@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 
 from value_investor.models import ALL_MODELS
+from value_investor.model_families import summarize_by_family
 from value_investor.models.base import ValueModel
 from value_investor.models.fitted import UniverseFittedModel
 
@@ -50,4 +51,9 @@ def summarize_by_ticker(model_results: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
     summary["pass_rate"] = summary["models_passed"] / summary["model_count"]
+
+    family_summary = summarize_by_family(model_results)
+    if not family_summary.empty:
+        summary = summary.merge(family_summary, on="ticker", how="left")
+
     return summary

@@ -8,7 +8,7 @@ import pandas as pd
 
 from value_investor.models.base import ModelResult
 from value_investor.models.fitted import UniverseFittedModel
-from value_investor.models.ranking import percentile_rank
+from value_investor.sector_scoring import _sector_percentile
 
 
 class CompositeValueModel(UniverseFittedModel):
@@ -45,31 +45,47 @@ class CompositeValueModel(UniverseFittedModel):
         reasons: list[str] = []
         failed: list[str] = []
 
-        pe_rank = percentile_rank(
-            self._universe["trailing_pe"], row.get("trailing_pe"), higher_is_better=False
+        pe_rank = _sector_percentile(
+            self._universe,
+            metric="trailing_pe",
+            value=row.get("trailing_pe"),
+            sector=row.get("sector"),
+            higher_is_better=False,
         )
-        pb_rank = percentile_rank(
-            self._universe["price_to_book"], row.get("price_to_book"), higher_is_better=False
+        pb_rank = _sector_percentile(
+            self._universe,
+            metric="price_to_book",
+            value=row.get("price_to_book"),
+            sector=row.get("sector"),
+            higher_is_better=False,
         )
-        div_rank = percentile_rank(
-            self._universe["dividend_yield"], row.get("dividend_yield"), higher_is_better=True
+        div_rank = _sector_percentile(
+            self._universe,
+            metric="dividend_yield",
+            value=row.get("dividend_yield"),
+            sector=row.get("sector"),
+            higher_is_better=True,
         )
 
         fcf_yield = None
         if row.get("free_cashflow") is not None and row.get("market_cap"):
             fcf_yield = row["free_cashflow"] / row["market_cap"]
-        fcf_rank = percentile_rank(
-            self._universe.get("fcf_yield", pd.Series(dtype=float)),
-            fcf_yield,
+        fcf_rank = _sector_percentile(
+            self._universe,
+            metric="fcf_yield",
+            value=fcf_yield,
+            sector=row.get("sector"),
             higher_is_better=True,
         )
 
         ev_ebitda = None
         if row.get("enterprise_value") and row.get("ebitda"):
             ev_ebitda = row["enterprise_value"] / row["ebitda"]
-        ev_rank = percentile_rank(
-            self._universe.get("ev_ebitda", pd.Series(dtype=float)),
-            ev_ebitda,
+        ev_rank = _sector_percentile(
+            self._universe,
+            metric="ev_ebitda",
+            value=ev_ebitda,
+            sector=row.get("sector"),
             higher_is_better=False,
         )
 

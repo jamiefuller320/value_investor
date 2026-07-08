@@ -7,7 +7,9 @@ import smtplib
 from dataclasses import dataclass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from value_investor.run_diff import RunDiff, format_run_diff_text
 from value_investor.summary import CompanyReport
+from value_investor.deep_analysis import DeepAnalysis
 
 
 @dataclass
@@ -60,12 +62,20 @@ def format_text_report(
     *,
     run_at: str,
     reports: list[CompanyReport],
+    run_diff: RunDiff | None = None,
+    deep_analysis: DeepAnalysis | None = None,
 ) -> str:
     lines = [
         f"FTSE 100 Value Screen — {run_at}",
         "=" * 60,
         "",
     ]
+
+    if deep_analysis is not None:
+        lines.extend(["DEEP ANALYSIS", "-" * 40, deep_analysis.full_text, ""])
+
+    if run_diff is not None:
+        lines.extend(["WEEK-OVER-WEEK CHANGES", "-" * 40, format_run_diff_text(run_diff), ""])
 
     counts: dict[str, int] = {}
     for report in reports:
@@ -90,6 +100,8 @@ def format_html_report(
     *,
     run_at: str,
     reports: list[CompanyReport],
+    run_diff: RunDiff | None = None,
+    deep_analysis: DeepAnalysis | None = None,
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -114,18 +126,45 @@ def format_html_report(
               </td>
               <td style="padding:12px;border-bottom:1px solid #eee;vertical-align:top">
                 <span style="color:{color};font-weight:bold">{label}</span><br>
-                <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models</span>
+                <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models<br>
+                {report.families_passed}/4 families</span>
               </td>
               <td style="padding:12px;border-bottom:1px solid #eee">{report.summary}</td>
             </tr>
             """
         )
 
+    deep_section = ""
+    if deep_analysis is not None:
+        intro = deep_analysis.executive_intro.replace("\n", "<br>")
+        picks = deep_analysis.top_picks_analysis.replace("\n", "<br>")
+        flags = deep_analysis.red_flags.replace("\n", "<br>")
+        deep_section = f"""
+  <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:16px 0">
+    <h3 style="margin-top:0">Deep Analysis</h3>
+    <p><strong>Executive intro</strong><br>{intro}</p>
+    <p><strong>Top picks</strong><br>{picks}</p>
+    <p><strong>Red flags</strong><br>{flags}</p>
+  </div>
+"""
+
+    diff_section = ""
+    if run_diff is not None:
+        diff_text = format_run_diff_text(run_diff).replace("\n", "<br>")
+        diff_section = f"""
+  <div style="background:#fff8e6;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #b8860b">
+    <h3 style="margin-top:0">Week-over-week changes</h3>
+    <p style="margin-bottom:0">{diff_text}</p>
+  </div>
+"""
+
     return f"""<!DOCTYPE html>
 <html>
 <body style="font-family:Arial,sans-serif;color:#222;max-width:900px;margin:0 auto">
   <h2>FTSE 100 Value Screen</h2>
   <p style="color:#666">{run_at}</p>
+  {deep_section}
+  {diff_section}
   <p>{summary_bits}</p>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">
     <thead>

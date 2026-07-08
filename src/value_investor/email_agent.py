@@ -9,24 +9,19 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
-
+from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.pipeline import run_screen, write_outputs
+from value_investor.run_diff import RunDiff
 from value_investor.summary import build_company_reports
 
 
-def _build_agent_intro_prompt(reports_json_path: Path) -> str:
-    return f"""You are a value investing analyst. Read the JSON file at {reports_json_path}
-containing FTSE 100 screening results (signal + summary per company).
-
-Write a 3–5 sentence executive introduction for an email report:
-- Overall market tone from signal distribution (strong buys vs avoids)
-- Any sector clusters among top picks
-- One caution about data limitations
-
-Plain text only, no markdown. Do not list every company — that comes in the table below.
-"""
+def _load_run_diff(output_dir: Path) -> RunDiff | None:
+    diff_path = output_dir / "run_diff.json"
+    if not diff_path.exists():
+        return None
+    data = json.loads(diff_path.read_text(encoding="utf-8"))
+    return RunDiff(**data)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -46,17 +41,25 @@ def main(argv: list[str] | None = None) -> int:
         help="Build report files but do not send email",
     )
     parser.add_argument(
+        "--deep-analysis",
+        action="store_true",
+        help="Run Cursor deep analysis on top 5 picks with red-flag pass (requires CURSOR_API_KEY)",
+    )
+    parser.add_argument(
         "--agent-intro",
         action="store_true",
-        help="Use Cursor SDK to write an executive intro paragraph (requires CURSOR_API_KEY)",
+        help="Alias for --deep-analysis (kept for backward compatibility)",
     )
-    parser.add_argument("--model", default="composer-2.5", help="Cursor model for --agent-intro")
+    parser.add_argument("--model", default="composer-2.5", help="Cursor model for deep analysis")
     parser.add_argument(
         "--api-key",
         default=os.environ.get("CURSOR_API_KEY"),
-        help="Cursor API key for --agent-intro",
+        help="Cursor API key for deep analysis",
     )
+    parser.add_argument("--top", type=int, default=5, help="Number of top picks for deep analysis")
     args = parser.parse_args(argv)
+
+    run_diff: RunDiff | None = None
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
@@ -69,54 +72,57 @@ def main(argv: list[str] | None = None) -> int:
         signals = pd.read_csv(signals_path)
         model_results = pd.read_csv(model_results_path)
         run_at = datetime.now(UTC)
+        run_diff = _load_run_diff(args.output_dir)
     else:
         result = run_screen(limit=args.limit)
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results
         run_at = result.run_at
+        run_diff = result.run_diff or _load_run_diff(args.output_dir)
 
     reports = build_company_reports(signals, model_results)
     run_at_str = run_at.strftime("%Y-%m-%d %H:%M UTC")
 
-    text_body = format_text_report(run_at=run_at_str, reports=reports)
-    html_body = format_html_report(run_at=run_at_str, reports=reports)
-
-    if args.agent_intro:
+    deep_analysis: DeepAnalysis | None = None
+    if args.deep_analysis or args.agent_intro:
         if not args.api_key:
-            print("CURSOR_API_KEY required for --agent-intro", file=sys.stderr)
+            print("CURSOR_API_KEY required for --deep-analysis", file=sys.stderr)
             return 1
-
-        reports_path = args.output_dir / "email_reports.json"
-        reports_path.write_text(
-            json.dumps([r.to_dict() for r in reports], indent=2),
-            encoding="utf-8",
-        )
         try:
-            agent_result = Agent.prompt(
-                _build_agent_intro_prompt(reports_path.resolve()),
-                AgentOptions(
-                    api_key=args.api_key,
-                    model=args.model,
-                    local=LocalAgentOptions(cwd=os.getcwd()),
-                ),
+            deep_analysis = run_deep_analysis(
+                reports=reports,
+                model_results_df=model_results,
+                output_dir=args.output_dir,
+                api_key=args.api_key,
+                model=args.model,
+                top_n=args.top,
             )
-        except CursorAgentError as err:
-            print(f"Agent startup failed: {err.message}", file=sys.stderr)
-            return 1
-        if agent_result.status == "error":
-            print(f"Agent run failed: {agent_result.id}", file=sys.stderr)
+        except RuntimeError as err:
+            print(str(err), file=sys.stderr)
             return 2
-        intro = (agent_result.result or "").strip()
-        if intro:
-            text_body = f"{intro}\n\n{text_body}"
-            html_body = html_body.replace(
-                '<p style="color:#666">',
-                f"<p>{intro}</p><p style=\"color:#666\">",
-                1,
-            )
+        analysis_path = args.output_dir / "deep_analysis.txt"
+        analysis_path.write_text(deep_analysis.full_text, encoding="utf-8")
+
+    text_body = format_text_report(
+        run_at=run_at_str,
+        reports=reports,
+        run_diff=run_diff,
+        deep_analysis=deep_analysis,
+    )
+    html_body = format_html_report(
+        run_at=run_at_str,
+        reports=reports,
+        run_diff=run_diff,
+        deep_analysis=deep_analysis,
+    )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    reports_path = args.output_dir / "email_reports.json"
+    reports_path.write_text(
+        json.dumps([r.to_dict() for r in reports], indent=2),
+        encoding="utf-8",
+    )
     text_path = args.output_dir / "email_report.txt"
     html_path = args.output_dir / "email_report.html"
     text_path.write_text(text_body, encoding="utf-8")
