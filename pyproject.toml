@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "value-investor"
+version = "0.1.0"
+description = "FTSE 100 value investment screener with Cursor SDK agent analysis"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cursor-sdk>=0.1.0",
+    "pandas>=2.2",
+    "yfinance>=0.2.40",
+    "lxml>=5.0",
+    "html5lib>=1.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.4"]
+
+[project.scripts]
+ftse-screen = "value_investor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
