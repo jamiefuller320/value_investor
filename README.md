@@ -42,7 +42,7 @@ export SMTP_PASSWORD="your-app-password"
 export EMAIL_TO="you@gmail.com"
 ftse-email --dry-run          # preview without sending
 ftse-email                    # run screen + email
-ftse-email --agent-intro      # add Cursor-written executive intro
+ftse-email --deep-analysis    # add Cursor deep analysis (top 5 + red flags)
 ```
 
 Outputs land in `output/`:
@@ -62,7 +62,7 @@ Outputs land in `output/`:
 
 Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
 
-**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--agent-intro`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
+**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab. Reports include week-over-week signal changes and, when the API key is set, deep analysis on the top 5 picks with a red-flag pass.
 
 ## Architecture
 

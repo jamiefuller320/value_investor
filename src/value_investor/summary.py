@@ -8,6 +8,8 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.model_families import format_family_summary
+
 SIGNAL_LABELS = {
     "strong_buy": "Strong Buy",
     "buy": "Buy",
@@ -26,6 +28,9 @@ class CompanyReport:
     models_passed: int
     model_count: int
     composite_score: float | None
+    sector_composite_score: float | None
+    families_passed: int
+    passed_families: str | None
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
@@ -39,6 +44,9 @@ class CompanyReport:
             "models_passed": self.models_passed,
             "model_count": self.model_count,
             "composite_score": self.composite_score,
+            "sector_composite_score": self.sector_composite_score,
+            "families_passed": self.families_passed,
+            "passed_families": self.passed_families,
             "summary": self.summary,
             "passed_models": self.passed_models,
             "key_metrics": self.key_metrics,
@@ -96,6 +104,9 @@ def _brief_summary(
     models_passed: int,
     model_count: int,
     composite_score: float | None,
+    sector_composite_score: float | None,
+    families_passed: int,
+    passed_families: str | None,
     passed_model_names: list[str],
     passed_reasons: list[str],
     near_miss_failures: list[str],
@@ -107,7 +118,13 @@ def _brief_summary(
     score_text = f"{models_passed}/{model_count} models"
     if composite_score is not None and not pd.isna(composite_score):
         score_text += f", composite {composite_score:.0%}"
+    if sector_composite_score is not None and not pd.isna(sector_composite_score):
+        score_text += f", sector-relative {sector_composite_score:.0%}"
     parts.append(f"{label} ({score_text}).")
+
+    if families_passed:
+        family_text = format_family_summary(passed_families)
+        parts.append(f"Families: {families_passed}/4 ({family_text}).")
 
     if key_metrics:
         metric_bits = ", ".join(f"{k} {v}" for k, v in list(key_metrics.items())[:4])
@@ -157,12 +174,19 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
         key_metrics = _key_metrics_row(row)
         composite = row.get("composite_score")
         composite_score = float(composite) if composite is not None and not pd.isna(composite) else None
+        sector_score = row.get("sector_composite_score")
+        sector_composite_score = (
+            float(sector_score) if sector_score is not None and not pd.isna(sector_score) else None
+        )
 
         summary = _brief_summary(
             signal=str(row.get("signal", "hold")),
             models_passed=int(row.get("models_passed") or 0),
             model_count=int(row.get("model_count") or 0),
             composite_score=composite_score,
+            sector_composite_score=sector_composite_score,
+            families_passed=int(row.get("families_passed") or 0),
+            passed_families=row.get("passed_families"),
             passed_model_names=passed_model_names,
             passed_reasons=passed_reasons,
             near_miss_failures=near_miss_failures,
@@ -178,6 +202,9 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 models_passed=int(row.get("models_passed") or 0),
                 model_count=int(row.get("model_count") or 0),
                 composite_score=composite_score,
+                sector_composite_score=sector_composite_score,
+                families_passed=int(row.get("families_passed") or 0),
+                passed_families=row.get("passed_families"),
                 summary=summary,
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,
