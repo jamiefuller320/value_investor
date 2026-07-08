@@ -24,6 +24,10 @@ SIGNAL_ORDER = {
 }
 
 
+def _min_passes(model_count: int, fraction: float, floor: int) -> int:
+    return max(floor, int(model_count * fraction))
+
+
 def assign_signal(
     *,
     models_passed: int,
@@ -39,11 +43,14 @@ def assign_signal(
     pass_rate = models_passed / model_count
     composite = composite_score if composite_score is not None else mean_model_score
 
-    if models_passed >= 3 and composite >= 0.7:
+    strong_threshold = _min_passes(model_count, 0.35, 5)
+    buy_threshold = _min_passes(model_count, 0.22, 3)
+
+    if models_passed >= strong_threshold and composite >= 0.7:
         return Signal.STRONG_BUY
-    if models_passed >= 2 and composite >= 0.55:
+    if models_passed >= buy_threshold and composite >= 0.55:
         return Signal.BUY
-    if pass_rate >= 0.25 or composite >= 0.45:
+    if pass_rate >= 0.15 or composite >= 0.45:
         return Signal.HOLD
     return Signal.AVOID
 

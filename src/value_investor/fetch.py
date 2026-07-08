@@ -9,6 +9,8 @@ from typing import Any
 import pandas as pd
 import yfinance as yf
 
+from value_investor.financials import extract_statement_metrics
+
 logger = logging.getLogger(__name__)
 
 METRIC_KEYS = [
@@ -23,15 +25,36 @@ METRIC_KEYS = [
     "current_ratio",
     "debt_to_equity",
     "return_on_equity",
+    "return_on_assets",
     "profit_margins",
     "revenue_growth",
     "earnings_growth",
     "free_cashflow",
     "enterprise_value",
     "ebitda",
+    "ebit",
     "total_revenue",
     "total_debt",
     "total_cash",
+    "book_value",
+    "total_assets",
+    "total_current_assets",
+    "total_liabilities",
+    "total_current_liabilities",
+    "net_income",
+    "operating_cashflow",
+    "gross_margin",
+    "ncav",
+    "shares_outstanding",
+    "return_on_assets_prev",
+    "gross_margin_prev",
+    "current_ratio_bs",
+    "current_ratio_bs_prev",
+    "leverage",
+    "leverage_prev",
+    "asset_turnover",
+    "asset_turnover_prev",
+    "shares_outstanding_prev",
 ]
 
 
@@ -48,15 +71,36 @@ class CompanyMetrics:
     current_ratio: float | None = None
     debt_to_equity: float | None = None
     return_on_equity: float | None = None
+    return_on_assets: float | None = None
     profit_margins: float | None = None
     revenue_growth: float | None = None
     earnings_growth: float | None = None
     free_cashflow: float | None = None
     enterprise_value: float | None = None
     ebitda: float | None = None
+    ebit: float | None = None
     total_revenue: float | None = None
     total_debt: float | None = None
     total_cash: float | None = None
+    book_value: float | None = None
+    total_assets: float | None = None
+    total_current_assets: float | None = None
+    total_liabilities: float | None = None
+    total_current_liabilities: float | None = None
+    net_income: float | None = None
+    operating_cashflow: float | None = None
+    gross_margin: float | None = None
+    ncav: float | None = None
+    shares_outstanding: float | None = None
+    return_on_assets_prev: float | None = None
+    gross_margin_prev: float | None = None
+    current_ratio_bs: float | None = None
+    current_ratio_bs_prev: float | None = None
+    leverage: float | None = None
+    leverage_prev: float | None = None
+    asset_turnover: float | None = None
+    asset_turnover_prev: float | None = None
+    shares_outstanding_prev: float | None = None
     errors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -96,15 +140,43 @@ def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | No
         metrics.current_ratio = _safe_float(info.get("currentRatio"))
         metrics.debt_to_equity = _safe_float(info.get("debtToEquity"))
         metrics.return_on_equity = _safe_float(info.get("returnOnEquity"))
+        metrics.return_on_assets = _safe_float(info.get("returnOnAssets"))
         metrics.profit_margins = _safe_float(info.get("profitMargins"))
         metrics.revenue_growth = _safe_float(info.get("revenueGrowth"))
         metrics.earnings_growth = _safe_float(info.get("earningsGrowth"))
         metrics.free_cashflow = _safe_float(info.get("freeCashflow"))
         metrics.enterprise_value = _safe_float(info.get("enterpriseValue"))
         metrics.ebitda = _safe_float(info.get("ebitda"))
+        metrics.ebit = _safe_float(info.get("ebit") or info.get("operatingIncome"))
         metrics.total_revenue = _safe_float(info.get("totalRevenue"))
         metrics.total_debt = _safe_float(info.get("totalDebt"))
         metrics.total_cash = _safe_float(info.get("totalCash"))
+        metrics.book_value = _safe_float(info.get("bookValue"))
+        metrics.shares_outstanding = _safe_float(
+            info.get("sharesOutstanding") or info.get("impliedSharesOutstanding")
+        )
+
+        stmt: dict[str, Any] = {}
+        try:
+            stmt = extract_statement_metrics(
+                getattr(stock, "balance_sheet", None),
+                getattr(stock, "income_stmt", None),
+                getattr(stock, "cashflow", None),
+            )
+            for key, value in stmt.items():
+                if value is not None and hasattr(metrics, key):
+                    setattr(metrics, key, value)
+        except Exception as stmt_exc:  # noqa: BLE001
+            logger.debug("Statement fetch partial for %s: %s", ticker, stmt_exc)
+
+        if metrics.ebit is None and stmt.get("operating_income") is not None:
+            metrics.ebit = stmt["operating_income"]
+
+        if metrics.return_on_assets is None and stmt.get("return_on_assets") is not None:
+            metrics.return_on_assets = stmt["return_on_assets"]
+
+        if metrics.current_ratio is None and metrics.current_ratio_bs is not None:
+            metrics.current_ratio = metrics.current_ratio_bs
 
         if metrics.market_cap is None and not info:
             metrics.errors.append("no market data returned")

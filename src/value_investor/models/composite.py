@@ -2,22 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Self
 
 import pandas as pd
 
-from value_investor.models.base import ModelResult, ValueModel
+from value_investor.models.base import ModelResult
+from value_investor.models.fitted import UniverseFittedModel
+from value_investor.models.ranking import percentile_rank
 
 
-def _percentile_rank(series: pd.Series, value: float, *, higher_is_better: bool) -> float | None:
-    valid = series.dropna()
-    if valid.empty or pd.isna(value):
-        return None
-    rank = (valid < value).sum() / len(valid)
-    return rank if higher_is_better else 1.0 - rank
-
-
-class CompositeValueModel(ValueModel):
+class CompositeValueModel(UniverseFittedModel):
     """
     Ranks companies on a weighted blend of cheapness and shareholder yield.
 
@@ -28,23 +22,15 @@ class CompositeValueModel(ValueModel):
     name = "Composite Value"
 
     WEIGHTS = {
-        "trailing_pe": 0.25,       # lower is better
-        "price_to_book": 0.20,     # lower is better
-        "dividend_yield": 0.20,    # higher is better
-        "fcf_yield": 0.20,         # higher is better
-        "ev_ebitda": 0.15,         # lower is better
+        "trailing_pe": 0.25,
+        "price_to_book": 0.20,
+        "dividend_yield": 0.20,
+        "fcf_yield": 0.20,
+        "ev_ebitda": 0.15,
     }
 
-    def __init__(self) -> None:
-        self._universe: pd.DataFrame | None = None
-
-    def fit(self, universe: pd.DataFrame) -> CompositeValueModel:
-        df = universe.copy()
-        if "market_cap" in df.columns and "free_cashflow" in df.columns:
-            df["fcf_yield"] = df["free_cashflow"] / df["market_cap"].replace(0, pd.NA)
-        if "enterprise_value" in df.columns and "ebitda" in df.columns:
-            df["ev_ebitda"] = df["enterprise_value"] / df["ebitda"].replace(0, pd.NA)
-        self._universe = df
+    def fit(self, universe: pd.DataFrame) -> Self:
+        self._fit_base(universe)
         return self
 
     def evaluate(self, row: dict[str, Any]) -> ModelResult:
@@ -59,16 +45,20 @@ class CompositeValueModel(ValueModel):
         reasons: list[str] = []
         failed: list[str] = []
 
-        pe_rank = _percentile_rank(self._universe["trailing_pe"], row.get("trailing_pe"), higher_is_better=False)
-        pb_rank = _percentile_rank(self._universe["price_to_book"], row.get("price_to_book"), higher_is_better=False)
-        div_rank = _percentile_rank(
+        pe_rank = percentile_rank(
+            self._universe["trailing_pe"], row.get("trailing_pe"), higher_is_better=False
+        )
+        pb_rank = percentile_rank(
+            self._universe["price_to_book"], row.get("price_to_book"), higher_is_better=False
+        )
+        div_rank = percentile_rank(
             self._universe["dividend_yield"], row.get("dividend_yield"), higher_is_better=True
         )
 
         fcf_yield = None
         if row.get("free_cashflow") is not None and row.get("market_cap"):
             fcf_yield = row["free_cashflow"] / row["market_cap"]
-        fcf_rank = _percentile_rank(
+        fcf_rank = percentile_rank(
             self._universe.get("fcf_yield", pd.Series(dtype=float)),
             fcf_yield,
             higher_is_better=True,
@@ -77,7 +67,7 @@ class CompositeValueModel(ValueModel):
         ev_ebitda = None
         if row.get("enterprise_value") and row.get("ebitda"):
             ev_ebitda = row["enterprise_value"] / row["ebitda"]
-        ev_rank = _percentile_rank(
+        ev_rank = percentile_rank(
             self._universe.get("ev_ebitda", pd.Series(dtype=float)),
             ev_ebitda,
             higher_is_better=False,

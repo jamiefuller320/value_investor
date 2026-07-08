@@ -8,7 +8,7 @@ import pandas as pd
 
 from value_investor.models import ALL_MODELS
 from value_investor.models.base import ValueModel
-from value_investor.models.composite import CompositeValueModel
+from value_investor.models.fitted import UniverseFittedModel
 
 
 def evaluate_universe(universe: pd.DataFrame, models: list[ValueModel] | None = None) -> pd.DataFrame:
@@ -19,17 +19,14 @@ def evaluate_universe(universe: pd.DataFrame, models: list[ValueModel] | None = 
     """
     models = list(models or ALL_MODELS)
 
-    # Fit composite on full universe before per-row evaluation
     for model in models:
-        if isinstance(model, CompositeValueModel):
+        if isinstance(model, UniverseFittedModel):
             model.fit(universe)
 
     rows: list[dict[str, Any]] = []
     for _, company in universe.iterrows():
         row = company.to_dict()
         for model in models:
-            if model.id == "composite_value" and not isinstance(model, CompositeValueModel):
-                continue
             result = model.evaluate(row)
             rows.append({"ticker": row["ticker"], **result.to_dict()})
 

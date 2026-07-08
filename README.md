@@ -5,11 +5,16 @@ Quantitative screener for FTSE 100 constituents against classic value investment
 ## What it does
 
 1. **Fetches** the current FTSE 100 list (Wikipedia) and fundamental data (yfinance / LSE `.L` tickers).
-2. **Screens** each company through four models:
-   - **Graham Defensive** — low P/E, P/B, strong current ratio, dividend payer
-   - **Graham Enterprising** — reasonable valuation with ROE and balance-sheet checks
-   - **Quality Value** — profitability, margins, leverage, FCF yield
-   - **Composite Value** — cross-sectional percentile rank on cheapness + yield
+2. **Screens** each company through **18 value models**:
+
+   | Category | Models |
+   |----------|--------|
+   | Graham | Defensive, Enterprising, Net-Net (NCAV) |
+   | Classic value | Schloss, Deep Value, Earnings Yield, FCF Yield, Low P/E + High Yield |
+   | GARP | Lynch PEG, Neff PEGY |
+   | Quality / moat | Quality Value, Buffett Quality, Economic Moat |
+   | Dividend | High Dividend Yield, Dividend Growth |
+   | Quantitative | Magic Formula, Acquirer's Multiple, Dreman Contrarian, Piotroski F-Score, Composite Value |
 3. **Emits signals** — `strong_buy`, `buy`, `hold`, `avoid`, or `insufficient_data`
 4. **Optional agent pass** — Cursor SDK reads the CSV and writes a qualitative memo on top candidates
 
@@ -45,7 +50,7 @@ Outputs land in `output/`:
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │ FTSE 100 list   │────▶│ yfinance metrics │────▶│ Value models    │
-│ (Wikipedia)     │     │ per .L ticker    │     │ (4 screens)     │
+│ (Wikipedia)     │     │ per .L ticker    │     │ (18 screens)    │
 └─────────────────┘     └──────────────────┘     └────────┬────────┘
                                                          │
                         ┌──────────────────┐     ┌─────────▼────────┐
