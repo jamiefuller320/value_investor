@@ -34,6 +34,15 @@ ftse-screen --limit 10
 # Agent analysis (requires CURSOR_API_KEY)
 export CURSOR_API_KEY="cursor_..."
 python scripts/agent_analyze.py --limit 20 --top 5
+
+# Email report with per-company signals + reason summaries
+export SMTP_HOST="smtp.gmail.com"
+export SMTP_USER="you@gmail.com"
+export SMTP_PASSWORD="your-app-password"
+export EMAIL_TO="you@gmail.com"
+ftse-email --dry-run          # preview without sending
+ftse-email                    # run screen + email
+ftse-email --agent-intro      # add Cursor-written executive intro
 ```
 
 Outputs land in `output/`:
@@ -44,6 +53,16 @@ Outputs land in `output/`:
 | `signals_*.csv` | Timestamped snapshot |
 | `model_results_*.csv` | Per-model pass/fail detail |
 | `agent_analysis.md` | SDK qualitative review |
+| `email_report.html` | Email preview (all companies + summaries) |
+| `email_report.txt` | Plain-text email preview |
+
+## Email agent
+
+`ftse-email` runs the full screener, builds a **brief reason summary per company** from model pass/fail data, and emails an HTML + plain-text report via SMTP.
+
+Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
+
+**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--agent-intro`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
 
 ## Architecture
 

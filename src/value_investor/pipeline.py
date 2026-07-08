@@ -70,4 +70,8 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     result.signals.to_csv(latest, index=False)
     paths["latest"] = latest
 
+    latest_models = output_dir / "latest_model_results.csv"
+    result.model_results.to_csv(latest_models, index=False)
+    paths["latest_model_results"] = latest_models
+
     return paths
