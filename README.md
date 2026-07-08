@@ -62,7 +62,14 @@ Outputs land in `output/`:
 
 Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
 
-**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--agent-intro`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
+**GitHub Actions** — add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--agent-intro`).
+
+| Trigger | How |
+|---------|-----|
+| Weekly | Automatic every Monday 07:00 UTC |
+| On request | **Actions** → **FTSE 100 Email Report** → **Run workflow** |
+
+Manual runs support optional inputs: company `limit`, `dry_run` (preview without sending), and `agent_intro`. Report files are uploaded as workflow artifacts for download.
 
 ## Architecture
 
