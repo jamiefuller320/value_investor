@@ -31,6 +31,12 @@ def _sample_frames():
             "signal_trend": "stable",
             "conviction_score": 0.72,
             "stability_label": "building",
+            "timing_signal": "accumulate",
+            "timing_score": 0.75,
+            "rsi_14": 34.0,
+            "price_vs_sma200_pct": -0.08,
+            "timing_reasons": ["RSI below neutral (34)", "below 200-day MA"],
+            "action_note": "Strong buy — favourable entry timing",
             "trailing_pe": 8.0,
             "price_to_book": 0.9,
             "dividend_yield": 0.04,
@@ -54,6 +60,12 @@ def _sample_frames():
             "signal_trend": "deteriorating",
             "conviction_score": 0.15,
             "stability_label": "new",
+            "timing_signal": "wait",
+            "timing_score": 0.25,
+            "rsi_14": 72.0,
+            "price_vs_sma200_pct": 0.12,
+            "timing_reasons": ["RSI overbought (72)"],
+            "action_note": "Pass — weak fundamentals",
             "trailing_pe": 25.0,
             "price_to_book": 3.0,
             "dividend_yield": 0.01,
@@ -112,6 +124,8 @@ def test_format_reports_contain_all_companies():
     assert "Beta PLC" in text
     assert "Families:" in text
     assert "Conviction" in text
+    assert "Timing" in text
+    assert "Market timing" in html or "Accumulate" in html
     assert "strong_buy" not in html
     assert "Strong Buy" in html
 
@@ -172,6 +186,15 @@ def test_format_reports_include_backtest_section():
     text = format_text_report(run_at="2026-07-08", reports=reports, backtest=backtest)
     assert "SIGNAL BACKTEST" in text
     assert "strong_buy" in text
+
+
+def test_format_reports_highlight_favorable_timing():
+    signals, model_results = _sample_frames()
+    reports = build_company_reports(signals, model_results)
+    text = format_text_report(run_at="2026-07-08", reports=reports)
+    assert "MARKET TIMING" in text
+    assert "Alpha PLC" in text
+    assert "favourable" in text.lower()
 
 
 @patch("value_investor.emailer.smtplib.SMTP")
