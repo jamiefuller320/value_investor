@@ -12,6 +12,7 @@ from value_investor.technical_analysis import (
     format_timing_summary,
     format_trade_plan_summary,
     TechnicalIndicators,
+    trade_plan_from_row,
 )
 
 
@@ -84,13 +85,13 @@ def test_compute_trade_plan_for_strong_buy_accumulate():
     assert plan.core_order in ("market", "limit")
     assert plan.tactical_order == "limit"
     assert plan.tactical_limit is not None
-    assert plan.stop_loss is not None
-    assert plan.take_profit is not None
+    assert plan.tactical_stop_loss is not None
+    assert plan.tactical_take_profit is not None
     assert plan.core_allocation_pct is not None
     assert plan.tactical_allocation_pct is not None
     assert plan.core_allocation_pct + plan.tactical_allocation_pct == 1.0
     assert "Trade plan:" in plan.trade_plan_summary
-    assert plan.stop_loss < plan.tactical_limit < tech.close
+    assert plan.tactical_stop_loss < plan.tactical_limit < tech.close
 
 
 def test_compute_trade_plan_skips_non_strong_buy():
@@ -106,10 +107,25 @@ def test_format_trade_plan_summary_market_core():
         core_allocation_pct=0.75,
         tactical_limit=95.0,
         tactical_allocation_pct=0.25,
-        stop_loss=90.0,
-        take_profit=110.0,
+        tactical_stop_loss=90.0,
+        tactical_take_profit=110.0,
         close=100.0,
     )
     assert "core 75% at market" in text
     assert "tactical 25% limit £95.00" in text
-    assert "stop £90.00" in text
+    assert "tactical stop £90.00" in text
+
+
+def test_trade_plan_from_row_reads_legacy_stop_columns():
+    row = pd.Series({
+        "core_order": "limit",
+        "core_limit": 98.0,
+        "tactical_limit": 95.0,
+        "stop_loss": 90.0,
+        "take_profit": 110.0,
+        "trade_plan_summary": "Trade plan example.",
+    })
+    plan = trade_plan_from_row(row)
+    assert plan is not None
+    assert plan.tactical_stop_loss == 90.0
+    assert plan.tactical_take_profit == 110.0

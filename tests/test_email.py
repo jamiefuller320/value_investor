@@ -43,11 +43,11 @@ def _sample_frames():
             "tactical_order": "limit",
             "tactical_limit": 95.0,
             "tactical_allocation_pct": 0.35,
-            "stop_loss": 92.0,
-            "take_profit": 105.0,
+            "tactical_stop_loss": 92.0,
+            "tactical_take_profit": 105.0,
             "trade_plan_summary": (
                 "Trade plan: core 65% limit £98.50; tactical 35% limit £95.00; "
-                "stop £92.00, target £105.00."
+                "tactical stop £92.00, target £105.00."
             ),
             "trailing_pe": 8.0,
             "price_to_book": 0.9,
@@ -217,10 +217,11 @@ def test_format_reports_include_strong_buy_trade_plans():
 
     assert "STRONG BUY TRADE PLANS" in text
     assert "Trade plan:" in text
-    assert "stop £92.00" in text
+    assert "tactical stop £92.00" in text
     assert "Strong buy trade plans" in html
     assert "Tactical:" in html
     alpha = reports[0]
+    assert alpha.trade_plan is not None
     assert "Trade plan:" in alpha.summary
 
 

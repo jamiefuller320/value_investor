@@ -81,7 +81,7 @@ def _strong_buy_trade_plans(reports: list[CompanyReport]) -> list[CompanyReport]
     return [
         r
         for r in reports
-        if r.signal == "strong_buy" and r.trade_plan_summary
+        if r.signal == "strong_buy" and r.trade_plan is not None
     ]
 
 
@@ -94,7 +94,8 @@ def _format_trade_plans_text(reports: list[CompanyReport]) -> str | None:
     ]
     for report in plans:
         lines.append(f"  • {report.name} ({report.ticker})")
-        lines.append(f"    {report.trade_plan_summary}")
+        if report.trade_plan and report.trade_plan.trade_plan_summary:
+            lines.append(f"    {report.trade_plan.trade_plan_summary}")
     return "\n".join(lines)
 
 
@@ -104,23 +105,29 @@ def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
         return ""
     rows = []
     for report in plans:
+        plan = report.trade_plan
+        if plan is None:
+            continue
         core_text = (
-            f"{report.core_order or 'n/a'}"
-            + (f" @ £{report.core_limit:.2f}" if report.core_limit is not None else " @ market")
-            + (f" ({report.core_allocation_pct:.0%})" if report.core_allocation_pct is not None else "")
+            f"{plan.core_order or 'n/a'}"
+            + (f" @ £{plan.core_limit:.2f}" if plan.core_limit is not None else " @ market")
+            + (f" ({plan.core_allocation_pct:.0%})" if plan.core_allocation_pct is not None else "")
         )
         tactical_text = (
-            f"{report.tactical_order or 'limit'}"
-            + (f" @ £{report.tactical_limit:.2f}" if report.tactical_limit is not None else "")
+            f"{plan.tactical_order or 'limit'}"
+            + (f" @ £{plan.tactical_limit:.2f}" if plan.tactical_limit is not None else "")
             + (
-                f" ({report.tactical_allocation_pct:.0%})"
-                if report.tactical_allocation_pct is not None
+                f" ({plan.tactical_allocation_pct:.0%})"
+                if plan.tactical_allocation_pct is not None
                 else ""
             )
         )
         risk_text = ""
-        if report.stop_loss is not None and report.take_profit is not None:
-            risk_text = f"Stop £{report.stop_loss:.2f}, target £{report.take_profit:.2f}"
+        if plan.tactical_stop_loss is not None and plan.tactical_take_profit is not None:
+            risk_text = (
+                f"Tactical stop £{plan.tactical_stop_loss:.2f}, "
+                f"target £{plan.tactical_take_profit:.2f}"
+            )
         rows.append(
             f"""
             <tr>
@@ -147,7 +154,7 @@ def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
         <tr style="background:#e8eef8">
           <th style="padding:10px;text-align:left">Company</th>
           <th style="padding:10px;text-align:left">Orders</th>
-          <th style="padding:10px;text-align:left">Risk levels</th>
+          <th style="padding:10px;text-align:left">Tactical risk</th>
         </tr>
       </thead>
       <tbody>

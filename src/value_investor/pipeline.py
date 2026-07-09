@@ -68,8 +68,8 @@ class ScreenResult:
                     "core_order",
                     "core_limit",
                     "tactical_limit",
-                    "stop_loss",
-                    "take_profit",
+                    "tactical_stop_loss",
+                    "tactical_take_profit",
                     "trade_plan_summary",
                     "mean_model_score",
                 ]

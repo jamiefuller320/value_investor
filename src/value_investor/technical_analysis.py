@@ -15,6 +15,15 @@ logger = logging.getLogger(__name__)
 MIN_BARS = 200
 LOOKBACK_PERIOD = "1y"
 
+# Trade plan thresholds (tunable)
+CORE_LIMIT_BELOW_SPOT = 0.99
+TACTICAL_LIMIT_BELOW_SPOT = 0.95
+TACTICAL_STOP_BELOW_SUPPORT = 0.97
+SUPPORT_FLOOR_BELOW_SPOT = 0.92
+TACTICAL_TARGET_ABOVE_LIMIT = 1.06
+TACTICAL_TARGET_ABOVE_SPOT = 1.05
+EXTENDED_ABOVE_SMA200 = 1.03
+
 
 class TimingSignal(str, Enum):
     ACCUMULATE = "accumulate"
@@ -41,8 +50,8 @@ class TradePlan:
     tactical_order: str | None = None
     tactical_limit: float | None = None
     tactical_allocation_pct: float | None = None
-    stop_loss: float | None = None
-    take_profit: float | None = None
+    tactical_stop_loss: float | None = None
+    tactical_take_profit: float | None = None
     trade_plan_summary: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,8 +62,8 @@ class TradePlan:
             "tactical_order": self.tactical_order,
             "tactical_limit": self.tactical_limit,
             "tactical_allocation_pct": self.tactical_allocation_pct,
-            "stop_loss": self.stop_loss,
-            "take_profit": self.take_profit,
+            "tactical_stop_loss": self.tactical_stop_loss,
+            "tactical_take_profit": self.tactical_take_profit,
             "trade_plan_summary": self.trade_plan_summary,
         }
 
@@ -75,7 +84,7 @@ class TechnicalIndicators:
     trade_plan: TradePlan | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        payload = {
+        return {
             "close": self.close,
             "rsi_14": self.rsi_14,
             "sma_50": self.sma_50,
@@ -87,9 +96,6 @@ class TechnicalIndicators:
             "timing_reasons": self.timing_reasons,
             "action_note": self.action_note,
         }
-        if self.trade_plan is not None:
-            payload.update(self.trade_plan.to_dict())
-        return payload
 
 
 def _round_price(value: float) -> float:
@@ -127,7 +133,7 @@ def compute_trade_plan(
     if timing == TimingSignal.ACCUMULATE:
         core_pct = 0.75 if rsi < 40 else 0.65
         core_order = "market"
-        if rsi >= 35 or (sma200 is not None and price > sma200 * 1.03):
+        if rsi >= 35 or (sma200 is not None and price > sma200 * EXTENDED_ABOVE_SMA200):
             core_order = "limit"
     elif timing == TimingSignal.WAIT:
         core_pct = 0.50
@@ -140,12 +146,12 @@ def compute_trade_plan(
 
     core_limit = None
     if core_order == "limit":
-        candidates = [price * 0.99]
+        candidates = [price * CORE_LIMIT_BELOW_SPOT]
         if sma50 is not None and sma50 < price:
             candidates.append(sma50)
         core_limit = _round_price(min(candidates))
 
-    tactical_candidates = [price * 0.95]
+    tactical_candidates = [price * TACTICAL_LIMIT_BELOW_SPOT]
     if recent_low is not None:
         tactical_candidates.append(recent_low)
     if sma200 is not None and sma200 < price:
@@ -154,13 +160,17 @@ def compute_trade_plan(
         tactical_candidates.append(sma50 * 0.98)
     tactical_limit = _round_price(min(tactical_candidates))
 
-    support_floor = min(p for p in [recent_low, sma200, tactical_limit, price * 0.92] if p is not None)
-    stop_loss = _round_price(support_floor * 0.97)
+    support_floor = min(
+        p for p in [recent_low, sma200, tactical_limit, price * SUPPORT_FLOOR_BELOW_SPOT] if p is not None
+    )
+    tactical_stop_loss = _round_price(support_floor * TACTICAL_STOP_BELOW_SUPPORT)
 
     if sma50 is not None and price < sma50:
-        take_profit = _round_price(sma50)
+        tactical_take_profit = _round_price(sma50)
     else:
-        take_profit = _round_price(max(tactical_limit * 1.06, price * 1.05))
+        tactical_take_profit = _round_price(
+            max(tactical_limit * TACTICAL_TARGET_ABOVE_LIMIT, price * TACTICAL_TARGET_ABOVE_SPOT)
+        )
 
     summary = format_trade_plan_summary(
         core_order=core_order,
@@ -168,8 +178,8 @@ def compute_trade_plan(
         core_allocation_pct=core_pct,
         tactical_limit=tactical_limit,
         tactical_allocation_pct=tactical_pct,
-        stop_loss=stop_loss,
-        take_profit=take_profit,
+        tactical_stop_loss=tactical_stop_loss,
+        tactical_take_profit=tactical_take_profit,
         close=price,
     )
 
@@ -180,8 +190,8 @@ def compute_trade_plan(
         tactical_order="limit",
         tactical_limit=tactical_limit,
         tactical_allocation_pct=tactical_pct,
-        stop_loss=stop_loss,
-        take_profit=take_profit,
+        tactical_stop_loss=tactical_stop_loss,
+        tactical_take_profit=tactical_take_profit,
         trade_plan_summary=summary,
     )
 
@@ -193,8 +203,8 @@ def format_trade_plan_summary(
     core_allocation_pct: float,
     tactical_limit: float,
     tactical_allocation_pct: float,
-    stop_loss: float,
-    take_profit: float,
+    tactical_stop_loss: float,
+    tactical_take_profit: float,
     close: float,
 ) -> str:
     core_pct = f"{core_allocation_pct:.0%}"
@@ -204,14 +214,54 @@ def format_trade_plan_summary(
     else:
         core_text = f"core {core_pct} limit £{core_limit:.2f}"
     tactical_text = f"tactical {tactical_pct} limit £{tactical_limit:.2f}"
-    risk_text = f"stop £{stop_loss:.2f}, target £{take_profit:.2f}"
+    risk_text = (
+        f"tactical stop £{tactical_stop_loss:.2f}, target £{tactical_take_profit:.2f}"
+    )
     return f"Trade plan: {core_text}; {tactical_text}; {risk_text}."
 
 
-def format_trade_plan_text(plan: TradePlan) -> str:
-    if not plan.trade_plan_summary:
+def format_trade_plan_text(plan: TradePlan | None) -> str:
+    if plan is None or not plan.trade_plan_summary:
         return ""
     return plan.trade_plan_summary
+
+
+def trade_plan_from_row(row: pd.Series) -> TradePlan | None:
+    """Reconstruct a trade plan from flattened signal columns."""
+    summary = row.get("trade_plan_summary")
+    if summary is not None and isinstance(summary, float) and pd.isna(summary):
+        summary = None
+    elif summary is not None:
+        summary = str(summary)
+
+    core_order = row.get("core_order")
+    if core_order is not None and isinstance(core_order, float) and pd.isna(core_order):
+        core_order = None
+
+    if not summary and core_order is None:
+        return None
+
+    def _optional_float(key: str) -> float | None:
+        value = row.get(key)
+        if value is None or (isinstance(value, float) and pd.isna(value)):
+            return None
+        return float(value)
+
+    tactical_order = row.get("tactical_order")
+    if tactical_order is not None and isinstance(tactical_order, float) and pd.isna(tactical_order):
+        tactical_order = None
+
+    return TradePlan(
+        core_order=str(core_order) if core_order is not None else None,
+        core_limit=_optional_float("core_limit"),
+        core_allocation_pct=_optional_float("core_allocation_pct"),
+        tactical_order=str(tactical_order) if tactical_order is not None else None,
+        tactical_limit=_optional_float("tactical_limit"),
+        tactical_allocation_pct=_optional_float("tactical_allocation_pct"),
+        tactical_stop_loss=_optional_float("tactical_stop_loss") or _optional_float("stop_loss"),
+        tactical_take_profit=_optional_float("tactical_take_profit") or _optional_float("take_profit"),
+        trade_plan_summary=summary,
+    )
 
 
 def _rsi(close: pd.Series, period: int = 14) -> pd.Series:
@@ -407,6 +457,14 @@ def fetch_close_history(tickers: list[str], *, period: str = LOOKBACK_PERIOD) ->
         return {}
 
 
+def _technical_row_dict(tech: TechnicalIndicators) -> dict[str, Any]:
+    """Serialize indicators; flatten trade plan only at the DataFrame boundary."""
+    row = tech.to_dict()
+    if tech.trade_plan is not None:
+        row.update(tech.trade_plan.to_dict())
+    return row
+
+
 def enrich_signals_with_technicals(signals: pd.DataFrame) -> pd.DataFrame:
     """Add technical indicators and timing signals to the signals DataFrame."""
     out = signals.copy()
@@ -424,10 +482,10 @@ def enrich_signals_with_technicals(signals: pd.DataFrame) -> pd.DataFrame:
             tech.action_note = combined_action(value_signal, tech.timing_signal.value)
             if value_signal == "strong_buy" and tech.timing_signal != TimingSignal.INSUFFICIENT_DATA:
                 tech.trade_plan = compute_trade_plan(series, tech, value_signal=value_signal)
-            rows.append({"ticker": ticker, **tech.to_dict()})
+            rows.append({"ticker": ticker, **_technical_row_dict(tech)})
             continue
 
-        rows.append({"ticker": ticker, **tech.to_dict()})
+        rows.append({"ticker": ticker, **_technical_row_dict(tech)})
 
     tech_df = pd.DataFrame(rows)
     return out.merge(tech_df, on="ticker", how="left")
