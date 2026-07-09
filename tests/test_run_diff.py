@@ -25,5 +25,5 @@ def test_compute_run_diff_tracks_upgrades_and_downgrades():
     assert diff.unchanged_top_signals == 1
 
     text = format_run_diff_text(diff)
-    assert "New strong buys" in text
+    assert "New strong buys this week" in text
     assert "Unchanged signals" in text

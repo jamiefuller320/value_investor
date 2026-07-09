@@ -8,6 +8,7 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
 
 SIGNAL_LABELS = {
@@ -31,6 +32,13 @@ class CompanyReport:
     sector_composite_score: float | None
     families_passed: int
     passed_families: str | None
+    data_quality_score: float
+    metrics_present: int
+    metrics_total: int
+    weeks_at_signal: int
+    signal_trend: str
+    conviction_score: float
+    stability_label: str
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
@@ -47,6 +55,13 @@ class CompanyReport:
             "sector_composite_score": self.sector_composite_score,
             "families_passed": self.families_passed,
             "passed_families": self.passed_families,
+            "data_quality_score": self.data_quality_score,
+            "metrics_present": self.metrics_present,
+            "metrics_total": self.metrics_total,
+            "weeks_at_signal": self.weeks_at_signal,
+            "signal_trend": self.signal_trend,
+            "conviction_score": self.conviction_score,
+            "stability_label": self.stability_label,
             "summary": self.summary,
             "passed_models": self.passed_models,
             "key_metrics": self.key_metrics,
@@ -107,6 +122,13 @@ def _brief_summary(
     sector_composite_score: float | None,
     families_passed: int,
     passed_families: str | None,
+    data_quality_score: float,
+    metrics_present: int,
+    metrics_total: int,
+    weeks_at_signal: int,
+    signal_trend: str,
+    conviction_score: float,
+    stability_label: str,
     passed_model_names: list[str],
     passed_reasons: list[str],
     near_miss_failures: list[str],
@@ -125,6 +147,11 @@ def _brief_summary(
     if families_passed:
         family_text = format_family_summary(passed_families)
         parts.append(f"Families: {families_passed}/4 ({family_text}).")
+
+    parts.append(
+        f"Data quality: {metrics_present}/{metrics_total} ({quality_label(data_quality_score)}). "
+        f"Conviction {conviction_score:.0%} ({stability_label}, {weeks_at_signal}w at signal, {signal_trend})."
+    )
 
     if key_metrics:
         metric_bits = ", ".join(f"{k} {v}" for k, v in list(key_metrics.items())[:4])
@@ -187,6 +214,13 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             sector_composite_score=sector_composite_score,
             families_passed=int(row.get("families_passed") or 0),
             passed_families=row.get("passed_families"),
+            data_quality_score=float(row.get("data_quality_score") or 0),
+            metrics_present=int(row.get("metrics_present") or 0),
+            metrics_total=int(row.get("metrics_total") or 20),
+            weeks_at_signal=int(row.get("weeks_at_signal") or 1),
+            signal_trend=str(row.get("signal_trend") or "new"),
+            conviction_score=float(row.get("conviction_score") or 0),
+            stability_label=str(row.get("stability_label") or "new"),
             passed_model_names=passed_model_names,
             passed_reasons=passed_reasons,
             near_miss_failures=near_miss_failures,
@@ -205,6 +239,13 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 sector_composite_score=sector_composite_score,
                 families_passed=int(row.get("families_passed") or 0),
                 passed_families=row.get("passed_families"),
+                data_quality_score=float(row.get("data_quality_score") or 0),
+                metrics_present=int(row.get("metrics_present") or 0),
+                metrics_total=int(row.get("metrics_total") or 20),
+                weeks_at_signal=int(row.get("weeks_at_signal") or 1),
+                signal_trend=str(row.get("signal_trend") or "new"),
+                conviction_score=float(row.get("conviction_score") or 0),
+                stability_label=str(row.get("stability_label") or "new"),
                 summary=summary,
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,

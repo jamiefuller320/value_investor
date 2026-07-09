@@ -9,6 +9,7 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+from value_investor.backtest import BacktestSummary
 from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.pipeline import run_screen, write_outputs
@@ -22,6 +23,21 @@ def _load_run_diff(output_dir: Path) -> RunDiff | None:
         return None
     data = json.loads(diff_path.read_text(encoding="utf-8"))
     return RunDiff(**data)
+
+
+def _load_backtest(output_dir: Path) -> BacktestSummary | None:
+    path = output_dir / "backtest_summary.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    from value_investor.backtest import HorizonResult
+
+    horizons = [HorizonResult(**h) for h in data.get("horizons", [])]
+    return BacktestSummary(
+        run_count=int(data.get("run_count", 0)),
+        horizons=horizons,
+        note=str(data.get("note", "")),
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -60,6 +76,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     run_diff: RunDiff | None = None
+    backtest: BacktestSummary | None = None
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
@@ -73,13 +90,15 @@ def main(argv: list[str] | None = None) -> int:
         model_results = pd.read_csv(model_results_path)
         run_at = datetime.now(UTC)
         run_diff = _load_run_diff(args.output_dir)
+        backtest = _load_backtest(args.output_dir)
     else:
-        result = run_screen(limit=args.limit)
+        result = run_screen(limit=args.limit, output_dir=args.output_dir)
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results
         run_at = result.run_at
         run_diff = result.run_diff or _load_run_diff(args.output_dir)
+        backtest = result.backtest or _load_backtest(args.output_dir)
 
     reports = build_company_reports(signals, model_results)
     run_at_str = run_at.strftime("%Y-%m-%d %H:%M UTC")
@@ -109,12 +128,14 @@ def main(argv: list[str] | None = None) -> int:
         reports=reports,
         run_diff=run_diff,
         deep_analysis=deep_analysis,
+        backtest=backtest,
     )
     html_body = format_html_report(
         run_at=run_at_str,
         reports=reports,
         run_diff=run_diff,
         deep_analysis=deep_analysis,
+        backtest=backtest,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

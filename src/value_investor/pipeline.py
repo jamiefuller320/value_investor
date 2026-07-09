@@ -10,11 +10,23 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.backtest import (
+    BacktestSummary,
+    compute_backtest,
+    load_run_snapshots,
+    save_run_snapshot,
+)
 from value_investor.constituents import fetch_ftse100_constituents
+from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
+from value_investor.run_diff import RunDiff, compute_run_diff
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.sector_scoring import add_sector_scores
-from value_investor.run_diff import RunDiff, compute_run_diff
+from value_investor.signal_stability import (
+    append_signal_history,
+    enrich_signals_with_stability,
+    load_signal_history,
+)
 from value_investor.signals import build_signals
 
 
@@ -25,9 +37,10 @@ class ScreenResult:
     model_results: pd.DataFrame
     signals: pd.DataFrame
     run_diff: RunDiff | None = None
+    backtest: BacktestSummary | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "run_at": self.run_at.isoformat(),
             "company_count": len(self.universe),
             "signals": self.signals[
@@ -40,23 +53,51 @@ class ScreenResult:
                     "families_passed",
                     "composite_score",
                     "sector_composite_score",
+                    "data_quality_score",
+                    "conviction_score",
+                    "weeks_at_signal",
+                    "signal_trend",
+                    "stability_label",
                     "mean_model_score",
                 ]
             ].to_dict(orient="records"),
         }
+        if self.run_diff is not None:
+            payload["run_diff"] = self.run_diff.to_dict()
+        if self.backtest is not None:
+            payload["backtest"] = self.backtest.to_dict()
+        return payload
 
 
-def run_screen(*, limit: int | None = None) -> ScreenResult:
+def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> ScreenResult:
     """Fetch FTSE 100 data, run value models, return ranked signals."""
+    run_at = datetime.now(UTC)
+    out_dir = output_dir or Path("output")
     constituents = fetch_ftse100_constituents()
     universe = fetch_universe(constituents, limit=limit)
+    universe = add_data_quality_scores(universe)
     universe = add_sector_scores(universe)
     model_results = evaluate_universe(universe)
     summary = summarize_by_ticker(model_results)
     signals = build_signals(universe, model_results, summary)
 
+    history = load_signal_history(out_dir)
+    signals = enrich_signals_with_stability(signals, history, run_at=run_at)
+
+    sort_cols = [
+        "signal_rank",
+        "conviction_score",
+        "composite_score",
+        "sector_composite_score",
+        "mean_model_score",
+        "models_passed",
+    ]
+    present_cols = [c for c in sort_cols if c in signals.columns]
+    signals = signals.sort_values(present_cols, ascending=[False] * len(present_cols))
+    signals = signals.reset_index(drop=True)
+
     return ScreenResult(
-        run_at=datetime.now(UTC),
+        run_at=run_at,
         universe=universe,
         model_results=model_results,
         signals=signals,
@@ -71,7 +112,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     latest = output_dir / "latest_signals.csv"
     previous_signals = pd.read_csv(latest) if latest.exists() else None
 
-    paths = {
+    paths: dict[str, Path] = {
         "signals": output_dir / f"signals_{stamp}.csv",
         "model_results": output_dir / f"model_results_{stamp}.csv",
         "universe": output_dir / f"universe_{stamp}.csv",
@@ -84,19 +125,23 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     result.model_results.to_csv(paths["model_results"], index=False)
     result.universe.to_csv(paths["universe"], index=False)
 
-    summary_payload = result.to_dict()
-    if result.run_diff is not None:
-        summary_payload["run_diff"] = result.run_diff.to_dict()
-    paths["summary"].write_text(json.dumps(summary_payload, indent=2), encoding="utf-8")
-
     if previous_signals is not None:
         run_diff = compute_run_diff(previous_signals, signals_out)
         result.run_diff = run_diff
         diff_path = output_dir / "run_diff.json"
         diff_path.write_text(json.dumps(run_diff.to_dict(), indent=2), encoding="utf-8")
         paths["run_diff"] = diff_path
-        summary_payload["run_diff"] = run_diff.to_dict()
-        paths["summary"].write_text(json.dumps(summary_payload, indent=2), encoding="utf-8")
+
+    snapshot_path = save_run_snapshot(output_dir, run_at=result.run_at, signals=signals_out)
+    paths["snapshot"] = snapshot_path
+
+    snapshots = load_run_snapshots(output_dir)
+    result.backtest = compute_backtest(snapshots)
+    backtest_path = output_dir / "backtest_summary.json"
+    backtest_path.write_text(json.dumps(result.backtest.to_dict(), indent=2), encoding="utf-8")
+    paths["backtest"] = backtest_path
+
+    paths["summary"].write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
 
     signals_out.to_csv(latest, index=False)
     paths["latest"] = latest
@@ -104,5 +149,8 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     latest_models = output_dir / "latest_model_results.csv"
     result.model_results.to_csv(latest_models, index=False)
     paths["latest_model_results"] = latest_models
+
+    append_signal_history(output_dir, signals_out, run_at=result.run_at)
+    paths["signal_history"] = output_dir / "signal_history.csv"
 
     return paths

@@ -9,6 +9,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.data_quality import MIN_QUALITY_FOR_ANALYSIS
 from value_investor.summary import CompanyReport
 
 
@@ -28,13 +29,24 @@ class DeepAnalysis:
         return "\n\n".join(p.strip() for p in parts if p.strip())
 
 
+def _eligible_for_deep_analysis(reports: list[CompanyReport]) -> list[CompanyReport]:
+    """Exclude low-data or weak-signal names from agent review."""
+    return [
+        report
+        for report in reports
+        if report.data_quality_score >= MIN_QUALITY_FOR_ANALYSIS
+        and report.signal in ("strong_buy", "buy")
+    ]
+
+
 def _build_analysis_payload(
     reports: list[CompanyReport],
     model_results: list[dict[str, Any]],
     *,
     top_n: int = 5,
 ) -> dict[str, Any]:
-    top_reports = [r.to_dict() for r in reports[:top_n]]
+    eligible = _eligible_for_deep_analysis(reports)
+    top_reports = [r.to_dict() for r in eligible[:top_n]]
     top_tickers = {r["ticker"] for r in top_reports}
     top_model_results = [row for row in model_results if row.get("ticker") in top_tickers]
 
@@ -99,6 +111,11 @@ def run_deep_analysis(
         model_results_df.to_dict(orient="records"),
         top_n=top_n,
     )
+    if not payload["top_candidates"]:
+        raise RuntimeError(
+            "No candidates meet data-quality threshold for deep analysis "
+            f"(requires score >= {MIN_QUALITY_FOR_ANALYSIS:.0%} and buy/strong_buy signal)"
+        )
     payload_path = output_dir / "deep_analysis_payload.json"
     output_dir.mkdir(parents=True, exist_ok=True)
     payload_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
