@@ -44,6 +44,11 @@ ftse-email --dry-run          # preview without sending
 ftse-email                    # run screen + email
 ftse-email --deep-analysis    # add Cursor deep analysis (top 5 + red flags)
 
+# Deep research memos for every strong buy (5-year financials + 1-year news)
+ftse-research --dry-run       # list eligible strong buys
+ftse-research                 # initial deep pass (requires CURSOR_API_KEY)
+ftse-email --research-docs    # screen + update research + email (weekly rerun appends updates)
+
 # Simulate £1,000 portfolio with 3% per-trade costs from archived runs
 ftse-simulate
 ftse-simulate --capital 1000 --trade-cost 0.03 --json
@@ -63,6 +68,8 @@ Outputs land in `output/`:
 | `agent_analysis.md` | SDK qualitative review |
 | `email_report.html` | Email preview (all companies + summaries) |
 | `email_report.txt` | Plain-text email preview |
+| `research/{TICKER}/research.md` | Per-ticker strong buy research memo |
+| `research/{TICKER}/sources/` | Cached financials, news, and screening snapshots |
 
 ## GitHub Pages dashboard
 
@@ -104,6 +111,16 @@ Reports include:
 - **Signal backtest** vs FTSE 100 (after 2+ archived weekly runs)
 - **Portfolio simulation** — £1,000 pot, 3% per trade, rebalanced on top conviction picks
 - **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
+- **Strong buy research** — per-ticker memos from five years of financials and one year of news, with weekly update sections on reruns
+
+## Strong buy research
+
+`ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for **every** `strong_buy` that passes the data-quality gate:
+
+1. **First pass** — ingests five years of annual statements (yfinance), one year of headlines (yfinance + Google News RSS), and the quantitative screen snapshot; Cursor agent writes sections on thesis, financials, risks, and news.
+2. **Weekly reruns** — refreshes sources, fetches new headlines since the last update, and appends a `WEEKLY UPDATE` section via the same per-ticker agent (resumed when possible).
+
+Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured.
 
 ## Architecture
 

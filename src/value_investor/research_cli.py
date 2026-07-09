@@ -1,0 +1,112 @@
+"""CLI for strong-buy deep research documents."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from datetime import UTC, datetime
+from pathlib import Path
+
+import pandas as pd
+
+from value_investor.research.format import format_research_text
+from value_investor.research.runner import run_research_for_strong_buys
+from value_investor.summary import build_company_reports
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Generate or update deep research memos for strong buy recommendations"
+    )
+    parser.add_argument("--output-dir", type=Path, default=Path("output"))
+    parser.add_argument(
+        "--skip-screen",
+        action="store_true",
+        help="Reuse latest_signals.csv instead of re-running the screener",
+    )
+    parser.add_argument("--limit", type=int, default=None, help="Limit universe when screening")
+    parser.add_argument("--model", default="composer-2.5", help="Cursor model for research agent")
+    parser.add_argument(
+        "--api-key",
+        default=os.environ.get("CURSOR_API_KEY"),
+        help="Cursor API key (required)",
+    )
+    parser.add_argument(
+        "--force-initial",
+        action="store_true",
+        help="Regenerate initial deep pass even if a memo already exists",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="List eligible strong buys without calling the research agent",
+    )
+    args = parser.parse_args(argv)
+
+    if args.skip_screen:
+        signals_path = args.output_dir / "latest_signals.csv"
+        model_results_path = args.output_dir / "latest_model_results.csv"
+        if not signals_path.exists() or not model_results_path.exists():
+            print("Missing output files; run ftse-screen first", file=sys.stderr)
+            return 1
+        signals = pd.read_csv(signals_path)
+        model_results = pd.read_csv(model_results_path)
+    else:
+        from value_investor.pipeline import run_screen, write_outputs
+
+        result = run_screen(limit=args.limit, output_dir=args.output_dir)
+        write_outputs(result, args.output_dir)
+        signals = result.signals
+        model_results = result.model_results
+
+    reports = build_company_reports(signals, model_results)
+    strong_buys = [r for r in reports if r.signal == "strong_buy"]
+    print(f"Found {len(strong_buys)} strong buy recommendation(s)")
+
+    if args.dry_run:
+        for report in strong_buys:
+            print(f"  • {report.name} ({report.ticker})")
+        return 0
+
+    if not args.api_key:
+        print("CURSOR_API_KEY required for research generation", file=sys.stderr)
+        return 1
+
+    summary = run_research_for_strong_buys(
+        reports=reports,
+        output_dir=args.output_dir,
+        api_key=args.api_key,
+        model=args.model,
+        force_initial=args.force_initial,
+    )
+
+    summary_path = args.output_dir / "research_summary.json"
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    summary_path.write_text(
+        json.dumps(
+            {
+                "run_at": datetime.now(UTC).isoformat(),
+                "created": summary.created,
+                "updated": summary.updated,
+                "skipped": summary.skipped,
+                "errors": summary.errors,
+                "documents": [doc.to_dict() for doc in summary.documents],
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    preview = format_research_text(summary, summary.documents)
+    if preview:
+        print(preview)
+
+    if summary.errors:
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
