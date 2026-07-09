@@ -6,6 +6,9 @@ on:
     - cron: "0 7 * * 1"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   email-report:
     runs-on: ubuntu-latest
@@ -19,17 +22,27 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Run screener and email report
+      - name: Screen, build reports, and publish dashboard
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          ARGS="--dry-run --publish-dashboard"
+          if [ -n "$CURSOR_API_KEY" ]; then
+            ARGS="$ARGS --deep-analysis --research-docs"
+          fi
+          ftse-email $ARGS
+
+      - name: Send email report
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-        run: |
-          ARGS=""
-          if [ -n "$CURSOR_API_KEY" ]; then
-            ARGS="--deep-analysis --research-docs"
-          fi
-          ftse-email $ARGS
+        run: ftse-email --send-only
+
+      - name: Commit dashboard data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update dashboard data [skip ci]"
+          file_pattern: docs/data/* docs/research/*

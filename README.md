@@ -52,6 +52,10 @@ ftse-email --research-docs    # screen + update research + email (weekly rerun a
 # Simulate £1,000 portfolio with 3% per-trade costs from archived runs
 ftse-simulate
 ftse-simulate --capital 1000 --trade-cost 0.03 --json
+
+# Publish dashboard to docs/ for GitHub Pages (after a screen or email run)
+ftse-publish
+ftse-email --dry-run --publish-dashboard
 ```
 
 Outputs land in `output/`:
@@ -66,6 +70,30 @@ Outputs land in `output/`:
 | `email_report.txt` | Plain-text email preview |
 | `research/{TICKER}/research.md` | Per-ticker strong buy research memo |
 | `research/{TICKER}/sources/` | Cached financials, news, and screening snapshots |
+
+## GitHub Pages dashboard
+
+A static web dashboard lives in `docs/` and is published automatically after each weekly workflow run.
+
+**Enable:** Repository **Settings → Pages → Build and deployment → Source: Deploy from branch `main` / folder `/docs`**.
+
+| URL (example) | `https://<user>.github.io/value_investor/` |
+|---------------|---------------------------------------------|
+
+The dashboard shows:
+
+- Signal overview and week-over-week changes
+- Searchable screener table (all FTSE 100 names)
+- Strong buys with trade plans
+- Backtest and portfolio simulation results
+- Deep analysis and per-ticker research memos (when published)
+
+```bash
+ftse-screen --limit 10
+ftse-publish                  # writes docs/data/latest.json
+# or
+ftse-email --dry-run --publish-dashboard
+```
 
 ## Email agent
 
