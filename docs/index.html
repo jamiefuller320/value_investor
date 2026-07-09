@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FTSE 100 Value Investor</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <h1>FTSE 100 Value Investor</h1>
+        <p class="subtitle" id="run-meta">Loading dashboard…</p>
+      </div>
+      <nav class="tabs" id="tabs" aria-label="Dashboard sections"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="panel-overview" class="panel active" aria-labelledby="tab-overview"></section>
+    <section id="panel-screener" class="panel" aria-labelledby="tab-screener"></section>
+    <section id="panel-strong-buys" class="panel" aria-labelledby="tab-strong-buys"></section>
+    <section id="panel-performance" class="panel" aria-labelledby="tab-performance"></section>
+    <section id="panel-analysis" class="panel" aria-labelledby="tab-analysis"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Research signals only — not investment advice. Verify figures against primary sources before acting.</p>
+    <p class="muted">Data refreshed by the weekly screening workflow. <a href="https://github.com/jamiefuller320/value_investor">Source on GitHub</a></p>
+  </footer>
+
+  <dialog id="memo-dialog" class="memo-dialog">
+    <form method="dialog" class="memo-dialog-header">
+      <h2 id="memo-title">Research memo</h2>
+      <button type="submit" class="btn btn-ghost" aria-label="Close">✕</button>
+    </form>
+    <article id="memo-body" class="memo-body prose"></article>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
