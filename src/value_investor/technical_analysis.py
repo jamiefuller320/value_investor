@@ -32,6 +32,34 @@ TIMING_LABELS = {
 
 
 @dataclass
+class TradePlan:
+    """Order levels for building a core holding plus tactical dip entries."""
+
+    core_order: str | None = None
+    core_limit: float | None = None
+    core_allocation_pct: float | None = None
+    tactical_order: str | None = None
+    tactical_limit: float | None = None
+    tactical_allocation_pct: float | None = None
+    stop_loss: float | None = None
+    take_profit: float | None = None
+    trade_plan_summary: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "core_order": self.core_order,
+            "core_limit": self.core_limit,
+            "core_allocation_pct": self.core_allocation_pct,
+            "tactical_order": self.tactical_order,
+            "tactical_limit": self.tactical_limit,
+            "tactical_allocation_pct": self.tactical_allocation_pct,
+            "stop_loss": self.stop_loss,
+            "take_profit": self.take_profit,
+            "trade_plan_summary": self.trade_plan_summary,
+        }
+
+
+@dataclass
 class TechnicalIndicators:
     close: float | None = None
     rsi_14: float | None = None
@@ -44,9 +72,10 @@ class TechnicalIndicators:
     timing_score: float = 0.0
     timing_reasons: list[str] = field(default_factory=list)
     action_note: str = ""
+    trade_plan: TradePlan | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "close": self.close,
             "rsi_14": self.rsi_14,
             "sma_50": self.sma_50,
@@ -58,6 +87,131 @@ class TechnicalIndicators:
             "timing_reasons": self.timing_reasons,
             "action_note": self.action_note,
         }
+        if self.trade_plan is not None:
+            payload.update(self.trade_plan.to_dict())
+        return payload
+
+
+def _round_price(value: float) -> float:
+    return round(value, 2)
+
+
+def _recent_low(close: pd.Series, days: int = 20) -> float | None:
+    if len(close) < days:
+        return None
+    return float(close.tail(days).min())
+
+
+def compute_trade_plan(
+    close: pd.Series,
+    tech: TechnicalIndicators,
+    *,
+    value_signal: str,
+) -> TradePlan | None:
+    """
+    Recommend core + tactical orders for strong buys.
+
+    Core leg builds the long-term holding; tactical limit orders exploit
+    short-term dips with a defined stop-loss and take-profit.
+    """
+    if value_signal != "strong_buy" or tech.close is None:
+        return None
+
+    price = tech.close
+    sma50 = tech.sma_50
+    sma200 = tech.sma_200
+    recent_low = _recent_low(close)
+    timing = tech.timing_signal
+    rsi = tech.rsi_14 or 50.0
+
+    if timing == TimingSignal.ACCUMULATE:
+        core_pct = 0.75 if rsi < 40 else 0.65
+        core_order = "market"
+        if rsi >= 35 or (sma200 is not None and price > sma200 * 1.03):
+            core_order = "limit"
+    elif timing == TimingSignal.WAIT:
+        core_pct = 0.50
+        core_order = "limit"
+    else:
+        core_pct = 0.60
+        core_order = "limit"
+
+    tactical_pct = round(1.0 - core_pct, 2)
+
+    core_limit = None
+    if core_order == "limit":
+        candidates = [price * 0.99]
+        if sma50 is not None and sma50 < price:
+            candidates.append(sma50)
+        core_limit = _round_price(min(candidates))
+
+    tactical_candidates = [price * 0.95]
+    if recent_low is not None:
+        tactical_candidates.append(recent_low)
+    if sma200 is not None and sma200 < price:
+        tactical_candidates.append(sma200)
+    if sma50 is not None and sma50 < price * 0.98:
+        tactical_candidates.append(sma50 * 0.98)
+    tactical_limit = _round_price(min(tactical_candidates))
+
+    support_floor = min(p for p in [recent_low, sma200, tactical_limit, price * 0.92] if p is not None)
+    stop_loss = _round_price(support_floor * 0.97)
+
+    if sma50 is not None and price < sma50:
+        take_profit = _round_price(sma50)
+    else:
+        take_profit = _round_price(max(tactical_limit * 1.06, price * 1.05))
+
+    summary = format_trade_plan_summary(
+        core_order=core_order,
+        core_limit=core_limit,
+        core_allocation_pct=core_pct,
+        tactical_limit=tactical_limit,
+        tactical_allocation_pct=tactical_pct,
+        stop_loss=stop_loss,
+        take_profit=take_profit,
+        close=price,
+    )
+
+    return TradePlan(
+        core_order=core_order,
+        core_limit=core_limit,
+        core_allocation_pct=core_pct,
+        tactical_order="limit",
+        tactical_limit=tactical_limit,
+        tactical_allocation_pct=tactical_pct,
+        stop_loss=stop_loss,
+        take_profit=take_profit,
+        trade_plan_summary=summary,
+    )
+
+
+def format_trade_plan_summary(
+    *,
+    core_order: str,
+    core_limit: float | None,
+    core_allocation_pct: float,
+    tactical_limit: float,
+    tactical_allocation_pct: float,
+    stop_loss: float,
+    take_profit: float,
+    close: float,
+) -> str:
+    core_pct = f"{core_allocation_pct:.0%}"
+    tactical_pct = f"{tactical_allocation_pct:.0%}"
+    if core_order == "market":
+        core_text = f"core {core_pct} at market (~£{close:.2f})"
+    else:
+        core_text = f"core {core_pct} limit £{core_limit:.2f}"
+    tactical_text = f"tactical {tactical_pct} limit £{tactical_limit:.2f}"
+    risk_text = f"stop £{stop_loss:.2f}, target £{take_profit:.2f}"
+    return f"Trade plan: {core_text}; {tactical_text}; {risk_text}."
+
+
+def format_trade_plan_text(plan: TradePlan) -> str:
+    if not plan.trade_plan_summary:
+        return ""
+    return plan.trade_plan_summary
 
 
 def _rsi(close: pd.Series, period: int = 14) -> pd.Series:
@@ -135,7 +289,7 @@ def assign_timing_signal(
     """
     Score market timing for value entries.
 
-  Favourable: oversold RSI, trading below/near 200-day MA, MACD turning up.
+    Favourable: oversold RSI, trading below/near 200-day MA, MACD turning up.
     Unfavourable: overbought, extended above MAs, negative momentum.
     """
     if close is None or rsi is None:
@@ -265,10 +419,14 @@ def enrich_signals_with_technicals(signals: pd.DataFrame) -> pd.DataFrame:
         if series is None or series.empty:
             tech = TechnicalIndicators()
         else:
+            value_signal = str(out.loc[out["ticker"] == ticker, "signal"].iloc[0])
             tech = compute_indicators(series)
+            tech.action_note = combined_action(value_signal, tech.timing_signal.value)
+            if value_signal == "strong_buy" and tech.timing_signal != TimingSignal.INSUFFICIENT_DATA:
+                tech.trade_plan = compute_trade_plan(series, tech, value_signal=value_signal)
+            rows.append({"ticker": ticker, **tech.to_dict()})
+            continue
 
-        value_signal = str(out.loc[out["ticker"] == ticker, "signal"].iloc[0])
-        tech.action_note = combined_action(value_signal, tech.timing_signal.value)
         rows.append({"ticker": ticker, **tech.to_dict()})
 
     tech_df = pd.DataFrame(rows)

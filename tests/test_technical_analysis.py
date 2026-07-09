@@ -8,7 +8,10 @@ from value_investor.technical_analysis import (
     assign_timing_signal,
     combined_action,
     compute_indicators,
+    compute_trade_plan,
     format_timing_summary,
+    format_trade_plan_summary,
+    TechnicalIndicators,
 )
 
 
@@ -65,3 +68,48 @@ def test_format_timing_summary():
     text = format_timing_summary("accumulate", 32.0, ["RSI oversold (32)"])
     assert "Accumulate" in text
     assert "RSI 32" in text
+
+
+def test_compute_trade_plan_for_strong_buy_accumulate():
+    close = pd.Series([100.0 + i * 0.1 for i in range(220)])
+    tech = TechnicalIndicators(
+        close=120.0,
+        rsi_14=32.0,
+        sma_50=115.0,
+        sma_200=110.0,
+        timing_signal=TimingSignal.ACCUMULATE,
+    )
+    plan = compute_trade_plan(close, tech, value_signal="strong_buy")
+    assert plan is not None
+    assert plan.core_order in ("market", "limit")
+    assert plan.tactical_order == "limit"
+    assert plan.tactical_limit is not None
+    assert plan.stop_loss is not None
+    assert plan.take_profit is not None
+    assert plan.core_allocation_pct is not None
+    assert plan.tactical_allocation_pct is not None
+    assert plan.core_allocation_pct + plan.tactical_allocation_pct == 1.0
+    assert "Trade plan:" in plan.trade_plan_summary
+    assert plan.stop_loss < plan.tactical_limit < tech.close
+
+
+def test_compute_trade_plan_skips_non_strong_buy():
+    close = pd.Series([100.0] * 220)
+    tech = TechnicalIndicators(close=100.0, timing_signal=TimingSignal.ACCUMULATE)
+    assert compute_trade_plan(close, tech, value_signal="buy") is None
+
+
+def test_format_trade_plan_summary_market_core():
+    text = format_trade_plan_summary(
+        core_order="market",
+        core_limit=None,
+        core_allocation_pct=0.75,
+        tactical_limit=95.0,
+        tactical_allocation_pct=0.25,
+        stop_loss=90.0,
+        take_profit=110.0,
+        close=100.0,
+    )
+    assert "core 75% at market" in text
+    assert "tactical 25% limit £95.00" in text
+    assert "stop £90.00" in text

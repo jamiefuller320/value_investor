@@ -45,6 +45,15 @@ class CompanyReport:
     rsi_14: float | None
     price_vs_sma200_pct: float | None
     action_note: str
+    core_order: str | None
+    core_limit: float | None
+    core_allocation_pct: float | None
+    tactical_order: str | None
+    tactical_limit: float | None
+    tactical_allocation_pct: float | None
+    stop_loss: float | None
+    take_profit: float | None
+    trade_plan_summary: str | None
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
@@ -73,6 +82,15 @@ class CompanyReport:
             "rsi_14": self.rsi_14,
             "price_vs_sma200_pct": self.price_vs_sma200_pct,
             "action_note": self.action_note,
+            "core_order": self.core_order,
+            "core_limit": self.core_limit,
+            "core_allocation_pct": self.core_allocation_pct,
+            "tactical_order": self.tactical_order,
+            "tactical_limit": self.tactical_limit,
+            "tactical_allocation_pct": self.tactical_allocation_pct,
+            "stop_loss": self.stop_loss,
+            "take_profit": self.take_profit,
+            "trade_plan_summary": self.trade_plan_summary,
             "summary": self.summary,
             "passed_models": self.passed_models,
             "key_metrics": self.key_metrics,
@@ -145,6 +163,7 @@ def _brief_summary(
     rsi_14: float | None,
     timing_reasons: list[str] | str,
     action_note: str,
+    trade_plan_summary: str | None,
     passed_model_names: list[str],
     passed_reasons: list[str],
     near_miss_failures: list[str],
@@ -173,6 +192,9 @@ def _brief_summary(
         parts.append(format_timing_summary(timing_signal, rsi_14, timing_reasons))
         if action_note:
             parts.append(f"Action: {action_note}.")
+
+    if signal == "strong_buy" and trade_plan_summary:
+        parts.append(trade_plan_summary)
 
     if key_metrics:
         metric_bits = ", ".join(f"{k} {v}" for k, v in list(key_metrics.items())[:4])
@@ -235,6 +257,18 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
         else:
             timing_reasons = []
 
+        trade_plan_summary = row.get("trade_plan_summary")
+        if trade_plan_summary is not None and (isinstance(trade_plan_summary, float) and pd.isna(trade_plan_summary)):
+            trade_plan_summary = None
+        elif trade_plan_summary is not None:
+            trade_plan_summary = str(trade_plan_summary)
+
+        def _optional_float(key: str) -> float | None:
+            value = row.get(key)
+            if value is None or (isinstance(value, float) and pd.isna(value)):
+                return None
+            return float(value)
+
         summary = _brief_summary(
             signal=str(row.get("signal", "hold")),
             models_passed=int(row.get("models_passed") or 0),
@@ -255,6 +289,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
             timing_reasons=timing_reasons,
             action_note=str(row.get("action_note") or ""),
+            trade_plan_summary=trade_plan_summary,
             passed_model_names=passed_model_names,
             passed_reasons=passed_reasons,
             near_miss_failures=near_miss_failures,
@@ -288,6 +323,15 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
                 price_vs_sma200_pct=price_vs_sma200_pct,
                 action_note=str(row.get("action_note") or ""),
+                core_order=row.get("core_order") if pd.notna(row.get("core_order")) else None,
+                core_limit=_optional_float("core_limit"),
+                core_allocation_pct=_optional_float("core_allocation_pct"),
+                tactical_order=row.get("tactical_order") if pd.notna(row.get("tactical_order")) else None,
+                tactical_limit=_optional_float("tactical_limit"),
+                tactical_allocation_pct=_optional_float("tactical_allocation_pct"),
+                stop_loss=_optional_float("stop_loss"),
+                take_profit=_optional_float("take_profit"),
+                trade_plan_summary=trade_plan_summary,
                 summary=summary,
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,
