@@ -28,6 +28,7 @@ from value_investor.signal_stability import (
     load_signal_history,
 )
 from value_investor.signals import build_signals
+from value_investor.simulator import SimulationSummary, run_simulation
 from value_investor.technical_analysis import enrich_signals_with_technicals
 
 
@@ -39,6 +40,7 @@ class ScreenResult:
     signals: pd.DataFrame
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
+    simulation: SimulationSummary | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -71,6 +73,8 @@ class ScreenResult:
             payload["run_diff"] = self.run_diff.to_dict()
         if self.backtest is not None:
             payload["backtest"] = self.backtest.to_dict()
+        if self.simulation is not None:
+            payload["simulation"] = self.simulation.to_dict()
         return payload
 
 
@@ -146,6 +150,11 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     backtest_path = output_dir / "backtest_summary.json"
     backtest_path.write_text(json.dumps(result.backtest.to_dict(), indent=2), encoding="utf-8")
     paths["backtest"] = backtest_path
+
+    result.simulation = run_simulation(snapshots)
+    simulation_path = output_dir / "simulation_summary.json"
+    simulation_path.write_text(json.dumps(result.simulation.to_dict(), indent=2), encoding="utf-8")
+    paths["simulation"] = simulation_path
 
     paths["summary"].write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
 
