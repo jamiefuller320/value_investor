@@ -9,6 +9,7 @@ from pathlib import Path
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
 from value_investor.research.document import ResearchDocument, parse_research_sections
+from value_investor.research.verdict import parse_research_verdict
 from value_investor.summary import CompanyReport
 
 
@@ -44,6 +45,14 @@ Regulatory, cyclical, governance, pension, or competitive risks not fully captur
 NEWS HIGHLIGHTS
 Summarise material news from the past year: strategy shifts, management changes, regulatory actions, M&A.
 Cite article titles/dates from the manifest. Flag if news coverage is thin.
+
+RESEARCH VERDICT
+Structured conviction overlay for the quantitative screen (does not replace the screen signal).
+Use EXACTLY these lines:
+Verdict: accumulate | neutral | caution | pass
+Risk: low | medium | high
+Confidence: 0.00–1.00 (decimal, e.g. 0.75)
+Rationale: One sentence on whether deep research confirms, is neutral on, or weakens the strong buy case.
 
 Rules:
 - UK English, concise professional tone.
@@ -135,6 +144,7 @@ def run_initial_research_agent(
         cwd=cwd,
     )
     sections = parse_research_sections(text)
+    verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
     now = datetime.now(UTC).isoformat()
     doc = ResearchDocument(
         ticker=report.ticker,
@@ -149,6 +159,10 @@ def run_initial_research_agent(
         financial_review=sections["financial_review"],
         risks_and_flags=sections["risks_and_flags"],
         news_highlights=sections["news_highlights"],
+        research_verdict=verdict_fields["research_verdict"],  # type: ignore[arg-type]
+        research_risk_level=verdict_fields["research_risk_level"],  # type: ignore[arg-type]
+        research_confidence=verdict_fields["research_confidence"],  # type: ignore[arg-type]
+        research_rationale=verdict_fields["research_rationale"],  # type: ignore[arg-type]
         agent_id=agent_id,
     )
     return doc, agent_id
@@ -194,6 +208,10 @@ def run_weekly_research_update_agent(
         financial_review=existing.financial_review,
         risks_and_flags=existing.risks_and_flags,
         news_highlights=existing.news_highlights,
+        research_verdict=existing.research_verdict,
+        research_risk_level=existing.research_risk_level,
+        research_confidence=existing.research_confidence,
+        research_rationale=existing.research_rationale,
         weekly_updates=[
             *existing.weekly_updates,
             {"date": now.strftime("%Y-%m-%d"), "summary": update_summary},

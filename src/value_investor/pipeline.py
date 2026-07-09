@@ -20,6 +20,7 @@ from value_investor.constituents import fetch_ftse100_constituents
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
 from value_investor.run_diff import RunDiff, compute_run_diff
+from value_investor.research.overlay import enrich_signals_with_research
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
@@ -137,6 +138,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
 
     signals_out = result.signals.copy()
     signals_out["run_at"] = result.run_at.isoformat()
+    signals_out = enrich_signals_with_research(signals_out, output_dir)
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
     result.universe.to_csv(paths["universe"], index=False)

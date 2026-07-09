@@ -109,6 +109,9 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
                 "version": meta.get("version"),
                 "updated_at": meta.get("updated_at"),
                 "executive_summary": meta.get("executive_summary") or "",
+                "research_verdict": meta.get("research_verdict"),
+                "research_risk_level": meta.get("research_risk_level"),
+                "research_confidence": meta.get("research_confidence"),
                 "memo_path": f"research/{slug}.md",
             }
         )

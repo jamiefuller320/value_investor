@@ -12,6 +12,7 @@ RESEARCH_SECTIONS = (
     "financial_review",
     "risks_and_flags",
     "news_highlights",
+    "research_verdict",
 )
 
 SECTION_HEADINGS = {
@@ -20,6 +21,7 @@ SECTION_HEADINGS = {
     "financial_review": "FINANCIAL REVIEW",
     "risks_and_flags": "RISKS AND RED FLAGS",
     "news_highlights": "NEWS HIGHLIGHTS",
+    "research_verdict": "RESEARCH VERDICT",
     "weekly_update": "WEEKLY UPDATE",
 }
 
@@ -38,6 +40,10 @@ class ResearchDocument:
     financial_review: str = ""
     risks_and_flags: str = ""
     news_highlights: str = ""
+    research_verdict: str | None = None
+    research_risk_level: str | None = None
+    research_confidence: float | None = None
+    research_rationale: str | None = None
     weekly_updates: list[dict[str, str]] = field(default_factory=list)
     source_counts: dict[str, int] = field(default_factory=dict)
     agent_id: str | None = None
@@ -77,6 +83,10 @@ class ResearchDocument:
             "financial_review": self.financial_review,
             "risks_and_flags": self.risks_and_flags,
             "news_highlights": self.news_highlights,
+            "research_verdict": self.research_verdict,
+            "research_risk_level": self.research_risk_level,
+            "research_confidence": self.research_confidence,
+            "research_rationale": self.research_rationale,
             "weekly_updates": self.weekly_updates,
             "source_counts": self.source_counts,
             "agent_id": self.agent_id,
@@ -98,6 +108,14 @@ class ResearchDocument:
             financial_review=str(data.get("financial_review") or ""),
             risks_and_flags=str(data.get("risks_and_flags") or ""),
             news_highlights=str(data.get("news_highlights") or ""),
+            research_verdict=data.get("research_verdict"),
+            research_risk_level=data.get("research_risk_level"),
+            research_confidence=(
+                float(data["research_confidence"])
+                if data.get("research_confidence") is not None
+                else None
+            ),
+            research_rationale=data.get("research_rationale"),
             weekly_updates=list(data.get("weekly_updates") or []),
             source_counts=dict(data.get("source_counts") or {}),
             agent_id=data.get("agent_id"),
@@ -162,8 +180,25 @@ def render_research_markdown(doc: ResearchDocument) -> str:
         f"## {SECTION_HEADINGS['news_highlights']}",
         doc.news_highlights,
     ]
+    verdict_lines = _render_verdict_lines(doc)
+    if verdict_lines:
+        lines.extend(["", f"## {SECTION_HEADINGS['research_verdict']}", *verdict_lines])
     if doc.weekly_updates:
         lines.extend(["", "## Weekly updates"])
         for item in doc.weekly_updates:
             lines.extend(["", f"### {item.get('date', 'Update')}", item.get("summary", "")])
     return "\n".join(lines).strip() + "\n"
+
+
+def _render_verdict_lines(doc: ResearchDocument) -> list[str]:
+    if not doc.research_verdict:
+        return []
+    lines = [
+        f"Verdict: {doc.research_verdict}",
+        f"Risk: {doc.research_risk_level or 'unknown'}",
+    ]
+    if doc.research_confidence is not None:
+        lines.append(f"Confidence: {doc.research_confidence:.2f}")
+    if doc.research_rationale:
+        lines.append(f"Rationale: {doc.research_rationale}")
+    return lines

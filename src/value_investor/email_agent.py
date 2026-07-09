@@ -18,6 +18,7 @@ from value_investor.pipeline import run_screen, write_outputs
 from value_investor.publish import publish_dashboard
 from value_investor.run_diff import RunDiff
 from value_investor.research.format import research_documents_for_reports
+from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.runner import load_existing_research, run_research_for_strong_buys
 from value_investor.summary import build_company_reports
 
@@ -232,6 +233,13 @@ def main(argv: list[str] | None = None) -> int:
             print(str(err), file=sys.stderr)
             return 2
         research_documents = research_documents_for_reports(reports, research_summary.documents)
+
+    if research_documents:
+        reports = apply_research_overlay(reports, research_documents)
+
+    signals = enrich_signals_with_research(signals, args.output_dir)
+    signals_path = args.output_dir / "latest_signals.csv"
+    signals.to_csv(signals_path, index=False)
 
     text_body = format_text_report(
         run_at=run_at_str,
