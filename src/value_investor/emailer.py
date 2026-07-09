@@ -12,6 +12,7 @@ from value_investor.deep_analysis import DeepAnalysis
 from value_investor.run_diff import RunDiff, format_run_diff_text
 from value_investor.simulator import SimulationSummary, format_simulation_text
 from value_investor.summary import CompanyReport
+from value_investor.technical_analysis import timing_label
 
 
 @dataclass
@@ -59,6 +60,34 @@ SIGNAL_COLORS = {
     "insufficient_data": "#666666",
 }
 
+TIMING_COLORS = {
+    "accumulate": "#1b7f3a",
+    "neutral": "#b8860b",
+    "wait": "#b33a3a",
+    "insufficient_data": "#666666",
+}
+
+
+def _favorable_timing_picks(reports: list[CompanyReport]) -> list[CompanyReport]:
+    return [
+        r
+        for r in reports
+        if r.signal in ("strong_buy", "buy")
+        and r.timing_signal == "accumulate"
+    ]
+
+
+def _format_favorable_timing_text(reports: list[CompanyReport]) -> str | None:
+    picks = _favorable_timing_picks(reports)
+    if not picks:
+        return None
+    lines = ["Value + favourable technical timing:"]
+    for report in picks[:10]:
+        lines.append(f"  • {report.name} ({report.ticker}) — {report.action_note}")
+    if len(picks) > 10:
+        lines.append(f"  …and {len(picks) - 10} more")
+    return "\n".join(lines)
+
 
 def format_text_report(
     *,
@@ -86,6 +115,10 @@ def format_text_report(
 
     if run_diff is not None:
         lines.extend(["WEEK-OVER-WEEK CHANGES", "-" * 40, format_run_diff_text(run_diff), ""])
+
+    favorable = _format_favorable_timing_text(reports)
+    if favorable:
+        lines.extend(["MARKET TIMING", "-" * 40, favorable, ""])
 
     counts: dict[str, int] = {}
     for report in reports:
@@ -129,6 +162,14 @@ def format_html_report(
         color = SIGNAL_COLORS.get(report.signal, "#333")
         label = report.signal.replace("_", " ").title()
         sector = f' <span style="color:#666">({report.sector})</span>' if report.sector else ""
+        timing_color = TIMING_COLORS.get(report.timing_signal, "#666")
+        timing_label_text = timing_label(report.timing_signal)
+        rsi_html = f"RSI {report.rsi_14:.0f}" if report.rsi_14 is not None else "RSI n/a"
+        action_html = (
+            f"<br><span style='color:#666;font-size:12px'>{report.action_note}</span>"
+            if report.action_note
+            else ""
+        )
         rows.append(
             f"""
             <tr>
@@ -141,6 +182,10 @@ def format_html_report(
                 <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models<br>
                 {report.families_passed}/4 families<br>
                 Conviction {report.conviction_score:.0%} ({report.stability_label})</span>
+              </td>
+              <td style="padding:12px;border-bottom:1px solid #eee;vertical-align:top">
+                <span style="color:{timing_color};font-weight:bold">{timing_label_text}</span><br>
+                <span style="color:#666;font-size:12px">{rsi_html}</span>{action_html}
               </td>
               <td style="padding:12px;border-bottom:1px solid #eee">{report.summary}</td>
             </tr>
@@ -191,6 +236,17 @@ def format_html_report(
   </div>
 """
 
+    timing_section = ""
+    favorable_text = _format_favorable_timing_text(reports)
+    if favorable_text:
+        timing_html = favorable_text.replace("\n", "<br>")
+        timing_section = f"""
+  <div style="background:#eefaf0;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #1b7f3a">
+    <h3 style="margin-top:0">Market timing</h3>
+    <p style="margin-bottom:0">{timing_html}</p>
+  </div>
+"""
+
     return f"""<!DOCTYPE html>
 <html>
 <body style="font-family:Arial,sans-serif;color:#222;max-width:900px;margin:0 auto">
@@ -199,13 +255,15 @@ def format_html_report(
   {deep_section}
   {backtest_section}
   {simulation_section}
+  {timing_section}
   {diff_section}
   <p>{summary_bits}</p>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">
     <thead>
       <tr style="background:#f5f5f5">
         <th style="padding:12px;text-align:left">Company</th>
-        <th style="padding:12px;text-align:left">Signal</th>
+        <th style="padding:12px;text-align:left">Value signal</th>
+        <th style="padding:12px;text-align:left">Timing</th>
         <th style="padding:12px;text-align:left">Summary</th>
       </tr>
     </thead>

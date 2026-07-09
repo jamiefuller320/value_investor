@@ -29,6 +29,7 @@ from value_investor.signal_stability import (
 )
 from value_investor.signals import build_signals
 from value_investor.simulator import SimulationSummary, run_simulation
+from value_investor.technical_analysis import enrich_signals_with_technicals
 
 
 @dataclass
@@ -60,6 +61,10 @@ class ScreenResult:
                     "weeks_at_signal",
                     "signal_trend",
                     "stability_label",
+                    "timing_signal",
+                    "timing_score",
+                    "rsi_14",
+                    "action_note",
                     "mean_model_score",
                 ]
             ].to_dict(orient="records"),
@@ -84,6 +89,7 @@ def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> S
     model_results = evaluate_universe(universe)
     summary = summarize_by_ticker(model_results)
     signals = build_signals(universe, model_results, summary)
+    signals = enrich_signals_with_technicals(signals)
 
     history = load_signal_history(out_dir)
     signals = enrich_signals_with_stability(signals, history, run_at=run_at)
