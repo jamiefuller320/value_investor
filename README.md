@@ -66,6 +66,7 @@ Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](
 
 Reports include:
 - **Data quality scores** per company (downgrades thin-data signals)
+- **Technical timing** — RSI, 50/200-day MAs, MACD with accumulate/neutral/wait signals
 - **Conviction & stability** (weeks at signal, new vs persistent picks)
 - **Week-over-week signal changes** (new and persistent strong buys)
 - **Signal backtest** vs FTSE 100 (after 2+ archived weekly runs)

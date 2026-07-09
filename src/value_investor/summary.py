@@ -10,6 +10,7 @@ import pandas as pd
 
 from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
+from value_investor.technical_analysis import format_timing_summary
 
 SIGNAL_LABELS = {
     "strong_buy": "Strong Buy",
@@ -39,6 +40,11 @@ class CompanyReport:
     signal_trend: str
     conviction_score: float
     stability_label: str
+    timing_signal: str
+    timing_score: float
+    rsi_14: float | None
+    price_vs_sma200_pct: float | None
+    action_note: str
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
@@ -62,6 +68,11 @@ class CompanyReport:
             "signal_trend": self.signal_trend,
             "conviction_score": self.conviction_score,
             "stability_label": self.stability_label,
+            "timing_signal": self.timing_signal,
+            "timing_score": self.timing_score,
+            "rsi_14": self.rsi_14,
+            "price_vs_sma200_pct": self.price_vs_sma200_pct,
+            "action_note": self.action_note,
             "summary": self.summary,
             "passed_models": self.passed_models,
             "key_metrics": self.key_metrics,
@@ -129,6 +140,11 @@ def _brief_summary(
     signal_trend: str,
     conviction_score: float,
     stability_label: str,
+    timing_signal: str,
+    timing_score: float,
+    rsi_14: float | None,
+    timing_reasons: list[str] | str,
+    action_note: str,
     passed_model_names: list[str],
     passed_reasons: list[str],
     near_miss_failures: list[str],
@@ -152,6 +168,11 @@ def _brief_summary(
         f"Data quality: {metrics_present}/{metrics_total} ({quality_label(data_quality_score)}). "
         f"Conviction {conviction_score:.0%} ({stability_label}, {weeks_at_signal}w at signal, {signal_trend})."
     )
+
+    if timing_signal and timing_signal != "insufficient_data":
+        parts.append(format_timing_summary(timing_signal, rsi_14, timing_reasons))
+        if action_note:
+            parts.append(f"Action: {action_note}.")
 
     if key_metrics:
         metric_bits = ", ".join(f"{k} {v}" for k, v in list(key_metrics.items())[:4])
@@ -206,6 +227,14 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             float(sector_score) if sector_score is not None and not pd.isna(sector_score) else None
         )
 
+        timing_reasons_raw = row.get("timing_reasons")
+        if isinstance(timing_reasons_raw, str) and timing_reasons_raw.startswith("["):
+            timing_reasons = _parse_list_field(timing_reasons_raw)
+        elif isinstance(timing_reasons_raw, list):
+            timing_reasons = timing_reasons_raw
+        else:
+            timing_reasons = []
+
         summary = _brief_summary(
             signal=str(row.get("signal", "hold")),
             models_passed=int(row.get("models_passed") or 0),
@@ -221,11 +250,19 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             signal_trend=str(row.get("signal_trend") or "new"),
             conviction_score=float(row.get("conviction_score") or 0),
             stability_label=str(row.get("stability_label") or "new"),
+            timing_signal=str(row.get("timing_signal") or "insufficient_data"),
+            timing_score=float(row.get("timing_score") or 0),
+            rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
+            timing_reasons=timing_reasons,
+            action_note=str(row.get("action_note") or ""),
             passed_model_names=passed_model_names,
             passed_reasons=passed_reasons,
             near_miss_failures=near_miss_failures,
             key_metrics=key_metrics,
         )
+
+        vs_sma = row.get("price_vs_sma200_pct")
+        price_vs_sma200_pct = float(vs_sma) if vs_sma is not None and not pd.isna(vs_sma) else None
 
         reports.append(
             CompanyReport(
@@ -246,6 +283,11 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 signal_trend=str(row.get("signal_trend") or "new"),
                 conviction_score=float(row.get("conviction_score") or 0),
                 stability_label=str(row.get("stability_label") or "new"),
+                timing_signal=str(row.get("timing_signal") or "insufficient_data"),
+                timing_score=float(row.get("timing_score") or 0),
+                rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
+                price_vs_sma200_pct=price_vs_sma200_pct,
+                action_note=str(row.get("action_note") or ""),
                 summary=summary,
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,
