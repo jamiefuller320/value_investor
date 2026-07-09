@@ -49,6 +49,11 @@ class CompanyReport:
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
+    adjusted_signal: str | None = None
+    research_verdict: str | None = None
+    research_risk_level: str | None = None
+    research_confidence: float | None = None
+    research_rationale: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -78,6 +83,11 @@ class CompanyReport:
             "summary": self.summary,
             "passed_models": self.passed_models,
             "key_metrics": self.key_metrics,
+            "adjusted_signal": self.adjusted_signal,
+            "research_verdict": self.research_verdict,
+            "research_risk_level": self.research_risk_level,
+            "research_confidence": self.research_confidence,
+            "research_rationale": self.research_rationale,
         }
 
 
@@ -152,6 +162,8 @@ def _brief_summary(
     passed_reasons: list[str],
     near_miss_failures: list[str],
     key_metrics: dict[str, str],
+    research_verdict: str | None = None,
+    adjusted_signal: str | None = None,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -200,6 +212,13 @@ def _brief_summary(
         misses = "; ".join(near_miss_failures[:2])
         parts.append(f"Gaps: {misses}.")
 
+    if research_verdict:
+        verdict_label = research_verdict.replace("_", " ").title()
+        overlay = f"Research verdict: {verdict_label}"
+        if adjusted_signal and adjusted_signal != signal:
+            overlay += f" (adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})"
+        parts.append(f"{overlay}.")
+
     return " ".join(parts)
 
 
@@ -245,8 +264,40 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
 
         trade_plan = trade_plan_from_row(row)
 
+        signal = str(row.get("signal", "hold"))
+        adjusted_signal = row.get("adjusted_signal")
+        adjusted_signal_str = (
+            str(adjusted_signal)
+            if adjusted_signal is not None and not (isinstance(adjusted_signal, float) and pd.isna(adjusted_signal))
+            else None
+        )
+        research_verdict = row.get("research_verdict")
+        research_verdict_str = (
+            str(research_verdict)
+            if research_verdict is not None and not (isinstance(research_verdict, float) and pd.isna(research_verdict))
+            else None
+        )
+        research_risk = row.get("research_risk_level")
+        research_risk_str = (
+            str(research_risk)
+            if research_risk is not None and not (isinstance(research_risk, float) and pd.isna(research_risk))
+            else None
+        )
+        research_conf = row.get("research_confidence")
+        research_confidence = (
+            float(research_conf)
+            if research_conf is not None and not (isinstance(research_conf, float) and pd.isna(research_conf))
+            else None
+        )
+        research_rat = row.get("research_rationale")
+        research_rationale_str = (
+            str(research_rat)
+            if research_rat is not None and not (isinstance(research_rat, float) and pd.isna(research_rat))
+            else None
+        )
+
         summary = _brief_summary(
-            signal=str(row.get("signal", "hold")),
+            signal=signal,
             models_passed=int(row.get("models_passed") or 0),
             model_count=int(row.get("model_count") or 0),
             composite_score=composite_score,
@@ -270,6 +321,8 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             passed_reasons=passed_reasons,
             near_miss_failures=near_miss_failures,
             key_metrics=key_metrics,
+            research_verdict=research_verdict_str,
+            adjusted_signal=adjusted_signal_str,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -280,7 +333,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 ticker=ticker,
                 name=str(row.get("name") or ticker),
                 sector=row.get("sector"),
-                signal=str(row.get("signal", "hold")),
+                signal=signal,
                 models_passed=int(row.get("models_passed") or 0),
                 model_count=int(row.get("model_count") or 0),
                 composite_score=composite_score,
@@ -303,6 +356,11 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 summary=summary,
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,
+                adjusted_signal=adjusted_signal_str or signal,
+                research_verdict=research_verdict_str,
+                research_risk_level=research_risk_str,
+                research_confidence=research_confidence,
+                research_rationale=research_rationale_str,
             )
         )
 

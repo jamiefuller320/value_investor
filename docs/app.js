@@ -55,6 +55,15 @@ function timingBadge(timing) {
   return `<span class="badge badge-${timing}">${esc(timing)}</span>`;
 }
 
+function researchOverlayHtml(report) {
+  if (!report.research_verdict) return "";
+  const verdict = esc(report.research_verdict.replace(/_/g, " "));
+  if (report.adjusted_signal && report.adjusted_signal !== report.signal) {
+    return `<br><span class="small muted">Research: ${verdict} → ${esc(report.adjusted_signal.replace(/_/g, " "))}</span>`;
+  }
+  return `<br><span class="small muted">Research: ${verdict}</span>`;
+}
+
 function tradePlanHtml(report) {
   const plan = report.trade_plan;
   if (!plan) return '<span class="muted">—</span>';
@@ -216,7 +225,7 @@ function renderScreener(data) {
           <strong>${esc(report.name)}</strong><br>
           <span class="small muted">${esc(report.ticker)}${report.sector ? ` · ${esc(report.sector)}` : ""}</span>
         </td>
-        <td>${signalBadge(report.signal)}</td>
+        <td>${signalBadge(report.signal)}${researchOverlayHtml(report)}</td>
         <td>${timingBadge(report.timing_signal)}<br><span class="small muted">${report.rsi_14 != null ? `RSI ${Math.round(report.rsi_14)}` : ""}</span></td>
         <td>${report.models_passed}/${report.model_count}<br><span class="small muted">${report.families_passed}/4 families</span></td>
         <td>${pct(report.conviction_score)}<br><span class="small muted">${esc(report.stability_label || "")}</span></td>
@@ -245,7 +254,7 @@ function renderStrongBuys(data) {
       (report) => `
     <div class="card pick-card">
       <h4>${esc(report.name)} <span class="small muted">(${esc(report.ticker)})</span></h4>
-      <p>${signalBadge(report.signal)} ${timingBadge(report.timing_signal)} · Conviction ${pct(report.conviction_score)}</p>
+      <p>${signalBadge(report.signal)} ${timingBadge(report.timing_signal)} · Conviction ${pct(report.conviction_score)}${researchOverlayHtml(report)}</p>
       <p class="small">${esc(report.action_note || "")}</p>
       <p class="small"><strong>Trade plan:</strong><br>${tradePlanHtml(report)}</p>
       <p class="small">${esc(report.summary || "")}</p>
@@ -356,13 +365,14 @@ function renderAnalysis(data) {
     researchHtml = `
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Company</th><th>Version</th><th>Summary</th><th></th></tr></thead>
+          <thead><tr><th>Company</th><th>Verdict</th><th>Version</th><th>Summary</th><th></th></tr></thead>
           <tbody>
             ${research
               .map(
                 (item, index) => `
               <tr>
                 <td><strong>${esc(item.name)}</strong><br><span class="small muted">${esc(item.ticker)}</span></td>
+                <td>${item.research_verdict ? `<span class="badge badge-${esc(item.research_verdict)}">${esc(item.research_verdict)}</span>` : '<span class="muted">—</span>'}</td>
                 <td>v${item.version || 1}<br><span class="small muted">${fmtDate(item.updated_at)}</span></td>
                 <td class="small">${esc((item.executive_summary || "").slice(0, 240))}${(item.executive_summary || "").length > 240 ? "…" : ""}</td>
                 <td><button type="button" class="btn btn-primary" data-memo-index="${index}">Read memo</button></td>

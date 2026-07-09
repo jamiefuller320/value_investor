@@ -20,6 +20,8 @@ class SimulatorConfig:
     max_positions: int = DEFAULT_MAX_POSITIONS
     buy_signals: frozenset[str] = BUY_SIGNALS
     skip_timing_wait: bool = True
+    use_adjusted_signal: bool = False
+    require_research_accumulate: bool = False
 
 
 @dataclass
@@ -87,8 +89,16 @@ def _select_targets(snapshot: RunSnapshot, config: SimulatorConfig) -> list[str]
     ranked: list[tuple[str, float]] = []
     for row in snapshot.signals:
         signal = str(row.get("signal", ""))
+        if config.use_adjusted_signal:
+            adjusted = row.get("adjusted_signal")
+            if adjusted is not None and str(adjusted).strip():
+                signal = str(adjusted)
         if signal not in config.buy_signals:
             continue
+        if config.require_research_accumulate:
+            verdict = row.get("research_verdict")
+            if verdict is None or str(verdict).strip().lower() != "accumulate":
+                continue
         timing = row.get("timing_signal")
         if config.skip_timing_wait and timing == "wait":
             continue

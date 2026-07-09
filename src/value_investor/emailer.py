@@ -69,6 +69,23 @@ TIMING_COLORS = {
     "insufficient_data": "#666666",
 }
 
+VERDICT_COLORS = {
+    "accumulate": "#1b7f3a",
+    "neutral": "#b8860b",
+    "caution": "#c45c00",
+    "pass": "#b33a3a",
+}
+
+
+def _research_overlay_label(report: CompanyReport) -> str | None:
+    if not report.research_verdict:
+        return None
+    label = report.research_verdict.replace("_", " ").title()
+    if report.adjusted_signal and report.adjusted_signal != report.signal:
+        adj = report.adjusted_signal.replace("_", " ").title()
+        return f"Research: {label} → {adj}"
+    return f"Research: {label}"
+
 
 def _favorable_timing_picks(reports: list[CompanyReport]) -> list[CompanyReport]:
     return [
@@ -232,7 +249,10 @@ def format_text_report(
 
     for report in reports:
         label = report.signal.replace("_", " ").title()
+        overlay = _research_overlay_label(report)
         lines.append(f"{report.name} ({report.ticker}) — {label}")
+        if overlay:
+            lines.append(overlay)
         lines.append(report.summary)
         lines.append("")
 
@@ -272,6 +292,12 @@ def format_html_report(
             if report.action_note
             else ""
         )
+        overlay = _research_overlay_label(report)
+        overlay_html = (
+            f"<br><span style='color:#666;font-size:12px'>{overlay}</span>"
+            if overlay
+            else ""
+        )
         rows.append(
             f"""
             <tr>
@@ -280,7 +306,7 @@ def format_html_report(
                 <span style="color:#666">{report.ticker}</span>{sector}
               </td>
               <td style="padding:12px;border-bottom:1px solid #eee;vertical-align:top">
-                <span style="color:{color};font-weight:bold">{label}</span><br>
+                <span style="color:{color};font-weight:bold">{label}</span>{overlay_html}<br>
                 <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models<br>
                 {report.families_passed}/4 families<br>
                 Conviction {report.conviction_score:.0%} ({report.stability_label})</span>
