@@ -7,9 +7,10 @@ import smtplib
 from dataclasses import dataclass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from value_investor.backtest import BacktestSummary, format_backtest_text
+from value_investor.deep_analysis import DeepAnalysis
 from value_investor.run_diff import RunDiff, format_run_diff_text
 from value_investor.summary import CompanyReport
-from value_investor.deep_analysis import DeepAnalysis
 
 
 @dataclass
@@ -64,6 +65,7 @@ def format_text_report(
     reports: list[CompanyReport],
     run_diff: RunDiff | None = None,
     deep_analysis: DeepAnalysis | None = None,
+    backtest: BacktestSummary | None = None,
 ) -> str:
     lines = [
         f"FTSE 100 Value Screen — {run_at}",
@@ -73,6 +75,9 @@ def format_text_report(
 
     if deep_analysis is not None:
         lines.extend(["DEEP ANALYSIS", "-" * 40, deep_analysis.full_text, ""])
+
+    if backtest is not None:
+        lines.extend(["SIGNAL BACKTEST", "-" * 40, format_backtest_text(backtest), ""])
 
     if run_diff is not None:
         lines.extend(["WEEK-OVER-WEEK CHANGES", "-" * 40, format_run_diff_text(run_diff), ""])
@@ -102,6 +107,7 @@ def format_html_report(
     reports: list[CompanyReport],
     run_diff: RunDiff | None = None,
     deep_analysis: DeepAnalysis | None = None,
+    backtest: BacktestSummary | None = None,
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -127,7 +133,8 @@ def format_html_report(
               <td style="padding:12px;border-bottom:1px solid #eee;vertical-align:top">
                 <span style="color:{color};font-weight:bold">{label}</span><br>
                 <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models<br>
-                {report.families_passed}/4 families</span>
+                {report.families_passed}/4 families<br>
+                Conviction {report.conviction_score:.0%} ({report.stability_label})</span>
               </td>
               <td style="padding:12px;border-bottom:1px solid #eee">{report.summary}</td>
             </tr>
@@ -148,6 +155,16 @@ def format_html_report(
   </div>
 """
 
+    backtest_section = ""
+    if backtest is not None:
+        backtest_text = format_backtest_text(backtest).replace("\n", "<br>")
+        backtest_section = f"""
+  <div style="background:#eef6ff;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #2b6cb0">
+    <h3 style="margin-top:0">Signal backtest</h3>
+    <p style="margin-bottom:0">{backtest_text}</p>
+  </div>
+"""
+
     diff_section = ""
     if run_diff is not None:
         diff_text = format_run_diff_text(run_diff).replace("\n", "<br>")
@@ -164,6 +181,7 @@ def format_html_report(
   <h2>FTSE 100 Value Screen</h2>
   <p style="color:#666">{run_at}</p>
   {deep_section}
+  {backtest_section}
   {diff_section}
   <p>{summary_bits}</p>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">

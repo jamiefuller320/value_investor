@@ -62,7 +62,14 @@ Outputs land in `output/`:
 
 Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
 
-**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab. Reports include week-over-week signal changes and, when the API key is set, deep analysis on the top 5 picks with a red-flag pass.
+**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
+
+Reports include:
+- **Data quality scores** per company (downgrades thin-data signals)
+- **Conviction & stability** (weeks at signal, new vs persistent picks)
+- **Week-over-week signal changes** (new and persistent strong buys)
+- **Signal backtest** vs FTSE 100 (after 2+ archived weekly runs)
+- **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
 
 ## Architecture
 

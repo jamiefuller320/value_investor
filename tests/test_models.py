@@ -71,9 +71,25 @@ def test_assign_signal_strong_buy_scales_with_model_count():
         sector_composite_score=0.75,
         families_passed=3,
         family_count=4,
+        data_quality_score=0.85,
         has_errors=False,
     )
     assert signal == Signal.STRONG_BUY
+
+
+def test_assign_signal_downgrades_on_low_data_quality():
+    signal = assign_signal(
+        models_passed=8,
+        model_count=18,
+        mean_model_score=0.8,
+        composite_score=0.85,
+        sector_composite_score=0.85,
+        families_passed=3,
+        family_count=4,
+        data_quality_score=0.55,
+        has_errors=False,
+    )
+    assert signal == Signal.BUY
 
 
 def test_assign_signal_requires_multiple_families_for_strong_buy():
@@ -85,6 +101,7 @@ def test_assign_signal_requires_multiple_families_for_strong_buy():
         sector_composite_score=0.85,
         families_passed=1,
         family_count=4,
+        data_quality_score=0.85,
         has_errors=False,
     )
     assert signal != Signal.STRONG_BUY

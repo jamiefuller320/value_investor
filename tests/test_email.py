@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pandas as pd
 
+from value_investor.backtest import BacktestSummary, HorizonResult
 from value_investor.deep_analysis import DeepAnalysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.run_diff import RunDiff
@@ -23,6 +24,13 @@ def _sample_frames():
             "sector_composite_score": 0.82,
             "families_passed": 3,
             "passed_families": "cheapness,quality,dividend",
+            "data_quality_score": 0.85,
+            "metrics_present": 18,
+            "metrics_total": 20,
+            "weeks_at_signal": 3,
+            "signal_trend": "stable",
+            "conviction_score": 0.72,
+            "stability_label": "building",
             "trailing_pe": 8.0,
             "price_to_book": 0.9,
             "dividend_yield": 0.04,
@@ -39,6 +47,13 @@ def _sample_frames():
             "sector_composite_score": 0.25,
             "families_passed": 1,
             "passed_families": "cheapness",
+            "data_quality_score": 0.45,
+            "metrics_present": 9,
+            "metrics_total": 20,
+            "weeks_at_signal": 1,
+            "signal_trend": "deteriorating",
+            "conviction_score": 0.15,
+            "stability_label": "new",
             "trailing_pe": 25.0,
             "price_to_book": 3.0,
             "dividend_yield": 0.01,
@@ -96,6 +111,7 @@ def test_format_reports_contain_all_companies():
     assert "Alpha PLC" in text
     assert "Beta PLC" in text
     assert "Families:" in text
+    assert "Conviction" in text
     assert "strong_buy" not in html
     assert "Strong Buy" in html
 
@@ -106,6 +122,7 @@ def test_format_reports_include_diff_and_deep_analysis_sections():
     run_diff = RunDiff(
         previous_run_at="2026-07-01",
         new_strong_buys=["Alpha (AAA.L): buy → strong_buy"],
+        persistent_strong_buys=[],
         lost_strong_buys=[],
         upgrades=["Alpha (AAA.L): buy → strong_buy"],
         downgrades=[],
@@ -134,6 +151,27 @@ def test_format_reports_include_diff_and_deep_analysis_sections():
     assert "DEEP ANALYSIS" in text
     assert "Red flags" in html
     assert "Week-over-week changes" in html
+
+
+def test_format_reports_include_backtest_section():
+    signals, model_results = _sample_frames()
+    reports = build_company_reports(signals, model_results)
+    backtest = BacktestSummary(
+        run_count=3,
+        horizons=[
+            HorizonResult(
+                horizon_days=7,
+                signal="strong_buy",
+                avg_return=0.05,
+                count=4,
+                benchmark_return=0.01,
+                excess_return=0.04,
+            )
+        ],
+    )
+    text = format_text_report(run_at="2026-07-08", reports=reports, backtest=backtest)
+    assert "SIGNAL BACKTEST" in text
+    assert "strong_buy" in text
 
 
 @patch("value_investor.emailer.smtplib.SMTP")

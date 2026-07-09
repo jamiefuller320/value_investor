@@ -14,6 +14,7 @@ from value_investor.signals import SIGNAL_ORDER
 class RunDiff:
     previous_run_at: str | None
     new_strong_buys: list[str]
+    persistent_strong_buys: list[str]
     lost_strong_buys: list[str]
     upgrades: list[str]
     downgrades: list[str]
@@ -23,6 +24,7 @@ class RunDiff:
         return {
             "previous_run_at": self.previous_run_at,
             "new_strong_buys": self.new_strong_buys,
+            "persistent_strong_buys": self.persistent_strong_buys,
             "lost_strong_buys": self.lost_strong_buys,
             "upgrades": self.upgrades,
             "downgrades": self.downgrades,
@@ -32,6 +34,7 @@ class RunDiff:
     def has_changes(self) -> bool:
         return bool(
             self.new_strong_buys
+            or self.persistent_strong_buys
             or self.lost_strong_buys
             or self.upgrades
             or self.downgrades
@@ -54,6 +57,7 @@ def compute_run_diff(previous: pd.DataFrame, current: pd.DataFrame) -> RunDiff:
 
     common = prev.index.intersection(curr.index)
     new_strong_buys: list[str] = []
+    persistent_strong_buys: list[str] = []
     lost_strong_buys: list[str] = []
     upgrades: list[str] = []
     downgrades: list[str] = []
@@ -66,6 +70,8 @@ def compute_run_diff(previous: pd.DataFrame, current: pd.DataFrame) -> RunDiff:
 
         if prev_signal == curr_signal:
             unchanged += 1
+            if curr_signal == "strong_buy":
+                persistent_strong_buys.append(f"{name} ({ticker})")
             continue
 
         prev_rank = _signal_rank(prev_signal)
@@ -89,6 +95,7 @@ def compute_run_diff(previous: pd.DataFrame, current: pd.DataFrame) -> RunDiff:
     return RunDiff(
         previous_run_at=previous_run_at,
         new_strong_buys=new_strong_buys,
+        persistent_strong_buys=persistent_strong_buys,
         lost_strong_buys=lost_strong_buys,
         upgrades=upgrades,
         downgrades=downgrades,
@@ -105,7 +112,8 @@ def format_run_diff_text(diff: RunDiff) -> str:
         lines[0] += f" ({diff.previous_run_at})"
 
     sections = [
-        ("New strong buys", diff.new_strong_buys),
+        ("New strong buys this week", diff.new_strong_buys),
+        ("Persistent strong buys", diff.persistent_strong_buys),
         ("Lost strong buys", diff.lost_strong_buys),
         ("Upgrades", [u for u in diff.upgrades if u not in diff.new_strong_buys]),
         ("Downgrades", [d for d in diff.downgrades if d not in diff.lost_strong_buys]),
