@@ -36,7 +36,19 @@ def _sample_frames():
             "rsi_14": 34.0,
             "price_vs_sma200_pct": -0.08,
             "timing_reasons": ["RSI below neutral (34)", "below 200-day MA"],
-            "action_note": "Strong buy — favourable entry timing",
+            "action_note": "Strong Buy — favourable entry timing",
+            "core_order": "limit",
+            "core_limit": 98.5,
+            "core_allocation_pct": 0.65,
+            "tactical_order": "limit",
+            "tactical_limit": 95.0,
+            "tactical_allocation_pct": 0.35,
+            "tactical_stop_loss": 92.0,
+            "tactical_take_profit": 105.0,
+            "trade_plan_summary": (
+                "Trade plan: core 65% limit £98.50; tactical 35% limit £95.00; "
+                "tactical stop £92.00, target £105.00."
+            ),
             "trailing_pe": 8.0,
             "price_to_book": 0.9,
             "dividend_yield": 0.04,
@@ -195,6 +207,22 @@ def test_format_reports_highlight_favorable_timing():
     assert "MARKET TIMING" in text
     assert "Alpha PLC" in text
     assert "favourable" in text.lower()
+
+
+def test_format_reports_include_strong_buy_trade_plans():
+    signals, model_results = _sample_frames()
+    reports = build_company_reports(signals, model_results)
+    text = format_text_report(run_at="2026-07-08", reports=reports)
+    html = format_html_report(run_at="2026-07-08", reports=reports)
+
+    assert "STRONG BUY TRADE PLANS" in text
+    assert "Trade plan:" in text
+    assert "tactical stop £92.00" in text
+    assert "Strong buy trade plans" in html
+    assert "Tactical:" in html
+    alpha = reports[0]
+    assert alpha.trade_plan is not None
+    assert "Trade plan:" in alpha.summary
 
 
 @patch("value_investor.emailer.smtplib.SMTP")

@@ -77,6 +77,94 @@ def _favorable_timing_picks(reports: list[CompanyReport]) -> list[CompanyReport]
     ]
 
 
+def _strong_buy_trade_plans(reports: list[CompanyReport]) -> list[CompanyReport]:
+    return [
+        r
+        for r in reports
+        if r.signal == "strong_buy" and r.trade_plan is not None
+    ]
+
+
+def _format_trade_plans_text(reports: list[CompanyReport]) -> str | None:
+    plans = _strong_buy_trade_plans(reports)
+    if not plans:
+        return None
+    lines = [
+        "Suggested orders for strong buys (core holding + tactical dip entries):",
+    ]
+    for report in plans:
+        lines.append(f"  • {report.name} ({report.ticker})")
+        if report.trade_plan and report.trade_plan.trade_plan_summary:
+            lines.append(f"    {report.trade_plan.trade_plan_summary}")
+    return "\n".join(lines)
+
+
+def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
+    plans = _strong_buy_trade_plans(reports)
+    if not plans:
+        return ""
+    rows = []
+    for report in plans:
+        plan = report.trade_plan
+        if plan is None:
+            continue
+        core_text = (
+            f"{plan.core_order or 'n/a'}"
+            + (f" @ £{plan.core_limit:.2f}" if plan.core_limit is not None else " @ market")
+            + (f" ({plan.core_allocation_pct:.0%})" if plan.core_allocation_pct is not None else "")
+        )
+        tactical_text = (
+            f"{plan.tactical_order or 'limit'}"
+            + (f" @ £{plan.tactical_limit:.2f}" if plan.tactical_limit is not None else "")
+            + (
+                f" ({plan.tactical_allocation_pct:.0%})"
+                if plan.tactical_allocation_pct is not None
+                else ""
+            )
+        )
+        risk_text = ""
+        if plan.tactical_stop_loss is not None and plan.tactical_take_profit is not None:
+            risk_text = (
+                f"Tactical stop £{plan.tactical_stop_loss:.2f}, "
+                f"target £{plan.tactical_take_profit:.2f}"
+            )
+        rows.append(
+            f"""
+            <tr>
+              <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
+                <strong>{report.name}</strong><br>
+                <span style="color:#666">{report.ticker}</span>
+              </td>
+              <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
+                Core: {core_text}<br>
+                Tactical: {tactical_text}
+              </td>
+              <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">{risk_text}</td>
+            </tr>
+            """
+        )
+    return f"""
+  <div style="background:#f0f4ff;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #2b6cb0">
+    <h3 style="margin-top:0">Strong buy trade plans</h3>
+    <p style="color:#666;font-size:13px;margin-top:0">
+      Core leg builds the long-term holding; tactical limits target short-term dips.
+    </p>
+    <table style="width:100%;border-collapse:collapse;margin-top:8px">
+      <thead>
+        <tr style="background:#e8eef8">
+          <th style="padding:10px;text-align:left">Company</th>
+          <th style="padding:10px;text-align:left">Orders</th>
+          <th style="padding:10px;text-align:left">Tactical risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        {''.join(rows)}
+      </tbody>
+    </table>
+  </div>
+"""
+
+
 def _format_favorable_timing_text(reports: list[CompanyReport]) -> str | None:
     picks = _favorable_timing_picks(reports)
     if not picks:
@@ -119,6 +207,10 @@ def format_text_report(
     favorable = _format_favorable_timing_text(reports)
     if favorable:
         lines.extend(["MARKET TIMING", "-" * 40, favorable, ""])
+
+    trade_plans = _format_trade_plans_text(reports)
+    if trade_plans:
+        lines.extend(["STRONG BUY TRADE PLANS", "-" * 40, trade_plans, ""])
 
     counts: dict[str, int] = {}
     for report in reports:
@@ -247,6 +339,8 @@ def format_html_report(
   </div>
 """
 
+    trade_plans_section = _format_trade_plans_html(reports)
+
     return f"""<!DOCTYPE html>
 <html>
 <body style="font-family:Arial,sans-serif;color:#222;max-width:900px;margin:0 auto">
@@ -256,6 +350,7 @@ def format_html_report(
   {backtest_section}
   {simulation_section}
   {timing_section}
+  {trade_plans_section}
   {diff_section}
   <p>{summary_bits}</p>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">

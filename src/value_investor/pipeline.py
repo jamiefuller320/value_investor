@@ -65,6 +65,12 @@ class ScreenResult:
                     "timing_score",
                     "rsi_14",
                     "action_note",
+                    "core_order",
+                    "core_limit",
+                    "tactical_limit",
+                    "tactical_stop_loss",
+                    "tactical_take_profit",
+                    "trade_plan_summary",
                     "mean_model_score",
                 ]
             ].to_dict(orient="records"),
