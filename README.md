@@ -73,12 +73,14 @@ Outputs land in `output/`:
 
 ## GitHub Pages dashboard
 
-A static web dashboard lives in `docs/` and is published automatically after each weekly workflow run.
+A static web dashboard lives in `docs/` and is published by the **Deploy GitHub Pages** workflow when `docs/` changes on `main`.
 
-**Enable:** Repository **Settings → Pages → Build and deployment → Source: Deploy from branch `main` / folder `/docs`**.
+**Enable (one-time):** Repository **Settings → Pages → Build and deployment → Source: GitHub Actions** (not “Deploy from branch”). The workflow file is `.github/workflows/pages.yml`.
 
 | URL (example) | `https://<user>.github.io/value_investor/` |
 |---------------|---------------------------------------------|
+
+The weekly email workflow commits updated data to `docs/data/` (and research memos to `docs/research/`), which triggers a Pages redeploy.
 
 The dashboard shows:
 
