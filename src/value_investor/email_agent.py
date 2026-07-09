@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -14,6 +15,7 @@ from value_investor.simulator import SimulationSummary
 from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.pipeline import run_screen, write_outputs
+from value_investor.publish import publish_dashboard
 from value_investor.run_diff import RunDiff
 from value_investor.summary import build_company_reports
 
@@ -99,7 +101,53 @@ def main(argv: list[str] | None = None) -> int:
         help="Cursor API key for deep analysis",
     )
     parser.add_argument("--top", type=int, default=5, help="Number of top picks for deep analysis")
+    parser.add_argument(
+        "--send-only",
+        action="store_true",
+        help="Send email from existing output/email_report.* files (skip screening)",
+    )
+    parser.add_argument(
+        "--publish-dashboard",
+        action="store_true",
+        help="Publish screening output to docs/ for GitHub Pages",
+    )
+    parser.add_argument(
+        "--dashboard-dir",
+        type=Path,
+        default=Path("docs"),
+        help="GitHub Pages root for --publish-dashboard",
+    )
     args = parser.parse_args(argv)
+
+    if args.send_only:
+        text_path = args.output_dir / "email_report.txt"
+        html_path = args.output_dir / "email_report.html"
+        reports_path = args.output_dir / "email_reports.json"
+        if not text_path.exists() or not html_path.exists() or not reports_path.exists():
+            print("Missing email report files; run ftse-email --dry-run first", file=sys.stderr)
+            return 1
+        reports_data = json.loads(reports_path.read_text(encoding="utf-8"))
+        strong_buys = sum(1 for r in reports_data if r.get("signal") == "strong_buy")
+        run_line = text_path.read_text(encoding="utf-8").splitlines()[0]
+        date_match = None
+        import re
+
+        if (match := re.search(r"(\d{4}-\d{2}-\d{2})", run_line)):
+            date_match = match.group(1)
+        subject = f"FTSE 100 Value Screen — {strong_buys} strong buys — {date_match or 'report'}"
+        try:
+            config = EmailConfig.from_env()
+        except ValueError as err:
+            print(str(err), file=sys.stderr)
+            return 1
+        send_report_email(
+            subject=subject,
+            text_body=text_path.read_text(encoding="utf-8"),
+            html_body=html_path.read_text(encoding="utf-8"),
+            config=config,
+        )
+        print(f"Email sent to {config.email_to}")
+        return 0
 
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
@@ -179,6 +227,13 @@ def main(argv: list[str] | None = None) -> int:
     html_path = args.output_dir / "email_report.html"
     text_path.write_text(text_body, encoding="utf-8")
     html_path.write_text(html_body, encoding="utf-8")
+
+    if args.publish_dashboard:
+        dashboard_path = publish_dashboard(
+            output_dir=args.output_dir,
+            dest_dir=args.dashboard_dir,
+        )
+        print(f"Published dashboard data to {dashboard_path}")
 
     strong_buys = sum(1 for r in reports if r.signal == "strong_buy")
     subject = f"FTSE 100 Value Screen — {strong_buys} strong buys — {run_at.strftime('%Y-%m-%d')}"
