@@ -117,12 +117,15 @@ def save_run_snapshot(
     tickers = signals["ticker"].tolist()
     prices = snapshot_prices(tickers)
 
+    signal_cols = ["ticker", "signal", "conviction_score", "data_quality_score"]
+    for optional in ("timing_signal", "timing_score", "action_note"):
+        if optional in signals.columns:
+            signal_cols.append(optional)
+
     snapshot = RunSnapshot(
         run_at=run_at.isoformat(),
         prices=prices,
-        signals=signals[
-            ["ticker", "signal", "conviction_score", "data_quality_score"]
-        ].to_dict(orient="records"),
+        signals=signals[signal_cols].to_dict(orient="records"),
     )
 
     stamp = run_at.strftime("%Y%m%d_%H%M%S")

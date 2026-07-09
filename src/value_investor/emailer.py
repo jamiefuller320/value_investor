@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 from value_investor.backtest import BacktestSummary, format_backtest_text
 from value_investor.deep_analysis import DeepAnalysis
 from value_investor.run_diff import RunDiff, format_run_diff_text
+from value_investor.simulator import SimulationSummary, format_simulation_text
 from value_investor.summary import CompanyReport
 
 
@@ -66,6 +67,7 @@ def format_text_report(
     run_diff: RunDiff | None = None,
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
+    simulation: SimulationSummary | None = None,
 ) -> str:
     lines = [
         f"FTSE 100 Value Screen — {run_at}",
@@ -78,6 +80,9 @@ def format_text_report(
 
     if backtest is not None:
         lines.extend(["SIGNAL BACKTEST", "-" * 40, format_backtest_text(backtest), ""])
+
+    if simulation is not None:
+        lines.extend(["PORTFOLIO SIMULATION", "-" * 40, format_simulation_text(simulation), ""])
 
     if run_diff is not None:
         lines.extend(["WEEK-OVER-WEEK CHANGES", "-" * 40, format_run_diff_text(run_diff), ""])
@@ -108,6 +113,7 @@ def format_html_report(
     run_diff: RunDiff | None = None,
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
+    simulation: SimulationSummary | None = None,
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -165,6 +171,16 @@ def format_html_report(
   </div>
 """
 
+    simulation_section = ""
+    if simulation is not None:
+        sim_text = format_simulation_text(simulation).replace("\n", "<br>")
+        simulation_section = f"""
+  <div style="background:#f3eef9;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #6b46c1">
+    <h3 style="margin-top:0">Portfolio simulation</h3>
+    <p style="margin-bottom:0">{sim_text}</p>
+  </div>
+"""
+
     diff_section = ""
     if run_diff is not None:
         diff_text = format_run_diff_text(run_diff).replace("\n", "<br>")
@@ -182,6 +198,7 @@ def format_html_report(
   <p style="color:#666">{run_at}</p>
   {deep_section}
   {backtest_section}
+  {simulation_section}
   {diff_section}
   <p>{summary_bits}</p>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">

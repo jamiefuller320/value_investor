@@ -43,6 +43,10 @@ export EMAIL_TO="you@gmail.com"
 ftse-email --dry-run          # preview without sending
 ftse-email                    # run screen + email
 ftse-email --deep-analysis    # add Cursor deep analysis (top 5 + red flags)
+
+# Simulate £1,000 portfolio with 3% per-trade costs from archived runs
+ftse-simulate
+ftse-simulate --capital 1000 --trade-cost 0.03 --json
 ```
 
 Outputs land in `output/`:
@@ -69,6 +73,7 @@ Reports include:
 - **Conviction & stability** (weeks at signal, new vs persistent picks)
 - **Week-over-week signal changes** (new and persistent strong buys)
 - **Signal backtest** vs FTSE 100 (after 2+ archived weekly runs)
+- **Portfolio simulation** — £1,000 pot, 3% per trade, rebalanced on top conviction picks
 - **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
 
 ## Architecture
