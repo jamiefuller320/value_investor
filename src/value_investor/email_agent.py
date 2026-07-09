@@ -15,6 +15,8 @@ from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.pipeline import run_screen, write_outputs
 from value_investor.run_diff import RunDiff
+from value_investor.research.format import research_documents_for_reports
+from value_investor.research.runner import load_existing_research, run_research_for_strong_buys
 from value_investor.summary import build_company_reports
 
 
@@ -99,6 +101,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Cursor API key for deep analysis",
     )
     parser.add_argument("--top", type=int, default=5, help="Number of top picks for deep analysis")
+    parser.add_argument(
+        "--research-docs",
+        action="store_true",
+        help=(
+            "Generate or update per-ticker research memos for all strong buys "
+            "(5-year financials + 1-year news; weekly updates on reruns)"
+        ),
+    )
     args = parser.parse_args(argv)
 
     run_diff: RunDiff | None = None
@@ -133,6 +143,15 @@ def main(argv: list[str] | None = None) -> int:
     run_at_str = run_at.strftime("%Y-%m-%d %H:%M UTC")
 
     deep_analysis: DeepAnalysis | None = None
+    research_summary = None
+    research_documents = research_documents_for_reports(
+        reports,
+        load_existing_research(
+            args.output_dir,
+            tickers=[r.ticker for r in reports if r.signal == "strong_buy"],
+        ),
+    )
+
     if args.deep_analysis or args.agent_intro:
         if not args.api_key:
             print("CURSOR_API_KEY required for --deep-analysis", file=sys.stderr)
@@ -152,6 +171,22 @@ def main(argv: list[str] | None = None) -> int:
         analysis_path = args.output_dir / "deep_analysis.txt"
         analysis_path.write_text(deep_analysis.full_text, encoding="utf-8")
 
+    if args.research_docs:
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --research-docs", file=sys.stderr)
+            return 1
+        try:
+            research_summary = run_research_for_strong_buys(
+                reports=reports,
+                output_dir=args.output_dir,
+                api_key=args.api_key,
+                model=args.model,
+            )
+        except RuntimeError as err:
+            print(str(err), file=sys.stderr)
+            return 2
+        research_documents = research_documents_for_reports(reports, research_summary.documents)
+
     text_body = format_text_report(
         run_at=run_at_str,
         reports=reports,
@@ -159,6 +194,8 @@ def main(argv: list[str] | None = None) -> int:
         deep_analysis=deep_analysis,
         backtest=backtest,
         simulation=simulation,
+        research_summary=research_summary,
+        research_documents=research_documents,
     )
     html_body = format_html_report(
         run_at=run_at_str,
@@ -167,6 +204,8 @@ def main(argv: list[str] | None = None) -> int:
         deep_analysis=deep_analysis,
         backtest=backtest,
         simulation=simulation,
+        research_summary=research_summary,
+        research_documents=research_documents,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

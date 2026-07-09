@@ -9,6 +9,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from value_investor.backtest import BacktestSummary, format_backtest_text
 from value_investor.deep_analysis import DeepAnalysis
+from value_investor.research.document import ResearchDocument, ResearchSummary
+from value_investor.research.format import format_research_html, format_research_text
 from value_investor.run_diff import RunDiff, format_run_diff_text
 from value_investor.simulator import SimulationSummary, format_simulation_text
 from value_investor.summary import CompanyReport
@@ -185,6 +187,8 @@ def format_text_report(
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
     simulation: SimulationSummary | None = None,
+    research_summary: ResearchSummary | None = None,
+    research_documents: list[ResearchDocument] | None = None,
 ) -> str:
     lines = [
         f"FTSE 100 Value Screen — {run_at}",
@@ -211,6 +215,10 @@ def format_text_report(
     trade_plans = _format_trade_plans_text(reports)
     if trade_plans:
         lines.extend(["STRONG BUY TRADE PLANS", "-" * 40, trade_plans, ""])
+
+    research_text = format_research_text(research_summary, research_documents or [])
+    if research_text:
+        lines.extend(["STRONG BUY RESEARCH", "-" * 40, research_text, ""])
 
     counts: dict[str, int] = {}
     for report in reports:
@@ -239,6 +247,8 @@ def format_html_report(
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
     simulation: SimulationSummary | None = None,
+    research_summary: ResearchSummary | None = None,
+    research_documents: list[ResearchDocument] | None = None,
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -340,6 +350,7 @@ def format_html_report(
 """
 
     trade_plans_section = _format_trade_plans_html(reports)
+    research_section = format_research_html(research_documents or [], research_summary)
 
     return f"""<!DOCTYPE html>
 <html>
@@ -351,6 +362,7 @@ def format_html_report(
   {simulation_section}
   {timing_section}
   {trade_plans_section}
+  {research_section}
   {diff_section}
   <p>{summary_bits}</p>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">
