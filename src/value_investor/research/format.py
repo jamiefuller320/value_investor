@@ -6,6 +6,33 @@ from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.summary import CompanyReport
 
 
+VERDICT_LABELS = {
+    "accumulate": "Accumulate",
+    "neutral": "Neutral",
+    "caution": "Caution",
+    "pass": "Pass",
+}
+
+
+def _verdict_change_note(doc: ResearchDocument) -> str | None:
+    if doc.mode != "weekly_update" or not doc.weekly_updates:
+        return None
+    latest = doc.weekly_updates[-1]
+    prior_verdict = latest.get("prior_verdict")
+    if prior_verdict and prior_verdict != doc.research_verdict:
+        prior = VERDICT_LABELS.get(prior_verdict, prior_verdict)
+        current = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
+        return f"Verdict revised: {prior} → {current}"
+    return None
+
+
+def _latest_weekly_summary(doc: ResearchDocument) -> str | None:
+    if not doc.weekly_updates:
+        return None
+    summary = doc.weekly_updates[-1].get("summary", "").strip()
+    return summary or None
+
+
 def research_documents_for_reports(
     reports: list[CompanyReport],
     documents: list[ResearchDocument],
@@ -33,7 +60,17 @@ def format_research_text(summary: ResearchSummary | None, documents: list[Resear
         for error in summary.errors:
             lines.append(f"  ! {error}")
     for doc in documents:
-        lines.append(f"  • {doc.name} ({doc.ticker}) — v{doc.version}, updated {doc.updated_at[:10]}")
+        verdict = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
+        change = _verdict_change_note(doc)
+        lines.append(
+            f"  • {doc.name} ({doc.ticker}) — v{doc.version}, updated {doc.updated_at[:10]}, verdict {verdict}"
+        )
+        if change:
+            lines.append(f"    {change}")
+        weekly = _latest_weekly_summary(doc)
+        if weekly:
+            snippet = weekly.replace("\n", " ")
+            lines.append(f"    Weekly: {snippet[:180]}{'…' if len(snippet) > 180 else ''}")
         if doc.executive_summary:
             snippet = doc.executive_summary.replace("\n", " ")
             lines.append(f"    {snippet[:220]}{'…' if len(snippet) > 220 else ''}")
@@ -55,6 +92,19 @@ def format_research_html(documents: list[ResearchDocument], summary: ResearchSum
     rows = []
     for doc in documents:
         snippet = doc.executive_summary.replace("\n", "<br>") if doc.executive_summary else "No summary yet."
+        verdict = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
+        change = _verdict_change_note(doc)
+        weekly = _latest_weekly_summary(doc)
+        weekly_html = (
+            f"<br><span style='color:#666;font-size:12px'><strong>Weekly:</strong> {weekly}</span>"
+            if weekly
+            else ""
+        )
+        change_html = (
+            f"<br><span style='color:#b33a3a;font-size:12px;font-weight:bold'>{change}</span>"
+            if change
+            else ""
+        )
         path_html = (
             f"<br><span style='color:#666;font-size:12px'>Memo: {doc.research_path}</span>"
             if doc.research_path
@@ -68,9 +118,10 @@ def format_research_html(documents: list[ResearchDocument], summary: ResearchSum
                 <span style="color:#666">{doc.ticker}</span>
               </td>
               <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
-                v{doc.version} · {doc.updated_at[:10]}
+                v{doc.version} · {doc.updated_at[:10]}<br>
+                <span style="font-weight:bold">{verdict}</span>{change_html}
               </td>
-              <td style="padding:10px;border-bottom:1px solid #eee">{snippet}{path_html}</td>
+              <td style="padding:10px;border-bottom:1px solid #eee">{snippet}{weekly_html}{path_html}</td>
             </tr>
             """
         )
@@ -82,7 +133,7 @@ def format_research_html(documents: list[ResearchDocument], summary: ResearchSum
       <thead>
         <tr style="background:#efe7fb">
           <th style="padding:10px;text-align:left">Company</th>
-          <th style="padding:10px;text-align:left">Version</th>
+          <th style="padding:10px;text-align:left">Version / verdict</th>
           <th style="padding:10px;text-align:left">Executive summary</th>
         </tr>
       </thead>

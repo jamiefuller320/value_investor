@@ -263,6 +263,103 @@ function renderStrongBuys(data) {
     .join("");
 }
 
+const CHART_COLORS = {
+  "screen:strong_buy": "#1b7f3a",
+  "screen:buy": "#2e9c4f",
+  "overlay:strong_buy": "#2b6cb0",
+  "overlay:buy": "#6b46c1",
+  "research:pass": "#b33a3a",
+  "research:downgraded": "#c45c00",
+};
+
+function renderWeeklySeriesChart(weeklySeries, horizonDays = 28) {
+  if (!weeklySeries || !weeklySeries.length) return "";
+
+  const strategies = ["screen:strong_buy", "overlay:strong_buy", "screen:buy", "overlay:buy"];
+  const filtered = weeklySeries.filter(
+    (row) => row.horizon_days === horizonDays && strategies.includes(row.strategy)
+  );
+  if (!filtered.length) {
+    return `<p class="small muted">No weekly excess series for the ${horizonDays}-day horizon yet.</p>`;
+  }
+
+  const byStrategy = {};
+  for (const row of filtered) {
+    if (!byStrategy[row.strategy]) byStrategy[row.strategy] = [];
+    byStrategy[row.strategy].push(row);
+  }
+
+  const weeks = [...new Set(filtered.map((row) => row.week))].sort();
+  const width = 640;
+  const height = 220;
+  const pad = { top: 16, right: 16, bottom: 36, left: 48 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+
+  const values = filtered.flatMap((row) => [row.raw_excess_return, row.smoothed_excess_return]);
+  const minY = Math.min(-0.05, ...values);
+  const maxY = Math.max(0.05, ...values);
+  const spanY = maxY - minY || 0.01;
+
+  const xAt = (index) => pad.left + (index / Math.max(weeks.length - 1, 1)) * plotW;
+  const yAt = (value) => pad.top + plotH - ((value - minY) / spanY) * plotH;
+
+  const zeroY = yAt(0);
+  const gridLines = [-0.04, -0.02, 0, 0.02, 0.04]
+    .filter((tick) => tick >= minY && tick <= maxY)
+    .map(
+      (tick) =>
+        `<line x1="${pad.left}" y1="${yAt(tick)}" x2="${width - pad.right}" y2="${yAt(tick)}" stroke="#e2e8f0" stroke-width="1" />`
+    )
+    .join("");
+
+  const seriesPaths = strategies
+    .filter((strategy) => byStrategy[strategy])
+    .map((strategy) => {
+      const rows = byStrategy[strategy].sort((a, b) => a.week.localeCompare(b.week));
+      const points = rows
+        .map((row) => {
+          const index = weeks.indexOf(row.week);
+          return `${xAt(index)},${yAt(row.smoothed_excess_return)}`;
+        })
+        .join(" ");
+      return `<polyline fill="none" stroke="${CHART_COLORS[strategy] || "#666"}" stroke-width="2.5" points="${points}" />`;
+    })
+    .join("");
+
+  const legend = strategies
+    .filter((strategy) => byStrategy[strategy])
+    .map(
+      (strategy) =>
+        `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${CHART_COLORS[strategy] || "#666"}"></span>${esc(strategy)}</span>`
+    )
+    .join("");
+
+  const xLabels = weeks
+    .filter((_, index) => index % Math.max(1, Math.ceil(weeks.length / 6)) === 0 || index === weeks.length - 1)
+    .map((week) => {
+      const index = weeks.indexOf(week);
+      return `<text x="${xAt(index)}" y="${height - 8}" text-anchor="middle" class="chart-axis-label">${esc(week)}</text>`;
+    })
+    .join("");
+
+  return `
+    <h4 style="margin-top:1rem">Weekly excess returns (smoothed)</h4>
+    <p class="small muted">${horizonDays}-day horizon · dashed line = zero excess vs FTSE</p>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 ${width} ${height}" class="weekly-chart" role="img" aria-label="Smoothed weekly excess returns by strategy">
+        ${gridLines}
+        <line x1="${pad.left}" y1="${zeroY}" x2="${width - pad.right}" y2="${zeroY}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 4" />
+        ${seriesPaths}
+        <text x="${pad.left - 8}" y="${yAt(maxY)}" text-anchor="end" class="chart-axis-label">${pct(maxY)}</text>
+        <text x="${pad.left - 8}" y="${zeroY}" text-anchor="end" class="chart-axis-label">0%</text>
+        <text x="${pad.left - 8}" y="${yAt(minY)}" text-anchor="end" class="chart-axis-label">${pct(minY)}</text>
+        ${xLabels}
+      </svg>
+      <div class="chart-legend">${legend}</div>
+    </div>`;
+}
+
 function renderHistoricalAnalysis(historical) {
   if (!historical || !historical.strategy_horizons || !historical.strategy_horizons.length) {
     return `<div class="empty-state">${esc(historical?.note || "Historical analysis needs at least two archived weekly runs within the 3-year window.")}</div>`;
@@ -328,6 +425,8 @@ function renderHistoricalAnalysis(historical) {
       · ${historical.run_count} runs · ${historical.max_years}y window · ${historical.smoothing_weeks}w smoothing
     </p>
     <p class="small">Window: ${windowLabel}</p>
+    ${renderWeeklySeriesChart(historical.weekly_series, 28)}
+    ${renderWeeklySeriesChart(historical.weekly_series, 84)}
     <div class="table-wrap">
       <table>
         <thead><tr><th>Horizon</th><th>Strategy</th><th>Smoothed excess</th><th>Raw excess</th><th>N</th><th>Weeks</th></tr></thead>

@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.backtest import BacktestSummary
+from value_investor.historical_analysis import HistoricalAnalysisSummary, load_historical_analysis_summary
 from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
 from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
@@ -149,6 +150,7 @@ def main(argv: list[str] | None = None) -> int:
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
     simulation: SimulationComparison | None = None
+    historical_analysis: HistoricalAnalysisSummary | None = None
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
@@ -164,6 +166,7 @@ def main(argv: list[str] | None = None) -> int:
         run_diff = _load_run_diff(args.output_dir)
         backtest = _load_backtest(args.output_dir)
         simulation = _load_simulation(args.output_dir)
+        historical_analysis = load_historical_analysis_summary(args.output_dir)
     else:
         result = run_screen(limit=args.limit, output_dir=args.output_dir)
         write_outputs(result, args.output_dir)
@@ -173,6 +176,7 @@ def main(argv: list[str] | None = None) -> int:
         run_diff = result.run_diff or _load_run_diff(args.output_dir)
         backtest = result.backtest or _load_backtest(args.output_dir)
         simulation = result.simulation or _load_simulation(args.output_dir)
+        historical_analysis = load_historical_analysis_summary(args.output_dir)
 
     reports = build_company_reports(signals, model_results)
     run_at_str = run_at.strftime("%Y-%m-%d %H:%M UTC")
@@ -237,6 +241,7 @@ def main(argv: list[str] | None = None) -> int:
         deep_analysis=deep_analysis,
         backtest=backtest,
         simulation=simulation,
+        historical_analysis=historical_analysis,
         research_summary=research_summary,
         research_documents=research_documents,
     )
@@ -247,6 +252,7 @@ def main(argv: list[str] | None = None) -> int:
         deep_analysis=deep_analysis,
         backtest=backtest,
         simulation=simulation,
+        historical_analysis=historical_analysis,
         research_summary=research_summary,
         research_documents=research_documents,
     )

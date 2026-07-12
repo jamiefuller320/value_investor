@@ -83,6 +83,15 @@ Summarise any new information from the news batch and whether it changes the the
 If nothing material changed, say so in 2–3 sentences.
 Reference article titles and dates where relevant.
 Do not repeat the full prior memo.
+
+Then add a RESEARCH VERDICT section (revise conviction only if material news changes the investment case; otherwise repeat the prior verdict unchanged):
+
+RESEARCH VERDICT
+Use EXACTLY these lines:
+Verdict: accumulate | neutral | caution | pass
+Risk: low | medium | high
+Confidence: 0.00–1.00 (decimal, e.g. 0.75)
+Rationale: One sentence on whether this week's news confirms, is neutral on, or weakens the strong buy case.
 """
 
 
@@ -194,7 +203,24 @@ def run_weekly_research_update_agent(
     )
     sections = parse_research_sections(text)
     update_summary = sections.get("weekly_update", "").strip()
+    verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
     now = datetime.now(UTC)
+    new_verdict = verdict_fields.get("research_verdict") or existing.research_verdict
+    new_risk = verdict_fields.get("research_risk_level") or existing.research_risk_level
+    new_confidence = (
+        verdict_fields.get("research_confidence")
+        if verdict_fields.get("research_confidence") is not None
+        else existing.research_confidence
+    )
+    new_rationale = verdict_fields.get("research_rationale") or existing.research_rationale
+    weekly_entry: dict[str, str] = {
+        "date": now.strftime("%Y-%m-%d"),
+        "as_of": now.isoformat(),
+        "summary": update_summary,
+    }
+    if existing.research_verdict != new_verdict:
+        weekly_entry["prior_verdict"] = existing.research_verdict or ""
+        weekly_entry["new_verdict"] = new_verdict or ""
     updated = ResearchDocument(
         ticker=existing.ticker,
         name=existing.name,
@@ -208,17 +234,13 @@ def run_weekly_research_update_agent(
         financial_review=existing.financial_review,
         risks_and_flags=existing.risks_and_flags,
         news_highlights=existing.news_highlights,
-        research_verdict=existing.research_verdict,
-        research_risk_level=existing.research_risk_level,
-        research_confidence=existing.research_confidence,
-        research_rationale=existing.research_rationale,
+        research_verdict=new_verdict,
+        research_risk_level=new_risk,
+        research_confidence=new_confidence,
+        research_rationale=new_rationale,
         weekly_updates=[
             *existing.weekly_updates,
-            {
-                "date": now.strftime("%Y-%m-%d"),
-                "as_of": now.isoformat(),
-                "summary": update_summary,
-            },
+            weekly_entry,
         ],
         source_counts=existing.source_counts,
         agent_id=agent_id or existing.agent_id,

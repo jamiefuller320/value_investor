@@ -9,6 +9,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from value_investor.backtest import BacktestSummary, format_backtest_text
 from value_investor.deep_analysis import DeepAnalysis
+from value_investor.historical_analysis import (
+    HistoricalAnalysisSummary,
+    format_historical_analysis_html,
+    format_historical_analysis_text,
+)
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import format_research_html, format_research_text
 from value_investor.run_diff import RunDiff, format_run_diff_text
@@ -204,6 +209,7 @@ def format_text_report(
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
     simulation: SimulationComparison | None = None,
+    historical_analysis: HistoricalAnalysisSummary | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
 ) -> str:
@@ -224,6 +230,14 @@ def format_text_report(
             "PORTFOLIO SIMULATION",
             "-" * 40,
             format_simulation_comparison_text(simulation),
+            "",
+        ])
+
+    if historical_analysis is not None and historical_analysis.has_results():
+        lines.extend([
+            "HISTORICAL ANALYSIS",
+            "-" * 40,
+            format_historical_analysis_text(historical_analysis),
             "",
         ])
 
@@ -272,6 +286,7 @@ def format_html_report(
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
     simulation: SimulationComparison | None = None,
+    historical_analysis: HistoricalAnalysisSummary | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
 ) -> str:
@@ -359,6 +374,8 @@ def format_html_report(
   </div>
 """
 
+    historical_section = format_historical_analysis_html(historical_analysis) if historical_analysis else ""
+
     diff_section = ""
     if run_diff is not None:
         diff_text = format_run_diff_text(run_diff).replace("\n", "<br>")
@@ -391,6 +408,7 @@ def format_html_report(
   {deep_section}
   {backtest_section}
   {simulation_section}
+  {historical_section}
   {timing_section}
   {trade_plans_section}
   {research_section}

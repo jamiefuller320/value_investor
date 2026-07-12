@@ -23,6 +23,32 @@ def test_format_research_text_includes_paths():
     assert "research.md" in text
 
 
+def test_format_research_text_shows_verdict_revision():
+    doc = ResearchDocument(
+        ticker="AAA.L",
+        name="Alpha PLC",
+        signal="strong_buy",
+        version=2,
+        created_at="2026-07-01T00:00:00+00:00",
+        updated_at="2026-07-08T00:00:00+00:00",
+        mode="weekly_update",
+        executive_summary="Attractive on valuation.",
+        research_verdict="caution",
+        weekly_updates=[
+            {
+                "date": "2026-07-08",
+                "summary": "Regulatory probe announced.",
+                "prior_verdict": "accumulate",
+                "new_verdict": "caution",
+            }
+        ],
+    )
+    text = format_research_text(None, [doc])
+    assert text is not None
+    assert "Verdict revised" in text
+    assert "Weekly:" in text
+
+
 def test_format_research_html_renders_table():
     doc = ResearchDocument(
         ticker="AAA.L",

@@ -179,6 +179,37 @@ def test_format_reports_include_diff_and_deep_analysis_sections():
     assert "Week-over-week changes" in html
 
 
+def test_format_reports_include_historical_analysis_section():
+    signals, model_results = _sample_frames()
+    reports = build_company_reports(signals, model_results)
+    from value_investor.historical_analysis import HistoricalAnalysisSummary, StrategyHorizonResult
+
+    historical = HistoricalAnalysisSummary(
+        run_count=4,
+        window_start="2025-01-01T00:00:00+00:00",
+        window_end="2026-07-01T00:00:00+00:00",
+        max_years=3,
+        smoothing_weeks=4,
+        strategy_horizons=[
+            StrategyHorizonResult(
+                strategy="screen:strong_buy",
+                horizon_days=28,
+                raw_avg_return=0.03,
+                raw_excess_return=0.02,
+                smoothed_avg_return=0.025,
+                smoothed_excess_return=0.015,
+                count=5,
+                observation_weeks=4,
+            )
+        ],
+    )
+    text = format_text_report(run_at="2026-07-08", reports=reports, historical_analysis=historical)
+    html = format_html_report(run_at="2026-07-08", reports=reports, historical_analysis=historical)
+    assert "HISTORICAL ANALYSIS" in text
+    assert "screen:strong_buy" in text
+    assert "Historical analysis" in html
+
+
 def test_format_reports_include_backtest_section():
     signals, model_results = _sample_frames()
     reports = build_company_reports(signals, model_results)
