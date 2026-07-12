@@ -12,7 +12,7 @@ from value_investor.deep_analysis import DeepAnalysis
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import format_research_html, format_research_text
 from value_investor.run_diff import RunDiff, format_run_diff_text
-from value_investor.simulator import SimulationSummary, format_simulation_text
+from value_investor.simulator import SimulationComparison, format_simulation_comparison_text
 from value_investor.summary import CompanyReport
 from value_investor.technical_analysis import timing_label
 
@@ -203,7 +203,7 @@ def format_text_report(
     run_diff: RunDiff | None = None,
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
-    simulation: SimulationSummary | None = None,
+    simulation: SimulationComparison | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
 ) -> str:
@@ -220,7 +220,12 @@ def format_text_report(
         lines.extend(["SIGNAL BACKTEST", "-" * 40, format_backtest_text(backtest), ""])
 
     if simulation is not None:
-        lines.extend(["PORTFOLIO SIMULATION", "-" * 40, format_simulation_text(simulation), ""])
+        lines.extend([
+            "PORTFOLIO SIMULATION",
+            "-" * 40,
+            format_simulation_comparison_text(simulation),
+            "",
+        ])
 
     if run_diff is not None:
         lines.extend(["WEEK-OVER-WEEK CHANGES", "-" * 40, format_run_diff_text(run_diff), ""])
@@ -266,7 +271,7 @@ def format_html_report(
     run_diff: RunDiff | None = None,
     deep_analysis: DeepAnalysis | None = None,
     backtest: BacktestSummary | None = None,
-    simulation: SimulationSummary | None = None,
+    simulation: SimulationComparison | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
 ) -> str:
@@ -346,7 +351,7 @@ def format_html_report(
 
     simulation_section = ""
     if simulation is not None:
-        sim_text = format_simulation_text(simulation).replace("\n", "<br>")
+        sim_text = format_simulation_comparison_text(simulation).replace("\n", "<br>")
         simulation_section = f"""
   <div style="background:#f3eef9;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #6b46c1">
     <h3 style="margin-top:0">Portfolio simulation</h3>

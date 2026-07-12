@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.backtest import BacktestSummary
-from value_investor.simulator import SimulationSummary
+from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
 from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.pipeline import run_screen, write_outputs
@@ -31,29 +31,17 @@ def _load_run_diff(output_dir: Path) -> RunDiff | None:
     return RunDiff(**data)
 
 
-def _load_simulation(output_dir: Path) -> SimulationSummary | None:
+def _load_simulation(output_dir: Path) -> SimulationComparison | None:
     path = output_dir / "simulation_summary.json"
     if not path.exists():
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
-    from value_investor.simulator import Trade
+    if "research_overlay" in data:
+        return simulation_comparison_from_dict(data)
+    from value_investor.simulator import SimulationComparison, simulation_summary_from_dict
 
-    trades = [Trade(**t) for t in data.get("trades", [])]
-    return SimulationSummary(
-        initial_capital=float(data["initial_capital"]),
-        final_value=float(data["final_value"]),
-        total_return=float(data["total_return"]),
-        benchmark_return=float(data["benchmark_return"]),
-        excess_return=float(data["excess_return"]),
-        trade_count=int(data["trade_count"]),
-        total_costs=float(data["total_costs"]),
-        periods=int(data["periods"]),
-        holdings=data.get("holdings", {}),
-        trade_cost_pct=float(data.get("trade_cost_pct", 0.03)),
-        trades=trades,
-        equity_curve=data.get("equity_curve", []),
-        note=str(data.get("note", "")),
-    )
+    screen = simulation_summary_from_dict(data)
+    return SimulationComparison(screen=screen, overlay=screen)
 
 
 def _load_backtest(output_dir: Path) -> BacktestSummary | None:
@@ -160,7 +148,7 @@ def main(argv: list[str] | None = None) -> int:
 
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
-    simulation: SimulationSummary | None = None
+    simulation: SimulationComparison | None = None
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"

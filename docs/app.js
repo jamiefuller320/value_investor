@@ -295,18 +295,43 @@ function renderPerformance(data) {
 
   let simHtml = '<div class="empty-state">Simulation needs at least two archived weekly runs.</div>';
   if (simulation && simulation.final_value != null) {
+    const overlay = simulation.research_overlay;
+    const rows = [
+      {
+        label: "Screen only",
+        data: simulation,
+      },
+    ];
+    if (overlay) {
+      rows.push({ label: "Research overlay", data: overlay });
+    }
+
+    const tableRows = rows
+      .map(
+        ({ label, data }) => `<tr>
+          <td><strong>${esc(label)}</strong></td>
+          <td>£${Number(data.final_value).toFixed(2)}</td>
+          <td>${pct(data.total_return)}</td>
+          <td>${pct(data.excess_return)}</td>
+          <td>${data.trade_count}</td>
+        </tr>`
+      )
+      .join("");
+
     const holdings = Object.entries(simulation.holdings || {})
       .map(([ticker, shares]) => `<li>${esc(ticker)}: ${shares} shares</li>`)
       .join("");
+
     simHtml = `
-      <div class="grid">
-        <div class="card"><h3>Final value</h3><div class="stat-value">£${Number(simulation.final_value).toFixed(2)}</div></div>
-        <div class="card"><h3>Total return</h3><div class="stat-value">${pct(simulation.total_return)}</div></div>
-        <div class="card"><h3>vs FTSE</h3><div class="stat-value">${pct(simulation.excess_return)}</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strategy</th><th>Final value</th><th>Return</th><th>vs FTSE</th><th>Trades</th></tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>
       </div>
-      <p class="small muted">${esc(simulation.note || "")}</p>
-      <p class="small">Trades: ${simulation.trade_count} · Costs: £${Number(simulation.total_costs || 0).toFixed(2)} (${pct(simulation.trade_cost_pct)} per trade)</p>
-      ${holdings ? `<p><strong>Holdings</strong><ul class="list-plain">${holdings}</ul></p>` : ""}`;
+      <p class="small muted">${esc(simulation.comparison_note || simulation.note || "")}</p>
+      <p class="small">Costs: £${Number(simulation.total_costs || 0).toFixed(2)} (${pct(simulation.trade_cost_pct)} per trade) · ${simulation.periods} periods</p>
+      ${holdings ? `<p><strong>Screen holdings</strong><ul class="list-plain">${holdings}</ul></p>` : ""}`;
   }
 
   panel.innerHTML = `
