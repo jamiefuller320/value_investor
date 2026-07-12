@@ -20,6 +20,10 @@ from value_investor.constituents import fetch_ftse100_constituents
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
 from value_investor.run_diff import RunDiff, compute_run_diff
+from value_investor.historical_analysis import (
+    run_historical_analysis,
+    save_historical_analysis,
+)
 from value_investor.model_weights import load_model_weights, save_model_snapshot, update_model_weights
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.sector_scoring import add_sector_scores
@@ -178,6 +182,9 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     simulation_path = output_dir / "simulation_summary.json"
     simulation_path.write_text(json.dumps(result.simulation.to_dict(), indent=2), encoding="utf-8")
     paths["simulation"] = simulation_path
+
+    historical = run_historical_analysis(output_dir, snapshots=snapshots)
+    paths["historical_analysis"] = save_historical_analysis(output_dir, historical)
 
     paths["summary"].write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
 

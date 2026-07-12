@@ -126,6 +126,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     run_diff = _read_json(output_dir / "run_diff.json")
     backtest = _read_json(output_dir / "backtest_summary.json")
     simulation = _read_json(output_dir / "simulation_summary.json")
+    historical_analysis = _read_json(output_dir / "historical_analysis_summary.json")
     deep_analysis = _load_deep_analysis(output_dir)
 
     signal_counts = _signal_counts(reports)
@@ -150,6 +151,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "run_diff": run_diff,
         "backtest": backtest,
         "simulation": simulation,
+        "historical_analysis": historical_analysis,
         "deep_analysis": deep_analysis,
     }
 
@@ -200,6 +202,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "run_diff": None,
         "backtest": None,
         "simulation": None,
+        "historical_analysis": None,
         "deep_analysis": None,
         "research": [],
         "note": "Dashboard data not published yet. Run ftse-screen and ftse-publish locally, or wait for the weekly workflow.",

@@ -118,7 +118,16 @@ def save_run_snapshot(
     prices = snapshot_prices(tickers)
 
     signal_cols = ["ticker", "signal", "conviction_score", "data_quality_score"]
-    for optional in ("timing_signal", "timing_score", "action_note"):
+    for optional in (
+        "timing_signal",
+        "timing_score",
+        "action_note",
+        "models_passed",
+        "weighted_model_score",
+        "research_verdict",
+        "adjusted_signal",
+        "research_as_of",
+    ):
         if optional in signals.columns:
             signal_cols.append(optional)
 

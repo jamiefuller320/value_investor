@@ -263,9 +263,105 @@ function renderStrongBuys(data) {
     .join("");
 }
 
+function renderHistoricalAnalysis(historical) {
+  if (!historical || !historical.strategy_horizons || !historical.strategy_horizons.length) {
+    return `<div class="empty-state">${esc(historical?.note || "Historical analysis needs at least two archived weekly runs within the 3-year window.")}</div>`;
+  }
+
+  const windowLabel =
+    historical.window_start && historical.window_end
+      ? `${fmtDate(historical.window_start)} → ${fmtDate(historical.window_end)}`
+      : "—";
+
+  const keyStrategies = new Set([
+    "screen:strong_buy",
+    "screen:buy",
+    "overlay:strong_buy",
+    "overlay:buy",
+    "research:pass",
+    "research:downgraded",
+  ]);
+
+  const strategyRows = historical.strategy_horizons
+    .filter((row) => keyStrategies.has(row.strategy))
+    .sort((a, b) => a.horizon_days - b.horizon_days || a.strategy.localeCompare(b.strategy))
+    .map(
+      (row) => `<tr>
+        <td>${row.horizon_days}d</td>
+        <td>${signalBadge(row.strategy.replace(/^[^:]+:/, ""))}<br><span class="small muted">${esc(row.strategy)}</span></td>
+        <td>${pct(row.smoothed_excess_return)}</td>
+        <td>${pct(row.raw_excess_return)}</td>
+        <td>${row.count}</td>
+        <td>${row.observation_weeks}</td>
+      </tr>`
+    )
+    .join("");
+
+  const overlayRows = (historical.overlay_comparison || [])
+    .map(
+      (row) => `<tr>
+        <td>${row.horizon_days}d</td>
+        <td>${pct(row.smoothed_screen_excess)}</td>
+        <td>${pct(row.smoothed_overlay_excess)}</td>
+        <td>${row.downgrade_count}</td>
+        <td>${row.sample_count}</td>
+      </tr>`
+    )
+    .join("");
+
+  const modelRows = (historical.model_attribution || [])
+    .slice(0, 8)
+    .map((row) => {
+      const corr = row.smoothed_correlation != null ? row.smoothed_correlation : row.raw_correlation;
+      return `<tr>
+        <td>${esc(row.model_id)}</td>
+        <td>${row.horizon_days}d</td>
+        <td>${corr != null ? corr.toFixed(2) : "—"}</td>
+        <td>${row.sample_count}</td>
+      </tr>`;
+    })
+    .join("");
+
+  return `
+    <p class="small muted">
+      ${esc(historical.note || "")}
+      · ${historical.run_count} runs · ${historical.max_years}y window · ${historical.smoothing_weeks}w smoothing
+    </p>
+    <p class="small">Window: ${windowLabel}</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Horizon</th><th>Strategy</th><th>Smoothed excess</th><th>Raw excess</th><th>N</th><th>Weeks</th></tr></thead>
+        <tbody>${strategyRows}</tbody>
+      </table>
+    </div>
+    ${
+      overlayRows
+        ? `<h4 style="margin-top:1rem">Screen vs research overlay (buy cohort)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Horizon</th><th>Screen (smoothed)</th><th>Overlay (smoothed)</th><th>Downgrades</th><th>N</th></tr></thead>
+          <tbody>${overlayRows}</tbody>
+        </table>
+      </div>`
+        : ""
+    }
+    ${
+      modelRows
+        ? `<h4 style="margin-top:1rem">Model attribution (score→return correlation)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Model</th><th>Horizon</th><th>Correlation</th><th>N</th></tr></thead>
+          <tbody>${modelRows}</tbody>
+        </table>
+      </div>`
+        : ""
+    }`;
+}
+
 function renderPerformance(data) {
   const backtest = data.backtest;
   const simulation = data.simulation;
+  const historical = data.historical_analysis;
   const panel = document.getElementById("panel-performance");
 
   let backtestHtml = '<div class="empty-state">Backtest needs at least two archived weekly runs.</div>';
@@ -342,6 +438,11 @@ function renderPerformance(data) {
     <div class="card" style="margin-top:1rem">
       <h3>Portfolio simulation (£1,000)</h3>
       ${simHtml}
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <h3>Historical analysis</h3>
+      <p class="small muted">Point-in-time replay of screen signals, research verdicts, and model scores with weekly smoothing.</p>
+      ${renderHistoricalAnalysis(historical)}
     </div>
   `;
 }
