@@ -131,6 +131,29 @@ def _load_model_snapshots(output_dir: Path) -> dict[str, list[dict[str, Any]]]:
     return by_run
 
 
+def load_model_snapshot_for_run(output_dir: Path, run_at: str) -> list[dict[str, Any]]:
+    """Return model score rows for a screening run, matching by timestamp."""
+    by_run = _load_model_snapshots(output_dir)
+    if run_at in by_run:
+        return by_run[run_at]
+
+    target = _parse_run_at(run_at)
+    best_key: str | None = None
+    best_delta = float("inf")
+    for key in by_run:
+        try:
+            delta = abs(_parse_run_at(key).timestamp() - target.timestamp())
+        except ValueError:
+            continue
+        if delta < best_delta:
+            best_delta = delta
+            best_key = key
+
+    if best_key is not None and best_delta <= 3600:
+        return by_run[best_key]
+    return []
+
+
 def _pearson(xs: list[float], ys: list[float]) -> float | None:
     if len(xs) < MIN_SAMPLES_PER_MODEL or len(xs) != len(ys):
         return None
