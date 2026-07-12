@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot, load_run_snapshots
@@ -83,6 +83,105 @@ class SimulationSummary:
 
     def has_results(self) -> bool:
         return self.periods >= 2 and bool(self.equity_curve)
+
+
+@dataclass
+class SimulationComparison:
+    screen: SimulationSummary
+    overlay: SimulationSummary
+    comparison_note: str = ""
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = self.screen.to_dict()
+        payload["research_overlay"] = self.overlay.to_dict()
+        if self.comparison_note:
+            payload["comparison_note"] = self.comparison_note
+        return payload
+
+    def has_results(self) -> bool:
+        return self.screen.has_results() or self.overlay.has_results()
+
+
+def simulation_summary_from_dict(data: dict[str, Any]) -> SimulationSummary:
+    trades = [Trade(**t) for t in data.get("trades", [])]
+    return SimulationSummary(
+        initial_capital=float(data["initial_capital"]),
+        final_value=float(data["final_value"]),
+        total_return=float(data["total_return"]),
+        benchmark_return=float(data["benchmark_return"]),
+        excess_return=float(data["excess_return"]),
+        trade_count=int(data["trade_count"]),
+        total_costs=float(data["total_costs"]),
+        periods=int(data["periods"]),
+        holdings=dict(data.get("holdings") or {}),
+        trade_cost_pct=float(data.get("trade_cost_pct", DEFAULT_TRADE_COST_PCT)),
+        trades=trades,
+        equity_curve=list(data.get("equity_curve") or []),
+        note=str(data.get("note", "")),
+    )
+
+
+def simulation_comparison_from_dict(data: dict[str, Any]) -> SimulationComparison:
+    overlay_data = data.get("research_overlay")
+    return SimulationComparison(
+        screen=simulation_summary_from_dict(data),
+        overlay=simulation_summary_from_dict(overlay_data) if overlay_data else simulation_summary_from_dict(data),
+        comparison_note=str(data.get("comparison_note", "")),
+    )
+
+
+def _snapshots_have_research_overlay(snapshots: list[RunSnapshot]) -> bool:
+    for snapshot in snapshots:
+        for row in snapshot.signals:
+            verdict = row.get("research_verdict")
+            if verdict is not None and str(verdict).strip():
+                return True
+            adjusted = row.get("adjusted_signal")
+            signal = row.get("signal")
+            if (
+                adjusted is not None
+                and signal is not None
+                and str(adjusted).strip()
+                and str(adjusted) != str(signal)
+            ):
+                return True
+    return False
+
+
+def _comparison_note(
+    screen: SimulationSummary,
+    overlay: SimulationSummary,
+    *,
+    has_overlay_data: bool,
+) -> str:
+    if not screen.has_results():
+        return screen.note or overlay.note
+    if not has_overlay_data:
+        return "No research verdicts in archived runs; overlay track matches screen-only."
+    delta = overlay.total_return - screen.total_return
+    if abs(delta) < 0.0001:
+        return "Research overlay produced identical returns to screen-only over this window."
+    direction = "outperformed" if delta > 0 else "underperformed"
+    return f"Research overlay {direction} screen-only by {delta:+.1%} total return."
+
+
+def run_simulation_comparison(
+    snapshots: list[RunSnapshot],
+    config: SimulatorConfig | None = None,
+) -> SimulationComparison:
+    """Run screen-only and research-overlay simulations on the same snapshots."""
+    base = config or SimulatorConfig()
+    screen = run_simulation(snapshots, base)
+    overlay = run_simulation(
+        snapshots,
+        replace(base, use_adjusted_signal=True),
+    )
+    has_overlay_data = _snapshots_have_research_overlay(snapshots)
+    return SimulationComparison(
+        screen=screen,
+        overlay=overlay,
+        comparison_note=_comparison_note(screen, overlay, has_overlay_data=has_overlay_data),
+    )
 
 
 def _select_targets(snapshot: RunSnapshot, config: SimulatorConfig) -> list[str]:
@@ -342,28 +441,60 @@ def run_simulation(
     )
 
 
-def run_simulation_from_dir(output_dir, config: SimulatorConfig | None = None) -> SimulationSummary:
+def run_simulation_from_dir(output_dir, config: SimulatorConfig | None = None) -> SimulationComparison:
     from pathlib import Path
 
     path = Path(output_dir)
     snapshots = load_run_snapshots(path)
-    return run_simulation(snapshots, config=config)
+    return run_simulation_comparison(snapshots, config=config)
 
 
-def format_simulation_text(summary: SimulationSummary) -> str:
+def _format_single_simulation_text(summary: SimulationSummary, *, heading: str | None = None) -> list[str]:
     if not summary.has_results() and summary.note:
-        return summary.note
+        return [summary.note]
 
     cost_pct = summary.trade_cost_pct * 100
-    lines = [
-        f"Portfolio simulation (£{summary.initial_capital:,.0f} start, {cost_pct:.0f}% per trade):",
+    lines: list[str] = []
+    if heading:
+        lines.append(f"{heading}:")
+    lines.extend([
         f"  Final value: £{summary.final_value:,.2f} ({summary.total_return:+.1%})",
         f"  FTSE 100 buy-and-hold: {summary.benchmark_return:+.1%}",
         f"  Excess return: {summary.excess_return:+.1%}",
         f"  Trades: {summary.trade_count}, total costs: £{summary.total_costs:,.2f}",
-        f"  Periods simulated: {summary.periods}",
-    ]
+    ])
     if summary.holdings:
-        holding_bits = ", ".join(f"{ticker} ({shares:.2f} sh)" for ticker, shares in summary.holdings.items())
+        holding_bits = ", ".join(
+            f"{ticker} ({shares:.2f} sh)" for ticker, shares in summary.holdings.items()
+        )
         lines.append(f"  Current holdings: {holding_bits}")
+    if not heading:
+        lines.insert(0, f"Portfolio simulation (£{summary.initial_capital:,.0f} start, {cost_pct:.0f}% per trade):")
+    return lines
+
+
+def format_simulation_text(summary: SimulationSummary) -> str:
+    return "\n".join(_format_single_simulation_text(summary))
+
+
+def format_simulation_comparison_text(comparison: SimulationComparison) -> str:
+    if not comparison.screen.has_results() and comparison.screen.note:
+        return comparison.screen.note
+
+    cost_pct = comparison.screen.trade_cost_pct * 100
+    lines = [
+        f"Portfolio simulation comparison (£{comparison.screen.initial_capital:,.0f} start, {cost_pct:.0f}% per trade):",
+        f"Periods simulated: {comparison.screen.periods}",
+        "",
+    ]
+    lines.extend(_format_single_simulation_text(comparison.screen, heading="Screen only"))
+    lines.append("")
+    lines.extend(
+        _format_single_simulation_text(
+            comparison.overlay,
+            heading="With research overlay (adjusted_signal)",
+        )
+    )
+    if comparison.comparison_note:
+        lines.extend(["", comparison.comparison_note])
     return "\n".join(lines)

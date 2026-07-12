@@ -11,7 +11,7 @@ from value_investor.simulator import (
     DEFAULT_INITIAL_CAPITAL,
     DEFAULT_TRADE_COST_PCT,
     SimulatorConfig,
-    format_simulation_text,
+    format_simulation_comparison_text,
     run_simulation_from_dir,
 )
 
@@ -47,19 +47,19 @@ def main(argv: list[str] | None = None) -> int:
         trade_cost_pct=args.trade_cost,
         max_positions=args.max_positions,
     )
-    summary = run_simulation_from_dir(args.output_dir, config=config)
+    comparison = run_simulation_from_dir(args.output_dir, config=config)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     out_path = args.output_dir / "simulation_summary.json"
-    out_path.write_text(json.dumps(summary.to_dict(), indent=2), encoding="utf-8")
+    out_path.write_text(json.dumps(comparison.to_dict(), indent=2), encoding="utf-8")
 
     if args.json:
-        print(json.dumps(summary.to_dict(), indent=2))
+        print(json.dumps(comparison.to_dict(), indent=2))
     else:
-        print(format_simulation_text(summary))
+        print(format_simulation_comparison_text(comparison))
         print(f"\nWrote {out_path}")
 
-    return 0 if summary.has_results() or summary.note else 1
+    return 0 if comparison.has_results() or comparison.screen.note else 1
 
 
 if __name__ == "__main__":

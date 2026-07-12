@@ -29,7 +29,7 @@ from value_investor.signal_stability import (
     load_signal_history,
 )
 from value_investor.signals import build_signals
-from value_investor.simulator import SimulationSummary, run_simulation
+from value_investor.simulator import SimulationComparison, run_simulation_comparison
 from value_investor.technical_analysis import enrich_signals_with_technicals
 
 
@@ -41,7 +41,7 @@ class ScreenResult:
     signals: pd.DataFrame
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
-    simulation: SimulationSummary | None = None
+    simulation: SimulationComparison | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -159,7 +159,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     backtest_path.write_text(json.dumps(result.backtest.to_dict(), indent=2), encoding="utf-8")
     paths["backtest"] = backtest_path
 
-    result.simulation = run_simulation(snapshots)
+    result.simulation = run_simulation_comparison(snapshots)
     simulation_path = output_dir / "simulation_summary.json"
     simulation_path.write_text(json.dumps(result.simulation.to_dict(), indent=2), encoding="utf-8")
     paths["simulation"] = simulation_path
