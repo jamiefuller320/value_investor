@@ -81,6 +81,51 @@ Outputs land in `output/`:
 | `research/{TICKER}/research.md` | Per-ticker strong buy research memo |
 | `research/{TICKER}/sources/` | Cached financials, news, and screening snapshots |
 
+## Secrets and environment variables
+
+Copy `.env.example` to `.env` for local runs, or add the same values as **GitHub Actions repository secrets** (Settings → Secrets and variables → Actions) for the weekly workflow.
+
+### Email (required to send reports)
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `SMTP_HOST` | Yes | SMTP server hostname (e.g. `smtp.gmail.com`) |
+| `SMTP_PORT` | Yes | SMTP port (usually `587`) |
+| `SMTP_USER` | Yes | SMTP login / sender account |
+| `SMTP_PASSWORD` | Yes | SMTP password or [Gmail app password](https://support.google.com/accounts/answer/185833) |
+| `EMAIL_TO` | Yes | Recipient address for the weekly report |
+| `EMAIL_FROM` | No | Override sender address (defaults to `SMTP_USER`) |
+| `SMTP_USE_TLS` | No | Set to `false` to disable TLS (default: `true`) |
+
+Not needed for `ftse-email --dry-run` (builds report files without sending).
+
+### Agents (required for deep analysis and research memos)
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `CURSOR_API_KEY` | Yes* | API key from [cursor.com/dashboard/integrations](https://cursor.com/dashboard/integrations) |
+
+\* Required only when using `--deep-analysis`, `--research-docs`, or `ftse-research`. The quantitative screen runs without it.
+
+### What to configure by scenario
+
+| Goal | Variables needed |
+|------|------------------|
+| Screen only (`ftse-screen`) | None |
+| Dry run + dashboard (`ftse-email --dry-run --publish-dashboard`) | None |
+| Send weekly email | All five email variables (`SMTP_*`, `EMAIL_TO`) |
+| Full Monday pipeline (screen + agents + email + dashboard) | All six (`SMTP_*`, `EMAIL_TO`, `CURSOR_API_KEY`) |
+
+Check your setup with:
+
+```bash
+ftse-preflight                      # warnings OK on week 1
+ftse-preflight --require-email      # fail if email secrets missing
+ftse-preflight --require-agents     # fail if CURSOR_API_KEY missing
+```
+
+The weekly workflow (`.github/workflows/email-report.yml`) runs `ftse-preflight --require-email` before screening, then adds `--deep-analysis --research-docs` when `CURSOR_API_KEY` is present.
+
 ## GitHub Pages dashboard
 
 A static web dashboard lives in `docs/` and is published by the **Deploy GitHub Pages** workflow when `docs/` changes on `main`.
@@ -112,9 +157,9 @@ ftse-email --dry-run --publish-dashboard
 
 `ftse-email` runs the full screener, builds a **brief reason summary per company** from model pass/fail data, and emails an HTML + plain-text report via SMTP.
 
-Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
+Configure SMTP in `.env` (see [Secrets](#secrets-and-environment-variables) and `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
 
-**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
+**Schedule weekly** via GitHub Actions: add the email secrets listed above (and `CURSOR_API_KEY` for `--deep-analysis` / `--research-docs`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
 
 Reports include:
 - **Data quality scores** per company (downgrades thin-data signals)
@@ -140,7 +185,7 @@ Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.
 
 Before the scheduled Monday workflow (or your first manual `ftse-email`):
 
-1. **Repository secrets** — `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO`; optional `CURSOR_API_KEY` for deep analysis and research updates.
+1. **Repository secrets** — see [Secrets](#secrets-and-environment-variables) (email + optional `CURSOR_API_KEY`).
 2. **GitHub Pages** — Settings → Pages → Source: **GitHub Actions** (see `.github/workflows/pages.yml`).
 3. **Preflight** — `ftse-preflight --require-email` (CI runs this automatically). Warnings about missing history are normal on week 1.
 4. **Seed a screen locally** (optional but recommended) — `ftse-screen` then `ftse-email --dry-run --publish-dashboard` to verify outputs before Monday.
