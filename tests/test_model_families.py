@@ -23,4 +23,4 @@ def test_summarize_by_family_counts_independent_passes():
     assert "cheapness" in alpha["passed_families"]
     assert "quality" in alpha["passed_families"]
     assert beta["families_passed"] == 1
-    assert len(MODEL_FAMILIES) == 4
+    assert len(MODEL_FAMILIES) == 5

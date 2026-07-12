@@ -17,10 +17,7 @@ _LABEL_ALIASES: dict[str, list[str]] = {
     "operating_income": ["Operating Income", "EBIT", "Operating Income Or Loss"],
     "total_revenue": ["Total Revenue", "Operating Revenue"],
     "gross_profit": ["Gross Profit"],
-    "operating_cashflow": [
-        "Operating Cash Flow",
-        "Cash Flow From Continuing Operating Activities",
-    ],
+    "interest_expense": ["Interest Expense", "Interest Expense Non Operating"],
     "shares_outstanding": [
         "Ordinary Shares Number",
         "Share Issued",
@@ -57,6 +54,8 @@ def extract_statement_metrics(
             source = income_stmt
         elif key == "operating_cashflow":
             source = cashflow
+        elif key == "interest_expense":
+            source = income_stmt
 
         metrics[key] = _row_value(source, labels, 0)
         metrics[f"{key}_prev"] = _row_value(source, labels, 1)

@@ -5,7 +5,7 @@ Quantitative screener for FTSE 100 constituents against classic value investment
 ## What it does
 
 1. **Fetches** the current FTSE 100 list (Wikipedia) and fundamental data (yfinance / LSE `.L` tickers).
-2. **Screens** each company through **18 value models**:
+2. **Screens** each company through **20 value models** (five families):
 
    | Category | Models |
    |----------|--------|
@@ -14,7 +14,10 @@ Quantitative screener for FTSE 100 constituents against classic value investment
    | GARP | Lynch PEG, Neff PEGY |
    | Quality / moat | Quality Value, Buffett Quality, Economic Moat |
    | Dividend | High Dividend Yield, Dividend Growth |
+   | Risk | Earnings Quality, Financial Health |
    | Quantitative | Magic Formula, Acquirer's Multiple, Dreman Contrarian, Piotroski F-Score, Composite Value |
+
+   Model scores are combined with **adaptive weights** (`output/model_weights.json`) that refine over time from archived weekly runs (score → forward-return correlation).
 3. **Emits signals** — `strong_buy`, `buy`, `hold`, `avoid`, or `insufficient_data`
 4. **Optional agent pass** — Cursor SDK reads the CSV and writes a qualitative memo on top candidates
 

@@ -39,11 +39,14 @@ def assign_signal(
     models_passed: int,
     model_count: int,
     mean_model_score: float,
+    weighted_model_score: float | None,
     composite_score: float | None,
     sector_composite_score: float | None,
     families_passed: int,
     family_count: int,
     data_quality_score: float,
+    risk_family_passed: bool,
+    risk_mean_score: float,
     has_errors: bool,
 ) -> Signal:
     """Map aggregated model output to an actionable signal."""
@@ -54,7 +57,10 @@ def assign_signal(
         return Signal.INSUFFICIENT_DATA
 
     pass_rate = models_passed / model_count
-    composite = composite_score if composite_score is not None else mean_model_score
+    score_for_blend = (
+        weighted_model_score if weighted_model_score is not None else mean_model_score
+    )
+    composite = composite_score if composite_score is not None else score_for_blend
     sector_composite = sector_composite_score if sector_composite_score is not None else composite
     blended_composite = (composite + sector_composite) / 2
 
@@ -85,6 +91,12 @@ def assign_signal(
     if signal == Signal.BUY and data_quality_score < MIN_QUALITY_FOR_BUY:
         signal = Signal.HOLD
 
+    # Risk family veto: cheap screens can pass while balance sheet / earnings quality fail
+    if signal == Signal.STRONG_BUY and (not risk_family_passed or risk_mean_score < 0.55):
+        signal = Signal.BUY
+    if signal == Signal.BUY and (risk_mean_score < 0.35 or not risk_family_passed):
+        signal = Signal.HOLD
+
     return signal
 
 
@@ -110,16 +122,30 @@ def build_signals(
         composite = row.get("composite_score")
         composite_score = float(composite) if composite is not None and not pd.isna(composite) else None
 
+        weighted_score = row.get("weighted_model_score")
+        weighted_model_score = (
+            float(weighted_score)
+            if weighted_score is not None and not pd.isna(weighted_score)
+            else None
+        )
+        risk_passed = row.get("risk_family_passed")
+        risk_family_passed = bool(risk_passed) if risk_passed is not None and not pd.isna(risk_passed) else False
+        risk_score = row.get("risk_mean_score")
+        risk_mean_score = float(risk_score) if risk_score is not None and not pd.isna(risk_score) else 0.0
+
         signals.append(
             assign_signal(
                 models_passed=int(row.get("models_passed") or 0),
                 model_count=int(row.get("model_count") or 0),
                 mean_model_score=float(row.get("mean_model_score") or 0),
+                weighted_model_score=weighted_model_score,
                 composite_score=composite_score,
                 sector_composite_score=sector_composite_score,
                 families_passed=int(row.get("families_passed") or 0),
-                family_count=int(row.get("family_count") or 4),
+                family_count=int(row.get("family_count") or 5),
                 data_quality_score=float(row.get("data_quality_score") or 0),
+                risk_family_passed=risk_family_passed,
+                risk_mean_score=risk_mean_score,
                 has_errors=bool(row.get("errors")),
             )
         )
@@ -131,6 +157,7 @@ def build_signals(
         "signal_rank",
         "composite_score",
         "sector_composite_score",
+        "weighted_model_score",
         "mean_model_score",
         "models_passed",
     ]

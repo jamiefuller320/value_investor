@@ -36,6 +36,10 @@ MODEL_FAMILIES: dict[str, list[str]] = {
         "lynch_peg",
         "neff_pegy",
     ],
+    "risk": [
+        "earnings_quality",
+        "financial_health",
+    ],
 }
 
 MODEL_TO_FAMILY: dict[str, str] = {
@@ -78,6 +82,8 @@ def summarize_by_family(model_results: pd.DataFrame) -> pd.DataFrame:
             for family in MODEL_FAMILIES
             if family in pivot_scores.columns and pd.notna(pivot_scores.loc[ticker, family])
         }
+        risk_passed = "risk" in passed_families
+        risk_mean_score = family_scores.get("risk", 0.0)
         rows.append(
             {
                 "ticker": ticker,
@@ -85,6 +91,8 @@ def summarize_by_family(model_results: pd.DataFrame) -> pd.DataFrame:
                 "family_count": len(MODEL_FAMILIES),
                 "passed_families": ",".join(passed_families),
                 "family_mean_score": sum(family_scores.values()) / len(family_scores) if family_scores else 0.0,
+                "risk_family_passed": risk_passed,
+                "risk_mean_score": risk_mean_score,
             }
         )
 
@@ -99,6 +107,7 @@ def format_family_summary(passed_families: str | None) -> str:
         "quality": "quality",
         "dividend": "dividend",
         "garp": "GARP",
+        "risk": "risk",
     }
     parts = [labels.get(f, f) for f in passed_families.split(",") if f]
     return ", ".join(parts)
