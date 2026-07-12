@@ -166,6 +166,28 @@ class HistoricalAnalysisSummary:
         return bool(self.strategy_horizons)
 
 
+def historical_analysis_summary_from_dict(data: dict[str, Any]) -> HistoricalAnalysisSummary:
+    return HistoricalAnalysisSummary(
+        run_count=int(data.get("run_count", 0)),
+        window_start=data.get("window_start"),
+        window_end=data.get("window_end"),
+        max_years=int(data.get("max_years", MAX_HISTORY_YEARS)),
+        smoothing_weeks=int(data.get("smoothing_weeks", DEFAULT_SMOOTHING_WEEKS)),
+        strategy_horizons=[StrategyHorizonResult(**item) for item in data.get("strategy_horizons", [])],
+        model_attribution=[ModelAttributionResult(**item) for item in data.get("model_attribution", [])],
+        overlay_comparison=[OverlayComparison(**item) for item in data.get("overlay_comparison", [])],
+        weekly_series=list(data.get("weekly_series", [])),
+        note=str(data.get("note", "")),
+    )
+
+
+def load_historical_analysis_summary(output_dir: Path) -> HistoricalAnalysisSummary | None:
+    path = output_dir / "historical_analysis_summary.json"
+    if not path.exists():
+        return None
+    return historical_analysis_summary_from_dict(json.loads(path.read_text(encoding="utf-8")))
+
+
 def _week_key(run_at: datetime) -> str:
     year, week, _ = run_at.isocalendar()
     return f"{year}-W{week:02d}"
@@ -591,6 +613,23 @@ def save_historical_analysis(output_dir: Path, summary: HistoricalAnalysisSummar
     path = output_dir / "historical_analysis_summary.json"
     path.write_text(json.dumps(summary.to_dict(), indent=2), encoding="utf-8")
     return path
+
+
+def format_historical_analysis_html(summary: HistoricalAnalysisSummary) -> str:
+    if not summary.has_results():
+        return ""
+
+    text = format_historical_analysis_text(summary).replace("\n", "<br>")
+    return f"""
+  <div style="background:#eef8f4;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #1b7f3a">
+    <h3 style="margin-top:0">Historical analysis</h3>
+    <p style="color:#666;font-size:13px;margin-top:0">
+      Point-in-time replay of screen + research recommendations ({summary.max_years}y window,
+      {summary.smoothing_weeks}w smoothing, {summary.run_count} runs).
+    </p>
+    <p style="margin-bottom:0">{text}</p>
+  </div>
+"""
 
 
 def format_historical_analysis_text(summary: HistoricalAnalysisSummary) -> str:

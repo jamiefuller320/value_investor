@@ -19,6 +19,7 @@ from value_investor.backtest import (
 from value_investor.constituents import fetch_ftse100_constituents
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
+from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.run_diff import RunDiff, compute_run_diff
 from value_investor.historical_analysis import (
     run_historical_analysis,

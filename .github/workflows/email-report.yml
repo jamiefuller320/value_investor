@@ -22,6 +22,15 @@ jobs:
       - name: Install package
         run: pip install -e .
 
+      - name: Preflight checks
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: ftse-preflight --require-email
+
       - name: Screen, build reports, and publish dashboard
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}

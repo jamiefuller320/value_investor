@@ -56,6 +56,13 @@ ftse-email --research-docs    # screen + update research + email (weekly rerun a
 ftse-simulate
 ftse-simulate --capital 1000 --trade-cost 0.03 --json
 
+# Historical analysis replay (up to 3 years, weekly smoothing)
+ftse-historical --output-dir output
+
+# Preflight before the first weekly production run
+ftse-preflight
+ftse-preflight --require-email --require-agents
+
 # Publish dashboard to docs/ for GitHub Pages (after a screen or email run)
 ftse-publish
 ftse-email --dry-run --publish-dashboard
@@ -91,6 +98,7 @@ The dashboard shows:
 - Searchable screener table (all FTSE 100 names)
 - Strong buys with trade plans
 - Backtest and portfolio simulation results
+- **Historical analysis** — point-in-time replay of screen + research with weekly smoothing
 - Deep analysis and per-ticker research memos (when published)
 
 ```bash
@@ -115,17 +123,37 @@ Reports include:
 - **Week-over-week signal changes** (new and persistent strong buys)
 - **Signal backtest** vs FTSE 100 (after 2+ archived weekly runs)
 - **Portfolio simulation** — £1,000 pot, 3% per trade, rebalanced on top conviction picks
+- **Historical analysis** — 3-year replay of screen + research recommendations with 4-week smoothing
 - **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
-- **Strong buy research** — per-ticker memos from five years of financials and one year of news, with weekly update sections on reruns
+- **Strong buy research** — per-ticker memos from five years of financials and one year of news, with weekly update sections and **verdict revisions** when material news changes conviction
 
 ## Strong buy research
 
 `ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for **every** `strong_buy` that passes the data-quality gate:
 
 1. **First pass** — ingests five years of annual statements (yfinance), one year of headlines (yfinance + Google News RSS), and the quantitative screen snapshot; Cursor agent writes sections on thesis, financials, risks, and news.
-2. **Weekly reruns** — refreshes sources, fetches new headlines since the last update, and appends a `WEEKLY UPDATE` section via the same per-ticker agent (resumed when possible).
+2. **Weekly reruns** — refreshes sources, fetches new headlines since the last update, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news changes conviction (otherwise repeats the prior verdict).
 
 Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured.
+
+## First weekly run checklist
+
+Before the scheduled Monday workflow (or your first manual `ftse-email`):
+
+1. **Repository secrets** — `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO`; optional `CURSOR_API_KEY` for deep analysis and research updates.
+2. **GitHub Pages** — Settings → Pages → Source: **GitHub Actions** (see `.github/workflows/pages.yml`).
+3. **Preflight** — `ftse-preflight --require-email` (CI runs this automatically). Warnings about missing history are normal on week 1.
+4. **Seed a screen locally** (optional but recommended) — `ftse-screen` then `ftse-email --dry-run --publish-dashboard` to verify outputs before Monday.
+5. **Research memos** — on first strong buys, run `ftse-research` or `ftse-email --research-docs` so conviction overlays and historical replay have point-in-time verdicts.
+6. **Week 2+** — backtest, simulation, and historical analysis activate once two weekly snapshots exist in `output/history/`.
+
+```bash
+ftse-preflight --require-email
+ftse-screen
+ftse-email --dry-run --publish-dashboard
+# with agents:
+ftse-email --dry-run --publish-dashboard --deep-analysis --research-docs
+```
 
 ## Architecture
 
