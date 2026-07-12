@@ -20,7 +20,7 @@ from value_investor.constituents import fetch_ftse100_constituents
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
 from value_investor.run_diff import RunDiff, compute_run_diff
-from value_investor.research.overlay import enrich_signals_with_research
+from value_investor.model_weights import load_model_weights, save_model_snapshot, update_model_weights
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
@@ -73,6 +73,9 @@ class ScreenResult:
                     "tactical_take_profit",
                     "trade_plan_summary",
                     "mean_model_score",
+                    "weighted_model_score",
+                    "risk_family_passed",
+                    "risk_mean_score",
                 ]
             ].to_dict(orient="records"),
         }
@@ -94,7 +97,8 @@ def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> S
     universe = add_data_quality_scores(universe)
     universe = add_sector_scores(universe)
     model_results = evaluate_universe(universe)
-    summary = summarize_by_ticker(model_results)
+    weight_state = load_model_weights(out_dir)
+    summary = summarize_by_ticker(model_results, weights=weight_state.weights)
     signals = build_signals(universe, model_results, summary)
     signals = enrich_signals_with_technicals(signals)
 
@@ -107,6 +111,7 @@ def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> S
         "composite_score",
         "sector_composite_score",
         "mean_model_score",
+        "weighted_model_score",
         "models_passed",
     ]
     present_cols = [c for c in sort_cols if c in signals.columns]
@@ -152,6 +157,16 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
 
     snapshot_path = save_run_snapshot(output_dir, run_at=result.run_at, signals=signals_out)
     paths["snapshot"] = snapshot_path
+
+    model_snapshot_path = save_model_snapshot(
+        output_dir,
+        run_at=result.run_at,
+        model_results=result.model_results,
+    )
+    paths["model_snapshot"] = model_snapshot_path
+
+    weight_state = update_model_weights(output_dir)
+    paths["model_weights"] = output_dir / "model_weights.json"
 
     snapshots = load_run_snapshots(output_dir)
     result.backtest = compute_backtest(snapshots)

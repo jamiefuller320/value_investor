@@ -55,6 +55,7 @@ METRIC_KEYS = [
     "asset_turnover",
     "asset_turnover_prev",
     "shares_outstanding_prev",
+    "interest_expense",
 ]
 
 
@@ -101,6 +102,7 @@ class CompanyMetrics:
     asset_turnover: float | None = None
     asset_turnover_prev: float | None = None
     shares_outstanding_prev: float | None = None
+    interest_expense: float | None = None
     errors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:

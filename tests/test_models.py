@@ -11,12 +11,14 @@ from value_investor.signals import Signal, assign_signal
 
 
 def test_all_models_registered():
-    assert len(ALL_MODELS) >= 18
+    assert len(ALL_MODELS) >= 20
     ids = {m.id for m in ALL_MODELS}
     assert len(ids) == len(ALL_MODELS)
     assert "magic_formula" in ids
     assert "piotroski_f" in ids
     assert "graham_net_net" in ids
+    assert "earnings_quality" in ids
+    assert "financial_health" in ids
 
 
 def test_graham_defensive_passes_cheap_dividend_payer():
@@ -64,14 +66,17 @@ def test_piotroski_scores_financial_strength():
 
 def test_assign_signal_strong_buy_scales_with_model_count():
     signal = assign_signal(
-        models_passed=6,
-        model_count=18,
+        models_passed=7,
+        model_count=20,
         mean_model_score=0.75,
+        weighted_model_score=0.75,
         composite_score=0.8,
         sector_composite_score=0.75,
         families_passed=3,
-        family_count=4,
+        family_count=5,
         data_quality_score=0.85,
+        risk_family_passed=True,
+        risk_mean_score=0.8,
         has_errors=False,
     )
     assert signal == Signal.STRONG_BUY
@@ -80,13 +85,16 @@ def test_assign_signal_strong_buy_scales_with_model_count():
 def test_assign_signal_downgrades_on_low_data_quality():
     signal = assign_signal(
         models_passed=8,
-        model_count=18,
+        model_count=20,
         mean_model_score=0.8,
+        weighted_model_score=0.8,
         composite_score=0.85,
         sector_composite_score=0.85,
         families_passed=3,
-        family_count=4,
+        family_count=5,
         data_quality_score=0.55,
+        risk_family_passed=True,
+        risk_mean_score=0.7,
         has_errors=False,
     )
     assert signal == Signal.BUY
@@ -95,13 +103,16 @@ def test_assign_signal_downgrades_on_low_data_quality():
 def test_assign_signal_requires_multiple_families_for_strong_buy():
     signal = assign_signal(
         models_passed=8,
-        model_count=18,
+        model_count=20,
         mean_model_score=0.8,
+        weighted_model_score=0.8,
         composite_score=0.85,
         sector_composite_score=0.85,
         families_passed=1,
-        family_count=4,
+        family_count=5,
         data_quality_score=0.85,
+        risk_family_passed=True,
+        risk_mean_score=0.7,
         has_errors=False,
     )
     assert signal != Signal.STRONG_BUY

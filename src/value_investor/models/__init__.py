@@ -19,6 +19,7 @@ from value_investor.models.neff import LowPEHighYieldModel, NeffPEGYModel
 from value_investor.models.net_net import NetNetModel
 from value_investor.models.piotroski import PiotroskiFScoreModel
 from value_investor.models.quality_value import QualityValueModel
+from value_investor.models.risk import EarningsQualityModel, FinancialHealthModel
 
 __all__ = [
     "GrahamDefensiveModel",
@@ -41,6 +42,8 @@ __all__ = [
     "EconomicMoatModel",
     "NeffPEGYModel",
     "LowPEHighYieldModel",
+    "EarningsQualityModel",
+    "FinancialHealthModel",
     "ALL_MODELS",
 ]
 
@@ -71,4 +74,7 @@ ALL_MODELS = [
     DremanContrarianModel(),
     PiotroskiFScoreModel(),
     CompositeValueModel(),
+    # Risk
+    EarningsQualityModel(),
+    FinancialHealthModel(),
 ]
