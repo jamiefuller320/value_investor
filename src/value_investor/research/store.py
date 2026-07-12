@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 from value_investor.research.document import ResearchDocument, render_research_markdown
+from value_investor.research.timeline import archive_revision
 
 
 class ResearchStore:
     def __init__(self, output_dir: Path):
         self.root = output_dir / "research"
+        self.output_dir = output_dir
 
     def ticker_dir(self, ticker: str) -> Path:
         return self.root / ticker
@@ -23,6 +27,9 @@ class ResearchStore:
 
     def markdown_path(self, ticker: str) -> Path:
         return self.ticker_dir(ticker) / "research.md"
+
+    def timeline_path(self, ticker: str) -> Path:
+        return self.ticker_dir(ticker) / "timeline.json"
 
     def agent_id_path(self, ticker: str) -> Path:
         return self.ticker_dir(ticker) / "agent_id.txt"
@@ -39,10 +46,21 @@ class ResearchStore:
         doc.research_path = str(self.markdown_path(ticker))
         return doc
 
-    def save(self, doc: ResearchDocument) -> None:
+    def save(
+        self,
+        doc: ResearchDocument,
+        *,
+        run_at: datetime | None = None,
+        sources_as_of: dict[str, Any] | None = None,
+        delta: dict[str, Any] | None = None,
+    ) -> str:
         ticker_dir = self.ticker_dir(doc.ticker)
         ticker_dir.mkdir(parents=True, exist_ok=True)
         doc.research_path = str(self.markdown_path(doc.ticker))
+
+        if not doc.updated_at:
+            doc.updated_at = datetime.now(UTC).isoformat()
+
         self.metadata_path(doc.ticker).write_text(
             json.dumps(doc.to_dict(), indent=2),
             encoding="utf-8",
@@ -50,6 +68,14 @@ class ResearchStore:
         self.markdown_path(doc.ticker).write_text(render_research_markdown(doc), encoding="utf-8")
         if doc.agent_id:
             self.agent_id_path(doc.ticker).write_text(doc.agent_id, encoding="utf-8")
+
+        return archive_revision(
+            ticker_dir,
+            doc=doc,
+            run_at=run_at,
+            sources_as_of=sources_as_of,
+            delta=delta,
+        )
 
     def load_agent_id(self, ticker: str) -> str | None:
         path = self.agent_id_path(ticker)

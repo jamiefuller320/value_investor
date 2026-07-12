@@ -11,6 +11,7 @@ from value_investor.research.agent import run_initial_research_agent, run_weekly
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.ingest import ingest_research_sources
 from value_investor.research.store import ResearchStore
+from value_investor.research.timeline import build_sources_as_of, build_weekly_delta, revision_id_from_datetime
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ def run_research_for_strong_buys(
     model: str = "composer-2.5",
     cwd: str | None = None,
     force_initial: bool = False,
+    run_at: datetime | None = None,
 ) -> ResearchSummary:
     """
     Create or update per-ticker research memos for all strong buys.
@@ -53,6 +55,7 @@ def run_research_for_strong_buys(
                 model=model,
                 cwd=cwd,
                 force_initial=force_initial,
+                run_at=run_at,
             )
             summary.documents.append(doc)
             if action == "created":
@@ -78,6 +81,7 @@ def _process_ticker(
     model: str,
     cwd: str | None,
     force_initial: bool,
+    run_at: datetime | None,
 ) -> tuple[ResearchDocument, str]:
     sources_dir = store.sources_dir(report.ticker)
     existing = None if force_initial else store.load(report.ticker)
@@ -96,6 +100,8 @@ def _process_ticker(
         since=since,
     )
 
+    effective_run_at = run_at or datetime.now(UTC)
+
     if existing is None:
         doc, _agent_id = run_initial_research_agent(
             report=report,
@@ -108,7 +114,18 @@ def _process_ticker(
             "financial_years": source_meta["financial_years"],
             "news_articles": source_meta["news_total"],
         }
-        store.save(doc)
+        as_of = datetime.fromisoformat(doc.updated_at.replace("Z", "+00:00"))
+        sources_as_of = build_sources_as_of(
+            sources_dir=sources_dir,
+            source_meta=source_meta,
+            as_of=as_of,
+            revision_id=revision_id_from_datetime(as_of),
+        )
+        store.save(
+            doc,
+            run_at=effective_run_at,
+            sources_as_of=sources_as_of,
+        )
         return doc, "created"
 
     updated = run_weekly_research_update_agent(
@@ -124,7 +141,21 @@ def _process_ticker(
         "financial_years": source_meta["financial_years"],
         "news_articles": source_meta["news_total"],
     }
-    store.save(updated)
+    weekly_summary = updated.weekly_updates[-1]["summary"] if updated.weekly_updates else ""
+    as_of = datetime.fromisoformat(updated.updated_at.replace("Z", "+00:00"))
+    sources_as_of = build_sources_as_of(
+        sources_dir=sources_dir,
+        source_meta=source_meta,
+        as_of=as_of,
+        revision_id=revision_id_from_datetime(as_of),
+    )
+    delta = build_weekly_delta(prior=existing, updated=updated, weekly_summary=weekly_summary)
+    store.save(
+        updated,
+        run_at=effective_run_at,
+        sources_as_of=sources_as_of,
+        delta=delta,
+    )
     return updated, "updated"
 
 

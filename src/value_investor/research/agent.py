@@ -214,7 +214,11 @@ def run_weekly_research_update_agent(
         research_rationale=existing.research_rationale,
         weekly_updates=[
             *existing.weekly_updates,
-            {"date": now.strftime("%Y-%m-%d"), "summary": update_summary},
+            {
+                "date": now.strftime("%Y-%m-%d"),
+                "as_of": now.isoformat(),
+                "summary": update_summary,
+            },
         ],
         source_counts=existing.source_counts,
         agent_id=agent_id or existing.agent_id,

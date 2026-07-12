@@ -186,7 +186,8 @@ def render_research_markdown(doc: ResearchDocument) -> str:
     if doc.weekly_updates:
         lines.extend(["", "## Weekly updates"])
         for item in doc.weekly_updates:
-            lines.extend(["", f"### {item.get('date', 'Update')}", item.get("summary", "")])
+            heading = item.get("as_of") or item.get("date", "Update")
+            lines.extend(["", f"### {heading}", item.get("summary", "")])
     return "\n".join(lines).strip() + "\n"
 
 

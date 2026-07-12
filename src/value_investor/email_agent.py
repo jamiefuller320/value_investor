@@ -216,6 +216,7 @@ def main(argv: list[str] | None = None) -> int:
                 output_dir=args.output_dir,
                 api_key=args.api_key,
                 model=args.model,
+                run_at=run_at,
             )
         except RuntimeError as err:
             print(str(err), file=sys.stderr)
@@ -225,7 +226,7 @@ def main(argv: list[str] | None = None) -> int:
     if research_documents:
         reports = apply_research_overlay(reports, research_documents)
 
-    signals = enrich_signals_with_research(signals, args.output_dir)
+    signals = enrich_signals_with_research(signals, args.output_dir, run_at=run_at)
     signals_path = args.output_dir / "latest_signals.csv"
     signals.to_csv(signals_path, index=False)
 

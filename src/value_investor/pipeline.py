@@ -143,7 +143,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
 
     signals_out = result.signals.copy()
     signals_out["run_at"] = result.run_at.isoformat()
-    signals_out = enrich_signals_with_research(signals_out, output_dir)
+    signals_out = enrich_signals_with_research(signals_out, output_dir, run_at=result.run_at)
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
     result.universe.to_csv(paths["universe"], index=False)

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from value_investor.research.document import ResearchDocument
 from value_investor.research.store import ResearchStore
+from value_investor.research.timeline import list_revision_metas
 
 
 def test_research_store_round_trip(tmp_path: Path):
@@ -28,3 +29,5 @@ def test_research_store_round_trip(tmp_path: Path):
     assert loaded.agent_id == "agent-123"
     assert store.markdown_path("AAA.L").exists()
     assert json.loads(store.metadata_path("AAA.L").read_text(encoding="utf-8"))["version"] == 1
+    assert store.timeline_path("AAA.L").exists()
+    assert list_revision_metas(store.ticker_dir("AAA.L"))
