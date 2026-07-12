@@ -63,6 +63,10 @@ ftse-historical --output-dir output
 ftse-preflight
 ftse-preflight --require-email --require-agents
 
+# Verify CURSOR_API_KEY authenticates (optional --list-models)
+ftse-verify-key
+ftse-verify-key --list-models
+
 # Publish dashboard to docs/ for GitHub Pages (after a screen or email run)
 ftse-publish
 ftse-email --dry-run --publish-dashboard
@@ -142,7 +146,7 @@ Before the scheduled Monday workflow (or your first manual `ftse-email`):
 
 1. **Repository secrets** — `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO`; optional `CURSOR_API_KEY` for deep analysis and research updates.
 2. **GitHub Pages** — Settings → Pages → Source: **GitHub Actions** (see `.github/workflows/pages.yml`).
-3. **Preflight** — `ftse-preflight --require-email` (CI runs this automatically). Warnings about missing history are normal on week 1.
+3. **Preflight** — `ftse-preflight --require-email` (CI runs this automatically). Warnings about missing history are normal on week 1. If you set `CURSOR_API_KEY`, confirm it with `ftse-verify-key` before enabling `--deep-analysis` / `--research-docs`.
 4. **Seed a screen locally** (optional but recommended) — `ftse-screen` then `ftse-email --dry-run --publish-dashboard` to verify outputs before Monday.
 5. **Research memos** — on first strong buys, run `ftse-research` or `ftse-email --research-docs` so conviction overlays and historical replay have point-in-time verdicts.
 6. **Week 2+** — backtest, simulation, and historical analysis activate once two weekly snapshots exist in `output/history/`.
