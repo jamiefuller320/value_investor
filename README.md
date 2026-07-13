@@ -150,6 +150,17 @@ Reports include:
 - **Historical analysis** — 3-year replay of screen + research recommendations with 4-week smoothing
 - **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
 - **Buy-tier research** — per-ticker memos for strong buys and a capped set of top buys, from five years of financials and one year of news, with weekly update sections and **verdict revisions** when material news changes conviction
+- **Portfolio actions (dashboard)** — log when you act on a recommendation with limit/stop levels prefilled from the trade plan; diversification steer ranks unused buy-tier names toward a balanced book (browser-local storage)
+
+## Dashboard portfolio
+
+The GitHub Pages **Portfolio** tab lets you:
+
+1. **Log an action** from Strong buys / Buys — order type, limit, stop, take-profit, and allocation are prefilled from the technical trade plan when available.
+2. **Track open vs closed** actions in this browser (`localStorage`), with JSON export/import for backup.
+3. **See diversification advice** — sector concentration vs a 30% soft cap, and a ranked list blending conviction with sector diversity so the next fill improves portfolio balance.
+
+Action logs are private to your browser; they are not committed by the weekly workflow.
 
 ## Buy-tier research
 

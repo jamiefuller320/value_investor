@@ -12,6 +12,7 @@ const TABS = [
   { id: "overview", label: "Overview" },
   { id: "screener", label: "Screener" },
   { id: "strong-buys", label: "Strong buys" },
+  { id: "portfolio", label: "Portfolio" },
   { id: "performance", label: "Performance" },
   { id: "analysis", label: "Analysis" },
 ];
@@ -241,26 +242,43 @@ function renderScreener(data) {
 }
 
 function renderStrongBuys(data) {
-  const reports = (data.reports || []).filter((r) => r.signal === "strong_buy");
+  const reports = (data.reports || []).filter((r) => r.signal === "strong_buy" || r.signal === "buy");
   const panel = document.getElementById("panel-strong-buys");
 
   if (!reports.length) {
-    panel.innerHTML = '<div class="empty-state">No strong buy recommendations in the latest run.</div>';
+    panel.innerHTML = '<div class="empty-state">No strong buy or buy recommendations in the latest run.</div>';
     return;
   }
 
-  panel.innerHTML = reports
-    .map(
-      (report) => `
+  const strong = reports.filter((r) => r.signal === "strong_buy");
+  const buys = reports.filter((r) => r.signal === "buy");
+
+  const cardHtml = (report) => `
     <div class="card pick-card">
       <h4>${esc(report.name)} <span class="small muted">(${esc(report.ticker)})</span></h4>
       <p>${signalBadge(report.signal)} ${timingBadge(report.timing_signal)} · Conviction ${pct(report.conviction_score)}${researchOverlayHtml(report)}</p>
       <p class="small">${esc(report.action_note || "")}</p>
       <p class="small"><strong>Trade plan:</strong><br>${tradePlanHtml(report)}</p>
       <p class="small">${esc(report.summary || "")}</p>
-    </div>`
-    )
-    .join("");
+      <p><button type="button" class="btn btn-primary" data-log-ticker="${esc(report.ticker)}">Log action</button></p>
+    </div>`;
+
+  panel.innerHTML = `
+    ${strong.length ? `<h3 style="margin-top:0">Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
+    ${buys.length ? `<h3>Buys</h3>${buys.map(cardHtml).join("")}` : ""}
+  `;
+
+  panel.querySelectorAll("[data-log-ticker]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (typeof window.__openPortfolioActionDialog === "function") {
+        window.__openPortfolioActionDialog(button.dataset.logTicker);
+      } else {
+        const tabs = document.getElementById("tabs");
+        const portfolioTab = tabs?.querySelector('[data-tab="portfolio"]');
+        if (portfolioTab) portfolioTab.click();
+      }
+    });
+  });
 }
 
 const CHART_COLORS = {
@@ -634,6 +652,7 @@ function renderDashboard(data) {
   renderOverview(data);
   renderScreener(data);
   renderStrongBuys(data);
+  renderPortfolio(data);
   renderPerformance(data);
   renderAnalysis(data);
 }
