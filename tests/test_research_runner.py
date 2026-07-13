@@ -5,29 +5,41 @@ from unittest.mock import patch
 import pandas as pd
 
 from value_investor.research.document import ResearchDocument
-from value_investor.research.runner import eligible_strong_buys, run_research_for_strong_buys
+from value_investor.research.runner import (
+    eligible_research_targets,
+    eligible_strong_buys,
+    run_research_for_strong_buys,
+)
 from value_investor.summary import build_company_reports
 
 
-def _strong_buy_report():
+def _report(
+    *,
+    ticker: str = "AAA.L",
+    name: str = "Alpha PLC",
+    signal: str = "strong_buy",
+    data_quality_score: float = 0.85,
+    conviction_score: float = 0.72,
+    composite_score: float = 0.8,
+):
     signals = pd.DataFrame([
         {
-            "ticker": "AAA.L",
-            "name": "Alpha PLC",
+            "ticker": ticker,
+            "name": name,
             "sector": "Financials",
-            "signal": "strong_buy",
+            "signal": signal,
             "models_passed": 10,
             "model_count": 18,
-            "composite_score": 0.8,
+            "composite_score": composite_score,
             "sector_composite_score": 0.82,
             "families_passed": 3,
             "passed_families": "cheapness,quality,dividend",
-            "data_quality_score": 0.85,
+            "data_quality_score": data_quality_score,
             "metrics_present": 18,
             "metrics_total": 20,
             "weeks_at_signal": 3,
             "signal_trend": "stable",
-            "conviction_score": 0.72,
+            "conviction_score": conviction_score,
             "stability_label": "building",
             "timing_signal": "accumulate",
             "timing_score": 0.75,
@@ -39,7 +51,7 @@ def _strong_buy_report():
     ])
     model_results = pd.DataFrame([
         {
-            "ticker": "AAA.L",
+            "ticker": ticker,
             "model_name": "Graham Defensive",
             "passed": True,
             "score": 1.0,
@@ -50,6 +62,10 @@ def _strong_buy_report():
     return build_company_reports(signals, model_results)[0]
 
 
+def _strong_buy_report():
+    return _report()
+
+
 def test_eligible_strong_buys_filters_low_quality():
     report = _strong_buy_report()
     report_low_quality = _strong_buy_report()
@@ -57,6 +73,64 @@ def test_eligible_strong_buys_filters_low_quality():
     eligible = eligible_strong_buys([report, report_low_quality])
     assert len(eligible) == 1
     assert eligible[0].ticker == "AAA.L"
+
+
+def test_eligible_research_targets_includes_buys_after_strong_buys():
+    strong = _report(ticker="AAA.L", name="Alpha", signal="strong_buy", conviction_score=0.9)
+    buy_high = _report(
+        ticker="BBB.L",
+        name="Beta",
+        signal="buy",
+        data_quality_score=0.7,
+        conviction_score=0.8,
+        composite_score=0.7,
+    )
+    buy_low = _report(
+        ticker="CCC.L",
+        name="Gamma",
+        signal="buy",
+        data_quality_score=0.7,
+        conviction_score=0.5,
+        composite_score=0.6,
+    )
+    hold = _report(ticker="DDD.L", name="Delta", signal="hold", data_quality_score=0.9)
+
+    eligible = eligible_research_targets(
+        [buy_low, hold, buy_high, strong],
+        weekly_cap=3,
+    )
+
+    assert [r.ticker for r in eligible] == ["AAA.L", "BBB.L", "CCC.L"]
+    assert all(r.signal in ("strong_buy", "buy") for r in eligible)
+
+
+def test_eligible_research_targets_prioritises_all_strong_buys_within_cap():
+    strong_a = _report(ticker="AAA.L", conviction_score=0.6, composite_score=0.5)
+    strong_b = _report(ticker="BBB.L", name="Beta", conviction_score=0.9, composite_score=0.8)
+    buy = _report(
+        ticker="CCC.L",
+        name="Gamma",
+        signal="buy",
+        conviction_score=0.99,
+        composite_score=0.99,
+    )
+
+    eligible = eligible_research_targets([buy, strong_a, strong_b], weekly_cap=2)
+
+    assert [r.ticker for r in eligible] == ["BBB.L", "AAA.L"]
+    assert all(r.signal == "strong_buy" for r in eligible)
+
+
+def test_eligible_research_targets_respects_zero_cap():
+    assert eligible_research_targets([_strong_buy_report()], weekly_cap=0) == []
+
+
+def test_eligible_research_targets_filters_low_quality_buys():
+    buy_ok = _report(ticker="BBB.L", name="Beta", signal="buy", data_quality_score=0.6)
+    buy_low = _report(ticker="CCC.L", name="Gamma", signal="buy", data_quality_score=0.4)
+
+    eligible = eligible_research_targets([buy_ok, buy_low], weekly_cap=8)
+    assert [r.ticker for r in eligible] == ["BBB.L"]
 
 
 @patch("value_investor.research.runner.run_initial_research_agent")
@@ -95,3 +169,50 @@ def test_run_research_for_strong_buys_creates_initial_memo(mock_ingest, mock_ini
     assert summary.created == 1
     assert summary.documents[0].executive_summary == "Deep memo."
     assert (tmp_path / "research" / "AAA.L" / "research.md").exists()
+
+
+@patch("value_investor.research.runner.run_initial_research_agent")
+@patch("value_investor.research.runner.ingest_research_sources")
+def test_run_research_includes_capped_buys(mock_ingest, mock_initial, tmp_path):
+    mock_ingest.return_value = {
+        "financials_path": "f.json",
+        "snapshot_path": "s.json",
+        "news_manifest_path": "n.json",
+        "news_batch_path": "b.json",
+        "financial_years": 5,
+        "news_total": 4,
+        "news_new": 4,
+    }
+
+    def _fake_initial(*, report, **_kwargs):
+        return (
+            ResearchDocument(
+                ticker=report.ticker,
+                name=report.name,
+                signal=report.signal,
+                version=1,
+                created_at="2026-07-08T00:00:00+00:00",
+                updated_at="2026-07-08T00:00:00+00:00",
+                mode="initial",
+                executive_summary=f"Memo for {report.ticker}",
+                agent_id="agent-1",
+            ),
+            "agent-1",
+        )
+
+    mock_initial.side_effect = _fake_initial
+
+    summary = run_research_for_strong_buys(
+        reports=[
+            _report(ticker="AAA.L", signal="strong_buy"),
+            _report(ticker="BBB.L", name="Beta", signal="buy", data_quality_score=0.7),
+            _report(ticker="CCC.L", name="Gamma", signal="hold"),
+        ],
+        output_dir=tmp_path,
+        api_key="test-key",
+        weekly_cap=8,
+    )
+
+    tickers = {doc.ticker for doc in summary.documents}
+    assert tickers == {"AAA.L", "BBB.L"}
+    assert summary.created == 2

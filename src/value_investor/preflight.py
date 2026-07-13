@@ -119,7 +119,7 @@ def run_preflight(
             PreflightCheck(
                 "research_memos",
                 "warn",
-                "No research memos yet — run ftse-research or ftse-email --research-docs on first strong buys",
+                "No research memos yet — run ftse-research or ftse-email --research-docs on first buy-tier signals",
             )
         )
 

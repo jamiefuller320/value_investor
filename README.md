@@ -149,7 +149,7 @@ Reports include:
 - **Portfolio simulation** — £1,000 pot, 3% per trade, rebalanced on top conviction picks
 - **Historical analysis** — 3-year replay of screen + research recommendations with 4-week smoothing
 - **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
-- **Strong buy research** — per-ticker memos from five years of financials and one year of news, with weekly update sections and **verdict revisions** when material news changes conviction
+- **Buy-tier research** — per-ticker memos for strong buys and a capped set of top buys, from five years of financials and one year of news, with weekly update sections and **verdict revisions** when material news changes conviction
 - **Portfolio actions (dashboard)** — log when you act on a recommendation with limit/stop levels prefilled from the trade plan; diversification steer ranks unused buy-tier names toward a balanced book (browser-local storage)
 
 ## Dashboard portfolio
@@ -162,13 +162,14 @@ The GitHub Pages **Portfolio** tab lets you:
 
 Action logs are private to your browser; they are not committed by the weekly workflow.
 
-## Strong buy research
-`ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for **every** `strong_buy` that passes the data-quality gate:
+## Buy-tier research
+
+`ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for quality-gated `strong_buy` names first, then fills remaining slots with top `buy` names by conviction (default weekly cap: 8). Hold, avoid, and short-side names are not researched.
 
 1. **First pass** — ingests five years of annual statements (yfinance), one year of headlines (yfinance + Google News RSS), and the quantitative screen snapshot; Cursor agent writes sections on thesis, financials, risks, and news.
 2. **Weekly reruns** — refreshes sources, fetches new headlines since the last update, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news changes conviction (otherwise repeats the prior verdict).
 
-Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured.
+Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Override the cap with `--research-cap N`.
 
 ## First weekly run checklist
 
@@ -178,7 +179,7 @@ Before the scheduled Monday workflow (or your first manual `ftse-email`):
 2. **GitHub Pages** — Settings → Pages → Source: **GitHub Actions** (see `.github/workflows/pages.yml`).
 3. **Preflight** — `ftse-preflight --require-email` (CI runs this automatically). Warnings about missing history are normal on week 1. If you set `CURSOR_API_KEY`, confirm it with `ftse-verify-key` before enabling `--deep-analysis` / `--research-docs`.
 4. **Seed a screen locally** (optional but recommended) — `ftse-screen` then `ftse-email --dry-run --publish-dashboard` to verify outputs before Monday.
-5. **Research memos** — on first strong buys, run `ftse-research` or `ftse-email --research-docs` so conviction overlays and historical replay have point-in-time verdicts.
+5. **Research memos** — on first buy-tier signals, run `ftse-research` or `ftse-email --research-docs` so conviction overlays and historical replay have point-in-time verdicts.
 6. **Week 2+** — backtest, simulation, and historical analysis activate once two weekly snapshots exist in `output/history/`.
 
 ```bash

@@ -13,13 +13,25 @@ from value_investor.research.verdict import parse_research_verdict
 from value_investor.summary import CompanyReport
 
 
+def _screen_signal_label(signal: str) -> str:
+    labels = {
+        "strong_buy": "strong buy",
+        "buy": "buy",
+    }
+    return labels.get(signal, signal.replace("_", " "))
+
+
 def _initial_prompt(
     *,
     ticker: str,
     company_name: str,
     sources_dir: Path,
+    screen_signal: str = "strong_buy",
 ) -> str:
+    signal_label = _screen_signal_label(screen_signal)
     return f"""You are a UK equity research analyst writing a deep first-pass memo on {company_name} ({ticker}).
+
+The quantitative screen currently rates this name as a {signal_label}.
 
 Read the source files in: {sources_dir.resolve()}
 
@@ -33,7 +45,7 @@ EXECUTIVE SUMMARY
 3–5 sentences: investment case, valuation hook, and key debate.
 
 INVESTMENT THESIS
-Why this is a strong buy for a value investor. Tie quantitative screen results to business quality.
+Why this is a {signal_label} for a value investor. Tie quantitative screen results to business quality.
 
 FINANCIAL REVIEW
 Analyse the five-year financial trend: revenue, margins, leverage, cash generation, and balance-sheet strength.
@@ -52,7 +64,7 @@ Use EXACTLY these lines:
 Verdict: accumulate | neutral | caution | pass
 Risk: low | medium | high
 Confidence: 0.00–1.00 (decimal, e.g. 0.75)
-Rationale: One sentence on whether deep research confirms, is neutral on, or weakens the strong buy case.
+Rationale: One sentence on whether deep research confirms, is neutral on, or weakens the {signal_label} case.
 
 Rules:
 - UK English, concise professional tone.
@@ -68,8 +80,12 @@ def _weekly_update_prompt(
     sources_dir: Path,
     news_batch_path: Path,
     existing_markdown_path: Path,
+    screen_signal: str = "strong_buy",
 ) -> str:
+    signal_label = _screen_signal_label(screen_signal)
     return f"""You are updating an existing research memo on {company_name} ({ticker}).
+
+The quantitative screen currently rates this name as a {signal_label}.
 
 Existing memo: {existing_markdown_path.resolve()}
 New news batch since last update: {news_batch_path.resolve()}
@@ -91,7 +107,7 @@ Use EXACTLY these lines:
 Verdict: accumulate | neutral | caution | pass
 Risk: low | medium | high
 Confidence: 0.00–1.00 (decimal, e.g. 0.75)
-Rationale: One sentence on whether this week's news confirms, is neutral on, or weakens the strong buy case.
+Rationale: One sentence on whether this week's news confirms, is neutral on, or weakens the {signal_label} case.
 """
 
 
@@ -145,6 +161,7 @@ def run_initial_research_agent(
         ticker=report.ticker,
         company_name=report.name,
         sources_dir=sources_dir,
+        screen_signal=report.signal,
     )
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
@@ -186,6 +203,7 @@ def run_weekly_research_update_agent(
     api_key: str,
     model: str = "composer-2.5",
     cwd: str | None = None,
+    screen_signal: str | None = None,
 ) -> ResearchDocument:
     prompt = _weekly_update_prompt(
         ticker=existing.ticker,
@@ -193,6 +211,7 @@ def run_weekly_research_update_agent(
         sources_dir=sources_dir,
         news_batch_path=news_batch_path,
         existing_markdown_path=markdown_path,
+        screen_signal=screen_signal or existing.signal,
     )
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
