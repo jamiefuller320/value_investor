@@ -101,30 +101,32 @@ def _favorable_timing_picks(reports: list[CompanyReport]) -> list[CompanyReport]
     ]
 
 
-def _strong_buy_trade_plans(reports: list[CompanyReport]) -> list[CompanyReport]:
+def _buy_tier_trade_plans(reports: list[CompanyReport]) -> list[CompanyReport]:
     return [
         r
         for r in reports
-        if r.signal == "strong_buy" and r.trade_plan is not None
+        if r.signal in ("strong_buy", "buy") and r.trade_plan is not None
     ]
 
 
 def _format_trade_plans_text(reports: list[CompanyReport]) -> str | None:
-    plans = _strong_buy_trade_plans(reports)
+    plans = _buy_tier_trade_plans(reports)
     if not plans:
         return None
     lines = [
-        "Suggested orders for strong buys (core holding + tactical dip entries):",
+        "Suggested orders for buy-tier names (core holding + tactical dip entries):",
     ]
     for report in plans:
-        lines.append(f"  • {report.name} ({report.ticker})")
+        lines.append(
+            f"  • {report.name} ({report.ticker}) — {report.signal.replace('_', ' ')}"
+        )
         if report.trade_plan and report.trade_plan.trade_plan_summary:
             lines.append(f"    {report.trade_plan.trade_plan_summary}")
     return "\n".join(lines)
 
 
 def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
-    plans = _strong_buy_trade_plans(reports)
+    plans = _buy_tier_trade_plans(reports)
     if not plans:
         return ""
     rows = []
@@ -157,7 +159,7 @@ def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
             <tr>
               <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
                 <strong>{report.name}</strong><br>
-                <span style="color:#666">{report.ticker}</span>
+                <span style="color:#666">{report.ticker} · {report.signal.replace('_', ' ')}</span>
               </td>
               <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
                 Core: {core_text}<br>
@@ -169,7 +171,7 @@ def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
         )
     return f"""
   <div style="background:#f0f4ff;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #2b6cb0">
-    <h3 style="margin-top:0">Strong buy trade plans</h3>
+    <h3 style="margin-top:0">Buy-tier trade plans</h3>
     <p style="color:#666;font-size:13px;margin-top:0">
       Core leg builds the long-term holding; tactical limits target short-term dips.
     </p>
@@ -250,7 +252,7 @@ def format_text_report(
 
     trade_plans = _format_trade_plans_text(reports)
     if trade_plans:
-        lines.extend(["STRONG BUY TRADE PLANS", "-" * 40, trade_plans, ""])
+        lines.extend(["BUY-TIER TRADE PLANS", "-" * 40, trade_plans, ""])
 
     research_text = format_research_text(research_summary, research_documents or [])
     if research_text:

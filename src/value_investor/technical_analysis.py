@@ -117,12 +117,12 @@ def compute_trade_plan(
     value_signal: str,
 ) -> TradePlan | None:
     """
-    Recommend core + tactical orders for strong buys.
+    Recommend core + tactical orders for strong buys and buys.
 
     Core leg builds the long-term holding; tactical limit orders exploit
     short-term dips with a defined stop-loss and take-profit.
     """
-    if value_signal != "strong_buy" or tech.close is None:
+    if value_signal not in ("strong_buy", "buy") or tech.close is None:
         return None
 
     price = tech.close
@@ -490,7 +490,10 @@ def enrich_signals_with_technicals(signals: pd.DataFrame) -> pd.DataFrame:
             value_signal = str(out.loc[out["ticker"] == ticker, "signal"].iloc[0])
             tech = compute_indicators(series)
             tech.action_note = combined_action(value_signal, tech.timing_signal.value)
-            if value_signal == "strong_buy" and tech.timing_signal != TimingSignal.INSUFFICIENT_DATA:
+            if (
+                value_signal in ("strong_buy", "buy")
+                and tech.timing_signal != TimingSignal.INSUFFICIENT_DATA
+            ):
                 tech.trade_plan = compute_trade_plan(series, tech, value_signal=value_signal)
             rows.append({"ticker": ticker, **_technical_row_dict(tech)})
             continue
