@@ -118,7 +118,7 @@ ftse-email --dry-run --publish-dashboard
 
 Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
 
-**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). The workflow in `.github/workflows/email-report.yml` runs every Monday 07:00 UTC, or trigger manually from the Actions tab.
+**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). `.github/workflows/email-report-schedule.yml` dispatches `.github/workflows/email-report.yml` via `workflow_dispatch` (currently testing a temporary Monday slot, then Monday **07:17 UTC**). You can also run **FTSE 100 Email Report** manually from the Actions tab.
 
 Reports include:
 - **Data quality scores** per company (downgrades thin-data signals)
