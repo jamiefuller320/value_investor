@@ -1,10 +1,12 @@
 /* Portfolio actions + diversification advice (browser-local). */
 
 const PORTFOLIO_STORAGE_KEY = "ftseValueInvestor.portfolioActions.v1";
+const PORTFOLIO_BOOK_KEY = "ftseValueInvestor.portfolioBook.v1";
 const TARGET_SECTOR_CAP = 0.3;
 const MAX_POSITIONS = 8;
 const CONVICTION_WEIGHT = 0.55;
 const DIVERSITY_WEIGHT = 0.45;
+const DEFAULT_SIM_SEED_NAMES = 5;
 
 function createActionId() {
   if (window.crypto && typeof window.crypto.randomUUID === "function") {
@@ -26,6 +28,28 @@ function loadPortfolioActions() {
 
 function savePortfolioActions(actions) {
   localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(actions));
+}
+
+function normalizeExecutionMode(value) {
+  return value === "simulated" ? "simulated" : "live";
+}
+
+function actionExecutionMode(action) {
+  // Legacy rows (no mode) treated as live — they were logged as real actions.
+  if (!action || action.execution_mode == null || action.execution_mode === "") {
+    return "live";
+  }
+  return normalizeExecutionMode(action.execution_mode);
+}
+
+function loadBookFilter() {
+  const value = localStorage.getItem(PORTFOLIO_BOOK_KEY);
+  if (value === "live" || value === "all") return value;
+  return "simulated";
+}
+
+function saveBookFilter(value) {
+  localStorage.setItem(PORTFOLIO_BOOK_KEY, value);
 }
 
 function actionableReports(data) {
@@ -83,6 +107,11 @@ function applyLegDefaults(form, plan, leg) {
   }
   form.stop_loss.value = plan.tactical_stop_loss != null ? plan.tactical_stop_loss : "";
   form.take_profit.value = plan.tactical_take_profit != null ? plan.tactical_take_profit : "";
+}
+
+function filterActionsByBook(actions, bookFilter) {
+  if (bookFilter === "all") return actions;
+  return actions.filter((a) => actionExecutionMode(a) === bookFilter);
 }
 
 function normalizeHoldings(actions, data) {
@@ -195,7 +224,7 @@ function adviseDiversification(actions, data) {
   let summary;
   if (!holdings.length) {
     summary =
-      "No actioned holdings yet. Log fills from Strong buys / Buys, then use this panel to prefer underweight sectors on the next recommendation.";
+      "No actioned holdings in this book yet. Seed simulated buys from the current screen, or log fills manually.";
   } else if (warnings.length && ranked.length) {
     summary = `${holdings.length} open name(s). Address concentration first: next best diversified candidate is ${ranked[0].name} (${ranked[0].ticker}).`;
   } else if (ranked.length) {
@@ -220,7 +249,99 @@ function moneyInputValue(value) {
   return Number.isFinite(num) ? num : null;
 }
 
-function renderActionDialog(data, preselectTicker = "") {
+function modeToggleHtml(name, checkedLive) {
+  return `
+    <div class="mode-toggle" role="group" aria-label="Execution mode">
+      <span class="mode-label${!checkedLive ? " active" : ""}">Simulated</span>
+      <label class="switch">
+        <input type="checkbox" name="${name}" ${checkedLive ? "checked" : ""} aria-label="Toggle live trading">
+        <span class="slider"></span>
+      </label>
+      <span class="mode-label${checkedLive ? " active" : ""}">Live</span>
+    </div>
+  `;
+}
+
+function buildSimulatedActionFromReport(report, data, leg, index) {
+  const plan = report.trade_plan || null;
+  let orderType = "market";
+  let limitPrice = null;
+  let allocationPct = null;
+  if (leg === "tactical") {
+    orderType = plan?.tactical_order || "limit";
+    limitPrice = plan?.tactical_limit ?? null;
+    allocationPct = plan?.tactical_allocation_pct ?? null;
+  } else if (leg === "combined") {
+    orderType = plan?.core_order || "limit";
+    limitPrice = plan?.core_limit ?? plan?.tactical_limit ?? null;
+    allocationPct = 1;
+  } else {
+    orderType = plan?.core_order || "market";
+    limitPrice = plan?.core_limit ?? null;
+    allocationPct = plan?.core_allocation_pct ?? null;
+  }
+
+  return {
+    id: createActionId(),
+    ticker: report.ticker,
+    name: report.name,
+    sector: report.sector || null,
+    signal_at_action: report.signal,
+    run_at: data.run_at || null,
+    acted_at: new Date().toISOString(),
+    status: "open",
+    side: "buy",
+    execution_mode: "simulated",
+    leg,
+    order_type: orderType,
+    limit_price: limitPrice,
+    stop_loss: plan?.tactical_stop_loss ?? null,
+    take_profit: plan?.tactical_take_profit ?? null,
+    allocation_pct: allocationPct,
+    quantity: null,
+    notes: "Seeded simulated buy from current screen",
+    suggested: suggestedOrdersFromPlan(plan),
+    seed_batch: true,
+    seed_index: index,
+  };
+}
+
+function seedSimulatedBuys(data, { maxNames = DEFAULT_SIM_SEED_NAMES, includeTactical = true } = {}) {
+  const actions = loadPortfolioActions();
+  const simOpen = actions.filter(
+    (a) => (a.status || "open") === "open" && actionExecutionMode(a) === "simulated"
+  );
+  const advice = adviseDiversification(simOpen, data);
+  const held = new Set(normalizeHoldings(simOpen, data).map((h) => h.ticker));
+
+  const ordered = [...advice.ranked_candidates.map((c) => c.ticker)];
+  const remaining = actionableReports(data)
+    .filter((r) => !ordered.includes(r.ticker))
+    .sort((a, b) => (b.conviction_score || 0) - (a.conviction_score || 0));
+  ordered.push(...remaining.map((r) => r.ticker));
+
+  const seeded = [];
+  let added = 0;
+  for (const ticker of ordered) {
+    if (added >= maxNames) break;
+    if (held.has(ticker)) continue;
+    const report = reportByTicker(data, ticker);
+    if (!report) continue;
+    seeded.push(buildSimulatedActionFromReport(report, data, "core", added));
+    if (includeTactical && report.trade_plan && report.trade_plan.tactical_limit != null) {
+      seeded.push(buildSimulatedActionFromReport(report, data, "tactical", added));
+    }
+    held.add(ticker);
+    added += 1;
+  }
+
+  if (!seeded.length) return { added: 0, actions };
+  const next = [...seeded, ...actions];
+  savePortfolioActions(next);
+  return { added, actions: next };
+}
+
+function renderActionDialog(data, preselectTicker = "", defaultMode = "simulated") {
   const candidates = actionableReports(data);
   const options = candidates
     .map(
@@ -237,6 +358,8 @@ function renderActionDialog(data, preselectTicker = "") {
       </form>
       <form id="action-form" class="action-form">
         <p class="small muted">Stored only in this browser (localStorage). Export a backup if you switch devices.</p>
+        ${modeToggleHtml("execution_mode_live", defaultMode === "live")}
+        <p class="small muted mode-hint">Simulated buys are for paper evaluation and never mark capital as committed.</p>
         <label>
           Recommendation
           <select name="ticker" required ${candidates.length ? "" : "disabled"}>
@@ -304,14 +427,29 @@ function renderActionDialog(data, preselectTicker = "") {
   `;
 }
 
-function bindActionDialog(data, onSaved) {
+function bindModeToggle(root) {
+  const input = root.querySelector('input[type="checkbox"]');
+  if (!input) return;
+  const labels = root.querySelectorAll(".mode-label");
+  const sync = () => {
+    labels.forEach((label, index) => {
+      const isLive = index === 1;
+      label.classList.toggle("active", input.checked === isLive);
+    });
+  };
+  input.addEventListener("change", sync);
+  sync();
+}
+
+function bindActionDialog(data, onSaved, defaultMode = "simulated") {
   const existing = document.getElementById("action-dialog");
   if (existing) existing.remove();
 
-  document.body.insertAdjacentHTML("beforeend", renderActionDialog(data));
+  document.body.insertAdjacentHTML("beforeend", renderActionDialog(data, "", defaultMode));
   const dialog = document.getElementById("action-dialog");
   const form = document.getElementById("action-form");
   const hint = document.getElementById("action-plan-hint");
+  bindModeToggle(form);
 
   function syncFromTicker() {
     const ticker = form.ticker.value;
@@ -338,6 +476,8 @@ function bindActionDialog(data, onSaved) {
     if (!report) return;
 
     const status = form.status.value === "filled" ? "open" : form.status.value;
+    const liveToggle = form.querySelector('input[name="execution_mode_live"]');
+    const executionMode = liveToggle && liveToggle.checked ? "live" : "simulated";
     const action = {
       id: createActionId(),
       ticker,
@@ -348,6 +488,7 @@ function bindActionDialog(data, onSaved) {
       acted_at: new Date().toISOString(),
       status,
       side: "buy",
+      execution_mode: executionMode,
       leg: form.leg.value,
       order_type: form.order_type.value,
       limit_price: moneyInputValue(form.limit_price.value),
@@ -367,7 +508,12 @@ function bindActionDialog(data, onSaved) {
   });
 
   return {
-    open(ticker = "") {
+    open(ticker = "", mode = defaultMode) {
+      const liveToggle = form.querySelector('input[name="execution_mode_live"]');
+      if (liveToggle) {
+        liveToggle.checked = mode === "live";
+        liveToggle.dispatchEvent(new Event("change"));
+      }
       if (ticker) form.ticker.value = ticker;
       syncFromTicker();
       dialog.showModal();
@@ -402,14 +548,31 @@ function importActions(file, onDone) {
   reader.readAsText(file);
 }
 
+function modeBadge(mode) {
+  const normalized = normalizeExecutionMode(mode);
+  const label = normalized === "simulated" ? "simulated" : "live";
+  return `<span class="badge badge-${label}">${label}</span>`;
+}
+
 function renderPortfolio(data) {
   const panel = document.getElementById("panel-portfolio");
   if (!panel) return;
 
-  const actions = loadPortfolioActions();
-  const advice = adviseDiversification(actions, data);
-  const openActions = actions.filter((a) => (a.status || "open") === "open");
-  const closedActions = actions.filter((a) => (a.status || "open") !== "open");
+  const bookFilter = loadBookFilter();
+  const allActions = loadPortfolioActions();
+  const scopedActions = filterActionsByBook(allActions, bookFilter);
+  const advice = adviseDiversification(
+    scopedActions.filter((a) => (a.status || "open") === "open"),
+    data
+  );
+  const openActions = scopedActions.filter((a) => (a.status || "open") === "open");
+  const closedActions = scopedActions.filter((a) => (a.status || "open") !== "open");
+  const simOpenCount = allActions.filter(
+    (a) => (a.status || "open") === "open" && actionExecutionMode(a) === "simulated"
+  ).length;
+  const liveOpenCount = allActions.filter(
+    (a) => (a.status || "open") === "open" && actionExecutionMode(a) === "live"
+  ).length;
 
   const sectorBars = Object.entries(advice.sector_weights)
     .map(
@@ -439,13 +602,17 @@ function renderPortfolio(data) {
   const actionRows = (list) =>
     list.length
       ? list
-          .map(
-            (a) => `<tr>
+          .map((a) => {
+            const mode = actionExecutionMode(a);
+            return `<tr>
               <td>
                 <strong>${esc(a.name || a.ticker)}</strong><br>
                 <span class="small muted">${esc(a.ticker)}${a.sector ? ` · ${esc(a.sector)}` : ""}</span>
               </td>
-              <td>${signalBadge(a.signal_at_action || "buy")}<br><span class="small muted">${esc(a.leg || "")} · ${esc(a.order_type || "")}</span></td>
+              <td>
+                ${signalBadge(a.signal_at_action || "buy")} ${modeBadge(mode)}<br>
+                <span class="small muted">${esc(a.leg || "")} · ${esc(a.order_type || "")}</span>
+              </td>
               <td class="small">
                 ${a.limit_price != null ? `Limit £${Number(a.limit_price).toFixed(2)}<br>` : ""}
                 ${a.stop_loss != null ? `Stop £${Number(a.stop_loss).toFixed(2)}<br>` : ""}
@@ -458,25 +625,39 @@ function renderPortfolio(data) {
                   <option value="closed" ${a.status === "closed" ? "selected" : ""}>Closed</option>
                   <option value="cancelled" ${a.status === "cancelled" ? "selected" : ""}>Cancelled</option>
                 </select>
+                <div class="row-mode">${modeToggleHtml(`mode-${a.id}`, mode === "live")}</div>
               </td>
               <td><button type="button" class="btn" data-delete-id="${esc(a.id)}">Delete</button></td>
-            </tr>`
-          )
+            </tr>`;
+          })
           .join("")
-      : `<tr><td colspan="6" class="muted">None.</td></tr>`;
+      : `<tr><td colspan="6" class="muted">None in this book.</td></tr>`;
+
+  const bookLabel =
+    bookFilter === "all" ? "all books" : bookFilter === "live" ? "live book" : "simulated book";
 
   panel.innerHTML = `
-    <div class="toolbar">
+    <div class="toolbar portfolio-toolbar">
       <button type="button" class="btn btn-primary" id="log-action-btn">Log action</button>
+      <button type="button" class="btn" id="seed-sim-btn">Seed simulated buys</button>
       <button type="button" class="btn" id="export-actions-btn">Export JSON</button>
       <label class="btn file-btn">
         Import JSON
         <input type="file" id="import-actions-input" accept="application/json,.json" hidden>
       </label>
+      <label class="book-filter">
+        Book
+        <select id="book-filter" aria-label="Filter simulated or live book">
+          <option value="simulated" ${bookFilter === "simulated" ? "selected" : ""}>Simulated (${simOpenCount} open)</option>
+          <option value="live" ${bookFilter === "live" ? "selected" : ""}>Live (${liveOpenCount} open)</option>
+          <option value="all" ${bookFilter === "all" ? "selected" : ""}>All</option>
+        </select>
+      </label>
     </div>
+    <p class="small muted">Use <strong>Seed simulated buys</strong> to paper-trade the current screen (up to ${DEFAULT_SIM_SEED_NAMES} diversified names, core + tactical legs when a trade plan exists).</p>
 
     <div class="card">
-      <h3>Diversification steer</h3>
+      <h3>Diversification steer <span class="small muted">· ${esc(bookLabel)}</span></h3>
       <p>${esc(advice.summary)}</p>
       ${
         advice.concentration_warnings.length
@@ -518,7 +699,7 @@ function renderPortfolio(data) {
               <th>Order</th>
               <th>Levels</th>
               <th>Acted</th>
-              <th>Status</th>
+              <th>Status / mode</th>
               <th></th>
             </tr>
           </thead>
@@ -537,7 +718,7 @@ function renderPortfolio(data) {
               <th>Order</th>
               <th>Levels</th>
               <th>Acted</th>
-              <th>Status</th>
+              <th>Status / mode</th>
               <th></th>
             </tr>
           </thead>
@@ -547,9 +728,20 @@ function renderPortfolio(data) {
     </div>
   `;
 
-  const dialogApi = bindActionDialog(data, () => renderPortfolio(data));
+  const defaultMode = bookFilter === "live" ? "live" : "simulated";
+  const dialogApi = bindActionDialog(data, () => renderPortfolio(data), defaultMode);
 
-  panel.querySelector("#log-action-btn").addEventListener("click", () => dialogApi.open());
+  panel.querySelector("#log-action-btn").addEventListener("click", () => dialogApi.open("", defaultMode));
+  panel.querySelector("#seed-sim-btn").addEventListener("click", () => {
+    const result = seedSimulatedBuys(data);
+    if (!result.added) {
+      alert("No new simulated buys to seed — simulated book already covers current buy-tier names, or none are available.");
+    } else {
+      saveBookFilter("simulated");
+      alert(`Seeded ${result.added} simulated name(s) from the current screen.`);
+    }
+    renderPortfolio(data);
+  });
   panel.querySelector("#export-actions-btn").addEventListener("click", exportActions);
   panel.querySelector("#import-actions-input").addEventListener("change", (event) => {
     const file = event.target.files && event.target.files[0];
@@ -557,15 +749,35 @@ function renderPortfolio(data) {
     importActions(file, () => renderPortfolio(data));
     event.target.value = "";
   });
+  panel.querySelector("#book-filter").addEventListener("change", (event) => {
+    saveBookFilter(event.target.value);
+    renderPortfolio(data);
+  });
 
   panel.querySelectorAll("[data-log-ticker]").forEach((button) => {
-    button.addEventListener("click", () => dialogApi.open(button.dataset.logTicker));
+    button.addEventListener("click", () => dialogApi.open(button.dataset.logTicker, defaultMode));
   });
 
   panel.querySelectorAll("[data-status-id]").forEach((select) => {
     select.addEventListener("change", () => {
       const actionsNow = loadPortfolioActions().map((action) =>
         action.id === select.dataset.statusId ? { ...action, status: select.value } : action
+      );
+      savePortfolioActions(actionsNow);
+      renderPortfolio(data);
+    });
+  });
+
+  panel.querySelectorAll(".row-mode input[type='checkbox']").forEach((input) => {
+    const row = input.closest("tr");
+    const statusSelect = row?.querySelector("[data-status-id]");
+    const actionId = statusSelect?.dataset.statusId;
+    if (!actionId) return;
+    bindModeToggle(input.closest(".mode-toggle"));
+    input.addEventListener("change", () => {
+      const mode = input.checked ? "live" : "simulated";
+      const actionsNow = loadPortfolioActions().map((action) =>
+        action.id === actionId ? { ...action, execution_mode: mode } : action
       );
       savePortfolioActions(actionsNow);
       renderPortfolio(data);
@@ -580,11 +792,10 @@ function renderPortfolio(data) {
     });
   });
 
-  // Expose opener for Strong buys tab buttons.
   window.__openPortfolioActionDialog = (ticker) => {
     const tabs = document.getElementById("tabs");
     const portfolioTab = tabs?.querySelector('[data-tab="portfolio"]');
     if (portfolioTab) portfolioTab.click();
-    dialogApi.open(ticker || "");
+    dialogApi.open(ticker || "", defaultMode);
   };
 }

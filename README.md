@@ -157,10 +157,12 @@ Reports include:
 The GitHub Pages **Portfolio** tab lets you:
 
 1. **Log an action** from Strong buys / Buys — order type, limit, stop, take-profit, and allocation are prefilled from the technical trade plan when available.
-2. **Track open vs closed** actions in this browser (`localStorage`), with JSON export/import for backup.
-3. **See diversification advice** — sector concentration vs a 30% soft cap, and a ranked list blending conviction with sector diversity so the next fill improves portfolio balance.
+2. **Mark each trade Simulated or Live** with a slider (default Simulated). Filter the book, and flip mode later per row.
+3. **Seed simulated buys** from the current screen — up to five diversified buy-tier names with core (+ tactical) legs prefilled for paper evaluation.
+4. **Track open vs closed** actions in this browser (`localStorage`), with JSON export/import for backup.
+5. **See diversification advice** scoped to the selected book — sector concentration vs a 30% soft cap, and a ranked list blending conviction with sector diversity.
 
-Action logs are private to your browser; they are not committed by the weekly workflow.
+Action logs are private to your browser; they are not committed by the weekly workflow. Legacy rows without a mode are treated as live.
 
 ## Buy-tier research
 

@@ -392,3 +392,115 @@ tr:hover td { background: #fafbfc; }
   height: 100%;
   background: var(--accent);
 }
+
+.portfolio-toolbar {
+  align-items: flex-end;
+}
+
+.book-filter {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.book-filter select {
+  font-weight: 400;
+  color: var(--text);
+}
+
+.mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.35rem 0 0.75rem;
+}
+
+.mode-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.mode-label.active {
+  color: var(--text);
+}
+
+.mode-hint {
+  margin-top: -0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #94a3b8;
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+  background: var(--avoid);
+}
+
+.switch input:not(:checked) + .slider {
+  background: var(--accent);
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.badge-simulated { background: var(--accent); }
+.badge-live { background: var(--avoid); }
+
+.row-mode .mode-toggle {
+  margin: 0.45rem 0 0;
+}
+
+.row-mode .mode-label {
+  font-size: 0.72rem;
+}
+
+.row-mode .switch {
+  width: 36px;
+  height: 20px;
+}
+
+.row-mode .slider::before {
+  height: 14px;
+  width: 14px;
+}
+
+.row-mode .switch input:checked + .slider::before {
+  transform: translateX(16px);
+}

@@ -254,11 +254,14 @@ def holdings_from_actions(
     actions: list[dict[str, Any]],
     *,
     reports_by_ticker: dict[str, dict[str, Any]] | None = None,
+    execution_mode: str | None = None,
 ) -> list[PortfolioHolding]:
     """
     Build equal-weight (or quantity-weighted) holdings from open action log rows.
 
-    Expected action keys: ticker, status, sector?, name?, quantity?, allocation_pct?
+    Expected action keys: ticker, status, sector?, name?, quantity?, allocation_pct?,
+    execution_mode? ("simulated" | "live"; missing treated as live).
+    When execution_mode is set, only matching rows are included.
     """
     reports_by_ticker = reports_by_ticker or {}
     open_actions = [
@@ -266,6 +269,10 @@ def holdings_from_actions(
         for action in actions
         if str(action.get("status") or "open").lower() == "open"
         and action.get("ticker")
+        and (
+            execution_mode is None
+            or normalize_execution_mode(action.get("execution_mode")) == execution_mode
+        )
     ]
     if not open_actions:
         return []
@@ -302,6 +309,123 @@ def holdings_from_actions(
         )
         for item in by_ticker.values()
     ]
+
+
+def normalize_execution_mode(value: Any) -> str:
+    mode = str(value or "live").strip().lower()
+    return "simulated" if mode == "simulated" else "live"
+
+
+def build_simulated_action(
+    report: dict[str, Any],
+    *,
+    run_at: str | None = None,
+    acted_at: str | None = None,
+    leg: str = "core",
+    action_id: str | None = None,
+) -> dict[str, Any]:
+    """Build one simulated open action prefilled from a report trade_plan."""
+    plan = report.get("trade_plan") or {}
+    if leg == "tactical":
+        order_type = plan.get("tactical_order") or "limit"
+        limit_price = plan.get("tactical_limit")
+        allocation_pct = plan.get("tactical_allocation_pct")
+    elif leg == "combined":
+        order_type = plan.get("core_order") or "limit"
+        limit_price = plan.get("core_limit")
+        if limit_price is None:
+            limit_price = plan.get("tactical_limit")
+        allocation_pct = 1.0
+    else:
+        order_type = plan.get("core_order") or "market"
+        limit_price = plan.get("core_limit")
+        allocation_pct = plan.get("core_allocation_pct")
+
+    return {
+        "id": action_id or f"sim-{report.get('ticker')}-{leg}",
+        "ticker": report.get("ticker"),
+        "name": report.get("name"),
+        "sector": report.get("sector"),
+        "signal_at_action": report.get("signal"),
+        "run_at": run_at,
+        "acted_at": acted_at,
+        "status": "open",
+        "side": "buy",
+        "execution_mode": "simulated",
+        "leg": leg,
+        "order_type": order_type,
+        "limit_price": limit_price,
+        "stop_loss": plan.get("tactical_stop_loss"),
+        "take_profit": plan.get("tactical_take_profit"),
+        "allocation_pct": allocation_pct,
+        "quantity": None,
+        "notes": "Seeded simulated buy from current screen",
+        "suggested": dict(plan) if plan else {},
+    }
+
+
+def seed_simulated_buys(
+    reports: list[dict[str, Any]],
+    *,
+    existing_actions: list[dict[str, Any]] | None = None,
+    run_at: str | None = None,
+    acted_at: str | None = None,
+    max_names: int = 5,
+    include_tactical: bool = True,
+) -> list[dict[str, Any]]:
+    """
+    Create simulated open buys from current buy-tier recommendations.
+
+    Prefers diversification ranking against the existing simulated book, then
+    fills remaining slots by conviction. Skips tickers already open in simulated mode.
+    """
+    existing_actions = existing_actions or []
+    holdings = holdings_from_actions(existing_actions, execution_mode="simulated")
+    held = {h.ticker for h in holdings}
+    candidates = candidates_from_reports(reports)
+    advice = advise_diversification(holdings, candidates, top_n=max_names * 2)
+    ordered_tickers = [c.ticker for c in advice.ranked_candidates]
+    # Append any remaining buy-tier names by conviction.
+    remaining = sorted(
+        (c for c in candidates if c.ticker not in ordered_tickers),
+        key=lambda c: c.conviction_score,
+        reverse=True,
+    )
+    ordered_tickers.extend(c.ticker for c in remaining)
+
+    by_ticker = {str(r["ticker"]): r for r in reports if r.get("ticker")}
+    seeded: list[dict[str, Any]] = []
+    added = 0
+    for ticker in ordered_tickers:
+        if added >= max_names:
+            break
+        if ticker in held:
+            continue
+        report = by_ticker.get(ticker)
+        if not report or report.get("signal") not in ("strong_buy", "buy"):
+            continue
+        seeded.append(
+            build_simulated_action(
+                report,
+                run_at=run_at,
+                acted_at=acted_at,
+                leg="core",
+                action_id=f"sim-{ticker}-core-{added}",
+            )
+        )
+        if include_tactical and (report.get("trade_plan") or {}).get("tactical_limit") is not None:
+            seeded.append(
+                build_simulated_action(
+                    report,
+                    run_at=run_at,
+                    acted_at=acted_at,
+                    leg="tactical",
+                    action_id=f"sim-{ticker}-tactical-{added}",
+                )
+            )
+        held.add(ticker)
+        added += 1
+    return seeded
 
 
 def candidates_from_reports(reports: list[dict[str, Any]]) -> list[CandidatePick]:
