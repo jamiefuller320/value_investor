@@ -7,6 +7,11 @@ name: FTSE 100 Email Report
 on:
   workflow_dispatch:
 
+# Only one report run at a time so dashboard commits cannot race on main.
+concurrency:
+  group: ftse-email-report
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -51,8 +56,16 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: ftse-email --send-only
 
+      # Rebase in case main moved (e.g. PR merge) during the long screen step.
+      - name: Sync main before dashboard commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "${{ github.ref_name }}"
+
       - name: Commit dashboard data
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: update dashboard data [skip ci]"
           file_pattern: docs/data/* docs/research/*
+          skip_fetch: false

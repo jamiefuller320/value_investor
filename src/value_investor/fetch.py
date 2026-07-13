@@ -3,15 +3,20 @@
 from __future__ import annotations
 
 import logging
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
 import pandas as pd
 import yfinance as yf
 
+from value_investor.constituents import to_lse_ticker
 from value_investor.financials import extract_statement_metrics
 
 logger = logging.getLogger(__name__)
+
+FETCH_ATTEMPTS = 3
+FETCH_RETRY_DELAY_SECONDS = 2.0
 
 METRIC_KEYS = [
     "ticker",
@@ -123,14 +128,62 @@ def _safe_float(value: Any) -> float | None:
         return None
 
 
+def _is_transient_fetch_error(exc: BaseException) -> bool:
+    message = str(exc).lower()
+    transient_markers = (
+        "timed out",
+        "timeout",
+        "temporarily unavailable",
+        "connection reset",
+        "connection aborted",
+        "remote end closed",
+        "503",
+        "502",
+        "429",
+        "too many requests",
+    )
+    return any(marker in message for marker in transient_markers)
+
+
+def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
+    """Fetch yfinance ticker payload with retries for transient network errors."""
+    last_exc: BaseException | None = None
+    for attempt in range(1, FETCH_ATTEMPTS + 1):
+        try:
+            stock = yf.Ticker(ticker)
+            info = stock.info or {}
+            fast = getattr(stock, "fast_info", None)
+            return stock, info, fast
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            if attempt >= FETCH_ATTEMPTS or not _is_transient_fetch_error(exc):
+                raise
+            delay = FETCH_RETRY_DELAY_SECONDS * attempt
+            logger.warning(
+                "Transient fetch error for %s (attempt %s/%s): %s; retrying in %.1fs",
+                ticker,
+                attempt,
+                FETCH_ATTEMPTS,
+                exc,
+                delay,
+            )
+            time.sleep(delay)
+    assert last_exc is not None
+    raise last_exc
+
+
 def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | None = None) -> CompanyMetrics:
     """Pull screening metrics for a single LSE ticker via yfinance."""
-    metrics = CompanyMetrics(ticker=ticker, name=name, sector=sector)
+    resolved = to_lse_ticker(ticker)
+    metrics = CompanyMetrics(ticker=resolved, name=name, sector=sector)
 
     try:
-        stock = yf.Ticker(ticker)
-        info = stock.info or {}
-        fast = getattr(stock, "fast_info", None)
+        stock, info, fast = _load_ticker_payload(resolved)
+
+        # Quote-summary 404s often yield empty info without raising.
+        if not info and fast is None:
+            metrics.errors.append("no market data returned")
+            return metrics
 
         metrics.name = info.get("longName") or info.get("shortName") or name
         metrics.sector = info.get("sector") or sector
@@ -169,7 +222,7 @@ def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | No
                 if value is not None and hasattr(metrics, key):
                     setattr(metrics, key, value)
         except Exception as stmt_exc:  # noqa: BLE001
-            logger.debug("Statement fetch partial for %s: %s", ticker, stmt_exc)
+            logger.debug("Statement fetch partial for %s: %s", resolved, stmt_exc)
 
         if metrics.ebit is None and stmt.get("operating_income") is not None:
             metrics.ebit = stmt["operating_income"]
@@ -184,7 +237,7 @@ def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | No
             metrics.errors.append("no market data returned")
 
     except Exception as exc:  # noqa: BLE001 — collect per-ticker failures for batch runs
-        logger.warning("Failed to fetch %s: %s", ticker, exc)
+        logger.warning("Failed to fetch %s: %s", resolved, exc)
         metrics.errors.append(str(exc))
 
     return metrics

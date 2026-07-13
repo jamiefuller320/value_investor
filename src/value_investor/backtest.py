@@ -12,6 +12,8 @@ from typing import Any
 import pandas as pd
 import yfinance as yf
 
+from value_investor.constituents import to_lse_ticker
+
 logger = logging.getLogger(__name__)
 
 BENCHMARK_TICKER = "^FTSE"
@@ -56,9 +58,16 @@ class BacktestSummary:
         return bool(self.horizons)
 
 
+def _price_symbol(ticker: str) -> str:
+    if ticker.startswith("^"):
+        return ticker
+    return to_lse_ticker(ticker)
+
+
 def _safe_price(ticker: str) -> float | None:
+    symbol = _price_symbol(ticker)
     try:
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker(symbol)
         fast = getattr(stock, "fast_info", None)
         price = getattr(fast, "last_price", None) if fast else None
         if price is None:
@@ -66,8 +75,8 @@ def _safe_price(ticker: str) -> float | None:
             price = info.get("regularMarketPrice") or info.get("previousClose")
         return float(price) if price is not None else None
     except Exception as exc:  # noqa: BLE001
-        logger.debug("Price fetch failed for %s: %s", ticker, exc)
-        return None
+        logger.debug("Price fetch failed for %s: %s", symbol, exc)
+    return None
 
 
 def snapshot_prices(tickers: list[str]) -> dict[str, float]:

@@ -10,6 +10,8 @@ from typing import Any
 import pandas as pd
 import yfinance as yf
 
+from value_investor.constituents import to_lse_ticker
+
 logger = logging.getLogger(__name__)
 
 MIN_BARS = 200
@@ -439,16 +441,24 @@ def fetch_close_history(tickers: list[str], *, period: str = LOOKBACK_PERIOD) ->
     if not tickers:
         return {}
 
+    # Resolve Yahoo symbols but return series keyed by the original ticker labels.
     unique = list(dict.fromkeys(tickers))
+    symbol_by_ticker = {
+        ticker: (ticker if ticker.startswith("^") else to_lse_ticker(ticker)) for ticker in unique
+    }
+    symbols = list(dict.fromkeys(symbol_by_ticker.values()))
     try:
-        if len(unique) == 1:
-            data = yf.download(unique[0], period=period, interval="1d", progress=False, auto_adjust=True)
-            series = _extract_close_series(data, unique[0])
-            return {unique[0]: series} if series is not None else {}
-        data = yf.download(unique, period=period, interval="1d", progress=False, auto_adjust=True, group_by="column")
+        if len(symbols) == 1:
+            symbol = symbols[0]
+            data = yf.download(symbol, period=period, interval="1d", progress=False, auto_adjust=True)
+            series = _extract_close_series(data, symbol)
+            if series is None:
+                return {}
+            return {ticker: series for ticker, mapped in symbol_by_ticker.items() if mapped == symbol}
+        data = yf.download(symbols, period=period, interval="1d", progress=False, auto_adjust=True, group_by="column")
         out: dict[str, pd.Series] = {}
-        for ticker in unique:
-            series = _extract_close_series(data, ticker)
+        for ticker, symbol in symbol_by_ticker.items():
+            series = _extract_close_series(data, symbol)
             if series is not None:
                 out[ticker] = series
         return out

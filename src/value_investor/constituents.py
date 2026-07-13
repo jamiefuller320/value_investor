@@ -14,10 +14,17 @@ logger = logging.getLogger(__name__)
 WIKIPEDIA_FTSE_URL = "https://en.wikipedia.org/wiki/FTSE_100_Index"
 WIKIPEDIA_USER_AGENT = "value-investor/0.1 (research screener; contact: local)"
 
+# Explicit Wikipedia/LSE EPIC → Yahoo Finance symbol overrides (without .L).
+# Prefer general rules in to_lse_ticker(); keep this for odd cases only.
+YFINANCE_EPIC_ALIASES: dict[str, str] = {
+    "BT.A": "BT-A",
+    "BTA": "BT-A",
+}
+
 # Fallback when Wikipedia is unreachable — update periodically or override via CSV.
 FALLBACK_FTSE100_EPICS = [
     "III", "ADM", "AAL", "ANTO", "AHT", "ABF", "AZN", "AUTO", "AV", "BA", "BARC", "BATS",
-    "BEZ", "BKG", "BP", "BATS", "BT-A", "BNZL", "CNA", "CCH", "CPG", "CRDA", "CRH", "DCC",
+    "BEZ", "BKG", "BP", "BT-A", "BNZL", "CNA", "CCH", "CPG", "CRDA", "CRH", "DCC",
     "DGE", "ENT", "EXPN", "FCIT", "FRES", "GLEN", "GSK", "HLMA", "HLN", "HSBA", "HSX",
     "IMB", "INF", "IHG", "ITRK", "JD", "KGF", "LAND", "LGEN", "LLOY", "LSEG", "MKS", "MRO",
     "MNDI", "NG", "NXT", "OCDO", "PSON", "PSN", "PHNX", "PRU", "RKT", "REL", "RIO", "RR",
@@ -26,12 +33,29 @@ FALLBACK_FTSE100_EPICS = [
 ]
 
 
-def _to_lse_ticker(epic: str) -> str:
-    """Convert LSE EPIC / ticker to yfinance symbol (e.g. BARC -> BARC.L)."""
+def to_lse_ticker(epic: str) -> str:
+    """
+    Convert LSE EPIC / ticker to a yfinance symbol.
+
+    Wikipedia often lists share classes with a dot (``BT.A``); Yahoo Finance
+    expects a hyphen (``BT-A.L``).
+    """
     epic = epic.strip().upper()
     if epic.endswith(".L"):
-        return epic
+        epic = epic[:-2]
+
+    alias = YFINANCE_EPIC_ALIASES.get(epic)
+    if alias:
+        epic = alias
+    else:
+        # Class shares: BT.A → BT-A (Yahoo convention)
+        epic = epic.replace(".", "-")
+
     return f"{epic}.L"
+
+
+# Backwards-compatible private alias used by older call sites / tests.
+_to_lse_ticker = to_lse_ticker
 
 
 def _fetch_wikipedia_html(url: str) -> str:
@@ -68,7 +92,7 @@ def _parse_constituents_table(html: str) -> pd.DataFrame:
 
     constituents["epic"] = constituents["epic"].astype(str).str.strip()
     constituents = constituents[constituents["epic"].str.match(r"^[A-Za-z0-9.-]+$")]
-    constituents["ticker"] = constituents["epic"].map(_to_lse_ticker)
+    constituents["ticker"] = constituents["epic"].map(to_lse_ticker)
 
     if "name" not in constituents.columns:
         constituents["name"] = constituents["ticker"]
@@ -84,7 +108,7 @@ def _fallback_constituents() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "epic": epics,
-            "ticker": [_to_lse_ticker(e) for e in epics],
+            "ticker": [to_lse_ticker(e) for e in epics],
             "name": epics,
             "sector": None,
         }
@@ -109,4 +133,4 @@ def fetch_ftse100_constituents() -> pd.DataFrame:
 
 def normalize_tickers(tickers: list[str]) -> list[str]:
     """Normalize user-supplied tickers to LSE yfinance symbols."""
-    return [_to_lse_ticker(t) for t in tickers if t.strip()]
+    return [to_lse_ticker(t) for t in tickers if t.strip()]
