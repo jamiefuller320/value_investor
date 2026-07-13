@@ -130,6 +130,16 @@ Artifacts are kept lean for larger universes:
 - **Dashboard archives** keep the newest 8 dated snapshots in `docs/data/archive/` (not unbounded git growth)
 - Research index in `latest.json` stores a short summary blurb; full memos remain in `docs/research/*.md`
 
+## Alternate data sources
+
+When yfinance returns errors or leaves key fundamentals blank, a curated fallback cascade fills gaps:
+
+1. Yahoo `quoteSummary` JSON modules
+2. Yahoo chart meta (last price)
+3. Stooq UK daily CSV (last close)
+
+This is **not** an open web crawl — only stable CSV/JSON endpoints are used. Recovered fields are recorded in `data_sources` on each company row.
+
 Reports include:
 - **Data quality scores** per company (downgrades thin-data signals)
 - **Technical timing** — RSI, 50/200-day MAs, MACD with accumulate/neutral/wait signals
