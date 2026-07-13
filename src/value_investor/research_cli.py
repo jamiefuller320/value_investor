@@ -1,4 +1,4 @@
-"""CLI for strong-buy deep research documents."""
+"""CLI for buy-tier deep research documents."""
 
 from __future__ import annotations
 
@@ -11,13 +11,20 @@ from pathlib import Path
 import pandas as pd
 
 from value_investor.research.format import format_research_text
-from value_investor.research.runner import run_research_for_strong_buys
+from value_investor.research.runner import (
+    DEFAULT_RESEARCH_WEEKLY_CAP,
+    eligible_research_targets,
+    run_research_for_strong_buys,
+)
 from value_investor.summary import build_company_reports
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Generate or update deep research memos for strong buy recommendations"
+        description=(
+            "Generate or update deep research memos for strong buys and top buy-rated names "
+            f"(weekly cap default {DEFAULT_RESEARCH_WEEKLY_CAP})"
+        )
     )
     parser.add_argument("--output-dir", type=Path, default=Path("output"))
     parser.add_argument(
@@ -38,9 +45,17 @@ def main(argv: list[str] | None = None) -> int:
         help="Regenerate initial deep pass even if a memo already exists",
     )
     parser.add_argument(
+        "--research-cap",
+        type=int,
+        default=DEFAULT_RESEARCH_WEEKLY_CAP,
+        help=(
+            f"Max memos per run (strong buys first, then top buys; default {DEFAULT_RESEARCH_WEEKLY_CAP})"
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="List eligible strong buys without calling the research agent",
+        help="List eligible research targets without calling the research agent",
     )
     args = parser.parse_args(argv)
 
@@ -61,12 +76,17 @@ def main(argv: list[str] | None = None) -> int:
         model_results = result.model_results
 
     reports = build_company_reports(signals, model_results)
-    strong_buys = [r for r in reports if r.signal == "strong_buy"]
-    print(f"Found {len(strong_buys)} strong buy recommendation(s)")
+    targets = eligible_research_targets(reports, weekly_cap=args.research_cap)
+    strong_count = sum(1 for r in targets if r.signal == "strong_buy")
+    buy_count = sum(1 for r in targets if r.signal == "buy")
+    print(
+        f"Selected {len(targets)} research target(s) "
+        f"({strong_count} strong buy, {buy_count} buy; cap {args.research_cap})"
+    )
 
     if args.dry_run:
-        for report in strong_buys:
-            print(f"  • {report.name} ({report.ticker})")
+        for report in targets:
+            print(f"  • {report.name} ({report.ticker}) — {report.signal}")
         return 0
 
     if not args.api_key:
@@ -79,6 +99,7 @@ def main(argv: list[str] | None = None) -> int:
         api_key=args.api_key,
         model=args.model,
         force_initial=args.force_initial,
+        weekly_cap=args.research_cap,
     )
 
     summary_path = args.output_dir / "research_summary.json"
@@ -93,6 +114,7 @@ def main(argv: list[str] | None = None) -> int:
             "updated": summary.updated,
             "skipped": summary.skipped,
             "errors": summary.errors,
+            "weekly_cap": args.research_cap,
             "documents": [doc.to_dict() for doc in summary.documents],
         },
         compact=True,

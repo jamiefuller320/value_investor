@@ -1,12 +1,13 @@
-"""Orchestrate deep research for strong buy recommendations."""
+"""Orchestrate deep research for buy-tier recommendations."""
 
 from __future__ import annotations
 
 import logging
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
-from value_investor.data_quality import MIN_QUALITY_FOR_STRONG_BUY
+from value_investor.data_quality import MIN_QUALITY_FOR_BUY, MIN_QUALITY_FOR_STRONG_BUY
 from value_investor.research.agent import run_initial_research_agent, run_weekly_research_update_agent
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.ingest import ingest_research_sources
@@ -16,14 +17,58 @@ from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
 
+# Weekly memo budget for FTSE 100: all quality strong buys first, then top buys.
+DEFAULT_RESEARCH_WEEKLY_CAP = 8
+
+
+def _rank_key(report: CompanyReport) -> tuple[float, float]:
+    composite = report.composite_score if report.composite_score is not None else -1.0
+    return (report.conviction_score, composite)
+
 
 def eligible_strong_buys(reports: list[CompanyReport]) -> list[CompanyReport]:
+    """Quality-gated strong buys only (no weekly cap). Prefer eligible_research_targets()."""
     return [
         report
         for report in reports
         if report.signal == "strong_buy"
         and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
     ]
+
+
+def eligible_research_targets(
+    reports: list[CompanyReport],
+    *,
+    weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
+) -> list[CompanyReport]:
+    """
+    Select names for deep research memos.
+
+    Priority: quality strong buys (all, ranked), then top quality buys to fill
+    remaining slots up to weekly_cap. Hold/avoid/short names are never included.
+    """
+    if weekly_cap <= 0:
+        return []
+
+    strong = [
+        report
+        for report in reports
+        if report.signal == "strong_buy"
+        and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+    ]
+    buys = [
+        report
+        for report in reports
+        if report.signal == "buy" and report.data_quality_score >= MIN_QUALITY_FOR_BUY
+    ]
+    strong.sort(key=_rank_key, reverse=True)
+    buys.sort(key=_rank_key, reverse=True)
+
+    selected = strong[:weekly_cap]
+    remaining = weekly_cap - len(selected)
+    if remaining > 0:
+        selected.extend(buys[:remaining])
+    return selected
 
 
 def run_research_for_strong_buys(
@@ -35,15 +80,17 @@ def run_research_for_strong_buys(
     cwd: str | None = None,
     force_initial: bool = False,
     run_at: datetime | None = None,
+    weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
 ) -> ResearchSummary:
     """
-    Create or update per-ticker research memos for all strong buys.
+    Create or update per-ticker research memos for capped buy-tier names.
 
+    Includes all quality strong buys first, then top quality buys until weekly_cap.
     First run: ingest five years of financials + one year of news, then deep agent pass.
     Subsequent weekly runs: fetch new headlines and append a weekly update section.
     """
     store = ResearchStore(output_dir)
-    targets = eligible_strong_buys(reports)
+    targets = eligible_research_targets(reports, weekly_cap=weekly_cap)
     summary = ResearchSummary(documents=[], created=0, updated=0, skipped=0, errors=[])
 
     for report in targets:
@@ -136,7 +183,9 @@ def _process_ticker(
         api_key=api_key,
         model=model,
         cwd=cwd,
+        screen_signal=report.signal,
     )
+    updated = replace(updated, signal=report.signal)
     updated.source_counts = {
         "financial_years": source_meta["financial_years"],
         "news_articles": source_meta["news_total"],

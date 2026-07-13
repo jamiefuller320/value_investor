@@ -20,7 +20,11 @@ from value_investor.publish import publish_dashboard
 from value_investor.run_diff import RunDiff
 from value_investor.research.format import research_documents_for_reports
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
-from value_investor.research.runner import load_existing_research, run_research_for_strong_buys
+from value_investor.research.runner import (
+    DEFAULT_RESEARCH_WEEKLY_CAP,
+    load_existing_research,
+    run_research_for_strong_buys,
+)
 from value_investor.storage import write_json
 from value_investor.summary import build_company_reports
 
@@ -98,8 +102,18 @@ def main(argv: list[str] | None = None) -> int:
         "--research-docs",
         action="store_true",
         help=(
-            "Generate or update per-ticker research memos for all strong buys "
-            "(5-year financials + 1-year news; weekly updates on reruns)"
+            "Generate or update per-ticker research memos for strong buys and top buys "
+            f"(weekly cap default {DEFAULT_RESEARCH_WEEKLY_CAP}; "
+            "5-year financials + 1-year news; weekly updates on reruns)"
+        ),
+    )
+    parser.add_argument(
+        "--research-cap",
+        type=int,
+        default=DEFAULT_RESEARCH_WEEKLY_CAP,
+        help=(
+            f"Max research memos per run when --research-docs is set "
+            f"(strong buys first, then top buys; default {DEFAULT_RESEARCH_WEEKLY_CAP})"
         ),
     )
     parser.add_argument(
@@ -188,7 +202,7 @@ def main(argv: list[str] | None = None) -> int:
         reports,
         load_existing_research(
             args.output_dir,
-            tickers=[r.ticker for r in reports if r.signal == "strong_buy"],
+            tickers=[r.ticker for r in reports if r.signal in ("strong_buy", "buy")],
         ),
     )
 
@@ -222,6 +236,7 @@ def main(argv: list[str] | None = None) -> int:
                 api_key=args.api_key,
                 model=args.model,
                 run_at=run_at,
+                weekly_cap=args.research_cap,
             )
         except RuntimeError as err:
             print(str(err), file=sys.stderr)

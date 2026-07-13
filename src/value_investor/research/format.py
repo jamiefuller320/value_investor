@@ -40,7 +40,7 @@ def research_documents_for_reports(
     by_ticker = {doc.ticker: doc for doc in documents}
     ordered: list[ResearchDocument] = []
     for report in reports:
-        if report.signal != "strong_buy":
+        if report.signal not in ("strong_buy", "buy"):
             continue
         doc = by_ticker.get(report.ticker)
         if doc is not None:
@@ -51,7 +51,7 @@ def research_documents_for_reports(
 def format_research_text(summary: ResearchSummary | None, documents: list[ResearchDocument]) -> str | None:
     if not documents:
         return None
-    lines = ["Strong buy research memos:"]
+    lines = ["Research memos (strong buy + top buys):"]
     if summary is not None:
         lines.append(
             f"  Created {summary.created}, updated {summary.updated}, "
@@ -127,7 +127,7 @@ def format_research_html(documents: list[ResearchDocument], summary: ResearchSum
         )
     return f"""
   <div style="background:#faf5ff;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #6b46c1">
-    <h3 style="margin-top:0">Strong buy research</h3>
+    <h3 style="margin-top:0">Research memos</h3>
   {meta}
     <table style="width:100%;border-collapse:collapse;margin-top:8px">
       <thead>
