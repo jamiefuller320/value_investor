@@ -2,13 +2,11 @@ name: Schedule FTSE Email Report
 
 # Thin cron wrapper that dispatches FTSE 100 Email Report via workflow_dispatch
 # so weekly and manual runs share the same code path.
+# GitHub schedule events are best-effort; prefer Actions → Run workflow for
+# on-demand runs. Cron is offset from :00 to reduce peak-load drops.
 on:
   schedule:
-    # TEMPORARY same-day test (any weekday) — 10:10 UTC on 2026-07-13.
-    # Monday-only temp slots earlier today never appeared in Actions.
-    # Remove this entry after a successful scheduled dispatch.
-    - cron: "10 10 * * *"
-    # Optimum weekly slot (off the hour to reduce GitHub schedule drops)
+    # Monday 07:17 UTC (off the hour)
     - cron: "17 7 * * 1"
   workflow_dispatch:
 
