@@ -246,10 +246,10 @@ def test_format_reports_include_strong_buy_trade_plans():
     text = format_text_report(run_at="2026-07-08", reports=reports)
     html = format_html_report(run_at="2026-07-08", reports=reports)
 
-    assert "STRONG BUY TRADE PLANS" in text
+    assert "BUY-TIER TRADE PLANS" in text
     assert "Trade plan:" in text
     assert "tactical stop £92.00" in text
-    assert "Strong buy trade plans" in html
+    assert "Buy-tier trade plans" in html
     assert "Tactical:" in html
     alpha = reports[0]
     assert alpha.trade_plan is not None

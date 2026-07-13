@@ -94,10 +94,25 @@ def test_compute_trade_plan_for_strong_buy_accumulate():
     assert plan.tactical_stop_loss < plan.tactical_limit < tech.close
 
 
-def test_compute_trade_plan_skips_non_strong_buy():
+def test_compute_trade_plan_skips_non_buy_signals():
     close = pd.Series([100.0] * 220)
     tech = TechnicalIndicators(close=100.0, timing_signal=TimingSignal.ACCUMULATE)
-    assert compute_trade_plan(close, tech, value_signal="buy") is None
+    assert compute_trade_plan(close, tech, value_signal="hold") is None
+
+
+def test_compute_trade_plan_for_buy_signal():
+    close = pd.Series([100.0] * 220)
+    tech = TechnicalIndicators(
+        close=100.0,
+        rsi_14=40.0,
+        sma_50=102.0,
+        sma_200=110.0,
+        timing_signal=TimingSignal.ACCUMULATE,
+    )
+    plan = compute_trade_plan(close, tech, value_signal="buy")
+    assert plan is not None
+    assert plan.tactical_limit is not None
+    assert plan.tactical_stop_loss is not None
 
 
 def test_format_trade_plan_summary_market_core():

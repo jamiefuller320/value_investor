@@ -189,7 +189,7 @@ def _brief_summary(
         if action_note:
             parts.append(f"Action: {action_note}.")
 
-    if signal == "strong_buy" and trade_plan is not None:
+    if signal in ("strong_buy", "buy") and trade_plan is not None:
         plan_text = format_trade_plan_text(trade_plan)
         if plan_text:
             parts.append(plan_text)
