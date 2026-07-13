@@ -21,6 +21,7 @@ from value_investor.run_diff import RunDiff
 from value_investor.research.format import research_documents_for_reports
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.runner import load_existing_research, run_research_for_strong_buys
+from value_investor.storage import write_json
 from value_investor.summary import build_company_reports
 
 
@@ -259,10 +260,7 @@ def main(argv: list[str] | None = None) -> int:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     reports_path = args.output_dir / "email_reports.json"
-    reports_path.write_text(
-        json.dumps([r.to_dict() for r in reports], indent=2),
-        encoding="utf-8",
-    )
+    write_json(reports_path, [r.to_dict() for r in reports], compact=True)
     text_path = args.output_dir / "email_report.txt"
     html_path = args.output_dir / "email_report.html"
     text_path.write_text(text_body, encoding="utf-8")

@@ -104,9 +104,11 @@ def build_sources_as_of(
     article_ids: list[str] = []
     news_through: str | None = None
 
-    manifest_path = sources_dir / "news_manifest.json"
-    if manifest_path.exists():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    from value_investor.storage import read_json, resolve_json_path, write_json
+
+    manifest_path = resolve_json_path(sources_dir / "news_manifest.json")
+    if manifest_path is not None:
+        manifest = read_json(manifest_path)
         for article in manifest.get("articles") or []:
             published = article.get("published_at")
             if not published:
@@ -121,19 +123,23 @@ def build_sources_as_of(
                     news_through = str(published)
 
     financials_through: str | None = None
-    financials_path = sources_dir / "financials_annual.json"
-    if financials_path.exists():
-        financials = json.loads(financials_path.read_text(encoding="utf-8"))
+    financials_path = resolve_json_path(sources_dir / "financials_annual.json")
+    if financials_path is not None:
+        financials = read_json(financials_path)
         years = list((financials.get("income_statement") or {}).keys())
         if years:
             financials_through = max(years)
 
     snapshot_path = f"sources/snapshots/{revision_id}.json"
-    screening_src = sources_dir / "screening_snapshot.json"
+    screening_src = resolve_json_path(sources_dir / "screening_snapshot.json")
     snapshots_dir = sources_dir / "snapshots"
-    if screening_src.exists():
+    if screening_src is not None:
         snapshots_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(screening_src, snapshots_dir / f"{revision_id}.json")
+        dest = snapshots_dir / f"{revision_id}.json"
+        if screening_src.name.endswith(".gz"):
+            write_json(dest, read_json(screening_src), compact=True, compress=False)
+        else:
+            shutil.copy2(screening_src, dest)
 
     news_batch = source_meta.get("news_batch_path")
     news_batch_rel = None
@@ -148,7 +154,7 @@ def build_sources_as_of(
         "news_through": news_through,
         "financials_through": financials_through,
         "news_article_ids": [item for item in article_ids if item][:100],
-        "screening_snapshot_path": snapshot_path if screening_src.exists() else None,
+        "screening_snapshot_path": snapshot_path if screening_src is not None else None,
         "news_batch_path": news_batch_rel,
     }
 
@@ -179,15 +185,19 @@ def archive_revision(
 
     revisions_dir = ticker_dir / "revisions"
     revisions_dir.mkdir(parents=True, exist_ok=True)
-    (revisions_dir / f"{revision_id}.json").write_text(
-        json.dumps(revision.to_dict(), indent=2),
-        encoding="utf-8",
+    from value_investor.storage import read_json, write_json
+
+    write_json(
+        revisions_dir / f"{revision_id}.json",
+        revision.to_dict(),
+        compact=True,
+        compress=True,
     )
 
     timeline_path = ticker_dir / "timeline.json"
     timeline: dict[str, Any]
     if timeline_path.exists():
-        timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
+        timeline = read_json(timeline_path)
     else:
         timeline = {"ticker": doc.ticker, "revisions": []}
 
@@ -203,22 +213,26 @@ def archive_revision(
         )
     entries.sort(key=lambda item: item.as_of)
     timeline["revisions"] = [entry.to_dict() for entry in entries]
-    timeline_path.write_text(json.dumps(timeline, indent=2), encoding="utf-8")
+    write_json(timeline_path, timeline, compact=True)
     return revision_id
 
 
 def load_revision(ticker_dir: Path, revision_id: str) -> ResearchRevision | None:
-    path = ticker_dir / "revisions" / f"{revision_id}.json"
-    if not path.exists():
+    from value_investor.storage import read_json, resolve_json_path
+
+    path = resolve_json_path(ticker_dir / "revisions" / f"{revision_id}.json")
+    if path is None:
         return None
-    return ResearchRevision.from_dict(json.loads(path.read_text(encoding="utf-8")))
+    return ResearchRevision.from_dict(read_json(path))
 
 
 def list_revision_metas(ticker_dir: Path) -> list[ResearchRevisionMeta]:
+    from value_investor.storage import read_json
+
     timeline_path = ticker_dir / "timeline.json"
     if not timeline_path.exists():
         return []
-    timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
+    timeline = read_json(timeline_path)
     return [ResearchRevisionMeta.from_dict(item) for item in timeline.get("revisions") or []]
 
 
@@ -249,7 +263,9 @@ def get_research_as_of(
     legacy_path = ticker_dir / "research.json"
     if not legacy_path.exists():
         return None
-    doc = ResearchDocument.from_dict(json.loads(legacy_path.read_text(encoding="utf-8")))
+    from value_investor.storage import read_json
+
+    doc = ResearchDocument.from_dict(read_json(legacy_path))
     if doc.updated_at and _parse_as_of(doc.updated_at) > query:
         return None
     return doc

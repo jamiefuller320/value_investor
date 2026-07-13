@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import re
 import shutil
 from datetime import UTC, datetime
@@ -12,13 +11,20 @@ from typing import Any
 import pandas as pd
 
 from value_investor.deep_analysis import _parse_deep_analysis
+from value_investor.storage import (
+    DASHBOARD_ARCHIVE_KEEP,
+    prune_dashboard_archives,
+    read_json,
+    summarize_text,
+    write_json,
+)
 from value_investor.summary import build_company_reports
 
 
 def _read_json(path: Path) -> dict[str, Any] | list[Any] | None:
     if not path.exists():
         return None
-    return json.loads(path.read_text(encoding="utf-8"))
+    return read_json(path)
 
 
 def _signal_counts(reports: list[dict[str, Any]]) -> dict[str, int]:
@@ -100,15 +106,16 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
 
         meta = summary_docs.get(ticker)
         if meta is None:
-            meta = json.loads(metadata_path.read_text(encoding="utf-8"))
+            meta = read_json(metadata_path)
 
+        raw_summary = str(meta.get("executive_summary") or "")
         index.append(
             {
                 "ticker": ticker,
                 "name": meta.get("name") or ticker,
                 "version": meta.get("version"),
                 "updated_at": meta.get("updated_at"),
-                "executive_summary": meta.get("executive_summary") or "",
+                "executive_summary": summarize_text(raw_summary),
                 "research_verdict": meta.get("research_verdict"),
                 "research_risk_level": meta.get("research_risk_level"),
                 "research_confidence": meta.get("research_confidence"),
@@ -133,7 +140,9 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     strong_buy_count = signal_counts.get("strong_buy", 0)
 
     if run_at is None:
-        summary_files = sorted(output_dir.glob("summary_*.json"))
+        summary_files = sorted(output_dir.glob("summary_*.json")) + sorted(
+            output_dir.glob("summary_*.json.gz")
+        )
         if summary_files:
             summary = _read_json(summary_files[-1])
             if isinstance(summary, dict):
@@ -161,12 +170,16 @@ def publish_dashboard(
     output_dir: Path,
     dest_dir: Path,
     include_research: bool = True,
+    archive_keep: int = DASHBOARD_ARCHIVE_KEEP,
 ) -> Path:
     """
     Write dashboard JSON (and optional research memos) under dest_dir.
 
     Static site assets (index.html, app.js, styles.css) live in dest_dir in git;
     this function updates data/ and research/ only.
+
+    Dashboard archives keep only the newest ``archive_keep`` dated snapshots to
+    limit git growth; full memos live under research/*.md.
     """
     bundle = build_dashboard_bundle(output_dir)
     if include_research:
@@ -177,13 +190,14 @@ def publish_dashboard(
     data_dir = dest_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     latest_path = data_dir / "latest.json"
-    latest_path.write_text(json.dumps(bundle, indent=2), encoding="utf-8")
+    write_json(latest_path, bundle, compact=True, compress=False)
 
     if run_at := bundle.get("run_at"):
         stamp = str(run_at)[:10]
         archive_path = data_dir / "archive" / f"{stamp}.json"
         archive_path.parent.mkdir(parents=True, exist_ok=True)
-        archive_path.write_text(json.dumps(bundle, indent=2), encoding="utf-8")
+        write_json(archive_path, bundle, compact=True, compress=False)
+        prune_dashboard_archives(archive_path.parent, keep=archive_keep)
 
     return latest_path
 

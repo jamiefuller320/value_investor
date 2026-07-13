@@ -98,6 +98,53 @@ def test_publish_dashboard_writes_latest_json(tmp_path: Path):
 
     path = publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=False)
     assert path.exists()
-    data = json.loads(path.read_text(encoding="utf-8"))
+    raw = path.read_text(encoding="utf-8")
+    assert "\n  " not in raw  # compact JSON
+    data = json.loads(raw)
     assert data["meta"]["company_count"] == 2
     assert (dest_dir / "data" / "archive" / "2026-07-08.json").exists()
+
+
+def test_publish_research_index_is_summarized(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    dest_dir = tmp_path / "docs"
+    _write_sample_output(output_dir)
+
+    research_dir = output_dir / "research" / "AAA.L"
+    research_dir.mkdir(parents=True)
+    long_summary = "Alpha thesis. " + ("Detail sentence. " * 80)
+    (research_dir / "research.json").write_text(
+        json.dumps(
+            {
+                "ticker": "AAA.L",
+                "name": "Alpha PLC",
+                "version": 1,
+                "updated_at": "2026-07-08T07:00:00+00:00",
+                "executive_summary": long_summary,
+                "research_verdict": "accumulate",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (research_dir / "research.md").write_text("# Alpha\n\nFull memo.\n", encoding="utf-8")
+
+    path = publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=True)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert len(data["research"]) == 1
+    assert len(data["research"][0]["executive_summary"]) < len(long_summary)
+    assert data["research"][0]["executive_summary"].endswith("…")
+    assert (dest_dir / "research" / "AAA.L.md").exists()
+
+
+def test_publish_prunes_old_dashboard_archives(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    dest_dir = tmp_path / "docs"
+    _write_sample_output(output_dir)
+    archive = dest_dir / "data" / "archive"
+    archive.mkdir(parents=True)
+    for day in ("2026-01-01", "2026-02-01", "2026-03-01"):
+        (archive / f"{day}.json").write_text("{}", encoding="utf-8")
+
+    publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=False, archive_keep=2)
+    remaining = sorted(p.name for p in archive.iterdir())
+    assert remaining == ["2026-03-01.json", "2026-07-08.json"]

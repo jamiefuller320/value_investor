@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -35,6 +34,7 @@ from value_investor.signal_stability import (
 )
 from value_investor.signals import build_signals
 from value_investor.simulator import SimulationComparison, run_simulation_comparison
+from value_investor.storage import apply_output_retention, write_json
 from value_investor.technical_analysis import enrich_signals_with_technicals
 
 
@@ -157,7 +157,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         run_diff = compute_run_diff(previous_signals, signals_out)
         result.run_diff = run_diff
         diff_path = output_dir / "run_diff.json"
-        diff_path.write_text(json.dumps(run_diff.to_dict(), indent=2), encoding="utf-8")
+        write_json(diff_path, run_diff.to_dict(), compact=True)
         paths["run_diff"] = diff_path
 
     snapshot_path = save_run_snapshot(output_dir, run_at=result.run_at, signals=signals_out)
@@ -176,18 +176,18 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     snapshots = load_run_snapshots(output_dir)
     result.backtest = compute_backtest(snapshots)
     backtest_path = output_dir / "backtest_summary.json"
-    backtest_path.write_text(json.dumps(result.backtest.to_dict(), indent=2), encoding="utf-8")
+    write_json(backtest_path, result.backtest.to_dict(), compact=True)
     paths["backtest"] = backtest_path
 
     result.simulation = run_simulation_comparison(snapshots)
     simulation_path = output_dir / "simulation_summary.json"
-    simulation_path.write_text(json.dumps(result.simulation.to_dict(), indent=2), encoding="utf-8")
+    write_json(simulation_path, result.simulation.to_dict(), compact=True)
     paths["simulation"] = simulation_path
 
     historical = run_historical_analysis(output_dir, snapshots=snapshots)
     paths["historical_analysis"] = save_historical_analysis(output_dir, historical)
 
-    paths["summary"].write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
+    write_json(paths["summary"], result.to_dict(), compact=True)
 
     signals_out.to_csv(latest, index=False)
     paths["latest"] = latest
@@ -198,5 +198,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
 
     append_signal_history(output_dir, signals_out, run_at=result.run_at)
     paths["signal_history"] = output_dir / "signal_history.csv"
+
+    apply_output_retention(output_dir)
 
     return paths

@@ -120,6 +120,16 @@ Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](
 
 **Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). `.github/workflows/email-report-schedule.yml` dispatches `.github/workflows/email-report.yml` via `workflow_dispatch` every Monday **07:17 UTC** (off the hour). You can also run **Schedule FTSE Email Report** or **FTSE 100 Email Report** manually from the Actions tab.
 
+## Storage and retention
+
+Artifacts are kept lean for larger universes:
+
+- **Compact JSON** for dashboard and summary files (no pretty-print indent)
+- **Gzip** for local history snapshots (`output/history/run_*.json.gz`, `models_*.json.gz`) and research revision archives
+- **3-year retention** for local history, timestamped CSV/JSON copies, and research news batches
+- **Dashboard archives** keep the newest 8 dated snapshots in `docs/data/archive/` (not unbounded git growth)
+- Research index in `latest.json` stores a short summary blurb; full memos remain in `docs/research/*.md`
+
 Reports include:
 - **Data quality scores** per company (downgrades thin-data signals)
 - **Technical timing** — RSI, 50/200-day MAs, MACD with accumulate/neutral/wait signals

@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import json
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from value_investor.research.document import ResearchDocument, render_research_markdown
 from value_investor.research.timeline import archive_revision
+from value_investor.storage import read_json, write_json
 
 
 class ResearchStore:
@@ -41,7 +41,7 @@ class ResearchStore:
         path = self.metadata_path(ticker)
         if not path.exists():
             return None
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = read_json(path)
         doc = ResearchDocument.from_dict(data)
         doc.research_path = str(self.markdown_path(ticker))
         return doc
@@ -61,10 +61,7 @@ class ResearchStore:
         if not doc.updated_at:
             doc.updated_at = datetime.now(UTC).isoformat()
 
-        self.metadata_path(doc.ticker).write_text(
-            json.dumps(doc.to_dict(), indent=2),
-            encoding="utf-8",
-        )
+        write_json(self.metadata_path(doc.ticker), doc.to_dict(), compact=True)
         self.markdown_path(doc.ticker).write_text(render_research_markdown(doc), encoding="utf-8")
         if doc.agent_id:
             self.agent_id_path(doc.ticker).write_text(doc.agent_id, encoding="utf-8")

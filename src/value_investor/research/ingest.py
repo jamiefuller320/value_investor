@@ -204,10 +204,12 @@ def ingest_research_sources(
 
     financials = fetch_annual_financials(ticker)
     financials_path = sources_dir / "financials_annual.json"
-    financials_path.write_text(json.dumps(financials, indent=2), encoding="utf-8")
+    from value_investor.storage import read_json, resolve_json_path, write_json
+
+    write_json(financials_path, financials, compact=True, compress=False)
 
     snapshot_path = sources_dir / "screening_snapshot.json"
-    snapshot_path.write_text(json.dumps(screening_snapshot, indent=2), encoding="utf-8")
+    write_json(snapshot_path, screening_snapshot, compact=True, compress=False)
 
     yf_news = fetch_yfinance_news(ticker)
     google_news = fetch_google_news_rss(company_name, ticker)
@@ -219,8 +221,9 @@ def ingest_research_sources(
 
     manifest_path = sources_dir / "news_manifest.json"
     existing_manifest: dict[str, Any] = {"articles": []}
-    if manifest_path.exists():
-        existing_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    resolved_manifest = resolve_json_path(manifest_path)
+    if resolved_manifest is not None:
+        existing_manifest = read_json(resolved_manifest)
 
     known_ids = {item.get("id") for item in existing_manifest.get("articles", [])}
     combined = list(existing_manifest.get("articles", []))
@@ -234,7 +237,7 @@ def ingest_research_sources(
         "updated_at": datetime.now(UTC).isoformat(),
         "articles": sorted(combined, key=lambda item: item.get("published_at") or "", reverse=True),
     }
-    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    write_json(manifest_path, manifest, compact=True, compress=False)
 
     news_batch = {
         "ticker": ticker,
@@ -244,13 +247,23 @@ def ingest_research_sources(
     }
     batch_name = f"news_batch_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}.json"
     batch_path = sources_dir / batch_name
-    batch_path.write_text(json.dumps(news_batch, indent=2), encoding="utf-8")
+    write_json(
+        batch_path,
+        news_batch,
+        compact=True,
+        compress=False,
+    )
+
+    written_financials = resolve_json_path(financials_path) or financials_path
+    written_snapshot = resolve_json_path(snapshot_path) or snapshot_path
+    written_manifest = resolve_json_path(manifest_path) or manifest_path
+    written_batch = resolve_json_path(batch_path) or batch_path
 
     return {
-        "financials_path": str(financials_path),
-        "snapshot_path": str(snapshot_path),
-        "news_manifest_path": str(manifest_path),
-        "news_batch_path": str(batch_path),
+        "financials_path": str(written_financials),
+        "snapshot_path": str(written_snapshot),
+        "news_manifest_path": str(written_manifest),
+        "news_batch_path": str(written_batch),
         "financial_years": len(financials.get("income_statement", {})),
         "news_total": len(manifest["articles"]),
         "news_new": len(new_news),

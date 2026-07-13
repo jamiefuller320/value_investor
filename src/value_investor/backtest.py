@@ -139,8 +139,9 @@ def save_run_snapshot(
 
     stamp = run_at.strftime("%Y%m%d_%H%M%S")
     path = history_dir / f"run_{stamp}.json"
-    path.write_text(json.dumps(snapshot.to_dict(), indent=2), encoding="utf-8")
-    return path
+    from value_investor.storage import write_json
+
+    return write_json(path, snapshot.to_dict(), compact=True, compress=True)
 
 
 def load_run_snapshots(output_dir: Path) -> list[RunSnapshot]:
@@ -148,12 +149,18 @@ def load_run_snapshots(output_dir: Path) -> list[RunSnapshot]:
     if not history_dir.exists():
         return []
 
+    from value_investor.storage import read_json
+
     snapshots: list[RunSnapshot] = []
-    for path in sorted(history_dir.glob("run_*.json")):
+    paths = sorted({*history_dir.glob("run_*.json"), *history_dir.glob("run_*.json.gz")})
+    for path in paths:
+        # Prefer gzip twin when both exist for the same stamp.
+        if path.suffix == ".json" and path.with_suffix(".json.gz").exists():
+            continue
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data = read_json(path)
             snapshots.append(RunSnapshot.from_dict(data))
-        except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        except (json.JSONDecodeError, KeyError, TypeError, OSError) as exc:
             logger.warning("Skipping corrupt snapshot %s: %s", path, exc)
     return snapshots
 
