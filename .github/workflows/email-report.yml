@@ -1,9 +1,10 @@
 name: FTSE 100 Email Report
 
+# Reliable entrypoint: always run via workflow_dispatch (manual Actions UI,
+# gh workflow run, or the companion schedule-trigger workflow).
+# Do not attach cron here — GitHub schedule events at hour boundaries are
+# best-effort and may be delayed or dropped.
 on:
-  schedule:
-    # Monday 07:00 UTC
-    - cron: "0 7 * * 1"
   workflow_dispatch:
 
 permissions:
