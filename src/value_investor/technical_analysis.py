@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -475,7 +476,11 @@ def _technical_row_dict(tech: TechnicalIndicators) -> dict[str, Any]:
     return row
 
 
-def enrich_signals_with_technicals(signals: pd.DataFrame) -> pd.DataFrame:
+def enrich_signals_with_technicals(
+    signals: pd.DataFrame,
+    *,
+    chart_dir: Path | None = None,
+) -> pd.DataFrame:
     """Add technical indicators and timing signals to the signals DataFrame."""
     out = signals.copy()
     tickers = out["ticker"].tolist()
@@ -501,7 +506,18 @@ def enrich_signals_with_technicals(signals: pd.DataFrame) -> pd.DataFrame:
         rows.append({"ticker": ticker, **_technical_row_dict(tech)})
 
     tech_df = pd.DataFrame(rows)
-    return out.merge(tech_df, on="ticker", how="left")
+    enriched = out.merge(tech_df, on="ticker", how="left")
+
+    if chart_dir is not None:
+        from value_investor.price_charts import write_buy_tier_charts_from_history
+
+        write_buy_tier_charts_from_history(
+            signals=enriched,
+            history=history,
+            chart_dir=Path(chart_dir),
+        )
+
+    return enriched
 
 
 def timing_label(timing_signal: str) -> str:

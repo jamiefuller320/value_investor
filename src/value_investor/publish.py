@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
@@ -11,6 +10,12 @@ from typing import Any
 import pandas as pd
 
 from value_investor.deep_analysis import _parse_deep_analysis
+from value_investor.price_charts import (
+    chart_filename,
+    copy_charts_to_dashboard,
+    ensure_buy_tier_charts,
+    slug_ticker,
+)
 from value_investor.storage import (
     DASHBOARD_ARCHIVE_KEEP,
     prune_dashboard_archives,
@@ -73,7 +78,7 @@ def _load_deep_analysis(output_dir: Path) -> dict[str, str] | None:
 
 
 def _slug_ticker(ticker: str) -> str:
-    return re.sub(r"[^A-Za-z0-9._-]+", "_", ticker)
+    return slug_ticker(ticker)
 
 
 def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any]]:
@@ -148,6 +153,10 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             if isinstance(summary, dict):
                 run_at = summary.get("run_at")
 
+    for report in reports:
+        if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
+            report["chart_path"] = f"data/charts/{chart_filename(str(report['ticker']))}"
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": run_at,
@@ -189,6 +198,31 @@ def publish_dashboard(
 
     data_dir = dest_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+    charts_dest = data_dir / "charts"
+    charts_source = output_dir / "charts"
+    buy_tickers = [
+        str(report["ticker"])
+        for report in bundle.get("reports", [])
+        if report.get("signal") in ("strong_buy", "buy") and report.get("ticker")
+    ]
+    # Refresh missing charts from price history so popups work after publish.
+    ensure_buy_tier_charts(
+        reports=[r for r in bundle.get("reports", []) if r.get("signal") in ("strong_buy", "buy")],
+        chart_dir=charts_source,
+        fetch=True,
+    )
+    copy_charts_to_dashboard(
+        source_dir=charts_source,
+        dest_dir=charts_dest,
+        tickers=buy_tickers or None,
+    )
+    # Drop stale chart files for names no longer in the buy tier.
+    if charts_dest.exists() and buy_tickers:
+        keep = {chart_filename(ticker) for ticker in buy_tickers}
+        for stale in charts_dest.glob("*.json"):
+            if stale.name not in keep:
+                stale.unlink(missing_ok=True)
+
     latest_path = data_dir / "latest.json"
     write_json(latest_path, bundle, compact=True, compress=False)
 

@@ -105,7 +105,7 @@ def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> S
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
     signals = build_signals(universe, model_results, summary)
-    signals = enrich_signals_with_technicals(signals)
+    signals = enrich_signals_with_technicals(signals, chart_dir=out_dir / "charts")
 
     history = load_signal_history(out_dir)
     signals = enrich_signals_with_stability(signals, history, run_at=run_at)

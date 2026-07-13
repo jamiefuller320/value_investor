@@ -193,6 +193,7 @@ function renderScreener(data) {
             <th>Models</th>
             <th>Conviction</th>
             <th>Summary</th>
+            <th></th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -203,6 +204,7 @@ function renderScreener(data) {
   const tbody = panel.querySelector("tbody");
   const searchInput = panel.querySelector("#screener-search");
   const filterSelect = panel.querySelector("#screener-filter");
+  const byTicker = new Map(reports.map((r) => [r.ticker, r]));
 
   function renderRows() {
     const q = (searchInput.value || "").toLowerCase();
@@ -214,13 +216,17 @@ function renderScreener(data) {
     });
 
     if (!rows.length) {
-      tbody.innerHTML = `<tr><td colspan="6" class="muted">No companies match your filters.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="muted">No companies match your filters.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = rows
-      .map(
-        (report) => `
+      .map((report) => {
+        const chartBtn =
+          report.signal === "strong_buy" || report.signal === "buy"
+            ? `<button type="button" class="btn" data-chart-ticker="${esc(report.ticker)}">Chart</button>`
+            : "";
+        return `
       <tr>
         <td>
           <strong>${esc(report.name)}</strong><br>
@@ -231,9 +237,11 @@ function renderScreener(data) {
         <td>${report.models_passed}/${report.model_count}<br><span class="small muted">${report.families_passed}/4 families</span></td>
         <td>${pct(report.conviction_score)}<br><span class="small muted">${esc(report.stability_label || "")}</span></td>
         <td class="small">${esc(report.summary || "")}</td>
-      </tr>`
-      )
+        <td>${chartBtn}</td>
+      </tr>`;
+      })
       .join("");
+    bindChartButtons(tbody, byTicker);
   }
 
   searchInput.addEventListener("input", renderRows);
@@ -260,13 +268,19 @@ function renderStrongBuys(data) {
       <p class="small">${esc(report.action_note || "")}</p>
       <p class="small"><strong>Trade plan:</strong><br>${tradePlanHtml(report)}</p>
       <p class="small">${esc(report.summary || "")}</p>
-      <p><button type="button" class="btn btn-primary" data-log-ticker="${esc(report.ticker)}">Log action</button></p>
+      <p class="pick-actions">
+        <button type="button" class="btn" data-chart-ticker="${esc(report.ticker)}">Price chart</button>
+        <button type="button" class="btn btn-primary" data-log-ticker="${esc(report.ticker)}">Log action</button>
+      </p>
     </div>`;
 
   panel.innerHTML = `
     ${strong.length ? `<h3 style="margin-top:0">Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
     ${buys.length ? `<h3>Buys</h3>${buys.map(cardHtml).join("")}` : ""}
   `;
+
+  const byTicker = new Map(reports.map((r) => [r.ticker, r]));
+  bindChartButtons(panel, byTicker);
 
   panel.querySelectorAll("[data-log-ticker]").forEach((button) => {
     button.addEventListener("click", () => {

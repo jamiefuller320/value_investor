@@ -593,7 +593,10 @@ function renderPortfolio(data) {
             <td>${pct(c.conviction_score)}</td>
             <td>${pct(c.diversity_score)}</td>
             <td class="small">${esc(c.rationale)}</td>
-            <td><button type="button" class="btn btn-primary" data-log-ticker="${esc(c.ticker)}">Log</button></td>
+            <td class="pick-actions">
+              <button type="button" class="btn" data-chart-ticker="${esc(c.ticker)}">Chart</button>
+              <button type="button" class="btn btn-primary" data-log-ticker="${esc(c.ticker)}">Log</button>
+            </td>
           </tr>`
         )
         .join("")
@@ -757,6 +760,11 @@ function renderPortfolio(data) {
   panel.querySelectorAll("[data-log-ticker]").forEach((button) => {
     button.addEventListener("click", () => dialogApi.open(button.dataset.logTicker, defaultMode));
   });
+
+  bindChartButtons(
+    panel,
+    new Map((data.reports || []).map((report) => [report.ticker, report]))
+  );
 
   panel.querySelectorAll("[data-status-id]").forEach((select) => {
     select.addEventListener("change", () => {

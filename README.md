@@ -151,6 +151,7 @@ Reports include:
 - **Deep analysis** on top 5 picks when `CURSOR_API_KEY` is set
 - **Buy-tier research** — per-ticker memos for strong buys and a capped set of top buys, from five years of financials and one year of news, with weekly update sections and **verdict revisions** when material news changes conviction
 - **Portfolio actions (dashboard)** — log when you act on a recommendation with limit/stop levels prefilled from the trade plan; diversification steer ranks unused buy-tier names toward a balanced book (browser-local storage)
+- **Price charts** — popup charts on buy-tier recommendations with core/tactical buy, stop, target, and SMA levels marked
 
 ## Dashboard portfolio
 
@@ -161,6 +162,7 @@ The GitHub Pages **Portfolio** tab lets you:
 3. **Seed simulated buys** from the current screen — up to five diversified buy-tier names with core (+ tactical) legs prefilled for paper evaluation.
 4. **Track open vs closed** actions in this browser (`localStorage`), with JSON export/import for backup.
 5. **See diversification advice** scoped to the selected book — sector concentration vs a 30% soft cap, and a ranked list blending conviction with sector diversity.
+6. **Open a price chart** on buy-tier names — 1y closes with core/tactical buy, stop, target, and SMA levels marked.
 
 Action logs are private to your browser; they are not committed by the weekly workflow. Legacy rows without a mode are treated as live.
 
