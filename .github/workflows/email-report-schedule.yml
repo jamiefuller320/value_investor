@@ -4,10 +4,12 @@ name: Schedule FTSE Email Report
 # so weekly and manual runs share the same code path.
 on:
   schedule:
-    # TEMPORARY test slot — Monday 09:48 UTC (2026-07-13). Previous 09:22
-    # slot did not fire (new schedules often need longer lead time / GitHub
-    # delay). Replace with optimum weekly cron after success: "17 7 * * 1"
-    - cron: "48 9 * * 1"
+    # TEMPORARY same-day test (any weekday) — 10:10 UTC on 2026-07-13.
+    # Monday-only temp slots earlier today never appeared in Actions.
+    # Remove this entry after a successful scheduled dispatch.
+    - cron: "10 10 * * *"
+    # Optimum weekly slot (off the hour to reduce GitHub schedule drops)
+    - cron: "17 7 * * 1"
   workflow_dispatch:
 
 permissions:
