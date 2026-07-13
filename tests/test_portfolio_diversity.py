@@ -102,3 +102,104 @@ def test_empty_book_summary():
     advice = advise_diversification([], [])
     assert advice.holdings_count == 0
     assert "No actioned holdings" in advice.summary
+
+
+def test_holdings_from_actions_filters_execution_mode():
+    actions = [
+        {
+            "ticker": "RIO.L",
+            "sector": "Basic Materials",
+            "status": "open",
+            "execution_mode": "simulated",
+            "allocation_pct": 1.0,
+        },
+        {
+            "ticker": "SHEL.L",
+            "sector": "Energy",
+            "status": "open",
+            "execution_mode": "live",
+            "allocation_pct": 1.0,
+        },
+        {
+            "ticker": "HSBA.L",
+            "sector": "Financials",
+            "status": "open",
+            # legacy row → live
+            "allocation_pct": 1.0,
+        },
+    ]
+    simulated = holdings_from_actions(actions, execution_mode="simulated")
+    live = holdings_from_actions(actions, execution_mode="live")
+    assert [h.ticker for h in simulated] == ["RIO.L"]
+    assert {h.ticker for h in live} == {"SHEL.L", "HSBA.L"}
+
+
+def test_seed_simulated_buys_prefills_trade_plan_and_skips_held():
+    from value_investor.portfolio_diversity import seed_simulated_buys
+
+    reports = [
+        {
+            "ticker": "AAA.L",
+            "name": "Alpha",
+            "sector": "Energy",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "trade_plan": {
+                "core_order": "market",
+                "core_limit": None,
+                "core_allocation_pct": 0.6,
+                "tactical_order": "limit",
+                "tactical_limit": 95.0,
+                "tactical_allocation_pct": 0.4,
+                "tactical_stop_loss": 90.0,
+                "tactical_take_profit": 110.0,
+            },
+        },
+        {
+            "ticker": "BBB.L",
+            "name": "Beta",
+            "sector": "Financials",
+            "signal": "buy",
+            "conviction_score": 0.7,
+            "trade_plan": {
+                "core_order": "limit",
+                "core_limit": 10.0,
+                "core_allocation_pct": 0.7,
+                "tactical_order": "limit",
+                "tactical_limit": 9.5,
+                "tactical_allocation_pct": 0.3,
+                "tactical_stop_loss": 9.0,
+                "tactical_take_profit": 11.0,
+            },
+        },
+        {
+            "ticker": "CCC.L",
+            "name": "Gamma",
+            "sector": "Utilities",
+            "signal": "hold",
+            "conviction_score": 0.95,
+        },
+    ]
+    existing = [
+        {
+            "ticker": "AAA.L",
+            "status": "open",
+            "execution_mode": "simulated",
+            "allocation_pct": 1.0,
+        }
+    ]
+    seeded = seed_simulated_buys(
+        reports,
+        existing_actions=existing,
+        max_names=2,
+        include_tactical=True,
+        acted_at="2026-07-13T00:00:00+00:00",
+    )
+    assert seeded
+    assert all(row["execution_mode"] == "simulated" for row in seeded)
+    assert all(row["ticker"] != "AAA.L" for row in seeded)
+    assert any(row["ticker"] == "BBB.L" and row["leg"] == "core" for row in seeded)
+    assert any(row["ticker"] == "BBB.L" and row["leg"] == "tactical" for row in seeded)
+    tactical = next(row for row in seeded if row["leg"] == "tactical")
+    assert tactical["limit_price"] == 9.5
+    assert tactical["stop_loss"] == 9.0
