@@ -22,6 +22,23 @@ function formatChartPrice(value) {
   return `£${Number(value).toFixed(2)}`;
 }
 
+function estimateLabelWidth(text) {
+  // Approximate SVG label width for ~10–11px font.
+  return Math.ceil(String(text).length * 6.4);
+}
+
+function nudgeLevelLabelYs(entries, minGap = 18) {
+  const sorted = [...entries].sort((a, b) => a.y - b.y);
+  for (let i = 1; i < sorted.length; i += 1) {
+    const prev = sorted[i - 1];
+    const current = sorted[i];
+    if (current.y - prev.y < minGap) {
+      current.y = prev.y + minGap;
+    }
+  }
+  return sorted;
+}
+
 function ensureChartDialog() {
   let dialog = document.getElementById("chart-dialog");
   if (dialog) return dialog;
@@ -47,13 +64,22 @@ function renderPriceChartSvg(payload) {
   }
 
   const levels = payload.levels || {};
-  const width = 720;
-  const height = 340;
-  const pad = { top: 20, right: 88, bottom: 36, left: 16 };
+  const activeLevels = Object.entries(CHART_LEVEL_STYLES).filter(([key]) => levels[key] != null);
+  const longestLabel = activeLevels.reduce((max, [, style]) => {
+    const sample = `${style.label}`;
+    const priceSample = formatChartPrice(99999.99);
+    return Math.max(max, estimateLabelWidth(sample), estimateLabelWidth(priceSample));
+  }, 90);
+  const rightPad = Math.max(168, longestLabel + 28);
+  const width = 620 + rightPad;
+  const height = 380;
+  const pad = { top: 28, right: rightPad, bottom: 42, left: 22 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
 
-  const levelValues = Object.values(levels).filter((v) => v != null && !Number.isNaN(Number(v))).map(Number);
+  const levelValues = Object.values(levels)
+    .filter((v) => v != null && !Number.isNaN(Number(v)))
+    .map(Number);
   const minClose = Math.min(...closes);
   const maxClose = Math.max(...closes);
   const minY = Math.min(minClose, ...levelValues, minClose * 0.98);
@@ -74,17 +100,34 @@ function renderPriceChartSvg(payload) {
     })
     .join("");
 
-  const levelLines = Object.entries(CHART_LEVEL_STYLES)
-    .filter(([key]) => levels[key] != null)
-    .map(([key, style]) => {
+  const labelEntries = nudgeLevelLabelYs(
+    activeLevels.map(([key, style]) => {
       const value = Number(levels[key]);
-      const y = yAt(value);
+      return {
+        key,
+        style,
+        value,
+        lineY: yAt(value),
+        y: yAt(value),
+      };
+    })
+  );
+
+  for (const entry of labelEntries) {
+    entry.y = Math.min(pad.top + plotH - 4, Math.max(pad.top + 12, entry.y));
+  }
+
+  const levelLines = labelEntries
+    .map(({ style, value, lineY, y }) => {
+      const labelX = width - pad.right + 12;
+      const priceText = formatChartPrice(value);
       return `
-        <line x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}"
+        <line x1="${pad.left}" y1="${lineY}" x2="${width - pad.right}" y2="${lineY}"
           stroke="${style.color}" stroke-width="1.6" stroke-dasharray="${style.dash}" />
-        <text x="${width - pad.right + 6}" y="${y + 4}" class="chart-level-label" fill="${style.color}">
-          ${style.label} ${formatChartPrice(value)}
-        </text>`;
+        <line x1="${width - pad.right}" y1="${lineY}" x2="${labelX - 4}" y2="${y - 2}"
+          stroke="${style.color}" stroke-width="1" stroke-opacity="0.4" />
+        <text x="${labelX}" y="${y - 5}" class="chart-level-label" fill="${style.color}">${esc(style.label)}</text>
+        <text x="${labelX}" y="${y + 9}" class="chart-level-price" fill="${style.color}">${esc(priceText)}</text>`;
     })
     .join("");
 
@@ -93,12 +136,11 @@ function renderPriceChartSvg(payload) {
     .filter(({ index }) => index % Math.max(1, Math.ceil(dates.length / 5)) === 0 || index === dates.length - 1)
     .map(
       ({ date, index }) =>
-        `<text x="${xAt(index)}" y="${height - 10}" text-anchor="middle" class="chart-axis-label">${esc(date.slice(0, 7))}</text>`
+        `<text x="${xAt(index)}" y="${height - 12}" text-anchor="middle" class="chart-axis-label">${esc(date.slice(0, 7))}</text>`
     )
     .join("");
 
-  const legend = Object.entries(CHART_LEVEL_STYLES)
-    .filter(([key]) => levels[key] != null)
+  const legend = activeLevels
     .map(
       ([, style]) =>
         `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${style.color}"></span>${esc(style.label)}</span>`
@@ -107,7 +149,7 @@ function renderPriceChartSvg(payload) {
 
   return `
     <div class="price-chart-wrap">
-      <svg viewBox="0 0 ${width} ${height}" class="price-chart" role="img" aria-label="Price chart with trade levels">
+      <svg viewBox="0 0 ${width} ${height}" width="${width}" class="price-chart" role="img" aria-label="Price chart with trade levels">
         ${grid}
         <polygon points="${areaPoints}" fill="rgba(43,108,176,0.08)"></polygon>
         <polyline fill="none" stroke="#2b6cb0" stroke-width="2.25" points="${linePoints}" />
