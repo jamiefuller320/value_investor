@@ -12,6 +12,7 @@ import yfinance as yf
 
 from value_investor.constituents import to_lse_ticker
 from value_investor.financials import extract_statement_metrics
+from value_investor.providers import apply_fallback_providers
 
 logger = logging.getLogger(__name__)
 
@@ -108,11 +109,15 @@ class CompanyMetrics:
     asset_turnover_prev: float | None = None
     shares_outstanding_prev: float | None = None
     interest_expense: float | None = None
+    last_price: float | None = None
     errors: list[str] = field(default_factory=list)
+    data_sources: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         data = {k: getattr(self, k) for k in METRIC_KEYS}
+        data["last_price"] = self.last_price
         data["errors"] = self.errors
+        data["data_sources"] = self.data_sources
         return data
 
 
@@ -173,7 +178,7 @@ def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
 
 
 def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | None = None) -> CompanyMetrics:
-    """Pull screening metrics for a single LSE ticker via yfinance."""
+    """Pull screening metrics for a single LSE ticker via yfinance + fallbacks."""
     resolved = to_lse_ticker(ticker)
     metrics = CompanyMetrics(ticker=resolved, name=name, sector=sector)
 
@@ -183,64 +188,98 @@ def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | No
         # Quote-summary 404s often yield empty info without raising.
         if not info and fast is None:
             metrics.errors.append("no market data returned")
-            return metrics
-
-        metrics.name = info.get("longName") or info.get("shortName") or name
-        metrics.sector = info.get("sector") or sector
-        metrics.market_cap = _safe_float(info.get("marketCap") or getattr(fast, "market_cap", None))
-        metrics.trailing_pe = _safe_float(info.get("trailingPE"))
-        metrics.forward_pe = _safe_float(info.get("forwardPE"))
-        metrics.price_to_book = _safe_float(info.get("priceToBook"))
-        metrics.dividend_yield = _safe_float(info.get("dividendYield"))
-        metrics.current_ratio = _safe_float(info.get("currentRatio"))
-        metrics.debt_to_equity = _safe_float(info.get("debtToEquity"))
-        metrics.return_on_equity = _safe_float(info.get("returnOnEquity"))
-        metrics.return_on_assets = _safe_float(info.get("returnOnAssets"))
-        metrics.profit_margins = _safe_float(info.get("profitMargins"))
-        metrics.revenue_growth = _safe_float(info.get("revenueGrowth"))
-        metrics.earnings_growth = _safe_float(info.get("earningsGrowth"))
-        metrics.free_cashflow = _safe_float(info.get("freeCashflow"))
-        metrics.enterprise_value = _safe_float(info.get("enterpriseValue"))
-        metrics.ebitda = _safe_float(info.get("ebitda"))
-        metrics.ebit = _safe_float(info.get("ebit") or info.get("operatingIncome"))
-        metrics.total_revenue = _safe_float(info.get("totalRevenue"))
-        metrics.total_debt = _safe_float(info.get("totalDebt"))
-        metrics.total_cash = _safe_float(info.get("totalCash"))
-        metrics.book_value = _safe_float(info.get("bookValue"))
-        metrics.shares_outstanding = _safe_float(
-            info.get("sharesOutstanding") or info.get("impliedSharesOutstanding")
-        )
-
-        stmt: dict[str, Any] = {}
-        try:
-            stmt = extract_statement_metrics(
-                getattr(stock, "balance_sheet", None),
-                getattr(stock, "income_stmt", None),
-                getattr(stock, "cashflow", None),
+        else:
+            metrics.name = info.get("longName") or info.get("shortName") or name
+            metrics.sector = info.get("sector") or sector
+            metrics.market_cap = _safe_float(info.get("marketCap") or getattr(fast, "market_cap", None))
+            metrics.trailing_pe = _safe_float(info.get("trailingPE"))
+            metrics.forward_pe = _safe_float(info.get("forwardPE"))
+            metrics.price_to_book = _safe_float(info.get("priceToBook"))
+            metrics.dividend_yield = _safe_float(info.get("dividendYield"))
+            metrics.current_ratio = _safe_float(info.get("currentRatio"))
+            metrics.debt_to_equity = _safe_float(info.get("debtToEquity"))
+            metrics.return_on_equity = _safe_float(info.get("returnOnEquity"))
+            metrics.return_on_assets = _safe_float(info.get("returnOnAssets"))
+            metrics.profit_margins = _safe_float(info.get("profitMargins"))
+            metrics.revenue_growth = _safe_float(info.get("revenueGrowth"))
+            metrics.earnings_growth = _safe_float(info.get("earningsGrowth"))
+            metrics.free_cashflow = _safe_float(info.get("freeCashflow"))
+            metrics.enterprise_value = _safe_float(info.get("enterpriseValue"))
+            metrics.ebitda = _safe_float(info.get("ebitda"))
+            metrics.ebit = _safe_float(info.get("ebit") or info.get("operatingIncome"))
+            metrics.total_revenue = _safe_float(info.get("totalRevenue"))
+            metrics.total_debt = _safe_float(info.get("totalDebt"))
+            metrics.total_cash = _safe_float(info.get("totalCash"))
+            metrics.book_value = _safe_float(info.get("bookValue"))
+            metrics.shares_outstanding = _safe_float(
+                info.get("sharesOutstanding") or info.get("impliedSharesOutstanding")
             )
-            for key, value in stmt.items():
-                if value is not None and hasattr(metrics, key):
-                    setattr(metrics, key, value)
-        except Exception as stmt_exc:  # noqa: BLE001
-            logger.debug("Statement fetch partial for %s: %s", resolved, stmt_exc)
+            metrics.last_price = _safe_float(
+                info.get("regularMarketPrice")
+                or info.get("currentPrice")
+                or getattr(fast, "last_price", None)
+            )
 
-        if metrics.ebit is None and stmt.get("operating_income") is not None:
-            metrics.ebit = stmt["operating_income"]
+            stmt: dict[str, Any] = {}
+            try:
+                stmt = extract_statement_metrics(
+                    getattr(stock, "balance_sheet", None),
+                    getattr(stock, "income_stmt", None),
+                    getattr(stock, "cashflow", None),
+                )
+                for key, value in stmt.items():
+                    if value is not None and hasattr(metrics, key):
+                        setattr(metrics, key, value)
+            except Exception as stmt_exc:  # noqa: BLE001
+                logger.debug("Statement fetch partial for %s: %s", resolved, stmt_exc)
 
-        if metrics.return_on_assets is None and stmt.get("return_on_assets") is not None:
-            metrics.return_on_assets = stmt["return_on_assets"]
+            if metrics.ebit is None and stmt.get("operating_income") is not None:
+                metrics.ebit = stmt["operating_income"]
 
-        if metrics.current_ratio is None and metrics.current_ratio_bs is not None:
-            metrics.current_ratio = metrics.current_ratio_bs
+            if metrics.return_on_assets is None and stmt.get("return_on_assets") is not None:
+                metrics.return_on_assets = stmt["return_on_assets"]
 
-        if metrics.market_cap is None and not info:
-            metrics.errors.append("no market data returned")
+            if metrics.current_ratio is None and metrics.current_ratio_bs is not None:
+                metrics.current_ratio = metrics.current_ratio_bs
+
+            if metrics.market_cap is None and not info:
+                metrics.errors.append("no market data returned")
 
     except Exception as exc:  # noqa: BLE001 — collect per-ticker failures for batch runs
         logger.warning("Failed to fetch %s: %s", resolved, exc)
         metrics.errors.append(str(exc))
 
+    _apply_metric_fallbacks(metrics)
     return metrics
+
+
+def _apply_metric_fallbacks(metrics: CompanyMetrics) -> None:
+    """Fill gaps from curated alternate providers when primary data is incomplete."""
+    payload = metrics.to_dict()
+    updated, source_map, provider_errors = apply_fallback_providers(metrics.ticker, payload)
+    for key, value in updated.items():
+        if key in ("errors", "data_sources"):
+            continue
+        if hasattr(metrics, key) and getattr(metrics, key) is None and value is not None:
+            setattr(metrics, key, value)
+
+    if source_map:
+        metrics.data_sources = source_map
+        # Primary soft-failures are recoverable once fallbacks populate core fields.
+        if metrics.market_cap is not None or metrics.last_price is not None:
+            metrics.errors = [
+                error
+                for error in metrics.errors
+                if "no market data returned" not in error.lower()
+            ]
+
+    for error in provider_errors:
+        # Keep provider errors only when nothing useful was recovered from that attempt
+        # and the field set is still sparse — avoids quality penalties on successful fills.
+        if source_map:
+            continue
+        if error and error not in metrics.errors:
+            metrics.errors.append(error)
 
 
 def fetch_universe(
