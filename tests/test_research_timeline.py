@@ -1,6 +1,5 @@
 """Tests for point-in-time research revision archive."""
 
-import json
 from datetime import UTC, datetime
 from pathlib import Path
 
