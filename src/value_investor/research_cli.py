@@ -84,19 +84,19 @@ def main(argv: list[str] | None = None) -> int:
 
     summary_path = args.output_dir / "research_summary.json"
     summary_path.parent.mkdir(parents=True, exist_ok=True)
-    summary_path.write_text(
-        json.dumps(
-            {
-                "run_at": datetime.now(UTC).isoformat(),
-                "created": summary.created,
-                "updated": summary.updated,
-                "skipped": summary.skipped,
-                "errors": summary.errors,
-                "documents": [doc.to_dict() for doc in summary.documents],
-            },
-            indent=2,
-        ),
-        encoding="utf-8",
+    from value_investor.storage import write_json
+
+    write_json(
+        summary_path,
+        {
+            "run_at": datetime.now(UTC).isoformat(),
+            "created": summary.created,
+            "updated": summary.updated,
+            "skipped": summary.skipped,
+            "errors": summary.errors,
+            "documents": [doc.to_dict() for doc in summary.documents],
+        },
+        compact=True,
     )
 
     preview = format_research_text(summary, summary.documents)

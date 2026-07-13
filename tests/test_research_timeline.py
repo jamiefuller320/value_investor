@@ -50,7 +50,7 @@ def test_archive_revision_writes_timeline_and_snapshot(tmp_path: Path):
 
     assert revision_id == "20260601T070000Z"
     assert store.timeline_path("AAA.L").exists()
-    assert (store.ticker_dir("AAA.L") / "revisions" / f"{revision_id}.json").exists()
+    assert (store.ticker_dir("AAA.L") / "revisions" / f"{revision_id}.json.gz").exists()
     metas = list_revision_metas(store.ticker_dir("AAA.L"))
     assert len(metas) == 1
     assert metas[0].mode == "initial"
@@ -131,7 +131,7 @@ def test_enrich_signals_with_research_uses_point_in_time_verdict(tmp_path: Path)
     assert late.iloc[0]["adjusted_signal"] == "hold"
     assert late.iloc[0]["research_as_of"] == "2026-06-08T07:00:00+00:00"
 
-    revision = json.loads(
-        (store.ticker_dir("AAA.L") / "revisions" / "20260608T070000Z.json").read_text()
-    )
+    from value_investor.storage import read_json
+
+    revision = read_json(store.ticker_dir("AAA.L") / "revisions" / "20260608T070000Z.json")
     assert revision["delta"]["verdict_changed"] is True

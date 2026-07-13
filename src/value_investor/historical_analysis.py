@@ -610,9 +610,10 @@ def run_historical_analysis(
 
 
 def save_historical_analysis(output_dir: Path, summary: HistoricalAnalysisSummary) -> Path:
+    from value_investor.storage import write_json
+
     path = output_dir / "historical_analysis_summary.json"
-    path.write_text(json.dumps(summary.to_dict(), indent=2), encoding="utf-8")
-    return path
+    return write_json(path, summary.to_dict(), compact=True)
 
 
 def format_historical_analysis_html(summary: HistoricalAnalysisSummary) -> str:

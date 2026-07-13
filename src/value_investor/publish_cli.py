@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 from value_investor.publish import empty_dashboard_bundle, publish_dashboard
+from value_investor.storage import write_json
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -44,7 +44,7 @@ def main(argv: list[str] | None = None) -> int:
         data_dir = args.dest / "data"
         data_dir.mkdir(parents=True, exist_ok=True)
         path = data_dir / "latest.json"
-        path.write_text(json.dumps(empty_dashboard_bundle(), indent=2), encoding="utf-8")
+        write_json(path, empty_dashboard_bundle(), compact=True)
         print(f"Wrote placeholder {path}")
         return 0
 

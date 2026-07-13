@@ -73,6 +73,8 @@ def default_weights(model_ids: list[str] | None = None) -> dict[str, float]:
 
 
 def load_model_weights(output_dir: Path) -> ModelWeightState:
+    from value_investor.storage import read_json
+
     path = output_dir / MODEL_WEIGHTS_FILE
     if not path.exists():
         return ModelWeightState(
@@ -80,18 +82,19 @@ def load_model_weights(output_dir: Path) -> ModelWeightState:
             note="Using equal model weights until enough archived runs accumulate.",
         )
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = read_json(path)
         return ModelWeightState.from_dict(data)
-    except (json.JSONDecodeError, TypeError, ValueError) as exc:
+    except (json.JSONDecodeError, TypeError, ValueError, OSError) as exc:
         logger.warning("Could not load model weights: %s", exc)
         return ModelWeightState(weights=default_weights(), note="Invalid weights file; using defaults.")
 
 
 def save_model_weights(output_dir: Path, state: ModelWeightState) -> Path:
+    from value_investor.storage import write_json
+
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / MODEL_WEIGHTS_FILE
-    path.write_text(json.dumps(state.to_dict(), indent=2), encoding="utf-8")
-    return path
+    return write_json(path, state.to_dict(), compact=True, compress=False)
 
 
 def save_model_snapshot(
@@ -101,6 +104,8 @@ def save_model_snapshot(
     model_results: pd.DataFrame,
 ) -> Path:
     """Persist per-model scores alongside a screening run for weight learning."""
+    from value_investor.storage import write_json
+
     history_dir = output_dir / HISTORY_DIR
     history_dir.mkdir(parents=True, exist_ok=True)
 
@@ -111,22 +116,26 @@ def save_model_snapshot(
     }
     stamp = run_at.strftime("%Y%m%d_%H%M%S")
     path = history_dir / f"models_{stamp}.json"
-    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    return path
+    return write_json(path, payload, compact=True, compress=True)
 
 
 def _load_model_snapshots(output_dir: Path) -> dict[str, list[dict[str, Any]]]:
+    from value_investor.storage import read_json
+
     history_dir = output_dir / HISTORY_DIR
     if not history_dir.exists():
         return {}
 
     by_run: dict[str, list[dict[str, Any]]] = {}
-    for path in sorted(history_dir.glob("models_*.json")):
+    paths = sorted({*history_dir.glob("models_*.json"), *history_dir.glob("models_*.json.gz")})
+    for path in paths:
+        if path.suffix == ".json" and path.with_suffix(".json.gz").exists():
+            continue
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
+            data = read_json(path)
             run_at = str(data["run_at"])
             by_run[run_at] = list(data.get("models") or [])
-        except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        except (json.JSONDecodeError, KeyError, TypeError, OSError) as exc:
             logger.warning("Skipping corrupt model snapshot %s: %s", path, exc)
     return by_run
 
