@@ -1,10 +1,10 @@
-# FTSE 100 Value Investor
+# FTSE Value Investor
 
-Quantitative screener for FTSE 100 constituents against classic value investment models, with optional Cursor SDK agent analysis for qualitative follow-up.
+Quantitative screener for FTSE 350 constituents (FTSE 100 + FTSE 250) against classic value investment models, with optional Cursor SDK agent analysis for qualitative follow-up.
 
 ## What it does
 
-1. **Fetches** the current FTSE 100 list (Wikipedia) and fundamental data (yfinance / LSE `.L` tickers).
+1. **Fetches** the current FTSE 100 and FTSE 250 lists (Wikipedia) and fundamental data (yfinance / LSE `.L` tickers). Default universe is **FTSE 350** (~350 names after dedupe); override with `--universe ftse100|ftse250|ftse350`.
 2. **Screens** each company through **20 value models** (five families):
 
    | Category | Models |
@@ -99,7 +99,7 @@ The weekly email workflow commits updated data to `docs/data/` (and research mem
 The dashboard shows:
 
 - Signal overview and week-over-week changes
-- Searchable screener table (all FTSE 100 names)
+- Searchable screener table (all screened names)
 - Strong buys with trade plans
 - Backtest and portfolio simulation results
 - **Historical analysis** — point-in-time replay of screen + research with weekly smoothing
@@ -118,7 +118,7 @@ ftse-email --dry-run --publish-dashboard
 
 Configure SMTP in `.env` (see `.env.example`). For Gmail, use an [app password](https://support.google.com/accounts/answer/185833).
 
-**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). `.github/workflows/email-report-schedule.yml` dispatches `.github/workflows/email-report.yml` via `workflow_dispatch` every Monday **07:17 UTC** (off the hour). You can also run **Schedule FTSE Email Report** or **FTSE 100 Email Report** manually from the Actions tab.
+**Schedule weekly** via GitHub Actions: add repository secrets `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_TO` (optional `CURSOR_API_KEY` for `--deep-analysis`). `.github/workflows/email-report-schedule.yml` dispatches `.github/workflows/email-report.yml` via `workflow_dispatch` every Monday **07:17 UTC** (off the hour). You can also run **Schedule FTSE Email Report** or **FTSE Email Report** manually from the Actions tab.
 
 ## Storage and retention
 
@@ -168,7 +168,7 @@ Action logs are private to your browser; they are not committed by the weekly wo
 
 ## Buy-tier research
 
-`ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for quality-gated `strong_buy` names first, then fills remaining slots with top `buy` names by conviction (default weekly cap: 8). Hold, avoid, and short-side names are not researched.
+`ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for quality-gated `strong_buy` names first, then fills remaining slots with top `buy` names by conviction (default weekly cap: 12). Hold, avoid, and short-side names are not researched.
 
 1. **First pass** — ingests five years of annual statements (yfinance), one year of headlines (yfinance + Google News RSS), and the quantitative screen snapshot; Cursor agent writes sections on thesis, financials, risks, and news.
 2. **Weekly reruns** — refreshes sources, fetches new headlines since the last update, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news changes conviction (otherwise repeats the prior verdict).
@@ -198,8 +198,8 @@ ftse-email --dry-run --publish-dashboard --deep-analysis --research-docs
 
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│ FTSE 100 list   │────▶│ yfinance metrics │────▶│ Value models    │
-│ (Wikipedia)     │     │ per .L ticker    │     │ (18 screens)    │
+│ FTSE 350 list   │────▶│ yfinance metrics │────▶│ Value models    │
+│ (100 + 250)     │     │ per .L ticker    │     │ (18 screens)    │
 └─────────────────┘     └──────────────────┘     └────────┬────────┘
                                                          │
                         ┌──────────────────┐     ┌─────────▼────────┐
@@ -232,7 +232,7 @@ For a multi-turn research workflow (e.g. "now pull the annual report for the #1 
 |------|---------------|
 | Add a model | `src/value_investor/models/` — subclass `ValueModel`, register in `models/__init__.py` |
 | Change signal thresholds | `src/value_investor/signals.py` → `assign_signal()` |
-| Different index | Replace `fetch_ftse100_constituents()` or pass a custom ticker CSV |
+| Different index | Pass `--universe ftse100|ftse250|ftse350` or replace `fetch_universe_constituents()` |
 | Richer data | Swap yfinance for a paid API in `fetch.py` |
 
 ## Disclaimer

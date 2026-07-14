@@ -660,7 +660,7 @@ function renderDashboard(data) {
   dashboardData = data;
   const meta = data.meta || {};
   document.getElementById("run-meta").textContent = data.run_at
-    ? `${meta.company_count || 0} companies · ${meta.strong_buy_count || 0} strong buys · ${fmtDate(data.run_at)}`
+    ? `${meta.universe_label || "FTSE"} · ${meta.company_count || 0} companies · ${meta.strong_buy_count || 0} strong buys · ${fmtDate(data.run_at)}`
   : "Awaiting first published screening run";
 
   renderOverview(data);

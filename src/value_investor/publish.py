@@ -9,6 +9,7 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.constituents import DEFAULT_UNIVERSE, universe_label
 from value_investor.deep_analysis import _parse_deep_analysis
 from value_investor.price_charts import (
     chart_filename,
@@ -143,15 +144,18 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
 
     signal_counts = _signal_counts(reports)
     strong_buy_count = signal_counts.get("strong_buy", 0)
+    universe_name = DEFAULT_UNIVERSE
 
-    if run_at is None:
-        summary_files = sorted(output_dir.glob("summary_*.json")) + sorted(
-            output_dir.glob("summary_*.json.gz")
-        )
-        if summary_files:
-            summary = _read_json(summary_files[-1])
-            if isinstance(summary, dict):
+    summary_files = sorted(output_dir.glob("summary_*.json")) + sorted(
+        output_dir.glob("summary_*.json.gz")
+    )
+    if summary_files:
+        summary = _read_json(summary_files[-1])
+        if isinstance(summary, dict):
+            if run_at is None:
                 run_at = summary.get("run_at")
+            if summary.get("universe"):
+                universe_name = str(summary["universe"])
 
     for report in reports:
         if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
@@ -164,6 +168,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             "company_count": len(reports),
             "signal_counts": signal_counts,
             "strong_buy_count": strong_buy_count,
+            "universe": universe_name,
+            "universe_label": universe_label(universe_name),
         },
         "reports": reports,
         "run_diff": run_diff,
@@ -245,6 +251,8 @@ def empty_dashboard_bundle() -> dict[str, Any]:
             "company_count": 0,
             "signal_counts": {},
             "strong_buy_count": 0,
+            "universe": DEFAULT_UNIVERSE,
+            "universe_label": universe_label(DEFAULT_UNIVERSE),
         },
         "reports": [],
         "run_diff": None,

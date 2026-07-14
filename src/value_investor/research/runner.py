@@ -17,8 +17,8 @@ from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
 
-# Weekly memo budget for FTSE 100: all quality strong buys first, then top buys.
-DEFAULT_RESEARCH_WEEKLY_CAP = 8
+# Weekly memo budget for FTSE 350: all quality strong buys first, then top buys.
+DEFAULT_RESEARCH_WEEKLY_CAP = 12
 
 
 def _rank_key(report: CompanyReport) -> tuple[float, float]:
