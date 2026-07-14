@@ -203,6 +203,27 @@ def _format_favorable_timing_text(reports: list[CompanyReport]) -> str | None:
     return "\n".join(lines)
 
 
+def _universe_coverage_note(
+    *,
+    excluded_investment_vehicles: int,
+    insufficient_data_count: int,
+) -> str | None:
+    bits: list[str] = []
+    if excluded_investment_vehicles > 0:
+        bits.append(
+            f"Excluded {excluded_investment_vehicles} investment trusts/funds "
+            "(operating-company metrics not applicable)"
+        )
+    if insufficient_data_count > 0:
+        bits.append(
+            f"{insufficient_data_count} remaining name(s) marked insufficient data "
+            "(true fetch/fundamental gaps)"
+        )
+    if not bits:
+        return None
+    return ". ".join(bits) + "."
+
+
 def format_text_report(
     *,
     run_at: str,
@@ -215,6 +236,7 @@ def format_text_report(
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
     screen_label: str = "FTSE 350",
+    excluded_investment_vehicles: int = 0,
 ) -> str:
     lines = [
         f"{screen_label} Value Screen — {run_at}",
@@ -267,6 +289,12 @@ def format_text_report(
         "Summary: "
         + ", ".join(f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1]))
     )
+    coverage = _universe_coverage_note(
+        excluded_investment_vehicles=excluded_investment_vehicles,
+        insufficient_data_count=counts.get("insufficient_data", 0),
+    )
+    if coverage:
+        lines.append(coverage)
     lines.append("")
 
     for report in reports:
@@ -293,6 +321,7 @@ def format_html_report(
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
     screen_label: str = "FTSE 350",
+    excluded_investment_vehicles: int = 0,
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -301,6 +330,13 @@ def format_html_report(
     summary_bits = "".join(
         f'<span style="margin-right:12px"><strong>{k.replace("_", " ").title()}</strong>: {v}</span>'
         for k, v in sorted(counts.items(), key=lambda x: -x[1])
+    )
+    coverage = _universe_coverage_note(
+        excluded_investment_vehicles=excluded_investment_vehicles,
+        insufficient_data_count=counts.get("insufficient_data", 0),
+    )
+    coverage_html = (
+        f'<p style="color:#666;font-size:13px;margin-top:4px">{coverage}</p>' if coverage else ""
     )
 
     rows = []
@@ -418,6 +454,7 @@ def format_html_report(
   {research_section}
   {diff_section}
   <p>{summary_bits}</p>
+  {coverage_html}
   <table style="width:100%;border-collapse:collapse;margin-top:16px">
     <thead>
       <tr style="background:#f5f5f5">

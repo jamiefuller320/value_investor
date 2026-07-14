@@ -40,6 +40,11 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_UNIVERSE,
         help=f"Screening universe when not using --skip-screen (default: {DEFAULT_UNIVERSE})",
     )
+    parser.add_argument(
+        "--include-investment-trusts",
+        action="store_true",
+        help="Keep investment trusts/closed-end funds when screening (excluded by default)",
+    )
     parser.add_argument("--model", default="composer-2.5", help="Cursor model for research agent")
     parser.add_argument(
         "--api-key",
@@ -77,7 +82,12 @@ def main(argv: list[str] | None = None) -> int:
     else:
         from value_investor.pipeline import run_screen, write_outputs
 
-        result = run_screen(limit=args.limit, output_dir=args.output_dir, universe=args.universe)
+        result = run_screen(
+            limit=args.limit,
+            output_dir=args.output_dir,
+            universe=args.universe,
+            include_investment_trusts=args.include_investment_trusts,
+        )
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results

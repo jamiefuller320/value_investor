@@ -33,6 +33,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Limit number of companies (useful for dry runs)",
     )
     parser.add_argument(
+        "--include-investment-trusts",
+        action="store_true",
+        help=(
+            "Keep investment trusts, closed-end funds, and similar vehicles in the "
+            "screen (excluded by default — operating metrics usually unavailable)"
+        ),
+    )
+    parser.add_argument(
         "--top",
         type=int,
         default=15,
@@ -51,7 +59,11 @@ def main(argv: list[str] | None = None) -> int:
         format="%(levelname)s %(name)s: %(message)s",
     )
 
-    result = run_screen(limit=args.limit, universe=args.universe)
+    result = run_screen(
+        limit=args.limit,
+        universe=args.universe,
+        include_investment_trusts=args.include_investment_trusts,
+    )
     paths = write_outputs(result, args.output_dir)
 
     top = result.signals.head(args.top)
@@ -62,6 +74,11 @@ def main(argv: list[str] | None = None) -> int:
         display_cols = [c for c in cols if c in top.columns]
         print(top[display_cols].to_string(index=False))
         print(f"\nUniverse: {universe_label(args.universe)} ({len(result.universe)} companies)")
+        if result.excluded_investment_vehicles:
+            print(
+                f"Excluded {result.excluded_investment_vehicles} investment trusts/funds "
+                "(use --include-investment-trusts to keep them)"
+            )
         print(f"Wrote {paths['latest']}")
 
     return 0

@@ -36,6 +36,7 @@ from value_investor.signals import build_signals
 from value_investor.simulator import SimulationComparison, run_simulation_comparison
 from value_investor.storage import apply_output_retention, write_json
 from value_investor.technical_analysis import enrich_signals_with_technicals
+from value_investor.universe_filters import excluded_vehicle_records, partition_investment_vehicles
 
 
 @dataclass
@@ -48,6 +49,9 @@ class ScreenResult:
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
     simulation: SimulationComparison | None = None
+    excluded_investment_vehicles: int = 0
+    include_investment_trusts: bool = False
+    excluded_samples: list[dict[str, Any]] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -55,6 +59,9 @@ class ScreenResult:
             "universe": self.universe_name,
             "universe_label": universe_label(self.universe_name),
             "company_count": len(self.universe),
+            "excluded_investment_vehicles": self.excluded_investment_vehicles,
+            "include_investment_trusts": self.include_investment_trusts,
+            "excluded_samples": self.excluded_samples or [],
             "signals": self.signals[
                 [
                     "ticker",
@@ -101,11 +108,18 @@ def run_screen(
     limit: int | None = None,
     output_dir: Path | None = None,
     universe: str = DEFAULT_UNIVERSE,
+    include_investment_trusts: bool = False,
 ) -> ScreenResult:
     """Fetch FTSE constituents, run value models, return ranked signals."""
     run_at = datetime.now(UTC)
     out_dir = output_dir or Path("output")
     constituents = fetch_universe_constituents(universe)
+    excluded_count = 0
+    excluded_samples: list[dict[str, Any]] = []
+    if not include_investment_trusts:
+        constituents, excluded = partition_investment_vehicles(constituents)
+        excluded_count = len(excluded)
+        excluded_samples = excluded_vehicle_records(excluded)
     universe_df = fetch_universe(constituents, limit=limit)
     if "index" in constituents.columns and "ticker" in universe_df.columns:
         index_map = constituents[["ticker", "index"]].drop_duplicates("ticker")
@@ -140,6 +154,9 @@ def run_screen(
         model_results=model_results,
         signals=signals,
         universe_name=(universe or DEFAULT_UNIVERSE).strip().lower(),
+        excluded_investment_vehicles=excluded_count,
+        include_investment_trusts=include_investment_trusts,
+        excluded_samples=excluded_samples,
     )
 
 

@@ -145,6 +145,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     signal_counts = _signal_counts(reports)
     strong_buy_count = signal_counts.get("strong_buy", 0)
     universe_name = DEFAULT_UNIVERSE
+    excluded_investment_vehicles = 0
+    include_investment_trusts = False
 
     summary_files = sorted(output_dir.glob("summary_*.json")) + sorted(
         output_dir.glob("summary_*.json.gz")
@@ -156,6 +158,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
                 run_at = summary.get("run_at")
             if summary.get("universe"):
                 universe_name = str(summary["universe"])
+            excluded_investment_vehicles = int(summary.get("excluded_investment_vehicles") or 0)
+            include_investment_trusts = bool(summary.get("include_investment_trusts"))
 
     for report in reports:
         if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
@@ -170,6 +174,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             "strong_buy_count": strong_buy_count,
             "universe": universe_name,
             "universe_label": universe_label(universe_name),
+            "excluded_investment_vehicles": excluded_investment_vehicles,
+            "include_investment_trusts": include_investment_trusts,
         },
         "reports": reports,
         "run_diff": run_diff,
@@ -253,6 +259,8 @@ def empty_dashboard_bundle() -> dict[str, Any]:
             "strong_buy_count": 0,
             "universe": DEFAULT_UNIVERSE,
             "universe_label": universe_label(DEFAULT_UNIVERSE),
+            "excluded_investment_vehicles": 0,
+            "include_investment_trusts": False,
         },
         "reports": [],
         "run_diff": None,

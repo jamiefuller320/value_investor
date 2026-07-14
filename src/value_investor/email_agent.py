@@ -79,6 +79,14 @@ def main(argv: list[str] | None = None) -> int:
         help=f"Screening universe (default: {DEFAULT_UNIVERSE})",
     )
     parser.add_argument(
+        "--include-investment-trusts",
+        action="store_true",
+        help=(
+            "Keep investment trusts/closed-end funds in the screen "
+            "(excluded by default)"
+        ),
+    )
+    parser.add_argument(
         "--skip-screen",
         action="store_true",
         help="Reuse latest CSV outputs instead of re-running the screen",
@@ -174,6 +182,7 @@ def main(argv: list[str] | None = None) -> int:
     simulation: SimulationComparison | None = None
     historical_analysis: HistoricalAnalysisSummary | None = None
     screen_universe = args.universe
+    excluded_investment_vehicles = 0
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
@@ -190,13 +199,30 @@ def main(argv: list[str] | None = None) -> int:
         backtest = _load_backtest(args.output_dir)
         simulation = _load_simulation(args.output_dir)
         historical_analysis = load_historical_analysis_summary(args.output_dir)
+        summary_files = sorted(args.output_dir.glob("summary_*.json")) + sorted(
+            args.output_dir.glob("summary_*.json.gz")
+        )
+        if summary_files:
+            from value_investor.storage import read_json
+
+            summary = read_json(summary_files[-1])
+            if isinstance(summary, dict):
+                excluded_investment_vehicles = int(summary.get("excluded_investment_vehicles") or 0)
+                if summary.get("universe"):
+                    screen_universe = str(summary["universe"])
     else:
-        result = run_screen(limit=args.limit, output_dir=args.output_dir, universe=args.universe)
+        result = run_screen(
+            limit=args.limit,
+            output_dir=args.output_dir,
+            universe=args.universe,
+            include_investment_trusts=args.include_investment_trusts,
+        )
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results
         run_at = result.run_at
         screen_universe = result.universe_name
+        excluded_investment_vehicles = result.excluded_investment_vehicles
         run_diff = result.run_diff or _load_run_diff(args.output_dir)
         backtest = result.backtest or _load_backtest(args.output_dir)
         simulation = result.simulation or _load_simulation(args.output_dir)
@@ -270,6 +296,7 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         screen_label=universe_label(screen_universe),
+        excluded_investment_vehicles=excluded_investment_vehicles,
     )
     html_body = format_html_report(
         run_at=run_at_str,
@@ -282,6 +309,7 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         screen_label=universe_label(screen_universe),
+        excluded_investment_vehicles=excluded_investment_vehicles,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
