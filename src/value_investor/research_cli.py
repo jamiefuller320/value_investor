@@ -43,7 +43,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--include-investment-trusts",
         action="store_true",
-        help="Keep investment trusts/closed-end funds when screening (excluded by default)",
+        help="Merge trusts into the operating-company screen (disables separate trust track)",
+    )
+    parser.add_argument(
+        "--skip-trust-screen",
+        action="store_true",
+        help="Skip the separate investment-trust track when screening",
     )
     parser.add_argument("--model", default="composer-2.5", help="Cursor model for research agent")
     parser.add_argument(
@@ -87,6 +92,7 @@ def main(argv: list[str] | None = None) -> int:
             output_dir=args.output_dir,
             universe=args.universe,
             include_investment_trusts=args.include_investment_trusts,
+            screen_trusts=not args.skip_trust_screen,
         )
         write_outputs(result, args.output_dir)
         signals = result.signals

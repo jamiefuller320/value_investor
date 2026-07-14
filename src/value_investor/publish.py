@@ -25,6 +25,7 @@ from value_investor.storage import (
     write_json,
 )
 from value_investor.summary import build_company_reports
+from value_investor.trust_summary import build_trust_reports
 
 
 def _read_json(path: Path) -> dict[str, Any] | list[Any] | None:
@@ -64,6 +65,23 @@ def _load_reports(output_dir: Path) -> tuple[list[dict[str, Any]], str | None]:
     reports = [report.to_dict() for report in build_company_reports(signals, model_results)]
     run_at = str(signals["run_at"].iloc[0]) if "run_at" in signals.columns and not signals.empty else None
     return reports, run_at
+
+
+def _load_trust_reports(output_dir: Path) -> list[dict[str, Any]]:
+    reports_path = output_dir / "email_trust_reports.json"
+    if reports_path.exists():
+        data = _read_json(reports_path)
+        if isinstance(data, list):
+            return data
+
+    signals_path = output_dir / "latest_trust_signals.csv"
+    model_results_path = output_dir / "latest_trust_model_results.csv"
+    if not signals_path.exists() or not model_results_path.exists():
+        return []
+
+    signals = pd.read_csv(signals_path)
+    model_results = pd.read_csv(model_results_path)
+    return [report.to_dict() for report in build_trust_reports(signals, model_results)]
 
 
 def _load_deep_analysis(output_dir: Path) -> dict[str, str] | None:
@@ -142,11 +160,14 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     historical_analysis = _read_json(output_dir / "historical_analysis_summary.json")
     deep_analysis = _load_deep_analysis(output_dir)
 
+    trust_reports = _load_trust_reports(output_dir)
     signal_counts = _signal_counts(reports)
+    trust_signal_counts = _signal_counts(trust_reports)
     strong_buy_count = signal_counts.get("strong_buy", 0)
     universe_name = DEFAULT_UNIVERSE
     excluded_investment_vehicles = 0
     include_investment_trusts = False
+    screen_trusts = True
 
     summary_files = sorted(output_dir.glob("summary_*.json")) + sorted(
         output_dir.glob("summary_*.json.gz")
@@ -160,6 +181,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
                 universe_name = str(summary["universe"])
             excluded_investment_vehicles = int(summary.get("excluded_investment_vehicles") or 0)
             include_investment_trusts = bool(summary.get("include_investment_trusts"))
+            if "screen_trusts" in summary:
+                screen_trusts = bool(summary.get("screen_trusts"))
 
     for report in reports:
         if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
@@ -176,8 +199,12 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             "universe_label": universe_label(universe_name),
             "excluded_investment_vehicles": excluded_investment_vehicles,
             "include_investment_trusts": include_investment_trusts,
+            "screen_trusts": screen_trusts,
+            "trust_count": len(trust_reports),
+            "trust_signal_counts": trust_signal_counts,
         },
         "reports": reports,
+        "trust_reports": trust_reports,
         "run_diff": run_diff,
         "backtest": backtest,
         "simulation": simulation,
@@ -261,8 +288,12 @@ def empty_dashboard_bundle() -> dict[str, Any]:
             "universe_label": universe_label(DEFAULT_UNIVERSE),
             "excluded_investment_vehicles": 0,
             "include_investment_trusts": False,
+            "screen_trusts": True,
+            "trust_count": 0,
+            "trust_signal_counts": {},
         },
         "reports": [],
+        "trust_reports": [],
         "run_diff": None,
         "backtest": None,
         "simulation": None,

@@ -36,9 +36,14 @@ def main(argv: list[str] | None = None) -> int:
         "--include-investment-trusts",
         action="store_true",
         help=(
-            "Keep investment trusts, closed-end funds, and similar vehicles in the "
-            "screen (excluded by default — operating metrics usually unavailable)"
+            "Merge investment trusts into the operating-company Graham screen "
+            "(disables the separate trust track)"
         ),
+    )
+    parser.add_argument(
+        "--skip-trust-screen",
+        action="store_true",
+        help="Skip the separate investment-trust discount/income track",
     )
     parser.add_argument(
         "--top",
@@ -63,6 +68,7 @@ def main(argv: list[str] | None = None) -> int:
         limit=args.limit,
         universe=args.universe,
         include_investment_trusts=args.include_investment_trusts,
+        screen_trusts=not args.skip_trust_screen,
     )
     paths = write_outputs(result, args.output_dir)
 
@@ -74,10 +80,27 @@ def main(argv: list[str] | None = None) -> int:
         display_cols = [c for c in cols if c in top.columns]
         print(top[display_cols].to_string(index=False))
         print(f"\nUniverse: {universe_label(args.universe)} ({len(result.universe)} companies)")
-        if result.excluded_investment_vehicles:
+        if result.trust_signals is not None and not result.trust_signals.empty:
+            trust_top = result.trust_signals.head(min(args.top, 10))
+            tcols = [
+                c
+                for c in (
+                    "ticker",
+                    "name",
+                    "signal",
+                    "models_passed",
+                    "discount_to_nav",
+                    "dividend_yield",
+                    "price_to_book",
+                )
+                if c in trust_top.columns
+            ]
+            print(f"\nTrust track ({len(result.trust_signals)} names):")
+            print(trust_top[tcols].to_string(index=False))
+        elif result.excluded_investment_vehicles:
             print(
                 f"Excluded {result.excluded_investment_vehicles} investment trusts/funds "
-                "(use --include-investment-trusts to keep them)"
+                "(trust track skipped or empty)"
             )
         print(f"Wrote {paths['latest']}")
 

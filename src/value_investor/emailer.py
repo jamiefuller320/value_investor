@@ -207,21 +207,112 @@ def _universe_coverage_note(
     *,
     excluded_investment_vehicles: int,
     insufficient_data_count: int,
+    trust_report_count: int = 0,
 ) -> str | None:
     bits: list[str] = []
-    if excluded_investment_vehicles > 0:
+    if trust_report_count > 0:
+        bits.append(
+            f"Screened {trust_report_count} investment trusts/funds on the separate "
+            "discount/income track (book value as NAV proxy)"
+        )
+    elif excluded_investment_vehicles > 0:
         bits.append(
             f"Excluded {excluded_investment_vehicles} investment trusts/funds "
             "(operating-company metrics not applicable)"
         )
     if insufficient_data_count > 0:
         bits.append(
-            f"{insufficient_data_count} remaining name(s) marked insufficient data "
+            f"{insufficient_data_count} operating-company name(s) marked insufficient data "
             "(true fetch/fundamental gaps)"
         )
     if not bits:
         return None
     return ". ".join(bits) + "."
+
+
+def _format_trust_section_text(trust_reports: list[CompanyReport]) -> str | None:
+    if not trust_reports:
+        return None
+    counts: dict[str, int] = {}
+    for report in trust_reports:
+        counts[report.signal] = counts.get(report.signal, 0) + 1
+    lines = [
+        "INVESTMENT TRUST TRACK",
+        "-" * 40,
+        "Summary: "
+        + ", ".join(f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1])),
+        "Models use discount to book/NAV proxy, distribution yield, and premium risk.",
+        "",
+    ]
+    # Lead with buy-tier trusts, then the rest (cap detail length).
+    ordered = sorted(
+        trust_reports,
+        key=lambda r: ({"strong_buy": 0, "buy": 1, "hold": 2, "avoid": 3}.get(r.signal, 4), -r.conviction_score),
+    )
+    for report in ordered[:25]:
+        label = report.signal.replace("_", " ").title()
+        lines.append(f"{report.name} ({report.ticker}) — {label}")
+        lines.append(report.summary)
+        lines.append("")
+    if len(ordered) > 25:
+        lines.append(f"…and {len(ordered) - 25} more trusts in latest_trust_signals.csv")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def _format_trust_section_html(trust_reports: list[CompanyReport]) -> str:
+    if not trust_reports:
+        return ""
+    counts: dict[str, int] = {}
+    for report in trust_reports:
+        counts[report.signal] = counts.get(report.signal, 0) + 1
+    summary_bits = "".join(
+        f'<span style="margin-right:12px"><strong>{k.replace("_", " ").title()}</strong>: {v}</span>'
+        for k, v in sorted(counts.items(), key=lambda x: -x[1])
+    )
+    ordered = sorted(
+        trust_reports,
+        key=lambda r: ({"strong_buy": 0, "buy": 1, "hold": 2, "avoid": 3}.get(r.signal, 4), -r.conviction_score),
+    )
+    rows = []
+    for report in ordered[:25]:
+        color = SIGNAL_COLORS.get(report.signal, "#333")
+        label = report.signal.replace("_", " ").title()
+        metrics = ""
+        if report.key_metrics:
+            metrics = " · ".join(f"{k} {v}" for k, v in list(report.key_metrics.items())[:4])
+        rows.append(
+            f"""
+            <tr>
+              <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
+                <strong>{report.name}</strong><br>
+                <span style="color:#666">{report.ticker}</span>
+              </td>
+              <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
+                <span style="color:{color};font-weight:bold">{label}</span><br>
+                <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models</span>
+              </td>
+              <td style="padding:10px;border-bottom:1px solid #eee;font-size:13px">
+                {metrics}<br>{report.summary}
+              </td>
+            </tr>
+            """
+        )
+    more = ""
+    if len(ordered) > 25:
+        more = f'<p style="color:#666;font-size:12px">…and {len(ordered) - 25} more trusts.</p>'
+    return f"""
+  <div style="background:#f7fafc;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #2b6cb0">
+    <h3 style="margin-top:0">Investment trust track</h3>
+    <p style="color:#555;font-size:13px;margin-top:0">
+      Separate screen for closed-end funds / trusts using discount to book (NAV proxy),
+      yield, and premium risk — not the operating-company Graham models.
+    </p>
+    <p>{summary_bits}</p>
+    <table style="width:100%;border-collapse:collapse">{''.join(rows)}</table>
+    {more}
+  </div>
+"""
 
 
 def format_text_report(
@@ -237,6 +328,7 @@ def format_text_report(
     research_documents: list[ResearchDocument] | None = None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
+    trust_reports: list[CompanyReport] | None = None,
 ) -> str:
     lines = [
         f"{screen_label} Value Screen — {run_at}",
@@ -289,14 +381,21 @@ def format_text_report(
         "Summary: "
         + ", ".join(f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1]))
     )
+    trust_reports = trust_reports or []
     coverage = _universe_coverage_note(
         excluded_investment_vehicles=excluded_investment_vehicles,
         insufficient_data_count=counts.get("insufficient_data", 0),
+        trust_report_count=len(trust_reports),
     )
     if coverage:
         lines.append(coverage)
     lines.append("")
 
+    trust_section = _format_trust_section_text(trust_reports)
+    if trust_section:
+        lines.extend([trust_section, ""])
+
+    lines.extend(["OPERATING COMPANIES", "-" * 40, ""])
     for report in reports:
         label = report.signal.replace("_", " ").title()
         overlay = _research_overlay_label(report)
@@ -322,6 +421,7 @@ def format_html_report(
     research_documents: list[ResearchDocument] | None = None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
+    trust_reports: list[CompanyReport] | None = None,
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -331,13 +431,16 @@ def format_html_report(
         f'<span style="margin-right:12px"><strong>{k.replace("_", " ").title()}</strong>: {v}</span>'
         for k, v in sorted(counts.items(), key=lambda x: -x[1])
     )
+    trust_reports = trust_reports or []
     coverage = _universe_coverage_note(
         excluded_investment_vehicles=excluded_investment_vehicles,
         insufficient_data_count=counts.get("insufficient_data", 0),
+        trust_report_count=len(trust_reports),
     )
     coverage_html = (
         f'<p style="color:#666;font-size:13px;margin-top:4px">{coverage}</p>' if coverage else ""
     )
+    trust_section = _format_trust_section_html(trust_reports)
 
     rows = []
     for report in reports:
@@ -453,8 +556,10 @@ def format_html_report(
   {trade_plans_section}
   {research_section}
   {diff_section}
-  <p>{summary_bits}</p>
+  <p><strong>Operating companies</strong> — {summary_bits}</p>
   {coverage_html}
+  {trust_section}
+  <h3>Operating company signals</h3>
   <table style="width:100%;border-collapse:collapse;margin-top:16px">
     <thead>
       <tr style="background:#f5f5f5">

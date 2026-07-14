@@ -28,6 +28,7 @@ from value_investor.research.runner import (
 )
 from value_investor.storage import write_json
 from value_investor.summary import build_company_reports
+from value_investor.trust_summary import build_trust_reports
 
 
 def _load_run_diff(output_dir: Path) -> RunDiff | None:
@@ -82,9 +83,14 @@ def main(argv: list[str] | None = None) -> int:
         "--include-investment-trusts",
         action="store_true",
         help=(
-            "Keep investment trusts/closed-end funds in the screen "
-            "(excluded by default)"
+            "Merge investment trusts into the operating-company Graham screen "
+            "(disables the separate trust track)"
         ),
+    )
+    parser.add_argument(
+        "--skip-trust-screen",
+        action="store_true",
+        help="Skip the separate investment-trust discount/income track",
     )
     parser.add_argument(
         "--skip-screen",
@@ -183,6 +189,8 @@ def main(argv: list[str] | None = None) -> int:
     historical_analysis: HistoricalAnalysisSummary | None = None
     screen_universe = args.universe
     excluded_investment_vehicles = 0
+    trust_signals = None
+    trust_model_results = None
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
@@ -194,6 +202,11 @@ def main(argv: list[str] | None = None) -> int:
 
         signals = pd.read_csv(signals_path)
         model_results = pd.read_csv(model_results_path)
+        trust_signals_path = args.output_dir / "latest_trust_signals.csv"
+        trust_models_path = args.output_dir / "latest_trust_model_results.csv"
+        if trust_signals_path.exists() and trust_models_path.exists():
+            trust_signals = pd.read_csv(trust_signals_path)
+            trust_model_results = pd.read_csv(trust_models_path)
         run_at = datetime.now(UTC)
         run_diff = _load_run_diff(args.output_dir)
         backtest = _load_backtest(args.output_dir)
@@ -216,10 +229,13 @@ def main(argv: list[str] | None = None) -> int:
             output_dir=args.output_dir,
             universe=args.universe,
             include_investment_trusts=args.include_investment_trusts,
+            screen_trusts=not args.skip_trust_screen,
         )
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results
+        trust_signals = result.trust_signals
+        trust_model_results = result.trust_model_results
         run_at = result.run_at
         screen_universe = result.universe_name
         excluded_investment_vehicles = result.excluded_investment_vehicles
@@ -229,6 +245,13 @@ def main(argv: list[str] | None = None) -> int:
         historical_analysis = load_historical_analysis_summary(args.output_dir)
 
     reports = build_company_reports(signals, model_results)
+    trust_reports = (
+        build_trust_reports(trust_signals, trust_model_results)
+        if trust_signals is not None
+        and trust_model_results is not None
+        and not trust_signals.empty
+        else []
+    )
     run_at_str = run_at.strftime("%Y-%m-%d %H:%M UTC")
 
     deep_analysis: DeepAnalysis | None = None
@@ -297,6 +320,7 @@ def main(argv: list[str] | None = None) -> int:
         research_documents=research_documents,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
+        trust_reports=trust_reports,
     )
     html_body = format_html_report(
         run_at=run_at_str,
@@ -310,11 +334,18 @@ def main(argv: list[str] | None = None) -> int:
         research_documents=research_documents,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
+        trust_reports=trust_reports,
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     reports_path = args.output_dir / "email_reports.json"
     write_json(reports_path, [r.to_dict() for r in reports], compact=True)
+    if trust_reports:
+        write_json(
+            args.output_dir / "email_trust_reports.json",
+            [r.to_dict() for r in trust_reports],
+            compact=True,
+        )
     text_path = args.output_dir / "email_report.txt"
     html_path = args.output_dir / "email_report.html"
     text_path.write_text(text_body, encoding="utf-8")

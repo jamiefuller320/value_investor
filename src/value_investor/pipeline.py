@@ -18,13 +18,14 @@ from value_investor.backtest import (
 from value_investor.constituents import DEFAULT_UNIVERSE, fetch_universe_constituents, universe_label
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
-from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
+from value_investor.research.overlay import enrich_signals_with_research
 from value_investor.run_diff import RunDiff, compute_run_diff
 from value_investor.historical_analysis import (
     run_historical_analysis,
     save_historical_analysis,
 )
 from value_investor.model_weights import load_model_weights, save_model_snapshot, update_model_weights
+from value_investor.models.trusts import ALL_TRUST_MODELS
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
@@ -36,7 +37,71 @@ from value_investor.signals import build_signals
 from value_investor.simulator import SimulationComparison, run_simulation_comparison
 from value_investor.storage import apply_output_retention, write_json
 from value_investor.technical_analysis import enrich_signals_with_technicals
+from value_investor.trust_metrics import fetch_trust_universe
+from value_investor.trust_signals import build_trust_signals
 from value_investor.universe_filters import excluded_vehicle_records, partition_investment_vehicles
+
+
+def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
+    cols = [
+        "ticker",
+        "name",
+        "sector",
+        "signal",
+        "models_passed",
+        "families_passed",
+        "composite_score",
+        "sector_composite_score",
+        "data_quality_score",
+        "conviction_score",
+        "weeks_at_signal",
+        "signal_trend",
+        "stability_label",
+        "timing_signal",
+        "timing_score",
+        "rsi_14",
+        "action_note",
+        "core_order",
+        "core_limit",
+        "tactical_limit",
+        "tactical_stop_loss",
+        "tactical_take_profit",
+        "trade_plan_summary",
+        "mean_model_score",
+        "weighted_model_score",
+        "risk_family_passed",
+        "risk_mean_score",
+        "discount_to_nav",
+        "dividend_yield",
+        "price_to_book",
+    ]
+    present = [c for c in cols if c in signals.columns]
+    if signals.empty or not present:
+        return []
+    return signals[present].to_dict(orient="records")
+
+
+def _run_trust_track(
+    trust_constituents: pd.DataFrame,
+    *,
+    limit: int | None = None,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Fetch and score investment trusts on the dedicated NAV/discount track."""
+    if trust_constituents.empty:
+        empty = pd.DataFrame()
+        return empty, empty, empty
+
+    trust_universe = fetch_trust_universe(trust_constituents, limit=limit)
+    if "index" in trust_constituents.columns and "ticker" in trust_universe.columns:
+        index_map = trust_constituents[["ticker", "index"]].drop_duplicates("ticker")
+        trust_universe = trust_universe.merge(index_map, on="ticker", how="left")
+
+    # Fresh model instances so fitted state never leaks across runs.
+    trust_models = [model.__class__() for model in ALL_TRUST_MODELS]
+    trust_model_results = evaluate_universe(trust_universe, models=trust_models)
+    trust_summary = summarize_by_ticker(trust_model_results, weights=None)
+    trust_signals = build_trust_signals(trust_universe, trust_model_results, trust_summary)
+    return trust_universe, trust_model_results, trust_signals
 
 
 @dataclass
@@ -52,8 +117,13 @@ class ScreenResult:
     excluded_investment_vehicles: int = 0
     include_investment_trusts: bool = False
     excluded_samples: list[dict[str, Any]] | None = None
+    trust_universe: pd.DataFrame | None = None
+    trust_model_results: pd.DataFrame | None = None
+    trust_signals: pd.DataFrame | None = None
+    screen_trusts: bool = True
 
     def to_dict(self) -> dict[str, Any]:
+        trust_signals = self.trust_signals if self.trust_signals is not None else pd.DataFrame()
         payload: dict[str, Any] = {
             "run_at": self.run_at.isoformat(),
             "universe": self.universe_name,
@@ -61,38 +131,11 @@ class ScreenResult:
             "company_count": len(self.universe),
             "excluded_investment_vehicles": self.excluded_investment_vehicles,
             "include_investment_trusts": self.include_investment_trusts,
+            "screen_trusts": self.screen_trusts,
+            "trust_count": int(len(trust_signals)),
             "excluded_samples": self.excluded_samples or [],
-            "signals": self.signals[
-                [
-                    "ticker",
-                    "name",
-                    "sector",
-                    "signal",
-                    "models_passed",
-                    "families_passed",
-                    "composite_score",
-                    "sector_composite_score",
-                    "data_quality_score",
-                    "conviction_score",
-                    "weeks_at_signal",
-                    "signal_trend",
-                    "stability_label",
-                    "timing_signal",
-                    "timing_score",
-                    "rsi_14",
-                    "action_note",
-                    "core_order",
-                    "core_limit",
-                    "tactical_limit",
-                    "tactical_stop_loss",
-                    "tactical_take_profit",
-                    "trade_plan_summary",
-                    "mean_model_score",
-                    "weighted_model_score",
-                    "risk_family_passed",
-                    "risk_mean_score",
-                ]
-            ].to_dict(orient="records"),
+            "signals": _signal_records(self.signals),
+            "trust_signals": _signal_records(trust_signals),
         }
         if self.run_diff is not None:
             payload["run_diff"] = self.run_diff.to_dict()
@@ -109,17 +152,24 @@ def run_screen(
     output_dir: Path | None = None,
     universe: str = DEFAULT_UNIVERSE,
     include_investment_trusts: bool = False,
+    screen_trusts: bool = True,
 ) -> ScreenResult:
-    """Fetch FTSE constituents, run value models, return ranked signals."""
+    """
+    Fetch FTSE constituents, run operating-company value models, and optionally
+    a parallel investment-trust track (discount / income / premium risk).
+    """
     run_at = datetime.now(UTC)
     out_dir = output_dir or Path("output")
     constituents = fetch_universe_constituents(universe)
     excluded_count = 0
     excluded_samples: list[dict[str, Any]] = []
+    trust_constituents = pd.DataFrame()
+
     if not include_investment_trusts:
-        constituents, excluded = partition_investment_vehicles(constituents)
-        excluded_count = len(excluded)
-        excluded_samples = excluded_vehicle_records(excluded)
+        constituents, trust_constituents = partition_investment_vehicles(constituents)
+        excluded_count = len(trust_constituents)
+        excluded_samples = excluded_vehicle_records(trust_constituents)
+
     universe_df = fetch_universe(constituents, limit=limit)
     if "index" in constituents.columns and "ticker" in universe_df.columns:
         index_map = constituents[["ticker", "index"]].drop_duplicates("ticker")
@@ -148,6 +198,15 @@ def run_screen(
     signals = signals.sort_values(present_cols, ascending=[False] * len(present_cols))
     signals = signals.reset_index(drop=True)
 
+    trust_universe: pd.DataFrame | None = None
+    trust_model_results: pd.DataFrame | None = None
+    trust_signals: pd.DataFrame | None = None
+    if screen_trusts and not include_investment_trusts and not trust_constituents.empty:
+        trust_universe, trust_model_results, trust_signals = _run_trust_track(
+            trust_constituents,
+            limit=limit,
+        )
+
     return ScreenResult(
         run_at=run_at,
         universe=universe_df,
@@ -157,6 +216,10 @@ def run_screen(
         excluded_investment_vehicles=excluded_count,
         include_investment_trusts=include_investment_trusts,
         excluded_samples=excluded_samples,
+        trust_universe=trust_universe,
+        trust_model_results=trust_model_results,
+        trust_signals=trust_signals,
+        screen_trusts=screen_trusts,
     )
 
 
@@ -181,6 +244,29 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
     result.universe.to_csv(paths["universe"], index=False)
+
+    if result.trust_signals is not None and not result.trust_signals.empty:
+        trust_signals_out = result.trust_signals.copy()
+        trust_signals_out["run_at"] = result.run_at.isoformat()
+        trust_path = output_dir / f"trust_signals_{stamp}.csv"
+        trust_signals_out.to_csv(trust_path, index=False)
+        paths["trust_signals"] = trust_path
+        latest_trust = output_dir / "latest_trust_signals.csv"
+        trust_signals_out.to_csv(latest_trust, index=False)
+        paths["latest_trust_signals"] = latest_trust
+
+    if result.trust_model_results is not None and not result.trust_model_results.empty:
+        trust_models_path = output_dir / f"trust_model_results_{stamp}.csv"
+        result.trust_model_results.to_csv(trust_models_path, index=False)
+        paths["trust_model_results"] = trust_models_path
+        latest_trust_models = output_dir / "latest_trust_model_results.csv"
+        result.trust_model_results.to_csv(latest_trust_models, index=False)
+        paths["latest_trust_model_results"] = latest_trust_models
+
+    if result.trust_universe is not None and not result.trust_universe.empty:
+        trust_universe_path = output_dir / f"trust_universe_{stamp}.csv"
+        result.trust_universe.to_csv(trust_universe_path, index=False)
+        paths["trust_universe"] = trust_universe_path
 
     if previous_signals is not None:
         run_diff = compute_run_diff(previous_signals, signals_out)
