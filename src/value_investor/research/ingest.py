@@ -198,8 +198,15 @@ def ingest_research_sources(
     screening_snapshot: dict[str, Any],
     sources_dir: Path,
     since: datetime | None = None,
+    include_filings: bool = True,
 ) -> dict[str, Any]:
-    """Download financials and news, writing JSON caches under sources_dir."""
+    """
+    Download research sources under ``sources_dir``.
+
+    Yahoo annual statements + news remain available for context. Primary
+    regulatory filings (RNS / results) are written under ``filings/`` and kept
+    separate so FINANCIAL REVIEW can cite a consistent primary source.
+    """
     sources_dir.mkdir(parents=True, exist_ok=True)
 
     financials = fetch_annual_financials(ticker)
@@ -254,6 +261,23 @@ def ingest_research_sources(
         compress=False,
     )
 
+    filings_meta: dict[str, Any] = {
+        "filings_index_path": None,
+        "filings_summary": {"total": 0, "annual": 0, "interim": 0, "other": 0, "with_body": 0},
+        "filings_sources": [],
+    }
+    if include_filings:
+        from value_investor.research.filings import ingest_filings
+
+        try:
+            filings_meta = ingest_filings(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+            )
+        except Exception as exc:  # noqa: BLE001 — research should continue without filings
+            logger.warning("Filings ingest failed for %s: %s", ticker, exc)
+
     written_financials = resolve_json_path(financials_path) or financials_path
     written_snapshot = resolve_json_path(snapshot_path) or snapshot_path
     written_manifest = resolve_json_path(manifest_path) or manifest_path
@@ -267,4 +291,7 @@ def ingest_research_sources(
         "financial_years": len(financials.get("income_statement", {})),
         "news_total": len(manifest["articles"]),
         "news_new": len(new_news),
+        "filings_index_path": filings_meta.get("filings_index_path"),
+        "filings_summary": filings_meta.get("filings_summary") or {},
+        "filings_sources": filings_meta.get("filings_sources") or [],
     }

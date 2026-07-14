@@ -86,8 +86,9 @@ def run_research_for_strong_buys(
     Create or update per-ticker research memos for capped buy-tier names.
 
     Includes all quality strong buys first, then top quality buys until weekly_cap.
-    First run: ingest five years of financials + one year of news, then deep agent pass.
-    Subsequent weekly runs: fetch new headlines and append a weekly update section.
+    First run: ingest Yahoo financials, news, and primary RNS/results filings
+    (annual + interim when discoverable), then deep agent pass.
+    Subsequent weekly runs: refresh filings/news and append a weekly update section.
     """
     store = ResearchStore(output_dir)
     targets = eligible_research_targets(reports, weekly_cap=weekly_cap)
@@ -157,9 +158,14 @@ def _process_ticker(
             model=model,
             cwd=cwd,
         )
+        filings_summary = source_meta.get("filings_summary") or {}
         doc.source_counts = {
             "financial_years": source_meta["financial_years"],
             "news_articles": source_meta["news_total"],
+            "filings_total": filings_summary.get("total", 0),
+            "filings_annual": filings_summary.get("annual", 0),
+            "filings_interim": filings_summary.get("interim", 0),
+            "filings_with_body": filings_summary.get("with_body", 0),
         }
         as_of = datetime.fromisoformat(doc.updated_at.replace("Z", "+00:00"))
         sources_as_of = build_sources_as_of(
@@ -186,9 +192,14 @@ def _process_ticker(
         screen_signal=report.signal,
     )
     updated = replace(updated, signal=report.signal)
+    filings_summary = source_meta.get("filings_summary") or {}
     updated.source_counts = {
         "financial_years": source_meta["financial_years"],
         "news_articles": source_meta["news_total"],
+        "filings_total": filings_summary.get("total", 0),
+        "filings_annual": filings_summary.get("annual", 0),
+        "filings_interim": filings_summary.get("interim", 0),
+        "filings_with_body": filings_summary.get("with_body", 0),
     }
     weekly_summary = updated.weekly_updates[-1]["summary"] if updated.weekly_updates else ""
     as_of = datetime.fromisoformat(updated.updated_at.replace("Z", "+00:00"))
