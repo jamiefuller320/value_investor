@@ -82,6 +82,23 @@ def run_preflight(
             )
         )
 
+    if os.environ.get("TICKER_API_KEY") or os.environ.get("RNS_API_KEY"):
+        report.checks.append(
+            PreflightCheck(
+                "rns_api",
+                "ok",
+                "TICKER_API_KEY/RNS_API_KEY set — research memos can pull full RNS items",
+            )
+        )
+    else:
+        report.checks.append(
+            PreflightCheck(
+                "rns_api",
+                "warn",
+                "No TICKER_API_KEY — memo filings use Google News discovery (headlines; limited bodies)",
+            )
+        )
+
     snapshots = load_run_snapshots(output_dir)
     if len(snapshots) >= 2:
         report.checks.append(

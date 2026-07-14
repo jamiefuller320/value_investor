@@ -170,10 +170,14 @@ Action logs are private to your browser; they are not committed by the weekly wo
 
 `ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for quality-gated `strong_buy` names first, then fills remaining slots with top `buy` names by conviction (default weekly cap: 12). Hold, avoid, and short-side names are not researched.
 
-1. **First pass** — ingests five years of annual statements (yfinance), one year of headlines (yfinance + Google News RSS), and the quantitative screen snapshot; Cursor agent writes sections on thesis, financials, risks, and news.
-2. **Weekly reruns** — refreshes sources, fetches new headlines since the last update, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news changes conviction (otherwise repeats the prior verdict).
+1. **First pass** — for each memo ticker, ingests:
+   - **Primary filings** under `sources/filings/` — RNS / results announcements (annual + interim when discoverable) via Google News + optional [Ticker.app](https://developers.ticker.app/) RNS API (`TICKER_API_KEY` / `RNS_API_KEY`); body text saved when a direct publisher URL is available
+   - **Secondary Yahoo context** — five years of annual statements (+ cached quarterly income) in `financials_annual.json` (not mixed into the filings store)
+   - One year of headlines (yfinance + Google News RSS) and the quantitative screen snapshot  
+   The Cursor agent prefers filing bodies for FINANCIAL REVIEW and falls back to Yahoo only when needed.
+2. **Weekly reruns** — refreshes filings + news, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news/filings change conviction (otherwise repeats the prior verdict).
 
-Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Override the cap with `--research-cap N`.
+Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Override the cap with `--research-cap N`. Optional repo secret `TICKER_API_KEY` improves RNS body coverage for memo names.
 
 ## First weekly run checklist
 
