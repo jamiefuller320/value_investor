@@ -15,6 +15,7 @@ from value_investor.historical_analysis import HistoricalAnalysisSummary, load_h
 from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
 from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
 from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
+from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES, universe_label
 from value_investor.pipeline import run_screen, write_outputs
 from value_investor.publish import publish_dashboard
 from value_investor.run_diff import RunDiff
@@ -67,10 +68,16 @@ def _load_backtest(output_dir: Path) -> BacktestSummary | None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Run FTSE 100 screener and email signals with reason summaries"
+        description="Run FTSE screener and email signals with reason summaries"
     )
     parser.add_argument("--output-dir", type=Path, default=Path("output"))
     parser.add_argument("--limit", type=int, default=None, help="Limit universe size")
+    parser.add_argument(
+        "--universe",
+        choices=VALID_UNIVERSES,
+        default=DEFAULT_UNIVERSE,
+        help=f"Screening universe (default: {DEFAULT_UNIVERSE})",
+    )
     parser.add_argument(
         "--skip-screen",
         action="store_true",
@@ -147,7 +154,7 @@ def main(argv: list[str] | None = None) -> int:
         date_match = None
         if (match := re.search(r"(\d{4}-\d{2}-\d{2})", run_line)):
             date_match = match.group(1)
-        subject = f"FTSE 100 Value Screen — {strong_buys} strong buys — {date_match or 'report'}"
+        subject = f"FTSE Value Screen — {strong_buys} strong buys — {date_match or 'report'}"
         try:
             config = EmailConfig.from_env()
         except ValueError as err:
@@ -166,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     backtest: BacktestSummary | None = None
     simulation: SimulationComparison | None = None
     historical_analysis: HistoricalAnalysisSummary | None = None
+    screen_universe = args.universe
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
@@ -183,11 +191,12 @@ def main(argv: list[str] | None = None) -> int:
         simulation = _load_simulation(args.output_dir)
         historical_analysis = load_historical_analysis_summary(args.output_dir)
     else:
-        result = run_screen(limit=args.limit, output_dir=args.output_dir)
+        result = run_screen(limit=args.limit, output_dir=args.output_dir, universe=args.universe)
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results
         run_at = result.run_at
+        screen_universe = result.universe_name
         run_diff = result.run_diff or _load_run_diff(args.output_dir)
         backtest = result.backtest or _load_backtest(args.output_dir)
         simulation = result.simulation or _load_simulation(args.output_dir)
@@ -260,6 +269,7 @@ def main(argv: list[str] | None = None) -> int:
         historical_analysis=historical_analysis,
         research_summary=research_summary,
         research_documents=research_documents,
+        screen_label=universe_label(screen_universe),
     )
     html_body = format_html_report(
         run_at=run_at_str,
@@ -271,6 +281,7 @@ def main(argv: list[str] | None = None) -> int:
         historical_analysis=historical_analysis,
         research_summary=research_summary,
         research_documents=research_documents,
+        screen_label=universe_label(screen_universe),
     )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -289,7 +300,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Published dashboard data to {dashboard_path}")
 
     strong_buys = sum(1 for r in reports if r.signal == "strong_buy")
-    subject = f"FTSE 100 Value Screen — {strong_buys} strong buys — {run_at.strftime('%Y-%m-%d')}"
+    subject = (
+        f"{universe_label(screen_universe)} Value Screen — "
+        f"{strong_buys} strong buys — {run_at.strftime('%Y-%m-%d')}"
+    )
 
     if args.dry_run:
         print(f"Dry run: wrote {text_path} and {html_path}")

@@ -8,16 +8,23 @@ import logging
 import sys
 from pathlib import Path
 
+from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES, universe_label
 from value_investor.pipeline import run_screen, write_outputs
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Screen FTSE 100 companies for value signals")
+    parser = argparse.ArgumentParser(description="Screen FTSE companies for value signals")
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path("output"),
         help="Directory for CSV/JSON artifacts (default: output/)",
+    )
+    parser.add_argument(
+        "--universe",
+        choices=VALID_UNIVERSES,
+        default=DEFAULT_UNIVERSE,
+        help=f"Screening universe (default: {DEFAULT_UNIVERSE} = FTSE 100 + FTSE 250)",
     )
     parser.add_argument(
         "--limit",
@@ -44,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
         format="%(levelname)s %(name)s: %(message)s",
     )
 
-    result = run_screen(limit=args.limit)
+    result = run_screen(limit=args.limit, universe=args.universe)
     paths = write_outputs(result, args.output_dir)
 
     top = result.signals.head(args.top)
@@ -54,7 +61,8 @@ def main(argv: list[str] | None = None) -> int:
         cols = ["ticker", "name", "signal", "models_passed", "composite_score", "trailing_pe", "dividend_yield"]
         display_cols = [c for c in cols if c in top.columns]
         print(top[display_cols].to_string(index=False))
-        print(f"\nWrote {paths['latest']}")
+        print(f"\nUniverse: {universe_label(args.universe)} ({len(result.universe)} companies)")
+        print(f"Wrote {paths['latest']}")
 
     return 0
 

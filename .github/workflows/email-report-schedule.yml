@@ -1,6 +1,6 @@
 name: Schedule FTSE Email Report
 
-# Thin cron wrapper that dispatches FTSE 100 Email Report via workflow_dispatch
+# Thin cron wrapper that dispatches FTSE Email Report via workflow_dispatch
 # so weekly and manual runs share the same code path.
 # GitHub schedule events are best-effort; prefer Actions → Run workflow for
 # on-demand runs. Cron is offset from :00 to reduce peak-load drops.
@@ -18,7 +18,7 @@ jobs:
   dispatch-email-report:
     runs-on: ubuntu-latest
     steps:
-      - name: Dispatch FTSE 100 Email Report
+      - name: Dispatch FTSE Email Report
         uses: actions/github-script@v7
         with:
           script: |

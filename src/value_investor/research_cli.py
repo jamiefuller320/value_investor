@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES
 from value_investor.research.format import format_research_text
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_WEEKLY_CAP,
@@ -33,6 +34,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Reuse latest_signals.csv instead of re-running the screener",
     )
     parser.add_argument("--limit", type=int, default=None, help="Limit universe when screening")
+    parser.add_argument(
+        "--universe",
+        choices=VALID_UNIVERSES,
+        default=DEFAULT_UNIVERSE,
+        help=f"Screening universe when not using --skip-screen (default: {DEFAULT_UNIVERSE})",
+    )
     parser.add_argument("--model", default="composer-2.5", help="Cursor model for research agent")
     parser.add_argument(
         "--api-key",
@@ -70,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         from value_investor.pipeline import run_screen, write_outputs
 
-        result = run_screen(limit=args.limit, output_dir=args.output_dir)
+        result = run_screen(limit=args.limit, output_dir=args.output_dir, universe=args.universe)
         write_outputs(result, args.output_dir)
         signals = result.signals
         model_results = result.model_results

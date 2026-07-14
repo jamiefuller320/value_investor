@@ -15,7 +15,7 @@ from value_investor.backtest import (
     load_run_snapshots,
     save_run_snapshot,
 )
-from value_investor.constituents import fetch_ftse100_constituents
+from value_investor.constituents import DEFAULT_UNIVERSE, fetch_universe_constituents, universe_label
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
@@ -44,6 +44,7 @@ class ScreenResult:
     universe: pd.DataFrame
     model_results: pd.DataFrame
     signals: pd.DataFrame
+    universe_name: str = DEFAULT_UNIVERSE
     run_diff: RunDiff | None = None
     backtest: BacktestSummary | None = None
     simulation: SimulationComparison | None = None
@@ -51,6 +52,8 @@ class ScreenResult:
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "run_at": self.run_at.isoformat(),
+            "universe": self.universe_name,
+            "universe_label": universe_label(self.universe_name),
             "company_count": len(self.universe),
             "signals": self.signals[
                 [
@@ -93,18 +96,26 @@ class ScreenResult:
         return payload
 
 
-def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> ScreenResult:
-    """Fetch FTSE 100 data, run value models, return ranked signals."""
+def run_screen(
+    *,
+    limit: int | None = None,
+    output_dir: Path | None = None,
+    universe: str = DEFAULT_UNIVERSE,
+) -> ScreenResult:
+    """Fetch FTSE constituents, run value models, return ranked signals."""
     run_at = datetime.now(UTC)
     out_dir = output_dir or Path("output")
-    constituents = fetch_ftse100_constituents()
-    universe = fetch_universe(constituents, limit=limit)
-    universe = add_data_quality_scores(universe)
-    universe = add_sector_scores(universe)
-    model_results = evaluate_universe(universe)
+    constituents = fetch_universe_constituents(universe)
+    universe_df = fetch_universe(constituents, limit=limit)
+    if "index" in constituents.columns and "ticker" in universe_df.columns:
+        index_map = constituents[["ticker", "index"]].drop_duplicates("ticker")
+        universe_df = universe_df.merge(index_map, on="ticker", how="left")
+    universe_df = add_data_quality_scores(universe_df)
+    universe_df = add_sector_scores(universe_df)
+    model_results = evaluate_universe(universe_df)
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
-    signals = build_signals(universe, model_results, summary)
+    signals = build_signals(universe_df, model_results, summary)
     signals = enrich_signals_with_technicals(signals, chart_dir=out_dir / "charts")
 
     history = load_signal_history(out_dir)
@@ -125,9 +136,10 @@ def run_screen(*, limit: int | None = None, output_dir: Path | None = None) -> S
 
     return ScreenResult(
         run_at=run_at,
-        universe=universe,
+        universe=universe_df,
         model_results=model_results,
         signals=signals,
+        universe_name=(universe or DEFAULT_UNIVERSE).strip().lower(),
     )
 
 

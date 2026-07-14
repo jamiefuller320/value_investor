@@ -214,9 +214,10 @@ def format_text_report(
     historical_analysis: HistoricalAnalysisSummary | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
+    screen_label: str = "FTSE 350",
 ) -> str:
     lines = [
-        f"FTSE 100 Value Screen — {run_at}",
+        f"{screen_label} Value Screen — {run_at}",
         "=" * 60,
         "",
     ]
@@ -291,6 +292,7 @@ def format_html_report(
     historical_analysis: HistoricalAnalysisSummary | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
+    screen_label: str = "FTSE 350",
 ) -> str:
     counts: dict[str, int] = {}
     for report in reports:
@@ -405,7 +407,7 @@ def format_html_report(
     return f"""<!DOCTYPE html>
 <html>
 <body style="font-family:Arial,sans-serif;color:#222;max-width:900px;margin:0 auto">
-  <h2>FTSE 100 Value Screen</h2>
+  <h2>{screen_label} Value Screen</h2>
   <p style="color:#666">{run_at}</p>
   {deep_section}
   {backtest_section}

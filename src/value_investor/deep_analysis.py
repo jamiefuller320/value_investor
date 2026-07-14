@@ -65,7 +65,7 @@ def _build_analysis_payload(
 
 
 def _build_deep_analysis_prompt(payload_path: Path) -> str:
-    return f"""You are a value investing analyst reviewing FTSE 100 screening output.
+    return f"""You are a value investing analyst reviewing FTSE screening output.
 
 Read the structured JSON at: {payload_path}
 
