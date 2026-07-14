@@ -11,6 +11,7 @@ const SIGNAL_COLORS = {
 const TABS = [
   { id: "overview", label: "Overview" },
   { id: "screener", label: "Screener" },
+  { id: "trusts", label: "Trusts" },
   { id: "strong-buys", label: "Strong buys" },
   { id: "portfolio", label: "Portfolio" },
   { id: "performance", label: "Performance" },
@@ -136,16 +137,25 @@ function renderOverview(data) {
 
   const note = data.note ? `<div class="card"><p>${esc(data.note)}</p></div>` : "";
 
+  const trustCount = meta.trust_count || (data.trust_reports || []).length || 0;
+  const trustCounts = meta.trust_signal_counts || {};
+  const trustSegments = Object.entries(trustCounts).sort((a, b) => b[1] - a[1]);
+
   document.getElementById("panel-overview").innerHTML = `
     ${note}
     <div class="grid">
       <div class="card">
-        <h3>Companies screened</h3>
+        <h3>Operating companies</h3>
         <div class="stat-value">${total}</div>
       </div>
       <div class="card">
         <h3>Strong buys</h3>
         <div class="stat-value" style="color:var(--strong-buy)">${meta.strong_buy_count || 0}</div>
+      </div>
+      <div class="card">
+        <h3>Trust track</h3>
+        <div class="stat-value">${trustCount}</div>
+        <div class="small muted">Discount / income screen</div>
       </div>
       <div class="card">
         <h3>Last run</h3>
@@ -160,9 +170,73 @@ function renderOverview(data) {
         ${segments.map(([s, c]) => `<li>${signalBadge(s)} ${c}</li>`).join("")}
       </ul>
     </div>
+    ${trustSegments.length ? `
+    <div class="card" style="margin-top:1rem">
+      <h3>Trust signal distribution</h3>
+      <ul class="list-plain small">
+        ${trustSegments.map(([s, c]) => `<li>${signalBadge(s)} ${c}</li>`).join("")}
+      </ul>
+    </div>` : ""}
     <div class="card" style="margin-top:1rem">
       <h3>Week-over-week changes</h3>
       ${diffHtml}
+    </div>
+  `;
+}
+
+function renderTrusts(data) {
+  const reports = data.trust_reports || [];
+  const panel = document.getElementById("panel-trusts");
+  if (!reports.length) {
+    panel.innerHTML = `
+      <div class="empty-state">
+        No investment-trust track results yet. Trusts are screened separately using
+        discount to book (NAV proxy), yield, and premium risk.
+      </div>`;
+    return;
+  }
+
+  const rows = reports
+    .slice()
+    .sort((a, b) => {
+      const order = { strong_buy: 0, buy: 1, hold: 2, avoid: 3, insufficient_data: 4 };
+      return (order[a.signal] ?? 9) - (order[b.signal] ?? 9) || (b.conviction_score || 0) - (a.conviction_score || 0);
+    })
+    .map((report) => {
+      const metrics = report.key_metrics
+        ? Object.entries(report.key_metrics)
+            .slice(0, 4)
+            .map(([k, v]) => `${esc(k)} ${esc(v)}`)
+            .join(" · ")
+        : "";
+      return `<tr>
+        <td><strong>${esc(report.name)}</strong><br><span class="muted small">${esc(report.ticker)}</span></td>
+        <td>${signalBadge(report.signal)}</td>
+        <td class="small">${report.models_passed}/${report.model_count}</td>
+        <td class="small">${metrics || "—"}</td>
+        <td class="small">${esc(report.summary || "")}</td>
+      </tr>`;
+    })
+    .join("");
+
+  panel.innerHTML = `
+    <p class="muted small" style="margin-top:0">
+      Closed-end funds and investment trusts use book value as a NAV proxy
+      (Yahoo does not publish LSE trust NAVs). This track is separate from the operating-company Graham models.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Trust</th>
+            <th>Signal</th>
+            <th>Models</th>
+            <th>Key metrics</th>
+            <th>Summary</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
     </div>
   `;
 }
@@ -659,12 +733,14 @@ function renderAnalysis(data) {
 function renderDashboard(data) {
   dashboardData = data;
   const meta = data.meta || {};
+  const trustCount = meta.trust_count || (data.trust_reports || []).length || 0;
   document.getElementById("run-meta").textContent = data.run_at
-    ? `${meta.universe_label || "FTSE"} · ${meta.company_count || 0} companies · ${meta.strong_buy_count || 0} strong buys · ${fmtDate(data.run_at)}`
+    ? `${meta.universe_label || "FTSE"} · ${meta.company_count || 0} companies · ${trustCount} trusts · ${meta.strong_buy_count || 0} strong buys · ${fmtDate(data.run_at)}`
   : "Awaiting first published screening run";
 
   renderOverview(data);
   renderScreener(data);
+  renderTrusts(data);
   renderStrongBuys(data);
   renderPortfolio(data);
   renderPerformance(data);

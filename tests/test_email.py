@@ -240,6 +240,23 @@ def test_format_reports_highlight_favorable_timing():
     assert "favourable" in text.lower()
 
 
+def test_format_reports_note_excluded_investment_vehicles():
+    signals, model_results = _sample_frames()
+    reports = build_company_reports(signals, model_results)
+    text = format_text_report(
+        run_at="2026-07-08",
+        reports=reports,
+        excluded_investment_vehicles=79,
+    )
+    html = format_html_report(
+        run_at="2026-07-08",
+        reports=reports,
+        excluded_investment_vehicles=79,
+    )
+    assert "Excluded 79 investment trusts/funds" in text
+    assert "Excluded 79 investment trusts/funds" in html
+
+
 def test_format_reports_include_strong_buy_trade_plans():
     signals, model_results = _sample_frames()
     reports = build_company_reports(signals, model_results)
