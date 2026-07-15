@@ -174,6 +174,36 @@ def test_technical_pass_stop_and_entry():
     assert fund.holdings["NEW.L"].stop_loss == 40
 
 
+def test_preview_technical_plan_lists_entries_when_empty():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Tech",
+            mode="technical",
+            initial_cash=1000,
+            trade_cost_pct=0.0,
+            max_positions=3,
+        )
+    )
+    candidates = [
+        {
+            "ticker": "NEW.L",
+            "name": "NewCo",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "price": 50,
+            "timing_signal": "accumulate",
+            "trade_plan": {"core_limit": 48, "tactical_stop_loss": 40, "tactical_take_profit": 60},
+        }
+    ]
+    from value_investor.paper_fund import preview_technical_plan
+
+    plan = preview_technical_plan(fund, candidates)
+    assert any(b["ticker"] == "NEW.L" for b in plan["anticipated_buys"])
+    assert "core" in plan["summary"].lower() or "enter" in plan["summary"].lower()
+    assert len(plan["rules"]) >= 4
+    assert fund.cash == 1000
+
+
 def test_preview_automated_plan_explains_next_moves():
     fund = PaperFund.create(
         PaperFundConfig(

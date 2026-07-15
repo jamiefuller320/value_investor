@@ -173,8 +173,8 @@ Action logs and paper funds are private to your browser; they are not committed 
 | Mode | Behaviour |
 |------|-----------|
 | Immediate buy/sell | Manual trades against the pot (shares / £ / % NAV). |
-| Follow technical cues | One-click pass: exit on stop or take-profit; enter unused buy-tier names at core limit (~10% NAV) when timing is not `wait`. |
-| Automated stock picking | One-click equal-weight rebalance into top conviction buy-tier names (skips `timing_signal=wait`), selling names that leave the target set. |
+| Follow technical cues | One-click pass: exit on stop or take-profit; enter unused buy-tier names at core limit (~10% NAV) when timing is not `wait`. The Technical page previews those exits/entries before you run the pass. |
+| Automated stock picking | One-click equal-weight rebalance into top conviction buy-tier names (skips `timing_signal=wait`), selling names that leave the target set. The Automated page narrates the rules and previews the next rebalance. |
 
 Weekly strategy simulation (`ftse-simulate`) remains available for archived-run backtests and now accepts `--monthly-deposit` so returns are measured against capital contributed.
 

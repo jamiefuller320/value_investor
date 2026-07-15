@@ -865,6 +865,167 @@ function planMovesTable(title, rows, emptyText) {
     </div>`;
 }
 
+function technicalNarrativeHtml(fund, plan) {
+  const lastTech = (fund.trades || [])
+    .filter((t) => String(t.note || "").toLowerCase().includes("technical"))
+    .slice(0, 6);
+  const lastTechHtml = lastTech.length
+    ? `<ul class="list-plain small">${lastTech
+        .map(
+          (t) =>
+            `<li><strong>${esc(t.side)}</strong> ${esc(t.name || t.ticker)} — ${esc(t.note)} (${fmtDate(t.acted_at)})</li>`
+        )
+        .join("")}</ul>`
+    : `<p class="small muted">No technical trades yet — run a pass to create the first decision trail.</p>`;
+
+  return `
+    <div class="paper-narrative">
+      <h4>How the technical model decides</h4>
+      <ol class="paper-rules">
+        ${plan.rules.map((rule) => `<li>${esc(rule)}</li>`).join("")}
+      </ol>
+      <p><strong>Anticipated next move:</strong> ${esc(plan.summary)}</p>
+      <p class="small muted">NAV ${money(plan.nav)} · cash ${money(plan.cash)} · new entries ≈ ${(
+        Number(plan.buy_pct_nav) * 100
+      ).toFixed(0)}% of NAV each.</p>
+      ${planMovesTable("Would exit on stop/target", plan.anticipated_exits, "No stop/target exits on current marks.")}
+      ${planMovesTable("Would enter near core limit", plan.anticipated_buys, "No new technical entries available.")}
+      ${planMovesTable("Would hold", plan.anticipated_holds, "No open holdings to hold.")}
+      ${planMovesTable("Deferred", plan.deferred || [], "Nothing deferred.")}
+      <h5>Recent technical decisions</h5>
+      ${lastTechHtml}
+    </div>`;
+}
+
+function buildTechnicalPlan(fund, candidates) {
+  const priceMap = Object.fromEntries(
+    candidates.filter((c) => c.price != null).map((c) => [c.ticker, Number(c.price)])
+  );
+  for (const [ticker, pos] of Object.entries(fund.holdings || {})) {
+    if (priceMap[ticker] == null && pos.avg_cost > 0) priceMap[ticker] = Number(pos.avg_cost);
+  }
+  const buyPct = 0.1;
+  const exits = [];
+  const holds = [];
+  for (const [ticker, position] of Object.entries(fund.holdings || {})) {
+    const price = priceMap[ticker];
+    if (!(price > 0)) {
+      holds.push({
+        action: "hold",
+        ticker,
+        name: position.name || ticker,
+        reason: "No mark available to evaluate stop/target",
+      });
+      continue;
+    }
+    if (position.stop_loss != null && price <= position.stop_loss) {
+      exits.push({
+        action: "sell",
+        ticker,
+        name: position.name || ticker,
+        reason: `Stop hit (mark ${money(price)} ≤ stop ${money(position.stop_loss)})`,
+        shares: position.shares,
+        price,
+        value: position.shares * price,
+      });
+      continue;
+    }
+    if (position.take_profit != null && price >= position.take_profit) {
+      exits.push({
+        action: "sell",
+        ticker,
+        name: position.name || ticker,
+        reason: `Take-profit hit (mark ${money(price)} ≥ target ${money(position.take_profit)})`,
+        shares: position.shares,
+        price,
+        value: position.shares * price,
+      });
+      continue;
+    }
+    holds.push({
+      action: "hold",
+      ticker,
+      name: position.name || ticker,
+      reason: "Between stop and target (or levels not set)",
+      value: position.shares * price,
+    });
+  }
+
+  const exited = new Set(exits.map((e) => e.ticker));
+  const openSlots = Math.max(0, fund.config.max_positions - (Object.keys(fund.holdings || {}).length - exited.size));
+  const nav = paperNav(fund, priceMap);
+  const entries = [];
+  const deferred = [];
+  if (openSlots <= 0 || fund.cash <= 0) {
+    deferred.push({ ticker: "—", name: "New entries", reason: "No open slots or cash available after exits" });
+  } else {
+    const ranked = selectAutoTargets(candidates, fund.config.max_positions * 2);
+    for (const row of ranked) {
+      if (entries.length >= openSlots) break;
+      if (fund.holdings[row.ticker] || exited.has(row.ticker)) continue;
+      if (row.timing_signal === "wait") {
+        deferred.push({
+          ticker: row.ticker,
+          name: row.name || row.ticker,
+          reason: "timing_signal=wait",
+          conviction_score: row.conviction_score,
+          signal: row.signal,
+        });
+        continue;
+      }
+      const plan = row.trade_plan || {};
+      const price = Number(plan.core_limit) > 0 ? Number(plan.core_limit) : Number(row.price);
+      if (!(price > 0)) {
+        deferred.push({
+          ticker: row.ticker,
+          name: row.name || row.ticker,
+          reason: "No core limit / mark for entry",
+        });
+        continue;
+      }
+      entries.push({
+        action: "buy",
+        ticker: row.ticker,
+        name: row.name || row.ticker,
+        reason: `Core-limit entry (~${(buyPct * 100).toFixed(0)}% NAV)${
+          plan.core_limit != null ? ` at ${money(price)}` : " at last mark"
+        }`,
+        value: Math.min(nav * buyPct, fund.cash),
+        price,
+        conviction_score: row.conviction_score,
+        signal: row.signal,
+      });
+    }
+  }
+
+  const rules = [
+    "Exits first: full sell if last mark ≤ stop loss or ≥ take-profit.",
+    "Entries next: unused buy-tier names (timing ≠ wait) at core limit when available.",
+    `Position size for new entries: about ${(buyPct * 100).toFixed(0)}% of current NAV, capped by cash.`,
+    "Names exited in the same pass are not re-bought immediately.",
+    `Hard cap: ${fund.config.max_positions} open names.`,
+  ];
+  const parts = [];
+  if (exits.length) parts.push(`exit ${exits.length} holding(s) on stop/target`);
+  if (entries.length) parts.push(`enter ${entries.length} new name(s) near core limit`);
+  if (holds.length) parts.push(`keep ${holds.length} holding(s) between levels`);
+  const summary = parts.length
+    ? `Next technical pass would ${parts.join("; ")}.`
+    : "Next technical pass would make no trades on the current marks and screen.";
+
+  return {
+    rules,
+    nav,
+    cash: fund.cash,
+    buy_pct_nav: buyPct,
+    anticipated_exits: exits,
+    anticipated_buys: entries,
+    anticipated_holds: holds,
+    deferred: deferred.slice(0, 8),
+    summary,
+  };
+}
+
 function automatedNarrativeHtml(fund, plan) {
   const lastAuto = (fund.trades || []).filter((t) => String(t.note || "").startsWith("Automated")).slice(0, 6);
   const lastAutoHtml = lastAuto.length
@@ -1099,6 +1260,7 @@ function renderModePage(mode, fund, prices, plan) {
       </div>
       ${fundStatsHtml(fund, prices)}
       ${mode === "automated" && plan ? automatedNarrativeHtml(fund, plan) : ""}
+      ${mode === "technical" && plan ? technicalNarrativeHtml(fund, plan) : ""}
       <h4 style="margin-top:1.25rem">Holdings</h4>
       ${holdingsTableHtml(fund, prices)}
       <h4 style="margin-top:1rem">Recent trades</h4>
@@ -1126,7 +1288,7 @@ function paperSubnavHtml(activePage) {
     </nav>`;
 }
 
-function renderPaperFundsSection(data, pricesByFund, autoPlan) {
+function renderPaperFundsSection(data, pricesByFund, modePlan) {
   const book = loadPaperBook();
   if (!book.funds.length) return renderBootstrapCard();
 
@@ -1143,7 +1305,7 @@ function renderPaperFundsSection(data, pricesByFund, autoPlan) {
       applyPaperDeposits(fund, paperNowIso());
       savePaperBook(book);
       const prices = pricesByFund?.[fund.config.id] || {};
-      body = renderModePage(fund.config.mode, fund, prices, autoPlan);
+      body = renderModePage(fund.config.mode, fund, prices, modePlan);
     }
   }
 
@@ -1169,39 +1331,42 @@ async function pricesForBook(book, data) {
   return out;
 }
 
+async function candidatesForPlan(fund, data, holdingPrices) {
+  const candidates = await enrichCandidatesWithPrices(data);
+  for (const [ticker, price] of Object.entries(holdingPrices || {})) {
+    if (!candidates.find((c) => c.ticker === ticker)) {
+      const report = (data.reports || []).find((r) => r.ticker === ticker) || {
+        ticker,
+        name: fund.holdings[ticker]?.name || ticker,
+        signal: "hold",
+      };
+      candidates.push({ ...report, price });
+    }
+  }
+  return candidates;
+}
+
 async function renderPaperFunds(data) {
   const mount = document.getElementById("paper-funds-root");
   if (!mount) return;
   const book = loadPaperBook();
   let pricesByFund = {};
-  let autoPlan = null;
+  let modePlan = null;
   if (book.funds.length) {
     mount.innerHTML = `<div class="card"><p class="muted">Loading paper fund marks…</p></div>`;
     pricesByFund = await pricesForBook(book, data);
     const page = loadPaperSubpage();
-    if (page === "automated") {
-      const fund = fundByMode(book, "automated");
+    if (page === "automated" || page === "technical") {
+      const fund = fundByMode(book, page);
       if (fund) {
-        const candidates = await enrichCandidatesWithPrices(data);
-        // Include holding marks in candidate list for plan accuracy
-        const holdingPrices = pricesByFund[fund.config.id] || {};
-        for (const [ticker, price] of Object.entries(holdingPrices)) {
-          if (!candidates.find((c) => c.ticker === ticker)) {
-            const report = (data.reports || []).find((r) => r.ticker === ticker) || {
-              ticker,
-              name: fund.holdings[ticker]?.name || ticker,
-              signal: "hold",
-            };
-            candidates.push({ ...report, price });
-          }
-        }
-        autoPlan = buildAutomatedPlan(fund, candidates);
+        const candidates = await candidatesForPlan(fund, data, pricesByFund[fund.config.id] || {});
+        modePlan = page === "automated" ? buildAutomatedPlan(fund, candidates) : buildTechnicalPlan(fund, candidates);
       }
     }
   }
   const liveMount = document.getElementById("paper-funds-root");
   if (!liveMount) return;
-  liveMount.innerHTML = renderPaperFundsSection(data, pricesByFund, autoPlan);
+  liveMount.innerHTML = renderPaperFundsSection(data, pricesByFund, modePlan);
   bindPaperFunds(data);
 }
 
