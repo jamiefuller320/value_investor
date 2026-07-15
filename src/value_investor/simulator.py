@@ -22,6 +22,7 @@ class SimulatorConfig:
     skip_timing_wait: bool = True
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
+    monthly_deposit: float = 0.0
 
 
 @dataclass
@@ -389,14 +390,35 @@ def run_simulation(
         )
 
     cash = config.initial_capital
+    contributed = config.initial_capital
     holdings: dict[str, float] = {}
     all_trades: list[Trade] = []
     equity_curve: list[dict[str, Any]] = []
+    deposits_applied = 0
 
     first = snapshots[0]
     bench_start = first.prices.get(BENCHMARK_TICKER)
 
+    def _month_index(iso: str) -> int:
+        text = iso.replace("Z", "+00:00")
+        # Accept full ISO timestamps or YYYY-MM-DD.
+        stamp = text[:10]
+        year = int(stamp[0:4])
+        month = int(stamp[5:7])
+        return year * 12 + month
+
+    start_month = _month_index(first.run_at)
+
     for snapshot in snapshots:
+        if config.monthly_deposit > 0:
+            expected = max(0, _month_index(snapshot.run_at) - start_month)
+            missing = expected - deposits_applied
+            if missing > 0:
+                injected = missing * config.monthly_deposit
+                cash += injected
+                contributed += injected
+                deposits_applied += missing
+
         cash, holdings, trades = _rebalance(
             snapshot=snapshot,
             cash=cash,
@@ -410,6 +432,7 @@ def run_simulation(
                 "run_at": snapshot.run_at,
                 "portfolio_value": round(value, 2),
                 "cash": round(cash, 2),
+                "contributed_capital": round(contributed, 2),
                 "positions": len(holdings),
             }
         )
@@ -418,7 +441,9 @@ def run_simulation(
     final_value = _portfolio_value(cash, holdings, last.prices)
     bench_end = last.prices.get(BENCHMARK_TICKER)
 
-    total_return = (final_value - config.initial_capital) / config.initial_capital
+    # Return vs capital contributed (initial + deposits), not initial alone.
+    capital_base = contributed if contributed > 0 else config.initial_capital
+    total_return = (final_value - capital_base) / capital_base
     benchmark_return = 0.0
     if bench_start and bench_end and bench_start > 0:
         benchmark_return = (bench_end - bench_start) / bench_start
