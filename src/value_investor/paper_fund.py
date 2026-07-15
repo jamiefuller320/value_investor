@@ -1014,6 +1014,179 @@ def run_technical_pass(
     return trades
 
 
+def preview_technical_plan(
+    fund: PaperFund,
+    candidates: list[dict[str, Any]],
+    *,
+    buy_pct_nav: float = 0.1,
+) -> dict[str, Any]:
+    """Dry-run technical exits/entries without mutating the fund."""
+    if fund.config.mode != "technical":
+        raise ValueError("Technical plan preview requires a technical fund")
+
+    by_ticker = {str(row["ticker"]): row for row in candidates}
+    price_map = {
+        ticker: float(_candidate_price(row) or 0)
+        for ticker, row in by_ticker.items()
+        if _candidate_price(row)
+    }
+    for ticker, position in fund.holdings.items():
+        if ticker not in price_map and position.avg_cost > 0:
+            price_map[ticker] = float(position.avg_cost)
+
+    exits: list[dict[str, Any]] = []
+    holds: list[dict[str, Any]] = []
+    for ticker, position in fund.holdings.items():
+        price = price_map.get(ticker)
+        if price is None or price <= 0:
+            holds.append(
+                {
+                    "action": "hold",
+                    "ticker": ticker,
+                    "name": position.name or ticker,
+                    "reason": "No mark available to evaluate stop/target",
+                }
+            )
+            continue
+        if position.stop_loss is not None and price <= position.stop_loss:
+            exits.append(
+                {
+                    "action": "sell",
+                    "ticker": ticker,
+                    "name": position.name or ticker,
+                    "reason": f"Stop hit (mark {price:.2f} ≤ stop {position.stop_loss:.2f})",
+                    "shares": round(position.shares, 6),
+                    "price": round(price, 4),
+                    "value": round(position.shares * price, 2),
+                }
+            )
+            continue
+        if position.take_profit is not None and price >= position.take_profit:
+            exits.append(
+                {
+                    "action": "sell",
+                    "ticker": ticker,
+                    "name": position.name or ticker,
+                    "reason": (
+                        f"Take-profit hit (mark {price:.2f} ≥ target {position.take_profit:.2f})"
+                    ),
+                    "shares": round(position.shares, 6),
+                    "price": round(price, 4),
+                    "value": round(position.shares * price, 2),
+                }
+            )
+            continue
+        holds.append(
+            {
+                "action": "hold",
+                "ticker": ticker,
+                "name": position.name or ticker,
+                "reason": "Between stop and target (or levels not set)",
+                "value": round(position.shares * price, 2),
+            }
+        )
+
+    exited = {row["ticker"] for row in exits}
+    open_slots = max(0, fund.config.max_positions - (len(fund.holdings) - len(exited)))
+    nav = fund.nav(price_map)
+    entries: list[dict[str, Any]] = []
+    deferred: list[dict[str, Any]] = []
+
+    if open_slots <= 0 or fund.cash <= 0:
+        deferred.append(
+            {
+                "ticker": "—",
+                "name": "New entries",
+                "reason": "No open slots or cash available after exits",
+            }
+        )
+    else:
+        ranked = select_automated_targets(
+            candidates,
+            max_positions=fund.config.max_positions * 2,
+            skip_timing_wait=True,
+        )
+        for row in ranked:
+            if len(entries) >= open_slots:
+                break
+            ticker = str(row["ticker"])
+            if ticker in fund.holdings or ticker in exited:
+                continue
+            if row.get("timing_signal") == "wait":
+                deferred.append(
+                    {
+                        "ticker": ticker,
+                        "name": str(row.get("name") or ticker),
+                        "reason": "timing_signal=wait",
+                        "conviction_score": float(row.get("conviction_score") or 0),
+                        "signal": str(row.get("signal") or ""),
+                    }
+                )
+                continue
+            plan = row.get("trade_plan") or {}
+            price = _optional_float(plan.get("core_limit")) or _candidate_price(row)
+            if price is None or price <= 0:
+                deferred.append(
+                    {
+                        "ticker": ticker,
+                        "name": str(row.get("name") or ticker),
+                        "reason": "No core limit / mark for entry",
+                    }
+                )
+                continue
+            notional = nav * buy_pct_nav
+            entries.append(
+                {
+                    "action": "buy",
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": (
+                        f"Core-limit entry (~{buy_pct_nav:.0%} NAV)"
+                        + (
+                            f" at {float(price):.2f}"
+                            if plan.get("core_limit") is not None
+                            else " at last mark"
+                        )
+                    ),
+                    "value": round(min(notional, fund.cash), 2),
+                    "price": round(float(price), 4),
+                    "conviction_score": float(row.get("conviction_score") or 0),
+                    "signal": str(row.get("signal") or ""),
+                }
+            )
+
+    rules = [
+        "Exits first: full sell if last mark ≤ stop loss or ≥ take-profit.",
+        "Entries next: unused buy-tier names (timing ≠ wait) at core limit when available.",
+        f"Position size for new entries: about {buy_pct_nav:.0%} of current NAV, capped by cash.",
+        "Names exited in the same pass are not re-bought immediately.",
+        f"Hard cap: {fund.config.max_positions} open names.",
+    ]
+    parts = []
+    if exits:
+        parts.append(f"exit {len(exits)} holding(s) on stop/target")
+    if entries:
+        parts.append(f"enter {len(entries)} new name(s) near core limit")
+    if holds:
+        parts.append(f"keep {len(holds)} holding(s) between levels")
+    summary = (
+        ("Next technical pass would " + "; ".join(parts) + ".")
+        if parts
+        else "Next technical pass would make no trades on the current marks and screen."
+    )
+    return {
+        "rules": rules,
+        "nav": round(nav, 2),
+        "cash": round(fund.cash, 2),
+        "buy_pct_nav": buy_pct_nav,
+        "anticipated_exits": exits,
+        "anticipated_buys": entries,
+        "anticipated_holds": holds,
+        "deferred": deferred[:8],
+        "summary": summary,
+    }
+
+
 def compare_funds(funds: list[PaperFund], prices: dict[str, float]) -> list[dict[str, Any]]:
     rows = []
     for fund in funds:

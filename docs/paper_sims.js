@@ -1,6 +1,7 @@
 /* Parallel cash-backed paper funds (browser-local). */
 
 const PAPER_FUND_STORAGE_KEY = "ftseValueInvestor.paperFunds.v1";
+const PAPER_AUTO_SETTINGS_KEY = "ftseValueInvestor.paperAutoSettings.v1";
 const PAPER_STRATEGY_LABELS = {
   manual: "Immediate buy/sell",
   technical: "Follow technical cues",
@@ -12,6 +13,80 @@ function paperFundId() {
     return window.crypto.randomUUID();
   }
   return `fund-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function loadPaperAutoSettings() {
+  try {
+    const raw = localStorage.getItem(PAPER_AUTO_SETTINGS_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return {
+      independent: Boolean(parsed.independent),
+      settle_minutes_after_open: Number(parsed.settle_minutes_after_open ?? 75),
+      market_open: parsed.market_open || "08:00",
+      last_auto_run_day: parsed.last_auto_run_day || null,
+    };
+  } catch {
+    return {
+      independent: false,
+      settle_minutes_after_open: 75,
+      market_open: "08:00",
+      last_auto_run_day: null,
+    };
+  }
+}
+
+function savePaperAutoSettings(settings) {
+  localStorage.setItem(PAPER_AUTO_SETTINGS_KEY, JSON.stringify(settings));
+}
+
+function londonParts(dateObj = new Date()) {
+  const fmt = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
+  const parts = Object.fromEntries(fmt.formatToParts(dateObj).map((p) => [p.type, p.value]));
+  return {
+    year: Number(parts.year),
+    month: Number(parts.month),
+    day: Number(parts.day),
+    weekday: parts.weekday,
+    hour: Number(parts.hour),
+    minute: Number(parts.minute),
+    dayKey: `${parts.year}-${parts.month}-${parts.day}`,
+  };
+}
+
+function browserSessionGate(settings, now = new Date()) {
+  const local = londonParts(now);
+  const weekdayOk = !["Sat", "Sun"].includes(local.weekday);
+  const [openH, openM] = String(settings.market_open || "08:00")
+    .split(":")
+    .map((n) => Number(n));
+  const settleMins = Number(settings.settle_minutes_after_open || 75);
+  const openTotal = openH * 60 + openM;
+  const settleTotal = openTotal + settleMins;
+  const nowTotal = local.hour * 60 + local.minute;
+  const afterSettle = weekdayOk && nowTotal >= settleTotal;
+  let reason = "ok";
+  if (!settings.independent) reason = "independent auto disabled";
+  else if (!weekdayOk) reason = "non-trading day";
+  else if (nowTotal < openTotal) reason = "before market open";
+  else if (!afterSettle) {
+    reason = `waiting for open settle (${settleMins} min after ${settings.market_open} Europe/London)`;
+  }
+  return {
+    dayKey: local.dayKey,
+    can_act: Boolean(settings.independent && weekdayOk && afterSettle),
+    after_settle: afterSettle,
+    reason,
+    local_label: `${local.dayKey} ${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")} Europe/London`,
+  };
 }
 
 function paperNowIso() {
@@ -865,6 +940,287 @@ function planMovesTable(title, rows, emptyText) {
     </div>`;
 }
 
+function technicalNarrativeHtml(fund, plan) {
+  const lastTech = (fund.trades || [])
+    .filter((t) => String(t.note || "").toLowerCase().includes("technical"))
+    .slice(0, 6);
+  const lastTechHtml = lastTech.length
+    ? `<ul class="list-plain small">${lastTech
+        .map(
+          (t) =>
+            `<li><strong>${esc(t.side)}</strong> ${esc(t.name || t.ticker)} — ${esc(t.note)} (${fmtDate(t.acted_at)})</li>`
+        )
+        .join("")}</ul>`
+    : `<p class="small muted">No technical trades yet — run a pass to create the first decision trail.</p>`;
+
+  return `
+    <div class="paper-narrative">
+      <h4>How the technical model decides</h4>
+      <ol class="paper-rules">
+        ${plan.rules.map((rule) => `<li>${esc(rule)}</li>`).join("")}
+      </ol>
+      <p><strong>Anticipated next move:</strong> ${esc(plan.summary)}</p>
+      <p class="small muted">NAV ${money(plan.nav)} · cash ${money(plan.cash)} · new entries ≈ ${(
+        Number(plan.buy_pct_nav) * 100
+      ).toFixed(0)}% of NAV each.</p>
+      ${planMovesTable("Would exit on stop/target", plan.anticipated_exits, "No stop/target exits on current marks.")}
+      ${planMovesTable("Would enter near core limit", plan.anticipated_buys, "No new technical entries available.")}
+      ${planMovesTable("Would hold", plan.anticipated_holds, "No open holdings to hold.")}
+      ${planMovesTable("Deferred", plan.deferred || [], "Nothing deferred.")}
+      <h5>Recent technical decisions</h5>
+      ${lastTechHtml}
+    </div>`;
+}
+
+function buildTechnicalPlan(fund, candidates) {
+  const priceMap = Object.fromEntries(
+    candidates.filter((c) => c.price != null).map((c) => [c.ticker, Number(c.price)])
+  );
+  for (const [ticker, pos] of Object.entries(fund.holdings || {})) {
+    if (priceMap[ticker] == null && pos.avg_cost > 0) priceMap[ticker] = Number(pos.avg_cost);
+  }
+  const buyPct = 0.1;
+  const exits = [];
+  const holds = [];
+  for (const [ticker, position] of Object.entries(fund.holdings || {})) {
+    const price = priceMap[ticker];
+    if (!(price > 0)) {
+      holds.push({
+        action: "hold",
+        ticker,
+        name: position.name || ticker,
+        reason: "No mark available to evaluate stop/target",
+      });
+      continue;
+    }
+    if (position.stop_loss != null && price <= position.stop_loss) {
+      exits.push({
+        action: "sell",
+        ticker,
+        name: position.name || ticker,
+        reason: `Stop hit (mark ${money(price)} ≤ stop ${money(position.stop_loss)})`,
+        shares: position.shares,
+        price,
+        value: position.shares * price,
+      });
+      continue;
+    }
+    if (position.take_profit != null && price >= position.take_profit) {
+      exits.push({
+        action: "sell",
+        ticker,
+        name: position.name || ticker,
+        reason: `Take-profit hit (mark ${money(price)} ≥ target ${money(position.take_profit)})`,
+        shares: position.shares,
+        price,
+        value: position.shares * price,
+      });
+      continue;
+    }
+    holds.push({
+      action: "hold",
+      ticker,
+      name: position.name || ticker,
+      reason: "Between stop and target (or levels not set)",
+      value: position.shares * price,
+    });
+  }
+
+  const exited = new Set(exits.map((e) => e.ticker));
+  const openSlots = Math.max(0, fund.config.max_positions - (Object.keys(fund.holdings || {}).length - exited.size));
+  const nav = paperNav(fund, priceMap);
+  const entries = [];
+  const deferred = [];
+  if (openSlots <= 0 || fund.cash <= 0) {
+    deferred.push({ ticker: "—", name: "New entries", reason: "No open slots or cash available after exits" });
+  } else {
+    const ranked = selectAutoTargets(candidates, fund.config.max_positions * 2);
+    for (const row of ranked) {
+      if (entries.length >= openSlots) break;
+      if (fund.holdings[row.ticker] || exited.has(row.ticker)) continue;
+      if (row.timing_signal === "wait") {
+        deferred.push({
+          ticker: row.ticker,
+          name: row.name || row.ticker,
+          reason: "timing_signal=wait",
+          conviction_score: row.conviction_score,
+          signal: row.signal,
+        });
+        continue;
+      }
+      const plan = row.trade_plan || {};
+      const price = Number(plan.core_limit) > 0 ? Number(plan.core_limit) : Number(row.price);
+      if (!(price > 0)) {
+        deferred.push({
+          ticker: row.ticker,
+          name: row.name || row.ticker,
+          reason: "No core limit / mark for entry",
+        });
+        continue;
+      }
+      entries.push({
+        action: "buy",
+        ticker: row.ticker,
+        name: row.name || row.ticker,
+        reason: `Core-limit entry (~${(buyPct * 100).toFixed(0)}% NAV)${
+          plan.core_limit != null ? ` at ${money(price)}` : " at last mark"
+        }`,
+        value: Math.min(nav * buyPct, fund.cash),
+        price,
+        conviction_score: row.conviction_score,
+        signal: row.signal,
+      });
+    }
+  }
+
+  const rules = [
+    "Exits first: full sell if last mark ≤ stop loss or ≥ take-profit.",
+    "Entries next: unused buy-tier names (timing ≠ wait) at core limit when available.",
+    `Position size for new entries: about ${(buyPct * 100).toFixed(0)}% of current NAV, capped by cash.`,
+    "Names exited in the same pass are not re-bought immediately.",
+    `Hard cap: ${fund.config.max_positions} open names.`,
+  ];
+  const parts = [];
+  if (exits.length) parts.push(`exit ${exits.length} holding(s) on stop/target`);
+  if (entries.length) parts.push(`enter ${entries.length} new name(s) near core limit`);
+  if (holds.length) parts.push(`keep ${holds.length} holding(s) between levels`);
+  const summary = parts.length
+    ? `Next technical pass would ${parts.join("; ")}.`
+    : "Next technical pass would make no trades on the current marks and screen.";
+
+  return {
+    rules,
+    nav,
+    cash: fund.cash,
+    buy_pct_nav: buyPct,
+    anticipated_exits: exits,
+    anticipated_buys: entries,
+    anticipated_holds: holds,
+    deferred: deferred.slice(0, 8),
+    summary,
+  };
+}
+
+function ownedSurveillanceHtml(fund, prices, data) {
+  const rows = [];
+  for (const pos of Object.values(fund.holdings || {})) {
+    const mark = paperPositionMark(pos, prices);
+    let severity = "info";
+    let message = "No stop/target breach; continue monitoring";
+    if (pos.stop_loss != null && mark <= pos.stop_loss) {
+      severity = "action";
+      message = `Mark ${money(mark)} at/under stop ${money(pos.stop_loss)}`;
+    } else if (pos.take_profit != null && mark >= pos.take_profit) {
+      severity = "action";
+      message = `Mark ${money(mark)} at/over take-profit ${money(pos.take_profit)}`;
+    }
+    const report = (data?.reports || []).find((r) => r.ticker === pos.ticker);
+    if (report?.timing_signal === "wait" && severity === "info") {
+      severity = "watch";
+      message = "Technical timing is wait — avoid adding size";
+    }
+    rows.push({
+      ticker: pos.ticker,
+      name: pos.name || pos.ticker,
+      source: "paper",
+      severity,
+      message,
+      mark,
+    });
+  }
+
+  // Live/real owned intents from the action log
+  try {
+    const actions = JSON.parse(localStorage.getItem("ftseValueInvestor.portfolioActions.v1") || "[]");
+    const liveOpen = (Array.isArray(actions) ? actions : []).filter(
+      (a) => (a.status || "open") === "open" && (a.execution_mode == null || a.execution_mode === "live")
+    );
+    for (const action of liveOpen) {
+      const report = (data?.reports || []).find((r) => r.ticker === action.ticker);
+      const mark = prices?.[action.ticker] ?? report?.trade_plan?.core_limit ?? null;
+      let severity = "info";
+      let message = "Live book name under surveillance";
+      if (action.stop_loss != null && mark != null && Number(mark) <= Number(action.stop_loss)) {
+        severity = "action";
+        message = `Mark ${money(mark)} at/under stop ${money(action.stop_loss)}`;
+      } else if (action.take_profit != null && mark != null && Number(mark) >= Number(action.take_profit)) {
+        severity = "action";
+        message = `Mark ${money(mark)} at/over take-profit ${money(action.take_profit)}`;
+      } else if (report?.timing_signal === "wait") {
+        severity = "watch";
+        message = "Technical timing is wait";
+      } else if (report?.signal === "avoid" || report?.signal === "hold") {
+        severity = "watch";
+        message = `Screen signal is now ${report.signal}`;
+      }
+      rows.push({
+        ticker: action.ticker,
+        name: action.name || action.ticker,
+        source: "live",
+        severity,
+        message,
+        mark,
+      });
+    }
+  } catch {
+    /* ignore */
+  }
+
+  const body = rows
+    .map(
+      (r) => `<tr>
+        <td><strong>${esc(r.name)}</strong><br><span class="small muted">${esc(r.ticker)} · ${esc(r.source)}</span></td>
+        <td><span class="badge badge-${esc(r.severity)}">${esc(r.severity)}</span></td>
+        <td>${r.mark != null ? money(r.mark) : "—"}</td>
+        <td class="small">${esc(r.message)}</td>
+      </tr>`
+    )
+    .join("");
+
+  return `
+    <div class="paper-narrative">
+      <h4>Owned-stock surveillance</h4>
+      <p class="small muted">Daily checks across automated paper holdings and live action-log names (stops, targets, timing, signal drift).</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Severity</th><th>Mark</th><th>Note</th></tr></thead>
+          <tbody>${body || `<tr><td colspan="4" class="muted">No paper or live holdings to surveil yet.</td></tr>`}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function independentAutoControlsHtml(settings, gate, serverAuto) {
+  const serverNote = serverAuto
+    ? `<p class="small">Server last run: ${esc(serverAuto.note || "—")} · ${esc(
+        serverAuto.generated_at ? fmtDate(serverAuto.generated_at) : "n/a"
+      )} · acted=${esc(String(!!serverAuto.acted))}</p>`
+    : `<p class="small muted">No server automation report in latest.json yet. Enable the weekday GitHub Action <code>FTSE Paper Automation</code> (runs ~09:17 London).</p>`;
+
+  return `
+    <div class="paper-narrative paper-auto-settings">
+      <h4>Independent daily automation</h4>
+      <p>When enabled, the automated pot can rebalance on its own after early open volatility settles (default 75 minutes after 08:00 Europe/London ≈ 09:15). A weekday GitHub Action does the same server-side against published screen data.</p>
+      <form id="paper-auto-settings-form" class="paper-bootstrap-form">
+        <label class="paper-check">
+          <input type="checkbox" name="independent" ${settings.independent ? "checked" : ""}>
+          Run independently in this browser (once per day after settle)
+        </label>
+        <label>Market open (London)
+          <input name="market_open" type="time" value="${esc(settings.market_open || "08:00")}">
+        </label>
+        <label>Settle minutes after open
+          <input name="settle_minutes_after_open" type="number" min="0" max="240" step="5" value="${esc(
+            String(settings.settle_minutes_after_open ?? 75)
+          )}">
+        </label>
+        <button type="submit" class="btn btn-primary">Save auto settings</button>
+      </form>
+      <p class="small">Session gate: <strong>${esc(gate.reason)}</strong> · ${esc(gate.local_label)}</p>
+      ${serverNote}
+    </div>`;
+}
+
 function automatedNarrativeHtml(fund, plan) {
   const lastAuto = (fund.trades || []).filter((t) => String(t.note || "").startsWith("Automated")).slice(0, 6);
   const lastAutoHtml = lastAuto.length
@@ -958,11 +1314,12 @@ function modeIntro(mode) {
   return {
     title: "Automated stock picking",
     blurb:
-      "Fully rules-based: rank buy-tier names by conviction, skip timing=wait, hold up to max positions, and equal-weight the sleeves with cash as the hard constraint.",
+      "Fully rules-based: rank buy-tier names by conviction, skip timing=wait, hold up to max positions, and equal-weight the sleeves with cash as the hard constraint. Can run independently after the London open settle window.",
     bullets: [
       "Sells anything that drops out of the top conviction set.",
       "Trims overweight sleeves, then tops up / opens underweight sleeves.",
-      "The narrative below previews the next rebalance before you run it.",
+      "Independent mode waits ~75 minutes after 08:00 Europe/London so early volatility can settle, then acts once per day.",
+      "Surveillance watches paper holdings and live action-log names for stop/target/timing alerts.",
     ],
   };
 }
@@ -1070,8 +1427,10 @@ function renderOverviewPage(book, pricesByFund) {
     </div>`;
 }
 
-function renderModePage(mode, fund, prices, plan) {
+function renderModePage(mode, fund, prices, plan, data) {
   const intro = modeIntro(mode);
+  const settings = loadPaperAutoSettings();
+  const gate = browserSessionGate(settings);
   const actions =
     mode === "manual"
       ? `<button type="button" class="btn btn-primary" id="paper-trade-btn">Buy / sell</button>
@@ -1098,7 +1457,10 @@ function renderModePage(mode, fund, prices, plan) {
         <div class="paper-funds-actions">${actions}</div>
       </div>
       ${fundStatsHtml(fund, prices)}
+      ${mode === "automated" ? independentAutoControlsHtml(settings, gate, data?.paper_automation) : ""}
+      ${mode === "automated" ? ownedSurveillanceHtml(fund, prices, data) : ""}
       ${mode === "automated" && plan ? automatedNarrativeHtml(fund, plan) : ""}
+      ${mode === "technical" && plan ? technicalNarrativeHtml(fund, plan) : ""}
       <h4 style="margin-top:1.25rem">Holdings</h4>
       ${holdingsTableHtml(fund, prices)}
       <h4 style="margin-top:1rem">Recent trades</h4>
@@ -1126,7 +1488,7 @@ function paperSubnavHtml(activePage) {
     </nav>`;
 }
 
-function renderPaperFundsSection(data, pricesByFund, autoPlan) {
+function renderPaperFundsSection(data, pricesByFund, modePlan) {
   const book = loadPaperBook();
   if (!book.funds.length) return renderBootstrapCard();
 
@@ -1143,7 +1505,7 @@ function renderPaperFundsSection(data, pricesByFund, autoPlan) {
       applyPaperDeposits(fund, paperNowIso());
       savePaperBook(book);
       const prices = pricesByFund?.[fund.config.id] || {};
-      body = renderModePage(fund.config.mode, fund, prices, autoPlan);
+      body = renderModePage(fund.config.mode, fund, prices, modePlan, data);
     }
   }
 
@@ -1169,39 +1531,67 @@ async function pricesForBook(book, data) {
   return out;
 }
 
+async function candidatesForPlan(fund, data, holdingPrices) {
+  const candidates = await enrichCandidatesWithPrices(data);
+  for (const [ticker, price] of Object.entries(holdingPrices || {})) {
+    if (!candidates.find((c) => c.ticker === ticker)) {
+      const report = (data.reports || []).find((r) => r.ticker === ticker) || {
+        ticker,
+        name: fund.holdings[ticker]?.name || ticker,
+        signal: "hold",
+      };
+      candidates.push({ ...report, price });
+    }
+  }
+  return candidates;
+}
+
+async function maybeRunIndependentAuto(data) {
+  const settings = loadPaperAutoSettings();
+  const gate = browserSessionGate(settings);
+  if (!gate.can_act) return false;
+  if (settings.last_auto_run_day === gate.dayKey) return false;
+  const book = loadPaperBook();
+  const fund = fundByMode(book, "automated");
+  if (!fund) return false;
+  book.active_fund_id = fund.config.id;
+  await runAutomatedPaperRebalance(fund, data);
+  settings.last_auto_run_day = gate.dayKey;
+  savePaperAutoSettings(settings);
+  savePaperBook(book);
+  return true;
+}
+
 async function renderPaperFunds(data) {
   const mount = document.getElementById("paper-funds-root");
   if (!mount) return;
   const book = loadPaperBook();
   let pricesByFund = {};
-  let autoPlan = null;
+  let modePlan = null;
   if (book.funds.length) {
+    // Independent browser auto-run once/day after London open settle.
+    try {
+      const ran = await maybeRunIndependentAuto(data);
+      if (ran) {
+        /* fund state updated; continue to render */
+      }
+    } catch (err) {
+      console.warn("Independent paper auto failed", err);
+    }
     mount.innerHTML = `<div class="card"><p class="muted">Loading paper fund marks…</p></div>`;
-    pricesByFund = await pricesForBook(book, data);
+    pricesByFund = await pricesForBook(loadPaperBook(), data);
     const page = loadPaperSubpage();
-    if (page === "automated") {
-      const fund = fundByMode(book, "automated");
+    if (page === "automated" || page === "technical") {
+      const fund = fundByMode(loadPaperBook(), page);
       if (fund) {
-        const candidates = await enrichCandidatesWithPrices(data);
-        // Include holding marks in candidate list for plan accuracy
-        const holdingPrices = pricesByFund[fund.config.id] || {};
-        for (const [ticker, price] of Object.entries(holdingPrices)) {
-          if (!candidates.find((c) => c.ticker === ticker)) {
-            const report = (data.reports || []).find((r) => r.ticker === ticker) || {
-              ticker,
-              name: fund.holdings[ticker]?.name || ticker,
-              signal: "hold",
-            };
-            candidates.push({ ...report, price });
-          }
-        }
-        autoPlan = buildAutomatedPlan(fund, candidates);
+        const candidates = await candidatesForPlan(fund, data, pricesByFund[fund.config.id] || {});
+        modePlan = page === "automated" ? buildAutomatedPlan(fund, candidates) : buildTechnicalPlan(fund, candidates);
       }
     }
   }
   const liveMount = document.getElementById("paper-funds-root");
   if (!liveMount) return;
-  liveMount.innerHTML = renderPaperFundsSection(data, pricesByFund, autoPlan);
+  liveMount.innerHTML = renderPaperFundsSection(data, pricesByFund, modePlan);
   bindPaperFunds(data);
 }
 
@@ -1222,6 +1612,22 @@ function bindPaperFunds(data) {
       renderPaperFunds(data);
     });
     return;
+  }
+
+  const autoSettingsForm = document.getElementById("paper-auto-settings-form");
+  if (autoSettingsForm) {
+    autoSettingsForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const fd = new FormData(autoSettingsForm);
+      const prev = loadPaperAutoSettings();
+      savePaperAutoSettings({
+        independent: Boolean(fd.get("independent")),
+        settle_minutes_after_open: Number(fd.get("settle_minutes_after_open") || 75),
+        market_open: String(fd.get("market_open") || "08:00"),
+        last_auto_run_day: prev.last_auto_run_day,
+      });
+      renderPaperFunds(data);
+    });
   }
 
   document.querySelectorAll("[data-paper-page]").forEach((button) => {

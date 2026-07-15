@@ -1,0 +1,83 @@
+name: FTSE Paper Automation
+
+# Independent daily automated paper-fund pass + owned-stock surveillance.
+# Scheduled after London open settle (~09:17 local in BST via 08:17 UTC cron).
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force act even before settle (testing)"
+        type: boolean
+        default: false
+      surveillance_only:
+        description: "Surveillance only (no rebalance)"
+        type: boolean
+        default: false
+  schedule:
+    # Weekdays 08:17 UTC ≈ 09:17 Europe/London during BST
+    - cron: "17 8 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftse-paper-automation
+  cancel-in-progress: false
+
+jobs:
+  paper-auto:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Run paper automation
+        run: |
+          ARGS="--output-dir output/paper_automation --reports docs/data/latest.json"
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          if [ "${{ github.event.inputs.surveillance_only }}" = "true" ]; then
+            ARGS="$ARGS --surveillance-only"
+          fi
+          ftse-paper-auto $ARGS
+
+      - name: Publish automation artifacts to dashboard data
+        run: |
+          python3 - <<'PY'
+          import json
+          import shutil
+          from pathlib import Path
+
+          src = Path("output/paper_automation")
+          dest = Path("docs/data/paper_automation")
+          dest.mkdir(parents=True, exist_ok=True)
+          for name in ("last_run.json", "automated_fund.json", "config.json", "owned_watchlist.json"):
+              path = src / name
+              if path.exists():
+                  shutil.copy2(path, dest / name)
+
+          latest = Path("docs/data/latest.json")
+          report = src / "last_run.json"
+          if latest.exists() and report.exists():
+              bundle = json.loads(latest.read_text(encoding="utf-8"))
+              bundle["paper_automation"] = json.loads(report.read_text(encoding="utf-8"))
+              fund = src / "automated_fund.json"
+              if fund.exists():
+                  bundle["paper_automation"]["fund_snapshot"] = json.loads(fund.read_text(encoding="utf-8"))
+              latest.write_text(json.dumps(bundle, separators=(",", ":")), encoding="utf-8")
+              print("Updated docs/data/latest.json + docs/data/paper_automation/")
+          PY
+
+      - name: Commit automation artifacts
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: daily paper automation [skip ci]"
+          file_pattern: docs/data/**
+          skip_fetch: false
