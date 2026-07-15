@@ -174,7 +174,21 @@ Action logs and paper funds are private to your browser; they are not committed 
 |------|-----------|
 | Immediate buy/sell | Manual trades against the pot (shares / £ / % NAV). |
 | Follow technical cues | One-click pass: exit on stop or take-profit; enter unused buy-tier names at core limit (~10% NAV) when timing is not `wait`. The Technical page previews those exits/entries before you run the pass. |
-| Automated stock picking | One-click equal-weight rebalance into top conviction buy-tier names (skips `timing_signal=wait`), selling names that leave the target set. The Automated page narrates the rules and previews the next rebalance. |
+| Automated stock picking | Rules-based equal-weight rebalance into top conviction buy-tier names (skips `timing_signal=wait`). Can run **independently** after London open settle (~75 min after 08:00, ≈ 09:15) via browser toggle and/or weekday GitHub Action `FTSE Paper Automation`. Surveils paper holdings plus live action-log names for stop/target/timing alerts. |
+
+### Independent daily automation
+
+```bash
+# Add real/live owned tickers for surveillance (optional)
+ftse-paper-auto --add-watch BP.L --add-watch SHEL.L
+
+# Run after settle (default gate); use --force for testing
+ftse-paper-auto --reports docs/data/latest.json
+ftse-paper-auto --reports docs/data/latest.json --force
+ftse-paper-auto --surveillance-only
+```
+
+State lands in `output/paper_automation/` (`automated_fund.json`, `owned_watchlist.json`, `last_run.json`) and is bundled into the dashboard as `paper_automation`. The workflow `.github/workflows/paper-auto.yml` schedules weekdays at **08:17 UTC** (≈ 09:17 Europe/London in BST) so early open volatility can settle before acting.
 
 Weekly strategy simulation (`ftse-simulate`) remains available for archived-run backtests and now accepts `--monthly-deposit` so returns are measured against capital contributed.
 
