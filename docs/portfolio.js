@@ -640,7 +640,9 @@ function renderPortfolio(data) {
     bookFilter === "all" ? "all books" : bookFilter === "live" ? "live book" : "simulated book";
 
   panel.innerHTML = `
-    <div class="toolbar portfolio-toolbar">
+    <div id="paper-funds-root"></div>
+
+    <div class="toolbar portfolio-toolbar" style="margin-top:1rem">
       <button type="button" class="btn btn-primary" id="log-action-btn">Log action</button>
       <button type="button" class="btn" id="seed-sim-btn">Seed simulated buys</button>
       <button type="button" class="btn" id="export-actions-btn">Export JSON</button>
@@ -657,7 +659,7 @@ function renderPortfolio(data) {
         </select>
       </label>
     </div>
-    <p class="small muted">Use <strong>Seed simulated buys</strong> to paper-trade the current screen (up to ${DEFAULT_SIM_SEED_NAMES} diversified names, core + tactical legs when a trade plan exists).</p>
+    <p class="small muted">Action log below is separate from cash-backed paper funds above. Use <strong>Seed simulated buys</strong> to log diversified intents (up to ${DEFAULT_SIM_SEED_NAMES} names) without committing capital.</p>
 
     <div class="card">
       <h3>Diversification steer <span class="small muted">· ${esc(bookLabel)}</span></h3>
@@ -730,6 +732,10 @@ function renderPortfolio(data) {
       </div>
     </div>
   `;
+
+  if (typeof window.renderPaperFunds === "function") {
+    window.renderPaperFunds(data);
+  }
 
   const defaultMode = bookFilter === "live" ? "live" : "simulated";
   const dialogApi = bindActionDialog(data, () => renderPortfolio(data), defaultMode);

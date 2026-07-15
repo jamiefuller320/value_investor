@@ -55,6 +55,7 @@ ftse-email --research-docs    # screen + update research + email (weekly rerun a
 # Simulate £1,000 portfolio with 3% per-trade costs from archived runs
 ftse-simulate
 ftse-simulate --capital 1000 --trade-cost 0.03 --json
+ftse-simulate --capital 1000 --monthly-deposit 100 --trade-cost 0.03
 
 # Historical analysis replay (up to 3 years, weekly smoothing)
 ftse-historical --output-dir output
@@ -157,14 +158,25 @@ Reports include:
 
 The GitHub Pages **Portfolio** tab lets you:
 
-1. **Log an action** from Strong buys / Buys — order type, limit, stop, take-profit, and allocation are prefilled from the technical trade plan when available.
-2. **Mark each trade Simulated or Live** with a slider (default Simulated). Filter the book, and flip mode later per row.
-3. **Seed simulated buys** from the current screen — up to five diversified buy-tier names with core (+ tactical) legs prefilled for paper evaluation.
-4. **Track open vs closed** actions in this browser (`localStorage`), with JSON export/import for backup.
-5. **See diversification advice** scoped to the selected book — sector concentration vs a 30% soft cap, and a ranked list blending conviction with sector diversity.
-6. **Open a price chart** on buy-tier names — 1y closes with core/tactical buy, stop, target, and SMA levels marked.
+1. **Run parallel paper funds** — nominate initial cash and an optional monthly deposit, then create three side-by-side pots (Immediate buy/sell, Follow technical cues, Automated stock picking). Each fund is constrained by its cash balance and max positions; buys size by **share volume**, **cash value**, or **% of current fund NAV**. Marks use published chart last prices when available. Funds stay in browser `localStorage` (export JSON to back up).
+2. **Log an action** from Strong buys / Buys — order type, limit, stop, take-profit, and allocation are prefilled from the technical trade plan when available (intent log; does not move paper-fund cash).
+3. **Mark each logged trade Simulated or Live** with a slider (default Simulated). Filter the book, and flip mode later per row.
+4. **Seed simulated buys** from the current screen — up to five diversified buy-tier names with core (+ tactical) legs prefilled for paper evaluation.
+5. **Track open vs closed** action intents in this browser (`localStorage`), with JSON export/import for backup.
+6. **See diversification advice** scoped to the selected book — sector concentration vs a 30% soft cap, and a ranked list blending conviction with sector diversity.
+7. **Open a price chart** on buy-tier names — 1y closes with core/tactical buy, stop, target, and SMA levels marked.
 
-Action logs are private to your browser; they are not committed by the weekly workflow. Legacy rows without a mode are treated as live.
+Action logs and paper funds are private to your browser; they are not committed by the weekly workflow. Legacy action rows without a mode are treated as live.
+
+### Paper fund modes
+
+| Mode | Behaviour |
+|------|-----------|
+| Immediate buy/sell | Manual trades against the pot (shares / £ / % NAV). |
+| Follow technical cues | One-click pass: exit on stop or take-profit; enter unused buy-tier names at core limit (~10% NAV) when timing is not `wait`. |
+| Automated stock picking | One-click equal-weight rebalance into top conviction buy-tier names (skips `timing_signal=wait`), selling names that leave the target set. |
+
+Weekly strategy simulation (`ftse-simulate`) remains available for archived-run backtests and now accepts `--monthly-deposit` so returns are measured against capital contributed.
 
 ## Buy-tier research
 
