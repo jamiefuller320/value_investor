@@ -158,7 +158,7 @@ Reports include:
 
 The GitHub Pages **Portfolio** tab lets you:
 
-1. **Run parallel paper funds** — nominate initial cash and an optional monthly deposit, then create three side-by-side pots (Immediate buy/sell, Follow technical cues, Automated stock picking). Each fund is constrained by its cash balance and max positions; buys size by **share volume**, **cash value**, or **% of current fund NAV**. Marks use published chart last prices when available. Funds stay in browser `localStorage` (export JSON to back up).
+1. **Run parallel paper funds** — nominate initial cash and an optional monthly deposit, then create three side-by-side pots. The Portfolio tab splits **Paper simulations** from the **Action log**. Within simulations, use sub-pages for **Overview**, **Immediate**, **Technical**, and **Automated**. The Automated page explains the decision rules and previews the next rebalance (sells, trims, buys, waits) before you run it.
 2. **Log an action** from Strong buys / Buys — order type, limit, stop, take-profit, and allocation are prefilled from the technical trade plan when available (intent log; does not move paper-fund cash).
 3. **Mark each logged trade Simulated or Live** with a slider (default Simulated). Filter the book, and flip mode later per row.
 4. **Seed simulated buys** from the current screen — up to five diversified buy-tier names with core (+ tactical) legs prefilled for paper evaluation.

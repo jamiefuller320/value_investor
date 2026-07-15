@@ -508,6 +508,26 @@ function money(value) {
   return `£${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
+function pctLabel(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  return `${(n * 100).toFixed(1)}%`;
+}
+
+function loadPaperSubpage() {
+  const value = localStorage.getItem("ftseValueInvestor.paperFundPage.v1");
+  if (["overview", "manual", "technical", "automated"].includes(value)) return value;
+  return "overview";
+}
+
+function savePaperSubpage(page) {
+  localStorage.setItem("ftseValueInvestor.paperFundPage.v1", page);
+}
+
+function fundByMode(book, mode) {
+  return (book.funds || []).find((f) => f.config.mode === mode) || null;
+}
+
 function ensurePaperTradeDialog() {
   let dialog = document.getElementById("paper-trade-dialog");
   if (dialog) return dialog;
@@ -561,50 +581,10 @@ function ensurePaperTradeDialog() {
   return document.getElementById("paper-trade-dialog");
 }
 
-function renderPaperFundsSection(data, pricesByFund) {
-  const book = loadPaperBook();
-  if (!book.funds.length) {
-    return `
-      <div class="card paper-funds-card">
-        <h3>Paper fund simulations</h3>
-        <p>Run parallel cash-backed simulations with an initial pot and optional monthly deposits. Buys can be sized by shares, cash, or % of fund value; marks follow published chart prices.</p>
-        <form id="paper-bootstrap-form" class="paper-bootstrap-form">
-          <label>Initial cash (£)
-            <input name="initial_cash" type="number" min="0" step="any" value="1000" required>
-          </label>
-          <label>Monthly deposit (£)
-            <input name="monthly_deposit" type="number" min="0" step="any" value="100">
-          </label>
-          <label>Trade cost
-            <input name="trade_cost_pct" type="number" min="0" max="0.2" step="0.001" value="0.03">
-          </label>
-          <label>Max positions
-            <input name="max_positions" type="number" min="1" max="20" step="1" value="5">
-          </label>
-          <button type="submit" class="btn btn-primary">Create three parallel funds</button>
-        </form>
-        <p class="small muted">Creates Immediate, Technical cues, and Automated funds with the same cash rules so you can compare them.</p>
-      </div>`;
-  }
-
-  const active = activePaperFund(book);
-  const comparisonRows = book.funds
-    .map((fund) => {
-      const prices = pricesByFund?.[fund.config.id] || {};
-      applyPaperDeposits(fund, paperNowIso());
-      const perf = paperPerformance(fund, prices);
-      return { fund, perf };
-    })
-    .sort((a, b) => b.perf.total_return - a.perf.total_return);
-
-  // Persist deposits applied during render comparison
-  savePaperBook(book);
-
-  const activePrices = pricesByFund?.[active.config.id] || {};
-  const activePerf = paperPerformance(active, activePrices);
-  const holdingRows = Object.values(active.holdings || {})
+function holdingsTableHtml(fund, prices) {
+  const rows = Object.values(fund.holdings || {})
     .map((pos) => {
-      const mark = paperPositionMark(pos, activePrices);
+      const mark = paperPositionMark(pos, prices);
       const value = pos.shares * mark;
       const pnl = (mark - pos.avg_cost) * pos.shares;
       return `<tr>
@@ -615,13 +595,32 @@ function renderPaperFundsSection(data, pricesByFund) {
         <td>${money(value)}</td>
         <td class="${pnl >= 0 ? "pos" : "neg"}">${money(pnl)}</td>
         <td class="small">${pos.stop_loss != null ? `Stop ${money(pos.stop_loss)}<br>` : ""}${
-          pos.take_profit != null ? `Target ${money(pos.take_profit)}` : ""
+          pos.take_profit != null ? `Target ${money(pos.take_profit)}` : "—"
         }</td>
       </tr>`;
     })
-    .join("") || `<tr><td colspan="7" class="muted">No holdings yet.</td></tr>`;
+    .join("");
+  return `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Shares</th>
+            <th>Avg cost</th>
+            <th>Mark</th>
+            <th>Value</th>
+            <th>P&amp;L</th>
+            <th>Levels</th>
+          </tr>
+        </thead>
+        <tbody>${rows || `<tr><td colspan="7" class="muted">No holdings yet.</td></tr>`}</tbody>
+      </table>
+    </div>`;
+}
 
-  const tradeRows = (active.trades || [])
+function tradesTableHtml(fund) {
+  const rows = (fund.trades || [])
     .slice(0, 12)
     .map(
       (t) => `<tr>
@@ -634,50 +633,395 @@ function renderPaperFundsSection(data, pricesByFund) {
         <td class="small">${esc(t.note || "")}</td>
       </tr>`
     )
-    .join("") || `<tr><td colspan="7" class="muted">No trades yet.</td></tr>`;
+    .join("");
+  return `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>When</th>
+            <th>Side</th>
+            <th>Name</th>
+            <th>Fill</th>
+            <th>Sizing</th>
+            <th>Cash</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>${rows || `<tr><td colspan="7" class="muted">No trades yet.</td></tr>`}</tbody>
+      </table>
+    </div>`;
+}
 
-  const compareTable = comparisonRows
-    .map(({ fund, perf }) => {
-      const selected = fund.config.id === active.config.id ? "selected" : "";
-      return `<tr class="${selected}">
-        <td>
-          <button type="button" class="btn btn-link" data-paper-select="${esc(fund.config.id)}">
-            ${esc(fund.config.name)}
-          </button>
-          <div class="small muted">${esc(PAPER_STRATEGY_LABELS[fund.config.mode] || fund.config.mode)}</div>
-        </td>
-        <td>${money(perf.portfolio_value)}</td>
-        <td>${money(perf.cash)}</td>
-        <td>${money(perf.contributed_capital)}</td>
-        <td class="${perf.gain >= 0 ? "pos" : "neg"}">${(perf.total_return * 100).toFixed(1)}%</td>
-        <td>${perf.positions}</td>
+function fundStatsHtml(fund, prices) {
+  const perf = paperPerformance(fund, prices);
+  return `
+    <div class="paper-active-summary grid">
+      <div>
+        <div class="small muted">NAV</div>
+        <strong>${money(perf.portfolio_value)}</strong>
+      </div>
+      <div>
+        <div class="small muted">Cash available</div>
+        <strong>${money(perf.cash)}</strong>
+      </div>
+      <div>
+        <div class="small muted">Contributed</div>
+        <strong>${money(perf.contributed_capital)}</strong>
+      </div>
+      <div>
+        <div class="small muted">Return vs contributed</div>
+        <strong class="${perf.gain >= 0 ? "pos" : "neg"}">${pctLabel(perf.total_return)} (${money(perf.gain)})</strong>
+      </div>
+    </div>`;
+}
+
+function buildAutomatedPlan(fund, candidates) {
+  const targets = selectAutoTargets(candidates, fund.config.max_positions);
+  const targetSet = new Set(targets.map((t) => t.ticker));
+  const priceMap = Object.fromEntries(
+    candidates.filter((c) => c.price != null).map((c) => [c.ticker, Number(c.price)])
+  );
+  for (const [ticker, pos] of Object.entries(fund.holdings || {})) {
+    if (priceMap[ticker] == null && pos.avg_cost > 0) priceMap[ticker] = Number(pos.avg_cost);
+  }
+
+  const nav = paperNav(fund, priceMap);
+  let cash = Number(fund.cash);
+  const exits = [];
+  for (const [ticker, position] of Object.entries(fund.holdings || {})) {
+    if (targetSet.has(ticker)) continue;
+    const price = priceMap[ticker] || position.avg_cost;
+    const value = Number(position.shares) * Number(price || 0);
+    exits.push({
+      action: "sell",
+      ticker,
+      name: position.name || ticker,
+      reason: "No longer in the top conviction target set",
+      shares: position.shares,
+      price,
+      value,
+    });
+    cash += value * (1 - Number(fund.config.trade_cost_pct || 0));
+  }
+
+  const remaining = Object.fromEntries(
+    Object.entries(fund.holdings || {}).filter(([ticker]) => targetSet.has(ticker))
+  );
+  const navAfterExits = (() => {
+    const temp = { cash, holdings: remaining };
+    return paperNav(temp, priceMap);
+  })();
+  const targetEach = targets.length ? navAfterExits / targets.length : 0;
+  const trims = [];
+  const buys = [];
+  const holds = [];
+  const skipped = [];
+
+  for (const row of targets) {
+    const price = Number(row.price);
+    if (!(price > 0)) {
+      skipped.push({ ticker: row.ticker, name: row.name || row.ticker, reason: "No usable price mark" });
+      continue;
+    }
+    const current = remaining[row.ticker];
+    let currentValue = current ? current.shares * price : 0;
+    if (current && currentValue > targetEach * 1.02) {
+      const excess = currentValue - targetEach;
+      trims.push({
+        action: "trim",
+        ticker: row.ticker,
+        name: row.name || row.ticker,
+        reason: `Overweight vs equal-weight sleeve (${money(targetEach)} target)`,
+        value: excess,
+        price,
+        conviction_score: row.conviction_score,
+        signal: row.signal,
+      });
+      cash += excess * (1 - Number(fund.config.trade_cost_pct || 0));
+      currentValue = targetEach;
+    }
+    const shortfall = targetEach - currentValue;
+    if (Math.abs(shortfall) <= 0.01 * Math.max(1, targetEach)) {
+      holds.push({
+        action: "hold",
+        ticker: row.ticker,
+        name: row.name || row.ticker,
+        reason: "Already near equal-weight target",
+        value: currentValue,
+        target_value: targetEach,
+        conviction_score: row.conviction_score,
+        signal: row.signal,
+      });
+      continue;
+    }
+    if (shortfall <= 0) continue;
+    const budget = Math.min(shortfall, cash);
+    if (budget <= 0.01) {
+      skipped.push({
+        ticker: row.ticker,
+        name: row.name || row.ticker,
+        reason: "Insufficient cash after higher-conviction fills",
+        target_value: targetEach,
+        conviction_score: row.conviction_score,
+        signal: row.signal,
+      });
+      continue;
+    }
+    buys.push({
+      action: "buy",
+      ticker: row.ticker,
+      name: row.name || row.ticker,
+      reason: currentValue <= 0 ? "New sleeve" : "Top-up to equal weight",
+      value: budget,
+      price,
+      target_value: targetEach,
+      conviction_score: row.conviction_score,
+      signal: row.signal,
+    });
+    cash -= budget;
+  }
+
+  const waitlisted = candidates
+    .filter((row) => (row.signal === "strong_buy" || row.signal === "buy") && row.timing_signal === "wait")
+    .sort((a, b) => Number(b.conviction_score || 0) - Number(a.conviction_score || 0))
+    .slice(0, 8)
+    .map((row) => ({
+      ticker: row.ticker,
+      name: row.name || row.ticker,
+      signal: row.signal,
+      conviction_score: row.conviction_score,
+      reason: "timing_signal=wait — skipped until timing improves",
+    }));
+
+  const rules = [
+    "Universe: only strong_buy / buy names from the latest screen.",
+    "Timing filter: names with timing_signal=wait are excluded from new buys.",
+    `Ranking: highest conviction_score first, keep at most ${fund.config.max_positions} names.`,
+    "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+    `Costs: ${(Number(fund.config.trade_cost_pct) * 100).toFixed(1)}% applied on each buy and sell.`,
+  ];
+
+  let summary = "No eligible buy-tier targets right now — the next rebalance would stay in cash / existing names that still qualify.";
+  if (targets.length) {
+    const parts = [`Next rebalance would target ${targets.length} equal-weight sleeve(s)`];
+    if (exits.length) parts.push(`sell ${exits.length} name(s) that left the set`);
+    if (trims.length) parts.push(`trim ${trims.length} overweight sleeve(s)`);
+    if (buys.length) parts.push(`deploy cash into ${buys.length} buy(s)`);
+    if (holds.length) parts.push(`leave ${holds.length} near-target holding(s)`);
+    summary = `${parts.join("; ")}.`;
+  }
+
+  return {
+    rules,
+    nav,
+    cash: fund.cash,
+    max_positions: fund.config.max_positions,
+    target_sleeve_value: targetEach,
+    targets,
+    anticipated_exits: exits,
+    anticipated_trims: trims,
+    anticipated_buys: buys,
+    anticipated_holds: holds,
+    skipped,
+    waitlisted,
+    summary,
+  };
+}
+
+function planMovesTable(title, rows, emptyText) {
+  if (!rows.length) {
+    return `<div class="paper-plan-block"><h5>${esc(title)}</h5><p class="small muted">${esc(emptyText)}</p></div>`;
+  }
+  const body = rows
+    .map((row) => {
+      const detail =
+        row.value != null
+          ? money(row.value)
+          : row.shares != null
+            ? `${Number(row.shares).toFixed(4)} sh`
+            : "—";
+      return `<tr>
+        <td><strong>${esc(row.name || row.ticker)}</strong><br><span class="small muted">${esc(row.ticker)}${
+          row.signal ? ` · ${esc(row.signal)}` : ""
+        }</span></td>
+        <td>${esc(row.action || "—")}</td>
+        <td>${detail}</td>
+        <td class="small">${esc(row.reason || "")}${
+          row.conviction_score != null ? `<br>Conviction ${pctLabel(row.conviction_score)}` : ""
+        }</td>
       </tr>`;
     })
     .join("");
+  return `
+    <div class="paper-plan-block">
+      <h5>${esc(title)}</h5>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Action</th><th>Size</th><th>Why</th></tr></thead>
+          <tbody>${body}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
 
-  const modeActions =
-    active.config.mode === "automated"
-      ? `<button type="button" class="btn btn-primary" id="paper-auto-btn">Run automated rebalance</button>`
-      : active.config.mode === "technical"
-        ? `<button type="button" class="btn btn-primary" id="paper-tech-btn">Run technical pass</button>`
-        : `<button type="button" class="btn btn-primary" id="paper-trade-btn">Buy / sell</button>`;
+function automatedNarrativeHtml(fund, plan) {
+  const lastAuto = (fund.trades || []).filter((t) => String(t.note || "").startsWith("Automated")).slice(0, 6);
+  const lastAutoHtml = lastAuto.length
+    ? `<ul class="list-plain small">${lastAuto
+        .map(
+          (t) =>
+            `<li><strong>${esc(t.side)}</strong> ${esc(t.name || t.ticker)} — ${esc(t.note)} (${fmtDate(t.acted_at)})</li>`
+        )
+        .join("")}</ul>`
+    : `<p class="small muted">No automated trades yet — run a rebalance to create the first decision trail.</p>`;
+
+  const targetRows = (plan.targets || [])
+    .map(
+      (t, index) => `<tr>
+        <td>${index + 1}</td>
+        <td><strong>${esc(t.name || t.ticker)}</strong><br><span class="small muted">${esc(t.ticker)}</span></td>
+        <td>${signalBadge(t.signal)}</td>
+        <td>${pctLabel(t.conviction_score)}</td>
+        <td>${money(t.price)}</td>
+        <td>${money(plan.target_sleeve_value)}</td>
+      </tr>`
+    )
+    .join("");
+
+  return `
+    <div class="paper-narrative">
+      <h4>How the automated model decides</h4>
+      <ol class="paper-rules">
+        ${plan.rules.map((rule) => `<li>${esc(rule)}</li>`).join("")}
+      </ol>
+      <p><strong>Anticipated next move:</strong> ${esc(plan.summary)}</p>
+      <p class="small muted">Sleeve target ≈ ${money(plan.target_sleeve_value)} from NAV ${money(plan.nav)} with ${money(
+        plan.cash
+      )} cash on hand (max ${plan.max_positions} positions).</p>
+
+      <h5>Current target set</h5>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Signal</th>
+              <th>Conviction</th>
+              <th>Mark</th>
+              <th>Sleeve target</th>
+            </tr>
+          </thead>
+          <tbody>${
+            targetRows || `<tr><td colspan="6" class="muted">No eligible targets on the current screen.</td></tr>`
+          }</tbody>
+        </table>
+      </div>
+
+      ${planMovesTable("Would sell", plan.anticipated_exits, "No exits — every holding still qualifies.")}
+      ${planMovesTable("Would trim", plan.anticipated_trims, "No trims needed.")}
+      ${planMovesTable("Would buy / top up", plan.anticipated_buys, "No buys — sleeves are funded or cash is exhausted.")}
+      ${planMovesTable("Would hold near target", plan.anticipated_holds, "No near-target holds.")}
+      ${planMovesTable("Skipped / deferred", [...(plan.skipped || []), ...(plan.waitlisted || [])], "Nothing deferred.")}
+
+      <h5>Recent automated decisions</h5>
+      ${lastAutoHtml}
+    </div>`;
+}
+
+function modeIntro(mode) {
+  if (mode === "manual") {
+    return {
+      title: "Immediate buy/sell",
+      blurb:
+        "You choose every trade. Size by share volume, cash value, or % of current fund NAV. The pot cannot spend more cash than it holds, and new names are blocked once max positions are reached.",
+      bullets: [
+        "Best for discretionary paper trading against the same capital rules as the other sims.",
+        "Marks use published chart last prices when available.",
+        "Monthly deposits credit into cash automatically when you apply deposits or trade after month-end.",
+      ],
+    };
+  }
+  if (mode === "technical") {
+    return {
+      title: "Follow technical cues",
+      blurb:
+        "A one-click pass reads stop / take-profit levels on open holdings and looks for core-limit entries on unused buy-tier names when timing is not wait.",
+      bullets: [
+        "Exits first: full sell if last price ≤ stop or ≥ take-profit.",
+        "Entries next: ~10% of NAV at core limit (or last price), attaching the trade-plan stop/target.",
+        "Names stopped out in the same pass are not immediately re-bought.",
+      ],
+    };
+  }
+  return {
+    title: "Automated stock picking",
+    blurb:
+      "Fully rules-based: rank buy-tier names by conviction, skip timing=wait, hold up to max positions, and equal-weight the sleeves with cash as the hard constraint.",
+    bullets: [
+      "Sells anything that drops out of the top conviction set.",
+      "Trims overweight sleeves, then tops up / opens underweight sleeves.",
+      "The narrative below previews the next rebalance before you run it.",
+    ],
+  };
+}
+
+function renderBootstrapCard() {
+  return `
+    <div class="card paper-funds-card">
+      <h3>Paper fund simulations</h3>
+      <p>Create three parallel pots with the same starting cash and deposit rules, then work each strategy on its own sub-page.</p>
+      <form id="paper-bootstrap-form" class="paper-bootstrap-form">
+        <label>Initial cash (£)
+          <input name="initial_cash" type="number" min="0" step="any" value="1000" required>
+        </label>
+        <label>Monthly deposit (£)
+          <input name="monthly_deposit" type="number" min="0" step="any" value="100">
+        </label>
+        <label>Trade cost
+          <input name="trade_cost_pct" type="number" min="0" max="0.2" step="0.001" value="0.03">
+        </label>
+        <label>Max positions
+          <input name="max_positions" type="number" min="1" max="20" step="1" value="5">
+        </label>
+        <button type="submit" class="btn btn-primary">Create three parallel funds</button>
+      </form>
+      <p class="small muted">Funds: Immediate buy/sell · Follow technical cues · Automated stock picking. All stay in this browser unless you export JSON.</p>
+    </div>`;
+}
+
+function renderOverviewPage(book, pricesByFund) {
+  const rows = book.funds
+    .map((fund) => {
+      const prices = pricesByFund?.[fund.config.id] || {};
+      applyPaperDeposits(fund, paperNowIso());
+      const perf = paperPerformance(fund, prices);
+      return { fund, perf };
+    })
+    .sort((a, b) => b.perf.total_return - a.perf.total_return);
+
+  savePaperBook(book);
+  const sample = book.funds[0]?.config || {};
 
   return `
     <div class="card paper-funds-card">
       <div class="paper-funds-header">
         <div>
-          <h3>Paper fund simulations</h3>
-          <p class="small muted">Parallel pots share the same starting cash and deposit rules. Performance is mark-to-market vs capital contributed (initial + deposits).</p>
+          <h3>Simulation overview</h3>
+          <p class="small muted">Shared capital template: ${money(sample.initial_cash)} start · ${money(
+            sample.monthly_deposit || 0
+          )}/month · ${(Number(sample.trade_cost_pct) * 100).toFixed(1)}% costs · max ${
+            sample.max_positions
+          } positions. Open a strategy sub-page for its controls.</p>
         </div>
         <div class="paper-funds-actions">
-          ${modeActions}
           <button type="button" class="btn" id="paper-deposit-btn">Apply deposits</button>
           <button type="button" class="btn" id="paper-refresh-marks-btn">Refresh marks</button>
           <button type="button" class="btn" id="paper-export-btn">Export funds</button>
           <button type="button" class="btn" id="paper-reset-btn">Reset funds</button>
         </div>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
@@ -688,72 +1032,131 @@ function renderPaperFundsSection(data, pricesByFund) {
               <th>Contributed</th>
               <th>Return</th>
               <th>Positions</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>${compareTable}</tbody>
+          <tbody>
+            ${rows
+              .map(
+                ({ fund, perf }) => `<tr>
+                <td>
+                  <strong>${esc(fund.config.name)}</strong>
+                  <div class="small muted">${esc(PAPER_STRATEGY_LABELS[fund.config.mode] || fund.config.mode)}</div>
+                </td>
+                <td>${money(perf.portfolio_value)}</td>
+                <td>${money(perf.cash)}</td>
+                <td>${money(perf.contributed_capital)}</td>
+                <td class="${perf.gain >= 0 ? "pos" : "neg"}">${pctLabel(perf.total_return)}</td>
+                <td>${perf.positions}</td>
+                <td><button type="button" class="btn" data-paper-page="${esc(fund.config.mode)}">Open</button></td>
+              </tr>`
+              )
+              .join("")}
+          </tbody>
         </table>
       </div>
-
-      <div class="paper-active-summary grid" style="margin-top:1rem">
-        <div>
-          <div class="small muted">Active fund</div>
-          <strong>${esc(active.config.name)}</strong>
-          <div class="small muted">${esc(PAPER_STRATEGY_LABELS[active.config.mode] || active.config.mode)} · cost ${(
-            Number(active.config.trade_cost_pct) * 100
-          ).toFixed(1)}% · max ${active.config.max_positions} names</div>
-        </div>
-        <div>
-          <div class="small muted">NAV</div>
-          <strong>${money(activePerf.portfolio_value)}</strong>
-        </div>
-        <div>
-          <div class="small muted">Cash available</div>
-          <strong>${money(activePerf.cash)}</strong>
-        </div>
-        <div>
-          <div class="small muted">Return vs contributed</div>
-          <strong class="${activePerf.gain >= 0 ? "pos" : "neg"}">${(activePerf.total_return * 100).toFixed(1)}% (${money(
-            activePerf.gain
-          )})</strong>
-        </div>
+      <div class="paper-mode-cards grid" style="margin-top:1rem">
+        ${["manual", "technical", "automated"]
+          .map((mode) => {
+            const intro = modeIntro(mode);
+            return `<div class="paper-mode-card">
+              <h4>${esc(intro.title)}</h4>
+              <p class="small">${esc(intro.blurb)}</p>
+              <button type="button" class="btn btn-primary" data-paper-page="${esc(mode)}">Go to controls</button>
+            </div>`;
+          })
+          .join("")}
       </div>
+    </div>`;
+}
 
-      <h4 style="margin-top:1rem">Holdings</h4>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Shares</th>
-              <th>Avg cost</th>
-              <th>Mark</th>
-              <th>Value</th>
-              <th>P&amp;L</th>
-              <th>Levels</th>
-            </tr>
-          </thead>
-          <tbody>${holdingRows}</tbody>
-        </table>
+function renderModePage(mode, fund, prices, plan) {
+  const intro = modeIntro(mode);
+  const actions =
+    mode === "manual"
+      ? `<button type="button" class="btn btn-primary" id="paper-trade-btn">Buy / sell</button>
+         <button type="button" class="btn" id="paper-deposit-btn">Apply deposits</button>
+         <button type="button" class="btn" id="paper-refresh-marks-btn">Refresh marks</button>`
+      : mode === "technical"
+        ? `<button type="button" class="btn btn-primary" id="paper-tech-btn">Run technical pass</button>
+           <button type="button" class="btn" id="paper-deposit-btn">Apply deposits</button>
+           <button type="button" class="btn" id="paper-refresh-marks-btn">Refresh marks</button>`
+        : `<button type="button" class="btn btn-primary" id="paper-auto-btn">Run automated rebalance</button>
+           <button type="button" class="btn" id="paper-deposit-btn">Apply deposits</button>
+           <button type="button" class="btn" id="paper-refresh-marks-btn">Refresh marks</button>`;
+
+  return `
+    <div class="card paper-funds-card">
+      <div class="paper-funds-header">
+        <div>
+          <h3>${esc(intro.title)}</h3>
+          <p>${esc(intro.blurb)}</p>
+          <ul class="list-plain small paper-bullets">
+            ${intro.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}
+          </ul>
+        </div>
+        <div class="paper-funds-actions">${actions}</div>
       </div>
-
+      ${fundStatsHtml(fund, prices)}
+      ${mode === "automated" && plan ? automatedNarrativeHtml(fund, plan) : ""}
+      <h4 style="margin-top:1.25rem">Holdings</h4>
+      ${holdingsTableHtml(fund, prices)}
       <h4 style="margin-top:1rem">Recent trades</h4>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>When</th>
-              <th>Side</th>
-              <th>Name</th>
-              <th>Fill</th>
-              <th>Sizing</th>
-              <th>Cash</th>
-              <th>Note</th>
-            </tr>
-          </thead>
-          <tbody>${tradeRows}</tbody>
-        </table>
+      ${tradesTableHtml(fund)}
+    </div>`;
+}
+
+function paperSubnavHtml(activePage) {
+  const items = [
+    { id: "overview", label: "Overview" },
+    { id: "manual", label: "Immediate" },
+    { id: "technical", label: "Technical" },
+    { id: "automated", label: "Automated" },
+  ];
+  return `
+    <nav class="paper-subnav" aria-label="Paper fund simulators">
+      ${items
+        .map(
+          (item) =>
+            `<button type="button" class="paper-subtab${item.id === activePage ? " active" : ""}" data-paper-page="${item.id}">${esc(
+              item.label
+            )}</button>`
+        )
+        .join("")}
+    </nav>`;
+}
+
+function renderPaperFundsSection(data, pricesByFund, autoPlan) {
+  const book = loadPaperBook();
+  if (!book.funds.length) return renderBootstrapCard();
+
+  const page = loadPaperSubpage();
+  let body = "";
+  if (page === "overview") {
+    body = renderOverviewPage(book, pricesByFund);
+  } else {
+    const fund = fundByMode(book, page) || activePaperFund(book);
+    if (!fund) {
+      body = renderOverviewPage(book, pricesByFund);
+    } else {
+      book.active_fund_id = fund.config.id;
+      applyPaperDeposits(fund, paperNowIso());
+      savePaperBook(book);
+      const prices = pricesByFund?.[fund.config.id] || {};
+      body = renderModePage(fund.config.mode, fund, prices, autoPlan);
+    }
+  }
+
+  return `
+    <div class="paper-funds-shell">
+      <div class="paper-funds-title-row">
+        <div>
+          <h3 class="paper-section-title">Paper fund simulations</h3>
+          <p class="small muted">Each simulator has its own page for controls and holdings. Overview compares performance across pots.</p>
+        </div>
       </div>
-      <p class="small muted">Manual fund: discretionary buys/sells. Technical: stop/target exits and core-limit entries. Automated: equal-weight rebalance into top buy-tier names. All constrained by cash and max positions.</p>
+      ${paperSubnavHtml(page)}
+      ${body}
     </div>`;
 }
 
@@ -771,13 +1174,34 @@ async function renderPaperFunds(data) {
   if (!mount) return;
   const book = loadPaperBook();
   let pricesByFund = {};
+  let autoPlan = null;
   if (book.funds.length) {
     mount.innerHTML = `<div class="card"><p class="muted">Loading paper fund marks…</p></div>`;
     pricesByFund = await pricesForBook(book, data);
+    const page = loadPaperSubpage();
+    if (page === "automated") {
+      const fund = fundByMode(book, "automated");
+      if (fund) {
+        const candidates = await enrichCandidatesWithPrices(data);
+        // Include holding marks in candidate list for plan accuracy
+        const holdingPrices = pricesByFund[fund.config.id] || {};
+        for (const [ticker, price] of Object.entries(holdingPrices)) {
+          if (!candidates.find((c) => c.ticker === ticker)) {
+            const report = (data.reports || []).find((r) => r.ticker === ticker) || {
+              ticker,
+              name: fund.holdings[ticker]?.name || ticker,
+              signal: "hold",
+            };
+            candidates.push({ ...report, price });
+          }
+        }
+        autoPlan = buildAutomatedPlan(fund, candidates);
+      }
+    }
   }
   const liveMount = document.getElementById("paper-funds-root");
   if (!liveMount) return;
-  liveMount.innerHTML = renderPaperFundsSection(data, pricesByFund);
+  liveMount.innerHTML = renderPaperFundsSection(data, pricesByFund, autoPlan);
   bindPaperFunds(data);
 }
 
@@ -794,16 +1218,22 @@ function bindPaperFunds(data) {
         maxPositions: Number(fd.get("max_positions") || 5),
       });
       savePaperBook(book);
+      savePaperSubpage("overview");
       renderPaperFunds(data);
     });
     return;
   }
 
-  document.querySelectorAll("[data-paper-select]").forEach((button) => {
+  document.querySelectorAll("[data-paper-page]").forEach((button) => {
     button.addEventListener("click", () => {
+      const page = button.dataset.paperPage;
+      savePaperSubpage(page);
       const book = loadPaperBook();
-      book.active_fund_id = button.dataset.paperSelect;
-      savePaperBook(book);
+      const fund = fundByMode(book, page);
+      if (fund) {
+        book.active_fund_id = fund.config.id;
+        savePaperBook(book);
+      }
       renderPaperFunds(data);
     });
   });
@@ -837,6 +1267,7 @@ function bindPaperFunds(data) {
     resetBtn.addEventListener("click", () => {
       if (!window.confirm("Delete all paper funds in this browser?")) return;
       localStorage.removeItem(PAPER_FUND_STORAGE_KEY);
+      savePaperSubpage("overview");
       renderPaperFunds(data);
     });
   }
@@ -860,8 +1291,9 @@ function bindPaperFunds(data) {
       autoBtn.disabled = true;
       try {
         const book = loadPaperBook();
-        const fund = activePaperFund(book);
-        if (!fund || fund.config.mode !== "automated") return;
+        const fund = fundByMode(book, "automated");
+        if (!fund) return;
+        book.active_fund_id = fund.config.id;
         await runAutomatedPaperRebalance(fund, data);
         savePaperBook(book);
         await renderPaperFunds(data);
@@ -877,8 +1309,9 @@ function bindPaperFunds(data) {
       techBtn.disabled = true;
       try {
         const book = loadPaperBook();
-        const fund = activePaperFund(book);
-        if (!fund || fund.config.mode !== "technical") return;
+        const fund = fundByMode(book, "technical");
+        if (!fund) return;
+        book.active_fund_id = fund.config.id;
         await runTechnicalPaperPass(fund, data);
         savePaperBook(book);
         await renderPaperFunds(data);
@@ -896,17 +1329,26 @@ function bindPaperFunds(data) {
 
 async function openPaperTradeDialog(data) {
   const book = loadPaperBook();
-  const fund = activePaperFund(book);
+  const fund = fundByMode(book, "manual") || activePaperFund(book);
   if (!fund) return;
+  book.active_fund_id = fund.config.id;
+  savePaperBook(book);
   const dialog = ensurePaperTradeDialog();
   const form = document.getElementById("paper-trade-form");
   const tickerSelect = form.ticker;
   const buyTier = (data.reports || []).filter((r) => r.signal === "strong_buy" || r.signal === "buy");
   const held = Object.keys(fund.holdings);
-  const options = [...new Map([...buyTier.map((r) => [r.ticker, r]), ...held.map((t) => {
-    const report = (data.reports || []).find((r) => r.ticker === t);
-    return [t, report || { ticker: t, name: fund.holdings[t]?.name || t }];
-  }])].values()];
+  const options = [
+    ...new Map(
+      [
+        ...buyTier.map((r) => [r.ticker, r]),
+        ...held.map((t) => {
+          const report = (data.reports || []).find((r) => r.ticker === t);
+          return [t, report || { ticker: t, name: fund.holdings[t]?.name || t }];
+        }),
+      ]
+    ).values(),
+  ];
 
   tickerSelect.innerHTML = options
     .map((r) => `<option value="${esc(r.ticker)}">${esc(r.name || r.ticker)} (${esc(r.ticker)})</option>`)
@@ -966,3 +1408,4 @@ async function openPaperTradeDialog(data) {
 }
 
 window.renderPaperFunds = renderPaperFunds;
+

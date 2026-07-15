@@ -593,6 +593,222 @@ def select_automated_targets(
     return [row for _, row in ranked[:max_positions]]
 
 
+def preview_automated_plan(
+    fund: PaperFund,
+    candidates: list[dict[str, Any]],
+    *,
+    skip_timing_wait: bool = True,
+) -> dict[str, Any]:
+    """
+    Dry-run the automated rebalance rules without mutating the fund.
+
+    Returns a narrative-friendly plan: eligibility rules, target set, and
+    anticipated sells / trims / buys with cash constraints noted.
+    """
+    if fund.config.mode != "automated":
+        raise ValueError("Automated plan preview requires an automated fund")
+
+    targets = select_automated_targets(
+        candidates,
+        max_positions=fund.config.max_positions,
+        skip_timing_wait=skip_timing_wait,
+    )
+    target_tickers = {str(row["ticker"]) for row in targets}
+    price_map = {
+        str(row["ticker"]): float(_candidate_price(row) or 0)
+        for row in candidates
+        if _candidate_price(row)
+    }
+    for ticker, position in fund.holdings.items():
+        if ticker not in price_map and position.avg_cost > 0:
+            price_map[ticker] = float(position.avg_cost)
+
+    nav = fund.nav(price_map)
+    cash = float(fund.cash)
+    target_each = (nav / len(targets)) if targets else 0.0
+
+    exits: list[dict[str, Any]] = []
+    for ticker, position in fund.holdings.items():
+        if ticker in target_tickers:
+            continue
+        price = price_map.get(ticker) or position.avg_cost
+        value = position.shares * price if price else 0.0
+        exits.append(
+            {
+                "action": "sell",
+                "ticker": ticker,
+                "name": position.name or ticker,
+                "reason": "No longer in the top conviction target set",
+                "shares": round(position.shares, 6),
+                "price": round(float(price or 0), 4),
+                "value": round(value, 2),
+            }
+        )
+        cash += value * (1 - fund.config.trade_cost_pct)
+
+    # After hypothetical exits, recompute NAV for target sizing narrative.
+    remaining_holdings = {
+        t: p for t, p in fund.holdings.items() if t in target_tickers
+    }
+    nav_after_exits = portfolio_value(cash, remaining_holdings, price_map)
+    target_each = (nav_after_exits / len(targets)) if targets else 0.0
+
+    trims: list[dict[str, Any]] = []
+    buys: list[dict[str, Any]] = []
+    holds: list[dict[str, Any]] = []
+    skipped: list[dict[str, Any]] = []
+
+    for row in targets:
+        ticker = str(row["ticker"])
+        price = float(_candidate_price(row) or 0)
+        if price <= 0:
+            skipped.append(
+                {
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": "No usable price mark",
+                }
+            )
+            continue
+        current = remaining_holdings.get(ticker)
+        current_value = (current.shares * price) if current else 0.0
+        conviction = float(row.get("conviction_score") or 0)
+        signal = str(row.get("signal") or "")
+        if current and current_value > target_each * 1.02:
+            excess = current_value - target_each
+            trims.append(
+                {
+                    "action": "trim",
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": f"Overweight vs equal-weight sleeve ({target_each:,.0f} target)",
+                    "value": round(excess, 2),
+                    "price": round(price, 4),
+                    "conviction_score": conviction,
+                    "signal": signal,
+                }
+            )
+            cash += excess * (1 - fund.config.trade_cost_pct)
+            current_value = target_each
+
+        shortfall = target_each - current_value
+        if abs(shortfall) <= 0.01 * max(1.0, target_each):
+            holds.append(
+                {
+                    "action": "hold",
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": "Already near equal-weight target",
+                    "value": round(current_value, 2),
+                    "target_value": round(target_each, 2),
+                    "conviction_score": conviction,
+                    "signal": signal,
+                }
+            )
+            continue
+        if shortfall <= 0:
+            continue
+        budget = min(shortfall, cash)
+        if budget <= 0.01:
+            skipped.append(
+                {
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": "Insufficient cash after higher-conviction fills",
+                    "target_value": round(target_each, 2),
+                    "conviction_score": conviction,
+                    "signal": signal,
+                }
+            )
+            continue
+        buys.append(
+            {
+                "action": "buy",
+                "ticker": ticker,
+                "name": str(row.get("name") or ticker),
+                "reason": (
+                    "New sleeve" if current_value <= 0 else "Top-up to equal weight"
+                ),
+                "value": round(budget, 2),
+                "price": round(price, 4),
+                "target_value": round(target_each, 2),
+                "conviction_score": conviction,
+                "signal": signal,
+            }
+        )
+        cash -= budget
+
+    waitlisted = [
+        {
+            "ticker": str(row.get("ticker")),
+            "name": str(row.get("name") or row.get("ticker")),
+            "signal": str(row.get("signal") or ""),
+            "conviction_score": float(row.get("conviction_score") or 0),
+            "reason": "timing_signal=wait — skipped until timing improves",
+        }
+        for row in candidates
+        if str(row.get("signal") or "") in BUY_SIGNALS
+        and row.get("timing_signal") == "wait"
+    ]
+    waitlisted.sort(key=lambda r: r["conviction_score"], reverse=True)
+
+    narrative = [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        f"Ranking: highest conviction_score first, keep at most {fund.config.max_positions} names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        f"Costs: {fund.config.trade_cost_pct:.1%} applied on each buy and sell.",
+    ]
+
+    return {
+        "rules": narrative,
+        "nav": round(nav, 2),
+        "cash": round(fund.cash, 2),
+        "max_positions": fund.config.max_positions,
+        "target_sleeve_value": round(target_each, 2),
+        "targets": [
+            {
+                "ticker": str(row["ticker"]),
+                "name": str(row.get("name") or row["ticker"]),
+                "signal": str(row.get("signal") or ""),
+                "conviction_score": float(row.get("conviction_score") or 0),
+                "price": round(float(_candidate_price(row) or 0), 4),
+            }
+            for row in targets
+        ],
+        "anticipated_exits": exits,
+        "anticipated_trims": trims,
+        "anticipated_buys": buys,
+        "anticipated_holds": holds,
+        "skipped": skipped,
+        "waitlisted": waitlisted[:8],
+        "summary": _plan_summary(exits, trims, buys, holds, targets),
+    }
+
+
+def _plan_summary(
+    exits: list[dict[str, Any]],
+    trims: list[dict[str, Any]],
+    buys: list[dict[str, Any]],
+    holds: list[dict[str, Any]],
+    targets: list[dict[str, Any]],
+) -> str:
+    if not targets:
+        return "No eligible buy-tier targets right now — the next rebalance would stay in cash / existing names that still qualify."
+    parts = [
+        f"Next rebalance would target {len(targets)} equal-weight sleeve(s)",
+    ]
+    if exits:
+        parts.append(f"sell {len(exits)} name(s) that left the set")
+    if trims:
+        parts.append(f"trim {len(trims)} overweight sleeve(s)")
+    if buys:
+        parts.append(f"deploy cash into {len(buys)} buy(s)")
+    if holds:
+        parts.append(f"leave {len(holds)} near-target holding(s)")
+    return "; ".join(parts) + "."
+
+
 def run_automated_rebalance(
     fund: PaperFund,
     candidates: list[dict[str, Any]],
