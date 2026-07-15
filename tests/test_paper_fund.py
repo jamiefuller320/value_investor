@@ -174,6 +174,43 @@ def test_technical_pass_stop_and_entry():
     assert fund.holdings["NEW.L"].stop_loss == 40
 
 
+def test_preview_automated_plan_explains_next_moves():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.0,
+            max_positions=2,
+        )
+    )
+    fund.buy(ticker="OLD.L", price=10, sizing_mode="cash", amount=400, name="Old")
+    candidates = [
+        {"ticker": "AAA.L", "name": "A", "signal": "strong_buy", "conviction_score": 0.95, "price": 20},
+        {"ticker": "BBB.L", "name": "B", "signal": "buy", "conviction_score": 0.9, "price": 25},
+        {
+            "ticker": "WAIT.L",
+            "name": "Waiter",
+            "signal": "strong_buy",
+            "conviction_score": 0.99,
+            "price": 15,
+            "timing_signal": "wait",
+        },
+        {"ticker": "OLD.L", "name": "Old", "signal": "hold", "conviction_score": 0.1, "price": 10},
+    ]
+    from value_investor.paper_fund import preview_automated_plan
+
+    plan = preview_automated_plan(fund, candidates)
+    assert "equal-weight" in plan["summary"].lower() or "sleeve" in plan["summary"].lower()
+    assert any(x["ticker"] == "OLD.L" for x in plan["anticipated_exits"])
+    assert {t["ticker"] for t in plan["targets"]} == {"AAA.L", "BBB.L"}
+    assert any(w["ticker"] == "WAIT.L" for w in plan["waitlisted"])
+    assert len(plan["rules"]) >= 4
+    # Dry-run must not mutate fund
+    assert "OLD.L" in fund.holdings
+    assert fund.cash == 600
+
+
 def test_compare_funds_ranks_by_return():
     a = PaperFund.create(PaperFundConfig(name="A", mode="manual", initial_cash=1000, trade_cost_pct=0))
     b = PaperFund.create(PaperFundConfig(name="B", mode="manual", initial_cash=1000, trade_cost_pct=0))

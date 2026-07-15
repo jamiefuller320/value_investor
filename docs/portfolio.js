@@ -554,10 +554,21 @@ function modeBadge(mode) {
   return `<span class="badge badge-${label}">${label}</span>`;
 }
 
+function loadPortfolioSection() {
+  const value = localStorage.getItem("ftseValueInvestor.portfolioSection.v1");
+  if (value === "actions" || value === "sims") return value;
+  return "sims";
+}
+
+function savePortfolioSection(section) {
+  localStorage.setItem("ftseValueInvestor.portfolioSection.v1", section);
+}
+
 function renderPortfolio(data) {
   const panel = document.getElementById("panel-portfolio");
   if (!panel) return;
 
+  const section = loadPortfolioSection();
   const bookFilter = loadBookFilter();
   const allActions = loadPortfolioActions();
   const scopedActions = filterActionsByBook(allActions, bookFilter);
@@ -639,10 +650,8 @@ function renderPortfolio(data) {
   const bookLabel =
     bookFilter === "all" ? "all books" : bookFilter === "live" ? "live book" : "simulated book";
 
-  panel.innerHTML = `
-    <div id="paper-funds-root"></div>
-
-    <div class="toolbar portfolio-toolbar" style="margin-top:1rem">
+  const actionsSection = `
+    <div class="toolbar portfolio-toolbar">
       <button type="button" class="btn btn-primary" id="log-action-btn">Log action</button>
       <button type="button" class="btn" id="seed-sim-btn">Seed simulated buys</button>
       <button type="button" class="btn" id="export-actions-btn">Export JSON</button>
@@ -659,7 +668,7 @@ function renderPortfolio(data) {
         </select>
       </label>
     </div>
-    <p class="small muted">Action log below is separate from cash-backed paper funds above. Use <strong>Seed simulated buys</strong> to log diversified intents (up to ${DEFAULT_SIM_SEED_NAMES} names) without committing capital.</p>
+    <p class="small muted">Intent log only — does not move cash in the paper-fund simulators. Use <strong>Seed simulated buys</strong> to log diversified intents (up to ${DEFAULT_SIM_SEED_NAMES} names).</p>
 
     <div class="card">
       <h3>Diversification steer <span class="small muted">· ${esc(bookLabel)}</span></h3>
@@ -733,9 +742,41 @@ function renderPortfolio(data) {
     </div>
   `;
 
-  if (typeof window.renderPaperFunds === "function") {
+  panel.innerHTML = `
+    <nav class="portfolio-section-nav" aria-label="Portfolio sections">
+      <button type="button" class="portfolio-section-tab${section === "sims" ? " active" : ""}" data-portfolio-section="sims">Paper simulations</button>
+      <button type="button" class="portfolio-section-tab${section === "actions" ? " active" : ""}" data-portfolio-section="actions">Action log</button>
+    </nav>
+    <div id="portfolio-section-sims" class="portfolio-section${section === "sims" ? " active" : ""}">
+      <div id="paper-funds-root"></div>
+    </div>
+    <div id="portfolio-section-actions" class="portfolio-section${section === "actions" ? " active" : ""}">
+      ${section === "actions" ? actionsSection : ""}
+    </div>
+  `;
+
+  panel.querySelectorAll("[data-portfolio-section]").forEach((button) => {
+    button.addEventListener("click", () => {
+      savePortfolioSection(button.dataset.portfolioSection);
+      renderPortfolio(data);
+    });
+  });
+
+  window.__openPortfolioActionDialog = (ticker) => {
+    window.__pendingPortfolioLogTicker = ticker || "";
+    savePortfolioSection("actions");
+    const tabs = document.getElementById("tabs");
+    const portfolioTab = tabs?.querySelector('[data-tab="portfolio"]');
+    if (portfolioTab && !portfolioTab.classList.contains("active")) portfolioTab.click();
+    renderPortfolio(data);
+  };
+
+  if (section === "sims" && typeof window.renderPaperFunds === "function") {
     window.renderPaperFunds(data);
+    return;
   }
+
+  if (section !== "actions") return;
 
   const defaultMode = bookFilter === "live" ? "live" : "simulated";
   const dialogApi = bindActionDialog(data, () => renderPortfolio(data), defaultMode);
@@ -807,9 +848,22 @@ function renderPortfolio(data) {
   });
 
   window.__openPortfolioActionDialog = (ticker) => {
+    window.__pendingPortfolioLogTicker = ticker || "";
+    savePortfolioSection("actions");
     const tabs = document.getElementById("tabs");
     const portfolioTab = tabs?.querySelector('[data-tab="portfolio"]');
-    if (portfolioTab) portfolioTab.click();
-    dialogApi.open(ticker || "", defaultMode);
+    if (portfolioTab && !portfolioTab.classList.contains("active")) portfolioTab.click();
+    if (section === "actions") {
+      dialogApi.open(ticker || "", defaultMode);
+      window.__pendingPortfolioLogTicker = null;
+      return;
+    }
+    renderPortfolio(data);
   };
+
+  if (window.__pendingPortfolioLogTicker != null) {
+    const pending = window.__pendingPortfolioLogTicker;
+    window.__pendingPortfolioLogTicker = null;
+    dialogApi.open(pending, defaultMode);
+  }
 }
