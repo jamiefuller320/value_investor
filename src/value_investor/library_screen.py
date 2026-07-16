@@ -113,7 +113,7 @@ def run_library_screen(
 
     history = load_signal_history(screen_dir)
     if history is not None and not history.empty:
-        signals = enrich_signals_with_stability(signals, history)
+        signals = enrich_signals_with_stability(signals, history, run_at=run_at)
 
     # Shortlist buy-tier for ladder layer C
     buy_mask = signals["signal"].isin(["strong_buy", "buy"])

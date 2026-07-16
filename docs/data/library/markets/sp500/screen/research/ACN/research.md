@@ -1,0 +1,91 @@
+# Accenture plc (ACN) — Research memo
+
+_Version 1 · Updated 2026-07-16T18:07:28.373076+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Accenture plc presents a compelling value case after a prolonged de-rating: the quantitative screen flags strong buy on P/E 11.4, P/B 2.7, dividend yield 4.8%, and ROE 24.4%, with 15 of 22 models passing across cheapness, quality, dividend, GARP, and risk families. The investment hook is a cash-generative, globally diversified IT services franchise trading at a discount to its own history and to the quality of its balance sheet, whilst returning substantial capital via buybacks and dividends. The central debate is whether generative AI is a structural threat to labour-intensive consulting or a multi-year demand tailwind that Accenture is better placed to capture than peers. Primary regulatory filing bodies were unavailable in the source pack; financial analysis below relies on Yahoo fallback data, which limits verification of management commentary, going-concern language, and interim detail.
+
+## INVESTMENT THESIS
+The screen’s strong buy rating aligns with a classic quality-at-a-reasonable-price profile rather than deep cyclical distress. Accenture passes enterprising-value, earnings-yield, FCF-yield, Buffett Quality, Economic Moat, Magic Formula, and Financial Health models, indicating the market is pricing in material growth deceleration that may exceed fundamentals. Business quality supports the screen: FY2025 revenue of $69.7bn (Yahoo fallback) grew 7.4% year-on-year after a softer FY2024 (+1.2%), with diluted EPS rising to $12.15 from $11.44 and free cash flow reaching $10.9bn. Operating margins remain stable at roughly 15.5%, and net debt is modest at $8.2bn total debt against $11.5bn cash (Yahoo fallback). Capital allocation is shareholder-friendly: $4.6bn of buybacks and $3.7bn of dividends in FY2025, consistent with dividend-growth screen passes. For a value investor, the asymmetry lies in buying a wide-moat services compounder at ~11x earnings and ~5% yield whilst the market prices AI disruption as permanent impairment; if bookings stabilise—as suggested by record $22bn bookings in the most recent quarter (TIKR.com, 28 June 2026)—multiple re-rating could follow without heroic growth assumptions.
+
+## FINANCIAL REVIEW
+**Source note:** The filings index lists 21 entries but zero downloadable body extracts (`with_body: 0`); the `filings/bodies/` directory is empty. One annual headline (“Annual Financial Report”, Investegate, 13 June 2025) is indexed without text. No interim (half-year or quarterly) filing bodies are present. The remaining 20 index entries are misattributed third-party RNS items unrelated to Accenture. All figures below are sourced from `financials_annual.json` (Yahoo), stated explicitly as fallback.
+
+**Income statement trend (FY2022–FY2025, fiscal years ending August):**
+- Revenue: $61.6bn → $64.1bn → $64.9bn → $69.7bn; growth re-accelerated in FY2025 after a near-flat FY2024.
+- Operating income: $9.37bn → $9.87bn → $10.03bn → $10.84bn; operating margin held in a narrow 15.2–15.6% band.
+- Net income (common): $6.88bn → $6.87bn → $7.26bn → $7.68bn.
+- Diluted EPS: $10.71 → $10.77 → $11.44 → $12.15.
+- FY2025 included $615m of special charges (restructuring-related per Yahoo classification), which depressed reported operating income; normalised earnings would be modestly higher.
+
+**Cash flow and capital allocation (Yahoo fallback):**
+- Operating cash flow: $9.54bn (FY2022) → $9.52bn (FY2023) → $9.13bn (FY2024) → $11.47bn (FY2025).
+- Free cash flow: $8.82bn → $8.99bn → $8.61bn → $10.87bn; FCF conversion remains robust and supports the screen’s FCF-yield pass.
+- CapEx remained modest at $0.52–0.72bn annually; the model is asset-light.
+- Acquisitions: $3.6bn (FY2022), $2.5bn (FY2023), $6.6bn (FY2024), $1.5bn (FY2025); FY2024 M&A step-up aligns with AI capability build-out (Faculty, DLB Associates, Keepler per news flow).
+- Shareholder returns: buybacks of $4.1–4.6bn per year plus dividends rising from $2.46bn (FY2022) to $3.70bn (FY2025).
+
+**Balance sheet (Yahoo fallback, FY2025):**
+- Total assets $65.4bn; stockholders’ equity $31.2bn; tangible book value $6.2bn.
+- Goodwill and intangibles $24.9bn (38% of total assets)—elevated post-M&A, a key impairment risk if AI compresses consulting margins.
+- Total debt $8.2bn (up from $4.1bn in FY2024, driven by long-term debt issuance of $5.1bn); cash $11.5bn implies net cash position despite higher gross leverage.
+- Non-current pension and post-retirement obligations: $1.86bn.
+- Working capital $8.5bn; receivables $13.1bn (watch item in a slower macro).
+
+**Most recent quarter (Yahoo quarterly income, period labelled 2026—likely fiscal Q3 FY2026):**
+- Revenue $18.0bn; operating income $2.49bn; net income $1.83bn; diluted EPS $2.93.
+- No unusual items in this quarter per Yahoo data.
+
+**Interim filing gap:** No interim or trading-update filing bodies are available in the index. Quarterly trajectory and the June 2026 earnings/outlook reset (see news) cannot be cross-checked against primary filings.
+
+## RISKS AND RED FLAGS
+**AI disruption and growth outlook.** The dominant risk, extensively covered in news flow, is that generative AI automates billable hours faster than Accenture wins AI-transformation mandates. The Financial Times (18 June 2026) reported shares at their lowest since 2017 on AI threat concerns; management subsequently trimmed revenue growth guidance despite an earnings beat (Proactive, 19 June 2026; Invezz, 18 June 2026). This cyclical–structural tension is not captured by backward-looking screen metrics.
+
+**Sector contagion.** IBM’s July 2026 revenue warning dragged professional-services peers including Accenture (WSJ, 14 July 2026), highlighting sensitivity to enterprise IT budget shifts and AI-driven spending reallocation.
+
+**Goodwill and acquisition integration.** Goodwill of $22.5bn (Yahoo fallback) against tangible book of $6.2bn leaves limited balance-sheet cushion if AI pressures pricing or deal synergies disappoint. FY2024 acquisition spend of $6.6bn raises execution risk.
+
+**Leverage step-up.** Total debt doubled year-on-year to $8.2bn in FY2025 (Yahoo fallback), partly funding buybacks and M&A. Debt/equity of 25% remains screen-compliant, but trend warrants monitoring; no covenant or going-concern language could be reviewed owing to absent filing bodies.
+
+**Pension and employee liabilities.** Non-current pension obligations of $1.86bn are manageable relative to equity but add fixed cost in a headcount-intensive model.
+
+**Analyst divergence.** TD Cowen downgrade (22 June 2026), Wolfe Research target cut (16 June 2026), and Morgan Stanley caution on weak bookings (17 March 2026) contrast with bullish value commentary, suggesting the market debate is live rather than settled.
+
+**Governance / regulatory filing gap.** Unable to verify board changes, remuneration, related-party transactions, or contingency disclosures from primary filings. The indexed RNS feed contains no usable Accenture-specific regulatory text.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is substantial and ACN-specific; not thin.
+
+**Strategy and AI positioning:**
+- “Accenture dubs its 800,000 staff ‘reinventors’ as it adapts to AI” (Financial Times, 30 November 2025).
+- “HR must manage AI bots as well as humans, says Accenture executive” (Financial Times, 15 June 2026).
+- “Accenture (ACN) Is Up 9.2% After Expanding AI Offerings And Share Buyback Authorization” (simplywall.st, 3 July 2026).
+- “NATO Cloud Deal And Mid‑Market AI Push Could Be A Game Changer For Accenture (ACN)” (Yahoo Finance, 14 July 2026)—~€200m, seven-year NATO Protected Business Network contract with Leonardo.
+- “Accenture (ACN) Signs Multi-Million Euro Contract With the NATO Communications and Information Agency” (Yahoo Finance, 15 July 2026).
+
+**M&A:**
+- “Accenture buys UK AI start-up Faculty in $1bn deal” (Financial Times, 6 January 2026); corporate release same date.
+- “Accenture Makes Acquisition of AI Data Center Firm DLB Associates As Earnings Await” (AskTraders, 16 December 2025).
+- “Accenture Acquires Keepler to Boost Its AI and Data Business in Spain” (Accenture, 8 April 2026).
+
+**Earnings and sentiment:**
+- “Accenture sinks 14% as lowered outlook clouds earnings beat and cybersecurity deals” (Invezz, 18 June 2026).
+- “Accenture shares fall to lowest since 2017 as AI threat mounts” (Financial Times, 18 June 2026).
+- “Accenture Stock Near Its 52-Week Low Despite Record $22 Billion Bookings Quarter in 2026” (TIKR.com, 28 June 2026)—highlights the valuation–fundamentals disconnect.
+- “Accenture shares tumble on slashed revenue growth outlook” (Proactive, 19 June 2026).
+
+**Analyst actions:**
+- TD Cowen downgrade on growth concerns (Investing.com UK, 22 June 2026).
+- Wolfe Research target cut (Investing.com UK, 16 June 2026).
+- Morgan Stanley update citing weak bookings (Yahoo Finance, 17 March 2026).
+- HSBC initiated with Reduce rating (Yahoo Finance, 31 July 2025); HSBC later cited Accenture favourably in an IBM-alternatives basket (Barron’s, 14 July 2026).
+
+**Sector context:**
+- “Will the IT consulting share price rout ever end?” (Financial Times, 1 June 2026).
+- “IBM’s Tumble Drags on Software, IT Stocks” including Accenture (WSJ, 14 July 2026).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research confirms the screen’s quality-and-valuation case on backward-looking metrics but weakens conviction on the strong buy signal owing to absent primary filings, a trimmed growth outlook, and unresolved AI disruption risk that screens cannot fully capture.

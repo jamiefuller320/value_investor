@@ -179,10 +179,11 @@ def run_library_ladder(
                 layer["skipped"] = True
                 layer["reason"] = "CURSOR_API_KEY missing"
             else:
-                research_dir = screen_result.screen_dir / "research"
+                # ResearchStore writes under output_dir/research/{TICKER}/
+                # (same layout as the weekly FTSE run under output/research/).
                 summary = run_research_for_strong_buys(
                     reports=reports,
-                    output_dir=research_dir,
+                    output_dir=screen_result.screen_dir,
                     api_key=key,
                     model=model,
                     weekly_cap=research_cap,
