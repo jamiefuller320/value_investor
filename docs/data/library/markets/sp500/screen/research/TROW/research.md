@@ -1,0 +1,112 @@
+# T. Rowe Price Group, Inc. (TROW) — Research memo
+
+_Version 1 · Updated 2026-07-16T19:28:39.660839+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+T. Rowe Price is a premier active asset manager trading at a depressed multiple despite a fortress balance sheet, high dividend yield, and robust free cash flow generation. The quantitative screen flags Strong Buy across cheapness, quality, dividend, GARP, and risk families (P/E 12.8, P/B 2.4, yield 4.4%, ROE 18.7%, D/E ~4%). The central debate is whether persistent net client outflows and weak relative investment performance against passive peers represent a cyclical trough or a structural erosion of the active-management franchise. Filings confirm revenue resilience in 2025 and early 2026, but also accelerating outflows and ongoing restructuring costs that screens underweight.
+
+## INVESTMENT THESIS
+The screen’s Strong Buy signal rests on a classic quality-value intersection: a capital-light, debt-light business generating substantial owner earnings and returning them aggressively to shareholders. T. Rowe Price passes 13 of 22 models including Graham Enterprising, FCF Yield, Buffett Quality, Economic Moat, High Dividend Yield, and Financial Health — a breadth rarely seen outside deep-value financials.
+
+Business quality supports the screen. The FY2025 10-K describes an 85+ year global active manager with $1,775.6 billion in AUM at year-end 2025, diversified across equity, fixed income, multi-asset, and alternatives, with target-date retirement assets of $561.4 billion (31.6% of AUM). Defined-contribution recordkeeping and transfer-agent services add sticky client relationships. The firm maintains net capital above regulatory minima across all subsidiaries and held $3.4 billion in cash at December 2025 (Q1 2026 10-Q).
+
+The valuation hook is clear: at P/E 12.8 and yield 4.4%, the market prices TROW as a structurally impaired active manager rather than a high-ROE compounder. Yahoo-sourced data show diluted EPS rising from $6.70 (2022) to $9.24 (2025) and FCF of $1.48 billion in 2025, with $1.14 billion in dividends and $621 million in buybacks — a shareholder-return profile that screens favourably on FCF yield and dividend growth models.
+
+However, the screen’s quality signals partially reflect market-driven AUM gains rather than organic growth. FY2025 net cash outflows were $56.9 billion (10-K), and Q1 2026 saw a further $13.7 billion of outflows (Q1 2026 10-Q). For a value investor, the case is compelling on price and balance-sheet strength, but contingent on whether management’s diversification into alternatives, ETFs, CLOs, and model delivery can stabilise flows.
+
+## FINANCIAL REVIEW
+**Annual results (10-K — business and AUM data only; financial statements truncated in filing extracts)**
+
+Both FY2024 and FY2025 10-K body extracts are truncated at ~80,000 characters within Item 1A Risk Factors; consolidated income statements, balance sheets, and cash flow statements are not present in the available filing bodies. Annual P&L, balance sheet, and cash flow figures below are sourced from `financials_annual.json` (Yahoo Finance fallback), explicitly noted.
+
+| Metric | FY2023 | FY2024 | FY2025 (Yahoo fallback) |
+|--------|--------|--------|-------------------------|
+| Total revenue | $6,460.5m | $7,093.6m | $7,314.8m |
+| Operating income | $2,038.0m | $2,476.6m | $2,477.4m |
+| Net income (common) | $1,744.3m | $2,044.3m | $2,036.5m |
+| Diluted EPS | $7.76 | $9.15 | $9.24 |
+| Free cash flow | $911.2m | $1,262.2m | $1,479.2m |
+
+From the FY2025 10-K (filing body): AUM rose to $1,775.6 billion at 31 December 2025 (+$169.0 billion YoY), driven by market appreciation of $216.7 billion net of distributions, offset by net cash outflows of $56.9 billion. Target-date products saw net inflows of $5.2 billion; headcount fell 4.7% to 7,773 as part of an expense-alignment programme including restructuring charges.
+
+From the FY2024 10-K (filing body): AUM was $1,606.6 billion at 31 December 2024 (+$162.1 billion YoY), with market appreciation of $205.3 billion and net cash outflows of $43.2 billion. Outflow pressure worsened in 2025.
+
+Balance sheet (Yahoo fallback, FY2025): total assets $14.3 billion; stockholders’ equity $10.9 billion; cash $3.4 billion; total debt/capital leases $447 million; goodwill $2.6 billion (OHA acquisition); tangible book ~$7.9 billion.
+
+**Interim results (10-Q filing bodies — primary source)**
+
+*Q1 2026 (filed 30 April 2026):*
+- Net revenues: $1,857.0m (+5.3% YoY vs $1,763.9m)
+- Net operating income: $680.5m (+14.1% YoY vs $596.3m)
+- Net income attributable to T. Rowe Price: $498.2m (+1.6% YoY vs $490.5m)
+- Diluted EPS: $2.23 (+3.7% YoY vs $2.15)
+- AUM at 31 March 2026: $1,709.7 billion (−$65.9 billion from year-end 2025), comprising market depreciation of $52.2 billion and net cash outflows of $13.7 billion
+- Restructuring charge: $10.0m (severance under ongoing expense programme)
+- Cash and cash equivalents: $3,729.8m; total assets $14,393.0m
+- Share repurchases: $333.5m; dividends paid: $289.1m in the quarter
+
+*9M FY2025 (Q3 2025 10-Q, nine months ended 30 September 2025):*
+- Net revenues: $5,380.7m (+2.1% YoY vs $5,269.1m)
+- Net income attributable to T. Rowe Price: $1,641.8m (−1.1% YoY vs $1,660.2m)
+- Diluted EPS (9M): $7.25 vs $7.23 prior year
+- Q3 2025 alone: net revenues $1,893.5m; net income attributable $646.1m; diluted EPS $2.87
+- Restructuring charge recognised in Q3 2025: $28.5m
+
+*Q1 2025 (10-Q):*
+- AUM at 31 March 2025: $1,566.3 billion (−$40.3 billion in the quarter); net outflows $8.6 billion
+- Net revenues $1,763.9m; net income attributable $490.5m; diluted EPS $2.15
+
+**Trend assessment:** Revenue and earnings have grown over the 2023–2025 period, supported by market appreciation lifting AUM-based fees. Organic growth remains negative: outflows accelerated from $43.2 billion (FY2024) to $56.9 billion (FY2025) to $13.7 billion in Q1 2026 alone. Operating leverage is positive in Q1 2026 (revenue +5.3%, operating income +14.1%), aided by restructuring and expense discipline, but investment performance versus passive peers remains weak — only 19% of U.S. equity funds beat the passive peer median over one year as of March 2026 (Q1 2026 10-Q MD&A). Capital returns remain aggressive relative to earnings.
+
+**Data gaps:** FY2024 and FY2025 10-K financial statement tables are absent from truncated filing extracts; annual figures rely on Yahoo fallback. Q2 and Q3 2025 10-Q extracts lack AUM MD&A sections (truncated). Eight 8-K filings in the index have no body extracts.
+
+## RISKS AND RED FLAGS
+**Structural and cyclical**
+- Persistent net outflows ($56.9 billion in FY2025; $13.7 billion in Q1 2026) amid industry shift to passive strategies. The FY2025 10-K explicitly warns that passive managers continue to gain share and fee compression is ongoing.
+- Weak relative performance: Q1 2026 10-Q reports only 19% of equity funds beating passive peer median over one year; 28% over three years. Poor performance drives redemptions with operating leverage amplifying earnings declines.
+- Revenue concentration in U.S. mutual funds (~55% of advisory fees per 10-K) with terminable contracts on short notice.
+
+**Regulatory and legal**
+- Extensive multi-jurisdictional regulation (SEC, FCA, FINRA, etc.). FY2025 10-K notes rising compliance burdens around cybersecurity, AI, sustainability disclosure, and fee transparency.
+- No going-concern language in available filing extracts (expected for a well-capitalised firm).
+- OHA acquisition contingent consideration of up to $900 million (payable 2026–2027 on revenue earnout targets); fair value remeasured at zero as of March 2026 (Q1 2026 10-Q). Ordinary-course litigation deemed remote by management.
+- Subsidiary net capital meets all minimum requirements (FY2025 10-K); no covenant concerns flagged.
+
+**Operational and governance**
+- Restructuring programme: role eliminations, technology outsourcing, property disposals, and $10.0m charge in Q1 2026 with $5.2m accrued. Q3 2025 recognised $28.5m restructuring charge.
+- Deferred compensation liabilities of $1,129.2m at March 2026 (Q1 10-Q balance sheet), hedged by investment portfolio — mark-to-market volatility in non-operating income.
+- Employee benefits liability $235.7m (Yahoo balance sheet, FY2025); no defined-benefit pension concern identified in available extracts.
+- Goodwill/intangibles of ~$2.9 billion tied to OHA; amortisation running ~$50–90m per quarter.
+- Cybersecurity risk flagged as dedicated 10-K item (Item 1C); body extract truncated before detail.
+
+**Competitive**
+- Capital Appreciation strategy closed since 2014 still represents ~6% of AUM (FY2025 10-K) — concentration risk if performance falters.
+- Unfunded alternatives capital commitments of $21.6 billion at December 2025 (not in fee-earning AUM).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate-to-good, dominated by flow/valuation commentary and product launches rather than governance events.
+
+**Strategy and product expansion**
+- *T. Rowe Price Launches Multi-Token Crypto ETF* (16 July 2026, yfinance) — actively managed crypto ETF, signalling willingness to extend into new asset classes.
+- *T. Rowe Price Expands Fixed Income Platform Through CLO Launch* (9 April 2026, Google News/TradingView) — builds on alternatives/CLO capabilities referenced in filings.
+- *T. Rowe Price Group (TROW) After The AdvanCell Deal Is It Fully Valued* (16 July 2026, yfinance) — participation in AdvanCell’s oversubscribed $315 million Series D radiopharmaceutical round, extending private-markets reach.
+
+**Flows and earnings**
+- *How Q2 Net Outflows Amid Stable AUM At T. Rowe Price (TROW) Have Reframed Its Investment Story* (15 July 2026, yfinance) — reports ~$6.5 billion Q2 net outflows against stable AUM near $1.89 trillion (note: headline figure appears truncated in source; filings show $1,775.6 billion at year-end 2025).
+- *T. Rowe Price (NASDAQ:TROW) Misses Q1 CY2026 Revenue Estimates* (30 April 2026, Google News/Yahoo Finance) — Q1 revenue miss despite YoY growth in reported net revenues.
+- *T. Rowe Price Group (TROW) Experiences Significant Stock Decline Following Outflows* (13 July 2026, GuruFocus) — market sensitivity to flow data.
+
+**Valuation and sentiment**
+- *T. Rowe Price (TROW) Stock Looks Cheap As Shares Stay Down 29%* (15 July 2026, yfinance) — five-year share price decline of ~29% despite fundamental recovery.
+- Multiple Zacks list inclusions (16 July 2026): Strong Buy, Best Value, Best Income — corroborating quantitative screen signal.
+- *T. Rowe Price (TROW) Stock Trades Down, Here Is Why* (10 December 2025, Google News/Yahoo Finance) — prior outflow-driven selloff.
+
+**Management/governance:** No material CEO change or regulatory enforcement action in the manifest. Form 4 insider filing noted (1 July 2026, Investing.com UK) without detail in manifest summary.
+
+**Coverage quality:** News is adequate on flows and product strategy but thin on deep fundamental analysis. Several Google News hits are T. Rowe Price’s own market commentary (not company-specific news). No M&A of scale beyond OHA earnout monitoring and venture participations.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Deep research largely confirms the quantitative Strong Buy on valuation, balance-sheet quality, and capital returns, but moderates conviction given accelerating net outflows, weak passive-relative performance, and restructuring costs that the screen cannot fully capture.

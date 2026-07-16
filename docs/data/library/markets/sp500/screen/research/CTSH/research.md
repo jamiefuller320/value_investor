@@ -1,0 +1,91 @@
+# Cognizant Technology Solutions Corporation (CTSH) — Research memo
+
+_Version 1 · Updated 2026-07-16T19:20:10.385915+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Cognizant is a global IT services and consulting business trading at unusually deep value multiples for the sector (P/E 9.7, P/B 1.4, dividend yield 3.1%, ROE 14.9%), with the quantitative screen passing cheapness, quality, dividend, GARP and risk families. Revenue has re-accelerated after a flat 2022–2023 period, and the company generates substantial free cash flow whilst returning capital aggressively via buybacks and dividends. The central debate is whether Cognizant can convert its AI partnership push (OpenAI, Google Cloud, sovereign AI) into sustained consulting growth, or whether sector-wide IT spending caution, AI-driven automation of legacy work, and Indian regulatory overhangs keep the stock structurally cheap. Filings show no going-concern language; balance sheet and covenant compliance are sound, but tax litigation and contingent liabilities warrant a medium-risk overlay despite the screen’s strong buy signal.
+
+## INVESTMENT THESIS
+For a value investor, CTSH offers a rare combination: a profitable, cash-generative franchise at single-digit earnings multiples, with a current ratio of 2.23, low net leverage, and a capital-return programme that is actively shrinking the share count (479m shares at year-end 2025 versus 495m a year earlier, per the Q1 2026 10-Q).
+
+The screen’s 13 passing models—including Graham Defensive/Enterprising, Earnings Yield, FCF Yield, Magic Formula, Acquirer’s Multiple and Financial Health—reflect fundamentals that are better than the market’s implied rating. Revenue grew from a reported $5.115bn in Q1 2025 to $5.413bn in Q1 2026 (+5.8% YoY, Q1 2026 10-Q), with nine-month 2025 revenue of $15.775bn versus $14.654bn in the prior year (+7.7%, Q3 2025 10-Q). Operating income remains robust: Q1 2026 income from operations was $843m on $5.413bn revenue (15.6% margin), broadly in line with Q1 2025’s $853m, though the prior-year quarter included a $62m gain on sale of Indian property.
+
+Business quality is underwritten by diversified vertical exposure (Health Sciences, Financial Services, Products & Resources, Communications/Media/Technology), a $6.3bn remaining performance obligation at March 2026 (Q1 2026 10-Q), and a net-cash-ish posture: cash and equivalents of $1.504bn against long-term debt of $535m at March 2026. The 2025 full-year free cash flow of $2.595bn (Yahoo fallback—see Financial Review) equates to a high single-digit FCF yield at current prices, supporting the screen’s FCF Yield pass.
+
+The valuation hook is straightforward: the market prices CTSH as a structurally challenged IT outsourcer, whilst filings show improving top-line momentum, disciplined balance-sheet management, and management commitment to a $2bn 2026 share repurchase target (news, 18 May 2026). If AI-led consulting wins even partially offset legacy commoditisation, re-rating toward sector-normal multiples would be material—without requiring heroic growth assumptions.
+
+## FINANCIAL REVIEW
+**Source note:** Annual 10-K body extracts (FY2024 and FY2025) in the filing index are truncated before consolidated financial statements; annual figures below are sourced from Yahoo (`financials_annual.json`) with an explicit fallback. Interim figures are from SEC 10-Q body extracts.
+
+**Annual trends (Yahoo fallback)**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue ($bn) | 19.43 | 19.35 | 19.74 | 21.11 |
+| Net income ($bn) | 2.29 | 2.13 | 2.24 | 2.23 |
+| Operating income ($bn) | 2.97 | 2.92 | 3.03 | 3.33 |
+| Diluted EPS ($) | 4.41 | 4.21 | 4.51 | 4.56 |
+| Free cash flow ($bn) | 2.24 | 2.01 | 1.83 | 2.60 |
+
+Revenue inflected in 2024–2025 after stagnation in 2022–2023. Net income has been remarkably stable near $2.1–2.3bn despite restructuring charges in 2023–2024 (NextGen programme, per FY2025 10-K glossary). FCF rebounded sharply in 2025 to $2.60bn, aided by lower acquisition outflows versus 2024’s $1.615bn Belcan purchase (Q3 2024 10-Q cash flow statement). Gross margin expanded modestly (gross profit $7.12bn on $21.11bn revenue in 2025 versus $6.78bn on $19.74bn in 2024, Yahoo).
+
+**Balance sheet (filings)**
+
+At 31 December 2025 (Q1 2026 10-Q comparative column): cash $1.901bn; total assets $20.692bn; stockholders’ equity $15.015bn; goodwill $7.106bn; current liabilities $3.659bn against current assets $7.818bn (current ratio ~2.14 from filings; screen reports 2.23). Total debt per Yahoo at year-end 2025 was $1.152bn against equity of $15.015bn—conservative for the sector. The Credit Agreement ($650m Term Loan, $1.850bn revolver, maturing October 2027) was fully covenant-compliant at 31 March 2026 (Q1 2026 10-Q, Note 5).
+
+**Interim momentum (10-Q filings)**
+
+| Period | Revenue | YoY growth | Op. income | Net income | Diluted EPS |
+|--------|---------|------------|------------|------------|-------------|
+| Q1 2025 | $5,115m | — | $853m | $663m | $1.34 |
+| Q2 2025 | $5,245m | +8.1% | $817m | $645m | $1.31 |
+| Q3 2025 | $5,415m | +7.4% | $866m | $274m* | $0.56* |
+| Q1 2026 | $5,413m | +5.8% | $843m | $662m | $1.39 |
+
+*Q3 2025 net income was depressed by a $613m income tax provision in the quarter (Q3 2025 10-Q); nine-month 2025 net income was $1,582m versus $1,694m in 9M 2024 despite higher revenue.
+
+Nine-month 2025 operating cash flow was $2,025m (Q3 2025 10-Q), tracking toward the full-year $2.883bn operating cash flow per Yahoo. Q1 2026 operating cash flow was only $274m versus $400m in Q1 2025, reflecting working-capital absorption ($366m receivables increase in FY2025 per Yahoo; Q1 2026 showed $143m receivables build and $432m liability reduction).
+
+**Capital allocation**
+
+Share repurchases accelerated: $444m in Q1 2026 versus $209m in Q1 2025 (Q1 2026 10-Q); nine-month 2025 repurchases totalled $1.04bn. Dividends remain steady (~$610m annually per Yahoo). On 1 January 2026, Cognizant closed the 3Cloud acquisition (Microsoft Azure specialist) for $728m (Q1 2026 10-Q, Note 3), explaining the goodwill increase to $7.681bn at March 2026.
+
+**Gaps**
+
+FY2025 and FY2024 10-K body extracts lack readable consolidated statement tables due to truncation at 80,000 characters. Q1 2026 MD&A narrative is similarly truncated; operational commentary relies on interim financial notes and news flow. No annual report gaps in the filing index itself—both 10-Ks and six 10-Qs are catalogued.
+
+## RISKS AND RED FLAGS
+**Indian tax and regulatory exposure (filings).** Cognizant faces ongoing disputes with the Indian Income Tax Department over 2013 and 2016 share repurchase transactions by CTS India. The ITD asserts an additional ₹33bn (~$353m at March 2026 rates) on the 2016 transaction; the company has deposited ₹30bn with the ITD and is appealing at the Madras High Court (Q1 2026 10-Q, Note 6). No reserve has been recorded; an adverse outcome could materially affect cash and earnings. Separately, the India Defined Contribution Obligation (Supreme Court of India ruling, 2019) led to a $117m accrual for prior periods, but filings state “the ultimate amount of our obligation may be materially different from the amount accrued” (Q1 2026 10-Q, Note 10).
+
+**Litigation.** The Syntel/TriZetto trade-secrets case produced a March 2026 USDC-SDNY order that could bring Cognizant’s award to approximately $298m (compensatory, punitive, interest, fees), but entry of judgment is pending and Syntel is expected to appeal; no gain has been recorded (Q1 2026 10-Q, Note 10). Shareholder derivative actions related to FCPA matters remain in litigation (referenced in Q1 2026 10-Q contingencies section).
+
+**Competitive and cyclical (FY2025 10-K forward-looking/risk language).** Filings highlight intense competition from Accenture, Indian peers (TCS, Infosys, Wipro, HCL), GCCs and boutique digital firms; risk that AI-based technologies reduce demand or pricing power for legacy services; client contract terminations on short notice; visa/immigration restrictions in the US, UK and EU; and anti-outsourcing legislation. July 2026 news of IBM’s weak outlook hitting software/IT services stocks underscores sector cyclicality.
+
+**Operational.** Project Leap—a programme introduced in Q2 2026 to streamline operations via AI-led efficiencies—carries execution and restructuring cost risk (Q1 2026 10-Q glossary). Q1 2026 SG&A was flat YoY at $791m despite revenue growth, but cost-of-revenue rose faster (+7.1%), compressing gross margin slightly.
+
+**Balance sheet.** Goodwill and intangibles exceed $9bn combined at March 2026—high for a services business and a potential impairment risk if growth slows. No going-concern qualification appears in any filing body reviewed.
+
+**Governance/pension.** Defined benefit plan adjustments appear in other comprehensive income ($38m benefit in Q1 2026); gratuity plans in India are disclosed but not flagged as critical. Credit covenants are met; no covenant breach language.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is substantial and AI-centric, not thin. Key items from the news manifest:
+
+- **Q4/FY2025 earnings beat (4 Feb 2026):** “Cognizant Reports Fourth Quarter and Full-Year 2025 Results” and “Cognizant (CTSH) Beats Q4 Earnings and Revenue Estimates” (Yahoo Finance)—management raised outlook; shares reacted positively (“Cognizant Q4 Earnings Beat Estimates: Will Raised View Aid Shares?”, TradingView, 5 Feb 2026).
+
+- **Capital return (18 May 2026):** “Cognizant Increases 2026 Share Repurchase Target by $1 Billion to $2 Billion” (PR Newswire UK)—signals confidence in cash generation.
+
+- **AI strategy cluster (Jul 2026):** Multiple headlines on Neuro AI Trust governance platform (1 Jul), Google Cloud/Gemini expansion (7 Jul), Frontier AI workforce scaling and 15,000-worker training programme (9–10 Jul), OpenAI Daybreak Cyber Partner Programme with GPT-5.5 (16 Jul), and Domyn sovereign AI partnership for regulated EMEA clients (2 Jul).
+
+- **M&A:** 3Cloud acquisition (closed 1 Jan 2026, per Q1 2026 10-Q); subsequent Astreya deal referenced as a subsequent event (25 Apr 2026, Q1 2026 10-Q).
+
+- **Analyst actions:** Mixed—Citigroup raised target to $55 (9 Jun 2026); Morgan Stanley and TD Cowen lowered targets to $44–47 (23–26 Jun 2026). GuruFocus articles cite GF Value ~$84 versus price ~$39–44, highlighting the value disconnect.
+
+- **Sector sentiment (14 Jul 2026):** “IBM Warning Hits Software Stocks” and “Software Stocks Sink as IBM Miss”—sector headwind despite company-specific AI news flow.
+
+- **Counter-narrative (10 Jul 2026):** “CTSH Strengthens Enterprise AI Strategy With Frontier Workforce” notes weak demand, competition and margin pressure alongside the AI push.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Deep research confirms the quantitative strong buy case on valuation, balance-sheet quality and improving revenue/FCF trends, whilst flagging medium risk from Indian tax litigation, sector cyclicality and the unresolved AI disruption debate that likely explains the discount.
