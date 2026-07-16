@@ -1,18 +1,19 @@
-"""Primary UK regulatory filings for research memos (separate from Yahoo).
+"""Primary regulatory filings for research memos (separate from Yahoo).
 
 Memo-eligible names only. Yahoo remains the screening source; this module
-collects RNS / results announcements for FINANCIAL REVIEW.
+collects primary filings for FINANCIAL REVIEW.
 
-Sources (in priority order for body text):
-1. Optional Ticker.app RNS API when ``TICKER_API_KEY`` is set
-2. Google News RSS discovery of Investegate / results headlines
-3. HTML body fetch when a direct Investegate (or similar) URL is available
+Regimes:
+- ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
+- ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
+- other markets: index left empty until a local regulator path is added
 
-Interim vs annual is classified from headlines / FCA-style categories.
+Interim vs annual is classified from form type (10-K/10-Q) or headline cues.
 """
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import logging
@@ -35,6 +36,15 @@ FILINGS_LOOKBACK_DAYS = 800  # ~2.2 years — cover annual + several interims
 FILINGS_MAX_ITEMS = 40
 FILINGS_BODY_MAX_CHARS = 80_000
 TICKER_API_BASE = "https://api.tickerapp.net/v2"
+SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
+SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik10}.json"
+SEC_ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{accession_nodash}/{document}"
+SEC_ANNUAL_FORMS = frozenset({"10-K", "10-K/A", "20-F", "20-F/A", "40-F", "40-F/A"})
+SEC_INTERIM_FORMS = frozenset({"10-Q", "10-Q/A", "6-K"})
+SEC_OTHER_FORMS = frozenset({"8-K", "8-K/A"})
+SEC_FORM_ALLOWLIST = SEC_ANNUAL_FORMS | SEC_INTERIM_FORMS | SEC_OTHER_FORMS
+
+_sec_ticker_cik_cache: dict[str, int] | None = None
 
 # Headline cues for regulatory results packs.
 _ANNUAL_PATTERNS = (
@@ -75,12 +85,59 @@ def _epic(ticker: str) -> str:
     return ticker.replace(".L", "").replace(".l", "").strip().upper()
 
 
-def classify_filing_period(headline: str, *, category: str | None = None) -> str:
+def resolve_filings_regime(market: str | None, ticker: str) -> str:
+    """
+    Choose filing source regime for a ticker.
+
+    Explicit market ids win; otherwise infer from Yahoo-style suffixes.
+    """
+    m = (market or "").strip().lower()
+    if m in {"sp500", "us", "nyse", "nasdaq"}:
+        return "sec_edgar"
+    if m in {"ftse350", "uk", "lse"}:
+        return "uk_rns"
+    if m in {"euro_stoxx50", "asx200"}:
+        return "unsupported"
+
+    t = (ticker or "").strip().upper()
+    if t.endswith(".L"):
+        return "uk_rns"
+    if t.endswith(".AX"):
+        return "unsupported"
+    # Bare US-style symbols (library research) → EDGAR
+    if re.fullmatch(r"[A-Z]{1,5}", _epic(t)):
+        return "sec_edgar"
+    return "uk_rns"
+
+
+def _sec_user_agent() -> str:
+    # SEC fair-access policy expects an identifying UA with a contact email.
+    return (
+        os.environ.get("SEC_USER_AGENT")
+        or "value-investor-research/0.1 (contact: research@example.com)"
+    )
+
+
+def classify_filing_period(
+    headline: str,
+    *,
+    category: str | None = None,
+    form: str | None = None,
+) -> str:
     """
     Return ``annual``, ``interim``, or ``other``.
 
-    Uses headline keywords and optional provider category codes/names.
+    Uses SEC form types when present, else headline keywords / provider categories.
     """
+    if form:
+        form_u = str(form).strip().upper()
+        if form_u in SEC_ANNUAL_FORMS:
+            return "annual"
+        if form_u in SEC_INTERIM_FORMS:
+            return "interim"
+        if form_u in SEC_OTHER_FORMS or form_u.startswith("8-K"):
+            return "other"
+
     blob = f"{headline or ''} {category or ''}".lower()
 
     # Dividends / buybacks / exchange offers are not results packs.
@@ -118,10 +175,179 @@ def _parse_rss_date(value: str | None) -> str | None:
 
 
 def _http_get(url: str, *, headers: dict[str, str] | None = None, timeout: int = 30) -> bytes:
-    request_headers = {"User-Agent": USER_AGENT, **(headers or {})}
+    request_headers = {
+        "User-Agent": USER_AGENT,
+        "Accept-Encoding": "gzip, deflate",
+        **(headers or {}),
+    }
     request = urllib.request.Request(url, headers=request_headers)
     with urllib.request.urlopen(request, timeout=timeout) as response:
-        return response.read()
+        data = response.read()
+        encoding = (response.headers.get("Content-Encoding") or "").lower()
+        if encoding == "gzip" or data[:2] == b"\x1f\x8b":
+            try:
+                data = gzip.decompress(data)
+            except OSError:
+                pass
+        return data
+
+
+def _load_sec_ticker_cik_map() -> dict[str, int]:
+    global _sec_ticker_cik_cache
+    if _sec_ticker_cik_cache is not None:
+        return _sec_ticker_cik_cache
+    try:
+        payload = _http_get(
+            SEC_COMPANY_TICKERS_URL,
+            headers={"User-Agent": _sec_user_agent()},
+            timeout=40,
+        )
+        data = json.loads(payload.decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        logger.warning("SEC company_tickers fetch failed: %s", exc)
+        _sec_ticker_cik_cache = {}
+        return _sec_ticker_cik_cache
+    mapping: dict[str, int] = {}
+    if isinstance(data, dict):
+        rows = data.values()
+    elif isinstance(data, list):
+        rows = data
+    else:
+        rows = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        ticker = str(row.get("ticker") or "").strip().upper()
+        cik = row.get("cik_str")
+        if ticker and cik is not None:
+            try:
+                mapping[ticker] = int(cik)
+            except (TypeError, ValueError):
+                continue
+    _sec_ticker_cik_cache = mapping
+    return mapping
+
+
+def resolve_sec_cik(ticker: str) -> int | None:
+    """Map a US ticker to SEC CIK, or None if unknown."""
+    epic = _epic(ticker)
+    return _load_sec_ticker_cik_map().get(epic)
+
+
+def fetch_filings_sec_edgar(
+    *,
+    ticker: str,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+    include_current_reports: bool = True,
+) -> list[dict[str, Any]]:
+    """
+    Fetch recent SEC EDGAR filings (10-K / 10-Q / optional 8-K) for a US ticker.
+
+    Returns metadata rows with direct archive HTML URLs suitable for body extract.
+    """
+    cik = resolve_sec_cik(ticker)
+    if cik is None:
+        logger.warning("SEC CIK not found for ticker %s", ticker)
+        return []
+
+    cik10 = f"{cik:010d}"
+    url = SEC_SUBMISSIONS_URL.format(cik10=cik10)
+    try:
+        payload = _http_get(url, headers={"User-Agent": _sec_user_agent()}, timeout=40)
+        data = json.loads(payload.decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        logger.warning("SEC submissions fetch failed for %s: %s", ticker, exc)
+        return []
+
+    recent = (data.get("filings") or {}).get("recent") or {}
+    forms = recent.get("form") or []
+    dates = recent.get("filingDate") or []
+    accessions = recent.get("accessionNumber") or []
+    documents = recent.get("primaryDocument") or []
+    descriptions = recent.get("primaryDocDescription") or []
+
+    cutoff = datetime.now(UTC) - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    annual_interim = 0
+    other_count = 0
+    # Prefer keeping room for 10-K/10-Q; cap noisy 8-Ks.
+    max_other = max(4, max_items // 4) if include_current_reports else 0
+
+    for idx, form in enumerate(forms):
+        form_s = str(form or "").strip()
+        if form_s not in SEC_FORM_ALLOWLIST:
+            continue
+        if form_s in SEC_OTHER_FORMS and not include_current_reports:
+            continue
+
+        filing_date = dates[idx] if idx < len(dates) else None
+        published = None
+        if filing_date:
+            try:
+                published_dt = datetime.strptime(str(filing_date), "%Y-%m-%d").replace(tzinfo=UTC)
+                if published_dt < cutoff:
+                    continue
+                published = published_dt.isoformat()
+            except ValueError:
+                published = str(filing_date)
+
+        accession = accessions[idx] if idx < len(accessions) else None
+        document = documents[idx] if idx < len(documents) else None
+        if not accession or not document:
+            continue
+        # Skip binary primary docs; we only extract HTML/text bodies.
+        doc_l = str(document).lower()
+        if doc_l.endswith(".pdf") or doc_l.endswith(".zip"):
+            continue
+
+        period = classify_filing_period(form_s, form=form_s)
+        if period == "other":
+            if other_count >= max_other:
+                continue
+            other_count += 1
+        else:
+            annual_interim += 1
+
+        desc = descriptions[idx] if idx < len(descriptions) else ""
+        headline = f"{form_s}: {desc}".strip(": ").strip() if desc else form_s
+        archive_url = SEC_ARCHIVE_URL.format(
+            cik=cik,
+            accession_nodash=str(accession).replace("-", ""),
+            document=document,
+        )
+        rows.append(
+            {
+                "id": _filing_id("sec", str(accession), form_s),
+                "source": "sec_edgar",
+                "headline": headline,
+                "published_at": published,
+                "url": archive_url,
+                "period": period,
+                "category": form_s,
+                "form": form_s,
+                "summary": "",
+                "has_body": False,
+                "body_path": None,
+                "priority": _priority_score(headline, period)
+                + (10 if form_s in SEC_ANNUAL_FORMS else 0),
+                "provider_id": str(accession),
+                "cik": cik,
+            }
+        )
+        if len(rows) >= max_items:
+            break
+
+    if not rows:
+        logger.info("No SEC filings in lookback for %s (CIK %s)", ticker, cik)
+    else:
+        logger.info(
+            "SEC EDGAR: %s → %d filings (%d annual/interim)",
+            ticker,
+            len(rows),
+            annual_interim,
+        )
+    return rows
 
 
 def _priority_score(headline: str, period: str) -> int:
@@ -311,13 +537,15 @@ def fetch_filing_body(url: str | None) -> str | None:
     # Google News wrappers rarely expose the publisher body.
     if "news.google.com" in url:
         return None
+    headers: dict[str, str] = {}
+    if "sec.gov" in url:
+        headers["User-Agent"] = _sec_user_agent()
     try:
-        raw = _http_get(url, timeout=40)
+        raw = _http_get(url, headers=headers, timeout=60)
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         logger.debug("Filing body fetch failed for %s: %s", url, exc)
         return None
 
-    content_type = ""
     # urlopen doesn't return headers here easily — sniff
     if raw[:4] == b"%PDF":
         logger.info("Skipping PDF filing body (not parsed): %s", url)
@@ -329,6 +557,12 @@ def fetch_filing_body(url: str | None) -> str | None:
     if len(text) > FILINGS_BODY_MAX_CHARS:
         text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
     return text
+
+
+def _source_bonus(source: str | None) -> int:
+    if source in {"ticker_rns_api", "sec_edgar"}:
+        return 30
+    return 0
 
 
 def merge_filings(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -344,12 +578,16 @@ def merge_filings(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
             if existing is None:
                 merged[str(key)] = row
                 continue
-            # Prefer ticker API / body-bearing rows
-            existing_score = int(existing.get("priority") or 0) + (
-                50 if existing.get("has_body") else 0
-            ) + (30 if existing.get("source") == "ticker_rns_api" else 0)
-            new_score = int(row.get("priority") or 0) + (50 if row.get("has_body") else 0) + (
-                30 if row.get("source") == "ticker_rns_api" else 0
+            # Prefer primary regulator / body-bearing rows
+            existing_score = (
+                int(existing.get("priority") or 0)
+                + (50 if existing.get("has_body") else 0)
+                + _source_bonus(existing.get("source"))
+            )
+            new_score = (
+                int(row.get("priority") or 0)
+                + (50 if row.get("has_body") else 0)
+                + _source_bonus(row.get("source"))
             )
             if new_score >= existing_score:
                 # Keep body path if new row lacks one
@@ -421,6 +659,7 @@ def ingest_filings(
     company_name: str,
     sources_dir: Path,
     api_key: str | None = None,
+    market: str | None = None,
 ) -> dict[str, Any]:
     """
     Build ``sources/filings/`` for a memo ticker.
@@ -433,21 +672,52 @@ def ingest_filings(
     bodies_dir = filings_dir / "bodies"
     filings_dir.mkdir(parents=True, exist_ok=True)
 
-    ticker_rows = fetch_filings_ticker_api(ticker=ticker, api_key=api_key)
-    google_rows = fetch_filings_google_news(company_name=company_name, ticker=ticker)
-    merged = merge_filings(ticker_rows, google_rows)
+    regime = resolve_filings_regime(market, ticker)
+    groups: list[list[dict[str, Any]]] = []
+    if regime == "uk_rns":
+        groups.append(fetch_filings_ticker_api(ticker=ticker, api_key=api_key))
+        groups.append(fetch_filings_google_news(company_name=company_name, ticker=ticker))
+    elif regime == "sec_edgar":
+        groups.append(fetch_filings_sec_edgar(ticker=ticker))
+    else:
+        logger.info(
+            "No filings regime for market=%s ticker=%s — writing empty index",
+            market,
+            ticker,
+        )
+
+    merged = merge_filings(*groups) if groups else []
     merged = _write_bodies(merged, bodies_dir)
+
+    if regime == "sec_edgar":
+        note = (
+            "Primary regulatory filings via SEC EDGAR (separate from Yahoo). "
+            "period=annual (10-K/20-F) | interim (10-Q) | other (8-K). "
+            "Bodies are plain-text extracts from the primary HTML document "
+            f"(truncated at {FILINGS_BODY_MAX_CHARS:,} chars)."
+        )
+    elif regime == "uk_rns":
+        note = (
+            "Primary regulatory filings for research (separate from Yahoo). "
+            "period=annual|interim|other. Bodies are plain-text extracts when a "
+            "direct publisher URL was available; Google News wrappers often lack bodies."
+        )
+    else:
+        note = (
+            f"No primary filings source configured for market={market!r} "
+            f"(regime={regime}). Yahoo financials remain available as secondary context."
+        )
 
     index = {
         "ticker": ticker,
         "company_name": company_name,
+        "market": market,
+        "regime": regime,
         "fetched_at": datetime.now(UTC).isoformat(),
-        "note": (
-            "Primary regulatory filings for research (separate from Yahoo). "
-            "period=annual|interim|other. Bodies are plain-text extracts when a "
-            "direct publisher URL was available; Google News wrappers often lack bodies."
+        "note": note,
+        "sources_used": sorted(
+            {str(row.get("source")) for row in merged if row.get("source")}
         ),
-        "sources_used": sorted({row.get("source") for row in merged if row.get("source")}),
         "summary": summarize_filings(merged),
         "filings": merged,
     }
@@ -463,4 +733,5 @@ def ingest_filings(
         "filings_dir": str(filings_dir),
         "filings_summary": index["summary"],
         "filings_sources": index["sources_used"],
+        "filings_regime": regime,
     }

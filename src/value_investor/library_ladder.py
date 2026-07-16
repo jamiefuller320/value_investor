@@ -187,6 +187,7 @@ def run_library_ladder(
                     api_key=key,
                     model=model,
                     weekly_cap=research_cap,
+                    market=market,
                 )
                 executed = int(summary.created) + int(summary.updated)
                 layer["executed"] = executed

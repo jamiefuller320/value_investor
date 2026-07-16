@@ -1,4 +1,4 @@
-"""Tests for primary RNS/results filings ingest (separate from Yahoo)."""
+"""Tests for primary RNS/results and SEC EDGAR filings ingest (separate from Yahoo)."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ from value_investor.research.filings import (
     classify_filing_period,
     ingest_filings,
     merge_filings,
+    resolve_filings_regime,
     summarize_filings,
 )
 from value_investor.research.ingest import ingest_research_sources
@@ -24,6 +25,18 @@ def test_classify_filing_period_annual_and_interim():
     assert classify_filing_period("Transaction in Own Shares") == "other"
     assert classify_filing_period("Shell plc First Quarter 2026 Interim Dividend") == "other"
     assert classify_filing_period("Shell plc Announces Final Results of Exchange Offers") == "other"
+    assert classify_filing_period("10-K", form="10-K") == "annual"
+    assert classify_filing_period("10-Q", form="10-Q") == "interim"
+    assert classify_filing_period("8-K", form="8-K") == "other"
+
+
+def test_resolve_filings_regime_by_market_and_ticker():
+    assert resolve_filings_regime("sp500", "ACN") == "sec_edgar"
+    assert resolve_filings_regime("ftse350", "SHEL.L") == "uk_rns"
+    assert resolve_filings_regime(None, "SHEL.L") == "uk_rns"
+    assert resolve_filings_regime(None, "ACN") == "sec_edgar"
+    assert resolve_filings_regime("asx200", "BHP.AX") == "unsupported"
+    assert resolve_filings_regime("euro_stoxx50", "SAP") == "unsupported"
 
 
 def test_merge_filings_prefers_body_and_ticker_source():
@@ -211,3 +224,78 @@ def test_ingest_filings_saves_body_for_direct_url(tmp_path: Path):
     bodies = list((tmp_path / "filings" / "bodies").glob("*.txt"))
     assert len(bodies) == 1
     assert "revenue increased" in bodies[0].read_text(encoding="utf-8")
+
+
+def test_ingest_filings_sec_edgar_writes_annual_interim_bodies(tmp_path: Path):
+    sec_rows = [
+        {
+            "id": "sec10k10k10k10k",
+            "source": "sec_edgar",
+            "headline": "10-K: Annual report",
+            "published_at": "2026-02-10T00:00:00+00:00",
+            "url": "https://www.sec.gov/Archives/edgar/data/91142/000009114226000008/aos-20251231.htm",
+            "period": "annual",
+            "category": "10-K",
+            "form": "10-K",
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 130,
+        },
+        {
+            "id": "sec10q10q10q10q",
+            "source": "sec_edgar",
+            "headline": "10-Q: Quarterly report",
+            "published_at": "2026-04-30T00:00:00+00:00",
+            "url": "https://www.sec.gov/Archives/edgar/data/91142/000009114226000084/aos-20260331.htm",
+            "period": "interim",
+            "category": "10-Q",
+            "form": "10-Q",
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 100,
+        },
+    ]
+    body_text = "A" * 250 + " Item 8 Financial Statements and Consolidated Balance Sheets."
+    with (
+        patch("value_investor.research.filings.fetch_filings_sec_edgar", return_value=sec_rows),
+        patch("value_investor.research.filings.fetch_filing_body", return_value=body_text),
+        patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
+        patch("value_investor.research.filings.fetch_filings_google_news") as uk_news,
+    ):
+        meta = ingest_filings(
+            ticker="AOS",
+            company_name="A. O. Smith Corporation",
+            sources_dir=tmp_path,
+            market="sp500",
+        )
+
+    uk_api.assert_not_called()
+    uk_news.assert_not_called()
+    assert meta["filings_regime"] == "sec_edgar"
+    assert meta["filings_summary"]["annual"] == 1
+    assert meta["filings_summary"]["interim"] == 1
+    assert meta["filings_summary"]["with_body"] == 2
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert index["regime"] == "sec_edgar"
+    assert index["sources_used"] == ["sec_edgar"]
+
+
+def test_ingest_filings_unsupported_market_empty(tmp_path: Path):
+    with (
+        patch("value_investor.research.filings.fetch_filings_sec_edgar") as sec,
+        patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
+        patch("value_investor.research.filings.fetch_filings_google_news") as uk_news,
+    ):
+        meta = ingest_filings(
+            ticker="SAP",
+            company_name="SAP SE",
+            sources_dir=tmp_path,
+            market="euro_stoxx50",
+        )
+    sec.assert_not_called()
+    uk_api.assert_not_called()
+    uk_news.assert_not_called()
+    assert meta["filings_regime"] == "unsupported"
+    assert meta["filings_summary"]["total"] == 0

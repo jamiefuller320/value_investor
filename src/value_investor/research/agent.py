@@ -31,15 +31,16 @@ def _initial_prompt(
     signal_label = _screen_signal_label(screen_signal)
     filings_index = sources_dir / "filings" / "filings_index.json"
     filings_bodies = sources_dir / "filings" / "bodies"
-    return f"""You are a UK equity research analyst writing a deep first-pass memo on {company_name} ({ticker}).
+    return f"""You are an equity research analyst writing a deep first-pass memo on {company_name} ({ticker}).
 
 The quantitative screen currently rates this name as a {signal_label}.
 
 Read the source files in: {sources_dir.resolve()}
 
 Primary regulatory filings (preferred for FINANCIAL REVIEW — keep separate from Yahoo):
-- `{filings_index.resolve()}` — RNS / results catalog with period labels: annual, interim, or other
-- `{filings_bodies.resolve()}/` — plain-text extracts of announcement bodies when downloadable
+- `{filings_index.resolve()}` — catalog with period labels: annual, interim, or other
+  (UK RNS/results or US SEC EDGAR 10-K/10-Q/8-K depending on market; see `regime` in the index)
+- `{filings_bodies.resolve()}/` — plain-text extracts of filing bodies when downloadable
 
 Secondary / context only (do not mix into a blended number set):
 - `financials_annual.json` — Yahoo annual statements (and cached quarterly income). Use only when filing bodies lack the figure you need, and say you fell back to Yahoo.
@@ -56,7 +57,7 @@ Why this is a {signal_label} for a value investor. Tie quantitative screen resul
 
 FINANCIAL REVIEW
 Analyse the financial trend using primary filings first.
-Cover both annual results / annual report packs and interim (half-year / quarterly / trading update) releases when present in `filings_index.json`.
+Cover both annual results (annual report / 10-K) and interim (half-year / 10-Q / trading update) releases when present in `filings_index.json`.
 Cite figures from filing body extracts under `filings/bodies/` when available; otherwise cite `financials_annual.json` and state the fallback explicitly.
 Do not invent numbers. Note gaps if interim or annual filings are missing from the index.
 
@@ -101,14 +102,14 @@ The quantitative screen currently rates this name as a {signal_label}.
 Existing memo: {existing_markdown_path.resolve()}
 New news batch since last update: {news_batch_path.resolve()}
 Full news archive: {(sources_dir / 'news_manifest.json').resolve()}
-Primary filings index (annual + interim RNS/results): {(sources_dir / 'filings' / 'filings_index.json').resolve()}
+Primary filings index (annual + interim; RNS or SEC EDGAR): {(sources_dir / 'filings' / 'filings_index.json').resolve()}
 Filing body extracts (if any): {(sources_dir / 'filings' / 'bodies').resolve()}
 Yahoo financials (secondary only): {(sources_dir / 'financials_annual.json').resolve()}
 
 Write ONE section with the heading exactly as shown:
 
 WEEKLY UPDATE
-Summarise any new information from the news batch and any new/changed annual or interim filings, and whether it changes the thesis, risks, or timing.
+Summarise any new information from the news batch and any new/changed annual or interim filings (10-K/10-Q or RNS), and whether it changes the thesis, risks, or timing.
 If nothing material changed, say so in 2–3 sentences.
 Reference article/filing titles and dates where relevant.
 Do not repeat the full prior memo.
