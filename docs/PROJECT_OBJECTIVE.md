@@ -41,8 +41,34 @@ The live screener stays on FTSE 350. A separate **data library** progressively f
 
 See: `ftse-library` CLI, `src/value_investor/data_library.py`, and `.github/workflows/library-grow.yml` (persists under `docs/data/library/`).
 
+### Library richness ladder (stage 3)
+
+Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expansion. Grow offline in layers:
+
+| Layer | What accumulates | Why |
+|-------|------------------|-----|
+| **A. Fundamentals** *(current `ftse-library`)* | Constituents + Yahoo-style metrics, coverage/freshness manifests | PIT history and fetch reliability |
+| **B. Screen-lite** *(later, L29)* | Offline model scores, signals, data-quality, dated archives | Ranking/stability history comparable to FTSE — the main missing richness |
+| **C. Selective research** *(later, L30)* | Memos only for strong_buy / top buy names | Decision-pack depth for eventual manual verification; expensive, so cap tightly |
+
+Do **not** run full FTSE-style research across whole foreign indexes. Prefer B for breadth of history; use C sparingly on the shortlist.
+
+Prerequisite before trusting B/C: **market-aware fetch** (L31) — today `fetch_company_metrics` normalises via `to_lse_ticker`, which can corrupt non-UK symbols.
+
+### Research model / subscription budget
+
+Processing speed is not a priority for library or weekly research. Prefer a cheaper Cursor model:
+
+```bash
+ftse-verify-key --list-models          # see IDs available to CURSOR_API_KEY
+ftse-research --model <cheaper-id> --research-cap 3
+ftse-email --research-docs --model <cheaper-id> --research-cap 3
+```
+
+Default remains `composer-2.5` if `--model` is omitted. Cap (`--research-cap`) is the primary cost control; model choice is the secondary one.
+
 ---
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11).
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11), library screen-lite (L29), budget library research (L30), market-aware fetch (L31).
