@@ -381,6 +381,35 @@ def refresh_metrics(
     updated = 0
     errors = 0
     field_union: set[str] = set()
+    checkpoint_every = 25
+    as_of = datetime.now(UTC).date().isoformat()
+    total = len(selected)
+
+    def _checkpoint(*, final: bool = False) -> None:
+        rows = list(by_metrics.values())
+        for row in rows:
+            field_union.update(_metric_field_names(row))
+        write_json(metrics_path, rows, compact=True, compress=True)
+        write_json(
+            market_dir(root, market_id) / "metrics" / f"{as_of}.json.gz",
+            rows,
+            compact=True,
+            compress=True,
+        )
+        manifest["fields_present"] = sorted(field_union)
+        manifest["last_metrics_refresh"] = datetime.now(UTC).isoformat()
+        _recompute_coverage(manifest)
+        save_manifest(root, market_id, manifest)
+        if not final:
+            logger.info(
+                "Library grow checkpoint %s: %d/%d updated (coverage %s/%s)",
+                market_id,
+                updated,
+                total,
+                manifest.get("coverage_count"),
+                manifest.get("ticker_count"),
+            )
+
     for ticker in selected:
         meta = by_ticker.get(ticker) or {"ticker": ticker}
         try:
@@ -406,24 +435,10 @@ def refresh_metrics(
         }
         manifest["ticker_state"] = state
         updated += 1
+        if updated % checkpoint_every == 0:
+            _checkpoint(final=False)
 
-    rows = list(by_metrics.values())
-    as_of = datetime.now(UTC).date().isoformat()
-    write_json(metrics_path, rows, compact=True, compress=True)
-    write_json(
-        market_dir(root, market_id) / "metrics" / f"{as_of}.json.gz",
-        rows,
-        compact=True,
-        compress=True,
-    )
-
-    # Union fields across all covered tickers for manifest summary
-    for row in rows:
-        field_union.update(_metric_field_names(row))
-    manifest["fields_present"] = sorted(field_union)
-    manifest["last_metrics_refresh"] = datetime.now(UTC).isoformat()
-    _recompute_coverage(manifest)
-    save_manifest(root, market_id, manifest)
+    _checkpoint(final=True)
     return {
         "market": market_id,
         "selected": selected,
