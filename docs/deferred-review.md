@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-16T14:09:50+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-16T14:30:03+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -65,7 +65,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
-| L29 | **Offline screen archives for library markets (screen-lite)** | Once a market library has solid fundamentals coverage, run the quant screen offline and archive scores/signals/history under the library — without changing the live FTSE path. Needed for rich stage-4 expansion. | Target market library coverage/freshness is high and market-aware fetch (non-.L tickers) is solid |
 
 ### Research & portfolio product
 
@@ -79,7 +78,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L19 | **Portfolio concentration / sizing UI** | Sector caps, correlation warnings, size hints | Report should answer what to do with the list |
 | L20 | **Synced portfolio backend / dedicated hosting** | Leave Pages+Actions until shared state, login, live refresh, or SLA needs | Multi-device portfolio or private interactive dash |
 | L27 | **Standardise verify-before-trade decision packs (stage 2)** | Harden prompt/decision-pack templates: signal → thesis → levels → size → risks, with low false confidence, suitable for routine manual trading. | Paper-auto narratives and research memos are stable week-to-week |
-| L30 | **Selective budget research on library strong-buy candidates** | After offline screen ranks names, run low-cap research memos on strong_buy/buy candidates using a cheaper Cursor model (--model) since latency is not a priority. Market-aware filings/news required first. | Offline library screen produces stable buy-tier shortlists for at least one non-UK market |
 
 ### Ops / reliability
 

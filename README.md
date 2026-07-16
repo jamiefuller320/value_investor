@@ -204,14 +204,15 @@ See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit cri
 Other markets accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Growth is **one focus index at a time** (default `sp500` → then `euro_stoxx50` → `asx200`).
 
 ```bash
-ftse-library policy                    # focus market, 10% weekly budget, research model
-ftse-library policy --refresh-day 12   # set to your Cursor plan refresh day
-ftse-library review-model              # pick cheapest agent; Monday cron re-checks
-ftse-library grow                      # grows focus market only
+ftse-library policy                    # Pro $20, refresh day 8, focus sp500
+ftse-library ladder                    # fundamentals → screen-lite → selective research
+ftse-library ladder --dry-run-research
+ftse-library screen                    # screen-lite only
+ftse-library review-model              # cheapest agent; Monday cron re-checks
 ftse-library status --markets sp500
 ```
 
-Budget defaults: **10% of plan USD / week** for the library strand; **surplus day** (day before refresh) accelerates grow. Policy lives in `docs/data/library/policy.json`. Workflows: `library-grow.yml`, `library-model-review.yml`.
+Budget: **Cursor Pro**, refresh **8th**, surplus **7th**, library strand **10%/week ($2)**. Policy: `docs/data/library/policy.json`. Workflows: `library-grow.yml` (ladder), `library-model-review.yml`.
 
 ## Parked ideas (periodic review)
 

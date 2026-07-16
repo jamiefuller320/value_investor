@@ -53,24 +53,30 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 
 Do **not** run full FTSE-style research across whole foreign indexes. Prefer B for breadth of history; use C sparingly on the shortlist.
 
-**One index at a time:** policy focus starts at `sp500`, then `euro_stoxx50`, then `asx200` once coverage/freshness graduation floors are met (`docs/data/library/policy.json`).
+**One index at a time:** policy focus is **`sp500`**, then `euro_stoxx50`, then `asx200` once coverage/freshness graduation floors are met (`docs/data/library/policy.json`).
+
+### Running the ladder
+
+```bash
+ftse-library ladder                    # A grow → B screen-lite → C selective research
+ftse-library screen                    # screen-lite only on focus metrics
+ftse-library ladder --dry-run-research # shortlist without calling Cursor
+```
+
+Artifacts: `docs/data/library/markets/sp500/screen/` (signals, shortlist, history) and optional `screen/research/` memos.
 
 ### Research model / subscription budget
 
-Cheapest agent for plan efficiency (as of current Cursor pricing): **`composer-2.5`** on the first-party pool. Absolute lowest API $/token among models on this key is usually **`gpt-5.4-nano`**, but that burns the API credit pool — prefer first-party for subscription budget.
+Cheapest agent for plan efficiency: **`composer-2.5`** (first-party pool). Billing configured for **Cursor Pro ($20/mo), refresh on the 8th** → surplus day **7th**, library strand **$2/week** (10%).
 
 ```bash
-ftse-library review-model              # re-pick cheapest; also runs on a Monday cron
-ftse-library policy                    # focus market + 10% weekly budget
-ftse-library policy --refresh-day N    # set to your Cursor billing refresh day
-ftse-research                          # uses policy / CURSOR_RESEARCH_MODEL
+ftse-library policy                    # focus + budget + model
+ftse-library review-model              # re-pick cheapest (Monday cron)
+ftse-library ladder
 ```
 
-Budget policy defaults:
-
-- **10% of plan included USD per week** for the library/research strand (`weekly_library_fraction: 0.1`).
-- **Surplus day:** day before `plan_refresh_day_of_month` accelerates fundamentals grow and allows spending remaining weekly headroom so credits are not left unused.
-- Cursor does not expose live remaining credits to this repo — set `plan_monthly_usd` / refresh day to match your billing page; spend is estimated when research runs.
+- Screen-lite runs once enough focus metrics exist (≥25 by default).
+- Selective research is capped by remaining weekly USD (~$0.40/memo estimate, hard cap 5).
 
 ---
 

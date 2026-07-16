@@ -150,6 +150,44 @@ def build_parser() -> argparse.ArgumentParser:
     review_p.add_argument("--json", action="store_true")
     review_p.set_defaults(func=cmd_review_model)
 
+    screen_p = sub.add_parser(
+        "screen",
+        help="Run offline screen-lite on library metrics for the focus market",
+    )
+    screen_p.add_argument(
+        "--markets",
+        default="",
+        help="Market id (default: focus market from policy)",
+    )
+    screen_p.add_argument("--json", action="store_true")
+    screen_p.set_defaults(func=cmd_screen)
+
+    ladder_p = sub.add_parser(
+        "ladder",
+        help="Run offline ladder: fundamentals → screen-lite → selective research",
+    )
+    ladder_p.add_argument("--skip-grow", action="store_true")
+    ladder_p.add_argument("--skip-screen", action="store_true")
+    ladder_p.add_argument("--skip-research", action="store_true")
+    ladder_p.add_argument(
+        "--dry-run-research",
+        action="store_true",
+        help="List research targets without calling the Cursor agent",
+    )
+    ladder_p.add_argument(
+        "--max-tickers",
+        type=int,
+        default=None,
+        help="Override fundamentals grow budget for this run",
+    )
+    ladder_p.add_argument(
+        "--api-key",
+        default=os.environ.get("CURSOR_API_KEY"),
+        help="Cursor API key for selective research",
+    )
+    ladder_p.add_argument("--json", action="store_true")
+    ladder_p.set_defaults(func=cmd_ladder)
+
     return parser
 
 
@@ -341,6 +379,71 @@ def cmd_review_model(args: argparse.Namespace) -> int:
     )
     print(f"Saved to {args.policy}")
     print(f"Use with: ftse-research --model {pick['model_id']}")
+    return 0
+
+
+def cmd_screen(args: argparse.Namespace) -> int:
+    from .library_screen import run_library_screen
+
+    markets = _parse_markets(args.markets) or focus_markets(load_policy(args.policy))
+    summaries = []
+    for mid in markets:
+        result = run_library_screen(args.root, mid)
+        summaries.append(result.summary)
+        if not args.json:
+            print(
+                f"{mid}: screened {result.summary['ticker_count']}  "
+                f"strong_buy={result.summary.get('strong_buy', 0)}  "
+                f"buy={result.summary.get('buy', 0)}  "
+                f"shortlist={result.summary.get('shortlist_count', 0)}"
+            )
+            print(f"  wrote {result.screen_dir}")
+    if args.json:
+        print(json.dumps({"markets": summaries}, indent=2))
+    return 0
+
+
+def cmd_ladder(args: argparse.Namespace) -> int:
+    from .library_ladder import run_library_ladder
+
+    payload = run_library_ladder(
+        root=args.root,
+        policy_path=args.policy,
+        skip_grow=bool(args.skip_grow),
+        skip_screen=bool(args.skip_screen),
+        skip_research=bool(args.skip_research),
+        dry_run_research=bool(args.dry_run_research),
+        api_key=args.api_key,
+        max_tickers=args.max_tickers,
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(f"Ladder focus: {payload['focus_market']}")
+    for name, layer in (payload.get("layers") or {}).items():
+        if layer.get("skipped"):
+            print(f"  {name}: skipped — {layer.get('reason') or 'flagged'}")
+        elif name == "fundamentals":
+            st = (layer.get("status") or [{}])[0]
+            print(
+                f"  fundamentals: coverage={st.get('coverage_count', 0)}/"
+                f"{st.get('ticker_count', 0)}  max_tickers={layer.get('max_tickers')}"
+            )
+        elif name == "screen_lite":
+            print(
+                f"  screen_lite: tickers={layer.get('ticker_count')}  "
+                f"strong_buy={layer.get('strong_buy')}  buy={layer.get('buy')}  "
+                f"shortlist={layer.get('shortlist_count')}"
+            )
+        elif name == "selective_research":
+            print(
+                f"  selective_research: model={layer.get('model')}  "
+                f"cap={layer.get('research_cap')}  "
+                f"targets={len(layer.get('targets') or [])}  "
+                f"executed={layer.get('executed', 0)}"
+            )
+            for t in layer.get("targets") or []:
+                print(f"    • {t['ticker']} {t['signal']} ({t.get('name')})")
     return 0
 
 

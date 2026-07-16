@@ -1,22 +1,26 @@
-name: FTSE Library Grow
+name: FTSE Library Ladder
 
-# Single-index offline library growth (focus market from policy.json).
-# Fundamentals grow is Yahoo-side; Cursor agent budget is tracked separately for research.
+# Offline richness ladder for the focus market (default S&P 500):
+# A fundamentals grow → B screen-lite → C selective research (budget-gated).
 on:
   workflow_dispatch:
     inputs:
-      markets:
-        description: "Override focus market (empty = policy focus)"
-        type: string
-        default: ""
       max_tickers:
-        description: "Override max tickers (empty = policy budget)"
+        description: "Override fundamentals max tickers (empty = policy)"
         type: string
         default: ""
+      dry_run_research:
+        description: "List research targets without calling Cursor agent"
+        type: boolean
+        default: false
+      skip_research:
+        description: "Skip selective research layer"
+        type: boolean
+        default: false
   schedule:
-    # Weekly grow — Sundays 06:00 UTC
+    # Weekly ladder — Sundays 06:00 UTC
     - cron: "0 6 * * 0"
-    # Daily check for surplus-day acceleration (day before plan refresh)
+    # Daily check for surplus-day acceleration (7th when refresh is 8th)
     - cron: "30 5 * * *"
 
 permissions:
@@ -27,7 +31,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  library-grow:
+  library-ladder:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -39,76 +43,77 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Ensure policy + decide grow plan
+      - name: Ensure Pro billing policy (8th) + decide schedule gate
         id: plan
         run: |
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
-          # Materialise defaults if missing
-          ftse-library policy --policy "$ROOT/policy.json" >/dev/null
+          ftse-library --policy "$ROOT/policy.json" policy \
+            --plan-monthly-usd 20 \
+            --weekly-fraction 0.1 \
+            --refresh-day 8 \
+            --focus sp500 >/dev/null
           python3 - <<'PY'
           import json
           import os
           from datetime import UTC, datetime
           from pathlib import Path
-          from value_investor.agent_model_policy import grow_ticker_budget, load_policy, is_surplus_spend_day
+          from value_investor.agent_model_policy import grow_ticker_budget, load_policy
 
-          policy_path = Path("docs/data/library/policy.json")
-          policy = load_policy(policy_path)
-          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          policy = load_policy(Path("docs/data/library/policy.json"))
           plan = grow_ticker_budget(policy)
-          # On the daily cron, only run when it is the surplus day.
+          event = os.environ.get("GITHUB_EVENT_NAME", "")
           out = Path(os.environ["GITHUB_OUTPUT"])
+
           def emit(**kwargs):
               with out.open("a", encoding="utf-8") as fh:
                   for key, value in kwargs.items():
                       fh.write(f"{key}={value}\n")
 
           if event == "schedule":
-              # Daily cron also fires; only grow on Sunday or surplus day.
               now = datetime.now(UTC)
               is_sunday = now.weekday() == 6
-              surplus = plan["surplus_day"]
-              if not is_sunday and not surplus:
+              if not is_sunday and not plan["surplus_day"]:
                   emit(skip="true", reason="not_sunday_and_not_surplus")
-                  print("skip=true reason=not_sunday_and_not_surplus")
+                  print("skip=true")
                   raise SystemExit(0)
-          markets = os.environ.get("INPUT_MARKETS", "").strip()
-          max_tickers = os.environ.get("INPUT_MAX", "").strip()
-          if not markets:
-              markets = ",".join(plan["focus_markets"])
-          if not max_tickers:
-              max_tickers = str(plan["max_tickers"])
+          max_tickers = os.environ.get("INPUT_MAX", "").strip() or str(plan["max_tickers"])
           emit(
               skip="false",
-              markets=markets,
               max_tickers=max_tickers,
               surplus=str(plan["surplus_day"]).lower(),
               model=plan["research_model"],
+              weekly_usd=str(plan["weekly_library_usd"]),
           )
-          print(json.dumps({"markets": markets, "max_tickers": max_tickers, "plan": plan}, indent=2))
+          print(json.dumps(plan, indent=2))
           PY
         env:
-          INPUT_MARKETS: ${{ github.event.inputs.markets }}
           INPUT_MAX: ${{ github.event.inputs.max_tickers }}
 
-      - name: Grow focus library
+      - name: Run offline ladder
         if: steps.plan.outputs.skip != 'true'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           ROOT="docs/data/library"
-          ftse-library grow \
-            --root "$ROOT" \
-            --policy "$ROOT/policy.json" \
-            --markets "${{ steps.plan.outputs.markets }}" \
-            --max-tickers "${{ steps.plan.outputs.max_tickers }}" \
-            --retention-days 120 \
-            --json | tee "$ROOT/last_grow.json"
-          ftse-library status --root "$ROOT" --markets "${{ steps.plan.outputs.markets }}" --json \
+          ARGS="--root $ROOT --policy $ROOT/policy.json ladder --max-tickers ${{ steps.plan.outputs.max_tickers }} --json"
+          if [ "${{ github.event.inputs.dry_run_research }}" = "true" ]; then
+            ARGS="$ARGS --dry-run-research"
+          fi
+          if [ "${{ github.event.inputs.skip_research }}" = "true" ]; then
+            ARGS="$ARGS --skip-research"
+          fi
+          # Scheduled runs: research only when key present; otherwise dry-run research
+          if [ "${{ github.event_name }}" = "schedule" ] && [ -z "$CURSOR_API_KEY" ]; then
+            ARGS="$ARGS --dry-run-research"
+          fi
+          ftse-library $ARGS | tee "$ROOT/last_ladder.json"
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" status --markets sp500 --json \
             | tee "$ROOT/status_snapshot.json"
 
-      - name: Commit library artifacts
+      - name: Commit library ladder artifacts
         if: steps.plan.outputs.skip != 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "chore: grow offline focus-market data library"
+          commit_message: "chore: run offline library ladder (focus market)"
           file_pattern: "docs/data/library/**"

@@ -33,12 +33,12 @@ def test_recommend_falls_back_to_cheapest_api():
 
 
 def test_surplus_day_before_refresh():
+    # Pro billing on the 8th → surplus is the 7th
+    assert is_surplus_spend_day(datetime(2026, 7, 7, tzinfo=UTC), plan_refresh_day=8)
+    assert not is_surplus_spend_day(datetime(2026, 7, 8, tzinfo=UTC), plan_refresh_day=8)
     # Refresh on the 1st → surplus is last day of month
     assert is_surplus_spend_day(datetime(2026, 7, 31, tzinfo=UTC), plan_refresh_day=1)
     assert not is_surplus_spend_day(datetime(2026, 7, 30, tzinfo=UTC), plan_refresh_day=1)
-    # Refresh on the 15th → surplus is the 14th
-    assert is_surplus_spend_day(datetime(2026, 7, 14, tzinfo=UTC), plan_refresh_day=15)
-    assert not is_surplus_spend_day(datetime(2026, 7, 15, tzinfo=UTC), plan_refresh_day=15)
 
 
 def test_grow_budget_focus_and_surplus(tmp_path: Path):
@@ -47,7 +47,7 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     policy["focus_market"] = "sp500"
     policy["budget"]["plan_monthly_usd"] = 20
     policy["budget"]["weekly_library_fraction"] = 0.10
-    policy["budget"]["plan_refresh_day_of_month"] = 1
+    policy["budget"]["plan_refresh_day_of_month"] = 8
     save_policy(policy, path)
     policy = load_policy(path)
 
@@ -59,11 +59,12 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     assert normal["surplus_day"] is False
     assert normal["weekly_library_usd"] == 2.0
 
+    # Surplus day is the 7th when refresh is the 8th
     surplus = grow_ticker_budget(
         policy,
         base_max_tickers=40,
         surplus_max_tickers=120,
-        today=datetime(2026, 7, 31, tzinfo=UTC),
+        today=datetime(2026, 7, 7, tzinfo=UTC),
     )
     assert surplus["surplus_day"] is True
     assert surplus["max_tickers"] == 120

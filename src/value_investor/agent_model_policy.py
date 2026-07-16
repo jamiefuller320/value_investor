@@ -33,8 +33,9 @@ MODEL_API_RATES: dict[str, tuple[float, float]] = {
 FIRST_PARTY_MODEL_IDS = frozenset({"default", "composer-2.5", "grok-4.5"})
 
 DEFAULT_POLICY_PATH = Path("docs/data/library/policy.json")
-DEFAULT_PLAN_MONTHLY_USD = 20.0
+DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro included API pool
 DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10
+DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
 DEFAULT_MARKET_QUEUE = ["sp500", "euro_stoxx50", "asx200"]
 
@@ -131,7 +132,7 @@ def default_policy() -> dict[str, Any]:
             "weekly_library_usd": round(
                 DEFAULT_PLAN_MONTHLY_USD * DEFAULT_WEEKLY_BUDGET_FRACTION, 2
             ),
-            "plan_refresh_day_of_month": 1,
+            "plan_refresh_day_of_month": DEFAULT_PLAN_REFRESH_DAY,
             "surplus_day_before_refresh": True,
             "estimated_spend_usd_this_cycle": 0.0,
             "estimated_spend_usd_this_week": 0.0,
@@ -164,6 +165,17 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         merged = default_policy()[key]
         merged.update(dict(data.get(key) or {}))
         base[key] = merged
+    if "ladder" in data or True:
+        ladder = {
+            "enabled": True,
+            "layers": ["fundamentals", "screen_lite", "selective_research"],
+            "min_metrics_for_screen": 25,
+            "estimated_memo_usd": 0.4,
+            "research_hard_cap": 5,
+            "last_run": None,
+        }
+        ladder.update(dict(data.get("ladder") or {}))
+        base["ladder"] = ladder
     if not base.get("market_queue"):
         base["market_queue"] = list(DEFAULT_MARKET_QUEUE)
     if not base.get("focus_market"):
@@ -233,7 +245,7 @@ def focus_markets(policy: dict[str, Any] | None = None) -> list[str]:
 def is_surplus_spend_day(
     today: datetime | None = None,
     *,
-    plan_refresh_day: int = 1,
+    plan_refresh_day: int = DEFAULT_PLAN_REFRESH_DAY,
 ) -> bool:
     """True on the calendar day immediately before plan_refresh_day_of_month."""
     today = today or datetime.now(UTC)
