@@ -1,5 +1,12 @@
 # Agent instructions — FTSE Value Investor
 
+## Project objective
+
+Ultimate goal: a **self-improving automated global value portfolio**.  
+Interim goal: **high-quality prompts / decision packs** for manual verification and trade actions.
+
+North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Keep the live screener on FTSE 350 until stage 4; grow other markets via `ftse-library` offline.
+
 ## Parked / later ideas (required)
 
 When you give advice that is **not relevant now** or **potentially useful later** (deferred features, premature ideas, “revisit when…”, out-of-scope enhancements), **append it to the deferred-ideas store before ending the turn**:

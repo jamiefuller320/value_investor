@@ -1,0 +1,65 @@
+name: FTSE Library Grow
+
+# Progressive offline multi-market data libraries (not the live FTSE 350 screen).
+# Small per-run budgets accumulate coverage across weeks.
+on:
+  workflow_dispatch:
+    inputs:
+      markets:
+        description: "Comma-separated markets (empty = all registered)"
+        type: string
+        default: "sp500,euro_stoxx50,asx200"
+      max_tickers:
+        description: "Max tickers to fetch per market this run"
+        type: string
+        default: "20"
+  schedule:
+    # Sundays 06:00 UTC — quiet slot, separate from weekday paper-auto / weekly screen
+    - cron: "0 6 * * 0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftse-library-grow
+  cancel-in-progress: false
+
+jobs:
+  library-grow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Grow offline libraries
+        run: |
+          MARKETS="${{ github.event.inputs.markets }}"
+          if [ -z "$MARKETS" ]; then
+            MARKETS="sp500,euro_stoxx50,asx200"
+          fi
+          MAX="${{ github.event.inputs.max_tickers }}"
+          if [ -z "$MAX" ]; then
+            MAX="20"
+          fi
+          # Persist under docs/data/library (output/ is gitignored).
+          ROOT="docs/data/library"
+          mkdir -p "$ROOT"
+          ftse-library grow \
+            --root "$ROOT" \
+            --markets "$MARKETS" \
+            --max-tickers "$MAX" \
+            --retention-days 120 \
+            --json | tee "$ROOT/last_grow.json"
+          ftse-library status --root "$ROOT" --json | tee "$ROOT/status_snapshot.json"
+
+      - name: Commit library artifacts
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: grow offline multi-market data libraries"
+          file_pattern: "docs/data/library/**"
