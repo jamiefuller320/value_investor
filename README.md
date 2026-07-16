@@ -201,16 +201,17 @@ See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit cri
 
 ## Offline multi-market data libraries
 
-Other markets can accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Progressive grow runs prefer never-fetched tickers, then stale ones, with a per-run budget so libraries thicken across many scheduled jobs.
+Other markets accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Growth is **one focus index at a time** (default `sp500` → then `euro_stoxx50` → `asx200`).
 
 ```bash
-ftse-library list
-ftse-library status
-ftse-library refresh-constituents --markets sp500,asx200
-ftse-library grow --markets sp500,euro_stoxx50,asx200 --max-tickers 25
+ftse-library policy                    # Pro $20, refresh day 8, focus + graduation
+ftse-library ladder                    # grow → maintain graduated → screen → research → graduate
+ftse-library graduate --dry-run        # check floors without advancing
+ftse-library ladder --dry-run-research
+ftse-library review-model
 ```
 
-Local default root: `output/library/`. Scheduled CI grows into `docs/data/library/` (constituents, metrics, `manifest.json`) so coverage persists across runs. Do not wire these into the live screener until stage 4 quality bars are met. Workflow: `.github/workflows/library-grow.yml` (Sundays + manual).
+Budget: **Cursor Pro**, refresh **8th**, surplus **7th**, library strand **10%/week ($2)**. Focus auto-advances when coverage/stale floors are met; graduated markets get a light maintenance grow. Policy: `docs/data/library/policy.json`.
 
 ## Parked ideas (periodic review)
 
@@ -236,7 +237,7 @@ Cloud agents are instructed via `AGENTS.md` to call `ftse-defer add` whenever th
    The Cursor agent prefers filing bodies for FINANCIAL REVIEW and falls back to Yahoo only when needed.
 2. **Weekly reruns** — refreshes filings + news, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news/filings change conviction (otherwise repeats the prior verdict).
 
-Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Override the cap with `--research-cap N`. Optional repo secret `TICKER_API_KEY` improves RNS body coverage for memo names.
+Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Active buy-tier names use `--research-cap N`; names that later drop off the pick list keep receiving weekly updates (oldest memos first) up to `--alumni-cap N` so decision history stays rich — disable with `--no-continue-alumni`. Optional repo secret `TICKER_API_KEY` improves RNS body coverage for memo names.
 
 ## First weekly run checklist
 

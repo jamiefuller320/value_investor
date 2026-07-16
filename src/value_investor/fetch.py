@@ -177,9 +177,71 @@ def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
     raise last_exc
 
 
-def fetch_company_metrics(ticker: str, name: str | None = None, sector: str | None = None) -> CompanyMetrics:
-    """Pull screening metrics for a single LSE ticker via yfinance + fallbacks."""
-    resolved = to_lse_ticker(ticker)
+def resolve_yahoo_ticker(ticker: str) -> str:
+    """
+    Resolve a ticker for Yahoo Finance.
+
+    LSE EPICs (bare or ``.L``) map via ``to_lse_ticker``. Other Yahoo symbols
+    (US bare tickers, ``.AX``, ``.DE``, etc.) are left intact so offline
+    multi-market libraries are not rewritten to ``.L``.
+    """
+    raw = str(ticker or "").strip()
+    if not raw:
+        return raw
+    upper = raw.upper()
+    known_suffixes = (
+        ".AX",
+        ".DE",
+        ".PA",
+        ".AS",
+        ".MI",
+        ".MC",
+        ".SW",
+        ".HK",
+        ".T",
+        ".TO",
+        ".V",
+        ".SS",
+        ".SZ",
+    )
+    if any(upper.endswith(suffix) for suffix in known_suffixes):
+        return upper
+    # Default project universe is LSE (bare EPICs, class shares like BT.A, and .L).
+    # Non-LSE bare symbols (e.g. US) must pass market= via resolve_yahoo_ticker_for_market.
+    return to_lse_ticker(upper)
+
+
+def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> str:
+    """Market-aware Yahoo symbol resolution for offline libraries."""
+    raw = str(ticker or "").strip()
+    if not raw:
+        return raw
+    market_id = (market or "").strip().lower()
+    if market_id in {"sp500", "us"}:
+        return raw.replace(".", "-").upper() if not raw.endswith(".L") else to_lse_ticker(raw)
+    if market_id in {"asx200", "asx"}:
+        base = raw.upper()
+        return base if base.endswith(".AX") else f"{base.replace('.', '-')}.AX"
+    if market_id in {"euro_stoxx50", "eu"}:
+        return raw.strip()
+    if market_id in {"ftse350", "ftse100", "ftse250", "uk", "lse"}:
+        return to_lse_ticker(raw)
+    return resolve_yahoo_ticker(raw)
+
+
+def fetch_company_metrics(
+    ticker: str,
+    name: str | None = None,
+    sector: str | None = None,
+    *,
+    market: str | None = None,
+) -> CompanyMetrics:
+    """Pull screening metrics via yfinance + fallbacks (LSE by default)."""
+    resolved = (
+        resolve_yahoo_ticker_for_market(ticker, market)
+        if market
+        else resolve_yahoo_ticker(ticker)
+    )
     metrics = CompanyMetrics(ticker=resolved, name=name, sector=sector)
 
     try:

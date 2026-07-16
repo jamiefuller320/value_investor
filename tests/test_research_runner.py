@@ -6,10 +6,13 @@ import pandas as pd
 
 from value_investor.research.document import ResearchDocument
 from value_investor.research.runner import (
+    eligible_alumni_research_targets,
     eligible_research_targets,
     eligible_strong_buys,
     run_research_for_strong_buys,
+    select_research_targets,
 )
+from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
 
 
@@ -216,3 +219,134 @@ def test_run_research_includes_capped_buys(mock_ingest, mock_initial, tmp_path):
     tickers = {doc.ticker for doc in summary.documents}
     assert tickers == {"AAA.L", "BBB.L"}
     assert summary.created == 2
+
+
+def test_eligible_alumni_prefers_oldest_and_skips_active_buys(tmp_path):
+    store = ResearchStore(tmp_path)
+    older = ResearchDocument(
+        ticker="OLD.L",
+        name="Old Co",
+        signal="buy",
+        version=1,
+        created_at="2026-01-01T00:00:00+00:00",
+        updated_at="2026-01-01T00:00:00+00:00",
+        mode="initial",
+        executive_summary="Old memo",
+    )
+    newer = ResearchDocument(
+        ticker="NEW.L",
+        name="New Co",
+        signal="buy",
+        version=1,
+        created_at="2026-06-01T00:00:00+00:00",
+        updated_at="2026-06-01T00:00:00+00:00",
+        mode="initial",
+        executive_summary="Newer memo",
+    )
+    still_buy = ResearchDocument(
+        ticker="BUY.L",
+        name="Buy Co",
+        signal="buy",
+        version=1,
+        created_at="2026-02-01T00:00:00+00:00",
+        updated_at="2026-02-01T00:00:00+00:00",
+        mode="initial",
+        executive_summary="Still buy",
+    )
+    store.save(older)
+    store.save(newer)
+    store.save(still_buy)
+
+    reports = [
+        _report(ticker="OLD.L", name="Old Co", signal="hold"),
+        _report(ticker="NEW.L", name="New Co", signal="avoid"),
+        _report(ticker="BUY.L", name="Buy Co", signal="buy", data_quality_score=0.8),
+        _report(ticker="FRESH.L", name="Fresh", signal="strong_buy"),
+    ]
+    alumni = eligible_alumni_research_targets(reports, store, alumni_cap=8)
+    assert [r.ticker for r in alumni] == ["OLD.L", "NEW.L"]
+
+    active, alumni_sel = select_research_targets(
+        reports, store, weekly_cap=8, continue_alumni=True, alumni_cap=8
+    )
+    assert [r.ticker for r in active] == ["FRESH.L", "BUY.L"]
+    assert [r.ticker for r in alumni_sel] == ["OLD.L", "NEW.L"]
+
+
+@patch("value_investor.research.runner.run_weekly_research_update_agent")
+@patch("value_investor.research.runner.run_initial_research_agent")
+@patch("value_investor.research.runner.ingest_research_sources")
+def test_run_research_updates_alumni(mock_ingest, mock_initial, mock_weekly, tmp_path):
+    mock_ingest.return_value = {
+        "financials_path": "f.json",
+        "snapshot_path": "s.json",
+        "news_manifest_path": "n.json",
+        "news_batch_path": str(tmp_path / "b.json"),
+        "financial_years": 5,
+        "news_total": 2,
+        "news_new": 1,
+        "filings_summary": {},
+    }
+    (tmp_path / "b.json").write_text("[]", encoding="utf-8")
+
+    store = ResearchStore(tmp_path)
+    store.save(
+        ResearchDocument(
+            ticker="OLD.L",
+            name="Old Co",
+            signal="buy",
+            version=1,
+            created_at="2026-01-01T00:00:00+00:00",
+            updated_at="2026-01-01T00:00:00+00:00",
+            mode="initial",
+            executive_summary="Prior memo",
+            agent_id="agent-old",
+        )
+    )
+
+    mock_initial.return_value = (
+        ResearchDocument(
+            ticker="AAA.L",
+            name="Alpha PLC",
+            signal="strong_buy",
+            version=1,
+            created_at="2026-07-08T00:00:00+00:00",
+            updated_at="2026-07-08T00:00:00+00:00",
+            mode="initial",
+            executive_summary="New memo",
+            agent_id="agent-1",
+        ),
+        "agent-1",
+    )
+    mock_weekly.return_value = ResearchDocument(
+        ticker="OLD.L",
+        name="Old Co",
+        signal="hold",
+        version=2,
+        created_at="2026-01-01T00:00:00+00:00",
+        updated_at="2026-07-16T00:00:00+00:00",
+        mode="weekly_update",
+        executive_summary="Prior memo",
+        weekly_updates=[{"date": "2026-07-16", "summary": "Still monitoring."}],
+        agent_id="agent-old",
+    )
+
+    summary = run_research_for_strong_buys(
+        reports=[
+            _report(ticker="AAA.L", signal="strong_buy"),
+            _report(ticker="OLD.L", name="Old Co", signal="hold"),
+        ],
+        output_dir=tmp_path,
+        api_key="test-key",
+        weekly_cap=8,
+        continue_alumni=True,
+        alumni_cap=8,
+    )
+
+    assert summary.active_count == 1
+    assert summary.alumni_count == 1
+    assert summary.created == 1
+    assert summary.alumni_updated == 1
+    assert {doc.ticker for doc in summary.documents} == {"AAA.L", "OLD.L"}
+    mock_weekly.assert_called_once()
+    assert mock_weekly.call_args.kwargs["screen_signal"] == "hold"

@@ -1,21 +1,27 @@
-name: FTSE Library Grow
+name: FTSE Library Ladder
 
-# Progressive offline multi-market data libraries (not the live FTSE 350 screen).
-# Small per-run budgets accumulate coverage across weeks.
+# Offline richness ladder for the focus market (default S&P 500):
+# A fundamentals grow → B screen-lite → C selective research (budget-gated).
 on:
   workflow_dispatch:
     inputs:
-      markets:
-        description: "Comma-separated markets (empty = all registered)"
-        type: string
-        default: "sp500,euro_stoxx50,asx200"
       max_tickers:
-        description: "Max tickers to fetch per market this run"
+        description: "Override fundamentals max tickers (empty = policy)"
         type: string
-        default: "20"
+        default: ""
+      dry_run_research:
+        description: "List research targets without calling Cursor agent"
+        type: boolean
+        default: false
+      skip_research:
+        description: "Skip selective research layer"
+        type: boolean
+        default: false
   schedule:
-    # Sundays 06:00 UTC — quiet slot, separate from weekday paper-auto / weekly screen
+    # Weekly ladder — Sundays 06:00 UTC
     - cron: "0 6 * * 0"
+    # Daily check for surplus-day acceleration (7th when refresh is 8th)
+    - cron: "30 5 * * *"
 
 permissions:
   contents: write
@@ -25,7 +31,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  library-grow:
+  library-ladder:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -37,29 +43,80 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Grow offline libraries
+      - name: Ensure Pro billing policy (8th) + decide schedule gate
+        id: plan
         run: |
-          MARKETS="${{ github.event.inputs.markets }}"
-          if [ -z "$MARKETS" ]; then
-            MARKETS="sp500,euro_stoxx50,asx200"
-          fi
-          MAX="${{ github.event.inputs.max_tickers }}"
-          if [ -z "$MAX" ]; then
-            MAX="20"
-          fi
-          # Persist under docs/data/library (output/ is gitignored).
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
-          ftse-library grow \
-            --root "$ROOT" \
-            --markets "$MARKETS" \
-            --max-tickers "$MAX" \
-            --retention-days 120 \
-            --json | tee "$ROOT/last_grow.json"
-          ftse-library status --root "$ROOT" --json | tee "$ROOT/status_snapshot.json"
+          # Preserve focus_market / graduated_markets — do not force sp500.
+          ftse-library --policy "$ROOT/policy.json" policy \
+            --plan-monthly-usd 20 \
+            --weekly-fraction 0.1 \
+            --refresh-day 8 >/dev/null
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import UTC, datetime
+          from pathlib import Path
+          from value_investor.agent_model_policy import grow_ticker_budget, load_policy
 
-      - name: Commit library artifacts
+          policy = load_policy(Path("docs/data/library/policy.json"))
+          plan = grow_ticker_budget(policy)
+          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          out = Path(os.environ["GITHUB_OUTPUT"])
+
+          def emit(**kwargs):
+              with out.open("a", encoding="utf-8") as fh:
+                  for key, value in kwargs.items():
+                      fh.write(f"{key}={value}\n")
+
+          if event == "schedule":
+              now = datetime.now(UTC)
+              is_sunday = now.weekday() == 6
+              if not is_sunday and not plan["surplus_day"]:
+                  emit(skip="true", reason="not_sunday_and_not_surplus")
+                  print("skip=true")
+                  raise SystemExit(0)
+          max_tickers = os.environ.get("INPUT_MAX", "").strip() or str(plan["max_tickers"])
+          emit(
+              skip="false",
+              max_tickers=max_tickers,
+              surplus=str(plan["surplus_day"]).lower(),
+              model=plan["research_model"],
+              weekly_usd=str(plan["weekly_library_usd"]),
+          )
+          print(json.dumps(plan, indent=2))
+          PY
+        env:
+          INPUT_MAX: ${{ github.event.inputs.max_tickers }}
+
+      - name: Run offline ladder
+        if: steps.plan.outputs.skip != 'true'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          ROOT="docs/data/library"
+          ARGS="--root $ROOT --policy $ROOT/policy.json ladder --max-tickers ${{ steps.plan.outputs.max_tickers }} --json"
+          if [ "${{ github.event.inputs.dry_run_research }}" = "true" ]; then
+            ARGS="$ARGS --dry-run-research"
+          fi
+          if [ "${{ github.event.inputs.skip_research }}" = "true" ]; then
+            ARGS="$ARGS --skip-research"
+          fi
+          # Scheduled runs: research only when key present; otherwise dry-run research
+          if [ "${{ github.event_name }}" = "schedule" ] && [ -z "$CURSOR_API_KEY" ]; then
+            ARGS="$ARGS --dry-run-research"
+          fi
+          ftse-library $ARGS | tee "$ROOT/last_ladder.json"
+          FOCUS=$(python3 -c "import json; print(json.load(open('$ROOT/policy.json')).get('focus_market','sp500'))")
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" status --markets "$FOCUS" --json \
+            | tee "$ROOT/status_snapshot.json"
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" graduate --dry-run --json \
+            | tee "$ROOT/graduation_snapshot.json" || true
+
+      - name: Commit library ladder artifacts
+        if: steps.plan.outputs.skip != 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "chore: grow offline multi-market data libraries"
+          commit_message: "chore: run offline library ladder (focus market)"
           file_pattern: "docs/data/library/**"

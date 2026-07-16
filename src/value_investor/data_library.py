@@ -345,7 +345,9 @@ def refresh_metrics(
         manifest, max_tickers=max_tickers, stale_days=stale_days
     )
     fetch = fetch_fn or (
-        lambda ticker, name, sector: fetch_company_metrics(ticker, name=name, sector=sector)
+        lambda ticker, name, sector: fetch_company_metrics(
+            ticker, name=name, sector=sector, market=market_id
+        )
     )
 
     metrics_path = market_dir(root, market_id) / "metrics" / "latest.json.gz"

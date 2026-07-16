@@ -41,8 +41,45 @@ The live screener stays on FTSE 350. A separate **data library** progressively f
 
 See: `ftse-library` CLI, `src/value_investor/data_library.py`, and `.github/workflows/library-grow.yml` (persists under `docs/data/library/`).
 
+### Library richness ladder (stage 3)
+
+Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expansion. Grow offline in layers:
+
+| Layer | What accumulates | Why |
+|-------|------------------|-----|
+| **A. Fundamentals** *(current `ftse-library`)* | Constituents + Yahoo-style metrics, coverage/freshness manifests | PIT history and fetch reliability |
+| **B. Screen-lite** *(later, L29)* | Offline model scores, signals, data-quality, dated archives | Ranking/stability history comparable to FTSE — the main missing richness |
+| **C. Selective research** *(later, L30)* | Memos only for strong_buy / top buy names | Decision-pack depth for eventual manual verification; expensive, so cap tightly |
+
+Do **not** run full FTSE-style research across whole foreign indexes. Prefer B for breadth of history; use C sparingly on the shortlist.
+
+**One index at a time:** policy focus is **`sp500`**, then auto-advances to `euro_stoxx50`, then `asx200` when coverage ≥95% and stale ≤15% among covered names. Graduated markets keep a light maintenance grow (`maintenance_max_tickers`, default 15).
+
+### Running the ladder
+
+```bash
+ftse-library ladder                    # A grow → B screen-lite → C selective research
+ftse-library screen                    # screen-lite only on focus metrics
+ftse-library ladder --dry-run-research # shortlist without calling Cursor
+```
+
+Artifacts: `docs/data/library/markets/sp500/screen/` (signals, shortlist, history) and optional `screen/research/` memos.
+
+### Research model / subscription budget
+
+Cheapest agent for plan efficiency: **`composer-2.5`** (first-party pool). Billing configured for **Cursor Pro ($20/mo), refresh on the 8th** → surplus day **7th**, library strand **$2/week** (10%).
+
+```bash
+ftse-library policy                    # focus + budget + model
+ftse-library review-model              # re-pick cheapest (Monday cron)
+ftse-library ladder
+```
+
+- Screen-lite runs once enough focus metrics exist (≥25 by default).
+- Selective research is capped by remaining weekly USD (~$0.40/memo estimate, hard cap 5).
+
 ---
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11).
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11), library screen-lite (L29), budget library research (L30), market-aware fetch (L31).

@@ -123,8 +123,9 @@ def main(argv: list[str] | None = None) -> int:
         "--research-docs",
         action="store_true",
         help=(
-            "Generate or update per-ticker research memos for strong buys and top buys "
-            f"(weekly cap default {DEFAULT_RESEARCH_WEEKLY_CAP}; "
+            "Generate or update per-ticker research memos for strong buys and top buys, "
+            "and continue weekly updates for alumni that left the buy list "
+            f"(active cap default {DEFAULT_RESEARCH_WEEKLY_CAP}; "
             "5-year financials + 1-year news; weekly updates on reruns)"
         ),
     )
@@ -133,9 +134,23 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=DEFAULT_RESEARCH_WEEKLY_CAP,
         help=(
-            f"Max research memos per run when --research-docs is set "
+            f"Max active buy-tier research memos per run when --research-docs is set "
             f"(strong buys first, then top buys; default {DEFAULT_RESEARCH_WEEKLY_CAP})"
         ),
+    )
+    parser.add_argument(
+        "--alumni-cap",
+        type=int,
+        default=None,
+        help=(
+            "Max weekly updates for researched names that left the buy list "
+            "(default: same as research runner alumni default)"
+        ),
+    )
+    parser.add_argument(
+        "--no-continue-alumni",
+        action="store_true",
+        help="When using --research-docs, skip alumni refreshes for drop-offs",
     )
     parser.add_argument(
         "--send-only",
@@ -288,6 +303,8 @@ def main(argv: list[str] | None = None) -> int:
             print("CURSOR_API_KEY required for --research-docs", file=sys.stderr)
             return 1
         try:
+            from value_investor.research.runner import DEFAULT_RESEARCH_ALUMNI_CAP
+
             research_summary = run_research_for_strong_buys(
                 reports=reports,
                 output_dir=args.output_dir,
@@ -295,6 +312,12 @@ def main(argv: list[str] | None = None) -> int:
                 model=args.model,
                 run_at=run_at,
                 weekly_cap=args.research_cap,
+                continue_alumni=not args.no_continue_alumni,
+                alumni_cap=(
+                    args.alumni_cap
+                    if args.alumni_cap is not None
+                    else DEFAULT_RESEARCH_ALUMNI_CAP
+                ),
             )
         except RuntimeError as err:
             print(str(err), file=sys.stderr)

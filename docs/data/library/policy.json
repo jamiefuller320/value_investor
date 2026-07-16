@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "focus_market": "sp500",
+  "market_queue": [
+    "sp500",
+    "euro_stoxx50",
+    "asx200"
+  ],
+  "graduated_markets": [],
+  "focus_graduation": {
+    "min_coverage_pct": 0.95,
+    "max_stale_pct": 0.15,
+    "auto_advance": true,
+    "maintenance_enabled": true,
+    "maintenance_max_tickers": 15,
+    "history": [],
+    "note": "Advance to next queue market when focus meets floors; graduated markets keep a light maintenance grow."
+  },
+  "research_model": {
+    "model_id": "composer-2.5",
+    "display_name": "composer-2.5",
+    "input_per_m_usd": 0.5,
+    "output_per_m_usd": 2.5,
+    "pool": "first_party",
+    "reason": "First-party pool (preferred for subscription budget)"
+  },
+  "budget": {
+    "plan_monthly_usd": 20.0,
+    "weekly_library_fraction": 0.1,
+    "weekly_library_usd": 2.0,
+    "plan_refresh_day_of_month": 8,
+    "surplus_day_before_refresh": true,
+    "estimated_spend_usd_this_cycle": 0.0,
+    "estimated_spend_usd_this_week": 0.0,
+    "week_id": null,
+    "cycle_id": null,
+    "note": "Pro plan $20/mo included API pool; library strand uses 10%/week ($2). Surplus day is the 7th (day before refresh on the 8th).",
+    "plan_name": "Cursor Pro"
+  },
+  "model_review": {
+    "last_reviewed_at": "2026-07-16T14:09:40.872350+00:00",
+    "review_interval_days": 14,
+    "history": [
+      {
+        "reviewed_at": "2026-07-16T14:09:40.872338+00:00",
+        "model_id": "composer-2.5",
+        "previous_model_id": "composer-2.5",
+        "pool": "first_party",
+        "available_count": 34
+      }
+    ]
+  },
+  "updated_at": "2026-07-16T14:30:04.206905+00:00",
+  "ladder": {
+    "enabled": true,
+    "layers": [
+      "fundamentals",
+      "screen_lite",
+      "selective_research"
+    ],
+    "min_metrics_for_screen": 25,
+    "estimated_memo_usd": 0.4,
+    "research_hard_cap": 5,
+    "last_run": null
+  }
+}

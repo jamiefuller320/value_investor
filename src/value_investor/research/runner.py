@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 
 # Weekly memo budget for FTSE 350: all quality strong buys first, then top buys.
 DEFAULT_RESEARCH_WEEKLY_CAP = 12
+# Extra weekly updates for names that left the buy list but still have a memo.
+DEFAULT_RESEARCH_ALUMNI_CAP = 12
 
 
 def _rank_key(report: CompanyReport) -> tuple[float, float]:
@@ -42,10 +44,10 @@ def eligible_research_targets(
     weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
 ) -> list[CompanyReport]:
     """
-    Select names for deep research memos.
+    Select active buy-tier names for deep research memos.
 
     Priority: quality strong buys (all, ranked), then top quality buys to fill
-    remaining slots up to weekly_cap. Hold/avoid/short names are never included.
+    remaining slots up to weekly_cap.
     """
     if weekly_cap <= 0:
         return []
@@ -71,6 +73,68 @@ def eligible_research_targets(
     return selected
 
 
+def eligible_alumni_research_targets(
+    reports: list[CompanyReport],
+    store: ResearchStore,
+    *,
+    alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
+    exclude_tickers: set[str] | None = None,
+) -> list[CompanyReport]:
+    """
+    Select previously researched names that are no longer on the buy-tier pick list.
+
+    Only includes tickers that still appear in the current screen reports (so we have
+    an up-to-date signal/snapshot). Ranked by oldest ``updated_at`` first so stale
+    memos are refreshed preferentially — maximising longitudinal decision data.
+    """
+    if alumni_cap <= 0:
+        return []
+
+    exclude = set(exclude_tickers or ())
+    by_ticker = {report.ticker: report for report in reports}
+    candidates: list[tuple[str, CompanyReport]] = []
+    for doc in store.list_documents():
+        if doc.ticker in exclude:
+            continue
+        report = by_ticker.get(doc.ticker)
+        if report is None:
+            # Left the screened universe — skip until/unless re-listed.
+            continue
+        if report.signal in {"strong_buy", "buy"}:
+            # Still an active pick; handled by eligible_research_targets.
+            continue
+        candidates.append((doc.updated_at or "", report))
+
+    candidates.sort(key=lambda item: item[0])  # oldest memo first
+    return [report for _, report in candidates[:alumni_cap]]
+
+
+def select_research_targets(
+    reports: list[CompanyReport],
+    store: ResearchStore,
+    *,
+    weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
+    continue_alumni: bool = True,
+    alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
+) -> tuple[list[CompanyReport], list[CompanyReport]]:
+    """
+    Active buy-tier targets plus optional alumni weekly updates.
+
+    Returns ``(active_targets, alumni_targets)``. Combined list preserves active
+    first so new initials and current picks are never starved by alumni refreshes.
+    """
+    active = eligible_research_targets(reports, weekly_cap=weekly_cap)
+    if not continue_alumni:
+        return active, []
+    alumni = eligible_alumni_research_targets(
+        reports,
+        store,
+        alumni_cap=alumni_cap,
+        exclude_tickers={report.ticker for report in active},
+    )
+    return active, alumni
+
+
 def run_research_for_strong_buys(
     *,
     reports: list[CompanyReport],
@@ -81,18 +145,39 @@ def run_research_for_strong_buys(
     force_initial: bool = False,
     run_at: datetime | None = None,
     weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
+    continue_alumni: bool = True,
+    alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
 ) -> ResearchSummary:
     """
-    Create or update per-ticker research memos for capped buy-tier names.
+    Create or update per-ticker research memos.
 
-    Includes all quality strong buys first, then top quality buys until weekly_cap.
+    Active path: quality strong buys first, then top quality buys until weekly_cap.
+    Alumni path: continue weekly updates for names that dropped off the buy list
+    but still have a memo and remain in the screen (up to alumni_cap, oldest first).
+
     First run: ingest Yahoo financials, news, and primary RNS/results filings
     (annual + interim when discoverable), then deep agent pass.
     Subsequent weekly runs: refresh filings/news and append a weekly update section.
     """
     store = ResearchStore(output_dir)
-    targets = eligible_research_targets(reports, weekly_cap=weekly_cap)
-    summary = ResearchSummary(documents=[], created=0, updated=0, skipped=0, errors=[])
+    active, alumni = select_research_targets(
+        reports,
+        store,
+        weekly_cap=weekly_cap,
+        continue_alumni=continue_alumni,
+        alumni_cap=alumni_cap,
+    )
+    alumni_tickers = {report.ticker for report in alumni}
+    targets = [*active, *alumni]
+    summary = ResearchSummary(
+        documents=[],
+        created=0,
+        updated=0,
+        skipped=0,
+        errors=[],
+        active_count=len(active),
+        alumni_count=len(alumni),
+    )
 
     for report in targets:
         try:
@@ -102,7 +187,8 @@ def run_research_for_strong_buys(
                 api_key=api_key,
                 model=model,
                 cwd=cwd,
-                force_initial=force_initial,
+                # Alumni already have memos — never force a fresh initial pass.
+                force_initial=force_initial and report.ticker not in alumni_tickers,
                 run_at=run_at,
             )
             summary.documents.append(doc)
@@ -110,6 +196,8 @@ def run_research_for_strong_buys(
                 summary.created += 1
             elif action == "updated":
                 summary.updated += 1
+                if report.ticker in alumni_tickers:
+                    summary.alumni_updated += 1
             else:
                 summary.skipped += 1
         except Exception as exc:  # noqa: BLE001

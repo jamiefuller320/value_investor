@@ -1,0 +1,87 @@
+name: FTSE Library Model Review
+
+# Periodically re-select the cheapest Cursor agent available to CURSOR_API_KEY.
+on:
+  workflow_dispatch:
+  schedule:
+    # Mondays 05:00 UTC — skips if last review was within review_interval_days
+    - cron: "0 5 * * 1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftse-library-model-review
+  cancel-in-progress: false
+
+jobs:
+  review-model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Review cheapest agent model
+        id: review
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          mkdir -p docs/data/library
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import UTC, datetime, timedelta
+          from pathlib import Path
+          from value_investor.agent_model_policy import load_policy, review_model, recommend_cheapest_model, save_policy
+
+          path = Path("docs/data/library/policy.json")
+          policy = load_policy(path)
+          review = policy.get("model_review") or {}
+          interval = int(review.get("review_interval_days") or 14)
+          last = review.get("last_reviewed_at")
+          if last and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+              try:
+                  stamp = datetime.fromisoformat(str(last).replace("Z", "+00:00"))
+                  if datetime.now(UTC) - stamp < timedelta(days=interval):
+                      Path(os.environ["GITHUB_OUTPUT"]).write_text("skip=true\n", encoding="utf-8")
+                      print(f"Skipping — last review {last} within {interval} days")
+                      raise SystemExit(0)
+              except ValueError:
+                  pass
+
+          api_key = os.environ.get("CURSOR_API_KEY") or None
+          if api_key:
+              result = review_model(path, api_key=api_key)
+              result["mode"] = "live"
+          else:
+              pick = recommend_cheapest_model()
+              policy = load_policy(path)
+              policy["research_model"] = pick.to_dict()
+              mr = dict(policy.get("model_review") or {})
+              mr["last_reviewed_at"] = datetime.now(UTC).isoformat()
+              policy["model_review"] = mr
+              save_policy(policy, path)
+              result = {"pick": pick.to_dict(), "changed": True, "previous": None, "mode": "catalog"}
+
+          Path("docs/data/library/last_model_review.json").write_text(
+              json.dumps(result, indent=2) + "\n", encoding="utf-8"
+          )
+          Path(os.environ["GITHUB_OUTPUT"]).write_text(
+              f"skip=false\nmodel={result['pick']['model_id']}\n", encoding="utf-8"
+          )
+          print(json.dumps(result, indent=2))
+          PY
+          ftse-library policy --policy docs/data/library/policy.json
+
+      - name: Commit policy update
+        if: steps.review.outputs.skip != 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: refresh cheapest Cursor research model"
+          file_pattern: "docs/data/library/policy.json docs/data/library/last_model_review.json"

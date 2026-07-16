@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-16T04:03:10+00:00",
+  "updated_at": "2026-07-16T14:30:03+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -648,6 +648,76 @@
       "status": "open",
       "source": "project-objective-roadmap",
       "added_at": "2026-07-16T04:03:10+00:00"
+    },
+    {
+      "id": "L29",
+      "category": "later",
+      "section": "universe",
+      "title": "Offline screen archives for library markets (screen-lite)",
+      "summary": "Once a market library has solid fundamentals coverage, run the quant screen offline and archive scores/signals/history under the library \u2014 without changing the live FTSE path. Needed for rich stage-4 expansion.",
+      "revisit_when": "Target market library coverage/freshness is high and market-aware fetch (non-.L tickers) is solid",
+      "tags": [
+        "library",
+        "screen",
+        "stage3",
+        "richness"
+      ],
+      "status": "done",
+      "source": "library-richness-discussion",
+      "added_at": "2026-07-16T10:12:03+00:00",
+      "updated_at": "2026-07-16T14:30:03+00:00"
+    },
+    {
+      "id": "L30",
+      "category": "later",
+      "section": "research",
+      "title": "Selective budget research on library strong-buy candidates",
+      "summary": "After offline screen ranks names, run low-cap research memos on strong_buy/buy candidates using a cheaper Cursor model (--model) since latency is not a priority. Market-aware filings/news required first.",
+      "revisit_when": "Offline library screen produces stable buy-tier shortlists for at least one non-UK market",
+      "tags": [
+        "library",
+        "research",
+        "budget",
+        "model"
+      ],
+      "status": "done",
+      "source": "library-richness-discussion",
+      "added_at": "2026-07-16T10:12:03+00:00",
+      "updated_at": "2026-07-16T14:30:03+00:00"
+    },
+    {
+      "id": "L31",
+      "category": "later",
+      "section": "ops",
+      "title": "Market-aware fetch for non-UK library tickers",
+      "summary": "fetch_company_metrics currently normalises via to_lse_ticker; library markets need Yahoo suffixes preserved (.AX, US bare symbols, EU) or metrics will be wrong/empty.",
+      "revisit_when": "Before relying on library metrics for screen-lite or stage 4",
+      "tags": [
+        "library",
+        "fetch",
+        "bug",
+        "stage3"
+      ],
+      "status": "done",
+      "source": "library-richness-discussion",
+      "added_at": "2026-07-16T10:12:03+00:00",
+      "updated_at": "2026-07-16T14:09:50+00:00"
+    },
+    {
+      "id": "L32",
+      "category": "later",
+      "section": "ops",
+      "title": "Wire live Cursor usage API into library budget ledger",
+      "summary": "If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls.",
+      "revisit_when": "Cursor usage/credits API is available to CURSOR_API_KEY",
+      "tags": [
+        "budget",
+        "cursor",
+        "api"
+      ],
+      "status": "open",
+      "source": "library-budget-discussion",
+      "added_at": "2026-07-16T14:09:50+00:00"
     }
   ]
 }
