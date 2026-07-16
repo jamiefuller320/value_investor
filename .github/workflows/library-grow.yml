@@ -48,11 +48,11 @@ jobs:
         run: |
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
+          # Preserve focus_market / graduated_markets — do not force sp500.
           ftse-library --policy "$ROOT/policy.json" policy \
             --plan-monthly-usd 20 \
             --weekly-fraction 0.1 \
-            --refresh-day 8 \
-            --focus sp500 >/dev/null
+            --refresh-day 8 >/dev/null
           python3 - <<'PY'
           import json
           import os
@@ -108,8 +108,11 @@ jobs:
             ARGS="$ARGS --dry-run-research"
           fi
           ftse-library $ARGS | tee "$ROOT/last_ladder.json"
-          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" status --markets sp500 --json \
+          FOCUS=$(python3 -c "import json; print(json.load(open('$ROOT/policy.json')).get('focus_market','sp500'))")
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" status --markets "$FOCUS" --json \
             | tee "$ROOT/status_snapshot.json"
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" graduate --dry-run --json \
+            | tee "$ROOT/graduation_snapshot.json" || true
 
       - name: Commit library ladder artifacts
         if: steps.plan.outputs.skip != 'true'

@@ -120,10 +120,18 @@ def default_policy() -> dict[str, Any]:
         "schema_version": 1,
         "focus_market": DEFAULT_FOCUS_MARKET,
         "market_queue": list(DEFAULT_MARKET_QUEUE),
+        "graduated_markets": [],
         "focus_graduation": {
             "min_coverage_pct": 0.95,
             "max_stale_pct": 0.15,
-            "note": "Advance to next queue market only when focus meets these floors.",
+            "auto_advance": True,
+            "maintenance_enabled": True,
+            "maintenance_max_tickers": 15,
+            "history": [],
+            "note": (
+                "Advance to next queue market when focus meets floors; "
+                "graduated markets keep a light maintenance grow."
+            ),
         },
         "research_model": pick.to_dict(),
         "budget": {
@@ -180,6 +188,8 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         base["market_queue"] = list(DEFAULT_MARKET_QUEUE)
     if not base.get("focus_market"):
         base["focus_market"] = DEFAULT_FOCUS_MARKET
+    if not isinstance(base.get("graduated_markets"), list):
+        base["graduated_markets"] = list(data.get("graduated_markets") or [])
     return base
 
 

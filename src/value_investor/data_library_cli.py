@@ -164,11 +164,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     ladder_p = sub.add_parser(
         "ladder",
-        help="Run offline ladder: fundamentals → screen-lite → selective research",
+        help="Run offline ladder: fundamentals → maintenance → screen-lite → research → graduate",
     )
     ladder_p.add_argument("--skip-grow", action="store_true")
     ladder_p.add_argument("--skip-screen", action="store_true")
     ladder_p.add_argument("--skip-research", action="store_true")
+    ladder_p.add_argument("--skip-maintenance", action="store_true")
+    ladder_p.add_argument("--skip-graduation", action="store_true")
     ladder_p.add_argument(
         "--dry-run-research",
         action="store_true",
@@ -187,6 +189,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ladder_p.add_argument("--json", action="store_true")
     ladder_p.set_defaults(func=cmd_ladder)
+
+    grad_p = sub.add_parser(
+        "graduate",
+        help="Evaluate focus graduation floors and advance queue if met",
+    )
+    grad_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show evaluation without changing focus_market",
+    )
+    grad_p.add_argument("--json", action="store_true")
+    grad_p.set_defaults(func=cmd_graduate)
 
     return parser
 
@@ -310,6 +324,8 @@ def cmd_grow(args: argparse.Namespace) -> int:
 
 
 def cmd_policy(args: argparse.Namespace) -> int:
+    from .library_graduation import graduated_market_ids
+
     policy = load_policy(args.policy)
     changed = False
     if args.focus:
@@ -340,9 +356,18 @@ def cmd_policy(args: argparse.Namespace) -> int:
         return 0
     budget = policy.get("budget") or {}
     model = policy.get("research_model") or {}
+    fg = policy.get("focus_graduation") or {}
+    graduated = graduated_market_ids(policy)
     print(f"Policy: {args.policy}")
     print(f"Focus market: {policy.get('focus_market')}")
     print(f"Queue: {', '.join(policy.get('market_queue') or [])}")
+    print(f"Graduated: {', '.join(graduated) if graduated else '—'}")
+    print(
+        f"Graduation floors: coverage>={fg.get('min_coverage_pct')}  "
+        f"stale<={fg.get('max_stale_pct')}  "
+        f"auto_advance={fg.get('auto_advance')}  "
+        f"maintenance_max_tickers={fg.get('maintenance_max_tickers')}"
+    )
     print(
         f"Budget: ${budget.get('weekly_library_usd')}/week "
         f"({100 * float(budget.get('weekly_library_fraction') or 0):.0f}% of "
@@ -412,6 +437,8 @@ def cmd_ladder(args: argparse.Namespace) -> int:
         skip_grow=bool(args.skip_grow),
         skip_screen=bool(args.skip_screen),
         skip_research=bool(args.skip_research),
+        skip_maintenance=bool(args.skip_maintenance),
+        skip_graduation=bool(args.skip_graduation),
         dry_run_research=bool(args.dry_run_research),
         api_key=args.api_key,
         max_tickers=args.max_tickers,
@@ -420,6 +447,8 @@ def cmd_ladder(args: argparse.Namespace) -> int:
         print(json.dumps(payload, indent=2))
         return 0
     print(f"Ladder focus: {payload['focus_market']}")
+    if payload.get("focus_market_after") and payload["focus_market_after"] != payload["focus_market"]:
+        print(f"Focus after graduation: {payload['focus_market_after']}")
     for name, layer in (payload.get("layers") or {}).items():
         if layer.get("skipped"):
             print(f"  {name}: skipped — {layer.get('reason') or 'flagged'}")
@@ -428,6 +457,11 @@ def cmd_ladder(args: argparse.Namespace) -> int:
             print(
                 f"  fundamentals: coverage={st.get('coverage_count', 0)}/"
                 f"{st.get('ticker_count', 0)}  max_tickers={layer.get('max_tickers')}"
+            )
+        elif name == "maintenance":
+            print(
+                f"  maintenance: markets={', '.join(layer.get('markets') or []) or '—'}  "
+                f"max_tickers={layer.get('max_tickers')}"
             )
         elif name == "screen_lite":
             print(
@@ -444,6 +478,62 @@ def cmd_ladder(args: argparse.Namespace) -> int:
             )
             for t in layer.get("targets") or []:
                 print(f"    • {t['ticker']} {t['signal']} ({t.get('name')})")
+        elif name == "graduation":
+            ev = layer.get("event") or {}
+            evaluation = layer.get("evaluation") or {}
+            print(
+                f"  graduation: meets={evaluation.get('meets_floors')}  "
+                f"coverage={evaluation.get('coverage_pct')}  "
+                f"stale_pct={evaluation.get('stale_pct')}  "
+                f"event={ev.get('reason')}  "
+                f"{ev.get('from_market')}→{ev.get('to_market')}"
+            )
+    return 0
+
+
+def cmd_graduate(args: argparse.Namespace) -> int:
+    from .library_graduation import evaluate_graduation, maybe_graduate_focus
+
+    if args.dry_run:
+        policy = load_policy(args.policy)
+        evaluation = evaluate_graduation(args.root, policy)
+        payload = {
+            "evaluation": evaluation,
+            "event": {
+                "graduated": False,
+                "dry_run": True,
+                "would_advance": evaluation.get("can_advance"),
+                "from_market": evaluation.get("focus_market"),
+                "to_market": evaluation.get("next_focus"),
+            },
+            "policy_focus": policy.get("focus_market"),
+        }
+    else:
+        payload = maybe_graduate_focus(args.root, args.policy)
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    evaluation = payload.get("evaluation") or {}
+    event = payload.get("event") or {}
+    print(f"Focus: {evaluation.get('focus_market')}")
+    print(
+        f"Floors: coverage={evaluation.get('coverage_pct')} "
+        f"(need>={evaluation.get('min_coverage_pct')})  "
+        f"stale_pct={evaluation.get('stale_pct')} "
+        f"(need<={evaluation.get('max_stale_pct')})  "
+        f"meets={evaluation.get('meets_floors')}"
+    )
+    if event.get("dry_run"):
+        print(
+            f"Dry run: would_advance={event.get('would_advance')}  "
+            f"{event.get('from_market')}→{event.get('to_market')}"
+        )
+    else:
+        print(
+            f"Event: {event.get('reason')}  "
+            f"{event.get('from_market')}→{event.get('to_market')}  "
+            f"policy_focus={payload.get('policy_focus')}"
+        )
     return 0
 
 

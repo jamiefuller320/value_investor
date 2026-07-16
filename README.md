@@ -204,15 +204,14 @@ See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit cri
 Other markets accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Growth is **one focus index at a time** (default `sp500` → then `euro_stoxx50` → `asx200`).
 
 ```bash
-ftse-library policy                    # Pro $20, refresh day 8, focus sp500
-ftse-library ladder                    # fundamentals → screen-lite → selective research
+ftse-library policy                    # Pro $20, refresh day 8, focus + graduation
+ftse-library ladder                    # grow → maintain graduated → screen → research → graduate
+ftse-library graduate --dry-run        # check floors without advancing
 ftse-library ladder --dry-run-research
-ftse-library screen                    # screen-lite only
-ftse-library review-model              # cheapest agent; Monday cron re-checks
-ftse-library status --markets sp500
+ftse-library review-model
 ```
 
-Budget: **Cursor Pro**, refresh **8th**, surplus **7th**, library strand **10%/week ($2)**. Policy: `docs/data/library/policy.json`. Workflows: `library-grow.yml` (ladder), `library-model-review.yml`.
+Budget: **Cursor Pro**, refresh **8th**, surplus **7th**, library strand **10%/week ($2)**. Focus auto-advances when coverage/stale floors are met; graduated markets get a light maintenance grow. Policy: `docs/data/library/policy.json`.
 
 ## Parked ideas (periodic review)
 

@@ -18,6 +18,11 @@ from value_investor.agent_model_policy import (
     save_policy,
 )
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, library_status
+from value_investor.library_graduation import (
+    graduated_market_ids,
+    maybe_graduate_focus,
+    run_maintenance_grow,
+)
 from value_investor.library_screen import (
     library_research_reports,
     research_cap_from_budget,
@@ -51,12 +56,15 @@ def run_library_ladder(
     skip_grow: bool = False,
     skip_screen: bool = False,
     skip_research: bool = False,
+    skip_maintenance: bool = False,
+    skip_graduation: bool = False,
     dry_run_research: bool = False,
     api_key: str | None = None,
     max_tickers: int | None = None,
 ) -> dict[str, Any]:
     """
-    Focus-market ladder: A fundamentals grow → B screen-lite → C selective research.
+    Focus-market ladder: A fundamentals grow → maintenance → B screen-lite →
+    C selective research → graduation check.
 
     Research is budget-gated (10% weekly / surplus day) and uses the policy model.
     """
@@ -71,11 +79,12 @@ def run_library_ladder(
     result: dict[str, Any] = {
         "run_at": run_at.isoformat(),
         "focus_market": market,
+        "graduated_markets": graduated_market_ids(policy),
         "plan": plan,
         "layers": {},
     }
 
-    # A — fundamentals
+    # A — fundamentals (focus market)
     if not skip_grow:
         tickers = int(max_tickers if max_tickers is not None else plan["max_tickers"])
         grow_results = grow_library(
@@ -94,11 +103,18 @@ def run_library_ladder(
         status = library_status(root, markets=markets)
         result["layers"]["fundamentals"] = {"skipped": True, "status": status}
 
+    # A2 — maintenance grow on already-graduated markets
+    if skip_maintenance:
+        result["layers"]["maintenance"] = {"skipped": True}
+    else:
+        policy = load_policy(policy_path)
+        result["layers"]["maintenance"] = run_maintenance_grow(root, policy)
+
     coverage = (status[0] if status else {}) or {}
     metrics_count = int(coverage.get("coverage_count") or 0)
     min_metrics = int(policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)
 
-    # B — screen-lite
+    # B — screen-lite (focus)
     if skip_screen:
         result["layers"]["screen_lite"] = {"skipped": True}
         screen_result = None
@@ -112,7 +128,7 @@ def run_library_ladder(
         screen_result = run_library_screen(root, market, run_at=run_at)
         result["layers"]["screen_lite"] = screen_result.summary
 
-    # C — selective research (budget gated)
+    # C — selective research (budget gated, focus only)
     remaining = remaining_weekly_budget_usd(load_policy(policy_path))
     memo_cost = float(policy["ladder"].get("estimated_memo_usd") or ESTIMATED_MEMO_USD)
     hard_cap = int(policy["ladder"].get("research_hard_cap") or 5)
@@ -184,15 +200,29 @@ def run_library_ladder(
                     )
         result["layers"]["selective_research"] = layer
 
+    # D — graduation (after grow + screen so floors reflect this run)
+    if skip_graduation:
+        result["layers"]["graduation"] = {"skipped": True}
+    else:
+        graduation = maybe_graduate_focus(root, policy_path)
+        result["layers"]["graduation"] = graduation
+        result["focus_market_after"] = graduation.get("policy_focus")
+        result["graduated_markets"] = graduated_market_ids(load_policy(policy_path))
+
     policy = load_policy(policy_path)
     policy = _ensure_ladder_policy(policy)
     policy["ladder"]["last_run"] = {
         "run_at": run_at.isoformat(),
         "focus_market": market,
+        "focus_market_after": result.get("focus_market_after", market),
         "screen_shortlist": (screen_result.summary.get("shortlist_count") if screen_result else 0),
         "research": result["layers"].get("selective_research"),
+        "graduation": (result["layers"].get("graduation") or {}).get("event"),
+        "maintenance": {
+            "skipped": bool((result["layers"].get("maintenance") or {}).get("skipped")),
+            "markets": (result["layers"].get("maintenance") or {}).get("markets") or [],
+        },
     }
-    # Persist billing defaults if caller already set them on disk
     save_policy(policy, policy_path)
 
     write_json(Path(root) / "last_ladder.json", result, compact=False)

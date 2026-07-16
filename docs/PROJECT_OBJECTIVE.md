@@ -53,7 +53,7 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 
 Do **not** run full FTSE-style research across whole foreign indexes. Prefer B for breadth of history; use C sparingly on the shortlist.
 
-**One index at a time:** policy focus is **`sp500`**, then `euro_stoxx50`, then `asx200` once coverage/freshness graduation floors are met (`docs/data/library/policy.json`).
+**One index at a time:** policy focus is **`sp500`**, then auto-advances to `euro_stoxx50`, then `asx200` when coverage ≥95% and stale ≤15% among covered names. Graduated markets keep a light maintenance grow (`maintenance_max_tickers`, default 15).
 
 ### Running the ladder
 
