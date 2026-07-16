@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-16T03:29:20+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-16T04:03:10+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -36,6 +36,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N10 | **Node 20 Actions deprecation nit** | Harmless noise | Forced by action upgrades |
 | N11 | **Sync private live holdings into git/CI** | Privacy; dashboard localStorage must stay private | Private bridge (not git) is designed |
 | N12 | **Browser-only fully independent automation** | Only runs when dashboard is open | Server Action/ftse-paper-auto insufficient |
+| N13 | **Capital at risk / live broker automation (stage 6)** | Do not connect live capital or broker APIs until stages 2–5 are proven in paper with cost-aware review. | Manual packs trusted, decision-review learning working, and multi-market paper track proven |
 
 ---
 
@@ -63,6 +64,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L11 | **UK-primary fundamentals (Refinitiv/FMP/RNS depth)** | Supplement yfinance balance-sheet/dividend gaps | Data-quality errors dominate signals |
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
+| L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
 
 ### Research & portfolio product
 
@@ -75,6 +77,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L18 | **Montier C-Score** | Useful negative filter; after Sloan/FCF conversion if adding one EQ model | After earnings-quality/distress family |
 | L19 | **Portfolio concentration / sizing UI** | Sector caps, correlation warnings, size hints | Report should answer what to do with the list |
 | L20 | **Synced portfolio backend / dedicated hosting** | Leave Pages+Actions until shared state, login, live refresh, or SLA needs | Multi-device portfolio or private interactive dash |
+| L27 | **Standardise verify-before-trade decision packs (stage 2)** | Harden prompt/decision-pack templates: signal → thesis → levels → size → risks, with low false confidence, suitable for routine manual trading. | Paper-auto narratives and research memos are stable week-to-week |
 
 ### Ops / reliability
 
@@ -85,6 +88,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L23 | **Parallel fetch + caching** | Sequential yfinance loop | Weekly runtime becomes painful |
 | L24 | **CI pytest on PRs** | Hygiene before relying on weekly dashboard | Before production reliance |
 | L25 | **Private live-holdings surveillance bridge** | Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage | Need CI surveillance of personal live book |
+| L28 | **Multi-currency NAV and FX policy for global paper books** | When screening or holding non-GBP names, define reporting currency, FX source, and whether hedging is assumed in paper NAV. | First non-UK market enters paper track (stage 4) |
 
 ---
 

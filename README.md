@@ -192,6 +192,26 @@ State lands in `output/paper_automation/` (`automated_fund.json`, `owned_watchli
 
 Weekly strategy simulation (`ftse-simulate`) remains available for archived-run backtests and now accepts `--monthly-deposit` so returns are measured against capital contributed.
 
+## Project objective
+
+Ultimate goal: a **self-improving automated global value portfolio**.  
+Realistic interim goal: **accurate decision packs and prompts** for manual verification and trade actions.
+
+See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit criteria. Near-term priority is FTSE 350 data richness and paper decision quality — not wider live coverage.
+
+## Offline multi-market data libraries
+
+Other markets can accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Progressive grow runs prefer never-fetched tickers, then stale ones, with a per-run budget so libraries thicken across many scheduled jobs.
+
+```bash
+ftse-library list
+ftse-library status
+ftse-library refresh-constituents --markets sp500,asx200
+ftse-library grow --markets sp500,euro_stoxx50,asx200 --max-tickers 25
+```
+
+Local default root: `output/library/`. Scheduled CI grows into `docs/data/library/` (constituents, metrics, `manifest.json`) so coverage persists across runs. Do not wire these into the live screener until stage 4 quality bars are met. Workflow: `.github/workflows/library-grow.yml` (Sundays + manual).
+
 ## Parked ideas (periodic review)
 
 Deferred / “useful later” recommendations live in [`docs/deferred-ideas.json`](docs/deferred-ideas.json) and render to [`docs/deferred-review.md`](docs/deferred-review.md).
