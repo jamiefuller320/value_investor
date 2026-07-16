@@ -1,0 +1,87 @@
+{
+  "run_at": "2026-07-16T18:13:22.335633+00:00",
+  "focus_market": "sp500",
+  "graduated_markets": [],
+  "plan": {
+    "focus_markets": [
+      "sp500"
+    ],
+    "max_tickers": 40,
+    "surplus_day": false,
+    "weekly_library_usd": 2.0,
+    "remaining_weekly_usd": 1.2,
+    "research_model": "composer-2.5",
+    "allow_research": true,
+    "research_budget_usd": 1.2
+  },
+  "layers": {
+    "fundamentals": {
+      "skipped": true,
+      "status": [
+        {
+          "market": "sp500",
+          "label": "S&P 500",
+          "ticker_count": 503,
+          "coverage_count": 40,
+          "coverage_pct": 0.0795,
+          "last_constituents_refresh": "2026-07-16T17:59:10.765696+00:00",
+          "last_metrics_refresh": "2026-07-16T18:00:35.016226+00:00",
+          "fields_present": 37,
+          "never_fetched": 463,
+          "stale": 0,
+          "fresh": 40
+        }
+      ]
+    },
+    "maintenance": {
+      "skipped": true
+    },
+    "screen_lite": {
+      "market": "sp500",
+      "run_at": "2026-07-16T18:13:22.335633+00:00",
+      "ticker_count": 40,
+      "signal_counts": {
+        "hold": 29,
+        "avoid": 9,
+        "strong_buy": 2
+      },
+      "shortlist_count": 2,
+      "strong_buy": 2,
+      "buy": 0,
+      "paths": {
+        "signals": "latest_signals.csv",
+        "model_results": "latest_model_results.csv",
+        "shortlist": "latest_shortlist.csv"
+      },
+      "note": "Screen-lite — offline library only; no technicals/backtest; not the live FTSE screen."
+    },
+    "selective_research": {
+      "model": "composer-2.5",
+      "research_cap": 3,
+      "remaining_usd_before": 1.2,
+      "targets": [
+        {
+          "ticker": "ACN",
+          "name": "Accenture plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.7554
+        },
+        {
+          "ticker": "AOS",
+          "name": "A. O. Smith Corporation",
+          "signal": "strong_buy",
+          "conviction_score": 0.7221
+        }
+      ],
+      "executed": 2,
+      "created": 0,
+      "updated": 2,
+      "errors": [],
+      "estimated_spend_usd": 0.8,
+      "remaining_usd_after": 0.4
+    },
+    "graduation": {
+      "skipped": true
+    }
+  }
+}

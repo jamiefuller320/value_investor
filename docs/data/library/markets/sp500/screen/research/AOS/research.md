@@ -1,0 +1,79 @@
+# A. O. Smith Corporation (AOS) — Research memo
+
+_Version 2 · Updated 2026-07-16T18:13:56.875785+00:00 · Mode: weekly_update_
+
+## EXECUTIVE SUMMARY
+A. O. Smith is a US-listed manufacturer of water heating, treatment, and HVAC products that the quantitative screen rates as a strong buy on cheapness, quality, dividend, GARP, and risk metrics (P/E 16.2, ROE 28.3%, FCF yield 5.9%, dividend yield 2.4%). The value case rests on a high-return, cash-generative franchise trading at a modest multiple after a ~10.5% year-to-date share price decline, with aggressive capital return (buybacks and dividends) supported by low leverage. The central debate is whether near-term cyclical softness in residential demand and a Q1 2026 earnings miss are temporary headwinds or the start of a prolonged growth stall, against a backdrop of leadership consolidation under CEO Stephen Shafer. Primary regulatory filing data in the research pack is entirely absent for this issuer, limiting confirmation of management commentary, contingencies, and segment detail.
+
+## INVESTMENT THESIS
+The screen’s strong buy rating is underpinned by five factor families passing simultaneously: cheapness, quality, dividend, GARP, and risk. Ten of twenty-two models clear, including FCF Yield, Neff PEGY (0.07), Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Dreman Contrarian, Composite Value, and Financial Health — a breadth consistent with a compounder trading at a contrarian entry point rather than a deep-value distressed name.
+
+Business quality, as inferred from Yahoo financials (see Financial Review), aligns with the screen’s quality and moat signals: revenue has been broadly stable at ~$3.8bn over 2022–2025, operating margins have held near 19%, and return on equity (~28%) remains elevated despite a cyclical share price de-rating. Free cash flow conversion is strong ($546m FCF in 2025 on $617m operating cash flow), and the company returned ~$597m to shareholders in 2025 via dividends ($196m) and repurchases ($401m) while net debt remained modest at $192m against equity of $1.86bn.
+
+For a value investor, the hook is a quality industrial compounder — high ROE, low balance-sheet risk, consistent cash generation — offered at ~16x earnings and a ~6% FCF yield after the market has penalised the stock (52-week low of $58.19 in May 2026; down 10.5% YTD per news coverage). The Dreman Contrarian and Composite Value model passes suggest the screen is capturing this dislocation. Conviction on the screen is building (62%, two weeks at signal, stable trend) with high data quality (19/20 metrics present).
+
+## FINANCIAL REVIEW
+**Primary filings:** The `filings_index.json` catalogue contains 13 entries, all classified as `other` (zero annual, zero interim). None relate to A. O. Smith Corporation — they are UK RNS items for unrelated issuers (e.g. CAB Payments Holdings, Picton Property Income, Prologis). No filing body extracts exist under `filings/bodies/` (`with_body: 0` throughout). **No annual reports, 10-K filings, or interim/quarterly SEC releases are available in the primary source set.** All figures below are sourced from `financials_annual.json` (Yahoo Finance); this is an explicit fallback.
+
+**Income statement trend (Yahoo annual, USD millions unless stated):**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue | 3,754 | 3,853 | 3,818 | 3,830 |
+| Operating income | 659 | 757 | 717 | 728 |
+| Net income | 236 | 557 | 534 | 546 |
+| Diluted EPS ($) | 1.51 | 3.69 | 3.63 | 3.85 |
+
+Revenue has been essentially flat over four years, oscillating in a narrow $3.75–3.85bn band. Operating income peaked in 2023 ($757m) before moderating in 2024 ($717m, including $17.6m restructuring/M&A charges) and recovering modestly in 2025 ($728m). Reported net income in 2022 ($236m) was distorted by a $426m other non-operating expense (Yahoo); normalised earnings power is better represented by 2023–2025 run-rates of $534–557m. EPS growth in 2025 (+6% to $3.85) was aided by share count reduction (diluted average shares fell from 151m in 2023 to 142m in 2025).
+
+Gross margin improved slightly in 2025 (gross profit $1,487m on revenue $3,830m, ~38.8%) versus 2024 (~38.1%). EBITDA was $814m in 2025 versus $787m in 2024.
+
+**Balance sheet (Yahoo, 2025 year-end):** Total assets $3.14bn; stockholders’ equity $1.86bn; total debt $192m (long-term debt $113m, current debt $42m); cash and equivalents $175m. Net leverage is negligible. Goodwill and intangibles total $1.07bn (~34% of total assets). Treasury stock of $2.90bn reflects cumulative buyback activity. Working capital $429m (down from $556m in 2023). Non-current pension obligations are small ($7m in 2025; $11m in 2024).
+
+**Cash flow (Yahoo):** 2025 operating cash flow $617m; capital expenditure $71m; free cash flow $546m. FCF has been consistently strong: $321m (2022, depressed by working-capital and pension-related items), $598m (2023), $474m (2024), $546m (2025). 2024 included a $146m business acquisition (Yahoo `Purchase Of Business`). Capital allocation remains shareholder-friendly: dividends rose from $177m (2022) to $196m (2025); repurchases totalled $401m in 2025 alone.
+
+**Interim / quarterly (Yahoo quarterly income — no filing confirmation):** Q1 2026 (period label 2026 in Yahoo cache) shows revenue of $946m versus $1,011m in the comparable Q1 2025 period (−6.5%), and net income of $118m versus $152m (−22%). Diluted EPS was $0.85 versus $1.07. This deterioration is consistent with the April 2026 headline “A.O. Smith (AOS) Q1 Earnings and Revenues Lag Estimates.” No separate interim filing pack is available to reconcile segment or guidance detail.
+
+**Gaps:** No primary annual or interim filings; no MD&A, risk-factor, or going-concern language accessible; no segment breakdown (North America water heater, China, boiler, water treatment) in the source set. Financial analysis relies entirely on Yahoo aggregates.
+
+## RISKS AND RED FLAGS
+**Data integrity:** The filing pipeline returned UK RNS noise rather than SEC/Edgar material for NYSE:AOS. This prevents assessment of going-concern statements, litigation contingencies, debt covenants, or pension footnotes from primary sources. Pension history appears material (2022 cash flow shows $417m pension/benefit expense; 2021 balance sheet recorded $287m minimum pension liabilities), but current obligations look contained ($7m non-current in 2025 per Yahoo). Filing-body language on these items is unavailable.
+
+**Cyclical / demand:** News flow consistently flags near-term growth pressure. Analyst commentary (June 2026) notes “pressure on near term growth” with fair-value trims; Q2 2026 preview (2 July 2026) anticipates a “single-digit profit dip.” Q1 2026 Yahoo figures confirm revenue and earnings contraction. Residential construction and replacement-cycle exposure — core drivers for water heaters — are not quantified in the source pack but are implicit in the earnings trajectory.
+
+**Competitive / margin:** Flat revenue over four years with only modest margin recovery suggests limited organic growth and potential share or pricing pressure in core markets. Restructuring charges of $18–19m in both 2023 and 2024 (Yahoo) indicate ongoing operational adjustment costs.
+
+**Governance / leadership:** Executive Chairman Kevin Wheeler retired from his executive role on 1 July 2026; CEO Stephen Shafer assumed the additional chairman role while Wheeler remains on the board (news, 24–26 June 2026). Consolidation of chair and CEO roles reduces board independence at the top; succession execution risk is a watchpoint, though the market initially reacted positively (+4.4% on 24 June 2026).
+
+**Capital allocation:** Aggressive buybacks ($1.4bn cumulative 2022–2025 per Yahoo cash flow) have reduced the share count but also accumulated $2.9bn in treasury stock against $1.86bn of equity. At ~4.5x book (screen metric), the stock is not cheap on asset value; the thesis depends on sustained earnings and FCF, not liquidation value.
+
+**Balance sheet:** Low debt mitigates financial risk, but goodwill/intangibles at 34% of assets create impairment sensitivity if earnings weaken further. Cash has declined from $392m (2022) to $175m (2025) as buybacks accelerated.
+
+No regulatory actions, material litigation, or covenant breaches could be verified from filing bodies (none available).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate but increasingly focused on governance and earnings. Several manifest entries are irrelevant (A&O Shearman law firm, baby monitors, football transfer gossip) due to ticker collision in Google News RSS.
+
+**Material items:**
+
+- **Leadership change (24–26 June 2026):** “Why A. O. Smith (AOS) Stock Is Trading Up Today” — Executive Chairman Kevin Wheeler to retire 1 July 2026; CEO Stephen Shafer elected chairman. Follow-on pieces discuss investor reaction and whether “Leadership Consolidation and Restructuring” alters the investment case (Simply Wall St, 6 July 2026).
+- **Q1 2026 earnings miss (30 April 2026):** “A.O. Smith (AOS) Q1 Earnings and Revenues Lag Estimates.”
+- **Analyst sentiment (25 June 2026):** “A. O. Smith (AOS) Stock Gets Fair Value Trim As Analysts Cut Targets” — fair value trimmed from $70.91 to $70.45; near-term growth pressure acknowledged alongside demand resilience and balance-sheet flexibility.
+- **Valuation / performance (26 June 2026):** Stock at ~$61.13, down 10.5% YTD and 3.5% over one year; question of whether the market is “Pricing It Right.”
+- **Sector context (8 July 2026):** “Q1 Earnings Outperformers: A. O. Smith (NYSE:AOS) And The Rest Of The HVAC and Water Systems Stocks” — mixed sector read-through.
+- **Q2 preview (2 July 2026):** “Here's What to Expect From A. O. Smith's Next Earnings Report” — analysts expect single-digit profit decline.
+- **52-week low (12 May 2026):** “A.O. Smith stock hits 52-week low at 58.19 USD” (Investing.com).
+- **Dividend screens (15 July 2026):** Included in “3 Large Cap Dividend Stocks Worth Watching As Fed Rate Pressure Builds.”
+- **Cash generation (13 July 2026):** Featured among “2 Cash-Producing Stocks to Target This Week.”
+
+No M&A involving A. O. Smith itself was identified. No regulatory enforcement actions. News coverage is tilted toward commentary and opinion rather than primary corporate disclosures; depth is thin on strategy, product pipeline, and geographic mix.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Yahoo financials corroborate the screen’s quality-and-cash-flow thesis at a depressed valuation, but the complete absence of primary filings and visible near-term earnings erosion prevent full confirmation of the strong buy signal.
+
+## Weekly updates
+
+### 2026-07-16T18:13:56.875785+00:00

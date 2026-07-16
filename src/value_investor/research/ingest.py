@@ -199,13 +199,14 @@ def ingest_research_sources(
     sources_dir: Path,
     since: datetime | None = None,
     include_filings: bool = True,
+    market: str | None = None,
 ) -> dict[str, Any]:
     """
     Download research sources under ``sources_dir``.
 
     Yahoo annual statements + news remain available for context. Primary
-    regulatory filings (RNS / results) are written under ``filings/`` and kept
-    separate so FINANCIAL REVIEW can cite a consistent primary source.
+    regulatory filings (UK RNS or US SEC EDGAR) are written under ``filings/``
+    and kept separate so FINANCIAL REVIEW can cite a consistent primary source.
     """
     sources_dir.mkdir(parents=True, exist_ok=True)
 
@@ -274,6 +275,7 @@ def ingest_research_sources(
                 ticker=ticker,
                 company_name=company_name,
                 sources_dir=sources_dir,
+                market=market,
             )
         except Exception as exc:  # noqa: BLE001 — research should continue without filings
             logger.warning("Filings ingest failed for %s: %s", ticker, exc)

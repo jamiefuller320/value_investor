@@ -147,6 +147,7 @@ def run_research_for_strong_buys(
     weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
     continue_alumni: bool = True,
     alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
+    market: str | None = None,
 ) -> ResearchSummary:
     """
     Create or update per-ticker research memos.
@@ -155,8 +156,8 @@ def run_research_for_strong_buys(
     Alumni path: continue weekly updates for names that dropped off the buy list
     but still have a memo and remain in the screen (up to alumni_cap, oldest first).
 
-    First run: ingest Yahoo financials, news, and primary RNS/results filings
-    (annual + interim when discoverable), then deep agent pass.
+    First run: ingest Yahoo financials, news, and primary filings (UK RNS or
+    US SEC EDGAR — annual + interim when discoverable), then deep agent pass.
     Subsequent weekly runs: refresh filings/news and append a weekly update section.
     """
     store = ResearchStore(output_dir)
@@ -190,6 +191,7 @@ def run_research_for_strong_buys(
                 # Alumni already have memos — never force a fresh initial pass.
                 force_initial=force_initial and report.ticker not in alumni_tickers,
                 run_at=run_at,
+                market=market,
             )
             summary.documents.append(doc)
             if action == "created":
@@ -218,6 +220,7 @@ def _process_ticker(
     cwd: str | None,
     force_initial: bool,
     run_at: datetime | None,
+    market: str | None = None,
 ) -> tuple[ResearchDocument, str]:
     sources_dir = store.sources_dir(report.ticker)
     existing = None if force_initial else store.load(report.ticker)
@@ -234,6 +237,7 @@ def _process_ticker(
         screening_snapshot=report.to_dict(),
         sources_dir=sources_dir,
         since=since,
+        market=market,
     )
 
     effective_run_at = run_at or datetime.now(UTC)
