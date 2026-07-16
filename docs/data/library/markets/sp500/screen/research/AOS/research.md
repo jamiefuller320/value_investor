@@ -1,6 +1,6 @@
 # A. O. Smith Corporation (AOS) — Research memo
 
-_Version 1 · Updated 2026-07-16T18:08:01.620641+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-16T18:13:56.875785+00:00 · Mode: weekly_update_
 
 ## EXECUTIVE SUMMARY
 A. O. Smith is a US-listed manufacturer of water heating, treatment, and HVAC products that the quantitative screen rates as a strong buy on cheapness, quality, dividend, GARP, and risk metrics (P/E 16.2, ROE 28.3%, FCF yield 5.9%, dividend yield 2.4%). The value case rests on a high-return, cash-generative franchise trading at a modest multiple after a ~10.5% year-to-date share price decline, with aggressive capital return (buybacks and dividends) supported by low leverage. The central debate is whether near-term cyclical softness in residential demand and a Q1 2026 earnings miss are temporary headwinds or the start of a prolonged growth stall, against a backdrop of leadership consolidation under CEO Stephen Shafer. Primary regulatory filing data in the research pack is entirely absent for this issuer, limiting confirmation of management commentary, contingencies, and segment detail.
@@ -73,3 +73,7 @@ Verdict: accumulate
 Risk: medium
 Confidence: 0.68
 Rationale: Yahoo financials corroborate the screen’s quality-and-cash-flow thesis at a depressed valuation, but the complete absence of primary filings and visible near-term earnings erosion prevent full confirmation of the strong buy signal.
+
+## Weekly updates
+
+### 2026-07-16T18:13:56.875785+00:00

@@ -1,6 +1,6 @@
 # Accenture plc (ACN) — Research memo
 
-_Version 1 · Updated 2026-07-16T18:07:28.373076+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-16T18:13:40.194275+00:00 · Mode: weekly_update_
 
 ## EXECUTIVE SUMMARY
 Accenture plc presents a compelling value case after a prolonged de-rating: the quantitative screen flags strong buy on P/E 11.4, P/B 2.7, dividend yield 4.8%, and ROE 24.4%, with 15 of 22 models passing across cheapness, quality, dividend, GARP, and risk families. The investment hook is a cash-generative, globally diversified IT services franchise trading at a discount to its own history and to the quality of its balance sheet, whilst returning substantial capital via buybacks and dividends. The central debate is whether generative AI is a structural threat to labour-intensive consulting or a multi-year demand tailwind that Accenture is better placed to capture than peers. Primary regulatory filing bodies were unavailable in the source pack; financial analysis below relies on Yahoo fallback data, which limits verification of management commentary, going-concern language, and interim detail.
@@ -88,4 +88,9 @@ Coverage over the past year is substantial and ACN-specific; not thin.
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Deep research confirms the screen’s quality-and-valuation case on backward-looking metrics but weakens conviction on the strong buy signal owing to absent primary filings, a trimmed growth outlook, and unresolved AI disruption risk that screens cannot fully capture.
+Rationale: This week's empty news batch and unchanged filing gap are neutral on the strong buy case, leaving the prior accumulate verdict intact.
+
+## Weekly updates
+
+### 2026-07-16T18:13:40.194275+00:00
+No new articles were returned in the news batch since the prior memo (fetched 16 July 2026, `since` 18:07 UTC); the most recent ACN-specific coverage remains the NATO Protected Business Network contract announcements (Yahoo Finance, 14–15 July 2026) and the IBM-led sector selloff (WSJ, 14 July 2026), both already incorporated above. The filings index was refreshed at 18:13 UTC but is unchanged in substance: still one annual headline without a body extract, zero interim filings, and no downloadable text under `filings/bodies/`. Thesis, risk profile, and timing are therefore unchanged pending the next earnings catalyst or primary filing availability.
