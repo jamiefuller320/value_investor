@@ -201,16 +201,17 @@ See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit cri
 
 ## Offline multi-market data libraries
 
-Other markets can accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Progressive grow runs prefer never-fetched tickers, then stale ones, with a per-run budget so libraries thicken across many scheduled jobs.
+Other markets accumulate constituents + fundamentals **offline** without changing the live FTSE 350 screen. Growth is **one focus index at a time** (default `sp500` → then `euro_stoxx50` → `asx200`).
 
 ```bash
-ftse-library list
-ftse-library status
-ftse-library refresh-constituents --markets sp500,asx200
-ftse-library grow --markets sp500,euro_stoxx50,asx200 --max-tickers 25
+ftse-library policy                    # focus market, 10% weekly budget, research model
+ftse-library policy --refresh-day 12   # set to your Cursor plan refresh day
+ftse-library review-model              # pick cheapest agent; Monday cron re-checks
+ftse-library grow                      # grows focus market only
+ftse-library status --markets sp500
 ```
 
-Local default root: `output/library/`. Scheduled CI grows into `docs/data/library/` (constituents, metrics, `manifest.json`) so coverage persists across runs. Do not wire these into the live screener until stage 4 quality bars are met. Workflow: `.github/workflows/library-grow.yml` (Sundays + manual).
+Budget defaults: **10% of plan USD / week** for the library strand; **surplus day** (day before refresh) accelerates grow. Policy lives in `docs/data/library/policy.json`. Workflows: `library-grow.yml`, `library-model-review.yml`.
 
 ## Parked ideas (periodic review)
 

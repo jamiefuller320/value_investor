@@ -50,7 +50,14 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip the separate investment-trust track when screening",
     )
-    parser.add_argument("--model", default="composer-2.5", help="Cursor model for research agent")
+    parser.add_argument(
+        "--model",
+        default=None,
+        help=(
+            "Cursor model for research agent "
+            "(default: CURSOR_RESEARCH_MODEL, else library policy, else composer-2.5)"
+        ),
+    )
     parser.add_argument(
         "--api-key",
         default=os.environ.get("CURSOR_API_KEY"),
@@ -116,11 +123,21 @@ def main(argv: list[str] | None = None) -> int:
         print("CURSOR_API_KEY required for research generation", file=sys.stderr)
         return 1
 
+    model = args.model or os.environ.get("CURSOR_RESEARCH_MODEL")
+    if not model:
+        try:
+            from value_investor.agent_model_policy import research_model_id
+
+            model = research_model_id()
+        except Exception:  # noqa: BLE001
+            model = "composer-2.5"
+    print(f"Research model: {model}")
+
     summary = run_research_for_strong_buys(
         reports=reports,
         output_dir=args.output_dir,
         api_key=args.api_key,
-        model=args.model,
+        model=model,
         force_initial=args.force_initial,
         weekly_cap=args.research_cap,
     )

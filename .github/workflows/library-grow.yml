@@ -1,21 +1,23 @@
 name: FTSE Library Grow
 
-# Progressive offline multi-market data libraries (not the live FTSE 350 screen).
-# Small per-run budgets accumulate coverage across weeks.
+# Single-index offline library growth (focus market from policy.json).
+# Fundamentals grow is Yahoo-side; Cursor agent budget is tracked separately for research.
 on:
   workflow_dispatch:
     inputs:
       markets:
-        description: "Comma-separated markets (empty = all registered)"
+        description: "Override focus market (empty = policy focus)"
         type: string
-        default: "sp500,euro_stoxx50,asx200"
+        default: ""
       max_tickers:
-        description: "Max tickers to fetch per market this run"
+        description: "Override max tickers (empty = policy budget)"
         type: string
-        default: "20"
+        default: ""
   schedule:
-    # Sundays 06:00 UTC — quiet slot, separate from weekday paper-auto / weekly screen
+    # Weekly grow — Sundays 06:00 UTC
     - cron: "0 6 * * 0"
+    # Daily check for surplus-day acceleration (day before plan refresh)
+    - cron: "30 5 * * *"
 
 permissions:
   contents: write
@@ -37,29 +39,76 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Grow offline libraries
+      - name: Ensure policy + decide grow plan
+        id: plan
         run: |
-          MARKETS="${{ github.event.inputs.markets }}"
-          if [ -z "$MARKETS" ]; then
-            MARKETS="sp500,euro_stoxx50,asx200"
-          fi
-          MAX="${{ github.event.inputs.max_tickers }}"
-          if [ -z "$MAX" ]; then
-            MAX="20"
-          fi
-          # Persist under docs/data/library (output/ is gitignored).
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
+          # Materialise defaults if missing
+          ftse-library policy --policy "$ROOT/policy.json" >/dev/null
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import UTC, datetime
+          from pathlib import Path
+          from value_investor.agent_model_policy import grow_ticker_budget, load_policy, is_surplus_spend_day
+
+          policy_path = Path("docs/data/library/policy.json")
+          policy = load_policy(policy_path)
+          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          plan = grow_ticker_budget(policy)
+          # On the daily cron, only run when it is the surplus day.
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          def emit(**kwargs):
+              with out.open("a", encoding="utf-8") as fh:
+                  for key, value in kwargs.items():
+                      fh.write(f"{key}={value}\n")
+
+          if event == "schedule":
+              # Daily cron also fires; only grow on Sunday or surplus day.
+              now = datetime.now(UTC)
+              is_sunday = now.weekday() == 6
+              surplus = plan["surplus_day"]
+              if not is_sunday and not surplus:
+                  emit(skip="true", reason="not_sunday_and_not_surplus")
+                  print("skip=true reason=not_sunday_and_not_surplus")
+                  raise SystemExit(0)
+          markets = os.environ.get("INPUT_MARKETS", "").strip()
+          max_tickers = os.environ.get("INPUT_MAX", "").strip()
+          if not markets:
+              markets = ",".join(plan["focus_markets"])
+          if not max_tickers:
+              max_tickers = str(plan["max_tickers"])
+          emit(
+              skip="false",
+              markets=markets,
+              max_tickers=max_tickers,
+              surplus=str(plan["surplus_day"]).lower(),
+              model=plan["research_model"],
+          )
+          print(json.dumps({"markets": markets, "max_tickers": max_tickers, "plan": plan}, indent=2))
+          PY
+        env:
+          INPUT_MARKETS: ${{ github.event.inputs.markets }}
+          INPUT_MAX: ${{ github.event.inputs.max_tickers }}
+
+      - name: Grow focus library
+        if: steps.plan.outputs.skip != 'true'
+        run: |
+          ROOT="docs/data/library"
           ftse-library grow \
             --root "$ROOT" \
-            --markets "$MARKETS" \
-            --max-tickers "$MAX" \
+            --policy "$ROOT/policy.json" \
+            --markets "${{ steps.plan.outputs.markets }}" \
+            --max-tickers "${{ steps.plan.outputs.max_tickers }}" \
             --retention-days 120 \
             --json | tee "$ROOT/last_grow.json"
-          ftse-library status --root "$ROOT" --json | tee "$ROOT/status_snapshot.json"
+          ftse-library status --root "$ROOT" --markets "${{ steps.plan.outputs.markets }}" --json \
+            | tee "$ROOT/status_snapshot.json"
 
       - name: Commit library artifacts
+        if: steps.plan.outputs.skip != 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "chore: grow offline multi-market data libraries"
+          commit_message: "chore: grow offline focus-market data library"
           file_pattern: "docs/data/library/**"

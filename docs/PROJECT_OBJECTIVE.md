@@ -53,19 +53,24 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 
 Do **not** run full FTSE-style research across whole foreign indexes. Prefer B for breadth of history; use C sparingly on the shortlist.
 
-Prerequisite before trusting B/C: **market-aware fetch** (L31) — today `fetch_company_metrics` normalises via `to_lse_ticker`, which can corrupt non-UK symbols.
+**One index at a time:** policy focus starts at `sp500`, then `euro_stoxx50`, then `asx200` once coverage/freshness graduation floors are met (`docs/data/library/policy.json`).
 
 ### Research model / subscription budget
 
-Processing speed is not a priority for library or weekly research. Prefer a cheaper Cursor model:
+Cheapest agent for plan efficiency (as of current Cursor pricing): **`composer-2.5`** on the first-party pool. Absolute lowest API $/token among models on this key is usually **`gpt-5.4-nano`**, but that burns the API credit pool — prefer first-party for subscription budget.
 
 ```bash
-ftse-verify-key --list-models          # see IDs available to CURSOR_API_KEY
-ftse-research --model <cheaper-id> --research-cap 3
-ftse-email --research-docs --model <cheaper-id> --research-cap 3
+ftse-library review-model              # re-pick cheapest; also runs on a Monday cron
+ftse-library policy                    # focus market + 10% weekly budget
+ftse-library policy --refresh-day N    # set to your Cursor billing refresh day
+ftse-research                          # uses policy / CURSOR_RESEARCH_MODEL
 ```
 
-Default remains `composer-2.5` if `--model` is omitted. Cap (`--research-cap`) is the primary cost control; model choice is the secondary one.
+Budget policy defaults:
+
+- **10% of plan included USD per week** for the library/research strand (`weekly_library_fraction: 0.1`).
+- **Surplus day:** day before `plan_refresh_day_of_month` accelerates fundamentals grow and allows spending remaining weekly headroom so credits are not left unused.
+- Cursor does not expose live remaining credits to this repo — set `plan_monthly_usd` / refresh day to match your billing page; spend is estimated when research runs.
 
 ---
 
