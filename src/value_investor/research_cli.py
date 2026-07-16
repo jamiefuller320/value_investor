@@ -13,10 +13,12 @@ import pandas as pd
 from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES
 from value_investor.research.format import format_research_text
 from value_investor.research.runner import (
+    DEFAULT_RESEARCH_ALUMNI_CAP,
     DEFAULT_RESEARCH_WEEKLY_CAP,
-    eligible_research_targets,
     run_research_for_strong_buys,
+    select_research_targets,
 )
+from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
 
 
@@ -73,8 +75,23 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=DEFAULT_RESEARCH_WEEKLY_CAP,
         help=(
-            f"Max memos per run (strong buys first, then top buys; default {DEFAULT_RESEARCH_WEEKLY_CAP})"
+            f"Max active buy-tier memos per run "
+            f"(strong buys first, then top buys; default {DEFAULT_RESEARCH_WEEKLY_CAP})"
         ),
+    )
+    parser.add_argument(
+        "--alumni-cap",
+        type=int,
+        default=DEFAULT_RESEARCH_ALUMNI_CAP,
+        help=(
+            f"Max weekly updates for researched names that left the buy list "
+            f"(oldest memos first; default {DEFAULT_RESEARCH_ALUMNI_CAP})"
+        ),
+    )
+    parser.add_argument(
+        "--no-continue-alumni",
+        action="store_true",
+        help="Do not refresh research for names that dropped off the buy list",
     )
     parser.add_argument(
         "--dry-run",
@@ -106,17 +123,28 @@ def main(argv: list[str] | None = None) -> int:
         model_results = result.model_results
 
     reports = build_company_reports(signals, model_results)
-    targets = eligible_research_targets(reports, weekly_cap=args.research_cap)
-    strong_count = sum(1 for r in targets if r.signal == "strong_buy")
-    buy_count = sum(1 for r in targets if r.signal == "buy")
+    store = ResearchStore(args.output_dir)
+    active, alumni = select_research_targets(
+        reports,
+        store,
+        weekly_cap=args.research_cap,
+        continue_alumni=not args.no_continue_alumni,
+        alumni_cap=args.alumni_cap,
+    )
+    targets = [*active, *alumni]
+    strong_count = sum(1 for r in active if r.signal == "strong_buy")
+    buy_count = sum(1 for r in active if r.signal == "buy")
     print(
         f"Selected {len(targets)} research target(s) "
-        f"({strong_count} strong buy, {buy_count} buy; cap {args.research_cap})"
+        f"({strong_count} strong buy, {buy_count} buy, {len(alumni)} alumni; "
+        f"caps active={args.research_cap} alumni={args.alumni_cap})"
     )
 
     if args.dry_run:
-        for report in targets:
+        for report in active:
             print(f"  • {report.name} ({report.ticker}) — {report.signal}")
+        for report in alumni:
+            print(f"  • {report.name} ({report.ticker}) — {report.signal} [alumni]")
         return 0
 
     if not args.api_key:
@@ -140,6 +168,8 @@ def main(argv: list[str] | None = None) -> int:
         model=model,
         force_initial=args.force_initial,
         weekly_cap=args.research_cap,
+        continue_alumni=not args.no_continue_alumni,
+        alumni_cap=args.alumni_cap,
     )
 
     summary_path = args.output_dir / "research_summary.json"
@@ -155,6 +185,11 @@ def main(argv: list[str] | None = None) -> int:
             "skipped": summary.skipped,
             "errors": summary.errors,
             "weekly_cap": args.research_cap,
+            "alumni_cap": args.alumni_cap,
+            "continue_alumni": not args.no_continue_alumni,
+            "active_count": summary.active_count,
+            "alumni_count": summary.alumni_count,
+            "alumni_updated": summary.alumni_updated,
             "documents": [doc.to_dict() for doc in summary.documents],
         },
         compact=True,

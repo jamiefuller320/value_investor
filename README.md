@@ -238,7 +238,7 @@ Cloud agents are instructed via `AGENTS.md` to call `ftse-defer add` whenever th
    The Cursor agent prefers filing bodies for FINANCIAL REVIEW and falls back to Yahoo only when needed.
 2. **Weekly reruns** — refreshes filings + news, appends a `WEEKLY UPDATE` section, and **revises the research verdict** when material news/filings change conviction (otherwise repeats the prior verdict).
 
-Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Override the cap with `--research-cap N`. Optional repo secret `TICKER_API_KEY` improves RNS body coverage for memo names.
+Memos are stored under `output/research/{TICKER}/` as `research.md` + `research.json`. The weekly GitHub Action enables `--research-docs` when `CURSOR_API_KEY` is configured. Active buy-tier names use `--research-cap N`; names that later drop off the pick list keep receiving weekly updates (oldest memos first) up to `--alumni-cap N` so decision history stays rich — disable with `--no-continue-alumni`. Optional repo secret `TICKER_API_KEY` improves RNS body coverage for memo names.
 
 ## First weekly run checklist
 

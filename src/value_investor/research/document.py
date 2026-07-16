@@ -130,6 +130,9 @@ class ResearchSummary:
     updated: int = 0
     skipped: int = 0
     errors: list[str] = field(default_factory=list)
+    active_count: int = 0
+    alumni_count: int = 0
+    alumni_updated: int = 0
 
     @property
     def has_documents(self) -> bool:
