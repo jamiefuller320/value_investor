@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from io import StringIO
 from pathlib import Path
 from typing import Any, Callable
 from urllib.request import Request, urlopen
@@ -41,7 +42,11 @@ def _wiki_tables(url: str) -> list[pd.DataFrame]:
     request = Request(url, headers={"User-Agent": WIKIPEDIA_USER_AGENT})
     with urlopen(request, timeout=60) as response:  # noqa: S310 — curated Wikipedia URLs
         html = response.read().decode("utf-8", errors="replace")
-    return pd.read_html(html)
+    # StringIO required — passing a raw HTML string can be mis-handled as a path/URL.
+    try:
+        return pd.read_html(StringIO(html), flavor="lxml")
+    except ValueError:
+        return pd.read_html(StringIO(html), flavor="html5lib")
 
 
 def _pick_constituent_table(tables: list[pd.DataFrame]) -> pd.DataFrame:
@@ -68,11 +73,16 @@ def _normalize_wiki_constituents(
     rename: dict[str, str] = {}
     for col in table.columns:
         key = str(col).strip().lower()
-        if key in {"ticker", "symbol", "epic", "code"} or "ticker" in key or "symbol" in key:
+        if "raw_ticker" not in rename.values() and (
+            key in {"ticker", "symbol", "epic", "code"} or "ticker" in key or "symbol" in key
+        ):
             rename[col] = "raw_ticker"
-        elif key in {"company", "name", "security", "stock"} or "company" in key:
+        elif "name" not in rename.values() and (
+            key in {"company", "name", "security", "stock"} or "company" in key
+        ):
             rename[col] = "name"
-        elif "sector" in key or "industry" in key:
+        elif "sector" not in rename.values() and ("sector" in key or key == "industry"):
+            # Prefer the first sector-like column (e.g. GICS Sector over Sub-Industry).
             rename[col] = "sector"
     frame = table.rename(columns=rename).copy()
     if "raw_ticker" not in frame.columns:
@@ -95,11 +105,20 @@ def _normalize_wiki_constituents(
             ticker = base if base.endswith(yahoo_suffix) else f"{base}{yahoo_suffix}"
         else:
             ticker = raw.replace(".", "-")
+        sector_val = row["sector"] if "sector" in frame.columns else None
+        if sector_val is not None and not isinstance(sector_val, str):
+            try:
+                if pd.isna(sector_val):
+                    sector_val = None
+                else:
+                    sector_val = str(sector_val)
+            except (ValueError, TypeError):
+                sector_val = str(sector_val)
         rows.append(
             {
                 "ticker": ticker,
-                "name": str(row.get("name") or ticker),
-                "sector": None if pd.isna(row.get("sector")) else str(row.get("sector")),
+                "name": str(row["name"] if "name" in frame.columns else ticker),
+                "sector": sector_val,
                 "epic": raw,
                 "index": index_label,
                 "market": market_id,
