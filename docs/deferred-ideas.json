@@ -1,0 +1,589 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-16T03:29:20+00:00",
+  "sessions_mined": [
+    {
+      "name": "Stock open dashboard behavior",
+      "url": "https://cursor.com/agents/bc-957a7c96-f14d-494a-83f8-5f2a618a3446",
+      "focus": "Paper funds, automation, self-learning, universe"
+    },
+    {
+      "name": "Ftse key verification models",
+      "url": "https://cursor.com/agents/bc-84f8eb22-819f-4ea2-b70d-18ab2f010668",
+      "focus": "Full-run proof, CI, data sources, research limits"
+    },
+    {
+      "name": "Ftse verify key models",
+      "url": "https://cursor.com/agents/bc-f66d83fe-cfe6-44a6-b3de-51c10d6ae515",
+      "focus": "Env/gitignore, secrets hygiene"
+    },
+    {
+      "name": "Ftse key verification",
+      "url": "https://cursor.com/agents/bc-9bff5dd3-473b-4cf0-9374-3bc91363ec15",
+      "focus": "ftse-verify-key (little deferred)"
+    },
+    {
+      "name": "Merge request commit failure",
+      "url": "https://cursor.com/agents/bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5",
+      "focus": "Models roadmap, research overlay, data gaps"
+    }
+  ],
+  "ideas": [
+    {
+      "id": "N1",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Widen universe first (AIM / Europe / worldwide)",
+      "summary": "Learning bottleneck is weekly periods, not name count; worse data/liquidity; no code path",
+      "revisit_when": "FTSE 350 decision-review loop is stable and there is a clear data story",
+      "tags": [
+        "universe",
+        "AIM",
+        "Europe"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "N2",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Evolutionary / survival-of-the-fittest parallel sims",
+      "summary": "Sparse weekly history leads to overfitting; high-churn genomes look fit until costs dominate",
+      "revisit_when": "Many tens of weekly snapshots + cost-penalised walk-forward fitness",
+      "tags": [
+        "self-learning",
+        "evolutionary"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "N3",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Rewrite assign_signal() from LLM research",
+      "summary": "Research should overlay, not own the primary quant signal",
+      "revisit_when": "Explicit product decision to make LLM output part of base signal",
+      "tags": [
+        "research",
+        "signals"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "N4",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "More cheapness / P/E-variant screens",
+      "summary": "Saturated; adds noise",
+      "revisit_when": "Per-model attribution shows a cheapness gap",
+      "tags": [
+        "models",
+        "cheapness"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "N5",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "DCF as a screen model",
+      "summary": "yfinance too thin across FTSE",
+      "revisit_when": "Better fundamentals (RNS/paid API)",
+      "tags": [
+        "models",
+        "DCF"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "N6",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "ESG / sentiment as quant models",
+      "summary": "Belongs in research unless a dedicated feed exists",
+      "revisit_when": "Paid ESG/sentiment source available",
+      "tags": [
+        "models",
+        "ESG"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "N7",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Level 2 / ADVFN order book",
+      "summary": "Weak fit for weekly batch without licensed depth",
+      "revisit_when": "Licensed L2 + trade-plan overlay needed",
+      "tags": [
+        "market-data",
+        "L2"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "N8",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Resource/reserve miner metrics",
+      "summary": "Sector-specific, hard data",
+      "revisit_when": "Dedicated resources feed",
+      "tags": [
+        "models",
+        "resources"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "N9",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Extra storage compression / same-day cron micro-tests",
+      "summary": "Explicitly skipped after earlier storage/cron work",
+      "revisit_when": "Local output/history/ pain returns",
+      "tags": [
+        "storage",
+        "ops"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "N10",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Node 20 Actions deprecation nit",
+      "summary": "Harmless noise",
+      "revisit_when": "Forced by action upgrades",
+      "tags": [
+        "ops",
+        "ci"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "N11",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Sync private live holdings into git/CI",
+      "summary": "Privacy; dashboard localStorage must stay private",
+      "revisit_when": "Private bridge (not git) is designed",
+      "tags": [
+        "privacy",
+        "live-holdings"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "N12",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Browser-only fully independent automation",
+      "summary": "Only runs when dashboard is open",
+      "revisit_when": "Server Action/ftse-paper-auto insufficient",
+      "tags": [
+        "automation",
+        "localStorage"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "L1",
+      "category": "later",
+      "section": "learning",
+      "title": "Decision-review learning on automated book",
+      "summary": "Review automated trades for excess after costs; tune small knobs (max positions, timing strictness, conviction floor, sector cap). Preferred now path vs evolution.",
+      "revisit_when": "Implementing self-learning on paper-auto (next build step)",
+      "tags": [
+        "self-learning",
+        "decision-review",
+        "paper-auto"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "L2",
+      "category": "later",
+      "section": "learning",
+      "title": "Evolutionary genomes (stage 2)",
+      "summary": "Genomes = sim knobs \u00b1 weight deltas; fitness = excess \u2212 \u03bb\u00d7costs; elites + small mutations; freeze screen signals first",
+      "revisit_when": "After L1; history thick enough to trust fitness",
+      "tags": [
+        "self-learning",
+        "evolutionary"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "L3",
+      "category": "later",
+      "section": "learning",
+      "title": "Wire trade plans into simulator",
+      "summary": "Limit/stop plans are advisory; sim still uses conviction/timing",
+      "revisit_when": "Want simulated validation of levels",
+      "tags": [
+        "simulator",
+        "trade-plans"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L4",
+      "category": "later",
+      "section": "learning",
+      "title": "Clarify tactical vs whole-position stops",
+      "summary": "Semantics ambiguous if/when sim consumes plans",
+      "revisit_when": "L3 starts",
+      "tags": [
+        "trade-plans",
+        "simulator"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L5",
+      "category": "later",
+      "section": "learning",
+      "title": "Trade-plan magic numbers to config",
+      "summary": "Hard-coded thresholds fine until tuning/backtests",
+      "revisit_when": "Tuning trade-plan params",
+      "tags": [
+        "trade-plans",
+        "config"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L6",
+      "category": "later",
+      "section": "learning",
+      "title": "Sector-stratified backtest",
+      "summary": "Does cheapness work by sector?",
+      "revisit_when": "Enough archived runs",
+      "tags": [
+        "backtest",
+        "sector"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L7",
+      "category": "later",
+      "section": "universe",
+      "title": "Modest liquid UK All-Share slice",
+      "summary": "Volume + quality floors; not AIM/world",
+      "revisit_when": "FTSE 350 archive + decision-review stable",
+      "tags": [
+        "universe",
+        "All-Share"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "L8",
+      "category": "later",
+      "section": "universe",
+      "title": "Official AIC / published NAV for trusts",
+      "summary": "Trust track uses book-value NAV proxy",
+      "revisit_when": "Discount-to-book too coarse",
+      "tags": [
+        "trusts",
+        "NAV"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L9",
+      "category": "later",
+      "section": "universe",
+      "title": "Yahoo volume/ATR technicals",
+      "summary": "Higher signal-per-effort than L2 scrapes",
+      "revisit_when": "Refining buy-tier trade plans",
+      "tags": [
+        "technicals"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L10",
+      "category": "later",
+      "section": "universe",
+      "title": "Companies House / annual-report PDF ingest",
+      "summary": "Next filings step after RNS (memo-only)",
+      "revisit_when": "RNS bodies still thin for FINANCIAL REVIEW",
+      "tags": [
+        "filings",
+        "research"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L11",
+      "category": "later",
+      "section": "universe",
+      "title": "UK-primary fundamentals (Refinitiv/FMP/RNS depth)",
+      "summary": "Supplement yfinance balance-sheet/dividend gaps",
+      "revisit_when": "Data-quality errors dominate signals",
+      "tags": [
+        "data-quality"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L12",
+      "category": "later",
+      "section": "universe",
+      "title": "Paid news API",
+      "summary": "Beyond Google News RSS",
+      "revisit_when": "News quality becomes a bottleneck",
+      "tags": [
+        "news",
+        "research"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L13",
+      "category": "later",
+      "section": "universe",
+      "title": "SQLite / columnar history store",
+      "summary": "Deferred after gzip+retention",
+      "revisit_when": "Larger universe or local history pain",
+      "tags": [
+        "storage"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L14",
+      "category": "later",
+      "section": "research",
+      "title": "Research beyond capped buy tier / short-adversarial mode",
+      "summary": "Do not auto-research holds/avoids yet",
+      "revisit_when": "Capped buy-tier memos prove decision value",
+      "tags": [
+        "research"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L15",
+      "category": "later",
+      "section": "research",
+      "title": "Overlay follow-ons",
+      "summary": "Extend research to more buy; email on verdict downgrade; sizing from conviction; verdict_override.yaml",
+      "revisit_when": "Overlay vs screen-only sim shows benefit",
+      "tags": [
+        "research",
+        "overlay"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L16",
+      "category": "later",
+      "section": "research",
+      "title": "Multi-turn agent + structured JSON",
+      "summary": "Deeper RNS cross-check loops",
+      "revisit_when": "Cost/runtime budget allows",
+      "tags": [
+        "research",
+        "agent"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L17",
+      "category": "later",
+      "section": "research",
+      "title": "Model roadmap after risk family",
+      "summary": "Shareholder yield, Novy-Marx, mid-cycle P/E, sector-appropriate value, momentum-as-family",
+      "revisit_when": "Risk family + adaptive weights validated",
+      "tags": [
+        "models"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L18",
+      "category": "later",
+      "section": "research",
+      "title": "Montier C-Score",
+      "summary": "Useful negative filter; after Sloan/FCF conversion if adding one EQ model",
+      "revisit_when": "After earnings-quality/distress family",
+      "tags": [
+        "models",
+        "earnings-quality"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L19",
+      "category": "later",
+      "section": "research",
+      "title": "Portfolio concentration / sizing UI",
+      "summary": "Sector caps, correlation warnings, size hints",
+      "revisit_when": "Report should answer what to do with the list",
+      "tags": [
+        "portfolio",
+        "ui"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L20",
+      "category": "later",
+      "section": "research",
+      "title": "Synced portfolio backend / dedicated hosting",
+      "summary": "Leave Pages+Actions until shared state, login, live refresh, or SLA needs",
+      "revisit_when": "Multi-device portfolio or private interactive dash",
+      "tags": [
+        "hosting",
+        "portfolio"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L21",
+      "category": "later",
+      "section": "ops",
+      "title": "External cron to workflow_dispatch",
+      "summary": "Fallback if GitHub scheduler stays silent",
+      "revisit_when": "Monday schedule misses again",
+      "tags": [
+        "ops",
+        "cron"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L22",
+      "category": "later",
+      "section": "ops",
+      "title": "Prove Monday GitHub cron",
+      "summary": "Confirm 17 7 * * 1 (or Schedule\u2192dispatch wrapper)",
+      "revisit_when": "Next Monday after cron window",
+      "tags": [
+        "ops",
+        "cron"
+      ],
+      "status": "open",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+    },
+    {
+      "id": "L23",
+      "category": "later",
+      "section": "ops",
+      "title": "Parallel fetch + caching",
+      "summary": "Sequential yfinance loop",
+      "revisit_when": "Weekly runtime becomes painful",
+      "tags": [
+        "ops",
+        "performance"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L24",
+      "category": "later",
+      "section": "ops",
+      "title": "CI pytest on PRs",
+      "summary": "Hygiene before relying on weekly dashboard",
+      "revisit_when": "Before production reliance",
+      "tags": [
+        "ops",
+        "ci"
+      ],
+      "status": "open",
+      "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L25",
+      "category": "later",
+      "section": "ops",
+      "title": "Private live-holdings surveillance bridge",
+      "summary": "Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage",
+      "revisit_when": "Need CI surveillance of personal live book",
+      "tags": [
+        "privacy",
+        "surveillance"
+      ],
+      "status": "open",
+      "source": "bc-957a7c96-f14d-494a-83f8-5f2a618a3446"
+    },
+    {
+      "id": "S1",
+      "category": "security",
+      "section": "security",
+      "title": "Rotate any API/SMTP secrets that were pasted or committed",
+      "summary": "Git history may still contain old keys even after gitignore fixes",
+      "revisit_when": "Immediately if keys may still be live",
+      "tags": [
+        "security"
+      ],
+      "status": "open",
+      "source": "bc-f66d83fe-cfe6-44a6-b3de-51c10d6ae515"
+    },
+    {
+      "id": "S2",
+      "category": "security",
+      "section": "security",
+      "title": "Re-verify CURSOR_API_KEY in a fresh Cloud Agent",
+      "summary": "Secrets may not inject into an already-running pod",
+      "revisit_when": "Next new Cloud Agent run",
+      "tags": [
+        "security",
+        "ops"
+      ],
+      "status": "open",
+      "source": "bc-f66d83fe-cfe6-44a6-b3de-51c10d6ae515"
+    },
+    {
+      "id": "S3",
+      "category": "security",
+      "section": "security",
+      "title": "Quote special characters in .env",
+      "summary": "Unquoted passwords break source .env",
+      "revisit_when": "When recreating or editing .env locally",
+      "tags": [
+        "security",
+        "config"
+      ],
+      "status": "open",
+      "source": "bc-f66d83fe-cfe6-44a6-b3de-51c10d6ae515"
+    }
+  ]
+}

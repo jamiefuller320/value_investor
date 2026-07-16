@@ -192,7 +192,20 @@ State lands in `output/paper_automation/` (`automated_fund.json`, `owned_watchli
 
 Weekly strategy simulation (`ftse-simulate`) remains available for archived-run backtests and now accepts `--monthly-deposit` so returns are measured against capital contributed.
 
-## Buy-tier research
+## Parked ideas (periodic review)
+
+Deferred / “useful later” recommendations live in [`docs/deferred-ideas.json`](docs/deferred-ideas.json) and render to [`docs/deferred-review.md`](docs/deferred-review.md).
+
+```bash
+# Agents (and humans) append parked ideas:
+ftse-defer add --category later --title "…" --summary "…" --revisit-when "…"
+ftse-defer list
+ftse-defer status L3 done
+ftse-defer render
+```
+
+Cloud agents are instructed via `AGENTS.md` to call `ftse-defer add` whenever they park an idea.
+
 
 `ftse-research` (or `ftse-email --research-docs`) builds a dedicated memo for quality-gated `strong_buy` names first, then fills remaining slots with top `buy` names by conviction (default weekly cap: 12). Hold, avoid, and short-side names are not researched.
 
