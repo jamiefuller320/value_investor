@@ -282,3 +282,43 @@ def test_simulator_monthly_deposit_increases_contributed_capital():
     # Flat prices → final ≈ contributed after fees=0
     assert abs(summary.final_value - 1200) < 0.01
     assert abs(summary.total_return) < 0.001
+
+
+def test_buy_sets_position_currency_and_nav_reporting_converts():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="FX",
+            mode="manual",
+            initial_cash=1000,
+            trade_cost_pct=0.0,
+            reporting_currency="GBP",
+            hedge_assumption="none",
+        )
+    )
+    fund.buy(
+        ticker="AAPL",
+        price=100,
+        sizing_mode="shares",
+        amount=2,
+        name="Apple",
+    )
+    assert fund.holdings["AAPL"].currency == "USD"
+
+    # 2 shares @ $100 with USD→GBP = 0.8 → equity £160; cash £800 → NAV £960
+    nav, meta = fund.nav_reporting(
+        {"AAPL": 100.0},
+        rates={"GBP": 1.0, "USD": 0.8},
+    )
+    assert abs(nav - 960.0) < 1e-9
+    assert meta["hedge_assumption"] == "none"
+
+    mark = fund.record_mark(
+        {"AAPL": 100.0},
+        price_currencies={"AAPL": "USD"},
+        rates={"GBP": 1.0, "USD": 0.8},
+        note="fx mark",
+    )
+    assert mark["portfolio_value"] == 960.0
+    assert mark["reporting_currency"] == "GBP"
+    assert mark["hedge_assumption"] == "none"
+    assert mark["fx"]["rates"]["USD"] == 0.8

@@ -57,6 +57,8 @@ class PaperFundConfig:
     monthly_deposit: float = 0.0
     trade_cost_pct: float = DEFAULT_TRADE_COST_PCT
     max_positions: int = DEFAULT_MAX_POSITIONS
+    reporting_currency: str = "GBP"
+    hedge_assumption: str = "none"
     id: str = field(default_factory=create_fund_id)
     created_at: str = field(default_factory=_utcnow_iso)
 
@@ -71,6 +73,8 @@ class PaperFundConfig:
             raise ValueError("trade_cost_pct must be >= 0")
         if self.max_positions < 1:
             raise ValueError("max_positions must be >= 1")
+        self.reporting_currency = str(self.reporting_currency or "GBP").upper()
+        self.hedge_assumption = str(self.hedge_assumption or "none").lower()
 
 
 @dataclass
@@ -80,6 +84,7 @@ class Position:
     avg_cost: float
     name: str = ""
     sector: str = ""
+    currency: str = "GBP"
     stop_loss: float | None = None
     take_profit: float | None = None
     opened_at: str = field(default_factory=_utcnow_iso)
@@ -91,6 +96,7 @@ class Position:
             "avg_cost": round(self.avg_cost, 4),
             "name": self.name,
             "sector": self.sector,
+            "currency": self.currency,
             "stop_loss": self.stop_loss,
             "take_profit": self.take_profit,
             "opened_at": self.opened_at,
@@ -104,6 +110,7 @@ class Position:
             avg_cost=float(data.get("avg_cost") or 0),
             name=str(data.get("name") or ""),
             sector=str(data.get("sector") or ""),
+            currency=str(data.get("currency") or "GBP").upper(),
             stop_loss=_optional_float(data.get("stop_loss")),
             take_profit=_optional_float(data.get("take_profit")),
             opened_at=str(data.get("opened_at") or _utcnow_iso()),
@@ -267,22 +274,71 @@ class PaperFund:
     def nav(self, prices: dict[str, float]) -> float:
         return portfolio_value(self.cash, self.holdings, prices)
 
+    def nav_reporting(
+        self,
+        prices: dict[str, float],
+        *,
+        price_currencies: dict[str, str] | None = None,
+        rates: dict[str, float] | None = None,
+    ) -> tuple[float, dict[str, Any]]:
+        """
+        NAV in ``config.reporting_currency``.
+
+        Local prices are converted at spot (unhedged). Cash is already in the
+        reporting currency.
+        """
+        from value_investor.fx import convert_prices_to_reporting, currency_for_ticker
+
+        ccy_map = dict(price_currencies or {})
+        for ticker, pos in self.holdings.items():
+            ccy_map.setdefault(ticker, pos.currency or currency_for_ticker(ticker))
+        converted, meta = convert_prices_to_reporting(
+            prices,
+            price_currencies=ccy_map,
+            reporting_currency=self.config.reporting_currency,
+            rates=rates,
+        )
+        return self.nav(converted), meta
+
     def record_mark(
         self,
         prices: dict[str, float],
         *,
         acted_at: str | None = None,
         note: str = "",
+        price_currencies: dict[str, str] | None = None,
+        rates: dict[str, float] | None = None,
+        include_macro_note: bool = False,
+        macro_market: str | None = None,
     ) -> dict[str, Any]:
         when = acted_at or _utcnow_iso()
-        value = self.nav(prices)
+        value, fx_meta = self.nav_reporting(
+            prices,
+            price_currencies=price_currencies,
+            rates=rates,
+        )
+        mark_note = note
+        if include_macro_note:
+            try:
+                from value_investor.macro_context import macro_regime_note
+
+                regime = macro_regime_note(macro_market)
+                mark_note = f"{note}; {regime}".strip("; ")
+            except Exception:  # noqa: BLE001
+                pass
         point = {
             "at": when,
             "portfolio_value": round(value, 2),
             "cash": round(self.cash, 2),
             "contributed_capital": round(self.contributed_capital, 2),
             "positions": len(self.holdings),
-            "note": note,
+            "reporting_currency": self.config.reporting_currency,
+            "hedge_assumption": self.config.hedge_assumption,
+            "fx": {
+                "rates": fx_meta.get("rates"),
+                "issues": fx_meta.get("conversion_issues") or [],
+            },
+            "note": mark_note,
         }
         self.equity_curve.append(point)
         self.last_mark_at = when
@@ -370,12 +426,15 @@ class PaperFund:
             if sector:
                 existing.sector = sector
         else:
+            from value_investor.fx import currency_for_ticker
+
             self.holdings[ticker] = Position(
                 ticker=ticker,
                 shares=shares,
                 avg_cost=price,
                 name=name or ticker,
                 sector=sector or "",
+                currency=currency_for_ticker(ticker),
                 stop_loss=stop_loss,
                 take_profit=take_profit,
                 opened_at=when,
@@ -479,6 +538,8 @@ class PaperFund:
             monthly_deposit=float(cfg.get("monthly_deposit") or 0),
             trade_cost_pct=float(cfg.get("trade_cost_pct") or DEFAULT_TRADE_COST_PCT),
             max_positions=int(cfg.get("max_positions") or DEFAULT_MAX_POSITIONS),
+            reporting_currency=str(cfg.get("reporting_currency") or "GBP"),
+            hedge_assumption=str(cfg.get("hedge_assumption") or "none"),
             created_at=str(cfg.get("created_at") or _utcnow_iso()),
         )
         holdings = {

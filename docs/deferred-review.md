@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-16T14:30:03+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-17T05:27:48+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -88,7 +88,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L23 | **Parallel fetch + caching** | Sequential yfinance loop | Weekly runtime becomes painful |
 | L24 | **CI pytest on PRs** | Hygiene before relying on weekly dashboard | Before production reliance |
 | L25 | **Private live-holdings surveillance bridge** | Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage | Need CI surveillance of personal live book |
-| L28 | **Multi-currency NAV and FX policy for global paper books** | When screening or holding non-GBP names, define reporting currency, FX source, and whether hedging is assumed in paper NAV. | First non-UK market enters paper track (stage 4) |
 | L32 | **Wire live Cursor usage API into library budget ledger** | If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls. | Cursor usage/credits API is available to CURSOR_API_KEY |
 
 ---

@@ -164,6 +164,24 @@ def default_policy() -> dict[str, Any]:
             "review_interval_days": 14,
             "history": [],
         },
+        "paper_fx": {
+            "reporting_currency": "GBP",
+            "hedge_assumption": "none",
+            "rate_source": "yahoo_finance",
+            "note": (
+                "Paper NAV converts foreign marks into reporting_currency at spot. "
+                "No FX hedging is assumed. Cash is treated as reporting_currency."
+            ),
+        },
+        "macro_context": {
+            "enabled": True,
+            "refresh_on_ladder": True,
+            "use_in_scoring": False,
+            "note": (
+                "Offline macro / regime markers for research memos and paper notes only. "
+                "Never wire into quantitative scores or weights."
+            ),
+        },
         "updated_at": None,
     }
 
@@ -176,7 +194,7 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
     base = default_policy()
     base.update(data)
     # Ensure nested defaults
-    for key in ("budget", "model_review", "focus_graduation"):
+    for key in ("budget", "model_review", "focus_graduation", "paper_fx", "macro_context"):
         merged = default_policy()[key]
         merged.update(dict(data.get(key) or {}))
         base[key] = merged

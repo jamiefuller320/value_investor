@@ -205,8 +205,10 @@ def ingest_research_sources(
     Download research sources under ``sources_dir``.
 
     Yahoo annual statements + news remain available for context. Primary
-    regulatory filings (UK RNS or US SEC EDGAR) are written under ``filings/``
-    and kept separate so FINANCIAL REVIEW can cite a consistent primary source.
+    regulatory filings (UK RNS, US SEC EDGAR, ASX announcements, or Euro
+    results discovery) are written under ``filings/`` and kept separate so
+    FINANCIAL REVIEW can cite a consistent primary source. Macro context is
+    written for memo prompts only — never used for scoring.
     """
     sources_dir.mkdir(parents=True, exist_ok=True)
 
@@ -280,10 +282,28 @@ def ingest_research_sources(
         except Exception as exc:  # noqa: BLE001 — research should continue without filings
             logger.warning("Filings ingest failed for %s: %s", ticker, exc)
 
+    market_s = str(market or "").strip().lower() or None
+    macro_meta: dict[str, Any] = {"status": "skipped", "reason": "no_market"}
+    if market_s:
+        try:
+            from value_investor.macro_context import macro_context_for_market
+
+            macro_meta = macro_context_for_market(market_s, refresh_if_missing=False)
+            write_json(
+                sources_dir / "macro_context.json",
+                macro_meta,
+                compact=True,
+                compress=False,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Macro context attach failed for %s: %s", ticker, exc)
+            macro_meta = {"status": "error", "error": str(exc), "market": market_s}
+
     written_financials = resolve_json_path(financials_path) or financials_path
     written_snapshot = resolve_json_path(snapshot_path) or snapshot_path
     written_manifest = resolve_json_path(manifest_path) or manifest_path
     written_batch = resolve_json_path(batch_path) or batch_path
+    written_macro = resolve_json_path(sources_dir / "macro_context.json")
 
     return {
         "financials_path": str(written_financials),
@@ -296,4 +316,8 @@ def ingest_research_sources(
         "filings_index_path": filings_meta.get("filings_index_path"),
         "filings_summary": filings_meta.get("filings_summary") or {},
         "filings_sources": filings_meta.get("filings_sources") or [],
+        "filings_regime": filings_meta.get("filings_regime"),
+        "macro_context_path": str(written_macro) if written_macro else None,
+        "macro_context": macro_meta,
+        "market": market_s,
     }

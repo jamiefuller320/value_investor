@@ -35,8 +35,10 @@ def test_resolve_filings_regime_by_market_and_ticker():
     assert resolve_filings_regime("ftse350", "SHEL.L") == "uk_rns"
     assert resolve_filings_regime(None, "SHEL.L") == "uk_rns"
     assert resolve_filings_regime(None, "ACN") == "sec_edgar"
-    assert resolve_filings_regime("asx200", "BHP.AX") == "unsupported"
-    assert resolve_filings_regime("euro_stoxx50", "SAP") == "unsupported"
+    assert resolve_filings_regime("asx200", "BHP.AX") == "asx_announcements"
+    assert resolve_filings_regime(None, "BHP.AX") == "asx_announcements"
+    assert resolve_filings_regime("euro_stoxx50", "SAP.DE") == "euro_filings"
+    assert resolve_filings_regime(None, "SAP.DE") == "euro_filings"
 
 
 def test_merge_filings_prefers_body_and_ticker_source():
@@ -282,20 +284,91 @@ def test_ingest_filings_sec_edgar_writes_annual_interim_bodies(tmp_path: Path):
     assert index["sources_used"] == ["sec_edgar"]
 
 
-def test_ingest_filings_unsupported_market_empty(tmp_path: Path):
+def test_ingest_filings_asx_regime(tmp_path: Path):
+    asx_rows = [
+        {
+            "id": "asxasxasxasxasxa",
+            "source": "google_news_asx",
+            "headline": "Example Full Year Results",
+            "published_at": "2026-02-05T07:00:00+00:00",
+            "url": "https://news.google.com/rss/articles/asx1",
+            "period": "annual",
+            "category": None,
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 120,
+        }
+    ]
     with (
+        patch("value_investor.research.filings.fetch_filings_asx_news", return_value=asx_rows),
+        patch("value_investor.research.filings.fetch_filing_body", return_value=None),
         patch("value_investor.research.filings.fetch_filings_sec_edgar") as sec,
         patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
-        patch("value_investor.research.filings.fetch_filings_google_news") as uk_news,
     ):
         meta = ingest_filings(
-            ticker="SAP",
+            ticker="BHP.AX",
+            company_name="BHP Group",
+            sources_dir=tmp_path,
+            market="asx200",
+        )
+    sec.assert_not_called()
+    uk_api.assert_not_called()
+    assert meta["filings_regime"] == "asx_announcements"
+    assert meta["filings_summary"]["annual"] == 1
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert index["regime"] == "asx_announcements"
+
+
+def test_ingest_filings_euro_regime_includes_sec_dual_list(tmp_path: Path):
+    euro_rows = [
+        {
+            "id": "euroeuroeuroeuro",
+            "source": "google_news_euro",
+            "headline": "SAP Full Year Results",
+            "published_at": "2026-01-15T07:00:00+00:00",
+            "url": "https://news.google.com/rss/articles/euro1",
+            "period": "annual",
+            "category": None,
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 120,
+        }
+    ]
+    sec_rows = [
+        {
+            "id": "sec20f20f20f20f",
+            "source": "sec_edgar",
+            "headline": "20-F: Annual report",
+            "published_at": "2026-02-20T00:00:00+00:00",
+            "url": "https://www.sec.gov/Archives/edgar/data/1/0001/sap-20f.htm",
+            "period": "annual",
+            "category": "20-F",
+            "form": "20-F",
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 130,
+        }
+    ]
+    with (
+        patch("value_investor.research.filings.fetch_filings_euro_news", return_value=euro_rows),
+        patch("value_investor.research.filings.fetch_filings_sec_edgar", return_value=sec_rows) as sec,
+        patch("value_investor.research.filings.fetch_filing_body", return_value=None),
+        patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
+    ):
+        meta = ingest_filings(
+            ticker="SAP.DE",
             company_name="SAP SE",
             sources_dir=tmp_path,
             market="euro_stoxx50",
         )
-    sec.assert_not_called()
     uk_api.assert_not_called()
-    uk_news.assert_not_called()
-    assert meta["filings_regime"] == "unsupported"
-    assert meta["filings_summary"]["total"] == 0
+    sec.assert_called_once_with(ticker="SAP")
+    assert meta["filings_regime"] == "euro_filings"
+    assert meta["filings_summary"]["annual"] >= 1
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert index["regime"] == "euro_filings"
+    assert "google_news_euro" in index["sources_used"]
+    assert "sec_edgar" in index["sources_used"]
