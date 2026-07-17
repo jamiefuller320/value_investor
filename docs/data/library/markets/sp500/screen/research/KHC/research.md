@@ -1,0 +1,85 @@
+# The Kraft Heinz Company (KHC) — Research memo
+
+_Version 1 · Updated 2026-07-17T04:13:56.746741+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+The Kraft Heinz Company (KHC) screens as a buy on cheapness, dividend yield, and balance-sheet risk metrics, but the underlying business is a low-growth, impairment-prone staples franchise trading below book. The quantitative hook is clear: P/B near 0.7, a ~6.3% dividend yield, and ~10% FCF yield on roughly $3.2bn of trailing free cash flow, against a portfolio of global condiments, meals, and snacks brands (Heinz, Kraft, Oscar Mayer, Philadelphia, Lunchables). The central debate is whether cash generation and portfolio rationalisation can offset persistent volume pressure, repeated goodwill and trademark write-downs, and a capital structure that leaves tangible book deeply negative. Berkshire Hathaway’s planned exit of its long-held stake adds a governance and technical overhang that screens do not capture.
+
+## INVESTMENT THESIS
+For a value investor, KHC offers a classic “show me the cash” setup: the screen passes FCF Yield, Dividend Growth, Magic Formula, Acquirer’s Multiple, Composite Value, and Financial Health (6 of 22 models; composite score 93%, sector-relative 81%). Cheapness and dividend families align with a business that still converts earnings to cash despite flat to declining sales—FY2025 FCF of $3.7bn (Yahoo fallback; see Financial Review) on net sales of $24.9bn implies durable cash economics once non-cash impairments are stripped out. Normalised FY2025 operating income was $4.6bn (Yahoo), and Q1 FY2026 operating income of $1.1bn (10-Q) shows the core franchise remains profitable at the operating line.
+
+Business quality is mixed rather than poor. KHC owns category-leading shelf-stable brands with global distribution, and management is actively reshaping the portfolio—Italy infant nutrition divestiture closed in Q1 FY2026 for ~$146m cash (10-Q)—while global restructuring targets roughly 400 further role eliminations in 2026. However, reported ROE is −12.6% (screen), reflecting FY2025’s $5.8bn net loss driven by ~$9.3bn of asset impairments (Yahoo cash-flow statement), not a collapse in operating cash flow. The screen’s risk-family pass likely reflects manageable near-term leverage (~$21bn total debt; 10-Q balance sheet) and investment-grade-style capital markets access (€1bn senior notes offering, May 2026 news), but it underweights intangible-asset risk and the paused company split, which signals strategic uncertainty rather than imminent value unlock.
+
+## FINANCIAL REVIEW
+**Data sources and gaps.** The filings index catalogues two annual 10-Ks (FY2024 ended 28 Dec 2024; FY2025 ended 27 Dec 2025) and six interim 10-Qs. Annual 10-K body extracts are XBRL metadata only—no readable income-statement tables—so **annual figures below fall back to `financials_annual.json` (Yahoo)** and are stated explicitly. The Q1 FY2026 10-Q (filed 6 May 2026; period ended 28 Mar 2026) contains full readable financial statements and is the primary source for interim analysis. Ten 8-K filings are indexed but have no body extracts.
+
+**Annual trends (Yahoo fallback).**
+
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
+| Net sales | $26.6bn | $25.8bn | $24.9bn |
+| Operating income | $5.2bn | $5.4bn | $4.6bn |
+| Net income | $2.9bn | $2.7bn | **−$5.8bn** |
+| Diluted EPS | $2.31 | $2.26 | **−$4.93** |
+| Free cash flow | $3.0bn | $3.0bn | **$3.7bn** |
+
+Revenue has declined for three consecutive years (−3.5% in FY2025), while operating income has softened but remained positive. FY2025’s reported net loss reflects ~$9.3bn of asset impairment charges (Yahoo cash-flow line item), consistent with the company’s history of goodwill and indefinite-lived intangible write-downs. Normalised FY2025 net income (Yahoo) was ~$1.6bn, indicating underlying earnings power closer to ~$1.30/share before impairments.
+
+Balance sheet at FY2025 year-end (Yahoo): total assets $81.8bn; goodwill and intangibles ~$59.7bn; total debt $21.2bn; net debt $18.6bn; shareholders’ equity $41.7bn; **tangible book value −$18.0bn**. Retained earnings moved to a **$4.6bn deficit** (10-Q confirms $(4,629)m at 27 Dec 2025), reflecting cumulative dividends and FY2025’s loss. Dividends paid totalled ~$1.9bn in FY2025 (Yahoo), consistent with the $0.40 quarterly rate maintained through Q1 FY2026.
+
+**Interim: Q1 FY2026 (primary filing — 10-Q, period ended 28 Mar 2026).**
+
+- Net sales **$6,047m** vs $5,999m in Q1 FY2025 (+0.8% YoY)—first positive sales comp in the available interim series.
+- Gross profit **$2,219m** (36.7% margin) vs $2,064m prior year, on lower cost of products sold.
+- Operating income **$1,145m** vs $1,196m (−4.3%); Q1 FY2026 included $13m intangible impairment and a **$23m net restructuring benefit** (U.S. Retiree Life Insurance Plan settlement).
+- Net income **$799m** ($0.67 diluted EPS) vs $714m ($0.59)—boosted by a lower effective tax rate (20.9% vs 29.9%).
+- Operating cash flow **$1,006m** vs $720m; capex $240m; **Q1 FCF ~$766m** (operating cash less capex).
+- Balance sheet at 28 Mar 2026: cash **$3,308m**; total assets **$82,046m**; long-term debt **$19,223m** plus current portion **$1,910m** (~$21.1bn gross debt); goodwill **$22,153m**; net intangible assets **$37,387m**; retained earnings deficit improved to **$(3,831)m** from $(4,629)m at year-end.
+- Italy infant nutrition divestiture closed 31 Dec 2025; **$146m** cash proceeds received in Q1 FY2026.
+
+**Interim context from indexed filings (limited body readability).** Q2–Q3 FY2025 and Q4 FY2025 10-Qs are indexed but body extracts are XBRL-only; news and Yahoo quarterly data indicate a large Q4 FY2025 impairment drove the full-year GAAP loss. Q1 FY2026 represents a cleaner operating quarter, though management cautions interim results are not indicative of full-year outcomes (10-Q basis-of-presentation note).
+
+**Impairment and intangibles (10-Q, referencing FY2025 annual test).** Accumulated goodwill impairment losses total **$20.2bn**. Following the June 2025 annual test, five reporting units with aggregate goodwill of **$21.9bn** had **less than 5%** fair value over carrying amount; brands with ≤20% fair-value cushion carried **$15.0bn**. Management warns of heightened future impairment risk if growth assumptions, discount rates, or share price deteriorate further. No going-concern language appears in available filing extracts.
+
+## RISKS AND RED FLAGS
+**Intangible asset and impairment cycle.** Goodwill ($22.2bn) and indefinite-lived trademarks ($34.1bn at Q1 FY2026) dominate the balance sheet. FY2025’s multi-billion-dollar write-down and ongoing Q1 FY2026 impairments ($13m) confirm that acquisition-era valuations remain under pressure. The 10-Q explicitly flags that a sustained share-price decline or weaker long-term forecasts could trigger further charges across reporting units with thin fair-value cushions.
+
+**Structural growth and competitive pressure.** Three years of declining net sales (Yahoo annual series) point to volume and mix challenges in North American centre-store categories, private-label encroachment, and consumer trade-down—risks echoed in the 10-Q forward-looking statement list (competition, retail consolidation, private label).
+
+**Governance and shareholder overhang.** News coverage (Jan 2026) reports Berkshire Hathaway filing to sell up to **325 million shares**, removing a long-standing anchor shareholder and adding supply to the market. Warren Buffett’s public criticism of the Kraft-Heinz merger (CNBC, Sep 2025) underscores reputational drag. The **paused plan to split** the company into two listed entities (Feb–Jul 2026 news) creates strategic uncertainty and may defer sum-of-the-parts realisation.
+
+**Tax and regulatory contingencies.** The Q1 FY2026 10-Q discloses active **IRS examinations for 2018–2022**, with transfer-pricing NOPAs proposing additional federal tax of ~**$200m (2018)** and ~**$210m (2019)**, plus ~**$85m penalties per year**, with further NOPAs for 2020–2022. This is material relative to annual net income and not captured by valuation screens.
+
+**Leverage and covenants.** Gross debt ~$21bn against ~$4.6bn annualised operating cash flow (Q1 run-rate) is serviceable but constraining. The 10-Q forward-looking statements cite **indebtedness and covenant compliance** as explicit risks; debt covenants are not quantified in the truncated body extract, but the company references its revolving credit facility (originally July 2022) in XBRL metadata.
+
+**Pension and restructuring.** Restructuring continues globally (~400 role eliminations expected in remainder of FY2026). Postemployment benefit reclassifications affected Q1 comprehensive income ($38m). Pension obligations are disclosed but not flagged as critical in the Q1 extract; employee benefit liabilities total ~$131m accrued postemployment costs on the balance sheet.
+
+**Dividend sustainability debate.** At a ~6.3% yield, the market prices some dividend concern. Q1 FY2026 paid $474m in dividends against $799m net income and $1,006m operating cash flow—cover is adequate near term, but flat sales and impairment risk keep payout safety on watch (Simply Wall St, Jun 2026, questioned upcoming dividend attractiveness).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-heavy on valuation and shareholder dynamics**, lighter on operational breakthroughs.
+
+**Strategy and corporate actions**
+- “Why Did Kraft Heinz Hit the Brakes on its Big Split” (Kavout, 12 Feb 2026) and “Kraft Heinz (KHC) Pauses Split Plan, Is The Stock Still A Bargain?” (Simply Wall St, 14 Jul 2026): company split **paused**, timeline uncertain.
+- “Kraft Heinz (KHC) Combines Global Units And Leadership In Major Reorganization” (Simply Wall St, 20 Jun 2026) and “The Kraft Heinz Company Announces Management Changes” (Marketscreener, 18 Jun 2026): **leadership and segment reorganisation**.
+- “The Kraft Heinz Company Reports Earnings Results for the First Quarter Ended March 28, 2026” (Marketscreener, 6 May 2026) and “The Kraft Heinz Company Just Recorded A 32% EPS Beat” (Simply Wall St, 8 May 2026): **Q1 FY2026 earnings beat** vs consensus.
+
+**Shareholder and sentiment**
+- “Kraft Heinz stock falls after filing for potential Berkshire share resale” (Investing.com, 20 Jan 2026) and “As Berkshire Exits Its Kraft Heinz Position, Is the Stock a Sell?” (Yahoo Finance, 27 Jan 2026): **Berkshire stake unwind** filing; shares hit 52-week low ~$23.69 (Investing.com, 23 Dec 2025).
+- “Warren Buffett's public Kraft Heinz criticism is extremely unusual” (CNBC, 6 Sep 2025): rare public rebuke from legacy sponsor.
+- “Kraft Heinz: Berkshire Sale Doesn’t Sway Our Stance That Shares Are a Bargain” (Morningstar, 21 Jan 2026) vs “Is Kraft Heinz Stock a Value Trap?” (Morningstar, 4 Feb 2026): **analyst division** on quality.
+
+**Capital markets and income**
+- “Kraft Heinz Company (KHC) Announces €1 Billion Senior Notes Offe” (GuruFocus, 13 May 2026): **€1bn debt issuance**.
+- “The Kraft Heinz Company announces Quarterly dividend, payable on June 26, 2026” (Marketscreener, 7 May 2026): **$0.40 dividend maintained**.
+- “Kraft Heinz (KHC) Joins The Russell 1000 Dynamic Index” (Yahoo Finance, 10 Jul 2026): index inclusion may support passive flows.
+
+**Operational/analyst tone**
+- “Kraft Heinz: No Growth, Consumer Headwinds, And Depleting Margins” (Seeking Alpha, 24 Apr 2026) vs “Kraft Heinz: Undervalued And Fighting For Market Share” (Seeking Alpha, 28 May 2026): polarised sell-side narrative.
+- “Kraft Heinz (KHC) Faces Earnings Caution On A Fair Value Story That Still Looks Cheap” (Yahoo Finance, 10 Jul 2026): forward estimates point to **lower EPS and revenue** vs prior year.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Quantitative cheapness and cash-flow metrics are confirmed by filing-backed Q1 FY2026 profitability and FCF, but repeated impairments, declining sales, Berkshire exit, paused split, and IRS transfer-pricing exposure prevent a full endorsement of the screen’s buy signal.

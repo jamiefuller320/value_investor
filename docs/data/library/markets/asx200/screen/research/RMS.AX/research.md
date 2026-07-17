@@ -1,0 +1,94 @@
+# Ramelius Resources Limited (RMS.AX) — Research memo
+
+_Version 2 · Updated 2026-07-17T04:43:32.554298+00:00 · Mode: weekly_update_
+
+## EXECUTIVE SUMMARY
+Ramelius Resources is a mid-tier Australian gold producer that the quantitative screen rates as a **Strong Buy**, passing 11 of 22 value models across all four metric families (cheapness, quality, dividend, risk) with a composite score of 73%. The investment case rests on a low-multiple profile (P/E 11.5, P/B 1.4, yield 2.7%) backed by a sharp earnings and cash-flow inflection visible in secondary financial data. Yahoo-sourced accounts show revenue rising from A$603m (FY2022) to A$883m (FY2024) and net profit from A$12m to A$217m over the same period, with FY2024 free cash flow of A$332m and net debt effectively nil. The key debate is whether current profitability is sustainable through the gold cycle, or largely a function of elevated bullion prices and non-recurring margin peaks—H1 FY2026 news points to lower production but record EBITDA margins. Primary ASX regulatory filings are **not available** in the source library (regime unsupported), limiting verification of reserves, rehabilitation provisions, and management commentary.
+
+## INVESTMENT THESIS
+The screen’s Strong Buy rating is well supported on classical value criteria. Ramelius passes Graham Defensive and Enterprising screens, Earnings Yield, FCF Yield, Low P/E + High Yield, Magic Formula, Dreman Contrarian, Composite Value, Financial Health, Economic Moat, and Dividend Growth—an unusually broad sweep for a single name. Headline metrics align: P/E 11.5 (below the 15 threshold), P/B 1.39 (below 1.5), current ratio 3.30 (well above 2.0), ROE 10.6%, and reported FCF of ~A$411m on the snapshot.
+
+For a value investor, the thesis is a **quality compounder trading at a cyclical discount**. Secondary Yahoo data (see Financial Review) show a multi-year transformation from thin margins and impairment charges in FY2022 to FY2024 EBITDA of A$463m and operating income of A$269m. The balance sheet is fortress-like: FY2024 cash of A$424m against total debt of just A$11m (capital leases), giving substantial optionality for dividends, buybacks, or bolt-on M&A without balance-sheet stress. Dividend Growth screen passage and FY2024 dividends paid of A$17m support income-oriented value criteria.
+
+The screen’s sector-relative composite (71%) and high data quality score (19/20 metrics) add confidence that the signal is not a data artefact. Conviction is still **building** at 41% with only two weeks at signal—appropriate for a gold name where commodity timing dominates. The value case does not require growth re-rating; it requires earnings and FCF to hold at levels well above the depressed FY2022–23 base, which the financial trend suggests is plausible even if gold prices normalise modestly.
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` records regime `unsupported` with **zero** annual, interim, or other ASX filings indexed and no body extracts under `filings/bodies/`. All figures below are drawn from `financials_annual.json` (Yahoo Finance); this is an explicit fallback. Quarterly income data in that file is empty. Interim/H1 FY2026 results are referenced only in news headlines, not in filing bodies.
+
+**Income statement trend (Yahoo fallback, A$m)**
+
+| Metric | FY2022 | FY2023 | FY2024 |
+|---|---|---|---|
+| Revenue | 604 | 631 | 883 |
+| Operating income | 22 | 92 | 269 |
+| EBITDA | 95* | 135* | 463 |
+| Net income | 12 | 62 | 217 |
+| Diluted EPS (A$) | 0.015 | 0.068 | n/a |
+
+\*Normalised EBITDA per Yahoo; FY2022 included A$24m impairment/unusual charges.
+
+Revenue grew 40% in FY2024, with operating leverage driving net income up 252% year-on-year. FY2022 was distorted by A$24m asset impairments and heavy amortisation (A$136m), consistent with acquisition-related intangibles rather than operating failure. Gross margin expanded materially: gross profit rose from A$312m (FY2022) to A$495m (FY2024) on revenue of A$883m.
+
+**Cash flow and capital allocation (Yahoo fallback, A$m)**
+
+| Metric | FY2022 | FY2023 | FY2024 |
+|---|---|---|---|
+| Operating cash flow | 159 | 261 | 455 |
+| Capital expenditure | (146) | (189) | (123) |
+| Free cash flow | 14 | 72 | 332 |
+| Dividends paid | (20) | (7) | (17) |
+| Business acquisitions | (71) | (8) | (29) |
+
+FY2024 FCF of A$332m converts roughly 76% of EBITDA to cash—a strong outcome that validates the screen’s FCF Yield pass. Capex moderated in FY2024 despite higher revenue, suggesting mature operations or deferred growth spend. FY2023 included A$74m business disposal proceeds (net), inflating investing cash flows that year.
+
+**Balance sheet (Yahoo fallback, FY2024, A$m)**
+
+- Total assets: 1,594; equity: 1,329; total liabilities: 265  
+- Cash and equivalents: 424; total debt (leases): 11  
+- Working capital: 389; current assets 547 vs current liabilities 159 → current ratio ~3.4 (consistent with screen’s 3.30)  
+- Long-term provisions: 48 (likely rehabilitation/decommissioning—magnitude not verifiable without annual report)  
+- Shares outstanding rose from ~867m (FY2023) to ~1,143m (FY2024), implying equity issuance that funded growth/M&A and partially diluted per-share metrics  
+
+**Gaps:** No FY2025 annual or H1 FY2026 interim filing bodies are available. News (20 Feb 2026) cites record H1 FY2026 EBITDA margins but a dip in gold production—figures cannot be cited numerically from primary sources. Pension/post-retirement obligations are modest (A$1.8m combined current/non-current per Yahoo FY2024) but unverified against statutory disclosures.
+
+## RISKS AND RED FLAGS
+**Regulatory / disclosure gap.** With no ASX annual reports, half-year results, or trading updates in the filing index, this memo cannot assess going-concern language, contingent liabilities, environmental rehabilitation estimates, reserve life, or AISC guidance from primary documents. This is the single largest research limitation.
+
+**Commodity cyclicality.** As a gold producer, earnings are highly levered to bullion price and A$/US$ exchange rate. FY2024’s profit surge may embed peak-cycle assumptions; a gold correction would compress margins faster than the low P/E suggests.
+
+**Production risk.** H1 FY2026 earnings-call coverage (Yahoo Finance, 20 Feb 2026) flags lower gold production despite record EBITDA margins—suggesting margin is price-driven rather than volume-driven, a fragile mix if grades or throughput deteriorate.
+
+**Acquisition and amortisation.** Heavy intangible amortisation (A$148m in FY2024) and periodic impairments (FY2022: A$24m) indicate an acquisitive history. Integration risk and goodwill/intangible write-downs are not assessable without filings.
+
+**Share dilution.** The ~32% increase in shares outstanding between FY2023 and FY2024 dilutes per-share value creation; future equity raises for project pipeline could further compress per-share metrics.
+
+**Governance / provisions.** Long-term provisions of A$48m and deferred tax liabilities of A$124m (current + non-current) warrant scrutiny in a full annual report for closure-cost adequacy and tax timing. No covenant, related-party, or auditor emphasis-of-matter language is available from filing bodies.
+
+**Technical / sentiment.** Kalkine (26 Jun 2026) flagged a potential “structural breakdown” exhaustion pattern—relevant to timing, not fundamentals, but signals mixed market sentiment despite value-screen strength.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **thin on company-specific operational news** and dominated by generic “undervalued ASX stock” listicles. Material items:
+
+- **20 Feb 2026** — *Ramelius Resources Ltd (RMLRF) (H1 2026) Earnings Call Highlights: Navigating Challenges with…* (Yahoo Finance): Despite lower gold production, the company achieved a record EBITDA margin and declared a robust interim dividend. This is the most substantive operational update in the manifest.
+
+- **16 Feb 2026** — *An Intrinsic Calculation For Ramelius Resources Limited (ASX:RMS) Suggests It's 32% Undervalued* (Yahoo Finance): Third-party DCF-style fair value of A$6.77 cited; treat as illustrative, not independent research.
+
+- **2 Feb 2026** — *Investors Shouldn't Overlook The Favourable Returns On Capital At Ramelius Resources (ASX:RMS)* (Yahoo Finance): Highlights return-on-capital quality, consistent with the screen’s Economic Moat pass.
+
+- **18 Nov 2025** — *Here's Why Shareholders Will Not Be Complaining About Ramelius Resources Limited's (ASX:RMS) CEO Pay Packet* (simplywall.st via Google News): Governance/sentiment piece; no pay figures in manifest summary.
+
+- **11 Sep 2025** — *Ramelius Resources Limited (ASX:RMS) Shares Fly 28% But Investors Aren't Buying For Growth* (simplywall.st): Notes strong share-price performance but scepticism on growth narrative—relevant to the value-vs-growth debate.
+
+- **26 Jun 2026** — *Mid-Tier Gold Producer Faces Potential Structural Breakdown on Exhaustion Pattern* (Kalkine): Technical bearish view; no fundamental data.
+
+Multiple January–February 2026 articles list RMS among undervalued ASX names without company-specific detail. No M&A, management change, or regulatory enforcement headlines appear in the manifest.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Secondary financials support the screen’s cheapness, quality, dividend, and balance-sheet signals, but the absence of primary ASX filings and H1 FY2026 production softness prevent full confirmation of the Strong Buy case.
+
+## Weekly updates
+
+### 2026-07-17T04:43:32.554298+00:00

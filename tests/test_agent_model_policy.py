@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.agent_model_policy import (
+    enforce_weekly_research_cap,
     grow_ticker_budget,
     is_surplus_spend_day,
     load_policy,
@@ -58,6 +59,9 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     assert normal["max_tickers"] == 40
     assert normal["surplus_day"] is False
     assert normal["weekly_library_usd"] == 2.0
+    # Weekly research dollar strand is off by default; research still allowed.
+    assert normal["enforce_weekly_research_cap"] is False
+    assert normal["allow_research"] is True
 
     # Surplus day is the 7th when refresh is the 8th
     surplus = grow_ticker_budget(
@@ -68,6 +72,22 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     )
     assert surplus["surplus_day"] is True
     assert surplus["max_tickers"] == 120
+
+
+def test_weekly_research_cap_can_be_re_enabled(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    policy = load_policy(path)
+    policy["budget"]["enforce_weekly_research_cap"] = True
+    policy["budget"]["estimated_spend_usd_this_week"] = 2.0
+    policy["budget"]["weekly_library_usd"] = 2.0
+    policy["budget"]["week_id"] = datetime.now(UTC).strftime("%G-W%V")
+    save_policy(policy, path)
+    policy = load_policy(path)
+    assert enforce_weekly_research_cap(policy) is True
+    gated = grow_ticker_budget(
+        policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC)
+    )
+    assert gated["allow_research"] is False
 
 
 def test_review_model_persists(tmp_path: Path):
@@ -96,6 +116,8 @@ def test_market_aware_yahoo_resolution():
     assert resolve_yahoo_ticker_for_market("BHP", "asx200") == "BHP.AX"
     assert resolve_yahoo_ticker_for_market("BHP.AX", "asx200") == "BHP.AX"
     assert resolve_yahoo_ticker_for_market("BARC", "ftse350") == "BARC.L"
+    assert resolve_yahoo_ticker_for_market("ADS.DE", "euro_stoxx50") == "ADS.DE"
+    assert resolve_yahoo_ticker_for_market("ADS-DE", "euro_stoxx50") == "ADS.DE"
 
 
 def test_cli_policy_and_review(tmp_path: Path, capsys):

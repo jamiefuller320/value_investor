@@ -50,17 +50,29 @@ def _wiki_tables(url: str) -> list[pd.DataFrame]:
 
 
 def _pick_constituent_table(tables: list[pd.DataFrame]) -> pd.DataFrame:
+    """Prefer the largest listing-like table (ticker/symbol/code + company)."""
+    candidates: list[pd.DataFrame] = []
     for table in tables:
         cols = {str(c).strip().lower() for c in table.columns}
-        if {"ticker", "symbol"} & cols or any("ticker" in c or "symbol" in c for c in cols):
-            return table
-        if "company" in cols or "name" in cols:
-            # Prefer tables that also look like listings
-            if any("ticker" in str(c).lower() or "symbol" in str(c).lower() for c in table.columns):
-                return table
+        has_ticker = bool(
+            {"ticker", "symbol", "code", "epic"} & cols
+            or any(
+                any(token in str(c).lower() for token in ("ticker", "symbol", "code", "epic"))
+                for c in table.columns
+            )
+        )
+        has_name = bool({"company", "name", "security"} & cols) or any(
+            "company" in str(c).lower() or "security" in str(c).lower() for c in table.columns
+        )
+        if has_ticker and (has_name or len(table) >= 30):
+            candidates.append(table)
+        elif has_ticker:
+            candidates.append(table)
+    if candidates:
+        return max(candidates, key=len)
     if not tables:
         raise ValueError("No HTML tables found")
-    return tables[0]
+    return max(tables, key=len)
 
 
 def _normalize_wiki_constituents(
@@ -100,10 +112,15 @@ def _normalize_wiki_constituents(
         raw = raw.split(" ")[0].replace("\xa0", "")
         if yahoo_suffix == ".L":
             ticker = to_lse_ticker(raw)
+        elif market_id == "euro_stoxx50":
+            # Wikipedia already lists Yahoo-qualified symbols (e.g. ADS.DE, ASML.AS).
+            # Do not convert '.' → '-' (that yields ADS-DE, which Yahoo rejects).
+            ticker = raw
         elif yahoo_suffix:
             base = raw.replace(".", "-")
             ticker = base if base.endswith(yahoo_suffix) else f"{base}{yahoo_suffix}"
         else:
+            # US class shares: BRK.B → BRK-B
             ticker = raw.replace(".", "-")
         sector_val = row["sector"] if "sector" in frame.columns else None
         if sector_val is not None and not isinstance(sector_val, str):

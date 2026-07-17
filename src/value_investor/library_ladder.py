@@ -10,6 +10,7 @@ from typing import Any
 
 from value_investor.agent_model_policy import (
     DEFAULT_POLICY_PATH,
+    enforce_weekly_research_cap,
     grow_ticker_budget,
     load_policy,
     record_estimated_spend,
@@ -43,7 +44,7 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("layers", ["fundamentals", "screen_lite", "selective_research"])
     ladder.setdefault("min_metrics_for_screen", DEFAULT_MIN_METRICS_FOR_SCREEN)
     ladder.setdefault("estimated_memo_usd", ESTIMATED_MEMO_USD)
-    ladder.setdefault("research_hard_cap", 5)
+    ladder.setdefault("research_hard_cap", 12)
     ladder.setdefault("last_run", None)
     policy["ladder"] = ladder
     return policy
@@ -128,17 +129,22 @@ def run_library_ladder(
         screen_result = run_library_screen(root, market, run_at=run_at)
         result["layers"]["screen_lite"] = screen_result.summary
 
-    # C — selective research (budget gated, focus only)
-    remaining = remaining_weekly_budget_usd(load_policy(policy_path))
+    # C — selective research (focus only; weekly dollar strand optional)
+    policy = load_policy(policy_path)
+    remaining = remaining_weekly_budget_usd(policy)
     memo_cost = float(policy["ladder"].get("estimated_memo_usd") or ESTIMATED_MEMO_USD)
-    hard_cap = int(policy["ladder"].get("research_hard_cap") or 5)
-    research_cap = research_cap_from_budget(
-        remaining_usd=remaining,
-        estimated_memo_usd=memo_cost,
-        hard_cap=hard_cap,
-        surplus=bool(plan.get("surplus_day")),
-    )
-    model = research_model_id(load_policy(policy_path))
+    hard_cap = int(policy["ladder"].get("research_hard_cap") or 12)
+    weekly_cap_on = enforce_weekly_research_cap(policy)
+    if weekly_cap_on:
+        research_cap = research_cap_from_budget(
+            remaining_usd=remaining,
+            estimated_memo_usd=memo_cost,
+            hard_cap=hard_cap,
+            surplus=bool(plan.get("surplus_day")),
+        )
+    else:
+        research_cap = hard_cap
+    model = research_model_id(policy)
 
     if skip_research:
         result["layers"]["selective_research"] = {"skipped": True}
@@ -152,6 +158,7 @@ def run_library_ladder(
             "skipped": True,
             "reason": "weekly library research budget exhausted",
             "remaining_usd": remaining,
+            "enforce_weekly_research_cap": weekly_cap_on,
         }
     else:
         reports = library_research_reports(screen_result)
@@ -159,6 +166,7 @@ def run_library_ladder(
         layer: dict[str, Any] = {
             "model": model,
             "research_cap": research_cap,
+            "enforce_weekly_research_cap": weekly_cap_on,
             "remaining_usd_before": remaining,
             "targets": [
                 {

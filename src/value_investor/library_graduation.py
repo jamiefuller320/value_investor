@@ -11,7 +11,9 @@ from value_investor.data_library import DEFAULT_STALE_DAYS, grow_library, librar
 
 DEFAULT_MIN_COVERAGE_PCT = 0.95
 DEFAULT_MAX_STALE_PCT = 0.15
-DEFAULT_MAINTENANCE_MAX_TICKERS = 15
+# Per graduated market per ladder run (stale/never-fetched first).
+# 100 ≈ full EURO STOXX refresh in one run; S&P cycles in ~5 weekly runs.
+DEFAULT_MAINTENANCE_MAX_TICKERS = 100
 
 
 def _graduation_config(policy: dict[str, Any]) -> dict[str, Any]:
@@ -21,10 +23,14 @@ def _graduation_config(policy: dict[str, Any]) -> dict[str, Any]:
     cfg.setdefault("auto_advance", True)
     cfg.setdefault("maintenance_enabled", True)
     cfg.setdefault("maintenance_max_tickers", DEFAULT_MAINTENANCE_MAX_TICKERS)
+    # Once the queue is finished, refresh every graduated market (including focus).
+    cfg.setdefault("maintenance_include_focus_when_queue_complete", True)
+    cfg.setdefault("maintenance_refresh_constituents", True)
     cfg.setdefault(
         "note",
         "Advance to next queue market only when focus meets these floors; "
-        "graduated markets keep a light maintenance grow.",
+        "graduated markets keep a generous maintenance grow "
+        f"(default {DEFAULT_MAINTENANCE_MAX_TICKERS} tickers/market/run).",
     )
     return cfg
 
@@ -225,23 +231,33 @@ def run_maintenance_grow(
     policy: dict[str, Any],
     *,
     stale_days: int = DEFAULT_STALE_DAYS,
-    refresh_constituents_first: bool = False,
+    refresh_constituents_first: bool | None = None,
 ) -> dict[str, Any]:
     """
-    Light progressive refresh for graduated markets (stale-first via grow_library).
+    Progressive refresh for graduated markets (stale-first via grow_library).
 
-    Skips the current focus market so the main ladder budget is not diluted.
+    While the queue still has a next focus market, skips the current focus so the
+    main ladder grow is not diluted. When the queue is complete, refreshes every
+    graduated market (including focus) at ``maintenance_max_tickers`` each.
     """
     cfg = _graduation_config(policy)
     if not cfg.get("maintenance_enabled", True):
         return {"skipped": True, "reason": "maintenance_disabled", "markets": []}
 
     focus = str(policy.get("focus_market") or "")
-    markets = [m for m in graduated_market_ids(policy) if m and m != focus]
+    graduated = [m for m in graduated_market_ids(policy) if m]
+    queue_complete = bool(graduated) and next_focus_market(policy) is None
+    include_focus = bool(cfg.get("maintenance_include_focus_when_queue_complete", True))
+    if queue_complete and include_focus:
+        markets = graduated
+    else:
+        markets = [m for m in graduated if m != focus]
     if not markets:
         return {"skipped": True, "reason": "no_graduated_markets", "markets": []}
 
     max_tickers = int(cfg.get("maintenance_max_tickers") or DEFAULT_MAINTENANCE_MAX_TICKERS)
+    if refresh_constituents_first is None:
+        refresh_constituents_first = bool(cfg.get("maintenance_refresh_constituents", True))
     results = grow_library(
         root,
         markets=markets,
@@ -254,6 +270,9 @@ def run_maintenance_grow(
         "skipped": False,
         "markets": markets,
         "max_tickers": max_tickers,
+        "queue_complete": queue_complete,
+        "include_focus": bool(queue_complete and include_focus),
+        "refresh_constituents_first": bool(refresh_constituents_first),
         "grew": results,
         "status": status,
     }
