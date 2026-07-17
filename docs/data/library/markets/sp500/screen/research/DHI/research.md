@@ -1,0 +1,109 @@
+# D.R. Horton, Inc. (DHI) — Research memo
+
+_Version 1 · Updated 2026-07-17T03:59:50.888084+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+# D.R. Horton, Inc. (DHI) — Research memo
+
+Saved to `docs/data/library/markets/sp500/screen/research/DHI/research.md`.
+
+---
+
+## EXECUTIVE SUMMARY
+
+D.R. Horton is the largest U.S. homebuilder by closings, operating across 126 markets in 36 states, with a quantitative profile that fits a classic value buyer: P/E 14.3, P/B 1.8, debt/equity 27%, ROE 13.1%, and ten of 22 screen models passing across cheapness, quality, dividend, GARP, and risk families. FY2025 consolidated revenue fell to $34.3 billion from $36.8 billion (10-K), with homes closed down to 84,863 and average closing price easing to $370,400, reflecting a normalising housing cycle after peak volumes. The valuation hook is a scale leader with a conservative balance sheet, strong free cash flow, and aggressive capital return trading at mid-teens earnings despite cyclical earnings compression. The central debate is whether affordability-driven demand, potential rate relief, and housing-policy tailwinds can stabilise margins and volumes before incentive spending, Forestar land-pipeline risk, and inventory carrying costs erode the screen’s quality metrics.
+
+## INVESTMENT THESIS
+
+For a value investor, DHI offers a rare combination of absolute cheapness, balance-sheet resilience, and operational scale in a highly fragmented industry. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—with Graham Enterprising, FCF Yield, Neff PEGY, Quality Value, Dividend Growth, Magic Formula, Acquirer’s Multiple, Dreman Contrarian, Composite Value, and Financial Health all triggered. At P/E 14.3 and P/B 1.84, the market prices Horton as a cyclical mid-single-digit grower rather than the dominant builder that has led U.S. volume every year since 2002.
+
+Business quality is underwritten by national scale, geographic diversification across 36 states, and a vertically integrated land pipeline through majority-owned Forestar Group. Homebuilding generates roughly 92% of consolidated revenue (FY2025 10-K), supplemented by rental, financial services (mortgage/title), and lot development. FY2025 operational metrics from the 10-K confirm 84,863 closings at a $370,400 average price versus 89,690 closings at $378,000 in FY2024—volume and price both modestly lower, consistent with a post-peak normalisation rather than distress.
+
+The screen’s quality and risk passes align with filing evidence: notes payable of $5.97 billion against stockholders’ equity of $24.19 billion at 30 September 2025 (Q1 FY2026 10-Q), inventory-backed working capital typical of homebuilders, and free cash flow of $3.28 billion in FY2025 (Yahoo fallback; filing bodies lack full-year cash-flow statements). Capital return is material—treasury stock rose from $6.13 billion to $10.43 billion over FY2025 per interim equity roll-forwards, with continued repurchases in H1 FY2026 ($669.7 million in Q1 alone)—supporting per-share metrics even as unit volumes soften.
+
+The buy case is not a turnaround story but a cyclical entry: Horton remains profitable through the down-leg, maintains investment-grade leverage metrics relative to peers, and benefits from structural undersupply narratives and recent U.S. housing-affordability legislation cited in sector news. Interim filings show revenue and earnings declining year-on-year through H1 FY2026, but the stock’s valuation already embeds margin pressure, creating optionality if mortgage rates ease or incentives stabilise.
+
+## FINANCIAL REVIEW
+
+**Annual results (10-K)**
+
+Primary filing bodies are available for FY2025 (filed 19 November 2025) and FY2024 (filed 19 November 2024), but both 10-K extracts are truncated before Item 7 MD&A and Item 8 consolidated financial statements. Business-section disclosures and year-end balance-sheet comparisons in subsequent 10-Q filings are used where available; detailed annual P&L and cash-flow line items below are sourced from `financials_annual.json` (Yahoo) with explicit fallback noted.
+
+| Metric | FY2025 (Sep 2025) | FY2024 (Sep 2024) | Source |
+|--------|-------------------|-------------------|--------|
+| Consolidated revenue | $34.3bn | $36.8bn | FY2025/FY2024 10-K business sections |
+| Homes closed | 84,863 | 89,690 | FY2025/FY2024 10-K |
+| Average closing price | $370,400 | $378,000 | FY2025/FY2024 10-K |
+| Net income | $3.59bn | $4.76bn | Yahoo fallback |
+| Diluted EPS | $11.57 | $14.34 | Yahoo fallback |
+| Gross profit | $8.12bn (~23.7%) | $9.54bn (~25.9%) | Yahoo fallback |
+| Free cash flow | $3.28bn | $2.02bn | Yahoo fallback |
+| Total assets | $35.47bn | $36.10bn | Q1 FY2026 10-Q (Sep 2025/2024 columns) |
+| Cash & equivalents | $2.99bn | $4.52bn | Q1 FY2026 10-Q |
+| Notes payable | $5.97bn | $5.92bn | Q1 FY2026 10-Q |
+| Stockholders’ equity | $24.19bn | $25.31bn | Q1 FY2026 10-Q |
+| Total inventory | $25.29bn | $24.90bn | Q1 FY2026 10-Q |
+
+FY2025 revenue declined approximately 7% on lower closings and a modest reduction in average selling price. Net income fell more sharply (~25%, Yahoo fallback), reflecting gross-margin compression and higher SG&A absorption on fewer units. Rental operations closed 3,460 single-family rental homes in FY2025 (FY2025 10-K). Treasury stock increased by roughly $4.3 billion during FY2025 per equity roll-forwards in interim 10-Q filings.
+
+**Interim results (10-Q)**
+
+Six quarterly filing bodies are available (Q3 FY2024 through Q2 FY2026). Key trends from primary 10-Q statements of operations:
+
+- **Q1 FY2026** (three months ended 31 December 2025): Revenue $6,886.9m (−10% vs $7,613.0m); net income $601.4m vs $851.9m; diluted EPS $2.03 vs $2.61. Implied gross margin ~23.2% vs ~25.1% prior year.
+- **Q2 FY2026** (six months ended 31 March 2026): Revenue $14,445.0m (−6% vs $15,347.0m); net income $1,259.4m vs $1,671.0m; diluted EPS $4.27 vs $5.19. Q2 quarter: revenue $7,558.1m vs $7,734.0m; EPS $2.24 vs $2.58.
+- **Q3 FY2025** (nine months ended 30 June 2025): Revenue $24,572.6m (−8% vs $26,798.8m); net income $2,704.1m vs $3,506.2m; diluted EPS $8.53 vs $10.43.
+
+Share count is declining (330.1m diluted shares for 9M FY2024 vs 314.1m for 9M FY2025 vs 289.0m in Q2 FY2026 quarter), partially offsetting earnings pressure.
+
+**Balance sheet (filings)**
+
+At 31 March 2026 (Q2 FY2026 10-Q): total assets $35,566.9m; notes payable $6,563.8m; stockholders’ equity $23,625.8m; total inventory $26,303.8m; cash $1,917.9m. All interim balance sheets include standard “Commitments and contingencies (Note K)” language; no going-concern qualification appears in available filing bodies.
+
+**Data gaps:** FY2025 and FY2024 10-K consolidated income statements, MD&A tables (home sales gross margin, backlog, cancellation rates), and full Item 1A risk-factor text are absent from truncated filing body extracts. Nine 8-K filings in the index have no downloadable bodies.
+
+## RISKS AND RED FLAGS
+
+**Cyclical and margin risk.** Interim filings confirm declining revenue and net income year-on-year through H1 FY2026, with gross margins compressing as incentives rise. The FY2025 10-K cites affordability, mortgage availability, and interest rates as primary demand drivers.
+
+**Inventory and land exposure.** Total inventory of $25–26 billion represents the majority of assets; land and lots reached $14.5 billion at 31 March 2026. Financing-contingency sales contracts (FY2025 10-K) allow buyer cancellation.
+
+**Forestar subsidiary risk.** Recent news (*D.R. Horton (DHI) Faces New Questions As Forestar Cash Burn Raises Land Pipeline Risk*, 17 July 2026) flags cash burn at the majority-owned lot-development subsidiary. Interim 10-Q equity statements show recurring Forestar ownership adjustments.
+
+**Competitive and regulatory environment.** FY2025 10-K text describes “highly competitive” housing markets and “extensive and complex” environmental and land-use regulation across 36 states.
+
+**Leverage and capital allocation.** Notes payable rose from $5,917.7m (Sep 2024) to $6,563.8m (Mar 2026) while cash fell from $4,516.4m to $1,917.9m, partly reflecting buybacks and land investment. Debt remains manageable (~28% D/E on screen basis) but warrants monitoring.
+
+**Contingencies and warranty.** Filing bodies reference warranty obligations and Note K contingencies without quantifying exposures. No covenant breach or going-concern language was found.
+
+## NEWS HIGHLIGHTS
+
+Coverage is moderate-to-good, concentrated around earnings, analyst ratings, and housing policy. Several manifest items reference “DHI Group” (DHX)—a different company—and are excluded.
+
+**Earnings and guidance:** *D.R. Horton's Q3 Earnings Preview* (16 Jul 2026); *Earnings Flash: Fiscal Q2 EPS $2.24 vs $2.13 est* (21 Apr 2026); *Margin Compression Challenges Bullish Earnings Growth Narratives* (23 Apr 2026).
+
+**Valuation and sentiment:** *Can D.R. Horton Still Be a Bargain After Raised Guidance?* (16 Jul 2026); *Stock May Trade At A 16% Discount* (15 Jul 2026); *Wall Street Analyst Picks DR Horton Over Lennar And PulteGroup* (10 Jul 2026).
+
+**Analyst actions:** Zelman upgrade to Outperform (7 Jul 2026); Barclays PT raised to $141 (14 Jul 2026); Oppenheimer reiteration (9 Jul 2026); UBS Buy on balanced inventory (12 Mar 2026).
+
+**Policy and subsidiary risk:** *Landmark Housing Affordability Bill Becomes Law* (13 Jul 2026); *CPI Comes In Cool* rate-sensitive beneficiary piece (15 Jul 2026); *Forestar Cash Burn Raises Land Pipeline Risk* (17 Jul 2026).
+
+No material C-suite turnover or transformative M&A was identified. News flow is adequate but skewed toward earnings previews and syndicated commentary.
+
+## RESEARCH VERDICT
+
+Verdict: accumulate  
+Risk: medium  
+Confidence: 0.68  
+Rationale: Filings confirm scale leadership, manageable leverage, and sustained profitability through a cyclical down-leg that support the quantitative buy signal, partially offset by visible margin compression, rising inventory, Forestar-related land-pipeline concerns, and truncated annual filing extracts requiring Yahoo fallback for full-year income and cash-flow figures.
+
+## INVESTMENT THESIS
+
+
+## FINANCIAL REVIEW
+
+
+## RISKS AND RED FLAGS
+
+
+## NEWS HIGHLIGHTS
