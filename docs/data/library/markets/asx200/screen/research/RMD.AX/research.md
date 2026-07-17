@@ -1,0 +1,80 @@
+# ResMed Inc. (RMD.AX) — Research memo
+
+_Version 2 · Updated 2026-07-17T04:44:46.547928+00:00 · Mode: weekly_update_
+
+## EXECUTIVE SUMMARY
+ResMed is a global leader in sleep-apnoea and respiratory-care devices, with a growing connected-care software layer. The quantitative screen rates RMD.AX as a **buy** (9/22 models, composite 58%, sector-relative 62%), supported by a rare combination of quality (ROE 25.2%), moderate valuation (P/E 19.1, P/B 1.8), low leverage (D/E 13%), and strong free cash flow (~US$1.45bn). The investment case rests on durable demand for CPAP and related therapies, margin expansion, and capital return via dividends and buybacks. The key debate is whether GLP-1 obesity drugs and re-emerging competition (notably Philips) will cap growth in the sleep-apnoea addressable market, and whether the recent MatrixCare divestiture signals portfolio simplification or an admission of prior M&A missteps. Primary regulatory filings are **not available** in the research library for this ASX listing, limiting audit-trail verification.
+
+## INVESTMENT THESIS
+For a value investor, ResMed offers a high-quality compounder at a reasonable price rather than a deep cyclical discount. The screen passes five factor families — cheapness, quality, dividend, GARP, and risk — with models including Graham Enterprising, Buffett Quality, Economic Moat, Magic Formula, and Financial Health. That profile is consistent with a business generating rising returns on a widening asset base: revenue grew from US$3.58bn (FY2022) to US$5.15bn (FY2025) per Yahoo fallback data, while net income rose from US$779m to US$1.40bn over the same period. Operating margins have expanded and free cash flow has accelerated sharply (US$195m in FY2022 to US$1.65bn in FY2025), supporting the screen's quality and dividend-growth signals despite a modest 1.2% yield. Low debt, substantial cash (US$1.21bn at FY2025 year-end), and ongoing share repurchases (US$300m in FY2025) reinforce financial health. RMD.AX trades as a CHESS Depositary Interest over NYSE-listed RMD; fundamentals are USD-denominated. The screen's buy signal aligns with a business that combines franchise economics in a concentrated global market with valuation that is neither euphoric nor distressed.
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` records regime `unsupported` for market `asx200`, with **zero annual, interim, or other filings** and no body extracts under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance) with that fallback stated explicitly. Interim filing verification is not possible.
+
+**Annual trends (Yahoo, FY2022–FY2025)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | US$3.58bn | US$4.22bn | US$4.69bn | US$5.15bn |
+| Operating income | US$1.00bn | US$1.15bn | US$1.38bn | US$1.69bn |
+| Net income | US$779m | US$898m | US$1.02bn | US$1.40bn |
+| Diluted EPS | US$0.53 | US$0.61 | US$0.69 | US$0.95 |
+| EBITDA | US$1.18bn | US$1.35bn | US$1.60bn | US$1.92bn |
+| Free cash flow | US$195m | US$559m | US$1.29bn | US$1.65bn |
+
+Revenue compound growth over FY2022–FY2025 is approximately 13% per annum. Net margin expanded from roughly 22% to 27%. Gross profit rose from US$2.02bn to US$3.05bn, implying stable-to-improving gross margins despite R&D and SG&A investment (R&D reached US$331m in FY2025).
+
+**Balance sheet (Yahoo, FY2025)**
+
+- Total assets: US$8.17bn; stockholders' equity: US$5.97bn  
+- Total debt: US$852m (down from US$1.58bn peak in FY2023 following acquisition-related borrowing)  
+- Cash and equivalents: US$1.21bn (up from US$238m in FY2024, reflecting strong FCF generation)  
+- Goodwill and intangibles: US$3.51bn (~43% of total assets)  
+- Working capital: US$2.49bn  
+
+The balance sheet supports the screen's low-leverage reading (D/E 13%) and Financial Health pass. Goodwill concentration warrants monitoring but is typical for a serial acquirer in med-tech.
+
+**Cash flow and capital allocation (Yahoo)**
+
+Operating cash flow rose from US$351m (FY2022) to US$1.76bn (FY2025). CapEx remained modest at US$85–134m annually. Dividends paid increased from US$245m to US$311m; share repurchases resumed meaningfully in FY2025 (US$300m). FY2023 included a US$1.01bn business acquisition (working-capital drag); FY2025 included US$139m in further M&A spend before the subsequent MatrixCare exit announced in news flow.
+
+**Interim / quarterly (Yahoo cached quarterly income — not a filing substitute)**
+
+Most recent quarter available (labelled 2026 in Yahoo): revenue US$1.43bn, net income US$399m, diluted EPS US$0.274, versus prior-year comparable quarter (2025): revenue US$1.35bn, net income US$380m, EPS US$0.258 — roughly 6% revenue and 5% earnings growth year-on-year. Without SEC 10-Q or ASX interim extracts, segment detail, management commentary, and non-GAAP reconciliations cannot be verified.
+
+**Gaps:** No annual report, 10-K, half-year, or trading-update filing bodies are indexed. Going-concern, contingency, covenant, and pension disclosures cannot be cited from primary sources.
+
+## RISKS AND RED FLAGS
+Without filing body extracts, regulatory-risk language (going concern, litigation reserves, covenant compliance) cannot be quoted directly. The following risks are inferred from financial structure and news context:
+
+- **Competitive and market-structure risk:** ResMed benefited from Philips' CPAP recall; as competitors recover share and innovate, pricing and volume growth may normalise. The market debate around GLP-1 drugs potentially reducing sleep-apnoea prevalence is not captured by value screens and could compress the long-term TAM narrative.
+- **Goodwill and acquisition risk:** US$3.05bn of goodwill (FY2025) reflects prior M&A. The July 2026 sale of MatrixCare for US$490m cash (versus a reported ~US$750m original acquisition cost) suggests partial write-down of strategic value in post-acute care software and reinforces execution risk on non-core deals.
+- **Regulatory and reimbursement:** As a medical-device manufacturer operating globally, ResMed faces FDA and equivalent regulatory scrutiny, reimbursement policy changes, and product-liability exposure — none verifiable from indexed filings here.
+- **Currency and listing structure:** RMD.AX is a CDI; ASX investors bear AUD/USD translation risk on dividends and price, which screens may not fully reflect.
+- **Governance / insider activity:** A Form 4 insider filing was flagged in news (9 July 2026); details not available in sources.
+- **Valuation sensitivity:** At P/E ~19 and strong recent earnings growth, the stock is not a deep-value bargain; disappointment on FY2026 Q4 results (expected imminently per news) could trigger de-rating — the share hit a 52-week low of US$218.27 on 23 April 2026 per news coverage.
+
+No pension, covenant, or going-concern red flags can be confirmed or denied without primary filings.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderately thin on fundamental depth**, with a cluster of promotional "upside potential" articles (DirectorsTalk, GuruFocus) alongside a handful of material corporate items:
+
+- **MatrixCare divestiture (7–10 July 2026):** Multiple sources report ResMed agreed to sell MatrixCare post-acute care software to Frazier Healthcare Partners for **US$490m** cash, refocusing on sleep, breathing, and connected care ("ResMed to sell software business MatrixCare for $490 million," Reuters, 7 July 2026; "Resmed sharpens sleep care focus with $490m software business sale," Yahoo Finance, 8 July 2026). This is the most significant strategic action in the period.
+- **Upcoming Q4 FY2026 results (9 July 2026):** "ResMed's Q4 2026 Earnings: What to Expect" (Yahoo Finance) — analysts expect double-digit earnings growth; results pending at time of source fetch.
+- **Q1 FY2026 earnings (30 October 2025):** "ResMed Inc (RMD) Q1 2026 Earnings Call Highlights: Strong Revenue Growth and Strategic Innovations" (Yahoo Finance) — confirms continued top-line momentum earlier in the fiscal year.
+- **Share-price weakness (23 April 2026):** "ResMed Inc stock hits 52-week low at 218.27 USD" (Investing.com) — relevant to the screen's cheapness signal.
+- **Insider filing (9 July 2026):** Form 4 flagged (Investing.com); substance not detailed in manifest.
+- **Dividend quality commentary (15 July 2026):** ChartMill article highlighting profitability-supported dividend — consistent with screen's Dividend Growth pass.
+
+No material management changes, regulatory enforcement actions, or large acquisitions (beyond MatrixCare exit) are prominent in the manifest. Much of the feed is technical or valuation-commentary rather than investigative journalism.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: This week's empty news batch is neutral on the buy case; prior-week MatrixCare divestiture and earnings-timing considerations remain the operative inputs.
+
+## Weekly updates
+
+### 2026-07-17T04:44:46.547928+00:00
+No new articles were captured in the news batch since the prior memo (fetched 17 July 2026, `since` 2026-07-17T04:38:07 UTC). The filings index remains unchanged: regime `unsupported`, zero annual or interim filings indexed, and no new body extracts under `filings/bodies/`. The investment thesis, risk register, and near-term timing catalyst (pending FY2026 Q4 results, flagged in the prior week's coverage) are therefore unchanged.

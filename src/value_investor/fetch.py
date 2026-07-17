@@ -223,7 +223,25 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
         base = raw.upper()
         return base if base.endswith(".AX") else f"{base.replace('.', '-')}.AX"
     if market_id in {"euro_stoxx50", "eu"}:
-        return raw.strip()
+        # Prefer ADS.DE; recover ADS-DE from an earlier mistaken hyphen conversion.
+        t = raw.strip().upper()
+        for suf in (
+            ".AS",
+            ".PA",
+            ".DE",
+            ".MI",
+            ".BR",
+            ".HE",
+            ".MC",
+            ".IR",
+            ".LS",
+            ".AT",
+            ".SW",
+        ):
+            hyphen = suf.replace(".", "-")
+            if t.endswith(hyphen) and t.count("-") >= 1 and "." not in t:
+                return t[: -len(hyphen)] + suf
+        return t
     if market_id in {"ftse350", "ftse100", "ftse250", "uk", "lse"}:
         return to_lse_ticker(raw)
     return resolve_yahoo_ticker(raw)

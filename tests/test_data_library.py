@@ -156,6 +156,36 @@ def test_empty_manifest_note_offline():
     assert "not used by the live" in note.lower()
 
 
+def test_euro_constituents_keep_yahoo_dots():
+    from value_investor.data_library import _normalize_wiki_constituents
+
+    table = pd.DataFrame(
+        [
+            {"Ticker": "ADS.DE", "Company": "Adidas", "Sector": "Consumer"},
+            {"Ticker": "ASML.AS", "Company": "ASML", "Sector": "Tech"},
+        ]
+    )
+    out = _normalize_wiki_constituents(
+        table, market_id="euro_stoxx50", yahoo_suffix="", index_label="EURO STOXX 50"
+    )
+    assert list(out["ticker"]) == ["ADS.DE", "ASML.AS"]
+
+
+def test_pick_constituent_table_prefers_code_listings():
+    from value_investor.data_library import _pick_constituent_table
+
+    small = pd.DataFrame({0: ["Foundation"], 1: ["2000"]})
+    listing = pd.DataFrame(
+        {
+            "Code": ["BHP", "CBA"],
+            "Company": ["BHP", "CBA"],
+            "Sector": ["Materials", "Financials"],
+        }
+    )
+    picked = _pick_constituent_table([small, listing])
+    assert list(picked.columns) == ["Code", "Company", "Sector"]
+
+
 def test_cli_list_and_status(tmp_path: Path, capsys):
     root = tmp_path / "library"
     assert library_main(["--root", str(root), "list"]) == 0

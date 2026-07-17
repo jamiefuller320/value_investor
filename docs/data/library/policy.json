@@ -1,19 +1,63 @@
 {
   "schema_version": 1,
-  "focus_market": "sp500",
+  "focus_market": "asx200",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
     "asx200"
   ],
-  "graduated_markets": [],
+  "graduated_markets": [
+    {
+      "market": "sp500",
+      "graduated_at": "2026-07-17T04:23:00.289731+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "euro_stoxx50",
+      "graduated_at": "2026-07-17T04:28:29.172198+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "asx200",
+      "graduated_at": "2026-07-17T04:51:50.477265+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    }
+  ],
   "focus_graduation": {
     "min_coverage_pct": 0.95,
     "max_stale_pct": 0.15,
     "auto_advance": true,
     "maintenance_enabled": true,
     "maintenance_max_tickers": 15,
-    "history": [],
+    "history": [
+      {
+        "at": "2026-07-17T04:23:00.289731+00:00",
+        "from_market": "sp500",
+        "to_market": "euro_stoxx50",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-17T04:28:29.172198+00:00",
+        "from_market": "euro_stoxx50",
+        "to_market": "asx200",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-17T04:51:50.477265+00:00",
+        "from_market": "asx200",
+        "to_market": null,
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "queue_complete"
+      }
+    ],
     "note": "Advance to next queue market when focus meets floors; graduated markets keep a light maintenance grow."
   },
   "research_model": {
@@ -31,8 +75,8 @@
     "enforce_weekly_research_cap": false,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 20.0,
-    "estimated_spend_usd_this_week": 20.0,
+    "estimated_spend_usd_this_cycle": 34.0,
+    "estimated_spend_usd_this_week": 34.0,
     "week_id": "2026-W29",
     "cycle_id": "2026-07-d8",
     "note": "Pro plan $20/mo included API pool. Weekly library research dollar strand is disabled (enforce_weekly_research_cap=false); ladder.research_hard_cap and the monthly pool are the practical limits. Surplus day (7th) still accelerates fundamentals grow before refresh on the 8th.",
@@ -51,7 +95,7 @@
       }
     ]
   },
-  "updated_at": "2026-07-17T04:21:05.214132+00:00",
+  "updated_at": "2026-07-17T04:51:50.477279+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -63,202 +107,175 @@
     "estimated_memo_usd": 0.4,
     "research_hard_cap": 25,
     "last_run": {
-      "run_at": "2026-07-17T04:21:05.214116+00:00",
-      "focus_market": "sp500",
-      "focus_market_after": "sp500",
+      "run_at": "2026-07-17T04:51:32.714088+00:00",
+      "focus_market": "asx200",
+      "focus_market_after": "asx200",
+      "screen_shortlist": 31,
       "research": {
-        "test": "finish_buy_tier",
         "model": "composer-2.5",
-        "research_cap": 25,
+        "research_cap": 50,
+        "executed": 31,
+        "created": 5,
+        "updated": 26,
+        "errors": [],
+        "estimated_spend_usd": 12.4,
         "targets": [
           {
-            "ticker": "BF-B",
-            "name": "Brown-Forman Corporation",
-            "signal": "buy",
-            "conviction_score": 0.4946,
-            "data_quality_score": 0.95
+            "ticker": "RRL.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.7429
           },
           {
-            "ticker": "TXT",
-            "name": "Textron Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4884,
-            "data_quality_score": 0.95
+            "ticker": "FMG.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.7204
           },
           {
-            "ticker": "DHI",
-            "name": "D.R. Horton, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.488,
-            "data_quality_score": 0.95
+            "ticker": "ORA.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.6774
           },
           {
-            "ticker": "PHM",
-            "name": "PulteGroup, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.485,
-            "data_quality_score": 0.95
+            "ticker": "HVN.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.6653
           },
           {
-            "ticker": "EOG",
-            "name": "EOG Resources, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4801,
-            "data_quality_score": 0.95
+            "ticker": "GNE.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.6406
           },
           {
-            "ticker": "FOX",
-            "name": "Fox Corporation",
-            "signal": "buy",
-            "conviction_score": 0.4772,
-            "data_quality_score": 0.95
+            "ticker": "CQR.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.6352
           },
           {
-            "ticker": "TEL",
-            "name": "TE Connectivity plc",
-            "signal": "buy",
-            "conviction_score": 0.4755,
-            "data_quality_score": 0.95
+            "ticker": "WAF.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.6219
           },
           {
-            "ticker": "PYPL",
-            "name": "PayPal Holdings, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4404,
-            "data_quality_score": 0.95
+            "ticker": "PRN.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.5595
           },
           {
-            "ticker": "RMD",
-            "name": "ResMed Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4223,
-            "data_quality_score": 0.95
+            "ticker": "WHC.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.5494
           },
           {
-            "ticker": "FOXA",
-            "name": "Fox Corporation",
-            "signal": "buy",
-            "conviction_score": 0.4192,
-            "data_quality_score": 0.95
+            "ticker": "EBO.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.5462
           },
           {
-            "ticker": "REGN",
-            "name": "Regeneron Pharmaceuticals, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4191,
-            "data_quality_score": 0.95
+            "ticker": "RMS.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.5458
           },
           {
-            "ticker": "SWK",
-            "name": "Stanley Black & Decker, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4113,
-            "data_quality_score": 0.95
+            "ticker": "ZIM.AX",
+            "signal": "strong_buy",
+            "conviction_score": 0.4484
           },
           {
-            "ticker": "DOV",
-            "name": "Dover Corporation",
+            "ticker": "SOL.AX",
             "signal": "buy",
-            "conviction_score": 0.4059,
-            "data_quality_score": 0.95
+            "conviction_score": 0.6249
           },
           {
-            "ticker": "GRMN",
-            "name": "Garmin Ltd.",
+            "ticker": "ARB.AX",
             "signal": "buy",
-            "conviction_score": 0.4009,
-            "data_quality_score": 0.95
+            "conviction_score": 0.6238
           },
           {
-            "ticker": "MDT",
-            "name": "Medtronic plc",
+            "ticker": "CSL.AX",
             "signal": "buy",
-            "conviction_score": 0.3887,
-            "data_quality_score": 0.95
+            "conviction_score": 0.6054
           },
           {
-            "ticker": "ZBH",
-            "name": "Zimmer Biomet Holdings, Inc.",
+            "ticker": "SDF.AX",
             "signal": "buy",
-            "conviction_score": 0.3837,
-            "data_quality_score": 0.95
+            "conviction_score": 0.5844
           },
           {
-            "ticker": "COP",
-            "name": "ConocoPhillips",
+            "ticker": "RMD.AX",
             "signal": "buy",
-            "conviction_score": 0.3624,
-            "data_quality_score": 0.95
+            "conviction_score": 0.5701
           },
           {
-            "ticker": "KHC",
-            "name": "The Kraft Heinz Company",
+            "ticker": "PMV.AX",
             "signal": "buy",
-            "conviction_score": 0.3523,
-            "data_quality_score": 0.9
+            "conviction_score": 0.5632
           },
           {
-            "ticker": "SW",
-            "name": "Smurfit Westrock Plc",
+            "ticker": "JBH.AX",
             "signal": "buy",
-            "conviction_score": 0.3506,
-            "data_quality_score": 0.95
+            "conviction_score": 0.5454
           },
           {
-            "ticker": "BSX",
-            "name": "Boston Scientific Corporation",
+            "ticker": "NEM.AX",
             "signal": "buy",
-            "conviction_score": 0.341,
-            "data_quality_score": 0.9
+            "conviction_score": 0.5418
           },
           {
-            "ticker": "IFF",
-            "name": "International Flavors & Fragrances Inc.",
+            "ticker": "AAI.AX",
             "signal": "buy",
-            "conviction_score": 0.3271,
-            "data_quality_score": 0.95
+            "conviction_score": 0.5357
           },
           {
-            "ticker": "BIIB",
-            "name": "Biogen Inc.",
+            "ticker": "RWC.AX",
             "signal": "buy",
-            "conviction_score": 0.3045,
-            "data_quality_score": 0.9
+            "conviction_score": 0.4943
           },
           {
-            "ticker": "INCY",
-            "name": "Incyte Corporation",
+            "ticker": "DNL.AX",
             "signal": "buy",
-            "conviction_score": 0.2999,
-            "data_quality_score": 0.9
+            "conviction_score": 0.4851
           },
           {
-            "ticker": "UBER",
-            "name": "Uber Technologies, Inc.",
+            "ticker": "WDS.AX",
             "signal": "buy",
-            "conviction_score": 0.2705,
-            "data_quality_score": 0.9
+            "conviction_score": 0.4835
           },
           {
-            "ticker": "NKE",
-            "name": "NIKE, Inc.",
+            "ticker": "YAL.AX",
             "signal": "buy",
-            "conviction_score": 0.2215,
-            "data_quality_score": 0.8
+            "conviction_score": 0.4713
+          },
+          {
+            "ticker": "CIA.AX",
+            "signal": "buy",
+            "conviction_score": 0.4559
+          },
+          {
+            "ticker": "MND.AX",
+            "signal": "buy",
+            "conviction_score": 0.4361
+          },
+          {
+            "ticker": "WGX.AX",
+            "signal": "buy",
+            "conviction_score": 0.4187
+          },
+          {
+            "ticker": "PPT.AX",
+            "signal": "buy",
+            "conviction_score": 0.3731
+          },
+          {
+            "ticker": "CSC.AX",
+            "signal": "buy",
+            "conviction_score": 0.3465
+          },
+          {
+            "ticker": "TWE.AX",
+            "signal": "buy",
+            "conviction_score": 0.228
           }
-        ],
-        "executed": 25,
-        "created": 25,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 10.0,
-        "elapsed_seconds": 1505.3
-      },
-      "graduation": {
-        "skipped": true
-      },
-      "maintenance": {
-        "skipped": true
+        ]
       }
     }
   }

@@ -1,0 +1,75 @@
+# Perpetual Limited (PPT.AX) — Research memo
+
+_Version 1 · Updated 2026-07-17T04:47:46.299265+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Perpetual Limited is an ASX-listed wealth and asset management group undergoing a deliberate portfolio simplification: divesting its Australian wealth management business to Bain Capital while concentrating on global asset management (including Pendal and J O Hambro). The quantitative screen rates the stock a buy, anchored on cheapness (P/B 1.4), a 5.9% dividend yield, and an 11.3% FCF yield against reported free cash flow of approximately A$252m. Reported earnings remain distorted by goodwill impairments (A$547m in FY2024, A$154m in FY2025 per Yahoo), producing consecutive statutory net losses and negative ROE (-1.0%), even as underlying operating profit showed modest recovery in H1 FY2026. The central debate is whether strong cash generation and a rejected EQT-linked takeover bid at A$21.64/share (July 2026) signal undervaluation, or whether fund outflows, leverage (net debt ~A$632m), and negative tangible book value (-A$237m) reflect structural impairment of the acquisition-led growth story. Primary ASX regulatory filings were unavailable in the research library; all financial figures below fall back to Yahoo Finance unless noted.
+
+## INVESTMENT THESIS
+The value screen’s buy signal (4 of 22 models passed; composite score 74%; families: cheapness, dividend, risk) is driven by cash economics rather than reported earnings quality. Perpetual generates substantial operating cash flow—free cash flow of A$196m in FY2025 and A$265m in FY2024 (Yahoo)—supporting an FCF yield of roughly 11.3% and sustained dividend payments (A$127m in FY2025). Revenue has grown from A$755m (FY2022) to A$1,348m (FY2025), largely reflecting the Pendal acquisition, while operating income has stabilised near A$104–105m in FY2024–25 despite statutory losses. Normalised net income improved from -A$89m (FY2024) to A$49m (FY2025), suggesting the earnings base is recovering once impairment noise is stripped out. For a value investor, the hook is a de-leveraging, refocused asset manager trading below book (P/B 1.4) with a credible takeover floor (EQT/Windflower bid rejected at A$21.64) and proceeds from the Bain wealth sale earmarked for debt reduction. The screen’s Financial Health and Dividend Growth passes align with this cash-rich, income-oriented profile, though the low 37% conviction score and failure on 18 of 22 models (including quality and growth families) correctly flag that this is a recovery/special-situation name, not a compounder.
+
+## FINANCIAL REVIEW
+**Source limitation:** The filings index records zero primary regulatory documents (annual, interim, or other) for PPT.AX; the ASX200 regime is marked “unsupported” with no body extracts under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance) with this explicit fallback. No interim filing bodies or cached quarterly income were available (`quarterly_income` is empty).
+
+**Income trends (Yahoo, FY2022–FY2025):**
+- Revenue: A$755m → A$996m → A$1,304m → A$1,348m (+79% over four years; acquisition-inflated).
+- Operating income: A$152m (FY2022) → A$95m (FY2023) → A$105m (FY2024) → A$104m (FY2025)— broadly flat post-acquisition integration.
+- Reported net income: A$101m (FY2022) → A$59m (FY2023) → -A$472m (FY2024) → -A$58m (FY2025).
+- FY2024 and FY2025 losses were driven by impairment charges of A$547m and A$154m respectively (Yahoo “Impairment Of Capital Assets”).
+- Normalised net income (Yahoo): A$101m (FY2022) → A$59m (FY2023) → -A$89m (FY2024) → A$49m (FY2025)— a partial normalisation in the latest year.
+- Normalised EBITDA: A$199m (FY2022) → A$217m (FY2023) → A$277m (FY2024) → A$294m (FY2025).
+- Interest expense rose to A$71m (FY2025) from A$9m (FY2022), reflecting acquisition-related leverage.
+
+**Cash flow (Yahoo):**
+- Free cash flow: A$156m (FY2022) → A$109m (FY2023) → A$265m (FY2024) → A$196m (FY2025). The screen’s A$252m FCF figure aligns with this recent run-rate.
+- Operating cash receipts from customers: A$834m (FY2022) → A$1,424m (FY2025).
+- Dividends paid: A$112m → A$132m → A$142m → A$127m— maintained through loss years, funded by cash flow rather than earnings.
+
+**Balance sheet (Yahoo, FY2025):**
+- Total assets: A$3,418m; stockholders’ equity: A$1,647m.
+- Goodwill and intangibles: A$1,884m (goodwill A$890m; other intangibles A$994m)— 55% of total assets.
+- Tangible book value: -A$237m (negative).
+- Total debt: A$1,126m; net debt: A$632m; cash: A$343m.
+- Retained earnings: -A$801m (accumulated losses post-impairment).
+- Pension/post-retirement obligations (current + non-current): ~A$338m combined.
+
+**Interim / half-year context (news only; no filing bodies):**
+Yahoo headline coverage of the H1 FY2026 earnings call (26 February 2026) reports 2% operating revenue growth and 12% underlying profit growth, alongside “significant net outflows” during a period of strategic transition. These interim metrics cannot be verified against primary filings in this library.
+
+**Annual results context (news only; no filing bodies):**
+Yahoo’s “Perpetual Full Year 2025 Earnings: EPS Misses Expectations” (28 August 2025) cites revenue of A$1.39b (+2.4% YoY) and a net loss for FY2025, consistent with the Yahoo financials dataset above.
+
+## RISKS AND RED FLAGS
+**Goodwill and impairment:** Two consecutive years of large impairments (A$547m FY2024; A$154m FY2025 per Yahoo) indicate the acquisition programme has destroyed rather than created reported value. With A$1.9b of goodwill and intangibles against A$1.6b of equity, further write-downs remain a material risk; no primary filing language on going concern or covenant compliance was available to assess.
+
+**Leverage and negative tangible equity:** Net debt of A$632m and interest expense of A$71m (FY2025) constrain flexibility. Tangible book value of -A$237m means the equity cushion is entirely intangible-dependent—a red flag for traditional book-value investors despite the screen’s P/B pass.
+
+**Fund flows and revenue quality:** H1 FY2026 commentary (Yahoo, February 2026) highlights significant net outflows. Simply Wall St’s “Muted Revenues” piece (28 November 2025) reinforces concern that top-line growth is sluggish ex-acquisition. Asset management revenues are inherently cyclical and flow-sensitive.
+
+**Dividend sustainability:** Dividends of A$127m were paid in FY2025 against a statutory net loss of A$58m and normalised income of only A$49m. The payout is cash-flow-supported today but vulnerable if FCF normalises lower or debt service rises.
+
+**Strategic execution:** The Bain Capital wealth management divestment (announced March 2026) is pivotal to the de-leveraging narrative; completion timing, price, and reinvestment into core asset management remain unverified in primary filings. Rejection of the EQT/Windflower bid at A$21.64/share (July 2026) removes a near-term catalyst and invites scrutiny of management’s standalone value assessment.
+
+**Governance and ownership:** Institutional ownership is high (67% per Yahoo, January 2026), creating potential for activist or takeover pressure but also exit-risk volatility. No filing-sourced contingency or litigation disclosures were available.
+
+**Competitive and regulatory:** Australian wealth and global active equity management face fee compression, passive migration, and regulatory scrutiny (FOFA, best interests duty). UK subsidiary activity (Form 8.3 filings for LondonMetric, Oxford Metrics, Aspen Group stake changes in 2025–26) reflects ongoing portfolio repositioning but adds complexity.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate, tilted toward corporate actions and secondary analysis rather than deep operational reporting.
+
+- **Takeover rejected:** “Perpetual Limited Rejects Unsolicited $21.64-Per-Share Takeover Bid from EQT AB-Linked Entity Windflower” (Kalkine, 1 July 2026)— board declined a private-equity approach, implying a view that standalone value exceeds the bid.
+- **Wealth divestment:** “Perpetual agrees to sell wealth management unit to Bain Capital” (Yahoo Finance, 16 March 2026)— proceeds intended for debt reduction and asset management growth; paired with Kalkine’s “Investment Management Giant Eyes Recovery” (same date).
+- **H1 FY2026 results:** “Perpetual Ltd (PPTTF) (H1 2026) Earnings Call Highlights: Strong Revenue Growth Amidst …” (Yahoo Finance, 26 February 2026)— 2% revenue growth, 12% underlying profit growth, but significant net outflows during strategic transition.
+- **FY2025 miss:** “Perpetual Full Year 2025 Earnings: EPS Misses Expectations” (Yahoo Finance, 28 August 2025)— revenue A$1.39b (+2.4%), net loss reported.
+- **Revenue concern:** “There's No Escaping Perpetual Limited's (ASX:PPT) Muted Revenues” (simplywall.st, 28 November 2025).
+- **Management change:** “J O Hambro Capital Management hires new CEO” (Yahoo Finance, 8 September 2025)— leadership refresh at a key subsidiary.
+- **Portfolio activity:** Series of UK regulatory stake notifications—Aspen Group reduction to 13.9% (Kalkine, 15 July 2026); Oxford Metrics below 5% (Investing.com UK, 19 June 2026); LondonMetric Form 8.3 (TradingView, 12 June 2026).
+- **Ownership/performance context:** Institutional ownership analyses (Yahoo Finance, August 2025–January 2026) and “Investors in Perpetual (ASX:PPT) from five years ago are still down 9.7%” (Yahoo Finance, 8 October 2025).
+
+News coverage is adequate on corporate actions but thin on detailed operational metrics; several headlines are syndicated or generic (e.g. Asian small-cap insider-buying pieces referencing PPT indirectly).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: high
+Confidence: 0.58
+Rationale: Deep research partially confirms the screen’s cash-yield and dividend appeal but weakens the buy case on earnings quality, leverage, impairment history, and the absence of primary filing verification.

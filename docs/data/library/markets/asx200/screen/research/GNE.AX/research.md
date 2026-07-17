@@ -1,0 +1,74 @@
+# Genesis Energy Limited (GNE.AX) — Research memo
+
+_Version 2 · Updated 2026-07-17T04:42:18.040468+00:00 · Mode: weekly_update_
+
+## EXECUTIVE SUMMARY
+Genesis Energy Limited is a vertically integrated New Zealand electricity and gas retailer/generator, dual-listed on NZX (GNE) and ASX (GNE.AX), with the New Zealand government holding a controlling stake. The quantitative screen rates the name a strong buy on cheapness (P/B 0.9, FCF yield 8.1%), dividend quality (5.6% yield, dividend growth), GARP, and balance-sheet metrics (D/E 48%), with a composite score of 86% versus 83% sector-relative. FY2025 Yahoo data shows revenue and net profit recovery, but earnings remain well below FY2022–23 peaks, ROE is modest at 6.4%, and free cash flow fell sharply in FY2025. The central debate is whether discounted book value and an improving dividend profile adequately compensate for state-controlled governance, regulatory exposure, and capital-intensive renewable transition — without primary NZX/ASX filing extracts to validate covenants, contingencies, or going-concern language.
+
+## INVESTMENT THESIS
+The screen passes four of four factor families — cheapness, dividend, GARP, and risk — on 10 of 22 models, including Schloss Low P/B, FCF Yield, Lynch/Neff PEG variants, High Dividend Yield, Dividend Growth, Magic Formula, Dreman Contrarian, Composite Value, and Financial Health. At P/E 15.4, P/B 0.9, and yield 5.6%, the market prices Genesis below tangible book (NZ$2.68bn per Yahoo FY2025) despite a regulated utility asset base with growing customer receipts (NZ$3.78bn cash from customers in FY2025). FY2025 net profit rose 29% to NZ$169.1m and operating income more than doubled to NZ$210.4m, suggesting operational inflection after a weak FY2024 (net profit NZ$131.1m). For a value investor, the hook is a cash-generative monopoly-adjacent franchise trading below book, returning capital via a growing dividend (NZ$115.8m paid in FY2025), with GARP screens satisfied by earnings recovery off a depressed base. Business quality is mixed rather than exceptional: ROE of 6.4% sits below cost of equity, returns on capital have not structurally improved per secondary commentary, and the fixed-asset revaluation reserve (NZ$2.18bn) inflates equity — making the sub-1.0 P/B partly an accounting artefact rather than deep distress. Conviction on the screen is still building (48%, two weeks at signal, stable trend).
+
+## FINANCIAL REVIEW
+**Primary filings:** `filings_index.json` lists zero annual, interim, or other filings (regime: unsupported for ASX200; no body extracts under `filings/bodies/`). All figures below are sourced from `financials_annual.json` (Yahoo); quarterly income is empty. Interim/H1 results referenced in news (e.g. H1 FY2026 normalized EBITDAF of NZ$307m) cannot be verified against filing bodies in this dataset.
+
+**Income statement trend (Yahoo, NZ$m):**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | 2,830 | 2,383 | 3,027 | 3,715 |
+| EBITDA | 587 | 602 | 507 | 541 |
+| Operating income | 220 | 255 | 72 | 210 |
+| Net profit | 222 | 196 | 131 | 169 |
+| Basic EPS (NZ$) | 0.209 | 0.182 | 0.120 | 0.153 |
+
+Revenue rebounded strongly in FY2025 (+23% YoY), and net profit recovered from the FY2024 trough (+29%), though FY2025 net profit remains 24% below FY2022. EBITDA was broadly stable across the period (NZ$507–602m band), while operating income volatility in FY2024 (NZ$72m) reflects elevated operating expenses (NZ$791m) and cost-of-revenue dynamics; FY2025 operating expenses normalised somewhat to NZ$779m. Interest expense has been stable at NZ$61–79m; net interest cost was NZ$76m in FY2025.
+
+**Balance sheet and leverage (Yahoo, FY2025):** Total assets NZ$6.10bn; equity NZ$2.98bn; total debt NZ$1.49bn; net debt NZ$1.41bn (up from NZ$1.26bn in FY2024). Implied D/E of ~50% aligns with the screen’s 48% pass. Cash fell from NZ$193m to NZ$81m. Notable items: fixed-asset revaluation reserve NZ$2.18bn (74% of equity), negative retained earnings (NZ$−33m), long-term provisions NZ$203m (likely decommissioning/restoration), and goodwill NZ$219m. Net debt/EBITDA ≈ 2.6x on reported EBITDA.
+
+**Cash flow (Yahoo, NZ$m):**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Operating cash (direct) | 262 | 423 | 440 | 312 |
+| CapEx | (93) | (88) | (152) | (135) |
+| Free cash flow | 168 | 335 | 288 | 177 |
+| Dividends paid | (165) | (146) | (128) | (116) |
+
+FCF declined 39% in FY2025 to NZ$177m despite higher earnings, driven by lower operating cash conversion (NZ$312m vs NZ$440m in FY2024) and sustained capex. Dividend coverage by FCF tightened to ~1.5x (NZ$177m FCF vs NZ$116m dividends) from ~2.2x in FY2024. The screen’s FCF figure of NZ$196m and 8.1% yield may reflect a trailing or adjusted calculation not identical to Yahoo’s FY2025 FCF line.
+
+**Gaps:** No annual report, interim report, or NZX disclosure extracts are available to reconcile EBITDAF (company metric cited in news) with Yahoo EBITDA, to assess dividend policy statements, tax normalisations, or segment performance. No quarterly income in the secondary file.
+
+## RISKS AND RED FLAGS
+**Governance and ownership:** News coverage (10 Sep 2025) notes state/government control of ~51% of shares versus 41% individual investors — minority shareholders have limited influence over strategy, dividend policy, and potential privatisation/nationalisation dynamics.
+
+**Regulatory and sector:** As a NZ integrated generator/retailer, earnings are exposed to wholesale electricity price volatility, Tiwai Point aluminium smelter contract dynamics, gas supply costs, and climate/renewable policy. Without filing bodies, specific regulatory contingencies, price-path assumptions, and hedge book disclosures cannot be reviewed.
+
+**Earnings quality and returns:** ROE of 6.4% is low for a leveraged utility; secondary articles (Oct–Nov 2025) question whether Genesis has accelerated returns on capital. FY2024 operating income collapse and FY2025 partial recovery suggest commodity/mark-to-market sensitivity not fully captured by static value screens.
+
+**Balance sheet:** Rising net debt (NZ$1.41bn, +11% YoY) and declining cash (NZ$81m year-end) reduce liquidity headroom. The large revaluation reserve means P/B < 1 may overstate economic margin of safety if asset values are reassessed downward. Long-term provisions (NZ$203m) and impairment charges (NZ$0.9m FY2025; NZ$0.5–4.0m prior years) hint at asset-retirement and capital obsolescence risks.
+
+**Capital allocation:** Growing renewable ambitions (per H1 FY2026 earnings commentary, Feb 2026) imply elevated future capex; FY2024–25 capex already ran NZ$135–152m versus NZ$88–93m in FY2022–23. FCF compression in FY2025 is a yellow flag for dividend sustainability if capex escalates.
+
+**Filing gaps:** Absence of primary filings prevents assessment of going-concern statements, debt covenants, contingent liabilities, related-party transactions, and detailed hedge/derivative exposure (derivative liabilities NZ$38m on balance sheet per Yahoo, context unknown). This is a material research limitation for a leveraged utility.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is thin and largely syndicated via Yahoo Finance; no major M&A, management changes, or regulatory enforcement actions appear in the manifest.
+
+- **23 Feb 2026** — *Genesis Energy Ltd (ASX:GNE) (H1 2026) Earnings Call Highlights: Record EBITDAF and Strategic ...*: Reports record normalised EBITDAF of NZ$307m and outlines renewable energy growth plans.
+- **26 Aug 2025** — *Genesis Energy Ltd (ASX:GNE) Full Year 2025 Earnings Call Highlights: Resilience Amid Market ...*: Highlights strong FY2025 performance and strategic progress despite market challenges.
+- **18 Sep 2025** — *Genesis Energy's (NZSE:GNE) Upcoming Dividend Will Be Larger Than Last Year's*: Dividend increase signalled, consistent with the screen’s Dividend Growth pass.
+- **19 Sep 2025** — *Is It Worth Considering Genesis Energy Limited (NZSE:GNE) For Its Upcoming Dividend?*: Dividend-focused coverage ahead of ex-dividend date.
+- **10 Sep 2025** — *Individual investors own 41% of Genesis Energy Limited (NZSE:GNE) shares but state or government control 51% of the company*: Flags concentrated government ownership.
+- **Oct–Nov 2025** — Several articles (*Hasn't Managed To Accelerate Its Returns*, *Can Mixed Financials Have A Negative Impact...*, *Earnings growth outpaced the 1.9% CAGR...*) offer neutral-to-skeptical commentary on return profile versus share price performance.
+
+No material regulatory actions or M&A are recorded. Strategy emphasis in recent earnings commentary is renewable generation expansion; no CEO/CFO change headlines appear.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Quantitative cheapness and dividend metrics are corroborated by FY2025 earnings recovery and a higher dividend, but absent primary filings, moderate ROE, FCF compression, government control, and revaluation-heavy book value prevent full confirmation of the strong buy case.
+
+## Weekly updates
+
+### 2026-07-17T04:42:18.040468+00:00

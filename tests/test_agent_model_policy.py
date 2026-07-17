@@ -116,6 +116,8 @@ def test_market_aware_yahoo_resolution():
     assert resolve_yahoo_ticker_for_market("BHP", "asx200") == "BHP.AX"
     assert resolve_yahoo_ticker_for_market("BHP.AX", "asx200") == "BHP.AX"
     assert resolve_yahoo_ticker_for_market("BARC", "ftse350") == "BARC.L"
+    assert resolve_yahoo_ticker_for_market("ADS.DE", "euro_stoxx50") == "ADS.DE"
+    assert resolve_yahoo_ticker_for_market("ADS-DE", "euro_stoxx50") == "ADS.DE"
 
 
 def test_cli_policy_and_review(tmp_path: Path, capsys):

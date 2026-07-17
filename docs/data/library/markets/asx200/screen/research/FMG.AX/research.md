@@ -1,0 +1,113 @@
+# Fortescue Ltd (FMG.AX) — Research memo
+
+_Version 2 · Updated 2026-07-17T04:41:48.267225+00:00 · Mode: weekly_update_
+
+## EXECUTIVE SUMMARY
+Fortescue Ltd is the world's fourth-largest iron ore producer, operating low-cost Pilbara mines with a vertically integrated rail and port infrastructure. The quantitative screen rates FMG a strong buy on cheapness (P/E 10.7, dividend yield 6.6%), quality (ROE 18.7%), balance-sheet strength (current ratio 3.0), and positive free cash flow (~A$3.2bn). The central investment debate is whether current multiples adequately compensate for a cyclical earnings trough — Yahoo-sourced FY2025 revenue fell 15% to A$15.4bn and net profit 41% to A$3.4bn — and for substantial capital diverted to green hydrogen and energy projects under the Real Zero strategy. Primary ASX regulatory filings are not available in the research library; all financial figures below fall back to Yahoo Finance data.
+
+## INVESTMENT THESIS
+The screen's strong-buy rating rests on five converging value families, and the underlying business largely supports them.
+
+**Cheapness and income.** FMG passes Graham Defensive, Graham Enterprising, Earnings Yield, FCF Yield, Low P/E + High Yield, Lynch PEG, Neff PEGY, Dreman Contrarian, and Acquirer's Multiple. At P/E 10.7 and yield 6.6%, the stock prices in sustained commodity weakness that may already be reflected in trailing earnings.
+
+**Quality and moat.** Passes on Buffett Quality, Economic Moat, Magic Formula, and Quality Value reflect a structurally low C1 cost base (~US$17–18/wmt historically), captive logistics, and scale in the Pilbara. ROE of 18.7% remains robust despite the earnings down-cycle.
+
+**Financial health.** Current ratio of 3.0, net debt of only A$507m against A$4.3bn cash (Yahoo FY2025), and total debt of A$5.4bn against equity of A$20.0bn indicate a fortress balance sheet rare among cyclicals — consistent with the Financial Health and Composite Value passes.
+
+**GARP.** Lynch and Neff PEG/PEGY passes suggest growth-adjusted value even as the company pivots toward metals diversification (copper via Alta Copper) and energy.
+
+**Risk family pass.** Despite iron ore volatility, low leverage and strong liquidity keep distress risk contained — though this does not eliminate earnings cyclicality.
+
+For a value investor, FMG offers a high-quality cyclical at a trough-multiple entry, with dividends largely FCF-backed (FY2025 FCF A$3.2bn vs dividends paid A$2.9bn per Yahoo). The screen's 54% conviction score (building, 2 weeks stable) appropriately reflects that the quantitative case is strong but timing data are insufficient.
+
+## FINANCIAL REVIEW
+**Source limitation.** The filings index records regime `unsupported` for ASX200, with zero annual, interim, or other filings catalogued and no body extracts under `filings/bodies/`. Interim (half-year) figures are unavailable. All figures below are sourced from `financials_annual.json` (Yahoo Finance); quarterly income data in that file is empty.
+
+**Income statement trend (Yahoo, FY2022–FY2025)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue (A$m) | 17,312 | 16,780 | 18,109 | 15,420 |
+| EBITDA (A$m) | 10,398 | 8,677* | 10,517 | 7,559 |
+| Operating income (A$m) | 9,024 | 7,916 | 8,374 | 5,010 |
+| Net income (A$m) | 6,197 | 4,798 | 5,683 | 3,373 |
+| Diluted EPS (A$) | 2.01 | 1.56 | 1.84 | 1.10 |
+
+*FY2023 EBITDA reflects a A$1.04bn impairment charge (capital assets); normalised EBITDA was A$9.71bn per Yahoo.
+
+Revenue and earnings peaked in FY2024 before retracing sharply in FY2025, consistent with lower iron ore prices and/or volumes. Net income has halved from the FY2022 peak. Gross margin compressed as cost of revenue held relatively flat (A$6.7bn in FY2025 vs A$6.6bn in FY2024) while revenue declined. Depreciation rose to A$2.5bn (FY2025) from A$2.1bn (FY2024), reflecting a growing asset base.
+
+**Cash flow and capital allocation (Yahoo)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Operating cash flow (A$m) | 6,646 | 7,432 | 7,919 | 6,474 |
+| Capex (PPE, A$m) | (2,803) | (2,901) | (2,834) | (3,028) |
+| Free cash flow (A$m) | 3,843 | 4,531 | 5,085 | 3,236 |
+| Dividends paid (A$m) | (6,699) | (3,922) | (4,140) | (2,851) |
+
+FCF remained positive through the down-cycle, supporting the screen's FCF Yield pass. Dividend payout exceeded net income in FY2022 (special/lumpy) but FY2025 dividends (A$2.9bn) were covered by FCF (A$3.2bn). Capex is rising, driven by mine development and green-energy infrastructure.
+
+**Balance sheet (Yahoo, FY2025 vs FY2024)**
+
+- Total assets: A$30.5bn (FY2025) vs A$30.1bn (FY2024)
+- Stockholders' equity: A$20.0bn vs A$19.6bn
+- Cash and equivalents: A$4.3bn vs A$4.9bn
+- Total debt: A$5.4bn vs A$5.4bn; net debt: A$507m
+- Net PPE: A$22.3bn vs A$21.7bn
+- Working capital: A$3.9bn; current assets A$6.6bn / current liabilities A$2.7bn (implied current ratio ~2.4x on Yahoo data vs screen's 3.0x — methodology may differ)
+
+Leverage is modest for a miner. Equity grew despite lower earnings, aided by retained earnings accumulation. No going-concern, covenant, or contingency language is available from primary filings.
+
+**Gaps.** Without ASX annual reports or half-year results in the library, segment breakdowns (iron ore vs energy), realised pricing, unit costs, reserve life, and off-balance-sheet commitments cannot be verified from primary sources. Interim FY2026 trading updates referenced in news (October 2025 "robust start") are not available as filing extracts.
+
+## RISKS AND RED FLAGS
+**Commodity cyclicality.** FY2025 earnings decline (Yahoo) confirms high sensitivity to iron ore prices. Analyst coverage in the news manifest points to downward revisions to long-term commodity price assumptions and price-target cuts (e.g. fair-value/target resets reported March–April 2026). The screen's risk-family pass reflects balance-sheet resilience, not earnings stability.
+
+**China concentration.** July 2026 headlines report China restricting iron ore shipments, pressuring the share price. Fortescue derives the majority of revenue from Chinese steel demand; any sustained import curbs or steel-sector weakness is a direct earnings risk.
+
+**Energy transition capex.** Fortescue is committing substantial capital to green hydrogen and renewables — A$680m Pilbara Green Energy Project (April 2026), Turner River solar and Cloudbreak battery storage (May 2026) — under Real Zero by 2030. These projects carry execution, technology, and return-on-capital risk divergent from the core mining cash cow. Without filing disclosures, ROI thresholds and funding plans cannot be assessed.
+
+**Governance and social licence.** A$108.4m compensation to the Yindjibarndi people for cultural loss (May 2026) resolves one Native Title claim but highlights ongoing indigenous and environmental litigation risk in the Pilbara. Governance around capital allocation (mining dividends vs green energy spending) remains a shareholder debate, particularly under Executive Chairman Andrew Forrest's vision.
+
+**Diversification execution.** Acquisition of Alta Copper via Nascent Exploration (March 2026) expands beyond iron ore; integration and exploration success are unproven at scale.
+
+**Dividend sustainability.** Yield of 6.6% is attractive, but payout ratios have historically been high. If iron ore weakness persists and green capex rises, dividend growth may stall or reverse — a risk not fully captured by trailing-yield screens.
+
+**Data quality.** Absence of primary filings limits verification of provisions (A$981m long-term provisions per Yahoo FY2025), rehabilitation liabilities, and tax positions. Pension obligations appear immaterial (A$6m non-current employee benefits).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate, skewed toward commodity-price commentary and green-energy milestones rather than deep operational disclosure.
+
+**Strategy and capex**
+- "Fortescue commits $680m to Pilbara green energy expansion" (Yahoo, 24 Apr 2026) — 200MW Pilbara Green Energy Project, Real Zero acceleration.
+- "Fortescue begins work on Turner River solar farm and Cloudbreak BESS" (Yahoo, 26 May 2026) — final solar/storage for Real Zero plan.
+- "Fortescue's Nascent Exploration acquires Alta Copper" (Yahoo, 11 Mar 2026) — copper diversification via Canadian plan of arrangement.
+
+**Operations and earnings**
+- "Fortescue shares higher on 'robust start' to FY26" (Google News / Proactive, 22 Oct 2025) — positive trading update tone.
+- "Analysts Are Updating Their Fortescue Ltd (ASX:FMG) Estimates After Its Full-Year Results" (Google News / simplywall.st, 29 Aug 2025).
+- "There's No Escaping Fortescue Ltd's (ASX:FMG) Muted Earnings" (Google News / simplywall.st, 27 Dec 2025) — earnings disappointment narrative.
+
+**Regulatory, legal, and geopolitical**
+- "Fortescue to compensate Yindjibarndi with $108.4m for cultural loss" (Yahoo, 13 May 2026) — Native Title compensation claim settled.
+- "Fortescue shares fall as China reportedly restricts iron ore shipments" (Yahoo, 2 Jul 2026) — geopolitical/trade risk.
+
+**Market and analyst sentiment**
+- "How The Fortescue (ASX:FMG) Story Is Shifting With New Price Targets And Assumptions" (Yahoo, 25 Apr 2026) — target cut to A$17.20 on lower commodity assumptions.
+- "Why The Fortescue (ASX:FMG) Story Is Shifting As Analysts Reset Expectations" (Yahoo, 12 Mar 2026) — sector-wide model resets.
+- "Fortescue Ltd. Sponsored ADR (FSUGY) Moves to Strong Buy" (Yahoo / Zacks, 2 Jul 2026) — US ADR upgrade on earnings optimism.
+- Several Kalkine "worth watching" pieces (Jul 2026) — generic interest, limited incremental insight.
+
+News coverage is adequate for directional themes but thin on primary-source financial detail; no substitute for ASX releases.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: This week's empty news batch and absent filing updates are neutral on the strong buy case, leaving the prior accumulate view intact.
+
+## Weekly updates
+
+### 2026-07-17T04:41:48.267225+00:00
+No material changes this week. The news batch fetched 17 Jul 2026 (since the 17 Jul 04:31 UTC memo) returned zero new articles; the most recent headlines remain the 9 Jul Kalkine piece ("Fortescue Ltd (ASX:FMG): Is This Iron Ore Producer Still Worth Watching?"), the 2 Jul China iron ore shipment restriction report, and the Zacks ADR upgrade — all already captured in the prior memo. The filings index is unchanged: regime `unsupported`, with no annual or interim ASX releases catalogued and no new body extracts. Thesis, risk profile, and timing assessment are therefore unchanged pending primary filings or fresh operational news.
