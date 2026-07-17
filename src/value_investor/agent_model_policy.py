@@ -140,6 +140,9 @@ def default_policy() -> dict[str, Any]:
             "weekly_library_usd": round(
                 DEFAULT_PLAN_MONTHLY_USD * DEFAULT_WEEKLY_BUDGET_FRACTION, 2
             ),
+            # Offline library research is gated by ladder.research_hard_cap / monthly
+            # Pro pool, not a weekly dollar strand (cost tests showed the strand was binding early).
+            "enforce_weekly_research_cap": False,
             "plan_refresh_day_of_month": DEFAULT_PLAN_REFRESH_DAY,
             "surplus_day_before_refresh": True,
             "estimated_spend_usd_this_cycle": 0.0,
@@ -149,7 +152,8 @@ def default_policy() -> dict[str, Any]:
             "note": (
                 "Cursor does not expose remaining credits to this repo. "
                 "Set plan_monthly_usd and plan_refresh_day_of_month to match your billing page. "
-                "Spend is estimated from research runs."
+                "Spend is estimated from research runs. Weekly library research dollar cap is off; "
+                "use ladder.research_hard_cap and the monthly Pro pool as the practical limits."
             ),
         },
         "model_review": {
@@ -179,7 +183,7 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
             "layers": ["fundamentals", "screen_lite", "selective_research"],
             "min_metrics_for_screen": 25,
             "estimated_memo_usd": 0.4,
-            "research_hard_cap": 5,
+            "research_hard_cap": 12,
             "last_run": None,
         }
         ladder.update(dict(data.get("ladder") or {}))
@@ -287,6 +291,13 @@ def remaining_weekly_budget_usd(policy: dict[str, Any] | None = None) -> float:
     return max(0.0, round(weekly - spent, 4))
 
 
+def enforce_weekly_research_cap(policy: dict[str, Any] | None = None) -> bool:
+    """Whether offline library research should stop when the weekly dollar strand is spent."""
+    policy = policy or load_policy()
+    budget = policy.get("budget") or {}
+    return bool(budget.get("enforce_weekly_research_cap", False))
+
+
 def research_model_id(policy: dict[str, Any] | None = None) -> str:
     policy = policy or load_policy()
     model = policy.get("research_model") or {}
@@ -331,9 +342,10 @@ def grow_ticker_budget(
     """
     Translate plan budget policy into a fundamentals grow size for the focus market.
 
-    Fundamentals grow is Yahoo-side (no Cursor credits). Cursor budget gates research
-    separately; on surplus day we accelerate fundamentals to use spare capacity before
-    refresh, and allow research spend up to remaining weekly + soft surplus headroom.
+    Fundamentals grow is Yahoo-side (no Cursor credits). Research is capped by
+    ``ladder.research_hard_cap`` (and optionally a weekly dollar strand when
+    ``budget.enforce_weekly_research_cap`` is true). On surplus day we accelerate
+    fundamentals grow before the plan refresh.
     """
     policy = policy or load_policy()
     budget = policy.get("budget") or {}
@@ -344,13 +356,19 @@ def grow_ticker_budget(
     weekly = weekly_budget_usd(policy)
     remaining = remaining_weekly_budget_usd(policy)
     max_tickers = surplus_max_tickers if surplus else base_max_tickers
+    weekly_cap_on = enforce_weekly_research_cap(policy)
     return {
         "focus_markets": focus_markets(policy),
         "max_tickers": max_tickers,
         "surplus_day": surplus,
         "weekly_library_usd": weekly,
         "remaining_weekly_usd": remaining,
+        "enforce_weekly_research_cap": weekly_cap_on,
         "research_model": research_model_id(policy),
-        "allow_research": remaining > 0 or surplus,
-        "research_budget_usd": round(remaining + (weekly if surplus else 0.0), 4),
+        "allow_research": (not weekly_cap_on) or remaining > 0 or surplus,
+        "research_budget_usd": (
+            None
+            if not weekly_cap_on
+            else round(remaining + (weekly if surplus else 0.0), 4)
+        ),
     }
