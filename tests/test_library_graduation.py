@@ -129,18 +129,19 @@ def test_maintenance_grow_only_graduated(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(
         "value_investor.library_graduation.library_status",
         lambda root_path, markets=None, **kwargs: [
-            {"market": m, "coverage_pct": 0.96} for m in (markets or [])
+            {"market": m, "coverage_pct": 0.96, "ticker_count": 503} for m in (markets or [])
         ],
     )
     out = run_maintenance_grow(root, policy)
     assert out["skipped"] is False
     assert out["markets"] == ["sp500"]
-    assert out["max_tickers"] == 100
+    assert out["maintenance_full_refresh"] is True
+    assert out["max_tickers"] == 503
     assert out["queue_complete"] is False
     assert out["include_focus"] is False
     assert calls == [["sp500"]]
     assert grow_kwargs[0].get("refresh_constituents_first") is True
-    assert grow_kwargs[0].get("max_tickers_per_run") == 100
+    assert grow_kwargs[0].get("max_tickers_per_run") == 503
 
 
 def test_maintenance_includes_focus_when_queue_complete(tmp_path: Path, monkeypatch):
@@ -163,7 +164,8 @@ def test_maintenance_includes_focus_when_queue_complete(tmp_path: Path, monkeypa
     monkeypatch.setattr(
         "value_investor.library_graduation.library_status",
         lambda root_path, markets=None, **kwargs: [
-            {"market": m, "coverage_pct": 1.0} for m in (markets or [])
+            {"market": m, "coverage_pct": 1.0, "ticker_count": {"sp500": 503, "euro_stoxx50": 50, "asx200": 200}[m]}
+            for m in (markets or [])
         ],
     )
     out = run_maintenance_grow(root, policy)
@@ -171,8 +173,36 @@ def test_maintenance_includes_focus_when_queue_complete(tmp_path: Path, monkeypa
     assert out["queue_complete"] is True
     assert out["include_focus"] is True
     assert out["markets"] == ["sp500", "euro_stoxx50", "asx200"]
-    assert out["max_tickers"] == 100
+    assert out["maintenance_full_refresh"] is True
+    assert out["max_tickers"] == 503
     assert calls == [["sp500", "euro_stoxx50", "asx200"]]
+
+
+def test_maintenance_int_cap_still_throttles(tmp_path: Path, monkeypatch):
+    root = tmp_path / "library"
+    policy = load_policy(tmp_path / "policy.json")
+    policy["focus_market"] = "euro_stoxx50"
+    policy["market_queue"] = ["sp500", "euro_stoxx50", "asx200"]
+    policy["graduated_markets"] = [{"market": "sp500", "graduated_at": "2026-07-01T00:00:00+00:00"}]
+    policy["focus_graduation"] = dict(policy.get("focus_graduation") or {})
+    policy["focus_graduation"]["maintenance_max_tickers"] = 75
+    grow_kwargs: list[dict] = []
+
+    def fake_grow(root_path, markets=None, **kwargs):
+        grow_kwargs.append(kwargs)
+        return [{"market": m, "updated": 1} for m in (markets or [])]
+
+    monkeypatch.setattr("value_investor.library_graduation.grow_library", fake_grow)
+    monkeypatch.setattr(
+        "value_investor.library_graduation.library_status",
+        lambda root_path, markets=None, **kwargs: [
+            {"market": m, "coverage_pct": 0.96, "ticker_count": 503} for m in (markets or [])
+        ],
+    )
+    out = run_maintenance_grow(root, policy)
+    assert out["maintenance_full_refresh"] is False
+    assert out["max_tickers"] == 75
+    assert grow_kwargs[0]["max_tickers_per_run"] == 75
 
 
 def test_ladder_runs_graduation(tmp_path: Path, monkeypatch):
