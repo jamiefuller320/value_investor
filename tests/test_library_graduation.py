@@ -112,11 +112,14 @@ def test_maintenance_grow_only_graduated(tmp_path: Path, monkeypatch):
     root = tmp_path / "library"
     policy = load_policy(tmp_path / "policy.json")
     policy["focus_market"] = "euro_stoxx50"
+    policy["market_queue"] = ["sp500", "euro_stoxx50", "asx200"]
     policy["graduated_markets"] = [{"market": "sp500", "graduated_at": "2026-07-01T00:00:00+00:00"}]
     calls: list[list[str]] = []
+    grow_kwargs: list[dict] = []
 
     def fake_grow(root_path, markets=None, **kwargs):
         calls.append(list(markets or []))
+        grow_kwargs.append(kwargs)
         return [{"market": m, "updated": 1} for m in (markets or [])]
 
     monkeypatch.setattr(
@@ -132,7 +135,44 @@ def test_maintenance_grow_only_graduated(tmp_path: Path, monkeypatch):
     out = run_maintenance_grow(root, policy)
     assert out["skipped"] is False
     assert out["markets"] == ["sp500"]
+    assert out["max_tickers"] == 100
+    assert out["queue_complete"] is False
+    assert out["include_focus"] is False
     assert calls == [["sp500"]]
+    assert grow_kwargs[0].get("refresh_constituents_first") is True
+    assert grow_kwargs[0].get("max_tickers_per_run") == 100
+
+
+def test_maintenance_includes_focus_when_queue_complete(tmp_path: Path, monkeypatch):
+    root = tmp_path / "library"
+    policy = load_policy(tmp_path / "policy.json")
+    policy["focus_market"] = "asx200"
+    policy["market_queue"] = ["sp500", "euro_stoxx50", "asx200"]
+    policy["graduated_markets"] = [
+        {"market": "sp500", "graduated_at": "2026-07-01T00:00:00+00:00"},
+        {"market": "euro_stoxx50", "graduated_at": "2026-07-02T00:00:00+00:00"},
+        {"market": "asx200", "graduated_at": "2026-07-03T00:00:00+00:00"},
+    ]
+    calls: list[list[str]] = []
+
+    def fake_grow(root_path, markets=None, **kwargs):
+        calls.append(list(markets or []))
+        return [{"market": m, "updated": 1} for m in (markets or [])]
+
+    monkeypatch.setattr("value_investor.library_graduation.grow_library", fake_grow)
+    monkeypatch.setattr(
+        "value_investor.library_graduation.library_status",
+        lambda root_path, markets=None, **kwargs: [
+            {"market": m, "coverage_pct": 1.0} for m in (markets or [])
+        ],
+    )
+    out = run_maintenance_grow(root, policy)
+    assert out["skipped"] is False
+    assert out["queue_complete"] is True
+    assert out["include_focus"] is True
+    assert out["markets"] == ["sp500", "euro_stoxx50", "asx200"]
+    assert out["max_tickers"] == 100
+    assert calls == [["sp500", "euro_stoxx50", "asx200"]]
 
 
 def test_ladder_runs_graduation(tmp_path: Path, monkeypatch):
