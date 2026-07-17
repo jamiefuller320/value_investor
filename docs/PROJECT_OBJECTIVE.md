@@ -82,4 +82,4 @@ ftse-library ladder
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11), library screen-lite (L29), budget library research (L30), market-aware fetch (L31).
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11), library screen-lite (L29), budget library research (L30), market-aware fetch (L31). Multi-currency paper NAV / FX policy (L28) is implemented: reporting-currency spot MTM (unhedged), ASX/Euro filings regimes for library research, and offline macro context for memos/paper notes only (never scoring).

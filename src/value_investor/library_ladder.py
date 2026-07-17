@@ -111,6 +111,29 @@ def run_library_ladder(
         policy = load_policy(policy_path)
         result["layers"]["maintenance"] = run_maintenance_grow(root, policy)
 
+    # A3 — offline macro / regime context (research & paper notes only — never scoring)
+    macro_cfg = dict(policy.get("macro_context") or {})
+    if macro_cfg.get("enabled", True) and macro_cfg.get("refresh_on_ladder", True):
+        try:
+            from value_investor.macro_context import refresh_macro_library
+
+            macro_snap = refresh_macro_library(root / "macro")
+            result["layers"]["macro_context"] = {
+                "refreshed": True,
+                "fetched_at": macro_snap.get("fetched_at"),
+                "path": macro_snap.get("path"),
+                "use_in_scoring": False,
+            }
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Macro refresh failed: %s", exc)
+            result["layers"]["macro_context"] = {
+                "refreshed": False,
+                "error": str(exc),
+                "use_in_scoring": False,
+            }
+    else:
+        result["layers"]["macro_context"] = {"skipped": True, "use_in_scoring": False}
+
     coverage = (status[0] if status else {}) or {}
     metrics_count = int(coverage.get("coverage_count") or 0)
     min_metrics = int(policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)

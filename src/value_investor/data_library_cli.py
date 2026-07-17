@@ -202,6 +202,26 @@ def build_parser() -> argparse.ArgumentParser:
     grad_p.add_argument("--json", action="store_true")
     grad_p.set_defaults(func=cmd_graduate)
 
+    macro_p = sub.add_parser(
+        "macro",
+        help=(
+            "Refresh or show offline macro / regime context "
+            "(research & paper notes only — not scoring)"
+        ),
+    )
+    macro_p.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Fetch latest Yahoo markers and write docs/data/library/macro/",
+    )
+    macro_p.add_argument(
+        "--market",
+        default="",
+        help="Show sliced context for one market id (e.g. asx200)",
+    )
+    macro_p.add_argument("--json", action="store_true")
+    macro_p.set_defaults(func=cmd_macro)
+
     return parser
 
 
@@ -534,6 +554,54 @@ def cmd_graduate(args: argparse.Namespace) -> int:
             f"{event.get('from_market')}→{event.get('to_market')}  "
             f"policy_focus={payload.get('policy_focus')}"
         )
+    return 0
+
+
+def cmd_macro(args: argparse.Namespace) -> int:
+    from .macro_context import (
+        load_macro_snapshot,
+        macro_context_for_market,
+        refresh_macro_library,
+    )
+
+    # Keep macro under the library root (default or overridden --root).
+    macro_root = Path(args.root) / "macro"
+
+    if args.refresh:
+        snapshot = refresh_macro_library(macro_root)
+        payload: dict = {"refreshed": True, "snapshot": snapshot}
+    else:
+        snapshot = load_macro_snapshot(macro_root)
+        payload = {"refreshed": False, "snapshot": snapshot}
+
+    market = str(args.market or "").strip()
+    if market:
+        payload["market_context"] = macro_context_for_market(
+            market,
+            root=macro_root,
+            refresh_if_missing=False,
+        )
+
+    if args.json:
+        print(json.dumps(payload, indent=2, default=str))
+        return 0
+
+    snap = payload.get("snapshot") or {}
+    print(f"Macro root: {macro_root}")
+    print(f"Fetched at: {snap.get('fetched_at')}")
+    print(f"Note: {snap.get('note')}")
+    domains = snap.get("domains") or {}
+    for domain, block in domains.items():
+        markers = (block or {}).get("markers") or {}
+        bits = []
+        for key, row in markers.items():
+            if isinstance(row, dict) and row.get("value") is not None:
+                bits.append(f"{key}={row['value']}")
+        print(f"  {domain}: {', '.join(bits) if bits else '(empty)'}")
+    if market:
+        ctx = payload.get("market_context") or {}
+        print(f"\nMarket {market} → domain {ctx.get('domain')}")
+        print(f"  {ctx.get('note')}")
     return 0
 
 

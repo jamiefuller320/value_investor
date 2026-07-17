@@ -6,7 +6,8 @@ collects primary filings for FINANCIAL REVIEW.
 Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
-- other markets: index left empty until a local regulator path is added
+- ``asx_announcements`` (ASX 200 / ``.AX``): ASX / Market Index via Google News
+- ``euro_filings`` (EURO STOXX 50): results headlines via Google News + SEC 20-F/6-K when dual-listed
 
 Interim vs annual is classified from form type (10-K/10-Q) or headline cues.
 """
@@ -81,8 +82,34 @@ def _strip_html(text: str) -> str:
     return re.sub(r"\s+", " ", unescape(cleaned)).strip()
 
 
+_EXCHANGE_SUFFIXES = (
+    ".L",
+    ".AX",
+    ".DE",
+    ".PA",
+    ".AS",
+    ".MI",
+    ".BR",
+    ".HE",
+    ".MC",
+    ".IR",
+    ".LS",
+    ".AT",
+    ".SW",
+)
+
+
 def _epic(ticker: str) -> str:
     return ticker.replace(".L", "").replace(".l", "").strip().upper()
+
+
+def _base_symbol(ticker: str) -> str:
+    """Strip common Yahoo exchange suffixes for headline matching."""
+    t = (ticker or "").strip().upper()
+    for suf in _EXCHANGE_SUFFIXES:
+        if t.endswith(suf):
+            return t[: -len(suf)]
+    return t
 
 
 def resolve_filings_regime(market: str | None, ticker: str) -> str:
@@ -96,14 +123,18 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
         return "sec_edgar"
     if m in {"ftse350", "uk", "lse"}:
         return "uk_rns"
-    if m in {"euro_stoxx50", "asx200"}:
-        return "unsupported"
+    if m in {"asx200", "asx"}:
+        return "asx_announcements"
+    if m in {"euro_stoxx50", "eu"}:
+        return "euro_filings"
 
     t = (ticker or "").strip().upper()
     if t.endswith(".L"):
         return "uk_rns"
     if t.endswith(".AX"):
-        return "unsupported"
+        return "asx_announcements"
+    if any(t.endswith(suf) for suf in _EXCHANGE_SUFFIXES if suf not in {".L", ".AX"}):
+        return "euro_filings"
     # Bare US-style symbols (library research) → EDGAR
     if re.fullmatch(r"[A-Z]{1,5}", _epic(t)):
         return "sec_edgar"
@@ -370,23 +401,29 @@ def fetch_filings_google_news(
     ticker: str,
     max_items: int = FILINGS_MAX_ITEMS,
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
+    query: str | None = None,
+    source_label: str = "google_news_investegate",
+    hl: str = "en-GB",
+    gl: str = "GB",
+    ceid: str = "GB:en",
 ) -> list[dict[str, Any]]:
     """
-    Discover UK results / RNS-style announcements via Google News RSS.
+    Discover results / announcement headlines via Google News RSS.
 
     Returns metadata rows (title, date, url, period). Full text is usually not
     available from the Google wrapper URL; bodies are filled later when a direct
     publisher URL is known.
     """
-    epic = _epic(ticker)
-    query = (
-        f'site:investegate.co.uk "{company_name}" OR {epic} '
-        f'(Results OR "Annual Report" OR Interim OR "Half-year" OR "Trading Update" OR RNS)'
-    )
+    epic = _base_symbol(ticker)
+    if query is None:
+        query = (
+            f'site:investegate.co.uk "{company_name}" OR {epic} '
+            f'(Results OR "Annual Report" OR Interim OR "Half-year" OR "Trading Update" OR RNS)'
+        )
     url = (
         "https://news.google.com/rss/search?q="
         + urllib.parse.quote(query)
-        + "&hl=en-GB&gl=GB&ceid=GB:en"
+        + f"&hl={hl}&gl={gl}&ceid={ceid}"
     )
     try:
         payload = _http_get(url)
@@ -417,8 +454,8 @@ def fetch_filings_google_news(
         summary = _strip_html(item.findtext("description") or "")
         rows.append(
             {
-                "id": _filing_id("gnews", title, published or "", link or ""),
-                "source": "google_news_investegate",
+                "id": _filing_id("gnews", source_label, title, published or "", link or ""),
+                "source": source_label,
                 "headline": title,
                 "published_at": published,
                 "url": link,
@@ -433,6 +470,61 @@ def fetch_filings_google_news(
         if len(rows) >= max_items:
             break
     return rows
+
+
+def fetch_filings_asx_news(
+    *,
+    company_name: str,
+    ticker: str,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """Discover ASX results / announcements via Google News (ASX + Market Index)."""
+    epic = _base_symbol(ticker)
+    query = (
+        f'(site:asx.com.au OR site:marketindex.com.au) ("{company_name}" OR {epic}) '
+        f'(Results OR "Annual Report" OR "Half Year" OR "Half-year" OR Interim OR '
+        f'"Full Year" OR "Preliminary Final" OR "Quarterly Activities")'
+    )
+    return fetch_filings_google_news(
+        company_name=company_name,
+        ticker=ticker,
+        max_items=max_items,
+        lookback_days=lookback_days,
+        query=query,
+        source_label="google_news_asx",
+        hl="en-AU",
+        gl="AU",
+        ceid="AU:en",
+    )
+
+
+def fetch_filings_euro_news(
+    *,
+    company_name: str,
+    ticker: str,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """Discover Euro-listed results releases via Google News headlines."""
+    epic = _base_symbol(ticker)
+    query = (
+        f'("{company_name}" OR {epic} OR {ticker}) '
+        f'("Annual Report" OR "Full Year Results" OR "Half-year Results" OR '
+        f'"Interim Results" OR "Quarterly Results" OR "Half Year Results" OR '
+        f'"Preliminary Results")'
+    )
+    return fetch_filings_google_news(
+        company_name=company_name,
+        ticker=ticker,
+        max_items=max_items,
+        lookback_days=lookback_days,
+        query=query,
+        source_label="google_news_euro",
+        hl="en",
+        gl="DE",
+        ceid="DE:en",
+    )
 
 
 def fetch_filings_ticker_api(
@@ -679,6 +771,12 @@ def ingest_filings(
         groups.append(fetch_filings_google_news(company_name=company_name, ticker=ticker))
     elif regime == "sec_edgar":
         groups.append(fetch_filings_sec_edgar(ticker=ticker))
+    elif regime == "asx_announcements":
+        groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
+    elif regime == "euro_filings":
+        groups.append(fetch_filings_euro_news(company_name=company_name, ticker=ticker))
+        # Dual-listed names may also file 20-F / 6-K with the SEC.
+        groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
     else:
         logger.info(
             "No filings regime for market=%s ticker=%s — writing empty index",
@@ -701,6 +799,18 @@ def ingest_filings(
             "Primary regulatory filings for research (separate from Yahoo). "
             "period=annual|interim|other. Bodies are plain-text extracts when a "
             "direct publisher URL was available; Google News wrappers often lack bodies."
+        )
+    elif regime == "asx_announcements":
+        note = (
+            "Primary ASX announcement discovery via Google News (asx.com.au / "
+            "marketindex.com.au). period=annual|interim|other. Bodies only when a "
+            "direct publisher URL is downloadable; many ASX PDFs are not parsed."
+        )
+    elif regime == "euro_filings":
+        note = (
+            "Euro-listed results discovery via Google News, plus SEC 20-F/6-K when "
+            "the issuer is dual-listed. period=annual|interim|other. Bodies when a "
+            "direct HTML URL is available."
         )
     else:
         note = (

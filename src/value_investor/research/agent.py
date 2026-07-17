@@ -39,13 +39,16 @@ Read the source files in: {sources_dir.resolve()}
 
 Primary regulatory filings (preferred for FINANCIAL REVIEW — keep separate from Yahoo):
 - `{filings_index.resolve()}` — catalog with period labels: annual, interim, or other
-  (UK RNS/results or US SEC EDGAR 10-K/10-Q/8-K depending on market; see `regime` in the index)
+  (UK RNS, US SEC EDGAR 10-K/10-Q/8-K, ASX announcements, or Euro results discovery —
+  see `regime` in the index)
 - `{filings_bodies.resolve()}/` — plain-text extracts of filing bodies when downloadable
 
 Secondary / context only (do not mix into a blended number set):
 - `financials_annual.json` — Yahoo annual statements (and cached quarterly income). Use only when filing bodies lack the figure you need, and say you fell back to Yahoo.
 - `screening_snapshot.json` — quantitative value screen output (models passed, metrics, timing)
 - `news_manifest.json` — up to one year of news headlines from yfinance and Google News RSS
+- `macro_context.json` — offline market-regime markers (rates/FX/index proxies). Optional colour only —
+  do **not** use macro to auto-veto, reweight, or override the quantitative screen signal.
 
 Write a research memo with EXACTLY these plain-text section headings:
 
@@ -102,14 +105,16 @@ The quantitative screen currently rates this name as a {signal_label}.
 Existing memo: {existing_markdown_path.resolve()}
 New news batch since last update: {news_batch_path.resolve()}
 Full news archive: {(sources_dir / 'news_manifest.json').resolve()}
-Primary filings index (annual + interim; RNS or SEC EDGAR): {(sources_dir / 'filings' / 'filings_index.json').resolve()}
+Primary filings index (annual + interim; RNS / SEC / ASX / Euro): {(sources_dir / 'filings' / 'filings_index.json').resolve()}
 Filing body extracts (if any): {(sources_dir / 'filings' / 'bodies').resolve()}
 Yahoo financials (secondary only): {(sources_dir / 'financials_annual.json').resolve()}
+Macro regime context (optional colour only — not a scoring input): {(sources_dir / 'macro_context.json').resolve()}
 
 Write ONE section with the heading exactly as shown:
 
 WEEKLY UPDATE
-Summarise any new information from the news batch and any new/changed annual or interim filings (10-K/10-Q or RNS), and whether it changes the thesis, risks, or timing.
+Summarise any new information from the news batch and any new/changed annual or interim filings (10-K/10-Q, RNS, ASX, or Euro results), and whether it changes the thesis, risks, or timing.
+You may briefly note macro_context.json as background colour if relevant; do not let macro alone change the RESEARCH VERDICT.
 If nothing material changed, say so in 2–3 sentences.
 Reference article/filing titles and dates where relevant.
 Do not repeat the full prior memo.
