@@ -126,14 +126,14 @@ def default_policy() -> dict[str, Any]:
             "max_stale_pct": 0.15,
             "auto_advance": True,
             "maintenance_enabled": True,
-            "maintenance_max_tickers": 100,
+            "maintenance_max_tickers": "full",
             "maintenance_include_focus_when_queue_complete": True,
             "maintenance_refresh_constituents": True,
             "history": [],
             "note": (
                 "Advance to next queue market when focus meets floors; "
-                "graduated markets keep a generous maintenance grow "
-                "(100 tickers/market/run by default)."
+                "graduated markets get a full-universe maintenance refresh "
+                "(set maintenance_max_tickers to an int to throttle later)."
             ),
         },
         "research_model": pick.to_dict(),

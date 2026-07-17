@@ -11,9 +11,44 @@ from value_investor.data_library import DEFAULT_STALE_DAYS, grow_library, librar
 
 DEFAULT_MIN_COVERAGE_PCT = 0.95
 DEFAULT_MAX_STALE_PCT = 0.15
-# Per graduated market per ladder run (stale/never-fetched first).
-# 100 ≈ full EURO STOXX refresh in one run; S&P cycles in ~5 weekly runs.
-DEFAULT_MAINTENANCE_MAX_TICKERS = 100
+# Build-phase default: refresh every constituent each maintenance pass.
+# Set an int (e.g. 100) later to throttle; rating-priority refresh is deferred (L33).
+DEFAULT_MAINTENANCE_MAX_TICKERS: int | str = "full"
+FULL_MAINTENANCE_FALLBACK_TICKERS = 10_000
+
+
+def _is_full_maintenance_cap(value: Any) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, str) and value.strip().lower() in {"full", "all", "*"}:
+        return True
+    if isinstance(value, (int, float)) and int(value) <= 0:
+        return True
+    return False
+
+
+def resolve_maintenance_max_tickers(
+    cfg: dict[str, Any],
+    *,
+    root: Path | None = None,
+    markets: list[str] | None = None,
+) -> tuple[int, bool]:
+    """
+    Return ``(max_tickers, is_full)``.
+
+    ``"full"`` / null / ≤0 means refresh every constituent (cap derived from
+    library ticker counts when available).
+    """
+    raw = cfg.get("maintenance_max_tickers", DEFAULT_MAINTENANCE_MAX_TICKERS)
+    if not _is_full_maintenance_cap(raw):
+        return max(1, int(raw)), False
+    cap = FULL_MAINTENANCE_FALLBACK_TICKERS
+    if root is not None and markets:
+        status = library_status(root, markets=markets)
+        counts = [int(row.get("ticker_count") or 0) for row in status]
+        if counts and max(counts) > 0:
+            cap = max(counts)
+    return cap, True
 
 
 def _graduation_config(policy: dict[str, Any]) -> dict[str, Any]:
@@ -29,8 +64,8 @@ def _graduation_config(policy: dict[str, Any]) -> dict[str, Any]:
     cfg.setdefault(
         "note",
         "Advance to next queue market only when focus meets these floors; "
-        "graduated markets keep a generous maintenance grow "
-        f"(default {DEFAULT_MAINTENANCE_MAX_TICKERS} tickers/market/run).",
+        "graduated markets keep a full-universe maintenance refresh by default "
+        "(set maintenance_max_tickers to an int to throttle later).",
     )
     return cfg
 
@@ -238,7 +273,8 @@ def run_maintenance_grow(
 
     While the queue still has a next focus market, skips the current focus so the
     main ladder grow is not diluted. When the queue is complete, refreshes every
-    graduated market (including focus) at ``maintenance_max_tickers`` each.
+    graduated market (including focus). Default cap is ``"full"`` (every
+    constituent); set an int on ``maintenance_max_tickers`` to throttle later.
     """
     cfg = _graduation_config(policy)
     if not cfg.get("maintenance_enabled", True):
@@ -255,7 +291,9 @@ def run_maintenance_grow(
     if not markets:
         return {"skipped": True, "reason": "no_graduated_markets", "markets": []}
 
-    max_tickers = int(cfg.get("maintenance_max_tickers") or DEFAULT_MAINTENANCE_MAX_TICKERS)
+    max_tickers, is_full = resolve_maintenance_max_tickers(
+        cfg, root=root, markets=markets
+    )
     if refresh_constituents_first is None:
         refresh_constituents_first = bool(cfg.get("maintenance_refresh_constituents", True))
     results = grow_library(
@@ -270,6 +308,7 @@ def run_maintenance_grow(
         "skipped": False,
         "markets": markets,
         "max_tickers": max_tickers,
+        "maintenance_full_refresh": is_full,
         "queue_complete": queue_complete,
         "include_focus": bool(queue_complete and include_focus),
         "refresh_constituents_first": bool(refresh_constituents_first),
