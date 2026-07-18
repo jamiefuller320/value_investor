@@ -1,0 +1,86 @@
+# JD Logistics, Inc. (2618.HK) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:25:48.398413+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+JD Logistics, Inc. (2618.HK) screens as a buy on cheapness and financial health: P/E 11.2, P/B 1.3, ROE 11.6%, and debt/equity 38%, passing five of 22 quantitative models including Graham Enterprising, Earnings Yield, Magic Formula, and Composite Value. The investment case rests on China’s leading integrated supply-chain platform scaling revenue while earnings have normalised after the 2022 loss cycle. Valuation embeds scepticism after a weak share-price year (news cites c.−14% one-year total return at HK$12.40 in December 2025) despite double-digit top-line growth. The central debate is whether margin pressure from external-customer expansion, Southeast Asia capex, and subsidiary drag (Deppon) is cyclical, or whether lease-heavy capital intensity and receivables build structurally cap returns. Primary regulatory filings were not retrieved in the source library; financial analysis below falls back to Yahoo Finance data and must be treated with that limitation.
+
+## INVESTMENT THESIS
+For a value investor, 2618.HK offers a rare combination of scale, improving profitability, and modest multiples in a sector that typically trades at growth premia. The screen’s composite score of 65% (sector-relative 63%) is driven by two families—cheapness and risk—not momentum or quality, which fits a deep-value entry rather than a growth chase.
+
+Business quality, inferred from secondary financials, has improved materially since the 2022 trough: net income moved from a RMB1.40bn loss to RMB6.65bn in 2025, with operating cash flow consistently above RMB13bn annually. Revenue compounded from RMB137.4bn (2022) to RMB217.1bn (2025), implying the company is gaining external (non-JD.com) customers—a strategic pivot that diversifies away from pure captive volume. Gross margin expanded from c.7.4% (2022) to c.9–10% (2024–25), supporting the screen’s Financial Health pass despite elevated operating spend (R&D and SG&A both rising).
+
+The quantitative hook is straightforward: trailing P/E of 11.2 sits well below the screen’s 25× threshold; P/B of 1.3 on tangible book of RMB44.9bn suggests the market prices little optionality from integrated warehousing, cold chain, and cross-border logistics tied to JD.com’s international push (Joybuy Europe, bonded delivery). ROE of 11.6% is adequate for an asset-heavy logistics operator and aligns with earnings-yield and Magic Formula passes. Debt metrics screen conservatively (D/E 38%), though capital lease obligations of RMB18.0bn (Yahoo, 2025) are material and understate economic leverage relative to a pure debt ratio.
+
+The signal is new (one week at buy; conviction score 0%), so this memo is an initial overlay rather than a seasoned position call. Timing data are insufficient (RSI and 200-day SMA unavailable). Nonetheless, the intersection of value multiples, positive free cash flow, and a recovering earnings trajectory supports accumulation for investors comfortable with China exposure and related-party concentration within the JD ecosystem.
+
+## FINANCIAL REVIEW
+Primary source gap: `filings_index.json` contains no usable annual or interim regulatory filings for JD Logistics—only one unrelated Google News item (`period: other`, no body extract). The `filings/bodies/` directory is empty. No HKEX announcements, annual reports, or interim results could be cited from primary sources. All figures below are from `financials_annual.json` (Yahoo Finance); interim/quarterly filing bodies are absent, though Yahoo carries limited quarterly EPS (2025 diluted EPS RMB0.07; 2026 YTD RMB0.14 on a partial-year basis—interpret cautiously).
+
+Revenue and profitability trend (Yahoo, RMB)
+
+| Year | Revenue | Net income | Operating income | EBITDA |
+|------|---------|------------|------------------|--------|
+| 2022 | 137.4bn | −1.40bn | 0.45bn | 10.1bn |
+| 2023 | 166.6bn | 0.62bn | 1.58bn | 15.0bn |
+| 2024 | 182.8bn | 6.20bn | 7.09bn | 21.4bn |
+| 2025 | 217.1bn | 6.65bn | 6.35bn | 21.2bn |
+
+Revenue grew 19% in 2025 after 10% in 2024, consistent with news reports of 21.9% Q4 2025 and 24.1% Q3 2025 revenue growth. Net income roughly doubled from 2023 to 2024, then rose 7% in 2025; operating income actually fell 10% year-on-year in 2025 despite higher revenue, signalling margin compression at the EBIT line—corroborated by news headlines citing “rising costs” and profit-margin challenges.
+
+Margins (Yahoo-derived): gross margin improved from 7.4% (2022) to 10.2% (2024), easing to 9.1% (2025). Operating margin peaked at 3.9% (2024) and retreated to 2.9% (2025). Normalised income (adjusting unusual items) was RMB6.22bn vs reported RMB6.65bn in 2025; 2025 included RMB452m unusual items and RMB146m write-offs.
+
+Cash flow and capital allocation (Yahoo)
+
+Operating cash flow remained strong: RMB13.3bn (2022) → RMB16.4bn (2023) → RMB20.8bn (2024) → RMB18.8bn (2025). Free cash flow was RMB8.3bn, RMB10.9bn, RMB15.2bn, and RMB11.2bn respectively—2025 FCF declined 27% despite higher net income, driven by capex rising to RMB7.6bn (from RMB5.6bn in 2024) and working-capital absorption (receivables up RMB4.1bn; working capital fell from RMB28.0bn to RMB14.4bn).
+
+Balance sheet (Yahoo, 2025 year-end)
+
+Total assets RMB124.6bn; equity RMB54.7bn (minority interest RMB5.1bn). Cash and equivalents RMB18.1bn (down from RMB25.8bn in 2024). Total debt RMB22.4bn; long-term debt RMB3.9bn; capital lease obligations RMB18.0bn—leases dominate the debt stack. Goodwill and intangibles RMB9.7bn; tangible book RMB44.9bn. Accounts receivable RMB19.8bn (allowance RMB362m). Retained earnings remain deeply negative at RMB−13.8bn, reflecting accumulated losses pre-2023 profitability—common for recently IPO’d JD subsidiaries funded via paid-in capital (RMB69.0bn).
+
+Per-share: diluted EPS rose from RMB0.10 (2023) to RMB0.98 (2024) and RMB1.04 (2025), supporting the screen’s P/E of 11.2.
+
+Interim coverage: no interim filing bodies are indexed. News references board review of unaudited Q3 2025 results (November 2025) and Q4 2025 earnings call (March 2026), but primary interim statements were not available for verification.
+
+## RISKS AND RED FLAGS
+No primary filing bodies were available to review going-concern language, contingencies, covenant terms, or related-party disclosure; the following risks are inferred from Yahoo financials and news.
+
+Related-party and ecosystem concentration. JD Logistics remains structurally tied to JD.com (parent). Shifts in JD Retail volume, pricing, or strategic priority (e.g. food delivery investment cited in parent-company news) could affect captive revenue and capital allocation. External-customer growth mitigates but does not eliminate this dependency.
+
+Margin and cost inflation. Operating income declined in 2025 while revenue rose; news consistently flags rising costs and difficulty maintaining margins despite strong ISC (integrated supply chain) customer growth. R&D spend rose to RMB4.14bn (2025) from RMB3.57bn (2024), and SG&A exceeded RMB10bn—suggesting heavy investment phase.
+
+Subsidiary and expansion risk. News highlights losses at subsidiary Deppon and rollout of bulky-item delivery/installation in Malaysia and Singapore via JoyLogistics. International expansion adds execution and FX risk without proven contribution in the available data.
+
+Balance-sheet structure. Capital lease obligations (RMB18.0bn) represent the bulk of total debt (RMB22.4bn). Economic leverage and fixed-cost rigidity are higher than a 38% debt/equity screen ratio implies. Cash declined RMB7.7bn in 2025; financing cash outflow was RMB14.8bn.
+
+Working capital and receivables. Receivables grew faster than revenue in 2025 (c.+26% vs +19% revenue), and working capital halved—potential quality-of-earnings flag absent primary disclosure on ageing or customer mix.
+
+Competitive and regulatory environment. Chinese logistics is intensely competitive (SF Express, Cainiao, regional players) with price pressure. Macro/regulatory conditions in China (consumption, property-linked freight, data/security rules for logistics tech) are not captured by the value screen and could re-rate the sector irrespective of multiples.
+
+Governance and disclosure. Negative retained earnings, significant treasury shares (498m), and minority interests complicate equity attribution. Without HKEX annual/interim extracts, pension, litigation, and related-party terms could not be assessed.
+
+## NEWS HIGHLIGHTS
+Coverage is moderate for 2618.HK directly; several headlines concern parent JD.com (NASDAQ:JD) rather than the listed logistics subsidiary. Material JD Logistics–specific items from `news_manifest.json`:
+
+Earnings and margins
+- “JD Logistics Inc (JDLGF) Q4 2025 Earnings Call Highlights: Strong Revenue Growth Amid Rising Costs” (18 March 2026): Q4 2025 revenue +21.9%; cost management and profitability challenges noted.
+- “JD Logistics Inc (JDLGF) Q3 2025 Earnings Call Highlights: Robust Revenue Growth Amid Rising Costs” (25 November 2025): Q3 2025 revenue +24.1%; strong ISC customer growth; margin pressure.
+
+Strategy and expansion
+- “Southeast Asia Expansion and Subsidiary Losses Might Change the Case for Investing in JD Logistics (SEHK:2618)” (2 November 2025): JoyLogistics launched integrated bulky-item delivery/installation in Malaysia and Singapore; board scheduled Q3 2025 results review; Deppon subsidiary losses flagged.
+- “JD Logistics (SEHK:2618): Assessing Value Following Southeast Asia Expansion and Upcoming Financial Disclosure” (1 November 2025): similar themes; lacklustre share-price momentum.
+
+Valuation and sentiment
+- “JD Logistics (SEHK:2618): Revisiting Valuation After a Tough Year and Recent Share Price Uptick” (7 December 2025): share price HK$12.40; one-year total return approximately −13.65%.
+
+Parent-ecosystem context (secondary)
+- “JD.com (JD) Is Up 5.5% After Joybuy’s Europe Push…” (26 March 2026): JD Logistics’ bonded cross-border network referenced in JD.com’s European expansion.
+- JD.com Q1 2026 earnings and bear-case articles (May–December 2025) provide parent demand context but are not substitutes for 2618.HK filings.
+
+No material news on management changes, regulatory enforcement, or M&A specific to 2618.HK appeared in the manifest. Coverage is thin on governance and regulatory actions; most items are earnings summaries and valuation commentary rather than investigative reporting.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research broadly confirms the quantitative buy case on cheapness and improving earnings/cash generation, but primary filing absence, 2025 EBIT margin compression, lease-heavy leverage, and subsidiary/expansion risks prevent a higher-conviction endorsement.

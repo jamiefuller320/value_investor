@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "focus_market": "aim",
+  "focus_market": "us_adr_asia",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
@@ -67,6 +67,54 @@
       "graduated_at": "2026-07-18T18:04:30.214468+00:00",
       "coverage_pct": 1.0,
       "stale_pct": 0.0
+    },
+    {
+      "market": "aim",
+      "graduated_at": "2026-07-18T18:33:47.274723+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "ibex35",
+      "graduated_at": "2026-07-18T18:33:47.275978+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "ftse_mib",
+      "graduated_at": "2026-07-18T18:33:47.277118+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "aex",
+      "graduated_at": "2026-07-18T18:33:47.278138+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "bel20",
+      "graduated_at": "2026-07-18T18:33:47.279140+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "hang_seng",
+      "graduated_at": "2026-07-18T18:33:47.280727+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "sti",
+      "graduated_at": "2026-07-18T18:33:47.281863+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "us_adr_asia",
+      "graduated_at": "2026-07-18T18:33:55.191736+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
     }
   ],
   "focus_graduation": {
@@ -75,6 +123,8 @@
     "auto_advance": true,
     "maintenance_enabled": true,
     "maintenance_max_tickers": "full",
+    "maintenance_include_focus_when_queue_complete": true,
+    "maintenance_refresh_constituents": true,
     "history": [
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
@@ -106,11 +156,73 @@
         "to_market": "aim",
         "reason": "l34_next_slices_opened",
         "note": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
+      },
+      {
+        "at": "2026-07-18T18:33:47.274723+00:00",
+        "from_market": "aim",
+        "to_market": "ibex35",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:47.275978+00:00",
+        "from_market": "ibex35",
+        "to_market": "ftse_mib",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:47.277118+00:00",
+        "from_market": "ftse_mib",
+        "to_market": "aex",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:47.278138+00:00",
+        "from_market": "aex",
+        "to_market": "bel20",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:47.279140+00:00",
+        "from_market": "bel20",
+        "to_market": "hang_seng",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:47.280727+00:00",
+        "from_market": "hang_seng",
+        "to_market": "sti",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:47.281863+00:00",
+        "from_market": "sti",
+        "to_market": "us_adr_asia",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
+      },
+      {
+        "at": "2026-07-18T18:33:55.191736+00:00",
+        "from_market": "us_adr_asia",
+        "to_market": null,
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "queue_complete"
       }
     ],
-    "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass.",
-    "maintenance_include_focus_when_queue_complete": true,
-    "maintenance_refresh_constituents": true
+    "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
   },
   "research_model": {
     "model_id": "composer-2.5",
@@ -127,8 +239,8 @@
     "enforce_weekly_research_cap": false,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 34.0,
-    "estimated_spend_usd_this_week": 34.0,
+    "estimated_spend_usd_this_cycle": 52.4,
+    "estimated_spend_usd_this_week": 52.4,
     "week_id": "2026-W29",
     "cycle_id": "2026-07-d8",
     "note": "Pro plan $20/mo included API pool. Weekly library research dollar strand is disabled (enforce_weekly_research_cap=false); ladder.research_hard_cap and the monthly pool are the practical limits. Surplus day (7th) still accelerates fundamentals grow before refresh on the 8th.",
@@ -147,7 +259,19 @@
       }
     ]
   },
-  "updated_at": "2026-07-17T04:51:50.477279+00:00",
+  "paper_fx": {
+    "reporting_currency": "GBP",
+    "hedge_assumption": "none",
+    "rate_source": "yahoo_finance",
+    "note": "Paper NAV converts foreign marks into reporting_currency at spot. No FX hedging is assumed. Cash is treated as reporting_currency."
+  },
+  "macro_context": {
+    "enabled": true,
+    "refresh_on_ladder": true,
+    "use_in_scoring": false,
+    "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
+  },
+  "updated_at": "2026-07-18T18:33:55.191749+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -158,6 +282,7 @@
     "min_metrics_for_screen": 25,
     "estimated_memo_usd": 0.4,
     "research_hard_cap": 50,
+    "research_all_graduated": true,
     "last_run": {
       "run_at": "2026-07-17T04:51:32.714088+00:00",
       "focus_market": "asx200",
@@ -329,19 +454,6 @@
           }
         ]
       }
-    },
-    "research_all_graduated": true
-  },
-  "paper_fx": {
-    "reporting_currency": "GBP",
-    "hedge_assumption": "none",
-    "rate_source": "yahoo_finance",
-    "note": "Paper NAV converts foreign marks into reporting_currency at spot. No FX hedging is assumed. Cash is treated as reporting_currency."
-  },
-  "macro_context": {
-    "enabled": true,
-    "refresh_on_ladder": true,
-    "use_in_scoring": false,
-    "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
+    }
   }
 }

@@ -1,0 +1,93 @@
+# Li Ning Company Limited (2331.HK) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:23:45.299670+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Li Ning Company Limited screens as a **Strong Buy** on classic value metrics—P/E ~11.3, P/B ~1.2, dividend yield ~4.3%, and current ratio ~2.85—against a net-cash balance sheet and positive free cash flow. The investment case rests on buying a leading Chinese sportswear brand at a depressed multiple while revenue continues to grow modestly and the balance sheet strengthens. The central debate is whether margin compression and three consecutive years of declining net income (Yahoo, 2022–2025) reflect a cyclical trough or structural share-shift in a fiercely competitive domestic market. Filings discovery surfaced headline references to 2024 annual and 2025 interim results, but no downloadable primary text was captured, limiting confirmation of management guidance, channel inventory, and risk disclosures.
+
+## INVESTMENT THESIS
+The quantitative screen passes **14 of 22 models** (composite **77%**, sector-relative **72%**) across all four value families: **cheapness, dividend, GARP, and risk** (`screening_snapshot.json`). That profile fits a Graham/Schloss-style entry: low P/E and P/B, earnings yield and FCF yield support, dividend growth criteria met, and financial health screens cleared (current ratio ≥2; P/E×P/B well below 22.5).
+
+Business quality anchors the case despite earnings pressure. Li Ning remains one of China’s top domestic sportswear brands, with **RMB 29.6bn revenue** in FY2025 (Yahoo fallback), up from RMB 25.8bn in FY2022—a **~15% cumulative revenue gain** over three years. The balance sheet is conservative: **RMB 27.6bn equity**, **RMB 16.7bn cash**, total assets **RMB 37.7bn**, and working capital **RMB 14.9bn** (FY2025, Yahoo). Reported FCF of **RMB 3.57bn** (FY2025) and **RMB 3.76bn** (FY2024) supports the dividend (~RMB 1.4bn paid in FY2025 per cash-flow statement) and repurchase optionality. ROE of **10.9%** is respectable though below peak-cycle levels, consistent with margin normalisation rather than balance-sheet distress.
+
+For a value investor, the hook is asymmetry: the market prices Li Ning as a low-growth, low-quality name (single-digit P/E, sub-1.5 P/B) while the company still generates cash, pays a meaningful yield, and retains brand relevance—recently reinforced by the **Stephen Curry long-term footwear partnership** (news, June 2025). Nike’s ongoing China share losses to domestic rivals, including Li Ning, corroborates competitive positioning even as sector demand remains soft.
+
+## FINANCIAL REVIEW
+**Primary filings gap.** The filings index (`filings_index.json`, regime: `asia_filings`) lists five Google News hits, of which two are relevant to Li Ning: *“Li Ning Company Limited Announces 2024 Annual Results”* (28 Mar 2025, period: **annual**) and *“Li Ning Company Limited Announces 2025 Interim Results”* (21 Aug 2025, period: **interim**). Neither has a body extract; two other “annual” entries are unrelated noise. **No HKEX announcement text, going-concern language, contingencies, or covenant disclosures could be reviewed.** All figures below are from **`financials_annual.json` (Yahoo Finance)** unless noted.
+
+**Income statement trend (RMB, FY ends Dec).**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | 25.80bn | 27.60bn | 28.68bn | 29.60bn |
+| Operating income | 4.48bn | 3.38bn | 3.79bn | 3.95bn |
+| Net income | 4.06bn | 3.19bn | 3.01bn | 2.94bn |
+| Diluted EPS | 1.54 | 1.23 | 1.17 | 1.14 |
+| Gross margin (approx.) | 48.4% | 48.4% | 49.4% | 49.0% |
+
+Revenue growth has persisted (**+3.2% YoY** in FY2025; **+3.9%** in FY2024) but **net income has fallen ~28% from the FY2022 peak** (4.06bn → 2.94bn). Operating income recovered partially in FY2024–25 after a FY2023 dip, yet net profit continues to drift lower—suggesting higher effective tax, non-operating items, or impairment charges. Yahoo records **impairment/unusual charges** of RMB 275m (FY2024) and RMB 216m (FY2025), which warrant scrutiny in primary filings when available.
+
+Selling and marketing expense remains elevated (**~RMB 9.2bn**, ~31% of revenue in FY2025), indicating sustained brand investment in a competitive market. S&M spend has outpaced revenue growth since FY2022, compressing operating leverage.
+
+**Balance sheet (RMB, year-end).**
+
+- **Total assets:** 33.6bn (2022) → 37.7bn (2025).
+- **Stockholders’ equity:** 24.3bn → 27.6bn; **tangible book ~RMB 27.3bn**.
+- **Cash & equivalents:** 7.4bn (2022) → 16.7bn (2025)—a sharp FY2025 increase driven by net investment sales (RMB 6.9bn net in investing cash flow, Yahoo).
+- **Inventory:** ~RMB 2.5–2.7bn across the period; modest rise, not alarming relative to revenue scale.
+- **Total debt (incl. leases):** ~RMB 2.1bn vs. cash 16.7bn—**net cash position**.
+- **Current ratio (screen):** 2.85.
+
+The FY2025 cash build improves liquidity and dividend safety but may also reflect portfolio rebalancing rather than operational acceleration; primary filings would clarify investment policy and any mark-to-market volatility (available-for-sale securities ~RMB 2.2bn on FY2025 balance sheet).
+
+**Cash flow and returns.**
+
+- **Operating cash flow:** RMB 3.9bn (2022) → RMB 4.9bn (2025).
+- **FCF:** RMB 2.1bn (2022) → RMB 3.6bn (2025); stable and supportive of the **4.3% indicated yield**.
+- **Capex:** RMB 1.3bn (FY2025), down from RMB 1.8bn (FY2023)—disciplined after expansion phase.
+- **Dividends paid:** RMB 1.2bn (2022), RMB 2.2bn (2023), RMB 1.4bn (2024), RMB 1.4bn (2025).
+
+**Interim results.** The index references **2025 interim results** (Aug 2025) but provides no figures. **H1 2025 revenue, margin, and channel commentary are unavailable** in the source pack; this is a material gap for assessing near-term momentum.
+
+**Quarterly data.** `quarterly_income` in `financials_annual.json` is empty.
+
+## RISKS AND RED FLAGS
+**Data limitation.** Without HKEX filing bodies, standard risk sections (related-party transactions, litigation, going-concern assessments, lease covenants) **could not be reviewed**. The following risks are inferred from financial trends and news context only.
+
+**Earnings trajectory.** Three years of declining net income despite revenue growth is the primary red flag. If this reflects permanent margin reset or share loss to Anta and other domestic peers, the low P/E may be justified rather than opportunistic.
+
+**China consumer and sportswear cycle.** Macro context is unavailable in sources, but sector news highlights persistent weakness in Greater China sportswear demand. Nike reported a **17% China sales decline** (Jul 2025) and cited share losses to domestic brands including Li Ning—competitive validation, but also sector-wide demand risk.
+
+**Impairment charges.** FY2024–25 capital-asset impairments (Yahoo: RMB 269m and RMB 333m special charges in respective years) may signal store/network rationalisation or asset write-downs; magnitude is not large relative to earnings but merits filing review.
+
+**Investment portfolio and earnings quality.** Large financial-asset holdings (AFS securities, associates, investment properties totalling several billion RMB) introduce mark-to-market and dividend-income volatility. FY2025’s cash surge from investment sales improves liquidity but reduces recurring investment income unless redeployed.
+
+**Governance and disclosure.** No specific governance issues surfaced in the news manifest. Hong Kong-listed Chinese consumer names carry general regulatory and geopolitical overhang not captured by screens.
+
+**Competitive response.** Nike’s football/World Cup push and brand reset could intensify competition in core categories even as Li Ning gains basketball credibility via the Curry deal.
+
+**Inventory/receivables.** FY2025 saw a **RMB 372m increase in receivables** (working-capital change, cash-flow statement) and inventory up RMB 87m—watch for channel stuffing or wholesale credit extension in interim filings.
+
+## NEWS HIGHLIGHTS
+Direct Li Ning coverage in the past year is **thin**; most articles are syndicated quant/ranking pieces or Nike-centric stories mentioning Li Ning competitively.
+
+**Material items:**
+
+- **“Curry Defection And World Cup Push Test Nike Turnaround Expectations”** (5 Jun 2025, yfinance) — Stephen Curry signed a **long-term footwear partnership with Li Ning**, a significant brand coup in basketball and Asia, directly challenging Nike.
+- **“Can Nike’s World Cup Football Bet Recenter Its Core Brand Story for Investors (NKE)?”** (8 Jun 2025) — References Curry’s Li Ning move as a competitive pressure on Nike in Greater China.
+- **“Nike’s turnaround effort faces fresh doubts as China sales slide”** (1 Jul 2025) — Notes Nike losing China share to **Anta and Li Ning** amid weak sportswear demand; sector context rather than Li Ning-specific fundamentals.
+- **“Assessing Li Ning (SEHK:2331) Valuation After Recent Share Price Volatility”** (19 Apr 2026) — Flags choppy trading (HK$20.98 reference price; 1-year TSR discussion truncated in summary).
+- **Zacks “Strong Buy” / “Best Income Stocks” lists** featuring LNNGY (15–17 Apr 2026; 30 Mar 2026) — Third-party quant endorsement, not company-specific strategy news.
+
+**Filings-index headlines (no body text):**
+
+- *“Li Ning Company Limited Announces 2024 Annual Results”* (28 Mar 2025, Media OutReach).
+- *“Li Ning Company Limited Announces 2025 Interim Results”* (21 Aug 2025, Macau Business).
+
+No M&A, management changes, or regulatory actions against Li Ning were identified in the manifest. **News coverage is insufficient** to validate strategy shifts, DTC mix, or inventory policy; primary filings are required.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research **partially confirms** the Strong Buy screen on valuation, balance-sheet strength, and cash generation, but **weakens** conviction on earnings momentum and near-term visibility given declining net income, missing interim filing data, and sector demand uncertainty.

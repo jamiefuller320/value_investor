@@ -1,0 +1,74 @@
+# Impax Asset Management Group Plc (IPX.L) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:12:01.718156+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Impax Asset Management is a specialist sustainable-investment asset manager listed on AIM, currently flagged as a **Strong Buy** on the quantitative value screen (13/22 models; composite 82%) on the basis of low multiples (P/E 10.2, P/B 1.3), an ~8.9% dividend yield, and a strong balance sheet (current ratio 4.18). The investment case rests on buying a franchise trading well below prior-cycle earnings power, with net cash and listed investments providing downside cushion. The central debate is whether recent revenue and profit contraction—together with reported net outflows and activist pressure from Saba Capital—reflects a cyclical trough or structural impairment of the ESG/specialist model. Primary RNS annual and interim filing bodies are absent from the source pack, limiting verification of management guidance, going-concern language, and dividend policy from regulatory text.
+
+## INVESTMENT THESIS
+The screen identifies IPX as a rare Financial Services name passing all four value families—cheapness, dividend, GARP, and risk—with high data quality (19/20 metrics). At roughly 10× earnings and 1.3× book, the market prices in sustained earnings erosion rather than normalisation; for a value investor, that creates optionality if AUM stabilises and operating leverage reverses. Business quality anchors include a long-established environmental-markets franchise, recurring fee revenue (albeit under pressure), minimal financial leverage (capital lease obligations ~£5.7m versus ~£80m cash plus short-term investments at FY2025 per Yahoo), and ongoing capital return via dividends and buybacks (RNS headlines on 17 July 2026 reference share transactions and a buyback extension, though no filing bodies were captured). The screen’s Graham Defensive/Enterprising, FCF Yield, Magic Formula, and Financial Health passes align with a net-cash, asset-light manager rather than a distressed balance-sheet story. The mismatch—cheap on trailing metrics but deteriorating on growth— is precisely the contrarian setup the Dreman Contrarian and Acquirer’s Multiple models are designed to capture, provided outflows do not accelerate further.
+
+## FINANCIAL REVIEW
+**Source gap:** `filings_index.json` lists 16 UK RNS items (regime: `uk_rns`) but **zero annual or interim** results announcements and **zero downloadable body extracts** under `filings/bodies/`. Several indexed items appear to be market-wide RNS noise (e.g. Form 8.3 for unrelated issuers). **All figures below are sourced from `financials_annual.json` (Yahoo Finance); this is an explicit fallback.**
+
+**Income statement trend (Yahoo, £000s):**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Total revenue | 175,531 | 178,367 | 170,113 | 141,873 |
+| Operating income | 65,364 | 54,247 | 50,068 | 31,436 |
+| EBITDA | 77,390 | 57,676 | 53,971 | 33,403 |
+| Net income | 59,482 | 39,222 | 36,477 | 20,294 |
+| Diluted EPS (p) | 44.7 | 29.8 | 28.2 | 15.8 |
+
+Revenue has fallen for two consecutive years (−17% from FY2024 to FY2025), with operating income more than halving from the FY2022 peak. FY2025 includes £4.0m restructuring/M&A charges and £4.96m total unusual items (Yahoo), contributing to the earnings step-down. Normalised EBITDA (Yahoo) was £38.4m versus reported EBITDA £33.4m in FY2025.
+
+**Cash flow and capital allocation (Yahoo, £000s):**
+
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
+| Operating cash flow | 38,656 | 50,636 | 23,820 |
+| Free cash flow | 37,832 | 49,562 | 23,339 |
+| Cash dividends paid | 36,376 | 36,301 | 35,289 |
+| Share repurchases | 15,114 | 8,441 | 6,909 |
+
+FCF covered dividends comfortably in FY2023–24 but only partially in FY2025 (FCF £23.3m vs dividends £35.3m). The screen’s FCF figure (~£19.7m) is broadly consistent with the recent run-rate.
+
+**Balance sheet (Yahoo, FY2025, £000s):** Total assets £154,704; stockholders’ equity £115,219; total liabilities £39,485. Cash and equivalents £22,879; other short-term investments £57,396; total debt (capital leases) £5,744. Working capital £80,857. Treasury shares rose to ~5.9m (from ~4.8m in FY2024), consistent with ongoing buybacks. Goodwill and intangibles £25.0m; tangible book value £90.2m.
+
+**Interim/H1:** No interim results filing is present in `filings_index.json`. Secondary news (Yahoo, 6 June 2026: *“Impax Asset Management Group PLC (IPXAF) (H1 2026) Earnings Call Highlights”*) indicates H1 2026 revenue decline and net outflows, with management emphasising cost efficiency and product expansion—this cannot be reconciled to primary filing figures in the current source set.
+
+**Implied screen metrics vs fundamentals:** Trailing P/E 10.2 and ROE 11.8% (screen) sit against an EPS trajectory that has fallen ~65% from FY2022; if earnings stabilise at the FY2025 run-rate, headline cheapness is genuine, but forward P/E rises sharply on further AUM erosion.
+
+## RISKS AND RED FLAGS
+**No filing-body language available** for going-concern assessments, covenant disclosures, or contingency notes; risk assessment relies on secondary sources and Yahoo data.
+
+- **AUM outflows and revenue cyclicality:** News repeatedly cites net outflows and analyst downgrades (*“Impax Asset Management drops as outflows prompt downgrade”*, Yahoo Finance UK, 10 April 2026; *“Impax struggles as Saba pressure continues”*, Investors’ Chronicle, 20 May 2026). Yahoo revenue decline corroborates operational pressure.
+- **Dividend sustainability:** FY2025 cash dividends (£35.3m) exceeded net income (£20.3m) and consumed most of FCF (£23.3m); continued high payout (~8.9% yield on screen) may depend on balance-sheet liquidity rather than recurring earnings—a key value-trap risk if outflows persist.
+- **Activist/governance overhang:** Saba Capital pressure is flagged in trade press; RNS index includes *“Holding(s) in Company”* (17 July 2026) without body text—stake-building or voting dynamics cannot be verified here.
+- **Earnings quality:** Restructuring charges (£4.0m in FY2025) and normalised vs reported earnings gap suggest ongoing cost restructuring; special charges may recur.
+- **Competitive/strategy risk:** Specialist ESG/sustainable positioning faces secular support but cyclical headwinds when performance or flows lag broader markets; H1 2026 call summary (Yahoo, 6 June 2026) notes revenue decline despite product expansion efforts.
+- **Share-price sentiment:** *“The Market Doesn't Like What It Sees From Impax Asset Management Group Plc's (LON:IPX) Earnings Yet As Shares Tumble 25%”* (simplywall.st, 11 December 2025) signals negative market re-rating already under way.
+- **Data limitations:** Absence of annual report and half-year RNS bodies prevents assessment of auditor emphasis-of-matter paragraphs, client concentration, or regulatory capital requirements under FCA rules.
+
+## NEWS HIGHLIGHTS
+Coverage is **moderately thin for company-specific Impax news** and **heavily polluted by ticker confusion** with IperionX (ASX: IPX); the items below are Impax-specific.
+
+| Date | Title | Relevance |
+|------|-------|-----------|
+| 2026-06-18 | *Impax Asset Management Group (AIM:IPX) Stock Gets Fair Value Trim As Analysts Rework Assumptions* (Yahoo Finance) | Analyst fair value trimmed slightly from £1.88 to £1.86; mixed risk/confidence signals. |
+| 2026-06-06 | *Impax Asset Management Group PLC (IPXAF) (H1 2026) Earnings Call Highlights* (Yahoo Finance) | H1 revenue down, net outflows; focus on cost cuts, product expansion, technology. |
+| 2026-05-20 | *Impax Asset Management navigates outflows with stronger investment performance and broader product strategy* (Yahoo Finance UK) | Strategy pivot narrative amid flow pressure. |
+| 2026-05-20 | *Impax struggles as Saba pressure continues* (Investors' Chronicle) | Activist overhang; operational struggle. |
+| 2026-04-16 | *Downgrade: Here's How Analysts See Impax Asset Management Group Plc (LON:IPX) Performing In The Near Term* (simplywall.st) | Near-term earnings expectations cut. |
+| 2026-04-10 | *Impax Asset Management drops as outflows prompt downgrade* (Yahoo Finance UK) | Outflow-driven share weakness and analyst downgrade. |
+| 2025-12-11 | *The Market Doesn't Like What It Sees From Impax Asset Management Group Plc's (LON:IPX) Earnings Yet As Shares Tumble 25%* (simplywall.st) | Post-results sell-off on disappointing earnings. |
+| 2025-11-21 | *Impax Asset Management & Compass Group: Stock market week ahead* (Investors' Chronicle) | Scheduled results/event coverage. |
+
+Generic UK dividend/penny-stock listicles (May–June 2026) mention Impax peripherally but add little incremental insight. **No M&A, management change, or regulatory enforcement headlines** specific to Impax were identified in the manifest. RNS index items (17 July 2026) on buybacks, PDMR dealings, and holdings notifications suggest ongoing capital-allocation activity but lack extractable detail.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: The quantitative Strong Buy is supported by genuine cheapness, net-cash balance sheet, and dividend yield, but deep research on Yahoo financials and news flow weakens the case on earnings momentum, outflows, and dividend coverage—warranting selective accumulation rather than unqualified confirmation of the screen signal.

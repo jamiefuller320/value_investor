@@ -1,0 +1,64 @@
+# JD Health International Inc. (6618.HK) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:24:26.498296+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+JD Health International Inc. is the healthcare arm of the JD.com ecosystem, operating China's largest online pharmacy and a broader digital health platform spanning B2C retail, B2B distribution, telemedicine, and consumer health services. The quantitative screen rates the name a buy on cheapness, GARP, and risk metrics (P/E 19.2, P/B 1.7, debt/equity ~1%), with a sector-relative composite of 73% against a headline score of 81%. Yahoo-sourced financials show a clear multi-year inflection: revenue rose from RMB 46.7bn (FY2022) to RMB 73.4bn (FY2025), with operating income turning positive and net profit reaching RMB 5.4bn. The central debate is whether current earnings quality—boosted by large interest income on a cash-heavy balance sheet—and China healthcare regulatory intensity justify a sub-20x P/E, or whether operating leverage in the core pharmacy business is still underappreciated. Primary HKEX annual and interim filing bodies were not retrieved in this research pack, limiting audit-trail verification.
+
+## INVESTMENT THESIS
+For a value investor, 6618.HK offers a rare combination of growth at a reasonable price within Chinese healthcare. The screen passes five of 22 models—Graham Enterprising, FCF Yield, Lynch PEG, Composite Value, and Financial Health—across three of four factor families (cheapness, GARP, risk), with high data quality (18/20 metrics present). Valuation sits below typical growth-healthcare multiples (P/E 19.2, P/B 1.69, ROE 9.3%) while the business has crossed from loss-making (FY2021 diluted EPS −RMB 0.35) to sustained profitability (FY2024 diluted EPS RMB 1.32; FY2025 net income RMB 5.4bn per Yahoo). Operating margin expanded from negative in FY2022 to 5.4% in FY2025, and free cash flow accelerated to RMB 10.0bn in FY2025 from RMB 4.3bn in FY2024—supporting the FCF Yield pass. The balance sheet is exceptionally conservative: total debt of RMB 636m against equity of RMB 60.1bn and cash of RMB 31.8bn, consistent with the Financial Health and risk-family passes. Scale in online pharmacy (reported market leadership), integration with JD.com's logistics and traffic, and a capital-light model with minimal capex (RMB 151m in FY2025) underpin business quality that the screen's GARP and cheapness signals appear to capture. The signal is new (one week, conviction overlay 0%), so this is an early-stage accumulation candidate rather than a high-conviction compounder call.
+
+## FINANCIAL REVIEW
+**Source note:** The filings index (`filings_index.json`) contains zero annual and zero interim regulatory filings for 6618.HK; the `filings/bodies/` directory has no downloadable extracts. All figures below are sourced from `financials_annual.json` (Yahoo Finance) with this explicit fallback. No primary filing language on going concern, contingencies, or covenants is available for review.
+
+**Income statement trend (Yahoo, RMB)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|---|---:|---:|---:|---:|
+| Revenue | 46.7bn | 53.5bn | 58.2bn | 73.4bn |
+| Gross profit | 9.9bn | 11.9bn | 13.3bn | 18.2bn |
+| Operating income | −47m | 701m | 1.48bn | 3.94bn |
+| Net income | 380m | 2.14bn | 4.16bn | 5.38bn |
+| Diluted EPS | 0.12 | 0.68–0.69 | 1.32 | n/a* |
+
+*FY2025 diluted EPS not populated in the Yahoo extract; net income and share count (~3.21bn ordinary shares) imply roughly RMB 1.68 per share.
+
+Revenue CAGR FY2022–FY2025 is approximately 16%. Gross margin improved from 21.2% to 24.8%, and operating leverage is evident as SG&A and marketing grew more slowly than revenue. R&D rose from RMB 1.07bn to RMB 1.63bn, reflecting continued platform investment.
+
+**Earnings quality flags (Yahoo):** Non-operating interest income was RMB 1.54bn in FY2025 (versus operating income of RMB 3.94bn), meaning roughly one-quarter of pre-tax profit derived from cash/investment yield rather than core operations. Each year FY2022–FY2025 recorded unusual write-offs (RMB 98m–316m), classified as special income charges. Normalised income in FY2025 (RMB 5.50bn) exceeded reported net income (RMB 5.38bn), a modest gap.
+
+**Balance sheet (Yahoo, FY2025 year-end):** Total assets RMB 81.6bn; equity RMB 60.1bn; total liabilities RMB 21.5bn. Cash and equivalents RMB 31.8bn plus short-term investments RMB 16.4bn imply a very liquid position. Inventory rose to RMB 6.86bn (from RMB 5.84bn in FY2024), consistent with pharmacy scale-up. Retained earnings remain deeply negative at RMB −7.97bn, reflecting accumulated losses from the pre-profit phase rather than current distress. Goodwill and intangibles are RMB 1.93bn— modest relative to equity.
+
+**Cash flow (Yahoo):** Operating cash flow reached RMB 10.2bn in FY2025; capex was only RMB 151m, yielding FCF of RMB 10.0bn (up from RMB 4.3bn in FY2024). The screen's FCF figure of RMB 7.24bn likely reflects a different measurement window or adjustment; the Yahoo FY2025 FCF of RMB 10.0bn is the figure cited here.
+
+**Interim gap:** No half-year or quarterly filing bodies are present in the index. Yahoo provides only a partial quarterly income stub (FY2025 share count). Interim momentum, seasonality, and management commentary cannot be assessed from primary sources in this pack.
+
+## RISKS AND RED FLAGS
+**Regulatory:** China's online pharmacy and telemedicine sectors face ongoing policy scrutiny (prescription verification, drug pricing, cross-border rules, data/privacy). Without HKEX filing bodies, specific contingent liabilities or regulatory provisions cannot be quoted; this remains a material unverified risk.
+
+**Competitive:** Alibaba Health, Ping An Good Doctor, and offline pharmacy chains compete aggressively on price and fulfilment. Margin expansion may face ceiling pressure if regulatory or competitive dynamics intensify.
+
+**Governance / related-party:** JD.com is the controlling shareholder; ecosystem dependence creates related-party transaction and allocation risks that screens do not capture. The 6 January 2026 Simply Wall St headline notes public companies among the largest shareholders—consistent with JD.com group influence.
+
+**Earnings composition:** Heavy reliance on interest income (RMB 1.54bn in FY2025) on a cash-rich balance sheet inflates reported profitability relative to pure operating economics; normalised analysis is warranted.
+
+**Receivables / credit:** Allowance for doubtful accounts receivable was RMB 360m against gross receivables of RMB 790m (FY2025)—a 46% allowance ratio that warrants monitoring, though absolute receivables (RMB 430m net) are small versus revenue.
+
+**Filing gap:** Absence of annual report and interim results extracts in this research pack is itself a red flag for research depth; going-concern, covenant, pension, and litigation disclosures could not be reviewed.
+
+**Macro (colour only):** `macro_context.json` is empty for Hang Seng; no offline regime markers were available. China/HK sentiment and RMB FX remain background risks for a HK-listed RMB reporter.
+
+## NEWS HIGHLIGHTS
+News coverage in the manifest is **thin**—only three articles over the past year, none reporting material corporate events (M&A, management changes, regulatory actions, or strategy pivots).
+
+- **6 January 2026** — "Public companies among JD Health International Inc.'s (HKG:6618) largest shareholders, saw gain in holdings value after stock jumped 3.0% last week" (Simply Wall St / Google News): ownership-structure commentary; no operational update.
+- **11 September 2025** — "JD Health International (SEHK:6618): Exploring Valuation After Recent Momentum-Driven Share Price Gains" (Yahoo Finance): notes share-price appreciation without a identifiable catalyst; frames a valuation discussion.
+- **29 August 2025** — "Sector Update: Health Care Stocks Advance Friday Afternoon" (Yahoo Finance): generic sector piece; not company-specific.
+
+No material strategy shifts, management changes, regulatory actions, or M&A were captured in the news pipeline. The filings index similarly returned no relevant results announcements—only an unrelated Cyprus election headline and a generic stock profile snippet.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.65
+Rationale: Yahoo financial trends strongly support the screen's buy case on growth, margins, FCF, and balance-sheet quality, but the absence of primary HKEX filings and thin news flow prevent full confirmation of earnings quality and regulatory risk.

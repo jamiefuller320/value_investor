@@ -1,0 +1,67 @@
+# Randstad N.V. (RAND.AS) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:22:14.451499+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Randstad N.V. (RAND.AS) screens as a buy on valuation: composite score 72% (7/22 models), with passes across cheapness, dividend, GARP, and risk families — notably FCF yield (~10.4%), dividend yield (~5.0%), and Neff PEGY (0.04). The stock offers a cyclical recovery angle after a sharp earnings trough in 2024, with 2025 showing partial normalisation and strong free cash flow. The central debate is whether current multiples already reflect a staffing downcycle (revenue down ~16% from the 2022 peak) or whether permanent-hiring weakness and margin pressure will cap the rebound. Primary regulatory filings for Randstad are absent from the source library; financial analysis relies on Yahoo fallback data, which limits filing-level verification of risks.
+
+## INVESTMENT THESIS
+For a value investor, Randstad presents a contrarian cyclical income case rather than a quality compounder. The quantitative screen flags multiple value signals simultaneously: P/E 20.8 and P/B 1.5 on depressed earnings, FCF yield ~10.4% (FCF €597m per screen; €799m in Yahoo 2025), and a ~5.0% dividend yield with a Dividend Growth model pass. The Neff PEGY score (0.04) suggests the market prices in sustained earnings decline (-20.4% growth metric on screen) that may prove overly pessimistic if staffing volumes stabilise.
+
+Business quality is mixed but defensible at this price. Randstad remains the global leader in HR services with scale advantages, a digital marketplace strategy (referenced in Q4 2025 earnings commentary), and portfolio simplification via the May 2025 LTM tech-services divestiture (~$186m), refocusing on core staffing. ROE of 7.4% is modest and below historical norms, consistent with a late-cycle trough rather than structural impairment. Net debt of ~€1.0bn (Yahoo 2025) against FCF of ~€0.8bn implies manageable leverage if cash generation holds. The screen’s Financial Health and Magic Formula passes support the view that balance-sheet risk is not prohibitive at current prices, even though goodwill dominates the asset base.
+
+## FINANCIAL REVIEW
+**Primary filing gap.** The `filings_index.json` catalogue contains 59 entries, but none are verifiable Randstad N.V. annual reports or Euro interim releases with downloadable bodies. The ten SEC filing bodies (10-K, 10-Q) under `filings/bodies/` are misattributed: they relate to Rand Capital Corporation (CIK 81955, randcapital.com — a US business development company), not Randstad N.V. Google News “annual” and “interim” hits are largely false positives (Rand Paul, RAND Corporation, FirstRand, Ingersoll Rand, etc.). No Euronext annual report, half-year release, or 20-F body for Randstad is available in this source set. All figures below are from `financials_annual.json` (Yahoo), stated explicitly as fallback.
+
+**Annual trends (Yahoo, € millions unless noted).**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue | 27,568 | 25,426 | 24,122 | 23,077 |
+| Operating income | 1,137 | 885 | 497 | 555 |
+| Net income | 929 | 624 | 123 | 299 |
+| EBITDA | 1,473 | 1,169 | 606 | 845 |
+| Diluted EPS (€) | 5.02 | 3.43 | 0.65 | 1.66 |
+| Free cash flow | 951 | 1,101 | 565 | 799 |
+| Net debt | 272 | 306 | 1,290 | 1,013 |
+
+Revenue has fallen for three consecutive years (-4.3% in 2025 vs 2024; -16.3% vs 2022 peak). Gross margin compressed from ~20.9% (2022) to ~18.7% (2025); operating margin troughed at ~2.1% in 2024 and recovered modestly to ~2.4% in 2025. Net income collapsed to €123m in 2024 (impairments and unusual items per Yahoo: €97m total unusual items in 2024) before rebounding to €299m in 2025 — still roughly two-thirds below the 2022 peak.
+
+Cash generation has been resilient relative to reported earnings: operating cash flow was €872m in 2025, yielding FCF of €799m after capex of €73m. Common dividends paid were €914m (2022), €522m (2023), €627m (2024), and €284m (2025), indicating a material reset from peak payout levels through the downturn.
+
+**Balance sheet (Yahoo, 31 Dec 2025).** Total assets €10,686m; equity €4,001m; total debt €1,910m; net debt €1,013m; cash €399m. Goodwill and intangibles total €3,379m, leaving tangible book value of only €622m — a significant acquisition legacy. Pension and post-retirement obligations total ~€250m (€158m non-current + €92m current). Working capital remains positive at €1,006m.
+
+**Interim (Yahoo quarterly fallback).** Q1 2026 (Yahoo `quarterly_income`): revenue €5,513m; operating income €105m; net income €64m; diluted EPS €0.35. News coverage (“Randstad NV (RANJF) Q1 2026 Earnings Call Highlights”, 23 April 2026) cites solid revenue growth alongside margin and cash-flow pressure, but interim filing bodies are not available to corroborate segment detail, guidance, or management commentary.
+
+## RISKS AND RED FLAGS
+**Data integrity.** The misattribution of SEC filings to Randstad is a material research red flag; pension, covenant, contingency, and going-concern language cannot be verified from primary sources in this library.
+
+**Cyclical demand.** Morgan Stanley research (13 June 2025: “Can permanent hiring weakness continue to weigh on staffing stocks?”) warns that weak permanent recruitment could further pressure European staffing revenue, margins, and earnings — directly relevant to Randstad’s mix.
+
+**Earnings quality and ROE.** ROE of 7.4% (screen) is low for a franchise of this scale. Normalised income (Yahoo 2025: €343m) exceeds reported net income (€299m), but 2024 showed the reverse pattern, highlighting volatility from impairments and restructuring.
+
+**Balance sheet.** Goodwill of €3,129m against equity of €4,001m leaves limited tangible buffer if volumes weaken further. Net debt rose sharply in 2024 (€1,290m) before moderating in 2025; total debt remains ~€1.9bn.
+
+**Dividend sustainability.** Cash dividends were cut sharply in 2025 (€284m common vs €627m in 2024). The 5.0% screen yield may reflect a lower payout base; further cuts are possible if the staffing cycle deteriorates.
+
+**Competitive and structural.** Portfolio refocus (LTM divestiture) reduces complexity but also revenue diversification. AI-driven changes to white-collar hiring and the tech-services carve-out create execution risk. Euro-listed regulatory, labour-law, and cross-border compliance risks are not assessable without Randstad’s actual annual report.
+
+**Filing risks unavailable.** Rand Capital 10-K risk-factor language (indebtedness, BDC structure) in the indexed bodies is not applicable to Randstad and must not be used.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate but Randstad-specific items are identifiable:
+
+- **LTM tech divestiture (May 2025):** “LTM bids $186m for Randstad’s tech services in Europe and Australia” (25 May 2025) and “Randstad Refocuses On Core Staffing With LTM Tech Deal And Partnership” (27 May 2025) — strategic shift to core staffing with a long-term IT partnership retained.
+- **Q4 2025 results (Feb 2026):** “Randstad NV (RANJF) Q4 2025 Earnings Call Highlights: Navigating Challenges with Strategic …” (14 Feb 2026) — slight revenue decline offset by cost management and digital marketplace progress.
+- **Q1 2026 results (Apr 2026):** “Earnings Update: Randstad N.V. (AMS:RAND) Just Reported Its First-Quarter Results…” (25 Apr 2026) and “Randstad NV (RANJF) Q1 2026 Earnings Call Highlights: Solid Revenue Growth Amidst Market Challenges” (23 Apr 2026) — revenue improvement but ongoing margin and cash-flow headwinds.
+- **Sector sentiment (Jun 2026):** Morgan Stanley note on permanent hiring weakness weighing on European staffing stocks (13 Jun 2025).
+- **Dividend (Mar 2026):** “Randstad N.V. (AMS:RAND) Stock Goes Ex-Dividend In Just Three Days” (27 Mar 2026).
+- **Valuation debate (Jan–Feb 2026):** “Are Poor Financial Prospects Dragging Down Randstad N.V. (AMS:RAND) Stock?” (1 Jan 2026) vs “Is There Now An Opportunity In Randstad N.V. (AMS:RAND)?” (14 Feb 2026).
+
+Several manifest entries are irrelevant (Rathbones, South African “Rand” currency, generic staffing/AI articles). Bond profile coverage (14 Jul 2026) provides limited equity insight. No material M&A beyond LTM, management changes, or regulatory actions are captured in the manifest.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.62
+Rationale: Quantitative value metrics (FCF yield, dividend yield, PEGY) support the screen’s buy signal and 2025 earnings/FCF show cyclical stabilisation, but absent Randstad primary filings and ongoing staffing-cycle headwinds prevent full confirmation of the deep-value case.
