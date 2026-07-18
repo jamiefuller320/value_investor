@@ -1,0 +1,138 @@
+# Netflix, Inc. (NFLX) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:47:26.042031+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+# Netflix, Inc. (NFLX) — First-Pass Research Memo
+
+**Quantitative screen signal:** Buy (6/22 models, composite 62%, stable 5 weeks)  
+**Sector:** Communication Services | **Data as of:** 18 July 2026
+
+---
+
+## EXECUTIVE SUMMARY
+
+Netflix remains the scaled global leader in subscription streaming, with a business model that has shifted decisively from growth-at-all-costs to profitable cash compounding. The quantitative screen flags a **buy** on FCF yield (8.9%), exceptional returns on equity (49.5%), and broad quality/moat model passes, at a P/E of 21.7 that embeds a meaningful growth deceleration. Filings show revenue still expanding at a mid-teens pace through H1 2026, with operating margins holding above 32%, though the stock has sold off sharply after the 16 July 2026 Q2 release on weaker Q3 revenue guidance and reduced engagement disclosure. The central debate is whether Netflix is a durable cash compounder trading at a reasonable yield after de-rating, or a maturing platform whose best growth and transparency are behind it.
+
+---
+
+## INVESTMENT THESIS
+
+For a value-oriented investor, the case rests on **cash economics rather than subscriber headlines**. The screen passes three of four factor families—cheapness, quality, and risk—with high data quality (18/20 metrics). Specifically, Netflix clears FCF Yield, Quality Value, Buffett Quality, Economic Moat, Magic Formula, and Financial Health models. At a 28.2% profit margin and ROE of 49.5%, the franchise exhibits rare operating leverage for a consumer media business.
+
+The value hook is the **FCF yield of ~8.9%** on a platform generating accelerating operating cash flow ($7.0bn in H1 2026 per the Q2 10-Q, up from $5.2bn in H1 2025) while returning capital aggressively ($6.0bn of buybacks in H1 2026). Netflix has compounded revenue from $33.7bn (FY2023) to $45.2bn (FY2025, Yahoo fallback—see Financial Review) and expanded operating income from $7.0bn to $13.3bn over the same period. Pricing power (tier increases in March 2026), an advertising tier, and live-event adjacencies extend monetisation per account beyond pure subscriber growth.
+
+The screen’s buy signal aligns with a business that now self-funds content investment, reduces net debt, and repurchases stock—characteristics more typical of mature quality compounders than speculative growth names. The recent share-price weakness (52-week low cited 17 July 2026) may offer a better entry for investors who weight normalised free cash flow over quarterly guidance volatility.
+
+---
+
+## FINANCIAL REVIEW
+
+### Annual results (10-K)
+
+Two annual 10-K filings are indexed (FY2024 filed 27 January 2025; FY2025 filed 23 January 2026), and body extracts contain risk-factor and business narrative but **are truncated at 80,000 characters before the consolidated financial statement tables**. Annual figures below therefore **fall back to `financials_annual.json` (Yahoo)** and should be treated as secondary to filings.
+
+| Metric | FY2023 | FY2024 | FY2025 (Yahoo) | YoY FY25 |
+|---|---|---|---|---|
+| Revenue | $33.7bn | $39.0bn | $45.2bn | +15.9% |
+| Operating income | $7.0bn | $10.4bn | $13.3bn | +27.9% |
+| Net income | $5.4bn | $8.7bn | $11.0bn | +26.1% |
+| Free cash flow | $6.9bn | $6.9bn | $9.5bn | +36.6% |
+| Total assets | $48.7bn | $53.6bn | $55.6bn | +3.7% |
+| Stockholders' equity | $20.6bn | $24.7bn | $26.6bn | +7.7% |
+| Net debt | $7.4bn | $7.8bn | $5.4bn | −30.8% |
+
+FY2025 shows a clear inflection: revenue growth remains robust, margins expand (operating margin ~29.5% vs ~26.7% in FY2024), FCF accelerates, and net debt falls despite $9.1bn of share repurchases (Yahoo cash-flow data). Diluted EPS was $2.53 in FY2025 vs $1.98 in FY2024, reflecting both earnings growth and the **10-for-1 stock split** effective November 2025.
+
+The FY2025 10-K body (partial extract) references forward-looking content obligations, advertising, multi-household usage, AI, and a **Warner Bros. Discovery (WBD) transaction** as material uncertainty factors—though no quantified deal terms appear in the truncated extract.
+
+### Interim results (10-Q)
+
+Seven interim 10-Q filings are indexed with full body extracts. Key trends:
+
+**H1 2026 (six months ended 30 June 2026, Q2 10-Q):**
+
+| Metric | H1 2026 | H1 2025 | Change |
+|---|---|---|---|
+| Revenue | $24.81bn | $21.62bn | +14.7% |
+| Operating income | $8.15bn | $7.12bn | +14.5% |
+| Operating margin | 32.8% | 32.9% | −10 bps |
+| Net income | $8.68bn | $6.02bn | +44.3% |
+| Diluted EPS | $2.03 | $1.38 | +47.1% |
+| Operating cash flow | $7.03bn | $5.21bn | +34.9% |
+| Content additions (cash) | $4.93bn | $3.84bn | +28.5% |
+| Share repurchases | $5.98bn | $5.19bn | +15.1% |
+
+**Q2 2026 (three months ended 30 June 2026):** Revenue $12.56bn (+13.4% YoY); operating income $4.19bn (33.4% margin vs 34.1% in Q2 2025); net income $3.40bn; diluted EPS $0.80 vs $0.72.
+
+**Q1 2026:** Revenue $12.25bn (+16.2% YoY); net income $5.28bn was flattered by **$2.85bn of interest and other income** (vs $51m in Q1 2025)—a non-recurring boost visible in the Q1 10-Q income statement.
+
+**Balance sheet (30 June 2026 vs 31 December 2025, Q2 10-Q):** Total assets $58.5bn (+5.1%); stockholders' equity $30.2bn (+13.3%); long-term debt $11.8bn (−12.2%); cash $9.10bn; content assets (net) $33.8bn.
+
+**Content obligations (30 June 2026, Note 9):** $11.94bn due within one year and $9.55bn due in years one through three ($21.5bn combined). The filing body is **truncated** before the beyond-three-year bucket and total, so full committed content spend is understated here.
+
+**Liquidity:** Netflix maintains a **$3.0bn unsecured revolving credit facility** (matures April 2029); no amounts drawn as of 30 June 2026. The Q2 10-Q states the company **was in compliance with all related covenants**. No going-concern language appears in any filing body extract.
+
+**Gap note:** Nine 8-K filings are indexed (Dec 2025–Jul 2026) but none have downloadable body extracts; material event detail from those forms is unavailable in this source pack.
+
+---
+
+## RISKS AND RED FLAGS
+
+**Competitive intensity.** The FY2025 10-K states the entertainment video market is "intensely competitive and subject to rapid change," competing against linear TV, streaming peers (including piracy), gaming, social media, and user-generated content across subscription, transactional, ad-supported, and bundled models.
+
+**Member retention and disclosure.** Filings warn that failure to attract and retain members "will adversely affected" the business. Netflix has reduced viewership/engagement transparency (flagged in July 2026 news), making it harder for investors to validate the quality of revenue growth independently of management guidance.
+
+**Content balance-sheet risk.** Content assets of $33.8bn (~68% of annualised H1 revenue) and **$21.5bn+ of near-to-medium-term content obligations** create fixed-cost leverage if growth slows. H1 2026 content cash spend rose 28.5% YoY.
+
+**Capital allocation concentration.** H1 2026 buybacks ($6.0bn) consumed ~85% of operating cash flow, limiting balance-sheet flexibility if content ROI deteriorates.
+
+**M&A and strategic uncertainty.** FY2025 10-K forward-looking statements reference a WBD transaction; news reports (December 2025) describe a Warner Bros bid that coincided with share weakness, and June 2026 reports cite Netflix losing a Roku bidding war to Fox. Integration risk and deal financing could pressure returns.
+
+**Governance transition.** Reed Hastings stepped down as chair in April 2026 (Invezz, 16 April 2026), removing a long-tenured founder voice during a period of strategic flux.
+
+**Regulatory and AI.** Filings flag internet regulation changes and AI as risks to content creation, recommendation, and copyright.
+
+**Macro/sentiment.** Post-earnings selloff (17 July 2026) pushed shares to a reported 52-week low ($65.51, Investing.com UK), reflecting market concern that streaming industry growth may be peaking—a cyclical sentiment risk not captured by quality screens.
+
+No pension deficit or going-concern warnings were identified in available filing bodies.
+
+---
+
+## NEWS HIGHLIGHTS
+
+Coverage over the past year is **heavy and recent-biased**, dominated by earnings reactions and strategic moves:
+
+- **17 July 2026:** *"Netflix stock hits 52-week low at 65.51 USD"* (Investing.com UK); *"'It's in no man's land': What Wall Street is saying about Netflix's big miss"* (Yahoo Finance)—selloff driven by weak Q3 revenue outlook despite in-line Q2.
+- **16–17 July 2026:** Multiple articles on Q2 2026 earnings: in-line quarter but stock dropped ~9–10% on guidance and co-CEO comment that "not all views are created equal" (Yahoo Finance UK, 17 July 2026).
+- **16 June 2026:** *"Netflix shares drop after report it lost $22B Roku bidding war to Fox"* (Investing.com UK).
+- **16–17 April 2026:** *"Netflix chair Reed Hastings exits as earnings beat, stock drops"* (Invezz); Morningstar flagged no guidance raise and international slowdown.
+- **26 March 2026:** *"Netflix raises subscription prices across all tiers"* (Investing.com UK).
+- **5 December 2025:** Warner Bros deal coverage—* "What Netflix's Warner Bros bid means for stockholders as stock sinks"* (The Independent).
+- **November 2025:** 10-for-1 stock split (Morningstar, Capital.com).
+
+Earlier 2025 coverage includes a Q3 2025 earnings miss linked to Brazil (TradingView, 22 October 2025) and UK content investment success (Yahoo Finance, 8 August 2025). News is **not thin** for the recent six months; deeper historical strategy analysis is limited in the manifest.
+
+---
+
+## RESEARCH VERDICT
+
+Verdict: accumulate  
+Risk: medium  
+Confidence: 0.68  
+Rationale: Filings confirm strong cash generation, margin stability, and deleveraging that support the quantitative buy signal, but the latest guidance miss, heavy content commitments, and reduced operating transparency temper near-term conviction.
+
+---
+
+*Sources: SEC EDGAR 10-K/10-Q body extracts (`filings/bodies/`), `filings_index.json`, `screening_snapshot.json`, `financials_annual.json` (annual fallback only), `news_manifest.json`. Macro context not applied to signal weighting.*
+
+## INVESTMENT THESIS
+
+
+## FINANCIAL REVIEW
+
+
+## RISKS AND RED FLAGS
+
+
+## NEWS HIGHLIGHTS

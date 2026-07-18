@@ -37,6 +37,8 @@
     "auto_advance": true,
     "maintenance_enabled": true,
     "maintenance_max_tickers": "full",
+    "maintenance_include_focus_when_queue_complete": true,
+    "maintenance_refresh_constituents": true,
     "history": [
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
@@ -63,9 +65,7 @@
         "reason": "queue_complete"
       }
     ],
-    "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass.",
-    "maintenance_include_focus_when_queue_complete": true,
-    "maintenance_refresh_constituents": true
+    "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
   },
   "research_model": {
     "model_id": "composer-2.5",
@@ -82,8 +82,8 @@
     "enforce_weekly_research_cap": false,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 34.0,
-    "estimated_spend_usd_this_week": 34.0,
+    "estimated_spend_usd_this_cycle": 45.2,
+    "estimated_spend_usd_this_week": 45.2,
     "week_id": "2026-W29",
     "cycle_id": "2026-07-d8",
     "note": "Pro plan $20/mo included API pool. Weekly library research dollar strand is disabled (enforce_weekly_research_cap=false); ladder.research_hard_cap and the monthly pool are the practical limits. Surplus day (7th) still accelerates fundamentals grow before refresh on the 8th.",
@@ -102,191 +102,6 @@
       }
     ]
   },
-  "updated_at": "2026-07-17T04:51:50.477279+00:00",
-  "ladder": {
-    "enabled": true,
-    "layers": [
-      "fundamentals",
-      "screen_lite",
-      "selective_research"
-    ],
-    "min_metrics_for_screen": 25,
-    "estimated_memo_usd": 0.4,
-    "research_hard_cap": 50,
-    "last_run": {
-      "run_at": "2026-07-17T04:51:32.714088+00:00",
-      "focus_market": "asx200",
-      "focus_market_after": "asx200",
-      "screen_shortlist": 31,
-      "research": {
-        "model": "composer-2.5",
-        "research_cap": 50,
-        "executed": 31,
-        "created": 5,
-        "updated": 26,
-        "errors": [],
-        "estimated_spend_usd": 12.4,
-        "targets": [
-          {
-            "ticker": "RRL.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.7429
-          },
-          {
-            "ticker": "FMG.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.7204
-          },
-          {
-            "ticker": "ORA.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.6774
-          },
-          {
-            "ticker": "HVN.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.6653
-          },
-          {
-            "ticker": "GNE.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.6406
-          },
-          {
-            "ticker": "CQR.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.6352
-          },
-          {
-            "ticker": "WAF.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.6219
-          },
-          {
-            "ticker": "PRN.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.5595
-          },
-          {
-            "ticker": "WHC.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.5494
-          },
-          {
-            "ticker": "EBO.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.5462
-          },
-          {
-            "ticker": "RMS.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.5458
-          },
-          {
-            "ticker": "ZIM.AX",
-            "signal": "strong_buy",
-            "conviction_score": 0.4484
-          },
-          {
-            "ticker": "SOL.AX",
-            "signal": "buy",
-            "conviction_score": 0.6249
-          },
-          {
-            "ticker": "ARB.AX",
-            "signal": "buy",
-            "conviction_score": 0.6238
-          },
-          {
-            "ticker": "CSL.AX",
-            "signal": "buy",
-            "conviction_score": 0.6054
-          },
-          {
-            "ticker": "SDF.AX",
-            "signal": "buy",
-            "conviction_score": 0.5844
-          },
-          {
-            "ticker": "RMD.AX",
-            "signal": "buy",
-            "conviction_score": 0.5701
-          },
-          {
-            "ticker": "PMV.AX",
-            "signal": "buy",
-            "conviction_score": 0.5632
-          },
-          {
-            "ticker": "JBH.AX",
-            "signal": "buy",
-            "conviction_score": 0.5454
-          },
-          {
-            "ticker": "NEM.AX",
-            "signal": "buy",
-            "conviction_score": 0.5418
-          },
-          {
-            "ticker": "AAI.AX",
-            "signal": "buy",
-            "conviction_score": 0.5357
-          },
-          {
-            "ticker": "RWC.AX",
-            "signal": "buy",
-            "conviction_score": 0.4943
-          },
-          {
-            "ticker": "DNL.AX",
-            "signal": "buy",
-            "conviction_score": 0.4851
-          },
-          {
-            "ticker": "WDS.AX",
-            "signal": "buy",
-            "conviction_score": 0.4835
-          },
-          {
-            "ticker": "YAL.AX",
-            "signal": "buy",
-            "conviction_score": 0.4713
-          },
-          {
-            "ticker": "CIA.AX",
-            "signal": "buy",
-            "conviction_score": 0.4559
-          },
-          {
-            "ticker": "MND.AX",
-            "signal": "buy",
-            "conviction_score": 0.4361
-          },
-          {
-            "ticker": "WGX.AX",
-            "signal": "buy",
-            "conviction_score": 0.4187
-          },
-          {
-            "ticker": "PPT.AX",
-            "signal": "buy",
-            "conviction_score": 0.3731
-          },
-          {
-            "ticker": "CSC.AX",
-            "signal": "buy",
-            "conviction_score": 0.3465
-          },
-          {
-            "ticker": "TWE.AX",
-            "signal": "buy",
-            "conviction_score": 0.228
-          }
-        ]
-      }
-    },
-    "research_all_graduated": true
-  },
   "paper_fx": {
     "reporting_currency": "GBP",
     "hedge_assumption": "none",
@@ -298,5 +113,357 @@
     "refresh_on_ladder": true,
     "use_in_scoring": false,
     "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
+  },
+  "updated_at": "2026-07-18T12:54:53.694729+00:00",
+  "ladder": {
+    "enabled": true,
+    "layers": [
+      "fundamentals",
+      "screen_lite",
+      "selective_research"
+    ],
+    "min_metrics_for_screen": 25,
+    "estimated_memo_usd": 0.4,
+    "research_hard_cap": 50,
+    "research_all_graduated": true,
+    "last_run": {
+      "run_at": "2026-07-18T12:36:32.485083+00:00",
+      "focus_market": "ftse_smallcap",
+      "focus_market_after": "ftse_smallcap",
+      "screen_shortlist": 6,
+      "research": {
+        "model": "composer-2.5",
+        "research_cap": 50,
+        "research_markets": [
+          "sp500",
+          "euro_stoxx50",
+          "asx200",
+          "ftse_smallcap",
+          "nasdaq100",
+          "dax",
+          "cac40",
+          "tsx60"
+        ],
+        "research_all_graduated": true,
+        "enforce_weekly_research_cap": false,
+        "remaining_usd_before": 0.0,
+        "dedupe": {
+          "already_researched_count": 81,
+          "skipped_count": 89,
+          "skipped_sample": [
+            {
+              "market": "sp500",
+              "ticker": "ACN",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CTSH",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "AOS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "HII",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "PNR",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "SNA",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "NEM",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CF",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "INTU",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "GD",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "QCOM",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "TROW",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "PFE",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "SWKS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "PTC",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "FSLR",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "LEN",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "LULU",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CPRT",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "NVR",
+              "reason": "duplicate_ticker"
+            }
+          ],
+          "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
+        },
+        "targets": [
+          {
+            "market": "ftse_smallcap",
+            "ticker": "CAPD.L",
+            "name": "Capital Limited",
+            "signal": "strong_buy",
+            "conviction_score": 0.6908
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "MSFT",
+            "name": "Microsoft Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.6758
+          },
+          {
+            "market": "dax",
+            "ticker": "FME.DE",
+            "name": "Fresenius Medical Care",
+            "signal": "strong_buy",
+            "conviction_score": 0.6308
+          },
+          {
+            "market": "tsx60",
+            "ticker": "ABX.TO",
+            "name": "Barrick Mining Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.7163
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "REC.L",
+            "name": "Record plc",
+            "signal": "buy",
+            "conviction_score": 0.5942
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "PDD",
+            "name": "PDD Holdings Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.4706
+          },
+          {
+            "market": "dax",
+            "ticker": "MTX.DE",
+            "name": "MTU Aero Engines",
+            "signal": "buy",
+            "conviction_score": 0.5379
+          },
+          {
+            "market": "tsx60",
+            "ticker": "SU.TO",
+            "name": "Suncor Energy Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.7072
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "ULTP.L",
+            "name": "Ultimate Products Plc",
+            "signal": "buy",
+            "conviction_score": 0.5275
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "PCAR",
+            "name": "PACCAR Inc",
+            "signal": "buy",
+            "conviction_score": 0.5216
+          },
+          {
+            "market": "dax",
+            "ticker": "HEI.DE",
+            "name": "Heidelberg Materials AG",
+            "signal": "buy",
+            "conviction_score": 0.5367
+          },
+          {
+            "market": "tsx60",
+            "ticker": "CVE.TO",
+            "name": "Cenovus Energy Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.7056
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "GLE.L",
+            "name": "MJ Gleeson plc",
+            "signal": "buy",
+            "conviction_score": 0.4185
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "ADI",
+            "name": "Analog Devices",
+            "signal": "buy",
+            "conviction_score": 0.4993
+          },
+          {
+            "market": "dax",
+            "ticker": "BAS.DE",
+            "name": "BASF",
+            "signal": "buy",
+            "conviction_score": 0.4655
+          },
+          {
+            "market": "tsx60",
+            "ticker": "K.TO",
+            "name": "Kinross Gold Corporation",
+            "signal": "buy",
+            "conviction_score": 0.6319
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "BOOT.L",
+            "name": "Henry Boot PLC",
+            "signal": "buy",
+            "conviction_score": 0.3786
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "MU",
+            "name": "Micron Technology",
+            "signal": "buy",
+            "conviction_score": 0.4219
+          },
+          {
+            "market": "dax",
+            "ticker": "HEN3.DE",
+            "name": "Henkel AG & Co. KGaA",
+            "signal": "buy",
+            "conviction_score": 0.4532
+          },
+          {
+            "market": "tsx60",
+            "ticker": "NTR.TO",
+            "name": "Nutrien Ltd.",
+            "signal": "buy",
+            "conviction_score": 0.6209
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "SFR.L",
+            "name": "Severfield plc",
+            "signal": "buy",
+            "conviction_score": 0.2039
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "WDAY",
+            "name": "Workday, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.4171
+          },
+          {
+            "market": "dax",
+            "ticker": "FRE.DE",
+            "name": "Fresenius",
+            "signal": "buy",
+            "conviction_score": 0.4427
+          },
+          {
+            "market": "tsx60",
+            "ticker": "AEM.TO",
+            "name": "Agnico Eagle Mines Limited",
+            "signal": "buy",
+            "conviction_score": 0.5721
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "NFLX",
+            "name": "Netflix, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.3413
+          },
+          {
+            "market": "tsx60",
+            "ticker": "CCL-B.TO",
+            "name": "CCL Industries Inc.",
+            "signal": "buy",
+            "conviction_score": 0.5304
+          },
+          {
+            "market": "tsx60",
+            "ticker": "SAP.TO",
+            "name": "Saputo Inc.",
+            "signal": "buy",
+            "conviction_score": 0.3962
+          },
+          {
+            "market": "tsx60",
+            "ticker": "MG.TO",
+            "name": "Magna International Inc.",
+            "signal": "buy",
+            "conviction_score": 0.2391
+          }
+        ],
+        "executed": 28,
+        "created": 28,
+        "updated": 0,
+        "errors": [],
+        "estimated_spend_usd": 11.2,
+        "remaining_usd_after": 0.0
+      },
+      "graduation": null,
+      "maintenance": {
+        "skipped": true,
+        "markets": []
+      }
+    }
   }
 }
