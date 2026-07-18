@@ -44,6 +44,11 @@ def test_resolve_filings_regime_by_market_and_ticker():
     assert resolve_filings_regime("nasdaq100", "AAPL") == "sec_edgar"
     assert resolve_filings_regime("ftse_smallcap", "ASIT.L") == "uk_rns"
     assert resolve_filings_regime("tsx60", "AEM.TO") == "tsx_announcements"
+    assert resolve_filings_regime("aim", "ABDP.L") == "uk_rns"
+    assert resolve_filings_regime("ibex35", "ACS.MC") == "euro_filings"
+    assert resolve_filings_regime("hang_seng", "0005.HK") == "asia_filings"
+    assert resolve_filings_regime("sti", "D05.SI") == "asia_filings"
+    assert resolve_filings_regime("us_adr_asia", "BABA") == "sec_edgar"
     assert resolve_filings_regime(None, "AEM.TO") == "tsx_announcements"
 
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "focus_market": "ftse_smallcap",
+  "focus_market": "aim",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
@@ -9,7 +9,15 @@
     "nasdaq100",
     "dax",
     "cac40",
-    "tsx60"
+    "tsx60",
+    "aim",
+    "ibex35",
+    "ftse_mib",
+    "aex",
+    "bel20",
+    "hang_seng",
+    "sti",
+    "us_adr_asia"
   ],
   "graduated_markets": [
     {
@@ -27,6 +35,36 @@
     {
       "market": "asx200",
       "graduated_at": "2026-07-17T04:51:50.477265+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "ftse_smallcap",
+      "graduated_at": "2026-07-18T18:04:30.214468+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "nasdaq100",
+      "graduated_at": "2026-07-18T18:04:30.214468+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "dax",
+      "graduated_at": "2026-07-18T18:04:30.214468+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "cac40",
+      "graduated_at": "2026-07-18T18:04:30.214468+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "tsx60",
+      "graduated_at": "2026-07-18T18:04:30.214468+00:00",
       "coverage_pct": 1.0,
       "stale_pct": 0.0
     }
@@ -61,6 +99,13 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "queue_complete"
+      },
+      {
+        "at": "2026-07-18T18:04:30.214468+00:00",
+        "from_market": "tsx60",
+        "to_market": "aim",
+        "reason": "l34_next_slices_opened",
+        "note": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       }
     ],
     "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass.",

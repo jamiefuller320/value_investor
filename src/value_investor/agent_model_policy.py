@@ -48,6 +48,15 @@ DEFAULT_MARKET_QUEUE = [
     "dax",
     "cac40",
     "tsx60",
+    # L34 next slices
+    "aim",
+    "ibex35",
+    "ftse_mib",
+    "aex",
+    "bel20",
+    "hang_seng",
+    "sti",
+    "us_adr_asia",
 ]
 
 

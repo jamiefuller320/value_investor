@@ -12,7 +12,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_CURRENCIES = ("GBP", "USD", "EUR", "AUD", "CAD")
+SUPPORTED_CURRENCIES = ("GBP", "USD", "EUR", "AUD", "CAD", "HKD", "SGD")
 
 # Yahoo FX pairs quoted as BASEQUOTE=X → price of 1 BASE in QUOTE units.
 _YAHOO_PAIR: dict[tuple[str, str], str] = {
@@ -20,14 +20,20 @@ _YAHOO_PAIR: dict[tuple[str, str], str] = {
     ("EUR", "USD"): "EURUSD=X",
     ("AUD", "USD"): "AUDUSD=X",
     ("CAD", "USD"): "CADUSD=X",
+    ("HKD", "USD"): "HKDUSD=X",
+    ("SGD", "USD"): "SGDUSD=X",
     ("GBP", "EUR"): "GBPEUR=X",
     ("EUR", "GBP"): "EURGBP=X",
     ("AUD", "GBP"): "AUDGBP=X",
     ("CAD", "GBP"): "CADGBP=X",
+    ("HKD", "GBP"): "HKDGBP=X",
+    ("SGD", "GBP"): "SGDGBP=X",
     ("USD", "GBP"): "GBPUSD=X",  # invert
     ("USD", "EUR"): "EURUSD=X",  # invert
     ("USD", "AUD"): "AUDUSD=X",  # invert
     ("USD", "CAD"): "USDCAD=X",
+    ("USD", "HKD"): "USDHKD=X",
+    ("USD", "SGD"): "USDSGD=X",
 }
 
 _INVERT_PAIRS = {
@@ -39,13 +45,21 @@ _INVERT_PAIRS = {
 MARKET_CURRENCY = {
     "ftse350": "GBP",
     "ftse_smallcap": "GBP",
+    "aim": "GBP",
     "sp500": "USD",
     "nasdaq100": "USD",
+    "us_adr_asia": "USD",
     "euro_stoxx50": "EUR",
     "dax": "EUR",
     "cac40": "EUR",
+    "ibex35": "EUR",
+    "ftse_mib": "EUR",
+    "aex": "EUR",
+    "bel20": "EUR",
     "asx200": "AUD",
     "tsx60": "CAD",
+    "hang_seng": "HKD",
+    "sti": "SGD",
 }
 
 
@@ -106,6 +120,10 @@ def currency_for_ticker(ticker: str, *, market: str | None = None) -> str:
         return "CAD"
     if any(t.endswith(s) for s in (".DE", ".PA", ".AS", ".MI", ".BR", ".HE", ".MC")):
         return "EUR"
+    if t.endswith(".HK"):
+        return "HKD"
+    if t.endswith(".SI"):
+        return "SGD"
     return "USD"
 
 

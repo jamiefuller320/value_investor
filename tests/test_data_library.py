@@ -219,6 +219,31 @@ def test_ii_aligned_markets_registered():
     assert "cac40" in PREQUALIFIED_YAHOO_MARKETS
 
 
+def test_l34_next_slice_markets_registered():
+    for mid in (
+        "aim",
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20",
+        "hang_seng",
+        "sti",
+        "us_adr_asia",
+    ):
+        assert mid in MARKET_REGISTRY
+    assert "ibex35" in PREQUALIFIED_YAHOO_MARKETS
+    assert "bel20" in PREQUALIFIED_YAHOO_MARKETS
+
+
+def test_hk_and_sg_yahoo_helpers():
+    from value_investor.data_library import _to_hk_yahoo, _to_sg_yahoo, _to_bel_yahoo
+
+    assert _to_hk_yahoo("SEHK: 5") == "0005.HK"
+    assert _to_hk_yahoo("388") == "0388.HK"
+    assert _to_sg_yahoo("SGX: A17U") == "A17U.SI"
+    assert _to_bel_yahoo("Euronext Brussels:\xa0ABI") == "ABI.BR"
+
+
 def test_normalize_keeps_prequalified_euro_tickers():
     table = pd.DataFrame(
         {"Ticker": ["ADS.DE", "AIR.PA"], "Company": ["Adidas", "Airbus"], "Sector": ["Consumer", "Industrials"]}

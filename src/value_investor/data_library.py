@@ -51,7 +51,51 @@ def _wiki_tables(url: str) -> list[pd.DataFrame]:
 
 # Wikipedia already lists Yahoo-qualified symbols for these markets
 # (e.g. ADS.DE, AIR.PA). Do not append exchange suffixes or rewrite dots.
-PREQUALIFIED_YAHOO_MARKETS = frozenset({"euro_stoxx50", "dax", "cac40"})
+PREQUALIFIED_YAHOO_MARKETS = frozenset(
+    {
+        "euro_stoxx50",
+        "dax",
+        "cac40",
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20",
+    }
+)
+
+
+def _strip_exchange_prefix(raw: str) -> str:
+    """Strip Wikipedia prefixes like ``SEHK:``, ``SGX:``, ``Euronext Brussels:``."""
+    text = str(raw or "").replace("\xa0", " ").strip()
+    if ":" in text:
+        text = text.split(":", 1)[1].strip()
+    return text
+
+
+def _to_hk_yahoo(raw: str) -> str:
+    """Map Wikipedia Hang Seng codes (``SEHK: 5``) to Yahoo (``0005.HK``)."""
+    code = _strip_exchange_prefix(raw).upper().replace(" ", "")
+    if code.endswith(".HK"):
+        return code
+    if code.isdigit():
+        return f"{int(code):04d}.HK"
+    return f"{code}.HK"
+
+
+def _to_sg_yahoo(raw: str) -> str:
+    code = _strip_exchange_prefix(raw).upper().replace(" ", "")
+    if code.endswith(".SI"):
+        return code
+    return f"{code}.SI"
+
+
+def _to_bel_yahoo(raw: str) -> str:
+    code = _strip_exchange_prefix(raw).upper().replace(" ", "")
+    if code.endswith(".BR"):
+        return code
+    if code.endswith("-BR"):
+        return code[:-3] + ".BR"
+    return f"{code}.BR"
 
 
 def _pick_constituent_table(tables: list[pd.DataFrame]) -> pd.DataFrame:
@@ -227,6 +271,225 @@ def fetch_tsx60_constituents() -> pd.DataFrame:
     )
 
 
+def fetch_aim_constituents() -> pd.DataFrame:
+    """
+    Liquid AIM names from the Wikipedia AIM page company/ticker table.
+
+    Full FTSE AIM All-Share is much larger; this ~100-name slice is the
+    progressive L34 AIM step (II UK includes AIM).
+    """
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/Alternative_Investment_Market")
+    table = None
+    for candidate in tables:
+        cols = {str(c).strip().lower() for c in candidate.columns}
+        if "company" in cols and "ticker" in cols and len(candidate) >= 20:
+            table = candidate
+            break
+    if table is None:
+        table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="aim", yahoo_suffix=".L", index_label="AIM (Wikipedia liquid)"
+    )
+
+
+def fetch_ibex35_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/IBEX_35")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="ibex35", yahoo_suffix="", index_label="IBEX 35"
+    )
+
+
+def fetch_ftse_mib_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/FTSE_MIB")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="ftse_mib", yahoo_suffix="", index_label="FTSE MIB"
+    )
+
+
+def fetch_aex_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/AEX_index")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="aex", yahoo_suffix="", index_label="AEX"
+    )
+
+
+def fetch_bel20_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/BEL_20")
+    # Prefer the current-weightings table over the historical membership log.
+    table = None
+    for candidate in tables:
+        cols = [str(c).strip().lower() for c in candidate.columns]
+        if any("ticker" in c for c in cols) and any("weight" in c for c in cols):
+            table = candidate
+            break
+    if table is None:
+        table = _pick_constituent_table(tables)
+
+    # Columns: Company / ICB Sector / Ticker symbol (``Euronext Brussels: ABI``).
+    # Do not use _normalize_wiki_constituents — it splits on spaces and keeps "Euronext".
+    ticker_col = next(c for c in table.columns if "ticker" in str(c).lower())
+    name_col = next(c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower())
+    sector_col = next((c for c in table.columns if "sector" in str(c).lower()), None)
+    rows: list[dict[str, Any]] = []
+    for _, row in table.iterrows():
+        raw = str(row.get(ticker_col) or "").replace("\xa0", " ").strip()
+        if not raw or raw.lower() == "nan":
+            continue
+        # Dual-listed BEL names may show Amsterdam — keep Yahoo home suffix when present.
+        lower = raw.lower()
+        if "amsterdam" in lower:
+            code = _strip_exchange_prefix(raw).upper().replace(" ", "")
+            ticker = code if code.endswith(".AS") else f"{code}.AS"
+        else:
+            ticker = _to_bel_yahoo(raw)
+        if ticker in {".BR", ".AS", "NO.BR"}:
+            continue
+        sector_val = row.get(sector_col) if sector_col is not None else None
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": str(row.get(name_col) or ticker),
+                "sector": None if sector_val is None or (isinstance(sector_val, float) and pd.isna(sector_val)) else str(sector_val),
+                "epic": _strip_exchange_prefix(raw),
+                "index": "BEL 20",
+                "market": "bel20",
+            }
+        )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    return out.drop_duplicates("ticker", keep="first").reset_index(drop=True)
+
+
+def fetch_hang_seng_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/Hang_Seng_Index")
+    table = _pick_constituent_table(tables)
+    # Custom normalize: SEHK codes → zero-padded Yahoo .HK symbols.
+    rename: dict[str, str] = {}
+    for col in table.columns:
+        key = str(col).strip().lower()
+        if "raw_ticker" not in rename.values() and (
+            key in {"ticker", "symbol", "code"} or "ticker" in key
+        ):
+            rename[col] = "raw_ticker"
+        elif "name" not in rename.values() and (
+            key in {"name", "company", "security"} or "name" in key or "company" in key
+        ):
+            rename[col] = "name"
+        elif "sector" not in rename.values() and ("sector" in key or "sub-index" in key):
+            rename[col] = "sector"
+    frame = table.rename(columns=rename).copy()
+    rows: list[dict[str, Any]] = []
+    for _, row in frame.iterrows():
+        raw = str(row.get("raw_ticker") or "").strip()
+        if not raw or raw.lower() == "nan":
+            continue
+        ticker = _to_hk_yahoo(raw)
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": str(row.get("name") or ticker),
+                "sector": row.get("sector"),
+                "epic": _strip_exchange_prefix(raw),
+                "index": "Hang Seng",
+                "market": "hang_seng",
+            }
+        )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    return out.drop_duplicates("ticker", keep="first").reset_index(drop=True)
+
+
+def fetch_sti_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/Straits_Times_Index")
+    table = _pick_constituent_table(tables)
+    rename: dict[str, str] = {}
+    for col in table.columns:
+        key = str(col).strip().lower()
+        if "raw_ticker" not in rename.values() and (
+            "symbol" in key or key in {"ticker", "code"}
+        ):
+            rename[col] = "raw_ticker"
+        elif "name" not in rename.values() and (
+            key in {"company", "name", "security"} or "company" in key
+        ):
+            rename[col] = "name"
+    frame = table.rename(columns=rename).copy()
+    rows: list[dict[str, Any]] = []
+    for _, row in frame.iterrows():
+        raw = str(row.get("raw_ticker") or "").strip()
+        if not raw or raw.lower() == "nan":
+            continue
+        ticker = _to_sg_yahoo(raw)
+        if ticker in {".SI", "SGX.SI"}:
+            continue
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": str(row.get("name") or ticker),
+                "sector": None,
+                "epic": _strip_exchange_prefix(raw),
+                "index": "STI",
+                "market": "sti",
+            }
+        )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    return out.drop_duplicates("ticker", keep="first").reset_index(drop=True)
+
+
+# Major Asia home-market names commonly held via US-listed ADRs (II path for
+# Japan / India / China). Curated seed — not a full ADR catalog.
+US_ADR_ASIA_SEED: list[dict[str, str | None]] = [
+    {"ticker": "BABA", "name": "Alibaba Group", "sector": "Consumer Cyclical", "home": "China"},
+    {"ticker": "PDD", "name": "PDD Holdings", "sector": "Consumer Cyclical", "home": "China"},
+    {"ticker": "JD", "name": "JD.com", "sector": "Consumer Cyclical", "home": "China"},
+    {"ticker": "BIDU", "name": "Baidu", "sector": "Communication Services", "home": "China"},
+    {"ticker": "NIO", "name": "NIO", "sector": "Consumer Cyclical", "home": "China"},
+    {"ticker": "LI", "name": "Li Auto", "sector": "Consumer Cyclical", "home": "China"},
+    {"ticker": "XPEV", "name": "XPeng", "sector": "Consumer Cyclical", "home": "China"},
+    {"ticker": "TME", "name": "Tencent Music", "sector": "Communication Services", "home": "China"},
+    {"ticker": "TM", "name": "Toyota Motor", "sector": "Consumer Cyclical", "home": "Japan"},
+    {"ticker": "SONY", "name": "Sony Group", "sector": "Technology", "home": "Japan"},
+    {"ticker": "HMC", "name": "Honda Motor", "sector": "Consumer Cyclical", "home": "Japan"},
+    {"ticker": "MUFG", "name": "Mitsubishi UFJ Financial", "sector": "Financial Services", "home": "Japan"},
+    {"ticker": "SMFG", "name": "Sumitomo Mitsui Financial", "sector": "Financial Services", "home": "Japan"},
+    {"ticker": "MFG", "name": "Mizuho Financial", "sector": "Financial Services", "home": "Japan"},
+    {"ticker": "NMR", "name": "Nomura Holdings", "sector": "Financial Services", "home": "Japan"},
+    {"ticker": "TAK", "name": "Takeda Pharmaceutical", "sector": "Healthcare", "home": "Japan"},
+    {"ticker": "INFY", "name": "Infosys", "sector": "Technology", "home": "India"},
+    {"ticker": "WIT", "name": "Wipro", "sector": "Technology", "home": "India"},
+    {"ticker": "IBN", "name": "ICICI Bank", "sector": "Financial Services", "home": "India"},
+    {"ticker": "HDB", "name": "HDFC Bank", "sector": "Financial Services", "home": "India"},
+    {"ticker": "RDY", "name": "Dr. Reddy's Laboratories", "sector": "Healthcare", "home": "India"},
+    {"ticker": "TSM", "name": "Taiwan Semiconductor", "sector": "Technology", "home": "Taiwan"},
+    {"ticker": "UMC", "name": "United Microelectronics", "sector": "Technology", "home": "Taiwan"},
+    {"ticker": "ASX", "name": "ASE Technology", "sector": "Technology", "home": "Taiwan"},
+]
+
+
+def fetch_us_adr_asia_constituents() -> pd.DataFrame:
+    """Curated US-listed ADRs for Asia home markets (II ADR path)."""
+    rows = [
+        {
+            "ticker": str(item["ticker"]),
+            "name": item.get("name"),
+            "sector": item.get("sector"),
+            "epic": str(item["ticker"]),
+            "index": "US ADR Asia (curated)",
+            "market": "us_adr_asia",
+            "home_market": item.get("home"),
+        }
+        for item in US_ADR_ASIA_SEED
+    ]
+    return pd.DataFrame(rows)
+
+
 MARKET_REGISTRY: dict[str, MarketSpec] = {
     "ftse350": MarketSpec(
         market_id="ftse350",
@@ -301,6 +564,71 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         yahoo_suffix=".TO",
         constituent_source="wikipedia",
     ),
+    # L34 next slices — II-aligned expansion beyond the initial index queue.
+    "aim": MarketSpec(
+        market_id="aim",
+        label="AIM (liquid Wikipedia slice)",
+        exchange="LSE AIM",
+        currency="GBP",
+        yahoo_suffix=".L",
+        constituent_source="wikipedia",
+    ),
+    "ibex35": MarketSpec(
+        market_id="ibex35",
+        label="IBEX 35",
+        exchange="Bolsa de Madrid",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "ftse_mib": MarketSpec(
+        market_id="ftse_mib",
+        label="FTSE MIB",
+        exchange="Borsa Italiana",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "aex": MarketSpec(
+        market_id="aex",
+        label="AEX",
+        exchange="Euronext Amsterdam",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "bel20": MarketSpec(
+        market_id="bel20",
+        label="BEL 20",
+        exchange="Euronext Brussels",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "hang_seng": MarketSpec(
+        market_id="hang_seng",
+        label="Hang Seng",
+        exchange="HKEX",
+        currency="HKD",
+        yahoo_suffix=".HK",
+        constituent_source="wikipedia",
+    ),
+    "sti": MarketSpec(
+        market_id="sti",
+        label="Straits Times Index",
+        exchange="SGX",
+        currency="SGD",
+        yahoo_suffix=".SI",
+        constituent_source="wikipedia",
+    ),
+    "us_adr_asia": MarketSpec(
+        market_id="us_adr_asia",
+        label="US ADR Asia (curated)",
+        exchange="US ADR",
+        currency="USD",
+        yahoo_suffix="",
+        constituent_source="curated",
+    ),
 }
 
 CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
@@ -313,6 +641,14 @@ CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
     "dax": fetch_dax_constituents,
     "cac40": fetch_cac40_constituents,
     "tsx60": fetch_tsx60_constituents,
+    "aim": fetch_aim_constituents,
+    "ibex35": fetch_ibex35_constituents,
+    "ftse_mib": fetch_ftse_mib_constituents,
+    "aex": fetch_aex_constituents,
+    "bel20": fetch_bel20_constituents,
+    "hang_seng": fetch_hang_seng_constituents,
+    "sti": fetch_sti_constituents,
+    "us_adr_asia": fetch_us_adr_asia_constituents,
 }
 
 

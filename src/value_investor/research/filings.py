@@ -98,6 +98,8 @@ _EXCHANGE_SUFFIXES = (
     ".LS",
     ".AT",
     ".SW",
+    ".HK",
+    ".SI",
 )
 
 
@@ -121,16 +123,27 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
     Explicit market ids win; otherwise infer from Yahoo-style suffixes.
     """
     m = (market or "").strip().lower()
-    if m in {"sp500", "nasdaq100", "us", "nyse", "nasdaq"}:
+    if m in {"sp500", "nasdaq100", "us", "nyse", "nasdaq", "us_adr_asia"}:
         return "sec_edgar"
-    if m in {"ftse350", "ftse_smallcap", "uk", "lse"}:
+    if m in {"ftse350", "ftse_smallcap", "aim", "uk", "lse"}:
         return "uk_rns"
     if m in {"asx200", "asx"}:
         return "asx_announcements"
-    if m in {"euro_stoxx50", "dax", "cac40", "eu"}:
+    if m in {
+        "euro_stoxx50",
+        "dax",
+        "cac40",
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20",
+        "eu",
+    }:
         return "euro_filings"
     if m in {"tsx60", "tsx", "canada"}:
         return "tsx_announcements"
+    if m in {"hang_seng", "sti", "hk", "sgx", "asia"}:
+        return "asia_filings"
 
     t = (ticker or "").strip().upper()
     if t.endswith(".L"):
@@ -139,7 +152,13 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
         return "asx_announcements"
     if t.endswith(".TO"):
         return "tsx_announcements"
-    if any(t.endswith(suf) for suf in _EXCHANGE_SUFFIXES if suf not in {".L", ".AX", ".TO"}):
+    if t.endswith(".HK") or t.endswith(".SI"):
+        return "asia_filings"
+    if any(
+        t.endswith(suf)
+        for suf in _EXCHANGE_SUFFIXES
+        if suf not in {".L", ".AX", ".TO", ".HK", ".SI"}
+    ):
         return "euro_filings"
     # Bare US-style symbols (library research) → EDGAR
     if re.fullmatch(r"[A-Z]{1,5}", _epic(t)):
@@ -561,6 +580,34 @@ def fetch_filings_tsx_news(
     )
 
 
+def fetch_filings_asia_news(
+    *,
+    company_name: str,
+    ticker: str,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """Discover HK / Singapore results headlines via Google News."""
+    epic = _base_symbol(ticker)
+    query = (
+        f'("{company_name}" OR {epic} OR {ticker}) '
+        f'("Annual Report" OR "Full Year Results" OR "Interim Results" OR '
+        f'"Half-year Results" OR "Quarterly Results" OR "Final Results")'
+    )
+    gl = "HK" if ticker.upper().endswith(".HK") else "SG"
+    return fetch_filings_google_news(
+        company_name=company_name,
+        ticker=ticker,
+        max_items=max_items,
+        lookback_days=lookback_days,
+        query=query,
+        source_label="google_news_asia",
+        hl="en",
+        gl=gl,
+        ceid=f"{gl}:en",
+    )
+
+
 def fetch_filings_ticker_api(
     *,
     ticker: str,
@@ -814,6 +861,9 @@ def ingest_filings(
     elif regime == "tsx_announcements":
         groups.append(fetch_filings_tsx_news(company_name=company_name, ticker=ticker))
         groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
+    elif regime == "asia_filings":
+        groups.append(fetch_filings_asia_news(company_name=company_name, ticker=ticker))
+        groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
     else:
         logger.info(
             "No filings regime for market=%s ticker=%s — writing empty index",
@@ -853,6 +903,11 @@ def ingest_filings(
         note = (
             "Canadian issuer announcement discovery via Google News (SEDAR+ / "
             "newswire), plus SEC filings when dual-listed. period=annual|interim|other."
+        )
+    elif regime == "asia_filings":
+        note = (
+            "Hong Kong / Singapore results discovery via Google News, plus SEC "
+            "filings when dual-listed. period=annual|interim|other."
         )
     else:
         note = (
