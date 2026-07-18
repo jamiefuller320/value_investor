@@ -420,14 +420,20 @@ def _select_refresh_tickers(
     max_tickers: int,
     stale_days: int,
     now: datetime | None = None,
+    exclude_tickers: set[str] | None = None,
 ) -> list[str]:
+    from value_investor.library_dedupe import canonical_library_ticker
+
     now = now or datetime.now(UTC)
     stale_before = now - timedelta(days=stale_days)
+    excluded = {canonical_library_ticker(t) for t in (exclude_tickers or set())}
     state = manifest.get("ticker_state") or {}
     never: list[str] = []
     stale: list[str] = []
     fresh: list[str] = []
     for ticker in manifest.get("tickers") or []:
+        if canonical_library_ticker(ticker) in excluded:
+            continue
         entry = state.get(ticker) or {}
         last = entry.get("last_refresh")
         if not last:
@@ -453,12 +459,15 @@ def refresh_metrics(
     max_tickers: int = DEFAULT_MAX_TICKERS_PER_RUN,
     stale_days: int = DEFAULT_STALE_DAYS,
     fetch_fn: Callable[[str, str | None, str | None], Any] | None = None,
+    exclude_tickers: set[str] | None = None,
 ) -> dict[str, Any]:
     """
     Progressively refresh fundamentals for a market.
 
     Prefers never-fetched tickers, then stale ones, capped by ``max_tickers``
     so libraries can grow across many scheduled runs without hammering APIs.
+    ``exclude_tickers`` skips names already fetched earlier in the same multi-market
+    grow (exact Yahoo ticker match — avoids S&P/Nasdaq double-fetch).
     """
     if market_id not in MARKET_REGISTRY:
         raise ValueError(f"Unknown market {market_id!r}")
@@ -473,7 +482,10 @@ def refresh_metrics(
             by_ticker[str(row["ticker"])] = row
 
     selected = _select_refresh_tickers(
-        manifest, max_tickers=max_tickers, stale_days=stale_days
+        manifest,
+        max_tickers=max_tickers,
+        stale_days=stale_days,
+        exclude_tickers=exclude_tickers,
     )
     fetch = fetch_fn or (
         lambda ticker, name, sector: fetch_company_metrics(
@@ -665,21 +677,56 @@ def grow_library(
     retention_days: int = DEFAULT_RETENTION_DAYS,
     fetch_fn: Callable[[str, str | None, str | None], Any] | None = None,
 ) -> list[dict[str, Any]]:
-    """Refresh constituents (optional) and progressively fill metrics for each market."""
+    """
+    Refresh constituents (optional) and progressively fill metrics for each market.
+
+    Within a single grow run, identical Yahoo tickers shared across markets (e.g.
+    AAPL in S&P 500 and Nasdaq-100) reuse one fetch via an in-memory cache so
+    each market manifest still updates without duplicate network calls.
+    """
+    from value_investor.library_dedupe import canonical_library_ticker
+
     selected_markets = markets or list(MARKET_REGISTRY)
     results: list[dict[str, Any]] = []
+    fetch_cache: dict[str, Any] = {}
+    cache_hits = 0
+
+    def _base_fetch(ticker: str, name: str | None, sector: str | None, *, market_id: str):
+        if fetch_fn is not None:
+            return fetch_fn(ticker, name, sector)
+        return fetch_company_metrics(ticker, name=name, sector=sector, market=market_id)
+
     for market_id in selected_markets:
         if market_id not in MARKET_REGISTRY:
             raise ValueError(f"Unknown market {market_id!r}")
         if refresh_constituents_first:
             refresh_constituents(root, market_id)
+
+        def cached_fetch(
+            ticker: str,
+            name: str | None,
+            sector: str | None,
+            *,
+            _market_id: str = market_id,
+        ):
+            nonlocal cache_hits
+            key = canonical_library_ticker(ticker)
+            if key in fetch_cache:
+                cache_hits += 1
+                return dict(fetch_cache[key])
+            row = _base_fetch(ticker, name, sector, market_id=_market_id)
+            as_dict = row.to_dict() if hasattr(row, "to_dict") else dict(row)
+            fetch_cache[key] = as_dict
+            return dict(as_dict)
+
         result = refresh_metrics(
             root,
             market_id,
             max_tickers=max_tickers_per_run,
             stale_days=stale_days,
-            fetch_fn=fetch_fn,
+            fetch_fn=cached_fetch,
         )
+        result["fetch_cache_size"] = len(fetch_cache)
         results.append(result)
     if retention_days > 0:
         apply_library_retention(root, keep_days=retention_days)
@@ -689,6 +736,8 @@ def grow_library(
             "updated_at": datetime.now(UTC).isoformat(),
             "markets": library_status(root, markets=selected_markets, stale_days=stale_days),
             "last_grow": results,
+            "cross_market_fetch_cache_hits": cache_hits,
+            "cross_market_fetch_cache_size": len(fetch_cache),
         },
         compact=False,
     )

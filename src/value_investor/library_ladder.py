@@ -19,6 +19,10 @@ from value_investor.agent_model_policy import (
     save_policy,
 )
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, library_status
+from value_investor.library_dedupe import (
+    existing_library_research_tickers,
+    select_deduped_research_targets,
+)
 from value_investor.library_graduation import (
     graduated_market_ids,
     maybe_graduate_focus,
@@ -210,28 +214,25 @@ def run_library_ladder(
                 logger.warning("Screen-lite for research market %s failed: %s", mid, exc)
 
         # Round-robin buy-tier targets across markets until research_cap is filled.
+        # Skip exact Yahoo-ticker duplicates (e.g. AAPL in sp500 + nasdaq100) and
+        # names that already have a memo under any library market.
         per_market_reports: dict[str, list[Any]] = {}
         per_market_queues: dict[str, list[Any]] = {}
         for mid, scr in market_screens.items():
             reports = library_research_reports(scr)
             per_market_reports[mid] = reports
+            # Oversample per market so dedupe can refill the global cap.
             per_market_queues[mid] = eligible_research_targets(
-                reports, weekly_cap=research_cap
+                reports, weekly_cap=max(research_cap * 3, research_cap)
             )
 
-        selected: list[tuple[str, Any]] = []
-        while len(selected) < research_cap:
-            progressed = False
-            for mid in research_markets:
-                queue = per_market_queues.get(mid) or []
-                if not queue:
-                    continue
-                selected.append((mid, queue.pop(0)))
-                progressed = True
-                if len(selected) >= research_cap:
-                    break
-            if not progressed:
-                break
+        already = existing_library_research_tickers(root)
+        selected, dedupe_skipped = select_deduped_research_targets(
+            research_markets=research_markets,
+            per_market_queues=per_market_queues,
+            research_cap=research_cap,
+            already_researched=already,
+        )
 
         layer: dict[str, Any] = {
             "model": model,
@@ -242,6 +243,15 @@ def run_library_ladder(
             ),
             "enforce_weekly_research_cap": weekly_cap_on,
             "remaining_usd_before": remaining,
+            "dedupe": {
+                "already_researched_count": len(already),
+                "skipped_count": len(dedupe_skipped),
+                "skipped_sample": dedupe_skipped[:20],
+                "note": (
+                    "Exact Yahoo ticker match; earlier queue market wins. "
+                    "Existing memos in any library market are not re-created elsewhere."
+                ),
+            },
             "targets": [
                 {
                     "market": mid,
