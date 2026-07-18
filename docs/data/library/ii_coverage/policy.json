@@ -5,141 +5,366 @@
     "https://www.ii.co.uk/investing-with-ii/international-investing/markets",
     "https://www.ii.co.uk/investing-with-ii/international-investing"
   ],
-  "note": "Exchange-level coverage from Interactive Investor public pages. This is NOT a full instrument catalog (L34 remainder). Do not scrape logged-in account or search pages. Confidence is assumed until a broker instrument dump exists.",
+  "note": "Exchange-level coverage from Interactive Investor public pages + optional FIRDS MIC enrichment. Not a full II instrument catalog. Do not scrape logged-in account/search pages. UI Unavailable bypass keeps names on a watched-unavailable list.",
   "uk_includes_aim": true,
-  "adr_home_markets": ["Japan", "India", "China"],
+  "adr_home_markets": [
+    "Japan",
+    "India",
+    "China"
+  ],
   "exchanges": [
     {
       "ii_region": "North America",
       "ii_label": "United States",
-      "venues": ["NYSE", "NASDAQ"],
-      "yahoo_suffixes": [""],
+      "venues": [
+        "NYSE",
+        "NASDAQ"
+      ],
+      "yahoo_suffixes": [
+        ""
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XNYS",
+        "XNAS"
+      ]
     },
     {
       "ii_region": "North America",
       "ii_label": "Canada",
-      "venues": ["TSX"],
-      "yahoo_suffixes": [".TO"],
+      "venues": [
+        "TSX"
+      ],
+      "yahoo_suffixes": [
+        ".TO"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XTSE"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "United Kingdom",
-      "venues": ["LSE", "AIM"],
-      "yahoo_suffixes": [".L"],
+      "venues": [
+        "LSE",
+        "AIM"
+      ],
+      "yahoo_suffixes": [
+        ".L"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XLON",
+        "AIMX"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Ireland",
-      "venues": ["Euronext Dublin"],
-      "yahoo_suffixes": [".IR"],
+      "venues": [
+        "Euronext Dublin"
+      ],
+      "yahoo_suffixes": [
+        ".IR"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XDUB"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Germany",
-      "venues": ["Xetra", "Frankfurt"],
-      "yahoo_suffixes": [".DE"],
+      "venues": [
+        "Xetra",
+        "Frankfurt"
+      ],
+      "yahoo_suffixes": [
+        ".DE"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XETR",
+        "XFRA"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "France",
-      "venues": ["Euronext Paris"],
-      "yahoo_suffixes": [".PA"],
+      "venues": [
+        "Euronext Paris"
+      ],
+      "yahoo_suffixes": [
+        ".PA"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XPAR"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Spain",
-      "venues": ["Bolsa de Madrid"],
-      "yahoo_suffixes": [".MC"],
+      "venues": [
+        "Bolsa de Madrid"
+      ],
+      "yahoo_suffixes": [
+        ".MC"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XMAD"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Belgium",
-      "venues": ["Euronext Brussels"],
-      "yahoo_suffixes": [".BR"],
+      "venues": [
+        "Euronext Brussels"
+      ],
+      "yahoo_suffixes": [
+        ".BR"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XBRU"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Italy",
-      "venues": ["Borsa Italiana"],
-      "yahoo_suffixes": [".MI"],
+      "venues": [
+        "Borsa Italiana"
+      ],
+      "yahoo_suffixes": [
+        ".MI"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XMIL"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "The Netherlands",
-      "venues": ["Euronext Amsterdam"],
-      "yahoo_suffixes": [".AS"],
+      "venues": [
+        "Euronext Amsterdam"
+      ],
+      "yahoo_suffixes": [
+        ".AS"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XAMS"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Sweden",
-      "venues": ["Nasdaq Stockholm"],
-      "yahoo_suffixes": [".ST"],
+      "venues": [
+        "Nasdaq Stockholm"
+      ],
+      "yahoo_suffixes": [
+        ".ST"
+      ],
       "online_dealable": false,
-      "phone_only": true
+      "phone_only": true,
+      "mics": [
+        "XSTO"
+      ]
     },
     {
       "ii_region": "Europe",
       "ii_label": "Switzerland",
-      "venues": ["SIX Swiss"],
-      "yahoo_suffixes": [".SW"],
+      "venues": [
+        "SIX Swiss"
+      ],
+      "yahoo_suffixes": [
+        ".SW"
+      ],
       "online_dealable": false,
-      "phone_only": true
+      "phone_only": true,
+      "mics": [
+        "XSWX"
+      ]
     },
     {
       "ii_region": "Asia Pacific",
       "ii_label": "Australia",
-      "venues": ["ASX"],
-      "yahoo_suffixes": [".AX"],
+      "venues": [
+        "ASX"
+      ],
+      "yahoo_suffixes": [
+        ".AX"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XASX"
+      ]
     },
     {
       "ii_region": "Asia Pacific",
       "ii_label": "Hong Kong",
-      "venues": ["HKEX"],
-      "yahoo_suffixes": [".HK"],
+      "venues": [
+        "HKEX"
+      ],
+      "yahoo_suffixes": [
+        ".HK"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XHKG"
+      ]
     },
     {
       "ii_region": "Asia Pacific",
       "ii_label": "Singapore",
-      "venues": ["SGX"],
-      "yahoo_suffixes": [".SI"],
+      "venues": [
+        "SGX"
+      ],
+      "yahoo_suffixes": [
+        ".SI"
+      ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XSES"
+      ]
     }
   ],
   "market_defaults": {
-    "sp500": {"ii_exchange": "NYSE/NASDAQ", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "nasdaq100": {"ii_exchange": "NYSE/NASDAQ", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "ftse350": {"ii_exchange": "LSE", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "ftse_smallcap": {"ii_exchange": "LSE", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "dax": {"ii_exchange": "Xetra", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "cac40": {"ii_exchange": "Euronext Paris", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "asx200": {"ii_exchange": "ASX", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "tsx60": {"ii_exchange": "TSX", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
-    "euro_stoxx50": {"ii_exchange": null, "tradable_on_ii": null, "deal_channel": null, "confidence": "assumed", "basis": "suffix_allowlist"}
+    "sp500": {
+      "ii_exchange": "NYSE/NASDAQ",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "nasdaq100": {
+      "ii_exchange": "NYSE/NASDAQ",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ftse350": {
+      "ii_exchange": "LSE",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ftse_smallcap": {
+      "ii_exchange": "LSE",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "dax": {
+      "ii_exchange": "Xetra",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "cac40": {
+      "ii_exchange": "Euronext Paris",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "asx200": {
+      "ii_exchange": "ASX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "tsx60": {
+      "ii_exchange": "TSX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "euro_stoxx50": {
+      "ii_exchange": null,
+      "tradable_on_ii": null,
+      "deal_channel": null,
+      "confidence": "assumed",
+      "basis": "suffix_allowlist"
+    },
+    "aim": {
+      "ii_exchange": "LSE AIM",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ibex35": {
+      "ii_exchange": "Bolsa de Madrid",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ftse_mib": {
+      "ii_exchange": "Borsa Italiana",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "aex": {
+      "ii_exchange": "Euronext Amsterdam",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "bel20": {
+      "ii_exchange": "Euronext Brussels",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "hang_seng": {
+      "ii_exchange": "HKEX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "sti": {
+      "ii_exchange": "SGX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "us_adr_asia": {
+      "ii_exchange": "NYSE/NASDAQ",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    }
   },
   "next_slices": [
     {
@@ -147,28 +372,44 @@
       "label": "AIM (UK)",
       "priority": 1,
       "rationale": "II UK coverage includes AIM; largest liquid gap vs current LSE Main / FTSE slices.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "aim"
+      ]
     },
     {
       "id": "euronext_wider",
       "label": "Wider Euronext / Southern Europe liquid names",
       "priority": 2,
       "rationale": "II online: Madrid, Milan, Amsterdam, Brussels, Dublin beyond EURO STOXX 50 / CAC / DAX overlap.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20"
+      ]
     },
     {
       "id": "hk_sg",
       "label": "Hong Kong + Singapore large-cap slices",
       "priority": 3,
       "rationale": "II Asia-Pacific online exchanges with no library market yet.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "hang_seng",
+        "sti"
+      ]
     },
     {
       "id": "us_adr_asia",
       "label": "Japan / India / China via US ADRs",
       "priority": 4,
-      "rationale": "II offers home-market exposure only via ADRs on US exchanges — overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
-      "status": "candidate"
+      "rationale": "II offers home-market exposure only via ADRs on US exchanges \u2014 overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
+      "status": "complete",
+      "market_ids": [
+        "us_adr_asia"
+      ]
     },
     {
       "id": "full_instrument_catalog",
@@ -177,5 +418,16 @@
       "rationale": "Remaining L34 core: replace assumed exchange allowlist with verified tradable_on_ii per ISIN/ticker. No public feed found; requires export/partner/licensed data.",
       "status": "blocked_no_public_feed"
     }
-  ]
+  ],
+  "firds": {
+    "note": "Optional enrichment: filter public FCA/ESMA FIRDS instrument files by these MICs to confirm a name is admitted on an II-advertised venue. FIRDS proves venue listing, not that II will accept the order. Use: ftse-library firds-filter --input <FULINS.xml>",
+    "source_urls": [
+      "https://www.esma.europa.eu/publications-and-data/databases-and-registers",
+      "https://www.fca.org.uk/markets/primary-and-secondary-markets/financial-instruments-reference-data-system-firds"
+    ]
+  },
+  "unavailable_watch": {
+    "note": "Names marked Unavailable in the dashboard stay screened/watched but are excluded from suggested trades / paper auto-entries until restored. Browser list is primary; optional server file: docs/data/library/ii_coverage/unavailable_watch.json",
+    "path": "unavailable_watch.json"
+  }
 }

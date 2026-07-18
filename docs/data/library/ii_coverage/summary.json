@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-07-18T17:06:53.018161+00:00",
+  "as_of": "2026-07-18T18:33:47.728647+00:00",
   "policy_as_of": "2026-07-18",
   "source_urls": [
     "https://www.ii.co.uk/investing-with-ii/international-investing/markets",
@@ -95,6 +95,86 @@
       "curated_exception_count": 0,
       "non_tradable_sample": [],
       "path": "by_market/tsx60.csv"
+    },
+    "aim": {
+      "ticker_count": 99,
+      "tradable_count": 99,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/aim.csv"
+    },
+    "ibex35": {
+      "ticker_count": 35,
+      "tradable_count": 35,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/ibex35.csv"
+    },
+    "ftse_mib": {
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/ftse_mib.csv"
+    },
+    "aex": {
+      "ticker_count": 25,
+      "tradable_count": 25,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/aex.csv"
+    },
+    "bel20": {
+      "ticker_count": 20,
+      "tradable_count": 20,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/bel20.csv"
+    },
+    "hang_seng": {
+      "ticker_count": 85,
+      "tradable_count": 85,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/hang_seng.csv"
+    },
+    "sti": {
+      "ticker_count": 30,
+      "tradable_count": 30,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/sti.csv"
+    },
+    "us_adr_asia": {
+      "ticker_count": 24,
+      "tradable_count": 24,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/us_adr_asia.csv"
     }
   },
   "next_slices": [
@@ -103,28 +183,44 @@
       "label": "AIM (UK)",
       "priority": 1,
       "rationale": "II UK coverage includes AIM; largest liquid gap vs current LSE Main / FTSE slices.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "aim"
+      ]
     },
     {
       "id": "euronext_wider",
       "label": "Wider Euronext / Southern Europe liquid names",
       "priority": 2,
       "rationale": "II online: Madrid, Milan, Amsterdam, Brussels, Dublin beyond EURO STOXX 50 / CAC / DAX overlap.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20"
+      ]
     },
     {
       "id": "hk_sg",
       "label": "Hong Kong + Singapore large-cap slices",
       "priority": 3,
       "rationale": "II Asia-Pacific online exchanges with no library market yet.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "hang_seng",
+        "sti"
+      ]
     },
     {
       "id": "us_adr_asia",
       "label": "Japan / India / China via US ADRs",
       "priority": 4,
       "rationale": "II offers home-market exposure only via ADRs on US exchanges — overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
-      "status": "candidate"
+      "status": "complete",
+      "market_ids": [
+        "us_adr_asia"
+      ]
     },
     {
       "id": "full_instrument_catalog",
@@ -135,9 +231,9 @@
     }
   ],
   "totals": {
-    "markets": 8,
-    "tickers": 1081,
-    "tradable": 1080,
+    "markets": 16,
+    "tickers": 1439,
+    "tradable": 1438,
     "unknown_venue": 0
   }
 }

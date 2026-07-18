@@ -1,0 +1,85 @@
+# Yangzijiang Shipbuilding Holdings [zh] (BS6.SI) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:29:58.787686+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Yangzijiang Shipbuilding Holdings (SGX: BS6) screens as a buy on a deep value/quality basis: P/E 8.6×, P/B 2.3×, dividend yield 5.5%, and ROE 29.4%, with 14 of 22 quantitative models passing across cheapness, quality, dividend, GARP, and risk families. The investment case rests on a cyclical upswing in global shipbuilding, a fortress balance sheet (cash-rich, low leverage), and earnings momentum that Yahoo-sourced accounts show accelerating through FY2025. Valuation embeds scepticism about cycle duration and China shipyard competition, not operational weakness. The key debate is whether current order-book strength and treasury income justify treating the stock as a compounder at ~8× earnings, or whether working-capital absorption, treasury concentration, and shipping-cycle mean reversion will compress returns. Primary regulatory filings were not retrieved in this source pack, limiting confirmation of management guidance, contingencies, and interim trends.
+
+## INVESTMENT THESIS
+For a value investor, BS6 combines classic deep-value metrics with unusually strong quality signals. The screen passes Graham Enterprising, Acquirer’s Multiple, Dreman Contrarian, and Lynch/Neff PEG frameworks alongside Buffett Quality, Economic Moat, Magic Formula, Piotroski F-Score (14/14 financial-health bucket), and Dividend Growth — a rare overlap of “cheap” and “good.” Debt/equity of ~18% and high ROE (29.4%) support the quality narrative; low P/E plus high yield satisfies income-oriented value screens.
+
+Business quality, inferred from Yahoo annual data (no filing bodies available), shows a multi-year earnings compounder: revenue rose from RMB 20.7bn (2022) to RMB 28.5bn (2025), while net income grew from RMB 2.8bn to RMB 8.6bn over the same period. Gross margins expanded and net interest income (RMB 735m in 2025) reflects substantial cash deployment — consistent with the shipbuilder-plus-treasury model often associated with Yangzijiang. The quantitative screen’s negative trailing FCF figure (RMB −6.5bn in `screening_snapshot.json`) contrasts with reported FY2025 free cash flow of RMB 2.5bn in Yahoo data, driven largely by a RMB 4.4bn working-capital outflow in 2025 (inventory and receivables build typical of a ramping order book). Value investors may view the working-capital drag as cycle-linked investment rather than structural cash burn, but it warrants monitoring.
+
+At ~8.6× earnings and 5.5% yield, the market prices BS6 as a cyclical peak candidate rather than a sustained high-ROE franchise — creating asymmetry if the current shipbuilding upcycle persists and dividends hold.
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` contains zero annual and zero interim regulatory filings with downloadable body text (`summary`: 1 “other” Google News item, `with_body`: 0). No plain-text extracts exist under `filings/bodies/`. All figures below fall back to `financials_annual.json` (Yahoo), fetched 18 Jul 2026. Currency is implied as RMB throughout Yahoo statements. No interim/H1 2025 or 2026 trading updates are available in the index.
+
+**Income statement trend (Yahoo annual fallback)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | RMB 20.7bn | RMB 24.1bn | RMB 26.5bn | RMB 28.5bn |
+| Operating income | RMB 2.79bn | RMB 5.04bn | RMB 7.07bn | RMB 9.06bn |
+| Net income | RMB 2.81bn | RMB 4.10bn | RMB 6.63bn | RMB 8.64bn |
+| Diluted EPS | RMB 0.71 | RMB 1.04 | RMB 1.68 | n/a in source |
+
+Revenue CAGR 2022–2025 ≈ 11%; net income CAGR ≈ 46%. FY2025 net income rose ~30% YoY (RMB 6.63bn → RMB 8.64bn) on ~7% revenue growth, indicating margin expansion and/or higher non-operating contribution. Normalised EBITDA (Yahoo) reached RMB 11.0bn in 2025 vs RMB 9.0bn in 2024. Interest income rose to RMB 850m (2025) from RMB 735m (2024), consistent with a large cash balance.
+
+**Balance sheet (Yahoo annual fallback, year-end 2025 vs 2024)**
+
+- Total assets: RMB 58.3bn (2025) vs RMB 54.6bn (2024)
+- Shareholders’ equity: RMB 32.1bn vs RMB 26.3bn
+- Cash and equivalents: RMB 20.1bn vs RMB 28.1bn (decline partly reflects restricted cash build of RMB 6.1bn and working-capital deployment)
+- Total debt: RMB 5.5bn vs RMB 6.8bn; long-term debt reduced to zero (2025) with debt classified as current
+- Working capital: RMB 18.7bn vs RMB 17.3bn
+- Inventory: RMB 3.6bn vs RMB 1.9bn (WIP up sharply — order-book ramp)
+- Tangible book value: RMB 30.4bn
+
+Implied ROE on FY2025 net income / average equity ≈ 29%, aligning with the screen’s 29.4% ROE. Leverage remains modest (D/E ~18% per screen; debt/equity on Yahoo balance sheet ~17%).
+
+**Cash flow (Yahoo annual fallback)**
+
+| | FY2023 | FY2024 | FY2025 |
+|--|--------|--------|--------|
+| Operating CF | RMB 8.0bn | RMB 13.0bn | RMB 4.5bn |
+| CapEx | RMB (0.8)bn | RMB (1.1)bn | RMB (2.0)bn |
+| Free cash flow | RMB 7.2bn | RMB 11.9bn | RMB 2.5bn |
+| Dividends paid | RMB (1.0)bn | RMB (1.3)bn | RMB (2.6)bn |
+
+FY2024 FCF was inflated by a RMB 5.9bn working-capital release; FY2025 reversed with a RMB 4.4bn working-capital outflow (inventory +RMB 1.7bn, receivables +RMB 1.4bn, other current assets +RMB 1.1bn). Share buybacks: RMB 158m in 2025. Dividend payout stepped up materially in 2025 (RMB 2.6bn vs RMB 1.3bn in 2024), supporting the 5.5% screen yield but reducing net cash.
+
+**Interim gap:** No half-year results, 10-Q, or SGX announcement bodies are indexed. Trend analysis is annual-only and may miss H1 2025/H1 2026 inflection points.
+
+**Filing-language items:** Going concern, contingencies, covenant, and pension disclosures cannot be assessed — absent from `filings/bodies/`.
+
+## RISKS AND RED FLAGS
+**Cyclical exposure.** Shipbuilding is highly cyclical; FY2022–2025 earnings growth may reflect a peak order-book environment. Reversion in newbuild pricing, delivery schedules, or charter rates would compress margins and ROE — not fully captured by static value screens.
+
+**Working capital and FCF volatility.** FY2025 operating cash flow fell to RMB 4.5bn from RMB 13.0bn despite record net income, as working capital absorbed cash. The screen’s trailing FCF of RMB −6.5bn flags a potential liquidity-quality mismatch that the Piotroski pass may underweight. Sustained inventory/WIP build without corresponding cash collection is a red flag.
+
+**Treasury/concentration risk.** RMB 20bn+ cash and RMB 735m net interest income (2025) tie a material share of earnings to financial assets and interest-rate conditions. Impairment charges appeared in prior years (e.g. RMB 181m impairment of capital assets in 2024 per Yahoo unusual items) — filing detail unavailable.
+
+**Governance and disclosure.** Primary SGX/annual-report filings were not retrieved; investors lack verified access to related-party transactions, order-book quantification, and contingent liabilities from this source pack. Yangzijiang’s China operating base adds regulatory and geopolitical overlay (export controls, US–China trade friction affecting vessel demand).
+
+**Competitive dynamics.** Chinese private yards face state-owned competition and potential overcapacity if global ordering slows. Differentiation via LNG/green vessels (often cited in industry commentary) cannot be confirmed from indexed filings here.
+
+**Dividend sustainability.** The 2025 dividend step-up (RMB 2.6bn) equals ~30% of net income — manageable but higher than prior years; cycle downturn could force cuts, undermining the 5.5% yield thesis.
+
+**Macro context:** `macro_context.json` is empty (`library_note`: “macro snapshot missing”); no STI/rates/FX overlay applied.
+
+## NEWS HIGHLIGHTS
+News coverage in `news_manifest.json` is thin and largely generic; no material strategy, M&A, management, or regulatory headlines in the past year.
+
+Notable items:
+- **“At S$3.41, Is Yangzijiang Shipbuilding (Holdings) Ltd. (SGX:BS6) Worth Looking At Closely?”** — Yahoo Finance, 10 Jun 2026. Only article with BS6-specific framing; discusses share-price move and valuation (summary truncated in manifest).
+- **“3 Cash-Rich Blue Chips to Weather Market Turbulence”** — The Smart Investor (via Google News), 3 Apr 2026. Listed in `filings_index.json` as “other”; no body extract; likely references BS6’s cash position among STI names.
+- **May–Jun 2026 listicles** (e.g. “3 Asian Penny Stocks With Market Caps Over US$70M”, 11 Jun 2026; “Asian Penny Stocks To Follow In May 2026”, 17 May 2026) mention BS6 peripherally in “penny stock” round-ups — not substantive company news.
+
+No indexed headlines on management changes, regulatory actions, or M&A. **Flag: news coverage is thin**; the investment case rests on quantitative screen and Yahoo financials, not recent newswire confirmation.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research largely confirms the quantitative buy case on valuation, quality, and balance-sheet strength, but absent primary filings, thin news flow, and cyclical/working-capital risks prevent full conviction.

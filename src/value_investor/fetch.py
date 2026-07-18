@@ -196,13 +196,16 @@ def resolve_yahoo_ticker(ticker: str) -> str:
         ".AS",
         ".MI",
         ".MC",
+        ".BR",
         ".SW",
         ".HK",
+        ".SI",
         ".T",
         ".TO",
         ".V",
         ".SS",
         ".SZ",
+        ".L",
     )
     if any(upper.endswith(suffix) for suffix in known_suffixes):
         return upper
@@ -217,7 +220,7 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
     if not raw:
         return raw
     market_id = (market or "").strip().lower()
-    if market_id in {"sp500", "nasdaq100", "us"}:
+    if market_id in {"sp500", "nasdaq100", "us", "us_adr_asia"}:
         return raw.replace(".", "-").upper() if not raw.endswith(".L") else to_lse_ticker(raw)
     if market_id in {"asx200", "asx"}:
         base = raw.upper()
@@ -225,7 +228,24 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
     if market_id in {"tsx60", "tsx", "canada"}:
         base = raw.upper()
         return base if base.endswith(".TO") else f"{base.replace('.', '-')}.TO"
-    if market_id in {"euro_stoxx50", "dax", "cac40", "eu"}:
+    if market_id in {"hang_seng", "hk", "hkex"}:
+        from value_investor.data_library import _to_hk_yahoo
+
+        return _to_hk_yahoo(raw)
+    if market_id in {"sti", "singapore", "sgx"}:
+        from value_investor.data_library import _to_sg_yahoo
+
+        return _to_sg_yahoo(raw)
+    if market_id in {
+        "euro_stoxx50",
+        "dax",
+        "cac40",
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20",
+        "eu",
+    }:
         # Prefer ADS.DE; recover ADS-DE from an earlier mistaken hyphen conversion.
         t = raw.strip().upper()
         for suf in (
@@ -245,7 +265,15 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
             if t.endswith(hyphen) and t.count("-") >= 1 and "." not in t:
                 return t[: -len(hyphen)] + suf
         return t
-    if market_id in {"ftse350", "ftse_smallcap", "ftse100", "ftse250", "uk", "lse"}:
+    if market_id in {
+        "ftse350",
+        "ftse_smallcap",
+        "aim",
+        "ftse100",
+        "ftse250",
+        "uk",
+        "lse",
+    }:
         return to_lse_ticker(raw)
     return resolve_yahoo_ticker(raw)
 

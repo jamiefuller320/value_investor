@@ -1,0 +1,881 @@
+ticker,model_id,model_name,passed,score,reasons,failed_criteria
+A2A.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=9.8', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.37', 'Dividend payer: yield=443.00%']",['current ratio < 2']
+A2A.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=9.8', 'P/B < 3: P/B=1.37', 'ROE > 8%: ROE=11.5%']","['excessive leverage', 'negative earnings growth']"
+A2A.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+A2A.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+A2A.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=6.3'],['P/B not below 1.0']
+A2A.MI,earnings_yield,Earnings Yield,True,0.8518,['E/P=10.2% (P/E=9.8)'],[]
+A2A.MI,fcf_yield,FCF Yield,True,0.7636,['FCF yield=7.6%'],[]
+A2A.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=9.8', 'yield=443.0%']",[]
+A2A.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+A2A.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=443.0%']",['PEGY nan >= 1.0']
+A2A.MI,quality_value,Quality Value,False,0.4,"['P/E < 20: P/E=9.8', 'FCF yield >= 3%: FCF yield=7.6%']","['ROE below 12%', 'thin margins', 'high leverage']"
+A2A.MI,buffett_quality,Buffett Quality,False,0.25,['P/E < 25.0: P/E=9.8'],"['ROE too low', 'too much debt', 'thin margins']"
+A2A.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+A2A.MI,high_dividend,High Dividend Yield,False,0.6053,"['yield=443.0%', 'universe rank 61%']",['not in top quartile for yield']
+A2A.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=443.0%', 'reasonable P/E: P/E=9.8']",['earnings not growing']
+A2A.MI,magic_formula,Magic Formula,True,0.6475,"['earnings yield rank 78%', 'ROIC rank 52%']",[]
+A2A.MI,acquirers_multiple,Acquirer's Multiple,True,0.7778,"['EV/EBIT=11.7', 'universe rank 78%']",[]
+A2A.MI,dreman_contrarian,Dreman Contrarian,True,0.7754,"['low P/E rank 92%', 'low P/B rank 80%', 'dividend rank 61%']",[]
+A2A.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'leverage declining', 'no share dilution', 'asset turnover improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'current ratio improving', 'gross margin improving']"
+A2A.MI,composite_value,Composite Value,True,0.8167,"['top-tier on trailing_pe (percentile 100%)', 'top-tier on price_to_book (percentile 83%)', 'top-tier on fcf_yield (percentile 75%)', 'top-tier on ev_ebitda (percentile 100%)']",[]
+A2A.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.75', 'insufficient data — skipped']",['missing OCF']
+A2A.MI,financial_health,Financial Health,False,0.6,"['leverage=34.0%', 'ratio=2.6', 'coverage=5.7x']","['high debt to equity', 'weak liquidity']"
+AMP.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=270.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+AMP.MI,graham_enterprising,Graham Enterprising,False,0.2,['P/B < 3: P/B=2.19'],"['P/E >= 25', 'excessive leverage', 'ROE <= 8%', 'negative earnings growth']"
+AMP.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+AMP.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+AMP.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+AMP.MI,earnings_yield,Earnings Yield,False,0.2405,['E/P=2.9% (P/E=34.6)'],['earnings yield 2.9% below 8%']
+AMP.MI,fcf_yield,FCF Yield,True,1.0,['FCF yield=11.7%'],[]
+AMP.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=270.0%'],['P/E not below 12.0']
+AMP.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+AMP.MI,neff_pegy,Neff PEGY,True,0.8285,"['PEGY=0.17', 'growth=-68.0%', 'yield=270.0%']",[]
+AMP.MI,quality_value,Quality Value,False,0.2,['FCF yield >= 3%: FCF yield=11.7%'],"['ROE below 12%', 'thin margins', 'high leverage', 'P/E >= 20']"
+AMP.MI,buffett_quality,Buffett Quality,False,0.0,[],"['ROE too low', 'too much debt', 'thin margins', 'P/E too high']"
+AMP.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+AMP.MI,high_dividend,High Dividend Yield,False,0.2895,"['yield=270.0%', 'universe rank 29%']",['not in top quartile for yield']
+AMP.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=270.0%'],"['earnings not growing', 'P/E out of range']"
+AMP.MI,magic_formula,Magic Formula,False,0.4636,[],['below top half on combined Magic Formula rank']
+AMP.MI,acquirers_multiple,Acquirer's Multiple,False,0.4444,"['EV/EBIT=18.8', 'universe rank 44%']","['EV/EBIT 18.8 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+AMP.MI,dreman_contrarian,Dreman Contrarian,False,0.325,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+AMP.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'no share dilution', 'asset turnover improving']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving']"
+AMP.MI,composite_value,Composite Value,False,0.6,"['top-tier on price_to_book (percentile 100%)', 'top-tier on ev_ebitda (percentile 100%)']",[]
+AMP.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=3.65', 'insufficient data — skipped']",['missing OCF']
+AMP.MI,financial_health,Financial Health,False,0.4,"['leverage=46.8%', 'coverage=3.4x']","['high debt to equity', 'weak liquidity', 'high net debt/EBITDA']"
+AVIO.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=51.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+AVIO.MI,graham_enterprising,Graham Enterprising,False,0.4,"['P/B < 3: P/B=1.92', 'Debt/equity < 100%: D/E=1%']","['P/E >= 25', 'ROE <= 8%', 'negative earnings growth']"
+AVIO.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+AVIO.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=1%'],['P/B too high']
+AVIO.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+AVIO.MI,earnings_yield,Earnings Yield,False,0.0971,['E/P=1.2% (P/E=85.8)'],['earnings yield 1.2% below 8%']
+AVIO.MI,fcf_yield,FCF Yield,True,0.7808,['FCF yield=7.8%'],[]
+AVIO.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=51.0%'],['P/E not below 12.0']
+AVIO.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+AVIO.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=2.67', 'growth=-18.9%', 'yield=51.0%']",['PEGY 2.67 >= 1.0']
+AVIO.MI,quality_value,Quality Value,False,0.4,"['Debt/equity < 80%: D/E=1%', 'FCF yield >= 3%: FCF yield=7.8%']","['ROE below 12%', 'thin margins', 'P/E >= 20']"
+AVIO.MI,buffett_quality,Buffett Quality,False,0.25,['D/E < 60.0%: D/E=1%'],"['ROE too low', 'thin margins', 'P/E too high']"
+AVIO.MI,economic_moat,Economic Moat,False,0.25,['low leverage D/E=1%'],"['ROE below 18%', 'ROA below 8%', 'margins below 12%']"
+AVIO.MI,high_dividend,High Dividend Yield,False,0.0,"['yield=51.0%', 'universe rank 0%']",['not in top quartile for yield']
+AVIO.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=51.0%'],"['earnings not growing', 'P/E out of range']"
+AVIO.MI,magic_formula,Magic Formula,False,0.0543,[],['below top half on combined Magic Formula rank']
+AVIO.MI,acquirers_multiple,Acquirer's Multiple,False,0.0741,"['EV/EBIT=85.2', 'universe rank 7%']","['EV/EBIT 85.2 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+AVIO.MI,dreman_contrarian,Dreman Contrarian,False,0.2009,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+AVIO.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'leverage declining', 'current ratio improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'no share dilution', 'gross margin improving', 'asset turnover improving']"
+AVIO.MI,composite_value,Composite Value,False,0.3,['top-tier on price_to_book (percentile 83%)'],[]
+AVIO.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=10.04', 'insufficient data — skipped']",['missing OCF']
+AVIO.MI,financial_health,Financial Health,True,1.0,"['D/E=1%', 'leverage=0.6%', 'CR=1.28', 'ratio=-26.0', 'coverage=26.8x']",[]
+AZM.MI,graham_defensive,Graham Defensive,True,1.0,"['P/E < 15: P/E=9.5', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=2.26', 'Current ratio >= 2: CR=7.38', 'Dividend payer: yield=558.00%']",[]
+AZM.MI,graham_enterprising,Graham Enterprising,True,1.0,"['P/E < 25: P/E=9.5', 'P/B < 3: P/B=2.26', 'Debt/equity < 100%: D/E=3%', 'ROE > 8%: ROE=26.4%', 'Positive earnings growth: growth=8.6%']",[]
+AZM.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+AZM.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=3%'],['P/B too high']
+AZM.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=6.5'],['P/B not below 1.0']
+AZM.MI,earnings_yield,Earnings Yield,True,0.8787,['E/P=10.5% (P/E=9.5)'],[]
+AZM.MI,fcf_yield,FCF Yield,True,0.5689,['FCF yield=5.7%'],[]
+AZM.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=9.5', 'yield=558.0%']",[]
+AZM.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=1.10', 'growth=8.6%']",['PEG 1.10 >= 1.0']
+AZM.MI,neff_pegy,Neff PEGY,True,0.9833,"['PEGY=0.02', 'growth=8.6%', 'yield=558.0%']",[]
+AZM.MI,quality_value,Quality Value,True,1.0,"['ROE >= 12%: ROE=26.4%', 'Profit margin >= 5%: margin=35.4%', 'Debt/equity < 80%: D/E=3%', 'P/E < 20: P/E=9.5', 'FCF yield >= 3%: FCF yield=5.7%']",[]
+AZM.MI,buffett_quality,Buffett Quality,True,1.0,"['ROE >= 15%: ROE=26.4%', 'D/E < 60.0%: D/E=3%', 'margin >= 8%: margin=35.4%', 'P/E < 25.0: P/E=9.5']",[]
+AZM.MI,economic_moat,Economic Moat,True,0.75,"['high ROE=26.4%', 'wide margin=35.4%', 'low leverage D/E=3%']",['ROA below 8%']
+AZM.MI,high_dividend,High Dividend Yield,True,0.7632,"['yield=558.0%', 'universe rank 76%']",[]
+AZM.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=558.0%', 'earnings growth: growth=8.6%', 'reasonable P/E: P/E=9.5']",[]
+AZM.MI,magic_formula,Magic Formula,True,0.6884,['earnings yield rank 96%'],[]
+AZM.MI,acquirers_multiple,Acquirer's Multiple,True,0.963,"['EV/EBIT=7.3', 'universe rank 96%']",[]
+AZM.MI,dreman_contrarian,Dreman Contrarian,True,0.7202,"['low P/E rank 95%', 'dividend rank 76%']",['P/B not cheap vs universe']
+AZM.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'no share dilution', 'asset turnover improving']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving']"
+AZM.MI,composite_value,Composite Value,False,0.6227,"['top-tier on trailing_pe (percentile 91%)', 'top-tier on ev_ebitda (percentile 100%)']",[]
+AZM.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+AZM.MI,financial_health,Financial Health,False,0.8,"['D/E=3%', 'leverage=0.3%', 'ratio=-0.7', 'coverage=97.5x']",['weak liquidity']
+BMED.MI,graham_defensive,Graham Defensive,False,0.5,"['P/E < 15: P/E=13.0', 'Dividend payer: yield=581.00%']","['valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+BMED.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=13.0', 'ROE > 8%: ROE=27.8%', 'Positive earnings growth: growth=14.6%']","['P/B >= 3', 'excessive leverage']"
+BMED.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+BMED.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+BMED.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+BMED.MI,earnings_yield,Earnings Yield,False,0.6407,['E/P=7.7% (P/E=13.0)'],['earnings yield 7.7% below 8%']
+BMED.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+BMED.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=581.0%'],['P/E not below 12.0']
+BMED.MI,lynch_peg,Lynch PEG,True,0.1092,"['PEG=0.89', 'growth=14.6%']",[]
+BMED.MI,neff_pegy,Neff PEGY,True,0.9782,"['PEGY=0.02', 'growth=14.6%', 'yield=581.0%']",[]
+BMED.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=27.8%', 'Profit margin >= 5%: margin=52.1%', 'P/E < 20: P/E=13.0']","['high leverage', 'FCF yield below 3%']"
+BMED.MI,buffett_quality,Buffett Quality,True,0.75,"['ROE >= 15%: ROE=27.8%', 'margin >= 8%: margin=52.1%', 'P/E < 25.0: P/E=13.0']",['too much debt']
+BMED.MI,economic_moat,Economic Moat,False,0.5,"['high ROE=27.8%', 'wide margin=52.1%']","['ROA below 8%', 'leverage too high']"
+BMED.MI,high_dividend,High Dividend Yield,True,0.7895,"['yield=581.0%', 'universe rank 79%']",[]
+BMED.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=581.0%', 'earnings growth: growth=14.6%', 'reasonable P/E: P/E=13.0']",[]
+BMED.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+BMED.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+BMED.MI,dreman_contrarian,Dreman Contrarian,True,0.6009,"['low P/E rank 76%', 'dividend rank 79%']",['P/B not cheap vs universe']
+BMED.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+BMED.MI,composite_value,Composite Value,False,0.3986,[],"['missing fcf_yield', 'missing ev_ebitda']"
+BMED.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+BMED.MI,financial_health,Financial Health,False,0.4,"['leverage=0.4%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+BMPS.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=8.1', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.19', 'Dividend payer: yield=770.00%']",['current ratio < 2']
+BMPS.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=8.1', 'P/B < 3: P/B=1.19', 'ROE > 8%: ROE=13.3%']","['excessive leverage', 'negative earnings growth']"
+BMPS.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+BMPS.MI,schloss,Schloss Low P/B,False,0.5,['P/B < 1.2: P/B=1.19'],['too much leverage']
+BMPS.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+BMPS.MI,earnings_yield,Earnings Yield,True,1.0,['E/P=12.4% (P/E=8.1)'],[]
+BMPS.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+BMPS.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=8.1', 'yield=770.0%']",[]
+BMPS.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+BMPS.MI,neff_pegy,Neff PEGY,True,0.9888,"['PEGY=0.01', 'growth=-47.9%', 'yield=770.0%']",[]
+BMPS.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=13.3%', 'Profit margin >= 5%: margin=59.6%', 'P/E < 20: P/E=8.1']","['high leverage', 'FCF yield below 3%']"
+BMPS.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=59.6%', 'P/E < 25.0: P/E=8.1']","['ROE too low', 'too much debt']"
+BMPS.MI,economic_moat,Economic Moat,False,0.25,['wide margin=59.6%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+BMPS.MI,high_dividend,High Dividend Yield,True,0.8947,"['yield=770.0%', 'universe rank 89%']",[]
+BMPS.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=770.0%', 'reasonable P/E: P/E=8.1']",['earnings not growing']
+BMPS.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+BMPS.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+BMPS.MI,dreman_contrarian,Dreman Contrarian,True,0.9316,"['low P/E rank 100%', 'low P/B rank 90%', 'dividend rank 89%']",[]
+BMPS.MI,piotroski_f,Piotroski F-Score,False,0.1111,"['F-Score=1/9', 'positive net income']","['F-Score 1/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']"
+BMPS.MI,composite_value,Composite Value,True,0.9441,"['top-tier on trailing_pe (percentile 100%)', 'top-tier on price_to_book (percentile 100%)', 'top-tier on dividend_yield (percentile 82%)']","['missing fcf_yield', 'missing ev_ebitda']"
+BMPS.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+BMPS.MI,financial_health,Financial Health,False,0.4,"['leverage=21.4%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+BAMI.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=11.2', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.51', 'Dividend payer: yield=649.00%']",['current ratio < 2']
+BAMI.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=11.2', 'P/B < 3: P/B=1.51', 'ROE > 8%: ROE=13.7%']","['excessive leverage', 'negative earnings growth']"
+BAMI.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+BAMI.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+BAMI.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+BAMI.MI,earnings_yield,Earnings Yield,True,0.7463,['E/P=9.0% (P/E=11.2)'],[]
+BAMI.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+BAMI.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=11.2', 'yield=649.0%']",[]
+BAMI.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+BAMI.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=649.0%']",['PEGY nan >= 1.0']
+BAMI.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=13.7%', 'Profit margin >= 5%: margin=37.8%', 'P/E < 20: P/E=11.2']","['high leverage', 'FCF yield below 3%']"
+BAMI.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=37.8%', 'P/E < 25.0: P/E=11.2']","['ROE too low', 'too much debt']"
+BAMI.MI,economic_moat,Economic Moat,False,0.25,['wide margin=37.8%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+BAMI.MI,high_dividend,High Dividend Yield,True,0.8421,"['yield=649.0%', 'universe rank 84%']",[]
+BAMI.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=649.0%', 'reasonable P/E: P/E=11.2']",['earnings not growing']
+BAMI.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+BAMI.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+BAMI.MI,dreman_contrarian,Dreman Contrarian,True,0.8373,"['low P/E rank 89%', 'low P/B rank 78%', 'dividend rank 84%']",[]
+BAMI.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+BAMI.MI,composite_value,Composite Value,True,0.8182,"['top-tier on trailing_pe (percentile 82%)', 'top-tier on price_to_book (percentile 91%)', 'top-tier on dividend_yield (percentile 73%)']","['missing fcf_yield', 'missing ev_ebitda']"
+BAMI.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+BAMI.MI,financial_health,Financial Health,False,0.4,"['leverage=13.9%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+BPE.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=13.0', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.58', 'Dividend payer: yield=920.00%']",['current ratio < 2']
+BPE.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=13.0', 'P/B < 3: P/B=1.58', 'ROE > 8%: ROE=13.1%']","['excessive leverage', 'negative earnings growth']"
+BPE.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+BPE.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+BPE.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+BPE.MI,earnings_yield,Earnings Yield,False,0.6387,['E/P=7.7% (P/E=13.0)'],['earnings yield 7.7% below 8%']
+BPE.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+BPE.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=920.0%'],['P/E not below 12.0']
+BPE.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+BPE.MI,neff_pegy,Neff PEGY,True,0.9856,"['PEGY=0.01', 'growth=-14.4%', 'yield=920.0%']",[]
+BPE.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=13.1%', 'Profit margin >= 5%: margin=30.2%', 'P/E < 20: P/E=13.0']","['high leverage', 'FCF yield below 3%']"
+BPE.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=30.2%', 'P/E < 25.0: P/E=13.0']","['ROE too low', 'too much debt']"
+BPE.MI,economic_moat,Economic Moat,False,0.25,['wide margin=30.2%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+BPE.MI,high_dividend,High Dividend Yield,True,0.9474,"['yield=920.0%', 'universe rank 95%']",[]
+BPE.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=920.0%', 'reasonable P/E: P/E=13.0']",['earnings not growing']
+BPE.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+BPE.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+BPE.MI,dreman_contrarian,Dreman Contrarian,True,0.8114,"['low P/B rank 75%', 'dividend rank 95%']",['P/E not in bottom quartile']
+BPE.MI,piotroski_f,Piotroski F-Score,False,0.2222,"['F-Score=2/9', 'positive net income', 'leverage declining']","['F-Score 2/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']"
+BPE.MI,composite_value,Composite Value,True,0.6713,"['top-tier on price_to_book (percentile 82%)', 'top-tier on dividend_yield (percentile 91%)']","['missing fcf_yield', 'missing ev_ebitda']"
+BPE.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+BPE.MI,financial_health,Financial Health,False,0.4,"['leverage=12.2%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+BC.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=126.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+BC.MI,graham_enterprising,Graham Enterprising,False,0.4,"['ROE > 8%: ROE=26.5%', 'Positive earnings growth: growth=5.5%']","['P/E >= 25', 'P/B >= 3', 'excessive leverage']"
+BC.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+BC.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+BC.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+BC.MI,earnings_yield,Earnings Yield,False,0.2005,['E/P=2.4% (P/E=41.6)'],['earnings yield 2.4% below 8%']
+BC.MI,fcf_yield,FCF Yield,False,0.1697,['FCF yield=1.7%'],['FCF yield 1.7% below 5%']
+BC.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=126.0%'],['P/E not below 12.0']
+BC.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=7.56', 'growth=5.5%']",['PEG 7.56 >= 1.0']
+BC.MI,neff_pegy,Neff PEGY,True,0.6839,"['PEGY=0.32', 'growth=5.5%', 'yield=126.0%']",[]
+BC.MI,quality_value,Quality Value,False,0.4,"['ROE >= 12%: ROE=26.5%', 'Profit margin >= 5%: margin=9.6%']","['high leverage', 'P/E >= 20', 'FCF yield below 3%']"
+BC.MI,buffett_quality,Buffett Quality,False,0.5,"['ROE >= 15%: ROE=26.5%', 'margin >= 8%: margin=9.6%']","['too much debt', 'P/E too high']"
+BC.MI,economic_moat,Economic Moat,False,0.25,['high ROE=26.5%'],"['ROA below 8%', 'margins below 12%', 'leverage too high']"
+BC.MI,high_dividend,High Dividend Yield,False,0.1316,"['yield=126.0%', 'universe rank 13%']",['not in top quartile for yield']
+BC.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=126.0%', 'earnings growth: growth=5.5%']",['P/E out of range']
+BC.MI,magic_formula,Magic Formula,True,0.5805,['ROIC rank 83%'],[]
+BC.MI,acquirers_multiple,Acquirer's Multiple,False,0.3333,"['EV/EBIT=27.2', 'universe rank 33%']","['EV/EBIT 27.2 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+BC.MI,dreman_contrarian,Dreman Contrarian,False,0.1039,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+BC.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'current ratio improving', 'no share dilution']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'gross margin improving', 'asset turnover improving']"
+BC.MI,composite_value,Composite Value,False,0.3225,[],[]
+BC.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.70', 'insufficient data — skipped']",['missing OCF']
+BC.MI,financial_health,Financial Health,False,0.6,"['CR=1.42', 'ratio=3.4', 'coverage=6.0x']","['high debt to equity', 'high leverage']"
+BZU.MI,graham_defensive,Graham Defensive,True,1.0,"['P/E < 15: P/E=8.3', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.08', 'Current ratio >= 2: CR=4.58', 'Dividend payer: yield=165.00%']",[]
+BZU.MI,graham_enterprising,Graham Enterprising,True,1.0,"['P/E < 25: P/E=8.3', 'P/B < 3: P/B=1.08', 'Debt/equity < 100%: D/E=6%', 'ROE > 8%: ROE=13.4%', 'Positive earnings growth: growth=3.2%']",[]
+BZU.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+BZU.MI,schloss,Schloss Low P/B,True,1.0,"['P/B < 1.2: P/B=1.08', 'D/E < 50.0%: D/E=6%']",[]
+BZU.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=5.6'],['P/B not below 1.0']
+BZU.MI,earnings_yield,Earnings Yield,True,1.0,['E/P=12.0% (P/E=8.3)'],[]
+BZU.MI,fcf_yield,FCF Yield,False,0.3536,['FCF yield=3.5%'],['FCF yield 3.5% below 5%']
+BZU.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=8.3', 'yield=165.0%']",[]
+BZU.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=2.60', 'growth=3.2%']","['growth 3.2% below 5% floor', 'PEG 2.60 >= 1.0']"
+BZU.MI,neff_pegy,Neff PEGY,True,0.9505,"['PEGY=0.05', 'growth=3.2%', 'yield=165.0%']",[]
+BZU.MI,quality_value,Quality Value,True,1.0,"['ROE >= 12%: ROE=13.4%', 'Profit margin >= 5%: margin=20.4%', 'Debt/equity < 80%: D/E=6%', 'P/E < 20: P/E=8.3', 'FCF yield >= 3%: FCF yield=3.5%']",[]
+BZU.MI,buffett_quality,Buffett Quality,False,0.75,"['D/E < 60.0%: D/E=6%', 'margin >= 8%: margin=20.4%', 'P/E < 25.0: P/E=8.3']",['ROE too low']
+BZU.MI,economic_moat,Economic Moat,True,0.75,"['solid ROA=10.3%', 'wide margin=20.4%', 'low leverage D/E=6%']",['ROE below 18%']
+BZU.MI,high_dividend,High Dividend Yield,False,0.1579,"['yield=165.0%', 'universe rank 16%']",['not in top quartile for yield']
+BZU.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=165.0%', 'earnings growth: growth=3.2%', 'reasonable P/E: P/E=8.3']",[]
+BZU.MI,magic_formula,Magic Formula,True,0.7733,"['earnings yield rank 93%', 'ROIC rank 62%']",[]
+BZU.MI,acquirers_multiple,Acquirer's Multiple,True,0.9259,"['EV/EBIT=7.4', 'universe rank 93%']",[]
+BZU.MI,dreman_contrarian,Dreman Contrarian,True,0.6855,"['low P/E rank 97%', 'low P/B rank 92%']",['dividend yield below median']
+BZU.MI,piotroski_f,Piotroski F-Score,False,0.5556,"['F-Score=5/9', 'positive net income', 'leverage declining', 'current ratio improving', 'no share dilution', 'asset turnover improving']","['F-Score 5/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'gross margin improving']"
+BZU.MI,composite_value,Composite Value,True,0.6693,"['top-tier on trailing_pe (percentile 97%)', 'top-tier on price_to_book (percentile 92%)', 'top-tier on ev_ebitda (percentile 97%)']",[]
+BZU.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+BZU.MI,financial_health,Financial Health,True,1.0,"['D/E=6%', 'leverage=4.9%', 'CR=4.58', 'ratio=-0.8', 'coverage=21.5x']",[]
+CPR.MI,graham_defensive,Graham Defensive,False,0.5,"['Current ratio >= 2: CR=2.22', 'Dividend payer: yield=176.00%']","['P/E >= 15', 'valuation too rich on P/B or P/E×P/B']"
+CPR.MI,graham_enterprising,Graham Enterprising,True,0.8,"['P/E < 25: P/E=19.6', 'P/B < 3: P/B=1.77', 'Debt/equity < 100%: D/E=70%', 'ROE > 8%: ROE=8.6%']",['negative earnings growth']
+CPR.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+CPR.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+CPR.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+CPR.MI,earnings_yield,Earnings Yield,False,0.4247,['E/P=5.1% (P/E=19.6)'],['earnings yield 5.1% below 8%']
+CPR.MI,fcf_yield,FCF Yield,False,0.4646,['FCF yield=4.6%'],['FCF yield 4.6% below 5%']
+CPR.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=176.0%'],['P/E not below 12.0']
+CPR.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+CPR.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=176.0%']",['PEGY nan >= 1.0']
+CPR.MI,quality_value,Quality Value,False,0.8,"['Profit margin >= 5%: margin=11.4%', 'Debt/equity < 80%: D/E=70%', 'P/E < 20: P/E=19.6', 'FCF yield >= 3%: FCF yield=4.6%']",['ROE below 12%']
+CPR.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=11.4%', 'P/E < 25.0: P/E=19.6']","['ROE too low', 'too much debt']"
+CPR.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+CPR.MI,high_dividend,High Dividend Yield,False,0.2105,"['yield=176.0%', 'universe rank 21%']",['not in top quartile for yield']
+CPR.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=176.0%', 'reasonable P/E: P/E=19.6']",['earnings not growing']
+CPR.MI,magic_formula,Magic Formula,True,0.6264,"['earnings yield rank 67%', 'ROIC rank 59%']",[]
+CPR.MI,acquirers_multiple,Acquirer's Multiple,False,0.6667,"['EV/EBIT=14.6', 'universe rank 67%']",['EV/EBIT 14.6 above 12.0']
+CPR.MI,dreman_contrarian,Dreman Contrarian,False,0.4452,['low P/B rank 62%'],"['P/E not in bottom quartile', 'dividend yield below median']"
+CPR.MI,piotroski_f,Piotroski F-Score,False,0.6667,"['F-Score=6/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['F-Score 6/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving']"
+CPR.MI,composite_value,Composite Value,False,0.455,[],[]
+CPR.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.92', 'insufficient data — skipped']",['missing OCF']
+CPR.MI,financial_health,Financial Health,True,1.0,"['D/E=70%', 'leverage=31.6%', 'CR=2.22', 'ratio=2.6', 'coverage=5.7x']",[]
+DIA.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=188.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+DIA.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/B < 3: P/B=2.45', 'Debt/equity < 100%: D/E=47%', 'ROE > 8%: ROE=8.6%']","['P/E >= 25', 'negative earnings growth']"
+DIA.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+DIA.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=47%'],['P/B too high']
+DIA.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+DIA.MI,earnings_yield,Earnings Yield,False,0.3162,['E/P=3.8% (P/E=26.4)'],['earnings yield 3.8% below 8%']
+DIA.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+DIA.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=188.0%'],['P/E not below 12.0']
+DIA.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+DIA.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=188.0%']",['PEGY nan >= 1.0']
+DIA.MI,quality_value,Quality Value,False,0.4,"['Profit margin >= 5%: margin=12.1%', 'Debt/equity < 80%: D/E=47%']","['ROE below 12%', 'P/E >= 20', 'FCF yield below 3%']"
+DIA.MI,buffett_quality,Buffett Quality,False,0.5,"['D/E < 60.0%: D/E=47%', 'margin >= 8%: margin=12.1%']","['ROE too low', 'P/E too high']"
+DIA.MI,economic_moat,Economic Moat,False,0.5,"['wide margin=12.1%', 'low leverage D/E=47%']","['ROE below 18%', 'ROA below 8%']"
+DIA.MI,high_dividend,High Dividend Yield,False,0.2368,"['yield=188.0%', 'universe rank 24%']",['not in top quartile for yield']
+DIA.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=188.0%'],"['earnings not growing', 'P/E out of range']"
+DIA.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+DIA.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+DIA.MI,dreman_contrarian,Dreman Contrarian,False,0.3263,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+DIA.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'leverage declining', 'no share dilution', 'asset turnover improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'current ratio improving', 'gross margin improving']"
+DIA.MI,composite_value,Composite Value,False,0.4615,[],"['missing fcf_yield', 'missing ev_ebitda']"
+DIA.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+DIA.MI,financial_health,Financial Health,False,0.8,"['D/E=47%', 'leverage=27.5%', 'CR=1.55', 'coverage=11.0x']",['high net debt/EBITDA']
+ENEL.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=511.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+ENEL.MI,graham_enterprising,Graham Enterprising,False,0.2,['ROE > 8%: ROE=10.6%'],"['P/E >= 25', 'P/B >= 3', 'excessive leverage', 'negative earnings growth']"
+ENEL.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+ENEL.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+ENEL.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+ENEL.MI,earnings_yield,Earnings Yield,False,0.3114,['E/P=3.7% (P/E=26.8)'],['earnings yield 3.7% below 8%']
+ENEL.MI,fcf_yield,FCF Yield,False,0.1608,['FCF yield=1.6%'],['FCF yield 1.6% below 5%']
+ENEL.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=511.0%'],['P/E not below 12.0']
+ENEL.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+ENEL.MI,neff_pegy,Neff PEGY,True,0.9471,"['PEGY=0.05', 'growth=-5.3%', 'yield=511.0%']",[]
+ENEL.MI,quality_value,Quality Value,False,0.2,['Profit margin >= 5%: margin=5.2%'],"['ROE below 12%', 'high leverage', 'P/E >= 20', 'FCF yield below 3%']"
+ENEL.MI,buffett_quality,Buffett Quality,False,0.0,[],"['ROE too low', 'too much debt', 'thin margins', 'P/E too high']"
+ENEL.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+ENEL.MI,high_dividend,High Dividend Yield,False,0.7368,"['yield=511.0%', 'universe rank 74%']",['not in top quartile for yield']
+ENEL.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=511.0%'],"['earnings not growing', 'P/E out of range']"
+ENEL.MI,magic_formula,Magic Formula,False,0.1245,[],['below top half on combined Magic Formula rank']
+ENEL.MI,acquirers_multiple,Acquirer's Multiple,False,0.1111,"['EV/EBIT=52.1', 'universe rank 11%']","['EV/EBIT 52.1 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+ENEL.MI,dreman_contrarian,Dreman Contrarian,False,0.4004,['dividend rank 74%'],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+ENEL.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'no share dilution', 'asset turnover improving']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving']"
+ENEL.MI,composite_value,Composite Value,False,0.4317,['top-tier on dividend_yield (percentile 83%)'],[]
+ENEL.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+ENEL.MI,financial_health,Financial Health,False,0.4,"['leverage=38.3%', 'ratio=3.2']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+ENI.MI,graham_defensive,Graham Defensive,False,0.5,"['P/B < 1.5 or P/E×P/B < 22.5: P/B=1.30', 'Dividend payer: yield=494.00%']","['P/E >= 15', 'current ratio < 2']"
+ENI.MI,graham_enterprising,Graham Enterprising,False,0.8,"['P/E < 25: P/E=21.6', 'P/B < 3: P/B=1.30', 'Debt/equity < 100%: D/E=67%', 'Positive earnings growth: growth=1.0%']",['ROE <= 8%']
+ENI.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+ENI.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+ENI.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=7.5'],['P/B not below 1.0']
+ENI.MI,earnings_yield,Earnings Yield,False,0.385,['E/P=4.6% (P/E=21.6)'],['earnings yield 4.6% below 8%']
+ENI.MI,fcf_yield,FCF Yield,False,0.0,['FCF yield=-1.5%'],['FCF yield -1.5% below 5%']
+ENI.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=494.0%'],['P/E not below 12.0']
+ENI.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=21.64', 'growth=1.0%']","['growth 1.0% below 5% floor', 'PEG 21.64 >= 1.0']"
+ENI.MI,neff_pegy,Neff PEGY,True,0.9563,"['PEGY=0.04', 'growth=1.0%', 'yield=494.0%']",[]
+ENI.MI,quality_value,Quality Value,False,0.2,['Debt/equity < 80%: D/E=67%'],"['ROE below 12%', 'thin margins', 'P/E >= 20', 'FCF yield below 3%']"
+ENI.MI,buffett_quality,Buffett Quality,False,0.25,['P/E < 25.0: P/E=21.6'],"['ROE too low', 'too much debt', 'thin margins']"
+ENI.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+ENI.MI,high_dividend,High Dividend Yield,False,0.7105,"['yield=494.0%', 'universe rank 71%']",['not in top quartile for yield']
+ENI.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=494.0%', 'reasonable P/E: P/E=21.6']",['earnings not growing']
+ENI.MI,magic_formula,Magic Formula,False,0.2886,[],['below top half on combined Magic Formula rank']
+ENI.MI,acquirers_multiple,Acquirer's Multiple,False,0.3704,"['EV/EBIT=20.1', 'universe rank 37%']","['EV/EBIT 20.1 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+ENI.MI,dreman_contrarian,Dreman Contrarian,False,0.6776,"['low P/B rank 88%', 'dividend rank 71%']",['P/E not in bottom quartile']
+ENI.MI,piotroski_f,Piotroski F-Score,False,0.5556,"['F-Score=5/9', 'positive net income', 'ROA improving', 'leverage declining', 'current ratio improving', 'no share dilution']","['F-Score 5/9 below 7', 'positive operating cash flow', 'OCF > net income', 'gross margin improving', 'asset turnover improving']"
+ENI.MI,composite_value,Composite Value,False,0.6,['top-tier on price_to_book (percentile 100%)'],[]
+ENI.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+ENI.MI,financial_health,Financial Health,True,0.8,"['D/E=67%', 'leverage=25.0%', 'CR=1.33', 'ratio=1.8']",['weak interest coverage']
+RACE.MI,graham_defensive,Graham Defensive,False,0.5,"['Current ratio >= 2: CR=2.57', 'Dividend payer: yield=110.00%']","['P/E >= 15', 'valuation too rich on P/B or P/E×P/B']"
+RACE.MI,graham_enterprising,Graham Enterprising,False,0.6,"['Debt/equity < 100%: D/E=72%', 'ROE > 8%: ROE=42.0%', 'Positive earnings growth: growth=1.3%']","['P/E >= 25', 'P/B >= 3']"
+RACE.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+RACE.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+RACE.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+RACE.MI,earnings_yield,Earnings Yield,False,0.2276,['E/P=2.7% (P/E=36.6)'],['earnings yield 2.7% below 8%']
+RACE.MI,fcf_yield,FCF Yield,False,0.1704,['FCF yield=1.7%'],['FCF yield 1.7% below 5%']
+RACE.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=110.0%'],['P/E not below 12.0']
+RACE.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=28.17', 'growth=1.3%']","['growth 1.3% below 5% floor', 'PEG 28.17 >= 1.0']"
+RACE.MI,neff_pegy,Neff PEGY,True,0.671,"['PEGY=0.33', 'growth=1.3%', 'yield=110.0%']",[]
+RACE.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=42.0%', 'Profit margin >= 5%: margin=22.2%', 'Debt/equity < 80%: D/E=72%']","['P/E >= 20', 'FCF yield below 3%']"
+RACE.MI,buffett_quality,Buffett Quality,False,0.5,"['ROE >= 15%: ROE=42.0%', 'margin >= 8%: margin=22.2%']","['too much debt', 'P/E too high']"
+RACE.MI,economic_moat,Economic Moat,True,0.75,"['high ROE=42.0%', 'solid ROA=16.6%', 'wide margin=22.2%']",['leverage too high']
+RACE.MI,high_dividend,High Dividend Yield,False,0.0789,"['yield=110.0%', 'universe rank 8%']",['not in top quartile for yield']
+RACE.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=110.0%'],"['earnings not growing', 'P/E out of range']"
+RACE.MI,magic_formula,Magic Formula,True,0.6124,['ROIC rank 97%'],[]
+RACE.MI,acquirers_multiple,Acquirer's Multiple,False,0.2593,"['EV/EBIT=28.2', 'universe rank 26%']","['EV/EBIT 28.2 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+RACE.MI,dreman_contrarian,Dreman Contrarian,False,0.0956,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+RACE.MI,piotroski_f,Piotroski F-Score,True,0.7778,"['F-Score=7/9', 'positive net income', 'ROA improving', 'leverage declining', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['positive operating cash flow', 'OCF > net income']"
+RACE.MI,composite_value,Composite Value,False,0.315,[],[]
+RACE.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.62', 'insufficient data — skipped']",['missing OCF']
+RACE.MI,financial_health,Financial Health,True,1.0,"['D/E=72%', 'leverage=30.0%', 'CR=3.38', 'ratio=0.5', 'coverage=50.9x']",[]
+FCT.MI,graham_defensive,Graham Defensive,False,0.0,[],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2', 'no dividend']"
+FCT.MI,graham_enterprising,Graham Enterprising,False,0.4,"['ROE > 8%: ROE=12.8%', 'Positive earnings growth: growth=20.0%']","['P/E >= 25', 'P/B >= 3', 'excessive leverage']"
+FCT.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+FCT.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+FCT.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+FCT.MI,earnings_yield,Earnings Yield,False,0.2384,['E/P=2.9% (P/E=35.0)'],['earnings yield 2.9% below 8%']
+FCT.MI,fcf_yield,FCF Yield,True,1.0,['FCF yield=12.5%'],[]
+FCT.MI,low_pe_high_yield,Low P/E + High Yield,False,0.0,[],"['P/E not below 12.0', 'yield below 4%']"
+FCT.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=1.75', 'growth=20.0%']",['PEG 1.75 >= 1.0']
+FCT.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=20.0%', 'yield=nan%']",['PEGY nan >= 1.0']
+FCT.MI,quality_value,Quality Value,False,0.4,"['ROE >= 12%: ROE=12.8%', 'FCF yield >= 3%: FCF yield=12.5%']","['thin margins', 'high leverage', 'P/E >= 20']"
+FCT.MI,buffett_quality,Buffett Quality,False,0.0,[],"['ROE too low', 'too much debt', 'thin margins', 'P/E too high']"
+FCT.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+FCT.MI,high_dividend,High Dividend Yield,False,0.0,[],['could not rank yield']
+FCT.MI,dividend_growth,Dividend Growth,False,0.3333,['earnings growth: growth=20.0%'],"['yield too low', 'P/E out of range']"
+FCT.MI,magic_formula,Magic Formula,False,0.1948,[],['below top half on combined Magic Formula rank']
+FCT.MI,acquirers_multiple,Acquirer's Multiple,False,0.1481,"['EV/EBIT=40.6', 'universe rank 15%']","['EV/EBIT 40.6 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+FCT.MI,dreman_contrarian,Dreman Contrarian,False,0.1921,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+FCT.MI,piotroski_f,Piotroski F-Score,False,0.6667,"['F-Score=6/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['F-Score 6/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving']"
+FCT.MI,composite_value,Composite Value,False,0.5625,['top-tier on ev_ebitda (percentile 83%)'],['missing dividend_yield']
+FCT.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=4.56', 'insufficient data — skipped']",['missing OCF']
+FCT.MI,financial_health,Financial Health,False,0.2,['leverage=22.2%'],"['high debt to equity', 'weak liquidity', 'high net debt/EBITDA', 'weak interest coverage']"
+FBK.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=345.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+FBK.MI,graham_enterprising,Graham Enterprising,False,0.4,"['P/E < 25: P/E=21.6', 'ROE > 8%: ROE=24.6%']","['P/B >= 3', 'excessive leverage', 'negative earnings growth']"
+FBK.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+FBK.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+FBK.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+FBK.MI,earnings_yield,Earnings Yield,False,0.3857,['E/P=4.6% (P/E=21.6)'],['earnings yield 4.6% below 8%']
+FBK.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+FBK.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=345.0%'],['P/E not below 12.0']
+FBK.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+FBK.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=345.0%']",['PEGY nan >= 1.0']
+FBK.MI,quality_value,Quality Value,False,0.4,"['ROE >= 12%: ROE=24.6%', 'Profit margin >= 5%: margin=48.7%']","['high leverage', 'P/E >= 20', 'FCF yield below 3%']"
+FBK.MI,buffett_quality,Buffett Quality,True,0.75,"['ROE >= 15%: ROE=24.6%', 'margin >= 8%: margin=48.7%', 'P/E < 25.0: P/E=21.6']",['too much debt']
+FBK.MI,economic_moat,Economic Moat,False,0.5,"['high ROE=24.6%', 'wide margin=48.7%']","['ROA below 8%', 'leverage too high']"
+FBK.MI,high_dividend,High Dividend Yield,False,0.3947,"['yield=345.0%', 'universe rank 39%']",['not in top quartile for yield']
+FBK.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=345.0%', 'reasonable P/E: P/E=21.6']",['earnings not growing']
+FBK.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+FBK.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+FBK.MI,dreman_contrarian,Dreman Contrarian,False,0.3311,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+FBK.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'leverage declining', 'no share dilution']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+FBK.MI,composite_value,Composite Value,False,0.0629,[],"['missing fcf_yield', 'missing ev_ebitda']"
+FBK.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+FBK.MI,financial_health,Financial Health,False,0.4,"['leverage=2.3%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+G.MI,graham_defensive,Graham Defensive,False,0.5,"['Current ratio >= 2: CR=2.23', 'Dividend payer: yield=388.00%']","['P/E >= 15', 'valuation too rich on P/B or P/E×P/B']"
+G.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=15.7', 'P/B < 3: P/B=1.98', 'ROE > 8%: ROE=13.7%']","['excessive leverage', 'negative earnings growth']"
+G.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+G.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+G.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+G.MI,earnings_yield,Earnings Yield,False,0.5307,['E/P=6.4% (P/E=15.7)'],['earnings yield 6.4% below 8%']
+G.MI,fcf_yield,FCF Yield,True,0.546,['FCF yield=5.5%'],[]
+G.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=388.0%'],['P/E not below 12.0']
+G.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+G.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=388.0%']",['PEGY nan >= 1.0']
+G.MI,quality_value,Quality Value,True,0.8,"['ROE >= 12%: ROE=13.7%', 'Profit margin >= 5%: margin=7.2%', 'P/E < 20: P/E=15.7', 'FCF yield >= 3%: FCF yield=5.5%']",['high leverage']
+G.MI,buffett_quality,Buffett Quality,False,0.25,['P/E < 25.0: P/E=15.7'],"['ROE too low', 'too much debt', 'thin margins']"
+G.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+G.MI,high_dividend,High Dividend Yield,False,0.4474,"['yield=388.0%', 'universe rank 45%']",['not in top quartile for yield']
+G.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=388.0%', 'reasonable P/E: P/E=15.7']",['earnings not growing']
+G.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+G.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+G.MI,dreman_contrarian,Dreman Contrarian,False,0.5346,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+G.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'no share dilution', 'asset turnover improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving']"
+G.MI,composite_value,Composite Value,False,0.2091,[],[]
+G.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.83', 'insufficient data — skipped']",['missing OCF']
+G.MI,financial_health,Financial Health,False,0.4,"['leverage=7.1%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'high net debt/EBITDA']"
+HER.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=12.3', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.37', 'Dividend payer: yield=407.00%']",['current ratio < 2']
+HER.MI,graham_enterprising,Graham Enterprising,True,0.8,"['P/E < 25: P/E=12.3', 'P/B < 3: P/B=1.37', 'ROE > 8%: ROE=11.6%', 'Positive earnings growth: growth=0.1%']",['excessive leverage']
+HER.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+HER.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+HER.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=7.5'],['P/B not below 1.0']
+HER.MI,earnings_yield,Earnings Yield,True,0.6789,['E/P=8.1% (P/E=12.3)'],[]
+HER.MI,fcf_yield,FCF Yield,False,0.1118,['FCF yield=1.1%'],['FCF yield 1.1% below 5%']
+HER.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=407.0%'],['P/E not below 12.0']
+HER.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=122.75', 'growth=0.1%']","['growth 0.1% below 5% floor', 'PEG 122.75 >= 1.0']"
+HER.MI,neff_pegy,Neff PEGY,True,0.9698,"['PEGY=0.03', 'growth=0.1%', 'yield=407.0%']",[]
+HER.MI,quality_value,Quality Value,False,0.2,['P/E < 20: P/E=12.3'],"['ROE below 12%', 'thin margins', 'high leverage', 'FCF yield below 3%']"
+HER.MI,buffett_quality,Buffett Quality,False,0.25,['P/E < 25.0: P/E=12.3'],"['ROE too low', 'too much debt', 'thin margins']"
+HER.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+HER.MI,high_dividend,High Dividend Yield,False,0.5263,"['yield=407.0%', 'universe rank 53%']",['not in top quartile for yield']
+HER.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=407.0%', 'reasonable P/E: P/E=12.3']",['earnings not growing']
+HER.MI,magic_formula,Magic Formula,True,0.6277,"['earnings yield rank 70%', 'ROIC rank 55%']",[]
+HER.MI,acquirers_multiple,Acquirer's Multiple,False,0.7037,"['EV/EBIT=12.8', 'universe rank 70%']",['EV/EBIT 12.8 above 12.0']
+HER.MI,dreman_contrarian,Dreman Contrarian,True,0.7224,"['low P/E rank 82%', 'low P/B rank 82%', 'dividend rank 53%']",[]
+HER.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'current ratio improving', 'asset turnover improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'leverage declining', 'no share dilution', 'gross margin improving']"
+HER.MI,composite_value,Composite Value,False,0.6117,"['top-tier on trailing_pe (percentile 83%)', 'top-tier on price_to_book (percentile 100%)', 'top-tier on ev_ebitda (percentile 80%)']",[]
+HER.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+HER.MI,financial_health,Financial Health,False,0.6,"['leverage=34.9%', 'ratio=3.1', 'coverage=4.5x']","['high debt to equity', 'weak liquidity']"
+ISP.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=11.6', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.59', 'Dividend payer: yield=605.00%']",['current ratio < 2']
+ISP.MI,graham_enterprising,Graham Enterprising,True,0.8,"['P/E < 25: P/E=11.6', 'P/B < 3: P/B=1.59', 'ROE > 8%: ROE=14.0%', 'Positive earnings growth: growth=6.7%']",['excessive leverage']
+ISP.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+ISP.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+ISP.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+ISP.MI,earnings_yield,Earnings Yield,True,0.7163,['E/P=8.6% (P/E=11.6)'],[]
+ISP.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+ISP.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=11.6', 'yield=605.0%']",[]
+ISP.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=1.74', 'growth=6.7%']",['PEG 1.74 >= 1.0']
+ISP.MI,neff_pegy,Neff PEGY,True,0.981,"['PEGY=0.02', 'growth=6.7%', 'yield=605.0%']",[]
+ISP.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=14.0%', 'Profit margin >= 5%: margin=36.8%', 'P/E < 20: P/E=11.6']","['high leverage', 'FCF yield below 3%']"
+ISP.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=36.8%', 'P/E < 25.0: P/E=11.6']","['ROE too low', 'too much debt']"
+ISP.MI,economic_moat,Economic Moat,False,0.25,['wide margin=36.8%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+ISP.MI,high_dividend,High Dividend Yield,True,0.8158,"['yield=605.0%', 'universe rank 82%']",[]
+ISP.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=605.0%', 'earnings growth: growth=6.7%', 'reasonable P/E: P/E=11.6']",[]
+ISP.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+ISP.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+ISP.MI,dreman_contrarian,Dreman Contrarian,True,0.7943,"['low P/E rank 84%', 'low P/B rank 72%', 'dividend rank 82%']",[]
+ISP.MI,piotroski_f,Piotroski F-Score,False,0.5556,"['F-Score=5/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution', 'asset turnover improving']","['F-Score 5/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving', 'gross margin improving']"
+ISP.MI,composite_value,Composite Value,True,0.6643,['top-tier on price_to_book (percentile 73%)'],"['missing fcf_yield', 'missing ev_ebitda']"
+ISP.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+ISP.MI,financial_health,Financial Health,False,0.4,"['leverage=14.5%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+INW.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=878.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+INW.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=16.6', 'P/B < 3: P/B=1.61', 'ROE > 8%: ROE=9.1%']","['excessive leverage', 'negative earnings growth']"
+INW.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+INW.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+INW.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+INW.MI,earnings_yield,Earnings Yield,False,0.5018,['E/P=6.0% (P/E=16.6)'],['earnings yield 6.0% below 8%']
+INW.MI,fcf_yield,FCF Yield,True,0.8986,['FCF yield=9.0%'],[]
+INW.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=878.0%'],['P/E not below 12.0']
+INW.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+INW.MI,neff_pegy,Neff PEGY,True,0.9809,"['PEGY=0.02', 'growth=-8.2%', 'yield=878.0%']",[]
+INW.MI,quality_value,Quality Value,False,0.6,"['Profit margin >= 5%: margin=32.7%', 'P/E < 20: P/E=16.6', 'FCF yield >= 3%: FCF yield=9.0%']","['ROE below 12%', 'high leverage']"
+INW.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=32.7%', 'P/E < 25.0: P/E=16.6']","['ROE too low', 'too much debt']"
+INW.MI,economic_moat,Economic Moat,False,0.25,['wide margin=32.7%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+INW.MI,high_dividend,High Dividend Yield,True,0.9211,"['yield=878.0%', 'universe rank 92%']",[]
+INW.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=878.0%', 'reasonable P/E: P/E=16.6']",['earnings not growing']
+INW.MI,magic_formula,Magic Formula,False,0.4132,[],['below top half on combined Magic Formula rank']
+INW.MI,acquirers_multiple,Acquirer's Multiple,False,0.4815,"['EV/EBIT=18.3', 'universe rank 48%']","['EV/EBIT 18.3 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+INW.MI,dreman_contrarian,Dreman Contrarian,True,0.7421,"['low P/B rank 70%', 'dividend rank 92%']",['P/E not in bottom quartile']
+INW.MI,piotroski_f,Piotroski F-Score,False,0.6667,"['F-Score=6/9', 'positive net income', 'ROA improving', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['F-Score 6/9 below 7', 'positive operating cash flow', 'OCF > net income', 'leverage declining']"
+INW.MI,composite_value,Composite Value,True,0.6605,"['top-tier on price_to_book (percentile 70%)', 'top-tier on dividend_yield (percentile 92%)', 'top-tier on fcf_yield (percentile 75%)']",[]
+INW.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=1.42', 'insufficient data — skipped']",['missing OCF']
+INW.MI,financial_health,Financial Health,False,0.2,['coverage=4.2x'],"['high debt to equity', 'high leverage', 'weak liquidity', 'high net debt/EBITDA']"
+IG.MI,graham_defensive,Graham Defensive,False,0.5,"['P/E < 15: P/E=14.3', 'Dividend payer: yield=426.00%']","['valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+IG.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=14.3', 'P/B < 3: P/B=2.57', 'ROE > 8%: ROE=19.5%']","['excessive leverage', 'negative earnings growth']"
+IG.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+IG.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+IG.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+IG.MI,earnings_yield,Earnings Yield,False,0.5841,['E/P=7.0% (P/E=14.3)'],['earnings yield 7.0% below 8%']
+IG.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+IG.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=426.0%'],['P/E not below 12.0']
+IG.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+IG.MI,neff_pegy,Neff PEGY,True,0.9653,"['PEGY=0.03', 'growth=-15.3%', 'yield=426.0%']",[]
+IG.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=19.5%', 'Profit margin >= 5%: margin=18.4%', 'P/E < 20: P/E=14.3']","['high leverage', 'FCF yield below 3%']"
+IG.MI,buffett_quality,Buffett Quality,True,0.75,"['ROE >= 15%: ROE=19.5%', 'margin >= 8%: margin=18.4%', 'P/E < 25.0: P/E=14.3']",['too much debt']
+IG.MI,economic_moat,Economic Moat,False,0.5,"['high ROE=19.5%', 'wide margin=18.4%']","['ROA below 8%', 'leverage too high']"
+IG.MI,high_dividend,High Dividend Yield,False,0.5526,"['yield=426.0%', 'universe rank 55%']",['not in top quartile for yield']
+IG.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=426.0%', 'reasonable P/E: P/E=14.3']",['earnings not growing']
+IG.MI,magic_formula,Magic Formula,True,0.5204,['earnings yield rank 59%'],[]
+IG.MI,acquirers_multiple,Acquirer's Multiple,False,0.5926,"['EV/EBIT=17.0', 'universe rank 59%']","['EV/EBIT 17.0 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+IG.MI,dreman_contrarian,Dreman Contrarian,False,0.5461,['dividend rank 55%'],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+IG.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'current ratio improving', 'gross margin improving']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'no share dilution', 'asset turnover improving']"
+IG.MI,composite_value,Composite Value,False,0.45,[],['missing fcf_yield']
+IG.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+IG.MI,financial_health,Financial Health,False,0.2,['coverage=5.2x'],"['high debt to equity', 'high leverage', 'weak liquidity', 'high net debt/EBITDA']"
+IVG.MI,graham_defensive,Graham Defensive,False,0.75,"['P/B < 1.5 or P/E×P/B < 22.5: P/B=0.94', 'Current ratio >= 2: CR=2.07', 'Dividend payer: yield=235.00%']",['P/E >= 15']
+IVG.MI,graham_enterprising,Graham Enterprising,False,0.4,"['P/B < 3: P/B=0.94', 'Positive earnings growth: growth=2964.7%']","['P/E >= 25', 'excessive leverage', 'ROE <= 8%']"
+IVG.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+IVG.MI,schloss,Schloss Low P/B,False,0.5,['P/B < 1.2: P/B=0.94'],['too much leverage']
+IVG.MI,deep_value,Deep Value,False,0.5,['P/B=0.94'],['EV/EBITDA not below 8']
+IVG.MI,earnings_yield,Earnings Yield,False,0.227,['E/P=2.7% (P/E=36.7)'],['earnings yield 2.7% below 8%']
+IVG.MI,fcf_yield,FCF Yield,True,1.0,['FCF yield=20.2%'],[]
+IVG.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=235.0%'],['P/E not below 12.0']
+IVG.MI,lynch_peg,Lynch PEG,True,0.9876,"['PEG=0.01', 'growth=2964.7%']",[]
+IVG.MI,neff_pegy,Neff PEGY,True,0.9885,"['PEGY=0.01', 'growth=2964.7%', 'yield=235.0%']",[]
+IVG.MI,quality_value,Quality Value,False,0.4,"['Profit margin >= 5%: margin=10.6%', 'FCF yield >= 3%: FCF yield=20.2%']","['ROE below 12%', 'high leverage', 'P/E >= 20']"
+IVG.MI,buffett_quality,Buffett Quality,False,0.25,['margin >= 8%: margin=10.6%'],"['ROE too low', 'too much debt', 'P/E too high']"
+IVG.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+IVG.MI,high_dividend,High Dividend Yield,False,0.2632,"['yield=235.0%', 'universe rank 26%']",['not in top quartile for yield']
+IVG.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=235.0%', 'earnings growth: growth=2964.7%']",['P/E out of range']
+IVG.MI,magic_formula,Magic Formula,True,0.5824,['earnings yield rank 89%'],[]
+IVG.MI,acquirers_multiple,Acquirer's Multiple,True,0.8889,"['EV/EBIT=7.6', 'universe rank 89%']",[]
+IVG.MI,dreman_contrarian,Dreman Contrarian,False,0.4482,['low P/B rank 95%'],"['P/E not in bottom quartile', 'dividend yield below median']"
+IVG.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'leverage declining', 'no share dilution']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+IVG.MI,composite_value,Composite Value,True,0.72,"['top-tier on price_to_book (percentile 100%)', 'top-tier on fcf_yield (percentile 83%)', 'top-tier on ev_ebitda (percentile 100%)']",[]
+IVG.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=2.60', 'insufficient data — skipped']",['missing OCF']
+IVG.MI,financial_health,Financial Health,False,0.8,"['leverage=32.1%', 'CR=1.81', 'ratio=2.2', 'coverage=3.0x']",['high debt to equity']
+LDO.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=124.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+LDO.MI,graham_enterprising,Graham Enterprising,True,0.8,"['P/E < 25: P/E=22.7', 'P/B < 3: P/B=3.00', 'Debt/equity < 100%: D/E=42%', 'ROE > 8%: ROE=13.1%']",['negative earnings growth']
+LDO.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+LDO.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=42%'],['P/B too high']
+LDO.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+LDO.MI,earnings_yield,Earnings Yield,False,0.3678,['E/P=4.4% (P/E=22.7)'],['earnings yield 4.4% below 8%']
+LDO.MI,fcf_yield,FCF Yield,False,0.4361,['FCF yield=4.4%'],['FCF yield 4.4% below 5%']
+LDO.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=124.0%'],['P/E not below 12.0']
+LDO.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+LDO.MI,neff_pegy,Neff PEGY,True,0.6613,"['PEGY=0.34', 'growth=-57.1%', 'yield=124.0%']",[]
+LDO.MI,quality_value,Quality Value,True,0.8,"['ROE >= 12%: ROE=13.1%', 'Profit margin >= 5%: margin=5.1%', 'Debt/equity < 80%: D/E=42%', 'FCF yield >= 3%: FCF yield=4.4%']",['P/E >= 20']
+LDO.MI,buffett_quality,Buffett Quality,False,0.5,"['D/E < 60.0%: D/E=42%', 'P/E < 25.0: P/E=22.7']","['ROE too low', 'thin margins']"
+LDO.MI,economic_moat,Economic Moat,False,0.25,['low leverage D/E=42%'],"['ROE below 18%', 'ROA below 8%', 'margins below 12%']"
+LDO.MI,high_dividend,High Dividend Yield,False,0.1053,"['yield=124.0%', 'universe rank 11%']",['not in top quartile for yield']
+LDO.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=124.0%', 'reasonable P/E: P/E=22.7']",['earnings not growing']
+LDO.MI,magic_formula,Magic Formula,True,0.5658,['ROIC rank 72%'],[]
+LDO.MI,acquirers_multiple,Acquirer's Multiple,False,0.4074,"['EV/EBIT=19.6', 'universe rank 41%']","['EV/EBIT 19.6 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+LDO.MI,dreman_contrarian,Dreman Contrarian,False,0.275,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+LDO.MI,piotroski_f,Piotroski F-Score,True,0.7778,"['F-Score=7/9', 'positive net income', 'ROA improving', 'leverage declining', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['positive operating cash flow', 'OCF > net income']"
+LDO.MI,composite_value,Composite Value,False,0.5217,['top-tier on trailing_pe (percentile 83%)'],[]
+LDO.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=1.04', 'insufficient data — skipped']",['missing OCF']
+LDO.MI,financial_health,Financial Health,False,0.8,"['D/E=42%', 'leverage=13.0%', 'ratio=1.3', 'coverage=17.8x']",['weak liquidity']
+LTMC.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=175.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+LTMC.MI,graham_enterprising,Graham Enterprising,False,0.4,"['ROE > 8%: ROE=39.0%', 'Positive earnings growth: growth=40.0%']","['P/E >= 25', 'P/B >= 3', 'excessive leverage']"
+LTMC.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+LTMC.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+LTMC.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+LTMC.MI,earnings_yield,Earnings Yield,False,0.259,['E/P=3.1% (P/E=32.2)'],['earnings yield 3.1% below 8%']
+LTMC.MI,fcf_yield,FCF Yield,True,0.6238,['FCF yield=6.2%'],[]
+LTMC.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=175.0%'],['P/E not below 12.0']
+LTMC.MI,lynch_peg,Lynch PEG,True,0.1955,"['PEG=0.80', 'growth=40.0%']",[]
+LTMC.MI,neff_pegy,Neff PEGY,True,0.8503,"['PEGY=0.15', 'growth=40.0%', 'yield=175.0%']",[]
+LTMC.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=39.0%', 'Profit margin >= 5%: margin=8.4%', 'FCF yield >= 3%: FCF yield=6.2%']","['high leverage', 'P/E >= 20']"
+LTMC.MI,buffett_quality,Buffett Quality,False,0.5,"['ROE >= 15%: ROE=39.0%', 'margin >= 8%: margin=8.4%']","['too much debt', 'P/E too high']"
+LTMC.MI,economic_moat,Economic Moat,False,0.25,['high ROE=39.0%'],"['ROA below 8%', 'margins below 12%', 'leverage too high']"
+LTMC.MI,high_dividend,High Dividend Yield,False,0.1842,"['yield=175.0%', 'universe rank 18%']",['not in top quartile for yield']
+LTMC.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=175.0%', 'earnings growth: growth=40.0%']",['P/E out of range']
+LTMC.MI,magic_formula,Magic Formula,True,0.6903,"['earnings yield rank 52%', 'ROIC rank 86%']",[]
+LTMC.MI,acquirers_multiple,Acquirer's Multiple,False,0.5185,"['EV/EBIT=17.8', 'universe rank 52%']","['EV/EBIT 17.8 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+LTMC.MI,dreman_contrarian,Dreman Contrarian,False,0.1487,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+LTMC.MI,piotroski_f,Piotroski F-Score,False,0.5556,"['F-Score=5/9', 'positive net income', 'ROA improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['F-Score 5/9 below 7', 'positive operating cash flow', 'OCF > net income', 'leverage declining', 'current ratio improving']"
+LTMC.MI,composite_value,Composite Value,False,0.5875,"['top-tier on trailing_pe (percentile 75%)', 'top-tier on fcf_yield (percentile 80%)', 'top-tier on ev_ebitda (percentile 80%)']",[]
+LTMC.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=2.10', 'insufficient data — skipped']",['missing OCF']
+LTMC.MI,financial_health,Financial Health,False,0.2,['ratio=3.1'],"['high debt to equity', 'high leverage', 'weak liquidity', 'weak interest coverage']"
+MB.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=467.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+MB.MI,graham_enterprising,Graham Enterprising,False,0.4,"['P/E < 25: P/E=18.3', 'P/B < 3: P/B=1.90']","['excessive leverage', 'ROE <= 8%', 'negative earnings growth']"
+MB.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+MB.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+MB.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+MB.MI,earnings_yield,Earnings Yield,False,0.4544,['E/P=5.5% (P/E=18.3)'],['earnings yield 5.5% below 8%']
+MB.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+MB.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=467.0%'],['P/E not below 12.0']
+MB.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+MB.MI,neff_pegy,Neff PEGY,True,0.9607,"['PEGY=0.04', 'growth=0.0%', 'yield=467.0%']",[]
+MB.MI,quality_value,Quality Value,False,0.4,"['Profit margin >= 5%: margin=39.1%', 'P/E < 20: P/E=18.3']","['ROE below 12%', 'high leverage', 'FCF yield below 3%']"
+MB.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=39.1%', 'P/E < 25.0: P/E=18.3']","['ROE too low', 'too much debt']"
+MB.MI,economic_moat,Economic Moat,False,0.25,['wide margin=39.1%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+MB.MI,high_dividend,High Dividend Yield,False,0.6579,"['yield=467.0%', 'universe rank 66%']",['not in top quartile for yield']
+MB.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=467.0%', 'reasonable P/E: P/E=18.3']",['earnings not growing']
+MB.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+MB.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+MB.MI,dreman_contrarian,Dreman Contrarian,False,0.5952,['dividend rank 66%'],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+MB.MI,piotroski_f,Piotroski F-Score,False,0.2222,"['F-Score=2/9', 'positive net income', 'no share dilution']","['F-Score 2/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+MB.MI,composite_value,Composite Value,False,0.3217,[],"['missing fcf_yield', 'missing ev_ebitda']"
+MB.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+MB.MI,financial_health,Financial Health,False,0.6,"['leverage=36.4%', 'insufficient data — skipped', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity']"
+MONC.MI,graham_defensive,Graham Defensive,False,0.5,"['Current ratio >= 2: CR=2.42', 'Dividend payer: yield=276.00%']","['P/E >= 15', 'valuation too rich on P/B or P/E×P/B']"
+MONC.MI,graham_enterprising,Graham Enterprising,False,0.8,"['P/E < 25: P/E=21.9', 'Debt/equity < 100%: D/E=29%', 'ROE > 8%: ROE=16.9%', 'Positive earnings growth: growth=2.9%']",['P/B >= 3']
+MONC.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+MONC.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=29%'],['P/B too high']
+MONC.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+MONC.MI,earnings_yield,Earnings Yield,False,0.3801,['E/P=4.6% (P/E=21.9)'],['earnings yield 4.6% below 8%']
+MONC.MI,fcf_yield,FCF Yield,False,0.4424,['FCF yield=4.4%'],['FCF yield 4.4% below 5%']
+MONC.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=276.0%'],['P/E not below 12.0']
+MONC.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=7.56', 'growth=2.9%']","['growth 2.9% below 5% floor', 'PEG 7.56 >= 1.0']"
+MONC.MI,neff_pegy,Neff PEGY,True,0.9214,"['PEGY=0.08', 'growth=2.9%', 'yield=276.0%']",[]
+MONC.MI,quality_value,Quality Value,True,0.8,"['ROE >= 12%: ROE=16.9%', 'Profit margin >= 5%: margin=20.0%', 'Debt/equity < 80%: D/E=29%', 'FCF yield >= 3%: FCF yield=4.4%']",['P/E >= 20']
+MONC.MI,buffett_quality,Buffett Quality,True,1.0,"['ROE >= 15%: ROE=16.9%', 'D/E < 60.0%: D/E=29%', 'margin >= 8%: margin=20.0%', 'P/E < 25.0: P/E=21.9']",[]
+MONC.MI,economic_moat,Economic Moat,True,0.75,"['solid ROA=10.5%', 'wide margin=20.0%', 'low leverage D/E=29%']",['ROE below 18%']
+MONC.MI,high_dividend,High Dividend Yield,False,0.3158,"['yield=276.0%', 'universe rank 32%']",['not in top quartile for yield']
+MONC.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=276.0%', 'reasonable P/E: P/E=21.9']",['earnings not growing']
+MONC.MI,magic_formula,Magic Formula,True,0.7803,"['earnings yield rank 63%', 'ROIC rank 93%']",[]
+MONC.MI,acquirers_multiple,Acquirer's Multiple,False,0.6296,"['EV/EBIT=14.7', 'universe rank 63%']",['EV/EBIT 14.7 above 12.0']
+MONC.MI,dreman_contrarian,Dreman Contrarian,False,0.3206,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+MONC.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'current ratio improving', 'no share dilution', 'gross margin improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'asset turnover improving']"
+MONC.MI,composite_value,Composite Value,True,0.74,"['top-tier on trailing_pe (percentile 100%)', 'top-tier on price_to_book (percentile 80%)']",[]
+MONC.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.97', 'insufficient data — skipped']",['missing OCF']
+MONC.MI,financial_health,Financial Health,True,1.0,"['D/E=29%', 'leverage=18.9%', 'CR=2.42', 'ratio=-0.3', 'coverage=21.3x']",[]
+NEXI.MI,graham_defensive,Graham Defensive,False,0.5,"['P/B < 1.5 or P/E×P/B < 22.5: P/B=0.68', 'Dividend payer: yield=733.00%']","['no positive trailing P/E', 'current ratio < 2']"
+NEXI.MI,graham_enterprising,Graham Enterprising,False,0.4,"['P/B < 3: P/B=0.68', 'Debt/equity < 100%: D/E=96%']","['missing P/E', 'ROE <= 8%', 'negative earnings growth']"
+NEXI.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+NEXI.MI,schloss,Schloss Low P/B,False,0.5,['P/B < 1.2: P/B=0.68'],['too much leverage']
+NEXI.MI,deep_value,Deep Value,True,1.0,"['P/B=0.68', 'EV/EBITDA=6.2']",[]
+NEXI.MI,earnings_yield,Earnings Yield,False,1.0,['E/P=nan% (P/E=nan)'],['earnings yield nan% below 8%']
+NEXI.MI,fcf_yield,FCF Yield,True,1.0,['FCF yield=13.7%'],[]
+NEXI.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=733.0%'],['P/E not below 12.0']
+NEXI.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+NEXI.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=733.0%']",['PEGY nan >= 1.0']
+NEXI.MI,quality_value,Quality Value,False,0.2,['FCF yield >= 3%: FCF yield=13.7%'],"['ROE below 12%', 'thin margins', 'high leverage', 'missing P/E']"
+NEXI.MI,buffett_quality,Buffett Quality,False,0.0,[],"['ROE too low', 'too much debt', 'thin margins', 'missing P/E']"
+NEXI.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+NEXI.MI,high_dividend,High Dividend Yield,False,0.8684,"['yield=733.0%', 'universe rank 87%']",['no positive earnings']
+NEXI.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=733.0%'],"['earnings not growing', 'P/E out of range']"
+NEXI.MI,magic_formula,Magic Formula,True,0.5626,['earnings yield rank 81%'],[]
+NEXI.MI,acquirers_multiple,Acquirer's Multiple,True,0.8148,"['EV/EBIT=10.5', 'universe rank 81%']",[]
+NEXI.MI,dreman_contrarian,Dreman Contrarian,False,0.9217,"['low P/B rank 98%', 'dividend rank 87%']",[]
+NEXI.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['F-Score 4/9 below 7', 'positive net income', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining']"
+NEXI.MI,composite_value,Composite Value,True,0.9163,"['top-tier on price_to_book (percentile 98%)', 'top-tier on dividend_yield (percentile 87%)', 'top-tier on fcf_yield (percentile 89%)', 'top-tier on ev_ebitda (percentile 93%)']",['missing trailing_pe']
+NEXI.MI,earnings_quality,Earnings Quality,False,0.5,['insufficient data — skipped'],['negative net income']
+NEXI.MI,financial_health,Financial Health,False,0.6,"['leverage=33.2%', 'ratio=2.7', 'coverage=3.3x']","['high debt to equity', 'weak liquidity']"
+PST.MI,graham_defensive,Graham Defensive,False,0.5,"['P/E < 15: P/E=14.8', 'Dividend payer: yield=449.00%']","['valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+PST.MI,graham_enterprising,Graham Enterprising,True,0.8,"['P/E < 25: P/E=14.8', 'P/B < 3: P/B=2.84', 'ROE > 8%: ROE=19.0%', 'Positive earnings growth: growth=36.9%']",['excessive leverage']
+PST.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+PST.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+PST.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+PST.MI,earnings_yield,Earnings Yield,False,0.5627,['E/P=6.8% (P/E=14.8)'],['earnings yield 6.8% below 8%']
+PST.MI,fcf_yield,FCF Yield,True,0.9831,['FCF yield=9.8%'],[]
+PST.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=449.0%'],['P/E not below 12.0']
+PST.MI,lynch_peg,Lynch PEG,True,0.5987,"['PEG=0.40', 'growth=36.9%']",[]
+PST.MI,neff_pegy,Neff PEGY,True,0.9695,"['PEGY=0.03', 'growth=36.9%', 'yield=449.0%']",[]
+PST.MI,quality_value,Quality Value,True,0.8,"['ROE >= 12%: ROE=19.0%', 'Profit margin >= 5%: margin=17.0%', 'P/E < 20: P/E=14.8', 'FCF yield >= 3%: FCF yield=9.8%']",['high leverage']
+PST.MI,buffett_quality,Buffett Quality,True,0.75,"['ROE >= 15%: ROE=19.0%', 'margin >= 8%: margin=17.0%', 'P/E < 25.0: P/E=14.8']",['too much debt']
+PST.MI,economic_moat,Economic Moat,False,0.5,"['high ROE=19.0%', 'wide margin=17.0%']","['ROA below 8%', 'leverage too high']"
+PST.MI,high_dividend,High Dividend Yield,False,0.6316,"['yield=449.0%', 'universe rank 63%']",['not in top quartile for yield']
+PST.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=449.0%', 'earnings growth: growth=36.9%', 'reasonable P/E: P/E=14.8']",[]
+PST.MI,magic_formula,Magic Formula,False,0.1443,[],['below top half on combined Magic Formula rank']
+PST.MI,acquirers_multiple,Acquirer's Multiple,False,0.1852,"['EV/EBIT=35.8', 'universe rank 19%']","['EV/EBIT 35.8 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+PST.MI,dreman_contrarian,Dreman Contrarian,False,0.5553,['dividend rank 63%'],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+PST.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'no share dilution', 'gross margin improving']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'leverage declining', 'current ratio improving', 'asset turnover improving']"
+PST.MI,composite_value,Composite Value,True,0.6933,"['top-tier on trailing_pe (percentile 100%)', 'top-tier on dividend_yield (percentile 80%)']",[]
+PST.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=1.60', 'insufficient data — skipped']",['missing OCF']
+PST.MI,financial_health,Financial Health,False,0.4,"['leverage=3.6%', 'coverage=54.1x']","['high debt to equity', 'weak liquidity', 'high net debt/EBITDA']"
+PRY.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=72.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+PRY.MI,graham_enterprising,Graham Enterprising,False,0.6,"['Debt/equity < 100%: D/E=76%', 'ROE > 8%: ROE=22.7%', 'Positive earnings growth: growth=53.4%']","['P/E >= 25', 'P/B >= 3']"
+PRY.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+PRY.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+PRY.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+PRY.MI,earnings_yield,Earnings Yield,False,0.3125,['E/P=3.7% (P/E=26.7)'],['earnings yield 3.7% below 8%']
+PRY.MI,fcf_yield,FCF Yield,False,0.3182,['FCF yield=3.2%'],['FCF yield 3.2% below 5%']
+PRY.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=72.0%'],['P/E not below 12.0']
+PRY.MI,lynch_peg,Lynch PEG,True,0.5006,"['PEG=0.50', 'growth=53.4%']",[]
+PRY.MI,neff_pegy,Neff PEGY,True,0.7873,"['PEGY=0.21', 'growth=53.4%', 'yield=72.0%']",[]
+PRY.MI,quality_value,Quality Value,True,0.8,"['ROE >= 12%: ROE=22.7%', 'Profit margin >= 5%: margin=6.6%', 'Debt/equity < 80%: D/E=76%', 'FCF yield >= 3%: FCF yield=3.2%']",['P/E >= 20']
+PRY.MI,buffett_quality,Buffett Quality,False,0.25,['ROE >= 15%: ROE=22.7%'],"['too much debt', 'thin margins', 'P/E too high']"
+PRY.MI,economic_moat,Economic Moat,False,0.25,['high ROE=22.7%'],"['ROA below 8%', 'margins below 12%', 'leverage too high']"
+PRY.MI,high_dividend,High Dividend Yield,False,0.0526,"['yield=72.0%', 'universe rank 5%']",['not in top quartile for yield']
+PRY.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=72.0%', 'earnings growth: growth=53.4%']",['P/E out of range']
+PRY.MI,magic_formula,Magic Formula,True,0.5275,['ROIC rank 76%'],[]
+PRY.MI,acquirers_multiple,Acquirer's Multiple,False,0.2963,"['EV/EBIT=27.3', 'universe rank 30%']","['EV/EBIT 27.3 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+PRY.MI,dreman_contrarian,Dreman Contrarian,False,0.1561,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+PRY.MI,piotroski_f,Piotroski F-Score,True,0.7778,"['F-Score=7/9', 'positive net income', 'ROA improving', 'leverage declining', 'current ratio improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['positive operating cash flow', 'OCF > net income']"
+PRY.MI,composite_value,Composite Value,False,0.315,[],[]
+PRY.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.92', 'insufficient data — skipped']",['missing OCF']
+PRY.MI,financial_health,Financial Health,True,1.0,"['D/E=76%', 'leverage=25.8%', 'CR=1.23', 'ratio=1.5', 'coverage=6.7x']",[]
+REC.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=276.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+REC.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=22.7', 'ROE > 8%: ROE=23.4%', 'Positive earnings growth: growth=22.4%']","['P/B >= 3', 'excessive leverage']"
+REC.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+REC.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+REC.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+REC.MI,earnings_yield,Earnings Yield,False,0.3664,['E/P=4.4% (P/E=22.7)'],['earnings yield 4.4% below 8%']
+REC.MI,fcf_yield,FCF Yield,True,0.5133,['FCF yield=5.1%'],[]
+REC.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=276.0%'],['P/E not below 12.0']
+REC.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=1.02', 'growth=22.4%']",['PEG 1.02 >= 1.0']
+REC.MI,neff_pegy,Neff PEGY,True,0.9238,"['PEGY=0.08', 'growth=22.4%', 'yield=276.0%']",[]
+REC.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=23.4%', 'Profit margin >= 5%: margin=17.8%', 'FCF yield >= 3%: FCF yield=5.1%']","['high leverage', 'P/E >= 20']"
+REC.MI,buffett_quality,Buffett Quality,True,0.75,"['ROE >= 15%: ROE=23.4%', 'margin >= 8%: margin=17.8%', 'P/E < 25.0: P/E=22.7']",['too much debt']
+REC.MI,economic_moat,Economic Moat,True,0.75,"['high ROE=23.4%', 'solid ROA=8.4%', 'wide margin=17.8%']",['leverage too high']
+REC.MI,high_dividend,High Dividend Yield,False,0.3158,"['yield=276.0%', 'universe rank 32%']",['not in top quartile for yield']
+REC.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=276.0%', 'earnings growth: growth=22.4%', 'reasonable P/E: P/E=22.7']",[]
+REC.MI,magic_formula,Magic Formula,True,0.7261,"['earnings yield rank 56%', 'ROIC rank 90%']",[]
+REC.MI,acquirers_multiple,Acquirer's Multiple,False,0.5556,"['EV/EBIT=17.3', 'universe rank 56%']","['EV/EBIT 17.3 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+REC.MI,dreman_contrarian,Dreman Contrarian,False,0.2781,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+REC.MI,piotroski_f,Piotroski F-Score,False,0.5556,"['F-Score=5/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution', 'asset turnover improving']","['F-Score 5/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving', 'gross margin improving']"
+REC.MI,composite_value,Composite Value,False,0.525,['top-tier on trailing_pe (percentile 100%)'],[]
+REC.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=1.21', 'insufficient data — skipped']",['missing OCF']
+REC.MI,financial_health,Financial Health,False,0.8,"['leverage=47.0%', 'CR=1.59', 'ratio=2.0', 'coverage=7.2x']",['high debt to equity']
+SPM.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=405.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+SPM.MI,graham_enterprising,Graham Enterprising,False,0.4,"['Debt/equity < 100%: D/E=47%', 'ROE > 8%: ROE=11.6%']","['P/E >= 25', 'P/B >= 3', 'negative earnings growth']"
+SPM.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+SPM.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=47%'],['P/B too high']
+SPM.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=6.7'],['P/B not below 1.0']
+SPM.MI,earnings_yield,Earnings Yield,False,0.2975,['E/P=3.6% (P/E=28.0)'],['earnings yield 3.6% below 8%']
+SPM.MI,fcf_yield,FCF Yield,True,1.0,['FCF yield=14.2%'],[]
+SPM.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=405.0%'],['P/E not below 12.0']
+SPM.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+SPM.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=405.0%']",['PEGY nan >= 1.0']
+SPM.MI,quality_value,Quality Value,False,0.4,"['Debt/equity < 80%: D/E=47%', 'FCF yield >= 3%: FCF yield=14.2%']","['ROE below 12%', 'thin margins', 'P/E >= 20']"
+SPM.MI,buffett_quality,Buffett Quality,False,0.25,['D/E < 60.0%: D/E=47%'],"['ROE too low', 'thin margins', 'P/E too high']"
+SPM.MI,economic_moat,Economic Moat,False,0.25,['low leverage D/E=47%'],"['ROE below 18%', 'ROA below 8%', 'margins below 12%']"
+SPM.MI,high_dividend,High Dividend Yield,False,0.5,"['yield=405.0%', 'universe rank 50%']",['not in top quartile for yield']
+SPM.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=405.0%'],"['earnings not growing', 'P/E out of range']"
+SPM.MI,magic_formula,Magic Formula,True,0.7152,"['earnings yield rank 74%', 'ROIC rank 69%']",[]
+SPM.MI,acquirers_multiple,Acquirer's Multiple,True,0.7407,"['EV/EBIT=11.8', 'universe rank 74%']",[]
+SPM.MI,dreman_contrarian,Dreman Contrarian,False,0.3544,['dividend rank 50%'],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+SPM.MI,piotroski_f,Piotroski F-Score,False,0.5556,"['F-Score=5/9', 'positive net income', 'ROA improving', 'no share dilution', 'gross margin improving', 'asset turnover improving']","['F-Score 5/9 below 7', 'positive operating cash flow', 'OCF > net income', 'leverage declining', 'current ratio improving']"
+SPM.MI,composite_value,Composite Value,False,0.5,['top-tier on ev_ebitda (percentile 100%)'],[]
+SPM.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=3.73', 'insufficient data — skipped']",['missing OCF']
+SPM.MI,financial_health,Financial Health,False,0.8,"['D/E=47%', 'leverage=21.5%', 'ratio=0.0', 'coverage=4.3x']",['weak liquidity']
+SRG.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=485.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+SRG.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=17.3', 'P/B < 3: P/B=2.19', 'ROE > 8%: ROE=11.2%']","['excessive leverage', 'negative earnings growth']"
+SRG.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+SRG.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+SRG.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+SRG.MI,earnings_yield,Earnings Yield,False,0.482,['E/P=5.8% (P/E=17.3)'],['earnings yield 5.8% below 8%']
+SRG.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+SRG.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=485.0%'],['P/E not below 12.0']
+SRG.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+SRG.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=485.0%']",['PEGY nan >= 1.0']
+SRG.MI,quality_value,Quality Value,False,0.4,"['Profit margin >= 5%: margin=27.4%', 'P/E < 20: P/E=17.3']","['ROE below 12%', 'high leverage', 'FCF yield below 3%']"
+SRG.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=27.4%', 'P/E < 25.0: P/E=17.3']","['ROE too low', 'too much debt']"
+SRG.MI,economic_moat,Economic Moat,False,0.25,['wide margin=27.4%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+SRG.MI,high_dividend,High Dividend Yield,False,0.6842,"['yield=485.0%', 'universe rank 68%']",['not in top quartile for yield']
+SRG.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=485.0%', 'reasonable P/E: P/E=17.3']",['earnings not growing']
+SRG.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+SRG.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+SRG.MI,dreman_contrarian,Dreman Contrarian,False,0.5877,['dividend rank 68%'],"['P/E not in bottom quartile', 'P/B not cheap vs universe']"
+SRG.MI,piotroski_f,Piotroski F-Score,False,0.3333,"['F-Score=3/9', 'positive net income', 'no share dilution', 'asset turnover improving']","['F-Score 3/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving']"
+SRG.MI,composite_value,Composite Value,False,0.6026,[],"['missing fcf_yield', 'missing ev_ebitda']"
+SRG.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+SRG.MI,financial_health,Financial Health,False,0.4,"['leverage=52.8%', 'coverage=4.1x']","['high debt to equity', 'weak liquidity', 'high net debt/EBITDA']"
+STLAM.MI,graham_defensive,Graham Defensive,False,0.5,"['P/B < 1.5 or P/E×P/B < 22.5: P/B=0.27', 'Dividend payer: yield=1113.00%']","['no positive trailing P/E', 'current ratio < 2']"
+STLAM.MI,graham_enterprising,Graham Enterprising,False,0.4,"['P/B < 3: P/B=0.27', 'Debt/equity < 100%: D/E=79%']","['missing P/E', 'ROE <= 8%', 'negative earnings growth']"
+STLAM.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+STLAM.MI,schloss,Schloss Low P/B,False,0.5,['P/B < 1.2: P/B=0.27'],['too much leverage']
+STLAM.MI,deep_value,Deep Value,True,1.0,"['P/B=0.27', 'EV/EBITDA=-31.4']",[]
+STLAM.MI,earnings_yield,Earnings Yield,False,1.0,['E/P=nan% (P/E=nan)'],['earnings yield nan% below 8%']
+STLAM.MI,fcf_yield,FCF Yield,False,0.0,['FCF yield=-39.5%'],['FCF yield -39.5% below 5%']
+STLAM.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=1113.0%'],['P/E not below 12.0']
+STLAM.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+STLAM.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=1113.0%']",['PEGY nan >= 1.0']
+STLAM.MI,quality_value,Quality Value,False,0.2,['Debt/equity < 80%: D/E=79%'],"['ROE below 12%', 'thin margins', 'missing P/E', 'FCF yield below 3%']"
+STLAM.MI,buffett_quality,Buffett Quality,False,0.0,[],"['ROE too low', 'too much debt', 'thin margins', 'missing P/E']"
+STLAM.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+STLAM.MI,high_dividend,High Dividend Yield,False,0.9737,"['yield=1113.0%', 'universe rank 97%']",['no positive earnings']
+STLAM.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=1113.0%'],"['earnings not growing', 'P/E out of range']"
+STLAM.MI,magic_formula,Magic Formula,False,0.0,[],['below top half on combined Magic Formula rank']
+STLAM.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['missing EV or EBIT']
+STLAM.MI,dreman_contrarian,Dreman Contrarian,False,0.9868,"['low P/B rank 100%', 'dividend rank 97%']",[]
+STLAM.MI,piotroski_f,Piotroski F-Score,False,0.2222,"['F-Score=2/9', 'no share dilution', 'asset turnover improving']","['F-Score 2/9 below 7', 'positive net income', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving']"
+STLAM.MI,composite_value,Composite Value,True,0.68,"['top-tier on price_to_book (percentile 100%)', 'top-tier on dividend_yield (percentile 80%)', 'top-tier on ev_ebitda (percentile 100%)']",['missing trailing_pe']
+STLAM.MI,earnings_quality,Earnings Quality,False,0.5,['insufficient data — skipped'],['negative net income']
+STLAM.MI,financial_health,Financial Health,False,0.6,"['D/E=79%', 'leverage=23.5%', 'insufficient data — skipped']","['weak liquidity', 'weak interest coverage']"
+STMMI.MI,graham_defensive,Graham Defensive,False,0.5,"['Current ratio >= 2: CR=3.31', 'Dividend payer: yield=58.00%']","['P/E >= 15', 'valuation too rich on P/B or P/E×P/B']"
+STMMI.MI,graham_enterprising,Graham Enterprising,False,0.2,['Debt/equity < 100%: D/E=15%'],"['P/E >= 25', 'P/B >= 3', 'ROE <= 8%', 'negative earnings growth']"
+STMMI.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+STMMI.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=15%'],['P/B too high']
+STMMI.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+STMMI.MI,earnings_yield,Earnings Yield,False,0.0217,['E/P=0.3% (P/E=384.2)'],['earnings yield 0.3% below 8%']
+STMMI.MI,fcf_yield,FCF Yield,False,0.0,['FCF yield=-0.8%'],['FCF yield -0.8% below 5%']
+STMMI.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=58.0%'],['P/E not below 12.0']
+STMMI.MI,lynch_peg,Lynch PEG,False,0.2,[],['missing or negative earnings growth']
+STMMI.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=15.56', 'growth=-33.3%', 'yield=58.0%']",['PEGY 15.56 >= 1.0']
+STMMI.MI,quality_value,Quality Value,False,0.2,['Debt/equity < 80%: D/E=15%'],"['ROE below 12%', 'thin margins', 'P/E >= 20', 'FCF yield below 3%']"
+STMMI.MI,buffett_quality,Buffett Quality,False,0.25,['D/E < 60.0%: D/E=15%'],"['ROE too low', 'thin margins', 'P/E too high']"
+STMMI.MI,economic_moat,Economic Moat,False,0.25,['low leverage D/E=15%'],"['ROE below 18%', 'ROA below 8%', 'margins below 12%']"
+STMMI.MI,high_dividend,High Dividend Yield,False,0.0263,"['yield=58.0%', 'universe rank 3%']",['not in top quartile for yield']
+STMMI.MI,dividend_growth,Dividend Growth,False,0.3333,['dividend payer: yield=58.0%'],"['earnings not growing', 'P/E out of range']"
+STMMI.MI,magic_formula,Magic Formula,False,0.053,[],['below top half on combined Magic Formula rank']
+STMMI.MI,acquirers_multiple,Acquirer's Multiple,False,0.037,"['EV/EBIT=143.7', 'universe rank 4%']","['EV/EBIT 143.7 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+STMMI.MI,dreman_contrarian,Dreman Contrarian,False,0.1092,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+STMMI.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'leverage declining', 'current ratio improving', 'no share dilution']","['F-Score 4/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'gross margin improving', 'asset turnover improving']"
+STMMI.MI,composite_value,Composite Value,False,0.1133,[],[]
+STMMI.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+STMMI.MI,financial_health,Financial Health,True,1.0,"['D/E=15%', 'leverage=9.5%', 'CR=3.36', 'ratio=-0.7', 'coverage=5.9x']",[]
+TIT.MI,graham_defensive,Graham Defensive,False,0.25,['P/B < 1.5 or P/E×P/B < 22.5: P/B=1.37'],"['P/E >= 15', 'current ratio < 2', 'no dividend']"
+TIT.MI,graham_enterprising,Graham Enterprising,False,0.2,['P/B < 3: P/B=1.37'],"['P/E >= 25', 'excessive leverage', 'ROE <= 8%', 'negative earnings growth']"
+TIT.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+TIT.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+TIT.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+TIT.MI,earnings_yield,Earnings Yield,False,0.1912,['E/P=2.3% (P/E=43.6)'],['earnings yield 2.3% below 8%']
+TIT.MI,fcf_yield,FCF Yield,False,0.4132,['FCF yield=4.1%'],['FCF yield 4.1% below 5%']
+TIT.MI,low_pe_high_yield,Low P/E + High Yield,False,0.0,[],"['P/E not below 12.0', 'yield below 4%']"
+TIT.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+TIT.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=nan%']",['PEGY nan >= 1.0']
+TIT.MI,quality_value,Quality Value,False,0.2,['FCF yield >= 3%: FCF yield=4.1%'],"['ROE below 12%', 'thin margins', 'high leverage', 'P/E >= 20']"
+TIT.MI,buffett_quality,Buffett Quality,False,0.0,[],"['ROE too low', 'too much debt', 'thin margins', 'P/E too high']"
+TIT.MI,economic_moat,Economic Moat,False,0.0,[],"['ROE below 18%', 'ROA below 8%', 'margins below 12%', 'leverage too high']"
+TIT.MI,high_dividend,High Dividend Yield,False,0.0,[],['could not rank yield']
+TIT.MI,dividend_growth,Dividend Growth,False,0.0,[],"['yield too low', 'earnings not growing', 'P/E out of range']"
+TIT.MI,magic_formula,Magic Formula,False,0.1973,[],['below top half on combined Magic Formula rank']
+TIT.MI,acquirers_multiple,Acquirer's Multiple,False,0.2222,"['EV/EBIT=32.8', 'universe rank 22%']","['EV/EBIT 32.8 above 12.0', 'not in top 40% cheapest on EV/EBIT']"
+TIT.MI,dreman_contrarian,Dreman Contrarian,False,0.4645,['low P/B rank 85%'],['P/E not in bottom quartile']
+TIT.MI,piotroski_f,Piotroski F-Score,False,0.6667,"['F-Score=6/9', 'positive net income', 'ROA improving', 'leverage declining', 'current ratio improving', 'no share dilution', 'asset turnover improving']","['F-Score 6/9 below 7', 'positive operating cash flow', 'OCF > net income', 'gross margin improving']"
+TIT.MI,composite_value,Composite Value,False,0.4452,['top-tier on price_to_book (percentile 85%)'],['missing dividend_yield']
+TIT.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=2.32', 'insufficient data — skipped']",['missing OCF']
+TIT.MI,financial_health,Financial Health,False,0.4,"['leverage=36.0%', 'ratio=3.1']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+TEN.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=14.8', 'Current ratio >= 2: CR=4.14', 'Dividend payer: yield=310.00%']",['valuation too rich on P/B or P/E×P/B']
+TEN.MI,graham_enterprising,Graham Enterprising,True,1.0,"['P/E < 25: P/E=14.8', 'P/B < 3: P/B=1.67', 'Debt/equity < 100%: D/E=3%', 'ROE > 8%: ROE=11.6%', 'Positive earnings growth: growth=13.7%']",[]
+TEN.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+TEN.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=3%'],['P/B too high']
+TEN.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=7.9'],['P/B not below 1.0']
+TEN.MI,earnings_yield,Earnings Yield,False,0.5614,['E/P=6.7% (P/E=14.8)'],['earnings yield 6.7% below 8%']
+TEN.MI,fcf_yield,FCF Yield,True,0.5179,['FCF yield=5.2%'],[]
+TEN.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=310.0%'],['P/E not below 12.0']
+TEN.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=1.08', 'growth=13.7%']",['PEG 1.08 >= 1.0']
+TEN.MI,neff_pegy,Neff PEGY,True,0.9541,"['PEGY=0.05', 'growth=13.7%', 'yield=310.0%']",[]
+TEN.MI,quality_value,Quality Value,False,0.8,"['Profit margin >= 5%: margin=16.2%', 'Debt/equity < 80%: D/E=3%', 'P/E < 20: P/E=14.8', 'FCF yield >= 3%: FCF yield=5.2%']",['ROE below 12%']
+TEN.MI,buffett_quality,Buffett Quality,False,0.75,"['D/E < 60.0%: D/E=3%', 'margin >= 8%: margin=16.2%', 'P/E < 25.0: P/E=14.8']",['ROE too low']
+TEN.MI,economic_moat,Economic Moat,True,0.75,"['solid ROA=9.6%', 'wide margin=16.2%', 'low leverage D/E=3%']",['ROE below 18%']
+TEN.MI,high_dividend,High Dividend Yield,False,0.3684,"['yield=310.0%', 'universe rank 37%']",['not in top quartile for yield']
+TEN.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=310.0%', 'earnings growth: growth=13.7%', 'reasonable P/E: P/E=14.8']",[]
+TEN.MI,magic_formula,Magic Formula,True,0.8225,"['earnings yield rank 85%', 'ROIC rank 79%']",[]
+TEN.MI,acquirers_multiple,Acquirer's Multiple,True,0.8519,"['EV/EBIT=9.7', 'universe rank 85%']",[]
+TEN.MI,dreman_contrarian,Dreman Contrarian,False,0.5671,['low P/B rank 68%'],"['P/E not in bottom quartile', 'dividend yield below median']"
+TEN.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'leverage declining', 'current ratio improving', 'no share dilution']","['F-Score 4/9 below 7', 'positive operating cash flow', 'ROA improving', 'OCF > net income', 'gross margin improving', 'asset turnover improving']"
+TEN.MI,composite_value,Composite Value,False,0.5,['top-tier on trailing_pe (percentile 100%)'],[]
+TEN.MI,earnings_quality,Earnings Quality,False,0.6667,"['FCF/NI=0.67', 'insufficient data — skipped']",['missing OCF']
+TEN.MI,financial_health,Financial Health,True,1.0,"['D/E=3%', 'leverage=2.2%', 'CR=3.87', 'ratio=-1.0', 'coverage=48.9x']",[]
+TRN.MI,graham_defensive,Graham Defensive,False,0.25,['Dividend payer: yield=383.00%'],"['P/E >= 15', 'valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+TRN.MI,graham_enterprising,Graham Enterprising,False,0.6,"['P/E < 25: P/E=19.5', 'P/B < 3: P/B=2.33', 'ROE > 8%: ROE=13.3%']","['excessive leverage', 'negative earnings growth']"
+TRN.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+TRN.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+TRN.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+TRN.MI,earnings_yield,Earnings Yield,False,0.4267,['E/P=5.1% (P/E=19.5)'],['earnings yield 5.1% below 8%']
+TRN.MI,fcf_yield,FCF Yield,False,0.0,['FCF yield=-4.3%'],['FCF yield -4.3% below 5%']
+TRN.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=383.0%'],['P/E not below 12.0']
+TRN.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=nan', 'growth=nan%']",[]
+TRN.MI,neff_pegy,Neff PEGY,False,0.0,"['PEGY=nan', 'growth=nan%', 'yield=383.0%']",['PEGY nan >= 1.0']
+TRN.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=13.3%', 'Profit margin >= 5%: margin=27.2%', 'P/E < 20: P/E=19.5']","['high leverage', 'FCF yield below 3%']"
+TRN.MI,buffett_quality,Buffett Quality,False,0.5,"['margin >= 8%: margin=27.2%', 'P/E < 25.0: P/E=19.5']","['ROE too low', 'too much debt']"
+TRN.MI,economic_moat,Economic Moat,False,0.25,['wide margin=27.2%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+TRN.MI,high_dividend,High Dividend Yield,False,0.4211,"['yield=383.0%', 'universe rank 42%']",['not in top quartile for yield']
+TRN.MI,dividend_growth,Dividend Growth,True,0.6667,"['dividend payer: yield=383.0%', 'reasonable P/E: P/E=19.5']",['earnings not growing']
+TRN.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+TRN.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+TRN.MI,dreman_contrarian,Dreman Contrarian,False,0.4575,[],"['P/E not in bottom quartile', 'P/B not cheap vs universe', 'dividend yield below median']"
+TRN.MI,piotroski_f,Piotroski F-Score,False,0.2222,"['F-Score=2/9', 'ROA improving', 'no share dilution']","['F-Score 2/9 below 7', 'positive net income', 'positive operating cash flow', 'OCF > net income', 'leverage declining', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+TRN.MI,composite_value,Composite Value,False,0.2133,[],[]
+TRN.MI,earnings_quality,Earnings Quality,False,0.5,['insufficient data — skipped'],['missing net income']
+TRN.MI,financial_health,Financial Health,False,0.2,['insufficient data — skipped'],"['high debt to equity', 'high leverage', 'weak liquidity', 'high net debt/EBITDA']"
+UCG.MI,graham_defensive,Graham Defensive,False,0.75,"['P/E < 15: P/E=11.4', 'P/B < 1.5 or P/E×P/B < 22.5: P/B=1.76', 'Dividend payer: yield=391.00%']",['current ratio < 2']
+UCG.MI,graham_enterprising,Graham Enterprising,True,0.8,"['P/E < 25: P/E=11.4', 'P/B < 3: P/B=1.76', 'ROE > 8%: ROE=17.0%', 'Positive earnings growth: growth=20.1%']",['excessive leverage']
+UCG.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+UCG.MI,schloss,Schloss Low P/B,False,0.0,[],"['P/B too high', 'too much leverage']"
+UCG.MI,deep_value,Deep Value,False,0.0,[],"['P/B not below 1.0', 'EV/EBITDA not below 8']"
+UCG.MI,earnings_yield,Earnings Yield,True,0.733,['E/P=8.8% (P/E=11.4)'],[]
+UCG.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+UCG.MI,low_pe_high_yield,Low P/E + High Yield,True,1.0,"['P/E=11.4', 'yield=391.0%']",[]
+UCG.MI,lynch_peg,Lynch PEG,True,0.4344,"['PEG=0.57', 'growth=20.1%']",[]
+UCG.MI,neff_pegy,Neff PEGY,True,0.9723,"['PEGY=0.03', 'growth=20.1%', 'yield=391.0%']",[]
+UCG.MI,quality_value,Quality Value,False,0.6,"['ROE >= 12%: ROE=17.0%', 'Profit margin >= 5%: margin=44.6%', 'P/E < 20: P/E=11.4']","['high leverage', 'FCF yield below 3%']"
+UCG.MI,buffett_quality,Buffett Quality,True,0.75,"['ROE >= 15%: ROE=17.0%', 'margin >= 8%: margin=44.6%', 'P/E < 25.0: P/E=11.4']",['too much debt']
+UCG.MI,economic_moat,Economic Moat,False,0.25,['wide margin=44.6%'],"['ROE below 18%', 'ROA below 8%', 'leverage too high']"
+UCG.MI,high_dividend,High Dividend Yield,False,0.4737,"['yield=391.0%', 'universe rank 47%']",['not in top quartile for yield']
+UCG.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=391.0%', 'earnings growth: growth=20.1%', 'reasonable P/E: P/E=11.4']",[]
+UCG.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+UCG.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+UCG.MI,dreman_contrarian,Dreman Contrarian,True,0.664,"['low P/E rank 87%', 'low P/B rank 65%']",['dividend yield below median']
+UCG.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+UCG.MI,composite_value,Composite Value,False,0.5315,['top-tier on trailing_pe (percentile 73%)'],"['missing fcf_yield', 'missing ev_ebitda']"
+UCG.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+UCG.MI,financial_health,Financial Health,False,0.4,"['leverage=14.9%', 'insufficient data — skipped']","['high debt to equity', 'weak liquidity', 'weak interest coverage']"
+UNI.MI,graham_defensive,Graham Defensive,False,0.5,"['P/E < 15: P/E=12.8', 'Dividend payer: yield=430.00%']","['valuation too rich on P/B or P/E×P/B', 'current ratio < 2']"
+UNI.MI,graham_enterprising,Graham Enterprising,False,0.8,"['P/E < 25: P/E=12.8', 'P/B < 3: P/B=1.87', 'Debt/equity < 100%: D/E=47%', 'Positive earnings growth: growth=12.2%']",['ROE <= 8%']
+UNI.MI,graham_net_net,Graham Net-Net,False,0.0,[],['missing NCAV (balance sheet data)']
+UNI.MI,schloss,Schloss Low P/B,False,0.5,['D/E < 50.0%: D/E=47%'],['P/B too high']
+UNI.MI,deep_value,Deep Value,False,0.5,['EV/EBITDA=7.5'],['P/B not below 1.0']
+UNI.MI,earnings_yield,Earnings Yield,False,0.6496,['E/P=7.8% (P/E=12.8)'],['earnings yield 7.8% below 8%']
+UNI.MI,fcf_yield,FCF Yield,False,1.0,['FCF yield=nan%'],['FCF yield nan% below 5%']
+UNI.MI,low_pe_high_yield,Low P/E + High Yield,False,0.5,['yield=430.0%'],['P/E not below 12.0']
+UNI.MI,lynch_peg,Lynch PEG,False,0.0,"['PEG=1.05', 'growth=12.2%']",['PEG 1.05 >= 1.0']
+UNI.MI,neff_pegy,Neff PEGY,True,0.971,"['PEGY=0.03', 'growth=12.2%', 'yield=430.0%']",[]
+UNI.MI,quality_value,Quality Value,False,0.6,"['Profit margin >= 5%: margin=13.8%', 'Debt/equity < 80%: D/E=47%', 'P/E < 20: P/E=12.8']","['ROE below 12%', 'FCF yield below 3%']"
+UNI.MI,buffett_quality,Buffett Quality,False,0.75,"['D/E < 60.0%: D/E=47%', 'margin >= 8%: margin=13.8%', 'P/E < 25.0: P/E=12.8']",['ROE too low']
+UNI.MI,economic_moat,Economic Moat,False,0.5,"['wide margin=13.8%', 'low leverage D/E=47%']","['ROE below 18%', 'ROA below 8%']"
+UNI.MI,high_dividend,High Dividend Yield,False,0.5789,"['yield=430.0%', 'universe rank 58%']",['not in top quartile for yield']
+UNI.MI,dividend_growth,Dividend Growth,True,1.0,"['dividend payer: yield=430.0%', 'earnings growth: growth=12.2%', 'reasonable P/E: P/E=12.8']",[]
+UNI.MI,magic_formula,Magic Formula,False,0.0,[],['missing EBIT/EV or ROIC inputs']
+UNI.MI,acquirers_multiple,Acquirer's Multiple,False,0.0,[],['could not rank EV/EBIT']
+UNI.MI,dreman_contrarian,Dreman Contrarian,True,0.6561,"['low P/E rank 79%', 'low P/B rank 60%', 'dividend rank 58%']",[]
+UNI.MI,piotroski_f,Piotroski F-Score,False,0.4444,"['F-Score=4/9', 'positive net income', 'ROA improving', 'leverage declining', 'no share dilution']","['F-Score 4/9 below 7', 'positive operating cash flow', 'OCF > net income', 'current ratio improving', 'gross margin improving', 'asset turnover improving']"
+UNI.MI,composite_value,Composite Value,False,0.5,[],['missing fcf_yield']
+UNI.MI,earnings_quality,Earnings Quality,False,0.3333,['insufficient data — skipped'],"['weak free-cash conversion', 'missing OCF']"
+UNI.MI,financial_health,Financial Health,False,0.8,"['D/E=47%', 'leverage=5.5%', 'ratio=1.1', 'insufficient data — skipped']",['weak liquidity']

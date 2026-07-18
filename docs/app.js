@@ -66,6 +66,18 @@ function researchOverlayHtml(report) {
   return `<br><span class="small muted">Research: ${verdict}</span>`;
 }
 
+function iiTradabilityBadge(report) {
+  if (report.tradable_on_ii === true) {
+    const channel = report.ii_deal_channel === "phone" ? "phone" : "II online";
+    return `<span class="badge badge-ii-ok" title="Advisory exchange allowlist — not a confirmed II order book">${esc(channel)}</span>`;
+  }
+  if (report.tradable_on_ii === false) {
+    const why = report.ii_basis === "phone_only" ? "II phone-only" : "II venue unclear";
+    return `<span class="badge badge-ii-no" title="Advisory — name may still appear on II">${esc(why)}</span>`;
+  }
+  return "";
+}
+
 function tradePlanHtml(report) {
   const plan = report.trade_plan;
   if (!plan) return '<span class="muted">—</span>';
@@ -324,33 +336,73 @@ function renderScreener(data) {
 }
 
 function renderStrongBuys(data) {
+  if (typeof window.IIUnavailable?.mergeServer === "function") {
+    window.IIUnavailable.mergeServer(data.unavailable_watch);
+  }
+
   const reports = (data.reports || []).filter((r) => r.signal === "strong_buy" || r.signal === "buy");
   const panel = document.getElementById("panel-strong-buys");
+  const blocked = typeof window.IIUnavailable?.tickerSet === "function"
+    ? window.IIUnavailable.tickerSet()
+    : new Set();
+  const active = reports.filter((r) => !blocked.has(String(r.ticker || "").toUpperCase()));
+  const watched = typeof window.IIUnavailable?.load === "function"
+    ? window.IIUnavailable.load().items
+    : [];
+  const reportByTicker = new Map((data.reports || []).map((r) => [String(r.ticker).toUpperCase(), r]));
 
-  if (!reports.length) {
+  if (!active.length && !watched.length) {
     panel.innerHTML = '<div class="empty-state">No strong buy or buy recommendations in the latest run.</div>';
     return;
   }
 
-  const strong = reports.filter((r) => r.signal === "strong_buy");
-  const buys = reports.filter((r) => r.signal === "buy");
+  const strong = active.filter((r) => r.signal === "strong_buy");
+  const buys = active.filter((r) => r.signal === "buy");
 
   const cardHtml = (report) => `
     <div class="card pick-card">
       <h4>${esc(report.name)} <span class="small muted">(${esc(report.ticker)})</span></h4>
-      <p>${signalBadge(report.signal)} ${timingBadge(report.timing_signal)} · Conviction ${pct(report.conviction_score)}${researchOverlayHtml(report)}</p>
+      <p>${signalBadge(report.signal)} ${timingBadge(report.timing_signal)} ${iiTradabilityBadge(report)} · Conviction ${pct(report.conviction_score)}${researchOverlayHtml(report)}</p>
       <p class="small">${esc(report.action_note || "")}</p>
       <p class="small"><strong>Trade plan:</strong><br>${tradePlanHtml(report)}</p>
       <p class="small">${esc(report.summary || "")}</p>
       <p class="pick-actions">
         <button type="button" class="btn" data-chart-ticker="${esc(report.ticker)}">Price chart</button>
         <button type="button" class="btn btn-primary" data-log-ticker="${esc(report.ticker)}">Log action</button>
+        <button type="button" class="btn btn-warn" data-unavailable-ticker="${esc(report.ticker)}" title="Bypass this suggested trade — keep watching in case it becomes tradable on II">Unavailable</button>
       </p>
     </div>`;
 
+  const watchedHtml = watched.length
+    ? `<div class="unavailable-watch-block">
+        <h3>Watched — unavailable to trade</h3>
+        <p class="small muted">Bypassed suggested trades. Still screened when present in the universe; restore if they become actionable on Interactive Investor.</p>
+        ${watched
+          .map((item) => {
+            const live = reportByTicker.get(item.ticker);
+            const name = live?.name || item.name || item.ticker;
+            const signal = live ? signalBadge(live.signal) : '<span class="badge badge-watch">watching</span>';
+            const ii = live ? iiTradabilityBadge(live) : "";
+            return `<div class="card pick-card pick-card-muted">
+              <h4>${esc(name)} <span class="small muted">(${esc(item.ticker)})</span></h4>
+              <p>${signal} ${ii} <span class="small muted">${esc(item.reason || "unavailable_on_ii")}</span></p>
+              <p class="small muted">${live ? esc(live.action_note || "Still on latest screen.") : "Not in the latest published buy tier — kept on watch."}</p>
+              <p class="pick-actions">
+                ${live ? `<button type="button" class="btn" data-chart-ticker="${esc(item.ticker)}">Price chart</button>` : ""}
+                <button type="button" class="btn btn-primary" data-restore-ticker="${esc(item.ticker)}">Restore to suggestions</button>
+              </p>
+            </div>`;
+          })
+          .join("")}
+      </div>`
+    : "";
+
   panel.innerHTML = `
-    ${strong.length ? `<h3 style="margin-top:0">Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
+    <p class="small muted" style="margin-top:0">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on II. The name stays watched below and is excluded from paper auto-entries until restored.</p>
+    ${strong.length ? `<h3>Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
     ${buys.length ? `<h3>Buys</h3>${buys.map(cardHtml).join("")}` : ""}
+    ${!active.length ? '<div class="empty-state">All buy-tier names are on the unavailable watch list.</div>' : ""}
+    ${watchedHtml}
   `;
 
   const byTicker = new Map(reports.map((r) => [r.ticker, r]));
@@ -365,6 +417,28 @@ function renderStrongBuys(data) {
         const portfolioTab = tabs?.querySelector('[data-tab="portfolio"]');
         if (portfolioTab) portfolioTab.click();
       }
+    });
+  });
+
+  panel.querySelectorAll("[data-unavailable-ticker]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const ticker = button.dataset.unavailableTicker;
+      const report = byTicker.get(ticker) || { ticker };
+      if (typeof window.IIUnavailable?.mark === "function") {
+        window.IIUnavailable.mark(report);
+      }
+      renderStrongBuys(data);
+      if (typeof renderPortfolio === "function") renderPortfolio(data);
+    });
+  });
+
+  panel.querySelectorAll("[data-restore-ticker]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (typeof window.IIUnavailable?.restore === "function") {
+        window.IIUnavailable.restore(button.dataset.restoreTicker);
+      }
+      renderStrongBuys(data);
+      if (typeof renderPortfolio === "function") renderPortfolio(data);
     });
   });
 }

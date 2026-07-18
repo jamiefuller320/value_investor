@@ -53,7 +53,11 @@ function saveBookFilter(value) {
 }
 
 function actionableReports(data) {
-  return (data.reports || []).filter((r) => r.signal === "strong_buy" || r.signal === "buy");
+  const buyTier = (data.reports || []).filter((r) => r.signal === "strong_buy" || r.signal === "buy");
+  if (typeof window.IIUnavailable?.filterActionable === "function") {
+    return window.IIUnavailable.filterActionable(buyTier);
+  }
+  return buyTier;
 }
 
 function reportByTicker(data, ticker) {

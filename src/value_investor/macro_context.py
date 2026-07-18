@@ -39,18 +39,30 @@ DOMAIN_SERIES: dict[str, dict[str, str]] = {
         "cad_usd": "CADUSD=X",
         "tsx_composite": "^GSPTSE",
     },
+    "asia": {
+        "usd_index": "DX-Y.NYB",
+        "hang_seng": "^HSI",
+    },
 }
 
 MARKET_TO_DOMAIN: dict[str, str] = {
     "sp500": "us",
     "nasdaq100": "us",
+    "us_adr_asia": "us",
     "ftse350": "uk",
     "ftse_smallcap": "uk",
+    "aim": "uk",
     "euro_stoxx50": "euro",
     "dax": "euro",
     "cac40": "euro",
+    "ibex35": "euro",
+    "ftse_mib": "euro",
+    "aex": "euro",
+    "bel20": "euro",
     "asx200": "au",
     "tsx60": "ca",
+    "hang_seng": "asia",
+    "sti": "asia",
 }
 
 

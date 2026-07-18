@@ -1,0 +1,95 @@
+# Watkin Jones Plc (WJG.L) — Research memo
+
+_Version 1 · Updated 2026-07-18T18:14:04.739992+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Watkin Jones is a UK purpose-built student accommodation (PBSA) and build-to-rent (BTR) developer trading on AIM at a deep discount to book: the quantitative screen flags a **buy** on cheapness (P/B 0.39) and balance-sheet resilience (D/E ~29%), with composite score 76% versus 66% sector-relative. The investment hook is an asset-backed micro-cap where cash (£80.4m, Yahoo FY2025) exceeds implied market capitalisation (~£49m at stated P/B), alongside share buybacks and reported insider buying. The central debate is whether this is classic deep value or a value trap: revenues have fallen sharply (£413m in FY2023 to £280m in FY2025, Yahoo), reported net income turned negative again in FY2025 (£8.4m loss), and ROE is −6.7%. Primary annual and interim RNS body text is unavailable in the source library, limiting verification of going concern language, covenants, and pipeline quality.
+
+## INVESTMENT THESIS
+The quantitative screen passes five of 22 models across two families—**cheapness** and **risk**—including Schloss Low P/B, Deep Value, FCF Yield, Composite Value, and Financial Health. WJG does not pass quality or growth screens, which is consistent with a cyclical, out-of-favour developer rather than a compounder.
+
+For a value investor, the case rests on tangible asset backing and liquidity rather than earnings momentum. Yahoo FY2025 balance sheet (fallback source; see Financial Review) shows tangible book value of £114.5m, total equity of £125.0m, and net cash relative to a sub-£50m equity market value at 0.39× book. Inventory (work-in-progress) has been run down from £147.1m (FY2022) to £86.9m (FY2025), which may reflect deliberate de-risking or weaker sales velocity—interpretation requires filings not present here. Management signalling via extended buybacks (Jul 2026 RNS headlines) and multiple insider purchase reports (Aug–Dec 2025) aligns with a management view that equity is undervalued.
+
+Business quality is mixed: Watkin Jones retains a leading PBSA franchise and is diversifying into BTR, hotels (294-unit hotel development partnership, Dec 2025), and partnerships, but operates in a structurally challenged UK student-housing and residential development market characterised by planning friction, higher financing costs, and episodic oversupply in certain cities. The screen’s buy signal is therefore a **balance-sheet and optionality** call, not an earnings-growth call.
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` contains 21 UK RNS entries, all classified as **other** (holdings notifications, buybacks, AGM access, director appointments). There are **zero annual** and **zero interim** results entries, and **zero downloadable filing bodies** under `filings/bodies/`. All figures below are from `financials_annual.json` (Yahoo Finance); this is an explicit fallback. Quarterly income data in that file is empty. Going concern, covenant, and contingency language cannot be assessed from primary filings in this library.
+
+**Income statement trend (Yahoo, FY ends September):**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | £407.1m | £413.2m | £362.4m | £279.8m |
+| Operating income | £54.7m | £0.2m | £4.3m | −£8.9m |
+| Net income | £13.4m | −£32.5m | £1.9m | −£8.4m |
+| Basic EPS | 5.23p | −12.69p | 0.74p | −3.28p |
+
+Revenue peaked in FY2023 and has since declined 32% over two years. Profitability is volatile: FY2023 included £39.6m of special charges (restructuring/M&A-related per Yahoo normalisation fields), driving a £32.5m loss. FY2024 showed a modest recovery (£1.9m net profit) on lower revenue, but FY2025 reverted to an £8.4m loss with negative operating income (−£8.9m) and negative EBITDA (−£0.07m per Yahoo). Gross margin compressed materially (gross profit £67.6m on £407m revenue in FY2022 vs £19.4m on £280m in FY2025).
+
+The screening snapshot cites FCF of £23.9m and passes FCF Yield; Yahoo FY2025 free cash flow is **−£14.2m** (operating cash flow −£14.1m), versus **+£30.1m** in FY2024. This inconsistency may reflect different measurement periods or adjustments in the screen engine; treat FCF yield with caution until reconciled against an actual results announcement.
+
+**Balance sheet and liquidity (Yahoo FY2025):**
+
+- Cash and equivalents: **£80.4m** (down from £96.9m FY2024, £110.8m FY2022)
+- Total debt: **£43.6m**; capital lease obligations **£33.6m**
+- Stockholders’ equity: **£125.0m** (down from £176.9m FY2022)
+- Tangible book value: **£114.5m**
+- Inventory (finished goods/WIP): **£86.9m**
+- Working capital: **£125.2m** (down from £224.3m FY2022)
+- Long-term provisions: **£34.4m** (up from £25.7m FY2022)
+
+The balance sheet supports the screen’s Financial Health pass: moderate leverage (D/E ~29% per screen; ~35% on Yahoo debt/equity), substantial cash, and declining but still meaningful WIP. Negative ROE (−6.7%) reflects recent losses against a shrinking equity base. Dividends were paid in FY2023 (£15.1m) despite losses—a governance/capital allocation flag in hindsight, though no dividend appears in FY2024–FY2025 Yahoo cash flows.
+
+**Interim results:** No half-year or trading update filing bodies are indexed. News headlines from May 2026 (TradingView/Yahoo) reference H1 themes—revenue and profit decline offset by margin improvement, diversification, and pipeline build—but without primary filing text, interim figures cannot be cited numerically here.
+
+## RISKS AND RED FLAGS
+**Cyclical and operational**
+- Sharp revenue decline and return to FY2025 losses suggest the market may be pricing structural demand impairment in PBSA development, not a temporary cyclical dip.
+- Large WIP inventory (£86.9m) creates completion, cost-overrun, and sales-timing risk in a weaker transaction environment.
+- Rising long-term provisions (£34.4m) may indicate build-quality, fire-safety, or contract-related liabilities; magnitude cannot be verified without annual report note disclosures.
+
+**Financial**
+- Negative ROE and negative reported FCF in FY2025 (Yahoo) undermine the FCF Yield screen pass.
+- Capital lease obligations (£33.6m) add off-balance-sheet-style fixed commitments.
+- Equity has eroded ~29% from FY2022 peak (£176.9m to £125.0m).
+
+**Governance and market structure**
+- AIM-listed penny stock with likely limited liquidity and elevated bid-offer friction.
+- Shareholders who invested three years ago were reported to be in the red (Yahoo Finance, 23 Sep 2025).
+- Dividend paid during FY2023 loss year raises questions on capital discipline.
+
+**Regulatory / planning**
+- Local opposition to developments (e.g. Brighton 12-storey block criticism, The Argus, 26 May 2026) illustrates planning and community-acceptance risk inherent in the model.
+
+**Research gaps (material)**
+- No annual report or interim results body text available; **going concern assessments, bank covenants, contingent liabilities, and pension obligations cannot be reviewed**. This is the single largest red flag for a deep-value construction/developer name.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year mixes corporate actions, results commentary, and promotional penny-share articles; substantive operational news is moderate, not thin.
+
+**Strategy and operations**
+- *Development Partnership for 294-unit hotel* (Investegate, 22 Dec 2025) — diversification beyond core PBSA.
+- *Watkin Jones PLC Full Year 2025 Earnings Call Highlights* (Yahoo Finance, 23 Dec 2025) — management emphasised cost control, diversification, and cash position amid market headwinds (figures not verifiable without filing bodies).
+- *Watkin Jones Maintains Profitability Despite Lower Revenue as Diversification Strategy Expands Pipeline* (Yahoo Finance UK, 27 May 2026) and related TradingView H1 summaries (26–27 May 2026) — narrative of margin improvement and pipeline offsetting revenue decline; primary numbers absent from library.
+- *Investor Presentation via Investor Meet Company* (Investegate, 28 May 2026).
+
+**Capital allocation and governance**
+- *Transaction in own shares and Buy Back Extension* (RNS, 17 Jul 2026) and related buyback/holding notifications — active capital return signal.
+- *Appointment of Non-Executive Director* (Investegate, 9 Jul 2026).
+- *Change of Registered Office* (Investegate, 1 Jun 2026) — administrative.
+
+**Insider activity**
+- *Several Insiders Invested In Watkin Jones Flagging Positive News* (Yahoo Finance, 20 Dec 2025).
+- *Positive Signs As Multiple Insiders Buy Watkin Jones Stock* (simplywall.st, 9 Aug 2025).
+
+**Market sentiment**
+- Multiple penny-share spotlight articles (Yahoo/simplywall.st, May–Nov 2025) — largely promotional, not fundamental research.
+- *Shareholders in Watkin Jones are in the red if they invested three years ago* (Yahoo Finance, 23 Sep 2025) — underscores share-price underperformance.
+
+**Flag:** Several indexed news items are irrelevant (e.g. MER stock chart, 6 Jul 2026) or syndicated AI summaries without primary data. Macro context file is missing and was not used.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: high
+Confidence: 0.58
+Rationale: The quantitative buy signal is partially confirmed by extreme book and cash discounts and active buybacks, but deteriorating FY2025 earnings, negative reported free cash flow, and the complete absence of primary annual/interim filing bodies materially weaken conviction relative to the screen.
