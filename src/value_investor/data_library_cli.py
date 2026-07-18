@@ -222,6 +222,23 @@ def build_parser() -> argparse.ArgumentParser:
     macro_p.add_argument("--json", action="store_true")
     macro_p.set_defaults(func=cmd_macro)
 
+    overlaps_p = sub.add_parser(
+        "overlaps",
+        help="Show exact Yahoo-ticker overlaps across library markets (dedupe identity)",
+    )
+    overlaps_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all registered except unused)",
+    )
+    overlaps_p.add_argument(
+        "--live",
+        action="store_true",
+        help="Fetch constituents from Wikipedia now (else use library manifests)",
+    )
+    overlaps_p.add_argument("--json", action="store_true")
+    overlaps_p.set_defaults(func=cmd_overlaps)
+
     return parser
 
 
@@ -554,6 +571,49 @@ def cmd_graduate(args: argparse.Namespace) -> int:
             f"{event.get('from_market')}→{event.get('to_market')}  "
             f"policy_focus={payload.get('policy_focus')}"
         )
+    return 0
+
+
+def cmd_overlaps(args: argparse.Namespace) -> int:
+    from .data_library import CONSTITUENT_FETCHERS, load_manifest
+    from .library_dedupe import summarize_ticker_overlaps
+
+    markets = _parse_markets(args.markets)
+    if markets is None:
+        # Default: registered offline slices (live FTSE 350 screen list optional via --markets).
+        markets = [mid for mid in MARKET_REGISTRY if mid != "ftse350"]
+
+    market_tickers: dict[str, list[str]] = {}
+    for mid in markets:
+        if mid not in MARKET_REGISTRY:
+            print(f"Unknown market: {mid}")
+            return 2
+        if args.live:
+            frame = CONSTITUENT_FETCHERS[mid]()
+            market_tickers[mid] = [str(t) for t in frame["ticker"].tolist()]
+            continue
+        manifest = load_manifest(args.root, mid)
+        tickers = list(manifest.get("tickers") or [])
+        if not tickers:
+            # Fall back to live fetch when library not grown yet.
+            try:
+                frame = CONSTITUENT_FETCHERS[mid]()
+                tickers = [str(t) for t in frame["ticker"].tolist()]
+            except Exception as exc:  # noqa: BLE001
+                print(f"{mid}: unavailable ({exc})")
+                continue
+        market_tickers[mid] = tickers
+
+    payload = summarize_ticker_overlaps(market_tickers)
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(f"Markets: {', '.join(payload['markets'])}")
+    print(f"Tickers in ≥2 markets: {payload['tickers_in_multiple_markets']}")
+    print(payload["note"])
+    for row in payload["pairs"]:
+        a, b = row["markets"]
+        print(f"  {a} ∩ {b}: {row['overlap_count']}  e.g. {row['sample']}")
     return 0
 
 
