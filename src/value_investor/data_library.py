@@ -22,7 +22,7 @@ from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIBRARY_ROOT = Path("output/library")
+DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_MAX_TICKERS_PER_RUN = 25
 DEFAULT_STALE_DAYS = 14
 DEFAULT_RETENTION_DAYS = 400  # ~13 months of daily-ish snapshots per market
@@ -460,6 +460,7 @@ def refresh_metrics(
     stale_days: int = DEFAULT_STALE_DAYS,
     fetch_fn: Callable[[str, str | None, str | None], Any] | None = None,
     exclude_tickers: set[str] | None = None,
+    only_tickers: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Progressively refresh fundamentals for a market.
@@ -468,11 +469,12 @@ def refresh_metrics(
     so libraries can grow across many scheduled runs without hammering APIs.
     ``exclude_tickers`` skips names already fetched earlier in the same multi-market
     grow (exact Yahoo ticker match — avoids S&P/Nasdaq double-fetch).
+    ``only_tickers`` forces a specific retry set (still capped by ``max_tickers``).
     """
     if market_id not in MARKET_REGISTRY:
         raise ValueError(f"Unknown market {market_id!r}")
     manifest = load_manifest(root, market_id)
-    if not manifest.get("tickers"):
+    if not manifest.get("tickers") and only_tickers is None:
         manifest = refresh_constituents(root, market_id)
 
     constituents_path = market_dir(root, market_id) / "constituents" / "latest.json"
@@ -481,12 +483,16 @@ def refresh_metrics(
         for row in read_json(constituents_path):
             by_ticker[str(row["ticker"])] = row
 
-    selected = _select_refresh_tickers(
-        manifest,
-        max_tickers=max_tickers,
-        stale_days=stale_days,
-        exclude_tickers=exclude_tickers,
-    )
+    if only_tickers is not None:
+        selected = list(dict.fromkeys(str(t) for t in only_tickers if t))
+        selected = selected[: max(0, max_tickers)]
+    else:
+        selected = _select_refresh_tickers(
+            manifest,
+            max_tickers=max_tickers,
+            stale_days=stale_days,
+            exclude_tickers=exclude_tickers,
+        )
     fetch = fetch_fn or (
         lambda ticker, name, sector: fetch_company_metrics(
             ticker, name=name, sector=sector, market=market_id
@@ -552,10 +558,12 @@ def refresh_metrics(
         field_union.update(fields)
         by_metrics[ticker] = row
         state = dict(manifest.get("ticker_state") or {})
+        errors_list = list(row.get("errors") or [])
         state[ticker] = {
             "last_refresh": datetime.now(UTC).isoformat(),
             "fields_present": fields,
-            "errors": list(row.get("errors") or []),
+            "errors": errors_list,
+            "fetch_status": "failed" if errors_list else "ok",
         }
         manifest["ticker_state"] = state
         updated += 1
