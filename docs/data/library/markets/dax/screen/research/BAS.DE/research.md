@@ -1,0 +1,103 @@
+# BASF (BAS.DE) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:49:20.367307+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+BASF screens as a buy on cheapness, dividend quality, GARP, and financial-health factors (5/22 models; composite score 65%), anchored by a 4.6% yield, P/B of 1.2, and an unusually low Neff PEGY of 0.06. The investment case rests on a cyclical earnings recovery, portfolio simplification (€7.7bn coatings divestiture; planned Agricultural Solutions spin-off), and capital returns, set against a still-depressed chemicals cycle and a multi-year restructuring programme (CoreShift). The central debate is whether headline valuation and dividend support outweigh weak reported ROE (4.4%), negative trailing free cash flow on the screen, and guidance volatility driven by tariffs, China demand, and geopolitical price shocks. Primary regulatory filing bodies were not available in the source library; financial analysis below falls back to Yahoo Finance statement data and news headlines.
+
+## INVESTMENT THESIS
+For a value investor, BASF offers a classic “quality cyclical at a trough multiple” setup rather than a deep asset bargain. The quantitative screen passes four of four factor families—cheapness, dividend, GARP, and risk—with high data quality (19/20 metrics) and a stable buy signal held for five weeks. Book value (P/B 1.2) and income (4.6% yield, dividend-growth model pass) suggest the market is pricing BASF as a low-return, ex-growth chemicals conglomerate, while forward-looking news flow points to earnings momentum: preliminary Q2 2026 sales reportedly rose 16% to €17.2bn and management subsequently lifted 2026 EBITDA guidance after selective price increases linked to Middle East supply disruption.
+
+Business quality remains mixed but defensible. BASF retains global scale across chemicals, materials, and agrochemicals, a €19bn net debt load that is manageable relative to €7.6bn EBITDA (Yahoo, FY2025), and a stated €20–30bn spin-off ambition for Agricultural Solutions that could unlock sum-of-the-parts value. The coatings sale to Carlyle (enterprise value €7.7bn, 40% retained stake) demonstrates active portfolio management. Offsetting this, normalized ROE of 4.4% and screen-reported negative FCF (~€1.6bn) signal that the equity is not yet self-funding through the cycle; value hinges on restructuring delivery and a sustained upturn in volumes and spreads, not on pristine balance-sheet quality alone.
+
+## FINANCIAL REVIEW
+**Source note:** The filings index (`filings_index.json`) lists 38 Euro-regime discovery items but **zero downloadable body extracts** (`with_body: 0`; no files under `filings/bodies/`). Indexed “annual” items include misclassified headlines (e.g. KLM Group, BAS Group Bermuda). No BASF SE annual report, half-year report, or ad-hoc regulatory filing text is available for citation. All figures below are from **`financials_annual.json` (Yahoo Finance)** unless labelled as news-derived.
+
+**Annual income and profitability (FY2022–FY2025, Yahoo)**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue (€bn) | 87.3 | 68.9 | 61.4 | 59.7 |
+| Net income (€bn) | −0.63 | 0.23 | 1.30 | 1.62 |
+| EBITDA (€bn) | 6.1 | 7.3 | 7.5 | 7.6 |
+| Diluted EPS (€) | −0.70 | 0.25 | 1.45 | 1.81 |
+| Operating income (€bn) | 7.4* | 3.3 | 3.0 | 2.9 |
+
+*2022 operating income per Yahoo “Operating Income” line; reported figures are distorted by large special charges across all years (restructuring/M&A €0.5–1.1bn annually; impairments in 2022–2023).
+
+Trend: Revenue has fallen ~32% from the 2022 peak as energy-normalisation and destocking weighed on volumes and pricing. Reported net income recovered from a 2022 loss to €1.62bn in 2025, and EPS more than doubled over 2023–2025. EBITDA has stabilised in a €7.3–7.6bn band despite lower sales, implying margin improvement but also reflecting cost cuts and portfolio changes rather than broad-based volume growth.
+
+**Cash flow and capital allocation (Yahoo)**
+
+- Operating cash flow: €7.7bn (2022) → €8.1bn (2023) → €6.9bn (2024) → €5.6bn (2025).
+- Free cash flow: €3.3bn (2022) → €2.7bn (2023) → €0.75bn (2024) → €1.34bn (2025)—a weak 2024 followed by partial recovery.
+- CapEx: €4.4bn (2022) → €5.4bn (2023) → €6.2bn (2024) → €4.3bn (2025).
+- Dividends paid: €3.25bn (2022), €3.09bn (2023), €3.28bn (2024), €2.09bn (2025).
+- Share buybacks: €1.33bn (2022), €70m (2023), €46m (2024), €355m (2025).
+
+The dividend has been maintained at a substantial absolute level even as FCF compressed in 2024, which supports the screen’s dividend-family passes but raises sustainability questions if restructuring costs persist. The quantitative screen’s trailing FCF metric (−€1.57bn) diverges from Yahoo’s FY2025 FCF of +€1.34bn—likely a timing/TTM methodology difference; treat cash conversion as an unresolved data tension.
+
+**Balance sheet (Yahoo, FY2025 vs FY2024)**
+
+- Total assets: €76.2bn (2025) vs €80.4bn (2024).
+- Net debt: €19.0bn vs €19.4bn.
+- Total debt: €23.2bn vs €24.0bn.
+- Stockholders’ equity: €33.2bn vs €35.6bn (equity down ~7% YoY).
+- Non-current pension/post-retirement obligations: €1.87bn vs €2.46bn (improved).
+- Goodwill and intangibles: €9.7bn vs €12.0bn (reduced, consistent with divestitures).
+
+Leverage is moderate for a capital-intensive chemicals group but not conservative; equity erosion and persistent restructuring provisions (current provisions €3.7bn) warrant monitoring.
+
+**Interim / recent-period data**
+
+No BASF SE interim filing bodies are indexed. Yahoo quarterly income (labelled “2026” and “2025” without explicit quarter tags) shows:
+
+- Period “2026”: revenue €16.0bn, net income €0.93bn, diluted EPS €1.06.
+- Prior comparable period “2025”: revenue €16.5bn, net income €0.81bn, diluted EPS €0.91.
+
+News headlines (not filing bodies) report preliminary Q2 2026 sales up 16% to **€17.2bn** and net income of **€4.1bn** (“BASFY's Preliminary Q2 Sales Rise, FY26 Earnings Outlook Raised”, 16 Jul 2026)—a figure likely inflated by one-off gains from the coatings divestiture rather than underlying operating performance. Cash-flow guidance disappointment was also flagged (“BASF Shares Drop After Cash-Flow Guidance Disappoints”, 15 Jul 2026). Without primary interim filings, quarterly earnings quality cannot be verified from regulatory text.
+
+**Gaps:** No annual report, half-year report, pension note, going-concern statement, or contingency disclosure from primary filings is available in the source library.
+
+## RISKS AND RED FLAGS
+**Cyclical and macro:** BASF cut its 2025 outlook twice on global economic uncertainty and tariffs (“BASF Cuts Outlook on Global Economic Uncertainty”, WSJ, 11 Jul 2025; Reuters, 11 Jul 2025). Preliminary 2025 results were reported below expectations (“BASF’s preliminary results below expectations”, Borneo Bulletin, 26 Jan 2025). Chemical spreads remain sensitive to energy costs, China demand, and trade policy; recent earnings upgrades tied to Iran-conflict price hikes (“Germany's BASF lifts forecasts but Mideast war casts shadow”, 15 Jul 2026) are inherently non-recurring.
+
+**Restructuring and site risk:** CoreShift cost-saving programme includes job cuts (“BASF announces 2025 results and outlines job cuts amid cost-saving drive”, European Coatings, 2 Mar 2026). Ludwigshafen reportedly posted losses exceeding €1bn (“BASF Ludwigshafen Losses Top €1 Billion Amid Restructuring Push”, METissue, 5 Mar 2026). Yahoo data shows restructuring/M&A charges of €0.6–1.1bn annually—material and recurring.
+
+**Portfolio execution:** Agricultural Solutions spin-off (Reuters, 11 Nov 2025: Frankfurt listing targeted) and coatings separation create value only if executed cleanly; spin-off timing, tax leakage, and stranded costs are unverified without filing bodies. Battery recycling plant construction paused in Spain (electrive.com, 29 Jul 2024), signalling capital discipline but also growth-option reduction.
+
+**Governance / returns quality:** ROE of 4.4% (screen) remains far below cost of equity. Barclays cut its rating on weak fundamentals (Investing.com, 19 Feb 2026). Analyst target dispersion is wide (“Analyst Targets Stretch 14 Euros Apart”, ad-hoc-news.de, 17 Jul 2026).
+
+**Pension and provisions:** Non-current pension obligations of €1.87bn (Yahoo FY2025) improved YoY but remain a long-tail liability; current provisions of €3.7bn suggest ongoing legal/environmental exposure—magnitude and covenant detail unavailable without annual report text.
+
+**Regulatory filing gap:** Absence of primary filing bodies prevents assessment of going-concern language, litigation contingencies, debt covenants, or related-party disclosures— a material research limitation for a deep first pass.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **adequate on strategy and earnings**, though much is secondary commentary rather than issuer filings.
+
+**Portfolio and strategy**
+- Completed €7.7bn coatings sale to Carlyle; retained 40% in Surventis (Yahoo Finance, 6 Jul 2026).
+- Preparing €20–30bn Agricultural Solutions spin-off under CoreShift (“BASF Prepares €20-30 Billion Agri Spinoff While Slashing Costs at Home Under CoreShift”, ad-hoc-news.de, 14 Jul 2026; Reuters Frankfurt listing target, 11 Nov 2025).
+- €1.5bn buyback programme drawing to a close (ad-hoc-news.de, 16 Jun 2026).
+- Sold ~$291m Harbour Energy stake, reducing holding to 35% (WSJ / London South East, Mar 2026).
+- Early redemption of €1.25bn fixed-rate notes flagged in Jul 2026 Yahoo coverage.
+
+**Earnings and guidance**
+- 2025 results with job-cut outline (European Coatings, 2 Mar 2026); 2026 guidance initially missed consensus (Capital.com, 19 Mar 2026).
+- Jul 2026: lifted FY2026 EBITDA outlook after preliminary Q2 sales +16%; price hikes up to 30% on selected products (multiple sources, 15–17 Jul 2026).
+- Mixed market reaction: shares fell on cash-flow guidance disappointment (marketscreener.com, 15 Jul 2026) before recovering on forecast upgrade.
+
+**Management / operations**
+- Jens Luehring appointed to lead independent BASF Coatings (Collision Repair Mag, 28 Mar 2026).
+- Lisa Kelly appointed MD, BASF UK (MEM Magazine, 15 Jul 2026).
+- Personnel changes at BASF (BASF US, 27 Jan 2026).
+- New fermentation plant for crop protection commissioned in Ludwigshafen (Yahoo Finance UK, 11 May 2026).
+- Joint fungicide venture with Adama (Farmers Weekly, 23 Jan 2026).
+
+**Noise / misattribution:** Several indexed items reference BASF India (NSE:BASF) or unrelated “BAS” entities; parent-company BASF SE-specific regulatory news remains thin relative to trade-press commentary.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.62
+Rationale: The quantitative buy signal is partially supported by dividend yield, book-value discount, and visible portfolio catalysts, but primary filing verification is absent and earnings recovery remains cyclical, restructuring-dependent, and sensitive to non-recurring geopolitical pricing.

@@ -1,0 +1,71 @@
+# Record plc (REC.L) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:37:55.433223+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Record plc is a UK-listed currency and asset-management business whose shares screen as a **buy** on a rare combination of cheapness (P/E ~10.9, earnings yield ~9.2%), high dividend yield (~8.3%), strong reported ROE (~24.7%), and robust free cash flow (~9.8% FCF yield). The valuation hook is an asset-light, cash-generative model trading below mid-cycle earnings power while returning most cash to shareholders. The central debate is whether recent revenue and profit compression (management-linked AUM growth versus fee/revenue decline) is cyclical or structural, and whether an elevated payout ratio remains sustainable. Primary RNS body text was not available in the source pack, limiting verification of management guidance, pension disclosures, and going-concern language.
+
+## INVESTMENT THESIS
+The quantitative screen passes **12 of 22 models** (composite **62%**, sector-relative **63%**) across five factor families: **cheapness, quality, dividend, GARP, and risk**, with **59% conviction** held for five weeks on a stable signal. That profile fits a value investor seeking income plus quality at a discount: low multiples, high FCF conversion, and balance-sheet resilience rather than growth-at-any-price.
+
+Business quality indicators from secondary financials align with the screen: gross margins remain very high (cost of revenue minimal), operating margins near **24%** in FY2026 (Yahoo fallback), and FCF of **£8.5m** on **£40.1m** revenue — consistent with an advisory/management-fee model with limited capital intensity. The screen’s **Buffett Quality**, **Economic Moat**, **Magic Formula**, and **Financial Health** passes suggest the market may be penalising near-term earnings softness rather than balance-sheet or franchise quality.
+
+For a value investor, the case is: buy a profitable, dividend-paying UK small-cap asset manager at ~11× earnings and ~8% yield, backed by net cash and recurring fee streams, with optionality from AUM growth (headline news cites **$114.6bn AUM, +14%**) and strategic partnerships. The screen’s buy signal is coherent with reported cash economics even where reported net income has softened.
+
+## FINANCIAL REVIEW
+**Data limitation:** The filing index (`regime: uk_rns`) catalogues **7 annual**, **5 interim**, and **41 other** RNS/Investegate headlines for REC.L, including *Annual Financial Report* (19 Jun 2026), *Half-year Financial Report* (28 Nov 2025), *Third Quarter Trading Statement* (16 Apr 2026), *2025 Post-close Trading Update* (27 Jan 2026), and *Trading Update & Strategic Collaboration Agreement* (24 Sep 2025). **None have downloadable body extracts** (`with_body: 0`; `filings/bodies/` empty). All figures below therefore fall back to **`financials_annual.json` (Yahoo)**, stated explicitly. Interim line-item detail cannot be verified from bodies.
+
+**Annual trend (Yahoo; year-end March):**
+
+| Metric | FY2023 | FY2024 | FY2025 | FY2026 |
+|--------|--------|--------|--------|--------|
+| Revenue | £44.7m | £45.4m | £41.6m | **£40.1m** |
+| Operating income | £14.8m | £14.6m | £10.3m | **£9.5m** |
+| Net income | £11.3m | £9.3m | £9.7m | **£7.7m** |
+| EBITDA | £15.4m | £13.7m | £11.9m | **£11.6m** |
+| Diluted EPS | 5.81p | 4.78p | 4.94p | *(not reported in cache)* |
+| Free cash flow | £9.3m | £12.2m | £4.9m | **£8.5m** |
+| Cash dividends paid | £9.1m | £10.1m | £10.0m | **£9.1m** |
+
+**Interpretation:** Revenue peaked in FY2024 and has fallen **~12%** to FY2026. Net income has declined **~32%** from the FY2023 peak, though FY2026 net income (£7.7m) remains above FY2024 after a **£1.9m impairment** in FY2024 (Yahoo). EBITDA has been more stable (£11.6m–£15.4m range), and FY2026 FCF rebounded to **£8.5m** (operating cash flow **£9.2m**), supporting the screen’s FCF-yield pass. Dividend cash outflows (~**£9–10m p.a.**) have consistently matched or exceeded net income, implying a **high payout ratio** and dependence on balance-sheet cash rather than retained earnings alone.
+
+**Balance sheet (Yahoo, FY2026):** Total assets **£40.6m**; equity **£27.2m**; cash **£13.0m**; total debt **£6.6m** (substantially **capital lease** obligations); working capital **£20.4m**. Current pension/post-retirement provision **£2.5m**. Tangible book **£26.4m**; P/B **3.1×** (screen) sits above book, reflecting intangible franchise value rather than deep asset discount. Net cash position (cash less debt) remains positive.
+
+**Interim / trading updates (headlines only; no body figures):** The index confirms a steady disclosure cadence — H1 report (Nov 2025), Q3 statement (Apr 2026), post-close update (Jan 2026), and Jun 2026 trading update alongside FY2026 results. Secondary news (*TradingView*, 19 Jun 2026) summarises FY2026 as **AUM +14% to $114.6bn** but **revenue −4%**, with strong private-markets growth and a positive FY2027 outlook — consistent with Yahoo revenue decline but AUM expansion, pointing to fee-rate or mix pressure rather than client attrition. Without filing bodies, half-year revenue, profit, or dividend declarations cannot be cited precisely.
+
+**Gaps:** No audited primary text for going concern, contingencies, covenant detail, or precise interim P&L. Yahoo quarterly income cache is empty. FY2026 EPS/diluted share count not populated in the fallback file.
+
+## RISKS AND RED FLAGS
+**Earnings and dividend sustainability:** Net income is on a downward trajectory while dividends remain near **£9m+** annually — payout exceeds FY2026 earnings. Without filing language on dividend policy, this is the principal red flag for income investors.
+
+**Revenue vs AUM divergence:** Headline AUM growth (+14%) alongside revenue decline (−4% per news; −3.6% YoY per Yahoo FY2025→FY2026) suggests fee compression, product mix shift, or one-off revenue items — a structural risk screens may underweight.
+
+**Lease and pension obligations:** Capital lease liabilities of **£6.6m** and current pension-related provisions of **£2.5m** (Yahoo balance sheet) add fixed commitments; primary filing risk disclosures were unavailable for fuller context.
+
+**FX and asset-management cyclicality:** Record’s earnings correlate with currency-market activity and institutional flows. A softer macro backdrop for FX hedging demand could prolong revenue pressure (not captured fully by static value metrics).
+
+**Governance / small-cap factors:** Filing index shows ongoing **PDMR notifications**, **share buybacks**, and a **buy-back extension** (Jul 2026 RNS headline). Institutional ownership ~42% (Yahoo news, Oct 2025) aids liquidity but concentrates price sensitivity. Yahoo also flagged that **“the past three years for Record investors has not been profitable”** (Dec 2025) — a reminder of weak share-price performance despite fundamental cash generation.
+
+**Source-quality risk:** Filing ingestion captured substantial **ticker noise** (Indian REC Ltd, REC Silicon, Recruitment & Employment Confederation “KPMG and REC” jobs reports). Regulatory risk language (going concern, litigation, covenants) could not be reviewed from bodies.
+
+**Macro (colour only):** FTSE 100 ~10,600 and GBP/USD ~1.35 (Jul 2026) — no automatic override of the buy signal.
+
+## NEWS HIGHLIGHTS
+**Record plc–relevant (past year):**
+
+- **19 Jun 2026** — *“REC: AUM up 14% to $114.6bn, revenue down 4%, with strong Private Markets growth and positive FY27 outlook”* (TradingView): key operational snapshot for FY2026.
+- **19 Jun 2026** — *Annual Financial Report* / *CEO’s Comments at the 2026 AGM* / *Dividend Declaration* (RNS index): results and governance cycle; no body text.
+- **24 Sep 2025** — *Trading Update & Strategic Collaboration Agreement* (RNS index): strategic partnership signal; terms not available.
+- **27 Jan 2026** — *2025 Post-close Trading Update* (RNS index).
+- **16 Apr 2026** — *Third Quarter Trading Statement* (RNS index).
+- **Jul 2026** — *Transaction in own shares and Buy Back Extension* (RNS index): capital-return activity.
+- **9 Dec 2025** (Yahoo) — *“The past three years for Record (LON:REC) investors has not been profitable”*: bearish price-performance framing.
+- **28 Oct 2025** (Yahoo) — *“Owning 42% shares, institutional owners seem interested in Record plc”*: ownership concentration.
+
+**Coverage quality:** Material company-specific news is **thin** — essentially one substantive third-party results summary (TradingView) plus RNS headlines without bodies. The manifest is **heavily polluted** by unrelated “REC” tickers (Indian power financier REC Ltd/PFC merger, KPMG/REC UK jobs survey, Parks and Recreation, ASX Recharge Metals). Treat non–Record-plc headlines as noise.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Quantitative cheapness, quality, and cash-flow signals are corroborated by Yahoo financials showing strong FCF and a solid balance sheet, but the absence of primary filing bodies and a pattern of declining revenue/earnings alongside a high dividend payout prevent full confirmation of the screen’s buy case.

@@ -1,0 +1,79 @@
+# CCL Industries Inc. (CCL-B.TO) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:53:51.094802+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+CCL Industries is a globally diversified label and packaging operator whose quantitative profile fits a quality-at-a-reasonable-price mandate: P/E ~20, P/B ~2.8, ROE ~14.5%, debt/equity ~42%, and a ~C$987m free-cash-flow base, with the screen passing cheapness, quality, dividend, GARP, and risk families. Revenue and operating income have compounded steadily (Yahoo fallback: revenue from US$6.4bn in 2022 to US$7.7bn in 2025), with 2025 free cash flow rising sharply to US$863m, supporting dividends and buybacks. The central debate is whether bolt-on M&A (including the pending Sleever International deal) and a goodwill-heavy balance sheet can sustain mid-teens returns as organic growth moderates—Q1 2026 showed only modest top-line expansion and flat operating income. Primary SEDAR filing bodies were not available in the research library, limiting direct verification of risk disclosures; deep research broadly confirms, but does not strongly amplify, the screen’s buy signal.
+
+## INVESTMENT THESIS
+The quantitative screen rates CCL-B.TO as a buy with persistent conviction (53%, stable for five weeks), passing seven models including Graham Enterprising, FCF Yield, Neff PEGY, Quality Value, Dividend Growth, Magic Formula, and Financial Health. That combination is characteristic of a compounder trading at a modest discount to its own quality: neither deep value nor expensive growth.
+
+For a value investor, the hook is cash-generative durability at a controlled multiple. Revenue growth of roughly 6% CAGR (2022–2025, Yahoo fallback) alongside operating-margin expansion (operating income from US$863m to US$1,157m over the same period) points to scale and mix benefits across CCL’s label, Avery, Checkpoint, and film segments. Return on equity near 15% on a P/B below 3 suggests the market is not fully pricing the franchise’s reinvestment capacity.
+
+Capital allocation reinforces the case: 2025 saw US$224m in dividends, US$300m in share repurchases, and net debt reduced by roughly US$350m year-on-year (Yahoo fallback), while FCF conversion improved materially (US$602m in 2024 to US$863m in 2025). The 1.6% dividend yield, coupled with Dividend Growth model passage, signals a shareholder-return discipline that screens typically reward.
+
+The screen’s risk-family pass is notable given leverage that is elevated but manageable: total debt of US$2.26bn against US$990m cash and US$5.64bn equity (Yahoo, 2025). Net debt/EBITDA is approximately 0.6x—comfortable for an acquisitive industrial. The valuation (P/E 20) embeds some growth; the thesis holds if mid-single-digit organic growth plus tuck-in M&A can sustain low-teens ROE without multiple compression.
+
+## FINANCIAL REVIEW
+**Source limitations.** The filings index (`filings_index.json`) catalogues three SEDAR-linked announcements (two annual, one other) but **zero downloadable body extracts** (`with_body: 0`; no files under `filings/bodies/`). **No interim filings** (half-year, quarterly MD&A, or trading updates) are indexed. Accordingly, all figures below are drawn from `financials_annual.json` (Yahoo Finance) with explicit fallback notation. Regulatory language on going concern, contingencies, covenants, and pension obligations could not be reviewed from primary filings.
+
+**Annual trends (Yahoo fallback, fiscal years ended December).**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|
+| Revenue (US$m) | 6,382 | 6,650 | 7,245 | 7,664 |
+| Operating income (US$m) | 863 | 929 | 1,065 | 1,157 |
+| Net income (US$m) | 623 | 530 | 843 | 802 |
+| Basic EPS (US$) | 3.50 | 2.99 | 4.73 | 4.59 |
+| EBITDA (US$m) | 1,261 | 1,248 | 1,625 | 1,658 |
+| Free cash flow (US$m) | 546 | 542 | 602 | 863 |
+
+Revenue has grown every year, with 2025 up 5.8% versus 2024. Operating income rose 8.7% in 2025, and gross margin held near 30%. Reported net income declined 4.8% in 2025 (US$843m to US$802m), partly reflecting a US$10.5m restructuring/M&A charge versus a US$72.6m net unusual gain in 2024; normalised income (Yahoo) was US$810m in 2025 versus US$786m in 2024, a more representative +3% trend. The 2023 earnings dip (US$530m) included a US$137.8m impairment/restructuring charge—worth noting as episodic rather than structural.
+
+**Balance sheet and leverage (Yahoo fallback, 2025 year-end).** Total assets US$10.1bn; stockholders’ equity US$5.64bn; total debt US$2.26bn (long-term US$1.37bn, current US$687m); cash US$990m; net debt US$1.07bn. Goodwill and intangibles total US$3.64bn—roughly 64% of equity—reflecting serial acquisitions. Employee benefit obligations (pension/post-retirement proxy) stand at US$293m. Working capital fell to US$957m from US$1,527m in 2024, driven by higher current debt (US$687m vs US$4m), which warrants monitoring though overall liquidity remains adequate given cash and FCF.
+
+**Cash flow and returns (Yahoo fallback).** Operating cash flow was US$1.30bn in 2025; capex US$441m; FCF US$863m—a 43% increase year-on-year and the strongest in the four-year window. Capital returned: dividends US$224m, buybacks US$300m. FCF comfortably covers both. The screen’s FCF figure (~US$987m) is slightly above Yahoo’s US$863m; both support a positive FCF Yield model pass.
+
+**Interim / Q1 2026 (Yahoo quarterly fallback; no indexed interim filing).** Q1 2026 revenue US$1,939m versus US$1,935m in Q1 2025 (+0.2% per Yahoo; news headline cites +2.8% sales growth, likely constant-currency). Operating income US$296m versus US$300m (–1.5%). Basic EPS US$1.18 versus US$1.21. A marketscreener flash (13 May 2026) reported adjusted basic EPS of US$1.20, up 1.7% year-on-year. The pattern is stable but not accelerating—consistent with management commentary on “modest” growth and “nearly flat” operating income (Q1 earnings call coverage, May 2026).
+
+**Annual filing index (metadata only).** Indexed items include a 2024 SEDAR filing (20 Feb 2025), a Notice of Annual Meeting (6 May 2025), and a draft 2025 Annual Information Form (25 Feb 2026)—none with extractable financial tables. Full MD&A, segment breakdowns, and covenant detail are unavailable in this research pass.
+
+## RISKS AND RED FLAGS
+**Primary filing gap.** Without SEDAR body extracts, going-concern assurances, litigation contingencies, debt covenant headroom, and pension deficit/surplus language could not be assessed. This is a material research limitation for a acquisitive, globally exposed issuer.
+
+**Goodwill and acquisition risk.** Goodwill plus intangibles of US$3.64bn (Yahoo, 2025) create impairment sensitivity if label volumes weaken or integration underperforms. The announced Sleever International acquisition (~US$151m, March 2026) adds integration execution risk atop an already active M&A programme (US$25m spent on acquisitions in 2025 per Yahoo cash-flow statement).
+
+**Earnings momentum.** Q1 2026 operating income was flat to slightly down year-on-year despite revenue growth, suggesting margin pressure from inflation, mix, or price-cost dynamics—management cited inflation and macro uncertainty on the Q1 call. Full-year 2025 reported EPS declined versus 2024 even as operations improved.
+
+**Leverage and maturity profile.** Total debt rose modestly in 2025 versus 2024 but net debt improved sharply as cash built. Current-portion debt jumped to US$687m in 2025 from near-zero in 2024 (Yahoo)—refinancing risk exists though not quantifiable without filing covenants. Employee benefit obligations of US$293m add a long-tail liability.
+
+**Cyclical and end-market exposure.** As a consumer-packaged-goods and healthcare label supplier, CCL is indirectly exposed to CPG volume trends, private-label competition, and customer inventory destocking—none of which are captured in static value screens.
+
+**Governance.** Dual-class share structure (Class A voting / Class B subordinate voting) is standard for CCL but limits minority influence; no governance red flags surfaced in available news.
+
+**Currency.** Multi-jurisdictional operations (implied by global label footprint and CAD listing with USD reporting) create translation and transaction FX risk; CAD/USD at 0.713 (macro context) is secondary colour only.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderately thin on operational depth**, skewed toward earnings summaries and valuation commentary rather than investigative or regulatory reporting.
+
+**Earnings and guidance**
+- *CCL Industries Q4 Earnings Call Highlights* (1 Mar 2026): Management described FY2025 as a “record year-end performance” with higher sales, operating income, and a sharp FCF increase; shareholder return plans discussed.
+- *CCL Industries Q1 Earnings Call Highlights* (16 May 2026) / *CCL Industries Inc (CCDBF) Q1 2026 Earnings Call Highlights* (14 May 2026): Modest Q1 sales growth (~2.8%), nearly flat operating income; demand “generally stable” despite inflation and macro uncertainty; strong liquidity noted.
+- *Earnings Flash (CCL-B.TO) CCL Q1 Per Class B share $1.20 Adjusted Basic Earnings up 1.7%; $1.18 Basic EPS, Even YoY* (13 May 2026, marketscreener.com).
+
+**M&A**
+- *CCL Industries to acquire Sleever International for $151m* (16 Mar 2026): Shrink-sleeve labels and decorating services for CPG and healthcare clients.
+- *Stifel Canada on CCL Industries Buying Sleever International* (16 Mar 2026): Analyst commentary on the deal.
+
+**Valuation and sentiment**
+- *How The CCL Industries (TSX:CCL.B) Investment Story Is Shifting With New Analyst Targets* (28 Feb 2026): Analyst fair-value estimates in a CA$99–CA$102 band.
+- Multiple “Assessing CCL Industries valuation” pieces (Feb–Jun 2026) noting recent share-price weakness/pullback despite positive longer-term returns.
+- *CIBC Provides its Q1/26 Forestry, Building Products & Packaging Preview* (22 Apr 2026): Sector preview including CCL.
+
+No material regulatory actions, management departures, or restructuring announcements beyond routine M&A and earnings flow appeared in the manifest.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research confirms the screen’s quality-and-FCF-led buy case on improving leverage and cash generation, but is neutral on conviction given absent primary filings, goodwill-heavy balance sheet, and decelerating near-term earnings momentum.
