@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-07-18",
+  "source_urls": [
+    "https://www.ii.co.uk/investing-with-ii/international-investing/markets",
+    "https://www.ii.co.uk/investing-with-ii/international-investing"
+  ],
+  "note": "Exchange-level coverage from Interactive Investor public pages. This is NOT a full instrument catalog (L34 remainder). Do not scrape logged-in account or search pages. Confidence is assumed until a broker instrument dump exists.",
+  "uk_includes_aim": true,
+  "adr_home_markets": ["Japan", "India", "China"],
+  "exchanges": [
+    {
+      "ii_region": "North America",
+      "ii_label": "United States",
+      "venues": ["NYSE", "NASDAQ"],
+      "yahoo_suffixes": [""],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "North America",
+      "ii_label": "Canada",
+      "venues": ["TSX"],
+      "yahoo_suffixes": [".TO"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "United Kingdom",
+      "venues": ["LSE", "AIM"],
+      "yahoo_suffixes": [".L"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Ireland",
+      "venues": ["Euronext Dublin"],
+      "yahoo_suffixes": [".IR"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Germany",
+      "venues": ["Xetra", "Frankfurt"],
+      "yahoo_suffixes": [".DE"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "France",
+      "venues": ["Euronext Paris"],
+      "yahoo_suffixes": [".PA"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Spain",
+      "venues": ["Bolsa de Madrid"],
+      "yahoo_suffixes": [".MC"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Belgium",
+      "venues": ["Euronext Brussels"],
+      "yahoo_suffixes": [".BR"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Italy",
+      "venues": ["Borsa Italiana"],
+      "yahoo_suffixes": [".MI"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "The Netherlands",
+      "venues": ["Euronext Amsterdam"],
+      "yahoo_suffixes": [".AS"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Sweden",
+      "venues": ["Nasdaq Stockholm"],
+      "yahoo_suffixes": [".ST"],
+      "online_dealable": false,
+      "phone_only": true
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Switzerland",
+      "venues": ["SIX Swiss"],
+      "yahoo_suffixes": [".SW"],
+      "online_dealable": false,
+      "phone_only": true
+    },
+    {
+      "ii_region": "Asia Pacific",
+      "ii_label": "Australia",
+      "venues": ["ASX"],
+      "yahoo_suffixes": [".AX"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Asia Pacific",
+      "ii_label": "Hong Kong",
+      "venues": ["HKEX"],
+      "yahoo_suffixes": [".HK"],
+      "online_dealable": true,
+      "phone_only": false
+    },
+    {
+      "ii_region": "Asia Pacific",
+      "ii_label": "Singapore",
+      "venues": ["SGX"],
+      "yahoo_suffixes": [".SI"],
+      "online_dealable": true,
+      "phone_only": false
+    }
+  ],
+  "market_defaults": {
+    "sp500": {"ii_exchange": "NYSE/NASDAQ", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "nasdaq100": {"ii_exchange": "NYSE/NASDAQ", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "ftse350": {"ii_exchange": "LSE", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "ftse_smallcap": {"ii_exchange": "LSE", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "dax": {"ii_exchange": "Xetra", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "cac40": {"ii_exchange": "Euronext Paris", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "asx200": {"ii_exchange": "ASX", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "tsx60": {"ii_exchange": "TSX", "tradable_on_ii": true, "deal_channel": "online", "confidence": "assumed", "basis": "exchange_allowlist"},
+    "euro_stoxx50": {"ii_exchange": null, "tradable_on_ii": null, "deal_channel": null, "confidence": "assumed", "basis": "suffix_allowlist"}
+  },
+  "next_slices": [
+    {
+      "id": "aim",
+      "label": "AIM (UK)",
+      "priority": 1,
+      "rationale": "II UK coverage includes AIM; largest liquid gap vs current LSE Main / FTSE slices.",
+      "status": "candidate"
+    },
+    {
+      "id": "euronext_wider",
+      "label": "Wider Euronext / Southern Europe liquid names",
+      "priority": 2,
+      "rationale": "II online: Madrid, Milan, Amsterdam, Brussels, Dublin beyond EURO STOXX 50 / CAC / DAX overlap.",
+      "status": "candidate"
+    },
+    {
+      "id": "hk_sg",
+      "label": "Hong Kong + Singapore large-cap slices",
+      "priority": 3,
+      "rationale": "II Asia-Pacific online exchanges with no library market yet.",
+      "status": "candidate"
+    },
+    {
+      "id": "us_adr_asia",
+      "label": "Japan / India / China via US ADRs",
+      "priority": 4,
+      "rationale": "II offers home-market exposure only via ADRs on US exchanges — overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
+      "status": "candidate"
+    },
+    {
+      "id": "full_instrument_catalog",
+      "label": "Official II instrument dump / partner feed",
+      "priority": 5,
+      "rationale": "Remaining L34 core: replace assumed exchange allowlist with verified tradable_on_ii per ISIN/ticker. No public feed found; requires export/partner/licensed data.",
+      "status": "blocked_no_public_feed"
+    }
+  ]
+}
