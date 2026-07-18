@@ -12,19 +12,22 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_CURRENCIES = ("GBP", "USD", "EUR", "AUD")
+SUPPORTED_CURRENCIES = ("GBP", "USD", "EUR", "AUD", "CAD")
 
 # Yahoo FX pairs quoted as BASEQUOTE=X → price of 1 BASE in QUOTE units.
 _YAHOO_PAIR: dict[tuple[str, str], str] = {
     ("GBP", "USD"): "GBPUSD=X",
     ("EUR", "USD"): "EURUSD=X",
     ("AUD", "USD"): "AUDUSD=X",
+    ("CAD", "USD"): "CADUSD=X",
     ("GBP", "EUR"): "GBPEUR=X",
     ("EUR", "GBP"): "EURGBP=X",
     ("AUD", "GBP"): "AUDGBP=X",
+    ("CAD", "GBP"): "CADGBP=X",
     ("USD", "GBP"): "GBPUSD=X",  # invert
     ("USD", "EUR"): "EURUSD=X",  # invert
     ("USD", "AUD"): "AUDUSD=X",  # invert
+    ("USD", "CAD"): "USDCAD=X",
 }
 
 _INVERT_PAIRS = {
@@ -35,9 +38,14 @@ _INVERT_PAIRS = {
 
 MARKET_CURRENCY = {
     "ftse350": "GBP",
+    "ftse_smallcap": "GBP",
     "sp500": "USD",
+    "nasdaq100": "USD",
     "euro_stoxx50": "EUR",
+    "dax": "EUR",
+    "cac40": "EUR",
     "asx200": "AUD",
+    "tsx60": "CAD",
 }
 
 
@@ -94,6 +102,8 @@ def currency_for_ticker(ticker: str, *, market: str | None = None) -> str:
         return "GBP"
     if t.endswith(".AX"):
         return "AUD"
+    if t.endswith(".TO"):
+        return "CAD"
     if any(t.endswith(s) for s in (".DE", ".PA", ".AS", ".MI", ".BR", ".HE", ".MC")):
         return "EUR"
     return "USD"

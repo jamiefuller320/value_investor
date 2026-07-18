@@ -51,9 +51,13 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 | **B. Screen-lite** *(later, L29)* | Offline model scores, signals, data-quality, dated archives | Ranking/stability history comparable to FTSE — the main missing richness |
 | **C. Selective research** *(later, L30)* | Memos only for strong_buy / top buy names | Decision-pack depth for eventual manual verification; expensive, so cap tightly |
 
-Do **not** run full FTSE-style research across whole foreign indexes. Prefer B for breadth of history; use C sparingly on the shortlist.
+Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised while Cursor research remains cheap). Do **not** memo every name in an index.
 
-**One index at a time:** policy focus advances `sp500` → `euro_stoxx50` → `asx200` when coverage ≥95% and stale ≤15% among covered names. Graduated markets get a **full-universe** maintenance refresh each ladder run (`maintenance_max_tickers: "full"`; set an int later to throttle). Once the queue is complete, focus is included too. Rating-priority refresh is parked as L33.
+**Tradable north star (offline):** expand index slices toward stocks available on **Interactive Investor** (UK + ~17 international exchanges). Full broker instrument catalog is deferred (**L34**). Current queue:
+
+`sp500` → `euro_stoxx50` → `asx200` → `ftse_smallcap` → `nasdaq100` → `dax` → `cac40` → `tsx60`
+
+(FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) Advance focus when coverage ≥95% and stale ≤15%. Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research round-robins buy-tier names across focus + graduated markets (`research_all_graduated`). Rating-priority maintenance is **L33**; AIM / full II list is later.
 
 ### Running the ladder
 
@@ -76,10 +80,10 @@ ftse-library ladder
 ```
 
 - Screen-lite runs once enough focus metrics exist (≥25 by default).
-- Selective research is capped by remaining weekly USD (~$0.40/memo estimate, hard cap 5).
+- Selective research defaults to `research_hard_cap` 50 with the weekly USD strand off; buy-tier memos round-robin across graduated markets.
 
 ---
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), modest All-Share (L7), global expansion (N1), UK-primary data (L11), library screen-lite (L29), budget library research (L30), market-aware fetch (L31). Multi-currency paper NAV / FX policy (L28) is implemented: reporting-currency spot MTM (unhedged), ASX/Euro filings regimes for library research, and offline macro context for memos/paper notes only (never scoring).
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: decision-review learning (L1), evolutionary stage 2 (L2/N2), global expansion (N1), full Interactive Investor catalog (L34), UK-primary data (L11), AIM later. Implemented: multi-currency paper NAV (L28), library screen-lite/research ladder, FTSE SmallCap All-Share slice (L7), ASX/Euro/TSX filings regimes, offline macro context (not scoring).

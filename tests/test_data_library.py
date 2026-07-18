@@ -10,6 +10,9 @@ import pandas as pd
 
 from value_investor.data_library import (
     MARKET_REGISTRY,
+    PREQUALIFIED_YAHOO_MARKETS,
+    _normalize_wiki_constituents,
+    _pick_constituent_table,
     _select_refresh_tickers,
     apply_library_retention,
     empty_manifest,
@@ -207,3 +210,47 @@ def test_load_manifest_missing_is_empty(tmp_path: Path):
     manifest = load_manifest(tmp_path, "euro_stoxx50")
     assert manifest["ticker_count"] == 0
     assert manifest["market"] == "euro_stoxx50"
+
+
+def test_ii_aligned_markets_registered():
+    for mid in ("ftse_smallcap", "nasdaq100", "dax", "cac40", "tsx60"):
+        assert mid in MARKET_REGISTRY
+    assert "dax" in PREQUALIFIED_YAHOO_MARKETS
+    assert "cac40" in PREQUALIFIED_YAHOO_MARKETS
+
+
+def test_normalize_keeps_prequalified_euro_tickers():
+    table = pd.DataFrame(
+        {"Ticker": ["ADS.DE", "AIR.PA"], "Company": ["Adidas", "Airbus"], "Sector": ["Consumer", "Industrials"]}
+    )
+    dax = _normalize_wiki_constituents(table, market_id="dax", yahoo_suffix="", index_label="DAX")
+    assert list(dax["ticker"]) == ["ADS.DE", "AIR.PA"]
+
+
+def test_normalize_tsx_appends_to_suffix():
+    table = pd.DataFrame(
+        {"Symbol": ["AEM", "BMO"], "Company": ["Agnico", "BMO"], "Sector": ["Materials", "Financials"]}
+    )
+    tsx = _normalize_wiki_constituents(table, market_id="tsx60", yahoo_suffix=".TO", index_label="TSX60")
+    assert list(tsx["ticker"]) == ["AEM.TO", "BMO.TO"]
+
+
+def test_pick_constituent_table_skips_multiindex_changelogs():
+    listing = pd.DataFrame(
+        {"Ticker": [f"T{i}" for i in range(100)], "Company": [f"Co{i}" for i in range(100)]}
+    )
+    changelog = pd.DataFrame(
+        {
+            ("Added", "Ticker"): ["X"],
+            ("Added", "Security"): ["X Corp"],
+            ("Removed", "Ticker"): ["Y"],
+            ("Removed", "Security"): ["Y Corp"],
+        }
+    )
+    # Force MultiIndex like Wikipedia Nasdaq change log
+    changelog.columns = pd.MultiIndex.from_tuples(
+        [("Added", "Ticker"), ("Added", "Security"), ("Removed", "Ticker"), ("Removed", "Security")]
+    )
+    picked = _pick_constituent_table([changelog, listing])
+    assert list(picked.columns) == ["Ticker", "Company"]
+    assert len(picked) == 100

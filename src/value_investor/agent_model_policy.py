@@ -37,7 +37,18 @@ DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro included API pool
 DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10
 DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
-DEFAULT_MARKET_QUEUE = ["sp500", "euro_stoxx50", "asx200"]
+# Index slices that map toward Interactive Investor tradable coverage (offline).
+# Live FTSE 350 screen is unchanged. Full II instrument catalog is deferred (L34).
+DEFAULT_MARKET_QUEUE = [
+    "sp500",
+    "euro_stoxx50",
+    "asx200",
+    "ftse_smallcap",
+    "nasdaq100",
+    "dax",
+    "cac40",
+    "tsx60",
+]
 
 
 @dataclass(frozen=True)
@@ -204,7 +215,10 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
             "layers": ["fundamentals", "screen_lite", "selective_research"],
             "min_metrics_for_screen": 25,
             "estimated_memo_usd": 0.4,
-            "research_hard_cap": 12,
+            "research_hard_cap": 50,
+            # When True (default), research buy-tier shortlists across focus +
+            # graduated markets — not only the focus market.
+            "research_all_graduated": True,
             "last_run": None,
         }
         ladder.update(dict(data.get("ladder") or {}))

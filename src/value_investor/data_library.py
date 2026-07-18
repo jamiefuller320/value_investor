@@ -49,10 +49,18 @@ def _wiki_tables(url: str) -> list[pd.DataFrame]:
         return pd.read_html(StringIO(html), flavor="html5lib")
 
 
+# Wikipedia already lists Yahoo-qualified symbols for these markets
+# (e.g. ADS.DE, AIR.PA). Do not append exchange suffixes or rewrite dots.
+PREQUALIFIED_YAHOO_MARKETS = frozenset({"euro_stoxx50", "dax", "cac40"})
+
+
 def _pick_constituent_table(tables: list[pd.DataFrame]) -> pd.DataFrame:
     """Prefer the largest listing-like table (ticker/symbol/code + company)."""
     candidates: list[pd.DataFrame] = []
     for table in tables:
+        # Skip MultiIndex change-log tables (e.g. Nasdaq-100 additions/removals).
+        if isinstance(table.columns, pd.MultiIndex):
+            continue
         cols = {str(c).strip().lower() for c in table.columns}
         has_ticker = bool(
             {"ticker", "symbol", "code", "epic"} & cols
@@ -112,8 +120,8 @@ def _normalize_wiki_constituents(
         raw = raw.split(" ")[0].replace("\xa0", "")
         if yahoo_suffix == ".L":
             ticker = to_lse_ticker(raw)
-        elif market_id == "euro_stoxx50":
-            # Wikipedia already lists Yahoo-qualified symbols (e.g. ADS.DE, ASML.AS).
+        elif market_id in PREQUALIFIED_YAHOO_MARKETS:
+            # Wikipedia already lists Yahoo-qualified symbols (e.g. ADS.DE, AIR.PA).
             # Do not convert '.' → '-' (that yields ADS-DE, which Yahoo rejects).
             ticker = raw
         elif yahoo_suffix:
@@ -178,6 +186,47 @@ def fetch_ftse350_library_constituents() -> pd.DataFrame:
     return frame
 
 
+def fetch_ftse_smallcap_constituents() -> pd.DataFrame:
+    """FTSE SmallCap — with FTSE 350 this approximates the FTSE All-Share (excl. Fledgling/AIM)."""
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/FTSE_SmallCap_Index")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="ftse_smallcap", yahoo_suffix=".L", index_label="FTSE SmallCap"
+    )
+
+
+def fetch_nasdaq100_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/List_of_NASDAQ-100_companies")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="nasdaq100", yahoo_suffix="", index_label="Nasdaq-100"
+    )
+
+
+def fetch_dax_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/DAX")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="dax", yahoo_suffix="", index_label="DAX"
+    )
+
+
+def fetch_cac40_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/CAC_40")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="cac40", yahoo_suffix="", index_label="CAC 40"
+    )
+
+
+def fetch_tsx60_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/S%26P/TSX_60")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="tsx60", yahoo_suffix=".TO", index_label="S&P/TSX 60"
+    )
+
+
 MARKET_REGISTRY: dict[str, MarketSpec] = {
     "ftse350": MarketSpec(
         market_id="ftse350",
@@ -211,6 +260,47 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         yahoo_suffix=".AX",
         constituent_source="wikipedia",
     ),
+    # Interactive Investor–aligned expansion slices (offline ladder; not live screen).
+    "ftse_smallcap": MarketSpec(
+        market_id="ftse_smallcap",
+        label="FTSE SmallCap",
+        exchange="LSE",
+        currency="GBP",
+        yahoo_suffix=".L",
+        constituent_source="wikipedia",
+    ),
+    "nasdaq100": MarketSpec(
+        market_id="nasdaq100",
+        label="Nasdaq-100",
+        exchange="US",
+        currency="USD",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "dax": MarketSpec(
+        market_id="dax",
+        label="DAX",
+        exchange="XETRA",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "cac40": MarketSpec(
+        market_id="cac40",
+        label="CAC 40",
+        exchange="Euronext Paris",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
+    "tsx60": MarketSpec(
+        market_id="tsx60",
+        label="S&P/TSX 60",
+        exchange="TSX",
+        currency="CAD",
+        yahoo_suffix=".TO",
+        constituent_source="wikipedia",
+    ),
 }
 
 CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
@@ -218,6 +308,11 @@ CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
     "sp500": fetch_sp500_constituents,
     "euro_stoxx50": fetch_euro_stoxx50_constituents,
     "asx200": fetch_asx200_constituents,
+    "ftse_smallcap": fetch_ftse_smallcap_constituents,
+    "nasdaq100": fetch_nasdaq100_constituents,
+    "dax": fetch_dax_constituents,
+    "cac40": fetch_cac40_constituents,
+    "tsx60": fetch_tsx60_constituents,
 }
 
 
