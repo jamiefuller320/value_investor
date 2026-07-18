@@ -112,6 +112,48 @@ def list_research_filings_targets(
     return targets
 
 
+def _simplified_company_name(name: str, ticker: str) -> str | None:
+    """Shorter search label when a legal full name returns zero news hits."""
+    text = (name or "").strip()
+    if not text:
+        return None
+    simplified = text
+    # Leading corporate prefixes (Euro/French listings often need the core brand).
+    for prefix in ("Compagnie de ", "Compagnie ", "The "):
+        if simplified.startswith(prefix):
+            simplified = simplified[len(prefix) :]
+            break
+    # Drop common legal suffixes / punctuation noise.
+    for token in (
+        " S.A.",
+        " SA",
+        " SE",
+        " NV",
+        " N.V.",
+        " plc",
+        " PLC",
+        " Limited",
+        " Ltd.",
+        " Ltd",
+        " Corporation",
+        " Corp.",
+        " Inc.",
+        " Inc",
+        " Group",
+    ):
+        simplified = simplified.replace(token, " ")
+    simplified = " ".join(simplified.split()).strip(" ,.-")
+    if not simplified or simplified.lower() == text.lower():
+        # Fall back to first two words of the original.
+        parts = text.replace(",", " ").split()
+        simplified = " ".join(parts[:2]).strip() if parts else ""
+    if not simplified or simplified.lower() == text.lower():
+        return None
+    if simplified.upper() == ticker.upper():
+        return None
+    return simplified
+
+
 def reingest_research_filings(
     root: Path,
     markets: list[str],
@@ -129,20 +171,35 @@ def reingest_research_filings(
     )
     results: list[dict[str, Any]] = []
     for target in targets:
+        company_name = target["company_name"]
         meta = ingest_filings(
             ticker=target["ticker"],
-            company_name=target["company_name"],
+            company_name=company_name,
             sources_dir=target["sources_dir"],
             api_key=api_key,
             market=target["market"],
         )
         summary = meta.get("filings_summary") or {}
+        used_name = company_name
+        if int(summary.get("total") or 0) == 0:
+            alt = _simplified_company_name(company_name, target["ticker"])
+            if alt:
+                meta = ingest_filings(
+                    ticker=target["ticker"],
+                    company_name=alt,
+                    sources_dir=target["sources_dir"],
+                    api_key=api_key,
+                    market=target["market"],
+                )
+                summary = meta.get("filings_summary") or {}
+                used_name = alt
         results.append(
             {
                 "market": target["market"],
                 "ticker": target["ticker"],
                 "prior_regime": target["prior_regime"],
                 "regime": meta.get("filings_regime"),
+                "company_name_used": used_name,
                 "filings_total": summary.get("total", 0),
                 "with_body": summary.get("with_body", 0),
             }

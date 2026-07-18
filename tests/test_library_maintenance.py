@@ -6,6 +6,7 @@ from pathlib import Path
 
 from value_investor.data_library import empty_manifest, save_manifest
 from value_investor.library_maintenance import (
+    _simplified_company_name,
     list_failed_metric_tickers,
     list_research_filings_targets,
     prune_library_screen_history,
@@ -30,6 +31,11 @@ def _seed_market(root: Path, market_id: str, tickers: list[str]) -> None:
         [{"ticker": t, "name": f"Name {t}", "sector": "Tech"} for t in tickers],
         compact=True,
     )
+
+
+def test_simplified_company_name_strips_legal_noise():
+    assert _simplified_company_name("Compagnie de Saint-Gobain S.A.", "SGO.PA") == "Saint-Gobain"
+    assert _simplified_company_name("Short", "AAA") is None
 
 
 def test_list_and_reingest_unsupported_filings(tmp_path: Path, monkeypatch):
