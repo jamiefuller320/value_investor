@@ -7,7 +7,8 @@ Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
 - ``asx_announcements`` (ASX 200 / ``.AX``): ASX / Market Index via Google News
-- ``euro_filings`` (EURO STOXX 50): results headlines via Google News + SEC 20-F/6-K when dual-listed
+- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): results headlines via Google News + SEC 20-F/6-K when dual-listed
+- ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
 Interim vs annual is classified from form type (10-K/10-Q) or headline cues.
 """
@@ -85,6 +86,7 @@ def _strip_html(text: str) -> str:
 _EXCHANGE_SUFFIXES = (
     ".L",
     ".AX",
+    ".TO",
     ".DE",
     ".PA",
     ".AS",
@@ -119,21 +121,25 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
     Explicit market ids win; otherwise infer from Yahoo-style suffixes.
     """
     m = (market or "").strip().lower()
-    if m in {"sp500", "us", "nyse", "nasdaq"}:
+    if m in {"sp500", "nasdaq100", "us", "nyse", "nasdaq"}:
         return "sec_edgar"
-    if m in {"ftse350", "uk", "lse"}:
+    if m in {"ftse350", "ftse_smallcap", "uk", "lse"}:
         return "uk_rns"
     if m in {"asx200", "asx"}:
         return "asx_announcements"
-    if m in {"euro_stoxx50", "eu"}:
+    if m in {"euro_stoxx50", "dax", "cac40", "eu"}:
         return "euro_filings"
+    if m in {"tsx60", "tsx", "canada"}:
+        return "tsx_announcements"
 
     t = (ticker or "").strip().upper()
     if t.endswith(".L"):
         return "uk_rns"
     if t.endswith(".AX"):
         return "asx_announcements"
-    if any(t.endswith(suf) for suf in _EXCHANGE_SUFFIXES if suf not in {".L", ".AX"}):
+    if t.endswith(".TO"):
+        return "tsx_announcements"
+    if any(t.endswith(suf) for suf in _EXCHANGE_SUFFIXES if suf not in {".L", ".AX", ".TO"}):
         return "euro_filings"
     # Bare US-style symbols (library research) → EDGAR
     if re.fullmatch(r"[A-Z]{1,5}", _epic(t)):
@@ -527,6 +533,34 @@ def fetch_filings_euro_news(
     )
 
 
+def fetch_filings_tsx_news(
+    *,
+    company_name: str,
+    ticker: str,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """Discover Canadian issuer results / SEDAR+ headlines via Google News."""
+    epic = _base_symbol(ticker)
+    query = (
+        f'(site:sedarplus.ca OR site:sedar.com OR site:newswire.ca) '
+        f'("{company_name}" OR {epic}) '
+        f'(Results OR "Annual Report" OR "Annual Financial" OR Interim OR '
+        f'"Management\'s Discussion" OR "MD&A" OR "Quarterly Report")'
+    )
+    return fetch_filings_google_news(
+        company_name=company_name,
+        ticker=ticker,
+        max_items=max_items,
+        lookback_days=lookback_days,
+        query=query,
+        source_label="google_news_tsx",
+        hl="en-CA",
+        gl="CA",
+        ceid="CA:en",
+    )
+
+
 def fetch_filings_ticker_api(
     *,
     ticker: str,
@@ -777,6 +811,9 @@ def ingest_filings(
         groups.append(fetch_filings_euro_news(company_name=company_name, ticker=ticker))
         # Dual-listed names may also file 20-F / 6-K with the SEC.
         groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
+    elif regime == "tsx_announcements":
+        groups.append(fetch_filings_tsx_news(company_name=company_name, ticker=ticker))
+        groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
     else:
         logger.info(
             "No filings regime for market=%s ticker=%s — writing empty index",
@@ -811,6 +848,11 @@ def ingest_filings(
             "Euro-listed results discovery via Google News, plus SEC 20-F/6-K when "
             "the issuer is dual-listed. period=annual|interim|other. Bodies when a "
             "direct HTML URL is available."
+        )
+    elif regime == "tsx_announcements":
+        note = (
+            "Canadian issuer announcement discovery via Google News (SEDAR+ / "
+            "newswire), plus SEC filings when dual-listed. period=annual|interim|other."
         )
     else:
         note = (

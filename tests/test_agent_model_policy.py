@@ -113,11 +113,15 @@ def test_record_estimated_spend(tmp_path: Path):
 
 def test_market_aware_yahoo_resolution():
     assert resolve_yahoo_ticker_for_market("AAPL", "sp500") == "AAPL"
+    assert resolve_yahoo_ticker_for_market("AAPL", "nasdaq100") == "AAPL"
     assert resolve_yahoo_ticker_for_market("BHP", "asx200") == "BHP.AX"
     assert resolve_yahoo_ticker_for_market("BHP.AX", "asx200") == "BHP.AX"
     assert resolve_yahoo_ticker_for_market("BARC", "ftse350") == "BARC.L"
+    assert resolve_yahoo_ticker_for_market("ASIT", "ftse_smallcap") == "ASIT.L"
     assert resolve_yahoo_ticker_for_market("ADS.DE", "euro_stoxx50") == "ADS.DE"
     assert resolve_yahoo_ticker_for_market("ADS-DE", "euro_stoxx50") == "ADS.DE"
+    assert resolve_yahoo_ticker_for_market("ADS.DE", "dax") == "ADS.DE"
+    assert resolve_yahoo_ticker_for_market("AEM", "tsx60") == "AEM.TO"
 
 
 def test_cli_policy_and_review(tmp_path: Path, capsys):

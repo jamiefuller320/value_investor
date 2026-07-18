@@ -44,10 +44,27 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("layers", ["fundamentals", "screen_lite", "selective_research"])
     ladder.setdefault("min_metrics_for_screen", DEFAULT_MIN_METRICS_FOR_SCREEN)
     ladder.setdefault("estimated_memo_usd", ESTIMATED_MEMO_USD)
-    ladder.setdefault("research_hard_cap", 12)
+    ladder.setdefault("research_hard_cap", 50)
+    ladder.setdefault("research_all_graduated", True)
     ladder.setdefault("last_run", None)
     policy["ladder"] = ladder
     return policy
+
+
+def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
+    """Markets whose buy-tier shortlists get selective research this run."""
+    ladder = policy.get("ladder") or {}
+    if not ladder.get("research_all_graduated", True):
+        return [focus]
+    graduated = graduated_market_ids(policy)
+    ordered: list[str] = []
+    for mid in [focus, *graduated]:
+        if mid and mid not in ordered:
+            ordered.append(mid)
+    # Prefer queue order for stable round-robin across expansions.
+    queue = [m for m in (policy.get("market_queue") or []) if m in ordered]
+    extras = [m for m in ordered if m not in queue]
+    return queue + extras if queue else ordered
 
 
 def run_library_ladder(
@@ -152,11 +169,11 @@ def run_library_ladder(
         screen_result = run_library_screen(root, market, run_at=run_at)
         result["layers"]["screen_lite"] = screen_result.summary
 
-    # C — selective research (focus only; weekly dollar strand optional)
+    # C — selective research across focus + graduated markets (optional USD strand)
     policy = load_policy(policy_path)
     remaining = remaining_weekly_budget_usd(policy)
     memo_cost = float(policy["ladder"].get("estimated_memo_usd") or ESTIMATED_MEMO_USD)
-    hard_cap = int(policy["ladder"].get("research_hard_cap") or 12)
+    hard_cap = int(policy["ladder"].get("research_hard_cap") or 50)
     weekly_cap_on = enforce_weekly_research_cap(policy)
     if weekly_cap_on:
         research_cap = research_cap_from_budget(
@@ -168,14 +185,10 @@ def run_library_ladder(
     else:
         research_cap = hard_cap
     model = research_model_id(policy)
+    research_markets = _research_markets(policy, market)
 
     if skip_research:
         result["layers"]["selective_research"] = {"skipped": True}
-    elif screen_result is None:
-        result["layers"]["selective_research"] = {
-            "skipped": True,
-            "reason": "no screen-lite result",
-        }
     elif research_cap <= 0:
         result["layers"]["selective_research"] = {
             "skipped": True,
@@ -184,24 +197,63 @@ def run_library_ladder(
             "enforce_weekly_research_cap": weekly_cap_on,
         }
     else:
-        reports = library_research_reports(screen_result)
-        targets = eligible_research_targets(reports, weekly_cap=research_cap)
+        # Screen each research market (reuse focus screen_result when present).
+        market_screens: dict[str, Any] = {}
+        if screen_result is not None:
+            market_screens[market] = screen_result
+        for mid in research_markets:
+            if mid in market_screens:
+                continue
+            try:
+                market_screens[mid] = run_library_screen(root, mid, run_at=run_at)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Screen-lite for research market %s failed: %s", mid, exc)
+
+        # Round-robin buy-tier targets across markets until research_cap is filled.
+        per_market_reports: dict[str, list[Any]] = {}
+        per_market_queues: dict[str, list[Any]] = {}
+        for mid, scr in market_screens.items():
+            reports = library_research_reports(scr)
+            per_market_reports[mid] = reports
+            per_market_queues[mid] = eligible_research_targets(
+                reports, weekly_cap=research_cap
+            )
+
+        selected: list[tuple[str, Any]] = []
+        while len(selected) < research_cap:
+            progressed = False
+            for mid in research_markets:
+                queue = per_market_queues.get(mid) or []
+                if not queue:
+                    continue
+                selected.append((mid, queue.pop(0)))
+                progressed = True
+                if len(selected) >= research_cap:
+                    break
+            if not progressed:
+                break
+
         layer: dict[str, Any] = {
             "model": model,
             "research_cap": research_cap,
+            "research_markets": research_markets,
+            "research_all_graduated": bool(
+                (policy.get("ladder") or {}).get("research_all_graduated", True)
+            ),
             "enforce_weekly_research_cap": weekly_cap_on,
             "remaining_usd_before": remaining,
             "targets": [
                 {
+                    "market": mid,
                     "ticker": t.ticker,
                     "name": t.name,
                     "signal": t.signal,
                     "conviction_score": t.conviction_score,
                 }
-                for t in targets
+                for mid, t in selected
             ],
         }
-        if dry_run_research or not targets:
+        if dry_run_research or not selected:
             layer["dry_run"] = True
             layer["executed"] = 0
         else:
@@ -210,21 +262,32 @@ def run_library_ladder(
                 layer["skipped"] = True
                 layer["reason"] = "CURSOR_API_KEY missing"
             else:
-                # ResearchStore writes under output_dir/research/{TICKER}/
-                # (same layout as the weekly FTSE run under output/research/).
-                summary = run_research_for_strong_buys(
-                    reports=reports,
-                    output_dir=screen_result.screen_dir,
-                    api_key=key,
-                    model=model,
-                    weekly_cap=research_cap,
-                    market=market,
-                )
-                executed = int(summary.created) + int(summary.updated)
+                # Group by market so each memo lands under that market's screen/research/.
+                by_market: dict[str, list[Any]] = {}
+                for mid, report in selected:
+                    by_market.setdefault(mid, []).append(report)
+                executed = created = updated = 0
+                errors: list[str] = []
+                for mid, reports_subset in by_market.items():
+                    scr = market_screens[mid]
+                    # Pass only the round-robin-selected reports for this market.
+                    summary = run_research_for_strong_buys(
+                        reports=reports_subset,
+                        output_dir=scr.screen_dir,
+                        api_key=key,
+                        model=model,
+                        weekly_cap=len(reports_subset),
+                        continue_alumni=False,
+                        market=mid,
+                    )
+                    executed += int(summary.created) + int(summary.updated)
+                    created += int(summary.created)
+                    updated += int(summary.updated)
+                    errors.extend(list(summary.errors or []))
                 layer["executed"] = executed
-                layer["created"] = summary.created
-                layer["updated"] = summary.updated
-                layer["errors"] = summary.errors
+                layer["created"] = created
+                layer["updated"] = updated
+                layer["errors"] = errors
                 if executed > 0:
                     record_estimated_spend(executed * memo_cost, policy_path)
                     layer["estimated_spend_usd"] = round(executed * memo_cost, 4)

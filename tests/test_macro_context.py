@@ -17,9 +17,13 @@ from value_investor.research.ingest import ingest_research_sources
 
 def test_domain_for_market_mapping():
     assert domain_for_market("sp500") == "us"
+    assert domain_for_market("nasdaq100") == "us"
     assert domain_for_market("ftse350") == "uk"
+    assert domain_for_market("ftse_smallcap") == "uk"
     assert domain_for_market("euro_stoxx50") == "euro"
+    assert domain_for_market("dax") == "euro"
     assert domain_for_market("asx200") == "au"
+    assert domain_for_market("tsx60") == "ca"
 
 
 def test_macro_context_is_secondary_only(tmp_path: Path):

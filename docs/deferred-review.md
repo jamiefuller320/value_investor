@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-17T08:09:56+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-18T11:38:22+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -57,7 +57,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 
 | # | Idea | Summary | Revisit when |
 |---|------|---------|--------------|
-| L7 | **Modest liquid UK All-Share slice** | Volume + quality floors; not AIM/world | FTSE 350 archive + decision-review stable |
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
 | L9 | **Yahoo volume/ATR technicals** | Higher signal-per-effort than L2 scrapes | Refining buy-tier trade plans |
 | L10 | **Companies House / annual-report PDF ingest** | Next filings step after RNS (memo-only) | RNS bodies still thin for FINANCIAL REVIEW |
@@ -65,6 +64,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
+| L34 | **Full Interactive Investor tradable universe catalog** | ii.co.uk covers UK (incl AIM), US, and ~17 exchanges — far beyond index slices. Ingest or maintain a broker-tradable instrument list (or official constituents exports) as the long-term offline coverage target; do not scrape personal account data. | Index-slice libraries (All-Share approx, Nasdaq-100, DAX/CAC, TSX60) are screening and researching buy tiers reliably |
 
 ### Research & portfolio product
 

@@ -14,10 +14,13 @@ def test_currency_inference_from_ticker_and_market():
     assert currency_for_ticker("SHEL.L") == "GBP"
     assert currency_for_ticker("BHP.AX") == "AUD"
     assert currency_for_ticker("SAP.DE") == "EUR"
+    assert currency_for_ticker("AEM.TO") == "CAD"
     assert currency_for_ticker("AAPL") == "USD"
     assert currency_for_market("asx200") == "AUD"
     assert currency_for_market("euro_stoxx50") == "EUR"
     assert currency_for_market("sp500") == "USD"
+    assert currency_for_market("tsx60") == "CAD"
+    assert currency_for_market("ftse_smallcap") == "GBP"
     assert currency_for_ticker("AAPL", market="ftse350") == "GBP"
 
 

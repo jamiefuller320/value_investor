@@ -38,7 +38,13 @@ def test_resolve_filings_regime_by_market_and_ticker():
     assert resolve_filings_regime("asx200", "BHP.AX") == "asx_announcements"
     assert resolve_filings_regime(None, "BHP.AX") == "asx_announcements"
     assert resolve_filings_regime("euro_stoxx50", "SAP.DE") == "euro_filings"
+    assert resolve_filings_regime("dax", "ADS.DE") == "euro_filings"
+    assert resolve_filings_regime("cac40", "AIR.PA") == "euro_filings"
     assert resolve_filings_regime(None, "SAP.DE") == "euro_filings"
+    assert resolve_filings_regime("nasdaq100", "AAPL") == "sec_edgar"
+    assert resolve_filings_regime("ftse_smallcap", "ASIT.L") == "uk_rns"
+    assert resolve_filings_regime("tsx60", "AEM.TO") == "tsx_announcements"
+    assert resolve_filings_regime(None, "AEM.TO") == "tsx_announcements"
 
 
 def test_merge_filings_prefers_body_and_ticker_source():

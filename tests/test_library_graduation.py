@@ -205,6 +205,36 @@ def test_maintenance_int_cap_still_throttles(tmp_path: Path, monkeypatch):
     assert grow_kwargs[0]["max_tickers_per_run"] == 75
 
 
+def test_research_markets_includes_graduated_in_queue_order():
+    from value_investor.library_ladder import _research_markets
+
+    policy = {
+        "focus_market": "ftse_smallcap",
+        "market_queue": [
+            "sp500",
+            "euro_stoxx50",
+            "asx200",
+            "ftse_smallcap",
+            "nasdaq100",
+        ],
+        "graduated_markets": [
+            {"market": "sp500"},
+            {"market": "euro_stoxx50"},
+            {"market": "asx200"},
+        ],
+        "ladder": {"research_all_graduated": True},
+    }
+    assert _research_markets(policy, "ftse_smallcap") == [
+        "sp500",
+        "euro_stoxx50",
+        "asx200",
+        "ftse_smallcap",
+    ]
+
+    policy["ladder"]["research_all_graduated"] = False
+    assert _research_markets(policy, "ftse_smallcap") == ["ftse_smallcap"]
+
+
 def test_ladder_runs_graduation(tmp_path: Path, monkeypatch):
     root = tmp_path / "library"
     policy_path = tmp_path / "policy.json"

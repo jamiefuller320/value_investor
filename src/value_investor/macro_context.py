@@ -35,13 +35,22 @@ DOMAIN_SERIES: dict[str, dict[str, str]] = {
         "aud_usd": "AUDUSD=X",
         "asx_200": "^AXJO",
     },
+    "ca": {
+        "cad_usd": "CADUSD=X",
+        "tsx_composite": "^GSPTSE",
+    },
 }
 
 MARKET_TO_DOMAIN: dict[str, str] = {
     "sp500": "us",
+    "nasdaq100": "us",
     "ftse350": "uk",
+    "ftse_smallcap": "uk",
     "euro_stoxx50": "euro",
+    "dax": "euro",
+    "cac40": "euro",
     "asx200": "au",
+    "tsx60": "ca",
 }
 
 
@@ -158,7 +167,7 @@ def macro_context_for_market(
         "markers": block.get("markers") or {},
         "related_domains": {
             key: (snapshot.get("domains") or {}).get(key)
-            for key in ("us", "uk", "euro", "au")
+            for key in ("us", "uk", "euro", "au", "ca")
             if key != domain and (snapshot.get("domains") or {}).get(key)
         },
     }
