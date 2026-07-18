@@ -56,19 +56,23 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
 
 
 def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
-    """Markets whose buy-tier shortlists get selective research this run."""
+    """
+    Markets whose buy-tier shortlists get selective research this run.
+
+    When ``research_all_graduated`` is true (default), include the full market
+    queue plus focus/graduated — so newly grown index slices get memos before
+    they formally graduate. Prefer queue order for stable round-robin.
+    """
     ladder = policy.get("ladder") or {}
     if not ladder.get("research_all_graduated", True):
         return [focus]
+    queue = list(policy.get("market_queue") or [])
     graduated = graduated_market_ids(policy)
     ordered: list[str] = []
-    for mid in [focus, *graduated]:
+    for mid in [*queue, focus, *graduated]:
         if mid and mid not in ordered:
             ordered.append(mid)
-    # Prefer queue order for stable round-robin across expansions.
-    queue = [m for m in (policy.get("market_queue") or []) if m in ordered]
-    extras = [m for m in ordered if m not in queue]
-    return queue + extras if queue else ordered
+    return ordered or ([focus] if focus else [])
 
 
 def run_library_ladder(

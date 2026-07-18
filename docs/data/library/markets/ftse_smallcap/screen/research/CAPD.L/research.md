@@ -1,0 +1,96 @@
+# Capital Limited (CAPD.L) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:37:26.382734+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Capital Limited is an AIM-listed integrated mining-services group (drilling, mining services, laboratory operations) trading at a deep headline discount: P/E ~4.0, P/B ~0.85, FCF yield ~18%, with 18 of 22 quantitative value models passing across cheapness, quality, dividend, GARP and risk families. The investment case rests on cyclical recovery in gold and broader mining capex, record operational momentum in 2026 trading updates, and a strengthened balance sheet (net debt down to ~£31m). The central debate is whether reported FY2025 earnings — inflated by ~£62m of unusual items — overstate true economic profit; normalised earnings imply a still-cheap but less extreme ~10x P/E. Primary RNS filing bodies were not retrievable in the source pack, limiting verification of covenants, contingencies and going-concern language.
+
+## INVESTMENT THESIS
+The quantitative screen rates CAPD.L as a **Strong Buy** with composite score 72%, sector-relative score 74%, conviction 69% (persistent, five weeks at signal), and high data quality (19/20 metrics). The name passes classic value screens — Graham Defensive/Enterprising, Schloss Low P/B, Deep Value (EV/EBITDA ~2.8), Earnings Yield (~25%), FCF Yield (~18%) — alongside quality filters (ROE 21.2%, current ratio 2.47, debt/equity ~34%).
+
+For a value investor, the hook is a profitable, asset-heavy services business with tangible book value of ~£374m against a ~£236m market cap, generating positive operating cash flow (£74m in FY2025 per Yahoo) and FCF (~£36m) despite flat revenue. Business quality is supported by diversification across drilling, mining services and labs, geographic exposure to African and global mining markets, and recent management commentary describing record Q1/Q2 2026 revenue with full-year guidance maintained. Shareholder returns are modest but present (dividend yield ~1.8%; ~£5.1m paid in FY2025).
+
+The screen’s cheapness metrics align with a cyclical trough narrative: FY2025 revenue was essentially flat (£346m vs £348m prior year), operating margins compressed in 2024–25, and management guided to margin recovery while forecasting >20% revenue growth in 2026 on new contracts and a supportive gold-led demand cycle. If operational momentum converts to sustained earnings rather than one-off investment gains, the current valuation offers substantial re-rating optionality.
+
+## FINANCIAL REVIEW
+**Source limitation:** The `filings_index.json` catalogues 55 UK RNS items but **zero downloadable body extracts** (`filings/bodies/` is empty; `with_body: 0`). Indexed annual headlines (e.g. “Audited results for the year ended 31 March 2025”, “Annual Report for the Year Ended 31 December 2025”) cannot be verified as CAPD.L-specific — several indexed items reference unrelated entities (investment trusts, VCTs, “Daybreak O&G”, “AlbaCo”, “Sodalis Capital”). **No interim filings are indexed** (`interim: 0`), despite material H1 trading commentary in news. All figures below are from **`financials_annual.json` (Yahoo Finance)** unless stated otherwise.
+
+**Income statement trends (Yahoo, FY2022–FY2025)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | £290.3m | £318.4m | £348.0m | £345.8m |
+| Operating income | £64.1m | £62.2m | £48.5m | £50.9m |
+| Reported net income | £21.0m | £36.7m | £16.0m | **£69.4m** |
+| Normalised net income | £35.8m | £35.0m | £12.1m | **£22.7m** |
+| Basic EPS | 11.1p | 19.1p | 8.9p | 34.9p |
+| EBITDA (reported) | £69.9m | £101.4m | £92.9m | £151.4m |
+| Normalised EBITDA | £91.2m | £99.1m | £87.7m | £89.8m |
+
+**Annual observations:** Revenue grew strongly through FY2023 (+9.7%) and FY2024 (+9.3%) before stalling in FY2025 (−0.6%). Operating income peaked in FY2022–23 and fell materially in FY2024 (−22%), with partial recovery in FY2025 (+5%). Reported net income surged in FY2025 (+334% YoY), driven by **£61.5m of unusual items** (Yahoo); normalised net income of £22.7m remains below FY2022–23 levels, indicating underlying earnings pressure. Cash flow statement shows a **£67.3m loss on investment securities** in FY2025, corroborating distortion in headline profit. Gross margin improved slightly to ~43.2% (FY2025) from ~41.2% (FY2024).
+
+**Balance sheet (Yahoo, FY2024 → FY2025)**
+
+- Total assets: £512.8m → **£630.9m**
+- Shareholders’ equity: £269.9m → **£375.7m**
+- Net debt: £74.7m → **£31.4m** (meaningful deleveraging)
+- Cash & equivalents: £40.5m → **£63.4m**
+- Total debt: £149.0m → £130.9m (includes ~£36m capital lease obligations)
+- Working capital: £109.3m → **£200.5m**
+- Net PPE: £273.0m → £278.2m (asset-intensive model)
+- Share count: 196.3m → **225.3m** (+15%; equity issuance £38.2m in FY2025 per cash flow)
+
+Liquidity is robust (current ratio 2.47 per screen, consistent with Yahoo current assets £336.7m / current liabilities £136.2m). The balance sheet supports the screen’s financial-health passes, though capital intensity and lease-adjusted leverage warrant monitoring.
+
+**Cash flow (Yahoo)**
+
+| | FY2022 | FY2023 | FY2024 | FY2025 |
+|--|--------|--------|--------|--------|
+| Operating CF | £55.8m | £69.2m | £63.7m | £73.6m |
+| CapEx | (£49.2m) | (£56.2m) | (£42.6m) | (£37.8m) |
+| Free cash flow | £6.6m | £13.0m | £21.1m | **£35.8m** |
+| Dividends paid | (£7.1m) | (£7.6m) | (£7.7m) | (£5.1m) |
+
+FCF generation improved steadily, supporting the screen’s FCF Yield pass (~£43m FCF per snapshot vs ~£36m in annual cash flow — minor reconciliation difference). FY2025 benefited from working-capital release (£13.7m).
+
+**Interim / trading updates:** No interim filing bodies are available. News headlines (July 2026) reference **record H1 revenue** and **record Q2 revenue** with growth across divisions; August 2025 Investors’ Chronicle coverage noted **first-half margin compression** with management expecting recovery. These operational data points are not quantified in the source pack and cannot be cross-checked against primary filings.
+
+**Gaps:** No annual report body, no interim results body, no audit opinion, no going-concern or covenant disclosure accessible. FY year-end alignment in the filings index is ambiguous due to index contamination.
+
+## RISKS AND RED FLAGS
+**Earnings quality:** FY2025 reported net income (£69.4m) is **not representative** of recurring earnings; normalised profit (~£22.7m) implies ~10x normalised P/E, not ~4x. Screen metrics based on trailing reported earnings may overstate value on a through-cycle basis.
+
+**Cyclicality:** Revenue is tied to mining exploration and production activity; FY2024–25 margin and earnings weakness coincided with flat revenue. A downturn in gold or base-metal capex would pressure utilisation and pricing despite current positive trading commentary.
+
+**Capital structure and dilution:** Share count rose ~15% in FY2025 via equity issuance. Total debt of ~£131m and capital lease obligations of ~£36m remain material; interest expense was ~£14.3m in FY2025. **Covenant terms cannot be assessed** — filing bodies absent.
+
+**Asset and investment risk:** Large PPE base (~£278m net) and investment portfolio movements (significant FY2025 securities losses in cash flow) introduce impairment and mark-to-market volatility. Yahoo records impairments and write-offs across multiple years.
+
+**FX and geographic risk:** Exchange effects appear in cash flow (FY2025: −£1.8m FX loss). Operations in Africa and other emerging markets carry political, contract and receivables risk; allowance for doubtful accounts was reduced in FY2025 (allowance −£0.1m vs −£4.5m in FY2024) despite higher receivables — trend unverified in filings.
+
+**Governance / disclosure:** Filings index contamination with unrelated “Capital Limited” entities reduces confidence in automated regulatory capture. Unable to review director remuneration, related-party transactions, or pension obligations from primary sources.
+
+**Small-cap liquidity:** ~£236m market cap; bid-ask and index inclusion risk typical of FTSE Small Cap / AIM names.
+
+**Primary filing red flags:** **Not assessable** — no going-concern, contingency, or covenant language available in the source pack.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate for CAPD.L specifically** but noisy due to generic “Capital Limited” matches for unrelated companies (Aditya Birla, Tata Capital, Clime, Katana, etc.). Material CAPD.L-relevant items:
+
+- **16 July 2026** — “Capital Limited posts record H1 revenue as it reshapes mining services portfolio” (TipRanks): record H1 revenue; portfolio reshaping across mining services.
+- **16 July 2026** — “CAPD: Record Q2 revenue and strong outlook, with growth across all divisions and new contracts” (TradingView).
+- **20 May 2026** — “Capital Holds Guidance After Record Q1 as Mining, Lab Demand Accelerates” (Yahoo Finance): Executive Chairman Jamie Boyton cited strong Q1, maintained guidance, rising demand across drilling, mining services and labs.
+- **20 May 2026** — “Capital Limited Wins Strong Shareholder Backing at AGM” (TipRanks).
+- **29 April 2026** — “Capital Q1 Earnings Call Highlights” (Yahoo Finance): “record quarter”; full-year guidance reiterated; supportive gold macro.
+- **19 March 2026** — “Capital Ltd (CAPFF) Full Year 2025 Earnings Call Highlights” (Yahoo Finance): flat FY2025 revenue; management anticipates **>20% growth in 2026** from new contracts and demand cycle.
+- **14 August 2025** — “Capital Limited expects margin recovery after first-half drop” (Investors’ Chronicle): H1 margin pressure flagged; recovery expected.
+- **17 November 2025** — “Capital Limited (LON:CAPD) Shares Could Be 30% Below Their Intrinsic Value Estimate” (Yahoo Finance / Simply Wall St): third-party DCF suggesting ~£1.67 fair value vs ~104p price.
+- **4 January 2026** — “Capital Limited's (LON:CAPD) Stock is Soaring But Financials Seem Inconsistent” (Yahoo Finance): flags disconnect between share price momentum and financial consistency — aligns with unusual-item distortion noted above.
+
+No material M&A, regulatory enforcement, or management departures specific to CAPD.L appear in the filtered news set. Strategy focus is organic growth, contract wins, and integrated services expansion.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: The quantitative Strong Buy is broadly confirmed by balance-sheet strength, FCF generation and improving operational momentum, but headline cheapness is partly optical due to non-recurring FY2025 gains and primary filing gaps prevent full risk verification.

@@ -1,0 +1,68 @@
+# Barrick Mining Corporation (ABX.TO) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:50:30.872580+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Barrick Mining Corporation is a large-cap, globally diversified gold producer whose shares screen as a strong buy on cheapness, quality, dividend, GARP, and risk metrics (P/E 10.1×, ROE 25.2%, yield 2.0%, current ratio 3.06). The investment case rests on a sharp earnings and cash-flow inflection through 2024–2025, a net-cash balance sheet, and ongoing capital returns, set against a portfolio simplification (Africa divestiture, potential North American asset IPO, London listing). The central debate is whether current multiples still offer value after a strong multi-year share-price run, and how much of 2025 earnings durability depends on elevated gold prices versus structural cost and production improvements. A material research constraint is that indexed SEC filing bodies in the source pack appear mis-mapped to a different ABX issuer (Abacus Global Management), so financial analysis below relies on Yahoo fallback data and news headlines rather than verified Barrick regulatory extracts.
+
+## INVESTMENT THESIS
+The quantitative screen flags persistent strong-buy conviction (five weeks, 72% conviction score, 19/20 data quality), passing classic value frameworks (Graham Defensive/Enterprising, earnings yield, FCF yield, Magic Formula, Piotroski F-Score) alongside quality screens (Buffett Quality, Economic Moat). For a value investor, Barrick offers a rare combination: cyclical commodity exposure with balance-sheet optionality rather than distress — total debt of roughly $5.2bn against $6.7bn cash at year-end 2025 (Yahoo fallback), implying net cash, while ROE of 25.2% and FCF of ~$5.3bn (screen metric) suggest the market has not fully normalised earnings power from the recent gold upcycle.
+
+Business quality supports the screen: tier-one asset base (~$51.6bn total assets), stable leverage through the cycle, rising shareholder distributions ($890m dividends and $1.5bn buybacks in 2025 per Yahoo), and a new cash-flow-linked dividend framework (reported July 2026). Revenue scaled from $11.0bn (2022) to $17.0bn (2025) with operating income more than doubling over the same period, indicating operational leverage to gold rather than purely financial engineering. The screen’s dividend-family pass aligns with a payout that is becoming explicitly tied to free cash flow, which should appeal to income-oriented value accounts if gold prices hold.
+
+## FINANCIAL REVIEW
+**Source note (critical gap):** `filings_index.json` lists 32 items (4 annual, 10 interim SEC 10-K/10-Q, plus Google News SEDAR headlines), but all 11 downloadable body extracts under `filings/bodies/` reference CIK 1814287 and Abacus Global Management (life insurance/asset management — “LifeSolutions”, “insurance_contract”, “AssetManagement”), not Barrick Mining. No Barrick-specific language (gold, mining, Nevada, Pueblo Viejo, etc.) appears in any body extract. SEDAR interim headlines (e.g. “Barrick Q2 2025 Results Press Release”, 11 August 2025) have no body text. **All figures below are from `financials_annual.json` (Yahoo) with explicit fallback; primary filing citation is not possible for this name in the current source pack.**
+
+**Annual trends (Yahoo fallback, USD):**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue | $11.01bn | $11.40bn | $12.92bn | $16.96bn |
+| Operating income | $3.02bn | $2.81bn | $4.18bn | $8.01bn |
+| Net income (common) | $0.43bn | $1.27bn | $2.14bn | $4.99bn |
+| Diluted EPS | $0.24 | $0.72 | $1.22 | $2.93 |
+| Operating cash flow | $3.48bn | $3.73bn | $4.49bn | $7.69bn |
+| Capex | ($3.05bn) | ($3.09bn) | ($3.17bn) | ($3.82bn) |
+| Free cash flow | $0.43bn | $0.65bn | $1.32bn | $3.87bn |
+| Cash | $4.44bn | $4.15bn | $4.07bn | $6.71bn |
+| Total debt | $5.25bn | $5.22bn | $5.26bn | $5.21bn |
+| Stockholders’ equity | $22.77bn | $23.34bn | $24.29bn | $26.56bn |
+
+The trajectory is one of accelerating profitability: 2024–2025 revenue rose 31%, operating income 91%, and net income 133%. Balance-sheet quality improved materially — cash rose 65% in 2025 while debt was flat, moving the company to an estimated net cash position of ~$1.5bn. FCF conversion strengthened sharply in 2025 ($3.87bn vs $1.32bn in 2024), consistent with the screen’s FCF-yield pass.
+
+**Earnings quality considerations (Yahoo):** 2025 net income includes an $852m gain on sale of business; minority interests absorbed $2.16bn of consolidated earnings ($9.4bn minority interest on the balance sheet), reflecting complex JV structures typical of large gold miners. 2022 included a $1.67bn impairment of capital assets; 2024 had a ($457m) impairment line — evidence of reserve/asset write-down risk in weaker gold environments. Long-term provisions of $1.77bn (2025) suggest ongoing reclamation and closure obligations not visible in headline multiples.
+
+**Interim / recent quarter (Yahoo quarterly fallback):** Q1 2026 (period ended March 2026): revenue $5.22bn, net income $1.60bn, diluted EPS $0.96. News headline “Earnings Flash (B) Barrick Mining Corporation Posts Q1 Adjusted EPS $0.98 per Share” (11 May 2026) corroborates a strong start to 2026. No verified interim filing body is available for line-item reconciliation. The indexed 10-Q dated March 2026 (`abx-20260331`) is the Abacus entity, not Barrick.
+
+**Balance-sheet and screen alignment:** Computed current ratio ~2.9–3.1 (consistent with screen CR 3.06). P/B 2.1× is above classic Graham thresholds but passes combined P/E×P/B tests given low P/E. Retained earnings remain negative ($1.17bn deficit) despite strong recent profits, a legacy of prior-cycle losses and distributions — worth monitoring but not uncommon among long-lived miners.
+
+## RISKS AND RED FLAGS
+**Regulatory / filing gap:** Unable to review Barrick going-concern language, contingencies, covenant terms, or pension disclosures from primary filings — the indexed SEC bodies belong to a different issuer. This is a first-order research red flag independent of company fundamentals.
+
+**Cyclical / commodity:** Gold price sensitivity is the dominant risk. July 2026 headlines (“Barrick Mining Shares Weaken as Gold Prices Extend Decline”, 8 July 2026; sector peers down 16–31% over three months) highlight near-term margin compression if bullion retreats from cycle highs. 2025 earnings embed favourable commodity assumptions; normalisation would pressure the screen’s cheapness metrics.
+
+**Portfolio / strategic execution:** Reports of negotiating an Africa business sale and weighing a London listing (1 June 2026) introduce execution, tax, and timing risk. Plans for an IPO of selected North American assets and a cash-flow-linked dividend (8 July 2026) could unlock value but also fragment the asset base and alter consolidated earnings visibility.
+
+**Operational / jurisdictional:** Large minority interests ($9.4bn) and provisions ($1.77bn) point to JV-heavy operations in politically complex regions (Africa, Latin America, PNG historically). Historical impairments ($1.67bn in 2022) show asset-level write-down risk when costs rise or reserves disappoint.
+
+**Governance / complexity:** Negative retained earnings despite recent profitability, plus non-operating items (equity-accounted earnings $444m in 2025), make “owner earnings” less transparent than the headline P/E suggests. Without Barrick 10-K risk-factor text, tail risks (tax disputes, community agreements, environmental liabilities) cannot be assessed from filings in this pack.
+
+**Competitive:** Peer commentary (Newmont, Agnico Eagle margin pressure into 2026) suggests industry-wide cost inflation and production headwinds — Barrick is not isolated from sector trends.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate but Barrick-specific items are material:
+
+- **Cash-flow-linked dividend and North American asset IPO** — “Barrick Mining (TSX:ABX) Introduces Cash Flow Linked Dividend And Plans Asset IPO” (8 July 2026, Yahoo Finance): shifts capital-allocation framework and signals portfolio simplification.
+- **Valuation debate after strong run** — “Is Barrick Mining (TSX:ABX) Fully Priced, Or Still A Bargain?” (8 July 2026): notes ~154% three-year return; DCF closer to fair value while earnings multiples still look inexpensive.
+- **Gold-price-driven volatility** — “Barrick Mining (TSX:ABX) Following Gold Weakness Is The Bull Case Still Cheap” (9 July 2026); “Barrick Mining Shares Weaken as Gold Prices Extend Decline” (8 July 2026): near-term sentiment tied to bullion.
+- **Portfolio restructuring** — “Barrick Mining weighs London listing as it negotiates Africa business sale” (1 June 2026, Seeking Alpha/Reuters): major strategic pivot.
+- **Q1 2026 results** — “Earnings Flash (B) Barrick Mining Corporation Posts Q1 Adjusted EPS $0.98 per Share” (11 May 2026); “Barrick Mining Corporation Provides Production Guidance for the Year 2026” (11 May 2026); quarterly dividend announcement (11 May 2026).
+- **Analyst sentiment** — “Barrick Mining Corporation Beat Analyst Estimates” (14 May 2026); “Here is Why Barrick Mining (B) is One of the Undervalued Stocks with Huge Upside Potential” (9 April 2026).
+
+Several manifest entries are off-topic (Newmont, Agnico Eagle, Abacus Global on NYSE ABX, generic market pieces). Barrick-specific coverage is sufficient for strategy and earnings direction but thin on operational detail (no mine-level or reserve updates in the manifest).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.70
+Rationale: Yahoo financials confirm a powerful earnings and FCF inflection that supports the quantitative strong-buy signal, but mis-mapped primary filings, JV complexity, and gold-cycle dependence prevent full conviction until verified Barrick regulatory disclosures are reviewed.

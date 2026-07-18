@@ -308,6 +308,58 @@ def build_parser() -> argparse.ArgumentParser:
     unavail_p.add_argument("--json", action="store_true")
     unavail_p.set_defaults(func=cmd_unavailable_watch)
 
+    reingest_p = sub.add_parser(
+        "reingest-filings",
+        help="Re-ingest primary filings for existing research memos (backfill regimes)",
+    )
+    reingest_p.add_argument(
+        "--markets",
+        default="asx200,euro_stoxx50",
+        help="Comma-separated market ids (default: asx200,euro_stoxx50)",
+    )
+    reingest_p.add_argument(
+        "--all",
+        action="store_true",
+        help="Re-ingest every memo, not only unsupported/missing indexes",
+    )
+    reingest_p.add_argument(
+        "--api-key",
+        default=os.environ.get("TICKER_API_KEY") or os.environ.get("CURSOR_API_KEY"),
+        help="Optional Ticker API key for UK RNS (default: TICKER_API_KEY)",
+    )
+    reingest_p.add_argument("--json", action="store_true")
+    reingest_p.set_defaults(func=cmd_reingest_filings)
+
+    retry_p = sub.add_parser(
+        "retry-failed",
+        help="Re-fetch library metrics rows that currently have errors",
+    )
+    retry_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all registered offline markets)",
+    )
+    retry_p.add_argument("--json", action="store_true")
+    retry_p.set_defaults(func=cmd_retry_failed)
+
+    prune_p = sub.add_parser(
+        "prune-screen",
+        help="Prune dated screen CSV/JSON history; keep latest_* and N newest runs",
+    )
+    prune_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all offline markets with screens)",
+    )
+    prune_p.add_argument(
+        "--keep-runs",
+        type=int,
+        default=2,
+        help="Keep this many newest timestamped screen runs per market (default: 2)",
+    )
+    prune_p.add_argument("--json", action="store_true")
+    prune_p.set_defaults(func=cmd_prune_screen)
+
     return parser
 
 
@@ -803,6 +855,82 @@ def cmd_overlaps(args: argparse.Namespace) -> int:
     for row in payload["pairs"]:
         a, b = row["markets"]
         print(f"  {a} ∩ {b}: {row['overlap_count']}  e.g. {row['sample']}")
+    return 0
+
+
+def cmd_reingest_filings(args: argparse.Namespace) -> int:
+    from .library_maintenance import reingest_research_filings
+
+    markets = _parse_markets(args.markets) or ["asx200", "euro_stoxx50"]
+    payload = reingest_research_filings(
+        args.root,
+        markets,
+        only_unsupported=not bool(args.all),
+        api_key=args.api_key,
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(f"Library root: {args.root}")
+    print(
+        f"Re-ingested filings for {payload['target_count']} memo(s) "
+        f"across {', '.join(payload['markets'])}"
+    )
+    for row in payload.get("results") or []:
+        print(
+            f"  {row['market']}/{row['ticker']}: "
+            f"{row.get('prior_regime')}→{row.get('regime')}  "
+            f"filings={row.get('filings_total')}  bodies={row.get('with_body')}"
+        )
+    return 0
+
+
+def cmd_retry_failed(args: argparse.Namespace) -> int:
+    from .library_maintenance import retry_failed_metrics
+
+    markets = _parse_markets(args.markets) or [
+        mid for mid in MARKET_REGISTRY if mid != "ftse350"
+    ]
+    results = retry_failed_metrics(args.root, markets)
+    payload = {"root": str(args.root), "markets": results}
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(f"Library root: {args.root}")
+    for row in results:
+        still = row.get("still_failed") or []
+        print(
+            f"{row['market']}: retried={len(row.get('selected') or [])}  "
+            f"errors={row.get('errors', 0)}  still_failed={len(still)}"
+        )
+        if still:
+            print(f"  still: {', '.join(still)}")
+    return 0
+
+
+def cmd_prune_screen(args: argparse.Namespace) -> int:
+    from .library_maintenance import prune_library_screen_history
+
+    markets = _parse_markets(args.markets)
+    payload = prune_library_screen_history(
+        args.root,
+        markets=markets,
+        keep_runs=int(args.keep_runs),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(f"Library root: {args.root}")
+    print(
+        f"Pruned dated screen history (keep_runs={payload['keep_runs']}): "
+        f"removed {payload['total_removed']} file(s)"
+    )
+    for mid, counts in (payload.get("per_market") or {}).items():
+        if counts.get("removed"):
+            print(
+                f"  {mid}: screen={counts.get('screen_removed', 0)}  "
+                f"history={counts.get('history_removed', 0)}"
+            )
     return 0
 
 

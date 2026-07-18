@@ -1,0 +1,105 @@
+# Micron Technology (MU) — Research memo
+
+_Version 1 · Updated 2026-07-18T12:45:08.511298+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Micron is a leading DRAM/NAND memory manufacturer riding an AI-driven upcycle, with HBM and data-centre demand transforming financial performance from FY2023 losses to record profitability in FY2026. The quantitative screen flags a buy on quality, GARP, dividend, and financial-health metrics (P/E 19.3, ROE 66.6%, 6.0% yield), though P/B of 13.2 reflects peak-cycle earnings rather than classic deep value. The central debate is whether current margins and AI-linked pricing are sustainable, or whether memory cyclicality will erode the screen’s attractive multiples when supply catches demand. We view the name as a high-quality cyclical compounder worth accumulating on weakness, not a conventional low-multiple value play.
+
+## INVESTMENT THESIS
+The screen’s buy signal rests on four model families passing simultaneously: **quality** (Buffett Quality, Economic Moat), **GARP** (Lynch PEG 0.01, Neff PEGY 0.01 — distorted by the earnings snap-back from FY2023’s $5.8bn loss), **dividend** (Dividend Growth), and **risk** (Financial Health). At P/E 19.3 against ROE of 66.6% and FCF of ~$7.6bn (screen), the market is not pricing a distressed operator; it is pricing a capital-intensive oligopolist at a mid-teens multiple during a supercycle.
+
+Business quality is substantiated in filings. Micron describes itself as an industry leader in DRAM, NAND, and NOR memory, with manufacturing across Taiwan, Singapore, Japan, the US, Malaysia, China, and India (FY2025 10-K). FY2025 Compute and Memory BU (CMBU) revenue reached $13.52bn versus $3.79bn in FY2024, driven by HBM, DDR5, and data-centre products — confirming structural AI exposure beyond a commodity price spike. The balance sheet has strengthened materially: cash rose from $9.6bn (Aug 2025) to $25.0bn (May 2026, Q3 10-Q), with total assets of $134.1bn and shareholders’ equity of ~$100.7bn.
+
+For a value investor, the case is **GARP-on-quality at a cyclical inflection**, not asset-based deep value. The screen’s dividend yield (6.0%) and financial-health pass provide downside framing, but P/B of 13.2 and extreme earnings volatility (FY2023 loss → FY2026 record profit) mean position sizing and cycle awareness matter more than static multiples.
+
+## FINANCIAL REVIEW
+**Annual results (10-K)**
+
+Two annual 10-K filings are present (FY2024, filed Oct 2024; FY2025, filed Oct 2025). Filing body extracts contain segment disclosures and risk-factor language but **lack readable consolidated income-statement tables** (bodies appear truncated before full financial statements). Consolidated annual figures below therefore **fall back to Yahoo (`financials_annual.json`)**, with segment data from the 10-K bodies.
+
+| Metric | FY2025 (Aug 2025) | FY2024 (Aug 2024) | FY2023 (Aug 2023) | Source |
+|---|---|---|---|---|
+| Revenue | $37.4bn | $25.1bn | $15.5bn | Yahoo (consolidated) |
+| Net income | $8.5bn | $0.8bn | $(5.8)bn | Yahoo |
+| Diluted EPS | $7.59 | $0.70 | $(5.34) | Yahoo |
+| Gross margin | 39.8% | 22.4% | Negative | Yahoo |
+| Operating income | $9.8bn | $1.3bn | $(5.4)bn | Yahoo |
+| R&D | $3.8bn | $3.4bn | $3.1bn | Yahoo |
+| CapEx | $15.9bn | $8.4bn | $7.7bn | Yahoo |
+| Operating cash flow | $17.5bn | $8.5bn | $1.6bn | Yahoo |
+| FCF | $1.7bn | $0.1bn | $(6.1)bn | Yahoo |
+| Total assets | $82.8bn | $69.4bn | $64.3bn | Yahoo |
+| Shareholders’ equity | $54.2bn | $45.1bn | $44.1bn | Yahoo |
+| Total debt | $15.3bn | $14.0bn | $13.9bn | Yahoo |
+| Net debt | $1.9bn | $4.3bn | $3.5bn | Yahoo |
+
+**Segment revenue (FY2025 10-K body — primary source):**
+
+- DRAM: $28.58bn (2025) vs $17.60bn (2024) vs $10.98bn (2023)
+- NAND: $8.50bn vs $7.23bn vs $4.21bn
+- CMBU (compute/memory, AI/HBM): $13.52bn vs $3.79bn vs $1.87bn
+- CDBU (core data centre): $7.23bn vs $4.98bn vs $2.12bn
+- MCBU (mobile/client): $11.86bn vs $11.67bn vs $7.39bn
+- AEBU (automotive/embedded): $4.75bn vs $4.63bn vs $4.14bn
+
+The FY2023–FY2025 arc shows a classic memory trough-to-recovery pattern, with CMBU/data-centre the primary swing factor.
+
+**Interim results (10-Q filing bodies — primary source)**
+
+| Quarter | Revenue | Gross margin | Net income | YoY rev. change |
+|---|---|---|---|---|
+| Q1 FY2025 (Nov 2024) | $8.7bn | 38.4% | $1.9bn | vs $4.7bn / $(1.2)bn loss (Q1 FY2024) |
+| Q2 FY2025 (Feb 2025) | $8.1bn | 36.8% | $1.6bn | vs $6.8bn / $0.8bn (Q2 FY2024) |
+| Q3 FY2025 (May 2025) | $9.3bn | 37.7% | $1.9bn | vs $6.8bn / $0.3bn (Q3 FY2024) |
+| Q1 FY2026 (Nov 2025) | $13.6bn | 56.0% | $5.2bn | +57% revenue YoY |
+| Q2 FY2026 (Feb 2026) | $23.9bn | 74.4% | $13.8bn | +196% revenue YoY |
+| Q3 FY2026 (May 2026) | $41.5bn | 84.6% | $28.2bn | +346% revenue YoY |
+
+Nine months ended May 2026 (Q3 FY2026 10-Q): revenue $79.0bn, net income $47.3bn, operating cash flow $45.7bn, CapEx $(19.6)bn. DRAM revenue in Q3 FY2026 alone was $31.3bn; NAND $9.9bn.
+
+**Balance sheet trend (10-Q bodies):**
+
+- Q3 FY2025 (May 2025): total assets $78.4bn, cash $10.2bn, receivables $7.4bn
+- Q3 FY2026 (May 2026): total assets $134.1bn, cash $25.0bn, receivables $31.0bn, inventories $8.6bn, total liabilities $33.4bn
+
+Receivables have expanded sharply alongside revenue — a working-capital build worth monitoring, though cash generation remains strong. No going-concern language appears in available filing extracts. Commitments and contingencies are disclosed in standard form; pension is not a material focus in available extracts.
+
+**Gaps:** 8-K filings (10 items) are indexed but lack downloadable bodies. FY2025/FY2024 10-K bodies do not include full consolidated financial tables; annual consolidated figures rely on Yahoo fallback as noted.
+
+## RISKS AND RED FLAGS
+**Cyclicality (primary).** Both 10-K filings warn that increases in worldwide semiconductor supply, if not matched by demand, “could lead to declines in average selling prices” and materially harm results. FY2023’s $5.8bn loss is a recent reminder that memory is among the most volatile sectors in technology. Current 84.6% gross margins (Q3 FY2026) are extraordinary by historical standards and unlikely to persist through a downcycle.
+
+**Competition.** FY2025 10-K identifies Samsung, SK hynix, Kioxia, Sandisk, CXMT, and YMTC as competitors, noting they “may use aggressive pricing to obtain market share” and may operate with lower cost structures. HBM leadership is contested; SK Hynix is the primary rival in high-bandwidth memory.
+
+**China and geopolitics.** Filings reference China’s Cyberspace Administration (CAC), export controls, tariffs, and trade regulations as operational risks. Manufacturing and sales exposure to China remains a regulatory overhang.
+
+**Capital intensity.** FY2025 CapEx was $15.9bn (Yahoo); nine-month FY2026 CapEx reached $19.6bn (Q3 10-Q). The FY2025 10-K notes semiconductor manufacturing is “capital intensive, requiring large investments in sophisticated facilities.” CHIPS Act incentives are referenced, but Micron is simultaneously self-funding massive fab expansion (including a reported $100bn facility — see news).
+
+**Customer concentration.** XBRL tags in interim filings reference customer concentration risk and an undisclosed customer, but **specific concentration percentages are not readable** in the available body extracts — a data gap.
+
+**Governance / insider activity.** No governance red flags in filings. News reports EVP Scott DeBoer/Arnzen share sales of ~$13.9m (Apr 2026) — routine but worth noting at elevated valuations.
+
+**Valuation risk.** P/B of 13.2 and a market capitalisation that briefly exceeded $1tn (per news) imply the stock embeds sustained AI demand. A correction in AI capex sentiment has already triggered volatility (Jul 2026 selloff).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **extensive but sentiment-driven**, with heavy focus on price action rather than fundamentals.
+
+**AI supercycle and earnings:** Micron Q3 FY2026 earnings (Jun 2026) dominated headlines, with previews citing HBM4, margins, and trillion-dollar valuation (“Micron Q3 FY2026 earnings preview: HBM4, margins and $1 trillion valuation,” ig.com, 23 Jun 2026). Post-earnings, Micron and Nvidia were described as “single-handedly reshaping S&P 500 Tech earnings” (“How Nvidia and Micron Are Single-Handedly Reshaping S&P 500 Tech Earnings,” Yahoo Finance, 17 Jul 2026).
+
+**All-time highs and volatility:** The stock hit successive all-time highs through Apr–Jun 2026 (e.g. $533, $668, $822, $1,084 — Investing.com/Yahoo, Apr–Jun 2026), then pulled back below $1tn market cap (“Here’s What Can End Micron’s Stock Pain,” Barron’s, 17 Jul 2026). Jul 2026 saw a chip selloff tied to China’s Moonshot AI Kimi K3 model (“China’s Moonshot AI Adds More Fuel to Wall Street’s Chip Selloff,” WSJ, 17 Jul 2026).
+
+**Capacity expansion:** Micron broke ground on a $100bn semiconductor facility (“Micron Stock Jumps After Breaks Ground on $100 Billion Semiconductor Facility,” Yahoo Finance, 16 Jan 2026).
+
+**Strategic partnerships:** Automotive memory agreements, including with Visteon (“Visteon (VC) Gains Micron Backing As A Cheap Narrative Meets Earnings Test,” Yahoo Finance, 18 Jul 2026), though one report noted auto contracts cover a small share of total DRAM (“Micron (NASDAQ: MU) slips as new auto contracts leave most DRAM business outside deals,” TechStock², 16 Jul 2026).
+
+**Analyst sentiment:** UBS reportedly set an aggressive price target (“Analysts at UBS just set a jaw-dropping price target for Nasdaq stock Micron,” Yahoo Finance UK, 1 Jun 2026). Wall Street comparisons favouring Micron over SpaceX appeared Jul 2026.
+
+**Insider selling:** EVP share sale of $13.9m reported Apr 2026 (Investing.com UK).
+
+News is **not thin** on quantity, but much is price-reactive; limited incremental detail on HBM market share or customer contract terms beyond filings.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: high
+Confidence: 0.72
+Rationale: Deep research confirms the screen’s quality, earnings momentum, and balance-sheet improvement, but peak-cycle margins and memory cyclicality warrant a phased accumulation rather than full conviction at current multiples.
