@@ -421,7 +421,11 @@ async function buildPriceMap(tickers, data) {
 }
 
 function selectAutoTargets(candidates, maxPositions) {
-  return candidates
+  const actionable =
+    typeof window.IIUnavailable?.filterActionable === "function"
+      ? window.IIUnavailable.filterActionable(candidates)
+      : candidates;
+  return actionable
     .filter((row) => (row.signal === "strong_buy" || row.signal === "buy") && row.timing_signal !== "wait")
     .filter((row) => candidatePrice(row) != null)
     .sort((a, b) => Number(b.conviction_score || 0) - Number(a.conviction_score || 0))

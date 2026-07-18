@@ -340,10 +340,12 @@ def build_ii_overlays(
                     "",
                     "Exchange-allowlist mapping from II public pages onto offline library tickers.",
                     "",
-                    "- `policy.json` — published venues + next slice candidates",
+                    "- `policy.json` — published venues (Yahoo suffixes + MICs) + next slices",
                     "- `exceptions.json` — curated ticker overrides",
                     "- `by_market/*.csv` — per-ticker overlay joined by Yahoo ticker",
                     "- `summary.json` — rollup stats",
+                    "- `unavailable_watch.json` — optional bypass seed for unactionable II names",
+                    "- `firds_ii_mics.*` — optional FIRDS MIC filter output",
                     "",
                     "**Not** a full broker instrument book. Do not scrape logged-in ii.co.uk.",
                     "Does not change live FTSE 350 screening.",
@@ -358,7 +360,7 @@ def build_ii_overlays(
 def annotate_shortlist_rows(
     rows: list[dict[str, Any]],
     *,
-    market_id: str,
+    market_id: str | None = None,
     library_root: Path | None = None,
 ) -> list[dict[str, Any]]:
     """Attach II overlay fields to shortlist/signal dict rows (advisory)."""
@@ -368,9 +370,10 @@ def annotate_shortlist_rows(
     annotated: list[dict[str, Any]] = []
     for row in rows:
         ticker = str(row.get("ticker") or "")
+        mid = market_id or row.get("market")
         overlay = classify_ticker(
             ticker,
-            market_id=market_id,
+            market_id=str(mid) if mid else None,
             policy=policy,
             exceptions=exceptions,
         )
@@ -379,5 +382,22 @@ def annotate_shortlist_rows(
         merged["ii_deal_channel"] = overlay["deal_channel"]
         merged["ii_confidence"] = overlay["confidence"]
         merged["ii_exchange"] = overlay["ii_exchange"]
+        merged["ii_basis"] = overlay.get("basis")
         annotated.append(merged)
     return annotated
+
+
+def annotate_dashboard_reports(
+    reports: list[dict[str, Any]],
+    *,
+    library_root: Path | None = None,
+    market_id: str | None = None,
+) -> list[dict[str, Any]]:
+    """Annotate live dashboard reports with II overlay fields (advisory)."""
+    try:
+        return annotate_shortlist_rows(
+            reports, market_id=market_id, library_root=library_root
+        )
+    except FileNotFoundError:
+        logger.warning("II coverage policy missing — skipping dashboard annotation")
+        return reports

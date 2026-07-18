@@ -5,7 +5,7 @@
     "https://www.ii.co.uk/investing-with-ii/international-investing/markets",
     "https://www.ii.co.uk/investing-with-ii/international-investing"
   ],
-  "note": "Exchange-level coverage from Interactive Investor public pages. This is NOT a full instrument catalog (L34 remainder). Do not scrape logged-in account or search pages. Confidence is assumed until a broker instrument dump exists.",
+  "note": "Exchange-level coverage from Interactive Investor public pages + optional FIRDS MIC enrichment. Not a full II instrument catalog. Do not scrape logged-in account/search pages. UI Unavailable bypass keeps names on a watched-unavailable list.",
   "uk_includes_aim": true,
   "adr_home_markets": [
     "Japan",
@@ -24,7 +24,11 @@
         ""
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XNYS",
+        "XNAS"
+      ]
     },
     {
       "ii_region": "North America",
@@ -36,7 +40,10 @@
         ".TO"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XTSE"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -49,7 +56,11 @@
         ".L"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XLON",
+        "AIMX"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -61,7 +72,10 @@
         ".IR"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XDUB"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -74,7 +88,11 @@
         ".DE"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XETR",
+        "XFRA"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -86,7 +104,10 @@
         ".PA"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XPAR"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -98,7 +119,10 @@
         ".MC"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XMAD"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -110,7 +134,10 @@
         ".BR"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XBRU"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -122,7 +149,10 @@
         ".MI"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XMIL"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -134,7 +164,10 @@
         ".AS"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XAMS"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -146,7 +179,10 @@
         ".ST"
       ],
       "online_dealable": false,
-      "phone_only": true
+      "phone_only": true,
+      "mics": [
+        "XSTO"
+      ]
     },
     {
       "ii_region": "Europe",
@@ -158,7 +194,10 @@
         ".SW"
       ],
       "online_dealable": false,
-      "phone_only": true
+      "phone_only": true,
+      "mics": [
+        "XSWX"
+      ]
     },
     {
       "ii_region": "Asia Pacific",
@@ -170,7 +209,10 @@
         ".AX"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XASX"
+      ]
     },
     {
       "ii_region": "Asia Pacific",
@@ -182,7 +224,10 @@
         ".HK"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XHKG"
+      ]
     },
     {
       "ii_region": "Asia Pacific",
@@ -194,7 +239,10 @@
         ".SI"
       ],
       "online_dealable": true,
-      "phone_only": false
+      "phone_only": false,
+      "mics": [
+        "XSES"
+      ]
     }
   ],
   "market_defaults": {
@@ -370,5 +418,16 @@
       "rationale": "Remaining L34 core: replace assumed exchange allowlist with verified tradable_on_ii per ISIN/ticker. No public feed found; requires export/partner/licensed data.",
       "status": "blocked_no_public_feed"
     }
-  ]
+  ],
+  "firds": {
+    "note": "Optional enrichment: filter public FCA/ESMA FIRDS instrument files by these MICs to confirm a name is admitted on an II-advertised venue. FIRDS proves venue listing, not that II will accept the order. Use: ftse-library firds-filter --input <FULINS.xml>",
+    "source_urls": [
+      "https://www.esma.europa.eu/publications-and-data/databases-and-registers",
+      "https://www.fca.org.uk/markets/primary-and-secondary-markets/financial-instruments-reference-data-system-firds"
+    ]
+  },
+  "unavailable_watch": {
+    "note": "Names marked Unavailable in the dashboard stay screened/watched but are excluded from suggested trades / paper auto-entries until restored. Browser list is primary; optional server file: docs/data/library/ii_coverage/unavailable_watch.json",
+    "path": "unavailable_watch.json"
+  }
 }

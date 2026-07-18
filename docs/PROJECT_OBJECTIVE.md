@@ -59,9 +59,9 @@ Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised w
 
 (FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) Advance focus when coverage ≥95% and stale ≤15%. Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research round-robins buy-tier names across focus + graduated markets (`research_all_graduated`). Rating-priority maintenance is **L33**.
 
-**L34:** `docs/data/library/ii_coverage/` maps library Yahoo tickers → assumed II tradability from II’s *public* exchange list (`ftse-library ii-overlay`). Advisory only — does not filter screens. Full verified instrument catalog still needs a broker/partner dump (no public feed).
+**L34:** `docs/data/library/ii_coverage/` maps library Yahoo tickers → assumed II tradability from II’s *public* exchange list (`ftse-library ii-overlay`). Advisory only — does not filter screens. Optional FIRDS MIC filter (`ftse-library firds-filter`) confirms venue admission, not II order acceptance. Dashboard **Unavailable** bypass keeps unactionable names on a watched list and excludes them from suggested trades / paper auto-entries. Full verified instrument catalog still needs a broker/partner dump (no public feed).
 
-**L34 next slices (offline ladder):** `aim` → `ibex35` → `ftse_mib` → `aex` → `bel20` → `hang_seng` → `sti` → `us_adr_asia` (see `ii_coverage/policy.json`).
+**L34 next slices (offline ladder):** `aim` → `ibex35` → `ftse_mib` → `aex` → `bel20` → `hang_seng` → `sti` → `us_adr_asia` (see `ii_coverage/policy.json`) — complete; remaining L34 core is the official instrument dump.
 
 ### Running the ladder
 

@@ -89,6 +89,11 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     assert bundle["meta"]["strong_buy_count"] == 1
     assert bundle["reports"][0]["ticker"] == "AAA.L"
     assert bundle["run_diff"]["new_strong_buys"] == ["Alpha (AAA.L)"]
+    assert bundle["meta"].get("ii_overlay") is True
+    assert "unavailable_watch" in bundle
+    # AAA.L maps to UK / LSE on the II exchange allowlist
+    assert bundle["reports"][0].get("tradable_on_ii") is True
+    assert bundle["reports"][0].get("ii_deal_channel") == "online"
 
 
 def test_publish_dashboard_writes_latest_json(tmp_path: Path):

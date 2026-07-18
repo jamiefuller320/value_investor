@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
@@ -26,6 +27,8 @@ from value_investor.storage import (
 )
 from value_investor.summary import build_company_reports
 from value_investor.trust_summary import build_trust_reports
+
+logger = logging.getLogger(__name__)
 
 
 def _read_json(path: Path) -> dict[str, Any] | list[Any] | None:
@@ -189,6 +192,22 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
             report["chart_path"] = f"data/charts/{chart_filename(str(report['ticker']))}"
 
+    # Advisory II tradability overlay (exchange allowlist / optional FIRDS MICs).
+    try:
+        from value_investor.ii_coverage import annotate_dashboard_reports
+
+        reports = annotate_dashboard_reports(reports, market_id=universe_name)
+        trust_reports = annotate_dashboard_reports(trust_reports, market_id=universe_name)
+    except Exception as exc:  # noqa: BLE001 — dashboard must still publish
+        logger.warning("II overlay annotation skipped: %s", exc)
+
+    try:
+        from value_investor.unavailable_watch import load_unavailable_watch
+
+        unavailable_watch = load_unavailable_watch()
+    except Exception:  # noqa: BLE001
+        unavailable_watch = {"items": []}
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": run_at,
@@ -203,8 +222,11 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             "screen_trusts": screen_trusts,
             "trust_count": len(trust_reports),
             "trust_signal_counts": trust_signal_counts,
+            "ii_overlay": True,
+            "unavailable_watch_count": len(unavailable_watch.get("items") or []),
         },
         "reports": reports,
+        "unavailable_watch": unavailable_watch,
         "trust_reports": trust_reports,
         "run_diff": run_diff,
         "backtest": backtest,
@@ -293,8 +315,11 @@ def empty_dashboard_bundle() -> dict[str, Any]:
             "screen_trusts": True,
             "trust_count": 0,
             "trust_signal_counts": {},
+            "ii_overlay": False,
+            "unavailable_watch_count": 0,
         },
         "reports": [],
+        "unavailable_watch": {"items": []},
         "trust_reports": [],
         "run_diff": None,
         "backtest": None,

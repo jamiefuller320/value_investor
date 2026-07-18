@@ -259,6 +259,55 @@ def build_parser() -> argparse.ArgumentParser:
     ii_p.add_argument("--json", action="store_true")
     ii_p.set_defaults(func=cmd_ii_overlay)
 
+    firds_p = sub.add_parser(
+        "firds-filter",
+        help=(
+            "Filter a public FCA/ESMA FIRDS XML/CSV dump to II-advertised online MICs "
+            "(venue admission ≠ II order acceptance)"
+        ),
+    )
+    firds_p.add_argument(
+        "--input",
+        type=Path,
+        required=True,
+        help="Path to FIRDS .xml or .csv file",
+    )
+    firds_p.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Optional max rows to keep (for smoke tests)",
+    )
+    firds_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print counts without writing firds_ii_mics.json/csv",
+    )
+    firds_p.add_argument("--json", action="store_true")
+    firds_p.set_defaults(func=cmd_firds_filter)
+
+    unavail_p = sub.add_parser(
+        "unavailable-watch",
+        help=(
+            "List / mark / restore tickers unavailable to trade on II "
+            "(kept watching; excluded from suggested trades)"
+        ),
+    )
+    unavail_p.add_argument(
+        "action",
+        choices=["list", "mark", "restore"],
+        help="list | mark <ticker> | restore <ticker>",
+    )
+    unavail_p.add_argument("ticker", nargs="?", default="", help="Ticker for mark/restore")
+    unavail_p.add_argument("--name", default="", help="Optional company name when marking")
+    unavail_p.add_argument(
+        "--reason",
+        default="unavailable_on_ii",
+        help="Reason code (default: unavailable_on_ii)",
+    )
+    unavail_p.add_argument("--json", action="store_true")
+    unavail_p.set_defaults(func=cmd_unavailable_watch)
+
     return parser
 
 
@@ -634,6 +683,82 @@ def cmd_ii_overlay(args: argparse.Namespace) -> int:
         print(
             f"  [{item.get('priority')}] {item.get('id')}: {item.get('label')} "
             f"({item.get('status')})"
+        )
+    return 0
+
+
+def cmd_firds_filter(args: argparse.Namespace) -> int:
+    from .firds_mics import filter_firds_file, ii_allowed_mics, write_firds_filter_result
+
+    mics = ii_allowed_mics()
+    rows = filter_firds_file(args.input, mics=mics, limit=args.limit)
+    payload = {
+        "input": str(args.input),
+        "mic_count": len(mics),
+        "mics": sorted(mics),
+        "row_count": len(rows),
+        "sample": rows[:5],
+    }
+    if not args.dry_run:
+        path = write_firds_filter_result(rows, library_root=args.root, source_path=args.input)
+        payload["wrote"] = str(path)
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(f"FIRDS filter: {args.input}")
+    print(f"II online MICs ({len(mics)}): {', '.join(sorted(mics))}")
+    print(f"Matched rows: {len(rows)}")
+    if args.dry_run:
+        print("(dry-run — not written)")
+    else:
+        print(f"Wrote: {payload.get('wrote')}")
+    for row in rows[:5]:
+        print(f"  {row.get('isin')}  {row.get('mic')}  {row.get('name')}")
+    return 0
+
+
+def cmd_unavailable_watch(args: argparse.Namespace) -> int:
+    import sys
+
+    from .unavailable_watch import (
+        default_unavailable_path,
+        load_unavailable_watch,
+        mark_unavailable,
+        restore_unavailable,
+    )
+
+    path = default_unavailable_path(args.root)
+    action = str(args.action)
+    ticker = str(args.ticker or "").strip()
+
+    if action == "list":
+        payload = load_unavailable_watch(path)
+    elif action == "mark":
+        if not ticker:
+            print("ticker required for mark", file=sys.stderr)
+            return 2
+        payload = mark_unavailable(
+            ticker,
+            name=str(args.name or "").strip() or None,
+            reason=str(args.reason or "unavailable_on_ii"),
+            path=path,
+        )
+    else:  # restore
+        if not ticker:
+            print("ticker required for restore", file=sys.stderr)
+            return 2
+        payload = restore_unavailable(ticker, path=path)
+
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    items = payload.get("items") or []
+    print(f"Unavailable watch: {path}")
+    print(f"Items: {len(items)}")
+    for row in items:
+        print(
+            f"  {row.get('ticker')}: {row.get('name') or '—'}  "
+            f"reason={row.get('reason')}  status={row.get('status')}"
         )
     return 0
 
