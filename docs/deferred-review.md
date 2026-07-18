@@ -64,7 +64,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
-| L34 | **Full Interactive Investor tradable universe catalog** | ii.co.uk covers UK (incl AIM), US, and ~17 exchanges — far beyond index slices. Ingest or maintain a broker-tradable instrument list (or official constituents exports) as the long-term offline coverage target; do not scrape personal account data. | Index-slice libraries (All-Share approx, Nasdaq-100, DAX/CAC, TSX60) are screening and researching buy tiers reliably |
+| L34 | **Full Interactive Investor tradable universe catalog** | ii.co.uk covers UK (incl AIM), US, and ~17 exchanges — far beyond index slices. v1 shipped: exchange-allowlist overlay under docs/data/library/ii_coverage/ (ftse-library ii-overlay; assumed confidence; no logged-in scraping). Remaining: ingest an official/partner instrument catalog to move tickers from assumed → verified tradable_on_ii. | Official II instrument export, partner feed, or licensed universe dump becomes available; or when adding AIM / HK-SG slices that need tighter tradability checks |
 
 ### Research & portfolio product
 

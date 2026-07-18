@@ -22,7 +22,7 @@ from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LIBRARY_ROOT = Path("output/library")
+DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_MAX_TICKERS_PER_RUN = 25
 DEFAULT_STALE_DAYS = 14
 DEFAULT_RETENTION_DAYS = 400  # ~13 months of daily-ish snapshots per market

@@ -743,13 +743,14 @@
       "category": "later",
       "section": "universe",
       "title": "Full Interactive Investor tradable universe catalog",
-      "summary": "ii.co.uk covers UK (incl AIM), US, and ~17 exchanges \u2014 far beyond index slices. Ingest or maintain a broker-tradable instrument list (or official constituents exports) as the long-term offline coverage target; do not scrape personal account data.",
-      "revisit_when": "Index-slice libraries (All-Share approx, Nasdaq-100, DAX/CAC, TSX60) are screening and researching buy tiers reliably",
+      "summary": "ii.co.uk covers UK (incl AIM), US, and ~17 exchanges \u2014 far beyond index slices. v1 shipped: exchange-allowlist overlay under docs/data/library/ii_coverage/ (ftse-library ii-overlay; assumed confidence; no logged-in scraping). Remaining: ingest an official/partner instrument catalog to move tickers from assumed \u2192 verified tradable_on_ii.",
+      "revisit_when": "Official II instrument export, partner feed, or licensed universe dump becomes available; or when adding AIM / HK-SG slices that need tighter tradability checks",
       "tags": [
-        "library",
+        "broker",
         "interactive-investor",
-        "universe",
-        "broker"
+        "library",
+        "overlay-v1",
+        "universe"
       ],
       "status": "open",
       "source": "ii-coverage-discussion",
