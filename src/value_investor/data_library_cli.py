@@ -239,6 +239,26 @@ def build_parser() -> argparse.ArgumentParser:
     overlaps_p.add_argument("--json", action="store_true")
     overlaps_p.set_defaults(func=cmd_overlaps)
 
+    ii_p = sub.add_parser(
+        "ii-overlay",
+        help=(
+            "Build Interactive Investor coverage overlay for library markets "
+            "(exchange allowlist — not a full instrument catalog)"
+        ),
+    )
+    ii_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all offline library markets)",
+    )
+    ii_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compute summary without writing by_market artifacts",
+    )
+    ii_p.add_argument("--json", action="store_true")
+    ii_p.set_defaults(func=cmd_ii_overlay)
+
     reingest_p = sub.add_parser(
         "reingest-filings",
         help="Re-ingest primary filings for existing research memos (backfill regimes)",
@@ -622,6 +642,50 @@ def cmd_graduate(args: argparse.Namespace) -> int:
             f"Event: {event.get('reason')}  "
             f"{event.get('from_market')}→{event.get('to_market')}  "
             f"policy_focus={payload.get('policy_focus')}"
+        )
+    return 0
+
+
+def cmd_ii_overlay(args: argparse.Namespace) -> int:
+    from .ii_coverage import build_ii_overlays
+
+    markets = _parse_markets(args.markets)
+    summary = build_ii_overlays(
+        args.root,
+        markets=markets,
+        write=not bool(args.dry_run),
+    )
+    if args.json:
+        print(json.dumps(summary, indent=2))
+        return 0
+    totals = summary.get("totals") or {}
+    print(f"Library root: {args.root}")
+    print(f"II overlay as_of: {summary.get('as_of')}")
+    print(summary.get("note"))
+    print(
+        f"Totals: markets={totals.get('markets')}  "
+        f"tickers={totals.get('tickers')}  "
+        f"tradable={totals.get('tradable')}  "
+        f"unknown_venue={totals.get('unknown_venue')}"
+    )
+    for mid, row in (summary.get("markets") or {}).items():
+        print(
+            f"  {mid}: tradable={row.get('tradable_count')}/{row.get('ticker_count')} "
+            f"({100 * float(row.get('tradable_pct') or 0):.1f}%)  "
+            f"unknown={row.get('unknown_venue_count')}  "
+            f"curated={row.get('curated_exception_count')}"
+        )
+        sample = row.get("non_tradable_sample") or []
+        if sample:
+            bits = ", ".join(
+                f"{s['ticker']} ({s.get('basis')})" for s in sample[:5]
+            )
+            print(f"    non-tradable sample: {bits}")
+    print("\nNext slice candidates:")
+    for item in summary.get("next_slices") or []:
+        print(
+            f"  [{item.get('priority')}] {item.get('id')}: {item.get('label')} "
+            f"({item.get('status')})"
         )
     return 0
 

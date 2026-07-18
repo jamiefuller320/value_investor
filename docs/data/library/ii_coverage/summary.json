@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-07-18T17:06:53.018161+00:00",
+  "policy_as_of": "2026-07-18",
+  "source_urls": [
+    "https://www.ii.co.uk/investing-with-ii/international-investing/markets",
+    "https://www.ii.co.uk/investing-with-ii/international-investing"
+  ],
+  "note": "Advisory overlay only — does not filter library screens or the live FTSE 350 path. Full verified instrument catalog remains L34.",
+  "markets": {
+    "sp500": {
+      "ticker_count": 503,
+      "tradable_count": 503,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/sp500.csv"
+    },
+    "euro_stoxx50": {
+      "ticker_count": 50,
+      "tradable_count": 49,
+      "tradable_pct": 0.98,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 1,
+      "non_tradable_sample": [
+        {
+          "ticker": "NDA-FI.HE",
+          "ii_exchange": "Nasdaq Helsinki",
+          "deal_channel": "n/a",
+          "basis": "exception",
+          "exception_reason": "Finland / Helsinki is not on II's published 17-exchange list (EURO STOXX 50 includes Nordea as NDA-FI.HE)."
+        }
+      ],
+      "path": "by_market/euro_stoxx50.csv"
+    },
+    "asx200": {
+      "ticker_count": 200,
+      "tradable_count": 200,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/asx200.csv"
+    },
+    "ftse_smallcap": {
+      "ticker_count": 86,
+      "tradable_count": 86,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/ftse_smallcap.csv"
+    },
+    "nasdaq100": {
+      "ticker_count": 103,
+      "tradable_count": 103,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/nasdaq100.csv"
+    },
+    "dax": {
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/dax.csv"
+    },
+    "cac40": {
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/cac40.csv"
+    },
+    "tsx60": {
+      "ticker_count": 59,
+      "tradable_count": 59,
+      "tradable_pct": 1.0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/tsx60.csv"
+    }
+  },
+  "next_slices": [
+    {
+      "id": "aim",
+      "label": "AIM (UK)",
+      "priority": 1,
+      "rationale": "II UK coverage includes AIM; largest liquid gap vs current LSE Main / FTSE slices.",
+      "status": "candidate"
+    },
+    {
+      "id": "euronext_wider",
+      "label": "Wider Euronext / Southern Europe liquid names",
+      "priority": 2,
+      "rationale": "II online: Madrid, Milan, Amsterdam, Brussels, Dublin beyond EURO STOXX 50 / CAC / DAX overlap.",
+      "status": "candidate"
+    },
+    {
+      "id": "hk_sg",
+      "label": "Hong Kong + Singapore large-cap slices",
+      "priority": 3,
+      "rationale": "II Asia-Pacific online exchanges with no library market yet.",
+      "status": "candidate"
+    },
+    {
+      "id": "us_adr_asia",
+      "label": "Japan / India / China via US ADRs",
+      "priority": 4,
+      "rationale": "II offers home-market exposure only via ADRs on US exchanges — overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
+      "status": "candidate"
+    },
+    {
+      "id": "full_instrument_catalog",
+      "label": "Official II instrument dump / partner feed",
+      "priority": 5,
+      "rationale": "Remaining L34 core: replace assumed exchange allowlist with verified tradable_on_ii per ISIN/ticker. No public feed found; requires export/partner/licensed data.",
+      "status": "blocked_no_public_feed"
+    }
+  ],
+  "totals": {
+    "markets": 8,
+    "tickers": 1081,
+    "tradable": 1080,
+    "unknown_venue": 0
+  }
+}

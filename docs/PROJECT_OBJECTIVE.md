@@ -53,11 +53,13 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 
 Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised while Cursor research remains cheap). Do **not** memo every name in an index.
 
-**Tradable north star (offline):** expand index slices toward stocks available on **Interactive Investor** (UK + ~17 international exchanges). Full broker instrument catalog is deferred (**L34**). Current queue:
+**Tradable north star (offline):** expand index slices toward stocks available on **Interactive Investor** (UK + ~17 international exchanges). Index-slice queue:
 
 `sp500` → `euro_stoxx50` → `asx200` → `ftse_smallcap` → `nasdaq100` → `dax` → `cac40` → `tsx60`
 
-(FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) Advance focus when coverage ≥95% and stale ≤15%. Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research round-robins buy-tier names across focus + graduated markets (`research_all_graduated`). Rating-priority maintenance is **L33**; AIM / full II list is later.
+(FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) Advance focus when coverage ≥95% and stale ≤15%. Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research round-robins buy-tier names across focus + graduated markets (`research_all_graduated`). Rating-priority maintenance is **L33**.
+
+**L34 v1 (overlay):** `docs/data/library/ii_coverage/` maps library Yahoo tickers → assumed II tradability from II’s *public* exchange list (`ftse-library ii-overlay`). Advisory only — does not filter screens. Full verified instrument catalog still needs a broker/partner dump (no public feed). Next slice candidates: AIM → wider Euronext → HK/SG → Asia ADRs (see `ii_coverage/policy.json`).
 
 ### Running the ladder
 
