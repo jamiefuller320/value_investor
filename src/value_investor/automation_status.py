@@ -13,30 +13,44 @@ DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_AUTOMATION_PATH = Path("docs/data/automation.json")
 
 WORKFLOW_SCHEDULES = {
+    "orchestrator": {
+        "name": "Automation Orchestrator",
+        "cron_sunday": "17 6 * * 0",
+        "cron_surplus": "30 5 * * *",
+        "cron_paper": "17 8 * * 1-5",
+        "cadence": (
+            "Dispatches child workflows via workflow_dispatch. "
+            "Sunday 06:17 UTC quiet bundle (ladder + model review + email); "
+            "daily 05:30 UTC surplus-day ladder gate; "
+            "weekdays 08:17 UTC paper automation. "
+            "Prefer external cron → this workflow for reliability."
+        ),
+        "workflow": "automation-orchestrator.yml",
+    },
     "paper_auto": {
         "name": "FTSE Paper Automation",
         "cron": "17 8 * * 1-5",
-        "cadence": "Weekdays 08:17 UTC (≈09:17 Europe/London in BST)",
+        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (≈09:17 Europe/London in BST)",
         "workflow": "paper-auto.yml",
     },
     "library_ladder": {
         "name": "FTSE Library Ladder",
-        "cron_weekly": "0 6 * * 0",
+        "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Sundays 06:00 UTC weekly; daily 05:30 UTC surplus-day gate only",
+        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + surplus-day gate",
         "workflow": "library-grow.yml",
     },
     "model_review": {
         "name": "Library model review",
-        "cron": "0 5 * * 1",
-        "cadence": "Mondays 05:00 UTC (skips if within review_interval_days)",
+        "cron": "17 6 * * 0",
+        "cadence": "Sunday quiet bundle via orchestrator (skips if within review_interval_days)",
         "workflow": "library-model-review.yml",
     },
     "email_report": {
         "name": "Email report",
-        "cron": "17 7 * * 1",
-        "cadence": "Mondays 07:17 UTC",
-        "workflow": "email-report-schedule.yml",
+        "cron": "17 6 * * 0",
+        "cadence": "Sunday quiet bundle via orchestrator (markets closed)",
+        "workflow": "email-report.yml",
     },
     "pages": {
         "name": "Deploy GitHub Pages",

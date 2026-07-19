@@ -1,0 +1,238 @@
+name: Automation Orchestrator
+
+# Central dispatcher for scheduled automation. Prefer this workflow (or an
+# external cron hitting workflow_dispatch) over each child workflow's own
+# `schedule` trigger — GitHub cron is best-effort and has been dropping runs.
+#
+# External cron example (PAT needs actions:write):
+#   curl -sS -X POST \
+#     -H "Accept: application/vnd.github+json" \
+#     -H "Authorization: Bearer $GH_PAT" \
+#     https://api.github.com/repos/OWNER/REPO/actions/workflows/automation-orchestrator.yml/dispatches \
+#     -d '{"ref":"main","inputs":{"suite":"sunday"}}'
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "Which automation suite to dispatch"
+        type: choice
+        options:
+          - sunday
+          - weekday_paper
+          - surplus_check
+          - catchup_today
+          - ladder_only
+          - model_review_only
+          - email_only
+        default: sunday
+      delay_until:
+        description: "Optional UTC ISO time to wait until before dispatching (e.g. 2026-07-19T09:45:00+00:00)"
+        type: string
+        default: ""
+  schedule:
+    # Sunday quiet bundle — ladder + model review + email (markets closed)
+    - cron: "17 6 * * 0"
+    # Daily surplus-day gate for library ladder (7th before Pro refresh on 8th)
+    - cron: "30 5 * * *"
+    # Weekday paper automation after London open settle
+    - cron: "17 8 * * 1-5"
+    # One-shot catch-up for missed Sun 19 Jul 2026 morning suite (remove after today)
+    - cron: "45 9 * * 0"
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: automation-orchestrator
+  cancel-in-progress: false
+
+jobs:
+  decide:
+    runs-on: ubuntu-latest
+    outputs:
+      suite: ${{ steps.pick.outputs.suite }}
+      delay_until: ${{ steps.pick.outputs.delay_until }}
+      run_ladder: ${{ steps.pick.outputs.run_ladder }}
+      run_model_review: ${{ steps.pick.outputs.run_model_review }}
+      run_email: ${{ steps.pick.outputs.run_email }}
+      run_paper: ${{ steps.pick.outputs.run_paper }}
+    steps:
+      - name: Choose suite from schedule or inputs
+        id: pick
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const event = context.eventName;
+            const inputs = (context.payload && context.payload.inputs) || {};
+            let suite = inputs.suite || '';
+            let delayUntil = inputs.delay_until || '';
+
+            if (event === 'schedule') {
+              const now = new Date();
+              const day = now.getUTCDay(); // 0=Sun
+              const hour = now.getUTCHours();
+              // Map cron windows (GitHub may delay; keep windows loose)
+              if (day === 0 && hour === 9) {
+                suite = 'catchup_today';
+              } else if (day === 0 && (hour === 6 || hour === 7)) {
+                suite = 'sunday';
+              } else if (hour === 5 || hour === 4) {
+                suite = 'surplus_check';
+              } else if (hour === 8 || hour === 9 || hour === 10 || hour === 11 || hour === 12 || hour === 13) {
+                // Weekday paper cron is 08:17 but often lands late
+                suite = (day >= 1 && day <= 5) ? 'weekday_paper' : (day === 0 ? 'sunday' : 'surplus_check');
+              } else if (day === 0) {
+                suite = 'sunday';
+              } else {
+                suite = 'surplus_check';
+              }
+              core.info(`schedule mapped to suite=${suite} (utc ${now.toISOString()})`);
+            }
+
+            if (!suite) suite = 'sunday';
+
+            const flags = {
+              sunday:            { ladder: true,  model: true,  email: true,  paper: false },
+              catchup_today:     { ladder: true,  model: true,  email: true,  paper: false },
+              surplus_check:     { ladder: true,  model: false, email: false, paper: false },
+              weekday_paper:     { ladder: false, model: false, email: false, paper: true  },
+              ladder_only:       { ladder: true,  model: false, email: false, paper: false },
+              model_review_only: { ladder: false, model: true,  email: false, paper: false },
+              email_only:        { ladder: false, model: false, email: true,  paper: false },
+            };
+            const f = flags[suite] || flags.sunday;
+            core.setOutput('suite', suite);
+            core.setOutput('delay_until', delayUntil);
+            core.setOutput('run_ladder', String(f.ladder));
+            core.setOutput('run_model_review', String(f.model));
+            core.setOutput('run_email', String(f.email));
+            core.setOutput('run_paper', String(f.paper));
+
+  wait:
+    needs: decide
+    if: needs.decide.outputs.delay_until != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait until delay_until (UTC)
+        env:
+          TARGET: ${{ needs.decide.outputs.delay_until }}
+        run: |
+          python3 - <<'PY'
+          import os, time
+          from datetime import datetime, timezone
+
+          raw = os.environ["TARGET"].strip()
+          if raw.endswith("Z"):
+              raw = raw[:-1] + "+00:00"
+          target = datetime.fromisoformat(raw)
+          if target.tzinfo is None:
+              target = target.replace(tzinfo=timezone.utc)
+          print(f"Waiting until {target.isoformat()} …")
+          while True:
+              now = datetime.now(timezone.utc)
+              remaining = (target - now).total_seconds()
+              if remaining <= 0:
+                  print(f"Ready at {now.isoformat()}")
+                  break
+              sleep_for = min(60.0, max(5.0, remaining / 2))
+              print(f"{remaining:.0f}s remaining; sleep {sleep_for:.0f}s")
+              time.sleep(sleep_for)
+          PY
+
+  surplus_gate:
+    needs: [decide, wait]
+    if: |
+      always()
+      && needs.decide.result == 'success'
+      && (needs.wait.result == 'success' || needs.wait.result == 'skipped')
+      && needs.decide.outputs.suite == 'surplus_check'
+      && needs.decide.outputs.run_ladder == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      allow_ladder: ${{ steps.gate.outputs.allow_ladder }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: pip install -e .
+      - name: Allow ladder only on Sunday or surplus day
+        id: gate
+        run: |
+          python3 - <<'PY'
+          import os
+          from datetime import UTC, datetime
+          from pathlib import Path
+          from value_investor.agent_model_policy import grow_ticker_budget, load_policy
+
+          policy = load_policy(Path("docs/data/library/policy.json"))
+          plan = grow_ticker_budget(policy)
+          now = datetime.now(UTC)
+          allow = now.weekday() == 6 or bool(plan.get("surplus_day"))
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(f"allow_ladder={'true' if allow else 'false'}\n", encoding="utf-8")
+          print(
+              f"allow_ladder={allow} weekday={now.weekday()} "
+              f"surplus_day={plan.get('surplus_day')}"
+          )
+          PY
+
+  dispatch:
+    needs: [decide, wait, surplus_gate]
+    if: |
+      always()
+      && needs.decide.result == 'success'
+      && (needs.wait.result == 'success' || needs.wait.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch child workflows
+        uses: actions/github-script@v7
+        env:
+          SUITE: ${{ needs.decide.outputs.suite }}
+          RUN_LADDER: ${{ needs.decide.outputs.run_ladder }}
+          RUN_MODEL: ${{ needs.decide.outputs.run_model_review }}
+          RUN_EMAIL: ${{ needs.decide.outputs.run_email }}
+          RUN_PAPER: ${{ needs.decide.outputs.run_paper }}
+          SURPLUS_ALLOW: ${{ needs.surplus_gate.outputs.allow_ladder }}
+          SURPLUS_RESULT: ${{ needs.surplus_gate.result }}
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            // Always dispatch against default branch so children use production code.
+            const ref = 'main';
+            const suite = process.env.SUITE;
+            core.info(`Dispatching suite=${suite}`);
+
+            async function dispatch(workflow_id, inputs) {
+              const body = { owner, repo, workflow_id, ref };
+              if (inputs && Object.keys(inputs).length) body.inputs = inputs;
+              await github.rest.actions.createWorkflowDispatch(body);
+              core.info(`Dispatched ${workflow_id} ${JSON.stringify(inputs || {})}`);
+            }
+
+            let runLadder = process.env.RUN_LADDER === 'true';
+            if (suite === 'surplus_check') {
+              // surplus_gate skipped => treat as deny; success + allow_ladder true => run
+              runLadder = process.env.SURPLUS_RESULT === 'success'
+                && process.env.SURPLUS_ALLOW === 'true';
+              core.info(`surplus_check gate: result=${process.env.SURPLUS_RESULT} allow=${process.env.SURPLUS_ALLOW} => ladder=${runLadder}`);
+            }
+
+            if (runLadder) {
+              await dispatch('library-grow.yml', {});
+            }
+            if (process.env.RUN_MODEL === 'true') {
+              await dispatch('library-model-review.yml', {});
+            }
+            if (process.env.RUN_EMAIL === 'true') {
+              await dispatch('email-report.yml', {});
+            }
+            if (process.env.RUN_PAPER === 'true') {
+              await dispatch('paper-auto.yml', {
+                force: 'false',
+                surveillance_only: 'false',
+              });
+            }

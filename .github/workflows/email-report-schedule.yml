@@ -1,13 +1,9 @@
 name: Schedule FTSE Email Report
 
-# Thin cron wrapper that dispatches FTSE Email Report via workflow_dispatch
-# so weekly and manual runs share the same code path.
-# GitHub schedule events are best-effort; prefer Actions → Run workflow for
-# on-demand runs. Cron is offset from :00 to reduce peak-load drops.
+# Thin manual/backup wrapper that dispatches FTSE Email Report via
+# workflow_dispatch. Primary Sunday scheduling lives in
+# automation-orchestrator.yml (markets closed — quieter Actions time).
 on:
-  schedule:
-    # Monday 07:17 UTC (off the hour)
-    - cron: "17 7 * * 1"
   workflow_dispatch:
 
 permissions:

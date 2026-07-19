@@ -1,7 +1,7 @@
 name: FTSE Paper Automation
 
 # Independent daily automated paper-fund pass + owned-stock surveillance.
-# Scheduled after London open settle (~09:17 local in BST via 08:17 UTC cron).
+# Scheduling lives in automation-orchestrator.yml (weekdays ~08:17 UTC).
 on:
   workflow_dispatch:
     inputs:
@@ -13,9 +13,6 @@ on:
         description: "Surveillance only (no rebalance)"
         type: boolean
         default: false
-  schedule:
-    # Weekdays 08:17 UTC ≈ 09:17 Europe/London during BST
-    - cron: "17 8 * * 1-5"
 
 permissions:
   contents: write
@@ -71,6 +68,15 @@ jobs:
               fund = src / "automated_fund.json"
               if fund.exists():
                   bundle["paper_automation"]["fund_snapshot"] = json.loads(fund.read_text(encoding="utf-8"))
+              # Keep Automation tab in sync when present.
+              try:
+                  from value_investor.automation_status import build_automation_status
+                  bundle["automation"] = build_automation_status()
+                  Path("docs/data/automation.json").write_text(
+                      json.dumps(bundle["automation"], indent=2) + "\n", encoding="utf-8"
+                  )
+              except Exception as exc:  # noqa: BLE001
+                  print(f"automation status refresh skipped: {exc}")
               latest.write_text(json.dumps(bundle, separators=(",", ":")), encoding="utf-8")
               print("Updated docs/data/latest.json + docs/data/paper_automation/")
           PY

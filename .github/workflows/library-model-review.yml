@@ -1,11 +1,14 @@
 name: FTSE Library Model Review
 
 # Periodically re-select the cheapest Cursor agent available to CURSOR_API_KEY.
+# Scheduling lives in automation-orchestrator.yml (Sunday quiet bundle).
 on:
   workflow_dispatch:
-  schedule:
-    # Mondays 05:00 UTC — skips if last review was within review_interval_days
-    - cron: "0 5 * * 1"
+    inputs:
+      force:
+        description: "Force review even if within review_interval_days"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -31,6 +34,7 @@ jobs:
         id: review
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          FORCE_REVIEW: ${{ github.event.inputs.force }}
         run: |
           mkdir -p docs/data/library
           python3 - <<'PY'
@@ -45,7 +49,8 @@ jobs:
           review = policy.get("model_review") or {}
           interval = int(review.get("review_interval_days") or 14)
           last = review.get("last_reviewed_at")
-          if last and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+          force = str(os.environ.get("FORCE_REVIEW") or "").lower() in {"1", "true", "yes"}
+          if last and not force:
               try:
                   stamp = datetime.fromisoformat(str(last).replace("Z", "+00:00"))
                   if datetime.now(UTC) - stamp < timedelta(days=interval):
