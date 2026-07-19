@@ -1,53 +1,129 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 1 · Updated 2026-07-14T12:05:43.440102+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-19T10:08:07.329651+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Genuit Group plc (GEN.L) screens as a strong buy on quantitative value metrics: P/B 0.98, P/E 14.4, dividend yield 5.0%, and debt/equity 38%, with ten of twenty-two models passing across cheapness, dividend, GARP, and risk families. The investment case rests on a UK building-products franchise (sustainable water and climate-management systems) trading near book value despite resilient operating cash flow and a partial revenue recovery in FY2025. The central debate is whether statutory cheapness and a ~£73–78m free-cash-flow run rate adequately compensate for low reported ROE (6.9%), cyclical UK construction exposure, and a balance sheet increasingly dominated by goodwill and intangibles following FY2025 acquisition spend. Timing is neutral (RSI 44, price below the 200-day moving average), and the signal is new (one week), so conviction from the screen alone remains modest at 38%.
+# Genuit Group plc (GEN.L) — First-Pass Research Memo
+
+**Sources:** UK RNS filings index (44 headlines, 0 body extracts); Yahoo Finance (`financials_annual.json`, earnings-call summaries); quantitative screen (`screening_snapshot.json`). `macro_context.json` not present.
+
+---
+
+## EXECUTIVE SUMMARY
+
+Genuit Group plc is a UK building-products group (plastic piping, ventilation, water management and related sustainable systems) trading at a modest absolute valuation: P/E ~15×, P/B ~1.0×, dividend yield ~4.8%, and FCF yield ~7.9% on the quantitative screen. The investment case rests on a FY2025 earnings inflection—revenue rebounding to £602m (+7.3% YoY per management commentary) and reported net income rising to £45.2m—against a share price that has lagged earnings growth over five years. The central debate is whether FY2025 marks a durable recovery in UK construction/RMI demand or a cyclical peak, and whether acquisitive growth (Monodraught, prior bolt-ons) justifies rising net debt and a balance sheet now carrying negative tangible book value. Primary filing bodies were unavailable; financial analysis relies on Yahoo fallback data, limiting conviction on pension, covenant and contingency detail.
+
+---
 
 ## INVESTMENT THESIS
-The quantitative screen identifies Genuit as a rare name passing all four value families simultaneously. Cheapness is anchored by Schloss Low P/B, Deep Value, and Acquirer's Multiple passes at P/B 0.98—effectively a liquidation-adjacent entry for a business with recurring revenue characteristics in regulated building systems. Dividend support is robust: High Dividend Yield and Dividend Growth models pass at a 5.0% yield, backed by roughly £31m of annual cash dividends against operating cash flow consistently above £87m since 2022. GARP validation comes via Neff PEGY and Magic Formula passes, suggesting earnings growth is not fully priced despite a muted headline multiple. Risk models (FCF Yield, Financial Health, Composite Value) pass despite leverage, reflecting strong cash conversion: free cash flow rose from £43.1m (2022) to £78.4m (2024) before a still-solid £72.9m in 2025. For a value investor, the hook is a cash-generative industrial compounder at book value with an income kicker, where the market appears to penalise cyclical revenue softness (2022–2024) and low ROE rather than underlying cash economics. FY2025 reported revenue of £602.1m (+7.3% year-on-year per company commentary in news sources) and net income of £45.2m suggest earnings inflection may be under way, aligning the fundamental trajectory with the screen's strong-buy signal.
+
+The quantitative screen rates GEN.L **Strong Buy** (8/22 models passed; composite score 83%; sector-relative 79%), with all four value families satisfied: **cheapness, dividend, GARP and risk**. Passed models include Schloss Low P/B (P/B 1.02), FCF Yield (~7.9%), Neff PEGY, High Dividend Yield (4.8%), Dividend Growth, Dreman Contrarian, Composite Value and Financial Health. Leverage screens cleanly (D/E ~38%). Timing signal is **Accumulate** (RSI ~52; price ~0.1% below 200-day SMA; MACD improving).
+
+For a value investor, the hook is a profitable, cash-generative industrial compounder—FY2025 operating cash flow £103.1m and FCF £72.9m (Yahoo)—trading near book after a prolonged de-rating, with a dividend that management increased alongside FY2025 results. Business quality is adequate rather than exceptional: ROE is modest at 6.9%, revenue fell in FY2022–FY2024 before recovering in FY2025, and goodwill/intangibles dominate the balance sheet (£673m of £1,102m total assets). The screen correctly identifies **mispricing relative to cash returns and asset backing**, not a high-quality growth compounder. The GARP pass suggests the market may be underpricing the FY2025 earnings step-up (diluted EPS 17.8p vs 13.3p in FY2024) without fully re-rating the multiple.
+
+---
 
 ## FINANCIAL REVIEW
-Revenue trend: Revenue peaked at £622.2m in 2022, contracted to £586.5m (2023) and £561.3m (2024), then recovered to £602.1m in 2025—a volatile but ultimately flat five-year profile if 2021 full revenue is unavailable in the source file (2021 income-statement data is limited to EPS only). Net income followed a similar pattern: £36.5m (2022), £38.5m (2023), £33.5m (2024), £45.2m (2025), with diluted EPS rising from £0.146 (2022) to £0.178 (2025).
 
-Margins: Gross profit improved structurally from £247.6m (39.8% margin) in 2022 to £265.1m (44.0%) in 2025, indicating mix and pricing discipline despite lower mid-period volumes. Reported operating income was broadly stable at £79.4–80.5m across 2022–2025; EBITDA recovered from £92.6m (2022) to £112.9m (2025), with normalised EBITDA at £122.1m. However, each year carried material unusual items (£9.2m–£27.1m), including restructuring and M&A charges, which depress reported earnings quality.
+**Source limitation:** The filings index catalogues 44 UK RNS announcements (regime: `uk_rns`) including 2 annual and 4 interim items, but **zero downloadable body extracts** are available under `filings/bodies/`. Headlines confirm the following were released: FY2025 full-year results and investor Q&A (Mar 2026), annual report/AGM notice (May 2026), interim/half-year results (Apr–Jun 2026), and trading updates (Nov 2025, May 2026). **All figures below are sourced from `financials_annual.json` (Yahoo Finance fallback).**
 
-Leverage: Total debt rose from £216.2m (2022) to £252.9m (2025), while net debt moved from £143.1m (2022) to a low of £101.6m (2024) before increasing to £179.3m (2025), coinciding with £105.6m of business acquisitions. Debt/equity of c.38% remains moderate, and equity grew steadily from £627.1m to £662.9m. Interest expense was £11.5m in 2025 versus £7.0m in 2022.
+### Income statement trend (FY2022–FY2025)
 
-Cash generation: Operating cash flow strengthened from £86.9m (2022) to £105.1m (2024), holding at £103.1m (2025). Free cash flow improved from £43.1m (2022) to a peak of £78.4m (2024), moderating to £72.9m (2025) as capital expenditure and acquisition outlays increased. Dividends paid were consistently c.£30–31m annually (2022–2025), implying a well-covered payout.
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | £622.2m | £586.5m | £561.3m | £602.1m |
+| Gross profit | £247.6m | £245.8m | £250.8m | £265.1m |
+| Operating income | £80.5m | £76.3m | £78.8m | £79.4m |
+| EBITDA | £92.6m | £101.5m | £99.7m | £112.9m |
+| Net income | £36.5m | £38.5m | £33.5m | £45.2m |
+| Diluted EPS | 14.6p | 15.4p | 13.3p | 17.8p |
 
-Balance sheet: Total assets grew from £1,028m (2022) to £1,102m (2025), with goodwill and intangibles rising to £673m—61% of total assets. Tangible book value turned negative at £-10.1m in 2025 (from £62.8m in 2024), a red flag for asset-backed value investors. Working capital remained positive (£73.2m in 2025), and cash stood at £44.8m. Note: 2021 balance-sheet and cash-flow data in the source file are substantially incomplete, limiting full five-year comparability.
+Revenue declined for two consecutive years through FY2024, consistent with a weak UK construction cycle, before recovering **+7.3%** in FY2025—matching the headline in Yahoo's FY2025 earnings-call summary. Net income rose **+35%** YoY to £45.2m, aided by lower special charges (£9.2m vs £19.6m in FY2024) though restructuring/M&A costs remain recurring (£8.2m in FY2025). Normalised EBITDA (Yahoo) reached £122.1m vs reported EBITDA £112.9m. Operating margin remains stable at ~13%, but gross margin improved to ~44% (FY2025) from ~45% in prior years—suggesting limited pricing power offset by mix/volume.
+
+### Balance sheet and leverage (FY2024–FY2025)
+
+- **Total assets:** £993.0m → £1,101.6m  
+- **Equity:** £643.0m → £662.9m  
+- **Net debt:** £101.6m → **£179.3m** (+76%)  
+- **Total debt:** £172.8m → £252.9m  
+- **Goodwill + intangibles:** £580.2m → £673.0m  
+- **Tangible book value:** £62.8m → **–£10.1m** (goodwill write-up from acquisitions)  
+- **Working capital:** £66.5m → £73.2m  
+
+Net debt increased materially in FY2025, driven by **£105.6m of business acquisitions** (Yahoo cash-flow statement) alongside £31.3m of dividends. The Schloss P/B screen pass reflects equity backing, but **tangible asset coverage is negative**, a material caveat for deep-value investors. D/E at ~38% remains within the screen's risk threshold.
+
+### Cash flow and capital allocation
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Operating CF | £86.9m | £97.6m | £105.1m | £103.1m |
+| CapEx | £43.8m | £34.5m | £26.7m | £30.2m |
+| FCF | £43.1m | £63.1m | £78.4m | £72.9m |
+| Dividends paid | £30.5m | £30.5m | £30.8m | £31.3m |
+
+FCF conversion is solid and has supported a stable ~£31m annual dividend. FY2025 FCF dipped slightly from FY2024 peak as acquisition spend absorbed cash. Yahoo earnings-call summaries note management characterising the environment as "challenging" despite resilient profitability—consistent with margin pressure rather than demand collapse.
+
+### Interim filings
+
+Interim and trading-update RNS headlines are indexed (Nov 2025 trading update; Apr/Jun 2026 interim/half-year results) but **contain no extractable financial data** in this source set. No half-year figures can be cited without inventing numbers.
+
+---
 
 ## RISKS AND RED FLAGS
-Cyclicality: Revenue fell 9.8% from 2022 to 2024 before the FY2025 rebound, exposing sensitivity to UK residential construction and RMI cycles not fully captured by static valuation screens.
 
-Earnings quality: Recurring restructuring, impairment, and M&A-related charges (£8.2m–£14.6m annually) suggest ongoing portfolio reshaping rather than clean operating earnings.
+**Cyclical/construction exposure.** Revenue fell ~10% from FY2022 peak to FY2024 trough before FY2025 recovery. A renewed UK housing slowdown or RMI deferral would pressure volumes and margins; management's "challenging" trading language (Yahoo earnings summaries, Mar 2026) supports this risk.
 
-Intangible-heavy balance sheet: Goodwill of £509.6m and total intangibles of £673m create impairment risk if end-markets weaken; negative tangible book value in 2025 limits downside protection on a liquidation basis.
+**Balance sheet intangibles and acquisition risk.** Goodwill of £509.6m (FY2025) against net income of £45.2m implies significant impairment sensitivity. Tangible book turned negative after FY2025 M&A. Monodraught (Sep 2025 RNS headline) and prior bolt-ons (blue/green roof, underfloor heating, Aug 2024) add integration execution risk.
 
-Leverage step-up: Net debt increased £77.7m in 2025 following acquisition activity and higher gross debt (£252.9m), raising refinancing and interest-rate sensitivity despite passing financial-health screens.
+**Rising leverage.** Net debt increased £77.7m YoY to £179.3m; total debt £252.9m. Interest expense £11.5m (FY2025). Without filing bodies, **covenant headroom, maturity profile and going-concern language cannot be verified**—a material research gap.
 
-Low ROE: Reported ROE of 6.9% indicates weak capital efficiency relative to cost of equity, partly explained by the large intangible base but nonetheless a quality concern for GARP-oriented holders.
+**Low return on equity.** ROE 6.9% (screen) is below typical quality thresholds; the business earns adequately on assets but not exceptionally on equity after goodwill.
 
-Governance and pension: No material governance events in the news feed; pension-related cash-flow items appear immaterial in recent years (£0m in 2025; £-1.6m to £2.0m in 2022–2024), though defined-benefit obligations are not detailed in the source files.
+**Recurring special charges.** Restructuring/M&A costs of £8.2m (FY2025), £2.9m (FY2024) and higher in prior years suggest ongoing portfolio reshaping rather than one-off clean-up.
 
-Competitive and regulatory: Building-products markets face pricing pressure and customer consolidation; regulatory tailwinds (water efficiency, climate resilience) support demand but policy shifts could alter product standards and compliance costs.
+**Share-price vs earnings disconnect.** Yahoo Finance (6 Feb 2026) noted shareholders remain underwater over five years despite underlying earnings growth—implying persistent multiple compression that may reflect structural (not just cyclical) concerns.
 
-Signal stability: The strong-buy rating is new (one week, conviction 38%), and price action remains below the 200-day moving average, suggesting the market has not yet confirmed the re-rating thesis.
+**Possible corporate action.** RNS headlines dated 17 Jul 2026 include "Further Statement re Possible Offer" and "Final Announcement Released"; filing bodies unavailable to confirm whether these relate to Genuit directly or are feed contamination (the index also contains unrelated items such as DCC and Smith+Nephew forms). **Treat as unverified until primary filing text is obtained.**
+
+**Governance/pension.** No pension deficit, remuneration or related-party data available without annual report body extracts.
+
+---
 
 ## NEWS HIGHLIGHTS
-Company-specific coverage over the past year is thin; the majority of "GEN" search results reflect unrelated "Gen Z" content rather than Genuit Group. Material items identified:
 
-- "Genuit Group H2 Earnings Call Highlights" (10 March 2026): FY2025 results showed revenue growth and resilient profitability in a "challenging" trading environment; CEO Joe Vorih and CFO Tim Hext cited organic growth and market-share gains.
-- "Genuit Group PLC (FRA:0P5) Full Year 2025 Earnings Call Highlights: Strong Revenue Growth ..." (19 March 2026): Reported 7.3% revenue increase, strategic market gains, and a dividend rise, with margin pressure and market uncertainty noted.
-- "While shareholders of Genuit Group (LON:GEN) are in the red over the last five years, underlying earnings have actually grown" (6 February 2026): Highlights the disconnect between share-price performance and earnings progression—a relevant context for value entry.
-- "REG - Genuit Group PLC Aviva PLC - Holding(s) in Company" (11 June 2026): Routine major-shareholder disclosure; no change-of-control signal evident from the headline alone.
+**Company-specific (material):**
 
-Genuit also appeared passively in generic screen articles ("European Undervalued Small Caps With Insider Buying," 8 June 2026; "3 UK Dividend Stocks Yielding Up To 9.1%," 5 June 2026; "UK Dividend Stocks To Consider In May 2026," 7 May 2026), confirming index-level recognition as a yield/value name but offering no incremental operational insight. No material M&A announcements, management changes, or regulatory actions specific to Genuit were captured in the manifest beyond the FY2025 acquisition spend reflected in financials.
+- **"Genuit Group PLC (FRA:0P5) Full Year 2025 Earnings Call Highlights: Strong Revenue Growth …"** — Yahoo Finance, 19 Mar 2026: FY2025 revenue +7.3%, strategic market gains, dividend increase; margin challenges and market uncertainties flagged.  
+- **"Genuit Group H2 Earnings Call Highlights"** — Yahoo Finance, 10 Mar 2026: resilient profitability in a "challenging" environment; organic growth and market share gains cited by CEO Joe Vorih and CFO Tim Hext.  
+- **"While shareholders of Genuit Group (LON:GEN) are in the red over the last five years, underlying earnings have actually grown"** — Yahoo Finance, 6 Feb 2026: highlights valuation/performance disconnect.  
+- **RNS headlines (Investegate, no bodies):** Acquisition of Monodraught (1 Sep 2025); £25m investment and new strategic partner (9 Sep 2025); blue/green roof and underfloor heating acquisitions (8 Aug 2024); FY2025 results (29 Jan 2026); trading update (17 Nov 2025); interim/half-year results (Apr–Jun 2026); transaction in own shares and buyback extension (17 Jul 2026).
+
+**Peripheral coverage:**
+
+- Genuit appears in generic UK dividend and European undervalued small-cap round-ups (Yahoo Finance, Jan–Jun 2026) alongside insider-buying themes—supportive of value narrative but not company-specific analysis.
+
+**Coverage assessment:** Dedicated Genuit news is **thin** beyond earnings-call summaries and RNS headlines. The news manifest is heavily polluted by "Gen Z" keyword matches unrelated to Genuit Group plc. Material strategy news (Monodraught, strategic partner, buybacks) comes primarily from the filings index headlines, not press coverage.
+
+---
 
 ## RESEARCH VERDICT
-Verdict: accumulate
-Risk: medium
-Confidence: 0.68
-Rationale: Deep research largely confirms the screen's valuation and dividend case—book-value entry, strong FCF, and FY2025 earnings recovery—but moderates conviction owing to cyclical revenue history, negative tangible book, recurring restructuring charges, and thin company-specific news flow.
+
+Verdict: accumulate  
+Risk: medium  
+Confidence: 0.68  
+Rationale: Deep research broadly confirms the quantitative Strong Buy on valuation, dividend and FCF metrics, but tempers conviction owing to absent primary filing bodies, cyclical revenue history, rising post-M&A leverage, negative tangible book, and unverified possible-offer RNS headlines.
+
+---
+
+*Note: `macro_context.json` was not available in the source directory and has not been used. No price targets are implied.*
+
+## INVESTMENT THESIS
+
+
+## FINANCIAL REVIEW
+
+
+## RISKS AND RED FLAGS
+
+
+## NEWS HIGHLIGHTS

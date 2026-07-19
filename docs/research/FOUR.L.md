@@ -1,56 +1,164 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 1 · Updated 2026-07-14T12:04:35.713725+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-19T10:10:02.858154+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-4imprint Group plc screens as a Strong Buy on the quantitative value framework, passing 11 of 22 models across cheapness, quality, dividend, GARP, and risk families, with a composite score of 72% and an earnings yield of 8.1% (P/E 12.4x) alongside a 9.8% FCF yield. The financial profile supports the screen: gross margins above 32%, operating margins near 11%, minimal balance-sheet leverage, and free cash flow of £127m in FY2025. The central debate is whether a modest revenue decline in FY2025 (−1.5% to £1,346.8m) and lower net income (£113.6m vs £117.2m) mark cyclical normalisation or the start of a softer demand phase, against a capital-return policy that paid £142.8m in dividends in the year — above reported net income. News coverage in the source manifest is effectively absent for company-specific developments, limiting visibility on strategy and governance.
+# 4imprint Group plc (FOUR.L) — First-Pass Research Memo
+
+**Source note:** The filings index lists 56 UK RNS items (3 annual, 12 interim), but **zero downloadable body extracts** are present under `filings/bodies/`. Several indexed headlines appear to be feed noise unrelated to 4imprint. All financial figures below therefore fall back to **`financials_annual.json` (Yahoo)** unless noted. **`macro_context.json` is missing** from the source folder.
+
+---
+
+## EXECUTIVE SUMMARY
+
+4imprint is a high-return, asset-light direct marketer of promotional merchandise, predominantly serving US corporate buyers. The quantitative screen rates the stock a **buy** (10/22 models, 69% composite), anchored on a **9.4% FCF yield**, **4.6% dividend yield**, **12.9x P/E**, and strong quality/risk pass rates despite **−6.8% trailing growth**. Yahoo-sourced accounts show modest revenue and earnings softening in the latest year alongside **rising free cash flow** and a **net-cash balance sheet**, with capital return (dividends and buybacks) the dominant equity story. The central debate is whether recent earnings drift reflects cyclical promotional-spend weakness or structural share loss—and whether payout levels above reported net income are sustainable. Filing bodies were unavailable to validate management guidance, interim trends, or risk disclosures.
+
+---
 
 ## INVESTMENT THESIS
-The quantitative screen flags 4imprint as a rare combination of value, quality, and income: P/E 12.4x, FCF yield 9.8%, dividend yield 4.7%, ROE 65.2%, and a Neff PEGY of 0.03, with passes on Earnings Yield, FCF Yield, Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, and Financial Health. These metrics align with a business that has scaled revenue from £1,140.3m (2022) to a peak of £1,367.9m (2024) while expanding operating margin from 9.5% to 10.8% over the same period — indicative of operating leverage and pricing power in a promotional-products distribution model.
 
-Cash generation is the anchor of the case. Free cash flow has run at £68.9m (2022), £127.0m (2023), £113.0m (2024), and £127.0m (2025), with operating cash flow consistently above £130m in the last three years. The balance sheet is conservative: total debt of £3.4m at FY2025 (predominantly capital leases) against equity of £163.3m and cash of £105.8m, plus £27.0m in short-term investments. For a value investor, the screen correctly identifies an asset-light, high-ROE compounder trading at a mid-teens earnings multiple with a dividend kicker — albeit with a new signal (one week at Strong Buy, conviction score 42%) and neutral technical timing (RSI ~50, price in line with 200-day SMA).
+For a value investor, FOUR.L offers a rare combination of **cheap cash generation**, **balance-sheet safety**, and **proven capital discipline** in a niche with switching costs built around catalogue breadth, fulfilment reliability, and brand trust.
+
+The screen passes five factor families—**cheapness, quality, dividend, GARP, and risk**—which align with the underlying economics visible in Yahoo data:
+
+| Screen signal | Business linkage |
+|---|---|
+| FCF Yield, Acquirer's Multiple, Composite Value | Asset-light model: FY2025 FCF **£127m** on revenue **£1,347m** (~9.4%); minimal lease debt **£3.4m**; cash **£106m** |
+| Buffett Quality, Economic Moat, Financial Health | Stable ~**10.8%** operating margin; negligible pension (**£0.3m**); interest income exceeds expense |
+| Dividend Growth, 4.6% yield | Consistent cash return; FY2025 dividends paid **£143m** |
+| Neff PEGY (0.03) | Depressed growth (-6.8% screen metric) vs low multiple—classic GARP setup if growth stabilises |
+| Risk family pass | Net cash, low leverage, high data quality (19/20 metrics) |
+
+The business has compounded earnings from **£80m (2022)** to **£114m (2025)** on Yahoo figures, with revenue growing from **£1,140m** to **£1,347m** over the same span—evidence of a durable franchise even as the most recent year shows a **−1.5%** revenue and **−3%** net-income dip (2024→2025). High reported **ROE (65%)** reflects a deliberately thin equity base after large distributions, not necessarily overstated operating returns—but it confirms management's willingness to return excess capital rather than hoard it.
+
+**Valuation hook:** ~13x earnings and ~9% FCF yield on a net-cash, high-margin distributor is attractive if promotional demand normalises. **Key caveat:** screen conviction is only **40%** (new signal, one week)—deep research cannot yet confirm durability without primary filing text.
+
+---
 
 ## FINANCIAL REVIEW
-**Revenue.** Revenue grew strongly from £1,140.3m (2022) to £1,326.5m (2023, +16.3%) and £1,367.9m (2024, +3.1%), before easing to £1,346.8m (2025, −1.5%). FY2021 income-statement data in the source file is incomplete (no total revenue reported), so a full five-year revenue series cannot be constructed from the file alone.
 
-**Margins.** Gross profit rose from £392.9m (2022) to £436.0m (2025), with the gross margin recovering from 30.3% (2023) to 32.4% (2025). Operating income increased from £108.0m (2022) to a peak of £148.1m (2024), settling at £145.2m (2025); the operating margin expanded from 9.5% to 10.8% and held flat year-on-year in 2025. EBITDA was £157.9m in 2025 vs £161.6m in 2024.
+### Primary filings — availability gap
 
-**Profitability.** Net income progressed from £80.1m (2022) to £106.2m (2023) and £117.2m (2024), before declining to £113.6m (2025). Diluted EPS followed a similar path: £2.85 (2022), £3.77 (2023), £4.15 (2024); FY2025 EPS is not reported in the source file. Unusual write-offs of £4.8m (2022) and £2.5m (2023) are noted but immaterial to the broader trend.
+The `filings_index.json` catalogues relevant RNS headlines but **no body text** for any entry (`with_body: 0`). The following were identified by headline/timing but **cannot be cited for figures**:
 
-**Leverage and balance sheet.** Total debt fell from £13.7m (2022) to £3.4m (2025), entirely within capital lease obligations; there is no material interest-bearing bank debt. Stockholders' equity was £140.2m (2022), dipped to £134.5m (2023), recovered to £185.1m (2024), and declined to £163.3m (2025) — likely reflecting the heavy dividend programme. Total assets were £262.3m (2025) vs £287.5m (2024), with working capital of £110.6m. Defined benefit pension obligations are negligible (£0.3m at FY2025; £0 in 2023–2024).
+**Annual / full-year**
+- *Full Year Results* — 10 March 2025  
+- *Final Results* — 23 June 2026  
+- *FY26 trading update to April and full-year outlook* — 14 May 2026  
 
-**Cash generation and capital allocation.** Operating cash flow was £76.9m (2022), £137.0m (2023), £132.6m (2024), and £130.9m (2025). Capex remained modest at £3.9m–£19.6m annually. Free cash flow of £127.0m in both 2023 and 2025 demonstrates consistent conversion. However, cash dividends paid accelerated sharply: £18.7m (2022), £110.8m (2023), £65.5m (2024), and £142.8m (2025) — the FY2025 payout exceeded net income by £29.2m, funded partly by a £49.7m net increase in cash (including £72.8m net investment sales). Share buybacks were modest (£5.4m in 2025). Ending cash rose to £105.8m (2025) from £53.3m (2024).
+**Interim / trading**
+- *2024 AGM Trading Update* — 21 May 2024  
+- *2025 AGM Trading Update* — 21 May 2025  
+- *Strategy and Trading Update* — 1 April 2026  
+- *Pre-AGM Trading Update and New Loan Facility* — 29 May 2026  
+- *Interim Report January–June 2026* — 14 July 2026  
+- *Half-Year Report* — 15 July 2026  
+- Multiple *Trading Statement* releases (Jan–Jul 2026)
 
-**Summary.** The five-year trend (2022–2025 complete; 2021 partial) shows a business that grew revenue and margins through 2024, generates robust free cash flow, and carries minimal financial leverage — but FY2025 introduces top-line and earnings softness alongside an aggressive dividend policy that bears monitoring for sustainability.
+Interim financial metrics **cannot be analysed** from available sources. The June 2026 final results and July 2026 half-year report are indexed but content is absent.
+
+### Financial trends — Yahoo fallback (`financials_annual.json`)
+
+All figures below are from Yahoo annual statements (USD reporting currency in underlying accounts; amounts as stored in JSON, assumed GBP millions unless otherwise noted).
+
+**Income statement**
+
+| | 2023 | 2024 | 2025 |
+|---|---:|---:|---:|
+| Revenue | 1,327 | 1,368 | 1,347 |
+| Gross profit | 402 | 435 | 436 |
+| Operating income | 136 | 148 | 145 |
+| EBITDA | 148 | 162 | 158 |
+| Net income | 106 | 117 | 114 |
+| Diluted EPS | 3.77 | 4.15 | n/a |
+
+**Trend:** Revenue peaked in 2024 before a modest retreat; operating margin held near **10.8%**, indicating cost flexibility rather than severe margin compression. Net income remains **~7% below** the 2024 peak but **~35% above** 2022 levels (2022 net income **£80m**, revenue **£1,140m**).
+
+**Cash flow and capital allocation**
+
+| | 2023 | 2024 | 2025 |
+|---|---:|---:|---:|
+| Operating cash flow | 137 | 133 | 131 |
+| Capex | (10) | (20) | (4) |
+| **Free cash flow** | **127** | **113** | **127** |
+| Dividends paid | (111) | (66) | (143) |
+| Share buybacks | (1) | (2) | (5) |
+
+FCF generation is robust and **re-accelerated in 2025** despite softer earnings—working-capital release and lower capex helped. FY2025 dividends (**£143m**) exceeded net income (**£114m**), implying payout from cash reserves and/or investment liquidation (investing cash inflow **£69m** in 2025, including **£73m** net investment sales per cash-flow statement).
+
+**Balance sheet (year-end)**
+
+| | 2024 | 2025 |
+|---|---:|---:|
+| Cash & equivalents | 53 | 106 |
+| Total debt (leases) | 5 | 3 |
+| Total equity | 185 | 163 |
+| Total assets | 288 | 262 |
+| Working capital | 133 | 111 |
+
+The balance sheet is **net-cash** (~**£102m** net of leases in 2025). Equity contracted **£22m** YoY, consistent with distributions exceeding retained earnings. Goodwill/intangibles are immaterial (**£1.2m**). Pension exposure is negligible.
+
+**Screen cross-check:** Yahoo FCF **£104m** in `key_metrics` vs **£127m** in cash-flow section—the screen likely uses a slightly different TTM definition; both support a high single-digit FCF yield.
+
+**What we cannot verify without filings:** going-concern language, segment breakdown, US/UK mix, order trends cited in trading updates, covenant terms on the *New Loan Facility* (29 May 2026 headline), and FY2026 guidance.
+
+---
 
 ## RISKS AND RED FLAGS
-**Cyclical demand.** Promotional products spending is tied to corporate marketing budgets; the FY2025 revenue decline (−1.5%) and net income dip may signal cyclical headwinds not fully reflected in trailing valuation multiples.
 
-**Dividend sustainability.** FY2025 cash dividends of £142.8m exceeded net income of £113.6m and absorbed essentially all free cash flow (£127.0m). Continued payouts at this level would depend on cash balances, working-capital releases, or asset sales — a risk the dividend-family screen pass may underweight.
+**Data limitations:** Without filing bodies, standard regulatory risk language (going concern, contingencies, related-party transactions, audit emphasis-of-matter) **cannot be assessed**. This is itself a research red flag for conviction sizing.
 
-**Valuation on book.** P/B of 8.7x (per screen) is elevated for a distributor, reflecting asset-light economics but leaving less tangible-asset downside protection if earnings compress.
+**Cyclical demand:** Promotional products track corporate marketing and employment budgets. Yahoo revenue decline in 2025 and screen **−6.8% growth** flag cyclical or post-pandemic normalisation risk not fully captured by static value metrics.
 
-**Receivables and working capital.** Accounts receivable fell from £59.0m (2022) to £34.1m (2025), which supported cash flow but warrants monitoring for demand or credit-policy changes. Prepaid assets spiked to £102.0m (2024) before normalising to £33.2m (2025), adding volatility to the working-capital picture.
+**Payout sustainability:** FY2025 dividends (**£143m**) exceeded net income (**£114m**). If the elevated payout reflects a one-off capital return, yield may normalise lower; if repeated, it erodes an already reduced equity base (**£163m**).
 
-**Pension.** Defined benefit obligations are immaterial in recent years (£0–£1.2m), so pension is not a material red flag on available data.
+**Geographic/concentration risk:** 4imprint's operational footprint is heavily US-oriented (well-known business characteristic; **not confirmed in available filing text**). Tariffs, freight costs, and USD/GBP translation affect reported results for a UK-listed, US-operating group.
 
-**Governance and disclosure.** No company-specific news in the manifest prevents assessment of board changes, insider dealings, or strategic shifts. FY2021 financial data is incomplete in the source file.
+**Competition:** Promotional products is fragmented with online disruptors and legacy distributors; moat metrics pass the screen but headline revenue softness warrants monitoring.
 
-**Competitive and regulatory.** The source files contain no detail on competitive dynamics, tariff exposure (US-heavy operations are known externally but not in sources), or product-safety/regulatory compliance — all unquantified risks for a promotional-products distributor.
+**Governance / capital structure:** Indexed RNS items include *Transaction in own shares and Buy Back Extension* (17 July 2026) and PDMR dealings—positive for alignment if executed at attractive prices, but buybacks at elevated RSI (**63**, screen) may dilute value. Several indexed "other" announcements appear mis-attributed to FOUR.L (unrelated company headlines), suggesting **noisy regulatory feed quality**.
+
+**Pension:** Yahoo shows defined benefit obligation **£0.3m** (2025)—immaterial.
+
+**Macro:** `macro_context.json` unavailable; not used to adjust the thesis.
+
+---
 
 ## NEWS HIGHLIGHTS
-News coverage for 4imprint Group plc in the past year is effectively **thin to non-existent**. The 40-article manifest contains no material headlines referencing 4imprint, its management, results, M&A, or regulatory actions. Articles appear to be false positives triggered by the ticker "FOUR" or the numeral "four" in unrelated contexts, including:
 
-- "Four 'hot stocks' to buy now…" (The Sun, 6 July 2026)
-- "Four space stocks our experts expect will SOAR…" (The Sun, 29 June 2026)
-- "UK Dividend Stocks To Watch In June 2026" (Yahoo Finance, 15 June 2026) — generic dividend screen, not 4imprint-specific
-- "Sixteen funds and stocks for an income portfolio" (Investors' Chronicle, 22 October 2025) — possible inclusion but no 4imprint mention in title/summary
-- "Insider: at least one of these four stocks is 'simply too cheap'" (Interactive Investor, 1 September 2025) — unconfirmed relevance
+**Company-specific news coverage is effectively absent** from `news_manifest.json` over the past year. The feed is dominated by generic articles matching the ticker token "Four" (e.g., *Four 'hot stocks' to buy*, 6 July 2026; *Four space stocks*, 29 June 2026) rather than 4imprint Group plc.
 
-No strategy shifts, management changes, regulatory actions, or M&A activity can be corroborated from the manifest. This is a significant research gap: the investment case rests almost entirely on quantitative screening and reported financials, not on contemporaneous news flow.
+Potentially relevant items come only from **RNS headlines in the filings index** (no article bodies):
+
+| Date | Headline (filings index) |
+|---|---|
+| 1 Apr 2026 | *Strategy and Trading Update* |
+| 14 May 2026 | *FY26 trading update to April and full-year outlook* |
+| 29 May 2026 | *Pre-AGM Trading Update and New Loan Facility* |
+| 23 Jun 2026 | *Final Results* |
+| 14–15 Jul 2026 | *Interim Report January–June 2026* / *Half-Year Report* |
+| 17 Jul 2026 | *Transaction in own shares and Buy Back Extension*; PDMR notifications |
+
+Generic UK market/dividend listicles from Yahoo Finance (June 2026) discuss dividend investing broadly but **do not name 4imprint**. No material M&A, regulatory action, or management-change stories attributable to the company appear in the news manifest.
+
+**Coverage assessment: thin — insufficient for event-driven insight.**
+
+---
 
 ## RESEARCH VERDICT
-Verdict: accumulate
-Risk: medium
-Confidence: 0.72
-Rationale: Trailing financials confirm the screen's quality, cash-generation, and cheapness signals, but FY2025 revenue/earnings softness, dividend payouts above net income, and absent company-specific news prevent full endorsement of the Strong Buy label at this stage.
+
+Verdict: accumulate  
+Risk: medium  
+Confidence: 0.68  
+Rationale: Quantitative cheapness and quality signals are corroborated by strong FCF, net-cash balance sheet, and stable margins in Yahoo data, but the buy case is tempered by recent earnings/revenue softness, potentially elevated payout ratios, absent primary filing verification, and no corroborating news flow.
+
+## INVESTMENT THESIS
+
+
+## FINANCIAL REVIEW
+
+
+## RISKS AND RED FLAGS
+
+
+## NEWS HIGHLIGHTS

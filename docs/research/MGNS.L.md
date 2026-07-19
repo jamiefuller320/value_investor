@@ -1,64 +1,80 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 1 · Updated 2026-07-14T12:04:19.834187+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-19T10:06:24.788063+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Morgan Sindall Group is a UK-focused construction and regeneration business whose financial trajectory over 2022–2025 shows accelerating revenue, margin expansion, and robust cash generation, supporting a quantitative **Strong Buy** rating (11/22 models; composite score 70%). At a screen P/E of 13.4x, P/B of 3.0x, 3.3% yield, and 25.1% ROE, the name offers a blend of quality, dividend, and GARP characteristics uncommon in cyclical industrials. The central debate is whether record earnings and a net-cash balance sheet adequately compensate for UK construction cyclicality, contract/working-capital risk, and a valuation that is cheap on earnings but not on book. Near-term news flow has been constructive—profit outlook upgrades and resilient order intake—but coverage is skewed toward secondary market commentary rather than deep corporate disclosure.
+Morgan Sindall Group plc (MGNS.L) is a UK construction and regeneration group whose quantitative screen reads as a strong buy: 11 of 22 models pass across cheapness, quality, dividend, GARP, and risk (composite 71%, sector-relative 75%). The investment case rests on a compounder profile—revenue and profits have scaled materially since 2022, balance-sheet leverage remains modest, and cash generation supports dividends and buybacks—at a mid-teens P/E, ~3.0× P/B, and ~3.3% yield with 25% ROE. The central debate is whether recent margin and earnings momentum (supported by news of order-book growth and profit upgrades) can persist through a cyclical UK construction backdrop, given rising working-capital needs and limited primary filing coverage in the source pack. Deep research largely confirms the screen but with reduced conviction owing to absent annual/interim RNS body extracts.
 
 ## INVESTMENT THESIS
-The quantitative screen flags MGNS as a **Strong Buy**, passing five factor families: cheapness, quality, dividend, GARP, and risk. Eleven models clear, including Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, and Financial Health—suggesting the signal is broad-based rather than driven by a single metric.
+The screen flags MGNS as a rare construction name clearing both value and quality hurdles simultaneously. At P/E 13.4, P/B 2.95, debt/equity 18%, and dividend yield 3.3%, the stock sits in classic value territory, yet ROE of 25.1% and passes on Buffett Quality, Magic Formula, Financial Health, and FCF Yield point to an unusually strong franchise for the sector. Model breadth is notable: Graham Enterprising, Lynch PEG, Neff PEGY, Acquirer’s Multiple, Composite Value, Dividend Growth, and Quality Value all pass, implying the market is not fully pricing earnings power and cash return capacity.
 
-Business quality aligns with the screen. Revenue has compounded from £3.61bn (2022) to £5.02bn (2025), while operating margin has expanded from 2.3% to 4.5% and net income from £60.9m to £174.9m. Return on equity implied by the screen (25.1%) is consistent with equity growing from £496.2m to £748.8m over the same period. Leverage is modest (debt/equity 18% per screen; total debt £132.9m versus cash £590.5m at FY2025), and free cash flow has been consistently positive (£42.9m–£181.4m annually since 2022), supporting dividend growth and buybacks.
-
-For a value investor, the hook is a high-quality UK contractor trading at a mid-teens earnings multiple despite a multi-year record of profit growth, strong cash conversion, and capital returns (dividends rising from £43.5m in 2022 to £65.8m in 2025, plus £40.7m of repurchases in 2025). The screen's neutral timing signal (RSI 42; price roughly at the 200-day moving average) suggests no urgency to chase momentum, but the fundamental case is intact.
-
-INVESTMENT THESIS *(continued — financial quality)*
-
-The screen's **Financial Health** and **Buffett Quality** passes are corroborated by the balance sheet: net cash of roughly £457.6m (cash £590.5m less total debt £132.9m), working capital of £372.8m, and tangible book value of £530.5m. Capital allocation has been shareholder-friendly without stressing the balance sheet.
-
-Note: FY2021 income-statement and cash-flow data in `financials_annual.json` are largely absent (only partial EPS and balance-sheet items are populated), so the five-year analysis below covers 2022–2025 in full and treats 2021 as incomplete.
+Yahoo fallback financials (see Financial Review) show a clear multi-year improvement: revenue rose from £3.61bn (2022) to £5.02bn (2025), operating income from £83.8m to £226.2m, and net income from £60.9m to £174.9m. Free cash flow recovered to £170.7m in 2025 after a 2024 working-capital drag, and the group held £590.5m cash against £132.9m total debt at year-end 2025. Capital allocation aligns with value priorities: dividends grew from £43.5m (2022) to £65.8m (2025), with ongoing share repurchases (£40.7m in 2025). For a value investor, MGNS offers GARP characteristics—double-digit earnings growth at a sub-market multiple—within a cyclical sector that screens typically penalise; the risk family pass and low leverage mitigate balance-sheet concerns. Conviction on the screen is still nascent (43%, one week at signal, neutral timing), so the thesis favours accumulation rather than aggressive sizing.
 
 ## FINANCIAL REVIEW
-**Revenue and profitability.** Total revenue rose from £3,612.2m (2022) to £4,117.7m (2023), £4,546.2m (2024), and £5,018.6m (2025)—a compound growth trajectory of roughly 39% over three years. Gross profit increased from £370.9m to £612.0m, with the gross margin expanding from 10.3% to 12.2%. Operating income grew from £83.8m (2.3% margin) to £226.2m (4.5%), and net income from £60.9m to £174.9m (net margin from 1.7% to 3.5%). EBITDA rose from £113.3m to £272.2m. Diluted EPS progressed from £1.304 (2022) to £2.504 (2023), £2.715 (2024); 2025 EPS is not populated in the source file.
+**Primary filings gap:** The `filings_index.json` catalogue contains 20 UK RNS items (regime: `uk_rns`), but zero are labelled `annual` or `interim`; all are `other` (PDMR notifications, holdings disclosures, buyback notices, AGM access). None have downloadable body extracts (`with_body: 0`; no `filings/bodies/` directory). Accordingly, all figures below are sourced from `financials_annual.json` (Yahoo), with no ability to cross-check against statutory accounts, going-concern wording, or interim trading updates from filing bodies.
 
-**Margins and earnings quality.** Margin expansion has been the standout trend, indicating operating leverage and/or mix improvement as scale increases. FY2024 and FY2025 each include unusual write-offs of £21.0m and £2.5m respectively; even after these charges, reported net income continued to grow sharply, suggesting underlying momentum is strong.
+**Income statement trend (Yahoo, £m unless stated):**
 
-**Leverage and balance-sheet strength.** Total debt increased modestly from £134.0m (2022) to £132.9m (2025), while stockholders' equity grew from £496.2m to £748.8m. Cash and equivalents rose from £420.6m to £590.5m, leaving the group in a clear net-cash position. Total assets expanded from £1,794.4m to £2,448.3m, driven by working-capital build (inventory/work-in-progress from £333.9m to £603.3m; accounts receivable from £290.0m to £467.7m) consistent with revenue growth. Goodwill is stable at circa £217.7m. Pension liabilities appear immaterial in recent balance sheets (£0.2m in 2022; nil in 2023–2025).
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue | 3,612 | 4,118 | 4,546 | 5,019 |
+| Operating income | 83.8 | 125.2 | 179.8 | 226.2 |
+| EBITDA | 113.3 | 176.1 | 209.3 | 272.2 |
+| Net income | 60.9 | 117.7 | 131.7 | 174.9 |
+| Diluted EPS | 1.30 | 2.50 | 2.72 | n/a* |
 
-**Cash generation and capital allocation.** Operating cash flow strengthened from £54.7m (2022) to £187.3m (2025), with free cash flow of £42.9m, £181.4m, £110.6m, and £170.7m over 2022–2025 respectively. Capex remained modest (£11.8m–£18.2m annually). The group returned cash via dividends (£43.5m rising to £65.8m) and share repurchases (£15.7m–£47.2m annually), while still accumulating cash. Working-capital swings are material—in FY2025, receivables and inventory increases absorbed cash—but this is typical for a growing contractor and was offset by payable growth.
+*2025 diluted EPS not populated in the Yahoo extract; net income growth of ~33% YoY in 2025 is the available proxy.
 
-**Summary.** The financial profile is one of scale-driven growth, widening margins, conservative leverage, net cash, and consistent FCF—consistent with the screen's quality, dividend, and risk passes.
+Revenue CAGR 2022–2025 is approximately 11.6%. Operating margin expanded from ~2.3% (2022) to ~4.5% (2025). Reported net income in 2024 and 2025 includes unusual write-offs (£21.0m and £2.5m respectively); normalised income trends remain upward. Interest income materially exceeds interest expense (net interest income £6.9m in 2025), reflecting the group’s net cash position.
+
+**Balance sheet and leverage (Yahoo, year-end):**
+
+- Cash: £420.6m (2022) → £541.3m (2023) → £544.2m (2024) → £590.5m (2025).
+- Total debt: £134.0m → £144.4m → £118.5m → £132.9m; shareholders’ equity: £496.2m → £568.1m → £647.2m → £748.8m.
+- Net cash position implied; debt/equity ~18%, consistent with the screen.
+- Working capital: £222m (2022) → £257m (2023) → £305m (2024) → £373m (2025), driven by inventory/WIP rising to £603m (2025) from £334m (2022)—typical of contract growth but a cash-consumption watchpoint.
+- Goodwill stable at ~£218m; tangible book value £530m vs equity £749m.
+
+**Cash flow and returns (Yahoo):**
+
+- Operating cash flow: £54.7m (2022) → £196.0m (2023) → £128.8m (2024) → £187.3m (2025).
+- Free cash flow: £42.9m → £181.4m → £110.6m → £170.7m; screen FCF figure £134.8m likely reflects a trailing or adjusted basis.
+- Dividends paid: £43.5m → £48.1m → £56.1m → £65.8m; share repurchases £40.7m in 2025.
+- 2024 FCF was compressed by working-capital outflows (inventory +£131m, receivables changes); 2025 saw continued inventory build offset by payable growth.
+
+**Interim / trading updates:** No interim or half-year RNS body extracts are present in the index. News headlines reference upbeat trading updates (February and April 2026) and an order book of £12.2bn (+7% vs end-2024, per Yahoo news item, October 2025), but these cannot be verified against primary filing text in this source pack.
+
+**Valuation anchors (screen, as at fetch):** P/E 13.4, P/B 3.0, yield 3.3%, ROE 25.1%, FCF yield supportive of model passes. Price sits near the 200-day SMA (+0.7%), RSI ~48 (neutral timing).
 
 ## RISKS AND RED FLAGS
-**Cyclical and macro exposure.** As a UK construction and regeneration group, earnings are tied to public-sector spending, housing demand, and private commercial investment—all sensitive to interest rates, fiscal policy, and GDP. Screens may understate downside in a construction downturn.
+Without annual report or interim RNS body extracts, regulatory risk disclosure (going concern, contingencies, covenant detail, pension assumptions) cannot be quoted from primary filings—a material research limitation.
 
-**Working-capital intensity.** Rapid growth has tied up capital in WIP (£603.3m) and receivables (£467.7m). A slowdown or client payment delays could pressure FCF despite reported profits.
+**Cyclical and operational:** UK construction and regeneration demand is policy- and macro-sensitive. Revenue growth has coincided with a substantial rise in contract WIP/inventory (£603m), increasing execution, cost-inflation, and receivables risk if the cycle turns. Operating margins, while improved, remain thin (~4.5%), leaving limited buffer.
 
-**Contract and execution risk.** Construction margins can erode on fixed-price contracts, cost inflation, or project delays. FY2024–2025 write-offs (£21.0m and £2.5m) are small relative to group profit but highlight ongoing project-level risk.
+**Working capital and cash:** 2024 demonstrated that strong earnings do not automatically translate to FCF when working capital expands; a repeat could pressure the dividend/buyback narrative despite headline net cash.
 
-**Valuation on book.** P/B of 3.0x (screen) is not deep value on asset backing; tangible book is £530.5m versus market cap implied by multiples. The investment case rests on earnings power, not liquidation value.
+**Sector and competitive:** Public-sector and housing-linked work (emphasised in news coverage) exposes the group to procurement delays, political spending shifts, and tender pricing pressure. Construction remains fragmented and bid-competitive.
 
-**Competitive and sector risk.** UK contracting is fragmented and competitive; margin gains may mean-revert if bidding becomes more aggressive in a softer pipeline.
+**Governance / capital structure:** Recent RNS items include buyback extension and director share dealings (July 2026)—routine but worth monitoring for insider selling clusters. Treasury shares ~1.38m; buybacks continue alongside dividends, which may signal limited acquisition pipeline rather than undervaluation alone.
 
-**Governance and disclosure.** News coverage in the manifest is thin on board changes, regulatory actions, or M&A; no material governance red flags surfaced, but this may reflect coverage gaps rather than absence of risk.
+**Pension:** Yahoo balance sheet shows negligible non-current pension liabilities in recent years (£0.2m in 2022; not separately flagged in 2025 extract), but absence of filing text prevents confirmation of deficit recovery plans or triennial valuation outcomes.
 
-**Pension.** Current pension obligations appear negligible in the balance-sheet data; legacy or multi-employer scheme exposure is not visible in these sources and warrants verification in the annual report.
+**Macro context:** `macro_context.json` was not available in the source pack; no macro overlay applied.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate in volume but light on hard corporate news; much originates from Ad Hoc News and dividend-stock listicles. Material items include:
+Coverage over the past year is moderately thin on hard corporate actions (no M&A or management-change headlines in the manifest) but consistently positive on trading momentum. Material items:
 
-- **16 Apr 2026** — *"Morgan Sindall shares jump 10% after construction group upgrades full-year profit outlook"* (Yahoo Finance UK): positive earnings revision catalyst.
-- **12–13 May 2026** — *"Recent FTSE 250 trading update"* and *"Profits surge past £200m"* (Ad Hoc News): confirms strong FY2025 profit momentum.
-- **22 May 2026** — *"Results show resilient construction demand"* (Ad Hoc News): supports order-book narrative.
-- **25 Feb 2026** — *"Morgan Sindall Group H2 Earnings Call Highlights"* (Yahoo Finance): management cited a decade-long run of record profits (except COVID), strong cash, and forward workload.
-- **25 Feb 2026** — *"Morgan Sindall looks to housing to drive growth"* (Investors' Chronicle): strategic emphasis on housing division.
-- **6 Oct 2025** — *"Morgan Sindall revises 2025 outlook as Fit Out performance lifts group expectations"* (Yahoo Finance): total secured order book reported at £12.2bn, up 7% vs end-2024.
-- **Jun–Jul 2026** — Articles on contract strength, UK construction model focus, strategic outlook updates, and the Oakwood Village low-carbon housing development (Ad Hoc News).
+- **17 July 2026:** “Morgan Sindall stock trades near recent highs as order book and cash support outlook” (ad-hoc-news.de).
+- **16 April 2026:** “Morgan Sindall shares jump 10% after construction group upgrades full-year profit outlook” (Yahoo Finance UK)—most significant price-moving event in the window.
+- **12 February 2026:** “Morgan Sindall jumps 7% after upbeat trading update” (Yahoo Finance UK).
+- **25 February 2026:** “Morgan Sindall looks to housing to drive growth” (Investors’ Chronicle); H2 earnings call recap cites management describing another “good year” and a decade-long run of record profits except COVID (Yahoo Finance).
+- **6 October 2025:** “Morgan Sindall revises 2025 outlook as Fit Out performance lifts group expectations”; secured order book £12.2bn (+7% vs end-2024) (Yahoo Finance).
+- **July 2026 RNS (headlines only, no bodies):** “Transaction in own shares and Buy Back Extension”; ongoing capital return programme.
 
-No material M&A, regulatory enforcement, or management changes were identified in the manifest. Dividend-stock inclusion pieces (Simply Wall St, Yahoo Finance) reinforce income appeal but add little fundamental insight. **News coverage is thin on governance, regulatory, and competitive developments.**
+Broader coverage is dominated by dividend-stock listicles (Simply Wall St, Yahoo) rather than deep investigative or regulatory news. No material regulatory actions, scandals, or announced M&A appear in the manifest. Strategy emphasis from commentary: housing-led growth, Fit Out strength, resilient order book and cash.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Deep research largely confirms the quantitative Strong Buy case—record revenue and profit growth, net cash, strong FCF, and broad model passes—but cyclical construction risk, working-capital intensity, and thin news coverage prevent full conviction at the screen's maximum rating.
+Confidence: 0.68
+Rationale: Yahoo financial trends and news flow support the strong-buy screen on quality, cash, and valuation, but the absence of annual/interim filing bodies prevents full verification of risks and limits conviction.
