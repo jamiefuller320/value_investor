@@ -167,6 +167,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Max tickers for --research-gap-fill (default: 3)",
     )
     parser.add_argument(
+        "--no-park-gap-suggestions",
+        action="store_true",
+        help=(
+            "When using --research-gap-fill, do not auto-park high-priority "
+            "research-model suggestions into deferred-ideas"
+        ),
+    )
+    parser.add_argument(
         "--send-only",
         action="store_true",
         help="Send email from existing output/email_report.* files (skip screening)",
@@ -369,6 +377,7 @@ def main(argv: list[str] | None = None) -> int:
                 model=args.model,
                 run_at=run_at,
                 max_targets=int(args.gap_fill_cap),
+                park_suggestions=not bool(args.no_park_gap_suggestions),
             )
             write_json(
                 args.output_dir / "gap_fill_summary.json",

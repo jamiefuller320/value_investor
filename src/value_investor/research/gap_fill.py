@@ -12,6 +12,7 @@ from typing import Any
 from value_investor.deep_analysis import DeepAnalysis
 from value_investor.research.agent import run_gap_fill_research_agent
 from value_investor.research.document import ResearchDocument
+from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
 from value_investor.research.ingest import ingest_research_sources
 from value_investor.research.store import ResearchStore
 from value_investor.research.timeline import (
@@ -24,6 +25,7 @@ from value_investor.summary import CompanyReport
 logger = logging.getLogger(__name__)
 
 DEFAULT_GAP_FILL_CAP = 3
+DEFAULT_SUGGESTIONS_PATH = Path("docs/data/research_model_suggestions.json")
 
 _TICKER_TOKEN = re.compile(r"\b([A-Z]{1,5}(?:\.[A-Z]{1,2})?)\b")
 _DEEPER_RESEARCH_SPLIT = re.compile(
@@ -48,6 +50,10 @@ class GapFillSummary:
     created: int = 0
     skipped: int = 0
     errors: list[str] = field(default_factory=list)
+    question_outcomes: list[dict[str, Any]] = field(default_factory=list)
+    model_suggestions: list[dict[str, Any]] = field(default_factory=list)
+    alternate_source_plans: list[dict[str, Any]] = field(default_factory=list)
+    parked_suggestions: list[dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -65,6 +71,10 @@ class GapFillSummary:
             "created": self.created,
             "skipped": self.skipped,
             "errors": self.errors,
+            "question_outcomes": self.question_outcomes,
+            "model_suggestions": self.model_suggestions,
+            "alternate_source_plans": self.alternate_source_plans,
+            "parked_suggestions": self.parked_suggestions,
             "documents": [doc.to_dict() for doc in self.documents],
         }
 
@@ -171,6 +181,83 @@ def extract_gap_fill_targets(
     return targets
 
 
+def _persist_model_suggestions(
+    suggestions: list[dict[str, Any]],
+    *,
+    path: Path = DEFAULT_SUGGESTIONS_PATH,
+) -> list[dict[str, Any]]:
+    """Append unique suggestions to the rolling research-model suggestions log."""
+    from value_investor.storage import read_json, write_json
+
+    path = Path(path)
+    existing: dict[str, Any] = {"suggestions": []}
+    if path.exists():
+        try:
+            existing = read_json(path)
+        except (OSError, ValueError, TypeError):
+            existing = {"suggestions": []}
+    known = {
+        str(item.get("suggestion") or "").strip().lower()
+        for item in existing.get("suggestions") or []
+    }
+    appended: list[dict[str, Any]] = []
+    for row in suggestions:
+        text = str(row.get("suggestion") or "").strip()
+        if not text or text.lower() in known:
+            continue
+        known.add(text.lower())
+        record = {
+            **row,
+            "recorded_at": datetime.now(UTC).isoformat(),
+        }
+        existing.setdefault("suggestions", []).append(record)
+        appended.append(record)
+    existing["updated_at"] = datetime.now(UTC).isoformat()
+    write_json(path, existing, compact=False, compress=False)
+    return appended
+
+
+def _park_high_priority_suggestions(
+    suggestions: list[dict[str, Any]],
+    *,
+    enabled: bool,
+) -> list[dict[str, Any]]:
+    """Optionally park high-priority suggestions into deferred-ideas for review."""
+    if not enabled:
+        return []
+    from value_investor.deferred_ideas import add_idea, write_markdown
+
+    parked: list[dict[str, Any]] = []
+    for row in suggestions:
+        if str(row.get("priority") or "").lower() != "high":
+            continue
+        suggestion = str(row.get("suggestion") or "").strip()
+        area = str(row.get("area") or "research").strip()
+        if not suggestion:
+            continue
+        title = f"Gap-fill: {area} — {suggestion[:72]}"
+        try:
+            idea, created = add_idea(
+                title=title,
+                summary=suggestion,
+                category="later",
+                section="research",
+                revisit_when="After next weekly email gap-fill pass confirms the gap persists",
+                tags=["gap-fill", "research-model", area],
+                source="research-gap-fill",
+            )
+            if created:
+                parked.append(idea)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Could not park suggestion %r: %s", title, exc)
+    if parked:
+        try:
+            write_markdown()
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Could not refresh deferred-review.md: %s", exc)
+    return parked
+
+
 def run_red_flag_gap_fill(
     *,
     deep_analysis: DeepAnalysis | None,
@@ -182,12 +269,14 @@ def run_red_flag_gap_fill(
     run_at: datetime | None = None,
     max_targets: int = DEFAULT_GAP_FILL_CAP,
     market: str | None = None,
+    park_suggestions: bool = True,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
 ) -> GapFillSummary:
     """
     Re-ingest sources and run a gap-fill research pass for red-flag targets.
 
-    Creates an initial memo when missing, otherwise rewrites financial review /
-    risks and appends a gap-fill update that marks each question resolved or not.
+    Seeks alternate news / planned external sources when local filings are thin,
+    and collects research-model improvement suggestions for unresolved gaps.
     """
     targets = extract_gap_fill_targets(
         deep_analysis,
@@ -223,22 +312,32 @@ def run_red_flag_gap_fill(
                 existing = store.load(target.ticker) or doc
 
             sources_dir = store.sources_dir(target.ticker)
-            since: datetime | None = None
-            if existing.updated_at:
-                try:
-                    since = datetime.fromisoformat(existing.updated_at.replace("Z", "+00:00"))
-                except ValueError:
-                    since = None
-
+            # Full re-ingest for gap-fill so alternate evidence is not clipped by since=.
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,
                 screening_snapshot=target.report.to_dict(),
                 sources_dir=sources_dir,
-                since=since,
+                since=None,
                 market=market,
             )
-            updated = run_gap_fill_research_agent(
+            source_pack = prepare_gap_fill_source_pack(
+                ticker=target.ticker,
+                company_name=target.name,
+                sources_dir=sources_dir,
+                open_questions=target.questions,
+                market=market,
+            )
+            summary.alternate_source_plans.append(
+                {
+                    "ticker": target.ticker,
+                    "planned_alternate_sources": source_pack.get("planned_alternate_sources") or [],
+                    "thin": (source_pack.get("inventory") or {}).get("thin") or [],
+                    "alternate_news_added": source_pack.get("alternate_news_added") or 0,
+                }
+            )
+
+            agent_result = run_gap_fill_research_agent(
                 existing=existing,
                 sources_dir=sources_dir,
                 markdown_path=store.markdown_path(target.ticker),
@@ -248,7 +347,7 @@ def run_red_flag_gap_fill(
                 cwd=cwd,
                 screen_signal=target.report.signal,
             )
-            updated = replace(updated, signal=target.report.signal)
+            updated = replace(agent_result.document, signal=target.report.signal)
 
             filings_summary = source_meta.get("filings_summary") or {}
             updated.source_counts = {
@@ -266,13 +365,13 @@ def run_red_flag_gap_fill(
                 as_of=as_of,
                 revision_id=revision_id_from_datetime(as_of),
             )
-            gap_summary = ""
+            gap_summary_text = ""
             if updated.weekly_updates:
-                gap_summary = updated.weekly_updates[-1].get("summary", "")
+                gap_summary_text = updated.weekly_updates[-1].get("summary", "")
             delta = build_weekly_delta(
                 prior=existing,
                 updated=updated,
-                weekly_summary=gap_summary,
+                weekly_summary=gap_summary_text,
             )
             store.save(
                 updated,
@@ -282,9 +381,31 @@ def run_red_flag_gap_fill(
             )
             summary.documents.append(updated)
             summary.updated += 1
+            for outcome in agent_result.question_outcomes:
+                summary.question_outcomes.append({"ticker": target.ticker, **outcome})
+            for suggestion in agent_result.model_suggestions:
+                summary.model_suggestions.append(
+                    {
+                        "ticker": target.ticker,
+                        "name": target.name,
+                        **suggestion,
+                    }
+                )
         except Exception as exc:  # noqa: BLE001
             message = f"{target.ticker}: {exc}"
             logger.exception("Gap-fill research failed for %s", target.ticker)
             summary.errors.append(message)
+
+    if summary.model_suggestions:
+        _persist_model_suggestions(summary.model_suggestions, path=suggestions_path)
+        # Also mirror beside the run outputs for publish/email consumers.
+        _persist_model_suggestions(
+            summary.model_suggestions,
+            path=Path(output_dir) / "research_model_suggestions.json",
+        )
+        summary.parked_suggestions = _park_high_priority_suggestions(
+            summary.model_suggestions,
+            enabled=park_suggestions,
+        )
 
     return summary

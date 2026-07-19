@@ -105,23 +105,24 @@ def _parse_rss_date(value: str | None) -> str | None:
         return value
 
 
-def fetch_google_news_rss(
-    company_name: str,
-    ticker: str,
+def fetch_google_news_rss_query(
+    query: str,
     *,
+    source_label: str = "google_news",
     max_items: int = GOOGLE_NEWS_MAX_ITEMS,
     lookback_days: int = NEWS_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
-    """Fetch recent headlines from Google News RSS (no API key)."""
-    symbol = ticker.replace(".L", "")
-    query = urllib.parse.quote(f'"{company_name}" OR {symbol} stock UK')
-    url = f"https://news.google.com/rss/search?q={query}&hl=en-GB&gl=GB&ceid=GB:en"
+    """Fetch recent headlines for an arbitrary Google News RSS query."""
+    url = (
+        "https://news.google.com/rss/search?"
+        f"q={urllib.parse.quote(query)}&hl=en-GB&gl=GB&ceid=GB:en"
+    )
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             payload = response.read()
     except OSError as exc:
-        logger.warning("Google News fetch failed for %s: %s", ticker, exc)
+        logger.warning("Google News fetch failed for query %r: %s", query, exc)
         return []
 
     root = ET.fromstring(payload)
@@ -146,16 +147,35 @@ def fetch_google_news_rss(
         articles.append(
             {
                 "id": article_id,
-                "source": "google_news",
+                "source": source_label,
                 "title": _strip_html(title),
                 "summary": summary,
                 "published_at": published,
                 "url": link,
+                "query": query,
             }
         )
         if len(articles) >= max_items:
             break
     return articles
+
+
+def fetch_google_news_rss(
+    company_name: str,
+    ticker: str,
+    *,
+    max_items: int = GOOGLE_NEWS_MAX_ITEMS,
+    lookback_days: int = NEWS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """Fetch recent headlines from Google News RSS (no API key)."""
+    symbol = ticker.replace(".L", "")
+    query = f'"{company_name}" OR {symbol} stock UK'
+    return fetch_google_news_rss_query(
+        query,
+        source_label="google_news",
+        max_items=max_items,
+        lookback_days=lookback_days,
+    )
 
 
 def _article_key(article: dict[str, Any]) -> str:
