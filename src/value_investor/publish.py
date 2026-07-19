@@ -163,6 +163,13 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     historical_analysis = _read_json(output_dir / "historical_analysis_summary.json")
     deep_analysis = _load_deep_analysis(output_dir)
     gap_fill = _read_json(output_dir / "gap_fill_summary.json")
+    research_model_suggestions = _read_json(
+        Path("docs/data/research_model_suggestions.json")
+    )
+    if research_model_suggestions is None:
+        research_model_suggestions = _read_json(
+            output_dir / "research_model_suggestions.json"
+        )
     paper_automation = _read_json(output_dir / "paper_automation" / "last_run.json")
 
     trust_reports = _load_trust_reports(output_dir)
@@ -243,6 +250,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "historical_analysis": historical_analysis,
         "deep_analysis": deep_analysis,
         "gap_fill": gap_fill,
+        "research_model_suggestions": research_model_suggestions,
         "paper_automation": paper_automation,
         "automation": automation,
     }

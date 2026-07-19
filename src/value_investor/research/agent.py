@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -224,20 +225,29 @@ def _gap_fill_prompt(
 ) -> str:
     signal_label = _screen_signal_label(screen_signal)
     numbered = "\n".join(f"{idx}. {question}" for idx, question in enumerate(open_questions, start=1))
+    source_map = sources_dir / "gap_fill_source_map.json"
     return f"""You are closing qualitative research gaps on {company_name} ({ticker}).
 
 The quantitative screen currently rates this name as a {signal_label}.
 
 Existing memo: {existing_markdown_path.resolve()}
+Source map (inventory + alternate plan): {source_map.resolve()}
 Primary filings index: {(sources_dir / 'filings' / 'filings_index.json').resolve()}
 Filing body extracts: {(sources_dir / 'filings' / 'bodies').resolve()}
-Yahoo financials (secondary fallback only): {(sources_dir / 'financials_annual.json').resolve()}
-News archive: {(sources_dir / 'news_manifest.json').resolve()}
+Yahoo financials (secondary): {(sources_dir / 'financials_annual.json').resolve()}
+News archive (includes alternate themed pulls): {(sources_dir / 'news_manifest.json').resolve()}
+Alternate news batch: {(sources_dir / 'alternate_news.json').resolve()}
 Screen snapshot: {(sources_dir / 'screening_snapshot.json').resolve()}
 Macro context (colour only): {(sources_dir / 'macro_context.json').resolve()}
 
 Open qualitative questions from this week's deep-analysis / email red-flag pass:
 {numbered or '1. Resolve the qualitative risks highlighted for this name.'}
+
+Evidence discipline:
+1. Read ``gap_fill_source_map.json`` first and walk its ``evidence_ladder`` in order.
+2. Prefer filing bodies, then filings index, Yahoo, news/alternate news, then screen snapshot.
+3. If a question stays unresolved, choose concrete ``planned_alternate_sources`` (or equally specific external sources) and say what they would unlock — do not invent their contents.
+4. Emit research-model improvements whenever local sources are structurally insufficient (thin RNS bodies, missing IR PDFs, prompt gaps, etc.).
 
 Write these sections with headings EXACTLY as shown:
 
@@ -245,14 +255,16 @@ GAP FILL UPDATE
 For EACH open question above, use this mini-block:
 Q: <question text>
 Status: resolved | partially_resolved | unresolved
-Evidence: one or two sentences citing filing/news titles (or explicitly say data still missing).
+Evidence: one or two sentences citing source titles/paths (or explicitly say still missing).
+SourcesTried: comma-separated ladder steps actually inspected
+NextSources: concrete alternate sources to seek next (or "none" if resolved)
 
 FINANCIAL REVIEW
-Rewrite the financial review to incorporate any newly resolved facts from filings.
-Prefer filing body extracts; if falling back to Yahoo, say so. Note remaining gaps.
+Rewrite the financial review to incorporate any newly resolved facts.
+Prefer filing body extracts; if falling back to Yahoo/news, say so. Note remaining gaps.
 
 RISKS AND RED FLAGS
-Rewrite risks with the same honesty: what is now evidenced vs still open.
+Rewrite risks with the same honesty: evidenced vs still open, and which alternate source would close each open item.
 
 RESEARCH VERDICT
 Use EXACTLY these lines:
@@ -261,12 +273,27 @@ Risk: low | medium | high
 Confidence: 0.00–1.00 (decimal, e.g. 0.75)
 Rationale: One sentence on whether gap-fill strengthens, is neutral on, or weakens the {signal_label} case.
 
+RESEARCH MODEL SUGGESTIONS
+0–5 bullets for improving the research system itself (ingest, prompts, scoring overlay, data vendors).
+Use EXACTLY this bullet shape:
+- area: ingest | priority: high | suggestion: …
+- area: prompt | priority: medium | suggestion: …
+Allowed areas: ingest, prompt, scoring, coverage, ops.
+Only suggest actionable pipeline changes (e.g. Companies House PDF ingest, deeper RNS body extract, IR presentation fetch). Skip empty platitudes.
+
 Rules:
 - UK English, concise professional tone.
 - Do not invent numbers or filing language.
 - Prefer unresolved over false confidence when sources are thin.
 - Do not give buy/sell price targets.
 """
+
+
+@dataclass
+class GapFillAgentResult:
+    document: ResearchDocument
+    question_outcomes: list[dict[str, str]]
+    model_suggestions: list[dict[str, str]]
 
 
 def run_gap_fill_research_agent(
@@ -279,8 +306,13 @@ def run_gap_fill_research_agent(
     model: str = "composer-2.5",
     cwd: str | None = None,
     screen_signal: str | None = None,
-) -> ResearchDocument:
+) -> GapFillAgentResult:
     """Rewrite financial/risk sections to address open qualitative questions."""
+    from value_investor.research.gap_fill_sources import (
+        parse_model_suggestions,
+        parse_question_outcomes,
+    )
+
     prompt = _gap_fill_prompt(
         ticker=existing.ticker,
         company_name=existing.name,
@@ -300,6 +332,8 @@ def run_gap_fill_research_agent(
     gap_summary = sections.get("gap_fill_update", "").strip()
     if not gap_summary:
         gap_summary = sections.get("weekly_update", "").strip()
+    model_suggestions = parse_model_suggestions(sections.get("research_model_suggestions", ""))
+    question_outcomes = parse_question_outcomes(gap_summary)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
     now = datetime.now(UTC)
     new_verdict = verdict_fields.get("research_verdict") or existing.research_verdict
@@ -321,7 +355,7 @@ def run_gap_fill_research_agent(
     if existing.research_verdict != new_verdict:
         weekly_entry["prior_verdict"] = existing.research_verdict or ""
         weekly_entry["new_verdict"] = new_verdict or ""
-    return ResearchDocument(
+    document = ResearchDocument(
         ticker=existing.ticker,
         name=existing.name,
         signal=existing.signal,
@@ -341,6 +375,11 @@ def run_gap_fill_research_agent(
         weekly_updates=[*existing.weekly_updates, weekly_entry],
         source_counts=existing.source_counts,
         agent_id=agent_id or existing.agent_id,
+    )
+    return GapFillAgentResult(
+        document=document,
+        question_outcomes=question_outcomes,
+        model_suggestions=model_suggestions,
     )
 
 
