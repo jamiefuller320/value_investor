@@ -23,6 +23,7 @@ SECTION_HEADINGS = {
     "news_highlights": "NEWS HIGHLIGHTS",
     "research_verdict": "RESEARCH VERDICT",
     "weekly_update": "WEEKLY UPDATE",
+    "gap_fill_update": "GAP FILL UPDATE",
 }
 
 
@@ -141,14 +142,16 @@ class ResearchSummary:
 
 def parse_research_sections(text: str) -> dict[str, str]:
     """Parse agent output into named research sections."""
-    sections = {key: "" for key in (*RESEARCH_SECTIONS, "weekly_update")}
+    sections = {key: "" for key in (*RESEARCH_SECTIONS, "weekly_update", "gap_fill_update")}
     heading_to_key = {v.upper(): k for k, v in SECTION_HEADINGS.items()}
 
     current = "executive_summary"
     lines: list[str] = []
 
     for line in text.splitlines():
-        upper = line.strip().upper()
+        upper = line.strip().upper().lstrip("#").strip().rstrip(":")
+        if upper.startswith("**") and upper.endswith("**") and len(upper) > 4:
+            upper = upper[2:-2].strip()
         if upper in heading_to_key:
             if lines:
                 sections[current] = "\n".join(lines).strip()

@@ -2,8 +2,13 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.summary import CompanyReport
+
+if TYPE_CHECKING:
+    from value_investor.research.gap_fill import GapFillSummary
 
 
 VERDICT_LABELS = {
@@ -15,14 +20,15 @@ VERDICT_LABELS = {
 
 
 def _verdict_change_note(doc: ResearchDocument) -> str | None:
-    if doc.mode != "weekly_update" or not doc.weekly_updates:
+    if doc.mode not in {"weekly_update", "gap_fill"} or not doc.weekly_updates:
         return None
     latest = doc.weekly_updates[-1]
     prior_verdict = latest.get("prior_verdict")
     if prior_verdict and prior_verdict != doc.research_verdict:
         prior = VERDICT_LABELS.get(prior_verdict, prior_verdict)
         current = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
-        return f"Verdict revised: {prior} → {current}"
+        prefix = "Gap-fill verdict" if latest.get("kind") == "gap_fill" or doc.mode == "gap_fill" else "Verdict"
+        return f"{prefix} revised: {prior} → {current}"
     return None
 
 
@@ -31,6 +37,44 @@ def _latest_weekly_summary(doc: ResearchDocument) -> str | None:
         return None
     summary = doc.weekly_updates[-1].get("summary", "").strip()
     return summary or None
+
+
+def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
+    if summary is None or (not summary.targets and not summary.errors):
+        return None
+    lines = ["Red-flag gap-fill loop:"]
+    lines.append(
+        f"  Targets {len(summary.targets)}, created {summary.created}, "
+        f"updated {summary.updated}, errors {len(summary.errors)}"
+    )
+    for target in summary.targets:
+        q0 = target.questions[0] if target.questions else "qualitative follow-up"
+        lines.append(f"  • {target.name} ({target.ticker}) — {q0[:160]}{'…' if len(q0) > 160 else ''}")
+    by_ticker = {doc.ticker: doc for doc in summary.documents}
+    for target in summary.targets:
+        doc = by_ticker.get(target.ticker)
+        if doc is None or not doc.weekly_updates:
+            continue
+        latest = doc.weekly_updates[-1].get("summary", "").strip()
+        if latest:
+            snippet = latest.replace("\n", " ")
+            lines.append(f"    Gap-fill: {snippet[:220]}{'…' if len(snippet) > 220 else ''}")
+    for error in summary.errors:
+        lines.append(f"  ! {error}")
+    return "\n".join(lines)
+
+
+def format_gap_fill_html(summary: GapFillSummary | None) -> str:
+    text = format_gap_fill_text(summary)
+    if not text:
+        return ""
+    body = text.replace("\n", "<br>")
+    return f"""
+  <div style="background:#fff5f5;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #c53030">
+    <h3 style="margin-top:0">Red-flag research loop</h3>
+    <p style="margin-bottom:0">{body}</p>
+  </div>
+"""
 
 
 def research_documents_for_reports(

@@ -98,6 +98,20 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="List eligible research targets without calling the research agent",
     )
+    parser.add_argument(
+        "--gap-fill",
+        action="store_true",
+        help=(
+            "Run red-flag gap-fill loop from output/deep_analysis.txt instead of "
+            "the normal buy-tier research selection"
+        ),
+    )
+    parser.add_argument(
+        "--gap-fill-cap",
+        type=int,
+        default=3,
+        help="Max tickers for --gap-fill (default: 3)",
+    )
     args = parser.parse_args(argv)
 
     if args.skip_screen:
@@ -123,6 +137,57 @@ def main(argv: list[str] | None = None) -> int:
         model_results = result.model_results
 
     reports = build_company_reports(signals, model_results)
+
+    if args.gap_fill:
+        from value_investor.deep_analysis import _parse_deep_analysis
+        from value_investor.research.gap_fill import (
+            extract_gap_fill_targets,
+            run_red_flag_gap_fill,
+        )
+        from value_investor.storage import write_json
+
+        analysis_path = args.output_dir / "deep_analysis.txt"
+        if not analysis_path.exists():
+            print("Missing deep_analysis.txt; run ftse-email --deep-analysis first", file=sys.stderr)
+            return 1
+        deep_analysis = _parse_deep_analysis(analysis_path.read_text(encoding="utf-8"))
+        targets = extract_gap_fill_targets(
+            deep_analysis,
+            reports,
+            max_targets=int(args.gap_fill_cap),
+        )
+        print(f"Selected {len(targets)} gap-fill target(s) (cap={args.gap_fill_cap})")
+        for target in targets:
+            q0 = target.questions[0] if target.questions else ""
+            print(f"  • {target.name} ({target.ticker}) — {q0[:120]}")
+        if args.dry_run:
+            return 0
+        if not args.api_key:
+            print("CURSOR_API_KEY required for research generation", file=sys.stderr)
+            return 1
+        model = args.model or os.environ.get("CURSOR_RESEARCH_MODEL") or "composer-2.5"
+        print(f"Research model: {model}")
+        gap_summary = run_red_flag_gap_fill(
+            deep_analysis=deep_analysis,
+            reports=reports,
+            output_dir=args.output_dir,
+            api_key=args.api_key,
+            model=model,
+            max_targets=int(args.gap_fill_cap),
+        )
+        write_json(
+            args.output_dir / "gap_fill_summary.json",
+            {"run_at": datetime.now(UTC).isoformat(), **gap_summary.to_dict()},
+            compact=True,
+        )
+        print(
+            f"Gap-fill complete: created={gap_summary.created} "
+            f"updated={gap_summary.updated} errors={len(gap_summary.errors)}"
+        )
+        for error in gap_summary.errors:
+            print(f"  ! {error}", file=sys.stderr)
+        return 1 if gap_summary.errors and not gap_summary.documents else 0
+
     store = ResearchStore(args.output_dir)
     active, alumni = select_research_targets(
         reports,

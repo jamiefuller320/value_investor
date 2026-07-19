@@ -153,6 +153,20 @@ def main(argv: list[str] | None = None) -> int:
         help="When using --research-docs, skip alumni refreshes for drop-offs",
     )
     parser.add_argument(
+        "--research-gap-fill",
+        action="store_true",
+        help=(
+            "After deep analysis, run a research improvement loop on names/questions "
+            "called out in RED FLAGS / names worth deeper research (requires CURSOR_API_KEY)"
+        ),
+    )
+    parser.add_argument(
+        "--gap-fill-cap",
+        type=int,
+        default=3,
+        help="Max tickers for --research-gap-fill (default: 3)",
+    )
+    parser.add_argument(
         "--send-only",
         action="store_true",
         help="Send email from existing output/email_report.* files (skip screening)",
@@ -271,6 +285,7 @@ def main(argv: list[str] | None = None) -> int:
 
     deep_analysis: DeepAnalysis | None = None
     research_summary = None
+    gap_fill_summary = None
     research_documents = research_documents_for_reports(
         reports,
         load_existing_research(
@@ -324,6 +339,57 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         research_documents = research_documents_for_reports(reports, research_summary.documents)
 
+    if args.research_gap_fill:
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --research-gap-fill", file=sys.stderr)
+            return 1
+        if deep_analysis is None:
+            # Allow gap-fill from a previously written deep_analysis.txt when
+            # --skip-screen / reuse path did not re-run the agent this invocation.
+            prior = args.output_dir / "deep_analysis.txt"
+            if prior.exists():
+                from value_investor.deep_analysis import _parse_deep_analysis
+
+                deep_analysis = _parse_deep_analysis(prior.read_text(encoding="utf-8"))
+        if deep_analysis is None:
+            print(
+                "--research-gap-fill needs deep analysis output "
+                "(pass --deep-analysis or provide output/deep_analysis.txt)",
+                file=sys.stderr,
+            )
+            return 1
+        try:
+            from value_investor.research.gap_fill import run_red_flag_gap_fill
+
+            gap_fill_summary = run_red_flag_gap_fill(
+                deep_analysis=deep_analysis,
+                reports=reports,
+                output_dir=args.output_dir,
+                api_key=args.api_key,
+                model=args.model,
+                run_at=run_at,
+                max_targets=int(args.gap_fill_cap),
+            )
+            write_json(
+                args.output_dir / "gap_fill_summary.json",
+                {
+                    "run_at": run_at.isoformat() if hasattr(run_at, "isoformat") else str(run_at),
+                    **gap_fill_summary.to_dict(),
+                },
+                compact=True,
+            )
+        except RuntimeError as err:
+            print(str(err), file=sys.stderr)
+            return 2
+        if gap_fill_summary and gap_fill_summary.documents:
+            by_ticker = {doc.ticker: doc for doc in research_documents}
+            for doc in gap_fill_summary.documents:
+                by_ticker[doc.ticker] = doc
+            research_documents = research_documents_for_reports(
+                reports,
+                list(by_ticker.values()),
+            )
+
     if research_documents:
         reports = apply_research_overlay(reports, research_documents)
 
@@ -341,6 +407,7 @@ def main(argv: list[str] | None = None) -> int:
         historical_analysis=historical_analysis,
         research_summary=research_summary,
         research_documents=research_documents,
+        gap_fill_summary=gap_fill_summary,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
@@ -355,6 +422,7 @@ def main(argv: list[str] | None = None) -> int:
         historical_analysis=historical_analysis,
         research_summary=research_summary,
         research_documents=research_documents,
+        gap_fill_summary=gap_fill_summary,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,

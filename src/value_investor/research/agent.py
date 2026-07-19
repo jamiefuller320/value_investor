@@ -213,6 +213,137 @@ def run_initial_research_agent(
     return doc, agent_id
 
 
+def _gap_fill_prompt(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    existing_markdown_path: Path,
+    open_questions: list[str],
+    screen_signal: str = "strong_buy",
+) -> str:
+    signal_label = _screen_signal_label(screen_signal)
+    numbered = "\n".join(f"{idx}. {question}" for idx, question in enumerate(open_questions, start=1))
+    return f"""You are closing qualitative research gaps on {company_name} ({ticker}).
+
+The quantitative screen currently rates this name as a {signal_label}.
+
+Existing memo: {existing_markdown_path.resolve()}
+Primary filings index: {(sources_dir / 'filings' / 'filings_index.json').resolve()}
+Filing body extracts: {(sources_dir / 'filings' / 'bodies').resolve()}
+Yahoo financials (secondary fallback only): {(sources_dir / 'financials_annual.json').resolve()}
+News archive: {(sources_dir / 'news_manifest.json').resolve()}
+Screen snapshot: {(sources_dir / 'screening_snapshot.json').resolve()}
+Macro context (colour only): {(sources_dir / 'macro_context.json').resolve()}
+
+Open qualitative questions from this week's deep-analysis / email red-flag pass:
+{numbered or '1. Resolve the qualitative risks highlighted for this name.'}
+
+Write these sections with headings EXACTLY as shown:
+
+GAP FILL UPDATE
+For EACH open question above, use this mini-block:
+Q: <question text>
+Status: resolved | partially_resolved | unresolved
+Evidence: one or two sentences citing filing/news titles (or explicitly say data still missing).
+
+FINANCIAL REVIEW
+Rewrite the financial review to incorporate any newly resolved facts from filings.
+Prefer filing body extracts; if falling back to Yahoo, say so. Note remaining gaps.
+
+RISKS AND RED FLAGS
+Rewrite risks with the same honesty: what is now evidenced vs still open.
+
+RESEARCH VERDICT
+Use EXACTLY these lines:
+Verdict: accumulate | neutral | caution | pass
+Risk: low | medium | high
+Confidence: 0.00–1.00 (decimal, e.g. 0.75)
+Rationale: One sentence on whether gap-fill strengthens, is neutral on, or weakens the {signal_label} case.
+
+Rules:
+- UK English, concise professional tone.
+- Do not invent numbers or filing language.
+- Prefer unresolved over false confidence when sources are thin.
+- Do not give buy/sell price targets.
+"""
+
+
+def run_gap_fill_research_agent(
+    *,
+    existing: ResearchDocument,
+    sources_dir: Path,
+    markdown_path: Path,
+    open_questions: list[str],
+    api_key: str,
+    model: str = "composer-2.5",
+    cwd: str | None = None,
+    screen_signal: str | None = None,
+) -> ResearchDocument:
+    """Rewrite financial/risk sections to address open qualitative questions."""
+    prompt = _gap_fill_prompt(
+        ticker=existing.ticker,
+        company_name=existing.name,
+        sources_dir=sources_dir,
+        existing_markdown_path=markdown_path,
+        open_questions=open_questions,
+        screen_signal=screen_signal or existing.signal,
+    )
+    text, agent_id = _run_agent_prompt(
+        prompt=prompt,
+        api_key=api_key,
+        model=model,
+        cwd=cwd,
+        agent_id=existing.agent_id,
+    )
+    sections = parse_research_sections(text)
+    gap_summary = sections.get("gap_fill_update", "").strip()
+    if not gap_summary:
+        gap_summary = sections.get("weekly_update", "").strip()
+    verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
+    now = datetime.now(UTC)
+    new_verdict = verdict_fields.get("research_verdict") or existing.research_verdict
+    new_risk = verdict_fields.get("research_risk_level") or existing.research_risk_level
+    new_confidence = (
+        verdict_fields.get("research_confidence")
+        if verdict_fields.get("research_confidence") is not None
+        else existing.research_confidence
+    )
+    new_rationale = verdict_fields.get("research_rationale") or existing.research_rationale
+    financial_review = sections.get("financial_review", "").strip() or existing.financial_review
+    risks_and_flags = sections.get("risks_and_flags", "").strip() or existing.risks_and_flags
+    weekly_entry: dict[str, str] = {
+        "date": now.strftime("%Y-%m-%d"),
+        "as_of": now.isoformat(),
+        "summary": gap_summary or "Gap-fill pass completed.",
+        "kind": "gap_fill",
+    }
+    if existing.research_verdict != new_verdict:
+        weekly_entry["prior_verdict"] = existing.research_verdict or ""
+        weekly_entry["new_verdict"] = new_verdict or ""
+    return ResearchDocument(
+        ticker=existing.ticker,
+        name=existing.name,
+        signal=existing.signal,
+        version=existing.version + 1,
+        created_at=existing.created_at,
+        updated_at=now.isoformat(),
+        mode="gap_fill",
+        executive_summary=existing.executive_summary,
+        investment_thesis=existing.investment_thesis,
+        financial_review=financial_review,
+        risks_and_flags=risks_and_flags,
+        news_highlights=existing.news_highlights,
+        research_verdict=new_verdict,
+        research_risk_level=new_risk,
+        research_confidence=new_confidence,
+        research_rationale=new_rationale,
+        weekly_updates=[*existing.weekly_updates, weekly_entry],
+        source_counts=existing.source_counts,
+        agent_id=agent_id or existing.agent_id,
+    )
+
+
 def run_weekly_research_update_agent(
     *,
     existing: ResearchDocument,
