@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 from urllib.request import Request, urlopen
 
 import pandas as pd
@@ -25,7 +26,14 @@ logger = logging.getLogger(__name__)
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_MAX_TICKERS_PER_RUN = 25
 DEFAULT_STALE_DAYS = 14
+# Dense PIT window: keep every dated metrics/constituents snapshot.
 DEFAULT_RETENTION_DAYS = 400  # ~13 months of daily-ish snapshots per market
+# After the dense window, keep one snapshot per calendar month until this age.
+DEFAULT_MONTHLY_UNTIL_DAYS = DEFAULT_RETENTION_DAYS + 3 * 365  # ~4 years total
+# Older than monthly_until: keep one per calendar quarter indefinitely (cheap coarse history).
+
+_DATED_SNAPSHOT_NAME = re.compile(r"^(\d{4}-\d{2}-\d{2})(?:\.json(?:\.gz)?)$")
+RetentionResolution = Literal["all", "month", "quarter"]
 
 
 @dataclass(frozen=True)
@@ -985,27 +993,98 @@ def library_status(
     return rows
 
 
-def apply_library_retention(root: Path, *, keep_days: int = DEFAULT_RETENTION_DAYS) -> int:
-    """Prune dated constituent/metrics snapshots older than keep_days; keep latest.*."""
-    cutoff = datetime.now(UTC).date() - timedelta(days=keep_days)
-    removed = 0
+def _parse_dated_snapshot_name(name: str) -> date | None:
+    match = _DATED_SNAPSHOT_NAME.match(name)
+    if not match:
+        return None
+    try:
+        return datetime.strptime(match.group(1), "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def _retention_period_key(file_date: date, resolution: RetentionResolution) -> str:
+    if resolution == "month":
+        return f"{file_date.year}-{file_date.month:02d}"
+    if resolution == "quarter":
+        return f"{file_date.year}-Q{(file_date.month - 1) // 3 + 1}"
+    raise ValueError(f"Unsupported retention resolution {resolution!r}")
+
+
+def _iter_dated_pit_snapshots(root: Path) -> list[tuple[Path, date]]:
+    """Dated metrics/constituents snapshots under markets/*/… (not screen/research)."""
+    root = Path(root)
+    found: list[tuple[Path, date]] = []
+    markets_root = root / "markets"
+    if not markets_root.is_dir():
+        return found
+    for market_dir_path in markets_root.iterdir():
+        if not market_dir_path.is_dir():
+            continue
+        for bucket in ("metrics", "constituents"):
+            bucket_dir = market_dir_path / bucket
+            if not bucket_dir.is_dir():
+                continue
+            for path in bucket_dir.iterdir():
+                if not path.is_file() or path.name.startswith("latest"):
+                    continue
+                file_date = _parse_dated_snapshot_name(path.name)
+                if file_date is not None:
+                    found.append((path, file_date))
+    return found
+
+
+def apply_library_retention(
+    root: Path,
+    *,
+    keep_days: int = DEFAULT_RETENTION_DAYS,
+    monthly_until_days: int = DEFAULT_MONTHLY_UNTIL_DAYS,
+    now: datetime | date | None = None,
+) -> int:
+    """
+    Prune dated constituent/metrics PIT snapshots with decreasing resolution.
+
+    Generous defaults (storage is cheap; prune harder later if unused):
+
+    - age < ``keep_days``: keep every dated snapshot
+    - ``keep_days`` ≤ age < ``monthly_until_days``: keep one per calendar month
+    - age ≥ ``monthly_until_days``: keep one per calendar quarter indefinitely
+
+    ``keep_days=0`` disables pruning. ``latest.*`` and non-PIT paths are untouched.
+    Within a thinned period, the newest snapshot date is kept.
+    """
+    if keep_days <= 0:
+        return 0
     root = Path(root)
     if not root.exists():
         return 0
-    for path in root.rglob("*"):
-        if not path.is_file():
+
+    if isinstance(now, datetime):
+        today = now.astimezone(UTC).date() if now.tzinfo else now.date()
+    elif isinstance(now, date):
+        today = now
+    else:
+        today = datetime.now(UTC).date()
+
+    dense_cutoff = today - timedelta(days=keep_days)
+    monthly_until = max(int(monthly_until_days), int(keep_days))
+    monthly_cutoff = today - timedelta(days=monthly_until)
+
+    # Group thinned snapshots by (directory, resolution, period); dense stays.
+    groups: dict[tuple[Path, RetentionResolution, str], list[tuple[Path, date]]] = {}
+    for path, file_date in _iter_dated_pit_snapshots(root):
+        if file_date >= dense_cutoff:
             continue
-        name = path.name
-        if name.startswith("latest"):
+        resolution: RetentionResolution = "month" if file_date >= monthly_cutoff else "quarter"
+        key = (path.parent, resolution, _retention_period_key(file_date, resolution))
+        groups.setdefault(key, []).append((path, file_date))
+
+    removed = 0
+    for entries in groups.values():
+        if len(entries) <= 1:
             continue
-        if name == "manifest.json":
-            continue
-        stem = name.split(".")[0]
-        try:
-            file_date = datetime.strptime(stem[:10], "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        if file_date < cutoff:
+        entries.sort(key=lambda item: item[1], reverse=True)
+        for path, _file_date in entries[1:]:
             path.unlink(missing_ok=True)
             removed += 1
     return removed
@@ -1019,6 +1098,7 @@ def grow_library(
     stale_days: int = DEFAULT_STALE_DAYS,
     refresh_constituents_first: bool = True,
     retention_days: int = DEFAULT_RETENTION_DAYS,
+    monthly_until_days: int = DEFAULT_MONTHLY_UNTIL_DAYS,
     fetch_fn: Callable[[str, str | None, str | None], Any] | None = None,
 ) -> list[dict[str, Any]]:
     """
@@ -1073,7 +1153,11 @@ def grow_library(
         result["fetch_cache_size"] = len(fetch_cache)
         results.append(result)
     if retention_days > 0:
-        apply_library_retention(root, keep_days=retention_days)
+        apply_library_retention(
+            root,
+            keep_days=retention_days,
+            monthly_until_days=monthly_until_days,
+        )
     write_json(
         Path(root) / "library_status.json",
         {

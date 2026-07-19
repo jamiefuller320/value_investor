@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -22,6 +22,9 @@ from value_investor.data_library import (
     refresh_constituents,
     refresh_metrics,
 )
+
+# Fixed "today" for retention tests (matches suite era).
+_RETENTION_TODAY = date(2026, 7, 19)
 from value_investor.data_library_cli import main as library_main
 from value_investor.storage import read_json, write_json
 
@@ -145,13 +148,74 @@ def test_grow_library_retention(tmp_path: Path, monkeypatch):
         fetch_fn=fake_fetch,
     )
 
-    old = root / "markets" / "sp500" / "metrics" / "2020-01-01.json.gz"
-    write_json(old, [{"ticker": "OLD"}], compact=True, compress=True)
-    removed = apply_library_retention(root, keep_days=30)
+    metrics = root / "markets" / "sp500" / "metrics"
+    # Same quarter beyond monthly window: keep newest only.
+    older = metrics / "2020-01-01.json.gz"
+    newer = metrics / "2020-03-15.json.gz"
+    write_json(older, [{"ticker": "OLD"}], compact=True, compress=True)
+    write_json(newer, [{"ticker": "NEWER"}], compact=True, compress=True)
+    removed = apply_library_retention(
+        root,
+        keep_days=30,
+        monthly_until_days=90,
+        now=_RETENTION_TODAY,
+    )
     assert removed >= 1
-    assert not old.exists()
-    assert (root / "markets" / "sp500" / "metrics" / "latest.json.gz").exists()
+    assert not older.exists()
+    assert newer.exists()
+    assert (metrics / "latest.json.gz").exists()
     assert (root / "library_status.json").exists()
+
+
+def test_tiered_library_retention_keeps_coarse_history(tmp_path: Path):
+    root = tmp_path / "library"
+    metrics = root / "markets" / "sp500" / "metrics"
+    constituents = root / "markets" / "sp500" / "constituents"
+    metrics.mkdir(parents=True)
+    constituents.mkdir(parents=True)
+
+    dense_a = metrics / "2026-07-10.json.gz"
+    dense_b = metrics / "2026-07-01.json.gz"
+    # monthly window: dense_cutoff=2026-06-19, monthly_cutoff=2025-06-14
+    month_early = metrics / "2025-08-05.json.gz"
+    month_late = metrics / "2025-08-28.json.gz"
+    quarter_early = metrics / "2020-01-10.json.gz"
+    quarter_late = metrics / "2020-02-20.json.gz"
+    lone_quarter = metrics / "2019-08-01.json.gz"
+    const_dup_a = constituents / "2020-01-05.json"
+    const_dup_b = constituents / "2020-02-01.json"
+    # Unrelated dated path must not be touched.
+    other = root / "markets" / "sp500" / "screen" / "2020-01-01_run.json"
+    other.parent.mkdir(parents=True)
+    other.write_text("{}", encoding="utf-8")
+
+    for path in (
+        dense_a,
+        dense_b,
+        month_early,
+        month_late,
+        quarter_early,
+        quarter_late,
+        lone_quarter,
+    ):
+        write_json(path, [{"ticker": "X"}], compact=True, compress=True)
+    write_json(const_dup_a, [{"ticker": "Y"}], compact=False)
+    write_json(const_dup_b, [{"ticker": "Y"}], compact=False)
+
+    removed = apply_library_retention(
+        root,
+        keep_days=30,
+        monthly_until_days=400,
+        now=_RETENTION_TODAY,
+    )
+
+    assert dense_a.exists() and dense_b.exists()
+    assert not month_early.exists() and month_late.exists()
+    assert not quarter_early.exists() and quarter_late.exists()
+    assert lone_quarter.exists()  # sole quarterly anchor kept long-term
+    assert not const_dup_a.exists() and const_dup_b.exists()
+    assert other.exists()
+    assert removed == 3
 
 
 def test_empty_manifest_note_offline():

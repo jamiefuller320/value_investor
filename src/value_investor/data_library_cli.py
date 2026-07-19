@@ -20,6 +20,7 @@ from .agent_model_policy import (
 from .data_library import (
     DEFAULT_LIBRARY_ROOT,
     DEFAULT_MAX_TICKERS_PER_RUN,
+    DEFAULT_MONTHLY_UNTIL_DAYS,
     DEFAULT_RETENTION_DAYS,
     DEFAULT_STALE_DAYS,
     MARKET_REGISTRY,
@@ -105,7 +106,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--retention-days",
         type=int,
         default=DEFAULT_RETENTION_DAYS,
-        help=f"Delete dated snapshots older than this (default: {DEFAULT_RETENTION_DAYS}; 0 = keep all)",
+        help=(
+            "Dense PIT window in days: keep every dated metrics/constituents snapshot "
+            f"(default: {DEFAULT_RETENTION_DAYS}). Older ages thin to monthly then quarterly; "
+            "0 disables pruning."
+        ),
+    )
+    grow_p.add_argument(
+        "--retention-monthly-until-days",
+        type=int,
+        default=DEFAULT_MONTHLY_UNTIL_DAYS,
+        help=(
+            "After the dense window, keep one snapshot per month until this age in days "
+            f"(default: {DEFAULT_MONTHLY_UNTIL_DAYS}); older ages keep one per quarter forever."
+        ),
     )
     grow_p.add_argument(
         "--all-markets",
@@ -457,6 +471,7 @@ def cmd_grow(args: argparse.Namespace) -> int:
         stale_days=int(args.stale_days),
         refresh_constituents_first=not bool(args.skip_constituents),
         retention_days=int(args.retention_days),
+        monthly_until_days=int(args.retention_monthly_until_days),
     )
     status_rows = library_status(args.root, markets=markets, stale_days=int(args.stale_days))
     by_market = {r["market"]: r for r in status_rows}
