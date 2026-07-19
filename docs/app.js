@@ -14,6 +14,7 @@ const TABS = [
   { id: "trusts", label: "Trusts" },
   { id: "strong-buys", label: "Strong buys" },
   { id: "portfolio", label: "Portfolio" },
+  { id: "automation", label: "Automation" },
   { id: "performance", label: "Performance" },
   { id: "analysis", label: "Analysis" },
 ];
@@ -804,6 +805,151 @@ function renderAnalysis(data) {
   });
 }
 
+function settingRow(label, value) {
+  return `<div class="setting-row"><span class="setting-label">${esc(label)}</span><span class="setting-value">${value}</span></div>`;
+}
+
+function boolLabel(value) {
+  if (value === true) return '<span class="badge badge-ii-ok">on</span>';
+  if (value === false) return '<span class="badge badge-ii-no">off</span>';
+  return '<span class="muted">—</span>';
+}
+
+function renderAutomation(data) {
+  const panel = document.getElementById("panel-automation");
+  if (!panel) return;
+  const auto = data.automation;
+  if (!auto) {
+    panel.innerHTML =
+      '<div class="empty-state">Automation status not published yet. Run <code>ftse-library automation-status</code> or wait for the next ladder / publish.</div>';
+    return;
+  }
+
+  const settings = auto.settings || {};
+  const paper = settings.paper || {};
+  const library = settings.library || {};
+  const budget = library.budget || {};
+  const ladder = library.ladder || {};
+  const fg = library.focus_graduation || {};
+  const workflows = settings.workflows || {};
+  const achievements = auto.achievements || {};
+  const timeline = achievements.timeline || [];
+  const lastLadder = achievements.last_ladder || {};
+  const paperLast = achievements.paper_last_run || {};
+  const milestones = achievements.milestones || {};
+
+  const graduated = (library.graduated_markets || [])
+    .map((g) => esc(g.market))
+    .join(", ") || "—";
+
+  const workflowHtml = Object.values(workflows)
+    .map(
+      (wf) => `
+      <div class="setting-row">
+        <span class="setting-label">${esc(wf.name || wf.workflow || "Workflow")}</span>
+        <span class="setting-value small">${esc(wf.cadence || wf.cron || "—")}</span>
+      </div>`
+    )
+    .join("");
+
+  const timelineHtml = timeline.length
+    ? `<ol class="automation-timeline">
+        ${timeline
+          .map(
+            (event) => `
+          <li class="automation-event kind-${esc(event.kind || "other")}">
+            <div class="automation-event-when">${esc(fmtDate(event.at))}</div>
+            <div class="automation-event-body">
+              <strong>${esc(event.title || event.kind || "Event")}</strong>
+              <div class="small muted">${esc(event.detail || "")}</div>
+            </div>
+          </li>`
+          )
+          .join("")}
+      </ol>`
+    : '<p class="muted">No dated automation achievements recorded yet.</p>';
+
+  const milestoneBits = [];
+  if (milestones.ladder_complete?.completed_at) {
+    milestoneBits.push(
+      `<li><strong>Initial queue complete</strong> — ${esc(fmtDate(milestones.ladder_complete.completed_at))} · focus ${esc(milestones.ladder_complete.focus_market || "—")}</li>`
+    );
+  }
+  if (milestones.l34_slices?.completed_at) {
+    milestoneBits.push(
+      `<li><strong>L34 next slices</strong> — ${esc(fmtDate(milestones.l34_slices.completed_at))} · ${esc((milestones.l34_slices.new_markets || []).join(", "))} · ${esc(String(milestones.l34_slices.research_memos_created ?? "—"))} memos</li>`
+    );
+  }
+
+  panel.innerHTML = `
+    <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
+
+    <div class="automation-grid">
+      <section class="automation-section">
+        <h2>Current settings</h2>
+        <h3>Paper automation</h3>
+        ${settingRow("Enabled", boolLabel(paper.enabled))}
+        ${settingRow("Timezone", esc(paper.timezone || "—"))}
+        ${settingRow("Market open / settle", esc(`${paper.market_open || "—"} + ${paper.settle_minutes_after_open ?? "—"} min`))}
+        ${settingRow("Weekdays only", boolLabel(paper.weekdays_only))}
+        ${settingRow("Auto rebalance", boolLabel(paper.auto_rebalance))}
+        ${settingRow("Surveil holdings / watchlist", `${boolLabel(paper.surveil_paper_holdings)} / ${boolLabel(paper.surveil_watchlist)}`)}
+        ${settingRow("Max positions", esc(paper.max_positions ?? "—"))}
+        ${settingRow("Initial cash / trade cost", esc(`${paper.initial_cash ?? "—"} / ${paper.trade_cost_pct ?? "—"}`))}
+
+        <h3>Library ladder</h3>
+        ${settingRow("Enabled", boolLabel(ladder.enabled))}
+        ${settingRow("Focus market", esc(library.focus_market || "—"))}
+        ${settingRow("Queue complete", boolLabel(library.queue_complete))}
+        ${settingRow("Graduated markets", `<span class="small">${graduated}</span>`)}
+        ${settingRow("Auto-advance", boolLabel(fg.auto_advance))}
+        ${settingRow("Coverage / stale floors", esc(`${fg.min_coverage_pct ?? "—"} / ${fg.max_stale_pct ?? "—"}`))}
+        ${settingRow("Maintenance", `${boolLabel(fg.maintenance_enabled)} · max=${esc(fg.maintenance_max_tickers ?? "—")}`)}
+        ${settingRow("Research hard cap", esc(ladder.research_hard_cap ?? "—"))}
+        ${settingRow("Research all graduated", boolLabel(ladder.research_all_graduated))}
+        ${settingRow("Research model", esc((library.research_model || {}).model_id || "—"))}
+
+        <h3>Budget</h3>
+        ${settingRow("Plan", esc(`${budget.plan_name || "—"} · $${budget.plan_monthly_usd ?? "—"}/mo`))}
+        ${settingRow("Weekly library strand", esc(`$${budget.weekly_library_usd ?? "—"} · enforce=${budget.enforce_weekly_research_cap ? "on" : "off"}`))}
+        ${settingRow("Refresh / surplus day", esc(`${budget.plan_refresh_day_of_month ?? "—"} / day before`))}
+        ${settingRow("Spend this week / cycle", esc(`$${budget.estimated_spend_usd_this_week ?? "—"} / $${budget.estimated_spend_usd_this_cycle ?? "—"}`))}
+
+        <h3>Scheduled workflows</h3>
+        ${workflowHtml || '<p class="muted">No workflow schedules recorded.</p>'}
+      </section>
+
+      <section class="automation-section">
+        <h2>Achievements</h2>
+        ${
+          milestoneBits.length
+            ? `<h3>Milestones</h3><ul class="list-plain">${milestoneBits.join("")}</ul>`
+            : ""
+        }
+        <h3>Latest ladder snapshot</h3>
+        ${
+          lastLadder.run_at
+            ? `${settingRow("Run at", esc(fmtDate(lastLadder.run_at)))}
+               ${settingRow("Focus", esc(lastLadder.focus_market || "—"))}
+               ${settingRow("Shortlist / research", esc(`${(lastLadder.layers || {}).screen_shortlist ?? "—"} / created ${(lastLadder.layers || {}).research_created ?? "—"}`))}`
+            : '<p class="muted">No ladder snapshot yet.</p>'
+        }
+        <h3>Latest paper run</h3>
+        ${
+          paperLast.generated_at || paperLast.acted != null
+            ? `${settingRow("When", esc(fmtDate(paperLast.generated_at || (paperLast.gate || {}).local_time)))}
+               ${settingRow("Acted", boolLabel(!!paperLast.acted))}
+               ${settingRow("Trades", esc(paperLast.trade_count ?? "—"))}
+               <p class="small muted">${esc(paperLast.note || "")}</p>`
+            : '<p class="muted">No paper automation run recorded yet.</p>'
+        }
+        <h3>Dated record</h3>
+        ${timelineHtml}
+      </section>
+    </div>
+  `;
+}
+
 function renderDashboard(data) {
   dashboardData = data;
   const meta = data.meta || {};
@@ -817,6 +963,7 @@ function renderDashboard(data) {
   renderTrusts(data);
   renderStrongBuys(data);
   renderPortfolio(data);
+  renderAutomation(data);
   renderPerformance(data);
   renderAnalysis(data);
 }
@@ -826,6 +973,14 @@ async function loadDashboard() {
     const response = await fetch("data/latest.json");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
+    if (!data.automation) {
+      try {
+        const autoResp = await fetch("data/automation.json");
+        if (autoResp.ok) data.automation = await autoResp.json();
+      } catch {
+        /* optional sidecar */
+      }
+    }
     renderDashboard(data);
   } catch (err) {
     document.getElementById("run-meta").textContent = `Failed to load dashboard data: ${err.message}`;

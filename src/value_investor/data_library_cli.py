@@ -360,6 +360,24 @@ def build_parser() -> argparse.ArgumentParser:
     prune_p.add_argument("--json", action="store_true")
     prune_p.set_defaults(func=cmd_prune_screen)
 
+    auto_p = sub.add_parser(
+        "automation-status",
+        help="Assemble dashboard automation settings + dated achievement log",
+    )
+    auto_p.add_argument(
+        "--output",
+        type=Path,
+        default=Path("docs/data/automation.json"),
+        help="Write path (default: docs/data/automation.json)",
+    )
+    auto_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print summary without writing",
+    )
+    auto_p.add_argument("--json", action="store_true")
+    auto_p.set_defaults(func=cmd_automation_status)
+
     return parser
 
 
@@ -931,6 +949,42 @@ def cmd_prune_screen(args: argparse.Namespace) -> int:
                 f"  {mid}: screen={counts.get('screen_removed', 0)}  "
                 f"history={counts.get('history_removed', 0)}"
             )
+    return 0
+
+
+def cmd_automation_status(args: argparse.Namespace) -> int:
+    from .automation_status import build_automation_status, write_automation_status
+
+    if args.dry_run:
+        payload = build_automation_status(library_root=args.root)
+    else:
+        path = write_automation_status(library_root=args.root, path=args.output)
+        payload = build_automation_status(library_root=args.root)
+        payload = {**payload, "wrote": str(path)}
+
+    if args.json:
+        print(json.dumps(payload, indent=2, default=str))
+        return 0
+
+    settings = payload.get("settings") or {}
+    library = settings.get("library") or {}
+    paper = settings.get("paper") or {}
+    timeline = ((payload.get("achievements") or {}).get("timeline") or [])
+    print(f"Focus market: {library.get('focus_market')}")
+    print(
+        f"Graduated: {library.get('graduated_count')}  "
+        f"queue_complete={library.get('queue_complete')}"
+    )
+    print(
+        f"Paper auto: enabled={paper.get('enabled')}  "
+        f"rebalance={paper.get('auto_rebalance')}  "
+        f"max_positions={paper.get('max_positions')}"
+    )
+    print(f"Timeline events: {len(timeline)}")
+    for event in timeline[:8]:
+        print(f"  {event.get('at')}: {event.get('title')}")
+    if not args.dry_run:
+        print(f"Wrote: {payload.get('wrote')}")
     return 0
 
 

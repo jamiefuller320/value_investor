@@ -780,3 +780,80 @@ tr.selected td {
 #paper-trade-dialog .action-form {
   padding: 1rem 1.25rem 1.25rem;
 }
+
+.automation-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 960px) {
+  .automation-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.automation-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.automation-section h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.setting-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 42%) 1fr;
+  gap: 0.5rem 0.75rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+.setting-label {
+  color: var(--muted);
+}
+
+.setting-value {
+  color: var(--text);
+}
+
+.automation-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--border);
+}
+
+.automation-event {
+  position: relative;
+  padding: 0.65rem 0 0.65rem 1rem;
+}
+
+.automation-event::before {
+  content: "";
+  position: absolute;
+  left: -0.4rem;
+  top: 1rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.automation-event.kind-milestone::before { background: var(--strong-buy); }
+.automation-event.kind-paper_run::before { background: var(--hold); }
+.automation-event.kind-ladder_run::before { background: var(--accent); }
+.automation-event.kind-graduation::before,
+.automation-event.kind-graduated_market::before { background: #2e9c4f; }
+
+.automation-event-when {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.15rem;
+}

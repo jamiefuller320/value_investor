@@ -208,6 +208,14 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     except Exception:  # noqa: BLE001
         unavailable_watch = {"items": []}
 
+    try:
+        from value_investor.automation_status import build_automation_status
+
+        automation = build_automation_status()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Automation status assembly skipped: %s", exc)
+        automation = None
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": run_at,
@@ -234,6 +242,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "historical_analysis": historical_analysis,
         "deep_analysis": deep_analysis,
         "paper_automation": paper_automation,
+        "automation": automation,
     }
 
 
@@ -289,6 +298,11 @@ def publish_dashboard(
     latest_path = data_dir / "latest.json"
     write_json(latest_path, bundle, compact=True, compress=False)
 
+    # Standalone automation snapshot so ladder/paper workflows can refresh it
+    # without a full screen republish.
+    if bundle.get("automation"):
+        write_json(data_dir / "automation.json", bundle["automation"], compact=False)
+
     if run_at := bundle.get("run_at"):
         stamp = str(run_at)[:10]
         archive_path = data_dir / "archive" / f"{stamp}.json"
@@ -327,6 +341,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "historical_analysis": None,
         "deep_analysis": None,
         "paper_automation": None,
+        "automation": None,
         "research": [],
         "note": "Dashboard data not published yet. Run ftse-screen and ftse-publish locally, or wait for the weekly workflow.",
     }

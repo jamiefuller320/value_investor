@@ -113,10 +113,13 @@ jobs:
             | tee "$ROOT/status_snapshot.json"
           ftse-library --root "$ROOT" --policy "$ROOT/policy.json" graduate --dry-run --json \
             | tee "$ROOT/graduation_snapshot.json" || true
+          # Refresh Automation tab snapshot for the dashboard.
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" automation-status \
+            --output docs/data/automation.json
 
       - name: Commit library ladder artifacts
         if: steps.plan.outputs.skip != 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: run offline library ladder (focus market)"
-          file_pattern: "docs/data/library/**"
+          file_pattern: "docs/data/library/** docs/data/automation.json"
