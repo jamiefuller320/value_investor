@@ -665,12 +665,18 @@ function holdingsTableHtml(fund, prices) {
     .map((pos) => {
       const mark = paperPositionMark(pos, prices);
       const value = pos.shares * mark;
-      const pnl = (mark - pos.avg_cost) * pos.shares;
+      const cost = Number(pos.avg_cost) || 0;
+      const pnl = (mark - cost) * pos.shares;
+      const pnlPct = cost > 0 ? (mark - cost) / cost : null;
+      const opened = pos.opened_at
+        ? `<br><span class="small muted">Opened ${fmtDate(pos.opened_at)}</span>`
+        : "";
       return `<tr>
-        <td><strong>${esc(pos.name || pos.ticker)}</strong><br><span class="small muted">${esc(pos.ticker)}</span></td>
+        <td><strong>${esc(pos.name || pos.ticker)}</strong><br><span class="small muted">${esc(pos.ticker)}</span>${opened}</td>
         <td>${Number(pos.shares).toFixed(4)}</td>
-        <td>${money(pos.avg_cost)}</td>
+        <td>${money(cost)}</td>
         <td>${money(mark)}</td>
+        <td class="${pnlPct == null ? "" : pnlPct >= 0 ? "pos" : "neg"}">${pctLabel(pnlPct)}</td>
         <td>${money(value)}</td>
         <td class="${pnl >= 0 ? "pos" : "neg"}">${money(pnl)}</td>
         <td class="small">${pos.stop_loss != null ? `Stop ${money(pos.stop_loss)}<br>` : ""}${
@@ -688,12 +694,13 @@ function holdingsTableHtml(fund, prices) {
             <th>Shares</th>
             <th>Avg cost</th>
             <th>Mark</th>
+            <th>Change</th>
             <th>Value</th>
             <th>P&amp;L</th>
             <th>Levels</th>
           </tr>
         </thead>
-        <tbody>${rows || `<tr><td colspan="7" class="muted">No holdings yet.</td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="8" class="muted">No holdings yet.</td></tr>`}</tbody>
       </table>
     </div>`;
 }
@@ -1818,4 +1825,7 @@ async function openPaperTradeDialog(data) {
 }
 
 window.renderPaperFunds = renderPaperFunds;
+window.buildPriceMap = buildPriceMap;
+window.paperMoney = money;
+window.paperPctLabel = pctLabel;
 
