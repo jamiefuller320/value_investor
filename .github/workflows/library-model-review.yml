@@ -50,11 +50,12 @@ jobs:
           interval = int(review.get("review_interval_days") or 14)
           last = review.get("last_reviewed_at")
           force = str(os.environ.get("FORCE_REVIEW") or "").lower() in {"1", "true", "yes"}
+          out = Path(os.environ["GITHUB_OUTPUT"])
           if last and not force:
               try:
                   stamp = datetime.fromisoformat(str(last).replace("Z", "+00:00"))
                   if datetime.now(UTC) - stamp < timedelta(days=interval):
-                      Path(os.environ["GITHUB_OUTPUT"]).write_text("skip=true\n", encoding="utf-8")
+                      out.write_text("skip=true\n", encoding="utf-8")
                       print(f"Skipping — last review {last} within {interval} days")
                       raise SystemExit(0)
               except ValueError:
@@ -77,12 +78,15 @@ jobs:
           Path("docs/data/library/last_model_review.json").write_text(
               json.dumps(result, indent=2) + "\n", encoding="utf-8"
           )
-          Path(os.environ["GITHUB_OUTPUT"]).write_text(
+          out.write_text(
               f"skip=false\nmodel={result['pick']['model_id']}\n", encoding="utf-8"
           )
           print(json.dumps(result, indent=2))
           PY
-          ftse-library policy --policy docs/data/library/policy.json
+
+      - name: Show policy
+        if: steps.review.outputs.skip != 'true'
+        run: ftse-library --policy docs/data/library/policy.json policy
 
       - name: Commit policy update
         if: steps.review.outputs.skip != 'true'
@@ -90,3 +94,4 @@ jobs:
         with:
           commit_message: "chore: refresh cheapest Cursor research model"
           file_pattern: "docs/data/library/policy.json docs/data/library/last_model_review.json"
+          skip_fetch: false

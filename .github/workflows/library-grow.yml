@@ -105,8 +105,20 @@ jobs:
             --output docs/data/automation.json
 
       - name: Commit library ladder artifacts
+        id: commit
         if: steps.plan.outputs.skip != 'true'
+        continue-on-error: true
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: run offline library ladder (focus market)"
           file_pattern: "docs/data/library/** docs/data/automation.json"
+          # Email report / other automations may push to main while the ladder runs.
+          skip_fetch: false
+
+      - name: Rebase-push if commit raced with another automation
+        if: steps.plan.outputs.skip != 'true' && steps.commit.outcome == 'failure'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+          git push origin HEAD:main

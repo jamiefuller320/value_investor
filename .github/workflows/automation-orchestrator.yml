@@ -36,8 +36,6 @@ on:
     - cron: "30 5 * * *"
     # Weekday paper automation after London open settle
     - cron: "17 8 * * 1-5"
-    # One-shot catch-up for missed Sun 19 Jul 2026 morning suite (remove after today)
-    - cron: "45 9 * * 0"
 
 permissions:
   actions: write
@@ -73,15 +71,14 @@ jobs:
               const day = now.getUTCDay(); // 0=Sun
               const hour = now.getUTCHours();
               // Map cron windows (GitHub may delay; keep windows loose)
-              if (day === 0 && hour === 9) {
-                suite = 'catchup_today';
-              } else if (day === 0 && (hour === 6 || hour === 7)) {
+              if (day === 0 && (hour === 6 || hour === 7 || hour === 8 || hour === 9)) {
+                // Sunday quiet bundle (allow for Actions delay past 06:17)
                 suite = 'sunday';
               } else if (hour === 5 || hour === 4) {
                 suite = 'surplus_check';
-              } else if (hour === 8 || hour === 9 || hour === 10 || hour === 11 || hour === 12 || hour === 13) {
+              } else if (day >= 1 && day <= 5 && hour >= 8 && hour <= 13) {
                 // Weekday paper cron is 08:17 but often lands late
-                suite = (day >= 1 && day <= 5) ? 'weekday_paper' : (day === 0 ? 'sunday' : 'surplus_check');
+                suite = 'weekday_paper';
               } else if (day === 0) {
                 suite = 'sunday';
               } else {
@@ -213,6 +210,35 @@ jobs:
               core.info(`Dispatched ${workflow_id} ${JSON.stringify(inputs || {})}`);
             }
 
+            async function waitForNewRun(workflow_id, notBeforeIso, timeoutMs = 3 * 60 * 60 * 1000) {
+              const started = Date.now();
+              let runId = null;
+              while (Date.now() - started < timeoutMs) {
+                const { data } = await github.rest.actions.listWorkflowRuns({
+                  owner, repo, workflow_id, event: 'workflow_dispatch', per_page: 5,
+                });
+                const candidate = data.workflow_runs.find((r) => r.created_at >= notBeforeIso);
+                if (candidate) {
+                  runId = candidate.id;
+                  break;
+                }
+                await new Promise((r) => setTimeout(r, 5000));
+              }
+              if (!runId) throw new Error(`Timed out waiting for ${workflow_id} to start`);
+              core.info(`Watching ${workflow_id} run ${runId}`);
+              while (Date.now() - started < timeoutMs) {
+                const { data: run } = await github.rest.actions.getWorkflowRun({
+                  owner, repo, run_id: runId,
+                });
+                if (run.status === 'completed') {
+                  core.info(`${workflow_id} finished: conclusion=${run.conclusion}`);
+                  return run;
+                }
+                await new Promise((r) => setTimeout(r, 15000));
+              }
+              throw new Error(`Timed out waiting for ${workflow_id} run ${runId}`);
+            }
+
             let runLadder = process.env.RUN_LADDER === 'true';
             if (suite === 'surplus_check') {
               // surplus_gate skipped => treat as deny; success + allow_ladder true => run
@@ -221,8 +247,14 @@ jobs:
               core.info(`surplus_check gate: result=${process.env.SURPLUS_RESULT} allow=${process.env.SURPLUS_ALLOW} => ladder=${runLadder}`);
             }
 
+            // Run ladder first and wait — avoids email/ladder both pushing docs/ to main.
             if (runLadder) {
+              const notBefore = new Date(Date.now() - 2000).toISOString();
               await dispatch('library-grow.yml', {});
+              const ladderRun = await waitForNewRun('library-grow.yml', notBefore);
+              if (ladderRun.conclusion !== 'success') {
+                core.warning(`Library ladder concluded ${ladderRun.conclusion}; continuing with remaining suite jobs`);
+              }
             }
             if (process.env.RUN_MODEL === 'true') {
               await dispatch('library-model-review.yml', {});
