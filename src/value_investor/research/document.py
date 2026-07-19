@@ -24,6 +24,7 @@ SECTION_HEADINGS = {
     "research_verdict": "RESEARCH VERDICT",
     "weekly_update": "WEEKLY UPDATE",
     "gap_fill_update": "GAP FILL UPDATE",
+    "research_model_suggestions": "RESEARCH MODEL SUGGESTIONS",
 }
 
 
@@ -142,7 +143,10 @@ class ResearchSummary:
 
 def parse_research_sections(text: str) -> dict[str, str]:
     """Parse agent output into named research sections."""
-    sections = {key: "" for key in (*RESEARCH_SECTIONS, "weekly_update", "gap_fill_update")}
+    sections = {
+        key: ""
+        for key in (*RESEARCH_SECTIONS, "weekly_update", "gap_fill_update", "research_model_suggestions")
+    }
     heading_to_key = {v.upper(): k for k, v in SECTION_HEADINGS.items()}
 
     current = "executive_summary"

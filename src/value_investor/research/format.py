@@ -40,7 +40,11 @@ def _latest_weekly_summary(doc: ResearchDocument) -> str | None:
 
 
 def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
-    if summary is None or (not summary.targets and not summary.errors):
+    if summary is None or (
+        not summary.targets
+        and not summary.errors
+        and not summary.model_suggestions
+    ):
         return None
     lines = ["Red-flag gap-fill loop:"]
     lines.append(
@@ -59,6 +63,32 @@ def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
         if latest:
             snippet = latest.replace("\n", " ")
             lines.append(f"    Gap-fill: {snippet[:220]}{'…' if len(snippet) > 220 else ''}")
+    unresolved = [
+        row
+        for row in summary.question_outcomes
+        if str(row.get("status") or "").startswith("unresolved")
+        or str(row.get("status") or "").startswith("partially")
+    ]
+    if unresolved:
+        lines.append("  Open / partial questions:")
+        for row in unresolved[:6]:
+            nxt = row.get("next_sources") or "alternate source TBD"
+            lines.append(
+                f"    • {row.get('ticker')}: {str(row.get('question') or '')[:120]} "
+                f"→ next: {str(nxt)[:100]}"
+            )
+    if summary.model_suggestions:
+        lines.append("  Research-model suggestions:")
+        for row in summary.model_suggestions[:8]:
+            lines.append(
+                f"    • [{row.get('priority', 'medium')}/{row.get('area', 'research')}] "
+                f"{str(row.get('suggestion') or '')[:180]}"
+            )
+    if summary.parked_suggestions:
+        lines.append(
+            f"  Parked {len(summary.parked_suggestions)} high-priority suggestion(s) "
+            "into deferred-ideas for review."
+        )
     for error in summary.errors:
         lines.append(f"  ! {error}")
     return "\n".join(lines)

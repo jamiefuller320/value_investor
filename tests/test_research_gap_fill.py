@@ -130,8 +130,80 @@ def test_format_gap_fill_text_lists_targets():
             )
         ],
         updated=1,
+        question_outcomes=[
+            {
+                "ticker": "AEP.L",
+                "question": "pending OCF review",
+                "status": "unresolved",
+                "next_sources": "Companies House accounts",
+            }
+        ],
+        model_suggestions=[
+            {
+                "ticker": "AEP.L",
+                "area": "ingest",
+                "priority": "high",
+                "suggestion": "Add Companies House PDF body extract for UK names",
+            }
+        ],
     )
     text = format_gap_fill_text(summary)
     assert text is not None
     assert "AEP.L" in text
     assert "pending OCF" in text
+    assert "Companies House" in text
+    assert "Research-model suggestions" in text
+
+
+def test_parse_model_suggestions_and_outcomes():
+    from value_investor.research.gap_fill_sources import (
+        parse_model_suggestions,
+        parse_question_outcomes,
+        suggest_alternate_sources,
+    )
+
+    outcomes = parse_question_outcomes(
+        """
+Q: Is FCF negative structural?
+Status: unresolved
+Evidence: Filing bodies missing cash-flow note.
+SourcesTried: filings_bodies, yahoo_financials, alternate_news
+NextSources: Companies House annual report PDF; IR presentation
+"""
+    )
+    assert outcomes[0]["status"] == "unresolved"
+    assert "Companies House" in outcomes[0]["next_sources"]
+
+    suggestions = parse_model_suggestions(
+        """
+- area: ingest | priority: high | suggestion: Add Companies House PDF ingest for UK memos
+- area: prompt | priority: medium | suggestion: Ask explicitly for FCF bridge when Yahoo FCF conflicts with filings
+"""
+    )
+    assert suggestions[0]["area"] == "ingest"
+    assert suggestions[0]["priority"] == "high"
+    assert "Companies House" in suggestions[0]["suggestion"]
+
+    planned = suggest_alternate_sources(
+        ticker="HIK.L",
+        market="ftse350",
+        inventory={"thin": ["filings_bodies"]},
+        open_questions=["negative FCF vs dividend puzzle", "pension risk"],
+    )
+    assert planned
+    assert any(item["id"] == "companies_house_accounts" for item in planned)
+
+
+def test_parse_research_model_suggestions_section():
+    text = """GAP FILL UPDATE
+Q: test
+Status: resolved
+Evidence: ok
+SourcesTried: filings_bodies
+NextSources: none
+
+RESEARCH MODEL SUGGESTIONS
+- area: ingest | priority: high | suggestion: Pull IR PDFs when RNS bodies are empty
+"""
+    sections = parse_research_sections(text)
+    assert "IR PDFs" in sections["research_model_suggestions"]
