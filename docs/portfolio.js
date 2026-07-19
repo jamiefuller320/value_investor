@@ -64,6 +64,88 @@ function reportByTicker(data, ticker) {
   return (data.reports || []).find((r) => r.ticker === ticker) || null;
 }
 
+function moneyGbp(value) {
+  if (typeof window.paperMoney === "function") return window.paperMoney(value);
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  return `£${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function pctChangeLabel(value) {
+  if (typeof window.paperPctLabel === "function") return window.paperPctLabel(value);
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  return `${(n * 100).toFixed(1)}%`;
+}
+
+/** Entry price for open action P&L: explicit fill, else limit, else suggested limit. */
+function actionEntryPrice(action) {
+  for (const key of ["fill_price", "limit_price"]) {
+    const n = Number(action?.[key]);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  const suggested = Number(action?.suggested?.limit_price);
+  if (Number.isFinite(suggested) && suggested > 0) return suggested;
+  return null;
+}
+
+function actionShareQuantity(action) {
+  const n = Number(action?.quantity);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function actionOpenPnl(action, mark) {
+  const cost = actionEntryPrice(action);
+  const qty = actionShareQuantity(action);
+  const m = Number(mark);
+  if (!Number.isFinite(m) || m <= 0 || cost == null) {
+    return { mark: Number.isFinite(m) && m > 0 ? m : null, cost, qty, pnlPct: null, pnlCash: null };
+  }
+  const pnlPct = (m - cost) / cost;
+  const pnlCash = qty != null ? (m - cost) * qty : null;
+  return { mark: m, cost, qty, pnlPct, pnlCash };
+}
+
+function openActionPnlCells(action, prices) {
+  const { mark, pnlPct, pnlCash, qty } = actionOpenPnl(action, prices?.[action.ticker]);
+  const pctCls = pnlPct == null ? "muted" : pnlPct >= 0 ? "pos" : "neg";
+  const cashCls = pnlCash == null ? "muted" : pnlCash >= 0 ? "pos" : "neg";
+  const cashTitle =
+    qty == null
+      ? "Add quantity (shares) when logging to see cash P&amp;L"
+      : "Cash P&amp;L since entry (mark − entry) × shares";
+  return {
+    markHtml: mark != null ? moneyGbp(mark) : '<span class="muted">…</span>',
+    pctHtml: `<span class="${pctCls}">${pctChangeLabel(pnlPct)}</span>`,
+    cashHtml: `<span class="${cashCls}" title="${cashTitle}">${pnlCash != null ? moneyGbp(pnlCash) : "—"}</span>`,
+  };
+}
+
+async function enrichOpenActionMarks(openActions, data) {
+  if (!openActions?.length || typeof window.buildPriceMap !== "function") return;
+  const body = document.getElementById("open-actions-body");
+  if (!body) return;
+  try {
+    const prices = await window.buildPriceMap(
+      openActions.map((a) => a.ticker),
+      data
+    );
+    for (const action of openActions) {
+      const row = body.querySelector(`tr[data-action-id="${action.id}"]`);
+      if (!row) continue;
+      const cells = openActionPnlCells(action, prices);
+      const markEl = row.querySelector("[data-pnl-mark]");
+      const pctEl = row.querySelector("[data-pnl-pct]");
+      const cashEl = row.querySelector("[data-pnl-cash]");
+      if (markEl) markEl.innerHTML = cells.markHtml;
+      if (pctEl) pctEl.innerHTML = cells.pctHtml;
+      if (cashEl) cashEl.innerHTML = cells.cashHtml;
+    }
+  } catch (err) {
+    console.warn("Open action mark enrichment failed", err);
+  }
+}
+
 function suggestedOrdersFromPlan(plan) {
   if (!plan) {
     return {
@@ -299,6 +381,7 @@ function buildSimulatedActionFromReport(report, data, leg, index) {
     leg,
     order_type: orderType,
     limit_price: limitPrice,
+    fill_price: limitPrice,
     stop_loss: plan?.tactical_stop_loss ?? null,
     take_profit: plan?.tactical_take_profit ?? null,
     allocation_pct: allocationPct,
@@ -392,6 +475,10 @@ function renderActionDialog(data, preselectTicker = "", defaultMode = "simulated
             <input name="limit_price" type="number" step="0.01" min="0" placeholder="Optional">
           </label>
           <label>
+            Fill / avg cost (£)
+            <input name="fill_price" type="number" step="0.01" min="0" placeholder="Used for open P&amp;L">
+          </label>
+          <label>
             Stop loss (£)
             <input name="stop_loss" type="number" step="0.01" min="0" placeholder="Optional">
           </label>
@@ -460,6 +547,10 @@ function bindActionDialog(data, onSaved, defaultMode = "simulated") {
     const report = reportByTicker(data, ticker);
     const plan = report?.trade_plan || null;
     applyLegDefaults(form, plan, form.leg.value);
+    // Default fill/avg cost to the suggested limit so open P&L has an entry price.
+    if (form.fill_price && !form.fill_price.value && form.limit_price?.value) {
+      form.fill_price.value = form.limit_price.value;
+    }
     if (plan?.trade_plan_summary) {
       hint.textContent = `Suggested: ${plan.trade_plan_summary}`;
     } else if (report) {
@@ -496,6 +587,7 @@ function bindActionDialog(data, onSaved, defaultMode = "simulated") {
       leg: form.leg.value,
       order_type: form.order_type.value,
       limit_price: moneyInputValue(form.limit_price.value),
+      fill_price: moneyInputValue(form.fill_price.value),
       stop_loss: moneyInputValue(form.stop_loss.value),
       take_profit: moneyInputValue(form.take_profit.value),
       allocation_pct: moneyInputValue(form.allocation_pct.value),
@@ -617,25 +709,38 @@ function renderPortfolio(data) {
         .join("")
     : `<tr><td colspan="6" class="muted">No unused buy-tier candidates to rank.</td></tr>`;
 
-  const actionRows = (list) =>
+  const actionRows = (list, { withPnl = false, prices = {} } = {}) =>
     list.length
       ? list
           .map((a) => {
             const mode = actionExecutionMode(a);
-            return `<tr>
+            const entry = actionEntryPrice(a);
+            const qty = actionShareQuantity(a);
+            const pnl = withPnl ? openActionPnlCells(a, prices) : null;
+            return `<tr data-action-id="${esc(a.id)}" data-action-ticker="${esc(a.ticker)}">
               <td>
                 <strong>${esc(a.name || a.ticker)}</strong><br>
                 <span class="small muted">${esc(a.ticker)}${a.sector ? ` · ${esc(a.sector)}` : ""}</span>
               </td>
               <td>
                 ${signalBadge(a.signal_at_action || "buy")} ${modeBadge(mode)}<br>
-                <span class="small muted">${esc(a.leg || "")} · ${esc(a.order_type || "")}</span>
+                <span class="small muted">${esc(a.leg || "")} · ${esc(a.order_type || "")}${
+                  qty != null ? ` · ${qty} sh` : ""
+                }</span>
               </td>
               <td class="small">
-                ${a.limit_price != null ? `Limit £${Number(a.limit_price).toFixed(2)}<br>` : ""}
+                ${entry != null ? `Entry £${Number(entry).toFixed(2)}<br>` : ""}
+                ${a.limit_price != null && Number(a.limit_price) !== entry ? `Limit £${Number(a.limit_price).toFixed(2)}<br>` : ""}
                 ${a.stop_loss != null ? `Stop £${Number(a.stop_loss).toFixed(2)}<br>` : ""}
-                ${a.take_profit != null ? `Target £${Number(a.take_profit).toFixed(2)}` : ""}
+                ${a.take_profit != null ? `Target £${Number(a.take_profit).toFixed(2)}` : !entry && a.limit_price == null ? "—" : ""}
               </td>
+              ${
+                withPnl
+                  ? `<td class="small" data-pnl-mark>${pnl.markHtml}</td>
+                     <td class="small" data-pnl-pct>${pnl.pctHtml}</td>
+                     <td class="small" data-pnl-cash>${pnl.cashHtml}</td>`
+                  : ""
+              }
               <td class="small">${fmtDate(a.acted_at)}</td>
               <td>
                 <select data-status-id="${esc(a.id)}" aria-label="Status for ${esc(a.ticker)}">
@@ -649,7 +754,7 @@ function renderPortfolio(data) {
             </tr>`;
           })
           .join("")
-      : `<tr><td colspan="6" class="muted">None in this book.</td></tr>`;
+      : `<tr><td colspan="${withPnl ? 9 : 6}" class="muted">None in this book.</td></tr>`;
 
   const bookLabel =
     bookFilter === "all" ? "all books" : bookFilter === "live" ? "live book" : "simulated book";
@@ -709,6 +814,7 @@ function renderPortfolio(data) {
 
     <div class="card" style="margin-top:1rem">
       <h3>Open actions (${openActions.length})</h3>
+      <p class="small muted">Mark / change / P&amp;L use chart last price vs fill (or limit) since the action was logged. Cash P&amp;L needs share quantity.</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -716,12 +822,15 @@ function renderPortfolio(data) {
               <th>Company</th>
               <th>Order</th>
               <th>Levels</th>
+              <th>Mark</th>
+              <th>Change</th>
+              <th>P&amp;L</th>
               <th>Acted</th>
               <th>Status / mode</th>
               <th></th>
             </tr>
           </thead>
-          <tbody>${actionRows(openActions)}</tbody>
+          <tbody id="open-actions-body">${actionRows(openActions, { withPnl: true, prices: {} })}</tbody>
         </table>
       </div>
     </div>
@@ -842,6 +951,8 @@ function renderPortfolio(data) {
       renderPortfolio(data);
     });
   });
+
+  enrichOpenActionMarks(openActions, data);
 
   panel.querySelectorAll("[data-delete-id]").forEach((button) => {
     button.addEventListener("click", () => {
