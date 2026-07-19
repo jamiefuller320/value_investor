@@ -1,0 +1,78 @@
+# Halliburton Company (HAL) — Research memo
+
+_Version 1 · Updated 2026-07-19T15:55:55.040245+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Halliburton is a global oilfield services leader trading at modest multiples (P/E 19.5, P/B 2.7, yield 1.9%) that pass multiple value, quality, and cash-flow screens despite a cyclical earnings trough. FY2025 revenue fell 3% to roughly $22.2bn (10-K narrative; Yahoo fallback: $22.18bn) and net income roughly halved to $1.28bn (diluted EPS $1.50), weighed by North American softness, international activity reductions in Saudi Arabia and Mexico, and $831m of asset impairments tied largely to the planned Multi-Chem divestiture. The investment case rests on durable franchise economics (17%/15% segment operating margins in FY2025), $2.9bn operating cash flow, shareholder returns of $1.6bn, and recent multi-year Saudi Aramco contract wins that extend the international growth pivot. The central debate is whether current weakness is a normal late-cycle pause recoverable with activity stabilisation, or a more structural compression in North American fracturing intensity that limits re-rating.
+
+## INVESTMENT THESIS
+The quantitative screen flags HAL as a buy across five factor families—cheapness, quality, dividend, GARP, and risk—with nine passing models including Graham Enterprising, FCF Yield, Lynch PEG, Magic Formula, and Financial Health. At P/E 19.5 and P/B 2.7 with debt/equity of 75% and ROE of 14.6%, the market prices HAL as a cyclical mid-cap rather than a distressed operator, which aligns with filing evidence of manageable leverage, no material adverse change covenants on bank debt, and $3.5bn of undrawn revolving credit capacity (Q3 2025 10-Q).
+
+Business quality remains intact. Halliburton is the number-two global oilfield services provider with two segments—Completion & Production (C&P) and Drilling & Evaluation (D&E)—operating in more than 70 countries. FY2025 segment operating margins of 17% (C&P) and 15% (D&E) demonstrate pricing power and cost discipline even as revenue declined. Management targets capex at ~6% of revenue (~$1.1bn for 2026) and returns of more than 50% of free cash flow via dividends and buybacks—a capital-allocation framework value investors can underwrite.
+
+The screen’s buy signal is not driven by momentum; conviction is low (33%) and the signal is new (one week, improving). That makes HAL a classic “quality cyclical at reasonable price” candidate rather than a deep-value distressed asset. Q1 2026 results (10-Q, filed Apr 2026) showed early stabilisation: operating income rose 58% year-on-year to $679m and net income to $464m ($0.55 diluted EPS) against a prior-year quarter burdened by $356m of impairments. International contract momentum—notably multi-year Aramco LSTK awards for Jafurah unconventional gas and onshore re-entry work (Jul 2026 news)—supports the thesis that international growth can partially offset North American rig-count pressure.
+
+## FINANCIAL REVIEW
+**Primary source:** SEC EDGAR filing body extracts (`filings_index.json`: 2 annual 10-Ks, 6 interim 10-Qs with bodies; 10 other 8-Ks without downloadable bodies). Structured financial statement tables in body extracts are largely XBRL-tag dumps; narrative MD&A and quarterly commentary are usable. Where precise line-item totals are not cleanly parsed from bodies, Yahoo `financials_annual.json` is cited as fallback.
+
+**Annual trend (10-K)**
+
+| Metric | FY2023 | FY2024 | FY2025 | Source |
+|--------|--------|--------|--------|--------|
+| Revenue | $23.0bn | Flat vs 2023 (10-K) | −3% vs 2024 (10-K) | 2024 & 2025 10-K bodies |
+| Revenue ($) | $23.02bn | $22.94bn | $22.18bn | Yahoo fallback |
+| Net income | $2.64bn | $2.50bn | $1.28bn | Yahoo fallback |
+| Diluted EPS | $2.92 | $2.83 | $1.50 | Yahoo fallback |
+| Operating cash flow | — | Strong (10-K) | $2.9bn | 2025 10-K body |
+| FCF | $2.08bn | $2.42bn | $1.67bn | Yahoo fallback |
+| Shareholder returns | — | $1.6bn | $1.6bn | 2024 & 2025 10-K bodies |
+| Segment op. margins | — | 20% / 16% | 17% / 15% | 2024 & 2025 10-K bodies |
+
+FY2024 was a transition year: revenue flat, international revenue +6%, North America −8%, with solid margins and $100m debt repurchase. FY2025 saw broad deceleration—international −2%, North America −6%—and heavy non-cash charges. Yahoo attributes $840m of unusual items in 2025, including $831m asset impairment (Multi-Chem held-for-sale, facility closures, Argentina investment write-down per Q2/Q3 10-Q notes). Net income compression is therefore partly accounting-driven, not purely operational collapse.
+
+**Balance sheet and liquidity (Yahoo fallback for totals; 10-Q for narrative)**
+
+At 31 Dec 2025 (Yahoo): cash $2.21bn, total debt $8.13bn, net debt $4.95bn, stockholders’ equity $10.46bn, working capital $5.81bn. Debt is long-dated senior notes; Q2/Q3 2025 10-Qs state there are **no covenants or material adverse change provisions** in bank agreements. A new $3.5bn revolving credit facility was executed 18 Aug 2025, expiring 16 Aug 2030 (Q3 2025 10-Q). FY2025 retired $382m of 3.8% notes due Nov 2025 (2025 10-K body). Liquidity appears adequate; no going-concern language appears in available extracts.
+
+**Interim progression (10-Q bodies)**
+
+- **Q2 2025** (period ended 30 Jun 2025): Revenue $5.51bn (−6% YoY); H1 revenue $10.93bn (−6%). Q2 operating income $727m vs $1,032m prior year. H1 impairments $356m (Multi-Chem held-for-sale, facility closures). Cash $2.04bn; total debt ~$7.0bn.
+- **Q3 2025** (period ended 30 Sep 2025): Revenue $5.60bn (−2% YoY); 9M revenue $16.53bn. Q3 operating income $356m including $392m impairments; Q3 net income $20m. International weakness driven by Saudi Arabia and Mexico activity reductions.
+- **Q1 2026** (period ended 31 Mar 2026): Revenue $5.40bn (flat YoY). Operating income $679m (+58% YoY) with no new impairment charges vs $356m in Q1 2025. Net income $464m; diluted EPS $0.55. North America revenue −4%; Latin America +19%. Cash $2.00bn; total debt ~$6.9bn.
+
+**Gaps:** 8-K filings (VoltaGrid collaboration, director appointments, committee changes) are indexed but lack body extracts. Full consolidated income statement and balance sheet tabulations for annual periods are not cleanly available from body text alone; Yahoo was used for those totals.
+
+## RISKS AND RED FLAGS
+**Cyclical and demand.** The 2025 10-K risk factors emphasise that oil and gas price volatility and customer capex cuts can materially affect results—a direct concern given North America revenue −6% in FY2025 and management’s expectation of further international reductions in Saudi Arabia and Mexico (Q3 2025 10-Q).
+
+**Earnings quality.** FY2025 reported earnings were heavily distorted by impairments ($831m per Yahoo; $748m in 9M 2025 per Q3 10-Q). Until Multi-Chem is sold (expected H1 2026 per 2025 10-K), further write-downs or deal delays remain possible.
+
+**Geopolitical and regulatory.** Operations across 70+ countries expose HAL to sanctions, tariffs, and trade-policy uncertainty; the 2025 10-K explicitly flags 2025 US tariff measures and retaliatory risks. Hydraulic fracturing regulation remains a structural overhang for the C&P segment.
+
+**Operational and legal.** Product-liability and well-site incident risks are standard but material (10-K Item 1(a)). FCPA and export-control compliance in international NOC contracts (including Aramco) carry enforcement risk. Item 3 Legal Proceedings is referenced in extracts but detailed case exposure is truncated; no specific quantified contingent liability was visible in available body text.
+
+**Competitive.** SLB and regional players compete aggressively on price and technology; HAL’s Zeus electric fracturing and digital/automation investments are strategic responses but require sustained capex.
+
+**Governance / management.** January 2026 leadership reshuffle (Shannon Slocum to COO, hemisphere president changes) adds execution risk during a downturn. No pension funding crisis flagged; UK pension plan referenced in XBRL tags but details truncated.
+
+**Pension / covenants.** Employee benefit liabilities of $428m non-current (Yahoo, 2025) and foreign pension plans are present but not highlighted as distressed. Bank covenant risk appears low per 10-Q language.
+
+## NEWS HIGHLIGHTS
+Halliburton-specific coverage in the manifest is **thin** (8 articles in the past year; many indexed “HAL” items refer to Hindustan Aeronautics or unrelated names).
+
+Material items:
+
+- **17 Jul 2026** — *Halliburton (HAL) Lands Saudi Aramco Contracts For Unconventional Gas And Oil Re Entry* (yfinance): Multi-year Aramco awards for unconventional gas and onshore re-entry; expands Middle East footprint.
+- **16 Jul 2026** — *Halliburton Lands Aramco Deal for Saudi Arabia's Jafurah Gas Project*; *Halliburton wins multi-year LSTK onshore contracts from Aramco* (yfinance): Confirms integrated well-model contracts covering drilling, completions, workovers.
+- **16 Jul 2026** — *Halliburton Set to Report Q2 Earnings: Key Things To Watch* (yfinance): Pre-earnings preview citing Middle East disruptions and cost pressures.
+- **19 Jun 2026** — *Halliburton (HAL) Stock Faces Pressure As US Iran Deal Hits Oil Service Demand* (simplywall.st via Google News): Geopolitical/oil-price sentiment headwind.
+- **27 May 2026** — *Halliburton Co (HAL) Shares Fall 3.6%* (GuruFocus): Valuation debate.
+- **6 Feb 2026** — *HALLIBURTON CO SEC 10-K Report* (TradingView): Filing coverage of FY2025 results.
+
+Strategy signals from filings (not headlines): Multi-Chem partial sale progressing; VoltaGrid behind-the-meter power collaboration (8-K Oct 2025, no body); 50% of North American fracturing fleet on Zeus electric pumps (2025 10-K).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Filing review confirms the screen’s cheapness/quality/dividend case—solid margins, manageable leverage, and active capital return—but weakens conviction on near-term earnings power given FY2025 impairment-driven profit decline and ongoing North American/international activity headwinds, partially offset by Q1 2026 recovery and Aramco contract wins.

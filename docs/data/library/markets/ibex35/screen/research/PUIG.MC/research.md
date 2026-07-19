@@ -1,0 +1,76 @@
+# Puig Brands SA (PUIG.MC) — Research memo
+
+_Version 1 · Updated 2026-07-19T16:00:40.590859+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Puig Brands SA is a family-controlled Spanish luxury beauty group whose quantitative screen reads as a buy: eight of 22 models pass across cheapness, quality, dividend, GARP and risk families, on a composite score of 55% with P/E 15.9, P/B 2.4, dividend yield 2.5% and ROE 16.6%. The investment case rests on sustained revenue and profit growth above €5bn in sales, improving free cash flow and deleveraging, against a portfolio anchored in fragrance (Carolina Herrera, Jean Paul Gaultier, Rabanne) and high-growth makeup (Charlotte Tilbury). The central debate is whether post-IPO valuation adequately discounts intangible-heavy accounting, founder-related governance complexity, and recent volatility from a failed Estée Lauder merger and product-quality incidents — not whether the underlying franchise is growing.
+
+## INVESTMENT THESIS
+For a value investor, Puig offers a rare combination of mid-teens earnings multiple, mid-teens ROE, positive FCF yield and a dividend, while passing quality screens (Buffett Quality, Magic Formula, Financial Health) alongside classic value metrics (Graham Enterprising, FCF Yield, Neff PEGY). That profile fits a profitable compounder trading at a modest absolute and sector-relative valuation (sector composite 55%), with the signal improving but conviction still low at 33% given the name is only one week at buy status.
+
+Business quality supports the screen. Yahoo-sourced financials (primary filing bodies unavailable — see Financial Review) show revenue rising from €3.62bn (2022) to €5.04bn (2025), net income from €399m to €594m, and operating income from €536m to €834m over the same period. Gross margins have held near 75%, and 2025 free cash flow reached €661m after capex of €199m. Net debt fell sharply to €316m at end-2025 from €774m a year earlier, while total debt was reduced to €1.35bn. The screen’s debt/equity pass (45%) aligns with a balance sheet that is levered but manageable for a consumer franchise generating €859m operating cash flow.
+
+The value hook is that the market appears to price Puig as a cyclical mid-cap rather than a global brand owner with double-digit organic momentum in its core fragrance category and a scaled makeup asset in Charlotte Tilbury — particularly after the May 2026 merger collapse removed a speculative premium but also clarified the standalone path.
+
+## FINANCIAL REVIEW
+Primary regulatory filing bodies are not available in the research pack. The filings index (`filings_index.json`, regime: euro_filings) catalogues 14 Google News–discovered items (two tagged annual, one interim, eleven other) but reports `with_body: 0`; no extracts exist under `filings/bodies/`. Accordingly, all financial figures below are sourced from `financials_annual.json` (Yahoo Finance), with interim colour taken only from filing headlines where noted.
+
+Annual trend (Yahoo, € millions unless stated):
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue | 3,620 | 4,304 | 4,790 | 5,042 |
+| Operating income | 536 | 689 | 612* | 834 |
+| EBITDA | 692 | 877 | 980 | 1,118 |
+| Net income (common) | 399 | 465 | 531 | 594 |
+| Free cash flow | 268 | 379 | 549 | 661 |
+| Net debt | 1,129 | 1,294 | 774 | 316 |
+| Total debt | 1,883 | 2,205 | 1,732 | 1,353 |
+
+*2024 operating income was depressed by €137m of special charges (restructuring/M&A-related per Yahoo line items).
+
+Revenue grew at a compound rate of roughly 12% from 2022 to 2025. Net income growth accelerated in 2025 (+12% vs 2024) as the 2024 charge year normalised. EBITDA margin expanded from 19% (2022) to 22% (2025). FCF conversion strengthened materially: FCF/ net income rose from 67% (2022) to 111% (2025), supporting the screen’s FCF Yield pass.
+
+Balance sheet and capital structure (Yahoo, end-2025): total assets €8.55bn; goodwill and intangibles €4.97bn (58% of assets); tangible book value negative at €1.07bn; cash €1.04bn; equity attributable to shareholders €3.90bn. The intangible load reflects Charlotte Tilbury and other brand acquisitions — a structural feature, not a screen artefact. Puig repaid net €440m of long-term debt in 2025 and paid dividends of €214m.
+
+2024 was a transition year: May 2024 IPO expanded the share base from ~147m to ~563m ordinary shares (Yahoo), and cash flow shows €1.08bn of business acquisitions (Charlotte Tilbury-related) alongside €1.38bn equity issuance. Reported 2024 diluted EPS was €0.94 on the post-IPO share count; 2025 net income of €594m implies roughly €1.05 per share on ~563m shares (Yahoo does not publish 2025 EPS in the extract).
+
+Interim / trading updates: the sole interim-tagged filing headline (“Puig Q4 Sales Gain 14.3%, Driven by Fragrance, EMEA and Americas”, WWD, 30 January 2025) indicates strong Q4 2024 sales momentum, but no body text or audited interim accounts are present. A February 2026 headline (“Puig’s revenue surpassed the 5 billion euros mark in 2025”, Premium Beauty News, 19 February 2026) corroborates the Yahoo 2025 revenue figure but is not a substitute for filed half-year statements. No CNMV annual report, half-year report or trading update body was downloaded; going-concern, covenant and contingency language from primary filings cannot be assessed in this pass.
+
+## RISKS AND RED FLAGS
+Without filing bodies, formal risk disclosures (going concern, litigation, pension deficits, covenant headroom) cannot be quoted. The following risks are evident from available sources and financial structure:
+
+Governance and control: Puig remains family-controlled post-IPO. The terminated Estée Lauder merger (May 2026) reportedly foundered partly because Charlotte Tilbury founder Charlotte Tilbury sought to rework her buyout terms (Wall Street Journal, 22 May 2026), highlighting founder alignment risk across key assets.
+
+Balance sheet: Negative tangible equity and intangibles at nearly 60% of assets create impairment sensitivity and limit traditional book-value anchors — relevant given the P/B 2.4 screen pass is on accounting equity inflated by brands.
+
+M&A and integration: €1.08bn acquisition spend in 2024 and ongoing bolt-ons (e.g. Christian Lacroix via subsidiary Lonia; Modaes reported Lonia profits down 34%, 24 October 2025) introduce execution risk. 2024 special charges of €137m signal restructuring/friction costs.
+
+Product and reputational: December 2024 withdrawal of Charlotte Tilbury setting-spray batches triggered share weakness (Personal Care Insights, 10 December 2024; Asharq Al-Awsat, 17 December 2024), a reminder of quality-control and brand-equity risk in makeup.
+
+Cyclical/competitive: Industry commentary flags fragrance demand softening (“Fragrance Sales Are Softening — but by How Much?”, WWD, 13 May 2025). Puig’s growth has outpaced this so far, but category normalisation would pressure the GARP and Neff PEGY assumptions embedded in the buy signal.
+
+Deal overhang / volatility: Merger speculation (BNN Bloomberg, 24 March 2026) and collapse (Il Sole 24 ORE, 22 May 2026; WSJ, 21–22 May 2026) caused a ~14% single-day fall — the second-largest since the 2024 listing — adding event risk for value holders seeking stability.
+
+Data gap: Absence of downloadable CNMV/annual report bodies is itself a research limitation; pension, lease, and contingency detail may be material but is unverified here.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is adequate on operating performance and deal drama, thinner on governance and detailed strategy.
+
+Operating performance: Puig reported double-digit 2024 growth led by fragrance (glossy.co, 30 January 2025); Q4 2024 sales rose 14.3% (WWD, 30 January 2025); 2025 revenue exceeded €5bn (Premium Beauty News, 19 February 2026).
+
+M&A / portfolio: Christian Lacroix acquisition activity via Lonia, with modest valuation uplift post-deal (Modaes, 20 February 2026) but weak underlying profit trend at Lonia (Modaes, 24 October 2025).
+
+Major strategic event: Estée Lauder advanced merger talks from March 2026 (Bloomberg via Investing.com/yfinance, 2 April 2026) toward a speculated ~$40bn combination, terminated 21–22 May 2026 (WSJ; Barrons; Il Sole 24 ORE). Puig shares fell 13–14%; Estée Lauder rallied on relief from dilution concerns.
+
+Product incident: Charlotte Tilbury setting-spray batch withdrawals (December 2024).
+
+Corporate actions: Dividend ex-date approaching (simplywall.st, 11 June 2026). Valuation commentary after share weakness (Yahoo Finance, 4 June 2026).
+
+Industry context: Broader luxury-beauty retrenchment at peers (e.g. Estée Lauder job cuts, RTE.ie headline in filings index, 1 May 2026) frames a competitive environment of cost discipline and consolidation attempts.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research largely confirms the quantitative buy case on growth, FCF, leverage reduction and mid-teens valuation, but medium risk reflects missing primary filings, intangible-heavy accounts, founder/governance complexity and recent merger-related volatility.
