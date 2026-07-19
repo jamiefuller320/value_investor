@@ -20,8 +20,6 @@ from .agent_model_policy import (
 from .data_library import (
     DEFAULT_LIBRARY_ROOT,
     DEFAULT_MAX_TICKERS_PER_RUN,
-    DEFAULT_MONTHLY_UNTIL_DAYS,
-    DEFAULT_RETENTION_DAYS,
     DEFAULT_STALE_DAYS,
     MARKET_REGISTRY,
     grow_library,
@@ -29,6 +27,7 @@ from .data_library import (
     list_markets,
     refresh_constituents,
 )
+from .library_retention import DEFAULT_MONTHLY_UNTIL_DAYS, DEFAULT_RETENTION_DAYS
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -358,7 +357,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     prune_p = sub.add_parser(
         "prune-screen",
-        help="Prune dated screen CSV/JSON history; keep latest_* and N newest runs",
+        help=(
+            "Prune dated screen-lite history with decreasing resolution "
+            "(dense → monthly → quarterly; also thins signal_history.csv)"
+        ),
     )
     prune_p.add_argument(
         "--markets",
@@ -366,10 +368,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Comma-separated market ids (default: all offline markets with screens)",
     )
     prune_p.add_argument(
-        "--keep-runs",
+        "--retention-days",
         type=int,
-        default=2,
-        help="Keep this many newest timestamped screen runs per market (default: 2)",
+        default=DEFAULT_RETENTION_DAYS,
+        help=(
+            "Dense window in days: keep every dated screen run "
+            f"(default: {DEFAULT_RETENTION_DAYS}; 0 disables pruning)"
+        ),
+    )
+    prune_p.add_argument(
+        "--retention-monthly-until-days",
+        type=int,
+        default=DEFAULT_MONTHLY_UNTIL_DAYS,
+        help=(
+            "After the dense window, keep one run per month until this age "
+            f"(default: {DEFAULT_MONTHLY_UNTIL_DAYS}); older ages keep one per quarter"
+        ),
     )
     prune_p.add_argument("--json", action="store_true")
     prune_p.set_defaults(func=cmd_prune_screen)
@@ -948,21 +962,25 @@ def cmd_prune_screen(args: argparse.Namespace) -> int:
     payload = prune_library_screen_history(
         args.root,
         markets=markets,
-        keep_runs=int(args.keep_runs),
+        keep_days=int(args.retention_days),
+        monthly_until_days=int(args.retention_monthly_until_days),
     )
     if args.json:
         print(json.dumps(payload, indent=2))
         return 0
     print(f"Library root: {args.root}")
     print(
-        f"Pruned dated screen history (keep_runs={payload['keep_runs']}): "
-        f"removed {payload['total_removed']} file(s)"
+        f"Pruned screen-lite history "
+        f"(dense={payload['keep_days']}d, monthly_until={payload['monthly_until_days']}d): "
+        f"removed {payload['total_removed']} file(s), "
+        f"{payload.get('total_signal_history_rows_removed', 0)} signal_history row(s)"
     )
     for mid, counts in (payload.get("per_market") or {}).items():
-        if counts.get("removed"):
+        if counts.get("removed") or counts.get("signal_history_rows_removed"):
             print(
                 f"  {mid}: screen={counts.get('screen_removed', 0)}  "
-                f"history={counts.get('history_removed', 0)}"
+                f"history={counts.get('history_removed', 0)}  "
+                f"signal_rows={counts.get('signal_history_rows_removed', 0)}"
             )
     return 0
 

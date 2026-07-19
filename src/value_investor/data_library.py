@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import Any, Callable
 from urllib.request import Request, urlopen
 
 import pandas as pd
@@ -19,6 +19,11 @@ from value_investor.constituents import (
     to_lse_ticker,
 )
 from value_investor.fetch import fetch_company_metrics
+from value_investor.library_retention import (
+    DEFAULT_MONTHLY_UNTIL_DAYS,
+    DEFAULT_RETENTION_DAYS,
+    dates_to_remove,
+)
 from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
@@ -26,14 +31,8 @@ logger = logging.getLogger(__name__)
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_MAX_TICKERS_PER_RUN = 25
 DEFAULT_STALE_DAYS = 14
-# Dense PIT window: keep every dated metrics/constituents snapshot.
-DEFAULT_RETENTION_DAYS = 400  # ~13 months of daily-ish snapshots per market
-# After the dense window, keep one snapshot per calendar month until this age.
-DEFAULT_MONTHLY_UNTIL_DAYS = DEFAULT_RETENTION_DAYS + 3 * 365  # ~4 years total
-# Older than monthly_until: keep one per calendar quarter indefinitely (cheap coarse history).
 
 _DATED_SNAPSHOT_NAME = re.compile(r"^(\d{4}-\d{2}-\d{2})(?:\.json(?:\.gz)?)$")
-RetentionResolution = Literal["all", "month", "quarter"]
 
 
 @dataclass(frozen=True)
@@ -1003,14 +1002,6 @@ def _parse_dated_snapshot_name(name: str) -> date | None:
         return None
 
 
-def _retention_period_key(file_date: date, resolution: RetentionResolution) -> str:
-    if resolution == "month":
-        return f"{file_date.year}-{file_date.month:02d}"
-    if resolution == "quarter":
-        return f"{file_date.year}-Q{(file_date.month - 1) // 3 + 1}"
-    raise ValueError(f"Unsupported retention resolution {resolution!r}")
-
-
 def _iter_dated_pit_snapshots(root: Path) -> list[tuple[Path, date]]:
     """Dated metrics/constituents snapshots under markets/*/… (not screen/research)."""
     root = Path(root)
@@ -1059,32 +1050,20 @@ def apply_library_retention(
     if not root.exists():
         return 0
 
-    if isinstance(now, datetime):
-        today = now.astimezone(UTC).date() if now.tzinfo else now.date()
-    elif isinstance(now, date):
-        today = now
-    else:
-        today = datetime.now(UTC).date()
-
-    dense_cutoff = today - timedelta(days=keep_days)
-    monthly_until = max(int(monthly_until_days), int(keep_days))
-    monthly_cutoff = today - timedelta(days=monthly_until)
-
-    # Group thinned snapshots by (directory, resolution, period); dense stays.
-    groups: dict[tuple[Path, RetentionResolution, str], list[tuple[Path, date]]] = {}
+    # Thin independently per directory so markets/buckets do not compete.
+    by_dir: dict[Path, list[tuple[Path, date]]] = {}
     for path, file_date in _iter_dated_pit_snapshots(root):
-        if file_date >= dense_cutoff:
-            continue
-        resolution: RetentionResolution = "month" if file_date >= monthly_cutoff else "quarter"
-        key = (path.parent, resolution, _retention_period_key(file_date, resolution))
-        groups.setdefault(key, []).append((path, file_date))
+        by_dir.setdefault(path.parent, []).append((path, file_date))
 
     removed = 0
-    for entries in groups.values():
-        if len(entries) <= 1:
-            continue
-        entries.sort(key=lambda item: item[1], reverse=True)
-        for path, _file_date in entries[1:]:
+    for entries in by_dir.values():
+        drop = dates_to_remove(
+            [(path, file_date) for path, file_date in entries],
+            keep_days=keep_days,
+            monthly_until_days=monthly_until_days,
+            now=now,
+        )
+        for path in drop:
             path.unlink(missing_ok=True)
             removed += 1
     return removed
