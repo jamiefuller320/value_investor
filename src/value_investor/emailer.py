@@ -15,7 +15,12 @@ from value_investor.historical_analysis import (
     format_historical_analysis_text,
 )
 from value_investor.research.document import ResearchDocument, ResearchSummary
-from value_investor.research.format import format_research_html, format_research_text
+from value_investor.research.format import (
+    format_gap_fill_html,
+    format_gap_fill_text,
+    format_research_html,
+    format_research_text,
+)
 from value_investor.run_diff import RunDiff, format_run_diff_text
 from value_investor.simulator import SimulationComparison, format_simulation_comparison_text
 from value_investor.summary import CompanyReport
@@ -326,6 +331,7 @@ def format_text_report(
     historical_analysis: HistoricalAnalysisSummary | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
+    gap_fill_summary=None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
@@ -373,6 +379,10 @@ def format_text_report(
     if research_text:
         lines.extend(["STRONG BUY RESEARCH", "-" * 40, research_text, ""])
 
+    gap_text = format_gap_fill_text(gap_fill_summary)
+    if gap_text:
+        lines.extend(["RED-FLAG RESEARCH LOOP", "-" * 40, gap_text, ""])
+
     counts: dict[str, int] = {}
     for report in reports:
         counts[report.signal] = counts.get(report.signal, 0) + 1
@@ -419,6 +429,7 @@ def format_html_report(
     historical_analysis: HistoricalAnalysisSummary | None = None,
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
+    gap_fill_summary=None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
@@ -542,6 +553,7 @@ def format_html_report(
 
     trade_plans_section = _format_trade_plans_html(reports)
     research_section = format_research_html(research_documents or [], research_summary)
+    gap_fill_section = format_gap_fill_html(gap_fill_summary)
 
     return f"""<!DOCTYPE html>
 <html>
@@ -555,6 +567,7 @@ def format_html_report(
   {timing_section}
   {trade_plans_section}
   {research_section}
+  {gap_fill_section}
   {diff_section}
   <p><strong>Operating companies</strong> — {summary_bits}</p>
   {coverage_html}

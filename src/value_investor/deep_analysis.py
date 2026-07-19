@@ -88,7 +88,12 @@ Do not invent figures — only use data from the JSON.
 RED FLAGS
 List qualitative risks NOT captured by the screen for the top candidates:
 regulatory risk, cyclicality, pension deficits, governance, or balance-sheet concerns.
-If data is insufficient, say so. End with up to 3 names worth deeper research.
+If data is insufficient, say so explicitly as an open question.
+Prefer bullet lines that start with the ticker (e.g. ``AEP.L: …``).
+
+NAMES WORTH DEEPER RESEARCH
+Up to 3 tickers from the top candidates, one bullet each:
+``TICKER — open qualitative question to resolve``
 """
 
 
@@ -140,6 +145,15 @@ def run_deep_analysis(
     return _parse_deep_analysis(text)
 
 
+def _normalize_heading(line: str) -> str:
+    """Strip markdown/bold wrappers so section titles still match."""
+    text = line.strip()
+    text = text.lstrip("#").strip()
+    if text.startswith("**") and text.endswith("**") and len(text) > 4:
+        text = text[2:-2].strip()
+    return text.rstrip(":").strip().upper()
+
+
 def _parse_deep_analysis(text: str) -> DeepAnalysis:
     sections = {
         "executive_intro": "",
@@ -150,26 +164,60 @@ def _parse_deep_analysis(text: str) -> DeepAnalysis:
     lines: list[str] = []
 
     for line in text.splitlines():
-        upper = line.strip().upper()
-        if upper == "EXECUTIVE INTRO":
+        upper = _normalize_heading(line)
+        if upper in {"EXECUTIVE INTRO", "EXECUTIVE SUMMARY"}:
             if lines:
                 sections[current] = "\n".join(lines).strip()
                 lines = []
             current = "executive_intro"
             continue
-        if upper == "TOP PICKS ANALYSIS":
+        if upper in {"TOP PICKS ANALYSIS", "TOP PICKS"}:
             if lines:
                 sections[current] = "\n".join(lines).strip()
                 lines = []
             current = "top_picks_analysis"
             continue
-        if upper == "RED FLAGS":
+        if upper in {
+            "RED FLAGS",
+            "NAMES WORTH DEEPER RESEARCH",
+            "NAMES FOR DEEPER RESEARCH",
+            "OPEN QUESTIONS",
+        }:
             if lines:
-                sections[current] = "\n".join(lines).strip()
+                chunk = "\n".join(lines).strip()
+                if current == "red_flags" and sections["red_flags"]:
+                    sections["red_flags"] = f"{sections['red_flags']}\n\n{chunk}".strip()
+                else:
+                    sections[current] = chunk
                 lines = []
             current = "red_flags"
+            # Keep the heading label inside red_flags when it names the deeper-research list
+            # so extractors can still find "worth deeper research" wording.
+            if upper != "RED FLAGS":
+                lines.append(line.strip())
             continue
         lines.append(line)
 
-    sections[current] = "\n".join(lines).strip()
+    trailing = "\n".join(lines).strip()
+    if trailing:
+        if current == "red_flags" and sections["red_flags"]:
+            sections["red_flags"] = f"{sections['red_flags']}\n\n{trailing}".strip()
+        else:
+            sections[current] = trailing
+
+    # Fallback: models sometimes dump everything under the first heading.
+    if not sections["red_flags"] and sections["executive_intro"]:
+        intro = sections["executive_intro"]
+        for marker in (
+            "NAMES WORTH DEEPER RESEARCH",
+            "NAMES FOR DEEPER RESEARCH",
+            "RED FLAGS",
+            "Names worth deeper research",
+        ):
+            idx = intro.upper().find(marker.upper())
+            if idx >= 0:
+                sections["red_flags"] = intro[idx:].strip()
+                sections["executive_intro"] = intro[:idx].strip()
+                break
+
     return DeepAnalysis(**sections)

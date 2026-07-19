@@ -162,6 +162,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     simulation = _read_json(output_dir / "simulation_summary.json")
     historical_analysis = _read_json(output_dir / "historical_analysis_summary.json")
     deep_analysis = _load_deep_analysis(output_dir)
+    gap_fill = _read_json(output_dir / "gap_fill_summary.json")
     paper_automation = _read_json(output_dir / "paper_automation" / "last_run.json")
 
     trust_reports = _load_trust_reports(output_dir)
@@ -241,6 +242,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "simulation": simulation,
         "historical_analysis": historical_analysis,
         "deep_analysis": deep_analysis,
+        "gap_fill": gap_fill,
         "paper_automation": paper_automation,
         "automation": automation,
     }
