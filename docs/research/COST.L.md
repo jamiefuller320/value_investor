@@ -1,69 +1,99 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 1 · Updated 2026-07-19T10:09:26.392659+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-19T16:12:32.262784+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Costain Group PLC is a UK infrastructure engineering and consultancy group benefiting from a multi-year turnaround: profits and margins are rising even as revenue falls, reflecting a deliberate shift away from lower-margin construction toward higher-quality advisory and integrated delivery work. The quantitative screen rates the stock a **buy** (11/22 models, 70% composite), supported by modest valuation (P/E ~15×, P/B ~2.2×), ~2% yield, 15% ROE, strong free cash flow (~£48m), and a net-cash-lean balance sheet (debt/equity ~10%). The central debate is whether margin-led earnings growth and a record forward order book (per management commentary in news coverage) can offset ongoing revenue contraction and UK public-sector spending uncertainty. Primary RNS body text was unavailable in this research pass, limiting verification of pension disclosures, contingencies, and covenant language.
+# Costain Group PLC (COST.L) — First-pass research memo
+
+## EXECUTIVE SUMMARY
+
+Costain Group is a UK smart-infrastructure engineering and consultancy group benefiting from a multi-year turnaround: earnings and cash generation are improving even as reported revenue has contracted, consistent with a shift towards higher-margin advisory work. The quantitative screen rates the stock a buy on cheapness, quality, dividend, GARP, and risk metrics (11/22 models, 71% composite; P/E 15.0, P/B 2.2, ROE 15.1%, D/E 10%). The valuation hook is a net-cash balance sheet, rising free cash flow, and news flow pointing to a record forward work position and FTSE 250 re-entry after FY2025 results. The key debate is whether margin-led earnings growth and infrastructure tailwinds (transport, energy, defence) outweigh construction cyclicality, revenue decline, and pension/contingent-liability risks that cannot be verified from primary filing text — no RNS body extracts were downloaded (`with_body: 0` in the filings index).
 
 ## INVESTMENT THESIS
-For a value investor, Costain offers a rare combination in UK mid-cap industrials: improving returns on a cleaner business mix, balance-sheet optionality, and shareholder returns (dividends plus buybacks) without leverage stress. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—including Graham Enterprising, FCF Yield, Lynch/Neff PEG variants, Quality Value, Buffett Quality, Magic Formula, Acquirer's Multiple, and Financial Health. That breadth suggests the buy signal is grounded in both price and fundamentals, not a single metric.
 
-Business quality appears to be inflecting. Yahoo-sourced accounts show net income rising from £22.1m (2023) to £30.6m (2024) and £37.3m (2025) while revenue fell from £1,332m to £1,046m—consistent with management’s stated pivot to higher-margin work. Operating margin expanded from roughly 2.0% (2023) to 4.3% (2025); diluted EPS rose from 7.8p to 13.7p. Free cash flow strengthened to £48.5m (2025) against £33.6m (2024), with cash of £189.3m and total debt of only £25m. ROE of 15.1% and FCF yield screen passes align with a business generating cash well above its accounting earnings trajectory.
+The screen’s buy signal rests on a rare combination for a mid-cap UK contractor: modest valuation multiples, strong balance-sheet metrics, and improving returns. Costain passes Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Dividend Growth, Magic Formula, Acquirer’s Multiple, Composite Value, and Financial Health — spanning cheapness, quality, income, and balance-sheet strength rather than a single anomaly. At P/E 15.0 and P/B 2.2 with D/E of 10%, the market prices in cyclical scepticism despite ROE of 15.1% and FCF of c.£48m (screen/Yahoo FY2025).
 
-The valuation hook is a mid-teens earnings multiple on a company with net cash, rising returns, and visible contract wins (e.g. TfL framework), yet still carrying construction-sector scepticism. Timing is neutral per the screen (RSI ~54, price ~18% above 200-day MA), favouring staged accumulation rather than aggressive chasing.
+Business quality appears to be inflecting. Yahoo data show net income rising from £22.1m (FY2023) to £37.3m (FY2025) while revenue fell from £1.33bn to £1.05bn — gross margin expanded from 7.9% to 10.9% and EBITDA from £50.9m to £65.3m. That pattern fits a deliberate portfolio rationalisation away from low-margin pass-through contracting towards consultancy-led delivery in energy, water, transport, and defence. Secondary news from the March 2026 FY2025 results cycle cites “robust profits,” a “record forward work position,” and increased shareholder returns, with CEO Alex Vaughan noting a return to the FTSE 250. Contract wins such as placement on Transport for London’s £700m framework (June 2026) and involvement in the MESH long-duration energy storage project (April 2026) support the order-book narrative.
+
+For a value investor, the edge is a de-risked, cash-generative infrastructure services compounder trading at mid-teens earnings with net cash, buybacks, and a 2.0% yield — not deep asset-backed cheapness (P/B > tangible book), but GARP-style quality at a reasonable price. Screen conviction is only 41% (new signal, one week at buy), so sizing should reflect early-stage confirmation rather than high-conviction compounder status.
 
 ## FINANCIAL REVIEW
-**Primary filings gap.** The RNS index lists 56 entries (8 annual, 19 interim, 29 other) under `uk_rns` regime, but **none** have downloadable body extracts (`filings/bodies/` empty). Many indexed headlines appear to be Investegate/Google News false positives for other issuers (e.g. Shawbrook, Barratt Redrow, BHP). The only headline explicitly naming Costain is “Costain wins place on £700m TfL framework” (9 June 2026). Generic “Final Results” entries (March 2025, December 2025, March 2026) cannot be attributed to Costain without body text. **No interim half-year RNS body for Costain was verified.** All figures below fall back to `financials_annual.json` (Yahoo, fetched 19 July 2026).
 
-**Income statement trend (Yahoo, year-end December).**
+**Source limitation:** The UK RNS filings index (`regime: uk_rns`) lists 56 entries (8 annual, 20 interim, 28 other) but **zero downloadable body extracts** under `filings/bodies/` (`with_body: 0`). Many indexed headlines appear mis-attributed to other issuers (e.g. Shawbrook, Barratt Redrow, BHP). Costain-specific indexed items include generic “Final Results” headlines (March 2025, December 2025, March 2026), “Costain wins place on £700m TfL framework” (9 June 2026), and routine capital-structure RNS (transactions in own shares, PDMR notifications). **No interim half-year RNS body is available for Costain**; interim figures cannot be verified from primary filings. All quantitative analysis below uses `financials_annual.json` (Yahoo) as an explicit fallback. `macro_context.json` is absent from the source folder.
 
-| Metric | 2023 | 2024 | 2025 |
-|--------|------|------|------|
-| Revenue | £1,332m | £1,251m | £1,046m |
-| Operating income | £26.8m | £31.1m | £44.8m |
-| EBITDA | £50.9m | £52.6m | £65.3m |
-| Net income | £22.1m | £30.6m | £37.3m |
-| Diluted EPS | 7.8p | 11.1p | 13.7p |
+**Income statement trend (Yahoo fallback, £m unless noted)**
 
-Revenue has fallen three consecutive years (−16% in 2025 alone), yet operating income rose 44% year-on-year in 2025. Gross profit margin improved (gross profit £113.8m on £1,046m revenue vs £103.3m on £1,251m in 2024). SG&A was controlled at £69m (2025) vs £72m (2024) despite inflationary pressures elsewhere in the sector.
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | 1,421 | 1,332 | 1,251 | 1,046 |
+| Gross profit | 93 | 105 | 103 | 114 |
+| Operating income | 35 | 27 | 31 | 45 |
+| EBITDA | 49 | 51 | 53 | 65 |
+| Net income | 26 | 22 | 31 | 37 |
+| Basic EPS (p) | 9.4 | 8.1 | 11.3 | 13.9 |
 
-**Cash flow and returns (Yahoo).** Operating cash flow was £51.3m (2025), up from £42.7m (2024). Free cash flow was £48.5m (2025) after capex of £2.8m—capital-light relative to revenue. The company returned £7.3m in dividends and repurchased £12.0m of stock in 2025. FCF conversion remains strong versus net income.
+Revenue has declined four consecutive years (−26% from FY2022 peak), yet profitability has recovered sharply since the FY2023 trough. FY2025 net income of £37.3m (+22% YoY) and basic EPS of 13.9p (+23%) reflect operating leverage: operating margin rose from 2.5% (FY2024) to 4.3% (FY2025), and EBITDA margin from 4.2% to 6.2%. Gross profit rose to £113.8m despite lower revenue, confirming mix improvement rather than volume growth.
 
-**Balance sheet (Yahoo, 2025).** Cash and equivalents: £189.3m (up from £158.5m). Total debt: £25.0m (mostly lease obligations). Shareholders’ equity: £258.2m; tangible book £207.1m. Working capital: £125m positive, though working-capital movements consumed £9.5m of cash in 2025. **Contract receivables are material:** other receivables £137.4m plus accounts receivable £54.1m, with restricted cash of £26.0m—typical of engineering contractors but worth monitoring for collection risk. Defined benefit pension liability: £60.0m (up from £54.9m in 2024). Goodwill/intangibles: £51.1m.
+**Balance sheet (Yahoo FY2025, £m):** Total assets £561.9; equity £258.2; total debt £25.0 (essentially capital-lease obligations; no material bank debt); cash £189.3; restricted cash £26.0; implied net cash c.£164m. Working capital £125.0. Tangible book value £207.1; goodwill £45.1. Defined pension benefit balance-sheet item £60.0 (Yahoo classification — surplus/deficit detail unavailable without annual report body). Current provisions £9.9m.
 
-**Interim / trading updates.** No Costain-specific interim filing body was available. Secondary news coverage of the FY2025 results presentation (March 2026) cites management highlighting profit growth, improved margins, strong cash generation, a record forward work position, and return to the FTSE 250—these qualitative points cannot be reconciled to audited interim numbers in this pass.
+**Cash flow (Yahoo, £m):**
 
-**Annual results.** FY2025 Yahoo data aligns directionally with March 2026 earnings-call headlines (“robust profits… record forward work position… increased shareholder returns, despite revenue challenges”). Prior-year FY2024 results (March 2025 “Final Results” window) are represented in the 2024 column above; primary RNS confirmation is absent.
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
+| Operating CF | 69.8 | 42.7 | 51.3 |
+| Capex | (0.1) | (9.1) | (2.8) |
+| Free cash flow | 69.7 | 33.6 | 48.5 |
+| Dividends paid | (1.1) | (3.2) | (7.3) |
+| Share buybacks | (1.3) | (11.1) | (12.0) |
+
+FCF rebounded strongly in FY2025 after a softer FY2024 (working-capital outflow of £9.5m in FY2025 vs £4.5m in FY2024). Capital returns are rising: dividends nearly doubled YoY and buybacks totalled £12.0m. End cash position £215.3m (including restricted cash movements per cash-flow statement).
+
+**Annual / interim filing gaps:** FY2025 full-year results were reported in the March 2026 news cycle (“Costain Group H2 Earnings Call Highlights,” 10 March 2026; “Full Year 2025 Earnings Call Highlights,” 19 March 2026), but the corresponding RNS bodies are not in the corpus — figures above cannot be attributed to primary filing extracts. No Costain-specific half-year or trading-update RNS body is indexed with downloadable text; interim financial trends are therefore unavailable from filings. Going-concern, covenant, contingency, and pension-disclosure language could not be reviewed.
 
 ## RISKS AND RED FLAGS
-**Filing verification unavailable.** Without RNS body text, going-concern assessments, litigation contingencies, contract loss provisions, and banking covenants could not be reviewed. This is a material research gap for a contractor with historical legacy issues elsewhere in the sector.
 
-**Revenue contraction.** A 21% revenue decline over two years may reflect strategic portfolio pruning, but sustained top-line shrink raises questions about scale economies and bidding pipeline depth beyond headline contract wins.
+**Cyclical and revenue:** Four years of declining reported revenue (−16% YoY in FY2025 alone) signal ongoing portfolio shrinkage or contract roll-off. If margin gains stall, earnings leverage reverses quickly. UK public-infrastructure spending remains politically sensitive (e.g. broader sector coverage on HS2 cost pressures, BBC, 23 March 2026) — Costain’s exposure to transport mega-projects is a sector headwind even without company-specific impairment news in the manifest.
 
-**UK public-sector and mega-project exposure.** Sector news including “HS2 trains could run slower than planned to save money” (BBC, 23 March 2026) underscores fiscal pressure on transport infrastructure—a core Costain end-market. Budget cycles, political change, and project delays remain key cyclical risks.
+**Contract and execution:** Construction and complex infrastructure delivery carry cost-overrun, delay, and dispute risk. Current provisions of £9.9m (Yahoo FY2025) are modest, but **contingency and going-concern language could not be assessed** without annual report body text.
 
-**Pension deficit.** The £60m defined-benefit obligation is manageable relative to equity and cash but is rising; discount-rate and longevity assumptions could widen the deficit in adverse markets—a risk screens underweight.
+**Pension:** A £60.0m defined-benefit pension balance-sheet item (Yahoo FY2025, up from £54.9m in FY2024) warrants scrutiny. Historical UK contractors often carry hidden pension deficits; without the annual report note, surplus/deficit status and funding schedule are unknown — a material gap for risk assessment.
 
-**Working capital and contract risk.** Large receivable balances and negative working-capital cash movements in 2025 highlight execution and billing timing risk inherent in complex infrastructure contracts. Legacy contract disputes are an ever-present sector hazard; none were identified in available sources but absence of filing text is not reassurance.
+**Governance / filings quality:** The filings index contains significant noise (mis-attributed Investegate headlines), reducing confidence in automated regulatory coverage. Recent RNS activity is largely routine (PDMR vesting, holdings notifications, own-share transactions — July 2026), with no adverse governance signals visible from headlines alone.
 
-**Governance / capital allocation.** Recent RNS categories include “Transaction in Own Shares” and “Buy Back Extension” (July 2026)—positive for shareholders if done below intrinsic value, but buybacks alongside a declining revenue base warrant discipline on price paid.
+**Valuation:** P/B 2.2 exceeds tangible book (£207m vs equity £258m), so the screen’s cheapness is earnings/FCF-driven rather than asset-backed. A mid-teens P/E offers limited margin of safety if FY2025 margin peak proves cyclical.
 
-**Competitive.** Costain competes with larger international engineers (Aecom, Jacobs, etc.) and UK peers (Kier, Balfour Beatty) for framework positions; margin gains may attract competitive repricing on renewals.
+**Screen timing:** Conviction score 41%, signal trend “new” (one week), timing “neutral” with price 18% above 200-day MA and MACD momentum weakening — entry timing is not compelling despite the fundamental buy case.
 
 ## NEWS HIGHLIGHTS
-Dedicated Costain coverage over the past year is **moderate and partly noisy**—many indexed articles match the word “cost” rather than the company. Material items include:
 
-- **FY2025 results (March 2026):** “Costain Group H2 Earnings Call Highlights” (10 March 2026) and “Costain Group PLC Full Year 2025 Earnings Call Highlights” (19 March 2026) report profit growth, improved margins, strong cash generation, record forward work, increased shareholder returns, and FTSE 250 reinstatement under CEO Alex Vaughan.
-- **Contract wins:** “Costain wins place on £700m TfL framework” (Investegate, 9 June 2026); EnergyPathways MESH storage project—Costain shortlisted onshore sites, moving to FEED (Yahoo/small-cap snapshot, 27 April 2026).
-- **Analyst sentiment:** “How The Costain Group Story Is Shifting With Upgraded Targets And New Contracts” (21 April 2026) notes fair-value target cluster of £1.80–£2.40, with reference target £2.25.
-- **Capital returns:** “Transaction in Own Shares” / buyback extension (RNS, 17 July 2026); dividend interest piece (12 April 2026).
-- **Market profile:** “Costain Group PLC: A UK Infrastructure Stock Drawing Market Attention” (Kalkine, 17 June 2026).
-- **Sector context (not company-specific):** HS2 cost-saving reports (BBC, March 2026); UK construction slowdown affecting peers (Ashtead, Morningstar homebuilder note, June 2026).
+Costain-specific coverage over the past year is **moderate but thin on primary corporate detail**; much of the manifest is generic UK markets/ISA content unrelated to the company.
 
-No material M&A, regulatory enforcement, or management change announcements specific to Costain were identified in the manifest beyond routine PDMR and holdings disclosures.
+Material Costain items:
+
+- **FY2025 results (March 2026):** “Costain Group H2 Earnings Call Highlights” (10 March 2026) and “Costain Group PLC (FRA:5JY) Full Year 2025 Earnings Call Highlights” (19 March 2026) — management cited strong profit growth, improved margins, cash generation, record forward work, and return to the FTSE 250, with revenue challenges noted.
+- **Analyst sentiment (April 2026):** “How The Costain Group (LSE:COST) Story Is Shifting With Upgraded Targets And New Contracts” (21 April 2026) — fair-value target raised to £2.25 from £2.04; cluster of targets £1.80–£2.40.
+- **Dividend (April 2026):** “Why You Might Be Interested In Costain Group PLC (LON:COST) For Its Upcoming Dividend” (12 April 2026).
+- **Energy / infrastructure pipeline (April 2026):** “Oscillate, Bango, AOTI, EnergyPathways…” (27 April 2026) — Costain shortlisted onshore sites for EnergyPathways’ MESH long-duration storage project in Barrow-in-Furness.
+- **Contract win (June 2026):** “Costain wins place on £700m TfL framework” (9 June 2026, filings index).
+- **Market attention (June 2026):** “Costain Group PLC (LSE:COST): A UK Infrastructure Stock Drawing Market Attention” (17 June 2026, Kalkine Media).
+- **Longer-term context:** “Costain Group's (LON:COST) investors will be pleased with their fantastic 325% return over the last three years” (31 December 2025); “Are Investors Undervaluing Costain Group PLC (LON:COST) By 50%?” (10 December 2025); “Investors Will Want Costain Group's (LON:COST) Growth In ROCE To Persist” (24 November 2025).
+
+No material M&A, regulatory enforcement, or management-change headlines specific to Costain appear in the manifest. Capital-allocation activity (own-share transactions, buyback extension headline in filings index, July 2026) is routine. **Flag:** news coverage lacks depth on interim trading, contract backlog quantification, and pension status — investors must rely on Yahoo annuals and secondary earnings-call summaries.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
-Risk: medium
-Confidence: 0.68
-Rationale: Deep research largely confirms the quantitative buy case—improving margins, strong FCF, low leverage, and positive operational newsflow—but primary filing bodies were unavailable to validate risks, and revenue decline plus pension/working-capital exposures warrant staged conviction rather than full immediate sizing.
+
+Verdict: accumulate  
+Risk: medium  
+Confidence: 0.70  
+Rationale: Deep research broadly confirms the screen’s buy case on improving earnings, net cash, and FCF yield, but absent primary filing bodies and verifiable interim data prevent full validation of order-book, pension, and contingency risks.
+
+## INVESTMENT THESIS
+
+
+## FINANCIAL REVIEW
+
+
+## RISKS AND RED FLAGS
+
+
+## NEWS HIGHLIGHTS
