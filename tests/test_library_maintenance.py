@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
 
 from value_investor.data_library import empty_manifest, save_manifest
@@ -151,33 +152,66 @@ def test_retry_failed_metrics_only_errors(tmp_path: Path, monkeypatch):
     assert list_failed_metric_tickers(root, market) == []
 
 
-def test_prune_library_screen_keeps_latest_and_n_runs(tmp_path: Path):
+def test_prune_library_screen_tiered_retention(tmp_path: Path):
     root = tmp_path / "library"
     market = "nasdaq100"
     screen = root / "markets" / market / "screen"
     history = screen / "history"
     screen.mkdir(parents=True)
     history.mkdir(parents=True)
+    today = date(2026, 7, 19)
 
-    for stamp in ("20260701_010101", "20260702_020202", "20260703_030303"):
+    # Dense window (<30d): keep all
+    for stamp in ("20260710_010101", "20260715_020202"):
         (screen / f"signals_{stamp}.csv").write_text("ticker\n", encoding="utf-8")
-        (screen / f"model_results_{stamp}.csv").write_text("ticker\n", encoding="utf-8")
-        (screen / f"universe_{stamp}.csv").write_text("ticker\n", encoding="utf-8")
+        (history / f"models_{stamp}.json.gz").write_bytes(b"x")
+
+    # Same month beyond dense: keep newest run only
+    for stamp in ("20250805_010101", "20250828_020202"):
+        (screen / f"signals_{stamp}.csv").write_text("ticker\n", encoding="utf-8")
         (screen / f"summary_{stamp}.json").write_text("{}", encoding="utf-8")
         (history / f"models_{stamp}.json.gz").write_bytes(b"x")
 
+    # Same quarter beyond monthly: keep newest
+    for stamp in ("20200110_010101", "20200220_020202"):
+        (screen / f"signals_{stamp}.csv").write_text("ticker\n", encoding="utf-8")
+        (history / f"models_{stamp}.json.gz").write_bytes(b"x")
+
     (screen / "latest_signals.csv").write_text("ticker\n", encoding="utf-8")
-    (screen / "latest_model_results.csv").write_text("ticker\n", encoding="utf-8")
-    (screen / "signal_history.csv").write_text("ticker\n", encoding="utf-8")
+    (screen / "signal_history.csv").write_text(
+        "run_at,ticker,signal,signal_rank,conviction_score,data_quality_score\n"
+        "2020-01-10T01:01:01+00:00,AAA,buy,3,0.5,0.8\n"
+        "2020-02-20T02:02:02+00:00,AAA,buy,3,0.6,0.8\n"
+        "2025-08-05T01:01:01+00:00,AAA,buy,3,0.5,0.8\n"
+        "2025-08-28T02:02:02+00:00,AAA,buy,3,0.6,0.8\n"
+        "2026-07-10T01:01:01+00:00,AAA,buy,3,0.7,0.8\n"
+        "2026-07-15T02:02:02+00:00,AAA,buy,3,0.8,0.8\n",
+        encoding="utf-8",
+    )
 
-    payload = prune_library_screen_history(root, markets=[market], keep_runs=2)
-    assert payload["total_removed"] == 5  # 4 screen + 1 history for oldest stamp
+    payload = prune_library_screen_history(
+        root,
+        markets=[market],
+        keep_days=30,
+        monthly_until_days=400,
+        now=today,
+    )
+    assert payload["total_removed"] >= 1
+    assert (screen / "latest_signals.csv").exists()
+    assert (screen / "signals_20260710_010101.csv").exists()
+    assert (screen / "signals_20260715_020202.csv").exists()
+    assert not (screen / "signals_20250805_010101.csv").exists()
+    assert (screen / "signals_20250828_020202.csv").exists()
+    assert not (screen / "signals_20200110_010101.csv").exists()
+    assert (screen / "signals_20200220_020202.csv").exists()
+    assert not (history / "models_20250805_010101.json.gz").exists()
+    assert (history / "models_20250828_020202.json.gz").exists()
 
-    remaining = sorted(p.name for p in screen.iterdir() if p.is_file())
-    assert "latest_signals.csv" in remaining
-    assert "signal_history.csv" in remaining
-    assert "signals_20260701_010101.csv" not in remaining
-    assert "signals_20260702_020202.csv" in remaining
-    assert "signals_20260703_030303.csv" in remaining
-    hist_names = sorted(p.name for p in history.iterdir())
-    assert hist_names == ["models_20260702_020202.json.gz", "models_20260703_030303.json.gz"]
+    hist = (screen / "signal_history.csv").read_text(encoding="utf-8")
+    assert "2020-01-10T01:01:01+00:00" not in hist
+    assert "2020-02-20T02:02:02+00:00" in hist
+    assert "2025-08-05T01:01:01+00:00" not in hist
+    assert "2025-08-28T02:02:02+00:00" in hist
+    assert "2026-07-10T01:01:01+00:00" in hist
+    assert "2026-07-15T02:02:02+00:00" in hist
+    assert payload["total_signal_history_rows_removed"] == 2

@@ -4,12 +4,17 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
+from value_investor.library_retention import (
+    DEFAULT_MONTHLY_UNTIL_DAYS,
+    DEFAULT_RETENTION_DAYS,
+    dates_to_remove,
+)
 from value_investor.signals import SIGNAL_ORDER, Signal
 
 
@@ -108,6 +113,57 @@ def append_signal_history(
     else:
         frame.to_csv(path, index=False)
     return path
+
+
+def prune_signal_history_rows(
+    output_dir: Path,
+    *,
+    keep_days: int = DEFAULT_RETENTION_DAYS,
+    monthly_until_days: int = DEFAULT_MONTHLY_UNTIL_DAYS,
+    now: datetime | date | None = None,
+) -> dict[str, int]:
+    """
+    Thin ``signal_history.csv`` runs with the shared dense → monthly → quarterly policy.
+
+    Keeps every run inside the dense window; older runs keep the newest ``run_at``
+    per calendar month, then per quarter indefinitely.
+    """
+    path = Path(output_dir) / HISTORY_FILE
+    if not path.exists() or keep_days <= 0:
+        return {"removed_rows": 0, "removed_runs": 0}
+
+    frame = pd.read_csv(path)
+    if frame.empty or "run_at" not in frame.columns:
+        return {"removed_rows": 0, "removed_runs": 0}
+
+    dated_runs: list[tuple[str, date]] = []
+    seen: set[str] = set()
+    for raw in frame["run_at"].tolist():
+        run_key = str(raw)
+        if run_key in seen:
+            continue
+        seen.add(run_key)
+        ts = pd.to_datetime(raw, utc=True, errors="coerce")
+        if pd.isna(ts):
+            continue
+        dated_runs.append((run_key, ts.date()))
+
+    drop_runs = dates_to_remove(
+        dated_runs,
+        keep_days=keep_days,
+        monthly_until_days=monthly_until_days,
+        now=now,
+    )
+    if not drop_runs:
+        return {"removed_rows": 0, "removed_runs": 0}
+
+    before = len(frame)
+    kept = frame[~frame["run_at"].astype(str).isin(drop_runs)]
+    kept.to_csv(path, index=False)
+    return {
+        "removed_rows": int(before - len(kept)),
+        "removed_runs": int(len(drop_runs)),
+    }
 
 
 def compute_stability(

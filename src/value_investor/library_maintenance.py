@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -12,12 +13,16 @@ from value_investor.data_library import (
     market_dir,
     refresh_metrics,
 )
+from value_investor.library_retention import (
+    DEFAULT_MONTHLY_UNTIL_DAYS,
+    DEFAULT_RETENTION_DAYS,
+    dates_to_remove,
+)
 from value_investor.research.filings import ingest_filings
+from value_investor.signal_stability import prune_signal_history_rows
 from value_investor.storage import read_json
 
 logger = logging.getLogger(__name__)
-
-DEFAULT_SCREEN_KEEP_RUNS = 2
 
 _SCREEN_DATED_GLOBS = (
     "signals_*.csv",
@@ -38,6 +43,38 @@ _RUN_STAMP_RE = re.compile(r"_(\d{8}_\d{6})(?:\.[^.]+)*$")
 def _run_stamp(path: Path) -> str | None:
     match = _RUN_STAMP_RE.search(path.name)
     return match.group(1) if match else None
+
+
+def _stamp_date(stamp: str) -> date | None:
+    try:
+        return datetime.strptime(stamp[:8], "%Y%m%d").date()
+    except ValueError:
+        return None
+
+
+def _collect_screen_run_files(screen_dir: Path) -> dict[str, list[Path]]:
+    stamped: dict[str, list[Path]] = {}
+    if not screen_dir.exists():
+        return stamped
+    for pattern in _SCREEN_DATED_GLOBS:
+        for path in screen_dir.glob(pattern):
+            if not path.is_file() or path.name.startswith("latest"):
+                continue
+            stamp = _run_stamp(path)
+            if stamp is None:
+                continue
+            stamped.setdefault(stamp, []).append(path)
+    history_dir = screen_dir / "history"
+    if history_dir.is_dir():
+        for pattern in _HISTORY_DATED_GLOBS:
+            for path in history_dir.glob(pattern):
+                if not path.is_file():
+                    continue
+                stamp = _run_stamp(path)
+                if stamp is None:
+                    continue
+                stamped.setdefault(stamp, []).append(path)
+    return stamped
 
 
 def _company_name_for_memo(ticker_dir: Path, ticker: str) -> str:
@@ -276,69 +313,103 @@ def retry_failed_metrics(
     return summaries
 
 
-def _prune_dated_by_keep_runs(directory: Path, patterns: tuple[str, ...], *, keep_runs: int) -> list[Path]:
-    if keep_runs < 1 or not directory.exists():
-        return []
-    stamped: dict[str, list[Path]] = {}
-    for pattern in patterns:
-        for path in directory.glob(pattern):
-            if not path.is_file():
-                continue
-            if path.name.startswith("latest"):
-                continue
-            stamp = _run_stamp(path)
-            if stamp is None:
-                continue
-            stamped.setdefault(stamp, []).append(path)
-    if not stamped:
-        return []
-    ordered = sorted(stamped.keys(), reverse=True)
-    keep = set(ordered[:keep_runs])
-    removed: list[Path] = []
-    for stamp, paths in stamped.items():
-        if stamp in keep:
-            continue
-        for path in paths:
+def prune_screen_dir(
+    screen_dir: Path,
+    *,
+    keep_days: int = DEFAULT_RETENTION_DAYS,
+    monthly_until_days: int = DEFAULT_MONTHLY_UNTIL_DAYS,
+    now: datetime | date | None = None,
+    prune_signal_history: bool = True,
+) -> dict[str, Any]:
+    """
+    Apply decreasing-resolution retention to one market's screen-lite artifacts.
+
+    Dated run groups (``signals_*``, ``universe_*``, ``summary_*``, ``history/*``)
+    use the same dense → monthly → quarterly policy as fundamentals PIT snapshots.
+    ``latest_*`` is never removed. ``signal_history.csv`` rows are thinned on the
+    same cadence when ``prune_signal_history`` is true.
+    """
+    screen_dir = Path(screen_dir)
+    stamped = _collect_screen_run_files(screen_dir)
+    dated_stamps: list[tuple[str, date]] = []
+    for stamp in stamped:
+        stamp_day = _stamp_date(stamp)
+        if stamp_day is not None:
+            dated_stamps.append((stamp, stamp_day))
+
+    drop_stamps = dates_to_remove(
+        dated_stamps,
+        keep_days=keep_days,
+        monthly_until_days=monthly_until_days,
+        now=now,
+    )
+    removed_screen = 0
+    removed_history = 0
+    for stamp in drop_stamps:
+        for path in stamped.get(stamp, []):
             path.unlink(missing_ok=True)
-            removed.append(path)
-    return removed
+            if path.parent.name == "history":
+                removed_history += 1
+            else:
+                removed_screen += 1
+
+    history_stats = {"removed_rows": 0, "removed_runs": 0}
+    if prune_signal_history:
+        history_stats = prune_signal_history_rows(
+            screen_dir,
+            keep_days=keep_days,
+            monthly_until_days=monthly_until_days,
+            now=now,
+        )
+
+    return {
+        "screen_removed": removed_screen,
+        "history_removed": removed_history,
+        "runs_removed": len(drop_stamps),
+        "signal_history_rows_removed": int(history_stats.get("removed_rows") or 0),
+        "signal_history_runs_removed": int(history_stats.get("removed_runs") or 0),
+        "removed": removed_screen + removed_history,
+    }
 
 
 def prune_library_screen_history(
     root: Path,
     markets: list[str] | None = None,
     *,
-    keep_runs: int = DEFAULT_SCREEN_KEEP_RUNS,
+    keep_days: int = DEFAULT_RETENTION_DAYS,
+    monthly_until_days: int = DEFAULT_MONTHLY_UNTIL_DAYS,
+    now: datetime | date | None = None,
+    prune_signal_history: bool = True,
 ) -> dict[str, Any]:
     """
-    Prune dated screen CSV/JSON copies under each market's ``screen/``.
+    Prune dated screen-lite history under each market's ``screen/``.
 
-    Always keeps ``latest_*`` and ``signal_history.csv``. Retains the newest
-    ``keep_runs`` timestamped run groups (and matching ``history/`` snapshots).
+    Same decreasing-resolution policy as fundamentals PIT retention. Always keeps
+    ``latest_*``; thins ``signal_history.csv`` rows on the same schedule.
     """
     selected = markets or [mid for mid in MARKET_REGISTRY if mid != "ftse350"]
     per_market: dict[str, dict[str, int]] = {}
     total_removed = 0
+    total_history_rows = 0
     for market_id in selected:
         screen_dir = market_dir(root, market_id) / "screen"
         if not screen_dir.exists():
             continue
-        removed_screen = _prune_dated_by_keep_runs(
-            screen_dir, _SCREEN_DATED_GLOBS, keep_runs=keep_runs
+        counts = prune_screen_dir(
+            screen_dir,
+            keep_days=keep_days,
+            monthly_until_days=monthly_until_days,
+            now=now,
+            prune_signal_history=prune_signal_history,
         )
-        removed_history = _prune_dated_by_keep_runs(
-            screen_dir / "history", _HISTORY_DATED_GLOBS, keep_runs=keep_runs
-        )
-        count = len(removed_screen) + len(removed_history)
-        per_market[market_id] = {
-            "screen_removed": len(removed_screen),
-            "history_removed": len(removed_history),
-            "removed": count,
-        }
-        total_removed += count
+        per_market[market_id] = counts
+        total_removed += int(counts.get("removed") or 0)
+        total_history_rows += int(counts.get("signal_history_rows_removed") or 0)
     return {
-        "keep_runs": keep_runs,
+        "keep_days": keep_days,
+        "monthly_until_days": monthly_until_days,
         "markets": selected,
         "total_removed": total_removed,
+        "total_signal_history_rows_removed": total_history_rows,
         "per_market": per_market,
     }

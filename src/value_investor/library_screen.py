@@ -12,6 +12,7 @@ import pandas as pd
 
 from value_investor.data_library import market_dir
 from value_investor.data_quality import add_data_quality_scores
+from value_investor.library_maintenance import prune_screen_dir
 from value_investor.model_weights import load_model_weights, save_model_snapshot
 from value_investor.models.ranking import compute_derived_columns
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
@@ -152,6 +153,12 @@ def run_library_screen(
     }
     write_json(screen_dir / f"summary_{stamp}.json", payload, compact=False)
     write_json(screen_dir / "latest_summary.json", payload, compact=False)
+
+    # Same decreasing-resolution retention as fundamentals PIT history.
+    try:
+        prune_screen_dir(screen_dir, now=run_at)
+    except Exception as exc:  # noqa: BLE001 — retention must not fail the screen
+        logger.warning("Screen retention prune failed for %s: %s", market_id, exc)
 
     return LibraryScreenResult(
         market=market_id,
