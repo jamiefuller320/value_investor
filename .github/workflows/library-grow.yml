@@ -1,7 +1,8 @@
 name: FTSE Library Ladder
 
-# Offline richness ladder for the focus market (default S&P 500):
+# Offline richness ladder for the focus market:
 # A fundamentals grow → B screen-lite → C selective research (budget-gated).
+# Scheduling lives in automation-orchestrator.yml (workflow_dispatch).
 on:
   workflow_dispatch:
     inputs:
@@ -17,11 +18,6 @@ on:
         description: "Skip selective research layer"
         type: boolean
         default: false
-  schedule:
-    # Weekly ladder — Sundays 06:00 UTC
-    - cron: "0 6 * * 0"
-    # Daily check for surplus-day acceleration (7th when refresh is 8th)
-    - cron: "30 5 * * *"
 
 permissions:
   contents: write
@@ -43,7 +39,7 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Ensure Pro billing policy (8th) + decide schedule gate
+      - name: Ensure Pro billing policy (8th) + plan tickers
         id: plan
         run: |
           ROOT="docs/data/library"
@@ -56,28 +52,19 @@ jobs:
           python3 - <<'PY'
           import json
           import os
-          from datetime import UTC, datetime
           from pathlib import Path
           from value_investor.agent_model_policy import grow_ticker_budget, load_policy
 
           policy = load_policy(Path("docs/data/library/policy.json"))
           plan = grow_ticker_budget(policy)
-          event = os.environ.get("GITHUB_EVENT_NAME", "")
           out = Path(os.environ["GITHUB_OUTPUT"])
+          max_tickers = os.environ.get("INPUT_MAX", "").strip() or str(plan["max_tickers"])
 
           def emit(**kwargs):
               with out.open("a", encoding="utf-8") as fh:
                   for key, value in kwargs.items():
                       fh.write(f"{key}={value}\n")
 
-          if event == "schedule":
-              now = datetime.now(UTC)
-              is_sunday = now.weekday() == 6
-              if not is_sunday and not plan["surplus_day"]:
-                  emit(skip="true", reason="not_sunday_and_not_surplus")
-                  print("skip=true")
-                  raise SystemExit(0)
-          max_tickers = os.environ.get("INPUT_MAX", "").strip() or str(plan["max_tickers"])
           emit(
               skip="false",
               max_tickers=max_tickers,
@@ -103,8 +90,8 @@ jobs:
           if [ "${{ github.event.inputs.skip_research }}" = "true" ]; then
             ARGS="$ARGS --skip-research"
           fi
-          # Scheduled runs: research only when key present; otherwise dry-run research
-          if [ "${{ github.event_name }}" = "schedule" ] && [ -z "$CURSOR_API_KEY" ]; then
+          # Research only when key present; otherwise dry-run research
+          if [ -z "$CURSOR_API_KEY" ]; then
             ARGS="$ARGS --dry-run-research"
           fi
           ftse-library $ARGS | tee "$ROOT/last_ladder.json"
