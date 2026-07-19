@@ -131,7 +131,7 @@ async function enrichOpenActionMarks(openActions, data) {
       data
     );
     for (const action of openActions) {
-      const row = body.querySelector(`tr[data-action-id="${CSS.escape(action.id)}"]`);
+      const row = body.querySelector(`tr[data-action-id="${action.id}"]`);
       if (!row) continue;
       const cells = openActionPnlCells(action, prices);
       const markEl = row.querySelector("[data-pnl-mark]");
