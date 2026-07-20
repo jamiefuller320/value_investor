@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-18T11:38:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-20T20:51:04+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -62,9 +62,9 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L10 | **Companies House / annual-report PDF ingest** | Next filings step after RNS (memo-only) | RNS bodies still thin for FINANCIAL REVIEW |
 | L11 | **UK-primary fundamentals (Refinitiv/FMP/RNS depth)** | Supplement yfinance balance-sheet/dividend gaps | Data-quality errors dominate signals |
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |
-| L13 | **SQLite / columnar history store** | Deferred — gzip dated PIT snapshots now use decreasing-resolution retention (dense → monthly → quarterly kept long-term) | Larger universe or local history pain; trend-feature extraction from coarse PIT |
+| L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
-| L34 | **Full Interactive Investor tradable universe catalog** | ii.co.uk covers UK (incl AIM), US, and ~17 exchanges. Shipped: (1) exchange-allowlist overlay + MIC policy under docs/data/library/ii_coverage/; (2) next-slice offline markets aim, ibex35, ftse_mib, aex, bel20, hang_seng, sti, us_adr_asia — grown, screened, buy-tier researched, graduated; (3) optional FIRDS MIC filter CLI; (4) dashboard Unavailable bypass → watched-unavailable list (exclude from suggested trades / paper autos). Remaining: official/partner instrument catalog to verify tradable_on_ii per ISIN. | Official II instrument export / partner feed available, or when expanding beyond index/liquid slices (full AIM All-Share, broader Asia cash equities). |
+| L34 | **Full Interactive Investor tradable universe catalog** | ii.co.uk covers UK (incl AIM), US, and ~17 exchanges. Shipped: (1) exchange-allowlist overlay under docs/data/library/ii_coverage/; (2) next-slice offline markets aim, ibex35, ftse_mib, aex, bel20, hang_seng, sti, us_adr_asia — grown, screened, buy-tier researched, graduated. Remaining: official/partner instrument catalog to verify tradable_on_ii per ISIN. | Official II instrument export / partner feed available, or when expanding beyond index/liquid slices (full AIM All-Share, broader Asia cash equities). |
 
 ### Research & portfolio product
 
@@ -78,6 +78,15 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L19 | **Portfolio concentration / sizing UI** | Sector caps, correlation warnings, size hints | Report should answer what to do with the list |
 | L20 | **Synced portfolio backend / dedicated hosting** | Leave Pages+Actions until shared state, login, live refresh, or SLA needs | Multi-device portfolio or private interactive dash |
 | L27 | **Standardise verify-before-trade decision packs (stage 2)** | Harden prompt/decision-pack templates: signal → thesis → levels → size → risks, with low false confidence, suitable for routine manual trading. | Paper-auto narratives and research memos are stable week-to-week |
+| L35 | **Gap-fill: ingest — Add Companies House filed-accounts PDF fetch and text extract for UK-lis** | Add Companies House filed-accounts PDF fetch and text extract for UK-listed names when `filings_bodies` count is zero — unlocks pension notes, contingencies, going-concern, and governance sections missing from RNS headlines. | After next weekly email gap-fill pass confirms the gap persists |
+| L36 | **Gap-fill: ingest — Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged** | Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged “FY25 Results”, “interim”, and “annual report” rather than Google News wrapper URLs; current index lists 31 filings with `with_body: 0`. | After next weekly email gap-fill pass confirms the gap persists |
+| L37 | **Gap-fill: scoring — Override sector classification for plantation/agricultural issuers (e.g.** | Override sector classification for plantation/agricultural issuers (e.g. map to Agriculture/Commodities) so Consumer Defensive peer-relative scores are not applied to palm-oil producers with demonstrated revenue cyclicality. | After next weekly email gap-fill pass confirms the gap persists |
+| L38 | **Gap-fill: ingest — Fetch Hikma IR results presentation and annual-report PDFs from hikma.co** | Fetch Hikma IR results presentation and annual-report PDFs from hikma.com and extract cash-flow bridge tables, segment margins, and dividend-policy text into `filings/bodies/`. | After next weekly email gap-fill pass confirms the gap persists |
+| L39 | **Gap-fill: ingest — Re-classify UK RNS items by headline pattern (Full Year Results, Half Ye** | Re-classify UK RNS items by headline pattern (Full Year Results, Half Year, Trading Update) and download PDF bodies from Investegate/LSE direct URLs when Ticker RNS API returns empty text. | After next weekly email gap-fill pass confirms the gap persists |
+| L40 | **Gap-fill: scoring — Add healthcare overlay flag when trailing FCF is negative AND Piotroski** | Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy. | After next weekly email gap-fill pass confirms the gap persists |
+| L41 | **Gap-fill: ingest — Download and text-extract PDF bodies from `ticker_rns_api` URLs in `fili** | Download and text-extract PDF bodies from `ticker_rns_api` URLs in `filings_index.json` (currently 52 indexed, 0 bodies); filter mis-attributed Google News headlines by company name/ticker before indexing. | After next weekly email gap-fill pass confirms the gap persists |
+| L42 | **Gap-fill: ingest — Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow s** | Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures. | After next weekly email gap-fill pass confirms the gap persists |
+| L43 | **Gap-fill: ingest — Fetch company IR results presentation PDF from `photo-me.co.uk` investor** | Fetch company IR results presentation PDF from `photo-me.co.uk` investor pages (listed in `gap_fill_source_map.json` → `company_ir_presentation`) for segment tables, dividend policy, and H1 cash-flow bridges missing from Yahoo. | After next weekly email gap-fill pass confirms the gap persists |
 
 ### Ops / reliability
 

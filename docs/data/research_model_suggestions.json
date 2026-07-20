@@ -1,0 +1,141 @@
+{
+  "suggestions": [
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add Companies House filed-accounts PDF fetch and text extract for UK-listed names when `filings_bodies` count is zero — unlocks pension notes, contingencies, going-concern, and governance sections missing from RNS headlines.",
+      "recorded_at": "2026-07-20T20:51:04.192161+00:00"
+    },
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged “FY25 Results”, “interim”, and “annual report” rather than Google News wrapper URLs; current index lists 31 filings with `with_body: 0`.",
+      "recorded_at": "2026-07-20T20:51:04.192179+00:00"
+    },
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Fetch company IR results presentations and investor PDFs (themed alternate-news queries returned no usable PDFs) to bridge FCF, segment margin, and post-M&A funding.",
+      "recorded_at": "2026-07-20T20:51:04.192184+00:00"
+    },
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Override sector classification for plantation/agricultural issuers (e.g. map to Agriculture/Commodities) so Consumer Defensive peer-relative scores are not applied to palm-oil producers with demonstrated revenue cyclicality.",
+      "recorded_at": "2026-07-20T20:51:04.192189+00:00"
+    },
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When `annual: 0` in `filings_index.json`, auto-emit a structured “primary accounts missing” flag in gap-fill and cap research confidence until Companies House or IR PDF is ingested.",
+      "recorded_at": "2026-07-20T20:51:04.192196+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch Hikma IR results presentation and annual-report PDFs from hikma.com and extract cash-flow bridge tables, segment margins, and dividend-policy text into `filings/bodies/`.",
+      "recorded_at": "2026-07-20T20:51:04.192201+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Re-classify UK RNS items by headline pattern (Full Year Results, Half Year, Trading Update) and download PDF bodies from Investegate/LSE direct URLs when Ticker RNS API returns empty text.",
+      "recorded_at": "2026-07-20T20:51:04.192205+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest Companies House filed accounts for Hikma Pharmaceuticals PLC to capture pension, covenant, and going-concern language missing from the RNS index.",
+      "recorded_at": "2026-07-20T20:51:04.192209+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy.",
+      "recorded_at": "2026-07-20T20:51:04.192215+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to reconcile screen trailing FCF vs Yahoo annual FCF explicitly, with currency label (USD vs GBP), before answering dividend-safety questions.",
+      "recorded_at": "2026-07-20T20:51:04.192219+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "--",
+      "recorded_at": "2026-07-20T20:51:04.192222+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "The memo at `output/research/HIK.L/research.md` has been updated to version 2 (gap_fill mode) with these sections. Verdict moved from **accumulate** to **caution** (confidence 0.62), reflecting that local sources confirm the cash-flow red flags without resolving them.",
+      "recorded_at": "2026-07-20T20:51:04.192226+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Download and text-extract PDF bodies from `ticker_rns_api` URLs in `filings_index.json` (currently 52 indexed, 0 bodies); filter mis-attributed Google News headlines by company name/ticker before indexing.",
+      "recorded_at": "2026-07-20T20:51:04.192230+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
+      "recorded_at": "2026-07-20T20:51:04.192236+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch company IR results presentation PDF from `photo-me.co.uk` investor pages (listed in `gap_fill_source_map.json` → `company_ir_presentation`) for segment tables, dividend policy, and H1 cash-flow bridges missing from Yahoo.",
+      "recorded_at": "2026-07-20T20:51:04.192242+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When statutory FY growth (Yahoo) and trailing `earnings_growth` (yfinance) diverge by >5pp, flag a \"momentum mismatch\" overlay and cap conviction — MEGP shows +4.6% FY NI growth vs −3.9% screen input.",
+      "recorded_at": "2026-07-20T20:51:04.192249+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to cross-check dividend cover on both OCF and FCF explicitly, and state which metric the High Dividend Yield model implicitly assumes — MEGP passes dividend models despite FCF cover <1× on statutory data.",
+      "recorded_at": "2026-07-20T20:51:04.192255+00:00"
+    }
+  ],
+  "updated_at": "2026-07-20T20:51:04.192257+00:00"
+}
