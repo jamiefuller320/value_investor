@@ -99,6 +99,28 @@ function tradePlanHtml(report) {
   return parts.join("<br>") || '<span class="muted">—</span>';
 }
 
+function decisionPackHtml(report) {
+  const pack = report.decision_pack;
+  if (!pack) return "";
+  const verify = Array.isArray(pack.verify) ? pack.verify : [];
+  const verifyList = verify.length
+    ? `<ul class="decision-pack-verify">${verify.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
+    : "";
+  const gapNote = pack.high_conviction
+    ? ""
+    : '<p class="small decision-pack-caution">Evidence incomplete or cautious — do not size as high-conviction.</p>';
+  return `
+    <div class="decision-pack">
+      <p class="small decision-pack-title"><strong>Verify before trade</strong></p>
+      ${gapNote}
+      <p class="small"><strong>Thesis:</strong> ${esc(pack.thesis || "—")}</p>
+      <p class="small"><strong>Levels:</strong> ${esc(pack.levels || "—")}</p>
+      <p class="small"><strong>Size:</strong> ${esc(pack.size || "—")}</p>
+      <p class="small"><strong>Risks:</strong> ${esc(pack.risks || "—")}</p>
+      ${verifyList}
+    </div>`;
+}
+
 function initTabs() {
   const nav = document.getElementById("tabs");
   nav.innerHTML = TABS.map(
@@ -366,6 +388,7 @@ function renderStrongBuys(data) {
       <p>${signalBadge(report.signal)} ${timingBadge(report.timing_signal)} ${iiTradabilityBadge(report)} · Conviction ${pct(report.conviction_score)}${researchOverlayHtml(report)}</p>
       <p class="small">${esc(report.action_note || "")}</p>
       <p class="small"><strong>Trade plan:</strong><br>${tradePlanHtml(report)}</p>
+      ${decisionPackHtml(report)}
       <p class="small">${esc(report.summary || "")}</p>
       <p class="pick-actions">
         <button type="button" class="btn" data-chart-ticker="${esc(report.ticker)}">Price chart</button>
