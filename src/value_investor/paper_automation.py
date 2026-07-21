@@ -22,7 +22,7 @@ from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
 from value_investor.technical_analysis import (
     compute_indicators,
     compute_trade_plan,
-    fetch_close_history,
+    fetch_price_history,
 )
 
 LONDON = ZoneInfo("Europe/London")
@@ -359,19 +359,23 @@ def refresh_candidate_marks(
     if not tickers:
         return candidates
 
-    history = fetch_close_history(tickers, period="6mo")
+    history = fetch_price_history(tickers, period="6mo")
     by_ticker = {str(row.get("ticker")): dict(row) for row in candidates}
     for ticker in tickers:
-        series = history.get(ticker)
+        frame = history.get(ticker)
         row = by_ticker.get(ticker) or {"ticker": ticker, "name": ticker, "signal": "hold"}
-        if series is not None and not series.empty:
-            last = float(series.iloc[-1])
-            row["price"] = last
-            row["last"] = last
-            tech = compute_indicators(series)
+        if frame is not None and not frame.empty and "Close" in frame.columns:
+            series = frame["Close"]
+            last = float(series.dropna().iloc[-1]) if not series.dropna().empty else None
+            if last is not None:
+                row["price"] = last
+                row["last"] = last
+            tech = compute_indicators(frame)
             row["timing_signal"] = tech.timing_signal.value
             row["timing_score"] = tech.timing_score
             row["rsi_14"] = tech.rsi_14
+            row["atr_14"] = tech.atr_14
+            row["volume_ratio_20"] = tech.volume_ratio_20
             signal = str(row.get("signal") or "hold")
             if tech.trade_plan is None and signal in {"strong_buy", "buy"}:
                 tech.trade_plan = compute_trade_plan(series, tech, value_signal=signal)

@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import logging
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -17,15 +18,65 @@ logger = logging.getLogger(__name__)
 
 MIN_BARS = 200
 LOOKBACK_PERIOD = "1y"
+ATR_PERIOD = 14
+VOLUME_RATIO_WINDOW = 20
 
-# Trade plan thresholds (tunable)
-CORE_LIMIT_BELOW_SPOT = 0.99
-TACTICAL_LIMIT_BELOW_SPOT = 0.95
-TACTICAL_STOP_BELOW_SUPPORT = 0.97
-SUPPORT_FLOOR_BELOW_SPOT = 0.92
-TACTICAL_TARGET_ABOVE_LIMIT = 1.06
-TACTICAL_TARGET_ABOVE_SPOT = 1.05
-EXTENDED_ABOVE_SMA200 = 1.03
+
+@dataclass
+class TradePlanConfig:
+    """Tunable trade-plan thresholds (L5). Defaults match the prior hard-coded values."""
+
+    core_limit_below_spot: float = 0.99
+    tactical_limit_below_spot: float = 0.95
+    tactical_stop_below_support: float = 0.97
+    support_floor_below_spot: float = 0.92
+    tactical_target_above_limit: float = 1.06
+    tactical_target_above_spot: float = 1.05
+    extended_above_sma200: float = 1.03
+    accumulate_core_pct_low_rsi: float = 0.75
+    accumulate_core_pct: float = 0.65
+    wait_core_pct: float = 0.50
+    neutral_core_pct: float = 0.60
+    accumulate_rsi_low: float = 40.0
+    accumulate_rsi_limit_gate: float = 35.0
+    sma50_tactical_haircut: float = 0.98
+    recent_low_days: int = 20
+    # When set, stop = min(support stop, close − k×ATR14) if ATR is available.
+    atr_stop_multiplier: float | None = 2.0
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> TradePlanConfig:
+        raw = data or {}
+        known = {f.name for f in fields(cls)}
+        kwargs = {k: v for k, v in raw.items() if k in known}
+        return cls(**kwargs)
+
+
+DEFAULT_TRADE_PLAN_CONFIG = TradePlanConfig()
+
+# Backward-compatible aliases used by older imports/tests.
+CORE_LIMIT_BELOW_SPOT = DEFAULT_TRADE_PLAN_CONFIG.core_limit_below_spot
+TACTICAL_LIMIT_BELOW_SPOT = DEFAULT_TRADE_PLAN_CONFIG.tactical_limit_below_spot
+TACTICAL_STOP_BELOW_SUPPORT = DEFAULT_TRADE_PLAN_CONFIG.tactical_stop_below_support
+SUPPORT_FLOOR_BELOW_SPOT = DEFAULT_TRADE_PLAN_CONFIG.support_floor_below_spot
+TACTICAL_TARGET_ABOVE_LIMIT = DEFAULT_TRADE_PLAN_CONFIG.tactical_target_above_limit
+TACTICAL_TARGET_ABOVE_SPOT = DEFAULT_TRADE_PLAN_CONFIG.tactical_target_above_spot
+EXTENDED_ABOVE_SMA200 = DEFAULT_TRADE_PLAN_CONFIG.extended_above_sma200
+
+
+def load_trade_plan_config(path: Path) -> TradePlanConfig:
+    if not path.exists():
+        return TradePlanConfig()
+    return TradePlanConfig.from_dict(json.loads(path.read_text(encoding="utf-8")))
+
+
+def save_trade_plan_config(path: Path, config: TradePlanConfig) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(config.to_dict(), indent=2) + "\n", encoding="utf-8")
+    return path
 
 
 class TimingSignal(str, Enum):
@@ -80,6 +131,8 @@ class TechnicalIndicators:
     macd_histogram: float | None = None
     macd_histogram_prev: float | None = None
     price_vs_sma200_pct: float | None = None
+    atr_14: float | None = None
+    volume_ratio_20: float | None = None
     timing_signal: TimingSignal = TimingSignal.INSUFFICIENT_DATA
     timing_score: float = 0.0
     timing_reasons: list[str] = field(default_factory=list)
@@ -94,6 +147,10 @@ class TechnicalIndicators:
             "sma_200": self.sma_200,
             "macd_histogram": self.macd_histogram,
             "price_vs_sma200_pct": self.price_vs_sma200_pct,
+            "atr_14": None if self.atr_14 is None else round(self.atr_14, 4),
+            "volume_ratio_20": (
+                None if self.volume_ratio_20 is None else round(self.volume_ratio_20, 4)
+            ),
             "timing_signal": self.timing_signal.value,
             "timing_score": round(self.timing_score, 4),
             "timing_reasons": self.timing_reasons,
@@ -116,6 +173,7 @@ def compute_trade_plan(
     tech: TechnicalIndicators,
     *,
     value_signal: str,
+    config: TradePlanConfig | None = None,
 ) -> TradePlan | None:
     """
     Recommend core + tactical orders for strong buys and buys.
@@ -126,53 +184,73 @@ def compute_trade_plan(
     if value_signal not in ("strong_buy", "buy") or tech.close is None:
         return None
 
+    cfg = config or DEFAULT_TRADE_PLAN_CONFIG
     price = tech.close
     sma50 = tech.sma_50
     sma200 = tech.sma_200
-    recent_low = _recent_low(close)
+    recent_low = _recent_low(close, days=int(cfg.recent_low_days))
     timing = tech.timing_signal
     rsi = tech.rsi_14 or 50.0
 
     if timing == TimingSignal.ACCUMULATE:
-        core_pct = 0.75 if rsi < 40 else 0.65
+        core_pct = (
+            cfg.accumulate_core_pct_low_rsi
+            if rsi < cfg.accumulate_rsi_low
+            else cfg.accumulate_core_pct
+        )
         core_order = "market"
-        if rsi >= 35 or (sma200 is not None and price > sma200 * EXTENDED_ABOVE_SMA200):
+        if rsi >= cfg.accumulate_rsi_limit_gate or (
+            sma200 is not None and price > sma200 * cfg.extended_above_sma200
+        ):
             core_order = "limit"
     elif timing == TimingSignal.WAIT:
-        core_pct = 0.50
+        core_pct = cfg.wait_core_pct
         core_order = "limit"
     else:
-        core_pct = 0.60
+        core_pct = cfg.neutral_core_pct
         core_order = "limit"
 
     tactical_pct = round(1.0 - core_pct, 2)
 
     core_limit = None
     if core_order == "limit":
-        candidates = [price * CORE_LIMIT_BELOW_SPOT]
+        candidates = [price * cfg.core_limit_below_spot]
         if sma50 is not None and sma50 < price:
             candidates.append(sma50)
         core_limit = _round_price(min(candidates))
 
-    tactical_candidates = [price * TACTICAL_LIMIT_BELOW_SPOT]
+    tactical_candidates = [price * cfg.tactical_limit_below_spot]
     if recent_low is not None:
         tactical_candidates.append(recent_low)
     if sma200 is not None and sma200 < price:
         tactical_candidates.append(sma200)
-    if sma50 is not None and sma50 < price * 0.98:
-        tactical_candidates.append(sma50 * 0.98)
+    if sma50 is not None and sma50 < price * cfg.sma50_tactical_haircut:
+        tactical_candidates.append(sma50 * cfg.sma50_tactical_haircut)
     tactical_limit = _round_price(min(tactical_candidates))
 
     support_floor = min(
-        p for p in [recent_low, sma200, tactical_limit, price * SUPPORT_FLOOR_BELOW_SPOT] if p is not None
+        p
+        for p in [recent_low, sma200, tactical_limit, price * cfg.support_floor_below_spot]
+        if p is not None
     )
-    tactical_stop_loss = _round_price(support_floor * TACTICAL_STOP_BELOW_SUPPORT)
+    tactical_stop_loss = _round_price(support_floor * cfg.tactical_stop_below_support)
+    if (
+        cfg.atr_stop_multiplier is not None
+        and tech.atr_14 is not None
+        and tech.atr_14 > 0
+    ):
+        atr_stop = _round_price(price - float(cfg.atr_stop_multiplier) * float(tech.atr_14))
+        if atr_stop > 0:
+            tactical_stop_loss = _round_price(min(tactical_stop_loss, atr_stop))
 
     if sma50 is not None and price < sma50:
         tactical_take_profit = _round_price(sma50)
     else:
         tactical_take_profit = _round_price(
-            max(tactical_limit * TACTICAL_TARGET_ABOVE_LIMIT, price * TACTICAL_TARGET_ABOVE_SPOT)
+            max(
+                tactical_limit * cfg.tactical_target_above_limit,
+                price * cfg.tactical_target_above_spot,
+            )
         )
 
     summary = format_trade_plan_summary(
@@ -285,8 +363,47 @@ def _macd_histogram(close: pd.Series) -> tuple[pd.Series, pd.Series]:
     return macd - signal, macd
 
 
-def compute_indicators(close: pd.Series) -> TechnicalIndicators:
-    """Compute RSI, moving averages, MACD, and timing signal from daily closes."""
+def _atr(high: pd.Series, low: pd.Series, close: pd.Series, *, period: int = ATR_PERIOD) -> pd.Series:
+    prev_close = close.shift(1)
+    tr = pd.concat(
+        [
+            (high - low).abs(),
+            (high - prev_close).abs(),
+            (low - prev_close).abs(),
+        ],
+        axis=1,
+    ).max(axis=1)
+    return tr.ewm(alpha=1 / period, min_periods=period, adjust=False).mean()
+
+
+def _volume_ratio(volume: pd.Series, *, window: int = VOLUME_RATIO_WINDOW) -> float | None:
+    clean = volume.dropna()
+    if len(clean) < window + 1:
+        return None
+    avg = float(clean.tail(window).mean())
+    last = float(clean.iloc[-1])
+    if avg <= 0:
+        return None
+    return last / avg
+
+
+def _split_price_input(
+    price_data: pd.Series | pd.DataFrame,
+) -> tuple[pd.Series, pd.Series | None, pd.Series | None, pd.Series | None]:
+    if isinstance(price_data, pd.DataFrame):
+        if "Close" not in price_data.columns:
+            raise ValueError("OHLCV frame must include a Close column")
+        close = price_data["Close"]
+        high = price_data["High"] if "High" in price_data.columns else None
+        low = price_data["Low"] if "Low" in price_data.columns else None
+        volume = price_data["Volume"] if "Volume" in price_data.columns else None
+        return close, high, low, volume
+    return price_data, None, None, None
+
+
+def compute_indicators(price_data: pd.Series | pd.DataFrame) -> TechnicalIndicators:
+    """Compute RSI, MAs, MACD, timing, and optional ATR/volume from closes or OHLCV."""
+    close, high, low, volume = _split_price_input(price_data)
     clean = close.dropna()
     if len(clean) < MIN_BARS:
         return TechnicalIndicators(timing_signal=TimingSignal.INSUFFICIENT_DATA)
@@ -307,6 +424,18 @@ def compute_indicators(close: pd.Series) -> TechnicalIndicators:
     if sma200 and sma200 > 0:
         vs_sma200 = (last_close - sma200) / sma200
 
+    atr_14 = None
+    if high is not None and low is not None:
+        aligned = pd.concat(
+            {"high": high, "low": low, "close": close}, axis=1
+        ).dropna()
+        if len(aligned) >= MIN_BARS:
+            atr_series = _atr(aligned["high"], aligned["low"], aligned["close"])
+            if pd.notna(atr_series.iloc[-1]):
+                atr_14 = float(atr_series.iloc[-1])
+
+    volume_ratio_20 = _volume_ratio(volume) if volume is not None else None
+
     timing_signal, timing_score, reasons = assign_timing_signal(
         rsi=rsi_14,
         close=last_close,
@@ -324,6 +453,8 @@ def compute_indicators(close: pd.Series) -> TechnicalIndicators:
         macd_histogram=macd_hist,
         macd_histogram_prev=macd_hist_prev,
         price_vs_sma200_pct=vs_sma200,
+        atr_14=atr_14,
+        volume_ratio_20=volume_ratio_20,
         timing_signal=timing_signal,
         timing_score=timing_score,
         timing_reasons=reasons,
@@ -425,24 +556,43 @@ def combined_action(value_signal: str, timing_signal: str) -> str:
 
 
 def _extract_close_series(data: pd.DataFrame, ticker: str) -> pd.Series | None:
+    frame = _extract_ohlcv_frame(data, ticker)
+    if frame is None or frame.empty or "Close" not in frame.columns:
+        return None
+    return frame["Close"]
+
+
+def _extract_ohlcv_frame(data: pd.DataFrame, ticker: str) -> pd.DataFrame | None:
     if data.empty:
         return None
+    cols = ("Open", "High", "Low", "Close", "Volume")
     if isinstance(data.columns, pd.MultiIndex):
-        if "Close" in data.columns.get_level_values(0):
-            if ticker in data["Close"].columns:
-                return data["Close"][ticker]
+        level0 = data.columns.get_level_values(0)
+        if "Close" not in level0:
+            return None
+        pieces: dict[str, pd.Series] = {}
+        for col in cols:
+            if col not in level0:
+                continue
+            block = data[col]
+            if ticker in block.columns:
+                pieces[col] = block[ticker]
+        if "Close" not in pieces:
+            return None
+        return pd.DataFrame(pieces)
+    present = [c for c in cols if c in data.columns]
+    if "Close" not in present:
         return None
-    if "Close" in data.columns:
-        return data["Close"]
-    return None
+    return data[present].copy()
 
 
-def fetch_close_history(tickers: list[str], *, period: str = LOOKBACK_PERIOD) -> dict[str, pd.Series]:
-    """Batch-fetch daily close prices for technical indicators."""
+def fetch_price_history(
+    tickers: list[str], *, period: str = LOOKBACK_PERIOD
+) -> dict[str, pd.DataFrame]:
+    """Batch-fetch daily OHLCV frames keyed by the original ticker labels."""
     if not tickers:
         return {}
 
-    # Resolve Yahoo symbols but return series keyed by the original ticker labels.
     unique = list(dict.fromkeys(tickers))
     symbol_by_ticker = {
         ticker: (ticker if ticker.startswith("^") else to_lse_ticker(ticker)) for ticker in unique
@@ -451,21 +601,44 @@ def fetch_close_history(tickers: list[str], *, period: str = LOOKBACK_PERIOD) ->
     try:
         if len(symbols) == 1:
             symbol = symbols[0]
-            data = yf.download(symbol, period=period, interval="1d", progress=False, auto_adjust=True)
-            series = _extract_close_series(data, symbol)
-            if series is None:
+            data = yf.download(
+                symbol, period=period, interval="1d", progress=False, auto_adjust=True
+            )
+            frame = _extract_ohlcv_frame(data, symbol)
+            if frame is None:
                 return {}
-            return {ticker: series for ticker, mapped in symbol_by_ticker.items() if mapped == symbol}
-        data = yf.download(symbols, period=period, interval="1d", progress=False, auto_adjust=True, group_by="column")
-        out: dict[str, pd.Series] = {}
+            return {
+                ticker: frame
+                for ticker, mapped in symbol_by_ticker.items()
+                if mapped == symbol
+            }
+        data = yf.download(
+            symbols,
+            period=period,
+            interval="1d",
+            progress=False,
+            auto_adjust=True,
+            group_by="column",
+        )
+        out: dict[str, pd.DataFrame] = {}
         for ticker, symbol in symbol_by_ticker.items():
-            series = _extract_close_series(data, symbol)
-            if series is not None:
-                out[ticker] = series
+            frame = _extract_ohlcv_frame(data, symbol)
+            if frame is not None and not frame.empty:
+                out[ticker] = frame
         return out
     except Exception as exc:  # noqa: BLE001
         logger.warning("Batch price download failed: %s", exc)
         return {}
+
+
+def fetch_close_history(tickers: list[str], *, period: str = LOOKBACK_PERIOD) -> dict[str, pd.Series]:
+    """Batch-fetch daily close prices (thin wrapper over OHLCV history)."""
+    frames = fetch_price_history(tickers, period=period)
+    return {
+        ticker: frame["Close"]
+        for ticker, frame in frames.items()
+        if "Close" in frame.columns and not frame["Close"].empty
+    }
 
 
 def _technical_row_dict(tech: TechnicalIndicators) -> dict[str, Any]:
@@ -480,26 +653,37 @@ def enrich_signals_with_technicals(
     signals: pd.DataFrame,
     *,
     chart_dir: Path | None = None,
+    trade_plan_config: TradePlanConfig | None = None,
 ) -> pd.DataFrame:
     """Add technical indicators and timing signals to the signals DataFrame."""
     out = signals.copy()
     tickers = out["ticker"].tolist()
-    history = fetch_close_history(tickers)
+    price_history = fetch_price_history(tickers)
+    close_history = {
+        ticker: frame["Close"]
+        for ticker, frame in price_history.items()
+        if "Close" in frame.columns
+    }
 
     rows: list[dict[str, Any]] = []
     for ticker in tickers:
-        series = history.get(ticker)
-        if series is None or series.empty:
+        frame = price_history.get(ticker)
+        if frame is None or frame.empty:
             tech = TechnicalIndicators()
         else:
             value_signal = str(out.loc[out["ticker"] == ticker, "signal"].iloc[0])
-            tech = compute_indicators(series)
+            tech = compute_indicators(frame)
             tech.action_note = combined_action(value_signal, tech.timing_signal.value)
             if (
                 value_signal in ("strong_buy", "buy")
                 and tech.timing_signal != TimingSignal.INSUFFICIENT_DATA
             ):
-                tech.trade_plan = compute_trade_plan(series, tech, value_signal=value_signal)
+                tech.trade_plan = compute_trade_plan(
+                    frame["Close"],
+                    tech,
+                    value_signal=value_signal,
+                    config=trade_plan_config,
+                )
             rows.append({"ticker": ticker, **_technical_row_dict(tech)})
             continue
 
@@ -513,7 +697,7 @@ def enrich_signals_with_technicals(
 
         write_buy_tier_charts_from_history(
             signals=enriched,
-            history=history,
+            history=close_history,
             chart_dir=Path(chart_dir),
         )
 

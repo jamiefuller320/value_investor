@@ -136,6 +136,17 @@ def save_run_snapshot(
         "research_verdict",
         "adjusted_signal",
         "research_as_of",
+        # Trade-plan levels for optional simulator validation (L3)
+        "core_order",
+        "core_limit",
+        "core_allocation_pct",
+        "tactical_limit",
+        "tactical_allocation_pct",
+        "tactical_stop_loss",
+        "tactical_take_profit",
+        "trade_plan_summary",
+        "atr_14",
+        "volume_ratio_20",
     ):
         if optional in signals.columns:
             signal_cols.append(optional)
