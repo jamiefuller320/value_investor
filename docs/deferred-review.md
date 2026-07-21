@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:18:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:25:00+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -91,7 +91,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 
 | # | Idea | Summary | Revisit when |
 |---|------|---------|--------------|
-| L21 | **External cron to workflow_dispatch** | Fallback if GitHub scheduler stays silent | Monday schedule misses again |
 | L22 | **Prove Monday GitHub cron** | Confirm 17 7 * * 1 (or Schedule→dispatch wrapper) | Next Monday after cron window |
 | L23 | **Parallel fetch + caching** | Sequential yfinance loop | Weekly runtime becomes painful |
 | L24 | **CI pytest on PRs** | Hygiene before relying on weekly dashboard | Before production reliance |

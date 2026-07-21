@@ -1,15 +1,15 @@
 name: Automation Orchestrator
 
 # Central dispatcher for scheduled automation. Prefer this workflow (or an
-# external cron hitting workflow_dispatch) over each child workflow's own
+# external cron / repository_dispatch) over each child workflow's own
 # `schedule` trigger — GitHub cron is best-effort and has been dropping runs.
 #
-# External cron example (PAT needs actions:write):
-#   curl -sS -X POST \
-#     -H "Accept: application/vnd.github+json" \
-#     -H "Authorization: Bearer $GH_PAT" \
-#     https://api.github.com/repos/OWNER/REPO/actions/workflows/automation-orchestrator.yml/dispatches \
-#     -d '{"ref":"main","inputs":{"suite":"sunday"}}'
+# Reliability layers:
+# 1) Primary GitHub schedules (Sunday / surplus / weekday paper)
+# 2) Same-day catch-up schedules if the primary window is missed
+# 3) Skip children that already succeeded today (safe to re-fire catch-up)
+# 4) External cron → workflow_dispatch or repository_dispatch (see
+#    docs/ops/orchestrator-cron.md and scripts/dispatch_orchestrator.sh)
 on:
   workflow_dispatch:
     inputs:
@@ -29,13 +29,24 @@ on:
         description: "Optional UTC ISO time to wait until before dispatching (e.g. 2026-07-19T09:45:00+00:00)"
         type: string
         default: ""
+      force:
+        description: "Re-run children even if they already succeeded today"
+        type: boolean
+        default: false
+  repository_dispatch:
+    types: [automation-orchestrator]
   schedule:
     # Sunday quiet bundle — ladder + model review + email (markets closed)
     - cron: "17 6 * * 0"
+    # Sunday catch-up windows if 06:17 was dropped/delayed by Actions
+    - cron: "17 9 * * 0"
+    - cron: "17 12 * * 0"
     # Daily surplus-day gate for library ladder (7th before Pro refresh on 8th)
     - cron: "30 5 * * *"
     # Weekday paper automation after London open settle
     - cron: "17 8 * * 1-5"
+    # Weekday paper catch-up if 08:17 was dropped
+    - cron: "17 11 * * 1-5"
 
 permissions:
   actions: write
@@ -51,6 +62,7 @@ jobs:
     outputs:
       suite: ${{ steps.pick.outputs.suite }}
       delay_until: ${{ steps.pick.outputs.delay_until }}
+      force: ${{ steps.pick.outputs.force }}
       run_ladder: ${{ steps.pick.outputs.run_ladder }}
       run_model_review: ${{ steps.pick.outputs.run_model_review }}
       run_email: ${{ steps.pick.outputs.run_email }}
@@ -63,21 +75,23 @@ jobs:
           script: |
             const event = context.eventName;
             const inputs = (context.payload && context.payload.inputs) || {};
-            let suite = inputs.suite || '';
-            let delayUntil = inputs.delay_until || '';
+            const clientPayload = (context.payload && context.payload.client_payload) || {};
+            let suite = inputs.suite || clientPayload.suite || '';
+            let delayUntil = inputs.delay_until || clientPayload.delay_until || '';
+            let force = String(inputs.force ?? clientPayload.force ?? 'false') === 'true';
 
             if (event === 'schedule') {
               const now = new Date();
               const day = now.getUTCDay(); // 0=Sun
               const hour = now.getUTCHours();
               // Map cron windows (GitHub may delay; keep windows loose)
-              if (day === 0 && (hour === 6 || hour === 7 || hour === 8 || hour === 9)) {
-                // Sunday quiet bundle (allow for Actions delay past 06:17)
+              if (day === 0 && hour >= 6 && hour <= 14) {
+                // Sunday quiet bundle + catch-up windows (06:17 / 09:17 / 12:17)
                 suite = 'sunday';
               } else if (hour === 5 || hour === 4) {
                 suite = 'surplus_check';
               } else if (day >= 1 && day <= 5 && hour >= 8 && hour <= 13) {
-                // Weekday paper cron is 08:17 but often lands late
+                // Weekday paper primary 08:17 + catch-up 11:17
                 suite = 'weekday_paper';
               } else if (day === 0) {
                 suite = 'sunday';
@@ -85,6 +99,10 @@ jobs:
                 suite = 'surplus_check';
               }
               core.info(`schedule mapped to suite=${suite} (utc ${now.toISOString()})`);
+            }
+
+            if (event === 'repository_dispatch') {
+              core.info(`repository_dispatch suite=${suite || 'sunday'} force=${force}`);
             }
 
             if (!suite) suite = 'sunday';
@@ -101,6 +119,7 @@ jobs:
             const f = flags[suite] || flags.sunday;
             core.setOutput('suite', suite);
             core.setOutput('delay_until', delayUntil);
+            core.setOutput('force', String(force));
             core.setOutput('run_ladder', String(f.ladder));
             core.setOutput('run_model_review', String(f.model));
             core.setOutput('run_email', String(f.email));
@@ -188,6 +207,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           SUITE: ${{ needs.decide.outputs.suite }}
+          FORCE: ${{ needs.decide.outputs.force }}
           RUN_LADDER: ${{ needs.decide.outputs.run_ladder }}
           RUN_MODEL: ${{ needs.decide.outputs.run_model_review }}
           RUN_EMAIL: ${{ needs.decide.outputs.run_email }}
@@ -201,7 +221,29 @@ jobs:
             // Always dispatch against default branch so children use production code.
             const ref = 'main';
             const suite = process.env.SUITE;
-            core.info(`Dispatching suite=${suite}`);
+            const force = process.env.FORCE === 'true';
+            core.info(`Dispatching suite=${suite} force=${force}`);
+
+            function startOfUtcDay(d = new Date()) {
+              return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+            }
+
+            async function succeededToday(workflow_id) {
+              const dayStart = startOfUtcDay().toISOString();
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                owner, repo, workflow_id, status: 'completed', per_page: 30,
+              });
+              const hit = (data.workflow_runs || []).find((r) =>
+                r.conclusion === 'success'
+                && r.created_at >= dayStart
+                && (r.event === 'workflow_dispatch' || r.event === 'schedule' || r.event === 'repository_dispatch')
+              );
+              if (hit) {
+                core.info(`${workflow_id} already succeeded today: run ${hit.id} (${hit.created_at})`);
+                return true;
+              }
+              return false;
+            }
 
             async function dispatch(workflow_id, inputs) {
               const body = { owner, repo, workflow_id, ref };
@@ -240,11 +282,40 @@ jobs:
             }
 
             let runLadder = process.env.RUN_LADDER === 'true';
+            let runModel = process.env.RUN_MODEL === 'true';
+            let runEmail = process.env.RUN_EMAIL === 'true';
+            let runPaper = process.env.RUN_PAPER === 'true';
+
             if (suite === 'surplus_check') {
               // surplus_gate skipped => treat as deny; success + allow_ladder true => run
               runLadder = process.env.SURPLUS_RESULT === 'success'
                 && process.env.SURPLUS_ALLOW === 'true';
               core.info(`surplus_check gate: result=${process.env.SURPLUS_RESULT} allow=${process.env.SURPLUS_ALLOW} => ladder=${runLadder}`);
+            }
+
+            // Same-day catch-up safety: do not re-burn Actions minutes on successes.
+            if (!force) {
+              if (runLadder && await succeededToday('library-grow.yml')) {
+                core.info('Skipping ladder — already succeeded today');
+                runLadder = false;
+              }
+              if (runModel && await succeededToday('library-model-review.yml')) {
+                core.info('Skipping model review — already succeeded today');
+                runModel = false;
+              }
+              if (runEmail && await succeededToday('email-report.yml')) {
+                core.info('Skipping email — already succeeded today');
+                runEmail = false;
+              }
+              if (runPaper && await succeededToday('paper-auto.yml')) {
+                core.info('Skipping paper-auto — already succeeded today');
+                runPaper = false;
+              }
+            }
+
+            if (!runLadder && !runModel && !runEmail && !runPaper) {
+              core.info('Nothing left to dispatch for this suite today');
+              return;
             }
 
             // Run ladder first and wait — avoids email/ladder both pushing docs/ to main.
@@ -256,13 +327,13 @@ jobs:
                 core.warning(`Library ladder concluded ${ladderRun.conclusion}; continuing with remaining suite jobs`);
               }
             }
-            if (process.env.RUN_MODEL === 'true') {
+            if (runModel) {
               await dispatch('library-model-review.yml', {});
             }
-            if (process.env.RUN_EMAIL === 'true') {
+            if (runEmail) {
               await dispatch('email-report.yml', {});
             }
-            if (process.env.RUN_PAPER === 'true') {
+            if (runPaper) {
               await dispatch('paper-auto.yml', {
                 force: 'false',
                 surveillance_only: 'false',

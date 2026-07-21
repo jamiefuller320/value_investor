@@ -16,28 +16,31 @@ WORKFLOW_SCHEDULES = {
     "orchestrator": {
         "name": "Automation Orchestrator",
         "cron_sunday": "17 6 * * 0",
+        "cron_sunday_catchup": "17 9,12 * * 0",
         "cron_surplus": "30 5 * * *",
         "cron_paper": "17 8 * * 1-5",
+        "cron_paper_catchup": "17 11 * * 1-5",
         "cadence": (
             "Dispatches child workflows via workflow_dispatch. "
-            "Sunday 06:17 UTC quiet bundle (ladder + model review + email); "
+            "Sunday 06:17 UTC quiet bundle (+ 09:17/12:17 catch-up); "
             "daily 05:30 UTC surplus-day ladder gate; "
-            "weekdays 08:17 UTC paper automation. "
-            "Prefer external cron → this workflow for reliability."
+            "weekdays 08:17 UTC paper automation (+ 11:17 catch-up). "
+            "Skips children that already succeeded today. "
+            "External cron setup: docs/ops/orchestrator-cron.md."
         ),
         "workflow": "automation-orchestrator.yml",
     },
     "paper_auto": {
         "name": "FTSE Paper Automation",
         "cron": "17 8 * * 1-5",
-        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (≈09:17 Europe/London in BST)",
+        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (≈09:17 Europe/London in BST); 11:17 catch-up",
         "workflow": "paper-auto.yml",
     },
     "library_ladder": {
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + surplus-day gate",
+        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml",
     },
     "model_review": {
