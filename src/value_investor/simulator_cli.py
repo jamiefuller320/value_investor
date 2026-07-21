@@ -45,6 +45,14 @@ def main(argv: list[str] | None = None) -> int:
         default=0.0,
         help="Cash credited at the start of each new calendar month after the first run",
     )
+    parser.add_argument(
+        "--use-trade-plan-levels",
+        action="store_true",
+        help=(
+            "Honour archived core_limit entry gates and tactical stop/target exits "
+            "(default: off — conviction/timing path only)"
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON summary")
     args = parser.parse_args(argv)
 
@@ -53,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
         trade_cost_pct=args.trade_cost,
         max_positions=args.max_positions,
         monthly_deposit=args.monthly_deposit,
+        use_trade_plan_levels=bool(args.use_trade_plan_levels),
     )
     comparison = run_simulation_from_dir(args.output_dir, config=config)
 

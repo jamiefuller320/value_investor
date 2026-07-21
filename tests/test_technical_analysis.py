@@ -5,6 +5,7 @@ import pandas as pd
 
 from value_investor.technical_analysis import (
     TimingSignal,
+    TradePlanConfig,
     assign_timing_signal,
     combined_action,
     compute_indicators,
@@ -144,3 +145,66 @@ def test_trade_plan_from_row_reads_legacy_stop_columns():
     assert plan is not None
     assert plan.tactical_stop_loss == 90.0
     assert plan.tactical_take_profit == 110.0
+
+
+def test_trade_plan_config_round_trip_and_custom_limit(tmp_path):
+    cfg = TradePlanConfig(core_limit_below_spot=0.90)
+    path = tmp_path / "trade_plan.json"
+    from value_investor.technical_analysis import load_trade_plan_config, save_trade_plan_config
+
+    save_trade_plan_config(path, cfg)
+    loaded = load_trade_plan_config(path)
+    assert loaded.core_limit_below_spot == 0.90
+
+    close = pd.Series([100.0] * 220)
+    tech = TechnicalIndicators(
+        close=100.0,
+        rsi_14=50.0,
+        sma_50=110.0,
+        sma_200=120.0,
+        timing_signal=TimingSignal.NEUTRAL,
+    )
+    plan = compute_trade_plan(close, tech, value_signal="buy", config=cfg)
+    assert plan is not None
+    assert plan.core_order == "limit"
+    assert plan.core_limit == 90.0
+
+
+def test_compute_indicators_atr_and_volume_from_ohlcv():
+    n = 220
+    close = pd.Series([100.0 + (i % 5) * 0.2 for i in range(n)])
+    high = close + 1.0
+    low = close - 1.0
+    volume = pd.Series([1_000_000.0] * (n - 1) + [2_000_000.0])
+    frame = pd.DataFrame({"High": high, "Low": low, "Close": close, "Volume": volume})
+    tech = compute_indicators(frame)
+    assert tech.atr_14 is not None and tech.atr_14 > 0
+    assert tech.volume_ratio_20 is not None
+    assert tech.volume_ratio_20 > 1.5
+
+
+def test_atr_stop_tightens_tactical_stop():
+    close = pd.Series([100.0] * 220)
+    tech = TechnicalIndicators(
+        close=100.0,
+        rsi_14=40.0,
+        sma_50=102.0,
+        sma_200=110.0,
+        atr_14=8.0,
+        timing_signal=TimingSignal.NEUTRAL,
+    )
+    wide = compute_trade_plan(
+        close,
+        tech,
+        value_signal="buy",
+        config=TradePlanConfig(atr_stop_multiplier=None),
+    )
+    tight = compute_trade_plan(
+        close,
+        tech,
+        value_signal="buy",
+        config=TradePlanConfig(atr_stop_multiplier=2.0),
+    )
+    assert wide is not None and tight is not None
+    assert tight.tactical_stop_loss < wide.tactical_stop_loss
+    assert tight.tactical_stop_loss == 84.0  # 100 - 2×8 ATR

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:30:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:41:38+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -47,9 +47,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | # | Idea | Summary | Revisit when |
 |---|------|---------|--------------|
 | L2 | **Evolutionary genomes (stage 2)** | Genomes = sim knobs ± weight deltas; fitness = excess − λ×costs; elites + small mutations; freeze screen signals first | After L1; history thick enough to trust fitness |
-| L3 | **Wire trade plans into simulator** | Limit/stop plans are advisory; sim still uses conviction/timing | Want simulated validation of levels |
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |
-| L5 | **Trade-plan magic numbers to config** | Hard-coded thresholds fine until tuning/backtests | Tuning trade-plan params |
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
 
 ### Universe & data
@@ -57,7 +55,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | # | Idea | Summary | Revisit when |
 |---|------|---------|--------------|
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
-| L9 | **Yahoo volume/ATR technicals** | Higher signal-per-effort than L2 scrapes | Refining buy-tier trade plans |
 | L10 | **Companies House / annual-report PDF ingest** | Next filings step after RNS (memo-only) | RNS bodies still thin for FINANCIAL REVIEW |
 | L11 | **UK-primary fundamentals (Refinitiv/FMP/RNS depth)** | Supplement yfinance balance-sheet/dividend gaps | Data-quality errors dominate signals |
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |

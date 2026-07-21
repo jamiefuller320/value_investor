@@ -23,6 +23,8 @@ class SimulatorConfig:
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
     monthly_deposit: float = 0.0
+    # When True, honour core_limit entry gates and tactical stop/target exits (L3).
+    use_trade_plan_levels: bool = False
 
 
 @dataclass
@@ -273,6 +275,22 @@ def _execute_buy(
     return shares, gross + cost, trade
 
 
+def _signal_rows_by_ticker(snapshot: RunSnapshot) -> dict[str, dict[str, Any]]:
+    return {str(row.get("ticker")): row for row in snapshot.signals if row.get("ticker")}
+
+
+def _optional_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if number != number:  # NaN
+        return None
+    return number
+
+
 def _rebalance(
     *,
     snapshot: RunSnapshot,
@@ -285,6 +303,8 @@ def _rebalance(
     trades: list[Trade] = []
     targets = _select_targets(snapshot, config)
     target_set = set(targets)
+    by_ticker = _signal_rows_by_ticker(snapshot)
+    exited_for_levels: set[str] = set()
 
     # Sell positions no longer in target universe
     for ticker in list(holdings.keys()):
@@ -305,6 +325,31 @@ def _rebalance(
         cash += proceeds
         trades.append(trade)
 
+    # Optional trade-plan stop / take-profit exits (whole position; L3 / L4-lite).
+    if config.use_trade_plan_levels:
+        for ticker in list(holdings.keys()):
+            price = prices.get(ticker)
+            if price is None or price <= 0:
+                continue
+            row = by_ticker.get(ticker) or {}
+            stop = _optional_float(row.get("tactical_stop_loss"))
+            target = _optional_float(row.get("tactical_take_profit"))
+            hit_stop = stop is not None and price <= stop
+            hit_target = target is not None and price >= target
+            if not (hit_stop or hit_target):
+                continue
+            shares = holdings.pop(ticker)
+            proceeds, trade = _execute_sell(
+                run_at=run_at,
+                ticker=ticker,
+                shares=shares,
+                price=price,
+                trade_cost_pct=config.trade_cost_pct,
+            )
+            cash += proceeds
+            trades.append(trade)
+            exited_for_levels.add(ticker)
+
     if not targets:
         return cash, holdings, trades
 
@@ -313,6 +358,8 @@ def _rebalance(
 
     # Trim overweight positions
     for ticker in targets:
+        if ticker in exited_for_levels:
+            continue
         price = prices.get(ticker)
         if price is None or price <= 0:
             continue
@@ -340,9 +387,18 @@ def _rebalance(
 
     # Buy underweight positions
     for ticker in targets:
+        if ticker in exited_for_levels:
+            continue
         price = prices.get(ticker)
         if price is None or price <= 0:
             continue
+        if config.use_trade_plan_levels:
+            row = by_ticker.get(ticker) or {}
+            core_order = str(row.get("core_order") or "market")
+            core_limit = _optional_float(row.get("core_limit"))
+            if core_order == "limit" and core_limit is not None and price > core_limit:
+                # Limit not reached this period — leave cash unallocated for this sleeve.
+                continue
         current_shares = holdings.get(ticker, 0.0)
         current_value = current_shares * price
         shortfall = target_each - current_value
