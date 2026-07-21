@@ -17,8 +17,8 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 | Stage | Name | Outcome | Exit criteria |
 |-------|------|---------|---------------|
 | **0** | UK quant core | FTSE 350 screen, adaptive weights, research memos, paper funds, post-open automation | Weekly archives accumulating; paper-auto + decision packs usable |
-| **1** | Decision-review learning *(current)* | Automated book learns from its own outcomes after costs | Documented review loop; knobs adjust from reviewed excess returns (`ftse-decision-review`) |
-| **2** | Manual-action excellence | Decision packs good enough for routine human trading | Stable prompts: signal → thesis → levels → size → risks; low false confidence |
+| **1** | Decision-review learning | Automated book learns from its own outcomes after costs | Documented review loop; knobs adjust from reviewed excess returns (`ftse-decision-review`) |
+| **2** | Manual-action excellence *(current)* | Decision packs good enough for routine human trading | Stable packs: signal → thesis → levels → size → risks; low false confidence (`decision_pack`) |
 | **3** | Library-ready global data | Multi-market fundamentals/prices grow *offline* without polluting the live screen | Per-market manifests with coverage & freshness metrics; PIT constituent snapshots |
 | **4** | Controlled universe expansion | First non-UK market screened with same quality bar as FTSE 350 | Data-quality and liquidity floors pass; paper track only at first |
 | **5** | Self-improving automation | Portfolio rules improve from walk-forward review (evolution only if history is thick) | Cost-aware fitness; frozen screen signals for counterfactual safety |
@@ -26,8 +26,8 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 
 ### What “best progress” means now
 
-1. **Run decision-review learning** — `ftse-decision-review` after paper-auto; accumulate marks until knobs apply.
-2. **Improve manual decision packs** — trade plans, surveillance, research quality, clear “verify before trade” prompts.
+1. **Use verify-before-trade packs** — email + Strong Buys dashboard; tighten research prompts when gaps show up.
+2. **Keep decision-review learning running** — accumulate equity marks until knobs apply.
 3. **Grow data libraries in the background** — progressive multi-market snapshots ready for stage 4, without changing the live screen.
 4. **Only then** expand live coverage and tighten automation.
 
@@ -90,4 +90,4 @@ ftse-library ladder
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: evolutionary stage 2 (L2/N2), verify-before-trade packs (L27), global expansion (N1), full Interactive Investor catalog (L34), UK-primary data (L11). Implemented: decision-review learning loop (L1 — see [`ops/decision-review.md`](ops/decision-review.md)), orchestrator catch-up schedules + external-cron setup (L21 — see [`ops/orchestrator-cron.md`](ops/orchestrator-cron.md)), multi-currency paper NAV (L28), library screen-lite/research ladder, FTSE SmallCap All-Share slice (L7), ASX/Euro/TSX filings regimes, offline macro context (not scoring).
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: evolutionary stage 2 (L2/N2), global expansion (N1), full Interactive Investor catalog (L34), UK-primary data (L11). Implemented: verify-before-trade packs (L27), CI pytest on PRs (L24), decision-review learning (L1), orchestrator catch-up + external cron (L21), multi-currency paper NAV (L28), library screen-lite/research ladder, FTSE SmallCap All-Share slice (L7), ASX/Euro/TSX filings regimes, offline macro context (not scoring).

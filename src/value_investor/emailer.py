@@ -8,6 +8,11 @@ from dataclasses import dataclass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from value_investor.backtest import BacktestSummary, format_backtest_text
+from value_investor.decision_pack import (
+    build_decision_packs,
+    format_decision_packs_html,
+    format_decision_packs_text,
+)
 from value_investor.deep_analysis import DeepAnalysis
 from value_investor.historical_analysis import (
     HistoricalAnalysisSummary,
@@ -375,6 +380,14 @@ def format_text_report(
     if trade_plans:
         lines.extend(["BUY-TIER TRADE PLANS", "-" * 40, trade_plans, ""])
 
+    packs = build_decision_packs(reports, research_documents)
+    packs.sort(
+        key=lambda p: ({"strong_buy": 0, "buy": 1}.get(p.signal, 9), -(p.conviction_score or 0))
+    )
+    packs_text = format_decision_packs_text(packs)
+    if packs_text:
+        lines.extend(["VERIFY-BEFORE-TRADE PACKS", "-" * 40, packs_text, ""])
+
     research_text = format_research_text(research_summary, research_documents or [])
     if research_text:
         lines.extend(["STRONG BUY RESEARCH", "-" * 40, research_text, ""])
@@ -552,6 +565,11 @@ def format_html_report(
 """
 
     trade_plans_section = _format_trade_plans_html(reports)
+    packs = build_decision_packs(reports, research_documents)
+    packs.sort(
+        key=lambda p: ({"strong_buy": 0, "buy": 1}.get(p.signal, 9), -(p.conviction_score or 0))
+    )
+    packs_section = format_decision_packs_html(packs)
     research_section = format_research_html(research_documents or [], research_summary)
     gap_fill_section = format_gap_fill_html(gap_fill_summary)
 
@@ -566,6 +584,7 @@ def format_html_report(
   {historical_section}
   {timing_section}
   {trade_plans_section}
+  {packs_section}
   {research_section}
   {gap_fill_section}
   {diff_section}

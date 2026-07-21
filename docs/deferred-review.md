@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:25:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:30:40+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -76,7 +76,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L18 | **Montier C-Score** | Useful negative filter; after Sloan/FCF conversion if adding one EQ model | After earnings-quality/distress family |
 | L19 | **Portfolio concentration / sizing UI** | Sector caps, correlation warnings, size hints | Report should answer what to do with the list |
 | L20 | **Synced portfolio backend / dedicated hosting** | Leave Pages+Actions until shared state, login, live refresh, or SLA needs | Multi-device portfolio or private interactive dash |
-| L27 | **Standardise verify-before-trade decision packs (stage 2)** | Harden prompt/decision-pack templates: signal → thesis → levels → size → risks, with low false confidence, suitable for routine manual trading. | Paper-auto narratives and research memos are stable week-to-week |
 | L35 | **Gap-fill: ingest — Add Companies House filed-accounts PDF fetch and text extract for UK-lis** | Add Companies House filed-accounts PDF fetch and text extract for UK-listed names when `filings_bodies` count is zero — unlocks pension notes, contingencies, going-concern, and governance sections missing from RNS headlines. | After next weekly email gap-fill pass confirms the gap persists |
 | L36 | **Gap-fill: ingest — Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged** | Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged “FY25 Results”, “interim”, and “annual report” rather than Google News wrapper URLs; current index lists 31 filings with `with_body: 0`. | After next weekly email gap-fill pass confirms the gap persists |
 | L37 | **Gap-fill: scoring — Override sector classification for plantation/agricultural issuers (e.g.** | Override sector classification for plantation/agricultural issuers (e.g. map to Agriculture/Commodities) so Consumer Defensive peer-relative scores are not applied to palm-oil producers with demonstrated revenue cyclicality. | After next weekly email gap-fill pass confirms the gap persists |
@@ -93,7 +92,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 |---|------|---------|--------------|
 | L22 | **Prove Monday GitHub cron** | Confirm 17 7 * * 1 (or Schedule→dispatch wrapper) | Next Monday after cron window |
 | L23 | **Parallel fetch + caching** | Sequential yfinance loop | Weekly runtime becomes painful |
-| L24 | **CI pytest on PRs** | Hygiene before relying on weekly dashboard | Before production reliance |
 | L25 | **Private live-holdings surveillance bridge** | Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage | Need CI surveillance of personal live book |
 | L32 | **Wire live Cursor usage API into library budget ledger** | If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls. | Cursor usage/credits API is available to CURSOR_API_KEY |
 | L33 | **Signal-priority maintenance refresh for graduated libraries** | Once full weekly refresh is no longer needed, prioritise maintenance (Yahoo metrics/filings cadence) by screen signal / research verdict — e.g. strong_buy and buy first, then hold/alumni — instead of round-robin or uniform caps. | Library richness is stable and Actions runtime or stale floors suggest throttling maintenance_max_tickers away from full |

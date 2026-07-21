@@ -85,6 +85,8 @@ Rules:
 - UK English, concise professional tone.
 - Do not give buy/sell price targets.
 - If a source is missing data, say so explicitly.
+- Prefer unresolved over false confidence when filings or figures are thin —
+  verify-before-trade packs surface these gaps; do not invent certainty.
 - Prefer one consistent primary source for each figure (filings over Yahoo).
 """
 

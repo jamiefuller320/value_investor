@@ -103,6 +103,24 @@ def _slug_ticker(ticker: str) -> str:
     return slug_ticker(ticker)
 
 
+def _load_research_documents(output_dir: Path) -> list[Any]:
+    """Load ResearchDocument objects from output/research/*/research.json when present."""
+    from value_investor.research.document import ResearchDocument
+
+    research_root = output_dir / "research"
+    if not research_root.exists():
+        return []
+    docs: list[Any] = []
+    for path in sorted(research_root.glob("*/research.json")):
+        try:
+            payload = read_json(path)
+            if isinstance(payload, dict):
+                docs.append(ResearchDocument.from_dict(payload))
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Skipping research doc %s: %s", path, exc)
+    return docs
+
+
 def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any]]:
     research_root = output_dir / "research"
     if not research_root.exists():
@@ -208,6 +226,13 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         trust_reports = annotate_dashboard_reports(trust_reports, market_id=universe_name)
     except Exception as exc:  # noqa: BLE001 — dashboard must still publish
         logger.warning("II overlay annotation skipped: %s", exc)
+
+    try:
+        from value_investor.decision_pack import attach_decision_packs
+
+        attach_decision_packs(reports, _load_research_documents(output_dir))
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Decision-pack attachment skipped: %s", exc)
 
     try:
         from value_investor.unavailable_watch import load_unavailable_watch
