@@ -18,6 +18,7 @@ from value_investor.paper_fund import (
     preview_automated_plan,
     run_automated_rebalance,
 )
+from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
 from value_investor.technical_analysis import (
     compute_indicators,
     compute_trade_plan,
@@ -50,6 +51,10 @@ class AutomationConfig:
     monthly_deposit: float = 0.0
     trade_cost_pct: float = DEFAULT_TRADE_COST_PCT
     max_positions: int = DEFAULT_MAX_POSITIONS
+    # Decision-review learning knobs (L1) — tuned by ftse-decision-review.
+    skip_timing_wait: bool = True
+    min_conviction: float = 0.0
+    sector_cap: float = DEFAULT_TARGET_SECTOR_CAP
 
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)
@@ -84,6 +89,13 @@ class AutomationConfig:
             monthly_deposit=float(raw.get("monthly_deposit") or 0),
             trade_cost_pct=float(raw.get("trade_cost_pct", DEFAULT_TRADE_COST_PCT)),
             max_positions=int(raw.get("max_positions", DEFAULT_MAX_POSITIONS)),
+            skip_timing_wait=bool(raw.get("skip_timing_wait", True)),
+            min_conviction=float(raw.get("min_conviction") or 0.0),
+            sector_cap=float(
+                raw.get("sector_cap", DEFAULT_TARGET_SECTOR_CAP)
+                if raw.get("sector_cap") is not None
+                else DEFAULT_TARGET_SECTOR_CAP
+            ),
         )
 
 
@@ -280,9 +292,18 @@ def save_watchlist(path: Path, holdings: list[dict[str, Any]]) -> None:
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
+def sync_fund_from_automation_config(fund: PaperFund, config: AutomationConfig) -> None:
+    """Keep live fund trading knobs aligned with automation config (incl. L1 updates)."""
+    fund.config.max_positions = int(config.max_positions)
+    fund.config.monthly_deposit = float(config.monthly_deposit)
+    fund.config.trade_cost_pct = float(config.trade_cost_pct)
+
+
 def ensure_automated_fund(path: Path, config: AutomationConfig) -> PaperFund:
     if path.exists():
-        return PaperFund.from_dict(json.loads(path.read_text(encoding="utf-8")))
+        fund = PaperFund.from_dict(json.loads(path.read_text(encoding="utf-8")))
+        sync_fund_from_automation_config(fund, config)
+        return fund
     fund = PaperFund.create(
         PaperFundConfig(
             name="Automated stock picking",
@@ -305,19 +326,21 @@ def save_automated_fund(path: Path, fund: PaperFund) -> None:
 
 def load_screen_candidates(reports_path: Path | None = None) -> list[dict[str, Any]]:
     """Load latest screen reports for candidate selection."""
-    candidates: list[Path] = []
-    if reports_path:
-        candidates.append(reports_path)
-    candidates.extend(
-        [
-            Path("docs/data/latest.json"),
-            Path("output/dashboard_bundle.json"),
-        ]
-    )
-    for path in candidates:
+    if reports_path is not None:
+        path = Path(reports_path)
+        if not path.exists():
+            return []
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        reports = payload.get("reports") if isinstance(payload, dict) else None
+        return list(reports) if isinstance(reports, list) else []
+
+    for path in (Path("docs/data/latest.json"), Path("output/dashboard_bundle.json")):
         if not path.exists():
             continue
-        payload = json.loads(path.read_text(encoding="utf-8"))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
         reports = payload.get("reports") if isinstance(payload, dict) else None
         if isinstance(reports, list) and reports:
             return reports
@@ -472,8 +495,17 @@ def run_daily_automation(
     screen_rows = load_screen_candidates(reports_path)
     owned_tickers = list(fund.holdings.keys()) + [str(w["ticker"]) for w in watchlist]
     marked = refresh_candidate_marks(screen_rows, extra_tickers=owned_tickers)
+    select_kwargs = {
+        "skip_timing_wait": bool(config.skip_timing_wait),
+        "min_conviction": float(config.min_conviction),
+        "sector_cap": float(config.sector_cap),
+    }
 
-    plan = preview_automated_plan(fund, marked) if fund.config.mode == "automated" else {}
+    plan = (
+        preview_automated_plan(fund, marked, **select_kwargs)
+        if fund.config.mode == "automated"
+        else {}
+    )
     alerts = [
         a.to_dict()
         for a in run_owned_surveillance(
@@ -491,12 +523,14 @@ def run_daily_automation(
     can_act = force or gate["can_act"]
     if can_act and config.auto_rebalance:
         fund.apply_deposits_to(gate["local_time"])
-        executed = run_automated_rebalance(fund, marked, acted_at=gate["local_time"])
+        executed = run_automated_rebalance(
+            fund, marked, acted_at=gate["local_time"], **select_kwargs
+        )
         trades = [t.to_dict() for t in executed]
         save_automated_fund(fund_path, fund)
         acted = True
         note = f"Rebalanced after open settle ({len(trades)} trade(s))."
-        plan = preview_automated_plan(fund, marked)
+        plan = preview_automated_plan(fund, marked, **select_kwargs)
         alerts = [
             a.to_dict()
             for a in run_owned_surveillance(

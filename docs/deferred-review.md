@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-20T20:51:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T04:18:41+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -46,7 +46,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 
 | # | Idea | Summary | Revisit when |
 |---|------|---------|--------------|
-| L1 | **Decision-review learning on automated book** | Review automated trades for excess after costs; tune small knobs (max positions, timing strictness, conviction floor, sector cap). Preferred now path vs evolution. | Implementing self-learning on paper-auto (next build step) |
 | L2 | **Evolutionary genomes (stage 2)** | Genomes = sim knobs ± weight deltas; fitness = excess − λ×costs; elites + small mutations; freeze screen signals first | After L1; history thick enough to trust fitness |
 | L3 | **Wire trade plans into simulator** | Limit/stop plans are advisory; sim still uses conviction/timing | Want simulated validation of levels |
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |

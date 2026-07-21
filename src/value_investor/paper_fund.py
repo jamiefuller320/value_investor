@@ -638,8 +638,18 @@ def select_automated_targets(
     *,
     max_positions: int,
     skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = 1.0,
 ) -> list[dict[str, Any]]:
+    """
+    Rank buy-tier names by conviction, optionally skipping timing=wait.
+
+    ``min_conviction`` drops weak names. ``sector_cap`` limits how many equal-weight
+    sleeves can share one sector (count limit = max(1, floor(sector_cap * max_positions))).
+    Pass ``sector_cap=1.0`` to disable the sector filter.
+    """
     ranked: list[tuple[float, dict[str, Any]]] = []
+    floor = float(min_conviction or 0.0)
     for row in candidates:
         signal = str(row.get("signal") or "")
         if signal not in BUY_SIGNALS:
@@ -649,9 +659,29 @@ def select_automated_targets(
         if _candidate_price(row) is None:
             continue
         conviction = float(row.get("conviction_score") or 0)
+        if conviction < floor:
+            continue
         ranked.append((conviction, row))
     ranked.sort(key=lambda item: item[0], reverse=True)
-    return [row for _, row in ranked[:max_positions]]
+
+    cap = float(sector_cap) if sector_cap is not None else 1.0
+    if cap >= 1.0 or max_positions < 1:
+        return [row for _, row in ranked[:max_positions]]
+
+    per_sector_limit = max(1, int(cap * max_positions + 1e-9))
+    selected: list[dict[str, Any]] = []
+    sector_counts: dict[str, int] = {}
+    for _, row in ranked:
+        if len(selected) >= max_positions:
+            break
+        sector = str(row.get("sector") or "").strip()
+        # Missing sector data must not collapse into one synthetic bucket.
+        if sector and sector_counts.get(sector, 0) >= per_sector_limit:
+            continue
+        selected.append(row)
+        if sector:
+            sector_counts[sector] = sector_counts.get(sector, 0) + 1
+    return selected
 
 
 def preview_automated_plan(
@@ -659,6 +689,8 @@ def preview_automated_plan(
     candidates: list[dict[str, Any]],
     *,
     skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = 1.0,
 ) -> dict[str, Any]:
     """
     Dry-run the automated rebalance rules without mutating the fund.
@@ -673,6 +705,8 @@ def preview_automated_plan(
         candidates,
         max_positions=fund.config.max_positions,
         skip_timing_wait=skip_timing_wait,
+        min_conviction=min_conviction,
+        sector_cap=sector_cap,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
     price_map = {
@@ -813,9 +847,21 @@ def preview_automated_plan(
     ]
     waitlisted.sort(key=lambda r: r["conviction_score"], reverse=True)
 
+    timing_rule = (
+        "Timing filter: names with timing_signal=wait are excluded from new buys."
+        if skip_timing_wait
+        else "Timing filter: wait names remain eligible."
+    )
     narrative = [
         "Universe: only strong_buy / buy names from the latest screen.",
-        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        timing_rule,
+        f"Conviction floor: min_conviction={min_conviction:.2f}.",
+        (
+            f"Sector cap: at most {max(1, int(float(sector_cap) * fund.config.max_positions + 1e-9))} "
+            f"name(s) per known sector (cap={float(sector_cap):.0%})."
+            if float(sector_cap) < 1.0
+            else "Sector cap: disabled."
+        ),
         f"Ranking: highest conviction_score first, keep at most {fund.config.max_positions} names.",
         "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
         f"Costs: {fund.config.trade_cost_pct:.1%} applied on each buy and sell.",
@@ -826,6 +872,9 @@ def preview_automated_plan(
         "nav": round(nav, 2),
         "cash": round(fund.cash, 2),
         "max_positions": fund.config.max_positions,
+        "min_conviction": round(float(min_conviction), 4),
+        "sector_cap": round(float(sector_cap), 4),
+        "skip_timing_wait": bool(skip_timing_wait),
         "target_sleeve_value": round(target_each, 2),
         "targets": [
             {
@@ -876,6 +925,8 @@ def run_automated_rebalance(
     *,
     acted_at: str | None = None,
     skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = 1.0,
 ) -> list[PaperTrade]:
     """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
     if fund.config.mode != "automated":
@@ -886,6 +937,8 @@ def run_automated_rebalance(
         candidates,
         max_positions=fund.config.max_positions,
         skip_timing_wait=skip_timing_wait,
+        min_conviction=min_conviction,
+        sector_cap=sector_cap,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
     price_map = {
