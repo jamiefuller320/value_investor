@@ -34,6 +34,13 @@ jobs:
       - name: Install package
         run: pip install -e .
 
+      - name: Seed paper automation state from dashboard data
+        run: |
+          mkdir -p output/paper_automation
+          if [ -d docs/data/paper_automation ]; then
+            cp -f docs/data/paper_automation/*.json output/paper_automation/ 2>/dev/null || true
+          fi
+
       - name: Run paper automation
         run: |
           ARGS="--output-dir output/paper_automation --reports docs/data/latest.json"
@@ -45,6 +52,12 @@ jobs:
           fi
           ftse-paper-auto $ARGS
 
+      - name: Decision-review learning
+        if: ${{ github.event.inputs.surveillance_only != 'true' }}
+        run: |
+          # Propose always; apply only when enough equity marks/trades exist.
+          ftse-decision-review --output-dir output/paper_automation --apply
+
       - name: Publish automation artifacts to dashboard data
         run: |
           python3 - <<'PY'
@@ -55,7 +68,14 @@ jobs:
           src = Path("output/paper_automation")
           dest = Path("docs/data/paper_automation")
           dest.mkdir(parents=True, exist_ok=True)
-          for name in ("last_run.json", "automated_fund.json", "config.json", "owned_watchlist.json"):
+          for name in (
+              "last_run.json",
+              "automated_fund.json",
+              "config.json",
+              "owned_watchlist.json",
+              "decision_review.json",
+              "decision_review_history.json",
+          ):
               path = src / name
               if path.exists():
                   shutil.copy2(path, dest / name)
