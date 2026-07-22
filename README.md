@@ -182,20 +182,21 @@ Action logs and paper funds are private to your browser; they are not committed 
 # Add real/live owned tickers for surveillance (optional)
 ftse-paper-auto --add-watch BP.L --add-watch SHEL.L
 
-# Run after settle (default gate); use --force for testing
-ftse-paper-auto --reports docs/data/latest.json
-ftse-paper-auto --reports docs/data/latest.json --force
+# Primary learning track: AI-judgment book + rules control
+ftse-paper-auto --reports docs/data/latest.json --tracks all
+ftse-paper-auto --reports docs/data/latest.json --tracks all --force
+ftse-decision-review --tracks all --apply
 ftse-paper-auto --surveillance-only
 ```
 
-State lands in `output/paper_automation/` (`automated_fund.json`, `owned_watchlist.json`, `last_run.json`) and is bundled into the dashboard as `paper_automation`. The workflow `.github/workflows/paper-auto.yml` schedules weekdays at **08:17 UTC** (≈ 09:17 Europe/London in BST) so early open volatility can settle before acting.
+State lands in `docs/data/paper_automation/` (rules control) and `ai_judgment/` (primary). Success = excess after costs vs FTSE — see `docs/ops/primary-learning-track.md`. The workflow `.github/workflows/paper-auto.yml` schedules weekdays at **08:17 UTC** (≈ 09:17 Europe/London in BST) so early open volatility can settle before acting.
 
 Weekly strategy simulation (`ftse-simulate`) remains available for archived-run backtests and now accepts `--monthly-deposit` so returns are measured against capital contributed.
 
 ## Project objective
 
 Ultimate goal: a **self-improving automated global value portfolio**.  
-Realistic interim goal: **accurate decision packs and prompts** for manual verification and trade actions.
+Realistic interim goal: **hands-off learning from AI paper decisions vs market datums**, plus accurate decision packs when capital is at risk.
 
 See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit criteria. Near-term priority is FTSE 350 data richness and paper decision quality — not wider live coverage.
 

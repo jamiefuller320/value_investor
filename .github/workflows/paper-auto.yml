@@ -36,14 +36,17 @@ jobs:
 
       - name: Seed paper automation state from dashboard data
         run: |
-          mkdir -p output/paper_automation
+          mkdir -p output/paper_automation output/paper_automation/ai_judgment
           if [ -d docs/data/paper_automation ]; then
             cp -f docs/data/paper_automation/*.json output/paper_automation/ 2>/dev/null || true
           fi
+          if [ -d docs/data/paper_automation/ai_judgment ]; then
+            cp -f docs/data/paper_automation/ai_judgment/*.json output/paper_automation/ai_judgment/ 2>/dev/null || true
+          fi
 
-      - name: Run paper automation
+      - name: Run paper automation (AI judgment primary + rules control)
         run: |
-          ARGS="--output-dir output/paper_automation --reports docs/data/latest.json"
+          ARGS="--output-dir output/paper_automation --reports docs/data/latest.json --tracks all"
           if [ "${{ github.event.inputs.force }}" = "true" ]; then
             ARGS="$ARGS --force"
           fi
@@ -52,11 +55,11 @@ jobs:
           fi
           ftse-paper-auto $ARGS
 
-      - name: Decision-review learning
+      - name: Decision-review learning (both tracks vs market)
         if: ${{ github.event.inputs.surveillance_only != 'true' }}
         run: |
           # Propose always; apply only when enough equity marks/trades exist.
-          ftse-decision-review --output-dir output/paper_automation --apply
+          ftse-decision-review --output-dir output/paper_automation --tracks all --apply
 
       - name: Publish automation artifacts to dashboard data
         run: |
@@ -68,26 +71,51 @@ jobs:
           src = Path("output/paper_automation")
           dest = Path("docs/data/paper_automation")
           dest.mkdir(parents=True, exist_ok=True)
-          for name in (
+          (dest / "ai_judgment").mkdir(parents=True, exist_ok=True)
+
+          root_names = (
               "last_run.json",
               "automated_fund.json",
               "config.json",
               "owned_watchlist.json",
               "decision_review.json",
               "decision_review_history.json",
-          ):
+              "learning_tracks_summary.json",
+              "learning_tracks_review.json",
+          )
+          for name in root_names:
               path = src / name
               if path.exists():
                   shutil.copy2(path, dest / name)
 
+          for name in (
+              "last_run.json",
+              "automated_fund.json",
+              "config.json",
+              "decision_review.json",
+              "decision_review_history.json",
+          ):
+              path = src / "ai_judgment" / name
+              if path.exists():
+                  shutil.copy2(path, dest / "ai_judgment" / name)
+
           latest = Path("docs/data/latest.json")
-          report = src / "last_run.json"
+          report = src / "ai_judgment" / "last_run.json"
+          if not report.exists():
+              report = src / "last_run.json"
           if latest.exists() and report.exists():
               bundle = json.loads(latest.read_text(encoding="utf-8"))
               bundle["paper_automation"] = json.loads(report.read_text(encoding="utf-8"))
-              fund = src / "automated_fund.json"
+              fund = src / "ai_judgment" / "automated_fund.json"
+              if not fund.exists():
+                  fund = src / "automated_fund.json"
               if fund.exists():
                   bundle["paper_automation"]["fund_snapshot"] = json.loads(fund.read_text(encoding="utf-8"))
+              summary = src / "learning_tracks_review.json"
+              if summary.exists():
+                  bundle["paper_automation"]["learning_tracks_review"] = json.loads(
+                      summary.read_text(encoding="utf-8")
+                  )
               # Keep Automation tab in sync when present.
               try:
                   from value_investor.automation_status import build_automation_status
@@ -97,8 +125,8 @@ jobs:
                   )
               except Exception as exc:  # noqa: BLE001
                   print(f"automation status refresh skipped: {exc}")
-              latest.write_text(json.dumps(bundle, separators=(",", ":")), encoding="utf-8")
-              print("Updated docs/data/latest.json + docs/data/paper_automation/")
+              latest.write_text(json.dumps(bundle), encoding="utf-8")
+          print("Published paper automation (+ AI judgment track) artifacts")
           PY
 
       - name: Commit automation artifacts

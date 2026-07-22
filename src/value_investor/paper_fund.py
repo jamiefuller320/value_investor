@@ -640,6 +640,8 @@ def select_automated_targets(
     skip_timing_wait: bool = True,
     min_conviction: float = 0.0,
     sector_cap: float = 1.0,
+    use_adjusted_signal: bool = False,
+    require_research_accumulate: bool = False,
 ) -> list[dict[str, Any]]:
     """
     Rank buy-tier names by conviction, optionally skipping timing=wait.
@@ -647,13 +649,26 @@ def select_automated_targets(
     ``min_conviction`` drops weak names. ``sector_cap`` limits how many equal-weight
     sleeves can share one sector (count limit = max(1, floor(sector_cap * max_positions))).
     Pass ``sector_cap=1.0`` to disable the sector filter.
+
+    When ``use_adjusted_signal`` is true, eligibility uses research overlay
+    ``adjusted_signal`` when present (AI quasi-human gate). When
+    ``require_research_accumulate`` is true, only names with
+    ``research_verdict=accumulate`` are eligible.
     """
     ranked: list[tuple[float, dict[str, Any]]] = []
     floor = float(min_conviction or 0.0)
     for row in candidates:
         signal = str(row.get("signal") or "")
+        if use_adjusted_signal:
+            adjusted = row.get("adjusted_signal")
+            if adjusted is not None and str(adjusted).strip():
+                signal = str(adjusted)
         if signal not in BUY_SIGNALS:
             continue
+        if require_research_accumulate:
+            verdict = row.get("research_verdict")
+            if verdict is None or str(verdict).strip().lower() != "accumulate":
+                continue
         if skip_timing_wait and row.get("timing_signal") == "wait":
             continue
         if _candidate_price(row) is None:
@@ -691,6 +706,8 @@ def preview_automated_plan(
     skip_timing_wait: bool = True,
     min_conviction: float = 0.0,
     sector_cap: float = 1.0,
+    use_adjusted_signal: bool = False,
+    require_research_accumulate: bool = False,
 ) -> dict[str, Any]:
     """
     Dry-run the automated rebalance rules without mutating the fund.
@@ -707,6 +724,8 @@ def preview_automated_plan(
         skip_timing_wait=skip_timing_wait,
         min_conviction=min_conviction,
         sector_cap=sector_cap,
+        use_adjusted_signal=use_adjusted_signal,
+        require_research_accumulate=require_research_accumulate,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
     price_map = {
@@ -927,6 +946,8 @@ def run_automated_rebalance(
     skip_timing_wait: bool = True,
     min_conviction: float = 0.0,
     sector_cap: float = 1.0,
+    use_adjusted_signal: bool = False,
+    require_research_accumulate: bool = False,
 ) -> list[PaperTrade]:
     """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
     if fund.config.mode != "automated":
@@ -939,6 +960,8 @@ def run_automated_rebalance(
         skip_timing_wait=skip_timing_wait,
         min_conviction=min_conviction,
         sector_cap=sector_cap,
+        use_adjusted_signal=use_adjusted_signal,
+        require_research_accumulate=require_research_accumulate,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
     price_map = {
