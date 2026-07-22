@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:41:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:49:01+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -43,6 +43,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N17 | **Do not expand live screen beyond FTSE 350 yet** | Library breadth is far ahead (16 graduated markets). Stage 4 live expansion should wait until stage-2 decision packs are routinely trusted and decision-review has enough marks to adjust knobs. | Stage 2 exit criteria met and decision-review has actionable excess-return history |
 | N18 | **Do not let AI judgment own live capital path yet** | Primary learning track is paper-only. Keep live broker automation and any promotion of AI gates to real capital off until the AI-judgment book shows persistent excess vs ^FTSE and vs the rules control in walk-forward review. | AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review |
 | N19 | **Do not backdate research revisions for past paper decisions** | Extending source lookbacks and re-running memos is fine going forward, but inventing historical revisions as-of past run dates would leak post-period knowledge into AI-judgment / historical_analysis PIT overlays. | Never as a learning shortcut; only reconsider if building a separate counterfactual research lab outside the live paper track |
+| N20 | **Companies House Streaming API for realtime filings** | Streaming API pushes company/filing changes over long-lived connections; our research path only needs on-demand REST GET for search, filing-history, and document download. Keys are not interchangeable with REST. | Need near-realtime UK filing alerts outside weekly research cycles |
 
 ---
 
