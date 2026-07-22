@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T07:39:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T08:39:38+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -39,6 +39,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N13 | **Capital at risk / live broker automation (stage 6)** | Do not connect live capital or broker APIs until stages 2–5 are proven in paper with cost-aware review. | Manual packs trusted, decision-review learning working, and multi-market paper track proven |
 | N14 | **Live Trading 212 API integration** | Do not wire live order placement yet. T212 API is beta (non-idempotent orders); project is still at stage 2 manual packs. Prefer demo/paper path first when broker work starts. | Stages 2–5 exit criteria met and human override workflow defined (see N13) |
 | N15 | **Expand ladder before T212 catalogue verification** | Do not grow new offline markets from allowlist assumptions alone; hang_seng/sti/asx200 look 100% on suffix heuristics but need catalogue hit rates before further APAC breadth. | Catalogue fetched and alignment_report.json shows per-market catalogue_hit_pct |
+| N16 | **Do not chase live Cursor usage API before envelope calibration** | Live usage API (L32) is blocked on Cursor exposing credits to CURSOR_API_KEY. Prefer running the £30/week estimated gate for a few cycles and recalibrating estimated_memo_usd (L52) before investing in billing integration. | Cursor documents a usage/credits API for CURSOR_API_KEY, or estimated vs billed spend diverges badly after 2–4 constrained weeks |
+| N17 | **Do not expand live screen beyond FTSE 350 yet** | Library breadth is far ahead (16 graduated markets). Stage 4 live expansion should wait until stage-2 decision packs are routinely trusted and decision-review has enough marks to adjust knobs. | Stage 2 exit criteria met and decision-review has actionable excess-return history |
 
 ---
 
@@ -95,6 +97,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L32 | **Wire live Cursor usage API into library budget ledger** | If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls. | Cursor usage/credits API is available to CURSOR_API_KEY |
 | L33 | **Signal-priority maintenance refresh for graduated libraries** | Once full weekly refresh is no longer needed, prioritise maintenance (Yahoo metrics/filings cadence) by screen signal / research verdict — e.g. strong_buy and buy first, then hold/alumni — instead of round-robin or uniform caps. | Library richness is stable and Actions runtime or stale floors suggest throttling maintenance_max_tickers away from full |
 | L49 | **Default TRADING212_ENV to live or document key/env pairing** | Injected API credentials return 401 on demo.trading212.com but succeed on live. Default env is demo, so bare ftse-library t212-catalogue fails until --env live is passed. | Next credentials rotation or when someone hits catalogue 401 again |
+| L51 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation. | After a few weeks of enforce_weekly_research_cap with the £30 usage envelope |
+| L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
 
 ---
 

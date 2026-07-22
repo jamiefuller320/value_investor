@@ -17,6 +17,7 @@ from value_investor.agent_model_policy import (
     remaining_weekly_budget_usd,
     research_model_id,
     save_policy,
+    weekly_budget_status,
 )
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, library_status
 from value_investor.library_dedupe import (
@@ -198,11 +199,17 @@ def run_library_ladder(
     if skip_research:
         result["layers"]["selective_research"] = {"skipped": True}
     elif research_cap <= 0:
+        status = weekly_budget_status(policy, estimated_memo_usd=memo_cost)
         result["layers"]["selective_research"] = {
             "skipped": True,
             "reason": "weekly library research budget exhausted",
             "remaining_usd": remaining,
             "enforce_weekly_research_cap": weekly_cap_on,
+            "constraining": True,
+            "budget_flag": status["flag"],
+            "allocation_basis": status["allocation_basis"],
+            "weekly_usage_gbp": status["weekly_usage_gbp"],
+            "note": status.get("note"),
         }
     else:
         # Screen each research market (reuse focus screen_result when present).
@@ -238,6 +245,7 @@ def run_library_ladder(
             already_researched=already,
         )
 
+        status = weekly_budget_status(policy, estimated_memo_usd=memo_cost)
         layer: dict[str, Any] = {
             "model": model,
             "research_cap": research_cap,
@@ -246,6 +254,11 @@ def run_library_ladder(
                 (policy.get("ladder") or {}).get("research_all_graduated", True)
             ),
             "enforce_weekly_research_cap": weekly_cap_on,
+            "constraining": status["constraining"],
+            "near_limit": status["near_limit"],
+            "budget_flag": status["flag"],
+            "allocation_basis": status["allocation_basis"],
+            "weekly_usage_gbp": status["weekly_usage_gbp"],
             "remaining_usd_before": remaining,
             "dedupe": {
                 "already_researched_count": len(already),

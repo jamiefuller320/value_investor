@@ -323,12 +323,15 @@ def build_automation_status(
         paper_last_raw if isinstance(paper_last_raw, dict) else None
     )
 
+    from value_investor.agent_model_policy import weekly_budget_status
+
     focus_grad = policy.get("focus_graduation") or {}
     budget = policy.get("budget") or {}
     ladder = policy.get("ladder") or {}
     research_model = policy.get("research_model") or {}
     model_review = policy.get("model_review") or {}
     macro = policy.get("macro_context") or {}
+    budget_status = weekly_budget_status(policy)
 
     graduated = [
         {
@@ -373,13 +376,27 @@ def build_automation_status(
             "budget": {
                 "plan_name": budget.get("plan_name"),
                 "plan_monthly_usd": budget.get("plan_monthly_usd"),
-                "weekly_library_usd": budget.get("weekly_library_usd"),
+                "allocation_basis": budget_status.get("allocation_basis"),
+                "weekly_usage_gbp": budget_status.get("weekly_usage_gbp"),
+                "gbp_usd_rate": budget_status.get("gbp_usd_rate"),
+                "weekly_library_usd": budget_status.get("weekly_library_usd"),
                 "weekly_library_fraction": budget.get("weekly_library_fraction"),
-                "enforce_weekly_research_cap": budget.get("enforce_weekly_research_cap"),
+                "enforce_weekly_research_cap": budget_status.get(
+                    "enforce_weekly_research_cap"
+                ),
+                "constraining": budget_status.get("constraining"),
+                "near_limit": budget_status.get("near_limit"),
+                "budget_flag": budget_status.get("flag"),
+                "remaining_weekly_usd": budget_status.get("remaining_weekly_usd"),
+                "budget_note": budget_status.get("note"),
                 "plan_refresh_day_of_month": budget.get("plan_refresh_day_of_month"),
                 "surplus_day_before_refresh": budget.get("surplus_day_before_refresh"),
-                "estimated_spend_usd_this_week": budget.get("estimated_spend_usd_this_week"),
-                "estimated_spend_usd_this_cycle": budget.get("estimated_spend_usd_this_cycle"),
+                "estimated_spend_usd_this_week": budget_status.get(
+                    "estimated_spend_usd_this_week"
+                ),
+                "estimated_spend_usd_this_cycle": budget.get(
+                    "estimated_spend_usd_this_cycle"
+                ),
                 "week_id": budget.get("week_id"),
                 "cycle_id": budget.get("cycle_id"),
             },
