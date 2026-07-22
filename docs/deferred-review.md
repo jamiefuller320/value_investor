@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:14:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:32:36+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -84,9 +84,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L38 | **Gap-fill: ingest — Fetch Hikma IR results presentation and annual-report PDFs from hikma.co** | Fetch Hikma IR results presentation and annual-report PDFs from hikma.com and extract cash-flow bridge tables, segment margins, and dividend-policy text into `filings/bodies/`. | After next weekly email gap-fill pass confirms the gap persists |
 | L39 | **Gap-fill: ingest — Re-classify UK RNS items by headline pattern (Full Year Results, Half Ye** | Re-classify UK RNS items by headline pattern (Full Year Results, Half Year, Trading Update) and download PDF bodies from Investegate/LSE direct URLs when Ticker RNS API returns empty text. | After next weekly email gap-fill pass confirms the gap persists |
 | L40 | **Gap-fill: scoring — Add healthcare overlay flag when trailing FCF is negative AND Piotroski** | Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy. | After next weekly email gap-fill pass confirms the gap persists |
-| L41 | **Gap-fill: ingest — Download and text-extract PDF bodies from `ticker_rns_api` URLs in `fili** | Download and text-extract PDF bodies from `ticker_rns_api` URLs in `filings_index.json` (currently 52 indexed, 0 bodies); filter mis-attributed Google News headlines by company name/ticker before indexing. | After next weekly email gap-fill pass confirms the gap persists |
-| L42 | **Gap-fill: ingest — Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow s** | Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures. | After next weekly email gap-fill pass confirms the gap persists |
 | L43 | **Gap-fill: ingest — Fetch company IR results presentation PDF from `photo-me.co.uk` investor** | Fetch company IR results presentation PDF from `photo-me.co.uk` investor pages (listed in `gap_fill_source_map.json` → `company_ir_presentation`) for segment tables, dividend policy, and H1 cash-flow bridges missing from Yahoo. | After next weekly email gap-fill pass confirms the gap persists |
+| L54 | **Companies House PDF ingest for UK gap-fill** | After PDF/RNS body refetch, next fetch weakness is statutory accounts via Companies House free API (ticker→company number map). Unlocks pensions, covenants, going-concern language when RNS bodies remain thin. | Gap-fill fetch_attempts show RNS/PDF bodies present but questions still unresolved for UK names |
 
 ### Ops / reliability
 

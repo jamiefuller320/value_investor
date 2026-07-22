@@ -13,6 +13,7 @@ from value_investor.research.ingest import (
     fetch_google_news_rss_query,
     merge_news_articles,
 )
+from value_investor.research.filings import refetch_missing_filing_bodies
 from value_investor.storage import read_json, resolve_json_path, write_json
 
 logger = logging.getLogger(__name__)
@@ -212,6 +213,9 @@ def prepare_gap_fill_source_pack(
     sources_dir = Path(sources_dir)
     sources_dir.mkdir(parents=True, exist_ok=True)
 
+    # Re-attempt PDF / direct RNS bodies before the agent answers.
+    body_refetch = refetch_missing_filing_bodies(sources_dir / "filings")
+
     alternate_articles = fetch_alternate_gap_fill_news(company_name, ticker)
     alternate_path = sources_dir / "alternate_news.json"
     write_json(
@@ -269,12 +273,14 @@ def prepare_gap_fill_source_pack(
         "market": market,
         "built_at": datetime.now(UTC).isoformat(),
         "inventory": inventory,
+        "body_refetch": body_refetch,
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
         "planned_alternate_sources": planned,
         "evidence_ladder": list(EVIDENCE_LADDER),
         "instructions": (
             "Walk evidence_ladder in order. Cite what was tried. "
+            "Prefer filings/bodies/*.txt when present. "
             "If still unresolved, pick from planned_alternate_sources and emit "
             "RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
         ),
