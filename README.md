@@ -34,8 +34,9 @@ ftse-screen
 # Dry run on 10 names
 ftse-screen --limit 10
 
-# Agent analysis (requires CURSOR_API_KEY — User API Key from
-# https://cursor.com/dashboard/integrations, not Admin keys from /dashboard/api-keys)
+# Agent analysis (requires CURSOR_API_KEY — a User API Key).
+# Create from Integrations (scroll to User API Keys) or Cloud Agents → My Settings → API Keys.
+# Dashboard → API Keys with scope admin:* is the Admin API and will fail ftse-verify-key.
 export CURSOR_API_KEY="crsr_..."
 python scripts/agent_analyze.py --limit 20 --top 5
 

@@ -50,13 +50,22 @@ class VerifyKeyResult:
             lines.append(f"✗ {self.detail}")
             lines.append("")
             lines.append(
-                "Fix: create a User API Key at https://cursor.com/dashboard/integrations "
-                "(scroll to User API Keys → New / Add API Key), then set CURSOR_API_KEY "
-                "or pass --api-key."
+                "Fix: set CURSOR_API_KEY to a User API Key, then re-run in a new shell."
             )
             lines.append(
-                "Note: Dashboard → API Keys only creates Admin keys (scope admin:*). "
-                "Those are a different product and will not authenticate here."
+                "Where to create one (Cursor moves this UI often):"
+            )
+            lines.append(
+                "  1) https://cursor.com/dashboard/integrations — scroll past Source Control "
+                "and the third-party apps to 'User API Keys'"
+            )
+            lines.append(
+                "  2) https://cursor.com/dashboard?tab=cloud-agents → My Settings "
+                "(not Team Settings) → API Keys"
+            )
+            lines.append(
+                "  3) https://cursor.com/dashboard/api-keys — only if a non-admin / user key "
+                "option appears; Admin (admin:*) keys are a different product"
             )
         return "\n".join(lines)
 

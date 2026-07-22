@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T12:52:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T12:56:55+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -110,6 +110,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
 | L60 | **Upgrade Ticker RNS plan for symbol-filtered disclosures** | Current TICKER_API_KEY plan ignores symbol/isin filters and returns a global Form 8.x feed. Client-side issuer headline filter now drops noise, but a paid symbol filter would restore direct RNS bodies for memo tickers. | Ticker.app plan is upgraded or an alternate UK RNS API with issuer filter is available |
 | L62 | **Cursor docs still point Cloud Agents keys at Dashboard API Keys** | Official API docs say Cloud Agents keys come from Dashboard → API Keys, but that page only creates Admin (admin:*) keys. User API Keys live at dashboard/integrations (moved from Cloud Agents). Our verify-key/README now document Integrations; revisit if Cursor unifies the UI. | Cursor updates docs/UI so User API Keys are obvious from API Keys page |
+| L63 | **User API Keys section missing from Integrations for some accounts** | Owner sees only Source Control + Integrations on dashboard/integrations — no User API Keys generator. Alternatives: Cloud Agents → My Settings → API Keys, or ask Cursor support if UI is plan/account gated. Do not use admin:* keys from /dashboard/api-keys for CURSOR_API_KEY. | Owner locates User API Keys UI or Cursor confirms where personal keys live |
 
 ---
 
