@@ -57,6 +57,12 @@ DEFAULT_MARKET_QUEUE = [
     "hang_seng",
     "sti",
     "us_adr_asia",
+    # T212 venue-gap ladder
+    "atx",
+    "psi20",
+    "smi",
+    "omxs30",
+    "iseq20",
 ]
 
 

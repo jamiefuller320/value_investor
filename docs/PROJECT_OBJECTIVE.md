@@ -61,7 +61,7 @@ Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised w
 
 **Broker coverage:** `docs/data/library/t212_coverage/` is the tradable overlay. Fetch the official instrument book with `ftse-library t212-catalogue` (env: `TRADING212_API_KEY`, `TRADING212_API_SECRET`, optional `TRADING212_ENV=demo|live`), then join library tickers via `ftse-library t212-overlay` (ISIN / shortName catalogue hits; venue allowlist fallback). Advisory only — does not filter screens. Dashboard **Unavailable** bypass keeps unactionable names on a watched list and excludes them from suggested trades / paper auto-entries. Optional FIRDS MIC filter remains enrichment only (`ftse-library firds-filter`).
 
-**Offline ladder slices:** `aim` → `ibex35` → `ftse_mib` → `aex` → `bel20` → `hang_seng` → `sti` → `us_adr_asia` (see `t212_coverage/policy.json`) — complete; remaining work is keeping the T212 catalogue fresh and tightening ISIN joins.
+**Offline ladder slices:** `aim` → `ibex35` → `ftse_mib` → `aex` → `bel20` → `hang_seng` → `sti` → `us_adr_asia` → `atx` → `psi20` → `smi` → `omxs30` → `iseq20` (see `t212_coverage/policy.json`). Confirm tradability with `ftse-library t212-align` once the catalogue is fetched.
 
 ### Running the ladder
 

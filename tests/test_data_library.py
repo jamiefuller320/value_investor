@@ -9,6 +9,7 @@ from types import SimpleNamespace
 import pandas as pd
 
 from value_investor.data_library import (
+    CONSTITUENT_FETCHERS,
     MARKET_REGISTRY,
     PREQUALIFIED_YAHOO_MARKETS,
     _normalize_wiki_constituents,
@@ -297,6 +298,31 @@ def test_l34_next_slice_markets_registered():
         assert mid in MARKET_REGISTRY
     assert "ibex35" in PREQUALIFIED_YAHOO_MARKETS
     assert "bel20" in PREQUALIFIED_YAHOO_MARKETS
+
+
+def test_t212_venue_gap_markets_registered():
+    for mid in ("atx", "psi20", "smi", "omxs30", "iseq20"):
+        assert mid in MARKET_REGISTRY
+        assert mid in CONSTITUENT_FETCHERS
+    assert "omxs30" in PREQUALIFIED_YAHOO_MARKETS
+    from value_investor.agent_model_policy import DEFAULT_MARKET_QUEUE
+
+    for mid in ("atx", "psi20", "smi", "omxs30", "iseq20"):
+        assert mid in DEFAULT_MARKET_QUEUE
+
+
+def test_atx_curated_and_suffix_helpers():
+    from value_investor.data_library import (
+        ATX_SEED,
+        _to_suffix_yahoo,
+        fetch_atx_constituents,
+    )
+
+    assert _to_suffix_yahoo("Euronext Lisbon: BCP", ".LS") == "BCP.LS"
+    assert _to_suffix_yahoo("A5G", ".IR") == "A5G.IR"
+    frame = fetch_atx_constituents()
+    assert len(frame) == len(ATX_SEED)
+    assert set(frame["ticker"]) == {row["ticker"] for row in ATX_SEED}
 
 
 def test_hk_and_sg_yahoo_helpers():
