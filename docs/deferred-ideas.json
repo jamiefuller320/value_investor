@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T05:40:00+00:00",
+  "updated_at": "2026-07-22T05:42:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -910,6 +910,7 @@
     {
       "id": "L44",
       "category": "later",
+<<<<<<< HEAD
       "section": "learning",
       "title": "Trailing stop with entry-floor hard floor in technical sim",
       "summary": "Optional sim track: trail stops up from refreshed technicals but never below original entry stop; keep static-plan track for comparison.",
@@ -923,6 +924,57 @@
       "source": "",
       "added_at": "2026-07-21T18:39:18+00:00",
       "updated_at": "2026-07-22T05:40:00+00:00"
+=======
+      "section": "ops",
+      "title": "Prefer Trading 212 over Interactive Investor for execution",
+      "summary": "T212 has a public API usable with Stocks ISA, \u00a30 commission/platform fees, and 0.15% FX \u2014 better fit than ii (no retail trading API; ~\u00a36/mo + ~\u00a34/trade) for low-value UK ISA automation. Keep research/manual packs broker-agnostic until stage 6.",
+      "revisit_when": "Approaching live/paper broker integration (stage 6), or when replacing the ii_coverage tradability north star",
+      "tags": [
+        "broker",
+        "trading212",
+        "isa",
+        "api",
+        "stage6"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
+      "added_at": "2026-07-22T05:31:07+00:00"
+    },
+    {
+      "id": "L45",
+      "category": "later",
+      "section": "universe",
+      "title": "Trading 212 instrument catalog as tradability overlay",
+      "summary": "T212 exposes GET /equity/metadata/instruments via API; use that as the official tradable catalog instead of (or alongside) the ii exchange-allowlist overlay once broker preference is locked to T212.",
+      "revisit_when": "Broker north star confirmed as Trading 212 and building coverage/unavailable watch for execution",
+      "tags": [
+        "broker",
+        "trading212",
+        "library",
+        "coverage"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
+      "added_at": "2026-07-22T05:31:07+00:00"
+    },
+    {
+      "id": "N14",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Live Trading 212 API integration",
+      "summary": "Do not wire live order placement yet. T212 API is beta (non-idempotent orders); project is still at stage 2 manual packs. Prefer demo/paper path first when broker work starts.",
+      "revisit_when": "Stages 2\u20135 exit criteria met and human override workflow defined (see N13)",
+      "tags": [
+        "broker",
+        "trading212",
+        "api",
+        "automation",
+        "stage6"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
+      "added_at": "2026-07-22T05:31:07+00:00"
+>>>>>>> 02c2348 (Park Trading 212 as preferred execution venue over ii)
     }
   ]
 }
