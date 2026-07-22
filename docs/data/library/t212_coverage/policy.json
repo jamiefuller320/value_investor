@@ -415,10 +415,70 @@
       "id": "t212_catalogue",
       "label": "Trading 212 instrument catalogue",
       "priority": 5,
-      "rationale": "Replace assumed venue allowlist with verified tradable_on_t212 via GET /api/v0/equity/metadata/instruments (ISIN + shortName join).",
-      "status": "ready",
+      "rationale": "Run ftse-library t212-catalogue with TRADING212_API_KEY/SECRET to replace allowlist-assumed tradability with verified catalogue hits, then t212-align.",
+      "status": "blocked_needs_credentials",
       "market_ids": [],
       "cli": "ftse-library t212-catalogue && ftse-library t212-overlay"
+    },
+    {
+      "id": "atx",
+      "label": "ATX (Austria / Wiener B\u00f6rse)",
+      "priority": 6,
+      "rationale": "Wiener B\u00f6rse is listed on Trading 212's Invest instruments marketing; no offline library market yet.",
+      "status": "candidate",
+      "market_ids": [
+        "atx"
+      ],
+      "yahoo_suffix": ".VI",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "psi20",
+      "label": "PSI 20 (Portugal / Euronext Lisbon)",
+      "priority": 7,
+      "rationale": "Euronext Lisbon appears on Trading 212 Invest venue lists; library has other Euronext slices (PA/AS/BR) but not Lisbon.",
+      "status": "candidate",
+      "market_ids": [
+        "psi20"
+      ],
+      "yahoo_suffix": ".LS",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "smi",
+      "label": "SMI (Switzerland / SIX)",
+      "priority": 8,
+      "rationale": "SIX Swiss is widely reported on Trading 212 Invest stock coverage; suffix map exists but no dedicated library market.",
+      "status": "candidate",
+      "market_ids": [
+        "smi"
+      ],
+      "yahoo_suffix": ".SW",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "omxs30",
+      "label": "OMX Stockholm 30",
+      "priority": 9,
+      "rationale": "OMX Nordic coverage is reported for Trading 212 Invest; would also resolve EURO STOXX 50 Nordic names currently curated as exceptions (e.g. Helsinki/Stockholm dual listings).",
+      "status": "candidate",
+      "market_ids": [
+        "omxs30"
+      ],
+      "yahoo_suffix": ".ST",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "iseq20",
+      "label": "ISEQ 20 (Ireland)",
+      "priority": 10,
+      "rationale": "Euronext Dublin / Ireland is in the coverage suffix map (.IR) but has no offline library slice yet.",
+      "status": "candidate",
+      "market_ids": [
+        "iseq20"
+      ],
+      "yahoo_suffix": ".IR",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
     }
   ],
   "firds": {

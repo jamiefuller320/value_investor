@@ -293,6 +293,31 @@ def build_parser() -> argparse.ArgumentParser:
     t212_p.add_argument("--json", action="store_true")
     t212_p.set_defaults(func=cmd_t212_overlay)
 
+    t212_align = sub.add_parser(
+        "t212-align",
+        help=(
+            "Assess offline library vs Trading 212 catalogue "
+            "(writes t212_coverage/alignment_report.json)"
+        ),
+    )
+    t212_align.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all offline library markets)",
+    )
+    t212_align.add_argument(
+        "--allowlist-only",
+        action="store_true",
+        help="Ignore any local catalogue and report allowlist-assumed coverage only",
+    )
+    t212_align.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print report without writing alignment_report.json",
+    )
+    t212_align.add_argument("--json", action="store_true")
+    t212_align.set_defaults(func=cmd_t212_align)
+
     ii_p = sub.add_parser(
         "ii-overlay",
         help="Alias for t212-overlay (Trading 212 is the tradable north star)",
@@ -872,6 +897,72 @@ def cmd_t212_overlay(args: argparse.Namespace) -> int:
 
 # Backward-compatible name used by older docs/scripts.
 cmd_ii_overlay = cmd_t212_overlay
+
+
+def cmd_t212_align(args: argparse.Namespace) -> int:
+    from .t212_coverage import assess_t212_alignment, t212_coverage_root
+
+    markets = _parse_markets(args.markets)
+    report = assess_t212_alignment(
+        args.root,
+        markets=markets,
+        write=not bool(args.dry_run),
+        allowlist_only=bool(args.allowlist_only),
+    )
+    if args.json:
+        print(json.dumps(report, indent=2))
+        return 0
+
+    totals = report.get("library_totals") or {}
+    print(f"Library root: {args.root}")
+    print(f"Coverage root: {t212_coverage_root(args.root)}")
+    print(f"Mode: {report.get('mode')}")
+    print(report.get("note"))
+    if report.get("catalogue"):
+        cat = report["catalogue"]
+        print(
+            f"Catalogue: instruments={cat.get('instrument_count')}  "
+            f"fetched_at={cat.get('fetched_at')}"
+        )
+    print(
+        f"Library totals: markets={totals.get('markets')}  "
+        f"tickers={totals.get('tickers')}  "
+        f"tradable={totals.get('tradable')}  "
+        f"catalogue_hits={totals.get('catalogue_hits')}"
+    )
+    print("\nPer-market alignment:")
+    for row in report.get("markets") or []:
+        print(
+            f"  {row['market']:16} tradable={row['tradable_count']}/{row['ticker_count']} "
+            f"({100 * float(row['tradable_pct']):5.1f}%)  "
+            f"catalogue={row['catalogue_hit_count']} "
+            f"({100 * float(row['catalogue_hit_pct']):5.1f}%)  "
+            f"unk={row['unknown_venue_count']} cur={row['curated_exception_count']}"
+        )
+    weak = report.get("weak_existing_markets") or []
+    if weak:
+        print("\nWeak catalogue matches (existing markets):")
+        for row in weak:
+            print(
+                f"  {row['market']}: {100 * float(row['catalogue_hit_pct']):.1f}% "
+                f"({row['catalogue_hit_count']}/{row['ticker_count']}) — {row['note']}"
+            )
+    print("\nSuggested ladder markets:")
+    suggestions = report.get("suggested_ladder_markets") or []
+    if not suggestions:
+        print("  (none — catalogue absent filters none, or all gaps already covered)")
+    for item in suggestions:
+        support = item.get("catalogue_support")
+        extra = ""
+        if support:
+            extra = f"  catalogue_stocks={support.get('stock_count_on_hints')}"
+        print(
+            f"  [{item.get('priority')}] {item.get('id')}: {item.get('label')}{extra}"
+        )
+        print(f"      {item.get('rationale')}")
+    if not args.dry_run:
+        print(f"\nWrote: {t212_coverage_root(args.root) / 'alignment_report.json'}")
+    return 0
 
 
 def cmd_firds_filter(args: argparse.Namespace) -> int:

@@ -38,7 +38,7 @@ DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10
 DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
 # Index slices that map toward Trading 212 tradable coverage (offline).
-# Live FTSE 350 screen is unchanged. Full II instrument catalog is deferred (L34).
+# Live FTSE 350 screen is unchanged. Confirm tradability via t212-catalogue/t212-align.
 DEFAULT_MARKET_QUEUE = [
     "sp500",
     "euro_stoxx50",
@@ -48,7 +48,7 @@ DEFAULT_MARKET_QUEUE = [
     "dax",
     "cac40",
     "tsx60",
-    # L34 next slices
+    # Graduated offline slices
     "aim",
     "ibex35",
     "ftse_mib",
