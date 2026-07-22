@@ -1,6 +1,11 @@
-# Decision-review learning (paper-auto)
+## Decision-review learning (paper-auto)
 
-Stage 1 loop: review the automated paper book **after costs**, then nudge small trading knobs. Screen signals stay frozen.
+Primary loop: an **AI-judgment** paper book makes stock picks from research available
+at decision time; confirmation is **excess return after costs vs the market**
+(^FTSE), with a **rules** book as control. See
+[`primary-learning-track.md`](primary-learning-track.md).
+
+Screen signals stay frozen (N3). Knobs nudge slowly when history is thick.
 
 ## Knobs
 
@@ -10,28 +15,37 @@ Stage 1 loop: review the automated paper book **after costs**, then nudge small 
 | `skip_timing_wait` | true | Drop `timing_signal=wait` from new buys |
 | `min_conviction` | 0.0 | Conviction floor (bounds 0–0.6) |
 | `sector_cap` | 0.30 | Max equal-weight sleeves per *known* sector |
+| `use_adjusted_signal` | false / **true on AI track** | Gate on research overlay signal |
+| `require_research_accumulate` | false / **true on AI track** | Only buy when memo verdict is accumulate |
 
-Stored in `docs/data/paper_automation/config.json` (and runtime `output/paper_automation/`).
+Stored per track in `docs/data/paper_automation[/ai_judgment]/config.json`.
 
 ## Commands
 
 ```bash
-# Propose only (writes decision_review.json)
-ftse-decision-review --output-dir docs/data/paper_automation
+# Run both tracks
+ftse-paper-auto --output-dir docs/data/paper_automation --tracks all
+
+# Review both vs market (writes learning_tracks_review.json)
+ftse-decision-review --output-dir docs/data/paper_automation --tracks all
 
 # Apply clamped updates when ≥4 equity marks and ≥2 trades
-ftse-decision-review --output-dir docs/data/paper_automation --apply
+ftse-decision-review --output-dir docs/data/paper_automation --tracks all --apply
 ```
 
-Weekday `paper-auto.yml` seeds prior state, runs automation, then `ftse-decision-review --apply`. Thin history stays propose-only until marks accumulate.
+Weekday `paper-auto.yml` seeds prior state, runs both tracks, then
+`ftse-decision-review --tracks all --apply`. Thin history stays propose-only.
 
 ## Artifacts
 
-- `decision_review.json` — latest metrics, proposed changes, reasons
-- `decision_review_history.json` — last 52 reviews
+- `learning_tracks_summary.json` / `learning_tracks_review.json` — dual-track rollup
+- `decision_review.json` — per-track metrics, proposed changes, reasons
+- `decision_review_history.json` — last 52 reviews per track
 
 ## Safety
 
 - Steps are small (±1 position, ±0.05 conviction/sector).
 - No screen-signal or model-weight edits (those stay in archive weight learning).
 - Evolutionary genomes (L2) wait until this loop has thicker history.
+- Do not promote AI gates to live capital until the primary track shows persistent
+  excess vs market and vs the rules control.

@@ -55,6 +55,12 @@ class AutomationConfig:
     skip_timing_wait: bool = True
     min_conviction: float = 0.0
     sector_cap: float = DEFAULT_TARGET_SECTOR_CAP
+    # Learning-track policy (primary = AI judgment vs market excess).
+    track_id: str = "rules"
+    track_label: str = "Screen rules (control)"
+    is_primary_learning_track: bool = False
+    use_adjusted_signal: bool = False
+    require_research_accumulate: bool = False
 
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)
@@ -67,6 +73,15 @@ class AutomationConfig:
         base = datetime.combine(date(2000, 1, 1), self.market_open_time())
         settled = base + timedelta(minutes=int(self.settle_minutes_after_open))
         return settled.time()
+
+    def selection_kwargs(self) -> dict[str, Any]:
+        return {
+            "skip_timing_wait": bool(self.skip_timing_wait),
+            "min_conviction": float(self.min_conviction),
+            "sector_cap": float(self.sector_cap),
+            "use_adjusted_signal": bool(self.use_adjusted_signal),
+            "require_research_accumulate": bool(self.require_research_accumulate),
+        }
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -96,7 +111,48 @@ class AutomationConfig:
                 if raw.get("sector_cap") is not None
                 else DEFAULT_TARGET_SECTOR_CAP
             ),
+            track_id=str(raw.get("track_id") or "rules"),
+            track_label=str(raw.get("track_label") or "Screen rules (control)"),
+            is_primary_learning_track=bool(raw.get("is_primary_learning_track", False)),
+            use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
+            require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
         )
+
+
+AI_JUDGMENT_TRACK_ID = "ai_judgment"
+RULES_TRACK_ID = "rules"
+AI_JUDGMENT_SUBDIR = "ai_judgment"
+
+
+def default_ai_judgment_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Primary learning track: AI/research judgment at decision time."""
+    cfg = AutomationConfig.from_dict((base or AutomationConfig()).to_dict())
+    cfg.track_id = AI_JUDGMENT_TRACK_ID
+    cfg.track_label = "AI judgment (research accumulate + adjusted_signal)"
+    cfg.is_primary_learning_track = True
+    cfg.use_adjusted_signal = True
+    cfg.require_research_accumulate = True
+    return cfg
+
+
+def default_rules_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Control track: raw screen buy-tier rules only."""
+    cfg = AutomationConfig.from_dict((base or AutomationConfig()).to_dict())
+    cfg.track_id = RULES_TRACK_ID
+    cfg.track_label = "Screen rules (control)"
+    cfg.is_primary_learning_track = False
+    cfg.use_adjusted_signal = False
+    cfg.require_research_accumulate = False
+    return cfg
+
+
+def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
+    """Map track_id → output directory under the paper-automation root."""
+    root = Path(base_dir)
+    return {
+        RULES_TRACK_ID: root,
+        AI_JUDGMENT_TRACK_ID: root / AI_JUDGMENT_SUBDIR,
+    }
 
 
 def local_now(config: AutomationConfig, now: datetime | None = None) -> datetime:
@@ -499,11 +555,7 @@ def run_daily_automation(
     screen_rows = load_screen_candidates(reports_path)
     owned_tickers = list(fund.holdings.keys()) + [str(w["ticker"]) for w in watchlist]
     marked = refresh_candidate_marks(screen_rows, extra_tickers=owned_tickers)
-    select_kwargs = {
-        "skip_timing_wait": bool(config.skip_timing_wait),
-        "min_conviction": float(config.min_conviction),
-        "sector_cap": float(config.sector_cap),
-    }
+    select_kwargs = config.selection_kwargs()
 
     plan = (
         preview_automated_plan(fund, marked, **select_kwargs)
@@ -560,11 +612,120 @@ def run_daily_automation(
         fund=fund.to_dict(),
         note=note,
     )
+    payload = result.to_dict()
+    payload["track_id"] = config.track_id
+    payload["track_label"] = config.track_label
+    payload["is_primary_learning_track"] = config.is_primary_learning_track
+    payload["selection"] = config.selection_kwargs()
     (output_dir / REPORT_FILENAME).write_text(
-        json.dumps(result.to_dict(), indent=2),
+        json.dumps(payload, indent=2),
         encoding="utf-8",
     )
     return result
+
+
+def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]:
+    """Ensure rules (control) + AI judgment (primary) configs exist under base_dir."""
+    base_dir = Path(base_dir)
+    dirs = learning_track_dirs(base_dir)
+    configs: dict[str, AutomationConfig] = {}
+
+    rules_path = dirs[RULES_TRACK_ID] / CONFIG_FILENAME
+    if rules_path.exists():
+        rules = AutomationConfig.from_dict(json.loads(rules_path.read_text(encoding="utf-8")))
+        # Preserve knobs; stamp track metadata if missing/outdated.
+        rules.track_id = RULES_TRACK_ID
+        rules.is_primary_learning_track = False
+        rules.use_adjusted_signal = False
+        rules.require_research_accumulate = False
+        if not rules.track_label or rules.track_label == "Screen rules (control)":
+            rules.track_label = "Screen rules (control)"
+    else:
+        rules = default_rules_config()
+    rules_path.parent.mkdir(parents=True, exist_ok=True)
+    rules_path.write_text(json.dumps(rules.to_dict(), indent=2), encoding="utf-8")
+    configs[RULES_TRACK_ID] = rules
+
+    ai_dir = dirs[AI_JUDGMENT_TRACK_ID]
+    ai_path = ai_dir / CONFIG_FILENAME
+    ai_dir.mkdir(parents=True, exist_ok=True)
+    if ai_path.exists():
+        ai = AutomationConfig.from_dict(json.loads(ai_path.read_text(encoding="utf-8")))
+        ai.track_id = AI_JUDGMENT_TRACK_ID
+        ai.is_primary_learning_track = True
+        ai.use_adjusted_signal = True
+        ai.require_research_accumulate = True
+        ai.track_label = ai.track_label or "AI judgment (research accumulate + adjusted_signal)"
+        # Inherit shared operational settings from rules when unset-like.
+        ai.timezone = rules.timezone
+        ai.market_open = rules.market_open
+        ai.settle_minutes_after_open = rules.settle_minutes_after_open
+        ai.weekdays_only = rules.weekdays_only
+        ai.trade_cost_pct = rules.trade_cost_pct
+        ai.initial_cash = rules.initial_cash
+    else:
+        ai = default_ai_judgment_config(rules)
+    ai_path.write_text(json.dumps(ai.to_dict(), indent=2), encoding="utf-8")
+    configs[AI_JUDGMENT_TRACK_ID] = ai
+    return configs
+
+
+def run_learning_tracks(
+    *,
+    base_dir: Path = DEFAULT_AUTOMATION_DIR,
+    reports_path: Path | None = None,
+    now: datetime | None = None,
+    force: bool = False,
+    tracks: list[str] | None = None,
+    surveillance_only: bool = False,
+) -> dict[str, Any]:
+    """
+    Run the primary AI-judgment learning track plus the rules control book.
+
+    Success for the primary track is later judged by decision-review excess
+    vs the market benchmark (and vs the rules control), not by human trade confirms.
+    """
+    base_dir = Path(base_dir)
+    configs = ensure_learning_track_configs(base_dir)
+    dirs = learning_track_dirs(base_dir)
+    wanted = list(tracks) if tracks else [RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID]
+    results: dict[str, Any] = {}
+    for track_id in wanted:
+        if track_id not in configs:
+            continue
+        cfg = configs[track_id]
+        if surveillance_only:
+            cfg = AutomationConfig.from_dict(cfg.to_dict())
+            cfg.auto_rebalance = False
+        result = run_daily_automation(
+            output_dir=dirs[track_id],
+            config=cfg,
+            reports_path=reports_path,
+            now=now,
+            force=force,
+        )
+        results[track_id] = {
+            "output_dir": str(dirs[track_id]),
+            "acted": result.acted,
+            "trades": len(result.trades),
+            "note": result.note,
+            "is_primary_learning_track": cfg.is_primary_learning_track,
+            "selection": cfg.selection_kwargs(),
+        }
+    summary = {
+        "schema_version": 1,
+        "primary_learning_track": AI_JUDGMENT_TRACK_ID,
+        "success_criterion": (
+            "Outperformance after costs vs market benchmark (^FTSE) on the "
+            "primary AI-judgment track; rules track is the control."
+        ),
+        "tracks": results,
+    }
+    (base_dir / "learning_tracks_summary.json").write_text(
+        json.dumps(summary, indent=2),
+        encoding="utf-8",
+    )
+    return summary
 
 
 def format_automation_text(result: AutomationRunResult) -> str:

@@ -18,7 +18,8 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 |-------|------|---------|---------------|
 | **0** | UK quant core | FTSE 350 screen, adaptive weights, research memos, paper funds, post-open automation | Weekly archives accumulating; paper-auto + decision packs usable |
 | **1** | Decision-review learning | Automated book learns from its own outcomes after costs | Documented review loop; knobs adjust from reviewed excess returns (`ftse-decision-review`) |
-| **2** | Manual-action excellence *(current)* | Decision packs good enough for routine human trading | Stable packs: signal → thesis → levels → size → risks; low false confidence (`decision_pack`) |
+| **2** | Manual-action excellence | Decision packs good enough for routine human trading *(optional for live capital)* | Stable packs: signal → thesis → levels → size → risks; low false confidence (`decision_pack`) |
+| **2b** | **Primary learning track** *(current focus)* | AI judgment paper book vs market datums | Hands-off: research-gated picks; success = excess after costs vs ^FTSE (+ beat rules control) |
 | **3** | Library-ready global data | Multi-market fundamentals/prices grow *offline* without polluting the live screen | Per-market manifests with coverage & freshness metrics; PIT constituent snapshots |
 | **4** | Controlled universe expansion | First non-UK market screened with same quality bar as FTSE 350 | Data-quality and liquidity floors pass; paper track only at first |
 | **5** | Self-improving automation | Portfolio rules improve from walk-forward review (evolution only if history is thick) | Cost-aware fitness; frozen screen signals for counterfactual safety |
@@ -26,10 +27,11 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 
 ### What “best progress” means now
 
-1. **Use verify-before-trade packs** — email + Strong Buys dashboard; tighten research prompts when gaps show up.
-2. **Keep decision-review learning running** — accumulate equity marks until knobs apply.
-3. **Grow data libraries in the background** — progressive multi-market snapshots ready for stage 4, without changing the live screen.
-4. **Only then** expand live coverage and tighten automation.
+1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
+2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
+3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.
+4. **Grow data libraries in the background** — progressive multi-market snapshots ready for stage 4, without changing the live screen.
+5. **Only then** expand live coverage and tighten automation.
 
 ---
 

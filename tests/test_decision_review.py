@@ -59,6 +59,45 @@ def test_select_automated_targets_respects_conviction_and_sector_cap():
     assert tickers == ["AAA.L", "CCC.L"]
 
 
+def test_select_automated_targets_ai_judgment_gates():
+    candidates = [
+        {
+            "ticker": "GOOD.L",
+            "signal": "buy",
+            "adjusted_signal": "strong_buy",
+            "research_verdict": "accumulate",
+            "conviction_score": 0.9,
+            "price": 10,
+        },
+        {
+            "ticker": "NOMEMO.L",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "research_verdict": None,
+            "conviction_score": 0.95,
+            "price": 10,
+        },
+        {
+            "ticker": "AVOID.L",
+            "signal": "strong_buy",
+            "adjusted_signal": "avoid",
+            "research_verdict": "pass",
+            "conviction_score": 0.99,
+            "price": 10,
+        },
+    ]
+    rules = select_automated_targets(candidates, max_positions=5)
+    assert [r["ticker"] for r in rules] == ["AVOID.L", "NOMEMO.L", "GOOD.L"]
+
+    ai = select_automated_targets(
+        candidates,
+        max_positions=5,
+        use_adjusted_signal=True,
+        require_research_accumulate=True,
+    )
+    assert [r["ticker"] for r in ai] == ["GOOD.L"]
+
+
 def test_propose_knobs_raises_conviction_on_high_cost_drag():
     metrics = BookMetrics(
         portfolio_value=950,

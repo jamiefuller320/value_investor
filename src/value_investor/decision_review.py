@@ -135,6 +135,13 @@ class DecisionReviewResult:
     reasons: list[str] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
     note: str = ""
+    track_id: str = "rules"
+    track_label: str = ""
+    is_primary_learning_track: bool = False
+    success_criterion: str = (
+        "Outperformance after costs vs market benchmark (^FTSE); "
+        "knob updates only when excess persistently justifies them."
+    )
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -486,6 +493,18 @@ def run_decision_review(
         reasons=reasons,
         metrics=metrics.to_dict(),
         note=note,
+        track_id=str(config.track_id or "rules"),
+        track_label=str(config.track_label or ""),
+        is_primary_learning_track=bool(config.is_primary_learning_track),
+        success_criterion=(
+            "Outperformance after costs vs market benchmark (^FTSE) on this track; "
+            "AI-judgment is the primary learning track, rules is the control."
+            if config.is_primary_learning_track
+            else (
+                "Control track — compare excess_after_costs to the primary AI-judgment "
+                "book; do not treat rules outperformance alone as learning success."
+            )
+        ),
     )
     payload = result.to_dict()
     (output_dir / REVIEW_FILENAME).write_text(
@@ -499,6 +518,9 @@ def format_review_text(result: DecisionReviewResult) -> str:
     m = result.metrics
     lines = [
         "Decision review (paper-auto learning)",
+        f"  Track: {result.track_id} ({result.track_label or '—'})"
+        f"{' [PRIMARY]' if result.is_primary_learning_track else ' [control]'}",
+        f"  Success criterion: {result.success_criterion}",
         f"  Status: {result.note}",
         f"  Enough history: {result.enough_history}",
         f"  Applied: {result.applied}",
@@ -514,8 +536,86 @@ def format_review_text(result: DecisionReviewResult) -> str:
             f"  Excess after costs vs FTSE: {excess:+.1%} "
             f"(benchmark {m.get('benchmark_return'):+.1%})"
         )
+    else:
+        lines.append("  Excess after costs vs FTSE: unavailable (need benchmark + marks)")
     if result.proposed_changes:
         lines.append(f"  Proposed: {result.proposed_changes}")
     for reason in result.reasons[:6]:
         lines.append(f"  - {reason}")
     return "\n".join(lines)
+
+
+def compare_learning_tracks(
+    *,
+    base_dir: Path = DEFAULT_AUTOMATION_DIR,
+    apply: bool = False,
+    force: bool = False,
+    fetch_benchmark: bool = True,
+) -> dict[str, Any]:
+    """
+    Review rules (control) + AI judgment (primary) and summarize outperformance.
+
+    Success for the primary track = excess_after_costs vs ^FTSE (and ideally
+    beating the rules control on the same window).
+    """
+    from value_investor.paper_automation import (
+        AI_JUDGMENT_TRACK_ID,
+        RULES_TRACK_ID,
+        ensure_learning_track_configs,
+        learning_track_dirs,
+    )
+
+    base_dir = Path(base_dir)
+    ensure_learning_track_configs(base_dir)
+    dirs = learning_track_dirs(base_dir)
+    reviews: dict[str, Any] = {}
+    for track_id, track_dir in dirs.items():
+        result = run_decision_review(
+            output_dir=track_dir,
+            apply=apply,
+            force=force,
+            fetch_benchmark=fetch_benchmark,
+        )
+        reviews[track_id] = result.to_dict()
+
+    primary = reviews.get(AI_JUDGMENT_TRACK_ID) or {}
+    control = reviews.get(RULES_TRACK_ID) or {}
+    primary_excess = (primary.get("metrics") or {}).get("excess_after_costs")
+    control_excess = (control.get("metrics") or {}).get("excess_after_costs")
+    beat_market = primary_excess is not None and primary_excess > 0
+    beat_control = (
+        primary_excess is not None
+        and control_excess is not None
+        and primary_excess > control_excess
+    )
+    summary = {
+        "schema_version": 1,
+        "primary_learning_track": AI_JUDGMENT_TRACK_ID,
+        "success_criterion": (
+            "Primary AI-judgment track outperforms ^FTSE after costs; "
+            "rules track is the control datum."
+        ),
+        "primary_excess_after_costs": primary_excess,
+        "control_excess_after_costs": control_excess,
+        "beat_market": beat_market,
+        "beat_control": beat_control,
+        "verdict": (
+            "outperforming"
+            if beat_market and beat_control
+            else (
+                "beating_market"
+                if beat_market
+                else (
+                    "underperforming"
+                    if primary_excess is not None
+                    else "insufficient_data"
+                )
+            )
+        ),
+        "reviews": reviews,
+    }
+    (base_dir / "learning_tracks_review.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+    )
+    return summary
+

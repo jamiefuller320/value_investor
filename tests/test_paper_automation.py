@@ -126,3 +126,69 @@ def test_run_daily_automation_skips_before_settle(tmp_path, monkeypatch):
     )
     assert result.acted is False
     assert result.gate["can_act"] is False
+
+
+def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch):
+    from value_investor.paper_automation import run_learning_tracks
+
+    reports = {
+        "reports": [
+            {
+                "ticker": "GOOD.L",
+                "name": "Good",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "research_verdict": "accumulate",
+                "conviction_score": 0.9,
+                "price": 10,
+                "timing_signal": "accumulate",
+            },
+            {
+                "ticker": "SCREEN.L",
+                "name": "ScreenOnly",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "research_verdict": None,
+                "conviction_score": 0.85,
+                "price": 12,
+                "timing_signal": "neutral",
+            },
+        ]
+    }
+    reports_path = tmp_path / "latest.json"
+    reports_path.write_text(__import__("json").dumps(reports), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.paper_automation.refresh_candidate_marks",
+        lambda candidates, extra_tickers=None: candidates,
+    )
+
+    summary = run_learning_tracks(
+        base_dir=tmp_path / "auto",
+        reports_path=reports_path,
+        now=datetime(2026, 7, 15, 10, 0, tzinfo=LONDON),
+        force=True,
+    )
+    assert summary["primary_learning_track"] == "ai_judgment"
+    assert "rules" in summary["tracks"]
+    assert "ai_judgment" in summary["tracks"]
+    assert summary["tracks"]["ai_judgment"]["is_primary_learning_track"] is True
+    assert (tmp_path / "auto" / "learning_tracks_summary.json").exists()
+    assert (tmp_path / "auto" / "ai_judgment" / "config.json").exists()
+
+    rules_fund = PaperFund.from_dict(
+        __import__("json").loads(
+            (tmp_path / "auto" / "automated_fund.json").read_text(encoding="utf-8")
+        )
+    )
+    ai_fund = PaperFund.from_dict(
+        __import__("json").loads(
+            (tmp_path / "auto" / "ai_judgment" / "automated_fund.json").read_text(
+                encoding="utf-8"
+            )
+        )
+    )
+    # Rules may hold both buy-tier names; AI judgment requires research accumulate.
+    assert "GOOD.L" in ai_fund.holdings
+    assert "SCREEN.L" not in ai_fund.holdings
+    assert "GOOD.L" in rules_fund.holdings
+    assert "SCREEN.L" in rules_fund.holdings
