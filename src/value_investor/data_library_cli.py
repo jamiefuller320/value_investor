@@ -136,13 +136,38 @@ def build_parser() -> argparse.ArgumentParser:
         "--plan-monthly-usd",
         type=float,
         default=None,
-        help="Included plan budget in USD (e.g. 20 for Pro)",
+        help="Cursor subscription included pool USD (metadata; e.g. 20 for Pro)",
+    )
+    policy_p.add_argument(
+        "--weekly-usage-gbp",
+        type=float,
+        default=None,
+        help="Usage-based weekly library research envelope in GBP (sets allocation_basis)",
+    )
+    policy_p.add_argument(
+        "--gbp-usd-rate",
+        type=float,
+        default=None,
+        help="GBP→USD rate used to convert weekly_usage_gbp into the USD ledger",
     )
     policy_p.add_argument(
         "--weekly-fraction",
         type=float,
         default=None,
-        help="Fraction of plan budget for library strand per week (default 0.10)",
+        help="Legacy: fraction of plan_monthly_usd per week (sets allocation_basis=plan_fraction)",
+    )
+    policy_p.add_argument(
+        "--enforce-weekly-research-cap",
+        dest="enforce_weekly_research_cap",
+        action="store_true",
+        default=None,
+        help="Gate selective research when the weekly usage envelope is spent",
+    )
+    policy_p.add_argument(
+        "--no-enforce-weekly-research-cap",
+        dest="enforce_weekly_research_cap",
+        action="store_false",
+        help="Disable the weekly usage research gate",
     )
     policy_p.add_argument(
         "--refresh-day",
@@ -572,6 +597,7 @@ def cmd_grow(args: argparse.Namespace) -> int:
         f"Focus: {', '.join(markets)}  max_tickers={max_tickers}  "
         f"surplus_day={plan['surplus_day']}  "
         f"weekly_budget=${plan['weekly_library_usd']}  "
+        f"budget_flag={plan.get('budget_flag')}  "
         f"model={plan['research_model']}"
     )
     print()
@@ -592,6 +618,7 @@ def cmd_grow(args: argparse.Namespace) -> int:
 
 
 def cmd_policy(args: argparse.Namespace) -> int:
+    from .agent_model_policy import weekly_budget_status
     from .library_graduation import graduated_market_ids
 
     policy = load_policy(args.policy)
@@ -606,8 +633,21 @@ def cmd_policy(args: argparse.Namespace) -> int:
     if args.plan_monthly_usd is not None:
         budget["plan_monthly_usd"] = float(args.plan_monthly_usd)
         changed = True
+    if args.weekly_usage_gbp is not None:
+        budget["weekly_usage_gbp"] = float(args.weekly_usage_gbp)
+        budget["allocation_basis"] = "usage_weekly_gbp"
+        if args.enforce_weekly_research_cap is None:
+            budget["enforce_weekly_research_cap"] = True
+        changed = True
+    if args.gbp_usd_rate is not None:
+        budget["gbp_usd_rate"] = float(args.gbp_usd_rate)
+        changed = True
     if args.weekly_fraction is not None:
         budget["weekly_library_fraction"] = float(args.weekly_fraction)
+        budget["allocation_basis"] = "plan_fraction"
+        changed = True
+    if args.enforce_weekly_research_cap is not None:
+        budget["enforce_weekly_research_cap"] = bool(args.enforce_weekly_research_cap)
         changed = True
     if args.refresh_day is not None:
         budget["plan_refresh_day_of_month"] = max(1, min(28, int(args.refresh_day)))
@@ -620,12 +660,15 @@ def cmd_policy(args: argparse.Namespace) -> int:
         save_policy(policy, args.policy)
         policy = load_policy(args.policy)
     if args.json:
-        print(json.dumps(policy, indent=2))
+        payload = dict(policy)
+        payload["budget_status"] = weekly_budget_status(policy)
+        print(json.dumps(payload, indent=2))
         return 0
     budget = policy.get("budget") or {}
     model = policy.get("research_model") or {}
     fg = policy.get("focus_graduation") or {}
     graduated = graduated_market_ids(policy)
+    status = weekly_budget_status(policy)
     print(f"Policy: {args.policy}")
     print(f"Focus market: {policy.get('focus_market')}")
     print(f"Queue: {', '.join(policy.get('market_queue') or [])}")
@@ -636,18 +679,38 @@ def cmd_policy(args: argparse.Namespace) -> int:
         f"auto_advance={fg.get('auto_advance')}  "
         f"maintenance_max_tickers={fg.get('maintenance_max_tickers')}"
     )
+    basis = status.get("allocation_basis") or budget.get("allocation_basis")
+    if basis == "usage_weekly_gbp":
+        print(
+            f"Budget: £{budget.get('weekly_usage_gbp')}/week usage "
+            f"(×{budget.get('gbp_usd_rate')} → ${budget.get('weekly_library_usd')}/week)  "
+            f"subscription=${budget.get('plan_monthly_usd')}/mo ({budget.get('plan_name') or 'Cursor'})  "
+            f"enforce={budget.get('enforce_weekly_research_cap')}  "
+            f"refresh_day={budget.get('plan_refresh_day_of_month')}"
+        )
+    else:
+        print(
+            f"Budget: ${budget.get('weekly_library_usd')}/week "
+            f"({100 * float(budget.get('weekly_library_fraction') or 0):.0f}% of "
+            f"${budget.get('plan_monthly_usd')}/mo)  "
+            f"enforce={budget.get('enforce_weekly_research_cap')}  "
+            f"refresh_day={budget.get('plan_refresh_day_of_month')}  "
+            f"surplus_day_before_refresh={budget.get('surplus_day_before_refresh')}"
+        )
     print(
-        f"Budget: ${budget.get('weekly_library_usd')}/week "
-        f"({100 * float(budget.get('weekly_library_fraction') or 0):.0f}% of "
-        f"${budget.get('plan_monthly_usd')}/mo)  "
-        f"refresh_day={budget.get('plan_refresh_day_of_month')}  "
-        f"surplus_day_before_refresh={budget.get('surplus_day_before_refresh')}"
+        f"Spend this week: ${status.get('estimated_spend_usd_this_week')}  "
+        f"remaining=${status.get('remaining_weekly_usd')}  "
+        f"flag={status.get('flag')}"
+        + (f"  — {status['note']}" if status.get("note") else "")
     )
     print(
         f"Research model: {model.get('model_id')} "
         f"({model.get('pool')}) — {model.get('reason')}"
     )
-    print(f"Set refresh day to match Cursor billing: ftse-library policy --refresh-day N")
+    print(
+        "Set usage envelope: ftse-library policy --weekly-usage-gbp 30 "
+        "--enforce-weekly-research-cap"
+    )
     return 0
 
 

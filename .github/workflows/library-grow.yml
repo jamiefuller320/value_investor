@@ -39,15 +39,18 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Ensure Pro billing policy (8th) + plan tickers
+      - name: Ensure usage weekly budget (£30) + plan tickers
         id: plan
         run: |
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
           # Preserve focus_market / graduated_markets — do not force sp500.
+          # Subscription ($20) is metadata; library research uses £30/week usage envelope.
           ftse-library --policy "$ROOT/policy.json" policy \
             --plan-monthly-usd 20 \
-            --weekly-fraction 0.1 \
+            --weekly-usage-gbp 30 \
+            --gbp-usd-rate 1.27 \
+            --enforce-weekly-research-cap \
             --refresh-day 8 >/dev/null
           python3 - <<'PY'
           import json
@@ -71,6 +74,7 @@ jobs:
               surplus=str(plan["surplus_day"]).lower(),
               model=plan["research_model"],
               weekly_usd=str(plan["weekly_library_usd"]),
+              constraining=str(plan.get("constraining", False)).lower(),
           )
           print(json.dumps(plan, indent=2))
           PY

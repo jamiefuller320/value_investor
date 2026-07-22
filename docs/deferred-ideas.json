@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T07:39:34+00:00",
+  "updated_at": "2026-07-22T07:52:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1047,6 +1047,55 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
       "added_at": "2026-07-22T07:39:34+00:00"
+    },
+    {
+      "id": "L50",
+      "category": "later",
+      "section": "ops",
+      "title": "Separate Cursor subscription vs on-demand usage ceilings in policy",
+      "summary": "Implemented: allocation_basis=usage_weekly_gbp (\u00a330/week \u00d7 gbp_usd_rate), enforce_weekly_research_cap, and constraining/near_limit budget flags. Subscription plan_monthly_usd remains metadata.",
+      "revisit_when": "n/a \u2014 done in weekly usage budget PR",
+      "tags": [
+        "t212",
+        "budget",
+        "cursor",
+        "usage"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:52:52+00:00",
+      "updated_at": "2026-07-22T07:52:52+00:00"
+    },
+    {
+      "id": "L51",
+      "category": "later",
+      "section": "ops",
+      "title": "Unify live FTSE research spend into library weekly ledger",
+      "summary": "Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation.",
+      "revisit_when": "After a few weeks of enforce_weekly_research_cap with the \u00a330 usage envelope",
+      "tags": [
+        "budget",
+        "cursor",
+        "live-research"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:52:52+00:00"
+    },
+    {
+      "id": "L52",
+      "category": "later",
+      "section": "ops",
+      "title": "Recalibrate estimated_memo_usd from real Cursor bills",
+      "summary": "Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd.",
+      "revisit_when": "2\u20134 weeks of enforce_weekly_research_cap=true with known memo counts",
+      "tags": [
+        "budget",
+        "calibration"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:52:52+00:00"
     }
   ]
 }

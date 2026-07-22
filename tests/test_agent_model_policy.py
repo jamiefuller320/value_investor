@@ -14,6 +14,7 @@ from value_investor.agent_model_policy import (
     record_estimated_spend,
     review_model,
     save_policy,
+    weekly_budget_status,
 )
 from value_investor.data_library_cli import main as library_main
 from value_investor.fetch import resolve_yahoo_ticker_for_market
@@ -46,8 +47,10 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     path = tmp_path / "policy.json"
     policy = load_policy(path)
     policy["focus_market"] = "sp500"
+    policy["budget"]["allocation_basis"] = "plan_fraction"
     policy["budget"]["plan_monthly_usd"] = 20
     policy["budget"]["weekly_library_fraction"] = 0.10
+    policy["budget"]["enforce_weekly_research_cap"] = False
     policy["budget"]["plan_refresh_day_of_month"] = 8
     save_policy(policy, path)
     policy = load_policy(path)
@@ -59,9 +62,9 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     assert normal["max_tickers"] == 40
     assert normal["surplus_day"] is False
     assert normal["weekly_library_usd"] == 2.0
-    # Weekly research dollar strand is off by default; research still allowed.
     assert normal["enforce_weekly_research_cap"] is False
     assert normal["allow_research"] is True
+    assert normal["constraining"] is False
 
     # Surplus day is the 7th when refresh is the 8th
     surplus = grow_ticker_budget(
@@ -74,16 +77,72 @@ def test_grow_budget_focus_and_surplus(tmp_path: Path):
     assert surplus["max_tickers"] == 120
 
 
+def test_usage_weekly_gbp_allocation(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    policy = load_policy(path)
+    policy["budget"]["allocation_basis"] = "usage_weekly_gbp"
+    policy["budget"]["weekly_usage_gbp"] = 30.0
+    policy["budget"]["gbp_usd_rate"] = 1.27
+    policy["budget"]["enforce_weekly_research_cap"] = True
+    policy["budget"]["estimated_spend_usd_this_week"] = 0.8
+    policy["budget"]["week_id"] = datetime.now(UTC).strftime("%G-W%V")
+    save_policy(policy, path)
+    policy = load_policy(path)
+
+    assert policy["budget"]["weekly_library_usd"] == 38.1
+    status = weekly_budget_status(policy)
+    assert status["allocation_basis"] == "usage_weekly_gbp"
+    assert status["weekly_usage_gbp"] == 30.0
+    assert status["remaining_weekly_usd"] == 37.3
+    assert status["constraining"] is False
+    assert status["flag"] == "enforced"
+
+    plan = grow_ticker_budget(
+        policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC)
+    )
+    assert plan["weekly_library_usd"] == 38.1
+    assert plan["allow_research"] is True
+    assert plan["budget_flag"] == "enforced"
+
+
+def test_weekly_budget_constraining_flag(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    policy = load_policy(path)
+    policy["budget"]["allocation_basis"] = "usage_weekly_gbp"
+    policy["budget"]["weekly_usage_gbp"] = 30.0
+    policy["budget"]["gbp_usd_rate"] = 1.27
+    policy["budget"]["enforce_weekly_research_cap"] = True
+    policy["budget"]["estimated_spend_usd_this_week"] = 38.1
+    policy["budget"]["week_id"] = datetime.now(UTC).strftime("%G-W%V")
+    save_policy(policy, path)
+    policy = load_policy(path)
+
+    status = weekly_budget_status(policy)
+    assert status["constraining"] is True
+    assert status["flag"] == "constraining"
+    assert status["remaining_weekly_usd"] == 0.0
+    assert "constraining" in (status.get("note") or "")
+
+    gated = grow_ticker_budget(
+        policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC)
+    )
+    assert gated["allow_research"] is False
+    assert gated["constraining"] is True
+
+
 def test_weekly_research_cap_can_be_re_enabled(tmp_path: Path):
     path = tmp_path / "policy.json"
     policy = load_policy(path)
+    policy["budget"]["allocation_basis"] = "plan_fraction"
+    policy["budget"]["weekly_library_fraction"] = 0.10
+    policy["budget"]["plan_monthly_usd"] = 20
     policy["budget"]["enforce_weekly_research_cap"] = True
     policy["budget"]["estimated_spend_usd_this_week"] = 2.0
-    policy["budget"]["weekly_library_usd"] = 2.0
     policy["budget"]["week_id"] = datetime.now(UTC).strftime("%G-W%V")
     save_policy(policy, path)
     policy = load_policy(path)
     assert enforce_weekly_research_cap(policy) is True
+    assert policy["budget"]["weekly_library_usd"] == 2.0
     gated = grow_ticker_budget(
         policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC)
     )
@@ -109,6 +168,9 @@ def test_record_estimated_spend(tmp_path: Path):
     assert budget["estimated_spend_usd_this_week"] == 0.5
     budget = record_estimated_spend(0.25, path)
     assert budget["estimated_spend_usd_this_week"] == 0.75
+    # Usage mode must survive spend recording (not reset via plan_fraction).
+    assert budget["allocation_basis"] == "usage_weekly_gbp"
+    assert budget["weekly_library_usd"] == 38.1
 
 
 def test_market_aware_yahoo_resolution():
@@ -147,6 +209,25 @@ def test_cli_policy_and_review(tmp_path: Path, capsys):
     out = capsys.readouterr().out
     assert "Focus market: sp500" in out
     assert "$2.0/week" in out or "$2/week" in out
+
+    assert (
+        library_main(
+            [
+                "--policy",
+                str(path),
+                "policy",
+                "--weekly-usage-gbp",
+                "30",
+                "--gbp-usd-rate",
+                "1.27",
+                "--enforce-weekly-research-cap",
+            ]
+        )
+        == 0
+    )
+    usage_out = capsys.readouterr().out
+    assert "£30" in usage_out or "£30.0" in usage_out
+    assert "flag=" in usage_out
     assert library_main(["--policy", str(path), "review-model", "--json"]) == 0
     review_out = capsys.readouterr().out
     assert "composer-2.5" in review_out or "gpt-5.4-nano" in review_out

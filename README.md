@@ -211,7 +211,7 @@ ftse-library ladder --dry-run-research
 ftse-library review-model
 ```
 
-Budget: **Cursor Pro**, refresh **8th**, surplus **7th**, library strand **10%/week ($2)**. Focus auto-advances when coverage/stale floors are met; graduated markets get a light maintenance grow. Policy: `docs/data/library/policy.json`.
+Budget: **Cursor Pro** subscription ($20/mo, refresh **8th**, surplus **7th**) is metadata; library research uses a **£30/week usage envelope** with **`enforce_weekly_research_cap`** (flagged `constraining` when spent). Focus auto-advances when coverage/stale floors are met; graduated markets get a light maintenance grow. Policy: `docs/data/library/policy.json`.
 
 ## Parked ideas (periodic review)
 
