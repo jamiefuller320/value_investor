@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T05:42:00+00:00",
+  "updated_at": "2026-07-22T05:47:35+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -750,7 +750,7 @@
       "category": "later",
       "section": "universe",
       "title": "Full Interactive Investor tradable universe catalog",
-      "summary": "ii.co.uk covers UK (incl AIM), US, and ~17 exchanges. Shipped: (1) exchange-allowlist overlay under docs/data/library/ii_coverage/; (2) next-slice offline markets aim, ibex35, ftse_mib, aex, bel20, hang_seng, sti, us_adr_asia \u2014 grown, screened, buy-tier researched, graduated. Remaining: official/partner instrument catalog to verify tradable_on_ii per ISIN.",
+      "summary": "Superseded by Trading 212 north star: catalogue via ftse-library t212-catalogue + overlay under docs/data/library/t212_coverage/. Legacy ii_coverage allowlist retained as fallback / historical artifacts.",
       "revisit_when": "Official II instrument export / partner feed available, or when expanding beyond index/liquid slices (full AIM All-Share, broader Asia cash equities).",
       "tags": [
         "broker",
@@ -759,9 +759,10 @@
         "overlay-v1",
         "universe"
       ],
-      "status": "open",
+      "status": "done",
       "source": "ii-coverage-discussion",
-      "added_at": "2026-07-18T11:38:22+00:00"
+      "added_at": "2026-07-18T11:38:22+00:00",
+      "updated_at": "2026-07-22T05:47:35+00:00"
     },
     {
       "id": "L35",
@@ -910,11 +911,10 @@
     {
       "id": "L44",
       "category": "later",
-<<<<<<< HEAD
       "section": "learning",
       "title": "Trailing stop with entry-floor hard floor in technical sim",
       "summary": "Optional sim track: trail stops up from refreshed technicals but never below original entry stop; keep static-plan track for comparison.",
-      "revisit_when": "Implemented — Performance submenu + static/trailing tracks",
+      "revisit_when": "Implemented \u2014 Performance submenu + static/trailing tracks",
       "tags": [
         "trade-plans",
         "simulator",
@@ -924,11 +924,14 @@
       "source": "",
       "added_at": "2026-07-21T18:39:18+00:00",
       "updated_at": "2026-07-22T05:40:00+00:00"
-=======
+    },
+    {
+      "id": "L45",
+      "category": "later",
       "section": "ops",
       "title": "Prefer Trading 212 over Interactive Investor for execution",
-      "summary": "T212 has a public API usable with Stocks ISA, \u00a30 commission/platform fees, and 0.15% FX \u2014 better fit than ii (no retail trading API; ~\u00a36/mo + ~\u00a34/trade) for low-value UK ISA automation. Keep research/manual packs broker-agnostic until stage 6.",
-      "revisit_when": "Approaching live/paper broker integration (stage 6), or when replacing the ii_coverage tradability north star",
+      "summary": "Done: PROJECT_OBJECTIVE + t212_coverage north star; T212 preferred over ii for UK ISA + API automation. Live orders still deferred (N14).",
+      "revisit_when": "Approaching live/paper broker integration (stage 6), or when refreshing broker preference",
       "tags": [
         "broker",
         "trading212",
@@ -936,26 +939,28 @@
         "api",
         "stage6"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
-      "added_at": "2026-07-22T05:31:07+00:00"
+      "added_at": "2026-07-22T05:31:07+00:00",
+      "updated_at": "2026-07-22T05:47:35+00:00"
     },
     {
-      "id": "L45",
+      "id": "L46",
       "category": "later",
       "section": "universe",
       "title": "Trading 212 instrument catalog as tradability overlay",
-      "summary": "T212 exposes GET /equity/metadata/instruments via API; use that as the official tradable catalog instead of (or alongside) the ii exchange-allowlist overlay once broker preference is locked to T212.",
-      "revisit_when": "Broker north star confirmed as Trading 212 and building coverage/unavailable watch for execution",
+      "summary": "Done: t212_client + t212-catalogue/t212-overlay CLI; ISIN/shortName index; dashboard/decision-pack fields dual-written (tradable_on_t212 + legacy aliases).",
+      "revisit_when": "Refreshing catalogue join quality or expanding ISIN coverage in library constituents",
       "tags": [
         "broker",
         "trading212",
         "library",
         "coverage"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
-      "added_at": "2026-07-22T05:31:07+00:00"
+      "added_at": "2026-07-22T05:31:07+00:00",
+      "updated_at": "2026-07-22T05:47:35+00:00"
     },
     {
       "id": "N14",
@@ -974,7 +979,6 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
       "added_at": "2026-07-22T05:31:07+00:00"
->>>>>>> 02c2348 (Park Trading 212 as preferred execution venue over ii)
     }
   ]
 }

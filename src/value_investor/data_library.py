@@ -530,7 +530,7 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         yahoo_suffix=".AX",
         constituent_source="wikipedia",
     ),
-    # Interactive Investor–aligned expansion slices (offline ladder; not live screen).
+    # Trading 212–aligned expansion slices (offline ladder; not live screen).
     "ftse_smallcap": MarketSpec(
         market_id="ftse_smallcap",
         label="FTSE SmallCap",

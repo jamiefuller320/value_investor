@@ -49,7 +49,7 @@ function isUnavailableTicker(ticker) {
   return unavailableTickerSet().has(String(ticker || "").toUpperCase());
 }
 
-function markUnavailableTicker(report, reason = "unavailable_on_ii") {
+function markUnavailableTicker(report, reason = "unavailable_on_t212") {
   const ticker = String(report?.ticker || "").toUpperCase();
   if (!ticker) return loadUnavailableWatch();
   const payload = loadUnavailableWatch();

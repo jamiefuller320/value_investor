@@ -1,8 +1,8 @@
-"""Optional FIRDS MIC filtering for II-advertised venues.
+"""Optional FIRDS MIC filtering for broker venue allowlists.
 
 Public FCA/ESMA FIRDS files list instruments admitted on trading venues (ISIN + MIC).
-Filtering by Interactive Investor's advertised exchange MICs is a legal enrichment
-layer — it does **not** prove II will accept an order for that ISIN.
+Filtering by the Trading 212 coverage policy MICs is a legal enrichment layer —
+it does **not** prove Trading 212 will accept an order (use the T212 catalogue).
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 def ii_allowed_mics(policy: dict[str, Any] | None = None) -> set[str]:
-    """Return MIC codes for online-dealable II venues (exclude phone-only)."""
+    """Return MIC codes for online-dealable venues in coverage policy (exclude phone-only)."""
     policy = policy or load_ii_policy()
     mics: set[str] = set()
     for row in policy.get("exchanges") or []:

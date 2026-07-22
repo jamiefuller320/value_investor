@@ -22,7 +22,7 @@ RISKS_GAP = "No research risk section — review filings and news yourself befor
 VERIFY_BASE = [
     "Confirm live broker price vs the plan levels (Yahoo/screen marks can lag).",
     "Re-read open filing or data gaps before committing size.",
-    "If unavailable on Interactive Investor, park on the watchlist — do not force a substitute.",
+    "If unavailable on Trading 212, park on the watchlist — do not force a substitute.",
 ]
 
 
@@ -210,8 +210,15 @@ def _verify_checklist(
         )
         high_conviction = False
 
-    if data.get("ii_tradable") is False:
-        items.append("II overlay marks this name non-tradable — do not force a substitute venue.")
+    tradable = data.get("tradable_on_t212")
+    if tradable is None:
+        tradable = data.get("ii_tradable")
+    if tradable is None:
+        tradable = data.get("tradable_on_ii")
+    if tradable is False:
+        items.append(
+            "Trading 212 overlay marks this name non-tradable — do not force a substitute venue."
+        )
         high_conviction = False
 
     timing = str(data.get("timing_signal") or "")
