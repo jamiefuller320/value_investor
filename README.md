@@ -35,7 +35,7 @@ ftse-screen
 ftse-screen --limit 10
 
 # Agent analysis (requires CURSOR_API_KEY)
-export CURSOR_API_KEY="cursor_..."
+export CURSOR_API_KEY="crsr_..."  # User API key: https://cursor.com/dashboard/api-keys
 python scripts/agent_analyze.py --limit 20 --top 5
 
 # Email report with per-company signals + reason summaries
