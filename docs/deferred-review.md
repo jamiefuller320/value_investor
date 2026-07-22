@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T12:07:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T12:41:23+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -46,6 +46,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N20 | **Companies House Streaming API for realtime filings** | Streaming API pushes company/filing changes over long-lived connections; our research path only needs on-demand REST GET for search, filing-history, and document download. Keys are not interchangeable with REST. | Need near-realtime UK filing alerts outside weekly research cycles |
 | N21 | **Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh** | New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_…). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill targets selected but Agent.create failed for all three. Create a fresh User API key at cursor.com/dashboard/integrations, replace the cloud secret, then launch another new agent run. | Fresh CURSOR_API_KEY from Integrations verifies via ftse-verify-key in a new shell |
 | N22 | **Preflight CURSOR_API_KEY against /v0/me before gap-fill agents** | Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success. | After a valid User API key is installed and N21 gap-fill succeeds once |
+| N23 | **Refresh CURSOR_API_KEY after bc-53006131 verify failure** | ftse-verify-key in shell bc-53006131 failed with Invalid User API Key. CURSOR_API_KEY is present (len=69, crsr_…). Create a fresh User API key at cursor.com/dashboard/integrations, replace the cloud secret, then re-run ftse-verify-key in a new shell before deep analysis / gap-fill agents. | Fresh CURSOR_API_KEY from Integrations verifies via ftse-verify-key in a new shell |
 
 ---
 
