@@ -3,7 +3,7 @@
 Names stay in the screening universe and can keep updating, but are excluded from
 actionable trade suggestions and paper auto-entries until restored. The dashboard
 browser list is the primary UX; this module backs an optional server-side JSON
-mirror under ``docs/data/library/ii_coverage/``.
+mirror under ``docs/data/library/t212_coverage/`` (legacy ``ii_coverage/`` still read).
 """
 
 from __future__ import annotations
@@ -15,12 +15,19 @@ from typing import Any
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.storage import read_json, write_json
 
-DEFAULT_UNAVAILABLE_PATH = DEFAULT_LIBRARY_ROOT / "ii_coverage" / "unavailable_watch.json"
+DEFAULT_UNAVAILABLE_PATH = DEFAULT_LIBRARY_ROOT / "t212_coverage" / "unavailable_watch.json"
+LEGACY_UNAVAILABLE_PATH = DEFAULT_LIBRARY_ROOT / "ii_coverage" / "unavailable_watch.json"
 
 
 def default_unavailable_path(library_root: Path | None = None) -> Path:
     root = Path(library_root or DEFAULT_LIBRARY_ROOT)
-    return root / "ii_coverage" / "unavailable_watch.json"
+    preferred = root / "t212_coverage" / "unavailable_watch.json"
+    if preferred.exists() or (root / "t212_coverage").exists():
+        return preferred
+    legacy = root / "ii_coverage" / "unavailable_watch.json"
+    if legacy.exists():
+        return legacy
+    return preferred
 
 
 def empty_unavailable_watch() -> dict[str, Any]:
@@ -28,7 +35,7 @@ def empty_unavailable_watch() -> dict[str, Any]:
         "schema_version": 1,
         "updated_at": None,
         "note": (
-            "Tickers marked unavailable to trade on Interactive Investor (or otherwise "
+            "Tickers marked unavailable to trade on Trading 212 (or otherwise "
             "unactionable). Keep screening/watching; exclude from suggested trades until restored."
         ),
         "items": [],
@@ -36,7 +43,12 @@ def empty_unavailable_watch() -> dict[str, Any]:
 
 
 def load_unavailable_watch(path: Path | None = None) -> dict[str, Any]:
-    target = Path(path or DEFAULT_UNAVAILABLE_PATH)
+    if path is not None:
+        target = Path(path)
+    else:
+        target = default_unavailable_path()
+        if not target.exists() and LEGACY_UNAVAILABLE_PATH.exists():
+            target = LEGACY_UNAVAILABLE_PATH
     if not target.exists():
         return empty_unavailable_watch()
     payload = read_json(target)
@@ -48,7 +60,7 @@ def load_unavailable_watch(path: Path | None = None) -> dict[str, Any]:
 
 
 def save_unavailable_watch(payload: dict[str, Any], path: Path | None = None) -> Path:
-    target = Path(path or DEFAULT_UNAVAILABLE_PATH)
+    target = Path(path or default_unavailable_path())
     out = dict(payload)
     out["schema_version"] = 1
     out["updated_at"] = datetime.now(UTC).isoformat()
@@ -66,7 +78,7 @@ def mark_unavailable(
     ticker: str,
     *,
     name: str | None = None,
-    reason: str = "unavailable_on_ii",
+    reason: str = "unavailable_on_t212",
     path: Path | None = None,
 ) -> dict[str, Any]:
     key = str(ticker or "").strip().upper()

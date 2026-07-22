@@ -1,4 +1,4 @@
-"""Tests for Interactive Investor coverage overlay (L34 v1)."""
+"""Tests for legacy ii_coverage import path (Trading 212 north star aliases)."""
 
 from __future__ import annotations
 

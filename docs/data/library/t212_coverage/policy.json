@@ -1,0 +1,526 @@
+{
+  "schema_version": 2,
+  "as_of": "2026-07-22",
+  "source_urls": [
+    "https://docs.trading212.com/api",
+    "https://docs.trading212.com/api/instruments/instruments"
+  ],
+  "note": "Trading 212 is the tradable north star. Primary: authenticated instrument catalogue (ftse-library t212-catalogue). Fallback: venue allowlist below (Yahoo suffix heuristics) when the catalogue is missing or unmatched. Advisory only \u2014 does not filter live FTSE 350. No live order placement.",
+  "uk_includes_aim": true,
+  "adr_home_markets": [
+    "Japan",
+    "India",
+    "China"
+  ],
+  "exchanges": [
+    {
+      "ii_region": "North America",
+      "ii_label": "United States",
+      "venues": [
+        "NYSE",
+        "NASDAQ"
+      ],
+      "yahoo_suffixes": [
+        ""
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XNYS",
+        "XNAS"
+      ]
+    },
+    {
+      "ii_region": "North America",
+      "ii_label": "Canada",
+      "venues": [
+        "TSX"
+      ],
+      "yahoo_suffixes": [
+        ".TO"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XTSE"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "United Kingdom",
+      "venues": [
+        "LSE",
+        "AIM"
+      ],
+      "yahoo_suffixes": [
+        ".L"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XLON",
+        "AIMX"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Ireland",
+      "venues": [
+        "Euronext Dublin"
+      ],
+      "yahoo_suffixes": [
+        ".IR"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XDUB"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Germany",
+      "venues": [
+        "Xetra",
+        "Frankfurt"
+      ],
+      "yahoo_suffixes": [
+        ".DE"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XETR",
+        "XFRA"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "France",
+      "venues": [
+        "Euronext Paris"
+      ],
+      "yahoo_suffixes": [
+        ".PA"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XPAR"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Spain",
+      "venues": [
+        "Bolsa de Madrid"
+      ],
+      "yahoo_suffixes": [
+        ".MC"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XMAD"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Belgium",
+      "venues": [
+        "Euronext Brussels"
+      ],
+      "yahoo_suffixes": [
+        ".BR"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XBRU"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Italy",
+      "venues": [
+        "Borsa Italiana"
+      ],
+      "yahoo_suffixes": [
+        ".MI"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XMIL"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "The Netherlands",
+      "venues": [
+        "Euronext Amsterdam"
+      ],
+      "yahoo_suffixes": [
+        ".AS"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XAMS"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Sweden",
+      "venues": [
+        "Nasdaq Stockholm"
+      ],
+      "yahoo_suffixes": [
+        ".ST"
+      ],
+      "online_dealable": false,
+      "phone_only": true,
+      "mics": [
+        "XSTO"
+      ]
+    },
+    {
+      "ii_region": "Europe",
+      "ii_label": "Switzerland",
+      "venues": [
+        "SIX Swiss"
+      ],
+      "yahoo_suffixes": [
+        ".SW"
+      ],
+      "online_dealable": false,
+      "phone_only": true,
+      "mics": [
+        "XSWX"
+      ]
+    },
+    {
+      "ii_region": "Asia Pacific",
+      "ii_label": "Australia",
+      "venues": [
+        "ASX"
+      ],
+      "yahoo_suffixes": [
+        ".AX"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XASX"
+      ]
+    },
+    {
+      "ii_region": "Asia Pacific",
+      "ii_label": "Hong Kong",
+      "venues": [
+        "HKEX"
+      ],
+      "yahoo_suffixes": [
+        ".HK"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XHKG"
+      ]
+    },
+    {
+      "ii_region": "Asia Pacific",
+      "ii_label": "Singapore",
+      "venues": [
+        "SGX"
+      ],
+      "yahoo_suffixes": [
+        ".SI"
+      ],
+      "online_dealable": true,
+      "phone_only": false,
+      "mics": [
+        "XSES"
+      ]
+    }
+  ],
+  "market_defaults": {
+    "sp500": {
+      "ii_exchange": "NYSE/NASDAQ",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "nasdaq100": {
+      "ii_exchange": "NYSE/NASDAQ",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ftse350": {
+      "ii_exchange": "LSE",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ftse_smallcap": {
+      "ii_exchange": "LSE",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "dax": {
+      "ii_exchange": "Xetra",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "cac40": {
+      "ii_exchange": "Euronext Paris",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "asx200": {
+      "ii_exchange": "ASX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "tsx60": {
+      "ii_exchange": "TSX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "euro_stoxx50": {
+      "ii_exchange": null,
+      "tradable_on_ii": null,
+      "deal_channel": null,
+      "confidence": "assumed",
+      "basis": "suffix_allowlist"
+    },
+    "aim": {
+      "ii_exchange": "LSE AIM",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ibex35": {
+      "ii_exchange": "Bolsa de Madrid",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "ftse_mib": {
+      "ii_exchange": "Borsa Italiana",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "aex": {
+      "ii_exchange": "Euronext Amsterdam",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "bel20": {
+      "ii_exchange": "Euronext Brussels",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "hang_seng": {
+      "ii_exchange": "HKEX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "sti": {
+      "ii_exchange": "SGX",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    },
+    "us_adr_asia": {
+      "ii_exchange": "NYSE/NASDAQ",
+      "tradable_on_ii": true,
+      "deal_channel": "online",
+      "confidence": "assumed",
+      "basis": "exchange_allowlist"
+    }
+  },
+  "next_slices": [
+    {
+      "id": "aim",
+      "label": "AIM (UK)",
+      "priority": 1,
+      "rationale": "UK coverage includes AIM; largest liquid gap vs current LSE Main / FTSE slices.",
+      "status": "complete",
+      "market_ids": [
+        "aim"
+      ]
+    },
+    {
+      "id": "euronext_wider",
+      "label": "Wider Euronext / Southern Europe liquid names",
+      "priority": 2,
+      "rationale": "online venues: Madrid, Milan, Amsterdam, Brussels, Dublin beyond EURO STOXX 50 / CAC / DAX overlap.",
+      "status": "complete",
+      "market_ids": [
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20"
+      ]
+    },
+    {
+      "id": "hk_sg",
+      "label": "Hong Kong + Singapore large-cap slices",
+      "priority": 3,
+      "rationale": "broker Asia-Pacific online exchanges with no library market yet.",
+      "status": "complete",
+      "market_ids": [
+        "hang_seng",
+        "sti"
+      ]
+    },
+    {
+      "id": "us_adr_asia",
+      "label": "Japan / India / China via US ADRs",
+      "priority": 4,
+      "rationale": "broker offers home-market exposure only via ADRs on US exchanges \u2014 overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
+      "status": "complete",
+      "market_ids": [
+        "us_adr_asia"
+      ]
+    },
+    {
+      "id": "t212_catalogue",
+      "label": "Trading 212 instrument catalogue",
+      "priority": 5,
+      "rationale": "Replace assumed venue allowlist with verified tradable_on_t212 via GET /api/v0/equity/metadata/instruments (ISIN + shortName join).",
+      "status": "ready",
+      "market_ids": [],
+      "cli": "ftse-library t212-catalogue && ftse-library t212-overlay"
+    }
+  ],
+  "firds": {
+    "note": "Optional enrichment only. FIRDS MIC filter can confirm venue admission; T212 catalogue is the source of truth for orderability.",
+    "source_urls": [
+      "https://www.esma.europa.eu/publications-and-data/databases-and-registers",
+      "https://www.fca.org.uk/markets/primary-and-secondary-markets/financial-instruments-reference-data-system-firds"
+    ]
+  },
+  "unavailable_watch": {
+    "note": "Names marked Unavailable in the dashboard stay screened/watched but are excluded from suggested trades / paper auto-entries until restored. Browser list is primary; optional server file: docs/data/library/t212_coverage/unavailable_watch.json",
+    "path": "unavailable_watch.json"
+  },
+  "broker": "trading212",
+  "broker_label": "Trading 212",
+  "yahoo_suffix_to_t212_exchanges": {
+    "": [
+      "US"
+    ],
+    ".L": [
+      "LN",
+      "UK",
+      "LSE"
+    ],
+    ".DE": [
+      "DE",
+      "GY",
+      "XE",
+      "EU"
+    ],
+    ".PA": [
+      "FP",
+      "PA",
+      "FR"
+    ],
+    ".AS": [
+      "AS",
+      "NA",
+      "NL"
+    ],
+    ".BR": [
+      "BB",
+      "BR",
+      "BE"
+    ],
+    ".MI": [
+      "IM",
+      "MI",
+      "IT"
+    ],
+    ".MC": [
+      "MC",
+      "SM",
+      "ES"
+    ],
+    ".IR": [
+      "IR",
+      "ID",
+      "IE"
+    ],
+    ".TO": [
+      "TO",
+      "TSE",
+      "CA"
+    ],
+    ".AX": [
+      "AU",
+      "AX",
+      "ASX"
+    ],
+    ".HK": [
+      "HK"
+    ],
+    ".SI": [
+      "SI",
+      "SG"
+    ],
+    ".ST": [
+      "ST",
+      "SS",
+      "SE"
+    ],
+    ".SW": [
+      "SW",
+      "VX",
+      "CH"
+    ],
+    ".HE": [
+      "HE",
+      "FH",
+      "FI"
+    ]
+  },
+  "catalogue": {
+    "endpoint": "/api/v0/equity/metadata/instruments",
+    "exchanges_endpoint": "/api/v0/equity/metadata/exchanges",
+    "env_vars": [
+      "TRADING212_API_KEY",
+      "TRADING212_API_SECRET",
+      "TRADING212_ENV"
+    ],
+    "cli": "ftse-library t212-catalogue",
+    "note": "API key requires metadata scope. Prefer TRADING212_ENV=demo for fetches."
+  }
+}

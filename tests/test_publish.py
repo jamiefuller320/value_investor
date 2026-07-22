@@ -89,9 +89,12 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     assert bundle["meta"]["strong_buy_count"] == 1
     assert bundle["reports"][0]["ticker"] == "AAA.L"
     assert bundle["run_diff"]["new_strong_buys"] == ["Alpha (AAA.L)"]
+    assert bundle["meta"].get("broker_overlay") == "trading212"
+    assert bundle["meta"].get("t212_overlay") is True
     assert bundle["meta"].get("ii_overlay") is True
     assert "unavailable_watch" in bundle
-    # AAA.L maps to UK / LSE on the II exchange allowlist
+    # AAA.L maps to UK / LSE on the venue allowlist (or catalogue when present)
+    assert bundle["reports"][0].get("tradable_on_t212") is True
     assert bundle["reports"][0].get("tradable_on_ii") is True
     assert bundle["reports"][0].get("ii_deal_channel") == "online"
 

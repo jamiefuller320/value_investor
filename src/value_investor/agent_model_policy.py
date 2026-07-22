@@ -37,7 +37,7 @@ DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro included API pool
 DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10
 DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
-# Index slices that map toward Interactive Investor tradable coverage (offline).
+# Index slices that map toward Trading 212 tradable coverage (offline).
 # Live FTSE 350 screen is unchanged. Full II instrument catalog is deferred (L34).
 DEFAULT_MARKET_QUEUE = [
     "sp500",

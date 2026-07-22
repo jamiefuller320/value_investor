@@ -68,13 +68,20 @@ function researchOverlayHtml(report) {
 }
 
 function iiTradabilityBadge(report) {
-  if (report.tradable_on_ii === true) {
-    const channel = report.ii_deal_channel === "phone" ? "phone" : "II online";
-    return `<span class="badge badge-ii-ok" title="Advisory exchange allowlist — not a confirmed II order book">${esc(channel)}</span>`;
+  const tradable = report.tradable_on_t212 ?? report.tradable_on_ii;
+  if (tradable === true) {
+    const verified = report.broker_basis === "catalogue_hit" || report.ii_confidence === "verified";
+    const label = verified ? "T212" : (report.ii_deal_channel === "phone" ? "phone" : "T212 assumed");
+    const title = verified
+      ? "Present in Trading 212 instrument catalogue"
+      : "Advisory venue allowlist — not a confirmed T212 catalogue hit";
+    return `<span class="badge badge-ii-ok" title="${esc(title)}">${esc(label)}</span>`;
   }
-  if (report.tradable_on_ii === false) {
-    const why = report.ii_basis === "phone_only" ? "II phone-only" : "II venue unclear";
-    return `<span class="badge badge-ii-no" title="Advisory — name may still appear on II">${esc(why)}</span>`;
+  if (tradable === false) {
+    const why = report.broker_basis === "unknown_venue" || report.ii_basis === "unknown_venue"
+      ? "Not on T212"
+      : (report.ii_basis === "phone_only" ? "phone-only venue" : "T212 unclear");
+    return `<span class="badge badge-ii-no" title="Advisory — confirm in Trading 212 before acting">${esc(why)}</span>`;
   }
   return "";
 }
@@ -393,14 +400,14 @@ function renderStrongBuys(data) {
       <p class="pick-actions">
         <button type="button" class="btn" data-chart-ticker="${esc(report.ticker)}">Price chart</button>
         <button type="button" class="btn btn-primary" data-log-ticker="${esc(report.ticker)}">Log action</button>
-        <button type="button" class="btn btn-warn" data-unavailable-ticker="${esc(report.ticker)}" title="Bypass this suggested trade — keep watching in case it becomes tradable on II">Unavailable</button>
+        <button type="button" class="btn btn-warn" data-unavailable-ticker="${esc(report.ticker)}" title="Bypass this suggested trade — keep watching in case it becomes tradable on Trading 212">Unavailable</button>
       </p>
     </div>`;
 
   const watchedHtml = watched.length
     ? `<div class="unavailable-watch-block">
         <h3>Watched — unavailable to trade</h3>
-        <p class="small muted">Bypassed suggested trades. Still screened when present in the universe; restore if they become actionable on Interactive Investor.</p>
+        <p class="small muted">Bypassed suggested trades. Still screened when present in the universe; restore if they become actionable on Trading 212.</p>
         ${watched
           .map((item) => {
             const live = reportByTicker.get(item.ticker);
@@ -422,7 +429,7 @@ function renderStrongBuys(data) {
     : "";
 
   panel.innerHTML = `
-    <p class="small muted" style="margin-top:0">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on II. The name stays watched below and is excluded from paper auto-entries until restored.</p>
+    <p class="small muted" style="margin-top:0">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on Trading 212. The name stays watched below and is excluded from paper auto-entries until restored.</p>
     ${strong.length ? `<h3>Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
     ${buys.length ? `<h3>Buys</h3>${buys.map(cardHtml).join("")}` : ""}
     ${!active.length ? '<div class="empty-state">All buy-tier names are on the unavailable watch list.</div>' : ""}

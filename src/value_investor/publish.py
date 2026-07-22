@@ -218,14 +218,14 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
             report["chart_path"] = f"data/charts/{chart_filename(str(report['ticker']))}"
 
-    # Advisory II tradability overlay (exchange allowlist / optional FIRDS MICs).
+    # Advisory Trading 212 tradability overlay (catalogue + allowlist fallback).
     try:
-        from value_investor.ii_coverage import annotate_dashboard_reports
+        from value_investor.t212_coverage import annotate_dashboard_reports
 
         reports = annotate_dashboard_reports(reports, market_id=universe_name)
         trust_reports = annotate_dashboard_reports(trust_reports, market_id=universe_name)
     except Exception as exc:  # noqa: BLE001 — dashboard must still publish
-        logger.warning("II overlay annotation skipped: %s", exc)
+        logger.warning("T212 overlay annotation skipped: %s", exc)
 
     try:
         from value_investor.decision_pack import attach_decision_packs
@@ -263,6 +263,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             "screen_trusts": screen_trusts,
             "trust_count": len(trust_reports),
             "trust_signal_counts": trust_signal_counts,
+            "broker_overlay": "trading212",
+            "t212_overlay": True,
             "ii_overlay": True,
             "unavailable_watch_count": len(unavailable_watch.get("items") or []),
         },
@@ -364,6 +366,8 @@ def empty_dashboard_bundle() -> dict[str, Any]:
             "screen_trusts": True,
             "trust_count": 0,
             "trust_signal_counts": {},
+            "broker_overlay": "trading212",
+            "t212_overlay": False,
             "ii_overlay": False,
             "unavailable_watch_count": 0,
         },

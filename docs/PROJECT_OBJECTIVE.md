@@ -53,15 +53,15 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 
 Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised while Cursor research remains cheap). Do **not** memo every name in an index.
 
-**Tradable north star (offline):** expand index slices toward stocks available on **Interactive Investor** (UK + ~17 international exchanges). Index-slice queue:
+**Tradable north star (offline):** expand index slices toward stocks available on **Trading 212** (Invest / Stocks ISA catalogue). Index-slice queue:
 
 `sp500` → `euro_stoxx50` → `asx200` → `ftse_smallcap` → `nasdaq100` → `dax` → `cac40` → `tsx60`
 
 (FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) Advance focus when coverage ≥95% and stale ≤15%. Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research round-robins buy-tier names across focus + graduated markets (`research_all_graduated`). Rating-priority maintenance is **L33**.
 
-**L34:** `docs/data/library/ii_coverage/` maps library Yahoo tickers → assumed II tradability from II’s *public* exchange list (`ftse-library ii-overlay`). Advisory only — does not filter screens. Optional FIRDS MIC filter (`ftse-library firds-filter`) confirms venue admission, not II order acceptance. Dashboard **Unavailable** bypass keeps unactionable names on a watched list and excludes them from suggested trades / paper auto-entries. Full verified instrument catalog still needs a broker/partner dump (no public feed).
+**Broker coverage:** `docs/data/library/t212_coverage/` is the tradable overlay. Fetch the official instrument book with `ftse-library t212-catalogue` (env: `TRADING212_API_KEY`, `TRADING212_API_SECRET`, optional `TRADING212_ENV=demo|live`), then join library tickers via `ftse-library t212-overlay` (ISIN / shortName catalogue hits; venue allowlist fallback). Advisory only — does not filter screens. Dashboard **Unavailable** bypass keeps unactionable names on a watched list and excludes them from suggested trades / paper auto-entries. Optional FIRDS MIC filter remains enrichment only (`ftse-library firds-filter`).
 
-**L34 next slices (offline ladder):** `aim` → `ibex35` → `ftse_mib` → `aex` → `bel20` → `hang_seng` → `sti` → `us_adr_asia` (see `ii_coverage/policy.json`) — complete; remaining L34 core is the official instrument dump.
+**Offline ladder slices:** `aim` → `ibex35` → `ftse_mib` → `aex` → `bel20` → `hang_seng` → `sti` → `us_adr_asia` (see `t212_coverage/policy.json`) — complete; remaining work is keeping the T212 catalogue fresh and tightening ISIN joins.
 
 ### Running the ladder
 
@@ -90,4 +90,4 @@ ftse-library ladder
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: evolutionary stage 2 (L2/N2), global expansion (N1), full Interactive Investor catalog (L34), UK-primary data (L11). Implemented: trailing-stop sim track with entry floor (L44) + Performance submenu, trade-plan config/ATR (L5/L9), sim level gates (L3), verify-before-trade packs (L27), CI pytest (L24), decision-review (L1), orchestrator cron (L21).
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: evolutionary stage 2 (L2/N2), global expansion (N1), UK-primary data (L11). Broker north star is **Trading 212** (catalogue + overlay under `t212_coverage/`). Implemented: trailing-stop sim track with entry floor (L44) + Performance submenu, trade-plan config/ATR (L5/L9), sim level gates (L3), verify-before-trade packs (L27), CI pytest (L24), decision-review (L1), orchestrator cron (L21), multi-currency paper NAV (L28), library screen-lite/research ladder.

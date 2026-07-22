@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 from .agent_model_policy import (
@@ -252,12 +253,49 @@ def build_parser() -> argparse.ArgumentParser:
     overlaps_p.add_argument("--json", action="store_true")
     overlaps_p.set_defaults(func=cmd_overlaps)
 
+    t212_cat = sub.add_parser(
+        "t212-catalogue",
+        help=(
+            "Fetch Trading 212 instrument catalogue via API "
+            "(requires TRADING212_API_KEY / TRADING212_API_SECRET; metadata scope)"
+        ),
+    )
+    t212_cat.add_argument(
+        "--env",
+        default="",
+        help="demo|live (default: TRADING212_ENV or demo)",
+    )
+    t212_cat.add_argument(
+        "--skip-exchanges",
+        action="store_true",
+        help="Do not also fetch /equity/metadata/exchanges",
+    )
+    t212_cat.add_argument("--json", action="store_true")
+    t212_cat.set_defaults(func=cmd_t212_catalogue)
+
+    t212_p = sub.add_parser(
+        "t212-overlay",
+        help=(
+            "Build Trading 212 coverage overlay for library markets "
+            "(catalogue hits + venue allowlist fallback)"
+        ),
+    )
+    t212_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all offline library markets)",
+    )
+    t212_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compute summary without writing by_market artifacts",
+    )
+    t212_p.add_argument("--json", action="store_true")
+    t212_p.set_defaults(func=cmd_t212_overlay)
+
     ii_p = sub.add_parser(
         "ii-overlay",
-        help=(
-            "Build Interactive Investor coverage overlay for library markets "
-            "(exchange allowlist — not a full instrument catalog)"
-        ),
+        help="Alias for t212-overlay (Trading 212 is the tradable north star)",
     )
     ii_p.add_argument(
         "--markets",
@@ -270,13 +308,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Compute summary without writing by_market artifacts",
     )
     ii_p.add_argument("--json", action="store_true")
-    ii_p.set_defaults(func=cmd_ii_overlay)
+    ii_p.set_defaults(func=cmd_t212_overlay)
 
     firds_p = sub.add_parser(
         "firds-filter",
         help=(
-            "Filter a public FCA/ESMA FIRDS XML/CSV dump to II-advertised online MICs "
-            "(venue admission ≠ II order acceptance)"
+            "Filter a public FCA/ESMA FIRDS XML/CSV dump to coverage-policy online MICs "
+            "(venue admission ≠ Trading 212 order acceptance — prefer t212-catalogue)"
         ),
     )
     firds_p.add_argument(
@@ -315,8 +353,8 @@ def build_parser() -> argparse.ArgumentParser:
     unavail_p.add_argument("--name", default="", help="Optional company name when marking")
     unavail_p.add_argument(
         "--reason",
-        default="unavailable_on_ii",
-        help="Reason code (default: unavailable_on_ii)",
+        default="unavailable_on_t212",
+        help="Reason code (default: unavailable_on_t212)",
     )
     unavail_p.add_argument("--json", action="store_true")
     unavail_p.set_defaults(func=cmd_unavailable_watch)
@@ -742,11 +780,48 @@ def cmd_graduate(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_ii_overlay(args: argparse.Namespace) -> int:
-    from .ii_coverage import build_ii_overlays
+def cmd_t212_catalogue(args: argparse.Namespace) -> int:
+    from .t212_client import Trading212APIError, Trading212AuthError
+    from .t212_coverage import catalogue_dir, fetch_and_save_catalogue
+
+    env = (args.env or "").strip() or None
+    try:
+        meta = fetch_and_save_catalogue(
+            library_root=args.root,
+            env=env,
+            include_exchanges=not bool(args.skip_exchanges),
+        )
+    except Trading212AuthError as exc:
+        print(f"Trading 212 auth error: {exc}", file=sys.stderr)
+        return 2
+    except Trading212APIError as exc:
+        print(f"Trading 212 API error: {exc}", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(meta, indent=2))
+        return 0
+    print(f"Library root: {args.root}")
+    print(f"Catalogue dir: {catalogue_dir(args.root)}")
+    print(f"Fetched at: {meta.get('fetched_at')}")
+    print(f"Env/source: {meta.get('env')} / {meta.get('source')}")
+    print(
+        f"Instruments: {meta.get('instrument_count')}  "
+        f"ISINs: {meta.get('isin_count')}  "
+        f"Exchanges: {meta.get('exchanges_count')}"
+    )
+    types = meta.get("type_counts") or {}
+    if types:
+        bits = ", ".join(f"{k}={v}" for k, v in sorted(types.items()))
+        print(f"Types: {bits}")
+    print("Next: ftse-library t212-overlay")
+    return 0
+
+
+def cmd_t212_overlay(args: argparse.Namespace) -> int:
+    from .t212_coverage import build_t212_overlays
 
     markets = _parse_markets(args.markets)
-    summary = build_ii_overlays(
+    summary = build_t212_overlays(
         args.root,
         markets=markets,
         write=not bool(args.dry_run),
@@ -756,18 +831,27 @@ def cmd_ii_overlay(args: argparse.Namespace) -> int:
         return 0
     totals = summary.get("totals") or {}
     print(f"Library root: {args.root}")
-    print(f"II overlay as_of: {summary.get('as_of')}")
+    print(f"T212 overlay as_of: {summary.get('as_of')}")
+    print(f"Catalogue loaded: {summary.get('catalogue_loaded')}")
+    cat = summary.get("catalogue") or {}
+    if cat:
+        print(
+            f"Catalogue fetched_at: {cat.get('fetched_at')}  "
+            f"instruments={cat.get('instrument_count')}"
+        )
     print(summary.get("note"))
     print(
         f"Totals: markets={totals.get('markets')}  "
         f"tickers={totals.get('tickers')}  "
         f"tradable={totals.get('tradable')}  "
+        f"catalogue_hits={totals.get('catalogue_hits')}  "
         f"unknown_venue={totals.get('unknown_venue')}"
     )
     for mid, row in (summary.get("markets") or {}).items():
         print(
             f"  {mid}: tradable={row.get('tradable_count')}/{row.get('ticker_count')} "
             f"({100 * float(row.get('tradable_pct') or 0):.1f}%)  "
+            f"catalogue={row.get('catalogue_hit_count')}  "
             f"unknown={row.get('unknown_venue_count')}  "
             f"curated={row.get('curated_exception_count')}"
         )
@@ -784,6 +868,10 @@ def cmd_ii_overlay(args: argparse.Namespace) -> int:
             f"({item.get('status')})"
         )
     return 0
+
+
+# Backward-compatible name used by older docs/scripts.
+cmd_ii_overlay = cmd_t212_overlay
 
 
 def cmd_firds_filter(args: argparse.Namespace) -> int:
@@ -805,7 +893,7 @@ def cmd_firds_filter(args: argparse.Namespace) -> int:
         print(json.dumps(payload, indent=2))
         return 0
     print(f"FIRDS filter: {args.input}")
-    print(f"II online MICs ({len(mics)}): {', '.join(sorted(mics))}")
+    print(f"Coverage online MICs ({len(mics)}): {', '.join(sorted(mics))}")
     print(f"Matched rows: {len(rows)}")
     if args.dry_run:
         print("(dry-run — not written)")
@@ -839,7 +927,7 @@ def cmd_unavailable_watch(args: argparse.Namespace) -> int:
         payload = mark_unavailable(
             ticker,
             name=str(args.name or "").strip() or None,
-            reason=str(args.reason or "unavailable_on_ii"),
+            reason=str(args.reason or "unavailable_on_t212"),
             path=path,
         )
     else:  # restore
