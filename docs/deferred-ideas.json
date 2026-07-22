@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T10:24:58+00:00",
+  "updated_at": "2026-07-22T12:07:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1345,16 +1345,34 @@
       "category": "not_now",
       "section": "ops",
       "title": "Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh",
-      "summary": "Source deepen + IR allowlist for HIK/MEGP succeeded, but Cursor SDK gap-fill agent calls failed with Invalid User API Key in this environment. Re-run ftse-research --gap-fill once a valid CURSOR_API_KEY is injected.",
-      "revisit_when": "CURSOR_API_KEY verifies via ftse-verify-key",
+      "summary": "New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_\u2026). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill targets selected but Agent.create failed for all three. Create a fresh User API key at cursor.com/dashboard/integrations, replace the cloud secret, then launch another new agent run.",
+      "revisit_when": "Fresh CURSOR_API_KEY from Integrations verifies via ftse-verify-key in a new shell",
       "tags": [
         "gap-fill",
         "cursor-api",
         "ops"
       ],
       "status": "open",
-      "source": "https://cursor.com/agents/bc-e5948839-e90c-465e-b39a-1e7ce1455dc9",
-      "added_at": "2026-07-22T10:24:58+00:00"
+      "source": "https://cursor.com/agents/bc-f3c1c12e-0c80-4b78-9fc7-fbceed3e7ee6",
+      "added_at": "2026-07-22T10:24:58+00:00",
+      "updated_at": "2026-07-22T12:07:04.250092+00:00"
+    },
+    {
+      "id": "N22",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Preflight CURSOR_API_KEY against /v0/me before gap-fill agents",
+      "summary": "Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success.",
+      "revisit_when": "After a valid User API key is installed and N21 gap-fill succeeds once",
+      "tags": [
+        "cursor-api",
+        "ops",
+        "gap-fill",
+        "preflight"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-f3c1c12e-0c80-4b78-9fc7-fbceed3e7ee6",
+      "added_at": "2026-07-22T12:07:04+00:00"
     }
   ]
 }

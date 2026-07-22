@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T10:24:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T12:07:04+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -44,7 +44,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N18 | **Do not let AI judgment own live capital path yet** | Primary learning track is paper-only. Keep live broker automation and any promotion of AI gates to real capital off until the AI-judgment book shows persistent excess vs ^FTSE and vs the rules control in walk-forward review. | AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review |
 | N19 | **Do not backdate research revisions for past paper decisions** | Extending source lookbacks and re-running memos is fine going forward, but inventing historical revisions as-of past run dates would leak post-period knowledge into AI-judgment / historical_analysis PIT overlays. | Never as a learning shortcut; only reconsider if building a separate counterfactual research lab outside the live paper track |
 | N20 | **Companies House Streaming API for realtime filings** | Streaming API pushes company/filing changes over long-lived connections; our research path only needs on-demand REST GET for search, filing-history, and document download. Keys are not interchangeable with REST. | Need near-realtime UK filing alerts outside weekly research cycles |
-| N21 | **Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh** | Source deepen + IR allowlist for HIK/MEGP succeeded, but Cursor SDK gap-fill agent calls failed with Invalid User API Key in this environment. Re-run ftse-research --gap-fill once a valid CURSOR_API_KEY is injected. | CURSOR_API_KEY verifies via ftse-verify-key |
+| N21 | **Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh** | New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_…). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill targets selected but Agent.create failed for all three. Create a fresh User API key at cursor.com/dashboard/integrations, replace the cloud secret, then launch another new agent run. | Fresh CURSOR_API_KEY from Integrations verifies via ftse-verify-key in a new shell |
+| N22 | **Preflight CURSOR_API_KEY against /v0/me before gap-fill agents** | Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success. | After a valid User API key is installed and N21 gap-fill succeeds once |
 
 ---
 
