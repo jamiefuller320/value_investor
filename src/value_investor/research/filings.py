@@ -38,6 +38,7 @@ FILINGS_LOOKBACK_DAYS = 800  # ~2.2 years — cover annual + several interims
 FILINGS_MAX_ITEMS = 40
 FILINGS_BODY_MAX_CHARS = 80_000
 TICKER_API_BASE = "https://api.tickerapp.net/v2"
+DEFAULT_IR_URLS_PATH = Path("docs/data/research_ir_urls.json")
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik10}.json"
 SEC_ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{accession_nodash}/{document}"
@@ -806,9 +807,69 @@ def fetch_filing_body(url: str | None) -> str | None:
 
 
 def _source_bonus(source: str | None) -> int:
-    if source in {"ticker_rns_api", "sec_edgar"}:
+    if source in {"ticker_rns_api", "sec_edgar", "companies_house"}:
         return 30
+    if source == "ir_allowlist":
+        return 25
     return 0
+
+
+def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
+    """Manual IR/results PDF URLs by Yahoo ticker (MVP until a generic crawler)."""
+    path = path or DEFAULT_IR_URLS_PATH
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return {}
+    urls = data.get("urls") if isinstance(data, dict) else data
+    if not isinstance(urls, dict):
+        return {}
+    out: dict[str, list[str]] = {}
+    for key, value in urls.items():
+        if isinstance(value, str) and value.strip():
+            out[str(key).upper()] = [value.strip()]
+        elif isinstance(value, list):
+            cleaned = [str(u).strip() for u in value if str(u).strip()]
+            if cleaned:
+                out[str(key).upper()] = cleaned
+    return out
+
+
+def fetch_filings_ir_allowlist(
+    ticker: str,
+    *,
+    path: Path | None = None,
+) -> list[dict[str, Any]]:
+    """Build filing rows from the optional per-ticker IR URL allowlist."""
+    mapping = load_ir_url_allowlist(path)
+    urls = mapping.get(ticker.upper()) or mapping.get(_base_symbol(ticker)) or []
+    rows: list[dict[str, Any]] = []
+    for url in urls:
+        lower = url.lower()
+        period = "other"
+        if any(token in lower for token in ("annual", "fy", "full-year", "full_year", "accounts")):
+            period = "annual"
+        elif any(token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "trading")):
+            period = "interim"
+        digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
+        rows.append(
+            {
+                "id": f"ir_{digest}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1] or url}",
+                "published_at": None,
+                "url": url,
+                "period": period,
+                "category": "ir_allowlist",
+                "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+                "has_body": False,
+                "body_path": None,
+                "priority": 130,
+            }
+        )
+    return rows
 
 
 def merge_filings(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -866,14 +927,20 @@ def _write_bodies(
     updated: list[dict[str, Any]] = []
     for row in candidates:
         row = dict(row)
-        if downloaded < max_bodies and row.get("url") and not row.get("has_body"):
+        if downloaded < max_bodies and not row.get("has_body"):
             period = row.get("period")
             if period in ("annual", "interim", "other"):
                 # Always try annual/interim; only try a few "other" if slots remain
                 if period == "other" and downloaded >= max(4, max_bodies // 2):
                     updated.append(row)
                     continue
-                body = fetch_filing_body(str(row["url"]))
+                body = None
+                if row.get("source") == "companies_house" and (
+                    row.get("document_metadata_url") or row.get("url")
+                ):
+                    body = _fetch_companies_house_body(row)
+                elif row.get("url"):
+                    body = fetch_filing_body(str(row["url"]))
                 if body:
                     filename = f"{row['id']}.txt"
                     path = bodies_dir / filename
@@ -883,6 +950,38 @@ def _write_bodies(
                     downloaded += 1
         updated.append(row)
     return updated
+
+
+def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
+    """Download and extract text from a Companies House accounts filing."""
+    from value_investor.research.companies_house import (
+        companies_house_api_key,
+        fetch_document_bytes,
+    )
+
+    key = companies_house_api_key()
+    if not key:
+        return None
+    meta_url = str(row.get("document_metadata_url") or row.get("url") or "")
+    if not meta_url:
+        return None
+    try:
+        fetched = fetch_document_bytes(meta_url, api_key=key)
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
+        return None
+    if not fetched:
+        return None
+    raw, content_type = fetched
+    if raw[:4] == b"%PDF" or "pdf" in (content_type or "").lower():
+        text = _extract_pdf_text(raw)
+    else:
+        text = _strip_html(raw.decode("utf-8", errors="replace"))
+    if not text or len(text) < 200:
+        return None
+    if len(text) > FILINGS_BODY_MAX_CHARS:
+        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return text
 
 
 def refetch_missing_filing_bodies(
@@ -962,6 +1061,8 @@ def ingest_filings(
     sources_dir: Path,
     api_key: str | None = None,
     market: str | None = None,
+    deepen_history: bool = False,
+    max_ch_accounts: int | None = None,
 ) -> dict[str, Any]:
     """
     Build ``sources/filings/`` for a memo ticker.
@@ -969,16 +1070,37 @@ def ingest_filings(
     Writes:
     - ``filings_index.json`` — catalog with period labels (annual/interim/other)
     - ``bodies/*.txt`` — plain-text announcement extracts when downloadable
+
+    When ``deepen_history`` is true (memo tickers), pull more Companies House
+    accounts years. Does **not** backdate research revisions — sources deepen
+    for forward learning only.
     """
+    from value_investor.research.companies_house import (
+        DEEPEN_MAX_ACCOUNTS,
+        DEFAULT_MAX_ACCOUNTS,
+        fetch_filings_companies_house,
+    )
+
     filings_dir = sources_dir / "filings"
     bodies_dir = filings_dir / "bodies"
     filings_dir.mkdir(parents=True, exist_ok=True)
 
     regime = resolve_filings_regime(market, ticker)
     groups: list[list[dict[str, Any]]] = []
+    ch_accounts = max_ch_accounts
+    if ch_accounts is None:
+        ch_accounts = DEEPEN_MAX_ACCOUNTS if deepen_history else DEFAULT_MAX_ACCOUNTS
+
     if regime == "uk_rns":
         groups.append(fetch_filings_ticker_api(ticker=ticker, api_key=api_key))
         groups.append(fetch_filings_google_news(company_name=company_name, ticker=ticker))
+        groups.append(
+            fetch_filings_companies_house(
+                ticker=ticker,
+                company_name=company_name,
+                max_accounts=int(ch_accounts),
+            )
+        )
     elif regime == "sec_edgar":
         groups.append(fetch_filings_sec_edgar(ticker=ticker))
     elif regime == "asx_announcements":
@@ -1000,8 +1122,13 @@ def ingest_filings(
             ticker,
         )
 
+    # Optional manual IR/results PDFs (MVP until a generic IR crawler).
+    groups.append(fetch_filings_ir_allowlist(ticker))
+
     merged = merge_filings(*groups) if groups else []
-    merged = _write_bodies(merged, bodies_dir)
+    # Allow more bodies when deepening historical accounts for memo names.
+    max_bodies = 20 if deepen_history else 12
+    merged = _write_bodies(merged, bodies_dir, max_bodies=max_bodies)
 
     if regime == "sec_edgar":
         note = (
@@ -1012,9 +1139,12 @@ def ingest_filings(
         )
     elif regime == "uk_rns":
         note = (
-            "Primary regulatory filings for research (separate from Yahoo). "
-            "period=annual|interim|other. Bodies are plain-text extracts when a "
-            "direct publisher URL was available; Google News wrappers often lack bodies."
+            "Primary regulatory filings for research (separate from Yahoo): "
+            "Ticker RNS / Investegate discovery plus Companies House accounts "
+            f"(up to {ch_accounts} filings"
+            + (", historical deepen" if deepen_history else "")
+            + ") and optional IR allowlist URLs. "
+            "period=annual|interim|other. Bodies from PDF/HTML/iXBRL when available."
         )
     elif regime == "asx_announcements":
         note = (

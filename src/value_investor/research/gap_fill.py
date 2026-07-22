@@ -324,6 +324,7 @@ def run_red_flag_gap_fill(
                 sources_dir=sources_dir,
                 since=None,
                 market=market,
+                deepen_history=True,
             )
             source_pack = prepare_gap_fill_source_pack(
                 ticker=target.ticker,
