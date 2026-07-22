@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:14:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:23:21+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -42,6 +42,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N16 | **Do not chase live Cursor usage API before envelope calibration** | Live usage API (L32) is blocked on Cursor exposing credits to CURSOR_API_KEY. Prefer running the £30/week estimated gate for a few cycles and recalibrating estimated_memo_usd (L52) before investing in billing integration. | Cursor documents a usage/credits API for CURSOR_API_KEY, or estimated vs billed spend diverges badly after 2–4 constrained weeks |
 | N17 | **Do not expand live screen beyond FTSE 350 yet** | Library breadth is far ahead (16 graduated markets). Stage 4 live expansion should wait until stage-2 decision packs are routinely trusted and decision-review has enough marks to adjust knobs. | Stage 2 exit criteria met and decision-review has actionable excess-return history |
 | N18 | **Do not let AI judgment own live capital path yet** | Primary learning track is paper-only. Keep live broker automation and any promotion of AI gates to real capital off until the AI-judgment book shows persistent excess vs ^FTSE and vs the rules control in walk-forward review. | AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review |
+| N19 | **Upgrade research agent beyond composer-2.5 for deep research** | composer-2.5 is chosen for first-party pool / cost, not frontier reasoning. Capability upgrades matter less than ingest + multi-turn gap-fill until thin RNS bodies and L16 are addressed. | After Companies House/IR body ingest (L10/L35+) and multi-turn agent (L16) land, or weekly gap-fill stays chronically unresolved despite richer sources |
+| N20 | **Cursor Pro+ for research usage headroom** | Repo only documents Cursor Pro $20/mo as metadata plus a separate £30/week usage envelope. No Pro+ policy exists; raising weekly_usage_gbp or fixing double-spend (L51) is the in-repo lever. | Weekly budget_flag=constraining for several consecutive weeks despite composer-2.5 and after live+library spend is unified (L51) |
 
 ---
 
