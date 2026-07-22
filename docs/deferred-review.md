@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T07:39:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T07:48:37+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -95,6 +95,9 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L32 | **Wire live Cursor usage API into library budget ledger** | If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls. | Cursor usage/credits API is available to CURSOR_API_KEY |
 | L33 | **Signal-priority maintenance refresh for graduated libraries** | Once full weekly refresh is no longer needed, prioritise maintenance (Yahoo metrics/filings cadence) by screen signal / research verdict — e.g. strong_buy and buy first, then hold/alumni — instead of round-robin or uniform caps. | Library richness is stable and Actions runtime or stale floors suggest throttling maintenance_max_tickers away from full |
 | L49 | **Default TRADING212_ENV to live or document key/env pairing** | Injected API credentials return 401 on demo.trading212.com but succeed on live. Default env is demo, so bare ftse-library t212-catalogue fails until --env live is passed. | Next credentials rotation or when someone hits catalogue 401 again |
+| L50 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps (12+12) and never call record_estimated_spend. Fold that Cursor usage into the same weekly dollar/GBP envelope so library + live research cannot double-spend the allocation. | After weekly usage allocation (~£30) with enforce_weekly_research_cap is live and calibrated |
+| L51 | **Separate Cursor subscription vs on-demand usage ceilings in policy** | Today policy only models Pro included pool (plan_monthly_usd=20). Add an explicit on-demand / usage-based ceiling (e.g. ~£30/week or a 00-style monthly usage cap) distinct from the subscription, so docs and gates match real Cursor billing. | Implementing usage-based weekly allocation with constraining flag |
+| L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat $0.40/memo estimate. After a few constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd (and optionally per-model rates). | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
 
 ---
 

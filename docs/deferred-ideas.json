@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T07:39:34+00:00",
+  "updated_at": "2026-07-22T07:48:37+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1047,6 +1047,55 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
       "added_at": "2026-07-22T07:39:34+00:00"
+    },
+    {
+      "id": "L50",
+      "category": "later",
+      "section": "ops",
+      "title": "Unify live FTSE research spend into library weekly ledger",
+      "summary": "Live ftse-research / email --research-docs use count caps (12+12) and never call record_estimated_spend. Fold that Cursor usage into the same weekly dollar/GBP envelope so library + live research cannot double-spend the allocation.",
+      "revisit_when": "After weekly usage allocation (~\u00a330) with enforce_weekly_research_cap is live and calibrated",
+      "tags": [
+        "budget",
+        "cursor",
+        "research",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:48:37+00:00"
+    },
+    {
+      "id": "L51",
+      "category": "later",
+      "section": "ops",
+      "title": "Separate Cursor subscription vs on-demand usage ceilings in policy",
+      "summary": "Today policy only models Pro included pool (plan_monthly_usd=20). Add an explicit on-demand / usage-based ceiling (e.g. ~\u00a330/week or a 00-style monthly usage cap) distinct from the subscription, so docs and gates match real Cursor billing.",
+      "revisit_when": "Implementing usage-based weekly allocation with constraining flag",
+      "tags": [
+        "budget",
+        "cursor",
+        "billing"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:48:37+00:00"
+    },
+    {
+      "id": "L52",
+      "category": "later",
+      "section": "ops",
+      "title": "Recalibrate estimated_memo_usd from real Cursor bills",
+      "summary": "Library spend ledger uses a flat $0.40/memo estimate. After a few constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd (and optionally per-model rates).",
+      "revisit_when": "2\u20134 weeks of enforce_weekly_research_cap=true with known memo counts",
+      "tags": [
+        "budget",
+        "cursor",
+        "calibration"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:48:37+00:00"
     }
   ]
 }
