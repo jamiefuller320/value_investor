@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T10:03:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T10:24:58+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -44,6 +44,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N18 | **Do not let AI judgment own live capital path yet** | Primary learning track is paper-only. Keep live broker automation and any promotion of AI gates to real capital off until the AI-judgment book shows persistent excess vs ^FTSE and vs the rules control in walk-forward review. | AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review |
 | N19 | **Do not backdate research revisions for past paper decisions** | Extending source lookbacks and re-running memos is fine going forward, but inventing historical revisions as-of past run dates would leak post-period knowledge into AI-judgment / historical_analysis PIT overlays. | Never as a learning shortcut; only reconsider if building a separate counterfactual research lab outside the live paper track |
 | N20 | **Companies House Streaming API for realtime filings** | Streaming API pushes company/filing changes over long-lived connections; our research path only needs on-demand REST GET for search, filing-history, and document download. Keys are not interchangeable with REST. | Need near-realtime UK filing alerts outside weekly research cycles |
+| N21 | **Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh** | Source deepen + IR allowlist for HIK/MEGP succeeded, but Cursor SDK gap-fill agent calls failed with Invalid User API Key in this environment. Re-run ftse-research --gap-fill once a valid CURSOR_API_KEY is injected. | CURSOR_API_KEY verifies via ftse-verify-key |
 
 ---
 
@@ -90,6 +91,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L57 | **Seed IR allowlist URLs for active memo tickers** | Manual docs/data/research_ir_urls.json MVP is wired; populate URLs for paper-auto / gap-fill UK names that still miss FCF bridges and segment tables after Companies House accounts. | First deepen-sources or gap-fill run with COMPANIES_HOUSE_API_KEY shows CH bodies present but IR-only tables still missing |
 | L58 | **OCR for image-only Companies House accounts PDFs** | Shell plc and some other large issuers file image-only group accounts to Companies House; pypdf extracts no text. OCR (or preferring ESEF/iXBRL/SEC 20-F) would unlock CH body depth for those names. | After IR allowlist + SEC dual-list fallbacks still leave CH bodies empty for multiple memo tickers |
 | L59 | **Auto-pull SEC 20-F for dual-listed UK memo tickers** | UK deepen currently stays on RNS/CH; dual-listed names like SHEL.L have text-rich SEC 20-F HTML. A regime helper could auto-add recent 20-F/6-K URLs without manual IR allowlist seeding. | More than a handful of FTSE memos need SEC 20-F bodies because CH PDFs are image-only |
+| L61 | **Seed AEP.L IR allowlist once Anglo Eastern PDFs are discoverable** | AEP Plantations CH accounts remain image-only and angloeastern.co.uk investor pages are JS SPA without direct PDF hrefs. Seed research_ir_urls.json when annual/interim PDF URLs are stable. | Anglo Eastern publishes stable direct annual-report PDF URLs or ESEF/iXBRL text is available |
 
 ### Ops / reliability
 
@@ -103,6 +105,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L49 | **Default TRADING212_ENV to live or document key/env pairing** | Injected API credentials return 401 on demo.trading212.com but succeed on live. Default env is demo, so bare ftse-library t212-catalogue fails until --env live is passed. | Next credentials rotation or when someone hits catalogue 401 again |
 | L51 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation. | After a few weeks of enforce_weekly_research_cap with the £30 usage envelope |
 | L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
+| L60 | **Upgrade Ticker RNS plan for symbol-filtered disclosures** | Current TICKER_API_KEY plan ignores symbol/isin filters and returns a global Form 8.x feed. Client-side issuer headline filter now drops noise, but a paid symbol filter would restore direct RNS bodies for memo tickers. | Ticker.app plan is upgraded or an alternate UK RNS API with issuer filter is available |
 
 ---
 

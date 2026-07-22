@@ -683,6 +683,7 @@ def fetch_filings_asia_news(
 def fetch_filings_ticker_api(
     *,
     ticker: str,
+    company_name: str = "",
     api_key: str | None = None,
     max_items: int = FILINGS_MAX_ITEMS,
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
@@ -692,6 +693,9 @@ def fetch_filings_ticker_api(
 
     Free/lite tiers vary; failures are logged and return an empty list so the
     Google News path can still populate the index.
+
+    Some plans ignore the ``symbol`` filter and return a global RNS feed — we
+    always drop headlines that do not mention the issuer EPIC / name tokens.
     """
     key = api_key or os.environ.get("TICKER_API_KEY") or os.environ.get("RNS_API_KEY")
     if not key:
@@ -714,16 +718,26 @@ def fetch_filings_ticker_api(
         logger.warning("Ticker RNS API failed for %s: %s", ticker, exc)
         return []
 
+    warnings = data.get("warnings") if isinstance(data, dict) else None
+    if warnings:
+        logger.info("Ticker RNS API warnings for %s: %s", ticker, warnings)
+
     items = data.get("data") if isinstance(data, dict) else data
     if not isinstance(items, list):
         return []
 
     rows: list[dict[str, Any]] = []
-    for item in items[:max_items]:
+    skipped_unrelated = 0
+    for item in items[: max(max_items * 3, max_items)]:
+        if len(rows) >= max_items:
+            break
         if not isinstance(item, dict):
             continue
         headline = str(item.get("headline") or item.get("title") or "").strip()
         if not headline:
+            continue
+        if not headline_relevant_to_issuer(headline, company_name or epic, ticker):
+            skipped_unrelated += 1
             continue
         categories = item.get("category") or []
         category_label = None
@@ -771,6 +785,13 @@ def fetch_filings_ticker_api(
                 "priority": _priority_score(headline, period),
                 "provider_id": rns_id or None,
             }
+        )
+    if skipped_unrelated:
+        logger.info(
+            "Ticker RNS API: dropped %s unrelated headline(s) for %s (kept %s)",
+            skipped_unrelated,
+            ticker,
+            len(rows),
         )
     return rows
 
@@ -1108,7 +1129,13 @@ def ingest_filings(
         ch_accounts = DEEPEN_MAX_ACCOUNTS if deepen_history else DEFAULT_MAX_ACCOUNTS
 
     if regime == "uk_rns":
-        groups.append(fetch_filings_ticker_api(ticker=ticker, api_key=api_key))
+        groups.append(
+            fetch_filings_ticker_api(
+                ticker=ticker,
+                company_name=company_name,
+                api_key=api_key,
+            )
+        )
         groups.append(fetch_filings_google_news(company_name=company_name, ticker=ticker))
         groups.append(
             fetch_filings_companies_house(
