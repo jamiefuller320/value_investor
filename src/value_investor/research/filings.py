@@ -849,9 +849,25 @@ def fetch_filings_ir_allowlist(
     for url in urls:
         lower = url.lower()
         period = "other"
-        if any(token in lower for token in ("annual", "fy", "full-year", "full_year", "accounts")):
+        if any(
+            token in lower
+            for token in (
+                "annual",
+                "fy",
+                "full-year",
+                "full_year",
+                "accounts",
+                "20-f",
+                "20f",
+                "10-k",
+                "10k",
+            )
+        ) or re.search(r"-\d{4}1231\.(htm|html|pdf)(?:$|\?)", lower):
             period = "annual"
-        elif any(token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "trading")):
+        elif any(
+            token in lower
+            for token in ("interim", "half", "h1", "q1", "q2", "q3", "trading", "10-q", "10q")
+        ):
             period = "interim"
         digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
         rows.append(

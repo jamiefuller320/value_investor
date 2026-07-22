@@ -203,6 +203,11 @@ def test_ingest_filings_writes_index(tmp_path: Path):
         patch("value_investor.research.filings.fetch_filings_ticker_api", return_value=[]),
         patch("value_investor.research.filings.fetch_filings_google_news", return_value=fake_rows),
         patch("value_investor.research.filings.fetch_filing_body", return_value=None),
+        patch(
+            "value_investor.research.companies_house.fetch_filings_companies_house",
+            return_value=[],
+        ),
+        patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
     ):
         meta = ingest_filings(
             ticker="EXAM.L",
@@ -257,6 +262,11 @@ def test_ingest_research_sources_keeps_filings_separate_from_yahoo(tmp_path: Pat
             ],
         ),
         patch("value_investor.research.filings.fetch_filing_body", return_value=None),
+        patch(
+            "value_investor.research.companies_house.fetch_filings_companies_house",
+            return_value=[],
+        ),
+        patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
     ):
         meta = ingest_research_sources(
             ticker="EXAM.L",

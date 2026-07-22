@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import json
+import urllib.request
 from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.research.companies_house import (
     DEEPEN_MAX_ACCOUNTS,
     DEFAULT_MAX_ACCOUNTS,
+    _StripAuthOnRedirect,
     fetch_accounts_filing_rows,
     fetch_filings_companies_house,
     load_company_number_map,
@@ -24,6 +26,37 @@ from value_investor.research.filings import (
     load_ir_url_allowlist,
 )
 from value_investor.research.store import ResearchStore
+
+
+def test_strip_auth_on_redirect_drops_authorization():
+    handler = _StripAuthOnRedirect()
+    req = urllib.request.Request(
+        "https://document-api.company-information.service.gov.uk/document/x/content",
+        headers={
+            "Authorization": "Basic dGVzdDo=",
+            "Accept": "application/pdf",
+            "User-Agent": "test",
+        },
+        method="GET",
+    )
+    # Minimal fake redirect response headers
+    class _Hdrs(dict):
+        def get_all(self, name, default=None):  # noqa: ANN001
+            return [self[name]] if name in self else default
+
+    headers = _Hdrs({"Location": "https://s3.eu-west-2.amazonaws.com/bucket/doc?X-Amz-Algorithm=AWS4"})
+    new_req = handler.redirect_request(
+        req,
+        fp=None,
+        code=302,
+        msg="Found",
+        headers=headers,
+        newurl=headers["Location"],
+    )
+    assert new_req is not None
+    assert "Authorization" not in new_req.headers
+    assert "authorization" not in {k.lower() for k in new_req.headers}
+    assert new_req.get_header("Accept") == "application/pdf"
 
 
 def test_load_and_save_company_number_map(tmp_path: Path):
@@ -211,7 +244,10 @@ def test_ir_allowlist_load_and_fetch(tmp_path: Path):
                     "HIK.L": [
                         "https://www.hikma.com/investors/annual-report-2024.pdf",
                         "https://www.hikma.com/investors/interim-results.pdf",
-                    ]
+                    ],
+                    "SHEL.L": [
+                        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
+                    ],
                 }
             }
         ),
@@ -224,6 +260,9 @@ def test_ir_allowlist_load_and_fetch(tmp_path: Path):
     assert rows[0]["source"] == "ir_allowlist"
     assert rows[0]["period"] == "annual"
     assert rows[1]["period"] == "interim"
+    shel = fetch_filings_ir_allowlist("SHEL.L", path=path)
+    assert len(shel) == 1
+    assert shel[0]["period"] == "annual"
 
 
 def test_deepen_sources_for_memo_tickers(tmp_path: Path):
