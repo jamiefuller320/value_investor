@@ -377,6 +377,7 @@ def main(argv: list[str] | None = None) -> int:
                 model=args.model,
                 run_at=run_at,
                 max_targets=int(args.gap_fill_cap),
+                market="ftse350",
                 park_suggestions=not bool(args.no_park_gap_suggestions),
             )
             write_json(

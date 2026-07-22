@@ -116,6 +116,74 @@ def _base_symbol(ticker: str) -> str:
     return t
 
 
+_ISSUER_STOPWORDS = frozenset(
+    {
+        "plc",
+        "ltd",
+        "limited",
+        "group",
+        "holdings",
+        "holding",
+        "company",
+        "companies",
+        "the",
+        "and",
+        "inc",
+        "corp",
+        "corporation",
+        "sa",
+        "ag",
+        "nv",
+        "se",
+    }
+)
+
+
+def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -> bool:
+    """True when the headline mentions the EPIC or a meaningful company-name token."""
+    text = (headline or "").lower()
+    if not text:
+        return False
+    epic = _base_symbol(ticker).lower()
+    if epic and re.search(rf"\b{re.escape(epic)}\b", text, flags=re.IGNORECASE):
+        return True
+    tokens = [
+        tok
+        for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
+        if len(tok) >= 4 and tok not in _ISSUER_STOPWORDS
+    ]
+    return any(tok in text for tok in tokens[:4])
+
+
+def _extract_pdf_text(raw: bytes) -> str | None:
+    """Best-effort PDF text extract; returns None when pypdf is unavailable or empty."""
+    try:
+        from io import BytesIO
+
+        from pypdf import PdfReader
+    except ImportError:
+        logger.info("pypdf not installed — cannot parse PDF filing bodies")
+        return None
+    try:
+        reader = PdfReader(BytesIO(raw))
+        chunks: list[str] = []
+        for page in reader.pages:
+            try:
+                page_text = page.extract_text() or ""
+            except Exception:  # noqa: BLE001
+                continue
+            if page_text.strip():
+                chunks.append(page_text)
+            joined = "\n".join(chunks)
+            if len(joined) >= FILINGS_BODY_MAX_CHARS:
+                break
+        text = "\n".join(chunks).strip()
+        return text or None
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("PDF extract failed: %s", exc)
+        return None
+
+
 def resolve_filings_regime(market: str | None, ticker: str) -> str:
     """
     Choose filing source regime for a ticker.
@@ -466,6 +534,9 @@ def fetch_filings_google_news(
         # Drop index/landing pages
         if re.search(r"\bRNS Announcements\b", title) and "results" not in title.lower():
             continue
+        # Drop mis-attributed headlines that never mention the issuer.
+        if not headline_relevant_to_issuer(title, company_name, ticker):
+            continue
         link = item.findtext("link")
         published = _parse_rss_date(item.findtext("pubDate"))
         if published:
@@ -721,12 +792,14 @@ def fetch_filing_body(url: str | None) -> str | None:
 
     # urlopen doesn't return headers here easily — sniff
     if raw[:4] == b"%PDF":
-        logger.info("Skipping PDF filing body (not parsed): %s", url)
-        return None
-
-    text = _strip_html(raw.decode("utf-8", errors="replace"))
-    if len(text) < 200:
-        return None
+        text = _extract_pdf_text(raw)
+        if not text or len(text) < 200:
+            logger.info("PDF filing body empty/unreadable: %s", url)
+            return None
+    else:
+        text = _strip_html(raw.decode("utf-8", errors="replace"))
+        if len(text) < 200:
+            return None
     if len(text) > FILINGS_BODY_MAX_CHARS:
         text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
     return text
@@ -810,6 +883,62 @@ def _write_bodies(
                     downloaded += 1
         updated.append(row)
     return updated
+
+
+def refetch_missing_filing_bodies(
+    filings_dir: Path,
+    *,
+    max_bodies: int = 12,
+) -> dict[str, Any]:
+    """
+    Re-attempt body downloads for an existing filings index (PDF-capable).
+
+    Used by gap-fill so previously skipped PDFs / direct RNS URLs are filled
+    before the agent answers open questions.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists():
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": f"unreadable index: {exc}",
+        }
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    missing = [
+        row
+        for row in filings
+        if row.get("url")
+        and not row.get("has_body")
+        and "news.google.com" not in str(row.get("url") or "")
+    ]
+    updated = _write_bodies(filings, bodies_dir, max_bodies=max_bodies)
+    after = sum(1 for row in updated if row.get("has_body"))
+    payload["filings"] = updated
+    payload["summary"] = summarize_filings(updated)
+    payload["refetched_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": len(missing),
+        "fetched": max(0, after - before),
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "refetch_missing_filing_bodies",
+    }
 
 
 def summarize_filings(filings: list[dict[str, Any]]) -> dict[str, Any]:

@@ -6,6 +6,7 @@ import os
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
@@ -291,6 +292,44 @@ Rules:
 """
 
 
+def _gap_fill_followup_prompt(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    existing_markdown_path: Path,
+    open_questions: list[str],
+    body_refetch: dict[str, Any] | None = None,
+) -> str:
+    numbered = "\n".join(f"{i}. {q}" for i, q in enumerate(open_questions, start=1))
+    fetched = (body_refetch or {}).get("fetched")
+    with_body = (body_refetch or {}).get("with_body_after")
+    return f"""Follow-up gap-fill on {company_name} ({ticker}).
+
+Newly available filing body extracts were fetched this pass
+(fetched={fetched}, with_body_after={with_body}). Re-read:
+- {(sources_dir / 'filings' / 'bodies').resolve()}
+- {(sources_dir / 'filings' / 'filings_index.json').resolve()}
+- Existing memo: {existing_markdown_path.resolve()}
+
+Still-open questions only:
+{numbered or '1. Resolve remaining qualitative gaps.'}
+
+Rewrite ONLY these sections (same headings and mini-block format as before):
+
+GAP FILL UPDATE
+(For each still-open question: Q / Status / Evidence / SourcesTried / NextSources)
+
+FINANCIAL REVIEW
+RISKS AND RED FLAGS
+RESEARCH VERDICT
+RESEARCH MODEL SUGGESTIONS
+
+Rules: UK English; do not invent filing language; cite body paths when used;
+prefer unresolved over false confidence.
+"""
+
+
 @dataclass
 class GapFillAgentResult:
     document: ResearchDocument
@@ -308,6 +347,8 @@ def run_gap_fill_research_agent(
     model: str = "composer-2.5",
     cwd: str | None = None,
     screen_signal: str | None = None,
+    follow_up: bool = False,
+    body_refetch: dict[str, Any] | None = None,
 ) -> GapFillAgentResult:
     """Rewrite financial/risk sections to address open qualitative questions."""
     from value_investor.research.gap_fill_sources import (
@@ -315,14 +356,24 @@ def run_gap_fill_research_agent(
         parse_question_outcomes,
     )
 
-    prompt = _gap_fill_prompt(
-        ticker=existing.ticker,
-        company_name=existing.name,
-        sources_dir=sources_dir,
-        existing_markdown_path=markdown_path,
-        open_questions=open_questions,
-        screen_signal=screen_signal or existing.signal,
-    )
+    if follow_up:
+        prompt = _gap_fill_followup_prompt(
+            ticker=existing.ticker,
+            company_name=existing.name,
+            sources_dir=sources_dir,
+            existing_markdown_path=markdown_path,
+            open_questions=open_questions,
+            body_refetch=body_refetch,
+        )
+    else:
+        prompt = _gap_fill_prompt(
+            ticker=existing.ticker,
+            company_name=existing.name,
+            sources_dir=sources_dir,
+            existing_markdown_path=markdown_path,
+            open_questions=open_questions,
+            screen_signal=screen_signal or existing.signal,
+        )
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
         api_key=api_key,
@@ -351,8 +402,8 @@ def run_gap_fill_research_agent(
     weekly_entry: dict[str, str] = {
         "date": now.strftime("%Y-%m-%d"),
         "as_of": now.isoformat(),
-        "summary": gap_summary or "Gap-fill pass completed.",
-        "kind": "gap_fill",
+        "summary": gap_summary or ("Gap-fill follow-up completed." if follow_up else "Gap-fill pass completed."),
+        "kind": "gap_fill_followup" if follow_up else "gap_fill",
     }
     if existing.research_verdict != new_verdict:
         weekly_entry["prior_verdict"] = existing.research_verdict or ""

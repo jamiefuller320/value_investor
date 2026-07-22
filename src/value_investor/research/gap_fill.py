@@ -54,6 +54,8 @@ class GapFillSummary:
     model_suggestions: list[dict[str, Any]] = field(default_factory=list)
     alternate_source_plans: list[dict[str, Any]] = field(default_factory=list)
     parked_suggestions: list[dict[str, Any]] = field(default_factory=list)
+    fetch_attempts: list[dict[str, Any]] = field(default_factory=list)
+    follow_ups: int = 0
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -75,6 +77,8 @@ class GapFillSummary:
             "model_suggestions": self.model_suggestions,
             "alternate_source_plans": self.alternate_source_plans,
             "parked_suggestions": self.parked_suggestions,
+            "fetch_attempts": self.fetch_attempts,
+            "follow_ups": self.follow_ups,
             "documents": [doc.to_dict() for doc in self.documents],
         }
 
@@ -328,12 +332,15 @@ def run_red_flag_gap_fill(
                 open_questions=target.questions,
                 market=market,
             )
+            body_refetch = dict(source_pack.get("body_refetch") or {})
+            summary.fetch_attempts.append({"ticker": target.ticker, **body_refetch})
             summary.alternate_source_plans.append(
                 {
                     "ticker": target.ticker,
                     "planned_alternate_sources": source_pack.get("planned_alternate_sources") or [],
                     "thin": (source_pack.get("inventory") or {}).get("thin") or [],
                     "alternate_news_added": source_pack.get("alternate_news_added") or 0,
+                    "body_refetch": body_refetch,
                 }
             )
 
@@ -349,7 +356,37 @@ def run_red_flag_gap_fill(
             )
             updated = replace(agent_result.document, signal=target.report.signal)
 
+            unresolved = [
+                str(row.get("question") or "").strip()
+                for row in agent_result.question_outcomes
+                if str(row.get("status") or "").lower() in {"unresolved", "partially_resolved"}
+                and str(row.get("question") or "").strip()
+            ]
+            if unresolved and int(body_refetch.get("fetched") or 0) > 0:
+                # Second turn: force re-read of newly fetched bodies for open questions.
+                follow = run_gap_fill_research_agent(
+                    existing=updated,
+                    sources_dir=sources_dir,
+                    markdown_path=store.markdown_path(target.ticker),
+                    open_questions=unresolved,
+                    api_key=api_key,
+                    model=model,
+                    cwd=cwd,
+                    screen_signal=target.report.signal,
+                    follow_up=True,
+                    body_refetch=body_refetch,
+                )
+                updated = replace(follow.document, signal=target.report.signal)
+                agent_result = follow
+                summary.follow_ups += 1
+
             filings_summary = source_meta.get("filings_summary") or {}
+            # Prefer post-refetch body counts when available.
+            if body_refetch.get("with_body_after") is not None:
+                filings_summary = {
+                    **filings_summary,
+                    "with_body": body_refetch.get("with_body_after"),
+                }
             updated.source_counts = {
                 "financial_years": source_meta["financial_years"],
                 "news_articles": source_meta["news_total"],

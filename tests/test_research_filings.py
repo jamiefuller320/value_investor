@@ -8,12 +8,83 @@ from unittest.mock import patch
 
 from value_investor.research.filings import (
     classify_filing_period,
+    fetch_filing_body,
+    headline_relevant_to_issuer,
     ingest_filings,
     merge_filings,
+    refetch_missing_filing_bodies,
     resolve_filings_regime,
     summarize_filings,
 )
 from value_investor.research.ingest import ingest_research_sources
+from value_investor.financials import extract_statement_metrics
+import pandas as pd
+
+
+def test_operating_cashflow_aliases_from_yahoo_labels():
+    cashflow = pd.DataFrame(
+        {"2024": [90_800_000.0], "2023": [70_000_000.0]},
+        index=["Operating Cash Flow"],
+    )
+    metrics = extract_statement_metrics(None, None, cashflow)
+    assert metrics["operating_cashflow"] == 90_800_000.0
+    assert metrics["operating_cashflow_prev"] == 70_000_000.0
+
+
+def test_headline_relevant_to_issuer_filters_noise():
+    assert headline_relevant_to_issuer(
+        "Morgan Sindall Full Year Results", "Morgan Sindall Group plc", "MGNS.L"
+    )
+    assert headline_relevant_to_issuer(
+        "MGNS Interim Results", "Morgan Sindall Group plc", "MGNS.L"
+    )
+    assert not headline_relevant_to_issuer(
+        "Abri Group / SEGRO trading update", "Morgan Sindall Group plc", "MGNS.L"
+    )
+
+
+def test_fetch_filing_body_parses_pdf(monkeypatch):
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: b"%PDF-fake",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_pdf_text",
+        lambda raw: "A" * 250 + " Annual Report cash flow bridge",
+    )
+    text = fetch_filing_body("https://example.com/results.pdf")
+    assert text is not None
+    assert "cash flow bridge" in text
+
+
+def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "filings": [
+            {
+                "id": "t1",
+                "source": "ticker_rns_api",
+                "headline": "Full Year Results",
+                "published_at": "2026-07-01T07:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/example/fy/1",
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 100,
+            }
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: "Body text " + ("x" * 220),
+    )
+    result = refetch_missing_filing_bodies(filings_dir, max_bodies=4)
+    assert result["fetched"] == 1
+    assert result["with_body_after"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
 
 
 def test_classify_filing_period_annual_and_interim():

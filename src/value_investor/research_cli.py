@@ -174,6 +174,7 @@ def main(argv: list[str] | None = None) -> int:
             api_key=args.api_key,
             model=model,
             max_targets=int(args.gap_fill_cap),
+            market="ftse350",
         )
         write_json(
             args.output_dir / "gap_fill_summary.json",

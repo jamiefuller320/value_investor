@@ -18,6 +18,12 @@ _LABEL_ALIASES: dict[str, list[str]] = {
     "total_revenue": ["Total Revenue", "Operating Revenue"],
     "gross_profit": ["Gross Profit"],
     "interest_expense": ["Interest Expense", "Interest Expense Non Operating"],
+    "operating_cashflow": [
+        "Operating Cash Flow",
+        "Cash Flow From Continuing Operating Activities",
+        "Total Cash From Operating Activities",
+        "Cash from Operating Activities",
+    ],
     "shares_outstanding": [
         "Ordinary Shares Number",
         "Share Issued",
