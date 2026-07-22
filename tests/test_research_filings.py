@@ -41,6 +41,39 @@ def test_headline_relevant_to_issuer_filters_noise():
     assert not headline_relevant_to_issuer(
         "Abri Group / SEGRO trading update", "Morgan Sindall Group plc", "MGNS.L"
     )
+    assert not headline_relevant_to_issuer(
+        "Form 8.3 - Rotork plc", "Hikma Pharmaceuticals PLC", "HIK.L"
+    )
+    assert not headline_relevant_to_issuer(
+        "Net Asset Value(s)", "AEP Plantations Plc", "AEP.L"
+    )
+
+
+def test_fetch_filings_ticker_api_drops_unrelated_global_feed(monkeypatch):
+    payload = {
+        "data": [
+            {"headline": "Form 8.3 - Rotork plc", "timestamp": "2026-07-22T10:00:00Z"},
+            {
+                "headline": "Hikma Pharmaceuticals Full Year Results",
+                "timestamp": "2026-03-01T07:00:00Z",
+                "url": "https://example.com/hikma-fy.html",
+            },
+        ],
+        "warnings": ["The 'symbol' filter is not available on your plan and was ignored."],
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: json.dumps(payload).encode("utf-8"),
+    )
+    monkeypatch.setenv("TICKER_API_KEY", "test-key")
+    from value_investor.research.filings import fetch_filings_ticker_api
+
+    rows = fetch_filings_ticker_api(
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+    )
+    assert len(rows) == 1
+    assert "Hikma" in rows[0]["headline"]
 
 
 def test_fetch_filing_body_parses_pdf(monkeypatch):

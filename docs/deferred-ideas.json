@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T10:03:02+00:00",
+  "updated_at": "2026-07-22T10:24:58+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1306,6 +1306,55 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-e5948839-e90c-465e-b39a-1e7ce1455dc9",
       "added_at": "2026-07-22T10:03:02+00:00"
+    },
+    {
+      "id": "L60",
+      "category": "later",
+      "section": "ops",
+      "title": "Upgrade Ticker RNS plan for symbol-filtered disclosures",
+      "summary": "Current TICKER_API_KEY plan ignores symbol/isin filters and returns a global Form 8.x feed. Client-side issuer headline filter now drops noise, but a paid symbol filter would restore direct RNS bodies for memo tickers.",
+      "revisit_when": "Ticker.app plan is upgraded or an alternate UK RNS API with issuer filter is available",
+      "tags": [
+        "ticker-api",
+        "rns",
+        "filings",
+        "deepen-sources"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e5948839-e90c-465e-b39a-1e7ce1455dc9",
+      "added_at": "2026-07-22T10:24:58+00:00"
+    },
+    {
+      "id": "L61",
+      "category": "later",
+      "section": "research",
+      "title": "Seed AEP.L IR allowlist once Anglo Eastern PDFs are discoverable",
+      "summary": "AEP Plantations CH accounts remain image-only and angloeastern.co.uk investor pages are JS SPA without direct PDF hrefs. Seed research_ir_urls.json when annual/interim PDF URLs are stable.",
+      "revisit_when": "Anglo Eastern publishes stable direct annual-report PDF URLs or ESEF/iXBRL text is available",
+      "tags": [
+        "aep",
+        "ir-allowlist",
+        "deepen-sources"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e5948839-e90c-465e-b39a-1e7ce1455dc9",
+      "added_at": "2026-07-22T10:24:58+00:00"
+    },
+    {
+      "id": "N21",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh",
+      "summary": "Source deepen + IR allowlist for HIK/MEGP succeeded, but Cursor SDK gap-fill agent calls failed with Invalid User API Key in this environment. Re-run ftse-research --gap-fill once a valid CURSOR_API_KEY is injected.",
+      "revisit_when": "CURSOR_API_KEY verifies via ftse-verify-key",
+      "tags": [
+        "gap-fill",
+        "cursor-api",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e5948839-e90c-465e-b39a-1e7ce1455dc9",
+      "added_at": "2026-07-22T10:24:58+00:00"
     }
   ]
 }
