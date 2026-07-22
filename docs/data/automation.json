@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-20T20:33:10.928871+00:00",
+  "generated_at": "2026-07-22T07:21:10.933512+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -15,7 +15,10 @@
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.03,
-      "max_positions": 5
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
     },
     "library": {
       "focus_market": "us_adr_asia",
@@ -189,22 +192,24 @@
       "orchestrator": {
         "name": "Automation Orchestrator",
         "cron_sunday": "17 6 * * 0",
+        "cron_sunday_catchup": "17 9,12 * * 0",
         "cron_surplus": "30 5 * * *",
         "cron_paper": "17 8 * * 1-5",
-        "cadence": "Dispatches child workflows via workflow_dispatch. Sunday 06:17 UTC quiet bundle (ladder + model review + email); daily 05:30 UTC surplus-day ladder gate; weekdays 08:17 UTC paper automation. Prefer external cron \u2192 this workflow for reliability.",
+        "cron_paper_catchup": "17 11 * * 1-5",
+        "cadence": "Dispatches child workflows via workflow_dispatch. Sunday 06:17 UTC quiet bundle (+ 09:17/12:17 catch-up); daily 05:30 UTC surplus-day ladder gate; weekdays 08:17 UTC paper automation (+ 11:17 catch-up). Skips children that already succeeded today. External cron setup: docs/ops/orchestrator-cron.md.",
         "workflow": "automation-orchestrator.yml"
       },
       "paper_auto": {
         "name": "FTSE Paper Automation",
         "cron": "17 8 * * 1-5",
-        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (\u224809:17 Europe/London in BST)",
+        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (\u224809:17 Europe/London in BST); 11:17 catch-up",
         "workflow": "paper-auto.yml"
       },
       "library_ladder": {
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + surplus-day gate",
+        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -229,10 +234,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-07-20T20:33:10.172268+00:00",
+        "at": "2026-07-22T07:21:09.572928+00:00",
         "kind": "paper_run",
-        "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (5 trade(s))."
+        "title": "Paper automation checked (no action)",
+        "detail": "waiting for open settle (75 min after 08:00 Europe/London)"
       },
       {
         "at": "2026-07-20T20:06:59.706524+00:00",
@@ -715,56 +720,20 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-07-20T20:33:10.172268+00:00",
-      "acted": true,
-      "note": "Rebalanced after open settle (5 trade(s)).",
+      "generated_at": "2026-07-22T07:21:09.572928+00:00",
+      "acted": false,
+      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
       "gate": {
-        "local_time": "2026-07-20T21:32:40.266505+01:00",
+        "local_time": "2026-07-22T08:20:55.571942+01:00",
         "trading_day": true,
-        "after_settle": true,
-        "market_open_at": "2026-07-20T08:00:00+01:00",
-        "settle_at": "2026-07-20T09:15:00+01:00",
-        "can_act": true,
-        "reason": "ok"
+        "after_settle": false,
+        "market_open_at": "2026-07-22T08:00:00+01:00",
+        "settle_at": "2026-07-22T09:15:00+01:00",
+        "can_act": false,
+        "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
       },
-      "trade_count": 5,
-      "trades_sample": [
-        {
-          "acted_at": "2026-07-20T21:32:40.266505+01:00",
-          "ticker": "ITV.L",
-          "side": "buy",
-          "name": "ITV plc",
-          "net_cash": -200.0
-        },
-        {
-          "acted_at": "2026-07-20T21:32:40.266505+01:00",
-          "ticker": "AEP.L",
-          "side": "buy",
-          "name": "AEP Plantations Plc",
-          "net_cash": -200.0
-        },
-        {
-          "acted_at": "2026-07-20T21:32:40.266505+01:00",
-          "ticker": "MEGP.L",
-          "side": "buy",
-          "name": "ME Group International plc",
-          "net_cash": -200.0
-        },
-        {
-          "acted_at": "2026-07-20T21:32:40.266505+01:00",
-          "ticker": "HIK.L",
-          "side": "buy",
-          "name": "Hikma Pharmaceuticals PLC",
-          "net_cash": -200.0
-        },
-        {
-          "acted_at": "2026-07-20T21:32:40.266505+01:00",
-          "ticker": "MGNS.L",
-          "side": "buy",
-          "name": "Morgan Sindall Group plc",
-          "net_cash": -200.0
-        }
-      ],
+      "trade_count": 0,
+      "trades_sample": [],
       "fund": {
         "cash": 0.0,
         "nav": null,
