@@ -49,8 +49,8 @@ def main(argv: list[str] | None = None) -> int:
         "--use-trade-plan-levels",
         action="store_true",
         help=(
-            "Honour archived core_limit entry gates and tactical stop/target exits "
-            "(default: off — conviction/timing path only)"
+            "Deprecated no-op for the comparison runner: static + trailing level tracks "
+            "are always included alongside screen/overlay. Kept for CLI compatibility."
         ),
     )
     parser.add_argument("--json", action="store_true", help="Print full JSON summary")
@@ -61,7 +61,6 @@ def main(argv: list[str] | None = None) -> int:
         trade_cost_pct=args.trade_cost,
         max_positions=args.max_positions,
         monthly_deposit=args.monthly_deposit,
-        use_trade_plan_levels=bool(args.use_trade_plan_levels),
     )
     comparison = run_simulation_from_dir(args.output_dir, config=config)
 

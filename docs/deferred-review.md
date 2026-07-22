@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T18:39:18+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:40:00+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -49,7 +49,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L2 | **Evolutionary genomes (stage 2)** | Genomes = sim knobs ± weight deltas; fitness = excess − λ×costs; elites + small mutations; freeze screen signals first | After L1; history thick enough to trust fitness |
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
-| L44 | **Trailing stop with entry-floor hard floor in technical sim** | Optional sim/paper track: each period refresh stop from latest technicals but never below original entry stop (trail up only); keep static-plan track for comparison. | After L3 level gates are used in practice; pairs with L4 tactical-vs-whole-position semantics |
 
 ### Universe & data
 
