@@ -34,8 +34,9 @@ ftse-screen
 # Dry run on 10 names
 ftse-screen --limit 10
 
-# Agent analysis (requires CURSOR_API_KEY)
-export CURSOR_API_KEY="cursor_..."
+# Agent analysis (requires CURSOR_API_KEY — User API Key from
+# https://cursor.com/dashboard/integrations, not Admin keys from /dashboard/api-keys)
+export CURSOR_API_KEY="crsr_..."
 python scripts/agent_analyze.py --limit 20 --top 5
 
 # Email report with per-company signals + reason summaries

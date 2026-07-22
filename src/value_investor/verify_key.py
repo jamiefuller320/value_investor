@@ -50,8 +50,13 @@ class VerifyKeyResult:
             lines.append(f"✗ {self.detail}")
             lines.append("")
             lines.append(
-                "Fix: set CURSOR_API_KEY from https://cursor.com/dashboard/integrations "
+                "Fix: create a User API Key at https://cursor.com/dashboard/integrations "
+                "(scroll to User API Keys → New / Add API Key), then set CURSOR_API_KEY "
                 "or pass --api-key."
+            )
+            lines.append(
+                "Note: Dashboard → API Keys only creates Admin keys (scope admin:*). "
+                "Those are a different product and will not authenticate here."
             )
         return "\n".join(lines)
 
