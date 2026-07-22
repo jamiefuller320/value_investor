@@ -30,6 +30,9 @@ USER_AGENT = "value-investor-research/0.1 (+companies-house)"
 DEFAULT_MAX_ACCOUNTS = 2
 DEEPEN_MAX_ACCOUNTS = 5  # historical depth for memo tickers
 RATE_LIMIT_SLEEP_S = 0.6
+# Group accounts PDFs can be tens of MB; allow room for the S3 hop.
+DOCUMENT_DOWNLOAD_TIMEOUT_S = 300.0
+MAX_DOCUMENT_BYTES = 80_000_000
 
 
 def companies_house_api_key(explicit: str | None = None) -> str | None:
@@ -40,6 +43,32 @@ def companies_house_api_key(explicit: str | None = None) -> str | None:
 def _auth_header(api_key: str) -> str:
     token = base64.b64encode(f"{api_key}:".encode("utf-8")).decode("ascii")
     return f"Basic {token}"
+
+
+class _StripAuthOnRedirect(urllib.request.HTTPRedirectHandler):
+    """Follow redirects but drop Authorization (CH content → signed S3 URLs).
+
+    Ubuntu's urllib only strips Content-Length/Type on redirect; keeping Basic
+    auth on the S3 hop yields ``Only one auth mechanism allowed``.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
+        new_req = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new_req is None:
+            return None
+        # Request.headers keys are title-cased by urllib; remove both casings.
+        for key in list(new_req.headers):
+            if key.lower() == "authorization":
+                del new_req.headers[key]
+        unredirected = getattr(new_req, "unredirected_hdrs", None)
+        if isinstance(unredirected, dict):
+            for key in list(unredirected):
+                if key.lower() == "authorization":
+                    del unredirected[key]
+        return new_req
+
+
+_CH_OPENER = urllib.request.build_opener(_StripAuthOnRedirect)
 
 
 def _ch_get(
@@ -59,7 +88,7 @@ def _ch_get(
     for attempt in range(retries + 1):
         req = urllib.request.Request(url, headers=headers, method="GET")
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with _CH_OPENER.open(req, timeout=timeout) as resp:
                 return resp.read()
         except urllib.error.HTTPError as exc:
             last_exc = exc
@@ -283,6 +312,15 @@ def fetch_document_bytes(
     if isinstance(resources, dict):
         if "application/pdf" in resources:
             accept = "application/pdf"
+            length = int((resources["application/pdf"] or {}).get("content_length") or 0)
+            if length > MAX_DOCUMENT_BYTES:
+                logger.info(
+                    "Skipping oversized CH PDF (%s bytes > %s) for %s",
+                    length,
+                    MAX_DOCUMENT_BYTES,
+                    document_metadata_url,
+                )
+                return None
         elif "application/xhtml+xml" in resources:
             accept = "application/xhtml+xml"
         elif "application/xml" in resources:
@@ -295,7 +333,12 @@ def fetch_document_bytes(
     else:
         doc_url = str(doc_link)
     try:
-        raw = _ch_get(doc_url, api_key=api_key, accept=accept)
+        raw = _ch_get(
+            doc_url,
+            api_key=api_key,
+            accept=accept,
+            timeout=DOCUMENT_DOWNLOAD_TIMEOUT_S,
+        )
         time.sleep(RATE_LIMIT_SLEEP_S)
         return raw, accept
     except Exception as exc:  # noqa: BLE001

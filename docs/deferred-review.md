@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:49:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T10:03:02+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -88,6 +88,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L55 | **Extend FILINGS_LOOKBACK beyond 800d after CH bodies exist** | Raising FILINGS_LOOKBACK_DAYS / FINANCIAL_YEARS alone does little while UK bodies stay empty (Google wrappers). Once Companies House accounts are ingested, revisit deeper lookback and FILINGS_MAX_ITEMS prioritisation for multi-year statutory history. | CH accounts ingest ships and gap-fill with_body rises for UK memos |
 | L56 | **Generic IR PDF crawler (beyond per-issuer L38/L43)** | Prefer a small allowlisted IR-page PDF discovery helper over Hikma/Photo-Me hardcodes. Needs IR homepage map or search-derived PDF URLs; more fragile than Companies House. | CH ingest live and still missing FCF bridges / segment tables that only live in IR decks |
 | L57 | **Seed IR allowlist URLs for active memo tickers** | Manual docs/data/research_ir_urls.json MVP is wired; populate URLs for paper-auto / gap-fill UK names that still miss FCF bridges and segment tables after Companies House accounts. | First deepen-sources or gap-fill run with COMPANIES_HOUSE_API_KEY shows CH bodies present but IR-only tables still missing |
+| L58 | **OCR for image-only Companies House accounts PDFs** | Shell plc and some other large issuers file image-only group accounts to Companies House; pypdf extracts no text. OCR (or preferring ESEF/iXBRL/SEC 20-F) would unlock CH body depth for those names. | After IR allowlist + SEC dual-list fallbacks still leave CH bodies empty for multiple memo tickers |
+| L59 | **Auto-pull SEC 20-F for dual-listed UK memo tickers** | UK deepen currently stays on RNS/CH; dual-listed names like SHEL.L have text-rich SEC 20-F HTML. A regime helper could auto-add recent 20-F/6-K URLs without manual IR allowlist seeding. | More than a handful of FTSE memos need SEC 20-F bodies because CH PDFs are image-only |
 
 ### Ops / reliability
 
