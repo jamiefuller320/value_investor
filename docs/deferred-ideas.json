@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T09:32:36+00:00",
+  "updated_at": "2026-07-22T09:49:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -340,8 +340,9 @@
         "filings",
         "research"
       ],
-      "status": "open",
-      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668"
+      "status": "done",
+      "source": "bc-84f8eb22-819f-4ea2-b70d-18ab2f010668",
+      "updated_at": "2026-07-22T09:41:36+00:00"
     },
     {
       "id": "L11",
@@ -776,9 +777,10 @@
         "research-model",
         "ingest"
       ],
-      "status": "open",
+      "status": "done",
       "source": "research-gap-fill",
-      "added_at": "2026-07-20T20:51:04+00:00"
+      "added_at": "2026-07-20T20:51:04+00:00",
+      "updated_at": "2026-07-22T09:41:36+00:00"
     },
     {
       "id": "L36",
@@ -1179,9 +1181,96 @@
         "l10",
         "l35"
       ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T09:32:36+00:00",
+      "updated_at": "2026-07-22T09:41:36+00:00"
+    },
+    {
+      "id": "N19",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not backdate research revisions for past paper decisions",
+      "summary": "Extending source lookbacks and re-running memos is fine going forward, but inventing historical revisions as-of past run dates would leak post-period knowledge into AI-judgment / historical_analysis PIT overlays.",
+      "revisit_when": "Never as a learning shortcut; only reconsider if building a separate counterfactual research lab outside the live paper track",
+      "tags": [
+        "lookahead",
+        "pit",
+        "historical-analysis",
+        "ai-judgment"
+      ],
+      "status": "open",
+      "source": "feasibility: CH+IR vs historical backfill",
+      "added_at": "2026-07-22T09:36:56+00:00"
+    },
+    {
+      "id": "L55",
+      "category": "later",
+      "section": "research",
+      "title": "Extend FILINGS_LOOKBACK beyond 800d after CH bodies exist",
+      "summary": "Raising FILINGS_LOOKBACK_DAYS / FINANCIAL_YEARS alone does little while UK bodies stay empty (Google wrappers). Once Companies House accounts are ingested, revisit deeper lookback and FILINGS_MAX_ITEMS prioritisation for multi-year statutory history.",
+      "revisit_when": "CH accounts ingest ships and gap-fill with_body rises for UK memos",
+      "tags": [
+        "filings",
+        "lookback",
+        "companies-house",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "feasibility: CH+IR vs historical backfill",
+      "added_at": "2026-07-22T09:36:56+00:00"
+    },
+    {
+      "id": "L56",
+      "category": "later",
+      "section": "research",
+      "title": "Generic IR PDF crawler (beyond per-issuer L38/L43)",
+      "summary": "Prefer a small allowlisted IR-page PDF discovery helper over Hikma/Photo-Me hardcodes. Needs IR homepage map or search-derived PDF URLs; more fragile than Companies House.",
+      "revisit_when": "CH ingest live and still missing FCF bridges / segment tables that only live in IR decks",
+      "tags": [
+        "ir",
+        "pdf",
+        "gap-fill",
+        "ingest",
+        "l38",
+        "l43"
+      ],
+      "status": "open",
+      "source": "feasibility: CH+IR vs historical backfill",
+      "added_at": "2026-07-22T09:36:56+00:00"
+    },
+    {
+      "id": "L57",
+      "category": "later",
+      "section": "research",
+      "title": "Seed IR allowlist URLs for active memo tickers",
+      "summary": "Manual docs/data/research_ir_urls.json MVP is wired; populate URLs for paper-auto / gap-fill UK names that still miss FCF bridges and segment tables after Companies House accounts.",
+      "revisit_when": "First deepen-sources or gap-fill run with COMPANIES_HOUSE_API_KEY shows CH bodies present but IR-only tables still missing",
+      "tags": [
+        "ir",
+        "allowlist",
+        "gap-fill",
+        "l56"
+      ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
-      "added_at": "2026-07-22T09:32:36+00:00"
+      "added_at": "2026-07-22T09:41:36+00:00"
+    },
+    {
+      "id": "N20",
+      "category": "not_now",
+      "section": "research",
+      "title": "Companies House Streaming API for realtime filings",
+      "summary": "Streaming API pushes company/filing changes over long-lived connections; our research path only needs on-demand REST GET for search, filing-history, and document download. Keys are not interchangeable with REST.",
+      "revisit_when": "Need near-realtime UK filing alerts outside weekly research cycles",
+      "tags": [
+        "companies-house",
+        "streaming",
+        "api"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T09:49:01+00:00"
     }
   ]
 }

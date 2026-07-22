@@ -220,6 +220,7 @@ def ingest_research_sources(
     since: datetime | None = None,
     include_filings: bool = True,
     market: str | None = None,
+    deepen_history: bool = False,
 ) -> dict[str, Any]:
     """
     Download research sources under ``sources_dir``.
@@ -229,6 +230,10 @@ def ingest_research_sources(
     results discovery) are written under ``filings/`` and kept separate so
     FINANCIAL REVIEW can cite a consistent primary source. Macro context is
     written for memo prompts only — never used for scoring.
+
+    ``deepen_history`` pulls more Companies House accounts years for tickers
+    that already triggered memo compilation — forward depth only (does not
+    backdate research revisions / PIT overlays).
     """
     sources_dir.mkdir(parents=True, exist_ok=True)
 
@@ -298,6 +303,7 @@ def ingest_research_sources(
                 company_name=company_name,
                 sources_dir=sources_dir,
                 market=market,
+                deepen_history=deepen_history,
             )
         except Exception as exc:  # noqa: BLE001 — research should continue without filings
             logger.warning("Filings ingest failed for %s: %s", ticker, exc)

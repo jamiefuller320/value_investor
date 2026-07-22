@@ -112,7 +112,44 @@ def main(argv: list[str] | None = None) -> int:
         default=3,
         help="Max tickers for --gap-fill (default: 3)",
     )
+    parser.add_argument(
+        "--deepen-sources",
+        action="store_true",
+        help=(
+            "Re-ingest filings with historical deepen for existing memo tickers "
+            "(Companies House accounts years + RNS/PDF bodies). Does not call Cursor "
+            "and does not backdate research revisions."
+        ),
+    )
+    parser.add_argument(
+        "--tickers",
+        default="",
+        help="Comma-separated tickers for --deepen-sources (default: all memos in output-dir)",
+    )
     args = parser.parse_args(argv)
+
+    if args.deepen_sources:
+        from value_investor.research.deepen_sources import deepen_sources_for_memo_tickers
+
+        ticker_list = [t.strip() for t in str(args.tickers).split(",") if t.strip()] or None
+        result = deepen_sources_for_memo_tickers(
+            output_dir=args.output_dir,
+            tickers=ticker_list,
+            market="ftse350" if args.universe.startswith("ftse") else args.universe,
+        )
+        print(
+            f"Deepened sources for {len(result.deepened)} memo ticker(s); "
+            f"skipped={len(result.skipped)} errors={len(result.errors)}"
+        )
+        for row in result.deepened:
+            print(
+                f"  • {row['ticker']}: filings={row.get('filings_total')} "
+                f"with_body={row.get('filings_with_body')}"
+            )
+        for err in result.errors:
+            print(f"  ! {err}", file=sys.stderr)
+        print(f"Wrote {args.output_dir / 'deepen_sources_summary.json'}")
+        return 1 if result.errors and not result.deepened else 0
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"
