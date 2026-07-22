@@ -145,6 +145,94 @@ def test_simulation_trade_plan_limit_blocks_entry():
     assert "AAA.L" in market.holdings
 
 
+def test_trailing_stop_exits_on_entry_floor_not_weaker_period_stop():
+    snapshots = [
+        _snapshot(
+            "2026-06-01T07:00:00+00:00",
+            {"AAA.L": 100.0, BENCHMARK_TICKER: 8000.0},
+            [
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "data_quality_score": 0.8,
+                    "core_order": "market",
+                    "tactical_stop_loss": 90.0,
+                    "tactical_take_profit": 140.0,
+                }
+            ],
+        ),
+        _snapshot(
+            "2026-06-15T07:00:00+00:00",
+            {"AAA.L": 88.0, BENCHMARK_TICKER: 7990.0},
+            [
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "data_quality_score": 0.8,
+                    "core_order": "market",
+                    "tactical_stop_loss": 85.0,
+                    "tactical_take_profit": 140.0,
+                }
+            ],
+        ),
+    ]
+    static = run_simulation(
+        snapshots,
+        SimulatorConfig(use_trade_plan_levels=True, trailing_stop=False, trade_cost_pct=0.0),
+    )
+    trailing = run_simulation(
+        snapshots,
+        SimulatorConfig(use_trade_plan_levels=True, trailing_stop=True, trade_cost_pct=0.0),
+    )
+    # Price 88: above static period stop 85 → still held; at/below entry floor 90 → trailing exits.
+    assert "AAA.L" in static.holdings
+    assert "AAA.L" not in trailing.holdings
+
+
+def test_trailing_stop_rises_when_plan_stop_rises():
+    snapshots = [
+        _snapshot(
+            "2026-06-01T07:00:00+00:00",
+            {"AAA.L": 100.0, BENCHMARK_TICKER: 8000.0},
+            [
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "data_quality_score": 0.8,
+                    "core_order": "market",
+                    "tactical_stop_loss": 90.0,
+                    "tactical_take_profit": 140.0,
+                }
+            ],
+        ),
+        _snapshot(
+            "2026-06-15T07:00:00+00:00",
+            {"AAA.L": 96.0, BENCHMARK_TICKER: 8020.0},
+            [
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "data_quality_score": 0.8,
+                    "core_order": "market",
+                    "tactical_stop_loss": 97.0,  # trailed up
+                    "tactical_take_profit": 140.0,
+                }
+            ],
+        ),
+    ]
+    trailing = run_simulation(
+        snapshots,
+        SimulatorConfig(use_trade_plan_levels=True, trailing_stop=True, trade_cost_pct=0.0),
+    )
+    # Price 96 ≤ trailed stop 97 → exit
+    assert "AAA.L" not in trailing.holdings
+    assert any(t.side == "sell" for t in trailing.trades)
+
+
 def test_simulation_trade_plan_stop_exits_position():
     snapshots = [
         _snapshot(

@@ -661,6 +661,87 @@ function renderHistoricalAnalysis(historical) {
     }`;
 }
 
+const PERF_SIM_TRACK_KEY = "ftseValueInvestor.perfSimTrack.v1";
+
+const PERF_SIM_TRACKS = [
+  {
+    id: "screen",
+    label: "Screen",
+    blurb: "Conviction rebalance only — ignores trade-plan limits and stops.",
+  },
+  {
+    id: "overlay",
+    label: "Research overlay",
+    blurb: "Same as screen but uses adjusted_signal when research is present.",
+  },
+  {
+    id: "static",
+    label: "Static levels",
+    blurb: "Honours each archive period’s core limit, stop, and target as published.",
+  },
+  {
+    id: "trailing",
+    label: "Trailing stop",
+    blurb: "Stop trails up with refreshed technicals but never below the original entry stop.",
+  },
+];
+
+function loadPerfSimTrack() {
+  try {
+    const saved = localStorage.getItem(PERF_SIM_TRACK_KEY);
+    if (PERF_SIM_TRACKS.some((t) => t.id === saved)) return saved;
+  } catch {
+    /* ignore */
+  }
+  return "screen";
+}
+
+function savePerfSimTrack(trackId) {
+  try {
+    localStorage.setItem(PERF_SIM_TRACK_KEY, trackId);
+  } catch {
+    /* ignore */
+  }
+}
+
+function simTrackPayload(simulation, trackId) {
+  if (!simulation) return null;
+  if (trackId === "overlay") return simulation.research_overlay || simulation;
+  if (trackId === "static") return simulation.static_levels || null;
+  if (trackId === "trailing") return simulation.trailing_levels || null;
+  return simulation;
+}
+
+function renderSimTrackDetail(track, data, simulation) {
+  if (!data || data.final_value == null) {
+    return `<div class="empty-state">No results for ${esc(track.label)} yet. Needs archived runs with enough history${
+      track.id === "static" || track.id === "trailing" ? " and trade-plan fields" : ""
+    }.</div>`;
+  }
+  const holdings = Object.entries(data.holdings || {})
+    .map(([ticker, shares]) => `<li>${esc(ticker)}: ${shares} shares</li>`)
+    .join("");
+  return `
+    <p class="small muted">${esc(track.blurb)}</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Final value</th><th>Return</th><th>vs FTSE</th><th>Trades</th><th>Costs</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>£${Number(data.final_value).toFixed(2)}</td>
+            <td>${pct(data.total_return)}</td>
+            <td>${pct(data.excess_return)}</td>
+            <td>${data.trade_count ?? "—"}</td>
+            <td>£${Number(data.total_costs || 0).toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">${data.periods ?? simulation.periods ?? "—"} periods · ${pct(data.trade_cost_pct ?? simulation.trade_cost_pct)} per trade</p>
+    ${data.note ? `<p class="small muted">${esc(data.note)}</p>` : ""}
+    ${holdings ? `<p><strong>Holdings</strong><ul class="list-plain">${holdings}</ul></p>` : ""}`;
+}
+
 function renderPerformance(data) {
   const backtest = data.backtest;
   const simulation = data.simulation;
@@ -694,43 +775,55 @@ function renderPerformance(data) {
 
   let simHtml = '<div class="empty-state">Simulation needs at least two archived weekly runs.</div>';
   if (simulation && simulation.final_value != null) {
-    const overlay = simulation.research_overlay;
-    const rows = [
-      {
-        label: "Screen only",
-        data: simulation,
-      },
-    ];
-    if (overlay) {
-      rows.push({ label: "Research overlay", data: overlay });
-    }
-
-    const tableRows = rows
-      .map(
-        ({ label, data }) => `<tr>
-          <td><strong>${esc(label)}</strong></td>
-          <td>£${Number(data.final_value).toFixed(2)}</td>
-          <td>${pct(data.total_return)}</td>
-          <td>${pct(data.excess_return)}</td>
-          <td>${data.trade_count}</td>
-        </tr>`
-      )
-      .join("");
-
-    const holdings = Object.entries(simulation.holdings || {})
-      .map(([ticker, shares]) => `<li>${esc(ticker)}: ${shares} shares</li>`)
+    const activeId = loadPerfSimTrack();
+    const available = PERF_SIM_TRACKS.filter((track) => {
+      if (track.id === "screen") return true;
+      if (track.id === "overlay") return !!simulation.research_overlay;
+      if (track.id === "static") return !!simulation.static_levels;
+      if (track.id === "trailing") return !!simulation.trailing_levels;
+      return false;
+    });
+    const selected =
+      available.find((t) => t.id === activeId) || available[0] || PERF_SIM_TRACKS[0];
+    const trackData = simTrackPayload(simulation, selected.id);
+    const comparisonRows = available
+      .map((track) => {
+        const row = simTrackPayload(simulation, track.id);
+        if (!row || row.final_value == null) return "";
+        return `<tr>
+          <td><strong>${esc(track.label)}</strong></td>
+          <td>£${Number(row.final_value).toFixed(2)}</td>
+          <td>${pct(row.total_return)}</td>
+          <td>${pct(row.excess_return)}</td>
+          <td>${row.trade_count ?? "—"}</td>
+        </tr>`;
+      })
       .join("");
 
     simHtml = `
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Strategy</th><th>Final value</th><th>Return</th><th>vs FTSE</th><th>Trades</th></tr></thead>
-          <tbody>${tableRows}</tbody>
-        </table>
+      <nav class="paper-subnav sim-subnav" aria-label="Simulation tracks">
+        ${available
+          .map(
+            (track) =>
+              `<button type="button" class="paper-subtab${
+                track.id === selected.id ? " active" : ""
+              }" data-sim-track="${track.id}">${esc(track.label)}</button>`
+          )
+          .join("")}
+      </nav>
+      <div id="sim-track-detail">
+        ${renderSimTrackDetail(selected, trackData, simulation)}
       </div>
-      <p class="small muted">${esc(simulation.comparison_note || simulation.note || "")}</p>
-      <p class="small">Costs: £${Number(simulation.total_costs || 0).toFixed(2)} (${pct(simulation.trade_cost_pct)} per trade) · ${simulation.periods} periods</p>
-      ${holdings ? `<p><strong>Screen holdings</strong><ul class="list-plain">${holdings}</ul></p>` : ""}`;
+      <details class="sim-compare-details">
+        <summary>Compare all tracks</summary>
+        <div class="table-wrap" style="margin-top:0.75rem">
+          <table>
+            <thead><tr><th>Track</th><th>Final value</th><th>Return</th><th>vs FTSE</th><th>Trades</th></tr></thead>
+            <tbody>${comparisonRows}</tbody>
+          </table>
+        </div>
+        <p class="small muted">${esc(simulation.comparison_note || simulation.note || "")}</p>
+      </details>`;
   }
 
   panel.innerHTML = `
@@ -748,6 +841,24 @@ function renderPerformance(data) {
       ${renderHistoricalAnalysis(historical)}
     </div>
   `;
+
+  panel.querySelectorAll("[data-sim-track]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const trackId = button.dataset.simTrack;
+      savePerfSimTrack(trackId);
+      const track = PERF_SIM_TRACKS.find((t) => t.id === trackId);
+      const detail = panel.querySelector("#sim-track-detail");
+      if (!track || !detail) return;
+      panel.querySelectorAll("[data-sim-track]").forEach((el) => {
+        el.classList.toggle("active", el === button);
+      });
+      detail.innerHTML = renderSimTrackDetail(
+        track,
+        simTrackPayload(simulation, trackId),
+        simulation
+      );
+    });
+  });
 }
 
 async function openMemo(item) {

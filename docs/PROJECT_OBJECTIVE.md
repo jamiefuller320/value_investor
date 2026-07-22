@@ -90,4 +90,4 @@ ftse-library ladder
 
 ## Related parked ideas
 
-Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: evolutionary stage 2 (L2/N2), global expansion (N1), full Interactive Investor catalog (L34), UK-primary data (L11). Implemented: trade-plan config + ATR/volume (L5/L9), optional trade-plan levels in simulator (L3), verify-before-trade packs (L27), CI pytest (L24), decision-review learning (L1), orchestrator catch-up + external cron (L21), multi-currency paper NAV (L28), library screen-lite/research ladder.
+Tracked in [`docs/deferred-ideas.json`](deferred-ideas.json) / [`deferred-review.md`](deferred-review.md). Key linked items: evolutionary stage 2 (L2/N2), global expansion (N1), full Interactive Investor catalog (L34), UK-primary data (L11). Implemented: trailing-stop sim track with entry floor (L44) + Performance submenu, trade-plan config/ATR (L5/L9), sim level gates (L3), verify-before-trade packs (L27), CI pytest (L24), decision-review (L1), orchestrator cron (L21).

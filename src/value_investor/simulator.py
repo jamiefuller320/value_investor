@@ -25,6 +25,8 @@ class SimulatorConfig:
     monthly_deposit: float = 0.0
     # When True, honour core_limit entry gates and tactical stop/target exits (L3).
     use_trade_plan_levels: bool = False
+    # With use_trade_plan_levels: trail stop up from refreshed plans, never below entry stop (L44).
+    trailing_stop: bool = False
 
 
 @dataclass
@@ -92,17 +94,24 @@ class SimulationSummary:
 class SimulationComparison:
     screen: SimulationSummary
     overlay: SimulationSummary
+    static_levels: SimulationSummary | None = None
+    trailing_levels: SimulationSummary | None = None
     comparison_note: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         payload = self.screen.to_dict()
         payload["research_overlay"] = self.overlay.to_dict()
+        if self.static_levels is not None:
+            payload["static_levels"] = self.static_levels.to_dict()
+        if self.trailing_levels is not None:
+            payload["trailing_levels"] = self.trailing_levels.to_dict()
         if self.comparison_note:
             payload["comparison_note"] = self.comparison_note
         return payload
 
     def has_results(self) -> bool:
-        return self.screen.has_results() or self.overlay.has_results()
+        tracks = [self.screen, self.overlay, self.static_levels, self.trailing_levels]
+        return any(t is not None and t.has_results() for t in tracks)
 
 
 def simulation_summary_from_dict(data: dict[str, Any]) -> SimulationSummary:
@@ -126,9 +135,23 @@ def simulation_summary_from_dict(data: dict[str, Any]) -> SimulationSummary:
 
 def simulation_comparison_from_dict(data: dict[str, Any]) -> SimulationComparison:
     overlay_data = data.get("research_overlay")
+    static_data = data.get("static_levels")
+    trailing_data = data.get("trailing_levels")
     return SimulationComparison(
         screen=simulation_summary_from_dict(data),
-        overlay=simulation_summary_from_dict(overlay_data) if overlay_data else simulation_summary_from_dict(data),
+        overlay=(
+            simulation_summary_from_dict(overlay_data)
+            if overlay_data
+            else simulation_summary_from_dict(data)
+        ),
+        static_levels=(
+            simulation_summary_from_dict(static_data) if isinstance(static_data, dict) else None
+        ),
+        trailing_levels=(
+            simulation_summary_from_dict(trailing_data)
+            if isinstance(trailing_data, dict)
+            else None
+        ),
         comparison_note=str(data.get("comparison_note", "")),
     )
 
@@ -172,17 +195,36 @@ def run_simulation_comparison(
     snapshots: list[RunSnapshot],
     config: SimulatorConfig | None = None,
 ) -> SimulationComparison:
-    """Run screen-only and research-overlay simulations on the same snapshots."""
+    """Run screen, research-overlay, and technical level tracks on the same snapshots."""
     base = config or SimulatorConfig()
-    screen = run_simulation(snapshots, base)
+    # Force level flags off on the baseline tracks so comparison stays clean.
+    screen = run_simulation(
+        snapshots,
+        replace(base, use_trade_plan_levels=False, trailing_stop=False),
+    )
     overlay = run_simulation(
         snapshots,
-        replace(base, use_adjusted_signal=True),
+        replace(
+            base,
+            use_adjusted_signal=True,
+            use_trade_plan_levels=False,
+            trailing_stop=False,
+        ),
+    )
+    static_levels = run_simulation(
+        snapshots,
+        replace(base, use_trade_plan_levels=True, trailing_stop=False),
+    )
+    trailing_levels = run_simulation(
+        snapshots,
+        replace(base, use_trade_plan_levels=True, trailing_stop=True),
     )
     has_overlay_data = _snapshots_have_research_overlay(snapshots)
     return SimulationComparison(
         screen=screen,
         overlay=overlay,
+        static_levels=static_levels,
+        trailing_levels=trailing_levels,
         comparison_note=_comparison_note(screen, overlay, has_overlay_data=has_overlay_data),
     )
 
@@ -291,13 +333,30 @@ def _optional_float(value: Any) -> float | None:
     return number
 
 
+def _effective_stop(
+    *,
+    period_stop: float | None,
+    entry_stop: float | None,
+    trailing: bool,
+) -> float | None:
+    """Static = period stop; trailing = max(entry floor, period) so stops only rise."""
+    if not trailing:
+        return period_stop
+    if entry_stop is None:
+        return period_stop
+    if period_stop is None:
+        return entry_stop
+    return max(entry_stop, period_stop)
+
+
 def _rebalance(
     *,
     snapshot: RunSnapshot,
     cash: float,
     holdings: dict[str, float],
     config: SimulatorConfig,
-) -> tuple[float, dict[str, float], list[Trade]]:
+    entry_stops: dict[str, float] | None = None,
+) -> tuple[float, dict[str, float], list[Trade], dict[str, float]]:
     prices = snapshot.prices
     run_at = snapshot.run_at
     trades: list[Trade] = []
@@ -305,6 +364,10 @@ def _rebalance(
     target_set = set(targets)
     by_ticker = _signal_rows_by_ticker(snapshot)
     exited_for_levels: set[str] = set()
+    stops = dict(entry_stops or {})
+
+    def _clear_stop(ticker: str) -> None:
+        stops.pop(ticker, None)
 
     # Sell positions no longer in target universe
     for ticker in list(holdings.keys()):
@@ -313,8 +376,10 @@ def _rebalance(
         price = prices.get(ticker)
         if price is None or price <= 0:
             del holdings[ticker]
+            _clear_stop(ticker)
             continue
         shares = holdings.pop(ticker)
+        _clear_stop(ticker)
         proceeds, trade = _execute_sell(
             run_at=run_at,
             ticker=ticker,
@@ -325,20 +390,26 @@ def _rebalance(
         cash += proceeds
         trades.append(trade)
 
-    # Optional trade-plan stop / take-profit exits (whole position; L3 / L4-lite).
+    # Optional trade-plan stop / take-profit exits (whole position; L3 / L44).
     if config.use_trade_plan_levels:
         for ticker in list(holdings.keys()):
             price = prices.get(ticker)
             if price is None or price <= 0:
                 continue
             row = by_ticker.get(ticker) or {}
-            stop = _optional_float(row.get("tactical_stop_loss"))
+            period_stop = _optional_float(row.get("tactical_stop_loss"))
             target = _optional_float(row.get("tactical_take_profit"))
+            stop = _effective_stop(
+                period_stop=period_stop,
+                entry_stop=stops.get(ticker),
+                trailing=bool(config.trailing_stop),
+            )
             hit_stop = stop is not None and price <= stop
             hit_target = target is not None and price >= target
             if not (hit_stop or hit_target):
                 continue
             shares = holdings.pop(ticker)
+            _clear_stop(ticker)
             proceeds, trade = _execute_sell(
                 run_at=run_at,
                 ticker=ticker,
@@ -351,7 +422,7 @@ def _rebalance(
             exited_for_levels.add(ticker)
 
     if not targets:
-        return cash, holdings, trades
+        return cash, holdings, trades, stops
 
     total_value = _portfolio_value(cash, holdings, prices)
     target_each = total_value / len(targets)
@@ -383,6 +454,7 @@ def _rebalance(
         holdings[ticker] = current_shares - shares_to_sell
         if holdings[ticker] <= 1e-9:
             del holdings[ticker]
+            _clear_stop(ticker)
         trades.append(trade)
 
     # Buy underweight positions
@@ -392,8 +464,8 @@ def _rebalance(
         price = prices.get(ticker)
         if price is None or price <= 0:
             continue
+        row = by_ticker.get(ticker) or {}
         if config.use_trade_plan_levels:
-            row = by_ticker.get(ticker) or {}
             core_order = str(row.get("core_order") or "market")
             core_limit = _optional_float(row.get("core_limit"))
             if core_order == "limit" and core_limit is not None and price > core_limit:
@@ -415,10 +487,16 @@ def _rebalance(
         if trade is None:
             continue
         cash -= spent
+        was_flat = current_shares <= 1e-9
         holdings[ticker] = current_shares + shares_bought
+        # Sticky entry-stop floor: set only on first open (trailing track uses this).
+        if was_flat and ticker not in stops:
+            period_stop = _optional_float(row.get("tactical_stop_loss"))
+            if period_stop is not None:
+                stops[ticker] = period_stop
         trades.append(trade)
 
-    return cash, holdings, trades
+    return cash, holdings, trades, stops
 
 
 def run_simulation(
@@ -448,6 +526,7 @@ def run_simulation(
     cash = config.initial_capital
     contributed = config.initial_capital
     holdings: dict[str, float] = {}
+    entry_stops: dict[str, float] = {}
     all_trades: list[Trade] = []
     equity_curve: list[dict[str, Any]] = []
     deposits_applied = 0
@@ -475,11 +554,12 @@ def run_simulation(
                 contributed += injected
                 deposits_applied += missing
 
-        cash, holdings, trades = _rebalance(
+        cash, holdings, trades, entry_stops = _rebalance(
             snapshot=snapshot,
             cash=cash,
             holdings=holdings,
             config=config,
+            entry_stops=entry_stops,
         )
         all_trades.extend(trades)
         value = _portfolio_value(cash, holdings, snapshot.prices)
@@ -576,6 +656,22 @@ def format_simulation_comparison_text(comparison: SimulationComparison) -> str:
             heading="With research overlay (adjusted_signal)",
         )
     )
+    if comparison.static_levels is not None:
+        lines.append("")
+        lines.extend(
+            _format_single_simulation_text(
+                comparison.static_levels,
+                heading="Technical levels (static period stops)",
+            )
+        )
+    if comparison.trailing_levels is not None:
+        lines.append("")
+        lines.extend(
+            _format_single_simulation_text(
+                comparison.trailing_levels,
+                heading="Technical levels (trailing stop, entry floor)",
+            )
+        )
     if comparison.comparison_note:
         lines.extend(["", comparison.comparison_note])
     return "\n".join(lines)

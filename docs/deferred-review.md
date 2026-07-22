@@ -1,6 +1,10 @@
 # Parked & later ideas — periodic review
 
+<<<<<<< HEAD
 Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-21T18:39:18+00:00`).
+=======
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:29:25+00:00`).
+>>>>>>> 328c285 (Add trailing-stop sim track and Performance submenu)
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
