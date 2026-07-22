@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:55:52+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T06:15:27+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -62,7 +62,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L12 | **Paid news API** | Beyond Google News RSS | News quality becomes a bottleneck |
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
-| L47 | **T212 venue-gap ladder: ATX, PSI20, SMI, OMXS30, ISEQ20** | After catalogue confirm, add offline library markets for Wiener Börse, Euronext Lisbon, SIX Swiss, OMX Stockholm, and ISEQ — advertised/reported on Trading 212 Invest but missing from the current ladder. | ftse-library t212-catalogue succeeds and t212-align shows stock counts on VI/LS/SW/ST/IR exchange hints |
 
 ### Research & portfolio product
 
