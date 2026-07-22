@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:40:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:42:00+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -37,6 +37,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N11 | **Sync private live holdings into git/CI** | Privacy; dashboard localStorage must stay private | Private bridge (not git) is designed |
 | N12 | **Browser-only fully independent automation** | Only runs when dashboard is open | Server Action/ftse-paper-auto insufficient |
 | N13 | **Capital at risk / live broker automation (stage 6)** | Do not connect live capital or broker APIs until stages 2–5 are proven in paper with cost-aware review. | Manual packs trusted, decision-review learning working, and multi-market paper track proven |
+| N14 | **Live Trading 212 API integration** | Do not wire live order placement yet. T212 API is beta (non-idempotent orders); project is still at stage 2 manual packs. Prefer demo/paper path first when broker work starts. | Stages 2–5 exit criteria met and human override workflow defined (see N13) |
 
 ---
 
@@ -61,6 +62,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
 | L34 | **Full Interactive Investor tradable universe catalog** | ii.co.uk covers UK (incl AIM), US, and ~17 exchanges. Shipped: (1) exchange-allowlist overlay under docs/data/library/ii_coverage/; (2) next-slice offline markets aim, ibex35, ftse_mib, aex, bel20, hang_seng, sti, us_adr_asia — grown, screened, buy-tier researched, graduated. Remaining: official/partner instrument catalog to verify tradable_on_ii per ISIN. | Official II instrument export / partner feed available, or when expanding beyond index/liquid slices (full AIM All-Share, broader Asia cash equities). |
+| L45 | **Trading 212 instrument catalog as tradability overlay** | T212 exposes GET /equity/metadata/instruments via API; use that as the official tradable catalog instead of (or alongside) the ii exchange-allowlist overlay once broker preference is locked to T212. | Broker north star confirmed as Trading 212 and building coverage/unavailable watch for execution |
 
 ### Research & portfolio product
 
@@ -92,6 +94,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L25 | **Private live-holdings surveillance bridge** | Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage | Need CI surveillance of personal live book |
 | L32 | **Wire live Cursor usage API into library budget ledger** | If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls. | Cursor usage/credits API is available to CURSOR_API_KEY |
 | L33 | **Signal-priority maintenance refresh for graduated libraries** | Once full weekly refresh is no longer needed, prioritise maintenance (Yahoo metrics/filings cadence) by screen signal / research verdict — e.g. strong_buy and buy first, then hold/alumni — instead of round-robin or uniform caps. | Library richness is stable and Actions runtime or stale floors suggest throttling maintenance_max_tickers away from full |
+| L46 | **Prefer Trading 212 over Interactive Investor for execution** | T212 has a public API usable with Stocks ISA, £0 commission/platform fees, and 0.15% FX — better fit than ii (no retail trading API; ~£6/mo + ~£4/trade) for low-value UK ISA automation. Keep research/manual packs broker-agnostic until stage 6. | Approaching live/paper broker integration (stage 6), or when replacing the ii_coverage tradability north star |
 
 ---
 
