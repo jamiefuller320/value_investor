@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T08:39:38+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:09:13+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -41,6 +41,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N15 | **Expand ladder before T212 catalogue verification** | Do not grow new offline markets from allowlist assumptions alone; hang_seng/sti/asx200 look 100% on suffix heuristics but need catalogue hit rates before further APAC breadth. | Catalogue fetched and alignment_report.json shows per-market catalogue_hit_pct |
 | N16 | **Do not chase live Cursor usage API before envelope calibration** | Live usage API (L32) is blocked on Cursor exposing credits to CURSOR_API_KEY. Prefer running the £30/week estimated gate for a few cycles and recalibrating estimated_memo_usd (L52) before investing in billing integration. | Cursor documents a usage/credits API for CURSOR_API_KEY, or estimated vs billed spend diverges badly after 2–4 constrained weeks |
 | N17 | **Do not expand live screen beyond FTSE 350 yet** | Library breadth is far ahead (16 graduated markets). Stage 4 live expansion should wait until stage-2 decision packs are routinely trusted and decision-review has enough marks to adjust knobs. | Stage 2 exit criteria met and decision-review has actionable excess-return history |
+| N18 | **Make AI/research own automated trade actions on live path** | Do not let LLM research replace screen signal or auto-execute as the sole automated book until a parallel AI-judgment track beats screen-only after costs with PIT safety. | AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review |
 
 ---
 
@@ -53,6 +54,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L2 | **Evolutionary genomes (stage 2)** | Genomes = sim knobs ± weight deltas; fitness = excess − λ×costs; elites + small mutations; freeze screen signals first | After L1; history thick enough to trust fitness |
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
+| L53 | **AI judgment paper track (packs at decision time)** | Parallel paper book that selects using research/decision-pack judgment available at decision time (adjusted_signal / pack gates), compares excess vs FTSE datums after costs, and feeds improvements only when walk-forward outperformance holds. | Stage 2 packs trusted and decision-review L1 has thick enough marks; before evolutionary genomes (N2/L2) |
 
 ### Universe & data
 
