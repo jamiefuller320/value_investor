@@ -1,10 +1,6 @@
 # Parked & later ideas — periodic review
 
-<<<<<<< HEAD
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:40:00+00:00`).
-=======
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:31:07+00:00`).
->>>>>>> 02c2348 (Park Trading 212 as preferred execution venue over ii)
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T05:42:00+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -98,7 +94,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L25 | **Private live-holdings surveillance bridge** | Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage | Need CI surveillance of personal live book |
 | L32 | **Wire live Cursor usage API into library budget ledger** | If Cursor exposes remaining included credits via API, replace estimated spend + manual plan_monthly_usd with live remaining balance for the 10% weekly / surplus-day controls. | Cursor usage/credits API is available to CURSOR_API_KEY |
 | L33 | **Signal-priority maintenance refresh for graduated libraries** | Once full weekly refresh is no longer needed, prioritise maintenance (Yahoo metrics/filings cadence) by screen signal / research verdict — e.g. strong_buy and buy first, then hold/alumni — instead of round-robin or uniform caps. | Library richness is stable and Actions runtime or stale floors suggest throttling maintenance_max_tickers away from full |
-| L44 | **Prefer Trading 212 over Interactive Investor for execution** | T212 has a public API usable with Stocks ISA, £0 commission/platform fees, and 0.15% FX — better fit than ii (no retail trading API; ~£6/mo + ~£4/trade) for low-value UK ISA automation. Keep research/manual packs broker-agnostic until stage 6. | Approaching live/paper broker integration (stage 6), or when replacing the ii_coverage tradability north star |
+| L46 | **Prefer Trading 212 over Interactive Investor for execution** | T212 has a public API usable with Stocks ISA, £0 commission/platform fees, and 0.15% FX — better fit than ii (no retail trading API; ~£6/mo + ~£4/trade) for low-value UK ISA automation. Keep research/manual packs broker-agnostic until stage 6. | Approaching live/paper broker integration (stage 6), or when replacing the ii_coverage tradability north star |
 
 ---
 
