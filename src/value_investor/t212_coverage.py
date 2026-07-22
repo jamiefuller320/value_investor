@@ -821,6 +821,219 @@ def build_ii_overlays(
     return build_t212_overlays(library_root, markets, write=write)
 
 
+# Advertised / commonly reported Trading 212 Invest venues → suggested library slices.
+# Catalogue exchange-code stats refine these when a dump is present.
+T212_VENUE_LADDER_GAPS: list[dict[str, Any]] = [
+    {
+        "id": "atx",
+        "label": "ATX (Austria / Wiener Börse)",
+        "priority": 1,
+        "yahoo_suffix": ".VI",
+        "t212_exchange_hints": ["VI", "AT", "VIE"],
+        "rationale": (
+            "Wiener Börse is listed on Trading 212's Invest instruments marketing; "
+            "no offline library market yet."
+        ),
+        "wikipedia_index": "ATX",
+    },
+    {
+        "id": "psi20",
+        "label": "PSI 20 (Portugal / Euronext Lisbon)",
+        "priority": 2,
+        "yahoo_suffix": ".LS",
+        "t212_exchange_hints": ["LS", "PL", "PT"],
+        "rationale": (
+            "Euronext Lisbon appears on Trading 212 Invest venue lists; library has "
+            "other Euronext slices (PA/AS/BR) but not Lisbon."
+        ),
+        "wikipedia_index": "PSI-20",
+    },
+    {
+        "id": "smi",
+        "label": "SMI (Switzerland / SIX)",
+        "priority": 3,
+        "yahoo_suffix": ".SW",
+        "t212_exchange_hints": ["SW", "VX", "CH"],
+        "rationale": (
+            "SIX Swiss is widely reported on Trading 212 Invest stock coverage; "
+            "suffix map exists but no dedicated library market."
+        ),
+        "wikipedia_index": "Swiss Market Index",
+    },
+    {
+        "id": "omxs30",
+        "label": "OMX Stockholm 30",
+        "priority": 4,
+        "yahoo_suffix": ".ST",
+        "t212_exchange_hints": ["ST", "SS", "SE"],
+        "rationale": (
+            "OMX Nordic coverage is reported for Trading 212 Invest; would also "
+            "resolve EURO STOXX 50 Nordic names currently curated as exceptions "
+            "(e.g. Helsinki/Stockholm dual listings)."
+        ),
+        "wikipedia_index": "OMX Stockholm 30",
+    },
+    {
+        "id": "iseq20",
+        "label": "ISEQ 20 (Ireland)",
+        "priority": 5,
+        "yahoo_suffix": ".IR",
+        "t212_exchange_hints": ["IR", "ID", "IE"],
+        "rationale": (
+            "Euronext Dublin / Ireland is in the coverage suffix map (.IR) but has "
+            "no offline library slice yet."
+        ),
+        "wikipedia_index": "ISEQ 20",
+    },
+]
+
+
+def _catalogue_exchange_stats(index: dict[str, Any] | None) -> dict[str, Any]:
+    if not index:
+        return {"exchange_counts": {}, "stock_exchange_counts": {}, "type_counts": {}}
+    by_ticker = index.get("by_ticker") or {}
+    exchange_counts: dict[str, int] = {}
+    stock_exchange_counts: dict[str, int] = {}
+    for row in by_ticker.values():
+        if not isinstance(row, dict):
+            continue
+        code = str(row.get("exchangeCode") or "UNKNOWN").upper()
+        exchange_counts[code] = exchange_counts.get(code, 0) + 1
+        if str(row.get("type") or "").upper() == "STOCK":
+            stock_exchange_counts[code] = stock_exchange_counts.get(code, 0) + 1
+    return {
+        "exchange_counts": dict(
+            sorted(exchange_counts.items(), key=lambda kv: (-kv[1], kv[0]))
+        ),
+        "stock_exchange_counts": dict(
+            sorted(stock_exchange_counts.items(), key=lambda kv: (-kv[1], kv[0]))
+        ),
+        "type_counts": index.get("type_counts") or {},
+    }
+
+
+def assess_t212_alignment(
+    library_root: Path | None = None,
+    markets: list[str] | None = None,
+    *,
+    write: bool = True,
+    allowlist_only: bool = False,
+) -> dict[str, Any]:
+    """
+    Compare offline library markets to the Trading 212 catalogue (when present).
+
+    Without a catalogue, reports allowlist-assumed coverage and venue-gap
+    suggestions from ``T212_VENUE_LADDER_GAPS`` (provisional).
+    """
+    library_root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    t212_root = t212_coverage_root(library_root)
+    catalogue_index = None if allowlist_only else load_catalogue_index(library_root)
+    catalogue_meta = None if allowlist_only else load_catalogue_meta(library_root)
+    has_catalogue = catalogue_index is not None
+
+    overlay = build_t212_overlays(
+        library_root,
+        markets=markets,
+        write=False,
+    )
+    # When catalogue missing, build_t212_overlays still works via allowlist.
+
+    market_rows: list[dict[str, Any]] = []
+    for mid, stats in (overlay.get("markets") or {}).items():
+        total = int(stats.get("ticker_count") or 0)
+        tradable = int(stats.get("tradable_count") or 0)
+        catalogue_hits = int(stats.get("catalogue_hit_count") or 0)
+        market_rows.append(
+            {
+                "market": mid,
+                "ticker_count": total,
+                "tradable_count": tradable,
+                "tradable_pct": stats.get("tradable_pct") or 0.0,
+                "catalogue_hit_count": catalogue_hits,
+                "catalogue_hit_pct": round(catalogue_hits / total, 4) if total else 0.0,
+                "unknown_venue_count": stats.get("unknown_venue_count") or 0,
+                "curated_exception_count": stats.get("curated_exception_count") or 0,
+                "non_tradable_sample": stats.get("non_tradable_sample") or [],
+                "mode": "catalogue" if has_catalogue else "allowlist_assumed",
+            }
+        )
+    market_rows.sort(key=lambda r: (r["catalogue_hit_pct"], r["tradable_pct"], r["market"]))
+
+    exch_stats = _catalogue_exchange_stats(catalogue_index)
+
+    suggestions: list[dict[str, Any]] = []
+    for gap in T212_VENUE_LADDER_GAPS:
+        hints = {str(h).upper() for h in gap.get("t212_exchange_hints") or []}
+        in_library = gap["id"] in MARKET_REGISTRY
+        catalogue_support = None
+        if has_catalogue:
+            hits = {h: (exch_stats.get("stock_exchange_counts") or {}).get(h, 0) for h in hints}
+            catalogue_support = {
+                "matched_hints": {k: v for k, v in hits.items() if v},
+                "stock_count_on_hints": sum(hits.values()),
+                "supported": sum(hits.values()) > 0,
+            }
+            # Skip suggesting markets with zero catalogue presence when we have data.
+            if catalogue_support["stock_count_on_hints"] == 0:
+                continue
+        if in_library:
+            continue
+        suggestions.append(
+            {
+                **gap,
+                "in_library": False,
+                "catalogue_support": catalogue_support,
+                "status": "candidate",
+            }
+        )
+
+    # Markets already in library but weak catalogue hit rate (when catalogue present).
+    weak_existing: list[dict[str, Any]] = []
+    if has_catalogue:
+        for row in market_rows:
+            if row["ticker_count"] and row["catalogue_hit_pct"] < 0.7:
+                weak_existing.append(
+                    {
+                        "market": row["market"],
+                        "catalogue_hit_pct": row["catalogue_hit_pct"],
+                        "catalogue_hit_count": row["catalogue_hit_count"],
+                        "ticker_count": row["ticker_count"],
+                        "note": (
+                            "Low catalogue match — verify Yahoo↔T212 ticker mapping "
+                            "or trim non-tradable names via unavailable watch."
+                        ),
+                    }
+                )
+
+    report = {
+        "schema_version": 1,
+        "broker": "trading212",
+        "as_of": datetime.now(UTC).isoformat(),
+        "catalogue_loaded": has_catalogue,
+        "catalogue": catalogue_meta,
+        "mode": "catalogue" if has_catalogue else "allowlist_assumed",
+        "note": (
+            "Catalogue mode uses verified T212 instrument presence. "
+            "Allowlist-assumed mode only checks Yahoo-suffix heuristics and "
+            "overstates tradability until `ftse-library t212-catalogue` is run."
+            if not has_catalogue
+            else "Alignment uses ISIN/shortName catalogue hits vs library manifests."
+        ),
+        "library_totals": overlay.get("totals"),
+        "markets": market_rows,
+        "catalogue_exchange_stats": exch_stats if has_catalogue else None,
+        "suggested_ladder_markets": suggestions,
+        "weak_existing_markets": weak_existing,
+        "covered_library_markets": sorted(
+            mid for mid in MARKET_REGISTRY if mid != "ftse350"
+        ),
+    }
+    if write:
+        t212_root.mkdir(parents=True, exist_ok=True)
+        write_json(t212_root / "alignment_report.json", report, compact=False)
+    return report
+
+
 def annotate_shortlist_rows(
     rows: list[dict[str, Any]],
     *,

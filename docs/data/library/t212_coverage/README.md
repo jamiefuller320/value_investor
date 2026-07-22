@@ -10,6 +10,7 @@ Tradable north star for offline library markets (Invest / Stocks ISA).
 - `by_market/*` — per-ticker overlay rows
 - `summary.json` — rollup stats
 - `unavailable_watch.json` — dashboard bypass seed
+- `alignment_report.json` — library vs catalogue assessment (`ftse-library t212-align`)
 
 ## Commands
 
@@ -20,6 +21,7 @@ export TRADING212_ENV=demo   # or live
 
 ftse-library t212-catalogue          # fetch instruments (+ exchanges)
 ftse-library t212-overlay            # join library tickers → tradable_on_t212
+ftse-library t212-align              # library vs catalogue report
 ftse-library ii-overlay              # alias for t212-overlay
 ```
 

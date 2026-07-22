@@ -253,3 +253,54 @@ def test_build_overlays_catalogue_and_exceptions(tmp_path: Path):
     assert annotated[0]["tradable_on_t212"] is True
     assert annotated[0]["ii_tradable"] is True
     assert annotated[0]["broker_basis"] == "catalogue_hit"
+
+
+def test_assess_alignment_with_catalogue(tmp_path: Path):
+    root = tmp_path / "library"
+    from value_investor.data_library import MARKET_REGISTRY, empty_manifest, save_manifest
+    from value_investor.t212_coverage import assess_t212_alignment, save_catalogue
+
+    t212 = root / "t212_coverage"
+    t212.mkdir(parents=True)
+    write_json(
+        t212 / "policy.json",
+        {
+            "schema_version": 2,
+            "exchanges": [
+                {
+                    "yahoo_suffixes": [".DE"],
+                    "venues": ["Xetra"],
+                    "online_dealable": True,
+                    "phone_only": False,
+                }
+            ],
+            "market_defaults": {},
+            "next_slices": [],
+        },
+        compact=False,
+    )
+    write_json(t212 / "exceptions.json", {"exceptions": {}}, compact=False)
+    save_catalogue(
+        [
+            {
+                "ticker": "SAP_DE_EQ",
+                "shortName": "SAP",
+                "isin": "DE0007164600",
+                "type": "STOCK",
+                "currencyCode": "EUR",
+            }
+        ],
+        library_root=root,
+        env="demo",
+        source="fixture",
+    )
+    spec = MARKET_REGISTRY["euro_stoxx50"]
+    manifest = empty_manifest(spec)
+    manifest["tickers"] = ["SAP.DE", "MC.PA"]
+    manifest["ticker_count"] = 2
+    save_manifest(root, "euro_stoxx50", manifest)
+
+    report = assess_t212_alignment(root, markets=["euro_stoxx50"], write=True)
+    assert report["catalogue_loaded"] is True
+    assert report["markets"][0]["catalogue_hit_count"] == 1
+    assert (t212 / "alignment_report.json").exists()
