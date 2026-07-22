@@ -1,26 +1,111 @@
 {
   "schema_version": 1,
   "broker": "trading212",
-  "as_of": "2026-07-22T06:15:27.420309+00:00",
-  "catalogue_loaded": false,
-  "catalogue": null,
-  "mode": "allowlist_assumed",
-  "note": "Catalogue mode uses verified T212 instrument presence. Allowlist-assumed mode only checks Yahoo-suffix heuristics and overstates tradability until `ftse-library t212-catalogue` is run.",
+  "as_of": "2026-07-22T07:38:53.558793+00:00",
+  "catalogue_loaded": true,
+  "catalogue": {
+    "schema_version": 1,
+    "fetched_at": "2026-07-22T07:38:49.733883+00:00",
+    "env": "live",
+    "source": "https://live.trading212.com",
+    "instrument_count": 17328,
+    "isin_count": 13907,
+    "type_counts": {
+      "STOCK": 11173,
+      "ETF": 6133,
+      "WARRANT": 22
+    },
+    "exchanges_count": 17
+  },
+  "mode": "catalogue",
+  "note": "Alignment uses ISIN/shortName catalogue hits vs library manifests.",
   "library_totals": {
     "markets": 21,
     "tickers": 1546,
     "tradable": 1545,
-    "catalogue_hits": 0,
+    "catalogue_hits": 1072,
     "unknown_venue": 0
   },
   "markets": [
+    {
+      "market": "hang_seng",
+      "ticker_count": 85,
+      "tradable_count": 85,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 0,
+      "catalogue_hit_pct": 0.0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "sti",
+      "ticker_count": 30,
+      "tradable_count": 30,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 0,
+      "catalogue_hit_pct": 0.0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "omxs30",
+      "ticker_count": 30,
+      "tradable_count": 30,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 5,
+      "catalogue_hit_pct": 0.1667,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "ftse_mib",
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 11,
+      "catalogue_hit_pct": 0.275,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "asx200",
+      "ticker_count": 200,
+      "tradable_count": 200,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 65,
+      "catalogue_hit_pct": 0.325,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "iseq20",
+      "ticker_count": 20,
+      "tradable_count": 20,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 8,
+      "catalogue_hit_pct": 0.4,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
     {
       "market": "euro_stoxx50",
       "ticker_count": 50,
       "tradable_count": 49,
       "tradable_pct": 0.98,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 22,
+      "catalogue_hit_pct": 0.44,
       "unknown_venue_count": 0,
       "curated_exception_count": 1,
       "non_tradable_sample": [
@@ -33,252 +118,297 @@
           "exception_reason": "Nordea Helsinki listing — confirm against T212 catalogue before treating as tradable; kept non-tradable until a catalogue hit exists."
         }
       ],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "aex",
-      "ticker_count": 25,
-      "tradable_count": 25,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "aim",
-      "ticker_count": 99,
-      "tradable_count": 99,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "asx200",
-      "ticker_count": 200,
-      "tradable_count": 200,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "atx",
-      "ticker_count": 19,
-      "tradable_count": 19,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "bel20",
-      "ticker_count": 20,
-      "tradable_count": 20,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
       "market": "cac40",
       "ticker_count": 40,
       "tradable_count": 40,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 18,
+      "catalogue_hit_pct": 0.45,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "dax",
-      "ticker_count": 40,
-      "tradable_count": 40,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "ftse_mib",
-      "ticker_count": 40,
-      "tradable_count": 40,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "ftse_smallcap",
-      "ticker_count": 86,
-      "tradable_count": 86,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "hang_seng",
-      "ticker_count": 85,
-      "tradable_count": 85,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
       "market": "ibex35",
       "ticker_count": 35,
       "tradable_count": 35,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 19,
+      "catalogue_hit_pct": 0.5429,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
-      "market": "iseq20",
-      "ticker_count": 20,
-      "tradable_count": 20,
+      "market": "aim",
+      "ticker_count": 99,
+      "tradable_count": 99,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 57,
+      "catalogue_hit_pct": 0.5758,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
-      "market": "nasdaq100",
-      "ticker_count": 103,
-      "tradable_count": 103,
+      "market": "dax",
+      "ticker_count": 40,
+      "tradable_count": 40,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 26,
+      "catalogue_hit_pct": 0.65,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
-      "market": "omxs30",
-      "ticker_count": 30,
-      "tradable_count": 30,
+      "market": "aex",
+      "ticker_count": 25,
+      "tradable_count": 25,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 17,
+      "catalogue_hit_pct": 0.68,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
-    },
-    {
-      "market": "psi20",
-      "ticker_count": 18,
-      "tradable_count": 18,
-      "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
-      "unknown_venue_count": 0,
-      "curated_exception_count": 0,
-      "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
       "market": "smi",
       "ticker_count": 20,
       "tradable_count": 20,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 15,
+      "catalogue_hit_pct": 0.75,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
-      "market": "sp500",
-      "ticker_count": 503,
-      "tradable_count": 503,
+      "market": "ftse_smallcap",
+      "ticker_count": 86,
+      "tradable_count": 86,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 66,
+      "catalogue_hit_pct": 0.7674,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     },
     {
-      "market": "sti",
-      "ticker_count": 30,
-      "tradable_count": 30,
+      "market": "psi20",
+      "ticker_count": 18,
+      "tradable_count": 18,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 17,
+      "catalogue_hit_pct": 0.9444,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
+    },
+    {
+      "market": "bel20",
+      "ticker_count": 20,
+      "tradable_count": 20,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 19,
+      "catalogue_hit_pct": 0.95,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
     },
     {
       "market": "tsx60",
       "ticker_count": 59,
       "tradable_count": 59,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 58,
+      "catalogue_hit_pct": 0.9831,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
+    },
+    {
+      "market": "atx",
+      "ticker_count": 19,
+      "tradable_count": 19,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 19,
+      "catalogue_hit_pct": 1.0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "nasdaq100",
+      "ticker_count": 103,
+      "tradable_count": 103,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 103,
+      "catalogue_hit_pct": 1.0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
+    },
+    {
+      "market": "sp500",
+      "ticker_count": 503,
+      "tradable_count": 503,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 503,
+      "catalogue_hit_pct": 1.0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "mode": "catalogue"
     },
     {
       "market": "us_adr_asia",
       "ticker_count": 24,
       "tradable_count": 24,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 0,
-      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 24,
+      "catalogue_hit_pct": 1.0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
       "non_tradable_sample": [],
-      "mode": "allowlist_assumed"
+      "mode": "catalogue"
     }
   ],
-  "catalogue_exchange_stats": null,
+  "catalogue_exchange_stats": {
+    "exchange_counts": {
+      "EQ": 9608,
+      "US": 6928,
+      "CA": 539,
+      "BE": 101,
+      "AT": 97,
+      "PT": 28,
+      "BB": 14,
+      "UNKNOWN": 5,
+      "FR": 4,
+      "DE": 2,
+      "AU": 1,
+      "NL": 1
+    },
+    "stock_exchange_counts": {
+      "US": 6909,
+      "EQ": 3477,
+      "CA": 539,
+      "BE": 101,
+      "AT": 97,
+      "PT": 28,
+      "BB": 14,
+      "UNKNOWN": 5,
+      "DE": 2,
+      "AU": 1
+    },
+    "type_counts": {
+      "STOCK": 11173,
+      "ETF": 6133,
+      "WARRANT": 22
+    }
+  },
   "suggested_ladder_markets": [],
-  "weak_existing_markets": [],
+  "weak_existing_markets": [
+    {
+      "market": "hang_seng",
+      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 0,
+      "ticker_count": 85,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "sti",
+      "catalogue_hit_pct": 0.0,
+      "catalogue_hit_count": 0,
+      "ticker_count": 30,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "omxs30",
+      "catalogue_hit_pct": 0.1667,
+      "catalogue_hit_count": 5,
+      "ticker_count": 30,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "ftse_mib",
+      "catalogue_hit_pct": 0.275,
+      "catalogue_hit_count": 11,
+      "ticker_count": 40,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "asx200",
+      "catalogue_hit_pct": 0.325,
+      "catalogue_hit_count": 65,
+      "ticker_count": 200,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "iseq20",
+      "catalogue_hit_pct": 0.4,
+      "catalogue_hit_count": 8,
+      "ticker_count": 20,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "euro_stoxx50",
+      "catalogue_hit_pct": 0.44,
+      "catalogue_hit_count": 22,
+      "ticker_count": 50,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "cac40",
+      "catalogue_hit_pct": 0.45,
+      "catalogue_hit_count": 18,
+      "ticker_count": 40,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "ibex35",
+      "catalogue_hit_pct": 0.5429,
+      "catalogue_hit_count": 19,
+      "ticker_count": 35,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "aim",
+      "catalogue_hit_pct": 0.5758,
+      "catalogue_hit_count": 57,
+      "ticker_count": 99,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "dax",
+      "catalogue_hit_pct": 0.65,
+      "catalogue_hit_count": 26,
+      "ticker_count": 40,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    },
+    {
+      "market": "aex",
+      "catalogue_hit_pct": 0.68,
+      "catalogue_hit_count": 17,
+      "ticker_count": 25,
+      "note": "Low catalogue match — verify Yahoo↔T212 ticker mapping or trim non-tradable names via unavailable watch."
+    }
+  ],
   "covered_library_markets": [
     "aex",
     "aim",

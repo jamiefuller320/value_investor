@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T06:15:27+00:00",
+  "updated_at": "2026-07-22T07:39:34+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1013,6 +1013,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
       "added_at": "2026-07-22T05:55:52+00:00"
+    },
+    {
+      "id": "L48",
+      "category": "later",
+      "section": "universe",
+      "title": "Improve Yahoo\u2194T212 mapping for weak catalogue markets",
+      "summary": "After live catalogue fetch, hang_seng/sti show 0% catalogue hits and several EU/AU markets are well below 70% while allowlist still marks them tradable. Tighten ISIN/shortName mapping or trim via unavailable_watch.",
+      "revisit_when": "Next t212-align after catalogue refresh, or when researching those markets for paper/live trading",
+      "tags": [
+        "t212",
+        "catalogue",
+        "mapping",
+        "hang_seng",
+        "sti"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:39:34+00:00"
+    },
+    {
+      "id": "L49",
+      "category": "later",
+      "section": "ops",
+      "title": "Default TRADING212_ENV to live or document key/env pairing",
+      "summary": "Injected API credentials return 401 on demo.trading212.com but succeed on live. Default env is demo, so bare ftse-library t212-catalogue fails until --env live is passed.",
+      "revisit_when": "Next credentials rotation or when someone hits catalogue 401 again",
+      "tags": [
+        "t212",
+        "auth",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
+      "added_at": "2026-07-22T07:39:34+00:00"
     }
   ]
 }

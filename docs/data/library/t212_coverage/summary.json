@@ -1,0 +1,404 @@
+{
+  "schema_version": 2,
+  "broker": "trading212",
+  "as_of": "2026-07-22T07:38:54.348967+00:00",
+  "policy_as_of": "2026-07-22",
+  "catalogue": {
+    "schema_version": 1,
+    "fetched_at": "2026-07-22T07:38:49.733883+00:00",
+    "env": "live",
+    "source": "https://live.trading212.com",
+    "instrument_count": 17328,
+    "isin_count": 13907,
+    "type_counts": {
+      "STOCK": 11173,
+      "ETF": 6133,
+      "WARRANT": 22
+    },
+    "exchanges_count": 17
+  },
+  "catalogue_loaded": true,
+  "source_urls": [
+    "https://docs.trading212.com/api",
+    "https://docs.trading212.com/api/instruments/instruments"
+  ],
+  "note": "Advisory Trading 212 overlay — catalogue hits are verified presence; allowlist rows are assumed. Does not filter library screens or the live FTSE 350 path. Fetch catalogue: ftse-library t212-catalogue.",
+  "markets": {
+    "sp500": {
+      "ticker_count": 503,
+      "tradable_count": 503,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 503,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/sp500.csv"
+    },
+    "euro_stoxx50": {
+      "ticker_count": 50,
+      "tradable_count": 49,
+      "tradable_pct": 0.98,
+      "catalogue_hit_count": 22,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 1,
+      "non_tradable_sample": [
+        {
+          "ticker": "NDA-FI.HE",
+          "t212_exchange": "Nasdaq Helsinki",
+          "ii_exchange": "Nasdaq Helsinki",
+          "deal_channel": "n/a",
+          "basis": "exception",
+          "exception_reason": "Nordea Helsinki listing — confirm against T212 catalogue before treating as tradable; kept non-tradable until a catalogue hit exists."
+        }
+      ],
+      "path": "by_market/euro_stoxx50.csv"
+    },
+    "asx200": {
+      "ticker_count": 200,
+      "tradable_count": 200,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 65,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/asx200.csv"
+    },
+    "ftse_smallcap": {
+      "ticker_count": 86,
+      "tradable_count": 86,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 66,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/ftse_smallcap.csv"
+    },
+    "nasdaq100": {
+      "ticker_count": 103,
+      "tradable_count": 103,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 103,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/nasdaq100.csv"
+    },
+    "dax": {
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 26,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/dax.csv"
+    },
+    "cac40": {
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 18,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/cac40.csv"
+    },
+    "tsx60": {
+      "ticker_count": 59,
+      "tradable_count": 59,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 58,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/tsx60.csv"
+    },
+    "aim": {
+      "ticker_count": 99,
+      "tradable_count": 99,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 57,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/aim.csv"
+    },
+    "ibex35": {
+      "ticker_count": 35,
+      "tradable_count": 35,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 19,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/ibex35.csv"
+    },
+    "ftse_mib": {
+      "ticker_count": 40,
+      "tradable_count": 40,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 11,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/ftse_mib.csv"
+    },
+    "aex": {
+      "ticker_count": 25,
+      "tradable_count": 25,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 17,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/aex.csv"
+    },
+    "bel20": {
+      "ticker_count": 20,
+      "tradable_count": 20,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 19,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/bel20.csv"
+    },
+    "hang_seng": {
+      "ticker_count": 85,
+      "tradable_count": 85,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/hang_seng.csv"
+    },
+    "sti": {
+      "ticker_count": 30,
+      "tradable_count": 30,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/sti.csv"
+    },
+    "us_adr_asia": {
+      "ticker_count": 24,
+      "tradable_count": 24,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 24,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/us_adr_asia.csv"
+    },
+    "atx": {
+      "ticker_count": 19,
+      "tradable_count": 19,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 19,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/atx.csv"
+    },
+    "psi20": {
+      "ticker_count": 18,
+      "tradable_count": 18,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 17,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/psi20.csv"
+    },
+    "smi": {
+      "ticker_count": 20,
+      "tradable_count": 20,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 15,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/smi.csv"
+    },
+    "omxs30": {
+      "ticker_count": 30,
+      "tradable_count": 30,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 5,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/omxs30.csv"
+    },
+    "iseq20": {
+      "ticker_count": 20,
+      "tradable_count": 20,
+      "tradable_pct": 1.0,
+      "catalogue_hit_count": 8,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/iseq20.csv"
+    }
+  },
+  "next_slices": [
+    {
+      "id": "aim",
+      "label": "AIM (UK)",
+      "priority": 1,
+      "rationale": "UK coverage includes AIM; largest liquid gap vs current LSE Main / FTSE slices.",
+      "status": "complete",
+      "market_ids": [
+        "aim"
+      ]
+    },
+    {
+      "id": "euronext_wider",
+      "label": "Wider Euronext / Southern Europe liquid names",
+      "priority": 2,
+      "rationale": "online venues: Madrid, Milan, Amsterdam, Brussels, Dublin beyond EURO STOXX 50 / CAC / DAX overlap.",
+      "status": "complete",
+      "market_ids": [
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20"
+      ]
+    },
+    {
+      "id": "hk_sg",
+      "label": "Hong Kong + Singapore large-cap slices",
+      "priority": 3,
+      "rationale": "broker Asia-Pacific online exchanges with no library market yet.",
+      "status": "complete",
+      "market_ids": [
+        "hang_seng",
+        "sti"
+      ]
+    },
+    {
+      "id": "us_adr_asia",
+      "label": "Japan / India / China via US ADRs",
+      "priority": 4,
+      "rationale": "broker offers home-market exposure only via ADRs on US exchanges — overlay against Nasdaq/NYSE names, not new Yahoo home suffixes.",
+      "status": "complete",
+      "market_ids": [
+        "us_adr_asia"
+      ]
+    },
+    {
+      "id": "t212_catalogue",
+      "label": "Trading 212 instrument catalogue",
+      "priority": 5,
+      "rationale": "Run ftse-library t212-catalogue with TRADING212_API_KEY/SECRET to replace allowlist-assumed tradability with verified catalogue hits, then t212-align.",
+      "status": "blocked_needs_credentials",
+      "market_ids": [],
+      "cli": "ftse-library t212-catalogue && ftse-library t212-overlay"
+    },
+    {
+      "id": "atx",
+      "label": "ATX (Austria / Wiener Börse)",
+      "priority": 6,
+      "rationale": "Wiener Börse is listed on Trading 212's Invest instruments marketing; no offline library market yet. Registered in MARKET_REGISTRY + DEFAULT_MARKET_QUEUE; refresh constituents via ftse-library.",
+      "status": "queued",
+      "market_ids": [
+        "atx"
+      ],
+      "yahoo_suffix": ".VI",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "psi20",
+      "label": "PSI 20 (Portugal / Euronext Lisbon)",
+      "priority": 7,
+      "rationale": "Euronext Lisbon appears on Trading 212 Invest venue lists; library has other Euronext slices (PA/AS/BR) but not Lisbon. Registered in MARKET_REGISTRY + DEFAULT_MARKET_QUEUE; refresh constituents via ftse-library.",
+      "status": "queued",
+      "market_ids": [
+        "psi20"
+      ],
+      "yahoo_suffix": ".LS",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "smi",
+      "label": "SMI (Switzerland / SIX)",
+      "priority": 8,
+      "rationale": "SIX Swiss is widely reported on Trading 212 Invest stock coverage; suffix map exists but no dedicated library market. Registered in MARKET_REGISTRY + DEFAULT_MARKET_QUEUE; refresh constituents via ftse-library.",
+      "status": "queued",
+      "market_ids": [
+        "smi"
+      ],
+      "yahoo_suffix": ".SW",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "omxs30",
+      "label": "OMX Stockholm 30",
+      "priority": 9,
+      "rationale": "OMX Nordic coverage is reported for Trading 212 Invest; would also resolve EURO STOXX 50 Nordic names currently curated as exceptions (e.g. Helsinki/Stockholm dual listings). Registered in MARKET_REGISTRY + DEFAULT_MARKET_QUEUE; refresh constituents via ftse-library.",
+      "status": "queued",
+      "market_ids": [
+        "omxs30"
+      ],
+      "yahoo_suffix": ".ST",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "iseq20",
+      "label": "ISEQ 20 (Ireland)",
+      "priority": 10,
+      "rationale": "Euronext Dublin / Ireland is in the coverage suffix map (.IR) but has no offline library slice yet. Registered in MARKET_REGISTRY + DEFAULT_MARKET_QUEUE; refresh constituents via ftse-library.",
+      "status": "queued",
+      "market_ids": [
+        "iseq20"
+      ],
+      "yahoo_suffix": ".IR",
+      "confirm_with": "ftse-library t212-catalogue && ftse-library t212-align"
+    },
+    {
+      "id": "t212_venue_gaps",
+      "label": "T212 venue-gap ladder (ATX / PSI20 / SMI / OMXS30 / ISEQ20)",
+      "priority": 6,
+      "rationale": "Markets advertised or commonly covered on Trading 212 Invest that were missing from the offline ladder.",
+      "status": "queued",
+      "market_ids": [
+        "atx",
+        "psi20",
+        "smi",
+        "omxs30",
+        "iseq20"
+      ]
+    }
+  ],
+  "totals": {
+    "markets": 21,
+    "tickers": 1546,
+    "tradable": 1545,
+    "catalogue_hits": 1072,
+    "unknown_venue": 0
+  }
+}
