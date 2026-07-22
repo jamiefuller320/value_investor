@@ -67,6 +67,7 @@ PREQUALIFIED_YAHOO_MARKETS = frozenset(
         "ftse_mib",
         "aex",
         "bel20",
+        "omxs30",
     }
 )
 
@@ -103,6 +104,52 @@ def _to_bel_yahoo(raw: str) -> str:
     if code.endswith("-BR"):
         return code[:-3] + ".BR"
     return f"{code}.BR"
+
+
+def _to_suffix_yahoo(raw: str, suffix: str) -> str:
+    """Map a raw epic/code to Yahoo ``CODE{suffix}`` (e.g. ``.LS``, ``.IR``, ``.VI``)."""
+    code = _strip_exchange_prefix(raw).upper().replace(" ", "").replace("\xa0", "")
+    if not code or code.lower() == "nan":
+        return ""
+    if code.endswith(suffix.upper()) or code.endswith(suffix):
+        return code
+    # Class shares sometimes use dots on Wikipedia (ADDT.B → ADDT-B.ST already prequalified).
+    code = code.replace(".", "-")
+    return f"{code}{suffix}"
+
+
+# ATX Wikipedia listing has company names but no tickers — curated Yahoo .VI map.
+ATX_SEED: list[dict[str, str | None]] = [
+    {"ticker": "EBS.VI", "name": "Erste Bank", "sector": "Financials"},
+    {"ticker": "VER.VI", "name": "Verbund", "sector": "Utilities"},
+    {"ticker": "OMV.VI", "name": "OMV", "sector": "Energy"},
+    {"ticker": "BG.VI", "name": "BAWAG", "sector": "Financials"},
+    {"ticker": "ANDR.VI", "name": "Andritz", "sector": "Industrials"},
+    {"ticker": "WIE.VI", "name": "Wienerberger", "sector": "Materials"},
+    {"ticker": "VOE.VI", "name": "Voestalpine", "sector": "Materials"},
+    {"ticker": "RBI.VI", "name": "Raiffeisen International", "sector": "Financials"},
+    {"ticker": "POS.VI", "name": "Porr", "sector": "Industrials"},
+    {"ticker": "CAI.VI", "name": "CA Immo", "sector": "Real Estate"},
+    {"ticker": "EVN.VI", "name": "EVN Group", "sector": "Utilities"},
+    {"ticker": "ATS.VI", "name": "AT&S", "sector": "Technology"},
+    {"ticker": "POST.VI", "name": "Austrian Post", "sector": "Industrials"},
+    {"ticker": "VIG.VI", "name": "Vienna Insurance Group", "sector": "Financials"},
+    {"ticker": "LNZ.VI", "name": "Lenzing", "sector": "Materials"},
+    {"ticker": "UQA.VI", "name": "Uniqa Insurance Group", "sector": "Financials"},
+    {"ticker": "SBO.VI", "name": "Schoeller-Bleckmann Oilfield Equipment", "sector": "Energy"},
+    {"ticker": "STR.VI", "name": "Strabag", "sector": "Industrials"},
+    {"ticker": "DOC.VI", "name": "Do & Co", "sector": "Consumer Cyclical"},
+]
+
+# Wikipedia SMI ticker quirks → Yahoo symbols.
+SMI_YAHOO_OVERRIDES: dict[str, str] = {
+    "ROP": "RO.SW",  # Roche Holding (bearer) on Yahoo
+}
+
+# Wikipedia ISEQ MNEM quirks → Yahoo symbols.
+ISEQ_YAHOO_OVERRIDES: dict[str, str] = {
+    "RY4C": "RYA.IR",  # Ryanair
+}
 
 
 def _pick_constituent_table(tables: list[pd.DataFrame]) -> pd.DataFrame:
@@ -497,6 +544,161 @@ def fetch_us_adr_asia_constituents() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def fetch_atx_constituents() -> pd.DataFrame:
+    """ATX (Vienna) — curated Yahoo .VI map (EN Wikipedia has names, not tickers)."""
+    rows = [
+        {
+            "ticker": str(item["ticker"]),
+            "name": item.get("name"),
+            "sector": item.get("sector"),
+            "epic": str(item["ticker"]).removesuffix(".VI"),
+            "index": "ATX",
+            "market": "atx",
+        }
+        for item in ATX_SEED
+    ]
+    return pd.DataFrame(rows)
+
+
+def fetch_psi20_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/PSI-20")
+    table = None
+    for candidate in tables:
+        cols = [str(c).strip().lower() for c in candidate.columns]
+        if any("ticker" in c for c in cols) and any("company" in c for c in cols):
+            table = candidate
+            break
+    if table is None:
+        table = _pick_constituent_table(tables)
+    ticker_col = next(c for c in table.columns if "ticker" in str(c).lower())
+    name_col = next(
+        c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower()
+    )
+    sector_col = next((c for c in table.columns if "industry" in str(c).lower() or "sector" in str(c).lower()), None)
+    rows: list[dict[str, Any]] = []
+    for _, row in table.iterrows():
+        raw = str(row.get(ticker_col) or "").strip()
+        ticker = _to_suffix_yahoo(raw, ".LS")
+        if not ticker or ticker == ".LS":
+            continue
+        sector_val = row.get(sector_col) if sector_col is not None else None
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": str(row.get(name_col) or ticker),
+                "sector": (
+                    None
+                    if sector_val is None or (isinstance(sector_val, float) and pd.isna(sector_val))
+                    else str(sector_val)
+                ),
+                "epic": _strip_exchange_prefix(raw),
+                "index": "PSI 20",
+                "market": "psi20",
+            }
+        )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    return out.drop_duplicates("ticker", keep="first").reset_index(drop=True)
+
+
+def fetch_smi_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/Swiss_Market_Index")
+    table = None
+    for candidate in tables:
+        cols = [str(c).strip().lower() for c in candidate.columns]
+        if any("ticker" in c for c in cols) and any(
+            c in {"name", "company"} or "name" in c or "company" in c for c in cols
+        ):
+            table = candidate
+            break
+    if table is None:
+        table = _pick_constituent_table(tables)
+    ticker_col = next(c for c in table.columns if "ticker" in str(c).lower())
+    name_col = next(
+        c for c in table.columns if str(c).strip().lower() in {"name", "company"} or "name" in str(c).lower()
+    )
+    sector_col = next((c for c in table.columns if "sector" in str(c).lower()), None)
+    rows: list[dict[str, Any]] = []
+    for _, row in table.iterrows():
+        raw = str(row.get(ticker_col) or "").strip()
+        if not raw or raw.lower() == "nan":
+            continue
+        code = _strip_exchange_prefix(raw).upper().replace(" ", "")
+        ticker = SMI_YAHOO_OVERRIDES.get(code) or _to_suffix_yahoo(code, ".SW")
+        if not ticker or ticker == ".SW":
+            continue
+        sector_val = row.get(sector_col) if sector_col is not None else None
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": str(row.get(name_col) or ticker),
+                "sector": (
+                    None
+                    if sector_val is None or (isinstance(sector_val, float) and pd.isna(sector_val))
+                    else str(sector_val)
+                ),
+                "epic": code,
+                "index": "SMI",
+                "market": "smi",
+            }
+        )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    return out.drop_duplicates("ticker", keep="first").reset_index(drop=True)
+
+
+def fetch_omxs30_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/OMX_Stockholm_30")
+    table = _pick_constituent_table(tables)
+    # Wikipedia already lists Yahoo-qualified symbols (ABB.ST, ADDT-B.ST).
+    return _normalize_wiki_constituents(
+        table, market_id="omxs30", yahoo_suffix="", index_label="OMX Stockholm 30"
+    )
+
+
+def fetch_iseq20_constituents() -> pd.DataFrame:
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/ISEQ_20")
+    table = None
+    for candidate in tables:
+        cols = [str(c).strip().lower() for c in candidate.columns]
+        if any("mnem" in c or "code" in c for c in cols) and any("company" in c for c in cols):
+            table = candidate
+            break
+    if table is None:
+        table = _pick_constituent_table(tables)
+    code_col = next(
+        c
+        for c in table.columns
+        if "mnem" in str(c).lower() or str(c).strip().lower() in {"code", "ticker", "symbol"}
+    )
+    name_col = next(c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower())
+    rows: list[dict[str, Any]] = []
+    for _, row in table.iterrows():
+        raw = str(row.get(code_col) or "").replace("\xa0", " ").strip()
+        if not raw or raw.lower() == "nan":
+            continue
+        code = _strip_exchange_prefix(raw).upper().replace(" ", "")
+        ticker = ISEQ_YAHOO_OVERRIDES.get(code) or _to_suffix_yahoo(code, ".IR")
+        if not ticker or ticker == ".IR":
+            continue
+        rows.append(
+            {
+                "ticker": ticker,
+                "name": str(row.get(name_col) or ticker),
+                "sector": None,
+                "epic": code,
+                "index": "ISEQ 20",
+                "market": "iseq20",
+            }
+        )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    return out.drop_duplicates("ticker", keep="first").reset_index(drop=True)
+
+
 MARKET_REGISTRY: dict[str, MarketSpec] = {
     "ftse350": MarketSpec(
         market_id="ftse350",
@@ -571,7 +773,7 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         yahoo_suffix=".TO",
         constituent_source="wikipedia",
     ),
-    # L34 next slices — II-aligned expansion beyond the initial index queue.
+    # Graduated / T212-aligned expansion beyond the initial index queue.
     "aim": MarketSpec(
         market_id="aim",
         label="AIM (liquid Wikipedia slice)",
@@ -636,6 +838,47 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         yahoo_suffix="",
         constituent_source="curated",
     ),
+    # T212 venue-gap ladder (Wiener Börse, Lisbon, SIX, OMX Stockholm, ISEQ).
+    "atx": MarketSpec(
+        market_id="atx",
+        label="ATX",
+        exchange="Wiener Börse",
+        currency="EUR",
+        yahoo_suffix=".VI",
+        constituent_source="curated",
+    ),
+    "psi20": MarketSpec(
+        market_id="psi20",
+        label="PSI 20",
+        exchange="Euronext Lisbon",
+        currency="EUR",
+        yahoo_suffix=".LS",
+        constituent_source="wikipedia",
+    ),
+    "smi": MarketSpec(
+        market_id="smi",
+        label="SMI",
+        exchange="SIX Swiss",
+        currency="CHF",
+        yahoo_suffix=".SW",
+        constituent_source="wikipedia",
+    ),
+    "omxs30": MarketSpec(
+        market_id="omxs30",
+        label="OMX Stockholm 30",
+        exchange="Nasdaq Stockholm",
+        currency="SEK",
+        yahoo_suffix=".ST",
+        constituent_source="wikipedia",
+    ),
+    "iseq20": MarketSpec(
+        market_id="iseq20",
+        label="ISEQ 20",
+        exchange="Euronext Dublin",
+        currency="EUR",
+        yahoo_suffix=".IR",
+        constituent_source="wikipedia",
+    ),
 }
 
 CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
@@ -656,6 +899,11 @@ CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
     "hang_seng": fetch_hang_seng_constituents,
     "sti": fetch_sti_constituents,
     "us_adr_asia": fetch_us_adr_asia_constituents,
+    "atx": fetch_atx_constituents,
+    "psi20": fetch_psi20_constituents,
+    "smi": fetch_smi_constituents,
+    "omxs30": fetch_omxs30_constituents,
+    "iseq20": fetch_iseq20_constituents,
 }
 
 
