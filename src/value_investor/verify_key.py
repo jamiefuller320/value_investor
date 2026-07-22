@@ -50,8 +50,9 @@ class VerifyKeyResult:
             lines.append(f"✗ {self.detail}")
             lines.append("")
             lines.append(
-                "Fix: set CURSOR_API_KEY from https://cursor.com/dashboard/integrations "
-                "or pass --api-key."
+                "Fix: set CURSOR_API_KEY to a User API key from "
+                "https://cursor.com/dashboard/api-keys "
+                "(Team Admin keys are not supported by the SDK) or pass --api-key."
             )
         return "\n".join(lines)
 

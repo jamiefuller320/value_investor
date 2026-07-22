@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T12:07:04+00:00",
+  "updated_at": "2026-07-22T12:37:01.473008+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1345,8 +1345,8 @@
       "category": "not_now",
       "section": "ops",
       "title": "Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh",
-      "summary": "New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_\u2026). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill targets selected but Agent.create failed for all three. Create a fresh User API key at cursor.com/dashboard/integrations, replace the cloud secret, then launch another new agent run.",
-      "revisit_when": "Fresh CURSOR_API_KEY from Integrations verifies via ftse-verify-key in a new shell",
+      "summary": "New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_\u2026). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill Agent.create failed for all three. Mint a User API key from https://cursor.com/dashboard/api-keys (not Integrations; Team Admin keys unsupported by SDK), replace the cloud secret, then launch a new agent run.",
+      "revisit_when": "Fresh User API key from Dashboard \u2192 API Keys verifies via ftse-verify-key in a new shell",
       "tags": [
         "gap-fill",
         "cursor-api",
@@ -1355,14 +1355,14 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-f3c1c12e-0c80-4b78-9fc7-fbceed3e7ee6",
       "added_at": "2026-07-22T10:24:58+00:00",
-      "updated_at": "2026-07-22T12:07:04.250092+00:00"
+      "updated_at": "2026-07-22T12:37:01.472979+00:00"
     },
     {
       "id": "N22",
       "category": "not_now",
       "section": "ops",
       "title": "Preflight CURSOR_API_KEY against /v0/me before gap-fill agents",
-      "summary": "Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success.",
+      "summary": "Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success. Key source is Dashboard \u2192 API Keys (user key), not Integrations; Team Admin keys are unsupported by cursor-sdk.",
       "revisit_when": "After a valid User API key is installed and N21 gap-fill succeeds once",
       "tags": [
         "cursor-api",
@@ -1372,7 +1372,8 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-f3c1c12e-0c80-4b78-9fc7-fbceed3e7ee6",
-      "added_at": "2026-07-22T12:07:04+00:00"
+      "added_at": "2026-07-22T12:07:04+00:00",
+      "updated_at": "2026-07-22T12:37:01.473006+00:00"
     }
   ]
 }
