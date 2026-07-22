@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:23:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T09:24:14+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -44,6 +44,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N18 | **Do not let AI judgment own live capital path yet** | Primary learning track is paper-only. Keep live broker automation and any promotion of AI gates to real capital off until the AI-judgment book shows persistent excess vs ^FTSE and vs the rules control in walk-forward review. | AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review |
 | N19 | **Upgrade research agent beyond composer-2.5 for deep research** | composer-2.5 is chosen for first-party pool / cost, not frontier reasoning. Capability upgrades matter less than ingest + multi-turn gap-fill until thin RNS bodies and L16 are addressed. | After Companies House/IR body ingest (L10/L35+) and multi-turn agent (L16) land, or weekly gap-fill stays chronically unresolved despite richer sources |
 | N20 | **Cursor Pro+ for research usage headroom** | Repo only documents Cursor Pro $20/mo as metadata plus a separate £30/week usage envelope. No Pro+ policy exists; raising weekly_usage_gbp or fixing double-spend (L51) is the in-repo lever. | Weekly budget_flag=constraining for several consecutive weeks despite composer-2.5 and after live+library spend is unified (L51) |
+| N21 | **Do not upgrade research model before filing ingest** | composer-2.5 is budget-optimal for memo drafting. Gap quality is bottlenecked by thin local filings and planned-but-unfetched alternate sources (L35+), not model IQ. Prefer Companies House/IR ingest and multi-turn gap-fill (L16) before switching to frontier API models. | Gap-fill still leaves many unresolved questions after filing PDFs are ingestible, or primary learning track underperforms despite thick memo coverage |
 
 ---
 
@@ -102,6 +103,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L49 | **Default TRADING212_ENV to live or document key/env pairing** | Injected API credentials return 401 on demo.trading212.com but succeed on live. Default env is demo, so bare ftse-library t212-catalogue fails until --env live is passed. | Next credentials rotation or when someone hits catalogue 401 again |
 | L51 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation. | After a few weeks of enforce_weekly_research_cap with the £30 usage envelope |
 | L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
+| L54 | **Consider Cursor Pro+ only if first-party pool is the constraint** | Pro+ raises API pool (0→0) and scales the first-party Auto/Composer/Grok pool. Research already prefers composer-2.5 (first-party). Upgrade helps if dashboard shows first-party exhaustion or you intentionally move research to frontier API models; otherwise keep Pro + £30/week usage envelope and on-demand as needed. | Cursor dashboard shows first-party or included API pool exhausted before month end while library research is still valuable |
 
 ---
 
