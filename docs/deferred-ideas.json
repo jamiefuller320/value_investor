@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-22T12:41:23+00:00",
+  "updated_at": "2026-07-22T12:43:47+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1389,6 +1389,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-53006131-c9d7-4099-999d-6880f9063f90",
       "added_at": "2026-07-22T12:41:23+00:00"
+    },
+    {
+      "id": "N24",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Confirm CURSOR_API_KEY is User API Key not Admin key",
+      "summary": "api.cursor.com returns Invalid User API Key for the injected secret (format crsr_+64hex is fine; same 401 as a fake key). Likely causes: revoked/rotated secret, or an Admin/team API key pasted instead of a User API Key from Integrations. Recreate from cursor.com/dashboard/integrations (User API Keys), update the cloud secret, re-verify.",
+      "revisit_when": "After replacing CURSOR_API_KEY and ftse-verify-key succeeds",
+      "tags": [
+        "cursor-api",
+        "auth",
+        "user-api-key"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-53006131-c9d7-4099-999d-6880f9063f90",
+      "added_at": "2026-07-22T12:43:47+00:00"
     }
   ]
 }
