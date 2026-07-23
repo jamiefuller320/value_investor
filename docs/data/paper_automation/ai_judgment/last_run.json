@@ -1,0 +1,170 @@
+{
+  "acted": false,
+  "gate": {
+    "local_time": "2026-07-23T08:21:14.018686+01:00",
+    "trading_day": true,
+    "after_settle": false,
+    "market_open_at": "2026-07-23T08:00:00+01:00",
+    "settle_at": "2026-07-23T09:15:00+01:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+  },
+  "trades": [],
+  "plan": {
+    "rules": [
+      "Universe: only strong_buy / buy names from the latest screen.",
+      "Timing filter: names with timing_signal=wait are excluded from new buys.",
+      "Conviction floor: min_conviction=0.00.",
+      "Sector cap: at most 1 name(s) per known sector (cap=30%).",
+      "Ranking: highest conviction_score first, keep at most 5 names.",
+      "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+      "Costs: 3.0% applied on each buy and sell."
+    ],
+    "nav": 1000.0,
+    "cash": 1000.0,
+    "max_positions": 5,
+    "min_conviction": 0.0,
+    "sector_cap": 0.3,
+    "skip_timing_wait": true,
+    "target_sleeve_value": 250.0,
+    "targets": [
+      {
+        "ticker": "ITV.L",
+        "name": "ITV plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.5607000000000001,
+        "price": 73.6
+      },
+      {
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.5506000000000001,
+        "price": 177.0
+      },
+      {
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.4859,
+        "price": 4826.0
+      },
+      {
+        "ticker": "VTY.L",
+        "name": "Vistry Group PLC",
+        "signal": "strong_buy",
+        "conviction_score": 0.3467,
+        "price": 280.06
+      }
+    ],
+    "anticipated_exits": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "ITV.L",
+        "name": "ITV plc",
+        "reason": "New sleeve",
+        "value": 250.0,
+        "price": 73.6,
+        "target_value": 250.0,
+        "conviction_score": 0.5607000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "reason": "New sleeve",
+        "value": 250.0,
+        "price": 177.0,
+        "target_value": 250.0,
+        "conviction_score": 0.5506000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group plc",
+        "reason": "New sleeve",
+        "value": 250.0,
+        "price": 4826.0,
+        "target_value": 250.0,
+        "conviction_score": 0.4859,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "VTY.L",
+        "name": "Vistry Group PLC",
+        "reason": "New sleeve",
+        "value": 250.0,
+        "price": 280.06,
+        "target_value": 250.0,
+        "conviction_score": 0.3467,
+        "signal": "strong_buy"
+      }
+    ],
+    "anticipated_holds": [],
+    "skipped": [],
+    "waitlisted": [],
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); deploy cash into 4 buy(s)."
+  },
+  "alerts": [],
+  "fund": {
+    "config": {
+      "name": "Automated stock picking",
+      "mode": "automated",
+      "initial_cash": 1000.0,
+      "monthly_deposit": 0.0,
+      "trade_cost_pct": 0.03,
+      "max_positions": 5,
+      "reporting_currency": "GBP",
+      "hedge_assumption": "none",
+      "id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
+      "created_at": "2026-07-23T07:21:14.018803+00:00"
+    },
+    "cash": 1000.0,
+    "contributed_capital": 1000.0,
+    "deposits_applied": 0,
+    "holdings": {},
+    "trades": [],
+    "equity_curve": [
+      {
+        "at": "2026-07-23T07:21:14.018803+00:00",
+        "portfolio_value": 1000.0,
+        "cash": 1000.0,
+        "contributed_capital": 1000.0,
+        "positions": 0,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.74755,
+            "EUR": 0.85411,
+            "AUD": 0.5234,
+            "CAD": 0.5312,
+            "HKD": 0.09529,
+            "SGD": 0.57945
+          },
+          "issues": []
+        },
+        "note": "Fund opened"
+      }
+    ],
+    "last_mark_at": "2026-07-23T07:21:14.018803+00:00"
+  },
+  "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+  "generated_at": "2026-07-23T07:21:31.375301+00:00",
+  "track_id": "ai_judgment",
+  "track_label": "AI judgment (research accumulate + adjusted_signal)",
+  "is_primary_learning_track": true,
+  "selection": {
+    "skip_timing_wait": true,
+    "min_conviction": 0.0,
+    "sector_cap": 0.3,
+    "use_adjusted_signal": true,
+    "require_research_accumulate": true
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "primary_learning_track": "ai_judgment",
+  "success_criterion": "Primary AI-judgment track outperforms ^FTSE after costs; rules track is the control datum.",
+  "primary_excess_after_costs": null,
+  "control_excess_after_costs": null,
+  "beat_market": false,
+  "beat_control": false,
+  "verdict": "insufficient_data",
+  "reviews": {
+    "rules": {
+      "reviewed_at": "2026-07-23T07:21:32.081099+00:00",
+      "enough_history": false,
+      "applied": false,
+      "knobs_before": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "knobs_after": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "proposed_changes": {},
+      "reasons": [
+        "Need \u22654 equity marks and \u22652 trades (have 2 marks, 5 trades).",
+        "Holdings concentrated in Industrials (40%) \u2014 tighten sector_cap."
+      ],
+      "metrics": {
+        "portfolio_value": 970.87,
+        "contributed_capital": 1000.0,
+        "total_return": -0.0291,
+        "total_costs": 29.15,
+        "cost_drag": 0.0291,
+        "trade_count": 5,
+        "buy_count": 5,
+        "sell_count": 0,
+        "positions": 5,
+        "cash_fraction": 0.0,
+        "equity_marks": 2,
+        "max_sector_weight": 0.4,
+        "dominant_sector": "Industrials",
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "note": "Benchmark unavailable; excess_after_costs omitted."
+      },
+      "note": "Proposal only \u2014 history too thin to apply.",
+      "track_id": "rules",
+      "track_label": "Screen rules (control)",
+      "is_primary_learning_track": false,
+      "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+    },
+    "ai_judgment": {
+      "reviewed_at": "2026-07-23T07:21:32.081900+00:00",
+      "enough_history": false,
+      "applied": false,
+      "knobs_before": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "knobs_after": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "proposed_changes": {},
+      "reasons": [
+        "Need \u22654 equity marks and \u22652 trades (have 1 marks, 0 trades).",
+        "No knob change warranted from current reviewed outcomes."
+      ],
+      "metrics": {
+        "portfolio_value": 1000.0,
+        "contributed_capital": 1000.0,
+        "total_return": 0.0,
+        "total_costs": 0,
+        "cost_drag": 0.0,
+        "trade_count": 0,
+        "buy_count": 0,
+        "sell_count": 0,
+        "positions": 0,
+        "cash_fraction": 1.0,
+        "equity_marks": 1,
+        "max_sector_weight": 0.0,
+        "dominant_sector": null,
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "note": "Insufficient marks for benchmark span."
+      },
+      "note": "Proposal only \u2014 history too thin to apply.",
+      "track_id": "ai_judgment",
+      "track_label": "AI judgment (research accumulate + adjusted_signal)",
+      "is_primary_learning_track": true,
+      "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on this track; AI-judgment is the primary learning track, rules is the control."
+    }
+  }
+}
