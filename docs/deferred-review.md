@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-23T14:32:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-23T22:55:58+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -113,6 +113,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L63 | **User API Keys section missing from Integrations for some accounts** | Owner sees only Source Control + Integrations on dashboard/integrations — no User API Keys generator. Alternatives: Cloud Agents → My Settings → API Keys, or ask Cursor support if UI is plan/account gated. Do not use admin:* keys from /dashboard/api-keys for CURSOR_API_KEY. | Owner locates User API Keys UI or Cursor confirms where personal keys live |
 | L64 | **Create CURSOR_API_KEY from desktop browser not iPad web** | Owner uses Cursor web on iPad; Integrations and Cloud Agents My Settings show no User API Keys generator (iPad Safari is known to clip/hide dashboard sections). Use a desktop browser or Request Desktop Website, then create the User API Key and update the cloud secret. | Owner can access User API Keys UI from a desktop browser |
 | L65 | **User API Keys UI missing across devices; Pro unlikely the gate** | Owner still cannot find User API Keys on any device. Cloud Agents already work (paid plan required), and API returns Invalid User API Key not plan_required. Next: confirm billing plan, try a fresh key from the visible Dashboard → API Keys page against ftse-verify-key, and contact Cursor support if User API Keys UI remains absent. | Owner confirms plan on billing page and/or a newly created dashboard key verifies |
+| L66 | **Re-run cursor-api-key-handover after secret refresh** | Owner will refresh CURSOR_API_KEY and start a new agent. Use docs/ops/cursor-api-key-handover.md; confirm sha256_12 != ff143faf1516 and ftse-verify-key exits 0 before research/gap-fill. | New agent reports PASS on cursor-api-key-handover checklist |
 
 ---
 
