@@ -76,6 +76,30 @@ def test_fetch_filings_ticker_api_drops_unrelated_global_feed(monkeypatch):
     assert "Hikma" in rows[0]["headline"]
 
 
+def test_fetch_filing_body_parses_sec_inline_xbrl(monkeypatch):
+    html = """
+    <html><body>
+    <ix:header><ix:hidden>us-gaap:RevenueMember 2025-01-01 0000863064</ix:hidden></ix:header>
+    <ix:hidden>rio:RioTintoLimitedMember iso4217:USD xbrli:shares</ix:hidden>
+    <div>Cover page checkbox ITEM 1. Legal Proceedings noise</div>
+    <div>CONSOLIDATED INCOME STATEMENT</div>
+    <p>Revenue increased to $57.6 billion in 2025 driven by copper and aluminium.</p>
+    <p>Underlying EBITDA was $25.4 billion and net debt increased after acquisitions.</p>
+    <p>Operating cash flow remained strong while capital expenditure rose on growth projects.</p>
+    </body></html>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    text = fetch_filing_body("https://www.sec.gov/Archives/edgar/data/863064/x/rio-20251231.htm")
+    assert text is not None
+    assert "CONSOLIDATED INCOME STATEMENT" in text
+    assert "Revenue increased" in text
+    assert "us-gaap:RevenueMember" not in text
+    assert "RioTintoLimitedMember" not in text
+
+
 def test_fetch_filing_body_parses_pdf(monkeypatch):
     monkeypatch.setattr(
         "value_investor.research.filings._http_get",

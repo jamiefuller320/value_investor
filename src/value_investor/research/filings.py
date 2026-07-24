@@ -86,6 +86,46 @@ def _strip_html(text: str) -> str:
     return re.sub(r"\s+", " ", unescape(cleaned)).strip()
 
 
+_SEC_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
+    (r"\bCONSOLIDATED (?:INCOME|STATEMENT OF COMPREHENSIVE)\b", 1),
+    (r"\bFINANCIAL REVIEW\b", 2),
+    (r"\bMANAGEMENT[\u2019']S DISCUSSION AND ANALYSIS\b", 2),
+    (r"\bTABLE OF CONTENTS\b", 3),
+    (r"\bITEM\s+1[\.\s\-–]", 4),
+)
+_SEC_XBRL_TOKEN = re.compile(
+    r"\b(?:[a-z]{2,10}[-:]){1,3}[\w:-]+\b",
+    flags=re.I,
+)
+_SEC_MEMBER_TOKEN = re.compile(r"\b[A-Z][a-z]+(?:[A-Z][a-z]+){3,}Member\b")
+
+
+def _extract_sec_html_text(html: str) -> str:
+    """Extract readable narrative text from SEC inline-XBRL HTML filings."""
+    cleaned = re.sub(r"<ix:header[\s\S]*?</ix:header>", " ", html or "", flags=re.I)
+    cleaned = re.sub(r"<ix:hidden[\s\S]*?</ix:hidden>", " ", cleaned, flags=re.I)
+    cleaned = re.sub(r"<!--[\s\S]*?-->", " ", cleaned)
+    text = _strip_html(cleaned)
+
+    best_start: int | None = None
+    best_rank = 99
+    for pattern, rank in _SEC_NARRATIVE_MARKERS:
+        match = re.search(pattern, text, flags=re.I)
+        if not match:
+            continue
+        start = match.start()
+        if rank < best_rank or (rank == best_rank and (best_start is None or start < best_start)):
+            best_rank = rank
+            best_start = start
+    if best_start:
+        text = text[best_start:]
+
+    text = _SEC_XBRL_TOKEN.sub(" ", text)
+    text = re.sub(r"\b\d{10}\b", " ", text)
+    text = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", " ", text)
+    text = _SEC_MEMBER_TOKEN.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
 _EXCHANGE_SUFFIXES = (
     ".L",
     ".AX",
@@ -882,7 +922,10 @@ def fetch_filing_body(url: str | None) -> str | None:
             logger.info("PDF filing body empty/unreadable: %s", url)
             return None
     else:
-        text = _strip_html(raw.decode("utf-8", errors="replace"))
+        if "sec.gov" in url:
+            text = _extract_sec_html_text(raw.decode("utf-8", errors="replace"))
+        else:
+            text = _strip_html(raw.decode("utf-8", errors="replace"))
         if len(text) < 200:
             return None
     if len(text) > FILINGS_BODY_MAX_CHARS:
