@@ -1,196 +1,127 @@
 # ITV plc (ITV.L) — Research memo
 
-_Version 3 · Updated 2026-07-24T18:28:25.675604+00:00 · Mode: gap_fill_
+_Version 3 · Updated 2026-07-24T21:21:10.058975+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
-ITV plc screens as a **Strong Buy** on cheapness, dividend yield, quality and risk metrics, with the share price trading below its 200-day moving average and RSI near 35. The central investment case is a discounted UK media asset undergoing structural simplification: the agreed **£1.6bn sale of the Media & Entertainment (M&E) broadcast and streaming arm to Sky**, with management citing a **£950m shareholder return**, would leave ITV Studios as a standalone global content producer. Valuation looks compelling on headline multiples (P/E ~12, yield ~6.8%, P/B ~1.5), but the key debate is whether post-deal ITV Studios can sustain earnings, cash flow and the dividend without the broadcast cash engine — and whether CMA/regulatory approval is secured on acceptable terms. **Primary filing body text is unavailable in the source pack**, so financial conclusions rely on Yahoo fallback data and must be verified before trading.
+ITV plc screens as a strong buy on quantitative metrics (14/22 models, 84% composite; P/E 12.2, yield 6.8%, D/E 48%) with favourable entry timing (RSI ~35, below the 200-day moving average). The investment case rests on a vertically integrated UK broadcaster transitioning into a global content producer: two-thirds of revenue now comes from ITV Studios and digital M&E, ITVX is profitable, and the balance sheet is manageable (net debt £566m at FY2025, leverage 1.0x). The central debate is whether the proposed £1.6bn sale of the Media & Entertainment business to Sky crystallises latent value—management has flagged a planned £950m shareholder return—or whether post-deal ITV Studios alone can sustain earnings, dividends, and multiple re-rating in a cyclical UK advertising market.
 
 ## INVESTMENT THESIS
-The quantitative screen rates ITV a **Strong Buy** (14/22 models passed, composite score 84%, sector-relative 80%), spanning cheapness, quality, dividend, GARP and risk families with full metric coverage (20/20). Headline metrics — **P/E 12.2, P/B 1.5, dividend yield 6.8%, ROE 12.3%, debt/equity 48%** — fit a classic value profile: a cash-generative business trading below book-adjusted fair value with an income kicker. Passed models include Graham Enterprising, Earnings Yield, FCF Yield, Lynch PEG, Neff PEGY, Magic Formula, Acquirer's Multiple, High Dividend Yield, Dividend Growth, Earnings Quality and Financial Health, suggesting the screen sees both valuation support and balance-sheet resilience.
-
-Business quality, as inferred from Yahoo financials (fallback), shows a group that has stabilised revenue after a multi-year decline and restored operating profit from the 2023 trough, albeit with volatile reported net income driven by one-offs. **ITV Studios** — the intended remaining entity — is a scaled UK/international production business with franchise IP (e.g. Love Island, broad drama slate) and third-party commissions; the screen's quality and earnings-quality passes imply acceptable accounting and return characteristics on a normalised basis. The **Sky M&E disposal** is the value-unlock catalyst: monetising a structurally challenged linear-TV asset at ~£1.6bn, reducing capital intensity and funding returns, while refocusing equity on higher-growth, asset-light content production.
-
-Timing overlay from the screen is **Accumulate** (timing score 0.75): RSI 35 and a ~8% discount to the 200-day MA suggest favourable entry conditions for a value accumulator, though conviction is only 51% given the signal is new (one week). For a value investor, the asymmetry is clear: downside is partly cushioned by yield and tangible deal proceeds; upside hinges on pro-forma Studios earnings power and capital return execution.
-
-FINANIAL REVIEW
-
-**Source limitation:** The filings index catalogues six UK RNS/Companies House entries (four annual, one interim, one other) but **none have downloadable body extracts** (`filings/bodies/` is empty; `with_body: 0`). All figures below are from **Yahoo `financials_annual.json` (fallback)** and should not be treated as filing-verified. Filing headlines indexed but not parsed: *Full Year Results 2024* (6 Mar 2025), *Full Year Results 2025* (5 Mar 2026), *Q1 Trading Update* (14 May 2026), Companies House group accounts (May 2025, May 2026), and *Sale of ITV M&E Business to Sky* (6 Jul 2026). **No half-year/interim results release body is present** beyond the Q1 trading update headline; interim financial detail is a gap.
-
-**Income statement trend (Yahoo, £m)**
-
-| | 2022 | 2023 | 2024 | 2025 |
-|---|---:|---:|---:|---:|
-| Revenue | 3,728 | 3,624 | 3,488 | 3,511 |
-| Operating income | 519 | 238 | 318 | 363 |
-| EBITDA | 656 | 344 | 734 (norm. 522) | 473 |
-| Net income | 428 | 210 | 408 | 220 |
-
-Revenue fell **~5%** from 2022 to 2024 before a modest **+0.7%** rebound in 2025. Operating income collapsed in 2023 (likely reflecting advertising weakness and cost pressures) and partially recovered; 2025 operating income of **£363m** is the strongest "clean" year in the period. **2024 net income of £408m is not comparable**: Yahoo flags **£212m unusual items** (consistent with disposal/gain activity; cash flow shows **£295m business sale proceeds**). Normalised 2024 earnings would be materially lower. **2025 net income of £220m** represents a more representative run-rate, down ~46% from reported 2024 but up on the 2023 trough.
-
-**Cash flow and capital allocation (Yahoo, £m)**
-
-| | 2022 | 2023 | 2024 | 2025 |
-|---|---:|---:|---:|---:|
-| Operating cash flow | 304 | 385 | 333 | 202 |
-| CapEx | (78) | (70) | (49) | (54) |
-| Free cash flow | 226 | 315 | 284 | **148** |
-| Dividends paid | (201) | (201) | (198) | (187) |
-
-FCF generation was robust in 2023–24 but **weakened sharply in 2025 to £148m**, driven by a **£196m working-capital outflow** (receivables build). Dividend cash outflow has been steady at **~£187–201m p.a.**, implying the current yield is supported historically but **2025 FCF covered dividends only ~79%** — a yellow flag for sustainability absent deal proceeds or a rebased payout post-disposal. The screen's FCF Yield pass may reflect a trailing or normalised view; verify against FY2025 RNS.
-
-**Balance sheet (Yahoo, year-end £m)**
-
-| | 2024 | 2025 |
-|---|---:|---:|
-| Total assets | 4,186 | 4,285 |
-| Stockholders' equity | 1,808 | 1,798 |
-| Total debt | 838 | 876 |
-| Net debt | 306 | **463** |
-| Cash | 427 | 302 |
-| Goodwill + intangibles | 1,533 | 1,531 |
-| Tangible book value | 275 | **267** |
-
-Net debt rose **£157m** in 2025 to **£463m** as cash fell; leverage remains moderate (D/E ~48% per screen) but trending unfavourably. **Goodwill and intangibles of ~£1.5bn** dominate the balance sheet; tangible equity is thin at **£267m**, so P/B metrics are sensitive to impairment assumptions — relevant if M&E separation triggers accounting reassessment. Defined benefit pension obligations are **£231m** (2025); non-current pension liabilities **£43m**. No filing-body language on going concern, covenant headroom or contingencies is available to assess.
-
-**Interim / trading update:** A *Q1 Trading Update* (14 May 2026) is indexed but without body text; no quantitative interim figures can be cited. News flow around that date referenced World Cup advertising optimism and Sky deal hopes, but that is not substitutable for verified interim accounts.
-
-**Annual results narrative (from news, not filings):** FY2025 results (5 Mar 2026) were reported in secondary sources as beating expectations despite profit decline, with digital revenue growth and cost management cited; total advertising revenue was described as weaker. FY2024 results (6 Mar 2025) coincided with ongoing Sky talks. These headlines align with the Yahoo revenue stabilisation and earnings normalisation pattern but cannot replace primary filing review.
+The quantitative screen flags cheapness, quality, dividend, GARP, and risk simultaneously—a rare combination for a FTSE name trading at ~12x earnings with a ~6.8% yield and sub-50% gearing. Filing evidence supports the quality and dividend pillars more than pure deep-value contrarianism: group adjusted EBITA held broadly flat at £534m in FY2025 (from £542m in FY2024) despite a 5% decline in total advertising revenue (TAR), as ITV Studios revenue rose 5% to £2,130m and digital revenues grew 10% to £614m. Permanent cost savings (£63m in 2025; £253m cumulative since 2019) and a maintained 5.0p ordinary dividend (~£190m) reinforce financial health screens (Financial Health, Earnings Quality, High Dividend Yield). FCF yield and earnings-yield models benefit from resilient cash conversion (65% in FY2025; 83% in FY2024) and liquidity of £1.3bn+ including undrawn facilities. The screen’s “accumulate” timing aligns with a stock trading below trend amid a transformative corporate event (Sky M&E sale announced 6 July 2026) that could unlock sum-of-the-parts value, while Studios’ streaming-platform exposure (28% of Studios revenue) provides a structural growth offset to linear ad decline.
 
 ## FINANCIAL REVIEW
-**Primary sources:** Five Companies House annual report bodies (2022–2026 filings) in `filings/bodies/`; four RNS/index entries still without bodies (FY results announcements, Q1 Trading Update, Sky sale RNS). Figures below prefer filing bodies; Yahoo used only where noted.
+**Annual results (primary source: RNS filing bodies)**
 
-**FY2025 group performance (filing body, year ended 31 Dec 2025)**
-
-| Metric | FY2025 | FY2024 | YoY |
-|---|---:|---:|---|
-| Group external revenue | £3,511m | £3,488m | +1% |
-| Group adjusted EBITA | £534m | £542m | -1% |
-| Adjusted EPS | 8.5p | 9.6p | -11% |
-| Statutory EPS | 5.9p | 10.4p | -43% |
-| Free cash flow | £187m | £325m | — |
-| Profit to cash conversion | 65% | 83% | — |
-| Net debt | £566m | £431m | — |
-| Net debt / adjusted EBITDA | 1.0x | 0.7x | — |
+| Metric | FY2024 | FY2025 | YoY |
+|--------|--------|--------|-----|
+| Group external revenue | £3,488m | £3,511m | +1% |
+| Group adjusted EBITA | £542m | £534m | −1% |
+| Adjusted EPS | 9.6p | 8.5p | −11% |
+| Statutory profit before tax | £521m | £338m | −35% |
+| Statutory EPS | 10.4p | 5.9p | −43% |
+| ITV Studios adjusted EBITA | £299m | £297m | −1% |
+| M&E adjusted EBITA | £250m | £234m | −6% |
+| Digital revenue (M&E) | £556m | £614m | +10% |
+| TAR (full year) | — | −5% | — |
+| Net debt (31 Dec) | £431m | £566m | +31% |
+| Net debt / adj. EBITDA | 0.7x | 1.0x | — |
 | Ordinary dividend | 5.0p (~£190m) | 5.0p (~£190m) | flat |
+| Profit-to-cash conversion | 83% | 65% | — |
 
-Management (FY2025 report body): TAR **down 5%**; ITV Studios total revenues **+5%** (external +10%); digital revenues **+10%**; ITVX viewing **+16%**, digital advertising **+12%** (31% of total advertising). Adjusted EBITA down 1% on cost management. Statutory profit down due to 2024 BritBox International disposal gain.
+*Sources: `filings/bodies/4c09b7c94201a8c3.txt`, `00fcdb28c7a60c97.txt`; Companies House FY2025 OCR (`ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt`) corroborates net debt £566m and leverage 1.0x.*
 
-**Segment (filing body):** ITV Studios adjusted EBITA **£207m**; M&E **£234m**. Target Studios margin **13–15%**. Soap/daytime scheduling cuts internal Studios revenue by **~£80m from 2026**.
+FY2024 benefited from TAR +2%, record Studios profits, and a £255m BritBox International gain. FY2025 held adjusted EBITA near flat despite TAR −5%, as Studios (+5% revenue) and digital advertising (+10%) offset linear decline. **Yahoo fallback:** FY2025 FCF £148m versus dividends paid £187m—FCF did not cover the ordinary dividend in the trough year.
 
-**Dividend and cash (filing body):** **5.0p ordinary dividend (~£190m)** vs **£187m FCF** — essentially full payout with minimal headroom. 2024 body: policy of sustaining 5.0p with growth over time; pension **in surplus**; investment-grade metrics.
+**Interim and trading:** H1 2025 adjusted EBITA −31% (`4ae997cbb055a1bb.txt`); nine-month 2025 TAR −5% YTD with Q4 ~−9% (`0f18ec363b532193.txt`); Q1 2026 external revenue +1%, Q2 TAR guided ~+10% (`50990df6d8a4bbc9.txt`).
 
-**Balance sheet:** Filing net debt **£566m** at 1.0x vs Yahoo **£463m** — unreconciled. Yahoo (fallback): tangible book **£267m**, goodwill/intangibles **~£1.5bn**.
+**Sky M&E transaction (`0b0a4b2e4b15d060.txt`):** Consideration up to £1.6bn; net proceeds ~£1.05bn; capital return ~£950m (25p); completion H2 2027; £80m regulatory break fee. Post-deal Studios targets leverage ~1.5x, profit-to-cash ~80%, margins 13–15%, £2.1bn CSA 2028–2032. M&E carve-out FY2025: revenue £1,992.9m, adjusted EBITA £234m. Group dividend unchanged until completion.
 
-**Corporate action (news/index; RNS body missing):** Sky M&E sale **~£1.6bn**; **£950m shareholder return** cited in news. FY2025 body references preliminary Sky talks (Nov 2025) pre-completion. Pro-forma Studios accounts not available.
+**Liberty Global placing (`fa9897e979b007e7.txt`):** 193m shares (~5%), ~£135m gross, 60-day lock-up.
 
-**Remaining gaps:** RNS bodies for Sky sale and Q1 update; pro-forma post-deal dividend policy; FCF reconciliation (filing £187m vs screen ~£249m vs Yahoo £148m); detailed pension/covenant notes from financial statements sections.
+**Dividend sustainability:** Near-term integrated cover is tight but liquidity-supported; through-cycle 6.8% yield on the current entity is plausible but unproven. Post-Sky recurring policy is qualitative only—the £950m return is one-off, not recurring cover.
+
+**Remaining gaps:** Standalone Studios pro-forma dividend cover; covenant headroom; Piotroski components.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Evidenced (filing body):** 5% TAR decline; adjusted EPS -11%; profit-to-cash **65%**; FCF (£187m) barely covers ~£190m dividend; net debt **£566m** at **1.0x**; £80m internal Studios revenue headwind from 2026; statutory earnings volatility from disposals.
+**Evidenced (filing bodies):** Advertising cyclicality (Q4 2025 TAR ~−9%, full-year ~−6%); structural SOCV decline (32.2% → 31.7%); earnings-quality drift (adjusted EPS −11%, profit-to-cash 65%, H1 EBITA −31%); Sky execution/regulatory risk with £80m break fee and post-close diversification loss; separation costs (~£185m gross), pension escrow (£65m); Liberty Global block trade (`fa9897e979b007e7.txt`); FY2025 exceptionals £107m.
 
-**Evidenced (filing + news):** Structural pivot to Studios/digital (two-thirds of revenue) but linear advertising still material; Sky sale regulatory risk (Guardian, Nov 2025).
-
-**Evidenced (screen + filing):** Piotroski failure implied; filing momentum deterioration aligns with email brief's 3/9 concern despite Financial Health pass.
-
-**Evidenced (Yahoo fallback):** Thin tangible equity; goodwill-dominated balance sheet.
-
-**Evidenced (2024 filing body):** Pension in surplus; dividend sustainability framed by management — partially closes pension flag for FY2024.
-
-**Open:** Post-Sky Studios dividend/FCF — IR presentation PDF and deal circular. Covenant/going-concern language — Investegate RNS re-pull. FCF triple-source divergence — IR FCF bridge and snapshot failed_criteria export.
+**Open:** Piotroski 3/9 components (not in screen export); covenant headroom (requires IR PDF); post-deal Studios dividend quantification (requires Capital Markets Day pack).
 
 ---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **heavy on the Sky transaction** and earnings, with less depth on operational KPIs.
+Coverage over the past year is substantial, centred on the Sky transaction and operational updates:
 
-**Sky M&E disposal (dominant theme):**
-- *Britain's ITV in talks with Comcast's Sky on $2.15 billion TV sale* — Reuters, 6 Nov 2025
-- *ITV in talks to sell television business to Sky* — BBC, 7 Nov 2025
-- *ITV shares soar as it holds talks to sell television business to Sky* — The Guardian, 7 Nov 2025
-- *Three big problems with ITV's talks to sell television business to Sky: price, politics and regulation* — The Guardian (Nils Pratley), 7 Nov 2025
-- *Comcast-Owned Sky Agrees on Terms to Buy ITV's Broadcast and Streaming Unit (Report)* — Variety, 25 Jun 2026
-- *Sky makes £2bn spending pledge as it prepares takeover of ITV broadcasting arm* — The Guardian, 28 Jun 2026
-- *Sky agrees £1.6bn ITV deal as UK broadcasters take on streaming rivals* — Financial Times, 6 Jul 2026
-- *SALE OF ITV M&E BUSINESS TO SKY* — Investegate/RNS headline, 6 Jul 2026 (indexed; no body)
-- *ITV Calls Sky Deal Transformative as It Plans £950 Million Shareholder Return* — Yahoo Finance, 9 Jul 2026
-- *ITV Studios Will Not Need A "Transformational Acquisition" After Splitting With ITV Network, Bosses Claim* — Deadline, 6 Jul 2026
+- **6 July 2026:** “Sky agrees £1.6bn ITV deal as UK broadcasters take on streaming rivals” (Financial Times); “ITV and Comcast's Sky reshape British TV landscape with $2.1 billion deal” (Reuters); “SALE OF ITV M&E BUSINESS TO SKY” (RNS headline—body not available in sources).
+- **9 July 2026:** “ITV Calls Sky Deal Transformative as It Plans £950 Million Shareholder Return” (Yahoo Finance).
+- **6 July 2026:** “ITV Studios Will Not Need A ‘Transformational Acquisition’ After Splitting With ITV Network, Bosses Claim” (Deadline).
+- **7 November 2025:** “ITV shares soar as it holds talks to sell television business to Sky” (The Guardian); “Three big problems with ITV’s talks to sell television business to Sky: price, politics and regulation” (Nils Pratley, The Guardian).
+- **5 March 2026:** “ITV shares rise as results beat expectations” (UK Investor Magazine); “ITV holds out for Sky deal as transformation continues” (Investors’ Chronicle).
+- **24 July 2025:** Half-year results release (same day as indexed interim filing).
+- **22 October 2025:** “Liberty Global sold £135 Million on ITV's stakes, triggering price drop” (Señal News).
+- **7 November 2025:** “Box Clever members transferred to ITV Pension Scheme to end decade-long saga” (Pensions Expert).
 
-**FY2025 results (Mar 2026):**
-- *ITV earnings fall less than expected as hopes high for 2026 World Cup* — Yahoo Finance UK, 4 Mar 2026
-- *ITV shares rise as results beat expectations* — UK Investor Magazine, 5 Mar 2026
-- *ITV remains in talks over Sky TV deal as profits slip* — Yahoo Finance UK, 5 Mar 2026
-- *ITV holds out for Sky deal as transformation continues* — Investors' Chronicle, 5 Mar 2026
-
-**Trading / advertising:**
-- *ITV shares lifted by Sky deal hopes and strong World Cup advertising outlook* — Proactive Investors, 14 May 2026 (aligned with indexed Q1 Trading Update)
-- *ITV stock holds steady as advertising recovery and streaming growth shape outlook* — Ad-hoc-news.de, 24 Jul 2026
-
-**Shareholder / sentiment:**
-- *Liberty Global sold £135 Million on ITV's stakes, triggering price drop* — Senal News, 24 Oct 2025
-- *ITV shares slump following Liberty Global news* — businesscloud.co.uk, 22 Oct 2025
-
-News coverage is **adequate on M&A and results headlines** but **thin on verified financial detail, regulatory filings and pro-forma guidance**; much secondary commentary is retail-oriented.
+Much syndicated “ITV stock holds steady/advances” coverage (Ad-hoc-news.de) is low-information repetition. Material corporate news is not thin; the Sky deal dominates the narrative arc from preliminary talks (November 2025) to announced agreement (July 2026).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.64
-Rationale: Gap-fill strengthens the case on filing-verified strategy progress and dividend policy clarity, but tight FCF/dividend coverage, falling profit-to-cash, and unresolved post-Sky Studios economics keep the Strong Buy partially—not fully—confirmed.
+Confidence: 0.77
+Rationale: The second body-ingest pass closes the Sky deal and Liberty placing evidence gaps and confirms liquidity and capital-return optionality, but integrated FCF/dividend tension and unverified Piotroski weakness keep the overlay at accumulate rather than full confirmation of the quantitative strong buy.
 
 ## Weekly updates
 
-### 2026-07-24T14:39:57.997850+00:00
+### 2026-07-24T21:20:19.903383+00:00
 Q: Can advertising recovery and Studios growth offset linear-TV decline enough to support a 6.8% dividend through the next cycle?
 Status: partially_resolved
-Evidence: Yahoo fallback shows 2025 FCF of £148m versus dividends paid of £187m (~79% coverage); alternate news (*ITV Studios margins to hit lower end of range despite strong revenue growth*, Proactive Investors, 14 May 2026) and FY2025 headlines cite digital/Studios growth but weaker total advertising. Sky deal news (*ITV Calls Sky Deal Transformative as It Plans £950 Million Shareholder Return*, 9 Jul 2026) implies near-term payout support via proceeds, not verified Studios-only dividend policy.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
-NextSources: Company IR / results presentation PDF (segment margins, dividend policy, pro-forma Studios FCF); FY2025 RNS full-text re-pull (Investegate RNS HTML body)
+Evidence: FY2025 RNS maintained the 5.0p ordinary dividend (~£190m) while adjusted EPS fell 11% to 8.5p and TAR declined 5%, with Studios revenue +5% and digital revenue +10% partially offsetting linear weakness; profit-to-cash conversion fell to 65% (from 83% in FY2024). Yahoo fallback shows FY2025 free cash flow of £148m versus cash dividends paid of £187m—a coverage gap in the trough year—though liquidity remained £1.3bn+ (Q1 2026 trading update) and management applied £35m of temporary Q4 2025 M&E cost savings when TAR softened. The Sky sale RNS (6 July 2026, `filings/bodies/0b0a4b2e4b15d060.txt`) states group dividend policy is unchanged until completion and post-deal ITV Studios targets ~80% profit-to-cash conversion and an “attractive dividend,” but no standalone dividend cover or yield is quantified.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
+NextSources: Company IR / results presentation PDF (planned in `gap_fill_source_map.json`) for FCF bridge and dividend cover tables; ITV Studios Capital Markets Day materials (referenced in Sky RNS, pre-H2 2027) for post-deal dividend policy and pro-forma payout ratio
 
 Q: This FTSE screen is broadly cautious: 147 holds and 40 avoids outweigh 16 strong buys and 45 buys, so outright conviction is concentrated in a small subset rather than widespread. All five top candidates are strong buys with full 20/20 data quality and five-factor passes (cheapness, quality, dividend, GARP, risk), but conviction scores sit in a narrow 51–54% band and every name is a new signal (one week at signal), so persistence is unproven. Sector clustering is notable: three of five top picks are Industrials (FGP.L, MEGP.L, GFTU.L), with Healthcare (HIK.L) and Communication Services (ITV.L) rounding out the list. One caution: several model failure reasons reference missing NCAV/balance-sheet detail, negative or weak earnings growth, and free-cash conversion gaps—the screen is strong on trailing multiples and composite ranks but cannot fully validate balance-sheet depth, cyclical trough timing, or qualitative moats.
 Status: partially_resolved
-Evidence: ITV `screening_snapshot.json` confirms Strong Buy with 20/20 data quality, five families passed, conviction 51.3%, one week at signal, and timing Accumulate (RSI 35); universe-wide hold/avoid counts and cross-name conviction band are stated in the email brief but not stored in local ITV sources.
-SourcesTried: screening_snapshot, macro_context
-NextSources: Weekly screen export with failed_models per ticker and universe summary JSON (would unlock Piotroski/NCAV failure reasons and peer conviction persistence)
+Evidence: `screening_snapshot.json` confirms ITV as strong_buy with 14/22 models passed, composite 0.84, conviction 0.513, signal_trend “new” (1 week), timing “accumulate” (RSI ~35), five families passed, and 20/20 data quality—the only top-name attributes verifiable locally for ITV. Universe-wide hold/avoid counts and peer conviction bands are not stored in ITV local sources; they originate from the broader screen email pass cited in the question. ITV-specific FCF conversion weakness (profit-to-cash 65% in FY2025 filings vs FCF Yield model pass on trailing Yahoo FCF) illustrates the screen’s inability to reconcile cyclical trough timing without filing-depth overlay.
+SourcesTried: screening_snapshot, filings_bodies, yahoo_financials
+NextSources: Screen run metadata export (universe-level signal distribution, failed-model reasons per ticker) to validate concentration claims programmatically; cross-ticker conviction history table to test one-week signal persistence
 
 Q: (ITV plc) — Communication Services. Fourteen of 22 models passed (composite 84%, sector-relative 80%), including Graham Enterprising, Earnings Yield, FCF Yield (9.1%), Lynch PEG (PEG 0.47, growth 25.6%), Neff PEGY, Quality Value, High Dividend Yield (6.8%, universe rank 95%), Dividend Growth, Composite Value, Earnings Quality, and Financial Health (D/E 48%, interest coverage 15.1x). Only top name with favourable entry timing (RSI 35, accumulate signal). Piotroski F-Score 3/9 is a stark internal contradiction. Verdict: accumulate — best risk/reward entry among top picks on timing and income/value combo, provided structural media risks are acceptable.
 Status: partially_resolved
-Evidence: `screening_snapshot.json` confirms 14/22 passes, composite 84%, five families, yield 6.8%, D/E 48%, timing Accumulate at RSI 35; Piotroski F-Score is **not** in passed_models (implying failure) but the 3/9 score is cited only in the email brief—not persisted in the local snapshot. Screen FCF key metric (~£249m) diverges from Yahoo 2025 FCF (£148m).
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
-NextSources: Screening snapshot export with per-model scores and failed_criteria (would confirm Piotroski 3/9 and reconcile FCF Yield input); company IR presentation PDF
+Evidence: `screening_snapshot.json` lists 14 passed models (Graham Enterprising through Financial Health), timing accumulate, RSI 35.3, yield 6.8%, D/E 48%, and FCF £249m; Piotroski is absent from `passed_models`, consistent with failure, but the precise 3/9 score is not persisted in local ITV sources. Sub-model detail (Lynch PEG 0.47, interest coverage 15.1x, FCF yield 9.1%) appears in the red-flag pass narrative but is not exported in the snapshot JSON—only headline metrics are present.
+SourcesTried: screening_snapshot, filings_bodies, gap_fill_source_map
+NextSources: Extend `screening_snapshot.json` to export `failed_models`, per-model inputs, and Piotroski component scores; company IR presentation PDF for reconciling Lynch “growth 25.6%” against filing-adjusted EPS −11% YoY
 
 Q: Structural shift from linear broadcast to streaming threatens long-run advertising share; ad revenue is highly cyclical; Piotroski F-Score 3/9 suggests deteriorating operational momentum despite strong headline value — balance-sheet health alone may mask earnings-quality drift.
 Status: partially_resolved
-Evidence: Yahoo shows revenue still below 2022 (£3,728m) at £3,511m in 2025; 2025 net income £220m with OCF £202m (OCF < NI, consistent with weak Piotroski quality-of-earnings); Financial Health passes on D/E 48% per screen but tangible book is only £267m. Alternate news confirms Sky separation strategy (*ITV Studios Will Not Need A "Transformational Acquisition" After Splitting With ITV Network*, Deadline, 6 Jul 2026).
+Evidence: Filings document structural pressure (share of commercial viewing 32.2% FY2024 → 31.7% FY2025; TAR −5% FY2025, Q4 guided ~−9%) alongside digital offset (digital ad revenue +12–15% in H1/Q3 2025). Operational momentum deterioration is filing-evidenced: adjusted EPS −11%, profit-to-cash 65%, statutory EPS −43% FY2025, and H1 2025 group adjusted EBITA −31% on Euros comparatives—supporting the earnings-quality concern independent of Piotroski. Balance-sheet health is filing-supported (net debt £566m, leverage 1.0x, liquidity £1.3bn+), and the Sky RNS now provides M&E carve-out accounts (M&E adjusted EBITA £234m FY2025) plus pension mitigation (£65m escrow, trustee sign-off). Piotroski 3/9 remains unverified locally.
 SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
-NextSources: Companies House filed accounts PDF (pension, covenants, segment notes); CMA filing / deal circular when published (regulatory conditions on M&E separation)
+NextSources: Company IR / results presentation PDF for adjusted-vs-statutory reconciliation and working-capital bridge; screening export for Piotroski components; CMA/competition filing once Sky deal review opens
 
 ---
 
-### 2026-07-24T18:28:25.675604+00:00
+### 2026-07-24T21:21:10.058975+00:00
 Q: Can advertising recovery and Studios growth offset linear-TV decline enough to support a 6.8% dividend through the next cycle?
 Status: partially_resolved
-Evidence: FY2025 annual report body (`filings/bodies/ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt`) states total advertising revenue fell 5% but was offset by +5% ITV Studios revenues and +10% digital revenues; Board proposes maintaining **5.0p ordinary dividend (~£190m)** against **£187m free cash flow** and **65% profit-to-cash conversion** (down from 83% in 2024). Dividend policy targets sustaining 5.0p with growth over time (2024 report body), but post-Sky Studios-only payout is not addressed in available filings.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
-NextSources: Company IR / results presentation PDF (pro-forma Studios FCF and dividend policy post-M&E sale); Sky deal RNS full-text when body ingest succeeds
+Evidence: Integrated group: FY2025 RNS (`filings/bodies/00fcdb28c7a60c97.txt`) held the 5.0p dividend (~£190m) despite adjusted EPS −11% (8.5p) and TAR −5%, with Studios revenue +5% and digital revenue +10% offsetting linear decline; profit-to-cash conversion fell to 65%. Yahoo fallback shows FY2025 FCF £148m versus dividends paid £187m—cover was negative in the trough year—though Q1 2026 liquidity was £1,368m (`filings/bodies/50990df6d8a4bbc9.txt`) and Q4 2025 applied £35m temporary M&E savings when TAR softened (`filings/bodies/0f18ec363b532193.txt`). Sky RNS (`filings/bodies/0b0a4b2e4b15d060.txt`) confirms group dividend policy “will remain unchanged” until H2 2027 completion; post-deal ITV Studios targets ~80% profit-to-cash, margins 13–15%, and an “attractive dividend” within a five-point capital-allocation framework, plus a separate ~£950m capital return (25p)—but no pro-forma recurring dividend, cover ratio, or post-deal yield is stated.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
+NextSources: Company IR / results presentation PDF (`gap_fill_source_map.json` planned source) for dividend-cover and FCF-bridge tables; ITV Studios Capital Markets Day pack (referenced in Sky RNS, pre-H2 2027) for standalone payout policy and sensitivity to ad-cycle scenarios
 
 Q: This FTSE screen is broadly cautious: 147 holds and 40 avoids outweigh 16 strong buys and 45 buys, so outright conviction is concentrated in a small subset rather than widespread. All five top candidates are strong buys with full 20/20 data quality and five-factor passes (cheapness, quality, dividend, GARP, risk), but conviction scores sit in a narrow 51–54% band and every name is a new signal (one week at signal), so persistence is unproven. Sector clustering is notable: three of five top picks are Industrials (FGP.L, MEGP.L, GFTU.L), with Healthcare (HIK.L) and Communication Services (ITV.L) rounding out the list. One caution: several model failure reasons reference missing NCAV/balance-sheet detail, negative or weak earnings growth, and free-cash conversion gaps—the screen is strong on trailing multiples and composite ranks but cannot fully validate balance-sheet depth, cyclical trough timing, or qualitative moats.
 Status: partially_resolved
-Evidence: `screening_snapshot.json` confirms ITV Strong Buy, 20/20 data quality, five families passed, conviction 51.3%, one week at signal, timing Accumulate (RSI 35); filing-verified FY2025 profit-to-cash conversion of 65% supports the email brief's FCF-conversion gap concern. Universe hold/avoid counts and peer conviction band remain outside local ITV sources.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
-NextSources: Weekly screen export with failed_models per ticker and universe summary JSON
+Evidence: `screening_snapshot.json` verifies ITV-specific inputs only: strong_buy, 14/22 models, composite 0.84, conviction 0.513, signal_trend “new” (1 week), timing “accumulate”, RSI 35.3, five families passed, 20/20 data quality. Universe distribution (147 holds / 40 avoids / 16 strong buys / 45 buys), peer conviction bands, and failed-model reason text are not stored in ITV local sources. Filing evidence of cyclical-trough tension—profit-to-cash 65% FY2025 versus FCF Yield model pass on trailing Yahoo FCF—confirms the screen cannot reconcile trough timing without a filing overlay, consistent with the cited screen caution.
+SourcesTried: screening_snapshot, filings_bodies, yahoo_financials, filings_index
+NextSources: Screen run metadata export (universe signal counts, per-ticker failed-model reasons, conviction history) to validate concentration and persistence claims; cross-ticker NCAV/balance-sheet depth flags referenced in model failures
 
 Q: (ITV plc) — Communication Services. Fourteen of 22 models passed (composite 84%, sector-relative 80%), including Graham Enterprising, Earnings Yield, FCF Yield (9.1%), Lynch PEG (PEG 0.47, growth 25.6%), Neff PEGY, Quality Value, High Dividend Yield (6.8%, universe rank 95%), Dividend Growth, Composite Value, Earnings Quality, and Financial Health (D/E 48%, interest coverage 15.1x). Only top name with favourable entry timing (RSI 35, accumulate signal). Piotroski F-Score 3/9 is a stark internal contradiction. Verdict: accumulate — best risk/reward entry among top picks on timing and income/value combo, provided structural media risks are acceptable.
 Status: partially_resolved
-Evidence: `screening_snapshot.json` confirms 14/22 passes and timing overlay; Piotroski absent from `passed_models` (failure implied). FY2025 filing body corroborates operational drift: adjusted EPS **-11%** to 8.5p, profit-to-cash **65%**, net debt **£566m** at **1.0x leverage** — consistent with a low F-Score despite Financial Health pass. Screen FCF (~£249m), filing FCF (£187m), and Yahoo FCF (£148m) remain **unreconciled**.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
-NextSources: Screening snapshot export with per-model failed_criteria (confirm Piotroski 3/9); company IR presentation PDF for adjusted FCF bridge
+Evidence: `screening_snapshot.json` confirms 14 passed models, yield 6.8%, D/E 48%, FCF £249m, timing accumulate, RSI 35.3; Piotroski is absent from `passed_models` (implying failure among eight unlisted models) but the 3/9 score and sub-model inputs (Lynch PEG 0.47, interest coverage 15.1x, FCF yield 9.1%, universe rank 95%) are not exported locally. Filing-adjusted EPS −11% YoY (`00fcdb28c7a60c97.txt`) sits awkwardly against Lynch “growth 25.6%” cited in the red-flag pass—likely a screen input methodology issue, not verifiable from local snapshot.
+SourcesTried: screening_snapshot, filings_bodies, filings_index, gap_fill_source_map
+NextSources: Extend `screening_snapshot.json` with `failed_models`, Piotroski component scores, and per-model inputs; company IR presentation PDF to reconcile screen growth inputs with adjusted filing trends
 
 Q: Structural shift from linear broadcast to streaming threatens long-run advertising share; ad revenue is highly cyclical; Piotroski F-Score 3/9 suggests deteriorating operational momentum despite strong headline value — balance-sheet health alone may mask earnings-quality drift.
 Status: partially_resolved
-Evidence: FY2025 report body documents **5% TAR decline**, ITVX viewing **+16%**, digital advertising **+12%** (31% of total ad revenue), two-thirds of revenue from Studios plus M&E digital, and **£80m internal Studios revenue reduction** from soap/daytime scheduling effective 2026; 2024 report body cites pension scheme **in surplus** and investment-grade leverage metrics. Piotroski 3/9 score still not persisted locally; RNS bodies for Sky sale and Q1 trading update still missing.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
-NextSources: Investegate RNS full-text re-pull for *SALE OF ITV M&E BUSINESS TO SKY* and Q1 Trading Update; CMA filing when published
+Evidence: Structural/cyclical risks are filing-documented: SOCV 32.2% → 31.7% FY2024–25; TAR −5% FY2025 with Q4 ~−9% and full-year ~−6% (`0f18ec363b532193.txt`); digital ad revenue +12–15% partially offsets. Earnings-quality drift is independently filing-evidenced: adjusted EPS −11%, profit-to-cash 65%, statutory EPS −43% FY2025; H1 2025 adjusted EBITA −31% (`4ae997cbb055a1bb.txt`). Sky RNS (`0b0a4b2e4b15d060.txt`) adds M&E carve-out FY2025 adjusted EBITA £234m on revenue £1,993m, pension escrow £65m (trustee mitigation confirmed), and explicit post-close diversification loss (“smaller and less diversified”). Piotroski 3/9 score remains unverified in local screen export; Liberty Global secondary placing (`filings/bodies/fa9897e979b007e7.txt`: 193m shares, ~5% of capital, ~£135m gross, 60-day lock-up) adds a sentiment overhang separate from operational metrics.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, news_manifest
+NextSources: Company IR presentation PDF for working-capital bridge and adjusted-vs-statutory reconciliation; screening export for Piotroski components; CMA/regulatory filing once Sky deal review opens
 
 ---

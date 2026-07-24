@@ -1,89 +1,87 @@
 # Shell plc (SHEL.L) — Research memo
 
-_Version 1 · Updated 2026-07-24T18:33:53.027833+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-24T21:15:19.597083+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Shell plc (SHEL.L) screens as a **buy** on valuation, dividend, GARP and risk metrics (10/22 models; sector-relative composite 74%), yet the name sits at a crossroads between cash-return appeal and cyclical/transition risk. Filings show a company still generating substantial cash ($42.9bn operating cash flow and $26.1bn free cash flow in FY2025) while returning 52% of operating cash to shareholders via buybacks and dividends, but adjusted earnings and cash generation have retreated from 2024 peaks. The valuation hook is modest multiples (screen P/E 13.8x, yield 3.5%, P/B 1.4x) on an investment-grade integrated major with an explicit 40–50% distribution framework and progressive dividend policy. The central debate is whether Wael Sawan’s “performance, discipline and simplification” strategy can sustain per-share value through lower commodity margins, reserve decline and climate litigation—not whether Shell can pay today’s dividend.
+Shell plc screens as a buy on cheapness, dividend, GARP and risk metrics (P/E 13.8, P/B 1.4, yield 3.5%, debt/equity 43%), with sector-relative strength despite a new, low-conviction screen signal. The investment case rests on a cash-generative integrated model, progressive distributions (40–50% of CFFO through the cycle), and a balance sheet management describes as among the strongest in the sector — offset by normalised earnings and cash flow that fell materially in 2025 versus 2024. The central debate is whether structural cost savings, LNG growth and the ARC Resources acquisition can sustain per-share value creation through commodity cycles, or whether reserve decline, Middle East disruption and energy-transition litigation cap the multiple. Near-term timing is neutral (RSI ~66, price above the 200-day moving average).
 
 ## INVESTMENT THESIS
-For a value investor, Shell offers a rare combination of **cheapness, cash yield and balance-sheet optionality** within FTSE Energy. The quantitative screen passes four factor families with full data coverage (20/20 metrics): Graham Enterprising, FCF Yield, Lynch/Neff PEG variants, Dividend Growth, Magic Formula, Acquirer’s Multiple, Dreman Contrarian, Earnings Quality and Financial Health. That breadth matters because single-metric oil screens often fail on leverage or payout sustainability; here debt/equity is 43% with ROE 10.7%, supporting the “risk” bucket pass.
+For a value investor, Shell offers a rare combination: statistically cheap on multiple classic screens (Graham Enterprising, FCF yield, Lynch/Neff PEG, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Financial Health), plus a shareholder-return framework that is explicit in filings rather than aspirational. Capital Markets Day 2025 raised the distribution target to 40–50% of cash flow from operating activities (CFFO) through the cycle, with a progressive dividend (+4% annually) and buybacks prioritised; in 2025 the group returned 52% of CFFO via $13.9bn of buybacks and $8.5bn of dividends (Form 20-F / Annual Report 2025).
 
-Business quality, per the FY2025 Form 20-F and Companies House annual report, rests on scale advantages the screen cannot fully capture: world-leading listed LNG supply, integrated trading, premium mobility/lubricants, and a capital framework targeting >10% CAGR in normalised free cash flow per share through 2030, 40–50% of operating cash returned through the cycle, and $20–22bn annual cash capex. Management delivered $5.1bn structural cost savings by end-2025 (ahead of plan) and ran buybacks at the top end of guidance ($13.9bn). Peer-relative TSR outperformance over three years to end-2025 supports the view that operational execution is credible, not merely promotional.
+Business quality is supported by scale in LNG (record cargoes in 2025; 11% LNG sales growth), trading and optimisation (a meaningful Q1 2026 earnings driver), and structural cost reductions of $5.1bn versus 2022 — three years ahead of plan. Wael Sawan's "performance, discipline and simplification" agenda has coincided with peer-leading three-year total shareholder return, per the chair's letter. The screen's risk-family pass aligns with filing language on maintaining a strong investment-grade balance sheet through the cycle.
 
-The screen’s **buy** signal aligns with a capital-return story rather than a deep cyclical trough: timing is neutral (RSI ~66, price above 200-day MA), so the case is accumulate-on-weakness, not momentum chase. Sector-relative scoring (74% vs 54% absolute composite) suggests Shell looks attractive versus UK peers even if absolute conviction is only 32% (new signal, one week). Deep research **confirms** the quantitative case on valuation and shareholder yield, but flags that earnings power is normalising off a strong 2024 base—so the buy is quality-at-a-reasonable-price, not hidden distress.
+The screen signal is new (one week, conviction 32%), so this is an early-stage opportunity rather than a mature high-conviction call. Cheapness appears partly cyclical: 2025 adjusted earnings ($18.5bn) and free cash flow ($26.1bn) were well below 2024 ($23.7bn and $39.5bn respectively), which the quantitative models may not fully distinguish from structural impairment. Q1 2026 adjusted earnings of $6.9bn and a 5% dividend increase to $0.3906/share suggest operational resilience, but working-capital volatility ($11.2bn outflow in Q1) reminds us that reported CFFO can diverge sharply from underlying cash generation.
 
 ## FINANCIAL REVIEW
-**Primary source:** Shell Form 20-F for year ended 31 December 2025 (filed 12 March 2026) and Companies House group annual reports; figures in USD as reported.
+**Annual results (primary filings)**
 
-**FY2025 (annual)**
+Filings index covers annual reports for FY2023–FY2025 via Companies House group accounts and SEC Form 20-F (filed 12 March 2026). Consolidated income-statement tables in the 20-F body extracts are largely table-of-contents only; headline KPIs are taken from the strategic report sections of the Annual Report / 20-F and Companies House extracts.
 
-| Metric | 2025 | 2024 | 2023 |
-|--------|------|------|------|
-| Income for the period | $18.1bn | $16.5bn | $19.6bn |
-| Adjusted earnings* | $18.5bn | $23.7bn | $28.3bn |
-| Cash flow from operating activities | $42.9bn | $54.7bn | $54.2bn |
-| Free cash flow* | $26.1bn | $39.5bn | $36.5bn |
-| Cash capital expenditure* | $20.9bn | $21.1bn | $24.4bn |
-| Share buybacks | $13.9bn | $13.9bn | $14.6bn |
-| Dividends paid | $8.5bn | $8.7bn | $8.4bn |
+| Metric | FY2023 | FY2024 | FY2025 | Source |
+|--------|--------|--------|--------|--------|
+| Income for the period | $19.6bn | $16.5bn | $18.1bn | Annual Report 2024 / 2025 |
+| Adjusted earnings* | $28.3bn | $23.7bn | $18.5bn | Annual Report 2024 / 2025 |
+| CFFO | $54.2bn | $54.7bn | $42.9bn | Annual Report 2024 / 2025 |
+| Free cash flow* | $36.5bn | $39.5bn | $26.1bn | Annual Report 2024 / 2025 |
+| Cash capex* | $24.4bn | $21.1bn | $20.9bn | Annual Report 2024 / 2025 |
+| Buybacks | $14.6bn | $13.9bn | $13.9bn | Annual Report 2024 / 2025 |
+| Dividends paid | $8.4bn | $8.7bn | $8.5bn | Annual Report 2024 / 2025 |
 
-*Alternative performance measures per Shell filings.
+*Non-GAAP measures as defined in Shell filings.
 
-**Trend interpretation:** Reported income rose year-on-year, but **adjusted earnings fell 22%** from 2024 and **operating cash flow fell 22%**, reflecting softer commodity/marketing/refining conditions after an exceptionally strong 2024 (which management described as second-highest operating cash flow in Shell’s history). Free cash flow remained robust at $26.1bn—enough to cover dividends and a large buyback programme—but down $13.4bn versus 2024. Capital discipline is evident: cash capex held near $21bn despite inflationary industry cost pressure.
+Trend: after the 2022–2023 peak, normalised profitability and cash conversion moderated in 2024–2025. CFFO fell 22% year-on-year in 2025 despite income recovering slightly from 2024's trough. Management attributes 2025 delivery to LNG growth, upstream records in Brazil and the Gulf of America, and cost discipline; it also flagged four fatalities in operated businesses in 2025.
 
-**Balance sheet and reserves (20-F):** Management states Shell ended 2025 with “one of the strongest balance sheets in our industry.” Proved reserves (Shell share) fell to **8,123 million boe** at 31 December 2025 from **9,620 million boe** at end-2024—a material **~16% decline**, partly reflecting portfolio divestments (e.g. Nigeria SPDC) and booking economics. Production available for sale was **1,022 million boe** (2024: 1,038). **Net debt** is not legible in the downloaded filing body extracts; **Yahoo fallback:** net debt **$17.1bn** at 31 December 2025 versus **$10.5bn** at end-2024 (higher net debt as cash fell and distributions continued—verify against Note 6 Capital management in the full 20-F before trading).
+**Reserves and production (Form 20-F FY2025)**
 
-**FY2024 (annual):** Companies House 2024 annual report confirms the peak-year profile: adjusted earnings $23.7bn, operating cash flow $54.7bn, free cash flow $39.5bn, distributions ~30–40%+ of cash flow from operations through buybacks ($13.9bn) and dividends ($8.7bn).
+Proved reserves fell to 8,123 million boe at 31 December 2025 from 9,620 million boe in 2024 and 9,787 million boe in 2023, reflecting divestments (including SPDC Nigeria) and price/booking effects. Production available for sale was 1,022 million boe in 2025 versus 1,038 million in 2024. Reserve replacement remains a medium-term watchpoint; the ARC deal (370 kboe/d; targeting 4% production CAGR through 2030) is partly a response.
+
+**Balance sheet and capital structure**
+
+The 20-F body extract does not provide usable consolidated balance-sheet line items. Q1 2026 interim filing data: net debt $52.6bn (up from $45.7bn at Q4 2025), gearing 23% including leases; management cites working-capital inflation and ~$3bn non-cash lease-related net debt increases. For cross-check only (Yahoo fallback, not blended with filing figures): FY2025 total debt ~$75.6bn, net debt ~$17.1bn on Yahoo's definition, total equity ~$175.3bn, non-current pension obligations ~$7.1bn. Shell's net-debt metric includes lease and derivative adjustments — figures are not directly comparable to Yahoo.
+
+FY2025 statutory accounts received an unqualified auditor's report with no emphasis-of-matter paragraphs (Companies House interim filing, February 2026). No explicit going-concern qualification appears in available body extracts; liquidity risk is framed around investment-grade access and CFFO-funded distributions rather than covenant stress.
 
 **Interim / trading updates**
 
-- **Q4 2025 outlook (6-K, 8 January 2026):** Management guided Q4’25 Chemicals & Products adjusted earnings below Q4’24, chemicals at a “significant loss,” and trading/optimisation “significantly lower” than Q3’25—useful context for the earnings step-down into year-end. Actual Q4/FY2025 results were scheduled for **5 February 2026** (Investegate headline in index; **full results body not in extracts**).
-- **Q1 2026 (6-K filed 7 May 2026):** Index lists `shellq120266-k.htm` as interim, but the downloaded body contains only the cover page—**no Q1 2026 revenue, earnings or cash figures are available in primary extracts.** Yahoo fallback for orientation only: Q1 2026 revenue **$69.7bn**, net income **$5.7bn**, diluted EPS **$1.00** (not filing-validated here).
-- **UK RNS:** No dedicated UK interim results pack with body text in the index; interim disclosure runs primarily through SEC 6-Ks, many without downloaded bodies.
+| Period | Key figures | Source |
+|--------|-------------|--------|
+| Q4 2025 outlook (Jan 2026) | Integrated Gas production 930–970 kboe/d; chemicals expected significant loss; trading lower QoQ | SEC 6-K update note, 8 Jan 2026 |
+| Q4 2025 results | Adjusted earnings $3.3bn (segment table in Q1 release); full-year press release indexed but **body not downloaded** | Q1 2026 press release (partial); filings index gap |
+| Q1 2026 | Adjusted earnings $6.9bn; CFFO $6.1bn (WC outflow $11.2bn); CFFO ex-WC $17.2bn; FCF $2.9bn; cash capex $4.2bn; income attributable $5.7bn | Investegate/RNS, 7 May 2026 |
+| Q2 2026 outlook (Jul 2026) | Integrated Gas production cut to 610–650 kboe/d (Middle East); LNG liquefaction 7.4–7.8 MT; upstream 1,750–1,850 kboe/d; expected WC inflow $1–6bn; trading & optimisation "significantly higher" in Integrated Gas | Investegate, 7 Jul 2026 |
 
-**Gaps:** Consolidated income statement line items (operating revenue, IFRS operating profit) are referenced in the 20-F table of contents but not present in text extracts; pension/decommissioning quanta sit in Notes 24–25 but are not parsed here. Treat balance-sheet detail and Q1 2026 trends as **unresolved** until full interim PDF/HTML is ingested.
+Interim pattern: strong underlying Q1 earnings masked by working-capital timing; Q2 guidance embeds Qatar/Middle East volume risk but points to refining margin recovery (~$20/bbl indicative) and potential WC reversal. Cash capex guidance for 2026 is $24–26bn (including ~$4bn for ARC), reverting to $20–22bn in 2027–2028.
+
+**Gaps:** Full-year Q4 2025 unaudited results press release is catalogued (`b7d8046afd885e9c`) without a body extract. Many routine 6-K buyback notices lack bodies. Detailed consolidated balance sheet, pension note 24, and legal contingencies (note 32) are referenced in the 20-F index but not fully extracted — pension and litigation discussion below relies on strategic-report and risk-factor language.
 
 ## RISKS AND RED FLAGS
-**Cyclical and portfolio**
-- Form 20-F warns that low oil/gas prices can reduce revenue, trigger reserve debooking, impair assets and constrain distributions; high prices can hurt refining/chemicals and accelerate demand destruction. FY2025 already shows cash flow compression without a crisis price environment.
-- **Proved reserves down ~16% YoY** to 8,123 million boe raises reserve-replacement and long-term production questions, partially mitigated by upstream project pipeline (>1 mboe/d by 2030 target) but not eliminated.
+**Cyclical and operational.** Form 20-F risk factors warn that prolonged low oil and gas prices can impair assets, delay projects, and constrain distributions; high prices can reduce demand and trigger windfall taxes. Q2 2026 outlook explicitly revises Integrated Gas production down for Middle East conflict impacts on Qatari volumes. Chemicals margins remain weak (Q1 chemicals adjusted earnings -$0.1bn). Four workforce fatalities in 2025 underscore persistent HSSE risk.
 
-**Climate, litigation and regulation**
-- Milieudefensie climate case: Court of Appeal overturned prior emissions-reduction order (2024 annual report); **appeal to the Dutch Supreme Court** remains active (20-F risk factors). Adverse outcomes could affect strategy autonomy, asset divestment timing and reputation.
-- Carbon pricing exposure expected to rise; policy divergence (EU vs US) adds planning uncertainty. Rotterdam biofuels plant construction halted (September 2025) and Atlantic Shores offshore wind exit illustrate transition capital at risk.
+**Reserves and portfolio.** Proved reserves down ~16% in two years (9,787 → 8,123 million boe). Failure to replace reserves could impede the CMD25 target to sustain liquids at 1.4 mb/d through 2030. Large M&A (ARC Resources, April 2026 per news/filings index) adds integration and Canadian regulatory exposure.
 
-**Operational and safety**
-- **Four fatalities** in operated businesses in 2025; FPI frequency **2.1** (2024: 1.7 revised). Tier 1/2 process safety incidents **62** (2024: 89). Safety risk is explicit in filings and not captured by value screens.
-- Geopolitical exposure (Middle East conflict referenced in CEO letter), Nigeria divestment completion, and country fiscal/regulatory risk (windfall taxes, contract renegotiation) remain live.
+**Climate, litigation and governance.** Milieudefensie appealed to the Dutch Supreme Court after the Court of Appeal overturned the 2030 emissions-reduction order (Annual Report 2024). Form 20-F flags climate lawsuits globally as potentially material to reputation and financial results. Shell acknowledges significant risk it may not meet its 2050 net-zero target if society does not decarbonise on that timeline — a strategic rather than going-concern issue, but relevant to long-duration holders.
 
-**Governance and pensions**
-- Board change: Catherine Hughes not standing at 2026 AGM (6-K, 11 December 2025). Audit tender outcome announced February 2026 (index headline; body not downloaded).
-- Retirement benefit and decommissioning obligations are material (Notes 24–25; Yahoo shows non-current pension/post-retirement obligations ~$7.1bn and long-term provisions ~$21bn at FY2025—**Yahoo fallback for magnitude only**). No going-concern warning appears in available filing text; liquidity risk appears low given cash generation, but **off-balance-sheet decommissioning and pension sensitivities warrant full-note review**.
+**Capital allocation friction.** Buyback programme paused in June 2026 (filings index headline; body not extracted) pending ARC shareholder circular — distribution continuity depends on Board approval of catch-up repurchases. Net debt rose sharply in Q1 2026 on working capital; if WC inflows disappoint, gearing could stay elevated into a softer commodity patch.
 
-**M&A integration**
-- April 2026 agreement to acquire **ARC Resources** (Canada) adds deal and integration risk to the upstream portfolio (headline in filings index; terms not in body extracts).
+**Pension.** Non-current pension and post-retirement obligations ~$7.1bn (Yahoo fallback; filing note 24 not extracted). Not a near-term solvency threat given equity base and cash flow, but an off-balance-sheet cost the screen does not emphasise.
+
+**Governance.** Board changes: Sustainability Committee chair Catherine Hughes not standing for re-election at 2026 AGM (SEC 6-K, 11 Dec 2025). Audit tender outcome announced February 2026 (index only; body missing).
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **heavy but repetitive**—much of it Kalkine/Media commentary on oil price moves and buyback tranches rather than fundamental breaks. Material items from `news_manifest.json` and filing headlines:
+Coverage over the past year is voluminous but heavily skewed toward price-commentary outlets (Kalkine Media dominates the manifest); substantive corporate items include:
 
-| Date | Headline / theme |
-|------|------------------|
-| 5 Feb 2026 | “Shell Plc 4th Quarter 2025 and Full Year Unaudited Results” (Investegate) |
-| 6 Feb 2026 | “Shell plc - Outcome of audit tender process” (Investegate) |
-| 27 Apr 2026 | “Shell announces agreement to acquire Canadian energy company, ARC Resources Ltd” (Investegate) |
-| 7 May 2026 | “Shell announces commencement of a share buyback programme” (Investegate); Q1 2026 results 6-K |
-| 11 Dec 2025 | Board/committee changes (Catherine Hughes stepping down) — filing body |
-| 21–22 Jul 2026 | Five-year **Delta Air Lines SAF** supply agreement (Yahoo Finance) |
-| 20 Jul 2026 | Mizuho initiates European oil coverage: **Outperform BP/Total, Neutral Shell** |
-| 10 Jul 2026 | Berenberg **Buy** on Shell (Globe and Mail headline) |
-| 22 Jul 2026 | “Shell (LSE:SHEL) Stock Sees Modest Fair Value Cut After Mixed Analyst Revisions” — cites bulls on cash flow/ARC deal, bears on reserve life, refining/chemicals margins, litigation |
-| Mar–Jun 2026 | Ongoing share cancellations under buyback (multiple Stock Titan/Kalkine items) |
-| 2 Nov 2025 | “Shell plc Just Beat Earnings Expectations” (simplywall.st) |
+- **Strategy / CMD 2025:** Distribution target raised to 40–50% of CFFO; capex trimmed to $20–22bn (2025–2028); structural cost savings target increased to $5–7bn (filings; CMD materials referenced in 20-F).
+- **M&A:** Agreement to acquire ARC Resources Ltd (27 April 2026, Investegate/Google News index) — 370 kboe/d, ~$4bn capex in 2026 guidance.
+- **Capital returns:** Sustained buyback activity through mid-2026 (multiple Stock Titan / Kalkine headlines); pause announced 12 June 2026 (index); $3bn programme restarted Q1 2026 with 5% dividend increase (7 May 2026 release).
+- **Operations / geopolitics:** Middle East conflict cited in Q1/Q2 2026 filings as affecting LNG and integrated gas; Iran-war-related oil volatility drove sector moves in March–April 2026 (Proactive Investors, Twelfth Magpie).
+- **Partnerships:** Five-year SAF supply deal with Delta Air Lines (21–22 July 2026, Yahoo Finance).
+- **Analyst colour:** Mizuho initiated European Big Oil coverage with Shell at Neutral vs Outperform on BP (20 July 2026); Berenberg Buy on UK Shell (10 July 2026); fair-value estimate trimmed ~2.3% on mixed revisions (22 July 2026, Yahoo Finance UK).
+- **Governance:** Audit tender outcome (6 February 2026, index); director/committee changes (December 2025 6-K).
 
-Macro colour (optional): GBP/USD ~1.34, FTSE 100 ~10,525 (20 Jul 2026)—energy strength tied to crude volatility; not used to override the screen signal.
+News is **not thin** on corporate actions, but **low on primary-source depth** — many items are republished headlines rather than RNS bodies. Treat media sentiment as secondary.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filings support the screen’s buy case on cash return, balance-sheet strength and valuation, but normalising earnings, reserve decline and climate/legal overhangs cap conviction pending full Q1 2026 interim figures and net-debt reconciliation from primary statements.
+Rationale: Filings confirm the screen's cheapness and distribution story — strong franchise, explicit capital-return framework, and Q1 2026 earnings resilience — but 2025 cash-flow normalisation, reserve decline, Middle East volume risk and climate litigation prevent a stronger conviction overlay without further interim verification (notably Q2 2026 results on 30 July 2026 and ARC closing).

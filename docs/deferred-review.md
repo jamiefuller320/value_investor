@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T18:31:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T21:26:49+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -107,6 +107,14 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L73 | **Gap-fill: scoring — Cap Strong Buy when trailing FCF is negative and the name simultaneously** | Cap Strong Buy when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback. | After next weekly email gap-fill pass confirms the gap persists |
 | L74 | **Gap-fill: ingest — Upgrade Companies House ingest from OCR-only to iXBRL/structured account** | Upgrade Companies House ingest from OCR-only to iXBRL/structured accounts extract — five CH bodies are present but thin, blocking covenant schedules, pension deficit quantification and NCAV that screen models reference. | After next weekly email gap-fill pass confirms the gap persists |
 | L75 | **Gap-fill: ingest — Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull** | Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull — guidance-cut catalyst still news-only despite nine filing bodies elsewhere. | After next weekly email gap-fill pass confirms the gap persists |
+| L76 | **Gap-fill: ingest — Auto-trigger body refetch on `has_body: false` entries at gap-fill time** | Auto-trigger body refetch on `has_body: false` entries at gap-fill time (this pass fetched 3/3, reaching 17/17); persist refetch audit in `filings_index.json` for memo traceability. | After next weekly email gap-fill pass confirms the gap persists |
+| L77 | **Gap-fill: ingest — Implement planned `company_ir_presentation` fetch from ITV IR results ce** | Implement planned `company_ir_presentation` fetch from ITV IR results centre to supply dividend-cover tables, FCF bridges, and covenant headroom absent from RNS HTML extracts and Yahoo. | After next weekly email gap-fill pass confirms the gap persists |
+| L78 | **Gap-fill: scoring — Export `failed_models`, Piotroski component scores (currently cited at 3** | Export `failed_models`, Piotroski component scores (currently cited at 3/9 externally but not stored), and per-model failure reasons into `screening_snapshot.json`. | After next weekly email gap-fill pass confirms the gap persists |
+| L79 | **Gap-fill: ingest — Auto-fetch missing IR PDF bodies flagged in `filings_index.json` (e.g. A** | Auto-fetch missing IR PDF bodies flagged in `filings_index.json` (e.g. April 2026 trading update `ir_a9733d0de6aec27d`) before gap-fill close; current body refetch attempted 2, fetched 0. | After next weekly email gap-fill pass confirms the gap persists |
+| L80 | **Gap-fill: ingest — Extract annual report principal-risks section (pp. 84–88) and pension/co** | Extract annual report principal-risks section (pp. 84–88) and pension/covenant notes as dedicated body chunks, not only highlights pages. | After next weekly email gap-fill pass confirms the gap persists |
+| L81 | **Gap-fill: scoring — Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex)** | Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m. | After next weekly email gap-fill pass confirms the gap persists |
+| L82 | **Gap-fill: ingest — Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch** | Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch — five new bodies this pass were holding disclosures only and did not close material gaps. | After next weekly email gap-fill pass confirms the gap persists |
+| L83 | **Gap-fill: ingest — Parse Companies House iXBRL into structured borrowings, pension and NCAV** | Parse Companies House iXBRL into structured borrowings, pension and NCAV fields; OCR headline extracts (`ch_00735438_*.txt`) lack note-level covenant text. | After next weekly email gap-fill pass confirms the gap persists |
 
 ### Ops / reliability
 
