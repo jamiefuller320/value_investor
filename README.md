@@ -65,8 +65,10 @@ ftse-preflight
 ftse-preflight --require-email --require-agents
 
 # Verify CURSOR_API_KEY authenticates (optional --list-models)
+# Prefers CURSOR_API_KEY_V2 when set (useful for cloud-secrets rotation tests)
 ftse-verify-key
 ftse-verify-key --list-models
+ftse-verify-key --key-source legacy   # test only CURSOR_API_KEY
 
 # Publish dashboard to docs/ for GitHub Pages (after a screen or email run)
 ftse-publish
