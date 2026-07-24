@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.backtest import BacktestSummary
+from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.historical_analysis import HistoricalAnalysisSummary, load_historical_analysis_summary
 from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
 from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
@@ -115,8 +116,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model", default="composer-2.5", help="Cursor model for deep analysis")
     parser.add_argument(
         "--api-key",
-        default=os.environ.get("CURSOR_API_KEY"),
-        help="Cursor API key for deep analysis",
+        default=(resolve_cursor_api_key()[0] or None),
+        help="Cursor API key for deep analysis (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
     )
     parser.add_argument("--top", type=int, default=5, help="Number of top picks for deep analysis")
     parser.add_argument(
