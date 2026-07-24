@@ -291,6 +291,62 @@ def prepare_gap_fill_source_pack(
     return payload
 
 
+def execute_planned_alternate_sources(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    planned: list[dict[str, Any]],
+    market: str | None = None,
+    max_sources: int = 3,
+) -> dict[str, Any]:
+    """
+    Execute top-ranked alternate source fetchers before a gap-fill retry.
+
+    Re-ingests filings (Investegate/CH/SEC/IR) then refetches bodies. Stops
+  when new bodies are downloaded or the planned list is exhausted.
+    """
+    from value_investor.research.filings import ingest_filings, refetch_missing_filing_bodies
+
+    sources_dir = Path(sources_dir)
+    filings_dir = sources_dir / "filings"
+    sources_tried: list[str] = []
+    last_refetch: dict[str, Any] = {}
+    fetched_total = 0
+
+    filing_fetcher_ids = {
+        "companies_house_accounts",
+        "investegate_rns_full",
+        "exchange_filings_full",
+        "sec_exhibits",
+        "company_ir_presentation",
+    }
+
+    for item in planned[:max_sources]:
+        source_id = str(item.get("id") or "").strip()
+        if not source_id:
+            continue
+        sources_tried.append(source_id)
+        if source_id in filing_fetcher_ids:
+            ingest_filings(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                market=market,
+                deepen_history=True,
+            )
+            last_refetch = refetch_missing_filing_bodies(filings_dir, max_bodies=20)
+            fetched = int(last_refetch.get("fetched") or 0)
+            fetched_total += fetched
+            if fetched > 0:
+                break
+
+    return {
+        "sources_tried": sources_tried,
+        "body_refetch": last_refetch,
+        "fetched": fetched_total,
+    }
+
 _SUGGESTION_LINE = re.compile(
     r"^\s*[-*•]?\s*(?:area\s*[:=]\s*)?(?P<area>[a-z_]+)\s*[|;,]\s*"
     r"(?:priority\s*[:=]\s*)?(?P<priority>high|medium|low)\s*[|;,]\s*"

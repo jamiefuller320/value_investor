@@ -11,6 +11,7 @@ from value_investor.data_quality import MIN_QUALITY_FOR_BUY, MIN_QUALITY_FOR_STR
 from value_investor.research.agent import run_initial_research_agent, run_weekly_research_update_agent
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.ingest import ingest_research_sources
+from value_investor.research.source_quality import attach_memo_quality
 from value_investor.research.store import ResearchStore
 from value_investor.research.timeline import build_sources_as_of, build_weekly_delta, revision_id_from_datetime
 from value_investor.summary import CompanyReport
@@ -267,6 +268,7 @@ def _process_ticker(
             as_of=as_of,
             revision_id=revision_id_from_datetime(as_of),
         )
+        attach_memo_quality(doc, sources_dir=sources_dir)
         store.save(
             doc,
             run_at=effective_run_at,
@@ -303,6 +305,7 @@ def _process_ticker(
         revision_id=revision_id_from_datetime(as_of),
     )
     delta = build_weekly_delta(prior=existing, updated=updated, weekly_summary=weekly_summary)
+    attach_memo_quality(updated, sources_dir=sources_dir)
     store.save(
         updated,
         run_at=effective_run_at,

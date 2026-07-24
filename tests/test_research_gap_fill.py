@@ -5,7 +5,7 @@ from __future__ import annotations
 from value_investor.deep_analysis import DeepAnalysis, _parse_deep_analysis
 from value_investor.research.document import parse_research_sections
 from value_investor.research.format import format_gap_fill_text
-from value_investor.research.gap_fill import GapFillSummary, GapFillTarget, extract_gap_fill_targets
+from value_investor.research.gap_fill import GapFillSummary, GapFillTarget, _unresolved_questions, extract_gap_fill_targets
 from value_investor.summary import CompanyReport
 
 
@@ -192,6 +192,16 @@ NextSources: Companies House annual report PDF; IR presentation
     )
     assert planned
     assert any(item["id"] == "companies_house_accounts" for item in planned)
+
+
+def test_unresolved_questions_filters_statuses():
+    outcomes = [
+        {"question": "Q1", "status": "resolved"},
+        {"question": "Q2", "status": "partially_resolved"},
+        {"question": "Q3", "status": "unresolved"},
+        {"question": "", "status": "unresolved"},
+    ]
+    assert _unresolved_questions(outcomes) == ["Q2", "Q3"]
 
 
 def test_parse_research_model_suggestions_section():

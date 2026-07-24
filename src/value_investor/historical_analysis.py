@@ -50,6 +50,8 @@ class HistoricalObservation:
     research_verdict: str | None
     weighted_model_score: float | None
     models_passed: int | None
+    source_quality_score: float | None = None
+    research_confidence: float | None = None
 
     def strategy_tags(self) -> list[str]:
         tags = [f"screen:{self.screen_signal}"]
@@ -270,6 +272,21 @@ def _resolve_overlay_fields(
     return compute_adjusted_signal(screen_signal, doc.research_verdict), doc.research_verdict
 
 
+def _research_quality_fields(
+    output_dir: Path,
+    *,
+    ticker: str,
+    run_at: datetime,
+) -> tuple[float | None, float | None]:
+    doc = get_research_as_of(output_dir, ticker, run_at)
+    if doc is None:
+        return None, None
+    memo_quality = doc.memo_quality or {}
+    score = memo_quality.get("source_quality_score")
+    source_quality_score = float(score) if score is not None else None
+    return source_quality_score, doc.research_confidence
+
+
 def _build_observations(
     *,
     output_dir: Path,
@@ -304,6 +321,11 @@ def _build_observations(
                 run_at=entry_at,
                 row=row,
             )
+            source_quality_score, research_confidence = _research_quality_fields(
+                output_dir,
+                ticker=ticker,
+                run_at=entry_at,
+            )
 
             forward_return = (p1 - p0) / p0
             observations.append(
@@ -320,6 +342,8 @@ def _build_observations(
                     research_verdict=research_verdict,
                     weighted_model_score=_float_or_none(row.get("weighted_model_score")),
                     models_passed=_int_or_none(row.get("models_passed")),
+                    source_quality_score=source_quality_score,
+                    research_confidence=research_confidence,
                 )
             )
     return observations

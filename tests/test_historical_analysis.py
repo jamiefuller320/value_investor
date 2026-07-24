@@ -6,8 +6,10 @@ from pathlib import Path
 
 from value_investor.historical_analysis import (
     HistoricalAnalysisConfig,
+    _build_observations,
     run_historical_analysis,
 )
+from value_investor.backtest import load_run_snapshots
 from value_investor.model_weights import save_model_snapshot
 from value_investor.research.document import ResearchDocument
 from value_investor.research.store import ResearchStore
@@ -104,6 +106,8 @@ def test_historical_analysis_point_in_time_research_and_smoothing(tmp_path: Path
             updated_at="2026-06-01T07:00:00+00:00",
             mode="initial",
             research_verdict="accumulate",
+            research_confidence=0.72,
+            memo_quality={"source_quality_score": 0.81, "grade": "strong"},
         ),
         run_at=datetime(2026, 6, 1, 7, 0, tzinfo=UTC),
         sources_as_of={},
@@ -152,6 +156,17 @@ def test_historical_analysis_point_in_time_research_and_smoothing(tmp_path: Path
     assert summary.overlay_comparison
     assert summary.model_attribution
     assert summary.weekly_series
+
+    snapshots = load_run_snapshots(tmp_path)
+    observations = _build_observations(
+        output_dir=tmp_path,
+        snapshots=snapshots,
+        horizon_days=7,
+    )
+    aaa_obs = [obs for obs in observations if obs.ticker == "AAA.L"]
+    assert aaa_obs
+    assert aaa_obs[0].source_quality_score == 0.81
+    assert aaa_obs[0].research_confidence == 0.72
 
     store = ResearchStore(tmp_path)
     assert store.timeline_path("AAA.L").exists()

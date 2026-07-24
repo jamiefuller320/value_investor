@@ -885,6 +885,15 @@ async function openMemo(item) {
   }
 }
 
+function memoQualityBadge(item) {
+  const quality = item.memo_quality || {};
+  const grade = quality.grade;
+  if (!grade) return '<span class="muted">—</span>';
+  const score = quality.source_quality_score;
+  const label = score != null ? `${grade} (${Number(score).toFixed(2)})` : grade;
+  return `<span class="badge badge-${esc(grade)}">${esc(label)}</span>`;
+}
+
 function renderAnalysis(data) {
   const deep = data.deep_analysis;
   const research = data.research || [];
@@ -912,7 +921,7 @@ function renderAnalysis(data) {
     researchHtml = `
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Company</th><th>Verdict</th><th>Version</th><th>Summary</th><th></th></tr></thead>
+          <thead><tr><th>Company</th><th>Verdict</th><th>Sources</th><th>Version</th><th>Summary</th><th></th></tr></thead>
           <tbody>
             ${research
               .map(
@@ -920,6 +929,7 @@ function renderAnalysis(data) {
               <tr>
                 <td><strong>${esc(item.name)}</strong><br><span class="small muted">${esc(item.ticker)}</span></td>
                 <td>${item.research_verdict ? `<span class="badge badge-${esc(item.research_verdict)}">${esc(item.research_verdict)}</span>` : '<span class="muted">—</span>'}</td>
+                <td>${memoQualityBadge(item)}</td>
                 <td>v${item.version || 1}<br><span class="small muted">${fmtDate(item.updated_at)}</span></td>
                 <td class="small">${esc((item.executive_summary || "").slice(0, 240))}${(item.executive_summary || "").length > 240 ? "…" : ""}</td>
                 <td><button type="button" class="btn btn-primary" data-memo-index="${index}">Read memo</button></td>
