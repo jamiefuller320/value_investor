@@ -263,7 +263,127 @@
       "priority": "medium",
       "suggestion": "The memo at `output/research/MEGP.L/research.md` has been updated to version 3 (gap_fill mode). The main upgrade this pass: IR allowlist bodies resolve H1 PBT, EPS, cash flow, dividend declaration and payout policy — the June trading update and Companies House statutory accounts remain the priority gaps for the next ingest cycle.",
       "recorded_at": "2026-07-24T14:44:44.219865+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add Investegate/LSE RNS direct HTML fetch for indexed announcements still lacking bodies (FY2025 results RNS, Q1 Trading Update, Sky sale RNS) — Google News redirect URLs block extraction.",
+      "recorded_at": "2026-07-24T18:31:53.833858+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Fetch ITV investor-relations results presentation PDFs for FCF/working-capital bridges and pro-forma Studios dividend policy post-M&E sale.",
+      "recorded_at": "2026-07-24T18:31:53.833870+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Persist `failed_models` and per-model `failed_criteria` (Piotroski F-Score points) in `screening_snapshot.json` to reconcile internal contradictions without email-brief dependency.",
+      "recorded_at": "2026-07-24T18:31:53.833874+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When filing-body FCF and Yahoo FCF diverge by >15%, auto-flag reconciliation gap and prefer filing figure in FINANCIAL REVIEW with explicit dual-source note.",
+      "recorded_at": "2026-07-24T18:31:53.833880+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "coverage",
+      "priority": "low",
+      "suggestion": "Parse financial statements notes sections from Companies House OCR bodies (viability statement, pension note, borrowings covenants) via targeted section anchors rather than headline-page extract only.",
+      "recorded_at": "2026-07-24T18:31:53.833884+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Memo updated at `output/research/ITV.L/research.md` (version 3). Main change vs the earlier pass: **Companies House filing bodies are now the primary financial source**, confirming tight dividend coverage and strategy offset of linear-TV decline, while RNS/interim gaps persist.",
+      "recorded_at": "2026-07-24T18:31:53.833888+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch `april-2026-trading-update-vfinal.pdf` (indexed, body missing after refetch) — unlocks 503B exit quantification and H1 2026 cash commentary.",
+      "recorded_at": "2026-07-24T18:31:53.833892+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Replace thin Companies House OCR front-matter with iXBRL or full statutory-notes extract for company 05557934 — current CH bodies lack pension, covenant and cash-note detail despite `has_body: true`.",
+      "recorded_at": "2026-07-24T18:31:53.833897+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Deepen annual-report PDF extract to pages 80–88 (principal risks) and post-employment benefit notes — referenced in TOC but absent from body text.",
+      "recorded_at": "2026-07-24T18:31:53.833903+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Cap Strong Buy when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback.",
+      "recorded_at": "2026-07-24T18:31:53.833908+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Attach weekly screen aggregate metadata (hold/avoid counts, conviction band, top-five sector mix, failure-reason taxonomy) to each ticker research folder for portfolio-context questions.",
+      "recorded_at": "2026-07-24T18:31:53.833914+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Upgrade Companies House ingest from OCR-only to iXBRL/structured accounts extract — five CH bodies are present but thin, blocking covenant schedules, pension deficit quantification and NCAV that screen models reference.",
+      "recorded_at": "2026-07-24T18:31:53.833920+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull — guidance-cut catalyst still news-only despite nine filing bodies elsewhere.",
+      "recorded_at": "2026-07-24T18:31:53.833924+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Fetch company IR results presentation PDF (`gap_fill_source_map.json` → `company_ir_presentation`) for segment cash-flow and maintenance vs growth capex split.",
+      "recorded_at": "2026-07-24T18:31:53.833928+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ops",
+      "priority": "medium",
+      "suggestion": "Copy universe signal distribution and top-five conviction band into each ticker research pack — currently only in `output/email_reports.json`, outside the per-ticker evidence ladder.",
+      "recorded_at": "2026-07-24T18:31:53.833933+00:00"
     }
   ],
-  "updated_at": "2026-07-24T14:44:44.219867+00:00"
+  "updated_at": "2026-07-24T18:31:53.833935+00:00"
 }

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T14:44:44+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T18:31:53+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -101,6 +101,12 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L67 | **Gap-fill: scoring — Apply a cash-conversion cap when trailing FCF is negative and the name s** | Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on earnings-only cheapness. | After next weekly email gap-fill pass confirms the gap persists |
 | L68 | **Gap-fill: ingest — Fetch Companies House PDF text for ME Group (00735438) — five annual acc** | Fetch Companies House PDF text for ME Group (00735438) — five annual accounts are indexed with `has_body: false`, blocking NCAV, covenant and pension verification that multiple screen models require. | After next weekly email gap-fill pass confirms the gap persists |
 | L69 | **Gap-fill: ingest — Add June 2026 trading-update RNS to the IR allowlist or Investegate re-p** | Add June 2026 trading-update RNS to the IR allowlist or Investegate re-pull — the guidance-cut catalyst precedes the H1 results body and is referenced only via news headlines. | After next weekly email gap-fill pass confirms the gap persists |
+| L70 | **Gap-fill: ingest — Add Investegate/LSE RNS direct HTML fetch for indexed announcements stil** | Add Investegate/LSE RNS direct HTML fetch for indexed announcements still lacking bodies (FY2025 results RNS, Q1 Trading Update, Sky sale RNS) — Google News redirect URLs block extraction. | After next weekly email gap-fill pass confirms the gap persists |
+| L71 | **Gap-fill: ingest — Fetch `april-2026-trading-update-vfinal.pdf` (indexed, body missing afte** | Fetch `april-2026-trading-update-vfinal.pdf` (indexed, body missing after refetch) — unlocks 503B exit quantification and H1 2026 cash commentary. | After next weekly email gap-fill pass confirms the gap persists |
+| L72 | **Gap-fill: ingest — Replace thin Companies House OCR front-matter with iXBRL or full statuto** | Replace thin Companies House OCR front-matter with iXBRL or full statutory-notes extract for company 05557934 — current CH bodies lack pension, covenant and cash-note detail despite `has_body: true`. | After next weekly email gap-fill pass confirms the gap persists |
+| L73 | **Gap-fill: scoring — Cap Strong Buy when trailing FCF is negative and the name simultaneously** | Cap Strong Buy when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback. | After next weekly email gap-fill pass confirms the gap persists |
+| L74 | **Gap-fill: ingest — Upgrade Companies House ingest from OCR-only to iXBRL/structured account** | Upgrade Companies House ingest from OCR-only to iXBRL/structured accounts extract — five CH bodies are present but thin, blocking covenant schedules, pension deficit quantification and NCAV that screen models reference. | After next weekly email gap-fill pass confirms the gap persists |
+| L75 | **Gap-fill: ingest — Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull** | Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull — guidance-cut catalyst still news-only despite nine filing bodies elsewhere. | After next weekly email gap-fill pass confirms the gap persists |
 
 ### Ops / reliability
 

@@ -568,7 +568,7 @@ def test_ingest_filings_uk_rns_includes_sec_when_dual_listed(tmp_path: Path):
             "value_investor.research.companies_house.fetch_filings_companies_house",
             return_value=[],
         ),
-        patch("value_investor.research.filings.resolve_sec_cik", return_value=863064),
+        patch("value_investor.research.filings._uk_ticker_sec_dual_listed", return_value=True),
         patch(
             "value_investor.research.filings.fetch_filings_sec_edgar",
             return_value=sec_rows,
@@ -588,3 +588,37 @@ def test_ingest_filings_uk_rns_includes_sec_when_dual_listed(tmp_path: Path):
     index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
     assert "sec_edgar" in index["sources_used"]
     assert "SEC 20-F when dual-listed" in index["note"]
+
+
+def test_issuer_matches_sec_name_rejects_us_homonyms():
+    from value_investor.research.filings import _issuer_matches_sec_name
+
+    assert _issuer_matches_sec_name(
+        "Costain Group PLC",
+        "COSTCO WHOLESALE CORP /NEW",
+        "COST.L",
+    ) is False
+    assert _issuer_matches_sec_name(
+        "Shell plc",
+        "Shell plc",
+        "SHEL.L",
+    ) is True
+    assert _issuer_matches_sec_name(
+        "Rio Tinto Group",
+        "RIO TINTO PLC",
+        "RIO.L",
+    ) is True
+
+
+def test_uk_ticker_sec_dual_listed_rejects_costain_costco_collision(monkeypatch):
+    from value_investor.research.filings import _uk_ticker_sec_dual_listed
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_sec_cik",
+        lambda ticker: 909832 if ticker == "COST" else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._sec_submissions_entity_name",
+        lambda cik: "COSTCO WHOLESALE CORP /NEW",
+    )
+    assert _uk_ticker_sec_dual_listed("COST.L", "Costain Group PLC") is False

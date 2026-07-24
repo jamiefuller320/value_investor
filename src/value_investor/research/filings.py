@@ -462,6 +462,52 @@ def resolve_sec_cik(ticker: str) -> int | None:
     return _load_sec_ticker_cik_map().get(epic)
 
 
+def _sec_submissions_entity_name(cik: int) -> str | None:
+    """Return the registrant name from SEC submissions metadata."""
+    cik10 = f"{cik:010d}"
+    url = SEC_SUBMISSIONS_URL.format(cik10=cik10)
+    try:
+        payload = _http_get(url, headers={"User-Agent": _sec_user_agent()}, timeout=40)
+        data = json.loads(payload.decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        logger.debug("SEC submissions name lookup failed for CIK %s: %s", cik, exc)
+        return None
+    name = str(data.get("name") or "").strip()
+    return name or None
+
+
+def _issuer_matches_sec_name(company_name: str, sec_name: str, ticker: str) -> bool:
+    """True when a UK issuer name plausibly matches an SEC registrant."""
+    tokens = [
+        tok
+        for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
+        if len(tok) >= 4 and tok not in _ISSUER_STOPWORDS
+    ]
+    sec_l = (sec_name or "").lower()
+    hits = sum(1 for tok in tokens[:6] if tok in sec_l)
+    if hits >= 2:
+        return True
+    if hits == 1 and any(len(tok) >= 5 and tok in sec_l for tok in tokens):
+        return True
+    epic = _base_symbol(ticker).lower()
+    if len(epic) >= 4 and re.search(rf"\b{re.escape(epic)}\b", sec_l, flags=re.I):
+        return any(len(tok) >= 5 and tok in sec_l for tok in tokens)
+    return False
+
+
+def _uk_ticker_sec_dual_listed(ticker: str, company_name: str) -> bool:
+    """True when a `.L` ticker maps to an SEC CIK for the same issuer (not a US homonym)."""
+    if not (ticker or "").upper().endswith(".L"):
+        return False
+    cik = resolve_sec_cik(_base_symbol(ticker))
+    if cik is None:
+        return False
+    sec_name = _sec_submissions_entity_name(cik)
+    if not sec_name:
+        return False
+    return _issuer_matches_sec_name(company_name, sec_name, ticker)
+
+
 def fetch_filings_sec_edgar(
     *,
     ticker: str,
@@ -1247,7 +1293,7 @@ def ingest_filings(
             )
         )
         # Dual-listed UK names (e.g. RIO.L, SHEL.L) also file 20-F with the SEC.
-        if resolve_sec_cik(_base_symbol(ticker)):
+        if _uk_ticker_sec_dual_listed(ticker, company_name):
             groups.append(
                 fetch_filings_sec_edgar(
                     ticker=_base_symbol(ticker),
