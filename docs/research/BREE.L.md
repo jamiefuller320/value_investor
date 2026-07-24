@@ -1,92 +1,64 @@
 # Breedon Group plc (BREE.L) — Research memo
 
-_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
+_Version 1 · Updated 2026-07-24T18:48:53.790312+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Breedon Group plc is a UK-listed construction materials producer (aggregates, cement, asphalt) whose shares screen as a **strong buy** on quantitative value metrics: P/B 0.9, P/E 13.1, FCF yield 10.1%, dividend yield 4.8%, with eight of 22 models passing across cheapness, dividend, GARP and risk families. The investment hook is a cyclically depressed UK building-materials name trading below book, with management pursuing US expansion and continuing to grow the dividend despite a soft domestic market. The key debate is whether reported revenue and EBITDA resilience, plus M&A-led geographic diversification, will restore earnings power—or whether rising leverage, margin pressure and goodwill accumulation leave equity exposed if the UK construction recovery delays further. Primary RNS annual and interim filing bodies were not available in the source pack, limiting balance-sheet and covenant verification from regulatory text.
+Breedon Group plc is a vertically integrated UK–Ireland–US construction materials group (aggregates, cement, ready-mix, asphalt, surfacing) trading on a value screen at roughly 0.9× book, 13× earnings, ~5% yield and ~10% free-cash-flow yield. The quantitative model flags a **strong buy** (9/22 models; composite score 85%), supported by asset backing (~1.4bn tonnes of reserves per the 2024 annual report), a long M&A-led growth record, and progressive capital returns. The central debate is whether discounted valuation and US platform expansion offset a visible UK cyclical downturn, rising leverage after acquisitions, and declining reported earnings since 2022. Filing coverage in this pack is annual-only and OCR-thin on consolidated statements; interim RNS releases are absent from the index.
 
 ## INVESTMENT THESIS
-The quantitative screen flags Breedon as a classic deep-value, income-oriented holding in Basic Materials. At composite 83% (sector-relative 81%), the name passes Deep Value, FCF Yield, Neff PEGY, High Dividend Yield, Dividend Growth, Dreman Contrarian, Composite Value and Financial Health—covering all four value families (cheapness, dividend, GARP, risk) with high data quality (19/20 metrics). That profile fits a value investor seeking tangible-asset exposure at a discount: P/B below 1.0 implies the market prices equity below net assets, while a ~10% FCF yield and ~5% dividend yield offer cash-return support if free cash flow holds.
-
-Business quality, inferred from news and secondary financials, rests on Breedon’s regional quarry and logistics network—a locally advantaged, asset-heavy model with pricing power in tight supply areas. Management reported revenue and underlying EBITDA growth through FY2025 despite a “testing year” in UK construction (H2 earnings call summary, 11 March 2025), suggesting operational resilience and/or acquisition contribution. The US Falling Springs quarry deal (~$120m, June 2025) extends the footprint beyond a cyclically weak domestic market. Insider dividend reinvestment by director Clive Watson (July 2026) adds a modest governance-positive signal, though not decisive on its own.
-
-For a value investor, the screen’s strength lies in the combination of asset backing (sub-book valuation), cash generation (FCF yield), and shareholder returns (growing dividends)—at a point where sentiment appears cautious (analyst fair-value resets toward £4.05–£4.50 vs prior £5.00 anchors). Timing is neutral (RSI ~59, price roughly in line with the 200-day SMA), which suits accumulation rather than momentum chasing.
+The screen’s **strong buy** rests on four passed families—cheapness, dividend, GARP and risk—with full metric coverage (20/20) and sector-relative composite strength (83% vs 85% absolute). Breedon fits a classic asset-heavy value profile: essential local materials, high barriers to new quarry consent, and pull-through from aggregates into higher-margin downstream products. Reported revenue has compounded strongly (filings cite ~19% revenue CAGR since Breedon’s first full year; Yahoo shows revenue rising from £1.40bn in 2022 to £1.71bn in 2025), while the market prices the equity below book (P/B 0.9) despite continued dividend growth (2025 annual report highlights a 3% year-on-year increase and ~47% payout ratio) and robust cash conversion (Yahoo FCF £105.8m in 2025 vs £70.4m in 2024). Passed models—including Deep Value, FCF Yield, High Dividend Yield, Dividend Growth, Composite Value, Earnings Quality and Financial Health—align with an asset-backed consolidator that historically de-levers post-deal. Offsetting that, normalized earnings have softened (net income £112.5m in 2022 to £83.8m in 2025 per Yahoo), ROE is modest at 7.1%, and conviction on the screen is still low (42%, new signal). For a value investor, the case is **quality cyclical at a distressed multiple**, not a clean growth compounder.
 
 ## FINANCIAL REVIEW
-**Source limitation:** The filings index (`filings_index.json`, regime: UK RNS) contains 22 announcements, all classified as **other**—zero **annual** and zero **interim** results releases. No plain-text body extracts exist under `filings/bodies/`. Accordingly, all figures below are taken from **Yahoo Finance annual statements** (`financials_annual.json`), stated explicitly as fallback. Quarterly income data in that file is empty. Going-concern, covenant and contingency language could not be reviewed from primary filings.
+**Source hierarchy:** Five Companies House filings are indexed (all labelled annual; **no interim** half-year, trading update or RNS bodies). Usable filing extracts are largely strategic-report OCR; consolidated income/balance/cash-flow tables are not reliably extractable. Detailed trend analysis below therefore **falls back to `financials_annual.json` (Yahoo)**, with filing-sourced figures cited where legible.
 
-**Income statement trend (Yahoo fallback, £m unless stated):**
+**Annual trends (filings + Yahoo fallback)**
 
-| Metric | 2022 | 2023 | 2024 | 2025 |
-|--------|------|------|------|------|
-| Revenue | 1,396 | 1,488 | 1,576 | 1,714 |
-| EBITDA | 235 | 242 | 262 | 273 |
-| Operating income | 148 | 146 | 156 | 131 |
-| Net income | 113 | 106 | 96 | 84 |
-| Diluted EPS (p) | 33.2 | 31.0 | 28.0 | 24.2 |
+| Metric | Filing source | Yahoo fallback |
+|--------|---------------|----------------|
+| Revenue | 2024 AR: **£1,576m**; 2023 AR cover: **~£1.5bn** | 2022 £1,396m → 2023 £1,488m → 2024 £1,576m → **2025 £1,714m** |
+| Underlying EBITDA | 2024 AR: **£270m**, margin **17%**; EBITDA CAGR cited **24%** | Reported EBITDA: 2023 £242m → 2024 £262m → **2025 £273m** |
+| ROIC | 2024 AR: **9.0%**; 2023 AR: **9.9%** | — |
+| Net income / EPS | — | 2022 £112.5m (33.2p) → 2023 £105.5m (31.1p) → 2024 £96.2m (28.1p) → **2025 £83.8m (24.2p)** |
+| Net debt | 2025 AR (OCR): debt **reduced since half year**; **0.4× reduction in covenant leverage** | 2023 £122m → 2024 £357m → **2025 £481m** |
+| Free cash flow | — | 2022 £61m → 2023 £85m → 2024 £70m → **2025 £106m** |
+| Dividends (cash paid) | 2025 AR: **+3% YoY**; **47% payout ratio** | 2025 £51.1m vs 2024 £48.1m |
 
-Revenue has grown steadily (+23% over four years), and EBITDA has risen modestly (+16%), consistent with management’s claim of top-line and EBITDA resilience in a difficult market. However, **reported net income and EPS have declined each year since 2022** (−25% EPS over the period), driven in part by higher interest expense (£11.3m in 2022 to £28.9m in 2025) and restructuring/M&A-related charges. Operating income fell sharply in 2025 (−16% YoY to £131m), suggesting margin pressure despite revenue growth—possibly mix, input costs, or integration drag not visible without filing narrative.
+**Interpretation:** Top-line growth remains intact—consistent with US entry (BMC, per 2024 chair’s statement) and bolt-on M&A—while **reported profitability has drifted lower** since 2022, likely reflecting UK construction weakness (management described 2025 as a “testing year” in subsequent news), higher depreciation/amortisation, and deal-related costs (Yahoo shows restructuring/M&A charges in each year). EBITDA margins appear stable-to-improving on an underlying basis (17% in 2024 filing vs ~16% implied by Yahoo 2025 EBITDA/revenue), but net income compression warrants caution on headline P/E. Balance sheet: net debt stepped up materially in 2024–25 (Yahoo), coinciding with **£160m business purchases** in 2025; the latest annual report OCR nonetheless cites improved covenant leverage since interim—suggesting EBITDA growth and deleveraging actions, but **net debt of £481m** (Yahoo) is materially higher than the pre-US platform ~£122m in 2023.
 
-**Balance sheet and leverage (Yahoo fallback):**
+**Capital structure & going concern (filings)**  
+Initial accounts (period to 10 June 2023) disclose **£350m RCF (to June 2026)** and **£250m USPP notes (2028–2036)**; group **comfortably met all covenants**, with H1 2023 PBT **£56.5m**, cash **£76.9m** and **£350m undrawn** facilities. KPMG flagged **debt covenant compliance** as the principal going-concern risk but concurred with directors that no material uncertainty existed. No viability-statement body text was recoverable from later annual extracts.
 
-- Net debt: £148m (2022) → £122m (2023) → £357m (2024) → **£481m (2025)**; total debt £643m vs cash £116m.
-- Equity: £1,043m (2022) → £1,197m (2025); tangible book value fell from **£525m to £405m** as goodwill and intangibles rose to £792m (2025), reflecting acquisition activity.
-- The sub-1.0 P/B screen metric aligns with tangible book erosion and goodwill build-up rather than outright equity impairment.
-
-**Cash flow and returns (Yahoo fallback):**
-
-- Operating cash flow has been stable (£168m–£226m range 2022–2025).
-- Free cash flow: £61m (2022) → £85m (2023) → £70m (2024) → **£106m (2025)**—supporting the screen’s FCF yield pass.
-- CapEx ~£120m and business acquisitions ~£160m (2025) and ~£174m (2024) indicate an acquisitive, invest-for-growth posture funded partly by debt issuance (£166m long-term debt issued in 2025 per cash-flow statement).
-- Dividends paid rose from £31m (2022) to **£51m (2025)** despite falling net income—payout ratio has lengthened; sustainability depends on FCF and leverage headroom (not verifiable from filings in this pack).
-
-**Interim / half-year gap:** No interim, trading update or half-year RNS with extractable financial tables appears in the filings index. News summaries reference FY2025 full-year/H2 commentary (March 2025) but no primary half-year filing body was available for line-item reconciliation.
-
-**Macro context:** `macro_context.json` was not present in the source directory; no macro overlay applied.
+**Interim gap:** `filings_index.json` lists **zero interim** filings. No primary half-year revenue, margin or leverage update is available in this pack; news references (March 2026) cite H2 earnings-call commentary on UK demand deferral, but those figures are not verified here.
 
 ## RISKS AND RED FLAGS
-**Cyclical exposure:** Multiple news items describe a sharp UK downturn in construction materials demand and deferred infrastructure work (“Breedon struggles to escape UK construction gloom,” Investors’ Chronicle, 11 March 2025). Revenue growth may mask volume weakness if supported by price or acquisitions.
+**Cyclical/end-market:** UK construction materials demand weakened materially in 2025 (news: “testing year”, deferred infrastructure). Revenue growth may mask volume/price pressure in the core GB market. **Weather** is cited in the 2024 annual report as a headwind even in a record revenue year.
 
-**Leverage and interest:** Net debt has more than tripled from the 2023 trough; interest expense nearly tripled since 2022. Without filing bodies, **covenant headroom, maturity profile and fixed/floating mix are unknown**—a material gap for a leveraged acquisitor.
+**Leverage & integration:** Yahoo net debt rose to **£481m** in 2025 after US platform build-out and **~£160m** acquisition spend. Filing OCR cites covenant leverage improvement since half-year, but higher absolute debt raises sensitivity to a prolonged downturn. **BMC (2024)** and **Falling Springs (~$120m, June 2026 news)** add integration and cross-currency execution risk.
 
-**Earnings vs cash-return mismatch:** Declining reported earnings alongside rising dividends and debt-funded M&A raises questions on payout sustainability and capital allocation discipline if the cycle stays weak.
+**Earnings quality:** Declining net income and EPS over four years despite revenue growth; screen ROE **7.1%** is unexceptional. Goodwill/intangibles **£792m** (Yahoo 2025) vs tangible book **£405m**—P/B discount partly reflects intangibles, not purely hard assets.
 
-**Goodwill and M&A integration:** Goodwill of £564m (2025) on total assets £2.36bn; tangible net assets £405m. Impairment risk rises if US or UK quarry returns disappoint. The June 2025 Falling Springs deal and a June 2026 “Acquisition” RNS headline (Investegate, 9 June 2026) signal ongoing deal flow without disclosed terms in this source set.
+**Regulatory/planning:** Annual report emphasises **rare grant of new quarry consents**—reserve life depends on extensions and M&A replenishment (1.4bn tonnes; ~47 years cited).
 
-**Governance / capital structure:** February 2026 “Issue of Shares” RNS (Investegate) may dilute existing holders; details absent without body text.
+**Governance/pension/contingencies:** Initial accounts confirm going concern and covenant headroom but do not surface pension deficit or litigation quanta in extractable text; **principal risks, climate risks and viability statement sections were not legible** in OCR bodies—an information gap for verify-before-trade work.
 
-**Regulatory / pension / environmental:** No primary filing language on pensions, environmental liabilities, or going-concern assessments was available. Quarry operations carry inherent regulatory and remediation risks typical of the sector, but cannot be quantified here.
-
-**Screen blind spots:** ROE of 7.1% is modest for a “GARP” pass—partly reflecting higher equity base and lower earnings. The screen’s risk family pass should not be read as eliminating cyclical or leverage risk.
-
-**Data quality:** High screen data quality (95%) does not compensate for missing regulatory filing bodies; deep research cannot confirm note disclosures, related-party transactions or audit emphasis of matter paragraphs.
+**Macro (colour only):** FTSE and GBP levels in `macro_context.json` are backdrop only; no automatic override of the screen signal.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year mixes company-specific items with repetitive analyst-target commentary and some irrelevant “Bree” soap-opera noise (filter carefully).
+Coverage over the past year is **moderate but cyclical/M&A-focused**; several headline matches are irrelevant (Home and Away “Bree” soap stories).
 
-**Operational / results:**
-- “Breedon Group H2 Earnings Call Highlights” (Yahoo Finance, 11 March 2025): Management cited revenue and underlying EBITDA growth in 2025 despite a testing year, UK construction materials downturn and deferred infrastructure projects.
-- “Breedon struggles to escape UK construction gloom” (Investers’ Chronicle, 11 March 2025): Critical take on UK cyclical headwinds.
-- “Breedon awaits brighter days” (Investors’ Chronicle, 23 July 2025): Forward-looking tone on recovery potential.
+Material items from `news_manifest.json`:
 
-**Strategy / M&A:**
-- “Breedon boosts US footprint with $120m Falling Springs quarry deal” (TipRanks, 8 June 2025): Material US expansion.
-- “Acquisition” (Investegate RNS headline, 9 June 2026): Further M&A activity; terms not in manifest.
+- **8 Jun 2026** — “Breedon boosts US footprint with $120m Falling Springs quarry deal” (TipRanks): continued US consolidation.
+- **11 Mar 2026** — “Breedon struggles to escape UK construction gloom” (Investors’ Chronicle) and “Breedon Group H2 Earnings Call Highlights” (Yahoo): management cited revenue/underlying EBITDA growth in 2025 despite sharp UK materials downturn and deferred projects.
+- **Jun 2026** — “A 6.2% forecast yield but down 31%!” (Yahoo Finance UK): retail income/value angle; share price weakness context.
+- **Apr–Jun 2026** — Multiple Yahoo pieces on **analyst fair-value/target resets** (cluster ~£4.05–£4.50 vs prior ~£4.20–£5.00): Street tone shifting more cautious while ratings remain broadly constructive.
+- **24 May 2026** — Ex-dividend/dividend-quality articles (Simply Wall St, Yahoo): progressive dividend narrative.
+- **16 Jul 2026** — “Breedon Director Clive Watson Increases Stake Through Dividend Reinvestment” (TipRanks): insider alignment via DRIP.
 
-**Capital markets / sentiment:**
-- Series of Yahoo Finance pieces (March–June 2025) noting analyst fair-value and price-target resets from ~£5.00 toward £4.05–£4.50—more cautious Street tone despite constructive ratings.
-- “Breedon Group PLC (BREE.L) Stock Analysis: 39% Potential Upside…” (DirectorsTalk, 11 March 2025): Bullish third-party view; treat as promotional.
-
-**Insider / corporate actions:**
-- “Breedon Director Clive Watson Increases Stake Through Dividend Reinvestment” (TipRanks, 16 July 2026).
-- “Issue of Shares” (Investegate, 11 February 2026).
-- Routine director/PDMR and transaction-in-own-shares RNS headlines in July 2026 (filings index)—administrative, not strategic.
-
-**Coverage assessment:** Material news exists on results, UK cycle and US M&A, but **depth is thin on filing-grade detail**; much coverage is algorithmic analyst-target churn. No major regulatory enforcement or management scandal flagged in the manifest.
+No material regulatory enforcement, management departures or distressed financing headlines appear in the manifest. **Gap:** no primary RNS full-text results releases in the filing pack to corroborate trading updates.
 
 ## RESEARCH VERDICT
-Verdict: Verdict: accumulate
+Verdict: accumulate
 Risk: medium
-Confidence: 0.62
-Rationale: Quantitative cheapness, FCF yield and dividend metrics are corroborated by Yahoo financials showing revenue/FCF resilience, but missing primary filings, rising leverage, falling reported earnings and UK cyclicality prevent full confirmation of the strong-buy screen.
-Risk: unknown
+Confidence: 0.68
+Rationale: Deep research largely **confirms** the screen’s value/dividend case on asset backing, FCF and balance-sheet flexibility, but **weakens** near-term conviction owing to earnings erosion, higher leverage, absent interim filings and thin OCR on risk/disclosure sections.

@@ -76,6 +76,30 @@ def test_fetch_filings_ticker_api_drops_unrelated_global_feed(monkeypatch):
     assert "Hikma" in rows[0]["headline"]
 
 
+def test_fetch_filing_body_parses_sec_inline_xbrl(monkeypatch):
+    html = """
+    <html><body>
+    <ix:header><ix:hidden>us-gaap:RevenueMember 2025-01-01 0000863064</ix:hidden></ix:header>
+    <ix:hidden>rio:RioTintoLimitedMember iso4217:USD xbrli:shares</ix:hidden>
+    <div>Cover page checkbox ITEM 1. Legal Proceedings noise</div>
+    <div>CONSOLIDATED INCOME STATEMENT</div>
+    <p>Revenue increased to $57.6 billion in 2025 driven by copper and aluminium.</p>
+    <p>Underlying EBITDA was $25.4 billion and net debt increased after acquisitions.</p>
+    <p>Operating cash flow remained strong while capital expenditure rose on growth projects.</p>
+    </body></html>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    text = fetch_filing_body("https://www.sec.gov/Archives/edgar/data/863064/x/rio-20251231.htm")
+    assert text is not None
+    assert "CONSOLIDATED INCOME STATEMENT" in text
+    assert "Revenue increased" in text
+    assert "us-gaap:RevenueMember" not in text
+    assert "RioTintoLimitedMember" not in text
+
+
 def test_fetch_filing_body_parses_pdf(monkeypatch):
     monkeypatch.setattr(
         "value_investor.research.filings._http_get",
@@ -544,7 +568,7 @@ def test_ingest_filings_uk_rns_includes_sec_when_dual_listed(tmp_path: Path):
             "value_investor.research.companies_house.fetch_filings_companies_house",
             return_value=[],
         ),
-        patch("value_investor.research.filings.resolve_sec_cik", return_value=863064),
+        patch("value_investor.research.filings._uk_ticker_sec_dual_listed", return_value=True),
         patch(
             "value_investor.research.filings.fetch_filings_sec_edgar",
             return_value=sec_rows,
@@ -564,3 +588,37 @@ def test_ingest_filings_uk_rns_includes_sec_when_dual_listed(tmp_path: Path):
     index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
     assert "sec_edgar" in index["sources_used"]
     assert "SEC 20-F when dual-listed" in index["note"]
+
+
+def test_issuer_matches_sec_name_rejects_us_homonyms():
+    from value_investor.research.filings import _issuer_matches_sec_name
+
+    assert _issuer_matches_sec_name(
+        "Costain Group PLC",
+        "COSTCO WHOLESALE CORP /NEW",
+        "COST.L",
+    ) is False
+    assert _issuer_matches_sec_name(
+        "Shell plc",
+        "Shell plc",
+        "SHEL.L",
+    ) is True
+    assert _issuer_matches_sec_name(
+        "Rio Tinto Group",
+        "RIO TINTO PLC",
+        "RIO.L",
+    ) is True
+
+
+def test_uk_ticker_sec_dual_listed_rejects_costain_costco_collision(monkeypatch):
+    from value_investor.research.filings import _uk_ticker_sec_dual_listed
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_sec_cik",
+        lambda ticker: 909832 if ticker == "COST" else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._sec_submissions_entity_name",
+        lambda cik: "COSTCO WHOLESALE CORP /NEW",
+    )
+    assert _uk_ticker_sec_dual_listed("COST.L", "Costain Group PLC") is False
