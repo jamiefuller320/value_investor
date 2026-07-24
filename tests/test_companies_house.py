@@ -272,6 +272,11 @@ def test_ingest_filings_merges_companies_house_and_deepens(tmp_path: Path, monke
         ),
         patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
         patch("value_investor.research.filings.resolve_sec_cik", return_value=None),
+        patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[]),
+        patch(
+            "value_investor.research.filings.enrich_filing_rows",
+            side_effect=lambda rows, **kwargs: rows,
+        ),
     ):
         meta = ingest_filings(
             ticker="SHEL.L",

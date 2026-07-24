@@ -13,8 +13,10 @@ from value_investor.research.companies_house import (
 )
 from value_investor.research.filings import (
     _extract_filing_document_text,
+    _extract_ixbrl_html_text,
     _fetch_companies_house_body,
     _ocr_pdf_text,
+    _score_ch_body_text,
 )
 
 
@@ -97,6 +99,25 @@ def test_fetch_companies_house_body_uses_ixbrl_when_pdf_empty(monkeypatch):
         body = _fetch_companies_house_body(row)
     assert body is not None
     assert "going concern" in body
+
+
+def test_extract_filing_document_text_routes_ixbrl():
+    html = (
+        b"<html xmlns:ix=\"http://www.xbrl.org/2013/inlineXBRL\">"
+        b"<ix:hidden>noise</ix:hidden><div>STRATEGIC REPORT</div>"
+        b"<p>Revenue was GBP 500 million with pension and covenant disclosures.</p>"
+        b"</html>"
+    )
+    text = _extract_filing_document_text(html, "application/xhtml+xml")
+    assert text is not None
+    assert "STRATEGIC REPORT" in text
+    assert "Revenue" in text
+
+
+def test_score_ch_body_text_prefers_ixbrl_over_ocr_noise():
+    ixbrl = "STRATEGIC REPORT Revenue £500 million pension covenant going concern " * 3
+    ocr = "fontsymbol | | | " * 40
+    assert _score_ch_body_text(ixbrl) > _score_ch_body_text(ocr)
 
 
 def test_ocr_pdf_text_disabled_by_env(monkeypatch):
