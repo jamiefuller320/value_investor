@@ -38,7 +38,6 @@ def test_verify_key_blank(monkeypatch):
     assert not result.ok
     assert "not set" in result.detail
 
-
 def test_verify_key_success(monkeypatch):
     user = _user()
     monkeypatch.setattr(
@@ -122,11 +121,47 @@ def test_cli_success(monkeypatch, capsys):
     assert code == 0
     out = capsys.readouterr().out
     assert "Authentication succeeded" in out
+    assert "Environment:" in out
+
+
+def test_cli_prefers_v2_env(monkeypatch, capsys):
+    user = _user()
+    monkeypatch.setenv("CURSOR_API_KEY_V2", "cursor_v2")
+    monkeypatch.setenv("CURSOR_API_KEY", "cursor_legacy")
+
+    def _me(**kwargs):
+        assert kwargs.get("api_key") == "cursor_v2"
+        return user
+
+    monkeypatch.setattr("value_investor.verify_key.Cursor.me", _me)
+    code = verify_key_main([])
+    assert code == 0
+    out = capsys.readouterr().out
+    assert "CURSOR_API_KEY_V2" in out
+    assert "Verifying: CURSOR_API_KEY_V2" in out
+
+
+def test_cli_key_source_legacy(monkeypatch, capsys):
+    user = _user()
+    monkeypatch.setenv("CURSOR_API_KEY_V2", "cursor_v2")
+    monkeypatch.setenv("CURSOR_API_KEY", "cursor_legacy")
+
+    def _me(**kwargs):
+        assert kwargs.get("api_key") == "cursor_legacy"
+        return user
+
+    monkeypatch.setattr("value_investor.verify_key.Cursor.me", _me)
+    code = verify_key_main(["--key-source", "legacy"])
+    assert code == 0
+    out = capsys.readouterr().out
+    assert "Verifying: CURSOR_API_KEY" in out
 
 
 def test_cli_missing_key(monkeypatch, capsys):
     monkeypatch.delenv("CURSOR_API_KEY", raising=False)
+    monkeypatch.delenv("CURSOR_API_KEY_V2", raising=False)
     code = verify_key_main([])
     assert code == 1
     out = capsys.readouterr().out
     assert "not set" in out
+    assert "CURSOR_API_KEY_V2" in out
