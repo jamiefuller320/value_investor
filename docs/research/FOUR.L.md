@@ -1,6 +1,6 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:45:51.941850+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 4imprint Group plc screens as a **buy** on the quantitative model (11/22 models, 69% composite), driven by cheapness on free cash flow (9.4% yield), high reported quality (ROE 65%), dividend metrics, and low balance-sheet risk. The business presents as an asset-light, cash-generative franchise with minimal leverage, though recent revenue and earnings have softened after a strong 2022–24 run. Valuation at roughly 12.9× P/E and 4.6% yield looks attractive for a value investor if normalised cash earnings persist, but elevated P/B (9.1×) reflects a thin equity base after heavy distributions rather than tangible asset backing. The key debate is whether FY2025’s revenue dip and elevated special dividends signal a cyclical pause in promotional-product demand or a durable step-down in growth; management succession and a reported business reorganisation add execution uncertainty. Primary filing bodies were unavailable for this pass, limiting verification of interim/H1 2026 trends and risk disclosures.
@@ -77,7 +77,8 @@ Material events are visible only via **RNS/filing headlines** in `filings_index.
 No M&A, regulatory enforcement, or major litigation headlines specific to 4imprint appear in the manifest. **Flag: news coverage is insufficient for sentiment or narrative confirmation; rely on RNS headlines and future filing bodies.**
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.62
 Rationale: Quantitative cheapness and cash-flow quality are supported by Yahoo financials, but missing filing bodies, a soft FY2025 top line, heavy distributions, and management reorganisation prevent full confirmation of the buy case.
+Risk: unknown

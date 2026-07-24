@@ -1,6 +1,6 @@
 # MONY Group plc (MONY.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:46:27.927197+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 MONY Group plc (formerly Moneysupermarket) operates UK price-comparison and consumer finance platforms (MoneySuperMarket, Compare the Market-adjacent verticals, travel, home services). The quantitative screen rates it a **buy** on cheapness, quality, dividend, GARP, and risk metrics (11/22 models; composite 66%). The investment case rests on a cash-generative, high-ROE business trading at ~13.6× earnings with a ~6.2% yield and ~7.5% FCF yield, backed by sustained buybacks and dividends. The central debate is whether AI-native insurance and finance search (e.g. ChatGPT-powered quote tools) structurally impairs the aggregator model, or whether brand, data, and membership monetisation allow MONY to adapt—as management and some analysts argue. Near-term timing is neutral (RSI ~72; price above 200-day MA), and primary filing verification is currently unavailable.
@@ -92,7 +92,8 @@ Much coverage is **generic dividend-stock promotion** (Simply Wall St, Twelfth M
 ---
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.62
 Rationale: Quantitative cheapness, quality, and cash-return metrics are corroborated by Yahoo financial trends, but the absence of primary filing bodies and the unresolved AI-disruption debate prevent full confirmation of the screen’s buy signal.
+Risk: unknown

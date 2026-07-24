@@ -1,6 +1,6 @@
 # Breedon Group plc (BREE.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:41:55.833869+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 Breedon Group plc is a UK-listed construction materials producer (aggregates, cement, asphalt) whose shares screen as a **strong buy** on quantitative value metrics: P/B 0.9, P/E 13.1, FCF yield 10.1%, dividend yield 4.8%, with eight of 22 models passing across cheapness, dividend, GARP and risk families. The investment hook is a cyclically depressed UK building-materials name trading below book, with management pursuing US expansion and continuing to grow the dividend despite a soft domestic market. The key debate is whether reported revenue and EBITDA resilience, plus M&A-led geographic diversification, will restore earnings power—or whether rising leverage, margin pressure and goodwill accumulation leave equity exposed if the UK construction recovery delays further. Primary RNS annual and interim filing bodies were not available in the source pack, limiting balance-sheet and covenant verification from regulatory text.
@@ -85,7 +85,8 @@ Coverage over the past year mixes company-specific items with repetitive analyst
 **Coverage assessment:** Material news exists on results, UK cycle and US M&A, but **depth is thin on filing-grade detail**; much coverage is algorithmic analyst-target churn. No major regulatory enforcement or management scandal flagged in the manifest.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.62
 Rationale: Quantitative cheapness, FCF yield and dividend metrics are corroborated by Yahoo financials showing revenue/FCF resilience, but missing primary filings, rising leverage, falling reported earnings and UK cyclicality prevent full confirmation of the strong-buy screen.
+Risk: unknown

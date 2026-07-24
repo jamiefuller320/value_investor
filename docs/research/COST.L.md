@@ -1,6 +1,6 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:45:05.103648+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 Costain Group PLC is a UK-listed infrastructure engineering and consultancy group, repositioned around transport, water, energy and defence end-markets after a painful turnaround earlier in the decade. The quantitative screen rates the name a buy on cheapness (P/E ~15×, P/B ~2.2×), quality (ROE ~15%), dividend yield (~2%), GARP and balance-sheet metrics (D/E ~10%), with FCF yield support. The investment hook is a business that appears to be earning more from less revenue—margin expansion and cash generation have outpaced a deliberate shrink in top line—while news flow points to record forward work and a return to the FTSE 250. The central debate is whether improved profitability and contract wins are sustainable against declining reported revenue, construction execution risk, and pension/working-capital overhangs that cannot be verified from primary filing extracts in this source set.
@@ -92,7 +92,8 @@ No material M&A, regulatory enforcement, or senior management change stories wer
 ---
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.62
 Rationale: Deep research broadly confirms the screen's buy case—improving margins, strong net cash, FCF and quality metrics align with a de-risked turnaround—but revenue decline, pension/receivables exposure, and absence of primary filing extracts prevent full confirmation of contract risk and forward-order visibility.
+Risk: unknown
