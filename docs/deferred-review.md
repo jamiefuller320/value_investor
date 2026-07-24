@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-22T12:37:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T14:44:44+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -93,6 +93,14 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L58 | **OCR for image-only Companies House accounts PDFs** | Shell plc and some other large issuers file image-only group accounts to Companies House; pypdf extracts no text. OCR (or preferring ESEF/iXBRL/SEC 20-F) would unlock CH body depth for those names. | After IR allowlist + SEC dual-list fallbacks still leave CH bodies empty for multiple memo tickers |
 | L59 | **Auto-pull SEC 20-F for dual-listed UK memo tickers** | UK deepen currently stays on RNS/CH; dual-listed names like SHEL.L have text-rich SEC 20-F HTML. A regime helper could auto-add recent 20-F/6-K URLs without manual IR allowlist seeding. | More than a handful of FTSE memos need SEC 20-F bodies because CH PDFs are image-only |
 | L61 | **Seed AEP.L IR allowlist once Anglo Eastern PDFs are discoverable** | AEP Plantations CH accounts remain image-only and angloeastern.co.uk investor pages are JS SPA without direct PDF hrefs. Seed research_ir_urls.json when annual/interim PDF URLs are stable. | Anglo Eastern publishes stable direct annual-report PDF URLs or ESEF/iXBRL text is available |
+| L62 | **Gap-fill: ingest — Download and OCR Companies House group accounts PDFs (document-api URLs** | Download and OCR Companies House group accounts PDFs (document-api URLs already in `filings_index.json`; five refetches returned zero bodies) to extract pension notes, covenant language, and going-concern text. | After next weekly email gap-fill pass confirms the gap persists |
+| L63 | **Gap-fill: ingest — Add Investegate/LSE RNS direct HTML fetch for indexed announcements (FY2** | Add Investegate/LSE RNS direct HTML fetch for indexed announcements (FY2024/FY2025 results, Q1 trading update, Sky sale RNS) instead of Google News redirect URLs that block body extraction. | After next weekly email gap-fill pass confirms the gap persists |
+| L64 | **Gap-fill: ingest — Fetch ITV investor-relations results presentation PDFs (segment revenue,** | Fetch ITV investor-relations results presentation PDFs (segment revenue, Studios margin range, dividend policy, pro-forma cash flow) from allowlisted IR URLs post-results. | After next weekly email gap-fill pass confirms the gap persists |
+| L65 | **Gap-fill: ingest — Pull full text from Companies House annual accounts for Hikma (05557934)** | Pull full text from Companies House annual accounts for Hikma (05557934) — five filings indexed with `has_body: false`; unlocks pension note, covenant language and statutory going-concern wording. | After next weekly email gap-fill pass confirms the gap persists |
+| L66 | **Gap-fill: ingest — Fetch and extract `april-2026-trading-update-vfinal.pdf` (listed in `fil** | Fetch and extract `april-2026-trading-update-vfinal.pdf` (listed in `filings_index.json`, body refetch returned 0/6); unlocks 503B exit quantification and H1 2026 cash-flow commentary. | After next weekly email gap-fill pass confirms the gap persists |
+| L67 | **Gap-fill: scoring — Apply a cash-conversion cap when trailing FCF is negative and the name s** | Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on earnings-only cheapness. | After next weekly email gap-fill pass confirms the gap persists |
+| L68 | **Gap-fill: ingest — Fetch Companies House PDF text for ME Group (00735438) — five annual acc** | Fetch Companies House PDF text for ME Group (00735438) — five annual accounts are indexed with `has_body: false`, blocking NCAV, covenant and pension verification that multiple screen models require. | After next weekly email gap-fill pass confirms the gap persists |
+| L69 | **Gap-fill: ingest — Add June 2026 trading-update RNS to the IR allowlist or Investegate re-p** | Add June 2026 trading-update RNS to the IR allowlist or Investegate re-pull — the guidance-cut catalyst precedes the H1 results body and is referenced only via news headlines. | After next weekly email gap-fill pass confirms the gap persists |
 
 ### Ops / reliability
 
@@ -107,7 +115,6 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L51 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation. | After a few weeks of enforce_weekly_research_cap with the £30 usage envelope |
 | L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
 | L60 | **Upgrade Ticker RNS plan for symbol-filtered disclosures** | Current TICKER_API_KEY plan ignores symbol/isin filters and returns a global Form 8.x feed. Client-side issuer headline filter now drops noise, but a paid symbol filter would restore direct RNS bodies for memo tickers. | Ticker.app plan is upgraded or an alternate UK RNS API with issuer filter is available |
-| L62 | **Clarify Cursor API key page in agent handovers** | Handovers and verify-key previously said dashboard/integrations; official SDK docs use Dashboard → API Keys (user key). Team Admin keys unsupported. | After N21 gap-fill succeeds with a verified key |
 
 ---
 

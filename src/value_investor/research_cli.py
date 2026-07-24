@@ -11,6 +11,7 @@ from pathlib import Path
 import pandas as pd
 
 from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES
+from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.research.format import format_research_text
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_ALUMNI_CAP,
@@ -62,8 +63,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--api-key",
-        default=os.environ.get("CURSOR_API_KEY"),
-        help="Cursor API key (required)",
+        default=(resolve_cursor_api_key()[0] or None),
+        help="Cursor API key (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
     )
     parser.add_argument(
         "--force-initial",

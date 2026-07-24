@@ -135,7 +135,135 @@
       "priority": "medium",
       "suggestion": "Require gap-fill memos to cross-check dividend cover on both OCF and FCF explicitly, and state which metric the High Dividend Yield model implicitly assumes — MEGP passes dividend models despite FCF cover <1× on statutory data.",
       "recorded_at": "2026-07-20T20:51:04.192255+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Download and OCR Companies House group accounts PDFs (document-api URLs already in `filings_index.json`; five refetches returned zero bodies) to extract pension notes, covenant language, and going-concern text.",
+      "recorded_at": "2026-07-24T14:44:44.219802+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add Investegate/LSE RNS direct HTML fetch for indexed announcements (FY2024/FY2025 results, Q1 trading update, Sky sale RNS) instead of Google News redirect URLs that block body extraction.",
+      "recorded_at": "2026-07-24T14:44:44.219813+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch ITV investor-relations results presentation PDFs (segment revenue, Studios margin range, dividend policy, pro-forma cash flow) from allowlisted IR URLs post-results.",
+      "recorded_at": "2026-07-24T14:44:44.219817+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Persist `failed_models` and per-model `failed_criteria` (including Piotroski F-Score points) in `screening_snapshot.json` so gap-fill can reconcile internal contradictions without relying on email briefs.",
+      "recorded_at": "2026-07-24T14:44:44.219820+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When FCF Yield passes but latest-year Yahoo FCF/dividend coverage is below 1.0×, auto-flag \"yield supported by non-recurring cash or pending corporate action\" in the research verdict overlay.",
+      "recorded_at": "2026-07-24T14:44:44.219825+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Pull full text from Companies House annual accounts for Hikma (05557934) — five filings indexed with `has_body: false`; unlocks pension note, covenant language and statutory going-concern wording.",
+      "recorded_at": "2026-07-24T14:44:44.219830+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch and extract `april-2026-trading-update-vfinal.pdf` (listed in `filings_index.json`, body refetch returned 0/6); unlocks 503B exit quantification and H1 2026 cash-flow commentary.",
+      "recorded_at": "2026-07-24T14:44:44.219833+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Deepen annual-report PDF extract to include pages 80–88 (principal risks) and Note 6 pension/post-employment — current `ir_3a67962eb8770824.txt` stops at strategic sections and references risks without body text.",
+      "recorded_at": "2026-07-24T14:44:44.219837+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on earnings-only cheapness.",
+      "recorded_at": "2026-07-24T14:44:44.219842+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Attach weekly screen aggregate metadata (hold/avoid counts, conviction band, top-five sector mix, common failure reasons) to each ticker research folder so portfolio-context questions are answerable from local sources.",
+      "recorded_at": "2026-07-24T14:44:44.219845+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch Companies House PDF text for ME Group (00735438) — five annual accounts are indexed with `has_body: false`, blocking NCAV, covenant and pension verification that multiple screen models require.",
+      "recorded_at": "2026-07-24T14:44:44.219849+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add June 2026 trading-update RNS to the IR allowlist or Investegate re-pull — the guidance-cut catalyst precedes the H1 results body and is referenced only via news headlines.",
+      "recorded_at": "2026-07-24T14:44:44.219853+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Expand IR allowlist coverage to interim results presentation decks (segment cash-flow bridges) now that `company_ir_presentation` is the planned alternate in `gap_fill_source_map.json`.",
+      "recorded_at": "2026-07-24T14:44:44.219855+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Apply a dividend-sustainability overlay when trailing FCF yield is more than 400bp below dividend yield and interim payout has been cut — prevents Strong Buy on income metrics alone.",
+      "recorded_at": "2026-07-24T14:44:44.219858+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ops",
+      "priority": "medium",
+      "suggestion": "Attach universe-level signal distribution and top-five conviction band to each ticker research pack (`email_reports.json` is not currently copied into per-ticker source folders).",
+      "recorded_at": "2026-07-24T14:44:44.219860+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "The memo at `output/research/MEGP.L/research.md` has been updated to version 3 (gap_fill mode). The main upgrade this pass: IR allowlist bodies resolve H1 PBT, EPS, cash flow, dividend declaration and payout policy — the June trading update and Companies House statutory accounts remain the priority gaps for the next ingest cycle.",
+      "recorded_at": "2026-07-24T14:44:44.219865+00:00"
     }
   ],
-  "updated_at": "2026-07-20T20:51:04.192257+00:00"
+  "updated_at": "2026-07-24T14:44:44.219867+00:00"
 }

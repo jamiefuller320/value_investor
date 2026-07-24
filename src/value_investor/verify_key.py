@@ -22,8 +22,17 @@ class VerifyKeyResult:
     user: SDKUser | None = None
     models: list[SDKModel] = field(default_factory=list)
 
-    def to_text(self, *, show_models: bool = False) -> str:
+    def to_text(
+        self,
+        *,
+        show_models: bool = False,
+        diagnostics: list[str] | None = None,
+    ) -> str:
         lines = ["FTSE 100 Value Investor — Cursor API key check", "=" * 48, ""]
+        if diagnostics:
+            lines.append("Environment:")
+            lines.extend(diagnostics)
+            lines.append("")
         if self.ok and self.user is not None:
             name = " ".join(
                 part for part in (self.user.user_first_name, self.user.user_last_name) if part
@@ -50,7 +59,7 @@ class VerifyKeyResult:
             lines.append(f"✗ {self.detail}")
             lines.append("")
             lines.append(
-                "Fix: set CURSOR_API_KEY to a User API key from "
+                "Fix: set CURSOR_API_KEY_V2 or CURSOR_API_KEY to a User API key from "
                 "https://cursor.com/dashboard/api-keys "
                 "(Team Admin keys are not supported by the SDK) or pass --api-key."
             )
@@ -67,7 +76,7 @@ def verify_cursor_api_key(
     if not key:
         return VerifyKeyResult(
             ok=False,
-            detail="CURSOR_API_KEY is not set",
+            detail="CURSOR_API_KEY_V2 and CURSOR_API_KEY are not set",
         )
 
     try:

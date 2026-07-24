@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "primary_learning_track": "ai_judgment",
+  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control.",
+  "tracks": {
+    "rules": {
+      "output_dir": "output/paper_automation",
+      "acted": false,
+      "trades": 0,
+      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false
+      }
+    },
+    "ai_judgment": {
+      "output_dir": "output/paper_automation/ai_judgment",
+      "acted": false,
+      "trades": 0,
+      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+      "is_primary_learning_track": true,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true
+      }
+    }
+  }
+}
