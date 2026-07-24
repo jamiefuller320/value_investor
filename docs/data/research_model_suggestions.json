@@ -383,7 +383,143 @@
       "priority": "medium",
       "suggestion": "Copy universe signal distribution and top-five conviction band into each ticker research pack — currently only in `output/email_reports.json`, outside the per-ticker evidence ladder.",
       "recorded_at": "2026-07-24T18:31:53.833933+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Auto-trigger body refetch on `has_body: false` entries at gap-fill time (this pass fetched 3/3, reaching 17/17); persist refetch audit in `filings_index.json` for memo traceability.",
+      "recorded_at": "2026-07-24T21:26:49.093114+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Implement planned `company_ir_presentation` fetch from ITV IR results centre to supply dividend-cover tables, FCF bridges, and covenant headroom absent from RNS HTML extracts and Yahoo.",
+      "recorded_at": "2026-07-24T21:26:49.093128+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Export `failed_models`, Piotroski component scores (currently cited at 3/9 externally but not stored), and per-model failure reasons into `screening_snapshot.json`.",
+      "recorded_at": "2026-07-24T21:26:49.093132+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Flag when filing profit-to-cash and screen FCF Yield diverge by >15pp (ITV FY2025: 65% vs trailing FCF Yield pass) to force cyclical-trough annotation before strong-buy confirmation.",
+      "recorded_at": "2026-07-24T21:26:49.093135+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "On Significant Transaction RNS (e.g. `0b0a4b2e4b15d060.txt`), require gap-fill to separate integrated dividend sustainability, one-off capital return, and post-deal recurring payout policy in distinct sub-paragraphs.",
+      "recorded_at": "2026-07-24T21:26:49.093146+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "All four open questions remain **partially_resolved**. The main incremental gain from this pass is primary-sourcing of the Sky SPA (`0b0a4b2e4b15d060.txt`) and Liberty placing (`fa9897e979b007e7.txt`); none of the four questions can be marked resolved until IR presentation / Capital Markets Day materials and screen metadata exports close the dividend-cover and Piotroski gaps. The memo at `output/research/ITV.L/research.md` has been updated accordingly.",
+      "recorded_at": "2026-07-24T21:26:49.093150+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Auto-fetch missing IR PDF bodies flagged in `filings_index.json` (e.g. April 2026 trading update `ir_a9733d0de6aec27d`) before gap-fill close; current body refetch attempted 2, fetched 0.",
+      "recorded_at": "2026-07-24T21:26:49.093157+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extract annual report principal-risks section (pp. 84–88) and pension/covenant notes as dedicated body chunks, not only highlights pages.",
+      "recorded_at": "2026-07-24T21:26:49.093170+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+      "recorded_at": "2026-07-24T21:26:49.093177+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Flag Lynch PEG / GARP passes when stated growth rate diverges >10pp from filing net-income or EPS growth (HIK: 23.5% screen vs +12% reported EPS).",
+      "recorded_at": "2026-07-24T21:26:49.093181+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Attach FTSE350 universe summary JSON (hold/avoid/buy counts, top-five sector mix, conviction band) to each ticker gap-fill pack so meta-screen questions are answerable locally.",
+      "recorded_at": "2026-07-24T21:26:49.093184+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Key takeaway:** The −$66.1m screen FCF is largely explained by one-off legal cash ($186m), working-capital build and growth capex — not an earnings collapse. FY filing-implied FCF is ~$119–239m depending on intangibles treatment. What remains open is whether elevated capex normalises after 2028 and whether the dividend survives sodium oxybate competition without FCF compression. Memo updated at `/workspace/output/research/HIK.L/research.md`.",
+      "recorded_at": "2026-07-24T21:26:49.093190+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch — five new bodies this pass were holding disclosures only and did not close material gaps.",
+      "recorded_at": "2026-07-24T21:26:49.093194+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse Companies House iXBRL into structured borrowings, pension and NCAV fields; OCR headline extracts (`ch_00735438_*.txt`) lack note-level covenant text.",
+      "recorded_at": "2026-07-24T21:26:49.093196+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Fetch company IR results presentation PDF for capex-to-FCF bridge and final-dividend guidance tables.",
+      "recorded_at": "2026-07-24T21:26:49.093198+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Persist `failed_models`, Piotroski sub-scores and FCF-yield inputs in `screening_snapshot.json` to remove reliance on email-brief prose.",
+      "recorded_at": "2026-07-24T21:26:49.093200+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "coverage",
+      "priority": "low",
+      "suggestion": "Attach LSE liquidity metrics (ADV, spread) for FTSE 350 names below ~£500m market cap.",
+      "recorded_at": "2026-07-24T21:26:49.093204+00:00"
     }
   ],
-  "updated_at": "2026-07-24T18:31:53.833935+00:00"
+  "updated_at": "2026-07-24T21:26:49.093206+00:00"
 }

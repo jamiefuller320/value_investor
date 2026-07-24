@@ -8,13 +8,18 @@ from unittest.mock import patch
 
 from value_investor.research.filings import (
     classify_filing_period,
+    enrich_filing_rows,
     fetch_filing_body,
+    fetch_filings_investegate_company,
     headline_relevant_to_issuer,
     ingest_filings,
     merge_filings,
     refetch_missing_filing_bodies,
     resolve_filings_regime,
     summarize_filings,
+    _extract_investegate_html_text,
+    _extract_ixbrl_html_text,
+    _filing_text_is_substantive,
 )
 from value_investor.research.ingest import ingest_research_sources
 from value_investor.financials import extract_statement_metrics
@@ -98,6 +103,95 @@ def test_fetch_filing_body_parses_sec_inline_xbrl(monkeypatch):
     assert "Revenue increased" in text
     assert "us-gaap:RevenueMember" not in text
     assert "RioTintoLimitedMember" not in text
+
+
+def test_extract_ixbrl_html_text_prefers_statutory_sections():
+    html = """
+    <html><body>
+    <ix:hidden>ifrs-full:RevenueMember 2025-01-01</ix:hidden>
+    <div>Cover noise</div>
+    <div>STRATEGIC REPORT</div>
+    <p>Revenue increased to £1.2 billion and operating profit rose 8%.</p>
+    <p>Going concern: the directors have a reasonable expectation the group can meet its liabilities.</p>
+    <p>Pension deficit reduced following triennial review and covenant headroom remains adequate.</p>
+    </body></html>
+    """
+    text = _extract_ixbrl_html_text(html)
+    assert "STRATEGIC REPORT" in text
+    assert "Going concern" in text
+    assert "ifrs-full:RevenueMember" not in text
+    assert _filing_text_is_substantive(text)
+
+
+def test_extract_investegate_html_text_keeps_results_narrative():
+    html = """
+    <html><body>
+    <h1>ITV plc Full Year Results 2025</h1>
+    <div>Summary by AI BETA Close X Short AI blurb only.</div>
+    <p>Total external revenue increased 1% to £3,511 million and adjusted EBITA was £534 million.</p>
+    <p>The proposed dividend is 5.0p per share, approximately £190 million in total.</p>
+    <div>Related announcements</div>
+  </body></html>
+    """
+    text = _extract_investegate_html_text(html)
+    assert "£3,511 million" in text
+    assert "dividend" in text.lower()
+    assert "Related announcements" not in text
+
+
+def test_fetch_filings_investegate_company_parses_company_page(monkeypatch):
+    html = """
+    <table>
+      <tr>
+        <td>05 Mar 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201">ITV plc Full Year Results 2025</a></td>
+      </tr>
+    </table>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    rows = fetch_filings_investegate_company(ticker="ITV.L", company_name="ITV plc")
+    assert len(rows) == 1
+    assert rows[0]["source"] == "investegate_direct"
+    assert rows[0]["period"] == "annual"
+    assert "investegate.co.uk/announcement/" in rows[0]["url"]
+
+
+def test_enrich_filing_rows_resolves_google_wrapper(monkeypatch):
+    google_row = {
+        "id": "g1",
+        "source": "google_news_investegate",
+        "headline": "ITV plc Full Year Results 2025 - Investegate",
+        "published_at": "2026-03-05T00:00:00+00:00",
+        "url": "https://news.google.com/rss/articles/abc",
+        "period": "annual",
+        "has_body": False,
+        "priority": 100,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [
+            {
+                "id": "i1",
+                "source": "investegate_direct",
+                "headline": "ITV plc Full Year Results 2025",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201",
+                "period": "annual",
+                "has_body": False,
+                "priority": 125,
+            }
+        ],
+    )
+    enriched = enrich_filing_rows(
+        [google_row],
+        ticker="ITV.L",
+        company_name="ITV plc",
+    )
+    assert enriched[0]["source"] == "investegate_resolved"
+    assert "investegate.co.uk/announcement/" in enriched[0]["url"]
 
 
 def test_fetch_filing_body_parses_pdf(monkeypatch):

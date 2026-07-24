@@ -126,6 +126,290 @@ def _extract_sec_html_text(html: str) -> str:
     text = _SEC_MEMBER_TOKEN.sub(" ", text)
     return re.sub(r"\s+", " ", text).strip()
 
+
+_IXBRL_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
+    (r"\bCONSOLIDATED (?:INCOME|STATEMENT OF COMPREHENSIVE|BALANCE SHEET|CASH FLOW)\b", 1),
+    (r"\bSTRATEGIC REPORT\b", 2),
+    (r"\bDIRECTORS[\u2019'] REPORT\b", 2),
+    (r"\bNOTES TO THE (?:FINANCIAL|GROUP) STATEMENTS\b", 2),
+    (r"\bGOING CONCERN\b", 3),
+    (r"\bPENSION\b", 3),
+)
+_INVESTEGATE_COMPANY_URL = "https://www.investegate.co.uk/company/{epic}"
+_INVESTEGATE_USER_AGENT = "value-investor-research/0.1 (+investegate; research@local)"
+_INVESTEGATE_MAX_ITEMS = 50
+_SUBSTANTIVE_FILING_TERMS = (
+    "revenue",
+    "earnings",
+    "profit",
+    "ebitda",
+    "dividend",
+    "million",
+    "billion",
+    "cash flow",
+    "net debt",
+    "pension",
+    "going concern",
+    "covenant",
+    "borrowings",
+    "results",
+)
+
+
+def _is_ixbrl_html(raw: bytes | str) -> bool:
+    sample = raw[:8000] if isinstance(raw, bytes) else (raw or "")[:8000]
+    if isinstance(sample, bytes):
+        sample = sample.decode("utf-8", errors="ignore")
+    lower = sample.lower()
+    return "xmlns:ix=" in lower or "<ix:" in lower or "xbrl" in lower
+
+
+def _extract_ixbrl_html_text(html: str) -> str:
+    """Extract readable narrative from UK Companies House iXBRL/XHTML accounts."""
+    cleaned = re.sub(r"<ix:header[\s\S]*?</ix:header>", " ", html or "", flags=re.I)
+    cleaned = re.sub(r"<ix:hidden[\s\S]*?</ix:hidden>", " ", cleaned, flags=re.I)
+    cleaned = re.sub(r"<!--[\s\S]*?-->", " ", cleaned)
+    text = _strip_html(cleaned)
+
+    best_start: int | None = None
+    best_rank = 99
+    for pattern, rank in _IXBRL_NARRATIVE_MARKERS:
+        match = re.search(pattern, text, flags=re.I)
+        if not match:
+            continue
+        start = match.start()
+        if rank < best_rank or (rank == best_rank and (best_start is None or start < best_start)):
+            best_rank = rank
+            best_start = start
+    if best_start:
+        text = text[best_start:]
+
+    text = _SEC_XBRL_TOKEN.sub(" ", text)
+    text = re.sub(r"\b\d{10}\b", " ", text)
+    text = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", " ", text)
+    text = _SEC_MEMBER_TOKEN.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _score_ch_body_text(text: str) -> int:
+    """Prefer iXBRL narrative and penalise OCR front-matter noise."""
+    lower = (text or "").lower()
+    score = min(len(text), 20_000)
+    for term in _SUBSTANTIVE_FILING_TERMS:
+        if term in lower:
+            score += 400
+    if lower.count("fontsymbol") > 2 or lower.count("|") > 30:
+        score -= 2_000
+    if "consolidated" in lower and "income" in lower:
+        score += 800
+    return score
+
+
+def _extract_investegate_html_text(html: str) -> str:
+    """Extract the RNS announcement body from an Investegate HTML page."""
+    lower = (html or "").lower()
+    start = lower.find("<h1")
+    if start < 0:
+        start = 0
+    end_markers = (
+        "related announcements",
+        "cookie policy",
+        "sign up for investor",
+        "all information",
+    )
+    end = len(html)
+    for marker in end_markers:
+        pos = lower.find(marker, start)
+        if pos > start:
+            end = min(end, pos)
+    chunk = html[start:end]
+    text = _strip_html(chunk)
+    text = re.sub(
+        r"^.*?Summary by AI.*?(?=\b[A-Z0-9])",
+        "",
+        text,
+        count=1,
+        flags=re.I | re.S,
+    )
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _filing_text_is_substantive(text: str, *, min_chars: int = 200) -> bool:
+    if not text or len(text) < min_chars:
+        return False
+    lower = text.lower()
+    hits = sum(1 for term in _SUBSTANTIVE_FILING_TERMS if term in lower)
+    return hits >= 2 or len(text) >= 1_200
+
+
+def _try_sec_exhibit_body(url: str) -> str | None:
+    """When a 6-K primary doc is cover-only, try linked exhibits from the filing index."""
+    match = re.match(
+        r"(https://www\.sec\.gov/Archives/edgar/data/\d+/\d+)/([^/]+)$",
+        url,
+        flags=re.I,
+    )
+    if not match:
+        return None
+    base, _primary = match.groups()
+    accession_nodash = base.rsplit("/", 1)[-1]
+    if len(accession_nodash) != 18:
+        return None
+    accession = f"{accession_nodash[:10]}-{accession_nodash[10:12]}-{accession_nodash[12:]}"
+    index_url = f"{base}/{accession}-index.htm"
+    try:
+        raw = _http_get(index_url, headers={"User-Agent": _sec_user_agent()}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("SEC index fetch failed for %s: %s", index_url, exc)
+        return None
+
+    candidates: list[str] = []
+    for href in re.findall(r'href="([^"]+\.htm)"', html, flags=re.I):
+        if any(skip in href.lower() for skip in ("-index.htm", ".xsd", ".xml", ".xsl")):
+            continue
+        if href.startswith("http"):
+            candidates.append(href)
+        else:
+            candidates.append(f"{base}/{href.lstrip('/')}")
+    for exhibit_url in candidates[:6]:
+        body = fetch_filing_body(exhibit_url, allow_sec_exhibits=False)
+        if body and _filing_text_is_substantive(body, min_chars=400):
+            return body
+    return None
+
+
+def fetch_filings_investegate_company(
+    *,
+    ticker: str,
+    company_name: str,
+    max_items: int = _INVESTEGATE_MAX_ITEMS,
+) -> list[dict[str, Any]]:
+    """Fetch recent RNS announcements from the issuer's Investegate company page."""
+    epic = _base_symbol(ticker)
+    if not epic:
+        return []
+    url = _INVESTEGATE_COMPANY_URL.format(epic=urllib.parse.quote(epic))
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.warning("Investegate company page failed for %s: %s", ticker, exc)
+        return []
+
+    rows: list[dict[str, Any]] = []
+    pattern = re.compile(
+        r'<tr>\s*<td>(\d{2} \w{3} \d{4})</td>\s*<td>([^<]*)</td>[\s\S]*?'
+        r'href="(https://www\.investegate\.co\.uk/announcement/[^"]+)"[^>]*>'
+        r'([^<]+)</a>',
+        flags=re.I,
+    )
+    for match in pattern.finditer(html):
+        date_s, _time_s, link, headline = match.groups()
+        headline_clean = unescape(headline.strip())
+        if not headline_relevant_to_issuer(headline_clean, company_name, ticker):
+            continue
+        try:
+            published = (
+                datetime.strptime(date_s, "%d %b %Y").replace(tzinfo=UTC).isoformat()
+            )
+        except ValueError:
+            published = None
+        period = classify_filing_period(headline_clean)
+        rows.append(
+            {
+                "id": _filing_id("investegate", link),
+                "source": "investegate_direct",
+                "headline": headline_clean,
+                "published_at": published,
+                "url": link,
+                "period": period,
+                "category": None,
+                "summary": headline_clean,
+                "has_body": False,
+                "body_path": None,
+                "priority": 125 if period in ("annual", "interim") else 90,
+            }
+        )
+        if len(rows) >= max_items:
+            break
+    if rows:
+        logger.info("Investegate company page: %s → %d announcements", ticker, len(rows))
+    return rows
+
+
+def resolve_investegate_url(
+    row: dict[str, Any],
+    *,
+    ticker: str,
+    company_name: str,
+    cache: list[dict[str, Any]] | None = None,
+) -> str | None:
+    """Resolve a Google News wrapper URL to a direct Investegate announcement URL."""
+    url = str(row.get("url") or "")
+    if "investegate.co.uk/announcement/" in url:
+        return url
+    if "news.google.com" not in url:
+        return None
+    candidates = cache or fetch_filings_investegate_company(
+        ticker=ticker,
+        company_name=company_name,
+    )
+    headline = str(row.get("headline") or "").strip().lower()
+    headline = re.sub(r"\s*-\s*investegate\s*$", "", headline, flags=re.I)
+    date_prefix = str(row.get("published_at") or "")[:10]
+    for candidate in candidates:
+        cand_headline = str(candidate.get("headline") or "").strip().lower()
+        cand_date = str(candidate.get("published_at") or "")[:10]
+        if date_prefix and cand_date and date_prefix != cand_date:
+            continue
+        if headline and (
+            headline in cand_headline
+            or cand_headline in headline
+            or headline_relevant_to_issuer(cand_headline, headline, ticker)
+        ):
+            return str(candidate.get("url") or "") or None
+    return None
+
+
+def enrich_filing_rows(
+    rows: list[dict[str, Any]],
+    *,
+    ticker: str,
+    company_name: str,
+) -> list[dict[str, Any]]:
+    """Rewrite wrapper URLs and merge direct Investegate links where possible."""
+    investegate_rows = fetch_filings_investegate_company(
+        ticker=ticker,
+        company_name=company_name,
+    )
+    by_url = {str(row.get("url") or ""): row for row in investegate_rows if row.get("url")}
+    enriched: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for row in rows:
+        item = dict(row)
+        resolved = resolve_investegate_url(
+            item,
+            ticker=ticker,
+            company_name=company_name,
+            cache=investegate_rows,
+        )
+        if resolved:
+            item["url"] = resolved
+            if item.get("source") == "google_news_investegate":
+                item["source"] = "investegate_resolved"
+        url = str(item.get("url") or "")
+        if url:
+            seen_urls.add(url)
+        enriched.append(item)
+    for row in investegate_rows:
+        url = str(row.get("url") or "")
+        if url and url not in seen_urls:
+            enriched.append(row)
+            seen_urls.add(url)
+    return enriched
+
+
 _EXCHANGE_SUFFIXES = (
     ".L",
     ".AX",
@@ -256,6 +540,8 @@ def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
             return text
         ocr_text = _ocr_pdf_text(raw)
         return ocr_text or text
+    if _is_ixbrl_html(raw) or "xhtml" in (content_type or "").lower():
+        return _extract_ixbrl_html_text(raw.decode("utf-8", errors="replace"))
     return _strip_html(raw.decode("utf-8", errors="replace"))
 
 
@@ -945,7 +1231,7 @@ def fetch_filings_ticker_api(
     return rows
 
 
-def fetch_filing_body(url: str | None) -> str | None:
+def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
         return None
@@ -970,9 +1256,20 @@ def fetch_filing_body(url: str | None) -> str | None:
     else:
         if "sec.gov" in url:
             text = _extract_sec_html_text(raw.decode("utf-8", errors="replace"))
+            if allow_sec_exhibits and not _filing_text_is_substantive(text, min_chars=400):
+                exhibit = _try_sec_exhibit_body(url)
+                if exhibit:
+                    text = exhibit
+        elif "investegate.co.uk" in url:
+            text = _extract_investegate_html_text(raw.decode("utf-8", errors="replace"))
         else:
-            text = _strip_html(raw.decode("utf-8", errors="replace"))
-        if len(text) < 200:
+            html = raw.decode("utf-8", errors="replace")
+            text = (
+                _extract_ixbrl_html_text(html)
+                if _is_ixbrl_html(html)
+                else _strip_html(html)
+            )
+        if not _filing_text_is_substantive(text):
             return None
     if len(text) > FILINGS_BODY_MAX_CHARS:
         text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
@@ -982,6 +1279,8 @@ def fetch_filing_body(url: str | None) -> str | None:
 def _source_bonus(source: str | None) -> int:
     if source in {"ticker_rns_api", "sec_edgar", "companies_house"}:
         return 30
+    if source in {"investegate_direct", "investegate_resolved"}:
+        return 28
     if source == "ir_allowlist":
         return 25
     return 0
@@ -1159,14 +1458,21 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     except Exception as exc:  # noqa: BLE001
         logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
         return None
+    best_text: str | None = None
+    best_score = -1
     for raw, content_type in downloads:
         text = _extract_filing_document_text(raw, content_type)
         if not text or len(text) < 200:
             continue
-        if len(text) > FILINGS_BODY_MAX_CHARS:
-            text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
-        return text
-    return None
+        score = _score_ch_body_text(text)
+        if score > best_score:
+            best_score = score
+            best_text = text
+    if not best_text:
+        return None
+    if len(best_text) > FILINGS_BODY_MAX_CHARS:
+        best_text = best_text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return best_text
 
 
 def refetch_missing_filing_bodies(
@@ -1203,12 +1509,18 @@ def refetch_missing_filing_bodies(
         }
     filings = list(payload.get("filings") or [])
     before = sum(1 for row in filings if row.get("has_body"))
+    ticker = str(payload.get("ticker") or "")
+    company_name = str(payload.get("company_name") or "")
+    if ticker and company_name:
+        filings = enrich_filing_rows(
+            filings,
+            ticker=ticker,
+            company_name=company_name,
+        )
     missing = [
         row
         for row in filings
-        if row.get("url")
-        and not row.get("has_body")
-        and "news.google.com" not in str(row.get("url") or "")
+        if row.get("url") and not row.get("has_body")
     ]
     updated = _write_bodies(filings, bodies_dir, max_bodies=max_bodies)
     after = sum(1 for row in updated if row.get("has_body"))
@@ -1286,6 +1598,12 @@ def ingest_filings(
         )
         groups.append(fetch_filings_google_news(company_name=company_name, ticker=ticker))
         groups.append(
+            fetch_filings_investegate_company(
+                ticker=ticker,
+                company_name=company_name,
+            )
+        )
+        groups.append(
             fetch_filings_companies_house(
                 ticker=ticker,
                 company_name=company_name,
@@ -1325,6 +1643,12 @@ def ingest_filings(
     groups.append(fetch_filings_ir_allowlist(ticker))
 
     merged = merge_filings(*groups) if groups else []
+    if regime == "uk_rns":
+        merged = enrich_filing_rows(
+            merged,
+            ticker=ticker,
+            company_name=company_name,
+        )
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
     merged = _write_bodies(merged, bodies_dir, max_bodies=max_bodies)
@@ -1342,7 +1666,7 @@ def ingest_filings(
             "Ticker RNS / Investegate discovery plus Companies House accounts "
             f"(up to {ch_accounts} filings"
             + (", historical deepen" if deepen_history else "")
-            + "), optional IR allowlist URLs, and SEC 20-F when dual-listed. "
+            + "), optional IR allowlist URLs, Investegate direct RNS, and SEC 20-F when dual-listed. "
             "period=annual|interim|other. Bodies from PDF/HTML/iXBRL when available."
         )
     elif regime == "asx_announcements":

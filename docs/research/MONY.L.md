@@ -1,99 +1,78 @@
 # MONY Group plc (MONY.L) — Research memo
 
-_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
+_Version 1 · Updated 2026-07-24T21:11:20.882823+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-MONY Group plc (formerly Moneysupermarket) operates UK price-comparison and consumer finance platforms (MoneySuperMarket, Compare the Market-adjacent verticals, travel, home services). The quantitative screen rates it a **buy** on cheapness, quality, dividend, GARP, and risk metrics (11/22 models; composite 66%). The investment case rests on a cash-generative, high-ROE business trading at ~13.6× earnings with a ~6.2% yield and ~7.5% FCF yield, backed by sustained buybacks and dividends. The central debate is whether AI-native insurance and finance search (e.g. ChatGPT-powered quote tools) structurally impairs the aggregator model, or whether brand, data, and membership monetisation allow MONY to adapt—as management and some analysts argue. Near-term timing is neutral (RSI ~72; price above 200-day MA), and primary filing verification is currently unavailable.
-
----
+MONY Group plc (MONY.L) is a UK-listed, tech-led consumer finance platform (MoneySuperMarket, MoneySavingExpert, Quidco and B2B comparison services) that the quantitative screen rates as a **strong buy** on cheapness, quality, dividend and GARP metrics (15/22 models; composite score 0.70; P/E 12.1x, FCF yield ~8%, dividend yield 6.6%). Primary Companies House annual accounts show a five-year recovery from the 2021 trough: revenue rose from £316.7m to a record £446.3m in FY2025, with adjusted EBITDA expanding to £145.1m (33% margin) and profit before tax to £110.5m, supported by strong operating cash conversion and disciplined capital returns (12.63p total dividend plus buybacks). The central debate is whether AI-native distribution (e.g. conversational insurance quoting) structurally impairs the price-comparison moat, or whether MONY’s first-party data, membership propositions and regulated platform prove more durable than the February–July 2026 share volatility implies. **No interim RNS or half-year filing bodies are present in the source pack**, limiting visibility on the most recent H1 2026 trading update beyond news headlines.
 
 ## INVESTMENT THESIS
-For a value investor, MONY presents a **quality compounder priced as a cyclical income stock**. The screen passes five factor families simultaneously: cheapness (FCF Yield, Acquirer's Multiple, Composite Value), quality (Buffett Quality, Economic Moat, Magic Formula, Quality Value), dividend (High Dividend Yield, Dividend Growth), GARP (Neff PEGY at 0.02 despite flat reported growth), and risk (Financial Health). That breadth is unusual for a mid-cap consumer internet name.
+For a value investor, MONY presents a rare combination of **screen-validated cheapness with demonstrable business quality**. The screen passes span earnings yield, FCF yield, Neff PEGY (0.02), Buffett Quality, Economic Moat, High Dividend Yield, Dividend Growth, Piotroski F-Score and Financial Health — five factor families in total, with full data quality (20/20 metrics). That profile fits a cash-generative, asset-light marketplace: FY2025 filing highlights cite operating cash flow of £107.7m, adjusted EBITDA margin of 33%, and total shareholder returns of £96m (1% dividend growth plus a £30m buyback).
 
-Business quality indicators align with the screen: **ROE 34.4%**, strong operating margins (~26% on Yahoo data), and **FCF of ~£78–98m annually** against a modest net debt position. Capital allocation is shareholder-friendly: ~£67m dividends and ~£30m buybacks in FY2025 (Yahoo), with ongoing RNS disclosures of "Transaction in Own Shares" through Jul 2026. Revenue has grown from £387.6m (2022) to £446.3m (2025), though the latest year’s growth is only ~1.6%, matching the screen’s **-0.2% growth** flag—suggesting the market may be discounting stagnation rather than deterioration.
+Business quality anchors the signal. MONY operates a two-sided model matching consumers to financial and household-bill providers, underpinned by proprietary data (“Dialogue”) and re-platformed technology completed in FY2025. Estimated customer savings of £2.8bn (FY2025) and a Group NPS of 73 speak to brand trust — a non-trivial barrier in a regulated, Consumer Duty–sensitive market. Membership shift (SuperSaveClub >2.1m members) and B2B/API distribution (Rightmove, AutoTrader cited in prior-year accounts) diversify beyond pure transactional comparison.
 
-The buy case assumes: (1) FCF comfortably covers the dividend (~£98m FCF vs ~£67m dividends paid); (2) intangible-heavy balance sheet reflects acquired brands, not operational weakness; (3) AI is a competitive threat but not yet reflected in reported financials. The screen’s "new" signal (1 week, 40% conviction) warrants patience on entry rather than a fundamental veto.
-
----
+The valuation hook is straightforward: mid-teens earnings on a business delivering high-30s ROE (screen) and mid-single-digit organic revenue growth despite car-insurance and retail headwinds, with management explicitly returning surplus capital. GARP and dividend screens align: adjusted basic EPS grew 5% to 17.9p in FY2025 while the total dividend reached 12.63p. For a value allocator, the screen’s strong-buy label is grounded in **real earnings power and payout capacity**, not a distressed cyclical trough.
 
 ## FINANCIAL REVIEW
-**Primary filing gap:** The UK RNS index contains **36 announcements and zero classified as annual or interim results**, with **no downloadable body extracts** (`filings/bodies/` empty). Items captured are largely capital-structure notices (share buybacks, holdings, director changes). **All figures below fall back to Yahoo Finance (`financials_annual.json`)** and should be treated as unverified against audited accounts until FY2025 annual results are indexed.
+**Source hierarchy:** All headline P&L and cash figures below are taken from Companies House annual report body extracts (`filings/bodies/`) unless noted. Balance-sheet, free-cash-flow and per-share items not present in filing bodies are cited from `financials_annual.json` (Yahoo) with explicit fallback. **No interim filings** (half-year, trading update or 10-Q equivalent) appear in `filings_index.json` (0 interim; 5 annual only). H1 2026 performance is therefore **not verifiable from primary filings** in this pack.
 
-**Annual trend (Yahoo, FY year-end Dec):**
+**Annual trend (filings)**
 
-| Metric | 2022 | 2023 | 2024 | 2025 |
-|--------|------|------|------|------|
-| Revenue (£m) | 387.6 | 432.1 | 439.2 | 446.3 |
-| Operating income (£m) | 89.0 | 97.3 | 113.3 | 117.4 |
-| Net income (£m) | 68.3 | 72.7 | 80.6 | 81.2 |
-| Diluted EPS (p) | 12.7 | 13.5 | 14.9 | 15.2 |
-| Free cash flow (£m) | 93.0 | 91.2 | 101.5 | 98.1 |
-| Cash dividends paid (£m) | 62.8 | 63.4 | 65.5 | 66.9 |
+| Metric | FY2021 | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|--------|
+| Revenue (£m) | 316.7 | 387.6 | 432.1 | 439.2 | 446.3 |
+| Adj. EBITDA (£m) | 100.5 | 115.5 | 131.9 | 141.8 | 145.1 |
+| Profit before tax (£m) | 70.2 | 85.2 | 92.1 | 108.7 | 110.5 |
+| Total dividend (p) | 11.71 | 11.71 | 12.19 | 12.50 | 12.63 |
+| Operating cash flow (£m) | 65.7 | 104.4 | 102.2 | 115.6 | 107.7 |
 
-Revenue CAGR 2022–25 is ~4.8%; operating income has outpaced revenue, with margin expansion from ~23% to ~26%. Net income growth has slowed sharply (+0.7% YoY in 2025 vs +10% in 2024), consistent with maturation rather than contraction.
+*(FY2021–FY2024: Moneysupermarket.com / Moneysupermarket Group accounts; FY2025: MONY Group plc Annual Report and Accounts 2025.)*
 
-**Balance sheet and leverage (Yahoo, FY2025):** Total assets £377.8m; shareholders’ equity £226.5m; total debt £34.0m; cash £20.3m (implied net debt ~£13.7m). **Goodwill and intangibles £228.3m** drive **negative tangible book value (~£1.8m)**—a material screen blind spot for asset-based models. Working capital is positive (£17.5m). Debt is manageable relative to FCF.
+**FY2025 (year ended 31 December 2025; filed 11 May 2026):** Revenue grew 2% to **£446.3m**; profit before tax **£110.5m** (+2%); adjusted EBITDA **£145.1m** (+2%) with margin **33%** (record). Basic EPS **15.3p**; adjusted basic EPS **17.9p** (+5%). Total dividend **12.63p** (+1%). Operating cash flow **£107.7m** (cash conversion >80% per chair’s statement). Segment revenue (FY2025): Insurance £233m, Money £106m, Home services £48m, Cashback £53m, Travel £18m (11 months). Management completed Group re-platforming and reduced the Travel stake from majority to minority in December 2025.
 
-**Cash flow and capital returns (FY2025):** Operating cash flow £107.7m; capex £9.6m; FCF £98.1m. Financing outflows include £66.9m dividends and £30.2m share repurchases. FCF/dividend coverage ~1.5×—adequate but not expansive if growth stalls.
+**FY2024:** Revenue **£439.2m** (+2%); adjusted EBITDA **£141.8m** (+7%); PBT **£108.7m** (+18%); operating cash flow **£115.6m** (+13%). A **£30m share buyback** was announced alongside a 12.5p total dividend.
 
-**Interim results:** **Not present** in the filings index. No half-year or trading-update body text is available for H1 2025/2026 analysis. Quarterly income in `financials_annual.json` is empty.
+**FY2023:** Record revenue **£432.1m** (+11%) despite no material energy-switching income; adjusted EBITDA **£131.9m** (+14%); PBT **£92.1m** (+8%). Insurance switching strength offset closed energy market.
 
-**Screen cross-check:** Reported FCF (~£98m) is broadly consistent with the screen’s FCF figure (~£78m—the difference likely reflects timing/definition). P/E 13.6, yield 6.2%, and FCF yield 7.5% from the screen are internally coherent with Yahoo earnings and cash generation.
+**FY2022:** Revenue **£387.6m** (+22%, including Quidco consolidation); adjusted EBITDA **£115.5m** (+15%); PBT **£85.2m**. Net debt to adjusted EBITDA **0.3x** (filing highlight). Energy switching market closed; insurance impacted by FCA “price walking” reforms from January 2022.
 
----
+**FY2021 (trough year):** Revenue **£316.7m** (−8%); adjusted EBITDA **£100.5m** (−7%); PBT **£70.2m** (−20%). Energy market closure and softer insurance weighed on results; Quidco acquisition moved the group to net debt at **0.6x** adjusted EBITDA. Chair’s statement and viability-related commentary (2021 accounts) note stress testing showed **no expected breach of liquidity, solvency or debt covenants** under severe scenarios — the only explicit covenant language in available body extracts.
+
+**Yahoo fallback (FY2025 balance sheet / cash flow; not in filing bodies):** Total assets **£377.8m**; cash **£20.3m**; total debt **£34.0m**; stockholders’ equity **£226.5m**; goodwill and intangibles **£228.3m** (tangible book value negative). Net income **£81.2m**; operating cash flow **£107.7m** (consistent with filing); **free cash flow £98.1m**; cash dividends paid **£66.9m**; share repurchases **£30.2m**. Diluted EPS **15.2p**.
+
+**Interim gap:** The index contains **zero interim releases**. News headlines reference H1 2026 record revenue (+6%) and adjusted earnings growth (21 July 2026), but **these figures cannot be confirmed from filing bodies** in this pack. Treat near-term momentum as **unverified** pending RNS/interim accounts.
 
 ## RISKS AND RED FLAGS
-**AI and competitive disruption (primary):** News flow highlights acute market concern. In Feb 2026, *The Times* reported "MoneySuperMarket and Go Compare hit by AI car insurance quotes"; *The Guardian* noted price-comparison shares falling "amid AI fears." Morgan Stanley downgraded on AI concerns (Dec 2025). This is the risk the quantitative screen cannot fully capture—traffic and lead-value erosion may lag headline sentiment.
+**AI and competitive disruption (primary market debate):** Multiple news items (Feb–Jul 2026) link share weakness to fears that AI tools (including ChatGPT-based insurance quoting) bypass traditional aggregators. Morgan Stanley downgraded on AI concerns (5 December 2025); Berenberg subsequently argued the selloff was overdone (11 February 2026; 27 March 2026). Filings frame AI as both opportunity (OpendAI enterprise agreement, “Agent” concierge) and execution risk; FY2025 chair’s statement stresses that “compliance and regulation remains a critical competitive advantage” as AI adoption accelerates. This risk is **not fully captured** by backward-looking quality screens.
 
-**Flat growth:** Revenue growth ~1.6% and screen-reported growth -0.2% raise questions about long-term top-line momentum. Insurance premium inflation can flatter revenue without improving underlying volumes.
+**Regulatory:** MONY operates under FCA oversight including Consumer Duty (explicitly referenced in FY2025 governance language). Historical accounts detail FCA general insurance pricing reforms (January 2022) that reduced switching propensity by narrowing new-business vs renewal gaps — a structural headwind to enquiry volumes. Advisory or “do it for me” models cited in older principal-risk discussions could attract heavier regulation than the current success-fee comparison model.
 
-**Intangible-heavy balance sheet:** Goodwill ~£203m and intangibles ~£26m against equity of £227m. Impairment or amortisation acceleration would hit reported earnings; tangible book is negative.
+**Cyclical/end-market exposure:** FY2025 filings acknowledge headwinds in car insurance and retail-linked cashback amid weak consumer confidence; growth relied on breadth (life insurance, savings, credit cards, home services). Insurance premium inflation and switching volumes remain cyclical drivers of enquiry revenue.
 
-**Dividend intensity:** ~£67m dividends on ~£81m net income (~83% payout). Sustainable while FCF holds, but leaves limited reinvestment buffer if AI requires heavier product spend.
+**Balance sheet / intangibles:** Yahoo data (fallback) show goodwill-dominated assets and **negative tangible book** (−£1.8m). P/B of 4.5x on the screen reflects intangibles-heavy accounting, not hard asset backing — relevant for asset-based value investors.
 
-**Regulatory:** UK FCA Consumer Duty and insurance distribution rules can affect partner economics and disclosure requirements. No filing-body language on going concern, contingencies, or covenants was available to assess.
+**Capital allocation / dividend sustainability:** FY2025 cash returns (c.£67m dividends + £30m buybacks per Yahoo) absorb a large share of free cash flow. Growth in distributions alongside only 2% PBT growth raises questions about reinvestment versus payout if AI competition compresses margins.
 
-**Governance / management:** RNS index flags directorate changes (Jun–Jul 2026) but without body text. Not inherently negative, but unverified.
+**Governance / pension:** No defined-benefit pension deficit or material going-concern qualification appears in available body extracts. The FY2025 filing body is **truncated** before the full Principal Risks and Uncertainties, Viability Statement and auditor’s going-concern sections; older 2021 viability language supports resilience but is dated. **Covenant detail for the current debt facility is not present** in extracted bodies.
 
-**Technical / timing:** Screen RSI ~72 and price ~14% above 200-day SMA suggest near-term entry timing is not ideal despite fundamental buy signal.
-
-**Data quality:** High screen data score (19/20) but **zero primary filing bodies** limits deep-research confidence on provisions, segment mix, and risk disclosures.
-
----
+**Corporate / portfolio:** Travel deconsolidation (minority stake from December 2025) reduces segment diversification but improves focus; earn-out and minority-interest accounting add complexity.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but repetitive**, dominated by dividend/income listicles and AI-disruption headlines rather than deep operational reporting.
+Coverage over the past year is **moderately thick on capital markets and strategy, thin on deep fundamental analysis** — heavily skewed to dividend-yield listicles alongside a cluster of event-driven pieces.
 
-**Material corporate/strategic:**
-- **"Moneysupermarket introduces investment platform"** (Yahoo Finance, 20 Jul 2026) — launch of a platform offering ~40 mutual funds and ETFs (including Vanguard LifeStrategy), signalling diversification beyond comparison into wealth/adjacent revenue.
-- **"MONY Group maintains growth momentum as AI and membership strategy drive engagement"** (Yahoo Finance UK, 30 Apr 2026) — management framing AI as an enabler, not purely a threat.
-- **"Moneysupermarket owner MONY launches new buyback after making record profits"** (Yahoo Finance UK, 23 Feb 2026) — capital return alongside strong FY results.
-- **"MONY Group up 4% after bank moves to 'buy' with 51% upside as AI fears called overdone"** (Yahoo Finance UK, 27 Mar 2026) — sell-side pushback on AI pessimism.
+**Material items:**
 
-**AI-driven selloff:**
-- **"MoneySuperMarket and Go Compare hit by AI car insurance quotes"** (*The Times*, 10 Feb 2026).
-- **"UK wealth manager and price comparison site shares fall amid AI fears"** (*The Guardian*, 11 Feb 2026).
-- **"MONY stock falls as Morgan Stanley downgrades on AI concerns"** (Investing.com UK, 5 Dec 2025).
+- **H1 2026 results (21 July 2026):** “MONY Group delivers record first-half revenue as AI strategy supports growth” (Yahoo Finance UK); “Mony Group H1 Earnings Call Highlights” (Yahoo, 21 July 2026) — CEO Peter Duffy positioning MoneySuperMarket as an “everyday financial companion”; record revenue and adjusted earnings cited, though “Mony reports improved revenue and earnings, shares slide” (London South East, 21 July 2026) and “Why is MONY stock sliding today?” (Investing.com, 21 July 2026) note negative market reaction.
+- **Product expansion (20 July 2026):** “Moneysupermarket introduces investment platform” (Yahoo) — 40 funds/ETFs including Vanguard LifeStrategy.
+- **Capital management (Jul 2026):** Repeated share cancellations after buybacks — e.g. “MONY Group Cancels 98,213 Shares After Targeted Buyback” (Globe and Mail, 18 July 2026); “Mony Group PLC Cancels Newly Repurchased Shares” (TipRanks, 22 July 2026).
+- **AI selloff and pushback (Feb 2026):** “MoneySuperMarket and Go Compare hit by AI car insurance quotes” (The Times, 10 February 2026); “UK wealth manager and price comparison site shares fall amid AI fears” (The Guardian, 11 February 2026); “Mony Group, Future selloff on AI worries overdone, says Berenberg” (Sharecast, 11 February 2026).
+- **FY2025/full-year (Feb 2026):** “Moneysupermarket owner MONY launches new buyback after making record profits” (Yahoo Finance UK, 23 February 2026); “Mony is now a dividend stock” (Investors’ Chronicle, 24 February 2026).
+- **Analyst actions:** Morgan Stanley downgrade on AI concerns (Investing.com UK, 5 December 2025); “MONY Group up 4% after bank moves to 'buy' with 51% upside as AI fears called overdone” (Yahoo Finance UK, 27 March 2026).
+- **Strategy (Apr 2026):** “MONY Group maintains growth momentum as AI and membership strategy drive engagement” (Yahoo Finance UK, 30 April 2026).
 
-**Capital management:**
-- **"MONY Group Cancels 98,213 Shares After Targeted Buyback"** (*The Globe and Mail*, 18 Jul 2026).
-- **"MONY Group Repurchases and Cancels 100,182 Shares in Capital Management Move"** (*The Globe and Mail*, 15 Jul 2026).
-- Sustained RNS "Transaction in Own Shares" notices through Jul 2026.
-
-**Analyst/media commentary:**
-- **"Mony is now a dividend stock"** (*Investors' Chronicle*, 24 Feb 2026); **"Stockwatch: an enigmatic share offering an 8.5% yield"** (Interactive Investor, 24 Feb 2026).
-- **"High-yielding Mony undermined by strong premium comparators"** (*Investors' Chronicle*, 21 Jul 2025) — competitive pressure in insurance.
-- **"MONY shares drop 7% as management and analysts flag headwinds"** (Proactive Investors, 21 Jul 2025).
-
-**Governance:** Directorate change notices (Investegate, 30 Jun and 20 Jul 2026); holding notifications (Jun 2026). Detail not available in indexed bodies.
-
-Much coverage is **generic dividend-stock promotion** (Simply Wall St, Twelfth Magpie, Yahoo listicles)—useful for sentiment, not fundamentals.
-
----
+**Management / governance:** Jonathan Bewes completed first full year as chair in FY2025 (accounts); no CEO change flagged. Rebrand from Moneysupermarket.com Group to **MONY Group plc** is reflected in recent filings and news tickers (including US OTC MNSKY references in earnings coverage).
 
 ## RESEARCH VERDICT
-Verdict: Verdict: accumulate
+Verdict: accumulate
 Risk: medium
-Confidence: 0.62
-Rationale: Quantitative cheapness, quality, and cash-return metrics are corroborated by Yahoo financial trends, but the absence of primary filing bodies and the unresolved AI-disruption debate prevent full confirmation of the screen’s buy signal.
-Risk: unknown
+Confidence: 0.68
+Rationale: Primary annual filings confirm the screen’s cheap, cash-rich, dividend-supported quality profile, but missing interim filings, truncated risk disclosures and live AI-disruption debate prevent full confirmation of the strong-buy signal at face value.
