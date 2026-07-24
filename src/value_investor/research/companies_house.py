@@ -186,6 +186,8 @@ def search_company_number(
         title_l = title.lower()
         if status == "active":
             score += 5
+        elif status in {"dissolved", "dormant"}:
+            score -= 8
         if epic and epic in title_l:
             score += 4
         # Token overlap
@@ -258,6 +260,8 @@ def fetch_accounts_filing_rows(
             continue
         tx = str(item.get("transaction_id") or item.get("barcode") or len(rows))
         description = str(item.get("description") or "accounts")
+        if "dormant" in description.lower():
+            continue
         date = str(item.get("date") or item.get("action_date") or "")
         rows.append(
             {

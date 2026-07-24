@@ -1203,6 +1203,14 @@ def ingest_filings(
                 max_accounts=int(ch_accounts),
             )
         )
+        # Dual-listed UK names (e.g. RIO.L, SHEL.L) also file 20-F with the SEC.
+        if resolve_sec_cik(_base_symbol(ticker)):
+            groups.append(
+                fetch_filings_sec_edgar(
+                    ticker=_base_symbol(ticker),
+                    include_current_reports=False,
+                )
+            )
     elif regime == "sec_edgar":
         groups.append(fetch_filings_sec_edgar(ticker=ticker))
     elif regime == "asx_announcements":
@@ -1245,7 +1253,7 @@ def ingest_filings(
             "Ticker RNS / Investegate discovery plus Companies House accounts "
             f"(up to {ch_accounts} filings"
             + (", historical deepen" if deepen_history else "")
-            + ") and optional IR allowlist URLs. "
+            + "), optional IR allowlist URLs, and SEC 20-F when dual-listed. "
             "period=annual|interim|other. Bodies from PDF/HTML/iXBRL when available."
         )
     elif regime == "asx_announcements":
