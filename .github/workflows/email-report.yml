@@ -25,6 +25,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install system deps (CH accounts OCR)
+        run: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+
       - name: Install package
         run: pip install -e .
 
@@ -42,6 +45,8 @@ jobs:
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           TICKER_API_KEY: ${{ secrets.TICKER_API_KEY }}
+          COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
+          COMPANIES_HOUSE_OCR: "1"
         run: |
           ARGS="--dry-run --publish-dashboard"
           if [ -n "$CURSOR_API_KEY" ]; then
