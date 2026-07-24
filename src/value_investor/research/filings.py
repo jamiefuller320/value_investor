@@ -37,6 +37,8 @@ USER_AGENT = "value-investor-research/0.1 (+filings)"
 FILINGS_LOOKBACK_DAYS = 800  # ~2.2 years — cover annual + several interims
 FILINGS_MAX_ITEMS = 40
 FILINGS_BODY_MAX_CHARS = 80_000
+CH_OCR_MAX_PAGES = int(os.environ.get("COMPANIES_HOUSE_OCR_MAX_PAGES", "12"))
+CH_OCR_DPI = int(os.environ.get("COMPANIES_HOUSE_OCR_DPI", "150"))
 TICKER_API_BASE = "https://api.tickerapp.net/v2"
 DEFAULT_IR_URLS_PATH = Path("docs/data/research_ir_urls.json")
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -154,6 +156,67 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
         if len(tok) >= 4 and tok not in _ISSUER_STOPWORDS
     ]
     return any(tok in text for tok in tokens[:4])
+
+
+def _companies_house_ocr_enabled() -> bool:
+    flag = (os.environ.get("COMPANIES_HOUSE_OCR") or "1").strip().lower()
+    return flag not in {"0", "false", "no", "off"}
+
+
+def _ocr_pdf_text(raw: bytes, *, max_pages: int | None = None) -> str | None:
+    """OCR image-only PDF pages when pypdf returns no text layer."""
+    if not _companies_house_ocr_enabled():
+        return None
+    try:
+        import fitz  # pymupdf
+        import pytesseract
+        from PIL import Image
+    except ImportError:
+        logger.info(
+            "Companies House OCR skipped — install pymupdf, pytesseract, Pillow "
+            "and system tesseract-ocr"
+        )
+        return None
+
+    page_limit = max_pages if max_pages is not None else CH_OCR_MAX_PAGES
+    try:
+        doc = fitz.open(stream=raw, filetype="pdf")
+        scale = max(72, CH_OCR_DPI) / 72.0
+        matrix = fitz.Matrix(scale, scale)
+        chunks: list[str] = []
+        for index, page in enumerate(doc):
+            if index >= page_limit:
+                break
+            pixmap = page.get_pixmap(matrix=matrix, alpha=False)
+            image = Image.frombytes("RGB", (pixmap.width, pixmap.height), pixmap.samples)
+            page_text = (pytesseract.image_to_string(image) or "").strip()
+            if page_text:
+                chunks.append(page_text)
+            joined = "\n\n".join(chunks)
+            if len(joined) >= FILINGS_BODY_MAX_CHARS:
+                break
+        text = "\n\n".join(chunks).strip()
+        if text:
+            logger.info(
+                "Companies House OCR extracted %s chars from %s page(s)",
+                len(text),
+                min(page_limit, len(doc)),
+            )
+        return text or None
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("Companies House OCR failed: %s", exc)
+        return None
+
+
+def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
+    """Extract searchable text from a filing document (PDF, HTML, or iXBRL)."""
+    if raw[:4] == b"%PDF" or "pdf" in (content_type or "").lower():
+        text = _extract_pdf_text(raw)
+        if text and len(text) >= 200:
+            return text
+        ocr_text = _ocr_pdf_text(raw)
+        return ocr_text or text
+    return _strip_html(raw.decode("utf-8", errors="replace"))
 
 
 def _extract_pdf_text(raw: bytes) -> str | None:
@@ -993,7 +1056,7 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     """Download and extract text from a Companies House accounts filing."""
     from value_investor.research.companies_house import (
         companies_house_api_key,
-        fetch_document_bytes,
+        iter_ch_document_downloads,
     )
 
     key = companies_house_api_key()
@@ -1003,22 +1066,18 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     if not meta_url:
         return None
     try:
-        fetched = fetch_document_bytes(meta_url, api_key=key)
+        downloads = iter_ch_document_downloads(meta_url, api_key=key)
     except Exception as exc:  # noqa: BLE001
         logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
         return None
-    if not fetched:
-        return None
-    raw, content_type = fetched
-    if raw[:4] == b"%PDF" or "pdf" in (content_type or "").lower():
-        text = _extract_pdf_text(raw)
-    else:
-        text = _strip_html(raw.decode("utf-8", errors="replace"))
-    if not text or len(text) < 200:
-        return None
-    if len(text) > FILINGS_BODY_MAX_CHARS:
-        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
-    return text
+    for raw, content_type in downloads:
+        text = _extract_filing_document_text(raw, content_type)
+        if not text or len(text) < 200:
+            continue
+        if len(text) > FILINGS_BODY_MAX_CHARS:
+            text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+        return text
+    return None
 
 
 def refetch_missing_filing_bodies(
