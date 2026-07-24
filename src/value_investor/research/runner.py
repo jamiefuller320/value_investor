@@ -238,6 +238,7 @@ def _process_ticker(
         sources_dir=sources_dir,
         since=since,
         market=market,
+        deepen_history=True,
     )
 
     effective_run_at = run_at or datetime.now(UTC)

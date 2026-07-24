@@ -172,6 +172,7 @@ def test_run_research_for_strong_buys_creates_initial_memo(mock_ingest, mock_ini
     assert summary.created == 1
     assert summary.documents[0].executive_summary == "Deep memo."
     assert (tmp_path / "research" / "AAA.L" / "research.md").exists()
+    assert mock_ingest.call_args.kwargs["deepen_history"] is True
 
 
 @patch("value_investor.research.runner.run_initial_research_agent")
