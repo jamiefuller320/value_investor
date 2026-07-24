@@ -1,6 +1,6 @@
 # Vistry Group PLC (VTY.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:44:20.694789+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 Vistry Group is a UK housebuilder trading at a deep discount to book (P/B ~0.26, P/E ~6.4), which drives a **strong buy** on the quantitative screen (10/22 models passed, composite score 92%). The stock embeds a contrarian bet that normalised earnings and partnership-led affordable housing volumes will restore returns on a £3.3bn equity base with modest net debt (~£144m). The central debate is whether headline cheapness reflects a cyclical trough or structural margin impairment: management guided to an H1 2026 loss (~£30m), halted buybacks, and cut prices to drive sales, even as FY adjusted profit guidance (~£200m) is maintained. Leadership turnover, elevated short interest, and a sector-wide competition lawsuit add execution and legal overhang not captured by value metrics alone.
@@ -90,7 +90,8 @@ Strategy narrative in secondary coverage emphasises **partnerships and affordabl
 ---
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: high
 Confidence: 0.62
 Rationale: Deep research confirms the screen’s extreme valuation and balance-sheet cheapness but weakens the strong-buy case on near-term earnings (H1 loss, margin pressure), leadership transition, and unquantified litigation risk, warranting phased accumulation rather than full conviction.
+Risk: unknown

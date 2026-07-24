@@ -339,7 +339,13 @@ def test_ingest_filings_saves_body_for_direct_url(tmp_path: Path):
     with (
         patch("value_investor.research.filings.fetch_filings_ticker_api", return_value=rows),
         patch("value_investor.research.filings.fetch_filings_google_news", return_value=[]),
+        patch(
+            "value_investor.research.companies_house.fetch_filings_companies_house",
+            return_value=[],
+        ),
+        patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
         patch("value_investor.research.filings.fetch_filing_body", return_value=body_text),
+        patch("value_investor.research.filings.resolve_sec_cik", return_value=None),
     ):
         meta = ingest_filings(
             ticker="EX.L",
@@ -497,3 +503,64 @@ def test_ingest_filings_euro_regime_includes_sec_dual_list(tmp_path: Path):
     assert index["regime"] == "euro_filings"
     assert "google_news_euro" in index["sources_used"]
     assert "sec_edgar" in index["sources_used"]
+
+
+def test_ingest_filings_uk_rns_includes_sec_when_dual_listed(tmp_path: Path):
+    uk_rows = [
+        {
+            "id": "ukukukukukukukuk",
+            "source": "ticker_rns_api",
+            "headline": "Rio Tinto Full Year Results",
+            "published_at": "2026-02-20T07:00:00+00:00",
+            "url": "https://www.investegate.co.uk/announcement/rns/rio/fy/1",
+            "period": "annual",
+            "category": None,
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 120,
+        }
+    ]
+    sec_rows = [
+        {
+            "id": "sec20f20f20f20f",
+            "source": "sec_edgar",
+            "headline": "20-F: Annual report",
+            "published_at": "2026-02-20T00:00:00+00:00",
+            "url": "https://www.sec.gov/Archives/edgar/data/863064/0001/rio-20251231.htm",
+            "period": "annual",
+            "category": "20-F",
+            "form": "20-F",
+            "summary": "",
+            "has_body": False,
+            "body_path": None,
+            "priority": 130,
+        }
+    ]
+    with (
+        patch("value_investor.research.filings.fetch_filings_ticker_api", return_value=uk_rows),
+        patch("value_investor.research.filings.fetch_filings_google_news", return_value=[]),
+        patch(
+            "value_investor.research.companies_house.fetch_filings_companies_house",
+            return_value=[],
+        ),
+        patch("value_investor.research.filings.resolve_sec_cik", return_value=863064),
+        patch(
+            "value_investor.research.filings.fetch_filings_sec_edgar",
+            return_value=sec_rows,
+        ) as sec,
+        patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
+        patch("value_investor.research.filings.fetch_filing_body", return_value=None),
+    ):
+        meta = ingest_filings(
+            ticker="RIO.L",
+            company_name="Rio Tinto plc",
+            sources_dir=tmp_path,
+            market="ftse350",
+        )
+
+    sec.assert_called_once_with(ticker="RIO", include_current_reports=False)
+    assert meta["filings_regime"] == "uk_rns"
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "sec_edgar" in index["sources_used"]
+    assert "SEC 20-F when dual-listed" in index["note"]

@@ -1,6 +1,6 @@
 # Grafton Group plc (GFTU.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:42:44.568317+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 Grafton Group is a European building-materials distributor whose shares screen as a strong buy on cheapness (P/E 12.4, P/B 1.1), dividend yield (~4%), GARP, and balance-sheet quality (current ratio 2.11). The investment case rests on a cash-generative, acquisition-led platform trading below book-adjacent multiples while management returns capital via dividends and buybacks. FY2025 showed revenue recovery (+10.4% to £2.52bn per Yahoo) and H1 2026 momentum (+6.7% revenue to £1.34bn per news), but earnings remain well below the 2022 peak and UK construction remains a headwind. The central debate is whether European diversification and bolt-on M&A can sustain mid-single-digit organic growth through a patchy cycle, or whether cyclical normalisation and goodwill-heavy acquisitions cap ROE and re-rating potential. Primary RNS filing bodies were not retrieved in this research pass, limiting verification of risk disclosures and interim detail.
@@ -82,7 +82,8 @@ Coverage over the past year is moderate, skewed toward capital returns and resul
 **Thin / irrelevant items:** Several manifest entries reference unrelated tickers (BP chair ousting, Gooch & Housego, Games Workshop). Routine “Transaction in Own Shares” RNS notices (TradingView, 16 Sep 2025; ongoing Jul 2026) are procedural, not strategic.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.68
 Rationale: Deep research largely confirms the quantitative strong-buy case on valuation, cash generation, and capital returns, but the absence of primary filing bodies and persistent cyclical/UK headwinds warrant medium risk and staged conviction rather than full immediate sizing.
+Risk: unknown

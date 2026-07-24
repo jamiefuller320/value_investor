@@ -1,6 +1,6 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:41:17.422839+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 Morgan Sindall Group is a UK-focused construction and regeneration group (fit-out, construction, infrastructure, property services, and housing) that the quantitative screen rates as a **Strong Buy**, passing cheapness, quality, dividend, GARP, and risk factor families at a composite score of 71% (sector-relative 75%). The investment case rests on a multi-year earnings compounding story—Yahoo-sourced financials show revenue rising from £3.6bn (2022) to £5.0bn (2025) and net income from £61m to £175m—combined with modest leverage (debt/equity ~18%), a 3.3% dividend yield, and ~£171m free cash flow in FY2025. Valuation at roughly 13x earnings and 3.0x book looks reasonable for a business delivering ~25% ROE, though P/B sits at the screen’s upper bound. The key debate is whether record order-book momentum and margin expansion can persist through a cyclical UK construction downcycle, or whether working-capital build and contract-risk provisions will compress returns; primary regulatory filings were not retrieved, limiting filing-level risk verification.
@@ -102,7 +102,8 @@ Coverage over the past year is **moderately thick on trading sentiment but thin 
 **Notable absences:** No material M&A, regulatory fines, management departures, or profit warnings appear in the manifest. Coverage skews toward price-reaction headlines and third-party commentary rather than primary RNS result statements—consistent with the filing-index gap noted above.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.68
 Rationale: Yahoo-sourced financials and news flow support the screen’s quality-and-value profile (earnings growth, net cash, FCF, shareholder returns), but the absence of primary annual/interim filing extracts and construction-sector cyclicality prevent full confirmation of the Strong Buy signal at high conviction.
+Risk: unknown

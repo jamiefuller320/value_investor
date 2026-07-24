@@ -133,6 +133,77 @@ def test_resolve_company_number_uses_cache_before_search(tmp_path: Path, monkeyp
     assert called["search"] == 0
 
 
+def test_search_company_number_penalizes_dormant(monkeypatch):
+    payload = {
+        "items": [
+            {
+                "company_number": "16354310",
+                "title": "RIO TINTO PLC",
+                "company_status": "dormant",
+            },
+            {
+                "company_number": "00719885",
+                "title": "RIO TINTO PLC",
+                "company_status": "active",
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house._ch_get",
+        lambda *a, **k: json.dumps(payload).encode("utf-8"),
+    )
+    number = search_company_number(
+        company_name="Rio Tinto plc",
+        ticker="RIO.L",
+        api_key="test-key",
+    )
+    assert number == "00719885"
+
+
+def test_fetch_accounts_filing_rows_skips_dormant(monkeypatch):
+    payload = {
+        "items": [
+            {
+                "transaction_id": "tx_dormant",
+                "description": "accounts-with-made-up-date-dormant-company-accounts",
+                "date": "2025-03-15",
+                "links": {
+                    "document_metadata": (
+                        "https://document-api.company-information.service.gov.uk/document/d"
+                    )
+                },
+            },
+            {
+                "transaction_id": "tx_full",
+                "description": "accounts-with-accounts-type-full",
+                "date": "2024-03-15",
+                "links": {
+                    "document_metadata": (
+                        "https://document-api.company-information.service.gov.uk/document/f"
+                    )
+                },
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house._ch_get",
+        lambda *a, **k: json.dumps(payload).encode("utf-8"),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.time.sleep",
+        lambda *_a, **_k: None,
+    )
+    rows = fetch_accounts_filing_rows(
+        company_number="00719885",
+        api_key="test-key",
+        max_accounts=5,
+    )
+    assert len(rows) == 1
+    assert "full" in rows[0]["headline"]
+
+
 def test_fetch_accounts_filing_rows_limits_and_shapes(monkeypatch):
     items = []
     for i in range(8):
@@ -200,6 +271,7 @@ def test_ingest_filings_merges_companies_house_and_deepens(tmp_path: Path, monke
             return_value="A" * 250 + " pension deficit going concern",
         ),
         patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
+        patch("value_investor.research.filings.resolve_sec_cik", return_value=None),
     ):
         meta = ingest_filings(
             ticker="SHEL.L",

@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 2 · Updated 2026-07-20T20:48:07.945587+00:00 · Mode: gap_fill_
+_Version 2 · Updated 2026-07-24T14:30:46.011192+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 AEP Plantations Plc is a London-listed Indonesian palm-oil producer that the quantitative screen rates as a **Strong Buy** (16/22 models; composite score 89%), supported by low multiples (P/E 9.1, P/B 1.5), a ~6.0% dividend yield, 15.1% ROE, and an exceptionally strong balance sheet (current ratio 8.7; negligible debt). With no downloadable primary filing bodies in this research pack, Yahoo-sourced financials (`financials_annual.json`) indicate accelerating FY2025 performance: revenue of $465.2m (+25% y/y) and net income of $90.9m (+35%), with free cash flow of $83.6m. The investment case rests on cash-generative estates, active capital return (dividends and buybacks), and optionality from a proposed Indonesian subsidiary IPO. The central debate is whether cheap valuation and shareholder-friendly capital allocation offset Indonesian export-policy risk, palm-oil price cyclicality, and limited primary-disclosure depth in this source pack.
@@ -80,7 +80,7 @@ Coverage over the past year is moderate but focused on capital allocation, M&A, 
 News coverage is adequate for corporate actions but thin on detailed operational and regulatory analysis. Several indexed RNS items (PDMR notifications, holdings disclosures, 20 July 2026) are routine and add little strategic insight.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.70
 Rationale: Gap-fill confirms the screen’s net-cash balance sheet and value metrics are economically grounded, but primary disclosure remains too thin to fully validate governance, cyclicality overlays, or post-Pinago accounts, leaving the Strong Buy case supported yet not fully de-risked.
@@ -123,3 +123,4 @@ SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, al
 NextSources: Companies House accounts (validate earnings quality inputs); scoring overlay to reclassify plantation issuers out of Consumer Defensive peer sets; company IR presentation (bridge FCF and segment earnings for PEG/Piotroski context)
 
 ---
+Risk: unknown

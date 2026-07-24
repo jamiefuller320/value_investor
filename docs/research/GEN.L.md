@@ -1,6 +1,6 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 1 · Updated 2026-07-20T20:43:39.957369+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-24T16:32:48.579527+00:00 · Mode: seeded_
 
 ## EXECUTIVE SUMMARY
 Genuit Group plc is a UK building-products group (plastic piping, ventilation, water management and sustainable building systems) that the quantitative screen rates **Strong Buy** on modest multiples: P/E ~15×, P/B ~1.0×, dividend yield ~4.8% and FCF yield ~8%. The case rests on a FY2025 earnings inflection—revenue recovering to £602m (+7.3% YoY) and net income rising to £45.2m (+35%)—while the share price has lagged earnings over five years. The central debate is whether FY2025 marks a durable recovery in UK construction and RMI demand, or a cyclical upturn already in the price, and whether acquisitive growth justifies rising net debt and a balance sheet with negative tangible book value. Primary filing body extracts are entirely absent from the source set; financial analysis falls back to Yahoo data, limiting conviction on pensions, covenants and contingencies.
@@ -86,7 +86,8 @@ Two interim RNS headlines are indexed—a **Trading Update** (22 May 2026) and *
 **Coverage assessment:** Dedicated Genuit news is **thin** beyond earnings-call summaries and RNS headlines. The news manifest is heavily polluted by "Gen Z" keyword matches unrelated to Genuit Group plc. Material strategy news (Monodraught, acquisitions, interim trading) comes primarily from the filings index headlines, not press coverage.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: Verdict: accumulate
 Risk: medium
 Confidence: 0.68
 Rationale: Deep research broadly confirms the quantitative Strong Buy on valuation, dividend and FCF metrics, but tempers conviction owing to absent primary filing bodies, cyclical revenue history, rising post-M&A leverage, negative tangible book, and unverified RNS headlines in a contaminated feed.
+Risk: unknown
