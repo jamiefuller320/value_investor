@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T04:39:07+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-24T04:41:26+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -108,6 +108,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L51 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation. | After a few weeks of enforce_weekly_research_cap with the £30 usage envelope |
 | L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
 | L60 | **Upgrade Ticker RNS plan for symbol-filtered disclosures** | Current TICKER_API_KEY plan ignores symbol/isin filters and returns a global Form 8.x feed. Client-side issuer headline filter now drops noise, but a paid symbol filter would restore direct RNS bodies for memo tickers. | Ticker.app plan is upgraded or an alternate UK RNS API with issuer filter is available |
+| L62 | **Document Cursor Secrets delete path for CURSOR_API_KEY** | Agents cannot delete Cursor cloud secrets via MCP/API. When UI delete is hard to find, point owners to Dashboard → Cloud Agents → environment Secrets (or Settings Secrets tab), then start a new agent. Unsetting in a running shell does not remove the store. | Next time CURSOR_API_KEY rotation fails because the old secret cannot be removed from the UI |
 
 ---
 
