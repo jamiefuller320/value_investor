@@ -17,6 +17,8 @@ left questions `unresolved` and parked ingest suggestions.
 7. **Companies House accounts** — free Public Data API (`COMPANIES_HOUSE_API_KEY`) for UK
    statutory accounts PDFs/iXBRL text. Ticker→company number map cached in
    `docs/data/companies_house_numbers.json` (search + manual override).
+   When PDFs are image-only, OCR (tesseract + pymupdf) extracts text; iXBRL/xhtml
+   is preferred when CH offers both formats.
 8. **Historical deepen for memo tickers** — `ftse-research --deepen-sources` (and gap-fill
    ingest with `deepen_history=True`) pulls up to five CH accounts years + more bodies.
    **Does not** backdate research revisions (avoids lookahead into the learning track).
@@ -36,6 +38,11 @@ left questions `unresolved` and parked ingest suggestions.
 ```bash
 # Free key: https://developer.company-information.service.gov.uk/
 export COMPANIES_HOUSE_API_KEY=...
+
+# Image-only CH accounts PDFs need OCR (system package + Python deps in pyproject.toml)
+sudo apt install tesseract-ocr   # Debian/Ubuntu; brew install tesseract on macOS
+export COMPANIES_HOUSE_OCR=1       # default on; set 0 to skip OCR
+export COMPANIES_HOUSE_OCR_MAX_PAGES=12  # optional cap per filing
 ```
 
 ## Commands

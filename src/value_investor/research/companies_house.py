@@ -283,48 +283,65 @@ def fetch_accounts_filing_rows(
     return rows
 
 
-def fetch_document_bytes(
+MIME_PDF = "application/pdf"
+MIME_XHTML = "application/xhtml+xml"
+MIME_XML = "application/xml"
+DOCUMENT_MIME_PRIORITY = (MIME_PDF, MIME_XHTML, MIME_XML)
+
+
+def fetch_document_metadata(
     document_metadata_url: str,
     *,
     api_key: str,
-) -> tuple[bytes, str] | None:
-    """
-    Fetch filed document bytes.
-
-    Returns (raw_bytes, content_type_hint) or None.
-    """
-    # Metadata endpoint (may be on document-api host).
+) -> dict[str, Any] | None:
+    """Fetch Companies House document metadata JSON."""
     meta_url = document_metadata_url
     if meta_url.startswith("/"):
         meta_url = CH_DOCUMENT_API_BASE + meta_url
     try:
         meta_raw = _ch_get(meta_url, api_key=api_key)
-        meta = json.loads(meta_raw.decode("utf-8"))
+        return json.loads(meta_raw.decode("utf-8"))
     except Exception as exc:  # noqa: BLE001
         logger.debug("CH document metadata failed for %s: %s", document_metadata_url, exc)
+        return None
+
+
+def _document_mime_candidates(
+    resources: dict[str, Any],
+    *,
+    prefer: str | None = None,
+) -> list[str]:
+    if not isinstance(resources, dict):
+        return []
+    available = [mime for mime in DOCUMENT_MIME_PRIORITY if mime in resources]
+    if prefer and prefer in available:
+        return [prefer, *[mime for mime in available if mime != prefer]]
+    return available
+
+
+def fetch_document_bytes(
+    document_metadata_url: str,
+    *,
+    api_key: str,
+    prefer: str | None = None,
+    metadata: dict[str, Any] | None = None,
+) -> tuple[bytes, str] | None:
+    """
+    Fetch filed document bytes.
+
+    Returns (raw_bytes, content_type_hint) or None.
+  When ``prefer`` is set, that MIME type is tried first if present in metadata.
+    """
+    meta = metadata or fetch_document_metadata(document_metadata_url, api_key=api_key)
+    if not meta:
         return None
 
     links = meta.get("links") or {}
     doc_link = links.get("document") or links.get("self")
     resources = meta.get("resources") or {}
-    # Prefer PDF, then xhtml/ixbrl.
-    accept = "application/pdf"
-    if isinstance(resources, dict):
-        if "application/pdf" in resources:
-            accept = "application/pdf"
-            length = int((resources["application/pdf"] or {}).get("content_length") or 0)
-            if length > MAX_DOCUMENT_BYTES:
-                logger.info(
-                    "Skipping oversized CH PDF (%s bytes > %s) for %s",
-                    length,
-                    MAX_DOCUMENT_BYTES,
-                    document_metadata_url,
-                )
-                return None
-        elif "application/xhtml+xml" in resources:
-            accept = "application/xhtml+xml"
-        elif "application/xml" in resources:
-            accept = "application/xml"
+    candidates = _document_mime_candidates(resources, prefer=prefer)
+    if not candidates:
+        return None
 
     if not doc_link:
         return None
@@ -332,18 +349,64 @@ def fetch_document_bytes(
         doc_url = CH_DOCUMENT_API_BASE + str(doc_link)
     else:
         doc_url = str(doc_link)
-    try:
-        raw = _ch_get(
-            doc_url,
+
+    for accept in candidates:
+        if accept == MIME_PDF:
+            length = int((resources.get(MIME_PDF) or {}).get("content_length") or 0)
+            if length > MAX_DOCUMENT_BYTES:
+                logger.info(
+                    "Skipping oversized CH PDF (%s bytes > %s) for %s",
+                    length,
+                    MAX_DOCUMENT_BYTES,
+                    document_metadata_url,
+                )
+                continue
+        try:
+            raw = _ch_get(
+                doc_url,
+                api_key=api_key,
+                accept=accept,
+                timeout=DOCUMENT_DOWNLOAD_TIMEOUT_S,
+            )
+            time.sleep(RATE_LIMIT_SLEEP_S)
+            return raw, accept
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("CH document download failed for %s (%s): %s", doc_url, accept, exc)
+            continue
+    return None
+
+
+def iter_ch_document_downloads(
+    document_metadata_url: str,
+    *,
+    api_key: str,
+) -> list[tuple[bytes, str]]:
+    """Download each available MIME variant for a CH filing (PDF, then iXBRL)."""
+    meta = fetch_document_metadata(document_metadata_url, api_key=api_key)
+    if not meta:
+        return []
+    resources = meta.get("resources") or {}
+    downloads: list[tuple[bytes, str]] = []
+    seen: set[str] = set()
+    for mime in _document_mime_candidates(resources):
+        if mime in seen:
+            continue
+        fetched = fetch_document_bytes(
+            document_metadata_url,
             api_key=api_key,
-            accept=accept,
-            timeout=DOCUMENT_DOWNLOAD_TIMEOUT_S,
+            prefer=mime,
+            metadata=meta,
         )
-        time.sleep(RATE_LIMIT_SLEEP_S)
-        return raw, accept
-    except Exception as exc:  # noqa: BLE001
-        logger.debug("CH document download failed for %s: %s", doc_url, exc)
-        return None
+        if not fetched:
+            continue
+        raw, content_type = fetched
+        signature = f"{content_type}:{hash(raw[:4096])}"
+        if signature in seen:
+            continue
+        seen.add(signature)
+        seen.add(mime)
+        downloads.append((raw, content_type))
+    return downloads
 
 
 def fetch_filings_companies_house(
