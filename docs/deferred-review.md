@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:21:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:30:01+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -60,6 +60,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
 | L84 | **Momentum grace overlay for paper-auto exits** | When a held name drops below buy-tier on the value screen but price trend remains strong (e.g. above rising 50/200 MA, positive MACD slope, unrealized gain), keep the sleeve for a bounded grace period instead of immediate automated sell. Test as a separate paper track before touching the rules control book. | Decision-review has ≥12 weeks of marks on the rules control book and at least one full cycle where value-downgrade exits would have fired; trailing-stop sim track shows material give-back from screen-only churn |
+| L85 | **Auto-tune momentum grace knobs from exit-shadow review** | When exit_shadow_review shows ≥30 closed grace exits with stable early_exit vs good_exit balance vs rules screen_rotation, allow decision-review-style small steps on grace_weeks, ATR stop multiplier, and take-profit extension on the momentum_grace track only. | learning_tracks_exit_shadow.json shows ≥30 closed grace exits and grace vs screen_rotation verdict rates diverge materially |
 
 ### Universe & data
 
@@ -109,6 +110,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L81 | **Gap-fill: scoring — Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex)** | Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m. | After next weekly email gap-fill pass confirms the gap persists |
 | L82 | **Gap-fill: ingest — Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch** | Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch — five new bodies this pass were holding disclosures only and did not close material gaps. | After next weekly email gap-fill pass confirms the gap persists |
 | L83 | **Gap-fill: ingest — Parse Companies House iXBRL into structured borrowings, pension and NCAV** | Parse Companies House iXBRL into structured borrowings, pension and NCAV fields; OCR headline extracts (`ch_00735438_*.txt`) lack note-level covenant text. | After next weekly email gap-fill pass confirms the gap persists |
+| L86 | **Offline archive counterfactual lab for grace parameters** | Walk-forward search on archived weekly screens: simulate hold-N-more-weeks after value downgrade without touching live paper books. Use for parameter priors before promoting shadow-derived knob changes. | ≥12 months of weekly archives with buy-tier turnover and library screen-lite history on FTSE 350 |
 
 ### Ops / reliability
 

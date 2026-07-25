@@ -147,9 +147,13 @@ class PaperTrade:
     net_cash: float
     note: str = ""
     name: str = ""
+    avg_cost_at_exit: float | None = None
+    momentum_grace_at_exit: bool = False
+    grace_started_at_at_exit: str | None = None
+    position_closed: bool = False
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "id": self.id,
             "fund_id": self.fund_id,
             "acted_at": self.acted_at,
@@ -164,6 +168,15 @@ class PaperTrade:
             "note": self.note,
             "name": self.name,
         }
+        if self.avg_cost_at_exit is not None:
+            payload["avg_cost_at_exit"] = round(self.avg_cost_at_exit, 4)
+        if self.momentum_grace_at_exit:
+            payload["momentum_grace_at_exit"] = True
+        if self.grace_started_at_at_exit:
+            payload["grace_started_at_at_exit"] = self.grace_started_at_at_exit
+        if self.position_closed:
+            payload["position_closed"] = True
+        return payload
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> PaperTrade:
@@ -181,6 +194,10 @@ class PaperTrade:
             net_cash=float(data["net_cash"]),
             note=str(data.get("note") or ""),
             name=str(data.get("name") or ""),
+            avg_cost_at_exit=_optional_float(data.get("avg_cost_at_exit")),
+            momentum_grace_at_exit=bool(data.get("momentum_grace_at_exit", False)),
+            grace_started_at_at_exit=data.get("grace_started_at_at_exit"),
+            position_closed=bool(data.get("position_closed", False)),
         )
 
 
@@ -508,8 +525,12 @@ class PaperFund:
         cost = gross * self.config.trade_cost_pct
         proceeds = gross - cost
         self.cash += proceeds
+        avg_cost_at_exit = float(position.avg_cost)
+        momentum_grace_at_exit = bool(position.momentum_grace)
+        grace_started_at_at_exit = position.grace_started_at
+        position_closed = (position.shares - shares) <= 1e-9
         position.shares -= shares
-        if position.shares <= 1e-9:
+        if position_closed:
             del self.holdings[ticker]
 
         trade = PaperTrade(
@@ -526,6 +547,10 @@ class PaperFund:
             net_cash=proceeds,
             note=note,
             name=position.name if position else ticker,
+            avg_cost_at_exit=avg_cost_at_exit,
+            momentum_grace_at_exit=momentum_grace_at_exit,
+            grace_started_at_at_exit=grace_started_at_at_exit,
+            position_closed=position_closed,
         )
         self.trades.append(trade)
         return trade

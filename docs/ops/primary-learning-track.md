@@ -17,6 +17,18 @@ trade checklist — it is a performance comparison to market datums. Success =
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 
+## Post-exit shadow learning (observe-only)
+
+On every paper-auto run, each track records **full position sells** into a shadow cohort and
+scores post-exit price paths at 1/4/8/12 weeks. Artifacts per track:
+
+- `exit_shadow.json` — open + closed cohort records
+- `exit_shadow_review.json` — aggregate verdicts by exit kind (`grace`, `screen_rotation`, …)
+- `learning_tracks_exit_shadow.json` — rollup across tracks (compare grace vs rules)
+
+Verdicts (`good_exit`, `early_exit`, `neutral`) are **not** wired to auto-tune grace knobs yet —
+wait for a thicker closed cohort before promoting parameter changes.
+
 ## Success datums
 
 1. **Market:** excess return after costs vs FTSE 100 (`^FTSE`) on the primary book.

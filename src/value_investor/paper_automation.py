@@ -18,6 +18,7 @@ from value_investor.paper_fund import (
     preview_automated_plan,
     run_automated_rebalance,
 )
+from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
 from value_investor.technical_analysis import (
     compute_indicators,
@@ -520,6 +521,28 @@ def run_owned_surveillance(
     return alerts
 
 
+def _marked_price_map(
+    marked_rows: list[dict[str, Any]],
+    fund: PaperFund,
+) -> dict[str, float]:
+    prices: dict[str, float] = {}
+    for row in marked_rows:
+        ticker = str(row.get("ticker") or "")
+        if not ticker:
+            continue
+        for key in ("price", "last", "close"):
+            value = row.get(key)
+            if value is not None and float(value) > 0:
+                prices[ticker] = float(value)
+                break
+    for ticker, position in fund.holdings.items():
+        prices.setdefault(ticker, float(position.avg_cost or 0))
+    for trade in fund.trades:
+        if str(trade.side) == "sell" and trade.ticker not in prices:
+            prices[trade.ticker] = float(trade.price)
+    return prices
+
+
 @dataclass
 class AutomationRunResult:
     acted: bool
@@ -529,6 +552,7 @@ class AutomationRunResult:
     alerts: list[dict[str, Any]] = field(default_factory=list)
     fund: dict[str, Any] = field(default_factory=dict)
     note: str = ""
+    exit_shadow_review: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -539,6 +563,7 @@ class AutomationRunResult:
             "alerts": self.alerts,
             "fund": self.fund,
             "note": self.note,
+            "exit_shadow_review": self.exit_shadow_review,
             "generated_at": datetime.now(timezone.utc).isoformat(),
         }
 
@@ -625,6 +650,15 @@ def run_daily_automation(
         fund.apply_deposits_to(gate["local_time"])
         save_automated_fund(fund_path, fund)
 
+    price_map = _marked_price_map(marked, fund)
+    exit_shadow_review = run_exit_shadow_pass(
+        output_dir=output_dir,
+        fund=fund,
+        track_id=config.track_id,
+        prices_by_ticker=price_map,
+        as_of=gate["local_time"],
+    )
+
     result = AutomationRunResult(
         acted=acted,
         gate=gate,
@@ -633,6 +667,7 @@ def run_daily_automation(
         alerts=alerts,
         fund=fund.to_dict(),
         note=note,
+        exit_shadow_review=exit_shadow_review,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -768,6 +803,11 @@ def run_learning_tracks(
     }
     (base_dir / "learning_tracks_summary.json").write_text(
         json.dumps(summary, indent=2),
+        encoding="utf-8",
+    )
+    shadow_summary = summarize_learning_tracks_exit_shadow(base_dir)
+    (base_dir / "learning_tracks_exit_shadow.json").write_text(
+        json.dumps(shadow_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary

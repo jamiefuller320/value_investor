@@ -34,8 +34,12 @@ ftse-decision-review --output-dir docs/data/paper_automation --tracks all --appl
 ```
 
 Weekday `paper-auto.yml` seeds prior state, refreshes research overlay on
-`docs/data/latest.json`, runs both tracks, then
+`docs/data/latest.json`, runs all three tracks, then
 `ftse-decision-review --tracks all --apply`. Thin history stays propose-only.
+
+Post-exit shadow cohorts (`exit_shadow.json`, `exit_shadow_review.json`) score
+1/4/8/12-week paths after full sells. Observe-only for now — grace knob
+auto-tune is deferred until closed cohorts thicken (see `learning_tracks_exit_shadow.json`).
 
 ## Artifacts
 
