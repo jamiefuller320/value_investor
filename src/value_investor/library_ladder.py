@@ -318,7 +318,7 @@ def run_library_ladder(
             layer["dry_run"] = True
             layer["executed"] = 0
         else:
-            key = api_key or resolve_cursor_api_key()[0]
+            key = resolve_cursor_api_key()[0] if not (api_key or "").strip() else api_key.strip()
             if not key:
                 layer["skipped"] = True
                 layer["reason"] = "CURSOR_API_KEY missing"

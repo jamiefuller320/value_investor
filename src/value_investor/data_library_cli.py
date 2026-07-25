@@ -223,8 +223,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ladder_p.add_argument(
         "--api-key",
-        default=os.environ.get("CURSOR_API_KEY"),
-        help="Cursor API key for selective research",
+        default=None,
+        help="Cursor API key for selective research (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
     )
     ladder_p.add_argument(
         "--unrestricted-budget",
