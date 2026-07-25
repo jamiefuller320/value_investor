@@ -6,6 +6,7 @@ from dataclasses import dataclass, field, replace
 from typing import Any
 
 from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot, load_run_snapshots
+from value_investor.research.verdict import coerce_research_verdict
 
 DEFAULT_INITIAL_CAPITAL = 1000.0
 DEFAULT_TRADE_COST_PCT = 0.03
@@ -240,8 +241,10 @@ def _select_targets(snapshot: RunSnapshot, config: SimulatorConfig) -> list[str]
         if signal not in config.buy_signals:
             continue
         if config.require_research_accumulate:
-            verdict = row.get("research_verdict")
-            if verdict is None or str(verdict).strip().lower() != "accumulate":
+            verdict = coerce_research_verdict(
+                str(row.get("research_verdict")) if row.get("research_verdict") is not None else None
+            )
+            if verdict != "accumulate":
                 continue
         timing = row.get("timing_signal")
         if config.skip_timing_wait and timing == "wait":

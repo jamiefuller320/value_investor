@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "focus_market": "us_adr_asia",
+  "focus_market": "atx",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
@@ -265,6 +265,14 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "queue_complete"
+      },
+      {
+        "at": "2026-07-25T06:02:07.067074+00:00",
+        "from_market": "us_adr_asia",
+        "to_market": "atx",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
       }
     ],
     "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
@@ -319,7 +327,7 @@
     "use_in_scoring": false,
     "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
   },
-  "updated_at": "2026-07-22T06:15:00.241943+00:00",
+  "updated_at": "2026-07-25T06:02:07.068022+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -332,190 +340,22 @@
     "research_hard_cap": 50,
     "research_all_graduated": true,
     "last_run": {
-      "run_at": "2026-07-20T20:06:59.706524+00:00",
+      "run_at": "2026-07-25T06:02:06.887564+00:00",
       "focus_market": "us_adr_asia",
-      "focus_market_after": "us_adr_asia",
+      "focus_market_after": "atx",
       "screen_shortlist": 0,
       "research": {
-        "model": "composer-2.5",
-        "research_cap": 50,
-        "research_markets": [
-          "sp500",
-          "euro_stoxx50",
-          "asx200",
-          "ftse_smallcap",
-          "nasdaq100",
-          "dax",
-          "cac40",
-          "tsx60",
-          "aim",
-          "ibex35",
-          "ftse_mib",
-          "aex",
-          "bel20",
-          "hang_seng",
-          "sti",
-          "us_adr_asia"
-        ],
-        "research_all_graduated": true,
-        "enforce_weekly_research_cap": false,
-        "remaining_usd_before": 0.0,
-        "dedupe": {
-          "already_researched_count": 163,
-          "skipped_count": 169,
-          "skipped_sample": [
-            {
-              "market": "sp500",
-              "ticker": "ACN",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CTSH",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "AOS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "PNR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "HII",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "SNA",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "NEM",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CF",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "INTU",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "GD",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "TROW",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "QCOM",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "PFE",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "SWKS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "PTC",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "FSLR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "LEN",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "LULU",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CPRT",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "NVR",
-              "reason": "duplicate_ticker"
-            }
-          ],
-          "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
-        },
-        "targets": [
-          {
-            "market": "aim",
-            "ticker": "FDEV.L",
-            "name": "Frontier Developments plc",
-            "signal": "buy",
-            "conviction_score": 0.3091
-          },
-          {
-            "market": "us_adr_asia",
-            "ticker": "INFY",
-            "name": "Infosys Limited",
-            "signal": "buy",
-            "conviction_score": 0.329
-          }
-        ],
-        "executed": 2,
-        "created": 2,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 0.8,
-        "remaining_usd_after": 1.2
+        "skipped": true
       },
       "graduation": {
         "graduated": false,
         "from_market": "us_adr_asia",
-        "to_market": null,
-        "reason": "already_graduated"
+        "to_market": "atx",
+        "reason": "advanced"
       },
       "maintenance": {
-        "skipped": false,
-        "markets": [
-          "sp500",
-          "euro_stoxx50",
-          "asx200",
-          "ftse_smallcap",
-          "nasdaq100",
-          "dax",
-          "cac40",
-          "tsx60",
-          "aim",
-          "ibex35",
-          "ftse_mib",
-          "aex",
-          "bel20",
-          "hang_seng",
-          "sti",
-          "us_adr_asia"
-        ]
+        "skipped": true,
+        "markets": []
       }
     }
   }

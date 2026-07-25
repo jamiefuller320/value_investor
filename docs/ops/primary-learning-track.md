@@ -33,6 +33,9 @@ ftse-paper-auto --output-dir docs/data/paper_automation --reports docs/data/late
 
 # Review both vs market; apply knobs only when history is thick
 ftse-decision-review --output-dir docs/data/paper_automation --tracks all --apply
+
+# Refresh overlay + force bootstrap (weekends / testing):
+python3 scripts/bootstrap_learning_loop.py
 ```
 
 Artifacts: `learning_tracks_summary.json`, `learning_tracks_review.json`, plus
