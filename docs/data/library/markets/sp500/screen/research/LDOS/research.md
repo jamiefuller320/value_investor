@@ -1,0 +1,92 @@
+# Leidos Holdings, Inc. (LDOS) — Research memo
+
+_Version 1 · Updated 2026-07-25T10:19:24.567615+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Leidos is a US government-focused technology and defence services contractor (~87% of revenue from US government customers per FY2025 10-K) trading on a low absolute multiple (screen P/E 10.1, FCF yield 8.5%) despite a multi-year earnings recovery from the FY2023 impairment trough. The quantitative screen flags strong value, quality, dividend, GARP and risk characteristics (12/22 models passed, ROE 30.6%), but the share price has underperformed sharply in 2026 (~41–44% YTD per news commentary), creating a valuation-versus-sentiment disconnect. The central debate is whether recent weakness reflects transient contract or programme noise and repositioning (Entrust acquisition, segment realignment, UK logistics partnerships) or a more durable reset in growth expectations and programme risk. Filings support solid operating trends and backlog, but customer concentration, open DOJ antitrust and SEC probes, rising leverage post-Entrust, and contract estimate volatility warrant a measured accumulate stance rather than unqualified conviction.
+
+---
+
+## INVESTMENT THESIS
+For a value investor, LDOS offers a rare combination in defence IT: double-digit earnings power on a single-digit P/E, high reported ROE, rising dividends, and material share repurchases, all underpinned by recurring government demand and a funded backlog exceeding $48bn (Q1 FY2026 10-Q). The screen’s strong buy signal is coherent with filing evidence of revenue and margin expansion since FY2023: operating income recovered from impairment-distorted levels, nine-month FY2025 revenues reached $12.97bn (+5.4% YoY) with net income of $1.13bn (+16.3%), and Q1 FY2026 revenues of $4.40bn (+3.7%) despite softer margins. Quality screens (Piotroski F-Score, Buffett Quality, Earnings Quality) align with consistent cash generation—Yahoo fallback shows FY2025 free cash flow of $1.63bn and operating cash flow of $1.75bn, supporting an 8.5% FCF yield at current prices. The stock’s 2026 drawdown appears to have de-rated the equity ahead of fundamentals catching up, particularly given Health segment margins (~24% operating margin in Q3 FY2025 10-Q) and Defence Systems programme wins. However, value here is not “deep cyclical”: it is government-contract value with binary budget, protest, and investigation tail risks that screens cannot fully capture.
+
+---
+
+## FINANCIAL REVIEW
+**Annual results (10-K; figures from Yahoo fallback — filing bodies truncated before Item 8)**
+
+| Metric | FY2025 (ended 2 Jan 2026) | FY2024 (ended 3 Jan 2025) | FY2023 |
+|---|---|---|---|
+| Revenue | $17.17bn | $16.66bn | $15.44bn |
+| Net income | $1.45bn | $1.25bn | $0.20bn* |
+| Diluted EPS | $11.14 | $9.22 | $1.44 |
+| Operating income | $2.10bn | $1.82bn | $1.30bn |
+| Free cash flow | $1.63bn | $1.29bn | $0.98bn |
+
+*FY2023 net income per Yahoo reflects $711m in unusual/impairment charges disclosed in filings; normalised earnings trend is materially stronger in FY2024–25.
+
+FY2025 revenue growth of ~3.1% and net income growth of ~15% (Yahoo fallback) mark a third consecutive year of top-line expansion post-FY2023 write-downs. FY2025 10-K (body extract) confirms 87% US government revenue mix, four segments (National Security & Digital 44%, Health & Civil 30%, Commercial & International 13%, Defence Systems 13%), and acquisition of Kudu Dynamics ($293m, May 2025) for AI-enabled cyber capabilities.
+
+**Interim results (primary 10-Q filings)**
+
+*H1 FY2025 (Q2 10-Q, six months ended 4 Jul 2025):* revenues $8.50bn (+4.8% vs prior year), operating income $1.10bn (+23.7%), net income attributable to Leidos $754m (+24.4%), diluted EPS $5.80.
+
+*9M FY2025 (Q3 10-Q, nine months ended 3 Oct 2025):* revenues $12.97bn (+5.4%), operating income $1.64bn (+16.4%), net income $1.13bn (+16.3%), diluted EPS $8.62; operating margin 12.6% vs 11.4% prior year. Net bookings $11.9bn; total backlog $47.7bn (funded $9.1bn).
+
+*Q1 FY2026 (10-Q, three months ended 3 Apr 2026):* revenues $4.40bn (+3.7%), operating income $508m (-4.2%), net income $328m (-9.6%), diluted EPS $2.56; operating margin 11.5% vs 12.5%. Net bookings $3.3bn; total backlog $48.4bn. Unfavourable contract estimate changes net ($9m pre-tax; -$0.05 diluted EPS). Acquisition/integration costs of $35m (primarily Entrust).
+
+**Balance sheet and capital allocation (filings)**
+
+FY2025 year-end (Q1 FY2026 10-Q balance sheet, 2 Jan 2026): cash $1.11bn, total debt $4.65bn, goodwill $6.34bn. Post-Entrust (3 Apr 2026): cash $457m, total debt $6.34bn (+37%), goodwill $8.09bn, total assets $15.4bn. Entrust acquired 27 Mar 2026 for $2.39bn cash (energy infrastructure engineering for utilities, Homeland segment). Debt funded via $600m and $800m senior notes (Mar 2026) plus $300m commercial paper; revolving facility expanded to $1.5bn, undrawn. Covenants complied with as of 3 Apr 2026 (debt/EBITDA ≤3.75x, or 4.50x post-material acquisition).
+
+Capital return remains active: FY2025 included $944m buybacks and $211m dividends (Yahoo fallback); Q1 FY2026 open-market repurchases of $200m at ~$175/share (10-Q). UK defined benefit pension buy-out completed Feb 2026 with $23m settlement loss (Q1 FY2026).
+
+**Cash flow**
+
+Q1 FY2026 operating cash flow $301m vs $58m prior-year quarter (working capital timing); Entrust acquisition investing outflow $2.34bn. Nine-month FY2025 operating cash flow $1.26bn (Q3 10-Q). Yahoo fallback FY2025 FCF $1.63bn implies robust conversion once annual statements are confirmed.
+
+**Segment trends (Q1 FY2026 10-Q, recast segments)**
+
+Intelligence & Digital: revenue +7.5%, margin 9.6%. Health: flat revenue, margin 23.9%. Homeland: revenue +6.0% but margin collapsed to 4.0% (Entrust integration costs $25m). Defence: revenue +0.5%, margin 7.0%. Health remains the profit engine; Homeland is the near-term margin drag.
+
+---
+
+## RISKS AND RED FLAGS
+**Customer and budget concentration.** FY2025 10-K and Q1 FY2026 10-Q cite ~86–87% revenue from US government contracts; DoW and Intelligence Community ~49%. Filings warn explicitly that budget delays, continuing resolutions, shutdowns, and appropriations uncertainty can delay awards, reduce volumes, and impair cash collection—Q3 FY2025 10-Q noted an October 2025 shutdown risk; Q1 FY2026 notes DHS funding restored 30 Apr 2026.
+
+**Open investigations.** Q1 FY2026 and Q3 FY2025 10-Qs disclose: (1) DOJ Antitrust Division grand jury subpoena (Aug 2022) on three Intelligence Group procurements (2021–22)—outcome and liability “not possible to determine”; (2) SEC investigation on international business conduct—DOJ closed Dec 2024, SEC engagement ongoing with potential civil sanctions. These are material for a prime contractor and not reflected in screens.
+
+**Contract accounting volatility.** Q1 FY2026 unfavourable estimate changes ($9m net); Q3 FY2025 nine-month net favourable changes $58m. Percentage-of-completion accounting creates earnings lumpiness and audit exposure; DCAA indirect cost audits open for FY2024+ (Q1 FY2026 10-Q).
+
+**Leverage and goodwill.** Entrust lifts debt to $6.3bn and goodwill to $8.1bn (~53% of total assets). Tangible book value is negative (Yahoo: -$1.88bn FY2025)—a goodwill impairment in a downturn would hit equity hard. Filings note $596m accumulated goodwill impairment in Homeland segment history.
+
+**Pension.** UK plan buy-out removes future obligation but crystallised a $23m loss in Q1 FY2026.
+
+**Competitive and programme risk.** FY2025 10-K lists intense competition (BAE, Booz Allen, CACI, L3Harris, Lockheed, etc.) and risk that backlog may not convert to revenue. News flow references a “defence programme downgrade” (Jun 2026) and “Health IT contract uncertainty” (Jul 2026)—specific programme names are not in the filing extracts reviewed; treat as unverified headline risk.
+
+**No going-concern language** identified in available filing bodies; liquidity described as adequate for next 12 months.
+
+---
+
+## NEWS HIGHLIGHTS
+Coverage is voluminous but heavily price-action and opinion-driven; material corporate items are sparse in headlines.
+
+| Date | Headline (source) | Relevance |
+|---|---|---|
+| 16 Jun 2026 | “Jefferies Downgrades Leidos Holdings (LDOS) Stock to Hold” (Yahoo Finance) | Sell-side pushback on space/defence tech thesis; aligns with YTD underperformance. |
+| 13 Jul 2026 | “Jefferies Lowers PT on Leidos (LDOS), Is it Still The Best Space Technology Stock?” (Yahoo Finance) | Continued analyst caution. |
+| 15 Jun 2026 | “Why Leidos (LDOS) Shares Are Getting Obliterated Today” (Yahoo Finance) | Sentiment/technical commentary around drawdown. |
+| 17 Jun 2026 | “Leidos Holdings (LDOS) Stock Could Be 40.7% Undervalued After Defense Program Downgrade” (Yahoo Finance) | Value-vs-programme-risk debate in media. |
+| 20–23 Jul 2026 | UK defence logistics alliance with DHL Supply Chain and Rune Technologies (Yahoo Finance / simplywall.st) | Strategic push into AI-enabled UK MoD Future Defence Support Services bidding. |
+| 2 Jul 2026 | “Leidos (LDOS) Stock May Be Undervalued After Health IT Contract Uncertainty” (Yahoo Finance) | Health segment overhang flagged in commentary. |
+| 23 Jul 2026 | “2 Reasons to Watch LDOS and 1 to Stay Cautious” (Yahoo Finance) | Notes ~44% six-month decline; balanced retail narrative. |
+
+Filings (not headlines) confirm: Entrust acquisition closed Mar 2026 ($2.4bn); Kudu Dynamics May 2025 ($293m); planned Analogic JV for Security Enterprise Solutions (41.5% stake, H2 FY2026 close, Q1 FY2026 10-Q). No CEO change identified in news manifest. Institutional flows mixed (Dimensional increased, CalPERS lowered holdings, Jul 2026 MarketBeat headlines).
+
+---
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Interim SEC filings confirm improving revenue, backlog and cash generation that support the screen’s strong-buy value/quality case, but truncated annual statements, rising leverage from Entrust, open government investigations, and sharp 2026 share price weakness leave programme and sentiment risk insufficiently resolved for full conviction.

@@ -1,0 +1,87 @@
+# Gilead Sciences, Inc. (GILD) — Research memo
+
+_Version 1 · Updated 2026-07-25T10:32:35.200636+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Gilead Sciences (GILD) screens as a strong buy on a blend of cheapness, quality, dividend yield, GARP and low financial risk, with 12 of 22 models passing at a 74% composite score. The investment case rests on a cash-generative HIV franchise—Biktarvy still growing, Yeztugo (lenacapavir) PrEP now launched—and a valuation that embeds modest top-line growth (P/E ~18x, PEG ~0.32) despite normalised earnings power well above distorted 2024 GAAP. The central debate is whether pipeline and M&A-led diversification (oncology, liver disease, in vivo cell therapy) can offset Veklury decline, Trodelvy setbacks and looming US price negotiation from 2028, when Biktarvy is already in Medicare’s sights. Filing extracts support operational momentum in 2025–26, but annual statement tables are missing from truncated 10-K bodies, so full-year reconciliation relies partly on Yahoo fallback.
+
+## INVESTMENT THESIS
+The quantitative screen flags GILD across five factor families—cheapness, quality, dividend, GARP and risk—with full data coverage (20/20 metrics) and a stable strong-buy signal held for three weeks. That profile fits a mature biopharma compounder: high ROE (43.4%), 2.5% dividend yield with recent increases, P/E 17.8x and screen-reported FCF of ~$7.9bn against a business that filings describe as deriving a substantial portion of revenue from HIV treatment and prevention.
+
+Business quality aligns with the screen’s quality and moat passes (Buffett Quality, Economic Moat, Piotroski F-Score, Earnings Quality). Biktarvy remains the anchor—Q1 2026 product sales of $3.4bn (+7% YoY)—while Descovy and the broader HIV portfolio grew 10% to $5.0bn in the quarter. Yeztugo, approved for HIV PrEP in 2025 per interim filings, adds a long-dated growth leg (patent to 2037). The October 2025 Biktarvy generic settlement (no US entry before 1 April 2036 for the standard tablet) materially de-risks the near-term patent overhang that the market still prices into the name.
+
+For a value investor, the hook is normalised earnings on a depressed headline base: 2024 GAAP net income was $0.48bn (diluted EPS $0.38) after large acquired R&D, impairments and CymaBay-related charges, while 2025 recovered to $8.51bn net income and $6.78 diluted EPS (Yahoo fallback—see Financial Review). Lynch and Neff PEG models pass on screen-reported growth of 54.8% (largely the earnings rebound), but underlying revenue growth is low single digits—appropriate for a GARP/value overlay rather than a pure growth bet. Capital returns (dividends ~$4.0bn in 2025 per Yahoo cash-flow data, buybacks) and manageable leverage support the risk-family pass.
+
+## FINANCIAL REVIEW
+**Source note:** The filings index contains two annual 10-Ks (FY2024 filed Feb 2025; FY2025 filed Feb 2026) and six interim 10-Qs with body extracts. However, both 10-K body extracts truncate at ~80,000 characters before Item 8 financial statements; annual income-statement and cash-flow line items below are therefore cited from `financials_annual.json` (Yahoo) with explicit fallback. Interim figures are taken from 10-Q body extracts.
+
+**Annual trends (Yahoo fallback)**
+
+| Metric | 2023 | 2024 | 2025 |
+|--------|------|------|------|
+| Total revenue | $27.1bn | $28.8bn | $29.4bn |
+| Operating income | $8.8bn | $10.6bn | $11.7bn |
+| Net income (GAAP) | $5.7bn | $0.5bn | $8.5bn |
+| Diluted EPS | $4.50 | $0.38 | $6.78 |
+| Free cash flow | $7.4bn | $10.3bn | $9.5bn |
+| Cash & equivalents (year-end) | $6.1bn | $10.0bn | $7.6bn |
+| Total debt | $25.0bn | $26.7bn | $24.9bn |
+
+Revenue has grown steadily (~2–6% annually), with gross margins consistently above 75%. The 2024 earnings collapse is accounting-driven: Yahoo shows $9.2bn in total unusual items, including ~$4.8bn business purchases, $4.2bn asset impairment and heavy acquired R&D tied to the CymaBay acquisition (confirmed in Q1 2025 10-Q). Normalised 2024 EBITDA was ~$13.6bn versus reported EBITDA of $4.4bn (Yahoo). 2025 reflects cleaner operations, though still includes $1.2bn unusual items.
+
+Balance sheet (Yahoo, year-end 2025): total assets $59.0bn; stockholders’ equity $22.7bn; net debt ~$17.4bn; intangible assets ~$25.3bn (goodwill $8.3bn). Tangible book is negative, typical for acquisitive pharma. Q1 2026 10-Q shows total debt, net, of $20.9bn (down from $22.1bn at Dec 2025) and total stockholders’ equity of $23.4bn.
+
+**Interim trends (primary filings)**
+
+*Q1 2025 (10-Q, Mar 2025):* Total revenues $6.67bn; product sales $6.61bn; operating income $2.24bn; net income $1.32bn; diluted EPS $1.04. HIV product sales +6% to $4.6bn; Biktarvy $3.15bn (+7%). Heavy acquired R&D ($253m) and prior-year comparables distorted by CymaBay closing.
+
+*Q2 2025 (10-Q, Jun 2025):* Total revenues $7.08bn (+2% YoY); H1 revenues $13.75bn (+1%). Net income $1.96bn (Q2) / $3.28bn (H1). Q2 included a $190m bulevirtide IPR&D impairment. Yeztugo PrEP approval noted in the quarter.
+
+*Q3 2025 (10-Q, Sep 2025):* Q3 total revenues $7.77bn (+3% YoY); 9M revenues $21.52bn vs $21.19bn (+1.6%). 9M net income $6.33bn vs a $1.30bn loss in 9M 2024 (prior year weighed by $4.7bn acquired R&D and $4.2bn R&D impairments). Q3 diluted EPS $2.43 vs $1.00. Cash and equivalents $7.33bn at 30 Sep 2025.
+
+*Q1 2026 (10-Q, Mar 2026):* Total revenues $6.96bn (+4%); product sales $6.95bn; operating income $2.59bn; net income $2.02bn (+54%); diluted EPS $1.61 vs $1.04. HIV sales +10% to $5.03bn; Biktarvy $3.36bn (+7%); liver disease (Livdelzi) +37% to $402m; Veklury −52% to $144m on lower hospitalisations. Cash $7.63bn; operating cash flow $2.54bn in the quarter (vs $1.76bn prior year per cash-flow statement extract).
+
+**Gaps:** Full annual consolidated statements are not present in available 10-K body extracts. Eight 8-K filings in the index lack downloadable bodies. No going-concern language was found in available extracts.
+
+## RISKS AND RED FLAGS
+**Patent and generic exposure.** Filings state Gilead receives a substantial portion of revenue from HIV products and warn that loss of patent protection, generics or failure to launch new HIV medicines would adversely impact sales. The October 2025 8-K settlement with Lupin, Cipla and Laurus limits Biktarvy generic entry to no earlier than 1 April 2036 (standard tablet), but paediatric formulations may face earlier dates (2035/2036 per Q3 2025 10-Q). Ongoing litigation on TAF (Descovy, Vemlidy, Odefsey) and cobicistat (Stribild, Genvoya) remains flagged.
+
+**US pricing and policy.** FY2025 10-K risk language highlights Inflation Reduction Act Medicare negotiation, with Biktarvy selected and negotiated prices effective from 2028, potentially “substantially lower” than current Medicare pricing, with knock-on Medicaid/340B effects. Implementation uncertainty persists.
+
+**Pipeline and M&A execution.** Recent deals add integration and impairment risk: CymaBay ($3bn+, Livdelzi/seladelpar), Interius (~$350m, Oct 2025, in vivo CAR-T), Arcus collaboration stakes, and contingent CymaBay/MYR payments. Q2 2025 recorded a $190m bulevirtide IPR&D impairment; Trodelvy NSCLC IPR&D was impaired in 2024 after a failed overall-survival endpoint. Acquired R&D and impairment volatility can sharply swing GAAP earnings, as seen in 2024 and Q1 2025.
+
+**Product concentration and cyclicality.** Veklury fell 52% YoY in Q1 2026 on lower hospitalisations—demonstrating COVID-treatment revenue is non-recurring. Trodelvy growth has stalled (Q1 2025: −5% to $293m). Cell therapy remains a smaller, competitive segment.
+
+**Leverage and covenants.** Q1 2026 10-Q notes compliance with covenants under senior unsecured note indentures; total debt ~$21bn net. No default or going-concern disclosure found. Pension/post-retirement obligations appear on the balance sheet (~$1.3bn current category per Yahoo) but detail is thin in truncated annual extracts.
+
+**Governance.** August 2025 8-K: Erin Burkhart appointed SVP, Controllership and principal accounting officer from September 2025, succeeding interim controller Diane Wilfong—routine but worth monitoring during heavy M&A accounting.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is adequate on strategy and pipeline, though diluted by repetitive price-movement pieces (MarketWatch, Yahoo Finance daily wraps).
+
+**Pipeline and regulatory**
+- *EU panel recommends Trodelvy-Keytruda after 35% lower progression-or-death risk* (24 Jul 2026, Stock Titan) — positive oncology regulatory momentum.
+- *Gilead (GILD) Will Bring New HIV Data And A Merck Regimen To AIDS 2026* (22 Jul 2026, Yahoo Finance) — lenacapavir long-term data and Merck combination regimen.
+- *Gilead's drug wins first-ever US approval for deadly liver infection* (26 May 2026, Reuters) — regulatory win outside core HIV.
+- Yeztugo (lenacapavir) PrEP approval documented in Q2/Q3 2025 10-Q filings as first US HIV PrEP option of its kind.
+
+**M&A and capital deployment**
+- *Gilead Sciences Deploys $16 Billion in 60 Days: Is GILD Stock Undervalued for 2026?* (21 Apr 2026, TIKR.com).
+- Interius BioTherapeutics acquisition (~$350m) closed October 2025 per Q3 2025 10-Q.
+- *GILD Stock Slips After Hours On Sharp Earnings Guidance Hit From Massive M&A Spree* (7 May 2026, Stocktwits) and *Gilead Sciences Inc (NASDAQ:GILD) Beats Q1 Estimates But Stock Falls on Hefty Acquisition Costs and Revised Loss Guidance* (7 May 2026, ChartMill) — market pushback on deal-driven EPS noise.
+
+**Capital returns and sentiment**
+- *Gilead Sciences Announces 3.8 Percent Increase in First Quarter 2026 Dividend* (10 Feb 2026, Gilead Sciences).
+- *Maxim Upgrades Gilead Sciences (GILD) to ‘Buy’* (24 May 2026, Yahoo Finance) vs *GILD Downgraded by Leerink Partners -- Price Target Lowered to $127* (22 Jul 2026, GuruFocus) — mixed Street view after a strong multi-year run (*Gilead (GILD) Stock Could Still Trade At A Discount Following Its 127% Run*, 22 Jul 2026, simplywall.st).
+
+**Management**
+- Form 8-K (14 Aug 2025): Erin Burkhart appointed principal accounting officer.
+- Form 8-K (6 Oct 2025): Biktarvy patent litigation settlement with generic manufacturers.
+
+**Macro context (colour only):** US 10-year yield ~4.68%, policy rate proxy ~3.81% (macro_context.json, 24 Jul 2026). Not used to alter the screen signal.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Deep research largely confirms the strong-buy screen—normalised cash generation, HIV moat reinforcement (Biktarvy settlement, Yeztugo launch) and attractive GARP metrics outweigh GAAP noise and medium-term IRA pricing risk, though M&A-driven earnings volatility and oncology setbacks prevent full conviction without further filing completeness on annual statements.

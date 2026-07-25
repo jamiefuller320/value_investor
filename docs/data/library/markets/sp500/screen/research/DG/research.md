@@ -1,0 +1,77 @@
+# Dollar General Corporation (DG) — Research memo
+
+_Version 1 · Updated 2026-07-25T11:11:11.164922+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Dollar General Corporation (DG) is the largest US discount retailer by store count (~21,000 locations), serving predominantly low- and fixed-income households with everyday-low-price consumables. The quantitative screen flags a buy on cheapness, quality, dividend, GARP and risk factors (8/22 models; composite 62%; P/E 16.3, P/B 2.9, yield 2.0%, ROE 18.9%). Filings show an operational recovery after FY2024–FY2025 earnings collapse: comparable-store sales, gross margin and shrink metrics are improving, and FY2026 is tracking ahead of the prior year. The valuation hook is a mid-teens multiple on rebounding earnings and ~$2.4bn free cash flow (Yahoo fallback for annual cash flow; filing bodies lack full 10-K cash-flow tables). The central debate is whether margin repair and traffic growth are durable, or whether shrink, SNAP/tariff headwinds, lease-heavy capital structure and securities litigation cap normalised returns below the pre-2023 peak (diluted EPS $10.68 in FY2023 per Yahoo fallback).
+
+## INVESTMENT THESIS
+For a value investor, DG offers a franchise-scale discount model with demonstrated traffic resilience, now screening cheaply after a multi-year de-rating. The screen passes Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Magic Formula, Dreman Contrarian, Piotroski F-Score and Earnings Quality — a broad mix of value, quality and cash-return signals with full data coverage (20/20 metrics). Business quality remains intact in filings: positive comparable sales in recent quarters, consumables driving traffic (~82% of mix), and non-consumables outpacing consumables for five consecutive quarters through Q1 FY2026 (10-Q filed 2 June 2026). Management is executing shrink-reduction, Project Renovate/Elevate remodels, digital delivery and DG Media Network initiatives. FY2026 Q1 net sales rose 3.4% to $10.79bn, operating profit rose 10.8% to $638.5m, and diluted EPS rose to $2.00 from $1.78 (Q1 FY2026 10-Q). At ~16x earnings on recovering profits and a 2% dividend, the risk/reward aligns with a defensive value entry, provided operational fixes hold.
+
+## FINANCIAL REVIEW
+Primary source: SEC EDGAR filings (regime: sec_edgar). The index contains two annual 10-Ks (FY2025 filed 21 March 2025; FY2026 filed 20 March 2026) and seven interim 10-Qs with body extracts. Note: annual 10-K body extracts are truncated before Item 7/8 financial statements; annual income-statement figures below fall back to `financials_annual.json` (Yahoo). Interim figures are from filing bodies.
+
+Annual trend (Yahoo fallback — 10-K bodies lack complete financial statements)
+
+| Fiscal year (ended) | Revenue ($bn) | Net income ($bn) | Diluted EPS | Operating income ($bn) |
+|---|---|---|---|---|
+| FY2023 (Feb 2023) | 37.8 | 2.42 | 10.68 | 3.33 |
+| FY2024 (Feb 2024) | 38.7 | 1.66 | 7.55 | 2.45 |
+| FY2025 (Jan 2025) | 40.6 | 1.13 | 5.11 | 1.71 |
+| FY2026 (Jan 2026) | 42.7 | 1.51 | 6.85 | 2.20 |
+
+FY2024–FY2025 marked a sharp earnings trough (shrink, damages, inventory and pOpshelf impairment — FY2026 10-K risk factors). FY2026 shows revenue +5.2% and net income +34% vs FY2025 on Yahoo data, consistent with interim filing momentum.
+
+Interim filing trends (primary source)
+
+Q1 FY2026 (13 weeks to 1 May 2026; 10-Q): Net sales $10.79bn (+3.4%); comparable sales +2.0% (traffic +1.4%, average transaction +0.5%); gross margin 31.6% (+65 bps); operating profit $638.5m (+10.8%); net income $444.1m (+13.3%); diluted EPS $2.00 vs $1.78. Shrink in cost of goods sold: $153.2m vs $176.1m prior year.
+
+Q3 FY2025 (13 weeks to 31 Oct 2025; 10-Q): Net sales $10.65bn (+4.6%); comparable sales +2.5%; gross margin 29.9% (+107 bps); net income $282.7m vs $196.5m. Nine-month net sales $31.81bn (+5.0%); nine-month net income $1.09bn vs $934m; diluted EPS $4.92 vs $4.24.
+
+Q1 FY2025 (13 weeks to 2 May 2025; 10-Q): Net sales $10.44bn (+5.3%); comparable sales +2.4%; net income $391.9m; diluted EPS $1.78.
+
+Balance sheet and cash flow
+
+Q1 FY2026 balance sheet (10-Q): Cash $1.35bn; total assets $31.7bn; shareholders' equity $8.84bn; long-term debt obligations ~$4.58bn; operating lease assets ~$11.2bn. Revolving credit facility: no borrowings; compliant with fixed-charge and leverage covenants (Note 5). Credit ratings: S&P BBB / Moody's Baa3, stable (Q1 FY2026 MD&A).
+
+Yahoo fallback for FY2026: operating cash flow $3.63bn; free cash flow $2.39bn; net debt ~$3.4bn; capital lease obligations ~$11.1bn. FCF recovery from $692m (FY2024) and $1.69bn (FY2025) supports the screen's FCF Yield pass.
+
+Store footprint (10-K / 10-Q): ~20,893 stores at FY2025 year-end; 21,055 at 1 May 2026. FY2026 plan: ~450 US new stores, ~4,730 remodel/relocation projects. New-store growth slowed from 725 (FY2024) to 589 (FY2025), with 290 closures in FY2025 (FY2026 10-K business section).
+
+Gaps: Full annual income-statement and cash-flow detail for FY2025/FY2026 is not available in truncated 10-K body extracts; nine 8-K filings in the index lack downloadable bodies and may contain guidance or officer changes not fully captured here.
+
+## RISKS AND RED FLAGS
+Operational and competitive: Inventory shrink and damages remain structurally elevated; the FY2026 10-K warns sustained high shrink can drive store closures and asset impairment. Consumables are ~82–83% of sales, limiting gross-margin mix. Competition from Walmart, Dollar Tree/Family Dollar and grocery/convenience remains intense.
+
+Strategic: pOpshelf underperformance led to store closures/conversions, paused expansion from 2025, and Q4 FY2024 impairment (FY2026 10-K). ~180 standalone pOpshelf stores at Q1 FY2026; no assurance of turnaround.
+
+Regulatory and customer: Core customers are sensitive to SNAP changes, minimum-wage increases, student-loan collections (reinstated May 2025 per Q3 FY2025 MD&A) and tariff-driven price increases. Tariff refund timing/amount is uncertain despite claims filed after the February 2026 Supreme Court ruling (Q1 FY2026 MD&A).
+
+Legal: Active shareholder securities class action (putative class period May 2020–August 2024) alleging misrepresentation of store labour, inventory and pricing practices. Motion to dismiss granted without prejudice; third amended complaint filed; loss not estimable (Q1 FY2026 10-Q, Note 7). Related derivative suits stayed.
+
+Financial structure: ~$11bn+ operating lease liabilities and ~$4.6bn senior notes create fixed charges; interest and occupancy costs remain headwinds. Work Opportunity Tax Credit expired 31 December 2025, raising effective tax rate (Q1 FY2026: 24.9% vs 23.4% prior year).
+
+Governance: CFO Kelly Dilts resigned effective 28 August 2025 (8-K, 16 July 2025); successor search underway.
+
+No going-concern language in available filings. Liquidity described as sufficient for the next twelve months and several years (Q1 FY2026 MD&A).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate on fundamental news, dominated by holder-flow and valuation commentary.
+
+Material items from the manifest:
+
+- "Dollar General (DG) Raises Fiscal 2026 Outlook as Telsey Advisory Lowers Target" (Yahoo Finance, 21 June 2026) — guidance raise vs mixed sell-side reaction.
+- "Why Is Dollar General (DG) Up 9.6% Since Last Earnings Report?" (Yahoo Finance, 2 July 2026) — post-earnings rally.
+- "Dollar General (DG) Launches Back To School Campaign For Families And Teachers" (Yahoo Finance, 8 July 2026) — seasonal merchandising push.
+- "Dollar General copies Costco with inflation-proof deal" (Yahoo Finance, 16 July 2026) — value-oriented promotional strategy.
+- "Dollar General's Food Donations Equal More Than 90M Meals" (Stock Titan, 16 July 2026) — ESG/community initiative.
+- "Jim Cramer: Dollar General Is a Hedge Fund Favorite as Rising Gas Prices Fuel Discount Retail" (Yahoo Finance, 14 July 2026) — trade-flow narrative.
+- "Why is Dollar General Stock Sliding Despite Strong Q4 Results" (Kavout, 23 July 2026) — market scepticism despite operational beats.
+
+CFO departure (8-K, July 2025) is filing-sourced rather than headline-driven. No M&A activity flagged. Much RSS coverage is institutional position changes and options listings — thin on deep operational analysis.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.70
+Rationale: Filing evidence confirms an operational and earnings recovery that supports the quantitative buy signal, but litigation, lease leverage, pOpshelf drag and low-income customer sensitivity prevent full conviction until FY2026 progress is sustained through peak season and annual 10-K financials are verified without truncation gaps.

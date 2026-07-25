@@ -1,0 +1,86 @@
+# APA Corporation (APA) — Research memo
+
+_Version 1 · Updated 2026-07-25T10:16:24.169438+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+APA Corporation is a diversified independent E&P operator centred on the US Permian Basin, with meaningful production in Egypt, a wind-down North Sea footprint, and long-dated optionality in Suriname and frontier exploration (Alaska, Uruguay). The quantitative screen rates the name a **strong buy** (16/22 models; composite 84%; P/E 8.5, P/B ~2.0, yield 2.8%, ROE 26.2%), consistent with a post-Callon portfolio that is leaner, less levered, and generating stronger free cash flow. The valuation hook is straightforward: earnings and cash-flow multiples screen cheap against a business that repaid roughly **$3.6 billion of debt since 2021**, targets returning **60% of free cash flow** via dividends and buybacks, and reported FY2025 net income of **$1.43 billion** (diluted EPS **$3.99**) after the prior year’s impairment cycle. The central debate is whether commodity-linked earnings power and reserve quality fully offset Suriname development spend (~**$10.5 billion** total project; first oil targeted **2028**), Egypt receivable/sovereign exposure, and North Sea decommissioning obligations through end-of-decade exit.
+
+## INVESTMENT THESIS
+For a value investor, APA fits the screen’s cheapness–quality–dividend–GARP–risk cluster unusually well for an E&P name. Passes include Graham Enterprising, Earnings Yield, FCF Yield, Low P/E + High Yield, Lynch/Neff PEG variants, Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Acquirer’s Multiple, Dreman Contrarian, Piotroski F-Score, Composite Value, and Earnings Quality—suggesting the market is pricing cyclical normalisation and balance-sheet repair too conservatively.
+
+Business quality has improved materially since the **April 2024 Callon acquisition** (~**$4.5 billion**, inclusive of debt) and subsequent **~$2.2 billion** of Permian and other divestitures (including a full New Mexico exit for **$571 million** in 2025). Management’s stated framework—maintain financial discipline, generate cash above upstream capex, and allocate to debt reduction, buybacks, and dividends—has shown up in filings: term-loan repayment in **March 2025**, total debt falling from **$6.04 billion** (September 2024) to **$4.41 billion** (March 2026), and **98.2 million shares repurchased** from Q4 2021 through Q1 2026. FY2025 **free cash flow of $1.78 billion** (Yahoo fallback; see Financial Review) supports the screen’s FCF-yield signal.
+
+Operationally, FY2025 production rose to **169.5 MMboe** (+2% YoY) and proved reserves to **1,056 MMboe** (+9%), with US Permian scale (62% of production; 74% of proved reserves) providing the core cash engine. Egypt adds low-cost conventional barrels under a consolidated production-sharing contract, while Suriname offers asymmetric upside with TotalEnergies carrying most development capital. The screen’s quality and risk passes are not blind to leverage (D/E ~61%) or cyclicality, but the trajectory—deleveraging, reserve replacement, and capital returns—supports the strong-buy classification rather than a pure commodity punt.
+
+## FINANCIAL REVIEW
+**Source note:** SEC EDGAR extracts are available for **two 10-Ks** (FY2024 filed February 2025; FY2025 filed February 2026) and **six 10-Qs** through Q1 2026. However, the downloaded **10-K body text is truncated before Item 7 consolidated financial statements**, so **annual income-statement, balance-sheet, and cash-flow figures below are taken from `financials_annual.json` (Yahoo) with filing bodies used for production, reserves, segment narrative, and all interim/quarterly data.**
+
+**Annual results (10-K / primary narrative)**
+
+| Metric | FY2025 | FY2024 | Source |
+|--------|--------|--------|--------|
+| Total revenue | $8.92bn | $9.74bn | Yahoo fallback |
+| Net income (common) | $1.43bn | $0.80bn | Yahoo fallback |
+| Diluted EPS | $3.99 | $2.27 | Yahoo fallback |
+| Operating cash flow | $4.55bn | $3.62bn | Yahoo fallback |
+| Free cash flow | $1.78bn | $0.71bn | Yahoo fallback |
+| Total debt | $4.59bn | $6.16bn | Yahoo fallback |
+| Cash | $0.52bn | $0.63bn | Yahoo fallback |
+
+From the **FY2025 10-K** business section (primary filing): worldwide production was **169.5 MMboe** versus **166.4 MMboe** in FY2024, but reported **oil and gas production revenues of $7.23 billion** fell from **$8.20 billion**, reflecting lower realised prices (US oil **$65.71/bbl** vs **$75.92**; gas **$1.02/Mcf** vs **$0.71** on higher volume). **Proved reserves** increased to **1,056 MMboe** (71% liquids; 30% PUD) from **969 MMboe**, aided by **~100 MMboe** of extensions/discoveries and **175 MMboe** of net upward revisions. The Callon integration and Permian divestitures streamlined the portfolio toward core Midland/Delaware development.
+
+FY2024 was distorted by portfolio change and impairments. The **Q3 2024 10-Q** records a **$793 million** North Sea proved-property impairment and **$1.11 billion** of quarterly impairments in aggregate, driving the weak reported net income despite Callon adding **~222 MMboe** of reserves.
+
+**Interim results (10-Q)**
+
+**Q1 2026** (three months ended 31 March 2026; filed May 2026):
+- Total revenues **$2.33bn** vs **$2.64bn** in Q1 2025 (−12%).
+- Net income attributable to common stock **$446m** vs **$347m** (+29%); diluted EPS **$1.26** vs **$0.96**.
+- Cash from operations **$554m** vs **$1,096m**; management attributes the decline primarily to **Egypt receivable collections in the prior-year quarter** and working-capital timing (not underlying margin deterioration).
+- Upstream capex **$542m**; cash **$293m**; total debt **$4.41bn** (long-term **$4.28bn**).
+
+**Q2 2025** (three months ended 30 June 2025):
+- Total revenues **$2.18bn**; net income attributable to common **$603m**; diluted EPS **$1.67**.
+- Six-month net income **$950m** on revenues **$4.81bn**.
+
+**Q3 2025** (three months ended 30 September 2025):
+- Total revenues **$2.12bn** vs **$2.53bn**; net income attributable to common **$205m** vs a **$223m loss** (prior year included **$1.11bn** impairments).
+- Nine-month revenues **$6.93bn**; nine-month net income attributable to common **$1.16bn** vs **$450m**.
+- Total debt **$4.49bn** vs **$6.04bn** YoY; EGPC receivable collection noted as a Q3 2025 working-capital event.
+
+**Trend assessment:** Reported earnings have normalised sharply after FY2024’s North Sea-driven impairment cycle. Revenue is softer YoY on commodity prices, but margins improved in Q1 2026 on lower LOE/G&A and purchased-gas activity. Balance-sheet repair is the clearest positive: debt down roughly **$1.6bn** over twelve months, term loan fully repaid (**March 2025**), and ongoing buybacks/dividends funded within the 60% FCF-return framework. Production is modestly growing, but US volumes were **−11% YoY in Q1 2026** (five rigs in Permian), so volume momentum bears watching into the **6 August 2026** Q2 results call.
+
+**Gaps:** Consolidated annual P&L/cash-flow lines are **not present in the truncated 10-K body extracts**; covenant compliance language was **not found** in available filing text (credit facilities are described, but no explicit “in compliance” statement was extracted).
+
+## RISKS AND RED FLAGS
+**Commodity and cyclical exposure.** Filings emphasise that revenues and reserve valuations are highly sensitive to oil, gas, and NGL prices; FY2025 realised US prices declined materially even as volumes held up. This is the primary screen blind spot.
+
+**Suriname capital burden.** GranMorgu FID implies **~$10.5 billion** gross project spend with first oil in **2028**. TotalEnergies carries most appraisal/development cost under the joint-venture terms, but APA still spent **~$256m** on Suriname development in FY2025 and carries **74 MMboe** of PUD reserves there—execution and timing risk is real.
+
+**Egypt concentration and receivables.** Egypt contributed **31%** of FY2025 production and **~15%** of worldwide revenues via EGPC. Production-sharing mechanics inflate reported production/tax lines without full economic benefit. Receivables were **$1.46bn** at March 2026 (up from **$1.06bn** at year-end 2025); Q3 2025 noted a significant EGPC collection, but Egypt working-capital swings can distort quarterly cash flow, as seen in Q1 2026.
+
+**North Sea exit and decommissioning.** The company expects to **cease North Sea production before 2030** after UK tax/infrastructure rules rendered new investment uneconomic. Q3 2024 impairments of **$793m** on North Sea proved properties signal decommissioning and asset-retirement obligations; filings also flag potential liabilities on **previously sold Gulf of America properties**.
+
+**Portfolio/integration risk.** Callon integration is largely complete, but transaction/reorganisation costs remain (e.g. **$66m** over nine months to September 2025). Dry exploration wells in Egypt (**27.0 net dry** in FY2025) are manageable but not trivial.
+
+**Governance and capital allocation.** Buybacks (**98.2m shares** through Q1 2026) and dividends are shareholder-friendly, but repurchases at higher share prices after a strong 12-month run could dilute future FCF yield if commodity prices soften.
+
+**Regulatory/contingencies.** No **going concern** language appears in available extracts. Climate/methane regulation, hydraulic-fracturing scrutiny, and delivery commitments (natural-gas and crude offtake through **2037**) add compliance cost and volume risk. **Covenant status is unresolved** from the truncated filing pack.
+
+## NEWS HIGHLIGHTS
+News coverage over the past year is **thin on hard corporate developments** and dominated by price action, options flow, and institutional position changes (e.g. Arrowstreet, First Trust, CalPERS buys; **25 July 2026**). Material items include:
+
+- **15 July 2026** — *How APA’s Completed Buyback and Strait of Hormuz Risks At APA (APA) Has Changed Its Investment Story* (Yahoo Finance): references completion of the long-running repurchase programme (~**100.9m shares / ~$3.31bn** cumulative since 2018, including **$98.7m** in the latest tranche) alongside geopolitical oil-supply sensitivity.
+- **7 July 2026** — *APA Corporation Releases 2026 Sustainability Progress Report* (GlobeNewswire).
+- **8 July 2026** — *APA Corporation provides second-quarter 2026 supplemental information and schedules results conference call for Aug. 6* (GlobeNewswire).
+- **12 July 2026** — *Uruguay’s Offshore Oil Province Could Be Bigger Than Vaca Muerta* (Yahoo Finance): APA among majors preparing Uruguay offshore wells.
+- **13–15 July 2026** — Multiple articles linking APA to **Strait of Hormuz** tension and oil-price spikes (*Diamondback Energy, APA Corporation, and Talos Energy Stocks Trade Up*; fair-value/valuation commentary from Simply Wall St and Yahoo).
+- **22 July 2026** — *Citi Sticks to Their Hold Rating for APA (APA)* (Globe and Mail); **Susquehanna** maintains with **$45** target (GuruFocus/MarketBeat, **21–22 July**); **Truist** cut target to **$38** on a model update (**10 July**, Investing.com).
+
+No material CEO change or new M&A headline appeared in the manifest; strategic context remains anchored in **2024 Callon** and **2024–25 Permian divestitures** from filings rather than recent press.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Deep research largely confirms the screen’s strong-buy case on deleveraging, FCF generation, and reserve quality, but unresolved 10-K financial-statement gaps, Egypt receivable volatility, and Suriname/North Sea tail risks warrant phased accumulation rather than full conviction.

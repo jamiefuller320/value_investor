@@ -1,0 +1,105 @@
+# Automatic Data Processing, Inc. (ADP) — Research memo
+
+_Version 1 · Updated 2026-07-25T10:26:37.366132+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+ADP is a high-quality HCM and payroll franchise with durable recurring revenue, strong client retention, and a capital-light model that generates substantial free cash flow returned via dividends and buybacks. The quantitative screen flags a Strong Buy on cheapness, quality, dividend, GARP, and risk families (P/E 22.7, yield 2.8%, ROE 71.2%, PEGY 0.08, ~10.5% growth), and interim filings confirm mid-single-digit organic revenue growth with margin expansion. The central valuation debate is whether premium book multiples (P/B 15.8) and a meaningful float-income component (~$1.0bn in nine-month client-funds interest) are adequately priced, particularly as rate expectations remain elevated (10-year Treasury ~4.68%). Deep research broadly supports the screen’s quality and GARP case but flags PEO margin pressure, regulatory complexity, and incomplete annual filing extracts as items to resolve before full sizing.
+
+## INVESTMENT THESIS
+For a value-oriented investor, ADP offers a rare combination: a wide-moat, mission-critical payroll/HCM platform serving 1.1m+ clients and 42m+ workers globally (FY2025 10-K business section), paired with screen metrics that suggest growth is available at a reasonable earnings multiple rather than a speculative premium.
+
+The screen passes nine models spanning Neff PEGY, Quality Value, Buffett Quality, High Dividend Yield, Dividend Growth, Magic Formula, Piotroski F-Score, Composite Value, and Earnings Quality — indicating cheapness relative to growth and quality, not just a low absolute P/E. Key screen inputs (P/E 22.7, yield 2.8%, ROE 71.2%, ~10.5% growth, PEGY 0.08) align with filing-backed operating momentum: nine-month FY2026 revenue grew 7% (6% organic constant currency), diluted EPS grew 10% to $8.49, and adjusted EBIT margin expanded 50bps (Q3 FY2026 10-Q MD&A).
+
+Business quality anchors the thesis. ADP’s Employer Services segment — 68% of nine-month revenue — grew 7% with margin expansion to 37.4% (+50bps), driven by new bookings, retention, pricing, and client-funds interest. Pays-per-control rose 1% and PEO average worksite employees rose 2%, signalling resilient underlying employment volumes despite softer private hiring in ADP’s own National Employment Report headlines. The company returned $3.4bn to shareholders in the first nine months of FY2026 ($1.9bn dividends, $1.5bn buybacks) while maintaining a solid balance sheet, consistent with dividend-growth and quality screens.
+
+The AI/product investment cycle (ADP Assist, ADP Lyric HCM, WorkForce Software acquisition in October 2024) supports medium-term pricing power rather than near-term disruption risk, reinforcing the GARP profile the screen identifies.
+
+## FINANCIAL REVIEW
+**Source note:** Annual 10-K body extracts (FY2025 filed 6 August 2025; FY2024 filed 7 August 2024) are present in the index but truncated before Item 7 financial tables and Item 8 consolidated statements. Annual figures below are sourced from `financials_annual.json` (Yahoo) with an explicit fallback. Interim figures are sourced from 10-Q body extracts.
+
+**Annual trends (Yahoo fallback — FY ends 30 June)**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 | FY24→FY25 |
+|---|---|---|---|---|---|
+| Total revenue | $16.5bn | $18.0bn | $19.2bn | $20.6bn | +7.1% |
+| Net income | $2.95bn | $3.41bn | $3.75bn | $4.08bn | +8.7% |
+| Diluted EPS | $7.00 | $8.21 | $9.10 | $9.98 | +9.7% |
+| Operating income | $3.80bn | $4.51bn | $4.95bn | $5.41bn | +9.3% |
+| Free cash flow | $2.55bn | $3.64bn | $3.59bn | $4.39bn | +22.2% |
+
+FY2025 revenue of $20.6bn and net earnings of $4.08bn ($9.98 diluted EPS) extend a multi-year compounding pattern: revenue has grown at roughly high-single-digit rates since FY2022, with EPS growth running slightly ahead thanks to buybacks (408.7m diluted shares vs 412.2m in FY2024). FCF of $4.39bn (Yahoo) covers dividends paid of $2.40bn and repurchases of $1.28bn with headroom for capex and the WorkForce Software acquisition ($1.17bn cash outflow in FY2025 per cash-flow statement).
+
+**Interim trends (primary filings — 10-Q extracts)**
+
+Six interim 10-Q filings are indexed (Sep 2024 through Mar 2026). Key progression:
+
+*Q1 FY2026 (Sep 2025, 10-Q filed 31 Oct 2025):* Total revenues $5.18bn (+7.1% y/y); net earnings $1.01bn; diluted EPS $2.49 (+6.4%).
+
+*Q2 FY2026 (Dec 2025, 10-Q filed 29 Jan 2026):* Total revenues $5.36bn (+6.2% y/y); net earnings $1.06bn; diluted EPS $2.62 (+11.5%). Six-month revenue $10.53bn (+6.6%); net earnings $2.08bn; diluted EPS $5.12 (+9.2%).
+
+*Q3 FY2026 (Mar 2026, 10-Q filed 30 Apr 2026):* Total revenues $5.94bn (+7.0% y/y); net earnings $1.36bn (+8.8%); diluted EPS $3.38 (+10.5%). Nine-month revenue $16.47bn (+6.7%); net earnings $3.43bn (+8.4%); diluted EPS $8.49 (+9.6%).
+
+The filing MD&A attributes revenue growth to new bookings, retention, pricing, benefits pass-through, foreign exchange, and rising interest on client funds. Interest on funds held for clients reached $999.4m in the nine months (+13% y/y), on average balances of $40.2bn (+7.3%) and an average earned rate of 3.3% (vs 3.1% prior year). This float component is material and rate-sensitive.
+
+**Segment and margin (Q3 FY2026 10-Q MD&A)**
+
+- Employer Services: nine-month revenue $11.13bn (+7%), EBIT margin 37.4% (+50bps).
+- PEO Services: nine-month revenue $5.35bn (+6%), but EBIT margin 13.4% (−110bps) due to higher benefits pass-through, selling costs, and state unemployment insurance — a partial offset to consolidated margin gains.
+- Consolidated adjusted EBIT margin expanded 50bps for the nine months.
+
+**Balance sheet and cash flow (Q3 FY2026 10-Q, 31 Mar 2026)**
+
+- Total assets: $64.5bn; stockholders' equity: $6.35bn; debt: $3.98bn.
+- Funds held for clients: $46.4bn (client funds obligations $46.8bn) — balance-sheet scale that inflates asset/liability totals and distorts simple leverage and ROE metrics.
+- Commercial paper borrowings: $0 (vs $4.77bn at 30 Jun 2025) — paid down during FY2026 to date.
+- Nine-month operating cash flow: $4.01bn (+14.6% y/y); dividends paid $1.94bn; share repurchases $1.46bn.
+- Net pension income of $11.6m in nine-month cash flows (not a near-term funding concern).
+- Commitments and contingencies referenced in Note 14; no going-concern language identified.
+
+**Annual filing gap:** FY2025 and FY2024 10-K financial statement tables are not available in the body extracts (80,000-character truncation). Verify annual audited figures directly from EDGAR before trade execution.
+
+## RISKS AND RED FLAGS
+**Regulatory and compliance.** The FY2025 10-K risk factors emphasise exposure to evolving US and foreign payroll, tax, PEO co-employment, privacy, AI, and cybersecurity regulation. Failure to remit client taxes on time could trigger fines and reputational damage. PEO co-employment rules could alter TotalSource economics. GDPR, CPRA, and related data-protection regimes impose ongoing compliance cost.
+
+**Float-income cyclicality.** Client-funds interest contributed $999.4m in nine-month FY2026 revenues (+13% y/y). The 10-K warns that changes in withholding rules or remittance timing could reduce average client balances, and rate declines would compress this high-margin stream. With the 10-year Treasury near 4.68% (macro context), the direction of rates remains a key earnings sensitivity not fully captured by quality screens.
+
+**PEO margin erosion.** PEO EBIT margin fell 110bps to 13.4% in the nine months, driven by benefits inflation, selling investment, and ADP Indemnity headwinds. PEO is ~32% of consolidated revenue; sustained margin pressure could offset Employer Services gains.
+
+**Competitive intensity.** The 10-K cites competition on product quality, technology accessibility, breadth, and price from payroll/HCM peers (Paychex, Intuit, UKG, Oracle, SAP, and others). AI-native entrants and platform bundling by large cloud vendors remain structural threats, though ADP’s scale, data assets, and client switching costs provide defence.
+
+**Acquisition integration.** WorkForce Software (acquired October 2024 per 10-K) adds integration and amortisation costs; R&D expense rose 6% in nine-month FY2026 partly for this integration.
+
+**Debt and capital structure.** A May 2025 8-K documents issuance of $1.0bn of 4.750% senior notes due 2032. Total debt of ~$4.0bn is manageable against earnings, but leverage rose from near-zero net debt in FY2024 (Yahoo: net debt $78m) to $5.4bn net debt in FY2025 following commercial paper and note issuance — worth monitoring if buybacks continue at pace.
+
+**Governance / pension.** Pension is not a red flag near term (net pension income in cash flows). No going-concern or covenant breach language found. Legal proceedings section in interim 10-Q extracts is truncated; full Part II disclosures not verified in available bodies.
+
+**Screen blind spots.** Elevated P/B (15.8) and ROE (71.2%) partly reflect low book equity after aggressive buybacks and client-funds balance-sheet mechanics — screens passing on ROE may overstate economic return on invested capital.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate-to-heavy on earnings anticipation and analyst revisions, lighter on structural corporate events.
+
+**Strategy and product (material):**
+- *Will ADP's (ADP) Generative AI Push and Insider Buying Change Its Earnings and Margin Narrative?* (14 Jul 2025, simplywall.st) — AI product narrative.
+- *ADP to Launch Monthly Pay Tracking Indicator in Canada, Offering Look Inside Labor Market* (8 Jul 2025, WSJ) — international data product expansion.
+- Investor Day presentation filed via 8-K (12 Jun 2025) — strategic priorities on HCM technology, outsourcing, and global scale.
+
+**Earnings and analyst activity (Jul 2026 cluster):**
+- *What Analyst Projections for Key Metrics Reveal About ADP (ADP) Q4 Earnings* (24 Jul 2026, Yahoo Finance) — pre-FY2026 Q4 release.
+- *Automatic Data Processing (ADP) Earnings Expected to Grow: What to Know Ahead of Next Week's Release* (22 Jul 2026, Yahoo Finance).
+- Analyst price-target raises: Cantor Fitzgerald to $294 (22 Jul 2026, Investing.com); UBS maintained $270 (22 Jul 2026, GuruFocus); Stifel to $260 citing float income (8 Jul 2026, Investing.com).
+- *ADP stock holds steady after fiscal 2025 growth* (24 Jul 2026, AD HOC NEWS); *ADP Stock Gains 23% in 3 Months* (22 Jul 2026, Globe and Mail).
+
+**Macro / ADP data products (context, not company earnings):**
+- *ADP National Employment Report: Private Sector Employment Increased by 98,000 Jobs in June; Annual Pay was Up 4.4%* (1 Jul 2025, PR Newswire).
+- Weekly hiring slowdown headlines (Jul 2025–2026, Stock Titan) — relevant to pays-per-control but distinct from ADP corporate results.
+
+**Valuation debate in press:**
+- *ADP DCF Analysis: Intrinsic Value $214 vs Price $255* (22 Jul 2026, GuruFocus) — suggests market may be ahead of some DCF frameworks.
+
+No major M&A beyond WorkForce Software (disclosed in 10-K, not recent news flow), no CEO change, and no material regulatory enforcement actions identified in the manifest. News is tilted toward earnings preview and price action rather than deep fundamental disclosure.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Interim SEC filings confirm the screen’s quality-and-GARP thesis — steady organic growth, EPS compounding, and shareholder returns — but premium book metrics, float-income rate sensitivity, PEO margin drift, and missing annual financial-statement extracts prevent full confirmation of the Strong Buy signal at maximum conviction.

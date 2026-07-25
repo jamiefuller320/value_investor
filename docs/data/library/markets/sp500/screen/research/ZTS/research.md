@@ -1,0 +1,90 @@
+# Zoetis Inc. (ZTS) — Research memo
+
+_Version 1 · Updated 2026-07-25T11:05:36.228228+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Zoetis is the global leader in animal health, with a durable companion-animal franchise (~70% of revenue) and a growing pipeline in monoclonal antibody pain therapies. The quantitative screen flags the stock as a buy on cheapness, quality, dividend, GARP and risk metrics (P/E 12.2x, FCF yield 5.6%, ROE 67.7%), following a sharp de-rating from prior premium multiples. The investment case rests on operational resilience—mid-single-digit organic revenue growth through 2025 interims—and earnings power that screens well against peers, offset by elevated leverage, aggressive buybacks and product concentration in Simparica and Apoquel. The central debate is whether the May 2025 guidance reset and Librela-related sentiment overhang are temporary dislocations in an otherwise high-quality compounder, or early signals of structural growth deceleration.
+
+## INVESTMENT THESIS
+For a value investor, Zoetis offers a rare combination: a wide-moat animal health platform passing 12 of 22 quantitative models across five factor families (cheapness, quality, dividend, GARP, risk), with sector-relative composite score in line with the broader screen (69% vs 69% sector). Business quality is substantiated by filings: ~300 product lines sold in 100+ countries, market leadership in most operating regions, R&D spend of $698m in FY2025 (10-K), and top-ten products contributing ~57% of revenue without a single point of failure above ~16% (Simparica/Simparica Trio).
+
+The screen’s earnings yield (8.2%) and FCF yield (5.6%) imply the market is pricing in a growth slowdown that interim filings only partially support. Q1 2026 revenue of $2,262m rose 3% reported (+4% FX, −1% operational on a restated basis per Q1 2026 10-Q MD&A), with adjusted net income up 2%. Nine-month 2025 revenue of $7,080m (+2% YoY) and net income of $2,070m (+9%) show the underlying business still compounding, even after the difficult Q1 2025 print that triggered a guidance cut and ~22% single-day selloff (news, June 2025).
+
+Capital returns reinforce the dividend-screen pass: quarterly dividend raised to $0.53 (Q1 2026 10-Q) from $0.50, with sustained repurchases ($606m in Q1 2026 alone). Neff PEGY of 0.04 and passes on Buffett Quality, Economic Moat and Earnings Quality suggest the de-rating has moved valuation toward GARP/value territory without sacrificing franchise quality—consistent with the screen’s stable, building conviction label (60%, three weeks at signal).
+
+## FINANCIAL REVIEW
+**Annual results (10-K, FY2025 filed 12 Feb 2026; FY2024 filed 13 Feb 2025)**
+
+Filings confirm segment composition but **do not include Item 8 consolidated financial statements** in the available body extracts (truncated before page 54). Segment revenue from the FY2025 10-K: United States $5,097m (55%) and International $4,254m (45%), implying **~$9,351m** of geographic segment revenue. Companion animal products contributed ~70% of revenue; livestock ~29%. FY2024 segment split: US $5,074m, International $4,102m (~$9,176m combined). R&D expense was $698m (2025), $686m (2024) and $614m (2023) per the 10-K business section.
+
+**Consolidated annual figures below are sourced from `financials_annual.json` (Yahoo) as an explicit fallback**, as filing bodies lack downloadable income/cash-flow statements:
+
+| Metric | FY2025 | FY2024 | FY2023 | Trend |
+|--------|--------|--------|--------|-------|
+| Revenue | $9,467m | $9,256m | $8,544m | Steady mid-single-digit growth |
+| Operating income | $3,597m | $3,392m | $3,069m | Margin expansion |
+| Net income | $2,673m | $2,486m | $2,344m | +8% YoY in 2025 |
+| Diluted EPS | $6.02 | $5.47 | $5.07 | Buybacks amplifying EPS |
+| Free cash flow | $2,283m | $2,298m | $1,621m | FCF normalising post-2023 inventory build |
+| Operating cash flow | $2,904m | $2,953m | $2,353m | Strong conversion |
+
+Balance sheet (Yahoo fallback, FY2025): total debt $9,238m, net debt $6,732m, stockholders’ equity $3,331m, total assets $15,467m. **Negative tangible book value (−$434m)** reflects goodwill/intangibles from acquisitions and cumulative buybacks (treasury stock $10.7bn). This is a material screen caveat: high ROE (67.7%) is partly leverage- and buyback-driven.
+
+**Interim results (10-Q filings — primary source)**
+
+*Q1 2026 (10-Q filed 7 May 2026):*
+- Revenue **$2,262m** vs $2,198m restated prior-year (+3% reported; −1% operational)
+- Net income **$601m**; diluted EPS **$1.42** vs $1.34
+- Adjusted net income **$646m** (+2%)
+- R&D **$180m** (+11%); restructuring charges **$22m** (none in prior-year Q1)
+- Operating cash flow **$401m** (down from $515m, working-capital headwind)
+- Long-term debt **$9,045m**; cash **$1,941m**; equity **$3,233m**
+
+*Q1 2025 (10-Q filed 6 May 2025 — pre-fiscal-alignment):*
+- Revenue **$2,220m** vs $2,190m (+1% reported, **+5% operational**)
+- Net income **$631m**; diluted EPS **$1.41**
+- MD&A cited ~4% price growth and ~4% volume growth from key franchises, offset by ~4% FX headwind
+
+*Q2 2025 (10-Q filed 5 Aug 2025):*
+- Revenue **$2,460m** (+4% reported, +5% operational)
+- Net income **$718m** (+15% reported)
+
+*Q3 / nine months 2025 (10-Q filed 4 Nov 2025):*
+- Q3 revenue **$2,400m** (+1% YoY)
+- Nine-month revenue **$7,080m** (+2%); net income **$2,070m** (+9%); diluted EPS **$4.65** (+11%)
+
+**Gaps:** FY2025/FY2024 consolidated P&L, balance sheet and cash-flow statements are **not present** in filing body extracts; Q4 2025 standalone figures must be derived (not separately filed in index with body). Fiscal-year alignment of international subsidiaries (effective 2026 per 10-K) affects YoY comparability—Q1 2026 MD&A flags restated prior periods.
+
+## RISKS AND RED FLAGS
+**Product and patent cycle:** FY2025 10-K discloses generic entry on Draxxin (tulathromycin) across major markets, Excede in Brazil/Mexico/Russia, and Cerenia injectable (generic approved in US). Simparica (~16%) and Apoquel (~12%) together represent ~28% of revenue; top-five products ~42%. Patent cliff risk is partially mitigated by lifecycle extensions (Apoquel Chewable, Simparica Trio) but remains a medium-term headwind.
+
+**Customer concentration:** Largest US veterinary distributor represented ~16% of total FY2025 revenue (10-K).
+
+**Leverage and capital allocation:** Q1 2026 long-term debt of $9.0bn against equity of $3.2bn. Credit facilities carry a **maximum net-debt/EBITDA covenant of 3.5:1** (4.0:1 post-material acquisition) per Q1 2026 10-Q—no default disclosed. FY2025 saw $3.2bn of share repurchases and net long-term debt issuance of ~$2.5bn (Yahoo cash-flow fallback). Aggressive buybacks at depressed prices support EPS but increase financial risk if growth slows further.
+
+**Regulatory and trade:** Interim MD&A (Q1/Q2 2025 10-Q) flags tariff and trade-protection uncertainty from early-2025 US measures, with potential demand and cost impacts. Livestock revenue is exposed to disease outbreaks (avian influenza, screwworm in US cattle—news, July 2026).
+
+**Foreign exchange:** ~42% of Q1 2025 revenue in non-USD currencies; FX reduced reported growth by ~4% in that quarter.
+
+**Legal/contingent:** Balance sheets reference **commitments and contingencies (Note 15)** but detailed disclosure is not in available extracts. Q1 2026 10-Q notes reference environmental litigation in Ulianopolis, Brazil (suspended 2012, ongoing prosecutor investigation). **News coverage** indicates active **shareholder securities litigation** with filing deadlines of 27 July 2026 (GlobeNewswire, July 2026)—not independently verifiable from filing bodies reviewed. No going-concern language identified.
+
+**Governance:** Board expanded to 13 members with appointment of Stephanie Tilenius (8-K, 28 Oct 2025). R&D leadership transition: Dr Esch promoted to EVP/President R&D (Jan 2026, 10-K).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate in quality**—heavy on price-action and fund-flow articles, with several material corporate items:
+
+- **May 2025:** Q1 earnings miss and **full-year guidance cut** drove a valuation reset and analyst price-target cuts (“Zoetis (ZTS) Valuation Reset After Q1 Earnings Miss And Guidance Cut,” Yahoo Finance, 16 May 2025).
+- **June 2025:** Stock fell **~22% in a single day** amid broader concern over growth and Librela trajectory (“Zoetis (ZTS) Lost 22% in a Day,” Yahoo Finance, 22 Jun 2025).
+- **July 2025:** Launched **Portela** (cat OA pain mAb) and **Lenivia** (dog OA pain mAb) in Canada and EU (“Zoetis (ZTS) Launches Two Long Acting Pet Pain Therapies,” Yahoo Finance, 22 Jul 2025; GuruFocus, 23 Jul 2025).
+- **July 2025:** **EU Commission approval** for combined Newcastle/Marek’s poultry vaccine (Yahoo Finance, 8 Jul 2025).
+- **July 2026:** **Shareholder lawsuit** solicitation notices with 27 Jul 2026 deadline (GlobeNewswire, 18–22 Jul 2026); Morgan Stanley maintained rating but **lowered price target to $99** (GuruFocus, 22 Jul 2026).
+- **October 2025:** Board appointment of Stephanie Tilenius (8-K, 28 Oct 2025).
+- **July 2026:** Commentary framing the selloff as overdone (“Zoetis: The 60% Decline Was Justified, But Shares Are Finally Buyable,” Seeking Alpha, 5 Jul 2026; “Temporary Concerns Present Entry Point,” Yahoo Finance, 23 Jul 2026).
+
+No major M&A announced in the period; October 2024 **divestiture of medicated feed additives** is referenced in filings.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Deep research largely confirms the screen’s buy case on franchise quality and de-rated multiples, tempered by leverage, product concentration, fiscal-alignment comparability gaps and unresolved shareholder litigation.

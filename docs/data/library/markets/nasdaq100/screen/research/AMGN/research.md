@@ -1,0 +1,84 @@
+# Amgen Inc. (AMGN) — Research memo
+
+_Version 1 · Updated 2026-07-25T10:48:17.385046+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Amgen Inc. (AMGN) screens as a buy on the Nasdaq 100 value model (7/22 models passed; composite 61%), driven chiefly by dividend yield, Neff PEGY (0.09), earnings quality, and Piotroski F-Score, against a backdrop of mid‑20s P/E and ~2.7% yield. The investment case rests on a scaled biopharma franchise—product sales reached $35.1bn in FY2025 (10‑K)—with Horizon-acquired rare-disease assets (TEPEZZA, KRYSTEXXA), a broad late-stage pipeline (notably MariTide in obesity), and durable operating cash generation. The central debate is whether mid-single-digit organic growth and pipeline optionality offset structural headwinds: ~$50–52bn gross debt, Inflation Reduction Act (IRA) Medicare price setting on ENBREL (from January 2026) and Otezla (from January 2027), and accelerating Prolia/XGEVA biosimilar erosion after US patent expiry in February 2025. Filings confirm improving interim earnings momentum but also impairments, litigation, and regulatory friction that the quantitative screen does not fully capture.
+
+## INVESTMENT THESIS
+For a value-oriented investor, Amgen offers a rare combination in large-cap pharma: visible cash returns (2.7% dividend yield; dividend growth model pass), earnings that screen cheap on a growth-adjusted basis (PEGY 0.09; GARP family pass), and a quality/moat overlay from diversified biologics, manufacturing scale, and orphan/rare franchises. The screen’s “Economic Moat” and “Magic Formula” passes align with filing evidence of entrenched products (ENBREL, Repatha, Prolia/XGEVA, TEPEZZA) and a biosimilars offset strategy (eight launches since 2018, including WEZLANA and BKEMV in 2025).
+
+Business quality is substantively better than headline ROE (1.0% on the screen) implies: book equity is depressed by ~$41bn of goodwill/intangibles and negative retained earnings following the October 2023 Horizon acquisition (~$27bn purchase per cash-flow history in Yahoo), not by operational distress. Underlying free cash flow remains material—the screen cites ~$7.4bn FCF; FY2025 operating cash flow was $9.96bn (Yahoo fallback, as the FY2025 10‑K body extract does not include consolidated cash-flow statements).
+
+The buy case is therefore not classic deep value on P/B (22.1) but “quality income at a reasonable growth-adjusted price”: a cash-compounding pharmaceutical with pipeline call options (MariTide, IMDELLTRA, UPLIZNA label expansion) that the screen’s cheapness and dividend families identify before the market fully prices biosimilar and IRA erosion. Conviction is building (54% conviction score; three weeks at signal) but timing data are insufficient for entry optimisation.
+
+## FINANCIAL REVIEW
+Primary source: SEC EDGAR filings (regime: sec_edgar). The index contains two annual 10‑Ks (FY2024 filed February 2025; FY2025 filed February 2026), six interim 10‑Qs (Q2 2024 through Q1 2026), and ten 8‑Ks (eight without downloadable bodies—a gap for event-driven detail).
+
+Annual trends (product sales, from 10‑K body extracts)
+
+| Year | Product sales ($m) | YoY |
+|------|-------------------|-----|
+| 2023 | 26,910 | — |
+| 2024 | 32,026 | +19% (Horizon full-year contribution) |
+| 2025 | 35,148 | +10% |
+
+Geographic mix (FY2025 10‑K): US $25.7bn (73%); rest of world $9.5bn (27%). Three wholesalers (McKesson, Cencora, Cardinal) accounted for 77% of gross revenues in 2025—concentration risk noted in filings.
+
+R&D investment (FY2024 10‑K): $6.0bn (2024), $4.8bn (2023), $4.4bn (2022). FY2025 R&D not available in the truncated 10‑K body; Yahoo fallback shows $7.27bn for 2025—treat as indicative only.
+
+Full-year consolidated P&L and cash flow: The FY2025 and FY2024 10‑K body extracts are truncated before Item 8 financial statements. The following fall back to `financials_annual.json` (Yahoo) and should be cross-checked against the primary filings before trading:
+
+- FY2025 (Yahoo): total revenue $36.75bn; operating income $9.08bn; net income $7.71bn; diluted EPS $14.23; free cash flow $8.10bn; dividends paid $5.12bn; capital expenditure $1.86bn.
+- FY2024 (Yahoo): total revenue $33.42bn; operating income $7.26bn; net income $4.09bn; diluted EPS $7.56; free cash flow $10.39bn.
+- FY2023 (Yahoo): total revenue $28.19bn; net income $6.72bn; diluted EPS $12.49.
+
+The FY2024 earnings step-down versus 2023 is consistent with filing references to Otezla intangible asset impairment charges linked to IRA Medicare price setting, plus Horizon integration amortisation.
+
+Interim momentum (10‑Q body extracts)
+
+Q1 2026 (three months to 31 March 2026): total revenues $8.62bn (+6% y/y); product sales $8.22bn; operating income $2.67bn (vs $1.18bn); net income $1.82bn; diluted EPS $3.34. Balance sheet: cash $12.0bn; total debt $51.9bn. The company issued $4.0bn of new notes in the quarter while repaying existing debt—leverage remains elevated.
+
+Q3 2025 (nine months to 30 September 2025): total revenues $26.89bn (+10% y/y); product sales $25.78bn; operating income $6.36bn (+29%); net income $6.38bn (vs $3.46bn); nine-month diluted EPS $11.77 (vs $6.40). Q3 alone: revenues $9.56bn; net income $3.22bn; diluted EPS $5.93.
+
+H1 2025 (six months to 30 June 2025): total revenues $17.33bn (+9%); net income $3.16bn (vs $0.63bn in H1 2024, when a $800m intangible impairment hit Q1 2025 comparatives per Q1 2026 cash-flow disclosure). H1 2025 operating cash flow $3.67bn.
+
+Balance sheet and capital structure (filings + Yahoo)
+
+- FY2025 year-end (Q1 2026 10‑Q comparative): total debt ~$50.0bn; cash $9.1bn (Yahoo: net debt ~$45.5bn).
+- Q1 2026: total debt $51.9bn; cash $12.0bn; total assets $92.5bn; stockholders’ equity not fully extracted from truncated body—Yahoo shows $8.66bn common equity and negative tangible book (~$32bn), reflecting acquisition intangibles.
+- No going-concern language identified in available filing bodies. Debt covenants: filings note no material difference between coupon and effective rates on most notes; Q1 2026 issuance included 4.20% 2031, 4.85% 2036, 5.50% 2046 tranches.
+
+Cash generation remains the financial anchor: nine-month 2025 net income of $6.38bn converted to operating activities despite working-capital swings, supporting dividend continuity ($5.1bn paid in FY2025 per Yahoo). Interest expense is structurally significant—Yahoo shows ~$2.8bn in FY2025—limiting net income leverage to revenue growth.
+
+## RISKS AND RED FLAGS
+Regulatory and pricing (filings): CMS set Medicare Part D prices for ENBREL effective January 2026 and Otezla effective January 2027 at levels “significantly lower” than current prices, with expected negative profitability impact; Otezla intangible impairment charges are referenced in the FY2025 10‑K. IRA inflation rebates, Part D redesign, 340B programme expansion, and state Prescription Drug Affordability Boards (Colorado, Maryland, Minnesota, Washington with upper payment-limit authority) add layered pricing risk. Amgen disclosed compliance with July 2025 “MFN Letter” pricing requests and expansion of AmgenNow direct channels—policy risk remains fluid.
+
+Competitive and patent cliff: Prolia/XGEVA US composition patents expired February 2025 (November 2025 in select European markets). The FY2025 10‑K states the company “expect[s] accelerated sales erosion driven by increased competition, as multiple biosimilars have launched.” ENBREL faces biosimilar approval in the US (approved but not yet launched per filing). Small-molecule Sensipar history illustrates rapid revenue loss post-exclusivity.
+
+Pipeline and product-specific: FDA requested voluntary withdrawal of TAVNEOS in January 2026 over ChemoCentryx trial conduct concerns; Amgen declined withdrawal and is negotiating with FDA—regulatory overhang on a ChemoCentryx-acquired asset. Bemarituzumab gastric cancer programme abandoned (February 2026). Rocatinlimab collaboration with Kyowa Kirin terminated, with Kyowa assuming global control in Q1 2026.
+
+Legal and governance: Filings reference ongoing litigation and government investigations (healthcare fraud/abuse, FCPA). News manifest: “Amgen settles shareholder lawsuit claiming it hid $10.7 billion tax bill” (Reuters, 21 July 2026); GuruFocus reports $74m settlement over tax disclosure delay (23 July 2026)—governance and disclosure risk around tax positions (filings reference substantial unrecognized tax benefits and IRS matters).
+
+Financial structure: ~$52bn gross debt against ~$8–9bn GAAP equity produces distorted ROE and high P/B; refinancing at higher rates (10-year Treasury ~4.7% per macro context) pressures net income. Q1 2026 net debt issuance despite stated deleveraging intent warrants monitoring.
+
+Operational: Customer concentration (77% via three wholesalers), sole-source raw materials, manufacturing expansion execution (North Carolina, Ohio, Puerto Rico), and tariff/supply-chain risks flagged in Item 1A risk factors.
+
+Pension: Current/pension liabilities appear on the balance sheet (~$1.4bn current pension per Yahoo 2025); no material pension deficit alarm language found in truncated bodies—detail limited.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate-to-thick on price action and holder flows, with several material corporate/regulatory items:
+
+- Regulatory/pricing: “Colorado Enbrel Price Cap Setback Might Change The Case For Investing In Amgen (AMGN)” (Yahoo Finance, 22 July 2026)—federal judge blocked Colorado’s 70% Enbrel cap, easing a state-level pricing overhang; related Simplywall.st and Yahoo pieces same week.
+- Litigation/tax: “Amgen settles shareholder lawsuit claiming it hid $10.7 billion tax bill” (Reuters, 21 July 2026); “Amgen (AMGN) Settles Lawsuit for $74 Million Over Tax Disclosure Delay” (GuruFocus, 23 July 2026).
+- Pipeline/commercial: “Morgan Stanley Raises Amgen (AMGN) Price Target Following a Strong Start for Uplizna” (Yahoo Finance, 13 June 2026); “Amgen’s US$300m Biologics Push And What It Means For AMGN Stock” (Yahoo Finance, 6 May 2026).
+- Strategy/M&A: Rocatinlimab handover to Kyowa Kirin and TAVNEOS FDA dispute surfaced in FY2025 10‑K rather than news manifest; MariTide Phase 3 expansion and weight-maintenance data (January 2026) in 10‑K.
+- Sentiment/analyst: “Amgen (AMGN) Upgraded to Buy” (Yahoo Finance, 6 July 2026); multiple valuation debate pieces (“Is The Stock Fully Priced?”, June–July 2026).
+
+Thin spots: limited primary-sourced coverage of Q1 2026 debt issuance and TAVNEOS dispute in the news manifest; eight 8‑Ks from late 2025–mid 2026 lack body extracts.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.70
+Rationale: Filings confirm revenue growth, rising interim profitability, and strong cash generation that support the quantitative buy signal, but elevated leverage, IRA/biosimilar headwinds, and legal/tax overhangs prevent full conviction until full 10‑K financial statements and deleveraging progress are verified.
