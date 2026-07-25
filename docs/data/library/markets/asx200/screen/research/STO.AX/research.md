@@ -1,127 +1,129 @@
 # Santos (STO.AX) — Research memo
 
-_Version 1 · Updated 2026-07-19T16:00:22.737670+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T13:00:24.702097+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# Santos Ltd (STO.AX) — First-Pass Research Memo
-
-**Quantitative screen:** Buy (4/22 models, composite 55%)  
-**Sources:** ASX announcement index (40 items, **0 downloadable filing bodies**); financials via Yahoo fallback where noted.
-
----
-
-## EXECUTIVE SUMMARY
-
-Santos is a diversified ASX oil and gas producer with LNG, domestic gas, and growth projects (Barossa, Pikka) nearing production. The quantitative screen flags a buy on cheapness (P/B 1.1), dividend yield (4.5%), GARP (PEGY 0.05), and balance-sheet health (D/E 48%), with four model families passing. The valuation hook is asset-backed equity trading near book with a meaningful yield, while major projects offer a production uplift option. The central debate is whether declining reported earnings (FY2025 net profit down ~33% year on year per Yahoo) reflect a cyclical trough and heavy capex phase, or a structurally weaker earnings base after the collapsed ADNOC takeover and ongoing operational and regulatory friction. Deep research partially confirms the screen on price and balance sheet, but weakens conviction on earnings momentum and event risk.
+Santos is a diversified ASX oil and gas producer spanning LNG, domestic gas, and major growth projects (Barossa, Pikka, Papua LNG). The quantitative screen flags a buy on cheapness (P/B 1.1), dividend yield (4.5%), GARP (PEGY 0.05), and balance-sheet health (D/E 48%). The valuation hook is asset-backed equity near book with a meaningful yield, while Barossa and Pikka offer a near-term production and cash-flow uplift. The central debate is whether FY2025’s sharply lower reported earnings reflect a cyclical trough and heavy capex transition, or a structurally weaker earnings base after the collapsed ADNOC takeover, commissioning delays, and trimmed 2026 production guidance. Deep research partially confirms the screen on price and balance sheet, but filing gaps and weak earnings momentum limit conviction.
 
 ---
 
 ## INVESTMENT THESIS
+For a value investor, STO screens as a **cheap, income-oriented cyclical energy name with acceptable leverage**, not a deep-quality compounder. The screen passes Schloss (low P/B), Neff PEGY, Dividend Growth, and Financial Health — a coherent cluster for an asset-backed commodity play: equity near tangible book, yield above 4%, growth implied cheaply on PEGY metrics, and debt within the screen’s 50% ceiling.
 
-For a value investor, STO screens as a **cheap, income-oriented energy name with acceptable leverage**, not a deep-quality compounder. The screen passes Schloss (low P/B), Neff PEGY, Dividend Growth, and Financial Health — a coherent cluster for a cyclical asset play: equity near tangible book, yield above 4%, growth implied cheaply on PEGY metrics, and debt within the screen’s 50% ceiling.
+Business quality is **mixed**. Santos owns long-life LNG and domestic gas infrastructure across Australia, Papua New Guinea, and Alaska. The Q2 2026 quarterly report confirms Barossa at 97% of planned rates and Pikka ramping toward ~80,000 bbl/day gross plateau in Q3 2026, with management expecting H2 2026 production 20–30% above H1. However, **ROE is only 5.2%** (screen), and Yahoo-sourced net profit has fallen for three consecutive years to A$818m in FY2025 — inconsistent with a classic quality-at-a-fair-price story.
 
-Business quality is **mixed**. Santos owns long-life LNG and domestic gas infrastructure across Australia, Papua New Guinea, and Alaska, with Barossa and Pikka as near-term growth catalysts (per yfinance headlines, Apr 2026). Reserves and CCS expansion were highlighted around the Feb 2025 results season. However, **ROE is only 5.2%** (screen), and Yahoo-sourced profits have fallen for three consecutive years — inconsistent with a classic “quality at a fair price” story.
-
-The buy case rests on **mean reversion**: commodity-linked revenue stabilising as Barossa/Pikka start up, portfolio rationalisation (non-core sales to Eni and Comet Ridge, Dec 2025), and cost restructuring (10% workforce reduction announced with FY2024 results, Reuters, 17 Feb 2025). At P/B ~1.1 and yield ~4.5%, the market appears to price in execution risk and earnings erosion rather than growth optionality. That asymmetry aligns with the screen’s cheapness and dividend families, provided leverage and capex remain manageable.
+The buy case rests on **mean reversion and project delivery**: commodity-linked revenue stabilising as major projects reach steady state, portfolio rationalisation (non-core sales to Eni and Comet Ridge, Dec 2025), and cost restructuring (10% workforce reduction announced with FY2024 results, Reuters, 17 Feb 2026). At P/B ~1.1 and yield ~4.5%, the market appears to price execution risk and earnings erosion rather than the H2 2026 cash-flow inflection flagged in the Q2 report. That asymmetry aligns with the screen’s cheapness and dividend families, provided leverage and capex remain manageable through the transition year.
 
 ---
 
 ## FINANCIAL REVIEW
+### Primary filing coverage
 
-**Source limitation:** The filings index (`regime: asx_announcements`) catalogues 40 ASX-linked announcements — including **annual** items (e.g. “Santos 2024 Full-year results”, 19 Feb 2025) and **interim** items (quarterly reports through Q4 Jan 2026; “HALF-YEAR REPORT 2025”, 25 Aug 2025) — but **no filing body extracts** are available (`with_body: 0`). Going-concern, covenant, and contingency language from primary filings cannot be cited. All figures below fall back to **`financials_annual.json` (Yahoo)** unless otherwise stated.
+The filings index (`regime: asx_announcements`) catalogues eight ASX-linked announcements: one **interim** item with a full body extract (2026 Second Quarter Report, 23 Jul 2026), one **annual** headline only (2026 AGM results, 16 Apr 2026 — no body), and five **other** market-commentary links. **No annual report or half-year results body extract is available.** Going-concern, covenant, and contingency language from primary filings cannot be cited. Historical annual trends below fall back to **`financials_annual.json` (Yahoo)**; interim operating data is drawn from the Q2 2026 filing body (USD).
 
-### Income statement trend (Yahoo, AUD)
+### Interim — Q2 2026 quarterly report (primary filing body, USD)
+
+**Operating momentum (H1 2026):**
+- Production: **45.6 mmboe** (+3% vs H1 2025); Q2 production **23.1 mmboe** (+3% vs Q1).
+- Sales revenue: **US$2,620m** H1 YTD (+2% vs H1 2025); Q2 **US$1,349m** (+6% vs Q1).
+- Realised LNG price: **US$11.21/mmBtu** in Q2 (+4.9% vs Q1); management expects stronger H2 pricing as JCC-linked lag catches up to Q2 JCC averaging >US$100/bbl.
+- Free cash flow from operations (non-IFRS): **~US$378m** for H1, impacted by Barossa/Pikka commissioning costs, cargo timing (~US$300m proceeds due shortly after 30 June), and a PNG under-lift of ~1.3 mmboe expected to reverse in H2.
+- Barossa and Pikka combined: **~US$151m FCF loss** in H1 (including third-party cargo purchases during commissioning).
+- Capital expenditure: **US$922m** H1 YTD, **20% below** H1 2025, reflecting transition from major development to operations.
+
+**2026 guidance (updated in filing):**
+- Production narrowed to **99–105 mmboe** (from 101–111 mmboe).
+- Sales volumes: **102–108 mmboe**.
+- Total capex unchanged at **~US$1.95–2.15bn**; unit production costs unchanged at **US$6.95–7.45/boe**.
+- H1 half-year P&L guidance (preliminary): revenue from product sales **~US$2,600m**; cost of sales **~US$1,920–2,130m** (including ~US$460m third-party purchases and ~US$950m DD&A); net finance cost **~US$170–210m**; effective tax rate **~10–15%**.
+
+Management expects H2 production growth of 20–30% on H1 and higher free cash flow as Barossa maintains steady state and Pikka reaches plateau, with first Pikka sales revenue expected in August 2026.
+
+### Annual trend — Yahoo fallback (AUD)
 
 | Metric | FY2022 | FY2023 | FY2024 | FY2025 |
 |--------|--------|--------|--------|--------|
-| Revenue | 7,790m | 5,889m | 5,404m | 4,951m |
-| EBITDA | 4,967m | 3,968m | 3,674m | 3,286m |
-| Net profit | 2,112m | 1,416m | 1,224m | 818m |
+| Revenue | A$7,790m | A$5,889m | A$5,404m | A$4,951m |
+| EBITDA | A$4,967m | A$3,968m | A$3,674m | A$3,286m |
+| Net profit | A$2,112m | A$1,416m | A$1,224m | A$818m |
 | Diluted EPS | A$0.628 | A$0.432 | A$0.376 | A$0.251 |
 
-**Trend:** A clear downward trajectory in revenue, EBITDA, net profit, and EPS over four years. FY2025 net profit of **A$818m** is **33% below** FY2024 (A$1,224m) and **61% below** the FY2022 peak. Operating income fell to A$1,180m (FY2025) from A$1,618m (FY2024). Interest expense rose to **A$319m** (FY2025) from A$246m (FY2024), compressing net interest coverage.
+**Trend:** Four consecutive years of declining revenue, EBITDA, net profit, and EPS. FY2025 net profit of **A$818m** is **33% below** FY2024 and **61% below** the FY2022 peak. Interest expense rose to **A$319m** (FY2025) from A$246m (FY2024).
 
-### Balance sheet (Yahoo, FY2025)
+**Balance sheet (Yahoo, FY2025):**
+- Total assets: **A$30.5bn**; shareholders’ equity: **A$15.7bn**
+- Total debt: **A$7.54bn**; net debt: **A$4.35bn** (up from A$4.03bn in FY2024 and A$3.50bn in FY2023)
+- Tangible book: **A$14.4bn**; net PPE: **A$24.7bn**
+- Retained earnings: **A$650m** (thin, down from A$1,087m in FY2024)
 
-- **Total assets:** A$30.5bn  
-- **Shareholders’ equity:** A$15.7bn  
-- **Total debt:** A$7.54bn; **net debt:** A$4.35bn (up from A$4.03bn in FY2024 and A$3.50bn in FY2023)  
-- **D/E (screen metric):** ~48% — consistent with Financial Health model pass  
-- **Tangible book:** A$14.4bn; goodwill/intangibles modest at A$1.3bn  
-- **Net PPE:** A$24.7bn — asset-heavy, project-driven profile  
-
-Retained earnings are thin at **A$650m** (FY2025), down from A$1,087m (FY2024), reflecting sustained dividend distributions amid falling profits.
-
-### Cash flow (Yahoo)
+**Cash flow (Yahoo):**
 
 | | FY2022 | FY2023 | FY2024 | FY2025 |
 |--|--------|--------|--------|--------|
-| Operating cash (direct) | 4,558m | 3,258m | 2,850m | 2,813m |
-| CapEx | (1,707m) | (2,369m) | (2,401m) | (2,056m) |
-| **Free cash flow** | **2,851m** | **889m** | **449m** | **757m** |
-| Dividends paid | (536m) | (777m) | (991m) | (770m) |
+| Operating cash (direct) | A$4,558m | A$3,258m | A$2,850m | A$2,813m |
+| CapEx | (A$1,707m) | (A$2,369m) | (A$2,401m) | (A$2,056m) |
+| **Free cash flow** | **A$2,851m** | **A$889m** | **A$449m** | **A$757m** |
+| Dividends paid | (A$536m) | (A$777m) | (A$991m) | (A$770m) |
 
-FCF recovered modestly in FY2025 (A$757m) after a trough in FY2024 (A$449m) but remains **far below** FY2022 levels. Dividends (A$770m) consumed **~102% of FCF** in FY2025 — a point of tension for the Dividend Growth screen pass. The screen’s FCF figure (~A$746m) aligns with Yahoo FY2025.
+FCF recovered modestly in FY2025 but remains far below FY2022 levels. Dividends (A$770m) consumed **~102% of FCF** in FY2025 — a tension point for the Dividend Growth screen pass. The screen’s FCF figure (~A$746m) aligns with Yahoo FY2025.
 
-### Interim / annual filing gaps
-
-The index confirms regular **quarterly** and **half-year** disclosure cadence (Q1–Q4 2025, H1 FY2025 Aug 2025, Q4 Jan 2026), plus FY2024 full-year results (Feb 2025). Without body text, **interim revenue, production, and guidance figures cannot be verified** from primary sources. News headlines indicate Q1 FY2026 production/cash flow were stable with guidance held (“Santos Holds Guidance as Barossa Nears Startup and Pikka First Oil Looms”, yfinance, 23 Apr 2026), and Q4 FY2025 drove a positive market reaction (“Evening Wrap… Santos +6% on quarterly results”, Market Index, 22 Jan 2026) — directional only, not audited figures.
+**Filing gaps:** No downloadable annual report body; no half-year report body in the current index. FY2025 audited P&L, balance sheet, and covenant detail cannot be verified from primary sources. The Q2 report provides directional H1 2026 guidance only (USD, unaudited).
 
 ---
 
 ## RISKS AND RED FLAGS
+**Earnings and cyclicality.** Three years of declining revenue and profit (Yahoo) suggest cheap multiples may reflect deteriorating fundamentals, not mispricing alone. Low ROE (5.2%) indicates weak capital returns through the cycle. Q2 2026 revenue reportedly missed estimates despite higher production (“Santos slips after Q2 revenue misses estimates, trims 2026 production guidance”, Investing.com UK, 23 Jul 2026).
 
-**Earnings and cyclicality.** Three years of declining revenue and profit (Yahoo) suggest the screen’s cheap multiples may reflect **deteriorating fundamentals**, not mispricing alone. Low ROE (5.2%) indicates weak capital returns through the cycle.
+**Project execution and guidance cuts.** 2026 production guidance was narrowed downward to 99–105 mmboe (from 101–111 mmboe) due to Barossa/Pikka commissioning delays (Q2 report; AFR, 23 Jul 2026). Barossa and Pikka recorded a combined **~US$151m H1 FCF loss**. Transition risk remains through H2 2026.
 
-**Leverage and capex.** Net debt has risen steadily (A$3.5bn → A$4.4bn over three years). CapEx remains elevated (~A$2bn p.a.) during the Barossa/Pikka build-out. Filing covenant detail is unavailable; interest expense is rising. No going-concern or covenant breach language can be confirmed from bodies.
+**Leverage and capex.** Net debt has risen steadily (A$3.5bn → A$4.4bn over three years). CapEx guidance remains elevated at ~US$1.95–2.15bn for 2026. Filing covenant detail is unavailable; interest expense is rising. No going-concern or covenant breach language can be confirmed from bodies.
 
 **Failed strategic exit.** The **A$18.7bn ADNOC-led takeover collapsed** (Reuters, 17 Sep 2025), removing a premium bid and leaving Santos as a standalone operator under market scrutiny.
 
-**Operational disruption.** Flagship **GLNG was temporarily shut down** (Upstream Online, 25 Mar 2025), highlighting concentration and uptime risk in core LNG assets.
+**Operational disruption.** Flagship **GLNG was temporarily shut down** (Upstream Online, 25 Mar 2026). LNG concentration and uptime risk in core assets remain material.
 
-**Restructuring and governance.** FY2024 results triggered a **10% workforce reduction and portfolio review** on a profit miss (Reuters, 17 Feb 2025; SMH, 18 Feb 2025). A **court ruling on net-zero claims** was pending (Upstream Online, 16 Feb 2025) — climate litigation risk not captured by quantitative screens.
+**Regulatory and litigation.** A greenwashing case was **dismissed** by the Federal Court (White & Case LLP, 27 Feb 2026), reducing one legal overhang. However, domestic gas supply scrutiny persists (“Santos puts Australia’s gas supply debate back at the centre of the market”, Kalkine, 13 Jul 2026), and Papua LNG FID depends on regulatory approvals (targeted Q4 2026 per Q2 report).
 
-**Dividend sustainability.** Dividends have exceeded or closely matched FCF in recent years; further earnings weakness could pressure payout policy despite the screen’s dividend pass.
+**Governance.** A pension fund **voted against the CEO bonus** at the 2026 AGM (“Santos says Mideast impact to last for years as pension fund votes against CEO bonus”, Reuters, 15 Apr 2026). Workforce cuts of ~400 jobs (~10%) were announced alongside FY2024 results while executive remuneration drew criticism (Reuters/The Nightly, 17–18 Feb 2026).
 
-**News noise.** Google News retrieval includes substantial **false-positive “Santos”** content (football, other companies), so non-ASX-specific headlines were excluded; company-specific coverage is adequate but often headline-level rather than filing-grade.
+**Commodity and hedging.** Q2 report flags **~US$35m oil hedge losses** in H1 guidance. Realised pricing remains JCC-lagged; near-term benefit from higher oil depends on contract structure and timing.
+
+**Disclaimer language (Q2 report).** Forward-looking statements are subject to price fluctuations, reserve estimates, regulatory developments, joint venture conduct, and cost estimates — standard but broad risk framing. No going-concern qualification appears in the available body.
 
 ---
 
 ## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate in volume but uneven in quality** — substantial Kalkine/trader commentary alongside fewer primary-source items.
 
-Material STO.AX-related developments over the past year (from `news_manifest.json`):
+**Strategy and projects:**
+- Barossa LNG reached production milestone; shares surged on quarterly results (“Santos Shares Surge on Barossa LNG Milestone”, Sharecafe, 22 Jan 2026).
+- Q1 2026: stable production, guidance held (“Santos Holds Guidance as Barossa Nears Startup and Pikka First Oil Looms”, yfinance, 23 Apr 2026).
+- Q2 2026: higher Q2 production but **trimmed 2026 output forecast** to 99–105 MMboe (“Santos Narrows 2026 Production Forecast”, yfinance, 24 Jul 2026; AFR, 23 Jul 2026).
+- Non-core asset sales to Eni and Comet Ridge (yfinance, 19 Dec 2025).
+- FID taken on PNG Agogo tie-in (>50% IRR) and PNG oil infill drilling (>30% IRR) per Q2 report.
 
-| Date | Headline | Theme |
-|------|----------|-------|
-| 17 Sep 2025 | *Santos stock slumps as $18.7 billion ADNOC-led deal collapses* (Reuters) | M&A failure |
-| 17 Feb 2025 | *Santos to cut 10% of jobs, review portfolio; shares slip on profit miss* (Reuters) | Restructuring, earnings |
-| 16 Feb 2025 | *Santos awaits court ruling on net zero claims* (Upstream Online) | Regulatory/litigation |
-| 12 Feb 2025 | *Santos Reserves Update Highlights Growing Role For Carbon Capture Storage* (yfinance) | Reserves, CCS |
-| 25 Mar 2025 | *Santos temporarily shuts down flagship LNG project* (Upstream Online) | Operational |
-| 19 Dec 2025 | *Santos Sells Non-Core Assets to Eni, Comet Ridge* (yfinance) | Portfolio optimisation |
-| 5 Aug 2025 | *Santos Inks Preliminary Deal to Supply ENGIE with Narrabri Gas* (yfinance) | Commercial |
-| 23 Apr 2026 | *Santos Holds Guidance as Barossa Nears Startup and Pikka First Oil Looms* (yfinance) | Growth projects |
-| 22 Jan 2026 | *Evening Wrap… Santos +6% on quarterly results* (Market Index) | Quarterly momentum |
-| 10 Jul 2026 | *Santos (ASX:STO) Could Be 14% Undervalued After Firmer Oil And LNG Prices* (simplywall.st) | Valuation commentary |
+**Results and restructuring:**
+- FY2024/FY2025 results season (Feb 2026): **10% job cuts**, portfolio review, shares slipped on profit miss (“Santos to cut 10% of jobs, review portfolio; shares slip on profit miss”, Reuters, 17 Feb 2026).
+- Reserves update and CCS expansion highlighted (yfinance, 12 Feb 2026).
 
-**Coverage quality:** yfinance and Australian financial media provide reasonable STO-specific flow; Google News is polluted by homonym matches. No primary filing bodies were available to corroborate headline claims.
+**M&A:**
+- **ADNOC-led A$18.7bn takeover collapsed** (Reuters, 17 Sep 2025) — major strategic overhang removed without premium realisation.
+
+**Regulatory and governance:**
+- Greenwashing case **dismissed** (White & Case LLP, 27 Feb 2026).
+- Pension fund voted against CEO bonus at 2026 AGM (Reuters, 15 Apr 2026).
+- Domestic gas export/pricing scrutiny (“Aussies hit as gas giants reap export rewards”, aapnews, 7 Apr 2026).
+
+**Market context:**
+- Energy sector rallied on oil above US$90–100/bbl in mid-2026 (“Evening Wrap… Woodside and Santos winners as oil soars past US$90”, Market Index, 20 Jul 2026).
+- Macquarie Outperform noted post-Q1 (Kalkine, 9 Jun 2026); Morningstar flagged stock as cheap despite strong outlook (Morningstar Australia, 24 Apr 2026).
+
+**Noise:** Many headlines reference unrelated “Santos” entities (football, pharma, etc.) — material STO-specific coverage is identifiable but requires filtering.
 
 ---
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.68  
-Rationale: Quantitative cheapness, yield, and balance-sheet metrics support the screen’s buy signal, but three years of falling profits, takeover failure, and absent primary filing detail prevent full confirmation of the earnings and governance picture.
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
+Verdict: accumulate
+Risk: medium
+Confidence: 0.62
+Rationale: Deep research confirms the screen’s cheapness, yield, and balance-sheet case, but three years of declining reported earnings, thin primary filing coverage, and project commissioning delays weaken conviction on near-term earnings momentum despite a plausible H2 2026 cash-flow inflection.

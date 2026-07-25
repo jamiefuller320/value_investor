@@ -1,15 +1,15 @@
 # Contact Energy Limited (CEN.AX) — Research memo
 
-_Version 1 · Updated 2026-07-19T16:00:01.766009+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T12:46:50.578585+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Contact Energy is a New Zealand integrated electricity generator and retailer, predominantly hydro and geothermal, dual-listed on the NZX (CEN) and ASX (CEN.AX). The quantitative screen rates the name a buy (5/22 models; composite 54%, sector-relative 58%), anchored by P/E 20.7, P/B 2.0, dividend yield 4.3%, and ROE 11.1%, with passes across cheapness, dividend, GARP, and financial-health families. FY2025 (Yahoo fallback) shows a sharp earnings inflection—revenue up 20% to NZ$3.41bn and EPS rising to NZ$0.416 from NZ$0.299—but free cash flow remains thin (NZ$95m) against capex and dividends, and net debt has climbed to NZ$1.94bn. The central debate is whether the earnings recovery and 4%+ yield justify a leveraged growth capex cycle, or whether reported profit quality and rising interest costs cap upside.
+Contact Energy Limited is a New Zealand integrated electricity generator and retailer, with a predominantly renewable asset base (hydro and geothermal), dual-listed on the NZX and ASX. The quantitative screen rates the name a buy (5/22 models; composite 54%, sector-relative 58%), supported by P/E 20.7, P/B 2.0, dividend yield 4.3%, ROE 11.1%, and passes across cheapness, dividend, GARP, and financial-health factor families. FY2025 figures (Yahoo fallback — no annual or interim filing bodies in the source pack) show a sharp earnings recovery: revenue up 20% to NZ$3.41bn and diluted EPS rising to NZ$0.416 from NZ$0.299, though free cash flow remains thin at NZ$95m against capex of NZ$449m and dividends of NZ$198m. The central debate is whether operational momentum (lower generation costs, higher retail volumes in 2026 monthly updates) and a 4%+ yield justify a leveraged, dilution-heavy growth cycle — including a NZ$575m+ 2026 equity raise and Infratil’s subsequent ~5% block sale — or whether rising net debt (NZ$1.94bn), earnings-quality scepticism, and shareholder overhang cap upside.
 
 ## INVESTMENT THESIS
-For a value investor, Contact offers a regulated-utility-like asset base (NZ$5.2bn net PPE) at modest multiples rather than a deep cyclical discount. The screen’s buy signal is supported by four distinct factor families—cheapness (Graham Enterprising, Magic Formula), dividend (Dividend Growth), GARP (Neff PEGY), and balance-sheet resilience (Financial Health; debt/equity 71%)—suggesting the market is not pricing the FY2025 earnings step-up aggressively. Operating income doubled over two years (NZ$403m in FY2024 to NZ$709m in FY2025), and normalised EBITDA reached NZ$843m, implying operating leverage as generation volumes and wholesale prices recovered. The 4.3% yield with a payout that appears covered on a reported basis (FY2025 net income NZ$331m vs dividends paid NZ$198m) fits income-oriented value mandates. Business quality rests on long-life renewable generation assets and a vertically integrated retail franchise; the screen’s “improving” signal trend (1 week at buy, conviction 27%) aligns with the FY2025 result inflection reported in August 2025 news. The gap between screen FCF (~NZ$363m per snapshot) and Yahoo-reported FCF (NZ$95m) underscores that capital intensity—not operating weakness—is the binding constraint on deep-value upside.
+For a value investor, Contact offers a vertically integrated utility franchise backed by NZ$5.2bn of net property, plant and equipment at modest multiples rather than a deep cyclical trough. The screen’s buy signal rests on four distinct factor families — cheapness (Graham Enterprising, Magic Formula), dividend (Dividend Growth), GARP (Neff PEGY), and balance-sheet resilience (Financial Health; debt/equity 71%) — suggesting the market is not fully pricing the FY2025 earnings step-up. Operating income nearly doubled over two years (NZ$403m in FY2024 to NZ$709m in FY2025), and normalised EBITDA reached NZ$843m, implying meaningful operating leverage as generation volumes and wholesale conditions recovered from the FY2023 trough (EPS NZ$0.163). The 4.3% yield, with FY2025 net income of NZ$331m covering dividends paid of NZ$198m on a reported basis, fits income-oriented value mandates. Business quality rests on long-life renewable generation assets and an integrated retail franchise; recent monthly operating updates (March–June 2026) reporting higher sales and sharply lower generation costs reinforce the recovery narrative. The screen’s “improving” signal trend (1 week at buy, conviction 27%, stability “new”) aligns with this inflection, though the gap between the screen’s FCF metric (~NZ$363m) and Yahoo-reported FCF (NZ$95m) underscores that capital intensity — not operating weakness alone — is the binding constraint on deep-value upside.
 
 ## FINANCIAL REVIEW
-**Source limitation:** The filings index contains 12 ASX announcement references (regime: `asx_announcements`), but zero entries classified as annual or interim, and zero downloadable body extracts (`with_body: 0`). No primary annual report, half-year, or trading-update text is available for citation. All figures below are sourced from `financials_annual.json` (Yahoo Finance); quarterly income data in that file is empty.
+**Source limitation:** The filings index (`regime: asx_announcements`) contains one entry classified as `other` (board appointment, 22 July 2026) with a downloadable body extract. Zero entries are classified as `annual` or `interim`; no primary annual report, half-year results, or trading-update filing bodies are available for financial citation. The sole filing body confirms governance activity only (Alison Barrass appointed independent director effective 1 September 2026). All financial figures below are sourced from `financials_annual.json` (Yahoo Finance); quarterly income data in that file is empty. This is an explicit fallback.
 
 **Income statement trend (FY2022–FY2025, NZ$m unless stated):**
 
@@ -21,17 +21,18 @@ For a value investor, Contact offers a regulated-utility-like asset base (NZ$5.2
 | Net income | 182 | 127 | 235 | 331 |
 | Diluted EPS (NZ$) | 0.234 | 0.163 | 0.299 | 0.416 |
 
-FY2025 delivered the strongest result in the four-year window: revenue rose 20% year-on-year and net income increased 41%. FY2023 was the trough (EPS NZ$0.163), likely reflecting weaker hydrology and wholesale conditions. Yahoo flags impairments of capital assets of NZ$50m in FY2024 and NZ$10m in FY2025; normalised income (FY2025: NZ$338m) is modestly above reported net income. Other non-operating expenses were material in FY2025 (NZ$147m), and interest expense nearly doubled to NZ$97m from NZ$47m in FY2024—consistent with higher gross debt.
+FY2025 delivered the strongest result in the four-year window: revenue rose 20% year-on-year and net income increased 41%. FY2023 was the trough, consistent with weaker operating conditions. Yahoo flags impairments of capital assets of NZ$50m in FY2024 and NZ$10m in FY2025; normalised income in FY2025 (NZ$338m) is modestly above reported net income. Other non-operating expenses were material in FY2025 (NZ$147m), and interest expense nearly doubled to NZ$97m from NZ$47m in FY2024 — consistent with higher gross debt.
 
 **Balance sheet (FY2025 vs FY2024, Yahoo fallback):**
 
 - Total debt: NZ$2,449m (from NZ$1,913m); net debt: NZ$1,935m (from NZ$1,684m)
 - Stockholders’ equity: NZ$2,760m (from NZ$2,619m)
 - Cash: NZ$514m (from NZ$229m)
-- Net PPE: NZ$5,166m; construction in progress fell sharply to NZ$346m from NZ$1,416m, suggesting major project completion
+- Net PPE: NZ$5,166m; construction in progress fell to NZ$346m from NZ$1,416m, suggesting major project completion
+- Derivative liabilities: NZ$254m (commodity/rate exposure)
 - Debt/equity (screen metric): 71%
 
-Leverage has risen steadily since FY2022 (net debt NZ$931m), funding a heavy capex cycle. Equity has been broadly stable, with retained earnings NZ$795m at FY2025.
+Leverage has risen steadily since FY2022 (net debt NZ$931m), funding a heavy capex cycle. Ordinary shares outstanding increased to ~803m at FY2025 year-end (from ~789m in FY2024); the February–March 2026 equity raise (NZ$450m placement plus NZ$125m oversubscribed retail offer, per news) will further dilute the base — post-raise balance-sheet figures are not yet in the Yahoo annual set.
 
 **Cash flow (Yahoo fallback):**
 
@@ -42,37 +43,54 @@ Leverage has risen steadily since FY2022 (net debt NZ$931m), funding a heavy cap
 | Free cash flow | 53 | (146) | 74 | 95 |
 | Dividends paid | (242) | (243) | (248) | (198) |
 
-FCF turned negative in FY2023 during peak investment, recovered modestly in FY2024–FY2025 but remains well below dividend outflows in most years. FY2025 net long-term debt issuance was NZ$473m (issuance NZ$933m, repayments NZ$460m), indicating continued balance-sheet funding of the asset base.
+FCF turned negative in FY2023 during peak investment, recovered modestly in FY2024–FY2025 but remains well below dividend outflows in most years. FY2025 net long-term debt issuance was NZ$473m (issuance NZ$933m, repayments NZ$460m), indicating continued balance-sheet funding of the asset base. The screening snapshot cites FCF of ~NZ$363m — a materially higher figure than Yahoo’s NZ$95m; the discrepancy likely reflects different calculation methodology and should not be treated as filing-confirmed.
 
-**Interim filings:** None present in the filings index; half-year or trading-update analysis is not possible from primary sources.
+**Interim filings:** None present in the filings index; half-year or trading-update financial analysis from primary sources is not possible. Operational colour is available only from news coverage of monthly operating reports (April–June 2026).
 
 ## RISKS AND RED FLAGS
-**Data gap:** Without filing body extracts, going-concern language, covenant disclosures, and contingency notes cannot be reviewed from primary sources. This is a material limitation for a utility with rising leverage.
+**Primary filing gap:** Without annual or interim filing body extracts, going-concern language, covenant disclosures, contingency notes, and regulatory determinations cannot be reviewed from primary sources. This is a material limitation for a utility with rising leverage and derivative exposure (NZ$254m derivative liabilities at FY2025).
 
-**Leverage and interest:** Net debt of NZ$1.94bn and interest expense of NZ$97m (FY2025) create sensitivity to rate resets and credit-market conditions. Total debt has more than doubled since FY2022.
+**Leverage and interest:** Net debt of NZ$1.94bn and interest expense of NZ$97m (FY2025, Yahoo) create sensitivity to rate resets and credit-market conditions. Total debt has more than doubled since FY2022 (NZ$1.10bn). The 2026 equity raise partially de-risks the balance sheet but introduces dilution.
 
 **FCF vs distributions:** Reported FCF (NZ$95m) is thin relative to dividends paid (NZ$198m) and ongoing capex (~NZ$449m). Value screens passing on dividend metrics may understate reinvestment and funding risk.
 
 **Earnings quality:** Yahoo data shows recurring impairments (NZ$50m FY2024; NZ$10m FY2025) and large other non-operating items. News headline “Contact Energy's (NZSE:CEN) Earnings Are Of Questionable Quality” (25 August 2025) flags market scepticism on sustainability of reported profit.
 
-**Operational/regulatory:** Hydrology and wholesale electricity price volatility directly affect generation margins; no primary filing detail on hedge books or regulatory determinations is available in the source pack. Derivative liabilities of NZ$254m (FY2025 balance sheet) indicate commodity/rate exposure.
+**Shareholder overhang:** Infratil agreed to cut its Contact stake in an over-NZ$495m block trade (~5%, May 2026), with trading paused and resumed around the sale. This reverses the October 2025 narrative of Infratil increasing its stake and adds supply-side pressure. News also noted the stock down ~9% over the prior year (14 July 2026).
 
-**Governance/ownership:** News reports mixed ownership (institutional ~43–49%, retail ~48%) with no material management-change or M&A headlines in the past year.
+**Operational/regulatory cyclicality:** Hydrology and wholesale electricity price volatility directly affect generation margins; no primary filing detail on hedge books or regulatory determinations is available. Monthly updates show improving trends but remain unaudited.
+
+**Capital markets activity:** The NZ$450m placement (February 2026) and NZ$125m oversubscribed retail offer (March 2026) fund growth plans but dilute existing holders; simplywall.st flagged shares “may have run too fast too soon” (11 February 2026).
 
 ## NEWS HIGHLIGHTS
-Coverage is moderate but skewed toward earnings commentary and third-party analysis rather than company-issued strategy updates (consistent with the filings gap).
+Coverage is moderate over the past year, with a mix of earnings commentary, capital-markets activity, and operational updates. Company-specific regulatory or M&A news is thin; filings-index content is limited to the board appointment.
 
-- **19 August 2025** — “Contact Energy Full Year 2025 Earnings: EPS: NZ$0.41 (vs NZ$0.30 in FY 2024)”: Revenue NZ$3.44bn (+20% YoY); key corporate result driving the screen’s improving trend.
-- **25 August 2025** — “Contact Energy's (NZSE:CEN) Earnings Are Of Questionable Quality”: Post-results scepticism on profit sustainability.
-- **20 August 2025** — “Do These 3 Checks Before Buying Contact Energy Limited (NZSE:CEN) For Its Upcoming Dividend”: Dividend-focused pre-ex-date commentary.
-- **14 September 2025** — “Voith Completes Second Turbine Upgrade at New Zealand Hydropower Station”: Operational capex at Roxburgh hydropower station (efficiency/modernisation).
-- **16 November 2025** — “Is Contact Energy Limited (NZSE:CEN) Trading At A 35% Discount?”: Third-party DCF-based fair-value discussion (not corroborated by primary filings here).
-- **11 February 2026** — “Contact Energy Limited's (NZSE:CEN) Shares May Have Run Too Fast Too Soon”: Momentum/valuation pushback after the FY2025 rerating.
+**Earnings and valuation:**
+- **19 August 2025** — “Contact Energy Full Year 2025 Earnings: EPS: NZ$0.41 (vs NZ$0.30 in FY 2024)”: Revenue NZ$3.44bn (+20% YoY); key corporate result.
+- **25 August 2025** — “Contact Energy's (NZSE:CEN) Earnings Are Of Questionable Quality”: Post-results scepticism.
+- **11 February 2026** — “Contact Energy Limited's (NZSE:CEN) Shares May Have Run Too Fast Too Soon”: Valuation pushback.
+- **14 July 2026** — “Contact Energy (ASX:CEN) Flat on the Day and Down 9% in a Year — What Will It Take to Reignite the Stock?”: Momentum/performance context.
 
-No material M&A, regulatory enforcement, or senior management changes appear in the manifest. Filings-index ASX headlines are largely generic or unrelated tickers; company-specific regulatory news is thin.
+**Capital raising and ownership:**
+- **15 February 2026** — “Contact Energy sweet-talks Aus, NZ investors for $500m-plus raising” (AFR).
+- **17 February 2026** — “Contact Energy completes NZ$450m share placement for growth plans” (Motley Fool Australia).
+- **11–12 March 2026** — “Contact Energy Raises NZ$125 Million in Oversubscribed Retail Offer” (Yahoo Finance Australia); “Contact Energy’s Retail Offer Oversubscribed” (Finance News Network).
+- **19–21 May 2026** — “Infratil Agrees to Cut Stake in Contact Energy in Over NZ$495 Million Block Trade” (Yahoo Finance Australia); “Why is Infratil cashing out of its Contact Energy shares?” (Motley Fool Australia); trading pause and resumption headlines.
+
+**Operations and strategy:**
+- **14 September 2025** — “Voith Completes Second Turbine Upgrade at New Zealand Hydropower Station”: Roxburgh hydropower efficiency upgrade.
+- **16 April–19 May 2026** — Monthly operating updates (March, April earnings reports): higher sales and generation (Motley Fool Australia).
+- **16 June 2026** — “Contact Energy's May 2026 report shows higher sales and lower costs”; “Contact Energy's (ASX:CEN) Generation Costs Plunge 47% — What Drove Turnaround?” (Kalkine/Motley Fool).
+- **21 July 2026** — “New Zealand Shares Fall; Contact Energy Posts Higher Retail Electricity, Gas Sales in June” (Yahoo Finance Australia).
+
+**Governance and calendar:**
+- **22 July 2026** — “Alison Barrass to join Contact Board” (ASX announcement; primary filing body): independent director from 1 September 2026.
+- **21 July 2026** — “Contact Energy to Present Full Year 2026 Financial Results via Live Webcast on 10 August” (Kalkine): FY2026 results pending.
+
+No material regulatory enforcement actions or senior executive departures appear in the manifest. Sector context: “NZX Midday Sector Update: Consumer Services Soar, Utilities Sector Struggles” (22 July 2026).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Deep research partially confirms the screen’s buy case via FY2025 earnings growth, renewable asset quality, and dividend-supported valuation, but primary filing absence, rising leverage, thin FCF, and earnings-quality concerns prevent full confirmation.
+Confidence: 0.55
+Rationale: Deep research partially confirms the screen’s buy case via FY2025 earnings growth, renewable asset quality, and improving 2026 operating trends, but the absence of primary annual/interim filings, rising leverage, thin FCF, dilution from the 2026 equity raise, and Infratil’s block sale prevent full confirmation of the quantitative signal.

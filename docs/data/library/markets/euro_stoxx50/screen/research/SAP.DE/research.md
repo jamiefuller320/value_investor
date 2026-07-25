@@ -1,176 +1,130 @@
 # SAP SE (SAP.DE) — Research memo
 
-_Version 1 · Updated 2026-07-17T04:27:27.392566+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T13:12:19.656914+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# SAP SE (SAP.DE) — First-Pass Research Memo
-
-**Sector:** Technology | **Screen signal:** Strong Buy (9/22 models, composite 87%)  
-**Sources:** No primary regulatory filings indexed; all financial figures below from Yahoo (`financials_annual.json`) unless noted.
-
----
-
-## EXECUTIVE SUMMARY
-
-SAP SE is Europe’s dominant enterprise resource planning (ERP) vendor, mid-way through a multi-year shift from on-premise licences to subscription cloud revenue. The quantitative screen rates the name a **strong buy**, driven by cheapness (FCF yield 5.1%), quality (ROE 16.4%, moat and financial-health models passing), and growth-at-a-reasonable-price (PEGY 0.11 on ~9.3% revenue growth). At 22× P/E and 3.6× P/B, the market appears to discount the stock relative to its recurring-revenue profile and recent earnings acceleration, possibly reflecting sector-wide software de-rating and lingering scepticism over cloud transition pace. The central debate is whether SAP’s embedded customer base and AI pivot will sustain double-digit cloud growth and margin expansion, or whether competitive pressure from Oracle, Microsoft, and AI-native entrants will cap re-rating. Primary regulatory filings are **not available** in the research library (regime unsupported for Euro Stoxx 50), limiting audit-trail depth on contingencies and pension obligations.
-
----
+SAP SE is Europe’s largest enterprise software group, executing a multi-year shift from on-premise licences to subscription cloud under its RISE with SAP programme. The quantitative screen rates the name a strong buy (9/22 models, 87% composite), anchored by a 5.1% FCF yield, PEGY of 0.11, 16.4% ROE, and passes across cheapness, quality, dividend, GARP, and risk families. At roughly 22× trailing P/E and 3.6× P/B, the market appears to discount a recurring-revenue compounder that has de-rated sharply in the 2026 software selloff. Q2/H1 2026 results (23–24 July 2026) reinforced the cloud-growth narrative—record backlog, cloud revenue up ~24%, EPS beat—but also resurfaced margin and guidance tension after July acquisitions. The central debate is whether embedded ERP switching costs and accelerating cloud migration (including a 2027 support deadline) sustain re-rating, or whether AI disruption fears, margin pressure, and sector multiple compression cap upside. Primary regulatory filings are absent from the research library; financial analysis below relies on Yahoo fallback data.
 
 ## INVESTMENT THESIS
+The screen’s strong-buy signal is unusually broad: nine models across five factor families, with high data quality (19/20 metrics). This is not a deep-value trade on distressed assets; it is a quality compounder at a reasonable price.
 
-The screen’s strong-buy signal rests on an unusually broad pass set: **nine of 22 models**, spanning five factor families (cheapness, quality, dividend, GARP, risk). This is not a deep-value cigar butt; it is a **quality compounder trading at a reasonable price**.
+**Quantitative alignment.** The screen highlights FCF yield (5.1%), Neff PEGY (0.11 on ~9.3% growth), ROE (16.4%), dividend yield (1.8%), and passes on FCF Yield, Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Composite Value, and Financial Health. Composite score 87% exceeds the sector-relative 82%, suggesting SAP is cheap versus Euro Stoxx 50 technology peers on a multi-factor basis, not merely on headline multiples.
 
-**Why it fits a value framework:**
+**Business quality.** SAP’s ERP installations sit at the core of large enterprises’ finance, supply-chain, and HR workflows—high switching costs that support the moat and quality model passes. Deferred revenue of €6.6bn (Yahoo, FY2025 year-end) signals a growing recurring base. News flow consistently describes SAP as “irreplaceable” in client tech ecosystems (Harris Oakmark letter, 15 July 2026).
 
-| Screen metric | Reading | Model relevance |
-|---|---|---|
-| FCF yield | 5.1% | FCF Yield ✓ |
-| PEGY | 0.11 | Neff PEGY ✓ |
-| ROE | 16.4% | Buffett Quality, Quality Value ✓ |
-| Dividend yield | 1.8% | Dividend Growth ✓ |
-| Revenue growth | ~9.3% (2024→2025) | GARP family ✓ |
-| Balance-sheet health | Net debt negligible; debt falling | Financial Health, Economic Moat ✓ |
+**Valuation hook for value investors.** Trailing P/E of 22× against mid-teens ROE and FY2025 FCF of €8.4bn (~23% FCF margin) offers GARP characteristics. FY2025 net debt fell materially (total debt €7.5bn vs €10.7bn prior year; cash €8.2bn), supporting the Financial Health pass. Capital returns remain disciplined: proposed dividend of €2.50/share (19 February 2026), €1.9bn buybacks in FY2025 (Yahoo cash flow).
 
-**Business quality anchors the screen.** SAP’s ERP installations sit at the core of large enterprises’ finance, supply-chain, and HR workflows—high switching costs that support the Economic Moat and Buffett Quality passes. Cloud revenue (not separately broken out in Yahoo data) is the growth engine; Q1 2026 revenue of €9.55bn (news, 23 Apr 2026) confirms momentum.
-
-**Valuation hook:** At 22× trailing P/E versus mid-teens ROE and accelerating free cash flow (€8.4bn in FY2025 vs €4.4bn in FY2024), the stock offers GARP characteristics more commonly associated with US software peers at higher multiples. The screen’s composite score of **87%** (sector-relative 82%) suggests SAP is cheap *within* its peer set on a multi-factor basis, not merely on headline P/E.
-
-**Capital allocation** supports the dividend and quality screens: proposed dividend of **€2.50/share** (19 Feb 2026), ongoing buybacks (€1.9bn in FY2025), and net debt reduction (total debt €7.5bn vs €10.7bn prior year, per Yahoo balance sheet).
-
----
+**Why now.** Shares had fallen sharply into Q2 results amid sector-wide “SaaSpocalypse” anxiety (WSJ noted ~35% YTD decline into July 2026). The 24 July EPS beat (€1.89 vs €1.68 consensus) and record cloud backlog provide a catalyst, while the screen had already flagged cheapness before the bounce—consistent with accumulating into de-rated quality rather than chasing momentum.
 
 ## FINANCIAL REVIEW
+**Primary source gap.** `filings_index.json` contains zero annual, interim, or other filings (regime: `euro_filings`; 0 body extracts under `filings/bodies/`). No Form 20-F, integrated report, quarterly statement, or ad-hoc disclosure text is available for audit. All figures below are from **Yahoo Finance (`financials_annual.json`)** unless noted from news headlines; interim filing language on going concern, contingencies, covenants, and pension funded status cannot be verified.
 
-**Source gap:** `filings_index.json` records **zero** annual or interim filings (regime: unsupported; no body extracts under `filings/bodies/`). All figures below are from **Yahoo Finance (`financials_annual.json`)** and should be treated as secondary. Interim detail is limited to Yahoo’s cached quarterly income (Q1 2026) and news headlines.
+### Annual trend (Yahoo, FY2022–FY2025)
 
-### Revenue and profitability trend (Yahoo, FY2022–FY2025)
-
-| | FY2022 | FY2023 | FY2024 | FY2025 |
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
 |---|---:|---:|---:|---:|
 | Revenue (€m) | 29,519 | 31,207 | 34,176 | 36,800 |
 | Operating income (€m) | 6,051 | 6,014 | 7,808 | 9,620 |
 | Reported net income (€m) | 2,284 | 6,139 | 3,124 | 7,161 |
-| EBITDA (€m) | 6,480 | 7,353 | 6,589 | 12,073 |
+| Normalised EBITDA (€m) | 7,780 | 7,666 | 9,517 | 11,171 |
 | Diluted EPS (€) | 1.95 | 5.17 | 2.65 | 6.10 |
+| Free cash flow (€m) | 4,770 | 5,461 | 4,410 | 8,417 |
 
-**Revenue** has compounded at roughly **7.7% CAGR** (2022–2025), with FY2025 growth of **~7.7%** YoY (Yahoo: €36.8bn vs €34.2bn). The screen’s 9.3% growth figure likely reflects a different basis (e.g. constant currency or cloud-only).
+**Revenue** compounded at ~7.7% CAGR (2022–2025); FY2025 grew 7.7% YoY to €36.8bn. The screen’s 9.3% growth figure likely uses a different basis (constant currency or cloud-only).
 
-**Operating margin** expanded from ~20.5% (2022) to **~26.1%** (2025), consistent with cloud mix shift and post-restructuring cost base.
+**Operating margin** expanded from ~20.5% (2022) to ~26.1% (2025), consistent with cloud mix and post-restructuring cost base.
 
-**Reported net income is volatile** and not a clean earnings proxy:
-- **FY2023:** €6.1bn includes **€2.4bn** from discontinued operations (Qualtrics divestiture).
-- **FY2024:** €3.1bn depressed by **€3.1bn** restructuring/M&A charges (Yahoo: Special Income Charges −€3,144m).
-- **FY2025:** €7.2bn boosted by **€905m** gain on sale of securities; normalised income ~€6.5bn (Yahoo).
+**Reported net income is not a clean earnings proxy:**
+- FY2023 (€6.1bn) includes €2.4bn from discontinued operations (Qualtrics divestiture).
+- FY2024 (€3.1bn) reflects €3.1bn restructuring/M&A charges (Yahoo: Special Income Charges −€3,144m).
+- FY2025 (€7.2bn) includes €905m gain on sale of securities; normalised income ~€6.5bn (Yahoo).
 
-Normalised EBITDA (Yahoo) rose from €9.5bn (2024) to **€11.2bn** (2025), a cleaner trend line.
+Normalised EBITDA rose from €9.5bn (2024) to €11.2bn (2025)—the cleaner profitability trend.
 
-### Cash generation (Yahoo)
-
-| | FY2022 | FY2023 | FY2024 | FY2025 |
-|---|---:|---:|---:|---:|
-| Operating cash flow (€m) | 5,647 | 6,246 | 5,205 | 9,157 |
-| CapEx (€m) | (877) | (785) | (797) | (739) |
-| **Free cash flow (€m)** | **4,770** | **5,461** | **4,410** | **8,417** |
-
-FY2025 FCF of **€8.4bn** (~**23% FCF margin**) is the stand-out improvement and underpins the screen’s 5.1% FCF yield. FY2024 FCF was temporarily weak, partly reflecting higher M&A outflows (€1.1bn business purchases) and working-capital swings.
+**Cash generation.** FY2025 operating cash flow €9.2bn less capex €0.7bn yielded FCF €8.4bn, underpinning the screen’s 5.1% FCF yield. FY2024 FCF was temporarily weak (€4.4bn), reflecting €1.1bn M&A outflows and working-capital swings.
 
 ### Balance sheet (Yahoo, FY2025 year-end)
 
-- **Total assets:** €70.4bn; **stockholders’ equity:** €44.6bn  
-- **Total debt:** €7.5bn (down from €10.7bn in FY2024); **cash:** €8.2bn → effectively **net cash**  
-- **Deferred revenue (current):** €6.6bn — strong indicator of recurring cloud/subscription backlog  
-- **Goodwill + intangibles:** €31.3bn (44% of assets) — acquisition-heavy history; impairment risk in downturn  
-- **Pension/post-retirement (current):** €3.9bn — material off-balance-sheet-style obligation; **not verifiable from filings**
+- Total assets €70.4bn; stockholders’ equity €44.6bn.
+- Total debt €7.5bn (down from €10.7bn); cash €8.2bn → net cash position.
+- Deferred revenue (current) €6.6bn — strong recurring-revenue indicator.
+- Goodwill and intangibles €31.3bn (44% of assets) — acquisition-heavy; impairment risk.
+- Pension/post-retirement (current) €3.9bn plus employee benefits €524m (non-current) — material; funded status unverified without filings.
 
-### Interim / Q1 2026 (Yahoo quarterly + news)
+### Interim / 2026 (Yahoo quarterly + news; no filing bodies)
 
-Yahoo Q1 2026 (period ending in 2026 bucket):
-- Revenue: **€9.56bn**
-- Operating income: **€2.75bn**
-- Net income: **€1.93bn**; diluted EPS **€1.65**
+**Q1 2026 (Yahoo quarterly income):** Revenue €9.56bn; operating income €2.75bn; net income €1.93bn; diluted EPS €1.65. News corroboration (23 April 2026): *"SAP SE Reports Q1 Revenue (Euro)9.55B"* and *"Posts Q1 Non-IFRS EPS (Euro)1.72 per Share"* (marketscreener.com).
 
-News corroboration (23 Apr 2026): *"SAP SE Reports Q1 Revenue (Euro)9.55B"* and *"Posts Q1 Non-IFRS EPS (Euro)1.72 per Share"* — consistent with Yahoo GAAP figures; non-IFRS EPS higher due to add-backs.
+**Q2 / H1 2026 (news only; no filing body or Yahoo H1 aggregate):**
+- *"SAP Announces Q2 and Half-Year 2026 Results"* (SAP News Center, 23 July 2026); *"SAP Quarterly Statement Q2 2026"* (PR Newswire, 23 July 2026).
+- Barron’s (24 July 2026): Q2 EPS €1.89 vs €1.45 prior year, above €1.68 consensus.
+- Cloud revenue reportedly up 24% (Bitget/GuruFocus, 23–24 July); record cloud backlog (StocksToTrade, 24 July).
+- WSJ (23 July 2026): revenue up on cloud, but *"Operating Profit Guidance Lowered on Slowing Growth"*.
+- Stock Titan (23 July 2026): profit outlook trimmed after two July acquisitions.
+- AI revenue contribution described as *"negligible"* (finance.biggo.com, 23 July 2026).
 
-Management **reaffirmed 2026 guidance** in July 2026 (Zacks/top research reports, 13–14 Jul 2026).
+Yahoo’s quarterly cache covers Q1 2026 only; H1/Q2 line-item reconciliation against primary filings is not possible.
 
-**Missing:** No half-year report, annual report, or ad-hoc disclosure text in the filing library. Pension footnotes, segment breakdowns, and contingency language cannot be verified from primary sources.
-
----
+**Missing from library:** Annual report 2025 / Form 20-F (filed per news 26 February 2026, but not indexed); half-year report text; segment tables; covenant and contingency disclosures.
 
 ## RISKS AND RED FLAGS
+*Without filing body extracts, regulatory and contingency language cannot be cited. Risks below draw on Yahoo financials and news.*
 
-*Note: Without filing body extracts, the following draws on Yahoo financials and news; regulatory/contingency language from annual reports is unavailable.*
+**1. Sector multiple compression and sentiment.** Enterprise software sold off sharply in 2026 (*"Software stocks crash as IBM results deliver 'devastating blow'"*, 14 July 2026; *"FTSE and European firms worst hit by software sell-off"*, 5 February 2026). SAP shares plunged on cloud outlook disappointment in January (*"SAP Shares Plunge To New Low As Cloud Revenue Outlook Disappoints"*, 29 January 2026) and remained volatile into Q2.
 
-**1. Sector and multiple compression.** Enterprise software sold off sharply in early 2026 (*"Software stocks crash as IBM results deliver 'devastating blow'"*, 14 Jul 2026; *"FTSE and European firms worst hit by software sell-off"*, 5 Feb 2026). SAP is not immune—shares fell on cloud outlook disappointment in January 2026 (*"SAP Shares Plunge To New Low As Cloud Revenue Outlook Disappoints"*, 29 Jan 2026).
+**2. Guidance inconsistency post-Q2.** Strong cloud metrics coexisted with lowered operating profit guidance (WSJ, 23 July 2026) and a trimmed full-year profit outlook after July acquisitions (Stock Titan, 23 July 2026). Bernstein SocGen and TD Cowen cut price targets on margin pressure (24 July 2026)—a red flag the quality screen may underweight near-term.
 
-**2. Cloud transition execution.** The investment case assumes sustained cloud ARR growth. Any deceleration versus Oracle Cloud ERP or Microsoft Dynamics triggers de-rating, as seen in January.
+**3. AI transition cost and monetisation.** SAP reportedly froze hiring and travel to fund a significant AI push (Investing.com UK, 2 July 2026). R&D consumed €6.6bn in FY2025 (~18% of revenue; Yahoo). SAP’s own survey found AI ROI rising in insights and customer interaction, not cost savings (*"AI ROI is rising, but not where companies expected"*, 15 July 2026). Q2 disclosure that AI contribution remains negligible raises execution risk.
 
-**3. AI investment burden.** SAP reportedly **froze hiring and travel** to fund a "significant" AI push (Investing.com, 2 Jul 2026). Heavy R&D (€6.6bn in FY2025, ~18% of revenue) must translate into monetisable products; SAP’s own survey found AI ROI is rising but **not necessarily in cost savings** (*"AI ROI is rising, but not where companies expected"*, 15 Jul 2026).
+**4. Goodwill and intangibles (€31.3bn).** Nearly half of assets are non-physical. FY2024’s €3.1bn restructuring charge illustrates sensitivity to integration failures or downturn-driven impairments.
 
-**4. Goodwill and intangibles (€31.3bn).** Nearly half of assets are non-physical. A prolonged macro downturn or failed integration could force impairments, as occurred with the €3.1bn restructuring charge in FY2024.
+**5. Pension obligations.** €3.9bn current pension/post-retirement liability plus €524m employee benefits (Yahoo). Without German annual report footnotes, funded status, discount-rate sensitivity, and covenant headroom are unknown—a governance gap the screen cannot fully capture.
 
-**5. Pension obligations.** €3.9bn current pension/post-retirement liability (Yahoo) plus €524m non-current employee benefits. Without German annual report footnotes, funded status and discount-rate sensitivity are unknown—a governance/pension red flag the screen may underweight.
+**6. Earnings quality and M&A.** Large non-recurring items (Qualtrics sale, restructuring, securities gains, July 2026 acquisitions) make trailing P/E an imperfect metric. Value investors should anchor on normalised FCF and cloud KPIs.
 
-**6. Earnings quality volatility.** Large non-recurring items (Qualtrics sale, restructuring, securities gains) make trailing P/E a poor standalone metric. Value investors should anchor on normalised FCF and cloud KPIs.
+**7. Competitive and AI disintermediation.** Palantir and others embedding AI into SAP-centric environments (15 July 2026) could erode parts of the stack over time despite high switching costs today.
 
-**7. Competitive moat erosion.** Palantir and others are embedding AI into SAP-centric environments (*"Expanded SBA Fraud Push and New Alliances… SAP-centric environments"*, 15 Jul 2026), potentially disintermediating parts of the stack.
-
-**8. Currency and geo-political.** ~60%+ revenue outside eurozone (typical for SAP); FX swings affect reported figures (Yahoo shows −€836m FX effect on cash in FY2025).
-
----
+**8. Currency and geopolitics.** Significant non-euro revenue exposes reported figures to FX swings (Yahoo: −€836m FX effect on cash in FY2025). Q2 commentary flagged geopolitical concerns (GuruFocus, 25 July 2026).
 
 ## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-heavy on earnings and price action**, thinner on deep strategy and regulatory reporting. Several manifest entries are false positives (Saputo TSE:SAP, unrelated pension/covenant articles).
 
-Coverage over the past year is **moderate**—heavy on earnings flashes, analyst ratings, and GuruFocus valuation pieces; thinner on deep strategy reporting.
+**Q2 / H1 2026 earnings (23–25 July 2026)** — dominant theme:
+- *"SAP Announces Q2 and Half-Year 2026 Results"* (SAP News Center, 23 July).
+- *"SAP Stock Jumps as Earnings Beat Eases AI Fears"* (Barron’s, 24 July): Q2 EPS €1.89 beat €1.68 consensus.
+- *"SAP Shares Surge 7% on Strong Q2 Cloud Growth Amid Geopolitical Concerns"* (GuruFocus, 25 July).
+- *"SAP Stock Rises As Cloud Backlog Hits Record High"* (StocksToTrade, 24 July).
+- *"SAP Second-Quarter Revenue Up on Cloud Business Results, Operating Profit Guidance Lowered"* (WSJ, 23 July).
+- *"SAP trims 2026 profit outlook after two July acquisitions"* (Stock Titan, 23 July).
+- Analyst divergence: BMO raised target to $177 (24 July); Bernstein SocGen and TD Cowen cut targets on margins (24 July).
 
-**Earnings and guidance**
-- **Q1 2026** (23 Apr 2026): Revenue €9.55bn; non-IFRS EPS €1.72; strong cloud growth highlighted on earnings call (GuruFocus).
-- **2026 guidance reaffirmed** (13 Jul 2026, Zacks/top research reports).
+**Q1 2026 (April 2026):**
+- Revenue €9.55bn; non-IFRS EPS €1.72 (marketscreener.com, 23 April).
+- Strong cloud growth on earnings call (GuruFocus, 23 April).
 
-**Strategy / AI**
-- **Hiring and travel freeze** to fund AI investment (Investing.com, 2 Jul 2026).
-- SAP survey on **AI ROI**—insights and customer interaction gains, limited cost savings (Yahoo, 15 Jul 2026).
-- **Harris Oakmark** letter citing SAP’s "irreplaceable position" in client tech ecosystems (15 Jul 2026).
+**Strategy / AI:**
+- Hiring and travel freeze for AI investment (Investing.com UK, 2 July 2026).
+- *"AI Spending Raises Questions Over SAP’s ‘SaaSPocalypse’ Recovery"* (WSJ, 24 July 2026).
+- 2027 RISE deadline accelerating cloud migration (Bitget, 24 July 2026).
 
-**Capital returns**
-- **€2.50/share dividend proposed** (PR Newswire, 19 Feb 2026).
-- Seeking Alpha piece positioning SAP as a way to play the software sell-off (19 Feb 2026).
+**Capital returns and annual reporting:**
+- *"SAP Proposes Dividend of €2.50 per Share"* (PR Newswire, 19 February 2026).
+- *"SAP Releases Integrated Report 2025, Files on Form 20-F with U.S. SEC"* (SAP News Center, 26 February 2026) — not captured in filing index.
 
-**Sector / sentiment**
-- January 2026 selloff on **cloud revenue outlook** (AskTraders, 29 Jan 2026).
-- Broader software sector weakness linked to IBM results (Jul and Feb 2026).
-- Multiple GuruFocus articles flagging undervaluation (GF Score 77–80) after 3–4% daily declines (Jun–Jul 2026).
+**Sector sentiment:**
+- January selloff on cloud outlook (AskTraders, 29 January 2026).
+- Broader software weakness linked to IBM (July and February 2026).
+- Multiple GuruFocus pieces flagging undervaluation after declines (June–July 2026).
 
-**Analyst actions**
-- **UBS:** Buy maintained (19 Jun 2026).
-- **Deutsche Bank:** Buy maintained (20 Apr 2026).
-- **JP Morgan:** Neutral reiterated (14 May 2026).
+**Analyst actions (pre-Q2):**
+- UBS Buy maintained (19 June 2026); Deutsche Bank Buy (20 April 2026); JP Morgan Neutral (14 May 2026).
 
-**Management / governance**
-- Routine executive share disposal for tax on employee programme (Lars Lamade, 12 Jun 2026) — not material.
+**Governance:** Routine executive share disposal for employee programme tax (Lars Lamade, 12 June 2026)—not material.
 
-No major M&A, regulatory enforcement, or CEO change in the manifest period.
-
----
+No CEO change or major regulatory enforcement action in the manifest. M&A activity limited to two July 2026 acquisitions cited in profit-outlook revision.
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.68  
-Rationale: Deep research broadly confirms the screen’s strong-buy case on FCF, quality, and GARP metrics, but the absence of primary filings, sector volatility, and AI-transition execution risk prevent full conviction upgrade.
-
----
-
-*Data as of 17 Jul 2026. Financial figures: Yahoo Finance fallback only. No price targets provided.*
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
+Verdict: accumulate
+Risk: medium
+Confidence: 0.70
+Rationale: Multi-factor screen metrics and Q2 cloud/EPS momentum confirm the strong-buy case, but absent primary filings, mixed post-Q2 guidance, and sector AI-disruption overhang cap conviction at accumulate rather than full endorsement.

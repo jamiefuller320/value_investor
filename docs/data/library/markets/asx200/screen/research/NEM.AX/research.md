@@ -1,156 +1,97 @@
 # Newmont Corporation (NEM.AX) — Research memo
 
-_Version 2 · Updated 2026-07-17T04:45:27.996811+00:00 · Mode: weekly_update_
+_Version 1 · Updated 2026-07-25T12:54:20.673131+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# Newmont Corporation (NEM.AX) — First-Pass Research Memo
-
-**Ticker:** NEM.AX | **Sector:** Basic Materials (Gold Mining)  
-**Screen signal:** Buy (13/22 models) | **Data as at:** 17 July 2026  
-**Primary filings:** None indexed (ASX regime unsupported)
-
----
-
-## EXECUTIVE SUMMARY
-
-Newmont Corporation, the world’s largest gold producer, trades on the ASX via CHESS Depositary Interests (CDIs) linked to NYSE-listed NEM. The quantitative screen rates NEM.AX a buy on cheapness (P/E 11.6, P/B 2.8), quality (ROE 25.8%), free cash flow, and balance-sheet strength (debt/equity ~16%), with 13 of 22 models passing across five factor families. Yahoo-sourced financials (no primary filings available) show a sharp earnings and cash-flow inflection since the Newcrest integration, with FY2025 revenue of $22.7bn and net income of $7.1bn, though results remain heavily levered to gold prices and prior-year impairments cloud the through-cycle picture. The central debate is whether current multiples adequately compensate for cyclical gold exposure, rising unit costs, and post-merger execution risk, versus a deleveraging, buyback-supported cash generator at a discount to sector peers. Near-term sentiment is mixed: analyst support persists but the share price has fallen ~16% in three months amid softer bullion and macro headwinds.
-
----
+Newmont Corporation (NEM.AX) is the world’s largest gold producer, listed on the ASX via 1:1 CDIs to NYSE NEM. The quantitative screen rates the name a buy (13/22 models; composite 55%, sector-relative 59%) on cheapness (P/E 11.6, P/B 2.8), quality (ROE 25.8%), FCF generation, and a light balance sheet (debt/equity ~16%). Q2 2026 interim filings show record quarterly free cash flow of $2.2bn, net cash of $3.4bn, and reaffirmed full-year production guidance, but also softer realised gold prices versus Q1 and a revenue miss versus consensus. The central debate is whether current multiples adequately compensate for cyclical gold exposure and rising unit costs, or whether scale, net-cash flexibility, and aggressive capital returns make this a through-cycle value compounder at a discount to peak earnings.
 
 ## INVESTMENT THESIS
+For a value investor, NEM.AX offers screen-level cheapness backed by improving business quality after the Newcrest integration and non-core divestiture programme.
 
-For a value investor, NEM.AX offers a rare combination of scale, balance-sheet repair, and screen-level cheapness in a sector that typically trades at a premium during gold upcycles.
+The screen passes 13/22 models across five families — cheapness, quality, dividend, GARP, and risk — including Graham Enterprising, Earnings Yield, FCF Yield, Lynch PEG, Buffett Quality, Economic Moat, Magic Formula, Piotroski F-Score, and Financial Health. At P/E 11.6 and P/B 2.8 against ROE 25.8% and FCF of roughly $9.8bn (screen metric), the market appears to price normalisation rather than peak-cycle euphoria, despite FY2025 being an exceptionally strong earnings year.
 
-**Quantitative alignment.** The screen passes 13/22 models (composite 55%; sector-relative 59%) across cheapness, quality, dividend, GARP, and risk families. Specific passes include Graham Enterprising, Earnings Yield, FCF Yield, Lynch PEG, Buffett Quality, Economic Moat, Magic Formula, Piotroski F-Score (score implied by pass), and Financial Health. Key metrics—P/E 11.6, P/B 2.79, ROE 25.8%, debt/equity 16%, and FCF ~$9.8bn—suggest the market is pricing operational normalisation rather than peak-cycle euphoria, despite FY2025 being a strong earnings year on Yahoo data.
+Primary Q2 2026 filings reinforce the quality case. Newmont ended June 2026 with $9.0bn cash, $13.0bn total liquidity, and net cash of $3.4bn; H1 2026 free cash flow was $5.3bn on operating cash flow of $6.7bn. Management returned $3.5bn via share repurchases in H1 2026 and declared a $0.26 quarterly dividend (indicated $1.04 per share annualised), with more than 100 million shares repurchased since February 2024 (~9% of outstanding). The capital allocation framework prioritises sustaining capex, a through-cycle dividend, development projects, balance-sheet optimisation (targeting ~$1bn net cash), and ratable buybacks — a pattern consistent with the screen’s quality, dividend, and financial-health passes.
 
-**Business quality.** Newmont’s portfolio spans tier-one assets across the Americas, Australia, and Africa, augmented by the 2024 Newcrest acquisition (Cadia, Brucejack, etc.). Scale drives purchasing power, shared technical expertise, and diversification of jurisdictional risk. FY2025 Yahoo data shows operating cash flow of $10.3bn and FCF of $7.3bn after $3.0bn of capex, funding $2.3bn of buybacks and $1.1bn of dividends while reducing total debt from $9.0bn to $5.6bn. That capital-allocation pattern aligns with the screen’s quality and dividend passes.
+Scale remains the moat: tier-one assets across the Americas, Australia, and Africa, with attributable gold production of 1.29Moz in Q2 2026 and full-year guidance of 5.26Moz. Portfolio simplification is largely complete (CC&V, Musselwhite, Éléonore, Porcupine, and Akyem divested in 2025 per filing language), leaving a cleaner core portfolio. Ahafo North reached commercial production in Q4 2025, contributing to H1 growth.
 
-**Valuation hook.** At P/E ~11.6 and P/B ~2.8, the stock screens inexpensive relative to recent ROE and FCF generation, particularly if gold prices stabilise or re-rate on geopolitical/fiscal uncertainty. The low headline yield (1.1%) is a limitation for income-focused value investors, but buybacks partially offset it.
-
-**Caveat.** All financial trend analysis below relies on Yahoo (`financials_annual.json`) because no annual or interim filing bodies are indexed for NEM.AX. Deep-research conviction is therefore constrained until primary SEC 10-K/10-Q or ASX release extracts can be reviewed.
-
----
+The valuation hook is earnings and FCF yield at a discount to recent peak profitability, with buybacks amplifying per-share exposure to gold. The headline dividend yield (1.1%) is modest for income investors, but repurchases partially offset it. Caveat: results remain heavily levered to gold prices; Q2 average realised gold of $4,414/oz fell $486/oz from Q1, and the share price has been volatile with bullion.
 
 ## FINANCIAL REVIEW
+Primary source coverage: `filings_index.json` contains six ASX announcements (regime: `asx_announcements`) — four interim (Q2 2026 Form 8-K earnings release and Form 10-Q, plus duplicate news entries) and two other (dividend notification). Three have body extracts. No annual filings (`period: annual` count = 0) are indexed; the FY2025 Form 10-K filed 19 February 2026 is referenced in interim documents but is not available in this pack. The Form 10-Q body extract is truncated before Note 17 (Commitments and Contingencies), Item 1A (Risk Factors), and full MD&A liquidity discussion — those sections cannot be reviewed here.
 
-**Source gap.** `filings_index.json` records regime `unsupported` for market `asx200`, with zero annual, interim, or other filings and no body extracts under `filings/bodies/`. The following analysis uses **Yahoo Finance data only** (`financials_annual.json`), explicitly flagged as secondary context. Interim filing figures are unavailable; cached quarterly income for 2025 and 2026 is noted where relevant.
+Interim results (Q2 / H1 2026) — primary filings
 
-### Income statement trend (Yahoo, USD)
+From the Q2 2026 earnings release (Form 8-K, 23 July 2026):
 
-| Period | Revenue | Operating income | Net income | Diluted EPS | EBITDA |
-|--------|---------|------------------|------------|-------------|--------|
-| FY2022 | $11.9bn | $1.61bn | -$0.43bn | -$0.54 | $2.36bn |
-| FY2023 | $11.8bn | $0.71bn | -$2.49bn | -$2.94 | $0.32bn |
-| FY2024 | $18.7bn | $5.91bn | $3.35bn | $2.92 | $7.53bn |
-| FY2025 | $22.7bn | $11.02bn | $7.09bn | $6.39 | $14.09bn |
+Q2 2026: attributable net income $2.2bn ($2.06 diluted EPS); adjusted net income $2.2bn ($2.10/sh); adjusted EBITDA $3.8bn; free cash flow $2.2bn (record Q2); cash from operations $2.9bn; attributable gold production 1.29Moz; gold by-product CAS $1,043/oz; AISC $1,621/oz; average realised gold price $4,414/oz.
 
-FY2024 revenue step-up (~58%) reflects the Newcrest combination; FY2025 continued growth (+21% revenue, +112% net income) on higher gold production and prices. FY2023 net loss was driven by $1.89bn asset impairments and $2.59bn special charges (restructuring/M&A), not operating collapse—operating income remained positive at $0.71bn.
+H1 2026 (8-K and Form 10-Q, six months ended 30 June 2026): sales $13.4bn (vs $10.3bn H1 2025); net income attributable to Newmont stockholders $5.5bn ($5.07 diluted EPS); adjusted net income $5.4bn ($5.01/sh); adjusted EBITDA $8.9bn; operating cash flow $6.7bn (+52% YoY); free cash flow $5.3bn (+83% YoY); attributable gold production 2.59Moz; share repurchases $3.5bn.
 
-FY2025 tax provision of $4.60bn on pretax income of $11.34bn (effective rate ~40%) warrants scrutiny in primary filings; Yahoo flags normalised income of $6.86bn versus reported $7.09bn.
+Balance sheet at 30 June 2026 (Form 10-Q): total assets $57.6bn; stockholders’ equity $35.2bn; debt $5.1bn; cash and equivalents $9.0bn; net cash $3.4bn; reclamation and remediation liabilities $6.2bn (of which $3.6bn relates to Yanacocha); employee-related benefits $708m current and $616m non-current.
 
-**Interim proxy (Yahoo quarterly, no filing):** Q1 FY2026 (period label `2026` in cache) shows revenue $7.31bn, net income $3.26bn, diluted EPS $3.01—annualising suggests continued momentum, but this is unaudited secondary data, not an interim release.
+Full-year 2026 guidance (reaffirmed): attributable gold production 5.26Moz; gold by-product CAS $1,055/oz; AISC $1,680/oz; sustaining capital $1.95bn; development capital $1.4bn. H1 costs are tracking below full-year guidance (YTD by-product CAS $788/oz; AISC $1,321/oz), though management flags Q3 unit-cost increases from higher sustaining capex and oil/royalty sensitivity.
 
-### Cash flow and capital allocation (Yahoo, USD)
+Annual trend — filing-derived where available; Yahoo fallback otherwise
 
-| Period | Operating CF | Capex | FCF | Buybacks | Dividends | Debt repayment |
-|--------|-------------|-------|-----|----------|-----------|----------------|
-| FY2022 | $3.22bn | -$2.13bn | $1.09bn | — | -$1.75bn | -$0.16bn |
-| FY2023 | $2.76bn | -$2.67bn | $0.10bn | — | -$1.42bn | -$0.07bn |
-| FY2024 | $6.36bn | -$3.40bn | $2.96bn | -$1.25bn | -$1.15bn | -$3.95bn |
-| FY2025 | $10.34bn | -$3.04bn | $7.30bn | -$2.30bn | -$1.11bn | -$3.53bn |
+FY2025 figures are available within the Q2 2026 earnings release consolidated tables (not a separate annual filing body):
 
-FCF inflection from near-zero in FY2023 to $7.3bn in FY2025 supports the screen’s FCF Yield and Financial Health passes. Management is prioritising deleveraging and buybacks over dividend growth (yield 1.1%).
+FY2025 (8-K): sales $22.7bn; net income attributable $7.1bn ($6.39 diluted EPS); adjusted net income $7.6bn ($6.89/sh); adjusted EBITDA $13.5bn; operating cash flow $10.3bn; free cash flow $7.3bn; attributable gold production 5.89Moz; average realised gold price $3,498/oz.
 
-### Balance sheet (Yahoo, FY2025 year-end)
+For FY2022–FY2024 and balance-sheet history, I fall back to `financials_annual.json` (Yahoo):
 
-- **Total assets:** $57.1bn; **total equity:** $34.0bn  
-- **Cash & equivalents:** $7.65bn (up from $3.62bn FY2024)  
-- **Total debt:** $5.59bn (down from $8.97bn FY2024); **net debt** materially reduced  
-- **Debt/equity:** ~16% (consistent with screen)  
-- **Working capital:** $7.35bn  
-- **Long-term provisions:** $6.30bn (typical mining rehabilitation/closure obligations—detail absent from filings)  
-- **Goodwill:** $2.66bn (Newcrest integration; impairment risk if gold prices fall persistently)  
-- **Pension/employee benefits (non-current):** $634m; **current pension/post-retirement:** $898m  
+| Year | Revenue | Net income | Diluted EPS | FCF | Total debt |
+|------|---------|------------|-------------|-----|------------|
+| FY2022 | $11.9bn | -$0.43bn | -$0.54 | $1.1bn | $6.1bn |
+| FY2023 | $11.8bn | -$2.49bn | -$2.94 | $0.10bn | $9.4bn |
+| FY2024 | $18.7bn | $3.35bn | $2.92 | $3.0bn | $9.0bn |
+| FY2025 | $22.7bn | $7.09bn | $6.39 | $7.3bn | $5.6bn |
 
-FY2023–FY2025 equity rebuilt from retained-loss position (FY2024 retained earnings -$1.32bn) to +$3.43bn in FY2025, consistent with ROE recovery.
+FY2024 revenue rose ~58% on the Newcrest combination; FY2025 grew a further ~21% on higher production and gold prices. FY2023’s net loss reflected $1.9bn impairments and $2.6bn special charges (M&A/restructuring), not operating collapse (operating income was $0.7bn). FY2025 cash flow funded $2.3bn buybacks, $1.1bn dividends, and net debt reduction of ~$3.4bn (Yahoo).
 
-### Screen reconciliation
+Cost and cash-flow trajectory: Q2 2026 AISC of $1,621/oz rose 58% quarter-on-quarter, driven by lower volumes (Cadia seismic downtime from 14 April 2026), Ghana royalty increases, and higher diesel prices — partially offset by copper by-product credits. H1 2026 reclamation spend was $458m, including $351m on Yanacocha water treatment plants; total portfolio reclamation spend is guided at ~$850m for 2026 (~$550m at Yanacocha), with ~$1.8bn total WTP spend estimated and ~$1.1bn spent to date.
 
-Reported ROE 25.8% aligns directionally with FY2025 net income ($7.09bn) on average equity (~$32bn). P/E 11.6 implies market capitalisation roughly 11.6× trailing earnings—reasonable if FY2025 represents a mid-cycle rather than peak gold environment.
-
-**Missing data:** No 10-K, 10-Q, ASX annual report, or half-year release in the filings index; no going-concern, covenant, or contingency language from primary sources.
-
----
+Gaps: no annual filing body in the index; 10-Q truncated before contingencies and risk-factor sections; no going-concern or covenant language could be verified from available extracts.
 
 ## RISKS AND RED FLAGS
+Commodity cyclicality: Q2 realised gold fell to $4,414/oz from $4,900/oz in Q1; sensitivity tables in the earnings release show ~$505m pretax revenue impact per $100/oz gold move. Screen cheapness could erode quickly if bullion retraces.
 
-**Cyclical and commodity risk.** Gold mining earnings are highly correlated with bullion prices. News flow (July 2026) cites a 16% three-month share decline and sector weakness as gold retreated on oil-driven inflation/Fed concerns. A sustained gold downturn would compress margins, trigger impairments (FY2023 impairment charge $1.89bn on Yahoo data), and undermine FCF-funded buybacks.
+Operational disruption: Cadia operations were temporarily suspended after seismic activity on 14 April 2026; Q2 Cadia attributable production fell to 34koz (from 94koz in Q1). Operations resumed mid-June, but the filing notes deferred PC1-2 development capex and incremental downtime costs. Seismic and geotechnical risk at underground assets remains a standing concern.
 
-**Integration and operational risk.** The Newcrest acquisition enlarged the asset base and debt load (FY2023 total debt $9.4bn post-deal) before FY2025 deleveraging. News reports ongoing higher unit costs and integration complexity. The July 2026 Cadia seismic disruption (subsequently resolved) illustrates geological and operational tail risk at a flagship Australian asset.
+Reclamation and closure liabilities: $6.2bn reclamation/remediation liabilities at 30 June 2026 ($3.6bn Yanacocha). Elevated near-term cash spend on Yanacocha water treatment (~$550m in 2026 alone) compresses discretionary free cash flow and may persist until ~2028 before normalising to $300–400m annually.
 
-**Governance and structural.** NEM.AX CDIs track NYSE NEM; ASX investors bear currency translation risk (USD reporting vs AUD-denominated CDI pricing) and secondary-market liquidity differences. No primary filing extracts available to assess related-party transactions, executive compensation, or board independence.
+Unit-cost inflation: Q2 AISC spike to $1,621/oz, with Q3 guided higher on sustaining capex timing, oil prices, and price-linked royalties. Full-year cost guidance allows +/-5% variance.
 
-**Balance-sheet and legacy liabilities.** Long-term provisions of $6.3bn (FY2025) likely reflect mine-closure and rehabilitation obligations—standard for the sector but a long-dated cash drain not fully captured by P/E screens. Pension/post-retirement liabilities (~$1.5bn combined current and non-current) add fixed-cost exposure.
+Tax and earnings quality: H1 2026 income and mining tax expense was $2.4bn; adjusted tax rate guidance is 33%. FY2025 Yahoo data shows a ~40% effective rate on reported pretax income — jurisdiction mix and valuation allowances require 10-K note review (not in pack).
 
-**Tax and earnings quality.** FY2025 effective tax rate (~40%) and large deferred tax movements ($1.39bn deferred tax benefit in cash flow) complicate through-cycle earnings assessment. FY2025 included $842m asset impairment and $186m restructuring/M&A charges despite strong headline profits.
+Balance-sheet items not fully visible: employee benefits total ~$1.3bn; silver streaming liability $546m; $4.0bn undrawn revolving credit facility supports liquidity but covenant terms are in the truncated 10-Q. No going-concern qualification was found in available extracts; this is unresolved, not confirmed absent.
 
-**Primary filing gaps.** Without SEC or ASX filing bodies, going-concern assessments, debt covenants, litigation contingencies, and off-balance-sheet commitments cannot be verified. This is a material research limitation.
+Governance and integration: Newcrest transaction integration costs have largely ceased, but restructuring charges persist ($12m in Q2 2026). CEO Natascha Viljoen and a refreshed executive pipeline were highlighted in Q2 filings.
 
-**Dividend.** 1.1% yield passes some combined value screens but offers limited income support in a downturn; capital return is buyback-weighted.
+Regulatory and jurisdictional: Ghana royalty increases cited in Q2 cost commentary; Red Chris received BC regulatory approvals but awaits final investment decision; reclamation obligations at former/historic sites noted in partial 10-Q Note 6 language.
 
----
+Market sentiment: news flow notes ~16% three-month share price decline amid gold volatility; Morningstar (Oct 2025) flagged earnings up but shares overvalued — a valuation disagreement worth noting.
 
 ## NEWS HIGHLIGHTS
+Coverage over the past year is substantial, concentrated around Q1/Q2 2026 earnings and gold-price volatility; much ASX-specific news is syndicated Kalkine content rather than deep investigative reporting.
 
-Coverage over the past year is moderate—mix of operational updates, analyst commentary, and macro gold-sector pieces; limited ASX-specific corporate actions beyond CDI mechanics.
+Material items:
 
-**Operations and projects**
-- *"Newmont (NEM) Resumes Cadia Operations As It Pushes Ahead With Key Growth Projects"* (16 Jul 2026): Cadia back online after seismic event; Ahafo North and Tanami Expansion 2 progressing.
-- *"Did Analyst Upgrades and Buybacks Just Shift Newmont's (NEM) Operational Efficiency Investment Narrative?"* (16 Jul 2026): Analyst upgrades citing FCF growth, buybacks, and portfolio streamlining; unit-cost pressure noted.
-- *"Newmont Corporation (ASX:NEM) World's Largest Gold Miner Rides Precious Metal Wave"* (3 Jul 2026, Kalkine): Thematic gold exposure piece.
+- “Newmont Reports Robust Second Quarter 2026 Results; Remains on Track to Achieve Full Year Guidance” (Business Wire, 23 Jul 2026) — Q2 beat on earnings, record $2.2bn FCF, $1.9bn shareholder returns since prior call.
+- “Newmont Reported Strong Earnings and Cash Flow. The Stock Is Down.” (Barron’s, 24 Jul 2026) — market reaction despite strong fundamentals; Citi called quarter “in line.”
+- “NEM Q2 Earnings Call Centers on Costs and Capital Returns” (Yahoo Finance, 24 Jul 2026) — management maintained 2026 outlook; emphasis on cost control and buybacks.
+- “Newmont Generates Record Quarterly Earnings and Free Cash Flow, Reports First Quarter 2026 Results and Announces Increased Share Repurchase Authorization” (Business Wire, 1 Apr 2026) — Q1 record results; expanded repurchase authorisation.
+- “Newmont (NEM) Resumes Cadia Operations As It Pushes Ahead With Key Growth Projects” (Yahoo Finance, 16 Jul 2026) — Cadia restart after seismic event; progress on Ahafo North and Tanami Expansion 2.
+- “Did Analyst Upgrades and Buybacks Just Shift Newmont's Operational Efficiency Investment Narrative?” (Yahoo Finance, 16 Jul 2026) — mid-July analyst upgrades citing efficiency and buybacks; Jefferies maintained Buy but cut target to $146 from $158 (6 Jul 2026).
+- “Newmont (ASX:NEM) Q3FY25 Nets USD 1.8B Profits, Flags Lower 2026 Gold Output” (Kalkine, 2 Feb 2026) — prior-year quarterly context; 2026 output guidance flagged lower.
+- “Evening Wrap: ASX 200 smashed on US-Iran escalation, gold stocks plunge” (Market Index, 28 May 2026) — NEM fell >7% on geopolitical gold sell-off.
+- “Newmont declares quarterly dividend for ASX investors” (Motley Fool Australia, 24 Apr 2026) — ongoing dividend policy for CDI holders (30% withholding noted in ASX dividend filing).
 
-**Strategy, capital return, and M&A**
-- Newcrest integration remains the defining strategic event (referenced across multiple articles; acquisition predates manifest window but integration costs and efficiency gains dominate narrative).
-- *"Newmont Corporation Reports Increase in CDIs Issued Over Quoted Securities"* (7 Jul 2026, Kalkine): CDI capital-structure update.
-- Buyback activity corroborated by Yahoo cash-flow data ($2.3bn FY2025).
+Strategy/M&A: non-core divestiture programme completed in 2025 (per filings); Red Chris block-cave advancing toward FID; no major acquisition news in the past year. Management changes: internal executive appointments flagged in Q2 release.
 
-**Analyst and market sentiment**
-- *"Why Newmont Corporation (NEM) is One of the Top Cheap Blue Chip Stocks to Buy According to Wall Street Analysts"* (15 Jul 2026): Jefferies cut price target to $146 from $158 (6 Jul) but maintained Buy.
-- *"Here's Why Newmont Stock Popped Today (Hint: Wall Street Likes its Valuation)"* (14 Jul 2026).
-- *"Newmont Stock Slides 16% in 3 Months: Here's How to Play the Stock"* (15 Jul 2026): Near-term weakness on gold prices.
-- *"Gold stocks sink after oil rally dents bullion, revives Fed concerns"* (16 Jul 2026): Sector macro headwind.
-- *"Newmont Corporation (NEM) Falls More Steeply Than Broader Market"* (16 Jul 2026).
-
-**Earnings**
-- *"Newmont Corporation (NEM) Earnings Expected to Grow: What to Know Ahead of Next Week's Release"* (16 Jul 2026): Upcoming results event; no outcome in manifest.
-
-**Coverage assessment:** News is tilted toward US-listed NEM and macro gold commentary; ASX-specific regulatory or operational disclosures are thin. No material management-change or regulatory-enforcement headlines in the manifest.
-
----
+News gaps: limited ASX-primary investigative coverage on contingencies, pensions, or covenant compliance; pension/covenant/going-concern Google News queries returned only shareholder-structure and earnings summaries, not substantive regulatory filings.
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.58  
-Rationale: Quantitative cheapness and FY2025 deleveraging/FCF profile support the screen’s buy signal, but absent primary filings, persistent gold-price cyclicality, and post-Newcrest execution risk prevent full conviction until SEC/ASX disclosures can be reviewed.
-
----
-
-*Sources: `screening_snapshot.json`, `financials_annual.json` (Yahoo fallback), `news_manifest.json`, `filings/filings_index.json`. No primary filing body extracts were available.*
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
-
-
-## Weekly updates
-
-### 2026-07-17T04:45:27.996811+00:00
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Interim filings confirm strong cash generation, net-cash balance sheet, and screen-aligned cheapness, but cyclical gold exposure, Q2 cost spikes, reclamation cash demands, and missing annual/truncated contingency disclosures prevent full confirmation of the quantitative buy signal.

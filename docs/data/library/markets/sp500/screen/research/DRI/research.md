@@ -1,0 +1,126 @@
+# Darden Restaurants, Inc. (DRI) — Research memo
+
+_Version 1 · Updated 2026-07-25T13:20:34.880110+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Darden is the largest full-service restaurant operator in the US, owning Olive Garden, LongHorn Steakhouse, Ruth’s Chris, Chuy’s and seven other brands across ~2,200 company restaurants. The quantitative screen flags a buy on cheapness (PEG 0.52), quality, dividend growth and GARP, supported by mid-single-digit same-restaurant sales, double-digit earnings growth and consistent cash returns. Valuation at ~18.6× trailing earnings and a 3.1% yield looks reasonable for a scaled operator with an effective tax rate near 12% (FICA tip credit) and strong free cash flow. The central debate is whether LongHorn and newer brands can offset Olive Garden’s slowing traffic and rising food inflation, which compressed Q3 operating margins despite headline sales growth. Filings confirm earnings momentum but also portfolio restructuring (Bahama Breeze closures, Chuy’s integration) that warrants medium risk rather than high conviction.
+
+## INVESTMENT THESIS
+For a value investor, DRI offers a rare combination in consumer cyclicals: durable unit economics, visible cash conversion and shareholder returns at a sub-20× P/E. The screen passes seven models spanning Lynch PEG (0.52), Neff PEGY (0.05), Quality Value, Buffett Quality, Dividend Growth, Magic Formula and Earnings Quality — five of four required factor families (cheapness, quality, dividend, GARP, risk). Reported growth of 36% in screen metrics reflects the Chuy’s acquisition base effect and earnings rebound rather than purely organic expansion, but underlying same-restaurant sales of 4.2–4.4% (blended, nine months to February 2026, 10-Q) align with the GARP signal.
+
+Business quality rests on scale: centralised supply chain, data-driven staffing and a portfolio spanning casual (Olive Garden, LongHorn) through fine dining (Ruth’s Chris, Capital Grille). LongHorn is the stand-out growth engine — Q3 FY2026 same-restaurant sales +7.2% with guest counts +3.3% (10-Q) — while Olive Garden remains the cash cow but showed flat-to-negative traffic in the latest quarter (+3.2% comps driven by average check, guest counts −0.4%). Management returned capital aggressively: nine-month share repurchases of $534m and dividends of $522m (Q3 FY2026 10-Q), with an additional $1.5bn buyback authorisation and 8% dividend increase reported in June 2026 news flow.
+
+The screen’s high ROE (53.7%) partly reflects a lease-heavy capital structure and negative tangible book (Yahoo: −$792m FY2025); this is not a classical asset-based value play but an earnings-and-cash-flow compounder trading at a modest premium to history after a recent de-rating. For value investors, the hook is growth at a reasonable price in a defensive category with oligopolistic local scale — not deep book-value margin of safety.
+
+## FINANCIAL REVIEW
+**Source note:** Three annual 10-K body extracts (FY2024–FY2026) are truncated and contain tax notes, pension/contingency disclosures and exhibits only — not full income statements or cash-flow statements. Annual revenue, operating income, EPS and FCF for FY2022–FY2025 below are from `financials_annual.json` (Yahoo), explicitly marked as fallback. Interim 10-Q bodies (six quarters, August 2024–February 2026) provide primary filing data for trends, segments and liquidity.
+
+**Annual results (10-K tax note + Yahoo fallback)**
+
+| Metric | FY2026 (May 2026) | FY2025 (May 2025) | FY2024 (May 2024) | FY2023 (May 2023) | Source |
+|--------|-------------------|-------------------|-------------------|-------------------|--------|
+| Pretax earnings (continuing) | $1,388.6m | $1,187.2m | $1,175.5m | $1,120.5m | 10-K tax notes |
+| Income tax expense | $174.9m | $136.2m | $145.0m | $137.0m | 10-K tax notes |
+| Effective tax rate | 12.6% | 11.5% | 12.3% | 12.2% | 10-K tax notes |
+| Implied net income (continuing, pretax − tax) | ~$1,213.7m | ~$1,051.0m | ~$1,030.5m | ~$983.5m | Derived from filings |
+| Revenue | *Not in 10-K body* | $12,076.7m | $11,390.0m | $10,487.8m | Yahoo fallback |
+| Diluted EPS | *Not in 10-K body* | $8.86 | $8.51 | $7.99 | Yahoo fallback |
+| Operating income | *Not in 10-K body* | $1,436.3m | $1,350.9m | $1,217.1m | Yahoo fallback |
+| Free cash flow | *Not in 10-K body* | $1,026.6m | $983.6m | $951.3m | Yahoo fallback |
+
+Pretax earnings from continuing operations rose 17% from FY2025 to FY2026 ($1,187.2m → $1,388.6m, 10-K), driven by the 53-week fiscal year, Chuy’s contribution and same-restaurant sales growth. FY2026 full-year revenue, EPS and FCF cannot be verified from filing bodies; the gap should be closed against the filed 10-K HTML before sizing positions.
+
+**Interim trends (10-Q, primary filings)**
+
+Nine months ended 22 February 2026 vs prior year:
+- Sales: $9,492.1m (+7.8%)
+- Operating income: $1,066.0m (+8.8%)
+- Net earnings: $801.8m (+7.5%)
+- Diluted EPS: $6.87 (+9.2%)
+- Operating cash flow: $1,281.0m; capex: $540.9m (Q3 FY2026 10-Q)
+
+Third quarter FY2026 (Feb 2026) showed deceleration: sales +5.9% to $3,345.3m but net earnings −5.1% to $306.8m and diluted EPS −3.3% to $2.65, as food-and-beverage costs rose to 30.7% of sales (+50bp YoY) and Bahama Breeze impairment charges of $22.4m hit the quarter (10-Q Note 7).
+
+**Same-restaurant sales by segment (Q3 / 9M FY2026, 10-Q)**
+
+| Segment | Q3 SRS | 9M SRS |
+|---------|--------|--------|
+| Olive Garden | +3.2% | +4.5% |
+| LongHorn Steakhouse | +7.2% | +6.3% |
+| Fine Dining | +2.1% | +1.0% |
+| Other Business | +3.9% | +3.4% |
+
+Olive Garden Q3 traffic was −0.4% (check +3.6%); LongHorn traffic +3.3%. Chuy’s is excluded from SRS until Q4 FY2026 (16-month rule).
+
+**Balance sheet and capital structure (22 Feb 2026, 10-Q)**
+
+- Total assets: $12,888.8m; stockholders’ equity: $2,104.0m
+- Long-term debt: $2,141.0m; current debt: $290.0m commercial paper
+- Revolving credit facility: $1.25bn undrawn; $960m available after CP and letters of credit; covenant compliance confirmed
+- Maximum consolidated leverage covenant: 3.50× (temporarily 4.00× for covered acquisitions)
+
+Yahoo FY2025 shows total debt of $6,230m including ~$4,061m capital lease obligations — the economic leverage picture is lease-heavy, not just bond debt.
+
+**M&A and portfolio actions (filings)**
+
+- Chuy’s acquired October 2024 for $613.7m net cash; $267.2m goodwill finalised Q1 FY2026 (10-Q)
+- Olive Garden Canada (8 restaurants) sold July 2025 to Recipe Unlimited; $45.0m disposal gain in 9M FY2026 (10-Q Note 7)
+- Bahama Breeze: ~14 permanent closures expected ~5 April 2026; ~14 conversions to other brands over 12–18 months; $22.4m impairment booked (10-Q)
+
+**FY2026 management outlook (Q3 10-Q MD&A)**
+
+- Total sales growth ~9.5% (includes ~2.0% from 53rd week)
+- Same-restaurant sales ~4.5%
+- ~70 new restaurant openings
+- Capex $750–775m
+
+**Gaps:** FY2026 10-K body lacks revenue, EPS, FCF and full balance-sheet tables. Eight 8-K filings in the index have no body extracts. No going-concern language appears in available filing text.
+
+## RISKS AND RED FLAGS
+**Cyclical and competitive:** Casual dining faces bifurcated consumer demand — recent news (“Confidence Is Back, But Earnings Show the Consumer Is Being Picky,” 21 July 2026) highlights affluent diners outperforming middle-income guests. Olive Garden traffic softness (−0.4% Q3) and analyst pushback on the June 2026 earnings call (Yahoo, 10 July 2026) underscore brand-concentration risk: Olive Garden is ~42% of 9M segment sales ($4,057m of $9,492m, 10-Q).
+
+**Cost inflation:** Food-and-beverage costs rose 30.7% of sales in Q3 FY2026 vs 30.2% prior year; MD&A cites ~150bp inflation impact partially offset by pricing leverage (10-Q). Beef-cost pressure has been a recurring news theme (May 2026).
+
+**Integration and restructuring:** Chuy’s integration costs of $8.5m ($6.4m after tax) in 9M FY2026 (10-Q). Bahama Breeze wind-down adds impairment and closure risk; 15 Bahama Breeze locations were already closed in May 2025.
+
+**Balance sheet and leases:** Negative tangible book (Yahoo FY2025: −$792m) and $4.0bn+ capital lease obligations create hidden leverage. Nine-month interest expense rose 11% to $143.0m; commercial paper usage increased (10-Q). Credit ratings BBB/Baa2 (investment grade) but not pristine.
+
+**Contingencies (FY2026 10-K Note 16):** $71.9m standby letters of credit; $83.3m maximum lease guarantees on assigned properties (Red Lobster 2015 disposition, Olive Garden Canada sale); fair value of guarantee liability $64.7m; expected credit loss provision $10.4m. Management states current litigation “will not have a material adverse effect” individually or in aggregate — no quantified reserve beyond guarantees.
+
+**Pension and deferred compensation:** Primary pension settled FY2020. Remaining unfunded obligations are small (post-retirement $10.1m; frozen supplemental plan $2.7m, 10-K Note 14). FlexComp deferred compensation liability of $349.7m (10-K) is a meaningful off-balance-sheet employee obligation, funded on a pay-as-you-go basis.
+
+**Tax policy:** Effective rate benefits from FICA tip credit ($164.5m gross credit in FY2026, 10-K). Legislative changes (OBBBA, July 2025) affecting bonus depreciation and R&D expensing are being assessed; rate could normalise higher if tip-credit rules change — a regulatory tail risk not captured by screens.
+
+**Governance:** Routine board addition (Daryl Kenningham, 8-K 9 December 2024); no red flags in available filings. Bylaw amendments and Russell index removal (June 2026 news) are administrative, not fundamental.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate-to-heavy on earnings and opinion, lighter on hard corporate actions.
+
+**Earnings and capital returns (June 2026):**
+- “Darden Restaurants earnings beat estimates but Olive Garden growth weakens” (CNBC, 25 June 2026)
+- “Darden raises dividend 8% and authorizes $1.5B buyback” (Stock Titan, 25 June 2026)
+- “Darden Restaurants (DRI) Q4 Earnings Beat Estimates” (Yahoo Finance, 25 June 2026)
+
+**Strategy and brand mix:**
+- “Where Analysts Pushed Back On DRI's Latest Call” (Yahoo Finance, 10 July 2026) — Olive Garden slowing vs portfolio carry
+- “Darden Restaurants: LongHorn And New Restaurants Broaden The Growth Case” (Seeking Alpha, 23 July 2026)
+- “Olive Garden Follows McDonald’s Bet on Value: Will Never Ending Pasta Pass Strategy Work?” (Yahoo Finance, 17 July 2026)
+- “Darden Stock Outlook Centers on Growth Brands and Cost Risks” (Yahoo Finance, 2 July 2026)
+
+**Corporate / index:**
+- “Darden Restaurants (DRI) Leaves Russell Indexes After Record Sales And Bylaw Changes” (Yahoo Finance, 29 June 2026)
+
+**Consumer context:**
+- “Confidence Is Back, But Earnings Show the Consumer Is Being Picky” (Yahoo Finance, 21 July 2026)
+
+**Mixed sell-side / quant opinion:**
+- “1 S&P 500 Stock for Long-Term Investors and 2 We Turn Down” (Yahoo Finance, 24 July 2026) — DRI highlighted positively
+- “3 Reasons DRI is Risky and 1 Stock to Buy Instead” (Yahoo Finance, 25 May 2026) — bearish counterpoint
+
+Institutional flow articles (MarketBeat, Swiss National Bank, HSBC holdings) are noise, not thesis-changing. No material M&A beyond Chuy’s (closed) in the manifest. News coverage is adequate on earnings but thin on detailed segment strategy beyond Olive Garden/LongHorn narrative.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Filings confirm earnings growth, cash generation and investment-grade liquidity that support the quantitative buy signal, but Olive Garden traffic softness, margin pressure from inflation and incomplete FY2026 annual figures in filing extracts prevent full confirmation at higher conviction.

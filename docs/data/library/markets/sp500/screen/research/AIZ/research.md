@@ -1,0 +1,107 @@
+# Assurant, Inc. (AIZ) — Research memo
+
+_Version 1 · Updated 2026-07-25T13:18:47.925143+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Assurant is a B2B2C protection platform spanning Connected Living (mobile, extended service contracts, financial services), Global Automotive, and Global Housing (homeowners, renters, flood). The quantitative screen flags the name as a buy on cheapness, quality, dividend, GARP, and risk metrics (P/E ~14×, P/B ~2.3×, ROE ~18%, debt/equity ~38%). Filings show a clear earnings inflection: FY2025 net income rose to $872.7m (10-K tax note; corroborated by Yahoo) from $760.2m in FY2024, with Q1 2026 net income of $274.1m (+87% YoY per 10-Q) driven by lower catastrophes and Global Lifestyle growth. The valuation hook is a specialist insurer/administrator trading below broad-market multiples despite double-digit revenue growth and strong cash generation (Yahoo FCF ~$1.6bn in FY2025 — fallback). The key debate is whether recent share-price strength and catastrophe-normalised Housing margins already price in the recovery, and how durable client-linked growth is amid mobile-cycle and weather volatility.
+
+## INVESTMENT THESIS
+For a value investor, AIZ offers a franchise-like distribution model—embedded with carriers, OEMs, lenders, and retailers—rather than a commodity P&C underwriter. The screen’s buy signal aligns with filing evidence of improving returns: net earned premiums reached $10.48bn in FY2025 (10-K reinsurance note) versus $9.80bn in FY2024, while net favourable prior-year reserve development totalled $142.8m in FY2025 (10-K). Adjusted EBITDA in Q1 2026 was balanced across segments—Global Lifestyle and Global Housing each at $236.7m (Q1 2026 10-Q)—suggesting diversified earnings power.
+
+Quality screens (Buffett Quality, Earnings Quality, Acquirer’s Multiple) are supported by moderate leverage (total debt $2.21bn at 31 Dec 2025; 10-K), a well-funded pension (120% funded at 31 Mar 2026; Q1 2026 10-Q Note 13), and sustained capital return (Yahoo: ~$304m buybacks and ~$168m dividends in FY2025 — fallback for cash-flow detail). GARP and FCF-yield passes reflect earnings compounding (diluted EPS $16.93 in FY2025 per Yahoo — filing body extracts for FY2025/FY2024 10-K lack the consolidated statements of operations) and operating cash conversion. The March 2026 sale of the runoff long-term care subsidiary further simplifies the portfolio (Q1 2026 10-Q Note 4). At ~14× trailing earnings with ~18% ROE, the market appears to assign a discount to a business delivering mid-teens EPS growth—consistent with the screen’s cheapness and quality overlap.
+
+## FINANCIAL REVIEW
+**Annual (10-K; FY2025 filed 19 Feb 2026, FY2024 filed 20 Feb 2025)**
+
+*Limitation:* Both 10-K body extracts in the library begin mid-notes (fair value/disclosures) and do **not** include the consolidated statements of operations. Annual revenue, net income, EPS, and cash-flow statement figures below marked (Yahoo fallback) are taken from `financials_annual.json`; other annual figures are from 10-K note extracts.
+
+| Metric | FY2025 | FY2024 | FY2023 | Source |
+|--------|--------|--------|--------|--------|
+| Total revenue | $12,814m | $11,878m | $11,132m | Yahoo fallback |
+| Net income | $873m | $760m | $643m | 10-K tax note / Yahoo |
+| Diluted EPS | $16.93 | $14.46 | $11.95 | Yahoo fallback |
+| Net earned premiums | $10,483m | $9,796m | $9,388m | 10-K Note 17 |
+| Net policyholder benefits | $2,928m | $2,767m | $2,522m | 10-K Note 17 |
+| Interest expense | $110m | $107m | $108m | 10-K Note 18 |
+| Total debt (carrying) | $2,207m | $2,083m | — | 10-K Note 18 |
+| Total assets | $36,290m | — | — | Q1 2026 10-Q (31 Dec 2025) |
+| Stockholders’ equity | $5,872m | $5,107m | — | Q1 2026 10-Q / Q1 2025 10-Q |
+| Goodwill | $2,646m | $2,616m | — | 10-K Note 14 (no impairment FY2025) |
+| Operating cash flow | $1,834m | $1,333m | $1,138m | Yahoo fallback |
+| Free cash flow | $1,598m | $1,111m | $936m | Yahoo fallback |
+
+FY2025 pretax income was $1,087m with an effective tax rate of 19.7% (10-K Note 11), including benefits from transferable federal tax credits. Net favourable prior-year development of $142.8m (Global Lifestyle $47.2m; Global Housing $99.6m) boosted underwriting margins (10-K Note 16). Debt increased modestly following issuance of $300m 5.55% senior notes due 2036 (Aug 2025) and redemption of 2026 notes (10-K Note 18).
+
+**Interim (10-Q)**
+
+*Q1 2026 (period ended 31 Mar 2026; filed 7 May 2026):*
+- Total revenues $3,420m (+11% YoY); net income $274m (+87%); diluted EPS $5.41 vs $2.83 (Q1 2026 10-Q).
+- Global Lifestyle Adjusted EBITDA $237m (+20%); Global Housing Adjusted EBITDA $237m (+111%), including $132m lower reportable catastrophes (10-Q MD&A).
+- Connected Living net earned premiums, fees and other income $1,480m (+20% YoY); Global Automotive $1,071m (flat).
+- Care/runoff subsidiary sold in Mar 2026; total loss on sale $11.2m (10-Q Note 4).
+- Stockholders’ equity $5,869m; total assets $35,769m; debt $2,208m (Q1 2026 10-Q balance sheet).
+
+*Q1 2025 (period ended 31 Mar 2025):*
+- Total revenues $3,074m; net income $147m; diluted EPS $2.83 (Q1 2025 10-Q).
+
+*H1 2025 (six months ended 30 Jun 2025):*
+- Net income $382m vs $425m in H1 2024; diluted EPS $7.38 vs $8.05 (H1 2025 10-Q).
+- Global Lifestyle Adjusted EBITDA $399m (+0.5%); Global Housing $327m (-8% ex-cat normalisation mixed) (H1 2025 10-Q segment note).
+
+*9M 2025 (nine months ended 30 Sep 2025):*
+- Total revenues $9,464m (+8% YoY); net income $648m (+16%); diluted EPS $12.55 vs $10.60 (Q3 2025 10-Q).
+- Q3 2025 alone: net income $266m; total revenues $3,232m (Q3 2025 10-Q).
+
+**Trend summary:** Revenue and earnings accelerated through 2025 into Q1 2026, with Global Lifestyle volume growth and a sharp reduction in Housing catastrophe charges as the primary drivers. Reserve releases remain a tailwind but are partly offset by profit-sharing commissions (10-K/Q disclosures). Investment income benefited from higher yields and asset balances; net realised investment losses persisted ($21m in Q1 2026). Unrealised fixed-maturity losses widened in Q1 2026 (AOCI loss $629m at 31 Mar 2026 vs $544m at year-end 2025).
+
+## RISKS AND RED FLAGS
+**Catastrophe and Housing cyclicality.** Global Housing remains exposed to weather events and Florida regulatory dynamics. Q1 2026 results benefited from $132m lower reportable catastrophes YoY; normalised Housing Adjusted EBITDA fell 3% (10-Q MD&A). A reversion in cat frequency would compress margins quickly.
+
+**Client concentration and disintermediation.** MD&A lists loss of major clients and partner disintermediation among top risk factors. Much of Global Lifestyle/Housing premium is reinsured to client captives ($6.1bn of $6.5bn reinsurance recoverables are “Not Rated” at 31 Dec 2025, mitigated by collateral; 10-K Note 17).
+
+**Runoff and legacy liabilities.** Sharing-economy commercial liability in runoff generated net unfavourable development ($3.0m in FY2025; 10-K). High-deductible recoverable exposure was $86.8m at 31 Dec 2025 (down from $168.2m at 31 Dec 2024). Asbestos/environmental pools are carried but deemed immaterial to change (10-K).
+
+**Reinsurance counterparty risk.** Divested blocks include $472m recoverable from John Hancock (A+); insolvency would require rebuilding admin capabilities “on unfavourable terms” (10-K Note 17). Care block sale in Mar 2026 reduces but does not eliminate legacy reinsurance complexity.
+
+**Investment and rate sensitivity.** Fixed-maturity unrealised losses were ~7% of fair value at 31 Mar 2026 (Q1 2026 10-Q Note 7). Senior notes carry rating-based coupon step-ups if downgraded below investment grade (10-K Note 18). Revolving credit facility ($500m, matures Jun 2030) includes customary financial covenants (8-K, 18 Jun 2025).
+
+**Governance and pension.** EVP/COO Francesca Luthi announced departure effective Sep 2025 (8-K, 15 Jul 2025). Qualified pension plan is well funded (~120%); no going-concern language appears in available extracts.
+
+**Legal/contingencies.** Management states pending litigation is not expected to be materially adverse to financial condition individually or in aggregate, but possible loss beyond accruals “cannot be estimated” (Q1 2026 10-Q Note 14)—a standard but unresolved overhang.
+
+**Data gaps.** FY2025/FY2024 10-K body extracts omit primary consolidated income and cash-flow statements; annual revenue/EPS/OCF/FCF rely on Yahoo fallback. Eight of eighteen indexed 8-Ks have no body extract.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate—mix of company-specific items and repetitive valuation commentary.
+
+**Earnings and guidance**
+- “Assurant (NYSE:AIZ) Reports Upbeat Q1 CY2026” (StockStory, 5 May 2026) — aligns with filing showing strong Q1 beat.
+- “Assurant sets Aug. 4 earnings release, Aug. 5 live webcast” (Stock Titan, 6 Jul 2026).
+- “Assurant’s Quarterly Earnings Preview: What You Need to Know” (Yahoo Finance, 16 Jul 2026) — notes analyst EPS slip concern into Q2.
+
+**Management / governance**
+- “Assurant (AIZ) Appoints Kelli Ertel as Chief Communications Officer” (GuruFocus, 24 Jul 2026).
+- COO Francesca Luthi departure (8-K / filings, Jul 2025).
+
+**Strategy / partnerships**
+- “Total Wireless Launch New Device Protection Plan Developed in Partnership With Assurant (AIZ)” (Yahoo Finance, 28 Mar 2026).
+- “Cogeco mobile customers get financing, protection and trade-ins for devices” (Stock Titan, 23 Jul 2026) — distribution expansion.
+- “Assurant's Global Lifestyle Fuels Growth and Profitability” (Yahoo Finance, 7 Jul 2026).
+
+**Capital markets**
+- New $500m revolving credit facility through Jun 2030 (8-K, 18 Jun 2025).
+- $300m 2036 senior notes issued Aug 2025 (10-K Note 18).
+
+**Market sentiment**
+- “Assurant (AIZ) Stock May Be Fully Valued Following Its 124% Run” (simplywall.st, 18 Jul 2026).
+- “3 Reasons AIZ is Risky and 1 Stock to Buy Instead” (Yahoo Finance, 14 Jul 2026).
+- “What Makes Assurant (AIZ) a New Buy Stock” (Zacks, 13 Jul 2026).
+- EVP Lonergan sold 7,000 shares under 10b5-1 plan (Stock Titan, 23 Jun 2026).
+
+News is adequate on operations and partnerships but thin on deep regulatory or M&A developments; much headline flow is price-performance commentary rather than fundamental breaks.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Filings confirm accelerating earnings, reserve strength, and portfolio simplification that support the quantitative buy signal, partially offset by catastrophe sensitivity, client-linked model risk, and signs the market is debating full valuation after a strong run.

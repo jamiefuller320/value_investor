@@ -1,0 +1,78 @@
+# Lowe's Companies, Inc. (LOW) — Research memo
+
+_Version 1 · Updated 2026-07-25T13:25:33.602129+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Lowe's screens as a buy on cheapness (P/E 17.6), dividend quality (2.5% yield), GARP (PEGY 0.07), and risk metrics, against a cyclically depressed home-improvement backdrop. The investment case rests on a durable #2 franchise generating roughly $7–10 billion in annual free cash flow, a shareholder-return programme (dividends ~$2.6 billion/year), and a strategic pivot into the Pro/builder channel via the ADG ($1.3 billion) and FBM ($8.8 billion) acquisitions under the Total Home strategy. The central debate is whether flat comparable sales and modest earnings erosion reflect a housing-cycle trough that the market has already discounted, or a longer-lasting share and margin challenge versus Home Depot and online rivals. Negative book equity and elevated post-deal leverage complicate the picture but do not, in filings reviewed, indicate financial distress.
+
+## INVESTMENT THESIS
+For a value investor, LOW offers a recognisable quality compounder trading at a cyclical discount. The screen passes four factor families—cheapness, dividend, GARP, and risk—with high data quality (18/20 metrics) and persistent signal over four weeks. At ~17.6× trailing earnings and ~2.5% yield, the market prices low single-digit earnings growth (screen growth estimate −0.7%), which is consistent with filing disclosures of flat comps and a challenging macro environment rather than a broken business model.
+
+Business quality remains intact on operational measures visible in interim filings: return on invested capital was 26.8% in Q1 FY2026 (10-Q, May 2026), operating cash flow has remained robust ($3.4 billion in Q1; $8.3 billion over nine months to October 2025), and the company continues dividend payments while repaying bond maturities ($2.4 billion repaid in Q1 FY2026). The Total Home strategy—Pro customer focus, omnichannel, installation services—is being accelerated by ADG (interior finishes for home builders, closed June 2025) and FBM (building materials distribution, closed October 2025), expanding addressable market beyond DIY retail.
+
+The screen's Magic Formula, Dreman Contrarian, Neff PEGY, Dividend Growth, Composite Value, and Earnings Quality passes align with a cash-generative, out-of-favour large cap where valuation embeds pessimism. The negative P/B (−12.6 on screen) reflects accumulated share repurchases and goodwill from acquisitions, not impaired operating assets—a distinction value investors should weigh explicitly.
+
+## FINANCIAL REVIEW
+**Data note:** Both annual 10-K body extracts (FY2025, filed March 2025; FY2026, filed March 2026) are present in the filings index but truncated before consolidated financial statement tables; no annual dollar figures could be verified from filing bodies. Annual trends below fall back to `financials_annual.json` (Yahoo). Interim figures are sourced from 10-Q filing bodies.
+
+**Annual trends (Yahoo fallback — fiscal years ended late January/early February):**
+
+| Metric | FY2024 | FY2025 | FY2026 |
+|---|---|---|---|
+| Revenue | $86.4bn | $83.7bn | $86.3bn |
+| Operating income | $11.6bn | $10.5bn | $10.2bn |
+| Net income | $7.73bn | $6.96bn | $6.65bn |
+| Diluted EPS | $13.20 | $12.23 | $11.85 |
+| Free cash flow | $6.18bn | $7.70bn | $7.65bn |
+| Total debt | $40.1bn | $39.7bn | $44.7bn |
+| Stockholders' equity | −$15.1bn | −$14.2bn | −$9.9bn |
+
+Revenue fell from the FY2023 peak ($97.1bn, Yahoo) through FY2025 as housing turnover weakened, then rebounded in FY2026 partly on ADG/FBM consolidation. Underlying earnings have trended lower for three years (EPS −10% from FY2024 to FY2026), while FCF has held near $7–8 billion, supporting the dividend and deleveraging. Goodwill rose sharply to $9.9bn (Yahoo FY2026) from ~$0.6bn pre-deal, reflecting acquisition accounting.
+
+**Interim filing trends (primary source — 10-Q bodies):**
+
+*Q1 FY2025 (ended 2 May 2025):* Net sales $20.9bn (−2.0% YoY); comparable sales −1.1%; net earnings $1.64bn; diluted EPS $2.92; gross margin +19 bps YoY on productivity and shrink. Management cited weak housing and DIY big-ticket pressure.
+
+*Q2 FY2025 (ended 1 August 2025):* Net sales $24.0bn (+1.6%); comparable sales +1.1%; net earnings $2.40bn; diluted EPS $4.27; six-month sales $44.9bn (−0.1%). ADG acquisition completed 2 June 2025 for $1.3bn cash. Share repurchase programme paused in FY2025. Covenant compliance confirmed at 1 August 2025.
+
+*Q3 FY2025 (ended 31 October 2025):* Net sales $20.8bn (+3.2%); nine-month sales $65.7bn (+0.9%); Q3 comparable sales +0.4%; nine-month comps −0.1%; net earnings $1.62bn (Q3), $5.65bn (9M); diluted EPS $2.88 (Q3), $10.07 (9M); adjusted diluted EPS $3.06 (Q3). FBM closed 9 October 2025 for $8.8bn. Nine-month operating cash flow $8.3bn; capex $1.6bn. Cash $0.6bn plus $5.0bn revolver availability at quarter-end.
+
+*Q1 FY2026 (ended 1 May 2026):* Net sales $23.1bn (+10.3%, acquisition-inflated); comparable sales +0.6% (average ticket +1.5%, transactions −0.9%); net earnings $1.63bn (flat YoY); diluted EPS $2.90; adjusted diluted EPS $3.03; gross margin 32.68% (−70 bps, acquisition cost structure); operating income $2.59bn (12.1% of sales); operating cash flow $3.35bn; dividends paid $674m; $2.4bn bond maturities repaid. Shareholders' deficit $9.3bn; total assets $54.9bn. ROIC 26.8% (vs 31.0% prior year). Management described a "challenging macroeconomic environment" with delayed spring season.
+
+**Gaps:** Latest covenant compliance language was not found in Q3 FY2025 or Q1 FY2026 body extracts (present in Q1/Q2 FY2025). No going-concern language identified in any filing body reviewed.
+
+## RISKS AND RED FLAGS
+**Cyclical / demand:** FY2026 10-K risk factors and interim MD&A repeatedly flag inflation, affordability concerns, and a soft housing market adversely affecting discretionary spending. Comparable sales have been broadly flat to slightly negative on an organic basis; transaction counts remain under pressure despite ticket growth (pricing/mix).
+
+**Competitive:** Filings describe a "highly competitive market" with growing online/omnichannel rivals and risk of falling behind on AI and technology integration. Home Depot remains the dominant peer; screen timing data is insufficient to assess relative momentum.
+
+**M&A integration:** ADG ($1.3bn) and FBM ($8.8bn) are material strategic bets. FY2026 10-K warns that expected synergies may not materialise; Q1 FY2026 acquisition-related charges ($96m intangible amortisation) compressed reported EPS. Goodwill of ~$3.7bn (FBM) and ~$0.4bn (ADG) creates impairment risk if Pro growth disappoints. FBM has unionised employees—a labour risk not present across core retail.
+
+**Leverage and capital structure:** Total debt ~$44.7bn (Yahoo FY2026); net debt ~$38.9bn. Nine months to October 2025, acquisitions consumed ~$10.1bn investing cash flow. Share repurchases were paused in FY2025 to fund deleveraging; minimal buyback activity resumed in Q1 FY2026 ($365m). Negative stockholders' equity (~$9.9bn) is structural (retained deficit from buybacks plus goodwill), not an going-concern signal, but limits book-based valuation metrics.
+
+**Tariffs / supply chain:** FY2026 10-K flags that tariffs on imports from China, Mexico, and elsewhere could raise merchandise costs and dampen consumer demand; a large share of private-label and national-brand sourcing is offshore.
+
+**Legal / contingencies:** Interim filings state the company is "from time to time" party to ordinary-course lawsuits and records reserves when probable; no material single contingency quantified in bodies reviewed. Covenant compliance confirmed at May and August 2025.
+
+**Governance / pension:** No material governance red flags in sources reviewed. Pension/post-retirement benefit liabilities appear on balance sheet (~$1.3bn current portion, Yahoo FY2026) but are not flagged as acute in filing extracts.
+
+## NEWS HIGHLIGHTS
+Lowe-specific coverage is moderate but noisy: many manifest hits match the ticker "LOW" or the word "low" rather than Lowe's itself. Material Lowe's items include:
+
+- **24 July 2026** — *What You Need to Know Ahead of Lowe's Earnings Release* (Yahoo Finance): Q2 FY2026 earnings expected next month; analysts anticipate a low single-digit profit dip.
+- **23 July 2026** — *Lowe's (LOW) Stock May Be 10% Undervalued On AI Growth Plans* (simplywall.st): third-party valuation work citing AI/technology initiatives.
+- **21 July 2026** — *LOW Stock: A Discount With An Asterisk* (Yahoo/Trefis): argues shares look cheap after a slide but questions whether fundamentals are deteriorating.
+- **23 July 2026** — *Weak housing market hurts big and bulky last-mile delivery* (FreightWaves/Yahoo): sector context linking weak housing turnover to slower big-ticket delivery demand, relevant to appliances and bulky categories.
+- **12 July 2026** — *Lowe's (LOW) Stock Looks Fairly Valued Despite 2026 Growth Push* (Yahoo Finance).
+- **18 June 2026** — *3 Reasons to Avoid LOW and 1 Stock to Buy Instead* (Yahoo Finance): bearish counter-view.
+- **Institutional flows:** CI Investments and Saturna Capital reduced holdings (MarketBeat, July 2026); no management change or regulatory action identified.
+
+**Strategy/M&A in news vs filings:** The ADG and FBM acquisitions are confirmed in SEC filings rather than press-driven; no additional M&A beyond these was identified in the news manifest. Share repurchase pause and deleveraging are filing-sourced.
+
+**Coverage quality:** Thin on hard news; dominated by price-move commentary and generic valuation pieces. No primary-source earnings pre-announcements beyond the upcoming Q2 preview.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research largely confirms the screen's buy case on valuation, cash generation, and dividend support, but tempers conviction given flat organic comps, three-year earnings drift, and elevated leverage from the FBM/ADG pivot pending clearer integration progress.
