@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:53:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:54:29+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -48,6 +48,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N22 | **Preflight CURSOR_API_KEY against /v0/me before gap-fill agents** | Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success. Key source is Dashboard → API Keys (user key), not Integrations; Team Admin keys are unsupported by cursor-sdk. | After a valid User API key is installed and N21 gap-fill succeeds once |
 | N23 | **Do not add momentum overlay to base value screen** | Momentum should remain an exit/hold overlay or offline sim track, not a new factor family in assign_signal(). Mixing value entry with momentum hold rules in the primary quant signal would blur attribution and conflict with N3 (research overlays, frozen base screen). | Explicit product decision after walk-forward evidence that a momentum grace rule beats trailing stops and screen-only exits on cost-adjusted excess return |
 | N24 | **Do not route automated paper-auto or decision-review through LLMs** | Learning loop knobs (decision-review, future L85 grace auto-tune) must stay rule-based on structured JSON marks. Pro+ model access is for human/agent synthesis and selective research only — not live paper trading decisions. | Never for live automation; only reconsider if building a separate experimental LLM paper track with its own control datum |
+| N25 | **Keep exit-shadow cohort observe-only until maturity** | Post-exit shadow (exit_shadow.json / exit_shadow_review.json) is wired for all three paper tracks but must stay read-only for knob changes until per-track closed cohorts mature. Do not wire verdicts into decision-review or L85 grace auto-tune prematurely. | learning_tracks_exit_shadow.json shows ≥15 closed exits per track with stable 1/4/8/12-week scoring; L85 grace threshold (≥30 grace exits) met separately before any auto-tune |
+| N26 | **Do not nudge decision-review portfolio knobs below history floor** | Automated decision-review knob steps (max positions, timing strictness, conviction floor, sector cap) should not fire until the target track has ≥4 weekly marks and ≥2 closed trades. Below that floor, accumulate data hands-off. | Each paper track (ai_judgment, rules, momentum_grace) crosses the floor independently; then enable per-track knob review in decision-review |
 
 ---
 
@@ -60,9 +62,9 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L2 | **Evolutionary genomes (stage 2)** | Genomes = sim knobs ± weight deltas; fitness = excess − λ×costs; elites + small mutations; freeze screen signals first | After L1; history thick enough to trust fitness |
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
-| L84 | **Momentum grace overlay for paper-auto exits** | When a held name drops below buy-tier on the value screen but price trend remains strong (e.g. above rising 50/200 MA, positive MACD slope, unrealized gain), keep the sleeve for a bounded grace period instead of immediate automated sell. Test as a separate paper track before touching the rules control book. | Decision-review has ≥12 weeks of marks on the rules control book and at least one full cycle where value-downgrade exits would have fired; trailing-stop sim track shows material give-back from screen-only churn |
 | L85 | **Auto-tune momentum grace knobs from exit-shadow review** | When exit_shadow_review shows ≥30 closed grace exits with stable early_exit vs good_exit balance vs rules screen_rotation, allow decision-review-style small steps on grace_weeks, ATR stop multiplier, and take-profit extension on the momentum_grace track only. | learning_tracks_exit_shadow.json shows ≥30 closed grace exits and grace vs screen_rotation verdict rates diverge materially |
 | L87 | **LLM synthesis layer for periodic learning-track meta-reports** | Monthly or quarterly agent pass that reads learning_tracks_review.json, learning_tracks_exit_shadow.json, and historical_analysis_summary.json and produces a human-readable diagnosis (AI vs control, grace vs rules, cost drag, suggested experiments). Uses frontier/API-pool models; keep automated knobs deterministic. | ≥8 weeks of learning_tracks_review marks and ≥15 closed exit-shadow cohorts; paper-auto artifacts stable |
+| L90 | **Promote momentum grace into rules control after shadow evidence** | If momentum_grace track beats rules on cost-adjusted excess return and exit_shadow shows materially fewer early_exit vs screen_rotation on comparable sells, merge grace overlay into the rules control book and retire the separate third track to reduce operational surface. | ≥6 months of three-track marks; grace vs rules excess and exit-shadow verdict rates diverge consistently in grace favour |
 
 ### Universe & data
 

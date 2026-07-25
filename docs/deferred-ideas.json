@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-25T06:53:26+00:00",
+  "updated_at": "2026-07-25T06:54:29+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1747,9 +1747,10 @@
         "paper-auto",
         "sim"
       ],
-      "status": "open",
+      "status": "done",
       "source": "momentum-overlay-exit-discussion",
-      "added_at": "2026-07-25T05:51:31+00:00"
+      "added_at": "2026-07-25T05:51:31+00:00",
+      "updated_at": "2026-07-25T06:54:25+00:00"
     },
     {
       "id": "N23",
@@ -1867,6 +1868,56 @@
       "status": "open",
       "source": "pro-plus-meta-analysis-discussion",
       "added_at": "2026-07-25T06:53:26+00:00"
+    },
+    {
+      "id": "N25",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Keep exit-shadow cohort observe-only until maturity",
+      "summary": "Post-exit shadow (exit_shadow.json / exit_shadow_review.json) is wired for all three paper tracks but must stay read-only for knob changes until per-track closed cohorts mature. Do not wire verdicts into decision-review or L85 grace auto-tune prematurely.",
+      "revisit_when": "learning_tracks_exit_shadow.json shows \u226515 closed exits per track with stable 1/4/8/12-week scoring; L85 grace threshold (\u226530 grace exits) met separately before any auto-tune",
+      "tags": [
+        "exit-shadow",
+        "paper-auto",
+        "observe-only",
+        "auto-tune"
+      ],
+      "status": "open",
+      "source": "momentum-exit-shadow-progression-pathway",
+      "added_at": "2026-07-25T06:54:29+00:00"
+    },
+    {
+      "id": "L90",
+      "category": "later",
+      "section": "learning",
+      "title": "Promote momentum grace into rules control after shadow evidence",
+      "summary": "If momentum_grace track beats rules on cost-adjusted excess return and exit_shadow shows materially fewer early_exit vs screen_rotation on comparable sells, merge grace overlay into the rules control book and retire the separate third track to reduce operational surface.",
+      "revisit_when": "\u22656 months of three-track marks; grace vs rules excess and exit-shadow verdict rates diverge consistently in grace favour",
+      "tags": [
+        "momentum",
+        "exit-shadow",
+        "paper-auto",
+        "promotion"
+      ],
+      "status": "open",
+      "source": "momentum-exit-shadow-progression-pathway",
+      "added_at": "2026-07-25T06:54:29+00:00"
+    },
+    {
+      "id": "N26",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not nudge decision-review portfolio knobs below history floor",
+      "summary": "Automated decision-review knob steps (max positions, timing strictness, conviction floor, sector cap) should not fire until the target track has \u22654 weekly marks and \u22652 closed trades. Below that floor, accumulate data hands-off.",
+      "revisit_when": "Each paper track (ai_judgment, rules, momentum_grace) crosses the floor independently; then enable per-track knob review in decision-review",
+      "tags": [
+        "decision-review",
+        "paper-auto",
+        "self-learning"
+      ],
+      "status": "open",
+      "source": "momentum-exit-shadow-progression-pathway",
+      "added_at": "2026-07-25T06:54:29+00:00"
     }
   ]
 }
