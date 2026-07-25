@@ -36,15 +36,18 @@ jobs:
 
       - name: Seed paper automation state from dashboard data
         run: |
-          mkdir -p output/paper_automation output/paper_automation/ai_judgment
+          mkdir -p output/paper_automation output/paper_automation/ai_judgment output/paper_automation/momentum_grace
           if [ -d docs/data/paper_automation ]; then
             cp -f docs/data/paper_automation/*.json output/paper_automation/ 2>/dev/null || true
           fi
           if [ -d docs/data/paper_automation/ai_judgment ]; then
             cp -f docs/data/paper_automation/ai_judgment/*.json output/paper_automation/ai_judgment/ 2>/dev/null || true
           fi
+          if [ -d docs/data/paper_automation/momentum_grace ]; then
+            cp -f docs/data/paper_automation/momentum_grace/*.json output/paper_automation/momentum_grace/ 2>/dev/null || true
+          fi
 
-      - name: Run paper automation (AI judgment primary + rules control)
+      - name: Run paper automation (AI judgment primary + rules control + momentum grace)
         run: |
           ARGS="--output-dir output/paper_automation --reports docs/data/latest.json --tracks all"
           if [ "${{ github.event.inputs.force }}" = "true" ]; then
@@ -72,6 +75,7 @@ jobs:
           dest = Path("docs/data/paper_automation")
           dest.mkdir(parents=True, exist_ok=True)
           (dest / "ai_judgment").mkdir(parents=True, exist_ok=True)
+          (dest / "momentum_grace").mkdir(parents=True, exist_ok=True)
 
           root_names = (
               "last_run.json",
@@ -98,6 +102,17 @@ jobs:
               path = src / "ai_judgment" / name
               if path.exists():
                   shutil.copy2(path, dest / "ai_judgment" / name)
+
+          for name in (
+              "last_run.json",
+              "automated_fund.json",
+              "config.json",
+              "decision_review.json",
+              "decision_review_history.json",
+          ):
+              path = src / "momentum_grace" / name
+              if path.exists():
+                  shutil.copy2(path, dest / "momentum_grace" / name)
 
           latest = Path("docs/data/latest.json")
           report = src / "ai_judgment" / "last_run.json"

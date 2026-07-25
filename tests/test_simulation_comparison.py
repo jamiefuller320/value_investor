@@ -73,15 +73,18 @@ def test_run_simulation_comparison_diverges_with_overlay_data():
     payload = comparison.to_dict()
     assert "static_levels" in payload
     assert "trailing_levels" in payload
+    assert "momentum_grace" in payload
     restored = simulation_comparison_from_dict(payload)
     assert restored.overlay.total_return == pytest.approx(comparison.overlay.total_return, rel=1e-3)
     assert restored.static_levels is not None
     assert restored.trailing_levels is not None
+    assert restored.momentum_grace is not None
 
     text = format_simulation_comparison_text(comparison)
     assert "Screen only" in text
     assert "research overlay" in text.lower()
     assert "trailing stop" in text.lower()
+    assert "momentum grace" in text.lower()
     assert comparison.comparison_note in text
 
 

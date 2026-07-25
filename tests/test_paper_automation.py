@@ -193,6 +193,9 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     assert "SCREEN.L" not in ai_fund.holdings
     assert "GOOD.L" in rules_fund.holdings
     assert "SCREEN.L" in rules_fund.holdings
+    assert "momentum_grace" in summary["tracks"]
+    assert summary["tracks"]["momentum_grace"]["selection"]["use_momentum_grace"] is True
+    assert (tmp_path / "auto" / "momentum_grace" / "config.json").exists()
 
 
 def test_load_screen_candidates_accepts_email_reports_list(tmp_path):

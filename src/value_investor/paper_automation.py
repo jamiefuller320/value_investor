@@ -61,6 +61,7 @@ class AutomationConfig:
     is_primary_learning_track: bool = False
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
+    use_momentum_grace: bool = False
 
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)
@@ -81,6 +82,7 @@ class AutomationConfig:
             "sector_cap": float(self.sector_cap),
             "use_adjusted_signal": bool(self.use_adjusted_signal),
             "require_research_accumulate": bool(self.require_research_accumulate),
+            "use_momentum_grace": bool(self.use_momentum_grace),
         }
 
     def to_dict(self) -> dict[str, Any]:
@@ -116,12 +118,15 @@ class AutomationConfig:
             is_primary_learning_track=bool(raw.get("is_primary_learning_track", False)),
             use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
             require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
+            use_momentum_grace=bool(raw.get("use_momentum_grace", False)),
         )
 
 
 AI_JUDGMENT_TRACK_ID = "ai_judgment"
 RULES_TRACK_ID = "rules"
+MOMENTUM_GRACE_TRACK_ID = "momentum_grace"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
+MOMENTUM_GRACE_SUBDIR = "momentum_grace"
 
 
 def default_ai_judgment_config(base: AutomationConfig | None = None) -> AutomationConfig:
@@ -132,6 +137,16 @@ def default_ai_judgment_config(base: AutomationConfig | None = None) -> Automati
     cfg.is_primary_learning_track = True
     cfg.use_adjusted_signal = True
     cfg.require_research_accumulate = True
+    return cfg
+
+
+def default_momentum_grace_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Experimental track: screen rules + momentum grace on value downgrades."""
+    cfg = default_rules_config(base)
+    cfg.track_id = MOMENTUM_GRACE_TRACK_ID
+    cfg.track_label = "Screen rules + momentum grace"
+    cfg.is_primary_learning_track = False
+    cfg.use_momentum_grace = True
     return cfg
 
 
@@ -152,6 +167,7 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     return {
         RULES_TRACK_ID: root,
         AI_JUDGMENT_TRACK_ID: root / AI_JUDGMENT_SUBDIR,
+        MOMENTUM_GRACE_TRACK_ID: root / MOMENTUM_GRACE_SUBDIR,
     }
 
 
@@ -432,6 +448,10 @@ def refresh_candidate_marks(
             row["timing_signal"] = tech.timing_signal.value
             row["timing_score"] = tech.timing_score
             row["rsi_14"] = tech.rsi_14
+            row["sma_50"] = tech.sma_50
+            row["sma_200"] = tech.sma_200
+            row["macd_histogram"] = tech.macd_histogram
+            row["macd_histogram_prev"] = tech.macd_histogram_prev
             row["atr_14"] = tech.atr_14
             row["volume_ratio_20"] = tech.volume_ratio_20
             signal = str(row.get("signal") or "hold")
@@ -669,6 +689,28 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         ai = default_ai_judgment_config(rules)
     ai_path.write_text(json.dumps(ai.to_dict(), indent=2), encoding="utf-8")
     configs[AI_JUDGMENT_TRACK_ID] = ai
+
+    mg_dir = dirs[MOMENTUM_GRACE_TRACK_ID]
+    mg_path = mg_dir / CONFIG_FILENAME
+    mg_dir.mkdir(parents=True, exist_ok=True)
+    if mg_path.exists():
+        mg = AutomationConfig.from_dict(json.loads(mg_path.read_text(encoding="utf-8")))
+        mg.track_id = MOMENTUM_GRACE_TRACK_ID
+        mg.is_primary_learning_track = False
+        mg.use_adjusted_signal = False
+        mg.require_research_accumulate = False
+        mg.use_momentum_grace = True
+        mg.track_label = mg.track_label or "Screen rules + momentum grace"
+        mg.timezone = rules.timezone
+        mg.market_open = rules.market_open
+        mg.settle_minutes_after_open = rules.settle_minutes_after_open
+        mg.weekdays_only = rules.weekdays_only
+        mg.trade_cost_pct = rules.trade_cost_pct
+        mg.initial_cash = rules.initial_cash
+    else:
+        mg = default_momentum_grace_config(rules)
+    mg_path.write_text(json.dumps(mg.to_dict(), indent=2), encoding="utf-8")
+    configs[MOMENTUM_GRACE_TRACK_ID] = mg
     return configs
 
 
@@ -690,7 +732,7 @@ def run_learning_tracks(
     base_dir = Path(base_dir)
     configs = ensure_learning_track_configs(base_dir)
     dirs = learning_track_dirs(base_dir)
-    wanted = list(tracks) if tracks else [RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID]
+    wanted = list(tracks) if tracks else [RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID, MOMENTUM_GRACE_TRACK_ID]
     results: dict[str, Any] = {}
     for track_id in wanted:
         if track_id not in configs:
@@ -719,7 +761,8 @@ def run_learning_tracks(
         "primary_learning_track": AI_JUDGMENT_TRACK_ID,
         "success_criterion": (
             "Outperformance after costs vs market benchmark (^FTSE) on the "
-            "primary AI-judgment track; rules track is the control."
+            "primary AI-judgment track; rules track is the control; "
+            "momentum_grace is an experimental exit overlay."
         ),
         "tracks": results,
     }

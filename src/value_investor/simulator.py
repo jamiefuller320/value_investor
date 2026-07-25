@@ -28,6 +28,8 @@ class SimulatorConfig:
     use_trade_plan_levels: bool = False
     # With use_trade_plan_levels: trail stop up from refreshed plans, never below entry stop (L44).
     trailing_stop: bool = False
+    # Hold winners after value downgrade while price trend remains strong.
+    use_momentum_grace: bool = False
 
 
 @dataclass
@@ -97,6 +99,7 @@ class SimulationComparison:
     overlay: SimulationSummary
     static_levels: SimulationSummary | None = None
     trailing_levels: SimulationSummary | None = None
+    momentum_grace: SimulationSummary | None = None
     comparison_note: str = ""
 
     def to_dict(self) -> dict[str, Any]:
@@ -106,12 +109,14 @@ class SimulationComparison:
             payload["static_levels"] = self.static_levels.to_dict()
         if self.trailing_levels is not None:
             payload["trailing_levels"] = self.trailing_levels.to_dict()
+        if self.momentum_grace is not None:
+            payload["momentum_grace"] = self.momentum_grace.to_dict()
         if self.comparison_note:
             payload["comparison_note"] = self.comparison_note
         return payload
 
     def has_results(self) -> bool:
-        tracks = [self.screen, self.overlay, self.static_levels, self.trailing_levels]
+        tracks = [self.screen, self.overlay, self.static_levels, self.trailing_levels, self.momentum_grace]
         return any(t is not None and t.has_results() for t in tracks)
 
 
@@ -138,6 +143,7 @@ def simulation_comparison_from_dict(data: dict[str, Any]) -> SimulationCompariso
     overlay_data = data.get("research_overlay")
     static_data = data.get("static_levels")
     trailing_data = data.get("trailing_levels")
+    momentum_data = data.get("momentum_grace")
     return SimulationComparison(
         screen=simulation_summary_from_dict(data),
         overlay=(
@@ -151,6 +157,11 @@ def simulation_comparison_from_dict(data: dict[str, Any]) -> SimulationCompariso
         trailing_levels=(
             simulation_summary_from_dict(trailing_data)
             if isinstance(trailing_data, dict)
+            else None
+        ),
+        momentum_grace=(
+            simulation_summary_from_dict(momentum_data)
+            if isinstance(momentum_data, dict)
             else None
         ),
         comparison_note=str(data.get("comparison_note", "")),
@@ -220,12 +231,17 @@ def run_simulation_comparison(
         snapshots,
         replace(base, use_trade_plan_levels=True, trailing_stop=True),
     )
+    momentum_grace = run_simulation(
+        snapshots,
+        replace(base, use_momentum_grace=True),
+    )
     has_overlay_data = _snapshots_have_research_overlay(snapshots)
     return SimulationComparison(
         screen=screen,
         overlay=overlay,
         static_levels=static_levels,
         trailing_levels=trailing_levels,
+        momentum_grace=momentum_grace,
         comparison_note=_comparison_note(screen, overlay, has_overlay_data=has_overlay_data),
     )
 
@@ -502,6 +518,159 @@ def _rebalance(
     return cash, holdings, trades, stops
 
 
+def _screen_signal(row: dict[str, Any], config: SimulatorConfig) -> str:
+    signal = str(row.get("signal", ""))
+    if config.use_adjusted_signal:
+        adjusted = row.get("adjusted_signal")
+        if adjusted is not None and str(adjusted).strip():
+            signal = str(adjusted)
+    return signal
+
+
+def _rebalance_momentum_grace(
+    *,
+    snapshot: RunSnapshot,
+    cash: float,
+    holdings: dict[str, float],
+    avg_costs: dict[str, float],
+    grace_states: dict[str, Any],
+    config: SimulatorConfig,
+) -> tuple[float, dict[str, float], dict[str, float], dict[str, Any], list[Trade]]:
+    from value_investor.momentum_grace import SimGraceState, evaluate_grace_holding
+
+    prices = snapshot.prices
+    run_at = snapshot.run_at
+    trades: list[Trade] = []
+    targets = _select_targets(snapshot, config)
+    target_set = set(targets)
+    by_ticker = _signal_rows_by_ticker(snapshot)
+
+    def _clear_grace(ticker: str) -> None:
+        grace_states.pop(ticker, None)
+
+    grace_kept: set[str] = set()
+    for ticker in list(holdings.keys()):
+        if ticker in target_set:
+            if ticker in grace_states:
+                _clear_grace(ticker)
+            continue
+
+        row = by_ticker.get(ticker) or {"ticker": ticker, "signal": "hold"}
+        price = prices.get(ticker)
+        if price is None or price <= 0:
+            shares = holdings.pop(ticker)
+            avg_costs.pop(ticker, None)
+            _clear_grace(ticker)
+            continue
+
+        state = grace_states.get(ticker)
+        if state is None:
+            state = SimGraceState(avg_cost=avg_costs.get(ticker, price))
+        elif not isinstance(state, SimGraceState):
+            state = SimGraceState(**state) if isinstance(state, dict) else SimGraceState()
+
+        decision = evaluate_grace_holding(
+            row,
+            signal=_screen_signal(row, config),
+            avg_cost=avg_costs.get(ticker, price),
+            mark=price,
+            momentum_grace=state.active,
+            grace_started_at=state.started_at or None,
+            stop_loss=state.stop_loss,
+            take_profit=state.take_profit,
+            grace_entry_stop=state.entry_stop,
+            as_of=run_at,
+        )
+        if decision.keep:
+            grace_kept.add(ticker)
+            if decision.enter_grace:
+                state.active = True
+                state.started_at = run_at
+                state.entry_stop = state.entry_stop or state.stop_loss or avg_costs.get(ticker, price)
+                state.avg_cost = avg_costs.get(ticker, price)
+            if decision.stop_loss is not None:
+                state.stop_loss = decision.stop_loss
+            if decision.take_profit is not None:
+                state.take_profit = decision.take_profit
+            grace_states[ticker] = state
+            continue
+
+        shares = holdings.pop(ticker)
+        avg_costs.pop(ticker, None)
+        _clear_grace(ticker)
+        proceeds, trade = _execute_sell(
+            run_at=run_at,
+            ticker=ticker,
+            shares=shares,
+            price=price,
+            trade_cost_pct=config.trade_cost_pct,
+        )
+        cash += proceeds
+        trades.append(trade)
+
+    if not targets and not grace_kept:
+        return cash, holdings, avg_costs, grace_states, trades
+
+    total_value = _portfolio_value(cash, holdings, prices)
+    target_each = total_value / len(targets) if targets else 0.0
+
+    for ticker in targets:
+        price = prices.get(ticker)
+        if price is None or price <= 0:
+            continue
+        current_shares = holdings.get(ticker, 0.0)
+        current_value = current_shares * price
+        if current_value <= target_each * 1.02:
+            continue
+        excess_value = current_value - target_each
+        shares_to_sell = excess_value / price
+        if shares_to_sell <= 0:
+            continue
+        shares_to_sell = min(shares_to_sell, current_shares)
+        proceeds, trade = _execute_sell(
+            run_at=run_at,
+            ticker=ticker,
+            shares=shares_to_sell,
+            price=price,
+            trade_cost_pct=config.trade_cost_pct,
+        )
+        cash += proceeds
+        holdings[ticker] = current_shares - shares_to_sell
+        if holdings[ticker] <= 1e-9:
+            del holdings[ticker]
+            avg_costs.pop(ticker, None)
+            _clear_grace(ticker)
+        trades.append(trade)
+
+    for ticker in targets:
+        price = prices.get(ticker)
+        if price is None or price <= 0:
+            continue
+        current_shares = holdings.get(ticker, 0.0)
+        current_value = current_shares * price
+        shortfall = target_each - current_value
+        if shortfall <= 0.01:
+            continue
+        budget = min(shortfall, cash)
+        shares_bought, spent, trade = _execute_buy(
+            run_at=run_at,
+            ticker=ticker,
+            budget=budget,
+            price=price,
+            trade_cost_pct=config.trade_cost_pct,
+        )
+        if trade is None:
+            continue
+        cash -= spent
+        was_flat = current_shares <= 1e-9
+        holdings[ticker] = current_shares + shares_bought
+        if was_flat:
+            avg_costs[ticker] = price
+        trades.append(trade)
+
+    return cash, holdings, avg_costs, grace_states, trades
+
+
 def run_simulation(
     snapshots: list[RunSnapshot],
     config: SimulatorConfig | None = None,
@@ -530,6 +699,8 @@ def run_simulation(
     contributed = config.initial_capital
     holdings: dict[str, float] = {}
     entry_stops: dict[str, float] = {}
+    avg_costs: dict[str, float] = {}
+    grace_states: dict[str, Any] = {}
     all_trades: list[Trade] = []
     equity_curve: list[dict[str, Any]] = []
     deposits_applied = 0
@@ -557,13 +728,23 @@ def run_simulation(
                 contributed += injected
                 deposits_applied += missing
 
-        cash, holdings, trades, entry_stops = _rebalance(
-            snapshot=snapshot,
-            cash=cash,
-            holdings=holdings,
-            config=config,
-            entry_stops=entry_stops,
-        )
+        if config.use_momentum_grace:
+            cash, holdings, avg_costs, grace_states, trades = _rebalance_momentum_grace(
+                snapshot=snapshot,
+                cash=cash,
+                holdings=holdings,
+                avg_costs=avg_costs,
+                grace_states=grace_states,
+                config=config,
+            )
+        else:
+            cash, holdings, trades, entry_stops = _rebalance(
+                snapshot=snapshot,
+                cash=cash,
+                holdings=holdings,
+                config=config,
+                entry_stops=entry_stops,
+            )
         all_trades.extend(trades)
         value = _portfolio_value(cash, holdings, snapshot.prices)
         equity_curve.append(
@@ -673,6 +854,14 @@ def format_simulation_comparison_text(comparison: SimulationComparison) -> str:
             _format_single_simulation_text(
                 comparison.trailing_levels,
                 heading="Technical levels (trailing stop, entry floor)",
+            )
+        )
+    if comparison.momentum_grace is not None:
+        lines.append("")
+        lines.extend(
+            _format_single_simulation_text(
+                comparison.momentum_grace,
+                heading="Screen rules + momentum grace (exit overlay)",
             )
         )
     if comparison.comparison_note:
