@@ -1,14 +1,18 @@
 # ARB Corporation Limited (ARB.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T12:46:25.835734+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:12:53.651037+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-ARB Corporation Limited is a vertically integrated Australian manufacturer and retailer of four-wheel-drive accessories, currently rated a **buy** by the quantitative screen on a moderate earnings multiple (P/E 16.5, P/B 2.0), a near-pristine balance sheet (debt/equity ~6%), and a 3.9% dividend yield. The investment case rests on a durable brand franchise, improving free cash flow, and a sharp share-price de-rating that may have overshot near-term cyclical weakness. The central debate is whether revenue growth can offset persistent margin compression, sliding OEM channel sales, and a visible earnings step-down in H1 FY2026 — none of which can yet be verified against primary ASX filing extracts in this library.
+ARB Corporation Limited is a vertically integrated Australian manufacturer and retailer of four-wheel-drive accessories, currently rated **buy** by the quantitative screen on a moderate earnings multiple (P/E 16.5, P/B 2.0), a near-pristine balance sheet (debt/equity ~6%), and a 3.9% dividend yield. The investment case rests on a durable brand franchise, improving free cash flow, and a sharp share-price de-rating that may have overshot near-term cyclical weakness. The central debate is whether revenue growth can offset persistent margin compression, sliding OEM channel sales, and a visible earnings step-down in H1 FY2026 — none of which can yet be verified against primary ASX filing extracts in this library.
+
+---
 
 ## INVESTMENT THESIS
 For a value investor, ARB offers a screen-validated combination of cheapness, quality, dividend income, GARP, and low financial risk at a time when the market has heavily de-rated the name. The quantitative screen passes **10 of 22 models** (composite score **67%**, sector-relative **64%**) across five factor families — cheapness, quality, dividend, GARP, and risk — with high data completeness (19/20 metrics). Passing models include Graham Enterprising, FCF Yield, Neff PEGY, Quality Value, Economic Moat, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, and Financial Health. Headline metrics align with classic value criteria: P/E below 25, P/B below 3, debt/equity well below 100%, ROE 12.1%, and screen-reported FCF of approximately A$96m.
 
 Business quality supports the screen signal: ARB owns manufacturing, a growing retail store network, and an expanding US footprint, underpinned by a brand-led aftermarket moat in 4WD accessories. Yahoo fallback data show operating cash flow rising from A$84.6m (FY2022) to A$128.0m (FY2025) and free cash flow from A$22.3m to A$75.0m, despite net income remaining ~20% below its FY2022 peak. Insider buying — including director Shona Faber purchasing 5,420 shares on-market at A$18.46 (17 Jun 2026, Kalkine) — and recurring broker buy mentions (Motley Fool Australia, 8 May and 12 May 2026; 14 Jul 2026) suggest informed participants see value in the de-rating. News coverage references a ~44–50% share-price fall over the past year, which may have created an entry point where pessimism on cyclical demand and margin reset exceeds what the balance-sheet strength and franchise durability warrant.
+
+---
 
 ## FINANCIAL REVIEW
 **Primary source gap:** `filings_index.json` (regime: `asx_announcements`, fetched 25 Jul 2026) records **zero** indexed filings — no annual reports, no interim results, and **no body extracts** under `filings/bodies/`. Interim/H1 FY2026 figures referenced in news cannot be cited from regulatory text. All quantitative analysis below falls back to **`financials_annual.json` (Yahoo Finance)**; quarterly income data in that file is empty.
@@ -43,6 +47,8 @@ FCF generation improved markedly from A$22.3m to A$75.0m over four years, suppor
 
 **Interim gap:** No half-year filing bodies are indexed. News summaries (24 Feb 2026) reference H1 FY2026 results showing an approximate **19% profit decline**, margin compression, overall sales weakness offset by US sales growth, currency impacts, and OEM channel challenges (*"ARB (ASX:ARB) share price sinks after 19% profit decline in FY26 half-year result"*, Rask Media; *"ARB shares crash 15% after half-year earnings result disappoints investors"*, Motley Fool Australia). These interim figures **cannot be verified** from primary sources here. A disappointing FY2026 trading update on 20 Jan 2026 reportedly triggered an ~11% share-price fall (*"ARB (ASX:ARB) share price wrecked 11% after disappointing FY26 trading update"*, Rask Media), also unverified against filings.
 
+---
+
 ## RISKS AND RED FLAGS
 Without ASX filing body extracts, standard risk disclosures — going-concern language, contingent liabilities, covenant terms, related-party transactions, and segment profitability — **cannot be reviewed**. This is a material research gap for an ASX-listed name and limits confidence in any risk assessment.
 
@@ -59,6 +65,8 @@ Without ASX filing body extracts, standard risk disclosures — going-concern la
 **Competitive:** Aftermarket 4WD accessories face competition from OEM fit-outs, private-label products, and platform shifts (e.g. EV 4WD adoption). Product launches such as the Ford Ranger cap (18 Jul 2026, simplywall.st) and deeper Toyota Land Cruiser FJ integration (22 May 2026, simplywall.st) show ARB adapting, but competitive durability is unverified from filings.
 
 **Shareholder sentiment:** Significant drawdowns prompted exit-oriented coverage (*"Some ARB Corporation Limited (ASX:ARB) Shareholders Look For Exit As Shares Take 25% Pounding"*, simplywall.st, 16 Feb 2026). ~52% institutional ownership (Sep 2025, Yahoo Finance) implies sensitivity to fund flows on earnings misses.
+
+---
 
 ## NEWS HIGHLIGHTS
 Coverage over the past year is **moderate in volume but thin on primary operational detail** — heavily skewed toward Kalkine price-action commentary and generic valuation pieces rather than company-sourced disclosures.
@@ -86,6 +94,8 @@ Coverage over the past year is **moderate in volume but thin on primary operatio
 - **20 Jul 2026** — Dividend yield commentary at ~6.68% fully franked (*Kalkine*).
 
 No material M&A announcements, regulatory actions, or senior management changes appear in the manifest. The most actionable news item — H1 FY2026 results — **cannot be cross-checked** against ASX filing bodies in this library.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate

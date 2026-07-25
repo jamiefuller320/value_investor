@@ -1,88 +1,103 @@
 # Koninklijke Ahold Delhaize N.V. (AD.AS) — Research memo
 
-_Version 1 · Updated 2026-07-25T13:07:31.258183+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T15:09:30.042848+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Koninklijke Ahold Delhaize is a large, defensive food retailer screening as a strong buy on cheapness, quality, dividend, GARP and risk metrics (P/E 13.3, P/B 2.0, yield 4.3%, ROE 15.0%). The investment case rests on modest revenue growth, a sharp 2025 earnings rebound, robust free cash flow (~€4.4bn) and consistent capital returns via dividends and buybacks (~€2.1bn combined in 2025). The central debate is whether the low multiple reflects a durable cash compounder or structural margin pressure in US and European grocery, amplified by a dual leadership transition and a US$40m pharmacy compliance settlement. A critical limitation of this pack is that `filings_index.json` records zero Ahold Delhaize filings and no body extracts are available; financial conclusions therefore rely on Yahoo fallback data and cannot be verified against annual reports or interim releases.
+Koninklijke Ahold Delhaize is a multinational food retailer (Albert Heijn, Food Lion, Stop & Shop, bol.com, and others) trading at a modest multiple on a defensive, cash-generative franchise. The quantitative screen flags a strong buy on cheapness, quality, dividend, GARP, and risk metrics (P/E 13.3, P/B 2.0, yield 4.3%, ROE 15.0%), supported by FY2025 filing data: €92.4bn net sales, 4.0% underlying operating margin, €2.67 diluted underlying EPS, and €2.6bn free cash flow. The investment case rests on omnichannel scale, own-brand strength, and capital return (€1.24 proposed dividend, €1bn buyback), offset by US pharmacy compliance costs, regulatory price intervention (Serbia), and a heavy lease-adjusted balance sheet. The central debate is whether mid-single-digit underlying EPS growth and ~4% margins justify accumulation at current valuations, or whether US execution risk, legal settlements, and management transition cap upside.
 
 ## INVESTMENT THESIS
-The quantitative screen rates AD.AS as a strong buy with high data completeness (20/20 metrics, composite score 83%, sector-relative 78%, conviction 81%, signal stable for four weeks). Eight of 22 models pass — Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Magic Formula, Piotroski F-Score, Composite Value and Earnings Quality — an unusually broad pass set spanning five factor families for a euro consumer-defensive name.
+For a value investor, AD.AS combines staple demand, visible cash conversion, and shareholder yield at a discount to broader market multiples. The screen passes eight models spanning Graham Enterprising, FCF yield, Neff PEGY, dividend growth, Magic Formula, Piotroski F-Score, composite value, and earnings quality — five factor families with 20/20 data quality and 81% conviction sustained for four weeks.
 
-For a value investor, the screen signal aligns with observable business characteristics in Yahoo financials (see Financial Review). Revenue has grown from €87.0bn (2022) to €92.4bn (2025); net income rebounded to €2.26bn in 2025 after a softer 2024 (€1.76bn); diluted EPS rose 32% to €2.50; and free cash flow has remained in a €3.6–4.4bn band across four years. Capital allocation supports the dividend and GARP passes: 2025 dividends of €1.07bn and share repurchases of €1.01bn, with diluted shares falling from 933m to 905m.
+Business quality aligns with the screen’s quality and risk passes. FY2025 comparable sales excluding gasoline rose 3.2%; online sales grew 13.3% at constant exchange rates; management reports e-commerce profitability on a fully allocated basis. Underlying operating margin held at 4.0% despite price investments, Profi integration, and Serbian government pricing intervention — consistent with a durable, locally branded moat rather than a cyclical trade. Food Lion delivered 53 consecutive quarters of comparable sales growth; Albert Heijn reached 38.2% Dutch market share.
 
-Balance-sheet metrics from Yahoo (net debt €2.9bn vs EBITDA €7.3bn in 2025) support the risk-family pass despite substantial capitalised lease obligations (~€12.0bn). The screen’s cheapness does not appear driven by distress: operating cash flow was €6.99bn in 2025 and the business continues to fund growth capex (€2.56bn) alongside shareholder returns.
-
-The thesis is qualified, not rejected, by source gaps. Without verified annual reports, half-year releases or trading updates for this issuer, segment margins, identical sales and management guidance cannot be cross-checked — a verify-before-trade constraint that prevents full alignment with the screen’s 81% conviction score.
+Capital allocation reinforces the dividend and GARP signals: proposed FY2025 dividend of €1.24 (+6.0%, 47% payout on underlying EPS), completion of a €1bn buyback, and a new €1bn programme for 2026. FY2025 FCF of €2.6bn exceeded guidance of at least €2.2bn. At ~13x earnings and ~4.3% yield on a 15% ROE base, the stock offers GARP characteristics within consumer defensives — the screen’s strong-buy label is fundamentally coherent, not a pure deep-value anomaly.
 
 ## FINANCIAL REVIEW
-**Primary filings — unavailable for this issuer.**
+**Primary source:** Q4 2025 summary report (`ir_1ec828acebad4c87`), issued 11 February 2026. This covers Q4 and full-year 2025 in one document. The filings index contains no entries labelled `annual` or `interim` — only this Q4/full-year summary (`period: other`). No separate half-year or interim filing body is available in the research pack; interim trends below are drawn from the Q4 report only.
 
-`filings_index.json` (regime: euro_filings) records zero indexed filings (0 annual, 0 interim, 0 other, 0 with body). No body extracts exist under `filings/bodies/`. Euro-listed annual reports, interim results and SEC 20-F/6-K filings are absent from the index. Figures below are sourced exclusively from `financials_annual.json` (Yahoo), stated explicitly as fallback.
+**Full year 2025 (52 weeks vs 52 weeks 2024) — filing body**
 
-**Annual trends (Yahoo fallback)**
+| Metric | FY2025 | FY2024 | Change |
+|--------|--------|--------|--------|
+| Net sales | €92,352m | €89,356m | +3.4% (+5.9% constant FX) |
+| Comparable sales ex gasoline | +3.2% | — | — |
+| Online sales | €10,274m | €9,235m | +11.2% (+13.3% constant FX) |
+| IFRS operating income | €3,542m | €2,784m | +27.2% |
+| Underlying operating income | €3,734m | €3,608m | +3.5% (+6.2% constant FX) |
+| Underlying operating margin | 4.0% | 4.0% | flat |
+| Underlying EBITDA | €7,319m | €7,083m | +3.3% |
+| Net income | €2,264m | €1,764m | +28.4% |
+| Diluted IFRS EPS | €2.50 | €1.89 | +32.3% |
+| Diluted underlying EPS | €2.67 | €2.54 | +5.0% (+7.8% constant FX) |
+| Free cash flow | €2,600m | €2,545m | +2.2% |
+| Proposed dividend | €1.24/share | €1.17 | +6.0% |
 
-| Metric | 2022 | 2023 | 2024 | 2025 |
-|--------|------|------|------|------|
-| Revenue (€m) | 86,984 | 88,734 | 89,357 | 92,352 |
-| Operating income (€m) | 3,105 | 2,432 | 2,352 | 3,082 |
-| Net income (€m) | 2,546 | 1,874 | 1,764 | 2,264 |
-| Diluted EPS (€) | 2.54 | 1.94 | 1.89 | 2.50 |
-| EBITDA (€m) | 7,270 | 6,503 | 6,482 | 7,304 |
-| Free cash flow (€m) | 3,620 | 4,032 | 3,925 | 4,425 |
-| Gross margin | 26.8% | 26.9% | 26.6% | 26.5% |
+Segment split (FY2025): US net sales €53.1bn (+2.0% constant FX), underlying margin 4.5%; Europe €39.3bn (+11.7% constant FX, including Profi), underlying margin 3.8%.
 
-Revenue growth has been steady but modest (+3.4% in 2025). The 2024 earnings dip (EPS €1.89) reversed in 2025 with EPS up 32%, driven by higher operating income (€3.08bn vs €2.35bn). Interest expense rose to €823m (from €782m in 2024), partially offset by higher interest income (€159m). FCF peaked at €4.43bn in 2025 on operating cash flow of €6.99bn less capex of €2.56bn; a €1.25bn business acquisition also appears in investing cash flows.
+**Q4 2025 (13 weeks) — filing body**
 
-**Balance sheet and leverage (Yahoo, 2025)**
+Q4 net sales €23.5bn (+6.1% constant FX); comparable sales ex gasoline +2.5%. Underlying operating margin 4.2% (+0.1pp constant FX). Diluted underlying EPS €0.73 (+6.1%). Q4 FCF €1,495m (+19.2%). IFRS operating income €899m was €96m below underlying, mainly from US e-commerce fulfilment impairments (€77m).
 
-Total assets €49.1bn; equity €14.2bn (down from €15.5bn in 2024); total debt €18.4bn (including capital lease obligations €12.0bn); net debt €2.9bn; cash €3.5bn. Negative working capital of €4.9bn is typical for food retail. Goodwill and intangibles total €13.7bn, leaving tangible book value near €0.5bn — relevant when interpreting P/B of 2.0. Non-current pension and post-retirement obligations of €504m plus current pension provisions of €468m represent off-P&L liabilities not captured by headline multiples.
+**Balance sheet and leverage — filing body (28 December 2025)**
 
-**Capital allocation (Yahoo, 2025)**
+Total assets €49.1bn; equity attributable to common shareholders €14.2bn (down from €15.5bn, reflecting buybacks and currency translation). Net debt €14.7bn (vs €14.1bn end-2024). Cash and equivalents €3.6bn. Gross debt €18.4bn including lease liabilities €10.5bn. Goodwill €8.4bn post-Profi. The company states financial statements are prepared on a going-concern basis.
 
-Dividends paid €1.07bn; share repurchases €1.01bn. The combination represents a meaningful FCF payout ratio and supports the dividend-growth screen pass.
+**M&A and one-offs — filing body**
 
-**Interim — Yahoo quarterly fallback only**
+Profi acquisition (completed 3 January 2025): purchase consideration €1,239m; contributed €2,867m net sales in FY2025 with modest negative net income impact. FY2025 IFRS adjustments to underlying operating income totalled €192m (impairments €147m, restructuring/integration €44m), mainly e-commerce fulfilment facilities and Profi integration.
 
-No valid Ahold Delhaize interim filing is present in the index. Yahoo Q1 2026 (cached quarterly income): revenue €22.3bn vs €23.1bn in Q1 2025 (−3.5%); net income €552m vs €548m (flat); diluted EPS €0.62 vs €0.60. Early 2026 shows revenue softness with earnings broadly held — directionally inconclusive without management commentary or a verified trading update.
+**2026 outlook — filing body**
+
+Underlying operating margin around 4%; mid- to high-single-digit underlying EPS growth at constant FX; FCF at least €2.3bn; gross capex around €2.7bn; dividend growth; €1bn share buyback. Headwinds flagged: ~$350m US pharmacy sales impact from the Inflation Reduction Act (no underlying OI impact); Delfood acquisition adds >€200m European sales; 53rd week adds 1.5–2% to sales.
+
+**Historical context**
+
+Yahoo `financials_annual.json` aligns closely with filing FY2025 revenue (€92.4bn) and net income (€2.26bn) but is not used for FCF or net debt: Yahoo reports FY2025 FCF €4.4bn and net debt €2.9bn, which diverge materially from the filing’s lease-adjusted FCF definition (€2.6bn) and net debt (€14.7bn). All figures above are from the filing body unless noted.
 
 **Gaps**
 
-No verified annual report, 20-F, half-year release or trading update for Ahold Delhaize. Segment splits (US vs Europe), identical/comparable sales, underlying operating margin and any going-concern or contingency language from primary filings are unavailable from this pack.
+No annual report body, half-year report, or SEC 20-F extract is indexed. The full Annual Report 2025 is referenced as publishing 25 February 2026. Commitments, contingencies, and principal risks are deferred to that document; the Q4 summary provides qualitative risk disclosure only.
 
 ## RISKS AND RED FLAGS
-**Filing data integrity.** The research pack contains no indexed Ahold Delhaize filings and no downloadable body extracts. Risk language from primary filings (debt covenants, going concern, contingencies, legal proceedings) cannot be assessed. This is the most material red flag in the pack itself.
+**Regulatory and compliance.** Ahold Delhaize USA agreed to a US$40m settlement (June 2025 news) over allegations that supermarket pharmacy chains submitted inflated prescription prices to federal healthcare programmes — a compliance and reputational risk in a non-core but growing revenue line. The filing notes elevated scrutiny on food prices in several markets; Serbian operations were hit by a government decree limiting grocery pricing, pressuring European Q4 underlying margin (-0.3pp). US pharmacy sales face an estimated ~$350m headwind from the Inflation Reduction Act in 2026.
 
-**Regulatory and legal (news-sourced).** Ahold Delhaize USA agreed to pay a US$40m settlement (June 2026) over allegations that supermarket pharmacy chains (Giant, Hannaford, Stop & Shop, Food Lion) submitted inflated prescription drug prices to federal healthcare programmes including Medicare Part D, Medicaid and TRICARE. Primary filing contingency disclosure was not available to assess reserves or ongoing exposure.
+**Competitive and cyclical.** Grocery remains intensely competitive; US supermarket volumes declined 2% in 2025 though Ahold outpaced the market. Price investments and own-brand expansion are ongoing cost of retention. White House pressure on major US grocers over beef pricing (July 2025) signals political sensitivity on food inflation.
 
-**Competitive and cyclical.** US grocery faces intensifying competition from Walmart, Kroger consolidation (e.g. Giant Eagle acquisition, July 2026), discounters Aldi/Lidl and e-commerce. Industry reports note White House pressure on major US grocers over beef pricing (July 2026), signalling potential margin and political scrutiny. European operations face similar discounter pressure and wage inflation.
+**Operational and strategic.** The US pivot to a store-first omnichannel model triggered €77m Q4 impairments on e-commerce fulfilment centres; six US fulfilment centres were closed. Profi integration and Romanian expansion add execution risk. FY2025 net financial expenses rose €86m; income taxes rose €168m — management warns 2026 earnings growth will be partly offset by higher net financial expenses and taxes.
 
-**Management transition.** Group CEO Thierry Garnier (ex-Carrefour) took the helm in 2025; Claire Peters (ex-Amazon, Woolworths, Tesco) was nominated as Ahold Delhaize USA CEO effective September 2025, pending shareholder approval. Execution risk around US turnaround, omnichannel and private-label strategy is elevated during this dual transition.
+**Governance and pension.** Management transitions are underway: Thierry Garnier appointed group CEO (from Carrefour/home improvement background); Claire Peters nominated as US CEO from September 2026. Prior-year Dutch pension plan amendment drove a €203m Q4 2024 swing in group IFRS results; pension remeasurements remain a volatility source (FY2025 OCI loss €1.5bn on currency translation).
 
-**Balance sheet structure (Yahoo).** Capitalised lease obligations (~€12bn) and negative working capital increase effective leverage beyond headline net debt of €2.9bn. Pension obligations (~€972m combined) add to adjusted leverage not fully reflected in simple P/E or P/B screens.
+**Balance sheet.** Net debt €14.7bn and lease liabilities ~€10.5bn imply meaningful fixed obligations; working capital is structurally negative (current liabilities exceed current assets per filing balance sheet). Goodwill and intangibles €13.7bn leave tangible book value thin (Yahoo: €528m tangible book).
 
-**Analyst sentiment.** J.P. Morgan placed Ahold Delhaize on Negative Catalyst Watch ahead of Q2 results (24 June 2026). Bearish thematic coverage includes “3 Reasons to Avoid AD and 1 Stock to Buy Instead” (Yahoo Finance, 16 July 2026) and “Ahold Delhaize — Upside Is Gone, My Rotation Was Correct For 2026” (Seeking Alpha, 9 May 2026).
-
-**Macro (colour only).** EUR/USD at 1.14 and Euro Stoxx 50 at 6,281 (24 July 2026) provide no automatic veto; substantial US revenue exposure implies USD/EUR moves affect reported euro earnings.
+**Filing risk language.** The Q4 report cites geopolitical volatility, import tariffs, commodity price swings, food price inflation, and government intervention as elevated risks. It does not raise going-concern doubt. Detailed contingencies and covenant disclosures are not in the indexed body — a verify-before-trade gap pending the Annual Report 2025.
 
 ## NEWS HIGHLIGHTS
-News coverage is thin and noisy: most Google News hits match “AD stock” to unrelated issuers (Meta, Array Digital Infrastructure, Reddit ads). Material Ahold-specific items from `news_manifest.json`:
+News coverage is noisy: most Google News hits match “AD” to advertising stocks (Alphabet, Meta, Netflix) rather than Ahold Delhaize. Material, company-specific items from the manifest are limited but informative.
 
-- “Ahold Delhaize’s first decade: Key US milestones” (20 July 2026, yfinance/Grocery Dive) — retrospective on the 2016 merger and US portfolio evolution.
-- “Ahold Delhaize nominates former Amazon exec as stateside CEO” (18 June 2026) — Claire Peters to lead US operations from September 2025.
-- “What will Ahold Delhaize’s next CEO prioritize?” (11 June 2026) — Thierry Garnier’s strategic priorities as group CEO.
-- “Ahold Delhaize USA to pay $40m over inflated drug pricing claims” (12 June 2026) and “How Investors May Respond To Koninklijke Ahold Delhaize (ENXTAM:AD) US$40 Million Pharmacy Settlement” (13 June 2026).
-- “Grocery chain pays massive fine, accused of inflated price reporting” (17 June 2026) — related pharmacy pricing coverage.
-- “J.P. Morgan places Ahold Delhaize on Negative Catalyst Watch ahead of Q2 results” (24 June 2026, alternate news).
-- “Ahold Delhaize USA’s head of private label talks strategy” (21 May 2026) — own-brand growth outpacing wider assortment.
-- “Albert Heijn Bonuskaart from Koninklijke Ahold Delhaize N.V. — digital discounts reshape Dutch grocery” (27 June 2026, alternate news).
-- “Is Ahold Delhaize’s (ENXTAM:AD) Online Push and CEO Transition Quietly Reshaping Its Competitive Edge?” (8 May 2026).
-- “Analysts Have Made A Financial Statement On Koninklijke Ahold Delhaize N.V.’s (AMS:AD) Full-Year Report” (14 February 2026).
-- “White House Pressures Top U.S. Grocers on Beef Prices” (7 July 2026, WSJ via yfinance) — industry-wide pricing scrutiny; Ahold not named explicitly but US exposure is relevant.
+**Strategy and operations**
+- “Ahold Delhaize’s first decade: Key US milestones” (Yahoo Finance, 20 July 2026) — retrospective on the 2016 merger and US brand evolution.
+- “Ahold Delhaize USA’s head of private label talks strategy” (Yahoo Finance, 21 May 2026) — own brands outpacing broader assortment in sales and volume.
+- “Albert Heijn Bonuskaart from Koninklijke Ahold Delhaize N.V. - digital discounts reshape Dutch groce” (AD HOC NEWS, 27 June 2026) — loyalty/digital pricing in the Netherlands.
+- “Is Ahold Delhaize’s (ENXTAM:AD) Online Push and CEO Transition Quietly Reshaping Its Competitive Edge?” (Yahoo Finance, 8 May 2026).
 
-No material M&A involving Ahold Delhaize itself was identified in the manifest.
+**Management**
+- “Ahold Delhaize nominates former Amazon exec as stateside CEO” (Yahoo Finance, 18 June 2026) — Claire Peters to lead US operations from September 2026, pending approval.
+- “What will Ahold Delhaize’s next CEO prioritize?” (Yahoo Finance, 11 June 2026) — Thierry Garnier’s priorities as group CEO.
+
+**Regulatory / legal**
+- “Ahold Delhaize USA to pay $40m over inflated drug pricing claims” (Yahoo Finance, 12 June 2026) and related coverage (13–17 June 2026) — pharmacy pricing settlement.
+- “White House Pressures Top U.S. Grocers on Beef Prices” (WSJ via Yahoo, 7 July 2026) — industry-wide pricing scrutiny (Walmart, Kroger, Albertsons cited; Ahold not named but exposed via US banners).
+
+**Analyst / sentiment**
+- “J.P. Morgan places Ahold Delhaize on Negative Catalyst Watch ahead of Q2 results” (Investing.com, 24 June 2026).
+- “3 Reasons to Avoid AD and 1 Stock to Buy Instead” (Yahoo Finance, 16 July 2026) — bearish retail-analytics piece.
+- “Ahold Delhaize - Upside Is Gone, My Rotation Was Correct For 2026” (Seeking Alpha, 9 May 2026).
+- “Analysts Have Made A Financial Statement On Koninklijke Ahold Delhaize N.V.'s (AMS:AD) Full-Year Report” (Yahoo Finance, 14 February 2026).
+
+**Flag:** Company-specific news depth is thin relative to query volume; many headlines are false positives. Key events (Q4 results, Profi close, pharmacy settlement, CEO changes) are captured, but systematic sell-side or regulatory filing news flow is sparse in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Quantitative cheapness, dividend and FCF metrics align with a quality defensive grocer, but absent primary Ahold filings and reliance on Yahoo fallback prevent full confirmation of the strong buy signal.
+Confidence: 0.72
+Rationale: Filing-backed fundamentals — stable 4% underlying margins, 5% underlying EPS growth, strong FCF, and rising dividends — support the quantitative strong-buy signal, but pharmacy settlement, regulatory pricing risk, lease-heavy leverage, and incomplete annual-report disclosure prevent full conviction until the Annual Report 2025 is indexed.

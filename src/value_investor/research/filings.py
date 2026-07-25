@@ -487,6 +487,9 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     epic = _base_symbol(ticker).lower()
     if epic and re.search(rf"\b{re.escape(epic)}\b", text, flags=re.IGNORECASE):
         return True
+    # ASX Markit headlines often end with " - CSL" / " - WOR".
+    if epic and re.search(rf"[-–]\s*{re.escape(epic)}\s*$", text, flags=re.IGNORECASE):
+        return True
     tokens = [
         tok
         for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
@@ -719,6 +722,30 @@ def _http_get(url: str, *, headers: dict[str, str] | None = None, timeout: int =
         return data
 
 
+def _http_post(
+    url: str,
+    *,
+    data: bytes,
+    headers: dict[str, str] | None = None,
+    timeout: int = 30,
+) -> bytes:
+    request_headers = {
+        "User-Agent": USER_AGENT,
+        "Accept-Encoding": "gzip, deflate",
+        **(headers or {}),
+    }
+    request = urllib.request.Request(url, data=data, headers=request_headers, method="POST")
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        payload = response.read()
+        encoding = (response.headers.get("Content-Encoding") or "").lower()
+        if encoding == "gzip" or payload[:2] == b"\x1f\x8b":
+            try:
+                payload = gzip.decompress(payload)
+            except OSError:
+                pass
+        return payload
+
+
 def _load_sec_ticker_cik_map() -> dict[str, int]:
     global _sec_ticker_cik_cache
     if _sec_ticker_cik_cache is not None:
@@ -871,6 +898,13 @@ def enrich_global_filing_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]
                 src = str(item.get("source") or "google_news")
                 if not src.endswith("_resolved"):
                     item["source"] = f"{src}_resolved"
+        url = str(item.get("url") or "")
+        doc_url = resolve_asx_publisher_document_url(url)
+        if doc_url and doc_url != url:
+            item["url"] = doc_url
+            src = str(item.get("source") or "google_news")
+            if not src.endswith("_resolved"):
+                item["source"] = f"{src}_resolved"
         enriched.append(item)
     return enriched
 
@@ -1404,6 +1438,79 @@ def fetch_filings_ticker_api(
     return rows
 
 
+def _google_news_article_id(url: str) -> str | None:
+    parsed = urllib.parse.urlparse(url)
+    if parsed.netloc.lower() != "news.google.com":
+        return None
+    parts = [part for part in parsed.path.split("/") if part]
+    if len(parts) < 2 or parts[-2] not in {"articles", "read"}:
+        return None
+    return parts[-1] or None
+
+
+def _google_news_decoding_params(article_id: str) -> tuple[str, str] | None:
+    for prefix in ("articles", "rss/articles"):
+        page_url = f"https://news.google.com/{prefix}/{article_id}"
+        try:
+            raw = _http_get(page_url, headers={"User-Agent": USER_AGENT}, timeout=20)
+            html = raw.decode("utf-8", errors="replace")
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            logger.debug("Google News params fetch failed for %s: %s", page_url, exc)
+            continue
+        signature = re.search(r'data-n-a-sg="([^"]+)"', html)
+        timestamp = re.search(r'data-n-a-ts="([^"]+)"', html)
+        if signature and timestamp and timestamp.group(1).isdigit():
+            return signature.group(1), timestamp.group(1)
+    return None
+
+
+def _decode_google_news_article_url(url: str) -> str | None:
+    """Resolve post-2024 Google News article wrappers via batchexecute."""
+    article_id = _google_news_article_id(url)
+    if not article_id:
+        return None
+    params = _google_news_decoding_params(article_id)
+    if not params:
+        return None
+    signature, timestamp = params
+    payload = [
+        "Fbv4je",
+        (
+            '["garturlreq",[["X","X",["X","X"],null,null,1,1,"US:en",null,1,null,null,null,null,null,0,1],'
+            f'"X","X",1,[1,1,1],1,1,null,0,0,null,0],"{article_id}",{timestamp},"{signature}"]'
+        ),
+    ]
+    post_body = urllib.parse.urlencode(
+        {"f.req": json.dumps([[payload]], separators=(",", ":"))}
+    ).encode("utf-8")
+    try:
+        raw = _http_post(
+            "https://news.google.com/_/DotsSplashUi/data/batchexecute",
+            data=post_body,
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "User-Agent": USER_AGENT,
+            },
+            timeout=20,
+        )
+        parsed = json.loads(raw.decode("utf-8", errors="replace").split("\n\n", 1)[1])
+        if isinstance(parsed, list) and len(parsed) >= 3:
+            parsed = parsed[:-2]
+        decoded = json.loads(parsed[0][2])
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError, IndexError, TypeError) as exc:
+        logger.debug("Google News batchexecute decode failed for %s: %s", article_id, exc)
+        return None
+    if (
+        isinstance(decoded, list)
+        and len(decoded) >= 2
+        and decoded[0] == "garturlres"
+        and isinstance(decoded[1], str)
+        and decoded[1].startswith("http")
+    ):
+        return decoded[1]
+    return None
+
+
 def resolve_google_news_publisher_url(url: str | None) -> str | None:
     """Follow Google News wrapper redirects to the publisher URL when possible."""
     if not url or "news.google.com" not in url:
@@ -1416,7 +1523,43 @@ def resolve_google_news_publisher_url(url: str | None) -> str | None:
                 return final
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         logger.debug("Google News URL resolve failed for %s: %s", url, exc)
-    return None
+    return _decode_google_news_article_url(url)
+
+
+def resolve_asx_publisher_document_url(url: str | None) -> str | None:
+    """
+    Upgrade ASX publisher landing pages to direct PDF/document URLs when possible.
+
+    Market Index announcement pages and Google News wrappers often point at HTML
+    shells; this follows embedded PDF links (including data-api inline PDFs).
+    """
+    if not url or not url.startswith("http"):
+        return None
+    if url.lower().endswith(".pdf") or "/asxpdf/" in url.lower():
+        return url
+    host = urllib.parse.urlparse(url).netloc.lower()
+    if "marketindex.com.au" not in host:
+        return url
+    if "/pdf/" in url.lower() or "data-api" in url.lower():
+        return url
+    try:
+        raw = _http_get(url, headers={"User-Agent": USER_AGENT}, timeout=30)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("ASX publisher page fetch failed for %s: %s", url, exc)
+        return url
+    for pattern in (
+        r'"(https://www\.marketindex\.com\.au/data-api/api/v1/announcements/[^"]+/pdf/[^"]+)"',
+        r'"(https://asx\.api\.markitdigital\.com/[^"]+)"',
+        r'"(https://announcements\.asx\.com\.au/asxpdf/[^"]+\.pdf)"',
+        r'href="([^"]+\.pdf[^"]*)"',
+    ):
+        match = re.search(pattern, html, flags=re.I)
+        if match:
+            candidate = match.group(1)
+            if candidate.startswith("http"):
+                return candidate
+    return url
 
 
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
@@ -1428,6 +1571,7 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
         if not resolved or "news.google.com" in resolved:
             return None
         url = resolved
+    url = resolve_asx_publisher_document_url(url) or url
     headers: dict[str, str] = {}
     if "sec.gov" in url:
         headers["User-Agent"] = _sec_user_agent()

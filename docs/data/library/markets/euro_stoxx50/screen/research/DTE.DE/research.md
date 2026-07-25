@@ -1,108 +1,112 @@
 # Deutsche Telekom AG (DTE.DE) — Research memo
 
-_Version 1 · Updated 2026-07-25T13:10:05.090593+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T18:38:48.279343+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Deutsche Telekom screens as a **buy** on cheapness, quality, dividend, GARP, and risk (8/22 models; composite score 70%), anchored by a ~14% FCF yield, P/E of 14.6×, P/B of 2.0×, ROE of 14.4%, and a 3.8% dividend yield. The equity is a hybrid: a mature European telco plus a controlling stake in T-Mobile US, which drives group cash generation but concentrates debate around US wireless competition and reported DT/TMUS merger speculation. Valuation looks inexpensive on cash-flow metrics, yet reported net income and EPS fell in FY2025 and the screen flags sharply negative headline growth (−27.2%). **Critical data gap:** `filings_index.json` contains zero annual or interim Deutsche Telekom entries and no body extracts — primary filing verification is not possible from this pack.
+Deutsche Telekom AG (DTE.DE) screens as a buy on cheapness, quality, dividend, GARP, and risk (8/22 models; composite score 70%), underpinned by a ~14% FCF yield, P/E of 14.6×, P/B of 2.0×, ROE of 14.4%, and a 3.8% dividend yield. The equity is a hybrid: a mature European telco plus a controlling stake in T-Mobile US, which drives group cash generation but concentrates debate around US wireless competition and reported DT/TMUS merger speculation. FY2025 primary filing data show resilient organic growth (net revenue €119.1bn, adjusted EBITDA AL €44.2bn, free cash flow AL €19.5bn) and a proposed record dividend of €1.00, yet reported net profit fell 14.3% to €9.6bn and the share underperformed peers on USD/T-Mobile US weakness. The central debate is whether cash-rich valuation metrics outweigh earnings volatility, leverage (relative debt 2.62×), and structural complexity from the TMUS stake.
 
 ## INVESTMENT THESIS
-For a value investor, the quantitative case is unusually broad: eight models pass across five factor families (cheapness, quality, dividend, GARP, risk), with 20/20 data completeness, 68% conviction, and a stable four-week buy signal. Headline metrics — P/E 14.6×, P/B 2.0×, ROE 14.4%, FCF yield 14.1%, PEGY 0.04 — point to a cash-rich incumbent trading below intrinsic measures implied by operating cash flow rather than trailing earnings.
+For a value investor, the quantitative case is unusually broad: eight models pass across five factor families, with 20/20 data completeness, 68% conviction, and a stable four-week buy signal. Headline metrics — P/E 14.6×, P/B 2.0×, ROE 14.4%, FCF yield 14.1%, Neff PEGY 0.04 — point to a cash-rich incumbent trading below intrinsic measures implied by operating cash flow rather than trailing earnings.
 
-Business quality rests on scale telecom franchises in Germany and Europe, a majority-owned US growth asset (T-Mobile US), and sustained capital returns. FY2025 free cash flow of €21.4bn (Yahoo fallback) supports the screen’s FCF Yield, Magic Formula, Acquirer’s Multiple, and Quality Value passes; Dividend Growth and Earnings Quality passes align with rising cash dividends (€6.4bn paid in FY2025 per Yahoo). News flow references repeated guidance upgrades and a record dividend plan for FY2025, consistent with management confidence in cash generation.
+Business quality rests on scale franchises in Germany (~22% of net revenue) and international markets (~78%), a majority-owned US growth asset, and sustained capital returns. The FY2025 annual report (dt-25-annual-report-data.pdf) confirms the screen’s cash and quality signals: net cash from operating activities €40.6bn, free cash flow before dividend €24.1bn, and free cash flow AL €19.5bn (+2.0%), supporting FCF Yield, Magic Formula, Acquirer’s Multiple, and Quality Value passes. Adjusted EBITDA AL margin held at 37.2%; organic revenue grew 4.2% and adjusted EBITDA AL 4.7%. Dividend Growth and Earnings Quality passes align with a proposed €1.00 dividend (11% increase) and €2.0bn share buyback completed in 2025, with a further €2bn programme announced for 2026.
 
-The tension is that value screens reward cash and multiples while penalising reported earnings momentum (growth −27.2%). That is consistent with FY2025 net income falling to €9.6bn from €11.2bn in FY2024, even as revenue and operating income improved. The thesis is to **own a high-FCF telecom conglomerate at a discount**, accepting earnings volatility, leverage, intangible-heavy accounting, and structural complexity from the TMUS stake — but only after obtaining verified primary filings.
+The tension is that value screens reward cash and multiples while flagging sharply negative headline growth (−27.2%), driven largely by the non-comparable FY2023 base (T-Mobile disposal gains). Reported net income and EPS fell in FY2025 even as service revenue and adjusted earnings improved. The thesis is to own a high-FCF telecom conglomerate at a discount, accepting earnings volatility, leverage, intangible-heavy accounting, and TMUS structural complexity — with interim filing verification still outstanding.
 
 ## FINANCIAL REVIEW
-**Primary filings — not available for Deutsche Telekom**
+**Primary source:** FY2025 annual report body extract (`ir_9f75707ae66f4aea.txt`, period: annual). **Interim gap:** `filings_index.json` contains one annual filing and **zero interim** entries (no half-year, Q1/Q3, or trading-update body extracts). H1 2026 momentum referenced in news cannot be verified from primary filings in this pack.
 
-`filings_index.json` (regime: euro_filings) lists **zero** indexed filings: no annual report, 20-F, half-year, trading update, or other period entries, and **no body extracts** under `filings/bodies/`. Annual and interim analysis cannot be grounded in regulatory primary sources from this pack.
+**Revenue and earnings trend (annual report, EUR billions)**
 
-All figures below are from **`financials_annual.json` (Yahoo fallback)** unless noted.
+| Metric | FY2023 | FY2024 | FY2025 | YoY change FY25 |
+|--------|--------|--------|--------|-------------------|
+| Net revenue | 112.0 | 115.8 | 119.1 | +2.9% |
+| Service revenue | 92.9 | 96.5 | 99.4 | +2.9% |
+| EBITDA (adjusted) | 46.8 | 49.4 | 50.5 | +2.3% |
+| EBITDA AL (adjusted) | 40.5 | 43.0 | 44.2 | +2.8% |
+| EBITDA AL margin (adj.) | 36.2% | 37.2% | 37.2% | flat |
+| EBIT | 33.8 | 26.3 | 24.8 | −5.5% |
+| Net profit (reported) | 17.8 | 11.2 | 9.6 | −14.3% |
+| Net profit (adjusted) | 7.9 | 9.4 | 9.7 | +3.7% |
+| EPS | 3.57 | 2.27 | 1.97 | −13.1% |
+| Adjusted EPS | 1.60 | 1.90 | 2.00 | +5.2% |
+| ROCE | 9.0% | 8.5% | 7.5% | −100 bps |
 
-**Income and cash flow (EUR)**
+FY2023 reported net profit is not comparable (includes disposal-related items per management narrative). FY2025 operating performance is solid on an adjusted basis; reported EBIT and net profit decline reflect special factors not fully detailed in the truncated body extract.
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Revenue | €113.6bn | €111.3bn | €115.1bn | €118.3bn |
-| Operating income | €14.1bn | €21.2bn | €24.2bn | €25.6bn |
-| Net income (group) | €8.0bn | €17.8bn* | €11.2bn | €9.6bn |
-| Diluted EPS | €1.61 | €3.57* | €2.27 | €1.97 |
-| EBITDA | €44.5bn | €43.1bn | €53.6bn | €50.0bn |
-| Operating cash flow | €35.8bn | €37.3bn | €39.9bn | €40.6bn |
-| Free cash flow | €11.7bn | €19.4bn | €20.7bn | €21.4bn |
-| Cash dividends paid | €3.4bn | €4.0bn | €5.6bn | €6.4bn |
+**Cash flow and capital allocation (annual report)**
 
-\*FY2023 net income includes €13.7bn from discontinued operations (Yahoo); not a clean comparability year.
+| Metric | FY2024 | FY2025 |
+|--------|--------|--------|
+| Net cash from operating activities | 39.9 | 40.6 |
+| Cash capex | (19.2) | (19.3) |
+| FCF before dividend and spectrum | 24.1 | 24.1 |
+| FCF AL before dividend and spectrum | 19.2 | 19.5 |
+| Proposed dividend per share | €0.90 | €1.00 |
+| Total dividend (proposed) | 4.4 | 4.8 |
+| Share buyback | — | €2.0bn |
 
-**Trend:** Revenue grew ~2.8% in FY2025 to €118.3bn. Operating income rose ~5.8% to €25.6bn. Reported net income and EPS **declined** ~14% YoY to €9.6bn / €1.97, partly reflecting €1.7bn pre-tax unusual charges (Yahoo: special charges and write-offs). Normalised EBITDA was €51.7bn vs reported EBITDA €50.0bn. FCF continued to improve to €21.4bn — the metric most aligned with the screen’s buy case. Interest expense was €6.5bn (vs €6.8bn in FY2024). Minority interests absorbed €5.3bn of group profit (consistent with TMUS non-controlling shareholders).
+Operating cash conversion remains the anchor for the screen’s FCF Yield pass. Capex intensity is stable (~€19bn). The €2.0bn buyback (65.4m shares) adds to total shareholder return beyond the dividend.
 
-**Interim / quarterly (Yahoo fallback only — no filing bodies)**
+**Balance sheet and leverage (annual report)**
 
-| Period | Revenue | Net income | Diluted EPS |
-|--------|---------|------------|-------------|
-| Q3 FY2025 | €28.5bn | €2.6bn | €0.54 |
-| Q1 FY2026 | €29.7bn | €2.0bn | €0.42 |
+| Metric | FY2024 | FY2025 |
+|--------|--------|--------|
+| Total assets | 304.9 | 289.8 |
+| Shareholders’ equity | 98.6 | 92.2 |
+| Equity ratio | 32.3% | 31.8% |
+| Net debt | 137.3 | 132.5 |
+| Relative debt (net debt / EBITDA AL) | 2.78× | 2.62× |
 
-Q1 FY2026 revenue was ~4% above the prior comparable quarter, but net income was lower, suggesting margin or below-the-line pressure. **No half-year or quarterly filing extracts exist for Deutsche Telekom** in the index; interim trend analysis remains incomplete despite news headlines referencing a lifted FY2026 outlook on H1 2026 momentum (23 Jul 2026, AD HOC NEWS).
+Net debt fell €4.8bn and relative leverage improved, but 2.62× EBITDA AL remains material for a telco with heavy spectrum and fibre investment needs. Ratings held at BBB+/BBB+ (S&P/Fitch); Moody’s at A3.
 
-**Balance sheet (Yahoo fallback — 31 Dec 2025)**
+**Yahoo fallback (used only where filing body lacks detail)**
 
-- Total assets: €289.8bn
-- Total debt: €140.5bn; net debt: €97.0bn
-- Cash: €7.4bn
-- Common equity: €62.2bn; minority interest: €30.1bn
-- Tangible book value: **−€82.7bn** (goodwill and intangibles €144.9bn)
-- Capital lease obligations: €36.4bn
-- Non-current pension/post-retirement: €2.2bn
+- Balance-sheet intangibles/goodwill and pension provisions are not broken out in the body extract. Per `financials_annual.json` (fallback): goodwill €20.9bn, other intangibles €124.0bn, non-current pension obligations €2.2bn, minority interests €30.1bn (consistent with TMUS non-controlling stake absorbing €5.3bn of FY2025 group profit per Yahoo income statement).
+- Yahoo FCF of €21.4bn differs from the filing’s €24.1bn (pre-dividend, pre-spectrum) — definitions differ; **prefer filing figures for cash metrics**.
 
-Leverage is material but typical for a capex-intensive telco. Negative tangible book and a large intangible base mean P/B metrics need careful interpretation.
+**Interim / quarterly**
 
-**Capex and returns:** Capital expenditure was €19.3bn in FY2025 (vs €19.2bn in FY2024). Share buybacks: €2.0bn. FCF after dividends left reinvestment headroom, supporting the dividend-yield and FCF-yield screen passes.
+No interim filing bodies indexed. Yahoo cached Q1 FY2026 (fallback only): revenue €29.7bn, net income €2.0bn, EPS €0.42 — revenue ~4% above prior-year Q1, but net income lower. Treat as indicative only pending H1 2026 results filing.
 
 ## RISKS AND RED FLAGS
-**1. Primary filing gap (process red flag)**  
-No Deutsche Telekom annual or interim filings are indexed. Covenant, contingency, going-concern, and pension language cannot be assessed from filing bodies in this pack. Verify-before-trade requires DT’s German annual report, SEC 20-F (if applicable), or Q1/H1 2026 ad-hoc releases directly.
+**Regulatory and competitive:** The annual report flags “intensifying competition on both sides of the Atlantic” and a geopolitical risk backdrop reviewed by the Supervisory Board. European fibre rollout and US wireless pricing remain structural headwinds not fully captured by backward-looking value screens.
 
-**2. Earnings vs cash-flow divergence**  
-FY2025 EPS fell 13% while FCF rose. Unusual items and minority interest allocation complicate earnings quality. The screen’s −27.2% growth flag may reflect this — the value case rests on FCF, not reported EPS.
+**Leverage and capex:** Relative debt at 2.62× EBITDA AL, ~€19bn annual cash capex, and intangible-heavy balance sheet (goodwill/intangibles not quantified in body extract) constrain balance-sheet flexibility if US or European returns weaken.
 
-**3. Leverage and intangible-heavy balance sheet**  
-Net debt ~€97bn and negative tangible equity increase refinancing and impairment sensitivity. €36bn+ of lease obligations add further commitments.
+**Earnings quality:** Reported net profit down 14.3% despite revenue growth; EBIT down 5.5%. Adjusted metrics tell a better story (+3.7% net profit, +5.2% adjusted EPS), but special-factor detail is truncated in the body extract. Screen growth of −27.2% reflects FY2023 base effects — do not treat as forward guidance.
 
-**4. T-Mobile US concentration and M&A overhang**  
-~€30bn minority interest on the balance sheet reflects DT’s partial ownership of TMUS. News flow references a potential DT/TMUS merger and minority shareholder pushback (June–July 2026).
+**TMUS structural risk:** ~78% international revenue and minority interests (~€5.3bn FY2025 per Yahoo fallback) mean group earnings depend heavily on T-Mobile US. Share-price weakness and USD depreciation materially dragged the T-Share in 2025 (annual report: “significantly influenced by the weak U.S. dollar and the weaker development of the share price of our U.S. subsidiary”). DT/TMUS full merger speculation (UBS/Yahoo Finance, 4 Jul 2026) adds governance and minority-shareholder uncertainty.
 
-**5. US wireless competitive intensity**  
-T-Mobile reported a Q2 earnings beat but shares fell; management rejected an expanded Starlink partnership (23 Jul 2026).
+**Governance:** Board changes in FY2025 (Germany leadership transition Feb 2025; Product/Technology handover Oct 2025). Unqualified audit opinion issued Feb 2026 per Supervisory Board report — no going-concern qualification noted. **Gap:** body extract contains no pension funding, covenant, or contingency language; these cannot be assessed from primary sources in this pack.
 
-**6. European regulatory and fibre capex**  
-German/EU telecom regulation, spectrum costs, and fibre rollout sustain high capex. Specific contingent liabilities cannot be assessed without primary filings.
-
-**7. Pension**  
-€2.2bn non-current pension/post-retirement liability (Yahoo) — manageable at group scale but worth monitoring in primary filings when available.
+**FX and macro:** EUR/USD at 1.1375 (macro context) affects translated US earnings and reported group metrics — colour only, not a screen override.
 
 ## NEWS HIGHLIGHTS
-**Coverage quality:** Thin and noisy. A large share of manifest entries refer to **DTE Energy** (NYSE:DTE), a ticker-collision artefact from the `"DTE stock"` query. Deutsche Telekom-specific items are fewer; treat non-DT headlines as irrelevant.
+Coverage is **moderate for Deutsche Telekom** but heavily polluted by DTE Energy (NYSE:DTE) ticker confusion; material DT items are summarised below.
 
-**Deutsche Telekom–relevant items:**
+**Strategy and operations**
+- *Deutsche Telekom outperforms targets for 2025 and plans further strong growth in 2026* (26 Feb 2026, Deutsche Telekom) — FY2025 beat and FY2026 outlook.
+- *Deutsche Telekom raises 2026 guidance on T-Mobile gains* (13 May 2026, Reuters) and *Deutsche Telekom grows steadily in turbulent times and raises guidance for 2026* (13 May 2026, Deutsche Telekom).
+- *Telekom stock trades steady as Deutsche Telekom lifts full year outlook on strong H1 2026 momentum* (23 Jul 2026, AD HOC NEWS) — **not verified by interim filing in this pack**.
+- *Deutsche Telekom (XTRA:DTE) Could Be 32% Undervalued After Its Quantum Projects Move* (24 Jul 2026, Yahoo Finance) — EC-backed quantum communication projects (PETRUS2, HarmoniQCI) with AIT, THALES, Airbus, SES.
+- *Settlement agreement and extension of partnership between Deutsche Telekom and ISS until the end of 2035* (19 May 2026, GlobeNewswire).
 
-- **23 Jul 2026** — *Telekom stock trades steady as Deutsche Telekom lifts full year outlook on strong H1 2026 momentum* (AD HOC NEWS)
-- **24 Jul 2026** — *Deutsche Telekom (XTRA:DTE) Could Be 32% Undervalued After Its Quantum Projects Move* (Yahoo Finance): EC-backed quantum projects PETRUS2 and HarmoniQCI
-- **24 Jul 2026** — *Deutsche Telekom (XTRA:DTE) Stock May Be Cheap On Steady Earnings* (simplywall.st)
-- **24 Jul 2026** — *Deutsche Telekom (XTRA:DTE) Stock Looks Undervalued While Its 5 Year Return Stays Strong* (Yahoo Finance)
-- **23 Jul 2026** — *T-Mobile Falls Despite Earnings Beat. CEO Shoots Down Expanded Starlink Deal.* (Investor’s Business Daily)
-- **4 Jul 2026** — *Will a DT/TMUS merger really go ahead?* (Yahoo Finance / UBS)
-- **20 Jun 2026** — *T-Mobile US (TMUS) Faces Deutsche Telekom Merger Push And Minority Shareholder Questions* (Yahoo Finance)
-- **13 May 2026** — *Deutsche Telekom raises 2026 guidance on T-Mobile gains* (Reuters); *Deutsche Telekom grows steadily in turbulent times and raises guidance for 2026* (Deutsche Telekom)
-- **26 Feb 2026** — *Deutsche Telekom outperforms targets for 2025 and plans further strong growth in 2026* (Deutsche Telekom)
-- **13 Nov 2025** — *Deutsche Telekom raises guidance again and plans record-high dividend for the 2025 financial year* (Deutsche Telekom)
-- **19 May 2025** — *Settlement agreement and extension of partnership between Deutsche Telekom and ISS until the end of 2035* (GlobeNewswire)
-- **23 Jul 2026** — *Spain's Cellnex explores strategic options* (Bloomberg via Yahoo): tower-sector consolidation context
+**Capital returns**
+- *Deutsche Telekom raises guidance again and plans record-high dividend for the 2025 financial year* (13 Nov 2025, Deutsche Telekom).
+- *Deutsche Telekom Stock Forecast | Q4 Results and Buyback* (19 Mar 2026, Capital.com).
 
-No material management-change or regulatory-enforcement headlines specific to Deutsche Telekom appear in the filtered set.
+**TMUS / M&A overhang**
+- *Will a DT/TMUS merger really go ahead?* (4 Jul 2026, Yahoo Finance/UBS) — argues recent DT share weakness is overdone but merger concerns persist.
+- *T-Mobile US (TMUS) Faces Deutsche Telekom Merger Push And Minority Shareholder Questions* (20 Jun 2026, Yahoo Finance).
+- *T-Mobile Falls Despite Earnings Beat. CEO Shoots Down Expanded Starlink Deal* (23 Jul 2026, Investors.com) — US subsidiary sentiment.
+
+**Sector context**
+- *Spain's Cellnex explores strategic options* (23 Jul 2026, Bloomberg/Yahoo) — tower-sector consolidation relevant to European infra peers, not directly DT.
+
+**Coverage quality flag:** A large share of manifest entries reference DTE Energy, not Deutsche Telekom AG. Treat non-company-specific items as noise.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.62
-Rationale: Yahoo-backed financials support the screen’s FCF-led value case, but absent primary filings and declining reported EPS prevent full confirmation of the buy signal.
+Confidence: 0.74
+Rationale: FY2025 annual filing confirms the screen’s cash-generation and capital-return case, but missing interim filings, TMUS/merger overhang, and leverage cap conviction below a full confirmatory pass.
