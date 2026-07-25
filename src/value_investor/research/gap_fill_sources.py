@@ -62,6 +62,11 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
     ],
     "euro": [
         {
+            "id": "investegate_rns_full",
+            "label": "Full Investegate / RNS HTML body re-pull",
+            "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
+        },
+        {
             "id": "exchange_filings_full",
             "label": "Euronext / national register filing full-text re-pull",
             "why": "Euro memos often index headlines without bodies",
@@ -436,6 +441,78 @@ def execute_planned_alternate_sources(
         "body_refetch": last_refetch,
         "fetched": fetched_total,
     }
+
+
+# Minimum indexed filing bodies before the gap-fill deepen loop runs on memo paths.
+THIN_FILINGS_BODY_THRESHOLD = 2
+
+
+def deepen_thin_filings_if_needed(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    market: str | None = None,
+    filings_summary: dict[str, Any] | None = None,
+    min_bodies: int = THIN_FILINGS_BODY_THRESHOLD,
+    open_questions: list[str] | None = None,
+) -> dict[str, Any]:
+    """
+    When filing bodies are thin, run the gap-fill alternate-source deepen loop.
+
+    Used by memo create/update paths so ladder, repair, and weekly research share
+    the same filing hardening as ``deepen-thin`` / gap-fill CLI.
+    """
+    sources_dir = Path(sources_dir)
+    summary = dict(filings_summary or {})
+    with_body = int(summary.get("with_body") or 0)
+    if with_body >= min_bodies:
+        return {
+            "skipped": True,
+            "reason": "sufficient_bodies",
+            "with_body_before": with_body,
+            "with_body_after": with_body,
+        }
+
+    questions = open_questions or [
+        "Obtain annual and interim regulatory filing bodies for FINANCIAL REVIEW."
+    ]
+    source_pack = prepare_gap_fill_source_pack(
+        ticker=ticker,
+        company_name=company_name,
+        sources_dir=sources_dir,
+        open_questions=questions,
+        market=market,
+    )
+    alternate = execute_planned_alternate_sources(
+        ticker=ticker,
+        company_name=company_name,
+        sources_dir=sources_dir,
+        planned=list(source_pack.get("planned_alternate_sources") or []),
+        market=market,
+    )
+
+    filings_index = sources_dir / "filings" / "filings_index.json"
+    after = with_body
+    resolved = resolve_json_path(filings_index)
+    if resolved is not None:
+        try:
+            after = int((read_json(resolved).get("summary") or {}).get("with_body") or 0)
+        except (OSError, ValueError, TypeError):
+            after = with_body
+
+    return {
+        "skipped": False,
+        "with_body_before": with_body,
+        "with_body_after": after,
+        "improved": after > with_body,
+        "alternate_sources": alternate,
+        "source_pack": {
+            "alternate_news_added": source_pack.get("alternate_news_added"),
+            "planned_count": len(source_pack.get("planned_alternate_sources") or []),
+        },
+    }
+
 
 _SUGGESTION_LINE = re.compile(
     r"^\s*[-*•]?\s*(?:area\s*[:=]\s*)?(?P<area>[a-z_]+)\s*[|;,]\s*"

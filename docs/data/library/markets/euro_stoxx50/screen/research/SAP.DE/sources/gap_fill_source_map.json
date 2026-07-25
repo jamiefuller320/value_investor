@@ -2,7 +2,7 @@
   "ticker": "SAP.DE",
   "company_name": "SAP SE",
   "market": "euro_stoxx50",
-  "built_at": "2026-07-25T13:11:44.652805+00:00",
+  "built_at": "2026-07-25T14:10:04.848532+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
@@ -10,12 +10,11 @@
       "yahoo_financials": true,
       "news_manifest": true,
       "screening_snapshot": true,
-      "macro_context": false,
+      "macro_context": true,
       "alternate_news": true
     },
     "thin": [
-      "filings_bodies",
-      "macro_context"
+      "filings_bodies"
     ],
     "filings_body_files": 0,
     "filings_indexed_bodies": 0,
@@ -26,7 +25,7 @@
       "other": 0,
       "with_body": 0
     },
-    "news_article_count": 68,
+    "news_article_count": 110,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -44,9 +43,15 @@
     "with_body_after": 0,
     "note": "refetch_missing_filing_bodies"
   },
-  "alternate_news_added": 21,
+  "alternate_news_added": 0,
   "alternate_news_path": "docs/data/library/markets/euro_stoxx50/screen/research/SAP.DE/sources/alternate_news.json",
   "planned_alternate_sources": [
+    {
+      "id": "investegate_rns_full",
+      "label": "Full Investegate / RNS HTML body re-pull",
+      "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
+      "score": "3"
+    },
     {
       "id": "exchange_filings_full",
       "label": "Euronext / national register filing full-text re-pull",

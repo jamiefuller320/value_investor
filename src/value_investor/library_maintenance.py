@@ -736,6 +736,22 @@ def repair_library_research_memos(
                 market=market,
                 deepen_history=deepen_history,
             )
+            from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
+
+            summary = meta.get("filings_summary") or {}
+            deepen_meta = deepen_thin_filings_if_needed(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                market=market,
+                filings_summary=summary,
+            )
+            if not deepen_meta.get("skipped"):
+                after_deepen = int(deepen_meta.get("with_body_after") or 0)
+                summary = dict(summary)
+                summary["with_body"] = after_deepen
+                meta["filings_summary"] = summary
+            row["filings_deepen"] = deepen_meta
             after_bodies = int((meta.get("filings_summary") or {}).get("with_body") or 0)
             row["bodies_after"] = after_bodies
             row["filings_total"] = int((meta.get("filings_summary") or {}).get("total") or 0)

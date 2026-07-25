@@ -776,7 +776,15 @@ def _sec_submissions_entity_name(cik: int) -> str | None:
 
 
 def _issuer_matches_sec_name(company_name: str, sec_name: str, ticker: str) -> bool:
-    """True when a UK issuer name plausibly matches an SEC registrant."""
+    """True when a non-US issuer name plausibly matches an SEC registrant."""
+    norm_company = " ".join(
+        tok for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower()) if tok
+    ).strip()
+    norm_sec = " ".join(
+        tok for tok in re.split(r"[^a-z0-9]+", (sec_name or "").lower()) if tok
+    ).strip()
+    if norm_company and norm_company == norm_sec:
+        return True
     tokens = [
         tok
         for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
@@ -829,11 +837,15 @@ def filter_misattributed_filings(
     """Drop SEC (and noisy headline) rows that clearly belong to a different issuer."""
     if regime in {"sec_edgar", "uk_rns"}:
         return rows
+    sec_supplement_ok = _sec_edgar_supplement_allowed(ticker, company_name)
     kept: list[dict[str, Any]] = []
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
         if source == "sec_edgar":
+            if sec_supplement_ok:
+                kept.append(row)
+                continue
             form = str(row.get("form") or row.get("category") or "").upper()
             # Foreign listings should not pull domestic 10-K/10-Q from a homonym US ticker.
             if form in {"10-K", "10-Q"} and not headline_relevant_to_issuer(
@@ -1969,6 +1981,12 @@ def ingest_filings(
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
         )
+        groups.append(
+            fetch_filings_investegate_company(
+                ticker=ticker,
+                company_name=company_name,
+            )
+        )
         if _sec_edgar_supplement_allowed(ticker, company_name):
             groups.append(
                 fetch_filings_sec_edgar(
@@ -2005,13 +2023,13 @@ def ingest_filings(
     groups.append(fetch_filings_ir_allowlist(ticker))
 
     merged = merge_filings(*groups) if groups else []
-    if regime == "uk_rns":
+    if regime in {"uk_rns", "euro_filings"}:
         merged = enrich_filing_rows(
             merged,
             ticker=ticker,
             company_name=company_name,
         )
-    elif regime in {"euro_filings", "asx_announcements", "tsx_announcements", "asia_filings"}:
+    elif regime in {"asx_announcements", "tsx_announcements", "asia_filings"}:
         merged = enrich_global_filing_rows(merged)
     merged = filter_misattributed_filings(
         merged,
@@ -2053,9 +2071,9 @@ def ingest_filings(
         )
     elif regime == "euro_filings":
         note = (
-            "Euro-listed results discovery via Google News, plus SEC 20-F/6-K when "
-            "the issuer is dual-listed. period=annual|interim|other. Bodies when a "
-            "direct HTML URL is available."
+            "Euro-listed results discovery via Google News and Investegate (when listed), "
+            "plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. "
+            "Bodies when a direct HTML/PDF URL is available."
         )
     elif regime == "tsx_announcements":
         note = (
