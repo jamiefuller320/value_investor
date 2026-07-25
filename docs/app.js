@@ -691,6 +691,11 @@ const PERF_SIM_TRACKS = [
     label: "Trailing stop",
     blurb: "Stop trails up with refreshed technicals but never below the original entry stop.",
   },
+  {
+    id: "momentum_grace",
+    label: "Momentum grace",
+    blurb: "Screen rules plus a bounded hold when value downgrades but price trend stays strong.",
+  },
 ];
 
 function loadPerfSimTrack() {
@@ -716,6 +721,7 @@ function simTrackPayload(simulation, trackId) {
   if (trackId === "overlay") return simulation.research_overlay || simulation;
   if (trackId === "static") return simulation.static_levels || null;
   if (trackId === "trailing") return simulation.trailing_levels || null;
+  if (trackId === "momentum_grace") return simulation.momentum_grace || null;
   return simulation;
 }
 
@@ -788,6 +794,7 @@ function renderPerformance(data) {
       if (track.id === "overlay") return !!simulation.research_overlay;
       if (track.id === "static") return !!simulation.static_levels;
       if (track.id === "trailing") return !!simulation.trailing_levels;
+      if (track.id === "momentum_grace") return !!simulation.momentum_grace;
       return false;
     });
     const selected =

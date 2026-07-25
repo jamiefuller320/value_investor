@@ -13,8 +13,9 @@ trade checklist — it is a performance comparison to market datums. Success =
 |-------|-----------|-----------------|------|
 | **AI judgment** *(primary)* | `docs/data/paper_automation/ai_judgment/` | `adjusted_signal` + `research_verdict=accumulate` | Learning book |
 | **Screen rules** *(control)* | `docs/data/paper_automation/` | Raw buy-tier screen signal | Baseline datum |
+| **Momentum grace** *(experimental)* | `docs/data/paper_automation/momentum_grace/` | Screen rules + bounded hold on value downgrade when price trend stays strong | Exit-overlay experiment |
 
-Both books use the same costs, position caps, and weekday paper-auto schedule.
+Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 
 ## Success datums
 

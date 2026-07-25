@@ -88,9 +88,12 @@ class Position:
     stop_loss: float | None = None
     take_profit: float | None = None
     opened_at: str = field(default_factory=_utcnow_iso)
+    momentum_grace: bool = False
+    grace_started_at: str | None = None
+    grace_entry_stop: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "ticker": self.ticker,
             "shares": round(self.shares, 6),
             "avg_cost": round(self.avg_cost, 4),
@@ -101,6 +104,13 @@ class Position:
             "take_profit": self.take_profit,
             "opened_at": self.opened_at,
         }
+        if self.momentum_grace:
+            payload["momentum_grace"] = True
+        if self.grace_started_at:
+            payload["grace_started_at"] = self.grace_started_at
+        if self.grace_entry_stop is not None:
+            payload["grace_entry_stop"] = self.grace_entry_stop
+        return payload
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Position:
@@ -114,6 +124,9 @@ class Position:
             stop_loss=_optional_float(data.get("stop_loss")),
             take_profit=_optional_float(data.get("take_profit")),
             opened_at=str(data.get("opened_at") or _utcnow_iso()),
+            momentum_grace=bool(data.get("momentum_grace", False)),
+            grace_started_at=data.get("grace_started_at"),
+            grace_entry_stop=_optional_float(data.get("grace_entry_stop")),
         )
 
 
@@ -633,6 +646,108 @@ def _candidate_price(candidate: dict[str, Any]) -> float | None:
     return None
 
 
+def _candidate_screen_signal(
+    row: dict[str, Any],
+    *,
+    use_adjusted_signal: bool = False,
+) -> str:
+    signal = str(row.get("signal") or "")
+    if use_adjusted_signal:
+        adjusted = row.get("adjusted_signal")
+        if adjusted is not None and str(adjusted).strip():
+            return str(adjusted)
+    return signal
+
+
+def _evaluate_momentum_grace_holdings(
+    fund: PaperFund,
+    candidates: list[dict[str, Any]],
+    target_tickers: set[str],
+    *,
+    use_adjusted_signal: bool,
+    acted_at: str,
+    mutate: bool = True,
+) -> tuple[set[str], list[dict[str, Any]]]:
+    """Return tickers kept via momentum grace and planned grace transitions."""
+    from value_investor.momentum_grace import evaluate_grace_holding
+
+    by_ticker = {str(row.get("ticker")): row for row in candidates if row.get("ticker")}
+    grace_kept: set[str] = set()
+    transitions: list[dict[str, Any]] = []
+
+    for ticker, position in fund.holdings.items():
+        if ticker in target_tickers:
+            if position.momentum_grace:
+                transitions.append(
+                    {
+                        "ticker": ticker,
+                        "action": "grace_clear",
+                        "reason": "requalified on value screen",
+                    }
+                )
+                if mutate:
+                    position.momentum_grace = False
+                    position.grace_started_at = None
+                    position.grace_entry_stop = None
+            continue
+
+        row = by_ticker.get(ticker) or {"ticker": ticker, "signal": "hold"}
+        mark = _candidate_price(row) or position.avg_cost
+        decision = evaluate_grace_holding(
+            row,
+            signal=_candidate_screen_signal(row, use_adjusted_signal=use_adjusted_signal),
+            avg_cost=position.avg_cost,
+            mark=mark,
+            momentum_grace=position.momentum_grace,
+            grace_started_at=position.grace_started_at,
+            stop_loss=position.stop_loss,
+            take_profit=position.take_profit,
+            grace_entry_stop=position.grace_entry_stop,
+            as_of=acted_at,
+        )
+        if decision.keep:
+            grace_kept.add(ticker)
+            stop_loss = decision.stop_loss if decision.stop_loss is not None else position.stop_loss
+            take_profit = (
+                decision.take_profit if decision.take_profit is not None else position.take_profit
+            )
+            if mutate:
+                if decision.enter_grace:
+                    position.momentum_grace = True
+                    position.grace_started_at = acted_at
+                    position.grace_entry_stop = (
+                        position.grace_entry_stop
+                        or position.stop_loss
+                        or position.avg_cost
+                    )
+                if decision.stop_loss is not None:
+                    position.stop_loss = decision.stop_loss
+                if decision.take_profit is not None:
+                    position.take_profit = decision.take_profit
+            transitions.append(
+                {
+                    "ticker": ticker,
+                    "action": "grace_enter" if decision.enter_grace else "grace_hold",
+                    "reason": decision.reason,
+                    "stop_loss": stop_loss,
+                    "take_profit": take_profit,
+                }
+            )
+        else:
+            if mutate and position.momentum_grace and decision.exit_grace:
+                position.momentum_grace = False
+                position.grace_started_at = None
+                position.grace_entry_stop = None
+            transitions.append(
+                {
+                    "ticker": ticker,
+                    "action": "grace_exit" if decision.exit_grace else "sell",
+                    "reason": decision.reason,
+                }
+            )
+    return grace_kept, transitions
+
+
 def select_automated_targets(
     candidates: list[dict[str, Any]],
     *,
@@ -708,6 +823,7 @@ def preview_automated_plan(
     sector_cap: float = 1.0,
     use_adjusted_signal: bool = False,
     require_research_accumulate: bool = False,
+    use_momentum_grace: bool = False,
 ) -> dict[str, Any]:
     """
     Dry-run the automated rebalance rules without mutating the fund.
@@ -728,6 +844,18 @@ def preview_automated_plan(
         require_research_accumulate=require_research_accumulate,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
+    grace_kept: set[str] = set()
+    grace_transitions: list[dict[str, Any]] = []
+    if use_momentum_grace:
+        grace_kept, grace_transitions = _evaluate_momentum_grace_holdings(
+            fund,
+            candidates,
+            target_tickers,
+            use_adjusted_signal=use_adjusted_signal,
+            acted_at=_utcnow_iso(),
+            mutate=False,
+        )
+    keep_tickers = target_tickers | grace_kept
     price_map = {
         str(row["ticker"]): float(_candidate_price(row) or 0)
         for row in candidates
@@ -743,7 +871,7 @@ def preview_automated_plan(
 
     exits: list[dict[str, Any]] = []
     for ticker, position in fund.holdings.items():
-        if ticker in target_tickers:
+        if ticker in keep_tickers:
             continue
         price = price_map.get(ticker) or position.avg_cost
         value = position.shares * price if price else 0.0
@@ -760,9 +888,15 @@ def preview_automated_plan(
         )
         cash += value * (1 - fund.config.trade_cost_pct)
 
+    grace_holds = [
+        item
+        for item in grace_transitions
+        if item.get("action") in {"grace_enter", "grace_hold"}
+    ]
+
     # After hypothetical exits, recompute NAV for target sizing narrative.
     remaining_holdings = {
-        t: p for t, p in fund.holdings.items() if t in target_tickers
+        t: p for t, p in fund.holdings.items() if t in keep_tickers
     }
     nav_after_exits = portfolio_value(cash, remaining_holdings, price_map)
     target_each = (nav_after_exits / len(targets)) if targets else 0.0
@@ -886,6 +1020,11 @@ def preview_automated_plan(
         f"Costs: {fund.config.trade_cost_pct:.1%} applied on each buy and sell.",
     ]
 
+    if use_momentum_grace:
+        narrative.append(
+            "Momentum grace: holdings that leave buy-tier but still show strong price "
+            "trend may be kept for up to 6 weeks with tightened trailing stops."
+        )
     return {
         "rules": narrative,
         "nav": round(nav, 2),
@@ -894,6 +1033,7 @@ def preview_automated_plan(
         "min_conviction": round(float(min_conviction), 4),
         "sector_cap": round(float(sector_cap), 4),
         "skip_timing_wait": bool(skip_timing_wait),
+        "use_momentum_grace": bool(use_momentum_grace),
         "target_sleeve_value": round(target_each, 2),
         "targets": [
             {
@@ -906,6 +1046,7 @@ def preview_automated_plan(
             for row in targets
         ],
         "anticipated_exits": exits,
+        "anticipated_grace_holds": grace_holds,
         "anticipated_trims": trims,
         "anticipated_buys": buys,
         "anticipated_holds": holds,
@@ -948,6 +1089,7 @@ def run_automated_rebalance(
     sector_cap: float = 1.0,
     use_adjusted_signal: bool = False,
     require_research_accumulate: bool = False,
+    use_momentum_grace: bool = False,
 ) -> list[PaperTrade]:
     """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
     if fund.config.mode != "automated":
@@ -971,19 +1113,36 @@ def run_automated_rebalance(
     }
     trades: list[PaperTrade] = []
 
+    grace_kept: set[str] = set()
+    if use_momentum_grace:
+        grace_kept, _ = _evaluate_momentum_grace_holdings(
+            fund,
+            candidates,
+            target_tickers,
+            use_adjusted_signal=use_adjusted_signal,
+            acted_at=when,
+            mutate=True,
+        )
+    keep_tickers = target_tickers | grace_kept
+
     for ticker in list(fund.holdings):
-        if ticker in target_tickers:
+        if ticker in keep_tickers:
             continue
         price = price_map.get(ticker) or fund.holdings[ticker].avg_cost
         if not price or price <= 0:
             continue
+        note = (
+            "Momentum grace exit"
+            if fund.holdings[ticker].momentum_grace
+            else "Automated exit — left target set"
+        )
         trades.append(
             fund.sell(
                 ticker=ticker,
                 price=price,
                 sizing_mode="shares",
                 amount=fund.holdings[ticker].shares,
-                note="Automated exit — left target set",
+                note=note,
                 acted_at=when,
                 prices_for_nav=price_map,
             )

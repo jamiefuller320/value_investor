@@ -3,6 +3,7 @@
 from value_investor.paper_fund import (
     PaperFund,
     PaperFundConfig,
+    Position,
     compare_funds,
     create_parallel_book,
     resolve_order_shares,
@@ -322,3 +323,63 @@ def test_buy_sets_position_currency_and_nav_reporting_converts():
     assert mark["reporting_currency"] == "GBP"
     assert mark["hedge_assumption"] == "none"
     assert mark["fx"]["rates"]["USD"] == 0.8
+
+
+def test_momentum_grace_keeps_winner_after_value_downgrade():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Grace test",
+            mode="automated",
+            initial_cash=0,
+            trade_cost_pct=0.0,
+            max_positions=1,
+        )
+    )
+    fund.holdings["OLD.L"] = Position(
+        ticker="OLD.L",
+        shares=10,
+        avg_cost=100,
+        stop_loss=90,
+        take_profit=130,
+        name="Old winner",
+    )
+    candidates = [
+        {
+            "ticker": "NEW.L",
+            "name": "New pick",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "price": 50,
+            "timing_signal": "neutral",
+        },
+        {
+            "ticker": "OLD.L",
+            "name": "Old winner",
+            "signal": "hold",
+            "conviction_score": 0.2,
+            "price": 120,
+            "timing_signal": "neutral",
+            "sma_50": 110,
+            "macd_histogram": 0.5,
+            "macd_histogram_prev": 0.2,
+            "atr_14": 3.0,
+        },
+    ]
+
+    baseline = PaperFund.from_dict(fund.to_dict())
+    run_automated_rebalance(baseline, candidates, acted_at="2026-07-20T09:15:00+01:00")
+    assert "OLD.L" not in baseline.holdings
+
+    grace_fund = PaperFund.from_dict(fund.to_dict())
+    run_automated_rebalance(
+        grace_fund,
+        candidates,
+        acted_at="2026-07-20T09:15:00+01:00",
+        use_momentum_grace=True,
+    )
+    assert "OLD.L" in grace_fund.holdings
+    old = grace_fund.holdings["OLD.L"]
+    assert old.momentum_grace is True
+    assert old.grace_started_at is not None
+    assert old.stop_loss is not None and old.stop_loss >= 100
+    assert old.take_profit is not None and old.take_profit >= 130

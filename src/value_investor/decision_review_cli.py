@@ -15,6 +15,7 @@ from value_investor.decision_review import (
 from value_investor.paper_automation import (
     AI_JUDGMENT_TRACK_ID,
     DEFAULT_AUTOMATION_DIR,
+    MOMENTUM_GRACE_TRACK_ID,
     RULES_TRACK_ID,
     learning_track_dirs,
 )
@@ -38,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--tracks",
         default="all",
-        choices=["all", "rules", "ai_judgment"],
+        choices=["all", "rules", "ai_judgment", "momentum_grace"],
         help="Which learning track(s) to review (default: all)",
     )
     parser.add_argument(
@@ -97,7 +98,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\nWrote {Path(args.output_dir) / 'learning_tracks_review.json'}")
         return 0
 
-    track_id = RULES_TRACK_ID if args.tracks == "rules" else AI_JUDGMENT_TRACK_ID
+    track_id = {
+        "rules": RULES_TRACK_ID,
+        "ai_judgment": AI_JUDGMENT_TRACK_ID,
+        "momentum_grace": MOMENTUM_GRACE_TRACK_ID,
+    }[args.tracks]
     track_dir = learning_track_dirs(Path(args.output_dir))[track_id]
     result = run_decision_review(
         output_dir=track_dir,

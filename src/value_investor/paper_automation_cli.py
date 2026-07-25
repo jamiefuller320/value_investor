@@ -10,6 +10,7 @@ from pathlib import Path
 from value_investor.paper_automation import (
     AI_JUDGMENT_TRACK_ID,
     DEFAULT_AUTOMATION_DIR,
+    MOMENTUM_GRACE_TRACK_ID,
     RULES_TRACK_ID,
     AutomationConfig,
     format_automation_text,
@@ -60,7 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--tracks",
         default="all",
-        choices=["all", "rules", "ai_judgment"],
+        choices=["all", "rules", "ai_judgment", "momentum_grace"],
         help="Which learning track(s) to run (default: all)",
     )
     parser.add_argument(
@@ -118,7 +119,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\nWrote {output_dir / 'learning_tracks_summary.json'}")
         return 0
 
-    track_id = RULES_TRACK_ID if args.tracks == "rules" else AI_JUDGMENT_TRACK_ID
+    track_id = {
+        "rules": RULES_TRACK_ID,
+        "ai_judgment": AI_JUDGMENT_TRACK_ID,
+        "momentum_grace": MOMENTUM_GRACE_TRACK_ID,
+    }[args.tracks]
     track_dir = learning_track_dirs(output_dir)[track_id]
     track_dir.mkdir(parents=True, exist_ok=True)
 
@@ -131,7 +136,15 @@ def main(argv: list[str] | None = None) -> int:
         config.is_primary_learning_track = True
         config.use_adjusted_signal = True
         config.require_research_accumulate = True
+        config.use_momentum_grace = False
         config.track_label = "AI judgment (research accumulate + adjusted_signal)"
+    elif args.tracks == "momentum_grace":
+        config.track_id = MOMENTUM_GRACE_TRACK_ID
+        config.is_primary_learning_track = False
+        config.use_adjusted_signal = False
+        config.require_research_accumulate = False
+        config.use_momentum_grace = True
+        config.track_label = "Screen rules + momentum grace"
     else:
         config.track_id = RULES_TRACK_ID
         config.is_primary_learning_track = False
