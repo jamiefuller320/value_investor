@@ -1,53 +1,69 @@
 # Compagnie de Saint-Gobain S.A. (SGO.PA) — Research memo
 
-_Version 1 · Updated 2026-07-17T04:27:45.181368+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T13:12:47.338807+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Compagnie de Saint-Gobain is a global building-materials and distribution group trading at a modest multiple (P/E 13.3, P/B 1.5, dividend yield 3.0%) despite a multi-year earnings base that has stabilised after the post-2022 volume correction. The quantitative screen flags a strong buy on cheapness, dividend quality, GARP, and balance-sheet metrics, with eight of 22 models passing and a composite score of 86%. The central debate is whether portfolio reshaping—Nordic distribution divestiture, bolt-on M&A, and a softer 2026 margin outlook—will unlock value or merely offset cyclical headwinds in European construction. Primary regulatory filings are unavailable in the source library, so this memo relies on Yahoo financials and news; filing-level verification of contingencies, pensions, and covenant language is not yet possible.
+Compagnie de Saint-Gobain is a global building-materials and distribution group trading at modest multiples (P/E 13.3, P/B 1.5, dividend yield 3.0%) against a stabilised earnings base after the post-2022 volume correction. The quantitative screen rates the name a strong buy, with eight of 22 models passing across all four metric families (cheapness, dividend, GARP, risk) and a composite score of 86%. The central debate is whether portfolio reshaping—Nordic distribution divestiture, bolt-on M&A, and a softer 2026 margin outlook—will unlock value or merely offset cyclical headwinds in European construction. Primary regulatory filings are absent from the source library (zero indexed annual or interim releases, no body extracts), so this memo falls back to Yahoo financials and news; filing-level verification of contingencies, pensions, and covenant language is not yet possible.
 
 ## INVESTMENT THESIS
-Saint-Gobain fits a classic value screen: earnings power has recovered (diluted EPS rose from €5.23 in 2023 to €5.78 in 2025 per Yahoo), return on equity is a respectable 11.7%, debt/equity of 72% sits below the screen threshold, and free cash flow of approximately €3.1bn (screen) supports a sustainable dividend and buybacks. The screen passes four metric families—cheapness, dividend, GARP, and risk—including Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, and Financial Health. Business quality is underwritten by global scale across insulation, gypsum, glass, and specialist distribution, plus a track record of operating income holding near €5bn despite revenue drifting from a 2022 peak. Recent portfolio actions—selling Dahl's Nordic operations for €1.2bn (Kesko deal headline) while acquiring Xypex Chemical—signal a shift toward higher-margin, solutions-oriented businesses rather than pure volume growth. For a value investor, the hook is a de-rated industrial compounder with cash generation, shareholder returns (dividends ~€1.1bn and buybacks ~€0.8bn in 2025 per Yahoo), and a valuation that does not require a construction boom to work.
+Saint-Gobain fits a classic value screen. Earnings power has recovered: diluted EPS rose from €5.23 (2023) to €5.78 (2025) per Yahoo; ROE is 11.7%; debt/equity of 72% sits below the screen threshold; and free cash flow of approximately €3.1bn supports a sustainable dividend and buybacks. The screen passes Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, and Financial Health—covering cheapness, income, growth-at-a-reasonable-price, and balance-sheet quality in one package.
+
+Business quality is underwritten by global scale across insulation, gypsum, glass, and specialist distribution, plus operating income holding near €5bn despite revenue drifting from a 2022 peak of €51.2bn to €46.5bn in 2025 (Yahoo). Recent portfolio actions—selling Dahl's Nordic operations to Kesko for approximately €1.2bn while acquiring Xypex Chemical—signal a pivot toward higher-margin, solutions-oriented businesses rather than pure volume growth. For a value investor, the hook is a de-rated industrial compounder with cash generation, shareholder returns (dividends ~€1.1bn and buybacks ~€0.78bn in 2025 per Yahoo), and a valuation that does not require a construction boom to work.
+
+INVESTMENT THESIS (quantitative linkage)
+
+| Screen metric | Value | Models passed |
+|---|---|---|
+| Composite score | 86% (sector-relative 78%) | 8/22 |
+| P/E | 13.3 | Cheapness, GARP |
+| P/B | 1.5 | Cheapness |
+| Dividend yield | 3.0% | Dividend Growth |
+| ROE | 11.7% | Magic Formula, GARP |
+| D/E | 72% | Financial Health, risk family |
+| FCF | ~€3.12bn | FCF Yield, Acquirer's Multiple |
+
+Conviction on the screen is building (46%, two weeks at signal, stable trend) but timing data are insufficient for a tactical overlay.
 
 ## FINANCIAL REVIEW
-**Source limitation:** The filings index records regime "unsupported" with zero annual, interim, or other filings and no body extracts under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance); no primary filing reconciliation was possible. Quarterly income data in the same file is empty.
+**Source limitation.** The filings index (`regime: euro_filings`) records zero annual, interim, or other filings and no body extracts under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance fallback); no primary filing reconciliation was possible. Quarterly income data in the same file is empty. No interim or half-year filing bodies are available to corroborate intra-year trends.
 
-**Revenue and profitability.** Group revenue peaked at €51.2bn in 2022 (Yahoo) before easing to €47.9bn (2023), €46.6bn (2024), and €46.5bn (2025)—essentially flat over the last two years after the post-pandemic normalisation. Operating income has been resilient: €5.16bn (2022), €4.99bn (2023), €5.00bn (2024), €4.95bn (2025). EBITDA recovered from €7.05bn (2023) to €7.53bn (2025), with reported operating margin implied near 10.6% on 2025 revenue. Net income attributable to shareholders rose from €2.67bn (2023) to €2.88bn (2025); diluted EPS followed the same arc (€5.23 → €5.64 → €5.78). Special charges and impairments persisted (€170m in 2023, €184m in 2024, €83m in 2025), suggesting ongoing restructuring and asset reviews rather than one-off clean-up.
+**Revenue and profitability.** Group revenue peaked at €51.2bn (2022) before easing to €47.9bn (2023), €46.6bn (2024), and €46.5bn (2025)—essentially flat over the last two years after post-pandemic normalisation. Operating income has been resilient: €5.16bn (2022), €4.99bn (2023), €5.00bn (2024), €4.95bn (2025). EBITDA recovered from €7.05bn (2023) to €7.53bn (2025); implied operating margin on 2025 revenue is approximately 10.7%. Net income attributable to shareholders rose from €2.67bn (2023) to €2.88bn (2025); diluted EPS followed the same arc (€5.23 → €5.64 → €5.78). Special charges and impairments persisted (€170m in 2023, €184m in 2024, €83m in 2025 per Yahoo), suggesting ongoing restructuring and asset reviews rather than one-off clean-up.
 
 **Cash flow and capital allocation.** Operating cash flow has been consistently strong: €5.71bn (2022), €6.04bn (2023), €5.57bn (2024), €5.64bn (2025). Free cash flow peaked at €4.06bn (2023) and moderated to €3.45bn (2025) as capex rose to €2.19bn and acquisition spend remained elevated (€1.77bn business purchases in 2025; €3.33bn in 2024). Dividends totalled approximately €1.09bn (2025) and share repurchases ~€0.78bn, consistent with the screen's dividend-family pass.
 
 **Balance sheet.** Total assets stood at €60.8bn (2025); shareholders' equity €24.5bn. Net debt increased from €4.0bn (2023) to €7.0bn (2025), with total debt of €17.7bn against cash of €7.6bn. Goodwill and intangibles of €19.8bn represent a substantial portion of equity (goodwill alone €14.5bn), reflecting acquisitive growth. Non-current pension and post-retirement obligations were €1.54bn (2025), down from €1.87bn (2024) per Yahoo balance sheet. Working capital remained positive at €4.5bn.
 
-**Interim / guidance context (news, not filings).** News from 26 February 2026 reports full-year 2025 results slightly ahead on operating income but 2026 EBITDA margin guidance of "more than 15%", below the 15.5% delivered in 2025—a forward margin headwind not visible in the annual Yahoo series alone. No half-year or trading-update filing bodies were available to corroborate interim trends.
+**Interim / guidance context (news, not filings).** News from 26 February 2026 ("Saint-Gobain shares down on softer 2026 margin outlook") reports full-year 2025 operating income slightly ahead of expectations but 2026 EBITDA margin guidance of "more than 15%", below the 15.5% delivered in 2025—a forward margin headwind not visible in the annual Yahoo series alone. No half-year or trading-update filing bodies were available to corroborate interim trends; H1 2026 results were approaching as of July 2026 headlines but no indexed interim filing exists in the library.
 
 ## RISKS AND RED FLAGS
 Without primary filing extracts, going-concern, contingency, and covenant language cannot be quoted directly; the following risks are inferred from financial data and news.
 
-**Cyclical exposure.** Saint-Gobain remains tied to European and global construction cycles. Sector news (Holcim labour-shortage commentary, June 2026) highlights uneven recovery in European building activity, which could pressure volumes and pricing.
+**Cyclical exposure.** Saint-Gobain remains tied to European and global construction cycles. Sector news (Holcim labour-shortage commentary, 25 June 2026) highlights uneven recovery in European building activity, which could pressure volumes and pricing.
 
-**Margin guidance.** Management's 2026 EBITDA margin outlook ("more than 15%" vs 15.5% in 2025, per 26 Feb 2026 headline) signals potential compression from mix, input costs, or investment—directly challenging the GARP thesis if earnings growth stalls.
+**Margin guidance.** Management's 2026 EBITDA margin outlook ("more than 15%" vs 15.5% in 2025, per 26 February 2026 headline) signals potential compression from mix, input costs, or investment—directly challenging the GARP thesis if earnings growth stalls.
 
-**Leverage and M&A.** Net debt has risen ~€3bn over two years while the group continues bolt-on acquisitions (Xypex, July 2026) alongside divestitures (Dahl Nordic). Heavy goodwill/intangible load increases impairment risk if acquired businesses underperform; Yahoo already shows recurring impairment charges.
+**Leverage and M&A.** Net debt has risen ~€3bn over two years while the group continues bolt-on acquisitions (Xypex, July 2026) alongside divestitures (Dahl Nordic). Heavy goodwill/intangible load increases impairment risk if acquired businesses underperform; Yahoo already shows recurring impairment charges (€216m capital-asset impairment in 2025).
 
-**Pension and provisions.** Non-current pension liabilities of ~€1.5bn plus current pension items and long-term provisions (~€1.0bn) represent material off-balance-sheet-style commitments not fully captured by simple D/E screens.
+**Pension and provisions.** Non-current pension liabilities of ~€1.5bn plus current pension items (€139m) and long-term provisions (~€975m) represent material commitments not fully captured by simple D/E screens. Discount-rate sensitivity and funding status cannot be assessed without AMF/Euronext universal registration documents.
 
-**Governance / listing.** Delisting from the London Stock Exchange (February 2026 news) reduces secondary-market liquidity for UK-based holders; 48% institutional ownership (July 2025) concentrates influence among large holders.
+**Governance / listing.** Delisting from the London Stock Exchange (15 February 2026 news) reduces secondary-market liquidity for UK-based holders; 48% institutional ownership (21 July 2025, simplywall.st) concentrates influence among large holders.
 
-**Data gap.** Absence of AMF/Euronext universal registration documents or half-year reports in the source library is itself a research red flag—pension discount rates, litigation, and environmental provisions cannot be verified at filing granularity.
+**Data gap.** Absence of annual reports, half-year releases, or any filing body extracts in the source library is itself a research red flag—litigation, environmental provisions, and debt covenant headroom cannot be verified at filing granularity.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate (12 articles in the manifest) and skewed toward valuation commentary rather than deep operational reporting.
+Coverage over the past year is moderate (33 articles in the manifest) but skewed toward syndicated valuation commentary (notably AD HOC NEWS) rather than deep operational reporting; several headlines reference unrelated "SGO" tickers (oncology conference, Sonoro Gold) and should be disregarded.
 
-**Portfolio strategy.** Saint-Gobain agreed to sell the majority of its Dahl specialist distribution businesses in Sweden, Norway, and Denmark to Kesko for approximately €1.2bn / $1.76bn (15–16 June 2026; WSJ and Yahoo). Concurrently, it entered a definitive agreement to acquire Xypex Chemical Corporation (5 July 2026, marketscreener.com)—reinforcing a pivot toward higher-value construction chemicals and solutions.
+**Portfolio strategy.** "How Saint-Gobain's €9 Billion Chemicals Push and Portfolio Shake-Up Will Impact Compagnie de Saint-Gobain (ENXTPA:SGO) Investors" (13 June 2026, simplywall.st). Saint-Gobain agreed to sell the majority of its Dahl specialist distribution businesses in Sweden, Norway, and Denmark to Kesko for approximately €1.2bn / $1.76bn (15–16 June 2026; WSJ and Yahoo). Concurrently, it entered a definitive agreement to acquire Xypex Chemical Corporation (5 July 2026, marketscreener.com)—reinforcing a pivot toward higher-value construction chemicals and solutions.
 
-**Results and outlook.** "Saint-Gobain shares down on softer 2026 margin outlook" (26 February 2026) reported FY2025 operating income slightly ahead of expectations but guided 2026 EBITDA margin below 2025's 15.5%—the most material fundamental headline in the set.
+**Results and outlook.** "Saint-Gobain shares down on softer 2026 margin outlook" (26 February 2026) reported FY2025 operating income slightly ahead of expectations but guided 2026 EBITDA margin below 2025's 15.5%—the most material fundamental headline in the set. "Saint-Gobain stock tracks record 2024 earnings and higher dividend as investors watch order momentum" (18 July 2026, AD HOC NEWS) and "Saint-Gobain stock advances on 2025 sales and margin gains" (23 July 2026, AD HOC NEWS) reflect post-results sentiment.
 
 **Corporate actions.** "Saint Gobain London Delisting Refocuses Liquidity Dividend And Growth Outlook" (15 February 2026) noted consolidation of the listing on Euronext Paris (ENXTPA:SGO), ending London access.
 
-**Market sentiment.** Multiple articles (March–April 2026) highlighted sharp short-term share-price declines (roughly 14–19% over one to three months) against stronger three- to five-year total returns, framing the stock as post-pullback value rather than reporting new fundamentals.
+**Sell-side.** "J.P. Morgan Reaffirms Their Buy Rating on Compagnie de Saint Gobain (SGO)" (8 July 2026, The Globe and Mail).
 
-**Sector context.** Holcim labour-shortage warning (25 June 2026) and a dividend-stock screen mention (27 May 2026) provide peripheral sector colour rather than Saint-Gobain-specific news.
+**Market sentiment.** Multiple articles (March 2026) highlighted sharp short-term share-price declines (roughly 14–19% over one to three months) against stronger three- to five-year total returns, framing the stock as post-pullback value rather than reporting new fundamentals.
 
-News coverage is not thin on M&A and results, but lacks depth on regulatory, ESG, or management changes beyond the London delisting.
+News coverage is adequate on M&A and results but thin on regulatory, ESG, or management changes beyond the London delisting; pension and covenant language is entirely absent from indexed sources.
 
 ## RESEARCH VERDICT
 Verdict: accumulate

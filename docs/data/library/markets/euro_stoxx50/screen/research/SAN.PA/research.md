@@ -1,73 +1,107 @@
 # Sanofi (SAN.PA) — Research memo
 
-_Version 1 · Updated 2026-07-25T11:31:17.680575+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T13:11:41.771998+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Sanofi screens as a **strong buy** on quantitative value grounds: nine of 22 models pass with an 85% composite score and 84% conviction, anchored by an 18.3% FCF yield, 5.4% dividend yield, and PEGY of 0.04 at P/E 19.2 and P/B 1.3. The investment case is a cash-generative, diversified pharma franchise (immunology, vaccines, rare disease) trading cheaply on cash and capital-return metrics while management reshapes the portfolio under new leadership. The central debate is whether pipeline wins (Dupixent, tolebrutinib) can offset diabetes pressure and recent dermatology setbacks—not whether the stock is statistically inexpensive. **Critical data gap:** the filings index contains no annual or interim Sanofi report bodies; orphaned body extracts on disk are Banco Santander disclosures (ticker collision), so all financial figures below rely on Yahoo fallback and must be verified against Sanofi’s Universal Registration Document / 20-F before sizing.
+Sanofi (SAN.PA) screens as a **strong buy** on cash generation, dividend yield, and composite value metrics, against a global immunology and vaccines franchise anchored by Dupixent. The valuation hook is unusually high free-cash-flow yield (~18% on screen data) on a mid-teens P/E and 5.4% dividend yield, with the balance sheet strengthened after the Opella consumer-health divestiture. The central debate is whether pipeline replenishment and portfolio simplification under CEO Belén Garijo offset product concentration, US pricing pressure, and a run of clinical setbacks (amlitelimab, riliprubart). Deep research **confirms the value case on cash and capital returns** but **does not fully resolve pipeline and earnings-quality questions** after a distortion-heavy 2025.
 
 ## INVESTMENT THESIS
-For a value investor, Sanofi offers an unusual pairing of deep-value cash metrics and defensive healthcare exposure. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—with standout models including FCF Yield, Neff PEGY, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer’s Multiple, Piotroski F-Score, Composite Value, and Earnings Quality. Full data quality (20/20 metrics) and a stable four-week signal suggest the cheapness is persistent rather than a one-off.
+The quantitative screen passes nine of 22 models (composite 85%, sector-relative 83%) across cheapness, quality, dividend, GARP, and risk families — an unusually broad pass set for a large-cap pharma name. Headline metrics — P/E 19.2, P/B 1.3, yield 5.4%, FCF yield 18.3%, PEGY 0.04 — point to a business priced for stagnation rather than the underlying revenue and cash trajectory visible in filings.
 
-Business quality is adequate for a value entry despite headline volatility. Per Yahoo fallback, revenue grew from €40.6bn (2022) to €46.7bn (2025), reflecting immunology-led growth and portfolio reshaping. R&D spend reached €7.8bn (~17% of revenue), consistent with a pipeline-dependent model. The screen’s low ROE (6.6%) reflects a goodwill-heavy balance sheet (€67.6bn intangibles vs €3.8bn tangible book) rather than weak cash conversion: FY2025 free cash flow was €7.2bn on €46.7bn revenue—a 15% FCF margin supporting both the dividend and buybacks. The screen’s negative growth metric (-11.7%) flags earnings normalisation after divestitures and restructuring, not revenue collapse.
+Business quality rests on a scaled biopharma platform: Dupixent generated **€15,714m of net sales in 2025 (36.0% of group net sales)** per the 2025 Form 20-F body extract, up from **€13,072m (31.8%) in 2024** in the 2024 filing. The US accounted for **50.8% of 2025 net sales** (2024 Form 20-F: 48.7%). Vaccines and specialty care continue to support the top line; H1 2025 net sales were **€19,889m**, up from **€18,360m** in H1 2024 (half-year financial report).
 
-The hook for value investors is getting paid to wait: near-20% FCF yield, a growing dividend (€4.8bn paid in FY2025), and €5.0bn of share repurchases while immunology and vaccines compound and management prunes underperforming R&D.
+The value case is reinforced by capital discipline: Opella closed on 30 April 2025 (€16bn enterprise value), generating a **€2.7bn accounting gain** and **€10.7bn net cash inflow**, with net debt falling to **€5.1bn at 30 June 2025** from **€8.8bn at 31 December 2024** (half-year report). H1 2025 saw **€4.0bn of share buybacks** and **€4.8bn of dividends**. Holding-company financing carries **no financial covenants** (half-year report Note B.9). For a value investor, Sanofi offers a cash-rich, dividend-paying incumbent at a discount to growth implied by Dupixent and recent bolt-on M&A (Blueprint ~$9.1bn agreed; Vigil ~$470m agreed), while the screen’s quality and earnings-quality passes suggest reported earnings are not obviously low-grade — though 2025 headline EPS is heavily Opella-distorted.
 
 ## FINANCIAL REVIEW
-**Primary filing gap (critical).** The current `filings_index.json` lists one entry only: a 23 June 2026 press release on EU approval of Cenrifki (tolebrutinib) for secondary progressive MS (`period: other`, no downloadable body). There are **zero annual** and **zero interim** Sanofi filings indexed. Nineteen plain-text extracts exist under `filings/bodies/`, but all sampled files contain **Banco Santander** disclosures (share buybacks, CoCo issuance, Q1 2026 bank results)—a ticker-collision ingestion error. No Sanofi going-concern, contingency, or covenant language is available from primary sources in this pack. **All figures below fall back to `financials_annual.json` (Yahoo); treat as indicative only.**
+**Source coverage.** Primary filings in the index: 2025 Form 20-F (annual), 2024 Form 20-F (annual), and H1 2025 half-year report (interim). Body extracts for both 20-Fs are **partial** (risk factors and product commentary; consolidated income-statement tables not present in extract). Annual consolidated figures below therefore **fall back to `financials_annual.json` (Yahoo)** unless sourced from filing bodies. Interim figures are from the half-year report body.
 
-**Annual trends (Yahoo fallback, € millions unless stated)**
+**Interim (H1 2025 vs H1 2024)** — half-year financial report:
 
-| Metric | 2022 | 2023 | 2024 | 2025 |
-|--------|------|------|------|------|
-| Total revenue | 40,561 | 41,618 | 44,286 | 46,716 |
-| Operating income | 10,926 | 8,691 | 8,923 | 9,597 |
-| Net income (reported) | 8,371 | 5,400 | 5,560 | 7,813 |
-| Net income (continuing ops) | 8,083 | 5,098 | 5,554 | 4,977 |
-| Diluted EPS (€) | 5.37 | 4.31 | 4.59 | 6.40 |
-| Free cash flow | 8,423 | 7,352 | 5,886 | 7,212 |
-| Net debt | 6,295 | 7,682 | 8,559 | 10,933 |
-| R&D expense | 6,501 | 6,507 | 7,394 | 7,842 |
+| Metric | H1 2025 | H1 2024 |
+|---|---|---|
+| Net sales | €19,889m | €18,360m |
+| Operating income | €3,759m | €2,768m |
+| Net income (continuing) | €2,956m | €2,061m |
+| Net income (discontinued — Opella) | €2,881m | €202m |
+| Net income (total) | €5,837m | €2,263m |
+| Basic EPS (continuing) | €2.40 | €1.64 |
+| Basic EPS (total) | €4.74 | €1.80 |
+| Cash and equivalents | €15,359m | — |
+| Net debt (value on redemption) | €5,143m | €8,806m (Dec-24) |
+| R&D expense | €3,717m | €3,335m |
+| Impairment of intangibles | €210m | (€371m credit) |
+| Restructuring and similar | €430m | €1,060m |
 
-Revenue rose 5.5% in FY2025 to €46.7bn; operating income reached €9.6bn. Reported net income of €7.8bn and EPS of €6.40 were flattered by €2.87bn from discontinued operations (consistent with the Opella consumer-health divestiture) and offset by €3.3bn in unusual charges (impairments €2.2bn, restructuring €1.2bn). Yahoo normalised net income was €7.7bn; **continuing-operations net income fell to €5.0bn from €5.6bn**, signalling underlying earnings pressure beneath the headline.
+H1 trends are constructive on continuing operations: net sales up ~8%, operating income up ~36%, and continuing EPS up ~46%. Total EPS is **not comparable** owing to the Opella gain. Net debt improved materially post-divestiture; cash rose sharply. H1 operating cash flow before working capital was **€4.0bn**; after Opella investing cash inflow, cash rose **€7.9bn** in the half.
 
-Cash generation remains the anchor. Operating cash flow was €10.8bn; capex €3.5bn; FCF €7.2bn (up from €5.9bn in 2024). Capital returned totalled €9.8bn (dividends €4.8bn, buybacks €5.0bn)—exceeding FCF and funded partly by divestiture proceeds and higher net debt (€10.9bn vs €8.6bn in 2024). Leverage appears manageable at roughly 0.9× reported EBITDA (€12.5bn) or ~0.7× normalised EBITDA (€15.8bn), but this cannot be confirmed from filing covenants.
+**Annual (2023–2025)** — *Yahoo fallback* (`financials_annual.json`); filing bodies provide partial cross-checks only:
 
-**Balance sheet (FY2025, Yahoo fallback).** Total assets €126.8bn; shareholders’ equity €71.4bn; total debt €20.3bn; cash €7.7bn. Goodwill and intangibles total €67.6bn (~53% of assets), leaving tangible book of €3.8bn—explaining the 6.6% ROE. Long-term provisions €4.5bn; current pension/post-retirement obligations €1.9bn; working capital positive at €2.6bn.
+| Metric | 2023 | 2024 | 2025 |
+|---|---|---|---|
+| Total revenue (Yahoo) | €41.6bn | €44.3bn | €46.7bn |
+| Operating income (Yahoo) | €8.7bn | €8.9bn | €9.6bn |
+| Net income (Yahoo) | €5.4bn | €5.6bn | €7.8bn |
+| Diluted EPS (Yahoo) | €4.31 | €4.59 | €6.40 |
+| Free cash flow (Yahoo) | €7.4bn | €5.9bn | €7.2bn |
+| Net debt (Yahoo) | €7.7bn | €8.6bn | €10.9bn |
 
-**Interim / quarterly (Yahoo fallback; no Sanofi filing body).** Cached Q1 2026 quarterly income shows revenue €11.2bn, operating income €2.3bn, net income €1.6bn, diluted EPS €1.34— a stable run-rate versus FY2025. Without a verified Sanofi interim extract, business-unit splits, guidance, and pipeline-related charges cannot be confirmed. No Q2 2026 Sanofi interim is indexed in the current filings catalogue.
+Yahoo revenue growth (~5% in 2024, ~6% in 2025) is directionally consistent with H1 momentum. **2025 reported net income and EPS are inflated by discontinued Opella gains** (Yahoo shows €2.9bn discontinued-ops income in 2025). Normalised continuing-operations earnings are lower than headline figures suggest.
+
+Filing-body corroboration (annual, product/R&D level):
+- R&D spend: **€7,394m (18.0% of net sales) in 2024**; **€7,842m (18.0%) in 2025** (20-F extracts).
+- Dupixent: **€13,072m (2024)** → **€15,714m (2025)**.
+- Generic/biosimilar headwind: **€794m net sales loss** on affected products, 2024 vs 2023 (2024 20-F).
+
+**Balance sheet and capital allocation.** Goodwill was **€40.3bn** at 30 June 2025 vs **€43.4bn** at year-end 2024 (half-year report), reflecting Opella derecognition partly offset by acquisitions. Yahoo shows **€67.6bn of goodwill and intangibles** at year-end 2025, explaining the screen’s modest **6.6% ROE** despite solid operating cash flow. 2025 Yahoo cash flow shows **€5.0bn buybacks** and **€4.8bn dividends**, plus **€10.1bn business purchases** (Blueprint and other deals).
+
+**Gaps.** Full-year 2025 consolidated income-statement and cash-flow tables are **not available in the filing body extracts**; verify against the complete 20-F PDF before trading. No quarterly primary filing is indexed beyond H1 2025.
 
 ## RISKS AND RED FLAGS
-**Pipeline and R&D productivity.** July 2026 news reports Sanofi discontinued amlitelimab in atopic dermatitis, citing insufficient differentiation—a notable dermatology setback alongside a mixed CIDP trial halt (June 2026). Under a new CEO reviewing the pipeline, further programme cuts could impair long-term growth assumptions embedded in the screen’s -11.7% growth metric.
+**Product concentration.** Dupixent at 36% of 2025 net sales (20-F extract) creates single-product dependency; Lantus remains material at **€1,733m (2025)** despite erosion. Loss of exclusivity, biosimilar competition, or payer pushback on immunology pricing would hit both growth and the screen’s earnings-quality signal.
 
-**Primary source verification failure.** Filing-body contamination with Banco Santander data is a material red flag. Contingencies, litigation reserves, pension obligations beyond Yahoo line items, and covenant terms **cannot be assessed** from primary filings in this pack. Verify-before-trade is essential.
+**Pipeline setbacks.** Filing language flags discontinuations and mixed readouts (e.g. amlitelimab stopped in 2025; itepekimab COPD mixed results in May 2025 — 2025 20-F). News confirms **amlitelimab halted in atopic dermatitis (24 Jul 2026)** and **Phase 3 riliprubart stopped after weak interim data (9 Jun 2026)**. Dermatology and neurology replenishment is uncertain.
 
-**Patent and litigation exposure.** Yahoo Finance (17 July 2026) reports escalating mRNA patent disputes with Arbutus. Diabetes franchise pressure recurs in news flow (25 July 2026: investors weighing diabetes franchise and earnings trends).
+**US pricing and reimbursement.** The 2025 20-F cites IRA/MFN pricing dynamics; **50.8% of 2025 net sales are US-based**. The group signed a voluntary MFN agreement with the US government (20-F). EU HTA centralisation from 2025 adds European pricing risk.
 
-**Balance sheet and capital allocation.** Goodwill/intangible concentration leaves thin tangible equity. FY2025 buybacks (€5.0bn) alongside rising net debt warrant monitoring if divestiture proceeds normalise. Restructuring charges have recurred annually (€1.0–1.2bn in 2023–2025 per Yahoo).
+**M&A and integration.** Agreed Blueprint acquisition (~**$9.1bn** equity value, plus CVRs) and other bolt-ons (Dren-0201 $600m; Vigil ~$470m) increase goodwill and execution risk while net debt on a Yahoo basis rose to **€10.9bn** at year-end 2025 despite interim deleveraging.
 
-**Governance and sentiment.** Amundi disclosed a 5.65% stake (22 July 2026). Deutsche Bank cut its price target (27 June 2026). Multiple “undervalued?” commentaries suggest active debate rather than consensus dismissal.
+**Legal and tax contingencies.** Both 20-F extracts highlight **tax contingencies** with uncertain resolution and ongoing IP litigation (news: **Arbutus mRNA patent escalation, 17 Jul 2026**). A **$11.85m DOJ settlement** on charitable donations is referenced in the 2024 20-F.
 
-Macro context (EUR/USD 1.14, Euro Stoxx 50 ~6,281 as of 24 July 2026) provides stable European equity backdrop only; it does not override the screen signal.
+**Pensions.** Half-year report Note B.12 references **pension fund contributions** and UK defined-benefit buy-in transactions; pre-funded pension obligations were **€146m** at 30 June 2025. No going-concern language appears in available body extracts (**no “going concern” hits** in filing bodies).
+
+**Governance.** Management transition is underway: news references **Paul Hudson exit package and Belén Garijo CEO compensation (3 Apr 2026)**. Pipeline portfolio review under the new CEO increases strategic uncertainty.
+
+**Customer concentration.** Three main customers represented **15%, 11%, and 8%** of 2024 consolidated net sales (2024 20-F).
 
 ## NEWS HIGHLIGHTS
-Coverage is moderate for Sanofi-specific items but **noisy**: roughly 40% of manifest entries reference Banco Santander (NYSE/BME:SAN) or unrelated “San” tickers, not Sanofi.
+Coverage is **moderately useful but noisy**: many “SAN” hits refer to Banco Santander or San Francisco; Sanofi-specific items below.
 
-Material Sanofi headlines (past year):
+**Strategy and portfolio**
+- *Sanofi to Drop Eczema Drug Amid Review of Pipeline Under New CEO* (24 Jul 2026, WSJ/yfinance) — amlitelimab discontinued; pipeline rationalisation under Belén Garijo.
+- *Sanofi (ENXTPA:SAN) Stops Amlitelimab In Eczema And Expands Aqemia AI Pact* (25 Jul 2026, yfinance).
+- Opella divestiture completed (half-year report; negotiations from Oct 2024).
+- *With Dupixent driving growth, Sanofi touts 'vigorous defense' to extend US exclusivity* (23 Apr 2026, Fierce Pharma).
+- Blueprint Medicines acquisition agreed ~$9.1bn (half-year report, Jun 2025).
 
-- **24–25 July 2026** — “Sanofi halts development of troubled immune drug in eczema” / “Sanofi to Drop Eczema Drug Amid Review of Pipeline Under New CEO” (Yahoo/WSJ): amlitelimab discontinued; shares under pressure.
-- **25 July 2026** — “Sanofi (ENXTPA:SAN) Stops Amlitelimab In Eczema And Expands Aqemia AI Pact” (Yahoo): pipeline cut paired with expanded AI drug-discovery partnership.
-- **23 June 2026** — “Sanofi’s Cenrifki (tolebrutinib) approved in the EU…” (filings index / Euronext): first disability-targeting medicine for non-relapsing secondary progressive MS.
-- **14 June 2026** — “Sanofi (ENXTPA:SAN) Stock After Mixed CIDP Trial Halt And Sarclisa EU Approval” (Yahoo): mixed neurology/oncology news.
-- **4 June 2026** — “Sanofi launches 2026 global employee stock purchase plan” (GlobeNewswire).
-- **17 July 2026** — “Arbutus, Sanofi escalate mRNA patent fights” (Yahoo).
-- **20–24 July 2026** — Scribe Therapeutics IPO coverage noting Sanofi as a backer (gene-editing platform).
-- **22 July 2026** — “Amundi group reports 68.7M-share, 5.65% beneficial ownership position in Sanofi” (Stock Titan).
-- **27 June 2026** — “Deutsche Bank Cuts PT on Sanofi (SNY) – Here’s Why” (Yahoo).
+**Regulatory and pipeline**
+- *Press Release: Sanofi’s Cenrifki (tolebrutinib) approved in the EU…* (23 Jun 2026, Euronext/Google News) — first disability-targeting SPMS therapy without relapses.
+- *Sanofi ends Phase 3 riliprubart trial after weak interim results* (9 Jun 2026, Reuters).
+- *Sanofi (ENXTPA:SAN) Stock After Mixed CIDP Trial Halt And Sarclisa EU Approval* (14 Jun 2026, Yahoo Finance).
 
-Strategy read-through: management is pruning underperforming assets, advancing selective wins, leaning into AI partnerships, and returning capital aggressively—a portfolio in transition rather than a broken franchise, but with elevated pipeline volatility.
+**M&A and partnerships**
+- *South Korea's ADEL signs up to $1.04 billion Alzheimer's drug development deal with Sanofi* (15 Dec 2025, Reuters).
+- Scribe Therapeutics IPO with Sanofi backing (20–24 Jul 2026, yfinance).
+
+**Capital markets and ownership**
+- *Amundi group reports 68.7M-share, 5.65% beneficial ownership position in Sanofi* (22 Jul 2026, Stock Titan).
+- *Sanofi launches 2026 global employee stock purchase plan* (4 Jun 2026, GlobeNewswire).
+- *Deutsche Bank Cuts PT on Sanofi (SNY)* (27 Jun 2026, Yahoo Finance).
+- *Sanofi posts strong full-year figures despite development setbacks* (29 Jan 2026, Sharecast.com); *Q4 2025 Earnings Call Highlights* (29 Jan 2026, Yahoo Finance).
+
+**Macro colour (non-scoring):** EUR/USD ~1.14 and Euro Stoxx 50 ~6,281 (`macro_context.json`) — relevant given ~51% US sales exposure; not used to adjust the screen signal.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Quantitative cheapness and cash-return metrics are credible on Yahoo data, but absent Sanofi primary filings, contaminated body extracts, and recent pipeline setbacks prevent full confirmation of the screen’s strong-buy signal.
+Confidence: 0.72
+Rationale: Filing-backed cash generation, deleveraging, and dividend/buyback profile support the strong-buy screen, but partial annual filing extracts, Opella-distorted 2025 earnings, Dupixent concentration, and recent pipeline failures prevent full confirmation of sustained normalized growth.

@@ -1,33 +1,19 @@
 # Dyno Nobel Limited (DNL.AX) — Research memo
 
-_Version 2 · Updated 2026-07-17T04:45:55.833742+00:00 · Mode: weekly_update_
+_Version 1 · Updated 2026-07-25T12:50:01.249425+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# Dyno Nobel Limited (DNL.AX) — First-Pass Research Memo
-
-**Source note:** No primary regulatory filings are available in the research library (`filings_index.json`: regime `unsupported`, zero annual/interim entries, no body extracts). All financial figures below are drawn from `financials_annual.json` (Yahoo Finance), with that limitation stated explicitly. News from `news_manifest.json`; quantitative screen from `screening_snapshot.json`.
-
----
-
-## EXECUTIVE SUMMARY
-
-Dyno Nobel Limited is an ASX-listed commercial explosives and blasting-services business in Basic Materials, currently flagged as a **buy** on the quantitative value screen (7/22 models, composite score 66%). The investment case rests on a sharp recovery in underlying profitability—normalised EBITDA rose to ~US$933m in FY2025 from ~US$868m in FY2024—combined with an attractive headline FCF yield (13.1%), low PEG (0.12), 3.8% dividend yield, and an active on-market share buy-back. Statutory accounts remain noisy: FY2025 reported a net loss of US$53m after US$305m asset impairments and a US$200m discontinued-operations loss, following FY2024’s US$1.06bn impairment-driven statutory loss. The central debate is whether portfolio simplification and EBIT momentum represent a durable earnings base at ~1.6× book and 26× P/E, or whether cyclical mining exposure, impairment history, and absent primary-filing verification limit the screen’s cheapness signal.
-
----
+Dyno Nobel Limited is an ASX-listed commercial explosives and blasting-services business (Basic Materials) currently rated **buy** on the quantitative value screen (7/22 models, composite score 66%, stable for four weeks). The investment case rests on a recovering underlying earnings base—normalised EBITDA reached US$933m in FY2025 (Yahoo)—combined with headline FCF yield (13.1%), low PEG (0.12), 3.8% dividend yield, P/B 1.6, and an active on-market share buy-back. Statutory accounts remain noisy: FY2025 reported a US$53m net loss after US$305m impairments and a US$200m discontinued-operations loss, following FY2024’s impairment-driven statutory loss. The central debate is whether portfolio simplification into a pure-play explosives business and recent half-year EBIT momentum (~39% growth per news commentary) represent a durable earnings base, or whether cyclical mining exposure, impairment history, and the absence of verified primary filings limit the screen’s cheapness signal.
 
 ## INVESTMENT THESIS
+The quantitative screen passes all four metric families—**cheapness, dividend, GARP, and risk**—with high data quality (19/20 metrics). Dyno Nobel screens as simultaneously cheap on cash generation and growth-adjusted valuation: FCF Yield, Lynch PEG (0.12), Neff PEGY, Magic Formula, Composite Value, Financial Health, and Dividend Growth models all pass, against a sector-relative composite of 62%. At P/E 26.0, P/B 1.6, yield 3.8%, and reported growth of ~220% (likely off a depressed FY2024 base), the name fits a value investor’s preference for cash-backed returns and capital return rather than high reported ROE (5.8%).
 
-The quantitative screen passes all four metric families—**cheapness, dividend, GARP, and risk**—with high data quality (19/20 metrics). Dyno Nobel screens as simultaneously cheap on cash generation and growth-adjusted valuation: FCF Yield, Lynch PEG (0.12), Neff PEGY, Magic Formula, Composite Value, Financial Health, and Dividend Growth models all pass, against a sector-relative composite of 62%. At P/B 1.6, yield 3.8%, and reported growth of ~220% (likely off a depressed base), the name fits a value investor’s preference for cash-backed returns rather than pure earnings momentum.
-
-Business quality, on a normalised basis, is improving. Continuing-operations revenue fell to US$3.71bn in FY2025 (from US$5.28bn in FY2024), consistent with divestitures and portfolio reshaping, yet operating income rose to US$484m and normalised EBITDA to US$933m—suggesting a leaner, higher-margin core. Management is returning capital aggressively: US$293m of buy-backs and US$162m of dividends in FY2025 (Yahoo), alongside ongoing buy-back announcements through July 2026. For a value investor, the screen’s buy signal is anchored in **cash yield and capital return at a modest book multiple**, not in high ROE (5.8%) or clean reported earnings.
-
----
+Business quality, on a normalised basis, is improving. Continuing-operations revenue fell to US$3.71bn in FY2025 from US$5.28bn in FY2024 (Yahoo), consistent with divestitures and portfolio reshaping, yet operating income rose to US$484m and normalised EBITDA to US$933m—suggesting a leaner, higher-margin core explosives franchise. Management is returning capital aggressively: US$293m of buy-backs and US$162m of dividends in FY2025 (Yahoo), with buy-back progress updates continuing through July 2026. For a value investor, the screen’s buy signal is anchored in **cash yield, growth-adjusted cheapness, and capital return at a modest book multiple**, not in clean statutory earnings or high ROE.
 
 ## FINANCIAL REVIEW
+**Primary filings gap:** `filings_index.json` contains no ASX annual reports, half-year results, or trading updates with body extracts (`summary`: 0 annual, 0 interim, 1 other, 0 with body). No going-concern, covenant, contingency, or pension-disclosure language from regulatory filings can be cited. All figures below are from **Yahoo Finance (`financials_annual.json`)**; `quarterly_income` is empty.
 
-**Primary filings gap:** `filings_index.json` contains no ASX annual reports, half-year results, or trading updates, and `filings/bodies/` has no extracts. No going-concern, covenant, or contingency language from regulatory filings can be cited. All figures below are from **Yahoo Finance (`financials_annual.json`)**; interim/quarterly filing data are also absent (`quarterly_income` is empty).
-
-### Revenue and profitability trend
+### Revenue and profitability (annual — Yahoo fallback)
 
 | Metric (US$m) | FY2022 | FY2023 | FY2024 | FY2025 |
 |---|---:|---:|---:|---:|
@@ -36,22 +22,22 @@ Business quality, on a normalised basis, is improving. Continuing-operations rev
 | Normalised EBITDA | 1,840 | 786 | 868 | 933 |
 | Reported EBITDA | 1,835 | 792 | (190) | 628 |
 | Net income (statutory) | 1,014 | 560 | (311) | (53) |
-| Continuing ops net income | 1,014 | 277 | (479) | 148 |
+| Continuing ops net income | 1,014 | 277 | (478) | 148 |
 | Normalised income | 1,018 | 271 | 259 | 390 |
 
-Revenue has declined materially since FY2022, with the step-down in FY2025 reflecting a smaller continuing portfolio after discontinued operations (FY2025 discontinued loss: US$200m; FY2024 discontinued gain: US$167m). Underlying operating performance has stabilised and improved: operating income and normalised EBITDA both troughed in FY2023–FY2024 and recovered in FY2025. Reported EBITDA remains distorted by unusual items—FY2024 included US$1,058m of special charges (US$1,073m asset impairments), and FY2025 a further US$305m impairment—making normalised EBITDA the more reliable earnings proxy.
+Revenue has declined materially since FY2022, with the FY2025 step-down reflecting a smaller continuing portfolio after discontinued operations (FY2025 discontinued loss: US$200m; FY2024 discontinued gain: US$167m). Underlying operating performance troughed in FY2023–FY2024 and recovered in FY2025: operating income and normalised EBITDA both improved. Reported EBITDA remains distorted by unusual items—FY2024 included US$1,058m of special charges (US$1,073m asset impairments), and FY2025 a further US$305m impairment (US$298m capital-asset impairment)—making normalised EBITDA the more reliable earnings proxy in the absence of filing bodies.
 
 Interest expense was US$158m in FY2025 (vs US$153m in FY2024), with net interest cost of US$131m, absorbing a meaningful share of EBIT (US$344m).
 
-### Balance sheet and leverage
+### Balance sheet and leverage (Yahoo fallback)
 
 Total assets fell from US$10.86bn (FY2022) to US$7.83bn (FY2025), and shareholders’ equity from US$6.29bn to US$4.43bn, consistent with impairments, buy-backs, and asset sales. Net debt stood at US$1.16bn at FY2025 year-end (cash US$647m; total debt US$2.02bn), up from US$615m in FY2024 but below FY2023’s US$1.33bn. On FY2025 normalised EBITDA, net debt/EBITDA is roughly **1.2×**—moderate for an industrial name.
 
-Goodwill and intangibles total US$2.63bn against tangible book value of US$1.80bn, leaving reported equity heavily goodwill-weighted—a residual risk given repeated impairments (US$1.07bn in FY2024; US$298m in FY2025). Working capital compressed to US$531m from US$2.95bn in FY2023, largely reflecting the removal of assets held for sale.
+Goodwill and intangibles total US$2.63bn against tangible book value of US$1.80bn, leaving reported equity heavily goodwill-weighted—a residual risk given repeated impairments. Working capital compressed to US$531m from US$2.95bn in FY2023, largely reflecting the removal of assets held for sale. Pension and employee-benefit liabilities appear modest in Yahoo data (non-current employee benefits US$23m; current pension/post-retirement US$53m at FY2025)—not a dominant balance-sheet item on these figures alone, though primary-filing verification is absent.
 
-Pension and employee-benefit liabilities appear modest in Yahoo data (non-current employee benefits US$23m; current pension/post-retirement US$53m at FY2025)—not a dominant balance-sheet item on these figures alone.
+Ordinary shares outstanding fell from ~1.94bn (FY2023) to ~1.80bn (FY2025), reflecting buy-back activity.
 
-### Cash flow and capital allocation
+### Cash flow and capital allocation (Yahoo fallback)
 
 | Metric (US$m) | FY2022 | FY2023 | FY2024 | FY2025 |
 |---|---:|---:|---:|---:|
@@ -61,71 +47,50 @@ Pension and employee-benefit liabilities appear modest in Yahoo data (non-curren
 | Share buy-backs | — | — | (443) | (293) |
 | Dividends paid | (355) | (524) | (378) | (162) |
 
-FCF peaked at US$659m in FY2022, turned negative in FY2024 (US$89m outflow) despite heavy investing inflows from asset sales (net other investing US$1.64bn), and recovered to US$101m in FY2025. The screen’s FCF yield of 13.1% (FCF field ~US$832m) exceeds Yahoo’s FY2025 FCF, suggesting the model may use a trailing or adjusted figure not reconcilable to the annual statement without primary filings.
+FCF peaked at US$659m in FY2022, turned negative in FY2024 (US$89m outflow) despite heavy investing inflows from asset sales (net other investing US$1.64bn), and recovered to US$101m in FY2025. **Important reconciliation gap:** the screen’s FCF yield of 13.1% uses an FCF field of ~US$832m, which materially exceeds Yahoo’s FY2025 FCF of US$101m—the model may employ a trailing or adjusted figure that cannot be reconciled without primary filings.
 
-Capital return has been substantial: combined buy-backs and dividends exceeded US$450m in FY2025 and US$820m in FY2024, funded partly by divestiture proceeds—an allocation choice that supports per-share value but reduces balance-sheet flexibility if the cycle turns.
+Capital return has been substantial: combined buy-backs and dividends exceeded US$455m in FY2025 and US$821m in FY2024, funded partly by divestiture proceeds—supporting per-share value but reducing balance-sheet flexibility if the cycle turns.
 
 ### Interim results
 
-No interim or half-year filing is indexed. News headlines reference a **Half Year 2026** earnings call (11 May 2026) citing ~39% EBIT growth and strategic progress, but no verified interim figures are in the source library.
-
----
+**No interim or half-year filing is indexed** in `filings_index.json`, and no body extract is available. News headlines reference **Half Year 2026** results (May 2026) citing ~39% EBIT growth and strategic progress (*“Dyno Nobel H1 2026 presentation: pure-play pivot drives 39% EBIT growth”*, Investing.com, 10 May 2026; *“Dyno Nobel Ltd (ICPVF) Half Year 2026 Earnings Call Highlights”*, Yahoo, 11 May 2026), but **no verified interim figures** are in the source library and cannot be cited numerically.
 
 ## RISKS AND RED FLAGS
-
 **No filing-body verification.** Without ASX annual or half-year extracts, impairment triggers, debt covenants, environmental liabilities, and going-concern assessments cannot be reviewed from primary sources. This is the single largest research gap.
 
 **Impairment and earnings quality.** Two consecutive years of large asset write-downs (US$1.07bn FY2024; US$298m FY2025 per Yahoo) raise questions about acquisition goodwill (US$1.78bn at FY2025) and capital-allocation history. Statutory net losses in FY2024 and FY2025 mask improving continuing operations but undermine ROE (screen: 5.8%).
 
-**Cyclical end-market exposure.** Commercial explosives demand is tied to global mining, quarrying, and infrastructure activity. Revenue fell ~41% from FY2022 to FY2025 on a reported basis; a mining downturn could pressure volumes and pricing despite recent EBIT momentum.
+**FCF yield reliability.** The screen’s 13.1% FCF yield appears inconsistent with Yahoo’s FY2025 FCF of US$101m; without filing reconciliation, the cheapness signal may be overstated on a reported-cash basis.
+
+**Cyclical end-market exposure.** Commercial explosives demand is tied to global mining, quarrying, and infrastructure activity. Revenue fell ~41% from FY2022 to FY2025 on a reported basis; a mining downturn could pressure volumes and pricing despite recent EBIT momentum. Energy cost pressures are flagged in recent commentary (*“Dyno Nobel (ASX:DNL) Shares Slip as Energy Cost Concerns Offset Defensive Appeal”*, Kalkine, 17 Jul 2026).
 
 **Leverage and capital return tension.** Buy-backs of US$443m (FY2024) and US$293m (FY2025) proceeded while FY2024 FCF was negative; net debt rose in FY2025. Sustained returns at this pace require continued operating cash generation or further asset sales.
 
-**Portfolio transition risk.** Discontinued operations contributed US$283m profit (FY2023), US$167m (FY2024), and US$200m loss (FY2025)—material volatility. The market may still be adjusting to the post-divestiture earnings base.
+**Portfolio transition risk.** Discontinued operations contributed US$283m profit (FY2023), US$167m (FY2024), and US$200m loss (FY2025)—material volatility. The March 2026 sale of Phosphate Hill for US$1 (*“Dyno Nobel (ASX:DNL) Completes Fertiliser Exit With $1 Phosphate Hill Sale”*, Kalkine, 9 Mar 2026) completes the fertiliser exit but may leave residual liabilities or transition costs not visible in Yahoo data.
 
 **Governance and ownership concentration.** Institutional ownership is high (~52–57% per news items), which supports liquidity but can amplify exit risk in a downturn.
 
-**Competitive and regulatory.** Explosives manufacturing is regulated, capital-intensive, and concentrated (global peers include Orica, Austin Powder). No specific regulatory actions appear in the news manifest, but compliance and safety liabilities are inherent sector risks not captured by value screens.
-
----
+**Competitive and regulatory.** Explosives manufacturing is regulated, capital-intensive, and concentrated (global peers include Orica). No specific regulatory actions appear in the news manifest, but compliance and safety liabilities are inherent sector risks not captured by value screens.
 
 ## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate but tilted toward capital markets and earnings commentary** rather than deep operational reporting; no major management-change headlines appear in the manifest.
 
-Coverage over the past year is **moderate but tilted toward capital markets and earnings commentary** rather than deep operational reporting; no major M&A or management-change headlines appear in the manifest.
+**Capital return (Jul 2026):** *“Dyno Nobel Continues On-Market Share Buy-Back Following Shareholder Approval at 2025 AGM”* (Kalkine, 19 Jul 2026); *“Dyno Nobel Limited Announces Progress in On-Market Share Buy-Back Program”* (Kalkine, 14 Jul 2026); *“Dyno Nobel Limited Updates on Ongoing Share Buy-Back Program”* (Kalkine, 8 Jul 2026)—confirming buy-backs as a central shareholder-return pillar.
 
-**Capital return (Jul 2026):** *“Dyno Nobel Limited Announces Progress in On-Market Share Buy-Back Program”* (Kalkine, 14 Jul 2026) and *“Dyno Nobel Limited Updates on Ongoing Share Buy-Back Program”* (Kalkine, 8 Jul 2026)—confirming an active buy-back as a central shareholder-return pillar.
+**Half-year FY2026 (May 2026):** *“Dyno Nobel H1 2026 presentation: pure-play pivot drives 39% EBIT growth”* (Investing.com, 10 May 2026); *“Dyno Nobel Ltd (ICPVF) Half Year 2026 Earnings Call Highlights: Strong EBIT Growth and …”* (Yahoo, 11 May 2026); *“Explosive ASX 200 share jumps 8% on first-half profit surge”* (Motley Fool Australia, 11 May 2026); *“Jefferies Says Buy Dyno Nobel (ASX:DNL)”* (Kalkine, 13 May 2026)—strong interim earnings momentum and sell-side support, though figures are not indexed in filings.
 
-**Half-year FY2026 (May 2026):** *“Dyno Nobel Ltd (ICPVF) Half Year 2026 Earnings Call Highlights: Strong EBIT Growth and …”* (Yahoo, 11 May 2026)—reports ~39% EBIT increase and strategic progress despite temporary headwinds.
+**Fertiliser exit (Mar 2026):** *“Dyno Nobel (ASX:DNL) Completes Fertiliser Exit With $1 Phosphate Hill Sale”* (Kalkine, 9 Mar 2026); shares fell ~10% on announcement (*stocksdownunder.com*, 10 Mar 2026)—completing strategic pivot to pure-play explosives.
 
-**Post-FY2025 results (Nov 2025):** *“Dyno Nobel Ltd (ICPVF) Full Year 2025 Earnings Call Highlights: Strategic Sales and EBIT Growth …”* (Yahoo, 12 Nov 2025)—23% EBIT growth and strategic asset sales alongside statutory losses; *“We Think Dyno Nobel's (ASX:DNL) Profit Is Only A Baseline For What They Can Achieve”* (Yahoo, 17 Nov 2025).
+**Post-FY2025 results (Nov 2025):** *“Dyno Nobel Ltd (ICPVF) Full Year 2025 Earnings Call Highlights: Strategic Sales and EBIT Growth …”* (Yahoo, 12 Nov 2025)—23% EBIT growth and strategic asset sales alongside statutory losses.
 
-**Valuation debate (2025–2026):** Discount narratives (*“Is Dyno Nobel Limited (ASX:DNL) Trading At A 26% Discount?”*, 18 Jan 2026; *“…32% Discount?”*, 11 Aug 2025) contrast with growth scepticism (*“Insufficient Growth At Dyno Nobel Limited (ASX:DNL) Hampers Share Price”*, Simply Wall St, 9 Jan 2026).
+**Earlier divestitures (Oct 2025):** *“ASX 200 company jumps 5% on sale of Fertilisers Distribution business”* (Motley Fool Australia, 2 Oct 2025)—part of ongoing portfolio simplification.
 
-**Ownership and performance:** Institutional stake ~52–57% (Simply Wall St, 27 Jan 2026; Yahoo, 20 Sep 2025); *“Investors in Dyno Nobel (ASX:DNL) have seen notable returns of 95% over the past five years”* (Yahoo, 21 Dec 2025).
+**Valuation and ownership debate:** Discount narratives (*“Is Dyno Nobel Limited (ASX:DNL) Trading At A 26% Discount?”*, 18 Jan 2026) contrast with growth scepticism (*“Insufficient Growth At Dyno Nobel Limited (ASX:DNL) Hampers Share Price”*, Simply Wall St, 9 Jan 2026). Institutional stake ~52–57% (Simply Wall St, 27 Jan 2026).
 
-No material regulatory actions, pension crises, or large M&A transactions are flagged in the manifest. Strategy emphasis is portfolio simplification, EBIT recovery, and buy-backs.
-
----
+No material regulatory actions, pension crises, or large M&A transactions beyond the fertiliser divestitures are flagged. Strategy emphasis is portfolio simplification, EBIT recovery, and buy-backs.
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.62  
-Rationale: The screen’s cheapness and FCF-yield case is partially supported by improving normalised EBITDA and sustained capital return, but repeated impairments, statutory losses, and the absence of primary ASX filings prevent full confirmation of the buy signal.
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
-
-
-## Weekly updates
-
-### 2026-07-17T04:45:55.833742+00:00
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: The screen’s cheapness and FCF-yield case is partially supported by improving normalised EBITDA, recent half-year EBIT momentum in news commentary, and sustained capital return, but repeated impairments, statutory losses, FCF reconciliation gaps, and the absence of primary ASX filing bodies prevent full confirmation of the buy signal.

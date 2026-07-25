@@ -1,0 +1,75 @@
+# Union Pacific Corporation (UNP) — Research memo
+
+_Version 1 · Updated 2026-07-25T13:17:08.376291+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Union Pacific is a high-quality western US Class I railroad with an industry-leading operating ratio near 60%, accelerating earnings momentum in 2026, and a quantitative screen that flags the name as a buy on quality, GARP, and dividend metrics rather than deep cheapness. The investment case rests on durable pricing power, productivity gains under CEO Jim Vena, and a Neff PEGY of 0.13 that reconciles a 24.9x P/E with mid-single-digit growth — but headline P/B of 9.4x and a 1.8% yield offer limited margin of safety at current levels. The central debate is whether operational execution and a raised 2026 earnings outlook justify accumulation, or whether the pending Norfolk Southern merger — with STB scrutiny, competitor opposition, and up to $2.5 billion in termination fees — introduces binary regulatory risk that the screen underweights.
+
+## INVESTMENT THESIS
+The quantitative screen rates UNP as a buy with five of five value families passing (cheapness, quality, dividend, GARP, risk) and standout models including Neff PEGY, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Piotroski F-Score, and Earnings Quality. That profile fits a compounder-style value thesis: not statistically cheap on absolute multiples (P/E 24.9, P/B 9.4), but attractive on growth-adjusted and quality-adjusted measures (PEGY 0.13, ROE 39.7%, 6.6% growth).
+
+Filings corroborate the quality overlay. Union Pacific operates a 32,889-route-mile network with no substitute asset in the western US, generating freight revenues of $23.2 billion in FY2025 (10-K, filed Feb 2026) at a 59.8% operating ratio — 10 basis points better than FY2024's 59.9%. Management's "Safety, Service, and Operational Excellence leads to Growth" framework is delivering measurable productivity: workforce productivity improved 5–6% in H1 2026 (Q2 2026 10-Q), train length rose 2%, and the company reported its best-ever safety results in FY2025.
+
+For a value investor, the buy case is not a distressed asset but a wide-moat infrastructure franchise converting modest volume growth and core pricing into high-ROE earnings and free cash flow, with the screen correctly identifying earnings quality and dividend durability over headline cheapness. Share repurchases are paused pending the Norfolk Southern transaction, shifting near-term capital return to the 1.8% dividend yield.
+
+## FINANCIAL REVIEW
+**Annual results (10-K filings — narrative from body extracts; dollar figures from Yahoo where body extracts lack full statements)**
+
+The FY2025 10-K (filed 6 Feb 2026) reports operating revenues up 1%, freight revenues of $23.2 billion, volume up 1%, an operating ratio of 59.8%, and an 8% increase in diluted EPS versus FY2024. FY2024 10-K (filed 7 Feb 2025) shows freight revenues of $22.8 billion and an operating ratio of 59.9%. Both annual filing bodies in the source pack are truncated before full consolidated statements; the following annual figures fall back to `financials_annual.json` (Yahoo):
+
+| Metric | FY2023 | FY2024 | FY2025 |
+|---|---|---|---|
+| Total revenue ($bn) | 24.12 | 24.25 | 24.51 |
+| Operating income ($bn) | 9.08 | 9.71 | 9.85 |
+| Net income ($bn) | 6.38 | 6.75 | 7.14 |
+| Diluted EPS | $10.45 | $11.09 | $11.98 |
+| Operating cash flow ($bn) | 8.38 | 9.35 | 9.29 |
+| CapEx ($bn) | 3.61 | 3.45 | 3.79 |
+| Free cash flow ($bn) | 4.77 | 5.89 | 5.50 |
+| Total debt ($bn) | 34.18 | 32.46 | 32.82 |
+
+Trend: revenues have been broadly flat since FY2022 (~$24–25bn), but operating income and EPS have risen on margin discipline — diluted EPS compounded from $10.45 (FY2023) to $11.98 (FY2025), a 7% CAGR. FCF remains robust at $5.5 billion in FY2025 despite higher CapEx ($3.5 billion per 10-K narrative; Yahoo reports $3.79 billion). Leverage is material: net debt of ~$30.5 billion at FY2025 year-end (Yahoo), with the Q2 2026 10-Q confirming covenant compliance on an adjusted EBITDA coverage ratio and capacity to carry up to $49.7 billion of defined debt under the revolving credit facility.
+
+**Interim results (10-Q body extracts — primary source)**
+
+| Period | Operating revenues | Net income | Diluted EPS | Operating ratio |
+|---|---|---|---|---|
+| Q2 2025 (10-Q, Jul 2025) | $6,154m | $1,876m | $3.15 | 59.0% |
+| Q3 2025 (10-Q, Oct 2025) | $6,244m | $1,788m | $3.01 | 59.2% |
+| Q1 2026 (10-Q, Apr 2026) | $6,217m | $1,701m | $2.87 | 60.5% |
+| Q2 2026 (10-Q, Jul 2026) | $6,864m | $1,993m | $3.36 | 59.7% |
+
+H1 2026 (Q2 2026 10-Q): operating revenues $13.1 billion (+7% y/y), net income $3.7 billion (+5%), diluted EPS $6.22 (+6%), operating ratio 60.1% (+30 bps y/y). Q2 revenue acceleration (+12%) was driven by fuel surcharges, 2% carload growth, and core pricing, partially offset by unfavourable mix (higher domestic intermodal). Fuel expense rose 63% in Q2 on a 60% increase in diesel price ($3.86 vs $2.42/gallon). Cash from operations in H1 2026 was $5.5 billion; CapEx $1.8 billion. Total debt at 30 Jun 2026 was $30.3 billion ($1.3 billion current + $29.0 billion long-term per balance sheet).
+
+**Gaps:** Annual filing bodies lack downloadable income/cash-flow statements; interim coverage is strong (seven 10-Q bodies with full condensed statements). Eight 8-K filings in the index have no body extracts. No going-concern language appears in available filings.
+
+## RISKS AND RED FLAGS
+**Regulatory / M&A.** The Norfolk Southern merger (agreement dated 28 Jul 2025; ~225 million shares plus $20 billion cash consideration) is the dominant risk. The STB rejected the initial joint application as incomplete (Jan 2026); a revised application was accepted as complete in May 2026, with supplemental information due 27 Jul 2026. Either party may owe a $2.5 billion termination fee under specified circumstances (Q2 2026 10-Q, Note 18). Competitor BNSF argues the CN operating-rights agreement "undermines" the merger case (news, 24 Jul 2026). Merger pendency has paused share repurchases and incurred $71 million of acquisition-related expense in H1 2026.
+
+**Labour.** ~83% of employees are unionised under Railway Labor Act agreements; two subsidiary negotiations were ongoing at FY2025 year-end (10-K). Strike or work-stoppage risk is explicitly flagged.
+
+**Leverage and capital markets.** ~$32 billion of debt; cash consideration for Norfolk Southern expected to be funded via new debt and operating cash. Fair value of debt was ~$5.6 billion below carrying value at Jun 2026 (Q2 10-Q), implying rate sensitivity. No defaults on senior securities are reported (Item 3, Q2 10-Q).
+
+**Contingencies (filing language).** Personal injury (FELA) accrual $417 million at Jun 2026 (range $417–466 million). Environmental remediation liability $261 million across 345 sites, including 18 on the Superfund National Priorities List (Q2 10-Q, Note 15). Management states known lawsuits and environmental costs are not expected to have a material adverse effect after recorded liabilities and insurance — but personal injury and environmental estimates carry inherent uncertainty.
+
+**Pension.** Net periodic pension *benefit* of $12 million in H1 2026 (Q2 10-Q, Note 5); no minimum cash funding requirement for 2026. Not a near-term red flag, but defined-benefit obligations are embedded in the adjusted-debt covenant definition.
+
+**Cyclical / macro.** FY2025 10-K notes incremental US import tariffs adversely affected demand and input costs in 2025 and may persist in 2026. Coal volumes fell 17% y/y in Q2 2026 on lower natural gas prices and mine outages. Fuel surcharge programmes trail price moves by ~two months, adding earnings volatility.
+
+**Governance.** CEO Vena (appointed 2023) is driving the transformation and merger; integration culture risk is flagged in the 10-K pending-acquisition section.
+
+## NEWS HIGHLIGHTS
+**Coverage is thin:** the manifest contains 50 articles spanning only 30 Jun–25 Jul 2026 (~four weeks), not a full year. Material items within that window:
+
+- **Q2 2026 earnings beat (23 Jul 2026):** "Union Pacific (UNP) Surpasses Q2 Earnings and Revenue Estimates" (Yahoo Finance); "UNP Q2 Earnings & Revenues Beat Estimates, Up Y/Y, EPS View Raised" (TradingView, 23 Jul 2026). Stock reached 52-week highs ("Why Did CSX, UNP, NVCR Stocks Surge To 52-Week Highs Today?", 24 Jul 2026).
+- **Norfolk Southern / CN deal (24 Jul 2026):** "Union Pacific Wins CN Support for Norfolk Southern Deal With New Rail Access Agreement" (Yahoo Finance); RBC noted Q2 strength and the CN MOU reinforce the deal case ("Union Pacific's CN Agreement Strengthens Deal Case After Strong Q2, RBC Says", 24 Jul 2026). Counterpoint: "BNSF: New UP-CN deal 'undermines' case for merger" (FreightWaves/Yahoo, 24 Jul 2026).
+- **Analyst sentiment mixed-to-cautious:** Multiple price-target raises but largely Maintain/Hold — e.g. Barclays to $350 (25 Jul 2026), J.P. Morgan Hold at $334 (24 Jul 2026), Benchmark to $335 (25 Jul 2026). "Analysts Are Neutral on These Industrial Goods Stocks: Union Pacific (UNP)" (Globe and Mail, 25 Jul 2026).
+- **Strategy / capital allocation (10 Sep 2025, 8-K body):** CFO Jennifer Hamann confirmed share repurchases paused under merger terms and flagged ~$50 million of Q3 2025 fees.
+
+No material management departures or dividend cuts appear in the manifest. Broader merger timeline (shareholder approvals Nov 2025, STB filing Dec 2025) is documented in the Q2 2026 10-Q rather than news.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: SEC filings confirm durable margins, accelerating H1 2026 earnings, and high return on equity that support the screen's quality/GARP buy signal, partially offset by premium absolute multiples and unresolved Norfolk Southern STB approval risk.

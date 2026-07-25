@@ -1,54 +1,110 @@
 # Westgold Resources Limited (WGX.AX) — Research memo
 
-_Version 1 · Updated 2026-07-17T04:47:24.730439+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T13:04:26.636245+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Westgold Resources Limited (WGX.AX) screens as a buy on cheapness, quality, dividend, and risk metrics, with a composite score of 55% and seven of 22 models passing. The investment case rests on a mid-teens P/E, P/B below 2, low leverage, and a sharp earnings recovery from FY2022 losses to FY2024 profitability, supported by Western Australian gold production across the Murchison and Southern Goldfields hubs. The valuation hook is a producer trading at modest multiples despite record operational momentum and a debt-free, unhedged balance sheet, per recent market commentary. The key debate is whether portfolio rationalisation, Higginsville expansion, and strong cash generation justify the screen’s dividend and quality signals, or whether gold-price cyclicality, heavy sustaining and growth capex, and the absence of verified primary filings limit conviction.
+Westgold Resources Limited screens as a **buy** on cheapness, quality, dividend, and risk (7/22 models; composite 55%), offering a mid-teens P/E, P/B below 2, and low leverage against a Western Australian gold producer with improving earnings momentum. The investment case rests on scale production across the Murchison and Southern Goldfields hubs, portfolio rationalisation crystallising value, and capital returns (dividends, buybacks) signalling management confidence. The valuation hook is a debt-light, unhedged producer trading at modest multiples despite record operational performance in recent periods, per market commentary. The key debate is whether Higginsville expansion and divestment proceeds sustain free cash flow, or whether gold-price cyclicality, heavy capex, and the absence of verified primary filing extracts limit underwriting of the screen’s quality and dividend signals — notably the anomalous 64% yield.
+
+---
 
 ## INVESTMENT THESIS
-For a value investor, WGX offers a classic “quality at a reasonable price” profile within basic materials. The quantitative screen passes Graham Enterprising, FCF Yield, Quality Value, Economic Moat, Dividend Growth, Magic Formula, and Financial Health — spanning all four factor families (cheapness, quality, dividend, risk). Headline metrics include P/E 16.2, P/B 1.9, ROE 12.5%, debt/equity 8%, and reported FCF of approximately A$352m on the screen (data quality 19/20). These align with a business that has moved from impairment-driven losses in FY2022 to scale profitability in FY2024, with revenue growth and margin expansion on Yahoo-sourced accounts. Business quality indicators include a growing asset base (total assets A$1.05bn at FY2024), net cash build, and capital returns signalled via dividends and buybacks in recent news flow. The screen’s persistent buy signal (four weeks, stable trend) suggests the market has not fully re-rated the name despite operational improvement — though recent share-price weakness creates the value entry implied by the cheapness models. Caveat: the screen’s 64.0% yield is an outlier relative to disclosed capital-return policy and should be treated as a data-quality flag rather than a sustainable income thesis.
+For a value investor, WGX presents a “quality at a reasonable price” profile within Basic Materials. The quantitative screen passes **Graham Enterprising**, **FCF Yield**, **Quality Value**, **Economic Moat**, **Dividend Growth**, **Magic Formula**, and **Financial Health** — all four factor families (cheapness, quality, dividend, risk). Headline metrics: P/E 16.2, P/B 1.9, ROE 12.5%, debt/equity 8%, data quality 19/20, conviction 42% (persistent buy, four weeks, stable trend).
+
+These metrics align with a business that recovered from impairment-driven FY2022 losses to FY2024 profitability on Yahoo-sourced accounts: revenue A$716.5m, net income A$95.2m, EBITDA A$185.5m. Balance-sheet quality is supportive — shareholders’ equity A$691.8m, cash A$236.0m, total debt A$54.6m (predominantly lease obligations) at FY2024 — and news flow describes the company as debt-free at the operating level with strong recent cash builds.
+
+Business quality is reinforced by operational delivery (production beating guidance per Jul 2026 headlines), board-approved Higginsville expansion (1.6 to 2.6 mtpa), and a deliberate portfolio focus via asset sales and the Valiant demerger. The screen’s cheapness models imply the market has not fully re-rated the name despite operational improvement, though recent gold-sector weakness has pressured the share price.
+
+**Caveats:** The screen’s 64.0% dividend yield and ~A$352m FCF figure are inconsistent with Yahoo cash-flow data (FY2024 FCF A$78.7m; dividends paid A$4.7m) and should be treated as data-quality flags, not sustainable income or verified filing metrics. Primary ASX announcement bodies were not retrieved despite seven filings being indexed.
+
+---
 
 ## FINANCIAL REVIEW
-Primary regulatory filings are not available for this name. The filings index records regime “unsupported” for market `asx200`, with zero annual, interim, or other filings catalogued and no body extracts under `filings/bodies/`. All financial trend analysis below therefore falls back to `financials_annual.json` (Yahoo Finance). Interim or half-year filing verification is not possible from primary sources.
+### Primary filings status
 
-Annual trend (Yahoo, FY2022–FY2024):
+The filings index (`regime: asx_announcements`) catalogues **seven** ASX-related announcements: **zero annual**, **one interim**, **six other** — but **zero downloadable body extracts** under `filings/bodies/` (refetch attempted, none fetched). Consequently, no figures below are sourced from primary filing text; annual trends use **`financials_annual.json` (Yahoo Finance)** with explicit fallback, and interim/operational datapoints from indexed headlines or news only.
 
-Revenue rose from A$647.6m (FY2022) to A$654.4m (FY2023) and A$716.5m (FY2024), a compound recovery consistent with higher throughput and gold-price tailwinds. Reported net income swung from a A$111.1m loss (FY2022), driven by a A$175.5m impairment charge, to A$10.0m (FY2023) and A$95.2m (FY2024). Normalised earnings progression is more favourable than headline FY2022 suggests, but the impairment year underscores asset-quality and cycle sensitivity.
+**Annual gap:** No annual report or full-year results filing is indexed with extractable body text. FY25 results are referenced in news (“Westgold Resources: FY25 Financial Results”, 28 Aug 2025) but cannot be verified here.
 
-Profitability improved materially at the operating level: EBITDA moved from negative A$93.0m (FY2022) to A$69.4m (FY2023) and A$185.5m (FY2024); operating income from A$14.2m to A$5.4m to A$129.4m over the same period. Gross profit expanded from A$92.0m to A$74.8m to A$199.9m, implying stronger unit economics in the latest year.
+**Interim gap:** One interim item is indexed — “WGX ASX Half Year Results Summary” (26 Feb 2026) — without body text. H1 FY26 figures cited in news (sales A$1,237.56m, net income A$190.73m, 195,355 oz production) are **unverified** against primary extracts.
 
-Cash generation strengthened but remains capex-intensive. Free cash flow improved from negative A$26.6m (FY2022) to A$8.9m (FY2023) and A$78.7m (FY2024), while capital expenditure was A$206.5m, A$159.5m, and A$273.1m respectively — indicating that reported FCF and the screen’s higher FCF figure may reflect different definitions or timing. Cash and equivalents rose from A$182.7m (FY2022) to A$176.4m (FY2023) and A$236.0m (FY2024).
+### Annual trend — Yahoo fallback (FY2022–FY2024)
 
-Balance sheet: total debt (predominantly capital lease obligations) was A$43.0m, A$27.5m, and A$54.6m; shareholders’ equity grew from A$587.8m to A$598.3m to A$691.8m. Total assets expanded to A$1.05bn at FY2024. Working capital remained positive throughout. Employee benefit provisions (current and non-current) totalled approximately A$23.3m at FY2024 — modest relative to scale, but pension/post-retirement liabilities cannot be assessed from filing language.
+| Metric | FY2022 | FY2023 | FY2024 |
+|--------|--------|--------|--------|
+| Revenue | A$647.6m | A$654.4m | A$716.5m |
+| Net income | (A$111.1m) | A$10.0m | A$95.2m |
+| EBITDA | (A$93.0m) | A$69.4m | A$185.5m |
+| Operating income | A$14.2m | A$5.4m | A$129.4m |
+| Gross profit | A$92.0m | A$74.8m | A$199.9m |
+| Free cash flow | (A$26.6m) | A$8.9m | A$78.7m |
+| Capital expenditure | A$206.5m | A$159.5m | A$273.1m |
+| Cash & equivalents | A$182.7m | A$176.4m | A$236.0m |
+| Total debt | A$43.0m | A$27.5m | A$54.6m |
+| Shareholders’ equity | A$587.8m | A$598.3m | A$691.8m |
+| Total assets | A$827.2m | A$813.3m | A$1,050.0m |
 
-Interim gap: No interim, quarterly, or trading-update filings are indexed. Recent operational datapoints (e.g. H1 FY26 sales of A$1,237.56m and net income of A$190.73m; Q3 FY26 underlying cash build of A$285m) appear only in secondary news summaries and cannot be verified against primary extracts. `quarterly_income` in the Yahoo cache is empty.
+**Revenue and profitability:** Revenue grew modestly across the three years, with a step-change in FY2024 margins (gross profit nearly tripled vs FY2023). Reported net income in FY2022 was distorted by a A$175.5m impairment; normalised earnings progression is more favourable but underscores asset-quality sensitivity.
+
+**Cash flow and capex:** Operating cash generation improved, but capex (A$273.1m in FY2024) materially exceeded reported FCF — a persistent pattern for a growth-oriented gold producer. The screen’s higher FCF figure (~A$352m) likely reflects a different definition, timing, or trailing aggregate; it cannot be reconciled to Yahoo without primary filings.
+
+**Balance sheet:** Equity and assets expanded; working capital remained positive (A$138.4m at FY2024). Debt is low relative to equity (~8% D/E on screen; A$54.6m total debt vs A$691.8m equity on Yahoo). Employee benefit provisions totalled ~A$23.3m (current and non-current) at FY2024 — modest, but pension/contingency language cannot be assessed without filing bodies.
+
+**Interim / recent operational context (news-sourced, unverified):**
+
+- H1 FY26 (ended 31 Dec 2025): sales A$1,237.56m, net income A$190.73m, 195,355 oz gold (incl. purchased ore); FY26 guidance maintained at 345,000–385,000 oz, AISC A$2,600–A$2,900/oz.
+- Q3 FY26: ~A$285m underlying quarterly cash build; debt-free, unhedged (Yahoo Finance, 30 Apr 2026).
+- Jun 2026 quarter: production reportedly beat guidance (Kalkine, 21 Jul 2026; marketscreener, 22 Jul 2026).
+
+Yahoo `quarterly_income` cache is **empty** — no interim P&L verification available.
+
+---
 
 ## RISKS AND RED FLAGS
-Without primary filing bodies, going-concern statements, covenant disclosures, and contingency note language cannot be reviewed — a material research gap for an ASX-listed producer.
+**Primary filing gap (material):** With zero body extracts, going-concern opinion, covenant terms, rehabilitation provisions, and contingency/disclosure language **cannot be reviewed**. This is a significant limitation for an ASX-listed mining producer where asset retirement and closure liabilities are material.
 
-Cyclical and commodity risk: WGX is unhedged to gold (per news coverage), exposing earnings and the balance sheet to spot-price volatility. FY2022’s large impairment demonstrates sensitivity to asset valuations and mine economics.
+**Commodity and cyclical risk:** WGX is described as **unhedged** to gold in news coverage. FY2022’s A$175.5m impairment demonstrates earnings and asset-value sensitivity to gold prices and mine economics. Spot-price reversals would compress margins given FY26 AISC guidance of A$2,600–A$2,900/oz.
 
-Capital intensity: Sustaining and growth capex (A$273m in FY2024 on Yahoo) materially exceeds operating free cash flow in the filing-fallback dataset, raising execution risk on the Higginsville expansion (1.6mtpa to 2.6mtpa) and reliance on divestment proceeds to fund the pipeline.
+**Capital intensity and execution:** FY2024 capex (A$273.1m, Yahoo) exceeded reported FCF by a wide margin. Higginsville expansion (to 2.6 mtpa) adds execution and cost-inflation risk. Sustaining performance depends on grade, throughput, and contractor/labour costs in WA.
 
-Portfolio and guidance risk: FY26 production guidance of 345,000–385,000 oz at AISC of A$2,600–A$2,900/oz (news-sourced) leaves limited margin for cost inflation or grade variability. Asset sales (Peak Hill, Chalice, Reedy/Comet) reduce optionality even as they crystallise value.
+**Portfolio and strategic risk:** Multiple divestments (Peak Hill, Chalice, Mt Henry-Selene, Reedy/Comet to Valiant) sharpen focus on core assets but reduce optionality. Whether crystallised proceeds fund growth or mask declining organic exploration pipeline is unresolved without verified filings.
 
-Governance and market perception: Coverage includes commentary on CEO compensation (Nov 2025) and an earnings miss versus analyst expectations (Aug 2025), suggesting the market may demand consistent delivery against elevated expectations.
+**Screen data flags:** The 64.0% dividend yield on the quantitative screen is inconsistent with disclosed dividend policy (FY2024 cash dividends A$4.7m on Yahoo; final FY25 dividend and 5% buyback per news). Treat dividend-family pass with caution until annual-report confirmation.
 
-Screen data flag: The 64.0% dividend yield on the quantitative screen is inconsistent with a ordinary dividend policy and likely reflects a special distribution, buyback, or data artefact — it should not be underwritten without annual-report confirmation.
+**Market and governance:** Coverage notes an earnings miss vs analyst expectations (Aug 2025) and CEO compensation commentary (Nov 2025). No regulatory enforcement or management changes identified in the manifest.
+
+**Pension/rehabilitation:** Employee provisions are modest on Yahoo data; long-term rehabilitation and closure liabilities typical of WA gold miners cannot be assessed without annual-report notes.
+
+---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate, tilted toward corporate actions and valuation commentary rather than deep operational reporting.
+Coverage over the past year is **moderate** — strong on corporate actions and valuation commentary, thin on verified financial detail from primary sources. Many items are syndicated price/sector commentary (Kalkine, Simply Wall St).
 
-Portfolio rationalisation dominated the agenda: Westgold agreed to divest the Peak Hill gold project for A$58.3m plus a 1.0% NSR royalty (4 May 2025); executed sale of the Chalice Gold Project to Corazon Mining for approximately A$25.7–28.5m (19–20 May and 7 Jul 2025); and divested the Reedy and Comet projects to Valiant Gold (13 Mar 2025). These transactions signal a focus on core Murchison/Southern Goldfields assets and balance-sheet optionality.
+**Portfolio rationalisation and M&A:**
 
-Growth and operations: The board approved expansion of the Higginsville Processing Hub from 1.6mtpa to 2.6mtpa (10–11 Mar 2025). Westgold reported record half-year results for the period ended 31 December 2025, including A$1,237.56m sales, A$190.73m net income, and 195,355 oz production, alongside a final FY25 dividend and 5% on-market buyback (28 Feb 2026). A Q3 FY26 update cited an A$285m underlying quarterly cash build, reaffirmed guidance, and debt-free, unhedged status (30 Apr 2026).
+- Peak Hill gold project divestment for **A$58.3m plus 1.0% NSR** (4 May 2025, Yahoo Finance).
+- Chalice Gold Project sale to Corazon Mining for **~A$25.7–28.5m** (19–20 May 2025; 7 Jul 2025, marketscreener).
+- Mt Henry-Selene Gold Project divested for **A$64.6m** (17 Dec 2025, ASX announcement headline via filings index).
+- Demerger of non-core Reedy and Comet projects to **Valiant Gold**; Valiant listed on ASX **27 Mar 2026** (13 Mar 2026 demerger completion headline).
 
-Market and sentiment: Multiple articles flagged share-price weakness despite operational strength (12 Mar, 20 May, and 30 Apr 2026). Kalkine highlighted production outlook (15 May 2025); Simply Wall St noted institutional ownership support (22 Sep 2025) and analyst model revisions after an earnings miss (29 Aug 2025).
+**Operations and growth:**
 
-No material regulatory enforcement actions or management changes were identified in the manifest. News coverage is useful for strategy direction but thin on verified financial detail.
+- Higginsville Processing Hub expansion approved: **1.6 to 2.6 mtpa** (10–11 Mar 2025).
+- Record **H1 FY26** results: A$1,237.56m sales, A$190.73m net income, 195,355 oz; final FY25 dividend and **5% on-market buyback** announced (28 Feb 2026).
+- **Jun 2026 quarterly** results released 22 Jul 2026; headlines cite output beating guidance.
+- **TSX listing** commenced Aug 2024 (filings index).
+
+**Market sentiment:**
+
+- Share-price weakness despite operational strength flagged repeatedly (Mar, May, Jul 2026).
+- Institutional ownership noted positively (Sep 2025, Simply Wall St).
+- Analyst buy calls after strong rally discussed (Feb 2026, Kalkine).
+
+No material regulatory actions or CEO/management changes identified. News is useful for strategy direction but **cannot substitute** for missing filing bodies.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Deep research broadly confirms the screen’s buy case on valuation, balance-sheet strength, and earnings recovery, but primary filing absence, gold-price cyclicality, and unverified interim data prevent full confirmation of the dividend and quality signals.
+Confidence: 0.65
+Rationale: Deep research broadly confirms the screen’s buy case on valuation, balance-sheet strength, and earnings recovery, but the absence of primary filing extracts, gold-price cyclicality, and unverified interim data prevent full confirmation of the dividend and elevated FCF signals.

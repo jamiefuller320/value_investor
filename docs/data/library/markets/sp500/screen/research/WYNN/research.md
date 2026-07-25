@@ -1,0 +1,103 @@
+# Wynn Resorts, Limited (WYNN) — Research memo
+
+_Version 1 · Updated 2026-07-25T13:32:43.093673+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Wynn Resorts is a luxury integrated-resort operator spanning Macau (Wynn Palace, Wynn Macau), Las Vegas, Encore Boston Harbor, and a development-stage UAE project (Wynn Al Marjan Island, targeted 2027 opening). The quantitative screen flags a buy on cheapness, dividend, GARP, and risk factors—highlighting Lynch PEG 0.55, PEGY 0.18, and trailing earnings growth of ~51%—despite a modest 1.0% yield and negative book equity (P/B −46.8). Filings show revenue essentially flat in FY2025 ($7.14bn) but net income to common fell sharply to $327m as tax normalisation replaced prior-year Macau exemptions; Q1 2026 re-accelerated, with revenue up 9% year-on-year and net income attributable to Wynn Resorts of $120m. The valuation debate centres on whether the market is under-pricing UAE optionality and normalised Macau/Las Vegas cash generation, or correctly penalising ~$10.5bn gross debt, ~$626m annual interest expense, and cyclical China/Macau exposure. We see a GARP-consistent accumulate case, not a high-conviction deep-value entry.
+
+## INVESTMENT THESIS
+For a value-oriented investor, WYNN offers a **quality-at-a-reasonable-growth-price** profile rather than classic asset-based cheapness. The screen passes five models across four families (cheapness, dividend, GARP, risk) with high data quality (18/20 metrics), and the headline PEG metrics (0.55 Lynch, 0.18 Neff PEGY) suggest the market prices modest growth against an elevated but not extreme P/E of 27.8x. Business quality is supported by premium positioning: FY2025 Adjusted Property EBITDAR was $2.22bn (10-K), Las Vegas generated the largest property-level contribution ($902m EBITDAR), and Q1 2026 property EBITDAR rose to $562m from a softer FY2025 start. The company generates meaningful cash—Yahoo reports FY2025 free cash flow of $692m (filing bodies lack a complete cash-flow statement extract; see Financial Review)—and returns capital via dividends ($175m in FY2025 per Yahoo) and buybacks ($380m). Magic Formula and Earnings Quality passes indicate the screen is not relying on low-quality accounting. The **negative stockholders’ equity** (−$275m at parent level, −$1.0bn consolidated at 31 Dec 2025 per Q1 2026 10-Q) reflects accumulated deficits and aggressive treasury-stock repurchases rather than insolvency, but it limits traditional book-based value metrics. UAE expansion and continued Macau concession tenure (gaming tax exemptions through 2027 per FY2024 10-K) offer upside not fully captured by backward-looking screens. At ~$96 and near 52-week lows (news flow), the risk/reward skews favourable for patient investors who accept gaming-cycle volatility.
+
+## FINANCIAL REVIEW
+**Annual results (10-K, SEC EDGAR)**
+
+Two annual 10-K body extracts are available (FY2024 filed Feb 2025; FY2025 filed Mar 2026). Both are truncated and omit the primary consolidated income-statement front matter; segment and quarterly tables within the FY2025 10-K provide the authoritative annual figures below.
+
+| Metric | FY2025 (10-K) | FY2024 (10-K) | Change |
+|--------|---------------|---------------|--------|
+| Operating revenues | $7,137.9m | $7,128.0m | +0.1% |
+| Operating income | $1,118.4m | $1,132.7m | −1.3% |
+| Adjusted Property EBITDAR | $2,224.2m | $2,364.9m | −5.9% |
+| Income before taxes | $514.1m | $643.4m | −20.1% |
+| Tax provision | $105.0m | $3.7m | Normalisation |
+| Net income (consolidated) | $409.1m | $639.7m | −36.0% |
+| Net income attributable to Wynn Resorts | **$327.3m** | **$501.1m** | **−34.7%** |
+| Diluted EPS | $3.14 | $4.35 | −27.8% |
+| Interest expense | $625.6m | $688.4m | −9.1% |
+
+FY2025 revenue was essentially flat, with segment mix shifting: Wynn Palace revenue rose to $2.31bn while Wynn Macau declined to $1.41bn (10-K segment table). Property-level EBITDAR softened at all four resorts (Palace $683m, Macau $402m, Las Vegas $902m, Boston $237m). The earnings decline was driven primarily by a **$105m tax provision** in FY2025 versus a near-zero $3.7m provision in FY2024, as Macau complementary-tax exemptions ($107m benefit in 2024 per FY2024 10-K notes) and large deferred-tax movements normalised. Geographic pretax income shifted: U.S. pretax rose to $336m (from $251m) while foreign pretax fell to $178m (from $392m).
+
+**Balance sheet (filings)**
+
+At **31 December 2025** (Q1 2026 10-Q comparative column): total assets **$13,108m**; cash and equivalents **$1,463m**; long-term debt **$10,537m**; consolidated stockholders’ deficit **$(1,031)m** (parent deficit **$(275)m**). At **31 March 2026**: total assets **$12,905m**; cash **$1,188m**; long-term debt **$9,977m**; current portion of debt **$548m** (up from $9m at year-end, indicating near-term maturities/refinancing); consolidated stockholders’ deficit **$(942)m**. Total property and equipment (net) ~$6.6bn; investments in unconsolidated affiliates **$1,055m** (includes Al Marjan-related interests). **Gap:** the FY2025 10-K body extract does not include a readable consolidated balance-sheet table; figures above are from the Q1 2026 10-Q.
+
+**Interim results (10-Q)**
+
+Six quarterly 10-Q body extracts are available (Q2 2024 through Q1 2026). Key trends:
+
+- **Q1 2026** (filed May 2026): operating revenues **$1,857m** (+9.2% vs Q1 2025 $1,700m); operating income **$283m** (+5.2%); net income attributable to Wynn Resorts **$120m** (+66% vs $73m); Adjusted Property EBITDAR **$562m**; diluted EPS **$1.04**.
+- **9M FY2025** (Q3 2025 10-Q): operating revenues **$5,272m** (−0.3% vs 9M 2024); operating income **$844m** (+10%); net income attributable **$227m** (+1.4%). Q3 2025 alone was weak: net loss attributable **$(32)m** vs profit in prior quarters.
+- **Q1 2025** showed YoY revenue and operating income declines vs Q1 2024 ($1,700m revenue vs $1,863m; operating income $269m vs $363m), indicating a soft start to FY2025 before H2 recovery (Q4 FY2025 net income attributable **$100m** per 10-K quarterly table).
+
+**Cash flow (Yahoo fallback)**
+
+The FY2025 10-K body extract does not contain a legible consolidated cash-flow statement. Per **financials_annual.json** (Yahoo, stated explicitly as fallback): operating cash flow **$1,353m**; capital expenditure **$(661)m**; **free cash flow $692m**; dividends paid **$(175)m**; share repurchases **$(380)m**. Interest paid (supplemental) **$585m**. These align directionally with the earnings and capex commentary in filings (Macau and Las Vegas capex combined ~$528m in FY2025 per 10-K capex disclosure).
+
+**Other filing notes**
+
+- Contractual commitments: **$825m** minimum future payments as of 31 Dec 2025 (10-K).
+- Letters of credit: **$14.3m** outstanding.
+- Litigation: management states normal-course litigation **“not expected to have a material effect”** on financial condition (10-K).
+- **No going-concern language** identified in available body extracts.
+- Eight 8-K filings are indexed; only two have body extracts (Sep 2025 Wynn Macau **$1.0bn senior notes redemption** and interim report filing). Remaining 8-K bodies are unavailable.
+
+## RISKS AND RED FLAGS
+**Leverage and capital structure.** ~$10.5bn gross debt and ~$626m FY2025 interest expense (10-K) consume a large share of EBITDAR. The Q1 2026 balance sheet shows a **$548m current debt portion**, elevating near-term refinancing risk. Consolidated and parent-level **stockholders’ deficits** persist; continued buybacks ($380m FY2025 per Yahoo) deepen negative book equity and may concern credit-focused investors.
+
+**Cyclical and geographic concentration.** Macau remains material (FY2025 Palace + Macau revenue ~$3.7bn combined; Palace EBITDAR $683m). China consumer, travel policy, and regional competition (news: “Increased Competition In A Slowing Market,” Seeking Alpha, 15 Jul 2026) pose ongoing risks. FY2025 foreign pretax income fell 55% year-on-year (10-K tax note).
+
+**Tax and earnings quality.** FY2024–FY2025 comparability is distorted by Macau tax exemptions (through 2027) and deferred-tax movements. Normalised FY2025 effective tax rate was ~20% vs 0.6% in FY2024 (FY2024 10-K). Screen-trailing “50.9% growth” partly reflects this base effect and Q1 2026 rebound—not a durable organic growth rate.
+
+**Development and execution.** Wynn Al Marjan Island (UAE, 2027 target) is funded via an unconsolidated facility agreement; Wynn is not a direct borrower but has related-party development obligations (10-K Note 17). Regional geopolitical risk and first-mover uncertainty in UAE gaming are real (news coverage Jul 2026). Capital commitments of $825m plus project spend sit alongside existing leverage.
+
+**Governance and key-person.** The Wynn family retains significant influence; historical governance concerns are a known overhang (not detailed in current body extracts).
+
+**Market sentiment.** Shares have underperformed the S&P 500 (news: 16% six-month loss vs index +7.9%, Yahoo Finance, 24 Jul 2026) and touched 52-week lows (~$93), suggesting the market discounts Macau/UAE or macro fears beyond what screens capture.
+
+**Pension.** No material pension red flag surfaced in available extracts; accrued compensation liabilities are routine.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-good on fundamentals**, though heavily overlaid with price-action and options noise.
+
+**Strategy / growth**
+- “Did Wynn’s Middle East Debut with Al Marjan Island Just Shift Wynn Resorts' (WYNN) Investment Narrative?” (Yahoo Finance, 13 Jul 2026)
+- “Wynn Resorts (WYNN) Could Be 28% Undervalued As UAE Growth Narrative Builds” (Yahoo Finance, 13 Jul 2026; Truist initiation cited)
+- “Wynn Resorts' project in the UAE may be overlooked by investors” (Seeking Alpha, 22 Jul 2026)
+- “Wynn Resorts (WYNN) Announces Amended Land Concession Contract” (GuruFocus, 23 Jul 2026)
+- “Wynn Resorts (WYNN) Advances UAE Project Amid Regional Challenges” (GuruFocus, 23 Jul 2026)
+
+**Earnings**
+- “Wynn Resorts, Limited Reports First Quarter 2026 Results” (PR Newswire, 7 May 2026) — beat headlines
+- “Wynn Resorts Q1 Earnings & Revenues Beat Estimates, Rise Y/Y” (Yahoo Finance, 8 May 2026)
+- “What to Expect From Wynn Resorts' Next Quarterly Earnings Report” (Yahoo Finance, 22 Jul 2026) — Q2 2026 expectations for modest profit dip
+
+**Balance-sheet / subsidiary**
+- Sep 2025 8-K: Wynn Macau redeemed **$1.0bn** of 5.50% senior notes due 2026 (filing body)
+
+**Market / sentiment**
+- “Wynn Resorts stock hits 52-week low at 92.88 USD” (Investing.com, 23 Jul 2026)
+- “Stifel: Wynn Stock ‘Seems Crazy’ As It Assigns Nearly No Value for Macau, UAE” (Casino.org, 20 Jul 2026)
+- “3 Reasons WYNN is Risky and 1 Stock to Buy Instead” (Yahoo Finance, 24 Jul 2026)
+- Jim Cramer commentary: “Very Difficult Investment” / “Hold Off for Now” (Yahoo Finance, May–Jun 2026)
+- “Wynn Resorts: Increased Competition In A Slowing Market” (Seeking Alpha, 15 Jul 2026)
+
+**M&A context (sector)**
+- “MGM Resorts Could be Headed for a Sale as Casino Stocks Become Hot Takeover Targets” (Barron’s via yfinance, 13 Jul 2026) — sector consolidation read-through, not Wynn-specific
+
+**Management changes:** None material in the manifest.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: high
+Confidence: 0.68
+Rationale: Filings confirm a GARP-consistent buy case—stable ~$7.1bn revenue base, $2.2bn+ property EBITDAR, improving Q1 2026 trends, and UAE optionality—but normalised earnings are lower than peak FY2024, leverage and negative equity remain substantial, and cyclical/geopolitical risks warrant sizing discipline rather than full quantitative-screen conviction.

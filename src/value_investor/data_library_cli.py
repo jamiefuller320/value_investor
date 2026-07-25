@@ -235,7 +235,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--checkpoint-usd",
         type=float,
         default=None,
-        help="Pause research after this much estimated spend since last approval (default: 30)",
+        help="Pause research after this much estimated spend since last approval (default: 60)",
     )
     ladder_p.add_argument(
         "--approve-checkpoint",
@@ -473,6 +473,39 @@ def build_parser() -> argparse.ArgumentParser:
     )
     repair_p.add_argument("--json", action="store_true")
     repair_p.set_defaults(func=cmd_repair_research)
+
+    deepen_p = sub.add_parser(
+        "deepen-thin",
+        help="Re-ingest filings and gap-fill source deepen for thin library memos (0 bodies)",
+    )
+    deepen_p.add_argument(
+        "--markets",
+        default="asx200,euro_stoxx50",
+        help="Comma-separated market ids (default: asx200,euro_stoxx50)",
+    )
+    deepen_p.add_argument(
+        "--max-with-body",
+        type=int,
+        default=0,
+        help="Include memos with at most this many indexed filing bodies (default: 0)",
+    )
+    deepen_p.add_argument(
+        "--rememo",
+        action="store_true",
+        help="Re-memo tickers when filing bodies improve (requires Cursor API key)",
+    )
+    deepen_p.add_argument(
+        "--rememo-all",
+        action="store_true",
+        help="Re-memo every target after deepen (not only when bodies improved)",
+    )
+    deepen_p.add_argument(
+        "--api-key",
+        default=None,
+        help="Cursor API key for optional re-memo (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
+    )
+    deepen_p.add_argument("--json", action="store_true")
+    deepen_p.set_defaults(func=cmd_deepen_thin)
 
     retry_p = sub.add_parser(
         "retry-failed",
@@ -1258,6 +1291,51 @@ def cmd_repair_research(args: argparse.Namespace) -> int:
                 f"  {row['market']}/{row['ticker']}: "
                 f"bodies {row.get('bodies_before')}→{row.get('bodies_after')}  "
                 f"rememo={row.get('rememo')}  reasons={','.join(row.get('reasons') or [])}"
+            )
+    return 0 if not payload.get("errors") else 1
+
+
+def cmd_deepen_thin(args: argparse.Namespace) -> int:
+    from value_investor.cursor_api_key import resolve_cursor_api_key
+
+    from .library_maintenance import deepen_library_research_memos, list_thin_library_memos
+
+    markets = _parse_markets(args.markets) or ["asx200", "euro_stoxx50"]
+    targets = list_thin_library_memos(
+        args.root,
+        markets=markets,
+        max_with_body=int(args.max_with_body),
+    )
+    key = None
+    if args.rememo or args.rememo_all:
+        key = (args.api_key or "").strip() or resolve_cursor_api_key()[0]
+        if not key:
+            print("CURSOR_API_KEY_V2 / CURSOR_API_KEY required for --rememo / --rememo-all", file=sys.stderr)
+            return 1
+    payload = deepen_library_research_memos(
+        args.root,
+        targets,
+        api_key=key,
+        rememo_when_improved=bool(args.rememo),
+        rememo_all=bool(args.rememo_all),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0 if not payload.get("errors") else 1
+    print(
+        f"Thin targets: {payload['target_count']}  "
+        f"deepened: {payload['deepened']}  "
+        f"re-memoed: {payload['rememoed']}  "
+        f"errors: {len(payload.get('errors') or [])}"
+    )
+    for row in payload.get("results") or []:
+        if row.get("error"):
+            print(f"  ERROR {row['market']}/{row['ticker']}: {row['error']}")
+        else:
+            print(
+                f"  {row['market']}/{row['ticker']}: "
+                f"bodies {row.get('bodies_before')}→{row.get('bodies_after')}  "
+                f"improved={row.get('improved')}  rememo={row.get('rememo')}"
             )
     return 0 if not payload.get("errors") else 1
 
