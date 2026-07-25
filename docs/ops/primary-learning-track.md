@@ -39,6 +39,9 @@ ftse-decision-review --output-dir docs/data/paper_automation --tracks all --appl
 python3 scripts/bootstrap_learning_loop.py
 ```
 
+Weekday CI (`paper-auto.yml`) refreshes the research overlay on `docs/data/latest.json`
+automatically before trading — no manual bootstrap needed.
+
 Artifacts: `learning_tracks_summary.json`, `learning_tracks_review.json`, plus
 per-track `automated_fund.json` / `decision_review.json`.
 
