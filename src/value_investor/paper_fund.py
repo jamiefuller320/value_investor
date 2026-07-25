@@ -7,6 +7,8 @@ from datetime import date, datetime, timezone
 from typing import Any, Literal
 from uuid import uuid4
 
+from value_investor.research.verdict import coerce_research_verdict
+
 SizingMode = Literal["shares", "cash", "pct_nav"]
 StrategyMode = Literal["manual", "technical", "automated"]
 
@@ -666,8 +668,10 @@ def select_automated_targets(
         if signal not in BUY_SIGNALS:
             continue
         if require_research_accumulate:
-            verdict = row.get("research_verdict")
-            if verdict is None or str(verdict).strip().lower() != "accumulate":
+            verdict = coerce_research_verdict(
+                str(row.get("research_verdict")) if row.get("research_verdict") is not None else None
+            )
+            if verdict != "accumulate":
                 continue
         if skip_timing_wait and row.get("timing_signal") == "wait":
             continue

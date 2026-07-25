@@ -39,6 +39,27 @@ def _normalise_verdict(value: str | None) -> ResearchVerdict | None:
     return None
 
 
+def coerce_research_verdict(value: str | None) -> ResearchVerdict | None:
+    """
+    Normalise a research verdict from a slug (``accumulate``) or a rendered block
+    (``Verdict: accumulate\\nRisk: medium\\n...``).
+    """
+    if not value:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    direct = _normalise_verdict(text)
+    if direct is not None:
+        return direct
+    if "\n" in text or text.lower().startswith("verdict:"):
+        parsed = parse_research_verdict(text)
+        verdict = parsed.get("research_verdict")
+        if isinstance(verdict, str):
+            return _normalise_verdict(verdict)
+    return None
+
+
 def _normalise_risk(value: str | None) -> ResearchRiskLevel | None:
     if not value:
         return None

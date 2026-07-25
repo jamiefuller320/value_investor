@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-24T22:59:40.738631+00:00",
+  "generated_at": "2026-07-25T05:44:29.082734+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -252,10 +252,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-07-24T07:21:12.413811+00:00",
+        "at": "2026-07-25T05:44:21.533555+00:00",
         "kind": "paper_run",
-        "title": "Paper automation checked (no action)",
-        "detail": "waiting for open settle (75 min after 08:00 Europe/London)"
+        "title": "Paper automation acted",
+        "detail": "Rebalanced after open settle (5 trade(s))."
       },
       {
         "at": "2026-07-20T20:06:59.706524+00:00",
@@ -738,20 +738,56 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-07-24T07:21:12.413811+00:00",
-      "acted": false,
-      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+      "generated_at": "2026-07-25T05:44:21.533555+00:00",
+      "acted": true,
+      "note": "Rebalanced after open settle (5 trade(s)).",
       "gate": {
-        "local_time": "2026-07-24T08:20:57.447914+01:00",
-        "trading_day": true,
+        "local_time": "2026-07-25T06:44:13.933160+01:00",
+        "trading_day": false,
         "after_settle": false,
-        "market_open_at": "2026-07-24T08:00:00+01:00",
-        "settle_at": "2026-07-24T09:15:00+01:00",
+        "market_open_at": "2026-07-25T08:00:00+01:00",
+        "settle_at": "2026-07-25T09:15:00+01:00",
         "can_act": false,
-        "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+        "reason": "non-trading day"
       },
-      "trade_count": 0,
-      "trades_sample": [],
+      "trade_count": 5,
+      "trades_sample": [
+        {
+          "acted_at": "2026-07-25T06:44:13.933160+01:00",
+          "ticker": "MEGP.L",
+          "side": "buy",
+          "name": "ME Group International plc",
+          "net_cash": -183.39
+        },
+        {
+          "acted_at": "2026-07-25T06:44:13.933160+01:00",
+          "ticker": "HIK.L",
+          "side": "buy",
+          "name": "Hikma Pharmaceuticals PLC",
+          "net_cash": -183.39
+        },
+        {
+          "acted_at": "2026-07-25T06:44:13.933160+01:00",
+          "ticker": "ITV.L",
+          "side": "buy",
+          "name": "ITV plc",
+          "net_cash": -183.39
+        },
+        {
+          "acted_at": "2026-07-25T06:44:13.933160+01:00",
+          "ticker": "AEP.L",
+          "side": "buy",
+          "name": "AEP Plantations Plc",
+          "net_cash": -183.39
+        },
+        {
+          "acted_at": "2026-07-25T06:44:13.933160+01:00",
+          "ticker": "BREE.L",
+          "side": "buy",
+          "name": "Breedon Group plc",
+          "net_cash": -183.39
+        }
+      ],
       "fund": {
         "cash": 0.0,
         "nav": null,

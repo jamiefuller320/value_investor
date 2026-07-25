@@ -97,6 +97,23 @@ def test_select_automated_targets_ai_judgment_gates():
     )
     assert [r["ticker"] for r in ai] == ["GOOD.L"]
 
+    rendered = select_automated_targets(
+        [
+            {
+                "ticker": "RENDER.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "research_verdict": "Verdict: accumulate\nRisk: medium\nConfidence: 0.70",
+                "conviction_score": 0.88,
+                "price": 10,
+            }
+        ],
+        max_positions=5,
+        use_adjusted_signal=True,
+        require_research_accumulate=True,
+    )
+    assert [r["ticker"] for r in rendered] == ["RENDER.L"]
+
 
 def test_propose_knobs_raises_conviction_on_high_cost_drag():
     metrics = BookMetrics(
