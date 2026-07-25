@@ -1307,16 +1307,17 @@ def cmd_deepen_thin(args: argparse.Namespace) -> int:
         max_with_body=int(args.max_with_body),
     )
     key = None
-    if args.rememo:
+    if args.rememo or args.rememo_all:
         key = (args.api_key or "").strip() or resolve_cursor_api_key()[0]
         if not key:
-            print("CURSOR_API_KEY_V2 / CURSOR_API_KEY required for --rememo", file=sys.stderr)
+            print("CURSOR_API_KEY_V2 / CURSOR_API_KEY required for --rememo / --rememo-all", file=sys.stderr)
             return 1
     payload = deepen_library_research_memos(
         args.root,
         targets,
         api_key=key,
         rememo_when_improved=bool(args.rememo),
+        rememo_all=bool(args.rememo_all),
     )
     if args.json:
         print(json.dumps(payload, indent=2))
