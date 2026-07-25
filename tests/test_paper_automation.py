@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 from value_investor.paper_automation import (
     AutomationConfig,
     is_after_open_settle,
+    load_screen_candidates,
     run_daily_automation,
     session_gate_status,
     surveil_position,
@@ -195,3 +196,14 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     assert "momentum_grace" in summary["tracks"]
     assert summary["tracks"]["momentum_grace"]["selection"]["use_momentum_grace"] is True
     assert (tmp_path / "auto" / "momentum_grace" / "config.json").exists()
+
+
+def test_load_screen_candidates_accepts_email_reports_list(tmp_path):
+    path = tmp_path / "email_reports.json"
+    path.write_text(
+        '[{"ticker": "AAA.L", "signal": "strong_buy", "name": "Alpha"}]',
+        encoding="utf-8",
+    )
+    rows = load_screen_candidates(path)
+    assert len(rows) == 1
+    assert rows[0]["ticker"] == "AAA.L"

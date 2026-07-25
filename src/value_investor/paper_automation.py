@@ -403,6 +403,8 @@ def load_screen_candidates(reports_path: Path | None = None) -> list[dict[str, A
         if not path.exists():
             return []
         payload = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(payload, list):
+            return list(payload)
         reports = payload.get("reports") if isinstance(payload, dict) else None
         return list(reports) if isinstance(reports, list) else []
 
