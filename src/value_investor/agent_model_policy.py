@@ -37,6 +37,7 @@ DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro subscription (included pool metada
 DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10  # Legacy plan_fraction mode only
 DEFAULT_WEEKLY_USAGE_GBP = 30.0  # Usage-based library research envelope
 DEFAULT_GBP_USD_RATE = 1.27  # Approx; override via budget.gbp_usd_rate
+DEFAULT_SPEND_CHECKPOINT_USD = 30.0
 DEFAULT_ALLOCATION_BASIS = "usage_weekly_gbp"  # or "plan_fraction"
 DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
@@ -492,6 +493,66 @@ def record_estimated_spend(
     policy["budget"] = budget
     save_policy(policy, path)
     return normalize_budget(load_policy(path).get("budget"))
+
+
+def spend_since_checkpoint_usd(policy: dict[str, Any] | None = None) -> float:
+    """Estimated spend accumulated since the last approval checkpoint."""
+    policy = policy or load_policy()
+    ladder = policy.get("ladder") or {}
+    return float(ladder.get("spend_since_checkpoint_usd") or 0.0)
+
+
+def spend_checkpoint_usd(policy: dict[str, Any] | None = None) -> float:
+    """Configured spend checkpoint size (default $30)."""
+    policy = policy or load_policy()
+    ladder = policy.get("ladder") or {}
+    return float(ladder.get("spend_checkpoint_usd") or DEFAULT_SPEND_CHECKPOINT_USD)
+
+
+def record_spend_with_checkpoint(
+    amount_usd: float,
+    path: Path | None = None,
+    *,
+    checkpoint_usd: float | None = None,
+) -> dict[str, Any]:
+    """
+    Record estimated spend and return checkpoint status.
+
+    When ``spend_since_checkpoint_usd`` reaches ``checkpoint_usd``, callers
+    should pause and request human approval before continuing research.
+    """
+    policy = load_policy(path)
+    budget = record_estimated_spend(amount_usd, path)
+    policy = load_policy(path)
+    ladder = dict(policy.get("ladder") or {})
+    since = round(float(ladder.get("spend_since_checkpoint_usd") or 0.0) + float(amount_usd), 4)
+    ladder["spend_since_checkpoint_usd"] = since
+    limit = float(checkpoint_usd if checkpoint_usd is not None else spend_checkpoint_usd(policy))
+    ladder["spend_checkpoint_usd"] = limit
+    policy["ladder"] = ladder
+    save_policy(policy, path)
+    return {
+        "budget": budget,
+        "spend_since_checkpoint_usd": since,
+        "spend_checkpoint_usd": limit,
+        "checkpoint_reached": since >= limit,
+        "remaining_until_checkpoint_usd": round(max(0.0, limit - since), 4),
+    }
+
+
+def approve_spend_checkpoint(path: Path | None = None) -> dict[str, Any]:
+    """Reset spend-since-checkpoint after human approval to continue research."""
+    policy = load_policy(path)
+    ladder = dict(policy.get("ladder") or {})
+    ladder["spend_since_checkpoint_usd"] = 0.0
+    ladder["last_checkpoint_approved_at"] = datetime.now(UTC).isoformat()
+    policy["ladder"] = ladder
+    save_policy(policy, path)
+    return {
+        "spend_since_checkpoint_usd": 0.0,
+        "spend_checkpoint_usd": spend_checkpoint_usd(policy),
+        "approved_at": ladder["last_checkpoint_approved_at"],
+    }
 
 
 def grow_ticker_budget(

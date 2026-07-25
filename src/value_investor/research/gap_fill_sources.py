@@ -60,6 +60,54 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
             "why": "Non-GAAP reconciliations and FCF bridges",
         },
     ],
+    "euro": [
+        {
+            "id": "exchange_filings_full",
+            "label": "Euronext / national register filing full-text re-pull",
+            "why": "Euro memos often index headlines without bodies",
+        },
+        {
+            "id": "company_ir_presentation",
+            "label": "Company IR annual report / results deck PDF",
+            "why": "ESEF/iXBRL and segment tables often missing from Yahoo",
+        },
+    ],
+    "asia": [
+        {
+            "id": "exchange_filings_full",
+            "label": "HKEX / SGX announcement full-text re-pull",
+            "why": "Asia filing discovery is headline-only today",
+        },
+        {
+            "id": "sec_exhibits",
+            "label": "SEC 20-F / 6-K for dual-listed ADRs",
+            "why": "US filings may hold richer English disclosures",
+        },
+    ],
+    "tsx": [
+        {
+            "id": "exchange_filings_full",
+            "label": "SEDAR+ / exchange filing full-text re-pull",
+            "why": "Canadian announcements often lack downloaded bodies",
+        },
+        {
+            "id": "company_ir_presentation",
+            "label": "Company IR MD&A / results presentation",
+            "why": "Cash-flow bridges and pension notes",
+        },
+    ],
+    "asx": [
+        {
+            "id": "exchange_filings_full",
+            "label": "ASX announcement full-text re-pull",
+            "why": "ASX memos rely on Yahoo without announcement bodies",
+        },
+        {
+            "id": "company_ir_presentation",
+            "label": "Company IR results presentation",
+            "why": "Segment and FCF detail beyond Yahoo",
+        },
+    ],
     "default": [
         {
             "id": "company_ir_presentation",
@@ -81,6 +129,28 @@ def _market_bucket(market: str | None, ticker: str) -> str:
         return "uk"
     if mid in {"sp500", "nasdaq100", "us_adr_asia"} or "." not in ticker:
         return "us"
+    if mid in {
+        "euro_stoxx50",
+        "dax",
+        "cac40",
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20",
+        "atx",
+        "psi20",
+        "smi",
+        "omxs30",
+    }:
+        return "euro"
+    if mid in {"asx200", "asx"} or ticker.upper().endswith(".AX"):
+        return "asx"
+    if mid in {"tsx60", "tsx", "canada"} or ticker.upper().endswith(".TO"):
+        return "tsx"
+    if mid in {"hang_seng", "sti", "hk", "sgx", "asia"} or ticker.upper().endswith(
+        (".HK", ".SI")
+    ):
+        return "asia"
     return "default"
 
 
@@ -178,10 +248,16 @@ def fetch_alternate_gap_fill_news(
     ticker: str,
     *,
     max_items_per_query: int = 8,
+    market: str | None = None,
 ) -> list[dict[str, Any]]:
     """Extra Google News RSS queries aimed at qualitative gap themes."""
+    from value_investor.research.news_locale import resolve_news_locale
+
+    locale = resolve_news_locale(market, ticker)
     symbol = ticker.replace(".L", "")
-    base = fetch_google_news_rss(company_name, ticker, max_items=max_items_per_query)
+    base = fetch_google_news_rss(
+        company_name, ticker, max_items=max_items_per_query, market=market
+    )
     themed_queries = [
         f'"{company_name}" ("annual report" OR "full year" OR "interim results")',
         f'"{company_name}" (pension OR covenant OR "going concern" OR "working capital")',
@@ -194,6 +270,9 @@ def fetch_alternate_gap_fill_news(
                 query,
                 source_label="google_news_alternate",
                 max_items=max_items_per_query,
+                hl=locale["hl"],
+                gl=locale["gl"],
+                ceid=locale["ceid"],
             )
         )
     return merge_news_articles(base, themed)
@@ -216,7 +295,9 @@ def prepare_gap_fill_source_pack(
     # Re-attempt PDF / direct RNS bodies before the agent answers.
     body_refetch = refetch_missing_filing_bodies(sources_dir / "filings")
 
-    alternate_articles = fetch_alternate_gap_fill_news(company_name, ticker)
+    alternate_articles = fetch_alternate_gap_fill_news(
+        company_name, ticker, market=market
+    )
     alternate_path = sources_dir / "alternate_news.json"
     write_json(
         alternate_path,

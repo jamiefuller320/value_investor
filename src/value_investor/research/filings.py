@@ -1037,14 +1037,20 @@ def fetch_filings_euro_news(
     ticker: str,
     max_items: int = FILINGS_MAX_ITEMS,
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
+    market: str | None = None,
 ) -> list[dict[str, Any]]:
     """Discover Euro-listed results releases via Google News headlines."""
+    from value_investor.research.news_locale import euro_filing_site_clause, resolve_news_locale
+
     epic = _base_symbol(ticker)
+    site_clause = euro_filing_site_clause(ticker)
+    locale = resolve_news_locale(market, ticker)
     query = (
+        f"{site_clause}"
         f'("{company_name}" OR {epic} OR {ticker}) '
         f'("Annual Report" OR "Full Year Results" OR "Half-year Results" OR '
         f'"Interim Results" OR "Quarterly Results" OR "Half Year Results" OR '
-        f'"Preliminary Results")'
+        f'"Preliminary Results" OR "Geschäftsbericht" OR "Résultats")'
     )
     return fetch_filings_google_news(
         company_name=company_name,
@@ -1053,9 +1059,9 @@ def fetch_filings_euro_news(
         lookback_days=lookback_days,
         query=query,
         source_label="google_news_euro",
-        hl="en",
-        gl="DE",
-        ceid="DE:en",
+        hl=locale["hl"],
+        gl=locale["gl"],
+        ceid=locale["ceid"],
     )
 
 
@@ -1231,13 +1237,30 @@ def fetch_filings_ticker_api(
     return rows
 
 
+def resolve_google_news_publisher_url(url: str | None) -> str | None:
+    """Follow Google News wrapper redirects to the publisher URL when possible."""
+    if not url or "news.google.com" not in url:
+        return url
+    try:
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(request, timeout=20) as response:
+            final = response.geturl()
+            if final and "news.google.com" not in final:
+                return final
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("Google News URL resolve failed for %s: %s", url, exc)
+    return None
+
+
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
         return None
-    # Google News wrappers rarely expose the publisher body.
     if "news.google.com" in url:
-        return None
+        resolved = resolve_google_news_publisher_url(url)
+        if not resolved or "news.google.com" in resolved:
+            return None
+        url = resolved
     headers: dict[str, str] = {}
     if "sec.gov" in url:
         headers["User-Agent"] = _sec_user_agent()
@@ -1623,7 +1646,9 @@ def ingest_filings(
     elif regime == "asx_announcements":
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
-        groups.append(fetch_filings_euro_news(company_name=company_name, ticker=ticker))
+        groups.append(
+            fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
+        )
         # Dual-listed names may also file 20-F / 6-K with the SEC.
         groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
     elif regime == "tsx_announcements":
