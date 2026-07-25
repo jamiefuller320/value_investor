@@ -7,19 +7,23 @@ from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.research.filings import (
+    asx_markit_file_url,
     classify_filing_period,
     enrich_filing_rows,
     fetch_filing_body,
+    fetch_filings_asx_direct,
     fetch_filings_euro_news,
     fetch_filings_investegate_company,
     filter_misattributed_filings,
     headline_relevant_to_issuer,
     ingest_filings,
     merge_filings,
+    prune_orphaned_filing_bodies,
     refetch_missing_filing_bodies,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     summarize_filings,
+    _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
     _uk_ticker_sec_dual_listed,
     _extract_investegate_html_text,
@@ -570,6 +574,7 @@ def test_ingest_filings_asx_regime(tmp_path: Path):
         }
     ]
     with (
+        patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[]),
         patch("value_investor.research.filings.fetch_filings_asx_news", return_value=asx_rows),
         patch("value_investor.research.filings.fetch_filing_body", return_value=None),
         patch("value_investor.research.filings.fetch_filings_sec_edgar") as sec,
@@ -773,3 +778,82 @@ def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
         regime="euro_filings",
     )
     assert [row["id"] for row in filtered] == ["good"]
+
+
+def test_asx_markit_file_url():
+    key = "2924-03107929-2A1682457"
+    assert asx_markit_file_url(key).endswith(f"/file/{key}")
+
+
+@patch("value_investor.research.filings._http_get")
+def test_fetch_filings_asx_direct_parses_markit_json(mock_get):
+    payload = {
+        "data": {
+            "items": [
+                {
+                    "announcementType": "PERIODIC REPORTS",
+                    "date": "2026-02-26T08:00:00.000Z",
+                    "documentKey": "2924-03107929-2A1682457",
+                    "headline": "Worley Half Year 2026 Results",
+                    "isPriceSensitive": True,
+                },
+                {
+                    "announcementType": "ISSUED CAPITAL",
+                    "date": "2026-07-01T05:45:06.000Z",
+                    "documentKey": "2924-03106455-2A1681295",
+                    "headline": "Notification of cessation of securities - WOR",
+                },
+            ]
+        }
+    }
+    mock_get.return_value = json.dumps(payload).encode("utf-8")
+    rows = fetch_filings_asx_direct(company_name="Worley Limited", ticker="WOR.AX")
+    assert len(rows) == 1
+    assert rows[0]["source"] == "asx_direct"
+    assert rows[0]["period"] == "interim"
+    assert rows[0]["url"] == asx_markit_file_url("2924-03107929-2A1682457")
+
+
+def test_prune_orphaned_filing_bodies(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    (bodies_dir / "keepme.txt").write_text("Vinci SA annual results", encoding="utf-8")
+    (bodies_dir / "orphan.txt").write_text("Dollar General", encoding="utf-8")
+    index = {
+        "filings": [
+            {
+                "id": "keepme",
+                "has_body": True,
+                "body_path": str(bodies_dir / "keepme.txt"),
+            }
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    result = prune_orphaned_filing_bodies(filings_dir)
+    assert result["removed"] == 1
+    assert (bodies_dir / "keepme.txt").exists()
+    assert not (bodies_dir / "orphan.txt").exists()
+
+
+def test_scrub_misattributed_filing_rows(tmp_path: Path):
+    bodies_dir = tmp_path / "bodies"
+    bodies_dir.mkdir()
+    bad_path = bodies_dir / "badid.txt"
+    bad_path.write_text("Dollar General Corporation 10-Q", encoding="utf-8")
+    rows = [
+        {
+            "id": "badid",
+            "has_body": True,
+            "body_path": str(bad_path),
+            "headline": "10-Q",
+        }
+    ]
+    cleaned = _scrub_misattributed_filing_rows(
+        rows,
+        bodies_dir,
+        company_name="Vinci SA",
+        ticker="DG.PA",
+    )
+    assert cleaned[0]["has_body"] is False
+    assert not bad_path.exists()

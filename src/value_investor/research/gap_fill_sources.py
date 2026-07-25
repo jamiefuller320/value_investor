@@ -172,6 +172,9 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         except (OSError, ValueError, TypeError):
             filings_summary = {}
 
+    indexed_bodies = int(filings_summary.get("with_body") or 0)
+    has_filing_bodies = indexed_bodies > 0 or body_count > 0
+
     news_count = 0
     news_path = resolve_json_path(sources_dir / "news_manifest.json")
     if news_path is not None:
@@ -182,7 +185,7 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
 
     available = {
         "filings_index": resolved_index is not None,
-        "filings_bodies": body_count > 0,
+        "filings_bodies": has_filing_bodies,
         "yahoo_financials": resolve_json_path(sources_dir / "financials_annual.json") is not None,
         "news_manifest": news_count > 0,
         "screening_snapshot": resolve_json_path(sources_dir / "screening_snapshot.json") is not None,
@@ -194,6 +197,7 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         "available": available,
         "thin": thin,
         "filings_body_files": body_count,
+        "filings_indexed_bodies": indexed_bodies,
         "filings_summary": filings_summary,
         "news_article_count": news_count,
         "evidence_ladder": list(EVIDENCE_LADDER),
@@ -387,7 +391,11 @@ def execute_planned_alternate_sources(
     Re-ingests filings (Investegate/CH/SEC/IR) then refetches bodies. Stops
   when new bodies are downloaded or the planned list is exhausted.
     """
-    from value_investor.research.filings import ingest_filings, refetch_missing_filing_bodies
+    from value_investor.research.filings import (
+        ingest_filings,
+        prune_orphaned_filing_bodies,
+        refetch_missing_filing_bodies,
+    )
 
     sources_dir = Path(sources_dir)
     filings_dir = sources_dir / "filings"
@@ -417,6 +425,7 @@ def execute_planned_alternate_sources(
                 deepen_history=True,
             )
             last_refetch = refetch_missing_filing_bodies(filings_dir, max_bodies=20)
+            prune_orphaned_filing_bodies(filings_dir)
             fetched = int(last_refetch.get("fetched") or 0)
             fetched_total += fetched
             if fetched > 0:

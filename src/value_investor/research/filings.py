@@ -6,7 +6,7 @@ collects primary filings for FINANCIAL REVIEW.
 Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
-- ``asx_announcements`` (ASX 200 / ``.AX``): ASX / Market Index via Google News
+- ``asx_announcements`` (ASX 200 / ``.AX``): Markit Digital JSON feed (direct PDFs) + Google News fallback
 - ``euro_filings`` (EURO STOXX 50 / DAX / CAC): results headlines via Google News + SEC 20-F/6-K when dual-listed
 - ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
@@ -48,6 +48,19 @@ SEC_ANNUAL_FORMS = frozenset({"10-K", "10-K/A", "20-F", "20-F/A", "40-F", "40-F/
 SEC_INTERIM_FORMS = frozenset({"10-Q", "10-Q/A", "6-K"})
 SEC_OTHER_FORMS = frozenset({"8-K", "8-K/A"})
 SEC_FORM_ALLOWLIST = SEC_ANNUAL_FORMS | SEC_INTERIM_FORMS | SEC_OTHER_FORMS
+ASX_MARKIT_API_BASE = "https://asx.api.markitdigital.com/asx-research/1.0"
+ASX_MARKIT_ANNOUNCEMENTS_URL = ASX_MARKIT_API_BASE + "/companies/{symbol}/announcements"
+ASX_MARKIT_FILE_URL = ASX_MARKIT_API_BASE + "/file/{document_key}"
+# Markit returns at most five rows per request (no public pagination).
+ASX_MARKIT_MAX_ITEMS = 5
+_ASX_SKIP_ANNOUNCEMENT_TYPES = frozenset(
+    {
+        "ISSUED CAPITAL",
+        "SECURITY HOLDER DETAILS",
+        "CHANGE OF AUDITOR",
+        "CHANGE OF COMPANY DETAILS",
+    }
+)
 
 _sec_ticker_cik_cache: dict[str, int] | None = None
 
@@ -1060,6 +1073,92 @@ def fetch_filings_google_news(
     return rows
 
 
+def asx_markit_file_url(document_key: str) -> str:
+    """Direct PDF URL for an ASX announcement document key from the Markit feed."""
+    return ASX_MARKIT_FILE_URL.format(document_key=document_key)
+
+
+def fetch_filings_asx_direct(
+    *,
+    company_name: str,
+    ticker: str,
+    max_items: int = ASX_MARKIT_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """
+    Fetch recent ASX announcements via the public Markit Digital JSON feed.
+
+    Returns metadata rows with direct PDF URLs (``asx.api.markitdigital.com``).
+    The feed exposes only the latest handful of announcements per symbol.
+    """
+    epic = _base_symbol(ticker)
+    if not epic:
+        return []
+    url = (
+        ASX_MARKIT_ANNOUNCEMENTS_URL.format(symbol=urllib.parse.quote(epic))
+        + "?market=asx"
+        + f"&count={max(ASX_MARKIT_MAX_ITEMS, min(max_items, ASX_MARKIT_MAX_ITEMS))}"
+    )
+    try:
+        payload = _http_get(url, timeout=40)
+        data = json.loads(payload.decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        logger.warning("ASX Markit announcements fetch failed for %s: %s", ticker, exc)
+        return []
+
+    items = (data.get("data") or {}).get("items") or []
+    cutoff = datetime.now(UTC) - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    for item in items:
+        headline = _strip_html(str(item.get("headline") or ""))
+        if not headline:
+            continue
+        ann_type = str(item.get("announcementType") or "").strip().upper()
+        if ann_type in _ASX_SKIP_ANNOUNCEMENT_TYPES and not any(
+            token in headline.lower()
+            for token in ("result", "annual", "interim", "half year", "full year", "report")
+        ):
+            continue
+        if not headline_relevant_to_issuer(headline, company_name, ticker):
+            continue
+        published_raw = str(item.get("date") or "")
+        published: str | None = None
+        if published_raw:
+            try:
+                published_dt = datetime.fromisoformat(published_raw.replace("Z", "+00:00"))
+                if published_dt < cutoff:
+                    continue
+                published = published_dt.isoformat()
+            except ValueError:
+                published = published_raw
+        document_key = str(item.get("documentKey") or "").strip()
+        if not document_key:
+            continue
+        period = classify_filing_period(headline, form=ann_type)
+        file_url = asx_markit_file_url(document_key)
+        rows.append(
+            {
+                "id": _filing_id("asx_direct", document_key),
+                "source": "asx_direct",
+                "headline": headline,
+                "published_at": published,
+                "url": file_url,
+                "period": period,
+                "category": ann_type or None,
+                "summary": headline,
+                "has_body": False,
+                "body_path": None,
+                "priority": _priority_score(headline, period) + 15,
+                "document_key": document_key,
+            }
+        )
+        if len(rows) >= max_items:
+            break
+    if rows:
+        logger.info("ASX Markit direct: %s → %d announcements", ticker, len(rows))
+    return rows
+
+
 def fetch_filings_asx_news(
     *,
     company_name: str,
@@ -1360,6 +1459,8 @@ def _source_bonus(source: str | None) -> int:
         return 30
     if source in {"investegate_direct", "investegate_resolved"}:
         return 28
+    if source == "asx_direct":
+        return 27
     if source == "ir_allowlist":
         return 25
     return 0
@@ -1554,6 +1655,166 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     return best_text
 
 
+def _body_clearly_misattributed(text: str, company_name: str, ticker: str) -> bool:
+    """
+    True when body text is clearly from a different issuer (homonym collision).
+
+    Conservative: generic filing prose without issuer tokens is kept.
+    """
+    if headline_relevant_to_issuer(text, company_name, ticker):
+        return False
+    lower = (text or "").lower()
+    foreign_markers = (
+        "dollar general",
+        "banco santander",
+        "costco wholesale",
+    )
+    return any(marker in lower for marker in foreign_markers)
+
+
+def _scrub_misattributed_filing_rows(
+    filings: list[dict[str, Any]],
+    bodies_dir: Path,
+    *,
+    company_name: str,
+    ticker: str,
+) -> list[dict[str, Any]]:
+    """Remove body files and clear flags when text does not match the issuer."""
+    bodies_dir = Path(bodies_dir)
+    cleaned: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        if not item.get("has_body"):
+            cleaned.append(item)
+            continue
+        row_id = str(item.get("id") or "")
+        body_path = item.get("body_path")
+        candidate = Path(str(body_path)) if body_path else bodies_dir / f"{row_id}.txt"
+        if not candidate.is_file():
+            item["has_body"] = False
+            item["body_path"] = None
+            cleaned.append(item)
+            continue
+        try:
+            sample = candidate.read_text(encoding="utf-8", errors="replace")[:4000]
+        except OSError:
+            item["has_body"] = False
+            item["body_path"] = None
+            cleaned.append(item)
+            continue
+        if not _body_clearly_misattributed(sample, company_name, ticker):
+            cleaned.append(item)
+            continue
+        try:
+            candidate.unlink()
+        except OSError:
+            pass
+        item["has_body"] = False
+        item["body_path"] = None
+        cleaned.append(item)
+    return cleaned
+
+
+def prune_orphaned_filing_bodies(filings_dir: Path) -> dict[str, Any]:
+    """
+    Delete ``bodies/*.txt`` files not referenced by ``filings_index.json``.
+
+    Orphaned bodies can remain after SEC homonym collisions or index rewrites.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not bodies_dir.is_dir():
+        return {"removed": 0, "kept": 0, "removed_paths": []}
+    referenced: set[str] = set()
+    if index_path.exists():
+        try:
+            payload = json.loads(index_path.read_text(encoding="utf-8"))
+            for row in payload.get("filings") or []:
+                row_id = str(row.get("id") or "").strip()
+                if row_id:
+                    referenced.add(row_id)
+        except (OSError, ValueError, TypeError):
+            referenced = set()
+    removed_paths: list[str] = []
+    kept = 0
+    for path in sorted(bodies_dir.glob("*.txt")):
+        if path.stem in referenced:
+            kept += 1
+            continue
+        try:
+            path.unlink()
+            removed_paths.append(str(path))
+        except OSError as exc:
+            logger.debug("Failed to prune orphaned body %s: %s", path, exc)
+    if removed_paths:
+        logger.info("Pruned %d orphaned filing body file(s) under %s", len(removed_paths), bodies_dir)
+    return {"removed": len(removed_paths), "kept": kept, "removed_paths": removed_paths}
+
+
+def prune_misattributed_filing_bodies(
+    filings_dir: Path,
+    *,
+    company_name: str,
+    ticker: str,
+) -> dict[str, Any]:
+    """
+    Drop body files whose text clearly belongs to a different issuer.
+
+    Clears ``has_body`` on affected index rows and deletes the body file.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists() or not bodies_dir.is_dir():
+        return {"removed": 0, "cleared_rows": 0, "removed_paths": []}
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {"removed": 0, "cleared_rows": 0, "removed_paths": [], "note": str(exc)}
+    filings = list(payload.get("filings") or [])
+    removed_paths: list[str] = []
+    cleared_rows = 0
+    for row in filings:
+        if not row.get("has_body"):
+            continue
+        row_id = str(row.get("id") or "")
+        body_path = row.get("body_path")
+        candidate = Path(str(body_path)) if body_path else bodies_dir / f"{row_id}.txt"
+        if not candidate.is_file():
+            continue
+        try:
+            sample = candidate.read_text(encoding="utf-8", errors="replace")[:4000]
+        except OSError:
+            continue
+        if not _body_clearly_misattributed(sample, company_name, ticker):
+            continue
+        try:
+            candidate.unlink()
+            removed_paths.append(str(candidate))
+        except OSError:
+            pass
+        row["has_body"] = False
+        row["body_path"] = None
+        cleared_rows += 1
+    if cleared_rows:
+        payload["filings"] = filings
+        payload["summary"] = summarize_filings(filings)
+        from value_investor.storage import write_json
+
+        write_json(index_path, payload, compact=True, compress=False)
+        logger.info(
+            "Pruned %d misattributed filing body file(s) for %s",
+            len(removed_paths),
+            ticker,
+        )
+    return {
+        "removed": len(removed_paths),
+        "cleared_rows": cleared_rows,
+        "removed_paths": removed_paths,
+    }
+
+
 def refetch_missing_filing_bodies(
     filings_dir: Path,
     *,
@@ -1700,6 +1961,9 @@ def ingest_filings(
     elif regime == "sec_edgar":
         groups.append(fetch_filings_sec_edgar(ticker=ticker))
     elif regime == "asx_announcements":
+        groups.append(
+            fetch_filings_asx_direct(company_name=company_name, ticker=ticker)
+        )
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
         groups.append(
@@ -1758,6 +2022,12 @@ def ingest_filings(
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
     merged = _write_bodies(merged, bodies_dir, max_bodies=max_bodies)
+    merged = _scrub_misattributed_filing_rows(
+        merged,
+        bodies_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
 
     if regime == "sec_edgar":
         note = (
@@ -1777,9 +2047,9 @@ def ingest_filings(
         )
     elif regime == "asx_announcements":
         note = (
-            "Primary ASX announcement discovery via Google News (asx.com.au / "
-            "marketindex.com.au). period=annual|interim|other. Bodies only when a "
-            "direct publisher URL is downloadable; many ASX PDFs are not parsed."
+            "Primary ASX announcements via Markit Digital JSON feed (direct PDF URLs) "
+            "plus Google News fallback (asx.com.au / marketindex.com.au). "
+            "period=annual|interim|other. Bodies from downloadable PDF/HTML."
         )
     elif regime == "euro_filings":
         note = (
@@ -1821,6 +2091,7 @@ def ingest_filings(
 
     index_path = filings_dir / "filings_index.json"
     write_json(index_path, index, compact=True, compress=False)
+    prune_orphaned_filing_bodies(filings_dir)
     written = resolve_json_path(index_path) or index_path
 
     return {

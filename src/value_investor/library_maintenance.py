@@ -497,6 +497,158 @@ def list_batch1_repair_targets(
     return targets
 
 
+def list_thin_library_memos(
+    root: Path,
+    *,
+    markets: list[str] | None = None,
+    max_with_body: int = 0,
+) -> list[dict[str, Any]]:
+    """
+    Library memos with thin filing coverage (no indexed bodies by default).
+
+    Used by ``deepen-thin`` maintenance to re-ingest and optionally gap-fill.
+    """
+    selected = markets or [mid for mid in MARKET_REGISTRY if mid != "ftse350"]
+    targets: list[dict[str, Any]] = []
+    for market_id in selected:
+        research_root = market_dir(root, market_id) / "screen" / "research"
+        if not research_root.exists():
+            continue
+        for ticker_dir in sorted(p for p in research_root.iterdir() if p.is_dir()):
+            sources_dir = ticker_dir / "sources"
+            bodies = _filings_body_count(sources_dir)
+            if bodies > max_with_body:
+                continue
+            ticker = ticker_dir.name
+            targets.append(
+                {
+                    "market": market_id,
+                    "ticker": ticker,
+                    "company_name": _company_name_for_memo(ticker_dir, ticker),
+                    "sources_dir": sources_dir,
+                    "screen_dir": market_dir(root, market_id) / "screen",
+                    "bodies_before": bodies,
+                    "reasons": ["thin_filings"],
+                }
+            )
+    return targets
+
+
+def deepen_library_research_memos(
+    root: Path,
+    targets: list[dict[str, Any]],
+    *,
+    api_key: str | None = None,
+    model: str = "composer-2.5",
+    rememo_when_improved: bool = True,
+) -> dict[str, Any]:
+    """
+    Re-ingest filings and run the gap-fill source deepen loop for thin library memos.
+
+    Re-memos when filing bodies increase after ingest + alternate-source retry.
+    """
+    from datetime import UTC, datetime
+
+    from value_investor.research.gap_fill_sources import (
+        execute_planned_alternate_sources,
+        prepare_gap_fill_source_pack,
+    )
+    from value_investor.research.runner import _process_ticker
+    from value_investor.research.store import ResearchStore
+
+    results: list[dict[str, Any]] = []
+    rememoed = 0
+    deepened = 0
+    errors: list[str] = []
+
+    for target in targets:
+        market = str(target["market"])
+        ticker = str(target["ticker"])
+        company_name = str(target.get("company_name") or ticker)
+        sources_dir = Path(target["sources_dir"])
+        screen_dir = Path(target["screen_dir"])
+        before_bodies = int(target.get("bodies_before") or _filings_body_count(sources_dir))
+        row: dict[str, Any] = {
+            "market": market,
+            "ticker": ticker,
+            "reasons": list(target.get("reasons") or ["thin_filings"]),
+            "bodies_before": before_bodies,
+        }
+        try:
+            meta = ingest_filings(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                api_key=api_key,
+                market=market,
+                deepen_history=True,
+            )
+            row["bodies_after_ingest"] = int((meta.get("filings_summary") or {}).get("with_body") or 0)
+
+            source_pack = prepare_gap_fill_source_pack(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                open_questions=[
+                    "Obtain annual and interim regulatory filing bodies for FINANCIAL REVIEW."
+                ],
+                market=market,
+            )
+            planned = list(source_pack.get("planned_alternate_sources") or [])
+            row["alternate_sources"] = execute_planned_alternate_sources(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                planned=planned,
+                market=market,
+            )
+            after_bodies = _filings_body_count(sources_dir)
+            row["bodies_after"] = after_bodies
+            improved = after_bodies > before_bodies
+            row["improved"] = improved
+            if improved:
+                deepened += 1
+
+            should_rememo = rememo_when_improved and improved
+            row["rememo"] = should_rememo
+            if should_rememo:
+                if not api_key:
+                    raise RuntimeError("CURSOR API key required for re-memo after deepen")
+                snapshot_path = sources_dir / "screening_snapshot.json"
+                if not snapshot_path.exists():
+                    raise FileNotFoundError(f"missing screening_snapshot for {market}/{ticker}")
+                snapshot = read_json(snapshot_path)
+                report = _company_report_from_snapshot(snapshot)
+                store = ResearchStore(screen_dir)
+                doc, action = _process_ticker(
+                    report=report,
+                    store=store,
+                    api_key=api_key,
+                    model=model,
+                    cwd=None,
+                    force_initial=True,
+                    run_at=datetime.now(UTC),
+                    market=market,
+                )
+                row["rememo_action"] = action
+                row["rememo_version"] = doc.version
+                rememoed += 1
+        except Exception as exc:  # noqa: BLE001
+            message = f"{market}/{ticker}: {exc}"
+            logger.exception("Deepen failed for %s", message)
+            errors.append(message)
+            row["error"] = str(exc)
+        results.append(row)
+
+    return {
+        "target_count": len(targets),
+        "deepened": deepened,
+        "rememoed": rememoed,
+        "errors": errors,
+        "results": results,
+    }
+
+
 def _company_report_from_snapshot(snapshot: dict[str, Any]) -> Any:
     from value_investor.summary import CompanyReport
 
