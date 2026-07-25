@@ -5,7 +5,7 @@
 Ultimate goal: a **self-improving automated global value portfolio**.  
 Interim goal: **high-quality prompts / decision packs** for manual verification and trade actions.
 
-North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Keep the live screener on FTSE 350 until stage 4; grow other markets via `ftse-library` offline.
+North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Pipeline and data-model reference: [`docs/architecture.md`](docs/architecture.md). Keep the live screener on FTSE 350 until stage 4; grow other markets via `ftse-library` offline.
 
 ## Parked / later ideas (required)
 

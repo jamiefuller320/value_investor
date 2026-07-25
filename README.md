@@ -200,7 +200,7 @@ Weekly strategy simulation (`ftse-simulate`) remains available for archived-run 
 Ultimate goal: a **self-improving automated global value portfolio**.  
 Realistic interim goal: **hands-off learning from AI paper decisions vs market datums**, plus accurate decision packs when capital is at risk.
 
-See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit criteria. Near-term priority is FTSE 350 data richness and paper decision quality — not wider live coverage.
+See [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md) for staged exit criteria. Pipeline and data-model reference: [`docs/architecture.md`](docs/architecture.md). Near-term priority is FTSE 350 data richness and paper decision quality — not wider live coverage.
 
 ## Offline multi-market data libraries
 

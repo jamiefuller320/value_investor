@@ -8,6 +8,8 @@ Build a **self-improving automated global value stock portfolio**.
 
 Ship **high-quality, accurate prompts and decision packs** that support **manual verification and trade actions** — research memos, trade plans, surveillance alerts, and paper-fund decision narratives a human can trust before capital is committed.
 
+Pipeline stages, canonical stores, and publish projections: [`docs/architecture.md`](architecture.md).
+
 ---
 
 ## North-star stages
@@ -51,7 +53,7 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 |-------|------------------|-----|
 | **A. Fundamentals** *(current `ftse-library`)* | Constituents + Yahoo-style metrics, coverage/freshness manifests; dated PIT snapshots with decreasing resolution (dense ~400d → monthly → quarterly kept long-term) | PIT history and fetch reliability; coarse history stays cheap for future trend features |
 | **B. Screen-lite** *(later, L29)* | Offline model scores, signals, data-quality, dated archives; same dense→monthly→quarterly retention as Layer A (including `signal_history.csv` row thinning) | Ranking/stability history comparable to FTSE — the main missing richness |
-| **C. Selective research** *(later, L30)* | Memos only for strong_buy / top buy names; weekly **red-flag gap-fill loop** re-opens FINANCIAL REVIEW / RISKS for names called out in deep-analysis email red flags, seeks alternate evidence when local filings are thin, and parks research-model improvement suggestions | Decision-pack depth for eventual manual verification; expensive, so cap tightly |
+| **C. Selective research** *(later, L30)* | Memos only for strong_buy / top buy names; weekly **red-flag gap-fill loop** re-opens FINANCIAL REVIEW / RISKS for names called out in deep-analysis email red flags, seeks alternate evidence when local filings are thin (up to 3 retry attempts), and parks research-model improvement suggestions | Decision-pack depth for eventual manual verification; expensive, so cap tightly |
 
 Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised while Cursor research remains cheap). Do **not** memo every name in an index.
 
