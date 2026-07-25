@@ -12,8 +12,12 @@ from typing import Any
 from value_investor.deep_analysis import DeepAnalysis
 from value_investor.research.agent import run_gap_fill_research_agent
 from value_investor.research.document import ResearchDocument
-from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+from value_investor.research.gap_fill_sources import (
+    execute_planned_alternate_sources,
+    prepare_gap_fill_source_pack,
+)
 from value_investor.research.ingest import ingest_research_sources
+from value_investor.research.source_quality import attach_memo_quality
 from value_investor.research.store import ResearchStore
 from value_investor.research.timeline import (
     build_sources_as_of,
@@ -25,12 +29,22 @@ from value_investor.summary import CompanyReport
 logger = logging.getLogger(__name__)
 
 DEFAULT_GAP_FILL_CAP = 3
+DEFAULT_GAP_FILL_ATTEMPTS = 3
 DEFAULT_SUGGESTIONS_PATH = Path("docs/data/research_model_suggestions.json")
 
 _TICKER_TOKEN = re.compile(r"\b([A-Z]{1,5}(?:\.[A-Z]{1,2})?)\b")
 _DEEPER_RESEARCH_SPLIT = re.compile(
     r"(?i)names?\s+(?:worth|for)\s+deeper\s+research|\bopen questions?\b|\bred flags?\b"
 )
+
+
+def _unresolved_questions(question_outcomes: list[dict[str, Any]]) -> list[str]:
+    return [
+        str(row.get("question") or "").strip()
+        for row in question_outcomes
+        if str(row.get("status") or "").lower() in {"unresolved", "partially_resolved"}
+        and str(row.get("question") or "").strip()
+    ]
 
 
 @dataclass
@@ -357,14 +371,30 @@ def run_red_flag_gap_fill(
             )
             updated = replace(agent_result.document, signal=target.report.signal)
 
-            unresolved = [
-                str(row.get("question") or "").strip()
-                for row in agent_result.question_outcomes
-                if str(row.get("status") or "").lower() in {"unresolved", "partially_resolved"}
-                and str(row.get("question") or "").strip()
-            ]
-            if unresolved and int(body_refetch.get("fetched") or 0) > 0:
-                # Second turn: force re-read of newly fetched bodies for open questions.
+            planned = list(source_pack.get("planned_alternate_sources") or [])
+            retry_refetch = body_refetch
+            for attempt in range(1, DEFAULT_GAP_FILL_ATTEMPTS):
+                unresolved = _unresolved_questions(agent_result.question_outcomes)
+                if not unresolved:
+                    break
+
+                if attempt == 1 and int(retry_refetch.get("fetched") or 0) > 0:
+                    pass
+                else:
+                    alt_result = execute_planned_alternate_sources(
+                        ticker=target.ticker,
+                        company_name=target.name,
+                        sources_dir=sources_dir,
+                        planned=planned,
+                        market=market,
+                    )
+                    summary.fetch_attempts.append(
+                        {"ticker": target.ticker, "attempt": attempt, **alt_result}
+                    )
+                    retry_refetch = dict(alt_result.get("body_refetch") or {})
+                    if int(alt_result.get("fetched") or 0) <= 0:
+                        break
+
                 follow = run_gap_fill_research_agent(
                     existing=updated,
                     sources_dir=sources_dir,
@@ -375,11 +405,12 @@ def run_red_flag_gap_fill(
                     cwd=cwd,
                     screen_signal=target.report.signal,
                     follow_up=True,
-                    body_refetch=body_refetch,
+                    body_refetch=retry_refetch,
                 )
                 updated = replace(follow.document, signal=target.report.signal)
                 agent_result = follow
                 summary.follow_ups += 1
+                body_refetch = retry_refetch
 
             filings_summary = source_meta.get("filings_summary") or {}
             # Prefer post-refetch body counts when available.
@@ -410,6 +441,11 @@ def run_red_flag_gap_fill(
                 prior=existing,
                 updated=updated,
                 weekly_summary=gap_summary_text,
+            )
+            attach_memo_quality(
+                updated,
+                sources_dir=sources_dir,
+                question_outcomes=agent_result.question_outcomes,
             )
             store.save(
                 updated,
