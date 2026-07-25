@@ -235,7 +235,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--checkpoint-usd",
         type=float,
         default=None,
-        help="Pause research after this much estimated spend since last approval (default: 30)",
+        help="Pause research after this much estimated spend since last approval (default: 60)",
     )
     ladder_p.add_argument(
         "--approve-checkpoint",
@@ -493,6 +493,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--rememo",
         action="store_true",
         help="Re-memo tickers when filing bodies improve (requires Cursor API key)",
+    )
+    deepen_p.add_argument(
+        "--rememo-all",
+        action="store_true",
+        help="Re-memo every target after deepen (not only when bodies improved)",
     )
     deepen_p.add_argument(
         "--api-key",

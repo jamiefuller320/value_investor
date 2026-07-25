@@ -541,6 +541,7 @@ def deepen_library_research_memos(
     api_key: str | None = None,
     model: str = "composer-2.5",
     rememo_when_improved: bool = True,
+    rememo_all: bool = False,
 ) -> dict[str, Any]:
     """
     Re-ingest filings and run the gap-fill source deepen loop for thin library memos.
@@ -609,11 +610,11 @@ def deepen_library_research_memos(
             if improved:
                 deepened += 1
 
-            should_rememo = rememo_when_improved and improved
+            should_rememo = rememo_all or (rememo_when_improved and improved)
             row["rememo"] = should_rememo
             if should_rememo:
                 if not api_key:
-                    raise RuntimeError("CURSOR API key required for re-memo after deepen")
+                    raise RuntimeError("CURSOR API key required for re-memo")
                 snapshot_path = sources_dir / "screening_snapshot.json"
                 if not snapshot_path.exists():
                     raise FileNotFoundError(f"missing screening_snapshot for {market}/{ticker}")

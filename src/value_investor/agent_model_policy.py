@@ -37,7 +37,7 @@ DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro subscription (included pool metada
 DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10  # Legacy plan_fraction mode only
 DEFAULT_WEEKLY_USAGE_GBP = 30.0  # Usage-based library research envelope
 DEFAULT_GBP_USD_RATE = 1.27  # Approx; override via budget.gbp_usd_rate
-DEFAULT_SPEND_CHECKPOINT_USD = 30.0
+DEFAULT_SPEND_CHECKPOINT_USD = 60.0
 DEFAULT_ALLOCATION_BASIS = "usage_weekly_gbp"  # or "plan_fraction"
 DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
@@ -503,7 +503,7 @@ def spend_since_checkpoint_usd(policy: dict[str, Any] | None = None) -> float:
 
 
 def spend_checkpoint_usd(policy: dict[str, Any] | None = None) -> float:
-    """Configured spend checkpoint size (default $30)."""
+    """Configured spend checkpoint size (default $60)."""
     policy = policy or load_policy()
     ladder = policy.get("ladder") or {}
     return float(ladder.get("spend_checkpoint_usd") or DEFAULT_SPEND_CHECKPOINT_USD)
