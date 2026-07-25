@@ -12,6 +12,7 @@ from value_investor.research.filings import (
     fetch_filing_body,
     fetch_filings_euro_news,
     fetch_filings_investegate_company,
+    filter_misattributed_filings,
     headline_relevant_to_issuer,
     ingest_filings,
     merge_filings,
@@ -19,6 +20,8 @@ from value_investor.research.filings import (
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     summarize_filings,
+    _sec_edgar_supplement_allowed,
+    _uk_ticker_sec_dual_listed,
     _extract_investegate_html_text,
     _extract_ixbrl_html_text,
     _filing_text_is_substantive,
@@ -606,7 +609,7 @@ def test_ingest_filings_euro_regime_includes_sec_dual_list(tmp_path: Path):
         {
             "id": "sec20f20f20f20f",
             "source": "sec_edgar",
-            "headline": "20-F: Annual report",
+            "headline": "20-F: SAP SE Annual report",
             "published_at": "2026-02-20T00:00:00+00:00",
             "url": "https://www.sec.gov/Archives/edgar/data/1/0001/sap-20f.htm",
             "period": "annual",
@@ -620,6 +623,10 @@ def test_ingest_filings_euro_regime_includes_sec_dual_list(tmp_path: Path):
     ]
     with (
         patch("value_investor.research.filings.fetch_filings_euro_news", return_value=euro_rows),
+        patch(
+            "value_investor.research.filings._sec_edgar_supplement_allowed",
+            return_value=True,
+        ),
         patch("value_investor.research.filings.fetch_filings_sec_edgar", return_value=sec_rows) as sec,
         patch("value_investor.research.filings.fetch_filing_body", return_value=None),
         patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
@@ -631,7 +638,7 @@ def test_ingest_filings_euro_regime_includes_sec_dual_list(tmp_path: Path):
             market="euro_stoxx50",
         )
     uk_api.assert_not_called()
-    sec.assert_called_once_with(ticker="SAP")
+    sec.assert_called_once_with(ticker="SAP", include_current_reports=False)
     assert meta["filings_regime"] == "euro_filings"
     assert meta["filings_summary"]["annual"] >= 1
     index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
@@ -722,8 +729,6 @@ def test_issuer_matches_sec_name_rejects_us_homonyms():
 
 
 def test_uk_ticker_sec_dual_listed_rejects_costain_costco_collision(monkeypatch):
-    from value_investor.research.filings import _uk_ticker_sec_dual_listed
-
     monkeypatch.setattr(
         "value_investor.research.filings.resolve_sec_cik",
         lambda ticker: 909832 if ticker == "COST" else None,
@@ -733,3 +738,38 @@ def test_uk_ticker_sec_dual_listed_rejects_costain_costco_collision(monkeypatch)
         lambda cik: "COSTCO WHOLESALE CORP /NEW",
     )
     assert _uk_ticker_sec_dual_listed("COST.L", "Costain Group PLC") is False
+
+
+def test_sec_edgar_supplement_rejects_vinci_dg_collision(monkeypatch):
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_sec_cik",
+        lambda ticker: 29534 if ticker == "DG" else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._sec_submissions_entity_name",
+        lambda cik: "DOLLAR GENERAL CORP",
+    )
+    assert _sec_edgar_supplement_allowed("DG.PA", "Vinci SA") is False
+
+
+def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
+    rows = [
+        {
+            "id": "bad",
+            "source": "sec_edgar",
+            "headline": "Dollar General Corp 10-K Annual Report",
+            "form": "10-K",
+        },
+        {
+            "id": "good",
+            "source": "google_news_euro",
+            "headline": "Vinci SA Full Year Results",
+        },
+    ]
+    filtered = filter_misattributed_filings(
+        rows,
+        company_name="Vinci SA",
+        ticker="DG.PA",
+        regime="euro_filings",
+    )
+    assert [row["id"] for row in filtered] == ["good"]

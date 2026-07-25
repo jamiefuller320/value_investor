@@ -413,3 +413,217 @@ def prune_library_screen_history(
         "total_signal_history_rows_removed": total_history_rows,
         "per_market": per_market,
     }
+
+
+def _filings_body_count(sources_dir: Path) -> int:
+    index_path = sources_dir / "filings" / "filings_index.json"
+    if not index_path.exists():
+        return 0
+    try:
+        index = read_json(index_path)
+    except (OSError, ValueError, TypeError):
+        return 0
+    return int((index.get("summary") or {}).get("with_body") or 0)
+
+
+def _memo_updated_date(ticker_dir: Path) -> str | None:
+    memo = ticker_dir / "research.md"
+    if not memo.exists():
+        return None
+    match = re.search(r"Updated (\d{4}-\d{2}-\d{2})", memo.read_text(encoding="utf-8", errors="ignore"))
+    return match.group(1) if match else None
+
+
+def _memo_quality_flags(ticker_dir: Path) -> dict[str, bool]:
+    memo = ticker_dir / "research.md"
+    if not memo.exists():
+        return {"yahoo_only": False, "sec_collision": False}
+    text = memo.read_text(encoding="utf-8", errors="ignore")
+    yahoo_only = bool(
+        re.search(
+            r"no primary regulatory filings|all financial figures below from Yahoo|"
+            r"Yahoo.*only|not available in the research library|not usable for Vinci",
+            text,
+            flags=re.I,
+        )
+    )
+    sec_collision = bool(
+        re.search(r"ticker collision|Dollar General Corporation \(NYSE: DG\)", text, flags=re.I)
+        or ("Dollar General" in text and "Vinci" in text)
+    )
+    return {"yahoo_only": yahoo_only, "sec_collision": sec_collision}
+
+
+def list_batch1_repair_targets(
+    root: Path,
+    *,
+    batch_date: str = "2026-07-25",
+    markets: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Memos from a given batch date that need source repair or re-memo."""
+    selected = markets or [mid for mid in MARKET_REGISTRY if mid != "ftse350"]
+    targets: list[dict[str, Any]] = []
+    for market_id in selected:
+        research_root = market_dir(root, market_id) / "screen" / "research"
+        if not research_root.exists():
+            continue
+        for ticker_dir in sorted(p for p in research_root.iterdir() if p.is_dir()):
+            updated = _memo_updated_date(ticker_dir)
+            if updated != batch_date:
+                continue
+            flags = _memo_quality_flags(ticker_dir)
+            reasons: list[str] = []
+            if flags["sec_collision"]:
+                reasons.append("sec_collision")
+            if flags["yahoo_only"]:
+                reasons.append("yahoo_only")
+            if ticker_dir.name.upper().endswith(".L"):
+                reasons.append("uk_library")
+            if market_id in {"asx200", "hang_seng", "sti"}:
+                reasons.append("asia_pacific_gap")
+            if not reasons:
+                reasons.append("batch_refresh")
+            targets.append(
+                {
+                    "market": market_id,
+                    "ticker": ticker_dir.name,
+                    "company_name": _company_name_for_memo(ticker_dir, ticker_dir.name),
+                    "sources_dir": ticker_dir / "sources",
+                    "screen_dir": market_dir(root, market_id) / "screen",
+                    "reasons": reasons,
+                    "updated": updated,
+                }
+            )
+    return targets
+
+
+def _company_report_from_snapshot(snapshot: dict[str, Any]) -> Any:
+    from value_investor.summary import CompanyReport
+
+    return CompanyReport(
+        ticker=str(snapshot["ticker"]),
+        name=str(snapshot.get("name") or snapshot["ticker"]),
+        sector=snapshot.get("sector"),
+        signal=str(snapshot.get("signal") or "buy"),
+        models_passed=int(snapshot.get("models_passed") or 0),
+        model_count=int(snapshot.get("model_count") or 0),
+        composite_score=snapshot.get("composite_score"),
+        sector_composite_score=snapshot.get("sector_composite_score"),
+        families_passed=int(snapshot.get("families_passed") or 0),
+        passed_families=snapshot.get("passed_families"),
+        data_quality_score=float(snapshot.get("data_quality_score") or 0),
+        metrics_present=int(snapshot.get("metrics_present") or 0),
+        metrics_total=int(snapshot.get("metrics_total") or 0),
+        weeks_at_signal=int(snapshot.get("weeks_at_signal") or 0),
+        signal_trend=str(snapshot.get("signal_trend") or "stable"),
+        conviction_score=float(snapshot.get("conviction_score") or 0),
+        stability_label=str(snapshot.get("stability_label") or "building"),
+        timing_signal=str(snapshot.get("timing_signal") or "insufficient_data"),
+        timing_score=float(snapshot.get("timing_score") or 0),
+        rsi_14=snapshot.get("rsi_14"),
+        price_vs_sma200_pct=snapshot.get("price_vs_sma200_pct"),
+        action_note=str(snapshot.get("action_note") or ""),
+        trade_plan=None,
+        summary=str(snapshot.get("summary") or ""),
+        passed_models=list(snapshot.get("passed_models") or []),
+        key_metrics=dict(snapshot.get("key_metrics") or {}),
+        adjusted_signal=snapshot.get("adjusted_signal"),
+        research_verdict=snapshot.get("research_verdict"),
+        research_risk_level=snapshot.get("research_risk_level"),
+        research_confidence=snapshot.get("research_confidence"),
+        research_rationale=snapshot.get("research_rationale"),
+    )
+
+
+def repair_library_research_memos(
+    root: Path,
+    targets: list[dict[str, Any]],
+    *,
+    api_key: str,
+    model: str = "composer-2.5",
+    deepen_history: bool = True,
+    rememo_all: bool = False,
+) -> dict[str, Any]:
+    """
+    Re-ingest filings (and optionally re-memo) for library research tickers.
+
+    Re-memos when ``rememo_all`` is true, sources improved (more bodies), or the
+    target was flagged (SEC collision, yahoo-only, UK library gap).
+    """
+    from datetime import UTC, datetime
+
+    from value_investor.research.runner import _process_ticker
+    from value_investor.research.store import ResearchStore
+
+    results: list[dict[str, Any]] = []
+    rememoed = 0
+    skipped_rememo = 0
+    errors: list[str] = []
+
+    for target in targets:
+        market = str(target["market"])
+        ticker = str(target["ticker"])
+        company_name = str(target.get("company_name") or ticker)
+        sources_dir = Path(target["sources_dir"])
+        screen_dir = Path(target["screen_dir"])
+        reasons = list(target.get("reasons") or [])
+        before_bodies = _filings_body_count(sources_dir)
+        row: dict[str, Any] = {
+            "market": market,
+            "ticker": ticker,
+            "reasons": reasons,
+            "bodies_before": before_bodies,
+        }
+        try:
+            meta = ingest_filings(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                api_key=api_key,
+                market=market,
+                deepen_history=deepen_history,
+            )
+            after_bodies = int((meta.get("filings_summary") or {}).get("with_body") or 0)
+            row["bodies_after"] = after_bodies
+            row["filings_total"] = int((meta.get("filings_summary") or {}).get("total") or 0)
+            row["regime"] = meta.get("filings_regime")
+            should_rememo = rememo_all or "sec_collision" in reasons or "yahoo_only" in reasons or (
+                after_bodies > before_bodies
+            )
+            row["rememo"] = should_rememo
+            if should_rememo:
+                snapshot_path = sources_dir / "screening_snapshot.json"
+                if not snapshot_path.exists():
+                    raise FileNotFoundError(f"missing screening_snapshot for {market}/{ticker}")
+                snapshot = read_json(snapshot_path)
+                report = _company_report_from_snapshot(snapshot)
+                store = ResearchStore(screen_dir)
+                doc, action = _process_ticker(
+                    report=report,
+                    store=store,
+                    api_key=api_key,
+                    model=model,
+                    cwd=None,
+                    force_initial=True,
+                    run_at=datetime.now(UTC),
+                    market=market,
+                )
+                row["rememo_action"] = action
+                row["rememo_version"] = doc.version
+                rememoed += 1
+            else:
+                skipped_rememo += 1
+        except Exception as exc:  # noqa: BLE001
+            message = f"{market}/{ticker}: {exc}"
+            logger.exception("Repair failed for %s", message)
+            errors.append(message)
+            row["error"] = str(exc)
+        results.append(row)
+
+    return {
+        "target_count": len(targets),
+        "rememoed": rememoed,
+        "skipped_rememo": skipped_rememo,
+        "errors": errors,
+        "results": results,
+    }
