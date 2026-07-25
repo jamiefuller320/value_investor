@@ -33,7 +33,8 @@ ftse-decision-review --output-dir docs/data/paper_automation --tracks all
 ftse-decision-review --output-dir docs/data/paper_automation --tracks all --apply
 ```
 
-Weekday `paper-auto.yml` seeds prior state, runs both tracks, then
+Weekday `paper-auto.yml` seeds prior state, refreshes research overlay on
+`docs/data/latest.json`, runs both tracks, then
 `ftse-decision-review --tracks all --apply`. Thin history stays propose-only.
 
 ## Artifacts
