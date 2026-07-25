@@ -63,6 +63,11 @@ MARKET_TO_DOMAIN: dict[str, str] = {
     "tsx60": "ca",
     "hang_seng": "asia",
     "sti": "asia",
+    "atx": "euro",
+    "psi20": "euro",
+    "smi": "euro",
+    "omxs30": "euro",
+    "iseq20": "uk",
 }
 
 

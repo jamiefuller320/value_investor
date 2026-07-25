@@ -10,12 +10,14 @@ from value_investor.research.filings import (
     classify_filing_period,
     enrich_filing_rows,
     fetch_filing_body,
+    fetch_filings_euro_news,
     fetch_filings_investegate_company,
     headline_relevant_to_issuer,
     ingest_filings,
     merge_filings,
     refetch_missing_filing_bodies,
     resolve_filings_regime,
+    resolve_google_news_publisher_url,
     summarize_filings,
     _extract_investegate_html_text,
     _extract_ixbrl_html_text,
@@ -272,6 +274,21 @@ def test_resolve_filings_regime_by_market_and_ticker():
     assert resolve_filings_regime("sti", "D05.SI") == "asia_filings"
     assert resolve_filings_regime("us_adr_asia", "BABA") == "sec_edgar"
     assert resolve_filings_regime(None, "AEM.TO") == "tsx_announcements"
+
+
+def test_resolve_google_news_publisher_url_passthrough():
+    assert resolve_google_news_publisher_url("https://sec.gov/foo") == "https://sec.gov/foo"
+    assert resolve_google_news_publisher_url(None) is None
+
+
+@patch("value_investor.research.filings.fetch_filings_google_news")
+def test_fetch_filings_euro_news_uses_market_locale(mock_fetch):
+    mock_fetch.return_value = []
+    fetch_filings_euro_news(company_name="SAP SE", ticker="SAP.DE", market="dax")
+    kwargs = mock_fetch.call_args.kwargs
+    assert kwargs["hl"] == "de"
+    assert kwargs["gl"] == "DE"
+    assert "dgap.de" in kwargs["query"] or "eqs.com" in kwargs["query"]
 
 
 def test_merge_filings_prefers_body_and_ticker_source():

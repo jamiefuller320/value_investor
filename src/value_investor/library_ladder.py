@@ -10,13 +10,17 @@ from typing import Any
 
 from value_investor.agent_model_policy import (
     DEFAULT_POLICY_PATH,
+    DEFAULT_SPEND_CHECKPOINT_USD,
+    approve_spend_checkpoint,
     enforce_weekly_research_cap,
     grow_ticker_budget,
     load_policy,
-    record_estimated_spend,
+    record_spend_with_checkpoint,
     remaining_weekly_budget_usd,
     research_model_id,
     save_policy,
+    spend_checkpoint_usd,
+    spend_since_checkpoint_usd,
     weekly_budget_status,
 )
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, library_status
@@ -51,6 +55,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("estimated_memo_usd", ESTIMATED_MEMO_USD)
     ladder.setdefault("research_hard_cap", 50)
     ladder.setdefault("research_all_graduated", True)
+    ladder.setdefault("spend_checkpoint_usd", DEFAULT_SPEND_CHECKPOINT_USD)
+    ladder.setdefault("spend_since_checkpoint_usd", 0.0)
     ladder.setdefault("last_run", None)
     policy["ladder"] = ladder
     return policy
@@ -88,6 +94,9 @@ def run_library_ladder(
     dry_run_research: bool = False,
     api_key: str | None = None,
     max_tickers: int | None = None,
+    unrestricted_budget: bool = False,
+    checkpoint_usd: float | None = None,
+    approve_checkpoint: bool = False,
 ) -> dict[str, Any]:
     """
     Focus-market ladder: A fundamentals grow → maintenance → B screen-lite →
@@ -98,6 +107,11 @@ def run_library_ladder(
     root = root or DEFAULT_LIBRARY_ROOT
     policy_path = policy_path or DEFAULT_POLICY_PATH
     policy = _ensure_ladder_policy(load_policy(policy_path))
+    if approve_checkpoint:
+        approval = approve_spend_checkpoint(policy_path)
+        result_approval = {"checkpoint_approval": approval}
+    else:
+        result_approval = {}
     save_policy(policy, policy_path)
     plan = grow_ticker_budget(policy)
     markets = plan["focus_markets"]
@@ -109,6 +123,7 @@ def run_library_ladder(
         "graduated_markets": graduated_market_ids(policy),
         "plan": plan,
         "layers": {},
+        **result_approval,
     }
 
     # A — fundamentals (focus market)
@@ -183,7 +198,10 @@ def run_library_ladder(
     remaining = remaining_weekly_budget_usd(policy)
     memo_cost = float(policy["ladder"].get("estimated_memo_usd") or ESTIMATED_MEMO_USD)
     hard_cap = int(policy["ladder"].get("research_hard_cap") or 50)
-    weekly_cap_on = enforce_weekly_research_cap(policy)
+    weekly_cap_on = False if unrestricted_budget else enforce_weekly_research_cap(policy)
+    checkpoint_limit = float(
+        checkpoint_usd if checkpoint_usd is not None else spend_checkpoint_usd(policy)
+    )
     if weekly_cap_on:
         research_cap = research_cap_from_budget(
             remaining_usd=remaining,
@@ -195,10 +213,23 @@ def run_library_ladder(
         research_cap = hard_cap
     model = research_model_id(policy)
     research_markets = _research_markets(policy, market)
+    checkpoint_blocked = spend_since_checkpoint_usd(policy) >= checkpoint_limit
 
     if skip_research:
         result["layers"]["selective_research"] = {"skipped": True}
-    elif research_cap <= 0:
+    elif checkpoint_blocked and not approve_checkpoint:
+        result["layers"]["selective_research"] = {
+            "skipped": True,
+            "reason": "spend checkpoint reached — approval required to continue",
+            "spend_since_checkpoint_usd": spend_since_checkpoint_usd(policy),
+            "spend_checkpoint_usd": checkpoint_limit,
+            "unrestricted_budget": unrestricted_budget,
+            "note": (
+                "Re-run with --approve-checkpoint after human approval, "
+                "or reset spend_since_checkpoint_usd in policy."
+            ),
+        }
+    elif research_cap <= 0 and weekly_cap_on:
         status = weekly_budget_status(policy, estimated_memo_usd=memo_cost)
         result["layers"]["selective_research"] = {
             "skipped": True,
@@ -254,6 +285,9 @@ def run_library_ladder(
                 (policy.get("ladder") or {}).get("research_all_graduated", True)
             ),
             "enforce_weekly_research_cap": weekly_cap_on,
+            "unrestricted_budget": unrestricted_budget,
+            "spend_checkpoint_usd": checkpoint_limit,
+            "spend_since_checkpoint_usd": spend_since_checkpoint_usd(policy),
             "constraining": status["constraining"],
             "near_limit": status["near_limit"],
             "budget_flag": status["flag"],
@@ -289,38 +323,54 @@ def run_library_ladder(
                 layer["skipped"] = True
                 layer["reason"] = "CURSOR_API_KEY missing"
             else:
-                # Group by market so each memo lands under that market's screen/research/.
-                by_market: dict[str, list[Any]] = {}
-                for mid, report in selected:
-                    by_market.setdefault(mid, []).append(report)
                 executed = created = updated = 0
                 errors: list[str] = []
-                for mid, reports_subset in by_market.items():
+                checkpoint_reached = False
+                for mid, report in selected:
                     scr = market_screens[mid]
-                    # Pass only the round-robin-selected reports for this market.
                     summary = run_research_for_strong_buys(
-                        reports=reports_subset,
+                        reports=[report],
                         output_dir=scr.screen_dir,
                         api_key=key,
                         model=model,
-                        weekly_cap=len(reports_subset),
+                        weekly_cap=1,
                         continue_alumni=False,
                         market=mid,
                     )
-                    executed += int(summary.created) + int(summary.updated)
+                    memo_executed = int(summary.created) + int(summary.updated)
+                    executed += memo_executed
                     created += int(summary.created)
                     updated += int(summary.updated)
                     errors.extend(list(summary.errors or []))
+                    if memo_executed > 0:
+                        checkpoint_status = record_spend_with_checkpoint(
+                            memo_cost,
+                            policy_path,
+                            checkpoint_usd=checkpoint_limit,
+                        )
+                        layer["spend_since_checkpoint_usd"] = checkpoint_status[
+                            "spend_since_checkpoint_usd"
+                        ]
+                        if checkpoint_status["checkpoint_reached"]:
+                            checkpoint_reached = True
+                            layer["checkpoint_reached"] = True
+                            layer["checkpoint_note"] = (
+                                f"Paused after ${checkpoint_status['spend_since_checkpoint_usd']:.2f} "
+                                f"since last approval (limit ${checkpoint_limit:.2f}). "
+                                "Re-run with --approve-checkpoint to continue."
+                            )
+                            break
                 layer["executed"] = executed
                 layer["created"] = created
                 layer["updated"] = updated
                 layer["errors"] = errors
                 if executed > 0:
-                    record_estimated_spend(executed * memo_cost, policy_path)
                     layer["estimated_spend_usd"] = round(executed * memo_cost, 4)
                     layer["remaining_usd_after"] = remaining_weekly_budget_usd(
                         load_policy(policy_path)
                     )
+                if checkpoint_reached:
+                    layer["paused_for_approval"] = True
         result["layers"]["selective_research"] = layer
 
     # D — graduation (after grow + screen so floors reflect this run)

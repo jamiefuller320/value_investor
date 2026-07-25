@@ -226,6 +226,22 @@ def build_parser() -> argparse.ArgumentParser:
         default=os.environ.get("CURSOR_API_KEY"),
         help="Cursor API key for selective research",
     )
+    ladder_p.add_argument(
+        "--unrestricted-budget",
+        action="store_true",
+        help="Disable weekly research cap for this run (still honours spend checkpoints)",
+    )
+    ladder_p.add_argument(
+        "--checkpoint-usd",
+        type=float,
+        default=None,
+        help="Pause research after this much estimated spend since last approval (default: 30)",
+    )
+    ladder_p.add_argument(
+        "--approve-checkpoint",
+        action="store_true",
+        help="Reset spend-since-checkpoint after human approval to continue research",
+    )
     ladder_p.add_argument("--json", action="store_true")
     ladder_p.set_defaults(func=cmd_ladder)
 
@@ -773,6 +789,9 @@ def cmd_ladder(args: argparse.Namespace) -> int:
         dry_run_research=bool(args.dry_run_research),
         api_key=args.api_key,
         max_tickers=args.max_tickers,
+        unrestricted_budget=bool(args.unrestricted_budget),
+        checkpoint_usd=args.checkpoint_usd,
+        approve_checkpoint=bool(args.approve_checkpoint),
     )
     if args.json:
         print(json.dumps(payload, indent=2))

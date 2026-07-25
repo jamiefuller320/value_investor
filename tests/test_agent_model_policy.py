@@ -12,6 +12,9 @@ from value_investor.agent_model_policy import (
     load_policy,
     recommend_cheapest_model,
     record_estimated_spend,
+    record_spend_with_checkpoint,
+    approve_spend_checkpoint,
+    spend_since_checkpoint_usd,
     review_model,
     save_policy,
     weekly_budget_status,
@@ -171,6 +174,17 @@ def test_record_estimated_spend(tmp_path: Path):
     # Usage mode must survive spend recording (not reset via plan_fraction).
     assert budget["allocation_basis"] == "usage_weekly_gbp"
     assert budget["weekly_library_usd"] == 38.1
+
+
+def test_spend_checkpoint_pause_and_approve(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    save_policy(load_policy(path), path)
+    status = record_spend_with_checkpoint(30.0, path, checkpoint_usd=30.0)
+    assert status["checkpoint_reached"] is True
+    assert spend_since_checkpoint_usd(load_policy(path)) == 30.0
+    approval = approve_spend_checkpoint(path)
+    assert approval["spend_since_checkpoint_usd"] == 0.0
+    assert spend_since_checkpoint_usd(load_policy(path)) == 0.0
 
 
 def test_market_aware_yahoo_resolution():

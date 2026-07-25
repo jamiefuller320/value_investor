@@ -111,11 +111,14 @@ def fetch_google_news_rss_query(
     source_label: str = "google_news",
     max_items: int = GOOGLE_NEWS_MAX_ITEMS,
     lookback_days: int = NEWS_LOOKBACK_DAYS,
+    hl: str = "en-GB",
+    gl: str = "GB",
+    ceid: str = "GB:en",
 ) -> list[dict[str, Any]]:
     """Fetch recent headlines for an arbitrary Google News RSS query."""
     url = (
         "https://news.google.com/rss/search?"
-        f"q={urllib.parse.quote(query)}&hl=en-GB&gl=GB&ceid=GB:en"
+        f"q={urllib.parse.quote(query)}&hl={hl}&gl={gl}&ceid={ceid}"
     )
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
@@ -166,15 +169,24 @@ def fetch_google_news_rss(
     *,
     max_items: int = GOOGLE_NEWS_MAX_ITEMS,
     lookback_days: int = NEWS_LOOKBACK_DAYS,
+    market: str | None = None,
 ) -> list[dict[str, Any]]:
     """Fetch recent headlines from Google News RSS (no API key)."""
-    symbol = ticker.replace(".L", "")
-    query = f'"{company_name}" OR {symbol} stock UK'
+    from value_investor.research.news_locale import (
+        build_google_news_query,
+        resolve_news_locale,
+    )
+
+    locale = resolve_news_locale(market, ticker)
+    query = build_google_news_query(company_name, ticker, market)
     return fetch_google_news_rss_query(
         query,
         source_label="google_news",
         max_items=max_items,
         lookback_days=lookback_days,
+        hl=locale["hl"],
+        gl=locale["gl"],
+        ceid=locale["ceid"],
     )
 
 
@@ -247,7 +259,7 @@ def ingest_research_sources(
     write_json(snapshot_path, screening_snapshot, compact=True, compress=False)
 
     yf_news = fetch_yfinance_news(ticker)
-    google_news = fetch_google_news_rss(company_name, ticker)
+    google_news = fetch_google_news_rss(company_name, ticker, market=market)
     all_news = merge_news_articles(yf_news, google_news)
     if since is not None:
         new_news = filter_news_since(all_news, since)
