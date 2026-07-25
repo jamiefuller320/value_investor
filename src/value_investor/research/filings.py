@@ -785,13 +785,69 @@ def _uk_ticker_sec_dual_listed(ticker: str, company_name: str) -> bool:
     """True when a `.L` ticker maps to an SEC CIK for the same issuer (not a US homonym)."""
     if not (ticker or "").upper().endswith(".L"):
         return False
-    cik = resolve_sec_cik(_base_symbol(ticker))
+    return _sec_edgar_supplement_allowed(ticker, company_name)
+
+
+def _sec_edgar_supplement_allowed(ticker: str, company_name: str) -> bool:
+    """
+    True when SEC EDGAR is a same-issuer supplement for a non-US listing.
+
+    Prevents homonym collisions (e.g. Vinci ``DG.PA`` vs Dollar General ``DG``).
+    """
+    base = _base_symbol(ticker)
+    if not base or base == (ticker or "").strip().upper():
+        return False
+    cik = resolve_sec_cik(base)
     if cik is None:
         return False
     sec_name = _sec_submissions_entity_name(cik)
     if not sec_name:
         return False
     return _issuer_matches_sec_name(company_name, sec_name, ticker)
+
+
+def filter_misattributed_filings(
+    rows: list[dict[str, Any]],
+    *,
+    company_name: str,
+    ticker: str,
+    regime: str,
+) -> list[dict[str, Any]]:
+    """Drop SEC (and noisy headline) rows that clearly belong to a different issuer."""
+    if regime in {"sec_edgar", "uk_rns"}:
+        return rows
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        headline = str(row.get("headline") or "")
+        source = str(row.get("source") or "")
+        if source == "sec_edgar":
+            form = str(row.get("form") or row.get("category") or "").upper()
+            # Foreign listings should not pull domestic 10-K/10-Q from a homonym US ticker.
+            if form in {"10-K", "10-Q"} and not headline_relevant_to_issuer(
+                headline, company_name, ticker
+            ):
+                continue
+            if not headline_relevant_to_issuer(headline, company_name, ticker):
+                continue
+        kept.append(row)
+    return kept
+
+
+def enrich_global_filing_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Resolve Google News wrapper URLs to publisher links before body fetch."""
+    enriched: list[dict[str, Any]] = []
+    for row in rows:
+        item = dict(row)
+        url = str(item.get("url") or "")
+        if "news.google.com" in url:
+            resolved = resolve_google_news_publisher_url(url)
+            if resolved and "news.google.com" not in resolved:
+                item["url"] = resolved
+                src = str(item.get("source") or "google_news")
+                if not src.endswith("_resolved"):
+                    item["source"] = f"{src}_resolved"
+        enriched.append(item)
+    return enriched
 
 
 def fetch_filings_sec_edgar(
@@ -1634,7 +1690,7 @@ def ingest_filings(
             )
         )
         # Dual-listed UK names (e.g. RIO.L, SHEL.L) also file 20-F with the SEC.
-        if _uk_ticker_sec_dual_listed(ticker, company_name):
+        if _sec_edgar_supplement_allowed(ticker, company_name):
             groups.append(
                 fetch_filings_sec_edgar(
                     ticker=_base_symbol(ticker),
@@ -1649,14 +1705,31 @@ def ingest_filings(
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
         )
-        # Dual-listed names may also file 20-F / 6-K with the SEC.
-        groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
+        if _sec_edgar_supplement_allowed(ticker, company_name):
+            groups.append(
+                fetch_filings_sec_edgar(
+                    ticker=_base_symbol(ticker),
+                    include_current_reports=False,
+                )
+            )
     elif regime == "tsx_announcements":
         groups.append(fetch_filings_tsx_news(company_name=company_name, ticker=ticker))
-        groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
+        if _sec_edgar_supplement_allowed(ticker, company_name):
+            groups.append(
+                fetch_filings_sec_edgar(
+                    ticker=_base_symbol(ticker),
+                    include_current_reports=False,
+                )
+            )
     elif regime == "asia_filings":
         groups.append(fetch_filings_asia_news(company_name=company_name, ticker=ticker))
-        groups.append(fetch_filings_sec_edgar(ticker=_base_symbol(ticker)))
+        if _sec_edgar_supplement_allowed(ticker, company_name):
+            groups.append(
+                fetch_filings_sec_edgar(
+                    ticker=_base_symbol(ticker),
+                    include_current_reports=False,
+                )
+            )
     else:
         logger.info(
             "No filings regime for market=%s ticker=%s — writing empty index",
@@ -1674,6 +1747,14 @@ def ingest_filings(
             ticker=ticker,
             company_name=company_name,
         )
+    elif regime in {"euro_filings", "asx_announcements", "tsx_announcements", "asia_filings"}:
+        merged = enrich_global_filing_rows(merged)
+    merged = filter_misattributed_filings(
+        merged,
+        company_name=company_name,
+        ticker=ticker,
+        regime=regime,
+    )
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
     merged = _write_bodies(merged, bodies_dir, max_bodies=max_bodies)

@@ -296,8 +296,8 @@
     "enforce_weekly_research_cap": true,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 56.4,
-    "estimated_spend_usd_this_week": 0.8,
+    "estimated_spend_usd_this_cycle": 86.4,
+    "estimated_spend_usd_this_week": 30.8,
     "week_id": "2026-W30",
     "cycle_id": "2026-07-d8",
     "note": "Subscription (Pro $20/mo) is metadata only — allowable usage can be higher. Library research is capped at £30/week usage (×1.27 → $38.10) with enforce_weekly_research_cap=true. Ladder skips selective research when the weekly envelope is spent (budget_flag=constraining). Surplus day (7th) still accelerates fundamentals grow before refresh on the 8th."
@@ -327,7 +327,7 @@
     "use_in_scoring": false,
     "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
   },
-  "updated_at": "2026-07-25T06:02:07.068022+00:00",
+  "updated_at": "2026-07-25T11:13:02.665829+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -337,26 +337,701 @@
     ],
     "min_metrics_for_screen": 25,
     "estimated_memo_usd": 0.4,
-    "research_hard_cap": 50,
+    "research_hard_cap": 75,
     "research_all_graduated": true,
     "last_run": {
-      "run_at": "2026-07-25T06:02:06.887564+00:00",
-      "focus_market": "us_adr_asia",
+      "run_at": "2026-07-25T10:11:13.830984+00:00",
+      "focus_market": "atx",
       "focus_market_after": "atx",
       "screen_shortlist": 0,
       "research": {
-        "skipped": true
+        "model": "composer-2.5",
+        "research_cap": 75,
+        "research_markets": [
+          "sp500",
+          "euro_stoxx50",
+          "asx200",
+          "ftse_smallcap",
+          "nasdaq100",
+          "dax",
+          "cac40",
+          "tsx60",
+          "aim",
+          "ibex35",
+          "ftse_mib",
+          "aex",
+          "bel20",
+          "hang_seng",
+          "sti",
+          "us_adr_asia",
+          "atx",
+          "psi20",
+          "smi",
+          "omxs30",
+          "iseq20"
+        ],
+        "research_all_graduated": true,
+        "enforce_weekly_research_cap": false,
+        "unrestricted_budget": true,
+        "spend_checkpoint_usd": 30.0,
+        "spend_since_checkpoint_usd": 30.0,
+        "constraining": false,
+        "near_limit": false,
+        "budget_flag": "enforced",
+        "allocation_basis": "usage_weekly_gbp",
+        "weekly_usage_gbp": 30.0,
+        "remaining_usd_before": 36.9,
+        "dedupe": {
+          "already_researched_count": 166,
+          "skipped_count": 155,
+          "skipped_sample": [
+            {
+              "market": "sp500",
+              "ticker": "ACN",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CTSH",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "PNR",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "AOS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "HII",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_stoxx50",
+              "ticker": "DG.PA",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "RRL.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "FMG.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "GNE.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "HVN.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "PRN.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "WHC.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "ZIM.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "AAI.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "SOL.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "CSL.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "ARB.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "RMD.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "ORA.AX",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "asx200",
+              "ticker": "PMV.AX",
+              "reason": "duplicate_ticker"
+            }
+          ],
+          "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
+        },
+        "targets": [
+          {
+            "market": "sp500",
+            "ticker": "FIS",
+            "name": "Fidelity National Information Services, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.7955
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "SAN.PA",
+            "name": "Sanofi",
+            "signal": "strong_buy",
+            "conviction_score": 0.8354
+          },
+          {
+            "market": "asx200",
+            "ticker": "WOR.AX",
+            "name": "Worley Limited",
+            "signal": "buy",
+            "conviction_score": 0.4798
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "FOXT.L",
+            "name": "Foxtons Group plc",
+            "signal": "buy",
+            "conviction_score": 0.598
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "ROP",
+            "name": "Roper Technologies, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.7403
+          },
+          {
+            "market": "sp500",
+            "ticker": "APA",
+            "name": "APA Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.7378
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "AD.AS",
+            "name": "Koninklijke Ahold Delhaize N.V.",
+            "signal": "strong_buy",
+            "conviction_score": 0.8062
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "FORT.L",
+            "name": "Forterra plc",
+            "signal": "buy",
+            "conviction_score": 0.5286
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "TRI",
+            "name": "Thomson Reuters Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.6942
+          },
+          {
+            "market": "sp500",
+            "ticker": "LDOS",
+            "name": "Leidos Holdings, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.7312
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "TTE.PA",
+            "name": "TotalEnergies SE",
+            "signal": "strong_buy",
+            "conviction_score": 0.7905
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "DFS.L",
+            "name": "DFS Furniture plc",
+            "signal": "buy",
+            "conviction_score": 0.5278
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "BKR",
+            "name": "Baker Hughes Company",
+            "signal": "strong_buy",
+            "conviction_score": 0.6829
+          },
+          {
+            "market": "sp500",
+            "ticker": "CI",
+            "name": "The Cigna Group",
+            "signal": "strong_buy",
+            "conviction_score": 0.7063
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "DHL.DE",
+            "name": "Deutsche Post AG",
+            "signal": "strong_buy",
+            "conviction_score": 0.7
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "TPT.L",
+            "name": "Topps Tiles Plc",
+            "signal": "buy",
+            "conviction_score": 0.5142
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "ADP",
+            "name": "Automatic Data Processing, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6725
+          },
+          {
+            "market": "sp500",
+            "ticker": "VZ",
+            "name": "Verizon Communications Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6981
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "VOW.DE",
+            "name": "Volkswagen AG",
+            "signal": "strong_buy",
+            "conviction_score": 0.6461
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "MER.L",
+            "name": "Mears Group plc",
+            "signal": "buy",
+            "conviction_score": 0.4471
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "PEP",
+            "name": "PepsiCo, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6594
+          },
+          {
+            "market": "sp500",
+            "ticker": "UPS",
+            "name": "United Parcel Service, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6981
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "DTE.DE",
+            "name": "Deutsche Telekom AG",
+            "signal": "buy",
+            "conviction_score": 0.6808
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "MACF.L",
+            "name": "Macfarlane Group PLC",
+            "signal": "buy",
+            "conviction_score": 0.3881
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "GILD",
+            "name": "Gilead Sciences, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6362
+          },
+          {
+            "market": "sp500",
+            "ticker": "EG",
+            "name": "Everest Group, Ltd.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6888
+          },
+          {
+            "market": "euro_stoxx50",
+            "ticker": "WKL.AS",
+            "name": "Wolters Kluwer N.V.",
+            "signal": "buy",
+            "conviction_score": 0.675
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "APTD.L",
+            "name": "Aptitude Software Group plc",
+            "signal": "buy",
+            "conviction_score": 0.385
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "TMUS",
+            "name": "T-Mobile US, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6238
+          },
+          {
+            "market": "sp500",
+            "ticker": "BR",
+            "name": "Broadridge Financial Solutions, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6848
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "GMS.L",
+            "name": "Gulf Marine Services PLC",
+            "signal": "buy",
+            "conviction_score": 0.1846
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "NXPI",
+            "name": "NXP Semiconductors N.V.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5367
+          },
+          {
+            "market": "sp500",
+            "ticker": "STZ",
+            "name": "Constellation Brands, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6726
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "BKNG",
+            "name": "Booking Holdings Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5013
+          },
+          {
+            "market": "sp500",
+            "ticker": "BBY",
+            "name": "Best Buy Co., Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.662
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "ADSK",
+            "name": "Autodesk, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.4957
+          },
+          {
+            "market": "sp500",
+            "ticker": "EXE",
+            "name": "Expand Energy Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.6502
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "ADBE",
+            "name": "Adobe Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.4561
+          },
+          {
+            "market": "sp500",
+            "ticker": "BMY",
+            "name": "Bristol-Myers Squibb Company",
+            "signal": "strong_buy",
+            "conviction_score": 0.649
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "CSCO",
+            "name": "Cisco Systems, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.6
+          },
+          {
+            "market": "sp500",
+            "ticker": "ALL",
+            "name": "The Allstate Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.647
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "TXN",
+            "name": "Texas Instruments Incorporated",
+            "signal": "buy",
+            "conviction_score": 0.5453
+          },
+          {
+            "market": "sp500",
+            "ticker": "IBM",
+            "name": "International Business Machines Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.6435
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "AMGN",
+            "name": "Amgen Inc.",
+            "signal": "buy",
+            "conviction_score": 0.5396
+          },
+          {
+            "market": "sp500",
+            "ticker": "CRM",
+            "name": "Salesforce, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6369
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "CCEP",
+            "name": "Coca-Cola Europacific Partners PLC",
+            "signal": "buy",
+            "conviction_score": 0.5229
+          },
+          {
+            "market": "sp500",
+            "ticker": "CCL",
+            "name": "Carnival Corporation Ltd.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6275
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "LIN",
+            "name": "Linde plc",
+            "signal": "buy",
+            "conviction_score": 0.4032
+          },
+          {
+            "market": "sp500",
+            "ticker": "EQT",
+            "name": "EQT Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.622
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "VRTX",
+            "name": "Vertex Pharmaceuticals Incorporated",
+            "signal": "buy",
+            "conviction_score": 0.3883
+          },
+          {
+            "market": "sp500",
+            "ticker": "HPQ",
+            "name": "HP Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6206
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "CSX",
+            "name": "CSX Corporation",
+            "signal": "buy",
+            "conviction_score": 0.3879
+          },
+          {
+            "market": "sp500",
+            "ticker": "HIG",
+            "name": "The Hartford Insurance Group, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.6073
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "WBD",
+            "name": "Warner Bros. Discovery, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.373
+          },
+          {
+            "market": "sp500",
+            "ticker": "HCA",
+            "name": "HCA Healthcare, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5917
+          },
+          {
+            "market": "sp500",
+            "ticker": "FDX",
+            "name": "FedEx Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.589
+          },
+          {
+            "market": "sp500",
+            "ticker": "MO",
+            "name": "Altria Group, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5635
+          },
+          {
+            "market": "sp500",
+            "ticker": "OTIS",
+            "name": "Otis Worldwide Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.5442
+          },
+          {
+            "market": "sp500",
+            "ticker": "ACGL",
+            "name": "Arch Capital Group Ltd.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5349
+          },
+          {
+            "market": "sp500",
+            "ticker": "AIG",
+            "name": "American International Group, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5226
+          },
+          {
+            "market": "sp500",
+            "ticker": "CINF",
+            "name": "Cincinnati Financial Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.5068
+          },
+          {
+            "market": "sp500",
+            "ticker": "PRU",
+            "name": "Prudential Financial, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.5048
+          },
+          {
+            "market": "sp500",
+            "ticker": "GDDY",
+            "name": "GoDaddy Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.35
+          },
+          {
+            "market": "sp500",
+            "ticker": "HST",
+            "name": "Host Hotels & Resorts, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.6096
+          },
+          {
+            "market": "sp500",
+            "ticker": "ZTS",
+            "name": "Zoetis Inc.",
+            "signal": "buy",
+            "conviction_score": 0.604
+          },
+          {
+            "market": "sp500",
+            "ticker": "AVY",
+            "name": "Avery Dennison Corporation",
+            "signal": "buy",
+            "conviction_score": 0.5982
+          },
+          {
+            "market": "sp500",
+            "ticker": "DVN",
+            "name": "Devon Energy Corporation",
+            "signal": "buy",
+            "conviction_score": 0.5899
+          },
+          {
+            "market": "sp500",
+            "ticker": "ALLE",
+            "name": "Allegion plc",
+            "signal": "buy",
+            "conviction_score": 0.5855
+          },
+          {
+            "market": "sp500",
+            "ticker": "TRV",
+            "name": "The Travelers Companies, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.5793
+          },
+          {
+            "market": "sp500",
+            "ticker": "JKHY",
+            "name": "Jack Henry & Associates, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.5751
+          },
+          {
+            "market": "sp500",
+            "ticker": "INVH",
+            "name": "Invitation Homes Inc.",
+            "signal": "buy",
+            "conviction_score": 0.552
+          },
+          {
+            "market": "sp500",
+            "ticker": "DG",
+            "name": "Dollar General Corporation",
+            "signal": "buy",
+            "conviction_score": 0.55
+          },
+          {
+            "market": "sp500",
+            "ticker": "UDR",
+            "name": "UDR, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.5479
+          },
+          {
+            "market": "sp500",
+            "ticker": "AMT",
+            "name": "American Tower Corporation",
+            "signal": "buy",
+            "conviction_score": 0.5256
+          },
+          {
+            "market": "sp500",
+            "ticker": "CDW",
+            "name": "CDW Corporation",
+            "signal": "buy",
+            "conviction_score": 0.5176
+          }
+        ],
+        "checkpoint_reached": true,
+        "checkpoint_note": "Paused after $30.00 since last approval (limit $30.00). Re-run with --approve-checkpoint to continue.",
+        "executed": 74,
+        "created": 74,
+        "updated": 0,
+        "errors": [],
+        "estimated_spend_usd": 29.6,
+        "remaining_usd_after": 7.3,
+        "paused_for_approval": true
       },
-      "graduation": {
-        "graduated": false,
-        "from_market": "us_adr_asia",
-        "to_market": "atx",
-        "reason": "advanced"
-      },
+      "graduation": null,
       "maintenance": {
         "skipped": true,
         "markets": []
       }
-    }
+    },
+    "spend_checkpoint_usd": 30.0,
+    "spend_since_checkpoint_usd": 30.0
   }
 }

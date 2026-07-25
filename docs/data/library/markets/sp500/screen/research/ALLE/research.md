@@ -1,0 +1,100 @@
+# Allegion plc (ALLE) — Research memo
+
+_Version 1 · Updated 2026-07-25T11:08:00.200601+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Allegion plc is a global mechanical and electronic security hardware business (Schlage, Von Duprin, SimonsVoss, and related brands) whose Americas franchise is compounding through pricing, volume, and electronic adoption, while International remains a low-margin drag. The quantitative screen rates ALLE a buy (7/22 models; composite 67%), supported by quality, GARP, dividend, and moat signals — P/E 20.3, ROE 33.7%, PEGY 0.13, and ~16% earnings growth. FY2025 revenue reached $4.07bn (+7.8% vs FY2024 per 10-K), with H1 2026 momentum accelerating to +9.4% revenue and diluted EPS of $3.74. The central debate is whether Americas-led earnings power and capital return (dividends plus a replenished $500m buyback authorisation) justify the multiple after a sharp post-Q2 rally, given International volume weakness, acquisition-led growth, ~$2.0bn debt, and goodwill/intangible heaviness. Full-year numeric guidance is not present in the downloaded Q2 10-Q body extract; raised outlook figures in news should be treated as secondary until verified in an 8-K or earnings release.
+
+## INVESTMENT THESIS
+For a value-oriented GARP investor, Allegion offers a rare combination: a branded, specification-driven installed base in non-residential and multifamily markets, high returns on tangible capital in Americas (Q2 2026 segment operating margin 29.0%), and screen-validated earnings quality and dividend growth. The buy signal is not driven by deep cyclical cheapness alone — P/B 6.2 limits pure deep-value appeal — but by cheapness relative to growth (Neff PEGY pass), sustained margin expansion (consolidated operating margin 22.1% in Q2 2026 vs 21.5% prior year), and a multi-year compounding record: FY2025 net revenues $4,067.3m and operating income $859.5m (10-K, Feb 2026), versus FY2024 net revenues $3,772.2m and operating income $780.7m (10-K, Feb 2025).
+
+Business quality aligns with screen passes on Buffett Quality, Economic Moat, Magic Formula, and Earnings Quality. Distribution through locksmiths, architects, and institutional channels, plus electronic lock migration (management cites continued electronic growth in Americas), supports pricing power — Q2 2026 consolidated revenue bridge shows pricing +3.3% and volume +3.6%. Capital allocation is shareholder-friendly: H1 2026 dividends of $1.10 per share and $160.6m of repurchases, with the board reauthorising up to $500m in April 2026. Leverage is manageable — filing states covenant compliance for at least 12 months and ~88% of debt is fixed-rate — though net debt (~$1.6bn per Yahoo at FY2025 year-end; filing bodies lack full 10-K balance sheet) and acquisition spend warrant monitoring.
+
+## FINANCIAL REVIEW
+**Annual results (10-K filing bodies)**
+
+Primary 10-K extracts provide revenue and operating income in the business overview; full consolidated statements are truncated in the downloaded body files.
+
+| Metric | FY2025 (10-K, Feb 2026) | FY2024 (10-K, Feb 2025) | YoY |
+|--------|-------------------------|-------------------------|-----|
+| Net revenues | $4,067.3m | $3,772.2m | +7.8% |
+| Operating income | $859.5m | $780.7m | +10.1% |
+| Operating margin (derived) | 21.1% | 20.7% | +40bp |
+
+Net earnings, diluted EPS, cash flow, and year-end balance-sheet detail are **not available in the 10-K body extracts** (files truncate before Item 8 statements). **Yahoo fallback (`financials_annual.json`):**
+
+| Metric | FY2025 | FY2024 | FY2023 |
+|--------|--------|--------|--------|
+| Net income | $643.8m | $597.5m | $540.4m |
+| Diluted EPS | $7.44 | $6.82 | $6.12 |
+| Operating cash flow | $783.8m | $675.0m | $600.6m |
+| Free cash flow | $685.7m | $582.9m | $516.4m |
+| Total debt (year-end) | $1,980m | $1,999m | $2,015m |
+| Stockholders' equity | $2,068m | $1,501m | $1,318m |
+| Goodwill + intangibles | ~$2,738m | ~$2,058m | ~$2,016m |
+
+FY2025 FCF conversion was strong (~106% of net income per Yahoo). FY2025 investing cash outflows included ~$592m for acquisitions (Yahoo), consistent with an acquisitive growth strategy; the specific target name is not identifiable in the truncated 10-K body.
+
+Approximately 25% of FY2025 net revenues were derived outside the US (10-K, Feb 2026); ~24% in FY2024.
+
+**Interim results (10-Q filing bodies)**
+
+*Q1 2026 (10-Q, 28 Apr 2026):* Net revenues $1,033.6m (+9.7% vs Q1 2025 $941.9m); operating income $195.3m (flat vs $196.4m); net earnings $138.1m (-6.8% vs $148.2m); diluted EPS $1.59 vs $1.71. Q1 earnings softness is a watchpoint.
+
+*Q2 2026 (10-Q, 23 Jul 2026):* Net revenues $1,151.5m (+12.7% vs $1,022.0m); operating income $254.7m (+16.0%); operating margin 22.1% vs 21.5%; diluted EPS $2.15 vs $1.85 (+16.2%). Revenue bridge: pricing +3.3%, volume +3.6%, acquisitions/divestitures +5.1%, FX +0.7%.
+
+*H1 2026:* Net revenues $2,185.1m (+11.3% vs $1,963.9m); operating income $450.0m (+8.1%); net earnings $322.7m (+4.8%); diluted EPS $3.74 vs $3.56.
+
+*H1 2026 cash flow (10-Q):* Operating cash $299.7m (vs $314.2m prior year; working-capital build); capex $38.9m; acquisition spend $75.5m (includes DCI, ~$70m); share repurchases $160.6m; dividends $94.0m. Cash fell to $320.6m from $356.2m at year-end.
+
+*Balance sheet (30 Jun 2026, 10-Q):* Total assets $5,360.8m; total debt $2,030.9m (revolver drawn $240.6m plus senior notes); goodwill $1,925.6m (International accumulated impairment $573.6m); stockholders' equity $2,118.6m.
+
+**Segment trends (Q2/H1 2026, 10-Q)**
+
+- **Allegion Americas:** Q2 revenue $918.6m (+11.8%); segment operating income $266.8m, margin 29.0%. H1 segment margin 27.9% (down 50bp YoY due to acquisition mix). Engine of consolidated profit.
+- **Allegion International:** Q2 revenue $232.9m (+16.2%) but **volume -2.0%**; segment operating income $14.8m, margin **6.4%** (down from 7.8%). Revenue growth is acquisition- and FX-led; underlying volume and margin pressure persist.
+
+**Prior-year interim context**
+
+H1 2025 (10-Q, Jul 2025): revenue $1,963.9m vs H1 2024 $1,859.5m (+5.6%). 9M 2025 (10-Q, Oct 2025): revenue $3,034.1m vs 9M 2024 $2,826.6m (+7.3%).
+
+**Gaps:** Full-year 2026 revenue/EPS guidance figures are **not present** in the Q2 10-Q body extract. Numeric raised outlook cited in news (e.g. ~$8.79 EPS per GuruFocus, 24 Jul 2026) is unverified against primary filings in this pack.
+
+## RISKS AND RED FLAGS
+**International profitability:** International segment operating margin fell to 6.4% in Q2 2026 on negative volume mix; restructuring charges of $8.5m in H1 2026 targeted both segments. This is the largest operational red flag not fully captured by aggregate screen metrics.
+
+**Acquisition and goodwill risk:** Goodwill totalled $1,925.6m at 30 Jun 2026; International carries $573.6m of accumulated impairment. 10-K risk language warns of potential goodwill/intangible impairment if end markets weaken. FY2025 featured heavy M&A spend (~$592m per Yahoo); integration and leverage risk are real.
+
+**Balance-sheet intangibility:** Goodwill plus intangibles (~$2.7bn per Yahoo FY2025) exceed equity; tangible book is negative. Screen quality metrics partly reflect asset-light accounting rather than liquidating value.
+
+**Debt and covenants:** Total debt ~$2.03bn; revolver $1.0bn capacity with $240.6m drawn. Filing states compliance with financial covenants and no anticipated challenges for 12 months, but notes that covenant breach could accelerate indebtedness. Fixed-rate debt (~88%) limits near-term rate shock.
+
+**Pension:** May 2026 group annuity transfer triggered a **$3.7m settlement charge**; remaining US projected benefit obligation ~$196m with plan assets ~$207m (10-Q). Defined-benefit plans in US and non-US jurisdictions remain an ongoing obligation.
+
+**Tariffs and trade:** Q2 2026 MD&A cites ~20–25% of COGS from Mexico, <5% from China, and ongoing tariff uncertainty; management has offset tariff inflation with pricing but warns tariffs could affect future demand. IEEPA tariff refund amounts remain uncertain and unrecorded.
+
+**Contingencies:** Environmental reserves ~$21.9m (30 Jun 2026); management states no material adverse effect expected from legal/environmental matters except as disclosed. No going-concern language identified.
+
+**Customer concentration:** Top 10 customers ~26–27% of revenue; no single customer >10% (10-K).
+
+**Governance:** 8-K (27 May 2025) — SVP/GC Jeffrey Braun retired 30 Jun 2025; immaterial but noted.
+
+## NEWS HIGHLIGHTS
+Coverage is **heavy around Q2 2026 earnings (23–25 Jul 2026)** but thin on deeper strategic items beyond that window.
+
+- **Allegion Q2 Earnings Beat on Americas Growth, Outlook Raised** (Yahoo Finance, 23 Jul 2026) — double-digit revenue growth; full-year revenue and EPS outlook raised; Americas strength vs European weakness.
+- **Why Is Allegion (ALLE) Stock Rocketing Higher Today** (Yahoo Finance, 23 Jul 2026) — Q2 revenue $1.15bn (+12.7%), adjusted EPS $2.40 vs $2.22 consensus; stock up ~12.7%.
+- **Allegion Earnings: US Sales Volumes Offset Weak International Results; Shares Fairly Valued** (Morningstar, 23 Jul 2026) — constructive on Americas, cautious on valuation post-rally.
+- **Forget AI. This Lock Maker Is Leading the S&P 500** (Barron's, 23 Jul 2026) — best single-day move context amid broader market weakness.
+- **ALLE Maintained by JP Morgan — Price Target Raised to $170** (GuruFocus, 25 Jul 2026).
+- **Allegion (ALLE) Projects Earnings Per Share of $8.79 for 2026** (GuruFocus, 24 Jul 2026) — secondary; not verified in filing pack.
+- **1 Industrials Stock on Our Watchlist and 2 We Turn Down** (Yahoo Finance, 24 Jul 2026) — ALLE on positive watchlist.
+- **2 Reasons to Like ALLE and 1 to Stay Skeptical** (Yahoo Finance, 14 Jul 2026) — pre-earnings sentiment piece.
+
+Earlier corporate news in filings: **share repurchase authorisation replenished to $500m** (8-K headline, 15 Apr 2026; confirmed in Q2 10-Q); **DCI acquisition** (~$70m, Mar 2026); **Trimco, Next Door, Lemaar, Novas** bolt-ons in 2025 (~$64m aggregate). Much other news flow is institutional position-tracking (MarketBeat) with limited fundamental content.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Primary filings confirm sustained revenue, margin, and cash-generation improvement led by Americas, supporting the quantitative buy signal, but International weakness, acquisition dependence, intangible-heavy balance sheet, and post-earnings rerating temper conviction versus a full-conviction endorsement.

@@ -223,8 +223,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ladder_p.add_argument(
         "--api-key",
-        default=os.environ.get("CURSOR_API_KEY"),
-        help="Cursor API key for selective research",
+        default=None,
+        help="Cursor API key for selective research (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
     )
     ladder_p.add_argument(
         "--unrestricted-budget",
@@ -446,6 +446,33 @@ def build_parser() -> argparse.ArgumentParser:
     )
     reingest_p.add_argument("--json", action="store_true")
     reingest_p.set_defaults(func=cmd_reingest_filings)
+
+    repair_p = sub.add_parser(
+        "repair-research",
+        help="Re-ingest filings and re-memo library research tickers (e.g. batch 1 repair)",
+    )
+    repair_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: all library markets)",
+    )
+    repair_p.add_argument(
+        "--batch-date",
+        default="2026-07-25",
+        help="Only repair memos updated on this date (YYYY-MM-DD)",
+    )
+    repair_p.add_argument(
+        "--rememo-all",
+        action="store_true",
+        help="Re-memo every target after re-ingest (default: only when sources improved or flagged)",
+    )
+    repair_p.add_argument(
+        "--api-key",
+        default=None,
+        help="Cursor API key (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
+    )
+    repair_p.add_argument("--json", action="store_true")
+    repair_p.set_defaults(func=cmd_repair_research)
 
     retry_p = sub.add_parser(
         "retry-failed",
@@ -1191,6 +1218,48 @@ def cmd_reingest_filings(args: argparse.Namespace) -> int:
             f"filings={row.get('filings_total')}  bodies={row.get('with_body')}"
         )
     return 0
+
+
+def cmd_repair_research(args: argparse.Namespace) -> int:
+    from value_investor.cursor_api_key import resolve_cursor_api_key
+
+    from .library_maintenance import list_batch1_repair_targets, repair_library_research_memos
+
+    markets = _parse_markets(args.markets) or None
+    targets = list_batch1_repair_targets(
+        args.root,
+        batch_date=str(args.batch_date),
+        markets=markets,
+    )
+    key = (args.api_key or "").strip() or resolve_cursor_api_key()[0]
+    if not key:
+        print("CURSOR_API_KEY_V2 / CURSOR_API_KEY required for re-memo", file=sys.stderr)
+        return 1
+    payload = repair_library_research_memos(
+        args.root,
+        targets,
+        api_key=key,
+        rememo_all=bool(args.rememo_all),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0 if not payload.get("errors") else 1
+    print(
+        f"Repair targets: {payload['target_count']}  "
+        f"re-memoed: {payload['rememoed']}  "
+        f"skipped: {payload['skipped_rememo']}  "
+        f"errors: {len(payload.get('errors') or [])}"
+    )
+    for row in payload.get("results") or []:
+        if row.get("error"):
+            print(f"  ERROR {row['market']}/{row['ticker']}: {row['error']}")
+        else:
+            print(
+                f"  {row['market']}/{row['ticker']}: "
+                f"bodies {row.get('bodies_before')}→{row.get('bodies_after')}  "
+                f"rememo={row.get('rememo')}  reasons={','.join(row.get('reasons') or [])}"
+            )
+    return 0 if not payload.get("errors") else 1
 
 
 def cmd_retry_failed(args: argparse.Namespace) -> int:

@@ -1,0 +1,81 @@
+# The Cigna Group (CI) — Research memo
+
+_Version 1 · Updated 2026-07-25T10:24:41.643360+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+The Cigna Group is a scaled US healthcare platform combining Evernorth (pharmacy benefit management and specialty/care services, the majority of revenue) with Cigna Healthcare (employer and international medical benefits). The quantitative screen rates CI a **strong buy** (12/22 models, 82% composite; P/E 12.3, P/B 1.8, 2.2% yield, 16.3% ROE), reflecting cheapness, cash generation and quality metrics that align with a post-portfolio-simplification earnings profile. The central valuation debate is whether Evernorth’s durable cash flows and the Medicare divestiture (completed 19 March 2025) justify a re-rating, or whether PBM regulatory reform, client concentration and sector sentiment cap upside. Filings confirm accelerating operating momentum in early 2026, but annual 10-K financial tables are absent from the available body extracts — annual trend analysis relies partly on Yahoo fallback.
+
+## INVESTMENT THESIS
+For a value investor, CI offers a rare combination in managed care: **double-digit adjusted earnings power, strong free cash flow, and a sub-market multiple** on a business that is less Medicaid-exposed than peers currently in the headlines. The screen passes five factor families (cheapness, quality, dividend, GARP, risk) with full data quality (20/20 metrics), including Graham Enterprising, FCF Yield, Lynch/Neff PEG variants, Piotroski F-Score and Earnings Quality — suggesting the signal is not driven by a single ratio artefact.
+
+Business quality supports the screen. Evernorth adjudicates over two billion adjusted prescriptions annually and anchors revenue through long-dated PBM relationships (Centene from 2024, Prime Therapeutics, TRICARE). Cigna Healthcare is predominantly ASO-funded employer medical (roughly 79% of medical customers on an ASO basis per the FY2025 10-K business description), limiting balance-sheet medical risk relative to fully insured peers. The **HCSC transaction** — sale of Medicare Advantage, Part D, supplement and CareAllies businesses — completed in Q1 2025 and has visibly cleaned the earnings base: Q1 2026 shareholders’ net income was $1.65bn versus $1.32bn a year earlier (+25%), with diluted EPS of $6.26 versus $4.85 (+29%), per the Q1 2026 10-Q filing body.
+
+Capital allocation reinforces the value case: regular dividends ($1.56/quarter declared in Q1 2026 10-Q), active buybacks historically (Yahoo: $3.6bn repurchased in FY2025), and manageable leverage (net debt ~$23.8bn on ~$41.7bn equity per Yahoo FY2025 balance sheet; total debt ~$30.9bn at 31 March 2026 per Q1 2026 10-Q). Negative tangible book (~$31.8bn per Yahoo) reflects Express Scripts-era goodwill rather than distress — a screen blind spot worth noting, not a solvency flag.
+
+## FINANCIAL REVIEW
+**Source hierarchy and gaps.** The filings index contains two annual 10-Ks (FY2024 filed 27 Feb 2025; FY2025 filed 26 Feb 2026) and six interim 10-Qs with body extracts. However, **both 10-K body extracts are truncated at ~80,000 characters before Item 7 MD&A financial tables and Item 8 statements** — annual revenue, net income and cash-flow figures cannot be cited from those bodies. Interim 10-Q bodies contain full quarterly income statements and balance sheets. Where annual figures are needed below, **Yahoo `financials_annual.json` is used as explicit fallback**.
+
+**Annual trends (Yahoo fallback — 10-K bodies lack figures).**
+
+| Metric | FY2023 | FY2024 | FY2025 |
+|---|---|---|---|
+| Total revenue | $194.1bn | $246.1bn | $273.9bn |
+| Net income | $5.16bn | $3.43bn | $5.96bn |
+| Diluted EPS | $17.39 | $12.12 | $22.18 |
+| Operating cash flow | $11.81bn | $10.36bn | $9.60bn |
+| Free cash flow | $10.24bn | $8.96bn | $8.39bn |
+
+FY2024 GAAP net income was depressed by unusual investment/security losses (Yahoo: $1.76bn loss on sale of securities in 2024 versus a $1.02bn gain in 2025). Normalised earnings trend is better read through adjusted operating metrics and the interim filings post-Medicare exit.
+
+**Interim filing trends (primary source — 10-Q bodies).**
+
+*Revenue growth remains robust.* Nine months ended 30 September 2025: total revenues **$202.4bn** versus **$181.5bn** in 9M 2024 (+12%), driven by pharmacy revenues up to $158.3bn from $135.4bn (Q3 2025 10-Q). Q1 2026 total revenues **$68.5bn** versus **$65.5bn** in Q1 2025 (+4.6%; Q1 2026 10-Q).
+
+*Earnings inflection is visible.* 9M 2025 shareholders’ net income **$4.72bn** (diluted EPS **$17.52**) versus **$2.01bn** / **$7.05** in 9M 2024 — the prior-year period included large net investment losses ($2.8bn 9M 2024 vs $76m 9M 2025). Q1 2026 shareholders’ net income **$1.65bn** (diluted EPS **$6.26**) versus **$1.32bn** / **$4.85** in Q1 2025.
+
+*Management’s preferred metric — adjusted income from operations* (excludes investment gains/losses, intangible amortisation, special items): Q1 2026 **$2.60bn** versus **$2.31bn** in Q1 2025 (+13%; Q1 2026 10-Q segment note). Segment split Q1 2026: Evernorth **$1.47bn**, Cigna Healthcare **$1.51bn**. 9M 2024 adjusted income was **$5.90bn** per Q3 2024 10-Q MD&A extract (prior-year comparator available; 9M 2025 adjusted figure not present in the truncated Q3 2025 body).
+
+*Medical costs — favourable reserve development.* Cigna Healthcare incurred medical costs Q1 2026 **$7.66bn** versus **$10.39bn** Q1 2025, reflecting Medicare divestiture (Medicare Advantage premium line fell to zero from $2.36bn in Q1 2025 per Q1 2026 10-Q revenue disaggregation). Prior-year reserve development was **favourable $188m** (0.6% of current-year costs) in Q1 2026 versus **$222m** in Q1 2025 (Q1 2026 10-Q, Note 7).
+
+*Balance sheet (31 March 2026, Q1 2026 10-Q).* Total assets **$153.3bn**; shareholders’ equity **$42.2bn**; total debt **~$30.9bn** ($1.5bn current + $29.4bn long-term). Goodwill **$45.5bn** and other intangibles **$27.3bn** explain negative tangible equity. No going-concern language appears in any available filing body extract.
+
+*Cash and capital return.* Q1 2026 operating cash flow **$1.13bn** (seasonally light vs Q1 2025 **$1.92bn**). No share repurchases in Q1 2026 versus **$1.5bn** in Q1 2025 (Q1 2026 10-Q cash-flow statement). Dividend declared **$1.56/share** (Q2 2026 payment announced 22 April 2026 in Q1 2026 10-Q Note 5).
+
+*Special items.* Strategic optimisation programme charges **$380m** in Q1 2026 ($290m after tax), expected to run through 2028 (Q1 2026 10-Q Notes 12/15). HCSC integration/transaction costs **$35m** in Q1 2026.
+
+## RISKS AND RED FLAGS
+**Regulatory — PBM reform (high salience).** The FY2025 10-K business/regulation section describes the Consolidated Appropriations Act, 2026 provisions requiring 100% rebate pass-through to ERISA plan sponsors from August 2028, enhanced PBM disclosure, and Medicare Part D compensation restrictions from January 2028. Cigna states the full impact cannot yet be determined. This is the primary structural risk to Evernorth margins not captured by backward-looking screen ratios.
+
+**Client concentration.** A single pharmacy benefit client represented **~19% of total external revenue in FY2025** (16% in FY2024), per the FY2025 10-K business section. US federal government contracts contributed **~11%** of FY2025 revenue. Loss or repricing of either relationship would be material.
+
+**Litigation and compliance.** Filing bodies reference routine involvement in False Claims Act matters, qui tam actions, DOJ investigations and regulatory audits. A prior Medicare risk-adjustment investigation was settled in 2023 with a Corporate Integrity Agreement (FY2024 10-K). Q1 2026 recorded **$11m litigation benefits** in special items — net favourable, but litigation tail risk persists (Q1 2026 10-Q).
+
+**Medical cost cyclicality.** Risk-factor language in annual filings warns that actual claims may exceed estimates, compressing margins or making premiums insufficient. Favourable prior-year development in 2025–2026 could reverse if utilisation re-accelerates (sector-wide debate, amplified by UnitedHealth/Elevance headlines in the news feed).
+
+**Balance-sheet optics.** Tangible book value **negative $31.8bn** (Yahoo FY2025) and ~$1.3bn annual intangible amortisation create a persistent GAAP earnings drag. This is typical for PBM/consolidator models but obscures true economic earnings.
+
+**Pension and legacy liabilities.** Corporate segment carries expense for **frozen pension plans** (FY2025 10-K segment description). Other Operations retains variable-annuity reinsurance exposure largely ceded to Berkshire Hathaway with **~$3.0bn** remaining limit (Q1 2026 10-Q Note 8) — contained but not zero.
+
+**Debt issuance.** September 2025 8-K: **$4.5bn** senior notes issued (4.5%–6.0% coupons, 2030–2056 maturities) to repay a **$2.0bn** term loan tied to a strategic investment and for general corporate purposes. Leverage remains manageable but the company is not de-levering aggressively.
+
+**Governance.** Board member Retired Major General Elder Granger, M.D. retiring effective 31 December 2025 per October 2025 8-K — routine, not a red flag.
+
+No going-concern, covenant breach or material weakness disclosures were found in available filing bodies.
+
+## NEWS HIGHLIGHTS
+**Material company-specific items (past year):**
+
+- **Medicare divestiture to HCSC** — completed 19 March 2025 (Q1 2026 10-Q Note 1; FY2025 10-K). Strategically pivots CI away from Medicare Advantage risk toward employer/PBM cash flows.
+- **AI cost initiative** — “Cigna leans on AI for $200M decline in medical costs” (Seeking Alpha, 23 July 2026); “Cigna estimates AI-enabled care will reduce costs by $200M in 3 years” (Stock Titan, 23 July 2026).
+- **Dividend** — “Cigna sets Sept. 23 payment date for $1.56 dividend” (Stock Titan, 22 July 2026).
+- **Index reconstitution** — “Cigna (CI) Stock Just Lost Its Place In Key Russell Growth Indexes” (Yahoo Finance, 4 July 2026) — potential passive-flow headwind, not fundamental.
+- **Valuation commentary** — multiple pieces noting CI trading at a discount after pullback, e.g. “Cigna Group (CI) Could Be 16% Below Fair Value Following Its Recent Pullback” (simplywall.st, 23 July 2026); “Cigna (CI) Stock Still Looks Cheap As Earnings Stay Strong” (Yahoo Finance, 3 July 2026).
+- **Debt capital markets** — $4.5bn senior notes offering (8-K, 4 September 2025).
+
+**Coverage quality flag:** News coverage is **thin on hard corporate events** and heavily polluted by unrelated “CI Investments Inc.” (Canadian fund manager) holdings articles and peer-sector pieces on UNH/Elevance/CVS. Treat the manifest as sentiment/secondary, not a primary event calendar. No major M&A, CEO change or regulatory enforcement action against CI specifically surfaced in the manifest beyond the known HCSC divestiture and PBM legislative backdrop.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.78
+Rationale: Interim SEC filings confirm strong post-Medicare-divestiture earnings and cash generation that substantiate the quantitative strong-buy signal, tempered by PBM regulatory uncertainty, revenue concentration and incomplete annual filing-body data requiring Yahoo fallback for full-year figures.

@@ -1,0 +1,100 @@
+# Amgen Inc. (AMGN) — Research memo
+
+_Version 1 · Updated 2026-07-25T11:35:45.327860+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Amgen is a large-cap biotech with a durable marketed portfolio (Repatha, Prolia/XGEVA, TEPEZZA, Otezla, ENBREL) plus an emerging growth layer (UPLIZNA, IMDELLTRA/IMDYLLTRA, MariTide). The quantitative screen rates the name a **buy** (7/22 models; composite 61%), driven chiefly by dividend yield, PEGY and quality metrics rather than headline cheapness (P/E 25.8; P/B 22.1). Filings show product sales rising to **$35.1bn in 2025** (10-K) with improving interim momentum, but leverage (~**$55bn** debt), IRA/state pricing pressure, biosimilar erosion on Prolia/XGEVA, and open IRS tax litigation cap upside. The central debate is whether pipeline and Horizon-acquired rare-disease assets can outrun patent expiry and Medicare price-setting—not whether Amgen generates cash (it does).
+
+## INVESTMENT THESIS
+For a value-oriented investor, Amgen fits a **quality dividend/GARP** bucket more than deep cyclical value. The screen passes five factor families—cheapness, quality, dividend, GARP and risk—with standout metrics including **PEGY 0.09**, **2.7% yield**, and passes on Economic Moat, Dividend Growth, Magic Formula, Piotroski F-Score and Earnings Quality. Business quality is supported by: (1) **SEC-filed product sales of $35.1bn (+10% YoY)**, with U.S. mix stable at 73%; (2) recurring **operating cash generation** (Yahoo: **$10.0bn** in 2025; Q1 2026 10-Q operating cash flow **$2.2bn**, up from $1.4bn); (3) a broad late-stage pipeline (Repatha CV-risk expansion, MariTide obesity, UPLIZNA/IMDELLTRA label growth); and (4) manufacturing scale and biosimilar capability. The screen’s low reported **ROE (1.0%)** reflects a thin equity base (negative retained earnings, large Horizon-related intangibles) rather than weak operations—book value is not a clean anchor here. At ~26x earnings, the case rests on earnings durability, dividend growth and optionality from new launches offsetting ENBREL/Otezla pricing and denosumab biosimilar pressure.
+
+## FINANCIAL REVIEW
+**Annual (10-K, filed Feb 2025 and Feb 2026 for YE Dec 2025 and Dec 2024)**
+
+Product sales from the **FY2025 10-K body** (primary):
+- **2025:** $35,148m | **2024:** $32,026m | **2023:** $26,910m  
+- Geography 2025: U.S. **$25,656m (73%)**; ROW **$9,492m (27%)**  
+- TEPEZZA/KRYSTEXXA included from Horizon (closed Oct 2023).
+
+Full consolidated income statement, balance sheet and cash-flow totals for FY2025/FY2024 are **not present in the downloaded 10-K body extracts** (truncated before Item 8). **Yahoo fallback (stated explicitly):**
+
+| Metric | 2025 | 2024 | 2023 |
+|--------|------|------|------|
+| Total revenue | $36,751m | $33,424m | $28,190m |
+| Operating income | $9,080m | $7,258m | $7,897m |
+| Net income | $7,711m | $4,090m | $6,717m |
+| Diluted EPS | $14.23 | $7.56 | $12.49 |
+| Free cash flow | $8,100m | $10,394m | $7,359m |
+| Operating cash flow | $9,958m | $11,490m | $8,471m |
+| CapEx | $1,858m | $1,096m | $1,112m |
+| Total debt | $54,604m | $60,099m | $64,613m |
+| Cash | $9,129m | $11,973m | $10,944m |
+| Stockholders’ equity | $8,658m | $5,877m | $6,232m |
+| Total assets | $90,586m | $91,839m | $97,154m |
+
+2024 net income was depressed by **$800m Otezla intangible impairment** (Q1 2025 10-Q) after CMS selected Otezla for IRA Medicare price setting from Jan 2027. 2025 benefited from stronger core operations and lower amortisation versus prior-year impairment/noise.
+
+**Interim (10-Q filings with full financial statements in body extracts)**
+
+*Q1 2026 (10-Q, period ended 31 Mar 2026):*
+- Total revenues **$8,618m** vs $8,149m (+6% YoY); product sales **$8,218m** vs $7,873m  
+- Operating income **$2,666m** vs $1,178m (prior year included **$800m** Otezla impairment in Other operating expenses)  
+- Net income **$1,819m** vs $1,730m; diluted EPS **$3.34** vs $3.20  
+- Total assets **$92,504m**; total debt **$51,886m** (long-term) + **$5,437m** current = **$57,323m** carrying value  
+- Cash **$12,038m**; operating cash flow **$2,189m** vs $1,391m  
+
+Notable Q1 2026 product trends (10-Q): Repatha **$876m** (+34% YoY); UPLIZNA **$262m** (+188%); IMDELLTRA **$258m** (+219%); TEPEZZA **$490m** (+29%); Prolia **$727m** (−34%); ENBREL **$320m** (−37%).
+
+*Nine months ended 30 Sep 2025 (10-Q):*
+- Total revenues **$26,885m** vs $24,338m (+10%)  
+- Operating income **$6,360m** vs $4,947m (+29%)  
+- Net income **$6,378m** vs $3,463m (+84%; prior year distorted by impairments and equity-mark gains/losses)  
+- Nine-month operating cash flow **$8,355m** vs $6,719m  
+
+*Q2 2025 (10-Q):* revenues **$9,179m** (+9% YoY); net income **$1,432m** vs $746m.
+
+**Trend assessment:** Top-line growth is solid post-Horizon, with mix shifting toward Repatha, TEPEZZA and newer rare-disease/oncology assets, partially offset by ENBREL and Prolia declines. Margins are improving as one-off impairments roll off, but **intangible amortisation remains heavy** (~$896m/quarter in Q1 2026). Balance-sheet risk is elevated: net debt roughly **$45–46bn** (Yahoo YE2025) with **$2.8bn** annual interest (Yahoo 2025). FCF comfortably covers the **~$5.1bn** dividend (Yahoo 2025) but leaves limited room for aggressive deleveraging without asset sales or reduced buybacks (no repurchases in Q1 2026 per 10-Q).
+
+**Gap note:** Eight 8-K filings in the index (Nov 2025–May 2026) have **no body extracts**; earnings detail for those events relies on linked press releases not captured here.
+
+## RISKS AND RED FLAGS
+**Regulatory and pricing:** The FY2025 10-K flags CMS IRA mandatory price setting: **ENBREL from Jan 2026** and **Otezla from Jan 2027**, at “significantly lower” Medicare prices. State PDAB laws (Colorado, Maryland, Minnesota, Washington, etc.) may impose upper payment limits; news flow indicates Colorado’s **70% Enbrel price cap was blocked** (Jul 2025), but federal/state pricing pressure remains structural. Expanded **340B** utilisation is cited as a negative financial impact.
+
+**Competitive:** Prolia/XGEVA **RANKL antibody patents expired Feb 2025 (U.S.)** and Nov 2025 (select Europe); filing language expects “accelerated sales erosion” as denosumab biosimilars launch. ENBREL faces entrenched immunology competition and biosimilar pressure in Canada. Biosimilar competition on legacy brands (EPOGEN, Neulasta) is already intensifying.
+
+**Legal and tax:** Q1 2026 10-Q discloses IRS disputes seeking **~$3.6bn** (2010–12) and **~$5.1bn plus ~$2.0bn penalties** (2013–15) on Puerto Rico profit allocation; Tax Court decision expected **no earlier than H2 2026**. A **draft NOPA for 2016–18** could be material if sustained. **Amgen settles shareholder lawsuit claiming it hid $10.7bn tax bill** (Reuters, 21 Jul 2025; GuruFocus settlement at **$74m**, 23 Jul 2025).
+
+**Product-specific:** FDA **proposal to withdraw TAVNEOS** (Apr 2026 per Q1 2026 10-Q) over effectiveness/hepatotoxicity concerns; **$2.4bn** intangible carrying value at risk. **PAVBLU** (aflibercept biosimilar) patent litigation with Regeneron ongoing (U.S. and Singapore). Bemarituzumab gastric programme discontinued (Feb 2026, 10-K).
+
+**Financial structure:** ~**$55–58bn** gross debt; tangible book **negative** (goodwill/intangibles ~$41bn YE2025, Yahoo). Three wholesalers (McKesson, Cencora, Cardinal) accounted for **77%** of 2025 gross revenues—concentration risk. **BeOne** equity stake (~$5.6bn) introduces mark-to-market EPS volatility (Q1 2026 unrealised loss **$130m** vs Q1 2025 gain **$1.7bn**).
+
+**Governance/pension:** No **going concern** language identified in available filing bodies. Pension/post-retirement obligations present but not a primary red flag in extracts reviewed. Debt covenants not flagged as breached; revolving credit facility **$4.0bn**, undrawn (Q1 2026 10-Q).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-heavy**, though much is price/flow commentary rather than fundamental breaks.
+
+**Regulatory/pricing**
+- “Colorado Enbrel Price Cap Setback Might Change The Case For Investing In Amgen (AMGN)” — Yahoo Finance, **22 Jul 2025**
+- “What Amgen (AMGN)'s Blocked Colorado Enbrel Price Cap Means For Shareholders” — simplywall.st, **23 Jul 2025**
+- “Amgen (AMGN) Clears An Enbrel Overhang, Is The Stock Fully Priced?” — Yahoo Finance, **22 Jul 2025**
+
+**Legal/governance**
+- “Amgen settles shareholder lawsuit claiming it hid $10.7 billion tax bill” — Reuters, **21 Jul 2025**
+- “Amgen (AMGN) Settles Lawsuit for $74 Million Over Tax Disclosure Delay” — GuruFocus, **23 Jul 2025**
+
+**Strategy/pipeline**
+- “Amgen’s US$300m Biologics Push And What It Means For AMGN Stock” — Yahoo Finance, **6 May 2025**
+- “Morgan Stanley Raises Amgen (AMGN) Price Target Following a Strong Start for Uplizna” — Yahoo Finance, **13 Jun 2025**
+- “Therapeutics Stocks Q1 Teardown: Amgen (NASDAQ:AMGN) Vs The Rest” — Yahoo Finance, **24 Jul 2025**
+
+**Market sentiment**
+- “Amgen (AMGN) Upgraded to Buy: What Does It Mean for the Stock?” — Yahoo Finance, **6 Jul 2025**
+- Multiple technical/institutional-position articles (MarketBeat, ChartMill) — Jul 2025
+
+No material CEO change reported in the news manifest; board re-election routine (8-K, **23 May 2025**). M&A focus remains integration of **Horizon (2023)** rather than new large deals.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Filings confirm improving revenue, cash generation and pipeline depth that support the screen’s buy signal, but elevated leverage, IRA/biosimilar headwinds and unresolved tax litigation prevent full conviction at current multiples.

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import os
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -23,6 +22,7 @@ from value_investor.agent_model_policy import (
     spend_since_checkpoint_usd,
     weekly_budget_status,
 )
+from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, library_status
 from value_investor.library_dedupe import (
     existing_library_research_tickers,
@@ -318,7 +318,7 @@ def run_library_ladder(
             layer["dry_run"] = True
             layer["executed"] = 0
         else:
-            key = api_key or os.environ.get("CURSOR_API_KEY")
+            key = resolve_cursor_api_key()[0] if not (api_key or "").strip() else api_key.strip()
             if not key:
                 layer["skipped"] = True
                 layer["reason"] = "CURSOR_API_KEY missing"
