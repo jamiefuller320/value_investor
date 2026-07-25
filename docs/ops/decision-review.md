@@ -33,7 +33,8 @@ ftse-decision-review --output-dir docs/data/paper_automation --tracks all
 ftse-decision-review --output-dir docs/data/paper_automation --tracks all --apply
 ```
 
-Weekday `paper-auto.yml` seeds prior state, runs all three tracks, then
+Weekday `paper-auto.yml` seeds prior state, refreshes research overlay on
+`docs/data/latest.json`, runs all three tracks, then
 `ftse-decision-review --tracks all --apply`. Thin history stays propose-only.
 
 Post-exit shadow cohorts (`exit_shadow.json`, `exit_shadow_review.json`) score
