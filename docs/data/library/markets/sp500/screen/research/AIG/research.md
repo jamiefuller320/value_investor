@@ -1,126 +1,114 @@
 # American International Group, Inc. (AIG) — Research memo
 
-_Version 1 · Updated 2026-07-25T11:01:04.978774+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T11:25:39.874744+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-AIG presents as a post-transformation global P&C insurer trading near book value (P/B ~1.0, P/E ~13.7) with improving core underwriting, sustained capital return, and a screen that passes cheapness, dividend, GARP, and risk families simultaneously. The investment case rests on a simplified General Insurance franchise—Corebridge largely exited, Travel Guard sold, capital redeployed into buybacks and strategic stakes (Convex, Onex)—while accident-year combined ratios remain sub-90% and adjusted earnings run well ahead of reported GAAP noise. The central debate is whether current valuation adequately compensates for succession uncertainty (CEO transition), softening commercial P&C pricing, catastrophe and social-inflation reserve risk, and legacy tax/litigation overhangs ($1.4bn unrecognized tax benefits; ongoing IRS exams). Filings support operational quality; leadership and cycle timing remain the swing factors.
-
----
+American International Group, Inc. (AIG) screens as a **strong buy** on cheapness, dividend, GARP, and risk (9/22 models; 82% composite score), reflecting a simplified global P&C franchise trading near book (P/B ~1.0, P/E ~13.7, 2.6% yield, ~23% D/E). The investment case is a post-transformation insurer generating mid/high-single-digit adjusted returns on equity, sub-90% accident-year combined ratios, and aggressive capital return, while the market still prices legacy complexity and leadership uncertainty. The central debate is whether near-book valuation adequately compensates for CEO succession risk, commercial P&C pricing softening, catastrophe and social-inflation reserve tails, and a large tax contingency stack—not whether the core underwriting franchise has improved.
 
 ## INVESTMENT THESIS
-The quantitative screen flags AIG as a strong buy on four value families—cheapness, dividend, GARP, and risk—with 82% composite score, 95% data quality (19/20 metrics), and stable three-week signal. That aligns with a business that has materially de-risked its profile: General Insurance net premiums written were $23.7bn in FY2025 (10-K Schedule III), flat versus $23.9bn in FY2024 despite divestitures, while nine-month 2025 adjusted income reached $3.9bn (+22% YoY per Q3 2025 10-Q)—indicating earnings power beyond the headline GAAP figure distorted by prior Corebridge deconsolidation.
+The quantitative screen aligns with improving business quality in the primary filings. AIG now reports as a focused General Insurance group (North America Commercial, International Commercial, Global Personal) after Corebridge deconsolidation and divestitures (e.g. Travel Guard to Zurich, December 2024). FY2025 General Insurance net premiums written were **$23.7bn** (2025 Form 10-K Schedule III: $8.8bn North America + $8.7bn International + $6.3bn Global Personal), broadly flat versus **$23.9bn** in FY2024 (2024 Form 10-K) despite portfolio reshaping—suggesting underlying retention of scale.
 
-Value metrics are compelling for a global commercial insurer: P/B 1.04 (Schloss pass), FCF yield ~23%, D/E ~23%, dividend yield 2.6% with recent uplift to $0.45/quarter (8-K, 4 Nov 2025). Book value per share rose to $75.45 at 30 Sep 2025 (Q3 2025 10-Q), with core operating book value at $66.66—supporting the screen’s “cheap vs. book” thesis. Management has returned substantial capital: $5.8bn of common stock repurchased in FY2025 and $976m in dividends (2025 10-K parent cash-flow schedule).
+Underwriting metrics support the GARP and earnings-quality screen passes. General Insurance **accident-year combined ratio, as adjusted, was 88.2%** for the nine months ended 30 September 2025 (Q3 2025 Form 10-Q), matching FY2024’s **88.2%** full-year level (2024 Form 10-K). Nine-month 2025 **adjusted income was $3.9bn**, up 22% from $3.2bn in the prior-year period (Q3 2025 Form 10-Q). Adjusted return on equity annualised to **9.2%** in Q3 2025 (Q3 2025 Form 10-Q).
 
-Underwriting quality validates the GARP angle. General Insurance nine-month 2025 accident-year combined ratio, as adjusted, was 88.2% (Q3 2025 10-Q)—consistent with FY2024’s 88.2% full-year level (2024 10-K). North America Commercial underwriting income strengthened on lower cat losses and favourable prior-year development in 2025. The screen’s earnings-quality and contrarian passes are consistent with a franchise generating adjusted returns on equity annualising above 9% on an adjusted basis in 2025 (Q3 10-Q reconciliation table).
+Valuation screens are reinforced by capital structure and return of capital. Total AIG shareholders’ equity was **$41.1bn** at 31 December 2025 (2025 Form 10-K parent schedule); book value per share reached **$75.45** at 30 September 2025 (Q3 2025 Form 10-Q). FY2025 parent cash flows show **$5.8bn** of common stock repurchases and **$976m** of common dividends (2025 Form 10-K parent cash-flow schedule). The screen’s Schloss P/B, FCF yield (~23%), and dividend-growth passes are consistent with a name returning substantial surplus while still trading near tangible book (Yahoo: tangible book **$37.7bn** at FY2025—used only as secondary context for P/B screen inputs).
 
-For a value investor, AIG offers a rare combination: near-book valuation, double-digit normalised earnings power, active capital return, and a balance sheet that filings describe as adequate for foreseeable obligations—without the life-insurance complexity that previously weighed on the name.
-
----
+For a value investor, AIG offers a relatively rare pairing: a global commercial insurer with demonstrated underwriting discipline, double-digit normalised earnings power on an adjusted basis, active buybacks at near-book prices, and a balance sheet that filings describe as adequate for foreseeable obligations—without the life-insurance conglomerate discount that previously dominated the story.
 
 ## FINANCIAL REVIEW
-**Primary source:** SEC EDGAR 10-K and 10-Q body extracts. **Fallback (Yahoo):** used only where annual MD&A metrics are absent from truncated 10-K extracts—labelled below.
+**Primary source:** SEC EDGAR 10-K and 10-Q body extracts (`filings_index.json`: 2 annual, 6 interim, 10 other; 10 with body text). **Yahoo fallback** (`financials_annual.json`) is used only where annual MD&A metrics are absent from truncated 10-K extracts, and is labelled below.
 
-### Annual trend (10-K)
+### Annual results (10-K)
 
-| Metric | FY2025 (10-K) | FY2024 (10-K / Yahoo) | Direction |
-|--------|---------------|------------------------|-----------|
-| Net income attributable to AIG (GAAP) | $3,096m (2025 10-K parent schedule) | $(1,404)m GAAP; $2,222m continuing ops (Yahoo) | Normalised post-Corebridge |
-| Adjusted income | *Not in available 2025 10-K body extract* | $4,300m (2024 10-K) | — |
-| General Insurance net premiums written | $23,673m (2025 10-K Schedule III) | $23,902m (2024 10-K) | Flat (portfolio reshaped) |
-| General Insurance net investment income | $3,433m (2025 10-K Schedule III) | $3,060m (2024 10-K) | +12% |
-| Combined ratio (General Insurance) | *Not in available 2025 10-K body extract* | 91.8% reported; 88.2% accident-year adjusted (2024 10-K) | — |
-| Total AIG shareholders’ equity | $41,139m (2025 10-K) | $42,521m (2024 10-K) | −3% (buybacks, AOCI) |
-| Long-term debt (consolidated) | $9,191m (Yahoo balance sheet, FY2025) | $8,922m (Yahoo) | Modest rise |
+| Metric | FY2025 (10-K / schedules) | FY2024 (10-K) | Comment |
+|--------|---------------------------|---------------|---------|
+| Net income attributable to AIG (GAAP, parent schedule) | **$3,096m** | **$(1,404)m** | 2024 distorted by discontinued operations |
+| Adjusted income | *Not in available FY2025 10-K body extract* | **$4.3bn** | Gap in truncated 2025 10-K MD&A |
+| General Insurance net premiums written | **~$23.7bn** (Schedule III segment total) | **$23.9bn** | Flat after divestitures |
+| General Insurance net investment income | **$3,433m** (Schedule III) | **$3,060m** | +12% |
+| General Insurance combined ratio | *Not in available FY2025 10-K body extract* | **91.8%** reported; **88.2%** accident-year adjusted | Gap for FY2025 |
+| Total AIG shareholders’ equity | **$41,139m** | **$42,521m** | −3%; buybacks and AOCI |
+| Gross unrecognized tax benefits | **$1,412m** (Note 21) | **$1,384m** | Persistent tax overhang |
+| Common repurchases / dividends (parent) | **$5,836m / $976m** | **$6,652m / $1,002m** (common) | Sustained capital return |
 
-FY2025 GAAP net income of $3.1bn and diluted EPS of $5.43 (Yahoo, consistent with 2025 10-K parent net income) reflect a clean continuing P&C profile after Corebridge deconsolidation (Jun 2024) and Travel Guard sale (Dec 2024, $600m cash per 2024 10-K). FY2024 GAAP loss was dominated by discontinued operations (−$3.6bn Corebridge-related per Q3 2025 10-Q nine-month comparison)—not representative of ongoing earnings power.
+FY2024 GAAP net loss reflected **Corebridge deconsolidation** and other discontinued items; continuing operations and adjusted metrics are the relevant trend line. The 2024 Form 10-K reports **$367m** of net favourable prior-year reserve development in FY2024 and General Insurance **underwriting income of $1,917m** (down 18% YoY on higher North America cats and portfolio mix).
 
-**Gap:** The 2025 10-K body extract in source files is truncated (tax notes and schedules only); full-year FY2025 adjusted income and General Insurance combined ratio are **not available** from primary extracts. Interim filings below partially fill this gap.
+**Gap:** The FY2025 Form 10-K body extract in source files is truncated (tax notes, parent schedules, and Schedule III only). Full-year FY2025 adjusted income and General Insurance combined ratio are **not available from primary extracts**; interim filings partially bridge this (see below).
 
-### Interim trend (10-Q)
+**Yahoo fallback (FY2025 only):** Diluted EPS **$5.43**; total assets **$161.3bn**; long-term debt **$9.2bn**; operating cash flow **$3.3bn**—consistent with filing scale but not substituted for underwriting ratios.
+
+### Interim results (10-Q)
 
 **Q1 2026 (10-Q, filed 1 May 2026):**
-- Net income attributable to common shareholders: **$763m** (+9% vs Q1 2025 $698m)
-- Diluted EPS: **$1.41** (vs $1.16)
+- Net income attributable to common shareholders: **$763m** (+9% vs Q1 2025 **$698m**)
+- Diluted EPS: **$1.41** (vs **$1.16**)
 - Premiums: **$6,072m** (+5% YoY)
-- Total net investment income: **$712m** (−36% YoY, reflecting lower Corebridge-related fair-value income post stake reduction)
-- Total assets: **$161.5bn**; total equity: **$40.4bn**; debt: **$9.0bn**
-- Q1 share repurchases: **$524m**; dividend **$0.45/share**
-- Strategic: closed **35% stake in Convex Group for $2.1bn** and **9.9% of Onex for $642m** (Note 17, Q1 2026 10-Q); quota-share reinsurance with Convex from Dec 2025
+- Total net investment income: **$712m** (−36% YoY, lower Corebridge-related fair-value income after stake reduction)
+- Total assets **$161.5bn**; total equity **$40.4bn**; debt **~$9.0bn**
+- Share repurchases: **$524m**; dividend **$0.45/share**
+- Closed **35% stake in Convex for ~$2.1bn** and **9.9% of Onex for ~$642m**; quota-share reinsurance with Convex from December 2025 (Q1 2026 Form 10-Q)
+- **Adjusted income not present** in available Q1 2026 body extract
 
-**Nine months ended 30 Sep 2025 (Q3 2025 10-Q):**
-- Adjusted income: **$3.9bn** vs $3.2bn (+22%)
-- Q3 adjusted income: **$1.6bn** vs $1.1bn
+**Nine months ended 30 September 2025 (Q3 2025 10-Q):**
+- Adjusted income: **$3.9bn** vs **$3.2bn** (+22%)
+- Q3 adjusted income: **$1.6bn** vs **$1.1bn**
 - Q3 net income (common): **$519m**
 - General Insurance net premiums written (9M): **$17.6bn** (−1%); earned premiums +1%
 - General Insurance combined ratio (9M): **90.6%**; accident-year adjusted: **88.2%**
-- Q3 combined ratio: **86.8%** (−580 bps YoY, lower catastrophe losses)
-- Catastrophe charges (9M 2025): **$795m** vs $853m (2024)
-- Book value/share (30 Sep 2025): **$75.45**; adjusted BV: **$77.04**; core operating BV: **$66.66**
+- Q3 combined ratio: **86.8%** (−580 bps YoY on lower catastrophe losses)
+- Catastrophe charges (9M 2025): **$795m** vs **$853m** (2024)
+- Book value/share: **$75.45**; adjusted BV: **$77.04**; core operating BV: **$66.66**
+- Adjusted ROE (9M annualised): **9.2%**
 
 **H1 2025 (Q2 2025 10-Q):**
-- Adjusted income (6M): **$2.3bn**
+- Six-month adjusted income: **$2.3bn**
 - Q2 adjusted income: **$1.4bn**
 - General Insurance combined ratio (6M): **92.6%** reported; accident-year adjusted **88.2%**
 
 **Q1 2025 (Q1 2025 10-Q):**
-- Adjusted income: **$909m** (down from $1.2bn Q1 2024, elevated cat in North America)
-- Combined ratio (Q1): **95.8%** (9.1 pts catastrophe impact)
+- Adjusted income: **$909m** (vs **$1.2bn** Q1 2024)
+- Combined ratio (Q1): **95.8%** (9.1 pts catastrophe impact in North America)
 
-### Balance sheet and capital (filings)
+### Balance sheet, liquidity, and capital
 
-- FY2025 shareholders’ equity **$41.1bn**; parent-only repurchases **$5.8bn** and dividends **$976m** (2025 10-K schedules)
-- Gross loss reserves (General Insurance): **$72.1bn** net of reinsurance at 31 Dec 2025 (2025 10-K Schedule III)
-- Unrecognized tax benefits: **$1.4bn** at 30 Sep 2025 and 31 Dec 2025 (Q3 2025 10-Q; 2025 10-K Note 21)
-- IRS examinations open for **2007–2024** (2025 10-K)
-- Q4 2025: **$300m valuation allowance release** on US federal tax attribute carryforwards (2025 10-K Note 21)
-- **No going-concern language** identified in available filing bodies
+Filings state AIG **believes it has sufficient liquidity and capital resources** to meet obligations to policyholders, customers, creditors, and shareholders (2024 Form 10-K liquidity section—language cited in available annual extract). **No going-concern qualification** identified in available filing bodies.
 
-**Yahoo fallback (FY2025 only, where 10-K MD&A truncated):** Operating cash flow **$3.3bn**; free cash flow **$3.3bn**; total assets **$161.3bn**—consistent with filing balance-sheet scale.
-
----
+FY2025 gross General Insurance loss reserves (net of reinsurance in Schedule III presentation): **$72.1bn** unpaid losses and LAE at 31 December 2025. Parent long-term notes and bonds: **$8.5bn** at 31 December 2025 (2025 Form 10-K parent balance sheet). Subsequent events include a **CVC Capital Partners** strategic partnership (up to **$1.5bn** from existing private equity plus up to **$2bn** to managed accounts/funds, 2025 Form 10-K Note 22, 19 January 2026).
 
 ## RISKS AND RED FLAGS
-**Regulatory and tax:** Open IRS exams spanning 2007–2024; **$1.4bn gross unrecognized tax benefits** that would affect the effective rate if resolved (Q3 2025 10-Q, 2025 10-K). Deferred tax asset realisation depends on forecasts “that could change materially” (2025 10-K tax note language). This is a persistent overhang not captured by simple P/E screens.
+**Regulatory and tax:** Open IRS examinations for **2007–2024** (2025 Form 10-K Note 21). **$1.4bn gross unrecognized tax benefits** at year-end 2025 would affect the effective rate if recognised. Deferred tax asset realisation depends on taxable income projections that “could change in the near term, perhaps materially” (2025 Form 10-K tax note). Valuation allowance on deferred tax assets was **$1.1bn** at 31 December 2025, with a **$300m Q4 2025 release** on US federal tax attribute carryforwards.
 
-**Underwriting cycle:** Filings flag **social and economic inflation**, catastrophe volatility, and **softening commercial pricing** as core industry challenges (2024 10-K; Q3 2025 10-Q cross-reference). RBC flagged property-pricing headwinds for US insurers including AIG in Q2 2026 (news). North America Commercial Q1 2025 combined ratio hit **95.8%** on elevated cats—reminding that quarterly volatility persists.
+**Underwriting cycle:** Filings highlight **social and economic inflation**, catastrophe volatility, and **softening commercial pricing** as core industry challenges (2024 Form 10-K). Q1 2025 North America combined ratio reached **95.8%** on elevated cats—a reminder that quarterly volatility persists even with a good accident-year trend.
 
-**Legacy reserves:** NICO adverse-development cover (80% of pre-2016 US commercial losses above attachment) and **Fortitude Re** funds-withheld arrangements ($3.4bn reserves ceded per 2024 10-K) add complexity. Favourable prior-year development of **$367m** in FY2024 (2024 10-K) can reverse if casualty severity trends worsen.
+**Legacy reserves and reinsurance:** The **NICO adverse-development cover** (80% of pre-2016 US commercial losses above attachment) and **Fortitude Re** funds-withheld arrangements (**$3.4bn** reserves ceded at 31 December 2024, 2024 Form 10-K) add structural complexity. Favourable prior-year development can reverse if casualty severity trends worsen.
 
-**Governance / succession:** **AIG Stock Sinks on CEO’s Surprise Plan to Step Down** (WSJ, 6 Jan 2026). Subsequent 8-K (14 Nov 2025) confirmed **John Neal will not join** as planned President. Leadership continuity is unresolved—a material gap for a screen-driven thesis.
+**Governance and succession:** *AIG Stock Sinks on CEO’s Surprise Plan to Step Down* (Wall Street Journal, 6 January 2026). An 8-K (14 November 2025) confirmed **John Neal will not join** as planned President. Leadership continuity remains unresolved—a material gap for a screen-driven thesis tied to execution and capital allocation.
 
-**Strategic / M&A:** **$2.1bn Convex stake** (Jan 2026) and **CVC partnership up to $3.5bn** allocation (2025 10-K subsequent events, 19 Jan 2026) expand alternative-asset exposure. AIG stated it keeps **private credit “in check”** amid industry jitters (Reuters, 1 May 2025)—but allocation drift remains a monitoring point.
+**Strategic and investment risk:** **~$2.1bn Convex** and **~$642m Onex** stakes (Q1 2026 Form 10-Q) plus the **CVC partnership** expand alternative-asset exposure. *AIG keeps private credit in check to shield portfolio from industry jitters* (Reuters, 1 May 2025) signals management awareness, but allocation drift warrants monitoring. Q1 2026 other comprehensive loss of **$728m** (fixed-maturity marks) illustrates rate-sensitive book value volatility.
 
-**Investment marks:** Q1 2026 other comprehensive loss of **$728m** driven by fixed-maturity mark-to-market (−$616m)—rate-sensitive book value volatility despite solid operating earnings.
-
-**Screen limitations:** Reported ROE (~7.7%) understates adjusted return; conversely, FCF yield (~23%) is flattered by insurance cash-flow mechanics and may not map cleanly to distributable surplus. Neither metric fully captures cat tail risk or tax contingencies.
-
----
+**Screen limitations:** Reported ROE (~7.7% on screen inputs) understates adjusted return; conversely, FCF yield (~23%) is flattered by insurance cash-flow mechanics and may not map cleanly to distributable surplus. Neither fully captures cat tail risk or tax contingencies.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-heavy on sentiment and valuation**, thinner on deep operational analysis. Material items:
+Coverage over the past year is **moderate on hard news, heavy on valuation and dividend commentary** (numerous Yahoo Finance/Zacks-style pieces). Material items:
 
 | Date | Headline | Relevance |
 |------|----------|-----------|
-| 6 Jan 2026 | *AIG Stock Sinks on CEO’s Surprise Plan to Step Down* (WSJ) | Leadership transition; key governance event |
+| 6 Jan 2026 | *AIG Stock Sinks on CEO’s Surprise Plan to Step Down* (WSJ) | Leadership transition shock |
 | 14 Nov 2025 | 8-K: John Neal will not join as President | Succession plan disrupted |
-| 4 Nov 2025 | 8-K: Q3 2025 results; dividend raised to **$0.45/share** | Earnings + capital return |
-| Jan 2026 | Convex 35% stake closed ($2.1bn); Onex 9.9% ($642m) | Strategic pivot to specialty/alternatives |
-| 19 Jan 2026 | CVC strategic partnership (up to $3.5bn) | Asset-management expansion |
-| Dec 2024 | Corebridge stake sale to Nippon Life (~$3.8bn); Travel Guard to Zurich ($600m) | De-risking / simplification |
+| 4 Nov 2025 | 8-K: Q3 2025 results; dividend raised to **$0.45/share** | Earnings and capital return |
+| Q1 2026 | Convex (~$2.1bn) and Onex (~$642m) stakes closed | Strategic pivot to specialty/alternatives |
+| 19 Jan 2026 | CVC strategic partnership (up to ~$3.5bn allocation) | Asset-management expansion |
+| Dec 2024 | Corebridge stake sale to Nippon Life (~$3.8bn); Travel Guard to Zurich ($600m) | De-risking and simplification |
 | 1 May 2025 | *AIG keeps private credit in check…* (Reuters) | Investment discipline signal |
-| 30 Apr 2025 | *AIG Q1 Earnings Beat* (Yahoo Finance) | Operating momentum |
-| 20 Jul 2026 | *AIG Maintained by JP Morgan — PT Raised to $90* (GuruFocus) | Sell-side support |
+| 30 Apr 2025 | *AIG Q1 Earnings Beat Estimates* (Yahoo Finance) | Operating momentum |
+| 20 Jul 2026 | *AIG Maintained by JP Morgan — Price Target Raised to $90* (GuruFocus) | Sell-side support |
 | 13 Jul 2026 | *US Insurance to See Property Pricing Headwinds in Q2* (Yahoo/RBC) | Cycle caution |
-| 13 Jul 2026 | *AIG: An Opportunity To Buy This Global P&C Leader While Still Undervalued* (Seeking Alpha) | Bull case in media |
+| 13 Jul 2026 | *AIG: An Opportunity To Buy This Global P&C Leader While Still Undervalued* (Seeking Alpha) | Bull narrative |
 | 3 Jul 2026 | *3 Reasons to Sell AIG and 1 Stock to Buy Instead* (Yahoo Finance) | Counter-narrative |
 
-**Flag:** Much coverage is algorithmic valuation/dividend content (Yahoo Finance, Zacks-style pieces). Hard news density is lower outside CEO transition, earnings beats, and M&A.
-
----
+**Flag:** Substantial share of the manifest is price-action and quantitative-rating content (MarketWatch daily performance, dividend-stock listicles). Hard operational news density is lower outside CEO transition, earnings beats, and M&A/strategic investments.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filings confirm improving core P&C profitability, sub-90% accident-year combined ratios, strong capital return, and near-book valuation—supporting the quantitative strong-buy signal—while CEO succession uncertainty, commercial pricing softening, catastrophe/tax contingencies, and incomplete FY2025 MD&A data in source extracts prevent full conviction until Q2 2026 results and leadership clarity.
+Rationale: Primary filings confirm improving core P&C profitability, sub-90% accident-year combined ratios, strong capital return, and near-book valuation—supporting the quantitative strong-buy signal—while CEO succession uncertainty, commercial pricing softening, catastrophe/tax contingencies, and incomplete FY2025 MD&A data in source extracts prevent full conviction pending Q2 2026 results and leadership clarity.

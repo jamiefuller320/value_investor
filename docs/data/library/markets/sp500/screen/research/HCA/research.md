@@ -1,142 +1,112 @@
 # HCA Healthcare, Inc. (HCA) — Research memo
 
-_Version 1 · Updated 2026-07-25T10:56:55.327689+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T11:27:57.114038+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-HCA Healthcare is the largest US for-profit hospital operator (~190 hospitals, 19 states plus England), compounding revenues and earnings at a high single-digit pace while returning substantial capital via buybacks. The quantitative screen flags Strong Buy on cheapness (P/E ~13x, FCF yield ~6.8%), quality (Piotroski pass), and growth-at-a-reasonable-price (PEGY ~0.14). Filings show FY2025 revenues of $75.6bn (+7.1% YoY) and diluted EPS of $28.33 (+28.8%), with operating cash flow of $12.6bn. The central debate is whether near-term payer-mix deterioration—enhanced premium tax credit (EPTC) expiry, rising uninsured volumes, and Medicaid policy changes—temporarily compresses margins, or whether scale, pricing power, and capital return make the de-rating an entry point. Q2 2026 results beat consensus but management lowered full-year guidance, citing an estimated ~$400m pretax hit from exchange coverage losses; a Q2 2026 10-Q body extract is not yet in the filing library.
-
----
+HCA Healthcare is the largest US for-profit hospital operator (~190 hospitals across 19 states and England), combining scale, admission growth, and aggressive capital return with a valuation that screens cheap on earnings, cash flow, and quality metrics. The quantitative screen rates the name a **Strong Buy**, anchored by ~13x P/E, ~6.8% FCF yield, PEGY ~0.14, and passes across cheapness, quality, dividend, GARP, and risk families. The central debate is whether policy-driven payer-mix deterioration—enhanced premium tax credit (EPTC) expiry, exchange coverage losses, and Medicaid reform under the One Big Beautiful Bill Act (OBBBA)—is a cyclical headwind already in the price, or a structural margin reset that invalidates forward earnings power. Full-year 2025 filings show robust revenue and cash generation; Q1 2026 and July 2026 news point to rising uninsured volumes and trimmed guidance, tempering but not overturning the value case.
 
 ## INVESTMENT THESIS
-HCA fits a value investor’s checklist on business quality and price, not just statistical cheapness.
+For a value investor, HCA offers a rare combination: **durable operating scale**, **double-digit EPS compounding** (filings), and **screen-level cheapness** not typical of defensive healthcare.
 
-**Scale and moat.** The FY2025 10-K describes 190 hospitals, 121 freestanding surgery centres, and 31 endoscopy centres. Revenues are diversified across payers: managed care and commercial insurers ~49%, Medicare and managed Medicare ~33%, Medicaid ~13%. Texas and Florida alone generated 59% of admissions in Q1 2026—geographic concentration is a risk, but also reflects HCA’s deliberate footprint in high-growth Sun Belt markets.
+**Quantitative alignment.** The screen passes nine models including FCF Yield, Neff PEGY (0.14), Magic Formula, Acquirer's Multiple, Piotroski F-Score, Composite Value, and Earnings Quality, with composite score 0.74 and sector-relative 0.76. Conviction is building (59%) but not yet mature; data quality is high (18/20 metrics). Growth flagged at ~10.9% supports the GARP pass.
 
-**Quantitative alignment.** The screen passes nine models across five families (cheapness, quality, dividend, GARP, risk), including FCF Yield, Magic Formula, Acquirer’s Multiple, Piotroski F-Score, and Earnings Quality. Key metrics: P/E 13.0, FCF yield 6.8%, estimated growth 10.9%, PEGY 0.14. Negative book value (P/B -13.5) reflects aggressive buybacks driving a retained deficit, not impaired assets—total assets rose to $60.7bn at FY2025 year-end.
+**Business quality.** Per the FY2025 10-K, HCA operated 190 hospitals and generated **$75.6bn revenue** (+7.1% vs 2024), with income before taxes of **$9.8bn** and net income attributable to HCA of **$6.8bn** (diluted EPS **$28.33**). Adjusted segment EBITDA expanded across geographic groups through 2025. Same-facility admission and revenue-per-equivalent-admission growth persisted into H1 2025 (10-Q MD&A). Management redeploys cash via **$10.1bn share repurchases** in 2025 (26.7m shares) and rising dividends ($0.78/quarter from January 2026, per 8-K), consistent with a capital-light compounder rather than a distressed operator.
 
-**Capital allocation as a value lever.** HCA repurchased 26.7m shares for $10.1bn in FY2025 (avg ~$374/share) and a further $1.6bn in Q1 2026. The board authorised a new $10bn programme in January 2026 and raised the quarterly dividend to $0.78. With diluted share count down from 276m (FY2023) to 227m (Q1 2026), EPS growth has outpaced net income growth—classic shareholder-yield compounder behaviour that screens well on FCF yield and earnings quality.
+**Why "Strong Buy" fits.** Hospital operators with HCA's FCF profile and buyback yield rarely trade at mid-teens P/E with positive earnings momentum; the screen correctly identifies mispricing versus business quality. The offset is **leverage and policy exposure**: ~$46–48bn gross debt, negative reported stockholders' equity from buybacks, and heavy Texas/Florida concentration (59% of admissions in Q1 2026).
 
-**Earnings power.** Income before taxes reached $9.8bn in FY2025 (13.0% margin). Adjusted segment EBITDA grew across all three geographic groups in H1 2025. Even Q1 2026, amid payer headwinds, delivered $19.1bn revenue (+4.3%) and diluted EPS of $7.15 (+10.9% YoY).
-
-The screen’s Strong Buy signal is consistent with a high-quality operator trading at a mid-teens multiple of normalised earnings, with buyback-supported per-share compounding offsetting policy cyclicality.
-
----
+**Caveat.** The screen's timing signal is insufficient; near-term guidance revisions and payer-mix shifts are not fully captured in trailing metrics. Deep research **supports** the value signal but flags **2026 earnings visibility** as the key variable.
 
 ## FINANCIAL REVIEW
-*Primary source: SEC filing body extracts. Yahoo used only where noted.*
+*Primary source: SEC 10-K and 10-Q body extracts. Yahoo used only where noted.*
 
-### Annual results (10-K, year ended 31 December 2025; filed 10 February 2026)
+**Annual trend (10-K, years ended 31 December)**
 
-| Metric | FY2025 | FY2024 | FY2023 | YoY change (2025 vs 2024) |
-|--------|--------|--------|--------|---------------------------|
-| Revenues | $75,600m | $70,603m | $64,968m | +7.1% |
-| Income before income taxes | $9,832m | $8,523m | $7,706m | +15.4% |
-| Net income (HCA attributable) | $6,784m | $5,760m | $5,242m | +17.8% |
-| Diluted EPS | $28.33 | $22.00 | $18.97 | +28.8% |
-| Operating cash flow | $12,636m | $10,514m | $9,431m | +20.2% |
-| CapEx (PPE) | ($4,944m) | ($4,875m) | ($4,744m) | +1.4% |
-| Implied FCF (OCF − CapEx) | ~$7,692m | ~$5,639m | ~$4,687m | +36.6% |
-| Total debt | $46,492m | $43,031m | — | +8.0% |
-| Cash | $1,040m | $1,933m | — | −46.2% |
-| Total assets | $60,720m | $59,513m | — | +2.0% |
-| Stockholders’ deficit (HCA) | ($6,027m) | ($2,499m) | — | Wider |
-| Interest expense | $2,248m | $2,061m | $1,938m | +9.1% |
-| Days revenue in A/R | 51 days | 54 days | 53 days | Improved |
+| Metric | 2025 (10-K) | 2024 (10-K) | 2023 (10-K) |
+|--------|-------------|-------------|-------------|
+| Revenues | $75,600m | $70,603m | $64,968m |
+| Income before income taxes | $9,832m | $8,523m | $7,706m |
+| Net income (consolidated) | $7,782m | $6,657m | $6,091m |
+| Net income attributable to HCA | $6,784m | $5,760m | $5,242m |
+| Diluted EPS (HCA) | $28.33 | $22.00 | $18.97 |
+| Net cash from operations | $12,636m | $10,514m | $9,431m |
+| Purchase of property & equipment | ($4,944m) | ($4,875m) | ($4,744m) |
+| Implied FCF (OCF − capex) | ~$7,692m | ~$5,639m | ~$4,687m |
+| Total debt (gross) | $46,492m | $43,031m | $39,593m |
+| Cash & equivalents | $1,040m | $1,933m | $935m |
+| Stockholders' equity (deficit) | ($2,771)m | $555m | $1,060m |
 
-Revenue growth reflects volume (equivalent admissions) and pricing (revenue per equivalent admission). Salaries and benefits were 43.5% of revenue in FY2025; supplies 15.0%. Estimated cost of total uncompensated care rose to $4.6bn in FY2025 from $4.4bn in FY2024 (charity care $16.5bn gross).
+Revenue CAGR 2023–2025 is ~7.9%; diluted EPS CAGR ~22%, aided by buybacks (share count fell from 276.4m diluted in 2023 to 239.5m in 2025). Pretax margin held near **13%** (2025: 13.0%). Effective tax rate on pretax income: **20.9%** (2025).
 
-Professional liability reserves: $2,044m at year-end; provision $651m in FY2025. Defined-benefit pension plans show net assets of $165m in excess of obligations—no material pension deficit flagged.
+**Balance sheet and capital structure (FY2025 10-K).** Total assets **$60.7bn**; goodwill and intangibles **$10.3bn**; net PPE **$31.1bn**. Long-term debt (less current portion) **$41.6bn**; average debt life ~11.9 years at ~5.1%. Commercial paper **$2.2bn** at year-end; new **$8.0bn** unsecured revolver established in 2025. Days revenue in accounts receivable: **51 days** (2024: 54). Implicit price concessions on receivables: **$7.7bn** at 31 December 2025—revenue recognition remains estimation-heavy (auditor critical audit matter).
 
-Auditor Ernst & Young issued an unqualified opinion (10 February 2026). No going-concern qualification.
+**Payer mix (FY2025 revenues).** Managed care and other insurers **48.9%**; Managed Medicare **17.8%**; Medicare **14.9%**; Medicaid **7.8%**; Managed Medicaid **4.9%**; "Other" (incl. uninsured) **3.2%**. Estimated cost of total uncompensated care: **$4.6bn** (2025) vs **$4.4bn** (2024).
 
-*Cross-check:* Yahoo `financials_annual.json` FCF of $7.69bn for FY2025 matches OCF minus CapEx from the 10-K.
+**Interim results (10-Q)**
 
-### Interim results
+*Q1 2026 (filed 29 April 2026, quarter ended 31 March 2026):*
+- Revenues **$19,109m** (+4.3% YoY); income before taxes **$2,287m** (−1.7%); net income attributable to HCA **$1,620m** (+0.6%); diluted EPS **$7.15**.
+- Same-facility uninsured admissions **+15.5%**; filing cites unfavourable impact from **EPTC expiration** and exchange administrative reforms on managed-care revenues.
+- Estimated cost of uncompensated care: **$1,252m** (Q1 2026) vs **$1,055m** (Q1 2025).
+- Total debt **$48.0bn**; commercial paper **$3.65bn**; negative working capital **$3.2bn** (ex-commercial paper: **$444m** positive).
+- Nine-month 2026 10-Q and Q2 2026 10-Q **not present** in `filings_index.json` at time of review.
 
-**Q1 2026 (10-Q, quarter ended 31 March 2026; filed 29 April 2026)**
+*Q3 2025 (quarter ended 30 September 2025):*
+- Revenues **$19,161m** (+9.6%); net income attributable to HCA **$1,643m**; diluted EPS **$6.96**.
+- Nine months 2025 revenue **$56,087m** (+7.2%); HCA NI **$4,906m**; diluted EPS **$20.23**; OCF **$10,277m**.
 
-| Metric | Q1 2026 | Q1 2025 | Change |
-|--------|---------|---------|--------|
-| Revenues | $19,109m | $18,321m | +4.3% |
-| Income before taxes | $2,287m | $2,327m | −1.7% |
-| Net income (HCA attributable) | $1,620m | $1,610m | +0.6% |
-| Diluted EPS | $7.15 | $6.45 | +10.9% |
-| Operating cash flow | $2,014m | $1,651m | +22.0% |
-| Total debt | $48,023m | — | — |
-| Commercial paper outstanding | $3,650m | — | — |
+*H1 2025 (six months ended 30 June 2025):*
+- Revenues **$36,926m** (+6.0%); HCA NI **$3,263m**; diluted EPS **$13.28**; OCF **$5,861m**.
 
-Management explicitly linked managed-care revenue pressure to EPTC expiry and exchange administrative reforms. Same-facility uninsured admissions rose 15.5%. Estimated cost of uncompensated care in the quarter: $1,252m vs $1,055m prior year (+18.7%).
+**Interim vs annual consistency.** Trailing-four-quarter revenue implied from 9M 2025 + Q4 2025 is broadly consistent with FY2025 $75.6bn. Q1 2026 shows **volume resilience** (equivalent admissions +1.1%) but **margin pressure** from payer mix and higher other operating expenses (state supplemental Medicaid programme costs, professional fees, technology).
 
-**Q2 2025 (10-Q, quarter ended 30 June 2025; filed 4 August 2025)**
+**Yahoo fallback.** `financials_annual.json` aligns closely with 10-K figures for 2023–2025 (e.g. 2025 revenue $75.6bn, FCF $7.69bn). No Yahoo figures used where filing bodies provided the metric.
 
-| Metric | Q2 2025 | Q2 2024 | Change |
-|--------|---------|---------|--------|
-| Revenues | $18,605m | $17,492m | +6.4% |
-| Diluted EPS | $6.83 | $5.53 | +23.5% |
-| H1 2025 revenues | $36,926m | $34,831m | +6.0% |
-| H1 2025 diluted EPS | $13.28 | $11.47 | +15.8% |
-| H1 2025 operating cash flow | $5,861m | $4,440m | +32.0% |
-
-H1 2025 benefited from strong admission growth (+2.4%) and revenue per equivalent admission (+3.2%), with contract-labour costs declining 4.6%.
-
-**Q3 2025 (10-Q filed 30 October 2025):** Body extract present in index; truncated in library. Nine-month trends through September 2025 are available in the filing index but not fully extracted here—a minor gap for interim trend verification.
-
-**Q2 2026:** News reports (24 July 2026) cite revenue of ~$20.23bn (+8.7% YoY) and GAAP EPS of ~$7.62, beating estimates, with full-year revenue guidance of ~$78.25bn but lowered profit outlook due to payer-mix shifts. **No Q2 2026 10-Q body is in `filings_index.json` yet**; treat Q2 figures as unverified pending filing extract.
-
-### Balance sheet and leverage
-
-Debt has risen alongside buybacks and cap-ex: $46.5bn (Dec 2025) → $48.0bn (Mar 2026). FY2025 actions included $8.5bn senior note issuances, commercial paper programme launch ($2.2bn outstanding at year-end), and a new $8bn unsecured revolving credit facility. Indentures contain standard limitations on liens and sale-leaseback transactions (8-K, 31 October 2025).
-
-Management states in Q1 2026 MD&A that cash flows, revolver capacity, and debt-market access are “sufficient to meet expected liquidity needs for the foreseeable future.” Working capital was negative at March 2026 ($3.2bn), largely due to commercial paper classified as current; excluding CP, working capital would be $444m.
-
-Negative common equity ($6.0bn deficit) is an accounting consequence of cumulative buybacks exceeding retained earnings—not a covenant breach signal in itself, but it limits P/B-based screening interpretation.
-
----
+**Filing gaps.** Eight 8-K filings in the index lack body extracts; Q2 2026 results appear only in news, not yet as a filed 10-Q. No going-concern language identified in available filing bodies; liquidity discussion in Q1 2026 MD&A states operating cash flows, revolver, and debt markets are expected to meet needs.
 
 ## RISKS AND RED FLAGS
-**Payer mix and policy (primary near-term risk).** Q1 2026 filings document EPTC expiry at end-2025 driving a 15.5% rise in same-facility uninsured admissions and higher uncompensated-care costs. News and the Q2 earnings call (24 July 2026) cite an estimated ~$400m pretax impact from patients losing exchange coverage. The One Big Beautiful Bill Act (OBBBA, July 2025) introduces Medicaid work requirements, eligibility redeterminations, provider-tax caps, and state directed payment (SDP) revisions—HCA’s Q2 2025 MD&A flags material potential impact on federal health spending and insurance access. EPTC extension beyond 2025 remains uncertain per filings.
+**Regulatory and reimbursement (primary filing language).** 10-K and 10-Q contingencies note HCA operates in a "highly regulated and litigious industry," with False Claims Act qui tam exposure and facility-level government investigations that could have a "material, adverse effect" if systemic. The OBBBA (enacted July 2025) restricts Medicaid eligibility, provider taxes, and state directed payment (SDP) arrangements; EPTCs expired end-2025 per Q1 2026 MD&A. CMS rule changes shorten exchange open enrolment. Medicaid DSH cuts of **$8.0bn/year** for FY2026–28 began October 2025; congressional deferral uncertain. Potential **Medicare sequestration up to 4%** in early 2026 cited in Q3 2025 MD&A.
 
-**Regulatory and litigation.** Note 10 (Contingencies) across 10-K and 10-Q states HCA operates in a “highly regulated and litigious industry,” with exposure to False Claims Act qui tam suits, government investigations, professional liability claims (punitive damages may be uninsured), and tax disputes ($519m gross unrecognized tax benefits at Dec 2025). July 2026 news includes shareholder investigation alerts (Bragar Eagel, Kessler Topaz)—routine post-guidance-cut activity, but worth monitoring.
+**Payer mix and uninsured (operational red flag).** Q1 2026: same-facility uninsured admissions **+15.5%**; managed-care revenue share fell to **47.5%** from 49.4%. News (24 July 2026) cites ~**$400m pretax** impact from exchange coverage losses and payer-mix shift, with **2026 guidance revised down** despite Q2 EPS beat—this is the live earnings risk not fully in trailing screens.
 
-**Leverage and interest.** Total debt ~$48bn; FY2025 interest $2.25bn (3.0% of revenue). Average effective rate ~5.1%. A hypothetical 100bp rate rise on variable debt (~$4bn) would reduce pretax earnings by ~$40m (Q1 2026 MD&A). Refinancing risk is manageable given investment-grade market access (repeated senior note issuances in 2025–2026), but leverage limits flexibility if payer pressure persists.
+**Leverage and capital structure.** Gross debt **~$48bn** (March 2026); interest expense **$584m** in Q1 2026 alone. Stockholders' deficit **($3.0bn)** at March 2026 from cumulative buybacks; tangible book deeply negative. Debt/refinancing risk explicitly flagged in MD&A forward-looking statements. October 2025 8-K: **$3.25bn** senior notes issued (2030–2055 maturities).
 
-**Operational.** Inpatient and outpatient surgical volumes were flat to down in Q1 2026; respiratory-related admissions fell 42% (seasonal). Supply-cost inflation, particularly cardiovascular devices (+4.8% per admission in Q1 2026), and wage inflation (same-facility salaries per FTE +3.6%) compress margins. 73% of uninsured admissions originate in Texas and Florida—geographic and policy concentration.
+**Litigation and professional liability.** Professional liability reserves **$2.04bn** (FY2025); 2025 provision **$651m**. Reserves cover ~2,360 claims; management states adequacy but "no assurance ultimate liability will not exceed estimates."
 
-**Governance / capital structure.** Founder-family share exchange (February 2026) reduced outstanding shares by 72,047—immaterial economically but highlights insider ownership dynamics. Noncontrolling interests ($3.3bn) absorb ~13% of consolidated net income—relevant for minority-partner economics in Texas markets.
+**Governance / legal overhang.** July 2026 shareholder investigation notices (Bragar Eagel; Kessler Topaz) in news manifest—nature and merit unclear from filings available.
 
-**Pension.** Defined-benefit plans are overfunded ($165m net assets at Dec 2025); Restoration Plan and SERP liabilities total ~$363m—modest relative to scale.
+**Pension.** Acquired defined-benefit plans show **net assets $165m** in excess of obligation at 31 December 2025 (10-K Note 12)—not a balance-sheet red flag. Non-funded SERP/Restoration plan accruals **~$363m** combined.
 
-**Screening caveat.** The screen’s “Yield 83.0%” appears to be a data artefact (actual dividend yield ~0.8% at recent prices on a $0.78 quarterly dividend). Do not rely on that field.
+**Competitive / cyclical.** Surgical volumes softening (outpatient −2.7% consolidated in Q1 2026); labour inflation persists (same-facility salaries per FTE +3.6%). Texas/Florida concentration amplifies uninsured and hurricane exposure.
 
-No going-concern language appears in any filing body reviewed.
-
----
+**Screen blind spots.** Negative P/B (−13.5 in screen) reflects accounting equity, not asset coverage; "Yield 83%" in `screening_snapshot.json` appears erroneous—treat dividend yield from filings (~0.9% per 10-K dividend history) as authoritative.
 
 ## NEWS HIGHLIGHTS
-Coverage is **heavy on Q2 2026 earnings and payer-mix**, lighter on strategy/M&A. Material items from `news_manifest.json` (past year):
+Coverage is **material but heavily earnings- and flow-dominated** over the past year; limited strategic M&A beyond bolt-on hospitals.
 
-| Date | Headline | Relevance |
-|------|----------|-----------|
-| 24 Jul 2026 | *HCA Healthcare (HCA) Q2 Earnings Surpass Estimates* (Yahoo Finance) | Q2 beat; revenue ~$20.2bn |
-| 24 Jul 2026 | *HCA Q2 Earnings Beat on Strong Admissions, 2026 Outlook Revised* (Yahoo Finance) | Beat on volume; guidance trimmed |
-| 24 Jul 2026 | *HCA Healthcare cites uninsured volume in ~$400M pretax hit* (Stock Titan) | Quantifies payer-mix damage |
-| 24 Jul 2026 | *Hims & Hers Health… HCA earnings highlighted negative payer mix shift* (Yahoo Finance) | Sector read-through |
-| 14 Jul 2026 | *HCA cuts profit forecast as Obamacare coverage losses drive up uninsured patients* (Reuters) | Initial guidance cut |
-| 14 Jul 2026 | *HCA takes $400M hit from exchange coverage losses* (Modern Healthcare) | Policy impact detail |
-| 14 Jul 2026 | *HCA Healthcare Stock Falls as Uninsured Patients and Declining Surgeries Dent Outlook* (Barron's) | Market reaction |
-| 27 Jan 2026 | FY2025 results + new $10bn buyback + $0.78 dividend (8-K body) | Capital return acceleration |
-| 23 Jul 2026 | *Michael Burry Loads Up On HCA… 'Insanely Efficient Compounder'* (Stocktwits) | Notable investor interest |
-| 30 Jun 2026 | *Removal From Key Russell Growth Indexes* (Yahoo Finance) | Potential technical/index pressure |
-| 21 Jul 2026 | *HCA INVESTIGATION ALERT* (GlobeNewswire) | Legal/marketing alert post selloff |
+**Earnings and guidance (July 2026).**
+- *HCA Q2 Earnings Beat on Strong Admissions, 2026 Outlook Revised* (Yahoo Finance, 24 July 2026): Q2 beat on admissions/revenue; parts of 2026 guidance trimmed on expenses and weaker surgical volumes.
+- *HCA Healthcare cites uninsured volume in ~$400M pretax hit* (Stock Titan, 24 July 2026).
+- *HCA cuts profit forecast as Obamacare coverage losses drive up uninsured patients* (Reuters, 14 July 2026).
+- *HCA Healthcare Stock Falls as Uninsured Patients and Declining Surgeries Dent Outlook* (Barron's, 14 July 2026).
 
-**Management changes:** No CEO/CFO transition flagged in news or filings; Samuel Hazen remains CEO, Michael Marks CFO.
+**Capital allocation.**
+- 8-K (27 January 2026): FY2025 results; new **$10bn buyback**; dividend **$0.78/share**.
+- *Michael Burry Loads Up On HCA Despite 23% YTD Fall* (Stocktwits, 23 July 2026).
 
-**M&A:** Filings show small tuck-in hospital acquisitions ($189–265m per period) and divestitures of non-core facilities—not transformational deal activity.
+**Index / sentiment.**
+- *How Removal From Key Russell Growth Indexes Will Impact HCA Healthcare (HCA) Investors* (Yahoo Finance, 30 June 2026).
 
----
+**Legal.**
+- *HCA INVESTIGATION ALERT: Bragar Eagel & Squire* (GlobeNewswire, 21 July 2026).
+- *NYSE: HCA Investigation: Kessler Topaz Meltzer & Check* (GlobeNewswire, 21 July 2026).
+
+**Financing.**
+- 8-K (31 October 2025): **$3.25bn** senior notes offering.
+
+No CEO change or major transformative M&A in the manifest; strategy remains scale, same-facility growth, buybacks, and bolt-on acquisitions ($265m non-hospital spend in Q1 2026).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filings confirm a high-quality, cash-generative operator at a modest multiple with strong buyback support, but the quantitative Strong Buy case is tempered—not invalidated—by verified payer-mix deterioration and lowered 2026 guidance that screens do not fully capture.
+Rationale: Filings confirm the screen's quality-and-cash-flow value case, but Q1 2026 payer-mix deterioration and July 2026 guidance cuts introduce near-term earnings uncertainty that warrants accumulation rather than unqualified endorsement of the Strong Buy signal.

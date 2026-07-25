@@ -1,9 +1,9 @@
 # Mears Group plc (MER.L) — Research memo
 
-_Version 1 · Updated 2026-07-25T10:28:25.025091+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T12:05:02.363510+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Mears Group plc screens as a buy on cheapness, dividend, GARP and risk families, with headline metrics of P/E 8.0, P/B 1.9, yield 4.1% and ROE 23.4%. The investment case rests on a UK social housing and care outsourcing franchise that has expanded revenue and operating profit over four years while materially shrinking the share count through buybacks, lifting EPS even as reported revenue has plateaued. Valuation appears inexpensive relative to earnings power and cash generation, but this first pass cannot validate balance-sheet risk language from primary filings: five Companies House annual accounts are indexed with zero downloadable body extracts and no interim RNS results. The central debate is whether improving margins and capital return mask structural pressures—flat top line, falling free cash flow, lease-heavy liabilities and negative working capital—or whether the market is simply under-pricing a resilient, contract-backed income stream.
+Mears Group plc screens as a **buy** on cheapness, dividend, GARP and risk families, with headline metrics of P/E 8.0, P/B 1.9, yield 4.1% and ROE 23.4%. The investment case rests on a UK social-housing and care outsourcing franchise that has expanded operating profit and EPS over four years while materially shrinking the share count through buybacks, even as reported revenue has plateaued. Valuation appears inexpensive relative to earnings power and cash generation, but this first pass cannot validate balance-sheet risk language from primary filings: five Companies House annual accounts are indexed with zero downloadable body extracts and no interim RNS results. The central debate is whether improving margins and capital return mask structural pressures—flat top line, falling free cash flow, lease-heavy liabilities and negative working capital—or whether the market is under-pricing a resilient, contract-backed income stream.
 
 ---
 
@@ -48,12 +48,12 @@ FCF compression in FY2025 (screen key metric: £31.5m on a trailing basis vs £6
 - **Total assets:** £740.1m; **equity:** £201.7m (minority interest £3.1m).
 - **Investment properties:** £259.8m (up from £187.1m in FY2022)—a material, growing asset class not typical of pure-play outsourcing.
 - **Goodwill and intangibles:** £127.9m; **tangible book value:** £73.8m (P/B 1.9x reflects goodwill/property, not liquid net assets).
-- **Total debt / capital lease obligations:** £318.7m, essentially all capital leases (£238.1m non-current, £80.7m current). This is structurally significant; covenant and maturity detail is **not available** without filing bodies.
+- **Total debt / capital lease obligations:** £318.7m, essentially all capital leases (£238.1m non-current, £80.7m current). Covenant and maturity detail is **not available** without filing bodies.
 - **Defined pension benefit:** £24.1m (FY2025).
 - **Working capital:** −£58.0m (negative and worsening vs −£43.4m in FY2024).
 - **Cash:** £48.5m (down from £91.4m in FY2024).
 
-**Interim gap:** No half-year RNS, trading update or 10-Q equivalent appears in the filings index. Latest operational trends beyond FY2025 year-end cannot be verified from primary sources in this pack.
+**Interim gap:** No half-year RNS, trading update or equivalent appears in the filings index. Latest operational trends beyond FY2025 year-end cannot be verified from primary sources in this pack.
 
 ---
 
@@ -61,7 +61,7 @@ FCF compression in FY2025 (screen key metric: £31.5m on a trailing basis vs £6
 **Data gap (critical):** Without filing body extracts, this memo cannot cite going-concern assessments, contingent liabilities, lease covenant language, contract concentration, or audit emphasis-of-matter paragraphs. That is a material limitation for a regulated, contract-heavy UK outsourcer.
 
 **Balance-sheet structure (Yahoo):**
-- **Lease-heavy funding:** £318.7m of capital lease obligations against £201.7m equity suggests meaningful off-balance-sheet-style commitments embedded in reported debt; interest burden is rising.
+- **Lease-heavy funding:** £318.7m of capital lease obligations against £201.7m equity suggests meaningful embedded commitments; interest burden is rising.
 - **Property exposure:** Investment properties at £259.8m tie earnings to asset values and housing-market/regulatory dynamics; revaluation or disposal assumptions are unverified.
 - **Pension:** Defined-benefit obligation £24.1m—a manageable but persistent legacy risk in a labour-intensive sector.
 - **Negative working capital:** −£58.0m may reflect contract payment terms but increases liquidity sensitivity if operating cash weakens.
@@ -71,7 +71,7 @@ FCF compression in FY2025 (screen key metric: £31.5m on a trailing basis vs £6
 - UK social housing and care outsourcing faces local-authority budget pressure, procurement scrutiny and wage inflation—consistent with flat FY2025 revenue in Yahoo data.
 - Customer concentration and contract re-tender risk cannot be quantified from available sources.
 
-**Governance / news:** No material governance or regulatory actions surfaced in the news manifest; coverage is thin on operational detail (see below).
+**Governance / news:** No material governance or regulatory actions surfaced in the news manifest; coverage is thin on operational detail.
 
 ---
 

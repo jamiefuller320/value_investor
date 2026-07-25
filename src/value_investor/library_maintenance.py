@@ -587,9 +587,9 @@ def repair_library_research_memos(
             row["bodies_after"] = after_bodies
             row["filings_total"] = int((meta.get("filings_summary") or {}).get("total") or 0)
             row["regime"] = meta.get("filings_regime")
-            should_rememo = rememo_all or "sec_collision" in reasons or "yahoo_only" in reasons or (
-                after_bodies > before_bodies
-            )
+            should_rememo = rememo_all or bool(
+                {"sec_collision", "yahoo_only", "uk_library", "asia_pacific_gap"} & set(reasons)
+            ) or (after_bodies > before_bodies)
             row["rememo"] = should_rememo
             if should_rememo:
                 snapshot_path = sources_dir / "screening_snapshot.json"

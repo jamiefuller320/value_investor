@@ -1,116 +1,103 @@
 # Host Hotels & Resorts, Inc. (HST) — Research memo
 
-_Version 1 · Updated 2026-07-25T11:04:21.886871+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T11:28:45.226780+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Host Hotels & Resorts is the largest US lodging REIT, owning a concentrated portfolio of luxury and upper-upscale hotels (76 properties as of Q1 2026). The quantitative screen rates HST a buy on cheapness (P/E 16.3, P/B 2.5), quality (ROE 14.9%, Piotroski pass), dividend yield (3.3%), GARP, and manageable leverage (debt/equity 80%). Filings show accelerating operating momentum: FY2025 total hotel revenues rose to $6.0bn (+7.6% y/y) with segment EBITDA of $1.77bn, and Q1 2026 comparable RevPAR grew 4.4% with Adjusted FFO per share of $0.67. Management is actively recycling capital—most notably the $1.1bn sale of two Four Seasons resorts in Q1 2026—while returning proceeds via repurchases and a $0.72 special dividend. The central debate is whether current RevPAR growth (full-year 2026 guidance: 3.0–4.5%) and asset sales sustain earnings power, or whether cyclical lodging risk, rising cap-ex ($545–655m planned for 2026), and rate sensitivity cap upside after a strong share-price run.
+Host Hotels & Resorts is the largest US lodging REIT, owning 76 luxury and upper-upscale hotels (71 domestic) managed predominantly by Marriott International and Hyatt. The quantitative screen rates HST a buy (11/22 models; composite 69%; P/E 16.3, P/B 2.5, yield 3.3%, debt/equity 80%), supported by improving operating metrics, active capital recycling, and a balance sheet that remains within covenant limits. FY2025 revenue reached $6.1bn (10-K) with segment EBITDA of $1.77bn, and Q1 2026 comparable RevPAR rose 4.4% with Adjusted EBITDA re of $543m. The valuation hook is a quality franchise trading at mid-teens earnings and ~2.5× book whilst returning capital via dividends and buybacks. The central debate is whether near-term RevPAR momentum (World Cup, leisure strength) offsets cyclical lodging risk, rising wage inflation (~5%), elevated interest expense, and heavy ROI capex ($545–655m guided for 2026) that compresses free cash flow after asset-sale gains normalise.
 
 ## INVESTMENT THESIS
-For a value investor, HST offers a rare combination within lodging REITs: screen-validated valuation, investment-grade capital structure, and demonstrable capital-allocation discipline. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—with 20/20 data completeness and 61% conviction (building, three weeks stable). At P/E 16.3 and P/B 2.5, the stock sits below typical luxury-asset multiples while delivering a 3.3% dividend yield and consistent payout growth (regular dividend raised to $0.20/quarter; FY2025 common dividend $0.95 vs $0.90 in FY2024, per 10-K).
+For a value investor, HST offers a rare combination of screen-passing cheapness and institutional-quality assets. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—including Graham Enterprising, FCF Yield, Lynch/Neff PEG variants, Quality Value, High Dividend Yield, Dividend Growth, Piotroski F-Score, and Earnings Quality. That breadth suggests the signal is not driven by a single distressed metric.
 
-Business quality is supported by filings: FY2025 consolidated net income of $776m on total hotel revenues of $6.01bn (10-K, filed 25 Feb 2026), segment EBITDA margin expansion to $1.77bn from $1.69bn in FY2024, and comparable hotel EBITDA margins of 32.7% in Q1 2026 (+70 bps y/y). Host repurchased 13.1m shares for $205m in FY2025 at an average $15.68—below recent trading levels cited in news—and retains $480m on its authorisation plus $1.5bn undrawn revolver capacity (10-K). Asset sales at disclosed returns (11.0% IRR on the February 2026 $1.1bn luxury-resort disposal, per news citing filings) validate the portfolio pruning strategy without distress.
+Business quality aligns with the screen. Host owns irreplaceable urban and resort assets in markets such as New York ($516m room revenue in 2025), Orlando, San Diego, and Maui (10-K geographic disclosure). Comparable hotel EBITDA margins expanded to 32.7% in Q1 2026 (Q1 2026 10-Q), and Adjusted FFO per diluted share rose to $0.67 from $0.64 year-on-year despite higher interest and taxes. Management is a disciplined capital allocator: $1.1bn of luxury dispositions in Q1 2026 (Four Seasons Orlando and Jackson Hole), $205m of share repurchases in 2025 at $15.68 average (10-K), and a $0.72 special dividend announced alongside the regular $0.20 quarterly payout (Q1 2026 10-Q). Debt is largely unsecured investment-grade notes ($3.99bn senior notes; total debt $5.08bn at 31 March 2026) with $1.5bn revolver capacity undrawn and covenant compliance affirmed (10-K, Q1 2026 10-Q).
 
-The screen’s FCF Yield and Earnings Quality passes align with filing cash generation: operating cash flow of $1.51bn in FY2025 (Yahoo fallback; filing body extract does not include the cash-flow statement). For a REIT, Adjusted FFO is the more relevant earnings metric; interim filings show consistent growth (Q1 2026 Adjusted FFO $0.67 vs $0.64 in Q1 2025; nine-month 2025 Adjusted FFO $1.56 vs $1.55 in 9M 2024). The World Cup and group-booking tailwinds cited in sell-side and media coverage provide a near-term demand catalyst, though management itself flags macro and geopolitical uncertainty in Q1 2026 10-Q forward-looking statements.
+The screen’s FCF Yield pass is directionally supported but not unambiguous: FY2025 capital expenditures of $644m (10-K) against operating cash generation materially above reported net income—operating cash flow of $1.51bn and free cash flow of $866m per Yahoo (`financials_annual.json`; cash-flow statement not present in truncated 10-K body extracts). Normalised earnings power is better captured by Adjusted EBITDA re and FFO than GAAP net income, which Q1 2026 inflated by $242m of asset-sale gains.
 
 ## FINANCIAL REVIEW
-*Primary source: SEC EDGAR filing body extracts. Yahoo (`financials_annual.json`) used only where noted.*
+**Primary source:** SEC EDGAR filings (`filings_index.json`; regime: sec_edgar). Annual 10-K filings for FY2024 (filed 26 February 2025) and FY2025 (filed 25 February 2026) and interim 10-Q filings through Q1 2026 (filed 8 May 2026) are indexed. Filing body extracts are available for both annual reports and all six interim quarters, though 10-K body text is truncated and begins mid-notes—full income statements and cash-flow statements for the annual reports are not fully captured in the extracts.
 
-**Annual results (10-K)**
+**Annual trends (10-K body extracts, FY2025 vs FY2024 vs FY2023)**
 
-Two annual 10-K filings are indexed with body extracts: FY2024 (filed 26 Feb 2025) and FY2025 (filed 25 Feb 2026). Both extracts are truncated and omit the MD&A reconciliation tables; full-year Adjusted FFO per share for FY2025 is therefore **not available from the body extracts** and is not inferred here.
-
-| Metric | FY2025 (10-K) | FY2024 (10-K) | FY2023 (10-K) |
+| Metric | 2025 | 2024 | 2023 |
 |---|---|---|---|
 | Total hotel revenues | $6,114m | $5,684m | $5,311m |
 | Segment EBITDA | $1,774m | $1,690m | $1,653m |
-| Consolidated net income | $776m | $707m | $752m |
-| Diluted EPS | $1.10 | $0.99 | $1.04 |
+| Net income (Host L.P.) | $776m | $707m | $752m |
+| Diluted EPS (Host Inc.) | $1.10 | $0.99 | $1.04 |
 | Interest expense | $235m | $215m | $191m |
 | Capital expenditures | $644m | $548m | $646m |
-| Total debt | $5,077m | $5,083m | — |
-| Cash & equivalents | $768m | $554m | — |
-| Common dividend/share | $0.95 | $0.90 | $0.90 |
-| Shares repurchased | $205m (13.1m sh) | $107m (6.3m sh) | — |
+| Total debt (year-end) | $5,077m | $5,083m | — |
+| Regular dividends per share | $0.95 | $0.90 | $0.90 |
 
-Revenue growth accelerated: +7.6% in FY2025 and +7.0% in FY2024. Net income rose 9.8% in FY2025 despite higher interest expense (+9.3%) and cap-ex (+17.5%). The FY2025 result includes $143m aggregate gains on two hotel dispositions and $99m condominium-sale revenues at the Four Seasons Orlando development (10-K notes). Normalised operating trends remain positive: rooms revenue reached $3.61bn (+5.3%) with New York, Orlando, and San Diego the largest markets.
+Revenue growth of 7.6% in 2025 reflects post-pandemic demand normalisation, 2024 acquisitions (1 Hotel Nashville, 1 Hotel Central Park, The O'ahu Turtle Bay—10-K), and $99m of condominium sales adjacent to Four Seasons Orlando. Segment EBITDA margin expanded modestly. Net income rose despite higher interest, aided by $143m of disposition gains in 2025 (10-K). Debt was essentially flat year-on-year as bond issuance (Series M $500m at 5.7%, Series N $400m at 4.25%) funded redemptions of maturing notes (10-K debt note).
 
-**Interim results (10-Q)**
+**Balance sheet (31 December 2025, 10-K; 31 March 2026, Q1 10-Q)**
 
-Six interim 10-Q filings are indexed (Q2 2024 through Q1 2026), all with body extracts.
+- Total assets: $13.05bn (Dec 2025); $13.15bn (Mar 2026).
+- Cash and equivalents: $768m (Dec 2025); $1,703m (Mar 2026), elevated post-dispositions.
+- Total debt: $5,077m (Dec 2025); $5,079m (Mar 2026).
+- Stockholders' equity: $6,558m (Dec 2025); $6,827m (Mar 2026).
+- Net debt concept (per credit agreement): cash above $100m offsets gross debt; net debt approximately $4.3bn at year-end per Yahoo (`financials_annual.json`).
 
-*Q1 2026 (filed 8 May 2026):*
-- Total revenues: $1,645m (+3.2% y/y)
-- Net income: $501m (+99.6%), inflated by $242m gain on asset sales (St. Regis Houston; Four Seasons Orlando and Jackson Hole for $1.1bn)
-- Adjusted EBITDA re: $543m (+5.6%)
-- Adjusted FFO per diluted share: $0.67 (+4.7%); NAREIT FFO: $0.66 (+4.8%)
-- Comparable hotel RevPAR: $244.11 (+4.4%); Total RevPAR: $418.20 (+4.6%)
-- Comparable hotel EBITDA margin: 32.7% (+70 bps)
-- Cash rose to $1,703m (from $768m at year-end) post-dispositions; total debt stable at ~$5.08bn
-- FY2026 comparable RevPAR guidance: +3.0% to +4.5%
+Credit facility covenants require consolidated total debt/EBITDA ≤7.25×, unsecured interest coverage ≥1.75×, and fixed charge coverage ≥1.25×; the company states compliance at both 31 December 2025 and 31 March 2026 (10-K, Q1 2026 10-Q). Senior notes indenture requires interest coverage ≥1.5× and total indebtedness <65% of adjusted total assets (8-K, May 2025 Series M offering).
 
-*Q1 2025 (filed 2 May 2025):* Comparable RevPAR +7.0%; Adjusted FFO $0.64 (+4.9%); Adjusted EBITDA re $514m (+5.1%).
+**Interim performance**
 
-*Q2 2025 (filed 1 Aug 2025):* H1 2025 Adjusted FFO $1.21 (+1.7% vs H1 2024); H1 comparable RevPAR +5.0%.
+*Q1 2026 (10-Q filed 8 May 2026):* Total revenues $1,645m (+3.2% YoY). Net income $501m (+99.6%), heavily influenced by $242m of asset-sale gains (St. Regis Houston; Four Seasons Orlando and Jackson Hole). Adjusted EBITDA re $543m (+5.6%). NAREIT FFO per diluted share $0.66 (+4.8%); Adjusted FFO $0.67 (+4.7%). Comparable hotel RevPAR +4.4%; comparable hotel EBITDA margin 32.7% (+70 bps). Full-year 2026 comparable RevPAR guidance: 3.0–4.5%.
 
-*Q3 2025 (filed 7 Nov 2025):* Q3 comparable RevPAR +0.2% (seasonal softness); 9M 2025 Adjusted FFO $1.56 (+0.6% vs 9M 2024); 9M Adjusted EBITDA re $1,329m (+2.2%); management guided ~3.0% full-year 2025 comparable RevPAR.
+*Q1 2025 (10-Q filed 2 May 2025):* Revenues $1,594m; net income $251m; Adjusted EBITDA re $514m; comparable RevPAR +7.0%; Adjusted FFO $0.64.
 
-**Balance sheet and liquidity**
+*Q2 2025 (10-Q filed 1 August 2025):* H1 Adjusted EBITDA re $1,010m (+4.1% YoY); H1 Adjusted FFO $1.21 (+1.7%); Q2 comparable RevPAR +3.0%.
 
-Per FY2025 10-K: $5.08bn total debt (substantially unsecured senior notes plus $996m term loans; only one hotel encumbered by mortgage debt); $1.5bn revolver fully available; net-debt concept deducts cash above $100m. Credit facility covenants require leverage ≤7.25x, fixed-charge coverage ≥1.25x, and unsecured interest coverage ≥1.75x—Host confirmed compliance at 31 December 2025. Next major maturity: $500m term loan due January 2027 (one-year extension option available).
+*Q3 2025 (10-Q filed 7 November 2025):* Nine-month net income $639m; nine-month Adjusted EBITDA re $1,329m (+2.2%); nine-month Adjusted FFO $1.56 (+0.6%). Full-year 2025 comparable RevPAR guidance approximately 3.0%.
 
-Lease liabilities total $563m (ground leases on 18 hotels; undiscounted future payments ~$1.53bn over 44-year weighted term). No going-concern language appears in any indexed filing body.
+**Cash flow (Yahoo fallback)**
 
-**Yahoo fallback**
+Operating cash flow and the cash-flow statement are not available in the truncated 10-K body extracts. Per `financials_annual.json` (Yahoo fallback): FY2025 operating cash flow $1,510m, capex $644m, free cash flow $866m, common dividends paid $623m. FY2024 operating cash flow $1,498m, capex $548m, FCF $950m; the 2024 investing outflow included ~$1.5bn of acquisitions. FCF compression in 2025 versus 2024 reflects higher capex and acquisition activity rolling off, partially offset by stronger operations.
 
-Where filing extracts lack cash-flow detail: FY2025 free cash flow $866m, FY2024 $950m, FY2023 $795m (`financials_annual.json`). Yahoo total debt ($5.64bn) is higher than the filing figure ($5.08bn), likely reflecting capital-lease and presentation differences; the filing figure is used throughout.
-
-**Data gaps:** Full-year Adjusted FFO/NAREIT FFO for FY2025 and FY2024 are absent from truncated 10-K body extracts. Q4 2025 standalone 10-Q is not separately indexed (Q1 2026 covers the subsequent period). Eight 8-K filings are indexed without body extracts.
+**Gaps:** No going-concern language in available extracts. Pension exposure is not material (defined contribution plans only; 10-K). Full annual cash-flow and comprehensive risk-factor sections from the 10-K are not fully captured in body extracts due to truncation.
 
 ## RISKS AND RED FLAGS
-**Cyclical and macro.** Q1 2026 10-Q Item 1A cross-references extensive forward-looking risk factors: lodging demand sensitivity to recession, inflation, elevated interest rates (10-year Treasury ~4.68% per macro context), trade-policy uncertainty, international travel imbalance, and geopolitical conflict. Comparable RevPAR growth slowed to +0.2% in Q3 2025 before reaccelerating in Q1 2026—demonstrating quarter-to-quarter volatility.
+**Cyclical and macro.** The Q1 2026 10-Q MD&A lists extensive forward-looking risks: recession, elevated interest rates, inflation, geopolitical conflict, international travel imbalance (elevated US outbound vs weaker inbound), government shutdown impacts on travel, and weather events (Hurricanes Helene/Milton 2024; March 2026 Hawaii Kona Low rainstorm affecting Maui/Oahu RevPAR). No going-concern qualification appears in available filings.
 
-**Leverage and rates.** Total debt ~$5.1bn against equity of ~$6.6bn (Q1 2026). Interest expense rose to $235m in FY2025 (+9.3% y/y). Although covenant-compliant, cross-default provisions link senior notes and credit facility; a material payment default elsewhere could trigger acceleration (10-K debt footnote).
+**Operating and cost.** Wage and benefit inflation guided at ~5% for 2026 (Q1 2026 10-Q). Comparable hotel margins face moderation in H2 2026 as rate growth slows. Heavy transformational capex ($550–600m Hyatt programme through 2027; $300–350m Marriott programme through 2029) supports long-term positioning but depresses near-term FCF and creates business-disruption risk despite operator profit guarantees ($40m Hyatt; $18m Marriott net).
 
-**Operator concentration.** Marriott International manages or franchises ~64% of hotels by revenue; Hyatt ~17% (10-K). Fee structures and brand standards limit operating flexibility.
+**Concentration and governance.** Approximately 64% of hotel revenues are Marriott-managed and 17% Hyatt-managed (10-K). Loss of a key management relationship or brand deterioration would be material. The $1.1bn Q1 2026 sale of two Four Seasons assets to BDT & MSD Partners is disclosed as a related-party transaction: the CEO's stepson is a Principal at the buyer; the board approved the transaction and the CEO did not participate in negotiations (10-K Note 11; Q1 2026 10-Q).
 
-**Ground-lease exposure.** 18 hotels subject to ground leases with $1.47bn undiscounted future payments; contingent rent escalators tied to CPI or revenue percentages add variability (10-K lease note).
+**Financial structure.** Total debt ~$5.1bn against ~$6.8bn equity; interest expense rose to $235m in 2025 (+9% YoY) and $59m in Q1 2026 alone. A $500m term loan matures January 2027 (extendable one year subject to conditions; Q1 2026 10-Q). Ground lease obligations total $1,531m undiscounted ($563m present value; 10-K)—a long-dated, non-cancellable liability not fully reflected in screen leverage metrics. A $114m seller-financing note from the 2025 Washington Marriott disposition introduces credit exposure (10-K).
 
-**Cap-ex and disruption.** FY2026 cap-ex guidance of $545–655m (including $175–210m for Marriott/Hyatt transformation programmes) will suppress free cash flow and may disrupt operations, partially offset by $58m in operator profit guarantees. Hawaii Kona Low storm (March 2026) estimated at $25–35m property cost, though insurance expected to cover most damage.
+**Contingencies.** Hurricane remediation at The Don CeSar estimated at $64m, substantially covered by insurance ($81m proceeds received by Q1 2026; Q1 2026 10-Q). Kona Low storm property damage estimated at $25–35m, expected substantially insured. Legal proceedings are described as immaterial in aggregate (10-K Note 17; Q1 2026 10-Q). REIT qualification failure would trigger corporate-level tax—management asserts ongoing compliance.
 
-**Governance.** The $1.1bn sale of two Four Seasons resorts to BDT & MSD Partners is disclosed as a related-party transaction: CEO James Risoleo’s stepson is a principal at the buyer. The board reviewed and approved; Risoleo did not participate in negotiations (Q1 2026 10-Q, Note 7). This warrants monitoring but is not, on its own, a financial red flag given documented process.
-
-**Contingencies.** Hurricane Helene/Milton insurance claims largely resolved ($81m proceeds received by Q1 2026). Legal proceedings in the ordinary course are deemed immaterial in aggregate (10-K Item 17). No going-concern, pension, or material litigation accruals disclosed.
-
-**Screen limitations.** The quantitative pass reflects trailing metrics; it does not capture forward cap-ex burden, asset-shrinkage from dispositions, or the one-off nature of Q1 2026 reported EPS ($0.72 vs $0.35 prior year, heavily gain-driven).
+**Screen limitations.** The buy signal does not adjust for one-off gains, elevated capex, or the post-disposition shrinkage of the earnings base. Timing data (RSI, price vs 200-day SMA) is insufficient in the screen snapshot.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-good** on HST specifically, though diluted by repetitive MarketWatch price-comparison headlines and one misclassified Howmet Aerospace article (24 Jul 2026, yfinance).
+Coverage over the past year is adequate, dominated by earnings, analyst price-target revisions, and capital-markets activity rather than governance shocks.
 
 **Earnings and operations**
-- "Host Hotels (HST) Tops Q1 FFO and Revenue Estimates" (6 May 2025, Yahoo Finance)
-- Multiple articles on Q1 2026 EPS beat (~59% surprise vs estimates): e.g. "HST Q1 2026 Earnings: Strong EPS Surprise of 59.4%" (11 Jul 2026, dars.gov.et)
-- "Host Hotels Gains 18.8% in Three Months: Will the Trend Last?" (7 Jul 2026, Yahoo Finance) — cites RevPAR growth and capital recycling
-- "Host Hotels & Resorts Is The Hot Hotel REIT This Earnings Season" (21 Jul 2026, Seeking Alpha)
+- "Host Hotels (HST) Tops Q1 FFO and Revenue Estimates" (Yahoo Finance, 6 May 2025) — strong Q1 2025 beat.
+- Multiple Q1 2026 earnings summaries cite a ~59% EPS surprise (e.g. dars.gov.et articles, July 2026).
+- "Host Hotels & Resorts Is The Hot Hotel REIT This Earnings Season" (Seeking Alpha, 21 July 2026).
+- "What You Need To Know Ahead of Host Hotels & Resorts' Earnings Release" (Yahoo Finance, 17 July 2026) — Q2 2026 results expected early August.
 
 **Capital allocation and M&A**
-- "Host Hotels & Resorts, Inc. Sells Two Luxury Resorts for $1.1 Billion, Achieving 11.0% IRR" (18 Feb 2026, Quiver Quantitative)
-- "Host Hotels & Resorts Slides as Shares Trade Ex-Dividend After Special Payout" (30 Jun 2026, Quiver Quantitative) — $0.72 special dividend announced alongside Q2 2026 regular payout
-- "Host Hotels Announces Special Dividend: Time to Buy the Stock?" (12 Dec 2025, Yahoo Finance)
+- "Host Hotels & Resorts, Inc. Sells Two Luxury Resorts for $1.1 Billion, Achieving 11.0% IRR" (Quiver Quantitative, 18 February 2026).
+- "Host Hotels & Resorts Slides as Shares Trade Ex-Dividend After Special Payout" (Quiver Quantitative, 30 June 2026) — special dividend following asset sales.
+- "Host Hotels Announces Special Dividend: Time to Buy the Stock?" (Yahoo Finance, 12 December 2025).
 
-**Analyst sentiment (price targets cited in media; not endorsed here)**
-- Broad target raises through June–July 2026: Argus to $27 (17 Jun), BMO to $27 (12 Jun), Ladenburg to $28 (10 Jun), JP Morgan to $25 (21 Jul), Barclays to $24 (22 Jul), Wells Fargo to $26 (23 Jul)
-- Contrarian note: "Host Hotels & Resorts: Limited Upside At Current Levels (Rating Downgrade)" (10 May 2026, Seeking Alpha)
+**Analyst sentiment (price targets cited in news; not endorsed here)**
+- Wells Fargo maintained, PT raised to $26 (GuruFocus, 23 July 2026).
+- JP Morgan maintained, PT raised to $25 (21 July 2026); Barclays to $24 (22 July 2026); BMO to $27 (29 June 2026); Argus to $27 (4 July 2026); Ladenburg to $28 (15 July 2026).
 
 **Thematic**
-- "3 Hotel REITs Poised to Benefit from the World Cup" (18 Jun 2026, Yahoo Finance / MarketBeat)
-- "Here's Why Host Hotels & Resorts (HST) is Among the 10 Interest Rate Sensitive Stocks to Buy Now" (29 Jun 2026, Yahoo Finance)
+- "3 Hotel REITs Poised to Benefit from the World Cup" (Yahoo Finance / MarketBeat, 18 June 2026).
+- "Here's Why Host Hotels & Resorts (HST) is Among the 10 Interest Rate Sensitive Stocks to Buy Now" (Yahoo Finance, 29 June 2026).
+- Counterpoint: "Host Hotels & Resorts: Limited Upside At Current Levels (Rating Downgrade)" (Seeking Alpha, 10 May 2026).
 
-**Management/governance**
-- Annual meeting re-elected all nine directors; say-on-pay approved at ~88% (8-K, 16 May 2025)
-- No CEO or CFO changes reported in the news manifest
+**Non-material noise:** Several MarketWatch pieces on daily relative underperformance; one Ontario HST (harmonised sales tax) article is unrelated to the ticker.
+
+No material management changes or regulatory enforcement actions appear in the manifest. News is moderately thick on earnings and analyst flow but thinner on deep fundamental dispute.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Filings confirm improving RevPAR, margin, and FFO trends, disciplined capital recycling, and covenant-compliant balance sheet, broadly supporting the quantitative buy signal, though cyclical lodging exposure, heavy 2026 cap-ex, and gain-inflated Q1 earnings temper conviction.
+Confidence: 0.72
+Rationale: Filings confirm improving operating trends, covenant-compliant leverage, and screen-attractive valuation, but cyclical lodging exposure, rising interest and capex, and earnings distortion from asset-sale gains warrant a measured overlay rather than full-conviction endorsement of the quantitative buy signal.

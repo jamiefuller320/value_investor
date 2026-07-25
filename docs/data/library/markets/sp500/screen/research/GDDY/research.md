@@ -1,118 +1,105 @@
 # GoDaddy Inc. (GDDY) — Research memo
 
-_Version 1 · Updated 2026-07-25T11:03:29.085561+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T11:27:20.837742+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-GoDaddy is the global leader in domain registration (~81 million domains under management, ~21% of worldwide registrations per its FY2025 10-K) serving 20.4 million paying customers with ~85% annual retention and a durable subscription model. The quantitative screen flags the name as a Strong Buy on cheapness, quality, and risk factors—chiefly ~10.9% FCF yield, ~13.9x P/E, and models passing on Economic Moat, Buffett Quality, and Earnings Quality—after a severe share-price de-rating that news coverage links to AI-disruption fears and a dotcom promotional-pricing misstep. The investment case rests on high recurring revenue, expanding Applications & Commerce (A&C) mix, and aggressive capital return (~$1.6bn of buybacks in FY2025 per Yahoo), offset by ~$3.8bn gross debt, negative tangible book, and a widening gap between reported revenue growth and slower bookings momentum in Q1 2026. Key debate: whether the selloff has over-discounted a cash-rich franchise, or whether AI, pricing errors, and SMB demand softness mark a structural growth inflection.
-
----
+GoDaddy Inc. (GDDY) is the global leader in domain registration (~21% share, ~81 million domains) expanding into applications, commerce and AI-led tools (Airo, Agent Name Service). The quantitative screen rates the name a **strong buy** on cheapness, quality and risk (7/22 models; ~10.9% FCF yield; P/E ~13.9), but the share price has fallen sharply over the past year amid slowing billings, AI-disruption fears and a dotcom pricing controversy. Filings show durable subscription economics—high retention (~85%), rising ARPU and strong operating cash generation—offset by leverage (~$3.8bn debt), thin reported equity and aggressive buybacks. The central debate is whether domain-led cash flows re-rate the stock, or whether growth moderation and structural/AI risk keep multiples compressed.
 
 ## INVESTMENT THESIS
-The screen’s Strong Buy signal aligns with a business that screens cheap relative to cash economics, not accounting equity. GoDaddy generates subscription-heavy revenue with high retention (>89% of FY2025 revenue from existing customers, per the FY2025 10-K business section) and a large deferred-revenue backlog ($3.45bn as of 31 March 2026, per Q1 2026 10-Q). Seven of 22 models pass across cheapness, quality, and risk families; headline metrics include P/E 13.9, FCF yield ~10.9%, and profit margin ~17.3% (screening snapshot).
-
-Business quality supports the screen’s moat and quality buckets:
-
-- **Scale and switching:** ~21% global domain share, 94% of customers purchasing a domain (FY2025 10-K), and ~90% retention for customers >3 years.
-- **Mix shift:** A&C rose to 38% of FY2025 revenue (from 34% in 2023), lifting ARPU to $246 in Q1 2026 vs $225 a year earlier (Q1 2026 10-Q).
-- **Cash conversion:** FY2025 free cash flow of $1.58bn (Yahoo fallback—10-K body extract truncated before Item 8) on revenue of $4.95bn (10-K) implies robust conversion; Q1 2026 operating cash flow was $471.5m (+16.5% YoY, 10-Q).
-
-For a value investor, the hook is a profitable, recurring-revenue compounder trading at a mid-teens earnings multiple and double-digit FCF yield after a ~47% drawdown (Simply Wall St, 23 July 2026), with management returning essentially all FCF via buybacks ($279.7m in Q1 2026 alone; $1.89bn authorisation remaining under a $3.0bn programme through 2027, per Q1 2026 10-Q). The screen’s risk-family pass is notable given leverage, but debt is largely hedged and covenant-compliant (Q1 2026 10-Q).
-
----
+For a value investor, GDDY offers a cash-rich, subscription-heavy franchise at a depressed multiple after a ~47% one-year drawdown (per news flow), which aligns with the screen’s **strong buy** signal (composite 69%; families passed: cheapness, quality, risk). Seven models pass, including FCF Yield, Quality Value, Buffett Quality, Economic Moat and Earnings Quality; data quality is high (19/20 metrics). Business quality is supported by filings: 20.4 million customers (FY2025 10-K), ~85% retention, >89% of FY2025 revenue from repeat customers, and deferred revenue of $3.45bn at 31 March 2026 (Q1 2026 10-Q)—evidence of a recurring-revenue moat in domains and hosting, with A&C (websites, payments, email) growing faster than Core. Q1 2026 revenue rose 6.1% to $1,266.9m; A&C rose 11.6%; normalized EBITDA rose 13.5% to $413.5m; operating margin expanded to 24.5%. The valuation hook is high FCF conversion on a stable domain base, with management returning capital ($279.7m repurchased in Q1 2026; $1.89bn authorisation remaining per Q1 10-Q). The screen’s quality/risk passes are consistent with filing disclosures on liquidity (“sufficient … for at least the next 12 months”) and covenant compliance as of 31 March 2026. Conviction from the screen remains **building** (35%) rather than mature—appropriate given growth deceleration and narrative headwinds not fully captured by backward-looking multiples.
 
 ## FINANCIAL REVIEW
-*Primary source: SEC filing body extracts. Yahoo `financials_annual.json` used only where 10-K bodies lack figures (noted explicitly).*
+**Primary source:** SEC EDGAR 10-K and 10-Q body extracts. Annual statement detail in 10-K bodies is truncated before full financial tables; where noted, **Yahoo `financials_annual.json` is used as fallback** and labelled accordingly.
 
-### Annual trend (10-K business sections; income/cash flow from Yahoo fallback)
+**Annual results (10-K)**
 
-| Metric | FY2023 | FY2024 | FY2025 | Source |
-|--------|--------|--------|--------|--------|
-| Total revenue | $4,254m | $4,573m | **$4,951m** (+8.3% YoY) | 10-K bodies |
-| Total bookings | $4,603m | $5,039m | **$5,400m** (+7.2% YoY) | FY2025 10-K body |
-| Net income | $1,375m | $937m | **$875m** | Yahoo fallback* |
-| Diluted EPS | $9.20 | $6.45 | **$6.22** | Yahoo fallback* |
-| Operating income | $638m | $933m | **$1,138m** | Yahoo fallback* |
-| Free cash flow | $970m | $1,261m | **$1,576m** | Yahoo fallback* |
-| Customer retention | ~85% | ~84% | **~85%** | 10-K bodies |
+| Metric | FY2025 (10-K, filed Feb 2026) | FY2024 (10-K, filed Feb 2025) | Trend |
+|--------|--------------------------------|-------------------------------|--------|
+| Total revenue | $4,951.1m | $4,573.2m | +8.3% |
+| Total bookings | $5,400.0m | $5,038.8m | +7.2% |
+| Customers | 20.4m | 20.5m | Flat |
+| Customer retention | ~85% | ~84% | Stable |
+| A&C / Core revenue mix | 38% / 62% | 36% / 64% | A&C mix rising |
 
-\*FY2025 and FY2024 10-K body extracts are truncated at 80,000 characters and contain the Business section but not Item 8 financial statements; net income, EPS, operating income, and FCF are taken from Yahoo and should be verified against full EDGAR filings before trading.
+FY2025 revenue growth of 8.3% and bookings growth of 7.2% confirm top-line expansion, though bookings growth slowed versus FY2024 (+9.5% bookings; +7.5% revenue per FY2024 10-K). Segment mix is shifting toward higher-value A&C products.
 
-FY2025 net income declined vs FY2024 despite revenue growth, consistent with normalised tax rates replacing the FY2023/FY2024 tax benefits that inflated prior-year earnings (Q1 2025 10-Q notes a $34.6m uncertain-tax-position benefit in Q1 2025). Underlying operating leverage remains positive: operating margin expanded in Q1 2026 to 24.5% from 20.7% (Q1 2026 10-Q).
+**Fallback (Yahoo) — annual P&L and cash flow where 10-K bodies lack tables:**
 
-**Segment mix (FY2025 10-K):** Core Platform 62% of revenue; A&C 38% (+200 bps YoY). A&C is the growth engine—Q1 2026 A&C revenue rose 11.6% vs Core +2.8% (Q1 2026 10-Q).
+| Metric | 2025 | 2024 | 2023 |
+|--------|------|------|------|
+| Operating income | $1,138.4m | $932.9m | $638.2m |
+| Net income | $875.0m | $936.9m | $1,374.8m |
+| Diluted EPS | $6.22 | $6.45 | $9.20 |
+| Operating cash flow | $1,599.4m | $1,287.7m | $1,047.6m |
+| Free cash flow | $1,575.5m | $1,261.1m | $970.2m |
+| Capex | $23.9m | $26.6m | $77.4m |
 
-### Interim trend (10-Q filings)
+*(Source: `financials_annual.json`; not independently verified in filing body extracts.)*
 
-| Period | Revenue | Bookings | Net income | Operating income | Key filing |
-|--------|---------|----------|------------|------------------|------------|
-| Q1 2025 | $1,194m (+7.0%) | $1,417m (+7%) | $220m | $247m | Q1 2025 10-Q |
-| Q2 2025 | — | $1,345m (+6%) | $200m | $266m (+27%) | Q2 2025 10-Q |
-| Q3 2025 | $1,265m (+10.3%) | $1,355m (+9.1%) | $211m (+10.5%) | $297m (+16.9%) | Q3 2025 10-Q |
-| 9M 2025 | **$3,677m** (+8.8%) | — | **$630m** vs $738m | **$810m** vs $638m | Q3 2025 10-Q |
-| Q1 2026 | **$1,267m** (+6.1%) | **$1,455m** (+2.7%) | **$215m** (−2.2%) | **$311m** (+25.6%) | Q1 2026 10-Q |
+Net income fell in 2025 versus 2024 (Yahoo), partly reflecting a lower tax benefit after an unusually low 2024 effective rate; operating income and FCF continued to improve. FCF yield implied by the screen (~10.9%) is consistent with ~$1.58bn FCF on a depressed market cap.
 
-**Q1 2026 highlights (10-Q, filed 1 May 2026):**
-- Normalised EBITDA $413.5m (+13.5%); NEBITDA margin improving.
-- ARR $4,288m vs $4,054m; customers 20.4m; DUM 81.4m.
-- Operating cash flow $471.5m (+16.5%); capex minimal ($4.6m).
-- **Bookings growth (+2.7%) lagged revenue (+6.1%)**—a watchpoint for forward demand.
+**Balance sheet (Q1 2026 10-Q, primary)**
 
-**Balance sheet and capital structure (31 March 2026, Q1 2026 10-Q):**
-- Cash and equivalents: **$1,262m**
-- Total debt: **$3,823m** (2029 Term Loans $1,441m; 2031 Term Loans $983m; 2027 Notes $600m; 2029 Notes $800m)
-- Revolver availability: **$999m**; covenant-compliant
-- Deferred revenue: **$3,451m** (strong visibility)
-- Stockholders’ equity: **$237m** (accumulated deficit −$2,857m from buybacks)
-- Share repurchases Q1 2026: **$280m** (~3.0m shares)
+| Item | 31 Mar 2026 | 31 Dec 2025 |
+|------|-------------|-------------|
+| Cash and equivalents | $1,261.7m | $1,080.9m |
+| Total debt | $3,823.1m | $3,829.2m |
+| Deferred revenue | $3,450.6m | $3,319.1m |
+| Stockholders’ equity | $237.3m | $215.1m |
+| Goodwill + intangibles | ~$4.58bn | ~$4.62bn |
 
-**Credit refinancing (8-K, 5 & 16 December 2024):** Twelfth Amendment refinanced $1,463m of term loans maturing 2029 at SOFR + 175 bps.
+**Fallback (Yahoo) — FY2025 year-end:** total debt $3,862.6m; net debt $2,699.4m; tangible book value **−$4,404.5m**; working capital **−$1,154.6m**. Negative tangible equity reflects intangibles from prior acquisitions and sustained buybacks ($1,601.9m in 2025 per Yahoo), not a going-concern issue—the Q1 10-Q states existing cash and operating cash flows are sufficient for at least 12 months.
 
-**Gap note:** 10-K body extracts do not include Item 7 MD&A tables or Item 8 statements; annual net income, FCF, and balance-sheet detail above rely on Yahoo where marked. Interim coverage is good (six 10-Q bodies available; latest Q1 2026 complete).
+**Interim results (10-Q)**
 
----
+*Q1 2026 (filed 1 May 2026):*
+- Revenue $1,266.9m (+6.1%; +5.6% constant currency)
+- A&C $498.2m (+11.6%); Core $768.7m (+2.8%)
+- Operating income $310.5m (+25.6%); margin 24.5% vs 20.7%
+- Net income $214.6m (−2.2%; prior-year quarter included a $34.6m uncertain-tax-position benefit)
+- Normalized EBITDA $413.5m (+13.5%)
+- Total bookings $1,455.3m (+2.7%) — **noticeably below revenue growth**
+- ARR $4,288.4m; ARPU $246 vs $225
+- Operating cash flow $471.5m (+16.5%)
+
+*Q1 2025 (same filing, comparative):* revenue $1,194.3m; bookings $1,417.0m.
+
+Earlier interim 10-Q bodies (Q2–Q3 2025, Q2 2024) are indexed but truncated before full quarter tables in the extracts; trend confirmation relies primarily on Q1 2026 and annual 10-K narrative. **Gap:** full quarterly income/cash-flow series is not completely extractable from filing bodies; Yahoo quarterly income covers Q1 2026 only ($1,266.9m revenue; $1.60 diluted EPS), consistent with the 10-Q.
+
+**Capital allocation:** Board approved up to $3.0bn repurchases through 2027 (Q1 2026 10-Q, Note 4). Q1 2026 repurchases: ~3.0m shares for $279.7m. Debt covenants: compliant as of 31 March 2026; $998.6m revolver availability.
 
 ## RISKS AND RED FLAGS
-**Leverage and capital allocation.** Gross debt ~$3.8bn against equity of $237m and tangible book deeply negative (goodwill ~$3.6bn, per Q1 2026 10-Q). The FY2025 10-K risk factors cite “adverse consequences of our level of indebtedness.” Covenants restrict additional indebtedness, liens, and restricted payments; the company reported compliance as of 31 March 2026. No going-concern language appears in available filing bodies. Buybacks ($1.6bn FY2025 per Yahoo; $280m in Q1 2026) amplify EPS but reduce balance-sheet flexibility if growth slows.
+**Growth and pricing.** Q1 2026 bookings (+2.7%) lagged revenue (+6.1%), suggesting near-term billings momentum is softening—a risk the screen’s trailing multiples may understate. The Q1 2026 10-Q risk factors explicitly flag that **“pricing decisions may adversely affect our ability to attract and retain customers.”** News reports tie a dotcom promotional pricing strategy to reduced near-term revenue and securities scrutiny (Jul 2026).
 
-**Bookings deceleration.** Q1 2026 bookings +2.7% vs revenue +6.1% (Q1 2026 10-Q) suggests near-term demand or pricing pressure—consistent with news on dotcom promotional pricing reducing near-term revenue (Yahoo Finance, 23 July 2026) and June 2026 commentary on slowing billings.
+**AI and structural demand.** Filings warn that evolving technologies, including AI, “may impact the demand for and value of our products and services,” and that AI deployment presents litigation, reputational and cost risks. The market has priced AI as a threat to domain-centric SMB tools (e.g. Argosy Investors sold on “AI momentum,” Jun 2026 news).
 
-**Competitive and technology risk.** Filings name Shopify, Wix, Squarespace, Stripe, Google, and others across Core and A&C. Risk factors emphasise AI deployment risks, evolving internet/agentic models, and potential obsolescence of traditional domain/website workflows—directly relevant given the share-price narrative (Argosy Investors sold citing AI disruption, 8 June 2026).
+**Leverage and equity base.** Total debt ~$3.8bn against stockholders’ equity of ~$237m (Q1 10-Q). FY2025 10-K forward-looking statements cite **“adverse consequences of our level of indebtedness and our ability to repay our debt.”** Covenants restrict additional indebtedness and restricted payments; company reports compliance, but refinancing concentration (2027 Senior Notes $600m; 2029 Term Loans ~$1.44bn) adds calendar risk. No going-concern language identified.
 
-**Regulatory.** ICANN accreditation is foundational; India fake-website crackdown flagged by Reuters (3 July 2026) as potentially damaging to the open internet. Indirect-tax accrual $31.8m with audit uncertainty (Q1 2026 10-Q, Note 11). Gross unrecognized tax benefits $178.5m.
+**Competition and regulation.** FY2025 10-K lists intense competition across Core (Namecheap, Cloudflare) and A&C (Shopify, Wix, Squarespace, Stripe). ICANN accreditation and ccTLD rules are structural dependencies; India fake-website crackdown warnings (Reuters exclusive, 3 Jul 2026) highlight international regulatory friction.
 
-**Governance / insider activity.** Routine RSU tax-related selling (Chief Strategy & Legal Officer, 644 shares, 7 July 2026); no major management turnover in the news manifest.
+**Governance and legal.** Q1 10-Q: no material change in legal proceedings; ordinary-course litigation, class actions and regulatory matters reserved when probable. Gross unrecognized tax benefits $178.5m (31 Mar 2026). Indirect-tax accrual ~$31.8m; audits could differ materially.
 
-**Screen-specific flags.** Reported ROE of 4.0% in the screen reflects negative/low book equity after buybacks; the screen’s alternate ROE metric (398%) is not reconcilable to filing equity and should not be relied upon. P/B 52.1x is meaningless against negative tangible book.
-
-**Macro (colour only).** 10-year Treasury ~4.68% and elevated rates increase refinancing risk on floating-rate term loans, partially mitigated by interest-rate swaps ($1.9bn notional, Q1 2026 10-Q).
-
----
+**Accounting / quality.** Heavy deferred tax assets ($983m at 31 Mar 2026) support low cash taxes but create earnings sensitivity. Goodwill ~$3.6bn—no impairment flagged, but intangibles dominate the balance sheet. Share count reduction inflates per-share metrics; headline ROE in the screen (4.0%) reflects decimated book equity, not necessarily weak returns on invested capital.
 
 ## NEWS HIGHLIGHTS
-Coverage is **moderate-to-heavy** on price action and valuation, thinner on fundamental operating updates.
+Coverage is **moderate-to-heavy on price action and opinion**, thinner on hard corporate events. Material themes over the past year:
 
-**Strategy and product**
-- **GoDaddy Developer Platform launched** (mid-July 2026): domain APIs, OAuth, AI-friendly CLI (Stock Titan, 15 July 2026; Yahoo Finance, 23 July 2026)—positions GoDaddy for agentic/domain-infrastructure workflows aligned with Agent Name Service (ANS) in the 10-K.
-- **Dotcom promotional pricing misstep** disclosed, reducing near-term revenue and drawing securities-law scrutiny (Yahoo Finance, 23 July 2026)—material to the bookings/revenue divergence.
+| Date | Headline / theme |
+|------|------------------|
+| 23 Jul 2026 | “GoDaddy’s Pricing Misstep and Developer Push Could Be A Game Changer” — dotcom promo hit revenue; Developer Platform launch |
+| 15 Jul 2026 | “GoDaddy lets developers manage domains without leaving their tools” (Stock Titan) |
+| 7 Jul 2026 | Q2 2026 results webcast scheduled 30 Jul 2026 (Stock Titan) |
+| 3 Jul 2026 | Reuters exclusive: GoDaddy warns India fake-site crackdown could damage internet |
+| 28 Jun 2026 | “GoDaddy Faces Slowing Billings Growth As Competition Tests Demand” (Yahoo Finance) |
+| 30 Apr 2026 | “GoDaddy (GDDY) Beats Q1 Earnings and Revenue Estimates” (Yahoo Finance) |
+| 26 Feb 2026 | “GoDaddy (GDDY) Falls to 2-Year Low on Dismal Earnings” (Yahoo Finance) |
+| 14 Jul 2026 | “The Standoff Over GDDY Stock” — buybacks vs market selling (Yahoo/Trefis) |
+| 24 Jul 2026 | RBC Capital reiterates Buy (Globe and Mail) |
 
-**Earnings cycle**
-- Q1 2026 results reported 30 April 2026; Q2 2026 earnings expected late July 2026 (multiple previews, 22–24 July 2026).
-- Q1 2026 mixed: profitability beat narrative (ChartMill, 30 April 2026) vs ongoing billings-growth concerns (Yahoo Finance, 28 June 2026).
-
-**Market sentiment**
-- Stock cited down ~47–58% from 52-week highs (Simply Wall St, 23 July 2026; TIKR.com, 12 June 2026); RBC maintained Buy (Globe and Mail, 24 July 2026).
-- **Buyback vs selling pressure** (“Standoff Over GDDY Stock,” Yahoo Finance, 14 July 2026).
-
-**Regulatory / geopolitical**
-- Reuters exclusive: GoDaddy warned India’s fake-site crackdown could harm the internet (3 July 2026).
-
-**M&A / management**
-- No material M&A in the past year. CEO pay disclosure (Quiver Quantitative, 24 April 2026). No CEO change reported.
-
----
+No major M&A or CEO change in the manifest. Strategy emphasis: AI/Airo, Agent Name Service, developer APIs, commerce/payments. Management changes not prominently reported.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filing-backed cash generation, retention, and covenant-compliant balance sheet support the screen’s Strong Buy, but truncated 10-K extracts, bookings deceleration, leverage, and AI/pricing headlines warrant accumulation rather than full conviction until Q2 2026 results confirm demand stabilisation.
+Confidence: 0.68
+Rationale: Filings confirm the screen’s cash-flow and quality case—recurring revenue, rising margins and strong FCF—but bookings deceleration, AI/pricing overhangs and a leveraged, buyback-heavy capital structure prevent full confirmation of an unequivocal strong buy.

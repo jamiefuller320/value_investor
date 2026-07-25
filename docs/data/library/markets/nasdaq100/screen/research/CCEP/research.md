@@ -1,115 +1,76 @@
 # Coca-Cola Europacific Partners PLC (CCEP) — Research memo
 
-_Version 1 · Updated 2026-07-25T10:49:38.664846+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T11:37:11.406034+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Coca-Cola Europacific Partners (CCEP) is the world’s largest Coca-Cola bottler by revenue, spanning Western Europe and Asia Pacific (including the Philippines since February 2024). The quantitative screen rates the name a buy on cheapness, quality, dividend, GARP and risk factors (8/22 models; composite 60%), supported by reported EPS growth to €4.26 and a 2.3% dividend yield. Filings show a durable franchise: revenue rose to €20.9bn and operating profit to €2.79bn in FY2025, with €2.95bn operating cash flow and active capital return (€927m dividends; €1.0bn buyback completed). The valuation hook is growth at a modest headline multiple (P/E ~21x) against strong earnings momentum, offset by a heavily intangible balance sheet (€17.0bn goodwill and intangibles; negative tangible equity) and regulatory/health-policy exposure across 31 markets. Key debate: whether post-Philippines integration earnings and buybacks justify premium book metrics, or whether sugar taxes, plastic regulation and FX (notably GBP/AUD weakness in 2025) cap rerating.
+Coca-Cola Europacific Partners (CCEP) is the world’s largest Coca-Cola bottler, spanning Western Europe and Asia Pacific following the 2024 Philippines acquisition. The quantitative screen rates the name a buy (8/22 models; composite score 60%), driven by earnings growth, dividend quality, and contrarian value metrics (Lynch PEG 0.31; ROE 22.9%; yield 2.3%). FY2025 filings show reported revenue of €20.9bn (+2.3%) and diluted EPS of €4.26 (+38% year on year), with comparable operating profit up 5% to €2.8bn and strong cash conversion. The investment case rests on a durable franchise, pricing/mix discipline, and aggressive capital return (€1.0bn buyback completed; a further €1bn programme announced). The central debate is whether reported earnings momentum and capital return offset a leveraged, intangible-heavy balance sheet, thin impairment headroom in Pacific/Philippines CGUs, and ongoing tax, plastic-packaging, and consumer-health regulatory risks. Q1 2026 interim filing bodies are not available in the source pack, limiting near-term trend verification.
 
 ## INVESTMENT THESIS
-For a value investor, CCEP offers a rare combination of defensive beverage volume, contractual Coca-Cola franchise strength, and visible capital allocation. The screen’s buy signal aligns with filing-backed fundamentals rather than contradicting them:
-
-- **Quality and GARP**: FY2025 diluted EPS of €4.26 (+38% y/y) and ROE of ~22.9% (screen) reflect operating leverage and a cleaner cost base after 2024 Philippines integration charges and Indonesia impairment (€189m). Comparable operating profit reached €2,808m versus reported €2,793m, suggesting underlying earnings quality improved even after €105m restructuring.
-- **Cheapness on growth-adjusted metrics**: Lynch PEG 0.31 and Neff PEGY 0.07 (screen) imply the market underprices earnings growth relative to staples peers; headline P/E 21.3x is not deep value but reasonable for a bottler compounding EPS at this pace.
-- **Dividend and buyback**: Total dividends declared/paid ~€2.04 per share in 2025 (€0.79 + €1.25); a further €1bn buyback was announced in February 2026 through February 2027, continuing the February 2025 programme (12.7m shares cancelled for €1,006m).
-- **Moat**: Indefinite-lived TCCC bottling agreements, scale across Europe (€15.4bn revenue) and APS (€5.5bn), and no customer >10% of revenue (20-F).
-
-The screen passes Buffett Quality, Dividend Growth, Magic Formula, Piotroski F-Score (8) and Earnings Quality — consistent with a cash-generative, franchise-led compounder rather than a cyclical trade. Conviction on the screen is building (52%, stable, 3 weeks at signal) but timing data are insufficient; this is a fundamental accumulate case, not a tactical entry signal.
+For a value investor, CCEP offers a rare combination of defensive beverage exposure, visible earnings growth, and shareholder-friendly capital allocation at a screen-implied discount to growth. The buy signal passes five metric families—cheapness, quality, dividend, GARP, and risk—with high data completeness (20/20 metrics) and building conviction (52%, stable for three weeks). Reported EPS rose from €3.08 (2024) to €4.26 (2025) per the FY2025 6-K, while comparable operating profit grew from €2.66bn to €2.81bn, indicating underlying margin resilience after stripping one-offs. The screen’s PEG (0.31) and PEGY (0.07) reflect earnings acceleration against a P/E of 21.3 that is modest for a 22.9% ROE franchised bottler. Business quality is anchored in perpetual TCCC bottling agreements (treated as indefinite-lived intangibles), geographic diversification (Europe 74% of revenue; APS 26%), and consistent operating cash flow (~€3.0bn annually). Management returned €1.9bn to shareholders in 2025 via dividends (€927m) and buybacks (€1.0bn), with a renewed €1bn programme through February 2027—directly supporting per-share value compounding and aligning with Dividend Growth and Buffett Quality screen passes. Piotroski F-Score and Earnings Quality passes suggest the improvement is not purely accounting-driven, though 2025 benefited from €104m property-sale gains and a €19m litigation provision reversal.
 
 ## FINANCIAL REVIEW
-*Primary source: SEC Form 20-F (filed 13 March 2026) and FY2025 results 6-K (17 February 2026), both with body extracts. Currency: euro unless stated.*
+Primary source: SEC Form 20-F (annual, filed 13 March 2026) and FY2025 results 6-K (17 February 2026 filing body). Regime: SEC EDGAR. No 10-Q filings; interim updates are 6-K trading announcements.
 
-**Annual results (FY2023–FY2025)**
+Annual results (FY2023–FY2025, €m unless stated)
 
-| Metric | 2025 | 2024 | 2023 |
-|--------|------|------|------|
-| Revenue | €20,901m | €20,438m | €18,302m |
-| Gross profit | €7,440m | €7,211m | €6,720m |
-| Operating profit (reported) | €2,793m | €2,132m | €2,339m |
-| Comparable operating profit | €2,808m | €2,663m | €2,373m |
-| Profit after tax | €1,979m | €1,444m | €1,669m |
-| Profit attributable to shareholders | €1,942m | €1,418m | €1,669m |
-| Diluted EPS | €4.26 | €3.08 | €3.63 |
-| Operating cash flow | €2,953m | €3,061m | €2,806m |
+| Metric | 2023 | 2024 | 2025 |
+|---|---|---|---|
+| Revenue | 18,302 | 20,438 | 20,901 |
+| Reported operating profit | 2,339 | 2,132 | 2,793 |
+| Comparable operating profit | 2,373 | 2,663 | 2,808 |
+| Profit attributable to shareholders | 1,669 | 1,418 | 1,942 |
+| Diluted EPS (€) | 3.63 | 3.08 | 4.26 |
+| Net cash from operations | 2,806 | 3,061 | 2,953 |
+| Total borrowings | n/a | 11,331 | 10,694 |
+| Cash and equivalents | n/a | 1,563 | 918 |
+| Total equity | 7,976 | 8,985 | 8,303 |
 
-Trend: Reported revenue grew 2.3% in 2025 (Philippines now fully in the base; APS revenue €5,497m vs €5,467m). Reported operating profit rose 31%, aided by lower admin expenses (€1,402m vs €1,734m), €104m property-sale gains, and absence of 2024’s €189m Indonesia impairment. Normalised trajectory is better captured by comparable operating profit (+5.4% to €2,808m). EPS growth (+38%) also reflects a lower effective tax rate (23.0% vs 25.4%) and share count reduction via buyback (456m diluted average shares vs 461m).
+(Source: Form 20-F and FY2025 6-K income/cash-flow extracts.)
 
-**Cash flow and leverage**
+Revenue trend: Revenue rose 14% in 2024, largely reflecting the February 2024 Philippines acquisition (CCBPI/CCEAP), then grew 2.3% organically/comparably in 2025 to €20.9bn. Europe revenue was €15.4bn; APS €5.5bn, with Philippines contributing €1.9bn. Gross margin held broadly stable (gross profit €7.44bn vs €7.21bn prior year).
 
-- Investing: €632m outflow (2025) vs €1,957m (2024, including €1,524m Philippines acquisition).
-- Financing: €2,890m outflow — dividends €927m, buybacks €1,006m, net debt repayment.
-- Cash fell to €918m (from €1,563m); total borrowings €10,694m (€470m current).
-- Implied net debt ~€9.8bn (cash €918m deducted from gross debt per balance sheet). *Yahoo fallback for net debt: €9.08bn — broadly consistent with filing arithmetic.*
-- Free cash flow: filing-derived ~€2.0bn (OCF €2,953m less PPE/software capex €950m). *Yahoo FCF €2.0bn — used only as cross-check.*
+Profitability: Reported operating profit jumped 31% to €2.79bn in 2025, but comparability items matter. FY2024 was depressed by €189m Indonesia impairment and €264m restructuring; FY2025 included €105m restructuring, offset by €104m property-sale gains and a €19m litigation reversal. Comparable operating profit—the cleaner operating metric cited in segment disclosures—rose 5.4% to €2.81bn, a more representative read-through for underlying business momentum. ETR improved to 23.0% (from 25.4%), supporting net income growth to €1.94bn attributable to shareholders.
 
-**Balance sheet**
+Cash flow and capital allocation: Operating cash flow remained robust at €2.95bn despite higher tax payments (€513m). Investing cash outflow normalised to €632m after the €1.5bn Philippines acquisition in 2024; capex was €750m (PPE) plus €200m (software). Financing consumed €2.89bn, reflecting €1.0bn buybacks, €927m dividends, and net debt repayments. Cash fell to €918m at year-end as management prioritised returns over balance-sheet cash accumulation.
 
-- Total assets €29,872m; equity €8,303m (minority interest €468m).
-- Goodwill €4,536m + other intangibles €12,490m = €17,026m (57% of assets).
-- Tangible book negative (goodwill/intangibles exceed equity) — a structural screen limitation for asset-based models.
-- Employee benefit liabilities €157m; current tax provisions €329m.
+Balance sheet and leverage: Total assets €29.9bn; total equity €8.3bn. Borrowings totalled €10.7bn (€10.2bn non-current; €470m current) against €918m cash—implying net debt of approximately €9.8bn. Goodwill and intangibles total €17.0bn (57% of assets), yielding negative tangible book value; equity quality is franchise-dependent rather than asset-backed. Employee benefit liabilities were €157m (€150m non-current; €7m current). Negative working capital (~€1.5bn per Yahoo balance sheet; not separately stated in filing extract) is typical for bottlers but adds to operational leverage.
 
-**Interim / trading updates**
+Interim / trading updates: The filings index lists a Q1 2026 trading update (6-K, 28 April 2026; `ccepq12026tradingupdate-1s.htm`), but no body extract is available in the source pack—interim revenue, volume, and margin trends for H1 2026 cannot be verified from primary filings here. Available interim 6-K bodies are predominantly share-buyback transaction notices and governance filings, not half-year accounts. This is a material gap for assessing current-year momentum.
 
-The filings index lists a Q1 2026 trading update (6-K, 28 April 2026, `ccepq12026tradingupdate`) but **no body extract is available** — interim revenue, volume and margin figures cannot be verified from primary filings in this pack. News headlines cite ~€5.0bn Q1 2026 revenue and an interim dividend declaration (28 April 2026); treat as unverified until the filing body is ingested.
+Going concern (FY2025 6-K): Directors confirm a going-concern basis through 31 March 2027, citing €1.8bn undrawn committed credit facility, cash-flow forecasts including downside stress tests, and no material uncertainties to disclose.
 
-No separate half-year (H1) report body is present; interim disclosure in this dataset is limited to the FY2025 results 6-K and routine 6-K administrative filings.
-
-**Notable 2025 comparability items (filings)**
-
-- Restructuring €105m (efficiency programme to 2028).
-- Property gains €104m (Germany/GB).
-- Litigation provision reversal €19m.
-- 2024 comparables included €264m restructuring, €189m Indonesia impairment, €14m Philippines integration costs.
-
-**Auditor**: Ernst & Young issued an unqualified opinion on the 20-F (13 March 2026). Critical audit matters: accrued customer marketing costs (€6.0bn promotional deductions; €1.4bn accrual) and uncertain tax positions.
+Yahoo fallback: Not required for core P&L or balance-sheet figures; all annual metrics above are from filing bodies. Yahoo cash-flow FCF (~€2.0bn for 2025) is consistent with filing-derived OCF minus capex but is not used as the primary source.
 
 ## RISKS AND RED FLAGS
-**Franchise and concentration**
-- Dependence on The Coca-Cola Company for concentrate, brand equity and bottler agreement renewals. Filings assign indefinite lives to TCCC agreements based on renewal history, but termination or adverse refranchising would be material.
+Tax and transfer pricing: The Group carries €329m of tax provisions (current liabilities) and is routinely under audit across jurisdictions. Filings disclose substantial tax assessments related to concentrate purchases; management believes positions are defensible and has not recorded additional liabilities, but outcomes could differ materially. Ernst & Young flagged uncertain tax positions as a critical audit matter.
 
-**Regulatory and health policy**
-- Sugar/sweetened beverage taxes, packaging levies and health labelling rules across European and Asia-Pacific markets directly affect pricing and mix. Filings record excise and packaging taxes gross in revenue where CCEP is principal.
+Litigation and guarantees: Guarantees to third parties totalled €944m (primarily litigation and tax matters). While filings state no significant additional liabilities are expected, this exposure is large relative to annual profit.
 
-**Tax and litigation**
-- Uncertain tax provisions €329m (current) plus non-current tax liabilities; concentrate-purchase tax assessments disputed with “no technical merit” per management — outcome uncertain.
-- Guarantees to third parties €944m (primarily litigation and tax matters).
+Impairment sensitivity: Annual impairment testing shows thin headroom in Pacific (~20% of carrying value) and Philippines (~16%) CGUs; a 0.9–1.6% adverse move in discount rate or terminal growth could trigger write-downs. FY2024’s €189m Indonesia impairment demonstrates the risk.
 
-**Balance sheet and impairment**
-- €17bn intangible asset base; Pacific CGU headroom ~20% and Philippines ~16% on impairment testing — modest sensitivity to terminal growth (−1.2% to −1.6%) or discount rate (+0.9% to +1.2%).
-- 2024 Indonesia CGU impairment €189m highlights APS execution risk.
+Restructuring and integration: An efficiency programme runs to 2028; FY2025 restructuring costs were €105m. Philippines integration (2024 acquisition) adds execution risk in APS, a region with lower comparable margins (€669m profit on €5.5bn revenue vs Europe €2,139m on €15.4bn).
 
-**Operational and integration**
-- Philippines acquisition (February 2024) still in integration; minority interest €468m reflects Aboitiz partnership.
-- Beam Suntory distribution rights ended (Australia July 2025; NZ December 2025); accelerated amortisation largely complete.
+FX and interest: FY2025 other comprehensive loss included €686m foreign-currency translation; net finance costs rose to €203m (from €187m) as gross finance costs reached €306m. Multi-currency revenue (GBP, AUD, PHP, etc.) creates translation and transaction volatility; EUR/USD at 1.14 and GBP/USD at 1.33 (macro context) are relevant operational backdrops only.
 
-**Financial structure**
-- Negative working capital (current liabilities exceed current assets) typical for bottlers but increases reliance on commercial paper and bond markets; active refinancing in 2025 (new €1.3bn notes; maturities repaid).
-- Going concern: directors confirm adequacy of resources through 31 March 2027, citing €1.8bn undrawn committed credit facility and downside stress test — **no material going-concern uncertainty disclosed**.
+Franchise and regulatory: Bottling agreements are treated as indefinite-lived; any TCCC relationship change would be existential, though filings cite uninterrupted renewal history. Sugar taxes, packaging regulation (single-use plastic pressure—referenced in May 2026 news on environmental protests), and health-policy shifts are structural headwinds not fully captured by value screens.
 
-**Governance**
-- Board succession: Senior Independent Director Thomas Johnson and INED Guillaume Bacuvier retiring May 2026; Laurence Debroux appointed INED; General Counsel change to Svetlana Walker (April 2026).
-
-**FX**
-- 2025 other comprehensive loss included €686m foreign currency translation (GBP, AUD, PHP exposure). EUR reporting with multi-currency operations creates earnings volatility screens may not capture.
-
-**ESG**
-- Environmental protests at the 2025 AGM (news) on single-use plastic; sustainability targets updated May 2025 with Philippines integration — reputational and capex implications.
+Balance-sheet structure: High goodwill/intangibles, negative tangible equity, and ~€9.8bn net debt limit balance-sheet flexibility if volumes weaken or rates rise further. Screen “risk” family pass should not be read as low financial leverage.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate-to-good on capital allocation and results, thinner on operational detail:
+Coverage over the past year is adequate on capital allocation and sell-side sentiment, thinner on operational surprises.
 
-- **FY2025 results (Feb–Mar 2026)**: “Coca-Cola Europacific (CCEP) 2025 Revenue Hits €20.9B as Operating Profit Rises 31% to €2.79B” (Yahoo Finance, 10 March 2026); annual report filed 13 March 2026.
-- **Capital return**: “Coca-Cola Europacific Partners Advances EUR 1 Billion Share Buyback” (Globe and Mail, 21 July 2026 / 14 July 2026); final €500m tranche of prior programme and new €1bn programme through February 2027 (Stock Titan, July 2026); regular “Transactions in Own Shares” 6-K filings.
-- **Q1 2026**: “Coca-Cola Europacific Partners plc Announces Q1 Trading Update & Interim Dividend Declaration” (ACCESS Newswire, 28 April 2026); “Coca-Cola Europacific (CCEP) posts €5.0B Q1 2026 revenue and dividend” (Stock Titan, 28 April 2026) — *figures not verified in filing bodies*.
-- **Analyst activity**: Wells Fargo initiated Overweight (GuruFocus, 12 June 2026); Barclays maintained Overweight (GuruFocus, 21 July 2026); Yahoo piece citing Wells Fargo PT raise to $115 (16 July 2026).
-- **Strategy/ESG**: “Coca-Cola Europacific Partners Updates ESG Plan, Adds Philippines and Six 2030 Sustainability Targets” (Yahoo Finance, 4 May 2026); F1/Monster Energy brand tie-ins (simplywall.st, June 2026).
-- **Governance**: Director retirements and Laurence Debroux appointment (December 2025 6-K); Guillaume Bacuvier retirement (March 2026).
-- **Ownership flows**: Routine institutional position changes (MarketBeat, Invesco 5.7% stake — Stock Titan, 15 July 2026) — not thesis-changing.
+Earnings and trading: FY2025 results (February 2026) showed revenue €20.9bn and operating profit €2.79bn (+31%), prompting positive market reaction (“Coca-Cola Europacific Partners (ENXTAM:CCEP) Is Up 6.8% After €1 Billion Buyback And Higher 2025 Profits”, Yahoo Finance, 23 February 2026). Q1 2026 trading update headlines cite €5.0bn revenue and continued momentum (“Coca-Cola Europacific (CCEP) posts €5.0B Q1 2026 revenue and dividend”, Stock Titan, 28 April 2026; “CCEP stock trades steadily as Coca-Cola bottler updates investors on earnings momentum”, AD HOC NEWS, 21 July 2026)—but primary filing bodies for this release are absent from the source pack.
 
-Much headline volume is buyback tracking and holder filings rather than deep operational news; verify Q1 2026 trading metrics against the April 2026 6-K when the body becomes available.
+Capital return: Dominant theme. CCEP completed a €1bn buyback in 2025 and launched a further €1bn programme (February 2026 6-K; “Coca-Cola Europacific Partners launches final €500mn share buyback tranche”, Globe and Mail, 4 July 2026). Weekly/monthly 6-K filings document ongoing repurchases through July 2026.
+
+Strategy / ESG: Philippines integration into sustainability reporting (“Coca-Cola Europacific Partners Updates ESG Plan, Adds Philippines and Six 2030 Sustainability Targets”, Yahoo Finance, 4 May 2026). F1/Monster Energy brand partnerships noted as marketing initiatives (simplywall.st, June 2026). Plastic-packaging scrutiny at the annual meeting (Yahoo Finance, 29 May 2026).
+
+Sell-side / ownership: Wells Fargo initiated Overweight (GuruFocus, 12 June 2026); Barclays maintained Overweight with raised target (GuruFocus, 21 July 2026); Wells Fargo reiterated Overweight, target $115 (Yahoo Finance, 16 July 2026). Invesco reported 5.7% stake (Stock Titan, 15 July 2026). Much other coverage is routine institutional flow (MarketBeat) rather than fundamental news.
+
+M&A: No new acquisitions in the period; focus is integration of Philippines (2024) and organic investment.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Primary filings confirm strong FY2025 earnings, cash generation and shareholder returns that support the quantitative buy signal, tempered by intangible-heavy leverage, tax/litigation overhangs and missing Q1 2026 filing-body verification.
+Rationale: FY2025 primary filings confirm strong comparable earnings, cash generation, and capital return that support the quantitative buy signal, but leverage, intangible-heavy accounting, tax/litigation contingencies, and missing Q1 2026 filing bodies prevent full near-term confirmation.

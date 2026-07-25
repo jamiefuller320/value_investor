@@ -1,18 +1,18 @@
 # Thomson Reuters Corporation (TRI) — Research memo
 
-_Version 1 · Updated 2026-07-25T10:18:36.112946+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T11:40:00.918854+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Thomson Reuters is a high-quality, subscription-led professional information business (legal, tax, accounting, news) that the quantitative screen rates **Strong Buy**, driven by cheapness, quality, dividend, GARP, and risk-factor passes at a sector-relative composite of 77%. The valuation hook is a de-rated franchise trading at roughly 24.7× earnings and 3.1% yield after a sharp share-price reset, with Neff PEGY of 0.08 suggesting growth and income are mispriced relative to fundamentals. The central debate is whether generative AI erodes Thomson Reuters’ moat in legal and tax workflows—or whether proprietary content, compliance embedding, and “AI-as-product” investments turn disruption into an upgrade cycle. Capital return (dividends, buybacks, and a 2026 return-of-capital programme) supports the value case, but filing extracts in this pack are too thin to fully validate reported trends from primary documents alone.
+Thomson Reuters is a subscription-led professional information franchise (legal, tax, accounting, news) that the quantitative screen rates **Strong Buy**, with 10 of 22 models passing across cheapness, quality, dividend, GARP, and risk at a sector-relative composite of 77%. The valuation hook is a de-rated compounder at roughly 24.7× earnings, 3.3× book, and 3.1% yield after a sharp share-price reset, with Neff PEGY of 0.08 implying growth and income are mispriced relative to fundamentals. The central debate is whether generative AI erodes the legal and tax workflow moat, or whether proprietary content, compliance embedding, and AI-as-product investments turn disruption into an upgrade cycle. Capital return (dividends, buybacks, and a 2026 return-of-capital programme) supports the value case, but filing extracts in this pack are too thin to fully validate reported trends from primary documents alone.
 
 ---
 
 ## INVESTMENT THESIS
-The screen’s Strong Buy label rests on unusually broad factor confirmation: **10 of 22 models passed**, spanning **cheapness, quality, dividend, GARP, and risk** families, with full data quality (20/20 metrics) and building conviction (69%, stable for three weeks). For a value investor, the case is not a deep cyclical discount but a **quality compounder at a cyclically depressed multiple**—P/E 24.7, P/B 3.3, ROE 12.7%, ~3.1% yield, and PEGY 0.08 against ~5.6% growth in the screen snapshot.
+The screen’s Strong Buy label rests on unusually broad factor confirmation: **10 of 22 models passed**, spanning **cheapness, quality, dividend, GARP, and risk** families, with full data quality (20/20 metrics) and building conviction (69%, stable for three weeks). For a value investor, the case is not a deep cyclical discount but a **quality compounder at a depressed multiple**—P/E 24.7, P/B 3.3, ROE 12.7%, ~3.1% yield, and PEGY 0.08 against ~5.6% growth in the screen snapshot.
 
-Business quality aligns with the factor profile. Thomson Reuters operates mission-critical, recurring-revenue software and content for professionals—segments where switching costs, regulatory relevance, and workflow integration support the **Economic Moat**, **Quality Value**, **Earnings Quality**, and **Piotroski F-Score** passes. Free cash flow of roughly **$1.7bn** (screen) and rising operating cash generation (Yahoo fallback: FCF **$2.02bn** in FY2025) underpin **High Dividend Yield**, **Dividend Growth**, and **Composite Value** signals. The **Dreman Contrarian** and **Magic Formula** passes fit a narrative of market pessimism (AI disruption, post-portfolio-simplification noise) against still-resilient underlying economics.
+Business quality aligns with the factor profile. Thomson Reuters operates mission-critical, recurring-revenue software and content for professionals—segments where switching costs, regulatory relevance, and workflow integration support the **Economic Moat**, **Quality Value**, **Earnings Quality**, and **Piotroski F-Score** passes. Free cash flow of roughly **$1.68bn** in the screen metrics, with Yahoo fallback showing FCF rising to **$2.02bn** in FY2025, underpins **High Dividend Yield**, **Dividend Growth**, and **Composite Value** signals. The **Dreman Contrarian** and **Magic Formula** passes fit a narrative of market pessimism (AI disruption, portfolio-simplification noise) against still-resilient underlying economics.
 
-Portfolio actions—sale of non-core assets, the KKR joint venture for Global Print, and aggressive shareholder returns—have simplified the equity story toward higher-margin recurring revenue, which the screen interprets as undervalued durability rather than structural decline.
+Portfolio actions—the KKR joint venture for Global Print (51% stake sold), non-core divestitures, and aggressive shareholder returns—have simplified the equity story toward higher-margin recurring revenue, which the screen interprets as undervalued durability rather than structural decline.
 
 ---
 
@@ -52,7 +52,7 @@ Accordingly, **all quantitative trends below fall back to Yahoo `financials_annu
 - **Pension/post-retirement obligations (non-current):** **$504m** employee benefits liability.
 - **Working capital:** negative **$1.24bn**, largely deferred-revenue driven rather than distress.
 
-**Capital return (FY2025, Yahoo):** common dividends **$1.04bn**; share repurchases **$1.0bn**; long-term debt repayments **$1.06bn**. Filing index corroborates active debt management: multiple **6-K debt exchange offers and indenture amendments** (Feb–Mar 2025).
+**Capital return (FY2025, Yahoo):** common dividends **$1.04bn**; share repurchases **$1.0bn**; long-term debt repayments **$1.06bn**. The filing index corroborates active debt management: multiple **6-K debt exchange offers and indenture amendments** (Feb–Mar 2025), plus a **US$600m share repurchase programme** and **US$605m return of capital and share consolidation** announced 25 Feb 2026 (6-K exhibit description; body procedural only).
 
 ### Interim / recent quarter (Yahoo quarterly fallback; filing bodies absent)
 
@@ -62,7 +62,7 @@ Accordingly, **all quantitative trends below fall back to Yahoo `financials_annu
 
 From 6-K exhibit descriptions (bodies only):
 - **25 Feb 2026:** new **US$600m share repurchase programme** and **US$605m return of capital and share consolidation** (Material Change Report filed).
-- **Mar 2025:** debt exchange offers, consent solicitations, and replacement indentures—balance-sheet refinancing activity, not distress signals in available text.
+- **Mar 2025:** debt exchange offers, consent solicitations, and replacement indentures—balance-sheet refinancing activity; no distress language in available text.
 - **6 Mar 2025 / 5 Mar 2026:** annual 40-F filings for FY2024 and FY2025—financial statements **not extracted** in bodies.
 
 ---
@@ -76,7 +76,7 @@ From 6-K exhibit descriptions (bodies only):
 
 **Pension and employee liabilities.** **$504m** non-current employee benefit obligations (Yahoo, FY2025)—material but not screened as a primary risk factor here; full 40-F note disclosure unavailable in body extracts.
 
-**Governance structure.** The **Founders Share Company** (Woodbridge) controls a special share with strategic influence; **Kim Williams retirement** and appointment of **Dr. Stephen J. Toope** as chairman (13 Jan 2026) is a governance transition worth monitoring. Shareholder proposal rejected and two new directors added (11 Jun 2025) suggest active but not fully aligned investor debate.
+**Governance structure.** The **Founders Share Company** (Woodbridge) controls a special share with strategic influence; **Kim Williams retirement** and appointment of **Dr. Stephen J. Toope** as chairman (13 Jan 2026) is a governance transition worth monitoring. Two new directors added and a shareholder proposal rejected (11 Jun 2025) suggest active investor debate.
 
 **Operational restructuring.** Reuters reported a **“small number” of engineering job cuts** (13 Jul 2025) amid AI/product realignment—cost saves possible, execution risk on product roadmap.
 
@@ -94,15 +94,15 @@ Coverage over the past year is **moderate but repetitive**, dominated by valuati
 | Date | Headline (source) | Theme |
 |------|-------------------|-------|
 | 25 Feb 2026 | Thomson Reuters Announces New US$600 Million Share Repurchase Program and US$605 Million Return of Capital and Share Consolidation (Thomson Reuters / 6-K) | Capital return, share consolidation |
-| 28 Apr 2026 | Thomson Reuters Announces Voting Results of Return of Capital and Share Consolidation Transactions (Thomson Reuters) | Shareholder approval |
-| 14 Jul 2025 | Thomson Reuters and KKR Announce Joint Venture for Thomson Reuters Global Print Business (PR Newswire) | Portfolio simplification; 51% print stake to KKR |
+| 28 Apr 2025 | Thomson Reuters Announces Voting Results of Return of Capital and Share Consolidation Transactions (Thomson Reuters) | Shareholder approval |
+| 14 Jul 2025 | Thomson Reuters and KKR Announce Joint Venture for Thomson Reuters Global Print Business (PR Newswire) | Portfolio simplification; print stake to KKR |
 | 13 Jul 2025 | Thomson Reuters to cut 'small number' of engineering jobs (Reuters) | Restructuring / AI pivot |
 | 11 Jun 2025 | Two new faces join Thomson Reuters board as investors reject proposal (Stock Titan) | Governance |
 | 13 Jan 2026 | Chairman of Thomson Reuters Founders Share Company, Kim Williams, to Retire; Dr. Stephen J. Toope appointed (Thomson Reuters) | Governance succession |
-| 6 Mar 2026 | Thomson Reuters Corporation (TRI) Announces $600 Million Share Repurchase Program (Yahoo Finance) | Buyback confirmation |
 | 24 Jul 2026 | Thomson Reuters (TSX:TRI) Stock May Be Undervalued After AI Restructuring (Yahoo Finance) | Narrative: ~56% one-year decline vs resilient metrics |
 | 16 Jul 2026 | Wall Street Analysts Predict a 29.84% Upside in Thomson Reuters (TRI) (Yahoo Finance) | Consensus still constructive despite AI fears |
 | 12 Jun 2025 | Jim Cramer on Thomson Reuters: “I Can’t Get Behind It” (Yahoo Finance) | High-profile scepticism |
+| 22 Jun 2025 | Thomson Reuters: $143B in legal and accounting revenue at risk from AI gaps (Stock Titan) | Bearish AI narrative |
 
 **Coverage assessment:** Adequate on capital allocation and AI narrative; **thin on granular segment KPIs** (Legal Professionals, Corporates, Tax & Accounting organic growth, ARR, retention) because interim report bodies are missing from the source pack.
 
@@ -112,4 +112,4 @@ Coverage over the past year is **moderate but repetitive**, dominated by valuati
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Quantitative factors and improving FCF/dividend profile support the Strong Buy screen, but incomplete primary filing extracts and unresolved AI-disruption debate prevent full confirmation of normalized earnings power.
+Rationale: Quantitative factors and improving FCF/dividend profile support the Strong Buy screen, but incomplete primary filing extracts and the unresolved AI-disruption debate prevent full confirmation of normalised earnings power.
