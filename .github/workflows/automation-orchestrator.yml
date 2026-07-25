@@ -70,7 +70,7 @@ jobs:
     steps:
       - name: Choose suite from schedule or inputs
         id: pick
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const event = context.eventName;
@@ -169,7 +169,7 @@ jobs:
       allow_ladder: ${{ steps.gate.outputs.allow_ladder }}
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install package
@@ -204,7 +204,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch child workflows
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           SUITE: ${{ needs.decide.outputs.suite }}
           FORCE: ${{ needs.decide.outputs.force }}

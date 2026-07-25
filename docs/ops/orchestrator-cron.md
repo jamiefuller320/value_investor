@@ -65,3 +65,7 @@ gh run list --workflow=email-report.yml --limit 3
 ```
 
 Expect at least one successful Sunday suite without a human clicking **Run workflow**.
+
+## Failure emails that are not regressions
+
+Red runs caused by `startup_failure`, runner queue timeouts, or superseded PR CI are documented in [github-actions-flakes.md](github-actions-flakes.md).
