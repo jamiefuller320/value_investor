@@ -319,6 +319,45 @@ def ingest_research_sources(
             )
         except Exception as exc:  # noqa: BLE001 — research should continue without filings
             logger.warning("Filings ingest failed for %s: %s", ticker, exc)
+            filings_meta = {
+                "filings_index_path": None,
+                "filings_summary": {
+                    "total": 0,
+                    "annual": 0,
+                    "interim": 0,
+                    "other": 0,
+                    "with_body": 0,
+                },
+                "filings_sources": [],
+            }
+
+        if deepen_history:
+            from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
+
+            filings_summary = filings_meta.get("filings_summary") or {}
+            deepen_meta = deepen_thin_filings_if_needed(
+                ticker=ticker,
+                company_name=company_name,
+                sources_dir=sources_dir,
+                market=market,
+                filings_summary=filings_summary,
+            )
+            filings_meta["filings_deepen"] = deepen_meta
+            if not deepen_meta.get("skipped"):
+                # Re-read summary after gap-fill loop may have added bodies.
+                index_path = sources_dir / "filings" / "filings_index.json"
+                resolved_index = resolve_json_path(index_path)
+                if resolved_index is not None:
+                    try:
+                        index_payload = read_json(resolved_index)
+                        filings_meta["filings_summary"] = dict(
+                            index_payload.get("summary") or filings_summary
+                        )
+                        filings_meta["filings_sources"] = list(
+                            index_payload.get("sources_used") or []
+                        )
+                    except (OSError, ValueError, TypeError):
+                        pass
 
     market_s = str(market or "").strip().lower() or None
     macro_meta: dict[str, Any] = {"status": "skipped", "reason": "no_market"}

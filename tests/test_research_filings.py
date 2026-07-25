@@ -24,6 +24,7 @@ from value_investor.research.filings import (
     resolve_google_news_publisher_url,
     summarize_filings,
     _scrub_misattributed_filing_rows,
+    _issuer_matches_sec_name,
     _sec_edgar_supplement_allowed,
     _uk_ticker_sec_dual_listed,
     _extract_investegate_html_text,
@@ -857,3 +858,57 @@ def test_scrub_misattributed_filing_rows(tmp_path: Path):
     )
     assert cleaned[0]["has_body"] is False
     assert not bad_path.exists()
+
+
+def test_filter_misattributed_keeps_sec_when_supplement_validated():
+    rows = [
+        {
+            "id": "sec1",
+            "source": "sec_edgar",
+            "form": "20-F",
+            "headline": "20-F: FORM 20-F",
+        }
+    ]
+    with patch(
+        "value_investor.research.filings._sec_edgar_supplement_allowed",
+        return_value=True,
+    ):
+        kept = filter_misattributed_filings(
+            rows,
+            company_name="SAP SE",
+            ticker="SAP.DE",
+            regime="euro_filings",
+        )
+    assert len(kept) == 1
+
+
+def test_issuer_matches_sec_name_exact():
+    assert _issuer_matches_sec_name("SAP SE", "SAP SE", "SAP.DE") is True
+
+
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.filings._write_bodies")
+@patch("value_investor.research.filings.enrich_filing_rows")
+@patch("value_investor.research.filings.fetch_filings_investegate_company")
+@patch("value_investor.research.filings.fetch_filings_euro_news")
+def test_ingest_filings_euro_includes_investegate(
+    mock_euro_news,
+    mock_investegate,
+    mock_enrich,
+    mock_write_bodies,
+    _mock_ir,
+    tmp_path: Path,
+):
+    mock_euro_news.return_value = [{"id": "gn1", "source": "google_news_euro", "headline": "Results"}]
+    mock_investegate.return_value = [{"id": "ig1", "source": "investegate_direct", "headline": "Annual"}]
+    mock_enrich.side_effect = lambda rows, **_: rows
+    mock_write_bodies.side_effect = lambda rows, *_a, **_k: rows
+
+    ingest_filings(
+        ticker="TTE.PA",
+        company_name="TotalEnergies SE",
+        sources_dir=tmp_path,
+        market="euro_stoxx50",
+    )
+    mock_investegate.assert_called_once()
+    mock_enrich.assert_called_once()
