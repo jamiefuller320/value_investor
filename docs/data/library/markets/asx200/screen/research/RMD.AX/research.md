@@ -1,9 +1,9 @@
 # ResMed Inc. (RMD.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T12:56:56.243623+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:21:04.311254+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-ResMed is a global leader in sleep-apnoea and home respiratory-care devices, with an expanding connected-care software layer. The quantitative screen rates RMD.AX as a **buy** (9/22 models, composite 58%, sector-relative 62%), supported by quality metrics (ROE 25.2%), moderate valuation (P/E 19.1, P/B 1.8), low leverage (D/E 13%), and strong free cash flow (~US$1.45bn). The investment case rests on durable CPAP demand, margin expansion, and capital return via dividends and buybacks, with the July 2026 MatrixCare divestiture sharpening strategic focus. The key debate is whether GLP-1 obesity drugs and re-emerging competition (notably Philips) will cap sleep-apnoea market growth, and whether near-term earnings can sustain the current multiple. Primary annual filings are **absent** from the indexed library; only an SEC Form 8-K and an ASX earnings-date notice are available.
+ResMed Inc. (RMD.AX) is a global leader in sleep-apnoea and home respiratory-care devices, with an expanding connected-care software layer. The quantitative screen rates the name as a **buy** (9/22 models, composite 58%, sector-relative 62%), supported by quality metrics (ROE 25.2%), moderate valuation (P/E 19.1, P/B 1.8), low leverage (debt/equity 13%), and strong free cash flow (~US$1.45bn). The investment case rests on durable CPAP demand, margin expansion, and capital return via dividends and buybacks, with the July 2026 MatrixCare divestiture sharpening strategic focus. The key debate is whether GLP-1 obesity drugs and re-emerging competition (notably Philips) will cap sleep-apnoea market growth, and whether near-term earnings can sustain the current multiple. Primary annual filings are **absent** from the indexed library; only an SEC Form 8-K and an ASX earnings-date notice are available.
 
 ## INVESTMENT THESIS
 For a value investor, ResMed offers a high-quality compounder at a reasonable price rather than a deep cyclical discount. The screen passes five factor families — cheapness, quality, dividend, GARP, and risk — with models including Graham Enterprising, Buffett Quality, Economic Moat, Magic Formula, and Financial Health. That profile aligns with a business generating rising returns on a widening asset base.
@@ -13,7 +13,7 @@ Using Yahoo fallback data (no annual filing bodies indexed), revenue grew from U
 The July 2026 Form 8-K confirms management intent to return MatrixCare sale proceeds (US$490m) via an accelerated share repurchase, reinforcing the capital-allocation story. RMD.AX trades as a CHESS Depositary Interest over NYSE-listed RMD; fundamentals are USD-denominated. The screen's persistent buy signal (four weeks, conviction 57%) is consistent with franchise economics in a concentrated global market at a valuation that is neither euphoric nor distressed.
 
 ## FINANCIAL REVIEW
-**Primary filings indexed:** `filings_index.json` records regime `asx_announcements`, with four items: **zero annual**, one interim (Q4 FY2026 earnings date notice), and three other. Two body extracts are available. **No annual report, 10-K, or half-year results with financial statements** are indexed.
+**Primary filings indexed:** `filings_index.json` records regime `asx_announcements`, with four items: **zero annual**, one interim (Q4 FY2026 earnings date notice), and three other. Two body extracts contain material financial disclosure. **No annual report, 10-K, or half-year results with financial statements** are indexed.
 
 ### Interim / periodic (primary)
 

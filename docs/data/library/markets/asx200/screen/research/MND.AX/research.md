@@ -1,119 +1,115 @@
 # Monadelphous Group Limited (MND.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T12:53:11.850337+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:18:46.700532+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Monadelphous Group is a leading Australian engineering and construction contractor serving resources, energy and infrastructure markets through Engineering Construction and Maintenance and Industrial Services divisions. The quantitative screen rates MND a buy on cheapness, dividend, GARP and risk families, anchored by a 5.2% FCF yield, Lynch/Neff PEG metrics near 0.55, reported earnings growth of ~50.5%, a 3.3% dividend yield and 20.5% ROE. The investment case rests on a cyclical upswing in contract activity—recent ASX announcements include a A$380m Brigalow Peaking Power Plant award and further wins exceeding A$200m across Fortescue, Santos and Synergy—set against thin operating margins and heavy working-capital intensity typical of EPC contractors. Valuation is not outright cheap on headline multiples (P/E 27.7, P/B 5.4) but appears reasonable if elevated growth persists. The key debate is whether record H1 FY2026 momentum (46% revenue growth per earnings-call coverage) is sustainable through labour constraints and a historically cyclical end-market, particularly without downloadable primary filing bodies for annual or interim results in the research library.
-
----
+Monadelphous Group Limited (MND.AX) is a leading Australian engineering contractor serving resources, energy and infrastructure, with a quantitative screen rating of **buy** (5/22 models; composite 56%). Primary filings show a sharp acceleration in earnings and cash generation: H1 FY26 revenue of $1.53bn (+45.6%) and NPAT of $64.9m (+52.6%), on top of FY24 NPAT of $62.2m (+16.2%), supported by iron ore, LNG maintenance and energy-transition work. The investment case rests on contract-backed growth (>$1.4bn awards since 1 July 2025), strong balance sheet (cash $322m at Dec-25), dividend compounding (49c interim, fully franked) and screen metrics including FCF yield (~5.2%), Lynch PEG (0.55) and ROE (~20.5%). The central debate is whether operational momentum justifies a re-rated multiple (screen P/E 27.7x; brokers cite ~30x forward) or whether H1 FY26 represents peak growth, with valuation sensitivity after a near-doubling in the share price over the past year.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, MND offers a rare combination of **cash-backed income and growth-at-a-reasonable-price characteristics** within Industrials. The screen passes five of 22 models across all four metric families—cheapness (FCF Yield), GARP (Lynch PEG, Neff PEGY), dividend (Dividend Growth) and risk (Financial Health)—with a composite score of 56% (59% sector-relative) and high data quality (19/20 metrics). Conviction is moderate at 44%, stable for four weeks.
-
-Business quality, inferred from Yahoo financials (fallback), ASX contract announcements and news flow, supports the quantitative signal:
-
-- **Earnings and cash compounding:** Yahoo-sourced FY2024 net income of A$62.2m and basic EPS of A$0.64 represent step-ups from FY2023 (A$53.5m / A$0.56) and FY2022 (A$52.2m / A$0.55). Free cash flow strengthened to A$98.9m in FY2024 from A$74.2m (FY2023) and A$55.0m (FY2022), underpinning the screen's FCF-yield pass and dividend capacity.
-- **Balance-sheet conservatism:** FY2024 cash of A$225.9m against total debt of A$94.2m (predominantly capital-lease obligations of A$83.3m) implies a net cash position, consistent with the Financial Health model pass.
-- **Shareholder returns:** Dividends paid rose to A$53.5m in FY2024 (from A$50.5m and A$39.4m in prior years), supporting the Dividend Growth pass while remaining covered by FCF.
-- **Pipeline momentum:** ASX contract announcements and news coverage—including the A$380m CS Energy Brigalow award (June 2026), A$200m+ of Fortescue, Santos and Synergy wins (July 2026), and H1 FY2026 earnings-call commentary citing record revenue—align with the screen's elevated growth input.
-
-The GARP framing is the hook: headline P/E of 27.7x is not deep value, but a PEG near 0.55 suggests the market may still be underpricing an earnings inflection if contract backlog converts at improving margins.
-
----
+For a value-oriented investor, MND offers a rare combination of cyclical exposure with improving quality of earnings. The screen passes four metric families—cheapness, dividend, GARP and risk—despite headline multiples that look full on a trailing basis. That apparent tension is resolved by rapid earnings growth: NPAT roughly doubled from H1 FY25 ($42.5m) to H1 FY26 ($64.9m), while EBITDA margin held at 7.59%, and management guides FY26 revenue ~30% above the prior year with margins maintained. Contract visibility reinforces the GARP profile: Rio Tinto (~$300m five-year maintenance), BHP (Jimblebar, Finucane Island car dumper ~$175m), CS Energy Brigalow peaker (~$380m), and Fortescue/Santos extensions collectively underpin revenue without relying on speculative greenfield awards. Cash conversion (186% in H1 FY26) and net cash–lean leverage support the Financial Health and FCF Yield screen passes. Dividend growth (33c interim in H1 FY25 to 49c in H1 FY26) aligns with the Dividend Growth model. Business quality is evidenced by long-dated panel agreements with Rio Tinto, BHP, Woodside, Shell and INPEX, vertical integration via Melchor (civil), Inteforge (fabrication) and Zenviron (renewables), and bolt-on M&A (Kerman, APIP, High Energy Service) broadening the addressable market into transmission and non-process infrastructure. The buy signal is therefore grounded in earnings momentum and balance-sheet strength rather than deep absolute cheapness.
 
 ## FINANCIAL REVIEW
-**Primary filings:** The filings index (`regime: asx_announcements`) catalogues seven ASX announcements—one annual (FY2024 full-year results, 20 August 2024), one interim (half-year beat coverage, 28 February 2026) and five other progress reports—but **neither the annual nor interim entry has a downloadable body extract**. Financial trend analysis therefore relies on `financials_annual.json` (Yahoo Finance fallback). Contract-pipeline colour is drawn from two ASX body extracts under `filings/bodies/`.
+**Annual results (FY24, year ended 30 June 2024)**  
+Source: ASX full-year results release, 20 August 2024 (`29f11b1b4d277736`).
 
-### Annual results (FY2022–FY2024) — Yahoo fallback
+| Metric | FY24 | FY23 (pcp, per filing) | Change |
+|--------|------|------------------------|--------|
+| Revenue (incl. JVs) | $2.03bn | $1.83bn (implied +11%) | +11% |
+| EBITDA | $127.4m | $109.1m (reconciled) | +16.8% |
+| EBITDA margin | 6.28% | 5.96% | +32bp |
+| NPAT | $62.2m | — | +16.2% |
+| EPS | 64.1c | — | — |
+| Full-year dividend | 58c (91% payout) | — | +18.4% |
+| Cash | $225.9m | — | — |
+| Cash flow from operations | $187.7m | — | 169% conversion |
 
-| Metric | FY2022 | FY2023 | FY2024 |
-|---|---|---|---|
-| Revenue (A$m) | 1,809.5 | 1,721.0 | 2,008.6 |
-| Gross profit (A$m) | 122.5 | 118.7 | 135.8 |
-| EBITDA (A$m) | 108.4 | 108.6 | 132.8 |
-| Operating income (A$m) | 33.7 | 26.0 | 37.9 |
-| Net income (A$m) | 52.2 | 53.5 | 62.2 |
-| Basic EPS (A$) | 0.55 | 0.56 | 0.64 |
+Maintenance & Industrial Services revenue reached a record $1.32bn; Engineering Construction $712.7m (+31.5%). Statutory revenue (excl. JV share) was $2.01bn (+16.7%). Yahoo `financials_annual.json` corroborates FY24 revenue of $2.01bn and NPAT of $62.2m; figures above are from the primary filing.
 
-Revenue rebounded sharply in FY2024 (+16.7% vs FY2023) after a FY2023 decline (−4.9% vs FY2022). Net income grew 16.2% in FY2024. EBITDA expanded to A$132.8m, though gross margins remain thin (~6.8% of revenue). Operating income remains modest at A$37.9m (c. 1.9% margin), reflecting the pass-through nature of EPC contracting and elevated SG&A (A$41.1m). FY2024 net income includes A$7.7m of PPE disposal gains (A$57.0m normalised income per Yahoo); adjusting for these, underlying profit growth is still positive but less dramatic.
+**Interim results (H1 FY25, half year ended 31 December 2024)**  
+Source: Condensed consolidated financial report (`8dd750ebe5a8eff5`).
 
-The annual filing is indexed (headline: "MONADELPHOUS REPORTS 2024 FULL YEAR RESULTS", 20 August 2024) but lacks a body extract—FY2024 figures above cannot be cross-checked against the primary announcement.
+| Metric | H1 FY25 | H1 FY24 (pcp) | Change |
+|--------|---------|---------------|--------|
+| Revenue (incl. JVs) | $1.051bn | $1.008bn | +4.2% |
+| Statutory revenue | $1,018.8m | $1,000.2m | — |
+| NPAT | $42.5m | $30.1m | +41.3% |
+| EPS | 43.3c | 31.2c | — |
+| EBITDA | $79.8m | $61.3m | +30.2% |
+| EBITDA margin | 7.59% | 6.08% | +151bp |
+| Cash | $272.5m | — | — |
+| CFO | $93.1m | — | 145% conversion |
+| Interim dividend | 33c | 25c | — |
 
-### Cash flow and capital allocation — Yahoo fallback
+Directors declared reasonable grounds to pay debts as and when due (going-concern affirmation). Contingent liability: UnityWater claim amended to ~$200m (see Risks).
 
-- **FCF:** A$55.0m (FY2022) → A$74.2m (FY2023) → A$98.9m (FY2024). The screen's FCF figure of A$153.5m may reflect a trailing or adjusted methodology; library FCF from the cash-flow statement is A$98.9m for FY2024.
-- **CapEx:** Stepped up materially to A$88.9m in FY2024 (from A$19.0m in FY2023), partly offset by A$9.9m PPE disposals. This bears monitoring for maintenance vs growth spend.
-- **Dividends:** A$53.5m paid in FY2024 (~86% of reported net income, ~54% of FCF)—consistent with a mature, income-oriented payout policy.
-- **M&A:** A$8.8m business purchases in FY2024; A$23.5m in FY2023.
+**Interim results (H1 FY26, half year ended 31 December 2025)**  
+Source: ASX half-year results release, 24 February 2026 (`9dfb3547437c2faf` / `e1aa655898240788`).
 
-### Balance sheet — Yahoo fallback, FY2024
+| Metric | H1 FY26 | H1 FY25 (pcp) | Change |
+|--------|---------|---------------|--------|
+| Revenue (incl. JVs) | $1.53bn | $1.05bn | +45.6% |
+| Statutory revenue | $1.436bn | $1.019bn | — |
+| Engineering Construction rev. | $677.8m | $405.4m | ~+67% |
+| Maintenance & Industrial rev. | $852m | $645.1m | +32.1% |
+| EBITDA | $116.2m | $79.8m | +45.6% |
+| EBITDA margin | 7.59% | 7.59% | flat |
+| NPAT | $64.9m | $42.5m | +52.6% |
+| EPS | 65.2c | 43.3c | — |
+| Interim dividend | 49c | 33c | +48% |
+| Cash | $322m | — | — |
+| CFO | $171.1m | — | 186% conversion |
 
-- **Total assets:** A$887.4m; **equity:** A$465.6m; **ROE (reported by screen):** 20.5%.
-- **Liquidity:** Cash A$225.9m; working capital A$225.4m (down from A$260.6m in FY2023).
-- **Receivables:** A$340.1m (up from A$333.7m), reflecting revenue growth and typical contract billing cycles; working-capital intensity is a structural feature.
-- **Debt:** Total debt A$94.2m, largely lease liabilities (A$83.3m capital leases). Long-term borrowings are minimal (A$6.4m).
-- **Employee benefits / pension:** Non-current provisions A$7.5m plus current pension-related liabilities A$70.4m—a material obligation cluster that warrants review in a full annual report (body not available here).
+Management forecasts FY26 full-year revenue ~30% above the prior period with H1 operating margins maintained. Cash includes $22.5m acquisition-related amounts owed to Kerman vendors, mostly payable before year-end.
 
-### Interim / half-year results
+**Trend synthesis**  
+Revenue growth accelerated from low single digits (H1 FY25) to mid-40s (H1 FY26), driven by construction ramp-up and energy-sector turnaround activity. EBITDA margin expanded from ~6.0% (FY24) to ~7.6% (H1 FY25 onward) and has stabilised. NPAT in H1 FY26 alone ($64.9m) exceeds full-year FY24 ($62.2m), implying a step-change in run-rate earnings if H2 holds. Cash generation strengthened materially; receivables collection after the Jun-25 year-end drove H1 FY26 conversion.
 
-The interim filing is indexed (headline: "Monadelphous jumps on clean half year beat, but valuation bites back", 28 February 2026) but **has no body extract**. News coverage references **H1 FY2026 earnings-call highlights (24 February 2026)** citing a 46% revenue increase, strong contract wins and labour-market tightness, but these figures cannot be corroborated from primary filing bodies in this library. Treat as indicative only.
-
-### Contract pipeline (primary ASX body extracts)
-
-- **5 June 2026:** CS Energy Brigalow Peaking Power Plant contract valued at approximately **A$380m**; balance-of-plant construction and installation of 12 aeroderivative gas turbine units (400 MW combined); work from H2 2026, completion expected early 2029.
-- **1 July 2026:** New construction and maintenance contracts valued at **more than A$200m**, including Fortescue wind-turbine installation (Nullagine Wind Project) and three-year Pilbara maintenance; three-year Santos upstream services (Queensland) and PNG camp construction; three-year Synergy Muja Power Station O&M.
-
-These announcements confirm backlog momentum but do not substitute for audited interim financial statements.
-
-### Gaps
-
-- No downloadable body extracts for FY2024 annual results or H1 FY2026 interim results.
-- No quarterly income data in `financials_annual.json` (`quarterly_income` is empty).
-- No access to going-concern statements, contingent liabilities, covenant disclosures or segment breakdowns from regulatory filing bodies.
-
----
+**Gaps**  
+No FY25 (year ended 30 June 2025) annual report or audited 10-K equivalent appears in `filings_index.json`; the latest annual filing is FY24 (Aug 2024). Full-year FY25 revenue, margins, balance sheet and audit opinion are therefore unavailable from primary sources. Yahoo shows FY24 balance sheet only (equity $465.6m, total debt $94.2m, cash $225.9m, FCF $98.9m)—used here only where interim filings lack a figure; no FY25/FY26 Yahoo annual data is present.
 
 ## RISKS AND RED FLAGS
-**Cyclicality and end-market concentration.** Monadelphous derives the majority of revenue from resources, energy and infrastructure capex cycles. FY2023's revenue decline demonstrates sensitivity to customer spending pauses. The current upswing may prove transient if commodity prices or utility investment budgets soften.
+**Litigation (material, unresolved)**  
+UnityWater has amended its Supreme Court of Queensland claim against subsidiary Monadelphous Engineering Pty Ltd to approximately **$200m**, relating to the 2016 Kawana Sewerage Treatment Plant contract. The company denies the allegations, is vigorously defending and pursuing counterclaims, and has notified insurers. Disclosed in FY24 results and H1 FY25 interim notes; no provision quantified in available extracts.
 
-**Thin margins and execution risk.** Operating margins near 2% leave little room for cost overruns, labour inflation or contract disputes—common in Australian EPC. News from the H1 FY2026 earnings call explicitly flags **labour-market tightness** as a constraint on future growth sustainability.
+**Customer / project concentration and contract loss**  
+Revenue is heavily tied to Rio Tinto, BHP, Woodside, Shell, INPEX and Fortescue. Albemarle terminated Kemerton construction contracts for convenience (Aug 2024), reducing work-in-hand by ~$200m and removing an estimated $75–85m of FY25 revenue. Lithium/nickel price volatility remains a capex deferral risk, though iron ore and LNG maintenance provide offsetting stability.
 
-**Working-capital and receivables risk.** Receivables of A$340m represent a substantial share of the A$2.0bn revenue base. Deterioration in customer payment terms or project delays could absorb cash despite reported profitability.
+**Cyclical and execution risk**  
+Fixed-price EPC exposure, labour scarcity (workforce ~8,389 at Dec-25), and shutdown timing can distort half-year comparability—brokers flagged that some H1 FY26 maintenance may be non-recurring. Forward-looking statements in H1 FY26 filings note tariff, geopolitical and commodity uncertainties.
 
-**Capital intensity and lease burden.** FY2024 CapEx of A$88.9m and capital-lease obligations of A$83.3m indicate ongoing asset and fleet commitments. A downturn could leave fixed costs underutilised.
+**Financial structure**  
+High dividend payout (91% in FY24; interim 49c on strong H1 earnings) limits retained capital despite net cash. Performance guarantees to clients totalled ~$205m at Dec-24 (contingent, not debt). Capital lease obligations are material per Yahoo FY24 (~$83m); primary interim filings confirm lease liabilities but do not restate full debt stack for Dec-25.
 
-**Pension and employee-benefit provisions.** Combined current and non-current employee-benefit/pension-related liabilities exceed A$77m per Yahoo balance-sheet line items. Without filing-body disclosure, the funding status and future contribution requirements are unknown—a governance and accounting risk flag.
+**Governance / safety**  
+No going-concern flags in reviewed filings. TRIFR rose to 4.34 at Dec-25 from 3.02 at Jun-24 (safety deterioration warrants monitoring). Managing Director Zoran Bebic (appointed Nov 2022) remains in place; no adverse governance disclosures in available bodies.
 
-**Earnings quality.** Recurring gains on PPE disposal (A$7.7m in FY2024; A$2.9m in FY2023; A$4.3m in FY2022) inflate reported earnings. Normalised profit growth is more modest.
-
-**Valuation risk if growth normalises.** The screen's buy case leans heavily on ~50.5% growth and sub-1.0 PEG metrics. At P/E 27.7x and P/B 5.4x, any growth disappointment would compress multiples quickly; post-results coverage (February 2026) already notes valuation "biting back" after a record-breaking rally.
-
-**Data and disclosure gap.** Absence of annual and interim filing bodies in the research library prevents verification of contingencies, related-party transactions, director dealings, or going-concern language—standard red-flag review items that cannot be completed in this pass.
-
----
+**Valuation (screen-adjacent)**  
+The quantitative screen flags cheapness via GARP/FCF metrics, but trailing P/E (27.7x) and P/B (5.4x) are elevated versus historical medians cited in post-results commentary (~24x long-run median; ~30x forward post-rally). This is a positioning risk rather than a balance-sheet red flag.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but skewed toward retail commentary and contract-win headlines**; the manifest contains 50 articles (Google News RSS and yfinance). Material items:
+Coverage over the past year is substantial, skewed toward contract wins, results and broker commentary rather than regulatory action.
 
-| Date | Title | Relevance |
-|---|---|---|
-| 1 Jul 2026 | *Monadelphous Contracts Update* (ASX) | >A$200m Fortescue, Santos and Synergy awards; energy-transition and maintenance diversification. |
-| 5 Jun 2026 | *MND secures major construction contract with CS Energy* (ASX) | A$380m Brigalow Peaking Power Plant; 400 MW gas peaking; work to early 2029. |
-| 24 Feb 2026 | *Monadelphous Group Ltd (H1 2026) Earnings Call Highlights: Record Revenue and Robust...* | Reports 46% revenue increase; flags labour tightness and growth sustainability. |
-| 24 Feb 2026 | *Monadelphous Group posts record half-year result as new contracts boom* | Confirms H1 FY2026 earnings beat narrative. |
-| 28 Feb 2026 | *Monadelphous jumps on clean half year beat, but valuation bites back* | Beat acknowledged; valuation concern after rally. |
-| 25 Feb 2026 | *Buy recommendation: Broker says this ASX 200 stock goes from 'good to great'* | Positive sell-side sentiment post-results. |
-| 16 Jan 2026 | *Why Bell Potter just upgraded this smashing ASX 200 stock* | Broker upgrade following contract momentum. |
-| 14 Jan 2026 | *Monadelphous secures $300m Rio Tinto contract* | Major mining-services win. |
-| 22 Dec 2025 | *Monadelphous wins $250m Rio Tinto contract* | Prior Rio Tinto award. |
-| 8 Jan 2026 | *Monadelphous lands $110m in new contracts across sectors* | Breadth of contract intake. |
+**Results and guidance**  
+- *Monadelphous Group posts record half-year result as new contracts boom* (The Motley Fool Australia, 24 Feb 2026) — record H1 FY26 revenue and dividend.  
+- *Monadelphous jumps on clean half year beat, but valuation bites back* (Market Index, 28 Feb 2026) — beat on revenue, EBITDA, NPAT and dividend; FY26 revenue guide ~+30%; shares volatile on ~30x forward P/E concerns; Morgans downgraded to Hold citing peak-growth risk.  
+- *Buy recommendation: Broker says this ASX 200 stock goes from 'good to great'* (Motley Fool, 25 Feb 2026) — positive broker sentiment around results season.
 
-No manifest coverage of management changes, regulatory actions or M&A transactions. Strategy appears consistent—resources and energy construction/maintenance with growing energy-transition exposure (gas peaking, wind installation). **News is sufficient for pipeline colour but insufficient for audited financial verification**; contract wins and the H1 earnings narrative are the substantive corporate developments captured.
+**Major contract awards**  
+- *Monadelphous secures $380m energy contract* / Yahoo: *Monadelphous wins $268m Brigalow Peaker contract* (Jun 2026) — CS Energy Brigalow Peaking Power Plant, ~$380m, completion early 2029.  
+- *Monadelphous secures $300m Rio Tinto contract* (Motley Fool, 14 Jan 2026) — five-year Pilbara maintenance, ~$300m.  
+- *Monadelphous Contracts Update* (ASX, 1 Jul 2026) — Fortescue wind-turbine installation (Nullagine), three-year Fortescue maintenance, Santos upstream and PNG camp works, Synergy Muja O&M.  
+- *Monadelphous lands $110m in new contracts* (Motley Fool, 8 Jan 2026); *Monadelphous wins $250m Rio Tinto contract* (Motley Fool, 22 Dec 2025).
 
----
+**Strategy / M&A**  
+H1 FY26 filings and news reference acquisitions of Kerman Contracting (Nov 2025), Australian Power Industry Partners and High Energy Service (Jul 2025), expanding civil, high-voltage and non-process infrastructure capability. *Why Bell Potter just upgraded this smashing ASX 200 stock* (Motley Fool, 16 Jan 2026).
+
+**Dividend / income angle**  
+Multiple Kalkine/simplywall.st dividend-focused pieces (Jul 2026, Apr 2026) reflect income-investor interest; largely thematic rather than company-specific.
+
+News is not thin, but much of it is syndicated market commentary rather than investigative reporting. No material regulatory enforcement, management departures or accounting restatements appear in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Yahoo financials, ASX contract announcements and news flow broadly support the screen's GARP-and-income buy case, but the absence of annual and interim filing bodies prevents full confirmation of earnings quality, contingencies and H1 FY2026 momentum.
+Confidence: 0.74
+Rationale: Primary filings confirm accelerating revenue, stable ~7.6% EBITDA margins, exceptional cash conversion and a deep contract pipeline that supports the screen’s GARP/dividend buy case, partially offset by elevated valuation, unresolved UnityWater litigation and cyclical peak-growth uncertainty pending FY25 annual accounts.

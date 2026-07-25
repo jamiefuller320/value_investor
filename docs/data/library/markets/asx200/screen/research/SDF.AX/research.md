@@ -1,114 +1,105 @@
 # Steadfast Group Limited (SDF.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T12:59:09.951224+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:23:48.116484+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Steadfast Group Limited is an ASX-listed insurance broking consolidator operating networks across Australasia, Singapore and the USA, placing roughly A$25bn in gross written premium annually. The quantitative screen rates the name a **buy**, with eight of 22 models passing across cheapness, quality, dividend, GARP and risk at a 61% composite score (P/E 16.4, P/B 2.5, yield 3.8%, ROE 16.5%). Secondary Yahoo data show multi-year revenue and earnings growth, robust free cash flow and dividend coverage, but the primary filing library is thin: FY2025 Annual Report is indexed without a downloadable body, and no half-year or interim releases are catalogued. The central debate is whether steady organic growth and bolt-on M&A justify mid-teens earnings, or whether goodwill-heavy accounting, rising impairments and an active takeover process (Amwins/Dragoneer exclusivity from 10 June 2026, with KKR joining in July) cap standalone upside.
-
----
+Steadfast Group is an ASX-listed insurance broking and underwriting-agency consolidator placing roughly A$25bn in gross written premium across Australasia, Singapore, Europe and the USA. The quantitative screen rates the name a **buy** (8/22 models, 61% composite; P/E 16.4, P/B 2.5, yield 3.8%, ROE 16.5%). FY2025 primary filings confirm a twelfth consecutive record underlying result — underlying NPAT rose 17.2% to A$295.5m on underlying revenue of A$1,825.7m — with conservative gearing (27%) and FY2026 growth guidance. The valuation hook is a cash-generative roll-up at mid-teens earnings with a 25-year dividend growth streak, but the central debate is whether standalone compounding still matters: Steadfast entered an exclusivity deed with Amwins and Dragoneer (10 June 2026), with KKR joining a consortium reportedly offering ~A$6 per share (~A$8bn), which may cap upside if the bid succeeds.
 
 ## INVESTMENT THESIS
 For a value investor, SDF presents as a **quality compounder at a reasonable multiple**, not a deep cyclical discount.
 
-**Quantitative alignment.** The screen passes five metric families with high data quality (19/20 metrics): Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Dividend Growth and Financial Health. Key metrics sit comfortably inside thresholds — P/E 16.4 (<25), P/B 2.51 (<3), debt/equity 76% (<100%) — while conviction has built to 58% over four stable weeks at signal, suggesting the case is persisting rather than fleeting.
+**Quantitative alignment.** The screen passes five metric families with high data quality (19/20 metrics): Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Dividend Growth and Financial Health. Thresholds are comfortably met — P/E 16.4, P/B 2.51, debt/equity 76% — with conviction at 58% over four stable weeks, suggesting a persistent rather than fleeting signal.
 
-**Business quality.** Per the ASX notice of FY26 results (9 July 2026), Steadfast operates insurance broker and agency networks providing market access, technology, risk solutions and operational support, with equity solutions for member succession and acquisition growth, plus underwriting agencies and a Lloyd’s broking operation. Yahoo annual data (FY2022–FY2025; see Financial Review) show operating revenue rising from A$793m to A$1,320m (+67%) and diluted EPS from A$0.179 to A$0.304 (+70%), indicating scale gains through consolidation. FY2025 free cash flow of A$490m comfortably covered dividends of A$249m (~2× cover). Cash of A$1.60bn and net interest income of A$127m are consistent with a broking model holding client premiums in trust.
+**Business quality (filings).** Per the FY2025 Annual Report (28 August 2025), Steadfast operates 402 Australasian network brokerages (GWP A$12.5bn, +6.0%), 30 underwriting agencies (GWP A$2.5bn, +5.9%), and technology platforms transacting A$1.4bn GWP on SCTP (+15.6%). Underlying EBITA grew 11.9% to A$591.4m, split 8.8% organic and 3.1% acquisition-driven. Management characterises the model as low working-capital, high cash conversion, and accretive bolt-on M&A — consistent with a fragmented broking market where network scale, technology and equity participation drive retention.
 
-**Why buy for value.** The name clears multiple independent frameworks simultaneously — unusual for Financial Services — while offering income (3.8% yield) and growth (GARP passes). Debt/equity at 76% is below the screen threshold, working capital is positive (A$785m FY2025), and FCF yield supports the screen’s cash-return thesis. The hook is **predictable, cash-backed dividends plus accretive consolidation in a fragmented market**, available at mid-teens earnings rather than premium multiples.
-
----
+**Why buy for value.** The screen’s cheapness, quality, dividend and GARP passes align with filing evidence: underlying diluted EPS of 26.7 cps, total FY2025 dividend of 19.5 cps fully franked (73% payout, within the 65–85% target), and 25 consecutive dividend increases since listing. FY2026 guidance of underlying NPAT A$315–325m and EPS growth of 6–10% implies continued compounding. The hook is **predictable, cash-backed income plus disciplined consolidation**, available below typical financial-services growth premiums — though an active takeover process now competes with the standalone case.
 
 ## FINANCIAL REVIEW
 ### Primary filing coverage
 
 | Filing | Date | Period | Body available? |
 |--------|------|--------|-----------------|
-| Steadfast Group Annual Report 2025 | 28 Aug 2025 | Annual | **No** — indexed only |
-| Notice of Steadfast FY26 results | 9 Jul 2026 | Other | Yes — scheduling only (FY26 results 26 Aug 2026) |
+| Steadfast Group Annual Report 2025 | 28 Aug 2025 | Annual | **Yes** — partial extract |
+| Notice of Steadfast FY26 results | 9 Jul 2026 | Other | Yes — scheduling only |
 
-**Gaps:** No interim or half-year releases (e.g. FY2026 H1) are indexed. The only body extract confirms webcast timing and restates the business model; it contains **no financial figures, going-concern language, contingencies or covenant disclosures**. All quantitative analysis below therefore falls back to **`financials_annual.json` (Yahoo Finance)**. Quarterly income is empty in the source file.
+**Gaps:** No interim or half-year releases are indexed (`filings_index.json` shows `interim: 0`). The annual report body extract covers Chair, CEO and CFO messages, earnings reconciliation, capital management and operating-environment risks, but **does not include the Directors' Report** (pages 44–52 referenced for going-concern, contingencies, covenant detail and FY2026 guidance assumptions). The FY26 notice confirms results on 26 August 2026 with no financial figures.
 
-### Revenue and profitability (Yahoo fallback, FY2022–FY2025)
+### Income and earnings trend (Annual Report 2025 — primary)
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Total revenue | A$793m | A$1,008m | A$1,201m | A$1,320m |
-| Operating income | A$183m | A$217m | A$239m | A$266m |
-| Reported net income | A$172m | A$189m | A$228m | A$335m |
-| Diluted EPS | A$0.179 | A$0.184 | A$0.212 | A$0.304 |
-| Normalised net income | A$174m | A$206m | A$273m | A$441m |
+| Metric | FY2024 | FY2025 | Change |
+|--------|--------|--------|--------|
+| Underlying revenue | A$1,676.2m | A$1,825.7m | +8.9% |
+| Underlying EBITA | A$528.5m | A$591.4m | +11.9% |
+| Underlying NPAT | A$252.2m | A$295.5m | +17.2% |
+| Underlying NPATA | A$302.4m | A$346.2m | +14.5% |
+| Statutory NPAT | A$228.0m | A$334.9m | +46.9% |
+| Underlying EPS (NPAT) | 23.4 cps | 26.7 cps | +14.1% |
+| Total dividend | 17.1 cps | 19.5 cps | +14.0% |
 
-Revenue CAGR (FY2022–FY2025) is approximately **19%**, decelerating from +27% (FY2023) to +10% (FY2025). Operating margin has compressed from ~23% to ~20% as SG&A rose from A$421m to A$750m, reflecting integration and scale investment.
+Statutory NPAT exceeds underlying NPAT primarily due to a A$65.8m net write-up within the investment portfolio (reconciliation table), partly offset by mark-to-market losses (A$16.0m), contingent consideration expense (A$8.8m) and other non-trading items. Underlying earnings are the more appropriate basis for trend analysis.
 
-**Reported vs normalised earnings.** FY2025 reported net income of A$335m includes A$139m of capital-asset impairment charges (Yahoo line items). Normalised income of A$441m implies underlying earnings materially above reported — the screen’s P/E of 16.4 may partially reflect market look-through. FY2024 carried A$63m of impairments (normalised A$273m vs reported A$228m). Without the annual report body, the nature, recurrence and segment allocation of these charges **cannot be verified** from primary filings.
+FY2025 EBITA growth decomposed as 8.8% organic and 3.1% from acquisitions; A$300m of accretive acquisitions were funded from debt facilities and free cash flow.
 
-### Balance sheet and capital structure (Yahoo fallback, FY2025)
+**FY2026 guidance (Annual Report):** underlying NPATA A$365–375m; underlying NPAT A$315–325m; underlying EBITA A$650–665m; underlying diluted EPS growth 6–10%.
 
-- **Total assets:** A$6,427m; **stockholders’ equity:** A$2,397m  
-- **Goodwill and intangibles:** A$3,173m (goodwill A$2,712m) — **~132% of equity**  
-- **Tangible book value:** **negative A$777m**  
-- **Total debt:** A$1,630m (up from A$939m FY2022); **cash:** A$1,603m  
-- **Net debt:** roughly A$27m gross-minus-cash, though debt has risen with acquisition activity  
+### Cash flow and capital (Annual Report — primary; balance sheet — Yahoo fallback)
 
-The balance sheet is acquisition-driven and goodwill-intensive. Earning power sits in networks and relationships rather than hard assets, but impairment risk is elevated — A$139m FY2025 and A$63m FY2024 per Yahoo.
+**From filing:** Cash inflows from operating activities of **A$393.6m** (excluding trust account and premium funding movements), described as full conversion of pre-tax profits. Total shareholder equity **A$2,397m** (+2.9%). Corporate gearing **27.0%** excluding premium funding debt; Board maximum gearing raised to 35%. Chair and CFO state **significant headroom in debt covenants** and capacity to borrow a further A$365m within the ceiling.
 
-### Cash flow and shareholder returns (Yahoo fallback)
+**Yahoo fallback (`financials_annual.json`)** — used where the filing extract lacks detail:
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Free cash flow | A$239m | A$408m | A$287m | A$490m |
-| Dividends paid | A$130m | A$166m | A$213m | A$249m |
-| Business acquisitions (cash) | A$307m | A$440m | A$503m | A$382m |
+| Metric | FY2024 | FY2025 |
+|--------|--------|--------|
+| Free cash flow | A$287m | A$490m |
+| Dividends paid | A$213m | A$249m |
+| Total debt | A$1,297m | A$1,630m |
+| Cash and equivalents | A$1,326m | A$1,603m |
+| Goodwill and intangibles | A$2,690m | A$3,173m |
+| Tangible book value | −A$360m | −A$777m |
 
-FCF rebounded in FY2025 after a FY2024 dip when acquisition outflows peaked. Dividends grew ~24% CAGR (FY2022–FY2025) while remaining covered ~2× by FY2025 FCF. Share buybacks are immaterial (A$8.2m FY2025).
+FCF covered dividends roughly 2× in FY2025 (Yahoo). The balance sheet remains acquisition-driven and goodwill-intensive; tangible book is negative, consistent with a relationship-asset roll-up model. Yahoo reports A$139m impairment of capital assets in FY2025 — the filing reconciliation references portfolio write-ups rather than impairments at the statutory level; **segment-level impairment detail is not in the available extract**.
 
-### Interim / half-year gap
+Note: Yahoo "total revenue" of A$1,320m differs from filing "underlying revenue" of A$1,825.7m; **underlying revenue from the Annual Report is used throughout**.
 
-No interim filings are indexed. News references H1 FY2026 profit growth (25 February 2026) and a lifted interim dividend (20 May 2026), but **no filing bodies or figures** are available in the library. FY2026 full-year results are scheduled for 26 August 2026 per the ASX notice.
+### Interim gap
 
----
+No half-year or interim filing is catalogued. News references H1 FY2026 profit momentum (*Steadfast Group H1 Profit Jump Tests Long Term Growth Concerns*, 25 February 2026) and a lifted interim dividend (*Steadfast (ASX: SDF) Lifts Interim Dividend*, 20 May 2026), but **no interim figures can be cited from primary sources** in this library.
 
 ## RISKS AND RED FLAGS
-**1. Primary filing verification gap.** The FY2025 Annual Report is catalogued but its body was not extracted. Going-concern statements, contingent liabilities, related-party transactions, debt covenants and segment commentary **cannot be assessed** from regulatory sources. This is the largest research limitation.
+**1. Incomplete regulatory extract.** The Directors' Report (going concern, contingencies, related parties, detailed covenant terms) is referenced but **not present** in the body extract. Covenant comfort is asserted by management ("significant headroom") but cannot be independently verified from available filing text.
 
-**2. Goodwill and impairment cycle.** Negative tangible book (A$777m) and repeated impairments (A$63m FY2024; A$139m FY2025 per Yahoo) suggest prior acquisitions may be underperforming. Further write-downs would hit reported equity and compress P/B — already screen-monitored at 2.5×.
+**2. Goodwill and acquisition risk.** Negative tangible book (Yahoo: −A$777m FY2025) and A$3.17bn goodwill/intangibles (~132% of equity) expose reported equity to impairment if bolt-ons underperform. Contingent and deferred consideration items (A$8.8m expense; A$7.4m discount unwind in FY2025 reconciliation) indicate earn-out complexity in the M&A programme.
 
-**3. Leverage and acquisition dependency.** Total debt has risen ~74% since FY2022 while bolt-on M&A continues (A$382m cash spent FY2025). The roll-up model requires disciplined pricing; overpayment erodes returns and increases impairment risk. Screen debt/equity of 76% is manageable but trends with acquisition pace.
+**3. Leverage and roll-up dependency.** Total debt rose to A$1.63bn (Yahoo) while A$300m of acquisitions closed in FY2025. Gearing at 27% is conservative today, but the model requires continued disciplined pricing; overpayment erodes returns and raises impairment risk.
 
-**4. Takeover overhang (binary outcome).** On 10 June 2026 Steadfast entered an exclusivity and process deed with Amwins and Dragoneer; KKR joined the consortium (14 July 2026). Media cited an ~A$8bn proposal at ~A$6 per share (10 June 2026). A bid process introduces premium-capture potential versus loss of standalone compounding and dividend trajectory if the company delists. Current pricing may already embed bid expectations.
+**4. Operating environment (Annual Report language).** Management flags capacity risk (insurers raising premiums and narrowing appetite), sector consolidation, regulatory change, AI/technology disruption, talent competition and increasing cybersecurity costs. These are structural rather than cyclical tail risks for a network broker.
 
-**5. Insurance broking cyclicality.** Soft pricing cycles compress broking commissions. Yahoo data do not segment organic vs acquired growth or premium-rate sensitivity; cyclical exposure is **not captured** by static value screens.
+**5. Takeover binary outcome.** Exclusivity with Amwins/Dragoneer from 10 June 2026, with KKR joining in July 2026 and media citing ~A$6/share (~A$8bn), introduces event risk. Success likely caps standalone upside; failure could leave the stock repricing on fundamentals and bid-premium unwind.
 
-**6. Governance and concentration.** Institutional ownership ~58–59% (October 2025–January 2026 headlines) supports liquidity but offers limited insight into board independence or incentive alignment. No governance red flags surfaced in available sources; coverage is insufficient to clear this area.
+**6. Governance and succession.** Chair Frank O'Halloran is not standing for re-election (Vicki Allen to succeed); CEO Robert Kelly's tenure may end by December 2026 with succession expected mid-2026. CFO Stephen Humphrys retired post-FY2025. No governance red flags in available sources, but leadership transition adds execution uncertainty.
 
-**7. Valuation tension.** A Simply Wall St headline (18 August 2025) argued the business had “yet to catch up with its share price,” implying the market may be ahead of fundamental delivery — tension with the screen’s cheapness classification.
-
----
+**7. Insurance cycle.** Premium-rate moderation is acknowledged in the Annual Report ("not at previous levels"). Organic GWP growth depends on volume and rate; soft-market phases compress broking margins and are **not fully captured** by static value screens.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year mixes **material corporate events** with generic ASX dividend listicles (May–June 2026) in which Steadfast appears as a yield candidate rather than a subject of deep analysis.
+Coverage over the past year combines **material corporate events** with generic ASX dividend listicles (May–July 2026) in which Steadfast appears as a yield candidate.
 
 **Material items:**
 
 | Date | Title | Relevance |
 |------|-------|-----------|
-| 14 Jul 2026 | *KKR joins consortium pursuing Steadfast acquisition proposal* (Yahoo Finance) | KKR joined Amwins/Dragoneer consortium; exclusivity/process deed from 10 Jun 2026. **Primary strategic event.** |
-| 14 Jul 2026 | *Steadfast Group (ASX:SDF) Draws Global Attention as KKR Joins the $6-a-Share Takeover Consortium* (Kalkine) | Confirms bid framing at ~A$6/share. |
-| 10 Jun 2026 | *Australian Shares Rise; Steadfast Group Receives AU$8 Billion Takeover Proposal From Amwins, Dragoneer* (Yahoo Finance Australia) | Initial bid announcement; share price spike (~36% jump referenced in same-day coverage). |
+| 14 Jul 2026 | *KKR joins consortium pursuing Steadfast acquisition proposal* (Yahoo Finance) | KKR joined Amwins/Dragoneer; exclusivity from 10 Jun 2026. Primary strategic event. |
+| 14 Jul 2026 | *Steadfast Group (ASX:SDF) Draws Global Attention as KKR Joins the $6-a-Share Takeover Consortium* (Kalkine) | Confirms ~A$6/share bid framing. |
+| 10 Jun 2026 | *Australian Shares Rise; Steadfast Group Receives AU$8 Billion Takeover Proposal From Amwins, Dragoneer* (Yahoo Finance Australia) | Initial bid; share price spike (~36% referenced in same-day coverage). |
 | 11 Jun 2026 | *Steadfast Group (ASX: SDF) Downgraded To Hold (And Takeover Offer Announced)* (A Rich Life) | Analyst downgrade tied to takeover uncertainty. |
-| 20 May 2026 | *Steadfast (ASX: SDF) Lifts Interim Dividend* (Kalkine) | Dividend increase signal; **no filing figures in library**. |
-| 23 May 2026 | *Unmarketable Share Buyback Tests How Steadfast Group (ASX:SDF) Balances Efficiency With Shareholder Rewards* (simplywall.st) | Capital-return commentary; buyback immaterial in aggregate. |
-| 12 May 2026 | *Steadfast Group Limited announces an Equity Buyback for 51,621 shares… AUD 0.21 million* (marketscreener.com) | Token buyback (~0.005% of shares). |
-| 25 Feb 2026 | *Steadfast Group H1 Profit Jump Tests Long Term Growth Concerns* (simplywall.st) | H1 earnings momentum; **figures not in filing library**. |
+| 20 May 2026 | *Steadfast (ASX: SDF) Lifts Interim Dividend* (Kalkine) | Dividend increase signal; no filing figures in library. |
 | 11 Dec 2025 | *Steadfast Group share price: $127.7m in acquisitions, premium growth in FY26 investor update* (Motley Fool Australia) | FY26 trading update: A$127.7m acquisitions, premium growth. |
-| 18 Aug 2025 | *Steadfast Group Limited's (ASX:SDF) Business Is Yet to Catch Up With Its Share Price* (simplywall.st) | Bearish valuation framing. |
+| 25 Feb 2026 | *Steadfast Group H1 Profit Jump Tests Long Term Growth Concerns* (simplywall.st) | H1 earnings momentum; figures not in filing library. |
+| 18 Aug 2025 | *Steadfast Group Limited's (ASX:SDF) Business Is Yet to Catch Up With Its Share Price* (simplywall.st) | Bearish valuation framing pre-bid. |
 
-**Notable absences:** No indexed news on FY2025 results detail, CEO/CFO changes, or ASIC/APRA regulatory actions. Strategy and regulatory developments **cannot be fully reconstructed** from headlines alone. Company-specific fundamental coverage is thin outside the takeover cluster and dividend listicles.
-
----
+**Coverage assessment:** Company-specific fundamental coverage is thin outside the June–July 2026 takeover cluster. No indexed news on ASIC/APRA regulatory actions. Strategy is inferable from the Annual Report and the December 2025 investor update, but interim results detail is headline-only.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Secondary financial data support the screen’s buy case on earnings growth, FCF-backed dividends and reasonable multiples, but absent annual report body, missing interim filings and an active takeover process prevent full confirmation of asset quality, covenant headroom and standalone value.
+Confidence: 0.74
+Rationale: FY2025 Annual Report filings confirm the screen's buy case on underlying earnings growth, conservative gearing and dividend discipline, but missing interim filings, an incomplete Directors' Report extract and an active takeover process leave asset-quality verification and standalone upside unresolved.

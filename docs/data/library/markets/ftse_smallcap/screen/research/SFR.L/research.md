@@ -1,137 +1,117 @@
 # Severfield plc (SFR.L) — Research memo
 
-_Version 1 · Updated 2026-07-18T12:40:18.703230+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:56:58.260650+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# Severfield plc (SFR.L) — First-Pass Research Memo
-
-**Quantitative screen:** Buy (4/22 models, composite 71%)  
-**Sources:** `screening_snapshot.json`, `financials_annual.json` (Yahoo fallback — no filing bodies available), `filings_index.json`, `news_manifest.json`
-
----
-
-## EXECUTIVE SUMMARY
-
-Severfield plc is the UK’s leading structural steelwork contractor, and the quantitative screen flags it as a buy on deep asset cheapness: price-to-book of roughly 0.8, debt-to-equity below 50%, and a reported free-cash-flow yield near 38%. The stock trades well below stated book value after a sharp earnings deterioration driven by bridge-contract losses and rising provisions, with reported return on equity now negative at −21.6%. The central debate is whether the market is over-discounting a cyclical, contract-heavy business with recoverable operating economics, or whether goodwill, working-capital build, and elevated net debt after FY2025 reflect structural impairment. Primary RNS filing bodies were not available in the source library, so this review relies on Yahoo financials and news headlines; conviction is therefore tempered.
+Severfield plc is the UK’s leading structural steelwork contractor, and the quantitative screen flags it as a buy on deep asset cheapness: price-to-book ~0.8, debt-to-equity below 50%, and a reported free-cash-flow yield near 38%. The stock trades well below stated book after two consecutive years of reported losses driven by bridge-contract failures, contract provisions, and large special charges, with return on equity now −21.6%. The central debate is whether the market is over-discounting a cyclical, contract-heavy franchise with recoverable operating economics and optional India JV monetisation, or whether goodwill (~£87m), elevated provisions (~£32m), and structurally lower margins reflect lasting impairment. Primary annual and interim filing bodies are largely absent from the source library, so financial detail relies heavily on Yahoo fallback — conviction is therefore tempered.
 
 ---
 
 ## INVESTMENT THESIS
+For a value investor, the case rests on **balance-sheet cheapness rather than earnings momentum**. The screen passes four models — Schloss Low P/B, FCF Yield, Composite Value, and Financial Health — with cheapness and risk as the two families clearing thresholds. At P/B ≈ 0.77 against shareholders’ equity of £146.6m (Yahoo, FY2026 balance sheet), the market prices Severfield below net assets; tangible book was £59.7m against total assets of £363.2m, with goodwill of £86.8m a key swing factor.
 
-For a value investor, the case rests on **balance-sheet cheapness rather than earnings momentum**. The screen passes four models—Schloss Low P/B, FCF Yield, Composite Value, and Financial Health—with cheapness and risk as the two families clearing thresholds. At P/B ≈ 0.77 against shareholders’ equity of £183.0m (Yahoo, FY2025 balance sheet), the market appears to price Severfield below net assets; tangible book was £82.6m against total assets of £400.9m, with goodwill of £97.6m a key swing factor.
+Operating quality is mixed. Underlying operations still generated positive operating profit of £10.1m on revenue of £454.3m in FY2026 (Yahoo), but reported net loss widened to £35.6m after £47.7m of unusual/special charges — consistent with press coverage of bridge-contract difficulties and a broader strategy pivot. Normalised net income (Yahoo adjustment) was approximately £7.0m, down from £12.5m in FY2025, suggesting the core fabricator franchise is not broken but earnings power has stepped down materially from the FY2023 peak (£21.6m reported net profit on £491.8m revenue).
 
-Operating quality, by contrast, is mixed. Underlying operations still generated positive operating profit of £19.0m on revenue of £450.9m in FY2025 (Yahoo), but reported net loss was £14.1m after £33.0m of unusual/special charges—consistent with press coverage of bridge-contract difficulties. Normalised net income (Yahoo adjustment) was approximately £12.5m, suggesting the core fabricator franchise is not broken, but earnings power has clearly stepped down from FY2023 (£21.6m net profit on £491.8m revenue).
+The screen’s FCF Yield pass (FCF cited at £43.0m, yield 38.3%) appears lagged relative to the latest year: Yahoo shows FY2026 free cash flow of **£20.0m** (operating cash flow £22.9m) following negative FCF in FY2025 (−£8.4m). Value investors should treat the yield metric as backward-looking, not as confirmation of current cash generation at the screen’s headline level. The persistent buy signal (five weeks, stable trend) nevertheless indicates the market has not rerated the name despite deteriorating reported earnings.
 
-The screen’s FCF Yield pass (FCF cited at £43.0m, yield 38.3%) sits awkwardly against Yahoo’s FY2025 free cash flow of **−£8.4m** and operating cash flow of **−£0.5m**, following strong FCF in FY2024 (£33.8m) and FY2023 (£43.8m). Value investors should treat the yield metric as backward-looking or stale relative to the latest year’s cash burn, not as confirmation of current cash generation. The persistent buy signal (five weeks, stable trend) nevertheless indicates the market has not rerated the name despite recent results—creating a classic “cigar butt” setup if provisions peak and working capital normalises.
-
-Business quality anchors include market leadership in UK structural steel, exposure to infrastructure and commercial construction (a thematic tailwind cited in sector press), and management alignment signals: the CEO increased his market purchase in July 2026, and the company extended its share buyback programme. These do not offset the earnings decline but support the case that insiders see mispricing.
+Business quality anchors include market leadership in UK structural steel (~150,000 tonnes capacity, seven sites, ~1,800 employees — per the July 2025 RNS body extract), exposure to UK infrastructure and commercial construction, and a 50/50 Indian JV (JSSL) with JSW Steel where Severfield holds an option to sell up to 24.9% for up to £20m by 31 March 2026 — a potential liquidity lever the board states it has no current intention to exercise. Management alignment signals include the CEO’s market purchase (July 2026) and executive awards tied to EPS and total shareholder return targets.
 
 ---
 
 ## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` lists five Companies House annual accounts (filed October 2021–2025) and one Investegate RNS classified as `other` (JSW option agreement, July 2025). **None of the annual accounts have downloadable body extracts** (`has_body: false`). **No interim or half-year filings** are indexed. Going-concern language, covenant headroom, contingent liabilities, and auditor emphasis-of-matter paragraphs therefore cannot be verified from primary sources. All numeric trends below are from **`financials_annual.json` (Yahoo)**, stated explicitly as fallback.
 
-**Source limitation:** `filings_index.json` lists 21 UK RNS entries under regime `uk_rns`, but **zero are classified as annual or interim**, and **no filing body extracts** exist under `filings/bodies/`. Headlines reference “Results for the year ended 28 March 2026” (June 2026) and director dealings, but numeric detail cannot be verified from primary filings. All figures below are from **`financials_annual.json` (Yahoo)**, stated explicitly as fallback.
+### Income statement trend (March year-end, Yahoo)
 
-### Income statement trend (March year-end)
-
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+| Metric | FY2023 | FY2024 | FY2025 | FY2026 |
 |--------|--------|--------|--------|--------|
-| Revenue (£m) | 403.6 | 491.8 | 463.5 | 450.9 |
-| Operating income (£m) | 21.7 | 29.7 | 32.3 | 19.0 |
-| Reported net income (£m) | 15.6 | 21.6 | 15.9 | **−14.1** |
-| Diluted EPS (p) | — | 6.9 | 5.1 | **−4.7** |
-| Normalised net income (£m) | — | 23.2 | 21.5 | 12.5 |
+| Revenue (£m) | 491.8 | 463.5 | 450.9 | 454.3 |
+| Operating income (£m) | 29.7 | 32.3 | 19.0 | 10.1 |
+| Reported net income (£m) | 21.6 | 15.9 | −14.1 | **−35.6** |
+| Normalised net income (£m) | 23.2 | 21.5 | 12.5 | 7.0 |
+| Diluted EPS (p) | 6.9 | 5.1 | −4.7 | **−12.0** |
 
-Revenue has fallen for two consecutive years (−8.3% from FY2023 peak). Operating margin compressed materially in FY2025. The swing to reported loss reflects £33.0m of unusual items in FY2025 (Yahoo: special charges including £34.0m “other special charges” partly offset by restructuring credits), aligning with news that Severfield “sinks to a loss on bridge challenges” (Investors’ Chronicle, 24 July 2025).
+Revenue fell from the FY2023 peak, stabilised in FY2026 (+0.7% year-on-year), but operating margin compressed sharply — operating income down from £32.3m in FY2024 to £10.1m in FY2026. The FY2026 reported loss reflects £47.7m of unusual items (Yahoo: £25.5m other special charges, £22.2m write-offs), aligning with news that Severfield “sinks to a loss on bridge challenges” (Investors’ Chronicle, 24 July 2025) and “changes strategy as profits fall” (Investors’ Chronicle, 23 June 2026). Normalised earnings have halved over two years, indicating structural margin pressure beyond one-off contract hits.
 
-Partial FY2026 data in Yahoo shows diluted EPS of **−12.0p**, worse than FY2025’s −4.7p, indicating continued pressure; no full income statement is available for FY2026 in the source file.
+FY2022 income data in Yahoo is incomplete; earlier-year comparison is unavailable from sources.
 
-### Balance sheet (FY2025 vs FY2024, Yahoo)
+### Balance sheet (FY2026 vs FY2025, Yahoo)
 
-- **Total assets:** £400.9m (from £378.4m)
-- **Shareholders’ equity:** £183.0m (from £220.8m) — **−17%**
-- **Net debt:** £43.3m (from £9.6m) — leverage increased sharply
-- **Total debt:** £79.3m (from £42.5m), including long-term debt issuance of £45.0m in FY2025
-- **Goodwill:** £97.6m; **tangible book:** £82.6m
-- **Current provisions:** £30.5m (from £11.8m) — likely contract-related; material red flag
-- **Other receivables (current):** £89.5m (from £50.6m) — large working-capital item warranting filing-level scrutiny (unavailable)
-- **Pension deficit (non-current):** £6.9m (from £11.5m) — improved but still present
+- **Total assets:** £363.2m (from £400.9m)
+- **Shareholders’ equity:** £146.6m (from £183.0m) — **−20%**
+- **Net debt:** £28.2m (from £43.3m) — improved, though gross debt remains £71.0m
+- **Goodwill:** £86.8m; **tangible book:** £59.7m
+- **Current provisions:** £31.7m (from £30.5m) — elevated and stable; likely contract-related
+- **Other receivables (current):** £73.1m (~16% of revenue) — large working-capital item requiring filing-level scrutiny (unavailable)
+- **Pension deficit (non-current):** £2.9m (from £6.9m) — reduced but present
 
-Debt-to-equity on the screen (48%) is consistent with gross debt relative to diminished equity; net debt rose as cash remained modest (£15.5m) while debt funded operations and shareholder returns.
+Equity erosion from cumulative losses directly undermines the asset-backing thesis. Goodwill of £86.8m exceeds tangible book (£59.7m); further impairment would erode the P/B-based case.
 
 ### Cash flow (Yahoo)
 
-| Metric | FY2023 | FY2024 | FY2025 |
+| Metric | FY2024 | FY2025 | FY2026 |
 |--------|--------|--------|--------|
-| Operating cash flow (£m) | 50.3 | 45.1 | **−0.5** |
-| Capital expenditure (£m) | 6.5 | 11.3 | 7.8 |
-| Free cash flow (£m) | 43.8 | 33.8 | **−8.4** |
-| Dividends paid (£m) | 9.9 | 10.7 | 11.2 |
-| Share buybacks (£m) | — | 3.1 | 8.6 |
+| Operating cash flow (£m) | 45.1 | −0.5 | **22.9** |
+| Capital expenditure (£m) | 11.3 | 7.8 | 2.9 |
+| Free cash flow (£m) | 33.8 | −8.4 | **20.0** |
+| Dividends paid (£m) | 10.7 | 11.2 | — |
+| Share buybacks (£m) | 3.1 | 8.6 | — |
 
-FY2025 working-capital absorption was severe: receivables change **−£30.6m** (Yahoo). The company continued dividends and buybacks despite negative FCF—a governance/capital-allocation point that filing covenants and going-concern language would normally clarify; **those disclosures are absent from the source library**.
+FY2026 shows a meaningful FCF recovery driven by working-capital release (change in working capital +£28.0m per Yahoo), partly reversing FY2025’s severe receivables build (−£30.6m). FY2026 dividend and buyback cash flows are not populated in Yahoo; FY2025 continued shareholder returns despite negative FCF — a capital-allocation point that filing covenants would normally clarify.
+
+### Primary filing content (RNS body extract)
+
+The only available filing body (Investegate, 18 July 2025) confirms the **JSW Severfield Structures Limited option agreement**: Severfield may dispose of up to 24.9% of its 50% JSSL stake to JSW Steel for up to £20m, exercisable at its discretion on or before 31 March 2026. The board describes this as prudent strategic planning providing “additional financial flexibility” with no current intention to exercise. This is strategically relevant but does not substitute for audited financial statements.
 
 ### Interim / latest results gap
 
-The filings index contains a headline for **“Results for the year ended 28 March 2026”** (published 28 March 2026 / referenced June 2026 in news), plus routine PDMR, holdings, and buyback notices. Without body text, interim/H1 detail cannot be analysed. News (Investing.com, 31 March 2026) references an “in-line” year-end and FY2027 outlook, and Investors’ Chronicle (23 June 2026) reports a **strategy change as profits fall**—suggesting management is pivoting after a difficult year, but quantitative confirmation is unavailable.
+No interim filings are indexed. News references **“Results for the year ended 28 March 2026”** (TradingView, 22 June 2026) and **“Severfield shares outlook for fiscal 2027 after in-line year-end results”** (Investing.com, 31 March 2026), but without body text the “in-line” characterisation and FY2027 guidance cannot be verified numerically. Half-year detail from December 2025 (“Severfield reports solid 1H26 results”, Investing.com UK, 2 December 2025) is similarly unavailable in filing extracts.
 
 ---
 
 ## RISKS AND RED FLAGS
+**Earnings and contract risk.** FY2026 reported loss of £35.6m and current provisions of £31.7m point to ongoing problem contracts — bridge work specifically in press coverage. Until provisions stop rising and normalised earnings stabilise, book value remains at risk.
 
-**Earnings and contract risk.** FY2025 reported loss and elevated provisions (£30.5m current) point to problem contracts—bridge work specifically in press coverage. Until provisions stop rising, book value is at risk of further write-downs.
+**Goodwill and intangibles.** Goodwill of £86.8m exceeds tangible book (£59.7m). FY2026 included £22.2m in write-offs (Yahoo); further impairment would directly erode the asset backing underpinning the buy case.
 
-**Goodwill and intangibles.** Goodwill of £97.6m exceeds tangible book (£82.6m). A further impairment would directly erode the asset backing that underpins the P/B-based buy case.
+**Cash flow sustainability.** FY2026 FCF recovery appears working-capital-driven rather than earnings-driven. Without filing extracts, covenant headroom, going-concern assessments, and contingent liability disclosures cannot be verified — a significant gap for a contract-accounting business.
 
-**Cash flow and capital allocation.** Negative FY2025 FCF alongside dividend growth and buybacks raises questions about sustainability; without filing extracts, covenant headroom and going-concern assessments cannot be verified.
+**Leverage and capital allocation.** Net debt improved to £28.2m but gross debt of £71.0m against diminished equity (£146.6m) leaves limited buffer if provisions or impairments recur. Prior-year dividends and buybacks during negative FCF raise sustainability questions.
 
-**Leverage.** Net debt more than quadrupled to £43.3m; total debt £79.3m against reduced equity. D/E passes the screen threshold but direction of travel is unfavourable.
+**Working capital.** Other receivables of £73.1m remain unusually large; recovery or write-off risk is material and unverifiable without annual report notes.
 
-**Working capital.** Other receivables of £89.5m are unusually large relative to revenue (~20%); recovery or write-off risk is material.
+**Pension.** £2.9m non-current deficit is manageable in isolation but adds fixed obligations in a cyclical sector.
 
-**Pension.** £6.9m deficit is manageable in isolation but adds to fixed obligations in a cyclical sector.
+**Cyclical / macro exposure.** UK construction and infrastructure demand drives order books. Macro markers (FTSE 100 ~10,736, GBP/USD ~1.33) provide background only and do not alter the screen signal.
 
-**Cyclical / macro exposure.** UK construction and infrastructure demand drives order books; macro markers (FTSE 100 ~10,600, GBP/USD ~1.35) provide background only and do not alter the screen signal.
+**India JV optionality.** The JSW option provides potential liquidity but exercising it would reduce strategic exposure to a market the board describes as “strategically important”; disposal is not assured.
 
-**Governance / disclosure gap.** No annual report body text means auditors’ emphasis of matter, contingent liabilities, and related-party transactions cannot be reviewed— a significant research gap for a contract-accounting business.
+**Governance / disclosure gap.** Five Companies House annual accounts are catalogued but none have body extracts. Auditors’ emphasis of matter, related-party transactions, and contract accounting policies cannot be reviewed.
 
-**Screen metric inconsistency.** Reported ROE of −21.6% directly conflicts with a quality earnings narrative; the FCF Yield pass appears inconsistent with FY2025 Yahoo FCF (−£8.4m vs screen FCF £43.0m), suggesting the screen may be using a lagged or alternate FCF definition.
+**Screen metric inconsistency.** Reported ROE of −21.6% conflicts with a quality earnings narrative; the FCF Yield pass (38.3%, FCF £43.0m) appears inconsistent with FY2026 Yahoo FCF of £20.0m, suggesting a lagged or alternate FCF definition in the screen.
 
 ---
 
 ## NEWS HIGHLIGHTS
-
 **Material Severfield-specific coverage (past year):**
 
 - **“Severfield changes strategy as profits fall”** — Investors’ Chronicle, 23 June 2026: strategy pivot following profit decline; most substantive operational headline in the manifest.
 - **“REG - Severfield PLC - Results for the year ended 28 March 2026”** — TradingView, 22 June 2026: full-year results announcement (body not in library).
 - **“Severfield shares outlook for fiscal 2027 after in-line year-end results”** — Investing.com, 31 March 2026: management outlook commentary.
-- **“Severfield sinks to a loss on bridge challenges”** — Investors’ Chronicle, 24 July 2025: explains FY2025 loss drivers.
 - **“Severfield CEO Increases Stake With Market Share Purchase”** — TipRanks, 14 July 2026: insider buying signal.
-- **“Severfield Ties New Executive Share Awards to EPS and TSR Targets”** — TipRanks, 1 July 2026: remuneration aligned to earnings recovery and total shareholder return.
-- **“Directorate Change”** — Investegate, 8 November 2024: board change (detail unavailable).
+- **“Severfield Ties New Executive Share Awards to EPS and TSR Targets”** — TipRanks, 1 July 2026: remuneration aligned to earnings recovery.
+- **“REG - Severfield PLC - Holding(s) in Company”** — TradingView, 6 July 2026: routine holdings disclosure.
+- **“Severfield sinks to a loss on bridge challenges”** — Investors’ Chronicle, 24 July 2025: explains FY2025 loss drivers.
+- **“Severfield reports solid 1H26 results, maintains FY26 outlook”** — Investing.com UK, 2 December 2025: interim trading tone (filing body unavailable).
 - **“3 UK Construction Stocks To Watch As Local Investment Spending Picks Up”** — simplywall.st, 11 July 2026: sector thematic; Severfield may be referenced among UK construction names.
-- Yahoo Finance (Dec 2025): cited ~29% discount to estimated fair value of £0.41 vs ~£0.29 price.
-- Filings index (July 2026): **“Transaction in own shares and Buy Back Extension”** — capital return programme ongoing.
+- Yahoo Finance (4 December 2025): cited ~29% discount to estimated fair value of £0.41 vs ~£0.29 price.
 
-**Coverage quality flag:** A substantial share of manifest entries concerns **Sandfire Resources (ASX:SFR)** or **Altice’s French telecom SFR**, not Severfield plc (LSE:SFR). Severfield-specific news is **thin** beyond results-related headlines and insider/dealing notices; deep operational insight requires annual report access not present in sources.
+**Coverage quality flag:** A substantial share of manifest entries concerns **Sandfire Resources (ASX:SFR)** or **Altice’s French telecom SFR**, not Severfield plc (LSE:SFR). Severfield-specific news is **thin** beyond results-related headlines, insider dealings, and generic sector pieces; deep operational insight requires annual report access not present in sources.
 
 ---
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.62  
-Rationale: Deep research confirms the screen’s asset cheapness and balance-sheet headroom, but recent losses, provision build, negative FY2025 cash flow, and absent primary filings weaken confidence that earnings will normalise quickly enough to justify a stronger conviction overlay.
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Deep research confirms the screen’s asset cheapness and recent FCF/net-debt improvement, but widening reported losses, provision build, absent primary filing bodies, and deteriorating normalised earnings weaken confidence that the market’s discount will close quickly.

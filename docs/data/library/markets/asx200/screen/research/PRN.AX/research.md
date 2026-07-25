@@ -1,16 +1,20 @@
 # Perenti Limited (PRN.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T12:56:18.498527+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:20:28.548991+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Perenti Limited is an ASX-listed mining services group (underground contractor Barminco, surface drilling via Perenti Drilling, and technology) that the quantitative screen rates as a **Strong Buy**: nine of 22 models passed (composite 76%, sector-relative 72%) across cheapness, dividend, GARP, and risk families, with P/E 16.0, P/B 1.05, dividend yield 3.5%, FCF yield 8.4%, and D/E 35%. The investment case rests on a multi-year earnings recovery, improving leverage, active capital return (dividends and on-market buy-back), and a run of contract wins extending revenue visibility into the late 2020s. Valuation appears modest relative to book value and cash generation. The central debate is whether backlog growth and Technosia integration benefits offset cyclical mining-services risk, customer concentration, modest reported ROE (7.8%), and a goodwill-heavy balance sheet — all assessed here without access to primary ASX annual or interim filing text.
+Perenti Limited is an ASX-listed mining services group operating through underground contracting (Barminco), surface drilling (Perenti Drilling), and technology solutions. The quantitative screen rates PRN.AX a **Strong Buy** (9/22 models, composite 76%, sector-relative 72%) on cheapness, dividend, GARP, and risk metrics — P/E 16.0, P/B 1.05, dividend yield 3.5%, FCF yield 8.4%, and D/E 35%. The investment case rests on a multi-year earnings recovery, improving leverage, active capital return (dividends and on-market buy-back), and contract wins extending revenue visibility into the late 2020s. Valuation appears modest relative to book value and cash generation. The central debate is whether backlog growth and Technosia integration benefits offset cyclical mining-services risk, customer concentration, modest reported ROE (7.8%), and a goodwill-heavy balance sheet — all assessed here without access to primary ASX annual or interim filing text.
+
+---
 
 ## INVESTMENT THESIS
-The screen flags PRN.AX as a strong buy with high data quality (19/20 metrics), persistent signal (four weeks, stable), and conviction score 56%. Passes include Schloss Low P/B, FCF Yield, Neff PEGY, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Composite Value, and Financial Health — a profile suited to value investors seeking asset-backed cheapness (P/B below 1.2), income (3.5% yield with dividend-growth screen pass), and growth-at-a-reasonable-price characteristics without extreme leverage.
+The screen flags PRN.AX as a strong buy with high data quality (19/20 metrics), a persistent signal (four weeks, stable), and conviction score 56%. Passes include Schloss Low P/B, FCF Yield, Neff PEGY, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Composite Value, and Financial Health — a profile suited to value investors seeking asset-backed cheapness (P/B below 1.2), income (3.5% yield with dividend-growth screen pass), and growth-at-a-reasonable-price characteristics without extreme leverage.
 
 Business quality, inferred from Yahoo financials and news flow, broadly supports the screen. Revenue has risen from A$2.44bn (FY2022) to A$3.49bn (FY2025), while net income attributable to ordinary shareholders increased from A$40.7m to A$120.6m — a clear post-normalisation trajectory. FY2025 free cash flow of A$199.6m (Yahoo) supports the screen's 8.4% FCF yield; the group reduced net debt to A$264m (FY2025) from A$422m (FY2024) while paying A$72.5m in dividends and repurchasing shares. Contract extensions and new awards — Bellevue Gold (~A$850m over four years from August 2026), Barrick Fourmile (US$192m), Regis Duketon (+~A$180m to March 2029), and a US$95m Ghana extension (July 2026) — reinforce franchise strength in underground mining, Perenti's core competency.
 
 The risk-family pass is notable given sector cyclicality: cash of A$481m against total debt of A$786m, and FY2025 EBIT (~A$287m) against interest expense (~A$73m) implies comfortable interest coverage (~4×). The gap between screen signal (strong buy) and conviction score (56%) reflects timing uncertainty and the absence of primary filing verification rather than fundamental rejection.
+
+---
 
 ## FINANCIAL REVIEW
 **Primary source gap:** `filings_index.json` contains zero annual reports, half-year results, or other ASX extracts (`summary.total: 0`; regime `asx_announcements`). No body extracts exist under `filings/bodies/`. Interim FY2026 commentary appears only indirectly via a Yahoo earnings-call headline (23 February 2026). All figures below are from **`financials_annual.json` (Yahoo Finance fallback)**. `quarterly_income` in that file is empty — no interim P&L series is available in-library.
@@ -52,6 +56,8 @@ FCF inflected positive from FY2023 and accelerated in FY2024–25, supporting th
 
 **Missing from library:** No FY2025 ASX annual report, no HY2026 interim accounts, no director risk disclosures (going concern, contingencies, covenant language). Pension, impairment, and customer-concentration risks cannot be validated against filing text.
 
+---
+
 ## RISKS AND RED FLAGS
 **Cyclical and contract risk.** Mining services revenue is tied to customer production plans and exploration cycles. FY2025 revenue growth slowed to mid-single digits; news on the Half Year 2026 call (23 Feb 2026) flagged short-term revenue challenges despite strategic integration progress. Contract wins improve visibility but do not eliminate commodity-price or mine-plan deferral risk.
 
@@ -67,6 +73,8 @@ FCF inflected positive from FY2023 and accelerated in FY2024–25, supporting th
 
 **Macro (colour only).** Geopolitical and energy-price volatility referenced in generalist market articles (May–Jun 2026) can affect miner capex budgets and contract pricing; PRN-specific impact is not quantified in the manifest.
 
+---
+
 ## NEWS HIGHLIGHTS
 Coverage over the past year is **moderately thin on company-specific fundamentals** — several articles are generic "penny stock" or valuation listicles — but **material operational news is present**:
 
@@ -80,6 +88,8 @@ Coverage over the past year is **moderately thin on company-specific fundamental
 - **Institutional ownership (14 Feb 2026):** simplywall.st notes ~45% institutional ownership.
 
 No manifest entries report management changes, regulatory enforcement, or M&A transactions in the period. **News gap:** No ASX announcement PDFs or detailed HY2026 numbers in-library; contract values are from media summaries only.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate

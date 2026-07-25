@@ -912,3 +912,53 @@ def test_ingest_filings_euro_includes_investegate(
     )
     mock_investegate.assert_called_once()
     mock_enrich.assert_called_once()
+
+
+def test_headline_relevant_to_issuer_asx_suffix():
+    assert headline_relevant_to_issuer(
+        "Notification of cessation of securities - CSL",
+        "CSL Limited",
+        "CSL.AX",
+    )
+
+
+@patch("value_investor.research.filings._decode_google_news_article_url")
+def test_resolve_google_news_publisher_url_uses_batchexecute(mock_decode):
+    mock_decode.return_value = "https://announcements.asx.com.au/asxpdf/20250220/pdf/x.pdf"
+    url = "https://news.google.com/rss/articles/CBMiabc?oc=5"
+    assert resolve_google_news_publisher_url(url) == mock_decode.return_value
+    mock_decode.assert_called_once_with(url)
+
+
+@patch("value_investor.research.filings._http_get")
+def test_resolve_asx_publisher_document_url_finds_markit_pdf(mock_get):
+    from value_investor.research.filings import resolve_asx_publisher_document_url
+
+    mock_get.return_value = (
+        b'<a href="https://asx.api.markitdigital.com/asx-research/1.0/file/abc">PDF</a>'
+    )
+    landing = "https://www.marketindex.com.au/asx/wgx/announcements/foo"
+    assert (
+        resolve_asx_publisher_document_url(landing)
+        == "https://asx.api.markitdigital.com/asx-research/1.0/file/abc"
+    )
+
+
+def test_enrich_global_filing_rows_resolves_google_news():
+    from value_investor.research.filings import enrich_global_filing_rows
+
+    rows = [
+        {
+            "source": "google_news_asx",
+            "url": "https://news.google.com/rss/articles/CBMiabc?oc=5",
+            "headline": "WGX ASX Half Year Results Summary - Market Index",
+        }
+    ]
+    with patch(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        return_value="https://announcements.asx.com.au/asxpdf/20250220/pdf/x.pdf",
+    ):
+        enriched = enrich_global_filing_rows(rows)
+    assert enriched[0]["url"].endswith(".pdf")
+    assert enriched[0]["source"] == "google_news_asx_resolved"
+

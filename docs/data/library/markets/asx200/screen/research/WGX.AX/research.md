@@ -1,33 +1,29 @@
 # Westgold Resources Limited (WGX.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T13:04:26.636245+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-25T19:06:22.343248+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Westgold Resources Limited screens as a **buy** on cheapness, quality, dividend, and risk (7/22 models; composite 55%), offering a mid-teens P/E, P/B below 2, and low leverage against a Western Australian gold producer with improving earnings momentum. The investment case rests on scale production across the Murchison and Southern Goldfields hubs, portfolio rationalisation crystallising value, and capital returns (dividends, buybacks) signalling management confidence. The valuation hook is a debt-light, unhedged producer trading at modest multiples despite record operational performance in recent periods, per market commentary. The key debate is whether Higginsville expansion and divestment proceeds sustain free cash flow, or whether gold-price cyclicality, heavy capex, and the absence of verified primary filing extracts limit underwriting of the screen’s quality and dividend signals — notably the anomalous 64% yield.
-
----
+Westgold Resources Limited (ASX: WGX) screens as a **buy** on cheapness, quality, dividend, and risk (7/22 models; composite 55%), presenting a mid-teens P/E, P/B below 2, and low leverage against a Western Australian gold producer with sharply improving earnings momentum. The investment case rests on scale production across the Murchison and Southern Goldfields hubs, portfolio rationalisation crystallising value via multiple asset sales and the Valiant demerger, and capital returns (dividends, buybacks) signalling management confidence. The valuation hook is a debt-light, unhedged producer trading at modest multiples despite record operational performance in recent periods, per market commentary. The key debate is whether Higginsville expansion and divestment proceeds sustain free cash flow, or whether gold-price cyclicality, heavy capex, and the absence of verified primary filing extracts limit underwriting of the screen’s quality and dividend signals — notably the anomalous 64% yield.
 
 ## INVESTMENT THESIS
-For a value investor, WGX presents a “quality at a reasonable price” profile within Basic Materials. The quantitative screen passes **Graham Enterprising**, **FCF Yield**, **Quality Value**, **Economic Moat**, **Dividend Growth**, **Magic Formula**, and **Financial Health** — all four factor families (cheapness, quality, dividend, risk). Headline metrics: P/E 16.2, P/B 1.9, ROE 12.5%, debt/equity 8%, data quality 19/20, conviction 42% (persistent buy, four weeks, stable trend).
+For a value investor, WGX offers a “quality at a reasonable price” profile within Basic Materials. The quantitative screen passes **Graham Enterprising**, **FCF Yield**, **Quality Value**, **Economic Moat**, **Dividend Growth**, **Magic Formula**, and **Financial Health** — all four factor families (cheapness, quality, dividend, risk). Headline metrics: P/E 16.2, P/B 1.9, ROE 12.5%, debt/equity 8%, data quality 19/20, conviction 42% (persistent buy, four weeks, stable trend).
 
 These metrics align with a business that recovered from impairment-driven FY2022 losses to FY2024 profitability on Yahoo-sourced accounts: revenue A$716.5m, net income A$95.2m, EBITDA A$185.5m. Balance-sheet quality is supportive — shareholders’ equity A$691.8m, cash A$236.0m, total debt A$54.6m (predominantly lease obligations) at FY2024 — and news flow describes the company as debt-free at the operating level with strong recent cash builds.
 
 Business quality is reinforced by operational delivery (production beating guidance per Jul 2026 headlines), board-approved Higginsville expansion (1.6 to 2.6 mtpa), and a deliberate portfolio focus via asset sales and the Valiant demerger. The screen’s cheapness models imply the market has not fully re-rated the name despite operational improvement, though recent gold-sector weakness has pressured the share price.
 
-**Caveats:** The screen’s 64.0% dividend yield and ~A$352m FCF figure are inconsistent with Yahoo cash-flow data (FY2024 FCF A$78.7m; dividends paid A$4.7m) and should be treated as data-quality flags, not sustainable income or verified filing metrics. Primary ASX announcement bodies were not retrieved despite seven filings being indexed.
-
----
+**Caveats:** The screen’s 64.0% dividend yield and ~A$352m FCF figure are inconsistent with Yahoo cash-flow data (FY2024 FCF A$78.7m; dividends paid A$4.7m) and should be treated as data-quality flags, not sustainable income or verified filing metrics. Primary ASX announcement bodies were not retrieved despite six filings being indexed.
 
 ## FINANCIAL REVIEW
-### Primary filings status
+**Primary filings status**
 
-The filings index (`regime: asx_announcements`) catalogues **seven** ASX-related announcements: **zero annual**, **one interim**, **six other** — but **zero downloadable body extracts** under `filings/bodies/` (refetch attempted, none fetched). Consequently, no figures below are sourced from primary filing text; annual trends use **`financials_annual.json` (Yahoo Finance)** with explicit fallback, and interim/operational datapoints from indexed headlines or news only.
+The filings index (`regime: asx_announcements`) catalogues **six** ASX-related announcements: **zero annual**, **one interim**, **five other** — but **zero downloadable body extracts** under `filings/bodies/`. Consequently, no figures below are sourced from primary filing text; annual trends use **`financials_annual.json` (Yahoo Finance)** with explicit fallback, and interim/operational datapoints from indexed headlines or news only.
 
 **Annual gap:** No annual report or full-year results filing is indexed with extractable body text. FY25 results are referenced in news (“Westgold Resources: FY25 Financial Results”, 28 Aug 2025) but cannot be verified here.
 
 **Interim gap:** One interim item is indexed — “WGX ASX Half Year Results Summary” (26 Feb 2026) — without body text. H1 FY26 figures cited in news (sales A$1,237.56m, net income A$190.73m, 195,355 oz production) are **unverified** against primary extracts.
 
-### Annual trend — Yahoo fallback (FY2022–FY2024)
+**Annual trend — Yahoo fallback (FY2022–FY2024)**
 
 | Metric | FY2022 | FY2023 | FY2024 |
 |--------|--------|--------|--------|
@@ -57,8 +53,6 @@ The filings index (`regime: asx_announcements`) catalogues **seven** ASX-related
 
 Yahoo `quarterly_income` cache is **empty** — no interim P&L verification available.
 
----
-
 ## RISKS AND RED FLAGS
 **Primary filing gap (material):** With zero body extracts, going-concern opinion, covenant terms, rehabilitation provisions, and contingency/disclosure language **cannot be reviewed**. This is a significant limitation for an ASX-listed mining producer where asset retirement and closure liabilities are material.
 
@@ -73,8 +67,6 @@ Yahoo `quarterly_income` cache is **empty** — no interim P&L verification avai
 **Market and governance:** Coverage notes an earnings miss vs analyst expectations (Aug 2025) and CEO compensation commentary (Nov 2025). No regulatory enforcement or management changes identified in the manifest.
 
 **Pension/rehabilitation:** Employee provisions are modest on Yahoo data; long-term rehabilitation and closure liabilities typical of WA gold miners cannot be assessed without annual-report notes.
-
----
 
 ## NEWS HIGHLIGHTS
 Coverage over the past year is **moderate** — strong on corporate actions and valuation commentary, thin on verified financial detail from primary sources. Many items are syndicated price/sector commentary (Kalkine, Simply Wall St).
@@ -100,8 +92,6 @@ Coverage over the past year is **moderate** — strong on corporate actions and 
 - Analyst buy calls after strong rally discussed (Feb 2026, Kalkine).
 
 No material regulatory actions or CEO/management changes identified. News is useful for strategy direction but **cannot substitute** for missing filing bodies.
-
----
 
 ## RESEARCH VERDICT
 Verdict: accumulate

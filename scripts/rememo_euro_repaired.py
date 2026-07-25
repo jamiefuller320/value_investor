@@ -17,7 +17,15 @@ from value_investor.data_library import market_dir
 def main() -> int:
     root = Path("docs/data/library")
     market = "euro_stoxx50"
-    tickers = ["TTE.PA", "MC.PA", "SAP.DE"]
+    tickers = [
+        "AD.AS",
+        "DHL.DE",
+        "DTE.DE",
+        "ENI.MI",
+        "SGO.PA",
+        "VOW.DE",
+        "WKL.AS",
+    ]
     targets = []
     for ticker in tickers:
         ticker_dir = market_dir(root, market) / "screen" / "research" / ticker
@@ -30,7 +38,7 @@ def main() -> int:
                 "sources_dir": sources_dir,
                 "screen_dir": market_dir(root, market) / "screen",
                 "bodies_before": _filings_body_count(sources_dir),
-                "reasons": ["euro_body_repair"],
+                "reasons": ["euro_ir_seeds"],
             }
         )
 
