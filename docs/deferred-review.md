@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:30:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:53:26+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -47,6 +47,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N21 | **Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh** | New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_…). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill Agent.create failed for all three. Mint a User API key from https://cursor.com/dashboard/api-keys (not Integrations; Team Admin keys unsupported by SDK), replace the cloud secret, then launch a new agent run. | Fresh User API key from Dashboard → API Keys verifies via ftse-verify-key in a new shell |
 | N22 | **Preflight CURSOR_API_KEY against /v0/me before gap-fill agents** | Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success. Key source is Dashboard → API Keys (user key), not Integrations; Team Admin keys are unsupported by cursor-sdk. | After a valid User API key is installed and N21 gap-fill succeeds once |
 | N23 | **Do not add momentum overlay to base value screen** | Momentum should remain an exit/hold overlay or offline sim track, not a new factor family in assign_signal(). Mixing value entry with momentum hold rules in the primary quant signal would blur attribution and conflict with N3 (research overlays, frozen base screen). | Explicit product decision after walk-forward evidence that a momentum grace rule beats trailing stops and screen-only exits on cost-adjusted excess return |
+| N24 | **Do not route automated paper-auto or decision-review through LLMs** | Learning loop knobs (decision-review, future L85 grace auto-tune) must stay rule-based on structured JSON marks. Pro+ model access is for human/agent synthesis and selective research only — not live paper trading decisions. | Never for live automation; only reconsider if building a separate experimental LLM paper track with its own control datum |
 
 ---
 
@@ -61,6 +62,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
 | L84 | **Momentum grace overlay for paper-auto exits** | When a held name drops below buy-tier on the value screen but price trend remains strong (e.g. above rising 50/200 MA, positive MACD slope, unrealized gain), keep the sleeve for a bounded grace period instead of immediate automated sell. Test as a separate paper track before touching the rules control book. | Decision-review has ≥12 weeks of marks on the rules control book and at least one full cycle where value-downgrade exits would have fired; trailing-stop sim track shows material give-back from screen-only churn |
 | L85 | **Auto-tune momentum grace knobs from exit-shadow review** | When exit_shadow_review shows ≥30 closed grace exits with stable early_exit vs good_exit balance vs rules screen_rotation, allow decision-review-style small steps on grace_weeks, ATR stop multiplier, and take-profit extension on the momentum_grace track only. | learning_tracks_exit_shadow.json shows ≥30 closed grace exits and grace vs screen_rotation verdict rates diverge materially |
+| L87 | **LLM synthesis layer for periodic learning-track meta-reports** | Monthly or quarterly agent pass that reads learning_tracks_review.json, learning_tracks_exit_shadow.json, and historical_analysis_summary.json and produces a human-readable diagnosis (AI vs control, grace vs rules, cost drag, suggested experiments). Uses frontier/API-pool models; keep automated knobs deterministic. | ≥8 weeks of learning_tracks_review marks and ≥15 closed exit-shadow cohorts; paper-auto artifacts stable |
 
 ### Universe & data
 
@@ -111,6 +113,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L82 | **Gap-fill: ingest — Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch** | Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch — five new bodies this pass were holding disclosures only and did not close material gaps. | After next weekly email gap-fill pass confirms the gap persists |
 | L83 | **Gap-fill: ingest — Parse Companies House iXBRL into structured borrowings, pension and NCAV** | Parse Companies House iXBRL into structured borrowings, pension and NCAV fields; OCR headline extracts (`ch_00735438_*.txt`) lack note-level covenant text. | After next weekly email gap-fill pass confirms the gap persists |
 | L86 | **Offline archive counterfactual lab for grace parameters** | Walk-forward search on archived weekly screens: simulate hold-N-more-weeks after value downgrade without touching live paper books. Use for parameter priors before promoting shadow-derived knob changes. | ≥12 months of weekly archives with buy-tier turnover and library screen-lite history on FTSE 350 |
+| L88 | **Selective frontier-model research tier for top buy-tier memos** | Optional override of composer-2.5 for strong_buy / AI-judgment shortlist names when Cursor API pool headroom allows (e.g. Pro+). Cap tightly; compare memo quality vs cost in library policy. Default ladder stays on cheapest first-party model. | Pro+ or expanded weekly_usage_gbp in practice; A/B a small strong_buy cohort before policy change |
 
 ### Ops / reliability
 
@@ -125,6 +128,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L51 | **Unify live FTSE research spend into library weekly ledger** | Live ftse-research / email --research-docs use count caps and never call record_estimated_spend. Fold that Cursor usage into the same weekly GBP envelope so library + live research cannot double-spend the allocation. | After a few weeks of enforce_weekly_research_cap with the £30 usage envelope |
 | L52 | **Recalibrate estimated_memo_usd from real Cursor bills** | Library spend ledger uses a flat --.40/memo estimate. After constrained weeks, compare estimated_spend vs Cursor usage page and retune estimated_memo_usd. | 2–4 weeks of enforce_weekly_research_cap=true with known memo counts |
 | L60 | **Upgrade Ticker RNS plan for symbol-filtered disclosures** | Current TICKER_API_KEY plan ignores symbol/isin filters and returns a global Form 8.x feed. Client-side issuer headline filter now drops noise, but a paid symbol filter would restore direct RNS bodies for memo tickers. | Ticker.app plan is upgraded or an alternate UK RNS API with issuer filter is available |
+| L89 | **Revisit library weekly_usage_gbp after Pro+ upgrade** | Pro+ expands Composer/Auto and API pools. If library ladder is frequently constraining at £30/week, consider raising weekly_usage_gbp or selective_memo caps — only after reviewing ftse-library policy and actual spend vs envelope. | ftse-library policy shows constraining flag for ≥3 consecutive weeks despite Pro+ headroom |
 
 ---
 
