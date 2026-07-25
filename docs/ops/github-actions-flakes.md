@@ -1,0 +1,63 @@
+# GitHub Actions — known flakes and benign cancels
+
+Use this page when failure emails arrive but `main` looks healthy. Most are **infrastructure or concurrency**, not regressions in the repo.
+
+## Quick triage
+
+```bash
+# Today's non-success runs
+gh api "repos/jamiefuller320/value_investor/actions/runs?per_page=50" \
+  | python3 -c "
+import json,sys
+from datetime import datetime, timezone
+today=datetime.now(timezone.utc).strftime('%Y-%m-%d')
+for r in json.load(sys.stdin).get('workflow_runs',[]):
+    if not r['created_at'].startswith(today): continue
+    c=r.get('conclusion') or r.get('status')
+    if c not in ('success','skipped'):
+        print(c, r['name'], r['html_url'])
+"
+
+# Latest main CI + Pages
+gh run list --branch main --limit 5
+```
+
+If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older red runs on merged PRs can usually be ignored.
+
+## Known failure patterns
+
+| Pattern | Typical cause | Action needed |
+|---------|---------------|---------------|
+| `startup_failure` — *"workflow file issue"* | GitHub Actions runner could not start the job (no logs) | **Re-run** or push again; later runs on the same PR usually pass |
+| `cancelled` — *"higher priority waiting request"* | `concurrency: cancel-in-progress` on CI when a newer commit lands on the same PR | **None** — superseded run |
+| Orchestrator — *"job was not acquired by Runner"* | Hosted runner capacity / queue timeout | **Retry**; Sunday/weekday catch-up schedules or external cron cover missed work (see [orchestrator-cron.md](orchestrator-cron.md)) |
+| Node 20 deprecation annotation | Older action major versions on Node 20 runtime | Upgrade `setup-python` → v6, `github-script` → v8 (done in workflow tidy PR) |
+
+## Examples (2026-07-25)
+
+| Run | Outcome | Notes |
+|-----|---------|-------|
+| [CI #103](https://github.com/jamiefuller320/value_investor/actions/runs/30158196546) | `startup_failure` | Infra flake; later CI on same branch passed; PR merged |
+| [Pages #102 merge](https://github.com/jamiefuller320/value_investor/actions/runs/30157675847) | `startup_failure` | Infra flake; subsequent Pages deploys succeeded |
+| [CI #102](https://github.com/jamiefuller320/value_investor/actions/runs/30155950109) | `cancelled` | Superseded by newer push |
+| [Orchestrator 2026-07-24](https://github.com/jamiefuller320/value_investor/actions/runs/30108117174) | `failure` (runner acquisition) | Next day's scheduled run succeeded |
+
+## When to investigate further
+
+Treat as a **real** problem when:
+
+- The **latest** `main` CI run fails with pytest errors (not `startup_failure`).
+- Pages deploy fails on **two consecutive** merges to `main`.
+- Orchestrator fails on **both** primary and catch-up windows the same day **and** external cron did not fire.
+- A child workflow (`library-grow`, `paper-auto`, `email-report`) fails with application errors in logs.
+
+For application failures, inspect job logs:
+
+```bash
+gh run view <run-id> --log-failed
+```
+
+## Related
+
+- [orchestrator-cron.md](orchestrator-cron.md) — scheduling, catch-up, external cron
+- Workflow definitions: `.github/workflows/`
