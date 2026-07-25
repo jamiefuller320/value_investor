@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T05:44:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:21:00+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -46,6 +46,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | N20 | **Companies House Streaming API for realtime filings** | Streaming API pushes company/filing changes over long-lived connections; our research path only needs on-demand REST GET for search, filing-history, and document download. Keys are not interchangeable with REST. | Need near-realtime UK filing alerts outside weekly research cycles |
 | N21 | **Re-run AEP/HIK/MEGP agent gap-fill after CURSOR_API_KEY refresh** | New shell bc-f3c1c12e still fails ftse-verify-key with Invalid User API Key (CURSOR_API_KEY present, len=69, crsr_…). Deepen confirmed HIK with_body=3, MEGP=4, AEP=0. Gap-fill Agent.create failed for all three. Mint a User API key from https://cursor.com/dashboard/api-keys (not Integrations; Team Admin keys unsupported by SDK), replace the cloud secret, then launch a new agent run. | Fresh User API key from Dashboard → API Keys verifies via ftse-verify-key in a new shell |
 | N22 | **Preflight CURSOR_API_KEY against /v0/me before gap-fill agents** | Presence of CURSOR_API_KEY in cloud secrets is not enough: both prior and this new shell had a set crsr_ key that API rejects. Gate agent gap-fill launches on ftse-verify-key success. Key source is Dashboard → API Keys (user key), not Integrations; Team Admin keys are unsupported by cursor-sdk. | After a valid User API key is installed and N21 gap-fill succeeds once |
+| N23 | **Do not add momentum overlay to base value screen** | Momentum should remain an exit/hold overlay or offline sim track, not a new factor family in assign_signal(). Mixing value entry with momentum hold rules in the primary quant signal would blur attribution and conflict with N3 (research overlays, frozen base screen). | Explicit product decision after walk-forward evidence that a momentum grace rule beats trailing stops and screen-only exits on cost-adjusted excess return |
 
 ---
 
@@ -58,6 +59,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L2 | **Evolutionary genomes (stage 2)** | Genomes = sim knobs ± weight deltas; fitness = excess − λ×costs; elites + small mutations; freeze screen signals first | After L1; history thick enough to trust fitness |
 | L4 | **Clarify tactical vs whole-position stops** | Semantics ambiguous if/when sim consumes plans | L3 starts |
 | L6 | **Sector-stratified backtest** | Does cheapness work by sector? | Enough archived runs |
+| L84 | **Momentum grace overlay for paper-auto exits** | When a held name drops below buy-tier on the value screen but price trend remains strong (e.g. above rising 50/200 MA, positive MACD slope, unrealized gain), keep the sleeve for a bounded grace period instead of immediate automated sell. Test as a separate paper track before touching the rules control book. | Decision-review has ≥12 weeks of marks on the rules control book and at least one full cycle where value-downgrade exits would have fired; trailing-stop sim track shows material give-back from screen-only churn |
 
 ### Universe & data
 
