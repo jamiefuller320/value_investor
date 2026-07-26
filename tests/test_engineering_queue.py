@@ -9,6 +9,8 @@ from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     find_in_flight_pr,
     is_engineering_branch,
+    reprioritize_queue_after_ingest_merge,
+    snapshot_ingest_health,
     task_id_from_branch,
 )
 from value_investor.engineering_tasks import (
@@ -123,3 +125,93 @@ def test_mark_task_status_writes_committed_copy(tmp_path: Path):
 
 def test_task_title_key_normalizes_whitespace():
     assert task_title_key("  Build   CH  PDF ") == "build ch pdf"
+
+
+def test_reprioritize_boosts_scoring_when_ingest_improves(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    latest_path = tmp_path / "latest.json"
+    latest_path.write_text(
+        json.dumps({"reports": [{"ticker": "BT-A.L", "signal": "buy"}]}),
+        encoding="utf-8",
+    )
+    payload = {
+        "ingest_health": {"zero_body_buy_tier": 3, "indexed_without_body": 10},
+        "tasks": [
+            {
+                **_task("eng-20260726-01", status="merged", title="Companies House filed-accounts PDF fetch").to_dict(),
+            },
+            {
+                **_task("eng-20260726-02", title="Replace Google News wrapper URLs with Investegate").to_dict(),
+            },
+            {
+                "id": "eng-20260726-05",
+                "area": "scoring",
+                "title": "Add commodity overlay",
+                "summary": "x",
+                "priority": "high",
+                "priority_score": 90.0,
+                "source": "post_run_review",
+                "status": "open",
+                "evidence": {},
+                "acceptance_criteria": [],
+                "allowed_paths": [],
+                "blocked_paths": [],
+            },
+        ],
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    research_root = tmp_path / "research"
+    index_path = research_root / "BT-A.L" / "sources" / "filings" / "filings_index.json"
+    index_path.parent.mkdir(parents=True)
+    index_path.write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "with_body": 2},
+                "filings": [{"has_body": True}, {"has_body": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = reprioritize_queue_after_ingest_merge(
+        merged_task_id="eng-20260726-01",
+        tasks_path=tasks_path,
+        latest_path=latest_path,
+    )
+    assert result["skipped"] is False
+    assert result["improved"] is True
+    updated = json.loads(tasks_path.read_text(encoding="utf-8"))
+    scoring = next(row for row in updated["tasks"] if row["id"] == "eng-20260726-05")
+    assert scoring["priority_score"] > 90.0
+
+
+def test_snapshot_ingest_health_counts_zero_body(tmp_path: Path):
+    latest_path = tmp_path / "latest.json"
+    latest_path.write_text(
+        json.dumps(
+            {
+                "reports": [
+                    {"ticker": "BT-A.L", "signal": "buy"},
+                    {"ticker": "RIO.L", "signal": "strong_buy"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    root = tmp_path / "research"
+    for ticker, with_body in (("BT-A.L", 0), ("RIO.L", 2)):
+        index_path = root / ticker / "sources" / "filings" / "filings_index.json"
+        index_path.parent.mkdir(parents=True)
+        index_path.write_text(
+            json.dumps(
+                {
+                    "summary": {"total": 2, "with_body": with_body},
+                    "filings": [{"has_body": bool(with_body)}, {"has_body": False}],
+                }
+            ),
+            encoding="utf-8",
+        )
+    health = snapshot_ingest_health(latest_path=latest_path, research_roots=[root])
+    assert health["buy_tier_count"] == 2
+    assert health["zero_body_buy_tier"] == 1
