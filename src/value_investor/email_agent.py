@@ -191,6 +191,17 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("docs"),
         help="GitHub Pages root for --publish-dashboard",
     )
+    parser.add_argument(
+        "--policy",
+        type=Path,
+        default=Path("docs/data/library/policy.json"),
+        help="Library policy JSON for weekly_ops spend recording",
+    )
+    parser.add_argument(
+        "--no-record-spend",
+        action="store_true",
+        help="Do not record estimated Cursor spend to policy weekly_ops pool",
+    )
     args = parser.parse_args(argv)
 
     if args.send_only:
@@ -459,6 +470,35 @@ def main(argv: list[str] | None = None) -> int:
             dest_dir=args.dashboard_dir,
         )
         print(f"Published dashboard data to {dashboard_path}")
+
+    if (
+        args.api_key
+        and not args.send_only
+        and not args.no_record_spend
+        and (deep_analysis is not None or research_summary or gap_fill_summary)
+    ):
+        from value_investor.agent_model_policy import load_policy, record_email_run_spend
+
+        memo_usd = float(
+            (load_policy(args.policy).get("ladder") or {}).get("estimated_memo_usd") or 0.4
+        )
+        gap_revisions = 0
+        if gap_fill_summary is not None:
+            gap_revisions = int(gap_fill_summary.created) + int(gap_fill_summary.updated)
+        ops_status = record_email_run_spend(
+            deep_analysis_ran=deep_analysis is not None,
+            research_created=int(research_summary.created) if research_summary else 0,
+            research_updated=int(research_summary.updated) if research_summary else 0,
+            gap_fill_revisions=gap_revisions,
+            memo_usd=memo_usd,
+            path=args.policy,
+        )
+        print(
+            "Weekly ops spend recorded: "
+            f"${ops_status['estimated_spend_weekly_ops_usd_this_week']:.2f} / "
+            f"${ops_status['weekly_ops_cap_usd']:.2f} "
+            f"(remaining ${ops_status['remaining_weekly_ops_usd']:.2f})"
+        )
 
     strong_buys = sum(1 for r in reports if r.signal == "strong_buy")
     subject = (

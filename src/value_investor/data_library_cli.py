@@ -170,6 +170,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Disable the weekly usage research gate",
     )
     policy_p.add_argument(
+        "--weekly-ops-cap-usd",
+        type=float,
+        default=None,
+        help="Ring-fenced USD envelope for orchestrator weekly runs (email + ladder)",
+    )
+    policy_p.add_argument(
         "--refresh-day",
         type=int,
         default=None,
@@ -241,6 +247,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--approve-checkpoint",
         action="store_true",
         help="Reset spend-since-checkpoint after human approval to continue research",
+    )
+    ladder_p.add_argument(
+        "--spend-pool",
+        choices=("weekly_ops", "ad_hoc"),
+        default=None,
+        help=(
+            "Spend ledger pool: weekly_ops (orchestrator Sunday bundle, default) or "
+            "ad_hoc (checkpoint-gated manual depth passes; implied by --unrestricted-budget)"
+        ),
     )
     ladder_p.add_argument("--json", action="store_true")
     ladder_p.set_defaults(func=cmd_ladder)
@@ -694,7 +709,7 @@ def cmd_grow(args: argparse.Namespace) -> int:
 
 
 def cmd_policy(args: argparse.Namespace) -> int:
-    from .agent_model_policy import weekly_budget_status
+    from .agent_model_policy import weekly_budget_status, weekly_ops_budget_status
     from .library_graduation import graduated_market_ids
 
     policy = load_policy(args.policy)
@@ -725,6 +740,9 @@ def cmd_policy(args: argparse.Namespace) -> int:
     if args.enforce_weekly_research_cap is not None:
         budget["enforce_weekly_research_cap"] = bool(args.enforce_weekly_research_cap)
         changed = True
+    if args.weekly_ops_cap_usd is not None:
+        budget["weekly_ops_cap_usd"] = float(args.weekly_ops_cap_usd)
+        changed = True
     if args.refresh_day is not None:
         budget["plan_refresh_day_of_month"] = max(1, min(28, int(args.refresh_day)))
         changed = True
@@ -738,6 +756,7 @@ def cmd_policy(args: argparse.Namespace) -> int:
     if args.json:
         payload = dict(policy)
         payload["budget_status"] = weekly_budget_status(policy)
+        payload["weekly_ops_status"] = weekly_ops_budget_status(policy)
         print(json.dumps(payload, indent=2))
         return 0
     budget = policy.get("budget") or {}
@@ -745,6 +764,8 @@ def cmd_policy(args: argparse.Namespace) -> int:
     fg = policy.get("focus_graduation") or {}
     graduated = graduated_market_ids(policy)
     status = weekly_budget_status(policy)
+    ops_status = weekly_ops_budget_status(policy)
+    ladder = policy.get("ladder") or {}
     print(f"Policy: {args.policy}")
     print(f"Focus market: {policy.get('focus_market')}")
     print(f"Queue: {', '.join(policy.get('market_queue') or [])}")
@@ -778,6 +799,17 @@ def cmd_policy(args: argparse.Namespace) -> int:
         f"remaining=${status.get('remaining_weekly_usd')}  "
         f"flag={status.get('flag')}"
         + (f"  — {status['note']}" if status.get("note") else "")
+    )
+    print(
+        f"Weekly ops (orchestrator): ${ops_status.get('estimated_spend_weekly_ops_usd_this_week')} / "
+        f"${ops_status.get('weekly_ops_cap_usd')}  "
+        f"remaining=${ops_status.get('remaining_weekly_ops_usd')}  "
+        f"flag={ops_status.get('flag')}"
+        + (f"  — {ops_status['note']}" if ops_status.get("note") else "")
+    )
+    print(
+        f"Ad hoc checkpoint: ${ladder.get('spend_since_checkpoint_usd', 0)} / "
+        f"${ladder.get('spend_checkpoint_usd', 60)}"
     )
     print(
         f"Research model: {model.get('model_id')} "
@@ -852,6 +884,7 @@ def cmd_ladder(args: argparse.Namespace) -> int:
         unrestricted_budget=bool(args.unrestricted_budget),
         checkpoint_usd=args.checkpoint_usd,
         approve_checkpoint=bool(args.approve_checkpoint),
+        spend_pool=args.spend_pool,
     )
     if args.json:
         print(json.dumps(payload, indent=2))

@@ -6,11 +6,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.agent_model_policy import (
+    SPEND_POOL_WEEKLY_OPS,
     enforce_weekly_research_cap,
     grow_ticker_budget,
     is_surplus_spend_day,
     load_policy,
     recommend_cheapest_model,
+    record_email_run_spend,
     record_estimated_spend,
     record_spend_with_checkpoint,
     approve_spend_checkpoint,
@@ -18,6 +20,8 @@ from value_investor.agent_model_policy import (
     review_model,
     save_policy,
     weekly_budget_status,
+    weekly_ops_budget_status,
+    remaining_weekly_ops_usd,
 )
 from value_investor.data_library_cli import main as library_main
 from value_investor.fetch import resolve_yahoo_ticker_for_market
@@ -182,9 +186,56 @@ def test_spend_checkpoint_pause_and_approve(tmp_path: Path):
     status = record_spend_with_checkpoint(30.0, path, checkpoint_usd=30.0)
     assert status["checkpoint_reached"] is True
     assert spend_since_checkpoint_usd(load_policy(path)) == 30.0
+    loaded = load_policy(path)
+    assert loaded["budget"]["estimated_spend_weekly_ops_usd_this_week"] == 0.0
     approval = approve_spend_checkpoint(path)
     assert approval["spend_since_checkpoint_usd"] == 0.0
     assert spend_since_checkpoint_usd(load_policy(path)) == 0.0
+
+
+def test_weekly_ops_pool_ring_fenced_from_ad_hoc(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    policy = load_policy(path)
+    policy["budget"]["weekly_ops_cap_usd"] = 50.0
+    save_policy(policy, path)
+
+    record_estimated_spend(6.4, path, pool=SPEND_POOL_WEEKLY_OPS)
+    loaded = load_policy(path)
+    assert loaded["budget"]["estimated_spend_weekly_ops_usd_this_week"] == 6.4
+    assert loaded["budget"]["estimated_spend_usd_this_week"] == 6.4
+    assert spend_since_checkpoint_usd(loaded) == 0.0
+    assert remaining_weekly_ops_usd(loaded) == 43.6
+
+    record_spend_with_checkpoint(10.0, path, checkpoint_usd=60.0)
+    loaded = load_policy(path)
+    assert spend_since_checkpoint_usd(loaded) == 10.0
+    assert loaded["budget"]["estimated_spend_weekly_ops_usd_this_week"] == 6.4
+    assert loaded["budget"]["estimated_spend_usd_this_week"] == 16.4
+
+
+def test_record_email_run_spend(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    save_policy(load_policy(path), path)
+    status = record_email_run_spend(
+        deep_analysis_ran=True,
+        research_created=2,
+        research_updated=10,
+        gap_fill_revisions=3,
+        memo_usd=0.4,
+        path=path,
+    )
+    assert status["estimated_spend_weekly_ops_usd_this_week"] == 6.4
+    assert weekly_ops_budget_status(load_policy(path))["remaining_weekly_ops_usd"] == 43.6
+
+
+def test_weekly_ops_budget_status_constraining(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    policy = load_policy(path)
+    policy["budget"]["weekly_ops_cap_usd"] = 0.5
+    save_policy(policy, path)
+    status = weekly_ops_budget_status(load_policy(path), estimated_memo_usd=0.6)
+    assert status["constraining"] is True
+    assert status["flag"] == "constraining"
 
 
 def test_market_aware_yahoo_resolution():

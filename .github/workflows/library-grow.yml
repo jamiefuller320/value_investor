@@ -45,10 +45,11 @@ jobs:
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
           # Preserve focus_market / graduated_markets — do not force sp500.
-          # Subscription ($20) is metadata; library research uses £30/week usage envelope.
+          # Subscription ($20) is metadata; orchestrator runs use weekly_ops ($50 default).
           ftse-library --policy "$ROOT/policy.json" policy \
             --plan-monthly-usd 20 \
             --weekly-usage-gbp 30 \
+            --weekly-ops-cap-usd 50 \
             --gbp-usd-rate 1.27 \
             --enforce-weekly-research-cap \
             --refresh-day 8 >/dev/null
