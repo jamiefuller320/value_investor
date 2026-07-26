@@ -185,6 +185,21 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--ingest-improvement-pass",
+        action="store_true",
+        help=(
+            "Before gap-fill, run a deterministic ingest hardening pass on thin "
+            "buy-tier tickers using backlog ingest suggestions and existing "
+            "alternate-source fetchers (no agent calls)"
+        ),
+    )
+    parser.add_argument(
+        "--ingest-improvement-cap",
+        type=int,
+        default=5,
+        help="Max tickers for --ingest-improvement-pass (default: 5)",
+    )
+    parser.add_argument(
         "--send-only",
         action="store_true",
         help="Send email from existing output/email_report.* files (skip screening)",
@@ -315,6 +330,7 @@ def main(argv: list[str] | None = None) -> int:
     deep_analysis: DeepAnalysis | None = None
     research_summary = None
     gap_fill_summary = None
+    ingest_improvement_summary = None
     post_run_review = None
     research_documents = research_documents_for_reports(
         reports,
@@ -368,6 +384,16 @@ def main(argv: list[str] | None = None) -> int:
             print(str(err), file=sys.stderr)
             return 2
         research_documents = research_documents_for_reports(reports, research_summary.documents)
+
+    if args.ingest_improvement_pass:
+        from value_investor.research.ingest_improvement import run_ingest_improvement_pass
+
+        ingest_improvement_summary = run_ingest_improvement_pass(
+            reports=reports,
+            output_dir=args.output_dir,
+            market="ftse350",
+            max_targets=int(args.ingest_improvement_cap),
+        )
 
     if args.research_gap_fill:
         if not args.api_key:
@@ -466,6 +492,7 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         gap_fill_summary=gap_fill_summary,
+        ingest_improvement_summary=ingest_improvement_summary,
         post_run_review=post_run_review,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
@@ -482,6 +509,7 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         gap_fill_summary=gap_fill_summary,
+        ingest_improvement_summary=ingest_improvement_summary,
         post_run_review=post_run_review,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
