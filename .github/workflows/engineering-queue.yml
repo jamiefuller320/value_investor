@@ -67,7 +67,7 @@ jobs:
           PY
           )
           if [ -n "$TASK_ID" ]; then
-            ftse-engineering reprioritize --merged-task-id "$TASK_ID" --json
+            ftse-engineering --json reprioritize --merged-task-id "$TASK_ID"
           fi
 
       - name: Refresh queue from Sunday artifacts when present
@@ -88,6 +88,17 @@ jobs:
           RUNNING=$(gh run list --workflow engineering-agent.yml --limit 5 --json status \
             | python3 -c 'import json,sys; print("true" if any(r.get("status") in {"queued","in_progress","waiting"} for r in json.load(sys.stdin)) else "false")')
           echo "agent_running=$RUNNING" >> "$GITHUB_OUTPUT"
+
+      - name: Reconcile orphaned pr_open tasks
+        run: |
+          ftse-engineering --json reconcile-queue --open-prs-json /tmp/open_prs.json
+
+      - name: Commit reconciled queue state
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: reconcile engineering queue orphans [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json
+          skip_fetch: false
 
       - name: Evaluate queue dispatch
         id: gate

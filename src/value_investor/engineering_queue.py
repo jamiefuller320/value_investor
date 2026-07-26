@@ -20,6 +20,7 @@ from value_investor.engineering_tasks import (
     select_engineering_tasks,
     task_title_key,
 )
+from value_investor.storage import write_json
 
 ENGINEERING_BRANCH_RE = re.compile(r"^cursor/eng-\d{8}-\d{2}-1de3$")
 ENGINEERING_PR_TITLE_PREFIX = "feat(engineering):"
@@ -198,6 +199,36 @@ def evaluate_engineering_dispatch(
         status=status,
         next_task_id=status.next_task.id,
     )
+
+
+def reconcile_orphaned_pr_open_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Reset pr_open tasks that have no matching open engineering PR."""
+    data = load_engineering_tasks(tasks_path)
+    open_branches = {
+        str(row.get("headRefName") or row.get("head_branch") or "").strip()
+        for row in (open_prs or [])
+        if str(row.get("headRefName") or row.get("head_branch") or "").strip()
+    }
+    reset_ids: list[str] = []
+    for row in data.get("tasks") or []:
+        if str(row.get("status") or "") != IN_FLIGHT_STATUS:
+            continue
+        branch = str(row.get("branch_name") or "").strip()
+        if branch and branch in open_branches:
+            continue
+        row["status"] = DISPATCHABLE_STATUS
+        for key in ("branch_name", "completed_at", "pr_number", "pr_url", "result_path"):
+            row.pop(key, None)
+        reset_ids.append(str(row["id"]))
+    if reset_ids:
+        tasks_path = Path(tasks_path)
+        tasks_path.parent.mkdir(parents=True, exist_ok=True)
+        write_json(tasks_path, data, compact=False)
+    return {"reset": reset_ids, "count": len(reset_ids)}
 
 
 _INGEST_KEYWORDS = (

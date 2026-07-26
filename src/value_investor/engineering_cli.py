@@ -29,6 +29,7 @@ from value_investor.engineering_tasks import (
 )
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
+    reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
 )
 
@@ -140,6 +141,40 @@ def _cmd_sync_queue(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_reconcile_queue(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    open_prs: list[dict] = []
+    if args.open_prs_json:
+        open_prs = json.loads(Path(args.open_prs_json).read_text(encoding="utf-8"))
+    result = reconcile_orphaned_pr_open_tasks(tasks_path=tasks_path, open_prs=open_prs)
+    if args.json:
+        _print_json(result)
+    else:
+        if result["count"]:
+            print(f"Reset orphaned pr_open task(s): {', '.join(result['reset'])}")
+        else:
+            print("No orphaned pr_open tasks")
+    return 0
+
+
+def _cmd_mark_pr_open(args: argparse.Namespace) -> int:
+    updated = mark_task_status(
+        args.task_id,
+        "pr_open",
+        path=_resolve_tasks_path(args.tasks_path),
+        result_path=args.result_path,
+        branch_name=args.branch,
+    )
+    if updated is None:
+        print(f"No engineering task matched id {args.task_id}", file=sys.stderr)
+        return 1
+    if args.json:
+        _print_json(updated.to_dict())
+    else:
+        print(f"Marked {updated.id} as pr_open on {args.branch}")
+    return 0
+
+
 def _cmd_reprioritize(args: argparse.Namespace) -> int:
     tasks_path = _resolve_tasks_path(args.tasks_path)
     result = reprioritize_queue_after_ingest_merge(
@@ -222,13 +257,14 @@ def _cmd_run(args: argparse.Namespace) -> int:
             )
 
         branch = f"cursor/{task.id}-1de3"
-        mark_task_status(
-            task.id,
-            "pr_open",
-            path=tasks_path,
-            result_path=str(result.result_path),
-            branch_name=branch,
-        )
+        if not args.defer_pr_open:
+            mark_task_status(
+                task.id,
+                "pr_open",
+                path=tasks_path,
+                result_path=str(result.result_path),
+                branch_name=branch,
+            )
         print(f"Completed {task.id} → {result.result_path}")
 
         if args.create_branch:
@@ -296,6 +332,26 @@ def main(argv: list[str] | None = None) -> int:
     sync_p = sub.add_parser("sync-queue", help="Copy output/engineering_tasks.json to committed queue path")
     sync_p.set_defaults(func=_cmd_sync_queue)
 
+    reconcile_p = sub.add_parser(
+        "reconcile-queue",
+        help="Reset pr_open tasks that have no matching open engineering PR",
+    )
+    reconcile_p.add_argument(
+        "--open-prs-json",
+        default=None,
+        help="Path to JSON array of open PRs from gh pr list --json ...",
+    )
+    reconcile_p.set_defaults(func=_cmd_reconcile_queue)
+
+    mark_pr_open_p = sub.add_parser(
+        "mark-pr-open",
+        help="Mark an engineering task pr_open after a draft PR is created",
+    )
+    mark_pr_open_p.add_argument("--task-id", required=True)
+    mark_pr_open_p.add_argument("--branch", required=True)
+    mark_pr_open_p.add_argument("--result-path", required=True)
+    mark_pr_open_p.set_defaults(func=_cmd_mark_pr_open)
+
     merged_p = sub.add_parser("mark-merged", help="Mark an engineering task merged from a branch name")
     merged_p.add_argument("--branch", required=True)
     merged_p.add_argument("--pr-url", default=None)
@@ -336,6 +392,11 @@ def main(argv: list[str] | None = None) -> int:
         "--create-branch",
         action="store_true",
         help="After agent run, git checkout -b cursor/<task-id>-1de3 and commit changes",
+    )
+    run_p.add_argument(
+        "--defer-pr-open",
+        action="store_true",
+        help="Do not mark task pr_open until workflow creates the draft PR",
     )
     run_p.set_defaults(func=_cmd_run)
 
