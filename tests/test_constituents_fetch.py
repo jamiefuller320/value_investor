@@ -164,3 +164,42 @@ def test_fetch_company_metrics_resolves_bt_a_symbol():
     assert seen == ["BT-A.L"]
     assert metrics.ticker == "BT-A.L"
     assert metrics.name == "BT Group"
+
+
+def test_fetch_company_metrics_patch_does_not_double_fetch_yfinance():
+    """Regression: cashflow fallback must not re-open yfinance when OCF is missing."""
+    from value_investor import fetch as fetch_mod
+
+    seen: list[str] = []
+
+    class DummyTicker:
+        def __init__(self, symbol: str):
+            seen.append(symbol)
+
+        @property
+        def info(self):
+            return {"longName": "BT Group", "marketCap": 2_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=2_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    with patch.object(fetch_mod.yf, "Ticker", side_effect=DummyTicker):
+        fetch_mod.fetch_company_metrics("BT.A")
+
+    assert seen == ["BT-A.L"]

@@ -152,12 +152,13 @@ def supplement_company_metrics_cashflow(
     ticker: str | None = None,
     output_dir: Path | None = None,
     sources_dir: Path | None = None,
+    allow_live_fetch: bool = True,
 ) -> list[str]:
     """
     Populate ``operating_cashflow`` / ``free_cashflow`` on ``CompanyMetrics`` when fetch left gaps.
 
-    Prefers a supplied ``financials`` payload, then cached ``financials_annual.json``, then a
-    live Yahoo annual-statement fetch.
+    Prefers a supplied ``financials`` payload, then cached ``financials_annual.json``, then
+    optionally a live Yahoo annual-statement fetch when ``allow_live_fetch`` is True.
     """
     needs_fallback = any(getattr(metrics, key, None) is None for key in CASHFLOW_METRIC_KEYS)
     if not needs_fallback:
@@ -174,7 +175,7 @@ def supplement_company_metrics_cashflow(
             output_dir=output_dir,
             sources_dir=sources_dir,
         )
-    if payload is None or not (payload.get("cash_flow") or {}):
+    if allow_live_fetch and (payload is None or not (payload.get("cash_flow") or {})):
         payload = fetch_annual_financials(str(resolved_ticker))
 
     metrics_dict = metrics.to_dict() if hasattr(metrics, "to_dict") else dict(metrics)
@@ -212,7 +213,11 @@ def install_fetch_cashflow_fallback() -> None:
     ):
         metrics = original(ticker, name=name, sector=sector, market=market)
         try:
-            supplement_company_metrics_cashflow(metrics)
+            supplement_company_metrics_cashflow(
+                metrics,
+                output_dir=Path("output"),
+                allow_live_fetch=False,
+            )
         except Exception as exc:  # noqa: BLE001 — screening should continue
             logger.debug("Cash-flow fallback failed for %s: %s", ticker, exc)
         return metrics
