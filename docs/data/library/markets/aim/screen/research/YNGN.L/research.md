@@ -1,0 +1,72 @@
+# Young & Co.'s Brewery, P.L.C. (YNGN.L) — Research memo
+
+_Version 1 · Updated 2026-07-26T17:39:21.091073+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Young’s is a premium London and South-East pub operator trading on the non-voting line (YNGN.L) at roughly half of tangible book value, with a 3.5% dividend yield and strong free-cash-flow generation. The quantitative screen flags a compelling asset-backed value case: P/B 0.54, P/E 15.6, Piotroski F-Score 8/9, and passes across cheapness, quality, dividend, and risk families. The central debate is whether revalued freehold property (~£993m land plus £153m buildings on the balance sheet) supports intrinsic value, or whether low reported ROE (3.6%), recurring exceptional charges, and pub-sector cyclicality explain the discount. A Main Market transfer (effective 28 April 2026) and ongoing bolt-on M&A (Cubitt House, ~£30m) add strategic momentum, but this pack lacks annual or interim regulatory filing bodies — financial trends rely on Yahoo fallback data and must be verified before sizing a position.
+
+## INVESTMENT THESIS
+For a value investor, Young’s presents a classic asset-heavy UK pub estate at a statistical discount. The screen passes nine models including Schloss Low P/B, Deep Value, FCF Yield, Dividend Growth, Magic Formula, Dreman Contrarian, Piotroski F-Score (8/9), Composite Value, and Earnings Quality — spanning all four signal families (cheapness, quality, dividend, risk). Key metrics: P/B 0.54 (well below the 1.2 Schloss threshold), D/E 40%, FCF ~£49m (screen snapshot), and dividend yield 3.5%.
+
+Business quality indicators are mixed but directionally supportive. Revenue has grown from £368.9m (Yahoo FY2023) to £508.2m (FY2026), reflecting organic expansion and acquisitions (including a £144.5m business purchase in FY2024 per Yahoo cash-flow data). Operating income has been more stable (£52–71m range), and FY2026 free cash flow of £69.1m (Yahoo) comfortably covers dividends (~£14.7m) and capex (~£36m). Management is returning capital via buybacks (£6.1m FY2026) and has signalled confidence through insider buying (reported March 2026). The upgrade from AIM to the Main Market (confirmed in the sole RNS body extract, 28 April 2026) should broaden the investor base; ~71% institutional ownership (February 2026 headlines) suggests the story is not undiscovered, yet non-voting shares may still carry a structural discount versus the A ordinary line (YNGA).
+
+The screen fails Graham-style and high-yield models, consistent with moderate — not deep — earnings yield and a sub-4% dividend. Buffett Quality and Economic Moat also fail, reflecting low ROE on a revalued asset base rather than weak cash conversion. For a value investor prioritising tangible asset backing, cash flow, and balance-sheet discipline over headline ROE, the quantitative case is coherent: buy a well-located estate below book, collect a growing dividend, and benefit from operational leverage as trading normalises.
+
+## FINANCIAL REVIEW
+**Filing coverage gap.** The `filings_index.json` catalogue contains one UK RNS item classified as *other*: “Readmission — YOUNG & CO'S BREWERY PLC” (28 April 2026), confirming cancellation of AIM trading following transfer to the Main Market for both A ordinary (GB00B2NDK765) and non-voting ordinary (GB00B2NDK989) shares. No annual report, half-year results, or trading-update body extracts are indexed. Accordingly, all financial figures below are sourced from `financials_annual.json` (Yahoo) with explicit fallback notation. Interim/quarterly filing analysis is not possible from primary sources in this pack.
+
+**Income and earnings trend (Yahoo fallback).**
+
+| Metric | FY2023 | FY2024 | FY2025 | FY2026 |
+|--------|--------|--------|--------|--------|
+| Revenue | £368.9m | £388.8m | £485.8m | £508.2m |
+| Operating income | £52.4m | £57.3m | £71.4m | £71.3m |
+| Reported net income | £29.7m | £11.1m | £9.8m | £28.0m |
+| Normalised net income | £37.1m | £34.3m | £34.9m | £36.2m |
+| Basic EPS | 50.8p | 18.9p | 16.1p | 45.2p |
+
+Reported earnings are volatile due to recurring exceptional items: impairments and restructuring charges totalled £9.0m (FY2023), £27.0m (FY2024), £33.5m (FY2025), and £12.0m (FY2026) per Yahoo. Normalised earnings of ~£35–37m are materially steadier, suggesting underlying pub trading is healthier than headline net income implies. FY2025’s reported profit collapse (£9.8m) followed FY2024’s large acquisition (purchase of business: £144.5m cash outflow) and elevated interest expense (£19.9m).
+
+**Cash flow and capital allocation (Yahoo fallback).** Operating cash flow strengthened to £105.2m (FY2026) from £98.3m (FY2025) and £73.4m (FY2024). Free cash flow was £69.1m (FY2026), £51.3m (FY2025), and £24.9m (FY2024 — acquisition year). Capex ran at £36–47m annually. The company repaid £78m of debt while issuing £57m (FY2026), paid £14.7m in dividends, and repurchased £6.1m of shares. Cash at year-end was only £8.1m, with negative working capital of £81.6m — typical for pub operators but worth monitoring.
+
+**Balance sheet (Yahoo fallback, FY2026).** Total assets £1,317m; shareholders’ equity £790m; tangible book value £713m; net debt £224m (total debt £315m including £83m capital leases); fixed-asset revaluation reserve £303m. Land and buildings dominate: land £993m, buildings £153m (gross PPE £1,367m). Goodwill/intangibles are modest at £77m. Pension obligations appear small (£1.5m non-current pension liability). Net debt/EBITDA (using Yahoo EBITDA £103m) is roughly 2.2x — manageable but not negligible given £18.2m interest expense.
+
+**Screen vs. accounts reconciliation.** The screen’s P/B 0.54 and ROE 3.6% align with a property-revalued equity base: high asset values suppress ROE despite adequate cash earnings. FCF of ~£49m in the screen snapshot vs. Yahoo FY2026 FCF of £69.1m may reflect timing or share-class market-cap differences; both confirm strong cash conversion (OCF £105m vs. net income £28m — a Piotroski pass).
+
+**What primary filings would add.** Annual and interim RNS bodies would be needed to verify going-concern language, banking covenants, lease liabilities under IFRS 16, property valuation methodology, and segment performance. None are available here.
+
+## RISKS AND RED FLAGS
+**Sector and cyclicality.** UK pub operators face persistent wage inflation, energy costs, and discretionary consumer pressure. News coverage (July 2026) references “industry challenges” even as Young’s benefited from summer weather and sporting events — trading is improving but not immune to downturns.
+
+**Leverage and interest.** Net debt of £224m and interest expense of £18.2m (Yahoo FY2026) consume a meaningful share of operating profit. Debt was raised to fund acquisitions (FY2024 issuance £202m). Covenant terms cannot be assessed — no annual report body is in the pack.
+
+**Earnings quality.** Recurring exceptional charges (£12–34m annually) and impairments on capital assets raise questions about acquisition integration and asset write-down discipline. Normalised earnings smooth this, but sustained impairments would erode trust in the asset base.
+
+**Property valuation risk.** A £303m revaluation reserve underpins equity. A downward revaluation cycle — plausible in a weaker property or pub-transactions market — would hit book value and potentially covenants. Low ROE (3.6%) partly reflects this accounting choice rather than operational failure, but it limits screen passes on quality-moat models.
+
+**Governance and structure.** Non-voting shares (YNGN) carry no vote; the founding family retains control via A shares. This structural discount is appropriate but may cap re-rating relative to YNGA. Heavy institutional ownership (~71%, February 2026) increases sensitivity to index and fund flows.
+
+**Liquidity and listing transition.** AIM cancellation (28 April 2026 RNS body) is administrative, not operational, but investors should confirm Main Market liquidity and index inclusion separately.
+
+**Pension and contingencies.** Pension liabilities appear immaterial on the Yahoo balance sheet (£1.5m). No going-concern, litigation, or contingency disclosures are available from filing bodies — a material gap.
+
+**Screen blind spots.** Failed models include Graham Defensive/Net-Net, High Dividend Yield, Buffett Quality, and Economic Moat — signalling the name is cheap on assets and cash flow but not a classic high-quality compounder on reported returns.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate: a mix of company-specific RNS headlines (via aggregators), Yahoo Finance trading commentary, and generic small-cap screen articles. Material items include:
+
+- **Main Market transfer** — “Young & Co's Brewery Announces Christmas and Q3 Trading Update, and Move to Main Market” (James Sharp & Co., 22 January 2026); update on 25 March 2026; AIM cancellation confirmed 28 April 2026 (primary RNS body).
+- **Cubitt House acquisition** — “Young’s to snap up Cubitt House pubs in £30m deal” (Yahoo Finance, 8 April 2026); eight gastropubs with rooms, bolt-on to premium estate.
+- **FY26 trading update** — “Young & Co's Brewery Release FY26 Trading Update” (James Sharp & Co., 23 April 2026); details not in filing bodies.
+- **Trading momentum** — “Young’s toasts boost from summer of sport despite industry ‘challenges’” (Yahoo Finance, 7 July 2026); sunny weather filling pub gardens.
+- **Capital returns** — “Young & Co.'s Brewery Finalizes Share Buyback of Non-voting and A Shares in July 2026” (Kalkine Media, 17 July 2026); “Result of AGM” (Yahoo Finance UK, 7 July 2026).
+- **Insider activity** — “Favourable Signals For Young's Brewery: Numerous Insiders Acquired Stock” (Yahoo Finance, 29 March 2026).
+- **Ownership** — “With 71% ownership… heavily dominated by institutional owners” (Yahoo Finance, 15–16 February 2026).
+
+Several headlines are syndicated screening pieces (e.g. “European Insider Action: Top Undervalued Small Caps”, May 2026) rather than fundamental research. No regulatory actions or management departures were flagged. Trading-update and acquisition economics should be verified against full RNS text not captured in this pack.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Quantitative cheapness, cash-flow strength, and Piotroski quality align with a property-backed pub estate, but the absence of annual and interim filing bodies prevents full verification of earnings quality, covenants, and management guidance — partially confirming, not fully endorsing, the strong buy signal.

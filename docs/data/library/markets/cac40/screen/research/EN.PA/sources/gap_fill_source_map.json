@@ -1,0 +1,80 @@
+{
+  "ticker": "EN.PA",
+  "company_name": "Bouygues SA",
+  "market": "cac40",
+  "built_at": "2026-07-26T18:09:06.611017+00:00",
+  "inventory": {
+    "available": {
+      "filings_index": true,
+      "filings_bodies": false,
+      "yahoo_financials": true,
+      "news_manifest": true,
+      "screening_snapshot": true,
+      "macro_context": false,
+      "alternate_news": true
+    },
+    "thin": [
+      "filings_bodies",
+      "macro_context"
+    ],
+    "filings_body_files": 0,
+    "filings_indexed_bodies": 0,
+    "filings_summary": {
+      "total": 0,
+      "annual": 0,
+      "interim": 0,
+      "other": 0,
+      "with_body": 0
+    },
+    "news_article_count": 14,
+    "evidence_ladder": [
+      "filings_bodies",
+      "filings_index",
+      "yahoo_financials",
+      "news_manifest",
+      "alternate_news",
+      "screening_snapshot",
+      "macro_context"
+    ]
+  },
+  "body_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "with_body_before": 0,
+    "with_body_after": 0,
+    "note": "refetch_missing_filing_bodies"
+  },
+  "ch_refetch": {},
+  "alternate_news_added": 0,
+  "alternate_news_path": "docs/data/library/markets/cac40/screen/research/EN.PA/sources/alternate_news.json",
+  "planned_alternate_sources": [
+    {
+      "id": "investegate_rns_full",
+      "label": "Full Investegate / RNS HTML body re-pull",
+      "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
+      "score": "3"
+    },
+    {
+      "id": "exchange_filings_full",
+      "label": "Euronext / national register filing full-text re-pull",
+      "why": "Euro memos often index headlines without bodies",
+      "score": "3"
+    },
+    {
+      "id": "company_ir_presentation",
+      "label": "Company IR annual report / results deck PDF",
+      "why": "ESEF/iXBRL and segment tables often missing from Yahoo",
+      "score": "3"
+    }
+  ],
+  "evidence_ladder": [
+    "filings_bodies",
+    "filings_index",
+    "yahoo_financials",
+    "news_manifest",
+    "alternate_news",
+    "screening_snapshot",
+    "macro_context"
+  ],
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+}

@@ -1,0 +1,90 @@
+# Aena S.M.E., S.A. (AENA.MC) — Research memo
+
+_Version 1 · Updated 2026-07-26T17:30:38.035539+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Aena is Spain’s dominant airport operator—a regulated infrastructure monopoly with exceptional post-pandemic earnings recovery, now screening as a buy on quality, dividend, GARP, and risk metrics (P/E 18.5, yield 4.1%, ROE 24.4%, Piotroski 9/9). The investment case rests on traffic-led revenue growth, high returns on a quasi-monopolistic asset base, and a shareholder-friendly dividend policy (€1.09 per share approved April 2026). The central debate is whether regulatory tariff caps (CNMC DORA III), rising operating costs, and heavy capex through 2034 will compress the margin expansion that drives today’s valuation, or whether international concessions (Rio de Janeiro, Mexico GAP stake) and sustained tourism demand will extend the growth runway. Primary annual and interim filing bodies are absent from the research pack; all financial figures below fall back to Yahoo Finance data and should be verified against CNMV annual/interim reports before trading.
+
+## INVESTMENT THESIS
+The quantitative screen flags Aena as a buy across five factor families—cheapness, quality, dividend, GARP, and risk—passing eight of 22 models including Neff PEGY (PEGY 0.04), Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Piotroski F-Score (9/9), and Earnings Quality. That profile fits a value investor seeking a high-quality compounder rather than a deep-value net-net: the name fails Graham Defensive, Deep Value, Schloss Low P/B, and FCF Yield screens, reflecting premium multiples (P/B 4.2) on an asset-heavy regulated utility.
+
+Business quality aligns with the screen. Aena operates Spain’s principal airport network under long-dated concession agreements—a structural moat with limited direct competition, high barriers to entry, and revenue tied to passenger volumes and regulated aeronautical charges. Yahoo-sourced financials (fallback; see Financial Review) show revenue rising from €4.19bn (2022) to €6.29bn (2025), net income from €901m to €2.14bn, and EPS from €0.60 to €1.42 over the same period—a compound recovery and expansion story consistent with the screen’s 10% growth input and improving signal trend (conviction 37%, one week at buy, improving).
+
+The dividend pillar is material: 2025 cash dividends of €1.50bn (Yahoo) against net income of €2.14bn imply a payout near 70%, supporting the 4.1% yield. Free cash flow of €1.73bn (2025) covers dividends with modest headroom after capex of €1.06bn. For a GARP-oriented value investor, Aena offers moat-like infrastructure economics, visible cash returns, and earnings momentum at a mid-teens P/E—not statistically cheap on book, but reasonably priced for 24% ROE and a perfect Piotroski score indicating improving leverage, margins, and asset turnover.
+
+## FINANCIAL REVIEW
+**Filing coverage gap.** The `filings_index.json` catalogue contains three CNMV entries (ISIN information, entity registration, other relevant information listing page), all classified as `period: other`. No annual reports or interim results appear in the index (`annual: 0`, `interim: 0`). The filing body extracts are CNMV registry navigation pages without financial statement content. Interim Q1 2026 and H1 2026 result announcements are referenced on the CNMV listing page (e.g. “Press release regarding Q1 2026 results”, 29 April 2026; “1H 2026 Results” conference call, 22 July 2026) but their bodies were not captured. **All figures below are sourced from `financials_annual.json` (Yahoo Finance) as an explicit fallback.**
+
+**Income statement trend (Yahoo, € millions)**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Revenue | 4,190 | 5,048 | 5,784 | 6,294 |
+| Operating income | 1,353 | 2,106 | 2,626 | 2,966 |
+| EBITDA | 2,057 | 3,226 | 3,686 | 3,911 |
+| Net income | 901 | 1,631 | 1,934 | 2,137 |
+| Diluted EPS (€) | 0.60 | 1.09 | 1.29 | 1.42 |
+
+Revenue grew 50% over three years; net income more than doubled. EBITDA margin expanded from roughly 49% (2022) to 62% (2025). Operating expenses rose materially in 2025 (€1,463m vs €1,317m in 2024), consistent with news commentary that higher operating costs are pressuring margins despite top-line growth.
+
+**Balance sheet (Yahoo, year-end 2025, € millions)**
+
+- Total assets: 18,194  
+- Total equity: 9,206 (minority interest: −52)  
+- Total debt: 7,281; net debt: 5,183  
+- Cash and equivalents: 2,048  
+- Net PPE: 12,131 (asset-intensive concession model)  
+- Goodwill and intangibles: 1,700  
+
+Net debt/EBITDA ≈ 1.3× (5,183 / 3,911)—moderate for regulated infrastructure. Equity base expanded from €6.72bn (2022) to €9.21bn (2025), supporting the screen’s 24.4% ROE.
+
+**Cash flow (Yahoo, € millions)**
+
+| | 2023 | 2024 | 2025 |
+|--|------|------|------|
+| Operating cash flow | 2,220 | 2,747 | 2,787 |
+| Capital expenditure | (1,383) | (823) | (1,059) |
+| Free cash flow | 837 | 1,924 | 1,729 |
+| Cash dividends paid | (724) | (1,183) | (1,498) |
+
+FCF rebounded strongly post-pandemic but dividend growth has absorbed most discretionary cash (2025 FCF payout ratio ≈ 87%). Capex stepped up again in 2025 after a lower 2024 year, consistent with infrastructure expansion plans referenced in news (works extended to 2034).
+
+**Interim / quarterly (Yahoo quarterly income, fallback only)**
+
+Q1 2026 (period label in Yahoo: 2026): revenue €1,466m; operating income €463m; net income €329m; diluted EPS €0.22. Q1 2025 comparable: revenue €1,307m; net income €301m; EPS €0.20—modest YoY improvement. Without the primary Q1 2026 filing body, margin trajectory and management commentary on cost inflation cannot be verified from regulatory sources.
+
+**Items not verifiable from filing bodies:** going-concern language, covenant thresholds, pension obligations detail, contingency disclosures, and auditor emphasis-of-matter paragraphs. Yahoo shows non-current pension liabilities of €8m and current pension provisions of €51m (2025)—immaterial at group level but unconfirmed against annual report notes.
+
+## RISKS AND RED FLAGS
+**Regulatory and political.** The dominant risk not captured by quantitative screens. News and CNMV listing references highlight: (i) CNMC report on DORA III tariff framework (02 June 2026); (ii) CNMC setback on airport tariffs (“revés de la CNMC”, 03 June 2026); (iii) activist investor TCI threatening legal action if Aena does not fight for higher tariffs (14 November 2025); (iv) Senate amendment triggering a share price fall (06 November 2025); (v) political pressure on airport cogestión, with Aena stating it will not open airports to shared management (16 April 2026, Cinco Días). Tariff outcomes directly cap aeronautical revenue growth and are the key variable absent from filing-body verification.
+
+**Operating cost and margin pressure.** Multiple news items (Morningstar, 01 May 2026; Investing.com, 29 April 2026) report Q1 2026 results disappointing the market despite higher profit and revenue, driven by operating expense growth. Yahoo 2025 data shows other operating expenses rising faster than revenue—a trend requiring confirmation in H1 2026 filings.
+
+**Capex and capacity constraints.** Infrastructure works extended to 2034 (Benzinga, 04 May 2026). Yahoo 2025 capex of €1.06bn plus intangible investments of €339m indicate sustained reinvestment needs. Yahoo earnings-call headline (25 February 2026) cites “infrastructure constraints” alongside record passenger growth—a potential cap on near-term volume leverage.
+
+**Leverage and dividend sustainability.** Net debt of €5.2bn and dividends consuming ~87% of 2025 FCF leave limited buffer if traffic slows or tariffs disappoint. The screen fails Financial Health and FCF Yield models—consistent with this tension.
+
+**Governance and concentration.** CNMV entity data confirms 1.5bn shares outstanding; ENA remains subject to Spanish state influence (51% historical ownership—not re-verified in filing bodies). Shareholder activism (TCI) and political commentary (Pedro Sánchez remarks, September 2025) introduce governance volatility not scored by Piotroski.
+
+**Geographic expansion execution.** Rio de Janeiro concession (Cinco Días, 31 March 2026) and 6.55% GAP stake in Mexico (Negocios.com, 07 May 2026) diversify revenue but add execution, currency, and country-risk dimensions outside the domestic regulated core.
+
+**Filing and disclosure gap.** Absence of annual/interim filing bodies in the research pack is itself a red flag for verify-before-trade workflows; contingent liabilities, related-party transactions, and regulatory fee assumptions cannot be stress-tested from primary sources here.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is extensive but skewed toward price commentary and sell-side notes rather than primary disclosures. Material themes:
+
+**Results and dividends.** Q1 2026 results released 29 April 2026 (CNMV register 40511); market reaction negative despite profit growth (Investing.com, XTB, Benzinga, 29 April 2026). FY 2025 earnings call highlighted record revenue and passengers but rising opex (Yahoo Finance, 25 February 2026). Dividend of €1.09 gross per share approved at the 2026 AGM (16 April 2026; paid ~27 April 2026, Finect/Cinco Días)—total payout ~€1.64bn referenced in press.
+
+**Regulation.** CNMC DORA III report published (02 June 2026); tariff dispute remains live (Estrategias de Inversión, 03 June 2026; Expansión/TCI, November 2025). Basque bilateral airport body agreement announced 27 March 2026.
+
+**Strategy and M&A.** Rio Galeão concession awarded (31 March 2026). 6.55% stake in Grupo Aeroportuario del Pacífico (GAP), Mexico (07 May 2026). Management reaffirmed exclusive control of Spanish airport operations (April 2026).
+
+**Market and sentiment.** Repeated analyst upgrades (JP Morgan, June 2026; Bank of America, July 2026; Morgan Stanley, April 2026). BlackRock increased position (Expansión, 07 April 2026). Palma passenger record controversy (09 June 2026). Stock reached historical highs in early 2026 before Q1-result-driven correction.
+
+News coverage is **not thin** on corporate events, but **thin on primary financial detail**—most items are secondary market commentary in Spanish financial media rather than extracted filing text.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Yahoo-sourced financials and news corroborate the screen’s quality-dividend-GARP buy case, but missing primary annual/interim filings and active regulatory tariff risk prevent full confirmation and warrant a measured rather than aggressive overlay.

@@ -1,0 +1,109 @@
+# Unibail-Rodamco-Westfield SE (URW.PA) — Research memo
+
+_Version 1 · Updated 2026-07-26T17:58:46.487512+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Unibail-Rodamco-Westfield is Europe’s largest listed shopping-centre landlord, now consolidating around a simplified Paris-listed URW SE structure after years of balance-sheet repair. The quantitative screen flags a buy on cheapness (P/E 12.0, P/B 0.9), a 10.4% FCF yield, 4.3% dividend yield, and a Piotroski F-Score of 8/9, with earnings momentum sharply improved in FY2025. The valuation hook is a stock trading below book on a business that reported €1.27bn net income and is guiding recurring earnings (RNRAPA) of €9.15–9.30 for 2026, whilst returning capital via a rising distribution (€4.50 paid for 2025; €5.50 targeted for 2026). The central debate is whether post-recovery earnings and deleveraging are durable, or whether elevated net debt (~€19.4bn), retail cyclicality, and acquisition-led US exposure (Westfield UTC) reintroduce balance-sheet risk not fully visible without primary filings. **Critical data gap:** no annual or interim filing bodies were retrieved in the source pack; financial analysis below relies on Yahoo Finance fallback and news headlines.
+
+---
+
+## INVESTMENT THESIS
+For a value investor, URW offers a rare combination of deep discount to asset backing, improving cash generation, and an explicit shareholder-return policy after a painful 2023 loss year. The screen passes five factor families — cheapness, quality, dividend, GARP, and risk — with standout metrics including earnings yield 8.3%, Lynch/Neff PEG near zero (PEG 0.02), and dividend growth. Business quality is supported operationally: FY2025 net income of €1.27bn (per news/yfinance summary, consistent with Yahoo EPS of €8.86) marks a step-change from €146m in 2024 and a €1.63bn loss in 2023, whilst operating cash flow held above €2.0bn and free cash flow rose to €1.15bn (Yahoo). Management is actively shrinking net debt (€19.4bn at end-2025 vs €21.3bn in 2024) and recycling capital via €719m of investment-property disposals in 2025, aligning with the “Superior Places” portfolio-shaping strategy referenced in news flow. The failed screen models (Graham Defensive, Financial Health, Buffett Quality, Economic Moat) appropriately flag that this is not a fortress balance sheet — leverage and sector headwinds remain — but for a contrarian/value sleeve, the asymmetry lies in buying sub-book equity in a recovering, cash-generative landlord with a visible distribution ramp, provided the investor accepts REIT-style cyclicality and verifies covenant/going-concern language in filings before sizing.
+
+---
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` contains zero indexed filings (0 annual, 0 interim, 0 with body extracts). No primary regulatory filing text is available under `filings/bodies/`. All figures below are sourced from **`financials_annual.json` (Yahoo Finance)** unless noted as news-derived company headlines. Interim/H1 2025 or 2026 filing analysis is not possible from this pack.
+
+### Income statement trend (Yahoo, €m)
+
+| Metric | 2023 | 2024 | 2025 |
+|---|---|---|---|
+| Total revenue | 3,061 | 3,256 | 3,058 |
+| Operating income | 1,651 | 1,843 | 1,777 |
+| EBITDA | (727) | 1,627 | 2,724 |
+| Net interest expense (net) | (435) | (466) | (446) |
+| Pretax income | (1,771) | 391 | 1,869 |
+| Net income | (1,629) | 146 | 1,268 |
+| Basic EPS (€) | (11.72) | 1.05 | 8.86 |
+
+FY2025 represents a pronounced earnings recovery driven by normalised operating performance and lower unusual charges relative to 2023’s heavy impairment cycle. Revenue was broadly flat year-on-year (–6% vs 2024 on a reported basis), yet net income expanded nearly ninefold, indicating material non-operating and fair-value/normalisation effects typical of investment-property groups — a point that primary filings would need to disaggregate.
+
+**Company-reported headline (news fallback, not filing body):** Yahoo Finance news summary of FY2025 results (17 Feb 2026) cites turnover/sales of **€2,328.2m**, net income **€1.27bn**, and basic EPS from continuing operations **€8.86**, broadly consistent with Yahoo income-statement EPS but using a narrower “sales” definition than Yahoo total revenue. Guidance for **2026 RNRAPA of €9.15–9.30** was reported by Les Echos (12 Feb 2026). Q1 2026 trading update language (Les Echos, 23 Apr 2026) indicated profitability guidance maintained.
+
+### Balance sheet and leverage (Yahoo, €m, year-end)
+
+| Metric | 2024 | 2025 |
+|---|---|---|
+| Total assets | 53,546 | 49,684 |
+| Investment properties | 37,112 | 36,888 |
+| Stockholders’ equity | 17,671 | 17,702 |
+| Total debt | 27,560 | 22,688 |
+| Net debt | 21,292 | 19,437 |
+| Cash & equivalents | 5,289 | 2,681 |
+
+Deleveraging is the clearest positive trend: net debt fell **€1.9bn** in 2025, with long-term debt reduced from €23.4bn to €21.0bn and significant debt repayments (€5.2bn) partially offset by new issuance (€1.3bn) per cash-flow statement. Net debt/EBITDA (Yahoo) is approximately **7.1x** (€19.4bn / €2.7bn), still elevated for a value investor’s “financial health” threshold — consistent with the screen failing Financial Health and Graham Defensive models. P/B 0.9 implies the market prices equity at a discount to book (stockholders’ equity €17.7bn vs implied market cap from P/E metrics).
+
+### Cash flow and distributions (Yahoo, €m)
+
+| Metric | 2023 | 2024 | 2025 |
+|---|---|---|---|
+| Operating cash flow | 2,057 | 2,190 | 2,047 |
+| Capital expenditure | (1,181) | (1,308) | (895) |
+| Free cash flow | 876 | 882 | 1,152 |
+| Cash dividends paid | 0 | (348) | (501) |
+| Sale of investment properties | 299 | 494 | 719 |
+
+FCF conversion remains robust; the screen’s **10.4% FCF yield** and **€1.57bn FCF** key metric align with the €1.15bn Yahoo FCF after capex (difference likely reflects market-cap-based yield calculation timing). Dividends resumed and scaled: **€4.50/share for 2025** (Boursier.com / Revue économique de France, May 2026 AGM coverage), with management targeting **€5.50/share distribution for 2026** (Yahoo Finance news, 17 Feb 2026).
+
+### Interim / half-year gap
+
+No interim filings (H1 2025, Q1/Q2 2026 trading statements) are indexed in this pack. Q1 2026 commentary exists only at headline level in the news manifest (Les Echos, 23 Apr 2026: profitability guidance maintained). Verify H1 2026 results and covenant disclosures directly from Euronext/AMF filings before trade.
+
+---
+
+## RISKS AND RED FLAGS
+**Leverage and interest burden:** Net debt of €19.4bn and interest expense of €829m (2025, Yahoo) remain material relative to operating income. The screen’s failure on Financial Health and Graham Defensive models is warranted. Without filing bodies, covenant headroom, maturity walls, and going-concern language cannot be assessed — this is a significant verify-before-trade gap.
+
+**Earnings volatility and fair-value sensitivity:** The swing from a €1.63bn loss (2023) to €1.27bn profit (2025) reflects investment-property fair-value movements, disposals, and special items (Yahoo: total unusual items –€186m in 2025, –€439m in 2023). Reported EPS is not a smooth proxy for recurring rental cash earnings; RNRAPA guidance (€9.15–9.30 for 2026) is the more relevant operating metric but lacks filing-body reconciliation here.
+
+**Retail cyclicality and structural pressure:** Shopping-centre landlords face e-commerce substitution, tenant insolvency risk, and consumer-spending sensitivity. URW’s “Superior Places” premium-mall positioning provides some moat, but the screen fails Economic Moat and Buffett Quality — appropriate for a leveraged cyclical asset class.
+
+**US re-expansion risk:** Agreement to acquire the remaining 50% of Westfield UTC for approximately **$705m** (Les Echos / Boursier.com, 10 Jun 2026) adds US operational and currency exposure at a time when the group has been deleveraging via European disposals. Integration and capital-allocation rationale require filing-level scrutiny.
+
+**Governance and complexity (improving but recent):** Long-standing Franco-Dutch dual-structure complexity is being removed — URW SE becomes the sole listed entity (Idéal Investisseur / Boursier.com, 25 Jun 2026) — a positive simplification. Supervisory board changes (Jules Niel appointment, Les Echos, 29 Aug 2025) and an October 2025 management shake-up with raised 2025 targets (ABC Bourse, 24 Oct 2025) add transition noise.
+
+**Liquidity / working capital:** Piotroski component “current ratio improving” failed (7/9 other components passed). Working capital fell from €1.95bn (2024) to €0.85bn (2025, Yahoo), worth monitoring.
+
+**Pension / contingencies:** No pension or litigation disclosure available from filing bodies in this pack. Treat as unresolved.
+
+---
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-good on corporate events**, thin on deep sell-side research. Material items:
+
+| Date | Headline | Significance |
+|---|---|---|
+| 12 Feb 2026 | *URW dépasse son objectif de rentabilité en 2025 mais se veut prudent pour 2026* (ABC Bourse) | FY2025 beat; cautious 2026 tone |
+| 12 Feb 2026 | *URW : résultat net de 1,27 MdE; dividende de 4,50 euros par action* (Boursier.com) | Confirms earnings and dividend |
+| 12 Feb 2026 | *Unibail-Rodamco-Westfield vise un RNRAPA de €9,15-9,30 en 2026* (Les Echos) | Forward earnings guide |
+| 17 Feb 2026 | *How Investors Are Reacting To URW 2025 Earnings Jump And 2026 Payout Target* (Yahoo Finance) | €2,328m sales; €5.50 distribution target for 2026 |
+| 23 Apr 2026 | *URW maintient sa prévision de rentabilité pour 2026 à l'issue du premier trimestre* (Les Echos) | Q1 trading update |
+| 10 Jun 2026 | *URW va acquérir les 50% restants de Westfield pour environ $705 mlns* (Les Echos) | M&A — full ownership of Westfield UTC |
+| 25 Jun 2026 | *URW SE devient l'unique entité cotée à Paris* (Idéal Investisseur) | Legal simplification completed |
+| 25 Jun 2026 | *URW annonce la finalisation de la simplification de sa structure juridique* (Boursier.com) | Dual-structure removal |
+| 14 May 2026 | *Unibail-Rodamco-Westfield valide un dividende de 4,50 euros… suppression du jumelage franco-néerlandais* (Revue économique de France) | AGM decisions |
+| 30 Apr 2026 | *URW va installer son siège social au sein du quartier d'affaires de Paris La Défense* (ABC Bourse) | HQ relocation |
+| 24 Oct 2025 | *URW bouscule sa direction et revoit ses objectifs à la hausse pour 2025* (ABC Bourse) | Management change; guidance raise |
+| 29 Aug 2025 | *URW: Jules Niel… intègre le conseil de surveillance* (Les Echos) | Board composition |
+| 25 Feb 2026 | *Retail Landlords Formalize Sustainability Scoring Across 1,200 Brands* (Yahoo Finance) | URW–Ingka SRI Association launch |
+
+Much other coverage is price-tracking or share-count disclosure (Yahoo Finance France monthly notices). No material regulatory enforcement actions surfaced in the manifest.
+
+---
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Quantitative cheapness and FY2025 deleveraging/cash-flow recovery support the screen’s buy signal, but absent primary filings and with leverage still elevated, deep research confirms the value case directionally whilst leaving covenant, recurring-earnings, and acquisition-risk verification incomplete.

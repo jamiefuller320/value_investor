@@ -1,0 +1,93 @@
+# Partners Group Holding AG (PGHN.SW) — Research memo
+
+_Version 1 · Updated 2026-07-26T18:02:11.466931+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Partners Group is a Swiss listed private-markets manager whose shares screen as a buy on quality, cash generation, dividend yield, and growth-at-a-reasonable-price metrics, despite failing classic deep-value screens on price-to-book. The investment hook is a business compounding fee-related revenue and earnings (Yahoo: revenue up 22% and net income up 12% in FY2025) whilst trading at roughly 14x earnings with a ~6.8% dividend yield and ~7.7% FCF yield. The central debate is whether June 2026 redemption caps on an $8.6bn evergreen private-equity fund—and broader semi-liquid fund stress—are a temporary liquidity feature or a structural threat to the franchise, particularly after a ~30% share-price drawdown. Primary regulatory filings were not retrieved for this pack; all financial figures below fall back to Yahoo unless noted.
+
+## INVESTMENT THESIS
+The quantitative screen rates PGHN a buy (10/22 models passed; composite 57%, sector-relative 60%), spanning five factor families: cheapness, quality, dividend, GARP, and risk. That profile fits a value-oriented allocator seeking cash-backed earnings rather than asset-based bargains: P/E ~14.0, FCF yield ~7.7%, dividend yield ~6.8%, ROE ~54.8%, and Neff PEGY ~0.02 on ~11% growth. Passed models include FCF Yield, Quality Value, Buffett Quality, Economic Moat, High Dividend Yield, Dividend Growth, Magic Formula, Dreman Contrarian, and Earnings Quality—consistent with a high-return, fee-heavy asset manager rather than a net-net candidate.
+
+Business quality, as inferred from Yahoo financials and news flow, supports the screen. Fee revenue rose from USD 1.81bn (2022) to USD 2.46bn (2025); diluted EPS grew from USD 43.08 (2024) to USD 48.45 (2025); and free cash flow rebounded sharply to USD 1.49bn in 2025 from USD 793m in 2024. The firm reported record H1 fundraising of USD 16bn (15 July 2026, boerse.de / WSJ) and reconfirmed full-year guidance, whilst news references USD 184.9bn assets under management at end-2025. Share repurchases (USD 334m in 2025) and a rising dividend (USD 1.09bn paid in 2025) align with the dividend and quality screens.
+
+What the screen underweights is franchise risk in semi-liquid/evergreen products—a gap the news flow fills. For a value investor, the case is: buy a compounding fee business at a mid-teens multiple and high cash yield after a sentiment-driven de-rating, accepting that balance-sheet leverage and redemption mechanics require monitoring. Failed screens (Graham Defensive/Enterprising, Deep Value, Schloss Low P/B, Financial Health, Piotroski F-Score 6/9) flag elevated P/B (~8.0), rising net debt, and deteriorating balance-sheet trend metrics—not a cheap asset, but a quality compounder on sale relative to its own history.
+
+## FINANCIAL REVIEW
+**Primary filings:** The `filings_index.json` catalogue contains zero entries (0 annual, 0 interim, 0 other; regime: `euro_filings`). No plain-text extracts exist under `filings/bodies/`. Annual and interim Swiss/ESEF results could not be verified from primary sources in this pack. All figures below are from `financials_annual.json` (Yahoo); quarterly income data in that file is empty.
+
+**Income statement trend (Yahoo, USD):**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Total revenue | 1,814m | 1,857m | 2,018m | 2,461m |
+| Operating income | 1,132m | 1,193m | 1,309m | 1,541m |
+| Net income | 1,005m | 1,003m | 1,128m | 1,261m |
+| Diluted EPS | 39.34 | 38.55 | 43.08 | 48.45 |
+
+Revenue CAGR 2022–2025 is roughly 11%; net income re-accelerated in 2024–2025 after a flat 2023. Operating margin expanded (operating income/revenue: ~62% in 2022 to ~63% in 2025). Yahoo flags material unusual items each year (e.g. USD 75.6m in 2025; USD 112.5m in 2024), so reported earnings include non-recurring investment gains/losses that warrant reconciliation against Swiss GAAP/IFRS filings when available.
+
+**Cash flow and capital return (Yahoo, USD):**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Operating cash flow | 1,064m | 643m | 934m | 1,515m |
+| Free cash flow | 975m | 534m | 793m | 1,494m |
+| Dividends paid | 861m | 959m | 1,018m | 1,092m |
+| Share repurchases | 569m | 67m | 499m | 334m |
+
+FCF conversion strengthened markedly in 2025, supporting the screen’s FCF Yield pass (~USD 1.34bn FCF vs market cap implied by screen metrics). Dividends consume a large share of FCF (~73% in 2025), consistent with the high-yield screen but leaving less buffer if earnings weaken.
+
+**Balance sheet (Yahoo, USD, year-end):**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Total assets | 4,576m | 4,805m | 5,683m | 6,388m |
+| Stockholders’ equity | 2,416m | 2,427m | 2,414m | 2,187m |
+| Total debt | 1,147m | 1,475m | 2,144m | 2,486m |
+| Net debt | 290m | 1,089m | 1,756m | 2,057m |
+| Cash | 780m | 281m | 289m | 329m |
+
+Net debt rose fourfold from 2022 to 2025 whilst reported equity fell ~10% in 2025, likely reflecting buybacks, dividends, and mark-to-market on co-investments. This aligns with Piotroski failures on “leverage declining” and “current ratio improving.” Pension-related liabilities are material: non-current pension/post-retirement obligations of USD 194m plus current pension items of USD 390m at end-2025 (Yahoo)—not fully dissectable without the annual report note.
+
+**Interim results:** None indexed. News references an H1 2026 business update (15 July 2026: record USD 16bn fundraising, guidance reconfirmed) but no interim filing body is available to cite fee income, AuM, or redemption metrics directly.
+
+**Gaps:** No annual report, half-year report, or ad hoc regulatory filing text in this pack. Segment breakdown (management fees vs carried interest vs investment income), AuM flows, and going-concern or contingency language cannot be verified from primary sources here.
+
+## RISKS AND RED FLAGS
+**Semi-liquid redemption stress:** Multiple headlines (3 June 2026, MarketScreener: “Partners Group begrenzt Rücknahmen bei Private-Equity-Fonds in Höhe von 8,6 Milliarden Dollar”) report redemption caps on an USD 8.6bn evergreen PE fund, triggering a ~13% share fall and 52-week lows. WSJ (15 July 2026) notes redemption pressure across private markets but highlights continued net inflows. Chairman Steffen Meister (25 June 2026, Reuters/Yahoo) flagged potentially “slightly smaller” evergreen funds—strategic adaptation, but also an admission of scale limits in semi-liquid structures.
+
+**Share-price and sentiment:** News cites YTD declines of ~27–32% (June 2026, Yahoo/MarketScreener), including short-seller attention (3 June 2026, Investing.com). Citigroup reportedly downgraded to Sell (29 April 2026, AD HOC NEWS); Deutsche Bank cut its price target (7 May 2026). Analyst scepticism is not captured by backward-looking quantitative screens.
+
+**Leverage and balance-sheet trend:** Rising net debt (USD 2.06bn at end-2025) and falling equity weaken the Financial Health and Piotroski screens. Without filing bodies, covenant terms, liquidity facilities, and going-concern assessments are unknown—an explicit verify-before-trade gap.
+
+**Succession and governance:** Founder Urs Wietlisbach is carving out an independent “PG3” unit amid redemption pressure and a ~30% share drop (15 June 2026, Yahoo)—potential distraction or strategic optionality, but adds key-person uncertainty.
+
+**Pension obligations:** Yahoo shows USD ~584m combined pension-related balance-sheet items at end-2025. Magnitude and funding status require annual-report disclosure.
+
+**Cyclical/private-markets exposure:** Fundraising remains strong, but institutional investors are “choosier” after turbulence (15 June 2026, Reuters). A prolonged exit or valuation cycle could compress carried interest and co-investment marks—partially visible in Yahoo unusual items but not modelled in screens.
+
+**Competitive/regulatory:** Sector-wide semi-liquid redemption debate (WSJ/Yahoo, June–July 2026) affects all large alternatives managers; no specific regulatory action against Partners Group appears in the news manifest.
+
+## NEWS HIGHLIGHTS
+Coverage is moderate-to-heavy on price action and redemption events, lighter on granular fundamentals.
+
+- **3 June 2026:** Redemption caps on USD 8.6bn evergreen PE fund; shares fall ~13%; 52-week lows (MarketScreener, Investing.com, Finanztrends).
+- **4 June 2026:** Partial recovery after company update (MarketScreener, Investing.com).
+- **11 June 2026:** Shares near lowest since 2020 (MarketScreener).
+- **15 June 2026:** Founder Urs Wietlisbach moves to carve out PG3 unit; PremiStar portfolio M&A; pension advisers flag choosier institutional demand (Yahoo/Reuters).
+- **20 June 2026:** “High-Yield Paradox: 26% share wipeout masks cost of semi-liquid ambitions” (aktiencheck.de).
+- **25 June 2026:** Expanded buyback programme; chairman considers slightly smaller evergreen funds (AD HOC NEWS, Reuters).
+- **26 June 2026:** Investor day; guidance in focus (AD HOC NEWS).
+- **15 July 2026:** Record H1 fundraising USD 16bn; full-year guidance reconfirmed (boerse.de); WSJ notes inflows despite redemption jitters.
+- **21 July 2026:** USD 15bn infrastructure fund draws pension demand amid macro headwinds (aktiencheck.de).
+- **28 April 2026:** Reference to USD 184.9bn AuM at end-2025 (AD HOC NEWS).
+- **10 March 2026:** Annual dividend announced, payable 26 May 2026 (MarketScreener).
+- **29 April / 7 May 2026:** Citigroup Sell; Deutsche Bank target cut (AD HOC NEWS).
+
+Much recent coverage is syndicated AD HOC NEWS price commentary rather than primary-source journalism; treat operational claims (fundraising, guidance) as requiring cross-check against Swiss reporting when filings are ingested.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: high
+Confidence: 0.58
+Rationale: Yahoo-backed earnings, FCF, and dividend metrics support the quantitative buy signal, but the absence of primary filings and the June 2026 evergreen-fund redemption shock leave franchise durability and balance-sheet risk insufficiently verified for full conviction.

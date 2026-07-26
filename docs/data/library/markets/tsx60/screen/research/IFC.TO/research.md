@@ -1,0 +1,102 @@
+# Intact Financial Corporation (IFC.TO) — Research memo
+
+_Version 1 · Updated 2026-07-26T18:10:44.477495+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Intact Financial Corporation is Canada’s largest property and casualty (P&C) insurer, with a growing North American, UK and European footprint and roughly C$25 billion of annual operating direct premiums written (DPW). The quantitative screen flags a buy on cheapness, quality, dividend, GARP and risk metrics (P/E 15.6, P/B 2.6, ROE 17.2%, debt/equity 23%), consistent with a franchise delivering upper-teens operating ROE and sustained book-value compounding. Primary filings show a sharp earnings inflection in 2025 — full-year combined ratio 88.2%, NOIPS C$19.21 (+33%), BVPS C$107.35 (+16%) — though Q2 2026 catastrophe and large-loss pre-announcements (~C$247 million above expectations) remind investors that weather volatility can interrupt the trend. The central debate is whether Intact’s data-driven underwriting and capital strength justify a quality-multiple re-rating, or whether climate frequency, UK&I remediation and periodic cat quarters cap near-term upside.
+
+## INVESTMENT THESIS
+For a value investor, Intact offers a rare combination: screen-level cheapness on earnings and book, plus demonstrable operating quality that most deep-value screens miss. The screen passes Graham Enterprising, FCF Yield, Neff PEGY, Quality Value, Buffett Quality, Dividend Growth and Earnings Quality — five factor families — while failing moat, deep-value and Piotroski (6/9) checks, which is typical for a capital-light insurer with goodwill from the RSA acquisition rather than a distressed net-net.
+
+Filings corroborate the quality overlay. Full-year 2025 operating ROE was 19.5% (reported ROE 18.4%), against management’s stated ambition of 500 bps of industry ROE outperformance and 10% annual NOIPS growth over the decade. Underwriting income rose 61% to C$2.7 billion on a combined ratio improvement of 4.0 points to 88.2%. The balance sheet strengthened: total capital margin C$3.7 billion, adjusted debt-to-total capital 16.5% (down from 19.4% in 2024), supporting a 21st consecutive dividend increase (+11% to C$1.47 per quarter) and NCIB activity. Q1 2026 sustained momentum (NOIPS C$4.33, +8%; operating ROE 19.4%; capital margin C$4.0 billion), with management explicitly citing share repurchases when the stock is “meaningfully undervalued.”
+
+The screen’s 2.0% yield understates total return potential given double-digit dividend growth and buybacks, while P/E ~15.6 on record 2025 earnings (diluted EPS C$18.35 per Q4-2025 release) embeds scepticism that recent margins are durable — a reasonable value entry if cat-normalised earnings hold.
+
+## FINANCIAL REVIEW
+**Source hierarchy:** Figures below are from filing body extracts (Q4-2025, Q3-2025, Q1-2026 and Q2-2026 cat pre-announcement releases) unless noted. The 2025 annual report announcement (26 March 2026) contains no financial tables; multi-year IFRS income and balance-sheet trends use Yahoo (`financials_annual.json`) as an explicit fallback.
+
+**Annual / full-year 2025 (Q4-2025 results release, 10 February 2026)**
+
+| Metric | 2025 | 2024 | Change |
+|--------|------|------|--------|
+| Operating DPW | C$25,067m | C$23,727m | +4% |
+| Combined ratio | 88.2% | 92.2% | −4.0 pts |
+| Underwriting income | C$2,717m | C$1,689m | +61% |
+| NOIPS | C$19.21 | C$14.43 | +33% |
+| Diluted EPS | C$18.35 | C$12.36 | +48% |
+| Net income (IFRS) | C$3,365m | C$2,297m | +46% |
+| Operating ROE (LTM) | 19.5% | 16.5% | +3.0 pts |
+| BVPS | C$107.35 | C$92.67 | +16% |
+| Total capital margin | C$3,722m | C$2,890m | +C$832m |
+| Adj. debt/total capital | 16.5% | 19.4% | −2.9 pts |
+
+Segment combined ratios (2025): Canada 86.8%, US 85.1%, UK&I 94.8%. Canada personal property was particularly strong (76.4% in Q4). Acquisition, integration and restructuring costs remained a headwind (C$396m pre-tax in 2025 per MD&A reconciliation in the Q4 release).
+
+**Interim trajectory**
+
+*Q3-2025 (4 November 2025):* Operating DPW growth accelerated to 6%; combined ratio 89.8% (vs 103.9% in Q3-2024, when cat activity was heavy); NOIPS C$4.46; operating ROE 19.6%; BVPS C$103.16 (+14% YoY). YTD combined ratio through Q3 was 89.0%.
+
+*Q1-2026 (5 May 2026):* Operating DPW +4%; combined ratio 91.3% (flat YoY); NOIPS C$4.33 (+8%); net income C$752m (+11%); BVPS C$108.78 (+13% YoY); capital margin C$4.0b. UK&I combined ratio deteriorated to 103.2% (+5.6 pts), driven by an ~8-point cat/large-loss impact — an early warning within an otherwise solid group print.
+
+*Q2-2026 pre-announcement (8 July 2026):* Catastrophe losses estimated at C$416m pre-tax net of reinsurance for continuing operations (Canada C$295m, UK&I C$121m), plus large losses C$247m above expectations in aggregate (~C$1.08 diluted EPS after-tax). Management noted elevated fire and property losses across geographies with no discernible pattern. Full Q2 results were scheduled for 28 July 2026 and are not in the source pack.
+
+**Multi-year context (Yahoo fallback — filing bodies lack prior-year annual MD&A extracts)**
+
+| Year | Revenue (C$m) | Net income (C$m) | Diluted EPS | Combined ratio (filings where available) |
+|------|---------------|------------------|-------------|------------------------------------------|
+| 2022 | 22,539 | 2,454 | 13.63 | n/a in index |
+| 2023 | 23,290 | 1,316 | 6.99 | n/a in index |
+| 2024 | 24,984 | 2,297 | 12.36 | 92.2% |
+| 2025 | 26,073 | 3,365 | 18.35 | 88.2% |
+
+The 2023 earnings trough (heavy cat year industry-wide) and 2025 recovery align with filing narrative of lower-than-expected catastrophe losses over the LTM periods ending Q4-2025 and Q1-2026. Yahoo shows 2025 free cash flow of C$3.9b and operating cash flow C$4.4b, consistent with the screen’s FCF Yield pass; common equity C$19.1b and total debt C$5.3b (screen D/E 23%).
+
+**Gaps:** No downloadable SEDAR+ annual report or AIF body text in the index — only the publication notice. No Q2-2026 or H1-2026 interim MD&A bodies. Q2-2025 interim release is absent from the index (Q3, Q4, Q1 present). Pension and contingency detail is limited to MD&A cross-references in press releases (Risk Management sections 24–27 of year-end 2025 MD&A cited for forward-looking and cat definitions).
+
+## RISKS AND RED FLAGS
+**Catastrophe and climate:** The dominant underwriting risk. Q2-2026 cat pre-release (C$416m cats, C$247m above-expectation large losses) follows Q1-2026 UK&I weakness and Q3-2025 personal-property cat load (16 points in Canada personal property). Filing language warns that preliminary loss estimates “may be materially different” from final amounts. CEO commentary frames severe weather as reinforcing firm market conditions, but earnings volatility remains high versus banks or life insurers.
+
+**UK&I remediation:** Full-year 2025 combined ratio 94.8% (+2.0 pts YoY); Q1-2026 at 103.2%. DPW declined in 2025 (−4% constant currency) due to DLG portfolio remediation and strategic exits. RSA/NIG rebranding to Intact Insurance (October 2025) completes integration optically, but profitability lag versus Canada/US persists.
+
+**Competitive and M&A landscape:** Commercial large-account competition is cited repeatedly in filings. Definity’s agreement to acquire Travelers’ Canadian operations (May 2025 competitor release in index) reshapes domestic market share. News references CIBC commentary on potential Hiscox acquisition — unconfirmed strategic risk/reward. Goodwill and intangibles ~C$9.8b (Yahoo 2025 balance sheet) reflect acquisition dependence; amortisation and integration costs (C$396m pre-tax in 2025) recur.
+
+**Capital and governance:** Preferred share issuance (C$150m Series 13, November 2025) and February 2026 private placements (C$250m MTN + C$250m LRCN) extend hybrid capital — prudent for growth but dilutes pure common equity story slightly. CFO transition (Louis Marcotte to Vice Chair; Ken Anderson CFO from February 2025) appears orderly. Pension: Yahoo shows defined benefit obligation C$463m and employee benefit liabilities C$298m (2025); filings adjust non-operating pension expense in MD&A reconciliations — full obligation/coverage not in available bodies.
+
+**Regulatory / legal:** Standard P&C regulatory oversight (OSFI, provincial regulators, UK FCA/PRA). No going-concern language in available extracts. Forward-looking statements explicitly disclaim guarantees and reference Risk Management sections — typical but confirms material uncertainty on claims, investment markets and external conditions. One indexed headline references FSRA enforcement against unrelated “IFC Financial Inc.” (February 2026) — not Intact Financial Corporation.
+
+**Screen blind spots:** Failed Piotroski (current ratio and margin trends), Economic Moat, and Financial Health models suggest the quantitative buy is not unanimous; cat-heavy quarters can impair short-term quality scores.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is ample on earnings and valuation, thinner on hard investigative reporting.
+
+**Earnings and capital (material):**
+- *Intact Financial Corporation reports Q4-2025 results* (10 February 2026) — record profitability, dividend hike, NCIB renewal.
+- *Intact Financial Corporation reports Q1-2026 results* (5 May 2026) — record Q1 NOIPS; dividend reaffirmed.
+- *Intact Financial posts record profitability and hikes dividend on strong Q4* (The Globe and Mail, 11 February 2026).
+- *Intact Financial reports 'elevated' losses driven by weather events* (Yahoo Finance, 9 July 2026) — Q2 cat pre-announcement.
+- *Intact Financial Corporation announces second quarter catastrophe and large losses estimate* (8 July 2026).
+- *Intact Financial Corporation Completes $150 Million Preferred Share Offering* (November 2025).
+- Dividend/buyback/note issuance commentary: *A Look At Intact Financial (TSX:IFC) Valuation After Dividend Hike Buyback Renewal And Note Issuance* (Yahoo Finance, 13 February 2026).
+
+**Strategy and M&A:**
+- *Intact Financial Corporation announces official global rebranding of RSA and NIG to Intact Insurance* (6 October 2025).
+- *Intact Financial acquires Jiffy, Canada's No. 1 home maintenance app* (14 November 2024) — distribution/prevention pivot.
+- *CIBC on Intact Financial; Weighs In On A Potential Hiscox Acquisition* (Yahoo Finance, 21 May 2026).
+- *Does AM Best’s A+ Rating Keep Intact Financial’s (TSX:IFC) Risk Profile a Competitive Advantage?* (Yahoo Finance, 22 May 2026).
+
+**Management:**
+- *Intact Financial Corporation Announces CFO Transition* (20 November 2024).
+
+**Climate / industry:**
+- *Canadian insurers fortify homes, urge Carney to put climate first as wildfire season kicks off* (Reuters/Yahoo, 14 April 2026).
+- *Intact supports Kingston's wildfire recovery… 75% of claims are closed* (14 July 2026).
+
+**Sell-side / sentiment:** Mixed — RBC Hold (*Intact Financial Corporation (IFC) Receives a Hold from RBC Capital*, 14 July 2026) vs positive RBC price forecast pieces; CIBC Neutral at C$288 pre-Q1 (*CIBC Confirms Neutral Rating*, 21 April 2026). Retail-oriented bullish articles (Motley Fool, Seeking Alpha *Hasn't Been This Cheap In Years*, May 2026) dominate flow.
+
+Overall: news confirms operational strength and capital returns but also rising cat anxiety into Q2 2026; no major governance scandal or regulatory action against the listed entity.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Primary filings confirm the screen’s quality-and-value buy case via record 2025–Q1 2026 profitability, balance-sheet strength and shareholder returns, partially offset by elevated Q2 2026 catastrophe exposure and persistent UK&I underwriting drag that warrants gradual accumulation rather than aggressive sizing pending full Q2 results.

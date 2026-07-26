@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "focus_market": "psi20",
+  "focus_market": "smi",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
@@ -124,6 +124,12 @@
     {
       "market": "atx",
       "graduated_at": "2026-07-26T05:41:29.750591+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "psi20",
+      "graduated_at": "2026-07-26T18:19:32.036441+00:00",
       "coverage_pct": 1.0,
       "stale_pct": 0.0
     }
@@ -287,6 +293,14 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "advanced"
+      },
+      {
+        "at": "2026-07-26T18:19:32.036441+00:00",
+        "from_market": "psi20",
+        "to_market": "smi",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
       }
     ],
     "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
@@ -304,13 +318,13 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 98.0,
-    "estimated_spend_usd_this_week": 42.4,
+    "estimated_spend_usd_this_cycle": 126.4,
+    "estimated_spend_usd_this_week": 70.8,
     "week_id": "2026-W30",
     "cycle_id": "2026-07-d8",
     "weekly_ops_cap_usd": 50.0,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 0.0,
+    "estimated_spend_weekly_ops_usd_this_week": 28.4,
     "note": "Subscription (Pro $20/mo) is metadata only. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd."
   },
   "model_review": {
@@ -338,7 +352,7 @@
     "use_in_scoring": false,
     "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
   },
-  "updated_at": "2026-07-26T12:35:21.906784+00:00",
+  "updated_at": "2026-07-26T18:19:32.037706+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -351,25 +365,665 @@
     "research_hard_cap": 75,
     "research_all_graduated": true,
     "last_run": {
-      "run_at": "2026-07-26T05:22:45.904536+00:00",
-      "focus_market": "atx",
-      "focus_market_after": "psi20",
+      "run_at": "2026-07-26T16:52:52.434971+00:00",
+      "focus_market": "psi20",
+      "focus_market_after": "smi",
       "screen_shortlist": 0,
       "research": {
-        "skipped": true,
-        "reason": "weekly library research budget exhausted",
-        "remaining_usd": 0.0,
-        "enforce_weekly_research_cap": true,
-        "constraining": true,
-        "budget_flag": "constraining",
-        "allocation_basis": "usage_weekly_gbp",
-        "weekly_usage_gbp": 30.0,
-        "note": "Weekly usage envelope is constraining selective research — raise weekly_usage_gbp, wait for week rollover, or set enforce_weekly_research_cap=false."
+        "model": "composer-2.5",
+        "research_cap": 75,
+        "research_markets": [
+          "sp500",
+          "euro_stoxx50",
+          "asx200",
+          "ftse_smallcap",
+          "nasdaq100",
+          "dax",
+          "cac40",
+          "tsx60",
+          "aim",
+          "ibex35",
+          "ftse_mib",
+          "aex",
+          "bel20",
+          "hang_seng",
+          "sti",
+          "us_adr_asia",
+          "atx",
+          "psi20",
+          "smi",
+          "omxs30",
+          "iseq20"
+        ],
+        "research_all_graduated": true,
+        "spend_pool": "weekly_ops",
+        "enforce_weekly_ops_cap": true,
+        "unrestricted_budget": false,
+        "spend_checkpoint_usd": 60.0,
+        "spend_since_checkpoint_usd": 10.4,
+        "weekly_ops_cap_usd": 50.0,
+        "estimated_spend_weekly_ops_usd_this_week": 28.4,
+        "constraining": false,
+        "near_limit": false,
+        "budget_flag": "enforced",
+        "remaining_usd_before": 50.0,
+        "dedupe": {
+          "already_researched_count": 266,
+          "skipped_count": 276,
+          "skipped_sample": [
+            {
+              "market": "sp500",
+              "ticker": "FIS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "ACN",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CTSH",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "APA",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "PNR",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "AOS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "LDOS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CI",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "HII",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "UPS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "SNA",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "EG",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "VZ",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "BR",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "NEM",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "BBY",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "CF",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "STZ",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "BMY",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "sp500",
+              "ticker": "EXE",
+              "reason": "duplicate_ticker"
+            }
+          ],
+          "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
+        },
+        "targets": [
+          {
+            "market": "sp500",
+            "ticker": "CMCSA",
+            "name": "Comcast Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.5523
+          },
+          {
+            "market": "asx200",
+            "ticker": "ASX.AX",
+            "name": "ASX Limited",
+            "signal": "buy",
+            "conviction_score": 0.3295
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "CARD.L",
+            "name": "Card Factory plc",
+            "signal": "strong_buy",
+            "conviction_score": 0.4152
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "GEHC",
+            "name": "GE HealthCare Technologies Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.3708
+          },
+          {
+            "market": "dax",
+            "ticker": "G1A.DE",
+            "name": "GEA Group Aktiengesellschaft",
+            "signal": "buy",
+            "conviction_score": 0.4054
+          },
+          {
+            "market": "cac40",
+            "ticker": "CAP.PA",
+            "name": "Capgemini SE",
+            "signal": "strong_buy",
+            "conviction_score": 0.5261
+          },
+          {
+            "market": "tsx60",
+            "ticker": "OTEX.TO",
+            "name": "Open Text Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.5229
+          },
+          {
+            "market": "aim",
+            "ticker": "MPE.L",
+            "name": "M.P. Evans Group PLC",
+            "signal": "strong_buy",
+            "conviction_score": 0.4676
+          },
+          {
+            "market": "ibex35",
+            "ticker": "AENA.MC",
+            "name": "Aena S.M.E., S.A.",
+            "signal": "buy",
+            "conviction_score": 0.3661
+          },
+          {
+            "market": "ftse_mib",
+            "ticker": "A2A.MI",
+            "name": "A2A S.p.A.",
+            "signal": "strong_buy",
+            "conviction_score": 0.2984
+          },
+          {
+            "market": "aex",
+            "ticker": "AKZA.AS",
+            "name": "Akzo Nobel N.V.",
+            "signal": "strong_buy",
+            "conviction_score": 0.4961
+          },
+          {
+            "market": "bel20",
+            "ticker": "ACKB.BR",
+            "name": "Ackermans & Van Haaren NV",
+            "signal": "buy",
+            "conviction_score": 0.358
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "0322.HK",
+            "name": "Tingyi (Cayman Islands) Holding Corp.",
+            "signal": "buy",
+            "conviction_score": 0.3705
+          },
+          {
+            "market": "sti",
+            "ticker": "Y92.SI",
+            "name": "Thai Beverage Public Company Limited",
+            "signal": "strong_buy",
+            "conviction_score": 0.4844
+          },
+          {
+            "market": "smi",
+            "ticker": "NOVN.SW",
+            "name": "Novartis AG",
+            "signal": "strong_buy",
+            "conviction_score": 0.0
+          },
+          {
+            "market": "sp500",
+            "ticker": "MAS",
+            "name": "Masco Corporation",
+            "signal": "strong_buy",
+            "conviction_score": 0.525
+          },
+          {
+            "market": "ftse_smallcap",
+            "ticker": "CLIG.L",
+            "name": "City of London Investment Group Plc",
+            "signal": "buy",
+            "conviction_score": 0.3457
+          },
+          {
+            "market": "dax",
+            "ticker": "HNR1.DE",
+            "name": "Hannover Rück SE",
+            "signal": "buy",
+            "conviction_score": 0.4032
+          },
+          {
+            "market": "cac40",
+            "ticker": "RI.PA",
+            "name": "Pernod Ricard SA",
+            "signal": "strong_buy",
+            "conviction_score": 0.4609
+          },
+          {
+            "market": "tsx60",
+            "ticker": "CTC-A.TO",
+            "name": "Canadian Tire Corporation, Limited",
+            "signal": "strong_buy",
+            "conviction_score": 0.5182
+          },
+          {
+            "market": "aim",
+            "ticker": "YNGN.L",
+            "name": "Young & Co.'s Brewery, P.L.C.",
+            "signal": "strong_buy",
+            "conviction_score": 0.3516
+          },
+          {
+            "market": "ibex35",
+            "ticker": "GRF.MC",
+            "name": "Grifols, S.A.",
+            "signal": "buy",
+            "conviction_score": 0.2297
+          },
+          {
+            "market": "ftse_mib",
+            "ticker": "INW.MI",
+            "name": "Infrastrutture Wireless Italiane S.p.A.",
+            "signal": "buy",
+            "conviction_score": 0.408
+          },
+          {
+            "market": "aex",
+            "ticker": "KPN.AS",
+            "name": "Koninklijke KPN N.V.",
+            "signal": "buy",
+            "conviction_score": 0.3852
+          },
+          {
+            "market": "bel20",
+            "ticker": "UMI.BR",
+            "name": "Umicore SA",
+            "signal": "buy",
+            "conviction_score": 0.3311
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "0386.HK",
+            "name": "China Petroleum & Chemical Corporation",
+            "signal": "buy",
+            "conviction_score": 0.3344
+          },
+          {
+            "market": "sti",
+            "ticker": "BUOU.SI",
+            "name": "Frasers Logistics & Commercial Trust",
+            "signal": "buy",
+            "conviction_score": 0.4089
+          },
+          {
+            "market": "smi",
+            "ticker": "SCMN.SW",
+            "name": "Swisscom AG",
+            "signal": "buy",
+            "conviction_score": 0.0
+          },
+          {
+            "market": "sp500",
+            "ticker": "GEN",
+            "name": "Gen Digital Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.4892
+          },
+          {
+            "market": "dax",
+            "ticker": "VOW3.DE",
+            "name": "Volkswagen AG",
+            "signal": "buy",
+            "conviction_score": 0.3152
+          },
+          {
+            "market": "cac40",
+            "ticker": "TEP.PA",
+            "name": "Teleperformance SE",
+            "signal": "strong_buy",
+            "conviction_score": 0.4415
+          },
+          {
+            "market": "tsx60",
+            "ticker": "WSP.TO",
+            "name": "WSP Global Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.4969
+          },
+          {
+            "market": "aim",
+            "ticker": "PAF.L",
+            "name": "Pan African Resources PLC",
+            "signal": "buy",
+            "conviction_score": 0.3594
+          },
+          {
+            "market": "ftse_mib",
+            "ticker": "LTMC.MI",
+            "name": "Lottomatica Group S.p.A.",
+            "signal": "buy",
+            "conviction_score": 0.3672
+          },
+          {
+            "market": "bel20",
+            "ticker": "SOLB.BR",
+            "name": "Solvay SA",
+            "signal": "buy",
+            "conviction_score": 0.1445
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "0941.HK",
+            "name": "China Mobile Limited",
+            "signal": "buy",
+            "conviction_score": 0.3312
+          },
+          {
+            "market": "sti",
+            "ticker": "ME8U.SI",
+            "name": "Mapletree Industrial Trust",
+            "signal": "buy",
+            "conviction_score": 0.3464
+          },
+          {
+            "market": "smi",
+            "ticker": "AMRZ.SW",
+            "name": "AMRIZE N",
+            "signal": "buy",
+            "conviction_score": 0.0
+          },
+          {
+            "market": "sp500",
+            "ticker": "MKC",
+            "name": "McCormick & Company, Incorporated",
+            "signal": "strong_buy",
+            "conviction_score": 0.456
+          },
+          {
+            "market": "cac40",
+            "ticker": "CA.PA",
+            "name": "Carrefour SA",
+            "signal": "strong_buy",
+            "conviction_score": 0.2812
+          },
+          {
+            "market": "tsx60",
+            "ticker": "GIB-A.TO",
+            "name": "CGI Inc.",
+            "signal": "buy",
+            "conviction_score": 0.4271
+          },
+          {
+            "market": "aim",
+            "ticker": "KGH.L",
+            "name": "Knights Group Holdings plc",
+            "signal": "buy",
+            "conviction_score": 0.3052
+          },
+          {
+            "market": "ftse_mib",
+            "ticker": "LDO.MI",
+            "name": "Leonardo S.p.a.",
+            "signal": "buy",
+            "conviction_score": 0.3458
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "0101.HK",
+            "name": "Hang Lung Properties Limited",
+            "signal": "buy",
+            "conviction_score": 0.3306
+          },
+          {
+            "market": "smi",
+            "ticker": "SIKA.SW",
+            "name": "Sika AG",
+            "signal": "buy",
+            "conviction_score": 0.0
+          },
+          {
+            "market": "sp500",
+            "ticker": "IT",
+            "name": "Gartner, Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.3375
+          },
+          {
+            "market": "cac40",
+            "ticker": "URW.PA",
+            "name": "Unibail-Rodamco-Westfield SE",
+            "signal": "buy",
+            "conviction_score": 0.4077
+          },
+          {
+            "market": "tsx60",
+            "ticker": "MFC.TO",
+            "name": "Manulife Financial Corporation",
+            "signal": "buy",
+            "conviction_score": 0.3888
+          },
+          {
+            "market": "ftse_mib",
+            "ticker": "IVG.MI",
+            "name": "Iveco Group N.V.",
+            "signal": "buy",
+            "conviction_score": 0.3442
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "2318.HK",
+            "name": "Ping An Insurance (Group) Company of China, Ltd.",
+            "signal": "buy",
+            "conviction_score": 0.3109
+          },
+          {
+            "market": "smi",
+            "ticker": "PGHN.SW",
+            "name": "Partners Group Holding AG",
+            "signal": "buy",
+            "conviction_score": 0.0
+          },
+          {
+            "market": "sp500",
+            "ticker": "LVS",
+            "name": "Las Vegas Sands Corp.",
+            "signal": "buy",
+            "conviction_score": 0.4058
+          },
+          {
+            "market": "cac40",
+            "ticker": "PUB.PA",
+            "name": "Publicis Groupe S.A.",
+            "signal": "buy",
+            "conviction_score": 0.3779
+          },
+          {
+            "market": "tsx60",
+            "ticker": "L.TO",
+            "name": "Loblaw Companies Limited",
+            "signal": "buy",
+            "conviction_score": 0.3875
+          },
+          {
+            "market": "hang_seng",
+            "ticker": "0868.HK",
+            "name": "Xinyi Glass Holdings Limited",
+            "signal": "buy",
+            "conviction_score": 0.2875
+          },
+          {
+            "market": "smi",
+            "ticker": "LOGN.SW",
+            "name": "Logitech International S.A.",
+            "signal": "buy",
+            "conviction_score": 0.0
+          },
+          {
+            "market": "sp500",
+            "ticker": "CPT",
+            "name": "Camden Property Trust",
+            "signal": "buy",
+            "conviction_score": 0.3586
+          },
+          {
+            "market": "cac40",
+            "ticker": "EDEN.PA",
+            "name": "Edenred SE",
+            "signal": "buy",
+            "conviction_score": 0.3316
+          },
+          {
+            "market": "tsx60",
+            "ticker": "CNR.TO",
+            "name": "Canadian National Railway Company",
+            "signal": "buy",
+            "conviction_score": 0.3703
+          },
+          {
+            "market": "sp500",
+            "ticker": "EFX",
+            "name": "Equifax Inc.",
+            "signal": "buy",
+            "conviction_score": 0.3088
+          },
+          {
+            "market": "cac40",
+            "ticker": "EN.PA",
+            "name": "Bouygues SA",
+            "signal": "buy",
+            "conviction_score": 0.2827
+          },
+          {
+            "market": "tsx60",
+            "ticker": "IFC.TO",
+            "name": "Intact Financial Corporation",
+            "signal": "buy",
+            "conviction_score": 0.3594
+          },
+          {
+            "market": "sp500",
+            "ticker": "CCI",
+            "name": "Crown Castle Inc.",
+            "signal": "buy",
+            "conviction_score": 0.3003
+          },
+          {
+            "market": "tsx60",
+            "ticker": "RCI-B.TO",
+            "name": "Rogers Communications Inc.",
+            "signal": "buy",
+            "conviction_score": 0.2958
+          },
+          {
+            "market": "sp500",
+            "ticker": "MCD",
+            "name": "McDonald's Corporation",
+            "signal": "buy",
+            "conviction_score": 0.2912
+          },
+          {
+            "market": "tsx60",
+            "ticker": "MRU.TO",
+            "name": "Metro Inc.",
+            "signal": "buy",
+            "conviction_score": 0.2875
+          },
+          {
+            "market": "sp500",
+            "ticker": "MAA",
+            "name": "Mid-America Apartment Communities, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.2886
+          },
+          {
+            "market": "tsx60",
+            "ticker": "TRI.TO",
+            "name": "Thomson Reuters Corporation",
+            "signal": "buy",
+            "conviction_score": 0.2763
+          },
+          {
+            "market": "sp500",
+            "ticker": "MCK",
+            "name": "McKesson Corporation",
+            "signal": "buy",
+            "conviction_score": 0.2811
+          },
+          {
+            "market": "sp500",
+            "ticker": "FRT",
+            "name": "Federal Realty Investment Trust",
+            "signal": "buy",
+            "conviction_score": 0.2089
+          },
+          {
+            "market": "sp500",
+            "ticker": "L",
+            "name": "Loews Corporation",
+            "signal": "buy",
+            "conviction_score": 0.2011
+          }
+        ],
+        "executed": 71,
+        "created": 71,
+        "updated": 0,
+        "errors": [],
+        "estimated_spend_usd": 28.4,
+        "remaining_usd_after": 21.6
       },
       "graduation": {
         "graduated": true,
-        "from_market": "atx",
-        "to_market": "psi20",
+        "from_market": "psi20",
+        "to_market": "smi",
         "reason": "advanced"
       },
       "maintenance": {
@@ -390,7 +1044,8 @@
           "bel20",
           "hang_seng",
           "sti",
-          "us_adr_asia"
+          "us_adr_asia",
+          "atx"
         ]
       }
     },

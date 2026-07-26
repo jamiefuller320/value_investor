@@ -1,0 +1,112 @@
+# Manulife Financial Corporation (MFC.TO) — Research memo
+
+_Version 1 · Updated 2026-07-26T18:00:11.177020+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Manulife Financial Corporation is a globally diversified life insurer and asset manager whose quantitative profile aligns with a value-oriented buy: P/E 17.7, P/B 2.1, dividend yield 3.0%, ROE 12.6%, and debt/equity 44%, passing cheapness, quality, dividend, GARP, and risk model families. Primary filings show record 2025 core earnings of C$7.5bn (+3% CER), core ROE 16.5%, and a stable LICAT ratio of 136%, supported by double-digit new-business CSM growth and disciplined capital return (C$5.4bn to shareholders in 2025, plus a 10.2% dividend increase). The central debate is whether Asia and Global WAM can sustain momentum against U.S. life earnings pressure, persistent Global WAM net outflows (C$14.3bn in 2025; C$4.4bn in 1Q26), and market-experience volatility on alternative long-duration assets—while the share price sits near 52-week highs, tempering margin-of-safety. Deep research broadly supports the screen’s buy signal on business quality and capital discipline, but flags medium execution and valuation risk.
+
+## INVESTMENT THESIS
+For a value investor, MFC offers a rare combination of reasonable headline multiples, improving underlying earnings power, and shareholder-friendly capital allocation. The screen passes ten models—including Graham Enterprising, FCF Yield, Lynch PEG, Quality Value, Dividend Growth, and Acquirer's Multiple—suggesting the market still prices the name below intrinsic thresholds on conventional value metrics despite a multi-year rerating.
+
+Business quality is corroborated by filings, not just screens. FY2025 core earnings rose to C$7,521m from C$7,182m (CER +3%), core EPS to C$4.21 (+8% CER), and core ROE held at 16.5%. New business CSM grew 28% to C$3,775m; post-tax CSM net of NCI reached C$20,733m at year-end. Asia core earnings grew 18% (US$ basis) and Global WAM 14%, with Global WAM core EBITDA margin up 260bps to 29.7%. These are franchise-quality metrics consistent with the screen’s quality and GARP passes.
+
+Capital return reinforces the dividend-family pass: C$6.4bn remittances in 2025 funded C$5.4bn returned to shareholders (including 3.1% of shares repurchased for C$2.4bn), a 10.2% dividend increase, and a new NCIB for up to ~2.5% of shares. Financial leverage improved to 23.9% (from 24.0%) and adjusted book value per share to C$38.27 (+6%).
+
+The screen’s failures (Buffett Quality, Economic Moat, Piotroski F-Score 6/9, Financial Health) are instructive rather than disqualifying: they reflect insurance accounting complexity, U.S. segment volatility, and asset-management flow headwinds—not a broken balance sheet. LICAT at 136% and book value per common share at a record C$26.30 (1Q26) provide a capital cushion screens underweight.
+
+## FINANCIAL REVIEW
+*Annual (FY2025 — PR Newswire earnings release, 11 Feb 2026; 40-F filed 11 Feb 2026)*
+
+| Metric | FY2025 | FY2024 | Change (CER where stated) |
+|---|---|---|---|
+| Core earnings | C$7,521m | C$7,182m | +3% |
+| Net income to shareholders | C$5,572m | C$5,385m | +2% |
+| Core EPS | C$4.21 | C$3.85 | +8% |
+| Reported EPS | C$3.07 | C$2.84 | +6% |
+| Core ROE | 16.5% | 16.2% | +30bps |
+| Book value / common share | C$25.91 | C$25.63 | +1% |
+| Adjusted BV / common share | C$38.27 | C$36.25 | +6% |
+| Financial leverage | 23.9% | 24.0% | −10bps |
+| LICAT (MLI) | 136% | — | stable vs interim |
+| APE sales | C$9,717m | C$8,385m | +14% |
+| New business CSM | C$3,775m | C$2,887m | +28% |
+| NBV | C$3,533m | C$2,946m | +18% |
+| Global WAM net flows | (C$14.3bn) | +C$13.3bn | swing to outflows |
+| Post-tax CSM net of NCI | C$20,733m | C$18,353m | +13% |
+
+Segment FY2025 core earnings (CER): Asia +18% (US$), Global WAM +14%, Canada +4%, U.S. −30% (US$). U.S. net income was a loss of C$367m for the full year, driven by unfavourable life claims experience versus favourable prior-year experience, lower investment spreads, and market-experience charges on alternative long-duration assets (ALDA)—real estate, private equity, timber, infrastructure.
+
+Net income trailed core earnings by C$1.9bn due to a C$1,662m market-experience charge (ALDA underperformance, derivatives, plus a C$0.7bn realised loss on debt sold in the RGA U.S. reinsurance transaction, offset in OCI). This gap between core and reported earnings is a recurring insurance-investor watchpoint.
+
+The 40-F body extract (11 Feb 2026) confirms Ernst & Young audit, effective disclosure controls, and references to MD&A risk sections and Note 18 Commitments and Contingencies—but the full MD&A and audited financial statement tables were not downloaded into the body corpus; detailed line-item analysis relies on earnings releases.
+
+*Interim results*
+
+**2Q25 (PR Newswire, 6 Aug 2025):** Core earnings C$1,726m (−2% CER); core EPS C$0.95 (+2% CER); core ROE 15.0%; LICAT 136%. APE +15%, new business CSM +37%, NBV +20%. Global WAM net inflows C$0.9bn (positive quarter). U.S. core earnings −53% (unfavourable claims, ECL provisions). Excluding ECL change, core earnings would have been C$1,809m (+2% CER).
+
+**3Q25:** No standalone earnings press release body is available in the corpus (6-K cover page only, filed 12 Nov 2025). Quarterly figures are taken from the FY2025 annual release reconciliation tables: core earnings C$2,035m (strongest quarter of 2025); net income C$1,799m; core ROE 18.1% annualised. Asia core C$759m, Global WAM C$525m, Canada C$428m, U.S. C$332m.
+
+**4Q25 (within FY2025 release):** Core earnings C$1,993m (+5% vs 4Q24); core EPS C$1.12 (+9%); net income C$1,499m (−9%, market-experience charge C$441m). Global WAM net outflows C$9.5bn in the quarter.
+
+**1Q26 (PR Newswire, 13 May 2026):** Core earnings C$1,836m (+8% CER vs 1Q25); core EPS C$1.06 (+11% CER); core ROE 16.5%; LICAT 136%; financial leverage 22.5% (−140bps YoY). Book value per common share C$26.30 (record, per filing). APE +7%, new business CSM +16% across all three insurance segments. Global WAM net outflows C$4.4bn. Net income C$1,147m (+149% vs 1Q25, which included C$1,332m market-experience charge from RGA transaction). CSM balance C$25,589m (+C$620m vs Dec-25).
+
+*Trend assessment:* Underlying earnings trajectory is positive—core EPS grew in FY2025 and again in 1Q26, CSM accretion is strong, and capital metrics are stable-to-improving. Reported net income remains volatile quarter-to-quarter due to mark-to-market on ALDA and public equities. Global WAM flows turned sharply negative in 2H25 and remain so in 1Q26, partially offset by Comvest/Schroders Indonesia contributions to institutional inflows.
+
+*Yahoo fallback (financials_annual.json, used only where filing bodies lack comparable GAAP detail):* FY2025 net income C$5.78bn, diluted EPS C$3.07, common shareholders' equity C$44.3bn, total debt C$14.7bn, free cash flow C$32.1bn—directionally consistent with filing-reported figures but not used as primary metrics given insurance FCF definitional differences.
+
+## RISKS AND RED FLAGS
+**U.S. life insurance segment.** Full-year 2025 U.S. core earnings fell 30% (US$); 2Q25 core fell 53%. Drivers include unfavourable life claims experience (vs favourable prior year), lower investment spreads, and strengthened expected credit loss provisions. This is the largest earnings-quality red flag in the filing set.
+
+**Market-experience volatility.** FY2025 net market-experience charge of C$1,662m; 4Q25 charge C$441m; 1Q26 charge C$666m—primarily lower-than-expected ALDA returns (real estate, private equity, timber, infrastructure). Filing forward-looking language explicitly cites equity market performance, interest rates, credit spreads, and investment losses as material uncertainty factors.
+
+**Global WAM net outflows.** C$14.3bn outflows in FY2025 (vs C$13.3bn inflows in 2024); C$4.4bn outflow in 1Q26 driven by retirement redemptions and retail outflows through third-party intermediaries. Comvest and institutional fixed-income mandates partially offset. Flow reversal threatens fee-income growth despite margin expansion.
+
+**Regulatory and geographic expansion risk.** India JV (Mahindra), Schroders Indonesia acquisition, and Hong Kong eMPF transition create execution and regulatory-approval dependencies; filing language flags receipt of regulatory approvals as a condition for several initiatives.
+
+**Governance / fraud-adjacent.** Manulife issued multiple investor cautions (Apr 2025, Dec 2025) regarding unsolicited third-party share purchase offers (New York Stock and Bond LLC, Ocehan LLC)—operational rather than balance-sheet risk, but signals retail-targeting fraud activity around the name.
+
+**Hong Kong product scrutiny.** Yahoo Finance reported (17 Jun 2026) Manulife withdrew a highly leveraged Hong Kong product offering projected at >10% returns after regulatory scrutiny—reputational and conduct risk in a key Asian market.
+
+**Screen-identified weaknesses.** Piotroski F-Score 6/9 (ROA, current ratio, gross margin not improving); failed Financial Health, Buffett Quality, and Economic Moat models suggest the franchise is not unambiguously "wide moat" on quantitative grounds.
+
+**Filing gaps.** No going-concern language identified (expected for a well-capitalised insurer). Full annual MD&A risk-factor text, Note 18 contingencies detail, and Q3 2025 standalone release body are absent from the corpus—contingency and covenant analysis is incomplete.
+
+**Macro context (colour only):** CAD/USD 0.7096; TSX Composite ~35,369; US 10Y ~4.68%. Higher-for-longer rates support investment income but pressure ALDA marks and retirement outflows.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is extensive (50+ articles in manifest), though much is valuation commentary rather than hard news.
+
+**Strategy and M&A**
+- *Manulife Announces Refreshed Enterprise Strategy to Deliver Sustainable, Long-Term Growth* (12 Nov 2025) — strategic pivot emphasising Asia, WAM, AI, longevity.
+- *Manulife to Acquire Comvest Credit Partners* (6 Aug 2025); *Manulife Completes Acquisition of Comvest Credit Partners* (3 Nov 2025) — private credit platform expansion (~US$17.5bn AUM at acquisition).
+- *Manulife and Mahindra Agree to Establish 50:50 Life Insurance Joint Venture in India* (12 Nov 2025).
+- Schroders Indonesia acquisition completed 1Q26 (per 1Q26 earnings release).
+
+**Management and leadership**
+- *Manulife Announces Executive Leadership Team Changes* (21 May 2026).
+- *Manulife (TSX:MFC) Names Global AI Chief And Hong Kong Deputy CEO* (22 Jul 2026, Yahoo Finance).
+- *Manulife Financial (TSX:MFC) Names John Kee Deputy CEO* (25 Jul 2026, simplywall.st).
+
+**Capital return**
+- *How Manulife's Higher Dividend and New Buyback At Manulife Financial (TSX:MFC) Has Changed Its Investment Story* (13 Feb 2026) — 10.2% dividend increase and NCIB.
+- *Manulife announces Normal Course Issuer Bid* (19 Feb 2026).
+
+**Regulatory / conduct**
+- *Manulife Pulls Leverage From $80 Million Policy After Regulatory Scrutiny* (17 Jun 2026, Yahoo Finance) — Hong Kong leveraged product withdrawal.
+- Investor cautions re unsolicited share offers (Apr 2025, Dec 2025, per filings index).
+
+**Analyst / valuation sentiment**
+- Mixed: *TD Forecasts Strong Price Appreciation for Manulife Financial* (21 Jul 2026); *Manulife (TSX:MFC) Stock Looks Fairly Priced As It Hits A 52 Week High* (23 Jul 2026); *Manulife Financial Corporation (TSE:MFC) Analysts Just Slashed This Year's Revenue Estimates By 13%* (13 Apr 2026).
+- *MFC Outperforms Industry, Hits 52-Week High* (14 Jul 2026).
+
+**AI positioning**
+- *Manulife Named #1 Life Insurer for AI Maturity by Evident* (Jun 2025, again Jun 2026).
+- *Manulife Expands Partnership with Microsoft to Accelerate Enterprise AI Governance and Innovation* (22 Jul 2026).
+
+News is not thin on volume, but skews toward commentary and duplicate syndication; primary corporate disclosures carry more weight for financial conclusions.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Primary filings confirm improving core earnings, strong capital (LICAT 136%), and accretive new business, aligning with the quantitative buy signal, but U.S. claims weakness, Global WAM outflows, market-experience volatility, and proximity to 52-week highs warrant phased accumulation rather than full conviction at current levels.

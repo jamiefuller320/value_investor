@@ -1,0 +1,114 @@
+# Canadian Tire Corporation, Limited (CTC-A.TO) — Research memo
+
+_Version 1 · Updated 2026-07-26T17:38:49.526669+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Canadian Tire is a diversified Canadian retailer (Canadian Tire, SportChek, Mark's), financial services (Triangle Mastercard), and 68% owner of CT REIT, undergoing a four-year "True North" transformation after divesting Helly Hansen for C$1.3bn. The quantitative screen flags a strong buy on cheapness (P/E 16.4, P/B 1.8), dividend yield (3.6%), GARP metrics, and a Piotroski F-Score of 7/9, with normalised FY2025 EPS up 18.6% to C$13.77 on 4.1% comparable sales growth. The valuation hook is a nationally trusted franchise trading below historical quality multiples while returning capital (C$442m buybacks in 2025, C$1.80 dividend) and simplifying toward core Canadian retail. The key debate is whether True North execution (loyalty expansion, AI/omnichannel capex, C$2bn+ four-year investment) will convert into sustained margin and ROIC gains, or whether cyclical consumer pressure, transformation costs, and leverage will cap returns — a tension visible in Q1 2026's negative comps (-1.0%) despite revenue growth.
+
+## INVESTMENT THESIS
+The screen's strong buy rating rests on five passing factor families — cheapness, quality, dividend, GARP, and risk — with full data coverage (20/20 metrics). At P/E 16.4 and P/B 1.8, the stock sits well below typical Canadian consumer discretionary multiples while offering a 3.6% yield backed by 16 consecutive annual dividend increases (to C$1.80). ROE of 10.8% and FCF of approximately C$1.8bn (screen) align with a business generating double-digit retail ROIC (11.0% at FY2025, per filing) and positive operating cash flow (C$985m continuing ops in FY2025, per filing).
+
+Business quality is underappreciated relative to screen inputs. CTC operates nearly 1,700 retail and gasoline outlets with 9.8m active Triangle Rewards members (+6% YoY), a credit card franchise (GAAR +2.5% in Q4 2025), and banner diversification — SportChek comps +6.2% and Mark's +3.9% in FY2025 while Automotive reached C$1bn annual service sales. The Helly Hansen divestiture and holding-company-to-operating-company reorganisation sharpen capital allocation toward higher-return Canadian retail. Normalised earnings growth (+18.6% FY2025 EPS) and aggressive buybacks (share count down ~5% YoY) support the value case.
+
+For a value investor, the screen correctly identifies a cash-generative, dividend-paying national franchise at a reasonable multiple during a strategic reset — with the caveat that GAAP EPS is distorted by restructuring (C$125m) and prior-year property gains, and that the screen fails Graham Defensive, Buffett Quality, Economic Moat, and Financial Health models, signalling this is enterprising/value rather than deep-quality compounder territory.
+
+## FINANCIAL REVIEW
+**Source note:** Primary figures below are from earnings release body extracts (PR Newswire, Feb 2026 FY2025 and May 2026 Q1 2026). The index contains no downloadable SEDAR+ MD&A or full annual report body; the second "annual" entry (May 2025 AGM voting results) adds no financial data. No Q2 or Q3 2025 interim releases with bodies are present. Balance sheet and cash-flow detail for leverage/FCF cross-check uses `financials_annual.json` (Yahoo) where noted.
+
+**FY2025 (53 weeks ended 3 January 2026) — annual release, 19 Feb 2026**
+
+Continuing operations (Helly Hansen classified as discontinued):
+
+| Metric | FY2025 | FY2024 | Change |
+|---|---|---|---|
+| Consolidated revenue | C$16,315.5m | C$15,516.0m | +5.2% |
+| Consolidated comparable sales | +4.1% | — | — |
+| Retail sales | C$18,986.9m | — | +4.5% |
+| Retail revenue (ex petroleum) | — | — | +7.5% |
+| Normalised IBT | C$1,109.0m | C$970.3m | +14.3% |
+| GAAP IBT | C$878.5m | C$1,175.1m | -25.2% |
+| Normalised diluted EPS (continuing) | C$13.77 | C$11.61 | +18.6% |
+| GAAP diluted EPS (continuing) | C$10.57 | C$14.91 | -29.1% |
+| Normalised retail gross margin rate (ex petroleum) | 35.5% | — | +27 bps |
+| Normalised retail EBITDA / retail revenue (ex petroleum) | 14.6% | — | +8.1% EBITDA |
+| Retail ROIC (TTM) | 11.0% | 9.8% | +119 bps |
+
+GAAP earnings fell primarily due to True North restructuring (C$125.1m pre-tax) and transformation/advisory costs (C$88.4m), versus a C$222.9m Brampton distribution centre gain in FY2024. Normalised metrics show underlying retail improvement: all major banners posted positive comps (CTR +3.7%, SportChek +6.2%, Mark's +3.9%), loyalty membership grew, and ~C$30m of restructuring run-rate savings appeared in Q4 opex.
+
+**Capital allocation (FY2025, filing):** Operating capex C$502.2m (total C$630.5m); share repurchases C$442.4m beyond anti-dilutive amounts; dividend declared C$1.80/share (payable Jun 2026). Helly Hansen sale proceeds of C$1,290m (net, per cash flow statement in release) funded debt reduction and buybacks. 2026 operating capex guided at C$500–550m.
+
+**Balance sheet (3 Jan 2026, filing):** Total assets C$21,539.8m; total equity C$6,813.9m; cash C$553.5m; long-term debt C$3,617.9m plus current portion C$758.0m. Yahoo fallback (`financials_annual.json`): net debt C$4.70bn, total debt C$7.67bn (includes lease obligations C$2.44bn) — leverage is material and the screen's Financial Health model failure is consistent with this.
+
+**Cash flow (FY2025, filing):** Cash from continuing operating activities C$985.0m (consolidated C$952.1m including discontinued). Yahoo fallback: capex C$663.7m; FCF implied ~C$288m on Yahoo basis vs screen FCF of C$1.84bn (screen likely uses a different FCF definition — treat with caution).
+
+**Q1 2026 (ended 4 April 2026) — interim release, 14 May 2026**
+
+| Metric | Q1 2026 | Q1 2025 | Comment |
+|---|---|---|---|
+| Consolidated revenue | C$3,570.9m | — | +3.3% |
+| Retail revenue (ex petroleum) | C$2,689.5m | — | +5.0% |
+| Consolidated comparable sales | -1.0% | — | Two-year stack +3.7% |
+| Normalised diluted EPS | C$2.00 | C$2.00 | Flat YoY |
+| GAAP diluted EPS | C$2.02 | C$0.67 | Prior year hit by restructuring |
+| Normalised consolidated IBT | C$169.1m | C$165.7m | +C$3.4m |
+| Retail gross margin rate (ex petroleum) | 36.1% | — | — |
+| Retail ROIC (TTM) | 10.9% | 10.4% | Stable |
+| Financial Services GAAR | +3.1% | — | IBT -3.1% (investment drag) |
+
+Q1 showed revenue growth despite weather-driven CTR comp weakness (-2.3%); SportChek (+3.3% comps) and Mark's (+1.2%) offset. Management cited "resilient but selective" consumers. Normalised retail IBT was stable; higher IT and variable compensation offset gross margin dollar growth. Share repurchases continued (C$60.1m in Q1).
+
+**Trend assessment:** Normalised earnings and retail operating metrics improved through FY2025, but Q1 2026 comps turned negative and normalised EPS was flat — early evidence that transformation benefits are not yet flowing through to top-line momentum. Financial Services remains a growth investment (IBT declining despite receivables growth). Filing coverage gap: no half-year or Q3 2025 bodies available to assess intra-year trajectory.
+
+## RISKS AND RED FLAGS
+**Transformation execution:** True North entails C$2bn+ investment over four years, C$85m one-time restructuring (H1 2025, largely completed), and ongoing transformation/advisory costs. FY2025 recorded C$125m restructuring and C$88m transformation charges. Savings target ~C$100m run-rate from 2026 is not yet fully visible in Q1 results. Failure to deliver would leave elevated opex without offsetting revenue gains.
+
+**Consumer and cyclical exposure:** Q1 2026 comps -1.0%; seasonal/gardening weakness in Ontario/Quebec. True North forward-looking risk disclosures cite macroeconomic conditions, customer trends, seasonality, and geopolitical conditions including tariffs — relevant for a import-heavy retailer.
+
+**Leverage and financial structure:** Long-term debt C$3.6bn plus leases (Yahoo: net debt C$4.7bn). Screen fails Financial Health and Graham Defensive models; Piotroski components "leverage declining" and "ROA improving" both failed. Credit book growth (loans receivable C$6.86bn on balance sheet) adds cyclical credit risk if Canadian consumer stress intensifies.
+
+**Financial Services margin pressure:** Normalised Financial Services IBT declined in FY2025; Q1 2026 IBT down 3.1% on "previously communicated investments." Strategic review expenses also appeared in prior periods. Retaining CTFS (vs divestiture) concentrates credit-cycle exposure.
+
+**Governance and franchise model:** CTC operates through CTR Dealers; Q3 2025 dealer contract amendments were noted but dealer alignment risk persists. 60% retail shareholder ownership (news, Oct 2025) limits institutional influence.
+
+**Cyber and legal:** True North risk list explicitly flags cyber security and data/privacy. News manifest (25 Jul 2026) references data breach class action risk. No going-concern language in available filing bodies; no covenant detail in press releases — full MD&A unavailable.
+
+**Competitive:** Forward-looking disclosures cite hyper-scale global competition and loyalty-program dependency. Failed Economic Moat and Buffett Quality screen models suggest limited durable moat recognition.
+
+**GAAP vs normalised gap:** GAAP diluted EPS fell 29% in FY2025 despite strong normalised growth; investors relying on reported EPS may misprice the name in either direction.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate-to-good on corporate actions, thinner on deep fundamental analysis (many opinion/valuation pieces).
+
+**Strategy and portfolio (material):**
+- *Canadian Tire Corporation announces sale of Helly Hansen to Kontoor Brands* (19 Feb 2025) — C$1,276m gross proceeds; simplifies to Canadian retail focus.
+- *Canadian Tire Corporation launches "True North" transformative growth strategy* (6 Mar 2025) — four-year plan, new leadership (COO TJ Flood, CCO Matt Moore, CFO Darren Myers, CTO Susan O'Brien), 17 Atmosphere store closures, C$400m 2025 buyback intention, C$200m debt repayment.
+- *Canadian Tire Corporation announces CFO transition* (20 Jan 2025) — Darren Myers replaces retiring Gregory Craig effective 1 Apr 2025.
+
+**Loyalty and partnerships:**
+- *RBC and Canadian Tire Corporation announce strategic loyalty partnership* (27 Mar 2025); launch confirmed (13 Jan 2026).
+- *Canadian Tire Corporation and WestJet Launch Strategic Partnership* (8 May 2025); operational launch (25 Mar 2026).
+- Tim Hortons loyalty partnership announced (15 Sep 2025; body not in index).
+
+**Brand and product:**
+- Hudson's Bay Stripes collection launches (Nov 2025, Apr 2026).
+- *Canadian Tire Corporation expands Microsoft collaboration* (18 Feb 2026) — retail intelligence platform.
+
+**Earnings and capital return:**
+- *Canadian Tire Corporation Reports Strong Fourth Quarter and Full-Year 2025 Results* (19 Feb 2026).
+- *Canadian Tire Corporation Reports First Quarter 2026 Results* (14 May 2026) — comps -1%, EPS ahead of plan per management commentary in secondary coverage.
+- Dividend increase to C$1.80, 16th consecutive year (*Q3 2025 results announcement*, 6 Nov 2025).
+- NCIB renewal (Mar 2025); C$400m repurchase intention through 2026.
+
+**Analyst and market sentiment (secondary):**
+- Consensus "Hold" (*MarketBeat*, 21 Jul 2026); mixed analyst views ("Don't buy" *Cantech Letter*, Jan 2026 vs bullish *Motley Fool Canada* pieces).
+- Q1 margin compression narrative (*simplywall.st*, 15 May 2026).
+- Data breach class action risk (*simplywall.st*, 25 Jul 2026).
+- Consumer pressure context (*simplywall.st*, 12 Jul 2026).
+
+**Coverage gap:** No substantive news on regulatory actions or major M&A beyond Helly Hansen. SEDAR document entries in the index (Feb 2025, Feb 2026) have no downloadable bodies.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Deep research broadly confirms the screen's strong buy case on valuation, dividend, normalised earnings momentum, and capital return, but medium conviction reflects transformation execution risk, Q1 comp softness, leverage, missing full MD&A/filing depth, and screen failures on moat and financial health.

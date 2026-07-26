@@ -1,0 +1,108 @@
+# Capgemini SE (CAP.PA) — Research memo
+
+_Version 1 · Updated 2026-07-26T17:27:54.923335+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Capgemini screens as a **Strong Buy** on classic value metrics — P/E ~9.8, P/B ~1.3, dividend yield ~3.8%, and ROE ~13.7% — with 12 of 22 quantitative models passing across cheapness, quality, dividend, GARP, and risk families. The stock has de-rated materially (news flow cites roughly −30% over one year and −44% over three), while underlying cash generation has remained resilient at ~€2.2bn free cash flow annually. The central debate is whether the market is over-discounting cyclical IT-services weakness and integration risk from a large 2025 acquisition, or whether margin pressure and rising leverage justify a structurally lower multiple. **Primary filing coverage is a material gap:** no annual reports, half-year results, or body extracts are indexed, limiting verification of segment trends, guidance, and risk disclosures.
+
+---
+
+## INVESTMENT THESIS
+For a value investor, Capgemini offers a rare combination of **deep cyclical discount** and **durable cash returns**. The screen passes Graham Enterprising, Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Quality Value, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Composite Value, and Earnings Quality — a broad cheapness and cash-yield profile rather than a single-factor anomaly. Debt/equity at ~81% sits within the screen’s risk tolerance, and dividend plus buyback activity (Yahoo: ~€581m dividends and ~€543m repurchases in FY2025) support a shareholder-return narrative.
+
+Business quality, as inferred from Yahoo financials, is **adequate rather than exceptional**: revenue has been broadly flat at ~€22–22.5bn (2022–2025), operating income has drifted slightly lower (€2.56bn → €2.50bn), and recurring restructuring/M&A charges (~€166–302m p.a.) suggest ongoing portfolio reshaping. Nevertheless, operating cash flow has held near €2.5bn and FCF near €2.2bn — the kind of cash-backed earnings profile that value screens correctly flag when multiples compress. The failed models (Graham Defensive, Net-Net, Deep Value, Buffett Quality, Economic Moat, Financial Health, Piotroski F-Score 5/9) are consistent with a **good business at a cheap price**, not a wide-moat compounder — which aligns with a contrarian value entry rather than a quality-growth thesis.
+
+Strategic positioning around **agentic AI** (Capital Markets Day, May 2026) and contract wins (e.g. HMRC digital transformation, June 2026) offer a potential re-rating catalyst if bookings stabilise, but these are news-sourced and unverified against filings.
+
+---
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` contains **zero** entries (0 annual, 0 interim, 0 other; 0 body extracts under `filings/bodies/`). No Universal Registration Document, half-year release, or trading update could be reviewed. All figures below are from **`financials_annual.json` (Yahoo)** — treat as indicative, not filing-verified. Quarterly income data in the same file is empty.
+
+### Revenue and profitability (FY2022–FY2025, Yahoo)
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | €22.0bn | €22.5bn | €22.1bn | €22.5bn |
+| Operating income | €2.56bn | €2.58bn | €2.53bn | €2.50bn |
+| EBITDA | €3.14bn | €3.19bn | €3.24bn | €3.07bn |
+| Net income | €1.55bn | €1.67bn | €1.67bn | €1.61bn |
+| Diluted EPS | €8.79 | €9.37 | €9.47 | €9.13 |
+
+Revenue is **essentially flat** over four years, with a modest step-up in FY2025. Operating margin has edged down (~11.6% → ~11.1%). FY2025 net income and EPS declined ~4% vs FY2024 despite higher revenue, driven partly by higher restructuring/M&A charges (€302m in FY2025 vs €176m in FY2024) and lower reported EBITDA. Normalised income (Yahoo) was €1.81bn in FY2025 vs €1.81bn in FY2024 — suggesting underlying earnings are steadier than reported net income.
+
+Gross profit has been stable at ~€6.0–6.1bn (~27% margin), indicating pricing/cost discipline at the project level, but SG&A has absorbed margin gains.
+
+### Cash flow and capital allocation (Yahoo)
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Operating cash flow | €2.52bn | €2.53bn | €2.53bn | €2.48bn |
+| Free cash flow | €2.23bn | €2.27bn | €2.21bn | €2.20bn |
+| CapEx | €290m | €259m | €315m | €287m |
+| Dividends paid | €409m | €559m | €584m | €581m |
+| Share buybacks | €826m | €876m | €989m | €543m |
+
+FCF conversion remains **strong and stable** — the anchor for the screen’s FCF Yield and dividend-model passes. Capital intensity is low (~1.3% of revenue). Shareholder returns (dividends + buybacks) have consistently exceeded €1bn annually.
+
+### Balance sheet and leverage (Yahoo)
+
+FY2025 shows a **material shift**:
+
+- **Net debt:** €2.96bn (FY2022) → €2.21bn (FY2023) → €2.36bn (FY2024) → **€5.52bn (FY2025)**
+- **Total debt:** €6.08bn (FY2024) → **€9.46bn (FY2025)**
+- **Goodwill:** €12.3bn (FY2024) → **€14.9bn (FY2025)**
+- **Business acquisitions (cash):** €3.78bn in FY2025 (vs €827m in FY2024)
+
+This pattern is consistent with a **large acquisition** (widely reported as WNS in external news, not verified in filings here). Tangible book value turned more negative: **−€4.3bn** (FY2025) vs −€1.4bn (FY2024). Equity was broadly flat at ~€11.6–11.8bn.
+
+Pension/post-retirement obligations are modest at ~€339m non-current (FY2025). No going-concern, covenant, or contingency language is available from filing bodies.
+
+### Interim / H1 2026
+
+**Not available.** No interim filings are indexed; quarterly income in Yahoo is empty. Recent trading momentum, book-to-bill, and FY2026 guidance cannot be assessed from primary sources in this pack.
+
+---
+
+## RISKS AND RED FLAGS
+**Evidence gaps (primary):** Without filing bodies, standard risk sections — going concern, litigation, tax disputes, earn-out liabilities, integration provisions — cannot be reviewed. This is itself a research red flag for verify-before-trade.
+
+**Cyclical and sector risk:** Peer pressure is visible in news — *“Accenture Shares Sink 20% After Revenue Outlook Misses Expectations”* (18 June 2026). IT-services demand, discretionary digital spend, and client budget cycles can compress bookings and utilisation faster than cost can be flexed.
+
+**Leverage and M&A integration:** The FY2025 step-up in net debt (+€3.2bn YoY) and goodwill (+€2.5bn) raises **integration and impairment risk**. Goodwill now exceeds total equity (~€14.9bn vs ~€11.6bn). A failed integration or goodwill write-down would erode the tangible-value case that screens partially ignore (negative tangible book; Net-Net and Deep Value models failed).
+
+**Earnings quality flags from the screen:** Piotroski F-Score 5/9 — ROA not improving, leverage not declining, gross margin not improving, asset turnover not improving. The Financial Health and Buffett Quality models failed, consistent with balance-sheet heaviness and modest margin drift rather than deteriorating fundamentals, but worth monitoring.
+
+**Recurring restructuring:** Restructuring/M&A charges of €166–302m annually (Yahoo) suggest ongoing portfolio rationalisation; if charges rise or cash restructuring costs accelerate, FCF yield could disappoint.
+
+**Competitive positioning:** Capgemini lacks a clear moat pass on quantitative screens. AI/agentic positioning (company IR/news) is strategically relevant but unproven in revenue mix and margin contribution without filing disclosure.
+
+**Governance / pension:** Pension obligations (~€339m) appear manageable relative to scale, but detailed funding status is unavailable without the URD.
+
+---
+
+## NEWS HIGHLIGHTS
+**Coverage quality:** News is **thin on material corporate events** and noisy — many Google News hits are false positives (French articles containing “cap” unrelated to Capgemini SE). Actionable Capgemini-specific items are limited.
+
+**Valuation and price action (Yahoo Finance):**
+- *“Capgemini (ENXTPA:CAP) Rebound Puts Its Undervalued Narrative Back In Focus”* (16 July 2026) — cites ~30% one-year decline and recent price stabilisation (~€93).
+- *“Capgemini (ENXTPA:CAP) Stock May Be A Bargain on Cash Flow and Earnings”* (15 July 2026) — highlights ~44% three-year decline vs stable cash-flow profile.
+- *“L'action Cap Gemini (CGEMY) est-elle actuellement sous-évaluée ?”* (22 April 2026).
+
+**Strategy and positioning:**
+- *“Capital Markets Day 2026 : Capgemini idéalement positionné pour capter la pleine valeur de la révolution de l’IA agentique”* (27 May 2026) — management framing around agentic AI.
+- *“Capgemini (ENXTPA:CAP) Valuation Check As Major HMRC Digital Transformation Win Supports Growth Outlook”* (5 June 2026) — multi-year UK tax authority contract.
+- *“L’ingénierie augmentée en action”* (21 July 2026) and *“De la promesse à l’action : les tendances de l’IA dans le retail en 2026”* (25 March 2026) — thought-leadership content, not financial disclosures.
+
+**Sector read-through:**
+- *“Accenture Shares Sink 20% After Revenue Outlook Misses Expectations”* (18 June 2026) — negative sector sentiment on consulting demand.
+
+**No material items** in the manifest on management changes, regulatory enforcement, or M&A completion terms. The large FY2025 acquisition is evident in Yahoo cash-flow data but not corroborated by indexed filings or dedicated news articles in this pack.
+
+---
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: The quantitative cheapness case is supported by stable ~€2.2bn FCF and shareholder returns, but absent primary filings, missing interim data, FY2025 leverage/M&A step-up, and sector cyclicality prevent full confirmation of the Strong Buy signal.

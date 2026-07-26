@@ -1,0 +1,58 @@
+# Xinyi Glass Holdings Limited (0868.HK) — Research memo
+
+_Version 1 · Updated 2026-07-26T18:05:35.235365+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Xinyi Glass is a leading PRC float and automotive glass manufacturer trading below book (P/B ~0.9) with a modest earnings yield (P/E ~12) and ~5% dividend yield, which together drive the quantitative screen’s buy rating (11/22 models; composite 60%). The investment case rests on cyclical trough valuation, a deleveraging balance sheet, and strong 2025 free cash flow (~CNY 3.9bn per Yahoo), offset by a clear multi-year earnings downtrend (revenue and net profit fell in 2024 and 2025). Primary HKEX filing extracts are absent from the research pack—only interim headlines are indexed—so financial trends rely on Yahoo fallback and cannot be audited against annual-report language. Key debate: whether current cheapness reflects a recoverable China property/auto glass cycle, or a structural margin and return compression that makes the stock a value trap despite low leverage (D/E ~13%).
+
+## INVESTMENT THESIS
+For a value investor, the screen flags a statistically cheap, income-oriented name in Basic Materials: it passes all four metric families (cheapness, dividend, GARP, risk), including Schloss Low P/B, earnings yield, FCF yield, Lynch/Neff PEG variants, Magic Formula, Acquirer’s Multiple, Dreman Contrarian, earnings quality, and financial health. At P/B 0.92, P/E 12.3, yield 4.9%, and D/E 13%, the market prices Xinyi as a below-average business despite its scale franchise in float glass—consistent with cyclical pessimism rather than balance-sheet distress.
+
+Business quality is mixed. Reported ROE (~7.7%) is well below 2023 levels (~15% on Yahoo-derived equity/income), and the name fails quality-oriented screens (Buffett Quality, Economic Moat, Piotroski F-Score 5/9—ROA, gross margin, asset turnover, and share-count trends all weak). Offsetting this, 2025 showed material balance-sheet repair: net debt fell from CNY 5.9bn to CNY 2.2bn (Yahoo), operating cash flow remained robust at CNY 5.3bn, and FCF rebounded to CNY 3.9bn as capital expenditure halved sharply versus 2024. The buy case is therefore a “cheap cyclical with cash-flow optionality,” not a high-quality compounder—aligned with the screen’s cheapness/risk emphasis rather than its failed quality gates.
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` lists two interim headlines (Aug 2025 results decline; Jul 2026 board meeting for interim approval/dividend) but **zero annual filings** and **zero downloadable body extracts** under `filings/bodies/`. No going-concern, covenant, or contingency language is available from primary filings. All figures below fall back to **`financials_annual.json` (Yahoo)** unless noted.
+
+**Income trend (Yahoo, CNY):**
+
+| Period | Revenue | Net income | Diluted EPS | Operating income |
+|--------|---------|------------|-------------|------------------|
+| 2023 | 24.29bn | 4.88bn | 1.17 | 4.99bn |
+| 2024 | 22.32bn | 3.37bn | 0.75 | 4.37bn |
+| 2025 | 20.83bn | 2.73bn | 0.62 | 3.48bn |
+
+Revenue has declined ~14% over two years; net profit ~44% from the 2023 peak. Gross margin edged down to ~31.1% in 2025 from ~32% in 2023–24. 2025 included substantial non-recurring charges (Yahoo: total unusual items ~CNY 713m; write-offs ~CNY 590m; impairment of capital assets ~CNY 157m), with normalised net income ~CNY 3.40bn—still below 2024’s reported CNY 3.37bn.
+
+**Balance sheet (Yahoo, year-end CNY):** Total assets CNY 47.6bn (2025) vs CNY 48.1bn (2024). Shareholders’ equity rose to CNY 36.9bn. Total debt fell to CNY 4.8bn from CNY 7.3bn; cash rose to CNY 2.6bn from CNY 1.5bn; net debt CNY 2.2bn vs CNY 5.9bn. Long-term equity investments in associates ~CNY 9.4bn (~20% of assets) and investment properties ~CNY 2.8bn add complexity to book value. Net PPE ~CNY 22.2bn confirms capital intensity.
+
+**Cash flow (Yahoo, CNY):** Operating cash flow held at CNY 5.32bn (2025) despite lower earnings. FCF recovered to CNY 3.89bn (2025) from CNY 0.52bn (2024), driven by capex falling to CNY 1.43bn from CNY 5.07bn. Dividends paid were cut to CNY 393m (2025) from CNY 1.88bn (2024)—yield support may partly reflect a lower payout on a depressed share price rather than management confidence.
+
+**Interim filings (index only, no body):** TipRanks (1 Aug 2025) flagged a “significant decline” in 2025 interim results; a board meeting to approve interim results and consider a dividend was scheduled (TipRanks, 21 Jul 2026). Specific interim revenue/profit figures are **not** in the source pack and cannot be cited.
+
+**Annual report gap:** No full-year HKEX annual report is indexed. Full-year 2025 figures above are Yahoo-sourced only; the Yahoo news item (2 Mar 2026) independently cites FY2025 sales CNY 20.83bn and net income CNY 2.73bn, consistent with the fallback dataset.
+
+## RISKS AND RED FLAGS
+- **Cyclical/end-market exposure:** Sustained revenue and margin compression through 2023–25 suggests China property and automotive glass demand remains weak; screen timing data is insufficient and RSI/SMA metrics are absent.
+- **Earnings-quality deterioration:** Repeated impairments and write-offs in 2024–25 (Yahoo); Piotroski failures on ROA trend, gross margin, and asset turnover.
+- **Return erosion:** ROE ~7.7% fails Graham enterprising and quality screens; risk that sub-10% returns persist even if earnings stabilise.
+- **Associate/investment complexity:** ~CNY 9.4bn equity-method investments and ~CNY 2.8bn investment properties embed valuation and related-party sensitivity (Xinyi Solar, 968.HK, is a separate listed affiliate—governance overlap not verifiable without annual report).
+- **Share dilution:** Diluted share count rose from ~4.16bn (2023) to ~4.38bn (2025) per Yahoo; Piotroski “no share dilution” failed.
+- **Dividend uncertainty:** Sharp 2025 dividend cut; upcoming interim dividend decision (Jul 2026 headline only) is unresolved.
+- **Evidence gap:** No primary filing text for going concern, litigation, pension, or covenant disclosures—verify before sizing positions.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **thin** and partly off-topic (irrelevant News24 articles; one piece on Xinyi Solar 968.HK, not 0868.HK).
+
+Material items from the manifest:
+
+- **“Xinyi Glass Reports Significant Decline in 2025 Interim Results”** — TipRanks, 1 Aug 2025: confirms mid-year earnings weakness (no figures in pack).
+- **“A Look At Xinyi Glass Holdings (SEHK:868) Valuation After Weaker 2025 Earnings Results”** — Yahoo/yfinance, 2 Mar 2026: FY2025 sales CNY 20.83bn and net income CNY 2.73bn, both down YoY; notes strong recent share-price performance (1Y TSR ~60%) despite weaker fundamentals—valuation disconnect worth monitoring.
+- **“Xinyi Glass Sets Board Meeting to Approve Interim Results and Consider Dividend”** — TipRanks, 21 Jul 2026: near-term catalyst for H1 2026 disclosure and dividend policy.
+
+No material M&A, management change, or regulatory enforcement headlines appear in the manifest. TradingView ETF/revenue-breakdown items (Jul 2026) add no strategic insight.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Deep research partially confirms the screen’s cheapness and deleveraging/FCF story, but earnings decline, quality-screen failures, and absent primary filings weaken conviction versus the quantitative buy signal alone.

@@ -1,0 +1,80 @@
+{
+  "ticker": "0868.HK",
+  "company_name": "Xinyi Glass Holdings Limited",
+  "market": "hang_seng",
+  "built_at": "2026-07-26T18:05:01.402760+00:00",
+  "inventory": {
+    "available": {
+      "filings_index": true,
+      "filings_bodies": false,
+      "yahoo_financials": true,
+      "news_manifest": true,
+      "screening_snapshot": true,
+      "macro_context": false,
+      "alternate_news": true
+    },
+    "thin": [
+      "filings_bodies",
+      "macro_context"
+    ],
+    "filings_body_files": 0,
+    "filings_indexed_bodies": 0,
+    "filings_summary": {
+      "total": 2,
+      "annual": 0,
+      "interim": 2,
+      "other": 0,
+      "with_body": 0
+    },
+    "news_article_count": 8,
+    "evidence_ladder": [
+      "filings_bodies",
+      "filings_index",
+      "yahoo_financials",
+      "news_manifest",
+      "alternate_news",
+      "screening_snapshot",
+      "macro_context"
+    ]
+  },
+  "body_refetch": {
+    "attempted": 2,
+    "fetched": 0,
+    "with_body_before": 0,
+    "with_body_after": 0,
+    "note": "refetch_missing_filing_bodies"
+  },
+  "ch_refetch": {},
+  "alternate_news_added": 1,
+  "alternate_news_path": "docs/data/library/markets/hang_seng/screen/research/0868.HK/sources/alternate_news.json",
+  "planned_alternate_sources": [
+    {
+      "id": "exchange_filings_full",
+      "label": "HKEX / SGX announcement full-text re-pull",
+      "why": "Asia filing discovery is headline-only today",
+      "score": "3"
+    },
+    {
+      "id": "sec_exhibits",
+      "label": "SEC 20-F / 6-K for dual-listed ADRs",
+      "why": "US filings may hold richer English disclosures",
+      "score": "3"
+    },
+    {
+      "id": "company_ir_presentation",
+      "label": "Company IR / annual report PDF",
+      "why": "Primary statements beyond Yahoo summaries",
+      "score": "3"
+    }
+  ],
+  "evidence_ladder": [
+    "filings_bodies",
+    "filings_index",
+    "yahoo_financials",
+    "news_manifest",
+    "alternate_news",
+    "screening_snapshot",
+    "macro_context"
+  ],
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+}

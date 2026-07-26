@@ -1,0 +1,85 @@
+# Bouygues SA (EN.PA) — Research memo
+
+_Version 1 · Updated 2026-07-26T18:09:49.085416+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Bouygues SA is a diversified French industrial group spanning construction, telecoms (Bouygues Telecom), media (TF1), real estate, and energy services (Equans). The quantitative screen rates the name a buy on cheapness, dividend, and risk metrics — notably a 14.8% FCF yield, 4.4% dividend yield, P/E of 15.0, and P/B of 1.4 — though it fails quality, moat, and financial-health models. The investment case rests on sustained free cash flow generation, deleveraging, and a credible dividend, set against a pending €20.35bn consortium acquisition of SFR that could reshape French telecom market structure. Valuation appears reasonable after a strong one-year share-price run, but primary annual and interim filings were not retrieved, limiting forensic verification of leverage, contingencies, and segment economics. The central debate is whether cash-rich, cash-generative conglomerate economics justify accumulation ahead of SFR regulatory clearance, or whether deal execution risk and absent filing disclosure warrant caution despite the screen signal.
+
+## INVESTMENT THESIS
+For a value investor, Bouygues offers a multi-divisional cash engine at a modest absolute and sector-relative valuation. The screen passes six of 22 models — FCF Yield, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, and Earnings Quality — spanning three of four factor families (cheapness, dividend, risk). Data quality is full (20/20 metrics present), and the signal is new but improving (one week at buy, conviction 28%).
+
+The quantitative hook is cash, not glamour. Yahoo-sourced figures (see Financial Review) show free cash flow rising from €248m (2022) to roughly €3.0bn annually in 2023–2025, net debt falling from €7.6bn to €4.2bn over the same period, and net income progressing from €973m to €1.14bn. Dividends paid have risen from €680m to €755m. At a 4.4% yield and 15.0x earnings, the market prices Bouygues as a cyclical industrial rather than a compounder — consistent with value screens that reward cash yield over quality scores.
+
+Business quality is adequate rather than exceptional. ROE of 9.1% is respectable but below best-in-class industrial peers; the screen fails Buffett Quality, Economic Moat, and Quality Value. Piotroski F-Score is 6/9 (positive net income and OCF, ROA improving, OCF exceeding net income, current ratio improving, gross margin improving — but leverage not declining, share dilution present, asset turnover not improving). The conglomerate structure provides diversification across construction cycles and telecom subscription revenue, yet obscures unit economics and complicates sum-of-the-parts analysis.
+
+The buy case is therefore a cash-yield and balance-sheet repair story at a reasonable multiple, not a high-quality compounder. That aligns with the screen's cheapness and dividend families while explaining failures on moat and financial-health gates.
+
+## FINANCIAL REVIEW
+**Primary filings:** `filings_index.json` contains zero entries — no annual report, half-year release, trading update, or other regulatory filing indexed under the euro_filings regime, and no body extracts exist under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance); segment detail, pension obligations, contingent liabilities, covenant language, and going-concern disclosures cannot be verified from this pack.
+
+**Annual trends (Yahoo, FY2022–FY2025)**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|
+| Revenue (€m) | 44,398 | 56,017 | 56,752 | 56,877 |
+| Operating income (€m) | 1,796 | 2,237 | 2,646 | 2,730 |
+| EBITDA (€m) | 4,531 | 5,137 | 5,392 | 5,758 |
+| Net income (€m) | 973 | 1,040 | 1,058 | 1,138 |
+| Diluted EPS (€) | 2.55 | 2.77 | 2.80 | 2.99 |
+| Free cash flow (€m) | 248 | 2,680 | 2,664 | 2,971 |
+| Operating cash flow (€m) | 2,978 | 5,344 | 5,378 | 5,472 |
+| Net debt (€m) | 7,629 | 6,269 | 6,065 | 4,214 |
+| Cash (€m) | 5,736 | 5,548 | 5,567 | 7,535 |
+| Dividends paid (€m) | 680 | 671 | 718 | 755 |
+
+Revenue jumped sharply in 2023 (likely reflecting the Equans integration and full-year consolidation) and has since plateaued near €57bn. Profitability has improved steadily: operating income rose ~52% over four years, and net income rose ~17%. Normalised earnings (Yahoo) were €916m (2022), €1,127m (2023), €1,303m (2024), and €1,390m (2025), indicating reported figures are adjusted for recurring special charges (write-offs of €334–574m annually).
+
+Cash generation is the standout trend. FCF recovered from a depressed €248m in 2022 (a year of heavy M&A outflows of €6.3bn) to a stable ~€2.7–3.0bn run-rate. Net debt fell €3.4bn over four years despite continued capex (~€2.5–2.7bn p.a.) and rising dividends. The screen's 14.8% FCF yield and €2.7bn FCF metric are consistent with these Yahoo figures against current market capitalisation.
+
+**Balance sheet (Yahoo, FY2025)**
+
+Total assets €64.1bn; total equity (gross minority interest) €14.9bn; total debt €15.2bn (including €3.4bn capital lease obligations). Tangible book value is negative at −€4.3bn, driven by goodwill of €13.7bn and other intangibles of €3.6bn — a legacy of acquisitions (Equans, Alstom grid assets, telecom spectrum). Working capital is negative (−€2.2bn), typical for construction but worth monitoring. Share count has drifted upward (diluted average shares 372m in 2022 to 382m in 2025), consistent with the screen's Piotroski dilution failure.
+
+**Interim / quarterly (Yahoo cached quarterly income)**
+
+No interim filing bodies are available. Yahoo quarterly data shows seasonally weak Q4 2025 and Q1 2026: Q4 2025 net loss of €156m (EPS −€0.41) on revenue €12.6bn; Q1 2026 net loss of €94m (EPS −€0.24) on revenue €12.2bn. News coverage ("Bouygues (BOUYY) Q1 2026 Earnings Call Highlights: Strong Financial Management Amidst Challenges", 11 May 2026) states management maintained its 2026 outlook with improved net debt despite sales declines in key divisions — but the underlying filing text was not retrieved for verification.
+
+**Gaps and caveats**
+
+Without annual or interim filing bodies, the following cannot be assessed from primary sources: segment EBIT/FCF breakdown, pension deficit, litigation/contingency provisions, debt covenant headroom, lease-adjusted leverage, or auditor emphasis-of-matter language. Yahoo special-item adjustments may not match statutory IFRS presentation. Treat the financial picture as directionally supportive but unverified.
+
+## RISKS AND RED FLAGS
+**Filing and disclosure gap.** The most immediate red flag is the absence of indexed regulatory filings. Contingencies, going-concern assessments, covenant compliance, and pension disclosures — typically found in annual reports and half-year releases — are unavailable. This pack cannot surface filing-language risks.
+
+**SFR transaction execution and regulatory risk.** Bouygues Telecom is part of a consortium (with Orange and Free-iliad) signing a memorandum to acquire SFR from Altice France for €20.35bn including debt (reported 7 June 2025). The deal requires regulatory approval and would reduce France's major mobile operators from four to three effective players through asset carve-up. Failure to close, adverse remedy conditions, or integration costs could alter Bouygues Telecom's leverage, capex burden, and return profile. No filing body provides management's stated conditions or financing plan.
+
+**Leverage and balance-sheet quality.** Despite net debt improvement, total debt remains €15.2bn and the screen flags non-declining leverage (Piotroski). Negative tangible book (−€4.3bn) limits downside asset coverage in a stress scenario. Capital lease obligations of €3.4bn add to adjusted leverage. The screen fails Financial Health and Graham Defensive models.
+
+**Cyclical construction exposure.** Roughly half the group sits in construction and energy services, exposed to public-spending cycles, project delays, and margin compression. Q1 2026 news references sales declines in key divisions; seasonal losses are normal but construction downturn risk is not captured by dividend/cash-yield screens.
+
+**Conglomerate complexity and governance.** Diversification across construction, telecom, media, and real estate impedes transparent valuation and may embed cross-subsidies. Family-controlled structure (Bouygues family) provides long-term orientation but raises minority-governance questions. Google News coverage of CEO Olivier Roussat's compensation (25 June 2026) is present but does not indicate a governance event.
+
+**Share dilution.** Diluted share count has risen ~2.7% from 2022 to 2025; the screen's Piotroski component flags dilution. Dividend growth must be assessed net of per-share dilution.
+
+**Interest and pension (unverified).** Yahoo shows net interest expense of €433m (2025) and long-term provisions of €2.8bn, but pension specifics are not available without the annual report.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate (14 articles in the manifest; four additional Google News items in alternate feed, several low-substance). Material themes:
+
+**SFR consolidation (April–June 2025).** The dominant corporate story. Headlines include "France's Telecom Giants Want to Break Up SFR and Rewire the Market" (17 Apr 2025), "Bouygues-led consortium signs $23.4Bn deal to acquire SFR from Altice France" (7 Jun 2025), and "Bouygues Telecom SFR Deal Reshapes French Market And Valuation Story" (9 Jun 2025). J.P. Morgan maintained overweight on Bouygues, arguing double-digit equity FCF CAGR is achievable standalone even if SFR consolidation fails ("JPM stays constructive on French telcos with or without consolidation", 17 Apr 2025).
+
+**Q1 2026 results and outlook (May 2026).** "Bouygues (BOUYY) Q1 2026 Earnings Call Highlights: Strong Financial Management Amidst Challenges" (11 May 2026) — management maintained 2026 guidance and cited improved net debt despite divisional sales pressure.
+
+**US construction expansion (July 2026).** "Bouygues acquires Vannoy Construction in US expansion" (3 Jul 2026) — bolt-on deal to strengthen US construction presence.
+
+**Valuation and performance commentary.** Several articles note strong share-price performance ("Is It Too Late To Consider Bouygues (ENXTPA:EN) After Its 35.8% One-Year Rally?", 16 May 2026; "A Look At Bouygues (ENXTPA:EN) Valuation After Recent Share Price Moves", 28 Apr 2026), suggesting the easy re-rating may be partly done.
+
+**Dividend framing.** Bouygues appears in dividend-stock round-ups ("3 European Dividend Stocks With Up To 10.5% Yield For Your Portfolio", 7 May 2026; "Meilleures dividendes aristocrates : notre sélection 2026", 16 Dec 2025).
+
+**Thin coverage areas.** No material management-change, regulatory enforcement, or major construction contract win/loss headlines in the manifest. Vodafone CEO commentary on European telecom consolidation (16 Jun 2026) is sector context only. Several Google News items are price-target or compensation filler with limited analytical value.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Yahoo-sourced cash flow, deleveraging, and dividend metrics support the screen's cheapness/dividend buy case, but absent primary filings and pending SFR regulatory uncertainty prevent full confirmation of balance-sheet and contingent-liability risks.
