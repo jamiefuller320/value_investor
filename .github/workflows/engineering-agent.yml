@@ -43,6 +43,11 @@ jobs:
       - name: Install package
         run: pip install -e .
 
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Compile engineering tasks
         run: |
           ftse-engineering --output-dir output compile --json || true
@@ -52,101 +57,98 @@ jobs:
           fi
           ftse-engineering list
 
+      - name: Resolve engineering task id
+        if: ${{ github.event.inputs.compile_only != 'true' }}
+        id: task
+        run: |
+          if [ -n "${{ github.event.inputs.task_id }}" ]; then
+            echo "task_id=${{ github.event.inputs.task_id }}" >> "$GITHUB_OUTPUT"
+          else
+            TASK_ID=$(ftse-engineering --json list | python3 - <<'PY'
+          import json, sys
+          data = json.load(sys.stdin)
+          open_tasks = [
+              row for row in data.get("tasks") or []
+              if str(row.get("status") or "open") == "open"
+          ]
+          open_tasks.sort(key=lambda row: -float(row.get("priority_score") or 0))
+          print(open_tasks[0]["id"] if open_tasks else "")
+          PY
+          )
+            if [ -z "$TASK_ID" ]; then
+              echo "No open engineering task to run"
+              exit 1
+            fi
+            echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Run supervised engineering agent
         if: ${{ github.event.inputs.compile_only != 'true' }}
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           FORCE_RUN: ${{ github.event.inputs.force }}
         run: |
-          ARGS="run --max-tasks 1"
-          if [ -n "${{ github.event.inputs.task_id }}" ]; then
-            ARGS="$ARGS --task-id ${{ github.event.inputs.task_id }}"
+          ARGS="run --max-tasks 1 --defer-pr-open"
+          if [ -n "${{ steps.task.outputs.task_id }}" ]; then
+            ARGS="$ARGS --task-id ${{ steps.task.outputs.task_id }}"
           fi
           if [ "$FORCE_RUN" = "true" ]; then
             ARGS="$ARGS --force"
           fi
           ftse-engineering --output-dir output $ARGS
 
-      - name: Commit queue state on main
-        if: ${{ github.event.inputs.compile_only != 'true' }}
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: mark engineering task pr_open [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json
-          skip_fetch: false
-
       - name: Create feature branch for code changes
         if: ${{ github.event.inputs.compile_only != 'true' }}
+        id: branch
         run: |
-          TASK_ID=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          for candidate in (Path("docs/data/engineering_tasks.json"), Path("output/engineering_tasks.json")):
-              if candidate.exists():
-                  data = json.loads(candidate.read_text())
-                  break
-          else:
-              raise SystemExit("No engineering queue found")
-          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
-          if not pr_open:
-              raise SystemExit("No pr_open engineering task after agent run")
-          print(pr_open[-1]["id"])
-          PY
-          )
+          TASK_ID="${{ steps.task.outputs.task_id }}"
           BRANCH="cursor/${TASK_ID}-1de3"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           git checkout -b "$BRANCH"
           git add -A
           git reset HEAD docs/data/engineering_tasks.json || true
           git checkout -- docs/data/engineering_tasks.json || true
           if git diff --cached --quiet; then
             echo "No code changes to commit"
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          TITLE=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          data = json.loads(Path("docs/data/engineering_tasks.json").read_text())
-          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
-          print((pr_open[-1].get("title") if pr_open else "Engineering task")[:72])
+          TITLE=$(ftse-engineering --json list | python3 - <<'PY'
+          import json, sys
+          task_id = "${{ steps.task.outputs.task_id }}"
+          data = json.load(sys.stdin)
+          for row in data.get("tasks") or []:
+              if str(row.get("id")) == task_id:
+                  print(str(row.get("title") or "Engineering task")[:72])
+                  break
+          else:
+              print("Engineering task")
           PY
           )
           git commit -m "feat(engineering): ${TITLE}"
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
       - name: Push branch and open draft PR
-        if: ${{ github.event.inputs.compile_only != 'true' }}
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && steps.branch.outputs.has_changes == 'true'
+        id: pr
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          BRANCH=$(git branch --show-current)
-          if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-            echo "Agent did not create a feature branch; skipping PR"
-            exit 0
-          fi
+          BRANCH="${{ steps.branch.outputs.branch }}"
+          TASK_ID="${{ steps.task.outputs.task_id }}"
           git push -u origin "$BRANCH"
-          TASK_ID=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          for candidate in (Path("docs/data/engineering_tasks.json"), Path("output/engineering_tasks.json")):
-              if candidate.exists():
-                  data = json.loads(candidate.read_text())
+          TITLE=$(ftse-engineering --json list | python3 - <<'PY'
+          import json, sys
+          task_id = "${{ steps.task.outputs.task_id }}"
+          data = json.load(sys.stdin)
+          for row in data.get("tasks") or []:
+              if str(row.get("id")) == task_id:
+                  print(str(row.get("title") or "Engineering task")[:120])
                   break
           else:
-              data = {"tasks": []}
-          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
-          print(pr_open[-1]["id"] if pr_open else "engineering-task")
-          PY
-          )
-          TITLE=$(python3 - <<'PY'
-          import json
-          from pathlib import Path
-          for candidate in (Path("docs/data/engineering_tasks.json"), Path("output/engineering_tasks.json")):
-              if candidate.exists():
-                  data = json.loads(candidate.read_text())
-                  break
-          else:
-              data = {"tasks": []}
-          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
-          print((pr_open[-1].get("title") if pr_open else "Engineering task")[:120])
+              print("Engineering task")
           PY
           )
           gh pr create \
@@ -162,4 +164,25 @@ jobs:
           - Verify on next Sunday email run
 
           _Draft PR — human merge required._" \
-            --draft || echo "PR may already exist"
+            --draft
+          echo "opened=true" >> "$GITHUB_OUTPUT"
+
+      - name: Mark task pr_open after draft PR
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && steps.pr.outputs.opened == 'true'
+        run: |
+          ftse-engineering mark-pr-open \
+            --task-id "${{ steps.task.outputs.task_id }}" \
+            --branch "${{ steps.branch.outputs.branch }}" \
+            --result-path "output/engineering_result_${{ steps.task.outputs.task_id }}.md"
+
+      - name: Commit queue state on main
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && steps.pr.outputs.opened == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: mark engineering task pr_open [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json
+          skip_fetch: false

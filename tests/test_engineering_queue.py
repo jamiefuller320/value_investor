@@ -9,6 +9,7 @@ from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     find_in_flight_pr,
     is_engineering_branch,
+    reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
     snapshot_ingest_health,
     task_id_from_branch,
@@ -74,6 +75,44 @@ def test_evaluate_dispatch_ready_when_queue_open_and_no_pr(tmp_path: Path):
     decision = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=[])
     assert decision.should_dispatch is True
     assert decision.next_task_id == "eng-20260726-01"
+
+
+def test_reconcile_orphaned_pr_open_resets_without_matching_pr(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260726-02", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260726-02-1de3", "completed_at": "x"},
+            _task("eng-20260726-01").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    result = reconcile_orphaned_pr_open_tasks(tasks_path=tasks_path, open_prs=[])
+    assert result["count"] == 1
+    updated = json.loads(tasks_path.read_text(encoding="utf-8"))
+    assert updated["tasks"][0]["status"] == "open"
+    assert "branch_name" not in updated["tasks"][0]
+    decision = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=[])
+    assert decision.should_dispatch is True
+    assert decision.next_task_id == "eng-20260726-02"
+
+
+def test_reconcile_orphaned_pr_open_keeps_matching_open_pr(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260726-02", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260726-02-1de3"},
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    result = reconcile_orphaned_pr_open_tasks(
+        tasks_path=tasks_path,
+        open_prs=[{"number": 115, "headRefName": "cursor/eng-20260726-02-1de3"}],
+    )
+    assert result["count"] == 0
+    updated = json.loads(tasks_path.read_text(encoding="utf-8"))
+    assert updated["tasks"][0]["status"] == "pr_open"
 
 
 def test_merge_task_rows_preserves_merged_status():
