@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import ast
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 import pandas as pd
 
 from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
+from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.technical_analysis import TradePlan, format_timing_summary, format_trade_plan_text, trade_plan_from_row
 
 SIGNAL_LABELS = {
@@ -49,6 +50,8 @@ class CompanyReport:
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
+    failed_models: list[str] = field(default_factory=list)
+    piotroski_f_score: dict[str, Any] | None = None
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -82,7 +85,9 @@ class CompanyReport:
             "trade_plan": self.trade_plan.to_dict() if self.trade_plan else None,
             "summary": self.summary,
             "passed_models": self.passed_models,
+            "failed_models": self.failed_models,
             "key_metrics": self.key_metrics,
+            "piotroski_f_score": self.piotroski_f_score,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -134,6 +139,33 @@ def _key_metrics_row(row: pd.Series) -> dict[str, str]:
         if formatted is not None:
             metrics[label] = formatted
     return metrics
+
+
+def _piotroski_f_score_from_models(ticker_models: pd.DataFrame) -> dict[str, Any] | None:
+    if ticker_models.empty or "model_id" not in ticker_models.columns:
+        return None
+    piotroski = ticker_models[ticker_models["model_id"] == "piotroski_f"]
+    if piotroski.empty:
+        return None
+
+    model_row = piotroski.iloc[0]
+    details = model_row.get("details")
+    if isinstance(details, str) and details.strip():
+        try:
+            parsed = ast.literal_eval(details)
+            details = parsed if isinstance(parsed, dict) else None
+        except (SyntaxError, ValueError):
+            details = None
+    elif not isinstance(details, dict):
+        details = None
+
+    return piotroski_snapshot_from_result(
+        passed=bool(model_row.get("passed")),
+        score=float(model_row.get("score") or 0),
+        reasons=_parse_list_field(model_row.get("reasons")),
+        failed_criteria=_parse_list_field(model_row.get("failed_criteria")),
+        details=details,
+    )
 
 
 def _brief_summary(
@@ -234,6 +266,8 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
         failed = ticker_models[ticker_models["passed"] == False]  # noqa: E712
 
         passed_model_names = passed["model_name"].tolist()
+        failed_model_names = failed["model_name"].tolist()
+        piotroski_f_score = _piotroski_f_score_from_models(ticker_models)
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
             passed_reasons.extend(_parse_list_field(model_row.get("reasons")))
@@ -356,6 +390,8 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 summary=summary,
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,
+                failed_models=failed_model_names,
+                piotroski_f_score=piotroski_f_score,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,

@@ -15,9 +15,10 @@ class ModelResult:
     score: float  # 0.0 – 1.0 within this model
     reasons: list[str] = field(default_factory=list)
     failed_criteria: list[str] = field(default_factory=list)
+    details: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "model_id": self.model_id,
             "model_name": self.model_name,
             "passed": self.passed,
@@ -25,6 +26,9 @@ class ModelResult:
             "reasons": self.reasons,
             "failed_criteria": self.failed_criteria,
         }
+        if self.details:
+            payload["details"] = self.details
+        return payload
 
 
 class ValueModel(ABC):
@@ -42,6 +46,7 @@ class ValueModel(ABC):
         score: float,
         reasons: list[str] | None = None,
         failed_criteria: list[str] | None = None,
+        details: dict[str, Any] | None = None,
     ) -> ModelResult:
         return ModelResult(
             model_id=self.id,
@@ -50,4 +55,5 @@ class ValueModel(ABC):
             score=max(0.0, min(1.0, score)),
             reasons=reasons or [],
             failed_criteria=failed_criteria or [],
+            details=details or {},
         )

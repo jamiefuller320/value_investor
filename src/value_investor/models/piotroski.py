@@ -2,9 +2,71 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from value_investor.models.base import ModelResult, ValueModel
+
+PIOTROSKI_COMPONENT_LABELS = (
+    "positive net income",
+    "positive operating cash flow",
+    "ROA improving",
+    "OCF > net income",
+    "leverage declining",
+    "current ratio improving",
+    "no share dilution",
+    "gross margin improving",
+    "asset turnover improving",
+)
+
+
+def piotroski_snapshot_from_result(
+    *,
+    passed: bool,
+    score: float,
+    reasons: list[str],
+    failed_criteria: list[str],
+    details: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Structured Piotroski payload for screening_snapshot.json export."""
+    if details and details.get("components"):
+        return {
+            "score": int(details.get("f_score", round(score * 9))),
+            "max_score": int(details.get("max_score", 9)),
+            "passed": passed,
+            "components": list(details["components"]),
+        }
+
+    f_score: int | None = None
+    for reason in reasons:
+        match = re.match(r"F-Score=(\d+)/(\d+)", reason)
+        if match:
+            f_score = int(match.group(1))
+            break
+    if f_score is None:
+        for failure in failed_criteria:
+            match = re.match(r"F-Score (\d+)/(\d+)", failure)
+            if match:
+                f_score = int(match.group(1))
+                break
+    if f_score is None:
+        f_score = int(round(score * 9))
+
+    passed_labels = {label for label in reasons if not label.startswith("F-Score")}
+    failed_labels = {label for label in failed_criteria if not label.startswith("F-Score")}
+    components: list[dict[str, Any]] = []
+    for label in PIOTROSKI_COMPONENT_LABELS:
+        if label in passed_labels:
+            components.append({"name": label, "passed": True})
+        elif label in failed_labels:
+            components.append({"name": label, "passed": False})
+
+    return {
+        "score": f_score,
+        "max_score": 9,
+        "passed": passed,
+        "components": components,
+    }
 
 
 class PiotroskiFScoreModel(ValueModel):
@@ -63,11 +125,13 @@ class PiotroskiFScoreModel(ValueModel):
             ("asset turnover improving", at is not None and at_prev is not None and at > at_prev),
         ]
 
+        components: list[dict[str, Any]] = []
         available = 0
         for label, ok in checks:
             if ok is None:
                 continue
             available += 1
+            components.append({"name": label, "passed": bool(ok)})
             if ok:
                 points += 1
                 reasons.append(label)
@@ -79,6 +143,11 @@ class PiotroskiFScoreModel(ValueModel):
                 passed=False,
                 score=points / 9,
                 failed_criteria=["insufficient financial statement history"],
+                details={
+                    "f_score": points,
+                    "max_score": 9,
+                    "components": components,
+                },
             )
 
         score = points / 9
@@ -87,4 +156,14 @@ class PiotroskiFScoreModel(ValueModel):
             failed.insert(0, f"F-Score {points}/9 below {self.PASS_SCORE}")
 
         reasons.insert(0, f"F-Score={points}/9")
-        return self._result(passed=passed, score=score, reasons=reasons, failed_criteria=failed)
+        return self._result(
+            passed=passed,
+            score=score,
+            reasons=reasons,
+            failed_criteria=failed,
+            details={
+                "f_score": points,
+                "max_score": 9,
+                "components": components,
+            },
+        )
