@@ -27,7 +27,10 @@ from value_investor.engineering_tasks import (
     select_engineering_tasks,
     sync_committed_engineering_tasks,
 )
-from value_investor.engineering_queue import evaluate_engineering_dispatch
+from value_investor.engineering_queue import (
+    evaluate_engineering_dispatch,
+    reprioritize_queue_after_ingest_merge,
+)
 
 
 def _print_json(data: object) -> None:
@@ -134,6 +137,27 @@ def _cmd_sync_queue(args: argparse.Namespace) -> int:
         _print_json({"task_count": payload.get("task_count"), "path": str(args.tasks_path)})
     else:
         print(f"Synced {payload.get('task_count')} task(s) → {args.tasks_path}")
+    return 0
+
+
+def _cmd_reprioritize(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    result = reprioritize_queue_after_ingest_merge(
+        merged_task_id=args.merged_task_id,
+        tasks_path=tasks_path,
+        latest_path=args.latest_path,
+    )
+    if args.json:
+        _print_json(result)
+    else:
+        if result.get("skipped"):
+            print(f"Skipped reprioritize: {result.get('reason')}")
+        else:
+            print(
+                f"Reprioritized after {result.get('merged_task_id')} "
+                f"(improved={result.get('improved')}, "
+                f"adjustments={len(result.get('adjustments') or [])})"
+            )
     return 0
 
 
@@ -277,6 +301,18 @@ def main(argv: list[str] | None = None) -> int:
     merged_p.add_argument("--pr-url", default=None)
     merged_p.add_argument("--pr-number", type=int, default=None)
     merged_p.set_defaults(func=_cmd_mark_merged)
+
+    reprioritize_p = sub.add_parser(
+        "reprioritize",
+        help="Deterministically adjust open queue priorities after an ingest merge",
+    )
+    reprioritize_p.add_argument("--merged-task-id", required=True)
+    reprioritize_p.add_argument(
+        "--latest-path",
+        type=Path,
+        default=Path("docs/data/latest.json"),
+    )
+    reprioritize_p.set_defaults(func=_cmd_reprioritize)
 
     run_p = sub.add_parser("run", help="Run the supervised dev agent for open task(s)")
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")

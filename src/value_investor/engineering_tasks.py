@@ -446,12 +446,24 @@ def sync_committed_engineering_tasks(
     output_path: Path = DEFAULT_TASKS_PATH,
     committed_path: Path = COMMITTED_TASKS_PATH,
 ) -> dict[str, Any] | None:
-    """Copy the working queue to the committed dashboard path when present."""
+    """Merge output queue into committed path without clobbering lifecycle fields."""
     output_path = Path(output_path)
     committed_path = Path(committed_path)
     if not output_path.exists():
         return load_engineering_tasks(committed_path) if committed_path.exists() else None
-    payload = load_engineering_tasks(output_path)
+
+    output_payload = load_engineering_tasks(output_path)
+    committed_payload = load_engineering_tasks(committed_path) if committed_path.exists() else {"tasks": []}
+    merged_rows = _merge_task_rows(
+        list(committed_payload.get("tasks") or []),
+        [EngineeringTask.from_dict(row) for row in output_payload.get("tasks") or []],
+    )
+    payload = {
+        **committed_payload,
+        **{k: v for k, v in output_payload.items() if k != "tasks"},
+        "tasks": merged_rows,
+        "task_count": len(merged_rows),
+    }
     committed_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(committed_path, payload, compact=False)
     return payload
@@ -500,11 +512,15 @@ def compile_engineering_tasks(
                 break
 
     merged_rows = _merge_task_rows(existing_rows, tasks)
+    from value_investor.engineering_queue import snapshot_ingest_health
+
+    ingest_health = snapshot_ingest_health()
     payload = {
         "compiled_at": datetime.now(UTC).isoformat(),
         "run_at": _read_run_at(output_dir),
         "task_count": len(merged_rows),
         "tasks": merged_rows,
+        "ingest_health": ingest_health,
     }
     tasks_path = Path(tasks_path)
     tasks_path.parent.mkdir(parents=True, exist_ok=True)

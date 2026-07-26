@@ -6,7 +6,8 @@ name: FTSE Engineering Queue
 # - no open engineering PR is in flight
 # - ad-hoc spend checkpoint not reached (unless force)
 #
-# Also runs on engineering PR merge to mark the task merged and chain the next task.
+# Also runs on engineering PR merge to mark the task merged, reprioritize
+# open ingest/scoring tasks, and chain the next task.
 on:
   schedule:
   # Hourly on weekdays (UTC). GitHub cron is best-effort; safe to re-fire.
@@ -54,11 +55,25 @@ jobs:
             --pr-url "${{ github.event.pull_request.html_url }}" \
             --pr-number "${{ github.event.pull_request.number }}"
 
+      - name: Reprioritize queue after ingest merge
+        if: >-
+          github.event_name == 'pull_request'
+          && github.event.pull_request.merged == true
+          && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+        run: |
+          TASK_ID=$(python3 - <<'PY'
+          from value_investor.engineering_queue import task_id_from_branch
+          print(task_id_from_branch("${{ github.event.pull_request.head.ref }}") or "")
+          PY
+          )
+          if [ -n "$TASK_ID" ]; then
+            ftse-engineering reprioritize --merged-task-id "$TASK_ID" --json
+          fi
+
       - name: Refresh queue from Sunday artifacts when present
         run: |
-          ftse-engineering --output-dir output compile --json || true
-          if [ -f output/engineering_tasks.json ]; then
-            ftse-engineering sync-queue --tasks-path docs/data/engineering_tasks.json
+          if [ -f output/post_run_review.md ]; then
+            ftse-engineering --output-dir output compile --json
           fi
           ftse-engineering list || true
 
@@ -79,7 +94,7 @@ jobs:
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
-          ARGS="queue-status --json --open-prs-json /tmp/open_prs.json"
+          ARGS="--json queue-status --open-prs-json /tmp/open_prs.json"
           if [ "$FORCE" = "true" ]; then
             ARGS="$ARGS --force"
           fi
@@ -125,7 +140,7 @@ jobs:
           && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "chore: mark engineering task merged [skip ci]"
+          commit_message: "chore: update engineering queue after merge [skip ci]"
           file_pattern: docs/data/engineering_tasks.json
           skip_fetch: false
 
