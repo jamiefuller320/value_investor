@@ -59,11 +59,13 @@ DEFER
         encoding="utf-8",
     )
     tasks_path = output_dir / "engineering_tasks.json"
+    committed_path = tmp_path / "committed" / "engineering_tasks.json"
     payload = compile_engineering_tasks(
         output_dir=output_dir,
         suggestions_path=suggestions_path,
         max_tasks=5,
         tasks_path=tasks_path,
+        committed_path=committed_path,
     )
     assert payload["task_count"] >= 2
     areas = {row["area"] for row in payload["tasks"]}
