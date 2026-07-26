@@ -64,21 +64,7 @@ jobs:
           if [ -n "${{ github.event.inputs.task_id }}" ]; then
             echo "task_id=${{ github.event.inputs.task_id }}" >> "$GITHUB_OUTPUT"
           else
-            TASK_ID=$(ftse-engineering --json list | python3 - <<'PY'
-          import json, sys
-          data = json.load(sys.stdin)
-          open_tasks = [
-              row for row in data.get("tasks") or []
-              if str(row.get("status") or "open") == "open"
-          ]
-          open_tasks.sort(key=lambda row: -float(row.get("priority_score") or 0))
-          print(open_tasks[0]["id"] if open_tasks else "")
-          PY
-          )
-            if [ -z "$TASK_ID" ]; then
-              echo "No open engineering task to run"
-              exit 1
-            fi
+            TASK_ID=$(ftse-engineering next-open-id)
             echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
           fi
 
@@ -113,18 +99,7 @@ jobs:
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          TITLE=$(ftse-engineering --json list | python3 - <<'PY'
-          import json, sys
-          task_id = "${{ steps.task.outputs.task_id }}"
-          data = json.load(sys.stdin)
-          for row in data.get("tasks") or []:
-              if str(row.get("id")) == task_id:
-                  print(str(row.get("title") or "Engineering task")[:72])
-                  break
-          else:
-              print("Engineering task")
-          PY
-          )
+          TITLE=$(ftse-engineering task-title --task-id "$TASK_ID" --max-len 72)
           git commit -m "feat(engineering): ${TITLE}"
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
@@ -139,18 +114,7 @@ jobs:
           BRANCH="${{ steps.branch.outputs.branch }}"
           TASK_ID="${{ steps.task.outputs.task_id }}"
           git push -u origin "$BRANCH"
-          TITLE=$(ftse-engineering --json list | python3 - <<'PY'
-          import json, sys
-          task_id = "${{ steps.task.outputs.task_id }}"
-          data = json.load(sys.stdin)
-          for row in data.get("tasks") or []:
-              if str(row.get("id")) == task_id:
-                  print(str(row.get("title") or "Engineering task")[:120])
-                  break
-          else:
-              print("Engineering task")
-          PY
-          )
+          TITLE=$(ftse-engineering task-title --task-id "$TASK_ID" --max-len 120)
           gh pr create \
             --base main \
             --head "$BRANCH" \

@@ -157,6 +157,27 @@ def _cmd_reconcile_queue(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_next_open_id(args: argparse.Namespace) -> int:
+    tasks = select_engineering_tasks(path=_resolve_tasks_path(args.tasks_path), max_tasks=1)
+    if not tasks:
+        print("No open engineering tasks", file=sys.stderr)
+        return 1
+    print(tasks[0].id)
+    return 0
+
+
+def _cmd_task_title(args: argparse.Namespace) -> int:
+    data = load_engineering_tasks(_resolve_tasks_path(args.tasks_path))
+    wanted = str(args.task_id).strip()
+    for row in data.get("tasks") or []:
+        if str(row.get("id")) == wanted:
+            title = str(row.get("title") or "Engineering task")
+            print(title[: max(1, int(args.max_len))])
+            return 0
+    print(f"No engineering task matched id {wanted}", file=sys.stderr)
+    return 1
+
+
 def _cmd_mark_pr_open(args: argparse.Namespace) -> int:
     updated = mark_task_status(
         args.task_id,
@@ -342,6 +363,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to JSON array of open PRs from gh pr list --json ...",
     )
     reconcile_p.set_defaults(func=_cmd_reconcile_queue)
+
+    next_open_p = sub.add_parser("next-open-id", help="Print the top-priority open engineering task id")
+    next_open_p.set_defaults(func=_cmd_next_open_id)
+
+    task_title_p = sub.add_parser("task-title", help="Print an engineering task title")
+    task_title_p.add_argument("--task-id", required=True)
+    task_title_p.add_argument("--max-len", type=int, default=120)
+    task_title_p.set_defaults(func=_cmd_task_title)
 
     mark_pr_open_p = sub.add_parser(
         "mark-pr-open",
