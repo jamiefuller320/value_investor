@@ -13,8 +13,9 @@ import pandas as pd
 
 from value_investor.agent_model_policy import (
     load_policy,
-    record_estimated_spend,
-    remaining_weekly_budget_usd,
+    record_spend_with_checkpoint,
+    spend_checkpoint_usd,
+    spend_since_checkpoint_usd,
     research_model_id,
     save_policy,
 )
@@ -104,7 +105,7 @@ def main() -> int:
     executed = int(summary.created) + int(summary.updated)
     estimated_spend = round(executed * memo_cost, 4)
     if executed > 0:
-        record_estimated_spend(estimated_spend, POLICY)
+        record_spend_with_checkpoint(estimated_spend, POLICY)
 
     policy_after = load_policy(POLICY)
     ladder = policy_after.setdefault("ladder", {})
@@ -116,9 +117,7 @@ def main() -> int:
             "test": "finish_remaining_strong_buys",
             "model": model,
             "research_cap": len(remaining),
-            "enforce_weekly_research_cap": bool(
-                (policy_after.get("budget") or {}).get("enforce_weekly_research_cap", False)
-            ),
+            "spend_pool": "ad_hoc",
             "targets": log["targets"],
             "executed": executed,
             "created": summary.created,
@@ -126,7 +125,8 @@ def main() -> int:
             "errors": summary.errors,
             "estimated_spend_usd": estimated_spend,
             "elapsed_seconds": round(elapsed, 1),
-            "remaining_usd_after": remaining_weekly_budget_usd(policy_after),
+            "remaining_usd_after": spend_checkpoint_usd(policy_after)
+            - spend_since_checkpoint_usd(policy_after),
         },
         "graduation": {"skipped": True},
         "maintenance": {"skipped": True},

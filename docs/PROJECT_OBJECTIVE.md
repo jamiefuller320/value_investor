@@ -77,19 +77,27 @@ ftse-library ladder --dry-run-research # shortlist without calling Cursor
 
 Artifacts: `docs/data/library/markets/sp500/screen/` (signals, shortlist, history) and optional `screen/research/` memos.
 
-### Research model / usage budget
+### Research model / spend pools
 
-Cheapest agent for plan efficiency: **`composer-2.5`** (first-party pool). Cursor **subscription** (Pro **$20/mo**, refresh **8th** → surplus **7th**) is metadata only — included credits can be far below on-demand usage. Library research is capped by a **usage envelope of £30/week** (`weekly_usage_gbp` × `gbp_usd_rate` ≈ **$38.10**), with **`enforce_weekly_research_cap=true`**. When the envelope is spent, ladder selective research is skipped and the budget flag is **`constraining`** (dashboard + `ftse-library policy`).
+Cheapest agent for plan efficiency: **`composer-2.5`** (first-party pool). Cursor **subscription** (Pro **$20/mo**, refresh **8th** → surplus **7th**) is metadata only.
+
+| Pool | Default | Used by |
+|------|---------|---------|
+| **`weekly_ops`** | **$50/week** | Orchestrator Sunday bundle (email report + ladder selective research) |
+| **`ad_hoc`** | **$60 checkpoint** | Manual depth passes (`--unrestricted-budget`), rememo scripts |
+
+When `weekly_ops` is spent, orchestrator research is skipped (`budget_flag=constraining`). Ad-hoc work pauses at the checkpoint until human approval.
 
 ```bash
-ftse-library policy                    # focus + usage budget + flag
-ftse-library policy --weekly-usage-gbp 30 --enforce-weekly-research-cap
+ftse-library policy                    # focus + both spend pools
+ftse-library policy --weekly-ops-cap-usd 50
 ftse-library review-model              # re-pick cheapest (Monday cron)
-ftse-library ladder
+ftse-library ladder                    # weekly_ops pool (default)
+ftse-library ladder --unrestricted-budget  # ad_hoc checkpoint pool
 ```
 
 - Screen-lite runs once enough focus metrics exist (≥25 by default).
-- Selective research is limited by the weekly usage envelope and `research_hard_cap` 50; buy-tier memos round-robin across graduated markets.
+- Selective research is limited by `weekly_ops_cap_usd` (orchestrator) or `research_hard_cap` 50; buy-tier memos round-robin across graduated markets.
 
 ---
 

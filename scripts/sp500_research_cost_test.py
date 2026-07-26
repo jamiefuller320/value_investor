@@ -18,8 +18,9 @@ import pandas as pd
 
 from value_investor.agent_model_policy import (
     load_policy,
-    record_estimated_spend,
-    remaining_weekly_budget_usd,
+    record_spend_with_checkpoint,
+    spend_checkpoint_usd,
+    spend_since_checkpoint_usd,
     research_model_id,
     save_policy,
 )
@@ -54,7 +55,7 @@ def main() -> int:
 
     before_week = float((policy.get("budget") or {}).get("estimated_spend_usd_this_week") or 0.0)
     before_cycle = float((policy.get("budget") or {}).get("estimated_spend_usd_this_cycle") or 0.0)
-    remaining_before = remaining_weekly_budget_usd(policy)
+    remaining_before = spend_checkpoint_usd(policy) - spend_since_checkpoint_usd(policy)
 
     log: dict = {
         "test": "sp500_research_cost_impact",
@@ -64,8 +65,7 @@ def main() -> int:
         "selection_rule": "eligible_research_targets: quality strong_buy first, then buy to fill cap",
         "budget_gate_bypassed": True,
         "budget_gate_note": (
-            "Weekly library strand nearly exhausted; run continues for cost-impact "
-            "measurement against monthly Pro pool."
+            "Ad-hoc cost test — spend recorded against checkpoint pool, not weekly_ops."
         ),
         "estimated_memo_usd": memo_cost,
         "remaining_weekly_usd_before": remaining_before,
@@ -85,7 +85,7 @@ def main() -> int:
     LOG.write_text(json.dumps(log, indent=2) + "\n", encoding="utf-8")
     print(
         f"Research cost test: {len(targets)} targets, model={model}, "
-        f"cap={weekly_cap}, remaining_weekly=${remaining_before:.2f}",
+        f"cap={weekly_cap}, checkpoint_remaining=${remaining_before:.2f}",
         flush=True,
     )
     for row in log["targets"]:
@@ -110,7 +110,7 @@ def main() -> int:
     estimated_spend = round(executed * memo_cost, 4)
 
     if executed > 0:
-        record_estimated_spend(estimated_spend, POLICY)
+        record_spend_with_checkpoint(estimated_spend, POLICY)
 
     policy_after = load_policy(POLICY)
     ladder = policy_after.setdefault("ladder", {})
@@ -136,7 +136,8 @@ def main() -> int:
             "alumni_updated": summary.alumni_updated,
             "estimated_spend_usd": estimated_spend,
             "elapsed_seconds": round(elapsed, 1),
-            "remaining_usd_after": remaining_weekly_budget_usd(policy_after),
+            "remaining_usd_after": spend_checkpoint_usd(policy_after)
+            - spend_since_checkpoint_usd(policy_after),
         },
         "graduation": {"skipped": True},
         "maintenance": {"skipped": True},
@@ -160,7 +161,8 @@ def main() -> int:
             "estimated_spend_usd_this_cycle_after": (
                 policy_after.get("budget") or {}
             ).get("estimated_spend_usd_this_cycle"),
-            "remaining_weekly_usd_after": remaining_weekly_budget_usd(policy_after),
+            "remaining_weekly_usd_after": spend_checkpoint_usd(policy_after)
+            - spend_since_checkpoint_usd(policy_after),
             "documents": [d.ticker for d in summary.documents],
         }
     )

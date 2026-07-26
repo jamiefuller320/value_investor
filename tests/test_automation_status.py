@@ -49,14 +49,16 @@ def test_build_automation_status_timeline(tmp_path: Path):
             "budget": {
                 "plan_name": "Pro",
                 "plan_monthly_usd": 20,
-                "weekly_library_usd": 2.0,
-                "enforce_weekly_research_cap": False,
+                "weekly_ops_cap_usd": 50.0,
+                "enforce_weekly_ops_cap": True,
                 "plan_refresh_day_of_month": 8,
             },
             "ladder": {
                 "enabled": True,
                 "research_hard_cap": 50,
                 "research_all_graduated": True,
+                "spend_checkpoint_usd": 60.0,
+                "spend_since_checkpoint_usd": 0.0,
             },
             "research_model": {"model_id": "composer-2.5", "pool": "auto"},
             "model_review": {"last_reviewed_at": None, "review_interval_days": 14, "history": []},

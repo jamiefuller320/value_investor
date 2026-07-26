@@ -14,18 +14,15 @@ from value_investor.agent_model_policy import (
     SPEND_POOL_WEEKLY_OPS,
     approve_spend_checkpoint,
     enforce_weekly_ops_cap,
-    enforce_weekly_research_cap,
     grow_ticker_budget,
     load_policy,
     record_estimated_spend,
     record_spend_with_checkpoint,
-    remaining_weekly_budget_usd,
     remaining_weekly_ops_usd,
     research_model_id,
     save_policy,
     spend_checkpoint_usd,
     spend_since_checkpoint_usd,
-    weekly_budget_status,
     weekly_ops_budget_status,
 )
 from value_investor.cursor_api_key import resolve_cursor_api_key
@@ -217,18 +214,19 @@ def run_library_ladder(
         remaining = remaining_weekly_ops_usd(policy)
         weekly_cap_on = enforce_weekly_ops_cap(policy)
         budget_status = weekly_ops_budget_status(policy, estimated_memo_usd=memo_cost)
+        if weekly_cap_on:
+            research_cap = research_cap_from_budget(
+                remaining_usd=remaining,
+                estimated_memo_usd=memo_cost,
+                hard_cap=hard_cap,
+                surplus=bool(plan.get("surplus_day")),
+            )
+        else:
+            research_cap = hard_cap
     else:
-        remaining = remaining_weekly_budget_usd(policy)
-        weekly_cap_on = False if unrestricted_budget else enforce_weekly_research_cap(policy)
-        budget_status = weekly_budget_status(policy, estimated_memo_usd=memo_cost)
-    if weekly_cap_on:
-        research_cap = research_cap_from_budget(
-            remaining_usd=remaining,
-            estimated_memo_usd=memo_cost,
-            hard_cap=hard_cap,
-            surplus=bool(plan.get("surplus_day")),
-        )
-    else:
+        remaining = 0.0
+        weekly_cap_on = False
+        budget_status = weekly_ops_budget_status(policy, estimated_memo_usd=memo_cost)
         research_cap = hard_cap
     model = research_model_id(policy)
     research_markets = _research_markets(policy, market)
@@ -256,15 +254,13 @@ def run_library_ladder(
             "reason": (
                 "weekly orchestrator research budget exhausted"
                 if use_weekly_ops
-                else "weekly library research budget exhausted"
+                else "research cap unavailable"
             ),
             "spend_pool": spend_pool,
             "remaining_usd": remaining,
-            "enforce_weekly_research_cap": weekly_cap_on,
+            "enforce_weekly_ops_cap": weekly_cap_on,
             "constraining": True,
             "budget_flag": budget_status["flag"],
-            "allocation_basis": budget_status.get("allocation_basis"),
-            "weekly_usage_gbp": budget_status.get("weekly_usage_gbp"),
             "weekly_ops_cap_usd": budget_status.get("weekly_ops_cap_usd"),
             "note": budget_status.get("note"),
         }
@@ -311,7 +307,7 @@ def run_library_ladder(
                 (policy.get("ladder") or {}).get("research_all_graduated", True)
             ),
             "spend_pool": spend_pool,
-            "enforce_weekly_research_cap": weekly_cap_on,
+            "enforce_weekly_ops_cap": weekly_cap_on,
             "unrestricted_budget": unrestricted_budget,
             "spend_checkpoint_usd": checkpoint_limit,
             "spend_since_checkpoint_usd": spend_since_checkpoint_usd(policy),
@@ -322,8 +318,6 @@ def run_library_ladder(
             "constraining": status["constraining"],
             "near_limit": status["near_limit"],
             "budget_flag": status["flag"],
-            "allocation_basis": status.get("allocation_basis"),
-            "weekly_usage_gbp": status.get("weekly_usage_gbp"),
             "remaining_usd_before": remaining,
             "dedupe": {
                 "already_researched_count": len(already),
@@ -419,10 +413,6 @@ def run_library_ladder(
                     layer["estimated_spend_usd"] = round(executed * memo_cost, 4)
                     if use_weekly_ops:
                         layer["remaining_usd_after"] = remaining_weekly_ops_usd(
-                            load_policy(policy_path)
-                        )
-                    else:
-                        layer["remaining_usd_after"] = remaining_weekly_budget_usd(
                             load_policy(policy_path)
                         )
                 if checkpoint_reached:
