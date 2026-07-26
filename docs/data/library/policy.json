@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "focus_market": "atx",
+  "focus_market": "psi20",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
@@ -118,6 +118,12 @@
     {
       "market": "us_adr_asia",
       "graduated_at": "2026-07-18T18:33:55.191736+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "atx",
+      "graduated_at": "2026-07-26T05:41:29.750591+00:00",
       "coverage_pct": 1.0,
       "stale_pct": 0.0
     }
@@ -273,6 +279,14 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "advanced"
+      },
+      {
+        "at": "2026-07-26T05:41:29.750591+00:00",
+        "from_market": "atx",
+        "to_market": "psi20",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
       }
     ],
     "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
@@ -327,7 +341,7 @@
     "use_in_scoring": false,
     "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
   },
-  "updated_at": "2026-07-25T15:05:30.906990+00:00",
+  "updated_at": "2026-07-26T05:41:29.752233+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -340,14 +354,30 @@
     "research_hard_cap": 75,
     "research_all_graduated": true,
     "last_run": {
-      "run_at": "2026-07-25T15:05:16.747405+00:00",
+      "run_at": "2026-07-26T05:22:45.904536+00:00",
       "focus_market": "atx",
-      "focus_market_after": "atx",
+      "focus_market_after": "psi20",
       "screen_shortlist": 0,
       "research": {
-        "model": "composer-2.5",
-        "research_cap": 75,
-        "research_markets": [
+        "skipped": true,
+        "reason": "weekly library research budget exhausted",
+        "remaining_usd": 0.0,
+        "enforce_weekly_research_cap": true,
+        "constraining": true,
+        "budget_flag": "constraining",
+        "allocation_basis": "usage_weekly_gbp",
+        "weekly_usage_gbp": 30.0,
+        "note": "Weekly usage envelope is constraining selective research — raise weekly_usage_gbp, wait for week rollover, or set enforce_weekly_research_cap=false."
+      },
+      "graduation": {
+        "graduated": true,
+        "from_market": "atx",
+        "to_market": "psi20",
+        "reason": "advanced"
+      },
+      "maintenance": {
+        "skipped": false,
+        "markets": [
           "sp500",
           "euro_stoxx50",
           "asx200",
@@ -363,139 +393,8 @@
           "bel20",
           "hang_seng",
           "sti",
-          "us_adr_asia",
-          "atx",
-          "psi20",
-          "smi",
-          "omxs30",
-          "iseq20"
-        ],
-        "research_all_graduated": true,
-        "enforce_weekly_research_cap": false,
-        "unrestricted_budget": true,
-        "spend_checkpoint_usd": 60.0,
-        "spend_since_checkpoint_usd": 10.4,
-        "constraining": true,
-        "near_limit": true,
-        "budget_flag": "constraining",
-        "allocation_basis": "usage_weekly_gbp",
-        "weekly_usage_gbp": 30.0,
-        "remaining_usd_before": 0.0,
-        "dedupe": {
-          "already_researched_count": 266,
-          "skipped_count": 267,
-          "skipped_sample": [
-            {
-              "market": "sp500",
-              "ticker": "FIS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "ACN",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CTSH",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "APA",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "PNR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "LDOS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "AOS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "HII",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CI",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "VZ",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "UPS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "EG",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "SNA",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "STZ",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CF",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "BBY",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "INTU",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "EXE",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "BMY",
-              "reason": "duplicate_ticker"
-            }
-          ],
-          "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
-        },
-        "targets": [],
-        "dry_run": true,
-        "executed": 0
-      },
-      "graduation": null,
-      "maintenance": {
-        "skipped": true,
-        "markets": []
+          "us_adr_asia"
+        ]
       }
     },
     "spend_checkpoint_usd": 60.0,
