@@ -36,6 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
 
       - uses: actions/setup-python@v6
         with:
@@ -93,6 +96,26 @@ jobs:
           fi
           ftse-engineering --output-dir output $ARGS
 
+      - name: Clear stale engineering branch
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && github.event.inputs.pr_only != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="${{ steps.task.outputs.branch }}"
+          gh pr list --state open --limit 30 \
+            --json headRefName > /tmp/open_prs.json
+          if git ls-remote --exit-code origin "refs/heads/$BRANCH" >/dev/null 2>&1; then
+            if ftse-engineering branch-is-stale --branch "$BRANCH" --open-prs-json /tmp/open_prs.json; then
+              echo "Deleting stale remote branch $BRANCH (no open PR)"
+              git push origin --delete "$BRANCH"
+            else
+              echo "Remote branch $BRANCH has an open PR — refusing to delete"
+              exit 1
+            fi
+          fi
+
       - name: Create feature branch for code changes
         if: >-
           github.event.inputs.compile_only != 'true'
@@ -102,6 +125,9 @@ jobs:
           TASK_ID="${{ steps.task.outputs.task_id }}"
           BRANCH="${{ steps.task.outputs.branch }}"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          git fetch origin main
+          git checkout -B main origin/main
+          git branch -D "$BRANCH" 2>/dev/null || true
           git checkout -b "$BRANCH"
           git add -A
           git reset HEAD docs/data/engineering_tasks.json || true
@@ -133,7 +159,7 @@ jobs:
               exit 1
             fi
           else
-            git push -u origin "$BRANCH" || git push --force-with-lease origin "$BRANCH"
+            git push -u origin "$BRANCH"
           fi
 
           if [ "$(gh pr list --head "$BRANCH" --base main --json number --jq 'length')" = "0" ]; then
@@ -161,6 +187,7 @@ jobs:
           github.event.inputs.compile_only != 'true'
           && steps.pr.outputs.opened == 'true'
         run: |
+          git checkout -B main origin/main
           ftse-engineering mark-pr-open \
             --task-id "${{ steps.task.outputs.task_id }}" \
             --branch "${{ steps.task.outputs.branch }}" \
@@ -172,6 +199,7 @@ jobs:
           && steps.pr.outputs.opened == 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
+          branch: main
           commit_message: "chore: mark engineering task pr_open [skip ci]"
           file_pattern: docs/data/engineering_tasks.json
           skip_fetch: false

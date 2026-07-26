@@ -36,6 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
 
       - uses: actions/setup-python@v6
         with:
@@ -96,6 +99,7 @@ jobs:
       - name: Commit reconciled queue state
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
+          branch: main
           commit_message: "chore: reconcile engineering queue orphans [skip ci]"
           file_pattern: docs/data/engineering_tasks.json
           skip_fetch: false
@@ -151,6 +155,7 @@ jobs:
           && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
+          branch: main
           commit_message: "chore: update engineering queue after merge [skip ci]"
           file_pattern: docs/data/engineering_tasks.json
           skip_fetch: false

@@ -103,6 +103,25 @@ def task_id_from_branch(branch: str) -> str | None:
     return match.group(1) if match else None
 
 
+def branch_has_open_pr(branch: str, open_prs: list[dict[str, Any]] | None = None) -> bool:
+    wanted = branch.strip()
+    for row in open_prs or []:
+        head = str(row.get("headRefName") or row.get("head_branch") or "").strip()
+        if head == wanted:
+            return True
+    return False
+
+
+def is_safe_to_clear_stale_branch(
+    branch: str,
+    open_prs: list[dict[str, Any]] | None = None,
+) -> bool:
+    """True when an engineering branch has no open PR and may be deleted before re-push."""
+    if not is_engineering_branch(branch):
+        return False
+    return not branch_has_open_pr(branch, open_prs)
+
+
 def summarize_queue(
     payload: dict[str, Any] | None = None,
     *,

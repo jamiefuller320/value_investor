@@ -29,6 +29,7 @@ from value_investor.engineering_tasks import (
 )
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
+    is_safe_to_clear_stale_branch,
     reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
 )
@@ -155,6 +156,19 @@ def _cmd_reconcile_queue(args: argparse.Namespace) -> int:
         else:
             print("No orphaned pr_open tasks")
     return 0
+
+
+def _cmd_branch_is_stale(args: argparse.Namespace) -> int:
+    open_prs: list[dict] = []
+    if args.open_prs_json:
+        open_prs = json.loads(Path(args.open_prs_json).read_text(encoding="utf-8"))
+    safe = is_safe_to_clear_stale_branch(args.branch, open_prs)
+    payload = {"branch": args.branch, "safe_to_clear": safe}
+    if args.json:
+        _print_json(payload)
+    else:
+        print(f"{args.branch}: safe_to_clear={safe}")
+    return 0 if safe else 1
 
 
 def _cmd_next_open_id(args: argparse.Namespace) -> int:
@@ -363,6 +377,18 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to JSON array of open PRs from gh pr list --json ...",
     )
     reconcile_p.set_defaults(func=_cmd_reconcile_queue)
+
+    branch_stale_p = sub.add_parser(
+        "branch-is-stale",
+        help="Exit 0 when an engineering branch has no open PR and may be deleted",
+    )
+    branch_stale_p.add_argument("--branch", required=True)
+    branch_stale_p.add_argument(
+        "--open-prs-json",
+        default=None,
+        help="Path to JSON array of open PRs from gh pr list --json ...",
+    )
+    branch_stale_p.set_defaults(func=_cmd_branch_is_stale)
 
     next_open_p = sub.add_parser("next-open-id", help="Print the top-priority open engineering task id")
     next_open_p.set_defaults(func=_cmd_next_open_id)
