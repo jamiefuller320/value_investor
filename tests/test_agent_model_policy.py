@@ -192,6 +192,21 @@ def test_record_email_run_spend(tmp_path: Path):
     assert weekly_ops_budget_status(load_policy(path))["remaining_weekly_ops_usd"] == 43.6
 
 
+def test_record_email_run_spend_includes_post_run_review(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    save_policy(load_policy(path), path)
+    status = record_email_run_spend(
+        deep_analysis_ran=True,
+        research_created=0,
+        research_updated=0,
+        gap_fill_revisions=0,
+        post_run_review_ran=True,
+        memo_usd=0.4,
+        path=path,
+    )
+    assert status["estimated_spend_weekly_ops_usd_this_week"] == 0.8
+
+
 def test_weekly_ops_budget_status_constraining(tmp_path: Path):
     path = tmp_path / "policy.json"
     policy = load_policy(path)

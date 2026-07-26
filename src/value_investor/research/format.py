@@ -8,6 +8,7 @@ from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.summary import CompanyReport
 
 if TYPE_CHECKING:
+    from value_investor.post_run_review import PostRunReview
     from value_investor.research.gap_fill import GapFillSummary
 
 
@@ -92,6 +93,32 @@ def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
     for error in summary.errors:
         lines.append(f"  ! {error}")
     return "\n".join(lines)
+
+
+def format_post_run_review_text(review: PostRunReview | None) -> str | None:
+    if review is None or not review.full_text.strip():
+        return None
+    lines = ["Post-run improvement review:"]
+    if review.executive_summary.strip():
+        lines.extend(["", "Summary:", review.executive_summary.strip()])
+    if review.improvement_plan.strip():
+        lines.extend(["", "Prioritised plan:", review.improvement_plan.strip()])
+    if review.defer.strip():
+        lines.extend(["", "Defer:", review.defer.strip()])
+    return "\n".join(lines)
+
+
+def format_post_run_review_html(review: PostRunReview | None) -> str:
+    text = format_post_run_review_text(review)
+    if not text:
+        return ""
+    body = review.full_text.replace("\n", "<br>") if review is not None else text.replace("\n", "<br>")
+    return f"""
+  <div style="background:#f0fff4;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #2f855a">
+    <h3 style="margin-top:0">Post-run improvement review</h3>
+    <p style="margin-bottom:0">{body}</p>
+  </div>
+"""
 
 
 def format_gap_fill_html(summary: GapFillSummary | None) -> str:

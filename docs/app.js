@@ -903,6 +903,7 @@ function memoQualityBadge(item) {
 
 function renderAnalysis(data) {
   const deep = data.deep_analysis;
+  const postRun = data.post_run_review;
   const research = data.research || [];
   const panel = document.getElementById("panel-analysis");
 
@@ -920,6 +921,16 @@ function renderAnalysis(data) {
       <div class="card" style="margin-top:1rem">
         <h3>Red flags</h3>
         <p>${esc(deep.red_flags || "").replace(/\n/g, "<br>")}</p>
+      </div>`;
+  }
+
+  let postRunHtml = "";
+  if (postRun && (postRun.full_text || postRun.executive_summary)) {
+    const body = esc(postRun.full_text || postRun.executive_summary || "").replace(/\n/g, "<br>");
+    postRunHtml = `
+      <h2 style="margin-top:1.5rem">Post-run improvement review</h2>
+      <div class="card">
+        <p>${body}</p>
       </div>`;
   }
 
@@ -951,6 +962,7 @@ function renderAnalysis(data) {
   panel.innerHTML = `
     <h2 class="small muted" style="margin-top:0">Portfolio deep analysis</h2>
     ${deepHtml}
+    ${postRunHtml}
     <h2 style="margin-top:1.5rem">Strong buy research memos</h2>
     ${researchHtml}
   `;

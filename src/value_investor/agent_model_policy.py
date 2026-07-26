@@ -447,12 +447,15 @@ def record_email_run_spend(
     research_created: int = 0,
     research_updated: int = 0,
     gap_fill_revisions: int = 0,
+    post_run_review_ran: bool = False,
     memo_usd: float = 0.4,
     path: Path | None = None,
 ) -> dict[str, Any]:
     """Record estimated spend from a weekly email report run into weekly_ops."""
     calls = int(research_created) + int(research_updated) + int(gap_fill_revisions)
     if deep_analysis_ran:
+        calls += 1
+    if post_run_review_ran:
         calls += 1
     amount = estimate_agent_spend_usd(calls, memo_usd=memo_usd)
     if amount <= 0:

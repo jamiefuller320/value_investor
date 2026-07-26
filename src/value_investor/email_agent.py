@@ -176,6 +176,15 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--post-run-review",
+        action="store_true",
+        help=(
+            "After deep analysis / gap-fill / research memos, run a holistic "
+            "post-run synthesis agent to prioritise model improvements "
+            "(requires CURSOR_API_KEY)"
+        ),
+    )
+    parser.add_argument(
         "--send-only",
         action="store_true",
         help="Send email from existing output/email_report.* files (skip screening)",
@@ -306,6 +315,7 @@ def main(argv: list[str] | None = None) -> int:
     deep_analysis: DeepAnalysis | None = None
     research_summary = None
     gap_fill_summary = None
+    post_run_review = None
     research_documents = research_documents_for_reports(
         reports,
         load_existing_research(
@@ -412,6 +422,32 @@ def main(argv: list[str] | None = None) -> int:
                 list(by_ticker.values()),
             )
 
+    if args.post_run_review:
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --post-run-review", file=sys.stderr)
+            return 1
+        if deep_analysis is None:
+            prior = args.output_dir / "deep_analysis.txt"
+            if prior.exists():
+                from value_investor.deep_analysis import _parse_deep_analysis
+
+                deep_analysis = _parse_deep_analysis(prior.read_text(encoding="utf-8"))
+        try:
+            from value_investor.post_run_review import run_post_run_review
+
+            post_run_review = run_post_run_review(
+                reports=reports,
+                output_dir=args.output_dir,
+                api_key=args.api_key,
+                model=args.model,
+                run_at=run_at,
+                deep_analysis=deep_analysis,
+                gap_fill_summary=gap_fill_summary,
+            )
+        except RuntimeError as err:
+            print(str(err), file=sys.stderr)
+            return 2
+
     if research_documents:
         reports = apply_research_overlay(reports, research_documents)
 
@@ -430,6 +466,7 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         gap_fill_summary=gap_fill_summary,
+        post_run_review=post_run_review,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
@@ -445,6 +482,7 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         gap_fill_summary=gap_fill_summary,
+        post_run_review=post_run_review,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
@@ -475,7 +513,7 @@ def main(argv: list[str] | None = None) -> int:
         args.api_key
         and not args.send_only
         and not args.no_record_spend
-        and (deep_analysis is not None or research_summary or gap_fill_summary)
+        and (deep_analysis is not None or research_summary or gap_fill_summary or post_run_review)
     ):
         from value_investor.agent_model_policy import load_policy, record_email_run_spend
 
@@ -490,6 +528,7 @@ def main(argv: list[str] | None = None) -> int:
             research_created=int(research_summary.created) if research_summary else 0,
             research_updated=int(research_summary.updated) if research_summary else 0,
             gap_fill_revisions=gap_revisions,
+            post_run_review_ran=post_run_review is not None,
             memo_usd=memo_usd,
             path=args.policy,
         )
