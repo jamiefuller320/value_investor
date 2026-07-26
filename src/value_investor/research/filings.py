@@ -1714,6 +1714,158 @@ def fetch_filings_ir_allowlist(
     return rows
 
 
+def _is_ir_allowlist_row(row: dict[str, Any]) -> bool:
+    return str(row.get("source") or "") == "ir_allowlist"
+
+
+IR_BODY_FETCH_RETRIES = 2
+
+
+def merge_ir_allowlist_filings(
+    ticker: str,
+    filings_dir: Path,
+    *,
+    path: Path | None = None,
+) -> dict[str, Any]:
+    """Ensure manual IR allowlist rows are present in ``filings_index.json``."""
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    allowlist_rows = fetch_filings_ir_allowlist(ticker, path=path)
+    if not allowlist_rows:
+        return {"added": 0, "total_allowlist": 0, "note": "no allowlist urls for ticker"}
+
+    if index_path.exists():
+        try:
+            payload = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            payload = {}
+    else:
+        payload = {}
+        filings_dir.mkdir(parents=True, exist_ok=True)
+
+    filings = list(payload.get("filings") or [])
+    known_ids = {row.get("id") for row in filings}
+    known_urls = {str(row.get("url") or "").strip() for row in filings if row.get("url")}
+    added = 0
+    for row in allowlist_rows:
+        url = str(row.get("url") or "").strip()
+        if row.get("id") in known_ids or url in known_urls:
+            continue
+        filings.append(row)
+        known_ids.add(row.get("id"))
+        known_urls.add(url)
+        added += 1
+
+    payload["filings"] = filings
+    payload["summary"] = summarize_filings(filings)
+    if added:
+        payload["ir_allowlist_merged_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "added": added,
+        "total_allowlist": len(allowlist_rows),
+        "note": "merge_ir_allowlist_filings",
+    }
+
+
+def refetch_ir_allowlist_filing_bodies(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    max_bodies: int = 20,
+    max_retries: int = IR_BODY_FETCH_RETRIES,
+    allowlist_path: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Merge IR allowlist URLs then re-download bodies with retries.
+
+    Used when ``gap_fill_source_map.json`` plans ``company_ir_presentation`` or
+    when indexed IR PDF rows (e.g. ``ir_a9733d0de6aec27d``) still lack bodies.
+    """
+    filings_dir = Path(filings_dir)
+    merge_meta = merge_ir_allowlist_filings(ticker, filings_dir, path=allowlist_path)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists():
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "merge": merge_meta,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "merge": merge_meta,
+            "note": f"unreadable index: {exc}",
+        }
+
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
+    missing = [row for row in ir_rows if row.get("url") and not row.get("has_body")]
+    if not missing:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": before,
+            "with_body_after": before,
+            "merge": merge_meta,
+            "note": "no missing IR allowlist bodies",
+        }
+
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    downloaded = 0
+    retries_used = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        if (
+            downloaded < max_bodies
+            and _is_ir_allowlist_row(item)
+            and item.get("url")
+            and not item.get("has_body")
+        ):
+            body = None
+            url = str(item["url"])
+            for attempt in range(max_retries + 1):
+                body = fetch_filing_body(url)
+                if body:
+                    break
+                if attempt < max_retries:
+                    retries_used += 1
+            if body:
+                filename = f"{item['id']}.txt"
+                path = bodies_dir / filename
+                path.write_text(body, encoding="utf-8")
+                item["has_body"] = True
+                item["body_path"] = str(path)
+                downloaded += 1
+        updated.append(item)
+
+    after = sum(1 for row in updated if row.get("has_body"))
+    payload["filings"] = updated
+    payload["summary"] = summarize_filings(updated)
+    payload["ir_refetched_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": len(missing),
+        "fetched": max(0, after - before),
+        "with_body_before": before,
+        "with_body_after": after,
+        "retries_used": retries_used,
+        "merge": merge_meta,
+        "note": "refetch_ir_allowlist_filing_bodies",
+    }
+
+
 def merge_filings(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Merge filing rows, preferring entries with bodies and higher priority."""
     merged: dict[str, dict[str, Any]] = {}

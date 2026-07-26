@@ -9,7 +9,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.research.filings import refetch_companies_house_filing_bodies
+from value_investor.research.filings import (
+    fetch_filings_ir_allowlist,
+    refetch_companies_house_filing_bodies,
+    refetch_ir_allowlist_filing_bodies,
+)
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.gap_fill_sources import (
     ALTERNATE_SOURCE_CATALOG,
@@ -434,6 +438,24 @@ def run_ingest_improvement_pass(
                 ingest_suggestions=ingest_suggestions,
                 filings_with_body=before,
             )
+            ir_refetch: dict[str, Any] = {}
+            planned_ids = {str(row.get("id") or "") for row in planned}
+            if (
+                "company_ir_presentation" in planned_ids
+                or fetch_filings_ir_allowlist(target.ticker)
+            ):
+                ir_refetch = refetch_ir_allowlist_filing_bodies(
+                    sources_dir / "filings",
+                    target.ticker,
+                    max_bodies=20,
+                )
+                if int(ir_refetch.get("fetched") or 0) > 0:
+                    inventory = inspect_local_sources(sources_dir)
+                    before = int(
+                        (inventory.get("filings_summary") or {}).get("with_body")
+                        or inventory.get("filings_indexed_bodies")
+                        or before
+                    )
             mapped_source_ids = sorted(
                 {
                     source_id
@@ -480,6 +502,7 @@ def run_ingest_improvement_pass(
                     "mapped_source_ids": mapped_source_ids,
                     "planned_sources": [row.get("id") for row in planned],
                     "ch_refetch": ch_refetch,
+                    "ir_refetch": ir_refetch,
                     "alternate_sources": alternate,
                     "deepen": deepen,
                 }

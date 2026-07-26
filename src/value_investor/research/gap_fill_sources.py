@@ -14,7 +14,10 @@ from value_investor.research.ingest import (
     merge_news_articles,
 )
 from value_investor.research.filings import (
+    fetch_filings_ir_allowlist,
+    merge_ir_allowlist_filings,
     refetch_companies_house_filing_bodies,
+    refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
 )
 from value_investor.storage import read_json, resolve_json_path, write_json
@@ -305,15 +308,25 @@ def prepare_gap_fill_source_pack(
     sources_dir.mkdir(parents=True, exist_ok=True)
 
     # Re-attempt PDF / direct RNS bodies before the agent answers.
-    body_refetch = refetch_missing_filing_bodies(sources_dir / "filings")
+    filings_dir = sources_dir / "filings"
+    body_refetch = refetch_missing_filing_bodies(filings_dir)
     ch_refetch: dict[str, Any] = {}
     if _market_bucket(market, ticker) == "uk":
         ch_refetch = refetch_companies_house_filing_bodies(
-            sources_dir / "filings",
+            filings_dir,
             max_bodies=20,
         )
         if int(ch_refetch.get("fetched") or 0) > 0:
             body_refetch = ch_refetch
+    ir_refetch: dict[str, Any] = {}
+    if fetch_filings_ir_allowlist(ticker):
+        ir_refetch = refetch_ir_allowlist_filing_bodies(
+            filings_dir,
+            ticker,
+            max_bodies=20,
+        )
+        if int(ir_refetch.get("fetched") or 0) > 0:
+            body_refetch = ir_refetch
 
     alternate_articles = fetch_alternate_gap_fill_news(
         company_name, ticker, market=market
@@ -376,6 +389,7 @@ def prepare_gap_fill_source_pack(
         "inventory": inventory,
         "body_refetch": body_refetch,
         "ch_refetch": ch_refetch,
+        "ir_refetch": ir_refetch,
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
         "planned_alternate_sources": planned,
@@ -425,7 +439,6 @@ def execute_planned_alternate_sources(
         "investegate_rns_full",
         "exchange_filings_full",
         "sec_exhibits",
-        "company_ir_presentation",
     }
 
     for item in planned[:max_sources]:
@@ -433,7 +446,19 @@ def execute_planned_alternate_sources(
         if not source_id:
             continue
         sources_tried.append(source_id)
-        if source_id in filing_fetcher_ids:
+        if source_id == "company_ir_presentation":
+            merge_ir_allowlist_filings(ticker, filings_dir)
+            last_refetch = refetch_ir_allowlist_filing_bodies(
+                filings_dir,
+                ticker,
+                max_bodies=20,
+            )
+            prune_orphaned_filing_bodies(filings_dir)
+            fetched = int(last_refetch.get("fetched") or 0)
+            fetched_total += fetched
+            if fetched > 0:
+                break
+        elif source_id in filing_fetcher_ids:
             ingest_filings(
                 ticker=ticker,
                 company_name=company_name,
