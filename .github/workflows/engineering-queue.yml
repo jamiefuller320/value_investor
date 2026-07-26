@@ -1,0 +1,135 @@
+name: FTSE Engineering Queue
+
+# Hourly weekday processor for the supervised engineering task queue.
+# Dispatches engineering-agent when:
+# - open tasks remain in docs/data/engineering_tasks.json
+# - no open engineering PR is in flight
+# - ad-hoc spend checkpoint not reached (unless force)
+#
+# Also runs on engineering PR merge to mark the task merged and chain the next task.
+on:
+  schedule:
+  # Hourly on weekdays (UTC). GitHub cron is best-effort; safe to re-fire.
+    - cron: "0 * * * 1-5"
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Dispatch even if ad-hoc spend checkpoint is reached"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+  pull-requests: read
+
+concurrency:
+  group: ftse-engineering-queue
+  cancel-in-progress: false
+
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Mark merged engineering task
+        if: >-
+          github.event_name == 'pull_request'
+          && github.event.pull_request.merged == true
+          && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+        run: |
+          ftse-engineering mark-merged \
+            --branch "${{ github.event.pull_request.head.ref }}" \
+            --pr-url "${{ github.event.pull_request.html_url }}" \
+            --pr-number "${{ github.event.pull_request.number }}"
+
+      - name: Refresh queue from Sunday artifacts when present
+        run: |
+          ftse-engineering --output-dir output compile --json || true
+          if [ -f output/engineering_tasks.json ]; then
+            ftse-engineering sync-queue --tasks-path docs/data/engineering_tasks.json
+          fi
+          ftse-engineering list || true
+
+      - name: Collect open PRs and running agent workflows
+        id: probe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr list --state open --limit 30 \
+            --json number,title,headRefName,createdAt \
+            > /tmp/open_prs.json
+          RUNNING=$(gh run list --workflow engineering-agent.yml --limit 5 --json status \
+            | python3 -c 'import json,sys; print("true" if any(r.get("status") in {"queued","in_progress","waiting"} for r in json.load(sys.stdin)) else "false")')
+          echo "agent_running=$RUNNING" >> "$GITHUB_OUTPUT"
+
+      - name: Evaluate queue dispatch
+        id: gate
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          ARGS="queue-status --json --open-prs-json /tmp/open_prs.json"
+          if [ "$FORCE" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          if [ "${{ steps.probe.outputs.agent_running }}" = "true" ]; then
+            ARGS="$ARGS --agent-running"
+          fi
+          ftse-engineering $ARGS | tee /tmp/queue_status.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/queue_status.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+              f"reason={data.get('reason', '')}\n"
+              f"next_task_id={data.get('next_task_id') or ''}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch engineering agent
+        if: >-
+          steps.gate.outputs.should_dispatch == 'true'
+          && (github.event_name != 'pull_request' || github.event.pull_request.merged == true)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          INPUTS=()
+          if [ -n "${{ steps.gate.outputs.next_task_id }}" ]; then
+            INPUTS+=( -f task_id="${{ steps.gate.outputs.next_task_id }}" )
+          fi
+          if [ "$FORCE" = "true" ]; then
+            INPUTS+=( -f force=true )
+          fi
+          gh workflow run engineering-agent.yml "${INPUTS[@]}"
+          echo "Dispatched engineering-agent for ${{ steps.gate.outputs.next_task_id || 'top open task' }}"
+
+      - name: Commit queue state
+        if: >-
+          github.event_name == 'pull_request'
+          && github.event.pull_request.merged == true
+          && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: mark engineering task merged [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json
+          skip_fetch: false
+
+      - name: Queue idle summary
+        if: steps.gate.outputs.should_dispatch != 'true'
+        run: |
+          echo "No dispatch: ${{ steps.gate.outputs.reason }}"

@@ -45,8 +45,8 @@ jobs:
 
       - name: Compile engineering tasks
         run: |
-          ftse-engineering compile --output-dir output --json || true
-          if [ ! -f output/engineering_tasks.json ]; then
+          ftse-engineering --output-dir output compile --json || true
+          if [ ! -f docs/data/engineering_tasks.json ] && [ ! -f output/engineering_tasks.json ]; then
             echo "No engineering_tasks.json — run Sunday email with --compile-engineering-tasks first"
             exit 1
           fi
@@ -58,14 +58,59 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           FORCE_RUN: ${{ github.event.inputs.force }}
         run: |
-          ARGS="run --max-tasks 1 --create-branch"
+          ARGS="run --max-tasks 1"
           if [ -n "${{ github.event.inputs.task_id }}" ]; then
             ARGS="$ARGS --task-id ${{ github.event.inputs.task_id }}"
           fi
           if [ "$FORCE_RUN" = "true" ]; then
             ARGS="$ARGS --force"
           fi
-          ftse-engineering $ARGS
+          ftse-engineering --output-dir output $ARGS
+
+      - name: Commit queue state on main
+        if: ${{ github.event.inputs.compile_only != 'true' }}
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: mark engineering task pr_open [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json
+          skip_fetch: false
+
+      - name: Create feature branch for code changes
+        if: ${{ github.event.inputs.compile_only != 'true' }}
+        run: |
+          TASK_ID=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for candidate in (Path("docs/data/engineering_tasks.json"), Path("output/engineering_tasks.json")):
+              if candidate.exists():
+                  data = json.loads(candidate.read_text())
+                  break
+          else:
+              raise SystemExit("No engineering queue found")
+          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
+          if not pr_open:
+              raise SystemExit("No pr_open engineering task after agent run")
+          print(pr_open[-1]["id"])
+          PY
+          )
+          BRANCH="cursor/${TASK_ID}-1de3"
+          git checkout -b "$BRANCH"
+          git add -A
+          git reset HEAD docs/data/engineering_tasks.json || true
+          git checkout -- docs/data/engineering_tasks.json || true
+          if git diff --cached --quiet; then
+            echo "No code changes to commit"
+            exit 0
+          fi
+          TITLE=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("docs/data/engineering_tasks.json").read_text())
+          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
+          print((pr_open[-1].get("title") if pr_open else "Engineering task")[:72])
+          PY
+          )
+          git commit -m "feat(engineering): ${TITLE}"
 
       - name: Push branch and open draft PR
         if: ${{ github.event.inputs.compile_only != 'true' }}
@@ -81,17 +126,27 @@ jobs:
           TASK_ID=$(python3 - <<'PY'
           import json
           from pathlib import Path
-          data = json.loads(Path("output/engineering_tasks.json").read_text())
-          open_tasks = [t for t in data.get("tasks", []) if t.get("status") == "completed"]
-          print(open_tasks[-1]["id"] if open_tasks else "engineering-task")
+          for candidate in (Path("docs/data/engineering_tasks.json"), Path("output/engineering_tasks.json")):
+              if candidate.exists():
+                  data = json.loads(candidate.read_text())
+                  break
+          else:
+              data = {"tasks": []}
+          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
+          print(pr_open[-1]["id"] if pr_open else "engineering-task")
           PY
           )
           TITLE=$(python3 - <<'PY'
           import json
           from pathlib import Path
-          data = json.loads(Path("output/engineering_tasks.json").read_text())
-          done = [t for t in data.get("tasks", []) if t.get("status") == "completed"]
-          print((done[-1].get("title") if done else "Engineering task")[:120])
+          for candidate in (Path("docs/data/engineering_tasks.json"), Path("output/engineering_tasks.json")):
+              if candidate.exists():
+                  data = json.loads(candidate.read_text())
+                  break
+          else:
+              data = {"tasks": []}
+          pr_open = [t for t in data.get("tasks", []) if t.get("status") == "pr_open"]
+          print((pr_open[-1].get("title") if pr_open else "Engineering task")[:120])
           PY
           )
           gh pr create \

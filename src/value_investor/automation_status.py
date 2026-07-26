@@ -55,6 +55,21 @@ WORKFLOW_SCHEDULES = {
         "cadence": "Sunday quiet bundle via orchestrator (markets closed)",
         "workflow": "email-report.yml",
     },
+    "engineering_agent": {
+        "name": "FTSE Engineering Agent",
+        "cadence": "Dispatched by engineering-queue when an open task is ready",
+        "workflow": "engineering-agent.yml",
+    },
+    "engineering_queue": {
+        "name": "FTSE Engineering Queue",
+        "cron": "0 * * * 1-5",
+        "cadence": (
+            "Hourly weekday processor. Marks merged engineering PRs, then "
+            "dispatches engineering-agent when the queue has open tasks and "
+            "no engineering PR is in flight. Also runs on engineering PR merge."
+        ),
+        "workflow": "engineering-queue.yml",
+    },
     "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",

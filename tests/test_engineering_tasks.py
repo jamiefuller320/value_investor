@@ -73,3 +73,46 @@ DEFER
     assert len(selected) == 1
     assert selected[0].allowed_paths
     assert "paper_fund.py" in "".join(selected[0].blocked_paths)
+
+
+def test_compile_preserves_merged_task_status(tmp_path: Path):
+    committed = tmp_path / "committed.json"
+    committed.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260726-01",
+                        "area": "ingest",
+                        "title": "Build universal Companies House filed-accounts PDF fetch + text extract for UK-listed buy-tier names when `filings_with_body` is zero",
+                        "summary": "x",
+                        "priority": "high",
+                        "priority_score": 99.0,
+                        "source": "post_run_review",
+                        "status": "merged",
+                        "evidence": {},
+                        "acceptance_criteria": [],
+                        "allowed_paths": [],
+                        "blocked_paths": [],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    (output_dir / "post_run_review.md").write_text(
+        """PRIORITISED IMPROVEMENT PLAN
+1. **[ingest] Build universal Companies House filed-accounts PDF fetch + text extract for UK-listed buy-tier names when `filings_with_body` is zero — expected impact: unlocks pension evidence.**
+""",
+        encoding="utf-8",
+    )
+    payload = compile_engineering_tasks(
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_tasks=5,
+        tasks_path=output_dir / "engineering_tasks.json",
+        committed_path=committed,
+    )
+    assert payload["tasks"][0]["status"] == "merged"

@@ -489,7 +489,7 @@ def main(argv: list[str] | None = None) -> int:
             return 2
 
     if args.compile_engineering_tasks:
-        from value_investor.engineering_tasks import compile_engineering_tasks
+        from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, compile_engineering_tasks
 
         payload = compile_engineering_tasks(
             output_dir=args.output_dir,
@@ -497,7 +497,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(
             f"Compiled {payload['task_count']} engineering task(s) → "
-            f"{args.output_dir / 'engineering_tasks.json'}"
+            f"{args.output_dir / 'engineering_tasks.json'} and {COMMITTED_TASKS_PATH}"
         )
 
     if research_documents:
