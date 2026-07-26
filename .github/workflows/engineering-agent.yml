@@ -187,11 +187,18 @@ jobs:
           github.event.inputs.compile_only != 'true'
           && steps.pr.outputs.opened == 'true'
         run: |
+          git fetch origin main
           git checkout -B main origin/main
           ftse-engineering mark-pr-open \
             --task-id "${{ steps.task.outputs.task_id }}" \
             --branch "${{ steps.task.outputs.branch }}" \
             --result-path "output/engineering_result_${{ steps.task.outputs.task_id }}.md"
+
+      - name: Sync main before pr_open queue commit
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && steps.pr.outputs.opened == 'true'
+        run: git pull --rebase origin main
 
       - name: Commit queue state on main
         if: >-

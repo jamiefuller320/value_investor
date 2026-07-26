@@ -47,11 +47,21 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Mark merged engineering task
+      - name: Detect merged engineering task branch
         if: >-
           github.event_name == 'pull_request'
           && github.event.pull_request.merged == true
-          && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+        id: eng_branch
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
+            echo "is_task=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_task=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Mark merged engineering task
+        if: steps.eng_branch.outputs.is_task == 'true'
         run: |
           ftse-engineering mark-merged \
             --branch "${{ github.event.pull_request.head.ref }}" \
@@ -59,10 +69,7 @@ jobs:
             --pr-number "${{ github.event.pull_request.number }}"
 
       - name: Reprioritize queue after ingest merge
-        if: >-
-          github.event_name == 'pull_request'
-          && github.event.pull_request.merged == true
-          && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+        if: steps.eng_branch.outputs.is_task == 'true'
         run: |
           TASK_ID=$(python3 - <<'PY'
           from value_investor.engineering_queue import task_id_from_branch
@@ -95,6 +102,9 @@ jobs:
       - name: Reconcile orphaned pr_open tasks
         run: |
           ftse-engineering --json reconcile-queue --open-prs-json /tmp/open_prs.json
+
+      - name: Sync main before queue file commit
+        run: git pull --rebase origin main
 
       - name: Commit reconciled queue state
         uses: stefanzweifel/git-auto-commit-action@v6
@@ -148,11 +158,12 @@ jobs:
           gh workflow run engineering-agent.yml "${INPUTS[@]}"
           echo "Dispatched engineering-agent for ${{ steps.gate.outputs.next_task_id || 'top open task' }}"
 
+      - name: Sync main before merge queue commit
+        if: steps.eng_branch.outputs.is_task == 'true'
+        run: git pull --rebase origin main
+
       - name: Commit queue state
-        if: >-
-          github.event_name == 'pull_request'
-          && github.event.pull_request.merged == true
-          && startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+        if: steps.eng_branch.outputs.is_task == 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: main
