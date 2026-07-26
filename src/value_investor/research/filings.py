@@ -1562,10 +1562,28 @@ def resolve_asx_publisher_document_url(url: str | None) -> str | None:
     return url
 
 
+def _is_ch_document_url(url: str | None) -> bool:
+    """True for Companies House document-api metadata or content URLs."""
+    return bool(url) and "document-api.company-information.service.gov.uk" in url
+
+
+def _is_ch_filing_row(row: dict[str, Any]) -> bool:
+    """True when a filing row points at Companies House filed accounts."""
+    if str(row.get("source") or "") == "companies_house":
+        return True
+    return _is_ch_document_url(str(row.get("document_metadata_url") or "")) or _is_ch_document_url(
+        str(row.get("url") or "")
+    )
+
+
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
         return None
+    if _is_ch_document_url(url):
+        return _fetch_companies_house_body(
+            {"url": url, "document_metadata_url": url, "source": "companies_house"}
+        )
     if "news.google.com" in url:
         resolved = resolve_google_news_publisher_url(url)
         if not resolved or "news.google.com" in resolved:
@@ -1582,8 +1600,8 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
         return None
 
     # urlopen doesn't return headers here easily — sniff
-    if raw[:4] == b"%PDF":
-        text = _extract_pdf_text(raw)
+    if raw[:4] == b"%PDF" or str(url).lower().endswith(".pdf"):
+        text = _extract_filing_document_text(raw, "application/pdf")
         if not text or len(text) < 200:
             logger.info("PDF filing body empty/unreadable: %s", url)
             return None
@@ -1759,9 +1777,7 @@ def _write_bodies(
                     updated.append(row)
                     continue
                 body = None
-                if row.get("source") == "companies_house" and (
-                    row.get("document_metadata_url") or row.get("url")
-                ):
+                if _is_ch_filing_row(row):
                     body = _fetch_companies_house_body(row)
                 elif row.get("url"):
                     body = fetch_filing_body(str(row["url"]))
@@ -1968,6 +1984,86 @@ def prune_misattributed_filing_bodies(
         "removed": len(removed_paths),
         "cleared_rows": cleared_rows,
         "removed_paths": removed_paths,
+    }
+
+
+def refetch_companies_house_filing_bodies(
+    filings_dir: Path,
+    *,
+    max_bodies: int = 20,
+) -> dict[str, Any]:
+    """
+    Re-download filed-accounts PDF/iXBRL bodies for indexed CH rows without text.
+
+    Used by ingest-improvement and gap-fill when ``filings_with_body`` is zero
+    but ``filings_index.json`` already lists Companies House document URLs.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists():
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": f"unreadable index: {exc}",
+        }
+
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    ch_rows = [row for row in filings if _is_ch_filing_row(row)]
+    missing = [row for row in ch_rows if not row.get("has_body")]
+    if not missing:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": before,
+            "with_body_after": before,
+            "note": "no missing CH bodies",
+        }
+
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    downloaded = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        if (
+            downloaded < max_bodies
+            and _is_ch_filing_row(item)
+            and not item.get("has_body")
+        ):
+            body = _fetch_companies_house_body(item)
+            if body:
+                filename = f"{item['id']}.txt"
+                path = bodies_dir / filename
+                path.write_text(body, encoding="utf-8")
+                item["has_body"] = True
+                item["body_path"] = str(path)
+                downloaded += 1
+        updated.append(item)
+
+    after = sum(1 for row in updated if row.get("has_body"))
+    payload["filings"] = updated
+    payload["summary"] = summarize_filings(updated)
+    payload["ch_refetched_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": len(missing),
+        "fetched": max(0, after - before),
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "refetch_companies_house_filing_bodies",
     }
 
 

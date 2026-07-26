@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.research.filings import refetch_companies_house_filing_bodies
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.gap_fill_sources import (
     ALTERNATE_SOURCE_CATALOG,
@@ -202,11 +203,17 @@ def _filing_coverage(store: ResearchStore, ticker: str) -> dict[str, int]:
     return coverage
 
 
+def _is_uk_listed(*, market: str | None, ticker: str) -> bool:
+    return _market_bucket(market, ticker) == "uk"
+
+
 def _priority_score(
     coverage: dict[str, int],
     suggestions: list[dict[str, Any]],
     *,
     signal: str,
+    market: str | None = None,
+    ticker: str = "",
 ) -> float:
     score = 0.0
     if coverage["filings_total"] == 0:
@@ -214,6 +221,12 @@ def _priority_score(
     elif coverage["indexed_without_body"] > 0:
         score += 6.0 + min(coverage["indexed_without_body"], 10)
     elif coverage["filings_with_body"] < max(1, coverage["filings_annual"]):
+        score += 4.0
+    if (
+        coverage["filings_with_body"] == 0
+        and coverage["filings_total"] > 0
+        and _is_uk_listed(market=market, ticker=ticker)
+    ):
         score += 4.0
     for row in suggestions:
         priority = str(row.get("priority") or "").lower()
@@ -245,7 +258,13 @@ def select_ingest_improvement_targets(
             continue
         coverage = _filing_coverage(store, report.ticker)
         suggestions = suggestions_by_ticker.get(report.ticker.upper(), [])
-        score = _priority_score(coverage, suggestions, signal=report.signal)
+        score = _priority_score(
+            coverage,
+            suggestions,
+            signal=report.signal,
+            market="ftse350" if report.ticker.upper().endswith(".L") else None,
+            ticker=report.ticker,
+        )
         if score <= 0:
             continue
         candidates.append(
@@ -292,11 +311,22 @@ def _planned_sources_for_ticker(
     inventory: dict[str, Any],
     ingest_suggestions: list[dict[str, Any]],
     open_questions: list[str] | None = None,
+    filings_with_body: int | None = None,
 ) -> list[dict[str, Any]]:
     questions = open_questions or [
         "Obtain annual and interim regulatory filing bodies for FINANCIAL REVIEW."
     ]
     ranked: dict[str, dict[str, Any]] = {}
+    with_body = (
+        int(filings_with_body)
+        if filings_with_body is not None
+        else int((inventory.get("filings_summary") or {}).get("with_body") or 0)
+    )
+
+    if _is_uk_listed(market=market, ticker=ticker) and with_body == 0:
+        ch_item = _catalog_item("companies_house_accounts", market=market, ticker=ticker)
+        if ch_item is not None:
+            ranked["companies_house_accounts"] = {**ch_item, "score": "10"}
 
     for row in ingest_suggestions:
         for source_id in map_suggestion_to_source_ids(str(row.get("suggestion") or "")):
@@ -379,11 +409,30 @@ def run_ingest_improvement_pass(
             )
             inventory = inspect_local_sources(sources_dir)
             ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])
+            before = int(
+                (inventory.get("filings_summary") or {}).get("with_body")
+                or inventory.get("filings_indexed_bodies")
+                or 0
+            )
+            ch_refetch: dict[str, Any] = {}
+            if _is_uk_listed(market=market, ticker=target.ticker) and before == 0:
+                ch_refetch = refetch_companies_house_filing_bodies(
+                    sources_dir / "filings",
+                    max_bodies=20,
+                )
+                if int(ch_refetch.get("fetched") or 0) > 0:
+                    inventory = inspect_local_sources(sources_dir)
+                    before = int(
+                        (inventory.get("filings_summary") or {}).get("with_body")
+                        or inventory.get("filings_indexed_bodies")
+                        or before
+                    )
             planned = _planned_sources_for_ticker(
                 ticker=target.ticker,
                 market=market,
                 inventory=inventory,
                 ingest_suggestions=ingest_suggestions,
+                filings_with_body=before,
             )
             mapped_source_ids = sorted(
                 {
@@ -395,11 +444,6 @@ def run_ingest_improvement_pass(
                 }
             )
 
-            before = int(
-                (inventory.get("filings_summary") or {}).get("with_body")
-                or inventory.get("filings_indexed_bodies")
-                or 0
-            )
             alternate = execute_planned_alternate_sources(
                 ticker=target.ticker,
                 company_name=target.name,
@@ -435,6 +479,7 @@ def run_ingest_improvement_pass(
                     "improved": improved,
                     "mapped_source_ids": mapped_source_ids,
                     "planned_sources": [row.get("id") for row in planned],
+                    "ch_refetch": ch_refetch,
                     "alternate_sources": alternate,
                     "deepen": deepen,
                 }
