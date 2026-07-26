@@ -9,6 +9,7 @@ from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     find_in_flight_pr,
     is_engineering_branch,
+    is_safe_to_clear_stale_branch,
     reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
     snapshot_ingest_health,
@@ -39,6 +40,19 @@ def test_is_engineering_branch_and_task_id():
     assert is_engineering_branch("cursor/eng-20260726-01-1de3")
     assert not is_engineering_branch("cursor/post-run-review-1de3")
     assert task_id_from_branch("cursor/eng-20260726-01-1de3") == "eng-20260726-01"
+
+
+def test_is_safe_to_clear_stale_branch():
+    branch = "cursor/eng-20260726-02-1de3"
+    assert is_safe_to_clear_stale_branch(branch, open_prs=[]) is True
+    assert (
+        is_safe_to_clear_stale_branch(
+            branch,
+            open_prs=[{"headRefName": "cursor/eng-20260726-02-1de3"}],
+        )
+        is False
+    )
+    assert is_safe_to_clear_stale_branch("cursor/post-run-review-1de3", open_prs=[]) is False
 
 
 def test_find_in_flight_pr_matches_engineering_branch():
