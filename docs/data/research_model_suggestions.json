@@ -519,7 +519,135 @@
       "priority": "low",
       "suggestion": "Attach LSE liquidity metrics (ADV, spread) for FTSE 350 names below ~£500m market cap.",
       "recorded_at": "2026-07-24T21:26:49.093204+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch ME Group IR results presentation PDFs and extract capex bridge, segment KPI and dividend-policy tables — flagged in `gap_fill_source_map.json` as the main missing FCF layer.",
+      "recorded_at": "2026-07-26T05:56:57.224222+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Auto-pull LSE trading-update RNS between interim and full-year to verify recovery claims without news rewrites.",
+      "recorded_at": "2026-07-26T05:56:57.224235+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
+      "recorded_at": "2026-07-26T05:56:57.224242+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill to reconcile screen FCF source and state dividend coverage on both FCF and operating cash.",
+      "recorded_at": "2026-07-26T05:56:57.224247+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Broaden alternate_news to sell-side notes and capex/working-capital queries — current batch duplicated earnings headlines.",
+      "recorded_at": "2026-07-26T05:56:57.224252+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Updated memo saved to `output/research/MEGP.L/research.md` (v2).",
+      "recorded_at": "2026-07-26T05:56:57.224257+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Force-refetch IR allowlist PDFs with `has_body: false` (e.g. `april-2026-trading-update-vfinal.pdf`) before gap-fill close; log refetch success/failure in `gap_fill_source_map.json`",
+      "recorded_at": "2026-07-26T05:56:57.224261+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extract annual report risk-management section (pp 80–88) as a dedicated body shard so principal-risk prompts do not rely on cross-references only",
+      "recorded_at": "2026-07-26T05:56:57.224267+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Add FCF bridge overlay comparing screen TTM FCF to filing FY OCF minus capex/intangibles; flag names where sign diverges by >$50m or >50%",
+      "recorded_at": "2026-07-26T05:56:57.224271+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Export Piotroski F-Score component pass/fail (9 factors) and Lynch PEG growth source into `screening_snapshot.json` for gap-fill audit without re-deriving from memo text",
+      "recorded_at": "2026-07-26T05:56:57.224274+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to classify pharma risks into filing-evidenced vs news-only vs unresolved, with explicit next-source for each open regulatory/patent item",
+      "recorded_at": "2026-07-26T05:56:57.224277+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fix UK RNS discovery for GFTU.L — `filings_index.json` returned zero entries despite `uk_rns` regime and FTSE350 tag; add Investegate/LSE ticker alias fallback (GFTU, GN5) and mandatory body extract for latest annual + interim.",
+      "recorded_at": "2026-07-26T05:56:57.224285+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Ingest Grafton IR results presentation PDF (`graftonplc.com/investors`) — unlocks segment margin, geographic mix, and management-adjusted net debt/EBITDA that Yahoo omits.",
+      "recorded_at": "2026-07-26T05:56:57.224290+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Pull Companies House filed accounts (company 0160651) when RNS bodies are empty — statutory notes hold pension, covenant, going-coneern, and goodwill impairment language.",
+      "recorded_at": "2026-07-26T05:56:57.224296+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Export failed-model list and sub-metrics (Piotroski components, normalised FCF yield %) into `screening_snapshot.json` so gap-fill can reconcile ROE/moat misses without inferring from passed models alone.",
+      "recorded_at": "2026-07-26T05:56:57.224299+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Attach portfolio sector/cluster manifest to red-flag email pass (top-N sector counts, construction-beta tag) so cross-name Industrials concentration is evidenced without ad-hoc peer folder reads.",
+      "recorded_at": "2026-07-26T05:56:57.224302+00:00"
     }
   ],
-  "updated_at": "2026-07-24T21:26:49.093206+00:00"
+  "updated_at": "2026-07-26T05:56:57.224305+00:00"
 }

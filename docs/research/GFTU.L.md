@@ -1,116 +1,73 @@
 # Grafton Group plc (GFTU.L) — Research memo
 
-_Version 1 · Updated 2026-07-24T21:02:01.723364+00:00 · Mode: initial_
+_Version 2 · Updated 2026-07-26T05:56:51.323433+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
-Grafton Group plc is a pan-European merchanting group (building materials, DIY, plumbing/heating) whose shares screen as a **Strong Buy** on cheapness (P/E 12.6, P/B 1.1), cash generation (FCF yield), dividend (4.0%), and balance-sheet quality (current ratio 2.11, Piotroski pass). Consolidated revenue recovered to **£2.52bn in 2025** (+10.4% YoY per Yahoo), with net income **£136.6m** — up from the 2024 trough but still **~35% below the 2022 peak** (£208.6m), reflecting a cyclical earnings reset rather than a broken franchise. Management is returning capital aggressively via dividends (~£73m p.a.) and buybacks (including a fresh **£25m programme** announced with FY2025 results), and outlined **2030 growth targets** at a June 2026 Capital Markets Event. The central debate is whether margin normalisation and European M&A can restore mid-cycle returns, or whether UK construction weakness and goodwill-heavy acquisitive history cap re-rating. **Key research gap:** available regulatory filings are **subsidiary-only** (Grafton Group (UK) Public Limited Company); consolidated group accounts were sourced from Yahoo.
-
----
+Grafton Group is a pan-European merchanting group (building materials, DIY, plumbing/heating) that the quantitative screen rates **Strong Buy** (11/22 models, composite 84%), driven by cheapness (P/E 12.6, P/B 1.1), dividend yield (~4.0%), FCF generation, and balance-sheet liquidity (current ratio 2.11). Yahoo-sourced financials show FY2025 revenue recovery (+10.4% to £2,519.6m) and net income up to £136.6m, with continued buybacks and a new £25m repurchase programme, but earnings remain well below the 2022 peak (£208.6m). The valuation hook is a cash-generative distributor trading modestly above book with shareholder returns (dividend + buybacks) and Iberia/Ireland offsetting UK weakness. The key debate is whether margin normalisation and European M&A integration justify re-rating, or whether cyclical UK construction and lease-adjusted leverage cap returns — a question this pack cannot fully resolve without primary RNS/annual report extracts.
 
 ## INVESTMENT THESIS
-The quantitative screen flags Grafton across **five factor families** — cheapness, quality, dividend, GARP, and risk — with full data coverage (20/20 metrics) and passes including Graham Defensive/Enterprising, Schloss Low P/B, FCF Yield, Neff PEGY, Dividend Growth, Dreman Contrarian, Piotroski F-Score, Composite Value, Earnings Quality, and Financial Health. That profile fits a **classic value compounder**: a defensive, cash-generative distributor trading below historical earnings power.
+For a value investor, Grafton fits several classic screens simultaneously: Graham Defensive/Enterprising, Schloss Low P/B, FCF Yield, Neff PEGY, Dividend Growth, Dreman Contrarian, Piotroski F-Score, Composite Value, Earnings Quality, and Financial Health — spanning cheapness, quality, dividend, GARP, and risk families (5/4 passed). At P/E 12.6 and P/B 1.09, the market prices in modest growth and cyclical risk rather than franchise quality.
 
-**Business quality.** Grafton operates a fragmented, locally scaled distribution platform across the UK, Ireland, Benelux, and other European markets — a model that historically earns attractive returns on invested capital through branch density, private-label mix, and bolt-on M&A. FY2025 news describes a “resilient” performance with revenue and profit growth resuming, despite UK market headwinds.
+Business quality indicators from Yahoo (fallback): consistent operating cash flow (£217–272m annually, 2022–2025), FCF of £205.6m in FY2025, net cash/investment buffer (£396m cash plus £100m short-term investments vs £221m gross borrowings ex-leases), and a shrinking share count (223.4m ordinary shares in 2022 to 191.3m in 2025) via sustained buybacks (£57m in 2025; £159m in 2023). Revenue re-accelerated in 2025 after a flat/down 2023–2024 period, consistent with management commentary (via news) of Iberia and Ireland driving growth while the UK remains challenging.
 
-**Valuation hook.** At P/E 12.6 and P/B 1.1, the market prices Grafton as a mature cyclical rather than a platform capable of mid-teens ROE through the cycle. ROE of **8.4%** (screen) is depressed versus the 2022 peak, supporting a contrarian entry if earnings mean-revert. FCF of **~£206m** (Yahoo, 2025) comfortably covers dividends and buybacks.
-
-**Capital allocation.** Share count has fallen from **~223m (2022) to ~191m (2025)** (Yahoo balance sheet), with cumulative buybacks of **£567m (2025), £81m (2024), £159m (2023)**. Combined with a **4.0% yield**, total shareholder yield is material. The ongoing £25m buyback (news, Jul 2026) reinforces management confidence at current prices (~£9.00–£9.50 per tranche).
-
-**Why Strong Buy for a value investor.** The screen’s cheapness and FCF signals are underpinned by real cash conversion (operating cash flow **£252m** in 2025), a net-cash-lean balance sheet (cash **£396m** plus **£100m** short-term investments vs total debt **£619m** — Yahoo), and a dividend that has been maintained through the down-cycle. Timing is neutral (RSI 63, price ~3% above 200-day SMA), favouring staged accumulation rather than chasing momentum.
-
----
+The screen’s FCF yield and financial-health passes align with a capital-allocation story: management returned capital through dividends (~£73m/year) and buybacks while maintaining liquidity and funding bolt-on M&A (£17–69m/year, 2022–2025). ROE of 8.4% is moderate rather than exceptional, which keeps the name in value territory rather than quality-growth territory — appropriate for a cyclical distributor.
 
 ## FINANCIAL REVIEW
-### Source hierarchy and gaps
+**Primary filings gap persists:** `filings_index.json` remains empty (0 annual, 0 interim, 0 other; `body_refetch.attempted: 0`). All quantitative analysis below uses **Yahoo fallback (`financials_annual.json`)** unless noted; H1 2026 headline context from **news only**.
 
-| Source | Coverage | Limitation |
-|--------|----------|------------|
-| **Companies House (5 annual filings, 2021–2025)** | Grafton Group **(UK) Public Limited Company** — investment holding subsidiary | **Not consolidated group accounts**; profit after tax **£47.7m (2025)** vs group **£136.6m** (Yahoo) |
-| **Yahoo `financials_annual.json`** | Consolidated income, balance sheet, cash flow 2022–2025 | Secondary source; used throughout for group trends |
-| **Interim / half-year RNS** | **None indexed** | No H1 2025 trading update or interim results in `filings_index.json` |
+FY2025 revenue +10.4% to £2,519.6m; net income £136.6m (+~12% vs 2024, still ~35% below 2022 peak). Operating margin compressed 10.5% → 6.4% (2022–2025). FCF £205.6m covers dividends ~2.8×; bolt-on M&A £24–69m/year; buybacks ongoing (£25m programme per Jul 2026 news). Balance sheet: equity £1,649m, goodwill £659m (40% of equity), leases £397m vs term debt £191m, cash + ST investments £496m, current ratio 2.11, inventory £395m rising.
 
-### Consolidated income trend *(Yahoo — fallback; no consolidated filing bodies available)*
+H1 2026: solid results and maintained guidance per news (Kalkine, 13 Jul; DirectorsTalk, 22 Jul) — no numeric interim in pack.
 
-| Year | Revenue (£m) | YoY | Net income (£m) | Operating income (£m) | EBITDA (£m) |
-|------|-------------|-----|-----------------|----------------------|-------------|
-| 2022 | 2,301.5 | — | 208.6 | 240.9 | 386.8 |
-| 2023 | 2,319.2 | +0.8% | 148.7 | 184.1 | 333.4 |
-| 2024 | 2,282.3 | −1.6% | 122.0 | 153.8 | 312.0 |
-| 2025 | 2,519.6 | **+10.4%** | 136.6 | 162.4 | 340.0 |
-
-**Interpretation.** Revenue was broadly flat through 2022–2024 before accelerating in 2025, consistent with acquisition contribution and/or volume recovery. Earnings peaked in 2022 (post-Covid/RMI boom) and fell **~42%** to the 2024 trough before a **+12%** rebound in 2025. Operating margin compressed from **~10.5% (2022)** to **~6.4% (2025)** — a structural/cyclical mix shift that the market may be discounting. Gross profit margin has stabilised near **~38%**.
-
-### Cash flow and capital returns *(Yahoo)*
-
-| Year | Operating CF (£m) | Capex (£m) | FCF (£m) | Dividends (£m) | Buybacks (£m) |
-|------|-------------------|------------|----------|----------------|---------------|
-| 2022 | 217.3 | 57.8 | 159.5 | 73.9 | 143.0 |
-| 2023 | 272.8 | 52.8 | 220.0 | 72.6 | 159.5 |
-| 2024 | 246.8 | 46.8 | 200.0 | 73.2 | 81.1 |
-| 2025 | 251.8 | 46.2 | 205.6 | 72.6 | 56.7 |
-
-FCF conversion remains robust despite lower reported earnings. M&A spend was modest in 2025 (**£23.9m** acquisitions per cash-flow statement) versus **£69.4m** in 2024, suggesting a pause in large deals while integrating prior acquisitions.
-
-### Balance sheet *(Yahoo, 31 Dec 2025)*
-
-- **Total assets:** £2,820m; **equity:** £1,649m; **goodwill + intangibles:** £790m (**~28% of assets**)
-- **Total debt:** £619m (long-term debt **£191m**; capital lease obligations **£397m** — IFRS 16 heavy)
-- **Cash & equivalents:** £396m; **short-term investments:** £100m
-- **Working capital:** £645m; **current ratio:** 2.11 (screen)
-- **Pension (defined benefit):** £11.6m non-current + £3.0m current — **not material** at group level per Yahoo
-
-Net financial debt is modest once cash and liquid investments are netted (~£123m), but **lease-adjusted leverage** is more meaningful given £397m of capitalised lease liabilities.
-
-### Subsidiary filing signals *(Companies House bodies — primary where applicable)*
-
-The indexed annual accounts relate to the **UK holding company**, not the listed parent:
-
-- **2025:** Profit after tax **£47.7m** (2024: **£50.5m**); **£36.6m impairment** on investment in subsidiaries (2024: nil); dividend income from subsidiaries up 104%.
-- **Going concern:** Board concludes adequate resources; **net current liabilities £250.0m** (2024: £232.4m); **intercompany payable to Group companies £428.2m**; dependent on subsidiary dividends; **parent undertaking** to provide financial support for at least one year (2025 Directors’ Report).
-- **Principal risk (subsidiary):** Collectability of intercompany receivables and carrying value of investments in subsidiaries — directors assess recoverable; PwC **no material going-concern uncertainty** (2025 auditor report).
-- **Board changes (2025 filing):** R. Brewill resigned 01/09/2025; F. Elkins and S. Harris appointed.
-
-These subsidiary disclosures do **not** substitute for consolidated group risk language (covenants, segment performance, UK/Ireland trading) which would appear in Grafton Group plc’s RNS annual report — **not present in this source pack**.
-
-### Interim coverage
-
-**No interim, half-year, or trading-update filings** are indexed. Intra-year momentum (H1 2025 vs H2 2025, UK vs Continental Europe) cannot be verified from primary filings in this pack. News headlines (Mar 2026) cite FY2025 revenue growth of 10.4% and UK market challenges, but consolidated interim figures are unavailable here.
+**Remaining gaps:** segment splits, covenant language, adjusted leverage per management, goodwill impairment sensitivity, H1 line items — all require IR presentation or RNS/Companies House bodies.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Cyclical / end-market.** Building materials distribution is tied to RMI, new-build, and commercial construction. Earnings fell sharply from 2022–2024; FY2025 news flags **UK market challenges** despite group revenue growth. A prolonged UK downturn or rate-sensitive housing freeze could delay margin recovery.
+**Evidenced:** cyclical UK exposure and margin compression; thin ROE (8.4%) with moat-screen misses; goodwill/M&A roll-up risk (£659m goodwill, continued bolt-ons, 2030 acquisition strategy); lease-adjusted leverage; elevated RSI (63) on a new signal.
 
-**Earnings still below peak.** Net income **£136.6m (2025)** vs **£208.6m (2022)** — the screen’s low P/E partly reflects depressed normalised earnings, not purely undervaluation of peak capacity.
+**Open:** covenants, going concern, contingencies, pension detail, CGU impairment testing, H1 quantitative bridge — require Companies House accounts, Investegate RNS re-pull, or IR presentation PDF.
 
-**Goodwill and acquisition risk.** Goodwill of **£659m** (Yahoo) plus ongoing bolt-on strategy creates impairment risk. The **£36.6m subsidiary investment write-off** in the 2025 UK holdco accounts (Companies House) is a reminder that acquisition underwriting can fail at the entity level, even if immaterial at group scale.
-
-**Lease-adjusted leverage.** **£397m** capital lease obligations (Yahoo) are economically debt-like; interest expense **£23.9m** (2025) and net interest **−£7.3m** after interest income suggest manageable but not zero financial risk.
-
-**Holdco structure / intercompany.** Subsidiary accounts show worsening **net current liabilities** and reliance on **parent undertaking** and upstream dividends — standard for holdcos but worth monitoring if operating subsidiaries face covenant or liquidity stress (not disclosed in available bodies).
-
-**Governance / board turnover.** Multiple director changes in 2024–2025 (resignations/appointments in Companies House filings). Not inherently negative but warrants tracking at consolidated AGM level.
-
-**Research / disclosure gap.** Absence of **consolidated Grafton Group plc RNS annual report** and **any interim release** in the filing index limits verification of segment margins, geographic mix, debt covenants, and contingency disclosures. Pension appears modest in Yahoo data; **covenant language not available** in sourced bodies.
-
-**News coverage bias.** Recent headlines are dominated by **routine buyback tranche announcements** (Kalkine Media, TipRanks, Jul 2026) — low informational value; deeper strategic coverage is thin outside the Jun 2026 CME and Mar 2026 results articles.
+**Portfolio cluster:** construction/rates sensitivity evidenced at name level; correlated multi-pick drawdown not sizeable from GFTU-local sources.
 
 ---
 
 ## NEWS HIGHLIGHTS
-*Past year; titles and dates from `news_manifest.json`.*
+Coverage over the past year is **heavy on buyback mechanics** (numerous Kalkine/TipRanks/Globe and Mail articles, Jul 2026) and **lighter on fundamental strategy**, but several material items emerge:
 
-| Date | Headline | Relevance |
-|------|----------|-----------|
-| **11 Jun 2026** | *Grafton Group Sets 2030 Growth Targets as Cash Flow and Acquisitions Take Center Stage* (Yahoo) | Strategy: five-year plan at Capital Markets Event; CEO Eric Born emphasises European platform, cash generation, M&A |
-| **5 Mar 2026** | *Grafton Group PLC Full Year 2025 Earnings Call Highlights* (Yahoo) | FY2025: **+10.4% revenue**; new **£25m share buyback**; UK market challenges noted |
-| **5 Mar 2026** | *Grafton Group H2 Earnings Call Highlights* (Yahoo) | “Resilient” 2025; return to revenue/profit growth; integration investment |
-| **Jul 2026 (ongoing)** | Multiple: *Grafton Group plc Acquires 60,000 Shares… £25 Million Buyback* (Kalkine Media, 24 Jul 2026); *Grafton Steps Up £25m Share Buyback* (TipRanks, 23 Jul 2026) | Active execution of buyback at ~£9.08–£9.53/share |
-| **10 Jun 2026** | *At UK£8.28, Is Grafton Group plc Worth Looking At Closely?* (Yahoo) | Retail/commentary interest at lower price point |
-| **14 Nov 2025** | *Grafton Group plc has caught the attention of institutional investors who hold a sizeable 48% stake* (Yahoo) | ~48% institutional ownership — liquidity and sentiment sensitivity |
-| **28 Oct 2025** | *Grafton Group jumps 8.7% this week, though earnings growth tracking behind five-year shareholder returns* (Yahoo) | Share price volatility; earnings lag historical TSR |
-| **25 Sep 2025** | *Grafton Group plc Stock's On A Decline: Are Poor Fundamentals The Cause?* (Yahoo) | Negative sentiment on recent share weakness |
+- **H1 2026 / guidance:** “Grafton Group plc Announces Solid H1 2026 Results with Strategic Share Buyback and Steady Profit Outlook” (Kalkine, 13 Jul 2026); “Grafton Group Maintains 2026 Profit Guidance As Iberia And Ireland Drive Growth” (DirectorsTalk, 22 Jul 2026).
+- **FY2025 results:** “Grafton Group Revenue & Profit Rises Amid Challenging Market Conditions” (Insight DIY, 5 Mar 2026); Yahoo earnings-call summaries cite 10.4% revenue growth and a new £25m buyback despite UK challenges (5 Mar 2026).
+- **Capital Markets Day / strategy:** “Grafton Group Sets 2030 Growth Targets as Cash Flow and Acquisitions Take Center Stage” (Yahoo Finance, 11 Jun 2026) — management emphasised European platform, cash generation, and M&A through 2030.
+- **Capital returns:** Ongoing £25m share buyback with regular 60,000-share tranches at ~£9.08–£9.53 (multiple articles, Jul 2026).
+- **Valuation commentary:** Third-party “undervalued” pieces (simplywall.st, May 2026; Yahoo, Jun 2026) — not independent verification.
 
-**Coverage assessment:** Material corporate news is concentrated around **FY2025 results (Mar 2026)**, the **2030 strategy event (Jun 2026)**, and **buyback execution (Jul 2026)**. No M&A announcements, regulatory actions, or CEO changes appear in the manifest. **News depth is thin** on segment/geographic detail; most Jul 2026 items are repetitive buyback notices.
+No material M&A announcements, management changes, or regulatory actions appear in the manifest. **News is thin on risk topics** (pension, covenant, going concern searches returned irrelevant results). Substantive RNS text is absent from the source pack.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.60
+Rationale: Gap-fill corroborates the Graham/cash-flow screen case and clarifies cyclical, M&A, and thin-ROE limits, but the unchanged filing void leaves covenants, segments, and H1 numbers unverified — neutral on the Strong Buy signal, not a conviction upgrade.
+
+## Weekly updates
+
+### 2026-07-26T05:56:51.323433+00:00
+Q: Building-materials merchant—directly exposed to UK/Ireland construction and housing cycles; low ROE (8.4%) may signal thin competitive moat despite passing Graham screens; acquisition-led growth history (implied by merchant roll-up model) carries integration and goodwill impairment risk not modelled here.
+Status: partially_resolved
+Evidence: `screening_snapshot.json` confirms Industrials classification, ROE 8.4%, and Graham/FCF/Piotroski passes alongside moderate quality (no Buffett/Magic Formula in passed list). Yahoo fallback shows operating margin fell from 10.5% (2022) to 6.4% (2025), goodwill stable at £635–659m with bolt-on spend of £24–69m/year (2022–2025), and goodwill/equity ~40%. News corroborates cyclical mix: “Grafton Group Revenue & Profit Rises Amid Challenging Market Conditions” (Insight DIY, 5 Mar 2026) and “Grafton Group Maintains 2026 Profit Guidance As Iberia And Ireland Drive Growth” (DirectorsTalk, 22 Jul 2026). Segment margins, moat durability, and impairment testing language remain unavailable — no filing bodies.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
+NextSources: Company IR / results presentation PDF (`gap_fill_source_map.json` → `company_ir_presentation`) for segment revenue/margin and acquisition pipeline; Companies House annual report PDF for goodwill impairment notes and principal risks
+
+Q: / sector cluster: Three Industrials in the top five—macro slowdown or rates-driven construction weakness would hit multiple picks simultaneously.
+Status: partially_resolved
+Evidence: Grafton is classified **Industrials** and is construction-adjacent (building-materials merchant). News and Yahoo confirm UK headwinds with Iberia/Ireland offset. `macro_context.json` provides colour only (US 10y yield 4.70%, FTSE 100 ~10,639) — no UK construction PMI or housing-starts series. **Portfolio-level top-five sector composition is not present in the GFTU source pack**; cross-name concentration cannot be quantified from local files.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
+NextSources: Portfolio-level sector/cluster overlay at screen-export time (scoring layer); UK ONS construction output / BCIS housing indicators ingest for macro colour; peer RNS bodies (e.g. Genuit, Breedon) for correlated demand read-through
+
+Q: (Grafton Group plc)** — Eleven of 22 models passed (composite 84%, sector-relative 80%), notably Graham Defensive, Graham Enterprising, Schloss Low P/B (P/B 1.09), FCF Yield (10.0%), Piotroski F-Score (8/9), Earnings Quality, and Financial Health (D/E 38%, current ratio 2.11). Key metrics: P/E 12.6, P/B 1.1, yield 4.0%, ROE 8.4%. Misses on ROE-driven quality screens (Buffett Quality, Economic Moat) and Magic Formula; RSI 63 flagged as elevated. Third Industrials pick—sector concentration risk is material if building multiple names from this list. **Verdict: accumulate** — the cleanest balance-sheet and Graham-profile fit in the group, with moderate valuation and positive earnings growth (8.4%), despite modest ROE.
+Status: partially_resolved
+Evidence: `screening_snapshot.json` confirms Strong Buy (11/22), composite 84%, sector-relative 80%, passed families (cheapness, quality, dividend, GARP, risk), key metrics (P/E 12.6, P/B 1.1, yield 4.0%, ROE 8.4%, current ratio 2.11), passed models including Graham Defensive/Enterprising, Schloss Low P/B, FCF Yield, Piotroski F-Score, Earnings Quality, Financial Health; timing neutral, RSI 63, conviction 51%. Yahoo-derived D/E is ~38% (total debt £619m / equity £1,649m). Net income grew ~12% in 2025 vs 2024 (Yahoo) — note 8.4% is ROE, not earnings growth. **Piotroski sub-score (8/9) and FCF yield percentage (10.0%) are not exported in the local screen snapshot**; portfolio “third Industrials pick” ranking is outside this pack.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
+NextSources: Export per-model pass/fail detail and sub-metrics (Piotroski components, normalised FCF yield) in `screening_snapshot.json`; portfolio cluster manifest at email/red-flag generation time
 
 ---
