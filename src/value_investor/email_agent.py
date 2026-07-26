@@ -200,6 +200,20 @@ def main(argv: list[str] | None = None) -> int:
         help="Max tickers for --ingest-improvement-pass (default: 5)",
     )
     parser.add_argument(
+        "--compile-engineering-tasks",
+        action="store_true",
+        help=(
+            "After post-run review, compile supervised engineering tasks into "
+            "output/engineering_tasks.json (no agent calls)"
+        ),
+    )
+    parser.add_argument(
+        "--engineering-max-tasks",
+        type=int,
+        default=8,
+        help="Max tasks when using --compile-engineering-tasks (default: 8)",
+    )
+    parser.add_argument(
         "--send-only",
         action="store_true",
         help="Send email from existing output/email_report.* files (skip screening)",
@@ -473,6 +487,18 @@ def main(argv: list[str] | None = None) -> int:
         except RuntimeError as err:
             print(str(err), file=sys.stderr)
             return 2
+
+    if args.compile_engineering_tasks:
+        from value_investor.engineering_tasks import compile_engineering_tasks
+
+        payload = compile_engineering_tasks(
+            output_dir=args.output_dir,
+            max_tasks=int(args.engineering_max_tasks),
+        )
+        print(
+            f"Compiled {payload['task_count']} engineering task(s) → "
+            f"{args.output_dir / 'engineering_tasks.json'}"
+        )
 
     if research_documents:
         reports = apply_research_overlay(reports, research_documents)

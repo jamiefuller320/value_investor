@@ -201,6 +201,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     deep_analysis = _load_deep_analysis(output_dir)
     gap_fill = _read_json(output_dir / "gap_fill_summary.json")
     ingest_improvement = _read_json(output_dir / "ingest_improvement_summary.json")
+    engineering_tasks = _read_json(output_dir / "engineering_tasks.json")
     post_run_review = _load_post_run_review(output_dir)
     research_model_suggestions = _read_json(
         Path("docs/data/research_model_suggestions.json")
@@ -299,6 +300,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "deep_analysis": deep_analysis,
         "gap_fill": gap_fill,
         "ingest_improvement": ingest_improvement,
+        "engineering_tasks": engineering_tasks,
         "post_run_review": post_run_review,
         "research_model_suggestions": research_model_suggestions,
         "paper_automation": paper_automation,

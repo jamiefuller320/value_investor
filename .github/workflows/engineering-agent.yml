@@ -1,0 +1,110 @@
+name: FTSE Engineering Agent
+
+# Weekday / on-demand supervised dev agent for one engineering task.
+# Compiles tasks from the latest Sunday run artifacts, implements the top
+# open task, and opens a draft PR. Does not auto-merge.
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: "Specific engineering task id (leave empty for top priority)"
+        type: string
+        default: ""
+      compile_only:
+        description: "Only compile engineering_tasks.json; do not run agent"
+        type: boolean
+        default: false
+      force:
+        description: "Run even if ad-hoc spend checkpoint is reached"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ftse-engineering-agent
+  cancel-in-progress: false
+
+jobs:
+  engineering-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps (CH accounts OCR)
+        run: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Compile engineering tasks
+        run: |
+          ftse-engineering compile --output-dir output --json || true
+          if [ ! -f output/engineering_tasks.json ]; then
+            echo "No engineering_tasks.json — run Sunday email with --compile-engineering-tasks first"
+            exit 1
+          fi
+          ftse-engineering list
+
+      - name: Run supervised engineering agent
+        if: ${{ github.event.inputs.compile_only != 'true' }}
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          FORCE_RUN: ${{ github.event.inputs.force }}
+        run: |
+          ARGS="run --max-tasks 1 --create-branch"
+          if [ -n "${{ github.event.inputs.task_id }}" ]; then
+            ARGS="$ARGS --task-id ${{ github.event.inputs.task_id }}"
+          fi
+          if [ "$FORCE_RUN" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          ftse-engineering $ARGS
+
+      - name: Push branch and open draft PR
+        if: ${{ github.event.inputs.compile_only != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH=$(git branch --show-current)
+          if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+            echo "Agent did not create a feature branch; skipping PR"
+            exit 0
+          fi
+          git push -u origin "$BRANCH"
+          TASK_ID=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("output/engineering_tasks.json").read_text())
+          open_tasks = [t for t in data.get("tasks", []) if t.get("status") == "completed"]
+          print(open_tasks[-1]["id"] if open_tasks else "engineering-task")
+          PY
+          )
+          TITLE=$(python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("output/engineering_tasks.json").read_text())
+          done = [t for t in data.get("tasks", []) if t.get("status") == "completed"]
+          print((done[-1].get("title") if done else "Engineering task")[:120])
+          PY
+          )
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "feat(engineering): $TITLE" \
+            --body "Supervised engineering agent run for task \`$TASK_ID\`.
+
+          ## Review checklist
+          - Diff stays within task allowed_paths
+          - Tests added/updated and CI green
+          - No paper-fund / simulator / threshold changes unless intended
+          - Verify on next Sunday email run
+
+          _Draft PR — human merge required._" \
+            --draft || echo "PR may already exist"
