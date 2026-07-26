@@ -20,8 +20,10 @@ from value_investor.storage import read_json, write_json
 logger = logging.getLogger(__name__)
 
 DEFAULT_TASKS_PATH = Path("output/engineering_tasks.json")
+COMMITTED_TASKS_PATH = Path("docs/data/engineering_tasks.json")
 DEFAULT_MAX_COMPILE_TASKS = 8
 DEFAULT_MAX_RUN_TASKS = 1
+TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled"})
 
 BLOCKED_PATHS = (
     "src/value_investor/paper_fund.py",
@@ -367,6 +369,94 @@ def _tasks_from_gap_fill(gap_fill_path: Path, *, run_stamp: str, seq_start: int)
     return tasks
 
 
+def task_title_key(title: str) -> str:
+    return re.sub(r"\s+", " ", str(title or "").strip().lower())[:120]
+
+
+def _title_keys_match(left: str, right: str) -> bool:
+    a = task_title_key(left)
+    b = task_title_key(right)
+    if not a or not b:
+        return False
+    if a == b:
+        return True
+    shorter, longer = (a, b) if len(a) <= len(b) else (b, a)
+    return longer.startswith(shorter) or shorter in longer
+
+
+def _merge_task_rows(
+    existing_rows: list[dict[str, Any]],
+    compiled_tasks: list[EngineeringTask],
+) -> list[dict[str, Any]]:
+    """Preserve lifecycle fields for tasks that already ran or merged."""
+    by_title = {task_title_key(str(row.get("title") or "")): row for row in existing_rows}
+    by_id = {str(row.get("id") or ""): row for row in existing_rows}
+    merged: list[dict[str, Any]] = []
+    seen_titles: set[str] = set()
+    matched_ids: set[str] = set()
+
+    def _find_prior(task: EngineeringTask) -> dict[str, Any] | None:
+        direct = by_title.get(task_title_key(task.title)) or by_id.get(task.id)
+        if direct is not None:
+            return direct
+        for row in existing_rows:
+            if _title_keys_match(str(row.get("title") or ""), task.title):
+                return row
+        return None
+
+    for task in compiled_tasks:
+        key = task_title_key(task.title)
+        seen_titles.add(key)
+        prior = _find_prior(task)
+        row = task.to_dict()
+        if prior is not None:
+            matched_ids.add(str(prior.get("id") or ""))
+            prior_status = str(prior.get("status") or "open")
+            if prior_status != "open":
+                row["status"] = prior_status
+            for field in (
+                "result_path",
+                "branch_name",
+                "pr_url",
+                "pr_number",
+                "completed_at",
+                "merged_at",
+            ):
+                if prior.get(field) is not None:
+                    row[field] = prior[field]
+            if prior_status != "open" and prior.get("id"):
+                row["id"] = prior["id"]
+        merged.append(row)
+
+    for row in existing_rows:
+        if str(row.get("id") or "") in matched_ids:
+            continue
+        key = task_title_key(str(row.get("title") or ""))
+        if key in seen_titles:
+            continue
+        status = str(row.get("status") or "open")
+        if status in TERMINAL_TASK_STATUSES or status == "pr_open":
+            merged.append(row)
+    merged.sort(key=lambda row: -float(row.get("priority_score") or 0.0))
+    return merged
+
+
+def sync_committed_engineering_tasks(
+    *,
+    output_path: Path = DEFAULT_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+) -> dict[str, Any] | None:
+    """Copy the working queue to the committed dashboard path when present."""
+    output_path = Path(output_path)
+    committed_path = Path(committed_path)
+    if not output_path.exists():
+        return load_engineering_tasks(committed_path) if committed_path.exists() else None
+    payload = load_engineering_tasks(output_path)
+    committed_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(committed_path, payload, compact=False)
+    return payload
+
+
 def _dedupe_tasks(tasks: list[EngineeringTask]) -> list[EngineeringTask]:
     seen: set[str] = set()
     unique: list[EngineeringTask] = []
@@ -385,6 +475,7 @@ def compile_engineering_tasks(
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
     tasks_path: Path = DEFAULT_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
 ) -> dict[str, Any]:
     """Build a supervised engineering queue from Sunday run artifacts."""
     output_dir = Path(output_dir)
@@ -401,15 +492,26 @@ def compile_engineering_tasks(
     )
     tasks = _dedupe_tasks(tasks)[: max(0, int(max_tasks))]
 
+    existing_rows: list[dict[str, Any]] = []
+    for candidate in (committed_path, tasks_path):
+        if Path(candidate).exists():
+            existing_rows = list(load_engineering_tasks(candidate).get("tasks") or [])
+            if existing_rows:
+                break
+
+    merged_rows = _merge_task_rows(existing_rows, tasks)
     payload = {
         "compiled_at": datetime.now(UTC).isoformat(),
         "run_at": _read_run_at(output_dir),
-        "task_count": len(tasks),
-        "tasks": [task.to_dict() for task in tasks],
+        "task_count": len(merged_rows),
+        "tasks": merged_rows,
     }
     tasks_path = Path(tasks_path)
     tasks_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(tasks_path, payload, compact=False)
+    committed_path = Path(committed_path)
+    committed_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(committed_path, payload, compact=False)
     return payload
 
 
@@ -455,23 +557,96 @@ def select_engineering_tasks(
     return tasks[: max(0, int(max_tasks))]
 
 
-def mark_task_status(
+def _write_task_queue(payload: dict[str, Any], *, path: Path) -> None:
+    write_json(path, payload, compact=False)
+
+
+def _update_task_queue(
     task_id: str,
-    status: str,
     *,
-    path: Path = DEFAULT_TASKS_PATH,
-    result_path: str | None = None,
+    path: Path,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+    **fields: Any,
 ) -> EngineeringTask | None:
     data = load_engineering_tasks(path)
     updated: EngineeringTask | None = None
     for row in data.get("tasks") or []:
         if str(row.get("id")) != task_id:
             continue
-        row["status"] = status
-        if result_path:
-            row["result_path"] = result_path
+        row.update(fields)
         updated = EngineeringTask.from_dict(row)
         break
     if updated is not None:
-        write_json(path, data, compact=False)
+        _write_task_queue(data, path=path)
+        committed = Path(committed_path)
+        committed.parent.mkdir(parents=True, exist_ok=True)
+        _write_task_queue(data, path=committed)
     return updated
+
+
+def mark_task_status(
+    task_id: str,
+    status: str,
+    *,
+    path: Path = DEFAULT_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+    result_path: str | None = None,
+    branch_name: str | None = None,
+    pr_url: str | None = None,
+    pr_number: int | None = None,
+) -> EngineeringTask | None:
+    fields: dict[str, Any] = {"status": status}
+    if result_path:
+        fields["result_path"] = result_path
+    if branch_name:
+        fields["branch_name"] = branch_name
+    if pr_url:
+        fields["pr_url"] = pr_url
+    if pr_number is not None:
+        fields["pr_number"] = pr_number
+    if status in {"pr_open", "completed"}:
+        fields["completed_at"] = datetime.now(UTC).isoformat()
+    if status == "merged":
+        fields["merged_at"] = datetime.now(UTC).isoformat()
+    return _update_task_queue(
+        task_id,
+        path=path,
+        committed_path=committed_path,
+        **fields,
+    )
+
+
+def mark_task_merged_for_branch(
+    branch: str,
+    *,
+    path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+    pr_url: str | None = None,
+    pr_number: int | None = None,
+) -> EngineeringTask | None:
+    from value_investor.engineering_queue import task_id_from_branch
+
+    task_id = task_id_from_branch(branch)
+    if not task_id:
+        return None
+    data = load_engineering_tasks(path)
+    for row in data.get("tasks") or []:
+        if str(row.get("id")) == task_id or str(row.get("branch_name") or "") == branch:
+            return mark_task_status(
+                str(row["id"]),
+                "merged",
+                path=path,
+                committed_path=committed_path,
+                branch_name=branch,
+                pr_url=pr_url,
+                pr_number=pr_number,
+            )
+    return mark_task_status(
+        task_id,
+        "merged",
+        path=path,
+        committed_path=committed_path,
+        branch_name=branch,
+        pr_url=pr_url,
+        pr_number=pr_number,
+    )
