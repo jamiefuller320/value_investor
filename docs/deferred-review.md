@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-25T06:54:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-07-26T07:28:21+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -116,6 +116,10 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L83 | **Gap-fill: ingest — Parse Companies House iXBRL into structured borrowings, pension and NCAV** | Parse Companies House iXBRL into structured borrowings, pension and NCAV fields; OCR headline extracts (`ch_00735438_*.txt`) lack note-level covenant text. | After next weekly email gap-fill pass confirms the gap persists |
 | L86 | **Offline archive counterfactual lab for grace parameters** | Walk-forward search on archived weekly screens: simulate hold-N-more-weeks after value downgrade without touching live paper books. Use for parameter priors before promoting shadow-derived knob changes. | ≥12 months of weekly archives with buy-tier turnover and library screen-lite history on FTSE 350 |
 | L88 | **Selective frontier-model research tier for top buy-tier memos** | Optional override of composer-2.5 for strong_buy / AI-judgment shortlist names when Cursor API pool headroom allows (e.g. Pro+). Cap tightly; compare memo quality vs cost in library policy. Default ladder stays on cheapest first-party model. | Pro+ or expanded weekly_usage_gbp in practice; A/B a small strong_buy cohort before policy change |
+| L91 | **Holistic post-run synthesis agent after weekly email** | After deep analysis + gap-fill, run one agent pass over gap_fill_summary.json, research_model_suggestions.json, memo quality metadata, and filing coverage stats to produce a prioritised improvement strategy (ingest vs scoring vs prompt) rather than per-ticker suggestions only. | After weekly_ops budget PR merges and at least two more Sunday email runs accumulate suggestions without a rollup |
+| L92 | **Gap-fill: ingest — Fetch Companies House iXBRL/PDF bodies for EDV annual accounts and dual-** | Fetch Companies House iXBRL/PDF bodies for EDV annual accounts and dual-list SEDAR+ 20-F/AIF — five annual filings indexed with zero bodies; refetch returned 0/5. | After next weekly email gap-fill pass confirms the gap persists |
+| L93 | **Gap-fill: ingest — Add Endeavour IR results presentation PDF to allowlist for FCF bridges,** | Add Endeavour IR results presentation PDF to allowlist for FCF bridges, gold sensitivities and segment margins absent from RNS HTML extracts. | After next weekly email gap-fill pass confirms the gap persists |
+| L94 | **Supervised dev agent for post-run engineering tasks** | Weekday/on-demand Cloud Agent reads post_run_review.md + ingest/scoring suggestions, opens draft PRs for allowlisted change types (fetchers, snapshot exports, overlays), runs CI, and stops for human merge — never auto-merges or touches paper/trading paths. | After PR #110 merges and two Sunday runs show persistent scoring/ingest items that ingest-improvement-pass cannot close |
 
 ### Ops / reliability
 

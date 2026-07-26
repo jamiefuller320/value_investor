@@ -99,6 +99,23 @@ def _load_deep_analysis(output_dir: Path) -> dict[str, str] | None:
     }
 
 
+def _load_post_run_review(output_dir: Path) -> dict[str, str] | None:
+    path = output_dir / "post_run_review.md"
+    if not path.exists():
+        return None
+    from value_investor.post_run_review import _parse_post_run_review
+
+    parsed = _parse_post_run_review(path.read_text(encoding="utf-8"))
+    return {
+        "executive_summary": parsed.executive_summary,
+        "persistent_weaknesses": parsed.persistent_weaknesses,
+        "this_week_findings": parsed.this_week_findings,
+        "improvement_plan": parsed.improvement_plan,
+        "defer": parsed.defer,
+        "full_text": parsed.full_text,
+    }
+
+
 def _slug_ticker(ticker: str) -> str:
     return slug_ticker(ticker)
 
@@ -183,6 +200,9 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     historical_analysis = _read_json(output_dir / "historical_analysis_summary.json")
     deep_analysis = _load_deep_analysis(output_dir)
     gap_fill = _read_json(output_dir / "gap_fill_summary.json")
+    ingest_improvement = _read_json(output_dir / "ingest_improvement_summary.json")
+    engineering_tasks = _read_json(output_dir / "engineering_tasks.json")
+    post_run_review = _load_post_run_review(output_dir)
     research_model_suggestions = _read_json(
         Path("docs/data/research_model_suggestions.json")
     )
@@ -279,6 +299,9 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "historical_analysis": historical_analysis,
         "deep_analysis": deep_analysis,
         "gap_fill": gap_fill,
+        "ingest_improvement": ingest_improvement,
+        "engineering_tasks": engineering_tasks,
+        "post_run_review": post_run_review,
         "research_model_suggestions": research_model_suggestions,
         "paper_automation": paper_automation,
         "automation": automation,
@@ -381,6 +404,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "simulation": None,
         "historical_analysis": None,
         "deep_analysis": None,
+        "post_run_review": None,
         "paper_automation": None,
         "automation": None,
         "research": [],

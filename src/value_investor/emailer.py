@@ -19,10 +19,16 @@ from value_investor.historical_analysis import (
     format_historical_analysis_html,
     format_historical_analysis_text,
 )
+from value_investor.post_run_review import PostRunReview
+from value_investor.research.ingest_improvement import IngestImprovementSummary
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import (
     format_gap_fill_html,
     format_gap_fill_text,
+    format_ingest_improvement_html,
+    format_ingest_improvement_text,
+    format_post_run_review_html,
+    format_post_run_review_text,
     format_research_html,
     format_research_text,
 )
@@ -337,6 +343,8 @@ def format_text_report(
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
     gap_fill_summary=None,
+    ingest_improvement_summary: IngestImprovementSummary | None = None,
+    post_run_review: PostRunReview | None = None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
@@ -392,9 +400,17 @@ def format_text_report(
     if research_text:
         lines.extend(["STRONG BUY RESEARCH", "-" * 40, research_text, ""])
 
+    ingest_text = format_ingest_improvement_text(ingest_improvement_summary)
+    if ingest_text:
+        lines.extend(["INGEST IMPROVEMENT PASS", "-" * 40, ingest_text, ""])
+
     gap_text = format_gap_fill_text(gap_fill_summary)
     if gap_text:
         lines.extend(["RED-FLAG RESEARCH LOOP", "-" * 40, gap_text, ""])
+
+    post_run_text = format_post_run_review_text(post_run_review)
+    if post_run_text:
+        lines.extend(["POST-RUN IMPROVEMENT REVIEW", "-" * 40, post_run_text, ""])
 
     counts: dict[str, int] = {}
     for report in reports:
@@ -443,6 +459,8 @@ def format_html_report(
     research_summary: ResearchSummary | None = None,
     research_documents: list[ResearchDocument] | None = None,
     gap_fill_summary=None,
+    ingest_improvement_summary: IngestImprovementSummary | None = None,
+    post_run_review: PostRunReview | None = None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
@@ -571,7 +589,9 @@ def format_html_report(
     )
     packs_section = format_decision_packs_html(packs)
     research_section = format_research_html(research_documents or [], research_summary)
+    ingest_section = format_ingest_improvement_html(ingest_improvement_summary)
     gap_fill_section = format_gap_fill_html(gap_fill_summary)
+    post_run_section = format_post_run_review_html(post_run_review)
 
     return f"""<!DOCTYPE html>
 <html>
@@ -586,7 +606,9 @@ def format_html_report(
   {trade_plans_section}
   {packs_section}
   {research_section}
+  {ingest_section}
   {gap_fill_section}
+  {post_run_section}
   {diff_section}
   <p><strong>Operating companies</strong> — {summary_bits}</p>
   {coverage_html}

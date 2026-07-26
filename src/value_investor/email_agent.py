@@ -176,6 +176,44 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--post-run-review",
+        action="store_true",
+        help=(
+            "After deep analysis / gap-fill / research memos, run a holistic "
+            "post-run synthesis agent to prioritise model improvements "
+            "(requires CURSOR_API_KEY)"
+        ),
+    )
+    parser.add_argument(
+        "--ingest-improvement-pass",
+        action="store_true",
+        help=(
+            "Before gap-fill, run a deterministic ingest hardening pass on thin "
+            "buy-tier tickers using backlog ingest suggestions and existing "
+            "alternate-source fetchers (no agent calls)"
+        ),
+    )
+    parser.add_argument(
+        "--ingest-improvement-cap",
+        type=int,
+        default=5,
+        help="Max tickers for --ingest-improvement-pass (default: 5)",
+    )
+    parser.add_argument(
+        "--compile-engineering-tasks",
+        action="store_true",
+        help=(
+            "After post-run review, compile supervised engineering tasks into "
+            "output/engineering_tasks.json (no agent calls)"
+        ),
+    )
+    parser.add_argument(
+        "--engineering-max-tasks",
+        type=int,
+        default=8,
+        help="Max tasks when using --compile-engineering-tasks (default: 8)",
+    )
+    parser.add_argument(
         "--send-only",
         action="store_true",
         help="Send email from existing output/email_report.* files (skip screening)",
@@ -306,6 +344,8 @@ def main(argv: list[str] | None = None) -> int:
     deep_analysis: DeepAnalysis | None = None
     research_summary = None
     gap_fill_summary = None
+    ingest_improvement_summary = None
+    post_run_review = None
     research_documents = research_documents_for_reports(
         reports,
         load_existing_research(
@@ -358,6 +398,16 @@ def main(argv: list[str] | None = None) -> int:
             print(str(err), file=sys.stderr)
             return 2
         research_documents = research_documents_for_reports(reports, research_summary.documents)
+
+    if args.ingest_improvement_pass:
+        from value_investor.research.ingest_improvement import run_ingest_improvement_pass
+
+        ingest_improvement_summary = run_ingest_improvement_pass(
+            reports=reports,
+            output_dir=args.output_dir,
+            market="ftse350",
+            max_targets=int(args.ingest_improvement_cap),
+        )
 
     if args.research_gap_fill:
         if not args.api_key:
@@ -412,6 +462,44 @@ def main(argv: list[str] | None = None) -> int:
                 list(by_ticker.values()),
             )
 
+    if args.post_run_review:
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --post-run-review", file=sys.stderr)
+            return 1
+        if deep_analysis is None:
+            prior = args.output_dir / "deep_analysis.txt"
+            if prior.exists():
+                from value_investor.deep_analysis import _parse_deep_analysis
+
+                deep_analysis = _parse_deep_analysis(prior.read_text(encoding="utf-8"))
+        try:
+            from value_investor.post_run_review import run_post_run_review
+
+            post_run_review = run_post_run_review(
+                reports=reports,
+                output_dir=args.output_dir,
+                api_key=args.api_key,
+                model=args.model,
+                run_at=run_at,
+                deep_analysis=deep_analysis,
+                gap_fill_summary=gap_fill_summary,
+            )
+        except RuntimeError as err:
+            print(str(err), file=sys.stderr)
+            return 2
+
+    if args.compile_engineering_tasks:
+        from value_investor.engineering_tasks import compile_engineering_tasks
+
+        payload = compile_engineering_tasks(
+            output_dir=args.output_dir,
+            max_tasks=int(args.engineering_max_tasks),
+        )
+        print(
+            f"Compiled {payload['task_count']} engineering task(s) → "
+            f"{args.output_dir / 'engineering_tasks.json'}"
+        )
+
     if research_documents:
         reports = apply_research_overlay(reports, research_documents)
 
@@ -430,6 +518,8 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         gap_fill_summary=gap_fill_summary,
+        ingest_improvement_summary=ingest_improvement_summary,
+        post_run_review=post_run_review,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
@@ -445,6 +535,8 @@ def main(argv: list[str] | None = None) -> int:
         research_summary=research_summary,
         research_documents=research_documents,
         gap_fill_summary=gap_fill_summary,
+        ingest_improvement_summary=ingest_improvement_summary,
+        post_run_review=post_run_review,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
@@ -475,7 +567,7 @@ def main(argv: list[str] | None = None) -> int:
         args.api_key
         and not args.send_only
         and not args.no_record_spend
-        and (deep_analysis is not None or research_summary or gap_fill_summary)
+        and (deep_analysis is not None or research_summary or gap_fill_summary or post_run_review)
     ):
         from value_investor.agent_model_policy import load_policy, record_email_run_spend
 
@@ -490,6 +582,7 @@ def main(argv: list[str] | None = None) -> int:
             research_created=int(research_summary.created) if research_summary else 0,
             research_updated=int(research_summary.updated) if research_summary else 0,
             gap_fill_revisions=gap_revisions,
+            post_run_review_ran=post_run_review is not None,
             memo_usd=memo_usd,
             path=args.policy,
         )
