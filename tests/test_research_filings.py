@@ -19,6 +19,7 @@ from value_investor.research.filings import (
     ingest_filings,
     merge_filings,
     prune_orphaned_filing_bodies,
+    refetch_companies_house_filing_bodies,
     refetch_missing_filing_bodies,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
@@ -210,12 +211,68 @@ def test_fetch_filing_body_parses_pdf(monkeypatch):
         lambda url, headers=None, timeout=60: b"%PDF-fake",
     )
     monkeypatch.setattr(
-        "value_investor.research.filings._extract_pdf_text",
-        lambda raw: "A" * 250 + " Annual Report cash flow bridge",
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: "A" * 250 + " Annual Report cash flow bridge",
     )
     text = fetch_filing_body("https://example.com/results.pdf")
     assert text is not None
     assert "cash flow bridge" in text
+
+
+def test_fetch_filing_body_routes_companies_house_document_api(monkeypatch):
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: "A" * 220 + " pension covenant going concern",
+    )
+    url = "https://document-api.company-information.service.gov.uk/document/abc123"
+    text = fetch_filing_body(url)
+    assert text is not None
+    assert "pension covenant" in text
+
+
+def test_refetch_companies_house_filing_bodies_pdf_extract(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch1"
+    index = {
+        "filings": [
+            {
+                "id": "ch_row_1",
+                "source": "companies_house",
+                "headline": "Companies House accounts — full",
+                "url": ch_url,
+                "document_metadata_url": ch_url,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 140,
+            },
+            {
+                "id": "rns_row_1",
+                "source": "investegate_direct",
+                "headline": "Trading update",
+                "url": "https://www.investegate.co.uk/announcement/rns/x/trading/1",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 90,
+            },
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    body_text = "A" * 220 + " statutory accounts pension going concern covenant"
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: body_text,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=5)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    assert result["with_body_after"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / "ch_row_1.txt").exists()
+    assert saved["filings"][1]["has_body"] is False
 
 
 def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):

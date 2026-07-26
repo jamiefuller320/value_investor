@@ -13,7 +13,10 @@ from value_investor.research.ingest import (
     fetch_google_news_rss_query,
     merge_news_articles,
 )
-from value_investor.research.filings import refetch_missing_filing_bodies
+from value_investor.research.filings import (
+    refetch_companies_house_filing_bodies,
+    refetch_missing_filing_bodies,
+)
 from value_investor.storage import read_json, resolve_json_path, write_json
 
 logger = logging.getLogger(__name__)
@@ -303,6 +306,14 @@ def prepare_gap_fill_source_pack(
 
     # Re-attempt PDF / direct RNS bodies before the agent answers.
     body_refetch = refetch_missing_filing_bodies(sources_dir / "filings")
+    ch_refetch: dict[str, Any] = {}
+    if _market_bucket(market, ticker) == "uk":
+        ch_refetch = refetch_companies_house_filing_bodies(
+            sources_dir / "filings",
+            max_bodies=20,
+        )
+        if int(ch_refetch.get("fetched") or 0) > 0:
+            body_refetch = ch_refetch
 
     alternate_articles = fetch_alternate_gap_fill_news(
         company_name, ticker, market=market
@@ -364,6 +375,7 @@ def prepare_gap_fill_source_pack(
         "built_at": datetime.now(UTC).isoformat(),
         "inventory": inventory,
         "body_refetch": body_refetch,
+        "ch_refetch": ch_refetch,
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
         "planned_alternate_sources": planned,

@@ -9,6 +9,7 @@ from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
     IngestImprovementSummary,
     IngestImprovementTarget,
+    _planned_sources_for_ticker,
     map_suggestion_to_source_ids,
     select_ingest_improvement_targets,
 )
@@ -109,6 +110,22 @@ def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Pa
     assert targets[0].ticker == "BT-A.L"
     assert targets[0].indexed_without_body == 5
     assert targets[0].ingest_suggestion_count == 1
+
+
+def test_planned_sources_prioritises_companies_house_for_uk_zero_bodies():
+    inventory = {
+        "thin": ["filings_bodies"],
+        "filings_summary": {"with_body": 0, "total": 5},
+    }
+    planned = _planned_sources_for_ticker(
+        ticker="BT-A.L",
+        market="ftse350",
+        inventory=inventory,
+        ingest_suggestions=[],
+        filings_with_body=0,
+    )
+    assert planned
+    assert planned[0]["id"] == "companies_house_accounts"
 
 
 def test_format_ingest_improvement_text():
