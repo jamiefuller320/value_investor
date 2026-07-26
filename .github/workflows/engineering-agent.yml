@@ -14,6 +14,10 @@ on:
         description: "Only compile engineering_tasks.json; do not run agent"
         type: boolean
         default: false
+      pr_only:
+        description: "Open draft PR for an existing remote branch (skip agent run)"
+        type: boolean
+        default: false
       force:
         description: "Run even if ad-hoc spend checkpoint is reached"
         type: boolean
@@ -62,14 +66,20 @@ jobs:
         id: task
         run: |
           if [ -n "${{ github.event.inputs.task_id }}" ]; then
-            echo "task_id=${{ github.event.inputs.task_id }}" >> "$GITHUB_OUTPUT"
+            TASK_ID="${{ github.event.inputs.task_id }}"
+          elif [ "${{ github.event.inputs.pr_only }}" = "true" ]; then
+            echo "task_id is required when pr_only is true"
+            exit 1
           else
             TASK_ID=$(ftse-engineering next-open-id)
-            echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
           fi
+          echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+          echo "branch=cursor/${TASK_ID}-1de3" >> "$GITHUB_OUTPUT"
 
       - name: Run supervised engineering agent
-        if: ${{ github.event.inputs.compile_only != 'true' }}
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && github.event.inputs.pr_only != 'true'
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           FORCE_RUN: ${{ github.event.inputs.force }}
@@ -84,11 +94,13 @@ jobs:
           ftse-engineering --output-dir output $ARGS
 
       - name: Create feature branch for code changes
-        if: ${{ github.event.inputs.compile_only != 'true' }}
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && github.event.inputs.pr_only != 'true'
         id: branch
         run: |
           TASK_ID="${{ steps.task.outputs.task_id }}"
-          BRANCH="cursor/${TASK_ID}-1de3"
+          BRANCH="${{ steps.task.outputs.branch }}"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           git checkout -b "$BRANCH"
           git add -A
@@ -106,20 +118,30 @@ jobs:
       - name: Push branch and open draft PR
         if: >-
           github.event.inputs.compile_only != 'true'
-          && steps.branch.outputs.has_changes == 'true'
+          && (github.event.inputs.pr_only == 'true' || steps.branch.outputs.has_changes == 'true')
         id: pr
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          BRANCH="${{ steps.branch.outputs.branch }}"
+          BRANCH="${{ steps.task.outputs.branch }}"
           TASK_ID="${{ steps.task.outputs.task_id }}"
-          git push -u origin "$BRANCH"
           TITLE=$(ftse-engineering task-title --task-id "$TASK_ID" --max-len 120)
-          gh pr create \
-            --base main \
-            --head "$BRANCH" \
-            --title "feat(engineering): $TITLE" \
-            --body "Supervised engineering agent run for task \`$TASK_ID\`.
+
+          if [ "${{ github.event.inputs.pr_only }}" = "true" ]; then
+            if ! git ls-remote --exit-code origin "refs/heads/$BRANCH" >/dev/null 2>&1; then
+              echo "Remote branch $BRANCH not found"
+              exit 1
+            fi
+          else
+            git push -u origin "$BRANCH" || git push --force-with-lease origin "$BRANCH"
+          fi
+
+          if [ "$(gh pr list --head "$BRANCH" --base main --json number --jq 'length')" = "0" ]; then
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "feat(engineering): $TITLE" \
+              --body "Supervised engineering agent run for task \`$TASK_ID\`.
 
           ## Review checklist
           - Diff stays within task allowed_paths
@@ -128,7 +150,10 @@ jobs:
           - Verify on next Sunday email run
 
           _Draft PR — human merge required._" \
-            --draft
+              --draft
+          else
+            echo "Draft PR already exists for $BRANCH"
+          fi
           echo "opened=true" >> "$GITHUB_OUTPUT"
 
       - name: Mark task pr_open after draft PR
@@ -138,7 +163,7 @@ jobs:
         run: |
           ftse-engineering mark-pr-open \
             --task-id "${{ steps.task.outputs.task_id }}" \
-            --branch "${{ steps.branch.outputs.branch }}" \
+            --branch "${{ steps.task.outputs.branch }}" \
             --result-path "output/engineering_result_${{ steps.task.outputs.task_id }}.md"
 
       - name: Commit queue state on main
