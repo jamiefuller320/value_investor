@@ -1,122 +1,77 @@
 # Jupiter Fund Management Plc (JUP.L) — Research memo
 
-_Version 1 · Updated 2026-07-26T05:51:13.459977+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-26T18:31:01.018985+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Jupiter Fund Management is a UK-listed active asset manager trading at a deep value screen: P/E 8.6×, P/B 0.9×, 3.7% yield, 12% ROE, with 17 of 22 quantitative models passing (composite score 76%). The investment case rests on a turnaround in flows and profitability after a difficult 2023, amplified by the £100m acquisition of CCLA (closed H1 2026), which adds scale, a non-profit client channel, and targeted cost synergies. The central debate is whether recent momentum—record AUM of £73.7bn, strong H1 2026 inflows, and profit growth—is durable, or partly acquisition-driven and vulnerable to market drawdowns and integration execution. Primary regulatory filings for annual or interim results were not retrieved; financial analysis below relies on Yahoo data with that limitation stated explicitly.
-
----
+Jupiter Fund Management is a UK-listed active asset manager trading on a value screen at P/E 8.6, P/B 0.9, and dividend yield 3.7%, with 17 of 22 quantitative models passing across cheapness, quality, dividend, GARP, and risk families. The investment case rests on a turnaround in flows (positive net inflows for the first time since 2017), scale expansion via the £100m CCLA acquisition, and management’s medium-term cost:income target of 70%. Recent H1 2026 news points to record AUM of £73.7bn and sharply higher profits, but this memo cannot corroborate interim figures from primary RNS filing bodies — only one strategic announcement is indexed. The central debate is whether current earnings momentum and synergy delivery justify a sub-book multiple, or whether goodwill-heavy balance sheet, performance-fee cyclicality, and integration execution risk cap re-rating.
 
 ## INVESTMENT THESIS
-The quantitative screen flags JUP.L as a **strong buy**, passing five factor families: cheapness, quality, dividend, GARP, and risk. That profile fits a classic value setup in financials: the market prices the stock below book and at a single-digit earnings multiple despite a return to double-digit ROE and positive free cash flow.
+The quantitative screen flags Jupiter as a strong buy with high data completeness (20/20 metrics, Piotroski F-Score 7/9) and low leverage (debt/equity ~5%). For a value investor, the hook is a franchise trading below book (P/B 0.9) despite ROE of 12% and rising earnings: Yahoo-sourced FY2025 net income of £100.4m on revenue of £465.7m compares with £65.2m net income on £402.5m revenue in FY2024 — a material recovery after FY2023’s £12.9m loss.
 
-Business quality, inferred from the CCLA RNS and news flow, has improved materially:
+Business quality indicators supporting the screen include: (1) net debt essentially eliminated by FY2025 (long-term debt £0; total debt £38.7m, largely lease obligations per Yahoo); (2) strong cash generation — operating cash flow £59.3m and free cash flow £56.6m in FY2025, with ongoing buybacks (£37.3m) and dividends (£22.3m); (3) strategic scale via CCLA, adding ~£15bn AUM in the UK non-profit channel, with management targeting £16m annual run-rate synergies by end-2027 and day-one EPS accretion (RNS, 10 July 2025). The screen’s failures — Graham Defensive, Graham Net-Net, Buffett Quality, High Dividend Yield, Earnings Quality — appropriately flag goodwill dominance (£494.4m vs tangible book £400m) and earnings-quality concerns (Piotroski: operating cash flow did not exceed net income). These are acceptable trade-offs for a GARP/deep-value entry if flow momentum persists.
 
-- **Scale and flows:** After years of net outflows, Jupiter reported positive flows for the first time since 2017 (FY2025), with H1 2026 headlines citing record AUM of £73.7bn (+36%) and continued net inflows.
-- **Strategic repositioning:** The CCLA deal (10 July 2025 RNS) adds ~£15bn AUM, a sticky non-profit client base, and £16m+ run-rate cost synergies by end-2027, supporting a medium-term **70% cost:income** target.
-- **Capital discipline:** Balance-sheet-funded M&A (no new equity/debt), ongoing buybacks (treasury shares rose to ~43m in FY2025 per Yahoo), and a policy to return 50% of FY2025 performance-fee revenue to shareholders.
-- **Screen alignment:** Low P/B (Schloss, Deep Value), solid FCF yield, Piotroski F-Score pass, and modest leverage (D/E ~5%) support the quality/risk buckets alongside the headline cheapness.
+INVESTMENT THESIS (continued)
 
-For a value investor, the hook is a profitable, cash-generative UK asset manager at ~0.9× book, with a visible catalyst path (CCLA integration, cost take-out, flow inflection) that the screen captures but cannot fully validate without primary accounts.
-
----
+Operational momentum reported in news (not filing bodies) aligns with the screen: H1 2026 headlines cite record AUM, positive inflows, and CCLA integration ahead of plan. CEO Matthew Beesley’s capital allocation framework — ordinary dividend at 50% of pre-performance-fee earnings plus return of 50% of FY2025 performance-fee revenue — adds shareholder-return optionality. At ~1% below the 200-day SMA with neutral RSI (43), timing is neither stretched nor deeply discounted. The strong-buy signal is new (one week), so conviction from the screen alone is moderate (46%); deep research partially supports accumulation but cannot replace missing annual/interim filings.
 
 ## FINANCIAL REVIEW
-### Filing coverage gap
+**Filing coverage gap.** The `filings_index.json` catalogue contains one RNS item classified as `other` (CCLA acquisition, 10 July 2025). **No annual report or interim results filing bodies are indexed.** All multi-year P&L, balance sheet, and cash-flow analysis below therefore falls back to `financials_annual.json` (Yahoo), stated explicitly.
 
-`filings_index.json` contains **one** RNS item (CCLA acquisition, 10 July 2025; period: **other**). There are **no annual or interim filing bodies** indexed. H1 2026 interim results (23 July 2026) appear only in news headlines, not in primary extracts. **All figures below are from `financials_annual.json` (Yahoo) unless noted as RNS.**
+**Primary filing — CCLA acquisition RNS (10 July 2025).** Jupiter agreed to acquire CCLA Investment Management for £100m, funded entirely from existing cash with no new equity or debt. At signing, combined Group AUM was ~£59bn (Jupiter £44bn + CCLA £15bn as at 31 March 2025). CCLA generated £66m revenue and just under £13m underlying operating earnings in FY to 31 March 2025. Jupiter targets run-rate cost synergies of at least £16m p.a. by end-2027 (plus £15m run-rate savings announced 22 May 2025), one-off integration costs ~£17m over four years, and a medium-term cost:income ratio of 70%. Post-completion regulatory capital expected to exceed 2.5× requirements. Capital policy update: return 50% of FY2025 performance-fee revenue to shareholders (performance fees would have been £54m as at 31 May 2025); ongoing buyback programme permits up to 3% of issued share capital.
 
-### Income statement trend (Yahoo, £m)
+**Income trend (Yahoo fallback).**
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Revenue | 443.5 | 405.6 | 402.5 | **465.7** |
-| Operating income | 132.5 | 83.5 | 80.8 | **118.2** |
-| Net income | 47.9 | **(12.9)** | 65.2 | **100.4** |
-| Basic EPS (p) | 8.9 | (2.5) | 12.5 | **19.2** |
-| EBITDA | — | 41.4 | 110.8 | **144.4** |
+| Year | Revenue (£m) | Net income (£m) | Basic EPS (p) |
+|------|-------------|-----------------|---------------|
+| 2022 | 443.5 | 47.9 | 8.9 |
+| 2023 | 405.6 | (12.9) | (2.5) |
+| 2024 | 402.5 | 65.2 | 12.5 |
+| 2025 | 465.7 | 100.4 | 19.2 |
 
-**FY2023** reported a £12.9m loss, driven by £78.4m of special charges (including restructuring/M&A and goodwill-related items per Yahoo normalisation). Normalised income was materially higher (~£123m), indicating underlying operations were not as weak as the headline loss suggests.
+FY2023 loss reflected unusual/special charges (Yahoo shows £78.4m special income charges). FY2025 benefited from £8.3m unusual items and lower amortisation. Normalised trends still show revenue recovery and margin improvement: operating income rose from £80.8m (2024) to £118.2m (2025).
 
-**FY2024–FY2025** show a clear recovery: revenue +15.7% to £465.7m; net income +54% to £100.4m; basic EPS up 54% to 19.2p. Operating margin improved from the FY2024 trough, though FY2025 operating income (£118.2m) remains below FY2022 (£132.5m), consistent with ongoing cost restructuring and a lower fee base pre-CCLA.
+**Balance sheet (Yahoo, FY2025).** Total assets £1,242.6m; shareholders’ equity £906.1m; tangible book value £400m. Cash and equivalents £266m plus short-term investments £84.3m; working capital £398.8m. Goodwill and intangibles £506.1m — roughly 56% of equity. Total debt £38.7m (long-term debt nil; capital lease obligations dominate). Ordinary shares in issue ~502m (post-buyback). Retained earnings £656.4m.
 
-### Balance sheet (Yahoo, FY2025 vs FY2024)
+**Cash flow (Yahoo).** FY2025 operating cash flow £59.3m vs reported net income £100.4m — the gap (working capital outflow £57.1m, tax payments) explains the screen’s earnings-quality concern. Free cash flow: £157m (2022), £84.5m (2023), £66.3m (2024), £56.6m (2025). FY2025 financing included £50m long-term debt repayment, £37.3m buybacks, and £22.3m dividends.
 
-- **Equity:** £906.1m (+8.6%); **tangible book:** £400m (goodwill £494.4m dominates intangibles).
-- **Cash & equivalents:** £266m; **total debt:** £38.7m (down from £90.8m; £50m long-term debt repaid in FY2025).
-- **Working capital:** £398.8m; strong liquidity to fund the £100m CCLA deal from existing resources (per RNS).
-- **P/B 0.9×** (screen) largely reflects goodwill-heavy accounting; tangible P/B is roughly **2.3×** on Yahoo figures—a nuance the screen’s book metric understates.
+**Interim/H1 2026.** No interim filing body is available. News headlines (23 July 2026) report AUM surged 36% to £73.7bn, profits up ~67%, and accelerated CCLA synergies — figures **not verified against primary filings** in this pack.
 
-### Cash flow (Yahoo, £m)
+**Pension.** Yahoo balance sheet shows non-current pension liabilities of £15.8m in 2023; not separately disclosed in the FY2025 extract provided. Pension risk cannot be assessed from filing bodies.
 
-| | FY2022 | FY2023 | FY2024 | FY2025 |
-|--|--------|--------|--------|--------|
-| Operating CF | 162.3 | 88.0 | 73.9 | 59.3 |
-| FCF | 157.0 | 84.5 | 66.3 | **56.6** |
-| Dividends paid | (94.0) | (35.3) | (34.2) | (22.3) |
-| Share buybacks | (29.4) | (26.5) | (1.0) | **(37.3)** |
+FINANCIAL REVIEW (continued)
 
-FCF has trended down over four years but remains positive. FY2025 working-capital outflows (£57.1m receivables increase) weighed on operating cash. Capital return shifted toward buybacks (£37.3m) with a lower ordinary dividend (£22.3m). The screen cites FCF of ~£150m (likely a different definition or trailing adjustment); Yahoo FY2025 FCF is **£56.6m**.
-
-### RNS financial colour (CCLA acquisition, 10 July 2025)
-
-From the sole filing body:
-
-- Jupiter standalone AUM **£44bn**; combined pro forma **~£59bn** (31 March 2025).
-- CCLA FY Mar-2025 (draft, unaudited): revenue **£66m**, underlying operating earnings **~£13m**, AUM **£15bn**.
-- Jupiter targets **≥£16m** run-rate synergies by end-2027; **~£17m** one-off integration costs over four years.
-- Post-deal regulatory capital expected **>2.5×** requirements.
-- If performance fees had crystalised at 31 May 2025, revenue would have been **£54m** (capital return policy: 50% to shareholders).
-
-### Interim results (news only — not in filing bodies)
-
-News on **23 July 2026** (e.g. “JUP: Record AUM, strong inflows, and accelerated CCLA synergies…”, TradingView) cites H1 2026: AUM **£73.7bn** (+36%), **67% profit rise**, revenue +36%, CCLA integration ahead of plan. These figures **cannot be verified against primary filings** in this pack and should be treated as indicative until interim RNS/accounts are ingested.
-
----
+**Going concern / covenants.** No annual or interim accounts body is indexed; going-concern, covenant, or contingency language is unavailable for review. The CCLA RNS states regulatory capital expected >2.5× requirements post-acquisition but contains standard forward-looking disclaimers and explicitly notes the announcement is not a profit forecast.
 
 ## RISKS AND RED FLAGS
-**Filing and disclosure gaps.** Absence of annual report and interim results bodies limits verification of going-concern language, pension disclosures, covenants, and segment detail. This is the largest research gap.
+**Integration and goodwill.** CCLA integration carries ~£17m one-off costs and dependency on £16m synergy delivery without client disruption. Goodwill of £494.4m (Yahoo) leaves tangible equity thin; failed Buffett Quality and Earnings Quality screen components are consistent with this risk.
 
-**Goodwill and acquisition risk.** ~£494m goodwill (Yahoo FY2025) reflects prior deals; CCLA adds further integration execution risk. The RNS itself flags forward-looking uncertainty and states the announcement is **not a profit forecast**. One-off costs of ~£17m and synergy delivery by 2027 are targets, not guarantees.
+**Cyclicality and fee mix.** ~79% of Jupiter AUM was in mutual funds (RNS); performance fees are volatile (hypothetical £54m at 31 May 2025). Market drawdowns would pressure AUM, management fees, and performance-fee crystallisation.
 
-**Cyclicality and fee pressure.** Revenue ties to AUM levels, market performance, and net flows. FY2023 impairment/charges show earnings volatility. UK active managers face structural fee compression and passive competition.
+**Earnings quality.** Operating cash flow (£59.3m) materially lagged net income (£100.4m) in FY2025; Piotroski “OCF > net income” failed. Restructuring/M&A charges (£3.6m in 2025, £3.7m in 2024) recur.
 
-**Pension obligations.** Yahoo balance sheet shows non-current pension liabilities of ~£15.8m (FY2023) and ~£33.6m (FY2022); FY2025 shows no separate pension line (possibly reclassified or reduced—unverified without accounts).
+**Competitive and regulatory.** UK active asset management remains crowded; CCLA completion required customary regulatory approvals (RNS). No filing-body disclosure on FCA enforcement, client concentration, or liquidity risk.
 
-**Regulatory and conduct risk.** Completion of CCLA required FCA/customary approvals (RNS). Asset managers remain exposed to conduct, ESG/stewardship, and Client Asset Sourcebook rules; no specific regulatory action appears in the news manifest.
+**Governance / capital allocation.** Aggressive buybacks (£37.3m in FY2025) alongside £100m cash M&A reduce balance-sheet flexibility; upside depends on execution. Dividend yield (3.7%) failed the High Dividend Yield screen threshold.
 
-**Capital allocation complexity.** Performance-fee-linked special distributions and buybacks can boost near-term yield but reduce balance-sheet flexibility if markets reverse. FY2025 debt repayment improved the profile, but goodwill limits tangible downside protection.
-
-**News-driven narrative risk.** Much of the recent bullish case (H1 2026 profit/AUM) comes from secondary headlines, not filed interim accounts—risk of over-confidence if those numbers differ on formal release.
-
----
+**Data gaps.** Absence of indexed annual report and H1 2026 RNS bodies is itself a red flag for verify-before-trade: pension, provisions, related-party transactions, and going-concern assessments cannot be reviewed here.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-good** on strategy and results, thin on governance/regulatory depth.
+Coverage over the past year is reasonably thick (33 articles in manifest) but skewed toward earnings summaries and secondary commentary rather than full RNS text.
 
-**M&A and strategy**
-- *Acquisition of CCLA Investment Management Limited* (Investegate, **10 July 2025**) — £100m cash deal; non-profit channel; synergies.
-- *Jupiter CEO: Why we spent £100mn to buy CCLA* (FT Adviser, **28 July 2025**).
-- *Jupiter Fund Management stock gains after CCLA acquisition* (Investing.com, **21 April 2026**).
+**H1 2026 interim results (22–25 July 2026):** Multiple outlets report record AUM of £73.7bn (+36%), strong inflows, ~67% profit rise, and CCLA synergies ahead of plan — e.g. “JUP: Record AUM, strong inflows, and accelerated CCLA synergies drive robust interim performance” (TradingView, 23 Jul 2026); “Jupiter Fund Management H1 Earnings Call Highlights” (Yahoo Finance, 23 Jul 2026); “Jupiter H1 2026 slides: AUM surges 36%, CCLA integration ahead of plan” (Investing.com Canada, 23 Jul 2026).
 
-**Results and operations**
-- *Jupiter reports positive flows for the first time since 2017* (Investors’ Chronicle, **26 February 2026**).
-- *Jupiter Fund Management H2 Earnings Call Highlights* (Yahoo Finance, **26 February 2026**) — FY2025 “challenging” financially but improving flows/performance.
-- *JUP: Record AUM, strong inflows, and accelerated CCLA synergies drive robust interim performance* (TradingView, **23 July 2026**); *Jupiter H1 2026 slides: AUM surges 36%, CCLA integration ahead of plan* (Investing.com, **23 July 2026**).
-- *Jupiter Fund Management Reports Record £68.4bn AUM In Q1 2026* (DirectorsTalk, **21 April 2026**).
+**Flow turnaround (Feb 2026):** FY2025 full-year results described as financially challenging but with improving leading indicators; “Jupiter reports positive flows for the first time since 2017” (Investors’ Chronicle, 26 Feb 2026); CEO Matt Beesley highlighted investment performance and client demand (Yahoo Finance H2 earnings call, 26 Feb 2026).
 
-**Capital return**
-- *Jupiter Fund Management Reduces Share Count Through Ongoing Buyback* (TipRanks, **20 July 2026**).
+**CCLA acquisition (Jul 2025 – Apr 2026):** “Acquisition of CCLA Investment Management Limited” (RNS/Investegate, 10 Jul 2025 — primary filing in pack); “Jupiter CEO: Why we spent £100mn to buy CCLA” (FT Adviser, 28 Jul 2025); “Jupiter Fund Management stock gains after CCLA acquisition” (Investing.com, 21 Apr 2026); Q1 2026 record AUM £68.4bn (DirectorsTalk, 21 Apr 2026).
 
-**Analyst sentiment**
-- *Why The Story Around Jupiter Fund Management (LSE:JUP) Is Shifting As Analyst Targets Diverge* (Yahoo Finance, **10 June 2026**) — fair value estimates moving up but with split views.
+**Capital return:** “Jupiter Fund Management Reduces Share Count Through Ongoing Buyback” (TipRanks, 20 Jul 2026).
 
-Several manifest entries are tangential (e.g. unrelated AI credit/Bloomberg pieces). No material governance scandals or regulatory enforcement actions were flagged.
+**Analyst sentiment:** Diverging targets — fair value estimates shifted £1.49 to £1.67 with bullish clusters at £1.89–£1.90 (Yahoo Finance, 9–10 Jun 2026); earlier “Bumper upgrade” commentary (Interactive Investor, 18 Sep 2025).
 
----
+**Macro noise:** Several manifest entries are unrelated (e.g. Bloomberg AI credit market piece, 22 Jul 2026) and excluded.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Quantitative cheapness and improving flow/profit momentum are corroborated by news and the CCLA RNS, but missing primary annual/interim filings and goodwill-heavy balance sheet prevent full confirmation of the strong-buy screen.
+Rationale: Operational momentum, sub-book valuation, and low leverage support the quantitative strong-buy signal, but absent annual and interim filing bodies prevent full confirmation of earnings quality, pensions, and regulatory disclosures.

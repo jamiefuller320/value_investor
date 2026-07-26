@@ -1,82 +1,105 @@
 # Vistry Group PLC (VTY.L) — Research memo
 
-_Version 1 · Updated 2026-07-26T05:52:38.977632+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-26T18:32:44.507537+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Vistry Group PLC is a UK housebuilder (Open Market plus Partnerships/affordable housing) trading at a deep discount to book: the quantitative screen flags **Strong Buy** (12/22 models, composite 92%; P/E 6.7, P/B 0.27, D/E ~18%, FCF yield supportive). Yahoo-sourced FY2025 accounts show earnings recovery (net income £138m vs £74.5m in 2024) and improved FCF (£174.6m), but revenue fell and margins remain well below 2023 peaks. The central debate is whether statutory cheapness and partnership-led volume offset a deteriorating near-term profit trajectory—July 2026 guidance points to an ~£30m H1 loss while reiterating ~£200m full-year adjusted profit under new CEO Adam Daniels. Elevated short interest, a paused buyback, broker downgrades, and a sector-wide competition lawsuit add execution and legal overhang. Primary RNS annual/interim filing bodies were not retrieved; financial analysis below relies on Yahoo fallback and news flow.
+Vistry Group PLC (VTY.L) screens as a **Strong Buy** on deep value metrics — P/B ~0.27, P/E ~6.7, FCF yield attractive, Piotroski F-Score 7/9, and low leverage (D/E ~18%) — yet the share price reflects a distressed UK housebuilder in turnaround. The investment case rests on whether FY2025 earnings recovery (Yahoo: adj. profit trajectory, ~£138m net income) and management’s ~£200m full-year adjusted profit guidance can be rebuilt after H1 2026 is guided to a ~£30m loss. The central debate is **valuation vs. execution**: the balance sheet and screen look cheap, but margins, cash prioritisation, leadership change, elevated short interest, and sector litigation leave the recovery unproven. Primary filing coverage in this pack is **thin** (no annual or interim report bodies indexed); figures below rely on Yahoo fallback unless noted.
+
+---
 
 ## INVESTMENT THESIS
-The screen’s **Strong Buy** rests on four passed families—cheapness, quality, GARP, and risk—at high data quality (19/20 metrics). Vistry scores on classic deep-value screens: P/B 0.27 (Schloss, Deep Value), earnings yield and FCF yield, Piotroski F-Score, and financial health (D/E ~18%). Book equity of ~£3.3bn (Yahoo, FY2025) against a heavily discounted market cap implies the market is capitalising sustained margin erosion, partnership execution risk, and cyclical housing weakness rather than insolvency.
+The quantitative screen flags Vistry across all four families — **cheapness, quality, GARP, and risk** — with 12 of 22 models passing and a composite score of **92.3%** (sector-relative **84%**). That profile fits a classic value setup: the market prices tangible book at a steep discount (P/B **0.27**), earnings yield is high (P/E **6.7**), free cash flow is positive (**~£147m** per screen; **£174.6m** in Yahoo FY2025), and financial health screens pass (Piotroski **7/9**; leverage declining).
 
-For a value investor, the hook is asymmetric: tangible book ~£2.2bn, net debt only ~£144m, cash ~£354m, and FY2025 FCF of ~£175m suggest balance-sheet capacity to survive a downturn. FY2025 net income doubled to £138m and operating profit rose to £223m despite lower revenue—a sign cost/base effects and mix may be stabilising. Partnerships exposure aligns with UK affordable-housing policy tailwinds, and insider buying (~£100k, July 2026) offers modest alignment signal.
+Business quality is mixed rather than pristine. Vistry is a top-tier UK housebuilder (FTSE 100; partnerships/open-market mix, affordable housing exposure) with scale advantages in land, planning, and partnerships — but it is **not** a Buffett-quality compounder (failed Buffett Quality, Economic Moat, Graham Defensive). For a value investor, the hook is **asymmetric upside if normalised earnings revert** while downside is partially cushioned by net debt of only **~£144m** (Yahoo FY2025) against equity of **~£3.3bn**. The screen’s “Strong Buy — neutral timing” (RSI ~59, slightly below 200-day MA) suggests entry on weakness rather than momentum chase. Conviction from the screen itself is modest (**42%**, new signal, one week), which aligns with a turnaround where verification matters more than multiples alone.
 
-The screen’s quality pass is weaker on returns: ROE 4.2% reflects depressed earnings power versus historical ~6–7% EPS (2023: 63.7p vs 2025: 42.2p). Conviction on the screen is low (42%, new signal, one week)—appropriate given profit warnings and H1 2026 loss guidance. Value here is contingent on margin normalisation and delivery of ~£200m adjusted FY profit, not on current run-rate earnings alone.
+---
 
 ## FINANCIAL REVIEW
-**Filing coverage gap.** `filings_index.json` contains one entry classified as **other** (Investegate short-positions page, 28 Feb 2025)—no annual report or interim/half-year results with downloadable body text. Annual and interim analysis below uses **Yahoo `financials_annual.json` fallback**; interim/H1 2026 figures are taken from news headlines only (Trading Update, 8 Jul 2026).
+**Filing coverage gap:** `filings_index.json` contains **one** indexed item (`period: other`) — an Investegate short-positions page (published 28 Feb 2025), not statutory accounts. **No annual or interim filing bodies** are available. Interim and annual RNS results referenced in news (e.g. “Half year results for the period ended 30 June 2025”, “Full year results for the year ended 31 December 2025”) were **not** captured as body extracts. All financial figures below are from **`financials_annual.json` (Yahoo)** unless stated otherwise.
 
-**Income trend (Yahoo, FY ended 31 Dec).**
+**Income and profitability (Yahoo, FY ended 31 Dec):**
 
-| Metric | 2023 | 2024 | 2025 |
+| Metric | 2025 | 2024 | 2023 |
 |--------|------|------|------|
-| Revenue | £3,564m | £3,779m | £3,614m |
-| Operating profit | £300m | £167m | £223m |
-| Net income | £215m | £75m | £138m |
-| Diluted EPS | 63.7p | 21.8p | 42.2p |
-| EBITDA | £462m | £275m | £361m |
+| Revenue | £3,613.7m | £3,779.3m | £3,564.2m |
+| Operating income | £222.6m | £167.0m | £300.0m |
+| Net income | £138.0m | £74.5m | £215.0m |
+| Basic EPS | 42.2p | 22.0p | 64.6p |
+| EBITDA | £361.2m | £274.7m | £461.7m |
 
-Revenue peaked in 2024 then fell 4.4% in 2025; operating profit collapsed in 2024 (likely reflecting price cuts, incentive use, and cost inflation) before partial recovery in 2025. EPS remains ~34% below 2023. Gross profit improved to £390m (10.8% margin) from £292m (7.7%) in 2024, but is still far below 2023’s £534m (15.0%)—consistent with news reports of margin pressure and discounting to drive sales.
+Trend: revenue fell **~4%** in 2025 after 2024’s dip from 2023’s peak; **2024 was an earnings trough** (net income £74.5m) with **partial recovery in 2025** (£138m), though still well below 2023’s £215m. Gross profit improved to **£389.6m** (2025) from **£291.7m** (2024) despite lower revenue, implying margin repair — but operating income remains **~26% below 2023**.
 
-**Cash flow and capital allocation (Yahoo).** FCF strengthened materially: -£75m (2023) → £83m (2024) → £175m (2025). Operating cash flow was £186m in 2025, though working-capital absorption persisted (inventory up £220m; receivables up £45m). Share buybacks of £71m in 2025 and £173m in 2024 were halted after the May 2026 profit warning (news). No common dividend in 2024–2025 per cash-flow data.
+**Cash flow and balance sheet (Yahoo FY2025):**
+- Operating cash flow: **£185.6m**; capex **£11.0m**; **FCF £174.6m** (vs £82.8m in 2024).
+- Cash: **£353.7m**; total debt **£596.0m**; **net debt £144.2m** (down from £180.7m in 2024).
+- Shareholders’ equity: **£3,324.6m**; tangible book **£2,167.8m**.
+- Inventory: **£3,228.3m** (~51% of total assets £6,379.1m) — typical for housebuilders but a key working-capital and impairment risk.
+- Working capital: **£2,616.8m** positive.
+- Defined benefit pension (asset): **£32.2m** — modest relative to scale.
+- Share count reduced via buybacks (**£71.2m** repurchased in 2025 per cash-flow statement).
 
-**Balance sheet (Yahoo, 31 Dec 2025).** Total assets £6.38bn; equity £3.32bn; total debt £596m; net debt £144m; cash £354m. Inventory £3.23bn (~51% of total assets)—typical for housebuilders but a key cyclical sensitivity. Working capital £2.62bn. Defined benefit pension liability £32m (immaterial vs equity). Goodwill/intangibles £1.16bn; tangible book £2.17bn.
+**Interim / trading-update context (news only — no filing body):**
+- **8 Jul 2026:** Trading update — company expects **H1 loss before tax ~£30m** after cash-generation actions; **maintains full-year adjusted profit guidance ~£200m** (yfinance / “Vistry shares plunge on warning over first-half losses”).
+- **13–14 May 2026:** Prior profit warning — “significantly lower” H1 profit; **buyback halted** to prioritise cash and debt reduction (“Vistry Shares Sink 11.5% After Buyback Halt And Profit Warning”).
+- **4 Mar 2026:** Full-year results for year ended 31 Dec 2025 announced (news headline only; no body in index).
 
-**Interim / trading update (news only; no filing body).** On 8 Jul 2026, Vistry guided to an H1 2026 **loss before tax of ~£30m** following cash-generation actions, while **maintaining full-year adjusted profit guidance of ~£200m** (Trading Update; Q2 Earnings Call Highlights, 9 Jul 2026). This implies a heavily H2-weighted recovery and should be treated as unaudited until half-year RNS accounts are available.
+**Short interest (primary filing body — Investegate, Jul 2026 snapshot):** Notable disclosed shorts include **GLG Partners LP 2.24%**, **Schonfeld Strategic Advisors (UK) LLP 2.44%**, **Citadel Advisors LLC 1.19%**, and multiple other funds >0.5%. This corroborates market scepticism beyond the value screen.
 
-**Screen vs accounts consistency.** Screen P/E 6.7 and P/B 0.27 align with depressed earnings on a low market cap relative to £3.3bn book. Reported ROE 4.2% matches £138m net income on average equity. FCF ~£147m on screen vs £175m Yahoo FY2025—minor timing difference, same order of magnitude.
+**Screen metrics cross-check (Yahoo-derived):** ROE **~4.2%** ( depressed vs historical); D/E **~18%**; FCF **~£147m** on screen vs **£174.6m** Yahoo — consistent order of magnitude.
+
+---
 
 ## RISKS AND RED FLAGS
-**Cyclical and operational.** UK housebuilding remains rate- and policy-sensitive (“UK Housebuilder Shares Facing The Biggest Rate And Policy Test Yet”, 19 Jul 2026). May–Jul 2026 profit warnings, H1 loss guidance, and broker forecast cuts signal near-term earnings risk not fully captured by trailing-value metrics. Price-cutting to boost sales (Mar 2026) threatens margin recovery needed to justify book value.
+1. **Near-term earnings deterioration:** H1 2026 guided to **~£30m loss** while FY adj. profit target **~£200m** implies a steep H2 recovery — execution risk is high. No going-concern or covenant language available in indexed filing bodies to assess.
 
-**Governance and leadership.** CEO transition to Adam Daniels (Jul 2026 earnings call) follows a period of leadership uncertainty (Investors’ Chronicle, 4 Mar 2026). Strategy pivot toward partnerships/affordable housing is underway but execution unproven at scale.
+2. **Margin and pricing pressure:** Multiple reports note **price cuts to boost sales** and rising materials/labour costs (“Vistry drags housebuilders lower as it cuts prices to boost sales”, 4 Mar 2026; “Labour’s housebuilding partner warns on profit”, 13 May 2026).
 
-**Legal and regulatory.** Vistry is named in a potential **£4–4.5bn class action** alleging anti-competitive information sharing among major UK housebuilders (30 Jun 2026). The claim requires Competition Appeal Tribunal approval; quantum and liability are highly uncertain but headline risk is material.
+3. **Governance / leadership:** New CEO **Adam Daniels** (Jul 2026 earnings call coverage); prior coverage flagged **“leadership uncertainty”** (Investors’ Chronicle, 4 Mar 2026). Turnaround credibility is untested.
 
-**Market sentiment and liquidity.** Short interest is elevated: filing body extract lists active shorts including GLG Partners (2.24%), Schonfeld UK (2.44%), Citadel Advisors (1.19%), Two Sigma (1.28%) as of Jul 2026. Buyback pause removes a support bid. Investors’ Chronicle flagged liquidity concerns (21 Apr 2026)—not quantifiable from available filings.
+4. **Capital allocation reversal:** **Buyback paused** (May 2026) after active repurchases in 2024–25 — signals cash preservation under stress; reduces a prior shareholder-return pillar.
 
-**Balance-sheet and working capital.** Low net debt is a positive, but £3.2bn inventory and negative working-capital movements in prior years create downside if completions slow or impairments arise. No going-concern, covenant, or contingency language was available from primary filing bodies—a significant research gap.
+5. **Litigation:** Vistry named in a potential **£4bn+ class action** alleging anti-competitive information sharing among major UK housebuilders (yfinance, 30 Jun 2026). Outcome and provisioning **unknown** — not in filing bodies here.
 
-**Filing gap.** Absence of annual report and interim RNS body text prevents verification of management commentary, segment margins, land bank valuation, or audit emphasis-of-matter paragraphs.
+6. **Cyclical / policy exposure:** Sector faces **rates and housing-policy test** (“UK Housebuilder Shares Facing The Biggest Rate And Policy Test Yet”, 19 Jul 2026). Affordable/partnerships model offers some demand visibility but not immunity.
+
+7. **Elevated short interest:** Multiple funds hold **>2%** short positions (Investegate body) — informed opposition to the value thesis.
+
+8. **Liquidity / working capital:** Investors’ Chronicle asked whether to worry about **liquidity levels** (21 Apr 2026). Large inventory and receivables balances warrant monitoring; no primary filing detail on covenants in this pack.
+
+9. **Data quality for research:** Absence of annual report and interim results bodies means **pension sensitivities, impairments, land provisions, and debt covenants cannot be verified** from primary sources in this pack.
+
+---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-heavy on price action and warnings**, thinner on fundamental depth; many items are syndicated or retail-oriented.
+Coverage over the past year is **moderate-to-heavy on price action and warnings**, lighter on structural positives.
 
-**Profit warnings and guidance (material).**
-- *Labour’s housebuilding partner warns on profit after cutting home prices* (Yahoo, 13 May 2026); *Vistry Shares Sink 11.5% After Buyback Halt And Profit Warning* (14 May 2026).
-- *Vistry shares plunge on warning over first-half losses* (Yahoo, 8 Jul 2026); *Trading Update* (8 Jul 2026)—H1 loss ~£30m; FY adjusted profit ~£200m maintained.
-- *Vistry Group Q2 Earnings Call Highlights* (Yahoo, 9 Jul 2026)—new CEO Adam Daniels; leverage reduction focus.
+**Strategy and operations**
+- Focus on **UK housing partnerships** and affordable housing amid margin scrutiny (AD HOC NEWS, 7 Jul & 29 Jun 2026).
+- **Trading Update** (8 Jul 2026): H1 loss ~£30m; **FY adj. profit guidance ~£200m maintained**; leverage reduction under new CEO.
+- **FY2025 results** announced 4 Mar 2026 (headline in alternate news; details not in filing bodies).
 
-**Full-year results and strategy.**
-- *Vistry Group PLC announces full year results for year ended 31 December 2025* (Mar 2026)—FY2025 accounts context; shares fell on margin/sales concerns (*Vistry drags housebuilders lower as it cuts prices*, 4 Mar 2026).
-- Partnership/affordable housing emphasis recurring (e.g. AD HOC NEWS, Jun–Jul 2026).
+**Management and insider activity**
+- **Adam Daniels** appointed CEO; Q2 2026 earnings call (9 Jul 2026).
+- **Insider purchase ~£100k** (simplywall.st, 18 Jul 2026; Kalkine, 15 Jul 2026) — modest signal.
 
-**Legal.**
-- *Housebuilders face £4bn lawsuit over price conduct claims* (Yahoo, 30 Jun 2026)—Vistry named among seven builders.
+**Capital markets**
+- **Buyback halted** and profit warning (13–14 May 2026); earlier **buyback activity** through Mar–May 2026 before pause.
+- **Analyst target cuts** — fair value estimates cut (e.g. ~£5.18 to ~£3.15; yfinance, 7 Jul 2026).
+- **JPMorgan holding disclosure** (1 Jul 2026).
 
-**Analyst and valuation reset.**
-- Fair value estimates cut (~£5.18 to ~£3.15); targets ~£2.10–£3.40 (*Vistry Group Stock Fair Value Moves Lower*, 7 Jul 2026).
-- *Vistry shares under pressure as brokers cut profit forecasts* (Proactive Investors, 13 May 2026).
+**Legal / regulatory**
+- **£4bn+ housebuilder class action** including Vistry (30 Jun 2026).
 
-**Capital allocation and insiders.**
-- Buyback activity through early 2026, then pause (AD HOC NEWS, 1 Jun 2026).
-- *Insider Spends UK£100k Buying More Shares In Vistry Group* (Simply Wall St, 18 Jul 2026).
+**Market sentiment**
+- Shares described as **down ~73–81%** over two years in retail commentary (Twelfth Magpie, May–Jun 2026).
+- Seeking Alpha framed Vistry as **“High Reward And High Risk Turnaround Play”** (18 Jul 2026).
 
-**Sentiment.**
-- Seeking Alpha frames Vistry as “High Reward And High Risk Turnaround Play” (18 Jul 2026).
-- Short-interest register active through Jul 2026 (Investegate short-positions page—the only indexed filing body).
+**Thin areas:** `macro_context.json` is **missing** from the source pack. Primary RNS full-text for results and trading updates is **not indexed** despite news references.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
 Confidence: 0.58
-Rationale: Trailing cheapness and balance-sheet metrics support the quantitative Strong Buy, but missing primary filings, H1 2026 loss guidance, margin compression, and legal/overhang risks mean deep research **partially confirms** the value case while **materially weakening** near-term conviction until interim accounts and FY delivery are verified.
+Rationale: The quantitative Strong Buy is supported by deep discount, improving FY2025 cash generation, and manageable leverage on Yahoo data, but primary filings are absent, H1 2026 is guided to a loss, shorts are elevated, and litigation/execution risks weaken conviction pending verified interim and annual accounts.

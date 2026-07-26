@@ -647,7 +647,143 @@
       "priority": "medium",
       "suggestion": "Attach portfolio sector/cluster manifest to red-flag email pass (top-N sector counts, construction-beta tag) so cross-name Industrials concentration is evidenced without ad-hoc peer folder reads.",
       "recorded_at": "2026-07-26T05:56:57.224302+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Pull Companies House iXBRL/PDF annual and interim accounts for FGP.L (currently 0/3 filings classified annual/interim; CH refetch fetched 0) to unlock pension notes, covenant text, and lease-adjusted net debt.",
+      "recorded_at": "2026-07-26T18:43:49.552866+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add FirstGroup IR allowlist fetch for full-year and half-year results RNS plus presentation PDFs (`firstgroupplc.com/investors`) — gap map scores this 2/2 but it was not executed.",
+      "recorded_at": "2026-07-26T18:43:49.552880+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Cap composite score contribution from “risk” family when Financial Health and Graham Enterprising both fail, or emit explicit balance-sheet override flag for transport names with lease-adjusted D/E >2× and current ratio <1.",
+      "recorded_at": "2026-07-26T18:43:49.552889+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Persist per-model failure reasons in `screening_snapshot.json` (D/E value, current ratio, earnings growth %) so gap-fill does not need to re-derive from Yahoo.",
+      "recorded_at": "2026-07-26T18:43:49.552893+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill pass to reconcile Yahoo revenue with company-reported FY figures when RNS “About FirstGroup” boilerplate or news headlines disagree, and block “accumulate” verdict until resolved or explicitly flagged.",
+      "recorded_at": "2026-07-26T18:43:49.552900+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Key shift:** Verdict moves from **accumulate → caution** (confidence 0.68 → 0.62). The screen’s cheapness and cash conversion hold up, but gap-fill confirms balance-sheet and earnings flags are material—not screening noise—and statutory accounts are still missing to clear them.",
+      "recorded_at": "2026-07-26T18:43:49.552908+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Split quality/moat inputs (trailing FY ROE, margin, leverage) from forward-risk overlays (H1 EPS growth, FCF yield, interim dividend delta) so strong-buy cheapness signals auto-flag when near-term earnings growth is negative and payout is cut.",
+      "recorded_at": "2026-07-26T18:43:49.552912+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch and parse company IR results presentation PDFs (listed in `planned_alternate_sources`) for maintenance vs growth capex and contract-tenor tables not present in RNS body extracts.",
+      "recorded_at": "2026-07-26T18:43:49.552915+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest Companies House iXBRL/PDF statutory accounts for FTSE350 names when IR allowlist bodies lack covenant, pension wind-up and viability stress language.",
+      "recorded_at": "2026-07-26T18:43:49.552919+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Reconcile screen FCF (£15.7m) against Yahoo/filing FCF (£25.2m FY2025) in model detail output and expose the formula so sub-5% FCF yield failures are auditable.",
+      "recorded_at": "2026-07-26T18:43:49.552924+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill pass to populate `research_verdict`, `research_risk_level`, and `research_confidence` on `screening_snapshot.json` so email/watchlist overlays do not rely on null fields.",
+      "recorded_at": "2026-07-26T18:43:49.552928+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Refetch failed IR PDF bodies (April 2026 trading update `ir_a9733d0de6aec27d`; body refetch attempted 1, fetched 0 per `gap_fill_source_map.json`) before gap-fill runs complete.",
+      "recorded_at": "2026-07-26T18:43:49.552931+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extract annual report risk register (pp 84–88) and related-party notes from `1-2025-annual-report.pdf` — current PDF extract stops at strategic/governance summaries and omits statutory disclosure tables.",
+      "recorded_at": "2026-07-26T18:43:49.552937+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Compute FCF Yield from filing cash-flow statement (OCF − capex) when bodies available; flag and down-weight Yahoo TTM when it diverges >50% from latest annual filing FCF (HIK.L: −£66m screen vs +$119m filing).",
+      "recorded_at": "2026-07-26T18:43:49.552943+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add governance overlay for founder/family CEO + dual executive-chair structures (Darwazah family pattern) and null-CFO states, feeding research_verdict independently of cheapness composite.",
+      "recorded_at": "2026-07-26T18:43:49.552946+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memo to reconcile screen key_metrics.FCF against filing-derived FCF with explicit bridge (legal settlement, WC, capex lines) before Earnings Quality / FCF Yield failures are cited as red flags.",
+      "recorded_at": "2026-07-26T18:43:49.552950+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Key takeaway:** The watchlist concern on \"structurally negative FCF\" is **partially defused** — FY2025 filing cash flow shows positive FCF (~$119m), with the screen's −£66.1m likely a vendor TTM artefact. The dividend is **not fully covered on a reported basis** in 2025, and leverage is **rising**, so the name moves from watchlist toward **accumulate** rather than outright pass, with confidence lifted modestly to 0.71. Full memo saved to `output/research/HIK.L/research.md`.",
+      "recorded_at": "2026-07-26T18:43:49.552960+00:00"
     }
   ],
-  "updated_at": "2026-07-26T05:56:57.224305+00:00"
+  "updated_at": "2026-07-26T18:43:49.552962+00:00"
 }

@@ -1,86 +1,111 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 1 · Updated 2026-07-26T05:50:46.135813+00:00 · Mode: initial_
+_Version 1 · Updated 2026-07-26T18:30:31.172795+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Morgan Sindall Group plc is a UK-listed construction and regeneration group (Fit Out, Construction, Infrastructure, Partnership Housing and related divisions) that the quantitative screen rates **Strong Buy** on cheapness, quality, dividend, GARP and risk (16/22 models; composite 75%, sector-relative 78%). Yahoo fallback financials show a clear multi-year improvement: revenue from £3.61bn (2022) to £5.02bn (2025), statutory pre-tax profit from £85m to £232m, and free cash flow of £171m in 2025, alongside net cash (cash £591m vs total debt £133m). The valuation hook is modest multiples (P/E 11.8×, P/B 2.7×, yield 3.6%) against ROE of 26.1% and sustained shareholder returns (dividends paid £66m; buybacks £41m in 2025). The key debate is whether cyclical UK construction, subdued housing and working-capital intensity can interrupt momentum, or whether infrastructure, fit-out strength and a record H1 2026 (per news only) extend the compounding run. **Critical gap:** no annual or interim RNS/Companies House body extracts are present in the research pack — primary filing verification is unavailable here.
+Morgan Sindall Group is a diversified UK construction and regeneration contractor (Fit Out, Construction, Infrastructure, Property Services, Urban Regeneration, and housing-related activities) that the quantitative screen rates as a **strong buy** on cheapness, quality, dividend, GARP, and risk metrics (16/22 models; composite 75%). At roughly 11.8× P/E, 2.7× P/B, 3.6% yield, and 26.1% ROE, the stock screens as inexpensive relative to a multi-year record of profit and cash growth. Management has described H1 2026 (to 30 June) as a “record first half,” with infrastructure and fit-out offsetting housing weakness — but without statutory filing extracts, those interim figures cannot be verified here. The central debate is whether durable operational excellence and order-book visibility justify a quality-compounder label, or whether UK construction cyclicality, working-capital intensity, and the absence of primary filing disclosure leave the screen signal ahead of the evidence.
+
+---
 
 ## INVESTMENT THESIS
-For a value investor, MGNS screens as a rare UK contractor combining **earnings growth, balance-sheet strength and income**. The screen passes 16 of 22 models across five factor families — including Graham Enterprising, Acquirer’s Multiple, Piotroski F-Score, Magic Formula, Buffett Quality, Dividend Growth, FCF Yield and Financial Health — with full data quality (20/20 metrics). Headline metrics align with Yahoo-backed fundamentals: P/E 11.8× (consistent with ~£175m net income and ~46.6m shares), P/B 2.7× vs equity of £749m, debt/equity 18%, and FCF yield supported by £171m FCF (2025). Operating income has more than doubled from £84m (2022) to £226m (2025), while the group has remained in a **net-cash position** throughout (cash rose from £421m to £591m; total debt stable at ~£120–144m). Capital return is disciplined: dividends paid rose from £44m (2022) to £66m (2025), with £41m of buybacks in 2025. Business quality is corroborated qualitatively by news flow — management describing a decade of record profits (ex-COVID), a “record first half” in H1 2026 with Fit Out, Construction and Infrastructure offsetting housing weakness, and repeated references to order-book support — though those forward indicators **cannot be verified from filing bodies in this pack**. The screen’s sector-relative score (78%) suggests attractiveness versus FTSE Industrials peers, not merely absolute cheapness. Timing is neutral (RSI ~39; price slightly below 200-day MA), which may suit phased accumulation rather than momentum chasing.
+For a value investor, MGNS combines **statistical cheapness with operational quality** in a sector that rarely passes both tests simultaneously.
+
+**Quantitative alignment:** The screen passes five factor families — cheapness, quality, dividend, GARP, and risk — with full data coverage (20/20 metrics). Standout inputs include P/E 11.8, P/B 2.72, earnings yield, FCF yield (~£142m per screen; £171m per Yahoo FY2025), debt/equity ~18%, and Piotroski F-Score 8/9 (only asset-turnover improvement failed). Models passed span Graham Enterprising, Lynch/Neff PEG variants, Magic Formula, Acquirer’s Multiple, Buffett Quality, Dividend Growth, Composite Value, Earnings Quality, and Financial Health. Failures (Graham Defensive, Net-Net, Deep Value, Economic Moat, High Dividend Yield) are consistent with a profitable, going-concern contractor rather than a distressed or deep-net-asset play — not a contradiction of the strong-buy signal.
+
+**Business quality (secondary evidence):** Yahoo annual data (see Financial Review) show revenue rising from £3.6bn (FY2022) to £5.0bn (FY2025), net income from £61m to £175m, and FY2025 free cash flow of £171m — a compounder-like trajectory outside COVID-disrupted years. Balance sheet metrics support the risk family pass: cash £591m versus total debt £133m at FY2025 year-end, and equity up 16% year-on-year to £749m. News flow over the past year reinforces operational momentum: full-year profit outlook upgrade (April 2026), upbeat trading updates, and July 2026 interim headlines citing record H1 performance and order-book support.
+
+**Valuation hook:** Low-teens earnings multiple on high-teens ROE, positive FCF, and rising dividends is the classic “quality at a reasonable price” setup the screen is designed to surface. Timing is neutral (RSI ~39; price slightly below 200-day MA), suggesting the strong-buy signal is not momentum-chasing.
+
+---
 
 ## FINANCIAL REVIEW
-**Source hierarchy:** `filings_index.json` contains **zero filings** (0 annual, 0 interim, 0 other; 0 body extracts under `filings/bodies/`). All figures below are from **`financials_annual.json` (Yahoo fallback)** unless noted. `quarterly_income` is empty. **`macro_context.json` is absent.**
+**Primary source gap:** `filings_index.json` lists **zero** UK RNS or Companies House filings (annual: 0, interim: 0, with_body: 0). No text extracts exist under `filings/bodies/`. Going-concern, pension, covenant, and contingency language from statutory accounts **cannot be cited**. Interim coverage is limited to news/RNS titles (e.g. “RESULTS FOR THE HALF YEAR (HY) ENDED 30 JUNE 2026”, 23 July 2026) without numeric body text.
 
-### Annual trend (Yahoo fallback)
+**All figures below are from `financials_annual.json` (Yahoo) — explicit fallback.**
 
-| Year | Revenue (£m) | Operating income (£m) | Pre-tax profit (£m) | Net income (£m) | EBITDA (£m) | FCF (£m) | Cash (£m) | Total debt (£m) |
-|------|-------------|----------------------|---------------------|-----------------|-------------|----------|-----------|-----------------|
-| 2022 | 3,612 | 84 | 85 | 61 | 113 | 43 | 421 | 134 |
-| 2023 | 4,118 | 125 | 144 | 118 | 176 | 181 | 541 | 144 |
-| 2024 | 4,546 | 180 | 172 | 132 | 209 | 111 | 544 | 119 |
-| 2025 | 5,019 | 226 | 232 | 175 | 272 | 171 | 591 | 133 |
+### Annual trend (FY2022–FY2025)
 
-**Trend commentary**
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue (£m) | 3,612 | 4,118 | 4,546 | 5,019 |
+| Operating income (£m) | 84 | 125 | 180 | 226 |
+| Net income (£m) | 61 | 118 | 132 | 175 |
+| Diluted EPS (£) | 1.30 | 2.50 | 2.72 | n/a* |
+| EBITDA (£m) | 113 | 176 | 209 | 272 |
+| Free cash flow (£m) | 43 | 181 | 111 | 171 |
+| Cash (£m) | 421 | 541 | 544 | 591 |
+| Total debt (£m) | 134 | 144 | 119 | 133 |
+| Shareholders’ equity (£m) | 496 | 568 | 647 | 749 |
+| Working capital (£m) | 222 | 257 | 305 | 373 |
 
-- **Revenue:** ~11% CAGR 2022–2025; +10% YoY in 2025 to £5.02bn.
-- **Profitability:** Statutory pre-tax profit up ~2.7× from 2022 (£85m) to 2025 (£232m). Operating margin expanded materially (operating income/revenue: 2.3% → 4.5%). Yahoo records unusual write-offs of £21m (2024) and £2.5m (2025), which modestly depress reported earnings vs normalised figures — adjusted PBT/order-book metrics **not available** without primary filings.
-- **Cash generation:** FCF volatile but strong: £181m (2023), £111m (2024), £171m (2025). Operating cash flow £187m (2025). Working-capital outflows in 2025 (inventory +£127m; receivables +£111m) reflect contract growth — typical for the sector but a cyclical sensitivity.
-- **Balance sheet:** Net cash implied ~£458m (cash £591m less debt £133m, 2025). Stockholders’ equity £749m; tangible book £531m. Working capital £373m. Inventory/work-in-progress £603m; receivables £468m — combined ~£1.07bn, highlighting balance-sheet intensity.
-- **Shareholder returns:** Dividends paid £44m → £66m (2022–2025); buybacks £41m (2025), £47m (2024). Net share count ~46.6m ordinary shares (2025).
-- **Interest:** Net interest income £6.9m (2025) — cash-rich profile.
+*Yahoo did not populate diluted EPS for FY2025 in the extract; implied EPS ≈ £3.75 on ~46.6m ordinary shares (175m ÷ 46.6m).
 
-### Interim gap
+**Profitability:** Revenue CAGR FY2022–FY2025 ≈ 12%. Net income nearly tripled over the period. FY2025 operating margin ~4.5% (226/5,019) and net margin ~3.5% — modest in absolute terms but improving consistently and typical for UK contracting at scale.
 
-The filings index lists **no half-year or trading-update RNS bodies**. News references **“RESULTS FOR THE HALF YEAR (HY) ENDED 30 JUNE 2026”** (23 Jul 2026, TradingView/Google News) and Yahoo’s **“Morgan Sindall Group H1 Earnings Call Highlights”** (23 Jul 2026), where management described a “record first half” with revenue, profit and cash up, and divisional mix (Fit Out/Construction/Infrastructure strong; housing weak). **No interim figures** (revenue, PBT, order book, net cash) can be cited from primary sources in this pack.
+**Cash and capital allocation:** FY2025 operating cash flow £187m; capex £17m; FCF £171m. Dividends paid £66m (up from £56m FY2024). Net share repurchases £28m (buybacks £41m less issuance £13m). The group appears to self-fund growth, dividends, and buybacks without balance-sheet strain.
 
-### Items unavailable without filings
+**Balance sheet / working capital:** Net cash position (cash £591m less total debt £133m) ≈ **£458m** at FY2025. Debt/equity ~18% aligns with the screen. Working capital rose £68m YoY to £373m, driven by inventory/WIP (£603m, +27%) and receivables (£468m, +27%) — consistent with revenue growth but a watchpoint for cash conversion in a downturn. FY2025 FCF absorbed a £21m working-capital outflow.
 
-Secured order book, preferred-bidder workload, adjusted PBT, dividend per share, average daily net cash, segment P&L, going-concern wording, covenant headroom, contingent liabilities and pension scheme detail are **not present** in the available source set. Verify-before-trade on these is essential.
+**Quality checks:** Piotroski 8/9 (screen) corroborates improving ROA, declining leverage, OCF > net income, and no dilution. Unusual/write-off items (£2.5m FY2025; £21m FY2024) are immaterial relative to profit.
+
+### Interim (H1 FY2026)
+
+An RNS announcement for half-year results to **30 June 2026** is indexed in news (23 July 2026), and a Yahoo earnings-call summary describes a “record first half” with revenue, profit, and cash all rising, Fit Out/Construction/Infrastructure strong, housing-related markets weak. **No interim filing body is available; interim financials are not verified in this pack.**
+
+### Gaps
+
+- No FY2025 annual report, FY2024 annual report, or H1 2026 RNS body in the filing corpus.
+- No segment breakdown, order-book figure, or pension/covenant disclosure from primary filings.
+- `quarterly_income` in Yahoo is empty.
+- `macro_context.json` missing — no offline regime overlay.
+
+---
 
 ## RISKS AND RED FLAGS
-**Primary filing gap (material)**  
-With zero RNS/Companies House body extracts, regulatory risk language (going concern, contingencies, covenants, pension disclosures) **cannot be assessed from primary sources**. This is the largest research limitation.
+**Filing disclosure vacuum:** The absence of statutory accounts and RNS body text is the largest research red flag. Pension obligations, banking covenants, contract provisions, related-party transactions, and going-concern assessments cannot be reviewed from primary sources in this pack.
 
-**Cyclical and market**  
-UK construction and regeneration remain exposed to government spending cycles, interest rates, inflation and private-housing demand. News consistently flags housing-related weakness alongside infrastructure/fit-out strength — a mixed macro backdrop that screens may under-weight.
+**Cyclical and sector risks:** UK construction and regeneration demand is inherently cyclical. Public-sector pipeline visibility helps, but margin compression, project delays, and client insolvency remain sector-wide risks not fully captured by backward-looking screens.
 
-**Working capital and contract risk**  
-Yahoo data show rising inventory (£603m) and receivables (£468m) in 2025, with negative working-capital movement in operating cash flow. In a downturn, collection delays and cost overruns are sector-standard risks not fully captured by value screens.
+**Working-capital intensity:** FY2025 inventory/WIP (£603m) and receivables (£468m) are large relative to equity (£749m). In a revenue slowdown, cash conversion could deteriorate quickly — the screen’s risk pass reflects low leverage, not immunity to WC swings.
 
-**Earnings quality**  
-Write-offs of £21m (2024) and £2.5m (2025) per Yahoo suggest episodic contract or provision charges. Without filing footnotes, magnitude and recurrence cannot be judged.
+**Segment mix:** News summaries flag **weakness in housing-related markets** (H1 2026 call) while infrastructure and fit-out carry results. A prolonged housing downturn could drag group returns even if other divisions hold up.
 
-**Balance sheet**  
-Net-cash profile is a positive, but capital lease obligations (£74m total; £49m long-term) and provisions (£89m current + £18m long-term) add off-balance-sheet-style commitments. Yahoo shows negligible pension liabilities in historical balance sheets (2022–2023); **2025 pension position not confirmed** without filings.
+**Contract and execution risk:** Fixed-price contracting, supply-chain inflation, and labour availability can erode margins with limited screen visibility. FY2024–FY2025 write-offs (£21m; £2.5m) are small but remind that provisioning risk exists.
 
-**Governance and leadership**  
-Founder-CEO John Morgan remains closely associated with strategy (per H1 2026 earnings-call coverage). Decentralised divisional model mitigates single-point failure but concentration of strategic vision is a consideration.
+**Governance / capital structure:** A May 2026 headline references a “fresh share issue,” which warrants verification in the annual report (not available here). Founder/chair John Morgan’s long tenure and employee-ownership culture are positives for alignment but concentrate leadership dependency.
 
-**Equity issuance**  
-News headline (21 May 2026): “fresh share issue keeps UK construction player in focus” (AD HOC NEWS) — potential dilution; terms not verified in this pack.
+**Competitive positioning:** The screen **failed Economic Moat** — contracting is competitive; the investment case rests on execution track record rather than structural barriers.
 
-**Competitive**  
-Fragmented UK contracting market; margin discipline vs volume growth is an ongoing trade-off (management commentary in news, not filings).
+**Pension:** Yahoo balance sheet shows negligible pension liabilities in recent years (£0.2m non-current in FY2022; zero in FY2023+), but this cannot be confirmed without Companies House accounts.
+
+---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate in quantity** (35 articles in manifest) but **thin on deep sell-side or regulatory analysis**; many items are dividend-stock listicles or AD HOC NEWS templates.
+Coverage over the past year is **moderately rich on trading tone but thin on investigative depth**; much is syndicated “AD HOC NEWS” or dividend-listicles.
 
-**Material items**
+**Results and outlook**
+- *“REG - Morgan Sindall Grp - RESULTS FOR THE HALF YEAR (HY) ENDED 30 JUNE 2026”* (23 July 2026) — interim release.
+- *“Morgan Sindall Group H1 Earnings Call Highlights”* (23 July 2026, yfinance) — management cited a “record first half”; Fit Out, Construction, Infrastructure strong; housing-related markets weak.
+- *“Morgan Sindall shares jump 10% after construction group upgrades full-year profit outlook”* (16 April 2026, Yahoo Finance UK / Proactive Investors).
+- *“Morgan Sindall Group H2 Earnings Call Highlights”* (25 February 2026, yfinance) — “good year”; decade of record profits except COVID.
+- *“Morgan Sindall jumps 7% after upbeat trading update”* (12 February 2026, Yahoo Finance UK).
 
-- **24 Jul 2026** — “Morgan Sindall stock trades near recent highs as infrastructure and fit-out demand supports earnings” (AD HOC NEWS).
-- **23 Jul 2026** — “Morgan Sindall Group H1 Earnings Call Highlights” (Yahoo): “record first half”; Fit Out, Construction, Infrastructure strong; housing weak.
-- **23 Jul 2026** — “REG - Morgan Sindall Grp - RESULTS FOR THE HALF YEAR (HY) ENDED 30 JUNE 2026” (TradingView).
-- **16 Apr 2026** — “Morgan Sindall shares jump 10% after construction group upgrades full-year profit outlook” (Yahoo Finance UK / Proactive Investors).
-- **12 Feb 2026** — “Morgan Sindall jumps 7% after upbeat trading update” (Yahoo Finance UK).
-- **25 Feb 2026** — “Morgan Sindall Group H2 Earnings Call Highlights” (Yahoo): “good year,” decade of record profits except COVID; cash and forward workload emphasised.
-- **25 Feb 2026** — “Morgan Sindall looks to housing to drive growth” (Investors’ Chronicle).
-- **21 May 2026** — “fresh share issue keeps UK construction player in focus” (AD HOC NEWS).
-- **12 May 2026** — “Recent FTSE 250 trading update” (AD HOC NEWS), coinciding with full-year results season.
+**Strategy**
+- *“Morgan Sindall looks to housing to drive growth”* (25 February 2026, Investors’ Chronicle).
 
-**Thin areas:** No major M&A, management change or regulatory enforcement headlines. Repeated order-book/infrastructure templates without primary filing numbers. H1 2026 operational detail exists only in news/earnings-call summaries.
+**Capital markets**
+- *“Morgan Sindall Group plc stock: fresh share issue keeps UK construction player in foc”* (21 May 2026, AD HOC NEWS) — share issuance flagged; details not in filing pack.
+
+**Market commentary**
+- Multiple simplywall.st and Yahoo pieces listing MGNS among UK dividend stocks (June–July 2026).
+- Repeated AD HOC NEWS items (July 2026) citing order-book strength and infrastructure/fit-out demand.
+
+**Not observed in manifest:** Material M&A, regulatory enforcement, or management departures. No pension/covenant-specific investigative coverage despite targeted alternate-news queries.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Yahoo-backed financials and a broad quantitative Strong Buy align on cheap, cash-generative quality, but absent primary filings and interim RNS bodies prevent full confirmation of order book, adjusted earnings and regulatory risk disclosures.
+Confidence: 0.68
+Rationale: Yahoo financials and consistent news of record trading support the screen’s cheap-quality strong-buy case, but the complete absence of primary filing bodies prevents verification of interim results, pensions, covenants, and segment risks before full conviction.
