@@ -34,15 +34,11 @@ FIRST_PARTY_MODEL_IDS = frozenset({"default", "composer-2.5", "grok-4.5"})
 
 DEFAULT_POLICY_PATH = Path("docs/data/library/policy.json")
 DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro subscription (included pool metadata)
-DEFAULT_WEEKLY_BUDGET_FRACTION = 0.10  # Legacy plan_fraction mode only
-DEFAULT_WEEKLY_USAGE_GBP = 30.0  # Usage-based library research envelope
-DEFAULT_GBP_USD_RATE = 1.27  # Approx; override via budget.gbp_usd_rate
 DEFAULT_SPEND_CHECKPOINT_USD = 60.0
 DEFAULT_WEEKLY_OPS_CAP_USD = 50.0
 SPEND_POOL_WEEKLY_OPS = "weekly_ops"
 SPEND_POOL_AD_HOC = "ad_hoc"
 VALID_SPEND_POOLS = frozenset({SPEND_POOL_WEEKLY_OPS, SPEND_POOL_AD_HOC})
-DEFAULT_ALLOCATION_BASIS = "usage_weekly_gbp"  # or "plan_fraction"
 DEFAULT_PLAN_REFRESH_DAY = 8  # User billing cycle day-of-month
 DEFAULT_FOCUS_MARKET = "sp500"
 # Flag constraining when remaining weekly USD is below this share of the envelope.
@@ -176,16 +172,6 @@ def default_policy() -> dict[str, Any]:
         "budget": {
             "plan_name": "Cursor Pro",
             "plan_monthly_usd": DEFAULT_PLAN_MONTHLY_USD,
-            # Subscription ($20) ≠ allowable usage. Library research is capped by a
-            # usage-based weekly GBP envelope (default £30), converted to USD for the ledger.
-            "allocation_basis": DEFAULT_ALLOCATION_BASIS,
-            "weekly_usage_gbp": DEFAULT_WEEKLY_USAGE_GBP,
-            "gbp_usd_rate": DEFAULT_GBP_USD_RATE,
-            "weekly_library_fraction": DEFAULT_WEEKLY_BUDGET_FRACTION,
-            "weekly_library_usd": round(
-                DEFAULT_WEEKLY_USAGE_GBP * DEFAULT_GBP_USD_RATE, 2
-            ),
-            "enforce_weekly_research_cap": True,
             "plan_refresh_day_of_month": DEFAULT_PLAN_REFRESH_DAY,
             "surplus_day_before_refresh": True,
             "estimated_spend_usd_this_cycle": 0.0,
@@ -196,13 +182,11 @@ def default_policy() -> dict[str, Any]:
             "enforce_weekly_ops_cap": True,
             "estimated_spend_weekly_ops_usd_this_week": 0.0,
             "note": (
-                "Cursor subscription (plan_monthly_usd) is metadata only — included pool "
-                "can be far below on-demand usage. weekly_ops_cap_usd ring-fences the "
-                "orchestrator Sunday bundle (email report + ladder selective research). "
-                "Ad-hoc depth passes use ladder.spend_since_checkpoint_usd instead. "
-                "Legacy weekly_library_usd (£30 usage envelope) still gates ad-hoc ladder "
-                "runs that use --unrestricted-budget without weekly_ops. Cursor does not "
-                "expose remaining credits; spend is estimated from agent runs."
+                "Cursor subscription (plan_monthly_usd) is metadata only. "
+                "weekly_ops_cap_usd ring-fences the orchestrator Sunday bundle "
+                "(email report + ladder selective research). Ad-hoc depth passes "
+                "use ladder.spend_since_checkpoint_usd. Spend is estimated from "
+                "agent runs — Cursor does not expose remaining credits."
             ),
         },
         "model_review": {
@@ -244,14 +228,6 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})
         merged.update(file_section)
-        if key == "budget" and "allocation_basis" not in file_section:
-            # Legacy files: keep plan_fraction unless they already set weekly_usage_gbp.
-            if "weekly_usage_gbp" in file_section:
-                merged["allocation_basis"] = "usage_weekly_gbp"
-            else:
-                merged["allocation_basis"] = "plan_fraction"
-                merged.pop("weekly_usage_gbp", None)
-                merged.pop("gbp_usd_rate", None)
         base[key] = merged
     base["budget"] = normalize_budget(base.get("budget"))
     if "ladder" in data or True:
@@ -278,39 +254,10 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
 
 
 def normalize_budget(budget: dict[str, Any] | None) -> dict[str, Any]:
-    """Normalize budget fields; derive weekly_library_usd from allocation basis."""
+    """Normalize budget fields for the two-pool spend model."""
     budget = dict(budget or {})
     monthly = float(budget.get("plan_monthly_usd") or DEFAULT_PLAN_MONTHLY_USD)
-    frac = float(budget.get("weekly_library_fraction") or DEFAULT_WEEKLY_BUDGET_FRACTION)
-    raw_basis = budget.get("allocation_basis")
-    if raw_basis is None or str(raw_basis).strip() == "":
-        # Legacy policies: no allocation_basis → plan_fraction unless usage GBP is set.
-        basis = (
-            "usage_weekly_gbp"
-            if budget.get("weekly_usage_gbp") is not None
-            else "plan_fraction"
-        )
-    else:
-        basis = str(raw_basis).strip().lower()
-    if basis not in {"usage_weekly_gbp", "plan_fraction"}:
-        basis = DEFAULT_ALLOCATION_BASIS
     budget["plan_monthly_usd"] = monthly
-    budget["weekly_library_fraction"] = frac
-    budget["allocation_basis"] = basis
-    if basis == "usage_weekly_gbp":
-        gbp = float(budget.get("weekly_usage_gbp") or DEFAULT_WEEKLY_USAGE_GBP)
-        rate = float(budget.get("gbp_usd_rate") or DEFAULT_GBP_USD_RATE)
-        if gbp < 0:
-            gbp = 0.0
-        if rate <= 0:
-            rate = DEFAULT_GBP_USD_RATE
-        budget["weekly_usage_gbp"] = round(gbp, 2)
-        budget["gbp_usd_rate"] = round(rate, 4)
-        budget["weekly_library_usd"] = round(gbp * rate, 2)
-    else:
-        budget["weekly_library_usd"] = round(monthly * frac, 2)
-    if "enforce_weekly_research_cap" not in budget:
-        budget["enforce_weekly_research_cap"] = basis == "usage_weekly_gbp"
     cap = float(budget.get("weekly_ops_cap_usd") or DEFAULT_WEEKLY_OPS_CAP_USD)
     budget["weekly_ops_cap_usd"] = round(max(0.0, cap), 2)
     if "enforce_weekly_ops_cap" not in budget:
@@ -318,6 +265,15 @@ def normalize_budget(budget: dict[str, Any] | None) -> dict[str, Any]:
     budget["estimated_spend_weekly_ops_usd_this_week"] = round(
         float(budget.get("estimated_spend_weekly_ops_usd_this_week") or 0.0), 4
     )
+    for legacy_key in (
+        "allocation_basis",
+        "weekly_usage_gbp",
+        "gbp_usd_rate",
+        "weekly_library_fraction",
+        "weekly_library_usd",
+        "enforce_weekly_research_cap",
+    ):
+        budget.pop(legacy_key, None)
     return budget
 
 
@@ -395,39 +351,12 @@ def is_surplus_spend_day(
     return day == refresh - 1
 
 
-def weekly_budget_usd(policy: dict[str, Any] | None = None) -> float:
-    policy = policy or load_policy()
-    budget = normalize_budget(policy.get("budget"))
-    return float(budget.get("weekly_library_usd") or 0.0)
-
-
-def remaining_weekly_budget_usd(policy: dict[str, Any] | None = None) -> float:
-    policy = policy or load_policy()
-    budget = normalize_budget(policy.get("budget"))
-    weekly = float(budget.get("weekly_library_usd") or 0.0)
-    spent = float(budget.get("estimated_spend_usd_this_week") or 0.0)
-    return max(0.0, round(weekly - spent, 4))
-
-
-def enforce_weekly_research_cap(policy: dict[str, Any] | None = None) -> bool:
-    """Whether offline library research should stop when the weekly dollar strand is spent."""
-    policy = policy or load_policy()
-    budget = policy.get("budget") or {}
-    return bool(budget.get("enforce_weekly_research_cap", False))
-
-
-def weekly_budget_status(
+def weekly_ops_budget_status(
     policy: dict[str, Any] | None = None,
     *,
     estimated_memo_usd: float | None = None,
 ) -> dict[str, Any]:
-    """
-    Snapshot of the weekly usage envelope and whether it is constraining research.
-
-    ``constraining`` is True when the weekly cap is enforced and remaining budget
-    cannot fund another estimated memo (research will be gated / skipped).
-    ``near_limit`` is True when remaining is ≤ 20% of the weekly envelope.
-    """
+    """Ring-fenced envelope for orchestrator weekly runs (email + ladder research)."""
     policy = policy or load_policy()
     budget = normalize_budget(policy.get("budget"))
     ladder = policy.get("ladder") or {}
@@ -436,25 +365,22 @@ def weekly_budget_status(
         if estimated_memo_usd is not None
         else (ladder.get("estimated_memo_usd") or 0.4)
     )
-    weekly = float(budget.get("weekly_library_usd") or 0.0)
-    spent = float(budget.get("estimated_spend_usd_this_week") or 0.0)
-    remaining = max(0.0, round(weekly - spent, 4))
-    enforce = bool(budget.get("enforce_weekly_research_cap", False))
+    cap = float(budget.get("weekly_ops_cap_usd") or DEFAULT_WEEKLY_OPS_CAP_USD)
+    spent_ops = float(budget.get("estimated_spend_weekly_ops_usd_this_week") or 0.0)
+    spent_total = float(budget.get("estimated_spend_usd_this_week") or 0.0)
+    remaining = max(0.0, round(cap - spent_ops, 4))
+    enforce = bool(budget.get("enforce_weekly_ops_cap", True))
     constraining = bool(enforce and remaining < memo)
-    near_limit = bool(
-        enforce and weekly > 0 and (remaining / weekly) <= NEAR_LIMIT_REMAINING_FRACTION
-    )
-    basis = str(budget.get("allocation_basis") or DEFAULT_ALLOCATION_BASIS)
+    near_limit = bool(enforce and cap > 0 and (remaining / cap) <= NEAR_LIMIT_REMAINING_FRACTION)
     return {
-        "allocation_basis": basis,
+        "pool": SPEND_POOL_WEEKLY_OPS,
         "plan_monthly_usd": float(budget.get("plan_monthly_usd") or 0.0),
-        "weekly_usage_gbp": budget.get("weekly_usage_gbp"),
-        "gbp_usd_rate": budget.get("gbp_usd_rate"),
-        "weekly_library_usd": weekly,
-        "estimated_spend_usd_this_week": spent,
-        "remaining_weekly_usd": remaining,
+        "weekly_ops_cap_usd": cap,
+        "estimated_spend_weekly_ops_usd_this_week": spent_ops,
+        "estimated_spend_usd_this_week": spent_total,
+        "remaining_weekly_ops_usd": remaining,
         "estimated_memo_usd": memo,
-        "enforce_weekly_research_cap": enforce,
+        "enforce_weekly_ops_cap": enforce,
         "constraining": constraining,
         "near_limit": near_limit,
         "flag": (
@@ -463,12 +389,11 @@ def weekly_budget_status(
             else ("near_limit" if near_limit else ("enforced" if enforce else "unconstrained"))
         ),
         "note": (
-            "Weekly usage envelope is constraining selective research — raise "
-            "weekly_usage_gbp, wait for week rollover, or set "
-            "enforce_weekly_research_cap=false."
+            "Weekly orchestrator envelope is constraining — raise weekly_ops_cap_usd, "
+            "wait for week rollover, or set enforce_weekly_ops_cap=false."
             if constraining
             else (
-                "Weekly usage envelope nearly spent (≤20% remaining)."
+                "Weekly orchestrator envelope nearly spent (≤20% remaining)."
                 if near_limit
                 else None
             )
@@ -500,53 +425,6 @@ def remaining_weekly_ops_usd(policy: dict[str, Any] | None = None) -> float:
     cap = float(budget.get("weekly_ops_cap_usd") or DEFAULT_WEEKLY_OPS_CAP_USD)
     spent = float(budget.get("estimated_spend_weekly_ops_usd_this_week") or 0.0)
     return max(0.0, round(cap - spent, 4))
-
-
-def weekly_ops_budget_status(
-    policy: dict[str, Any] | None = None,
-    *,
-    estimated_memo_usd: float | None = None,
-) -> dict[str, Any]:
-    """Ring-fenced envelope for orchestrator weekly runs (email + ladder research)."""
-    policy = policy or load_policy()
-    budget = normalize_budget(policy.get("budget"))
-    ladder = policy.get("ladder") or {}
-    memo = float(
-        estimated_memo_usd
-        if estimated_memo_usd is not None
-        else (ladder.get("estimated_memo_usd") or 0.4)
-    )
-    cap = float(budget.get("weekly_ops_cap_usd") or DEFAULT_WEEKLY_OPS_CAP_USD)
-    spent = float(budget.get("estimated_spend_weekly_ops_usd_this_week") or 0.0)
-    remaining = max(0.0, round(cap - spent, 4))
-    enforce = bool(budget.get("enforce_weekly_ops_cap", True))
-    constraining = bool(enforce and remaining < memo)
-    near_limit = bool(enforce and cap > 0 and (remaining / cap) <= NEAR_LIMIT_REMAINING_FRACTION)
-    return {
-        "pool": SPEND_POOL_WEEKLY_OPS,
-        "weekly_ops_cap_usd": cap,
-        "estimated_spend_weekly_ops_usd_this_week": spent,
-        "remaining_weekly_ops_usd": remaining,
-        "estimated_memo_usd": memo,
-        "enforce_weekly_ops_cap": enforce,
-        "constraining": constraining,
-        "near_limit": near_limit,
-        "flag": (
-            "constraining"
-            if constraining
-            else ("near_limit" if near_limit else ("enforced" if enforce else "unconstrained"))
-        ),
-        "note": (
-            "Weekly orchestrator envelope is constraining — raise weekly_ops_cap_usd, "
-            "wait for week rollover, or set enforce_weekly_ops_cap=false."
-            if constraining
-            else (
-                "Weekly orchestrator envelope nearly spent (≤20% remaining)."
-                if near_limit
-                else None
-            )
-        ),
-    }
 
 
 def _sync_week_rollover(budget: dict[str, Any]) -> None:
@@ -688,10 +566,9 @@ def grow_ticker_budget(
     """
     Translate plan budget policy into a fundamentals grow size for the focus market.
 
-    Fundamentals grow is Yahoo-side (no Cursor credits). Research is capped by
-    ``ladder.research_hard_cap`` (and optionally a weekly dollar strand when
-    ``budget.enforce_weekly_research_cap`` is true). On surplus day we accelerate
-    fundamentals grow before the plan refresh.
+    Fundamentals grow is Yahoo-side (no Cursor credits). Orchestrator selective
+    research is capped by ``budget.weekly_ops_cap_usd``. On surplus day we
+    accelerate fundamentals grow before the plan refresh.
     """
     policy = policy or load_policy()
     budget = normalize_budget(policy.get("budget"))
@@ -699,45 +576,26 @@ def grow_ticker_budget(
     surplus = bool(budget.get("surplus_day_before_refresh", True)) and is_surplus_spend_day(
         today, plan_refresh_day=refresh_day
     )
-    weekly = weekly_budget_usd(policy)
-    remaining = remaining_weekly_budget_usd(policy)
     max_tickers = surplus_max_tickers if surplus else base_max_tickers
-    weekly_cap_on = enforce_weekly_research_cap(policy)
-    status = weekly_budget_status(policy)
     ops_status = weekly_ops_budget_status(policy)
+    cap = float(ops_status["weekly_ops_cap_usd"])
+    remaining = float(ops_status["remaining_weekly_ops_usd"])
+    enforce = bool(ops_status["enforce_weekly_ops_cap"])
     return {
         "focus_markets": focus_markets(policy),
         "max_tickers": max_tickers,
         "surplus_day": surplus,
-        "allocation_basis": status["allocation_basis"],
-        "weekly_usage_gbp": status["weekly_usage_gbp"],
-        "weekly_library_usd": weekly,
-        "remaining_weekly_usd": remaining,
-        "enforce_weekly_research_cap": weekly_cap_on,
-        "constraining": status["constraining"],
-        "near_limit": status["near_limit"],
-        "budget_flag": status["flag"],
-        "weekly_ops_cap_usd": ops_status["weekly_ops_cap_usd"],
-        "remaining_weekly_ops_usd": ops_status["remaining_weekly_ops_usd"],
-        "weekly_ops_constraining": ops_status["constraining"],
-        "weekly_ops_flag": ops_status["flag"],
+        "weekly_ops_cap_usd": cap,
+        "remaining_weekly_ops_usd": remaining,
+        "enforce_weekly_ops_cap": enforce,
+        "constraining": ops_status["constraining"],
+        "near_limit": ops_status["near_limit"],
+        "budget_flag": ops_status["flag"],
         "research_model": research_model_id(policy),
-        "allow_research": (not weekly_cap_on) or remaining > 0 or surplus,
-        "allow_weekly_ops_research": (not ops_status["enforce_weekly_ops_cap"])
-        or ops_status["remaining_weekly_ops_usd"] > 0
-        or surplus,
-        "research_budget_usd": (
-            None
-            if not weekly_cap_on
-            else round(remaining + (weekly if surplus else 0.0), 4)
-        ),
+        "allow_research": (not enforce) or remaining > 0 or surplus,
         "weekly_ops_research_budget_usd": (
             None
-            if not ops_status["enforce_weekly_ops_cap"]
-            else round(
-                ops_status["remaining_weekly_ops_usd"]
-                + (ops_status["weekly_ops_cap_usd"] if surplus else 0.0),
-                4,
-            )
+            if not enforce
+            else round(remaining + (cap if surplus else 0.0), 4)
         ),
     }

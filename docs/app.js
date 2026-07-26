@@ -1070,11 +1070,15 @@ function renderAutomation(data) {
         <h3>Budget</h3>
         ${settingRow("Plan (subscription)", esc(`${budget.plan_name || "—"} · $${budget.plan_monthly_usd ?? "—"}/mo`))}
         ${settingRow(
-          "Weekly usage allocation",
+          "Weekly ops (orchestrator)",
           esc(
-            budget.allocation_basis === "usage_weekly_gbp"
-              ? `£${budget.weekly_usage_gbp ?? "—"}/week × ${budget.gbp_usd_rate ?? "—"} → $${budget.weekly_library_usd ?? "—"} · enforce=${budget.enforce_weekly_research_cap ? "on" : "off"}`
-              : `$${budget.weekly_library_usd ?? "—"} · enforce=${budget.enforce_weekly_research_cap ? "on" : "off"}`
+            `$${budget.estimated_spend_weekly_ops_usd_this_week ?? "—"} / $${budget.weekly_ops_cap_usd ?? "—"} · remaining $${budget.remaining_weekly_ops_usd ?? "—"} · enforce=${budget.enforce_weekly_ops_cap ? "on" : "off"}`
+          )
+        )}
+        ${settingRow(
+          "Ad hoc checkpoint",
+          esc(
+            `$${budget.spend_since_checkpoint_usd ?? "—"} / $${budget.spend_checkpoint_usd ?? "—"}`
           )
         )}
         ${settingRow(
@@ -1083,10 +1087,10 @@ function renderAutomation(data) {
             ? `<span class="badge badge-ii-no">${esc(budget.budget_flag || "constraining")}</span>${budget.budget_note ? ` · <span class="small muted">${esc(budget.budget_note)}</span>` : ""}`
             : budget.near_limit
               ? `<span class="badge badge-watch">${esc(budget.budget_flag || "near_limit")}</span>`
-              : esc(budget.budget_flag || (budget.enforce_weekly_research_cap ? "enforced" : "unconstrained"))
+              : esc(budget.budget_flag || (budget.enforce_weekly_ops_cap ? "enforced" : "unconstrained"))
         )}
         ${settingRow("Refresh / surplus day", esc(`${budget.plan_refresh_day_of_month ?? "—"} / day before`))}
-        ${settingRow("Spend this week / cycle", esc(`$${budget.estimated_spend_usd_this_week ?? "—"} / $${budget.estimated_spend_usd_this_cycle ?? "—"} (remaining $${budget.remaining_weekly_usd ?? "—"})`))}
+        ${settingRow("Spend this week / cycle", esc(`$${budget.estimated_spend_usd_this_week ?? "—"} / $${budget.estimated_spend_usd_this_cycle ?? "—"}`))}
 
         <h3>Scheduled workflows</h3>
         ${workflowHtml || '<p class="muted">No workflow schedules recorded.</p>'}

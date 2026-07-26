@@ -214,7 +214,7 @@ ftse-library ladder --dry-run-research
 ftse-library review-model
 ```
 
-Budget: **Cursor Pro** subscription ($20/mo, refresh **8th**, surplus **7th**) is metadata; library research uses a **£30/week usage envelope** with **`enforce_weekly_research_cap`** (flagged `constraining` when spent). Focus auto-advances when coverage/stale floors are met; graduated markets get a light maintenance grow. Policy: `docs/data/library/policy.json`.
+Budget: **Cursor Pro** subscription ($20/mo, refresh **8th**, surplus **7th**) is metadata. Orchestrator runs use a **$50/week `weekly_ops`** envelope (email + ladder research); ad-hoc depth passes use a separate **$60 checkpoint**. Policy: `docs/data/library/policy.json`.
 
 ## Parked ideas (periodic review)
 

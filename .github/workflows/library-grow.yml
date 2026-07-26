@@ -39,7 +39,7 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Ensure usage weekly budget (£30) + plan tickers
+      - name: Ensure weekly_ops budget ($50) + plan tickers
         id: plan
         run: |
           ROOT="docs/data/library"
@@ -48,10 +48,7 @@ jobs:
           # Subscription ($20) is metadata; orchestrator runs use weekly_ops ($50 default).
           ftse-library --policy "$ROOT/policy.json" policy \
             --plan-monthly-usd 20 \
-            --weekly-usage-gbp 30 \
             --weekly-ops-cap-usd 50 \
-            --gbp-usd-rate 1.27 \
-            --enforce-weekly-research-cap \
             --refresh-day 8 >/dev/null
           python3 - <<'PY'
           import json
@@ -74,7 +71,7 @@ jobs:
               max_tickers=max_tickers,
               surplus=str(plan["surplus_day"]).lower(),
               model=plan["research_model"],
-              weekly_usd=str(plan["weekly_library_usd"]),
+              weekly_ops_usd=str(plan["weekly_ops_cap_usd"]),
               constraining=str(plan.get("constraining", False)).lower(),
           )
           print(json.dumps(plan, indent=2))
