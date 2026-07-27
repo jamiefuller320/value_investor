@@ -51,6 +51,8 @@ class CompanyReport:
     passed_models: list[str]
     key_metrics: dict[str, Any]
     failed_models: list[str] = field(default_factory=list)
+    model_failures: dict[str, list[str]] = field(default_factory=dict)
+    screening_inputs: dict[str, Any] = field(default_factory=dict)
     piotroski_f_score: dict[str, Any] | None = None
     adjusted_signal: str | None = None
     research_verdict: str | None = None
@@ -86,6 +88,8 @@ class CompanyReport:
             "summary": self.summary,
             "passed_models": self.passed_models,
             "failed_models": self.failed_models,
+            "model_failures": self.model_failures,
+            "screening_inputs": self.screening_inputs,
             "key_metrics": self.key_metrics,
             "piotroski_f_score": self.piotroski_f_score,
             "adjusted_signal": self.adjusted_signal,
@@ -139,6 +143,50 @@ def _key_metrics_row(row: pd.Series) -> dict[str, str]:
         if formatted is not None:
             metrics[label] = formatted
     return metrics
+
+
+def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
+    """Raw metric inputs cited by D/E, liquidity, growth, NCAV, and yield models."""
+    inputs: dict[str, Any] = {}
+
+    de = row.get("debt_to_equity")
+    if de is not None and not (isinstance(de, float) and pd.isna(de)):
+        inputs["debt_to_equity"] = float(de)
+
+    cr = row.get("current_ratio_bs")
+    if cr is None or (isinstance(cr, float) and pd.isna(cr)):
+        cr = row.get("current_ratio")
+    if cr is not None and not (isinstance(cr, float) and pd.isna(cr)):
+        inputs["current_ratio"] = float(cr)
+
+    growth = row.get("earnings_growth")
+    if growth is not None and not (isinstance(growth, float) and pd.isna(growth)):
+        inputs["earnings_growth_pct"] = float(growth)
+
+    ncav = row.get("ncav")
+    inputs["ncav_available"] = ncav is not None and not (isinstance(ncav, float) and pd.isna(ncav))
+    if inputs["ncav_available"]:
+        inputs["ncav"] = float(ncav)
+
+    yld = row.get("dividend_yield")
+    if yld is not None and not (isinstance(yld, float) and pd.isna(yld)):
+        inputs["dividend_yield_raw"] = float(yld)
+
+    return inputs
+
+
+def _build_model_failures(ticker_models: pd.DataFrame) -> dict[str, list[str]]:
+    """Map failed model names to their ``failed_criteria`` reasons."""
+    failures: dict[str, list[str]] = {}
+    if ticker_models.empty:
+        return failures
+
+    failed = ticker_models[ticker_models["passed"] == False]  # noqa: E712
+    for _, model_row in failed.iterrows():
+        reasons = _parse_list_field(model_row.get("failed_criteria"))
+        if reasons:
+            failures[str(model_row["model_name"])] = reasons
+    return failures
 
 
 def _piotroski_f_score_from_models(ticker_models: pd.DataFrame) -> dict[str, Any] | None:
@@ -267,6 +315,8 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
 
         passed_model_names = passed["model_name"].tolist()
         failed_model_names = failed["model_name"].tolist()
+        model_failures = _build_model_failures(ticker_models)
+        screening_inputs = _build_screening_inputs(row)
         piotroski_f_score = _piotroski_f_score_from_models(ticker_models)
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
@@ -391,6 +441,8 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 passed_models=passed_model_names,
                 key_metrics=key_metrics,
                 failed_models=failed_model_names,
+                model_failures=model_failures,
+                screening_inputs=screening_inputs,
                 piotroski_f_score=piotroski_f_score,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,

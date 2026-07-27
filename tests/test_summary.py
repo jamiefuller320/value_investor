@@ -83,6 +83,60 @@ def test_build_company_reports_exports_failed_models():
     assert report.signal == "strong_buy"
 
 
+def test_build_company_reports_exports_model_failures_and_screening_inputs():
+    signals = pd.DataFrame([
+        _signal_row(
+            debt_to_equity=140.0,
+            current_ratio=0.73,
+            earnings_growth=-0.072,
+            dividend_yield=0.04,
+            ncav=None,
+        )
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "model_id": "graham_enterprising",
+            "model_name": "Graham Enterprising",
+            "passed": False,
+            "score": 0.5,
+            "reasons": "[]",
+            "failed_criteria": "['negative earnings growth', 'excessive leverage']",
+        },
+        {
+            "ticker": "HIK.L",
+            "model_id": "graham_net_net",
+            "model_name": "Graham Net-Net",
+            "passed": False,
+            "score": 0.0,
+            "reasons": "[]",
+            "failed_criteria": "['missing NCAV (balance sheet data)']",
+        },
+        {
+            "ticker": "HIK.L",
+            "model_id": "financial_health",
+            "model_name": "Financial Health",
+            "passed": False,
+            "score": 0.4,
+            "reasons": "[]",
+            "failed_criteria": "['high debt to equity', 'weak liquidity']",
+        },
+    ])
+
+    snapshot = build_company_reports(signals, model_results)[0].to_dict()
+
+    assert snapshot["model_failures"]["Graham Enterprising"] == [
+        "negative earnings growth",
+        "excessive leverage",
+    ]
+    assert snapshot["model_failures"]["Graham Net-Net"] == ["missing NCAV (balance sheet data)"]
+    assert snapshot["screening_inputs"]["debt_to_equity"] == 140.0
+    assert snapshot["screening_inputs"]["current_ratio"] == 0.73
+    assert snapshot["screening_inputs"]["earnings_growth_pct"] == -0.072
+    assert snapshot["screening_inputs"]["ncav_available"] is False
+    assert snapshot["screening_inputs"]["dividend_yield_raw"] == 0.04
+
+
 def test_build_company_reports_exports_piotroski_component_scores():
     signals = pd.DataFrame([_signal_row()])
     model_results = _model_results_for_hik()
@@ -106,6 +160,8 @@ def test_company_report_to_dict_keeps_existing_fields():
     assert snapshot["ticker"] == "HIK.L"
     assert snapshot["passed_models"] == ["Graham Enterprising"]
     assert "failed_models" in snapshot
+    assert "model_failures" in snapshot
+    assert "screening_inputs" in snapshot
     assert "piotroski_f_score" in snapshot
 
 
