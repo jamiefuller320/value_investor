@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -40,6 +41,54 @@ from value_investor.technical_analysis import enrich_signals_with_technicals
 from value_investor.trust_metrics import fetch_trust_universe
 from value_investor.trust_signals import build_trust_signals
 from value_investor.universe_filters import excluded_vehicle_records, partition_investment_vehicles
+
+logger = logging.getLogger(__name__)
+
+
+def _install_research_snapshot_hooks() -> None:
+    """Propagate gap-fill verdicts back to per-ticker screening_snapshot.json."""
+    from value_investor.research import overlay as research_overlay
+    from value_investor.research.store import ResearchStore
+    from value_investor.scoring.snapshot import refresh_snapshot_from_document, sync_research_verdict_snapshots
+
+    if not getattr(research_overlay.apply_research_overlay, "_snapshot_sync_installed", False):
+        _original_overlay = research_overlay.apply_research_overlay
+
+        def _apply_research_overlay_with_snapshots(reports, documents):
+            updated = _original_overlay(reports, documents)
+            if documents:
+                output_dir = _output_dir_from_documents(documents)
+                sync_research_verdict_snapshots(output_dir, updated, documents)
+            return updated
+
+        _apply_research_overlay_with_snapshots._snapshot_sync_installed = True  # type: ignore[attr-defined]
+        research_overlay.apply_research_overlay = _apply_research_overlay_with_snapshots
+
+    if getattr(ResearchStore.save, "_snapshot_sync_installed", False):
+        return
+
+    _original_save = ResearchStore.save
+
+    def _save_with_snapshot_sync(self, doc, **kwargs):
+        revision_id = _original_save(self, doc, **kwargs)
+        if doc.research_verdict:
+            refresh_snapshot_from_document(self.output_dir, doc)
+        return revision_id
+
+    _save_with_snapshot_sync._snapshot_sync_installed = True  # type: ignore[attr-defined]
+    ResearchStore.save = _save_with_snapshot_sync  # type: ignore[method-assign]
+
+
+def _output_dir_from_documents(documents) -> Path:
+    for doc in documents:
+        if doc.research_path:
+            path = Path(doc.research_path)
+            if path.parent.parent.name == "research":
+                return path.parent.parent.parent
+    return Path("output")
+
+
+_install_research_snapshot_hooks()
 
 
 def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
