@@ -96,6 +96,17 @@ jobs:
           fi
           ftse-engineering --output-dir output $ARGS
 
+      - name: Commit ad-hoc spend to main
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && github.event.inputs.pr_only != 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: record engineering agent spend [skip ci]"
+          file_pattern: docs/data/library/policy.json
+          skip_fetch: false
+
       - name: Clear stale engineering branch
         if: >-
           github.event.inputs.compile_only != 'true'
@@ -130,8 +141,17 @@ jobs:
           git branch -D "$BRANCH" 2>/dev/null || true
           git checkout -b "$BRANCH"
           git add -A
-          git reset HEAD docs/data/engineering_tasks.json || true
-          git checkout -- docs/data/engineering_tasks.json || true
+          for path in \
+            docs/data/engineering_tasks.json \
+            docs/data/library/policy.json \
+            src/value_investor/paper_fund.py \
+            src/value_investor/simulator.py \
+            src/value_investor/paper_automation_cli.py \
+            .github/workflows/paper-auto.yml
+          do
+            git reset HEAD "$path" 2>/dev/null || true
+            git checkout -- "$path" 2>/dev/null || true
+          done
           if git diff --cached --quiet; then
             echo "No code changes to commit"
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
