@@ -666,3 +666,97 @@ def mark_task_merged_for_branch(
         pr_url=pr_url,
         pr_number=pr_number,
     )
+
+
+def normalize_repo_path(path: str) -> str:
+    return path.replace("\\", "/").strip().lstrip("./")
+
+
+def path_matches_allowed_pattern(changed: str, pattern: str) -> bool:
+    """Return True when *changed* is within an allowed file or directory pattern."""
+    changed = normalize_repo_path(changed)
+    pattern = normalize_repo_path(pattern)
+    if not pattern:
+        return False
+    if pattern.endswith("/"):
+        return changed.startswith(pattern) or changed == pattern.rstrip("/")
+    return changed == pattern
+
+
+def path_matches_blocked_pattern(changed: str, blocked: str) -> bool:
+    changed = normalize_repo_path(changed)
+    blocked = normalize_repo_path(blocked)
+    return changed == blocked
+
+
+@dataclass
+class PathGuardResult:
+    ok: bool
+    violations: list[str]
+    task_id: str | None = None
+    skipped: bool = False
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "ok": self.ok,
+            "skipped": self.skipped,
+            "task_id": self.task_id,
+            "violations": list(self.violations),
+        }
+
+
+def find_engineering_task(
+    task_id: str,
+    *,
+    path: Path = COMMITTED_TASKS_PATH,
+) -> EngineeringTask | None:
+    wanted = str(task_id).strip()
+    for row in load_engineering_tasks(path).get("tasks") or []:
+        if str(row.get("id")) == wanted:
+            return EngineeringTask.from_dict(row)
+    return None
+
+
+def validate_engineering_pr_paths(
+    *,
+    task: EngineeringTask,
+    changed_files: list[str],
+) -> PathGuardResult:
+    """Validate PR file changes against task allow/block lists and global BLOCKED_PATHS."""
+    blocked = list(dict.fromkeys([*BLOCKED_PATHS, *(task.blocked_paths or [])]))
+    allowed = list(task.allowed_paths or [])
+    normalized = [normalize_repo_path(path) for path in changed_files]
+    normalized = [path for path in normalized if path]
+
+    if not normalized:
+        return PathGuardResult(ok=True, violations=[], task_id=task.id)
+
+    violations: list[str] = []
+    for changed in normalized:
+        for blocked_path in blocked:
+            if path_matches_blocked_pattern(changed, blocked_path):
+                violations.append(f"blocked path touched: {changed} (matches {blocked_path})")
+                break
+        else:
+            if not allowed:
+                violations.append(f"outside allowed_paths: {changed} (task has no allowed_paths)")
+            elif not any(path_matches_allowed_pattern(changed, pattern) for pattern in allowed):
+                violations.append(f"outside allowed_paths: {changed}")
+
+    return PathGuardResult(ok=not violations, violations=violations, task_id=task.id)
+
+
+def validate_engineering_pr_paths_for_task_id(
+    task_id: str,
+    changed_files: list[str],
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+) -> PathGuardResult:
+    task = find_engineering_task(task_id, path=tasks_path)
+    if task is None:
+        return PathGuardResult(
+            ok=False,
+            violations=[f"unknown engineering task id: {task_id}"],
+            task_id=task_id,
+        )
+    return validate_engineering_pr_paths(task=task, changed_files=changed_files)
