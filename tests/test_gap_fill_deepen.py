@@ -22,11 +22,15 @@ def test_deepen_thin_filings_skips_when_sufficient(tmp_path: Path):
 
 
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_ch_refetch_for_uk(
     mock_refetch,
     mock_ch_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
     mock_news,
     tmp_path: Path,
 ):
@@ -53,11 +57,21 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
     assert pack["body_refetch"]["fetched"] == 2
 
 
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.execute_planned_alternate_sources")
 @patch("value_investor.research.gap_fill_sources.prepare_gap_fill_source_pack")
-def test_deepen_thin_filings_runs_when_thin(mock_prepare, mock_execute, mock_refetch, mock_ch_refetch, tmp_path: Path):
+def test_deepen_thin_filings_runs_when_thin(
+    mock_prepare,
+    mock_execute,
+    mock_refetch,
+    mock_ch_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    tmp_path: Path,
+):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir(parents=True)
     (filings_dir / "filings_index.json").write_text(
@@ -86,3 +100,77 @@ def test_deepen_thin_filings_runs_when_thin(mock_prepare, mock_execute, mock_ref
     assert result["improved"] is True
     mock_prepare.assert_called_once()
     mock_execute.assert_called_once()
+
+
+@patch("value_investor.research.filings.prune_orphaned_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.merge_ir_allowlist_filings")
+def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
+    mock_merge,
+    mock_ir_refetch,
+    mock_prune,
+    tmp_path: Path,
+):
+    from value_investor.research.gap_fill_sources import execute_planned_alternate_sources
+
+    mock_merge.return_value = {"added": 1}
+    mock_ir_refetch.return_value = {
+        "attempted": 2,
+        "fetched": 1,
+        "with_body_before": 0,
+        "with_body_after": 1,
+    }
+
+    result = execute_planned_alternate_sources(
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        sources_dir=tmp_path,
+        planned=[{"id": "company_ir_presentation", "score": "2"}],
+        market="ftse350",
+    )
+
+    mock_merge.assert_called_once()
+    mock_ir_refetch.assert_called_once()
+    mock_prune.assert_called_once()
+    assert result["sources_tried"] == ["company_ir_presentation"]
+    assert result["fetched"] == 1
+    assert result["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
+@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
+    mock_refetch,
+    mock_ch_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ir_rows.return_value = [{"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}]
+    mock_ir_refetch.return_value = {"fetched": 1, "with_body_after": 1}
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        sources_dir=tmp_path,
+        open_questions=["fcf bridge"],
+        market="ftse350",
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert pack["ir_refetch"]["fetched"] == 1
+    assert pack["body_refetch"]["fetched"] == 1

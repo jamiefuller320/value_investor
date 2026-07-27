@@ -18,8 +18,10 @@ from value_investor.research.filings import (
     headline_relevant_to_issuer,
     ingest_filings,
     merge_filings,
+    merge_ir_allowlist_filings,
     prune_orphaned_filing_bodies,
     refetch_companies_house_filing_bodies,
+    refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
@@ -1018,4 +1020,88 @@ def test_enrich_global_filing_rows_resolves_google_news():
         enriched = enrich_global_filing_rows(rows)
     assert enriched[0]["url"].endswith(".pdf")
     assert enriched[0]["source"] == "google_news_asx_resolved"
+
+
+def test_merge_ir_allowlist_filings_adds_missing_rows(tmp_path: Path):
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(
+        json.dumps(
+            {
+                "urls": {
+                    "HIK.L": [
+                        "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf",
+                    ]
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    result = merge_ir_allowlist_filings("HIK.L", filings_dir, path=allowlist_path)
+    assert result["added"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert len(saved["filings"]) == 1
+    assert saved["filings"][0]["source"] == "ir_allowlist"
+    assert saved["filings"][0]["id"].startswith("ir_")
+
+
+def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path, monkeypatch):
+    allowlist_path = tmp_path / "ir_urls.json"
+    url = "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf"
+    allowlist_path.write_text(json.dumps({"urls": {"HIK.L": [url]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    digest = "a9733d0de6aec27d"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest}",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document",
+                        "url": url,
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                        "priority": 130,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    attempts = {"count": 0}
+
+    def fake_fetch(body_url):
+        attempts["count"] += 1
+        if attempts["count"] == 1:
+            return None
+        return "Trading update narrative " + ("x" * 220)
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        fake_fetch,
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "HIK.L",
+        max_bodies=5,
+        max_retries=2,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    assert result["retries_used"] == 1
+    assert attempts["count"] == 2
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / f"ir_{digest}.txt").exists()
 
