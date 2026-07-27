@@ -26,12 +26,15 @@ from value_investor.engineering_tasks import (
     mark_task_status,
     select_engineering_tasks,
     sync_committed_engineering_tasks,
+    validate_engineering_pr_paths_for_task_id,
 )
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
+    is_engineering_branch,
     is_safe_to_clear_stale_branch,
     reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
+    task_id_from_branch,
 )
 
 
@@ -208,6 +211,42 @@ def _cmd_mark_pr_open(args: argparse.Namespace) -> int:
     else:
         print(f"Marked {updated.id} as pr_open on {args.branch}")
     return 0
+
+
+def _cmd_check_pr_paths(args: argparse.Namespace) -> int:
+    branch = str(args.branch or "").strip()
+    if branch and not is_engineering_branch(branch):
+        if args.json:
+            _print_json({"ok": True, "skipped": True, "reason": "not an engineering task branch"})
+        else:
+            print(f"Skip path guard: {branch} is not an engineering task branch")
+        return 0
+
+    task_id = str(args.task_id or "").strip() or (task_id_from_branch(branch) if branch else "")
+    if not task_id:
+        print("task_id or engineering branch is required", file=sys.stderr)
+        return 2
+
+    changed_path = Path(args.changed_files)
+    changed_files = [
+        line.strip()
+        for line in changed_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    result = validate_engineering_pr_paths_for_task_id(
+        task_id,
+        changed_files,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+    )
+    if args.json:
+        _print_json(result.to_dict())
+    elif result.violations:
+        print(f"Engineering path guard failed for {task_id}:", file=sys.stderr)
+        for violation in result.violations:
+            print(f"  - {violation}", file=sys.stderr)
+    else:
+        print(f"Engineering path guard passed for {task_id} ({len(changed_files)} file(s))")
+    return 0 if result.ok else 1
 
 
 def _cmd_reprioritize(args: argparse.Namespace) -> int:
@@ -424,6 +463,23 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("docs/data/latest.json"),
     )
     reprioritize_p.set_defaults(func=_cmd_reprioritize)
+
+    check_paths_p = sub.add_parser(
+        "check-pr-paths",
+        help="Fail when changed files are outside task allowed_paths or touch blocked_paths",
+    )
+    check_paths_p.add_argument(
+        "--branch",
+        default=None,
+        help="Engineering PR branch (cursor/eng-YYYYMMDD-NN-1de3); non-task branches are skipped",
+    )
+    check_paths_p.add_argument("--task-id", default=None, help="Override task id parsed from branch")
+    check_paths_p.add_argument(
+        "--changed-files",
+        required=True,
+        help="Path to a newline-delimited list of changed repo paths",
+    )
+    check_paths_p.set_defaults(func=_cmd_check_pr_paths)
 
     run_p = sub.add_parser("run", help="Run the supervised dev agent for open task(s)")
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")

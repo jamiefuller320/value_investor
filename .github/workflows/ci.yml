@@ -32,3 +32,30 @@ jobs:
 
       - name: Pytest
         run: pytest -q
+
+  engineering-path-guard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Validate engineering PR paths
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          git fetch origin "${BASE_REF}"
+          git diff --name-only "origin/${BASE_REF}...HEAD" > /tmp/changed_files.txt
+          ftse-engineering check-pr-paths \
+            --branch "${HEAD_REF}" \
+            --changed-files /tmp/changed_files.txt
