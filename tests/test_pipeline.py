@@ -11,6 +11,7 @@ import value_investor.pipeline  # noqa: F401 — installs research snapshot hook
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
+from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
@@ -389,4 +390,76 @@ def test_enrich_signals_with_healthcare_overlay_after_research():
     enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
 
     assert bool(enriched.iloc[0]["healthcare_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_signals_with_cash_conversion_overlay_caps_adjusted_signal():
+    signals = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "name": "Hikma Pharmaceuticals PLC",
+            "sector": "Health Care",
+            "signal": "strong_buy",
+            "free_cashflow": -66.1,
+            "shares_outstanding": 240_000_000,
+            "shares_outstanding_prev": 245_000_000,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "model_id": "dividend_growth",
+            "model_name": "Dividend Growth",
+            "passed": True,
+            "score": 0.8,
+            "reasons": "['dividend payer: yield=3.9%']",
+            "failed_criteria": "[]",
+        },
+    ])
+
+    enriched = enrich_signals_with_cash_conversion_overlay(signals, model_results)
+
+    assert enriched.iloc[0]["signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
+    signals = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "name": "Hikma Pharmaceuticals PLC",
+            "sector": "Health Care",
+            "signal": "strong_buy",
+            "free_cashflow": -66.1,
+            "shares_outstanding": 240_000_000,
+            "shares_outstanding_prev": 245_000_000,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "model_id": "dividend_growth",
+            "model_name": "Dividend Growth",
+            "passed": True,
+            "score": 0.8,
+            "reasons": "['dividend payer: yield=3.9%']",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": "HIK.L",
+            "model_id": "piotroski_f",
+            "model_name": "Piotroski F-Score",
+            "passed": False,
+            "score": 6 / 9,
+            "reasons": "['F-Score=6/9']",
+            "failed_criteria": "['F-Score 6/9 below 7']",
+        },
+    ])
+
+    enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
+    enriched = enrich_signals_with_cash_conversion_overlay(enriched, model_results)
+
+    assert bool(enriched.iloc[0]["healthcare_overlay"]) is False
+    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
