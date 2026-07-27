@@ -198,7 +198,7 @@ jobs:
         if: >-
           github.event.inputs.compile_only != 'true'
           && steps.pr.outputs.opened == 'true'
-        run: git pull --rebase origin main
+        run: git pull --rebase --autostash origin main
 
       - name: Commit queue state on main
         if: >-

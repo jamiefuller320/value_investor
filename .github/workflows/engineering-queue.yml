@@ -104,7 +104,7 @@ jobs:
           ftse-engineering --json reconcile-queue --open-prs-json /tmp/open_prs.json
 
       - name: Sync main before queue file commit
-        run: git pull --rebase origin main
+        run: git pull --rebase --autostash origin main
 
       - name: Commit reconciled queue state
         uses: stefanzweifel/git-auto-commit-action@v6
@@ -160,7 +160,7 @@ jobs:
 
       - name: Sync main before merge queue commit
         if: steps.eng_branch.outputs.is_task == 'true'
-        run: git pull --rebase origin main
+        run: git pull --rebase --autostash origin main
 
       - name: Commit queue state
         if: steps.eng_branch.outputs.is_task == 'true'
