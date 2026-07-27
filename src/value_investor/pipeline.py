@@ -28,6 +28,7 @@ from value_investor.historical_analysis import (
 from value_investor.model_weights import load_model_weights, save_model_snapshot, update_model_weights
 from value_investor.models.trusts import ALL_TRUST_MODELS
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
+from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
     append_signal_history,
@@ -224,6 +225,7 @@ def run_screen(
         index_map = constituents[["ticker", "index"]].drop_duplicates("ticker")
         universe_df = universe_df.merge(index_map, on="ticker", how="left")
     universe_df = add_data_quality_scores(universe_df)
+    universe_df = apply_sector_overrides(universe_df)
     universe_df = add_sector_scores(universe_df)
     model_results = evaluate_universe(universe_df)
     weight_state = load_model_weights(out_dir)

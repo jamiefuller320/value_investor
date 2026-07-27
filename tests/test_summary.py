@@ -6,6 +6,7 @@ import pandas as pd
 
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
 from value_investor.scoring import evaluate_universe
+from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
 from value_investor.summary import build_company_reports
 
@@ -228,3 +229,31 @@ def test_strong_buy_confirmation_unchanged_by_snapshot_export():
         has_errors=False,
     )
     assert signal == Signal.STRONG_BUY
+
+
+def test_build_company_reports_exports_overridden_plantation_sector():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="AEP.L",
+            name="AEP Plantations Plc",
+            sector=AGRICULTURE_COMMODITIES_SECTOR,
+            sector_composite_score=0.55,
+        )
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "AEP.L",
+            "model_id": "composite_value",
+            "model_name": "Composite Value",
+            "passed": True,
+            "score": 0.7,
+            "reasons": "[]",
+            "failed_criteria": "[]",
+        },
+    ])
+
+    report = build_company_reports(signals, model_results)[0]
+
+    assert report.sector == AGRICULTURE_COMMODITIES_SECTOR
+    assert report.sector_composite_score == 0.55
+    assert "sector-relative 55%" in report.summary

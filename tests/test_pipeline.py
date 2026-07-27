@@ -11,7 +11,13 @@ import value_investor.pipeline  # noqa: F401 — installs research snapshot hook
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
+from value_investor.scoring.sector_overrides import (
+    AGRICULTURE_COMMODITIES_SECTOR,
+    apply_sector_overrides,
+    resolve_scoring_sector,
+)
 from value_investor.scoring.snapshot import refresh_snapshot_from_document, sync_research_verdict_snapshots
+from value_investor.sector_scoring import add_sector_scores
 from value_investor.storage import write_json
 from value_investor.summary import CompanyReport, build_company_reports
 
@@ -227,3 +233,100 @@ def test_research_store_save_refreshes_screening_snapshot(tmp_path: Path):
     written = json.loads((sources_dir / "screening_snapshot.json").read_text(encoding="utf-8"))
     assert written["research_verdict"] == "pass"
     assert written["adjusted_signal"] == "hold"
+
+
+def _consumer_defensive_universe_with_plantation() -> pd.DataFrame:
+    """Plantation misclassified as Consumer Defensive: cheap vs FMCG, not vs full universe."""
+    return pd.DataFrame([
+        {
+            "ticker": "AEP.L",
+            "name": "AEP Plantations Plc",
+            "sector": "Consumer Defensive",
+            "trailing_pe": 10.0,
+            "price_to_book": 1.5,
+            "dividend_yield": 0.056,
+            "free_cashflow": 80,
+            "market_cap": 1000,
+            "enterprise_value": 950,
+            "ebitda": 120,
+            "return_on_equity": 0.15,
+        },
+        {
+            "ticker": "ULVR.L",
+            "name": "Unilever PLC",
+            "sector": "Consumer Defensive",
+            "trailing_pe": 22.0,
+            "price_to_book": 5.0,
+            "dividend_yield": 0.03,
+            "free_cashflow": 40,
+            "market_cap": 1000,
+            "enterprise_value": 1100,
+            "ebitda": 80,
+            "return_on_equity": 0.12,
+        },
+        {
+            "ticker": "DGE.L",
+            "name": "Diageo plc",
+            "sector": "Consumer Defensive",
+            "trailing_pe": 25.0,
+            "price_to_book": 6.0,
+            "dividend_yield": 0.025,
+            "free_cashflow": 30,
+            "market_cap": 1000,
+            "enterprise_value": 1150,
+            "ebitda": 70,
+            "return_on_equity": 0.10,
+        },
+        {
+            "ticker": "ABF.L",
+            "name": "Associated British Foods",
+            "sector": "Consumer Defensive",
+            "trailing_pe": 28.0,
+            "price_to_book": 4.5,
+            "dividend_yield": 0.02,
+            "free_cashflow": 25,
+            "market_cap": 1000,
+            "enterprise_value": 1200,
+            "ebitda": 65,
+            "return_on_equity": 0.09,
+        },
+        {
+            "ticker": "SHEL.L",
+            "name": "Shell plc",
+            "sector": "Energy",
+            "trailing_pe": 6.0,
+            "price_to_book": 1.0,
+            "dividend_yield": 0.07,
+            "free_cashflow": 120,
+            "market_cap": 1000,
+            "enterprise_value": 900,
+            "ebitda": 180,
+            "return_on_equity": 0.18,
+        },
+    ])
+
+
+def test_resolve_scoring_sector_remaps_aep_and_plantation_names():
+    assert resolve_scoring_sector("AEP.L", "Consumer Defensive", "AEP Plantations Plc") == (
+        AGRICULTURE_COMMODITIES_SECTOR
+    )
+    assert resolve_scoring_sector("XYZ.L", "Consumer Defensive", "Palm Oil Holdings Ltd") == (
+        AGRICULTURE_COMMODITIES_SECTOR
+    )
+    assert resolve_scoring_sector("XYZ.L", "Consumer Defensive", "Unilever PLC") == "Consumer Defensive"
+    assert resolve_scoring_sector("XYZ.L", "Energy", "Palm Oil Holdings Ltd") == "Energy"
+
+
+def test_apply_sector_overrides_changes_sector_composite_score():
+    universe = _consumer_defensive_universe_with_plantation()
+    before = add_sector_scores(universe)
+    aep_before = float(before.loc[before["ticker"] == "AEP.L", "sector_composite_score"].iloc[0])
+
+    overridden = apply_sector_overrides(universe)
+    assert overridden.loc[overridden["ticker"] == "AEP.L", "sector"].iloc[0] == AGRICULTURE_COMMODITIES_SECTOR
+
+    after = add_sector_scores(overridden)
+    aep_after = float(after.loc[after["ticker"] == "AEP.L", "sector_composite_score"].iloc[0])
+
+    assert aep_before > 0.7
+    assert aep_after < aep_before
