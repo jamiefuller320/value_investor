@@ -11,6 +11,10 @@ import pandas as pd
 from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
+from value_investor.scoring.healthcare_overlay import (
+    apply_healthcare_overlay_to_signal,
+    piotroski_score_for_ticker,
+)
 from value_investor.technical_analysis import TradePlan, format_timing_summary, format_trade_plan_text, trade_plan_from_row
 
 SIGNAL_LABELS = {
@@ -54,6 +58,7 @@ class CompanyReport:
     model_failures: dict[str, list[str]] = field(default_factory=dict)
     screening_inputs: dict[str, Any] = field(default_factory=dict)
     piotroski_f_score: dict[str, Any] | None = None
+    healthcare_overlay: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -92,6 +97,7 @@ class CompanyReport:
             "screening_inputs": self.screening_inputs,
             "key_metrics": self.key_metrics,
             "piotroski_f_score": self.piotroski_f_score,
+            "healthcare_overlay": self.healthcare_overlay,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -244,6 +250,7 @@ def _brief_summary(
     key_metrics: dict[str, str],
     research_verdict: str | None = None,
     adjusted_signal: str | None = None,
+    healthcare_overlay: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -299,6 +306,12 @@ def _brief_summary(
             overlay += f" (adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})"
         parts.append(f"{overlay}.")
 
+    if healthcare_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Healthcare overlay: negative FCF with weak Piotroski "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
     return " ".join(parts)
 
 
@@ -318,6 +331,10 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
         model_failures = _build_model_failures(ticker_models)
         screening_inputs = _build_screening_inputs(row)
         piotroski_f_score = _piotroski_f_score_from_models(ticker_models)
+        fcf = row.get("free_cashflow")
+        free_cashflow = (
+            float(fcf) if fcf is not None and not (isinstance(fcf, float) and pd.isna(fcf)) else None
+        )
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
             passed_reasons.extend(_parse_list_field(model_row.get("reasons")))
@@ -355,6 +372,20 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             if adjusted_signal is not None and not (isinstance(adjusted_signal, float) and pd.isna(adjusted_signal))
             else None
         )
+        healthcare_overlay_flag = row.get("healthcare_overlay")
+        if healthcare_overlay_flag is not None and not (
+            isinstance(healthcare_overlay_flag, float) and pd.isna(healthcare_overlay_flag)
+        ):
+            healthcare_overlay = bool(healthcare_overlay_flag)
+        else:
+            piotroski_score = piotroski_score_for_ticker(ticker_models)
+            healthcare_overlay, adjusted_signal_str = apply_healthcare_overlay_to_signal(
+                signal,
+                sector=row.get("sector"),
+                free_cashflow=free_cashflow,
+                piotroski_f_score=piotroski_score,
+                adjusted_signal=adjusted_signal_str,
+            )
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
@@ -407,6 +438,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             key_metrics=key_metrics,
             research_verdict=research_verdict_str,
             adjusted_signal=adjusted_signal_str,
+            healthcare_overlay=healthcare_overlay,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -444,6 +476,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 model_failures=model_failures,
                 screening_inputs=screening_inputs,
                 piotroski_f_score=piotroski_f_score,
+                healthcare_overlay=healthcare_overlay,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,

@@ -257,3 +257,71 @@ def test_build_company_reports_exports_overridden_plantation_sector():
     assert report.sector == AGRICULTURE_COMMODITIES_SECTOR
     assert report.sector_composite_score == 0.55
     assert "sector-relative 55%" in report.summary
+
+
+def _healthcare_overlay_models(*, f_score: int = 3) -> pd.DataFrame:
+    return pd.DataFrame([
+        {
+            "ticker": "PHAR.L",
+            "model_id": "piotroski_f",
+            "model_name": "Piotroski F-Score",
+            "passed": False,
+            "score": f_score / 9,
+            "reasons": f"['F-Score={f_score}/9']",
+            "failed_criteria": f"['F-Score {f_score}/9 below 7']",
+        },
+    ])
+
+
+def test_healthcare_overlay_caps_strong_buy_when_negative_fcf_and_weak_piotroski():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="PHAR.L",
+            name="Pharma Weak Ltd",
+            sector="Healthcare",
+            signal="strong_buy",
+            free_cashflow=-50.0,
+        )
+    ])
+    model_results = _healthcare_overlay_models(f_score=3)
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert report.signal == "strong_buy"
+    assert snapshot["healthcare_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Healthcare overlay" in report.summary
+
+
+def test_healthcare_overlay_not_triggered_for_hik_like_profile():
+    signals = pd.DataFrame([
+        _signal_row(free_cashflow=-100.0),
+    ])
+    model_results = _model_results_for_hik()
+
+    report = build_company_reports(signals, model_results)[0]
+
+    assert report.signal == "strong_buy"
+    assert report.to_dict()["healthcare_overlay"] is False
+    assert report.to_dict()["adjusted_signal"] == "strong_buy"
+
+
+def test_healthcare_overlay_respects_existing_research_adjusted_signal():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="PHAR.L",
+            name="Pharma Weak Ltd",
+            sector="Health Care",
+            signal="strong_buy",
+            free_cashflow=-25.0,
+            adjusted_signal="hold",
+            research_verdict="pass",
+        )
+    ])
+    model_results = _healthcare_overlay_models(f_score=4)
+
+    report = build_company_reports(signals, model_results)[0]
+
+    assert report.to_dict()["healthcare_overlay"] is True
+    assert report.adjusted_signal == "hold"
