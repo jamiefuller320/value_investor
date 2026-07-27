@@ -166,7 +166,7 @@ def run_weekday_ingest_loop(
     ingest_summary: IngestImprovementSummary | None = None
     if reports:
         ingest_summary = run_ingest_improvement_pass(
-            reports,
+            reports=reports,
             output_dir=data_dir,
             market=market,
             max_targets=max_targets,
