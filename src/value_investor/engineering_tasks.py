@@ -531,6 +531,71 @@ def compile_engineering_tasks(
     return payload
 
 
+def compile_ingest_engineering_tasks_micro(
+    *,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    max_tasks: int = 3,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+    latest_path: Path = Path("docs/data/latest.json"),
+) -> dict[str, Any]:
+    """Append ingest-only engineering tasks when weekday ingest health stalls."""
+    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
+    existing_payload = load_engineering_tasks(committed_path)
+    existing_rows = list(existing_payload.get("tasks") or [])
+    if any(
+        str(row.get("area") or "").lower() == "ingest"
+        and str(row.get("status") or "open") in {"open", "pr_open"}
+        for row in existing_rows
+    ):
+        return {"compiled_count": 0, "reason": "open ingest engineering task already queued"}
+
+    prefix = f"eng-{run_stamp}-"
+    used_seq = [
+        int(str(row.get("id") or "").removeprefix(prefix))
+        for row in existing_rows
+        if str(row.get("id") or "").startswith(prefix)
+        and str(row.get("id") or "").removeprefix(prefix).isdigit()
+    ]
+    seq_start = max(used_seq, default=0) + 1
+    compiled = [
+        task
+        for task in _tasks_from_suggestions(
+            suggestions_path,
+            run_stamp=run_stamp,
+            seq_start=seq_start,
+        )
+        if task.area == "ingest"
+    ]
+    compiled = sorted(compiled, key=lambda row: -row.priority_score)[: max(0, int(max_tasks))]
+    if not compiled:
+        return {"compiled_count": 0, "reason": "no ingest suggestions eligible"}
+
+    merged_rows = _merge_task_rows(existing_rows, compiled)
+    from value_investor.engineering_queue import snapshot_ingest_health
+
+    ingest_health = snapshot_ingest_health(latest_path=latest_path)
+    payload = {
+        **existing_payload,
+        "compiled_at": datetime.now(UTC).isoformat(),
+        "task_count": len(merged_rows),
+        "tasks": merged_rows,
+        "ingest_health": ingest_health,
+        "micro_compile_source": "weekday_ingest_loop",
+    }
+    committed_path = Path(committed_path)
+    tasks_path = Path(tasks_path)
+    committed_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(committed_path, payload, compact=False)
+    if tasks_path != committed_path:
+        write_json(tasks_path, payload, compact=False)
+    return {
+        "compiled_count": len(compiled),
+        "task_ids": [task.id for task in compiled],
+        "task_count": len(merged_rows),
+    }
+
+
 def _read_run_at(output_dir: Path) -> str | None:
     gap_fill = output_dir / "gap_fill_summary.json"
     if gap_fill.exists():

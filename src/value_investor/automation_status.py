@@ -70,6 +70,16 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "engineering-queue.yml",
     },
+    "ingest_loop": {
+        "name": "FTSE Ingest Loop",
+        "cron": "0 7 * * 1,3,5",
+        "cadence": (
+            "Mon/Wed/Fri 07:00 UTC. Bounded ingest-improvement on buy-tier names "
+            "from docs/data/latest.json; logs ingest_health; micro-compiles ingest "
+            "engineering tasks when zero-body buy-tier coverage stalls."
+        ),
+        "workflow": "ingest-loop.yml",
+    },
     "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",
