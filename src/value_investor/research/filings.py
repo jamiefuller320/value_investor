@@ -151,6 +151,11 @@ _IXBRL_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
 _INVESTEGATE_COMPANY_URL = "https://www.investegate.co.uk/company/{epic}"
 _INVESTEGATE_USER_AGENT = "value-investor-research/0.1 (+investegate; research@local)"
 _INVESTEGATE_MAX_ITEMS = 50
+_LSE_RNS_PDF_HOSTS = ("rns-pdf.londonstockexchange.com", "docs.londonstockexchange.com")
+_INVESTEGATE_LSE_PDF_PATTERNS = (
+    r'https?://(?:www\.)?rns-pdf\.londonstockexchange\.com/rns/[^"\s<>]+\.pdf',
+    r'https?://(?:www\.)?docs\.londonstockexchange\.com/[^"\s<>]+\.pdf',
+)
 _SUBSTANTIVE_FILING_TERMS = (
     "revenue",
     "earnings",
@@ -351,6 +356,61 @@ def fetch_filings_investegate_company(
     return rows
 
 
+def _is_lse_rns_pdf_url(url: str | None) -> bool:
+    lower = (url or "").lower()
+    return any(host in lower for host in _LSE_RNS_PDF_HOSTS) and lower.endswith(".pdf")
+
+
+def resolve_investegate_document_url(html: str) -> str | None:
+    """Extract a direct LSE RNS PDF URL embedded in an Investegate announcement page."""
+    for pattern in _INVESTEGATE_LSE_PDF_PATTERNS:
+        match = re.search(pattern, html or "", flags=re.I)
+        if match:
+            return match.group(0)
+    return None
+
+
+def resolve_investegate_lse_pdf_url(url: str | None) -> str | None:
+    """
+    Upgrade an Investegate announcement URL to the linked LSE RNS PDF when present.
+
+    Returns ``url`` unchanged when it already points at an LSE PDF or is not Investegate.
+    """
+    if not url or not url.startswith("http"):
+        return url
+    if _is_lse_rns_pdf_url(url):
+        return url
+    if "investegate.co.uk/announcement/" not in url:
+        return url
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("Investegate page fetch failed for %s: %s", url, exc)
+        return url
+    pdf_url = resolve_investegate_document_url(html)
+    return pdf_url or url
+
+
+def _apply_headline_period(
+    row: dict[str, Any],
+    *,
+    candidate: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Re-classify annual/interim/other from headline cues (incl. trading updates)."""
+    item = dict(row)
+    if candidate:
+        if candidate.get("headline"):
+            item["headline"] = candidate["headline"]
+        if candidate.get("published_at") and not item.get("published_at"):
+            item["published_at"] = candidate["published_at"]
+    headline = str(item.get("headline") or "")
+    period = classify_filing_period(headline, category=item.get("category"))
+    item["period"] = period
+    item["priority"] = _priority_score(headline, period)
+    return item
+
+
 def resolve_investegate_url(
     row: dict[str, Any],
     *,
@@ -360,8 +420,14 @@ def resolve_investegate_url(
 ) -> str | None:
     """Resolve a Google News wrapper URL to a direct Investegate announcement URL."""
     url = str(row.get("url") or "")
-    if "investegate.co.uk/announcement/" in url:
+    if "investegate.co.uk/announcement/" in url or _is_lse_rns_pdf_url(url):
         return url
+    if "news.google.com" in url:
+        decoded = resolve_google_news_publisher_url(url)
+        if decoded and "news.google.com" not in decoded:
+            lower = decoded.lower()
+            if "investegate.co.uk/announcement/" in lower or _is_lse_rns_pdf_url(decoded):
+                return decoded
     if "news.google.com" not in url:
         return None
     candidates = cache or fetch_filings_investegate_company(
@@ -407,10 +473,12 @@ def enrich_filing_rows(
             company_name=company_name,
             cache=investegate_rows,
         )
+        candidate = by_url.get(resolved) if resolved else None
         if resolved:
             item["url"] = resolved
             if item.get("source") == "google_news_investegate":
                 item["source"] = "investegate_resolved"
+        item = _apply_headline_period(item, candidate=candidate)
         url = str(item.get("url") or "")
         if url:
             seen_urls.add(url)
@@ -418,7 +486,7 @@ def enrich_filing_rows(
     for row in investegate_rows:
         url = str(row.get("url") or "")
         if url and url not in seen_urls:
-            enriched.append(row)
+            enriched.append(_apply_headline_period(row))
             seen_urls.add(url)
     return enriched
 
@@ -1590,9 +1658,13 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
             return None
         url = resolved
     url = resolve_asx_publisher_document_url(url) or url
+    if "investegate.co.uk/announcement/" in url:
+        url = resolve_investegate_lse_pdf_url(url) or url
     headers: dict[str, str] = {}
     if "sec.gov" in url:
         headers["User-Agent"] = _sec_user_agent()
+    elif "investegate.co.uk" in url or _is_lse_rns_pdf_url(url):
+        headers["User-Agent"] = _INVESTEGATE_USER_AGENT
     try:
         raw = _http_get(url, headers=headers, timeout=60)
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
@@ -1613,7 +1685,14 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
                 if exhibit:
                     text = exhibit
         elif "investegate.co.uk" in url:
-            text = _extract_investegate_html_text(raw.decode("utf-8", errors="replace"))
+            html = raw.decode("utf-8", errors="replace")
+            text = _extract_investegate_html_text(html)
+            if not _filing_text_is_substantive(text):
+                pdf_url = resolve_investegate_document_url(html)
+                if pdf_url and pdf_url != url:
+                    pdf_body = fetch_filing_body(pdf_url, allow_sec_exhibits=allow_sec_exhibits)
+                    if pdf_body:
+                        text = pdf_body
         else:
             html = raw.decode("utf-8", errors="replace")
             text = (
@@ -2216,6 +2295,113 @@ def refetch_companies_house_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "note": "refetch_companies_house_filing_bodies",
+    }
+
+
+def refetch_investegate_filing_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 20,
+) -> dict[str, Any]:
+    """
+    Resolve Google News wrappers to Investegate/LSE PDFs and download RNS bodies.
+
+    Used by ingest-improvement and gap-fill when indexed UK RNS rows lack text.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists():
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": f"unreadable index: {exc}",
+        }
+
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    enriched = enrich_filing_rows(
+        filings,
+        ticker=ticker,
+        company_name=company_name,
+    )
+    rns_sources = {
+        "google_news_investegate",
+        "investegate_direct",
+        "investegate_resolved",
+        "ticker_rns_api",
+    }
+    missing = [
+        row
+        for row in enriched
+        if row.get("url")
+        and not row.get("has_body")
+        and (
+            str(row.get("source") or "") in rns_sources
+            or "investegate.co.uk" in str(row.get("url") or "")
+            or "news.google.com" in str(row.get("url") or "")
+        )
+    ]
+    if not missing:
+        if enriched != filings:
+            payload["filings"] = enriched
+            payload["summary"] = summarize_filings(enriched)
+            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": before,
+            "with_body_after": before,
+            "note": "no missing Investegate/LSE bodies",
+        }
+
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    downloaded = 0
+    updated: list[dict[str, Any]] = []
+    missing_ids = {row.get("id") for row in missing}
+    for row in enriched:
+        item = dict(row)
+        if (
+            downloaded < max_bodies
+            and item.get("id") in missing_ids
+            and item.get("url")
+            and not item.get("has_body")
+        ):
+            body = fetch_filing_body(str(item["url"]))
+            if body:
+                filename = f"{item['id']}.txt"
+                path = bodies_dir / filename
+                path.write_text(body, encoding="utf-8")
+                item["has_body"] = True
+                item["body_path"] = str(path)
+                downloaded += 1
+        updated.append(item)
+
+    after = sum(1 for row in updated if row.get("has_body"))
+    payload["filings"] = updated
+    payload["summary"] = summarize_filings(updated)
+    payload["investegate_refetched_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": len(missing),
+        "fetched": max(0, after - before),
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "refetch_investegate_filing_bodies",
     }
 
 

@@ -24,11 +24,13 @@ def test_deepen_thin_filings_skips_when_sufficient(tmp_path: Path):
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_ch_refetch_for_uk(
     mock_refetch,
     mock_ch_refetch,
+    mock_investegate_refetch,
     mock_ir_rows,
     mock_ir_refetch,
     mock_news,
@@ -44,6 +46,7 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
     )
     mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
     mock_ch_refetch.return_value = {"fetched": 2, "with_body_after": 2}
+    mock_investegate_refetch.return_value = {"fetched": 0, "with_body_after": 2}
 
     pack = prepare_gap_fill_source_pack(
         ticker="BT-A.L",
@@ -53,8 +56,48 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
         market="ftse350",
     )
     mock_ch_refetch.assert_called_once()
+    mock_investegate_refetch.assert_called_once()
     assert pack["ch_refetch"]["fetched"] == 2
     assert pack["body_refetch"]["fetched"] == 2
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_calls_investegate_refetch_for_uk(
+    mock_refetch,
+    mock_ch_refetch,
+    mock_investegate_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_investegate_refetch.return_value = {"fetched": 3, "with_body_after": 3}
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="ITV.L",
+        company_name="ITV plc",
+        sources_dir=tmp_path,
+        open_questions=["annual results"],
+        market="ftse350",
+    )
+    mock_investegate_refetch.assert_called_once()
+    assert pack["investegate_refetch"]["fetched"] == 3
+    assert pack["body_refetch"]["fetched"] == 3
 
 
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
@@ -140,11 +183,13 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
+@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
     mock_refetch,
     mock_ch_refetch,
+    mock_investegate_refetch,
     mock_ir_rows,
     mock_ir_refetch,
     mock_news,
@@ -160,6 +205,7 @@ def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
     )
     mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
     mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_investegate_refetch.return_value = {"fetched": 0, "with_body_after": 0}
     mock_ir_rows.return_value = [{"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}]
     mock_ir_refetch.return_value = {"fetched": 1, "with_body_after": 1}
 

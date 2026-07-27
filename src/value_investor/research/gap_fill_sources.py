@@ -17,6 +17,7 @@ from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
     refetch_companies_house_filing_bodies,
+    refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
 )
@@ -311,6 +312,7 @@ def prepare_gap_fill_source_pack(
     filings_dir = sources_dir / "filings"
     body_refetch = refetch_missing_filing_bodies(filings_dir)
     ch_refetch: dict[str, Any] = {}
+    investegate_refetch: dict[str, Any] = {}
     if _market_bucket(market, ticker) == "uk":
         ch_refetch = refetch_companies_house_filing_bodies(
             filings_dir,
@@ -318,6 +320,14 @@ def prepare_gap_fill_source_pack(
         )
         if int(ch_refetch.get("fetched") or 0) > 0:
             body_refetch = ch_refetch
+        investegate_refetch = refetch_investegate_filing_bodies(
+            filings_dir,
+            ticker=ticker,
+            company_name=company_name,
+            max_bodies=20,
+        )
+        if int(investegate_refetch.get("fetched") or 0) > 0:
+            body_refetch = investegate_refetch
     ir_refetch: dict[str, Any] = {}
     if fetch_filings_ir_allowlist(ticker):
         ir_refetch = refetch_ir_allowlist_filing_bodies(
@@ -389,6 +399,7 @@ def prepare_gap_fill_source_pack(
         "inventory": inventory,
         "body_refetch": body_refetch,
         "ch_refetch": ch_refetch,
+        "investegate_refetch": investegate_refetch,
         "ir_refetch": ir_refetch,
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
@@ -466,7 +477,17 @@ def execute_planned_alternate_sources(
                 market=market,
                 deepen_history=True,
             )
-            last_refetch = refetch_missing_filing_bodies(filings_dir, max_bodies=20)
+            if source_id == "investegate_rns_full":
+                from value_investor.research.filings import refetch_investegate_filing_bodies
+
+                last_refetch = refetch_investegate_filing_bodies(
+                    filings_dir,
+                    ticker=ticker,
+                    company_name=company_name,
+                    max_bodies=20,
+                )
+            else:
+                last_refetch = refetch_missing_filing_bodies(filings_dir, max_bodies=20)
             prune_orphaned_filing_bodies(filings_dir)
             fetched = int(last_refetch.get("fetched") or 0)
             fetched_total += fetched

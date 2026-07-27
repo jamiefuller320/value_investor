@@ -12,6 +12,7 @@ from typing import Any
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     refetch_companies_house_filing_bodies,
+    refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
@@ -419,12 +420,26 @@ def run_ingest_improvement_pass(
                 or 0
             )
             ch_refetch: dict[str, Any] = {}
+            investegate_refetch: dict[str, Any] = {}
             if _is_uk_listed(market=market, ticker=target.ticker) and before == 0:
                 ch_refetch = refetch_companies_house_filing_bodies(
                     sources_dir / "filings",
                     max_bodies=20,
                 )
                 if int(ch_refetch.get("fetched") or 0) > 0:
+                    inventory = inspect_local_sources(sources_dir)
+                    before = int(
+                        (inventory.get("filings_summary") or {}).get("with_body")
+                        or inventory.get("filings_indexed_bodies")
+                        or before
+                    )
+                investegate_refetch = refetch_investegate_filing_bodies(
+                    sources_dir / "filings",
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    max_bodies=20,
+                )
+                if int(investegate_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(
                         (inventory.get("filings_summary") or {}).get("with_body")
@@ -502,6 +517,7 @@ def run_ingest_improvement_pass(
                     "mapped_source_ids": mapped_source_ids,
                     "planned_sources": [row.get("id") for row in planned],
                     "ch_refetch": ch_refetch,
+                    "investegate_refetch": investegate_refetch,
                     "ir_refetch": ir_refetch,
                     "alternate_sources": alternate,
                     "deepen": deepen,
