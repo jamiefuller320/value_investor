@@ -28,6 +28,7 @@ from value_investor.historical_analysis import (
 from value_investor.model_weights import load_model_weights, save_model_snapshot, update_model_weights
 from value_investor.models.trusts import ALL_TRUST_MODELS
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
+from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
@@ -126,6 +127,7 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "dividend_yield",
         "price_to_book",
         "healthcare_overlay",
+        "cash_conversion_overlay",
         "adjusted_signal",
     ]
     present = [c for c in cols if c in signals.columns]
@@ -296,6 +298,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out["run_at"] = result.run_at.isoformat()
     signals_out = enrich_signals_with_research(signals_out, output_dir, run_at=result.run_at)
     signals_out = enrich_signals_with_healthcare_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_cash_conversion_overlay(signals_out, result.model_results)
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
     result.universe.to_csv(paths["universe"], index=False)

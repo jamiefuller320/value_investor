@@ -73,6 +73,29 @@ def _model_results_for_hik() -> pd.DataFrame:
     ])
 
 
+def _model_results_for_hik_cash_conversion_cap() -> pd.DataFrame:
+    return pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "model_id": "dividend_growth",
+            "model_name": "Dividend Growth",
+            "passed": True,
+            "score": 0.8,
+            "reasons": "['dividend payer: yield=3.9%']",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": "HIK.L",
+            "model_id": "piotroski_f",
+            "model_name": "Piotroski F-Score",
+            "passed": True,
+            "score": 7 / 9,
+            "reasons": "['F-Score=7/9', 'positive net income', 'no share dilution']",
+            "failed_criteria": "['OCF > net income']",
+        },
+    ])
+
+
 def test_build_company_reports_exports_failed_models():
     signals = pd.DataFrame([_signal_row()])
     model_results = _model_results_for_hik()
@@ -304,7 +327,72 @@ def test_healthcare_overlay_not_triggered_for_hik_like_profile():
 
     assert report.signal == "strong_buy"
     assert report.to_dict()["healthcare_overlay"] is False
+    assert report.to_dict()["cash_conversion_overlay"] is False
     assert report.to_dict()["adjusted_signal"] == "strong_buy"
+
+
+def test_cash_conversion_overlay_caps_hik_like_profile():
+    signals = pd.DataFrame([
+        _signal_row(
+            free_cashflow=-66.1,
+            shares_outstanding=240_000_000,
+            shares_outstanding_prev=245_000_000,
+        ),
+    ])
+    model_results = _model_results_for_hik_cash_conversion_cap()
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert report.signal == "strong_buy"
+    assert snapshot["healthcare_overlay"] is False
+    assert snapshot["cash_conversion_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Cash-conversion overlay" in report.summary
+
+
+def test_cash_conversion_overlay_not_triggered_without_dividend_screen():
+    signals = pd.DataFrame([
+        _signal_row(
+            free_cashflow=-66.1,
+            shares_outstanding=240_000_000,
+            shares_outstanding_prev=245_000_000,
+        ),
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "model_id": "piotroski_f",
+            "model_name": "Piotroski F-Score",
+            "passed": True,
+            "score": 7 / 9,
+            "reasons": "['F-Score=7/9', 'no share dilution']",
+            "failed_criteria": "[]",
+        },
+    ])
+
+    report = build_company_reports(signals, model_results)[0]
+
+    assert report.to_dict()["cash_conversion_overlay"] is False
+    assert report.to_dict()["adjusted_signal"] == "strong_buy"
+
+
+def test_cash_conversion_overlay_respects_existing_research_adjusted_signal():
+    signals = pd.DataFrame([
+        _signal_row(
+            free_cashflow=-66.1,
+            shares_outstanding=240_000_000,
+            shares_outstanding_prev=245_000_000,
+            adjusted_signal="hold",
+            research_verdict="pass",
+        ),
+    ])
+    model_results = _model_results_for_hik_cash_conversion_cap()
+
+    report = build_company_reports(signals, model_results)[0]
+
+    assert report.to_dict()["cash_conversion_overlay"] is True
+    assert report.adjusted_signal == "hold"
 
 
 def test_healthcare_overlay_respects_existing_research_adjusted_signal():

@@ -11,6 +11,7 @@ import pandas as pd
 from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
+from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -59,6 +60,7 @@ class CompanyReport:
     screening_inputs: dict[str, Any] = field(default_factory=dict)
     piotroski_f_score: dict[str, Any] | None = None
     healthcare_overlay: bool = False
+    cash_conversion_overlay: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -98,6 +100,7 @@ class CompanyReport:
             "key_metrics": self.key_metrics,
             "piotroski_f_score": self.piotroski_f_score,
             "healthcare_overlay": self.healthcare_overlay,
+            "cash_conversion_overlay": self.cash_conversion_overlay,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -251,6 +254,7 @@ def _brief_summary(
     research_verdict: str | None = None,
     adjusted_signal: str | None = None,
     healthcare_overlay: bool = False,
+    cash_conversion_overlay: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -309,6 +313,12 @@ def _brief_summary(
     if healthcare_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
             f"Healthcare overlay: negative FCF with weak Piotroski "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if cash_conversion_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Cash-conversion overlay: negative FCF with dividend screens and buyback "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -386,6 +396,34 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 piotroski_f_score=piotroski_score,
                 adjusted_signal=adjusted_signal_str,
             )
+
+        shares = row.get("shares_outstanding")
+        shares_outstanding = (
+            float(shares)
+            if shares is not None and not (isinstance(shares, float) and pd.isna(shares))
+            else None
+        )
+        shares_prev = row.get("shares_outstanding_prev")
+        shares_outstanding_prev = (
+            float(shares_prev)
+            if shares_prev is not None and not (isinstance(shares_prev, float) and pd.isna(shares_prev))
+            else None
+        )
+
+        cash_conversion_overlay_flag = row.get("cash_conversion_overlay")
+        if cash_conversion_overlay_flag is not None and not (
+            isinstance(cash_conversion_overlay_flag, float) and pd.isna(cash_conversion_overlay_flag)
+        ):
+            cash_conversion_overlay = bool(cash_conversion_overlay_flag)
+        else:
+            cash_conversion_overlay, adjusted_signal_str = apply_cash_conversion_overlay_to_signal(
+                signal,
+                free_cashflow=free_cashflow,
+                shares_outstanding=shares_outstanding,
+                shares_outstanding_prev=shares_outstanding_prev,
+                ticker_models=ticker_models,
+                adjusted_signal=adjusted_signal_str,
+            )
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
@@ -439,6 +477,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             research_verdict=research_verdict_str,
             adjusted_signal=adjusted_signal_str,
             healthcare_overlay=healthcare_overlay,
+            cash_conversion_overlay=cash_conversion_overlay,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -477,6 +516,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 screening_inputs=screening_inputs,
                 piotroski_f_score=piotroski_f_score,
                 healthcare_overlay=healthcare_overlay,
+                cash_conversion_overlay=cash_conversion_overlay,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,
