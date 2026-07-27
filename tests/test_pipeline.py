@@ -11,6 +11,7 @@ import value_investor.pipeline  # noqa: F401 — installs research snapshot hook
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
+from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
     apply_sector_overrides,
@@ -330,3 +331,62 @@ def test_apply_sector_overrides_changes_sector_composite_score():
 
     assert aep_before > 0.7
     assert aep_after < aep_before
+
+
+def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
+    signals = pd.DataFrame([
+        {
+            "ticker": "PHAR.L",
+            "name": "Pharma Weak Ltd",
+            "sector": "Healthcare",
+            "signal": "strong_buy",
+            "free_cashflow": -80.0,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "PHAR.L",
+            "model_id": "piotroski_f",
+            "model_name": "Piotroski F-Score",
+            "passed": False,
+            "score": 4 / 9,
+            "reasons": "['F-Score=4/9']",
+            "failed_criteria": "['F-Score 4/9 below 7']",
+        },
+    ])
+
+    enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
+
+    assert enriched.iloc[0]["signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["healthcare_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_signals_with_healthcare_overlay_after_research():
+    signals = pd.DataFrame([
+        {
+            "ticker": "PHAR.L",
+            "name": "Pharma Weak Ltd",
+            "sector": "Healthcare",
+            "signal": "strong_buy",
+            "free_cashflow": -80.0,
+            "adjusted_signal": "strong_buy",
+            "research_verdict": "accumulate",
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "PHAR.L",
+            "model_id": "piotroski_f",
+            "model_name": "Piotroski F-Score",
+            "passed": False,
+            "score": 2 / 9,
+            "reasons": "['F-Score=2/9']",
+            "failed_criteria": "['F-Score 2/9 below 7']",
+        },
+    ])
+
+    enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
+
+    assert bool(enriched.iloc[0]["healthcare_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
