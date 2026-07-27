@@ -327,6 +327,7 @@ def snapshot_ingest_health(
 ) -> dict[str, Any]:
     """Summarise buy-tier filing body coverage from committed research stores."""
     roots = research_roots or [
+        Path("docs/data/research"),
         Path("output/research"),
         Path("docs/data/library/markets"),
     ]

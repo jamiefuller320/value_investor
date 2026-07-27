@@ -108,6 +108,51 @@ class CompanyReport:
             "research_rationale": self.research_rationale,
         }
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> CompanyReport:
+        from value_investor.technical_analysis import trade_plan_from_row
+
+        trade_plan_raw = data.get("trade_plan")
+        trade_plan = trade_plan_from_row(trade_plan_raw) if trade_plan_raw else None
+        return cls(
+            ticker=str(data["ticker"]),
+            name=str(data.get("name") or data["ticker"]),
+            sector=data.get("sector"),
+            signal=str(data.get("signal") or "hold"),
+            models_passed=int(data.get("models_passed") or 0),
+            model_count=int(data.get("model_count") or 0),
+            composite_score=data.get("composite_score"),
+            sector_composite_score=data.get("sector_composite_score"),
+            families_passed=int(data.get("families_passed") or 0),
+            passed_families=data.get("passed_families"),
+            data_quality_score=float(data.get("data_quality_score") or 0.0),
+            metrics_present=int(data.get("metrics_present") or 0),
+            metrics_total=int(data.get("metrics_total") or 0),
+            weeks_at_signal=int(data.get("weeks_at_signal") or 0),
+            signal_trend=str(data.get("signal_trend") or "new"),
+            conviction_score=float(data.get("conviction_score") or 0.0),
+            stability_label=str(data.get("stability_label") or "new"),
+            timing_signal=str(data.get("timing_signal") or "neutral"),
+            timing_score=float(data.get("timing_score") or 0.0),
+            rsi_14=data.get("rsi_14"),
+            price_vs_sma200_pct=data.get("price_vs_sma200_pct"),
+            action_note=str(data.get("action_note") or ""),
+            trade_plan=trade_plan,
+            summary=str(data.get("summary") or ""),
+            passed_models=list(data.get("passed_models") or []),
+            key_metrics=dict(data.get("key_metrics") or {}),
+            failed_models=list(data.get("failed_models") or []),
+            model_failures=dict(data.get("model_failures") or {}),
+            screening_inputs=dict(data.get("screening_inputs") or {}),
+            piotroski_f_score=data.get("piotroski_f_score"),
+            healthcare_overlay=bool(data.get("healthcare_overlay")),
+            adjusted_signal=data.get("adjusted_signal"),
+            research_verdict=data.get("research_verdict"),
+            research_risk_level=data.get("research_risk_level"),
+            research_confidence=data.get("research_confidence"),
+            research_rationale=data.get("research_rationale"),
+        )
+
 
 def _parse_list_field(value: Any) -> list[str]:
     if value is None or (isinstance(value, float) and pd.isna(value)):
