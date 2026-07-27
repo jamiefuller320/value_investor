@@ -21,10 +21,13 @@ from value_investor.research.filings import (
     merge_ir_allowlist_filings,
     prune_orphaned_filing_bodies,
     refetch_companies_house_filing_bodies,
+    refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
+    resolve_investegate_document_url,
+    resolve_investegate_lse_pdf_url,
     summarize_filings,
     _scrub_misattributed_filing_rows,
     _issuer_matches_sec_name,
@@ -205,6 +208,167 @@ def test_enrich_filing_rows_resolves_google_wrapper(monkeypatch):
     )
     assert enriched[0]["source"] == "investegate_resolved"
     assert "investegate.co.uk/announcement/" in enriched[0]["url"]
+    assert enriched[0]["period"] == "annual"
+
+
+def test_enrich_filing_rows_reclassifies_trading_update(monkeypatch):
+    google_row = {
+        "id": "g2",
+        "source": "google_news_investegate",
+        "headline": "ITV plc Q1 Trading Update - Investegate",
+        "published_at": "2026-05-14T00:00:00+00:00",
+        "url": "https://news.google.com/rss/articles/q1",
+        "period": "other",
+        "has_body": False,
+        "priority": 50,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [
+            {
+                "id": "i2",
+                "source": "investegate_direct",
+                "headline": "ITV plc Q1 Trading Update",
+                "published_at": "2026-05-14T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/q1-trading/1",
+                "period": "interim",
+                "has_body": False,
+                "priority": 90,
+            }
+        ],
+    )
+    enriched = enrich_filing_rows(
+        [google_row],
+        ticker="ITV.L",
+        company_name="ITV plc",
+    )
+    assert enriched[0]["period"] == "interim"
+    assert enriched[0]["priority"] >= 80
+
+
+def test_resolve_investegate_document_url_finds_lse_pdf():
+    html = """
+    <p>Click on or paste the following link into your web browser to view the associated PDF document.
+    <a href="http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf">PDF</a></p>
+    """
+    assert resolve_investegate_document_url(html) == (
+        "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    )
+
+
+def test_resolve_investegate_lse_pdf_url_upgrades_investegate_page(monkeypatch):
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
+    )
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    html = f'<a href="{lse_pdf}">PDF</a>'
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    assert resolve_investegate_lse_pdf_url(investegate_url) == lse_pdf
+    assert resolve_investegate_lse_pdf_url(lse_pdf) == lse_pdf
+
+
+def test_fetch_filing_body_investegate_follows_lse_pdf(monkeypatch):
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
+    )
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    investegate_html = f"""
+    <h1>ITV plc Full Year Results 2025</h1>
+    <p>Short blurb only.</p>
+    <a href="{lse_pdf}">PDF</a>
+    """
+    pdf_text = "A" * 250 + " revenue increased and operating profit rose sharply."
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == investegate_url:
+            return investegate_html.encode("utf-8")
+        if url == lse_pdf:
+            return b"%PDF-fake"
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: pdf_text,
+    )
+    text = fetch_filing_body(investegate_url)
+    assert text is not None
+    assert "revenue increased" in text
+
+
+def test_refetch_investegate_filing_bodies_resolves_and_downloads(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "gnews1",
+                "source": "google_news_investegate",
+                "headline": "ITV plc Full Year Results 2025 - Investegate",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": "https://news.google.com/rss/articles/abc",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 50,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+
+    def fake_enrich(rows, *, ticker, company_name):
+        return [
+            {
+                **rows[0],
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1",
+                "source": "investegate_resolved",
+                "period": "annual",
+            }
+        ]
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        fake_enrich,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: "Annual results narrative " + ("x" * 220),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert saved["filings"][0]["period"] == "annual"
+    assert (filings_dir / "bodies" / "gnews1.txt").exists()
+
+
+def test_resolve_investegate_url_decodes_google_news_to_investegate(monkeypatch):
+    from value_investor.research.filings import resolve_investegate_url
+
+    decoded = "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1"
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: decoded,
+    )
+    row = {
+        "url": "https://news.google.com/rss/articles/CBMiabc?oc=5",
+        "headline": "ITV plc Full Year Results 2025",
+    }
+    assert (
+        resolve_investegate_url(row, ticker="ITV.L", company_name="ITV plc")
+        == decoded
+    )
 
 
 def test_fetch_filing_body_parses_pdf(monkeypatch):
