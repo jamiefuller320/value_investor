@@ -22,20 +22,29 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Weekday ingest-assess loop for live FTSE buy-tier filing coverage",
     )
-    parser.add_argument("--json", action="store_true")
-    parser.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
-    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--health-log-path", type=Path, default=DEFAULT_HEALTH_LOG_PATH)
-    parser.add_argument("--suggestions-path", type=Path, default=DEFAULT_SUGGESTIONS_PATH)
-    parser.add_argument("--max-targets", type=int, default=5)
-    parser.add_argument("--stall-runs", type=int, default=DEFAULT_STALL_RUNS)
-    parser.add_argument("--micro-compile-max-tasks", type=int, default=3)
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--json", action="store_true")
+    common.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
+    common.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    common.add_argument("--health-log-path", type=Path, default=DEFAULT_HEALTH_LOG_PATH)
+    common.add_argument("--suggestions-path", type=Path, default=DEFAULT_SUGGESTIONS_PATH)
+    common.add_argument("--max-targets", type=int, default=5)
+    common.add_argument("--stall-runs", type=int, default=DEFAULT_STALL_RUNS)
+    common.add_argument("--micro-compile-max-tasks", type=int, default=3)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    run_p = sub.add_parser("run", help="Run ingest improvement, log health, maybe micro-compile tasks")
+    run_p = sub.add_parser(
+        "run",
+        parents=[common],
+        help="Run ingest improvement, log health, maybe micro-compile tasks",
+    )
     run_p.set_defaults(func=_cmd_run)
 
-    status_p = sub.add_parser("status", help="Report whether ingest health is stalled")
+    status_p = sub.add_parser(
+        "status",
+        parents=[common],
+        help="Report whether ingest health is stalled",
+    )
     status_p.set_defaults(func=_cmd_status)
 
     args = parser.parse_args(argv)

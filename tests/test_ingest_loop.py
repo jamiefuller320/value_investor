@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from unittest.mock import patch
 
 from value_investor.engineering_tasks import (
     EngineeringTask,
@@ -11,10 +12,12 @@ from value_investor.engineering_tasks import (
     task_title_key,
 )
 from value_investor.ingest_loop import (
+    IngestLoopResult,
     append_health_log_entry,
     ingest_health_stalled,
     reports_from_latest,
 )
+from value_investor.ingest_loop_cli import main
 
 
 def test_reports_from_latest_builds_company_reports(tmp_path: Path):
@@ -146,3 +149,14 @@ def test_compile_ingest_engineering_tasks_micro_appends_ingest_tasks(tmp_path: P
     assert len(open_tasks) == 1
     assert open_tasks[0]["area"] == "ingest"
     assert task_title_key(open_tasks[0]["title"]).startswith("implement companies house")
+
+
+def test_ingest_loop_cli_run_json_flag_parsing():
+    result = IngestLoopResult(
+        health_before={"zero_body_buy_tier": 2},
+        health_after={"zero_body_buy_tier": 1},
+        ingest_summary=None,
+        micro_compiled=False,
+    )
+    with patch("value_investor.ingest_loop_cli.run_weekday_ingest_loop", return_value=result):
+        assert main(["run", "--json", "--max-targets", "2"]) == 0

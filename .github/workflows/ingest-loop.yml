@@ -47,11 +47,12 @@ jobs:
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
         run: |
-          ARGS="run --json"
+          set -euo pipefail
+          ARGS=(run --json)
           if [ -n "${{ github.event.inputs.max_targets }}" ]; then
-            ARGS="$ARGS --max-targets ${{ github.event.inputs.max_targets }}"
+            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
           fi
-          ftse-ingest-loop $ARGS | tee /tmp/ingest_loop.json
+          ftse-ingest-loop "${ARGS[@]}" > /tmp/ingest_loop.json
           python3 - <<'PY'
           import json
           import os
