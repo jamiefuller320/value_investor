@@ -60,6 +60,35 @@ def test_map_suggestion_to_source_ids():
     assert "sec_exhibits" in map_suggestion_to_source_ids(
         "dual-list SEDAR+ 20-F/AIF for annual accounts"
     )
+    assert "company_ir_presentation" in map_suggestion_to_source_ids(
+        "Fetch ITV investor-relations results presentation PDFs (segment revenue, Studios margin range, dividend policy, pro-forma cash flow) from allowlisted IR URLs post-results."
+    )
+
+
+def test_planned_sources_includes_ir_presentation_for_itv_l():
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    inventory = {
+        "thin": ["filings_bodies"],
+        "filings_summary": {"with_body": 0, "total": 5},
+    }
+    planned = _planned_sources_for_ticker(
+        ticker="ITV.L",
+        market="ftse350",
+        inventory=inventory,
+        ingest_suggestions=[
+            {
+                "suggestion": (
+                    "Fetch ITV investor-relations results presentation PDFs "
+                    "(segment revenue, Studios margin range, dividend policy, pro-forma cash flow)"
+                )
+            }
+        ],
+        filings_with_body=0,
+    )
+    planned_ids = {row["id"] for row in planned}
+    assert "company_ir_presentation" in planned_ids
+    assert fetch_filings_ir_allowlist("ITV.L")
 
 
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):

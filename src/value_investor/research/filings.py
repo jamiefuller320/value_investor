@@ -41,6 +41,14 @@ CH_OCR_MAX_PAGES = int(os.environ.get("COMPANIES_HOUSE_OCR_MAX_PAGES", "12"))
 CH_OCR_DPI = int(os.environ.get("COMPANIES_HOUSE_OCR_DPI", "150"))
 TICKER_API_BASE = "https://api.tickerapp.net/v2"
 DEFAULT_IR_URLS_PATH = Path("docs/data/research_ir_urls.json")
+# Code-shipped IR URLs for tickers not yet in research_ir_urls.json (or needing extra decks).
+_BUILTIN_IR_URLS: dict[str, list[str]] = {
+    "ITV.L": [
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%202025%20FY%20Results%20Presentation.pdf",
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20_%202025%20Interim%20Results%20Presentation.pdf",
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20FY%202024%20Results%20Presentation%20-%2006032025.pdf",
+    ],
+}
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik10}.json"
 SEC_ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{accession_nodash}/{document}"
@@ -1813,27 +1821,42 @@ def _source_bonus(source: str | None) -> int:
     return 0
 
 
+def _merge_ir_url_lists(*groups: dict[str, list[str]]) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {}
+    for group in groups:
+        for key, urls in group.items():
+            ticker = str(key).upper()
+            seen = set(out.get(ticker) or [])
+            merged = list(out.get(ticker) or [])
+            for url in urls:
+                cleaned = str(url).strip()
+                if cleaned and cleaned not in seen:
+                    merged.append(cleaned)
+                    seen.add(cleaned)
+            if merged:
+                out[ticker] = merged
+    return out
+
+
 def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
     """Manual IR/results PDF URLs by Yahoo ticker (MVP until a generic crawler)."""
     path = path or DEFAULT_IR_URLS_PATH
-    if not path.exists():
-        return {}
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError, TypeError):
-        return {}
-    urls = data.get("urls") if isinstance(data, dict) else data
-    if not isinstance(urls, dict):
-        return {}
-    out: dict[str, list[str]] = {}
-    for key, value in urls.items():
-        if isinstance(value, str) and value.strip():
-            out[str(key).upper()] = [value.strip()]
-        elif isinstance(value, list):
-            cleaned = [str(u).strip() for u in value if str(u).strip()]
-            if cleaned:
-                out[str(key).upper()] = cleaned
-    return out
+    file_urls: dict[str, list[str]] = {}
+    if path.exists():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            data = {}
+        urls = data.get("urls") if isinstance(data, dict) else data
+        if isinstance(urls, dict):
+            for key, value in urls.items():
+                if isinstance(value, str) and value.strip():
+                    file_urls[str(key).upper()] = [value.strip()]
+                elif isinstance(value, list):
+                    cleaned = [str(u).strip() for u in value if str(u).strip()]
+                    if cleaned:
+                        file_urls[str(key).upper()] = cleaned
+    return _merge_ir_url_lists(file_urls, _BUILTIN_IR_URLS)
 
 
 def fetch_filings_ir_allowlist(

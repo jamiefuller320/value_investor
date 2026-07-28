@@ -220,3 +220,51 @@ def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
     mock_ir_refetch.assert_called_once()
     assert pack["ir_refetch"]["fetched"] == 1
     assert pack["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
+@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_calls_ir_refetch_for_itv_l(
+    mock_refetch,
+    mock_ch_refetch,
+    mock_investegate_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_investegate_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ir_rows.return_value = [
+        {
+            "id": "ir_itv_fy25",
+            "source": "ir_allowlist",
+            "url": "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%202025%20FY%20Results%20Presentation.pdf",
+        }
+    ]
+    mock_ir_refetch.return_value = {"fetched": 1, "with_body_after": 1}
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="ITV.L",
+        company_name="ITV plc",
+        sources_dir=tmp_path,
+        open_questions=["segment revenue and dividend cover"],
+        market="ftse350",
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert pack["ir_refetch"]["fetched"] == 1
+    assert pack["body_refetch"]["fetched"] == 1
