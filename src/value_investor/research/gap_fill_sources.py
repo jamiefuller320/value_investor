@@ -20,6 +20,7 @@ from value_investor.research.filings import (
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
+    refetch_ticker_rns_api_filing_bodies,
 )
 from value_investor.storage import read_json, resolve_json_path, write_json
 
@@ -313,6 +314,7 @@ def prepare_gap_fill_source_pack(
     body_refetch = refetch_missing_filing_bodies(filings_dir)
     ch_refetch: dict[str, Any] = {}
     investegate_refetch: dict[str, Any] = {}
+    ticker_rns_refetch: dict[str, Any] = {}
     if _market_bucket(market, ticker) == "uk":
         ch_refetch = refetch_companies_house_filing_bodies(
             filings_dir,
@@ -328,6 +330,14 @@ def prepare_gap_fill_source_pack(
         )
         if int(investegate_refetch.get("fetched") or 0) > 0:
             body_refetch = investegate_refetch
+        ticker_rns_refetch = refetch_ticker_rns_api_filing_bodies(
+            filings_dir,
+            ticker=ticker,
+            company_name=company_name,
+            max_bodies=20,
+        )
+        if int(ticker_rns_refetch.get("fetched") or 0) > 0:
+            body_refetch = ticker_rns_refetch
     ir_refetch: dict[str, Any] = {}
     if fetch_filings_ir_allowlist(ticker):
         ir_refetch = refetch_ir_allowlist_filing_bodies(
@@ -400,6 +410,7 @@ def prepare_gap_fill_source_pack(
         "body_refetch": body_refetch,
         "ch_refetch": ch_refetch,
         "investegate_refetch": investegate_refetch,
+        "ticker_rns_refetch": ticker_rns_refetch,
         "ir_refetch": ir_refetch,
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
