@@ -26,7 +26,7 @@ WORKFLOW_SCHEDULES = {
             "daily 05:30 UTC surplus-day ladder gate; "
             "weekdays 08:17 UTC paper automation (+ 11:17 catch-up). "
             "Skips children that already succeeded today. "
-            "External cron setup: docs/ops/orchestrator-cron.md."
+            "External cron (primary): docs/ops/orchestrator-cron.md."
         ),
         "workflow": "automation-orchestrator.yml",
     },
@@ -86,9 +86,11 @@ WORKFLOW_SCHEDULES = {
         "name": "Modelling analysis review",
         "cron": "30 8 * * 0",
         "cadence": (
-            "Sunday 08:30 UTC read-only synthesis over backtest/sim/historical analysis "
-            "and paper learning tracks. Writes analysis_review + analysis_tasks; manual "
-            "promotion to engineering queue. docs/ops/analysis-review.md."
+            "Sunday 08:30 UTC GitHub backup; **primary: cron-job.org** "
+            "35 10 * * 0 (optional 35 12) after email bundle. "
+            "Read-only synthesis over backtest/sim/historical analysis and paper "
+            "learning tracks. docs/ops/analysis-review.md; scheduling: "
+            "docs/ops/orchestrator-cron.md."
         ),
         "workflow": "analysis-review.yml",
     },

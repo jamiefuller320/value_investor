@@ -36,6 +36,9 @@ Typical production wrapper:
 ftse-email --dry-run --publish-dashboard --deep-analysis --research-docs --research-gap-fill
 ```
 
+**Scheduling:** production calendar triggers use **cron-job.org → `workflow_dispatch`**
+(PAT), not GitHub `schedule` alone. See [`docs/ops/orchestrator-cron.md`](ops/orchestrator-cron.md).
+
 ---
 
 ## Canonical vs published data
