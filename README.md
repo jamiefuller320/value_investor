@@ -251,7 +251,7 @@ Before the scheduled Monday workflow (or your first manual `ftse-email`):
 3. **Preflight** — `ftse-preflight --require-email` (CI runs this automatically). Warnings about missing history are normal on week 1. If you set `CURSOR_API_KEY`, confirm it with `ftse-verify-key` before enabling `--deep-analysis` / `--research-docs`.
 4. **Seed a screen locally** (optional but recommended) — `ftse-screen` then `ftse-email --dry-run --publish-dashboard` to verify outputs before Monday.
 5. **Research memos** — on first buy-tier signals, run `ftse-research` or `ftse-email --research-docs` so conviction overlays and historical replay have point-in-time verdicts.
-6. **Week 2+** — backtest, simulation, and historical analysis activate once two weekly snapshots exist in `output/history/`.
+6. **Week 2+** — backtest, simulation, and historical analysis activate once two weekly snapshots exist in `docs/data/history/` (mirrored from `output/history/` each screen).
 
 ```bash
 ftse-preflight --require-email

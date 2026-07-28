@@ -5,12 +5,21 @@ from __future__ import annotations
 import gzip
 import json
 import re
+import shutil
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
 # Align with historical analysis window.
 MAX_HISTORY_YEARS = 3
+# Git-tracked mirror of output/history for CI (see restore/publish helpers below).
+COMMITTED_HISTORY_DIR = Path("docs/data/history")
+_HISTORY_SNAPSHOT_GLOBS = (
+    "run_*.json",
+    "run_*.json.gz",
+    "models_*.json",
+    "models_*.json.gz",
+)
 # Keep a short rolling set of dashboard archives in git (not full history).
 DASHBOARD_ARCHIVE_KEEP = 8
 # Dashboard research index stores a short blurb, not the full memo.
@@ -143,6 +152,16 @@ def prune_paths_older_than(paths: list[Path], cutoff: datetime) -> list[Path]:
     return removed
 
 
+def history_snapshot_paths(history_dir: Path) -> list[Path]:
+    """List run/model snapshot files under a history directory."""
+    paths: list[Path] = []
+    if not history_dir.exists():
+        return paths
+    for pattern in _HISTORY_SNAPSHOT_GLOBS:
+        paths.extend(history_dir.glob(pattern))
+    return paths
+
+
 def prune_history_dir(
     output_dir: Path,
     *,
@@ -154,11 +173,59 @@ def prune_history_dir(
     if not history_dir.exists():
         return []
     cutoff = history_cutoff(max_years=max_years, now=now)
-    patterns = ("run_*.json", "run_*.json.gz", "models_*.json", "models_*.json.gz")
-    paths: list[Path] = []
-    for pattern in patterns:
-        paths.extend(history_dir.glob(pattern))
-    return prune_paths_older_than(paths, cutoff)
+    return prune_paths_older_than(history_snapshot_paths(history_dir), cutoff)
+
+
+def restore_committed_run_history(
+    output_dir: Path,
+    *,
+    committed_dir: Path | None = None,
+) -> int:
+    """
+    Copy git-tracked run/model snapshots into ``output/history`` before a screen.
+
+    Skips files that already exist locally so dev runs are not overwritten.
+    """
+    source = committed_dir or COMMITTED_HISTORY_DIR
+    if not source.exists():
+        return 0
+    dest = output_dir / "history"
+    dest.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    for path in history_snapshot_paths(source):
+        target = dest / path.name
+        if target.exists():
+            continue
+        shutil.copy2(path, target)
+        copied += 1
+    return copied
+
+
+def publish_committed_run_history(
+    output_dir: Path,
+    *,
+    committed_dir: Path | None = None,
+    max_years: int = MAX_HISTORY_YEARS,
+    now: datetime | None = None,
+) -> dict[str, int]:
+    """
+    Mirror ``output/history`` into ``docs/data/history`` for git commit.
+
+    Applies the same retention window as local ``output/history``.
+    """
+    source = output_dir / "history"
+    dest = committed_dir or COMMITTED_HISTORY_DIR
+    dest.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    if source.exists():
+        for path in history_snapshot_paths(source):
+            shutil.copy2(path, dest / path.name)
+            copied += 1
+    pruned = prune_paths_older_than(
+        history_snapshot_paths(dest),
+        history_cutoff(max_years=max_years, now=now),
+    )
+    return {"copied": copied, "pruned": len(pruned)}
 
 
 def prune_timestamped_outputs(

@@ -156,7 +156,8 @@ Assembled by `build_dashboard_bundle()` in `publish.py`:
 
 ## Historical replay
 
-`historical_analysis.py` walks archived `output/history/run_*.json.gz` snapshots.
+`historical_analysis.py` walks archived `output/history/run_*.json.gz` snapshots
+(restored from git-tracked `docs/data/history/` at the start of each screen).
 For each ticker × horizon it records:
 
 - Screen signal vs research-adjusted signal (`get_research_as_of` + `compute_adjusted_signal`)
@@ -187,7 +188,7 @@ screener stays on FTSE 350 until stage 4.
 |----------|-----------|---------------------|
 | Research memo | `output/research/{TICKER}/research.json` | `docs/research/{slug}.md` + `latest.json` index |
 | Model suggestions | `docs/data/research_model_suggestions.json` | `output/research_model_suggestions.json` |
-| Run summary | per-ticker `research.json` | `output/research_summary.json` (convenience) |
+| Run snapshots (backtest / sim / historical) | `output/history/run_*.json.gz` | `docs/data/history/` (3-year retention, gzip) |
 
 When adding new fields, extend `ResearchDocument` and the publish index — avoid
 a third parallel store.
