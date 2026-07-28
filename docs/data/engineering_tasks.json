@@ -357,6 +357,44 @@
       "merged_at": "2026-07-27T09:53:59.011795+00:00"
     },
     {
+      "id": "eng-20260728-07",
+      "area": "ingest",
+      "title": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, cau",
+      "summary": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
+      "priority": "high",
+      "priority_score": 42.0,
+      "source": "research_model_suggestions",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-07-20T20:51:04.192236+00:00"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for MEGP.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "status": "open"
+    },
+    {
       "id": "eng-20260728-06",
       "area": "ingest",
       "title": "Download and text-extract PDF bodies from `ticker_rns_api` URLs in `filings_index.json` (currently 52 indexed, 0 bodies); filter mis-attributed Google News head",
@@ -392,48 +430,13 @@
         ".github/workflows/paper-auto.yml",
         "docs/data/library/policy.json"
       ],
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260728-06.md",
       "branch_name": "cursor/eng-20260728-06-1de3",
-      "completed_at": "2026-07-28T07:11:42.657425+00:00"
-    },
-    {
-      "id": "eng-20260728-07",
-      "area": "ingest",
-      "title": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, cau",
-      "summary": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
-      "priority": "high",
-      "priority_score": 40.0,
-      "source": "research_model_suggestions",
-      "evidence": {
-        "tickers": [
-          "MEGP.L"
-        ],
-        "recorded_at": "2026-07-20T20:51:04.192236+00:00"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for MEGP.L",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "status": "open"
+      "completed_at": "2026-07-28T07:11:42.657425+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/136",
+      "pr_number": 136,
+      "merged_at": "2026-07-28T11:58:46.505235+00:00"
     },
     {
       "id": "eng-20260728-10",
@@ -441,7 +444,7 @@
       "title": "Fetch ITV investor-relations results presentation PDFs (segment revenue, Studios margin range, dividend policy, pro-forma cash flow) from allowlisted IR URLs po",
       "summary": "Fetch ITV investor-relations results presentation PDFs (segment revenue, Studios margin range, dividend policy, pro-forma cash flow) from allowlisted IR URLs post-results.",
       "priority": "high",
-      "priority_score": 40.0,
+      "priority_score": 36.0,
       "source": "research_model_suggestions",
       "evidence": {
         "tickers": [
@@ -475,6 +478,14 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-07-28T11:58:52.161051+00:00",
+    "buy_tier_count": 60,
+    "measured_tickers": 2,
+    "zero_body_buy_tier": 1,
+    "indexed_without_body": 20,
+    "filings_with_body": 7
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-07-28T07:06:28.494758+00:00",
     "buy_tier_count": 60,
     "measured_tickers": 7,
@@ -482,15 +493,7 @@
     "indexed_without_body": 21,
     "filings_with_body": 61
   },
-  "ingest_health_before": {
-    "snapshot_at": "2026-07-27T07:02:59.509969+00:00",
-    "buy_tier_count": 60,
-    "measured_tickers": 2,
-    "zero_body_buy_tier": 1,
-    "indexed_without_body": 20,
-    "filings_with_body": 7
-  },
-  "reprioritized_at": "2026-07-27T08:42:07.956574+00:00",
-  "reprioritized_after_task": "eng-20260726-03",
+  "reprioritized_at": "2026-07-28T11:58:52.161206+00:00",
+  "reprioritized_after_task": "eng-20260728-06",
   "micro_compile_source": "weekday_ingest_loop"
 }
