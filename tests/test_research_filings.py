@@ -14,9 +14,11 @@ from value_investor.research.filings import (
     fetch_filings_asx_direct,
     fetch_filings_euro_news,
     fetch_filings_investegate_company,
+    fetch_filings_ir_allowlist,
     filter_misattributed_filings,
     headline_relevant_to_issuer,
     ingest_filings,
+    load_ir_url_allowlist,
     merge_filings,
     merge_ir_allowlist_filings,
     prune_orphaned_filing_bodies,
@@ -1554,4 +1556,77 @@ def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path,
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
     assert (filings_dir / "bodies" / f"ir_{digest}.txt").exists()
+
+
+def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
+    """ITV.L IR results decks are allowlisted for segment/dividend/cash-flow gap-fill."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    mapping = load_ir_url_allowlist(allowlist_path)
+    assert "ITV.L" in mapping
+    assert len(mapping["ITV.L"]) >= 3
+
+    rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    periods = {row["period"] for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+    assert all("itvplc.com" in row["url"] for row in rows)
+
+
+def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+
+    rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
+    fy_url = next(row["url"] for row in rows if row["period"] == "annual" and "2025" in row["url"])
+    import hashlib
+
+    digest = hashlib.sha256(fy_url.encode("utf-8")).hexdigest()[:16]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest}",
+                        "source": "ir_allowlist",
+                        "headline": "ITV FY2025 results presentation",
+                        "url": fy_url,
+                        "period": "annual",
+                        "has_body": False,
+                        "body_path": None,
+                        "priority": 130,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    sample_body = (
+        "ITV Studios segment revenue £2,130m. Studios margin 13-15%. "
+        "Dividend policy 5.0p per share. Pro-forma cash flow bridge."
+        + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: sample_body if url == fy_url else None,
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "ITV.L",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    body_text = (filings_dir / "bodies" / f"ir_{digest}.txt").read_text(encoding="utf-8")
+    assert "Studios margin" in body_text
+    assert "Dividend policy" in body_text
 
