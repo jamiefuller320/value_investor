@@ -3,15 +3,24 @@ name: FTSE Ingest Loop
 # Weekday ingest-assess-improve loop for live FTSE buy-tier filing coverage.
 # Runs bounded ingest-improvement against docs/data/latest.json (no full screen),
 # logs ingest_health, and micro-compiles ingest engineering tasks when coverage stalls.
+#
+# Reliability: GitHub schedule is best-effort — use external cron → workflow_dispatch
+# (see docs/ops/orchestrator-cron.md). Primary + catch-up schedules skip when this
+# workflow already succeeded today (or another run is still active).
 on:
   schedule:
     - cron: "0 7 * * 1,3,5"
+    - cron: "0 10 * * 1,3,5"
   workflow_dispatch:
     inputs:
       max_targets:
         description: "Max buy-tier tickers for ingest-improvement pass"
         type: string
         default: "5"
+      force:
+        description: "Re-run even if ingest loop already succeeded today"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -22,7 +31,74 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - name: Skip if ingest loop already ran today
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        with:
+          script: |
+            const force = process.env.FORCE === 'true';
+            if (force) {
+              core.info('force=true — running ingest loop');
+              core.setOutput('should_run', 'true');
+              return;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflow_id = 'ingest-loop.yml';
+            const runId = context.runId;
+
+            function startOfUtcDay(d = new Date()) {
+              return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())).toISOString();
+            }
+
+            const dayStart = startOfUtcDay();
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id,
+              per_page: 30,
+            });
+
+            const prior = (data.workflow_runs || []).filter((r) =>
+              r.id !== runId
+              && r.created_at >= dayStart
+              && (r.event === 'workflow_dispatch' || r.event === 'schedule')
+            );
+
+            const succeeded = prior.find((r) => r.conclusion === 'success');
+            if (succeeded) {
+              core.info(
+                `Skipping — ingest loop already succeeded today (run ${succeeded.id} at ${succeeded.created_at})`
+              );
+              core.setOutput('should_run', 'false');
+              return;
+            }
+
+            const active = prior.find((r) =>
+              ['in_progress', 'queued', 'waiting', 'pending'].includes(r.status)
+            );
+            if (active) {
+              core.info(
+                `Skipping — ingest loop already active today (run ${active.id}, status=${active.status})`
+              );
+              core.setOutput('should_run', 'false');
+              return;
+            }
+
+            core.info('No successful ingest loop today — running');
+            core.setOutput('should_run', 'true');
+
   ingest-loop:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
