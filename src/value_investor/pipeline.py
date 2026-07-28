@@ -39,7 +39,12 @@ from value_investor.signal_stability import (
 )
 from value_investor.signals import build_signals
 from value_investor.simulator import SimulationComparison, run_simulation_comparison
-from value_investor.storage import apply_output_retention, write_json
+from value_investor.storage import (
+    apply_output_retention,
+    publish_committed_run_history,
+    restore_committed_run_history,
+    write_json,
+)
 from value_investor.technical_analysis import enrich_signals_with_technicals
 from value_investor.trust_metrics import fetch_trust_universe
 from value_investor.trust_signals import build_trust_signals
@@ -282,6 +287,7 @@ def run_screen(
 def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     """Write CSV and JSON artifacts for a screening run."""
     output_dir.mkdir(parents=True, exist_ok=True)
+    restore_committed_run_history(output_dir)
     stamp = result.run_at.strftime("%Y%m%d_%H%M%S")
 
     latest = output_dir / "latest_signals.csv"
@@ -373,5 +379,6 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     paths["signal_history"] = output_dir / "signal_history.csv"
 
     apply_output_retention(output_dir)
+    publish_committed_run_history(output_dir)
 
     return paths

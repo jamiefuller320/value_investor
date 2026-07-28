@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from value_investor.backtest import load_run_snapshots
+from value_investor.storage import COMMITTED_HISTORY_DIR, restore_committed_run_history
 
 
 @dataclass
@@ -99,7 +100,9 @@ def run_preflight(
             )
         )
 
+    restore_committed_run_history(output_dir)
     snapshots = load_run_snapshots(output_dir)
+    committed_runs = len(list(COMMITTED_HISTORY_DIR.glob("run_*.json*"))) if COMMITTED_HISTORY_DIR.exists() else 0
     if len(snapshots) >= 2:
         report.checks.append(
             PreflightCheck(
@@ -109,21 +112,15 @@ def run_preflight(
             )
         )
     elif len(snapshots) == 1:
-        report.checks.append(
-            PreflightCheck(
-                "history",
-                "warn",
-                "1 archived run — backtest/historical analysis need a second weekly run",
-            )
-        )
+        detail = "1 archived run — backtest/historical analysis need a second weekly run"
+        if committed_runs:
+            detail += f" ({committed_runs} committed in {COMMITTED_HISTORY_DIR})"
+        report.checks.append(PreflightCheck("history", "warn", detail))
     else:
-        report.checks.append(
-            PreflightCheck(
-                "history",
-                "warn",
-                "No archived runs yet — first screen seeds history; performance metrics appear from week 2",
-            )
-        )
+        detail = "No archived runs yet — first screen seeds history; performance metrics appear from week 2"
+        if committed_runs:
+            detail += f" ({committed_runs} committed snapshot(s) in {COMMITTED_HISTORY_DIR} not yet restored)"
+        report.checks.append(PreflightCheck("history", "warn", detail))
 
     research_dir = output_dir / "research"
     memo_count = len(list(research_dir.glob("*/research.json"))) if research_dir.exists() else 0

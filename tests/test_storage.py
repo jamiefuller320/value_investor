@@ -10,8 +10,10 @@ from value_investor.storage import (
     dumps_json,
     history_cutoff,
     prune_dashboard_archives,
+    publish_committed_run_history,
     read_json,
     resolve_json_path,
+    restore_committed_run_history,
     summarize_text,
     write_json,
 )
@@ -53,6 +55,27 @@ def test_prune_dashboard_archives_keeps_newest(tmp_path: Path):
     assert len(removed) == 2
     remaining = sorted(p.name for p in archive.iterdir())
     assert remaining == ["2026-03-01.json", "2026-04-01.json"]
+
+
+def test_restore_and_publish_committed_run_history(tmp_path: Path):
+    committed = tmp_path / "committed"
+    output = tmp_path / "output"
+    committed.mkdir()
+    output.mkdir()
+    payload = {"run_at": "2026-07-01T07:00:00+00:00", "prices": {}, "signals": []}
+    write_json(committed / "run_20260701_070000.json", payload, compress=True)
+
+    copied_in = restore_committed_run_history(output, committed_dir=committed)
+    assert copied_in == 1
+    assert (output / "history" / "run_20260701_070000.json.gz").exists()
+
+    payload["run_at"] = "2026-07-08T07:00:00+00:00"
+    write_json(output / "history" / "run_20260708_070000.json", payload, compress=True)
+    stats = publish_committed_run_history(output, committed_dir=committed)
+    assert stats["copied"] == 2
+    assert (committed / "run_20260708_070000.json.gz").exists()
+
+    assert restore_committed_run_history(output, committed_dir=committed) == 0
 
 
 def test_apply_output_retention_removes_old_history(tmp_path: Path):
