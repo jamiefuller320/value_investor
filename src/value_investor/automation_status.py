@@ -82,6 +82,16 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "ingest-loop.yml",
     },
+    "analysis_review": {
+        "name": "Modelling analysis review",
+        "cron": "30 8 * * 0",
+        "cadence": (
+            "Sunday 08:30 UTC read-only synthesis over backtest/sim/historical analysis "
+            "and paper learning tracks. Writes analysis_review + analysis_tasks; manual "
+            "promotion to engineering queue. docs/ops/analysis-review.md."
+        ),
+        "workflow": "analysis-review.yml",
+    },
     "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",
