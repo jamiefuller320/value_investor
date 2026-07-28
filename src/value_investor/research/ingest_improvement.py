@@ -25,7 +25,7 @@ from value_investor.research.gap_fill_sources import (
     inspect_local_sources,
     suggest_alternate_sources,
 )
-from value_investor.research.ingest import ingest_research_sources
+from value_investor.research.ingest import ingest_research_sources, install_fetch_cashflow_fallback
 from value_investor.research.store import ResearchStore
 from value_investor.storage import read_json, write_json
 from value_investor.summary import CompanyReport
@@ -555,3 +555,6 @@ def run_ingest_improvement_pass(
         compact=True,
     )
     return summary
+
+
+install_fetch_cashflow_fallback()

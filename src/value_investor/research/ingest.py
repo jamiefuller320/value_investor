@@ -49,10 +49,187 @@ def _df_years(df: pd.DataFrame | None, *, max_years: int = FINANCIAL_YEARS) -> d
     return out
 
 
+# yfinance cash-flow label variants (mirrors value_investor.financials aliases).
+_CASHFLOW_LABEL_ALIASES: dict[str, list[str]] = {
+    "operating_cashflow": [
+        "Operating Cash Flow",
+        "Cash Flow From Continuing Operating Activities",
+        "Total Cash From Operating Activities",
+        "Cash from Operating Activities",
+    ],
+    "free_cashflow": [
+        "Free Cash Flow",
+    ],
+}
+
+CASHFLOW_METRIC_KEYS = tuple(_CASHFLOW_LABEL_ALIASES.keys())
+
+
+def _sorted_financial_years(section: dict[str, Any]) -> list[str]:
+    return sorted((str(year) for year in section.keys()), reverse=True)
+
+
+def _annual_label_value(year_rows: dict[str, Any], labels: list[str]) -> float | None:
+    for label in labels:
+        value = year_rows.get(label)
+        if value is None:
+            continue
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            continue
+        if pd.notna(number):
+            return number
+    return None
+
+
+def extract_cashflow_metrics_from_annual_financials(
+    financials: dict[str, Any],
+) -> dict[str, float | None]:
+    """Extract latest (and prior-year) cash-flow metrics from ``financials_annual.json``."""
+    cash_flow = financials.get("cash_flow") or {}
+    if not cash_flow:
+        return {}
+
+    years = _sorted_financial_years(cash_flow)
+    metrics: dict[str, float | None] = {}
+    for key, labels in _CASHFLOW_LABEL_ALIASES.items():
+        if years:
+            metrics[key] = _annual_label_value(cash_flow.get(years[0]) or {}, labels)
+        if len(years) > 1:
+            metrics[f"{key}_prev"] = _annual_label_value(cash_flow.get(years[1]) or {}, labels)
+    return metrics
+
+
+def apply_cashflow_metrics_fallback(
+    metrics: dict[str, Any],
+    financials: dict[str, Any],
+) -> list[str]:
+    """Fill missing cash-flow fields on a metrics dict from annual Yahoo statements."""
+    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    filled: list[str] = []
+    for key in CASHFLOW_METRIC_KEYS:
+        if metrics.get(key) is not None:
+            continue
+        value = extracted.get(key)
+        if value is not None:
+            metrics[key] = value
+            filled.append(key)
+    return filled
+
+
+def _resolve_cached_annual_financials(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+    sources_dir: Path | None = None,
+) -> dict[str, Any] | None:
+    from value_investor.storage import read_json, resolve_json_path
+
+    candidates: list[Path] = []
+    if sources_dir is not None:
+        candidates.append(sources_dir / "financials_annual.json")
+    if output_dir is not None:
+        candidates.append(output_dir / "research" / ticker / "sources" / "financials_annual.json")
+
+    for path in candidates:
+        resolved = resolve_json_path(path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if isinstance(payload, dict) and payload.get("cash_flow"):
+            return payload
+    return None
+
+
+def supplement_company_metrics_cashflow(
+    metrics: Any,
+    *,
+    financials: dict[str, Any] | None = None,
+    ticker: str | None = None,
+    output_dir: Path | None = None,
+    sources_dir: Path | None = None,
+    allow_live_fetch: bool = True,
+) -> list[str]:
+    """
+    Populate ``operating_cashflow`` / ``free_cashflow`` on ``CompanyMetrics`` when fetch left gaps.
+
+    Prefers a supplied ``financials`` payload, then cached ``financials_annual.json``, then
+    optionally a live Yahoo annual-statement fetch when ``allow_live_fetch`` is True.
+    """
+    needs_fallback = any(getattr(metrics, key, None) is None for key in CASHFLOW_METRIC_KEYS)
+    if not needs_fallback:
+        return []
+
+    resolved_ticker = ticker or getattr(metrics, "ticker", None)
+    if not resolved_ticker:
+        return []
+
+    payload = financials
+    if payload is None:
+        payload = _resolve_cached_annual_financials(
+            str(resolved_ticker),
+            output_dir=output_dir,
+            sources_dir=sources_dir,
+        )
+    if allow_live_fetch and (payload is None or not (payload.get("cash_flow") or {})):
+        payload = fetch_annual_financials(str(resolved_ticker))
+
+    metrics_dict = metrics.to_dict() if hasattr(metrics, "to_dict") else dict(metrics)
+    filled = apply_cashflow_metrics_fallback(metrics_dict, payload)
+    if not filled:
+        return []
+
+    for key in filled:
+        if hasattr(metrics, key):
+            setattr(metrics, key, metrics_dict[key])
+
+    source_map = getattr(metrics, "data_sources", None)
+    if isinstance(source_map, dict):
+        for key in filled:
+            source_map[key] = "yahoo_financials_annual"
+
+    return filled
+
+
+def install_fetch_cashflow_fallback() -> None:
+    """Patch ``fetch_company_metrics`` to backfill cash-flow fields from Yahoo annual statements."""
+    from value_investor import fetch as fetch_mod
+
+    if getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False):
+        return
+
+    original = fetch_mod.fetch_company_metrics
+
+    def fetch_company_metrics_with_cashflow_fallback(
+        ticker: str,
+        name: str | None = None,
+        sector: str | None = None,
+        *,
+        market: str | None = None,
+    ):
+        metrics = original(ticker, name=name, sector=sector, market=market)
+        try:
+            supplement_company_metrics_cashflow(
+                metrics,
+                output_dir=Path("output"),
+                allow_live_fetch=False,
+            )
+        except Exception as exc:  # noqa: BLE001 — screening should continue
+            logger.debug("Cash-flow fallback failed for %s: %s", ticker, exc)
+        return metrics
+
+    fetch_company_metrics_with_cashflow_fallback._cashflow_fallback_installed = True  # type: ignore[attr-defined]
+    fetch_mod.fetch_company_metrics = fetch_company_metrics_with_cashflow_fallback
+
+
 def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dict[str, Any]:
     """Pull up to five years of annual statements from yfinance."""
     stock = yf.Ticker(ticker)
-    return {
+    payload: dict[str, Any] = {
         "ticker": ticker,
         "fetched_at": datetime.now(UTC).isoformat(),
         "income_statement": _df_years(stock.financials, max_years=years),
@@ -60,6 +237,10 @@ def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dic
         "cash_flow": _df_years(stock.cashflow, max_years=years),
         "quarterly_income": _df_years(getattr(stock, "quarterly_financials", None), max_years=4),
     }
+    cashflow_metrics = extract_cashflow_metrics_from_annual_financials(payload)
+    if cashflow_metrics:
+        payload["cashflow_metrics"] = cashflow_metrics
+    return payload
 
 
 def _normalize_yfinance_article(item: dict[str, Any]) -> dict[str, Any] | None:
