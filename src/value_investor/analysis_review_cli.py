@@ -43,7 +43,7 @@ def _cmd_payload(args: argparse.Namespace) -> int:
 
 
 def _cmd_run(args: argparse.Namespace) -> int:
-    api_key = resolve_cursor_api_key(explicit=args.api_key)
+    api_key = (args.api_key or "").strip() or resolve_cursor_api_key()[0]
     if not api_key:
         print("CURSOR_API_KEY required for analysis review run", file=sys.stderr)
         return 1
@@ -127,20 +127,25 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--json", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
 
+    def add_json_flags(subparser: argparse.ArgumentParser) -> None:
+        subparser.add_argument("--json", action="store_true")
+
     payload = sub.add_parser("payload", help="Show deterministic analysis inputs")
+    add_json_flags(payload)
     payload.add_argument("--allow-thin", action="store_true")
     payload.set_defaults(func=_cmd_payload)
 
     run = sub.add_parser("run", help="Run analysis synthesis agent")
+    add_json_flags(run)
     run.add_argument("--api-key", default=None)
     run.add_argument("--model", default="composer-2.5")
     run.add_argument("--no-compile-tasks", action="store_true")
     run.set_defaults(func=_cmd_run)
 
     compile_cmd = sub.add_parser("compile", help="Compile experiments from review markdown")
+    add_json_flags(compile_cmd)
     compile_cmd.add_argument(
         "--review-file",
         type=Path,
@@ -150,6 +155,7 @@ def main(argv: list[str] | None = None) -> int:
     compile_cmd.set_defaults(func=_cmd_compile)
 
     list_cmd = sub.add_parser("list", help="List analysis tasks")
+    add_json_flags(list_cmd)
     list_cmd.add_argument("--tasks-path", type=Path, default=COMMITTED_TASKS_PATH)
     list_cmd.set_defaults(func=_cmd_list)
 
@@ -157,6 +163,7 @@ def main(argv: list[str] | None = None) -> int:
         "promote",
         help="Manually promote analysis tasks into engineering_tasks.json",
     )
+    add_json_flags(promote)
     promote.add_argument("--task-id", action="append", default=[])
     promote.add_argument("--tasks-path", type=Path, default=COMMITTED_TASKS_PATH)
     promote.add_argument(

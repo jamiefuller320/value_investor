@@ -1,0 +1,40 @@
+EXECUTIVE SUMMARY
+The quant stack is still in its seeding phase: archived backtest, offline simulation, and historical-analysis tracks each have run_count=1, so forward-return and strategy comparisons are not yet computable. Forward paper evidence is mixed but directionally informative—the primary ai_judgment track shows a smaller drawdown (-2.91% total return, 2.91% cost drag, 5 trades) than the rules control (-10.98% return, 10.71% cost drag, 23 trades), yet learning_tracks_review verdict is insufficient_data because primary excess_after_costs is null (benchmark unavailable) and neither beat_market nor beat_control is true. Rules already absorbed clamped knob proposals (min_conviction 0.05, max_positions 4) in review, but those must not be auto-applied from this report. The single biggest modelling/analysis gap this week is insufficient archived run history (history_run_count=1) combined with too-thin forward marks—especially momentum_grace (1 equity mark, 0 trades) and exit_shadow (0 closed exits across all tracks)—which blocks benchmark-attributed excess, offline sim, and exit-overlay learning.
+
+PERFORMANCE DIAGNOSIS
+- Primary (ai_judgment): portfolio_value 970.87 vs contributed_capital 1000.0; total_return -2.91%; cost_drag 2.91% (£29.15 on 5 trades); excess_after_costs null because benchmark_return is unavailable—cannot assess market beat after costs.
+- Control (rules): total_return -10.98%; benchmark_return +1.09%; excess_after_costs -12.07% after costs; cost_drag 10.71% (£107.10 on 23 trades)—cost drag is the dominant drag on control performance.
+- Market comparison: only the rules track has a benchmark mark (+1.09% ^FTSE); primary cannot be scored vs market this week; overall beat_market=false, beat_control=false.
+- Relative primary vs control: ai_judgment lost less capital (-2.91% vs -10.98%) with far lower turnover (5 vs 23 trades) and lower cost drag (2.91% vs 10.71%), but this is not a formal beat_control outcome in the JSON (beat_control=false).
+- Mark thickness: ai_judgment has 4 equity_marks / 5 positions; rules has 5 equity_marks / 5 positions (enough_history=true for both). momentum_grace has 1 equity mark, 0 trades, 100% cash—marks too thin to trust for learning.
+- Realized vs unrealized: JSON reports portfolio_value and total_return only; no separate unrealized/realized decomposition—marks are portfolio-level, not P&L-attributed.
+- Decision-review knobs: rules review proposed min_conviction 0.05 and max_positions 4 (already noted as applied in that review pass); do not recommend auto-applying decision-review knobs from this analysis.
+
+SIGNAL & BACKTEST FINDINGS
+- Signal backtest: run_count=1; top_horizons=[]; note states at least 2 archived runs are needed to compute forward returns—history is still seeding.
+- Offline simulation (research_overlay, static_levels, trailing_levels, momentum_grace): each track has periods=1 with total_return, benchmark_return, and excess_return all 0.0, trade_count=0; comparison_note and per-track notes require ≥2 archived runs—history is still seeding.
+- Historical analysis: run_count=1; window_start/window_end null; top_strategies=[]; overlay_comparison=[]; note requires ≥2 archived weekly runs within the analysis window—history is still seeding.
+- Current screen snapshot (248 FTSE 350 names): strong_buy 16, buy 44, hold 148, avoid 40; trust overlay adds 102 vehicles with strong_buy 20, buy 25—this is live screen meta, not archived backtest evidence.
+- Adaptive model_weights: null—no weight-state learning signal this week.
+
+PAPER TRACK COMPARISON
+- ai_judgment (primary): total_return -2.91%, cost_drag 2.91%, 5 trades (5 buys, 0 sells), 5 positions, 4 equity_marks; knobs unchanged (max_positions 5, min_conviction 0.0); applied=false; benchmark and excess_after_costs omitted.
+- rules (control): total_return -10.98%, cost_drag 10.71%, 23 trades (14 buys, 9 sells), excess_after_costs -12.07% vs benchmark +1.09%; review applied clamped knobs (min_conviction 0.05, max_positions 4) with reasons citing high cost drag and weak excess—control underperformed market after costs.
+- momentum_grace: flat book (portfolio_value 1000.0, total_return 0.0, 0 trades, 1 equity mark, 100% cash); enough_history=false; no knob changes; cannot compare to primary or control on excess.
+- learning_tracks_review verdict: insufficient_data; primary_excess_after_costs null, control_excess_after_costs -0.1207.
+- exit_shadow (all three tracks): open_count=0, closed_count=0, grace_vs_rotation counts all zero; ingested_this_pass=0; observe-only—no grace vs screen_rotation comparison possible yet.
+- learning_tracks_summary: all three tracks acted=false today (waiting for open settle); no new trades logged in summary pass—forward paper layer is running but mark accumulation is early.
+
+PROPOSED EXPERIMENTS
+1. [offline_sim] Seed second+ archived weekly run and replay rules vs ai_judgment vs momentum_grace sim tracks — unlock excess_return, trade_count, and total_costs comparisons once run_count ≥ 2.
+2. [paper_knobs] Counterfactual paper run: rules track with pre-review knobs (min_conviction 0.0, max_positions 5) vs post-review knobs (0.05, 4) on identical mark windows — quantify whether cost-drag reduction offsets turnover/concentration effects (human gate required).
+3. [paper_knobs] Hold ai_judgment knobs fixed but add synthetic benchmark backfill pass for weeks where benchmark_return was null — enable primary excess_after_costs and beat_market scoring on the primary track.
+4. [monitoring] Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.
+5. [analysis] Historical-analysis window bootstrap: archive two consecutive weekly runs with overlay_comparison populated — test whether research_overlay / adjusted_signal ranks predict forward 4w/12w excess once top_strategies fills.
+
+DEFER
+- Auto-merging paper-auto or live knob apply from decision-review --apply — revisit only after ≥4 equity marks and ≥2 trades per track with stable benchmark spans (momentum_grace currently fails this gate).
+- Base signal / assign_signal changes — guardrail no_base_signal_mutation=true; revisit when offline_sim run_count ≥ 2 shows persistent negative excess on top_horizons across ≥3 windows.
+- Momentum-grace knob auto-tune from exit_shadow — exit_shadow note explicitly defers; revisit when closed_count ≥ 10 per track with non-zero grace_vs_rotation splits.
+- Model-weight evolution / adaptive reweighting — model_weights is null and history_run_count=1; revisit after historical_analysis overlay_comparison has ≥2 populated weekly archives.
+- Engineering promotion without human gate — guardrail engineering_promotion_manual=true; any experiment above requires explicit queue promotion, not pipeline automation.
