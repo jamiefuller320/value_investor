@@ -547,6 +547,32 @@ _ISSUER_STOPWORDS = frozenset(
 )
 
 
+def _issuer_name_phrases(company_name: str) -> list[str]:
+    """Leading multi-word brand phrases (e.g. ``me group`` from ME Group International)."""
+    lower = (company_name or "").lower()
+    for suf in (
+        " plc",
+        " limited",
+        " ltd",
+        " sa",
+        " se",
+        " ag",
+        " nv",
+        " inc",
+        " corp",
+        " corporation",
+    ):
+        if lower.endswith(suf):
+            lower = lower[: -len(suf)].strip()
+    words = [w for w in re.split(r"[^a-z0-9]+", lower) if w]
+    phrases: list[str] = []
+    if len(words) >= 2:
+        phrases.append(f"{words[0]} {words[1]}")
+    if len(words) >= 3:
+        phrases.append(f"{words[0]} {words[1]} {words[2]}")
+    return phrases
+
+
 def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -> bool:
     """True when the headline mentions the EPIC or a meaningful company-name token."""
     text = (headline or "").lower()
@@ -558,6 +584,9 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     # ASX Markit headlines often end with " - CSL" / " - WOR".
     if epic and re.search(rf"[-–]\s*{re.escape(epic)}\s*$", text, flags=re.IGNORECASE):
         return True
+    for phrase in _issuer_name_phrases(company_name):
+        if phrase in text:
+            return True
     tokens = [
         tok
         for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
@@ -930,13 +959,18 @@ def filter_misattributed_filings(
     regime: str,
 ) -> list[dict[str, Any]]:
     """Drop SEC (and noisy headline) rows that clearly belong to a different issuer."""
-    if regime in {"sec_edgar", "uk_rns"}:
+    if regime == "sec_edgar":
         return rows
     sec_supplement_ok = _sec_edgar_supplement_allowed(ticker, company_name)
     kept: list[dict[str, Any]] = []
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
+        if regime == "uk_rns" and (
+            source == "ticker_rns_api" or source.startswith("google_news")
+        ):
+            if not headline_relevant_to_issuer(headline, company_name, ticker):
+                continue
         if source == "sec_edgar":
             if sec_supplement_ok:
                 kept.append(row)
@@ -1390,6 +1424,52 @@ def fetch_filings_asia_news(
     )
 
 
+def _ticker_rns_item_symbol(item: dict[str, Any]) -> str:
+    """Best-effort EPIC/symbol from a Ticker.app RNS API item."""
+    for key in ("symbol", "ticker", "epic"):
+        val = str(item.get(key) or "").strip().upper()
+        if val:
+            return _base_symbol(val)
+    company = item.get("company") or item.get("issuer") or {}
+    if isinstance(company, dict):
+        for key in ("symbol", "ticker", "epic"):
+            val = str(company.get(key) or "").strip().upper()
+            if val:
+                return _base_symbol(val)
+    symbols = item.get("symbols")
+    if isinstance(symbols, list) and symbols:
+        first = symbols[0]
+        if isinstance(first, str):
+            return _base_symbol(first)
+        if isinstance(first, dict):
+            val = str(first.get("symbol") or first.get("ticker") or "").strip().upper()
+            if val:
+                return _base_symbol(val)
+    return ""
+
+
+def _ticker_rns_item_matches_issuer(
+    item: dict[str, Any],
+    *,
+    company_name: str,
+    ticker: str,
+) -> bool:
+    """True when API metadata or headline plausibly belongs to the requested issuer."""
+    epic = _base_symbol(ticker).upper()
+    item_sym = _ticker_rns_item_symbol(item)
+    if item_sym and item_sym != epic:
+        return False
+    headline = str(item.get("headline") or item.get("title") or "").strip()
+    return headline_relevant_to_issuer(headline, company_name, ticker)
+
+
+def _is_ticker_rns_pdf_url(url: str | None) -> bool:
+    lower = (url or "").lower()
+    return "newswire.tickerapp.net" in lower or (
+        "tickerapp.net" in lower and lower.endswith(".pdf")
+    )
+
+
 def fetch_filings_ticker_api(
     *,
     ticker: str,
@@ -1446,7 +1526,11 @@ def fetch_filings_ticker_api(
         headline = str(item.get("headline") or item.get("title") or "").strip()
         if not headline:
             continue
-        if not headline_relevant_to_issuer(headline, company_name or epic, ticker):
+        if not _ticker_rns_item_matches_issuer(
+            item,
+            company_name=company_name or epic,
+            ticker=ticker,
+        ):
             skipped_unrelated += 1
             continue
         categories = item.get("category") or []
@@ -1464,19 +1548,29 @@ def fetch_filings_ticker_api(
         if isinstance(published, (int, float)):
             published = datetime.fromtimestamp(published, tz=UTC).isoformat()
 
-        # Prefer HTML publication URL when present
+        # Prefer direct PDF (newswire/LSE) over HTML wrappers for body extract.
         pub_url = None
+        pdf_url = None
+        html_url = None
         publications = item.get("publication") or item.get("publications") or []
         if isinstance(publications, list):
             for pub in publications:
                 if not isinstance(pub, dict):
                     continue
                 candidate = pub.get("url") or pub.get("href")
-                if candidate and str(candidate).startswith("http"):
-                    pub_url = str(candidate)
-                    if str(pub.get("type") or "").lower() in ("html", "text", ""):
-                        break
-        pub_url = pub_url or item.get("url") or item.get("sourceUrl")
+                if not candidate or not str(candidate).startswith("http"):
+                    continue
+                candidate_s = str(candidate)
+                if _is_ticker_rns_pdf_url(candidate_s) or candidate_s.lower().endswith(".pdf"):
+                    pdf_url = candidate_s
+                elif str(pub.get("type") or "").lower() in ("html", "text", ""):
+                    html_url = candidate_s
+        pub_url = pdf_url or html_url or item.get("url") or item.get("sourceUrl")
+        if pub_url and not _is_ticker_rns_pdf_url(pub_url):
+            for fallback in (item.get("url"), item.get("sourceUrl")):
+                if fallback and _is_ticker_rns_pdf_url(str(fallback)):
+                    pub_url = str(fallback)
+                    break
 
         period = classify_filing_period(headline, category=category_label)
         rns_id = str(item.get("rnsId") or item.get("id") or "")
@@ -2402,6 +2496,110 @@ def refetch_investegate_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "note": "refetch_investegate_filing_bodies",
+    }
+
+
+def refetch_ticker_rns_api_filing_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 20,
+) -> dict[str, Any]:
+    """
+    Download PDF/text bodies for indexed ``ticker_rns_api`` rows (newswire URLs).
+
+    Prunes mis-attributed global-feed headlines, then fetches direct PDF bodies.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists():
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "pruned": 0,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "pruned": 0,
+            "note": f"unreadable index: {exc}",
+        }
+
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    filtered = filter_misattributed_filings(
+        filings,
+        company_name=company_name,
+        ticker=ticker,
+        regime="uk_rns",
+    )
+    pruned = len(filings) - len(filtered)
+    missing = [
+        row
+        for row in filtered
+        if str(row.get("source") or "") == "ticker_rns_api"
+        and row.get("url")
+        and not row.get("has_body")
+    ]
+    if not missing:
+        if pruned:
+            payload["filings"] = filtered
+            payload["summary"] = summarize_filings(filtered)
+            payload["ticker_rns_pruned_at"] = datetime.now(UTC).isoformat()
+            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": before,
+            "with_body_after": before,
+            "pruned": pruned,
+            "note": "no missing ticker_rns_api bodies",
+        }
+
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    downloaded = 0
+    missing_ids = {row.get("id") for row in missing}
+    updated: list[dict[str, Any]] = []
+    for row in filtered:
+        item = dict(row)
+        if (
+            downloaded < max_bodies
+            and item.get("id") in missing_ids
+            and item.get("url")
+            and not item.get("has_body")
+        ):
+            body = fetch_filing_body(str(item["url"]))
+            if body:
+                filename = f"{item['id']}.txt"
+                path = bodies_dir / filename
+                path.write_text(body, encoding="utf-8")
+                item["has_body"] = True
+                item["body_path"] = str(path)
+                downloaded += 1
+        updated.append(item)
+
+    after = sum(1 for row in updated if row.get("has_body"))
+    payload["filings"] = updated
+    payload["summary"] = summarize_filings(updated)
+    payload["ticker_rns_refetched_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": len(missing),
+        "fetched": max(0, after - before),
+        "with_body_before": before,
+        "with_body_after": after,
+        "pruned": pruned,
+        "note": "refetch_ticker_rns_api_filing_bodies",
     }
 
 

@@ -24,6 +24,7 @@ from value_investor.research.filings import (
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
+    refetch_ticker_rns_api_filing_bodies,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
@@ -59,6 +60,12 @@ def test_headline_relevant_to_issuer_filters_noise():
     assert headline_relevant_to_issuer(
         "MGNS Interim Results", "Morgan Sindall Group plc", "MGNS.L"
     )
+    assert headline_relevant_to_issuer(
+        "ME Group Full Year Results", "ME Group International plc", "MEGP.L"
+    )
+    assert headline_relevant_to_issuer(
+        "MEGP Interim Results", "ME Group International plc", "MEGP.L"
+    )
     assert not headline_relevant_to_issuer(
         "Abri Group / SEGRO trading update", "Morgan Sindall Group plc", "MGNS.L"
     )
@@ -67,6 +74,11 @@ def test_headline_relevant_to_issuer_filters_noise():
     )
     assert not headline_relevant_to_issuer(
         "Net Asset Value(s)", "AEP Plantations Plc", "AEP.L"
+    )
+    assert not headline_relevant_to_issuer(
+        "Development Partnership for 294-unit hotel - Investegate",
+        "ME Group International plc",
+        "MEGP.L",
     )
 
 
@@ -471,6 +483,106 @@ def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):
     assert saved["filings"][0]["has_body"] is True
 
 
+def test_refetch_ticker_rns_api_filing_bodies_megp_prunes_and_downloads(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    pdf_url = "https://newswire.tickerapp.net/rns/2026-03-05/1234M/example.content.pdf"
+    index = {
+        "ticker": "MEGP.L",
+        "company_name": "ME Group International plc",
+        "filings": [
+            {
+                "id": "noise1",
+                "source": "google_news_investegate",
+                "headline": "Form 8.3 - Rotork plc - Investegate",
+                "url": "https://news.google.com/rss/articles/noise",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 0,
+            },
+            {
+                "id": "megp1",
+                "source": "ticker_rns_api",
+                "headline": "ME Group Full Year Results",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": pdf_url,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            },
+        ],
+        "summary": {"total": 2, "with_body": 0},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: (
+            "ME Group International plc full year results "
+            + ("revenue increased " * 30)
+            if url == pdf_url
+            else None
+        ),
+    )
+    result = refetch_ticker_rns_api_filing_bodies(
+        filings_dir,
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        max_bodies=5,
+    )
+    assert result["pruned"] == 1
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert len(saved["filings"]) == 1
+    assert saved["filings"][0]["id"] == "megp1"
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / "megp1.txt").exists()
+
+
+def test_fetch_filings_ticker_api_prefers_pdf_publication(monkeypatch):
+    payload = {
+        "data": [
+            {
+                "headline": "ME Group Full Year Results",
+                "symbol": "MEGP",
+                "timestamp": "2026-03-01T07:00:00Z",
+                "publications": [
+                    {
+                        "type": "html",
+                        "url": "https://example.com/rns/html",
+                    },
+                    {
+                        "type": "pdf",
+                        "url": "https://newswire.tickerapp.net/rns/2026-03-01/1M/a.content.pdf",
+                    },
+                ],
+            },
+            {
+                "headline": "Form 8.3 - Rotork plc",
+                "symbol": "ROR",
+                "timestamp": "2026-07-22T10:00:00Z",
+                "url": "https://newswire.tickerapp.net/rns/2026-07-22/2M/b.content.pdf",
+            },
+        ],
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: json.dumps(payload).encode("utf-8"),
+    )
+    monkeypatch.setenv("TICKER_API_KEY", "test-key")
+    from value_investor.research.filings import fetch_filings_ticker_api
+
+    rows = fetch_filings_ticker_api(
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+    )
+    assert len(rows) == 1
+    assert rows[0]["url"].endswith(".content.pdf")
+    assert "ME Group" in rows[0]["headline"]
+
+
 def test_classify_filing_period_annual_and_interim():
     assert classify_filing_period("Shell Plc 4th Quarter 2025 and Full Year Unaudited Results") == "annual"
     assert classify_filing_period("Shell Publishes Annual Report and Accounts") == "annual"
@@ -527,7 +639,7 @@ def test_merge_filings_prefers_body_and_ticker_source():
         {
             "id": "g1",
             "source": "google_news_investegate",
-            "headline": "Half-year Results",
+            "headline": "Example Half-year Results",
             "published_at": "2026-07-01T07:00:00+00:00",
             "url": "https://news.google.com/rss/articles/abc",
             "period": "interim",
@@ -539,7 +651,7 @@ def test_merge_filings_prefers_body_and_ticker_source():
         {
             "id": "t1",
             "source": "ticker_rns_api",
-            "headline": "Half-year Results",
+            "headline": "Example Half-year Results",
             "published_at": "2026-07-01T07:00:00+00:00",
             "url": "https://www.investegate.co.uk/announcement/rns/example/half-year/1",
             "period": "interim",
@@ -648,7 +760,7 @@ def test_ingest_research_sources_keeps_filings_separate_from_yahoo(tmp_path: Pat
                 {
                     "id": "f1f1f1f1f1f1f1f1",
                     "source": "google_news_investegate",
-                    "headline": "Full Year Results",
+                    "headline": "Example PLC Full Year Results",
                     "published_at": "2026-02-01T07:00:00+00:00",
                     "url": "https://news.google.com/rss/articles/z",
                     "period": "annual",
@@ -690,7 +802,7 @@ def test_ingest_filings_saves_body_for_direct_url(tmp_path: Path):
         {
             "id": "bodybodybodybody",
             "source": "ticker_rns_api",
-            "headline": "Half-year Results",
+            "headline": "Example Half-year Results",
             "published_at": "2026-07-01T07:00:00+00:00",
             "url": "https://www.investegate.co.uk/announcement/rns/example--ex/half-year/1",
             "period": "interim",
@@ -979,6 +1091,28 @@ def test_sec_edgar_supplement_rejects_vinci_dg_collision(monkeypatch):
         lambda cik: "DOLLAR GENERAL CORP",
     )
     assert _sec_edgar_supplement_allowed("DG.PA", "Vinci SA") is False
+
+
+def test_filter_misattributed_filings_drops_uk_rns_google_news_noise():
+    rows = [
+        {
+            "id": "bad",
+            "source": "google_news_investegate",
+            "headline": "Development Partnership for 294-unit hotel - Investegate",
+        },
+        {
+            "id": "good",
+            "source": "ticker_rns_api",
+            "headline": "ME Group Full Year Results",
+        },
+    ]
+    filtered = filter_misattributed_filings(
+        rows,
+        company_name="ME Group International plc",
+        ticker="MEGP.L",
+        regime="uk_rns",
+    )
+    assert [row["id"] for row in filtered] == ["good"]
 
 
 def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
