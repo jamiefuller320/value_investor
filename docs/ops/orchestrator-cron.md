@@ -42,6 +42,23 @@ GH_PAT=… SUITE=sunday ./scripts/dispatch_orchestrator.sh
 GH_PAT=… SUITE=weekday_paper ./scripts/dispatch_orchestrator.sh
 ```
 
+**Weekday ingest loop — Mon/Wed/Fri primary + catch-up (one cron-job.org job):**
+
+Schedule `5 7,10 * * 1,3,5` (07:05 and 10:05 UTC). The workflow skips when it already
+succeeded today or another ingest run is still active — safe to overlap with GitHub's
+own `0 7` / `0 10` schedules.
+
+```bash
+export GH_PAT=…
+curl -sS -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GH_PAT" \
+  https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/ingest-loop.yml/dispatches \
+  -d '{"ref":"main"}'
+```
+
+Force a same-day re-run: Actions → FTSE Ingest Loop → `force=true`.
+
 3. Confirm the next window creates an Orchestrator run under
    https://github.com/jamiefuller320/value_investor/actions/workflows/automation-orchestrator.yml
    with event `workflow_dispatch` (external) or `schedule` (GitHub).

@@ -72,11 +72,13 @@ WORKFLOW_SCHEDULES = {
     },
     "ingest_loop": {
         "name": "FTSE Ingest Loop",
-        "cron": "0 7 * * 1,3,5",
+        "cron": "0 7,10 * * 1,3,5",
         "cadence": (
-            "Mon/Wed/Fri 07:00 UTC. Bounded ingest-improvement on buy-tier names "
-            "from docs/data/latest.json; logs ingest_health; micro-compiles ingest "
-            "engineering tasks when zero-body buy-tier coverage stalls."
+            "Mon/Wed/Fri 07:00 + 10:00 UTC catch-up (GitHub schedule + external cron). "
+            "Skips when this workflow already succeeded today or another run is active. "
+            "Bounded ingest-improvement on buy-tier names from docs/data/latest.json; "
+            "logs ingest_health; micro-compiles ingest engineering tasks when zero-body "
+            "buy-tier coverage stalls. External cron: docs/ops/orchestrator-cron.md."
         ),
         "workflow": "ingest-loop.yml",
     },
