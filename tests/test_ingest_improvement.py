@@ -156,3 +156,9 @@ def test_format_ingest_improvement_text():
     assert text is not None
     assert "BT-A.L" in text
     assert "0 → 2" in text
+
+
+def test_ingest_improvement_installs_fetch_cashflow_fallback():
+    from value_investor import fetch as fetch_mod
+
+    assert getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False)

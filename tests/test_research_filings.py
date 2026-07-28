@@ -38,8 +38,16 @@ from value_investor.research.filings import (
     _extract_ixbrl_html_text,
     _filing_text_is_substantive,
 )
-from value_investor.research.ingest import ingest_research_sources
+from value_investor.research.ingest import (
+    apply_cashflow_metrics_fallback,
+    extract_cashflow_metrics_from_annual_financials,
+    fetch_annual_financials,
+    ingest_research_sources,
+    install_fetch_cashflow_fallback,
+    supplement_company_metrics_cashflow,
+)
 from value_investor.financials import extract_statement_metrics
+from value_investor.fetch import CompanyMetrics
 import pandas as pd
 
 
@@ -51,6 +59,150 @@ def test_operating_cashflow_aliases_from_yahoo_labels():
     metrics = extract_statement_metrics(None, None, cashflow)
     assert metrics["operating_cashflow"] == 90_800_000.0
     assert metrics["operating_cashflow_prev"] == 70_000_000.0
+
+
+def test_extract_cashflow_metrics_from_financials_annual_json():
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2024": {
+                "Operating Cash Flow": 90_800_000.0,
+                "Free Cash Flow": 55_000_000.0,
+            },
+            "2023": {
+                "Operating Cash Flow": 70_000_000.0,
+                "Free Cash Flow": 40_000_000.0,
+            },
+        },
+    }
+    metrics = extract_cashflow_metrics_from_annual_financials(financials)
+    assert metrics["operating_cashflow"] == 90_800_000.0
+    assert metrics["free_cashflow"] == 55_000_000.0
+    assert metrics["operating_cashflow_prev"] == 70_000_000.0
+
+
+def test_apply_cashflow_metrics_fallback_leaves_existing_values():
+    payload = {"operating_cashflow": 1.0, "free_cashflow": None}
+    financials = {
+        "cash_flow": {
+            "2024": {"Operating Cash Flow": 90_800_000.0, "Free Cash Flow": 55_000_000.0},
+        }
+    }
+    filled = apply_cashflow_metrics_fallback(payload, financials)
+    assert filled == ["free_cashflow"]
+    assert payload["operating_cashflow"] == 1.0
+    assert payload["free_cashflow"] == 55_000_000.0
+
+
+def test_supplement_company_metrics_cashflow_megp_uses_cached_financials(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {"2024": {"Operating Cash Flow": 90_800_000.0, "Free Cash Flow": 55_000_000.0}},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    metrics = CompanyMetrics(ticker="MEGP.L")
+    filled = supplement_company_metrics_cashflow(
+        metrics,
+        sources_dir=sources,
+    )
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics.operating_cashflow == 90_800_000.0
+    assert metrics.free_cashflow == 55_000_000.0
+    assert metrics.data_sources["operating_cashflow"] == "yahoo_financials_annual"
+
+
+def test_install_fetch_cashflow_fallback_patches_fetch(monkeypatch):
+    from value_investor import fetch as fetch_mod
+
+    metrics = CompanyMetrics(ticker="MEGP.L", operating_cashflow=None, free_cashflow=None)
+
+    def fake_fetch(*_args, **_kwargs):
+        return metrics
+
+    monkeypatch.setattr(fetch_mod, "fetch_company_metrics", fake_fetch)
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+
+    calls: list[str] = []
+
+    def fake_supplement(m, **_kw):
+        calls.append(m.ticker)
+        m.operating_cashflow = 90_800_000.0
+        return ["operating_cashflow"]
+
+    monkeypatch.setattr(
+        "value_investor.research.ingest.supplement_company_metrics_cashflow",
+        fake_supplement,
+    )
+
+    install_fetch_cashflow_fallback()
+    result = fetch_mod.fetch_company_metrics("MEGP.L")
+    assert result.operating_cashflow == 90_800_000.0
+    assert calls == ["MEGP.L"]
+
+
+def test_fetch_cashflow_fallback_does_not_double_fetch_yfinance(monkeypatch):
+    """Regression: patched fetch must not re-open yfinance when OCF is missing."""
+    from types import SimpleNamespace
+
+    from value_investor import fetch as fetch_mod
+
+    seen: list[str] = []
+
+    class DummyTicker:
+        def __init__(self, symbol: str):
+            seen.append(symbol)
+
+        @property
+        def info(self):
+            return {"longName": "ME Group International plc", "marketCap": 2_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=2_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    install_fetch_cashflow_fallback()
+
+    with patch.object(fetch_mod.yf, "Ticker", side_effect=DummyTicker):
+        fetch_mod.fetch_company_metrics("MEGP.L")
+
+    assert seen == ["MEGP.L"]
+
+
+def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
+    cashflow_df = pd.DataFrame(
+        {"2024": [90_800_000.0, 55_000_000.0]},
+        index=["Operating Cash Flow", "Free Cash Flow"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = cashflow_df
+        quarterly_financials = None
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    payload = fetch_annual_financials("MEGP.L")
+    assert payload["cashflow_metrics"]["operating_cashflow"] == 90_800_000.0
+    assert payload["cashflow_metrics"]["free_cashflow"] == 55_000_000.0
 
 
 def test_headline_relevant_to_issuer_filters_noise():
