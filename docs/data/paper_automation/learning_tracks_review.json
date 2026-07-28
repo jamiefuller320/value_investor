@@ -2,16 +2,16 @@
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
   "success_criterion": "Primary AI-judgment track outperforms ^FTSE after costs; rules track is the control datum.",
-  "primary_excess_after_costs": -0.0382,
-  "control_excess_after_costs": -0.1299,
+  "primary_excess_after_costs": null,
+  "control_excess_after_costs": -0.1207,
   "beat_market": false,
-  "beat_control": true,
-  "verdict": "underperforming",
+  "beat_control": false,
+  "verdict": "insufficient_data",
   "reviews": {
     "rules": {
-      "reviewed_at": "2026-07-25T05:44:28.883001+00:00",
+      "reviewed_at": "2026-07-28T07:22:42.849665+00:00",
       "enough_history": true,
-      "applied": false,
+      "applied": true,
       "knobs_before": {
         "max_positions": 5,
         "skip_timing_wait": true,
@@ -30,7 +30,7 @@
       },
       "reasons": [
         "High cost drag (10.7%) \u2014 raise min_conviction.",
-        "Weak excess after costs (-13.0%) \u2014 reduce max_positions."
+        "Weak excess after costs (-12.1%) \u2014 reduce max_positions."
       ],
       "metrics": {
         "portfolio_value": 890.23,
@@ -46,18 +46,18 @@
         "equity_marks": 5,
         "max_sector_weight": 0.2,
         "dominant_sector": "Healthcare",
-        "benchmark_return": 0.0201,
-        "excess_after_costs": -0.1299,
+        "benchmark_return": 0.0109,
+        "excess_after_costs": -0.1207,
         "note": ""
       },
-      "note": "Forced proposal with thin history (not applied).",
+      "note": "Applied clamped knob updates from decision review.",
       "track_id": "rules",
       "track_label": "Screen rules (control)",
       "is_primary_learning_track": false,
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "ai_judgment": {
-      "reviewed_at": "2026-07-25T05:44:28.921234+00:00",
+      "reviewed_at": "2026-07-28T07:22:42.921789+00:00",
       "enough_history": true,
       "applied": false,
       "knobs_before": {
@@ -67,16 +67,14 @@
         "sector_cap": 0.3
       },
       "knobs_after": {
-        "max_positions": 4,
+        "max_positions": 5,
         "skip_timing_wait": true,
         "min_conviction": 0.0,
         "sector_cap": 0.3
       },
-      "proposed_changes": {
-        "max_positions": 4
-      },
+      "proposed_changes": {},
       "reasons": [
-        "Weak excess after costs (-3.8%) \u2014 reduce max_positions."
+        "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
         "portfolio_value": 970.87,
@@ -92,15 +90,60 @@
         "equity_marks": 4,
         "max_sector_weight": 0.2,
         "dominant_sector": "Basic Materials",
-        "benchmark_return": 0.0091,
-        "excess_after_costs": -0.0382,
-        "note": ""
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "note": "Benchmark unavailable; excess_after_costs omitted."
       },
-      "note": "Forced proposal with thin history (not applied).",
+      "note": "Reviewed; no knob changes to apply.",
       "track_id": "ai_judgment",
       "track_label": "AI judgment (research accumulate + adjusted_signal)",
       "is_primary_learning_track": true,
       "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on this track; AI-judgment is the primary learning track, rules is the control."
+    },
+    "momentum_grace": {
+      "reviewed_at": "2026-07-28T07:22:42.922777+00:00",
+      "enough_history": false,
+      "applied": false,
+      "knobs_before": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "knobs_after": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "proposed_changes": {},
+      "reasons": [
+        "Need \u22654 equity marks and \u22652 trades (have 1 marks, 0 trades).",
+        "No knob change warranted from current reviewed outcomes."
+      ],
+      "metrics": {
+        "portfolio_value": 1000.0,
+        "contributed_capital": 1000.0,
+        "total_return": 0.0,
+        "total_costs": 0,
+        "cost_drag": 0.0,
+        "trade_count": 0,
+        "buy_count": 0,
+        "sell_count": 0,
+        "positions": 0,
+        "cash_fraction": 1.0,
+        "equity_marks": 1,
+        "max_sector_weight": 0.0,
+        "dominant_sector": null,
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "note": "Insufficient marks for benchmark span."
+      },
+      "note": "Proposal only \u2014 history too thin to apply.",
+      "track_id": "momentum_grace",
+      "track_label": "Screen rules + momentum grace",
+      "is_primary_learning_track": false,
+      "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     }
   }
 }
