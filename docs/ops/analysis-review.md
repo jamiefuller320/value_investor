@@ -8,10 +8,19 @@ decision-review knobs, or open engineering PRs automatically.
 
 | Trigger | Schedule |
 |---------|----------|
-| GitHub cron | Sunday 08:30 UTC (catch-up after email quiet bundle) |
+| **cron-job.org (primary)** | Sunday **10:35 UTC** (`35 10 * * 0`); optional backup `35 12 * * 0` |
+| GitHub cron (backup) | Sunday 08:30 UTC |
 | Manual | Actions → **FTSE Analysis Review** → Run workflow |
 
-Same-day skip: a second fire exits quickly if a successful run already happened today.
+External dispatch (same `GH_PAT` as orchestrator / ingest):
+
+```bash
+WORKFLOW=analysis-review.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+```
+
+Schedule after the Sunday email quiet bundle so `docs/data/` is fresh. Same-day skip: a second fire exits quickly if a successful run already happened today.
+
+See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
 
 ## Prerequisites
 
