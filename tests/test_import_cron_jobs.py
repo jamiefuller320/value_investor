@@ -1,0 +1,26 @@
+"""Tests for cron-job.org import helper."""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+
+def test_import_cron_jobs_dry_run_data_backup():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "data-backup", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE data backup (Sunday)"
+    assert payload["requestMethod"] == 1
+    assert payload["schedule"]["hours"] == [12]
+    assert payload["schedule"]["minutes"] == [30]
+    assert "data-backup.yml" in payload["url"]

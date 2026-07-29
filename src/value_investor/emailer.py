@@ -5,6 +5,8 @@ from __future__ import annotations
 import os
 import smtplib
 from dataclasses import dataclass
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from value_investor.backtest import BacktestSummary, format_backtest_text
@@ -641,14 +643,48 @@ def send_report_email(
     html_body: str,
     config: EmailConfig,
 ) -> None:
-    message = MIMEMultipart("alternative")
+    send_email(
+        subject=subject,
+        text_body=text_body,
+        html_body=html_body,
+        config=config,
+    )
+
+
+def send_email(
+    *,
+    subject: str,
+    text_body: str,
+    html_body: str | None = None,
+    attachments: list[tuple[str, bytes, str]] | None = None,
+    config: EmailConfig,
+) -> None:
+    """Send a plain or multipart email, optionally with binary attachments."""
+    if attachments:
+        message: MIMEMultipart = MIMEMultipart("mixed")
+        body = MIMEMultipart("alternative")
+        body.attach(MIMEText(text_body, "plain", "utf-8"))
+        if html_body:
+            body.attach(MIMEText(html_body, "html", "utf-8"))
+        message.attach(body)
+        for filename, payload, mime_type in attachments:
+            maintype, _, subtype = mime_type.partition("/")
+            part = MIMEBase(maintype, subtype or "octet-stream")
+            part.set_payload(payload)
+            encoders.encode_base64(part)
+            part.add_header("Content-Disposition", "attachment", filename=filename)
+            message.attach(part)
+    else:
+        message = MIMEMultipart("alternative")
+        message.attach(MIMEText(text_body, "plain", "utf-8"))
+        if html_body:
+            message.attach(MIMEText(html_body, "html", "utf-8"))
+
     message["Subject"] = subject
     message["From"] = config.email_from or config.smtp_user
     message["To"] = config.email_to
-    message.attach(MIMEText(text_body, "plain", "utf-8"))
-    message.attach(MIMEText(html_body, "html", "utf-8"))
 
-    with smtplib.SMTP(config.smtp_host, config.smtp_port, timeout=60) as server:
+    with smtplib.SMTP(config.smtp_host, config.smtp_port, timeout=120) as server:
         if config.use_tls:
             server.starttls()
         server.login(config.smtp_user, config.smtp_password)

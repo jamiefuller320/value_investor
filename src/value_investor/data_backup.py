@@ -20,6 +20,9 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_DATA_ROOT = Path("docs/data")
 DEFAULT_BACKUP_DIR = Path("output/backups")
+DEFAULT_BACKUP_EMAIL_TO = "intellaigence101@gmail.com"
+# Keep chunks below Gmail's 25MB attachment limit after base64 encoding.
+DEFAULT_EMAIL_CHUNK_BYTES = 15 * 1024 * 1024
 
 # Paths expensive or impossible to regenerate quickly (see docs/ops/data-backup.md).
 TIER1_RELATIVE_PATHS: tuple[str, ...] = (
@@ -290,4 +293,123 @@ def run_restore_drill(
         "ok": not missing,
         "missing_tier_paths": missing,
         "history_files_restored_to_output": copied,
+    }
+
+
+def backup_email_to() -> str:
+    return (os.environ.get("BACKUP_EMAIL_TO") or DEFAULT_BACKUP_EMAIL_TO).strip()
+
+
+def split_archive_for_email(
+    archive_path: Path,
+    *,
+    chunk_bytes: int = DEFAULT_EMAIL_CHUNK_BYTES,
+    output_dir: Path | None = None,
+) -> list[Path]:
+    """Split a tarball into numbered parts sized for SMTP attachment limits."""
+    archive_path = Path(archive_path)
+    output_dir = Path(output_dir or archive_path.parent)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stem = archive_path.name
+    parts: list[Path] = []
+    with archive_path.open("rb") as handle:
+        index = 1
+        while True:
+            chunk = handle.read(chunk_bytes)
+            if not chunk:
+                break
+            part_path = output_dir / f"{stem}.part{index:03d}"
+            part_path.write_bytes(chunk)
+            parts.append(part_path)
+            index += 1
+    return parts
+
+
+def merge_email_chunks(chunk_paths: Iterable[Path], output_path: Path) -> Path:
+    """Reassemble emailed backup parts into a single tarball."""
+    ordered = sorted(Path(path) for path in chunk_paths)
+
+    def _part_index(path: Path) -> int:
+        suffix = path.name.rsplit(".part", 1)[-1]
+        return int(suffix)
+
+    ordered.sort(key=_part_index)
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("wb") as out:
+        for part_path in ordered:
+            out.write(part_path.read_bytes())
+    return output_path
+
+
+def send_backup_snapshot_email(
+    snapshot: BackupSnapshot,
+    *,
+    email_to: str | None = None,
+    chunk_bytes: int = DEFAULT_EMAIL_CHUNK_BYTES,
+) -> dict[str, Any]:
+    """
+    Email manifest + chunked archive to an off-GitHub mailbox.
+
+    Large snapshots are split into multiple messages to stay under common SMTP
+  attachment limits (~25MB for Gmail).
+    """
+    from value_investor.emailer import EmailConfig, send_email
+
+    to_addr = (email_to or backup_email_to()).strip()
+    if not to_addr:
+        raise ValueError("BACKUP_EMAIL_TO is empty")
+
+    config = EmailConfig.from_env()
+    config.email_to = to_addr
+
+    parts = split_archive_for_email(
+        snapshot.archive_path,
+        chunk_bytes=chunk_bytes,
+        output_dir=snapshot.archive_path.parent,
+    )
+    stamp = snapshot.manifest.created_at[:10]
+    manifest_payload = snapshot.manifest_path.read_bytes()
+    manifest_name = snapshot.manifest_path.name
+
+    manifest_text = (
+        f"FTSE tier-1 backup manifest ({stamp})\n\n"
+        f"Archive: {snapshot.manifest.archive_name}\n"
+        f"Bytes: {snapshot.manifest.bytes:,}\n"
+        f"Files: {snapshot.manifest.file_count:,}\n"
+        f"SHA256: {snapshot.manifest.sha256}\n"
+        f"Email parts: {len(parts)}\n\n"
+        "Restore from emailed chunks:\n"
+        "  1. Save all .partNNN attachments to one folder\n"
+        f"  2. ftse-data-backup reassemble --output {snapshot.manifest.archive_name} *.part*\n"
+        f"  3. ftse-data-backup verify {snapshot.manifest.archive_name}\n"
+        f"  4. ftse-data-backup restore {snapshot.manifest.archive_name}\n"
+    )
+    send_email(
+        subject=f"FTSE tier-1 backup manifest ({stamp})",
+        text_body=manifest_text,
+        attachments=[(manifest_name, manifest_payload, "application/json")],
+        config=config,
+    )
+
+    for index, part_path in enumerate(parts, start=1):
+        part_text = (
+            f"FTSE tier-1 backup part {index}/{len(parts)} ({stamp})\n\n"
+            f"Archive: {snapshot.manifest.archive_name}\n"
+            f"Part file: {part_path.name}\n"
+            f"SHA256 (full archive): {snapshot.manifest.sha256}\n"
+        )
+        send_email(
+            subject=f"FTSE tier-1 backup part {index}/{len(parts)} ({stamp})",
+            text_body=part_text,
+            attachments=[(part_path.name, part_path.read_bytes(), "application/gzip")],
+            config=config,
+        )
+
+    return {
+        "emailed": True,
+        "email_to": to_addr,
+        "parts": len(parts),
+        "chunk_bytes": chunk_bytes,
+        "part_paths": [str(path) for path in parts],
     }

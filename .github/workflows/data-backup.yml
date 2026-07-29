@@ -7,6 +7,10 @@ on:
     - cron: "30 12 * * 0"
   workflow_dispatch:
     inputs:
+      force:
+        description: "Run even if data backup already succeeded today"
+        type: boolean
+        default: false
       include_tier2:
         description: "Include tier-2 JSON files in the snapshot"
         type: boolean
@@ -15,16 +19,65 @@ on:
         description: "Upload to BACKUP_S3_URI when configured"
         type: boolean
         default: true
+      email_backup:
+        description: "Email manifest + chunked archive to BACKUP_EMAIL_TO"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: ftse-data-backup
   cancel-in-progress: false
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - name: Skip if data backup already ran today
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        with:
+          script: |
+            const force = process.env.FORCE === 'true';
+            if (force) {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflow_id = 'data-backup.yml';
+            const runId = context.runId;
+            const dayStart = new Date(Date.UTC(
+              new Date().getUTCFullYear(),
+              new Date().getUTCMonth(),
+              new Date().getUTCDate(),
+            )).toISOString();
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner, repo, workflow_id, per_page: 20,
+            });
+            const prior = (data.workflow_runs || []).filter((r) =>
+              r.id !== runId
+              && r.created_at >= dayStart
+              && (r.event === 'workflow_dispatch' || r.event === 'schedule')
+            );
+            const succeeded = prior.find((r) => r.conclusion === 'success');
+            if (succeeded) {
+              core.info(`Skipping — data backup already succeeded today (run ${succeeded.id})`);
+              core.setOutput('should_run', 'false');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
   backup:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -47,6 +100,9 @@ jobs:
           if [ "${{ github.event.inputs.upload_s3 || 'true' }}" = "true" ]; then
             ARGS+=(--upload)
           fi
+          if [ "${{ github.event.inputs.email_backup || 'true' }}" = "true" ]; then
+            ARGS+=(--email)
+          fi
           ftse-data-backup "${ARGS[@]}" > /tmp/backup.json
           python3 - <<'PY'
           import json, os
@@ -59,6 +115,16 @@ jobs:
               encoding="utf-8",
           )
           PY
+        env:
+          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          BACKUP_EMAIL_TO: ${{ secrets.BACKUP_EMAIL_TO }}
 
       - name: Upload backup artifact
         uses: actions/upload-artifact@v4
@@ -77,16 +143,19 @@ jobs:
             python3 - <<'PY'
           import json
           from pathlib import Path
-          upload = json.loads(Path("/tmp/backup.json").read_text()).get("upload") or {}
+          payload = json.loads(Path("/tmp/backup.json").read_text())
+          upload = payload.get("upload") or {}
+          email = payload.get("email") or {}
           if upload.get("uploaded"):
               print(f"S3 upload ok: {upload.get('archive_dest')}")
           else:
               print(f"S3 upload skipped: {upload.get('reason', 'not requested')}")
+          if email.get("emailed"):
+              print(
+                  f"Email backup ok: {email.get('email_to')} "
+                  f"({email.get('parts')} part(s))"
+              )
+          elif "${{ github.event.inputs.email_backup || 'true' }}" == "true":
+              print("Email backup not recorded in snapshot output")
           PY
           fi
-
-        env:
-          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
