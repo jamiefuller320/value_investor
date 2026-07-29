@@ -10,7 +10,7 @@ Related: [`architecture.md`](../architecture.md), [`orchestrator-cron.md`](orche
 
 | Tier | RPO (max loss) | RTO (target restore) | Mechanism |
 |------|----------------|----------------------|-----------|
-| **Tier 1** | 7 days (weekly Sunday snapshot) | &lt; 1 hour manual | `ftse-data-backup` + optional S3 |
+| **Tier 1** | 7 days (weekly Sunday snapshot) | &lt; 1 hour manual | `ftse-data-backup` + email + optional S3 |
 | **Tier 2** | 7 days if `--include-tier2` | Same session as tier 1 | Optional in snapshot |
 | **GitHub `main`** | Last commit | Minutes (clone/checkout) | Implicit backup |
 
@@ -57,6 +57,12 @@ ftse-data-backup snapshot --include-tier2
 # Upload to S3 when BACKUP_S3_URI is set (requires AWS CLI + credentials)
 ftse-data-backup snapshot --upload
 
+# Email manifest + chunked archive off-GitHub (default: intellaigence101@gmail.com)
+ftse-data-backup snapshot --email
+
+# Reassemble emailed chunks into a tarball
+ftse-data-backup reassemble --output restored.tar.gz ftse-tier1-*.part*
+
 # List local snapshots
 ftse-data-backup list
 
@@ -92,8 +98,25 @@ Same-day skip: a second successful run the same UTC day exits quickly unless
 
 ### cron-job.org setup (one-time)
 
-Use the same fine-grained PAT as other workflow dispatches (**Actions: Read and
-write** on this repo only).
+**Recommended:** import all production jobs via API (idempotent by title):
+
+```bash
+CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
+# or just data backup:
+CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --job data-backup
+```
+
+`CRONJOB_API_KEY` from [cron-job.org](https://cron-job.org) → Settings → API.
+`GH_PAT` is the same fine-grained PAT used for other workflow dispatches
+(**Actions: Read and write** on this repo only).
+
+Dry-run to inspect payloads:
+
+```bash
+./scripts/import_cron_jobs.py --job data-backup --dry-run
+```
+
+**Manual UI** (alternative): use the same fine-grained PAT as other workflow dispatches.
 
 1. [cron-job.org](https://cron-job.org) → **Create cronjob**
 2. **Title:** `FTSE data backup (Sunday)`
@@ -130,14 +153,33 @@ Set repository secrets / env:
 
 Lifecycle rule on the bucket: keep **weekly** objects 90 days, **monthly** pins 1 year.
 
+### Email off-GitHub copy (default)
+
+Weekly CI runs email the manifest plus chunked archive to **`intellaigence101@gmail.com`**
+(override with `BACKUP_EMAIL_TO`). Uses the same SMTP secrets as the Sunday screen
+(`SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`).
+
+Snapshots are ~60MB compressed today — above Gmail’s single-attachment limit — so the
+workflow sends **multiple emails** (~15MB parts) plus one manifest message with restore
+instructions. Reassemble locally:
+
+```bash
+ftse-data-backup reassemble --output restored.tar.gz ~/Downloads/ftse-tier1-*.part*
+ftse-data-backup verify restored.tar.gz
+ftse-data-backup restore restored.tar.gz
+```
+
+Optional GitHub secret `BACKUP_EMAIL_TO` overrides the default mailbox.
+
 ## Restore procedure (quarterly drill)
 
 1. Clone a clean copy of the repo (or use a worktree).
-2. Download latest snapshot (S3, GitHub Actions artifact, or local `output/backups`).
-3. `ftse-data-backup verify <archive.tar.gz>`
-4. `ftse-data-backup restore <archive.tar.gz>`
-5. `ftse-data-backup drill`
-6. `ftse-preflight` and `python3 -m pytest tests/test_historical_analysis.py -q` (smoke)
+2. Download latest snapshot (email chunks, S3, GitHub Actions artifact, or local `output/backups`).
+3. If from email: `ftse-data-backup reassemble --output archive.tar.gz *.part*`
+4. `ftse-data-backup verify <archive.tar.gz>`
+5. `ftse-data-backup restore <archive.tar.gz>`
+6. `ftse-data-backup drill`
+7. `ftse-preflight` and `python3 -m pytest tests/test_historical_analysis.py -q` (smoke)
 
 ## What GitHub already gives you
 

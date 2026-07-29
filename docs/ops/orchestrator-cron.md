@@ -26,6 +26,7 @@ on the cron host — never commit it.
 
 - `scripts/dispatch_orchestrator.sh` — Sunday / weekday paper / surplus suites
 - `scripts/dispatch_github_workflow.sh` — any single workflow file
+- `scripts/import_cron_jobs.py` — bulk import/update cron-job.org jobs via API
 
 ## Coverage matrix
 
@@ -45,6 +46,17 @@ on the cron host — never commit it.
 | `ci.yml` / `pages.yml` | Push / PR | No | No |
 
 ## One-time external cron setup
+
+Bulk import (recommended — idempotent by job title):
+
+```bash
+CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
+```
+
+Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop`,
+`analysis-review`, `ops-monitor`, `data-backup`. Dry-run: `--dry-run --json`.
+
+Manual per-job examples below.
 
 ### 1. Orchestrator — Sunday quiet bundle (06:20 UTC)
 

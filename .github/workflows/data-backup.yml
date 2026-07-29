@@ -19,6 +19,10 @@ on:
         description: "Upload to BACKUP_S3_URI when configured"
         type: boolean
         default: true
+      email_backup:
+        description: "Email manifest + chunked archive to BACKUP_EMAIL_TO"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -96,6 +100,9 @@ jobs:
           if [ "${{ github.event.inputs.upload_s3 || 'true' }}" = "true" ]; then
             ARGS+=(--upload)
           fi
+          if [ "${{ github.event.inputs.email_backup || 'true' }}" = "true" ]; then
+            ARGS+=(--email)
+          fi
           ftse-data-backup "${ARGS[@]}" > /tmp/backup.json
           python3 - <<'PY'
           import json, os
@@ -108,6 +115,16 @@ jobs:
               encoding="utf-8",
           )
           PY
+        env:
+          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          BACKUP_EMAIL_TO: ${{ secrets.BACKUP_EMAIL_TO }}
 
       - name: Upload backup artifact
         uses: actions/upload-artifact@v4
@@ -126,16 +143,19 @@ jobs:
             python3 - <<'PY'
           import json
           from pathlib import Path
-          upload = json.loads(Path("/tmp/backup.json").read_text()).get("upload") or {}
+          payload = json.loads(Path("/tmp/backup.json").read_text())
+          upload = payload.get("upload") or {}
+          email = payload.get("email") or {}
           if upload.get("uploaded"):
               print(f"S3 upload ok: {upload.get('archive_dest')}")
           else:
               print(f"S3 upload skipped: {upload.get('reason', 'not requested')}")
+          if email.get("emailed"):
+              print(
+                  f"Email backup ok: {email.get('email_to')} "
+                  f"({email.get('parts')} part(s))"
+              )
+          elif "${{ github.event.inputs.email_backup || 'true' }}" == "true":
+              print("Email backup not recorded in snapshot output")
           PY
           fi
-
-        env:
-          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}

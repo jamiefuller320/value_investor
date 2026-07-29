@@ -11,8 +11,10 @@ from value_investor.data_backup import (
     DEFAULT_BACKUP_DIR,
     create_backup_snapshot,
     list_local_snapshots,
+    merge_email_chunks,
     restore_backup_snapshot,
     run_restore_drill,
+    send_backup_snapshot_email,
     upload_backup_snapshot,
     verify_backup_snapshot,
 )
@@ -34,6 +36,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Also include small regenerable dashboard/queue JSON files",
     )
     snap.add_argument("--upload", action="store_true", help="Upload when BACKUP_S3_URI is set")
+    snap.add_argument(
+        "--email",
+        action="store_true",
+        help="Email manifest + chunked archive to BACKUP_EMAIL_TO (default: intellaigence101@gmail.com)",
+    )
     snap.set_defaults(func=_cmd_snapshot)
 
     sub.add_parser("list", help="List local snapshots under output/backups").set_defaults(func=_cmd_list)
@@ -52,6 +59,11 @@ def main(argv: list[str] | None = None) -> int:
     drill.add_argument("--output-dir", type=Path, default=Path("output"))
     drill.set_defaults(func=_cmd_drill)
 
+    reassemble = sub.add_parser("reassemble", help="Merge emailed .partNNN chunks into a tarball")
+    reassemble.add_argument("chunks", nargs="+", type=Path, help="Chunk files (*.part001, *.part002, …)")
+    reassemble.add_argument("--output", type=Path, required=True, help="Output .tar.gz path")
+    reassemble.set_defaults(func=_cmd_reassemble)
+
     args = parser.parse_args(argv)
     return int(args.func(args))
 
@@ -69,9 +81,18 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
         except RuntimeError as exc:
             print(str(exc), file=sys.stderr)
             return 1
+    email_result = None
+    if args.email:
+        try:
+            email_result = send_backup_snapshot_email(snapshot)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
     payload = snapshot.to_dict()
     if upload_result is not None:
         payload["upload"] = upload_result
+    if email_result is not None:
+        payload["email"] = email_result
     if args.json:
         print(json.dumps(payload, indent=2))
     else:
@@ -81,6 +102,17 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
         print(f"  sha256: {snapshot.manifest.sha256}")
         if upload_result:
             print(f"  upload: {upload_result}")
+        if email_result:
+            print(f"  email: {email_result}")
+    return 0
+
+
+def _cmd_reassemble(args: argparse.Namespace) -> int:
+    output = merge_email_chunks(args.chunks, args.output)
+    if args.json:
+        print(json.dumps({"output": str(output)}, indent=2))
+    else:
+        print(f"Reassembled: {output}")
     return 0
 
 
