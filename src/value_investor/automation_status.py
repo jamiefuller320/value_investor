@@ -104,6 +104,15 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "ops-monitor.yml",
     },
+    "data_backup": {
+        "name": "FTSE Data Backup",
+        "cron": "30 12 * * 0",
+        "cadence": (
+            "Sunday 12:30 UTC after email bundle. Tier-1 docs/data tarball + manifest; "
+            "GitHub artifact (90d) and optional S3 via BACKUP_S3_URI. docs/ops/data-backup.md."
+        ),
+        "workflow": "data-backup.yml",
+    },
     "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",

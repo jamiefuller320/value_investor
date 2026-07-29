@@ -1,0 +1,92 @@
+name: FTSE Data Backup
+
+# Weekly tier-1 snapshot of committed docs/data after the Sunday bundle.
+# Produces a GitHub Actions artifact (90-day retention) and optional S3 upload.
+on:
+  schedule:
+    - cron: "30 12 * * 0"
+  workflow_dispatch:
+    inputs:
+      include_tier2:
+        description: "Include tier-2 JSON files in the snapshot"
+        type: boolean
+        default: false
+      upload_s3:
+        description: "Upload to BACKUP_S3_URI when configured"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ftse-data-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Create tier-1 snapshot
+        id: snap
+        run: |
+          set -euo pipefail
+          ARGS=(snapshot --json)
+          if [ "${{ github.event.inputs.include_tier2 || 'false' }}" = "true" ]; then
+            ARGS+=(--include-tier2)
+          fi
+          if [ "${{ github.event.inputs.upload_s3 || 'true' }}" = "true" ]; then
+            ARGS+=(--upload)
+          fi
+          ftse-data-backup "${ARGS[@]}" > /tmp/backup.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/backup.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"archive_path={data['archive_path']}\n"
+              f"manifest_path={data['manifest_path']}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftse-tier1-data-backup
+          path: |
+            output/backups/ftse-tier1-*.tar.gz
+            output/backups/ftse-tier1-*.manifest.json
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: S3 upload note
+        if: always()
+        run: |
+          if [ -f /tmp/backup.json ]; then
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          upload = json.loads(Path("/tmp/backup.json").read_text()).get("upload") or {}
+          if upload.get("uploaded"):
+              print(f"S3 upload ok: {upload.get('archive_dest')}")
+          else:
+              print(f"S3 upload skipped: {upload.get('reason', 'not requested')}")
+          PY
+          fi
+
+        env:
+          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
