@@ -98,3 +98,24 @@ def test_send_backup_email_uses_backup_to(monkeypatch, tmp_path: Path):
     assert result["parts"] >= 1
     assert sent
     assert all(msg["config"].email_to == "intellaigence101@gmail.com" for msg in sent)
+
+
+def test_data_backup_cli_accepts_snapshot_json_after_subcommand(tmp_path: Path, monkeypatch):
+    from unittest.mock import MagicMock
+
+    from value_investor.data_backup_cli import main
+
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+
+    mock_snapshot = MagicMock()
+    mock_snapshot.to_dict.return_value = {"archive_path": "out.tar.gz", "manifest_path": "out.json"}
+    monkeypatch.chdir(repo)
+    monkeypatch.setattr(
+        "value_investor.data_backup_cli.create_backup_snapshot",
+        lambda **kwargs: mock_snapshot,
+    )
+    rc = main(["snapshot", "--json", "--backup-dir", str(tmp_path / "backups")])
+    assert rc == 0
