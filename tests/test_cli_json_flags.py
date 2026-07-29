@@ -96,6 +96,24 @@ def test_deferred_ideas_cli_accepts_list_json_after_subcommand():
             assert defer_main(["list", "--json"]) == 0
 
 
+def test_engineering_check_pr_paths_skips_non_engineering_branch(tmp_path: Path):
+    changed = tmp_path / "changed.txt"
+    changed.write_text("docs/paper_sims.js\n", encoding="utf-8")
+    with patch("sys.stdout", StringIO()):
+        assert (
+            engineering_main(
+                [
+                    "check-pr-paths",
+                    "--branch",
+                    "cursor/cli-audit-unrealized-pnl-f028",
+                    "--changed-files",
+                    str(changed),
+                ]
+            )
+            == 0
+        )
+
+
 def test_analysis_review_cli_accepts_payload_json_after_subcommand():
     with patch(
         "value_investor.analysis_review_cli.build_analysis_payload",

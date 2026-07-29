@@ -459,6 +459,7 @@ def main(argv: list[str] | None = None) -> int:
 
     reconcile_p = sub.add_parser(
         "reconcile-queue",
+        parents=[common],
         help="Reset pr_open tasks that have no matching open engineering PR",
     )
     reconcile_p.add_argument(
@@ -470,6 +471,7 @@ def main(argv: list[str] | None = None) -> int:
 
     recover_p = sub.add_parser(
         "recover-queue",
+        parents=[common],
         help="Self-repair queue: reconcile orphans, retry failed, park blocked tasks",
     )
     recover_p.add_argument("--open-prs-json", default=None)
@@ -484,6 +486,7 @@ def main(argv: list[str] | None = None) -> int:
 
     branch_stale_p = sub.add_parser(
         "branch-is-stale",
+        parents=[common],
         help="Exit 0 when an engineering branch has no open PR and may be deleted",
     )
     branch_stale_p.add_argument("--branch", required=True)
@@ -504,6 +507,7 @@ def main(argv: list[str] | None = None) -> int:
 
     mark_pr_open_p = sub.add_parser(
         "mark-pr-open",
+        parents=[common],
         help="Mark an engineering task pr_open after a draft PR is created",
     )
     mark_pr_open_p.add_argument("--task-id", required=True)
@@ -519,6 +523,7 @@ def main(argv: list[str] | None = None) -> int:
 
     reprioritize_p = sub.add_parser(
         "reprioritize",
+        parents=[common],
         help="Deterministically adjust open queue priorities after an ingest merge",
     )
     reprioritize_p.add_argument("--merged-task-id", required=True)
@@ -531,6 +536,7 @@ def main(argv: list[str] | None = None) -> int:
 
     check_paths_p = sub.add_parser(
         "check-pr-paths",
+        parents=[common],
         help="Fail when changed files are outside task allowed_paths or touch blocked_paths",
     )
     check_paths_p.add_argument(
