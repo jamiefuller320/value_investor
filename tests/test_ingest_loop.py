@@ -15,6 +15,7 @@ from value_investor.ingest_loop import (
     IngestLoopResult,
     append_health_log_entry,
     ingest_health_stalled,
+    load_health_log_payload,
     reports_from_latest,
 )
 from value_investor.ingest_loop_cli import main
@@ -59,6 +60,36 @@ def test_reports_from_latest_builds_company_reports(tmp_path: Path):
     assert len(reports) == 1
     assert reports[0].ticker == "BT-A.L"
     assert reports[0].signal == "buy"
+
+
+def test_load_health_log_payload_recovers_from_corrupt_json(tmp_path: Path):
+    log_path = tmp_path / "ingest_health_log.json"
+    log_path.write_text('{"entries": [{"run_at": "old"}]\n<<<<<<< conflict\n', encoding="utf-8")
+
+    payload = load_health_log_payload(log_path)
+    assert payload == {"entries": []}
+    backups = list(tmp_path.glob("ingest_health_log.corrupt.*.json"))
+    assert len(backups) == 1
+    assert b"<<<<<<< conflict" in backups[0].read_bytes()
+
+
+def test_append_health_log_entry_appends_after_corrupt_file(tmp_path: Path):
+    log_path = tmp_path / "ingest_health_log.json"
+    log_path.write_text("{not valid json", encoding="utf-8")
+
+    result = append_health_log_entry({"run_at": "2026-07-29T00:00:00+00:00"}, path=log_path)
+
+    assert len(result["entries"]) == 1
+    assert result["entries"][0]["run_at"] == "2026-07-29T00:00:00+00:00"
+    restored = json.loads(log_path.read_text(encoding="utf-8"))
+    assert restored["entries"] == result["entries"]
+
+
+def test_restored_health_log_enables_stall_detection():
+    log_path = Path("docs/data/ingest_health_log.json")
+    payload = load_health_log_payload(log_path, backup_corrupt=False)
+    assert len(payload.get("entries") or []) >= 2
+    assert ingest_health_stalled(log_path, min_runs=2) is True
 
 
 def test_ingest_health_stalled_requires_flat_zero_body_window(tmp_path: Path):

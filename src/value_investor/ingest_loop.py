@@ -37,6 +37,60 @@ HEALTH_LOG_KEEP = 52
 DEFAULT_STALL_RUNS = 2
 
 
+def load_health_log_payload(
+    path: Path,
+    *,
+    backup_corrupt: bool = True,
+) -> dict[str, Any]:
+    """
+    Load ingest health log JSON, recovering from corrupt or malformed files.
+
+    When the file cannot be parsed or does not have a list ``entries`` field,
+    optionally copies the raw bytes to a sibling ``*.corrupt.<timestamp>.json``
+    file before returning an empty payload.
+    """
+    path = Path(path)
+    if not path.exists():
+        return {"entries": []}
+
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError) as exc:
+        logger.warning("Corrupt ingest health log at %s: %s", path, exc)
+        if backup_corrupt:
+            _backup_corrupt_health_log(path)
+        return {"entries": []}
+
+    if not isinstance(payload, dict):
+        logger.warning("Ingest health log at %s is not a JSON object — resetting", path)
+        if backup_corrupt:
+            _backup_corrupt_health_log(path)
+        return {"entries": []}
+
+    entries = payload.get("entries")
+    if entries is None:
+        return {"entries": []}
+    if not isinstance(entries, list):
+        logger.warning("Ingest health log entries at %s is not a list — resetting", path)
+        if backup_corrupt:
+            _backup_corrupt_health_log(path)
+        return {"entries": []}
+
+    return payload
+
+
+def _backup_corrupt_health_log(path: Path) -> Path | None:
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    backup = path.with_name(f"{path.stem}.corrupt.{stamp}{path.suffix}")
+    try:
+        backup.write_bytes(path.read_bytes())
+        logger.warning("Backed up corrupt ingest health log to %s", backup)
+        return backup
+    except OSError:
+        logger.exception("Failed to back up corrupt ingest health log at %s", path)
+        return None
+
+
 @dataclass
 class IngestLoopResult:
     health_before: dict[str, Any]
@@ -82,14 +136,7 @@ def append_health_log_entry(
     keep: int = HEALTH_LOG_KEEP,
 ) -> dict[str, Any]:
     path = Path(path)
-    payload: dict[str, Any]
-    if path.exists():
-        try:
-            payload = read_json(path)
-        except (OSError, ValueError, TypeError):
-            payload = {"entries": []}
-    else:
-        payload = {"entries": []}
+    payload = load_health_log_payload(path)
     entries = list(payload.get("entries") or [])
     entries.append(entry)
     payload["entries"] = entries[-max(1, int(keep)) :]
