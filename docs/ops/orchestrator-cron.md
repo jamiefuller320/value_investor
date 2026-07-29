@@ -19,8 +19,10 @@ Human-readable inventory also appears on the dashboard automation page
 | PR merge / push triggers? | No external cron needed |
 | Low-stakes hourly polling? | GitHub schedule may suffice; add external cron if misses matter |
 
-**PAT:** fine-grained, **Actions: Read and write** on this repo only. Store as `GH_PAT`
-on the cron host — never commit it.
+**PAT:** fine-grained, **Actions: Read and write** on this repo only. Store as
+`WORKFLOW_DISPATCH_PAT` (preferred) or `GH_PAT` on the cron host and in Cursor Cloud
+secrets — never commit it. Avoid using `GH_TOKEN` alone in Cursor; it may receive
+the `ghs_…` integration token instead of your user PAT.
 
 **Helper scripts:**
 
@@ -55,7 +57,7 @@ Two layers:
 ### Register jobs on cron-job.org (curl)
 
 `CRONJOB_API_KEY` from [cron-job.org](https://cron-job.org) → Settings → API.
-`GH_PAT` is the fine-grained PAT with **Actions: Read and write** on this repo.
+`WORKFLOW_DISPATCH_PAT` (or `GH_PAT`) is the fine-grained PAT with **Actions: Read and write** on this repo.
 
 **Data backup** (Sunday 12:30 UTC):
 

@@ -2,7 +2,7 @@
 # Dispatch the Automation Orchestrator via GitHub API (for external cron hosts).
 #
 # Required:
-#   GH_PAT   — fine-grained or classic PAT with Actions: write on this repo
+#   WORKFLOW_DISPATCH_PAT or GH_PAT — fine-grained PAT with Actions: write on this repo
 # Optional:
 #   REPO     — owner/name (default: jamiefuller320/value_investor)
 #   SUITE    — sunday | weekday_paper | surplus_check | catchup_today | … (default: sunday)
@@ -16,19 +16,20 @@
 #   MODE=repository_dispatch SUITE=sunday ./scripts/dispatch_orchestrator.sh
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=resolve_workflow_pat.sh
+source "${SCRIPT_DIR}/resolve_workflow_pat.sh"
+
 REPO="${REPO:-jamiefuller320/value_investor}"
 SUITE="${SUITE:-sunday}"
 FORCE="${FORCE:-false}"
 REF="${REF:-main}"
 MODE="${MODE:-workflow_dispatch}"
 
-if [[ -z "${GH_PAT:-}" ]]; then
-  echo "GH_PAT is required (PAT with Actions: write on ${REPO})" >&2
-  exit 1
-fi
+WORKFLOW_PAT="$(resolve_workflow_pat)" || exit 1
 
 API="https://api.github.com/repos/${REPO}"
-AUTH=( -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${GH_PAT}" )
+AUTH=( -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${WORKFLOW_PAT}" )
 
 if [[ "${MODE}" == "repository_dispatch" ]]; then
   echo "repository_dispatch automation-orchestrator suite=${SUITE} force=${FORCE}"

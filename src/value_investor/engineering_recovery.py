@@ -17,6 +17,8 @@ from value_investor.engineering_queue import (
 )
 from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, load_engineering_tasks, mark_task_status
 
+from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
+
 logger = logging.getLogger(__name__)
 
 PARKED_STATUS = "parked"
@@ -27,9 +29,14 @@ GITHUB_API_VERSION = "2022-11-28"
 
 
 def _github_token() -> str | None:
-    for key in ("GITHUB_TOKEN", "GH_TOKEN", "GH_PAT"):
+    pat = resolve_workflow_dispatch_pat()
+    if pat:
+        return pat
+    for key in ("GITHUB_TOKEN", "GH_TOKEN"):
         value = os.environ.get(key)
-        if value:
+        if value and not is_integration_token(value):
+            return value
+        if value and key == "GITHUB_TOKEN":
             return value
     return None
 

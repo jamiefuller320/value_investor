@@ -6,10 +6,10 @@ Idempotent by job title.
 
 Required env:
   CRONJOB_API_KEY  — cron-job.org API key (Settings → API)
-  GH_PAT           — fine-grained PAT with Actions: Read and write on the repo
+  WORKFLOW_DISPATCH_PAT or GH_PAT — fine-grained PAT with Actions: Read and write on the repo
 
 Examples:
-  GH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all
+  WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all
   GH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job data-backup
   ./scripts/import_cron_jobs.py --all --dry-run
 """
@@ -24,6 +24,8 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from typing import Any
+
+from value_investor.workflow_pat import require_workflow_dispatch_pat, resolve_workflow_dispatch_pat
 
 REPO = os.environ.get("REPO", "jamiefuller320/value_investor")
 REF = os.environ.get("REF", "main")
@@ -208,13 +210,17 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     api_key = os.environ.get("CRONJOB_API_KEY", "").strip()
-    gh_pat = os.environ.get("GH_PAT", "").strip()
     if not args.dry_run and not api_key:
         print("CRONJOB_API_KEY is required (cron-job.org → Settings → API)", file=sys.stderr)
         return 1
-    if not args.dry_run and not gh_pat:
-        print("GH_PAT is required (fine-grained PAT with Actions: Read and write)", file=sys.stderr)
-        return 1
+    if args.dry_run:
+        gh_pat = resolve_workflow_dispatch_pat() or "github_pat_dry_run_placeholder"
+    else:
+        try:
+            gh_pat = require_workflow_dispatch_pat()
+        except RuntimeError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
 
     specs = {spec.key: spec for spec in _job_specs()}
     selected: list[CronJobSpec]
