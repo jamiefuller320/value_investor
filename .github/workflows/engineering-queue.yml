@@ -99,9 +99,9 @@ jobs:
             | python3 -c 'import json,sys; print("true" if any(r.get("status") in {"queued","in_progress","waiting"} for r in json.load(sys.stdin)) else "false")')
           echo "agent_running=$RUNNING" >> "$GITHUB_OUTPUT"
 
-      - name: Reconcile orphaned pr_open tasks
+      - name: Recover engineering queue
         run: |
-          ftse-engineering --json reconcile-queue --open-prs-json /tmp/open_prs.json
+          ftse-engineering --json recover-queue --open-prs-json /tmp/open_prs.json
 
       - name: Sync main before queue file commit
         run: git pull --rebase --autostash origin main
@@ -110,7 +110,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: main
-          commit_message: "chore: reconcile engineering queue orphans [skip ci]"
+          commit_message: "chore: engineering queue recovery [skip ci]"
           file_pattern: docs/data/engineering_tasks.json
           skip_fetch: false
 

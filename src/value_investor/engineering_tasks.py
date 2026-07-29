@@ -23,7 +23,7 @@ DEFAULT_TASKS_PATH = Path("output/engineering_tasks.json")
 COMMITTED_TASKS_PATH = Path("docs/data/engineering_tasks.json")
 DEFAULT_MAX_COMPILE_TASKS = 8
 DEFAULT_MAX_RUN_TASKS = 1
-TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled"})
+TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
 
 BLOCKED_PATHS = (
     "src/value_investor/paper_fund.py",
@@ -69,7 +69,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/automation_status.py",
         "src/value_investor/email_agent.py",
         "src/value_investor/ops_monitor.py",
-        "src/value_investor/ingest_loop.py",
+        "src/value_investor/engineering_recovery.py",
         ".github/workflows/ops-monitor.yml",
         "tests/test_automation_status.py",
         "tests/test_ops_monitor.py",
@@ -679,8 +679,14 @@ def mark_task_status(
     branch_name: str | None = None,
     pr_url: str | None = None,
     pr_number: int | None = None,
+    **extra_fields: Any,
 ) -> EngineeringTask | None:
-    fields: dict[str, Any] = {"status": status}
+    data = load_engineering_tasks(path)
+    prior_row = next(
+        (row for row in data.get("tasks") or [] if str(row.get("id")) == task_id),
+        None,
+    )
+    fields: dict[str, Any] = {"status": status, **extra_fields}
     if result_path:
         fields["result_path"] = result_path
     if branch_name:
@@ -689,6 +695,12 @@ def mark_task_status(
         fields["pr_url"] = pr_url
     if pr_number is not None:
         fields["pr_number"] = pr_number
+    if status == "failed":
+        fields["failure_count"] = int((prior_row or {}).get("failure_count") or 0) + 1
+        fields["last_failed_at"] = datetime.now(UTC).isoformat()
+    if status == "parked":
+        fields.setdefault("parked_at", datetime.now(UTC).isoformat())
+        fields.setdefault("parked_reason", "manual review required")
     if status in {"pr_open", "completed"}:
         fields["completed_at"] = datetime.now(UTC).isoformat()
     if status == "merged":

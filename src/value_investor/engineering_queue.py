@@ -25,7 +25,7 @@ from value_investor.storage import write_json
 ENGINEERING_BRANCH_RE = re.compile(r"^cursor/eng-\d{8}-\d{2}-1de3$")
 ENGINEERING_PR_TITLE_PREFIX = "feat(engineering):"
 
-TERMINAL_STATUSES = frozenset({"merged", "completed", "failed", "cancelled"})
+TERMINAL_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
 DISPATCHABLE_STATUS = "open"
 IN_FLIGHT_STATUS = "pr_open"
 
@@ -34,6 +34,7 @@ IN_FLIGHT_STATUS = "pr_open"
 class EngineeringQueueStatus:
     open_count: int
     pr_open_count: int
+    parked_count: int
     merged_count: int
     failed_count: int
     next_task: EngineeringTask | None
@@ -47,6 +48,7 @@ class EngineeringQueueStatus:
         return {
             "open_count": self.open_count,
             "pr_open_count": self.pr_open_count,
+            "parked_count": self.parked_count,
             "merged_count": self.merged_count,
             "failed_count": self.failed_count,
             "next_task_id": self.next_task.id if self.next_task else None,
@@ -133,6 +135,7 @@ def summarize_queue(
     rows = list(data.get("tasks") or [])
     open_count = sum(1 for row in rows if str(row.get("status") or "open") == DISPATCHABLE_STATUS)
     pr_open_count = sum(1 for row in rows if str(row.get("status") or "") == IN_FLIGHT_STATUS)
+    parked_count = sum(1 for row in rows if str(row.get("status") or "") == "parked")
     merged_count = sum(
         1 for row in rows if str(row.get("status") or "") in {"merged", "completed"}
     )
@@ -155,6 +158,7 @@ def summarize_queue(
     return EngineeringQueueStatus(
         open_count=open_count,
         pr_open_count=pr_open_count,
+        parked_count=parked_count,
         merged_count=merged_count,
         failed_count=failed_count,
         next_task=next_task,

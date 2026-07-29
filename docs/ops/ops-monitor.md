@@ -71,4 +71,19 @@ for a daily digest regardless of status.
 - Does **not** change paper books, screen signals, or decision-review knobs
 - Code fixes for drafted `ops` tasks follow the normal supervised engineering PR path
 
+## Engineering queue recovery
+
+`ftse-engineering recover-queue` (hourly via `engineering-queue.yml` and daily via ops monitor):
+
+| Situation | Action |
+|-----------|--------|
+| `pr_open` but PR closed / missing | Reopen → `open` (auto-retry) |
+| `failed` with retries left + cooldown elapsed | Reopen → `open` |
+| `failed` after max agent retries | Park → `parked` (manual review) |
+| `pr_open` with CI red for 48h+ | Park → `parked` (unblocks queue; PR stays for you) |
+
+List parked tasks: `ftse-engineering list-parked`
+
+To resume a parked task manually, set status back to `open` in `engineering_tasks.json` or add a fresh task.
+
 See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md).

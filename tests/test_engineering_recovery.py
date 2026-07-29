@@ -1,0 +1,116 @@
+"""Tests for engineering queue self-repair."""
+
+from __future__ import annotations
+
+import json
+from datetime import UTC, datetime, timedelta
+from pathlib import Path
+from unittest.mock import patch
+
+from value_investor.engineering_recovery import (
+    recover_engineering_queue,
+    retry_failed_tasks,
+    summarize_parked_tasks,
+)
+from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks, mark_task_status
+
+
+def _task(task_id: str, *, status: str = "open", title: str = "Build CH PDF fetch") -> EngineeringTask:
+    return EngineeringTask(
+        id=task_id,
+        area="ingest",
+        title=title,
+        summary=title,
+        priority="high",
+        priority_score=99.0,
+        source="post_run_review",
+        status=status,
+    )
+
+
+def test_retry_failed_tasks_reopens_after_cooldown(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    old = (datetime.now(UTC) - timedelta(hours=30)).isoformat()
+    payload = {
+        "tasks": [
+            _task("eng-20260729-01", status="failed").to_dict()
+            | {"failure_count": 1, "last_failed_at": old}
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    reopened, parked = retry_failed_tasks(tasks_path=tasks_path, apply=True, max_retries=2)
+    assert reopened == ["eng-20260729-01"]
+    assert parked == []
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "open"
+
+
+def test_retry_failed_tasks_parks_when_retries_exhausted(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260729-01", status="failed").to_dict()
+            | {"failure_count": 2, "last_failed_at": datetime.now(UTC).isoformat()}
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    reopened, parked = retry_failed_tasks(tasks_path=tasks_path, apply=True, max_retries=2)
+    assert reopened == []
+    assert len(parked) == 1
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "parked"
+    assert "manual review" in str(updated["tasks"][0].get("parked_reason"))
+
+
+def test_recover_engineering_queue_reconciles_orphans(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260729-02", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260729-02-1de3"},
+            _task("eng-20260729-01").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    result = recover_engineering_queue(tasks_path=tasks_path, open_prs=[], apply=True)
+    assert result.reconciled == ["eng-20260729-02"]
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "open"
+
+
+def test_mark_task_status_increments_failure_count(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps({"tasks": [_task("eng-20260729-01").to_dict()]}),
+        encoding="utf-8",
+    )
+    mark_task_status("eng-20260729-01", "failed", path=tasks_path, committed_path=tasks_path)
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["failure_count"] == 1
+    mark_task_status("eng-20260729-01", "failed", path=tasks_path, committed_path=tasks_path)
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["failure_count"] == 2
+
+
+def test_summarize_parked_tasks(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    _task("eng-20260729-01", status="parked").to_dict()
+                    | {
+                        "parked_reason": "CI blocked",
+                        "parked_at": "2026-07-29T00:00:00+00:00",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    rows = summarize_parked_tasks(tasks_path)
+    assert len(rows) == 1
+    assert rows[0]["id"] == "eng-20260729-01"
