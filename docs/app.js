@@ -224,6 +224,55 @@ function renderProjectProgress(data) {
   `;
 }
 
+function renderIngestHealth(data) {
+  const ingest = data.ingest_improvement;
+  const progress = data.project_progress || {};
+  const bottleneck = progress.ingest_bottleneck || {};
+  const health = bottleneck.health || {};
+
+  if (!ingest && !health.buy_tier_count) {
+    return "";
+  }
+
+  const rows = [];
+  if (health.buy_tier_count != null) {
+    rows.push(
+      `<div class="setting-row"><span class="setting-label">Buy-tier measured</span><span class="setting-value">${esc(String(health.measured_tickers ?? "—"))} / ${esc(String(health.buy_tier_count ?? "—"))}</span></div>`
+    );
+    rows.push(
+      `<div class="setting-row"><span class="setting-label">Zero-body tickers</span><span class="setting-value">${esc(String(health.zero_body_buy_tier ?? "—"))}</span></div>`
+    );
+    if ((health.unmeasured_buy_tier || 0) > 0) {
+      rows.push(
+        `<div class="setting-row"><span class="setting-label">Unmeasured</span><span class="setting-value">${esc(String(health.unmeasured_buy_tier))}</span></div>`
+      );
+    }
+  }
+  if (ingest) {
+    rows.push(
+      `<div class="setting-row"><span class="setting-label">Last ingest pass</span><span class="setting-value">${esc(String(ingest.improved ?? 0))} improved · ${esc(String((ingest.targets || []).length))} targets</span></div>`
+    );
+    if (ingest.run_at) {
+      rows.push(
+        `<div class="setting-row"><span class="setting-label">Run at</span><span class="setting-value small">${esc(fmtDate(ingest.run_at))}</span></div>`
+      );
+    }
+  }
+
+  const zeroList = (health.zero_body_tickers || []).slice(0, 8);
+  const zeroHtml = zeroList.length
+    ? `<p class="small muted">Zero-body: ${zeroList.map((t) => esc(t)).join(", ")}</p>`
+    : "";
+
+  return `
+    <div class="card" style="margin-top:1rem">
+      <h3>Ingest health</h3>
+      ${rows.join("")}
+      ${zeroHtml}
+    </div>
+  `;
+}
+
 function renderOverview(data) {
   const meta = data.meta || {};
   const counts = meta.signal_counts || {};
@@ -302,6 +351,7 @@ function renderOverview(data) {
       ${diffHtml}
     </div>
     ${renderProjectProgress(data)}
+    ${renderIngestHealth(data)}
   `;
 }
 

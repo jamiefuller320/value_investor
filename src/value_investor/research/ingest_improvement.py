@@ -15,6 +15,12 @@ from value_investor.research.filings import (
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_ticker_rns_api_filing_bodies,
+    sanitize_filings_index,
+)
+from value_investor.research.ingest_bootstrap import (
+    bootstrap_buy_tier_research,
+    canonical_sources_dir,
+    prefer_filing_index_path,
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.gap_fill_sources import (
@@ -32,7 +38,7 @@ from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_INGEST_IMPROVEMENT_CAP = 5
+DEFAULT_INGEST_IMPROVEMENT_CAP = 10
 KNOWN_SOURCE_IDS = frozenset(
     {
         "companies_house_accounts",
@@ -178,26 +184,12 @@ def _load_ingest_suggestions(path: Path) -> dict[str, list[dict[str, Any]]]:
     return by_ticker
 
 
-def _research_roots(output_dir: Path) -> list[Path]:
-    return [
-        output_dir / "research",
-        Path("docs/data/research"),
-        Path("output/research"),
-        Path("docs/data/library/markets"),
-    ]
-
-
 def _resolve_sources_dir(store: ResearchStore, ticker: str, output_dir: Path) -> Path:
-    from value_investor.engineering_queue import _filing_index_paths_for_ticker
-
-    paths = _filing_index_paths_for_ticker(ticker, roots=_research_roots(output_dir))
-    if paths:
-        return paths[0].parent.parent
-    return store.sources_dir(ticker)
+    return canonical_sources_dir(output_dir, ticker)
 
 
 def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dict[str, int]:
-    from value_investor.engineering_queue import _coverage_from_index, _filing_index_paths_for_ticker
+    from value_investor.engineering_queue import _coverage_from_index
 
     coverage = {
         "filings_total": 0,
@@ -206,12 +198,21 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
         "filings_with_body": 0,
         "indexed_without_body": 0,
     }
-    paths = _filing_index_paths_for_ticker(ticker, roots=_research_roots(output_dir))
-    index_path = paths[0] if paths else store.sources_dir(ticker) / "filings" / "filings_index.json"
-    if not index_path.exists():
+    index_path = prefer_filing_index_path(ticker, output_dir=output_dir)
+    if index_path is None:
         return coverage
     measured = _coverage_from_index(index_path)
     coverage.update(measured)
+    try:
+        index = read_json(index_path)
+        filings = list(index.get("filings") or [])
+        coverage["filings_annual"] = int((index.get("summary") or {}).get("annual") or 0)
+        coverage["filings_interim"] = int((index.get("summary") or {}).get("interim") or 0)
+        coverage["indexed_without_body"] = sum(
+            1 for row in filings if not row.get("has_body")
+        )
+    except (OSError, ValueError, TypeError):
+        pass
     return coverage
 
 
@@ -389,6 +390,11 @@ def run_ingest_improvement_pass(
   Uses only existing fetchers (Companies House, Investegate, IR PDFs, SEC/SEDAR).
   Does not modify scoring, prompts, or repository code.
     """
+    bootstrap_buy_tier_research(
+        reports,
+        output_dir=output_dir,
+        market=market,
+    )
     targets = select_ingest_improvement_targets(
         reports,
         output_dir=output_dir,
@@ -412,6 +418,12 @@ def run_ingest_improvement_pass(
                 summary.skipped += 1
                 continue
             sources_dir = _resolve_sources_dir(store, target.ticker, output_dir)
+            sources_dir.mkdir(parents=True, exist_ok=True)
+            sanitize_filings_index(
+                sources_dir / "filings",
+                company_name=target.name,
+                ticker=target.ticker,
+            )
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,

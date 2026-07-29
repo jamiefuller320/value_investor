@@ -16,7 +16,7 @@ on:
       max_targets:
         description: "Max buy-tier tickers for ingest-improvement pass"
         type: string
-        default: "5"
+        default: "10"
       force:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean
@@ -152,6 +152,7 @@ jobs:
           file_pattern: |
             docs/data/ingest_health_log.json
             docs/data/ingest_improvement_summary.json
+            docs/data/ingest_bootstrap_summary.json
             docs/data/research/**
             docs/data/engineering_tasks.json
           skip_fetch: false

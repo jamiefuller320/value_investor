@@ -150,7 +150,12 @@ def _recent_suggestions(
 
 
 def _filing_coverage_for_ticker(store: ResearchStore, ticker: str) -> dict[str, Any]:
-    index_path = store.sources_dir(ticker) / "filings" / "filings_index.json"
+    from value_investor.engineering_queue import _coverage_from_index
+    from value_investor.research.ingest_bootstrap import (
+        DEFAULT_COMMITTED_DATA_DIR,
+        prefer_filing_index_path,
+    )
+
     coverage = {
         "ticker": ticker,
         "filings_total": 0,
@@ -159,22 +164,21 @@ def _filing_coverage_for_ticker(store: ResearchStore, ticker: str) -> dict[str, 
         "filings_with_body": 0,
         "indexed_without_body": 0,
     }
+    index_path = prefer_filing_index_path(ticker, output_dir=DEFAULT_COMMITTED_DATA_DIR)
+    if index_path is None:
+        index_path = store.sources_dir(ticker) / "filings" / "filings_index.json"
     if not index_path.exists():
         return coverage
     try:
         index = read_json(index_path)
     except (OSError, ValueError, TypeError):
         return coverage
-    summary = index.get("summary") or {}
+    measured = _coverage_from_index(index_path)
+    coverage.update(measured)
+    coverage["ticker"] = ticker
     filings = list(index.get("filings") or [])
-    coverage.update(
-        {
-            "filings_total": int(summary.get("total") or len(filings)),
-            "filings_annual": int(summary.get("annual") or 0),
-            "filings_interim": int(summary.get("interim") or 0),
-            "filings_with_body": int(summary.get("with_body") or 0),
-        }
-    )
+    coverage["filings_annual"] = int((index.get("summary") or {}).get("annual") or 0)
+    coverage["filings_interim"] = int((index.get("summary") or {}).get("interim") or 0)
     coverage["indexed_without_body"] = sum(
         1 for row in filings if not row.get("has_body")
     )
