@@ -202,4 +202,5 @@ a third parallel store.
 
 - [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) — stages and exit criteria
 - [`ops/gap-fill-fetch.md`](ops/gap-fill-fetch.md) — gap-fill ingest and retry behaviour
+- [`ops/data-backup.md`](ops/data-backup.md) — tier-1 backup, restore drill, scheduling
 - [`ops/primary-learning-track.md`](ops/primary-learning-track.md) — paper book vs market

@@ -39,6 +39,7 @@ on the cron host — never commit it.
 | `ingest-loop.yml` | External **primary** | `5 7,10 * * 1,3,5` → `ingest-loop.yml` | Mon/Wed/Fri 07:00 + 10:00 |
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 08:30 |
 | `ops-monitor.yml` | External **primary** | `45 7 * * *` → `ops-monitor.yml` | Daily 07:45 |
+| `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | GitHub only today | Optional later if hourly misses hurt | Hourly weekdays |
 | `engineering-agent.yml` | Queue / manual | No | No |
 | `ci.yml` / `pages.yml` | Push / PR | No | No |
@@ -91,6 +92,17 @@ WORKFLOW=ops-monitor.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Sends SMTP summary on warn/fail or when auto-fixes run. Same-day skip on duplicate success.
+
+### 6. Data backup — Sunday tier-1 snapshot (~12:30 UTC)
+
+After the Sunday email bundle commits `docs/data/`. Schedule: `30 12 * * 0`.
+
+```bash
+WORKFLOW=data-backup.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+```
+
+Creates `output/backups/ftse-tier1-*.tar.gz` as a GitHub Actions artifact (90-day retention).
+Optional `BACKUP_S3_URI` + AWS secrets for off-repo copy. See [`data-backup.md`](data-backup.md).
 
 ### Generic dispatch (any workflow)
 
@@ -145,6 +157,7 @@ gh run list --workflow=automation-orchestrator.yml --limit 5
 gh run list --workflow=email-report.yml --limit 3
 gh run list --workflow=analysis-review.yml --limit 3
 gh run list --workflow=ops-monitor.yml --limit 3
+gh run list --workflow=data-backup.yml --limit 3
 gh run list --workflow=ingest-loop.yml --limit 3
 ```
 
