@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-28T07:22:43.506081+00:00",
+  "generated_at": "2026-07-29T07:21:41.449476+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -15,9 +15,9 @@
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.03,
-      "max_positions": 4,
+      "max_positions": 3,
       "skip_timing_wait": true,
-      "min_conviction": 0.05,
+      "min_conviction": 0.1,
       "sector_cap": 0.3,
       "track_id": "rules",
       "track_label": "Screen rules (control)",
@@ -186,9 +186,9 @@
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 6.0,
+        "estimated_spend_usd_this_week": 8.4,
         "estimated_spend_weekly_ops_usd_this_week": 0.0,
-        "estimated_spend_usd_this_cycle": 140.4,
+        "estimated_spend_usd_this_cycle": 142.8,
         "week_id": "2026-W31",
         "cycle_id": "2026-07-d8"
       },
@@ -216,7 +216,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-07-28T07:11:32.490464+00:00"
+      "updated_at": "2026-07-28T17:45:01.514481+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -226,7 +226,7 @@
         "cron_surplus": "30 5 * * *",
         "cron_paper": "17 8 * * 1-5",
         "cron_paper_catchup": "17 11 * * 1-5",
-        "cadence": "Dispatches child workflows via workflow_dispatch. Sunday 06:17 UTC quiet bundle (+ 09:17/12:17 catch-up); daily 05:30 UTC surplus-day ladder gate; weekdays 08:17 UTC paper automation (+ 11:17 catch-up). Skips children that already succeeded today. External cron setup: docs/ops/orchestrator-cron.md.",
+        "cadence": "Dispatches child workflows via workflow_dispatch. Sunday 06:17 UTC quiet bundle (+ 09:17/12:17 catch-up); daily 05:30 UTC surplus-day ladder gate; weekdays 08:17 UTC paper automation (+ 11:17 catch-up). Skips children that already succeeded today. External cron (primary): docs/ops/orchestrator-cron.md.",
         "workflow": "automation-orchestrator.yml"
       },
       "paper_auto": {
@@ -271,6 +271,18 @@
         "cadence": "Mon/Wed/Fri 07:00 + 10:00 UTC catch-up (GitHub schedule + external cron). Skips when this workflow already succeeded today or another run is active. Bounded ingest-improvement on buy-tier names from docs/data/latest.json; logs ingest_health; micro-compiles ingest engineering tasks when zero-body buy-tier coverage stalls. External cron: docs/ops/orchestrator-cron.md.",
         "workflow": "ingest-loop.yml"
       },
+      "analysis_review": {
+        "name": "Modelling analysis review",
+        "cron": "30 8 * * 0",
+        "cadence": "Sunday 08:30 UTC GitHub backup; **primary: cron-job.org** 35 10 * * 0 (optional 35 12) after email bundle. Read-only synthesis over backtest/sim/historical analysis and paper learning tracks. docs/ops/analysis-review.md; scheduling: docs/ops/orchestrator-cron.md.",
+        "workflow": "analysis-review.yml"
+      },
+      "ops_monitor": {
+        "name": "FTSE Ops Monitor",
+        "cron": "45 7 * * *",
+        "cadence": "Daily 07:45 UTC (GitHub schedule + external cron). Workflow/artifact health, safe auto-fixes, ops engineering task drafting, daily SMTP summary on warn/fail. docs/ops/ops-monitor.md.",
+        "workflow": "ops-monitor.yml"
+      },
       "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",
@@ -281,7 +293,7 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-07-28T07:21:51.610018+00:00",
+        "at": "2026-07-29T07:21:14.884053+00:00",
         "kind": "paper_run",
         "title": "Paper automation checked (no action)",
         "detail": "waiting for open settle (75 min after 08:00 Europe/London)"
@@ -800,15 +812,15 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-07-28T07:21:51.610018+00:00",
+      "generated_at": "2026-07-29T07:21:14.884053+00:00",
       "acted": false,
       "note": "waiting for open settle (75 min after 08:00 Europe/London)",
       "gate": {
-        "local_time": "2026-07-28T08:21:30.780082+01:00",
+        "local_time": "2026-07-29T08:21:02.471608+01:00",
         "trading_day": true,
         "after_settle": false,
-        "market_open_at": "2026-07-28T08:00:00+01:00",
-        "settle_at": "2026-07-28T09:15:00+01:00",
+        "market_open_at": "2026-07-29T08:00:00+01:00",
+        "settle_at": "2026-07-29T09:15:00+01:00",
         "can_act": false,
         "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
       },

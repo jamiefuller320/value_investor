@@ -2,35 +2,35 @@
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
   "success_criterion": "Primary AI-judgment track outperforms ^FTSE after costs; rules track is the control datum.",
-  "primary_excess_after_costs": null,
-  "control_excess_after_costs": -0.1207,
+  "primary_excess_after_costs": -0.0382,
+  "control_excess_after_costs": -0.1299,
   "beat_market": false,
-  "beat_control": false,
-  "verdict": "insufficient_data",
+  "beat_control": true,
+  "verdict": "underperforming",
   "reviews": {
     "rules": {
-      "reviewed_at": "2026-07-28T07:22:42.849665+00:00",
+      "reviewed_at": "2026-07-29T07:21:40.753874+00:00",
       "enough_history": true,
       "applied": true,
       "knobs_before": {
-        "max_positions": 5,
-        "skip_timing_wait": true,
-        "min_conviction": 0.0,
-        "sector_cap": 0.3
-      },
-      "knobs_after": {
         "max_positions": 4,
         "skip_timing_wait": true,
         "min_conviction": 0.05,
         "sector_cap": 0.3
       },
+      "knobs_after": {
+        "max_positions": 3,
+        "skip_timing_wait": true,
+        "min_conviction": 0.1,
+        "sector_cap": 0.3
+      },
       "proposed_changes": {
-        "min_conviction": 0.05,
-        "max_positions": 4
+        "min_conviction": 0.1,
+        "max_positions": 3
       },
       "reasons": [
         "High cost drag (10.7%) \u2014 raise min_conviction.",
-        "Weak excess after costs (-12.1%) \u2014 reduce max_positions."
+        "Weak excess after costs (-13.0%) \u2014 reduce max_positions."
       ],
       "metrics": {
         "portfolio_value": 890.23,
@@ -46,8 +46,8 @@
         "equity_marks": 5,
         "max_sector_weight": 0.2,
         "dominant_sector": "Healthcare",
-        "benchmark_return": 0.0109,
-        "excess_after_costs": -0.1207,
+        "benchmark_return": 0.0201,
+        "excess_after_costs": -0.1299,
         "note": ""
       },
       "note": "Applied clamped knob updates from decision review.",
@@ -57,9 +57,9 @@
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "ai_judgment": {
-      "reviewed_at": "2026-07-28T07:22:42.921789+00:00",
+      "reviewed_at": "2026-07-29T07:21:40.797896+00:00",
       "enough_history": true,
-      "applied": false,
+      "applied": true,
       "knobs_before": {
         "max_positions": 5,
         "skip_timing_wait": true,
@@ -67,14 +67,16 @@
         "sector_cap": 0.3
       },
       "knobs_after": {
-        "max_positions": 5,
+        "max_positions": 4,
         "skip_timing_wait": true,
         "min_conviction": 0.0,
         "sector_cap": 0.3
       },
-      "proposed_changes": {},
+      "proposed_changes": {
+        "max_positions": 4
+      },
       "reasons": [
-        "No knob change warranted from current reviewed outcomes."
+        "Weak excess after costs (-3.8%) \u2014 reduce max_positions."
       ],
       "metrics": {
         "portfolio_value": 970.87,
@@ -90,18 +92,18 @@
         "equity_marks": 4,
         "max_sector_weight": 0.2,
         "dominant_sector": "Basic Materials",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "benchmark_return": 0.0091,
+        "excess_after_costs": -0.0382,
+        "note": ""
       },
-      "note": "Reviewed; no knob changes to apply.",
+      "note": "Applied clamped knob updates from decision review.",
       "track_id": "ai_judgment",
       "track_label": "AI judgment (research accumulate + adjusted_signal)",
       "is_primary_learning_track": true,
       "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on this track; AI-judgment is the primary learning track, rules is the control."
     },
     "momentum_grace": {
-      "reviewed_at": "2026-07-28T07:22:42.922777+00:00",
+      "reviewed_at": "2026-07-29T07:21:40.799007+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {

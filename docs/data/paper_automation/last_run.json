@@ -1,11 +1,11 @@
 {
   "acted": false,
   "gate": {
-    "local_time": "2026-07-28T08:21:30.780082+01:00",
+    "local_time": "2026-07-29T08:21:02.471608+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-07-28T08:00:00+01:00",
-    "settle_at": "2026-07-28T09:15:00+01:00",
+    "market_open_at": "2026-07-29T08:00:00+01:00",
+    "settle_at": "2026-07-29T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
@@ -14,55 +14,48 @@
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
-      "Conviction floor: min_conviction=0.00.",
+      "Conviction floor: min_conviction=0.05.",
       "Sector cap: at most 1 name(s) per known sector (cap=30%).",
-      "Ranking: highest conviction_score first, keep at most 5 names.",
+      "Ranking: highest conviction_score first, keep at most 4 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
       "Costs: 3.0% applied on each buy and sell."
     ],
-    "nav": 922.9,
+    "nav": 932.09,
     "cash": 0.0,
-    "max_positions": 5,
-    "min_conviction": 0.0,
+    "max_positions": 4,
+    "min_conviction": 0.05,
     "sector_cap": 0.3,
     "skip_timing_wait": true,
     "use_momentum_grace": false,
-    "target_sleeve_value": 183.46,
+    "target_sleeve_value": 231.58,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6311000000000001,
-        "price": 111.701
+        "conviction_score": 0.6811000000000001,
+        "price": 113.0859
       },
       {
         "ticker": "HIK.L",
         "name": "Hikma Pharmaceuticals PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.6193000000000001,
-        "price": 1581.0
+        "conviction_score": 0.6693000000000001,
+        "price": 1614.0
       },
       {
         "ticker": "ITV.L",
         "name": "ITV plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6098000000000001,
-        "price": 75.0
+        "conviction_score": 0.6598000000000002,
+        "price": 76.0
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.5964,
-        "price": 179.0
-      },
-      {
-        "ticker": "JUP.L",
-        "name": "Jupiter Fund Management Plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.5578000000000001,
-        "price": 155.0
+        "conviction_score": 0.6464000000000001,
+        "price": 174.0
       }
     ],
     "anticipated_exits": [
@@ -72,82 +65,62 @@
         "name": "Breedon Group plc",
         "reason": "No longer in the top conviction target set",
         "shares": 0.584526,
-        "price": 318.4,
-        "value": 186.11
+        "price": 328.2,
+        "value": 191.84
       }
     ],
     "anticipated_grace_holds": [],
-    "anticipated_trims": [
+    "anticipated_trims": [],
+    "anticipated_buys": [
       {
-        "action": "trim",
+        "action": "buy",
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
-        "reason": "Overweight vs equal-weight sleeve (183 target)",
-        "value": 5.23,
-        "price": 111.701,
-        "conviction_score": 0.6311000000000001,
+        "reason": "Top-up to equal weight",
+        "value": 40.55,
+        "price": 113.0859,
+        "target_value": 231.58,
+        "conviction_score": 0.6811000000000001,
         "signal": "strong_buy"
-      }
-    ],
-    "anticipated_buys": [
+      },
       {
         "action": "buy",
         "ticker": "HIK.L",
         "name": "Hikma Pharmaceuticals PLC",
         "reason": "Top-up to equal weight",
-        "value": 2.21,
-        "price": 1581.0,
-        "target_value": 183.46,
-        "conviction_score": 0.6193000000000001,
+        "value": 46.54,
+        "price": 1614.0,
+        "target_value": 231.58,
+        "conviction_score": 0.6693000000000001,
         "signal": "strong_buy"
       },
       {
         "action": "buy",
-        "ticker": "JUP.L",
-        "name": "Jupiter Fund Management Plc",
-        "reason": "New sleeve",
-        "value": 183.39,
-        "price": 155.0,
-        "target_value": 183.46,
-        "conviction_score": 0.5578000000000001,
-        "signal": "strong_buy"
-      }
-    ],
-    "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
-        "reason": "Already near equal-weight target",
-        "value": 183.46,
-        "target_value": 183.46,
-        "conviction_score": 0.6311000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
         "ticker": "ITV.L",
         "name": "ITV plc",
-        "reason": "Already near equal-weight target",
-        "value": 183.68,
-        "target_value": 183.46,
-        "conviction_score": 0.6098000000000001,
+        "reason": "Top-up to equal weight",
+        "value": 45.45,
+        "price": 76.0,
+        "target_value": 231.58,
+        "conviction_score": 0.6598000000000002,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
-        "reason": "Already near equal-weight target",
-        "value": 183.16,
-        "target_value": 183.46,
-        "conviction_score": 0.5964,
+        "reason": "Top-up to equal weight",
+        "value": 53.54,
+        "price": 174.0,
+        "target_value": 231.58,
+        "conviction_score": 0.6464000000000001,
         "signal": "strong_buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); sell 1 name(s) that left the set; trim 1 overweight sleeve(s); deploy cash into 2 buy(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 4 buy(s)."
   },
   "alerts": [
     {
@@ -156,7 +129,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 111.70099639892578,
+      "mark": 113.08589935302734,
       "stop_loss": 95.05,
       "take_profit": 114.39,
       "timing_signal": "insufficient_data"
@@ -167,7 +140,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1581.0,
+      "mark": 1614.0,
       "stop_loss": 1411.78,
       "take_profit": 1661.1,
       "timing_signal": "insufficient_data"
@@ -178,7 +151,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 75.0,
+      "mark": 76.0,
       "stop_loss": 65.1,
       "take_profit": 79.11,
       "timing_signal": "insufficient_data"
@@ -189,7 +162,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 179.0,
+      "mark": 174.0,
       "stop_loss": 142.28,
       "take_profit": 185.85,
       "timing_signal": "insufficient_data"
@@ -198,9 +171,9 @@
       "ticker": "BREE.L",
       "name": "Breedon Group plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 318.3999938964844,
+      "severity": "action",
+      "message": "Mark 328.20 at/over take-profit 327.60",
+      "mark": 328.20001220703125,
       "stop_loss": 278.43,
       "take_profit": 327.6,
       "timing_signal": "insufficient_data"
@@ -213,7 +186,7 @@
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.03,
-      "max_positions": 5,
+      "max_positions": 4,
       "reporting_currency": "GBP",
       "hedge_assumption": "none",
       "id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
@@ -720,7 +693,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-07-28T07:21:51.609777+00:00",
+    "generated_at": "2026-07-29T07:21:14.883631+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -736,13 +709,13 @@
     "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
-  "generated_at": "2026-07-28T07:21:51.610018+00:00",
+  "generated_at": "2026-07-29T07:21:14.884053+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,
   "selection": {
     "skip_timing_wait": true,
-    "min_conviction": 0.0,
+    "min_conviction": 0.05,
     "sector_cap": 0.3,
     "use_adjusted_signal": false,
     "require_research_accumulate": false,
