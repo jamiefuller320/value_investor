@@ -146,6 +146,84 @@ function initTabs() {
   });
 }
 
+function stageStatusBadge(status) {
+  const labels = {
+    complete: "complete",
+    in_progress: "in progress",
+    not_started: "not started",
+  };
+  const cls = {
+    complete: "stage-complete",
+    in_progress: "stage-active",
+    not_started: "stage-pending",
+  };
+  const key = status || "in_progress";
+  return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(labels[key] || key)}</span>`;
+}
+
+function renderProjectProgress(data) {
+  const progress = data.project_progress;
+  if (!progress) {
+    return "";
+  }
+
+  const appraisal = progress.appraisal || {};
+  const ingest = progress.ingest_bottleneck || {};
+  const stages = progress.stages || [];
+
+  const stageRows = stages
+    .map(
+      (stage) => `
+      <div class="setting-row">
+        <span class="setting-label"><strong>${esc(stage.id)}</strong> ${esc(stage.name)}</span>
+        <span class="setting-value">${stageStatusBadge(stage.status)}</span>
+      </div>
+      <div class="small muted" style="margin:-0.35rem 0 0.65rem 0">${esc(stage.focus || "")}</div>`
+    )
+    .join("");
+
+  const list = (items) =>
+    (items || []).length
+      ? `<ul class="list-plain small">${items.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
+      : '<p class="muted small">—</p>';
+
+  const ingestHtml = ingest.summary
+    ? `
+    <div class="card" style="margin-top:1rem">
+      <h3>Ingest bottleneck</h3>
+      <p class="small">${esc(ingest.summary)}</p>
+      ${ingest.stalled ? `<p class="small"><strong>Status:</strong> stalled (zero_body_buy_tier=${esc(String(ingest.zero_body_buy_tier ?? "—"))})</p>` : '<p class="small muted">No active stall detected in latest health log.</p>'}
+      <h4 class="small" style="margin-top:0.75rem">Recommended fixes</h4>
+      ${list(ingest.fixes)}
+      <h4 class="small" style="margin-top:0.75rem">Commands</h4>
+      <ul class="list-plain small">${(ingest.commands || []).map((cmd) => `<li><code>${esc(cmd)}</code></li>`).join("")}</ul>
+    </div>`
+    : "";
+
+  return `
+    <div class="card" style="margin-top:1rem">
+      <h3>Project progress</h3>
+      <p class="small muted" style="margin-top:0">Current focus: <strong>${esc(progress.current_focus || "—")}</strong> · Updated ${esc(fmtDate(progress.generated_at))}</p>
+      <p>${esc(progress.headline || "")}</p>
+      <div class="automation-grid" style="margin-top:0.75rem">
+        <section class="automation-section">
+          <h4>North-star stages</h4>
+          ${stageRows}
+        </section>
+        <section class="automation-section">
+          <h4>Strengths</h4>
+          ${list(appraisal.strengths)}
+          <h4 style="margin-top:1rem">Gaps</h4>
+          ${list(appraisal.gaps)}
+          <h4 style="margin-top:1rem">Next actions</h4>
+          ${list(appraisal.next_actions)}
+        </section>
+      </div>
+    </div>
+    ${ingestHtml}
+  `;
+}
+
 function renderOverview(data) {
   const meta = data.meta || {};
   const counts = meta.signal_counts || {};
@@ -223,6 +301,7 @@ function renderOverview(data) {
       <h3>Week-over-week changes</h3>
       ${diffHtml}
     </div>
+    ${renderProjectProgress(data)}
   `;
 }
 
@@ -1166,6 +1245,14 @@ async function loadDashboard() {
       try {
         const autoResp = await fetch("data/automation.json");
         if (autoResp.ok) data.automation = await autoResp.json();
+      } catch {
+        /* optional sidecar */
+      }
+    }
+    if (!data.project_progress) {
+      try {
+        const progressResp = await fetch("data/project_progress.json");
+        if (progressResp.ok) data.project_progress = await progressResp.json();
       } catch {
         /* optional sidecar */
       }

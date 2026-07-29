@@ -576,6 +576,17 @@ def compile_ingest_engineering_tasks_micro(
         return {"compiled_count": 0, "reason": "no ingest suggestions eligible"}
 
     merged_rows = _merge_task_rows(existing_rows, compiled)
+    open_ids_before = {
+        str(row.get("id") or "")
+        for row in existing_rows
+        if str(row.get("status") or "open") == "open"
+    }
+    newly_open = [
+        row
+        for row in merged_rows
+        if str(row.get("status") or "open") == "open"
+        and str(row.get("id") or "") not in open_ids_before
+    ]
     from value_investor.engineering_queue import snapshot_ingest_health
 
     ingest_health = snapshot_ingest_health(latest_path=latest_path)
@@ -594,8 +605,8 @@ def compile_ingest_engineering_tasks_micro(
     if tasks_path != committed_path:
         write_json(tasks_path, payload, compact=False)
     return {
-        "compiled_count": len(compiled),
-        "task_ids": [task.id for task in compiled],
+        "compiled_count": len(newly_open),
+        "task_ids": [str(row.get("id") or "") for row in newly_open],
         "task_count": len(merged_rows),
     }
 

@@ -182,6 +182,53 @@ def test_compile_ingest_engineering_tasks_micro_appends_ingest_tasks(tmp_path: P
     assert task_title_key(open_tasks[0]["title"]).startswith("implement companies house")
 
 
+def test_compile_ingest_engineering_tasks_micro_skips_already_merged(tmp_path: Path):
+    suggestions = tmp_path / "suggestions.json"
+    suggestions.write_text(
+        json.dumps(
+            {
+                "suggestions": [
+                    {
+                        "area": "ingest",
+                        "priority": "high",
+                        "suggestion": "Implement Companies House filed-accounts PDF fetch pipeline",
+                        "ticker": "ITV.L",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    merged_title = "Implement Companies House filed-accounts PDF fetch pipeline"
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    EngineeringTask(
+                        id="eng-20260728-01",
+                        area="ingest",
+                        title=merged_title,
+                        summary="done",
+                        priority="high",
+                        priority_score=99.0,
+                        source="post_run_review",
+                        status="merged",
+                    ).to_dict()
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = compile_ingest_engineering_tasks_micro(
+        suggestions_path=suggestions,
+        max_tasks=2,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert result["compiled_count"] == 0
+
+
 def test_ingest_loop_cli_run_json_flag_parsing():
     result = IngestLoopResult(
         health_before={"zero_body_buy_tier": 2},
