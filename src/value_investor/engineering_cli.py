@@ -33,6 +33,7 @@ from value_investor.engineering_recovery import (
     retry_failed_tasks,
     summarize_parked_tasks,
 )
+from value_investor.cli_args import apply_parsed_globals
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     is_engineering_branch,
@@ -406,30 +407,35 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Compile and run supervised engineering tasks from weekly run artifacts"
     )
-    parser.add_argument("--output-dir", type=Path, default=Path("output"))
-    parser.add_argument("--tasks-path", type=Path, default=COMMITTED_TASKS_PATH)
-    parser.add_argument(
-        "--suggestions-path",
-        type=Path,
-        default=Path("docs/data/research_model_suggestions.json"),
-    )
-    parser.add_argument(
-        "--policy",
-        type=Path,
-        default=Path("docs/data/library/policy.json"),
-        help="Library policy JSON for ad-hoc spend checkpoint",
-    )
-    parser.add_argument("--json", action="store_true")
+    common = argparse.ArgumentParser(add_help=False)
+
+    def _add_shared_flags(target: argparse.ArgumentParser) -> None:
+        target.add_argument("--output-dir", type=Path, default=Path("output"))
+        target.add_argument("--tasks-path", type=Path, default=COMMITTED_TASKS_PATH)
+        target.add_argument(
+            "--suggestions-path",
+            type=Path,
+            default=Path("docs/data/research_model_suggestions.json"),
+        )
+        target.add_argument(
+            "--policy",
+            type=Path,
+            default=Path("docs/data/library/policy.json"),
+            help="Library policy JSON for ad-hoc spend checkpoint",
+        )
+        target.add_argument("--json", action="store_true")
+
+    _add_shared_flags(common)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    compile_p = sub.add_parser("compile", help="Build engineering_tasks.json from run artifacts")
+    compile_p = sub.add_parser("compile", parents=[common], help="Build engineering_tasks.json from run artifacts")
     compile_p.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
     compile_p.set_defaults(func=_cmd_compile)
 
-    list_p = sub.add_parser("list", help="List compiled engineering tasks")
+    list_p = sub.add_parser("list", parents=[common], help="List compiled engineering tasks")
     list_p.set_defaults(func=_cmd_list)
 
-    queue_p = sub.add_parser("queue-status", help="Evaluate whether to auto-dispatch the next task")
+    queue_p = sub.add_parser("queue-status", parents=[common], help="Evaluate whether to auto-dispatch the next task")
     queue_p.add_argument(
         "--open-prs-json",
         default=None,
@@ -448,7 +454,7 @@ def main(argv: list[str] | None = None) -> int:
     queue_p.add_argument("--force", action="store_true")
     queue_p.set_defaults(func=_cmd_queue_status)
 
-    sync_p = sub.add_parser("sync-queue", help="Copy output/engineering_tasks.json to committed queue path")
+    sync_p = sub.add_parser("sync-queue", parents=[common], help="Copy output/engineering_tasks.json to committed queue path")
     sync_p.set_defaults(func=_cmd_sync_queue)
 
     reconcile_p = sub.add_parser(
@@ -473,7 +479,7 @@ def main(argv: list[str] | None = None) -> int:
     recover_p.add_argument("--ci-red-park-hours", type=int, default=48)
     recover_p.set_defaults(func=_cmd_recover_queue)
 
-    parked_p = sub.add_parser("list-parked", help="List tasks parked for manual review")
+    parked_p = sub.add_parser("list-parked", parents=[common], help="List tasks parked for manual review")
     parked_p.set_defaults(func=_cmd_list_parked)
 
     branch_stale_p = sub.add_parser(
@@ -488,10 +494,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     branch_stale_p.set_defaults(func=_cmd_branch_is_stale)
 
-    next_open_p = sub.add_parser("next-open-id", help="Print the top-priority open engineering task id")
+    next_open_p = sub.add_parser("next-open-id", parents=[common], help="Print the top-priority open engineering task id")
     next_open_p.set_defaults(func=_cmd_next_open_id)
 
-    task_title_p = sub.add_parser("task-title", help="Print an engineering task title")
+    task_title_p = sub.add_parser("task-title", parents=[common], help="Print an engineering task title")
     task_title_p.add_argument("--task-id", required=True)
     task_title_p.add_argument("--max-len", type=int, default=120)
     task_title_p.set_defaults(func=_cmd_task_title)
@@ -505,7 +511,7 @@ def main(argv: list[str] | None = None) -> int:
     mark_pr_open_p.add_argument("--result-path", required=True)
     mark_pr_open_p.set_defaults(func=_cmd_mark_pr_open)
 
-    merged_p = sub.add_parser("mark-merged", help="Mark an engineering task merged from a branch name")
+    merged_p = sub.add_parser("mark-merged", parents=[common], help="Mark an engineering task merged from a branch name")
     merged_p.add_argument("--branch", required=True)
     merged_p.add_argument("--pr-url", default=None)
     merged_p.add_argument("--pr-number", type=int, default=None)
@@ -540,7 +546,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     check_paths_p.set_defaults(func=_cmd_check_pr_paths)
 
-    run_p = sub.add_parser("run", help="Run the supervised dev agent for open task(s)")
+    run_p = sub.add_parser("run", parents=[common], help="Run the supervised dev agent for open task(s)")
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")
     run_p.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_RUN_TASKS)
     run_p.add_argument("--model", default="composer-2.5")
@@ -570,7 +576,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     run_p.set_defaults(func=_cmd_run)
 
-    args = parser.parse_args(argv)
+    argv_list = list(argv or sys.argv[1:])
+    pre, remaining = common.parse_known_args(argv_list)
+    args = parser.parse_args(remaining)
+    apply_parsed_globals(
+        args,
+        pre,
+        argv_list,
+        ["json", "output_dir", "tasks_path", "suggestions_path", "policy"],
+    )
     return int(args.func(args))
 
 

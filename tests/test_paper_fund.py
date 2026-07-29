@@ -82,6 +82,10 @@ def test_monthly_deposits_and_mtm_performance():
     assert perf["portfolio_value"] == 1320  # 600 cash + 720 equity
     assert perf["contributed_capital"] == 1200
     assert abs(perf["total_return"] - (120 / 1200)) < 1e-6
+    assert perf["cost_basis"] == 600
+    assert perf["invested_value"] == 720
+    assert perf["unrealized_pnl"] == 120
+    assert abs(perf["unrealized_pnl_pct"] - 0.2) < 1e-6
 
 
 def test_parallel_book_three_modes():

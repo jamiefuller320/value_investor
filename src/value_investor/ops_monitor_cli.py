@@ -122,7 +122,10 @@ def _cmd_email(args: argparse.Namespace) -> int:
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
         return 1
-    print("Ops monitor email sent")
+    if args.json:
+        print(json.dumps({"sent": True, "overall": report.overall}, indent=2))
+    else:
+        print("Ops monitor email sent")
     return 0
 
 
