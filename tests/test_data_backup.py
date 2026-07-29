@@ -100,6 +100,23 @@ def test_send_backup_email_uses_backup_to(monkeypatch, tmp_path: Path):
     assert all(msg["config"].email_to == "intellaigence101@gmail.com" for msg in sent)
 
 
+def test_send_backup_email_without_email_to_env(monkeypatch, tmp_path: Path):
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+
+    monkeypatch.delenv("EMAIL_TO", raising=False)
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.com")
+    monkeypatch.setenv("SMTP_USER", "user@example.com")
+    monkeypatch.setenv("SMTP_PASSWORD", "secret")
+    monkeypatch.setattr("value_investor.emailer.send_email", lambda **kwargs: None)
+
+    result = send_backup_snapshot_email(snapshot)
+    assert result["email_to"] == "intellaigence101@gmail.com"
+
+
 def test_data_backup_cli_accepts_snapshot_json_after_subcommand(tmp_path: Path, monkeypatch):
     from unittest.mock import MagicMock
 
