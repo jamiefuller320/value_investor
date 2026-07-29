@@ -148,3 +148,16 @@ def test_restored_health_log_passes_ingest_checks():
     findings = check_ingest_health_log(Path("docs/data/ingest_health_log.json"))
     corrupt = [row for row in findings if row.title == "Ingest health log is corrupt"]
     assert not corrupt
+
+
+def test_ops_monitor_cli_accepts_run_json_after_subcommand():
+    from value_investor.ops_monitor_cli import main
+
+    with patch("value_investor.ops_monitor_cli.run_ops_monitor") as mock_run:
+        mock_run.return_value = OpsMonitorReport(
+            run_at="2026-07-29T00:00:00+00:00",
+            overall="ok",
+        )
+        with patch("value_investor.ops_monitor_cli.append_monitor_log_entry"):
+            rc = main(["run", "--json", "--no-apply", "--no-draft"])
+    assert rc == 0
