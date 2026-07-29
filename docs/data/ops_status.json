@@ -1,0 +1,78 @@
+{
+  "run_at": "2026-07-29T10:08:15.248293+00:00",
+  "overall": "warn",
+  "findings": [
+    {
+      "severity": "warn",
+      "category": "ingest",
+      "title": "Buy-tier filing ingest stalled",
+      "summary": "zero_body_buy_tier unchanged across recent runs — micro-compile or engineering may be needed.",
+      "auto_fixable": true,
+      "fixed": true,
+      "action_taken": "micro-compiled ingest tasks: eng-20260729-06, eng-20260729-07, eng-20260729-10"
+    }
+  ],
+  "auto_fixes": [
+    {
+      "action": "micro_compile_ingest",
+      "detail": "micro-compiled ingest tasks: eng-20260729-06, eng-20260729-07, eng-20260729-10"
+    }
+  ],
+  "drafted_task_ids": [],
+  "workflow_checks": [
+    {
+      "workflow": "ingest-loop.yml",
+      "name": "FTSE Ingest Loop",
+      "expected_today": true,
+      "last_success_at": "2026-07-29T09:05:20+00:00",
+      "last_success_run_id": 30438173534,
+      "age_hours": 1.0,
+      "stale": false,
+      "recent_failures_24h": 0
+    },
+    {
+      "workflow": "automation-orchestrator.yml",
+      "name": "Automation Orchestrator",
+      "expected_today": true,
+      "last_success_at": "2026-07-29T07:20:14+00:00",
+      "last_success_run_id": 30431279440,
+      "age_hours": 2.8,
+      "stale": false,
+      "recent_failures_24h": 0
+    },
+    {
+      "workflow": "engineering-queue.yml",
+      "name": "FTSE Engineering Queue",
+      "expected_today": true,
+      "last_success_at": "2026-07-29T10:06:47+00:00",
+      "last_success_run_id": 30442377997,
+      "age_hours": 0.0,
+      "stale": false,
+      "recent_failures_24h": 0
+    },
+    {
+      "workflow": "analysis-review.yml",
+      "name": "Modelling analysis review",
+      "expected_today": false,
+      "last_success_at": "2026-07-29T07:57:15+00:00",
+      "last_success_run_id": 30433574470,
+      "age_hours": 2.2,
+      "stale": false,
+      "recent_failures_24h": 0
+    }
+  ],
+  "queue_status": {
+    "open_count": 0,
+    "pr_open_count": 0,
+    "parked_count": 0,
+    "merged_count": 11,
+    "failed_count": 0,
+    "next_task_id": null,
+    "in_flight_branch": null,
+    "in_flight_pr": null,
+    "spend_since_checkpoint_usd": 10.4,
+    "spend_checkpoint_usd": 60.0,
+    "spend_blocked": false
+  },
+  "should_dispatch_engineering": false
+}
