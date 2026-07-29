@@ -17,9 +17,9 @@ from typing import Any
 from value_investor.agent_model_policy import weekly_ops_budget_status
 from value_investor.automation_status import WORKFLOW_SCHEDULES
 from value_investor.emailer import EmailConfig, send_report_email
+from value_investor.engineering_recovery import recover_engineering_queue, summarize_parked_tasks
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
-    reconcile_orphaned_pr_open_tasks,
     summarize_queue,
 )
 from value_investor.engineering_tasks import (
@@ -469,7 +469,20 @@ def check_engineering_queue(
                 severity="warn",
                 category="engineering",
                 title="Failed engineering tasks in queue",
-                summary=f"{status.failed_count} task(s) marked failed — review engineering_tasks.json.",
+                summary=f"{status.failed_count} task(s) marked failed — recovery may retry or park.",
+                auto_fixable=True,
+            )
+        )
+
+    parked = summarize_parked_tasks(tasks_path)
+    if parked:
+        ids = ", ".join(str(row.get("id")) for row in parked[:5])
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="engineering",
+                title="Parked engineering tasks need manual review",
+                summary=f"{len(parked)} parked task(s): {ids}",
             )
         )
 
@@ -594,14 +607,28 @@ def apply_auto_fixes(
     results: list[dict[str, Any]] = []
 
     if apply:
-        reconcile = reconcile_orphaned_pr_open_tasks(tasks_path=tasks_path, open_prs=open_prs)
-        if reconcile.get("count"):
-            action = f"reset pr_open → open: {', '.join(reconcile.get('reset') or [])}"
-            results.append({"action": "reconcile_engineering_queue", "detail": action})
+        recovery = recover_engineering_queue(
+            tasks_path=tasks_path,
+            open_prs=open_prs,
+            apply=True,
+        )
+        if recovery.reconciled:
+            action = f"reconciled pr_open → open: {', '.join(recovery.reconciled)}"
+            results.append({"action": "recover_engineering_queue", "detail": action})
             for finding in findings:
                 if finding.title.startswith("Orphaned pr_open"):
                     finding.fixed = True
                     finding.action_taken = action
+        if recovery.reopened:
+            action = f"reopened failed tasks: {', '.join(recovery.reopened)}"
+            results.append({"action": "retry_failed_tasks", "detail": action})
+            for finding in findings:
+                if finding.title == "Failed engineering tasks in queue":
+                    finding.fixed = True
+                    finding.action_taken = action
+        for parked_action in recovery.parked:
+            detail = f"parked {parked_action.task_id}: {parked_action.reason}"
+            results.append({"action": "park_engineering_task", "detail": detail})
 
     corrupt_health = any(row.title == "Ingest health log is corrupt" for row in findings)
     if corrupt_health and apply and health_log_path.exists():

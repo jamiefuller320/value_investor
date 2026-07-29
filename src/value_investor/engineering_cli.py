@@ -28,6 +28,11 @@ from value_investor.engineering_tasks import (
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
 )
+from value_investor.engineering_recovery import (
+    recover_engineering_queue,
+    retry_failed_tasks,
+    summarize_parked_tasks,
+)
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     is_engineering_branch,
@@ -104,7 +109,8 @@ def _cmd_queue_status(args: argparse.Namespace) -> int:
         print(f"Dispatch: {decision.should_dispatch} — {decision.reason}")
         print(
             f"Queue open={status.open_count} pr_open={status.pr_open_count} "
-            f"merged={status.merged_count} failed={status.failed_count}"
+            f"parked={status.parked_count} merged={status.merged_count} "
+            f"failed={status.failed_count}"
         )
         if status.next_task:
             print(f"Next task: {status.next_task.id} — {status.next_task.title[:100]}")
@@ -158,6 +164,45 @@ def _cmd_reconcile_queue(args: argparse.Namespace) -> int:
             print(f"Reset orphaned pr_open task(s): {', '.join(result['reset'])}")
         else:
             print("No orphaned pr_open tasks")
+    return 0
+
+
+def _cmd_recover_queue(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    open_prs: list[dict] = []
+    if args.open_prs_json:
+        open_prs = json.loads(Path(args.open_prs_json).read_text(encoding="utf-8"))
+    result = recover_engineering_queue(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        apply=not args.dry_run,
+        max_agent_retries=args.max_agent_retries,
+        retry_cooldown_hours=args.retry_cooldown_hours,
+        ci_red_park_hours=args.ci_red_park_hours,
+    )
+    if args.json:
+        _print_json(result.to_dict())
+    else:
+        if result.reconciled:
+            print(f"Reconciled orphaned pr_open: {', '.join(result.reconciled)}")
+        if result.reopened:
+            print(f"Reopened failed tasks: {', '.join(result.reopened)}")
+        for action in result.parked:
+            print(f"Parked {action.task_id}: {action.reason}")
+        if not result.to_dict()["action_count"]:
+            print("No queue recovery actions needed")
+    return 0
+
+
+def _cmd_list_parked(args: argparse.Namespace) -> int:
+    rows = summarize_parked_tasks(_resolve_tasks_path(args.tasks_path))
+    if args.json:
+        _print_json({"parked": rows, "count": len(rows)})
+    elif not rows:
+        print("No parked engineering tasks")
+    else:
+        for row in rows:
+            print(f"{row['id']}: {row.get('parked_reason')}")
     return 0
 
 
@@ -416,6 +461,20 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to JSON array of open PRs from gh pr list --json ...",
     )
     reconcile_p.set_defaults(func=_cmd_reconcile_queue)
+
+    recover_p = sub.add_parser(
+        "recover-queue",
+        help="Self-repair queue: reconcile orphans, retry failed, park blocked tasks",
+    )
+    recover_p.add_argument("--open-prs-json", default=None)
+    recover_p.add_argument("--dry-run", action="store_true")
+    recover_p.add_argument("--max-agent-retries", type=int, default=2)
+    recover_p.add_argument("--retry-cooldown-hours", type=int, default=24)
+    recover_p.add_argument("--ci-red-park-hours", type=int, default=48)
+    recover_p.set_defaults(func=_cmd_recover_queue)
+
+    parked_p = sub.add_parser("list-parked", help="List tasks parked for manual review")
+    parked_p.set_defaults(func=_cmd_list_parked)
 
     branch_stale_p = sub.add_parser(
         "branch-is-stale",
