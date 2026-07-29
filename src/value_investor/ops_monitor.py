@@ -39,6 +39,7 @@ from value_investor.ingest_loop import (
     load_health_log_payload,
 )
 from value_investor.storage import read_json, write_json
+from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
 
 logger = logging.getLogger(__name__)
 
@@ -131,9 +132,15 @@ class OpsMonitorReport:
 
 
 def _github_token() -> str | None:
-    for key in ("GITHUB_TOKEN", "GH_TOKEN", "GH_PAT"):
+    pat = resolve_workflow_dispatch_pat()
+    if pat:
+        return pat
+    for key in ("GITHUB_TOKEN", "GH_TOKEN"):
         value = os.environ.get(key)
-        if value:
+        if value and not is_integration_token(value):
+            return value
+        if value and key == "GITHUB_TOKEN":
+            # In GitHub Actions the installation token is valid for repo API reads.
             return value
     return None
 
@@ -153,7 +160,10 @@ def _github_repo() -> str | None:
 def github_api_get(path: str, *, token: str | None = None) -> Any:
     token = token or _github_token()
     if not token:
-        raise RuntimeError("GitHub token not configured (GITHUB_TOKEN / GH_TOKEN / GH_PAT)")
+        raise RuntimeError(
+            "GitHub token not configured "
+            "(WORKFLOW_DISPATCH_PAT / GH_PAT / GITHUB_TOKEN / GH_TOKEN)"
+        )
     request = urllib.request.Request(
         f"https://api.github.com{path}",
         headers={
