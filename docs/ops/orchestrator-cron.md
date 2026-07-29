@@ -47,7 +47,88 @@ on the cron host — never commit it.
 
 ## One-time external cron setup
 
-Bulk import (recommended — idempotent by job title):
+Two layers:
+
+1. **Register on cron-job.org** — `PUT https://api.cron-job.org/jobs` (curl below or import script)
+2. **What each job calls** — GitHub `workflow_dispatch` (curl in [Generic dispatch](#generic-dispatch-any-workflow))
+
+### Register jobs on cron-job.org (curl)
+
+`CRONJOB_API_KEY` from [cron-job.org](https://cron-job.org) → Settings → API.
+`GH_PAT` is the fine-grained PAT with **Actions: Read and write** on this repo.
+
+**Data backup** (Sunday 12:30 UTC):
+
+```bash
+export CRONJOB_API_KEY=…
+export GH_PAT=…
+
+curl -sS -X PUT 'https://api.cron-job.org/jobs' \
+  -H "Authorization: Bearer $CRONJOB_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "job": {
+      "title": "FTSE data backup (Sunday)",
+      "url": "https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/data-backup.yml/dispatches",
+      "enabled": true,
+      "saveResponses": true,
+      "requestMethod": 1,
+      "schedule": {
+        "timezone": "UTC",
+        "expiresAt": 0,
+        "hours": [12],
+        "minutes": [30],
+        "mdays": [-1],
+        "months": [-1],
+        "wdays": [0]
+      },
+      "extendedData": {
+        "headers": {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer '"$GH_PAT"'"
+        },
+        "body": "{\"ref\":\"main\"}"
+      }
+    }
+  }'
+```
+
+**Ops monitor** (daily 07:45 UTC) — same pattern; change `title`, `hours`/`minutes`/`wdays`, and workflow URL:
+
+```bash
+curl -sS -X PUT 'https://api.cron-job.org/jobs' \
+  -H "Authorization: Bearer $CRONJOB_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "job": {
+      "title": "FTSE ops monitor (daily)",
+      "url": "https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/ops-monitor.yml/dispatches",
+      "enabled": true,
+      "saveResponses": true,
+      "requestMethod": 1,
+      "schedule": {
+        "timezone": "UTC",
+        "expiresAt": 0,
+        "hours": [7],
+        "minutes": [45],
+        "mdays": [-1],
+        "months": [-1],
+        "wdays": [-1]
+      },
+      "extendedData": {
+        "headers": {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer '"$GH_PAT"'"
+        },
+        "body": "{\"ref\":\"main\"}"
+      }
+    }
+  }'
+```
+
+Schedule fields: `wdays` `0`=Sunday … `6`=Saturday, `[-1]`=every day; `hours`/`minutes` are UTC when `timezone` is `UTC`. `requestMethod` `1` = POST.
+
+**Optional bulk import** (all six production jobs — idempotent by title):
 
 ```bash
 CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
@@ -56,7 +137,7 @@ CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
 Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop`,
 `analysis-review`, `ops-monitor`, `data-backup`. Dry-run: `--dry-run --json`.
 
-Manual per-job examples below.
+Manual per-job dispatch examples (what cron-job.org calls) below.
 
 ### 1. Orchestrator — Sunday quiet bundle (06:20 UTC)
 

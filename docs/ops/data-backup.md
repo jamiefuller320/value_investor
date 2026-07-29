@@ -98,7 +98,51 @@ Same-day skip: a second successful run the same UTC day exits quickly unless
 
 ### cron-job.org setup (one-time)
 
-**Recommended:** import all production jobs via API (idempotent by title):
+Register the scheduled HTTP job on cron-job.org (Sunday **12:30 UTC**). This is
+separate from the GitHub `workflow_dispatch` curl in
+[orchestrator-cron.md](orchestrator-cron.md) — cron-job.org calls GitHub on your
+behalf.
+
+**curl (recommended one-liner setup):**
+
+```bash
+export CRONJOB_API_KEY=…   # cron-job.org → Settings → API
+export GH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
+
+curl -sS -X PUT 'https://api.cron-job.org/jobs' \
+  -H "Authorization: Bearer $CRONJOB_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "job": {
+      "title": "FTSE data backup (Sunday)",
+      "url": "https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/data-backup.yml/dispatches",
+      "enabled": true,
+      "saveResponses": true,
+      "requestMethod": 1,
+      "schedule": {
+        "timezone": "UTC",
+        "expiresAt": 0,
+        "hours": [12],
+        "minutes": [30],
+        "mdays": [-1],
+        "months": [-1],
+        "wdays": [0]
+      },
+      "extendedData": {
+        "headers": {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer '"$GH_PAT"'"
+        },
+        "body": "{\"ref\":\"main\"}"
+      }
+    }
+  }'
+```
+
+Response is `{"jobId":12345}` on success. Then trigger once from the cron-job.org
+console (**Run now**) or wait for Sunday.
+
+**Optional bulk import** (all production jobs — idempotent by title):
 
 ```bash
 CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
@@ -106,29 +150,17 @@ CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
 CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --job data-backup
 ```
 
-`CRONJOB_API_KEY` from [cron-job.org](https://cron-job.org) → Settings → API.
-`GH_PAT` is the same fine-grained PAT used for other workflow dispatches
-(**Actions: Read and write** on this repo only).
+Dry-run payloads: `./scripts/import_cron_jobs.py --job data-backup --dry-run --json`
 
-Dry-run to inspect payloads:
+**Manual UI** (alternative): [cron-job.org](https://cron-job.org) → **Create cronjob**
 
-```bash
-./scripts/import_cron_jobs.py --job data-backup --dry-run
-```
-
-**Manual UI** (alternative): use the same fine-grained PAT as other workflow dispatches.
-
-1. [cron-job.org](https://cron-job.org) → **Create cronjob**
-2. **Title:** `FTSE data backup (Sunday)`
-3. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/data-backup.yml/dispatches`
-4. **Schedule:** custom `30 12 * * 0` (Sunday 12:30 UTC)
-5. **Request method:** `POST`
-6. **Request headers:**
-   - `Accept: application/vnd.github+json`
-   - `Authorization: Bearer <GH_PAT>`
-7. **Request body:** `{"ref":"main"}`
-8. **Timezone:** UTC
-9. Save and use **Run now** once to verify
+1. **Title:** `FTSE data backup (Sunday)`
+2. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/data-backup.yml/dispatches`
+3. **Schedule:** custom `30 12 * * 0` (Sunday 12:30 UTC)
+4. **Request method:** `POST`
+5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <GH_PAT>`
+6. **Request body:** `{"ref":"main"}`
+7. **Timezone:** UTC
 
 Verify:
 
