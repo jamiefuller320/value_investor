@@ -20,22 +20,27 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Monitor cron/workflows, apply safe fixes, draft engineering tasks, email summary",
     )
-    parser.add_argument("--json", action="store_true")
-    parser.add_argument("--status-path", type=Path, default=DEFAULT_STATUS_PATH)
-    parser.add_argument("--monitor-log-path", type=Path, default=DEFAULT_MONITOR_LOG_PATH)
-    parser.add_argument(
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--json", action="store_true")
+    common.add_argument("--status-path", type=Path, default=DEFAULT_STATUS_PATH)
+    common.add_argument("--monitor-log-path", type=Path, default=DEFAULT_MONITOR_LOG_PATH)
+    common.add_argument(
         "--no-apply",
         action="store_true",
         help="Detect issues only — do not apply auto-fixes or draft tasks",
     )
-    parser.add_argument(
+    common.add_argument(
         "--no-draft",
         action="store_true",
         help="Do not queue ops engineering tasks for unresolved failures",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    run_p = sub.add_parser("run", help="Run checks, optional auto-fixes, write ops_status.json")
+    run_p = sub.add_parser(
+        "run",
+        parents=[common],
+        help="Run checks, optional auto-fixes, write ops_status.json",
+    )
     run_p.add_argument(
         "--email",
         action="store_true",
@@ -48,7 +53,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     run_p.set_defaults(func=_cmd_run)
 
-    email_p = sub.add_parser("email", help="Email the latest ops_status.json summary")
+    email_p = sub.add_parser(
+        "email",
+        parents=[common],
+        help="Email the latest ops_status.json summary",
+    )
     email_p.add_argument(
         "--always",
         action="store_true",
