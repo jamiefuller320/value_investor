@@ -381,14 +381,25 @@ class PaperFund:
         contributed = self.contributed_capital or 0.0
         gain = value - contributed
         total_return = (gain / contributed) if contributed > 0 else 0.0
-        invested = sum(
-            pos.shares * (prices.get(t) or pos.avg_cost or 0)
-            for t, pos in self.holdings.items()
-        )
+        cost_basis = 0.0
+        market_value = 0.0
+        for ticker, pos in self.holdings.items():
+            mark = prices.get(ticker)
+            if mark is None or mark <= 0:
+                mark = pos.avg_cost
+            if mark and mark > 0:
+                market_value += pos.shares * mark
+            if pos.avg_cost and pos.avg_cost > 0:
+                cost_basis += pos.shares * pos.avg_cost
+        unrealized_pnl = market_value - cost_basis
+        unrealized_pnl_pct = (unrealized_pnl / cost_basis) if cost_basis > 0 else 0.0
         return {
             "portfolio_value": round(value, 2),
             "cash": round(self.cash, 2),
-            "invested_value": round(invested, 2),
+            "invested_value": round(market_value, 2),
+            "cost_basis": round(cost_basis, 2),
+            "unrealized_pnl": round(unrealized_pnl, 2),
+            "unrealized_pnl_pct": round(unrealized_pnl_pct, 4),
             "contributed_capital": round(contributed, 2),
             "gain": round(gain, 2),
             "total_return": round(total_return, 4),

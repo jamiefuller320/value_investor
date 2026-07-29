@@ -219,10 +219,25 @@ function paperPerformance(fund, prices) {
   const value = paperNav(fund, prices);
   const contributed = Number(fund.contributed_capital) || 0;
   const gain = value - contributed;
+  let costBasis = 0;
+  let marketValue = 0;
+  for (const pos of Object.values(fund.holdings || {})) {
+    const mark = paperPositionMark(pos, prices);
+    const cost = Number(pos.avg_cost) || 0;
+    const shares = Number(pos.shares) || 0;
+    if (mark > 0) marketValue += shares * mark;
+    if (cost > 0) costBasis += shares * cost;
+  }
+  const unrealizedPnl = marketValue - costBasis;
+  const unrealizedPnlPct = costBasis > 0 ? unrealizedPnl / costBasis : 0;
   return {
     portfolio_value: value,
     cash: Number(fund.cash),
     contributed_capital: contributed,
+    invested_value: marketValue,
+    cost_basis: costBasis,
+    unrealized_pnl: unrealizedPnl,
+    unrealized_pnl_pct: unrealizedPnlPct,
     gain,
     total_return: contributed > 0 ? gain / contributed : 0,
     positions: Object.keys(fund.holdings || {}).length,
@@ -741,6 +756,7 @@ function tradesTableHtml(fund) {
 
 function fundStatsHtml(fund, prices) {
   const perf = paperPerformance(fund, prices);
+  const unrealizedClass = perf.unrealized_pnl >= 0 ? "pos" : "neg";
   return `
     <div class="paper-active-summary grid">
       <div>
@@ -754,6 +770,10 @@ function fundStatsHtml(fund, prices) {
       <div>
         <div class="small muted">Contributed</div>
         <strong>${money(perf.contributed_capital)}</strong>
+      </div>
+      <div>
+        <div class="small muted">Unrealized (open)</div>
+        <strong class="${unrealizedClass}">${pctLabel(perf.unrealized_pnl_pct)} (${money(perf.unrealized_pnl)})</strong>
       </div>
       <div>
         <div class="small muted">Return vs contributed</div>
@@ -1399,6 +1419,7 @@ function renderOverviewPage(book, pricesByFund) {
               <th>Cash</th>
               <th>Contributed</th>
               <th>Return</th>
+              <th>Unrealized</th>
               <th>Positions</th>
               <th></th>
             </tr>
@@ -1415,6 +1436,7 @@ function renderOverviewPage(book, pricesByFund) {
                 <td>${money(perf.cash)}</td>
                 <td>${money(perf.contributed_capital)}</td>
                 <td class="${perf.gain >= 0 ? "pos" : "neg"}">${pctLabel(perf.total_return)}</td>
+                <td class="${perf.unrealized_pnl >= 0 ? "pos" : "neg"}">${pctLabel(perf.unrealized_pnl_pct)} (${money(perf.unrealized_pnl)})</td>
                 <td>${perf.positions}</td>
                 <td><button type="button" class="btn" data-paper-page="${esc(fund.config.mode)}">Open</button></td>
               </tr>`

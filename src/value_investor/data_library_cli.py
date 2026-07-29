@@ -29,6 +29,7 @@ from .data_library import (
     refresh_constituents,
 )
 from .library_retention import DEFAULT_MONTHLY_UNTIL_DAYS, DEFAULT_RETENTION_DAYS
+from .cli_args import apply_parsed_globals
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -39,24 +40,29 @@ def build_parser() -> argparse.ArgumentParser:
             "without changing the live FTSE 350 screening path."
         ),
     )
-    parser.add_argument(
-        "--root",
-        type=Path,
-        default=DEFAULT_LIBRARY_ROOT,
-        help=f"Library root (default: {DEFAULT_LIBRARY_ROOT})",
-    )
-    parser.add_argument(
-        "--policy",
-        type=Path,
-        default=DEFAULT_POLICY_PATH,
-        help=f"Library/budget policy JSON (default: {DEFAULT_POLICY_PATH})",
-    )
+    common = argparse.ArgumentParser(add_help=False)
+
+    def _add_shared_flags(target: argparse.ArgumentParser) -> None:
+        target.add_argument(
+            "--root",
+            type=Path,
+            default=DEFAULT_LIBRARY_ROOT,
+            help=f"Library root (default: {DEFAULT_LIBRARY_ROOT})",
+        )
+        target.add_argument(
+            "--policy",
+            type=Path,
+            default=DEFAULT_POLICY_PATH,
+            help=f"Library/budget policy JSON (default: {DEFAULT_POLICY_PATH})",
+        )
+
+    _add_shared_flags(common)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    list_p = sub.add_parser("list", help="List registered markets")
+    list_p = sub.add_parser("list", parents=[common], help="List registered markets")
     list_p.set_defaults(func=cmd_list)
 
-    status_p = sub.add_parser("status", help="Show library coverage / freshness")
+    status_p = sub.add_parser("status", parents=[common], help="Show library coverage / freshness")
     status_p.add_argument(
         "--markets",
         default="",
@@ -129,7 +135,7 @@ def build_parser() -> argparse.ArgumentParser:
     grow_p.add_argument("--json", action="store_true", help="Emit JSON summary")
     grow_p.set_defaults(func=cmd_grow)
 
-    policy_p = sub.add_parser("policy", help="Show or update library focus / budget policy")
+    policy_p = sub.add_parser("policy", parents=[common], help="Show or update library focus / budget policy")
     policy_p.add_argument("--json", action="store_true")
     policy_p.add_argument("--focus", default="", help="Set focus market id (e.g. sp500)")
     policy_p.add_argument(
@@ -1446,8 +1452,24 @@ def cmd_macro(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    argv_list = list(argv or sys.argv[1:])
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument(
+        "--root",
+        type=Path,
+        default=DEFAULT_LIBRARY_ROOT,
+        help=f"Library root (default: {DEFAULT_LIBRARY_ROOT})",
+    )
+    common.add_argument(
+        "--policy",
+        type=Path,
+        default=DEFAULT_POLICY_PATH,
+        help=f"Library/budget policy JSON (default: {DEFAULT_POLICY_PATH})",
+    )
+    pre, remaining = common.parse_known_args(argv_list)
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(remaining)
+    apply_parsed_globals(args, pre, argv_list, ["root", "policy"])
     return int(args.func(args))
 
 
