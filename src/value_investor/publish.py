@@ -271,6 +271,14 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         logger.warning("Automation status assembly skipped: %s", exc)
         automation = None
 
+    try:
+        from value_investor.project_progress import build_project_progress
+
+        project_progress = build_project_progress()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Project progress assembly skipped: %s", exc)
+        project_progress = None
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": run_at,
@@ -305,6 +313,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "research_model_suggestions": research_model_suggestions,
         "paper_automation": paper_automation,
         "automation": automation,
+        "project_progress": project_progress,
     }
 
 
@@ -365,6 +374,9 @@ def publish_dashboard(
     if bundle.get("automation"):
         write_json(data_dir / "automation.json", bundle["automation"], compact=False)
 
+    if bundle.get("project_progress"):
+        write_json(data_dir / "project_progress.json", bundle["project_progress"], compact=False)
+
     if run_at := bundle.get("run_at"):
         stamp = str(run_at)[:10]
         archive_path = data_dir / "archive" / f"{stamp}.json"
@@ -407,6 +419,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "post_run_review": None,
         "paper_automation": None,
         "automation": None,
+        "project_progress": None,
         "research": [],
         "note": "Dashboard data not published yet. Run ftse-screen and ftse-publish locally, or wait for the weekly workflow.",
     }

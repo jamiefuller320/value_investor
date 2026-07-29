@@ -141,6 +141,37 @@ def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Pa
     assert targets[0].ingest_suggestion_count == 1
 
 
+def test_select_ingest_improvement_targets_uses_library_research_path(tmp_path: Path, monkeypatch):
+    output_dir = tmp_path / "output"
+    library_index = (
+        tmp_path
+        / "docs/data/library/markets/aim/screen/research/BREE.L/sources/filings/filings_index.json"
+    )
+    library_index.parent.mkdir(parents=True)
+    library_index.write_text(
+        json.dumps(
+            {
+                "summary": {"total": 20, "annual": 0, "interim": 0, "with_body": 0},
+                "filings": [{"has_body": False}] * 20,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path)
+    targets = select_ingest_improvement_targets(
+        [_report("BREE.L", "Breedon Group")],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=3,
+    )
+
+    assert len(targets) == 1
+    assert targets[0].ticker == "BREE.L"
+    assert targets[0].filings_total == 20
+    assert targets[0].indexed_without_body == 20
+
+
 def test_planned_sources_prioritises_companies_house_for_uk_zero_bodies():
     inventory = {
         "thin": ["filings_bodies"],

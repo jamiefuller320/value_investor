@@ -178,8 +178,27 @@ def _load_ingest_suggestions(path: Path) -> dict[str, list[dict[str, Any]]]:
     return by_ticker
 
 
-def _filing_coverage(store: ResearchStore, ticker: str) -> dict[str, int]:
-    index_path = store.sources_dir(ticker) / "filings" / "filings_index.json"
+def _research_roots(output_dir: Path) -> list[Path]:
+    return [
+        output_dir / "research",
+        Path("docs/data/research"),
+        Path("output/research"),
+        Path("docs/data/library/markets"),
+    ]
+
+
+def _resolve_sources_dir(store: ResearchStore, ticker: str, output_dir: Path) -> Path:
+    from value_investor.engineering_queue import _filing_index_paths_for_ticker
+
+    paths = _filing_index_paths_for_ticker(ticker, roots=_research_roots(output_dir))
+    if paths:
+        return paths[0].parent.parent
+    return store.sources_dir(ticker)
+
+
+def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dict[str, int]:
+    from value_investor.engineering_queue import _coverage_from_index, _filing_index_paths_for_ticker
+
     coverage = {
         "filings_total": 0,
         "filings_annual": 0,
@@ -187,25 +206,12 @@ def _filing_coverage(store: ResearchStore, ticker: str) -> dict[str, int]:
         "filings_with_body": 0,
         "indexed_without_body": 0,
     }
+    paths = _filing_index_paths_for_ticker(ticker, roots=_research_roots(output_dir))
+    index_path = paths[0] if paths else store.sources_dir(ticker) / "filings" / "filings_index.json"
     if not index_path.exists():
         return coverage
-    try:
-        index = read_json(index_path)
-    except (OSError, ValueError, TypeError):
-        return coverage
-    summary = index.get("summary") or {}
-    filings = list(index.get("filings") or [])
-    coverage.update(
-        {
-            "filings_total": int(summary.get("total") or len(filings)),
-            "filings_annual": int(summary.get("annual") or 0),
-            "filings_interim": int(summary.get("interim") or 0),
-            "filings_with_body": int(summary.get("with_body") or 0),
-        }
-    )
-    coverage["indexed_without_body"] = sum(
-        1 for row in filings if not row.get("has_body")
-    )
+    measured = _coverage_from_index(index_path)
+    coverage.update(measured)
     return coverage
 
 
@@ -234,6 +240,8 @@ def _priority_score(
         and _is_uk_listed(market=market, ticker=ticker)
     ):
         score += 4.0
+    if coverage["filings_with_body"] == 0 and coverage["filings_total"] > 0:
+        score += 50.0
     for row in suggestions:
         priority = str(row.get("priority") or "").lower()
         if priority == "high":
@@ -262,7 +270,7 @@ def select_ingest_improvement_targets(
     for report in reports:
         if report.signal not in ("strong_buy", "buy"):
             continue
-        coverage = _filing_coverage(store, report.ticker)
+        coverage = _filing_coverage(store, report.ticker, output_dir)
         suggestions = suggestions_by_ticker.get(report.ticker.upper(), [])
         score = _priority_score(
             coverage,
@@ -403,7 +411,7 @@ def run_ingest_improvement_pass(
             if report is None:
                 summary.skipped += 1
                 continue
-            sources_dir = store.sources_dir(target.ticker)
+            sources_dir = _resolve_sources_dir(store, target.ticker, output_dir)
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,
