@@ -24,12 +24,17 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Snapshot, verify, upload, and restore tier-1 docs/data backups",
     )
-    parser.add_argument("--json", action="store_true")
-    parser.add_argument("--repo-root", type=Path, default=Path.cwd())
-    parser.add_argument("--backup-dir", type=Path, default=DEFAULT_BACKUP_DIR)
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--json", action="store_true")
+    common.add_argument("--repo-root", type=Path, default=Path.cwd())
+    common.add_argument("--backup-dir", type=Path, default=DEFAULT_BACKUP_DIR)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    snap = sub.add_parser("snapshot", help="Create a tier-1 tarball + manifest")
+    snap = sub.add_parser(
+        "snapshot",
+        parents=[common],
+        help="Create a tier-1 tarball + manifest",
+    )
     snap.add_argument(
         "--include-tier2",
         action="store_true",
@@ -43,23 +48,43 @@ def main(argv: list[str] | None = None) -> int:
     )
     snap.set_defaults(func=_cmd_snapshot)
 
-    sub.add_parser("list", help="List local snapshots under output/backups").set_defaults(func=_cmd_list)
+    sub.add_parser(
+        "list",
+        parents=[common],
+        help="List local snapshots under output/backups",
+    ).set_defaults(func=_cmd_list)
 
-    verify = sub.add_parser("verify", help="Verify archive checksum against manifest")
+    verify = sub.add_parser(
+        "verify",
+        parents=[common],
+        help="Verify archive checksum against manifest",
+    )
     verify.add_argument("archive", type=Path)
     verify.add_argument("--manifest", type=Path, default=None)
     verify.set_defaults(func=_cmd_verify)
 
-    restore = sub.add_parser("restore", help="Restore archive into repo root (merge)")
+    restore = sub.add_parser(
+        "restore",
+        parents=[common],
+        help="Restore archive into repo root (merge)",
+    )
     restore.add_argument("archive", type=Path)
     restore.add_argument("--dry-run", action="store_true")
     restore.set_defaults(func=_cmd_restore)
 
-    drill = sub.add_parser("drill", help="Post-restore smoke: tier paths + history restore count")
+    drill = sub.add_parser(
+        "drill",
+        parents=[common],
+        help="Post-restore smoke: tier paths + history restore count",
+    )
     drill.add_argument("--output-dir", type=Path, default=Path("output"))
     drill.set_defaults(func=_cmd_drill)
 
-    reassemble = sub.add_parser("reassemble", help="Merge emailed .partNNN chunks into a tarball")
+    reassemble = sub.add_parser(
+        "reassemble",
+        parents=[common],
+        help="Merge emailed .partNNN chunks into a tarball",
+    )
     reassemble.add_argument("chunks", nargs="+", type=Path, help="Chunk files (*.part001, *.part002, …)")
     reassemble.add_argument("--output", type=Path, required=True, help="Output .tar.gz path")
     reassemble.set_defaults(func=_cmd_reassemble)
