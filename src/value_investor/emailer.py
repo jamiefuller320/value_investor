@@ -51,18 +51,19 @@ class EmailConfig:
     use_tls: bool = True
 
     @classmethod
-    def from_env(cls) -> EmailConfig:
+    def from_env(cls, *, email_to: str | None = None) -> EmailConfig:
         host = os.environ.get("SMTP_HOST")
         user = os.environ.get("SMTP_USER")
         password = os.environ.get("SMTP_PASSWORD")
-        email_to = os.environ.get("EMAIL_TO")
+        resolved_to = (email_to or os.environ.get("EMAIL_TO") or "").strip()
 
         missing = [k for k, v in [
             ("SMTP_HOST", host),
             ("SMTP_USER", user),
             ("SMTP_PASSWORD", password),
-            ("EMAIL_TO", email_to),
         ] if not v]
+        if not resolved_to:
+            missing.append("EMAIL_TO")
         if missing:
             raise ValueError(f"Missing required email env vars: {', '.join(missing)}")
 
@@ -71,7 +72,7 @@ class EmailConfig:
             smtp_port=int(os.environ.get("SMTP_PORT", "587")),
             smtp_user=user,
             smtp_password=password,
-            email_to=email_to,
+            email_to=resolved_to,
             email_from=os.environ.get("EMAIL_FROM", user),
             use_tls=os.environ.get("SMTP_USE_TLS", "true").lower() != "false",
         )

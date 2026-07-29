@@ -360,8 +360,7 @@ def send_backup_snapshot_email(
     if not to_addr:
         raise ValueError("BACKUP_EMAIL_TO is empty")
 
-    config = EmailConfig.from_env()
-    config.email_to = to_addr
+    config = EmailConfig.from_env(email_to=to_addr)
 
     parts = split_archive_for_email(
         snapshot.archive_path,
