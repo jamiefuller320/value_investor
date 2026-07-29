@@ -32,6 +32,82 @@ Runs after the Mon/Wed/Fri ingest loop (~07:05) and before weekday paper
 orchestrator (~08:20). Same-day skip — a second successful run the same UTC
 day exits quickly unless `email_always=true`.
 
+### cron-job.org setup (one-time)
+
+Register the scheduled HTTP job on cron-job.org (daily **07:45 UTC**). This is
+separate from the GitHub `workflow_dispatch` curl above — cron-job.org calls
+GitHub on your behalf.
+
+**curl (recommended one-liner setup):**
+
+```bash
+export CRONJOB_API_KEY=…   # cron-job.org → Settings → API
+export GH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
+
+curl -sS -X PUT 'https://api.cron-job.org/jobs' \
+  -H "Authorization: Bearer $CRONJOB_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "job": {
+      "title": "FTSE ops monitor (daily)",
+      "url": "https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/ops-monitor.yml/dispatches",
+      "enabled": true,
+      "saveResponses": true,
+      "requestMethod": 1,
+      "schedule": {
+        "timezone": "UTC",
+        "expiresAt": 0,
+        "hours": [7],
+        "minutes": [45],
+        "mdays": [-1],
+        "months": [-1],
+        "wdays": [-1]
+      },
+      "extendedData": {
+        "headers": {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer '"$GH_PAT"'"
+        },
+        "body": "{\"ref\":\"main\"}"
+      }
+    }
+  }'
+```
+
+Response is `{"jobId":12345}` on success. Then trigger once from the cron-job.org
+console (**Run now**) or wait for the next 07:45 UTC slot.
+
+**Optional bulk import** (all production jobs — idempotent by title):
+
+```bash
+CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
+# or just ops monitor:
+CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --job ops-monitor
+```
+
+Dry-run payloads: `./scripts/import_cron_jobs.py --job ops-monitor --dry-run --json`
+
+**Manual UI** (alternative): [cron-job.org](https://cron-job.org) → **Create cronjob**
+
+1. **Title:** `FTSE ops monitor (daily)`
+2. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/ops-monitor.yml/dispatches`
+3. **Schedule:** custom `45 7 * * *` (daily 07:45 UTC)
+4. **Request method:** `POST`
+5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <GH_PAT>`
+6. **Request body:** `{"ref":"main"}`
+7. **Timezone:** UTC
+
+Verify:
+
+```bash
+gh run list --workflow=ops-monitor.yml --limit 3
+```
+
+Expect a successful `workflow_dispatch` run; `docs/data/ops_status.json` updates on
+warn/fail or when auto-fixes run.
+
+See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
+
 ## Artifacts
 
 | File | Purpose |
