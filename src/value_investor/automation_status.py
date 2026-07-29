@@ -94,6 +94,16 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "analysis-review.yml",
     },
+    "ops_monitor": {
+        "name": "FTSE Ops Monitor",
+        "cron": "45 7 * * *",
+        "cadence": (
+            "Daily 07:45 UTC (GitHub schedule + external cron). "
+            "Workflow/artifact health, safe auto-fixes, ops engineering task drafting, "
+            "daily SMTP summary on warn/fail. docs/ops/ops-monitor.md."
+        ),
+        "workflow": "ops-monitor.yml",
+    },
     "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",

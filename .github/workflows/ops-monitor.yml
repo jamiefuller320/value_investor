@@ -1,0 +1,145 @@
+name: FTSE Ops Monitor
+
+# Daily operational health checks, safe auto-fixes, engineering task drafting,
+# and SMTP summary. See docs/ops/ops-monitor.md.
+on:
+  schedule:
+    - cron: "45 7 * * *"
+  workflow_dispatch:
+    inputs:
+      email_always:
+        description: "Send email even when overall status is ok"
+        type: boolean
+        default: false
+      apply_fixes:
+        description: "Apply safe auto-fixes and draft engineering tasks"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  actions: write
+  pull-requests: read
+
+concurrency:
+  group: ftse-ops-monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - name: Skip if ops monitor already emailed today
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          EMAIL_ALWAYS: ${{ github.event.inputs.email_always || 'false' }}
+        with:
+          script: |
+            const emailAlways = process.env.EMAIL_ALWAYS === 'true';
+            if (emailAlways) {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflow_id = 'ops-monitor.yml';
+            const runId = context.runId;
+            const dayStart = new Date(Date.UTC(
+              new Date().getUTCFullYear(),
+              new Date().getUTCMonth(),
+              new Date().getUTCDate(),
+            )).toISOString();
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id,
+              per_page: 20,
+            });
+            const prior = (data.workflow_runs || []).filter((r) =>
+              r.id !== runId
+              && r.created_at >= dayStart
+              && r.conclusion === 'success'
+            );
+            if (prior.length) {
+              core.info(`Skipping — ops monitor already succeeded today (run ${prior[0].id})`);
+              core.setOutput('should_run', 'false');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
+  monitor:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run ops monitor
+        id: monitor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          set -euo pipefail
+          ARGS=(run --json)
+          if [ "${{ github.event.inputs.apply_fixes || 'true' }}" != "false" ]; then
+            :
+          else
+            ARGS+=(--no-apply --no-draft)
+          fi
+          if [ "${{ github.event.inputs.email_always || 'false' }}" = "true" ]; then
+            ARGS+=(--email-always)
+          else
+            ARGS+=(--email)
+          fi
+          ftse-ops-monitor "${ARGS[@]}" > /tmp/ops_monitor.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/ops_monitor.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch_engineering') else 'false'}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Sync main before commit
+        run: git pull --rebase --autostash origin main
+
+      - name: Commit ops monitor artifacts
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: ops monitor [skip ci]"
+          file_pattern: |
+            docs/data/ops_status.json
+            docs/data/ops_monitor_log.json
+            docs/data/engineering_tasks.json
+            docs/data/ingest_health_log.json
+          skip_fetch: false
+
+      - name: Dispatch engineering queue when ready
+        if: steps.monitor.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run engineering-queue.yml
