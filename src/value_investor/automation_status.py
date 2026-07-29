@@ -108,8 +108,9 @@ WORKFLOW_SCHEDULES = {
         "name": "FTSE Data Backup",
         "cron": "30 12 * * 0",
         "cadence": (
-            "Sunday 12:30 UTC after email bundle. Tier-1 docs/data tarball + manifest; "
-            "GitHub artifact (90d) and optional S3 via BACKUP_S3_URI. docs/ops/data-backup.md."
+            "Sunday 12:30 UTC after email bundle; **primary: cron-job.org** 30 12 * * 0. "
+            "Tier-1 docs/data tarball + manifest; GitHub artifact (90d) and optional S3 "
+            "via BACKUP_S3_URI. docs/ops/data-backup.md."
         ),
         "workflow": "data-backup.yml",
     },

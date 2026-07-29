@@ -77,9 +77,45 @@ ftse-data-backup drill
 
 | Trigger | When | Notes |
 |---------|------|-------|
-| **GitHub Actions** | `data-backup.yml` — Sunday 12:30 UTC | After Sunday email bundle; uploads **artifact** (90-day GH retention) |
-| **cron-job.org (optional)** | `30 12 * * 0` | `WORKFLOW=data-backup.yml` via `dispatch_github_workflow.sh` |
-| **Manual** | Any time | Before large library grows or risky migrations |
+| **cron-job.org (primary)** | Sunday **12:30 UTC** (`30 12 * * 0`) | After Sunday email bundle commits `docs/data/` |
+| **GitHub cron (backup)** | Same expression | Same-day skip — safe alongside external cron |
+| **Manual** | Any time | Actions → **FTSE Data Backup** → Run workflow |
+
+External dispatch (same `GH_PAT` as orchestrator / ingest / ops monitor):
+
+```bash
+WORKFLOW=data-backup.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+```
+
+Same-day skip: a second successful run the same UTC day exits quickly unless
+`force=true`.
+
+### cron-job.org setup (one-time)
+
+Use the same fine-grained PAT as other workflow dispatches (**Actions: Read and
+write** on this repo only).
+
+1. [cron-job.org](https://cron-job.org) → **Create cronjob**
+2. **Title:** `FTSE data backup (Sunday)`
+3. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/data-backup.yml/dispatches`
+4. **Schedule:** custom `30 12 * * 0` (Sunday 12:30 UTC)
+5. **Request method:** `POST`
+6. **Request headers:**
+   - `Accept: application/vnd.github+json`
+   - `Authorization: Bearer <GH_PAT>`
+7. **Request body:** `{"ref":"main"}`
+8. **Timezone:** UTC
+9. Save and use **Run now** once to verify
+
+Verify:
+
+```bash
+gh run list --workflow=data-backup.yml --limit 3
+```
+
+Expect a successful `workflow_dispatch` run with artifact `ftse-tier1-data-backup`.
+
+See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
 
 ### S3 upload (optional)
 
