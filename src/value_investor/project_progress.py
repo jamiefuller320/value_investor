@@ -107,6 +107,11 @@ def build_project_progress(
     latest_ingest = ingest_entries[-1] if ingest_entries else {}
     health_after = latest_ingest.get("health_after") or {}
 
+    if not health_after:
+        from value_investor.engineering_queue import snapshot_ingest_health
+
+        health_after = snapshot_ingest_health(latest_path=latest_path)
+
     evidence = {
         "screen_company_count": int(meta.get("company_count") or 0),
         "strong_buy_count": int(meta.get("strong_buy_count") or 0),
@@ -120,8 +125,11 @@ def build_project_progress(
         "rules_total_return": rules_metrics.get("total_return"),
         "ops_overall": ops.get("overall"),
         "zero_body_buy_tier": health_after.get("zero_body_buy_tier"),
+        "unmeasured_buy_tier": health_after.get("unmeasured_buy_tier"),
+        "measured_tickers": health_after.get("measured_tickers"),
+        "buy_tier_count": health_after.get("buy_tier_count"),
         "ingest_stalled": bool(
-            health_after.get("zero_body_buy_tier", 0) > 0
+            int(health_after.get("zero_body_buy_tier") or 0) > 0
             and int(latest_ingest.get("delta_zero_body") or 0) == 0
         ),
     }
@@ -149,10 +157,13 @@ def build_project_progress(
         gaps.append(
             f"Primary AI track still below ^FTSE after costs ({_fmt_pct(ai_excess)} excess; history still thin)."
         )
+    if int(evidence.get("unmeasured_buy_tier") or 0) > 0:
+        gaps.append(
+            f"Ingest coverage gap: {evidence['unmeasured_buy_tier']} buy-tier tickers have no filings index yet."
+        )
     if evidence.get("ingest_stalled"):
         gaps.append(
-            f"Ingest bottleneck: zero_body_buy_tier stuck at {evidence.get('zero_body_buy_tier')} "
-            "(library-path tickers not reached by weekday ingest pass)."
+            f"Ingest bottleneck: zero_body_buy_tier stuck at {evidence.get('zero_body_buy_tier')}."
         )
     if evidence.get("screen_run_at"):
         gaps.append(f"Published screen bundle dated {evidence['screen_run_at'][:10]} — confirm Sunday refresh.")
@@ -167,22 +178,23 @@ def build_project_progress(
     ingest_bottleneck = {
         "stalled": evidence.get("ingest_stalled", False),
         "zero_body_buy_tier": evidence.get("zero_body_buy_tier"),
+        "health": health_after,
         "summary": (
-            "Health measurement scans library research paths, but the weekday ingest pass "
-            "only reads docs/data/research/. Tickers like BREE.L (indexed, zero bodies) never "
-            "enter the top-5 target list. Micro-compile can also false-positive when it "
-            "re-matches already-merged engineering tasks."
+            "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps "
+            "missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows "
+            "before refetching bodies."
         ),
         "fixes": [
-            "Unify filing-index lookup in ingest improvement (same roots as health snapshot).",
-            "Boost priority for measured zero-body tickers (indexed > 0, bodies = 0).",
-            "Count only newly-open tasks after micro-compile before marking stall fixed.",
-            "Add BREE.L-focused ingest task: prune mis-attributed RNS, CH accounts, body refetch.",
+            "Canonical path + library migration (implemented).",
+            "Sunday bootstrap seeds strong_buy indexes when missing (capped).",
+            "Misattribution filter + headline reclassify at pass start (implemented).",
+            "Raise weekday caps and run ingest after Sunday screen (implemented).",
+            "Targeted BREE.L ingest suggestions for engineering micro-compile.",
         ],
         "commands": [
             "ftse-ingest-loop status --json",
             "ftse-ingest-loop run --max-targets 10 --json",
-            "gh workflow run ingest-loop.yml -f force=true -f max_targets=10",
+            "gh workflow run ingest-loop.yml -f force=true -f max_targets=15",
         ],
     }
 

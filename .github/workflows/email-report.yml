@@ -50,7 +50,7 @@ jobs:
         run: |
           ARGS="--dry-run --publish-dashboard"
           if [ -n "$CURSOR_API_KEY" ]; then
-            ARGS="$ARGS --deep-analysis --research-docs --ingest-improvement-pass --research-gap-fill --post-run-review --compile-engineering-tasks"
+            ARGS="$ARGS --deep-analysis --research-docs --ingest-improvement-pass --ingest-improvement-cap 15 --research-gap-fill --post-run-review --compile-engineering-tasks"
           fi
           ftse-email $ARGS
 

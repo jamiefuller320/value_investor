@@ -340,23 +340,33 @@ def snapshot_ingest_health(
     indexed_without_body = 0
     with_body = 0
     measured = 0
+    unmeasured_tickers: list[str] = []
+    zero_body_tickers: list[str] = []
     for ticker in tickers:
         paths = _filing_index_paths_for_ticker(ticker, roots=roots)
         if not paths:
+            unmeasured_tickers.append(ticker)
             continue
         measured += 1
-        coverage = _coverage_from_index(paths[0])
+        canonical = Path("docs/data/research") / ticker / "sources" / "filings" / "filings_index.json"
+        index_path = canonical if canonical.exists() else paths[0]
+        coverage = _coverage_from_index(index_path)
         with_body += coverage["filings_with_body"]
         indexed_without_body += coverage["indexed_without_body"]
         if coverage["filings_with_body"] == 0 and coverage["filings_total"] > 0:
             zero_body += 1
+            zero_body_tickers.append(ticker)
         elif coverage["filings_total"] == 0:
             zero_body += 1
+            zero_body_tickers.append(ticker)
     return {
         "snapshot_at": datetime.now(UTC).isoformat(),
         "buy_tier_count": len(tickers),
         "measured_tickers": measured,
+        "unmeasured_buy_tier": len(unmeasured_tickers),
+        "unmeasured_tickers": unmeasured_tickers[:25],
         "zero_body_buy_tier": zero_body,
+        "zero_body_tickers": zero_body_tickers[:25],
         "indexed_without_body": indexed_without_body,
         "filings_with_body": with_body,
     }

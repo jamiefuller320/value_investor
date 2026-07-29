@@ -196,8 +196,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--ingest-improvement-cap",
         type=int,
-        default=5,
-        help="Max tickers for --ingest-improvement-pass (default: 5)",
+        default=10,
+        help="Max tickers for --ingest-improvement-pass (default: 10)",
     )
     parser.add_argument(
         "--compile-engineering-tasks",
@@ -402,9 +402,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.ingest_improvement_pass:
         from value_investor.research.ingest_improvement import run_ingest_improvement_pass
 
+        ingest_data_dir = Path("docs/data")
         ingest_improvement_summary = run_ingest_improvement_pass(
             reports=reports,
-            output_dir=args.output_dir,
+            output_dir=ingest_data_dir,
             market="ftse350",
             max_targets=int(args.ingest_improvement_cap),
         )

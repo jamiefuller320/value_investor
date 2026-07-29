@@ -2702,6 +2702,74 @@ def summarize_filings(filings: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def sanitize_filings_index(
+    filings_dir: Path,
+    *,
+    company_name: str,
+    ticker: str,
+    regime: str = "uk_rns",
+) -> dict[str, Any]:
+    """
+    Prune mis-attributed index rows and reclassify annual/interim periods.
+
+    Safe to call at the start of an ingest-improvement pass before refetching bodies.
+    """
+    from value_investor.storage import read_json, write_json
+
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    if not index_path.exists():
+        return {
+            "pruned": 0,
+            "reclassified": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = read_json(index_path)
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "pruned": 0,
+            "reclassified": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": str(exc),
+        }
+
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    filtered = filter_misattributed_filings(
+        filings,
+        company_name=company_name,
+        ticker=ticker,
+        regime=regime,
+    )
+    reclassified = [_apply_headline_period(row) for row in filtered]
+    pruned = len(filings) - len(reclassified)
+    changed = pruned > 0 or reclassified != filings
+    if changed:
+        payload["filings"] = reclassified
+        payload["summary"] = summarize_filings(reclassified)
+        payload["sanitized_at"] = datetime.now(UTC).isoformat()
+        write_json(index_path, payload, compact=True, compress=False)
+        prune_orphaned_filing_bodies(filings_dir)
+        prune_misattributed_filing_bodies(
+            filings_dir,
+            company_name=company_name,
+            ticker=ticker,
+        )
+
+    after = sum(1 for row in reclassified if row.get("has_body"))
+    return {
+        "pruned": pruned,
+        "reclassified": len(reclassified),
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "sanitize_filings_index",
+    }
+
+
 def ingest_filings(
     *,
     ticker: str,
