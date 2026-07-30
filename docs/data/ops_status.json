@@ -1,32 +1,18 @@
 {
-  "run_at": "2026-07-29T10:08:15.248293+00:00",
-  "overall": "warn",
-  "findings": [
-    {
-      "severity": "warn",
-      "category": "ingest",
-      "title": "Buy-tier filing ingest stalled",
-      "summary": "zero_body_buy_tier unchanged across recent runs — micro-compile or engineering may be needed.",
-      "auto_fixable": true,
-      "fixed": true,
-      "action_taken": "micro-compiled ingest tasks: eng-20260729-06, eng-20260729-07, eng-20260729-10"
-    }
-  ],
-  "auto_fixes": [
-    {
-      "action": "micro_compile_ingest",
-      "detail": "micro-compiled ingest tasks: eng-20260729-06, eng-20260729-07, eng-20260729-10"
-    }
-  ],
+  "run_at": "2026-07-30T13:17:08.236069+00:00",
+  "overall": "ok",
+  "findings": [],
+  "auto_fixes": [],
   "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
-      "last_success_at": "2026-07-29T09:05:20+00:00",
-      "last_success_run_id": 30438173534,
-      "age_hours": 1.0,
+      "expected_today": false,
+      "max_age_hours": 30,
+      "last_success_at": "2026-07-29T22:46:10+00:00",
+      "last_success_run_id": 30497287366,
+      "age_hours": 14.5,
       "stale": false,
       "recent_failures_24h": 0
     },
@@ -34,9 +20,10 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "last_success_at": "2026-07-29T07:20:14+00:00",
-      "last_success_run_id": 30431279440,
-      "age_hours": 2.8,
+      "max_age_hours": 28,
+      "last_success_at": "2026-07-30T12:09:20+00:00",
+      "last_success_run_id": 30541379797,
+      "age_hours": 1.1,
       "stale": false,
       "recent_failures_24h": 0
     },
@@ -44,8 +31,9 @@
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": true,
-      "last_success_at": "2026-07-29T10:06:47+00:00",
-      "last_success_run_id": 30442377997,
+      "max_age_hours": 26,
+      "last_success_at": "2026-07-30T13:15:27+00:00",
+      "last_success_run_id": 30546095487,
       "age_hours": 0.0,
       "stale": false,
       "recent_failures_24h": 0
@@ -54,9 +42,10 @@
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
       "expected_today": false,
+      "max_age_hours": 36,
       "last_success_at": "2026-07-29T07:57:15+00:00",
       "last_success_run_id": 30433574470,
-      "age_hours": 2.2,
+      "age_hours": 29.3,
       "stale": false,
       "recent_failures_24h": 0
     }
