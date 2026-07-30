@@ -32,6 +32,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
             "value_investor.ops_monitor.latest_workflow_run",
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
     ):
         findings, checks = check_workflow_freshness(queue_status=idle_queue)
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
@@ -49,6 +50,7 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
             "value_investor.ops_monitor.latest_workflow_run",
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
     ):
         findings, checks = check_workflow_freshness(queue_status=active_queue)
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
