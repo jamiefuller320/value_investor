@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from value_investor.agent_model_policy import load_policy, save_policy
@@ -27,6 +28,9 @@ def _seed_market(
     covered: int,
     stale: int = 0,
 ) -> None:
+    now = datetime.now(UTC)
+    fresh_last = (now - timedelta(days=1)).isoformat()
+    stale_last = (now - timedelta(days=30)).isoformat()
     tickers = [f"{market.upper()}{i:03d}" for i in range(n)]
     state = {}
     for i, ticker in enumerate(tickers):
@@ -34,9 +38,9 @@ def _seed_market(
             continue
         # Fresh unless in the stale tail of the covered set
         if i >= covered - stale:
-            last = "2020-01-01T00:00:00+00:00"
+            last = stale_last
         else:
-            last = "2026-07-16T00:00:00+00:00"
+            last = fresh_last
         state[ticker] = {"last_refresh": last, "fields_present": ["trailing_pe"], "errors": []}
     write_json(
         market_dir(root, market) / "manifest.json",
