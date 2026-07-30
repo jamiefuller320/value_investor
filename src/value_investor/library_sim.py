@@ -34,6 +34,57 @@ MARKET_BENCHMARKS: dict[str, str] = {
 _STAMP_RE = re.compile(r"signals_(\d{8}_\d{6})\.csv$")
 
 
+DEFAULT_OBSERVE_SIM_MARKETS: tuple[str, ...] = ("sp500",)
+
+
+def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
+    """Markets that get an observe-only sim refresh after screen-lite in the ladder."""
+    ladder = policy.get("ladder") or {}
+    if not ladder.get("observe_sim_after_screen", True):
+        return []
+    configured = ladder.get("observe_sim_markets")
+    if configured is None:
+        markets = list(DEFAULT_OBSERVE_SIM_MARKETS)
+    else:
+        markets = [str(mid) for mid in configured if str(mid).strip()]
+    return [mid for mid in markets if mid in MARKET_BENCHMARKS]
+
+
+def run_observe_sims_for_screened_markets(
+    root: Path,
+    policy: dict[str, Any],
+    screened_markets: set[str] | list[str],
+) -> dict[str, Any]:
+    """Refresh observe-only sims for configured markets that were screened this run."""
+    targets = [
+        mid for mid in observe_sim_markets_for_policy(policy) if mid in set(screened_markets)
+    ]
+    if not targets:
+        return {
+            "skipped": True,
+            "reason": "no observe-sim markets screened this run",
+            "eligible": observe_sim_markets_for_policy(policy),
+        }
+    markets_out: dict[str, Any] = {}
+    for mid in targets:
+        try:
+            result = run_library_observe_sim(root, mid, rebuild_snapshots=True)
+            screen = result.tracks.get("screen_rules") or {}
+            markets_out[mid] = {
+                "snapshot_count": result.snapshot_count,
+                "benchmark": result.benchmark,
+                "comparison_note": result.comparison_note,
+                "screen_rules_excess": screen.get("excess_return"),
+                "screen_rules_return": screen.get("total_return"),
+                "trade_count": screen.get("trade_count"),
+                "path": f"markets/{mid}/screen/sim/observe_summary.json",
+            }
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Observe sim for %s failed: %s", mid, exc)
+            markets_out[mid] = {"error": str(exc)}
+    return {"skipped": False, "markets": markets_out}
+
+
 @dataclass
 class LibraryObserveSimResult:
     market: str
