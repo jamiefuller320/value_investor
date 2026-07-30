@@ -121,6 +121,7 @@ cat <<'EOF'
     analysis-review          Sun 10:35 UTC
     ops-monitor              Daily 07:45 UTC                 (jobId 8180483)
     data-backup              Sun 12:30 UTC                   (jobId 8179967)
+    engineering-queue        Hourly Mon–Fri :15 UTC
 
   Re-import after PAT rotation:
     WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all

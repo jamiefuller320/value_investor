@@ -109,6 +109,15 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[30],
             wdays=[0],
         ),
+        CronJobSpec(
+            key="engineering-queue",
+            title="FTSE engineering queue (hourly weekdays)",
+            workflow="engineering-queue.yml",
+            body={"ref": REF},
+            hours=list(range(24)),
+            minutes=[15],
+            wdays=[1, 2, 3, 4, 5],
+        ),
     ]
 
 

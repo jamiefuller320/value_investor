@@ -15,11 +15,40 @@ from value_investor.ops_monitor import (
     check_committed_json,
     check_ingest_health_log,
     check_latest_bundle,
+    check_workflow_freshness,
     draft_ops_engineering_tasks,
     format_ops_monitor_text,
     load_health_log_payload,
     run_ops_monitor,
 )
+
+
+def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold():
+    eight_hours_ago = (datetime.now(UTC) - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    with patch(
+        "value_investor.ops_monitor.latest_workflow_run",
+        return_value={"id": 1, "created_at": eight_hours_ago},
+    ):
+        findings, checks = check_workflow_freshness(queue_status=idle_queue)
+    eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
+    assert eng_checks and eng_checks[0]["max_age_hours"] == 26
+    assert eng_checks[0]["stale"] is False
+    assert not [row for row in findings if "Engineering Queue" in row.title]
+
+
+def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
+    eight_hours_ago = (datetime.now(UTC) - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    active_queue = {"open_count": 2, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    with patch(
+        "value_investor.ops_monitor.latest_workflow_run",
+        return_value={"id": 1, "created_at": eight_hours_ago},
+    ):
+        findings, checks = check_workflow_freshness(queue_status=active_queue)
+    eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
+    assert eng_checks and eng_checks[0]["max_age_hours"] == 3
+    assert eng_checks[0]["stale"] is True
+    assert any("Engineering Queue" in row.title for row in findings)
 
 
 def test_check_committed_json_flags_corrupt_file(tmp_path: Path):

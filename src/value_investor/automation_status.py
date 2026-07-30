@@ -62,11 +62,11 @@ WORKFLOW_SCHEDULES = {
     },
     "engineering_queue": {
         "name": "FTSE Engineering Queue",
-        "cron": "0 * * * 1-5",
+        "cron": "15 * * * 1-5",
         "cadence": (
-            "Hourly weekday processor. Marks merged engineering PRs, then "
-            "dispatches engineering-agent when the queue has open tasks and "
-            "no engineering PR is in flight. Also runs on engineering PR merge."
+            "Hourly weekday processor (:15 UTC via external cron; GitHub schedule backup). "
+            "Marks merged engineering PRs, then dispatches engineering-agent when the queue "
+            "has open tasks and no engineering PR is in flight. Also runs on engineering PR merge."
         ),
         "workflow": "engineering-queue.yml",
     },
