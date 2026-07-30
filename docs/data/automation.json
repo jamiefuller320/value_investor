@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-29T07:21:41.449476+00:00",
+  "generated_at": "2026-07-30T07:22:13.867582+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -17,7 +17,7 @@
       "trade_cost_pct": 0.03,
       "max_positions": 3,
       "skip_timing_wait": true,
-      "min_conviction": 0.1,
+      "min_conviction": 0.15,
       "sector_cap": 0.3,
       "track_id": "rules",
       "track_label": "Screen rules (control)",
@@ -283,6 +283,12 @@
         "cadence": "Daily 07:45 UTC (GitHub schedule + external cron). Workflow/artifact health, safe auto-fixes, ops engineering task drafting, daily SMTP summary on warn/fail. docs/ops/ops-monitor.md.",
         "workflow": "ops-monitor.yml"
       },
+      "data_backup": {
+        "name": "FTSE Data Backup",
+        "cron": "30 12 * * 0",
+        "cadence": "Sunday 12:30 UTC after email bundle; **primary: cron-job.org** 30 12 * * 0. Tier-1 docs/data tarball + manifest; GitHub artifact (90d), chunked SMTP email to BACKUP_EMAIL_TO, optional S3 via BACKUP_S3_URI. docs/ops/data-backup.md.",
+        "workflow": "data-backup.yml"
+      },
       "pages": {
         "name": "Deploy GitHub Pages",
         "cadence": "On push to main when docs/** change",
@@ -293,7 +299,7 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-07-29T07:21:14.884053+00:00",
+        "at": "2026-07-30T07:21:31.834794+00:00",
         "kind": "paper_run",
         "title": "Paper automation checked (no action)",
         "detail": "waiting for open settle (75 min after 08:00 Europe/London)"
@@ -812,15 +818,15 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-07-29T07:21:14.884053+00:00",
+      "generated_at": "2026-07-30T07:21:31.834794+00:00",
       "acted": false,
       "note": "waiting for open settle (75 min after 08:00 Europe/London)",
       "gate": {
-        "local_time": "2026-07-29T08:21:02.471608+01:00",
+        "local_time": "2026-07-30T08:21:16.046474+01:00",
         "trading_day": true,
         "after_settle": false,
-        "market_open_at": "2026-07-29T08:00:00+01:00",
-        "settle_at": "2026-07-29T09:15:00+01:00",
+        "market_open_at": "2026-07-30T08:00:00+01:00",
+        "settle_at": "2026-07-30T09:15:00+01:00",
         "can_act": false,
         "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
       },
