@@ -41,6 +41,10 @@ from value_investor.library_screen import (
     research_cap_from_budget,
     run_library_screen,
 )
+from value_investor.library_sim import (
+    DEFAULT_OBSERVE_SIM_MARKETS,
+    run_observe_sims_for_screened_markets,
+)
 from value_investor.research.runner import eligible_research_targets, run_research_for_strong_buys
 from value_investor.storage import write_json
 
@@ -58,6 +62,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("estimated_memo_usd", ESTIMATED_MEMO_USD)
     ladder.setdefault("research_hard_cap", 50)
     ladder.setdefault("research_all_graduated", True)
+    ladder.setdefault("observe_sim_after_screen", True)
+    ladder.setdefault("observe_sim_markets", list(DEFAULT_OBSERVE_SIM_MARKETS))
     ladder.setdefault("spend_checkpoint_usd", DEFAULT_SPEND_CHECKPOINT_USD)
     ladder.setdefault("spend_since_checkpoint_usd", 0.0)
     ladder.setdefault("last_run", None)
@@ -187,6 +193,7 @@ def run_library_ladder(
     coverage = (status[0] if status else {}) or {}
     metrics_count = int(coverage.get("coverage_count") or 0)
     min_metrics = int(policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)
+    screened_markets: set[str] = set()
 
     # B — screen-lite (focus)
     if skip_screen:
@@ -200,6 +207,7 @@ def run_library_ladder(
         screen_result = None
     else:
         screen_result = run_library_screen(root, market, run_at=run_at)
+        screened_markets.add(market)
         result["layers"]["screen_lite"] = screen_result.summary
 
     # C — selective research across focus + graduated markets (optional USD strand)
@@ -274,6 +282,7 @@ def run_library_ladder(
                 continue
             try:
                 market_screens[mid] = run_library_screen(root, mid, run_at=run_at)
+                screened_markets.add(mid)
             except Exception as exc:  # noqa: BLE001
                 logger.warning("Screen-lite for research market %s failed: %s", mid, exc)
 
@@ -418,6 +427,20 @@ def run_library_ladder(
                 if checkpoint_reached:
                     layer["paused_for_approval"] = True
         result["layers"]["selective_research"] = layer
+
+    # B2 — observe-only paper sim for pilot library markets (after screen + research)
+    policy = load_policy(policy_path)
+    if skip_screen or not screened_markets:
+        result["layers"]["observe_sim"] = {
+            "skipped": True,
+            "reason": "screen-lite did not run this pass",
+        }
+    else:
+        result["layers"]["observe_sim"] = run_observe_sims_for_screened_markets(
+            root,
+            policy,
+            screened_markets,
+        )
 
     # D — graduation (after grow + screen so floors reflect this run)
     if skip_graduation:

@@ -92,7 +92,11 @@ def test_ladder_screen_without_research(tmp_path: Path, monkeypatch):
     base["focus_market"] = "sp500"
     base["budget"]["plan_refresh_day_of_month"] = 8
     base["budget"]["plan_monthly_usd"] = 20
-    base["ladder"] = {"min_metrics_for_screen": 25, "research_hard_cap": 5}
+    base["ladder"] = {
+        "min_metrics_for_screen": 25,
+        "research_hard_cap": 5,
+        "observe_sim_after_screen": False,
+    }
     save_policy(base, policy)
 
     # Avoid Yahoo grow; use seeded metrics

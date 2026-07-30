@@ -77,6 +77,16 @@ ftse-library ladder --dry-run-research # shortlist without calling Cursor
 
 Artifacts: `docs/data/library/markets/sp500/screen/` (signals, shortlist, history) and optional `screen/research/` memos.
 
+**Observe-only paper sim (S&P 500 pilot):**
+
+Runs automatically after screen-lite when `sp500` is screened in `ftse-library ladder` (policy: `ladder.observe_sim_after_screen`, default on). Manual refresh:
+
+```bash
+ftse-library sim --markets sp500
+```
+
+Rebuilds `screen/history/` snapshots from all dated screen-lite CSVs, runs screen-rules / research-overlay / AI-judgment tracks vs **^GSPC**, and writes `screen/sim/observe_summary.json`. Evidence accumulates with each screen pass — still observe-only and **not** wired to `ftse-decision-review` or live FTSE paper books.
+
 ### Research model / spend pools
 
 Cheapest agent for plan efficiency: **`composer-2.5`** (first-party pool). Cursor **subscription** (Pro **$20/mo**, refresh **8th** → surplus **7th**) is metadata only.
