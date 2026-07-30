@@ -12,7 +12,9 @@ from value_investor.library_sim import (
     build_library_run_snapshot,
     enrich_signals_with_library_research,
     iter_library_screen_runs,
+    observe_sim_markets_for_policy,
     run_library_observe_sim,
+    run_observe_sims_for_screened_markets,
     save_library_run_snapshots,
 )
 
@@ -103,6 +105,19 @@ def test_run_library_observe_sim_writes_summary(tmp_path: Path):
     assert (screen_dir / "sim" / "observe_summary.json").exists()
     assert "screen_rules" in result.tracks
     assert result.tracks["screen_rules"]["periods"] == 2
+
+
+def test_observe_sim_markets_from_policy_respects_toggle(tmp_path: Path):
+    policy = {"ladder": {"observe_sim_after_screen": False, "observe_sim_markets": ["sp500"]}}
+    assert observe_sim_markets_for_policy(policy) == []
+    policy = {"ladder": {"observe_sim_after_screen": True, "observe_sim_markets": ["sp500"]}}
+    assert observe_sim_markets_for_policy(policy) == ["sp500"]
+
+
+def test_run_observe_sims_for_screened_markets_skips_when_not_screened(tmp_path: Path):
+    policy = {"ladder": {"observe_sim_after_screen": True, "observe_sim_markets": ["sp500"]}}
+    result = run_observe_sims_for_screened_markets(tmp_path, policy, {"euro_stoxx50"})
+    assert result["skipped"] is True
 
 
 def test_save_library_run_snapshots(tmp_path: Path):
