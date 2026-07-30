@@ -52,6 +52,8 @@ ftse-engineering list
 Only `scoring`, `ingest`, `prompt`, `coverage`, and `ops` areas promote to
 `engineering_tasks.json`. `offline_sim` and `paper_knobs` experiments stay
 analysis-only — run counterfactuals or decision-review probes manually.
+`paper_churn` experiments from [`paper-learning-review.md`](paper-learning-review.md)
+stay manual (config guard tuning).
 
 ## Guardrails
 
