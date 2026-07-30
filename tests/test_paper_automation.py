@@ -207,3 +207,49 @@ def test_load_screen_candidates_accepts_email_reports_list(tmp_path):
     rows = load_screen_candidates(path)
     assert len(rows) == 1
     assert rows[0]["ticker"] == "AAA.L"
+
+
+def test_run_daily_automation_skips_duplicate_rebalance_same_day(tmp_path, monkeypatch):
+    reports_path = tmp_path / "latest.json"
+    reports_path.write_text(
+        __import__("json").dumps(
+            {
+                "reports": [
+                    {
+                        "ticker": "AAA.L",
+                        "name": "Alpha",
+                        "signal": "strong_buy",
+                        "conviction_score": 0.9,
+                        "price": 10,
+                        "timing_signal": "neutral",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.paper_automation.refresh_candidate_marks",
+        lambda candidates, extra_tickers=None: candidates,
+    )
+    out = tmp_path / "auto"
+    when = datetime(2026, 7, 15, 9, 20, tzinfo=LONDON)
+    first = run_daily_automation(
+        output_dir=out,
+        config=AutomationConfig(max_positions=1),
+        reports_path=reports_path,
+        now=when,
+        force=False,
+    )
+    assert first.acted is True
+    assert len(first.trades) >= 1
+
+    second = run_daily_automation(
+        output_dir=out,
+        config=AutomationConfig(max_positions=1),
+        reports_path=reports_path,
+        now=when,
+        force=False,
+    )
+    assert second.acted is False
+    assert "Already rebalanced today" in second.note

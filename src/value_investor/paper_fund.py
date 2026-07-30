@@ -16,6 +16,11 @@ BUY_SIGNALS = frozenset({"strong_buy", "buy"})
 DEFAULT_TRADE_COST_PCT = 0.03
 DEFAULT_MAX_POSITIONS = 5
 DEFAULT_INITIAL_CASH = 1000.0
+DEFAULT_EXIT_CONFIRM_SCREENS = 2
+DEFAULT_REENTRY_COOLDOWN_SCREENS = 1
+DEFAULT_MIN_REBALANCE_NOTIONAL_GBP = 10.0
+REBALANCE_TRIM_TOLERANCE = 1.02
+REBALANCE_CASH_FLOOR = 0.01
 STRATEGY_MODES: tuple[StrategyMode, ...] = ("manual", "technical", "automated")
 SIZING_MODES: tuple[SizingMode, ...] = ("shares", "cash", "pct_nav")
 
@@ -49,6 +54,32 @@ def _month_index(value: date) -> int:
 
 def create_fund_id() -> str:
     return str(uuid4())
+
+
+@dataclass
+class RebalanceState:
+    """Per-fund churn guards for automated equal-weight rebalancing."""
+
+    exit_streak: dict[str, int] = field(default_factory=dict)
+    reentry_cooldown: dict[str, int] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "exit_streak": dict(self.exit_streak),
+            "reentry_cooldown": dict(self.reentry_cooldown),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> RebalanceState:
+        raw = data or {}
+        return cls(
+            exit_streak={
+                str(k): int(v) for k, v in (raw.get("exit_streak") or {}).items()
+            },
+            reentry_cooldown={
+                str(k): int(v) for k, v in (raw.get("reentry_cooldown") or {}).items()
+            },
+        )
 
 
 @dataclass
@@ -274,6 +305,7 @@ class PaperFund:
     trades: list[PaperTrade] = field(default_factory=list)
     equity_curve: list[dict[str, Any]] = field(default_factory=list)
     last_mark_at: str | None = None
+    rebalance_state: RebalanceState = field(default_factory=RebalanceState)
 
     @classmethod
     def create(cls, config: PaperFundConfig) -> PaperFund:
@@ -576,6 +608,7 @@ class PaperFund:
             "trades": [t.to_dict() for t in self.trades],
             "equity_curve": list(self.equity_curve),
             "last_mark_at": self.last_mark_at,
+            "rebalance_state": self.rebalance_state.to_dict(),
         }
 
     @classmethod
@@ -607,6 +640,7 @@ class PaperFund:
             trades=trades,
             equity_curve=list(data.get("equity_curve") or []),
             last_mark_at=data.get("last_mark_at"),
+            rebalance_state=RebalanceState.from_dict(data.get("rebalance_state")),
         )
 
 
@@ -786,6 +820,87 @@ def _evaluate_momentum_grace_holdings(
     return grace_kept, transitions
 
 
+def tick_reentry_cooldowns(fund: PaperFund, *, skip_tickers: set[str] | None = None) -> None:
+    """Advance re-entry cooldown counters once per rebalance pass."""
+    state = fund.rebalance_state
+    skip = set(skip_tickers or ())
+    for ticker in list(state.reentry_cooldown):
+        if ticker in skip:
+            continue
+        remaining = int(state.reentry_cooldown[ticker]) - 1
+        if remaining <= 0:
+            state.reentry_cooldown.pop(ticker, None)
+        else:
+            state.reentry_cooldown[ticker] = remaining
+
+
+def reentry_blocked(fund: PaperFund, ticker: str) -> bool:
+    return int(fund.rebalance_state.reentry_cooldown.get(ticker, 0)) > 0
+
+
+def mark_reentry_cooldown(fund: PaperFund, ticker: str, screens: int) -> None:
+    if screens > 0:
+        fund.rebalance_state.reentry_cooldown[ticker] = int(screens)
+
+
+def resolve_automated_holdings_to_exit(
+    fund: PaperFund,
+    *,
+    target_tickers: set[str],
+    grace_kept: set[str],
+    exit_confirm_screens: int,
+    mutate_state: bool = True,
+    force_exit_tickers: set[str] | None = None,
+) -> tuple[set[str], set[str]]:
+    """
+  Return (keep_tickers, full_exit_tickers).
+
+  When ``exit_confirm_screens`` > 0, holdings must be outside the target set
+  for that many consecutive rebalance passes before a full exit fires.
+  ``force_exit_tickers`` bypass the hold buffer (e.g. momentum grace failures).
+  """
+    state = fund.rebalance_state
+    forced = set(force_exit_tickers or ())
+    buffer_held: set[str] = set()
+    sell_tickers: set[str] = set()
+
+    for ticker in fund.holdings:
+        if ticker in target_tickers or ticker in grace_kept:
+            if mutate_state:
+                state.exit_streak.pop(ticker, None)
+            continue
+
+        if ticker in forced:
+            sell_tickers.add(ticker)
+            if mutate_state:
+                state.exit_streak.pop(ticker, None)
+            continue
+
+        if exit_confirm_screens <= 0:
+            sell_tickers.add(ticker)
+            continue
+
+        if mutate_state:
+            streak = int(state.exit_streak.get(ticker, 0)) + 1
+            state.exit_streak[ticker] = streak
+        else:
+            streak = int(state.exit_streak.get(ticker, 0)) + 1
+
+        if streak >= exit_confirm_screens:
+            sell_tickers.add(ticker)
+            if mutate_state:
+                state.exit_streak.pop(ticker, None)
+        else:
+            buffer_held.add(ticker)
+
+    keep_tickers = set(target_tickers) | set(grace_kept) | buffer_held
+    return keep_tickers, sell_tickers
+
+
+def _rebalance_adjustment_worthwhile(gross_value: float, min_notional: float) -> bool:
+    return gross_value >= float(min_notional)
+
+
 def select_automated_targets(
     candidates: list[dict[str, Any]],
     *,
@@ -864,6 +979,9 @@ def preview_automated_plan(
     use_adjusted_signal: bool = False,
     require_research_accumulate: bool = False,
     use_momentum_grace: bool = False,
+    exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS,
+    reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
+    min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
 ) -> dict[str, Any]:
     """
     Dry-run the automated rebalance rules without mutating the fund.
@@ -886,6 +1004,7 @@ def preview_automated_plan(
     target_tickers = {str(row["ticker"]) for row in targets}
     grace_kept: set[str] = set()
     grace_transitions: list[dict[str, Any]] = []
+    grace_force_exit: set[str] = set()
     if use_momentum_grace:
         grace_kept, grace_transitions = _evaluate_momentum_grace_holdings(
             fund,
@@ -895,7 +1014,20 @@ def preview_automated_plan(
             acted_at=_utcnow_iso(),
             mutate=False,
         )
-    keep_tickers = target_tickers | grace_kept
+        grace_force_exit = {
+            str(item["ticker"])
+            for item in grace_transitions
+            if item.get("action") in {"grace_exit", "sell"}
+        }
+    keep_tickers, sell_tickers = resolve_automated_holdings_to_exit(
+        fund,
+        target_tickers=target_tickers,
+        grace_kept=grace_kept,
+        exit_confirm_screens=exit_confirm_screens,
+        mutate_state=False,
+        force_exit_tickers=grace_force_exit,
+    )
+    buffer_held = keep_tickers - target_tickers - grace_kept
     price_map = {
         str(row["ticker"]): float(_candidate_price(row) or 0)
         for row in candidates
@@ -911,7 +1043,7 @@ def preview_automated_plan(
 
     exits: list[dict[str, Any]] = []
     for ticker, position in fund.holdings.items():
-        if ticker in keep_tickers:
+        if ticker not in sell_tickers:
             continue
         price = price_map.get(ticker) or position.avg_cost
         value = position.shares * price if price else 0.0
@@ -962,22 +1094,23 @@ def preview_automated_plan(
         current_value = (current.shares * price) if current else 0.0
         conviction = float(row.get("conviction_score") or 0)
         signal = str(row.get("signal") or "")
-        if current and current_value > target_each * 1.02:
+        if current and current_value > target_each * REBALANCE_TRIM_TOLERANCE:
             excess = current_value - target_each
-            trims.append(
-                {
-                    "action": "trim",
-                    "ticker": ticker,
-                    "name": str(row.get("name") or ticker),
-                    "reason": f"Overweight vs equal-weight sleeve ({target_each:,.0f} target)",
-                    "value": round(excess, 2),
-                    "price": round(price, 4),
-                    "conviction_score": conviction,
-                    "signal": signal,
-                }
-            )
-            cash += excess * (1 - fund.config.trade_cost_pct)
-            current_value = target_each
+            if _rebalance_adjustment_worthwhile(excess, min_rebalance_notional_gbp):
+                trims.append(
+                    {
+                        "action": "trim",
+                        "ticker": ticker,
+                        "name": str(row.get("name") or ticker),
+                        "reason": f"Overweight vs equal-weight sleeve ({target_each:,.0f} target)",
+                        "value": round(excess, 2),
+                        "price": round(price, 4),
+                        "conviction_score": conviction,
+                        "signal": signal,
+                    }
+                )
+                cash += excess * (1 - fund.config.trade_cost_pct)
+                current_value = target_each
 
         shortfall = target_each - current_value
         if abs(shortfall) <= 0.01 * max(1.0, target_each):
@@ -996,13 +1129,47 @@ def preview_automated_plan(
             continue
         if shortfall <= 0:
             continue
+        if reentry_blocked(fund, ticker):
+            skipped.append(
+                {
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": (
+                        f"Re-entry cooldown ({fund.rebalance_state.reentry_cooldown[ticker]} "
+                        f"rebalance(s) remaining after recent exit)"
+                    ),
+                    "target_value": round(target_each, 2),
+                    "conviction_score": conviction,
+                    "signal": signal,
+                }
+            )
+            continue
         budget = min(shortfall, cash)
-        if budget <= 0.01:
+        if budget <= REBALANCE_CASH_FLOOR:
             skipped.append(
                 {
                     "ticker": ticker,
                     "name": str(row.get("name") or ticker),
                     "reason": "Insufficient cash after higher-conviction fills",
+                    "target_value": round(target_each, 2),
+                    "conviction_score": conviction,
+                    "signal": signal,
+                }
+            )
+            continue
+        is_new_sleeve = current_value <= 0
+        if not is_new_sleeve and not _rebalance_adjustment_worthwhile(
+            budget, min_rebalance_notional_gbp
+        ):
+            holds.append(
+                {
+                    "action": "hold",
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": (
+                        f"Top-up below min trade size (£{min_rebalance_notional_gbp:.0f})"
+                    ),
+                    "value": round(current_value, 2),
                     "target_value": round(target_each, 2),
                     "conviction_score": conviction,
                     "signal": signal,
@@ -1025,6 +1192,27 @@ def preview_automated_plan(
             }
         )
         cash -= budget
+
+    for ticker in buffer_held:
+        position = remaining_holdings.get(ticker)
+        if position is None:
+            continue
+        price = price_map.get(ticker) or position.avg_cost
+        streak = int(fund.rebalance_state.exit_streak.get(ticker, 0)) + 1
+        holds.append(
+            {
+                "action": "hold",
+                "ticker": ticker,
+                "name": position.name or ticker,
+                "reason": (
+                    f"Hold buffer — outside target set "
+                    f"({streak}/{exit_confirm_screens} screen(s) before exit)"
+                ),
+                "value": round(position.shares * float(price or 0), 2),
+                "conviction_score": None,
+                "signal": None,
+            }
+        )
 
     waitlisted = [
         {
@@ -1059,6 +1247,19 @@ def preview_automated_plan(
         "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
         f"Costs: {fund.config.trade_cost_pct:.1%} applied on each buy and sell.",
     ]
+    if exit_confirm_screens > 0:
+        narrative.append(
+            f"Hold buffer: full exit only after {exit_confirm_screens} consecutive "
+            "rebalance(s) outside the target set."
+        )
+    if reentry_cooldown_screens > 0:
+        narrative.append(
+            f"Re-entry cooldown: wait {reentry_cooldown_screens} rebalance(s) after a "
+            "full exit before buying the same name again."
+        )
+    narrative.append(
+        f"Dust guard: skip trim/top-up adjustments below £{min_rebalance_notional_gbp:.0f}."
+    )
 
     if use_momentum_grace:
         narrative.append(
@@ -1074,6 +1275,9 @@ def preview_automated_plan(
         "sector_cap": round(float(sector_cap), 4),
         "skip_timing_wait": bool(skip_timing_wait),
         "use_momentum_grace": bool(use_momentum_grace),
+        "exit_confirm_screens": int(exit_confirm_screens),
+        "reentry_cooldown_screens": int(reentry_cooldown_screens),
+        "min_rebalance_notional_gbp": round(float(min_rebalance_notional_gbp), 2),
         "target_sleeve_value": round(target_each, 2),
         "targets": [
             {
@@ -1130,6 +1334,9 @@ def run_automated_rebalance(
     use_adjusted_signal: bool = False,
     require_research_accumulate: bool = False,
     use_momentum_grace: bool = False,
+    exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS,
+    reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
+    min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
 ) -> list[PaperTrade]:
     """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
     if fund.config.mode != "automated":
@@ -1151,11 +1358,16 @@ def run_automated_rebalance(
         for row in candidates
         if _candidate_price(row)
     }
+    for ticker, position in fund.holdings.items():
+        if ticker not in price_map and position.avg_cost > 0:
+            price_map[ticker] = float(position.avg_cost)
     trades: list[PaperTrade] = []
 
     grace_kept: set[str] = set()
+    grace_force_exit: set[str] = set()
+    sold_this_pass: set[str] = set()
     if use_momentum_grace:
-        grace_kept, _ = _evaluate_momentum_grace_holdings(
+        grace_kept, grace_transitions = _evaluate_momentum_grace_holdings(
             fund,
             candidates,
             target_tickers,
@@ -1163,10 +1375,22 @@ def run_automated_rebalance(
             acted_at=when,
             mutate=True,
         )
-    keep_tickers = target_tickers | grace_kept
+        grace_force_exit = {
+            str(item["ticker"])
+            for item in grace_transitions
+            if item.get("action") in {"grace_exit", "sell"}
+        }
+    _, sell_tickers = resolve_automated_holdings_to_exit(
+        fund,
+        target_tickers=target_tickers,
+        grace_kept=grace_kept,
+        exit_confirm_screens=exit_confirm_screens,
+        mutate_state=True,
+        force_exit_tickers=grace_force_exit,
+    )
 
     for ticker in list(fund.holdings):
-        if ticker in keep_tickers:
+        if ticker not in sell_tickers:
             continue
         price = price_map.get(ticker) or fund.holdings[ticker].avg_cost
         if not price or price <= 0:
@@ -1187,6 +1411,8 @@ def run_automated_rebalance(
                 prices_for_nav=price_map,
             )
         )
+        sold_this_pass.add(ticker)
+        mark_reentry_cooldown(fund, ticker, reentry_cooldown_screens)
 
     if not targets:
         fund.record_mark(price_map, acted_at=when, note="Automated rebalance (no targets)")
@@ -1200,27 +1426,35 @@ def run_automated_rebalance(
         price = float(_candidate_price(row) or 0)
         if price <= 0:
             continue
+        if reentry_blocked(fund, ticker):
+            continue
         current = fund.holdings.get(ticker)
         current_value = (current.shares * price) if current else 0.0
         # Trim overweight
-        if current and current_value > target_each * 1.02:
+        if current and current_value > target_each * REBALANCE_TRIM_TOLERANCE:
             excess = current_value - target_each
-            trades.append(
-                fund.sell(
-                    ticker=ticker,
-                    price=price,
-                    sizing_mode="cash",
-                    amount=excess,
-                    note="Automated trim",
-                    acted_at=when,
-                    prices_for_nav=price_map,
+            if _rebalance_adjustment_worthwhile(excess, min_rebalance_notional_gbp):
+                trades.append(
+                    fund.sell(
+                        ticker=ticker,
+                        price=price,
+                        sizing_mode="cash",
+                        amount=excess,
+                        note="Automated trim",
+                        acted_at=when,
+                        prices_for_nav=price_map,
+                    )
                 )
-            )
-            current = fund.holdings.get(ticker)
-            current_value = (current.shares * price) if current else 0.0
+                current = fund.holdings.get(ticker)
+                current_value = (current.shares * price) if current else 0.0
 
         shortfall = target_each - current_value
-        if shortfall <= 0.01 or fund.cash <= 0.01:
+        if shortfall <= REBALANCE_CASH_FLOOR or fund.cash <= REBALANCE_CASH_FLOOR:
+            continue
+        is_new_sleeve = current_value <= 0
+        if not is_new_sleeve and not _rebalance_adjustment_worthwhile(
+            shortfall, min_rebalance_notional_gbp
+        ):
             continue
         budget = min(shortfall, fund.cash)
         try:
@@ -1244,6 +1478,7 @@ def run_automated_rebalance(
         except ValueError:
             continue
 
+    tick_reentry_cooldowns(fund, skip_tickers=sold_this_pass)
     fund.record_mark(price_map, acted_at=when, note="Automated rebalance")
     return trades
 

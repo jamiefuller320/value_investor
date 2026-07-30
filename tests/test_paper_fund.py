@@ -235,7 +235,9 @@ def test_preview_automated_plan_explains_next_moves():
     ]
     from value_investor.paper_fund import preview_automated_plan
 
-    plan = preview_automated_plan(fund, candidates)
+    plan = preview_automated_plan(
+        fund, candidates, exit_confirm_screens=0, reentry_cooldown_screens=0
+    )
     assert "equal-weight" in plan["summary"].lower() or "sleeve" in plan["summary"].lower()
     assert any(x["ticker"] == "OLD.L" for x in plan["anticipated_exits"])
     assert {t["ticker"] for t in plan["targets"]} == {"AAA.L", "BBB.L"}
@@ -371,7 +373,12 @@ def test_momentum_grace_keeps_winner_after_value_downgrade():
     ]
 
     baseline = PaperFund.from_dict(fund.to_dict())
-    run_automated_rebalance(baseline, candidates, acted_at="2026-07-20T09:15:00+01:00")
+    run_automated_rebalance(
+        baseline,
+        candidates,
+        acted_at="2026-07-20T09:15:00+01:00",
+        exit_confirm_screens=0,
+    )
     assert "OLD.L" not in baseline.holdings
 
     grace_fund = PaperFund.from_dict(fund.to_dict())
@@ -387,3 +394,171 @@ def test_momentum_grace_keeps_winner_after_value_downgrade():
     assert old.grace_started_at is not None
     assert old.stop_loss is not None and old.stop_loss >= 100
     assert old.take_profit is not None and old.take_profit >= 130
+
+
+def _auto_candidates() -> list[dict]:
+    return [
+        {
+            "ticker": "AAA.L",
+            "name": "Alpha",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "price": 100,
+            "timing_signal": "neutral",
+        },
+        {
+            "ticker": "BBB.L",
+            "name": "Beta",
+            "signal": "buy",
+            "conviction_score": 0.8,
+            "price": 100,
+            "timing_signal": "neutral",
+        },
+        {
+            "ticker": "CCC.L",
+            "name": "Charlie",
+            "signal": "buy",
+            "conviction_score": 0.7,
+            "price": 100,
+            "timing_signal": "neutral",
+        },
+    ]
+
+
+def test_hold_buffer_delays_exit_until_confirm_screens():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Buffer",
+            mode="automated",
+            initial_cash=0,
+            trade_cost_pct=0.0,
+            max_positions=2,
+        )
+    )
+    fund.holdings["OLD.L"] = Position(
+        ticker="OLD.L", shares=1, avg_cost=100, name="Old", sector="Tech"
+    )
+    candidates = _auto_candidates()
+
+    run_automated_rebalance(
+        fund,
+        candidates,
+        acted_at="2026-07-20T09:15:00+01:00",
+        exit_confirm_screens=2,
+        reentry_cooldown_screens=0,
+    )
+    assert "OLD.L" in fund.holdings
+    assert fund.rebalance_state.exit_streak["OLD.L"] == 1
+
+    run_automated_rebalance(
+        fund,
+        candidates,
+        acted_at="2026-07-21T09:15:00+01:00",
+        exit_confirm_screens=2,
+        reentry_cooldown_screens=0,
+    )
+    assert "OLD.L" not in fund.holdings
+
+
+def test_reentry_cooldown_blocks_immediate_buyback():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Cooldown",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.0,
+            max_positions=2,
+        )
+    )
+    fund.holdings["OLD.L"] = Position(
+        ticker="OLD.L", shares=5, avg_cost=100, name="Old", sector="Tech"
+    )
+    candidates_round1 = [
+        {
+            "ticker": "AAA.L",
+            "name": "Alpha",
+            "signal": "strong_buy",
+            "conviction_score": 0.95,
+            "price": 100,
+            "timing_signal": "neutral",
+        },
+        {
+            "ticker": "BBB.L",
+            "name": "Beta",
+            "signal": "buy",
+            "conviction_score": 0.9,
+            "price": 100,
+            "timing_signal": "neutral",
+        },
+    ]
+    run_automated_rebalance(
+        fund,
+        candidates_round1,
+        acted_at="2026-07-20T09:15:00+01:00",
+        exit_confirm_screens=0,
+        reentry_cooldown_screens=1,
+    )
+    assert "OLD.L" not in fund.holdings
+    assert fund.rebalance_state.reentry_cooldown.get("OLD.L") == 1
+
+    candidates_round2 = _auto_candidates() + [
+        {
+            "ticker": "OLD.L",
+            "name": "Old",
+            "signal": "strong_buy",
+            "conviction_score": 0.99,
+            "price": 100,
+            "timing_signal": "neutral",
+        }
+    ]
+    run_automated_rebalance(
+        fund,
+        candidates_round2,
+        acted_at="2026-07-21T09:15:00+01:00",
+        exit_confirm_screens=0,
+        reentry_cooldown_screens=1,
+    )
+    assert "OLD.L" not in fund.holdings
+
+    run_automated_rebalance(
+        fund,
+        candidates_round2,
+        acted_at="2026-07-22T09:15:00+01:00",
+        exit_confirm_screens=0,
+        reentry_cooldown_screens=1,
+    )
+    assert "OLD.L" in fund.holdings
+
+
+def test_min_notional_skips_dust_trim_and_top_up():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Dust",
+            mode="automated",
+            initial_cash=0,
+            trade_cost_pct=0.0,
+            max_positions=1,
+        )
+    )
+    fund.holdings["AAA.L"] = Position(
+        ticker="AAA.L", shares=3.01, avg_cost=100, name="Alpha", sector="Tech"
+    )
+    candidates = [
+        {
+            "ticker": "AAA.L",
+            "name": "Alpha",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "price": 100,
+            "timing_signal": "neutral",
+        }
+    ]
+    trades = run_automated_rebalance(
+        fund,
+        candidates,
+        acted_at="2026-07-20T09:15:00+01:00",
+        min_rebalance_notional_gbp=10.0,
+        exit_confirm_screens=0,
+        reentry_cooldown_screens=0,
+    )
+    assert trades == []
