@@ -94,6 +94,16 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "analysis-review.yml",
     },
+    "paper_learning_review": {
+        "name": "Paper learning churn review",
+        "cron": "45 10 * * 0",
+        "cadence": (
+            "Optional observe-only churn/cost agent synthesis. "
+            "Disable via docs/data/paper_automation/review_policy.json. "
+            "docs/ops/paper-learning-review.md"
+        ),
+        "workflow": "paper-learning-review.yml",
+    },
     "ops_monitor": {
         "name": "FTSE Ops Monitor",
         "cron": "45 7 * * *",

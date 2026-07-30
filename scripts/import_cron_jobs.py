@@ -92,6 +92,15 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[0],
         ),
         CronJobSpec(
+            key="paper-learning-review",
+            title="FTSE paper learning review (Sunday)",
+            workflow="paper-learning-review.yml",
+            body={"ref": REF},
+            hours=[10],
+            minutes=[45],
+            wdays=[0],
+        ),
+        CronJobSpec(
             key="ops-monitor",
             title="FTSE ops monitor (daily)",
             workflow="ops-monitor.yml",

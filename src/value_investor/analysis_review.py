@@ -29,7 +29,7 @@ _EXPERIMENT_LINE = re.compile(
 )
 _ENGINEERING_AREAS = frozenset({"scoring", "ingest", "prompt", "coverage", "ops"})
 _ANALYSIS_ONLY_AREAS = frozenset(
-    {"offline_sim", "paper_knobs", "attribution", "monitoring", "analysis"}
+    {"offline_sim", "paper_knobs", "paper_churn", "attribution", "monitoring", "analysis"}
 )
 
 
@@ -250,6 +250,7 @@ def build_analysis_payload(
     learning_review = _safe_read(paper_root / "learning_tracks_review.json")
     learning_summary = _safe_read(paper_root / "learning_tracks_summary.json")
     exit_shadow = _safe_read(paper_root / "learning_tracks_exit_shadow.json")
+    churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
 
     model_weights = _safe_read(output_dir / "model_weights.json") or _safe_read(
         data_dir / "model_weights.json"
@@ -265,6 +266,7 @@ def build_analysis_payload(
         "learning_tracks_review": learning_review,
         "learning_tracks_summary": learning_summary,
         "exit_shadow": exit_shadow,
+        "churn_health": churn_health,
         "model_weights": {
             "sample_count": (model_weights or {}).get("sample_count"),
             "updated_at": (model_weights or {}).get("updated_at"),
@@ -313,6 +315,8 @@ def _experiment_type_for_area(area: str) -> str:
         return "engineering_candidate"
     if normalized == "paper_knobs":
         return "decision_review_probe"
+    if normalized == "paper_churn":
+        return "churn_probe"
     if normalized == "offline_sim":
         return "offline_sim"
     return "observe"
@@ -324,6 +328,8 @@ def _promote_target_for_area(area: str) -> str:
         return "engineering_queue"
     if normalized == "paper_knobs":
         return "decision_review_manual"
+    if normalized == "paper_churn":
+        return "manual"
     return "manual"
 
 
@@ -470,7 +476,7 @@ Read the structured JSON at: {payload_path}
 
 It contains archived backtest/simulation/historical-analysis summaries, paper learning
 track reviews (AI judgment vs rules control vs momentum grace), exit-shadow rollups,
-and adaptive model-weight state.
+churn_health (cost drag, trade churn, hold-buffer state), and adaptive model-weight state.
 
 Write SIX plain-text sections with headings exactly as shown:
 
@@ -493,9 +499,9 @@ exit_shadow when present. Note unrealized vs realized marks only if present in J
 PROPOSED EXPERIMENTS
 Numbered top 5 experiments for the next sprint. Each line MUST use this format:
 ``N. [area] Experiment title — expected learning value``
-Areas: scoring, ingest, offline_sim, paper_knobs, attribution, monitoring, analysis.
-Use scoring/ingest only when a code change is the right next step; prefer offline_sim or
-paper_knobs for knob/counterfactual ideas (human gate required).
+Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
+Use scoring/ingest only when a code change is the right next step; prefer offline_sim,
+paper_knobs, or paper_churn for knob/counterfactual ideas (human gate required).
 
 DEFER
 Bullets for ideas that must NOT be automated yet (evolution, live knob apply, base signal

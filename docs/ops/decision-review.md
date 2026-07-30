@@ -53,6 +53,10 @@ Weekday `paper-auto.yml` seeds prior state, refreshes research overlay on
 
 State: `automated_fund.json` → `rebalance_state` (`exit_streak`, `reentry_cooldown`).
 
+Deterministic rollup: `learning_tracks_churn_health.json` (refreshed after
+`ftse-decision-review --tracks all`). Optional agent synthesis:
+[`paper-learning-review.md`](paper-learning-review.md) (`review_policy.json` kill switch).
+
 Post-exit shadow cohorts (`exit_shadow.json`, `exit_shadow_review.json`) score
 1/4/8/12-week paths after full sells. Observe-only for now — grace knob
 auto-tune is deferred until closed cohorts thicken (see `learning_tracks_exit_shadow.json`).

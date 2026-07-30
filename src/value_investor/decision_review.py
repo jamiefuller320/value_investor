@@ -617,5 +617,8 @@ def compare_learning_tracks(
     (base_dir / "learning_tracks_review.json").write_text(
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"
     )
+    from value_investor.churn_health import write_churn_health
+
+    summary["churn_health"] = write_churn_health(base_dir)
     return summary
 

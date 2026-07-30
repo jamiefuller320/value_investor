@@ -51,12 +51,17 @@ def test_build_analysis_payload_reads_learning_tracks(tmp_path: Path):
         json.dumps({"primary_excess_after_costs": -0.03, "beat_control": True}),
         encoding="utf-8",
     )
+    (paper / "learning_tracks_churn_health.json").write_text(
+        json.dumps({"tracks": {"rules": {"decision_review": {"cost_drag": 0.05}}}}),
+        encoding="utf-8",
+    )
     (data_dir / "latest.json").write_text(
         json.dumps({"meta": {"company_count": 248}, "backtest": {"run_count": 1}}),
         encoding="utf-8",
     )
     payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
     assert payload["learning_tracks_review"]["beat_control"] is True
+    assert payload["churn_health"]["tracks"]["rules"]["decision_review"]["cost_drag"] == 0.05
     ok, _ = has_enough_analysis_inputs(payload)
     assert ok is True
 

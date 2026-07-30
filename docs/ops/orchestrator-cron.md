@@ -40,7 +40,8 @@ the `ghs_…` integration token instead of your user PAT.
 | `library-model-review.yml` | Via orchestrator | ↑ | None |
 | `paper-auto.yml` | Via orchestrator weekdays | ↑ | None |
 | `ingest-loop.yml` | External **primary** | `5 7,10 * * 1,3,5` → `ingest-loop.yml` | Mon/Wed/Fri 07:00 + 10:00 |
-| `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 08:30 |
+| `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
+| `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
 | `ops-monitor.yml` | External **primary** | `45 7 * * *` → `ops-monitor.yml` | Daily 07:45 |
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
