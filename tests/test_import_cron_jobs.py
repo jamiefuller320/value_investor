@@ -26,7 +26,22 @@ def test_import_cron_jobs_dry_run_data_backup():
     assert "data-backup.yml" in payload["url"]
 
 
-def test_import_cron_jobs_dry_run_ops_monitor():
+def test_import_cron_jobs_dry_run_engineering_queue():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "engineering-queue", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE engineering queue (hourly weekdays)"
+    assert payload["schedule"]["hours"] == list(range(24))
+    assert payload["schedule"]["minutes"] == [15]
+    assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
+    assert "engineering-queue.yml" in payload["url"]
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(
         [sys.executable, str(script), "--job", "ops-monitor", "--dry-run", "--json"],

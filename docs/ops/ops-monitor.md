@@ -131,6 +131,18 @@ ftse-ops-monitor email
 Requires `GITHUB_TOKEN` / `GH_TOKEN` for workflow freshness checks and
 `SMTP_*` + `EMAIL_TO` for email delivery.
 
+### Workflow freshness thresholds
+
+| Workflow | Expected | Stale when |
+|----------|----------|------------|
+| Ingest loop | Mon/Wed/Fri | No success within 30h on scheduled days |
+| Orchestrator | Daily | No success within 28h |
+| Engineering queue | Weekdays | **3h** when open/pr_open tasks exist; **26h** when the queue is fully idle |
+| Analysis review | Sunday | No success within 36h |
+
+Engineering queue reliability depends on external cron (`engineering-queue` job in
+`import_cron_jobs.py`); GitHub `schedule` is backup only.
+
 ## Email policy
 
 By default the workflow sends email when:

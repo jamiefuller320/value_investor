@@ -67,7 +67,10 @@ MONITORED_WORKFLOWS: tuple[dict[str, Any], ...] = (
         "key": "engineering_queue",
         "workflow": "engineering-queue.yml",
         "weekdays": {0, 1, 2, 3, 4},
+        # Hourly when the queue has work; daily is enough when fully idle.
         "max_age_hours": 3,
+        "max_age_hours_idle": 26,
+        "idle_when": "engineering_queue_idle",
     },
     {
         "key": "analysis_review",
@@ -370,11 +373,33 @@ def check_latest_bundle(path: Path = DEFAULT_LATEST_PATH, *, max_age_hours: int 
     return []
 
 
+def _engineering_queue_needs_hourly(queue_status: dict[str, Any] | None) -> bool:
+    """True when open/pr_open tasks or an in-flight agent need the hourly processor."""
+    if not queue_status:
+        return False
+    if int(queue_status.get("open_count") or 0) > 0:
+        return True
+    if int(queue_status.get("pr_open_count") or 0) > 0:
+        return True
+    if queue_status.get("in_flight_branch") or queue_status.get("in_flight_pr"):
+        return True
+    return False
+
+
+def _workflow_max_age_hours(spec: dict[str, Any], *, queue_status: dict[str, Any] | None) -> int:
+    default = int(spec.get("max_age_hours") or 24)
+    if spec.get("idle_when") == "engineering_queue_idle":
+        if not _engineering_queue_needs_hourly(queue_status):
+            return int(spec.get("max_age_hours_idle") or default)
+    return default
+
+
 def check_workflow_freshness(
   *,
   repo: str | None = None,
   token: str | None = None,
   now: datetime | None = None,
+  queue_status: dict[str, Any] | None = None,
 ) -> tuple[list[OpsFinding], list[dict[str, Any]]]:
     findings: list[OpsFinding] = []
     checks: list[dict[str, Any]] = []
@@ -398,7 +423,8 @@ def check_workflow_freshness(
         key = str(spec["key"])
         schedule = WORKFLOW_SCHEDULES.get(key, {})
         expected_today = weekday in set(spec.get("weekdays") or set())
-        max_age = timedelta(hours=int(spec.get("max_age_hours") or 24))
+        max_age_hours = _workflow_max_age_hours(spec, queue_status=queue_status)
+        max_age = timedelta(hours=max_age_hours)
         last_success = latest_workflow_run(workflow, repo=repo, token=token, status="success")
         last_run_at = _parse_github_time(str((last_success or {}).get("created_at") or ""))
         age = (now - last_run_at) if last_run_at else None
@@ -409,6 +435,7 @@ def check_workflow_freshness(
             "workflow": workflow,
             "name": schedule.get("name") or workflow,
             "expected_today": expected_today,
+            "max_age_hours": max_age_hours,
             "last_success_at": last_run_at.isoformat() if last_run_at else None,
             "last_success_run_id": (last_success or {}).get("id"),
             "age_hours": round(age.total_seconds() / 3600, 1) if age else None,
@@ -701,13 +728,17 @@ def run_ops_monitor(
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
 
-    workflow_findings, workflow_checks = check_workflow_freshness(repo=repo, token=token)
-    findings.extend(workflow_findings)
-
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,
         tasks_path=tasks_path,
     )
+
+    workflow_findings, workflow_checks = check_workflow_freshness(
+        repo=repo,
+        token=token,
+        queue_status=queue_status,
+    )
+    findings.extend(workflow_findings)
     findings.extend(engineering_findings)
 
     auto_fixes = apply_auto_fixes(
