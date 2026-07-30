@@ -182,6 +182,32 @@ def build_parser() -> argparse.ArgumentParser:
     screen_p.add_argument("--json", action="store_true")
     screen_p.set_defaults(func=cmd_screen)
 
+    sim_p = sub.add_parser(
+        "sim",
+        parents=[common],
+        help="Observe-only offline paper sim from screen-lite archives (library markets)",
+    )
+    sim_p.add_argument(
+        "--markets",
+        default="sp500",
+        help="Market id (default: sp500)",
+    )
+    sim_p.add_argument(
+        "--benchmark",
+        default="",
+        help="Benchmark ticker override (default: per-market, e.g. ^GSPC for sp500)",
+    )
+    sim_p.add_argument("--capital", type=float, default=1000.0)
+    sim_p.add_argument("--trade-cost", type=float, default=0.03)
+    sim_p.add_argument("--max-positions", type=int, default=5)
+    sim_p.add_argument(
+        "--no-rebuild-snapshots",
+        action="store_true",
+        help="Reuse existing screen/history snapshots",
+    )
+    sim_p.add_argument("--json", action="store_true")
+    sim_p.set_defaults(func=cmd_sim)
+
     ladder_p = sub.add_parser(
         "ladder",
         help="Run offline ladder: fundamentals → maintenance → screen-lite → research → graduate",
@@ -805,6 +831,37 @@ def cmd_screen(args: argparse.Namespace) -> int:
             print(f"  wrote {result.screen_dir}")
     if args.json:
         print(json.dumps({"markets": summaries}, indent=2))
+    return 0
+
+
+def cmd_sim(args: argparse.Namespace) -> int:
+    from .library_sim import run_library_observe_sim
+
+    markets = _parse_markets(args.markets) or ["sp500"]
+    payloads = []
+    for mid in markets:
+        result = run_library_observe_sim(
+            args.root,
+            mid,
+            benchmark=args.benchmark or None,
+            initial_capital=float(args.capital),
+            trade_cost_pct=float(args.trade_cost),
+            max_positions=int(args.max_positions),
+            rebuild_snapshots=not args.no_rebuild_snapshots,
+        )
+        payloads.append(result.to_dict())
+        if not args.json:
+            screen = result.tracks.get("screen_rules") or {}
+            print(f"{mid}: benchmark={result.benchmark}  snapshots={result.snapshot_count}")
+            print(
+                f"  screen_rules return={screen.get('total_return', 0):+.1%}  "
+                f"excess={screen.get('excess_return', 0):+.1%}  "
+                f"trades={screen.get('trade_count', 0)}"
+            )
+            print(f"  {result.comparison_note}")
+            print(f"  wrote {args.root}/markets/{mid}/screen/sim/observe_summary.json")
+    if args.json:
+        print(json.dumps({"markets": payloads}, indent=2))
     return 0
 
 

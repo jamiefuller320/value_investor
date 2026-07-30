@@ -24,6 +24,7 @@ class SimulatorConfig:
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
     monthly_deposit: float = 0.0
+    benchmark_ticker: str = BENCHMARK_TICKER
     # When True, honour core_limit entry gates and tactical stop/target exits (L3).
     use_trade_plan_levels: bool = False
     # With use_trade_plan_levels: trail stop up from refreshed plans, never below entry stop (L44).
@@ -706,7 +707,8 @@ def run_simulation(
     deposits_applied = 0
 
     first = snapshots[0]
-    bench_start = first.prices.get(BENCHMARK_TICKER)
+    bench = config.benchmark_ticker
+    bench_start = first.prices.get(bench)
 
     def _month_index(iso: str) -> int:
         text = iso.replace("Z", "+00:00")
@@ -759,7 +761,7 @@ def run_simulation(
 
     last = snapshots[-1]
     final_value = _portfolio_value(cash, holdings, last.prices)
-    bench_end = last.prices.get(BENCHMARK_TICKER)
+    bench_end = last.prices.get(bench)
 
     # Return vs capital contributed (initial + deposits), not initial alone.
     capital_base = contributed if contributed > 0 else config.initial_capital
