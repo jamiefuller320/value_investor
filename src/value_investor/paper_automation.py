@@ -10,6 +10,9 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from value_investor.paper_fund import (
+    DEFAULT_EXIT_CONFIRM_SCREENS,
+    DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    DEFAULT_REENTRY_COOLDOWN_SCREENS,
     DEFAULT_INITIAL_CASH,
     DEFAULT_MAX_POSITIONS,
     DEFAULT_TRADE_COST_PCT,
@@ -63,6 +66,10 @@ class AutomationConfig:
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
     use_momentum_grace: bool = False
+    # Churn guards — tuneable via config.json (not decision-review knobs yet).
+    exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
+    reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
+    min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP
 
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)
@@ -84,6 +91,9 @@ class AutomationConfig:
             "use_adjusted_signal": bool(self.use_adjusted_signal),
             "require_research_accumulate": bool(self.require_research_accumulate),
             "use_momentum_grace": bool(self.use_momentum_grace),
+            "exit_confirm_screens": int(self.exit_confirm_screens),
+            "reentry_cooldown_screens": int(self.reentry_cooldown_screens),
+            "min_rebalance_notional_gbp": round(float(self.min_rebalance_notional_gbp), 2),
         }
 
     def to_dict(self) -> dict[str, Any]:
@@ -120,6 +130,15 @@ class AutomationConfig:
             use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
             require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
             use_momentum_grace=bool(raw.get("use_momentum_grace", False)),
+            exit_confirm_screens=int(
+                raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)
+            ),
+            reentry_cooldown_screens=int(
+                raw.get("reentry_cooldown_screens", DEFAULT_REENTRY_COOLDOWN_SCREENS)
+            ),
+            min_rebalance_notional_gbp=float(
+                raw.get("min_rebalance_notional_gbp", DEFAULT_MIN_REBALANCE_NOTIONAL_GBP)
+            ),
         )
 
 
@@ -223,6 +242,33 @@ def session_gate_status(config: AutomationConfig, when: datetime | None = None) 
         "can_act": bool(config.enabled and trading and settled),
         "reason": reason,
     }
+
+
+def already_rebalanced_today(
+    output_dir: Path,
+    config: AutomationConfig,
+    when: datetime | None = None,
+) -> bool:
+    """True when this track already executed a rebalance on the local trading day."""
+    last_path = Path(output_dir) / REPORT_FILENAME
+    if not last_path.exists():
+        return False
+    try:
+        payload = json.loads(last_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return False
+    if not payload.get("acted"):
+        return False
+    gate = payload.get("gate") or {}
+    last_local = gate.get("local_time") or payload.get("generated_at")
+    if not last_local:
+        return False
+    try:
+        last_dt = datetime.fromisoformat(str(last_local).replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    current = local_now(config, when)
+    return last_dt.astimezone(config.tz()).date() == current.date()
 
 
 @dataclass
@@ -624,6 +670,17 @@ def run_daily_automation(
     note = gate["reason"]
 
     can_act = force or gate["can_act"]
+    if (
+        can_act
+        and config.auto_rebalance
+        and not force
+        and already_rebalanced_today(output_dir, config, now)
+    ):
+        can_act = False
+        note = (
+            "Already rebalanced today for this track — skipping duplicate pass "
+            "(use --force to override)."
+        )
     if can_act and config.auto_rebalance:
         fund.apply_deposits_to(gate["local_time"])
         executed = run_automated_rebalance(
