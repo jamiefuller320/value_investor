@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-30T07:22:13.867582+00:00",
+  "generated_at": "2026-07-31T07:21:42.540724+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -17,14 +17,17 @@
       "trade_cost_pct": 0.03,
       "max_positions": 3,
       "skip_timing_wait": true,
-      "min_conviction": 0.15,
+      "min_conviction": 0.2,
       "sector_cap": 0.3,
       "track_id": "rules",
       "track_label": "Screen rules (control)",
       "is_primary_learning_track": false,
       "use_adjusted_signal": false,
       "require_research_accumulate": false,
-      "use_momentum_grace": false
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
     },
     "library": {
       "focus_market": "smi",
@@ -261,8 +264,8 @@
       },
       "engineering_queue": {
         "name": "FTSE Engineering Queue",
-        "cron": "0 * * * 1-5",
-        "cadence": "Hourly weekday processor. Marks merged engineering PRs, then dispatches engineering-agent when the queue has open tasks and no engineering PR is in flight. Also runs on engineering PR merge.",
+        "cron": "15 * * * 1-5",
+        "cadence": "Hourly weekday processor (:15 UTC via external cron; GitHub schedule backup). Marks merged engineering PRs, then dispatches engineering-agent when the queue has open tasks and no engineering PR is in flight. Also runs on engineering PR merge.",
         "workflow": "engineering-queue.yml"
       },
       "ingest_loop": {
@@ -276,6 +279,12 @@
         "cron": "30 8 * * 0",
         "cadence": "Sunday 08:30 UTC GitHub backup; **primary: cron-job.org** 35 10 * * 0 (optional 35 12) after email bundle. Read-only synthesis over backtest/sim/historical analysis and paper learning tracks. docs/ops/analysis-review.md; scheduling: docs/ops/orchestrator-cron.md.",
         "workflow": "analysis-review.yml"
+      },
+      "paper_learning_review": {
+        "name": "Paper learning churn review",
+        "cron": "45 10 * * 0",
+        "cadence": "Optional observe-only churn/cost agent synthesis. Disable via docs/data/paper_automation/review_policy.json. docs/ops/paper-learning-review.md",
+        "workflow": "paper-learning-review.yml"
       },
       "ops_monitor": {
         "name": "FTSE Ops Monitor",
@@ -299,7 +308,7 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-07-30T07:21:31.834794+00:00",
+        "at": "2026-07-31T07:21:19.139611+00:00",
         "kind": "paper_run",
         "title": "Paper automation checked (no action)",
         "detail": "waiting for open settle (75 min after 08:00 Europe/London)"
@@ -818,15 +827,15 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-07-30T07:21:31.834794+00:00",
+      "generated_at": "2026-07-31T07:21:19.139611+00:00",
       "acted": false,
       "note": "waiting for open settle (75 min after 08:00 Europe/London)",
       "gate": {
-        "local_time": "2026-07-30T08:21:16.046474+01:00",
+        "local_time": "2026-07-31T08:21:05.285368+01:00",
         "trading_day": true,
         "after_settle": false,
-        "market_open_at": "2026-07-30T08:00:00+01:00",
-        "settle_at": "2026-07-30T09:15:00+01:00",
+        "market_open_at": "2026-07-31T08:00:00+01:00",
+        "settle_at": "2026-07-31T09:15:00+01:00",
         "can_act": false,
         "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
       },
