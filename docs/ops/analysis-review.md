@@ -22,6 +22,9 @@ Schedule after the Sunday email quiet bundle so `docs/data/` is fresh. Same-day 
 
 See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
 
+For a mid-week dashboard refresh (Analysis tab + optional modelling review after
+engineering merges), see [accelerated-review-cycle.md](accelerated-review-cycle.md).
+
 ## Prerequisites
 
 At least one of:

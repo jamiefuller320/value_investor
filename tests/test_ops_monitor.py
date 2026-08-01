@@ -23,8 +23,13 @@ from value_investor.ops_monitor import (
 )
 
 
+def _weekday_noon_utc() -> datetime:
+    """Pinned Wednesday so engineering-queue freshness tests are weekday-stable."""
+    return datetime(2026, 8, 5, 12, 0, 0, tzinfo=UTC)
+
+
 def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold():
-    eight_hours_ago = (datetime.now(UTC) - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    eight_hours_ago = (_weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
     idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
@@ -34,7 +39,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
         ),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
     ):
-        findings, checks = check_workflow_freshness(queue_status=idle_queue)
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=_weekday_noon_utc())
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 26
     assert eng_checks[0]["stale"] is False
@@ -42,7 +47,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
 
 
 def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
-    eight_hours_ago = (datetime.now(UTC) - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    eight_hours_ago = (_weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
     active_queue = {"open_count": 2, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
@@ -52,7 +57,7 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
         ),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
     ):
-        findings, checks = check_workflow_freshness(queue_status=active_queue)
+        findings, checks = check_workflow_freshness(queue_status=active_queue, now=_weekday_noon_utc())
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 3
     assert eng_checks[0]["stale"] is True
