@@ -52,7 +52,11 @@ WORKFLOW_SCHEDULES = {
     "email_report": {
         "name": "Email report",
         "cron": "17 6 * * 0",
-        "cadence": "Sunday quiet bundle via orchestrator (markets closed)",
+        "cadence": (
+            "Sunday quiet bundle via orchestrator (markets closed). "
+            "Optional mid-week Analysis refresh: docs/ops/accelerated-review-cycle.md "
+            "(email_only + force after engineering queue drains)."
+        ),
         "workflow": "email-report.yml",
     },
     "engineering_agent": {

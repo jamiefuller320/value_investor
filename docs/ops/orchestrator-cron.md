@@ -246,6 +246,14 @@ Force a full re-run: Actions UI → Orchestrator → `force=true`, or `FORCE=tru
 5. Update `automation_status.py` `WORKFLOW_SCHEDULES` cadence string.
 6. Test once via cron-job.org; confirm `workflow_dispatch` run in Actions.
 
+## Mid-week analysis refresh (after engineering merges)
+
+When the weekday engineering queue has drained and merged code should appear on the
+dashboard **Analysis** tab before the next Sunday screen, use
+[accelerated-review-cycle.md](accelerated-review-cycle.md) (`SUITE=email_only` +
+`FORCE=true`). First planned use: after the next baseline Sunday cycle (week of
+2026-08-03).
+
 ## Verify after a quiet Sunday
 
 ```bash
