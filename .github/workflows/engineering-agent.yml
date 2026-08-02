@@ -183,6 +183,18 @@ jobs:
           fi
 
           if [ "$(gh pr list --head "$BRANCH" --base main --json number --jq 'length')" = "0" ]; then
+            AUTO_MERGE=false
+            if ftse-engineering task-auto-merge --task-id "$TASK_ID" >/dev/null 2>&1; then
+              AUTO_MERGE=true
+            fi
+            DRAFT_FLAG=()
+            BODY_SUFFIX="Draft PR — human merge required."
+            if [ "$AUTO_MERGE" = "true" ]; then
+              DRAFT_FLAG=()
+              BODY_SUFFIX="Scoped auto-merge enabled — merges when CI and path guard are green."
+            else
+              DRAFT_FLAG=(--draft)
+            fi
             gh pr create \
               --base main \
               --head "$BRANCH" \
@@ -195,8 +207,8 @@ jobs:
           - No paper-fund / simulator / threshold changes unless intended
           - Verify on next Sunday email run
 
-          _Draft PR — human merge required._" \
-              --draft
+          _${BODY_SUFFIX}_" \
+              "${DRAFT_FLAG[@]}"
           else
             echo "Draft PR already exists for $BRANCH"
           fi

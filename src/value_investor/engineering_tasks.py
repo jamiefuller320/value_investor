@@ -74,6 +74,18 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "tests/test_automation_status.py",
         "tests/test_ops_monitor.py",
     ],
+    "ci": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/ci-fix-responder.yml",
+        ".github/workflows/engineering-auto-merge.yml",
+        "scripts/check_committed_data_json.py",
+        "src/value_investor/ci_fix_tasks.py",
+        "src/value_investor/engineering_auto_merge.py",
+        "tests/conftest.py",
+        "tests/test_committed_data_json.py",
+        "tests/test_ci_fix_tasks.py",
+        "tests/test_engineering_auto_merge.py",
+    ],
 }
 
 _CODE_KEYWORDS = (
@@ -116,6 +128,7 @@ class EngineeringTask:
     acceptance_criteria: list[str] = field(default_factory=list)
     allowed_paths: list[str] = field(default_factory=list)
     blocked_paths: list[str] = field(default_factory=list)
+    auto_merge: bool = False
     status: str = "open"
 
     def to_dict(self) -> dict[str, Any]:
@@ -131,6 +144,7 @@ class EngineeringTask:
             "acceptance_criteria": self.acceptance_criteria,
             "allowed_paths": self.allowed_paths,
             "blocked_paths": self.blocked_paths,
+            "auto_merge": self.auto_merge,
             "status": self.status,
         }
 
@@ -148,6 +162,7 @@ class EngineeringTask:
             acceptance_criteria=list(data.get("acceptance_criteria") or []),
             allowed_paths=list(data.get("allowed_paths") or []),
             blocked_paths=list(data.get("blocked_paths") or BLOCKED_PATHS),
+            auto_merge=bool(data.get("auto_merge")),
             status=str(data.get("status") or "open"),
         )
 
@@ -170,7 +185,7 @@ def needs_engineering_implementation(
     """Return True when a suggestion needs code changes, not ingest retry only."""
     normalized = _normalize_area(area)
     text = str(suggestion or "").lower()
-    if normalized in {"scoring", "prompt", "coverage", "ops"}:
+    if normalized in {"scoring", "prompt", "coverage", "ops", "ci"}:
         return True
     if normalized != "ingest":
         return False
@@ -215,6 +230,12 @@ def _default_acceptance_criteria(area: str, tickers: list[str]) -> list[str]:
             "Export or overlay behaviour is covered by a unit test",
             "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
             "No edits under blocked_paths",
+        ]
+    if normalized == "ci":
+        return [
+            "Fix the failing pytest module(s) with minimal diff",
+            "Run the relevant pytest subset locally before finishing",
+            "Diff stays within allowed_paths and does not touch blocked_paths",
         ]
     return [
         "Prompt or export change is covered by a parser/unit test",

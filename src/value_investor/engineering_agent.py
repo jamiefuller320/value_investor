@@ -53,6 +53,7 @@ Implement ONLY that one task. Rules:
 5. Run the most relevant pytest subset before finishing (e.g. tests covering changed modules).
 6. Do NOT merge branches, open pull requests, or change GitHub workflows unless the task explicitly requires it.
 7. Do NOT change paper-fund, simulator, or live signal thresholds unless the task explicitly requires it.
+8. When `auto_merge` is true on the task, keep the diff minimal and within `allowed_paths` so CI and the path guard can merge automatically.
 
 When finished, write a markdown report to:
 {result_path}

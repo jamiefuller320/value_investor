@@ -62,4 +62,5 @@ gh run view <run-id> --log-failed
 ## Related
 
 - [orchestrator-cron.md](orchestrator-cron.md) — scheduling, catch-up, external cron
+- [ci-fix-automation.md](ci-fix-automation.md) — CI failure → engineering agent → scoped auto-merge
 - Workflow definitions: `.github/workflows/`
