@@ -1,0 +1,83 @@
+# Aperam S.A. (APAM.AS) — Research memo
+
+_Version 1 · Updated 2026-08-02T11:55:47.312094+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Aperam S.A. screens as a buy on asset-backed value metrics—P/B near 1.0, FCF yield ~9.4%, dividend yield ~4.4%, and moderate leverage (D/E ~40%)—despite trough-level reported earnings (ROE 3.9%, P/E 26). The investment case rests on a cyclical recovery in stainless/specialty steel, supported by Q2 2026 EBITDA of €130m (highest in four years per company commentary), maintained €2.00/share dividend policy, and geographic diversification away from European dependence. The central debate is whether strong operating cash flow and book value adequately compensate for collapsed 2025 net income (€9m vs €231m in 2024), rising net debt (€857m vs €443m), and absent primary filing verification. Deep research partially supports the screen on balance-sheet and cash-flow grounds but cannot fully validate earnings quality or contingent liabilities without annual/interim filing extracts.
+
+## INVESTMENT THESIS
+The quantitative screen flags Aperam across four value families—cheapness, dividend, GARP, and risk—with passes on Schloss Low P/B, FCF Yield, Lynch PEG, Neff PEGY, Dividend Growth, Earnings Quality, and Financial Health. That profile suits a value investor seeking cyclical exposure at roughly tangible book: P/B 1.02, current ratio 1.80, and no share dilution (Piotroski component passed). FCF of €248m (Yahoo, FY2025) against a market cap implied by ~9.4% FCF yield suggests the market is pricing depressed cycle earnings rather than permanent impairment—consistent with Lynch/Neff PEG passes on low single-digit earnings growth (+5.4%).
+
+Business quality is mixed. Aperam operates integrated stainless and specialty alloy production across Europe, Brazil, and the Americas—a diversified footprint management emphasises (CEO commentary, July 2026). Q2 2026 results reportedly met expectations and maintained trajectory toward 2026 objectives, with European trade measures cited as a tailwind. Dividend continuity (€2.00/share proposed for 2026 in four instalments) signals board confidence in cash generation even through the downturn.
+
+What the screen underweights: quality and moat models fail (ROE 3.9%, thin gross margins ~5.6% in FY2025 vs ~14.5% in FY2022, Piotroski F-Score 5/9). EV/EBIT of ~269 reflects near-zero EBIT in 2025, making earnings-multiple screens misleading at the trough. The buy case is therefore asset- and cash-flow-led, not earnings-quality-led—a defensible value stance if the cycle turns, but not a Buffett-style compounder.
+
+## FINANCIAL REVIEW
+**Primary filings gap:** `filings_index.json` contains zero indexed filings (0 annual, 0 interim, 0 other; no body extracts under `filings/bodies/`). No annual report, half-year release, 10-K, 20-F, or trading update could be reviewed from primary sources. All figures below fall back to `financials_annual.json` (Yahoo Finance) unless sourced from news headlines; segment detail, pension footnotes, covenant language, and going-concern disclosures are unavailable.
+
+**Revenue and profitability trend (Yahoo, €m):**
+
+| Year | Revenue | Operating income | EBITDA | Net income | Diluted EPS |
+|------|---------|------------------|--------|------------|-------------|
+| 2022 | 8,156 | 890 | 960 | 625 | €8.29 |
+| 2023 | 6,592 | 89 | 364 | 203 | €2.79 |
+| 2024 | 6,255 | 129 | 354 | 231 | €3.17 |
+| 2025 | 6,080 | 16 | 247 | 9 | €0.13 |
+
+Revenue has fallen ~25% from the 2022 peak; operating income collapsed from €890m to €16m. FY2025 net income of €9m includes €51m unusual items (Yahoo); normalised income was approximately -€34m. Gross profit margin compressed from €1,180m (14.5% of revenue) in 2022 to €341m (5.6%) in 2025—consistent with screen flags on thin margins and failed quality models.
+
+**Cash flow vs reported earnings (Yahoo, FY2025):** Operating cash flow €422m (up from €280m in 2024); free cash flow €248m (up from €115m). Cash conversion remains positive despite minimal net income, supporting the screen’s Earnings Quality and FCF Yield passes. CapEx €174m; dividends paid €145m (~€2.00/share). A €415m business acquisition in FY2025 (investing cash flow) was partly debt-funded—net debt issuance €449m.
+
+**Balance sheet (Yahoo, FY2025, €m):** Total assets €6,205; shareholders’ equity €3,195 (tangible book €2,690); total debt €1,303; net debt €857 (vs €443 in 2024); cash €325. Inventory €2,028 (33% of revenue)—elevated working-capital risk in a weak pricing environment. Non-current pension/post-retirement obligations €135m (Yahoo line item; no filing footnote to assess funding status). Current ratio 1.80; D/E 40% per screen.
+
+**Interim / Q2 2026:** No interim filing indexed. News coverage (July 2026) reports Q2 2026 EBITDA of €130m—the strongest quarter in four years—driven partly by European trade measures, with weak underlying demand and a negative valuation effect also noted. Yahoo cached quarterly income for 2026 shows one quarter with revenue €1,575m, EBITDA €90m, and net income €3m; this does not reconcile cleanly with the €130m EBITDA headline and appears incomplete. Interim trend cannot be verified from primary sources; the operational uptick is indicative but unconfirmed in filing extracts.
+
+**Dividend:** €145m cash dividends in FY2024 and FY2025; company proposed maintaining €2.00/share in four payments for 2026 (Boursorama, 6 Feb 2026)—roughly 4.4% yield at recent prices per screen inputs.
+
+## RISKS AND RED FLAGS
+**Cyclical and commodity exposure:** Stainless steel remains highly sensitive to global industrial demand, nickel/chromium input costs, and import competition. FY2022–2025 revenue and margin trajectory reflects a severe downcycle; recovery timing is uncertain despite Q2 2026 improvement.
+
+**Earnings vs cash-flow divergence:** FY2025 net income near zero while FCF was €248m may reflect working-capital release (inventory down €131m), deferred tax (-€85m), and non-cash items—but without filing notes the sustainability of cash generation at trough earnings cannot be assessed.
+
+**Leverage and M&A:** Net debt nearly doubled YoY to €857m following €415m acquisition spend and net debt issuance. Total debt €1,303m vs FY2025 EBITDA €247m implies ~5.3x gross debt/EBITDA on reported figures. Covenant headroom and maturity profile are unknown (no filing bodies).
+
+**Balance-sheet composition:** Large inventory (€2,028m) creates write-down risk if prices fall further. Goodwill and intangibles €505m against equity €3,195m—impairment risk if acquired assets underperform.
+
+**Pension and provisions:** €135m non-current pension liability (Yahoo); long-term provisions €55m. No primary disclosure on funding deficit or contribution schedule.
+
+**Governance and regulatory:** No filing language on going concern, contingencies, or litigation available. European trade measures cited as Q2 tailwind may reverse with policy changes.
+
+**Screen-specific red flags:** Piotroski 5/9 (ROA, leverage, gross margin, asset turnover not improving); Graham and quality models fail; EV/EBIT extreme due to depressed EBIT—screen buy is narrow, not broad-based.
+
+**Index and sentiment:** BEL 20 inclusion (March 2026) may support passive flows but does not alter fundamentals. Morgan Stanley downgrade (16 June 2026) coincided with a share-price fall; analyst views are split (Zacks Strong Buy July 2026 vs Strong Sell May 2026).
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate (17 articles in manifest) and skewed toward Q2 2026 results and sentiment pieces rather than deep strategy reporting.
+
+**Results and guidance:**
+- *Aperam SA (APEMY) (Q2 2026) Earnings Call Highlights: Resilient EBITDA Amid Headwinds, Trade …* (30 Jul 2026, yfinance) — Q2 EBITDA €130m; European trade measures and diversification cited; weak demand and negative valuation effect noted.
+- *Aperam affiche des résultats au 2e trimestre au plus haut depuis quatre ans* (30 Jul 2026, Zonebourse Suisse).
+- *Aperam : T2 2026 conforme aux attentes, maintien de la trajectoire vers les objectifs 2026* (30 Jul 2026, Zonebourse).
+- *Le PDG d'Aperam affirme que la diversification a réduit la dépendance à l'Europe* (30 Jul 2026, Zonebourse).
+
+**Capital allocation:**
+- *Aperam propose de maintenir son dividende à €2,00 par action, en quatre versements en 2026* (6 Feb 2026, Boursorama).
+
+**Index and market:**
+- *Aperam intègre le BEL 20 : ce que cela change pour l'action APAM* (12 Mar 2026, Idéal Investisseur).
+
+**Analyst and sentiment:**
+- *Aperam : Morgan Stanley abaisse sa recommandation* (16 Jun 2026, ABC Bourse); *Pourquoi l'action Aperam chute-t-elle aujourd'hui ?* (16 Jun 2026, Investing.com France).
+- *Aperam (APEMY) Upgraded to Strong Buy* (16 Jul 2026, yfinance); contrasting *New Strong Sell Stocks for May 1st* including APEMY (1 May 2026, yfinance).
+
+**Earlier weakness:**
+- *Aperam's (AMS:APAM) Anemic Earnings Might Be Worse Than You Think* (1 Apr 2026, yfinance).
+- *Aperam S.A. (AMS:APAM) Just Released Its First-Quarter Results* (2 May 2026, yfinance).
+
+No material M&A announcements beyond the FY2025 acquisition spend visible in Yahoo cash flow (€415m) without deal naming in news manifest. Management changes and regulatory actions not prominently covered.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: The buy screen is partially confirmed by sub-book valuation, strong FCF yield, and dividend continuity, with Q2 2026 operational improvement supportive, but absent primary filings, trough earnings quality, rising leverage, and cyclical exposure prevent full confirmation of the quantitative signal.

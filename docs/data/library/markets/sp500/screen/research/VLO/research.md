@@ -1,0 +1,87 @@
+# Valero Energy Corporation (VLO) — Research memo
+
+_Version 1 · Updated 2026-08-02T12:25:34.928839+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Valero Energy Corporation (VLO) is the largest independent US refiner, with integrated renewable diesel and ethanol operations. The quantitative screen rates the name a **buy** (8/22 models; composite 58%), driven chiefly by free cash flow yield (~9.3%), earnings quality, and GARP metrics rather than classic deep-value multiples. Filings show a sharp earnings rebound in 2026 after a weak 2025, when a $1.1bn California refinery impairment and softer renewable diesel margins weighed on results. At ~13× trailing P/E and 3.9× P/B, the stock screens cheap on cash generation but rich on book and cycle-normalised earnings. The central debate is whether current refining margins and record interim profits represent sustainable quality, or a cyclical peak that the market is already discounting.
+
+## INVESTMENT THESIS
+For a value investor, VLO offers a **cash-return compounder in a cyclical industry**: high-throughput Gulf Coast and inland refining assets, a leading renewable diesel platform (Diamond Green Diesel joint venture), and a disciplined capital allocation record of buybacks and dividends. The screen’s buy signal aligns with filing evidence of strong operating cash conversion and balance-sheet capacity, not with Graham-style asset bargains.
+
+**Quantitative fit.** The name passes five metric families—cheapness (FCF yield), quality (Buffett Quality, Earnings Quality, Financial Health), dividend (Dividend Growth), GARP (Lynch PEG, Neff PEGY), and risk—while failing deep-value screens (P/B 3.9, no net-net), Economic Moat (ROA below threshold), and Piotroski F-Score (6/9). ROE of 27.6% reflects recent profitability rather than structural moat. The screen’s 453% earnings growth figure is a base-effect artefact from the 2025 trough, not a durable growth rate.
+
+**Business quality.** SEC segment data show refining remains the profit engine: refining operating income was $4.0bn in FY2025 (10-K, year ended 31 December 2025) and $6.3bn in H1 2026 (Q2 2026 10-Q), versus renewable diesel operating **loss** of $156m in FY2025 turning to $856m operating income in H1 2026. Ethanol contributed $374m operating income in FY2025 and $408m in H1 2026, aided from 2026 by clean fuel production credits under the One Big Beautiful Bill Act. Management returned $3.6bn to shareholders in H1 2026 (buybacks and dividends) while maintaining $12.7bn liquidity (Q2 2026 10-Q).
+
+## FINANCIAL REVIEW
+*Primary source: SEC EDGAR filing body extracts unless noted. Yahoo (`financials_annual.json`) used only where annual consolidated income/cash-flow statements are absent from extracts.*
+
+**Annual results (10-K)**
+
+| Metric | FY2025 (10-K, filed 25 Feb 2026) | FY2024 (10-K, filed 26 Feb 2025) | FY2023 (10-K segment data) |
+|---|---|---|---|
+| Consolidated revenue | $122.7bn | $129.9bn | $144.8bn |
+| Income before income tax | $3.0bn | $3.7bn | $11.8bn |
+| Segment operating income (Refining / Renewables / Ethanol) | $4.0bn / ($0.2bn) / $0.4bn | $4.0bn / $0.5bn / $0.3bn | $11.5bn / $0.9bn / $0.6bn |
+| Asset impairment (Refining) | $1.1bn | — | — |
+| Total consolidated assets | $58.0bn | $60.1bn | — |
+| Debt (excl. finance leases) | $8.3bn | $8.1bn | — |
+| RIN/compliance programme cost | $1.6bn | $0.7bn | $1.3bn |
+
+Revenue fell 5% in FY2025 as product prices and volumes eased from 2023–24 peaks. Pre-tax income declined to $3.0bn, reflecting the $1.1bn non-recurring impairment on the Benicia and Wilmington refineries (fair-value write-down recognised in Q1 2025, Refining segment) and renewable diesel margin compression. Interest expense was stable at $556m in both years. Net income and diluted EPS for FY2025 are **not available in the 10-K body extract** (truncated before the consolidated income statement); per Yahoo fallback: net income $2.35bn, diluted EPS $7.57, operating cash flow $5.83bn, free cash flow $5.03bn, capital expenditure $0.80bn.
+
+FY2024 was a mid-cycle year: revenue $129.9bn, pre-tax income $3.7bn, refining operating income $4.0bn, renewable diesel $0.5bn. Yahoo fallback: net income $2.77bn, EPS $8.58, FCF $5.78bn. The step-down from FY2023 (pre-tax income $11.8bn on $144.8bn revenue) illustrates normal cyclicality.
+
+**Interim results (10-Q)**
+
+*Q2 2026 (10-Q, filed 30 July 2026)* — Record quarter amid tight global product supply:
+- Q2 revenue $44.5bn (vs $29.9bn Q2 2025); pre-tax income $5.2bn (vs $0.9bn)
+- Net income attributable to stockholders **$3.7bn**, or **$12.62/share** (per news summary citing the earnings release; the Q2 10-Q body confirms $3.72bn net income to stockholders)
+- H1 2026: revenue $76.9bn; pre-tax income $6.9bn; net income to stockholders **$5.0bn** (vs $0.1bn H1 2025)
+- Refining Q2 operating income $4.5bn on throughput ~2,950 kbpd; renewable diesel $0.7bn; ethanol $0.3bn
+- Total assets $64.7bn; debt (excl. finance leases) $9.1bn; cash and equivalents ~$8.1bn; liquidity $12.7bn
+- H1 RIN/compliance costs $1.4bn (vs $0.7bn H1 2025)
+
+*Q1 2025 (10-Q, filed 24 Apr 2025)* — Impairment quarter:
+- Q1 revenue $30.3bn; asset impairment loss **$1.1bn** (Benicia/Wilmington refineries)
+- Refining segment operating **loss** $0.5bn before corporate allocation
+
+*Q3 2025 (10-Q, filed 23 Oct 2025)*:
+- Q3 net income to stockholders **$1.1bn**; 9M 2025 net income **$1.2bn** (vs $2.5bn 9M 2024)
+
+**Balance sheet and cash flow (filings + Yahoo fallback)**
+
+Debt remains manageable: debt/equity ~40% per screen inputs; filing carrying value $8.3–9.1bn against total assets of $58–65bn. Working capital is positive ($9.1bn per Yahoo FY2025). Share count has fallen materially (diluted average 309m in FY2025 vs 353m in FY2023, Yahoo). FY2025 buybacks ~$2.6bn and dividends ~$1.4bn (Yahoo cash-flow fallback). No going-concern language appears in available filing extracts.
+
+**Gaps.** Q4 2025 and Q1/Q2 2026 earnings 8-K body extracts are **not** in the source pack (`has_body: false`). Full-year FY2025 consolidated net income and cash-flow statement must rely on Yahoo where 10-K body extracts lack the primary statements.
+
+## RISKS AND RED FLAGS
+**Cyclicality and peak-earnings risk.** Refining margins are the dominant earnings driver. H1 2026 pre-tax income ($6.9bn) annualises well above FY2023–25 levels; news coverage flags “peak cycle” scepticism (*Valero Energy (VLO) Stock Shrugs Off Profit Surge As Peak Cycle Doubts Linger*, simplywall.st, 31 July 2026). Normalisation of gasoline/distillate cracks would compress the screen’s FCF yield and PEG metrics rapidly.
+
+**Regulatory and compliance costs.** Filing language highlights exposure to EPA RFS, California LCFS, and similar programmes. Compliance credit (primarily RIN) costs rose to **$1.6bn in FY2025** from $730m in FY2024; H1 2026 alone was $1.4bn. Blending programme obligations are mark-to-market liabilities ($85–87m at 31 December 2025 / 30 June 2026). California policy (including SBx 1-2) and refinery closure obligations at Benicia add ongoing cost and strategic uncertainty; Q2 2026 corporate expenses now include Benicia decommissioning costs.
+
+**Asset impairments and operational incidents.** Q1 2025 recorded a **$1.1bn impairment** on Benicia ($901m loss) and Wilmington ($230m loss) refinery assets. Benicia refining operations were fully idled by April 2026. A March 2026 fire at Port Arthur prompted a full shutdown and phased restart, temporarily reducing throughput. These events confirm portfolio rationalisation risk in mature US refining.
+
+**Renewable diesel volatility.** FY2025 renewable diesel operating loss of $156m reflects feedstock inflation and tax-credit regime changes (blender’s credit replaced by clean fuel production credits). Segment recovery in 2026 is policy- and price-dependent; non-controlling interest in DGD rose sharply in Q2 2026 ($353m vs $51m loss prior year), indicating profit sharing with the joint-venture partner.
+
+**Leverage and capital returns.** Debt is not excessive, but aggressive buybacks at cycle highs (H1 2026: $3.6bn returned vs $798m capex) could constrain flexibility if margins revert. Piotroski F-Score 6/9 flags declining leverage trend and ROA not improving—consistent with capital return over balance-sheet strengthening.
+
+**Governance / pension.** Non-current pension and post-retirement obligations ~$423m (Yahoo FY2025). No material going-concern, covenant breach, or control weakness cited in extracts; disclosure controls reported effective. Revolving credit facility amended October 2025 (10-K exhibit reference).
+
+## NEWS HIGHLIGHTS
+Coverage is **dense around Q2 2026 earnings (29–31 July 2026)** but thinner for earlier periods in the manifest.
+
+- **Record Q2 2026 results** (*Valero jumps after posting highest-ever Q2 profit, aided by lower-cost Venezuelan feedstocks*, Seeking Alpha, 30 July 2026): net income $3.7bn; refining income $4.5bn; $2.6bn returned to stockholders in the quarter.
+- **Earnings beat** (*Valero Energy (VLO) Beats Q2 Earnings and Revenue Estimates*, Yahoo Finance, 30 July 2026).
+- **Peak-cycle debate** (*Valero Energy (VLO) Stock Shrugs Off Profit Surge As Peak Cycle Doubts Linger*, simplywall.st, 31 July 2026): strong profits but market caution on sustainability.
+- **Cash-return narrative** (*How a Profit Surge and Bigger Cash Returns At Valero Energy (VLO) Has Changed Its Investment Story*, simplywall.st, 31 July 2026).
+- **Dividend** (*Valero Energy Corp's Dividend Analysis*, Yahoo Finance, 31 July 2026): $1.20/share quarterly dividend, ex-date 31 July 2026.
+- **Analyst actions** (GuruFocus/MarketBeat, 30 July–1 August 2026): multiple firms maintained ratings with raised price targets (Wells Fargo, UBS)—noted for sentiment, not used as valuation anchors here.
+- **Portfolio / California** (filings, not headlines): Benicia refinery idled; Wilmington impaired—structurally more important than the institutional flow stories dominating the feed.
+
+No material M&A or CEO change in the news manifest; R. Lane Riggs remains Chairman/CEO per the FY2025 10-K (CFO transition to Homer S. Bhullar noted in the 2026 filing).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Filing-backed cash generation and the screen’s FCF/quality signals support the buy case, but cyclical peak margins, rising RIN costs, and recent asset impairments warrant sizing discipline rather than full conviction.

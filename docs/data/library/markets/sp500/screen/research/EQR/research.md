@@ -1,0 +1,96 @@
+# Equity Residential (EQR) — Research memo
+
+_Version 1 · Updated 2026-08-02T12:28:58.600153+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Equity Residential (EQR) is a large-cap US multifamily REIT focused on coastal and select Sun Belt markets, owning roughly 312 properties and 85,520 units as of 30 June 2026 (Q2 2026 10-Q). The quantitative screen rates the name a buy on cash-flow yield, dividend income, composite value and earnings quality, though it fails classic deep-value and quality screens on P/E (28.9×), P/B (2.4×) and ROE (8.0%). Operating fundamentals are improving: first-half 2026 rental income rose 2.3% year on year, and management raised guidance after a Q2 beat led by San Francisco and New York. The central debate is whether a ~4.2% dividend and ~5.7% FCF yield compensate for a pending all-stock merger with AvalonBay Communities (combined entity: Vivmark Residential), rising property-level costs and REIT-typical leverage — not whether EQR is statistically cheap on headline multiples.
+
+## INVESTMENT THESIS
+For a value-oriented investor, EQR offers a cash-generative, institutionally managed apartment platform rather than a net-net or deep-discount asset play. The screen passes four factor families — cheapness, dividend, GARP and risk — via FCF Yield, Neff PEGY, High Dividend Yield, Composite Value and Earnings Quality, with a 68% composite score and full data quality (20/20 metrics). That profile fits an income-plus-cash-flow value sleeve: reported GAAP earnings are heavily distorted by investment gains, but operating cash flow remained robust at $1.65bn in FY2025 (Yahoo fallback; see Financial Review) and the screen’s 5.7% FCF yield and 4.2% dividend yield capture the economic substance better than trailing P/E.
+
+Business quality is defensible. Filings describe a portfolio concentrated in knowledge-economy metros (Boston, New York, Washington DC, Southern California, San Francisco, Seattle, plus Denver, Atlanta, Dallas/Fort Worth and Austin), with technology-enabled operations, strong resident retention and active capital recycling. H1 2026 filings show management repurchased ~$219m of stock at a weighted average $63.42 while maintaining quarterly distributions ($0.7025 per share in Q2). Coastal re-leasing strength and moderating supply in several markets support the screen’s improving signal trend, even as absolute valuation remains rich versus Graham-style thresholds.
+
+The pending AvalonBay merger reframes the thesis: scale (~180,000 combined units), cost synergies and portfolio diversification are strategic positives, but EQR shareholders will hold ~49% of Vivmark and face integration, litigation and potential $1bn+ break-fee exposure. For value investors, EQR is best viewed as an accumulate-on-weakness income compounder with a transformational catalyst — not a low-risk deep-value entry.
+
+## FINANCIAL REVIEW
+**Source note:** Annual 10-K body extracts (FY2024 filed 13 Feb 2025; FY2025 filed 13 Feb 2026) are truncated before consolidated financial statements; annual figures below fall back to `financials_annual.json` (Yahoo). Interim figures are from SEC 10-Q body extracts.
+
+**Annual trends (Yahoo fallback)**
+
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
+| Total revenue | $2,874m | $2,980m | $3,094m |
+| Operating income | $878m | $872m | $870m |
+| Net income (GAAP) | $835m | $1,036m | $1,120m |
+| Normalised income | $553m | $490m | $495m |
+| Operating cash flow | $1,533m | $1,574m | $1,649m |
+| Free cash flow | $1,199m | $1,255m | $1,290m |
+| Total debt | $7,702m | $8,427m | $8,480m |
+| Net debt | $7,340m | $8,059m | $8,119m |
+| Total assets | $20,035m | $20,834m | $20,746m |
+| Common dividends paid | $990m | $1,019m | $1,046m |
+
+Revenue grew ~3.8% in FY2025, but operating income was flat as property expenses rose with the portfolio. GAAP net income overstated underlying earnings: FY2025 included ~$626m in gains on sale of securities (Yahoo), versus normalised income of ~$495m — explaining the screen’s −39.9% earnings-growth input and why FCF-based metrics are more informative than P/E alone. Balance-sheet leverage is REIT-typical: debt/equity ~79% on screen inputs; Yahoo shows net debt roughly flat year on year in FY2025 despite higher absolute debt.
+
+**Interim trends (10-Q filings)**
+
+*Q2 2026 (period ended 30 June 2026, filed 30 July 2026):*
+- Q2 rental income: **$785.0m** (+2.1% vs Q2 2025 $768.8m).
+- H1 rental income: **$1,564.9m** (+2.3% vs H1 2025 $1,529.6m).
+- H1 total property expenses: **$1,132.4m** (+2.1%); Q2 real estate taxes and insurance **$122.3m** (+8.8% YoY), property and maintenance **$142.8m** (+4.8% YoY).
+- H1 net income: **$210.8m** vs **$463.6m** prior year — primarily due to a **$16.8m net loss** on property dispositions (vs a **$212.4m gain** in H1 2025) and **$50.8m** of other expenses (vs $9.0m), likely merger-related.
+- H1 net income available to common: **$203.5m** ($0.54 diluted EPS) vs **$448.2m** ($1.18) prior year.
+- H1 operating cash flow: **$702.4m** vs **$785.1m** prior year; cash interest paid **$142.8m**.
+- Total assets **$20.28bn** (30 Jun 2026) vs **$20.75bn** (31 Dec 2025); total debt, net **$8.26bn** vs **$7.89bn** (31 Dec 2024 reference in prior quarter) / **$8.18bn** at 31 Dec 2025 per other filings.
+- Commercial paper **~$668m**; revolving credit availability **~$1.83bn** on a **$2.5bn** facility; unsecured note covenants **in compliance**.
+
+*Q1 2026 (filed 30 April 2026):* Q1 rental income **$779.8m** (+2.5% vs $760.8m); Q1 net income **$93.1m** vs **$264.8m** (prior-year gain on sales).
+
+*9M 2025 (Q3 10-Q, period ended 30 September 2025):* Rental income **$2,312.0m** (+4.5% vs $2,213.3m); 9M net income available to common **$736.9m** vs **$614.0m**.
+
+**Capital allocation:** H1 2026 share repurchases of **$219.4m** (3.46m shares at $63.42); H1 distributions **$1.405** per common share declared. Two consolidated property dispositions in H1 2026 for **$164m** at a **$16.8m** loss.
+
+**Merger-related financing:** Undrawn **$2.0bn** bridge facility (commitment letter 20 May 2026) for transaction costs and debt refinancing; no going-concern language in available extracts.
+
+**Gap:** Normalised FFO per share and same-store NOI percentages are referenced in filings but not present in the truncated body extracts reviewed; Q2 FFO beat is reported in news only, not verified from primary filing text here.
+
+## RISKS AND RED FLAGS
+**Transformational M&A.** The 20 May 2026 merger agreement with AvalonBay (Q2 2026 10-Q, Note 11) creates Vivmark Residential on an all-stock basis (2.793 EQR shares per AVB share; legacy EQR holders ~49%). Reciprocal termination fees of ~**$1.005bn** (EQR) and ~**$1.070bn** (AVB) under specified circumstances, reverse-acquisition accounting (AvalonBay as accounting acquirer), dual headquarters and a 14-member board split add execution and governance complexity. Completion is expected H2 2026 but is not assured.
+
+**Expense pressure.** Filing data show accelerating property taxes, insurance and maintenance costs; news ("Equity Residential Earnings: Operating Expenses Outpace Revenue Growth Due to High Utility Increase", Morningstar, 28 July 2026) flags utility inflation as a margin headwind despite revenue growth.
+
+**Leverage and rate sensitivity.** Total debt, net rose to **$8.26bn** at 30 June 2026; H1 interest expense increased ~8%. Screen flags weak liquidity (current ratio 0.15) and high net debt/EBITDA. Macro context shows a 10-year Treasury near 4.75% (offline marker); REITs remain rate-sensitive though covenants are currently met.
+
+**Regulatory and concentration.** FY2025 10-K risk factors highlight rent-control expansion, coastal market concentration and lease rollover (predominantly 12-month leases), which amplify downturn sensitivity.
+
+**Earnings quality.** Large non-operating gains (securities and property sales) inflate GAAP earnings and can mislead naive value screens; Piotroski F-Score is 6/9 (failed), with leverage not declining and gross margin not improving per screen components.
+
+**Litigation.** July 2026 news references merger-related litigation and registration effectiveness (e.g. "AvalonBay to Combine with Equity Residential in All-Stock Merger; Registrations Effective, Litigation Disclosed", TradingView, 31 July 2026).
+
+No going-concern qualification appears in available filing extracts; unsecured debt covenant compliance is affirmatively stated for H1 2026.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is heavily merger- and earnings-driven; it is adequate on strategy but thin on standalone operational depth.
+
+**Merger and rebranding (May–July 2026):**
+- "AvalonBay and Equity Residential announce 'merger of equals'" (Multifamily Dive, 21 May 2026); "Merger of AvalonBay Communities, Equity Residential creates $52B company" (Westfair Communications, 22 May 2026); "What the AvalonBay, Equity Residential megamerger means for the apartment industry and rents" (CNBC, 22 May 2026).
+- Combined name announced: "Equity Residential, AvalonBay announce name of combined firm: Vivmark Residential" (Multifamily Dive / Yahoo Finance, 30–31 July 2026); Benjamin Schall (AvalonBay CEO) named incoming Vivmark CEO.
+- "AvalonBay (NYSE: AVB) adds merger litigation and valuation detail" (Stock Titan, 31 July 2026).
+
+**Q2 2026 results (July 2026):**
+- "Equity Residential Q2 FFO Beats Estimates, Coastal Demand Lifts Results" (Yahoo Finance, 23 July 2026); "AvalonBay, Equity Residential beat FFO estimates in Q2" (Yahoo Finance, 23 July 2026) — both raised guidance, citing San Francisco and New York strength.
+- "Equity Residential Earnings: Operating Expenses Outpace Revenue Growth Due to High Utility Increase" (Morningstar, 28 July 2026).
+- "AVB, EQR down despite Q2 beat, guidance raise as expenses mount amid impending merger" (Seeking Alpha, 22 July 2026).
+
+**Analyst and market commentary:**
+- "Equity Residential (EQR) Receives a Buy from Argus Research" (Globe and Mail, 30 July 2026).
+- "Truist Raises its Price Target on Equity Residential (EQR)" (Yahoo Finance, 29 June 2026).
+- "Morgan Stanley Highlights Equity Residential (EQR)'s Emerging Strength" (Yahoo Finance, 31 March 2026).
+
+**Other:** Routine dividend declaration ("Equity Residential sets July 10 payout for common shares", Stock Titan, 18 June 2026). Merger speculation preceded the deal ("AvalonBay, Equity Residential reportedly mull merger: Bloomberg", Multifamily Dive, 30 April 2026).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Deep research largely confirms the screen’s income and cash-flow value case — rising rental revenue, strong OCF/FCF, a well-covered dividend and active buybacks — but the pending Vivmark merger, expense inflation and headline valuation richness prevent full endorsement of a classic deep-value buy.

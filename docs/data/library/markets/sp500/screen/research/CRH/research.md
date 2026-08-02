@@ -1,0 +1,88 @@
+# CRH PLC (CRH) — Research memo
+
+_Version 1 · Updated 2026-08-02T11:58:00.290860+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+CRH plc is a leading North American and international building-materials group, now primarily listed on the NYSE, benefiting from infrastructure and reindustrialisation demand while reshaping its portfolio through bolt-ons and larger deals. The quantitative screen rates the name a buy (8/22 models; composite 66%), supported by reasonable valuation (P/E 16.8, P/B 2.8), solid ROE (15.8%), manageable leverage (D/E 78%), and dividend growth. Primary filings show accelerating fundamentals: FY2025 revenue of $37.4bn (+5% vs FY2024), net income $3.8bn, and adjusted EBITDA $7.7bn, with H1 2026 revenue up 7% to $18.1bn. The central debate is whether infrastructure pricing and portfolio upgrades offset cyclical residential weakness, rising debt for the pending $8.5bn Arcosa acquisition, and weak free-cash conversion relative to reported earnings.
+
+## INVESTMENT THESIS
+For a value investor, CRH offers a quality compounder at a mid-teens earnings multiple rather than a deep-value trough. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—via models including Graham Enterprising, Buffett Quality, Dividend Growth, and Financial Health. That aligns with filing evidence of sustained margin expansion (Q2 2026 adjusted EBITDA margin 24.4%, +30bps YoY) and disciplined capital returns ($0.7bn buybacks YTD, quarterly dividend raised 5% to $0.39).
+
+Business quality is underpinned by scale (83,032 employees; 3,961 locations), a connected materials-to-solutions model, and a revenue mix tilting toward infrastructure (40% in FY2025 vs 35% in FY2024). Management is actively upgrading the portfolio—Eco Material Technologies (FY2025), 16 bolt-ons in H1 2026 ($1.2bn)—while divesting non-core assets (construction accessories, lawn and garden). The screen’s failures (Deep Value, FCF Yield, Lynch PEG, Economic Moat) flag that CRH is not statistically cheap on asset or cash-flow bases; the case rests on earnings durability and re-rating as a US infrastructure beneficiary, not on net-net or high-yield metrics.
+
+## FINANCIAL REVIEW
+**Annual results (SEC 10-K, filed 18 Feb 2026 and 26 Feb 2025)**
+
+| Metric | FY2025 (10-K) | FY2024 (10-K) | Change |
+|--------|---------------|---------------|--------|
+| Total revenues | $37.4bn | $35.6bn | +5% |
+| Net income | $3.8bn | $3.5bn | +9% |
+| Adjusted EBITDA | $7.7bn | $6.9bn | +12% |
+
+FY2025 revenue mix: 40% infrastructure, 32% residential, 28% non-residential construction; 60% new-build, 40% repair/remodel. FY2024 mix was broadly 35% infrastructure, 30% construction, 35% residential. Sustainability-linked product revenue reached $15.7bn (+7% YoY), per the FY2025 10-K.
+
+*Yahoo fallback (used only for items not clearly stated in filing bodies):* FY2025 diluted EPS $5.51, operating cash flow $5.6bn, free cash flow $2.9bn, capital expenditure $2.7bn; total debt $19.7bn, net debt $13.6bn, shareholders’ equity $24.0bn (balance sheet at 31 Dec 2025). FCF conversion (~78% of net income) is adequate but below screen thresholds—consistent with the Earnings Quality model failure.
+
+**Interim results (SEC 10-Q, six months to 30 Jun 2026, filed 30 Jul 2026)**
+
+| Metric | H1 2026 | H1 2025 | Change |
+|--------|---------|---------|--------|
+| Total revenues | $18.1bn | $16.96bn | +7% |
+| Net income | $1.3bn | $1.2bn | +8% |
+| Adjusted EBITDA | $3.2bn | $2.9bn | +9% |
+| Adjusted EBITDA margin | 17.7% | 17.4% | +30bps |
+| Diluted EPS | $1.93 ($2.01 adj.) | $1.78 | +8–13% |
+
+Q2 2026 (three months): revenue $10.8bn (+6%), net income $1.5bn (+13%), adjusted EBITDA $2.6bn (+7%), diluted EPS $2.21 vs $1.94. Net income margin improved 90bps to 14.0%.
+
+**Capital allocation (H1 2026, 10-Q):** share buybacks $0.6bn (program paused from 22 Jun 2026 pending Arcosa); quarterly dividend $0.39 (5% annualised increase); 16 acquisitions for $1.2bn; growth/maintenance capex $1.2bn.
+
+**Balance sheet (30 Jun 2026, 10-Q):** total assets $58.6bn; total debt $17.8bn (vs $17.5bn at 31 Dec 2025); cash $3.0bn; undrawn RCF capacity ~$4.0bn (€3.5bn facility). Goodwill $13.2bn—elevated post-acquisition.
+
+**Portfolio actions (H1 2026):** agreement to divest construction accessories ($0.7bn consideration; $48m goodwill impairment in Q1); lawn and garden sold for $1.1bn (Q2 gain $266m). These items distort quarterly earnings—Q1 2026 reported a loss per Yahoo quarterly data, not fully detailed in the truncated Q1 10-Q body extract.
+
+**Gaps:** Full-year 2026 guidance is referenced in news (“CRH (NYSE:CRH) Releases FY 2026 Earnings Guidance”, 30 Jul 2026) but specific numeric guidance is not present in the available 10-Q body extract; treat outlook as unverified from primary filings. Nine of nineteen indexed 8-K filings lack body extracts.
+
+## RISKS AND RED FLAGS
+**Cyclicality:** The FY2025 10-K states construction activity is “inherently cyclical,” with demand sensitive to interest rates, housing, weather, and public funding. Q2 strength may not persist into weaker residential markets.
+
+**Arcosa acquisition ($8.5bn EV, ~$150/share):** Announced Jun 2026; expected close Q1 2027. CRH entered a $3.3bn bridge facility and term loan; buybacks suspended. Filing language cites risks of failure to close, regulatory approval, integration disruption, financing cost, and inability to realise synergies. Pro forma leverage will rise materially—total debt already increased from $15.6bn (FY2024) to $19.7bn (FY2025) per Yahoo, and stood at $17.8bn mid-2026 before Arcosa funding.
+
+**Leverage and interest:** H1 2026 interest expense $423m vs $381m prior year (+11%). Screen D/E 78% passes risk thresholds but fails deep-value and moat models on leverage. Revolving credit facility carries no financial covenants (10-Q); bond indentures include rating-trigger coupon step-ups.
+
+**Integration and goodwill:** Goodwill $13.2bn (23% of assets). FY2025 and H1 2026 filings warn of impairment charges on acquisitions; $48m impairment on held-for-sale construction accessories in Q1 2026.
+
+**Operational:** Weather seasonality, labour shortages, energy/raw-material inflation, MSHA/OSHA compliance, and environmental remediation provisions are recurring 10-K risk themes. Pension/post-retirement obligations are modest ($248m non-current liability at FY2025 year-end, Yahoo).
+
+**Governance/listing:** Irish-domiciled with NYSE primary listing; Irish dividend withholding and stamp-duty considerations for certain holders (10-K).
+
+**Going concern:** No going-concern qualification identified in available filing extracts. Liquidity appears adequate via cash, RCF, and commercial paper programmes, but Arcosa funding adds execution risk.
+
+**Legal:** Item 1 Legal Proceedings sections in interim filings contain no material case detail in the extracted bodies—treat as unverified beyond standard contingency disclosures.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is earnings-heavy rather than thin, though much is syndicated analyst/flow commentary.
+
+**Earnings and guidance (Jul 2026):**
+- “CRH Stock Up on Q2 Earnings & Revenue Beat, Both Up Y/Y” (30 Jul 2026, Zacks/Yahoo)
+- “CRH (NYSE:CRH) Issues Earnings Results, Beats Expectations By $0.19 EPS” (31 Jul 2026, MarketBeat)
+- “CRH Q2 Earnings Call Highlights” (31 Jul 2026, Yahoo)—record Q2 revenue, margins, EPS; full-year guidance reaffirmed per summary
+- “CRH (NYSE:CRH) Releases FY 2026 Earnings Guidance” (30 Jul 2026, MarketBeat)
+
+**M&A and capital allocation:**
+- “CRH (CRH) Stock Slides As Margin Strength Meets Deal Risk” (1 Aug 2026, simplywall.st)—Arcosa deal cited as overhang
+- Dividend maintained/increased: “Crh Plc (NYSE:CRH) Declares Quarterly Dividend of $0.39” (31 Jul 2026)
+
+**Analyst sentiment:**
+- Consensus “Moderate Buy” (1 Aug 2026, MarketBeat); price targets trimmed (“CRH Maintains Overweight Rating — Price Target Lowered to $125”, 31 Jul 2026, GuruFocus)
+- “Why Wells Fargo Still Prefers CRH (CRH) as Construction Stocks Face Pressure” (15 Jul 2026, Yahoo Finance)
+
+**Macro context (colour only):** Barrons noted resilient infrastructure earnings amid AI/data-centre capex concerns (30 Jul 2026)—supportive backdrop, not a screen input.
+
+No material management-change or regulatory-enforcement headlines in the manifest.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Primary filings confirm improving revenue, margins, and earnings that support the quantitative buy signal, but elevated M&A-driven leverage, cyclical exposure, and sub-par FCF yield warrant accumulation rather than high-conviction overweight until Arcosa integration and 2026 guidance are verified from full filing text.

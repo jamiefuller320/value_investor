@@ -1,0 +1,83 @@
+# Naturgy Energy Group, S.A. (NTGY.MC) — Research memo
+
+_Version 1 · Updated 2026-08-02T11:54:02.366097+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Naturgy is a Spanish integrated gas and electricity utility offering regulated network earnings, liberalised supply and generation exposure, and a capital-return profile that screens attractively on cheapness, quality, dividend yield, GARP, and risk metrics. At roughly 13× P/E, 2.8× P/B, ~8.3% dividend yield, and 22.9% ROE, the quantitative screen flags a strong buy, though conviction is tempered by elevated leverage (debt/equity ~141%), a sub-Graham current ratio (1.18), and a new one-week signal with only 49% conviction score. The central debate is whether post-crisis normalisation of earnings and cash flow—plus recent 1H26 guidance upgrades—justify the yield and buyback programme, or whether regulatory risk, shareholder overhang from successive PE exits, and balance-sheet strain cap upside. Primary regulatory filing bodies are absent from the research pack; all financial figures below fall back to Yahoo unless noted.
+
+## INVESTMENT THESIS
+The screen passes 13 of 22 models across five factor families—cheapness, quality, dividend, GARP, and risk—at a composite score of 79% (sector-relative 77%), with full data quality (20/20 metrics). Naturgy fits a classic utility value template: durable regulated cash flows, double-digit ROE, and a shareholder-return stack combining an ~8% yield with meaningful buybacks (€2.58bn repurchased in FY2025 per Yahoo cash-flow data). Piotroski F-Score of 7/9 confirms improving profitability, positive operating cash flow exceeding net income, declining leverage, and no share dilution—quality markers that align with passes on Buffett Quality, Quality Value, Earnings Quality, and Magic Formula.
+
+Where the screen fails—Graham Defensive, Deep Value, Lynch PEG (1.26), Economic Moat, and Financial Health—it largely reflects sector structure rather than distress: utilities carry inherently high leverage and moderate margins, and P/B above 1.0 blocks deep-value filters. For a value investor, the hook is a cash-generative incumbent trading below many global peers on earnings yield (~7.5%) while returning capital aggressively; FY2025 free cash flow of €2.38bn against a market-implied FCF yield supports the FCF Yield and High Dividend Yield model passes. Recent news of upgraded 2026 guidance and strong 1H26 results (July 2026) adds a near-term operational tailwind, though this cannot be cross-checked against CNMV interim filing text in the current source set.
+
+## FINANCIAL REVIEW
+**Source limitation:** The filings index (`filings_index.json`) contains zero annual and zero interim entries with downloadable body text. One "other" CNMV entity-information page is indexed (19 May 2025) without a body extract. No going-concern, covenant, contingency, or pension disclosures could be verified from primary filings. All figures below are sourced from `financials_annual.json` (Yahoo); interim commentary draws on Yahoo cached quarterly income and news headlines only.
+
+**Income and profitability (annual, Yahoo fallback)**
+
+| Metric | FY2025 | FY2024 | FY2023 | FY2022 |
+|--------|--------|--------|--------|--------|
+| Revenue (€m) | 19,455 | 19,267 | 22,617 | 33,965 |
+| Operating income (€m) | 3,803 | 3,894 | 4,030 | 3,586 |
+| EBITDA (€m) | 5,543 | 5,471 | 5,192 | 4,511 |
+| Net income (€m) | 2,023 | 1,901 | 1,986 | 1,649 |
+| Diluted EPS (€) | 2.17 | 1.98 | 2.07 | 1.72 |
+
+Revenue has normalised sharply from the 2022 energy-crisis spike (€34.0bn) to a stable ~€19–20bn run-rate, while net income has risen steadily from €1.65bn (2022) to €2.02bn (2025)—a +23% three-year uplift. EPS followed the same trajectory (€1.72 → €2.17). EBITDA expanded modestly to €5.54bn in 2025 despite slightly lower operating income, reflecting stable underlying margins post-volatility. Normalised income (Yahoo) was €2.19bn in 2025 versus reported €2.02bn, with €222m of unusual charges (impairments, restructuring)—recurring but worth monitoring.
+
+**Cash flow and capital allocation (annual, Yahoo fallback)**
+
+| Metric | FY2025 | FY2024 | FY2023 |
+|--------|--------|--------|--------|
+| Operating cash flow (€m) | 4,525 | 3,992 | 4,857 |
+| Free cash flow (€m) | 2,376 | 1,795 | 2,433 |
+| CapEx (€m) | (2,149) | (2,197) | (2,424) |
+| Dividends paid (€m) | (1,920) | (1,571) | (1,624) |
+| Share buybacks (€m) | (2,580) | (510) | (20) |
+
+Cash conversion remains robust: OCF exceeded net income in 2025 (€4.53bn vs €2.02bn), supporting the screen's Earnings Quality pass. FCF rebounded to €2.38bn from €1.80bn in 2024. Capital return intensified materially in 2025—€1.92bn dividends plus €2.58bn buybacks—raising questions about balance-sheet headroom that filing covenant language would normally clarify.
+
+**Balance sheet (FY2025, Yahoo fallback)**
+
+- Total debt: €16.75bn; net debt: €11.11bn (vs €10.79bn FY2024)
+- Stockholders' equity: €9.34bn; total assets: €39.10bn
+- Debt/equity (screen input): ~141%
+- Current ratio: 1.18; working capital: €1.40bn
+- Cash and equivalents: €4.36bn
+
+Leverage is declining in Piotroski terms but remains high in absolute and screen terms (Financial Health model failed). Net debt ticked up slightly year-on-year despite FCF generation, consistent with aggressive buybacks. Tangible book value of €3.38bn implies goodwill-heavy balance sheet (€5.96bn goodwill and intangibles)—typical for a utility with network assets but limiting net-net or deep-value screens.
+
+**Interim / 1H26 (gap noted)**
+
+No interim filing bodies are indexed. Yahoo quarterly income for 2026 shows a single quarter with revenue €5.10bn, net income €530m, and diluted EPS €0.57 (share count ~926m). News headlines from 22 July 2026 report upgraded full-year 2026 guidance and strong 1H26 results with robust cash flow ("NTGY: Upgraded guidance and strong 1H26 results…", TradingView; "Las acciones de Naturgy suben tras elevar su objetivo anual", XTB.com), but specific 1H26 consolidated figures cannot be cited from primary filings. Analyst forecast updates following provisional results were noted on 25 July 2026 (simplywall.st).
+
+## RISKS AND RED FLAGS
+**Regulatory and political:** As Spain's largest integrated gas utility, Naturgy faces ongoing regulatory scrutiny on network remuneration, retail tariff structures, and energy-transition policy. None of this is quantified in the available filing bodies; it remains a structural sector risk not captured by valuation screens.
+
+**Leverage and liquidity:** Debt/equity ~141%, current ratio 1.18 (below Graham Defensive threshold of 2.0), and failed Financial Health and Economic Moat models flag balance-sheet strain. Net debt rose slightly in FY2025 despite strong FCF. Without filing covenant disclosures, refinancing terms and headroom are unverified.
+
+**Shareholder overhang and governance:** March 2026 saw BlackRock exit its entire stake (~€2.79bn block), triggering a ~6% share-price fall ("Las acciones de Naturgy caen un 6% tras la salida completa de BlackRock", Investing.com España, 3 Mar 2026). CVC sold its stake for ~$3.57bn in May 2026 ("CVC Sells Naturgy Stake for $3.57 Billion", WSJ/Yahoo, 27 May 2026). IFM sought to increase its stake toward 29.9% (XTB.com, 20 Jan 2026). Repeated PE exits create supply overhang and concentrate ownership among a few financial sponsors—governance and minority-shareholder alignment risks that screens do not model.
+
+**Capital-return sustainability:** FY2025 returned ~€4.5bn (dividends + buybacks) against €2.38bn FCF—a gap funded by balance sheet and/or asset sales. The ~8.3% screen yield is attractive but may compress if payout policy adjusts; dividend sustainability cannot be confirmed without CNMV dividend-policy or annual-report disclosures.
+
+**Earnings quality:** Recurring special charges (€222m FY2025; €131m FY2024; €510m FY2023) for impairments and restructuring suggest ongoing portfolio optimisation costs. ROA remains below the Economic Moat screen threshold despite strong ROE, reflecting asset-heavy structure.
+
+**Missing filing disclosures:** No going-concern, pension obligation, litigation contingency, or covenant language available from indexed filing bodies. This is a material research gap for a verify-before-trade workflow.
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate (27 articles in manifest) but includes several material items:
+
+- **1H26 results and guidance upgrade (Jul 2026):** TradingView (22 Jul), XTB.com (22 Jul), and Investing.com México (22 Jul) report strong 1H26 earnings and raised 2026 outlook; share price reacted positively.
+- **Australia renewables (Jul 2026):** Naturgy to invest $344m in an Australian renewables project with a ten-year PPA, operations from 2028 (Yahoo, 17 Jul 2026)—signals international growth capex alongside domestic networks.
+- **CVC full exit (May 2026):** CVC sold its Naturgy stake for ~$3.57bn (WSJ/Yahoo, 27 May 2026), following BlackRock's earlier divestment.
+- **BlackRock block sale (Mar 2026):** Complete exit at ~€2.79bn caused a sharp one-day sell-off; commentary noted register-clearing at a price cost ("Naturgy Pays the Price for BlackRock's Exit", Yahoo, 3 Mar 2026).
+- **IFM stake build (Jan 2026):** IFM Investors sought to raise its holding toward 29.9% (XTB.com, 20 Jan 2026)—partial offset to PE exits.
+- **Dividend commentary (Jan–Apr 2026):** Multiple generic European dividend-stock listicles mention Naturgy (Yahoo, Apr 2026); TIKR.com (14 Jan 2026) highlighted ~6.6% yield—below current screen yield, suggesting recent price or payout moves.
+
+Technical/price commentary (El Español, May 2026; Estrategias de Inversión, Dec 2025) adds little fundamental insight. No material M&A beyond stake sales was identified.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Yahoo-backed earnings, cash-flow, and capital-return data broadly support the strong-buy screen, and July 2026 guidance upgrades add operational confirmation, but the absence of CNMV annual/interim filing bodies prevents verification of leverage covenants, regulatory provisions, and dividend sustainability—warranting accumulation rather than unqualified endorsement.
