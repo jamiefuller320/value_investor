@@ -96,6 +96,7 @@ COMMITTED_JSON_PATHS: tuple[Path, ...] = (
     DEFAULT_LATEST_PATH,
     COMMITTED_TASKS_PATH,
     Path("docs/data/paper_automation/last_run.json"),
+    Path("docs/data/library/policy.json"),
 )
 
 

@@ -7,6 +7,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
+from tests.conftest import weekday_noon_utc
 from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks
 from value_investor.ops_monitor import (
     OpsFinding,
@@ -25,13 +26,8 @@ from value_investor.ops_monitor import (
 )
 
 
-def _weekday_noon_utc() -> datetime:
-    """Pinned Wednesday so engineering-queue freshness tests are weekday-stable."""
-    return datetime(2026, 8, 5, 12, 0, 0, tzinfo=UTC)
-
-
 def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold():
-    eight_hours_ago = (_weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    eight_hours_ago = (weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
     idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
@@ -40,8 +36,9 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=_weekday_noon_utc())
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=weekday_noon_utc())
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 26
     assert eng_checks[0]["stale"] is False
@@ -49,7 +46,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
 
 
 def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
-    eight_hours_ago = (_weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    eight_hours_ago = (weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
     active_queue = {"open_count": 2, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
@@ -58,8 +55,9 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(queue_status=active_queue, now=_weekday_noon_utc())
+        findings, checks = check_workflow_freshness(queue_status=active_queue, now=weekday_noon_utc())
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 3
     assert eng_checks[0]["stale"] is True
@@ -67,7 +65,7 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
 
 
 def test_check_workflow_freshness_softens_orchestrator_when_recovery_bundle_active():
-    thirty_hours_ago = (_weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    thirty_hours_ago = (weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
     idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
 
     def fake_latest(workflow_file, **kwargs):
@@ -86,7 +84,7 @@ def test_check_workflow_freshness_softens_orchestrator_when_recovery_bundle_acti
         patch("value_investor.ops_monitor.active_workflow_runs", side_effect=fake_active),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
     ):
-        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=_weekday_noon_utc())
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=weekday_noon_utc())
 
     orch = [row for row in findings if "Automation Orchestrator" in row.title]
     assert orch and orch[0].severity == "warn"
