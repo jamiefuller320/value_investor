@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-01T20:25:54+00:00",
+  "updated_at": "2026-08-02T13:49:49+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2030,6 +2030,134 @@
       "status": "open",
       "source": "accelerated-review-cycle runbook planning",
       "added_at": "2026-08-01T20:25:54+00:00"
+    },
+    {
+      "id": "L98",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Extend Companies House PDF extraction to capture Financial Review (p. 26",
+      "summary": "Extend Companies House PDF extraction to capture Financial Review (p. 26+), consolidated cash-flow statement, and viability/going-concern sections \u2014 current FY2025 body truncates at CEO review (~p. 10), leaving covenant and adjusted-FCF language unreachable.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L99",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Add dedicated RNS fetch for \u201cInterim Results\u201d and \u201cFull Year Results\u201d an",
+      "summary": "Add dedicated RNS fetch for \u201cInterim Results\u201d and \u201cFull Year Results\u201d announcement types (Investegate/LSE API) and classify `period=interim|annual` \u2014 index currently marks all seven filings as `other`, obscuring coverage gaps.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L100",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Implement `company_ir_presentation` fetch from FirstGroup IR allowlist (",
+      "summary": "Implement `company_ir_presentation` fetch from FirstGroup IR allowlist (`firstgroupplc.com` results PDFs) to bridge FCF, working capital, and segment margin tables absent from Yahoo.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L101",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Target-extract annual report \"Notes to the Financial Statements\" pages (",
+      "summary": "Target-extract annual report \"Notes to the Financial Statements\" pages (Related party transactions, Segment information, Financial instruments) from IR PDFs \u2014 current body extracts capture strategic report and RNS summaries but miss structured note tables needed for related-party and country revenue gaps.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L102",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Fetch and parse company IR results presentation PDFs (`planned_alternate",
+      "summary": "Fetch and parse company IR results presentation PDFs (`planned_alternate_sources.company_ir_presentation`) for FCF/working-capital bridge tables and segment EBITDA margins not present in Yahoo or RNS headline blocks.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L103",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: scoring \u2014 Reconcile `key_metrics.FCF` (\u2212$66.1m) with `cashflow_metrics.free_cashfl",
+      "summary": "Reconcile `key_metrics.FCF` (\u2212$66.1m) with `cashflow_metrics.free_cashflow` (+$119m) in `screening_snapshot.json`; drive FCF Yield and cash-conversion overlay from a single filing-aligned definition (OCF \u2212 capEx per reported year, USD).",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "scoring"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L104",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading",
+      "summary": "Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading update); gap_fill IR refetch attempted 1 fetch, 0 success\u2014add retry with alternate PDF parser or direct HTML RNS mirror.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L105",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Extract Annual Report consolidated cash-flow statement and Note 5 except",
+      "summary": "Extract Annual Report consolidated cash-flow statement and Note 5 exceptional items as structured tables (currently narrative-only in `ir_0e40d9707e30c3b7.txt`); unlocks WC/capex/M&A bridge without Yahoo fallback.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-02T13:49:49+00:00"
     }
   ]
 }

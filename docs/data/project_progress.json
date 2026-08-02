@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-29T12:12:52.024004+00:00",
+  "generated_at": "2026-08-02T13:50:13.183489+00:00",
   "current_focus": "stage_2b",
   "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
   "stages": [
@@ -45,28 +45,31 @@
     "screen_company_count": 248,
     "strong_buy_count": 16,
     "screen_run_at": "2026-07-26T18:20:46.898282+00:00",
-    "library_graduated_count": 18,
-    "library_focus_market": "smi",
+    "library_graduated_count": 19,
+    "library_focus_market": "omxs30",
     "decision_review_applied": true,
     "ai_excess_after_costs": -0.0382,
     "rules_excess_after_costs": -0.1299,
     "ai_total_return": -0.0291,
     "rules_total_return": -0.1098,
     "ops_overall": "warn",
-    "zero_body_buy_tier": 1,
-    "ingest_stalled": true
+    "zero_body_buy_tier": 0,
+    "unmeasured_buy_tier": 42,
+    "measured_tickers": 18,
+    "buy_tier_count": 60,
+    "ingest_stalled": false
   },
   "appraisal": {
     "strengths": [
       "FTSE 350 live screen and published dashboard are operational.",
-      "Offline library: 18 graduated markets (focus: smi).",
+      "Offline library: 19 graduated markets (focus: omxs30).",
       "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
       "Engineering queue self-repair and 11 merged supervised tasks.",
       "AI-judgment track beating rules control (-3.8% vs -13.0% excess)."
     ],
     "gaps": [
       "Primary AI track still below ^FTSE after costs (-3.8% excess; history still thin).",
-      "Ingest bottleneck: zero_body_buy_tier stuck at 1 (library-path tickers not reached by weekday ingest pass).",
+      "Ingest coverage gap: 42 buy-tier tickers have no filings index yet.",
       "Published screen bundle dated 2026-07-26 — confirm Sunday refresh."
     ],
     "next_actions": [
@@ -77,19 +80,57 @@
     ]
   },
   "ingest_bottleneck": {
-    "stalled": true,
-    "zero_body_buy_tier": 1,
-    "summary": "Health measurement scans library research paths, but the weekday ingest pass only reads docs/data/research/. Tickers like BREE.L (indexed, zero bodies) never enter the top-5 target list. Micro-compile can also false-positive when it re-matches already-merged engineering tasks.",
+    "stalled": false,
+    "zero_body_buy_tier": 0,
+    "health": {
+      "snapshot_at": "2026-07-31T06:32:06.859962+00:00",
+      "buy_tier_count": 60,
+      "measured_tickers": 18,
+      "unmeasured_buy_tier": 42,
+      "unmeasured_tickers": [
+        "SN.L",
+        "COST.L",
+        "DATA.L",
+        "BME.L",
+        "FOUR.L",
+        "DSCV.L",
+        "WIX.L",
+        "EDV.L",
+        "IMB.L",
+        "KLR.L",
+        "RNK.L",
+        "HLN.L",
+        "BT-A.L",
+        "RS1.L",
+        "JD.L",
+        "PFD.L",
+        "SGE.L",
+        "RIO.L",
+        "ALFA.L",
+        "GFRD.L",
+        "GAMA.L",
+        "ASHM.L",
+        "BYIT.L",
+        "DNLM.L",
+        "KNOS.L"
+      ],
+      "zero_body_buy_tier": 0,
+      "zero_body_tickers": [],
+      "indexed_without_body": 1,
+      "filings_with_body": 120
+    },
+    "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
     "fixes": [
-      "Unify filing-index lookup in ingest improvement (same roots as health snapshot).",
-      "Boost priority for measured zero-body tickers (indexed > 0, bodies = 0).",
-      "Count only newly-open tasks after micro-compile before marking stall fixed.",
-      "Add BREE.L-focused ingest task: prune mis-attributed RNS, CH accounts, body refetch."
+      "Canonical path + library migration (implemented).",
+      "Sunday bootstrap seeds strong_buy indexes when missing (capped).",
+      "Misattribution filter + headline reclassify at pass start (implemented).",
+      "Raise weekday caps and run ingest after Sunday screen (implemented).",
+      "Targeted BREE.L ingest suggestions for engineering micro-compile."
     ],
     "commands": [
       "ftse-ingest-loop status --json",
       "ftse-ingest-loop run --max-targets 10 --json",
-      "gh workflow run ingest-loop.yml -f force=true -f max_targets=10"
+      "gh workflow run ingest-loop.yml -f force=true -f max_targets=15"
     ]
   }
 }

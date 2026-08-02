@@ -1,125 +1,182 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 2 · Updated 2026-07-26T18:43:22.177575+00:00 · Mode: gap_fill_
+_Version 2 · Updated 2026-08-02T13:49:49.876595+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
-Hikma Pharmaceuticals is a FTSE 100 multinational generics and specialty pharma group spanning Injectables, MENA Branded, and US Hikma Rx, with roughly 59% of revenue in North America. The quantitative screen rates the stock a **Strong Buy** (13/22 models; composite 75%; sector-relative 91%), supported by low multiples (P/E 11.6, P/B 1.8, yield 3.9%, ROE 16.5%) across cheapness, quality, dividend, GARP and risk families. FY2025 filings show resilient underlying performance — core revenue +6% to $3,349m and core operating profit +3% to $741m — but reported earnings were distorted by a sodium oxybate legal settlement and Injectables margins are compressing. The central debate is whether Branded/Hikma Rx momentum and capital returns (5% dividend increase, $250m buyback) justify the valuation after management withdrew medium-term margin targets and guided 2026 core operating profit broadly flat at $720–770m.
+Hikma is a diversified multinational generics and specialty pharma group (Injectables, Branded MENA, Hikma Rx US) reporting FY2025 core revenue of $3,349m (+6%) and core operating profit of $741m (+3%), with Branded and Hikma Rx offsetting Injectables margin pressure. The quantitative screen flags the stock as a Strong Buy on cheapness (P/E 11.8, P/B 1.8, yield 3.9%), quality, dividend and GARP metrics, though free-cash conversion remains a screen weakness. The valuation hook is a BBB-rated, US-heavy manufacturer trading below historical multiples after a profit-guidance reset and Injectables de-rating, with a $250m buyback and 5% dividend increase signalling balance-sheet confidence. The central debate is whether Branded/Hikma Rx momentum and US onshoring advantages outweigh further Injectables margin erosion, management churn, and muted 2026 guidance (core OP $720–770m, revenue +2–4%) after medium-term targets were withdrawn.
 
 ## INVESTMENT THESIS
-For a value investor, Hikma offers a rare combination of sector-leading scale (seventh-largest US generic supplier; largest pharma by sales in MENA), investment-grade balance sheet (BBB/stable, net debt/core EBITDA 1.6x), and a cash-return framework (84c total dividend, +5%; $250m buyback for 2026) at a discount to healthcare peers. The screen’s Strong Buy signal is underpinned by passing Graham Enterprising, Earnings Yield, Lynch PEG, Magic Formula, Buffett Quality, Dividend Growth and Financial Health models, with debt/equity at 62% and full data quality (20/20 metrics). Business quality is genuine: Branded grew core revenue 10% at a 26.4% margin; Hikma Rx held above $1bn revenue with margin improving to 17.3%; ROIC was 16.0%. The valuation gap likely reflects the February 2026 guidance reset, Injectables margin erosion (core margin 31.0% vs 35.3% in 2024), and leadership turnover — factors the screen’s cheapness metrics may under-weight but that create a contrarian entry if execution stabilises under returning CEO Said Darwazah.
+For a value investor, Hikma offers a rare combination of sector-defensive cash generation, visible shareholder returns, and a statistically cheap entry point. The screen passes five factor families—cheapness, quality, dividend, GARP and risk—with 20/20 data completeness and sector-relative composite at 91%, while the cash-conversion overlay (negative FCF yield on screen inputs) was adjusted rather than vetoing the signal.
+
+Business quality is supported by primary filings: three complementary segments across North America, MENA and Europe; 84 product launches in 2025; first US biosimilar (ustekinumab); investment-grade credit (S&P and Fitch upgraded to BBB in 2025); and return on average invested capital of 16.0%. Core earnings have compounded from a trough in 2023 (statutory profit $190m per Companies House 2024 accounts extract) to $402m attributable profit in 2025, with core EPS of 228 cents (+2%) providing a cleaner earnings base than reported figures distorted by legal settlements.
+
+The screen’s cheapness metrics align with reported fundamentals: ROE 16.5% (screen) vs core business generating 22.1% group core operating margin; debt/equity 62% with net debt/core EBITDA at 1.6x—elevated but within investment-grade tolerance. Dividend growth (84 cents, +5%) plus a $250m 2026 buyback reinforce the income and capital-return case that passes Dividend Growth and Low P/E + High Yield models.
+
+What makes this a *value* rather than pure deep-value trade is the identifiable catalyst path: Injectables reinvestment, US manufacturing footprint (relevant to generic-drug tariff debate), and analyst re-rating after a ~30% recovery from lows (Panmure, July 2026). Failed screen models (FCF Yield, Economic Moat, Piotroski 6/9, Earnings Quality) correctly flag that margin recovery in Injectables is not yet proven—making the name an accumulate on fundamentals, not a blind quantitative buy.
 
 ## FINANCIAL REVIEW
-**Annual results (FY2025, year ended 31 December 2025)** — primary source: full-year results press release with consolidated cash-flow statement (`filings/bodies/ir_0e40d9707e30c3b7.txt`); annual report highlights (`ir_3a67962eb8770824.txt`).
+**Primary sources:** FY2025 results press release (`filings/bodies/ir_0e40d9707e30c3b7.txt`); Annual Report 2025 extract (`ir_3a67962eb8770824.txt`); H1 2025 interim presentation (`ir_a70365d580129295.txt`). **Gap:** April 2026 trading update (`ir_a9733d0de6aec27d`) remains indexed without body text after IR refetch.
+
+### Profit and cash (FY2025 vs FY2024 — filings)
 
 | Metric | 2025 | 2024 | Change |
 |--------|------|------|--------|
 | Reported revenue | $3,349m | $3,127m | +7% |
 | Core revenue | $3,349m | $3,156m | +6% |
-| Core operating profit | $741m | $719m | +3% |
-| Core operating margin | 22.1% | 22.8% | −0.7pp |
 | Reported operating profit | $542m | $612m | −11% |
-| Core profit attributable to shareholders | $503m | $495m | +2% |
-| Reported profit attributable to shareholders | $402m | $359m | +12% |
-| Core basic EPS | 228c | 224c | +2% |
-| Reported basic EPS | 182c | 162c | +12% |
-| Total dividend per share | 84c | 80c | +5% |
+| Core operating profit | $741m | $719m | +3% (margin 22.1%) |
+| Profit attributable | $402m | $359m | +12% |
+| Core profit attributable | $503m | $495m | +2% |
+| Basic / core EPS | 182c / 228c | 162c / 224c | +12% / +2% |
+| Dividend per share | 84c | 80c | +5% |
 | Operating cash flow | $436m | $564m | −23% |
-| Filing-derived FCF (OCF − PPE − intangibles) | ~$119m | ~$329m | — |
-| Dividends paid (cash) | $185m | $175m | — |
+| CapEx (PPE, filings) | $197m | $165m | +19% |
 | Net debt | $1,387m | $1,118m | +24% |
-| Net debt / core EBITDA | 1.6x | 1.4x | +0.2x |
+| Net debt / core EBITDA | 1.6× | 1.4× | — |
 | Working capital days | 245 | 240 | +5 days |
 | ROIC | 16.0% | — | — |
 
-**Cash-flow bridge (gap-fill resolution).** The consolidated cash-flow statement in the FY2025 release breaks down the OCF decline: cash generated from operations before tax $560m, less tax paid $126m = OCF $436m. Investing outflows included PPE $197m, intangibles $120m and contingent consideration $75m. Simple FCF (OCF less PPE and intangible capex) is approximately **$119m**, corroborated by Yahoo `financials_annual.json` (fallback). This **contradicts** the screen's trailing FCF of **−£66.1m** (`screening_snapshot.json`); the negative screen reading is not supported by FY2025 statutory cash flow and may reflect TTM vendor timing — **unreconciled** without quarterly cash-flow data.
+Reported operating profit was hit by a **sodium oxybate legal settlement** ($72m exceptional; $186m cash, with $111m in restricted cash at year-end). Excluding settlement cash, management reconciles operating cash flow to **+10%** growth.
 
-One-off **$186m legal-settlement cash** (sodium oxybate antitrust; $72m P&L charge) is the largest OCF drag; management states excluding this, OCF would have increased ~10%. Working-capital outflows were also material: inventories −$86m, trade receivables −$97m, other current assets −$122m (includes restricted cash build of $111m for settlement, paid January 2026). Inventories on the balance sheet rose to $1,106m (from $986m). Capex of $197m (+19% YoY) reflects Injectables capacity (Bedford, Cherry Hill, Columbus) and MENA expansion; 2026 capex guidance $190–210m with Bedford commercial production not expected until 2028.
+### Free cash flow bridge (filings + Yahoo fallback)
 
-**Dividend coverage.** Reported FCF of ~$119m did **not** cover $185m dividends paid in 2025. On an adjusted basis excluding legal settlements, cash generation would comfortably cover the dividend, but sustained working-capital build and the $250m buyback programme mean **cash conversion remains a monitoring point**.
+Yahoo `financials_annual.json` (fallback, corroborating filing OCF):
 
-Segment mix (core revenue): Injectables $1,423m (+7%), Branded $849m (+10%), Hikma Rx $1,037m (flat). Injectables core margin fell to 31.0% (from 35.3%); guided to 27–28% in 2026. BBB/stable at S&P and Fitch; covenants suspended while investment-grade.
+| Driver | FY2025 ($m) | FY2024 ($m) |
+|--------|-------------|-------------|
+| Operating cash flow | 436 | 564 |
+| Capital expenditure (Yahoo, incl. intangibles) | (317) | (235) |
+| **Free cash flow (Yahoo)** | **119** | **329** |
+| Change in working capital | (251) | (135) |
+| Inventory increase | (86) | (112) |
+| Receivables increase | (97) | (144) |
+| Business acquisitions | (75) | (162) |
+| Cash dividends paid | (185) | (175) |
 
-**Interim (H1 2025)** — interim presentation (`ir_a70365d580129295.txt`): core revenue $1,657m, core operating profit $429m, OCF $161m (vs $198m H1 2024), net debt/core EBITDA 1.7x at June 2025.
+Filings attribute capEx to capacity expansion in North America ($81m), MENA ($82m) and Europe ($34m); 2026 capEx guidance is $190–210m. FCF is **positive but compressed**: down 64% YoY, **below dividends paid**, before the announced **$250m buyback** (filings). Net debt rose despite BBB upgrade and Eurobond refinancing at a higher coupon (5.125% vs 3.25%).
 
-**2026 outlook (FY2025 release):** Revenue +2–4%; core operating profit $720–770m. April 2026 trading update cited in news as reiterating guidance — **not verified from filing body** (PDF indexed, body missing).
+**Screen note:** `screening_snapshot.json` reports FCF of −$66.1m for the FCF Yield model while the same file’s `cashflow_metrics.free_cashflow` is +$119m—treat screen FCF yield as **unreconciled** pending scoring fix.
 
-**Remaining gaps:** Quarterly cash-flow series absent locally; screen FCF vs filing FCF unreconciled; principal-risk register (pp 84–88) and related-party note not in extracts.
+**Earnings growth note:** Screen inputs show 23.5% earnings growth; filings show core profit growth of **+2%** and reported net income **+12%**. GARP model passes should be weighted accordingly.
+
+### Segments (FY2025 — filings)
+
+Injectables core revenue $1,423m (+7%) with core margin **31.0%** (from 35.3%) on US competition, Xellia mix and FX. Branded $849m (+10%), margin **26.4%** (+19% core OP). Hikma Rx $1,037m (flat), margin **17.3%**. Three US wholesalers each ≥10% of group revenue.
+
+### Interim H1 2025 (filings)
+
+Core revenue $1,657m; core operating profit $429m; operating cash flow $161m (vs $198m H1 2024). Net debt/core EBITDA **1.7×** at June 2025. Injectables margin pressure visible early; full-year Injectables margin guidance was later cut at FY results (to 27–28% for 2026).
+
+### Multi-year cash trend (Yahoo fallback)
+
+FCF trajectory: $404m (2023) → $329m (2024) → $119m (2025)—a three-year deterioration driven by rising capEx, working-capital absorption, and the 2025 legal settlement, not by collapsing revenue (core revenue +6% in 2025).
+
+**Remaining gaps:** Consolidated cash-flow statement line items not fully available in body extracts; pension obligations not found in ingested text; April 2026 trading update figures unverified locally.
 
 ---
 
 ## RISKS AND RED FLAGS
 **Evident from filings (high confidence)**
 
-- **Injectables margin compression.** Core margin 35.3%→31.0%→guided 27–28% in 2026; competition, Xellia mix, euro strength, inventory provisions. Medium-term margin guidance withdrawn.
-- **Legal/regulatory.** $72m sodium oxybate settlement; $186m cash outflow. Principal risks include "legal, regulatory and intellectual property" — **full register not in extract**. Pfizer tafamidis delay to 2031 (news).
-- **Leverage rising.** Net debt +$269m; 1.4x→1.6x EBITDA; Piotroski leverage fail. Covenants suspended only while BBB maintained.
-- **Customer concentration.** Three US wholesalers ≥10% of revenue each.
-- **Cash conversion / dividend coverage.** Reported FCF ~$119m < dividends $185m; WC build and settlement cash explain much of the gap, but Earnings Quality failure is directionally supported.
-- **Governance turnover.** Darwazah family executive control; CFO search ongoing; Acting CFO in place.
+- **Injectables margin and guidance reset:** Core margin −430 bps to 31.0%; 2026 guided to 27–28%; medium-term group and Injectables margin targets withdrawn (`ir_0e40d9707e30c3b7.txt`). Primary earnings risk.
+- **Cash conversion deterioration:** OCF −23% reported; FCF $119m vs dividends $185m (Yahoo); working capital days 245 and rising; inventory and receivables build (Yahoo). Validates Earnings Quality and FCF Yield **concerns** even if headline FCF is not negative.
+- **Legal settlement and contingencies:** Sodium oxybate settlement ($72m P&L / $186m cash); filings flag sensitivity to legal outcomes in forward-looking statements.
+- **Leverage rising:** Net debt +$269m; 1.6× EBITDA; new IFC and syndicated loans; Piotroski leverage-decline fail confirmed. Covenants suspended while BBB retained—evidenced, but not a permanent shield.
+- **Customer concentration:** Three US wholesalers ≥10% each of revenue (FY2025 results notes).
+- **Competitive pressure in injectables:** US competition on high-value products; lower-margin Xellia and partnered products diluting mix (`ir_3a67962eb8770824.txt`)—differentiation narrative present, margin outcome negative.
+- **Management transition:** CEO/chair/CFO changes announced February 2026 (filings).
 
-**Open / thin evidence**
+**Partially evidenced / still open**
 
-- **Related-party and founder control** — Darwazah presence confirmed; no related-party note in extracts. *Next:* Companies House accounts; LSE substantial-shareholder filings.
-- **Principal risk detail (patent cliff, FDA/EMA)** — pp 84–88 not extracted. *Next:* full annual report risk section; FDA Orange Book.
-- **Screen FCF vs filing FCF** — TTM −£66.1m vs filing +$119m unreconciled. *Next:* quarterly cash-flow ingest; IR cash bridge.
-- **Pension** — remeasurement −$2m only; no deficit quantified. *Next:* Companies House pension note.
+- **Capital allocation adequacy:** Buyback + dividend growth alongside thin FCF and rising debt is **disclosed and board-endorsed** but not stress-tested in ingested documents. *Next source:* April 2026 trading update PDF; full cash-flow note.
+- **Regulatory / FDA quality risk:** Annual Report states highly regulated environment and FDA compliance processes; **no specific warning letters or inspection outcomes** in body extracts. *Next source:* FDA establishment inspection database; Annual Report principal risks (page 82, not fully ingested).
+- **US generic tariff exposure:** Debated in news (Citi positive on US manufacturing, July 2026); **not quantified in filings pack**. *Next source:* company tariff sensitivity disclosure or broker model (external).
+- **Pension:** No pension text in ingested bodies—**open disclosure gap**. *Next source:* Annual Report notes to accounts (full PDF); Companies House iXBRL.
+- **Patent litigation pipeline:** Pfizer/VYNDAMAX settlement (news, April 2026) illustrates industry risk; Hikma-specific pipeline exposure not mapped in local sources.
+
+Going concern: affirmed in FY2025 results notes with liquidity stress-testing—no qualification in extracted text.
 
 ---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderately thick** on corporate events but thin on deep operational analysis; several items are syndicated Kalkine Media pieces.
+Coverage over the past year is **moderate on company-specific fundamentals, heavy on sector rotation and broker commentary**.
 
-**Strategy and guidance:** *Hikma Pharmaceuticals Reiterates 2026 Guidance, Exits 503B Compounding in April Trading Update Call* (24 April 2026, yfinance) — encouraging start to 2026, guidance maintained, strategic exit from 503B compounding. *Hikma’s shares plummet after guidance cut* / *Hikma Pharma tumbles on softer guidance as buyback fails to soften pill* (26 February 2026) — February FY2025 results and softer 2026 Injectables margin outlook drove selloff despite $250m buyback.
+**Results and guidance (material):**
+- *Hikma’s shares plummet after guidance cut* — Investors' Chronicle, 26 February 2026
+- *Hikma Pharma tumbles on softer guidance as buyback fails to soften pill* — Yahoo Finance UK, 26 February 2026
+- *ii view: Hikma Pharmaceuticals injects big dose of caution* — Interactive Investor, 19 March 2026
+- *Across The Markets: Hikma, IHG, Harbour Energy* — Investegate, 7 August 2025 (H1 interims: operating profit −26%, shares −6% on tariff concerns)
+- *Hikma Pharmaceuticals Reiterates 2026 Guidance, Exits 503B Compounding in April Trading Update Call* — yfinance, 24 April 2026 (body of April PDF not in pack)
 
-**Analyst sentiment:** *Citi starts Hikma at 'buy' with strategy reset offering compelling entry point* (16 July 2026) — £17 target, sum-of-the-parts. *Hikma recovery story still has further to run after recent rally, says Panmure* (22 July 2026) — Buy, 1,600p target. *Hikma and Fresenius best positioned from Trump's generic drug tariffs, says Citi* (23 July 2026). *How The Hikma Pharmaceuticals (LSE:HIK) Narrative Is Shifting After Analyst Valuation Resets* (19 May 2026) — Street targets cut (e.g. JPMorgan £18–20 from higher prior levels).
+**Strategy / M&A:**
+- *Statement regarding Hikma Pharmaceuticals Plc* — Investegate, 4 February 2026 (Brookfield confirms no offer)
+- Pfizer settlements with Hikma, Dexcel, Cipla on VYNDAMAX/tafamidis — yfinance, 28–30 April 2026
 
-**M&A / corporate:** *Statement regarding Hikma Pharmaceuticals Plc* — Brookfield Rule 2.8 announcement, no offer (4 February 2026, Investegate/RNS body).
+**Analyst / sentiment:**
+- *Citi starts Hikma at 'buy'* — yfinance, 16 July 2026 (£17 target)
+- *Hikma and Fresenius best positioned from Trump's generic drug tariffs, says Citi* — yfinance, 23 July 2026
+- *Hikma recovery story still has further to run after recent rally, says Panmure* — yfinance, 22 July 2026
+- *How The Hikma Pharmaceuticals (LSE:HIK) Narrative Is Shifting After Analyst Valuation Resets* — yfinance, 19 May 2026 (target cuts, fair value ~£18.7)
 
-**Management / insider:** *Independent Chairman of Hikma Pharmaceuticals Victoria Hull Buys 241% More Shares* (2 May 2025, simplywall.st). Major leadership reshuffle announced with FY2025 results (February 2026 filings).
+**Shareholder / governance:**
+- *Independent Chairman Victoria Hull Buys 241% More Shares* — Simply Wall St, 2 May 2026
+- *Wellington Management Group LLP Lowers Stake Below 5%* — Kalkine Media, 24 July 2026
 
-**Regulatory / legal:** Pfizer VYNDAMAX/tafamidis patent settlements with Hikma, Dexcel and Cipla extending protection to 2031 (28–30 April 2025, yfinance). *Generic drugmakers gain key victory in 'skinny label' patent case* (5 June 2025) — sector-positive Supreme Court ruling.
-
-**Shareholder activity:** *Wellington Management Group LLP Lowers Stake in Hikma Pharmaceuticals Below 5% Reporting Threshold* (24 July 2026, Kalkine Media).
-
-**Sector context:** *Shares in Generic-Drug Makers Fall After Trump's Tariff Plan* (22 July 2026, WSJ via yfinance) — sector sold off on tariff announcement.
+Much other news is generic FTSE/dividend listicles (Twelfth Magpie) or sector pieces mentioning Hikma in passing—limited incremental insight.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.71
-Rationale: Gap-fill confirms FY2025 FCF is positive on filing data and one-off legal cash—not structural negative FCF—partially validating the Strong Buy cheapness signal, but rising leverage, tight reported dividend coverage, and unresolved related-party/principal-risk detail prevent full confirmation.
+Confidence: 0.76
+Rationale: Gap-fill reconciles FCF drivers and shows FY2025 FCF is positive but thin and insufficient for stated capital returns, partially validating the cash-conversion overlay while supporting the screen’s cheapness case and slightly upgrading conviction from the prior watchlist framing.
 
 ## Weekly updates
 
-### 2026-07-26T18:43:22.177575+00:00
-Q: Generic-pharma and injectables exposure carries patent-cliff and FDA/EMA regulatory risk; negative FCF (−£66.1m) may reflect heavy capex or working-capital build—screen does not distinguish.
-Status: partially_resolved
-Evidence: FY2025 press release (`ir_0e40d9707e30c3b7.txt`) flags principal risks including legal, regulatory and intellectual property (full register on annual report pp 84–88, not fully extracted). Regulatory compliance with FDA/EMA is described in the annual report (`ir_3a67962eb8770824.txt`). Filing cash-flow statement shows OCF $436m, PPE capex $197m and intangible purchases $120m — filing-derived FCF ≈ $119m (positive), not the screen's −£66.1m; OCF was depressed by $186m legal-settlement cash and working-capital outflows (inventories −$86m, receivables −$97m, other current assets −$122m).
-SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
-NextSources: Annual Report 2025 risk section pp 84–88 (full PDF extract); FDA approval/action letter database for pipeline products; April 2026 trading update PDF (`ir_a9733d0de6aec27d`) — body refetch failed per `gap_fill_source_map.json`
+### 2026-08-02T13:49:49.876595+00:00
+Q: Negative FCF (−£66.1m) with ongoing dividend and buyback activity (per cash-conversion overlay note) creates balance-sheet and capital-allocation risk; pharma faces pricing pressure, patent cliffs, and FDA/regulatory scrutiny—not modelled.
 
-Q: Leverage not declining (Piotroski fail) despite D/E 62%; governance and related-party risk typical of founder-influenced pharma names is not assessed.
 Status: partially_resolved
-Evidence: Net debt rose $1,387m from $1,118m and net debt/core EBITDA 1.4x→1.6x (FY2025 release); Piotroski leverage component failed (`screening_snapshot.json`). Darwazah family holds executive control — Said Darwazah CEO, Mazen Darwazah Deputy CEO MENA and Executive Vice Chairman (filings). Board refresh: Victoria Hull becomes Chair, CFO search ongoing. Remeasurement of post-employment obligations was −$2m (consolidated statement of comprehensive income) — pension not material in extract. No related-party transactions note captured in available body extracts.
-SourcesTried: filings_bodies, filings_index, news_manifest, alternate_news, screening_snapshot
-NextSources: Companies House filed accounts — related-party and remuneration notes; Annual Report corporate governance section pp 96–150 (full extract); LSE substantial-shareholder announcements for family stake percentage
 
-Q: Is negative free cash flow (−£66.1m, FCF yield −2.0%) driven by temporary injectables capex or a structural working-capital drain that threatens the 3.9% yield?
-Status: partially_resolved
-Evidence: FY2025 filing cash flow (`ir_0e40d9707e30c3b7.txt`): OCF $436m; capex $197m PPE + $120m intangibles → FCF ≈ $119m (Yahoo `financials_annual.json` agrees at $119m). Screen TTM FCF −£66.1m conflicts with annual filing — likely a vendor TTM timing/definition mismatch, not verified from quarterly filings (Yahoo `quarterly_income` empty). Cash drivers: (1) one-off $186m legal settlements in OCF; (2) working-capital build — days 240→245, inventory +$120m on balance sheet; (3) elevated capex for Bedford/Columbus/MENA plants ($197m; 2026 guide $190–210m). Dividends paid $185m exceeded reported FCF $119m in 2025; excluding legal settlements, management states OCF would have risen ~10%. $250m buyback adds 2026 cash demand but BBB rating and 1.6x leverage provide headroom.
-SourcesTried: filings_bodies, yahoo_financials, screening_snapshot, news_manifest
-NextSources: Company IR cash-flow bridge presentation (planned in `gap_fill_source_map.json`); H1/H2 2026 interim cash-flow statement to reconcile screen TTM vs statutory
+Evidence: FY2025 filings (`ir_0e40d9707e30c3b7.txt`) report operating cash flow of $436m (down 23%; +10% excluding $186m sodium oxybate settlement cash), capEx of $197m, net debt of $1,387m (1.6× core EBITDA, up from 1.4×), a 5% dividend increase to 84c, and a $250m 2026 buyback. Yahoo `financials_annual.json` (fallback) shows FY2025 free cash flow of **+$119m** (not negative)—but dividends paid of $185m exceed that FCF, and the screen’s `key_metrics.FCF` of **−$66.1m** conflicts with its own `cashflow_metrics.free_cashflow` of +$119m. Regulatory/pricing risk is referenced qualitatively in the Annual Report 2025 (`ir_3a67962eb8770824.txt`: highly regulated industry, FDA compliance) but is not quantified in the screen.
 
-Q: (Hikma Pharmaceuticals PLC) — Thirteen of 22 models pass (75% composite, 91% sector-relative), including Graham Enterprising, Lynch PEG, Quality Value, Buffett Quality, Financial Health (D/E 62%). Critical failures: FCF Yield (−2.0%), Piotroski (6/9), Earnings Quality. Verdict: watchlist — attractive growth/quality but negative FCF is a material gap.
-Status: partially_resolved
-Evidence: `screening_snapshot.json` confirms 13/22 pass, composite 0.7505, sector-relative 0.911, conviction 0.519 (new signal, 1 week). Failed models: FCF Yield, Piotroski (6/9 — leverage, gross margin, asset turnover failed), Earnings Quality, Economic Moat. Filing-derived FY2025 FCF is positive ($119m), weakening the FCF-failure as a structural red flag but not eliminating weak conversion (dividends $185m > FCF). Lynch PEG pass cited in email red-flag pass is not independently verified in local sources (PEG 0.49 / growth 23.5% not present in `screening_snapshot.json`).
-SourcesTried: screening_snapshot, filings_bodies, yahoo_financials
-NextSources: Screen model detail export with per-model inputs (PEG, coverage 7.2x cited in email); filing-based FCF overlay to replace Yahoo TTM in scoring
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
 
-Q: FTSE screen is broadly cautious; top-five names are fresh strong buys with low conviction; sector clustering and null research_verdict fields leave governance/regulatory/pension risks outside the screen.
+NextSources: Company IR / results presentation PDF (`planned_alternate_sources.company_ir_presentation`) for a published FCF bridge and capex/WC split; consolidated cash-flow note from full Annual Report PDF (page-level tables not fully extracted in current bodies)
+
+---
+
+Q: Leverage rising (Piotroski: leverage declining = fail); ROE 16.5% below moat thresholds—competitive positioning in generics/injectables is an open question.
+
 Status: partially_resolved
-Evidence: HIK.L `screening_snapshot.json`: strong_buy, conviction 0.5193, stability_label "new", weeks_at_signal 1, research_verdict null. Data quality 20/20 but Graham Net-Net fails (NCAV data absent — noted in email, not in local snapshot). Macro context (`macro_context.json`) is colour-only per pipeline design. This gap-fill pass populated research_verdict and resolved FCF/leverage/governance partially from filings; principal-risk register and related-party detail remain outside automated scoring.
-SourcesTried: screening_snapshot, macro_context, gap_fill_source_map, filings_bodies
-NextSources: Cross-universe screen export for top-five conviction band comparison; scoring overlay hook to consume gap-fill research_verdict; NCAV ingest from Companies House balance sheets
+
+Evidence: Filings confirm rising leverage—net debt rose from $1,118m to $1,387m and net debt/core EBITDA from 1.4× to 1.6× (FY2025 results, `ir_0e40d9707e30c3b7.txt`), consistent with the Piotroski leverage-decline failure in `screening_snapshot.json`. ROIC of 16.0% (filings) and screen ROE of 16.5% sit below the Economic Moat model’s 18% ROE threshold. On positioning, the Annual Report cites 29 manufacturing plants, 13 US FDA-inspected sites, IQVIA market references, and a differentiation strategy—but Injectables core margin fell from 35.3% to 31.0% on US competition, Xellia mix dilution, and inventory provisions (`ir_3a67962eb8770824.txt`), indicating scale and manufacturing depth without a durable margin moat in injectables.
+
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, news_manifest, alternate_news
+
+NextSources: IQVIA or peer margin benchmarks (external; not in local pack); Annual Report principal-risks section (page 82 referenced in extract but not fully body-ingested); FDA warning-letter / inspection database for supply-quality validation
+
+---
+
+Q: What explains negative FCF alongside 23.5% earnings growth: growth capex, inventory build, or M&A—and is the dividend/buyback policy still appropriate?
+
+Status: partially_resolved
+
+Evidence: The **−$66.1m screen FCF** is not corroborated by FY2025 primary/Yahoo data (+$119m FCF; OCF $436m minus capital expenditure of $317m per Yahoo, vs $197m PPE capEx per filings plus $120m intangible purchases). The cash shortfall versus earnings is explained by filings and Yahoo (fallback): (1) **one-off legal settlement**—$186m operating cash outflow ($72m P&L exceptional); (2) **working capital**—days rose to 245 (from 240); Yahoo working-capital change −$251m, inventory +$86m, receivables +$97m; (3) **growth capex**—$197m PPE (+19% YoY) across US/MENA/Europe capacity; (4) **M&A/intangibles**—$75m business purchases and $120m intangible spend (Yahoo). Screen **earnings growth of 23.5%** does not match filing trajectories (reported net income +12%, core profit attributable +2%, core EPS +2%); the Lynch PEG pass (PEG 0.50) therefore rests on a growth input that filings do not verify. Capital return: dividends ($185m paid) exceed FY FCF ($119m); buyback is sized at $250m while net long-term debt issuance was +$309m (Yahoo)—policy is framed by management as supported by BBB credit and “strong cash flow generation” (filings), but is **tight on a reported FCF basis** and relies on ex-settlement OCF (+10%) and additional borrowing.
+
+SourcesTried: filings_bodies, yahoo_financials, screening_snapshot, filings_index, alternate_news, news_manifest
+
+NextSources: April 2026 trading update PDF body (`filings_index.json` entry `ir_a9733d0de6aec27d`, `has_body: false` after IR refetch); Hikma FY2025 consolidated cash-flow statement (full PDF/iXBRL) for line-item WC and investing-activities reconciliation
+
+---
+
+Q: (Hikma Pharmaceuticals, Healthcare) passes 13 of 22 models (75% composite, 91% sector-relative) on P/E 11.8, P/B 1.8, yield 3.9%, ROE 16.5%, earnings growth 23.5%, and Lynch PEG pass (PEG 0.50). Passes include Graham Enterprising, Quality Value, Buffett Quality, Dividend Growth, and Financial Health (D/E 62%). Failures are material: FCF yield −2.0% (FCF −£66.1m), Earnings Quality (weak free-cash conversion), Piotroski F-Score 6/9, and Economic Moat; the cash-conversion overlay adjusts the signal from Strong Buy to Buy. Verdict: watchlist — attractive earnings-growth valuation, but negative FCF alongside dividend screens demands working-capital and capex research before treating this as a full Strong Buy.
+
+Status: partially_resolved
+
+Evidence: Gap-fill confirms the **failure cluster is directionally right**—weak cash conversion (OCF down, WC build, FCF collapsed from $329m to $119m over two years per Yahoo), rising leverage, sub-moat ROE/ROIC, and Piotroski 6/9—all supported by filings. It also reveals a **scoring inconsistency**: screen `key_metrics.FCF` (−$66.1m) vs Yahoo/filing FY2025 FCF (+$119m) and screen `cashflow_metrics.free_cashflow` (+$119m). Cheapness passes (P/E, P/B, yield, D/E 62%) remain intact against filing fundamentals. The watchlist caution on “negative FCF” is **overstated for FY2025** but **understated on capital-allocation sufficiency** (dividends + buyback vs thin FCF and rising debt). Earnings-growth-driven GARP passes are **weakened** by filing core EPS growth of only +2% vs screen 23.5%.
+
+SourcesTried: screening_snapshot, filings_bodies, yahoo_financials, filings_index, news_manifest, alternate_news, macro_context
+
+NextSources: none for headline screen metrics; pipeline fix needed for FCF input alignment (see RESEARCH MODEL SUGGESTIONS)
 
 ---

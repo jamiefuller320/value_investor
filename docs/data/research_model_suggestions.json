@@ -5,7 +5,7 @@
       "name": "AEP Plantations Plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Add Companies House filed-accounts PDF fetch and text extract for UK-listed names when `filings_bodies` count is zero \u2014 unlocks pension notes, contingencies, going-concern, and governance sections missing from RNS headlines.",
+      "suggestion": "Add Companies House filed-accounts PDF fetch and text extract for UK-listed names when `filings_bodies` count is zero — unlocks pension notes, contingencies, going-concern, and governance sections missing from RNS headlines.",
       "recorded_at": "2026-07-20T20:51:04.192161+00:00"
     },
     {
@@ -13,7 +13,7 @@
       "name": "AEP Plantations Plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged \u201cFY25 Results\u201d, \u201cinterim\u201d, and \u201cannual report\u201d rather than Google News wrapper URLs; current index lists 31 filings with `with_body: 0`.",
+      "suggestion": "Re-pull full Investegate/RNS HTML or PDF bodies for indexed items tagged “FY25 Results”, “interim”, and “annual report” rather than Google News wrapper URLs; current index lists 31 filings with `with_body: 0`.",
       "recorded_at": "2026-07-20T20:51:04.192179+00:00"
     },
     {
@@ -37,7 +37,7 @@
       "name": "AEP Plantations Plc",
       "area": "prompt",
       "priority": "medium",
-      "suggestion": "When `annual: 0` in `filings_index.json`, auto-emit a structured \u201cprimary accounts missing\u201d flag in gap-fill and cap research confidence until Companies House or IR PDF is ingested.",
+      "suggestion": "When `annual: 0` in `filings_index.json`, auto-emit a structured “primary accounts missing” flag in gap-fill and cap research confidence until Companies House or IR PDF is ingested.",
       "recorded_at": "2026-07-20T20:51:04.192196+00:00"
     },
     {
@@ -69,7 +69,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "scoring",
       "priority": "high",
-      "suggestion": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score \u2264 4 \u2014 cap adjusted signal at neutral/caution despite composite Strong Buy.",
+      "suggestion": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy.",
       "recorded_at": "2026-07-20T20:51:04.192215+00:00"
     },
     {
@@ -109,7 +109,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements \u2014 MEGP.L shows OCF \u00a390.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
+      "suggestion": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
       "recorded_at": "2026-07-20T20:51:04.192236+00:00"
     },
     {
@@ -117,7 +117,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Fetch company IR results presentation PDF from `photo-me.co.uk` investor pages (listed in `gap_fill_source_map.json` \u2192 `company_ir_presentation`) for segment tables, dividend policy, and H1 cash-flow bridges missing from Yahoo.",
+      "suggestion": "Fetch company IR results presentation PDF from `photo-me.co.uk` investor pages (listed in `gap_fill_source_map.json` → `company_ir_presentation`) for segment tables, dividend policy, and H1 cash-flow bridges missing from Yahoo.",
       "recorded_at": "2026-07-20T20:51:04.192242+00:00"
     },
     {
@@ -125,7 +125,7 @@
       "name": "ME Group International plc",
       "area": "scoring",
       "priority": "medium",
-      "suggestion": "When statutory FY growth (Yahoo) and trailing `earnings_growth` (yfinance) diverge by >5pp, flag a \"momentum mismatch\" overlay and cap conviction \u2014 MEGP shows +4.6% FY NI growth vs \u22123.9% screen input.",
+      "suggestion": "When statutory FY growth (Yahoo) and trailing `earnings_growth` (yfinance) diverge by >5pp, flag a \"momentum mismatch\" overlay and cap conviction — MEGP shows +4.6% FY NI growth vs −3.9% screen input.",
       "recorded_at": "2026-07-20T20:51:04.192249+00:00"
     },
     {
@@ -133,7 +133,7 @@
       "name": "ME Group International plc",
       "area": "prompt",
       "priority": "medium",
-      "suggestion": "Require gap-fill memos to cross-check dividend cover on both OCF and FCF explicitly, and state which metric the High Dividend Yield model implicitly assumes \u2014 MEGP passes dividend models despite FCF cover <1\u00d7 on statutory data.",
+      "suggestion": "Require gap-fill memos to cross-check dividend cover on both OCF and FCF explicitly, and state which metric the High Dividend Yield model implicitly assumes — MEGP passes dividend models despite FCF cover <1× on statutory data.",
       "recorded_at": "2026-07-20T20:51:04.192255+00:00"
     },
     {
@@ -173,7 +173,7 @@
       "name": "ITV plc",
       "area": "prompt",
       "priority": "medium",
-      "suggestion": "When FCF Yield passes but latest-year Yahoo FCF/dividend coverage is below 1.0\u00d7, auto-flag \"yield supported by non-recurring cash or pending corporate action\" in the research verdict overlay.",
+      "suggestion": "When FCF Yield passes but latest-year Yahoo FCF/dividend coverage is below 1.0×, auto-flag \"yield supported by non-recurring cash or pending corporate action\" in the research verdict overlay.",
       "recorded_at": "2026-07-24T14:44:44.219825+00:00"
     },
     {
@@ -181,7 +181,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Pull full text from Companies House annual accounts for Hikma (05557934) \u2014 five filings indexed with `has_body: false`; unlocks pension note, covenant language and statutory going-concern wording.",
+      "suggestion": "Pull full text from Companies House annual accounts for Hikma (05557934) — five filings indexed with `has_body: false`; unlocks pension note, covenant language and statutory going-concern wording.",
       "recorded_at": "2026-07-24T14:44:44.219830+00:00"
     },
     {
@@ -197,7 +197,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "medium",
-      "suggestion": "Deepen annual-report PDF extract to include pages 80\u201388 (principal risks) and Note 6 pension/post-employment \u2014 current `ir_3a67962eb8770824.txt` stops at strategic sections and references risks without body text.",
+      "suggestion": "Deepen annual-report PDF extract to include pages 80–88 (principal risks) and Note 6 pension/post-employment — current `ir_3a67962eb8770824.txt` stops at strategic sections and references risks without body text.",
       "recorded_at": "2026-07-24T14:44:44.219837+00:00"
     },
     {
@@ -205,7 +205,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "scoring",
       "priority": "high",
-      "suggestion": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback \u2014 prevents Strong Buy on earnings-only cheapness.",
+      "suggestion": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on earnings-only cheapness.",
       "recorded_at": "2026-07-24T14:44:44.219842+00:00"
     },
     {
@@ -221,7 +221,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Fetch Companies House PDF text for ME Group (00735438) \u2014 five annual accounts are indexed with `has_body: false`, blocking NCAV, covenant and pension verification that multiple screen models require.",
+      "suggestion": "Fetch Companies House PDF text for ME Group (00735438) — five annual accounts are indexed with `has_body: false`, blocking NCAV, covenant and pension verification that multiple screen models require.",
       "recorded_at": "2026-07-24T14:44:44.219849+00:00"
     },
     {
@@ -229,7 +229,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Add June 2026 trading-update RNS to the IR allowlist or Investegate re-pull \u2014 the guidance-cut catalyst precedes the H1 results body and is referenced only via news headlines.",
+      "suggestion": "Add June 2026 trading-update RNS to the IR allowlist or Investegate re-pull — the guidance-cut catalyst precedes the H1 results body and is referenced only via news headlines.",
       "recorded_at": "2026-07-24T14:44:44.219853+00:00"
     },
     {
@@ -245,7 +245,7 @@
       "name": "ME Group International plc",
       "area": "scoring",
       "priority": "medium",
-      "suggestion": "Apply a dividend-sustainability overlay when trailing FCF yield is more than 400bp below dividend yield and interim payout has been cut \u2014 prevents Strong Buy on income metrics alone.",
+      "suggestion": "Apply a dividend-sustainability overlay when trailing FCF yield is more than 400bp below dividend yield and interim payout has been cut — prevents Strong Buy on income metrics alone.",
       "recorded_at": "2026-07-24T14:44:44.219858+00:00"
     },
     {
@@ -261,7 +261,7 @@
       "name": "ME Group International plc",
       "area": "research",
       "priority": "medium",
-      "suggestion": "The memo at `output/research/MEGP.L/research.md` has been updated to version 3 (gap_fill mode). The main upgrade this pass: IR allowlist bodies resolve H1 PBT, EPS, cash flow, dividend declaration and payout policy \u2014 the June trading update and Companies House statutory accounts remain the priority gaps for the next ingest cycle.",
+      "suggestion": "The memo at `output/research/MEGP.L/research.md` has been updated to version 3 (gap_fill mode). The main upgrade this pass: IR allowlist bodies resolve H1 PBT, EPS, cash flow, dividend declaration and payout policy — the June trading update and Companies House statutory accounts remain the priority gaps for the next ingest cycle.",
       "recorded_at": "2026-07-24T14:44:44.219865+00:00"
     },
     {
@@ -269,7 +269,7 @@
       "name": "ITV plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Add Investegate/LSE RNS direct HTML fetch for indexed announcements still lacking bodies (FY2025 results RNS, Q1 Trading Update, Sky sale RNS) \u2014 Google News redirect URLs block extraction.",
+      "suggestion": "Add Investegate/LSE RNS direct HTML fetch for indexed announcements still lacking bodies (FY2025 results RNS, Q1 Trading Update, Sky sale RNS) — Google News redirect URLs block extraction.",
       "recorded_at": "2026-07-24T18:31:53.833858+00:00"
     },
     {
@@ -317,7 +317,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Fetch `april-2026-trading-update-vfinal.pdf` (indexed, body missing after refetch) \u2014 unlocks 503B exit quantification and H1 2026 cash commentary.",
+      "suggestion": "Fetch `april-2026-trading-update-vfinal.pdf` (indexed, body missing after refetch) — unlocks 503B exit quantification and H1 2026 cash commentary.",
       "recorded_at": "2026-07-24T18:31:53.833892+00:00"
     },
     {
@@ -325,7 +325,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Replace thin Companies House OCR front-matter with iXBRL or full statutory-notes extract for company 05557934 \u2014 current CH bodies lack pension, covenant and cash-note detail despite `has_body: true`.",
+      "suggestion": "Replace thin Companies House OCR front-matter with iXBRL or full statutory-notes extract for company 05557934 — current CH bodies lack pension, covenant and cash-note detail despite `has_body: true`.",
       "recorded_at": "2026-07-24T18:31:53.833897+00:00"
     },
     {
@@ -333,7 +333,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "medium",
-      "suggestion": "Deepen annual-report PDF extract to pages 80\u201388 (principal risks) and post-employment benefit notes \u2014 referenced in TOC but absent from body text.",
+      "suggestion": "Deepen annual-report PDF extract to pages 80–88 (principal risks) and post-employment benefit notes — referenced in TOC but absent from body text.",
       "recorded_at": "2026-07-24T18:31:53.833903+00:00"
     },
     {
@@ -357,7 +357,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Upgrade Companies House ingest from OCR-only to iXBRL/structured accounts extract \u2014 five CH bodies are present but thin, blocking covenant schedules, pension deficit quantification and NCAV that screen models reference.",
+      "suggestion": "Upgrade Companies House ingest from OCR-only to iXBRL/structured accounts extract — five CH bodies are present but thin, blocking covenant schedules, pension deficit quantification and NCAV that screen models reference.",
       "recorded_at": "2026-07-24T18:31:53.833920+00:00"
     },
     {
@@ -365,7 +365,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull \u2014 guidance-cut catalyst still news-only despite nine filing bodies elsewhere.",
+      "suggestion": "Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull — guidance-cut catalyst still news-only despite nine filing bodies elsewhere.",
       "recorded_at": "2026-07-24T18:31:53.833924+00:00"
     },
     {
@@ -373,7 +373,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "medium",
-      "suggestion": "Fetch company IR results presentation PDF (`gap_fill_source_map.json` \u2192 `company_ir_presentation`) for segment cash-flow and maintenance vs growth capex split.",
+      "suggestion": "Fetch company IR results presentation PDF (`gap_fill_source_map.json` → `company_ir_presentation`) for segment cash-flow and maintenance vs growth capex split.",
       "recorded_at": "2026-07-24T18:31:53.833928+00:00"
     },
     {
@@ -381,7 +381,7 @@
       "name": "ME Group International plc",
       "area": "ops",
       "priority": "medium",
-      "suggestion": "Copy universe signal distribution and top-five conviction band into each ticker research pack \u2014 currently only in `output/email_reports.json`, outside the per-ticker evidence ladder.",
+      "suggestion": "Copy universe signal distribution and top-five conviction band into each ticker research pack — currently only in `output/email_reports.json`, outside the per-ticker evidence ladder.",
       "recorded_at": "2026-07-24T18:31:53.833933+00:00"
     },
     {
@@ -445,7 +445,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Extract annual report principal-risks section (pp. 84\u201388) and pension/covenant notes as dedicated body chunks, not only highlights pages.",
+      "suggestion": "Extract annual report principal-risks section (pp. 84–88) and pension/covenant notes as dedicated body chunks, not only highlights pages.",
       "recorded_at": "2026-07-24T21:26:49.093170+00:00"
     },
     {
@@ -453,7 +453,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "scoring",
       "priority": "high",
-      "suggestion": "Reconcile screen FCF (\u2212$66.1m TTM) with filing-derived FCF (OCF \u2212 capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+      "suggestion": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
       "recorded_at": "2026-07-24T21:26:49.093177+00:00"
     },
     {
@@ -477,7 +477,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "research",
       "priority": "medium",
-      "suggestion": "*Key takeaway:** The \u2212$66.1m screen FCF is largely explained by one-off legal cash ($186m), working-capital build and growth capex \u2014 not an earnings collapse. FY filing-implied FCF is ~$119\u2013239m depending on intangibles treatment. What remains open is whether elevated capex normalises after 2028 and whether the dividend survives sodium oxybate competition without FCF compression. Memo updated at `/workspace/output/research/HIK.L/research.md`.",
+      "suggestion": "*Key takeaway:** The −$66.1m screen FCF is largely explained by one-off legal cash ($186m), working-capital build and growth capex — not an earnings collapse. FY filing-implied FCF is ~$119–239m depending on intangibles treatment. What remains open is whether elevated capex normalises after 2028 and whether the dividend survives sodium oxybate competition without FCF compression. Memo updated at `/workspace/output/research/HIK.L/research.md`.",
       "recorded_at": "2026-07-24T21:26:49.093190+00:00"
     },
     {
@@ -485,7 +485,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch \u2014 five new bodies this pass were holding disclosures only and did not close material gaps.",
+      "suggestion": "Prioritise June 2026 trading-update RNS discovery over Form 8.3 refetch — five new bodies this pass were holding disclosures only and did not close material gaps.",
       "recorded_at": "2026-07-24T21:26:49.093194+00:00"
     },
     {
@@ -517,7 +517,7 @@
       "name": "ME Group International plc",
       "area": "coverage",
       "priority": "low",
-      "suggestion": "Attach LSE liquidity metrics (ADV, spread) for FTSE 350 names below ~\u00a3500m market cap.",
+      "suggestion": "Attach LSE liquidity metrics (ADV, spread) for FTSE 350 names below ~£500m market cap.",
       "recorded_at": "2026-07-24T21:26:49.093204+00:00"
     },
     {
@@ -525,7 +525,7 @@
       "name": "ME Group International plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Fetch ME Group IR results presentation PDFs and extract capex bridge, segment KPI and dividend-policy tables \u2014 flagged in `gap_fill_source_map.json` as the main missing FCF layer.",
+      "suggestion": "Fetch ME Group IR results presentation PDFs and extract capex bridge, segment KPI and dividend-policy tables — flagged in `gap_fill_source_map.json` as the main missing FCF layer.",
       "recorded_at": "2026-07-26T05:56:57.224222+00:00"
     },
     {
@@ -541,7 +541,7 @@
       "name": "ME Group International plc",
       "area": "scoring",
       "priority": "high",
-      "suggestion": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0\u00d7.",
+      "suggestion": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
       "recorded_at": "2026-07-26T05:56:57.224242+00:00"
     },
     {
@@ -557,7 +557,7 @@
       "name": "ME Group International plc",
       "area": "coverage",
       "priority": "medium",
-      "suggestion": "Broaden alternate_news to sell-side notes and capex/working-capital queries \u2014 current batch duplicated earnings headlines.",
+      "suggestion": "Broaden alternate_news to sell-side notes and capex/working-capital queries — current batch duplicated earnings headlines.",
       "recorded_at": "2026-07-26T05:56:57.224252+00:00"
     },
     {
@@ -581,7 +581,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Extract annual report risk-management section (pp 80\u201388) as a dedicated body shard so principal-risk prompts do not rely on cross-references only",
+      "suggestion": "Extract annual report risk-management section (pp 80–88) as a dedicated body shard so principal-risk prompts do not rely on cross-references only",
       "recorded_at": "2026-07-26T05:56:57.224267+00:00"
     },
     {
@@ -613,7 +613,7 @@
       "name": "Grafton Group plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Fix UK RNS discovery for GFTU.L \u2014 `filings_index.json` returned zero entries despite `uk_rns` regime and FTSE350 tag; add Investegate/LSE ticker alias fallback (GFTU, GN5) and mandatory body extract for latest annual + interim.",
+      "suggestion": "Fix UK RNS discovery for GFTU.L — `filings_index.json` returned zero entries despite `uk_rns` regime and FTSE350 tag; add Investegate/LSE ticker alias fallback (GFTU, GN5) and mandatory body extract for latest annual + interim.",
       "recorded_at": "2026-07-26T05:56:57.224285+00:00"
     },
     {
@@ -621,7 +621,7 @@
       "name": "Grafton Group plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Ingest Grafton IR results presentation PDF (`graftonplc.com/investors`) \u2014 unlocks segment margin, geographic mix, and management-adjusted net debt/EBITDA that Yahoo omits.",
+      "suggestion": "Ingest Grafton IR results presentation PDF (`graftonplc.com/investors`) — unlocks segment margin, geographic mix, and management-adjusted net debt/EBITDA that Yahoo omits.",
       "recorded_at": "2026-07-26T05:56:57.224290+00:00"
     },
     {
@@ -629,7 +629,7 @@
       "name": "Grafton Group plc",
       "area": "ingest",
       "priority": "medium",
-      "suggestion": "Pull Companies House filed accounts (company 0160651) when RNS bodies are empty \u2014 statutory notes hold pension, covenant, going-coneern, and goodwill impairment language.",
+      "suggestion": "Pull Companies House filed accounts (company 0160651) when RNS bodies are empty — statutory notes hold pension, covenant, going-coneern, and goodwill impairment language.",
       "recorded_at": "2026-07-26T05:56:57.224296+00:00"
     },
     {
@@ -661,7 +661,7 @@
       "name": "FirstGroup plc",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Add FirstGroup IR allowlist fetch for full-year and half-year results RNS plus presentation PDFs (`firstgroupplc.com/investors`) \u2014 gap map scores this 2/2 but it was not executed.",
+      "suggestion": "Add FirstGroup IR allowlist fetch for full-year and half-year results RNS plus presentation PDFs (`firstgroupplc.com/investors`) — gap map scores this 2/2 but it was not executed.",
       "recorded_at": "2026-07-26T18:43:49.552880+00:00"
     },
     {
@@ -669,7 +669,7 @@
       "name": "FirstGroup plc",
       "area": "scoring",
       "priority": "high",
-      "suggestion": "Cap composite score contribution from \u201crisk\u201d family when Financial Health and Graham Enterprising both fail, or emit explicit balance-sheet override flag for transport names with lease-adjusted D/E >2\u00d7 and current ratio <1.",
+      "suggestion": "Cap composite score contribution from “risk” family when Financial Health and Graham Enterprising both fail, or emit explicit balance-sheet override flag for transport names with lease-adjusted D/E >2× and current ratio <1.",
       "recorded_at": "2026-07-26T18:43:49.552889+00:00"
     },
     {
@@ -685,7 +685,7 @@
       "name": "FirstGroup plc",
       "area": "prompt",
       "priority": "medium",
-      "suggestion": "Require gap-fill pass to reconcile Yahoo revenue with company-reported FY figures when RNS \u201cAbout FirstGroup\u201d boilerplate or news headlines disagree, and block \u201caccumulate\u201d verdict until resolved or explicitly flagged.",
+      "suggestion": "Require gap-fill pass to reconcile Yahoo revenue with company-reported FY figures when RNS “About FirstGroup” boilerplate or news headlines disagree, and block “accumulate” verdict until resolved or explicitly flagged.",
       "recorded_at": "2026-07-26T18:43:49.552900+00:00"
     },
     {
@@ -693,7 +693,7 @@
       "name": "FirstGroup plc",
       "area": "research",
       "priority": "medium",
-      "suggestion": "*Key shift:** Verdict moves from **accumulate \u2192 caution** (confidence 0.68 \u2192 0.62). The screen\u2019s cheapness and cash conversion hold up, but gap-fill confirms balance-sheet and earnings flags are material\u2014not screening noise\u2014and statutory accounts are still missing to clear them.",
+      "suggestion": "*Key shift:** Verdict moves from **accumulate → caution** (confidence 0.68 → 0.62). The screen’s cheapness and cash conversion hold up, but gap-fill confirms balance-sheet and earnings flags are material—not screening noise—and statutory accounts are still missing to clear them.",
       "recorded_at": "2026-07-26T18:43:49.552908+00:00"
     },
     {
@@ -725,7 +725,7 @@
       "name": "ME Group International plc",
       "area": "scoring",
       "priority": "medium",
-      "suggestion": "Reconcile screen FCF (\u00a315.7m) against Yahoo/filing FCF (\u00a325.2m FY2025) in model detail output and expose the formula so sub-5% FCF yield failures are auditable.",
+      "suggestion": "Reconcile screen FCF (£15.7m) against Yahoo/filing FCF (£25.2m FY2025) in model detail output and expose the formula so sub-5% FCF yield failures are auditable.",
       "recorded_at": "2026-07-26T18:43:49.552924+00:00"
     },
     {
@@ -749,7 +749,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "ingest",
       "priority": "high",
-      "suggestion": "Extract annual report risk register (pp 84\u201388) and related-party notes from `1-2025-annual-report.pdf` \u2014 current PDF extract stops at strategic/governance summaries and omits statutory disclosure tables.",
+      "suggestion": "Extract annual report risk register (pp 84–88) and related-party notes from `1-2025-annual-report.pdf` — current PDF extract stops at strategic/governance summaries and omits statutory disclosure tables.",
       "recorded_at": "2026-07-26T18:43:49.552937+00:00"
     },
     {
@@ -757,7 +757,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "scoring",
       "priority": "high",
-      "suggestion": "Compute FCF Yield from filing cash-flow statement (OCF \u2212 capex) when bodies available; flag and down-weight Yahoo TTM when it diverges >50% from latest annual filing FCF (HIK.L: \u2212\u00a366m screen vs +$119m filing).",
+      "suggestion": "Compute FCF Yield from filing cash-flow statement (OCF − capex) when bodies available; flag and down-weight Yahoo TTM when it diverges >50% from latest annual filing FCF (HIK.L: −£66m screen vs +$119m filing).",
       "recorded_at": "2026-07-26T18:43:49.552943+00:00"
     },
     {
@@ -781,7 +781,7 @@
       "name": "Hikma Pharmaceuticals PLC",
       "area": "research",
       "priority": "medium",
-      "suggestion": "*Key takeaway:** The watchlist concern on \"structurally negative FCF\" is **partially defused** \u2014 FY2025 filing cash flow shows positive FCF (~$119m), with the screen's \u2212\u00a366.1m likely a vendor TTM artefact. The dividend is **not fully covered on a reported basis** in 2025, and leverage is **rising**, so the name moves from watchlist toward **accumulate** rather than outright pass, with confidence lifted modestly to 0.71. Full memo saved to `output/research/HIK.L/research.md`.",
+      "suggestion": "*Key takeaway:** The watchlist concern on \"structurally negative FCF\" is **partially defused** — FY2025 filing cash flow shows positive FCF (~$119m), with the screen's −£66.1m likely a vendor TTM artefact. The dividend is **not fully covered on a reported basis** in 2025, and leverage is **rising**, so the name moves from watchlist toward **accumulate** rather than outright pass, with confidence lifted modestly to 0.71. Full memo saved to `output/research/HIK.L/research.md`.",
       "recorded_at": "2026-07-26T18:43:49.552960+00:00"
     },
     {
@@ -799,7 +799,127 @@
       "priority": "high",
       "suggestion": "Migrate Breedon library research store to canonical docs/data/research/BREE.L and fetch CH accounts + Investegate bodies for zero-body buy-tier stall.",
       "recorded_at": "2026-07-29T12:24:46.923433+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extend Companies House PDF extraction to capture Financial Review (p. 26+), consolidated cash-flow statement, and viability/going-concern sections — current FY2025 body truncates at CEO review (~p. 10), leaving covenant and adjusted-FCF language unreachable.",
+      "recorded_at": "2026-08-02T13:49:49.937021+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add dedicated RNS fetch for “Interim Results” and “Full Year Results” announcement types (Investegate/LSE API) and classify `period=interim|annual` — index currently marks all seven filings as `other`, obscuring coverage gaps.",
+      "recorded_at": "2026-08-02T13:49:49.937035+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Implement `company_ir_presentation` fetch from FirstGroup IR allowlist (`firstgroupplc.com` results PDFs) to bridge FCF, working capital, and segment margin tables absent from Yahoo.",
+      "recorded_at": "2026-08-02T13:49:49.937041+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When filing adjusted EPS is available, compute `earnings_growth_pct` from adjusted series (not Yahoo statutory TTM) to avoid false Graham/Lynch failures on pension-restructuring years.",
+      "recorded_at": "2026-08-02T13:49:49.937045+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add FCF-yield overlay using 3-year average FCF or WC-normalized FCF (strip receivables swing >1σ) and flag when single-year FCF exceeds 2× trailing average — would have flagged FY2025→FY2026 FCF compression prospectively.",
+      "recorded_at": "2026-08-02T13:49:49.937052+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Target-extract annual report \"Notes to the Financial Statements\" pages (Related party transactions, Segment information, Financial instruments) from IR PDFs — current body extracts capture strategic report and RNS summaries but miss structured note tables needed for related-party and country revenue gaps.",
+      "recorded_at": "2026-08-02T13:49:49.937060+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch and parse company IR results presentation PDFs (`planned_alternate_sources.company_ir_presentation`) for FCF/working-capital bridge tables and segment EBITDA margins not present in Yahoo or RNS headline blocks.",
+      "recorded_at": "2026-08-02T13:49:49.937064+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Parse Companies House iXBRL for latest filed group accounts (`ch_00735438_MzUxODY0NzMxMGFkaXF6a2N4`) instead of OCR-only PDF text — unlocks machine-readable related-party and geographic note tags.",
+      "recorded_at": "2026-08-02T13:49:49.937070+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add research overlay flag when High Dividend Yield passes but FCF Yield and Earnings Quality both fail — surfaces \"capex-funded income\" names like MEGP where trailing yield overstates forward cover.",
+      "recorded_at": "2026-08-02T13:49:49.937076+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill pass to compute dividend cover from filing EPS and declared DPS (not screen yield alone) whenever dividend-family models pass — would have resolved Q1 cover verification without manual derivation.",
+      "recorded_at": "2026-08-02T13:49:49.937083+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Reconcile `key_metrics.FCF` (−$66.1m) with `cashflow_metrics.free_cashflow` (+$119m) in `screening_snapshot.json`; drive FCF Yield and cash-conversion overlay from a single filing-aligned definition (OCF − capEx per reported year, USD).",
+      "recorded_at": "2026-08-02T13:49:49.937090+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading update); gap_fill IR refetch attempted 1 fetch, 0 success—add retry with alternate PDF parser or direct HTML RNS mirror.",
+      "recorded_at": "2026-08-02T13:49:49.937096+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extract Annual Report consolidated cash-flow statement and Note 5 exceptional items as structured tables (currently narrative-only in `ir_0e40d9707e30c3b7.txt`); unlocks WC/capex/M&A bridge without Yahoo fallback.",
+      "recorded_at": "2026-08-02T13:49:49.937099+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When cash-conversion overlay fires, require memo to reconcile screen FCF vs filing OCF/capEx/dividends in a standard bridge table and flag internal screen inconsistencies explicitly.",
+      "recorded_at": "2026-08-02T13:49:49.937102+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Ingest Annual Report principal-risks section (page 82 reference exists in `ir_3a67962eb8770824.txt` but body is strategic-report heavy); map FDA/regulatory, pricing, and pension risks from notes to accounts rather than relying on news-themed alternate pulls.",
+      "recorded_at": "2026-08-02T13:49:49.937105+00:00"
     }
   ],
-  "updated_at": "2026-07-26T18:43:49.552962+00:00"
+  "updated_at": "2026-08-02T13:49:49.937108+00:00"
 }
