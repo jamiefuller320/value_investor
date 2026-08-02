@@ -7,7 +7,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
-from tests.conftest import weekday_noon_utc
+from pinned_time import weekday_noon_utc
 from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks
 from value_investor.ops_monitor import (
     OpsFinding,

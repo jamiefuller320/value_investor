@@ -79,6 +79,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         ".github/workflows/ci-fix-responder.yml",
         ".github/workflows/engineering-auto-merge.yml",
         "scripts/check_committed_data_json.py",
+        "src/value_investor/committed_data_json.py",
         "src/value_investor/ci_fix_tasks.py",
         "src/value_investor/engineering_auto_merge.py",
         "tests/conftest.py",

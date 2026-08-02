@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from scripts.check_committed_data_json import check_path, main
+from value_investor.committed_data_json import check_path, main
 
 
 def test_check_path_flags_merge_conflict_markers(tmp_path: Path):
