@@ -232,7 +232,8 @@ Payload type must be `automation-orchestrator`.
 |-------|-----------|
 | Primary schedules | Sun 06:17, daily surplus 05:30, weekdays 08:17 UTC |
 | Catch-up schedules | Sun 09:17 + 12:17; weekdays 11:17 UTC |
-| Same-day skip | Catch-up does **not** re-run children that already succeeded today |
+| Duplicate-run gate | Skip a new orchestrator run when another is `in_progress`/`queued`/`waiting` (unless `force=true`) |
+| Same-day skip | Catch-up does **not** re-run children that already **succeeded or are active** today (`busyToday`) |
 | Manual / API | `workflow_dispatch` and `repository_dispatch` (`automation-orchestrator`) |
 
 Force a full re-run: Actions UI → Orchestrator → `force=true`, or `FORCE=true` with the script above.

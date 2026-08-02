@@ -7,6 +7,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
+from pinned_time import weekday_noon_utc
 from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks
 from value_investor.ops_monitor import (
     OpsFinding,
@@ -19,17 +20,14 @@ from value_investor.ops_monitor import (
     draft_ops_engineering_tasks,
     format_ops_monitor_text,
     load_health_log_payload,
+    recovery_bundle_in_flight,
     run_ops_monitor,
+    workflow_stale_only_failures,
 )
 
 
-def _weekday_noon_utc() -> datetime:
-    """Pinned Wednesday so engineering-queue freshness tests are weekday-stable."""
-    return datetime(2026, 8, 5, 12, 0, 0, tzinfo=UTC)
-
-
 def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold():
-    eight_hours_ago = (_weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    eight_hours_ago = (weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
     idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
@@ -38,8 +36,9 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=_weekday_noon_utc())
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=weekday_noon_utc())
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 26
     assert eng_checks[0]["stale"] is False
@@ -47,7 +46,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
 
 
 def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
-    eight_hours_ago = (_weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    eight_hours_ago = (weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
     active_queue = {"open_count": 2, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
@@ -56,12 +55,108 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(queue_status=active_queue, now=_weekday_noon_utc())
+        findings, checks = check_workflow_freshness(queue_status=active_queue, now=weekday_noon_utc())
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 3
     assert eng_checks[0]["stale"] is True
     assert any("Engineering Queue" in row.title for row in findings)
+
+
+def test_check_workflow_freshness_softens_orchestrator_when_recovery_bundle_active():
+    thirty_hours_ago = (weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+
+    def fake_latest(workflow_file, **kwargs):
+        if workflow_file == "automation-orchestrator.yml" and kwargs.get("status") == "success":
+            return {"id": 99, "created_at": thirty_hours_ago}
+        return None
+
+    def fake_active(workflow_file, **kwargs):
+        if workflow_file == "automation-orchestrator.yml":
+            return [{"id": 100, "status": "in_progress"}]
+        return []
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", side_effect=fake_active),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+    ):
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=weekday_noon_utc())
+
+    orch = [row for row in findings if "Automation Orchestrator" in row.title]
+    assert orch and orch[0].severity == "warn"
+    assert "Recovery bundle in flight" in orch[0].summary
+    orch_checks = [row for row in checks if row["workflow"] == "automation-orchestrator.yml"]
+    assert orch_checks and orch_checks[0]["stale"] is True
+
+
+def test_recovery_bundle_in_flight_detects_active_orchestrator():
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch(
+            "value_investor.ops_monitor.active_workflow_runs",
+            side_effect=lambda wf, **kw: [{"id": 1}] if wf == "automation-orchestrator.yml" else [],
+        ),
+    ):
+        active, labels = recovery_bundle_in_flight()
+    assert active is True
+    assert any("automation-orchestrator.yml" in label for label in labels)
+
+
+def test_workflow_stale_only_failures_true_for_overdue_only():
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: Automation Orchestrator",
+            summary="No successful run within 28h.",
+        )
+    ]
+    assert workflow_stale_only_failures(findings) is True
+
+
+def test_workflow_stale_only_failures_false_when_other_failures_present():
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: Automation Orchestrator",
+            summary="stale",
+        ),
+        OpsFinding(
+            severity="fail",
+            category="dashboard",
+            title="Published dashboard bundle missing",
+            summary="missing",
+        ),
+    ]
+    assert workflow_stale_only_failures(findings) is False
+
+
+def test_ops_monitor_cli_exit_zero_when_only_workflow_stale_fail():
+    from value_investor.ops_monitor_cli import main
+
+    with patch("value_investor.ops_monitor_cli.run_ops_monitor") as mock_run:
+        mock_run.return_value = OpsMonitorReport(
+            run_at="2026-07-29T00:00:00+00:00",
+            overall="fail",
+            findings=[
+                OpsFinding(
+                    severity="fail",
+                    category="workflows",
+                    title="Workflow overdue: Automation Orchestrator",
+                    summary="stale",
+                )
+            ],
+        )
+        with patch("value_investor.ops_monitor_cli.append_monitor_log_entry"):
+            rc = main(
+                ["run", "--json", "--no-apply", "--no-draft", "--allow-workflow-stale-exit-zero"]
+            )
+    assert rc == 0
 
 
 def test_check_committed_json_flags_corrupt_file(tmp_path: Path):

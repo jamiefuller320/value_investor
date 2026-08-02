@@ -31,6 +31,8 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 | `startup_failure` — *"workflow file issue"* | GitHub Actions runner could not start the job (no logs) | **Re-run** or push again; later runs on the same PR usually pass |
 | `cancelled` — *"higher priority waiting request"* | `concurrency: cancel-in-progress` on CI when a newer commit lands on the same PR | **None** — superseded run |
 | Orchestrator — *"job was not acquired by Runner"* | Hosted runner capacity / queue timeout | **Retry**; Sunday/weekday catch-up schedules or external cron cover missed work (see [orchestrator-cron.md](orchestrator-cron.md)) |
+| Ops monitor red on Sunday morning while orchestrator catch-up pending | Primary orchestrator window failed; 07:45 UTC monitor runs before catch-up | **Expected** — monitor still emails `warn`/`fail`; workflow uses `--allow-workflow-stale-exit-zero` so the Actions job stays green when only workflow-overdue findings remain |
+| Duplicate orchestrator dispatches same day | Overlapping catch-up + external cron | Orchestrator **gate** job skips when another run is `in_progress`/`queued`; child dispatch uses `busyToday()` (success or active) |
 | Node 20 deprecation annotation | Older action major versions on Node 20 runtime | Upgrade `setup-python` → v6, `github-script` → v8 (done in workflow tidy PR) |
 
 ## Examples (2026-07-25)
@@ -46,7 +48,7 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 
 Treat as a **real** problem when:
 
-- The **latest** `main` CI run fails with pytest errors (not `startup_failure`).
+- The **latest** `main` CI run fails with pytest errors (not `startup_failure`). CI runs `scripts/check_committed_data_json.py` before pytest to catch merge-conflict markers and invalid JSON in core `docs/data/` files — a common cause of widespread `JSONDecodeError` failures after overlapping automation commits.
 - Pages deploy fails on **two consecutive** merges to `main`.
 - Orchestrator fails on **both** primary and catch-up windows the same day **and** external cron did not fire.
 - A child workflow (`library-grow`, `paper-auto`, `email-report`) fails with application errors in logs.
@@ -60,4 +62,5 @@ gh run view <run-id> --log-failed
 ## Related
 
 - [orchestrator-cron.md](orchestrator-cron.md) — scheduling, catch-up, external cron
+- [ci-fix-automation.md](ci-fix-automation.md) — CI failure → engineering agent → scoped auto-merge
 - Workflow definitions: `.github/workflows/`

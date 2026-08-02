@@ -1,0 +1,43 @@
+name: Engineering Auto Merge
+
+# Squash-merge engineering PRs when CI is green and the diff stays within the
+# task's allowed_paths. Only tasks with auto_merge=true are eligible.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: engineering-auto-merge-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success'
+      && startsWith(github.event.workflow_run.head_branch, 'cursor/eng-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package + gh
+        run: pip install -e .
+
+      - name: Try scoped auto-merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          ftse-engineering try-auto-merge \
+            --branch "${{ github.event.workflow_run.head_branch }}" \
+            --allow-skip

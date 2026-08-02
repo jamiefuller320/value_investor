@@ -27,6 +27,7 @@ from value_investor.engineering_tasks import (
     select_engineering_tasks,
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
+    find_engineering_task,
 )
 from value_investor.engineering_recovery import (
     recover_engineering_queue,
@@ -34,6 +35,8 @@ from value_investor.engineering_recovery import (
     summarize_parked_tasks,
 )
 from value_investor.cli_args import apply_parsed_globals
+from value_investor.ci_fix_tasks import draft_ci_fix_task, parse_pytest_failures_from_log, task_eligible_for_auto_merge
+from value_investor.engineering_auto_merge import evaluate_auto_merge, perform_auto_merge
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     is_engineering_branch,
@@ -295,6 +298,90 @@ def _cmd_check_pr_paths(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def _cmd_draft_ci_fix(args: argparse.Namespace) -> int:
+    log_text = ""
+    if args.log_file:
+        log_text = Path(args.log_file).read_text(encoding="utf-8", errors="replace")
+    elif args.run_id:
+        result = subprocess.run(
+            ["gh", "run", "view", str(args.run_id), "--log-failed"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        log_text = (result.stdout or "") + (result.stderr or "")
+        if result.returncode != 0 and not log_text.strip():
+            print(result.stderr or result.stdout or "gh run view failed", file=sys.stderr)
+            return 1
+    else:
+        print("Provide --run-id or --log-file", file=sys.stderr)
+        return 2
+
+    failures = parse_pytest_failures_from_log(log_text)
+    if not failures:
+        if args.json:
+            _print_json({"drafted": [], "reason": "no pytest failures parsed"})
+        else:
+            print("No pytest failures found in log")
+        return 0
+
+    drafted = draft_ci_fix_task(
+        failures,
+        run_id=args.run_id,
+        run_url=args.run_url,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+    )
+    if args.json:
+        _print_json({"drafted": drafted, "failures": failures})
+    elif drafted:
+        print(f"Drafted CI fix task(s): {', '.join(drafted)}")
+    else:
+        print("No new CI fix task drafted (duplicate open task or empty scope)")
+    return 0 if drafted or not args.require_draft else 1
+
+
+def _cmd_task_auto_merge(args: argparse.Namespace) -> int:
+    task = find_engineering_task(args.task_id, path=_resolve_tasks_path(args.tasks_path))
+    if task is None:
+        print(f"No engineering task matched id {args.task_id}", file=sys.stderr)
+        return 1
+    eligible = task_eligible_for_auto_merge(task)
+    if args.json:
+        _print_json({"task_id": args.task_id, "auto_merge": eligible})
+    else:
+        print("true" if eligible else "false")
+    return 0 if eligible else 1
+
+
+def _cmd_try_auto_merge(args: argparse.Namespace) -> int:
+    branch = str(args.branch or "").strip()
+    if not branch:
+        print("--branch is required", file=sys.stderr)
+        return 2
+    decision = evaluate_auto_merge(
+        branch=branch,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+    )
+    if args.json:
+        payload = decision.to_dict()
+        if decision.should_merge and not args.dry_run:
+            ok, detail = perform_auto_merge(decision)
+            payload["merged"] = ok
+            payload["merge_detail"] = detail
+        _print_json(payload)
+    elif decision.should_merge:
+        if args.dry_run:
+            print(f"Would auto-merge PR #{decision.pr_number} for {decision.task_id}")
+        else:
+            ok, detail = perform_auto_merge(decision)
+            print(detail)
+            if not ok:
+                return 1
+    else:
+        print(f"No auto-merge: {decision.reason}")
+    return 0 if decision.should_merge or args.allow_skip else 1
+
+
 def _cmd_reprioritize(args: argparse.Namespace) -> int:
     tasks_path = _resolve_tasks_path(args.tasks_path)
     result = reprioritize_queue_after_ingest_merge(
@@ -551,6 +638,43 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to a newline-delimited list of changed repo paths",
     )
     check_paths_p.set_defaults(func=_cmd_check_pr_paths)
+
+    draft_ci_p = sub.add_parser(
+        "draft-ci-fix",
+        parents=[common],
+        help="Draft a scoped CI-fix engineering task from a failed Actions run log",
+    )
+    draft_ci_p.add_argument("--run-id", default=None, help="GitHub Actions run id (uses gh run view --log-failed)")
+    draft_ci_p.add_argument("--log-file", default=None, help="Path to saved failed CI log text")
+    draft_ci_p.add_argument("--run-url", default=None, help="Optional link stored in task evidence")
+    draft_ci_p.add_argument(
+        "--require-draft",
+        action="store_true",
+        help="Exit 1 when no new task is drafted",
+    )
+    draft_ci_p.set_defaults(func=_cmd_draft_ci_fix)
+
+    task_auto_p = sub.add_parser(
+        "task-auto-merge",
+        parents=[common],
+        help="Exit 0 when a task is eligible for scoped auto-merge",
+    )
+    task_auto_p.add_argument("--task-id", required=True)
+    task_auto_p.set_defaults(func=_cmd_task_auto_merge)
+
+    try_merge_p = sub.add_parser(
+        "try-auto-merge",
+        parents=[common],
+        help="Merge an engineering PR when CI is green and diff stays in scope",
+    )
+    try_merge_p.add_argument("--branch", required=True)
+    try_merge_p.add_argument("--dry-run", action="store_true")
+    try_merge_p.add_argument(
+        "--allow-skip",
+        action="store_true",
+        help="Exit 0 when auto-merge is not applicable (for workflow conditions)",
+    )
+    try_merge_p.set_defaults(func=_cmd_try_auto_merge)
 
     run_p = sub.add_parser("run", parents=[common], help="Run the supervised dev agent for open task(s)")
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")
