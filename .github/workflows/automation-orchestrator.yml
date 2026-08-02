@@ -57,7 +57,53 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - name: Skip duplicate orchestrator while another run is active
+        id: gate
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const event = context.eventName;
+            const inputs = (context.payload && context.payload.inputs) || {};
+            const clientPayload = (context.payload && context.payload.client_payload) || {};
+            const force = String(inputs.force ?? clientPayload.force ?? 'false') === 'true';
+            if (event === 'workflow_dispatch' && force) {
+              core.info('force=true — not skipping duplicate orchestrator check');
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runId = context.runId;
+            const workflow_id = 'automation-orchestrator.yml';
+            const statuses = ['in_progress', 'queued', 'waiting'];
+            let others = [];
+            for (const status of statuses) {
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                owner, repo, workflow_id, status, per_page: 10,
+              });
+              others = others.concat(
+                (data.workflow_runs || []).filter((r) => r.id !== runId),
+              );
+            }
+            if (others.length) {
+              const hit = others[0];
+              core.info(
+                `Skipping orchestrator run ${runId} — `
+                + `run ${hit.id} already ${hit.status} (${hit.created_at})`,
+              );
+              core.setOutput('should_run', 'false');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
   decide:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     outputs:
       suite: ${{ steps.pick.outputs.suite }}
@@ -126,8 +172,10 @@ jobs:
             core.setOutput('run_paper', String(f.paper));
 
   wait:
-    needs: decide
-    if: needs.decide.outputs.delay_until != ''
+    needs: [gate, decide]
+    if: |
+      needs.gate.outputs.should_run == 'true'
+      && needs.decide.outputs.delay_until != ''
     runs-on: ubuntu-latest
     steps:
       - name: Wait until delay_until (UTC)
@@ -157,9 +205,10 @@ jobs:
           PY
 
   surplus_gate:
-    needs: [decide, wait]
+    needs: [gate, decide, wait]
     if: |
-      always()
+      needs.gate.outputs.should_run == 'true'
+      && always()
       && needs.decide.result == 'success'
       && (needs.wait.result == 'success' || needs.wait.result == 'skipped')
       && needs.decide.outputs.suite == 'surplus_check'
@@ -196,9 +245,10 @@ jobs:
           PY
 
   dispatch:
-    needs: [decide, wait, surplus_gate]
+    needs: [gate, decide, wait, surplus_gate]
     if: |
-      always()
+      needs.gate.outputs.should_run == 'true'
+      && always()
       && needs.decide.result == 'success'
       && (needs.wait.result == 'success' || needs.wait.result == 'skipped')
     runs-on: ubuntu-latest
@@ -240,6 +290,25 @@ jobs:
               );
               if (hit) {
                 core.info(`${workflow_id} already succeeded today: run ${hit.id} (${hit.created_at})`);
+                return true;
+              }
+              return false;
+            }
+
+            async function busyToday(workflow_id) {
+              if (await succeededToday(workflow_id)) {
+                return true;
+              }
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                owner, repo, workflow_id, status: 'in_progress', per_page: 5,
+              });
+              const active = (data.workflow_runs || []).filter((r) =>
+                r.status === 'in_progress' || r.status === 'queued' || r.status === 'waiting'
+              );
+              if (active.length) {
+                core.info(
+                  `${workflow_id} already active: run ${active[0].id} (${active[0].status})`,
+                );
                 return true;
               }
               return false;
@@ -295,20 +364,20 @@ jobs:
 
             // Same-day catch-up safety: do not re-burn Actions minutes on successes.
             if (!force) {
-              if (runLadder && await succeededToday('library-grow.yml')) {
-                core.info('Skipping ladder — already succeeded today');
+              if (runLadder && await busyToday('library-grow.yml')) {
+                core.info('Skipping ladder — already succeeded or in progress today');
                 runLadder = false;
               }
-              if (runModel && await succeededToday('library-model-review.yml')) {
-                core.info('Skipping model review — already succeeded today');
+              if (runModel && await busyToday('library-model-review.yml')) {
+                core.info('Skipping model review — already succeeded or in progress today');
                 runModel = false;
               }
-              if (runEmail && await succeededToday('email-report.yml')) {
-                core.info('Skipping email — already succeeded today');
+              if (runEmail && await busyToday('email-report.yml')) {
+                core.info('Skipping email — already succeeded or in progress today');
                 runEmail = false;
               }
-              if (runPaper && await succeededToday('paper-auto.yml')) {
-                core.info('Skipping paper-auto — already succeeded today');
+              if (runPaper && await busyToday('paper-auto.yml')) {
+                core.info('Skipping paper-auto — already succeeded or in progress today');
                 runPaper = false;
               }
             }

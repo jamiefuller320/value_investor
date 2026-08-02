@@ -124,6 +124,9 @@ ftse-ops-monitor run --no-apply --no-draft
 # Full run + email on warn/fail/auto-fix
 ftse-ops-monitor run --email
 
+# CI: do not fail the workflow when only workflow-overdue checks are red
+ftse-ops-monitor run --allow-workflow-stale-exit-zero
+
 # Email the saved report
 ftse-ops-monitor email
 ```
@@ -137,6 +140,16 @@ Requires `GITHUB_TOKEN` / `GH_TOKEN` for workflow freshness checks and
 |----------|----------|------------|
 | Ingest loop | Mon/Wed/Fri | No success within 30h on scheduled days |
 | Orchestrator | Daily | No success within 28h |
+
+When the orchestrator or a Sunday quiet-bundle child (`library-grow`,
+`library-model-review`, `email-report`) is **actively running**, overdue findings
+for those workflows are downgraded to `warn` and annotated with
+`Recovery bundle in flight`.
+
+The GitHub Actions workflow passes `--allow-workflow-stale-exit-zero` so a
+morning run that reports orchestrator staleness before catch-up still commits
+`ops_status.json` and sends email without failing the job.
+
 | Engineering queue | Weekdays | **3h** when open/pr_open tasks exist; **26h** when the queue is fully idle |
 | Analysis review | Sunday | No success within 36h |
 

@@ -110,6 +110,7 @@ jobs:
           else
             ARGS+=(--email)
           fi
+          ARGS+=(--allow-workflow-stale-exit-zero)
           ftse-ops-monitor "${ARGS[@]}" > /tmp/ops_monitor.json
           python3 - <<'PY'
           import json

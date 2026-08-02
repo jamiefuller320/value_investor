@@ -80,6 +80,17 @@ MONITORED_WORKFLOWS: tuple[dict[str, Any], ...] = (
     },
 )
 
+# Sunday quiet bundle + orchestrator — soften overdue findings while a run is active.
+RECOVERY_BUNDLE_WORKFLOWS: frozenset[str] = frozenset(
+    {
+        "automation-orchestrator.yml",
+        "library-grow.yml",
+        "library-model-review.yml",
+        "email-report.yml",
+    }
+)
+ACTIVE_RUN_STATUSES: tuple[str, ...] = ("in_progress", "queued", "waiting")
+
 COMMITTED_JSON_PATHS: tuple[Path, ...] = (
     DEFAULT_HEALTH_LOG_PATH,
     DEFAULT_LATEST_PATH,
@@ -209,6 +220,49 @@ def latest_workflow_run(
     payload = github_api_get(query, token=token)
     rows = list((payload or {}).get("workflow_runs") or [])
     return rows[0] if rows else None
+
+
+def active_workflow_runs(
+    workflow_file: str,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> list[dict[str, Any]]:
+    """Return in-flight runs (in_progress / queued / waiting) for a workflow file."""
+    repo = repo or _github_repo()
+    token = token or _github_token()
+    if not repo or not token:
+        return []
+    owner, name = repo.split("/", 1)
+    seen: set[int] = set()
+    active: list[dict[str, Any]] = []
+    for status in ACTIVE_RUN_STATUSES:
+        payload = github_api_get(
+            f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/runs"
+            f"?per_page=5&status={status}",
+            token=token,
+        )
+        for row in list((payload or {}).get("workflow_runs") or []):
+            run_id = row.get("id")
+            if run_id is None or run_id in seen:
+                continue
+            seen.add(int(run_id))
+            active.append(row)
+    return active
+
+
+def recovery_bundle_in_flight(
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> tuple[bool, list[str]]:
+    """True when orchestrator or a Sunday bundle child workflow is actively running."""
+    active_labels: list[str] = []
+    for workflow in sorted(RECOVERY_BUNDLE_WORKFLOWS):
+        runs = active_workflow_runs(workflow, repo=repo, token=token)
+        if runs:
+            active_labels.append(f"{workflow}#{runs[0].get('id')}")
+    return bool(active_labels), active_labels
 
 
 def recent_workflow_failures(
@@ -466,6 +520,22 @@ def check_workflow_freshness(
                     ),
                 )
             )
+
+    recovery_active, recovery_detail = recovery_bundle_in_flight(repo=repo, token=token)
+    if recovery_active:
+        detail = ", ".join(recovery_detail)
+        name_to_workflow = {str(row.get("name") or ""): str(row.get("workflow") or "") for row in checks}
+        for finding in findings:
+            if finding.category != "workflows" or not finding.title.startswith("Workflow overdue:"):
+                continue
+            schedule_name = finding.title.removeprefix("Workflow overdue:").strip()
+            workflow_file = name_to_workflow.get(schedule_name, "")
+            if workflow_file not in RECOVERY_BUNDLE_WORKFLOWS:
+                continue
+            if finding.severity == "fail":
+                finding.severity = "warn"
+            finding.summary = f"{finding.summary} Recovery bundle in flight ({detail})."
+
     return findings, checks
 
 
@@ -703,6 +773,19 @@ def _overall_status(findings: list[OpsFinding]) -> str:
     if any(row.severity in {"fail", "warn"} for row in findings):
         return "warn"
     return "ok"
+
+
+def workflow_stale_only_failures(findings: list[OpsFinding]) -> bool:
+    """True when every unfixed fail finding is a workflow-overdue stale check."""
+    unfixed_fails = [
+        row for row in findings if row.severity == "fail" and not row.fixed
+    ]
+    if not unfixed_fails:
+        return False
+    return all(
+        row.category == "workflows" and row.title.startswith("Workflow overdue:")
+        for row in unfixed_fails
+    )
 
 
 def run_ops_monitor(

@@ -13,6 +13,7 @@ from value_investor.ops_monitor import (
     append_monitor_log_entry,
     run_ops_monitor,
     send_ops_monitor_email,
+    workflow_stale_only_failures,
 )
 
 
@@ -50,6 +51,11 @@ def main(argv: list[str] | None = None) -> int:
         "--email-always",
         action="store_true",
         help="Send SMTP summary even when overall status is ok",
+    )
+    run_p.add_argument(
+        "--allow-workflow-stale-exit-zero",
+        action="store_true",
+        help="Exit 0 when overall fail is only due to workflow-overdue findings",
     )
     run_p.set_defaults(func=_cmd_run)
 
@@ -95,7 +101,11 @@ def _cmd_run(args: argparse.Namespace) -> int:
             print(f"  drafted tasks: {', '.join(report.drafted_task_ids)}")
         if report.should_dispatch_engineering:
             print("  engineering queue ready to dispatch")
-    return 0 if report.overall != "fail" else 1
+    if report.overall == "fail":
+        if args.allow_workflow_stale_exit_zero and workflow_stale_only_failures(report.findings):
+            return 0
+        return 1
+    return 0
 
 
 def _cmd_email(args: argparse.Namespace) -> int:
