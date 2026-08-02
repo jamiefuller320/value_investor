@@ -48,7 +48,7 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 
 Treat as a **real** problem when:
 
-- The **latest** `main` CI run fails with pytest errors (not `startup_failure`).
+- The **latest** `main` CI run fails with pytest errors (not `startup_failure`). CI runs `scripts/check_committed_data_json.py` before pytest to catch merge-conflict markers and invalid JSON in core `docs/data/` files — a common cause of widespread `JSONDecodeError` failures after overlapping automation commits.
 - Pages deploy fails on **two consecutive** merges to `main`.
 - Orchestrator fails on **both** primary and catch-up windows the same day **and** external cron did not fire.
 - A child workflow (`library-grow`, `paper-auto`, `email-report`) fails with application errors in logs.
