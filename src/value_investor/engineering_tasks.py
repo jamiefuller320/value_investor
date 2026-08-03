@@ -72,6 +72,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/backtest_health.py",
         "src/value_investor/engineering_recovery.py",
         "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
         ".github/workflows/ops-monitor.yml",
         ".github/workflows/engineering-agent.yml",
         ".github/workflows/engineering-queue.yml",
@@ -79,6 +80,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "tests/test_ops_monitor.py",
         "tests/test_backtest_health.py",
         "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
     ],
     "ci": [
         ".github/workflows/ci.yml",

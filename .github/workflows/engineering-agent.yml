@@ -189,11 +189,27 @@ jobs:
           && (github.event.inputs.pr_only == 'true' || steps.branch.outputs.has_changes == 'true')
         id: pr
         env:
-          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           BRANCH="${{ steps.task.outputs.branch }}"
           TASK_ID="${{ steps.task.outputs.task_id }}"
           TITLE=$(ftse-engineering task-title --task-id "$TASK_ID" --max-len 120)
+
+          if [ -n "${WORKFLOW_DISPATCH_PAT:-}" ]; then
+            export GH_TOKEN="$WORKFLOW_DISPATCH_PAT"
+            USED_PAT=true
+          elif [ -n "${GH_PAT:-}" ]; then
+            export GH_TOKEN="$GH_PAT"
+            USED_PAT=true
+          else
+            export GH_TOKEN="$GITHUB_TOKEN"
+            USED_PAT=false
+            echo "::warning::WORKFLOW_DISPATCH_PAT not set — PR opened with GITHUB_TOKEN; CI may require manual approval."
+          fi
+          gh auth setup-git
 
           if [ "${{ github.event.inputs.pr_only }}" = "true" ]; then
             if ! git ls-remote --exit-code origin "refs/heads/$BRANCH" >/dev/null 2>&1; then
@@ -204,15 +220,15 @@ jobs:
             git push -u origin "$BRANCH"
           fi
 
+          AUTO_MERGE=false
+          if ftse-engineering task-auto-merge --task-id "$TASK_ID" >/dev/null 2>&1; then
+            AUTO_MERGE=true
+          fi
+
           if [ "$(gh pr list --head "$BRANCH" --base main --json number --jq 'length')" = "0" ]; then
-            AUTO_MERGE=false
-            if ftse-engineering task-auto-merge --task-id "$TASK_ID" >/dev/null 2>&1; then
-              AUTO_MERGE=true
-            fi
             DRAFT_FLAG=()
             BODY_SUFFIX="Draft PR — human merge required."
             if [ "$AUTO_MERGE" = "true" ]; then
-              DRAFT_FLAG=()
               BODY_SUFFIX="Scoped auto-merge enabled — merges when CI and path guard are green."
             else
               DRAFT_FLAG=(--draft)
@@ -231,10 +247,52 @@ jobs:
 
           _${BODY_SUFFIX}_" \
               "${DRAFT_FLAG[@]}"
+            echo "opened=true" >> "$GITHUB_OUTPUT"
           else
             echo "Draft PR already exists for $BRANCH"
+            echo "opened=true" >> "$GITHUB_OUTPUT"
           fi
-          echo "opened=true" >> "$GITHUB_OUTPUT"
+
+          PR_JSON=$(gh pr view "$BRANCH" --json url,number,isDraft)
+          PR_URL=$(python3 -c 'import json,sys; print(json.load(sys.stdin)["url"])' <<<"$PR_JSON")
+          PR_NUMBER=$(python3 -c 'import json,sys; print(json.load(sys.stdin)["number"])' <<<"$PR_JSON")
+          IS_DRAFT=$(python3 -c 'import json,sys; print("true" if json.load(sys.stdin)["isDraft"] else "false")' <<<"$PR_JSON")
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "is_draft=$IS_DRAFT" >> "$GITHUB_OUTPUT"
+          echo "auto_merge=$AUTO_MERGE" >> "$GITHUB_OUTPUT"
+          echo "used_pat=$USED_PAT" >> "$GITHUB_OUTPUT"
+
+      - name: Email engineering PR opened
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && steps.pr.outputs.opened == 'true'
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          ARGS=(
+            notify-pr-open
+            --task-id "${{ steps.task.outputs.task_id }}"
+            --branch "${{ steps.task.outputs.branch }}"
+            --pr-url "${{ steps.pr.outputs.pr_url }}"
+          )
+          if [ -n "${{ steps.pr.outputs.pr_number }}" ]; then
+            ARGS+=(--pr-number "${{ steps.pr.outputs.pr_number }}")
+          fi
+          if [ "${{ steps.pr.outputs.is_draft }}" = "true" ]; then
+            ARGS+=(--is-draft)
+          fi
+          if [ "${{ steps.pr.outputs.auto_merge }}" = "true" ]; then
+            ARGS+=(--auto-merge)
+          fi
+          if [ "${{ steps.pr.outputs.used_pat }}" = "true" ]; then
+            ARGS+=(--used-pat)
+          fi
+          ftse-engineering "${ARGS[@]}" || true
 
       - name: Mark task pr_open after draft PR
         if: >-

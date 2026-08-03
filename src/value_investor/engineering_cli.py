@@ -37,6 +37,7 @@ from value_investor.engineering_recovery import (
 from value_investor.cli_args import apply_parsed_globals
 from value_investor.ci_fix_tasks import draft_ci_fix_task, parse_pytest_failures_from_log, task_eligible_for_auto_merge
 from value_investor.engineering_auto_merge import evaluate_auto_merge, perform_auto_merge
+from value_investor.engineering_pr_notify import EngineeringPrNotification, send_engineering_pr_email
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     is_engineering_branch,
@@ -403,6 +404,28 @@ def _cmd_reprioritize(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_notify_pr_open(args: argparse.Namespace) -> int:
+    note = EngineeringPrNotification(
+        task_id=str(args.task_id).strip(),
+        branch=str(args.branch).strip(),
+        pr_url=str(args.pr_url).strip(),
+        pr_number=int(args.pr_number) if args.pr_number is not None else None,
+        is_draft=bool(args.is_draft),
+        auto_merge=bool(args.auto_merge),
+        used_pat=bool(args.used_pat),
+        ci_approval_hint=not args.no_ci_hint,
+    )
+    if args.json:
+        _print_json({"sent": send_engineering_pr_email(note), **note.to_dict()})
+        return 0
+    sent = send_engineering_pr_email(note)
+    if sent:
+        print(f"Engineering PR email sent for {note.task_id}")
+    else:
+        print("Engineering PR email skipped (SMTP not configured)", file=sys.stderr)
+    return 0
+
+
 def _cmd_run(args: argparse.Namespace) -> int:
     if not args.api_key:
         print("CURSOR_API_KEY required for engineering run", file=sys.stderr)
@@ -675,6 +698,29 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 0 when auto-merge is not applicable (for workflow conditions)",
     )
     try_merge_p.set_defaults(func=_cmd_try_auto_merge)
+
+    notify_pr_p = sub.add_parser(
+        "notify-pr-open",
+        parents=[common],
+        help="Email alert when the engineering agent opens a supervised PR",
+    )
+    notify_pr_p.add_argument("--task-id", required=True)
+    notify_pr_p.add_argument("--branch", required=True)
+    notify_pr_p.add_argument("--pr-url", required=True)
+    notify_pr_p.add_argument("--pr-number", type=int, default=None)
+    notify_pr_p.add_argument("--is-draft", action="store_true")
+    notify_pr_p.add_argument("--auto-merge", action="store_true")
+    notify_pr_p.add_argument(
+        "--used-pat",
+        action="store_true",
+        help="Set when PR was opened with WORKFLOW_DISPATCH_PAT / GH_PAT",
+    )
+    notify_pr_p.add_argument(
+        "--no-ci-hint",
+        action="store_true",
+        help="Omit backup note about approving action_required CI runs",
+    )
+    notify_pr_p.set_defaults(func=_cmd_notify_pr_open)
 
     run_p = sub.add_parser("run", parents=[common], help="Run the supervised dev agent for open task(s)")
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")
