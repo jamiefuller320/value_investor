@@ -50,3 +50,26 @@ Dispatch target is always re-resolved to a currently open task id.
 
 - [`ops-monitor.md`](ops-monitor.md) — daily health checks
 - [`ci-fix-automation.md`](ci-fix-automation.md) — scoped CI auto-merge loop
+
+## Engineering PR CI + email
+
+GitHub often blocks CI on PRs opened by `GITHUB_TOKEN` until a human approves the
+workflow run (`action_required`, 0 jobs). Two layers address this:
+
+| Layer | Mechanism |
+|-------|-----------|
+| **Primary** | `engineering-agent.yml` uses `WORKFLOW_DISPATCH_PAT` (or `GH_PAT`) for `git push` + `gh pr create` so CI starts without approval |
+| **Backup** | SMTP email via `ftse-engineering notify-pr-open` when a PR opens (includes CI approval hint when PAT was not used) |
+
+### PAT setup (one-time)
+
+Add repository secret **`WORKFLOW_DISPATCH_PAT`** — fine-grained PAT with:
+
+- **Contents:** Read and write
+- **Pull requests:** Read and write
+- **Actions:** Read and write (for existing dispatch scripts)
+
+`GH_PAT` is accepted as a fallback. When neither is set, the workflow falls back to
+`GITHUB_TOKEN` and logs a warning.
+
+Email reuses Sunday report SMTP secrets (`SMTP_*`, `EMAIL_TO`).
