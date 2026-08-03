@@ -21,8 +21,15 @@ class EarningsQualityModel(ValueModel):
     MIN_OCF_TO_NI = 0.8
     MAX_ACCRUALS_TO_ASSETS = 0.08
 
+    @staticmethod
+    def _earnings_base(row: dict[str, Any]) -> float | None:
+        adjusted = row.get("net_income_adjusted")
+        if adjusted is not None:
+            return adjusted
+        return row.get("net_income")
+
     def evaluate(self, row: dict[str, Any]) -> ModelResult:
-        ni = row.get("net_income")
+        ni = self._earnings_base(row)
         fcf = row.get("free_cashflow")
         ocf = row.get("operating_cashflow")
         assets = row.get("total_assets")

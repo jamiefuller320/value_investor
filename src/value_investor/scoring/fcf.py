@@ -27,6 +27,20 @@ _FREE_CASHFLOW_LABELS = [
     "Free Cash Flow",
 ]
 
+_ADJUSTED_EARNINGS_LABELS = [
+    "Normalized Income",
+    "Normalized Net Income",
+]
+
+_FILING_METRIC_KEYS = (
+    "operating_cashflow",
+    "operating_cashflow_prev",
+    "free_cashflow",
+    "free_cashflow_prev",
+    "net_income_adjusted",
+    "net_income_adjusted_prev",
+)
+
 _RESEARCH_ROOTS = (
     Path("docs/data/research"),
     Path("output/research"),
@@ -72,6 +86,38 @@ def extract_cashflow_metrics_from_annual_financials(
     return metrics
 
 
+def extract_income_metrics_from_annual_financials(
+    financials: dict[str, Any],
+) -> dict[str, float | None]:
+    """Extract latest (and prior-year) adjusted earnings from ``financials_annual.json``."""
+    income_statement = financials.get("income_statement") or {}
+    if not income_statement:
+        return {}
+
+    years = _sorted_financial_years(income_statement)
+    metrics: dict[str, float | None] = {}
+    if years:
+        metrics["net_income_adjusted"] = _annual_label_value(
+            income_statement.get(years[0]) or {},
+            _ADJUSTED_EARNINGS_LABELS,
+        )
+    if len(years) > 1:
+        metrics["net_income_adjusted_prev"] = _annual_label_value(
+            income_statement.get(years[1]) or {},
+            _ADJUSTED_EARNINGS_LABELS,
+        )
+    return metrics
+
+
+def extract_filing_metrics_from_annual_financials(
+    financials: dict[str, Any],
+) -> dict[str, float | None]:
+    """Combined cash-flow and adjusted-earnings metrics from cached Yahoo annuals."""
+    metrics = extract_cashflow_metrics_from_annual_financials(financials)
+    metrics.update(extract_income_metrics_from_annual_financials(financials))
+    return metrics
+
+
 def _financials_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
     ticker = ticker.strip().upper()
     candidates: list[Path] = []
@@ -92,7 +138,7 @@ def load_cached_financials(ticker: str, *, output_dir: Path | None = None) -> di
             payload = read_json(resolved)
         except (OSError, ValueError, TypeError):
             continue
-        if isinstance(payload, dict) and payload.get("cash_flow"):
+        if isinstance(payload, dict) and (payload.get("cash_flow") or payload.get("income_statement")):
             return payload
     return None
 
@@ -230,4 +276,34 @@ def enrich_universe_with_canonical_fcf(
         canonical if canonical is not None else screen
         for canonical, screen in zip(canonicals, screen_ttms, strict=True)
     ]
+    return out
+
+
+def enrich_universe_with_filing_metrics(
+    universe: pd.DataFrame,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Fill missing cash-flow and adjusted-earnings fields from cached ``financials_annual.json``."""
+    if universe.empty:
+        return universe
+
+    out = universe.copy()
+    for key in _FILING_METRIC_KEYS:
+        if key not in out.columns:
+            out[key] = None
+
+    for index, row in out.iterrows():
+        ticker = str(row["ticker"])
+        financials = load_cached_financials(ticker, output_dir=output_dir)
+        if not financials:
+            continue
+
+        extracted = extract_filing_metrics_from_annual_financials(financials)
+        for key, value in extracted.items():
+            if value is None:
+                continue
+            current = out.at[index, key]
+            if current is None or (isinstance(current, float) and pd.isna(current)):
+                out.at[index, key] = value
+
     return out

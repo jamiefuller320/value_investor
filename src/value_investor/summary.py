@@ -13,6 +13,7 @@ from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
+from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
 from value_investor.scoring.fcf import reconcile_fcf_for_ticker, resolve_free_cashflow, screen_ttm_from_row
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
@@ -65,6 +66,7 @@ class CompanyReport:
     piotroski_f_score: dict[str, Any] | None = None
     healthcare_overlay: bool = False
     cash_conversion_overlay: bool = False
+    dividend_yield_overlay: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -107,6 +109,7 @@ class CompanyReport:
             "piotroski_f_score": self.piotroski_f_score,
             "healthcare_overlay": self.healthcare_overlay,
             "cash_conversion_overlay": self.cash_conversion_overlay,
+            "dividend_yield_overlay": self.dividend_yield_overlay,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -154,6 +157,8 @@ class CompanyReport:
             fcf=data.get("fcf"),
             piotroski_f_score=data.get("piotroski_f_score"),
             healthcare_overlay=bool(data.get("healthcare_overlay")),
+            cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
+            dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
             research_risk_level=data.get("research_risk_level"),
@@ -312,6 +317,7 @@ def _brief_summary(
     adjusted_signal: str | None = None,
     healthcare_overlay: bool = False,
     cash_conversion_overlay: bool = False,
+    dividend_yield_overlay: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -376,6 +382,12 @@ def _brief_summary(
     if cash_conversion_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
             f"Cash-conversion overlay: negative FCF with dividend screens and buyback "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if dividend_yield_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Dividend-yield overlay: high yield passes but FCF yield and earnings quality fail "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -490,6 +502,19 @@ def build_company_reports(
                 ticker_models=ticker_models,
                 adjusted_signal=adjusted_signal_str,
             )
+
+        dividend_yield_overlay_flag = row.get("dividend_yield_overlay")
+        if dividend_yield_overlay_flag is not None and not (
+            isinstance(dividend_yield_overlay_flag, float) and pd.isna(dividend_yield_overlay_flag)
+        ):
+            dividend_yield_overlay = bool(dividend_yield_overlay_flag)
+        else:
+            dividend_yield_overlay, adjusted_signal_str = apply_dividend_yield_overlay_to_signal(
+                signal,
+                ticker_models=ticker_models,
+                adjusted_signal=adjusted_signal_str,
+            )
+
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
@@ -544,6 +569,7 @@ def build_company_reports(
             adjusted_signal=adjusted_signal_str,
             healthcare_overlay=healthcare_overlay,
             cash_conversion_overlay=cash_conversion_overlay,
+            dividend_yield_overlay=dividend_yield_overlay,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -590,6 +616,7 @@ def build_company_reports(
                 piotroski_f_score=piotroski_f_score,
                 healthcare_overlay=healthcare_overlay,
                 cash_conversion_overlay=cash_conversion_overlay,
+                dividend_yield_overlay=dividend_yield_overlay,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,

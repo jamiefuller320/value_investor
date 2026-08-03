@@ -12,7 +12,8 @@ from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
 from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
-from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf
+from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
+from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf, enrich_universe_with_filing_metrics
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
@@ -493,3 +494,85 @@ def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Pat
     assert hik["free_cashflow_screen_ttm"] == -66_125_000.0
     assert hik["free_cashflow"] == 119_000_000.0
     assert other["free_cashflow"] == 10_000_000.0
+
+
+def test_enrich_universe_with_filing_metrics_fills_ocf_and_adjusted_earnings(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2025": {"Operating Cash Flow": 90_800_000.0, "Free Cash Flow": 55_000_000.0},
+            "2024": {"Operating Cash Flow": 70_000_000.0},
+        },
+        "income_statement": {
+            "2025": {"Normalized Income": 55_047_230.0, "Net Income": 56_572_000.0},
+            "2024": {"Normalized Income": 50_000_000.0},
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame([
+        {
+            "ticker": "MEGP.L",
+            "name": "ME Group International plc",
+            "operating_cashflow": None,
+            "free_cashflow": 15_565_750.0,
+            "net_income": 56_572_000.0,
+        }
+    ])
+
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["operating_cashflow"] == 90_800_000.0
+    assert row["operating_cashflow_prev"] == 70_000_000.0
+    assert row["net_income_adjusted"] == 55_047_230.0
+    assert row["net_income_adjusted_prev"] == 50_000_000.0
+    assert row["free_cashflow"] == 15_565_750.0
+
+
+def test_enrich_signals_with_dividend_yield_overlay_caps_megp_like_profile():
+    signals = pd.DataFrame([
+        {
+            "ticker": "MEGP.L",
+            "name": "ME Group International plc",
+            "sector": "Industrials",
+            "signal": "strong_buy",
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "MEGP.L",
+            "model_id": "high_dividend",
+            "model_name": "High Dividend Yield",
+            "passed": True,
+            "score": 0.9,
+            "reasons": "['yield=7.6%']",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": "MEGP.L",
+            "model_id": "fcf_yield",
+            "model_name": "FCF Yield",
+            "passed": False,
+            "score": 0.3,
+            "reasons": "[]",
+            "failed_criteria": "['FCF yield 3.7% below 5%']",
+        },
+        {
+            "ticker": "MEGP.L",
+            "model_id": "earnings_quality",
+            "model_name": "Earnings Quality",
+            "passed": False,
+            "score": 0.5,
+            "reasons": "[]",
+            "failed_criteria": "['weak free-cash conversion']",
+        },
+    ])
+
+    enriched = enrich_signals_with_dividend_yield_overlay(signals, model_results)
+
+    assert enriched.iloc[0]["signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["dividend_yield_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
