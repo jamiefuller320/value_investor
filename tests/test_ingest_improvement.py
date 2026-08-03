@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from unittest.mock import patch
 
 from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
@@ -11,6 +12,7 @@ from value_investor.research.ingest_improvement import (
     IngestImprovementTarget,
     _planned_sources_for_ticker,
     map_suggestion_to_source_ids,
+    run_ingest_improvement_pass,
     select_ingest_improvement_targets,
 )
 from value_investor.summary import CompanyReport
@@ -291,3 +293,55 @@ def test_ingest_improvement_installs_fetch_cashflow_fallback():
     from value_investor import fetch as fetch_mod
 
     assert getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False)
+
+
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+@patch("value_investor.research.ingest_improvement.refetch_indexed_without_body_filing_bodies")
+def test_ingest_improvement_refetches_when_partial_bodies(
+    mock_indexed_refetch,
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "RIO.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    filings = [{"has_body": True}] * 10 + [{"has_body": False}] * 5
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 15, "with_body": 10},
+                "filings": filings,
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_ingest_sources.return_value = {"filings_summary": {"with_body": 10}}
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+    mock_indexed_refetch.return_value = {
+        "investegate": {"fetched": 2, "with_body_after": 12},
+        "ticker_rns": {"fetched": 0, "with_body_after": 12},
+        "fetched": 2,
+        "with_body_before": 10,
+        "with_body_after": 12,
+    }
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("RIO.L", "Rio Tinto Group")],
+        output_dir=output_dir,
+        market="ftse350",
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+    )
+
+    mock_indexed_refetch.assert_called_once()
+    assert summary.results[0]["indexed_refetch"]["fetched"] == 2
+    assert summary.results[0]["investegate_refetch"]["fetched"] == 2

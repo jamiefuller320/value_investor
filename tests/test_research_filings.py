@@ -25,6 +25,7 @@ from value_investor.research.filings import (
     period_body_coverage,
     prune_orphaned_filing_bodies,
     refetch_companies_house_filing_bodies,
+    refetch_indexed_without_body_filing_bodies,
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
@@ -521,6 +522,148 @@ def test_refetch_investegate_filing_bodies_resolves_and_downloads(tmp_path, monk
     assert saved["filings"][0]["has_body"] is True
     assert saved["filings"][0]["period"] == "annual"
     assert (filings_dir / "bodies" / "gnews1.txt").exists()
+
+
+def test_fetch_filing_body_rejects_unresolved_google_news_url(monkeypatch):
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: None,
+    )
+    assert (
+        fetch_filing_body(
+            "https://news.google.com/rss/articles/CBMiabc?oc=5"
+        )
+        is None
+    )
+
+
+def test_refetch_investegate_rejects_unresolved_google_news_wrapper(
+    tmp_path, monkeypatch
+):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "RIO.L",
+        "company_name": "Rio Tinto Group",
+        "filings": [
+            {
+                "id": "gnews_stuck",
+                "source": "google_news_investegate",
+                "headline": "Rio Tinto trading update - Investegate",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": "https://news.google.com/rss/articles/stuck?oc=5",
+                "period": "trading_update",
+                "has_body": False,
+                "body_path": None,
+                "priority": 90,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: (_ for _ in ()).throw(AssertionError("should not fetch")),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="RIO.L",
+        company_name="Rio Tinto Group",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 0
+    assert result["fetched"] == 0
+    assert result["google_news_rejected"] == 1
+
+
+def test_refetch_investegate_fetches_direct_lse_pdf_url(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    index = {
+        "ticker": "SHEL.L",
+        "company_name": "Shell plc",
+        "filings": [
+            {
+                "id": "lse_pdf1",
+                "source": "investegate_resolved",
+                "headline": "Shell plc Full Year Results",
+                "published_at": "2026-02-05T00:00:00+00:00",
+                "url": lse_pdf,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 100,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: "Annual results narrative " + ("x" * 220),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="SHEL.L",
+        company_name="Shell plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / "lse_pdf1.txt").exists()
+
+
+def test_refetch_indexed_without_body_filing_bodies_orchestrates(
+    tmp_path, monkeypatch
+):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0}}),
+        encoding="utf-8",
+    )
+    investegate_result = {
+        "attempted": 2,
+        "fetched": 1,
+        "with_body_before": 10,
+        "with_body_after": 11,
+        "google_news_rejected": 1,
+    }
+    ticker_rns_result = {
+        "attempted": 1,
+        "fetched": 1,
+        "with_body_before": 11,
+        "with_body_after": 12,
+        "pruned": 0,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_investegate_filing_bodies",
+        lambda *args, **kwargs: dict(investegate_result),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_ticker_rns_api_filing_bodies",
+        lambda *args, **kwargs: dict(ticker_rns_result),
+    )
+    result = refetch_indexed_without_body_filing_bodies(
+        filings_dir,
+        ticker="GSK.L",
+        company_name="GSK plc",
+        max_bodies=20,
+    )
+    assert result["fetched"] == 2
+    assert result["attempted"] == 3
+    assert result["with_body_before"] == 10
+    assert result["with_body_after"] == 12
+    assert result["google_news_rejected"] == 1
 
 
 def test_resolve_investegate_url_decodes_google_news_to_investegate(monkeypatch):

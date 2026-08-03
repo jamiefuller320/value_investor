@@ -396,6 +396,31 @@ def _is_lse_rns_pdf_url(url: str | None) -> bool:
     return any(host in lower for host in _LSE_RNS_PDF_HOSTS) and lower.endswith(".pdf")
 
 
+_RNS_BODY_FETCH_SOURCES = frozenset(
+    {
+        "google_news_investegate",
+        "investegate_direct",
+        "investegate_resolved",
+        "ticker_rns_api",
+    }
+)
+
+
+def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
+    """True when a row points at Investegate or LSE RNS content worth body-fetching."""
+    url = str(row.get("url") or "")
+    if not url or row.get("has_body"):
+        return False
+    if "news.google.com" in url:
+        return False
+    source = str(row.get("source") or "")
+    return (
+        source in _RNS_BODY_FETCH_SOURCES
+        or "investegate.co.uk" in url
+        or _is_lse_rns_pdf_url(url)
+    )
+
+
 def resolve_investegate_document_url(html: str) -> str | None:
     """Extract a direct LSE RNS PDF URL embedded in an Investegate announcement page."""
     for pattern in _INVESTEGATE_LSE_PDF_PATTERNS:
@@ -2566,23 +2591,13 @@ def refetch_investegate_filing_bodies(
         ticker=ticker,
         company_name=company_name,
     )
-    rns_sources = {
-        "google_news_investegate",
-        "investegate_direct",
-        "investegate_resolved",
-        "ticker_rns_api",
-    }
-    missing = [
-        row
+    google_news_rejected = sum(
+        1
         for row in enriched
-        if row.get("url")
-        and not row.get("has_body")
-        and (
-            str(row.get("source") or "") in rns_sources
-            or "investegate.co.uk" in str(row.get("url") or "")
-            or "news.google.com" in str(row.get("url") or "")
-        )
-    ]
+        if not row.get("has_body")
+        and "news.google.com" in str(row.get("url") or "")
+    )
+    missing = [row for row in enriched if _is_rns_body_fetch_candidate(row)]
     if not missing:
         if enriched != filings:
             payload["filings"] = enriched
@@ -2593,6 +2608,7 @@ def refetch_investegate_filing_bodies(
             "fetched": 0,
             "with_body_before": before,
             "with_body_after": before,
+            "google_news_rejected": google_news_rejected,
             "note": "no missing Investegate/LSE bodies",
         }
 
@@ -2628,7 +2644,47 @@ def refetch_investegate_filing_bodies(
         "fetched": max(0, after - before),
         "with_body_before": before,
         "with_body_after": after,
+        "google_news_rejected": google_news_rejected,
         "note": "refetch_investegate_filing_bodies",
+    }
+
+
+def refetch_indexed_without_body_filing_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 20,
+) -> dict[str, Any]:
+    """
+    Universal pipeline for indexed rows lacking bodies on UK RNS tickers.
+
+    Resolves Google News wrappers to Investegate/LSE direct HTML/PDF URLs,
+    rejects unresolvable Google News wrappers, then downloads announcement text.
+    """
+    investegate = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+    )
+    ticker_rns = refetch_ticker_rns_api_filing_bodies(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+    )
+    before = int(investegate.get("with_body_before") or 0)
+    after = int(ticker_rns.get("with_body_after") or investegate.get("with_body_after") or before)
+    return {
+        "investegate": investegate,
+        "ticker_rns": ticker_rns,
+        "attempted": int(investegate.get("attempted") or 0) + int(ticker_rns.get("attempted") or 0),
+        "fetched": int(investegate.get("fetched") or 0) + int(ticker_rns.get("fetched") or 0),
+        "with_body_before": before,
+        "with_body_after": after,
+        "google_news_rejected": int(investegate.get("google_news_rejected") or 0),
+        "note": "refetch_indexed_without_body_filing_bodies",
     }
 
 
