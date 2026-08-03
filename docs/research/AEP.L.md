@@ -1,98 +1,101 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 1 · Updated 2026-08-02T12:48:18.294937+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-03T20:36:10.135578+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-AEP Plantations Plc is a London-listed integrated palm-oil producer with ~65,000 ha planted across Indonesia and Malaysia, trading at a modest multiple despite a sharp earnings recovery. The quantitative screen flags Strong Buy on cheapness (P/E ~10.6, yield ~5.5%), quality (ROE ~15%, Piotroski 8/9), and a fortress balance sheet (negligible debt, current ratio ~8.7). FY2025 filings show revenue up 25% to $465.2m and profit attributable to shareholders up 35% to $90.9m, driven by volume growth and stronger CPO/palm-kernel prices. The central debate is whether current earnings reflect a cyclical commodity peak or a structurally improved business following minority buy-outs, estate rationalisation, and capital returns — versus persistent Indonesia policy risk, EU sustainability regulation, and execution risk around the proposed Kalimantan subsidiary IPO.
+AEP Plantations Plc is a London-listed integrated palm-oil producer with estates and mills across Indonesia and Malaysia, reporting in US dollars. The quantitative screen flags a Strong Buy on cheapness (P/E ~10.4, yield ~5.5%), quality (ROE ~15%, Piotroski 8/9), and balance-sheet strength (minimal leverage, current ratio ~8.7). The 2025 annual report shows a sharp earnings inflection: revenue rose 25% to $465.2m and profit attributable to shareholders grew 35% to $90.9m, supported by higher FFB volumes and stronger CPO/PK prices. The central debate is whether current earnings and cash reflect a cyclical commodity upswing or durable operational improvement—and how the proposed Indonesia subsidiary IPO, ongoing buybacks, and Indonesian export policy interact with shareholder returns. Filing coverage is adequate for annual trends but thin on formal interim RNS and detailed note-level risk disclosures in the extracted bodies.
 
 ---
 
 ## INVESTMENT THESIS
-For a value investor, AEP offers a rare combination: commodity exposure with net-cash optionality, rising dividends, and active buybacks — without the leverage typical of plantation peers.
+For a value investor, AEP offers a rare combination: commodity exposure with net-cash fortification, rising production, and explicit capital return. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—with 20/20 data quality and models including Graham Defensive/Enterprising, FCF Yield, Buffett Quality, High Dividend Yield, and Piotroski F-Score (8/9).
 
-**Quantitative alignment.** The screen passes five metric families (cheapness, quality, dividend, GARP, risk). Graham Defensive/Enterprising, FCF Yield, Buffett Quality, Magic Formula, and Piotroski F-Score all pass. Failures are concentrated in deep-value archetypes (net-net, P/B <1.0) and Lynch PEG (1.41), consistent with a quality compounder rather than a distressed asset.
+Business quality supports the signal. The group owns ~56k ha of mature palms (weighted average age ~14 years), seven mills (400 mt/hr combined capacity), and an eighth mill under construction at KAP (commissioning targeted January 2027). 2025 own FFB production reached 1.1m mt (+6%), with total mill throughput of 2.1m mt. Net assets attributable to shareholders rose to $580.7m ($1,497 per share) with cash net of short-term borrowings of $231.8m—against total debt of only ~$0.5m per the 2025 filing financial record (capital leases). The board proposed an 81 US cent dividend for 2025 (up from 51 cents in 2024), consistent with a policy of returning at least 25% of retained group profits.
 
-**Business quality supports the screen.** Primary filings describe a vertically integrated operator: seven mills (eighth under construction), ~56,000 ha mature palms, weighted average tree age ~14 years, and growing third-party FFB intake (~1.2m mt in 2025). OER averaged 19.8% in 2025. The group consolidated minority interests in Indonesian subsidiaries ($87.8m in 2023, per 2023 annual report), reducing non-controlling interests from $109.6m (2022 financial record) to $4.2m (2025 financial record) and capturing more group earnings. South Sumatra non-performing estates were disposed for $8.5m (2023). Cash net of short-term borrowings rose from $152.0m (2023) to $231.8m (2025), funding replanting, an eighth mill, BioCNG expansion, dividends (81 US cents proposed for 2025 vs 51 cents in 2024), and treasury share repurchases.
+The valuation hook is earnings and cash on a strong balance sheet: screen P/E ~10.4 and P/B ~1.6 against ROE ~15% and TTM FCF of ~$76m (screen; Yahoo annual cash flow shows 2025 FCF of $83.6m—used as fallback for cash-flow detail not fully extracted from filing bodies). Failed screen models (Graham Net-Net, Deep Value, Schloss) reflect P/B above 1.0 and absence of NCAV—not a quality concern for this business type.
 
-**Capital allocation.** Dividend payout has stepped up materially (30¢ → 51¢ → 81¢ over 2023–2025, per annual reports). FTSE 250 inclusion (September 2025) and a ten-for-one share split (June 2026, per news manifest) improve liquidity. An £8m buyback programme launched July 2026.
-
-The screen’s Strong Buy signal is therefore grounded in real operating and balance-sheet improvement, not purely statistical cheapness.
+Governance and strategic actions reinforce the case: FTSE 250 inclusion (September 2025), rebrand to AEP Plantations (November 2025), active share buybacks, and a proposed IPO of Indonesian subsidiary PT AEP Nusantara Plantations (~19k ha Kalimantan platform) to fund regional capex without over-levering the parent.
 
 ---
 
 ## FINANCIAL REVIEW
-**Source note.** All figures below are from Companies House filing body extracts unless stated. The filings index catalogues six documents under `period: other` (no entries labelled `annual` or `interim`); content identifies four group annual reports (2022–2025), one parent-company interim filing (May 2024), and one RNS. No consolidated half-year or trading-update RNS is in the index — a material gap for intra-year trend verification.
+**Source hierarchy:** Primary figures from Companies House annual report extracts (`filings/bodies/`). The `filings_index.json` catalogues six filings, all labelled `period: other` (no formal annual/interim RNS tags); bodies include full annual reports for 2022–2025, one parent-only interim to 2 June 2023, and an Investegate IPO announcement. No half-year or trading-update RNS bodies are present—interim group results are a gap.
 
-### Annual trend (group, continuing operations)
+### Annual trend (consolidated, continuing operations)
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Revenue ($m) | 447.6 | 371.0 | 372.3 | 465.2 |
-| Operating profit ($m) | 132.9* | 69.7 | 81.7 | 111.6 |
-| Profit attr. shareholders ($m) | 86.9 | 49.4 | 67.5 | 90.9 |
-| Basic EPS (US¢) | 219.2 | 124.9 | 170.9 | 231.4 |
-| Dividend (US¢) | 25.0 | 30.0 | 51.0 | 81.0 |
-| Net assets ex-NCI ($m) | 466.1 | 513.6 | 551.0 | 580.7 |
-| Asset value/share (US¢) | 1,176 | 1,298 | 1,395 | 1,497 |
-| Cash net of ST borrowings ($m) | 221.5 | 153.0 | 181.9 | 231.8 |
+| Metric | 2025 | 2024 | 2023 | 2022 |
+|--------|------|------|------|------|
+| Revenue ($m) | 465.2 | 372.3 | 370.4 | 447.6 |
+| Operating profit ($m) | 111.6 | 81.7 | 69.7 | 132.9 |
+| Profit attributable ($m) | 90.9 | 67.5 | 49.4 | 86.9 |
+| Basic EPS (US ¢) | 231.4 | 170.9 | 124.9 | 219.2 |
+| Dividend / share (US ¢) | 81.0 | 51.0 | 30.0 | 25.0 |
+| Net assets ex-NCI ($m) | 580.7 | 551.0 | 513.6 | 466.1 |
+| Asset value / share (US ¢) | 1,497 | 1,395 | 1,298 | 1,176 |
+| Cash net of ST borrowings ($m) | 231.8 | 181.9 | 153.0 | 221.5 |
 
-*2022 operating profit before biological-asset movement; later years per financial record tables.
+*Source: 2025 Annual Report Financial Record (`ch_01884630_MzUyODQ4NTgzM2FkaXF6a2N4`); prior years from corresponding annual report bodies.*
 
-**Cycle and recovery.** FY2022 benefited from record CPO prices (avg ~$1,369/mt ex-Rotterdam, per 2022 chairman’s statement). FY2023 saw a 17% revenue decline as CPO averaged ~$971/mt; EPS fell 47% before biological-asset adjustments. FY2024–FY2025 marked recovery: revenue +25% in 2025 on 6% higher own-FFB production, 18% higher third-party intake, and stronger prices; profit before tax +35% to $119.3m (2025 chairman’s statement).
+**2025 (year ended 31 December 2025, filed 25 June 2026):** Chairman’s statement confirms revenue +25% to $465.2m and profit before tax +35% to $119.3m, driven by 6% higher FFB production, 18% higher third-party crop intake, and stronger CPO/PK prices. Proposed dividend totals 81 US cents. Treasury shares rose materially ($13.8m book value vs $2.5m in 2024), reflecting expanded buyback activity.
 
-**Balance sheet.** The group carries minimal financial debt — filing financial records show cash exceeding short-term borrowings throughout. Yahoo `financials_annual.json` (fallback) confirms total debt of ~$0.5m and stockholders’ equity of ~$581m at FY2025, consistent with filings. Working capital is substantial (Yahoo: ~$305m), though partly reflects tax receivables and inventory tied to Indonesia operations.
+**2024 (filed 3 July 2025):** Revenue flat at $372.3m vs $370.4m in 2023, but EPS from continuing operations rose 37% to 171 cents; dividend increased to 51 cents. Company proposed rename to AEP Plantations Plc.
 
-**Cash generation.** Yahoo fallback shows operating cash flow of $113.8m and free cash flow of $83.6m in 2025 (vs $73.9m and $44.9m in 2024), broadly consistent with filing narrative of “strong cash generation.” Capex ~$30m annually (mills, replanting, BioCNG).
+**2023 (filed 1 July 2024):** Revenue fell 17% on lower CPO prices ($971/mt avg vs $1,369/mt in 2022). Operating profit $69.7m. Notable corporate actions: $87.8m minority buy-ins across nine Indonesian subsidiaries; $8.5m disposal of three non-performing South Sumatra estates; landbank reduced to ~90.5k ha.
 
-**Interim filing (limited utility).** The May 2024 Companies House interim covers the **parent company only** (1 January–2 June 2023): revenue $20.5m, profit $20.1m, filed solely for Companies Act distributable-reserves purposes. It does **not** provide consolidated group half-year results. No group interim is available in the source pack.
+**2022:** Peak revenue year ($447.6m) on record CPO pricing in H1; operating profit $132.9m before biological asset adjustments.
 
-**Reporting gaps.** (1) No consolidated interim/H1 RNS in index. (2) Filing bodies are partial PDF extracts — going-concern, audit emphasis, and note-level contingencies are not captured in available text. (3) `macro_context.json` absent.
+### Balance sheet and cash
+
+The group remains effectively unlevered at parent level. Yahoo `financials_annual.json` (fallback for line-item detail not in extracted filing tables) shows 2025 total debt of $0.54m (capital leases), cash and equivalents $231.8m, working capital $304.7m, and non-current pension obligations $7.97m. Screen debt/equity 0.09 and current ratio 8.7 align with this profile.
+
+2025 operating cash flow and capex are not fully tabulated in the extracted annual report bodies; **Yahoo fallback:** operating cash flow $113.8m, capex $30.2m, FCF $83.6m, dividends paid $34.6m, share repurchases $11.4m.
+
+### Interim coverage
+
+The only interim filing is **parent-company-only**, unaudited, for 1 January–2 June 2023 (`ch_01884630_MzQxOTk5ODk1NGFkaXF6a2N4`), prepared for distributable-reserves compliance—not consolidated group half-year results. **No 2024 or 2025 interim group accounts or trading updates appear in the index.** Recent performance must be inferred from the 2025 annual report and news flow.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Commodity cyclicality.** Earnings remain highly correlated with CPO/PK prices. FY2023 demonstrated how quickly profits compress when soft-oil supply gluts emerge. Current screen metrics may embed a mid-cycle or above-trend earnings base.
+**Commodity cyclicality:** Earnings are highly correlated with CPO/PK prices. 2023 demonstrated downside when Rotterdam CPO averaged $971/mt (−29% vs 2022); 2025 benefited from recovery. Screens do not fully capture forward commodity risk.
 
-**Indonesia regulatory and export policy.** May 2026 news (e.g. “AEP shares fall as Indonesia announces export controls for palm oil,” London South East, 20 May 2026) highlights sensitivity to Jakarta’s centralised export regime. Historical filing commentary references export bans (2022) and competition from small millers eroding third-party crop margins (2023 chairman’s statement).
+**Indonesia regulatory and export policy:** May 2026 news reported share weakness on Indonesian export-control centralisation. The group’s revenue is overwhelmingly Indonesia/Malaysia-denominated in operational terms, with USD reporting creating FX translation exposure (large negative exchange reserves: −$381.5m in 2025).
 
-**EU sustainability regulation (EUDR).** 2022–2023 annual reports discuss EUDR compliance burden. Management states NDPE policy limits direct impact, but RSPO certification could cost up to **$18m** (2023 chairman’s statement) — a significant unfunded capex/opex item not captured by value screens.
+**EUDR / sustainability compliance:** 2023 chairman’s statement notes EU Deforestation Regulation risk for the sector; AEP cites NDPE compliance but is pursuing RSPO membership with consultants estimating up to **$18m** to certify the full group—a cost and execution burden not in value screens.
 
-**Governance and related-party concentration.** Genton International (Lim family) remains a significant shareholder; Marcus Chan (son of former chairman) serves as executive director. Board refresh occurred after Madam Lim’s death (2022), but family influence persists.
+**Operational and competitive:** Replanting (2–3% of trees annually) suppresses near-term yields; Bengkulu has seen sharp crop declines during replanting cycles. Small independent millers compete aggressively for third-party FFB, pressuring intake margins (noted in Riau). Logistics disruptions (road closures in Kalimantan) remain an operational hazard per 2022 filings.
 
-**Corporate-law technical issue.** The 2023 annual report disclosed that interim accounts were not filed at Companies House before certain 2022–2023 dividends and buybacks, requiring shareholder ratification. Management stated no impact on financial position, but it signals process weakness.
+**Governance / technical compliance:** 2023 annual report disclosed a **Companies Act 2006 technical breach**—interim accounts not filed at Companies House before 2022 final dividend, 2023 interim dividend, and 2023 share buybacks, though distributable profits were sufficient. Shareholder ratification proposed; filing states no impact on financial position, but it flags process weakness around capital returns.
 
-**IPO and structure complexity.** The April 2026 RNS proposes listing PT AEP Nusantara Plantations (~19,000 ha Kalimantan) on IDX by mid-2026, issuing ~15% new shares. Benefits include local capital access; risks include minority dilution at Holdco, valuation arbitrage, and distraction. Outcome and pricing are unresolved.
+**Capital structure complexity:** Proposed IPO of PT AEP Nusantara (~15% new share issuance on IDX, target mid-2026) introduces execution, regulatory (OJK/IDX), and potential value-leakage risk if pricing or governance terms are unfavourable. Minority interests remain ($4.2m NCI in 2025 vs $109.6m in 2022 pre-consolidation).
 
-**Operational/geographic.** Replanting (~2%–3% of trees annually) temporarily suppresses Bengkulu yields. Logistics disruptions (road closures in Kalimantan, 2022) and biogas grid tripping (2023) show infrastructure fragility. Pension/other post-retirement liabilities of ~$8m (Yahoo fallback, FY2025) are modest but present.
+**Liquidity / free float:** Aggressive buybacks (including £8m programme from July 2026 per news) tighten free float—a double-edged sword for existing holders but a liquidity risk for new entrants. A **10-for-1 share split** was announced June 2026, which will restate per-share metrics.
 
-**Liquidity.** Despite FTSE 250 promotion and share split, historical filing commentary notes low trading liquidity constraining buybacks — relevant for exit risk in a small-cap plantation name.
+**Pension:** Non-current pension and post-retirement obligations ~$8m (Yahoo 2025 balance sheet)— modest but worth monitoring.
 
-No going-concern language appears in available filing extracts.
+**Filing gaps:** No going-concern qualification found in extracted bodies; however, detailed auditor emphasis-of-matter, covenant, or contingency language from full audited notes is **not available** in the body extracts—verify before sizing.
 
 ---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but skewed toward buyback mechanics and listicles**, with several material corporate events.
+Coverage over the past year is moderate but noisy: several headlines conflate AEP with **American Electric Power** (US utility)—those are not relevant to this issuer.
 
-**Strategy and capital markets**
-- “Proposed IPO of PT AEP Nusantara Plantations Tbk” (Investegate RNS, 16 April 2026) — Kalimantan subsidiary listing on IDX, ~15% new share issue, target mid-2026.
-- “UK-based AEP Plantations subsidiary eyes Indonesia IPO” (idnfinancials.com, 18 April 2026).
-- “AEP Plantations plans ten-for-one stock split” (Sharecast.com, 22 June 2026); “IN BRIEF: AEP Plantations to implement 10-for-1 share split” (London South East, 22 June 2026).
-- Rebrand from Anglo-Eastern Plantations to AEP Plantations Plc (effective November 2025, per FY2025 annual report).
+**Material AEP-specific items:**
 
-**Shareholder returns**
-- “Anglo-Eastern Plantations Announces £8 Million Share Buyback Scheme Starting July 2026” (Kalkine Media, 6 July 2026), followed by numerous daily buyback completion notices through July 2026 at prices ~169–179p.
+| Date | Headline | Relevance |
+|------|----------|-----------|
+| 16 Apr 2026 | Proposed IPO of PT AEP Nusantara Plantations Tbk (Investegate RNS / filing body) | Strategic: ~19k ha Kalimantan platform; ~15% new shares on IDX; capex for mill/infrastructure; completion targeted mid-2026 |
+| 22 Jun 2026 | AEP Plantations plans ten-for-one stock split (sharecast.com / London South East) | Per-share restatement; liquidity |
+| 6 Jul 2026 | Anglo-Eastern Plantations announces £8m share buyback from July 2026 (kalkinemedia.com) | Capital return; free-float impact |
+| Jul 2026 | Multiple TipRanks/kalkinemedia items on ongoing buybacks (e.g. 54,348 shares repurchased 28 Jul 2026) | Sustained treasury accumulation |
+| 20 May 2026 | AEP shares fall as Indonesia announces export controls for palm oil (London South East, sharecast.com) | Regulatory/market sensitivity |
+| 27 May 2026 | Palm oil stocks struggle after Indonesian intervention (Investors' Chronicle) | Sector context |
+| 17 Sep 2025 | FTSE 250 promotion (2025 annual report) | Index inclusion; liquidity profile |
+| 24 Nov 2025 | Rebrand to AEP Plantations Plc (2025 annual report) | Corporate identity |
+| 14 Oct 2025 | CB Industrial exits Indonesian venture with RM38m divestment to UK-listed AEP (theedgemalaysia.com) | Land/asset consolidation |
+| 13 Jan 2026 | Investors' Chronicle: "Why I'm buying this cash-generation machine" | Third-party bullish commentary |
 
-**Sector/regulatory shock**
-- “AEP shares tank as Indonesia centralises export controls” (Sharecast.com, 20 May 2026); “Palm oil stocks struggle after Indonesian intervention” (Investors’ Chronicle, 27 May 2026); counterpoint: “Indonesian export shake-up hands investors a buying opportunity in London-listed palm oil producers” (Yahoo Finance UK, 21 May 2026).
-
-**M&A**
-- “CB Industrial exits Indonesian plantation venture with RM38m divestment to UK-listed AEP” (The Edge Malaysia, 14 October 2025).
-
-**Third-party commentary**
-- Dividend/value listicles (Yahoo Finance, simplywall.st, The Twelfth Magpie) and Investors’ Chronicle (“Why I’m buying this cash-generation machine,” 13 January 2026).
-
-**Noise.** Several “AEP” headlines refer to US utility American Electric Power (Bloom Energy fuel-cell deal) — not this issuer.
+**Thin spots:** Limited sell-side depth; much coverage is dividend-screen listicles (simplywall.st, Yahoo Finance). No major M&A beyond bolt-on land deals and minority consolidations disclosed in filings.
 
 ---
 
@@ -100,4 +103,4 @@ Coverage over the past year is **moderate but skewed toward buyback mechanics an
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Primary filings confirm accelerating earnings, a net-cash balance sheet, and rising shareholder returns that support the quantitative Strong Buy, partially offset by commodity cyclicality, Indonesia policy exposure, and unresolved IPO/RSPO costs that screens do not fully capture.
+Rationale: Primary filings confirm a strong earnings and balance-sheet recovery that supports the quantitative Strong Buy, but commodity cyclicality, Indonesia policy risk, IPO execution, and absent interim RNS/note-level disclosures prevent full conviction without further verification.

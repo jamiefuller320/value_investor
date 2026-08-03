@@ -919,7 +919,143 @@
       "priority": "medium",
       "suggestion": "Ingest Annual Report principal-risks section (page 82 reference exists in `ir_3a67962eb8770824.txt` but body is strategic-report heavy); map FDA/regulatory, pricing, and pension risks from notes to accounts rather than relying on news-themed alternate pulls.",
       "recorded_at": "2026-08-02T13:49:49.937105+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Re-classify Companies House group/interim accounts as `period=annual|interim` in `filings_index.json` so prompts target consolidated accounts, not s.838 holding-company stubs.",
+      "recorded_at": "2026-08-03T21:38:47.174857+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Deep-fetch full Companies House PDF/iXBRL notes (pensions, borrowings/covenants, consolidated cash flow)—current bodies stop at strategic-report highlights.",
+      "recorded_at": "2026-08-03T21:38:47.174871+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Investegate RNS fetch for half-year and full-year results with minimum body-length threshold; FGP lacks consolidated H1 FY2026.",
+      "recorded_at": "2026-08-03T21:38:47.174877+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Pull IR results presentation PDFs for FCF bridge and segment margins.",
+      "recorded_at": "2026-08-03T21:38:47.174881+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Dual margin/earnings fields (statutory vs adjusted) on UK transport names to avoid false moat/quality failures on pass-through revenue.",
+      "recorded_at": "2026-08-03T21:38:47.174885+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require TTM-vs-adjusted earnings reconciliation when screen growth is negative but filing adjusted EPS and Piotroski gross margin are improving.",
+      "recorded_at": "2026-08-03T21:38:47.174889+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Embed cohort screen export (Hold/Buy counts, peer tickers) in each `gap_fill_source_map.json` for cross-name email questions.",
+      "recorded_at": "2026-08-03T21:38:47.174892+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Drive the cash-conversion overlay from `fcf.canonical` (filing-aligned) rather than preserved `screen_ttm`, and surface both figures explicitly in the action note when they diverge by sign or >25%.",
+      "recorded_at": "2026-08-03T21:38:47.174897+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Retry IR allowlist PDF fetch for April 2026 trading update (`ir_a9733d0de6aec27d`) with fallback to Investegate RNS HTML when PDF extraction fails (refetch returned 0 bodies per `gap_fill_source_map.json`).",
+      "recorded_at": "2026-08-03T21:38:47.174901+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Pull Yahoo quarterly cash-flow statements into `financials_annual.json` so TTM FCF can be reconciled against fiscal-year OCF−CapEx for names like HIK.L where the gap exceeds $150m.",
+      "recorded_at": "2026-08-03T21:38:47.174907+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Deepen annual report extract to include principal risks (page 82+), note 24–27 cash-flow reconciliation, and pension/covenant tables from Companies House PDFs rather than cover-page OCR only.",
+      "recorded_at": "2026-08-03T21:38:47.174913+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Add optional FDA inspections/enforcement and product-revenue concentration fields to the healthcare overlay so patent-cliff and GMP risks are scored alongside cheapness/quality passes.",
+      "recorded_at": "2026-08-03T21:38:47.174917+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Targeted PDF page-range extraction for Principal Risks and Viability Statement (TOC references pages 42–66 but narrative never lands in body text)",
+      "recorded_at": "2026-08-03T21:38:47.174922+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch company IR results presentation PDF — FCF bridge, site-owner concentration, and forward dividend guidance absent from 18 current bodies",
+      "recorded_at": "2026-08-03T21:38:47.174927+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Index trading-update RNS for FTSE350 names; MEGP guidance revision arrived only via interim",
+      "recorded_at": "2026-08-03T21:38:47.174930+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add governance overlay (director control %, related-party remuneration, listing compliance) decoupled from Financial Health pass",
+      "recorded_at": "2026-08-03T21:38:47.174933+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When Earnings Quality fails, require FCF/dividend coverage >1.0x before High Dividend Yield contributes to strong_buy conviction",
+      "recorded_at": "2026-08-03T21:38:47.174936+00:00"
     }
   ],
-  "updated_at": "2026-08-02T13:49:49.937108+00:00"
+  "updated_at": "2026-08-03T21:38:47.174939+00:00"
 }
