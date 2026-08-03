@@ -117,3 +117,7 @@ and CLI (`ftse-engineering task-auto-merge`, `try-auto-merge`).
 `notify-pr-open` emails on every new engineering PR. The message notes whether the
 task is auto-merge eligible so you can ignore merge for narrow CI fixes but still
 review everything else.
+
+`notify-queue-blocked` (L96) emails when the queue processor stops dispatching due
+to spend checkpoint, agent failures, orphan `pr_open` reconcile, or newly parked
+tasks. Wired from `engineering-queue.yml` after recovery + sync + gate evaluation.
