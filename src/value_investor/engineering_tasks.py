@@ -71,10 +71,14 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/ops_monitor.py",
         "src/value_investor/backtest_health.py",
         "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
         ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
         "tests/test_automation_status.py",
         "tests/test_ops_monitor.py",
         "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
     ],
     "ci": [
         ".github/workflows/ci.yml",
@@ -463,10 +467,51 @@ def _merge_task_rows(
         if key in seen_titles:
             continue
         status = str(row.get("status") or "open")
-        if status in TERMINAL_TASK_STATUSES or status == "pr_open":
+        if status in TERMINAL_TASK_STATUSES or status in {"pr_open", "open"}:
             merged.append(row)
     merged.sort(key=lambda row: -float(row.get("priority_score") or 0.0))
     return merged
+
+
+def open_task_ids_dropped_by_merge(
+    existing_rows: list[dict[str, Any]],
+    compiled_tasks: list[EngineeringTask],
+) -> list[str]:
+    """Return open task ids that would disappear after a compile merge."""
+    before = {
+        str(row.get("id") or "")
+        for row in existing_rows
+        if str(row.get("status") or "open") == "open" and str(row.get("id") or "")
+    }
+    merged = _merge_task_rows(existing_rows, compiled_tasks)
+    after = {
+        str(row.get("id") or "")
+        for row in merged
+        if str(row.get("status") or "open") == "open" and str(row.get("id") or "")
+    }
+    return sorted(before - after)
+
+
+def build_compiled_task_list(
+    *,
+    output_dir: Path,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+) -> list[EngineeringTask]:
+    """Build compiled tasks from run artifacts without writing queue files."""
+    output_dir = Path(output_dir)
+    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
+    tasks: list[EngineeringTask] = []
+    tasks.extend(_parse_post_run_plan(output_dir / "post_run_review.md"))
+    seq = len(tasks) + 1
+    tasks.extend(
+        _tasks_from_suggestions(suggestions_path, run_stamp=run_stamp, seq_start=seq)
+    )
+    seq = len(tasks) + 1
+    tasks.extend(
+        _tasks_from_gap_fill(output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq)
+    )
+    return _dedupe_tasks(tasks)[: max(0, int(max_tasks))]
 
 
 def sync_committed_engineering_tasks(
@@ -519,18 +564,11 @@ def compile_engineering_tasks(
 ) -> dict[str, Any]:
     """Build a supervised engineering queue from Sunday run artifacts."""
     output_dir = Path(output_dir)
-    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
-    tasks: list[EngineeringTask] = []
-    tasks.extend(_parse_post_run_plan(output_dir / "post_run_review.md"))
-    seq = len(tasks) + 1
-    tasks.extend(
-        _tasks_from_suggestions(suggestions_path, run_stamp=run_stamp, seq_start=seq)
+    tasks = build_compiled_task_list(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        max_tasks=max_tasks,
     )
-    seq = len(tasks) + 1
-    tasks.extend(
-        _tasks_from_gap_fill(output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq)
-    )
-    tasks = _dedupe_tasks(tasks)[: max(0, int(max_tasks))]
 
     existing_rows: list[dict[str, Any]] = []
     for candidate in (committed_path, tasks_path):

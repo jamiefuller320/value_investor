@@ -27,6 +27,12 @@ from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     summarize_queue,
 )
+from value_investor.engineering_sync import (
+    ENGINEERING_AGENT_WORKFLOW,
+    EngineeringSyncReport,
+    run_engineering_sync,
+    summarize_sync_findings,
+)
 from value_investor.engineering_tasks import (
     BLOCKED_PATHS,
     COMMITTED_TASKS_PATH,
@@ -615,6 +621,49 @@ def check_engineering_queue(
     return findings, queue_dict
 
 
+def check_engineering_sync(
+    *,
+    open_prs: list[dict[str, Any]] | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+) -> tuple[list[OpsFinding], EngineeringSyncReport]:
+    failures = (
+        list(recent_agent_failures)
+        if recent_agent_failures is not None
+        else recent_workflow_failures(
+            ENGINEERING_AGENT_WORKFLOW,
+            repo=repo,
+            token=token,
+            within_hours=6,
+        )
+    )
+    report = run_engineering_sync(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=failures,
+        apply=False,
+    )
+    status = summarize_queue(tasks_path=tasks_path, open_prs=open_prs)
+    findings: list[OpsFinding] = []
+    for row in summarize_sync_findings(
+        report,
+        status_open_count=status.open_count,
+        in_flight_pr=status.in_flight_pr,
+    ):
+        findings.append(
+            OpsFinding(
+                severity=row["severity"],
+                category="engineering",
+                title=row["title"],
+                summary=row["summary"],
+                auto_fixable=True,
+            )
+        )
+    return findings, report
+
+
 def check_ops_budget() -> list[OpsFinding]:
     status = weekly_ops_budget_status()
     if not status:
@@ -867,6 +916,19 @@ def run_ops_monitor(
         open_prs=open_prs,
         tasks_path=tasks_path,
     )
+    eng_failures = recent_workflow_failures(
+        ENGINEERING_AGENT_WORKFLOW,
+        repo=repo,
+        token=token,
+        within_hours=6,
+    )
+    sync_findings, _sync_preview = check_engineering_sync(
+        open_prs=open_prs,
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+        recent_agent_failures=eng_failures,
+    )
 
     workflow_findings, workflow_checks = check_workflow_freshness(
         repo=repo,
@@ -875,6 +937,7 @@ def run_ops_monitor(
     )
     findings.extend(workflow_findings)
     findings.extend(engineering_findings)
+    findings.extend(sync_findings)
 
     auto_fixes = apply_auto_fixes(
         findings,
@@ -884,11 +947,30 @@ def run_ops_monitor(
         apply=apply_fixes,
     )
 
+    sync_report = run_engineering_sync(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=eng_failures,
+        apply=apply_fixes,
+    )
+    for repair in sync_report.repairs:
+        auto_fixes.append(repair)
+    if sync_report.repairs:
+        for finding in findings:
+            if finding.category == "engineering" and finding.auto_fixable and finding.title.startswith(
+                ("Engineering agent sync", "Engineering compile would")
+            ):
+                finding.fixed = True
+                finding.action_taken = "; ".join(
+                    f"{row['action']}: {row['detail']}" for row in sync_report.repairs[:2]
+                )
+
     drafted_ids: list[str] = []
     if draft_tasks and apply_fixes:
         drafted_ids = draft_ops_engineering_tasks(findings, tasks_path=tasks_path)
 
     dispatch = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=open_prs)
+    should_dispatch = dispatch.should_dispatch or sync_report.should_redispatch
 
     report = OpsMonitorReport(
         run_at=run_at,
@@ -898,7 +980,7 @@ def run_ops_monitor(
         drafted_task_ids=drafted_ids,
         workflow_checks=workflow_checks,
         queue_status=queue_status,
-        should_dispatch_engineering=dispatch.should_dispatch,
+        should_dispatch_engineering=should_dispatch,
     )
 
     status_path = Path(status_path)

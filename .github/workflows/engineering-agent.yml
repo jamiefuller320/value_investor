@@ -56,10 +56,24 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Compile engineering tasks
+        if: >-
+          github.event.inputs.compile_only == 'true'
+          || github.event.inputs.task_id == ''
         run: |
           ftse-engineering --output-dir output compile --json || true
           if [ ! -f docs/data/engineering_tasks.json ] && [ ! -f output/engineering_tasks.json ]; then
             echo "No engineering_tasks.json — run Sunday email with --compile-engineering-tasks first"
+            exit 1
+          fi
+          ftse-engineering list
+
+      - name: Verify committed engineering queue
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && github.event.inputs.task_id != ''
+        run: |
+          if [ ! -f docs/data/engineering_tasks.json ]; then
+            echo "docs/data/engineering_tasks.json missing"
             exit 1
           fi
           ftse-engineering list
@@ -69,12 +83,20 @@ jobs:
         id: task
         run: |
           if [ -n "${{ github.event.inputs.task_id }}" ]; then
-            TASK_ID="${{ github.event.inputs.task_id }}"
+            TASK_ID=$(python3 - <<'PY'
+          from value_investor.engineering_sync import resolve_dispatch_task_id
+          print(resolve_dispatch_task_id("${{ github.event.inputs.task_id }}") or "")
+          PY
+          )
           elif [ "${{ github.event.inputs.pr_only }}" = "true" ]; then
             echo "task_id is required when pr_only is true"
             exit 1
           else
             TASK_ID=$(ftse-engineering next-open-id)
+          fi
+          if [ -z "$TASK_ID" ]; then
+            echo "No open engineering tasks in queue"
+            exit 1
           fi
           echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
           echo "branch=cursor/${TASK_ID}-1de3" >> "$GITHUB_OUTPUT"

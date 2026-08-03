@@ -9,6 +9,7 @@ artifacts, ingest stall detection, and the engineering queue.
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
 - Micro-compile ingest engineering tasks when buy-tier filing ingest is stalled
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
+- Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
 
 **Supervised follow-ons** (not automatic code changes):
 
@@ -189,4 +190,4 @@ List parked tasks: `ftse-engineering list-parked`
 
 To resume a parked task manually, set status back to `open` in `engineering_tasks.json` or add a fresh task.
 
-See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md), [`backtest-health.md`](backtest-health.md).
+See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md), [`backtest-health.md`](backtest-health.md), [`engineering-sync.md`](engineering-sync.md).
