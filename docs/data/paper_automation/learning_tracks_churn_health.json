@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-31T07:21:41.915910+00:00",
+  "generated_at": "2026-08-03T07:22:09.704110+00:00",
   "lookback_days": 7,
   "primary_learning_track": "ai_judgment",
   "control_track": "rules",
@@ -16,7 +16,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-07-31T07:21:41.868660+00:00",
+        "reviewed_at": "2026-08-03T07:22:09.645499+00:00",
         "applied": true,
         "enough_history": true,
         "cost_drag": 0.1071,
@@ -26,11 +26,11 @@
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.2,
+          "min_conviction": 0.25,
           "sector_cap": 0.3
         },
         "proposed_changes": {
-          "min_conviction": 0.2
+          "min_conviction": 0.25
         },
         "reasons": [
           "High cost drag (10.7%) — raise min_conviction."
@@ -46,31 +46,18 @@
         "note": "waiting for open settle (75 min after 08:00 Europe/London)",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 2,
+        "buffer_holds_planned": 3,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 18,
-        "buys": 9,
-        "sells": 7,
-        "trims": 2,
-        "full_exits": 7,
-        "adjacent_side_flips": [
-          {
-            "ticker": "HIK.L",
-            "from_side": "sell",
-            "to_side": "buy",
-            "acted_at": "2026-07-25T06:42:16.110748+01:00"
-          },
-          {
-            "ticker": "AEP.L",
-            "from_side": "sell",
-            "to_side": "buy",
-            "acted_at": "2026-07-25T06:42:16.110748+01:00"
-          }
-        ],
-        "adjacent_flip_count": 2
+        "total": 0,
+        "buys": 0,
+        "sells": 0,
+        "trims": 0,
+        "full_exits": 0,
+        "adjacent_side_flips": [],
+        "adjacent_flip_count": 0
       }
     },
     "ai_judgment": {
@@ -83,7 +70,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-07-31T07:21:41.911278+00:00",
+        "reviewed_at": "2026-08-03T07:22:09.699003+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0291,
@@ -111,13 +98,13 @@
         "note": "waiting for open settle (75 min after 08:00 Europe/London)",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 2,
+        "buffer_holds_planned": 3,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 5,
-        "buys": 5,
+        "total": 0,
+        "buys": 0,
         "sells": 0,
         "trims": 0,
         "full_exits": 0,
@@ -135,7 +122,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-07-31T07:21:41.912384+00:00",
+        "reviewed_at": "2026-08-03T07:22:09.700255+00:00",
         "applied": false,
         "enough_history": false,
         "cost_drag": 0.0,
@@ -185,12 +172,6 @@
       "track": "rules",
       "title": "Elevated rules-track cost drag",
       "summary": "cost_drag=10.7% — review churn guards and conviction floor."
-    },
-    {
-      "severity": "info",
-      "track": "rules",
-      "title": "Adjacent buy/sell flips in lookback window",
-      "summary": "2 adjacent side flip(s) in last 7d."
     }
   ]
 }
