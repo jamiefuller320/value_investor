@@ -10,7 +10,8 @@ Regimes:
 - ``euro_filings`` (EURO STOXX 50 / DAX / CAC): results headlines via Google News + SEC 20-F/6-K when dual-listed
 - ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
-Interim vs annual is classified from form type (10-K/10-Q) or headline cues.
+UK RNS headlines are tagged ``period=annual|interim|trading_update|other`` via
+:classify_rns_headline`; SEC forms use annual/interim/other from form type.
 """
 
 from __future__ import annotations
@@ -92,12 +93,19 @@ _INTERIM_PATTERNS = (
     r"\bsecond quarter\b",
     r"\bthird quarter\b",
     r"\bfourth quarter\b",
+)
+_TRADING_UPDATE_PATTERNS = (
     r"\btrading update\b",
     r"\btrading statement\b",
 )
 
 # Prefer results / accounts over buybacks and trivia when ranking.
-_PRIORITY_PATTERNS = _ANNUAL_PATTERNS + _INTERIM_PATTERNS + (r"\bannual report and accounts\b",)
+_PRIORITY_PATTERNS = (
+    _ANNUAL_PATTERNS
+    + _INTERIM_PATTERNS
+    + _TRADING_UPDATE_PATTERNS
+    + (r"\bannual report and accounts\b",)
+)
 
 
 def _strip_html(text: str) -> str:
@@ -354,7 +362,13 @@ def fetch_filings_investegate_company(
                 "summary": headline_clean,
                 "has_body": False,
                 "body_path": None,
-                "priority": 125 if period in ("annual", "interim") else 90,
+                "priority": (
+                    125
+                    if period in ("annual", "interim")
+                    else 100
+                    if period == "trading_update"
+                    else 90
+                ),
             }
         )
         if len(rows) >= max_items:
@@ -405,7 +419,7 @@ def _apply_headline_period(
     *,
     candidate: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Re-classify annual/interim/other from headline cues (incl. trading updates)."""
+    """Re-classify annual/interim/trading_update/other from headline cues."""
     item = dict(row)
     if candidate:
         if candidate.get("headline"):
@@ -753,26 +767,17 @@ def _sec_user_agent() -> str:
     )
 
 
-def classify_filing_period(
+def classify_rns_headline(
     headline: str,
     *,
     category: str | None = None,
-    form: str | None = None,
 ) -> str:
     """
-    Return ``annual``, ``interim``, or ``other``.
+    Tag UK RNS announcement headlines as ``annual``, ``interim``, ``trading_update``, or ``other``.
 
-    Uses SEC form types when present, else headline keywords / provider categories.
+    Trading updates are classified before interim quarter cues so a headline like
+    "Q1 Trading Update" is not treated as interim results.
     """
-    if form:
-        form_u = str(form).strip().upper()
-        if form_u in SEC_ANNUAL_FORMS:
-            return "annual"
-        if form_u in SEC_INTERIM_FORMS:
-            return "interim"
-        if form_u in SEC_OTHER_FORMS or form_u.startswith("8-K"):
-            return "other"
-
     blob = f"{headline or ''} {category or ''}".lower()
 
     # Dividends / buybacks / exchange offers are not results packs.
@@ -785,6 +790,8 @@ def classify_filing_period(
 
     if any(re.search(pat, blob) for pat in _ANNUAL_PATTERNS):
         return "annual"
+    if any(re.search(pat, blob) for pat in _TRADING_UPDATE_PATTERNS):
+        return "trading_update"
     if any(re.search(pat, blob) for pat in _INTERIM_PATTERNS):
         return "interim"
     # FCA-style codes sometimes appear in provider metadata
@@ -793,6 +800,29 @@ def classify_filing_period(
     if re.search(r"\b(ir|half[- ]year report|interim results)\b", blob):
         return "interim"
     return "other"
+
+
+def classify_filing_period(
+    headline: str,
+    *,
+    category: str | None = None,
+    form: str | None = None,
+) -> str:
+    """
+    Return ``annual``, ``interim``, ``trading_update``, or ``other``.
+
+    Uses SEC form types when present, else :func:`classify_rns_headline`.
+    """
+    if form:
+        form_u = str(form).strip().upper()
+        if form_u in SEC_ANNUAL_FORMS:
+            return "annual"
+        if form_u in SEC_INTERIM_FORMS:
+            return "interim"
+        if form_u in SEC_OTHER_FORMS or form_u.startswith("8-K"):
+            return "other"
+
+    return classify_rns_headline(headline, category=category)
 
 
 def _filing_id(*parts: str) -> str:
@@ -1141,6 +1171,8 @@ def _priority_score(headline: str, period: str) -> int:
         score += 100
     elif period == "interim":
         score += 80
+    elif period == "trading_update":
+        score += 60
     lower = (headline or "").lower()
     if any(re.search(pat, lower) for pat in _PRIORITY_PATTERNS):
         score += 20
@@ -1886,9 +1918,11 @@ def fetch_filings_ir_allowlist(
             )
         ) or re.search(r"-\d{4}1231\.(htm|html|pdf)(?:$|\?)", lower):
             period = "annual"
+        elif any(token in lower for token in ("trading",)):
+            period = "trading_update"
         elif any(
             token in lower
-            for token in ("interim", "half", "h1", "q1", "q2", "q3", "trading", "10-q", "10q")
+            for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")
         ):
             period = "interim"
         digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
@@ -2119,8 +2153,8 @@ def _write_bodies(
         row = dict(row)
         if downloaded < max_bodies and not row.get("has_body"):
             period = row.get("period")
-            if period in ("annual", "interim", "other"):
-                # Always try annual/interim; only try a few "other" if slots remain
+            if period in ("annual", "interim", "trading_update", "other"):
+                # Always try annual/interim/trading updates; only try a few "other" if slots remain
                 if period == "other" and downloaded >= max(4, max_bodies // 2):
                     updated.append(row)
                     continue
@@ -2688,17 +2722,34 @@ def refetch_missing_filing_bodies(
     }
 
 
+def period_body_coverage(filings: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
+    """Count indexed filings and downloaded bodies per ``period`` tag."""
+    periods = ("annual", "interim", "trading_update", "other")
+    coverage = {period: {"total": 0, "with_body": 0} for period in periods}
+    for row in filings:
+        period = str(row.get("period") or "other")
+        if period not in coverage:
+            period = "other"
+        coverage[period]["total"] += 1
+        if row.get("has_body"):
+            coverage[period]["with_body"] += 1
+    return coverage
+
+
 def summarize_filings(filings: list[dict[str, Any]]) -> dict[str, Any]:
     annual = sum(1 for f in filings if f.get("period") == "annual")
     interim = sum(1 for f in filings if f.get("period") == "interim")
+    trading_update = sum(1 for f in filings if f.get("period") == "trading_update")
     other = sum(1 for f in filings if f.get("period") == "other")
     with_body = sum(1 for f in filings if f.get("has_body"))
     return {
         "total": len(filings),
         "annual": annual,
         "interim": interim,
+        "trading_update": trading_update,
         "other": other,
         "with_body": with_body,
+        "period_coverage": period_body_coverage(filings),
     }
 
 
@@ -2710,7 +2761,7 @@ def sanitize_filings_index(
     regime: str = "uk_rns",
 ) -> dict[str, Any]:
     """
-    Prune mis-attributed index rows and reclassify annual/interim periods.
+    Prune mis-attributed index rows and reclassify annual/interim/trading_update periods.
 
     Safe to call at the start of an ingest-improvement pass before refetching bodies.
     """
@@ -2928,7 +2979,7 @@ def ingest_filings(
             f"(up to {ch_accounts} filings"
             + (", historical deepen" if deepen_history else "")
             + "), optional IR allowlist URLs, Investegate direct RNS, and SEC 20-F when dual-listed. "
-            "period=annual|interim|other. Bodies from PDF/HTML/iXBRL when available."
+            "period=annual|interim|trading_update|other. Bodies from PDF/HTML/iXBRL when available."
         )
     elif regime == "asx_announcements":
         note = (

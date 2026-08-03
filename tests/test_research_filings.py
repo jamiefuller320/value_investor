@@ -9,6 +9,7 @@ from unittest.mock import patch
 from value_investor.research.filings import (
     asx_markit_file_url,
     classify_filing_period,
+    classify_rns_headline,
     enrich_filing_rows,
     fetch_filing_body,
     fetch_filings_asx_direct,
@@ -21,6 +22,7 @@ from value_investor.research.filings import (
     load_ir_url_allowlist,
     merge_filings,
     merge_ir_allowlist_filings,
+    period_body_coverage,
     prune_orphaned_filing_bodies,
     refetch_companies_house_filing_bodies,
     refetch_investegate_filing_bodies,
@@ -408,8 +410,8 @@ def test_enrich_filing_rows_reclassifies_trading_update(monkeypatch):
         ticker="ITV.L",
         company_name="ITV plc",
     )
-    assert enriched[0]["period"] == "interim"
-    assert enriched[0]["priority"] >= 80
+    assert enriched[0]["period"] == "trading_update"
+    assert enriched[0]["priority"] >= 60
 
 
 def test_resolve_investegate_document_url_finds_lse_pdf():
@@ -695,6 +697,33 @@ def test_refetch_ticker_rns_api_filing_bodies_megp_prunes_and_downloads(tmp_path
     assert (filings_dir / "bodies" / "megp1.txt").exists()
 
 
+def test_fetch_filings_ticker_api_classifies_trading_update(monkeypatch):
+    payload = {
+        "data": [
+            {
+                "headline": "ME Group Q1 Trading Update",
+                "symbol": "MEGP",
+                "timestamp": "2026-05-14T07:00:00Z",
+                "url": "https://newswire.tickerapp.net/rns/2026-05-14/1M/trading.pdf",
+            },
+        ],
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: json.dumps(payload).encode("utf-8"),
+    )
+    monkeypatch.setenv("TICKER_API_KEY", "test-key")
+    from value_investor.research.filings import fetch_filings_ticker_api
+
+    rows = fetch_filings_ticker_api(
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+    )
+    assert len(rows) == 1
+    assert rows[0]["period"] == "trading_update"
+    assert rows[0]["priority"] >= 60
+
+
 def test_fetch_filings_ticker_api_prefers_pdf_publication(monkeypatch):
     payload = {
         "data": [
@@ -737,11 +766,20 @@ def test_fetch_filings_ticker_api_prefers_pdf_publication(monkeypatch):
     assert "ME Group" in rows[0]["headline"]
 
 
+def test_classify_rns_headline_annual_interim_and_trading_update():
+    assert classify_rns_headline("ME Group Full Year Results") == "annual"
+    assert classify_rns_headline("Half-year Results for the six months ended 30 June") == "interim"
+    assert classify_rns_headline("ITV plc Q1 Trading Update") == "trading_update"
+    assert classify_rns_headline("Trading Statement for the 17 weeks ended 3 May") == "trading_update"
+    assert classify_rns_headline("Transaction in Own Shares") == "other"
+    assert classify_rns_headline("Shell plc First Quarter 2026 Interim Dividend") == "other"
+
+
 def test_classify_filing_period_annual_and_interim():
     assert classify_filing_period("Shell Plc 4th Quarter 2025 and Full Year Unaudited Results") == "annual"
     assert classify_filing_period("Shell Publishes Annual Report and Accounts") == "annual"
     assert classify_filing_period("Half-year Results") == "interim"
-    assert classify_filing_period("Q1 Trading Update") == "interim"
+    assert classify_filing_period("Q1 Trading Update") == "trading_update"
     assert classify_filing_period("Interim Results for the six months ended 30 June") == "interim"
     assert classify_filing_period("Transaction in Own Shares") == "other"
     assert classify_filing_period("Shell plc First Quarter 2026 Interim Dividend") == "other"
@@ -823,16 +861,44 @@ def test_summarize_filings_counts_periods():
         {"period": "annual", "has_body": True},
         {"period": "interim", "has_body": False},
         {"period": "interim", "has_body": True},
+        {"period": "trading_update", "has_body": True},
         {"period": "other", "has_body": False},
     ]
     summary = summarize_filings(filings)
     assert summary == {
-        "total": 4,
+        "total": 5,
         "annual": 1,
         "interim": 2,
+        "trading_update": 1,
         "other": 1,
-        "with_body": 2,
+        "with_body": 3,
+        "period_coverage": {
+            "annual": {"total": 1, "with_body": 1},
+            "interim": {"total": 2, "with_body": 1},
+            "trading_update": {"total": 1, "with_body": 1},
+            "other": {"total": 1, "with_body": 0},
+        },
     }
+
+
+def test_period_body_coverage_from_rns_index_rows():
+    filings = [
+        {
+            "headline": "ME Group Full Year Results",
+            "period": classify_rns_headline("ME Group Full Year Results"),
+            "has_body": True,
+        },
+        {
+            "headline": "ME Group Q1 Trading Update",
+            "period": classify_rns_headline("ME Group Q1 Trading Update"),
+            "has_body": False,
+        },
+    ]
+    assert filings[0]["period"] == "annual"
+    assert filings[1]["period"] == "trading_update"
+    coverage = period_body_coverage(filings)
+    assert coverage["annual"] == {"total": 1, "with_body": 1}
+    assert coverage["trading_update"] == {"total": 1, "with_body": 0}
 
 
 def test_ingest_filings_writes_index(tmp_path: Path):

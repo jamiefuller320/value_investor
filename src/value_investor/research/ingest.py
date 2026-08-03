@@ -484,7 +484,14 @@ def ingest_research_sources(
 
     filings_meta: dict[str, Any] = {
         "filings_index_path": None,
-        "filings_summary": {"total": 0, "annual": 0, "interim": 0, "other": 0, "with_body": 0},
+        "filings_summary": {
+            "total": 0,
+            "annual": 0,
+            "interim": 0,
+            "trading_update": 0,
+            "other": 0,
+            "with_body": 0,
+        },
         "filings_sources": [],
     }
     if include_filings:
@@ -506,6 +513,7 @@ def ingest_research_sources(
                     "total": 0,
                     "annual": 0,
                     "interim": 0,
+                    "trading_update": 0,
                     "other": 0,
                     "with_body": 0,
                 },

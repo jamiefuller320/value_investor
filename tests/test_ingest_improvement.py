@@ -91,6 +91,72 @@ def test_planned_sources_includes_ir_presentation_for_itv_l():
     assert fetch_filings_ir_allowlist("ITV.L")
 
 
+def test_select_ingest_improvement_targets_prioritises_missing_annual_bodies(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "MEGP.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 3,
+                    "annual": 1,
+                    "interim": 1,
+                    "trading_update": 1,
+                    "with_body": 1,
+                },
+                "filings": [
+                    {"period": "annual", "has_body": False},
+                    {"period": "interim", "has_body": True},
+                    {"period": "trading_update", "has_body": False},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    targets = select_ingest_improvement_targets(
+        [_report("MEGP.L", "ME Group International plc")],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=3,
+    )
+
+    assert len(targets) == 1
+    assert targets[0].ticker == "MEGP.L"
+    assert targets[0].priority_score >= 4.0
+
+
+def test_inspect_local_sources_includes_period_coverage(tmp_path: Path):
+    from value_investor.research.gap_fill_sources import inspect_local_sources
+
+    sources_dir = tmp_path / "sources"
+    filings_dir = sources_dir / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 2,
+                    "annual": 1,
+                    "trading_update": 1,
+                    "with_body": 0,
+                },
+                "filings": [
+                    {"period": "annual", "has_body": False},
+                    {"period": "trading_update", "has_body": False},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    inventory = inspect_local_sources(sources_dir)
+    assert inventory["period_coverage"]["annual"]["total"] == 1
+    assert inventory["period_coverage"]["trading_update"]["total"] == 1
+    assert inventory["filings_summary"]["period_coverage"]["annual"]["with_body"] == 0
+
+
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):
     output_dir = tmp_path / "output"
     suggestions_path = tmp_path / "suggestions.json"

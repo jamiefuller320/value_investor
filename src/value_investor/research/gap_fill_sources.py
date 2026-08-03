@@ -16,6 +16,7 @@ from value_investor.research.ingest import (
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
+    period_body_coverage,
     refetch_companies_house_filing_bodies,
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
@@ -177,13 +178,18 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         body_count = sum(1 for path in bodies_dir.iterdir() if path.is_file())
 
     filings_summary: dict[str, Any] = {}
+    period_coverage: dict[str, dict[str, int]] = {}
     resolved_index = resolve_json_path(filings_index)
     if resolved_index is not None:
         try:
             payload = read_json(resolved_index)
             filings_summary = dict(payload.get("summary") or {})
+            period_coverage = period_body_coverage(list(payload.get("filings") or []))
+            if period_coverage:
+                filings_summary["period_coverage"] = period_coverage
         except (OSError, ValueError, TypeError):
             filings_summary = {}
+            period_coverage = {}
 
     indexed_bodies = int(filings_summary.get("with_body") or 0)
     has_filing_bodies = indexed_bodies > 0 or body_count > 0
@@ -212,6 +218,7 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         "filings_body_files": body_count,
         "filings_indexed_bodies": indexed_bodies,
         "filings_summary": filings_summary,
+        "period_coverage": period_coverage,
         "news_article_count": news_count,
         "evidence_ladder": list(EVIDENCE_LADDER),
     }

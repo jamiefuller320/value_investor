@@ -11,6 +11,7 @@ from typing import Any
 
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
+    period_body_coverage,
     refetch_companies_house_filing_bodies,
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
@@ -195,8 +196,12 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
         "filings_total": 0,
         "filings_annual": 0,
         "filings_interim": 0,
+        "filings_trading_update": 0,
         "filings_with_body": 0,
         "indexed_without_body": 0,
+        "annual_with_body": 0,
+        "interim_with_body": 0,
+        "trading_update_with_body": 0,
     }
     index_path = prefer_filing_index_path(ticker, output_dir=output_dir)
     if index_path is None:
@@ -206,10 +211,18 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
     try:
         index = read_json(index_path)
         filings = list(index.get("filings") or [])
-        coverage["filings_annual"] = int((index.get("summary") or {}).get("annual") or 0)
-        coverage["filings_interim"] = int((index.get("summary") or {}).get("interim") or 0)
+        summary = index.get("summary") or {}
+        coverage["filings_annual"] = int(summary.get("annual") or 0)
+        coverage["filings_interim"] = int(summary.get("interim") or 0)
+        coverage["filings_trading_update"] = int(summary.get("trading_update") or 0)
         coverage["indexed_without_body"] = sum(
             1 for row in filings if not row.get("has_body")
+        )
+        period_cov = period_body_coverage(filings)
+        coverage["annual_with_body"] = int(period_cov["annual"]["with_body"])
+        coverage["interim_with_body"] = int(period_cov["interim"]["with_body"])
+        coverage["trading_update_with_body"] = int(
+            period_cov["trading_update"]["with_body"]
         )
     except (OSError, ValueError, TypeError):
         pass
@@ -233,8 +246,26 @@ def _priority_score(
         score += 12.0
     elif coverage["indexed_without_body"] > 0:
         score += 6.0 + min(coverage["indexed_without_body"], 10)
-    elif coverage["filings_with_body"] < max(1, coverage["filings_annual"]):
-        score += 4.0
+    else:
+        annual_gap = max(
+            0,
+            coverage["filings_annual"] - coverage.get("annual_with_body", 0),
+        )
+        interim_gap = max(
+            0,
+            coverage["filings_interim"] - coverage.get("interim_with_body", 0),
+        )
+        if annual_gap > 0:
+            score += 4.0 + min(annual_gap, 5)
+        if interim_gap > 0:
+            score += 2.0 + min(interim_gap, 3)
+        trading_gap = max(
+            0,
+            coverage.get("filings_trading_update", 0)
+            - coverage.get("trading_update_with_body", 0),
+        )
+        if trading_gap > 0:
+            score += 0.5
     if (
         coverage["filings_with_body"] == 0
         and coverage["filings_total"] > 0
