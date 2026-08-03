@@ -12,6 +12,7 @@ from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
 from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
+from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
@@ -463,3 +464,32 @@ def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
     assert bool(enriched.iloc[0]["healthcare_overlay"]) is False
     assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Path):
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "HIK.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 436_000_000.0,
+                "Capital Expenditure": -317_000_000.0,
+                "Free Cash Flow": 119_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame([
+        {"ticker": "HIK.L", "name": "Hikma Pharmaceuticals PLC", "free_cashflow": -66_125_000.0},
+        {"ticker": "OTHER.L", "name": "Other plc", "free_cashflow": 10_000_000.0},
+    ])
+
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    hik = enriched[enriched["ticker"] == "HIK.L"].iloc[0]
+    other = enriched[enriched["ticker"] == "OTHER.L"].iloc[0]
+
+    assert hik["free_cashflow_screen_ttm"] == -66_125_000.0
+    assert hik["free_cashflow"] == 119_000_000.0
+    assert other["free_cashflow"] == 10_000_000.0

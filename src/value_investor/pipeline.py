@@ -29,6 +29,7 @@ from value_investor.model_weights import load_model_weights, save_model_snapshot
 from value_investor.models.trusts import ALL_TRUST_MODELS
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
+from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
@@ -237,6 +238,7 @@ def run_screen(
     universe_df = add_data_quality_scores(universe_df)
     universe_df = apply_sector_overrides(universe_df)
     universe_df = add_sector_scores(universe_df)
+    universe_df = enrich_universe_with_canonical_fcf(universe_df, out_dir)
     model_results = evaluate_universe(universe_df)
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)

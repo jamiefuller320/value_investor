@@ -8,6 +8,7 @@ from typing import Any
 import pandas as pd
 
 from value_investor.models.piotroski import piotroski_snapshot_from_result
+from value_investor.scoring.fcf import resolve_free_cashflow
 
 _SIGNAL_RANK = {
     "strong_buy": 4,
@@ -141,10 +142,7 @@ def enrich_signals_with_healthcare_overlay(
     for _, row in out.iterrows():
         ticker = str(row["ticker"])
         ticker_models = model_results[model_results["ticker"] == ticker]
-        fcf = row.get("free_cashflow")
-        free_cashflow = (
-            float(fcf) if fcf is not None and not (isinstance(fcf, float) and pd.isna(fcf)) else None
-        )
+        free_cashflow = resolve_free_cashflow(row)
         existing = row.get("adjusted_signal")
         existing_adjusted = (
             str(existing)

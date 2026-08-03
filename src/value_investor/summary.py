@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -12,6 +13,7 @@ from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
+from value_investor.scoring.fcf import reconcile_fcf_for_ticker, resolve_free_cashflow, screen_ttm_from_row
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -58,6 +60,8 @@ class CompanyReport:
     failed_models: list[str] = field(default_factory=list)
     model_failures: dict[str, list[str]] = field(default_factory=dict)
     screening_inputs: dict[str, Any] = field(default_factory=dict)
+    cashflow_metrics: dict[str, Any] | None = None
+    fcf: dict[str, Any] | None = None
     piotroski_f_score: dict[str, Any] | None = None
     healthcare_overlay: bool = False
     cash_conversion_overlay: bool = False
@@ -98,6 +102,8 @@ class CompanyReport:
             "model_failures": self.model_failures,
             "screening_inputs": self.screening_inputs,
             "key_metrics": self.key_metrics,
+            "cashflow_metrics": self.cashflow_metrics,
+            "fcf": self.fcf,
             "piotroski_f_score": self.piotroski_f_score,
             "healthcare_overlay": self.healthcare_overlay,
             "cash_conversion_overlay": self.cash_conversion_overlay,
@@ -144,6 +150,8 @@ class CompanyReport:
             failed_models=list(data.get("failed_models") or []),
             model_failures=dict(data.get("model_failures") or {}),
             screening_inputs=dict(data.get("screening_inputs") or {}),
+            cashflow_metrics=data.get("cashflow_metrics"),
+            fcf=data.get("fcf"),
             piotroski_f_score=data.get("piotroski_f_score"),
             healthcare_overlay=bool(data.get("healthcare_overlay")),
             adjusted_signal=data.get("adjusted_signal"),
@@ -183,19 +191,23 @@ def _format_metric(value: Any, *, pct: bool = False, decimals: int = 1) -> str |
     return f"{float(value):.{decimals}f}"
 
 
-def _key_metrics_row(row: pd.Series) -> dict[str, str]:
+def _key_metrics_row(row: pd.Series, *, canonical_fcf: float | None = None) -> dict[str, str]:
     metrics: dict[str, str] = {}
     mapping = [
         ("trailing_pe", "P/E", False),
         ("price_to_book", "P/B", False),
         ("dividend_yield", "Yield", True),
         ("return_on_equity", "ROE", True),
-        ("free_cashflow", "FCF", False),
     ]
     for col, label, is_pct in mapping:
         formatted = _format_metric(row.get(col), pct=is_pct)
         if formatted is not None:
             metrics[label] = formatted
+
+    fcf_value = canonical_fcf if canonical_fcf is not None else row.get("free_cashflow")
+    formatted_fcf = _format_metric(fcf_value, pct=False)
+    if formatted_fcf is not None:
+        metrics["FCF"] = formatted_fcf
     return metrics
 
 
@@ -370,7 +382,12 @@ def _brief_summary(
     return " ".join(parts)
 
 
-def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) -> list[CompanyReport]:
+def build_company_reports(
+    signals: pd.DataFrame,
+    model_results: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> list[CompanyReport]:
     """Create a brief reason summary for every screened company."""
     reports: list[CompanyReport] = []
 
@@ -386,9 +403,13 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
         model_failures = _build_model_failures(ticker_models)
         screening_inputs = _build_screening_inputs(row)
         piotroski_f_score = _piotroski_f_score_from_models(ticker_models)
-        fcf = row.get("free_cashflow")
+        screen_ttm = screen_ttm_from_row(row)
+        fcf_bundle = reconcile_fcf_for_ticker(ticker, screen_ttm=screen_ttm, output_dir=output_dir)
+        canonical_fcf = fcf_bundle.get("canonical")
         free_cashflow = (
-            float(fcf) if fcf is not None and not (isinstance(fcf, float) and pd.isna(fcf)) else None
+            float(canonical_fcf)
+            if canonical_fcf is not None
+            else resolve_free_cashflow(row)
         )
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
@@ -402,7 +423,7 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
             if failures:
                 near_miss_failures.append(f"{model_row['model_name']}: {failures[0]}")
 
-        key_metrics = _key_metrics_row(row)
+        key_metrics = _key_metrics_row(row, canonical_fcf=free_cashflow)
         composite = row.get("composite_score")
         composite_score = float(composite) if composite is not None and not pd.isna(composite) else None
         sector_score = row.get("sector_composite_score")
@@ -559,6 +580,13 @@ def build_company_reports(signals: pd.DataFrame, model_results: pd.DataFrame) ->
                 failed_models=failed_model_names,
                 model_failures=model_failures,
                 screening_inputs=screening_inputs,
+                cashflow_metrics=fcf_bundle.get("cashflow_metrics"),
+                fcf={
+                    key: value
+                    for key, value in fcf_bundle.items()
+                    if key != "cashflow_metrics" and value is not None
+                }
+                or None,
                 piotroski_f_score=piotroski_f_score,
                 healthcare_overlay=healthcare_overlay,
                 cash_conversion_overlay=cash_conversion_overlay,

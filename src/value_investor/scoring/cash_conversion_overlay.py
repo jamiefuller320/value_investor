@@ -7,6 +7,8 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.scoring.fcf import resolve_free_cashflow
+
 DIVIDEND_MODEL_IDS = ("high_dividend", "dividend_growth")
 SHARE_COUNT_STABLE_TOLERANCE = 1.01
 
@@ -135,10 +137,7 @@ def enrich_signals_with_cash_conversion_overlay(
         ticker = str(row["ticker"])
         ticker_models = model_results[model_results["ticker"] == ticker]
 
-        fcf = row.get("free_cashflow")
-        free_cashflow = (
-            float(fcf) if fcf is not None and not (isinstance(fcf, float) and pd.isna(fcf)) else None
-        )
+        free_cashflow = resolve_free_cashflow(row)
 
         shares = row.get("shares_outstanding")
         shares_outstanding = (
