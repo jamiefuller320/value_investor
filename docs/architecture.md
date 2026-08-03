@@ -161,6 +161,9 @@ Assembled by `build_dashboard_bundle()` in `publish.py`:
 
 `historical_analysis.py` walks archived `output/history/run_*.json.gz` snapshots
 (restored from git-tracked `docs/data/history/` at the start of each screen).
+Integrity checks, safe quarantine repair, and readiness reporting are handled by
+[`ops/backtest-health.md`](ops/backtest-health.md) (`ftse-backtest-health`, daily
+ops monitor).
 For each ticker × horizon it records:
 
 - Screen signal vs research-adjusted signal (`get_research_as_of` + `compute_adjusted_signal`)
@@ -203,4 +206,5 @@ a third parallel store.
 - [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) — stages and exit criteria
 - [`ops/gap-fill-fetch.md`](ops/gap-fill-fetch.md) — gap-fill ingest and retry behaviour
 - [`ops/data-backup.md`](ops/data-backup.md) — tier-1 backup, restore drill, scheduling
+- [`ops/backtest-health.md`](ops/backtest-health.md) — archived run snapshot audit and safe repair
 - [`ops/primary-learning-track.md`](ops/primary-learning-track.md) — paper book vs market

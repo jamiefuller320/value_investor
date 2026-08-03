@@ -8,11 +8,14 @@ from pathlib import Path
 from unittest.mock import patch
 
 from pinned_time import weekday_noon_utc
-from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks
+from value_investor.backtest import BENCHMARK_TICKER
+from value_investor.engineering_tasks import load_engineering_tasks
+from value_investor.storage import write_json
 from value_investor.ops_monitor import (
     OpsFinding,
     OpsMonitorReport,
     apply_auto_fixes,
+    check_backtest_history,
     check_committed_json,
     check_ingest_health_log,
     check_latest_bundle,
@@ -173,6 +176,61 @@ def test_check_latest_bundle_warns_when_stale(tmp_path: Path):
     latest.write_text(json.dumps({"updated_at": old, "reports": []}), encoding="utf-8")
     findings = check_latest_bundle(latest, max_age_hours=24)
     assert findings and findings[0].title == "Dashboard bundle is stale"
+
+
+def _history_snapshot() -> dict:
+    signals = [
+        {
+            "ticker": f"AAA{i}.L",
+            "signal": "buy",
+            "conviction_score": 0.5,
+            "data_quality_score": 0.9,
+        }
+        for i in range(60)
+    ]
+    prices = {row["ticker"]: 100.0 + i for i, row in enumerate(signals)}
+    prices[BENCHMARK_TICKER] = 8000.0
+    return {"run_at": "2026-08-02T12:34:17+00:00", "prices": prices, "signals": signals}
+
+
+def test_check_backtest_history_warns_when_seeding(tmp_path: Path):
+    history = tmp_path / "history"
+    history.mkdir()
+    write_json(history / "run_20260802_123417.json.gz", _history_snapshot(), compress=True)
+
+    findings = check_backtest_history(history)
+
+    seeding = [row for row in findings if row.title == "Backtest history still seeding"]
+    assert len(seeding) == 1
+    assert seeding[0].severity == "warn"
+    assert seeding[0].category == "backtest"
+
+
+def test_check_backtest_history_flags_corrupt_snapshot(tmp_path: Path):
+    history = tmp_path / "history"
+    history.mkdir()
+    (history / "run_20260802_123417.json.gz").write_bytes(b"{broken")
+
+    findings = check_backtest_history(history)
+
+    corrupt = [row for row in findings if row.title.startswith("Backtest history: corrupt_json")]
+    assert len(corrupt) == 1
+    assert corrupt[0].severity == "fail"
+    assert corrupt[0].auto_fixable is True
+
+
+def test_apply_auto_fixes_quarantines_corrupt_backtest_history(tmp_path: Path):
+    history = tmp_path / "history"
+    history.mkdir()
+    bad = history / "run_20260802_123417.json.gz"
+    bad.write_bytes(b"{broken")
+    findings = check_backtest_history(history)
+    with patch("value_investor.ops_monitor.COMMITTED_HISTORY_DIR", history):
+        fixes = apply_auto_fixes(findings, apply=True)
+    assert fixes
+    assert not bad.exists()
+    assert list((history / "quarantine").glob("*run_20260802_123417.json.gz"))
+    assert all(row.fixed for row in findings if row.category == "backtest" and row.auto_fixable)
 
 
 def test_apply_auto_fixes_reconciles_orphan_pr_open(tmp_path: Path):
