@@ -63,6 +63,9 @@ def test_map_suggestion_to_source_ids():
     assert "company_ir_presentation" in map_suggestion_to_source_ids(
         "Fetch ITV investor-relations results presentation PDFs (segment revenue, Studios margin range, dividend policy, pro-forma cash flow) from allowlisted IR URLs post-results."
     )
+    assert "company_ir_presentation" in map_suggestion_to_source_ids(
+        "Extract consolidated cash-flow statement and related party transactions from annual report PDF"
+    )
 
 
 def test_planned_sources_includes_ir_presentation_for_itv_l():
