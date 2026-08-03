@@ -8,6 +8,7 @@ artifacts, ingest stall detection, and the engineering queue.
 - Reconcile orphaned `pr_open` engineering tasks (no matching open PR)
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
 - Micro-compile ingest engineering tasks when buy-tier filing ingest is stalled
+- Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 
 **Supervised follow-ons** (not automatic code changes):
 
@@ -114,6 +115,7 @@ See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling po
 |------|---------|
 | `docs/data/ops_status.json` | Latest findings, auto-fixes, workflow freshness |
 | `docs/data/ops_monitor_log.json` | Rolling daily run index (90 entries) |
+| `docs/data/backtest_health.json` | Backtest history audit and readiness (see [backtest-health.md](backtest-health.md)) |
 
 ## CLI
 
@@ -187,4 +189,4 @@ List parked tasks: `ftse-engineering list-parked`
 
 To resume a parked task manually, set status back to `open` in `engineering_tasks.json` or add a fresh task.
 
-See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md).
+See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md), [`backtest-health.md`](backtest-health.md).

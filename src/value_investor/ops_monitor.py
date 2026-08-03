@@ -16,6 +16,11 @@ from typing import Any
 
 from value_investor.agent_model_policy import weekly_ops_budget_status
 from value_investor.automation_status import WORKFLOW_SCHEDULES
+from value_investor.backtest_health import (
+    DEFAULT_STATUS_PATH as BACKTEST_HEALTH_STATUS_PATH,
+    audit_history_dir,
+    repair_history_dir,
+)
 from value_investor.emailer import EmailConfig, send_report_email
 from value_investor.engineering_recovery import recover_engineering_queue, summarize_parked_tasks
 from value_investor.engineering_queue import (
@@ -39,6 +44,7 @@ from value_investor.ingest_loop import (
     load_health_log_payload,
 )
 from value_investor.storage import read_json, write_json
+from value_investor.storage import COMMITTED_HISTORY_DIR
 from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
 
 logger = logging.getLogger(__name__)
@@ -628,6 +634,36 @@ def check_ops_budget() -> list[OpsFinding]:
     return findings
 
 
+def check_backtest_history(
+    history_dir: Path = COMMITTED_HISTORY_DIR,
+) -> list[OpsFinding]:
+    findings: list[OpsFinding] = []
+    issues, stats = audit_history_dir(history_dir)
+    for row in issues:
+        findings.append(
+            OpsFinding(
+                severity=row.severity,
+                category="backtest",
+                title=f"Backtest history: {row.code}",
+                summary=row.summary,
+                auto_fixable=row.auto_fixable,
+            )
+        )
+    if int(stats.get("valid_runs") or 0) < 2:
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="backtest",
+                title="Backtest history still seeding",
+                summary=(
+                    f"{stats.get('valid_runs', 0)} valid run snapshot(s) in {history_dir.as_posix()} — "
+                    "need ≥2 weekly archives before forward-return backtest populates."
+                ),
+            )
+        )
+    return findings
+
+
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
@@ -765,6 +801,20 @@ def apply_auto_fixes(
                     finding.fixed = True
                     finding.action_taken = action
 
+    backtest_fixable = any(
+        row.category == "backtest" and row.auto_fixable and not row.fixed for row in findings
+    )
+    if backtest_fixable and apply:
+        issues, _ = audit_history_dir(COMMITTED_HISTORY_DIR)
+        repairs = repair_history_dir(COMMITTED_HISTORY_DIR, issues, apply=True)
+        for repair in repairs:
+            results.append({"action": repair.action, "detail": repair.detail})
+        if repairs:
+            for finding in findings:
+                if finding.category == "backtest" and finding.auto_fixable:
+                    finding.fixed = True
+                    finding.action_taken = "; ".join(row.detail for row in repairs[:3])
+
     return results
 
 
@@ -811,6 +861,7 @@ def run_ops_monitor(
     findings.extend(check_ingest_health_log(health_log_path))
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
+    findings.extend(check_backtest_history())
 
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,
@@ -853,6 +904,11 @@ def run_ops_monitor(
     status_path = Path(status_path)
     status_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(status_path, report.to_dict(), compact=False)
+
+    from value_investor.backtest_health import run_backtest_health
+
+    run_backtest_health(apply_repairs=False, status_path=BACKTEST_HEALTH_STATUS_PATH)
+
     return report
 
 

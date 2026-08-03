@@ -212,20 +212,29 @@ def publish_committed_run_history(
     Mirror ``output/history`` into ``docs/data/history`` for git commit.
 
     Applies the same retention window as local ``output/history``.
+    Skips new run snapshots that fail backtest health validation (pollution guard).
     """
+    from value_investor.backtest_health import validate_history_before_publish
+
     source = output_dir / "history"
     dest = committed_dir or COMMITTED_HISTORY_DIR
     dest.mkdir(parents=True, exist_ok=True)
+    blocked = validate_history_before_publish(output_dir, committed_dir=dest)
+    blocked_names = {Path(row.path).name for row in blocked if Path(row.path).suffix in {".json", ".gz"}}
     copied = 0
+    skipped = 0
     if source.exists():
         for path in history_snapshot_paths(source):
+            if path.name in blocked_names and not (dest / path.name).exists():
+                skipped += 1
+                continue
             shutil.copy2(path, dest / path.name)
             copied += 1
     pruned = prune_paths_older_than(
         history_snapshot_paths(dest),
         history_cutoff(max_years=max_years, now=now),
     )
-    return {"copied": copied, "pruned": len(pruned)}
+    return {"copied": copied, "pruned": len(pruned), "skipped_invalid": skipped}
 
 
 def prune_timestamped_outputs(

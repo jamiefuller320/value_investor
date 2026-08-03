@@ -57,22 +57,38 @@ def test_prune_dashboard_archives_keeps_newest(tmp_path: Path):
     assert remaining == ["2026-03-01.json", "2026-04-01.json"]
 
 
+def _valid_run_snapshot(run_at: str) -> dict:
+    signals = [
+        {
+            "ticker": f"AAA{i}.L",
+            "signal": "buy",
+            "conviction_score": 0.5,
+            "data_quality_score": 0.9,
+        }
+        for i in range(60)
+    ]
+    prices = {row["ticker"]: 100.0 + i for i, row in enumerate(signals)}
+    prices["^FTSE"] = 8000.0
+    return {"run_at": run_at, "prices": prices, "signals": signals}
+
+
 def test_restore_and_publish_committed_run_history(tmp_path: Path):
     committed = tmp_path / "committed"
     output = tmp_path / "output"
     committed.mkdir()
     output.mkdir()
-    payload = {"run_at": "2026-07-01T07:00:00+00:00", "prices": {}, "signals": []}
+    payload = _valid_run_snapshot("2026-07-01T07:00:00+00:00")
     write_json(committed / "run_20260701_070000.json", payload, compress=True)
 
     copied_in = restore_committed_run_history(output, committed_dir=committed)
     assert copied_in == 1
     assert (output / "history" / "run_20260701_070000.json.gz").exists()
 
-    payload["run_at"] = "2026-07-08T07:00:00+00:00"
+    payload = _valid_run_snapshot("2026-07-08T07:00:00+00:00")
     write_json(output / "history" / "run_20260708_070000.json", payload, compress=True)
     stats = publish_committed_run_history(output, committed_dir=committed)
     assert stats["copied"] == 2
+    assert stats["skipped_invalid"] == 0
     assert (committed / "run_20260708_070000.json.gz").exists()
 
     assert restore_committed_run_history(output, committed_dir=committed) == 0
