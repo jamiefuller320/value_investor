@@ -101,7 +101,7 @@ jobs:
 
       - name: Recover engineering queue
         run: |
-          ftse-engineering --json recover-queue --open-prs-json /tmp/open_prs.json
+          ftse-engineering --json recover-queue --open-prs-json /tmp/open_prs.json | tee /tmp/recovery.json
 
       - name: Engineering sync check
         id: sync
@@ -213,3 +213,17 @@ jobs:
         if: steps.gate.outputs.should_dispatch != 'true'
         run: |
           echo "No dispatch: ${{ steps.gate.outputs.reason }}"
+
+      - name: Email engineering queue blocks
+        if: steps.gate.outputs.should_dispatch != 'true'
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          ftse-engineering notify-queue-blocked \
+            --recovery-json /tmp/recovery.json \
+            --sync-json /tmp/eng_sync.json \
+            --queue-status-json /tmp/queue_status.json

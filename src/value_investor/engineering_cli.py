@@ -7,6 +7,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 from value_investor.agent_model_policy import load_policy, spend_since_checkpoint_usd, spend_checkpoint_usd
 from value_investor.cursor_api_key import resolve_cursor_api_key
@@ -37,7 +38,12 @@ from value_investor.engineering_recovery import (
 from value_investor.cli_args import apply_parsed_globals
 from value_investor.ci_fix_tasks import draft_ci_fix_task, parse_pytest_failures_from_log, task_eligible_for_auto_merge
 from value_investor.engineering_auto_merge import evaluate_auto_merge, perform_auto_merge
-from value_investor.engineering_pr_notify import EngineeringPrNotification, send_engineering_pr_email
+from value_investor.engineering_pr_notify import (
+    EngineeringPrNotification,
+    collect_queue_block_alerts,
+    send_engineering_pr_email,
+    send_engineering_queue_block_email,
+)
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     is_engineering_branch,
@@ -426,6 +432,36 @@ def _cmd_notify_pr_open(args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_optional_json(path: str | None) -> dict[str, Any]:
+    if not path:
+        return {}
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    return dict(payload) if isinstance(payload, dict) else {}
+
+
+def _cmd_notify_queue_blocked(args: argparse.Namespace) -> int:
+    alerts = collect_queue_block_alerts(
+        recovery=_load_optional_json(args.recovery_json),
+        sync=_load_optional_json(args.sync_json),
+        dispatch=_load_optional_json(args.queue_status_json),
+    )
+    sent = send_engineering_queue_block_email(alerts)
+    payload = {
+        "alert_count": len(alerts),
+        "alerts": [row.to_dict() for row in alerts],
+        "sent": sent,
+    }
+    if args.json:
+        _print_json(payload)
+    elif not alerts:
+        print("No engineering queue block alerts")
+    elif sent:
+        print(f"Engineering queue-block email sent ({len(alerts)} alert(s))")
+    else:
+        print("Engineering queue-block email skipped (SMTP not configured)", file=sys.stderr)
+    return 0
+
+
 def _cmd_run(args: argparse.Namespace) -> int:
     if not args.api_key:
         print("CURSOR_API_KEY required for engineering run", file=sys.stderr)
@@ -721,6 +757,28 @@ def main(argv: list[str] | None = None) -> int:
         help="Omit backup note about approving action_required CI runs",
     )
     notify_pr_p.set_defaults(func=_cmd_notify_pr_open)
+
+    notify_block_p = sub.add_parser(
+        "notify-queue-blocked",
+        parents=[common],
+        help="Email when the engineering queue is blocked (checkpoint, failures, reconcile, park)",
+    )
+    notify_block_p.add_argument(
+        "--recovery-json",
+        default=None,
+        help="JSON from ftse-engineering recover-queue --json",
+    )
+    notify_block_p.add_argument(
+        "--sync-json",
+        default=None,
+        help="JSON from engineering sync report",
+    )
+    notify_block_p.add_argument(
+        "--queue-status-json",
+        default=None,
+        help="JSON from ftse-engineering queue-status --json",
+    )
+    notify_block_p.set_defaults(func=_cmd_notify_queue_blocked)
 
     run_p = sub.add_parser("run", parents=[common], help="Run the supervised dev agent for open task(s)")
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")
