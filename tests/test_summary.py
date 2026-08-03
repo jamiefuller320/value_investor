@@ -9,6 +9,7 @@ import pandas as pd
 
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
 from value_investor.scoring import evaluate_universe
+from value_investor.models.risk import EarningsQualityModel
 from value_investor.scoring.fcf import reconcile_fcf
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
@@ -335,6 +336,97 @@ def test_healthcare_overlay_not_triggered_for_hik_like_profile():
     assert report.to_dict()["adjusted_signal"] == "strong_buy"
 
 
+def _model_results_for_megp_dividend_overlay(*, ticker: str = "MEGP.L") -> pd.DataFrame:
+    return pd.DataFrame([
+        {
+            "ticker": ticker,
+            "model_id": "high_dividend",
+            "model_name": "High Dividend Yield",
+            "passed": True,
+            "score": 0.9,
+            "reasons": "['yield=7.6%']",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": ticker,
+            "model_id": "fcf_yield",
+            "model_name": "FCF Yield",
+            "passed": False,
+            "score": 0.3,
+            "reasons": "[]",
+            "failed_criteria": "['FCF yield 3.7% below 5%']",
+        },
+        {
+            "ticker": ticker,
+            "model_id": "earnings_quality",
+            "model_name": "Earnings Quality",
+            "passed": False,
+            "score": 0.5,
+            "reasons": "[]",
+            "failed_criteria": "['weak free-cash conversion']",
+        },
+    ])
+
+
+def test_dividend_yield_overlay_caps_megp_like_profile():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="MEGP.L",
+            name="ME Group International plc",
+            sector="Industrials",
+            signal="strong_buy",
+            dividend_yield=0.0757,
+        ),
+    ])
+    model_results = _model_results_for_megp_dividend_overlay()
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert report.signal == "strong_buy"
+    assert snapshot["dividend_yield_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Dividend-yield overlay" in report.summary
+
+
+def test_dividend_yield_overlay_not_triggered_when_fcf_yield_passes():
+    signals = pd.DataFrame([_signal_row(ticker="MEGP.L", signal="strong_buy")])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "MEGP.L",
+            "model_id": "high_dividend",
+            "model_name": "High Dividend Yield",
+            "passed": True,
+            "score": 0.9,
+            "reasons": "[]",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": "MEGP.L",
+            "model_id": "fcf_yield",
+            "model_name": "FCF Yield",
+            "passed": True,
+            "score": 0.8,
+            "reasons": "[]",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": "MEGP.L",
+            "model_id": "earnings_quality",
+            "model_name": "Earnings Quality",
+            "passed": False,
+            "score": 0.5,
+            "reasons": "[]",
+            "failed_criteria": "['weak free-cash conversion']",
+        },
+    ])
+
+    report = build_company_reports(signals, model_results)[0]
+
+    assert report.to_dict()["dividend_yield_overlay"] is False
+    assert report.to_dict()["adjusted_signal"] == "strong_buy"
+
+
 def test_cash_conversion_overlay_caps_hik_like_profile():
     signals = pd.DataFrame([
         _signal_row(
@@ -434,6 +526,30 @@ def _hik_financials() -> dict:
             }
         },
     }
+
+
+def test_earnings_quality_prefers_adjusted_net_income():
+    model = EarningsQualityModel()
+    statutory_only = model.evaluate(
+        {
+            "net_income": 100.0,
+            "free_cashflow": 40.0,
+            "operating_cashflow": 80.0,
+            "total_assets": 1000.0,
+        }
+    )
+    assert statutory_only.passed is False
+
+    with_adjusted = model.evaluate(
+        {
+            "net_income": 100.0,
+            "net_income_adjusted": 50.0,
+            "free_cashflow": 40.0,
+            "operating_cashflow": 80.0,
+            "total_assets": 1000.0,
+        }
+    )
+    assert with_adjusted.passed is True
 
 
 def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
