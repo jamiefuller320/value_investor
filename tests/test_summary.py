@@ -582,5 +582,6 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     assert snapshot["fcf"]["canonical"] == 119_000_000.0
     assert snapshot["fcf"]["source"] == "filing_aligned_ocf_capex"
     assert snapshot["fcf"]["screen_ttm"] == -66_125_000.0
-    assert snapshot["cash_conversion_overlay"] is False
-    assert snapshot["adjusted_signal"] == "strong_buy"
+    assert snapshot["cash_conversion_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Cash-conversion overlay" in snapshot["summary"]

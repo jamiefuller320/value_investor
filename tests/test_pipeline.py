@@ -467,6 +467,39 @@ def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
+def test_enrich_signals_with_cash_conversion_overlay_uses_trailing_fcf():
+    """Cap when screen TTM FCF is negative even if canonical filing FCF is positive."""
+    signals = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "name": "Hikma Pharmaceuticals PLC",
+            "sector": "Health Care",
+            "signal": "strong_buy",
+            "free_cashflow": 119_000_000.0,
+            "free_cashflow_screen_ttm": -66_125_000.0,
+            "shares_outstanding": 240_000_000,
+            "shares_outstanding_prev": 245_000_000,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "HIK.L",
+            "model_id": "dividend_growth",
+            "model_name": "Dividend Growth",
+            "passed": True,
+            "score": 0.8,
+            "reasons": "['dividend payer: yield=3.9%']",
+            "failed_criteria": "[]",
+        },
+    ])
+
+    enriched = enrich_signals_with_cash_conversion_overlay(signals, model_results)
+
+    assert enriched.iloc[0]["signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Path):
     sources = tmp_path / "research" / "HIK.L" / "sources"
     sources.mkdir(parents=True)

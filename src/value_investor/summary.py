@@ -496,7 +496,7 @@ def build_company_reports(
         else:
             cash_conversion_overlay, adjusted_signal_str = apply_cash_conversion_overlay_to_signal(
                 signal,
-                free_cashflow=free_cashflow,
+                free_cashflow=screen_ttm_from_row(row),
                 shares_outstanding=shares_outstanding,
                 shares_outstanding_prev=shares_outstanding_prev,
                 ticker_models=ticker_models,
