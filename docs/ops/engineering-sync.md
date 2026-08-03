@@ -73,3 +73,47 @@ Add repository secret **`WORKFLOW_DISPATCH_PAT`** — fine-grained PAT with:
 `GITHUB_TOKEN` and logs a warning.
 
 Email reuses Sunday report SMTP secrets (`SMTP_*`, `EMAIL_TO`).
+
+## Merge policy
+
+Not every engineering task needs a human merge — but **most do by design**.
+
+### Supervised loop (default)
+
+```mermaid
+flowchart LR
+  A[Queue dispatches task] --> B[Agent opens draft PR]
+  B --> C[CI + path guard]
+  C --> D[Human review + merge]
+  D --> E[Queue chains next task]
+```
+
+Post-run review tasks (ingest, scoring, research, routine ops) are compiled with
+`auto_merge: false` and open as **draft PRs**. You review the diff and merge when
+satisfied.
+
+`WORKFLOW_DISPATCH_PAT` removes the GitHub **CI approval gate** on bot PRs; it does
+**not** remove this merge step.
+
+### When auto-merge applies
+
+| Condition | Human merge? |
+|-----------|----------------|
+| Post-run ingest / scoring / research | **Yes** (draft PR) |
+| Routine ops / engineering hardening | **Yes** (draft PR) |
+| Narrow CI-fix task (`auto_merge: true`) | **No** — merges when CI + path guard pass |
+| Any change touching `blocked_paths` | **Yes** — never auto-merged |
+
+CI-fix tasks are drafted by `ci-fix-responder.yml` when **main** pytest fails. A
+task gets `auto_merge: true` only when scope is narrow (≤ 8 `allowed_paths`, all
+within safe prefixes, no blocked paths). `engineering-auto-merge.yml` squash-merges
+eligible PRs after green CI.
+
+See [`ci-fix-automation.md`](ci-fix-automation.md) for the full eligibility rules
+and CLI (`ftse-engineering task-auto-merge`, `try-auto-merge`).
+
+### Notifications
+
+`notify-pr-open` emails on every new engineering PR. The message notes whether the
+task is auto-merge eligible so you can ignore merge for narrow CI fixes but still
+review everything else.
