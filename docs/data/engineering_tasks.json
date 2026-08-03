@@ -173,10 +173,13 @@
         ".github/workflows/paper-auto.yml",
         "docs/data/library/policy.json"
       ],
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260802-01.md",
       "branch_name": "cursor/eng-20260802-01-1de3",
-      "completed_at": "2026-08-03T10:41:36.188535+00:00"
+      "completed_at": "2026-08-03T10:41:36.188535+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/166",
+      "pr_number": 166,
+      "merged_at": "2026-08-03T13:30:30.313325+00:00"
     },
     {
       "id": "eng-20260726-02",
@@ -270,6 +273,45 @@
       "merged_at": "2026-07-26T09:33:04.236765+00:00"
     },
     {
+      "id": "eng-20260802-03",
+      "area": "ingest",
+      "title": "Extend PDF extraction depth to consolidated cash-flow statements, exceptional-items notes, and related-party/geographic segments; wire `company_ir_presentation`",
+      "summary": "Extend PDF extraction depth to consolidated cash-flow statements, exceptional-items notes, and related-party/geographic segments; wire `company_ir_presentation` IR allowlist fetch",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "PDF",
+          "IR"
+        ],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for PDF",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "status": "open"
+    },
+    {
       "id": "eng-20260802-04",
       "area": "scoring",
       "title": "Populate `operating_cashflow` and adjusted earnings series from Yahoo/filing sources into `CompanyMetrics`; add overlay when High Dividend Yield passes but FCF ",
@@ -295,45 +337,6 @@
         "src/value_investor/scoring/",
         "tests/test_pipeline.py",
         "tests/test_summary.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "status": "open"
-    },
-    {
-      "id": "eng-20260802-03",
-      "area": "ingest",
-      "title": "Extend PDF extraction depth to consolidated cash-flow statements, exceptional-items notes, and related-party/geographic segments; wire `company_ir_presentation`",
-      "summary": "Extend PDF extraction depth to consolidated cash-flow statements, exceptional-items notes, and related-party/geographic segments; wire `company_ir_presentation` IR allowlist fetch",
-      "priority": "high",
-      "priority_score": 96.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [
-          "PDF",
-          "IR"
-        ],
-        "plan_index": 4
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for PDF",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py"
       ],
       "blocked_paths": [
         "src/value_investor/paper_fund.py",
@@ -685,6 +688,43 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-08-03T13:30:36.242832+00:00",
+    "buy_tier_count": 63,
+    "measured_tickers": 29,
+    "unmeasured_buy_tier": 34,
+    "unmeasured_tickers": [
+      "GAMA.L",
+      "DSCV.L",
+      "RNK.L",
+      "FOUR.L",
+      "GFRD.L",
+      "HLN.L",
+      "JD.L",
+      "DATA.L",
+      "PFD.L",
+      "RS1.L",
+      "BT-A.L",
+      "BYIT.L",
+      "DNLM.L",
+      "ALFA.L",
+      "KNOS.L",
+      "SGE.L",
+      "ASHM.L",
+      "BOWL.L",
+      "JSG.L",
+      "CNA.L",
+      "SBRY.L",
+      "BOY.L",
+      "INCH.L",
+      "ABF.L",
+      "BTRW.L"
+    ],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 169,
+    "filings_with_body": 226
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-08-02T13:50:12.870314+00:00",
     "buy_tier_count": 60,
     "measured_tickers": 28,
@@ -720,5 +760,7 @@
     "zero_body_tickers": [],
     "indexed_without_body": 117,
     "filings_with_body": 216
-  }
+  },
+  "reprioritized_at": "2026-08-03T13:30:36.242956+00:00",
+  "reprioritized_after_task": "eng-20260802-01"
 }
