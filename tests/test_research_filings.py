@@ -40,6 +40,8 @@ from value_investor.research.filings import (
     _uk_ticker_sec_dual_listed,
     _extract_investegate_html_text,
     _extract_ixbrl_html_text,
+    _compose_pdf_body_text,
+    _extract_pdf_depth_sections,
     _filing_text_is_substantive,
 )
 from value_investor.research.ingest import (
@@ -551,6 +553,60 @@ def test_fetch_filing_body_parses_pdf(monkeypatch):
     text = fetch_filing_body("https://example.com/results.pdf")
     assert text is not None
     assert "cash flow bridge" in text
+
+
+def test_compose_pdf_body_text_splices_late_cash_flow_and_notes():
+    """Regression: depth extract must reach consolidated cash-flow and note sections."""
+    early = "Chief Executive Review and strategic outlook " * 900
+    cash_flow_page = (
+        "CONSOLIDATED STATEMENT OF CASH FLOW\n"
+        "Cash generated from operations 90.8\n"
+        "Purchase of property, plant and equipment (65.6)\n"
+        "Free cash flow before dividends 25.2"
+    )
+    exceptional_page = (
+        "NOTE 5 Exceptional items\n"
+        "Restructuring costs 45\n"
+        "Legal settlement 72\n"
+        "Total exceptional charge 117"
+    )
+    segment_page = (
+        "SEGMENT INFORMATION\n"
+        "UK revenue 800\n"
+        "US revenue 400\n"
+        "RELATED PARTY TRANSACTIONS\n"
+        "Sales to associate 12\n"
+        "Purchases from joint venture 3"
+    )
+    pages = [early[:3500]] * 10 + [cash_flow_page, exceptional_page, segment_page]
+
+    text = _compose_pdf_body_text(pages)
+    assert text is not None
+    assert "Chief Executive Review" in text
+    assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
+    assert "Cash generated from operations 90.8" in text
+    assert "NOTE 5 Exceptional items" in text
+    assert "Legal settlement 72" in text
+    assert "SEGMENT INFORMATION" in text
+    assert "RELATED PARTY TRANSACTIONS" in text
+    assert "Sales to associate 12" in text
+
+
+def test_extract_pdf_depth_sections_skips_lead_window():
+    lead = "Strategic report narrative " * 1200
+    tail = (
+        "CONSOLIDATED CASH FLOW STATEMENT operating activities 123 "
+        "EXCEPTIONAL ITEMS restructuring 45 "
+        "SEGMENT INFORMATION UK revenue 800"
+    )
+    full = lead + tail
+    lead_limit = min(28_000, len(full))
+    sections = _extract_pdf_depth_sections(full, skip_before=lead_limit)
+    joined = "\n".join(sections)
+    assert "CONSOLIDATED CASH FLOW STATEMENT" in joined
+    assert "EXCEPTIONAL ITEMS" in joined
+    assert "SEGMENT INFORMATION" in joined
+    assert lead[:500] not in joined
 
 
 def test_fetch_filing_body_routes_companies_house_document_api(monkeypatch):

@@ -38,6 +38,11 @@ USER_AGENT = "value-investor-research/0.1 (+filings)"
 FILINGS_LOOKBACK_DAYS = 800  # ~2.2 years — cover annual + several interims
 FILINGS_MAX_ITEMS = 40
 FILINGS_BODY_MAX_CHARS = 80_000
+# Lead narrative kept from the start; depth sections are spliced from later pages.
+_PDF_DEPTH_LEAD_CHARS = 28_000
+_PDF_DEPTH_SECTION_CHARS = 6_000
+_PDF_DEPTH_MAX_SECTIONS = 8
+_PDF_EXTRACT_MAX_PAGES = 200
 CH_OCR_MAX_PAGES = int(os.environ.get("COMPANIES_HOUSE_OCR_MAX_PAGES", "12"))
 CH_OCR_DPI = int(os.environ.get("COMPANIES_HOUSE_OCR_DPI", "150"))
 TICKER_API_BASE = "https://api.tickerapp.net/v2"
@@ -236,6 +241,14 @@ def _score_ch_body_text(text: str) -> int:
         score -= 2_000
     if "consolidated" in lower and "income" in lower:
         score += 800
+    if "consolidated" in lower and "cash flow" in lower:
+        score += 900
+    if "exceptional item" in lower:
+        score += 700
+    if "related party" in lower:
+        score += 700
+    if "segment" in lower and any(token in lower for token in ("information", "analysis", "reporting")):
+        score += 500
     return score
 
 
@@ -680,6 +693,71 @@ def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
     return _strip_html(raw.decode("utf-8", errors="replace"))
 
 
+_PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
+    (r"\bCONSOLIDATED (?:STATEMENT OF )?CASH FLOW", 1),
+    (r"\bCONSOLIDATED CASH FLOW STATEMENT", 1),
+    (r"\bSTATEMENT OF CASH FLOWS\b", 1),
+    (r"\bCASH FLOW STATEMENT\b", 1),
+    (r"\b(?:NOTE|NOTES)\s+(?:TO THE )?(?:FINANCIAL|GROUP) STATEMENTS\b", 2),
+    (r"\bEXCEPTIONAL ITEMS?\b", 2),
+    (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*(?:Exceptional|Adjusting items?)", 2),
+    (r"\bRELATED PARTY TRANSACTIONS?\b", 3),
+    (r"\bRELATED PARTIES\b", 3),
+    (r"\bSEGMENT(?:AL)? (?:INFORMATION|ANALYSIS|REPORTING)\b", 3),
+    (r"\bGEOGRAPHIC(?:AL)? (?:INFORMATION|SEGMENTS?|ANALYSIS)\b", 3),
+    (r"\bANALYSIS BY SEGMENT\b", 3),
+    (r"\bOPERATING SEGMENTS?\b", 3),
+)
+
+
+def _extract_pdf_depth_sections(full_text: str, *, skip_before: int = 0) -> list[str]:
+    """Pull windows for cash-flow statements, exceptional-item notes, and segment tables."""
+    sections: list[str] = []
+    used_ranges: list[tuple[int, int]] = []
+    for pattern, _rank in _PDF_DEPTH_SECTION_MARKERS:
+        for match in re.finditer(pattern, full_text, flags=re.I):
+            if match.start() < skip_before:
+                continue
+            start = max(skip_before, match.start() - 150)
+            end = min(len(full_text), match.end() + _PDF_DEPTH_SECTION_CHARS)
+            if any(start < used_end and end > used_start for used_start, used_end in used_ranges):
+                continue
+            chunk = full_text[start:end].strip()
+            if len(chunk) < 80:
+                continue
+            sections.append(chunk)
+            used_ranges.append((start, end))
+            if len(sections) >= _PDF_DEPTH_MAX_SECTIONS:
+                return sections
+    return sections
+
+
+def _compose_pdf_body_text(pages: list[str]) -> str | None:
+    """
+    Compose filing body text from PDF pages.
+
+    Keeps the opening narrative, then splices consolidated cash-flow statements,
+    exceptional-item notes, and related-party / geographic segment disclosures that
+    often sit beyond the first ~30 pages of annual reports and IR decks.
+    """
+    full = "\n".join(page.strip() for page in pages if page and page.strip())
+    if not full.strip():
+        return None
+
+    lead_limit = min(_PDF_DEPTH_LEAD_CHARS, len(full))
+    lead = full[:lead_limit].rstrip()
+    depth_sections = _extract_pdf_depth_sections(full, skip_before=lead_limit)
+
+    parts = [lead]
+    for section in depth_sections:
+        parts.append("\n\n---\n\n" + section)
+
+    text = "".join(parts).strip()
+    if len(text) > FILINGS_BODY_MAX_CHARS:
+        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return text or None
+
+
 def _extract_pdf_text(raw: bytes) -> str | None:
     """Best-effort PDF text extract; returns None when pypdf is unavailable or empty."""
     try:
@@ -691,19 +769,17 @@ def _extract_pdf_text(raw: bytes) -> str | None:
         return None
     try:
         reader = PdfReader(BytesIO(raw))
-        chunks: list[str] = []
-        for page in reader.pages:
+        pages: list[str] = []
+        for index, page in enumerate(reader.pages):
+            if index >= _PDF_EXTRACT_MAX_PAGES:
+                break
             try:
                 page_text = page.extract_text() or ""
             except Exception:  # noqa: BLE001
                 continue
             if page_text.strip():
-                chunks.append(page_text)
-            joined = "\n".join(chunks)
-            if len(joined) >= FILINGS_BODY_MAX_CHARS:
-                break
-        text = "\n".join(chunks).strip()
-        return text or None
+                pages.append(page_text)
+        return _compose_pdf_body_text(pages)
     except Exception as exc:  # noqa: BLE001
         logger.debug("PDF extract failed: %s", exc)
         return None
