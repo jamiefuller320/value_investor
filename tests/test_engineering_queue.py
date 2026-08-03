@@ -158,6 +158,19 @@ def test_merge_task_rows_preserves_merged_status():
     assert merged[0]["id"] == "eng-20260726-01"
 
 
+def test_merge_task_rows_preserves_unmatched_open_tasks():
+    existing = [
+        _task("eng-20260802-02", title="Reconcile canonical FCF field").to_dict(),
+    ]
+    compiled = [
+        _task("eng-20260803-29", title="Cap Strong Buy when trailing FCF is negative"),
+    ]
+    merged = _merge_task_rows(existing, compiled)
+    ids = {row["id"] for row in merged}
+    assert "eng-20260802-02" in ids
+    assert "eng-20260803-29" in ids
+
+
 def test_mark_task_status_writes_committed_copy(tmp_path: Path):
     tasks_path = tmp_path / "output" / "engineering_tasks.json"
     committed_path = tmp_path / "docs" / "data" / "engineering_tasks.json"

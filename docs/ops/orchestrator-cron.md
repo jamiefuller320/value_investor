@@ -167,6 +167,19 @@ WORKFLOW=ingest-loop.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
 
 Same-day skip in the workflow — safe alongside GitHub `0 7` / `0 10` schedules.
 
+#### Why Mon/Wed/Fri instead of daily?
+
+| Factor | Mon/Wed/Fri | Daily |
+|--------|-------------|-------|
+| **Screen cadence** | Sunday screen refreshes buy-tier universe; mid-week ingests close filing gaps before the next screen | Extra runs duplicate work against the same `latest.json` snapshot |
+| **Filing rhythm** | UK RNS / accounts often land Mon–Thu after results; Wed catches post-weekend backlog | Tue/Thu runs rarely add bodies without a fresh screen signal |
+| **API / CI cost** | ~6 runs/week (2 slots × 3 days) vs 14 | Lower GitHub + Yahoo load; same stall detection via ops monitor |
+| **Engineering queue** | Ingest merges on Mon/Wed/Fri still reprioritise open tasks | More noise, not better coverage |
+
+The **10:00 UTC catch-up** on ingest days covers morning stalls. Ops monitor at
+07:45 UTC still flags buy-tier ingest stalls and can micro-compile ingest tasks
+on any weekday when zero-body counts stop improving.
+
 ### 4. Analysis review — Sunday after email bundle (~10:35 UTC)
 
 Run **after** the Sunday screen commits `docs/data/` (email via orchestrator often

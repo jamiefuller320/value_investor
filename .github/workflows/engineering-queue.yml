@@ -103,6 +103,40 @@ jobs:
         run: |
           ftse-engineering --json recover-queue --open-prs-json /tmp/open_prs.json
 
+      - name: Engineering sync check
+        id: sync
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY' | tee /tmp/eng_sync.json
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.engineering_sync import run_engineering_sync
+          from value_investor.ops_monitor import recent_workflow_failures, _github_repo, _github_token
+          open_prs = json.loads(Path("/tmp/open_prs.json").read_text(encoding="utf-8"))
+          repo = _github_repo() or os.environ.get("GITHUB_REPOSITORY", "")
+          failures = recent_workflow_failures(
+              "engineering-agent.yml",
+              repo=repo or None,
+              token=_github_token(),
+              within_hours=6,
+          )
+          report = run_engineering_sync(open_prs=open_prs, recent_agent_failures=failures, apply=True)
+          print(json.dumps(report.to_dict(), indent=2))
+          PY
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/eng_sync.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_redispatch={'true' if data.get('should_redispatch') else 'false'}\n",
+              encoding="utf-8",
+          )
+          PY
+
       - name: Sync main before queue file commit
         run: git pull --rebase --autostash origin main
 
@@ -128,21 +162,25 @@ jobs:
           fi
           ftse-engineering $ARGS | tee /tmp/queue_status.json
           python3 - <<'PY'
-          import json, os
+          import json
+          import os
           from pathlib import Path
+          from value_investor.engineering_sync import resolve_dispatch_task_id
           data = json.loads(Path("/tmp/queue_status.json").read_text())
+          raw_task_id = data.get("next_task_id") or ""
+          resolved = resolve_dispatch_task_id(raw_task_id) or ""
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
               f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
               f"reason={data.get('reason', '')}\n"
-              f"next_task_id={data.get('next_task_id') or ''}\n",
+              f"next_task_id={resolved}\n",
               encoding="utf-8",
           )
           PY
 
       - name: Dispatch engineering agent
         if: >-
-          steps.gate.outputs.should_dispatch == 'true'
+          (steps.gate.outputs.should_dispatch == 'true' || steps.sync.outputs.should_redispatch == 'true')
           && (github.event_name != 'pull_request' || github.event.pull_request.merged == true)
         env:
           GH_TOKEN: ${{ github.token }}
