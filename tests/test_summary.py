@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pandas as pd
 
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
 from value_investor.scoring import evaluate_universe
+from value_investor.scoring.fcf import reconcile_fcf
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
 from value_investor.summary import build_company_reports
@@ -73,10 +77,10 @@ def _model_results_for_hik() -> pd.DataFrame:
     ])
 
 
-def _model_results_for_hik_cash_conversion_cap() -> pd.DataFrame:
+def _model_results_for_hik_cash_conversion_cap(*, ticker: str = "HIKX.L") -> pd.DataFrame:
     return pd.DataFrame([
         {
-            "ticker": "HIK.L",
+            "ticker": ticker,
             "model_id": "dividend_growth",
             "model_name": "Dividend Growth",
             "passed": True,
@@ -85,7 +89,7 @@ def _model_results_for_hik_cash_conversion_cap() -> pd.DataFrame:
             "failed_criteria": "[]",
         },
         {
-            "ticker": "HIK.L",
+            "ticker": ticker,
             "model_id": "piotroski_f",
             "model_name": "Piotroski F-Score",
             "passed": True,
@@ -334,6 +338,8 @@ def test_healthcare_overlay_not_triggered_for_hik_like_profile():
 def test_cash_conversion_overlay_caps_hik_like_profile():
     signals = pd.DataFrame([
         _signal_row(
+            ticker="HIKX.L",
+            name="Hikma-like Test plc",
             free_cashflow=-66.1,
             shares_outstanding=240_000_000,
             shares_outstanding_prev=245_000_000,
@@ -380,6 +386,8 @@ def test_cash_conversion_overlay_not_triggered_without_dividend_screen():
 def test_cash_conversion_overlay_respects_existing_research_adjusted_signal():
     signals = pd.DataFrame([
         _signal_row(
+            ticker="HIKX.L",
+            name="Hikma-like Test plc",
             free_cashflow=-66.1,
             shares_outstanding=240_000_000,
             shares_outstanding_prev=245_000_000,
@@ -413,3 +421,50 @@ def test_healthcare_overlay_respects_existing_research_adjusted_signal():
 
     assert report.to_dict()["healthcare_overlay"] is True
     assert report.adjusted_signal == "hold"
+
+
+def _hik_financials() -> dict:
+    return {
+        "ticker": "HIK.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 436_000_000.0,
+                "Capital Expenditure": -317_000_000.0,
+                "Free Cash Flow": 119_000_000.0,
+            }
+        },
+    }
+
+
+def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
+    bundle = reconcile_fcf(screen_ttm=-66_125_000.0, financials=_hik_financials())
+    assert bundle["canonical"] == 119_000_000.0
+    assert bundle["source"] == "filing_aligned_ocf_capex"
+    assert bundle["screen_ttm"] == -66_125_000.0
+    assert bundle["cashflow_metrics_free_cashflow"] == 119_000_000.0
+
+
+def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_hik_financials()), encoding="utf-8")
+
+    signals = pd.DataFrame([
+        _signal_row(
+            free_cashflow=-66_125_000.0,
+            free_cashflow_screen_ttm=-66_125_000.0,
+            shares_outstanding=240_000_000,
+            shares_outstanding_prev=245_000_000,
+        )
+    ])
+    model_results = _model_results_for_hik_cash_conversion_cap(ticker="HIK.L")
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["key_metrics"]["FCF"] == "119000000.0"
+    assert snapshot["cashflow_metrics"]["free_cashflow"] == 119_000_000.0
+    assert snapshot["fcf"]["canonical"] == 119_000_000.0
+    assert snapshot["fcf"]["source"] == "filing_aligned_ocf_capex"
+    assert snapshot["fcf"]["screen_ttm"] == -66_125_000.0
+    assert snapshot["cash_conversion_overlay"] is False
+    assert snapshot["adjusted_signal"] == "strong_buy"
