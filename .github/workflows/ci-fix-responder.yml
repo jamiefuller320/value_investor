@@ -4,7 +4,7 @@ name: CI Fix Responder
 # supervised queue. See docs/ops/ci-fix-automation.md.
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["CI", "CI Main Nightly"]
     types: [completed]
 
 permissions:
@@ -21,7 +21,11 @@ jobs:
     if: >-
       github.event.workflow_run.conclusion == 'failure'
       && github.event.workflow_run.head_branch == 'main'
-      && github.event.workflow_run.event == 'push'
+      && (
+        github.event.workflow_run.event == 'push'
+        || github.event.workflow_run.event == 'schedule'
+        || github.event.workflow_run.event == 'workflow_dispatch'
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

@@ -33,6 +33,7 @@ AUTO_MERGE_SAFE_PREFIXES: tuple[str, ...] = (
     "tests/",
     "scripts/",
     ".github/workflows/ci.yml",
+    ".github/workflows/ci-main-nightly.yml",
     "src/value_investor/",
 )
 
@@ -101,6 +102,7 @@ def build_allowed_paths_for_failures(failures: list[dict[str, str]]) -> list[str
     if failures:
         add("tests/conftest.py")
         add(".github/workflows/ci.yml")
+        add(".github/workflows/ci-main-nightly.yml")
     return paths
 
 
