@@ -14,7 +14,12 @@ from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
-from value_investor.scoring.fcf import reconcile_fcf_for_ticker, resolve_free_cashflow, screen_ttm_from_row
+from value_investor.scoring.fcf import (
+    append_fcf_divergence_to_action_note,
+    reconcile_fcf_for_ticker,
+    resolve_free_cashflow,
+    screen_ttm_from_row,
+)
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -496,12 +501,18 @@ def build_company_reports(
         else:
             cash_conversion_overlay, adjusted_signal_str = apply_cash_conversion_overlay_to_signal(
                 signal,
-                free_cashflow=screen_ttm_from_row(row),
+                free_cashflow=free_cashflow,
                 shares_outstanding=shares_outstanding,
                 shares_outstanding_prev=shares_outstanding_prev,
                 ticker_models=ticker_models,
                 adjusted_signal=adjusted_signal_str,
             )
+
+        action_note = append_fcf_divergence_to_action_note(
+            str(row.get("action_note") or ""),
+            canonical=free_cashflow,
+            screen_ttm=screen_ttm,
+        )
 
         dividend_yield_overlay_flag = row.get("dividend_yield_overlay")
         if dividend_yield_overlay_flag is not None and not (
@@ -559,7 +570,7 @@ def build_company_reports(
             timing_score=float(row.get("timing_score") or 0),
             rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
             timing_reasons=timing_reasons,
-            action_note=str(row.get("action_note") or ""),
+            action_note=action_note,
             trade_plan=trade_plan,
             passed_model_names=passed_model_names,
             passed_reasons=passed_reasons,
@@ -598,7 +609,7 @@ def build_company_reports(
                 timing_score=float(row.get("timing_score") or 0),
                 rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
                 price_vs_sma200_pct=price_vs_sma200_pct,
-                action_note=str(row.get("action_note") or ""),
+                action_note=action_note,
                 trade_plan=trade_plan,
                 summary=summary,
                 passed_models=passed_model_names,
