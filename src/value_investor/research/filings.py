@@ -953,6 +953,14 @@ def classify_companies_house_period(
         return "annual"
     if re.search(r"accounts-type-interim", blob):
         return "interim"
+    if (category or "").lower() == "accounts":
+        if re.search(r"\binterim\b", blob):
+            return "interim"
+        if re.search(
+            r"\b(?:group|full|medium|small|micro(?:-entity)?|total-exemption-full)\b",
+            blob,
+        ):
+            return "annual"
     return None
 
 

@@ -252,12 +252,6 @@ def fetch_accounts_filing_rows(
     )
     raw = _ch_get(url, api_key=api_key)
     payload = json.loads(raw.decode("utf-8"))
-    from value_investor.research.filings import (
-        classify_companies_house_period,
-        classify_filing_entity_type,
-        _priority_score,
-    )
-
     rows: list[dict[str, Any]] = []
     for item in payload.get("items") or []:
         links = item.get("links") or {}
@@ -269,29 +263,24 @@ def fetch_accounts_filing_rows(
         if "dormant" in description.lower():
             continue
         date = str(item.get("date") or item.get("action_date") or "")
-        period = classify_companies_house_period(description, category="accounts") or "annual"
-        row = {
-            "id": _filing_id(company_number, tx),
-            "source": "companies_house",
-            "headline": f"Companies House accounts — {description}",
-            "published_at": f"{date}T00:00:00+00:00" if date and "T" not in date else date,
-            "url": str(meta),
-            "period": period,
-            "category": "accounts",
-            "summary": description,
-            "has_body": False,
-            "body_path": None,
-            "provider_id": tx,
-            "company_number": company_number,
-            "document_metadata_url": str(meta),
-        }
-        row["entity_type"] = classify_filing_entity_type(row)
-        row["priority"] = _priority_score(
-            str(row["headline"]),
-            str(row["period"]),
-            entity_type=str(row["entity_type"]),
-        ) + 40
-        rows.append(row)
+        rows.append(
+            {
+                "id": _filing_id(company_number, tx),
+                "source": "companies_house",
+                "headline": f"Companies House accounts — {description}",
+                "published_at": f"{date}T00:00:00+00:00" if date and "T" not in date else date,
+                "url": str(meta),
+                "period": "annual",
+                "category": "accounts",
+                "summary": description,
+                "has_body": False,
+                "body_path": None,
+                "priority": 140,
+                "provider_id": tx,
+                "company_number": company_number,
+                "document_metadata_url": str(meta),
+            }
+        )
         if len(rows) >= max_accounts:
             break
         time.sleep(RATE_LIMIT_SLEEP_S)

@@ -971,6 +971,7 @@ def test_classify_companies_house_period_group_and_interim():
     assert classify_companies_house_period("accounts-with-accounts-type-group") == "annual"
     assert classify_companies_house_period("accounts-with-accounts-type-interim") == "interim"
     assert classify_companies_house_period("accounts-with-accounts-type-full") == "annual"
+    assert classify_companies_house_period("full", category="accounts") == "annual"
 
 
 def test_classify_filing_entity_type_s838_from_body():
