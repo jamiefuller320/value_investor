@@ -1,11 +1,11 @@
 {
   "acted": false,
   "gate": {
-    "local_time": "2026-08-03T08:21:28.335449+01:00",
+    "local_time": "2026-08-04T08:21:28.284919+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-08-03T08:00:00+01:00",
-    "settle_at": "2026-08-03T09:15:00+01:00",
+    "market_open_at": "2026-08-04T08:00:00+01:00",
+    "settle_at": "2026-08-04T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
@@ -14,7 +14,7 @@
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
-      "Conviction floor: min_conviction=0.20.",
+      "Conviction floor: min_conviction=0.25.",
       "Sector cap: at most 1 name(s) per known sector (cap=30%).",
       "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
@@ -23,38 +23,38 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 936.91,
+    "nav": 940.05,
     "cash": 0.0,
     "max_positions": 3,
-    "min_conviction": 0.2,
+    "min_conviction": 0.25,
     "sector_cap": 0.3,
     "skip_timing_wait": true,
     "use_momentum_grace": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 312.3,
+    "target_sleeve_value": 313.35,
     "targets": [
       {
         "ticker": "FGP.L",
         "name": "FirstGroup plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6481000000000001,
-        "price": 187.2
+        "conviction_score": 0.6507000000000001,
+        "price": 187.6
       },
       {
         "ticker": "HIK.L",
         "name": "Hikma Pharmaceuticals PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.6193000000000001,
-        "price": 1584.0
+        "conviction_score": 0.6364000000000001,
+        "price": 1572.2
       },
       {
         "ticker": "ITV.L",
         "name": "ITV plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6110000000000001,
-        "price": 73.5755
+        "conviction_score": 0.6048000000000001,
+        "price": 73.0
       }
     ],
     "anticipated_exits": [],
@@ -64,19 +64,10 @@
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "BREE.L",
-        "name": "Breedon Group plc",
-        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
-        "value": 197.98,
-        "conviction_score": null,
-        "signal": null
-      },
-      {
-        "action": "hold",
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
-        "value": 187.94,
+        "value": 179.07,
         "conviction_score": null,
         "signal": null
       },
@@ -85,7 +76,16 @@
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
-        "value": 189.2,
+        "value": 199.71,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "BREE.L",
+        "name": "Breedon Group plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 202.25,
         "conviction_score": null,
         "signal": null
       }
@@ -95,24 +95,24 @@
         "ticker": "FGP.L",
         "name": "FirstGroup plc",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 312.3,
-        "conviction_score": 0.6481000000000001,
+        "target_value": 313.35,
+        "conviction_score": 0.6507000000000001,
         "signal": "strong_buy"
       },
       {
         "ticker": "HIK.L",
         "name": "Hikma Pharmaceuticals PLC",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 312.3,
-        "conviction_score": 0.6193000000000001,
+        "target_value": 313.35,
+        "conviction_score": 0.6364000000000001,
         "signal": "strong_buy"
       },
       {
         "ticker": "ITV.L",
         "name": "ITV plc",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 312.3,
-        "conviction_score": 0.6110000000000001,
+        "target_value": 313.35,
+        "conviction_score": 0.6048000000000001,
         "signal": "strong_buy"
       }
     ],
@@ -124,9 +124,9 @@
       "ticker": "MEGP.L",
       "name": "ME Group International plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 112.0,
+      "severity": "action",
+      "message": "Mark 118.22 at/over take-profit 114.39",
+      "mark": 118.2239990234375,
       "stop_loss": 95.05,
       "take_profit": 114.39,
       "timing_signal": "insufficient_data"
@@ -137,7 +137,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1584.0,
+      "mark": 1572.199951171875,
       "stop_loss": 1411.78,
       "take_profit": 1661.1,
       "timing_signal": "insufficient_data"
@@ -148,7 +148,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 73.57550048828125,
+      "mark": 73.0,
       "stop_loss": 65.1,
       "take_profit": 79.11,
       "timing_signal": "insufficient_data"
@@ -159,7 +159,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 183.6719970703125,
+      "mark": 175.0,
       "stop_loss": 142.28,
       "take_profit": 185.85,
       "timing_signal": "insufficient_data"
@@ -169,8 +169,8 @@
       "name": "Breedon Group plc",
       "source": "paper",
       "severity": "action",
-      "message": "Mark 338.71 at/over take-profit 327.60",
-      "mark": 338.7080078125,
+      "message": "Mark 346.00 at/over take-profit 327.60",
+      "mark": 346.0,
       "stop_loss": 278.43,
       "take_profit": 327.6,
       "timing_signal": "insufficient_data"
@@ -694,7 +694,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-08-03T07:21:41.879485+00:00",
+    "generated_at": "2026-08-04T07:21:44.344369+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -710,13 +710,13 @@
     "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
-  "generated_at": "2026-08-03T07:21:41.879877+00:00",
+  "generated_at": "2026-08-04T07:21:44.344751+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,
   "selection": {
     "skip_timing_wait": true,
-    "min_conviction": 0.2,
+    "min_conviction": 0.25,
     "sector_cap": 0.3,
     "use_adjusted_signal": false,
     "require_research_accumulate": false,

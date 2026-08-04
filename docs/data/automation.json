@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-03T21:39:09.459549+00:00",
+  "generated_at": "2026-08-04T07:22:05.478361+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -17,7 +17,7 @@
       "trade_cost_pct": 0.03,
       "max_positions": 3,
       "skip_timing_wait": true,
-      "min_conviction": 0.25,
+      "min_conviction": 0.3,
       "sector_cap": 0.3,
       "track_id": "rules",
       "track_label": "Screen rules (control)",
@@ -189,15 +189,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 50.0,
+        "remaining_weekly_ops_usd": 43.2,
         "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 7.2,
-        "estimated_spend_weekly_ops_usd_this_week": 0.0,
-        "estimated_spend_usd_this_cycle": 24.4,
+        "estimated_spend_usd_this_week": 18.8,
+        "estimated_spend_weekly_ops_usd_this_week": 6.8,
+        "estimated_spend_usd_this_cycle": 36.0,
         "week_id": "2026-W32",
         "cycle_id": "2026-08-d8"
       },
@@ -225,7 +225,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-03T16:12:28.834881+00:00"
+      "updated_at": "2026-08-04T05:24:48.270871+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -241,14 +241,14 @@
       "paper_auto": {
         "name": "FTSE Paper Automation",
         "cron": "17 8 * * 1-5",
-        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (≈09:17 Europe/London in BST); 11:17 catch-up",
+        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (\u224809:17 Europe/London in BST); 11:17 catch-up",
         "workflow": "paper-auto.yml"
       },
       "library_ladder": {
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
+        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -298,6 +298,12 @@
         "cadence": "Daily 07:45 UTC (GitHub schedule + external cron). Workflow/artifact health, safe auto-fixes, ops engineering task drafting, daily SMTP summary on warn/fail. docs/ops/ops-monitor.md.",
         "workflow": "ops-monitor.yml"
       },
+      "ci_main_nightly": {
+        "name": "CI main nightly",
+        "cron": "30 7 * * *",
+        "cadence": "Daily 07:30 UTC full pytest on main (GitHub schedule + external cron). Catches latent test coupling to docs/data commits that skip push CI. Failures draft ci-fix tasks via ci-fix-responder. docs/ops/ci-fix-automation.md.",
+        "workflow": "ci-main-nightly.yml"
+      },
       "data_backup": {
         "name": "FTSE Data Backup",
         "cron": "30 12 * * 0",
@@ -314,7 +320,7 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-08-03T07:21:41.879877+00:00",
+        "at": "2026-08-04T07:21:44.344751+00:00",
         "kind": "paper_run",
         "title": "Paper automation checked (no action)",
         "detail": "waiting for open settle (75 min after 08:00 Europe/London)"
@@ -322,13 +328,13 @@
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-02T12:33:10.531346+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: smi → omxs30",
+        "title": "Focus advanced: smi \u2192 omxs30",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -341,12 +347,12 @@
         "at": "2026-08-02T11:04:38.063888+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus smi)",
-        "detail": "shortlist=None research created=26 updated=0 spend≈10.4"
+        "detail": "shortlist=None research created=26 updated=0 spend\u224810.4"
       },
       {
         "at": "2026-07-26T18:19:32.036441+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: psi20 → smi",
+        "title": "Focus advanced: psi20 \u2192 smi",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -358,7 +364,7 @@
       {
         "at": "2026-07-26T05:41:29.750591+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: atx → psi20",
+        "title": "Focus advanced: atx \u2192 psi20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -370,7 +376,7 @@
       {
         "at": "2026-07-25T06:02:07.067074+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: us_adr_asia → atx",
+        "title": "Focus advanced: us_adr_asia \u2192 atx",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -394,7 +400,7 @@
       {
         "at": "2026-07-18T18:33:47.281863+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sti → us_adr_asia",
+        "title": "Focus advanced: sti \u2192 us_adr_asia",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -406,7 +412,7 @@
       {
         "at": "2026-07-18T18:33:47.280727+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: hang_seng → sti",
+        "title": "Focus advanced: hang_seng \u2192 sti",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -418,7 +424,7 @@
       {
         "at": "2026-07-18T18:33:47.279140+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: bel20 → hang_seng",
+        "title": "Focus advanced: bel20 \u2192 hang_seng",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -430,7 +436,7 @@
       {
         "at": "2026-07-18T18:33:47.278138+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aex → bel20",
+        "title": "Focus advanced: aex \u2192 bel20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -442,7 +448,7 @@
       {
         "at": "2026-07-18T18:33:47.277118+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_mib → aex",
+        "title": "Focus advanced: ftse_mib \u2192 aex",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -454,7 +460,7 @@
       {
         "at": "2026-07-18T18:33:47.275978+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ibex35 → ftse_mib",
+        "title": "Focus advanced: ibex35 \u2192 ftse_mib",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -466,7 +472,7 @@
       {
         "at": "2026-07-18T18:33:47.274723+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aim → ibex35",
+        "title": "Focus advanced: aim \u2192 ibex35",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -478,7 +484,7 @@
       {
         "at": "2026-07-18T18:04:30.214468+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: tsx60 → aim",
+        "title": "Focus advanced: tsx60 \u2192 aim",
         "detail": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       },
       {
@@ -526,32 +532,32 @@
       {
         "at": "2026-07-18T13:49:17.502997+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: cac40 → tsx60",
+        "title": "Focus advanced: cac40 \u2192 tsx60",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.501764+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: dax → cac40",
+        "title": "Focus advanced: dax \u2192 cac40",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.500540+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: nasdaq100 → dax",
+        "title": "Focus advanced: nasdaq100 \u2192 dax",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.498573+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_smallcap → nasdaq100",
+        "title": "Focus advanced: ftse_smallcap \u2192 nasdaq100",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-17T04:51:50.477798+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:51:50.477265+00:00",
@@ -593,12 +599,12 @@
         "at": "2026-07-17T04:28:29.172645+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:28:29.172198+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: euro_stoxx50 → asx200",
+        "title": "Focus advanced: euro_stoxx50 \u2192 asx200",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -635,12 +641,12 @@
         "at": "2026-07-17T04:23:00.290382+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sp500 → euro_stoxx50",
+        "title": "Focus advanced: sp500 \u2192 euro_stoxx50",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -652,7 +658,7 @@
       {
         "at": "2026-07-16T14:09:40.872338+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       }
     ],
@@ -853,15 +859,15 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-08-03T07:21:41.879877+00:00",
+      "generated_at": "2026-08-04T07:21:44.344751+00:00",
       "acted": false,
       "note": "waiting for open settle (75 min after 08:00 Europe/London)",
       "gate": {
-        "local_time": "2026-08-03T08:21:28.335449+01:00",
+        "local_time": "2026-08-04T08:21:28.284919+01:00",
         "trading_day": true,
         "after_settle": false,
-        "market_open_at": "2026-08-03T08:00:00+01:00",
-        "settle_at": "2026-08-03T09:15:00+01:00",
+        "market_open_at": "2026-08-04T08:00:00+01:00",
+        "settle_at": "2026-08-04T09:15:00+01:00",
         "can_act": false,
         "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
       },
