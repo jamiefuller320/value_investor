@@ -56,6 +56,17 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20_%202025%20Interim%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20FY%202024%20Results%20Presentation%20-%2006032025.pdf",
     ],
+    "MEGP.L": [
+        "https://me-group.com/wp-content/uploads/2026/03/ME-Group-Annual-Report-2025.pdf",
+        "https://me-group.com/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results.pdf",
+        "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-RNS-FINAL.pdf",
+        "https://me-group.com/wp-content/uploads/2025/02/ME-Group-Annual-Report-2024.pdf",
+    ],
+    "FGP.L": [
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/firstgroup-plc-fy-2025-results-presentation.pdf",
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/251118-firstgroup-plc-h1-2026-results-presentation.pdf",
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/press-release/firstgroup-plc-h1-2026-results.pdf",
+    ],
 }
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik10}.json"
@@ -2180,6 +2191,115 @@ def _is_ir_allowlist_row(row: dict[str, Any]) -> bool:
 
 
 IR_BODY_FETCH_RETRIES = 2
+IR_BODY_MIN_CHARS = 200
+_IR_ROW_TOKEN_SKIP = frozenset(
+    {"pdf", "vfinal", "final", "allowlist", "document", "media", "files", "presentation"}
+)
+_IR_PERIOD_HEADLINE_CUES: dict[str, tuple[str, ...]] = {
+    "annual": ("full year", "final results", "annual results", "annual report", "fy "),
+    "interim": ("half year", "interim", "h1 ", "h2 "),
+    "trading_update": ("trading update", "trading statement", "trading"),
+}
+
+
+def _ir_row_search_tokens(row: dict[str, Any]) -> set[str]:
+    """Tokens from an IR allowlist URL/headline for Investegate headline matching."""
+    url = str(row.get("url") or "")
+    headline = str(row.get("headline") or "")
+    filename = url.rsplit("/", 1)[-1].lower()
+    blob = f"{filename} {headline.lower()}"
+    return {
+        tok
+        for tok in re.split(r"[^a-z0-9]+", blob)
+        if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP
+    }
+
+
+def _match_ir_row_to_investegate(
+    row: dict[str, Any],
+    candidates: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Pick the best Investegate RNS row for an IR allowlist PDF that failed extraction."""
+    if not candidates:
+        return None
+    period = str(row.get("period") or "other")
+    tokens = _ir_row_search_tokens(row)
+    years = {tok for tok in tokens if re.fullmatch(r"20\d{2}", tok)}
+
+    best: dict[str, Any] | None = None
+    best_score = -1
+    for candidate in candidates:
+        headline = str(candidate.get("headline") or "").lower()
+        cand_period = str(candidate.get("period") or classify_filing_period(headline))
+        score = 0
+        if period != "other" and cand_period == period:
+            score += 50
+        elif period != "other":
+            cues = _IR_PERIOD_HEADLINE_CUES.get(period, ())
+            if any(cue in headline for cue in cues):
+                score += 30
+        score += sum(10 for tok in tokens if tok in headline)
+        if years and any(year in headline for year in years):
+            score += 20
+        if score > best_score:
+            best_score = score
+            best = candidate
+    return best if best_score >= 20 else None
+
+
+def _fetch_investegate_html_body(url: str) -> str | None:
+    """Download Investegate RNS HTML narrative without upgrading to the LSE PDF."""
+    if "investegate.co.uk/announcement/" not in url:
+        return None
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("Investegate HTML body fetch failed for %s: %s", url, exc)
+        return None
+    text = _extract_investegate_html_text(html)
+    if not _filing_text_is_substantive(text, min_chars=IR_BODY_MIN_CHARS):
+        return None
+    if len(text) > FILINGS_BODY_MAX_CHARS:
+        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return text
+
+
+def _fetch_ir_allowlist_body(
+    row: dict[str, Any],
+    *,
+    ticker: str,
+    company_name: str = "",
+    investegate_cache: list[dict[str, Any]] | None = None,
+) -> tuple[str | None, str | None]:
+    """
+    Fetch IR allowlist text from the PDF URL, falling back to Investegate RNS HTML.
+
+    Returns ``(body, source)`` where ``source`` is ``pdf``, ``investegate_html``, or ``None``.
+    Bodies shorter than :data:`IR_BODY_MIN_CHARS` or failing the substantive gate are rejected.
+    """
+    url = str(row.get("url") or "")
+    if not url:
+        return None, None
+
+    body = fetch_filing_body(url)
+    if body and _filing_text_is_substantive(body, min_chars=IR_BODY_MIN_CHARS):
+        return body, "pdf"
+
+    if not str(ticker or "").upper().endswith(".L"):
+        return None, None
+
+    cache = investegate_cache
+    if cache is None:
+        cache = fetch_filings_investegate_company(ticker=ticker, company_name=company_name)
+    matched = _match_ir_row_to_investegate(row, cache)
+    if not matched:
+        return None, None
+    ig_url = str(matched.get("url") or "")
+    html_body = _fetch_investegate_html_body(ig_url)
+    if html_body:
+        return html_body, "investegate_html"
+    return None, None
 
 
 def merge_ir_allowlist_filings(
@@ -2233,6 +2353,7 @@ def refetch_ir_allowlist_filing_bodies(
     filings_dir: Path,
     ticker: str,
     *,
+    company_name: str = "",
     max_bodies: int = 20,
     max_retries: int = IR_BODY_FETCH_RETRIES,
     allowlist_path: Path | None = None,
@@ -2253,6 +2374,7 @@ def refetch_ir_allowlist_filing_bodies(
             "fetched": 0,
             "with_body_before": 0,
             "with_body_after": 0,
+            "investegate_fallbacks": 0,
             "merge": merge_meta,
             "note": "no filings_index.json",
         }
@@ -2264,6 +2386,7 @@ def refetch_ir_allowlist_filing_bodies(
             "fetched": 0,
             "with_body_before": 0,
             "with_body_after": 0,
+            "investegate_fallbacks": 0,
             "merge": merge_meta,
             "note": f"unreadable index: {exc}",
         }
@@ -2278,13 +2401,22 @@ def refetch_ir_allowlist_filing_bodies(
             "fetched": 0,
             "with_body_before": before,
             "with_body_after": before,
+            "investegate_fallbacks": 0,
             "merge": merge_meta,
             "note": "no missing IR allowlist bodies",
         }
 
+    investegate_cache: list[dict[str, Any]] | None = None
+    if str(ticker or "").upper().endswith(".L"):
+        investegate_cache = fetch_filings_investegate_company(
+            ticker=ticker,
+            company_name=company_name,
+        )
+
     bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
     retries_used = 0
+    investegate_fallbacks = 0
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
@@ -2295,9 +2427,14 @@ def refetch_ir_allowlist_filing_bodies(
             and not item.get("has_body")
         ):
             body = None
-            url = str(item["url"])
+            fetch_source: str | None = None
             for attempt in range(max_retries + 1):
-                body = fetch_filing_body(url)
+                body, fetch_source = _fetch_ir_allowlist_body(
+                    item,
+                    ticker=ticker,
+                    company_name=company_name,
+                    investegate_cache=investegate_cache,
+                )
                 if body:
                     break
                 if attempt < max_retries:
@@ -2308,6 +2445,8 @@ def refetch_ir_allowlist_filing_bodies(
                 path.write_text(body, encoding="utf-8")
                 item["has_body"] = True
                 item["body_path"] = str(path)
+                if fetch_source == "investegate_html":
+                    investegate_fallbacks += 1
                 downloaded += 1
         updated.append(item)
 
@@ -2322,6 +2461,7 @@ def refetch_ir_allowlist_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "retries_used": retries_used,
+        "investegate_fallbacks": investegate_fallbacks,
         "merge": merge_meta,
         "note": "refetch_ir_allowlist_filing_bodies",
     }

@@ -350,6 +350,7 @@ def prepare_gap_fill_source_pack(
         ir_refetch = refetch_ir_allowlist_filing_bodies(
             filings_dir,
             ticker,
+            company_name=company_name,
             max_bodies=20,
         )
         if int(ir_refetch.get("fetched") or 0) > 0:
@@ -480,6 +481,7 @@ def execute_planned_alternate_sources(
             last_refetch = refetch_ir_allowlist_filing_bodies(
                 filings_dir,
                 ticker,
+                company_name=company_name,
                 max_bodies=20,
             )
             prune_orphaned_filing_bodies(filings_dir)
