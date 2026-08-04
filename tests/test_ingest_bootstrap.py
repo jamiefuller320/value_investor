@@ -105,6 +105,7 @@ def test_sanitize_filings_index_prunes_misattributed_rows(tmp_path: Path):
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert len(payload["filings"]) == 1
     assert payload["filings"][0]["period"] == "annual"
+    assert payload["filings"][0]["entity_type"] == "consolidated"
 
 
 def test_bootstrap_buy_tier_research_migrates_strong_buy(tmp_path: Path, monkeypatch):

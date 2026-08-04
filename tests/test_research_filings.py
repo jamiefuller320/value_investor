@@ -8,6 +8,8 @@ from unittest.mock import patch
 
 from value_investor.research.filings import (
     asx_markit_file_url,
+    classify_companies_house_period,
+    classify_filing_entity_type,
     classify_filing_period,
     classify_rns_headline,
     enrich_filing_rows,
@@ -963,6 +965,95 @@ def test_fetch_filings_ticker_api_prefers_pdf_publication(monkeypatch):
     assert len(rows) == 1
     assert rows[0]["url"].endswith(".content.pdf")
     assert "ME Group" in rows[0]["headline"]
+
+
+def test_classify_companies_house_period_group_and_interim():
+    assert classify_companies_house_period("accounts-with-accounts-type-group") == "annual"
+    assert classify_companies_house_period("accounts-with-accounts-type-interim") == "interim"
+    assert classify_companies_house_period("accounts-with-accounts-type-full") == "annual"
+
+
+def test_classify_filing_entity_type_s838_from_body():
+    row = {
+        "source": "companies_house",
+        "headline": "Companies House accounts — accounts-with-accounts-type-interim",
+        "summary": "accounts-with-accounts-type-interim",
+        "category": "accounts",
+    }
+    s838_body = (
+        "Interim parent company financial statements for the 6-month period ended 30 June 2024. "
+        "These interim accounts have been prepared, under sections 836 and 838 of the Companies Act 2006, "
+        "for the purposes of confirming that the Company now has sufficient distributable reserves."
+    )
+    assert classify_filing_entity_type(row, body_snippet=s838_body) == "s838_holding"
+    assert classify_filing_entity_type(
+        {
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+        },
+        body_snippet="Vistry Group PLC Annual Report 2022 Strategic report",
+    ) == "consolidated"
+    assert classify_filing_entity_type(
+        {"headline": "Form 8.3 - Rotork plc"},
+    ) == "holding_disclosure"
+
+
+def test_sanitize_filings_index_reclassifies_ch_period_and_entity_type(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_path = bodies_dir / "ch_interim.txt"
+    body_path.write_text(
+        "Interim parent company financial statements prepared under s838 of the Act "
+        "for confirming distributable reserves. Information about Vistry Group PLC solely "
+        "as an individual company.",
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ch_interim",
+                        "source": "companies_house",
+                        "headline": "Companies House accounts — accounts-with-accounts-type-interim",
+                        "summary": "accounts-with-accounts-type-interim",
+                        "period": "other",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    },
+                    {
+                        "id": "ch_group",
+                        "source": "companies_house",
+                        "headline": "Companies House accounts — accounts-with-accounts-type-group",
+                        "summary": "accounts-with-accounts-type-group",
+                        "period": "other",
+                        "has_body": False,
+                    },
+                ],
+                "summary": {"total": 2, "with_body": 1, "annual": 0, "interim": 0, "other": 2},
+            }
+        ),
+        encoding="utf-8",
+    )
+    from value_investor.research.filings import sanitize_filings_index
+
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Vistry Group PLC",
+        ticker="VTY.L",
+    )
+    assert result["reclassified"] == 2
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    interim = next(row for row in saved["filings"] if row["id"] == "ch_interim")
+    group = next(row for row in saved["filings"] if row["id"] == "ch_group")
+    assert interim["period"] == "interim"
+    assert interim["entity_type"] == "s838_holding"
+    assert group["period"] == "annual"
+    assert group["entity_type"] == "consolidated"
+    assert saved["summary"]["annual"] == 1
+    assert saved["summary"]["interim"] == 1
 
 
 def test_classify_rns_headline_annual_interim_and_trading_update():

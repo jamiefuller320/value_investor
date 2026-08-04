@@ -12,6 +12,8 @@ Regimes:
 
 UK RNS headlines are tagged ``period=annual|interim|trading_update|other`` via
 :classify_rns_headline`; SEC forms use annual/interim/other from form type.
+Companies House rows also carry ``entity_type=consolidated|s838_holding|holding_disclosure|other``
+so parent-company s.838 distributable-reserve stubs are not treated as group results.
 """
 
 from __future__ import annotations
@@ -456,8 +458,9 @@ def _apply_headline_period(
     row: dict[str, Any],
     *,
     candidate: dict[str, Any] | None = None,
+    body_snippet: str | None = None,
 ) -> dict[str, Any]:
-    """Re-classify annual/interim/trading_update/other from headline cues."""
+    """Re-classify period and entity_type from headline, CH metadata, and body cues."""
     item = dict(row)
     if candidate:
         if candidate.get("headline"):
@@ -465,9 +468,22 @@ def _apply_headline_period(
         if candidate.get("published_at") and not item.get("published_at"):
             item["published_at"] = candidate["published_at"]
     headline = str(item.get("headline") or "")
-    period = classify_filing_period(headline, category=item.get("category"))
+    summary = str(item.get("summary") or "")
+    category = item.get("category")
+    period = classify_companies_house_period(summary or headline, category=category)
+    if period is None:
+        period = classify_filing_period(
+            headline,
+            category=category,
+            form=item.get("form"),
+        )
     item["period"] = period
-    item["priority"] = _priority_score(headline, period)
+    item["entity_type"] = classify_filing_entity_type(item, body_snippet=body_snippet)
+    item["priority"] = _priority_score(
+        headline,
+        period,
+        entity_type=str(item.get("entity_type") or "other"),
+    )
     return item
 
 
@@ -926,6 +942,103 @@ def classify_filing_period(
     return classify_rns_headline(headline, category=category)
 
 
+def classify_companies_house_period(
+    description: str,
+    *,
+    category: str | None = None,
+) -> str | None:
+    """Map Companies House account filing descriptions to ``period`` tags."""
+    blob = f"{description or ''} {category or ''}".lower()
+    if re.search(r"accounts-type-(?:group|full|total-exemption-full|medium|small)", blob):
+        return "annual"
+    if re.search(r"accounts-type-interim", blob):
+        return "interim"
+    return None
+
+
+_S838_BODY_PATTERNS = (
+    r"\bs\.?\s*838\b",
+    r"\bsection\s+838\b",
+    r"\bsections\s+836\s+and\s+838\b",
+    r"\bparent company financial statements\b",
+    r"\bsolely as an individual company\b",
+    r"\binformation about .+ solely as an individual company\b",
+    r"\bdistributable reserves?\b",
+)
+_HOLDING_DISCLOSURE_PATTERNS = (
+    r"\bform\s+8\.3\b",
+    r"\bsection\s+838\b.*\bdisclosure\b",
+    r"\bholding[s]?\s+disclosure\b",
+)
+
+
+def classify_filing_entity_type(
+    row: dict[str, Any],
+    *,
+    body_snippet: str | None = None,
+) -> str:
+    """
+    Tag whether a filing is consolidated group results vs a holding / s.838 stub.
+
+    Returns ``consolidated``, ``s838_holding``, ``holding_disclosure``, or ``other``.
+    """
+    headline = str(row.get("headline") or "")
+    summary = str(row.get("summary") or "")
+    category = str(row.get("category") or "")
+    source = str(row.get("source") or "")
+    blob = f"{headline} {summary} {category}".lower()
+
+    if any(re.search(pat, blob, flags=re.I) for pat in _HOLDING_DISCLOSURE_PATTERNS):
+        return "holding_disclosure"
+
+    body = (body_snippet or "").lower()
+    if body and any(re.search(pat, body, flags=re.I) for pat in _S838_BODY_PATTERNS):
+        if re.search(r"\bparent company\b", body, flags=re.I) or re.search(
+            r"\bindividual company\b", body, flags=re.I
+        ):
+            return "s838_holding"
+
+    if source == "companies_house":
+        if re.search(r"accounts-type-interim", blob):
+            return "s838_holding" if body and "s838" in body else "consolidated"
+        if re.search(r"accounts-type-(?:group|full)", blob):
+            return "consolidated"
+
+    form = str(row.get("form") or category or "").upper()
+    if form in SEC_ANNUAL_FORMS | SEC_INTERIM_FORMS:
+        return "consolidated"
+
+    if classify_filing_period(headline, category=category or None, form=row.get("form")) in {
+        "annual",
+        "interim",
+    }:
+        return "consolidated"
+
+    return "other"
+
+
+def _body_snippet_for_row(row: dict[str, Any], filings_dir: Path) -> str | None:
+    """Read a short body excerpt for entity-type classification."""
+    filings_dir = Path(filings_dir)
+    body_path = row.get("body_path")
+    candidates: list[Path] = []
+    if body_path:
+        path = Path(str(body_path))
+        candidates.append(path if path.is_absolute() else filings_dir.parent / path)
+        candidates.append(filings_dir / "bodies" / path.name)
+    row_id = str(row.get("id") or "")
+    if row_id:
+        candidates.append(filings_dir / "bodies" / f"{row_id}.txt")
+    for path in candidates:
+        if not path.is_file():
+            continue
+        try:
+            return path.read_text(encoding="utf-8", errors="replace")[:4000]
+        except OSError:
+            continue
+    return None
+
+
 def _filing_id(*parts: str) -> str:
     raw = "|".join(parts)
     return hashlib.sha1(raw.encode()).hexdigest()[:16]
@@ -1266,7 +1379,12 @@ def fetch_filings_sec_edgar(
     return rows
 
 
-def _priority_score(headline: str, period: str) -> int:
+def _priority_score(
+    headline: str,
+    period: str,
+    *,
+    entity_type: str = "other",
+) -> int:
     score = 0
     if period == "annual":
         score += 100
@@ -1279,6 +1397,10 @@ def _priority_score(headline: str, period: str) -> int:
         score += 20
     if "transaction in own shares" in lower or "director/pdmr" in lower:
         score -= 50
+    if entity_type == "s838_holding":
+        score -= 40
+    elif entity_type == "holding_disclosure":
+        score -= 60
     return score
 
 
@@ -2928,7 +3050,13 @@ def sanitize_filings_index(
         ticker=ticker,
         regime=regime,
     )
-    reclassified = [_apply_headline_period(row) for row in filtered]
+    reclassified = [
+        _apply_headline_period(
+            row,
+            body_snippet=_body_snippet_for_row(row, filings_dir),
+        )
+        for row in filtered
+    ]
     pruned = len(filings) - len(reclassified)
     changed = pruned > 0 or reclassified != filings
     if changed:
@@ -3096,6 +3224,13 @@ def ingest_filings(
         company_name=company_name,
         ticker=ticker,
     )
+    merged = [
+        _apply_headline_period(
+            row,
+            body_snippet=_body_snippet_for_row(row, filings_dir),
+        )
+        for row in merged
+    ]
 
     if regime == "sec_edgar":
         note = (
