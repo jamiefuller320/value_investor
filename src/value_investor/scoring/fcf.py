@@ -249,6 +249,81 @@ def resolve_free_cashflow(row: pd.Series) -> float | None:
     return _float_or_none(row.get("free_cashflow"))
 
 
+FCF_DIVERGENCE_THRESHOLD = 0.25
+
+
+def _fcf_sign(value: float) -> int:
+    if value < 0:
+        return -1
+    if value > 0:
+        return 1
+    return 0
+
+
+def fcf_values_diverge(
+    canonical: float | None,
+    screen_ttm: float | None,
+    *,
+    threshold: float = FCF_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """True when sign differs or relative magnitude gap exceeds ``threshold``."""
+    if canonical is None or screen_ttm is None:
+        return False
+    if canonical == screen_ttm:
+        return False
+    if _fcf_sign(canonical) != _fcf_sign(screen_ttm):
+        return True
+    denominator = max(abs(canonical), abs(screen_ttm))
+    if denominator == 0:
+        return False
+    return abs(canonical - screen_ttm) / denominator > threshold
+
+
+def _format_fcf_compact(value: float) -> str:
+    sign = "−" if value < 0 else ""
+    abs_val = abs(value)
+    if abs_val >= 1_000_000:
+        scaled = abs_val / 1_000_000
+        if scaled == int(scaled):
+            return f"{sign}${int(scaled)}M"
+        return f"{sign}${scaled:.1f}M"
+    if abs_val >= 1_000:
+        scaled = abs_val / 1_000
+        if scaled == int(scaled):
+            return f"{sign}${int(scaled)}K"
+        return f"{sign}${scaled:.1f}K"
+    if abs_val == int(abs_val):
+        return f"{sign}${int(abs_val)}"
+    return f"{sign}${abs_val:.1f}"
+
+
+def format_fcf_divergence_action_note(
+    canonical: float,
+    screen_ttm: float,
+) -> str:
+    """Surface both FCF figures when filing-aligned and screen TTM disagree."""
+    return (
+        f"FCF filing-aligned {_format_fcf_compact(canonical)} "
+        f"vs screen TTM {_format_fcf_compact(screen_ttm)}"
+    )
+
+
+def append_fcf_divergence_to_action_note(
+    action_note: str,
+    *,
+    canonical: float | None,
+    screen_ttm: float | None,
+) -> str:
+    """Append a compact FCF bridge note when canonical and screen TTM diverge."""
+    if not fcf_values_diverge(canonical, screen_ttm):
+        return action_note
+    assert canonical is not None and screen_ttm is not None
+    divergence_note = format_fcf_divergence_action_note(canonical, screen_ttm)
+    if action_note:
+        return f"{action_note} | {divergence_note}"
+    return divergence_note
+
+
 def enrich_universe_with_canonical_fcf(
     universe: pd.DataFrame,
     output_dir: Path | None = None,

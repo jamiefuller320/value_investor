@@ -10,7 +10,11 @@ import pandas as pd
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
 from value_investor.scoring import evaluate_universe
 from value_investor.models.risk import EarningsQualityModel
-from value_investor.scoring.fcf import reconcile_fcf
+from value_investor.scoring.fcf import (
+    append_fcf_divergence_to_action_note,
+    fcf_values_diverge,
+    reconcile_fcf,
+)
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
 from value_investor.summary import build_company_reports
@@ -560,6 +564,32 @@ def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
     assert bundle["cashflow_metrics_free_cashflow"] == 119_000_000.0
 
 
+def test_fcf_values_diverge_on_sign_or_magnitude():
+    assert fcf_values_diverge(119_000_000.0, -66_125_000.0) is True
+    assert fcf_values_diverge(100.0, 80.0) is False
+    assert fcf_values_diverge(100.0, 70.0, threshold=0.25) is True
+    assert fcf_values_diverge(100.0, 100.0) is False
+    assert fcf_values_diverge(None, -66_125_000.0) is False
+
+
+def test_append_fcf_divergence_to_action_note():
+    note = append_fcf_divergence_to_action_note(
+        "Strong Buy — neutral timing",
+        canonical=119_000_000.0,
+        screen_ttm=-66_125_000.0,
+    )
+    assert "Strong Buy — neutral timing" in note
+    assert "FCF filing-aligned $119M" in note
+    assert "screen TTM −$66.1M" in note
+
+    unchanged = append_fcf_divergence_to_action_note(
+        "Buy — neutral timing",
+        canonical=100.0,
+        screen_ttm=90.0,
+    )
+    assert unchanged == "Buy — neutral timing"
+
+
 def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     sources = tmp_path / "research" / "HIK.L" / "sources"
     sources.mkdir(parents=True)
@@ -582,6 +612,7 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     assert snapshot["fcf"]["canonical"] == 119_000_000.0
     assert snapshot["fcf"]["source"] == "filing_aligned_ocf_capex"
     assert snapshot["fcf"]["screen_ttm"] == -66_125_000.0
-    assert snapshot["cash_conversion_overlay"] is True
-    assert snapshot["adjusted_signal"] == "buy"
-    assert "Cash-conversion overlay" in snapshot["summary"]
+    assert snapshot["cash_conversion_overlay"] is False
+    assert snapshot["adjusted_signal"] == "strong_buy"
+    assert "FCF filing-aligned $119M" in snapshot["action_note"]
+    assert "screen TTM −$66.1M" in snapshot["action_note"]

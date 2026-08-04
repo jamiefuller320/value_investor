@@ -467,8 +467,8 @@ def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
-def test_enrich_signals_with_cash_conversion_overlay_uses_trailing_fcf():
-    """Cap when screen TTM FCF is negative even if canonical filing FCF is positive."""
+def test_enrich_signals_with_cash_conversion_overlay_uses_canonical_fcf():
+    """Do not cap when canonical FCF is positive even if preserved screen TTM is negative."""
     signals = pd.DataFrame([
         {
             "ticker": "HIK.L",
@@ -496,8 +496,8 @@ def test_enrich_signals_with_cash_conversion_overlay_uses_trailing_fcf():
     enriched = enrich_signals_with_cash_conversion_overlay(signals, model_results)
 
     assert enriched.iloc[0]["signal"] == "strong_buy"
-    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
-    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is False
+    assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
 
 
 def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Path):
