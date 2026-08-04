@@ -29,7 +29,7 @@ Weekday **ingest-loop** (Mon/Wed/Fri) improves filing bodies offline; this runbo
 |-------|------|--------|
 | **0 — Baseline** | **Next Sunday cycle** (scheduled engineering-loop test) | Let `SUITE=sunday` run normally. Confirm compile → queue → agent → merge. Do **not** run this runbook yet. |
 | **1 — First manual cycle** | **After** Sunday succeeds **and** the weekday engineering queue drains (`open_count=0`, no `pr_open`) | Follow [Procedure](#procedure) below once. Record spend and whether Analysis conclusions changed materially. |
-| **2 — Habit or automation** | After Phase 1 succeeds | Repeat manually when a batch of engineering merges lands mid-week, **or** revisit automating dispatch when the queue idles (deferred — see [deferred-review.md](../deferred-review.md)). |
+| **2 — Habit or automation** | After Phase 1 succeeds | Repeat manually when needed, **or** rely on **auto-chain** (L97): when an ingest/scoring/prompt/coverage engineering PR merges and the queue idles, `engineering-queue.yml` may dispatch `automation-orchestrator` `suite=email_only` (max **2/week**, `weekly_ops` headroom ≥ ~$18, no active email/orchestrator run). Log: `docs/data/accelerated_review.json`. |
 
 **First planned use:** the week starting **Sunday 2026-08-03** (after the baseline Sunday run completes and engineering tasks from that compile are merged or parked).
 
@@ -125,6 +125,30 @@ Review new open tasks:
 ftse-engineering list
 gh run list --workflow=engineering-queue.yml --limit 3
 ```
+
+## Automated mid-week chain (L97)
+
+When an engineering task PR merges on `main` (`cursor/eng-*-1de3` branches), the
+**engineering-queue** workflow:
+
+1. Marks the task merged and reconciles queue state.
+2. If no further engineering dispatch is needed (`open_count=0`, `pr_open_count=0`).
+3. Evaluates guards via `ftse-engineering try-accelerated-email`.
+4. On pass: records the run in `docs/data/accelerated_review.json` and dispatches
+   `automation-orchestrator.yml` with `suite=email_only`, `force=true`.
+
+Guards (all must pass):
+
+| Guard | Detail |
+|-------|--------|
+| Queue idle | `open_count=0`, `pr_open_count=0` |
+| Material merge | Merged task area ∈ `ingest`, `scoring`, `prompt`, `coverage` |
+| Weekday | Skips Sunday (scheduled `SUITE=sunday` handles that) |
+| `weekly_ops` headroom | ≥ ~$18 remaining after estimated email_only cost |
+| Weekly cap | Max 2 mid-week `email_only` chains per ISO week |
+| No active runs | `email-report.yml` and `automation-orchestrator.yml` not in flight |
+
+Manual override remains available via [Procedure](#procedure) step 1.
 
 ## Costs and side effects
 

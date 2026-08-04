@@ -209,6 +209,66 @@ jobs:
           file_pattern: docs/data/engineering_tasks.json
           skip_fetch: false
 
+      - name: Evaluate accelerated email_only chain
+        if: >-
+          steps.eng_branch.outputs.is_task == 'true'
+          && steps.gate.outputs.should_dispatch != 'true'
+        id: accel
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGED_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          TASK_ID=$(python3 - <<'PY'
+          from value_investor.engineering_queue import task_id_from_branch
+          import os
+          print(task_id_from_branch(os.environ.get("MERGED_BRANCH", "")) or "")
+          PY
+          )
+          echo "merged_task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+          ftse-engineering try-accelerated-email \
+            --open-prs-json /tmp/open_prs.json \
+            --merged-task-id "$TASK_ID" \
+            --allow-skip --json | tee /tmp/accel_email.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/accel_email.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+                  f"reason={data.get('reason', '')}\n"
+              )
+          PY
+
+      - name: Chain email_only orchestrator
+        if: steps.accel.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ftse-engineering record-accelerated-email \
+            --source auto_queue_drain \
+            --merged-task-id "${{ steps.accel.outputs.merged_task_id }}" \
+            --note "${{ steps.accel.outputs.reason }}"
+          gh workflow run automation-orchestrator.yml \
+            -f suite=email_only \
+            -f force=true
+          echo "Dispatched automation-orchestrator email_only (force) after queue drain"
+
+      - name: Sync main before accelerated review log commit
+        if: steps.accel.outputs.should_dispatch == 'true'
+        run: git pull --rebase --autostash origin main
+
+      - name: Commit accelerated review log
+        if: steps.accel.outputs.should_dispatch == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: log mid-week email_only chain [skip ci]"
+          file_pattern: docs/data/accelerated_review.json
+          skip_fetch: false
+
       - name: Queue idle summary
         if: steps.gate.outputs.should_dispatch != 'true'
         run: |
