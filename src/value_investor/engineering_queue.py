@@ -335,6 +335,7 @@ def snapshot_ingest_health(
         Path("output/research"),
         Path("docs/data/library/markets"),
     ]
+    prefer_committed_research = research_roots is None
     tickers = _buy_tier_tickers(latest_path)
     zero_body = 0
     indexed_without_body = 0
@@ -348,8 +349,17 @@ def snapshot_ingest_health(
             unmeasured_tickers.append(ticker)
             continue
         measured += 1
-        canonical = Path("docs/data/research") / ticker / "sources" / "filings" / "filings_index.json"
-        index_path = canonical if canonical.exists() else paths[0]
+        if prefer_committed_research:
+            canonical = (
+                Path("docs/data/research")
+                / ticker
+                / "sources"
+                / "filings"
+                / "filings_index.json"
+            )
+            index_path = canonical if canonical.exists() else paths[0]
+        else:
+            index_path = paths[0]
         coverage = _coverage_from_index(index_path)
         with_body += coverage["filings_with_body"]
         indexed_without_body += coverage["indexed_without_body"]
