@@ -545,6 +545,7 @@ def run_ingest_improvement_pass(
                 ir_refetch = refetch_ir_allowlist_filing_bodies(
                     sources_dir / "filings",
                     target.ticker,
+                    company_name=target.name,
                     max_bodies=20,
                 )
                 if int(ir_refetch.get("fetched") or 0) > 0:

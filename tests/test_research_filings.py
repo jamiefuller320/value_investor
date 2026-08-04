@@ -46,6 +46,8 @@ from value_investor.research.filings import (
     _compose_pdf_body_text,
     _extract_pdf_depth_sections,
     _filing_text_is_substantive,
+    _fetch_ir_allowlist_body,
+    _match_ir_row_to_investegate,
 )
 from value_investor.research.ingest import (
     apply_cashflow_metrics_fallback,
@@ -1892,11 +1894,19 @@ def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path,
         attempts["count"] += 1
         if attempts["count"] == 1:
             return None
-        return "Trading update narrative " + ("x" * 220)
+        return (
+            "Trading update revenue growth 2% to 4% and operating profit "
+            "in the range of $720 million with dividend guidance."
+            + ("x" * 220)
+        )
 
     monkeypatch.setattr(
         "value_investor.research.filings.fetch_filing_body",
         fake_fetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
     )
 
     result = refetch_ir_allowlist_filing_bodies(
@@ -1973,10 +1983,15 @@ def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
         "value_investor.research.filings.fetch_filing_body",
         lambda url: sample_body if url == fy_url else None,
     )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
 
     result = refetch_ir_allowlist_filing_bodies(
         filings_dir,
         "ITV.L",
+        company_name="ITV plc",
         max_bodies=5,
         allowlist_path=allowlist_path,
     )
@@ -1986,4 +2001,202 @@ def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
     body_text = (filings_dir / "bodies" / f"ir_{digest}.txt").read_text(encoding="utf-8")
     assert "Studios margin" in body_text
     assert "Dividend policy" in body_text
+
+
+def test_fetch_ir_allowlist_body_rejects_short_pdf(monkeypatch):
+    url = "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf"
+    row = {
+        "id": "ir_a9733d0de6aec27d",
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — april-2026-trading-update-vfinal.pdf",
+        "url": url,
+        "period": "trading_update",
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda _url: "too short",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+
+    body, source = _fetch_ir_allowlist_body(
+        row,
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        investegate_cache=[],
+    )
+    assert body is None
+    assert source is None
+
+
+def test_fetch_ir_allowlist_body_investegate_fallback_hik_trading_update(monkeypatch):
+    url = "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf"
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/hikma-pharmaceuticals--hik/"
+        "trading-statement/9533700"
+    )
+    row = {
+        "id": "ir_a9733d0de6aec27d",
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — april-2026-trading-update-vfinal.pdf",
+        "url": url,
+        "period": "trading_update",
+    }
+    investegate_rows = [
+        {
+            "source": "investegate_direct",
+            "headline": "Trading Statement",
+            "url": investegate_url,
+            "period": "trading_update",
+        }
+    ]
+    sample_html = (
+        "Hikma reiterates full year 2026 guidance following encouraging start to the year. "
+        "Group revenue to grow in the range of 2% to 4% and operating profit "
+        "in the range of $720 million to $770 million. Dividend of 48 cents per share."
+        + ("x" * 220)
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda _url: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_investegate_html_body",
+        lambda ig_url: sample_html if ig_url == investegate_url else None,
+    )
+
+    body, source = _fetch_ir_allowlist_body(
+        row,
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        investegate_cache=investegate_rows,
+    )
+    assert source == "investegate_html"
+    assert "720 million" in (body or "")
+    assert _filing_text_is_substantive(body or "")
+
+
+def test_match_ir_row_to_investegate_prefers_period_and_tokens():
+    row = {
+        "url": "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf",
+        "headline": "IR allowlist document — april-2026-trading-update-vfinal.pdf",
+        "period": "trading_update",
+    }
+    candidates = [
+        {
+            "headline": "Full Year Results 2025",
+            "url": "https://www.investegate.co.uk/announcement/rns/hik/fy/1",
+            "period": "annual",
+        },
+        {
+            "headline": "Trading Statement",
+            "url": "https://www.investegate.co.uk/announcement/rns/hik/trading/1",
+            "period": "trading_update",
+        },
+    ]
+    matched = _match_ir_row_to_investegate(row, candidates)
+    assert matched is not None
+    assert matched["headline"] == "Trading Statement"
+
+
+def test_refetch_ir_allowlist_filing_bodies_investegate_fallback(tmp_path: Path, monkeypatch):
+    allowlist_path = tmp_path / "ir_urls.json"
+    url = "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf"
+    allowlist_path.write_text(json.dumps({"urls": {"HIK.L": [url]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    digest = "a9733d0de6aec27d"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest}",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — april-2026-trading-update-vfinal.pdf",
+                        "url": url,
+                        "period": "trading_update",
+                        "has_body": False,
+                        "body_path": None,
+                        "priority": 130,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/hikma-pharmaceuticals--hik/"
+        "trading-statement/9533700"
+    )
+    fallback_body = (
+        "Hikma reiterates full year 2026 guidance. Revenue growth 2% to 4%. "
+        "Operating profit $720 million to $770 million."
+        + ("x" * 220)
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda _url: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [
+            {
+                "headline": "Trading Statement",
+                "url": investegate_url,
+                "period": "trading_update",
+            }
+        ],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_investegate_html_body",
+        lambda ig_url: fallback_body if ig_url == investegate_url else None,
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    assert result["investegate_fallbacks"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / f"ir_{digest}.txt").exists()
+
+
+def test_fetch_filings_ir_allowlist_fgp_l(tmp_path: Path):
+    """FGP.L IR results decks are allowlisted for FCF bridge and forward guidance."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    mapping = load_ir_url_allowlist(allowlist_path)
+    assert "FGP.L" in mapping
+    assert len(mapping["FGP.L"]) >= 2
+
+    rows = fetch_filings_ir_allowlist("FGP.L", path=allowlist_path)
+    assert len(rows) >= 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert all("firstgroupplc.com" in row["url"] for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_megp_l(tmp_path: Path):
+    """MEGP.L IR results decks are allowlisted for cash-flow gap-fill."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    mapping = load_ir_url_allowlist(allowlist_path)
+    assert "MEGP.L" in mapping
+    assert len(mapping["MEGP.L"]) >= 3
+
+    rows = fetch_filings_ir_allowlist("MEGP.L", path=allowlist_path)
+    assert len(rows) >= 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert all("me-group.com" in row["url"] for row in rows)
 
