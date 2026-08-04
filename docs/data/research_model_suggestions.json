@@ -1055,7 +1055,135 @@
       "priority": "medium",
       "suggestion": "When Earnings Quality fails, require FCF/dividend coverage >1.0x before High Dividend Yield contributes to strong_buy conviction",
       "recorded_at": "2026-08-03T21:38:47.174936+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch body text for indexed IR PDFs that fail extraction (HIK.L `ir_a9733d0de6aec27d` April 2026 trading update; retry already attempted per gap_fill_source_map `ir_refetch.fetched: 0`).",
+      "recorded_at": "2026-08-04T10:25:49.182091+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Populate `quarterly_cashflow` in `financials_annual.json` from Yahoo so TTM FCF can be line-item reconciled against filing-aligned annual FCF without manual inference.",
+      "recorded_at": "2026-08-04T10:25:49.182102+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When `fcf_values_diverge()` triggers sign flip (canonical >0, screen_ttm <0), auto-apply a cash-conversion caution overlay or cap conviction — HIK.L currently passes strong_buy despite FCF Yield and Earnings Quality fails.",
+      "recorded_at": "2026-08-04T10:25:49.182110+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Pull Hikma IR results-presentation PDF cash-bridge slides (`planned_alternate_sources.company_ir_presentation`) as structured tables for segment FCF and capex guidance.",
+      "recorded_at": "2026-08-04T10:25:49.182114+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to compute dividend coverage on three bases (OCF, core earnings, filing-aligned FCF) and flag when buyback + dividend exceed narrow FCF even if OCF covers.",
+      "recorded_at": "2026-08-04T10:25:49.182117+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Deep-extract \"Principal risks\" and \"Longer-term viability statement\" from `ir_55af4b8f27e3dd6f.txt` PDF — current body stops at TOC; contract-churn and regulatory risks referenced but not readable",
+      "recorded_at": "2026-08-04T10:25:49.182123+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch company IR results presentation PDF (planned alternate in `gap_fill_source_map.json`) for machine-retention KPIs and dividend/FCF reconciliation absent from RNS bodies",
+      "recorded_at": "2026-08-04T10:25:49.182126+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Index trading-update RNS for MEGP.L (`filings_index.json` shows zero trading_update entries) to bridge H1 FY2026 and full-year guidance",
+      "recorded_at": "2026-08-04T10:25:49.182130+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When filing_aligned FCF exceeds screen_ttm FCF by >30%, attach H1 working-capital and capex lines from latest interim body as structured overlay context (MEGP: inventory +£8.3m, capex £33.9m from `ir_3f2f55026f8c6fe6.txt`)",
+      "recorded_at": "2026-08-04T10:25:49.182136+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "low",
+      "suggestion": "On Investegate RNS refetch, strip HTML/nav boilerplate from bodies (`275c8eb9ff3328e9.txt` retains page chrome) before memo citation to reduce noise in gap-fill passes",
+      "recorded_at": "2026-08-04T10:25:49.182140+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Ingest Grafton Group plc consolidated annual and interim RNS from Investegate/LSE for ticker GFTU.L; do not treat Grafton Group (UK) Public Limited Company (CH 02886378) statutory accounts as group consolidated filings.",
+      "recorded_at": "2026-08-04T10:25:49.182143+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch company IR results presentation PDF (`company_ir_presentation` in gap_fill_source_map) to extract segment margin tables, FCF/working-capital bridges and banking covenant disclosures absent from Yahoo.",
+      "recorded_at": "2026-08-04T10:25:49.182146+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "coverage",
+      "priority": "high",
+      "suggestion": "Index interim and trading-update RNS separately from annual; current pack has 5/5 annual UKCo bodies and 0 interim, leaving H1 revenue/guidance unverified despite alternate-news headlines.",
+      "recorded_at": "2026-08-04T10:25:49.182149+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add a cyclical-sector timing overlay when RSI > 70 and Economic Moat/Buffett Quality fail simultaneously — flag watchlist without overriding Strong Buy signal.",
+      "recorded_at": "2026-08-04T10:25:49.182154+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require explicit peer ROE/margin comparison step for low-moat distributors before research verdict can upgrade from neutral to accumulate.",
+      "recorded_at": "2026-08-04T10:25:49.182157+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Summary:** The evidence ladder confirms the screen’s value case (Graham Defensive + Enterprising, strong FCF, Piotroski 8/9) but cannot resolve whether 8.4% ROE is cyclical or structural, nor verify segment/geographic mix from primary filings. The research overlay moves from **accumulate** to **neutral (watchlist)** — aligned with the email red-flag pass — while the quantitative **Strong Buy** signal stands unchanged. Updated sections are persisted in `output/research/GFTU.L/research.md`.",
+      "recorded_at": "2026-08-04T10:25:49.182167+00:00"
     }
   ],
-  "updated_at": "2026-08-03T21:38:47.174939+00:00"
+  "updated_at": "2026-08-04T10:25:49.182169+00:00"
 }

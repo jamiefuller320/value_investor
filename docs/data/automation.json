@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T12:11:09.816766+00:00",
+  "generated_at": "2026-08-04T12:22:08.402897+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -189,15 +189,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 43.2,
+        "remaining_weekly_ops_usd": 36.4,
         "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 18.8,
-        "estimated_spend_weekly_ops_usd_this_week": 6.8,
-        "estimated_spend_usd_this_cycle": 36.0,
+        "estimated_spend_usd_this_week": 28.0,
+        "estimated_spend_weekly_ops_usd_this_week": 13.6,
+        "estimated_spend_usd_this_cycle": 45.2,
         "week_id": "2026-W32",
         "cycle_id": "2026-08-d8"
       },
@@ -225,7 +225,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-04T05:24:48.270871+00:00"
+      "updated_at": "2026-08-04T12:17:46.422889+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -1066,22 +1066,71 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-03T21:39:09.180096+00:00",
-    "task_count": 20,
+    "compiled_at": "2026-08-04T10:26:12.910668+00:00",
+    "task_count": 24,
     "status": {
-      "open_count": 0,
+      "open_count": 4,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 20,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260804-36",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260804-36",
+        "area": "scoring",
+        "title": "Export `failed_models`, Piotroski component scores (currently cited at 3/9 externally but not stored), and per-model failure reasons into `screening_snapshot.js",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260804-42",
+        "area": "scoring",
+        "title": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260804-51",
+        "area": "scoring",
+        "title": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260804-57",
+        "area": "scoring",
+        "title": "Add FCF bridge overlay comparing screen TTM FCF to filing FY OCF minus capex/intangibles; flag names where sign diverges by >$50m or >50%",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "attention_tasks": []
   }
 }
