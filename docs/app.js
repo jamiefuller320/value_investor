@@ -1114,6 +1114,182 @@ function boolLabel(value) {
   return '<span class="muted">—</span>';
 }
 
+function engStatusBadge(status) {
+  const value = String(status || "open");
+  const labels = {
+    open: "open",
+    pr_open: "pr open",
+    parked: "parked",
+    failed: "failed",
+    merged: "merged",
+    completed: "completed",
+    cancelled: "cancelled",
+  };
+  const classes = {
+    open: "badge-info",
+    pr_open: "badge-watch",
+    parked: "badge-watch",
+    failed: "badge-ii-no",
+    merged: "badge-ii-ok",
+    completed: "badge-ii-ok",
+    cancelled: "muted",
+  };
+  const cls = classes[value] || "badge-info";
+  return `<span class="badge ${cls}">${esc(labels[value] || value)}</span>`;
+}
+
+function resolveEngineeringQueue(data) {
+  const auto = data.automation || {};
+  if (auto.engineering_queue) return auto.engineering_queue;
+  const raw = data.engineering_tasks;
+  if (!raw || !Array.isArray(raw.tasks)) return null;
+  const tasks = raw.tasks;
+  const countStatus = (wanted) =>
+    tasks.filter((row) => String(row.status || "open") === wanted).length;
+  const pick = (wanted) =>
+    tasks
+      .filter((row) => wanted.has(String(row.status || "open")))
+      .map((row) => ({
+        id: row.id,
+        area: row.area,
+        title: row.title,
+        priority: row.priority,
+        priority_score: row.priority_score,
+        status: row.status,
+        source: row.source,
+        pr_url: row.pr_url,
+        pr_number: row.pr_number,
+        branch_name: row.branch_name,
+      }))
+      .sort((a, b) => Number(b.priority_score || 0) - Number(a.priority_score || 0));
+  const open = new Set(["open", "pr_open"]);
+  const attention = new Set(["parked", "failed"]);
+  const openTasks = pick(open);
+  const nextTask = openTasks.find((row) => row.status === "open") || openTasks[0] || null;
+  return {
+    compiled_at: raw.compiled_at,
+    task_count: Number(raw.task_count || tasks.length),
+    status: {
+      open_count: countStatus("open"),
+      pr_open_count: countStatus("pr_open"),
+      parked_count: countStatus("parked"),
+      merged_count: tasks.filter((row) =>
+        ["merged", "completed"].includes(String(row.status || ""))
+      ).length,
+      failed_count: countStatus("failed"),
+      next_task_id: nextTask ? nextTask.id : null,
+      in_flight_branch: openTasks.find((row) => row.status === "pr_open")?.branch_name || null,
+      in_flight_pr: openTasks.find((row) => row.status === "pr_open")?.pr_number || null,
+      spend_since_checkpoint_usd: null,
+      spend_checkpoint_usd: null,
+      spend_blocked: null,
+    },
+    queued_tasks: openTasks,
+    attention_tasks: pick(attention),
+  };
+}
+
+function renderEngineeringQueueSection(queue) {
+  if (!queue) {
+    return `
+      <section class="automation-section automation-section-full">
+        <h2>Engineering queue</h2>
+        <p class="muted">Queue status not published yet.</p>
+      </section>`;
+  }
+
+  const status = queue.status || {};
+  const queued = queue.queued_tasks || [];
+  const attention = queue.attention_tasks || [];
+  const idle = Number(status.open_count || 0) === 0 && Number(status.pr_open_count || 0) === 0;
+  const spendHtml =
+    status.spend_since_checkpoint_usd != null && status.spend_checkpoint_usd != null
+      ? settingRow(
+          "Ad hoc spend checkpoint",
+          status.spend_blocked
+            ? `<span class="badge badge-ii-no">blocked</span> · $${esc(String(status.spend_since_checkpoint_usd))} / $${esc(String(status.spend_checkpoint_usd))}`
+            : esc(`$${status.spend_since_checkpoint_usd} / $${status.spend_checkpoint_usd}`)
+        )
+      : "";
+
+  const summaryHtml = `
+    ${settingRow("Open / PR open", esc(`${status.open_count ?? 0} / ${status.pr_open_count ?? 0}`))}
+    ${settingRow("Parked / failed / merged", esc(`${status.parked_count ?? 0} / ${status.failed_count ?? 0} / ${status.merged_count ?? 0}`))}
+    ${settingRow("Next task", esc(status.next_task_id || (idle ? "— (idle)" : "—")))}
+    ${status.in_flight_pr ? settingRow("In-flight PR", `<a href="https://github.com/jamiefuller320/value_investor/pull/${esc(String(status.in_flight_pr))}" target="_blank" rel="noopener">#${esc(String(status.in_flight_pr))}</a>`) : ""}
+    ${spendHtml}
+    ${settingRow("Compiled", esc(fmtDate(queue.compiled_at)))}
+  `;
+
+  const taskRows = (tasks) =>
+    tasks
+      .map((task) => {
+        const prCell = task.pr_url
+          ? `<a href="${esc(task.pr_url)}" target="_blank" rel="noopener">#${esc(String(task.pr_number || "PR"))}</a>`
+          : "—";
+        return `
+          <tr>
+            <td><code>${esc(task.id || "—")}</code></td>
+            <td>${engStatusBadge(task.status)}</td>
+            <td>${esc(task.area || "—")}</td>
+            <td>${esc(String(task.priority_score ?? "—"))}</td>
+            <td>${prCell}</td>
+            <td>${esc(task.title || "")}</td>
+          </tr>`;
+      })
+      .join("");
+
+  const queuedHtml = queued.length
+    ? `<div class="table-wrap">
+        <table class="eng-queue-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+              <th>Area</th>
+              <th>Score</th>
+              <th>PR</th>
+              <th>Title</th>
+            </tr>
+          </thead>
+          <tbody>${taskRows(queued)}</tbody>
+        </table>
+      </div>`
+    : `<p class="muted">${idle ? "Queue idle — no open or in-flight engineering tasks." : "No queued tasks."}</p>`;
+
+  const attentionHtml = attention.length
+    ? `<h3>Needs attention</h3>
+       <div class="table-wrap">
+         <table class="eng-queue-table">
+           <thead>
+             <tr>
+               <th>Task</th>
+               <th>Status</th>
+               <th>Area</th>
+               <th>Score</th>
+               <th>PR</th>
+               <th>Title</th>
+             </tr>
+           </thead>
+           <tbody>${taskRows(attention)}</tbody>
+         </table>
+       </div>`
+    : "";
+
+  return `
+    <section class="automation-section automation-section-full">
+      <h2>Engineering queue</h2>
+      <p class="small muted" style="margin-top:0">
+        Supervised dev-agent tasks from post-run compile and ops monitor.
+        Hourly weekday dispatch via <code>engineering-queue.yml</code>.
+      </p>
+      ${summaryHtml}
+      <h3>Queued items</h3>
+      ${queuedHtml}
+      ${attentionHtml}
+    </section>`;
+}
+
 function renderAutomation(data) {
   const panel = document.getElementById("panel-automation");
   if (!panel) return;
@@ -1136,6 +1312,7 @@ function renderAutomation(data) {
   const lastLadder = achievements.last_ladder || {};
   const paperLast = achievements.paper_last_run || {};
   const milestones = achievements.milestones || {};
+  const engineeringQueue = resolveEngineeringQueue(data);
 
   const graduated = (library.graduated_markets || [])
     .map((g) => esc(g.market))
@@ -1265,6 +1442,7 @@ function renderAutomation(data) {
         ${timelineHtml}
       </section>
     </div>
+    ${renderEngineeringQueueSection(engineeringQueue)}
   `;
 }
 
@@ -1303,6 +1481,14 @@ async function loadDashboard() {
       try {
         const progressResp = await fetch("data/project_progress.json");
         if (progressResp.ok) data.project_progress = await progressResp.json();
+      } catch {
+        /* optional sidecar */
+      }
+    }
+    if (!data.engineering_tasks && !(data.automation || {}).engineering_queue) {
+      try {
+        const engResp = await fetch("data/engineering_tasks.json");
+        if (engResp.ok) data.engineering_tasks = await engResp.json();
       } catch {
         /* optional sidecar */
       }

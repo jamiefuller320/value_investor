@@ -335,6 +335,7 @@ def snapshot_ingest_health(
         Path("output/research"),
         Path("docs/data/library/markets"),
     ]
+    prefer_committed_research = research_roots is None
     tickers = _buy_tier_tickers(latest_path)
     zero_body = 0
     indexed_without_body = 0
@@ -348,8 +349,17 @@ def snapshot_ingest_health(
             unmeasured_tickers.append(ticker)
             continue
         measured += 1
-        canonical = Path("docs/data/research") / ticker / "sources" / "filings" / "filings_index.json"
-        index_path = canonical if canonical.exists() else paths[0]
+        if prefer_committed_research:
+            canonical = (
+                Path("docs/data/research")
+                / ticker
+                / "sources"
+                / "filings"
+                / "filings_index.json"
+            )
+            index_path = canonical if canonical.exists() else paths[0]
+        else:
+            index_path = paths[0]
         coverage = _coverage_from_index(index_path)
         with_body += coverage["filings_with_body"]
         indexed_without_body += coverage["indexed_without_body"]
@@ -450,4 +460,50 @@ def reprioritize_queue_after_ingest_merge(
         "ingest_health_before": before,
         "ingest_health_after": after,
         "adjustments": adjustments,
+    }
+
+
+ACTIVE_QUEUE_STATUSES = frozenset({"open", "pr_open"})
+ATTENTION_STATUSES = frozenset({"parked", "failed"})
+
+
+def _slim_task_for_dashboard(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": row.get("id"),
+        "area": row.get("area"),
+        "title": row.get("title"),
+        "priority": row.get("priority"),
+        "priority_score": row.get("priority_score"),
+        "status": row.get("status"),
+        "source": row.get("source"),
+        "pr_url": row.get("pr_url"),
+        "pr_number": row.get("pr_number"),
+        "branch_name": row.get("branch_name"),
+    }
+
+
+def build_engineering_queue_dashboard(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+) -> dict[str, Any]:
+    """Slim engineering queue snapshot for the dashboard Automation tab."""
+    data = load_engineering_tasks(tasks_path)
+    status = summarize_queue(data, tasks_path=tasks_path)
+    rows = list(data.get("tasks") or [])
+
+    def _active_rows(wanted: frozenset[str]) -> list[dict[str, Any]]:
+        picked = [
+            _slim_task_for_dashboard(row)
+            for row in rows
+            if str(row.get("status") or "open") in wanted
+        ]
+        picked.sort(key=lambda row: float(row.get("priority_score") or 0.0), reverse=True)
+        return picked
+
+    return {
+        "compiled_at": data.get("compiled_at"),
+        "task_count": int(data.get("task_count") or len(rows)),
+        "status": status.to_dict(),
+        "queued_tasks": _active_rows(ACTIVE_QUEUE_STATUSES),
+        "attention_tasks": _active_rows(ATTENTION_STATUSES),
     }

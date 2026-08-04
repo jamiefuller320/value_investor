@@ -407,6 +407,7 @@ def build_automation_status(
     )
 
     from value_investor.agent_model_policy import weekly_ops_budget_status
+    from value_investor.engineering_queue import build_engineering_queue_dashboard
 
     focus_grad = policy.get("focus_graduation") or {}
     budget = policy.get("budget") or {}
@@ -532,6 +533,7 @@ def build_automation_status(
         ),
         "settings": settings,
         "achievements": achievements,
+        "engineering_queue": build_engineering_queue_dashboard(),
     }
 
 
