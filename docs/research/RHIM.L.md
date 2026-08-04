@@ -1,119 +1,84 @@
 # RHI Magnesita N.V. (RHIM.L) — Research memo
 
-_Version 1 · Updated 2026-08-03T20:48:05.034433+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-04T09:12:02.594017+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-RHI Magnesita is a global leader in refractory products and solutions for steel, cement, and industrial customers, listed on the London Stock Exchange. The quantitative screen flags a strong buy on cheapness (P/E 18.5, P/B 1.5), a 5.5% dividend yield, positive FCF yield, and GARP metrics, with four of four value families passing. The valuation hook is a cyclical industrial trading below book-adjusted peers while generating ~$268m of free cash flow and paying a well-covered dividend. The central debate is whether a self-help restructuring (plant closures, pricing, network optimisation) can restore margins and delever a balance sheet that screens as over-levered (debt/equity ~156%), after reported earnings fell sharply in FY2025. **Critical data gap:** no RHI Magnesita regulatory filings (annual report, RNS, or interim results) are present in the source pack; indexed Companies House accounts belong to an unrelated Scottish entity (Alasdair Rhind Funeral Director Ltd., SC410994).
-
----
+RHI Magnesita is the global leader in industrial refractories, serving steel, cement, and other high-temperature industries. The quantitative screen flags a Strong Buy on cheapness (P/E 18.7, P/B 1.5), a 5.5% dividend yield, resilient filing-aligned FCF of $268M, and GARP characteristics, with four of four value families passing. The valuation hook is a cyclical industrial trading below historical earnings power whilst management executes the 4PRO self-help programme—H1 2026 news reports 42% constant-currency adjusted EBITA growth despite a 4.9% revenue decline from FX. The key debate is whether margin recovery and deleveraging can offset a deteriorating reported earnings trend (net income fell from $165M in 2023 to $86M in 2025), elevated leverage (debt/equity 156%), and a complete absence of usable primary group filings in this research pack.
 
 ## INVESTMENT THESIS
-The screen rates RHIM.L as a **strong buy** with composite score 0.84 (sector-relative 0.73), passing Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, High Dividend Yield, Dividend Growth, Composite Value, and Earnings Quality. Key metrics: P/E 18.5, P/B 1.51, dividend yield 5.5%, ROE 9.9%, FCF $268m (FY2025, filing-aligned), operating cash flow $379m. All 20 screen inputs are present (data quality 1.0).
+For a value investor, RHIM presents a classic “show-me” cyclical recovery at a reasonable price. The screen passes Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, High Dividend Yield, Dividend Growth, Composite Value, and Earnings Quality—covering cheapness, dividend, GARP, and risk families with a sector-relative composite of 73%. At P/E 18.7 and yield 5.5%, the market appears to price in continued earnings weakness rather than normalised profitability; ROE of 9.9% is modest but above the screen’s 8% hurdle.
 
-For a value investor, the case rests on:
+Business quality is mixed rather than elite: the company holds global scale and pricing power in a consolidated refractory oligopoly, and recent management actions—plant network optimisation, pricing discipline, administrative cost cuts—are bearing fruit per H1 2026 commentary. FCF generation ($268M in FY2025; OCF $379M less capex $111M) comfortably covers dividends (~$85M) and supports the deleveraging narrative management reiterates. However, quality-oriented screen models fail (Buffett Quality, Economic Moat, Piotroski F-Score 5/9, Financial Health), reflecting thin margins, high leverage, and deteriorating balance-sheet trends. The screen’s filing-aligned FCF ($268M) exceeds the TTM screen figure ($179M), suggesting cash conversion is better than headline earnings imply—a positive for value investors prioritising cash over accruals.
 
-1. **Cash-generative cyclical at a discount** — FCF yield is attractive despite earnings volatility; OCF exceeded net income in FY2025 (Piotroski: OCF > NI passed).
-2. **Income component** — Dividend yield and dividend-growth models pass; ~$85m dividends paid in FY2025 against $268m FCF suggests headroom if restructuring succeeds.
-3. **Self-help inflection (qualitative)** — Recent H1 2026 news describes margin expansion and adjusted EBITA growth despite revenue pressure, consistent with a turnaround rather than a pure deep-value trap.
-
-What the screen does **not** capture well: balance-sheet quality (debt/equity 156%, interest expense $104m), moat/quality (ROE 9.9% fails Buffett/Economic Moat thresholds), and Piotroski F-Score 5/9 (leverage not declining, margins not improving on a trailing basis). Conviction on the screen itself is low at 39% (new signal, one week). Timing is neutral (RSI ~46, price ~4% above 200-day SMA).
-
----
+The investment case rests on: (1) valuation discount to normalised mid-cycle earnings; (2) a well-covered, growing dividend; (3) operational turnaround under CEO Stefan Borgas; and (4) optionality from steel-cycle recovery and the EU-backed RAPTOR refractory recycling initiative (November 2025). Conviction is constrained by missing primary filings and a two-year reported earnings decline that the screen’s cheapness metrics may not fully capture until verified.
 
 ## FINANCIAL REVIEW
-### Primary filings — not available for RHI Magnesita
+**Primary filings — critical gap.** The `filings_index.json` catalogues five Companies House accounts (regime: uk_rns; source: companies_house only). All five body extracts are for **Alasdair Rhind (Funeral Director) Ltd.** (company number SC410994), a Scottish small company—not RHI Magnesita N.V. No RNS announcements, annual reports, half-year results, trading updates, or SEC 20-F filings for the listed group are present. **No interim filings** (period: interim = 0) and **no valid annual group accounts** exist in this pack. Filing-body figures are therefore not cited for group analysis. All consolidated financial trends below fall back to **`financials_annual.json`** (Yahoo Finance, fetched 4 August 2026).
 
-The `filings_index.json` catalogues five Companies House entries (regime: `uk_rns`, source: `companies_house`), all classified as **period: other** (zero annual, zero interim, zero trading updates). Body extracts under `filings/bodies/` are **not** RHI Magnesita accounts. They are unaudited abridged statements for **Alasdair Rhind (Funeral Director) Ltd.** (registered number SC410994), a Scottish funeral director with net assets of ~£21,512 and seven employees. These figures are **not used** below.
+**Income statement trend (Yahoo, USD).**
 
-**Gaps:** No UK RNS annual results, half-year results, trading updates, SEC 20-F, or Euro IR filings for RHI Magnesita N.V. are indexed. Interim H1 2026 figures referenced in news headlines are **not** available as filing body extracts in this pack.
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
+| Revenue | $3,572M | $3,487M | $3,366M |
+| Operating income | $349M | $292M | $248M |
+| EBITDA | $508M | $472M | $415M |
+| Net income | $165M | $142M | $86M |
+| Diluted EPS | $3.42 | $2.94 | $1.77 |
 
-### Financial trends — Yahoo fallback (`financials_annual.json`, USD)
+Revenue has declined ~6% over two years; reported net income has fallen ~48% over the same period. FY2025 includes $42M restructuring/M&A charges and $2M impairment; FY2024 included $27M restructuring and $42M impairment. Normalised income (Yahoo) was ~$98M in FY2025 versus reported $86M. Interest expense rose from $97M (2023) to $104M (2025), compressing pretax income to $128M.
 
-All figures below are sourced from Yahoo annual statements with explicit fallback notation.
+**Cash flow (Yahoo, USD).** FCF has been more resilient than earnings: $325M (2023) → $288M (2024) → $268M (2025). Operating cash flow declined from $433M to $379M. Capex moderated to $111M in 2025. Dividends paid were ~$85–87M annually—roughly one-third of FCF, suggesting the 5.5% yield is supported by cash generation despite earnings weakness. FY2025 investing included $363M business acquisitions and net debt issuance of $59M long-term.
 
-**Income statement trend (FY2022–FY2025)**
+**Balance sheet (Yahoo, USD, year-end).**
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Revenue | $3,317m | $3,572m | $3,487m | $3,366m |
-| Operating income | $345m | $349m | $292m | $248m |
-| Net income (common) | $156m | $165m | $142m | $86m |
-| Diluted EPS | $3.26 | $3.42 | $2.94 | $1.77 |
-| EBITDA | $478m | $508m | $472m | $415m |
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
+| Total debt | $1,931M | $1,816M | $1,845M |
+| Net debt | $1,237M | $1,166M | $1,434M |
+| Stockholders’ equity | $1,202M | $1,202M | $1,025M |
+| Cash | $694M | $573M | $346M |
+| Tangible book value | $393M | $443M | $82M |
 
-Revenue peaked in FY2023 and has declined two consecutive years. Reported net income fell ~39% in FY2025 to $86m, with diluted EPS down from $2.94 to $1.77. FY2025 included $45m of special charges (restructuring/M&A $42m, impairments) and $17m of unusual items; normalised net income (Yahoo) was ~$98m. Interest expense rose to $104m (from $97m in FY2024), reflecting higher net debt.
+Net debt increased $268M in FY2025 as cash fell and acquisitions were funded. Equity declined to $1,025M; tangible book collapsed to $82M as goodwill and intangibles ($943M) dominate the balance sheet—relevant for asset-based valuation and covenant analysis, though not verifiable from filing bodies here. Combined pension and post-retirement obligations total ~$289M ($232M non-current + $57M current per Yahoo). Current ratio is 1.46 (screen); working capital fell from $1,037M to $602M.
 
-**Balance sheet (FY2024–FY2025, Yahoo fallback)**
+**Interim / H1 2026.** No interim filing bodies are available. News summaries (31 July 2026) report H1 2026 results: revenue down 4.9% (FX), adjusted EBITA up 42% in constant currency (17% reported per earnings-call headline), with guidance confirmed and deleveraging described as on track. These figures are **unverified** against primary regulatory releases in this pack.
 
-- Total assets: $4,576m → $4,348m  
-- Stockholders' equity: $1,202m → $1,025m  
-- Net debt: $1,166m → $1,434m (+23%)  
-- Total debt: $1,816m → $1,845m  
-- Cash: $573m → $346m  
-- Goodwill + intangibles: $759m → $943m (goodwill rose to $403m; $363m business acquisition in FY2025 cash flow)  
-- Tangible book value: $443m → **$82m** (heavily goodwill/intangible weighted)  
-- Pension/post-retirement liabilities (non-current + current): ~$368m → ~$289m  
-- Current ratio: ~1.7x → ~1.5x (screen: 1.45)
+**Screen FCF cross-check.** The screening snapshot cites filing-aligned FCF of $268M (FY2025, USD), consistent with Yahoo cash-flow data—partial corroboration, though the underlying filing source is not present in `filings/bodies/`.
 
-Leverage increased in FY2025 as cash was deployed on M&A and dividends while earnings weakened.
-
-**Cash flow (Yahoo fallback)**
-
-| | FY2023 | FY2024 | FY2025 |
-|--|--------|--------|--------|
-| Operating CF | $505m | $433m | $379m |
-| CapEx | ($180m) | ($145m) | ($111m) |
-| Free cash flow | $325m | $288m | $268m |
-| Dividends paid | ($77m) | ($87m) | ($85m) |
-| Net debt movement | — | repayment | issuance net +$34m |
-
-FCF remains solid but has declined three years running; FY2025 included a $363m business purchase. FCF comfortably covers dividends (~3.2x coverage in FY2025) but deleveraging progress stalled as net debt rose.
-
-**Interim / H1 2026**
-
-No interim filing body is available. News headlines (31 July 2026) report H1 2026 adjusted EBITA up 42% in constant currency, with margin and profit growth offsetting revenue decline; management confirmed guidance and cited deleveraging on track. These are **unverified secondary summaries** — not primary filing figures.
-
----
+**Macro context.** `macro_context.json` is not present in the source folder; no macro overlay applied.
 
 ## RISKS AND RED FLAGS
-1. **Filing/data integrity** — The research pack contains no RHI Magnesita regulatory filings; indexed primary sources are misattributed. Any verify-before-trade workflow must source the FY2025 annual report and H1 2026 RNS directly from the company IR site or LSE RNS.
+**Filing and governance.** The complete mismatch between indexed Companies House filings and the listed entity is a material research red flag. Investors cannot verify going-concern language, debt covenants, contingencies, or pension assumptions from primary sources in this pack. RHI Magnesita is Netherlands-domiciled with LSE and Vienna listings; proper analysis requires RNS/annual report or 20-F review before sizing a position.
 
-2. **Leverage and interest burden** — Debt/equity ~156%; interest expense $104m on FY2025 pretax income of $128m. Screen fails Financial Health, Buffett Quality, and Economic Moat on leverage. Net debt rose to $1,434m in FY2025. Covenant language is **not available** in this pack.
+**Leverage and pensions.** Debt/equity of 156% and total debt of ~$1.85B (Yahoo) failed Financial Health and multiple quality screens. Interest coverage is strained by declining EBIT. Pension and post-retirement liabilities (~$289M) add off-balance-sheet risk not fully captured by simple leverage ratios. No covenant or going-concern disclosures are available from filing bodies.
 
-3. **Earnings quality and cyclicality** — Trailing reported earnings fell sharply; Piotroski score 5/9 with ROA, leverage, current ratio, and gross margin trends deteriorating. Refractory demand is tied to steel and industrial capex — cyclical downturn risk remains even if H1 2026 self-help is encouraging.
+**Cyclical and operational.** Refractory demand tracks steel and industrial production; FY2025 revenue and operating income declines reflect soft end-markets. Restructuring charges ($42M in 2025; $58M special charges in 2024) indicate ongoing portfolio and plant rationalisation—November 2025 news (“RHI Magnesita surges 15% after hailing effects of cost-cutting, plant closures,” 10 November 2025) confirms closure activity with associated social and execution risk.
 
-4. **Goodwill and acquisition risk** — FY2025 $363m acquisition increased goodwill/intangibles; tangible book collapsed to $82m. Impairment risk if industrial recovery disappoints. FY2024–FY2025 impairments and restructuring charges totalling tens of millions signal portfolio stress.
+**Earnings quality.** Piotroski F-Score of 5/9 with failures on ROA improvement, leverage decline, current-ratio improvement, and gross-margin improvement signals deteriorating financial trend despite positive net income and OCF. Reported net income fell 48% over two years whilst FCF held up—a divergence that warrants scrutiny of working-capital movements and non-cash items.
 
-5. **Pension obligations** — Non-current pension/post-retirement liabilities ~$232m plus current ~$57m (FY2025 Yahoo). No going-concern or contingency language from RHI filings is available in this pack.
+**FX and M&A.** H1 2026 revenue was hit by FX; the group operates globally with EUR reporting and multi-currency exposure. FY2025 included $363M acquisition spend, adding integration risk atop organic turnaround.
 
-6. **Governance / related-party** — Not assessable from available filings. News coverage of the listed parent is thin on governance topics.
-
-7. **Currency and geographic exposure** — Global footprint (Austria HQ, LSE listing, operations worldwide) creates FX translation risk; H1 2026 news cites currency pressure.
-
----
+**Tangible asset base.** Tangible book of $82M versus P/B of 1.5 on total equity implies the market assigns substantial value to goodwill/intangibles ($943M)—vulnerable to further impairment in a prolonged downturn.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but event-driven**, concentrated around results and restructuring rather than deep investigative reporting. Several headlines conflate RHI Magnesita India (NSE:RHIM) with the LSE parent — those India-specific articles are noted but not treated as parent-company news.
+Coverage over the past year is **moderate for the parent** but diluted by articles on RHI Magnesita India (NSE:RHIM), a separate listed entity.
 
-**Material items (parent company):**
+**Material parent-company items:**
 
-| Date | Title | Relevance |
-|------|-------|-----------|
-| 31 Jul 2026 | *RHI Magnesita Q2 Earnings Call Highlights* (Yahoo) | CEO Stefan Borgas: H1 2026 earnings improved despite soft markets; pricing, plant-network changes, and admin cost cuts offset FX and weak industrial project demand. |
-| 31 Jul 2026 | *2026 Half Year Results* (TradingView) | Formal H1 results release. |
-| 31 Jul 2026 | *RHIM: Self-help actions boosted margins and profits, with H2 recovery expected in industrials and guidance confirmed* (TradingView) | Turnaround narrative; guidance maintained. |
-| 31 Jul 2026 | *RHI Magnesita Posts 42% Constant-Currency Growth in Adjusted EBITA for H1 2026* (Kalkine Media) | Key operating metric — unverified without filing. |
-| 31 Jul 2026 | *Margin and profit growth offset revenue decline; guidance and deleveraging on track* (TradingView) | Deleveraging theme. |
-| 10 Nov 2025 | *RHI Magnesita surges 15% after hailing effects of cost-cutting, plant closures* (Proactive Investors) | Restructuring market reaction. |
-| 17 Nov 2025 | *EU-backed RAPTOR sets new standard in refractory recycling* (RHI Magnesita) | Sustainability/circular-economy initiative. |
-| 3 Aug 2026 | *RHI Magnesita Updates Total Voting Rights and Share Capital Structure* (TipRanks) | Routine capital notification (~47.4m voting rights per 1 Jul 2026 headline). |
+- **H1 2026 results (31 July 2026):** “2026 Half Year Results” (tradingview.com); “RHI Magnesita N.V. Reports Earnings Results for the Half Year Ended June 30, 2026” (marketscreener.com); “RHI Magnesita Q2 Earnings Call Highlights” (Yahoo, 31 July 2026)—EBITA growth on self-help, soft markets, guidance confirmed.
+- **Earnings call (4 August 2026):** “RHI Magnesita NV (WBO:RHIM) (H1 2026) Earnings Call Highlights: EBITA Surges 17% on Self-Help …” — 42% constant-currency EBITA growth, 4PRO momentum, FX-driven revenue decline.
+- **Capital structure (3 August 2026):** “RHI Magnesita Updates Total Voting Rights and Share Capital Structure” (TipRanks); 47,364,298 voting rights as of 30 June 2026 (Kalkine, 1 July 2026).
+- **Turnaround momentum (10 November 2025):** “RHI Magnesita surges 15% after hailing effects of cost-cutting, plant closures” (Proactive Investors, LSE:RHIM).
+- **Sustainability (17 November 2025):** “EU-backed RAPTOR sets new standard in refractory recycling” (RHI Magnesita).
 
-**Thin areas:** No material M&A announcements beyond the FY2025 acquisition (visible in cash flow, not news), no management changes, no regulatory actions, and no deep sell-side initiation coverage in the manifest. Multiple Simply Wall St / Yahoo "undervalued UK stocks" listicles mention RHIM peripherally without company-specific analysis.
+**Low-signal / third-party listicles:** Multiple Simply Wall St and Yahoo articles placing RHIM among “undervalued UK stocks” (May–July 2026)—generic screen-driven content, not company-specific catalysts.
 
----
+**Noise:** Several articles reference RHI Magnesita India (governance, debt, mixed financials)—not directly applicable to RHIM.L.
+
+No material M&A, regulatory enforcement, or management-change headlines for the parent were identified in the manifest beyond ongoing restructuring under CEO Stefan Borgas.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.55
-Rationale: The quantitative strong-buy case on valuation, FCF, and dividend is partially supported by a credible self-help turnaround signalled in H1 2026 news, but deep research is materially constrained by absent primary filings, declining FY2023–FY2025 reported earnings, elevated leverage, and quality-screen failures that prevent full confirmation of the signal.
+Confidence: 0.58
+Rationale: The quantitative Strong Buy is partially supported by attractive valuation, dividend coverage, and resilient FCF, but deep research is materially weakened by absent group primary filings and a two-year reported earnings decline that quality screens already flag.

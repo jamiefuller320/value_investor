@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-03T21:39:09.180096+00:00",
-  "run_at": "2026-08-03T20:19:21.700123+00:00",
-  "task_count": 20,
+  "compiled_at": "2026-08-04T10:26:12.910668+00:00",
+  "run_at": "2026-08-04T08:38:47.304498+00:00",
+  "task_count": 24,
   "tasks": [
     {
       "id": "eng-20260726-05",
@@ -766,6 +766,154 @@
       "merged_at": "2026-08-03T16:40:44.207078+00:00"
     },
     {
+      "id": "eng-20260804-36",
+      "area": "scoring",
+      "title": "Export `failed_models`, Piotroski component scores (currently cited at 3/9 externally but not stored), and per-model failure reasons into `screening_snapshot.js",
+      "summary": "Export `failed_models`, Piotroski component scores (currently cited at 3/9 externally but not stored), and per-model failure reasons into `screening_snapshot.json`.",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-07-24T21:26:49.093132+00:00"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260804-42",
+      "area": "scoring",
+      "title": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+      "summary": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
+      "evidence": {
+        "tickers": [
+          "HIK.L"
+        ],
+        "recorded_at": "2026-07-24T21:26:49.093177+00:00"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260804-51",
+      "area": "scoring",
+      "title": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
+      "summary": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-07-26T05:56:57.224242+00:00"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260804-57",
+      "area": "scoring",
+      "title": "Add FCF bridge overlay comparing screen TTM FCF to filing FY OCF minus capex/intangibles; flag names where sign diverges by >$50m or >50%",
+      "summary": "Add FCF bridge overlay comparing screen TTM FCF to filing FY OCF minus capex/intangibles; flag names where sign diverges by >$50m or >50%",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
+      "evidence": {
+        "tickers": [
+          "HIK.L"
+        ],
+        "recorded_at": "2026-07-26T05:56:57.224271+00:00"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260728-07",
       "area": "ingest",
       "title": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, cau",
@@ -899,17 +1047,12 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-08-04T06:01:30.176509+00:00",
+    "snapshot_at": "2026-08-04T10:26:12.910635+00:00",
     "buy_tier_count": 62,
-    "measured_tickers": 35,
-    "unmeasured_buy_tier": 27,
+    "measured_tickers": 40,
+    "unmeasured_buy_tier": 22,
     "unmeasured_tickers": [
-      "JD.L",
-      "HLN.L",
-      "BT-A.L",
       "RS1.L",
-      "DNLM.L",
-      "BYIT.L",
       "ALFA.L",
       "KNOS.L",
       "ASHM.L",
@@ -928,50 +1071,13 @@
       "BKG.L",
       "KGF.L",
       "PETS.L",
-      "BWY.L"
+      "BWY.L",
+      "PTEC.L",
+      "MGAM.L"
     ],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 226,
-    "filings_with_body": 275
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-08-04T05:21:43.930655+00:00",
-    "buy_tier_count": 62,
-    "measured_tickers": 35,
-    "unmeasured_buy_tier": 27,
-    "unmeasured_tickers": [
-      "JD.L",
-      "HLN.L",
-      "BT-A.L",
-      "RS1.L",
-      "DNLM.L",
-      "BYIT.L",
-      "ALFA.L",
-      "KNOS.L",
-      "ASHM.L",
-      "SGE.L",
-      "BOWL.L",
-      "JSG.L",
-      "CNA.L",
-      "SBRY.L",
-      "BOY.L",
-      "INCH.L",
-      "ABDN.L",
-      "VSVS.L",
-      "BTRW.L",
-      "ABF.L",
-      "GCP.L",
-      "BKG.L",
-      "KGF.L",
-      "PETS.L",
-      "BWY.L"
-    ],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 226,
-    "filings_with_body": 275
-  },
-  "reprioritized_at": "2026-08-04T06:01:30.176618+00:00",
-  "reprioritized_after_task": "eng-20260803-04"
+    "indexed_without_body": 161,
+    "filings_with_body": 421
+  }
 }
