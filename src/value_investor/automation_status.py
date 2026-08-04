@@ -118,6 +118,16 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "ops-monitor.yml",
     },
+    "ci_main_nightly": {
+        "name": "CI main nightly",
+        "cron": "30 7 * * *",
+        "cadence": (
+            "Daily 07:30 UTC full pytest on main (GitHub schedule + external cron). "
+            "Catches latent test coupling to docs/data commits that skip push CI. "
+            "Failures draft ci-fix tasks via ci-fix-responder. docs/ops/ci-fix-automation.md."
+        ),
+        "workflow": "ci-main-nightly.yml",
+    },
     "data_backup": {
         "name": "FTSE Data Backup",
         "cron": "30 12 * * 0",

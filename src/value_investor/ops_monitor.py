@@ -85,6 +85,12 @@ MONITORED_WORKFLOWS: tuple[dict[str, Any], ...] = (
         "idle_when": "engineering_queue_idle",
     },
     {
+        "key": "ci_main_nightly",
+        "workflow": "ci-main-nightly.yml",
+        "weekdays": set(range(7)),
+        "max_age_hours": 28,
+    },
+    {
         "key": "analysis_review",
         "workflow": "analysis-review.yml",
         "weekdays": {6},
