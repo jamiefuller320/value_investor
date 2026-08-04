@@ -8,6 +8,10 @@ from value_investor.preflight import run_preflight
 def test_preflight_warns_without_history(tmp_path: Path, monkeypatch):
     monkeypatch.delenv("CURSOR_API_KEY", raising=False)
     monkeypatch.delenv("SMTP_HOST", raising=False)
+    monkeypatch.setattr(
+        "value_investor.preflight.restore_committed_run_history",
+        lambda output_dir, **kwargs: 0,
+    )
     report = run_preflight(tmp_path)
     assert report.ok
     names = {check.name for check in report.checks}
