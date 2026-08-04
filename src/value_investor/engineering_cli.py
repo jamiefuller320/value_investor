@@ -9,7 +9,15 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from value_investor.agent_model_policy import load_policy, spend_since_checkpoint_usd, spend_checkpoint_usd
+from value_investor.accelerated_review import (
+    evaluate_accelerated_email_only_dispatch,
+    record_midweek_email_only_run,
+)
+from value_investor.agent_model_policy import (
+    load_policy,
+    spend_checkpoint_usd,
+    spend_since_checkpoint_usd,
+)
 from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.engineering_agent import (
     DEFAULT_ESTIMATED_USD,
@@ -214,6 +222,45 @@ def _cmd_list_parked(args: argparse.Namespace) -> int:
     else:
         for row in rows:
             print(f"{row['id']}: {row.get('parked_reason')}")
+    return 0
+
+
+def _load_open_prs_json(path: str | None) -> list[dict[str, Any]]:
+    if not path:
+        return []
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    return list(payload) if isinstance(payload, list) else []
+
+
+def _cmd_try_accelerated_email(args: argparse.Namespace) -> int:
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    status = summarize_queue(
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        open_prs=open_prs,
+    )
+    decision = evaluate_accelerated_email_only_dispatch(
+        queue_status=status,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        policy_path=args.policy,
+        merged_task_id=str(args.merged_task_id).strip() if args.merged_task_id else None,
+    )
+    if args.json:
+        _print_json(decision.to_dict())
+    else:
+        print(decision.reason)
+    return 0 if decision.should_dispatch or args.allow_skip else 1
+
+
+def _cmd_record_accelerated_email(args: argparse.Namespace) -> int:
+    entry = record_midweek_email_only_run(
+        source=str(args.source).strip(),
+        merged_task_id=str(args.merged_task_id).strip() if args.merged_task_id else None,
+        note=str(args.note).strip() if args.note else None,
+    )
+    if args.json:
+        _print_json({"recorded": entry})
+    else:
+        print(f"Recorded mid-week email_only run ({entry.get('source')})")
     return 0
 
 
@@ -626,6 +673,30 @@ def main(argv: list[str] | None = None) -> int:
     recover_p.add_argument("--retry-cooldown-hours", type=int, default=24)
     recover_p.add_argument("--ci-red-park-hours", type=int, default=48)
     recover_p.set_defaults(func=_cmd_recover_queue)
+
+    try_accel_p = sub.add_parser(
+        "try-accelerated-email",
+        parents=[common],
+        help="Decide whether to chain orchestrator email_only after queue drain (L97)",
+    )
+    try_accel_p.add_argument("--open-prs-json", default=None)
+    try_accel_p.add_argument("--merged-task-id", default=None)
+    try_accel_p.add_argument(
+        "--allow-skip",
+        action="store_true",
+        help="Exit 0 when dispatch is not applicable (for workflow conditions)",
+    )
+    try_accel_p.set_defaults(func=_cmd_try_accelerated_email)
+
+    record_accel_p = sub.add_parser(
+        "record-accelerated-email",
+        parents=[common],
+        help="Record a mid-week email_only orchestrator dispatch in the log",
+    )
+    record_accel_p.add_argument("--source", required=True)
+    record_accel_p.add_argument("--merged-task-id", default=None)
+    record_accel_p.add_argument("--note", default=None)
+    record_accel_p.set_defaults(func=_cmd_record_accelerated_email)
 
     parked_p = sub.add_parser("list-parked", parents=[common], help="List tasks parked for manual review")
     parked_p.set_defaults(func=_cmd_list_parked)
