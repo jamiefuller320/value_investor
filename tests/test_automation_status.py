@@ -131,6 +131,9 @@ def test_build_automation_status_timeline(tmp_path: Path):
     assert any("L34 next-slice" in t for t in titles)
     assert payload["achievements"]["last_ladder"]["layers"]["research_created"] == 3
 
+    assert payload["engineering_queue"]["status"]["open_count"] >= 0
+    assert "queued_tasks" in payload["engineering_queue"]
+
     out = write_automation_status(
         library_root=library,
         paper_root=paper,

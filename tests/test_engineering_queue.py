@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from value_investor.engineering_queue import (
+    build_engineering_queue_dashboard,
     evaluate_engineering_dispatch,
     find_in_flight_pr,
     is_engineering_branch,
@@ -281,3 +282,29 @@ def test_snapshot_ingest_health_counts_zero_body(tmp_path: Path):
     health = snapshot_ingest_health(latest_path=latest_path, research_roots=[root])
     assert health["buy_tier_count"] == 2
     assert health["zero_body_buy_tier"] == 1
+
+
+def test_build_engineering_queue_dashboard_lists_open_and_pr_open(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "compiled_at": "2026-08-04T10:00:00+00:00",
+                "tasks": [
+                    _task("eng-20260804-01", status="open", title="Open task").to_dict(),
+                    _task("eng-20260804-02", status="pr_open", title="PR open task").to_dict(),
+                    _task("eng-20260804-03", status="parked", title="Parked task").to_dict(),
+                    _task("eng-20260804-04", status="merged", title="Merged task").to_dict(),
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = build_engineering_queue_dashboard(tasks_path=tasks_path)
+    assert payload["status"]["open_count"] == 1
+    assert payload["status"]["pr_open_count"] == 1
+    assert [row["id"] for row in payload["queued_tasks"]] == [
+        "eng-20260804-01",
+        "eng-20260804-02",
+    ]
+    assert payload["attention_tasks"][0]["id"] == "eng-20260804-03"
