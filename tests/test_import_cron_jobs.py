@@ -26,6 +26,23 @@ def test_import_cron_jobs_dry_run_data_backup():
     assert "data-backup.yml" in payload["url"]
 
 
+def test_import_cron_jobs_dry_run_ci_main_nightly():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "ci-main-nightly", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE CI main nightly (daily)"
+    assert payload["schedule"]["hours"] == [7]
+    assert payload["schedule"]["minutes"] == [30]
+    assert "ci-main-nightly.yml" in payload["url"]
+
+
 def test_import_cron_jobs_dry_run_engineering_queue():
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(

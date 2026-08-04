@@ -110,6 +110,15 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[-1],
         ),
         CronJobSpec(
+            key="ci-main-nightly",
+            title="FTSE CI main nightly (daily)",
+            workflow="ci-main-nightly.yml",
+            body={"ref": REF},
+            hours=[7],
+            minutes=[30],
+            wdays=[-1],
+        ),
+        CronJobSpec(
             key="data-backup",
             title="FTSE data backup (Sunday)",
             workflow="data-backup.yml",
