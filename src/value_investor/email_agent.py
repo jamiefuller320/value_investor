@@ -196,8 +196,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--ingest-improvement-cap",
         type=int,
-        default=10,
-        help="Max tickers for --ingest-improvement-pass (default: 10)",
+        default=15,
+        help="Max tickers for --ingest-improvement-pass (default: 15)",
     )
     parser.add_argument(
         "--compile-engineering-tasks",

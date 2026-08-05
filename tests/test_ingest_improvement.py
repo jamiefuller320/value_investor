@@ -238,6 +238,37 @@ def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Pa
     assert targets[0].ingest_suggestion_count == 1
 
 
+def test_select_ingest_improvement_targets_prioritises_unmeasured_over_thin_indexed(
+    tmp_path: Path,
+):
+    output_dir = tmp_path / "output"
+    measured_sources = output_dir / "research" / "MEGP.L" / "sources" / "filings"
+    measured_sources.mkdir(parents=True)
+    (measured_sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 8, "annual": 8, "interim": 0, "with_body": 2},
+                "filings": [{"has_body": True}] * 2 + [{"has_body": False}] * 6,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    targets = select_ingest_improvement_targets(
+        [
+            _report("MEGP.L", "ME Group International plc"),
+            _report("NEW.L", "Newco plc", signal="buy"),
+        ],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=1,
+    )
+
+    assert len(targets) == 1
+    assert targets[0].ticker == "NEW.L"
+    assert targets[0].filings_total == 0
+
+
 def test_select_ingest_improvement_targets_uses_library_research_path(tmp_path: Path, monkeypatch):
     output_dir = tmp_path / "output"
     library_index = (

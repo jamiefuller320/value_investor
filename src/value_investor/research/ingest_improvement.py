@@ -39,7 +39,8 @@ from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_INGEST_IMPROVEMENT_CAP = 10
+DEFAULT_INGEST_IMPROVEMENT_CAP = 15
+UNMEASURED_PRIORITY_BONUS = 10.0
 KNOWN_SOURCE_IDS = frozenset(
     {
         "companies_house_accounts",
@@ -252,7 +253,7 @@ def _priority_score(
 ) -> float:
     score = 0.0
     if coverage["filings_total"] == 0:
-        score += 12.0
+        score += 12.0 + UNMEASURED_PRIORITY_BONUS
     elif coverage["indexed_without_body"] > 0:
         score += 6.0 + min(coverage["indexed_without_body"], 10)
     else:
