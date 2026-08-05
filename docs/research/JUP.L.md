@@ -1,89 +1,115 @@
 # Jupiter Fund Management Plc (JUP.L) — Research memo
 
-_Version 1 · Updated 2026-08-04T09:04:28.334684+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-05T10:25:30.099098+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Jupiter Fund Management is a UK-listed active asset manager undergoing a credible operational turnaround under CEO Matthew Beesley: assets under management (AUM) recovered to £54bn at FY2025, net flows turned positive for the first calendar year since 2017, and the £100m acquisition of CCLA adds scale in UK non-profit mandates. The quantitative screen flags the stock as a strong buy on cheapness (P/E ~8.5, P/B ~0.9), dividend yield (~3.8%), moderate leverage (D/E ~5%), and a Piotroski F-Score of 7/9. The valuation hook is a sub-book, low-multiple asset manager with accelerating flow momentum and active capital return (ordinary dividend, performance-fee distributions, buybacks). The central debate is whether FY2025’s earnings uplift—heavily performance-fee-driven—and the CCLA integration will sustain into a normalised earnings base, or whether elevated cost:income (82%) and persistent industry headwinds will cap re-rating.
+Jupiter Fund Management is a UK-listed active asset manager that the quantitative screen flags as a **Strong Buy** on deep value metrics (P/E ~8.6, P/B ~0.9, yield ~3.8%, low leverage). The investment case rests on a credible operational turnaround: AUM recovered to **£54.0bn** at FY2025, the firm delivered its first calendar-year **positive net flows since 2017** (£1.3bn), and investment performance improved materially across one-, three- and five-year horizons. FY2025 underlying profit was flattered by **£120.3m of performance fees**, masking weaker underlying management-fee economics and a rising cost:income ratio (**82%**). The agreed **CCLA acquisition** (£100m cash, ~£15bn AUM) adds UK non-profit scale and targeted synergies, but integration and regulatory approval remain live variables. Key debate: whether discounted valuation adequately compensates for cyclical flow risk, fee-margin compression, and earnings lumpiness—or whether scale, capital returns, and flow momentum mark a durable inflection.
+
+---
 
 ## INVESTMENT THESIS
-For a value investor, Jupiter offers a cyclical recovery play on a franchise that screens as statistically cheap across five model families (cheapness, quality, dividend, GARP, risk). The business quality case is strengthening on leading indicators cited in primary filings: investment performance improved (68% of mutual fund AUM above peer median over three years at FY2025 vs 61% prior year), employee engagement rose to 88%, and net flows of £1.3bn reversed the prior year’s £10.3bn outflow. Management is executing a coherent four-pillar strategy—increase scale, reduce complexity, broaden client appeal, deepen stakeholder relationships—with measurable cost discipline (non-compensation costs to £89m; headcount 442 FTE at FY2025 vs 585 at end-2021) and a medium-term 70% cost:income target.
+For a value investor, Jupiter offers a classic **asset-gatherer at a cyclical trough** profile that the screen captures well. Seventeen of twenty-two models pass across cheapness, quality, dividend, GARP, and risk families; Piotroski F-Score is **7/9**, debt/equity is ~**5%**, and the share trades below book with a mid-single-digit dividend yield plus active buybacks.
 
-The screen’s deep-value metrics align with a balance sheet that filings portray as robust: H1 2025 regulatory capital surplus of £236.6m (~4.8× requirement), with post-CCLA surplus guided at £146m and >2.5× regulatory coverage. Debt is modest (Yahoo: total debt ~£39m, largely leases; long-term bank debt repaid per H1 2025 balance sheet). Capital allocation is shareholder-friendly—50% payout of pre-performance-fee underlying EPS, plus ad hoc returns from performance fees (11.4p/share for FY2025) and ongoing buybacks (2026 programme active per news). CCLA adds ~£15bn AUM, a new non-profit client channel, and targeted run-rate synergies of at least £16m p.a. by end-2027, materially accretive to management-fee earnings per share from completion (February 2026 per FY2025 annual report narrative).
+Business quality is improving on leading indicators the screens underweight. FY2025 net flows turned **+£1.3bn** (from **£(10.3)bn** in FY2024); three-year mutual-fund outperformance rose to **68%** of AUM (from 61%); employee engagement reached **88%**. Management under CEO Matthew Beesley has cut headcount (442 FTE at FY2025 vs 585 at end-2021), outsourced middle-office operations to BNY, and targets a **70% cost:income ratio** via further savings (£15m run-rate by end-2026, plus ≥£16m CCLA synergies by end-2027).
 
-Failed screen checks are informative rather than disqualifying: Graham Defensive and Buffett Quality (ROE 12% vs higher thresholds), High Dividend Yield (3.8% not top-quartile), Earnings Quality (operating cash flow below reported earnings), and Graham Net-Net (NCAV unavailable). These point to earnings normalisation and cash-conversion scrutiny rather than balance-sheet distress.
+Capital allocation supports the value case: ordinary dividend policy at **50% of pre-performance-fee underlying EPS**, supplemental returns from performance-fee revenue, and ongoing share repurchases (including a 2026 programme). Regulatory capital surplus was **~4.8×** requirement at H1 2025 (£236.6m surplus on £61.5m requirement), with post-CCLA coverage expected above **2.5×**.
+
+The screen’s Strong Buy signal aligns with a business transitioning from multi-year outflows and reputational repair toward scale, efficiency, and shareholder returns—at a valuation that does not yet fully reflect a normalised earnings base.
+
+---
 
 ## FINANCIAL REVIEW
-**Source coverage:** Filings index contains three annual accounts (FY2023–FY2025), two interim reports (H1 2024, H1 2025), and the CCLA RNS. No trading updates or H1 2026 interim filing is indexed; latest operational colour for H1 2026 comes from news only. Full IFRS primary statements for FY2024/FY2025 annual accounts are not fully extracted in filing bodies; statutory FY comparatives are taken from H1 2025 interim accounts; balance-sheet/cash-flow trends below use Yahoo where filing bodies lack complete tables (noted explicitly).
+*Primary source: Companies House filing body extracts unless noted. Full statutory income statements for FY2025 and FY2024 annual reports are not present in the extracted bodies; interim filings and annual KPI/narrative sections are used, with Yahoo fallback where stated.*
 
-### Annual trend (Companies House annual reports)
+### Annual trend (FY2023 → FY2025)
 
-| Metric | FY2023 (AR 2023) | FY2024 (AR 2024 KPIs + H1 2025 interim FY comparatives) | FY2025 (AR 2025) |
-|--------|------------------|----------------------------------------------------------|------------------|
+| Metric | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|
 | AUM | £52.2bn | £45.3bn | £54.0bn |
-| Net flows | (£2.2)bn | (£10.3)bn | +£1.3bn |
-| Net management fees | £354.0m | £331.3m (KPI); £332.9m per FY2025 AR comparative | £310.7m |
+| Net flows | £(2.2)bn | £(10.3)bn | **+£1.3bn** |
+| Net management fees | £354.0m | £331.3m | £310.7m |
 | Cost:income ratio | 73% | 78% | 82% |
 | Underlying EPS | 14.8p | 13.4p | 19.4p |
-| Underlying PBT | £105.2m (AR 2023 Chair’s statement) | Not in KPI extract; ex-perf comparative £79.0m (FY2025 AR) | £138.3m |
-| Statutory PBT | £9.4m (goodwill impairment £76.2m) | £88.3m (H1 2025 interim comparative) | Not in available annual body extract |
-| Statutory revenue | — | £402.5m (H1 2025 interim comparative) | — |
-| Statutory net income | (£12.9)m (H1 2024 interim comparative for FY2023) | £65.2m (H1 2025 interim comparative) | — |
+| TSR | (25)% | +1% | +92% |
 
-**FY2023:** Challenging year—statutory PBT collapsed to £9.4m after £76.2m goodwill impairment (Merian/Knightsbridge), despite underlying PBT rising to £105.2m. Net outflows persisted but narrowed vs 2022.
+**FY2023** (annual report, May 2024): Challenging industry backdrop; underlying PBT **£105.2m** but statutory PBT fell to **£9.4m** after a **£76.2m goodwill impairment** (Merian/Knightsbridge). Net outflows **£(2.2)bn**; regulatory capital surplus **£177m** at 31 December 2023.
 
-**FY2024:** Scale retrenchment—AUM fell 13% to £45.3bn on £10.3bn net outflows (Value team departures, Chrysalis trust management change, weak retail risk appetite per AR 2024). Underlying EPS fell to 13.4p; cost:income rose to 78%. Statutory PBT recovered to £88.3m (filings); net income £65.2m.
+**FY2024** (annual report, May 2025): Material deterioration in flows—**£(10.3)bn** net outflows driven by Value-team departures, Chrysalis Investment Trust management change, and weak retail risk appetite. Net management fees fell to **£331.3m**; cost:income rose to **78%**; underlying EPS **13.4p**. Non-compensation costs **£109.5m**; headcount **492** (lowest since 2016). Statutory PBT **£88.3m** and net revenue **£364.1m** per H1 2025 interim cross-reference to FY2024.
 
-**FY2025:** Inflection year—AUM +19% to £54bn (£7.4bn markets, £1.3bn net flows). Underlying PBT +42% to £138.3m, but **£120.3m performance fees** (vs £31.2m in 2024) drove the uplift; excluding performance fees, underlying PBT fell to £62.2m (from £79.0m) as the annualisation effect of 2024 AUM losses hit management fees. Cost:income worsened to 82% (target 70%). Total shareholder return +92%. Ordinary dividends 4.4p plus 11.4p performance-fee-related return.
+**FY2025** (annual report, April 2026): Turnaround year. AUM **+19%** to **£54.0bn** (market **+£7.4bn**, flows **+£1.3bn**). Underlying PBT **£138.3m** (+42% YoY), driven by performance fees **£120.3m** (2024: **£31.2m**). **Excluding performance fees**, underlying PBT fell to **£62.2m** (2024: **£79.0m**) as the 2024 AUM loss annualised through revenues. Net management fees **£310.7m**; cost:income **82%** despite non-compensation costs falling to **£89m**. Ordinary dividends **4.4p** (2.0p interim + 2.3p final proposed) plus **11.4p** special (50% of FY2025 performance-fee revenue, split between special dividend and buyback). Post-CCLA regulatory capital surplus **£146m**.
 
-*Yahoo fallback (FY2025, for figures absent from filing extracts):* revenue £465.7m; net income £100.4m; shareholders’ equity £906.1m; total assets £1,242.6m; free cash flow £56.6m (operating cash flow £59.3m). Screen TTM FCF of £150.4m differs from Yahoo FY2025—treat FCF as uncertain pending full filing reconciliation.
+*Yahoo fallback (FY2025 statutory, not in annual body extract):* total revenue **£465.7m**, net income **£100.4m**, operating cash flow **£59.3m**, free cash flow **£56.6m**, shareholders’ equity **£906.1m**, tangible book **£400m** (goodwill **£494.4m**). Screen TTM FCF is cited at **$150.4m**—methodology/currency differs from Yahoo; treat as indicative only.
 
-### Interim trend (Companies House interim accounts)
+### Interim trend (H1 2024 vs H1 2025)
 
-**H1 2024 (published 26 July 2024):** Statutory PBT £38.7m (+11% YoY); underlying PBT £47.9m (+3%). Net flows (£3.4)bn (underlying ex-Value/Chrysalis: (£0.2)bn). AUM £51.3bn. Net revenue £173.7m. Cost:income 74%. Interim dividend 3.2p. Going concern: Directors saw no material uncertainties; 12-month going concern basis adopted.
+| Metric | H1 2024 | H1 2025 |
+|--------|---------|---------|
+| AUM (period end) | £51.3bn | £47.1bn → recovering |
+| Net flows | £(3.4)bn | £(0.2)bn |
+| Net revenue | £173.7m | £153.9m |
+| Underlying PBT | £47.9m | £30.4m |
+| Statutory PBT | £38.7m | £27.5m |
+| Underlying EPS | 6.6p | 4.2p |
+| Ordinary dividend | 3.2p | 2.1p |
+| Cost:income | 74% | 82% |
 
-**H1 2025 (published 25 July 2025):** Statutory PBT £27.5m (down vs H1 2024 £38.7m); underlying PBT £30.4m (vs £47.9m). Net flows (£0.2)bn with Q2 positive £0.3bn; AUM £47.1bn (+4% vs Dec 2024). Net revenue £153.9m. Cost:income 82%. Interim dividend 2.1p. Balance sheet at 30 June 2025: total assets £1,207.8m; equity £841.0m; cash £195.5m; goodwill £494.4m. Regulatory surplus £236.6m. Long-term borrowings nil (vs £49.8m at H1 2024). CCLA acquisition announced; completion expected before end-2025 (subsequently completed February 2026 per FY2025 AR).
+**H1 2024** (interim, July 2024): Underlying PBT **+3%** to **£47.9m** despite **£(3.4)bn** gross outflows (£3.2bn Value team/Chrysalis-related; underlying outflows only **£(0.2)bn**). Operating costs **£129.1m** (-2%). Directors confirmed **going concern** with no material uncertainties over a 12-month horizon; Group able to operate within resources even under stressed scenarios.
 
-**Gap:** No indexed H1 2026 interim filing. News (23 July 2026) reports “strong” H1 2026 results with higher AUM, positive net inflows, and CCLA integration progress—figures not verified from primary filings in this pack.
+**H1 2025** (interim, July 2025): Profitability down YoY reflecting lower average AUM (**£45.7bn** vs **£52.1bn**). Flow picture improved: Q2 net inflows **+£0.3bn** after Q1 outflows; July net positive across both channels per management. CCLA acquisition announced; **£15m** cost savings target for 2025–2026. Capital surplus **£236.6m** (~**4.8×** regulatory requirement). Balance sheet at 30 June 2025: total assets **£1,207.8m**, equity **£841.0m**, cash **£195.5m**, goodwill **£494.4m**; **£50.0m** long-term debt repaid in period. *Going-concern language not captured in the H1 2025 body extract.*
 
-### CCLA acquisition (Investegate RNS, 10 July 2025)
+### Coverage gaps
 
-- Consideration: £100m cash from balance sheet; no new equity/debt.
-- CCLA AUM ~£15bn (31 March 2025); FY Mar-2025 revenue ~£66m, underlying operating earnings ~£13m.
-- Synergies: ≥£16m run-rate by end-2027; one-off integration costs ~£17m.
-- Combined pro-forma AUM ~£59bn; UK client concentration ~75%.
-- Regulatory capital expected >2.5× requirements post-deal.
+- No **trading updates** in the filings index.
+- No **H1 2026 interim** (expected ~July/August 2026).
+- FY2025/FY2024 **full statutory P&L and cash-flow statements** absent from annual body extracts; interim cross-references and Yahoo used for statutory lines where needed.
+- `macro_context.json` unavailable.
+
+---
 
 ## RISKS AND RED FLAGS
-**Cyclical and revenue quality:** Asset management revenues remain flow- and market-sensitive. FY2025 earnings quality is distorted by lumpy performance fees (£120.3m); underlying ex-performance-fee profit fell YoY. The screen’s Earnings Quality failure (operating cash below earnings) and Yahoo FCF decline (£56.6m in FY2025 vs £66.3m in FY2024) warrant monitoring—working-capital swings in asset managers can be volatile.
+**Cyclical and structural:** Asset management revenues remain tied to AUM and market levels. FY2024’s **£(10.3)bn** outflows demonstrate vulnerability to team departures, product-specific events, and retail risk-off sentiment. Net management fees have fallen three consecutive years; fee margins face industry-wide pressure (company cites declining revenue margins and rising regulatory costs).
 
-**Margin and cost structure:** Cost:income at 82% (FY2025) is well above the 70% medium-term target; savings from CCLA synergies (£16m) and May 2025 cost programme (£15m by 2026) are necessary, not optional.
+**Earnings quality:** FY2025 reported earnings growth is **performance-fee dependent** (£120.3m). Ex-fee underlying PBT **declined**. The screen fails **Earnings Quality** (operating cash below earnings) and **Buffett Quality** (ROE below threshold)—Yahoo shows FY2025 OCF **£59.3m** vs net income **£100.4m**. Normalised earnings likely sit below headline P/E implies.
 
-**Balance sheet and goodwill:** Goodwill of £494.4m (H1 2025) represents a large share of equity; FY2023’s £76.2m impairment demonstrates sensitivity to sustained underperformance. Tangible book value is materially below stated equity (Yahoo: ~£400m tangible vs £906m equity).
+**Cost discipline vs outcome:** Cost:income worsened to **82%** despite headcount and non-compensation cost reductions. Medium-term **70%** target requires both further cuts and revenue growth; failure on flows would leave the ratio structurally elevated.
 
-**Integration and execution:** CCLA integration (culture preservation, platform migration, synergy delivery) is the largest strategic bet. Completion consumed cash and reduces regulatory surplus to ~£146m—still adequate per filing language but less headroom.
+**CCLA integration:** **£100m** cash acquisition (completed February 2026 per FY2025 annual narrative), subject to customary regulatory approvals at announcement. **~£17m** one-off integration costs over four years; **≥£16m** run-rate synergies targeted by end-2027. Execution, cultural preservation, and client retention in the non-profit channel are unproven at group level.
 
-**Principal risks (FY2025 AR):** Market disruption; investment performance risk; regulatory risk; technology and information security; financial risk; outsourcing/supplier risk. Active managers face structural passive competition and fee compression—explicitly acknowledged in FY2024 CEO commentary.
+**Balance sheet and goodwill:** Goodwill **£494.4m** (~59% of H1 2025 equity) follows prior Merian-related impairment (**£76.2m** in FY2023). Tangible book **£400m** (Yahoo, FY2025)—P/B screen reflects intangible-heavy equity.
 
-**Governance:** Chair David Cruickshank retiring (not standing for re-election at 2026 AGM); succession search underway (H1 2025 interim). No material going-concern language in H1 2025 extract; last explicit going-concern affirmation in available bodies is H1 2024 interim.
+**Operational and regulatory:** Principal risks flagged in annual reports include **investment performance**, **regulatory**, **outsourcing/supplier** (BNY middle-office), **technology/cyber**, **people**, and **financial** risks. Forward-looking statements in RNS emphasise market, FX, competition, and acquisition timing uncertainty.
 
-**Pension:** Non-current pension liabilities present on Yahoo FY2022–FY2023 balance sheets; absent from FY2025 Yahoo snapshot—status not confirmed in filing extracts.
+**Governance transition:** Chair David Cruickshank retiring (Nathan Bostock succeeding per FY2025 report); orderly but adds oversight transition risk during integration.
+
+**Pension:** No defined-benefit pension exposure identified in available filing extracts (Yahoo shows reduced pension liabilities vs 2022–2023). Gap—not verified in latest annual body text.
+
+---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate-to-good on corporate actions, thinner on deep fundamentals.
+Coverage over the past year is **moderate and event-driven**, centred on results, capital returns, and M&A rather than deep investigative reporting.
 
-- **10 July 2025:** *Acquisition of CCLA Investment Management Limited* (Investegate/RNS)—£100m deal, £15bn+ AUM, non-profit channel, synergy targets.
-- **26 February 2026:** *Jupiter reports positive flows for the first time since 2017* (Investors’ Chronicle)—aligns with FY2025 filing data (+£1.3bn).
-- **23 July 2026:** *Jupiter Fund Management H1 Earnings Call Highlights* (Yahoo)—CEO cites strong H1 2026 interim, higher AUM, positive net inflows, CCLA integration (primary filing not in index).
-- **23 July 2026:** *Jupiter Fund Management lifts profits and assets on strong flows and CCLA deal* (TipRanks).
-- **May–August 2026:** Multiple items on **2026 share buyback** progress—share count reduced to ~518.1m (TipRanks, 3 August 2026; Kalkine, 6 July 2026).
-- **June 2026:** *Why The Story Around Jupiter Fund Management Is Shifting As Analyst Targets Diverge* (Yahoo, 10 June 2026)—fair-value estimates £1.49–£1.67 with bullish cluster ~£1.89–£1.90; consensus still divided.
-- **September 2025:** *Bumper upgrade gives this FTSE 250 stock another lift* (Interactive Investor).
-- **May 2025 (H1 2025 interim):** Chair succession announced—David Cruickshank to retire after successor appointed.
+**Strategy and M&A**
+- *Acquisition of CCLA Investment Management Limited* (Investegate, **10 July 2025**): £100m all-cash deal for ~£15bn AUM UK non-profit specialist; ≥£16m synergies; materially accretive to management-fee EPS from day one.
+- *Jupiter Fund Management H1 Earnings Call Highlights* (Yahoo Finance, **23 July 2025**): CEO cited strong H1 2026 interim results, higher AUM, positive net inflows, CCLA integration progress.
 
-Irrelevant noise (crypto ticker confusion, generic market pieces) filtered out. No material regulatory enforcement headlines in the manifest.
+**Flows and results**
+- *Jupiter reports positive flows for the first time since 2017* (Investors’ Chronicle, **26 February 2026**): aligns with FY2025 annual KPI of **+£1.3bn** net flows.
+- *Jupiter Fund Management H2 Earnings Call Highlights* (Yahoo Finance, **26 February 2026**): FY2025 described as financially challenging but with improved leading indicators.
+
+**Capital returns**
+- *Jupiter Reduces Share Count as 2026 Buyback Programme Progresses* (TipRanks, **27 July 2026**); *Executes Buyback of 482,621 Shares at 161.4p–171.0p* (Kalkine Media, **6 July 2025**): active repurchase programme underway.
+
+**Governance and market colour**
+- Chair succession announced in H1 2025 interim (May 2025).
+- *Why The Story Around Jupiter Fund Management (LSE:JUP) Is Shifting As Analyst Targets Diverge* (Yahoo Finance, **9–10 June 2026**): fair-value estimates clustered ~£1.67 with bullish targets ~£1.89–£1.90—reflects split sell-side view.
+- Several articles are **tangential** (crypto JUP/INR, generic market pieces) or **low substance** (director dealing notices, share-capital updates).
+
+No material regulatory enforcement actions or fraud allegations surfaced in the manifest.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Deep research largely confirms the quantitative strong-buy case—cheap multiples, low leverage, improving flows, and credible capital return—but FY2025 earnings are performance-fee-heavy, cost:income remains elevated, and CCLA integration plus missing H1 2026 primary filings limit conviction until normalised earnings and post-deal metrics are verified.
+Confidence: 0.72
+Rationale: Deep research largely confirms the screen’s cheapness and improving flow/performance trajectory, but FY2025 earnings quality is weakened by lump-sum performance fees, the cost:income ratio is moving the wrong way, and CCLA integration adds execution risk that warrants accumulation rather than unqualified strong-buy conviction.

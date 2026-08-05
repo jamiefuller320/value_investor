@@ -1,126 +1,108 @@
 # ITV plc (ITV.L) — Research memo
 
-_Version 1 · Updated 2026-08-04T08:56:55.096872+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-05T10:18:03.088893+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-ITV trades at a modest earnings multiple with a high dividend yield while undergoing a strategic break-up: the proposed £1.6bn sale of Media & Entertainment (M&E) to Sky would leave a listed ITV Studios content business and unlock roughly £950m of net cash return to shareholders, plus an interim £100m buyback. The quantitative screen flags a strong buy on cheapness, dividend, GARP and risk metrics (14/22 models; composite 75%), supported by resilient FY 2025 profits, net leverage of 1.0x and a maintained 5.0p ordinary dividend. The central debate is whether current valuation adequately prices (a) cyclical UK advertising weakness and post-deal earnings power, versus (b) a simplified, cash-rich Studios pure-play with ITVX digital momentum. Regulatory approval of the Sky transaction (CMA; possible Phase 2 until H2 2027) is the key swing factor.
-
----
+ITV plc screens as a strong buy on cheapness, dividend yield, earnings/FCF yield, and financial health, yet the equity sits below its 200-day moving average with neutral timing. The investment case rests on a dual engine: a resilient, above-market ITV Studios franchise (28% of Studios revenue from streaming; margins in the 13–15% target band) and a pending sale of Media & Entertainment (M&E) to Sky that management frames as unlocking ~£950 million of net cash return to shareholders, leaving a focused global content business. FY 2025 results (RNS, 5 March 2026) showed flat revenue and only a 1% decline in adjusted EBITA despite a 5% fall in total advertising revenue (TAR), with ITVX digital advertising up 12%; adjusted EPS fell 11% to 8.5p on higher financing costs and tax. The central debate is whether headline valuation (P/E ~12, yield ~6.8%, P/B ~1.6) adequately compensates for structural linear-TV pressure, advertising cyclicality, and regulatory risk on the Sky transaction—not whether ITV can still generate cash today.
 
 ## INVESTMENT THESIS
-For a value investor, ITV offers a familiar UK income-and-cashflow profile at a screen-attractive valuation: P/E 12.3, P/B 1.5, dividend yield 6.7%, debt/equity 52%, and filing-aligned FCF of c.£148m (FY 2025 per screen; £187m per FY 2025 RNS). The screen passes five metric families—cheapness, quality, dividend, GARP and risk—including Graham Enterprising, FCF Yield, High Dividend Yield, Magic Formula and Financial Health, with sector-relative composite at 86%.
+The quantitative screen flags ITV across five families—cheapness, quality, dividend, GARP, and risk—with 14 of 22 models passing, a composite score of 74% (84% sector-relative), and full data quality (20/20 metrics). Key metrics align with a classic UK value setup: P/E 12.2, P/B 1.59, dividend yield 6.8%, ROE 13.5%, and debt/equity 52%. Passes include Graham Enterprising, Earnings Yield, FCF Yield, Lynch/Neff PEG variants, High Dividend Yield, Magic Formula, Acquirer’s Multiple, and Financial Health—consistent with a cash-generative, income-oriented name rather than a deep net-net or moat compounder (Graham Defensive, Net-Net, Buffett Quality, Economic Moat, and Piotroski F-Score all fail).
 
-Business quality is better than legacy “declining broadcaster” narratives imply. FY 2025 RNS shows external revenue up 1% despite total advertising revenue (TAR) down 5%; two-thirds of revenue now comes from ITV Studios and digital M&E. ITV Studios external revenue grew 10%; ITVX streaming hours rose 16% and digital advertising 12%. Cost discipline (£253m permanent savings since 2019; further £20m guided for 2026) has held group adjusted EBITA to £534m (−1%) and margin at 15.2%.
-
-The Sky deal reframes the equity: post-transaction ITV becomes a global content producer with an investment-grade balance sheet ambition, while shareholders receive a large special return. Until close, the listed entity retains M&E cash generation, World Cup advertising tailwinds and a sticky 5.0p dividend policy. Screen failures (Graham Defensive, Buffett Quality, Economic Moat, Piotroski F-Score 3/9) correctly flag thin margins, sub-moat ROE and deteriorating cash-conversion trends—not reasons to dismiss the name, but limits to “deep value quality.”
-
----
+Business quality supports the screen rather than contradicting it. Under Carolyn McCall’s “More Than TV” strategy, two-thirds of revenue now comes from ITV Studios and digital M&E (FY 2025 RNS). Studios delivered 10% external revenue growth in 2025; ITVX recouped cumulative investment four years early; and the group has returned over £1.6 billion to shareholders since 2018 via dividends and buybacks. The proposed Sky sale (announced 6 July 2026, H1 2026 interim) crystallises a sum-of-parts narrative: ~£950 million net cash return plus retention of a scaled Studios business targeting above-market organic growth at industry-leading margins. For a value investor, the screen captures trough-like multiples on a business that is actively de-risking its UK broadcast exposure while maintaining a 5.0p ordinary dividend (~£190 million annually) and announcing a £100 million buyback alongside H1 2026 results.
 
 ## FINANCIAL REVIEW
-*Primary source: RNS filing bodies unless noted.*
+Primary source: UK RNS filing bodies (`filings_index.json`, regime `uk_rns`). Annual and interim coverage is good (FY 2024, FY 2025, H1 2025, H1 2026, plus Q1/Q3 trading updates). Figures below are from filing extracts unless noted.
 
-### Annual trend (FY 2024 → FY 2025)
+**Annual trajectory (FY 2024 → FY 2025)**
 
-| Metric | FY 2024 (RNS) | FY 2025 (RNS) | Direction |
-|--------|---------------|---------------|-----------|
-| Group external revenue | £3,488m | £3,511m | +1% |
-| Group adjusted EBITA | £542m | £534m | −1% |
-| Adjusted EPS | 9.6p | 8.5p | −11% |
-| Statutory PBT | £521m | £338m | −35%* |
-| Statutory EPS | 10.4p | 5.9p | −43%* |
-| Net debt (31 Dec) | £431m | £566m | Higher |
-| Leverage (ND/EBITDA) | 0.7x | 1.0x | Higher |
-| Free cash flow | £325m | £187m | Lower |
-| Profit-to-cash conversion | 83% | 65% | Lower |
-| Ordinary dividend | 5.0p (~£190m) | 5.0p (~£190m) | Maintained |
+| Metric | FY 2024 | FY 2025 | Source |
+|--------|---------|---------|--------|
+| Total group revenue | £4,140m (−3%) | £4,121m (flat) | FY 2024 / FY 2025 RNS |
+| Group external revenue | £3,488m (−4%) | £3,511m (+1%) | FY 2025 RNS |
+| Group adjusted EBITA | £542m (+11%) | £534m (−1%) | FY 2024 / FY 2025 RNS |
+| Adjusted EPS | 9.6p (+23%) | 8.5p (−11%) | FY 2024 / FY 2025 RNS |
+| Statutory PBT | £521m | £338m (−35%) | FY 2025 RNS (2024 benefited from BritBox International disposal) |
+| TAR | +2% | −5% | FY 2024 / FY 2025 RNS |
+| Digital revenue (M&E) | £556m (+12%) | £614m (+10%) | FY 2024 / FY 2025 RNS |
+| ITV Studios adjusted EBITA | £299m (margin 14.7%) | £297m (margin 13.9%) | FY 2025 RNS |
+| Net debt | £431m | £566m | FY 2024 / FY 2025 RNS |
+| Leverage (net debt/adj. EBITDA) | 0.7x | 1.0x | FY 2024 / FY 2025 RNS |
+| Free cash flow | £325m | £187m | FY 2024 RNS; FY 2025 CEO statement |
+| Profit-to-cash conversion | 83% | 65% | FY 2024 / FY 2025 RNS |
+| Ordinary dividend | 5.0p (~£190m) | 5.0p proposed (~£190m) | FY 2024 / FY 2025 RNS |
 
-\*FY 2024 statutory results included £194m profit on the BritBox International sale; FY 2025 comparatives are distorted accordingly.
+FY 2024 was a peak earnings year helped by record Studios profits, M&E margin expansion, and the BritBox International gain. FY 2025 held adjusted EBITA broadly flat despite a tough TAR comp (2024 Men’s Euros), demonstrating cost discipline (£63m permanent non-content savings) and digital offset. Statutory earnings fell sharply on the absence of one-offs. Net debt rose £135m; leverage remains modest at 1.0x versus a covenant ceiling of 3.5x (FY 2025 accounts, going concern note). FCF weakened materially (£325m → £187m), with profit-to-cash conversion falling to 65%, partly reflecting working-capital dynamics flagged in interim commentary.
 
-FY 2025 was resilient operationally: ITV Studios adjusted EBITA £297m (margin 13.9%); M&E adjusted EBITA £234m (−6% on TAR); digital revenue £614m (+10%). TAR fell 5% against a strong 2024 Euros comp. Exceptional items were £107m (restructuring and corporate transaction costs).
+**Interim trends (H1 2025 → H1 2026)**
 
-Cash generation softened: FCF fell from £325m to £187m; rolling profit-to-cash conversion dropped to 65% (from 83%), with working-capital outflows cited in filings. Net debt rose £135m to £566m; leverage remained modest at 1.0x. Liquidity was adequate—FY 2024 annual filing referenced £1,377m cash plus committed facilities.
+H1 2025 (24 July 2025 RNS) was heavily impacted by Euro 2024 advertising comps: group adjusted EBITA £146m (−31%), adjusted EPS 1.8p (−45%), net debt £586m. Studios revenue grew 3% but EBITA fell 21% on phasing; M&E TAR fell 7% though digital advertising grew 12%.
 
-*Cross-check:* Yahoo `financials_annual.json` aligns on FY 2025 revenue (£3,511m), net income (£220m) and FCF (£148m); the screen uses filing-aligned FCF £148m vs TTM £212m—figures are directionally consistent but not identical, likely due to timing/definition.
+H1 2026 (31 July 2026 RNS) showed stabilisation: group adjusted EBITA £146m (flat), adjusted EPS 2.2p (+22%), total group revenue +2%. M&E adjusted EBITA rose 37% on TAR +3% (World Cup-driven Q2) and ITVX viewing +27%; Studios adjusted EBITA fell 9% (margin 10.6%) on delivery phasing and soap/daytime scheduling changes, with management guiding H2-weighted recovery. Net debt was £652m (31 Dec 2025: £566m).
 
-### Interim trend (H1 2025 → H1 2026)
+**Trading updates**
 
-| Metric | H1 2025 (RNS) | H1 2026 (RNS) | Direction |
-|--------|---------------|---------------|-----------|
-| Group revenue | £1,848m | £1,887m | +2% |
-| Group adjusted EBITA | £146m | £146m | Flat |
-| Adjusted EPS | 1.8p | 2.2p | +22% |
-| Statutory PBT | £67m | £78m | +16% |
-| TAR (H1) | £824m (−7% vs H1 24) | £850m (+3% vs H1 25) | Improved |
-| ITV Studios adj. EBITA | £107m | £97m | −9% (H2-weighted) |
-| M&E adj. EBITA | £35m | £48m | +37% |
-| Net debt (30 Jun) | £586m | £652m | Higher |
-| Digital revenue (H1) | £271m | £307m | +13% |
+Q1 2025 (15 May 2025): external revenue +4%; TAR −2% in line with guidance; digital advertising +15%.
 
-H1 2026 was “solid” and on full-year guidance. Studios margin was 10.6% in H1 (phasing of scripted deliveries and soap/daytime scheduling changes); management guided H2-weighted recovery. M&E benefited from World Cup advertising; ITVX viewing +27%, digital ad revenue +13%. Less-healthy-food (LHF) advertising restrictions (from October 2025) estimated at £20m H1 TAR impact.
+Q3 YTD 2025 (6 November 2025): group revenue +2% YTD; TAR flat in Q3, −5% YTD; flagged Q4 advertising caution ahead of the Budget.
 
-PwC interim review (H1 2026 filing): going concern basis appropriate; no material going-concern uncertainties identified. Net debt £652m; gross borrowings £916m; RCF facilities in place. Covenant definitions differ from reported net debt; interim filing includes covenant-adjusted EBITDA (£555m) and covenant net debt (£652m)—no breach indicated.
+Q1 2026 (14 May 2026): external revenue +1%; TAR −1.5% (better than guidance); digital revenue +12%; net debt £592m; Q2 TAR guided up ~10% on World Cup.
 
-### Pension
+**Balance sheet, pensions, going concern**
 
-H1 2026 interim accounts: defined benefit pension **surplus** £188m (31 Dec 2025: £198m). FY 2024 annual RNS flagged a proposed Box Clever pension resolution with a possible one-off c.£25m cash payment into the ITV scheme in 2025—status post-H1 2026 not confirmed in available bodies.
+FY 2025 accounts confirm going concern with total liquidity of £1,327m (cash £302m plus undrawn facilities). Defined benefit pension surplus £198m (31 Dec 2025). The long-running Box Clever dispute was resolved in October 2025 via transfer into the ITV Pension Scheme (exceptional pension items in FY 2025 accounts).
 
-### Trading updates (sequential colour)
+**Screen vs filing FCF**
 
-- **Q1 2025:** External revenue +4%; TAR −2%; digital ad +15%; net debt £455m.
-- **Q3 2025:** Nine-month TAR flat in Q3; full-year Studios margin 13–15% maintained; Q4 ad caution ahead of Budget.
-- **Q1 2026:** External revenue +1%; TAR −1.5% (better than guide); Q2 TAR expected +c.10% on World Cup; net debt £592m; Sky discussions ongoing.
-- **Post-period:** M&E sale to Sky announced 6 July 2026 (body extract not in index—headline only in `filings_index.json`); H1 2026 interim confirms ~£950m net cash return and £100m buyback.
-
-### Coverage gaps
-
-Annual and interim RNS bodies are well populated (9 annual, 6 interim with bodies). The Sky sale RNS (July 2026) and Liberty placing (October 2025) lack downloadable bodies in the index—deal economics beyond H1 2026 interim must be treated as provisional. `macro_context.json` absent.
-
----
+The screen reports filing-aligned FCF of $148m (FY 2025) versus TTM screen FCF of $212m—material divergence worth noting before sizing on yield metrics. Yahoo `financials_annual.json` (fallback) shows free cash flow of $148m in 2025 and $284m in 2024, broadly consistent with the filing-aligned figure but in USD and below the screen’s TTM estimate; we prefer the FY 2025 RNS figure of £187m for primary analysis.
 
 ## RISKS AND RED FLAGS
-**Regulatory / transaction.** The Sky deal requires CMA approval; a Public Interest Intervention Notice is expected. Phase 2 review could delay completion to **H2 2027**. Until then, separation costs (~£95m exceptional guidance, up from £55m) and execution risk weigh on near-term FCF. No certainty the deal completes on announced terms.
+**Structural and cyclical**
+- UK linear advertising remains in structural decline; FY 2025 TAR fell 5% and Q3 2025 commentary flagged widespread Q4 caution. Less healthy food (LHF) advertising restrictions (from October 2025) estimated at ~£20m H1 2026 TAR impact (H1 2026 RNS).
+- Studios margins are mix-dependent; FY 2025 margin 13.9% at lower end of 13–15% range, with H1 2026 at 10.6% on phasing—execution risk on H2 deliveries.
+- Profit-to-cash conversion fell from 83% (2024) to 65% (2025); working-capital swings in US production inventories remain a cash-flow swing factor.
 
-**Advertising cyclicality.** TAR remains the largest revenue pool for the combined group pre-deal. FY 2025 TAR −5%; Q3 2025 flagged Q4 industry caution. H1 2026 LHF rules cost an estimated £20m. Q3 2026 TAR guided down c.5% despite strong July World Cup—a macro headwind into H2.
+**Sky transaction**
+- Sale of M&E to Sky announced 6 July 2026; subject to CMA review and possible Public Interest Intervention Notice. Management guides completion potentially H2 2027 if Phase 2 review required (H1 2026 RNS). No certainty of approval; deal economics (~£950m net cash return) are not yet in accounts.
+- Post-deal ITV becomes predominantly Studios—customer concentration (streaming platforms), content commissioning cycles, and US tariff/geopolitical risks become more prominent.
 
-**Studios phasing and mix.** H1 2026 Studios margin 10.6% (target range 13–15% full year, lower end). Revenue/profit weighted to H2 and Q4; slippage in scripted deliveries or catalogue licensing would miss guidance. Soap/daytime production changes add transition risk.
+**Balance sheet and governance**
+- Net debt trending up: £431m (Dec 2024) → £566m (Dec 2025) → £652m (Jun 2026). Leverage 1.0x remains comfortable but direction matters if Sky proceeds stall.
+- Liberty Global halved its stake via secondary placing (October 2025 news; RNS headline in index, body not downloaded)—overhang and sentiment risk.
+- Piotroski F-Score 3/9 (screen): deteriorating ROA, leverage, margins, and asset turnover on a year-on-year basis—quality trend flag the screen captures.
+- Exceptional costs elevated: ~£107m operating exceptionals in FY 2025; FY 2026 guidance ~£95m including Sky transaction/separation costs.
 
-**Balance sheet and cash conversion.** Net debt rose from £431m (FY 2024) to £652m (H1 2026). FCF fell sharply (£325m → £187m FY; H1 2026 rolling conversion 63%). Working-capital swings in content production are structural. Screen notes OCF below net income (Piotroski fail).
+**Pension**
+- Box Clever largely resolved, but defined benefit schemes remain a long-duration obligation; FY 2025 pension funding cash outflow £65m per accounts extract.
 
-**Governance / shareholder overhang.** October 2025 secondary placing by Liberty Global (halving stake) triggered a sharp share-price reaction (Financial Times, 22 October 2025)—signals large-holder exit appetite.
-
-**Pension / legacy liabilities.** Surplus on balance sheet is favourable, but Box Clever resolution and remeasurement volatility (H1 2026: £17m remeasurement loss) remain watch items.
-
-**Competitive / structural.** Linear viewing share erosion continues (SOCV 31.7% FY 2025 vs 32.2% FY 2024). Post-deal ITV loses diversified UK broadcast cash flows; Studios faces global content-market competition and streaming commissioning cycles.
-
-**Screen blind spots.** Failures on Economic Moat, Buffett Quality and Piotroski (3/9) reflect weak trend in ROA, margins, leverage and accruals—consistent with filing narrative of transition, not steady-state quality compounder.
-
-Going-concern language in H1 2026 interim is clean; principal forward-looking risk factors in RNS mirror ad market, regulation, liquidity events and strategy change.
-
----
+Filing language supports liquidity (going concern confirmed; severe downside scenarios modelled) but does not eliminate regulatory or advertising-cycle risk.
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **material but deal-centric**; much Google News flow is retail dividend/ISA commentary rather than fundamental analysis.
+Coverage over the past year is substantial, centred on the Sky transaction and results cadence.
 
 **Strategy / M&A (dominant theme)**
-- **November 2025:** ITV confirms preliminary talks to sell M&E to Sky (~£1.6bn); shares surge (The Guardian, BBC, 7 November 2025).
-- **June–July 2026:** Sky terms agreed; sale announced 6 July 2026 (Variety, ig.com, 6 July 2026). ITV describes transaction as “transformative,” targeting ~£950m net cash return and £100m buyback (Yahoo Finance, 9 July 2026; H1 2026 earnings, 31 July 2026).
-- **July 2026:** CMA review under way; completion potentially H2 2027 (H1 2026 RNS).
+- *ITV in talks to sell television business to Sky* (BBC, 7 November 2025); shares reportedly surged ~18% (Share Talk / Guardian, 7 November 2025).
+- *Britain's ITV in talks with Comcast's Sky on $2.15 billion TV sale* (Reuters, 6 November 2025).
+- *Comcast-Owned Sky Agrees on Terms to Buy ITV’s Broadcast and Streaming Unit* (Variety, 25 June 2026).
+- *ITV and Comcast's Sky reshape British TV landscape with $2.1 billion deal* (Reuters, 6 July 2026).
+- *ITV sells its broadcast arm to Sky for £1.6bn — what it means for shareholders* (ig.com, 6 July 2026).
+- *ITV Calls Sky Deal Transformative as It Plans £950 Million Shareholder Return* (Yahoo Finance, 9 July 2026).
+- *ITV’s Big Bet Is Becoming Less About TV* (Yahoo Finance, 6 March 2026)—strategic pivot narrative.
 
-**Capital returns / holders**
-- **October 2025:** Liberty Global halves ITV stake via secondary placing; shares fall (Financial Times, 22 October 2025).
-- **2025–2026:** £235m buyback completed April 2025; interim dividend maintained at 1.7p; £100m buyback announced July 2026.
+**Results and capital returns**
+- *ITV shares rise as results beat expectations* (UK Investor Magazine, 5 March 2026)—FY 2025.
+- *ITV PLC (ITVPF) Full Year 2025 Earnings Call Highlights* (Yahoo Finance, 5 March 2026).
+- *ITV PLC (ITVPF) (H1 2026) Earnings Call Highlights: Strategic M&A Sale and Digital Momentum* (Yahoo Finance, 31 July 2026)—£100m buyback alongside interim results.
 
-**Operations**
-- **March 2026:** FY 2025 results—digital growth, resilient EBITA, Sky talks ongoing (Investors’ Chronicle, 5 March 2026).
-- **May–July 2026:** World Cup supports Q2 advertising; ITVX viewing +27% H1 2026 (Yahoo Finance earnings highlights, 31 July 2026).
-- **October 2025:** LHF advertising restrictions implemented; Q3 trading update notes macro caution into Q4.
+**Shareholder / sentiment**
+- *ITV shares sink after John Malone’s Liberty halves its stake* (Financial Times, 22 October 2025).
 
-**Management:** Carolyn McCall remains CEO throughout; no CEO change in the manifest period.
+**Macro / sector colour**
+- Multiple retail/commentary pieces on dividend yield and World Cup advertising (e.g. Proactive Investors, 14 May 2026; Yahoo Finance UK, 6 June 2026).
 
----
+News is not thin; the Sky deal dominates and introduces binary regulatory catalyst risk. Management continuity (Carolyn McCall) is stable throughout the period covered.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Filings support the screen’s cheapness and income case—maintained dividend, sub-1.5x leverage, Studios/digital growth and a large prospective cash return—but FCF deterioration, ad cyclicality and CMA timing on the Sky deal prevent full confirmation of the strong-buy signal until pro-forma Studios economics and regulatory outcome are clearer.
+Confidence: 0.72
+Rationale: Filing-backed earnings resilience, maintained dividend, and the Sky-led cash-return catalyst support the quantitative strong-buy signal, but rising net debt, weak Piotroski trends, FCF/screen FCF divergence, and M&A regulatory uncertainty prevent full conviction until deal terms and post-transaction Studios economics are clearer.
