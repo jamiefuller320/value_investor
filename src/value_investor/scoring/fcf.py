@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,23 @@ _ADJUSTED_EARNINGS_LABELS = [
     "Normalized Net Income",
 ]
 
+_DIVIDENDS_PAID_LABELS = [
+    "Cash Dividends Paid",
+    "Common Stock Dividend Paid",
+]
+
+_INTERIM_EPS_DECLINE_RES = (
+    re.compile(
+        r"(?:diluted|basic|adjusted)?\s*earnings per share\b.{0,200}?"
+        r"(?:decline|decrease|down)\s+of\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\beps\b.{0,120}?(?:decline|decrease|down)\s+of\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+)
+
 _FILING_METRIC_KEYS = (
     "operating_cashflow",
     "operating_cashflow_prev",
@@ -39,6 +57,8 @@ _FILING_METRIC_KEYS = (
     "free_cashflow_prev",
     "net_income_adjusted",
     "net_income_adjusted_prev",
+    "dividends_paid",
+    "interim_eps_decline_pct",
 )
 
 _RESEARCH_ROOTS = (
@@ -109,12 +129,124 @@ def extract_income_metrics_from_annual_financials(
     return metrics
 
 
+def extract_dividends_paid_from_annual_financials(
+    financials: dict[str, Any],
+) -> float | None:
+    """Latest annual cash dividends paid (absolute value) from ``financials_annual.json``."""
+    cash_flow = financials.get("cash_flow") or {}
+    if not cash_flow:
+        return None
+    years = _sorted_financial_years(cash_flow)
+    if not years:
+        return None
+    paid = _annual_label_value(cash_flow.get(years[0]) or {}, _DIVIDENDS_PAID_LABELS)
+    if paid is None:
+        return None
+    return abs(float(paid))
+
+
+def parse_interim_eps_decline_pct(text: str) -> float | None:
+    """Return positive decline fraction (e.g. 0.039 for 3.9%) from interim filing prose."""
+    if not text:
+        return None
+    for pattern in _INTERIM_EPS_DECLINE_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        try:
+            pct = float(match.group(1)) / 100.0
+        except (TypeError, ValueError):
+            continue
+        if pct > 0:
+            return pct
+    return None
+
+
+def _filings_index_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
+    ticker = ticker.strip().upper()
+    candidates: list[Path] = []
+    if output_dir is not None:
+        candidates.append(
+            Path(output_dir) / "research" / ticker / "sources" / "filings" / "filings_index.json"
+        )
+    for root in _RESEARCH_ROOTS:
+        candidates.append(root / ticker / "sources" / "filings" / "filings_index.json")
+    return candidates
+
+
+def _resolve_filing_body_path(body_path: str | None) -> Path | None:
+    if not body_path:
+        return None
+    path = Path(body_path)
+    if path.is_file():
+        return path
+    resolved = resolve_json_path(path)
+    if resolved is not None and resolved.is_file():
+        return resolved
+    return None
+
+
+def load_latest_interim_filing_body(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> str | None:
+    """Load text from the newest indexed interim filing body when available."""
+    for index_path in _filings_index_candidates(ticker, output_dir):
+        resolved = resolve_json_path(index_path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+
+        interim_rows = [
+            row
+            for row in payload.get("filings") or []
+            if isinstance(row, dict)
+            and row.get("period") == "interim"
+            and row.get("has_body")
+        ]
+        if not interim_rows:
+            continue
+
+        interim_rows.sort(
+            key=lambda row: str(row.get("published_at") or ""),
+            reverse=True,
+        )
+        for row in interim_rows:
+            body_path = _resolve_filing_body_path(row.get("body_path"))
+            if body_path is None:
+                continue
+            try:
+                return body_path.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+    return None
+
+
+def extract_interim_eps_decline_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> float | None:
+    """Parse interim diluted-EPS decline from cached filing bodies."""
+    body = load_latest_interim_filing_body(ticker, output_dir=output_dir)
+    if not body:
+        return None
+    return parse_interim_eps_decline_pct(body)
+
+
 def extract_filing_metrics_from_annual_financials(
     financials: dict[str, Any],
 ) -> dict[str, float | None]:
     """Combined cash-flow and adjusted-earnings metrics from cached Yahoo annuals."""
     metrics = extract_cashflow_metrics_from_annual_financials(financials)
     metrics.update(extract_income_metrics_from_annual_financials(financials))
+    metrics["dividends_paid"] = extract_dividends_paid_from_annual_financials(financials)
     return metrics
 
 
@@ -383,5 +515,11 @@ def enrich_universe_with_filing_metrics(
             current = out.at[index, key]
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, key] = value
+
+        interim_decline = extract_interim_eps_decline_for_ticker(ticker, output_dir=output_dir)
+        if interim_decline is not None:
+            current = out.at[index, "interim_eps_decline_pct"]
+            if current is None or (isinstance(current, float) and pd.isna(current)):
+                out.at[index, "interim_eps_decline_pct"] = interim_decline
 
     return out

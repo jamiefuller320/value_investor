@@ -431,6 +431,55 @@ def test_dividend_yield_overlay_not_triggered_when_fcf_yield_passes():
     assert report.to_dict()["adjusted_signal"] == "strong_buy"
 
 
+def test_interim_quality_overlay_caps_megp_like_profile():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="MEGP.L",
+            name="ME Group International plc",
+            sector="Industrials",
+            signal="strong_buy",
+            passed_families="cheapness,quality,dividend,garp,risk",
+            free_cashflow=25_153_000.0,
+            interim_eps_decline_pct=0.039,
+            dividends_paid=29_769_000.0,
+        ),
+    ])
+    model_results = pd.DataFrame(
+        columns=["ticker", "model_id", "model_name", "passed", "score", "reasons", "failed_criteria"]
+    )
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert report.signal == "strong_buy"
+    assert snapshot["interim_quality_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Interim-quality overlay" in report.summary
+
+
+def test_interim_quality_overlay_not_triggered_when_fcf_covers_dividends():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="TEST.L",
+            signal="strong_buy",
+            passed_families="cheapness,quality,dividend,garp,risk",
+            free_cashflow=40_000_000.0,
+            interim_eps_decline_pct=0.039,
+            dividends_paid=29_769_000.0,
+        ),
+    ])
+
+    report = build_company_reports(
+        signals,
+        pd.DataFrame(
+            columns=["ticker", "model_id", "model_name", "passed", "score", "reasons", "failed_criteria"]
+        ),
+    )[0]
+
+    assert report.to_dict()["interim_quality_overlay"] is False
+    assert report.to_dict()["adjusted_signal"] == "strong_buy"
+
+
 def test_cash_conversion_overlay_caps_hik_like_profile():
     signals = pd.DataFrame([
         _signal_row(

@@ -14,6 +14,7 @@ from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
+from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     reconcile_fcf_for_ticker,
@@ -72,6 +73,7 @@ class CompanyReport:
     healthcare_overlay: bool = False
     cash_conversion_overlay: bool = False
     dividend_yield_overlay: bool = False
+    interim_quality_overlay: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -115,6 +117,7 @@ class CompanyReport:
             "healthcare_overlay": self.healthcare_overlay,
             "cash_conversion_overlay": self.cash_conversion_overlay,
             "dividend_yield_overlay": self.dividend_yield_overlay,
+            "interim_quality_overlay": self.interim_quality_overlay,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -164,6 +167,7 @@ class CompanyReport:
             healthcare_overlay=bool(data.get("healthcare_overlay")),
             cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
             dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
+            interim_quality_overlay=bool(data.get("interim_quality_overlay")),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
             research_risk_level=data.get("research_risk_level"),
@@ -323,6 +327,7 @@ def _brief_summary(
     healthcare_overlay: bool = False,
     cash_conversion_overlay: bool = False,
     dividend_yield_overlay: bool = False,
+    interim_quality_overlay: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -395,6 +400,13 @@ def _brief_summary(
     if dividend_yield_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
             f"Dividend-yield overlay: high yield passes but FCF yield and earnings quality fail "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if interim_quality_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Interim-quality overlay: quality passes but interim EPS declined and FCF/dividend "
+            f"coverage is below 1.0× "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -528,6 +540,34 @@ def build_company_reports(
                 adjusted_signal=adjusted_signal_str,
             )
 
+        interim_quality_overlay_flag = row.get("interim_quality_overlay")
+        if interim_quality_overlay_flag is not None and not (
+            isinstance(interim_quality_overlay_flag, float) and pd.isna(interim_quality_overlay_flag)
+        ):
+            interim_quality_overlay = bool(interim_quality_overlay_flag)
+        else:
+            interim_decline = row.get("interim_eps_decline_pct")
+            interim_eps_decline_pct = (
+                float(interim_decline)
+                if interim_decline is not None
+                and not (isinstance(interim_decline, float) and pd.isna(interim_decline))
+                else None
+            )
+            dividends = row.get("dividends_paid")
+            dividends_paid = (
+                float(dividends)
+                if dividends is not None and not (isinstance(dividends, float) and pd.isna(dividends))
+                else None
+            )
+            interim_quality_overlay, adjusted_signal_str = apply_interim_quality_overlay_to_signal(
+                signal,
+                passed_families=row.get("passed_families"),
+                interim_eps_decline_pct=interim_eps_decline_pct,
+                free_cashflow=free_cashflow,
+                dividends_paid=dividends_paid,
+                adjusted_signal=adjusted_signal_str,
+            )
+
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
@@ -583,6 +623,7 @@ def build_company_reports(
             healthcare_overlay=healthcare_overlay,
             cash_conversion_overlay=cash_conversion_overlay,
             dividend_yield_overlay=dividend_yield_overlay,
+            interim_quality_overlay=interim_quality_overlay,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -630,6 +671,7 @@ def build_company_reports(
                 healthcare_overlay=healthcare_overlay,
                 cash_conversion_overlay=cash_conversion_overlay,
                 dividend_yield_overlay=dividend_yield_overlay,
+                interim_quality_overlay=interim_quality_overlay,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,
