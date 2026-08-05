@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 PARKED_STATUS = "parked"
 DEFAULT_MAX_AGENT_RETRIES = 2
+DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
 DEFAULT_CI_RED_PARK_HOURS = 48
 GITHUB_API_VERSION = "2022-11-28"
@@ -194,6 +195,74 @@ def _park_task(
             parked_reason=reason,
         )
     return action
+
+
+def record_agent_no_diff_run(
+    task_id: str,
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    max_runs: int = DEFAULT_MAX_NO_DIFF_RUNS,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Increment no-diff counter; park when the cap is reached."""
+    now = now or datetime.now(UTC)
+    data = load_engineering_tasks(tasks_path)
+    row = next(
+        (item for item in data.get("tasks") or [] if str(item.get("id") or "") == task_id),
+        None,
+    )
+    if row is None:
+        return {"recorded": False, "skipped": True, "reason": f"task {task_id} not found"}
+    if str(row.get("status") or "open") != "open":
+        return {
+            "recorded": False,
+            "skipped": True,
+            "reason": f"task {task_id} is {row.get('status')} (expected open)",
+        }
+
+    count = int(row.get("no_diff_count") or 0) + 1
+    stamp = now.isoformat()
+    if count >= max(1, int(max_runs)):
+        reason = (
+            f"agent produced no code changes {count} time(s) "
+            f"(cap {max_runs}) — manual review"
+        )
+        if apply:
+            mark_task_status(
+                task_id,
+                PARKED_STATUS,
+                path=tasks_path,
+                committed_path=tasks_path,
+                parked_reason=reason,
+                parked_at=stamp,
+                no_diff_count=count,
+                last_no_diff_at=stamp,
+            )
+        return {
+            "recorded": True,
+            "task_id": task_id,
+            "no_diff_count": count,
+            "parked": True,
+            "parked_reason": reason,
+        }
+
+    if apply:
+        mark_task_status(
+            task_id,
+            "open",
+            path=tasks_path,
+            committed_path=tasks_path,
+            no_diff_count=count,
+            last_no_diff_at=stamp,
+        )
+    return {
+        "recorded": True,
+        "task_id": task_id,
+        "no_diff_count": count,
+        "parked": False,
+        "remaining_before_park": max(1, int(max_runs)) - count,
+    }
 
 
 def retry_failed_tasks(

@@ -773,6 +773,8 @@ def mark_task_status(
     if status == "failed":
         fields["failure_count"] = int((prior_row or {}).get("failure_count") or 0) + 1
         fields["last_failed_at"] = datetime.now(UTC).isoformat()
+    if status in {"pr_open", "merged"}:
+        fields["no_diff_count"] = 0
     if status == "parked":
         fields.setdefault("parked_at", datetime.now(UTC).isoformat())
         fields.setdefault("parked_reason", "manual review required")

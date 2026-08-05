@@ -183,6 +183,42 @@ jobs:
           git commit -m "feat(engineering): ${TITLE}"
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
+      - name: Record no-diff agent run
+        if: >-
+          github.event.inputs.compile_only != 'true'
+          && github.event.inputs.pr_only != 'true'
+          && steps.branch.outputs.has_changes == 'false'
+        id: no_diff
+        run: |
+          ftse-engineering record-no-diff \
+            --task-id "${{ steps.task.outputs.task_id }}" \
+            --json | tee /tmp/no_diff.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/no_diff.json").read_text(encoding="utf-8"))
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"recorded={'true' if data.get('recorded') else 'false'}\n"
+                  f"parked={'true' if data.get('parked') else 'false'}\n"
+              )
+          PY
+
+      - name: Sync main before no-diff queue commit
+        if: steps.no_diff.outputs.recorded == 'true'
+        run: git pull --rebase --autostash origin main
+
+      - name: Commit no-diff queue state
+        if: steps.no_diff.outputs.recorded == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: update engineering queue no-diff count [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json
+          skip_fetch: false
+
       - name: Push branch and open draft PR
         if: >-
           github.event.inputs.compile_only != 'true'
