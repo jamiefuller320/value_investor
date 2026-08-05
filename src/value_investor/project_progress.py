@@ -186,15 +186,15 @@ def build_project_progress(
         ),
         "fixes": [
             "Canonical path + library migration (implemented).",
-            "Sunday bootstrap seeds strong_buy indexes when missing (capped).",
+            "Sunday/weekday bootstrap seeds buy-tier indexes when missing (capped).",
             "Misattribution filter + headline reclassify at pass start (implemented).",
             "Raise weekday caps and run ingest after Sunday screen (implemented).",
             "Targeted BREE.L ingest suggestions for engineering micro-compile.",
         ],
         "commands": [
             "ftse-ingest-loop status --json",
-            "ftse-ingest-loop run --max-targets 10 --json",
-            "gh workflow run ingest-loop.yml -f force=true -f max_targets=15",
+            "ftse-ingest-loop run --max-targets 15 --json",
+            "gh workflow run ingest-loop.yml -f force=true -f max_targets=20",
         ],
     }
 

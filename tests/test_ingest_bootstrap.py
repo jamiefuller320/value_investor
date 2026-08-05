@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from unittest.mock import patch
 
 from value_investor.research.ingest_bootstrap import (
     bootstrap_buy_tier_research,
@@ -126,3 +127,39 @@ def test_bootstrap_buy_tier_research_migrates_strong_buy(tmp_path: Path, monkeyp
     )
     assert summary["migrated"] == 1
     assert (canonical_filings_dir(data_dir, "BREE.L") / "filings_index.json").exists()
+
+
+@patch("value_investor.research.ingest.ingest_research_sources")
+def test_bootstrap_buy_tier_research_seeds_buy_tier_up_to_cap(
+    mock_ingest: object,
+    tmp_path: Path,
+    monkeypatch,
+):
+    monkeypatch.chdir(tmp_path)
+    data_dir = tmp_path / "docs/data"
+    reports = [
+        _report("AAA.L", "Alpha plc", signal="strong_buy"),
+        _report("BBB.L", "Beta plc", signal="buy"),
+        _report("CCC.L", "Gamma plc", signal="buy"),
+    ]
+
+    def _fake_ingest(**kwargs):
+        sources_dir = kwargs["sources_dir"]
+        filings_dir = sources_dir / "filings"
+        filings_dir.mkdir(parents=True, exist_ok=True)
+        (filings_dir / "filings_index.json").write_text(
+            json.dumps({"summary": {"total": 0, "with_body": 0}, "filings": []}),
+            encoding="utf-8",
+        )
+        return {"filings_summary": {"total": 0, "with_body": 0}}
+
+    mock_ingest.side_effect = _fake_ingest
+
+    summary = bootstrap_buy_tier_research(reports, output_dir=data_dir, seed_cap=2)
+
+    assert summary["seeded"] == 2
+    assert summary["pending"] == 1
+    assert mock_ingest.call_count == 2
+    assert (canonical_filings_dir(data_dir, "AAA.L") / "filings_index.json").exists()
+    assert (canonical_filings_dir(data_dir, "BBB.L") / "filings_index.json").exists()
+    assert not (canonical_filings_dir(data_dir, "CCC.L") / "filings_index.json").exists()

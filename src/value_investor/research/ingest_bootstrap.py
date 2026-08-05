@@ -14,7 +14,7 @@ from value_investor.summary import CompanyReport
 logger = logging.getLogger(__name__)
 
 DEFAULT_COMMITTED_DATA_DIR = Path("docs/data")
-BOOTSTRAP_SEED_CAP = 10
+BOOTSTRAP_SEED_CAP = 20
 
 
 def research_roots(output_dir: Path) -> list[Path]:
@@ -141,7 +141,8 @@ def bootstrap_buy_tier_research(
     pending = 0
 
     for report in buy_reports:
-        seed = seeded < seed_cap and report.signal == "strong_buy"
+        # Strong_buy first (sort above); seed any buy-tier missing a canonical index.
+        seed = seeded < seed_cap
         row = ensure_canonical_research_store(
             report.ticker,
             report.name,
