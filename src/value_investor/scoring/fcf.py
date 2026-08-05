@@ -250,6 +250,7 @@ def resolve_free_cashflow(row: pd.Series) -> float | None:
 
 
 FCF_DIVERGENCE_THRESHOLD = 0.25
+FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 
 
 def _fcf_sign(value: float) -> int:
@@ -265,18 +266,20 @@ def fcf_values_diverge(
     screen_ttm: float | None,
     *,
     threshold: float = FCF_DIVERGENCE_THRESHOLD,
+    sign_min_abs: float = FCF_SIGN_DIVERGENCE_MIN_ABS,
 ) -> bool:
-    """True when sign differs or relative magnitude gap exceeds ``threshold``."""
+    """True when signs differ by more than ``sign_min_abs``, or same-sign gap exceeds ``threshold``."""
     if canonical is None or screen_ttm is None:
         return False
     if canonical == screen_ttm:
         return False
+    abs_gap = abs(canonical - screen_ttm)
     if _fcf_sign(canonical) != _fcf_sign(screen_ttm):
-        return True
+        return abs_gap > sign_min_abs
     denominator = max(abs(canonical), abs(screen_ttm))
     if denominator == 0:
         return False
-    return abs(canonical - screen_ttm) / denominator > threshold
+    return abs_gap / denominator > threshold
 
 
 def _format_fcf_compact(value: float) -> str:
