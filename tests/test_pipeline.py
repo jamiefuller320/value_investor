@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 import value_investor.pipeline  # noqa: F401 — installs research snapshot hooks
 from value_investor.research.document import ResearchDocument
@@ -13,8 +14,13 @@ from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
 from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
-from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf, enrich_universe_with_filing_metrics
+from value_investor.scoring.fcf import (
+    enrich_universe_with_canonical_fcf,
+    enrich_universe_with_filing_metrics,
+    parse_interim_eps_decline_pct,
+)
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
+from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
     apply_sector_overrides,
@@ -609,3 +615,97 @@ def test_enrich_signals_with_dividend_yield_overlay_caps_megp_like_profile():
     assert enriched.iloc[0]["signal"] == "strong_buy"
     assert bool(enriched.iloc[0]["dividend_yield_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_parse_interim_eps_decline_pct_from_filing_prose():
+    text = (
+        "Diluted earnings per share of 6.48 pence, a decline of 3.9% "
+        "(H1 2025: 6.74 pence per share)."
+    )
+    assert parse_interim_eps_decline_pct(text) == pytest.approx(0.039)
+
+
+def test_enrich_universe_with_filing_metrics_extracts_interim_eps_decline(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    body_path = filings_dir / "interim.txt"
+    body_path.write_text(
+        "Diluted earnings per share of 6.48 pence, a decline of 3.9% "
+        "(H1 2025: 6.74 pence per share).",
+        encoding="utf-8",
+    )
+    (sources / "filings").mkdir(parents=True, exist_ok=True)
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "interim",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                        "published_at": "2026-07-13",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Dividends Paid": -29_769_000.0,
+            }
+        },
+        "income_statement": {"2025": {"Normalized Income": 55_047_230.0}},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame([{"ticker": "MEGP.L", "name": "ME Group International plc"}])
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["dividends_paid"] == pytest.approx(29_769_000.0)
+    assert row["interim_eps_decline_pct"] == pytest.approx(0.039)
+
+
+def test_enrich_signals_with_interim_quality_overlay_caps_megp_like_profile():
+    signals = pd.DataFrame([
+        {
+            "ticker": "MEGP.L",
+            "name": "ME Group International plc",
+            "sector": "Industrials",
+            "signal": "strong_buy",
+            "passed_families": "cheapness,quality,dividend,garp,risk",
+            "free_cashflow": 25_153_000.0,
+            "interim_eps_decline_pct": 0.039,
+            "dividends_paid": 29_769_000.0,
+        }
+    ])
+    model_results = pd.DataFrame([])
+
+    enriched = enrich_signals_with_interim_quality_overlay(signals, model_results)
+
+    assert enriched.iloc[0]["signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["interim_quality_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_signals_with_interim_quality_overlay_not_triggered_without_interim_decline():
+    signals = pd.DataFrame([
+        {
+            "ticker": "MEGP.L",
+            "signal": "strong_buy",
+            "passed_families": "cheapness,quality,dividend,garp,risk",
+            "free_cashflow": 25_153_000.0,
+            "dividends_paid": 29_769_000.0,
+        }
+    ])
+
+    enriched = enrich_signals_with_interim_quality_overlay(signals, pd.DataFrame())
+
+    assert bool(enriched.iloc[0]["interim_quality_overlay"]) is False
+    assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
