@@ -347,6 +347,8 @@ def _brief_summary(
         parts.append(format_timing_summary(timing_signal, rsi_14, timing_reasons))
         if action_note:
             parts.append(f"Action: {action_note}.")
+    elif action_note and "FCF filing-aligned" in action_note:
+        parts.append(f"Action: {action_note}.")
 
     if signal in ("strong_buy", "buy") and trade_plan is not None:
         plan_text = format_trade_plan_text(trade_plan)

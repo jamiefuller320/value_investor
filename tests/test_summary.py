@@ -566,6 +566,8 @@ def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
 
 def test_fcf_values_diverge_on_sign_or_magnitude():
     assert fcf_values_diverge(119_000_000.0, -66_125_000.0) is True
+    assert fcf_values_diverge(1_000_000.0, -1_000_000.0) is False
+    assert fcf_values_diverge(60_000_000.0, -1_000_000.0) is True
     assert fcf_values_diverge(100.0, 80.0) is False
     assert fcf_values_diverge(100.0, 70.0, threshold=0.25) is True
     assert fcf_values_diverge(100.0, 100.0) is False
@@ -616,3 +618,25 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     assert snapshot["adjusted_signal"] == "strong_buy"
     assert "FCF filing-aligned $119M" in snapshot["action_note"]
     assert "screen TTM −$66.1M" in snapshot["action_note"]
+
+
+def test_build_company_reports_surfaces_fcf_bridge_when_timing_insufficient(tmp_path: Path):
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_hik_financials()), encoding="utf-8")
+
+    signals = pd.DataFrame([
+        _signal_row(
+            free_cashflow=-66_125_000.0,
+            free_cashflow_screen_ttm=-66_125_000.0,
+            timing_signal="insufficient_data",
+            timing_score=0.0,
+            rsi_14=None,
+        )
+    ])
+    model_results = _model_results_for_hik_cash_conversion_cap(ticker="HIK.L")
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+
+    assert "FCF filing-aligned $119M" in report.action_note
+    assert "FCF filing-aligned $119M" in report.summary
