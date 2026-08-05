@@ -59,6 +59,7 @@ from value_investor.engineering_queue import (
     is_safe_to_clear_stale_branch,
     reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
+    summarize_queue,
     task_id_from_branch,
 )
 
