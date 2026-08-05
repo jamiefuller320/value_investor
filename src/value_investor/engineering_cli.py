@@ -40,6 +40,7 @@ from value_investor.engineering_tasks import (
 )
 from value_investor.engineering_recovery import (
     recover_engineering_queue,
+    record_agent_no_diff_run,
     retry_failed_tasks,
     summarize_parked_tasks,
 )
@@ -223,6 +224,30 @@ def _cmd_list_parked(args: argparse.Namespace) -> int:
         for row in rows:
             print(f"{row['id']}: {row.get('parked_reason')}")
     return 0
+
+
+def _cmd_record_no_diff(args: argparse.Namespace) -> int:
+    result = record_agent_no_diff_run(
+        str(args.task_id).strip(),
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        max_runs=args.max_runs,
+    )
+    if args.json:
+        _print_json(result)
+    elif result.get("skipped"):
+        print(result.get("reason") or "Skipped no-diff record")
+    elif result.get("parked"):
+        print(
+            f"Parked {result.get('task_id')} after "
+            f"{result.get('no_diff_count')} no-diff run(s)"
+        )
+    else:
+        print(
+            f"Recorded no-diff run for {result.get('task_id')} "
+            f"({result.get('no_diff_count')}/{args.max_runs}; "
+            f"{result.get('remaining_before_park')} before park)"
+        )
+    return 0 if result.get("recorded") or result.get("skipped") else 1
 
 
 def _load_open_prs_json(path: str | None) -> list[dict[str, Any]]:
@@ -700,6 +725,20 @@ def main(argv: list[str] | None = None) -> int:
 
     parked_p = sub.add_parser("list-parked", parents=[common], help="List tasks parked for manual review")
     parked_p.set_defaults(func=_cmd_list_parked)
+
+    record_no_diff_p = sub.add_parser(
+        "record-no-diff",
+        parents=[common],
+        help="Record an agent run that produced no committable code changes",
+    )
+    record_no_diff_p.add_argument("--task-id", required=True)
+    record_no_diff_p.add_argument(
+        "--max-runs",
+        type=int,
+        default=2,
+        help="Park after this many consecutive no-diff runs (default: 2)",
+    )
+    record_no_diff_p.set_defaults(func=_cmd_record_no_diff)
 
     branch_stale_p = sub.add_parser(
         "branch-is-stale",

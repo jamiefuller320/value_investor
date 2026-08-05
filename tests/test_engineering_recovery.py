@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from value_investor.engineering_recovery import (
     recover_engineering_queue,
+    record_agent_no_diff_run,
     retry_failed_tasks,
     summarize_parked_tasks,
 )
@@ -114,3 +115,30 @@ def test_summarize_parked_tasks(tmp_path: Path):
     rows = summarize_parked_tasks(tasks_path)
     assert len(rows) == 1
     assert rows[0]["id"] == "eng-20260729-01"
+
+
+def test_record_agent_no_diff_run_increments_then_parks(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps({"tasks": [_task("eng-20260804-36").to_dict()]}),
+        encoding="utf-8",
+    )
+
+    first = record_agent_no_diff_run(
+        "eng-20260804-36",
+        tasks_path=tasks_path,
+        max_runs=2,
+    )
+    assert first["recorded"] is True
+    assert first["parked"] is False
+    assert first["no_diff_count"] == 1
+
+    second = record_agent_no_diff_run(
+        "eng-20260804-36",
+        tasks_path=tasks_path,
+        max_runs=2,
+    )
+    assert second["parked"] is True
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "parked"
+    assert "no code changes" in str(updated["tasks"][0].get("parked_reason"))

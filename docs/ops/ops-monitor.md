@@ -185,6 +185,8 @@ for a daily digest regardless of status.
 | `failed` with retries left + cooldown elapsed | Reopen → `open` |
 | `failed` after max agent retries | Park → `parked` (manual review) |
 | `pr_open` with CI red for 48h+ | Park → `parked` (unblocks queue; PR stays for you) |
+| Agent runs with **no committable code changes** | After **2** consecutive no-diff runs → `parked` (`record-no-diff` in `engineering-agent.yml`) |
+| Agent runs with **no committable code changes** | After **2** consecutive no-diff runs → `parked` (`ftse-engineering record-no-diff`; wired in `engineering-agent.yml`) |
 
 List parked tasks: `ftse-engineering list-parked`
 
