@@ -10,8 +10,11 @@ from value_investor.rebalance_log import (
     append_rebalance_log,
     build_rebalance_log_entry,
     collect_decision_candidates,
+    collect_screen_buy_tier,
+    gate_excluded_tickers,
     load_rebalance_log,
     replay_counterfactual_from_log,
+    resolve_replay_candidates,
     slim_candidate,
 )
 
@@ -56,6 +59,13 @@ def test_collect_decision_candidates_includes_holdings():
             "price": 12,
         },
         {
+            "ticker": "AI.L",
+            "signal": "strong_buy",
+            "adjusted_signal": "hold",
+            "conviction_score": 0.85,
+            "price": 8,
+        },
+        {
             "ticker": "HOLD.L",
             "signal": "hold",
             "price": 10,
@@ -66,9 +76,115 @@ def test_collect_decision_candidates_includes_holdings():
             "price": 5,
         },
     ]
+    screen = collect_screen_buy_tier(marked, fund)
+    screen_tickers = {row["ticker"] for row in screen}
+    assert screen_tickers == {"BUY.L", "AI.L", "HOLD.L"}
+
     picked = collect_decision_candidates(marked, fund, use_adjusted_signal=False)
-    tickers = {row["ticker"] for row in picked}
-    assert tickers == {"BUY.L", "HOLD.L"}
+    assert {row["ticker"] for row in picked} == {"BUY.L", "AI.L", "HOLD.L"}
+
+    gated = collect_decision_candidates(marked, fund, use_adjusted_signal=True)
+    assert {row["ticker"] for row in gated} == {"BUY.L", "HOLD.L"}
+    assert gate_excluded_tickers(screen, gated) == ["AI.L"]
+
+
+def test_resolve_replay_candidates_widens_on_ai_gate_change():
+    entry = {
+        "selection": {
+            "use_adjusted_signal": True,
+            "require_research_accumulate": True,
+        },
+        "screen_buy_tier": [{"ticker": "AI.L"}, {"ticker": "BUY.L"}],
+        "candidates": [{"ticker": "BUY.L"}],
+    }
+    assert resolve_replay_candidates(entry) == entry["candidates"]
+    assert resolve_replay_candidates(entry, use_adjusted_signal=False) == entry[
+        "screen_buy_tier"
+    ]
+    assert (
+        resolve_replay_candidates(entry, candidate_source="screen_buy_tier")
+        == entry["screen_buy_tier"]
+    )
+
+
+def test_replay_counterfactual_uses_screen_pool_for_raw_signal(tmp_path: Path):
+    out = tmp_path / "track"
+    out.mkdir()
+    base_entry = {
+        "schema_version": 2,
+        "strategy_mode": "automated",
+        "trade_cost_pct": 0.0,
+        "max_positions": 5,
+        "acted": True,
+        "selection": {
+            "skip_timing_wait": True,
+            "min_conviction": 0.0,
+            "sector_cap": 1.0,
+            "use_adjusted_signal": True,
+            "require_research_accumulate": False,
+            "use_momentum_grace": False,
+            "exit_confirm_screens": 0,
+            "reentry_cooldown_screens": 0,
+            "min_rebalance_notional_gbp": 0.0,
+        },
+        "nav_before": 1000.0,
+        "cash_before": 1000.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": [],
+        "rebalance_state_before": {},
+        "screen_buy_tier": [
+            {
+                "ticker": "RAW.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "hold",
+                "conviction_score": 0.95,
+                "price": 10,
+                "sector": "Tech",
+            },
+            {
+                "ticker": "BUY.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.7,
+                "price": 10,
+                "sector": "Banks",
+            },
+        ],
+        "candidates": [
+            {
+                "ticker": "BUY.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.7,
+                "price": 10,
+                "sector": "Banks",
+            }
+        ],
+        "gate_excluded": ["RAW.L"],
+        "holdings_after": [],
+        "rebalance_state_after": {},
+    }
+    entries = [
+        {**base_entry, "gate": {"local_time": "2026-01-01T12:00:00+00:00"}},
+        {**base_entry, "gate": {"local_time": "2026-01-02T12:00:00+00:00"}},
+    ]
+    for entry in entries:
+        append_rebalance_log(out, entry)
+
+    gated = replay_counterfactual_from_log(
+        load_rebalance_log(out),
+        max_positions=2,
+        use_adjusted_signal=True,
+    )
+    raw = replay_counterfactual_from_log(
+        load_rebalance_log(out),
+        max_positions=2,
+        use_adjusted_signal=False,
+    )
+    assert gated is not None and raw is not None
+    assert gated["used_screen_buy_tier_pool"] is False
+    assert raw["used_screen_buy_tier_pool"] is True
+    assert raw["simulated_trade_count"] > gated["simulated_trade_count"]
 
 
 def test_run_daily_automation_appends_rebalance_log(tmp_path, monkeypatch):
@@ -113,10 +229,11 @@ def test_run_daily_automation_appends_rebalance_log(tmp_path, monkeypatch):
     assert len(entries) == 1
     entry = entries[0]
     assert entry["acted"] is True
+    assert entry["schema_version"] == 2
     assert entry["screen_source"]["run_at"] == "2026-07-15T08:00:00+00:00"
     assert any(row["ticker"] == "AAA.L" for row in entry["candidates"])
-
-
+    assert any(row["ticker"] == "AAA.L" for row in entry["screen_buy_tier"])
+    assert entry["gate_excluded"] == []
 def test_replay_counterfactual_from_log_changes_trade_count(tmp_path: Path):
     out = tmp_path / "track"
     out.mkdir()

@@ -187,6 +187,9 @@ def test_bootstrap_rebalance_log_from_trades_and_archive(tmp_path: Path):
     assert len(entries) == 1
     assert entries[0]["bootstrapped"] is True
     assert entries[0]["acted"] is True
+    assert entries[0]["schema_version"] == 2
+    assert "screen_buy_tier" in entries[0]
+    assert "gate_excluded" in entries[0]
     assert len(entries[0]["trades"]) == 2
     assert (track / REBALANCE_LOG_FILENAME).exists()
 

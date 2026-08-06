@@ -95,12 +95,16 @@ archive lab (`offline_sim`); pass `--no-counterfactual` to skip the preview.
 Every weekday paper-auto pass appends to `rebalance_log.json` per track:
 
 - Screen source (`latest.json` `run_at`), active knobs, knob-epoch id
-- Candidate universe at decision time (conviction, timing, adjusted_signal, research verdict)
+- **`screen_buy_tier`** — raw screen buy-tier names (before AI overlay gates)
+- **`candidates`** — effective decision universe after overlay gates
+- **`gate_excluded`** — tickers in screen buy-tier but dropped by overlay gates
 - Plan preview, executed trades, NAV/cash/holdings and churn state before/after
 
 Once a track has **≥2 acted log entries**, decision-review counterfactuals
 graduate to **log replay** (`scope: rebalance_log_replay`) — re-running
 `select_automated_targets` / rebalance on the shadow fund with proposed knobs.
+When `screen_buy_tier` is logged, replay can widen the pool to raw screen
+buy-tier names when AI overlay gates are counterfactually toggled.
 
 Manual replay:
 
@@ -108,6 +112,9 @@ Manual replay:
 ftse-rebalance-log summary --output-dir docs/data/paper_automation/ai_judgment
 ftse-rebalance-log replay --output-dir docs/data/paper_automation/ai_judgment \
   --max-positions 3 --min-conviction 0.05 --json
+# AI-gate counterfactual (needs screen_buy_tier on log entries):
+ftse-rebalance-log replay --output-dir docs/data/paper_automation/ai_judgment \
+  --use-raw-signal --no-research-accumulate --json
 ```
 
 ### Pre-logging backfill

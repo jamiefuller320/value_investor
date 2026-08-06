@@ -53,6 +53,17 @@ def _cmd_replay(args: argparse.Namespace) -> int:
         skip_timing_wait=not args.allow_timing_wait,
         min_conviction=float(args.min_conviction),
         sector_cap=float(args.sector_cap),
+        use_adjusted_signal=(
+            False
+            if args.use_raw_signal
+            else (True if args.use_adjusted_signal else None)
+        ),
+        require_research_accumulate=(
+            True
+            if args.require_research_accumulate
+            else (False if args.no_research_accumulate else None)
+        ),
+        candidate_source=str(args.candidate_source),
         actual_fund=fund,
     )
     if replay is None:
@@ -103,6 +114,32 @@ def main(argv: list[str] | None = None) -> int:
         "--allow-timing-wait",
         action="store_true",
         help="Do not skip timing_signal=wait on new buys",
+    )
+    replay.add_argument(
+        "--use-raw-signal",
+        action="store_true",
+        help="Counterfactual: ignore adjusted_signal overlay (use raw screen signal)",
+    )
+    replay.add_argument(
+        "--use-adjusted-signal",
+        action="store_true",
+        help="Counterfactual: gate on adjusted_signal overlay",
+    )
+    replay.add_argument(
+        "--require-research-accumulate",
+        action="store_true",
+        help="Counterfactual: only buy when research_verdict=accumulate",
+    )
+    replay.add_argument(
+        "--no-research-accumulate",
+        action="store_true",
+        help="Counterfactual: do not require research accumulate verdict",
+    )
+    replay.add_argument(
+        "--candidate-source",
+        choices=("auto", "candidates", "screen_buy_tier"),
+        default="auto",
+        help="Candidate pool for replay (default: auto — widens when AI gates change)",
     )
     replay.add_argument("--json", action="store_true")
     replay.set_defaults(func=_cmd_replay)

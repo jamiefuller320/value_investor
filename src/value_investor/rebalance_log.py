@@ -19,7 +19,7 @@ from value_investor.paper_fund import (
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
 
 REBALANCE_LOG_FILENAME = "rebalance_log.json"
-LOG_SCHEMA_VERSION = 1
+LOG_SCHEMA_VERSION = 2
 LOG_KEEP = 104  # ~2 years of weekday passes
 MIN_LOG_ACTED_ENTRIES = 2
 
@@ -71,13 +71,29 @@ def slim_candidate(row: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in slim.items() if value is not None}
 
 
+def collect_screen_buy_tier(
+    marked_rows: list[dict[str, Any]],
+    fund: PaperFund,
+) -> list[dict[str, Any]]:
+    """Raw screen buy-tier plus held names (before AI overlay gates)."""
+    included: dict[str, dict[str, Any]] = {}
+    for row in marked_rows:
+        ticker = str(row.get("ticker") or "").strip()
+        if not ticker:
+            continue
+        signal = str(row.get("signal") or "")
+        if signal in BUY_SIGNALS or ticker in fund.holdings:
+            included[ticker] = slim_candidate(row)
+    return list(included.values())
+
+
 def collect_decision_candidates(
     marked_rows: list[dict[str, Any]],
     fund: PaperFund,
     *,
     use_adjusted_signal: bool,
 ) -> list[dict[str, Any]]:
-    """Buy-tier universe plus held names (for exit pricing and replay)."""
+    """Effective buy-tier universe plus held names (after AI overlay gates)."""
     included: dict[str, dict[str, Any]] = {}
     for row in marked_rows:
         ticker = str(row.get("ticker") or "").strip()
@@ -92,6 +108,24 @@ def collect_decision_candidates(
         if effective in BUY_SIGNALS or ticker in fund.holdings:
             included[ticker] = slim_candidate(row)
     return list(included.values())
+
+
+def gate_excluded_tickers(
+    screen_buy_tier: list[dict[str, Any]],
+    candidates: list[dict[str, Any]],
+) -> list[str]:
+    """Tickers in raw screen buy-tier but excluded by effective decision gates."""
+    candidate_tickers = {
+        str(row.get("ticker") or "").strip()
+        for row in candidates
+        if str(row.get("ticker") or "").strip()
+    }
+    excluded: list[str] = []
+    for row in screen_buy_tier:
+        ticker = str(row.get("ticker") or "").strip()
+        if ticker and ticker not in candidate_tickers:
+            excluded.append(ticker)
+    return sorted(excluded)
 
 
 def snapshot_holdings(fund: PaperFund) -> list[dict[str, Any]]:
@@ -155,6 +189,8 @@ def build_rebalance_log_entry(
     screen_source: dict[str, Any],
     knob_epoch_started_at: str | None,
     candidates: list[dict[str, Any]],
+    screen_buy_tier: list[dict[str, Any]] | None = None,
+    gate_excluded: list[str] | None = None,
     plan: dict[str, Any],
     trades: list[dict[str, Any]],
     nav_before: float,
@@ -182,6 +218,8 @@ def build_rebalance_log_entry(
         "max_positions": int(max_positions),
         "trade_cost_pct": round(float(trade_cost_pct), 4),
         "candidates": candidates,
+        "screen_buy_tier": screen_buy_tier if screen_buy_tier is not None else [],
+        "gate_excluded": gate_excluded if gate_excluded is not None else [],
         "plan": plan,
         "trades": trades,
         "nav_before": round(float(nav_before), 2),
@@ -286,15 +324,23 @@ def _selection_kwargs_for_replay(
     skip_timing_wait: bool,
     min_conviction: float,
     sector_cap: float,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
 ) -> dict[str, Any]:
     selection = dict(entry.get("selection") or {})
+    logged_use_adj = bool(selection.get("use_adjusted_signal", False))
+    logged_req_acc = bool(selection.get("require_research_accumulate", False))
     return {
         "skip_timing_wait": bool(skip_timing_wait),
         "min_conviction": float(min_conviction),
         "sector_cap": float(sector_cap),
-        "use_adjusted_signal": bool(selection.get("use_adjusted_signal", False)),
-        "require_research_accumulate": bool(
-            selection.get("require_research_accumulate", False)
+        "use_adjusted_signal": (
+            logged_use_adj if use_adjusted_signal is None else bool(use_adjusted_signal)
+        ),
+        "require_research_accumulate": (
+            logged_req_acc
+            if require_research_accumulate is None
+            else bool(require_research_accumulate)
         ),
         "use_momentum_grace": bool(selection.get("use_momentum_grace", False)),
         "exit_confirm_screens": int(selection.get("exit_confirm_screens") or 2),
@@ -306,6 +352,50 @@ def _selection_kwargs_for_replay(
     }
 
 
+def resolve_replay_candidates(
+    entry: dict[str, Any],
+    *,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
+    candidate_source: str = "auto",
+) -> list[dict[str, Any]]:
+    """
+    Choose candidate pool for log replay.
+
+    ``auto`` uses ``screen_buy_tier`` when AI overlay gates differ from the
+    logged pass and raw screen snapshots exist; otherwise ``candidates``.
+    """
+    selection = dict(entry.get("selection") or {})
+    logged_use_adj = bool(selection.get("use_adjusted_signal", False))
+    logged_req_acc = bool(selection.get("require_research_accumulate", False))
+    screen = list(entry.get("screen_buy_tier") or [])
+    candidates = list(entry.get("candidates") or [])
+
+    source = str(candidate_source or "auto").strip().lower()
+    if source == "screen_buy_tier":
+        return screen or candidates
+    if source == "candidates":
+        return candidates
+
+    ai_gate_changed = (
+        (use_adjusted_signal is not None and bool(use_adjusted_signal) != logged_use_adj)
+        or (
+            require_research_accumulate is not None
+            and bool(require_research_accumulate) != logged_req_acc
+        )
+    )
+    if ai_gate_changed and screen:
+        return screen
+    return candidates
+
+
+def _merge_candidate_price_maps(*pools: list[dict[str, Any]]) -> dict[str, float]:
+    prices: dict[str, float] = {}
+    for pool in pools:
+        prices.update(_price_map_from_candidates(pool))
+    return prices
+
+
 def replay_counterfactual_from_log(
     entries: list[dict[str, Any]],
     *,
@@ -313,10 +403,16 @@ def replay_counterfactual_from_log(
     skip_timing_wait: bool = True,
     min_conviction: float = 0.0,
     sector_cap: float = DEFAULT_TARGET_SECTOR_CAP,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
+    candidate_source: str = "auto",
     actual_fund: PaperFund | None = None,
 ) -> dict[str, Any] | None:
     """
     Replay logged rebalance passes with alternate knobs on a shadow fund.
+
+    When ``screen_buy_tier`` is present, AI-gate counterfactuals can widen the
+    replay pool to raw screen buy-tier names (or force via ``candidate_source``).
 
     Returns None when there are no acted log entries to replay.
     """
@@ -331,9 +427,29 @@ def replay_counterfactual_from_log(
     fund.config.trade_cost_pct = float(first.get("trade_cost_pct") or fund.config.trade_cost_pct)
 
     replay_trades = 0
+    used_screen_pool = False
     for entry in acted:
         mode = str(entry.get("strategy_mode") or fund.config.mode)
-        candidates = list(entry.get("candidates") or [])
+        screen_pool = list(entry.get("screen_buy_tier") or [])
+        candidates = resolve_replay_candidates(
+            entry,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
+            candidate_source=candidate_source,
+        )
+        if screen_pool:
+            screen_tickers = {
+                str(row.get("ticker") or "").strip()
+                for row in screen_pool
+                if str(row.get("ticker") or "").strip()
+            }
+            replay_tickers = {
+                str(row.get("ticker") or "").strip()
+                for row in candidates
+                if str(row.get("ticker") or "").strip()
+            }
+            if screen_tickers and replay_tickers == screen_tickers:
+                used_screen_pool = True
         when = str((entry.get("gate") or {}).get("local_time") or entry.get("logged_at") or "")
         kwargs = _selection_kwargs_for_replay(
             entry,
@@ -341,6 +457,8 @@ def replay_counterfactual_from_log(
             skip_timing_wait=skip_timing_wait,
             min_conviction=min_conviction,
             sector_cap=sector_cap,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
         )
         fund.config.max_positions = int(kwargs.pop("max_positions"))
         if mode == "technical":
@@ -349,7 +467,10 @@ def replay_counterfactual_from_log(
             executed = run_automated_rebalance(fund, candidates, acted_at=when or None, **kwargs)
         replay_trades += len(executed)
 
-    prices = _price_map_from_candidates(list(last.get("candidates") or []))
+    prices = _merge_candidate_price_maps(
+        list(last.get("candidates") or []),
+        list(last.get("screen_buy_tier") or []),
+    )
     for row in last.get("holdings_after") or []:
         if isinstance(row, dict):
             ticker = str(row.get("ticker") or "")
@@ -364,6 +485,17 @@ def replay_counterfactual_from_log(
     contributed = float(first.get("contributed_capital_before") or baseline_nav or 1.0)
     sim_drag = (sim_costs / contributed) if contributed > 0 else 0.0
 
+    selection = dict(first.get("selection") or {})
+    effective_use_adj = (
+        bool(selection.get("use_adjusted_signal", False))
+        if use_adjusted_signal is None
+        else bool(use_adjusted_signal)
+    )
+    effective_req_acc = (
+        bool(selection.get("require_research_accumulate", False))
+        if require_research_accumulate is None
+        else bool(require_research_accumulate)
+    )
     payload: dict[str, Any] = {
         "scope": "rebalance_log_replay",
         "knobs": {
@@ -371,7 +503,11 @@ def replay_counterfactual_from_log(
             "skip_timing_wait": bool(skip_timing_wait),
             "min_conviction": round(float(min_conviction), 4),
             "sector_cap": round(float(sector_cap), 4),
+            "use_adjusted_signal": effective_use_adj,
+            "require_research_accumulate": effective_req_acc,
+            "candidate_source": str(candidate_source or "auto"),
         },
+        "used_screen_buy_tier_pool": used_screen_pool,
         "log_entries_total": len(entries),
         "log_entries_replayed": len(acted),
         "replay_from": _entry_sort_key(first),
@@ -384,8 +520,9 @@ def replay_counterfactual_from_log(
         "simulated_trade_count": replay_trades,
         "limitations": (
             "Replay covers logged rebalance passes only; pre-logging history "
-            "needs archive lab (L111). Technical track replays stops/targets "
-            "from logged trade_plan snapshots."
+            "needs archive lab (L111). Names never in screen_buy_tier (hold/avoid "
+            "on raw screen) still need full archive replay. Technical track replays "
+            "stops/targets from logged trade_plan snapshots."
         ),
     }
 
@@ -686,6 +823,8 @@ def bootstrap_rebalance_log(
             replay_fund,
             use_adjusted_signal=bool(selection.get("use_adjusted_signal", False)),
         )
+        screen_buy_tier = collect_screen_buy_tier(marked, replay_fund)
+        gate_excluded = gate_excluded_tickers(screen_buy_tier, candidates)
         trade_payloads = [t.to_dict() for t in pass_trades]
         sector_by_ticker = {
             str(row.get("ticker")): str(row.get("sector") or "")
@@ -744,6 +883,8 @@ def bootstrap_rebalance_log(
             },
             knob_epoch_started_at=load_knob_epoch_started_at(track_dir),
             candidates=candidates,
+            screen_buy_tier=screen_buy_tier,
+            gate_excluded=gate_excluded,
             plan=plan,
             trades=trade_payloads,
             nav_before=nav_before,
