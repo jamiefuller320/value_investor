@@ -22,7 +22,11 @@ from value_investor.backtest_health import (
     repair_history_dir,
 )
 from value_investor.emailer import EmailConfig, send_report_email
-from value_investor.engineering_recovery import recover_engineering_queue, summarize_parked_tasks
+from value_investor.engineering_recovery import (
+    housekeep_parked_tasks,
+    recover_engineering_queue,
+    summarize_parked_tasks_needing_attention,
+)
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     summarize_queue,
@@ -284,6 +288,24 @@ def recovery_bundle_in_flight(
     return bool(active_labels), active_labels
 
 
+def filter_unresolved_workflow_failures(
+    failures: list[dict[str, Any]],
+    last_success_at: datetime | None,
+) -> list[dict[str, Any]]:
+    """Keep only failures newer than the latest successful run (actionable regressions)."""
+    if last_success_at is None:
+        return list(failures)
+    unresolved: list[dict[str, Any]] = []
+    for row in failures:
+        run_at = _parse_github_time(str(row.get("created_at") or ""))
+        if run_at is None:
+            unresolved.append(row)
+            continue
+        if run_at > last_success_at:
+            unresolved.append(row)
+    return unresolved
+
+
 def recent_workflow_failures(
     workflow_file: str,
     *,
@@ -502,7 +524,8 @@ def check_workflow_freshness(
         last_run_at = _parse_github_time(str((last_success or {}).get("created_at") or ""))
         age = (now - last_run_at) if last_run_at else None
         stale = expected_today and (last_run_at is None or age > max_age)
-        failures = recent_workflow_failures(workflow, repo=repo, token=token, within_hours=24)
+        failures = recent_workflow_failures(workflow, repo=repo, token=token, within_hours=12)
+        unresolved = filter_unresolved_workflow_failures(failures, last_run_at)
 
         row = {
             "workflow": workflow,
@@ -514,17 +537,21 @@ def check_workflow_freshness(
             "age_hours": round(age.total_seconds() / 3600, 1) if age else None,
             "stale": stale,
             "recent_failures_24h": len(failures),
+            "unresolved_failures_12h": len(unresolved),
         }
         checks.append(row)
 
-        if failures:
-            run_ids = ", ".join(str(item.get("id")) for item in failures[:3])
+        if unresolved:
+            run_ids = ", ".join(str(item.get("id")) for item in unresolved[:3])
             findings.append(
                 OpsFinding(
                     severity="warn",
                     category="workflows",
                     title=f"Recent workflow failure: {row['name']}",
-                    summary=f"{len(failures)} failure(s) in last 24h (runs: {run_ids}).",
+                    summary=(
+                        f"{len(unresolved)} unresolved failure(s) since last success "
+                        f"(runs: {run_ids})."
+                    ),
                 )
             )
         if stale:
@@ -600,7 +627,7 @@ def check_engineering_queue(
             )
         )
 
-    parked = summarize_parked_tasks(tasks_path)
+    parked = summarize_parked_tasks_needing_attention(tasks_path)
     if parked:
         ids = ", ".join(str(row.get("id")) for row in parked[:5])
         findings.append(
@@ -828,6 +855,25 @@ def apply_auto_fixes(
         for parked_action in recovery.parked:
             detail = f"parked {parked_action.task_id}: {parked_action.reason}"
             results.append({"action": "park_engineering_task", "detail": detail})
+
+        housekeep = housekeep_parked_tasks(tasks_path=tasks_path, apply=True)
+        for action in housekeep.cancelled:
+            detail = (
+                f"cancelled duplicate {action.task_id}"
+                + (f" (of {action.duplicate_of})" if action.duplicate_of else "")
+            )
+            results.append({"action": "housekeep_parked_task", "detail": detail})
+            for finding in findings:
+                if finding.title == "Parked engineering tasks need manual review":
+                    finding.fixed = True
+                    finding.action_taken = detail
+        for action in housekeep.annotated:
+            results.append(
+                {
+                    "action": "annotate_parked_task",
+                    "detail": f"{action.task_id}: {action.reason}",
+                }
+            )
 
     corrupt_health = any(row.title == "Ingest health log is corrupt" for row in findings)
     if corrupt_health and apply and health_log_path.exists():

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import urllib.request
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
@@ -22,6 +23,13 @@ from value_investor.workflow_pat import is_integration_token, resolve_workflow_d
 logger = logging.getLogger(__name__)
 
 PARKED_STATUS = "parked"
+PARKED_POLICY_DUPLICATE = "duplicate"
+PARKED_POLICY_NO_DIFF = "no_diff_cap"
+PARKED_POLICY_CI_BLOCKED = "ci_blocked"
+PARKED_POLICY_MANUAL = "manual"
+INFORMATIONAL_PARKED_POLICIES = frozenset({PARKED_POLICY_DUPLICATE, PARKED_POLICY_NO_DIFF})
+DUPLICATE_PARKED_REASON_RE = re.compile(r"duplicate|dup of|superseded", re.IGNORECASE)
+NO_DIFF_PARKED_REASON_RE = re.compile(r"no code changes", re.IGNORECASE)
 DEFAULT_MAX_AGENT_RETRIES = 2
 DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
@@ -193,6 +201,14 @@ def _park_task(
             PARKED_STATUS,
             path=tasks_path,
             parked_reason=reason,
+            parked_policy=(
+                PARKED_POLICY_CI_BLOCKED
+                if (
+                    "checks still failing" in reason.lower()
+                    or "ci blocked" in reason.lower()
+                )
+                else PARKED_POLICY_MANUAL
+            ),
         )
     return action
 
@@ -238,6 +254,7 @@ def record_agent_no_diff_run(
                 parked_at=stamp,
                 no_diff_count=count,
                 last_no_diff_at=stamp,
+                parked_policy=PARKED_POLICY_NO_DIFF,
             )
         return {
             "recorded": True,
@@ -423,19 +440,179 @@ def recover_engineering_queue(
     return result
 
 
+def _merged_task_ids(tasks: list[dict[str, Any]]) -> set[str]:
+    return {
+        str(row.get("id") or "")
+        for row in tasks
+        if str(row.get("status") or "") == "merged" and str(row.get("id") or "")
+    }
+
+
+def classify_parked_task(
+    row: dict[str, Any],
+    *,
+    merged_ids: set[str] | None = None,
+) -> dict[str, Any]:
+    """Grade a parked task for ops attention and housekeeping actions."""
+    reason = str(row.get("parked_reason") or "")
+    policy = str(row.get("parked_policy") or "").strip().lower()
+    duplicate_of = str(row.get("duplicate_of") or "").strip()
+
+    if not policy:
+        if duplicate_of or DUPLICATE_PARKED_REASON_RE.search(reason):
+            policy = PARKED_POLICY_DUPLICATE
+        elif NO_DIFF_PARKED_REASON_RE.search(reason):
+            policy = PARKED_POLICY_NO_DIFF
+        elif "checks still failing" in reason.lower() or "ci blocked" in reason.lower():
+            policy = PARKED_POLICY_CI_BLOCKED
+        else:
+            policy = PARKED_POLICY_MANUAL
+
+    needs_attention = policy not in INFORMATIONAL_PARKED_POLICIES
+    if policy == PARKED_POLICY_DUPLICATE and duplicate_of and merged_ids is not None:
+        needs_attention = duplicate_of not in merged_ids
+
+    return {
+        "id": row.get("id"),
+        "parked_policy": policy,
+        "duplicate_of": duplicate_of or None,
+        "needs_attention": needs_attention,
+        "parked_reason": reason or None,
+    }
+
+
 def summarize_parked_tasks(tasks_path: Path = COMMITTED_TASKS_PATH) -> list[dict[str, Any]]:
     rows = []
-    for row in load_engineering_tasks(tasks_path).get("tasks") or []:
+    data = load_engineering_tasks(tasks_path)
+    tasks = list(data.get("tasks") or [])
+    merged_ids = _merged_task_ids(tasks)
+    for row in tasks:
         if str(row.get("status") or "") != PARKED_STATUS:
             continue
+        grade = classify_parked_task(row, merged_ids=merged_ids)
         rows.append(
             {
                 "id": row.get("id"),
                 "title": row.get("title"),
                 "parked_at": row.get("parked_at"),
                 "parked_reason": row.get("parked_reason"),
+                "parked_policy": grade["parked_policy"],
+                "duplicate_of": grade["duplicate_of"],
+                "needs_attention": grade["needs_attention"],
                 "pr_url": row.get("pr_url"),
                 "branch_name": row.get("branch_name"),
             }
         )
     return rows
+
+
+def summarize_parked_tasks_needing_attention(
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+) -> list[dict[str, Any]]:
+    return [row for row in summarize_parked_tasks(tasks_path) if row.get("needs_attention")]
+
+
+@dataclass
+class ParkedHousekeepAction:
+    task_id: str
+    action: str
+    reason: str
+    duplicate_of: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "task_id": self.task_id,
+            "action": self.action,
+            "reason": self.reason,
+            "duplicate_of": self.duplicate_of,
+        }
+
+
+@dataclass
+class ParkedHousekeepResult:
+    cancelled: list[ParkedHousekeepAction] = field(default_factory=list)
+    annotated: list[ParkedHousekeepAction] = field(default_factory=list)
+    skipped: list[dict[str, str]] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "cancelled": [row.to_dict() for row in self.cancelled],
+            "annotated": [row.to_dict() for row in self.annotated],
+            "skipped": self.skipped,
+            "action_count": len(self.cancelled) + len(self.annotated),
+        }
+
+
+def housekeep_parked_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> ParkedHousekeepResult:
+    """
+    Grade parked tasks and take safe automatic actions.
+
+    - Cancel duplicates of already-merged tasks (``duplicate_of`` + merged target).
+    - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
+  Does not reopen or merge tasks — run from daily ops monitor recovery.
+    """
+    now = now or datetime.now(UTC)
+    result = ParkedHousekeepResult()
+    data = load_engineering_tasks(tasks_path)
+    tasks = list(data.get("tasks") or [])
+    merged_ids = _merged_task_ids(tasks)
+
+    for row in tasks:
+        if str(row.get("status") or "") != PARKED_STATUS:
+            continue
+        task_id = str(row.get("id") or "")
+        if not task_id:
+            continue
+
+        grade = classify_parked_task(row, merged_ids=merged_ids)
+        policy = str(grade["parked_policy"])
+        duplicate_of = str(grade.get("duplicate_of") or "").strip()
+        reason = str(row.get("parked_reason") or "")
+
+        if policy == PARKED_POLICY_DUPLICATE and duplicate_of in merged_ids:
+            cancel_reason = reason or f"duplicate of merged {duplicate_of}"
+            if apply:
+                mark_task_status(
+                    task_id,
+                    "cancelled",
+                    path=tasks_path,
+                    committed_path=tasks_path,
+                    parked_policy=policy,
+                    duplicate_of=duplicate_of,
+                    cancelled_at=now.isoformat(),
+                    cancelled_reason=cancel_reason,
+                )
+            result.cancelled.append(
+                ParkedHousekeepAction(
+                    task_id=task_id,
+                    action="cancel_duplicate",
+                    reason=cancel_reason,
+                    duplicate_of=duplicate_of,
+                )
+            )
+            continue
+
+        needs_policy = not str(row.get("parked_policy") or "").strip()
+        if needs_policy and policy in INFORMATIONAL_PARKED_POLICIES:
+            if apply:
+                mark_task_status(
+                    task_id,
+                    PARKED_STATUS,
+                    path=tasks_path,
+                    committed_path=tasks_path,
+                    parked_policy=policy,
+                )
+            result.annotated.append(
+                ParkedHousekeepAction(
+                    task_id=task_id,
+                    action="annotate_policy",
+                    reason=f"parked_policy={policy}",
+                )
+            )
+
+    return result

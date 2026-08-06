@@ -778,6 +778,8 @@ def mark_task_status(
     if status == "parked":
         fields.setdefault("parked_at", datetime.now(UTC).isoformat())
         fields.setdefault("parked_reason", "manual review required")
+    if status == "cancelled":
+        fields.setdefault("cancelled_at", datetime.now(UTC).isoformat())
     if status in {"pr_open", "completed"}:
         fields["completed_at"] = datetime.now(UTC).isoformat()
     if status == "merged":

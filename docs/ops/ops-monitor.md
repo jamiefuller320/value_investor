@@ -8,6 +8,7 @@ artifacts, ingest stall detection, and the engineering queue.
 - Reconcile orphaned `pr_open` engineering tasks (no matching open PR)
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
 - Micro-compile ingest engineering tasks when buy-tier filing ingest is stalled
+- Grade parked engineering tasks and auto-cancel duplicates of merged work
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
 
@@ -109,6 +110,23 @@ Expect a successful `workflow_dispatch` run; `docs/data/ops_status.json` updates
 warn/fail or when auto-fixes run.
 
 See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
+
+### Parked engineering tasks
+
+The daily ops monitor **grades** parked tasks (no separate housekeeping loop):
+
+| `parked_policy` | Ops email alert? | Auto action |
+|-----------------|------------------|-------------|
+| `duplicate` (of merged task) | No | Cancel task when `duplicate_of` is merged |
+| `no_diff_cap` | No | Annotate policy only |
+| `ci_blocked` | Yes | Manual review |
+| `manual` | Yes | Manual review |
+
+Set `duplicate_of` and `parked_policy` when parking duplicates. No-diff parks from
+`record-no-diff` are tagged automatically.
+
+Workflow failure alerts only fire for **unresolved** failures (after the latest
+successful run), scanned within a 12h window.
 
 ## Artifacts
 
