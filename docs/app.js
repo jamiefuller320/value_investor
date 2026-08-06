@@ -1290,6 +1290,111 @@ function renderEngineeringQueueSection(queue) {
     </section>`;
 }
 
+function renderLearningTracksPanel(data) {
+  const review = data.learning_tracks_review;
+  if (!review || !review.reviews) {
+    return `<section class="automation-section learning-tracks-section">
+      <h2>Learning tracks (server)</h2>
+      <p class="muted">No learning-track review published yet — runs after weekday paper-auto + decision-review.</p>
+    </section>`;
+  }
+
+  const funds = data.learning_track_funds || {};
+  const trackOrder = [
+    ["technical", "Technical (levels baseline)"],
+    ["rules", "Rules (control)"],
+    ["ai_judgment", "AI judgment (primary)"],
+    ["momentum_grace", "Momentum grace"],
+  ];
+
+  const rows = trackOrder
+    .map(([id, label]) => {
+      const row = review.reviews[id];
+      if (!row) return "";
+      const m = row.metrics || {};
+      const fund = funds[id] || {};
+      const primary = row.is_primary_learning_track ? ' <span class="badge badge-buy">primary</span>' : "";
+      const excess = m.excess_after_costs;
+      const excessHtml =
+        excess == null
+          ? "—"
+          : `<span class="${excess >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`;
+      const epoch = m.epoch || {};
+      const epochReturn =
+        epoch.total_return != null
+          ? `<span class="small">${pct(epoch.total_return)}</span>`
+          : '<span class="small muted">—</span>';
+      const epochExcess = epoch.excess_after_costs;
+      const epochExcessHtml =
+        epochExcess == null
+          ? '<span class="small muted">—</span>'
+          : `<span class="small ${epochExcess >= 0 ? "text-positive" : "text-negative"}">${(Number(epochExcess) * 100).toFixed(1)}%</span>`;
+      const curve = Array.isArray(fund.equity_curve) ? fund.equity_curve : [];
+      const spark =
+        curve.length >= 2
+          ? curve
+              .map((pt) => Number(pt.nav || pt.value || 0))
+              .filter((v) => v > 0)
+              .slice(-12)
+          : [];
+      const sparkHtml =
+        spark.length >= 2
+          ? `<span class="small muted" title="Recent NAV marks">${spark
+              .map((v) => `£${v.toFixed(0)}`)
+              .join(" → ")}</span>`
+          : '<span class="small muted">—</span>';
+      return `<tr>
+        <td><strong>${esc(label)}</strong>${primary}<br><span class="small muted">${esc(id)}</span></td>
+        <td>${m.portfolio_value != null ? `£${Number(m.portfolio_value).toFixed(2)}` : "—"}</td>
+        <td>${m.total_return != null ? pct(m.total_return) : "—"}</td>
+        <td>${excessHtml}</td>
+        <td>${epochReturn}</td>
+        <td>${epochExcessHtml}</td>
+        <td>${m.trade_count ?? "—"}</td>
+        <td>${m.positions ?? fund.holdings_count ?? "—"}</td>
+        <td>${sparkHtml}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const verdict = review.verdict || "—";
+  const beatMarket = review.beat_market ? "Yes" : "No";
+  const beatControl = review.beat_control ? "Yes" : "No";
+  const primaryExcess = review.primary_excess_after_costs;
+
+  return `<section class="automation-section learning-tracks-section">
+    <h2>Learning tracks (server)</h2>
+    <p class="small muted" style="margin-top:0">
+      Weekday paper-auto books published from CI — not the browser local sandbox.
+      Primary success = AI judgment excess vs ^FTSE after costs; rules is control; technical is timing/levels baseline.
+    </p>
+    <div class="learning-tracks-headline">
+      <span>Verdict: <strong>${esc(verdict)}</strong></span>
+      <span>AI excess vs ^FTSE: <strong>${primaryExcess != null ? pct(primaryExcess) : "—"}</strong></span>
+      <span>Beat market: ${esc(beatMarket)}</span>
+      <span>Beat rules control: ${esc(beatControl)}</span>
+    </div>
+    <div class="table-wrap">
+      <table class="learning-tracks-table">
+        <thead>
+          <tr>
+            <th>Track</th>
+            <th>NAV</th>
+            <th>Return</th>
+            <th>Excess vs ^FTSE</th>
+            <th>Epoch return</th>
+            <th>Epoch excess</th>
+            <th>Trades</th>
+            <th>Positions</th>
+            <th>Recent marks</th>
+          </tr>
+        </thead>
+        <tbody>${rows || '<tr><td colspan="9" class="muted">No track reviews in bundle.</td></tr>'}</tbody>
+      </table>
+    </div>
+  </section>`;
+}
+
 function renderAutomation(data) {
   const panel = document.getElementById("panel-automation");
   if (!panel) return;
@@ -1358,6 +1463,7 @@ function renderAutomation(data) {
   }
 
   panel.innerHTML = `
+    ${renderLearningTracksPanel(data)}
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
 
     <div class="automation-grid">

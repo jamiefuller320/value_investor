@@ -6,8 +6,12 @@ from value_investor.decision_review import (
     BookMetrics,
     LearningKnobs,
     compute_book_metrics,
+    ensure_knob_epoch,
+    estimate_counterfactual_preview,
+    metrics_for_review,
     propose_knob_updates,
     run_decision_review,
+    start_knob_epoch,
 )
 from value_investor.paper_automation import AutomationConfig
 from value_investor.paper_fund import (
@@ -289,3 +293,177 @@ def test_run_decision_review_applies_when_forced(tmp_path: Path):
             or cfg["sector_cap"] < 0.5
         )
     assert (out / "decision_review_history.json").exists()
+
+
+def test_knob_epoch_metrics_since_last_apply(tmp_path: Path):
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.03,
+            max_positions=5,
+        )
+    )
+    fund.buy(
+        ticker="AAA.L",
+        price=10,
+        sizing_mode="cash",
+        amount=400,
+        sector="Banks",
+        name="A",
+        acted_at="2026-01-01T12:00:00+00:00",
+    )
+    fund.record_mark({"AAA.L": 11}, note="m1", acted_at="2026-01-02T12:00:00+00:00")
+    fund.record_mark({"AAA.L": 11}, note="m2", acted_at="2026-01-03T12:00:00+00:00")
+
+    out = tmp_path / "paper"
+    out.mkdir()
+    (out / "config.json").write_text(
+        __import__("json").dumps(AutomationConfig(max_positions=5).to_dict()),
+        encoding="utf-8",
+    )
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()),
+        encoding="utf-8",
+    )
+
+    epoch = start_knob_epoch(
+        out,
+        fund,
+        LearningKnobs(max_positions=4),
+        reviewed_at="2026-01-03T12:00:00+00:00",
+    )
+    assert epoch.baseline_nav > 0
+
+    fund.buy(
+        ticker="BBB.L",
+        price=10,
+        sizing_mode="cash",
+        amount=200,
+        sector="Mining",
+        name="B",
+        acted_at="2026-01-04T12:00:00+00:00",
+    )
+    fund.record_mark(
+        {"AAA.L": 11, "BBB.L": 10},
+        note="m3",
+        acted_at="2026-01-05T12:00:00+00:00",
+    )
+    fund.record_mark(
+        {"AAA.L": 11, "BBB.L": 10.5},
+        note="m4",
+        acted_at="2026-01-06T12:00:00+00:00",
+    )
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()),
+        encoding="utf-8",
+    )
+
+    metrics = compute_book_metrics(
+        fund,
+        benchmark_return=0.01,
+        fetch_benchmark=False,
+        knob_epoch=ensure_knob_epoch(out),
+    )
+    assert metrics.epoch is not None
+    assert metrics.epoch["trade_count"] == 1
+    assert metrics.epoch["equity_marks"] >= 2
+    assert metrics.epoch["total_return"] != metrics.total_return
+
+    review_slice = metrics_for_review(metrics)
+    assert review_slice.trade_count == 1
+    assert review_slice.equity_marks >= 2
+
+
+def test_counterfactual_preview_blocks_excess_buys():
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.03,
+            max_positions=10,
+        )
+    )
+    for i, ticker in enumerate(["AAA.L", "BBB.L", "CCC.L", "DDD.L", "EEE.L", "FFF.L"]):
+        fund.buy(
+            ticker=ticker,
+            price=10,
+            sizing_mode="cash",
+            amount=150,
+            sector=f"Sector{i % 2}",
+            name=ticker,
+            acted_at=f"2026-01-0{i+1}T12:00:00+00:00",
+        )
+    preview = estimate_counterfactual_preview(
+        fund,
+        knobs=LearningKnobs(max_positions=3, sector_cap=0.5),
+    )
+    assert preview["blocked_buys"] >= 3
+    assert preview["estimated_cost_savings_gbp"] > 0
+    assert preview["cost_drag_delta"] > 0
+
+
+def test_run_decision_review_starts_epoch_on_apply(tmp_path: Path):
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.03,
+            max_positions=5,
+        )
+    )
+    for i, ticker in enumerate(["AAA.L", "BBB.L", "CCC.L", "DDD.L"]):
+        fund.buy(
+            ticker=ticker,
+            price=10,
+            sizing_mode="cash",
+            amount=200,
+            sector="Banks",
+            name=ticker,
+            acted_at=f"2026-01-0{i+1}T12:00:00+00:00",
+        )
+    for ticker in ["AAA.L", "BBB.L"]:
+        fund.sell(
+            ticker=ticker,
+            price=9,
+            sizing_mode="shares",
+            amount=fund.holdings[ticker].shares,
+            acted_at="2026-02-01T12:00:00+00:00",
+        )
+    for i in range(4):
+        fund.record_mark(
+            {t: 9.5 for t in fund.holdings},
+            note=f"m{i}",
+            acted_at=f"2026-03-0{i+1}T12:00:00+00:00",
+        )
+
+    out = tmp_path / "paper"
+    out.mkdir()
+    config = AutomationConfig(
+        max_positions=5,
+        skip_timing_wait=True,
+        min_conviction=0.0,
+        sector_cap=0.5,
+    )
+    (out / "config.json").write_text(
+        __import__("json").dumps(config.to_dict()),
+        encoding="utf-8",
+    )
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()),
+        encoding="utf-8",
+    )
+
+    result = run_decision_review(
+        output_dir=out,
+        apply=True,
+        fetch_benchmark=False,
+        benchmark_return=0.05,
+    )
+    if result.applied:
+        assert (out / "knob_epoch.json").exists()
+        epoch = __import__("json").loads((out / "knob_epoch.json").read_text(encoding="utf-8"))
+        assert epoch["knobs"]["max_positions"] <= 5

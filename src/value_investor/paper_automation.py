@@ -20,6 +20,8 @@ from value_investor.paper_fund import (
     PaperFundConfig,
     preview_automated_plan,
     run_automated_rebalance,
+    run_technical_pass,
+    preview_technical_plan,
 )
 from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
@@ -60,6 +62,7 @@ class AutomationConfig:
     min_conviction: float = 0.0
     sector_cap: float = DEFAULT_TARGET_SECTOR_CAP
     # Learning-track policy (primary = AI judgment vs market excess).
+    strategy_mode: str = "automated"  # automated | technical
     track_id: str = "rules"
     track_label: str = "Screen rules (control)"
     is_primary_learning_track: bool = False
@@ -125,6 +128,7 @@ class AutomationConfig:
                 else DEFAULT_TARGET_SECTOR_CAP
             ),
             track_id=str(raw.get("track_id") or "rules"),
+            strategy_mode=str(raw.get("strategy_mode") or "automated"),
             track_label=str(raw.get("track_label") or "Screen rules (control)"),
             is_primary_learning_track=bool(raw.get("is_primary_learning_track", False)),
             use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
@@ -145,8 +149,16 @@ class AutomationConfig:
 AI_JUDGMENT_TRACK_ID = "ai_judgment"
 RULES_TRACK_ID = "rules"
 MOMENTUM_GRACE_TRACK_ID = "momentum_grace"
+TECHNICAL_TRACK_ID = "technical"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
+TECHNICAL_SUBDIR = "technical"
+LEARNING_TRACK_IDS = (
+    RULES_TRACK_ID,
+    AI_JUDGMENT_TRACK_ID,
+    MOMENTUM_GRACE_TRACK_ID,
+    TECHNICAL_TRACK_ID,
+)
 
 
 def default_ai_judgment_config(base: AutomationConfig | None = None) -> AutomationConfig:
@@ -170,12 +182,27 @@ def default_momentum_grace_config(base: AutomationConfig | None = None) -> Autom
     return cfg
 
 
+def default_technical_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Timing baseline: stops/targets from trade_plan, no conviction rebalance."""
+    cfg = AutomationConfig.from_dict((base or AutomationConfig()).to_dict())
+    cfg.track_id = TECHNICAL_TRACK_ID
+    cfg.track_label = "Technical levels (stops / trade_plan)"
+    cfg.is_primary_learning_track = False
+    cfg.strategy_mode = "technical"
+    cfg.use_adjusted_signal = False
+    cfg.require_research_accumulate = False
+    cfg.use_momentum_grace = False
+    cfg.auto_rebalance = True
+    return cfg
+
+
 def default_rules_config(base: AutomationConfig | None = None) -> AutomationConfig:
     """Control track: raw screen buy-tier rules only."""
     cfg = AutomationConfig.from_dict((base or AutomationConfig()).to_dict())
     cfg.track_id = RULES_TRACK_ID
     cfg.track_label = "Screen rules (control)"
     cfg.is_primary_learning_track = False
+    cfg.strategy_mode = "automated"
     cfg.use_adjusted_signal = False
     cfg.require_research_accumulate = False
     return cfg
@@ -188,6 +215,7 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
         RULES_TRACK_ID: root,
         AI_JUDGMENT_TRACK_ID: root / AI_JUDGMENT_SUBDIR,
         MOMENTUM_GRACE_TRACK_ID: root / MOMENTUM_GRACE_SUBDIR,
+        TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
     }
 
 
@@ -419,14 +447,22 @@ def sync_fund_from_automation_config(fund: PaperFund, config: AutomationConfig) 
 
 
 def ensure_automated_fund(path: Path, config: AutomationConfig) -> PaperFund:
+    mode = str(config.strategy_mode or "automated")
+    if mode not in {"automated", "technical"}:
+        mode = "automated"
+    fund_name = config.track_label or (
+        "Technical levels" if mode == "technical" else "Automated stock picking"
+    )
     if path.exists():
         fund = PaperFund.from_dict(json.loads(path.read_text(encoding="utf-8")))
+        if fund.config.mode != mode:
+            fund.config.mode = mode  # type: ignore[assignment]
         sync_fund_from_automation_config(fund, config)
         return fund
     fund = PaperFund.create(
         PaperFundConfig(
-            name="Automated stock picking",
-            mode="automated",
+            name=fund_name,
+            mode=mode,
             initial_cash=config.initial_cash,
             monthly_deposit=config.monthly_deposit,
             trade_cost_pct=config.trade_cost_pct,
@@ -650,11 +686,11 @@ def run_daily_automation(
     marked = refresh_candidate_marks(screen_rows, extra_tickers=owned_tickers)
     select_kwargs = config.selection_kwargs()
 
-    plan = (
-        preview_automated_plan(fund, marked, **select_kwargs)
-        if fund.config.mode == "automated"
-        else {}
-    )
+    plan: dict[str, Any] = {}
+    if fund.config.mode == "automated":
+        plan = preview_automated_plan(fund, marked, **select_kwargs)
+    elif fund.config.mode == "technical":
+        plan = preview_technical_plan(fund, marked)
     alerts = [
         a.to_dict()
         for a in run_owned_surveillance(
@@ -683,14 +719,24 @@ def run_daily_automation(
         )
     if can_act and config.auto_rebalance:
         fund.apply_deposits_to(gate["local_time"])
-        executed = run_automated_rebalance(
-            fund, marked, acted_at=gate["local_time"], **select_kwargs
-        )
+        if fund.config.mode == "technical":
+            executed = run_technical_pass(fund, marked, acted_at=gate["local_time"])
+        else:
+            executed = run_automated_rebalance(
+                fund, marked, acted_at=gate["local_time"], **select_kwargs
+            )
         trades = [t.to_dict() for t in executed]
         save_automated_fund(fund_path, fund)
         acted = True
-        note = f"Rebalanced after open settle ({len(trades)} trade(s))."
-        plan = preview_automated_plan(fund, marked, **select_kwargs)
+        note = (
+            f"Technical pass after open settle ({len(trades)} trade(s))."
+            if fund.config.mode == "technical"
+            else f"Rebalanced after open settle ({len(trades)} trade(s))."
+        )
+        if fund.config.mode == "automated":
+            plan = preview_automated_plan(fund, marked, **select_kwargs)
+        else:
+            plan = preview_technical_plan(fund, marked)
         alerts = [
             a.to_dict()
             for a in run_owned_surveillance(
@@ -750,6 +796,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         # Preserve knobs; stamp track metadata if missing/outdated.
         rules.track_id = RULES_TRACK_ID
         rules.is_primary_learning_track = False
+        rules.strategy_mode = "automated"
         rules.use_adjusted_signal = False
         rules.require_research_accumulate = False
         if not rules.track_label or rules.track_label == "Screen rules (control)":
@@ -803,6 +850,29 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         mg = default_momentum_grace_config(rules)
     mg_path.write_text(json.dumps(mg.to_dict(), indent=2), encoding="utf-8")
     configs[MOMENTUM_GRACE_TRACK_ID] = mg
+
+    tech_dir = dirs[TECHNICAL_TRACK_ID]
+    tech_path = tech_dir / CONFIG_FILENAME
+    tech_dir.mkdir(parents=True, exist_ok=True)
+    if tech_path.exists():
+        tech = AutomationConfig.from_dict(json.loads(tech_path.read_text(encoding="utf-8")))
+        tech.track_id = TECHNICAL_TRACK_ID
+        tech.is_primary_learning_track = False
+        tech.strategy_mode = "technical"
+        tech.use_adjusted_signal = False
+        tech.require_research_accumulate = False
+        tech.use_momentum_grace = False
+        tech.track_label = tech.track_label or "Technical levels (stops / trade_plan)"
+        tech.timezone = rules.timezone
+        tech.market_open = rules.market_open
+        tech.settle_minutes_after_open = rules.settle_minutes_after_open
+        tech.weekdays_only = rules.weekdays_only
+        tech.trade_cost_pct = rules.trade_cost_pct
+        tech.initial_cash = rules.initial_cash
+    else:
+        tech = default_technical_config(rules)
+    tech_path.write_text(json.dumps(tech.to_dict(), indent=2), encoding="utf-8")
+    configs[TECHNICAL_TRACK_ID] = tech
     return configs
 
 
@@ -824,7 +894,11 @@ def run_learning_tracks(
     base_dir = Path(base_dir)
     configs = ensure_learning_track_configs(base_dir)
     dirs = learning_track_dirs(base_dir)
-    wanted = list(tracks) if tracks else [RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID, MOMENTUM_GRACE_TRACK_ID]
+    wanted = (
+        list(tracks)
+        if tracks
+        else [TECHNICAL_TRACK_ID, RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID, MOMENTUM_GRACE_TRACK_ID]
+    )
     results: dict[str, Any] = {}
     for track_id in wanted:
         if track_id not in configs:
@@ -854,6 +928,7 @@ def run_learning_tracks(
         "success_criterion": (
             "Outperformance after costs vs market benchmark (^FTSE) on the "
             "primary AI-judgment track; rules track is the control; "
+            "technical track is the timing/levels baseline; "
             "momentum_grace is an experimental exit overlay."
         ),
         "tracks": results,

@@ -1544,10 +1544,16 @@ function renderPaperFundsSection(data, pricesByFund, modePlan) {
 
   return `
     <div class="paper-funds-shell">
+      <div class="card paper-sims-legacy-note" style="margin-bottom:1rem">
+        <p class="small" style="margin:0">
+          <strong>Local sandbox only.</strong> These sims use browser storage and are not part of the stage-2b learning loop.
+          Server learning tracks (technical, rules, AI judgment) run daily after London open settle — see the <strong>Automation</strong> tab.
+        </p>
+      </div>
       <div class="paper-funds-title-row">
         <div>
-          <h3 class="paper-section-title">Paper fund simulations</h3>
-          <p class="small muted">Each simulator has its own page for controls and holdings. Overview compares performance across pots.</p>
+          <h3 class="paper-section-title">Local paper sandbox</h3>
+          <p class="small muted">Optional discretionary experiments. For canonical performance, use Automation → Learning tracks.</p>
         </div>
       </div>
       ${paperSubnavHtml(page)}
@@ -1602,15 +1608,6 @@ async function renderPaperFunds(data) {
   let pricesByFund = {};
   let modePlan = null;
   if (book.funds.length) {
-    // Independent browser auto-run once/day after London open settle.
-    try {
-      const ran = await maybeRunIndependentAuto(data);
-      if (ran) {
-        /* fund state updated; continue to render */
-      }
-    } catch (err) {
-      console.warn("Independent paper auto failed", err);
-    }
     mount.innerHTML = `<div class="card"><p class="muted">Loading paper fund marks…</p></div>`;
     pricesByFund = await pricesForBook(loadPaperBook(), data);
     const page = loadPaperSubpage();

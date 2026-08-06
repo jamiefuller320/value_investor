@@ -28,9 +28,13 @@ logger = logging.getLogger(__name__)
 
 REVIEW_FILENAME = "decision_review.json"
 REVIEW_HISTORY_FILENAME = "decision_review_history.json"
+KNOB_EPOCH_FILENAME = "knob_epoch.json"
+KNOB_EPOCHS_HISTORY_FILENAME = "knob_epochs.json"
 
 MIN_EQUITY_MARKS = 4
 MIN_TRADES = 2
+MIN_EPOCH_MARKS = 2
+MIN_EPOCH_TRADES = 1
 
 MAX_POSITIONS_BOUNDS = (3, 8)
 MIN_CONVICTION_BOUNDS = (0.0, 0.6)
@@ -79,6 +83,51 @@ class LearningKnobs:
 
 
 @dataclass
+class KnobEpoch:
+    """Performance baseline after a decision-review knob apply."""
+
+    started_at: str
+    baseline_nav: float
+    baseline_contributed_capital: float
+    knobs: dict[str, Any]
+    trade_count_at_start: int = 0
+    equity_marks_at_start: int = 0
+    seeded_from_history: bool = False
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "started_at": self.started_at,
+            "baseline_nav": round(self.baseline_nav, 2),
+            "baseline_contributed_capital": round(self.baseline_contributed_capital, 2),
+            "knobs": dict(self.knobs),
+            "trade_count_at_start": int(self.trade_count_at_start),
+            "equity_marks_at_start": int(self.equity_marks_at_start),
+            "seeded_from_history": bool(self.seeded_from_history),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> KnobEpoch | None:
+        raw = data or {}
+        started = str(raw.get("started_at") or "").strip()
+        if not started:
+            return None
+        knobs = raw.get("knobs")
+        if not isinstance(knobs, dict):
+            knobs = {}
+        return cls(
+            started_at=started,
+            baseline_nav=float(raw.get("baseline_nav") or 0.0),
+            baseline_contributed_capital=float(
+                raw.get("baseline_contributed_capital") or raw.get("baseline_nav") or 0.0
+            ),
+            knobs=knobs,
+            trade_count_at_start=int(raw.get("trade_count_at_start") or 0),
+            equity_marks_at_start=int(raw.get("equity_marks_at_start") or 0),
+            seeded_from_history=bool(raw.get("seeded_from_history", False)),
+        )
+
+
+@dataclass
 class BookMetrics:
     portfolio_value: float
     contributed_capital: float
@@ -96,9 +145,10 @@ class BookMetrics:
     benchmark_return: float | None
     excess_after_costs: float | None
     note: str = ""
+    epoch: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "portfolio_value": round(self.portfolio_value, 2),
             "contributed_capital": round(self.contributed_capital, 2),
             "total_return": round(self.total_return, 4),
@@ -122,6 +172,9 @@ class BookMetrics:
             ),
             "note": self.note,
         }
+        if self.epoch:
+            payload["epoch"] = self.epoch
+        return payload
 
 
 @dataclass
@@ -134,6 +187,7 @@ class DecisionReviewResult:
     proposed_changes: dict[str, Any] = field(default_factory=dict)
     reasons: list[str] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
+    counterfactual_preview: dict[str, Any] | None = None
     note: str = ""
     track_id: str = "rules"
     track_label: str = ""
@@ -144,7 +198,10 @@ class DecisionReviewResult:
     )
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        payload = asdict(self)
+        if payload.get("counterfactual_preview") is None:
+            payload.pop("counterfactual_preview", None)
+        return payload
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -163,6 +220,322 @@ def _parse_iso_date(value: str | None) -> datetime | None:
         return datetime.fromisoformat(text)
     except ValueError:
         return None
+
+
+def _trade_dt(trade: Any) -> datetime | None:
+    return _parse_iso_date(str(getattr(trade, "acted_at", "") or ""))
+
+
+def _events_since(
+    fund: PaperFund,
+    started_at: str,
+) -> tuple[list[Any], list[dict[str, Any]]]:
+    start_dt = _parse_iso_date(started_at)
+    if start_dt is None:
+        return list(fund.trades), list(fund.equity_curve)
+    trades = [
+        trade
+        for trade in fund.trades
+        if (_trade_dt(trade) or datetime.min.replace(tzinfo=UTC)) > start_dt
+    ]
+    marks = [
+        mark
+        for mark in fund.equity_curve
+        if (_parse_iso_date(str((mark or {}).get("at") or "")) or datetime.min.replace(tzinfo=UTC))
+        > start_dt
+    ]
+    return trades, marks
+
+
+def load_knob_epoch(output_dir: Path) -> KnobEpoch | None:
+    path = Path(output_dir) / KNOB_EPOCH_FILENAME
+    if not path.exists():
+        return None
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+    return KnobEpoch.from_dict(raw if isinstance(raw, dict) else None)
+
+
+def save_knob_epoch(output_dir: Path, epoch: KnobEpoch) -> None:
+    path = Path(output_dir) / KNOB_EPOCH_FILENAME
+    path.write_text(json.dumps(epoch.to_dict(), indent=2) + "\n", encoding="utf-8")
+
+
+def _append_knob_epoch_history(output_dir: Path, epoch: KnobEpoch) -> None:
+    path = Path(output_dir) / KNOB_EPOCHS_HISTORY_FILENAME
+    history: list[dict[str, Any]] = []
+    if path.exists():
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(raw, list):
+                history = [row for row in raw if isinstance(row, dict)]
+        except (json.JSONDecodeError, OSError):
+            history = []
+    history.append(epoch.to_dict())
+    history = history[-HISTORY_KEEP:]
+    path.write_text(json.dumps(history, indent=2) + "\n", encoding="utf-8")
+
+
+def seed_knob_epoch_from_history(output_dir: Path) -> KnobEpoch | None:
+    """Backfill the active epoch from the last applied knob change in review history."""
+    history_path = Path(output_dir) / REVIEW_HISTORY_FILENAME
+    if not history_path.exists():
+        return None
+    try:
+        raw = json.loads(history_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+    if not isinstance(raw, list):
+        return None
+    for row in reversed(raw):
+        if not isinstance(row, dict) or not row.get("applied"):
+            continue
+        changes = row.get("proposed_changes") or {}
+        if not changes:
+            continue
+        metrics = row.get("metrics") or {}
+        knobs_after = row.get("knobs_after") or {}
+        return KnobEpoch(
+            started_at=str(row.get("reviewed_at") or ""),
+            baseline_nav=float(metrics.get("portfolio_value") or 0.0),
+            baseline_contributed_capital=float(
+                metrics.get("contributed_capital") or metrics.get("portfolio_value") or 0.0
+            ),
+            knobs=dict(knobs_after),
+            trade_count_at_start=int(metrics.get("trade_count") or 0),
+            equity_marks_at_start=int(metrics.get("equity_marks") or 0),
+            seeded_from_history=True,
+        )
+    return None
+
+
+def ensure_knob_epoch(output_dir: Path) -> KnobEpoch | None:
+    epoch = load_knob_epoch(output_dir)
+    if epoch is not None:
+        return epoch
+    seeded = seed_knob_epoch_from_history(output_dir)
+    if seeded is not None:
+        save_knob_epoch(output_dir, seeded)
+    return seeded
+
+
+def start_knob_epoch(
+    output_dir: Path,
+    fund: PaperFund,
+    knobs: LearningKnobs,
+    *,
+    reviewed_at: str,
+) -> KnobEpoch:
+    prices = _mark_prices(fund)
+    perf = fund.performance(prices)
+    epoch = KnobEpoch(
+        started_at=reviewed_at,
+        baseline_nav=float(perf["portfolio_value"] or 0.0),
+        baseline_contributed_capital=float(perf["contributed_capital"] or 0.0),
+        knobs=knobs.to_dict(),
+        trade_count_at_start=len(fund.trades),
+        equity_marks_at_start=len(fund.equity_curve),
+        seeded_from_history=False,
+    )
+    save_knob_epoch(output_dir, epoch)
+    _append_knob_epoch_history(output_dir, epoch)
+    return epoch
+
+
+def _compute_epoch_metrics(
+    fund: PaperFund,
+    epoch: KnobEpoch,
+    *,
+    benchmark_return: float | None = None,
+    fetch_benchmark: bool = True,
+) -> dict[str, Any]:
+    prices = _mark_prices(fund)
+    perf = fund.performance(prices)
+    nav = float(perf["portfolio_value"] or 0.0)
+    baseline = float(epoch.baseline_nav or 0.0)
+    epoch_trades, epoch_marks = _events_since(fund, epoch.started_at)
+    epoch_costs = sum(float(t.cost or 0.0) for t in epoch_trades)
+    buys = sum(1 for t in epoch_trades if t.side == "buy")
+    sells = sum(1 for t in epoch_trades if t.side == "sell")
+    epoch_return = ((nav - baseline) / baseline) if baseline > 0 else 0.0
+    cost_drag = (epoch_costs / baseline) if baseline > 0 else 0.0
+    cash_fraction = (float(fund.cash) / nav) if nav > 0 else 1.0
+    max_sector_weight, dominant = _sector_concentration(fund, prices)
+
+    bench = benchmark_return
+    note = ""
+    if bench is None and fetch_benchmark and len(epoch_marks) >= 2:
+        start_dt = _parse_iso_date(epoch.started_at)
+        end_dt = _parse_iso_date(str((epoch_marks[-1] or {}).get("at") or ""))
+        if start_dt and end_dt:
+            bench = fetch_benchmark_return(start_dt, end_dt)
+            if bench is None:
+                note = "Benchmark unavailable for epoch window."
+        else:
+            note = "Epoch mark timestamps missing."
+    elif bench is None and len(epoch_marks) < 2:
+        note = "Insufficient epoch marks for benchmark span."
+
+    excess = None if bench is None else epoch_return - float(bench)
+
+    return {
+        "started_at": epoch.started_at,
+        "knobs": dict(epoch.knobs),
+        "seeded_from_history": bool(epoch.seeded_from_history),
+        "baseline_nav": round(baseline, 2),
+        "portfolio_value": round(nav, 2),
+        "total_return": round(epoch_return, 4),
+        "total_costs": round(epoch_costs, 2),
+        "cost_drag": round(cost_drag, 4),
+        "trade_count": len(epoch_trades),
+        "buy_count": buys,
+        "sell_count": sells,
+        "positions": int(perf["positions"]),
+        "cash_fraction": round(cash_fraction, 4),
+        "equity_marks": len(epoch_marks),
+        "max_sector_weight": round(max_sector_weight, 4),
+        "dominant_sector": dominant,
+        "benchmark_return": None if bench is None else round(float(bench), 4),
+        "excess_after_costs": None if excess is None else round(excess, 4),
+        "note": note,
+    }
+
+
+def metrics_for_review(metrics: BookMetrics) -> BookMetrics:
+    """Prefer epoch-scoped metrics when the active epoch has enough post-change data."""
+    epoch = metrics.epoch
+    if not epoch:
+        return metrics
+    if epoch.get("equity_marks", 0) < MIN_EPOCH_MARKS:
+        return metrics
+    if epoch.get("trade_count", 0) < MIN_EPOCH_TRADES:
+        return metrics
+    return BookMetrics(
+        portfolio_value=float(epoch.get("portfolio_value") or metrics.portfolio_value),
+        contributed_capital=float(epoch.get("baseline_nav") or metrics.contributed_capital),
+        total_return=float(epoch.get("total_return") or 0.0),
+        total_costs=float(epoch.get("total_costs") or 0.0),
+        cost_drag=float(epoch.get("cost_drag") or 0.0),
+        trade_count=int(epoch.get("trade_count") or 0),
+        buy_count=int(epoch.get("buy_count") or 0),
+        sell_count=int(epoch.get("sell_count") or 0),
+        positions=int(epoch.get("positions") or metrics.positions),
+        cash_fraction=float(epoch.get("cash_fraction") or metrics.cash_fraction),
+        equity_marks=int(epoch.get("equity_marks") or 0),
+        max_sector_weight=float(epoch.get("max_sector_weight") or metrics.max_sector_weight),
+        dominant_sector=epoch.get("dominant_sector") or metrics.dominant_sector,
+        benchmark_return=epoch.get("benchmark_return"),
+        excess_after_costs=epoch.get("excess_after_costs"),
+        note=str(epoch.get("note") or metrics.note),
+        epoch=epoch,
+    )
+
+
+def enough_epoch_history(epoch: dict[str, Any] | None) -> bool:
+    if not epoch:
+        return False
+    return (
+        int(epoch.get("equity_marks") or 0) >= MIN_EPOCH_MARKS
+        and int(epoch.get("trade_count") or 0) >= MIN_EPOCH_TRADES
+    )
+
+
+def _ticker_sector_map(fund: PaperFund) -> dict[str, str]:
+    sectors: dict[str, str] = {}
+    for ticker, pos in fund.holdings.items():
+        sectors[str(ticker)] = str(pos.sector or "Unknown") or "Unknown"
+    return sectors
+
+
+def _would_pass_sector_cap(
+    *,
+    sector: str,
+    sector_cap: float,
+    max_positions: int,
+    holdings: dict[str, dict[str, Any]],
+) -> bool:
+    if max_positions <= 0:
+        return False
+    sector = str(sector or "Unknown") or "Unknown"
+    per_sector_cap = max(1, int(max_positions * sector_cap))
+    same_sector = sum(1 for row in holdings.values() if row.get("sector") == sector)
+    return same_sector < per_sector_cap
+
+
+def estimate_counterfactual_preview(
+    fund: PaperFund,
+    *,
+    knobs: LearningKnobs,
+) -> dict[str, Any]:
+    """
+    Lightweight lifetime replay: which historical trades would have been blocked
+    by max_positions / sector_cap if those knobs had applied from inception.
+
+    min_conviction, skip_timing_wait, and AI gates need archived screen snapshots
+    for a full path replay — omitted here by design.
+    """
+    sectors = _ticker_sector_map(fund)
+    holdings: dict[str, dict[str, Any]] = {}
+    executed = 0
+    blocked_buys = 0
+    blocked_sells = 0
+    blocked_costs = 0.0
+    simulated_costs = 0.0
+    actual_costs = sum(float(t.cost or 0.0) for t in fund.trades)
+
+    for trade in fund.trades:
+        ticker = str(trade.ticker)
+        cost = float(trade.cost or 0.0)
+        if trade.side == "sell":
+            if ticker in holdings:
+                del holdings[ticker]
+                executed += 1
+                simulated_costs += cost
+            else:
+                blocked_sells += 1
+                blocked_costs += cost
+            continue
+
+        sector = sectors.get(ticker, "Unknown")
+        at_cap = len(holdings) >= int(knobs.max_positions)
+        sector_blocked = not _would_pass_sector_cap(
+            sector=sector,
+            sector_cap=float(knobs.sector_cap),
+            max_positions=int(knobs.max_positions),
+            holdings=holdings,
+        )
+        if at_cap or sector_blocked:
+            blocked_buys += 1
+            blocked_costs += cost
+            continue
+
+        holdings[ticker] = {"sector": sector}
+        executed += 1
+        simulated_costs += cost
+
+    contributed = float(fund.contributed_capital or fund.config.initial_cash or 0.0)
+    actual_drag = (actual_costs / contributed) if contributed > 0 else 0.0
+    simulated_drag = (simulated_costs / contributed) if contributed > 0 else 0.0
+    return {
+        "scope": "lifetime_trade_replay",
+        "knobs": knobs.to_dict(),
+        "limitations": (
+            "Replay uses max_positions and sector_cap only; min_conviction, "
+            "skip_timing_wait, and AI gates need archived weekly screens for "
+            "full counterfactual P&L."
+        ),
+        "executed_trades": executed,
+        "blocked_buys": blocked_buys,
+        "blocked_orphan_sells": blocked_sells,
+        "actual_total_costs": round(actual_costs, 2),
+        "simulated_total_costs": round(simulated_costs, 2),
+        "estimated_cost_savings_gbp": round(blocked_costs, 2),
+        "actual_cost_drag": round(actual_drag, 4),
+        "simulated_cost_drag": round(simulated_drag, 4),
+        "cost_drag_delta": round(actual_drag - simulated_drag, 4),
+    }
 
 
 def _mark_prices(fund: PaperFund) -> dict[str, float]:
@@ -229,6 +602,7 @@ def compute_book_metrics(
     *,
     benchmark_return: float | None = None,
     fetch_benchmark: bool = True,
+    knob_epoch: KnobEpoch | None = None,
 ) -> BookMetrics:
     prices = _mark_prices(fund)
     perf = fund.performance(prices)
@@ -258,6 +632,15 @@ def compute_book_metrics(
     total_return = float(perf["total_return"] or 0.0)
     excess = None if bench is None else total_return - float(bench)
 
+    epoch_metrics = None
+    if knob_epoch is not None:
+        epoch_metrics = _compute_epoch_metrics(
+            fund,
+            knob_epoch,
+            benchmark_return=benchmark_return,
+            fetch_benchmark=fetch_benchmark,
+        )
+
     return BookMetrics(
         portfolio_value=nav,
         contributed_capital=contributed,
@@ -275,6 +658,7 @@ def compute_book_metrics(
         benchmark_return=bench,
         excess_after_costs=excess,
         note=note,
+        epoch=epoch_metrics,
     )
 
 
@@ -420,6 +804,7 @@ def run_decision_review(
     force: bool = False,
     benchmark_return: float | None = None,
     fetch_benchmark: bool = True,
+    counterfactual: bool = True,
 ) -> DecisionReviewResult:
     """
     Review the automated paper book and optionally write clamped knob updates.
@@ -441,17 +826,27 @@ def run_decision_review(
 
     fund = ensure_automated_fund(fund_path, config)
     knobs_before = LearningKnobs.from_config(config)
+    knob_epoch = ensure_knob_epoch(output_dir)
     metrics = compute_book_metrics(
         fund,
         benchmark_return=benchmark_return,
         fetch_benchmark=fetch_benchmark,
+        knob_epoch=knob_epoch,
     )
+    epoch_ok = enough_epoch_history(metrics.epoch)
     history_ok = enough_history(metrics)
-    proposed, changes, reasons = propose_knob_updates(metrics, knobs_before)
+    if metrics.epoch and epoch_ok:
+        review_metrics = metrics_for_review(metrics)
+        review_history_ok = True
+    else:
+        review_metrics = metrics
+        review_history_ok = history_ok
+    proposed, changes, reasons = propose_knob_updates(review_metrics, knobs_before)
 
+    reviewed_at = datetime.now(tz=UTC).isoformat()
     applied = False
     note = "Proposal only — history too thin to apply."
-    if not history_ok and not force:
+    if not review_history_ok and not force:
         knobs_after = knobs_before
     else:
         knobs_after = proposed
@@ -464,8 +859,15 @@ def run_decision_review(
 
             sync_fund_from_automation_config(fund, config)
             save_automated_fund(fund_path, fund)
+            start_knob_epoch(output_dir, fund, knobs_after, reviewed_at=reviewed_at)
             applied = True
-            note = "Applied clamped knob updates from decision review."
+            note = "Applied clamped knob updates from decision review; started new knob epoch."
+            metrics = compute_book_metrics(
+                fund,
+                benchmark_return=benchmark_return,
+                fetch_benchmark=fetch_benchmark,
+                knob_epoch=load_knob_epoch(output_dir),
+            )
         elif apply and not changes:
             note = "Reviewed; no knob changes to apply."
             knobs_after = knobs_before
@@ -474,24 +876,37 @@ def run_decision_review(
         else:
             note = "Proposal ready; re-run with --apply to write config."
 
-    if not history_ok:
+    if not review_history_ok:
         reasons = [
             (
-                f"Need ≥{MIN_EQUITY_MARKS} equity marks and ≥{MIN_TRADES} trades "
-                f"(have {metrics.equity_marks} marks, {metrics.trade_count} trades)."
+                f"Need ≥{MIN_EPOCH_MARKS} epoch marks and ≥{MIN_EPOCH_TRADES} epoch trades "
+                f"since last knob apply (or ≥{MIN_EQUITY_MARKS} lifetime marks and "
+                f"≥{MIN_TRADES} trades when no epoch yet) — "
+                f"epoch marks={((metrics.epoch or {}).get('equity_marks'))}, "
+                f"epoch trades={((metrics.epoch or {}).get('trade_count'))}, "
+                f"lifetime marks={metrics.equity_marks}, "
+                f"lifetime trades={metrics.trade_count}."
             ),
             *reasons,
         ]
 
+    counterfactual_preview = None
+    if counterfactual and (changes or force):
+        counterfactual_preview = estimate_counterfactual_preview(
+            fund,
+            knobs=proposed if (changes or force) else knobs_after,
+        )
+
     result = DecisionReviewResult(
-        reviewed_at=datetime.now(tz=UTC).isoformat(),
-        enough_history=history_ok,
+        reviewed_at=reviewed_at,
+        enough_history=review_history_ok,
         applied=applied,
         knobs_before=knobs_before.to_dict(),
         knobs_after=knobs_after.to_dict(),
-        proposed_changes=changes if history_ok or force else {},
+        proposed_changes=changes if review_history_ok or force else {},
         reasons=reasons,
         metrics=metrics.to_dict(),
+        counterfactual_preview=counterfactual_preview,
         note=note,
         track_id=str(config.track_id or "rules"),
         track_label=str(config.track_label or ""),
@@ -501,8 +916,13 @@ def run_decision_review(
             "AI-judgment is the primary learning track, rules is the control."
             if config.is_primary_learning_track
             else (
-                "Control track — compare excess_after_costs to the primary AI-judgment "
-                "book; do not treat rules outperformance alone as learning success."
+                "Timing/levels baseline — stock-picking tracks should beat this "
+                "after costs; uses trade_plan stops/targets, not conviction rebalance."
+                if str(config.track_id or "") == "technical"
+                else (
+                    "Control track — compare excess_after_costs to the primary AI-judgment "
+                    "book; do not treat rules outperformance alone as learning success."
+                )
             )
         ),
     )
@@ -530,6 +950,14 @@ def format_review_text(result: DecisionReviewResult) -> str:
             f"trades: {m.get('trade_count', 0)}"
         ),
     ]
+    epoch = m.get("epoch") or {}
+    if epoch:
+        lines.append(
+            f"  Epoch since {epoch.get('started_at', '—')}: "
+            f"return {epoch.get('total_return', 0):+.1%} | "
+            f"cost drag {epoch.get('cost_drag', 0):.1%} | "
+            f"trades {epoch.get('trade_count', 0)}"
+        )
     excess = m.get("excess_after_costs")
     if excess is not None:
         lines.append(
@@ -538,8 +966,22 @@ def format_review_text(result: DecisionReviewResult) -> str:
         )
     else:
         lines.append("  Excess after costs vs FTSE: unavailable (need benchmark + marks)")
+    epoch_excess = epoch.get("excess_after_costs")
+    if epoch and epoch_excess is not None:
+        lines.append(
+            f"  Epoch excess vs FTSE: {epoch_excess:+.1%} "
+            f"(benchmark {epoch.get('benchmark_return'):+.1%})"
+        )
     if result.proposed_changes:
         lines.append(f"  Proposed: {result.proposed_changes}")
+    preview = result.counterfactual_preview or {}
+    if preview:
+        lines.append(
+            "  Counterfactual (lifetime replay): "
+            f"blocked {preview.get('blocked_buys', 0)} buys, "
+            f"est. cost savings £{preview.get('estimated_cost_savings_gbp', 0):.2f}, "
+            f"drag delta {preview.get('cost_drag_delta', 0):+.1%}"
+        )
     for reason in result.reasons[:6]:
         lines.append(f"  - {reason}")
     return "\n".join(lines)
@@ -551,6 +993,7 @@ def compare_learning_tracks(
     apply: bool = False,
     force: bool = False,
     fetch_benchmark: bool = True,
+    counterfactual: bool = True,
 ) -> dict[str, Any]:
     """
     Review rules (control) + AI judgment (primary) and summarize outperformance.
@@ -575,6 +1018,7 @@ def compare_learning_tracks(
             apply=apply,
             force=force,
             fetch_benchmark=fetch_benchmark,
+            counterfactual=counterfactual,
         )
         reviews[track_id] = result.to_dict()
 

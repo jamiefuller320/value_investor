@@ -653,7 +653,7 @@ function modeBadge(mode) {
 function loadPortfolioSection() {
   const value = localStorage.getItem("ftseValueInvestor.portfolioSection.v1");
   if (value === "actions" || value === "sims") return value;
-  return "sims";
+  return "actions";
 }
 
 function savePortfolioSection(section) {
@@ -857,8 +857,8 @@ function renderPortfolio(data) {
 
   panel.innerHTML = `
     <nav class="portfolio-section-nav" aria-label="Portfolio sections">
-      <button type="button" class="portfolio-section-tab${section === "sims" ? " active" : ""}" data-portfolio-section="sims">Paper simulations</button>
       <button type="button" class="portfolio-section-tab${section === "actions" ? " active" : ""}" data-portfolio-section="actions">Action log</button>
+      <button type="button" class="portfolio-section-tab${section === "sims" ? " active" : ""}" data-portfolio-section="sims">Local sandbox</button>
     </nav>
     <div id="portfolio-section-sims" class="portfolio-section${section === "sims" ? " active" : ""}">
       <div id="paper-funds-root"></div>

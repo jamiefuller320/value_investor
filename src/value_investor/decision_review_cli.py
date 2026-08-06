@@ -57,6 +57,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip FTSE benchmark fetch (excess_after_costs omitted)",
     )
+    parser.add_argument(
+        "--no-counterfactual",
+        action="store_true",
+        help="Skip lifetime counterfactual trade replay for proposed knobs",
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON result")
     args = parser.parse_args(argv)
 
@@ -66,6 +71,7 @@ def main(argv: list[str] | None = None) -> int:
             apply=bool(args.apply),
             force=bool(args.force),
             fetch_benchmark=not args.no_benchmark,
+            counterfactual=not args.no_counterfactual,
         )
         if args.json:
             print(json.dumps(summary, indent=2))
@@ -109,6 +115,7 @@ def main(argv: list[str] | None = None) -> int:
         apply=bool(args.apply),
         force=bool(args.force),
         fetch_benchmark=not args.no_benchmark,
+        counterfactual=not args.no_counterfactual,
     )
 
     if args.json:
