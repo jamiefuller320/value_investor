@@ -29,6 +29,8 @@ from value_investor.rebalance_log import (
     append_rebalance_log,
     build_rebalance_log_entry,
     collect_decision_candidates,
+    collect_screen_buy_tier,
+    gate_excluded_tickers,
     load_knob_epoch_started_at,
     resolve_screen_source,
     snapshot_holdings,
@@ -705,6 +707,8 @@ def run_daily_automation(
         fund,
         use_adjusted_signal=config.use_adjusted_signal,
     )
+    screen_buy_tier = collect_screen_buy_tier(marked, fund)
+    gate_excluded = gate_excluded_tickers(screen_buy_tier, decision_candidates)
 
     plan: dict[str, Any] = {}
     if fund.config.mode == "automated":
@@ -816,6 +820,8 @@ def run_daily_automation(
         screen_source=resolve_screen_source(reports_path),
         knob_epoch_started_at=load_knob_epoch_started_at(output_dir),
         candidates=decision_candidates,
+        screen_buy_tier=screen_buy_tier,
+        gate_excluded=gate_excluded,
         plan=plan,
         trades=trades,
         nav_before=nav_before,
