@@ -17,10 +17,12 @@ from value_investor.ops_monitor import (
     apply_auto_fixes,
     check_backtest_history,
     check_committed_json,
+    check_engineering_queue,
     check_ingest_health_log,
     check_latest_bundle,
     check_workflow_freshness,
     draft_ops_engineering_tasks,
+    filter_unresolved_workflow_failures,
     format_ops_monitor_text,
     load_health_log_payload,
     recovery_bundle_in_flight,
@@ -46,6 +48,69 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
     assert eng_checks and eng_checks[0]["max_age_hours"] == 26
     assert eng_checks[0]["stale"] is False
     assert not [row for row in findings if "Engineering Queue" in row.title]
+
+
+def test_filter_unresolved_workflow_failures_ignores_pre_success_failures():
+    success_at = weekday_noon_utc()
+    older = (success_at - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    newer = (success_at + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    failures = [
+        {"id": 1, "created_at": older},
+        {"id": 2, "created_at": newer},
+    ]
+    unresolved = filter_unresolved_workflow_failures(failures, success_at)
+    assert [row["id"] for row in unresolved] == [2]
+
+
+def test_check_workflow_freshness_ignores_resolved_failures():
+    success_at = weekday_noon_utc()
+    one_hour_ago = (success_at - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch(
+            "value_investor.ops_monitor.latest_workflow_run",
+            return_value={"id": 2, "created_at": success_at.strftime("%Y-%m-%dT%H:%M:%SZ")},
+        ),
+        patch(
+            "value_investor.ops_monitor.recent_workflow_failures",
+            return_value=[{"id": 1, "created_at": one_hour_ago}],
+        ),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=success_at)
+    assert not [row for row in findings if "workflow failure" in row.title.lower()]
+    eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
+    assert eng_checks[0]["unresolved_failures_12h"] == 0
+
+
+def test_check_engineering_queue_skips_informational_parked(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260726-05",
+                        "area": "scoring",
+                        "title": "Merged task",
+                        "status": "merged",
+                    },
+                    {
+                        "id": "eng-20260804-36",
+                        "area": "scoring",
+                        "title": "Duplicate task",
+                        "status": "parked",
+                        "parked_policy": "duplicate",
+                        "duplicate_of": "eng-20260726-05",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    findings, _ = check_engineering_queue(tasks_path=tasks_path, open_prs=[])
+    assert not [row for row in findings if row.title.startswith("Parked engineering")]
 
 
 def test_check_workflow_freshness_engineering_queue_active_requires_hourly():

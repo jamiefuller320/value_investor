@@ -8,10 +8,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.engineering_recovery import (
+    housekeep_parked_tasks,
     recover_engineering_queue,
     record_agent_no_diff_run,
     retry_failed_tasks,
     summarize_parked_tasks,
+    summarize_parked_tasks_needing_attention,
 )
 from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks, mark_task_status
 
@@ -115,6 +117,53 @@ def test_summarize_parked_tasks(tmp_path: Path):
     rows = summarize_parked_tasks(tasks_path)
     assert len(rows) == 1
     assert rows[0]["id"] == "eng-20260729-01"
+    assert rows[0]["needs_attention"] is True
+    assert rows[0]["parked_policy"] == "ci_blocked"
+
+
+def test_summarize_parked_tasks_needing_attention_skips_no_diff(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    _task("eng-20260804-01", status="parked").to_dict()
+                    | {
+                        "parked_reason": "agent produced no code changes 2 time(s) (cap 2) — manual review",
+                        "parked_policy": "no_diff_cap",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert summarize_parked_tasks_needing_attention(tasks_path) == []
+
+
+def test_housekeep_parked_tasks_cancels_duplicate_of_merged(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    _task("eng-20260726-05", status="merged").to_dict(),
+                    _task("eng-20260804-36", status="parked").to_dict()
+                    | {
+                        "parked_policy": "duplicate",
+                        "duplicate_of": "eng-20260726-05",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = housekeep_parked_tasks(tasks_path=tasks_path, apply=True)
+    assert len(result.cancelled) == 1
+    assert result.cancelled[0].task_id == "eng-20260804-36"
+    updated = load_engineering_tasks(tasks_path)
+    parked = next(row for row in updated["tasks"] if row["id"] == "eng-20260804-36")
+    assert parked["status"] == "cancelled"
+    assert parked["duplicate_of"] == "eng-20260726-05"
 
 
 def test_record_agent_no_diff_run_increments_then_parks(tmp_path: Path):
@@ -142,3 +191,4 @@ def test_record_agent_no_diff_run_increments_then_parks(tmp_path: Path):
     updated = load_engineering_tasks(tasks_path)
     assert updated["tasks"][0]["status"] == "parked"
     assert "no code changes" in str(updated["tasks"][0].get("parked_reason"))
+    assert updated["tasks"][0].get("parked_policy") == "no_diff_cap"
