@@ -211,6 +211,29 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
             output_dir / "research_model_suggestions.json"
         )
     paper_automation = _read_json(output_dir / "paper_automation" / "last_run.json")
+    learning_tracks_review = _read_json(
+        output_dir / "paper_automation" / "learning_tracks_review.json"
+    )
+    learning_tracks_summary = _read_json(
+        output_dir / "paper_automation" / "learning_tracks_summary.json"
+    )
+    learning_track_funds: dict[str, Any] = {}
+    try:
+        from value_investor.paper_automation import learning_track_dirs
+
+        for track_id, track_dir in learning_track_dirs(
+            output_dir / "paper_automation"
+        ).items():
+            fund_payload = _read_json(track_dir / "automated_fund.json")
+            if fund_payload:
+                learning_track_funds[track_id] = {
+                    "nav": fund_payload.get("nav"),
+                    "total_return": fund_payload.get("total_return"),
+                    "equity_curve": (fund_payload.get("equity_curve") or [])[-24:],
+                    "holdings_count": len(fund_payload.get("holdings") or {}),
+                }
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Learning track fund snapshot skipped: %s", exc)
 
     trust_reports = _load_trust_reports(output_dir)
     signal_counts = _signal_counts(reports)
@@ -312,6 +335,9 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "post_run_review": post_run_review,
         "research_model_suggestions": research_model_suggestions,
         "paper_automation": paper_automation,
+        "learning_tracks_review": learning_tracks_review,
+        "learning_tracks_summary": learning_tracks_summary,
+        "learning_track_funds": learning_track_funds,
         "automation": automation,
         "project_progress": project_progress,
     }

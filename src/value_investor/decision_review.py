@@ -501,8 +501,13 @@ def run_decision_review(
             "AI-judgment is the primary learning track, rules is the control."
             if config.is_primary_learning_track
             else (
-                "Control track — compare excess_after_costs to the primary AI-judgment "
-                "book; do not treat rules outperformance alone as learning success."
+                "Timing/levels baseline — stock-picking tracks should beat this "
+                "after costs; uses trade_plan stops/targets, not conviction rebalance."
+                if str(config.track_id or "") == "technical"
+                else (
+                    "Control track — compare excess_after_costs to the primary AI-judgment "
+                    "book; do not treat rules outperformance alone as learning success."
+                )
             )
         ),
     )

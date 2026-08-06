@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
 
 from value_investor.paper_automation import (
     AutomationConfig,
+    default_technical_config,
     is_after_open_settle,
     load_screen_candidates,
     run_daily_automation,
@@ -196,6 +197,52 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     assert "momentum_grace" in summary["tracks"]
     assert summary["tracks"]["momentum_grace"]["selection"]["use_momentum_grace"] is True
     assert (tmp_path / "auto" / "momentum_grace" / "config.json").exists()
+    assert "technical" in summary["tracks"]
+    assert (tmp_path / "auto" / "technical" / "config.json").exists()
+
+
+def test_run_daily_automation_technical_pass(tmp_path, monkeypatch):
+    reports_path = tmp_path / "latest.json"
+    reports_path.write_text(
+        __import__("json").dumps(
+            {
+                "reports": [
+                    {
+                        "ticker": "AAA.L",
+                        "name": "Alpha",
+                        "signal": "strong_buy",
+                        "conviction_score": 0.9,
+                        "price": 10,
+                        "timing_signal": "neutral",
+                        "trade_plan": {
+                            "core_limit": 10,
+                            "tactical_stop_loss": 8,
+                            "tactical_take_profit": 14,
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.paper_automation.refresh_candidate_marks",
+        lambda candidates, extra_tickers=None: candidates,
+    )
+    out = tmp_path / "auto" / "technical"
+    config = default_technical_config()
+    result = run_daily_automation(
+        output_dir=out,
+        config=config,
+        reports_path=reports_path,
+        now=datetime(2026, 7, 15, 10, 0, tzinfo=LONDON),
+        force=True,
+    )
+    assert result.acted is True
+    fund = PaperFund.from_dict(
+        __import__("json").loads((out / "automated_fund.json").read_text(encoding="utf-8"))
+    )
+    assert fund.config.mode == "technical"
 
 
 def test_load_screen_candidates_accepts_email_reports_list(tmp_path):

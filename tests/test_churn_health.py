@@ -117,8 +117,10 @@ def test_write_churn_health_for_learning_tracks(tmp_path: Path):
     _write_track(paper / "ai_judgment", trades=[], cost_drag=0.03)
     (paper / "momentum_grace").mkdir()
     _write_track(paper / "momentum_grace", trades=[], cost_drag=0.01)
+    (paper / "technical").mkdir()
+    _write_track(paper / "technical", trades=[], cost_drag=0.02)
 
     payload = write_churn_health(paper)
     assert (paper / "learning_tracks_churn_health.json").exists()
-    assert set(payload["tracks"]) == {"rules", "ai_judgment", "momentum_grace"}
+    assert set(payload["tracks"]) == {"rules", "ai_judgment", "momentum_grace", "technical"}
     assert any("cost drag" in alert["title"].lower() for alert in payload["alerts"])

@@ -12,6 +12,7 @@ from value_investor.paper_automation import (
     DEFAULT_AUTOMATION_DIR,
     MOMENTUM_GRACE_TRACK_ID,
     RULES_TRACK_ID,
+    TECHNICAL_TRACK_ID,
     AutomationConfig,
     format_automation_text,
     learning_track_dirs,
@@ -61,7 +62,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--tracks",
         default="all",
-        choices=["all", "rules", "ai_judgment", "momentum_grace"],
+        choices=["all", "rules", "ai_judgment", "momentum_grace", "technical"],
         help="Which learning track(s) to run (default: all)",
     )
     parser.add_argument(
@@ -123,6 +124,7 @@ def main(argv: list[str] | None = None) -> int:
         "rules": RULES_TRACK_ID,
         "ai_judgment": AI_JUDGMENT_TRACK_ID,
         "momentum_grace": MOMENTUM_GRACE_TRACK_ID,
+        "technical": TECHNICAL_TRACK_ID,
     }[args.tracks]
     track_dir = learning_track_dirs(output_dir)[track_id]
     track_dir.mkdir(parents=True, exist_ok=True)
@@ -144,12 +146,22 @@ def main(argv: list[str] | None = None) -> int:
         config.use_adjusted_signal = False
         config.require_research_accumulate = False
         config.use_momentum_grace = True
+        config.strategy_mode = "automated"
         config.track_label = "Screen rules + momentum grace"
+    elif args.tracks == "technical":
+        config.track_id = TECHNICAL_TRACK_ID
+        config.is_primary_learning_track = False
+        config.use_adjusted_signal = False
+        config.require_research_accumulate = False
+        config.use_momentum_grace = False
+        config.strategy_mode = "technical"
+        config.track_label = "Technical levels (stops / trade_plan)"
     else:
         config.track_id = RULES_TRACK_ID
         config.is_primary_learning_track = False
         config.use_adjusted_signal = False
         config.require_research_accumulate = False
+        config.strategy_mode = "automated"
     if args.settle_minutes is not None:
         config.settle_minutes_after_open = args.settle_minutes
     if args.surveillance_only:
