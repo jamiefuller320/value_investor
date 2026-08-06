@@ -110,7 +110,32 @@ ftse-rebalance-log replay --output-dir docs/data/paper_automation/ai_judgment \
   --max-positions 3 --min-conviction 0.05 --json
 ```
 
-Pre-logging trade history still needs the archive lab (L111) for backfill.
+### Pre-logging backfill
+
+Tracks that traded before logging existed can be bootstrapped from trade history
++ nearest daily archive:
+
+```bash
+python3 scripts/bootstrap_rebalance_log.py --tracks rules
+# or all tracks with trades:
+python3 scripts/bootstrap_rebalance_log.py --tracks all --overwrite
+```
+
+Entries are marked `bootstrapped: true`. AI-judgment bootstrap is lossier (needs
+PIT research); rules track is the reference implementation.
+
+### Archive → history backfill
+
+Extend offline sim / backtest depth from dated dashboard archives:
+
+```bash
+ftse-archive-history --data-dir docs/data
+ftse-sim --output-dir docs/data --grace-sweep 4,6,8
+```
+
+Skips archive dates that already have a `history/run_*.json.gz` for that calendar day.
+
+Pre-logging trade history still needs the archive lab (L111) for full inception replay.
 
 ## Safety
 

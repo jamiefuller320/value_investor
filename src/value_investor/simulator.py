@@ -6,6 +6,7 @@ from dataclasses import dataclass, field, replace
 from typing import Any
 
 from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot, load_run_snapshots
+from value_investor.momentum_grace import MomentumGraceConfig
 from value_investor.research.verdict import coerce_research_verdict
 
 DEFAULT_INITIAL_CAPITAL = 1000.0
@@ -31,6 +32,7 @@ class SimulatorConfig:
     trailing_stop: bool = False
     # Hold winners after value downgrade while price trend remains strong.
     use_momentum_grace: bool = False
+    grace_config: MomentumGraceConfig = field(default_factory=MomentumGraceConfig)
 
 
 @dataclass
@@ -581,6 +583,7 @@ def _rebalance_momentum_grace(
             take_profit=state.take_profit,
             grace_entry_stop=state.entry_stop,
             as_of=run_at,
+            config=config.grace_config,
         )
         if decision.keep:
             grace_kept.add(ticker)
@@ -786,6 +789,44 @@ def run_simulation(
         trades=all_trades,
         equity_curve=equity_curve,
     )
+
+
+def run_grace_parameter_sweep(
+    snapshots: list[RunSnapshot],
+    *,
+    grace_weeks_values: list[int],
+    base: SimulatorConfig | None = None,
+) -> list[dict[str, Any]]:
+    """Compare momentum_grace offline sim across grace_weeks settings."""
+    base = base or SimulatorConfig()
+    results: list[dict[str, Any]] = []
+    for weeks in grace_weeks_values:
+        grace_cfg = MomentumGraceConfig(
+            grace_weeks=int(weeks),
+            archive_sma200_floor_pct=base.grace_config.archive_sma200_floor_pct,
+        )
+        summary = run_simulation(
+            snapshots,
+            replace(
+                base,
+                use_momentum_grace=True,
+                use_trade_plan_levels=False,
+                trailing_stop=False,
+                grace_config=grace_cfg,
+            ),
+        )
+        results.append(
+            {
+                "grace_weeks": int(weeks),
+                "total_return": summary.total_return,
+                "excess_return": summary.excess_return,
+                "trade_count": summary.trade_count,
+                "total_costs": summary.total_costs,
+                "periods": summary.periods,
+                "note": summary.note,
+            }
+        )
+    return results
 
 
 def run_simulation_from_dir(output_dir, config: SimulatorConfig | None = None) -> SimulationComparison:

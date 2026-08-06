@@ -413,3 +413,357 @@ def replay_counterfactual_from_log(
         )
 
     return payload
+
+
+def _parse_iso_datetime(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    try:
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        return datetime.fromisoformat(text)
+    except ValueError:
+        return None
+
+
+def load_initial_knobs(output_dir: Path) -> dict[str, Any]:
+    path = Path(output_dir) / "decision_review_history.json"
+    if not path.exists():
+        return {}
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if not isinstance(raw, list) or not raw:
+        return {}
+    first = raw[0]
+    if isinstance(first, dict):
+        knobs = first.get("knobs_before")
+        if isinstance(knobs, dict):
+            return dict(knobs)
+    return {}
+
+
+def load_decision_knob_timeline(output_dir: Path) -> list[tuple[datetime, dict[str, Any]]]:
+    path = Path(output_dir) / "decision_review_history.json"
+    if not path.exists():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    if not isinstance(raw, list):
+        return []
+    timeline: list[tuple[datetime, dict[str, Any]]] = []
+    for row in raw:
+        if not isinstance(row, dict) or not row.get("applied"):
+            continue
+        if not row.get("proposed_changes"):
+            continue
+        when = _parse_iso_datetime(str(row.get("reviewed_at") or ""))
+        knobs = row.get("knobs_after")
+        if when is None or not isinstance(knobs, dict):
+            continue
+        timeline.append((when, dict(knobs)))
+    timeline.sort(key=lambda item: item[0])
+    return timeline
+
+
+def selection_at_time(
+    config: Any,
+    timeline: list[tuple[datetime, dict[str, Any]]],
+    when: str,
+    *,
+    initial_knobs: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Merge track config selection with applied knob changes as-of a pass timestamp."""
+    when_dt = _parse_iso_datetime(when)
+    base = config.selection_kwargs() if hasattr(config, "selection_kwargs") else {}
+    merged = dict(base)
+    seed = dict(initial_knobs or {})
+    for key in ("max_positions", "skip_timing_wait", "min_conviction", "sector_cap"):
+        if key in seed:
+            merged[key] = seed[key]
+    if when_dt is None:
+        return merged
+    for reviewed_at, knobs in timeline:
+        if reviewed_at <= when_dt:
+            for key in ("max_positions", "skip_timing_wait", "min_conviction", "sector_cap"):
+                if key in knobs:
+                    merged[key] = knobs[key]
+    return merged
+
+
+def nearest_archive_for(
+    archives: list[tuple[datetime, Path]],
+    when: str,
+) -> Path | None:
+    when_dt = _parse_iso_datetime(when)
+    if when_dt is None or not archives:
+        return None
+    best: tuple[datetime, Path] | None = None
+    for run_at, path in archives:
+        if run_at <= when_dt and (best is None or run_at > best[0]):
+            best = (run_at, path)
+    if best is not None:
+        return best[1]
+    return archives[0][1]
+
+
+def archive_to_marked_rows(
+    archive_path: Path,
+    *,
+    price_hints: dict[str, float],
+    fetch_prices: bool = False,
+) -> list[dict[str, Any]]:
+    from value_investor.archive_history import archive_to_run_snapshot
+
+    snapshot = archive_to_run_snapshot(
+        archive_path,
+        fetch_prices=fetch_prices,
+        price_overrides=price_hints,
+    )
+    if snapshot is None:
+        return []
+    marked: list[dict[str, Any]] = []
+    for row in snapshot.signals:
+        ticker = str(row.get("ticker") or "")
+        if not ticker:
+            continue
+        item = dict(row)
+        price = snapshot.prices.get(ticker) or price_hints.get(ticker)
+        if price is not None and float(price) > 0:
+            item["price"] = float(price)
+            item["last"] = float(price)
+        marked.append(item)
+    return marked
+
+
+def _group_trades_by_pass(trades: list[Any]) -> list[tuple[str, list[Any]]]:
+    buckets: dict[str, list[Any]] = {}
+    order: list[str] = []
+    for trade in trades:
+        key = str(getattr(trade, "acted_at", "") or "")
+        if key not in buckets:
+            buckets[key] = []
+            order.append(key)
+        buckets[key].append(trade)
+    return [(key, buckets[key]) for key in order]
+
+
+def bootstrap_rebalance_log(
+    track_dir: Path,
+    *,
+    archive_dir: Path | None = None,
+    fetch_prices: bool = False,
+    overwrite: bool = False,
+) -> dict[str, Any]:
+    """
+    Reconstruct rebalance_log.json from trade history + nearest dashboard archives.
+
+    Intended for pre-logging backfill (rules track first). Entries are marked
+    ``bootstrapped: true``.
+    """
+    from value_investor.archive_history import list_dashboard_archives
+    from value_investor.paper_automation import (
+        CONFIG_FILENAME,
+        FUND_FILENAME,
+        AutomationConfig,
+    )
+    from value_investor.paper_fund import PaperFund, PaperFundConfig, preview_automated_plan
+
+    track_dir = Path(track_dir)
+    config_path = track_dir / CONFIG_FILENAME
+    fund_path = track_dir / FUND_FILENAME
+    if not fund_path.exists():
+        return {"ok": False, "reason": "missing automated_fund.json", "entries": 0}
+
+    if config_path.exists():
+        config = AutomationConfig.from_dict(
+            json.loads(config_path.read_text(encoding="utf-8"))
+        )
+    else:
+        config = AutomationConfig()
+
+    source_fund = PaperFund.from_dict(json.loads(fund_path.read_text(encoding="utf-8")))
+    if not source_fund.trades:
+        return {"ok": False, "reason": "no trades to bootstrap", "entries": 0}
+
+    log_path = track_dir / REBALANCE_LOG_FILENAME
+    if log_path.exists() and not overwrite:
+        existing = load_rebalance_log(track_dir)
+        if existing:
+            return {
+                "ok": True,
+                "skipped": True,
+                "reason": "rebalance_log.json already exists (use overwrite=True)",
+                "entries": len(existing),
+            }
+
+    data_dir = Path(archive_dir).parent if archive_dir else Path("docs/data")
+    archives = list_dashboard_archives(Path(archive_dir or data_dir / "archive"))
+    if not archives:
+        return {"ok": False, "reason": "no dashboard archives found", "entries": 0}
+
+    knob_timeline = load_decision_knob_timeline(track_dir)
+    initial_knobs = load_initial_knobs(track_dir)
+    replay_fund = PaperFund.create(
+        PaperFundConfig(
+            name=source_fund.config.name,
+            mode=source_fund.config.mode,
+            initial_cash=float(source_fund.config.initial_cash),
+            trade_cost_pct=float(source_fund.config.trade_cost_pct),
+            max_positions=int(source_fund.config.max_positions),
+        )
+    )
+
+    price_hints: dict[str, float] = {}
+    for trade in source_fund.trades:
+        if float(trade.price) > 0:
+            price_hints[str(trade.ticker)] = float(trade.price)
+    for ticker, pos in source_fund.holdings.items():
+        if pos.avg_cost > 0:
+            price_hints.setdefault(ticker, float(pos.avg_cost))
+
+    entries: list[dict[str, Any]] = []
+    for acted_at, pass_trades in _group_trades_by_pass(source_fund.trades):
+        archive_path = nearest_archive_for(archives, acted_at)
+        if archive_path is None:
+            continue
+
+        marked = archive_to_marked_rows(
+            archive_path,
+            price_hints=price_hints,
+            fetch_prices=fetch_prices,
+        )
+        selection = selection_at_time(
+            config, knob_timeline, acted_at, initial_knobs=initial_knobs
+        )
+        max_pos = int(selection.get("max_positions") or config.max_positions)
+        replay_fund.config.max_positions = max_pos
+
+        prices_pre = {
+            t: float(p.avg_cost)
+            for t, p in replay_fund.holdings.items()
+            if p.avg_cost > 0
+        }
+        for row in marked:
+            ticker = str(row.get("ticker") or "")
+            price = row.get("price")
+            if ticker and price is not None and float(price) > 0:
+                prices_pre[ticker] = float(price)
+
+        nav_before = replay_fund.nav(prices_pre)
+        cash_before = float(replay_fund.cash)
+        holdings_before = snapshot_holdings(replay_fund)
+        rebalance_state_before = replay_fund.rebalance_state.to_dict()
+
+        plan: dict[str, Any] = {}
+        if replay_fund.config.mode == "automated":
+            plan = preview_automated_plan(
+                replay_fund,
+                marked,
+                skip_timing_wait=bool(selection.get("skip_timing_wait", True)),
+                min_conviction=float(selection.get("min_conviction") or 0.0),
+                sector_cap=float(selection.get("sector_cap") or 1.0),
+                use_adjusted_signal=bool(selection.get("use_adjusted_signal", False)),
+                require_research_accumulate=bool(
+                    selection.get("require_research_accumulate", False)
+                ),
+                use_momentum_grace=bool(selection.get("use_momentum_grace", False)),
+                exit_confirm_screens=int(selection.get("exit_confirm_screens") or 2),
+                reentry_cooldown_screens=int(selection.get("reentry_cooldown_screens") or 1),
+                min_rebalance_notional_gbp=float(
+                    selection.get("min_rebalance_notional_gbp") or 10.0
+                ),
+            )
+
+        candidates = collect_decision_candidates(
+            marked,
+            replay_fund,
+            use_adjusted_signal=bool(selection.get("use_adjusted_signal", False)),
+        )
+        trade_payloads = [t.to_dict() for t in pass_trades]
+        sector_by_ticker = {
+            str(row.get("ticker")): str(row.get("sector") or "")
+            for row in marked
+            if row.get("ticker")
+        }
+        for trade in pass_trades:
+            if trade.side == "buy":
+                ticker = str(trade.ticker)
+                replay_fund.buy(
+                    ticker=ticker,
+                    price=float(trade.price),
+                    sizing_mode="shares",
+                    amount=float(trade.shares),
+                    name=str(trade.name or ticker),
+                    sector=sector_by_ticker.get(ticker, ""),
+                    note=str(trade.note or "Bootstrapped buy"),
+                    acted_at=str(trade.acted_at),
+                )
+            else:
+                replay_fund.sell(
+                    ticker=str(trade.ticker),
+                    price=float(trade.price),
+                    sizing_mode="shares",
+                    amount=float(trade.shares),
+                    note=str(trade.note or "Bootstrapped sell"),
+                    acted_at=str(trade.acted_at),
+                )
+
+        prices_post = dict(prices_pre)
+        for trade in pass_trades:
+            if float(trade.price) > 0:
+                prices_post[str(trade.ticker)] = float(trade.price)
+
+        archive_payload = json.loads(archive_path.read_text(encoding="utf-8"))
+        entry = build_rebalance_log_entry(
+            track_id=str(config.track_id or "rules"),
+            track_label=str(config.track_label or ""),
+            strategy_mode=str(config.strategy_mode or replay_fund.config.mode),
+            gate={
+                "local_time": acted_at,
+                "trading_day": True,
+                "after_settle": True,
+                "can_act": True,
+                "reason": "bootstrapped from trade history",
+            },
+            acted=True,
+            note="Bootstrapped rebalance pass from trades + archive",
+            selection=selection,
+            max_positions=max_pos,
+            trade_cost_pct=float(replay_fund.config.trade_cost_pct),
+            screen_source={
+                "path": str(archive_path),
+                "run_at": archive_payload.get("run_at"),
+                "generated_at": archive_payload.get("generated_at"),
+            },
+            knob_epoch_started_at=load_knob_epoch_started_at(track_dir),
+            candidates=candidates,
+            plan=plan,
+            trades=trade_payloads,
+            nav_before=nav_before,
+            cash_before=cash_before,
+            contributed_capital_before=float(replay_fund.contributed_capital),
+            holdings_before=holdings_before,
+            rebalance_state_before=rebalance_state_before,
+            nav_after=replay_fund.nav(prices_post),
+            cash_after=float(replay_fund.cash),
+            holdings_after=snapshot_holdings(replay_fund),
+            rebalance_state_after=replay_fund.rebalance_state.to_dict(),
+        )
+        entry["bootstrapped"] = True
+        entry["bootstrap_source"] = "trades+archives"
+        entries.append(entry)
+
+    log_path.write_text(json.dumps(entries, indent=2) + "\n", encoding="utf-8")
+    return {
+        "ok": True,
+        "entries": len(entries),
+        "path": str(log_path),
+        "passes": [e["gate"]["local_time"] for e in entries],
+    }
