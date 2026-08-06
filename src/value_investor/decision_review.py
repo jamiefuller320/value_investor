@@ -538,6 +538,40 @@ def estimate_counterfactual_preview(
     }
 
 
+def estimate_counterfactual_with_log(
+    output_dir: Path,
+    fund: PaperFund,
+    *,
+    knobs: LearningKnobs,
+) -> dict[str, Any]:
+    """Prefer rebalance-log replay when enough acted entries exist."""
+    from value_investor.rebalance_log import (
+        MIN_LOG_ACTED_ENTRIES,
+        acted_log_entries,
+        load_rebalance_log,
+        replay_counterfactual_from_log,
+    )
+
+    entries = load_rebalance_log(output_dir)
+    acted = acted_log_entries(entries)
+    if len(acted) >= MIN_LOG_ACTED_ENTRIES:
+        replay = replay_counterfactual_from_log(
+            entries,
+            max_positions=int(knobs.max_positions),
+            skip_timing_wait=bool(knobs.skip_timing_wait),
+            min_conviction=float(knobs.min_conviction),
+            sector_cap=float(knobs.sector_cap),
+            actual_fund=fund,
+        )
+        if replay is not None:
+            return replay
+
+    preview = estimate_counterfactual_preview(fund, knobs=knobs)
+    preview["log_entries_replayed"] = len(acted)
+    preview["graduates_at_acted_entries"] = MIN_LOG_ACTED_ENTRIES
+    return preview
+
+
 def _mark_prices(fund: PaperFund) -> dict[str, float]:
     prices: dict[str, float] = {}
     if fund.equity_curve:
@@ -892,7 +926,8 @@ def run_decision_review(
 
     counterfactual_preview = None
     if counterfactual and (changes or force):
-        counterfactual_preview = estimate_counterfactual_preview(
+        counterfactual_preview = estimate_counterfactual_with_log(
+            output_dir,
             fund,
             knobs=proposed if (changes or force) else knobs_after,
         )
@@ -976,12 +1011,29 @@ def format_review_text(result: DecisionReviewResult) -> str:
         lines.append(f"  Proposed: {result.proposed_changes}")
     preview = result.counterfactual_preview or {}
     if preview:
-        lines.append(
-            "  Counterfactual (lifetime replay): "
-            f"blocked {preview.get('blocked_buys', 0)} buys, "
-            f"est. cost savings £{preview.get('estimated_cost_savings_gbp', 0):.2f}, "
-            f"drag delta {preview.get('cost_drag_delta', 0):+.1%}"
-        )
+        scope = preview.get("scope", "lifetime_trade_replay")
+        if scope == "rebalance_log_replay":
+            lines.append(
+                "  Counterfactual (log replay): "
+                f"{preview.get('log_entries_replayed', 0)} passes | "
+                f"sim return {preview.get('simulated_return', 0):+.1%} | "
+                f"actual {preview.get('actual_return_over_window', 0):+.1%} | "
+                f"cost drag Δ {preview.get('cost_drag_delta_vs_actual', 0):+.1%}"
+            )
+        else:
+            lines.append(
+                "  Counterfactual (lifetime replay): "
+                f"blocked {preview.get('blocked_buys', 0)} buys, "
+                f"est. cost savings £{preview.get('estimated_cost_savings_gbp', 0):.2f}, "
+                f"drag delta {preview.get('cost_drag_delta', 0):+.1%}"
+            )
+            acted = preview.get("log_entries_replayed")
+            need = preview.get("graduates_at_acted_entries")
+            if acted is not None and need is not None:
+                lines.append(
+                    f"  Log replay: {acted}/{need} acted entries "
+                    "(full replay unlocks with more weekday passes)."
+                )
     for reason in result.reasons[:6]:
         lines.append(f"  - {reason}")
     return "\n".join(lines)

@@ -10,8 +10,10 @@ from pathlib import Path
 from value_investor.simulator import (
     DEFAULT_INITIAL_CAPITAL,
     DEFAULT_TRADE_COST_PCT,
+    MomentumGraceConfig,
     SimulatorConfig,
     format_simulation_comparison_text,
+    run_grace_parameter_sweep,
     run_simulation_from_dir,
 )
 
@@ -53,15 +55,71 @@ def main(argv: list[str] | None = None) -> int:
             "are always included alongside screen/overlay. Kept for CLI compatibility."
         ),
     )
+    parser.add_argument(
+        "--grace-weeks",
+        type=int,
+        default=None,
+        help="Momentum grace weeks for the grace track (default: 6)",
+    )
+    parser.add_argument(
+        "--grace-sma200-floor",
+        type=float,
+        default=None,
+        help="Archive SMA200 floor for offline grace (default: -0.02)",
+    )
+    parser.add_argument(
+        "--grace-sweep",
+        type=str,
+        default="",
+        help="Comma-separated grace_weeks values to sweep (e.g. 4,6,8). Writes grace_sweep.json.",
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON summary")
     args = parser.parse_args(argv)
+
+    grace_config = MomentumGraceConfig()
+    if args.grace_weeks is not None:
+        grace_config = MomentumGraceConfig(
+            grace_weeks=int(args.grace_weeks),
+            archive_sma200_floor_pct=(
+                args.grace_sma200_floor
+                if args.grace_sma200_floor is not None
+                else grace_config.archive_sma200_floor_pct
+            ),
+        )
+    elif args.grace_sma200_floor is not None:
+        grace_config = MomentumGraceConfig(
+            archive_sma200_floor_pct=float(args.grace_sma200_floor)
+        )
 
     config = SimulatorConfig(
         initial_capital=args.capital,
         trade_cost_pct=args.trade_cost,
         max_positions=args.max_positions,
         monthly_deposit=args.monthly_deposit,
+        grace_config=grace_config,
     )
+
+    if args.grace_sweep.strip():
+        from value_investor.backtest import load_run_snapshots
+
+        weeks = [int(part.strip()) for part in args.grace_sweep.split(",") if part.strip()]
+        snapshots = load_run_snapshots(args.output_dir)
+        sweep = run_grace_parameter_sweep(snapshots, grace_weeks_values=weeks, base=config)
+        sweep_path = args.output_dir / "grace_sweep.json"
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        sweep_path.write_text(json.dumps({"grace_weeks": weeks, "results": sweep}, indent=2) + "\n")
+        if args.json:
+            print(json.dumps({"grace_weeks": weeks, "results": sweep}, indent=2))
+        else:
+            print("Momentum grace parameter sweep")
+            for row in sweep:
+                print(
+                    f"  {row['grace_weeks']}w: return {row['total_return']:+.1%} "
+                    f"excess {row['excess_return']:+.1%} trades {row['trade_count']}"
+                )
+            print(f"\nWrote {sweep_path}")
+        return 0 if sweep else 1
+
     comparison = run_simulation_from_dir(args.output_dir, config=config)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-06T13:39:09+00:00",
+  "updated_at": "2026-08-06T14:31:54+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2253,6 +2253,40 @@
       "status": "open",
       "source": "knob-epoch and counterfactual discussion",
       "added_at": "2026-08-06T13:39:09+00:00"
+    },
+    {
+      "id": "L112",
+      "category": "later",
+      "section": "research",
+      "title": "Persist per-rebalance decision snapshots",
+      "summary": "Append-only rebalance_log.json per track capturing candidate universe, conviction/timing at decision time, knobs active, and trades executed \u2014 enables faithful knob counterfactuals without relying on daily archive joins alone.",
+      "revisit_when": "decision-review counterfactual preview is used weekly and archive replay (L111) is scoped",
+      "tags": [
+        "paper_automation",
+        "counterfactual",
+        "knobs"
+      ],
+      "status": "done",
+      "source": "counterfactual architecture discussion",
+      "added_at": "2026-08-06T13:47:17+00:00",
+      "updated_at": "2026-08-06T14:31:53+00:00"
+    },
+    {
+      "id": "L113",
+      "category": "later",
+      "section": "research",
+      "title": "AI-judgment rebalance log bootstrap (PIT research)",
+      "summary": "Extend bootstrap_rebalance_log to ai_judgment using get_research_as_of per archive date for adjusted_signal and accumulate gates \u2014 rules-only bootstrap is live; AI track needs point-in-time memo joins.",
+      "revisit_when": "ai_judgment track has \u22654 acted rebalance passes in forward logging or \u22658 weeks of archive+research timeline coverage",
+      "tags": [
+        "rebalance_log",
+        "ai_judgment",
+        "counterfactual",
+        "PIT"
+      ],
+      "status": "open",
+      "source": "pre-logging and offline grace discussion",
+      "added_at": "2026-08-06T14:31:54+00:00"
     }
   ]
 }

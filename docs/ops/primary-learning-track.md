@@ -56,7 +56,8 @@ Weekday CI (`paper-auto.yml`) refreshes the research overlay on `docs/data/lates
 automatically before trading — no manual bootstrap needed.
 
 Artifacts: `learning_tracks_summary.json`, `learning_tracks_review.json`, plus
-per-track `automated_fund.json` / `decision_review.json`.
+per-track `automated_fund.json` / `decision_review.json` / `rebalance_log.json`
+(append-only decision snapshots for knob counterfactual replay).
 
 ## Safety
 
