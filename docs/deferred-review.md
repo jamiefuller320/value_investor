@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-06T13:39:09+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-06T14:31:54+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -134,6 +134,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L104 | **Gap-fill: ingest — Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading** | Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading update); gap_fill IR refetch attempted 1 fetch, 0 success—add retry with alternate PDF parser or direct HTML RNS mirror. | After next weekly email gap-fill pass confirms the gap persists |
 | L105 | **Gap-fill: ingest — Extract Annual Report consolidated cash-flow statement and Note 5 except** | Extract Annual Report consolidated cash-flow statement and Note 5 exceptional items as structured tables (currently narrative-only in `ir_0e40d9707e30c3b7.txt`); unlocks WC/capex/M&A bridge without Yahoo fallback. | After next weekly email gap-fill pass confirms the gap persists |
 | L111 | **Full knob counterfactual via archive replay** | Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review. | docs/data/archive has ≥12 months of weekly screens and analysis_review offline_sim queue is active |
+| L113 | **AI-judgment rebalance log bootstrap (PIT research)** | Extend bootstrap_rebalance_log to ai_judgment using get_research_as_of per archive date for adjusted_signal and accumulate gates — rules-only bootstrap is live; AI track needs point-in-time memo joins. | ai_judgment track has ≥4 acted rebalance passes in forward logging or ≥8 weeks of archive+research timeline coverage |
 
 ### Ops / reliability
 
