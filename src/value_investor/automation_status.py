@@ -24,7 +24,7 @@ WORKFLOW_SCHEDULES = {
             "Dispatches child workflows via workflow_dispatch. "
             "Sunday 06:17 UTC quiet bundle (+ 09:17/12:17 catch-up); "
             "daily 05:30 UTC surplus-day ladder gate; "
-            "weekdays 08:17 UTC paper automation (+ 11:17 catch-up). "
+            "weekdays 08:25 UTC paper automation (+ 11:25 catch-up). "
             "Skips children that already succeeded today. "
             "External cron (primary): docs/ops/orchestrator-cron.md."
         ),
@@ -33,7 +33,7 @@ WORKFLOW_SCHEDULES = {
     "paper_auto": {
         "name": "FTSE Paper Automation",
         "cron": "17 8 * * 1-5",
-        "cadence": "Dispatched by orchestrator on weekdays 08:17 UTC (≈09:17 Europe/London in BST); 11:17 catch-up",
+        "cadence": "Dispatched by orchestrator on weekdays 08:25 UTC (after London settle); 11:25 catch-up",
         "workflow": "paper-auto.yml",
     },
     "library_ladder": {
