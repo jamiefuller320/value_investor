@@ -66,6 +66,28 @@ auto-tune is deferred until closed cohorts thicken (see `learning_tracks_exit_sh
 - `learning_tracks_summary.json` / `learning_tracks_review.json` — dual-track rollup
 - `decision_review.json` — per-track metrics, proposed changes, reasons
 - `decision_review_history.json` — last 52 reviews per track
+- `knob_epoch.json` — active performance baseline after the latest knob apply
+- `knob_epochs.json` — history of knob-epoch snapshots (last 52)
+
+## Knob epochs
+
+When `ftse-decision-review --apply` writes a knob change, the track starts a
+**fresh performance epoch**: NAV at apply time becomes the baseline, and
+`metrics.epoch` in `decision_review.json` reports return, cost drag, and excess
+vs ^FTSE **since that apply only**. Lifetime `metrics.total_return` remains for
+context; proposal heuristics switch to epoch metrics once the post-apply window
+has ≥2 equity marks and ≥1 trade.
+
+Existing tracks backfill the active epoch from the last applied row in
+`decision_review_history.json` on the next review (marked `seeded_from_history`).
+
+## Counterfactual preview
+
+When a review proposes knob changes, `counterfactual_preview` estimates lifetime
+cost impact if `max_positions` / `sector_cap` had applied from the first trade
+(lightweight trade replay — no archived screen snapshots). Full P&L replay
+including `min_conviction`, timing gates, and AI overlays needs the offline
+archive lab (`offline_sim`); pass `--no-counterfactual` to skip the preview.
 
 ## Safety
 

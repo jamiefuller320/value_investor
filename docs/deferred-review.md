@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-04T06:27:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-06T13:39:09+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -65,6 +65,11 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L85 | **Auto-tune momentum grace knobs from exit-shadow review** | When exit_shadow_review shows ≥30 closed grace exits with stable early_exit vs good_exit balance vs rules screen_rotation, allow decision-review-style small steps on grace_weeks, ATR stop multiplier, and take-profit extension on the momentum_grace track only. | learning_tracks_exit_shadow.json shows ≥30 closed grace exits and grace vs screen_rotation verdict rates diverge materially |
 | L87 | **LLM synthesis layer for periodic learning-track meta-reports** | Monthly or quarterly agent pass that reads learning_tracks_review.json, learning_tracks_exit_shadow.json, and historical_analysis_summary.json and produces a human-readable diagnosis (AI vs control, grace vs rules, cost drag, suggested experiments). Uses frontier/API-pool models; keep automated knobs deterministic. | ≥8 weeks of learning_tracks_review marks and ≥15 closed exit-shadow cohorts; paper-auto artifacts stable |
 | L90 | **Promote momentum grace into rules control after shadow evidence** | If momentum_grace track beats rules on cost-adjusted excess return and exit_shadow shows materially fewer early_exit vs screen_rotation on comparable sells, merge grace overlay into the rules control book and retire the separate third track to reduce operational surface. | ≥6 months of three-track marks; grace vs rules excess and exit-shadow verdict rates diverge consistently in grace favour |
+| L106 | **Calibrate browser automated sim vs server paper automation** | Browser automated rebalance churns immediately (no hold buffer, no re-entry cooldown) while server paper_automation uses exit_confirm_screens and hold buffer. Align rules or label them as distinct tracks before tuning conviction/sector caps from learning data. | learning_tracks_churn_health has ≥8 weeks of marks and paper-learning review enabled; AI-judgment vs rules-control divergence is measurable |
+| L107 | **Learning tracks performance panel in dashboard** | Render learning_tracks_review.json and per-track equity curves (rules, ai_judgment, momentum_grace) in Automation or Performance tab — side-by-side excess vs ^FTSE, NAV, trade count, last knob change. | Stage 2b observe period continues; no new tracks until panel makes server books legible |
+| L108 | **Server-side daily technical paper track** | Wire run_technical_pass into paper-auto as a fourth published track under docs/data/paper_automation/technical/ with same weekday schedule as rules/AI books. | Browser technical sim validated or deprecated in favour of server track |
+| L109 | **Knob-epoch zero datums for learning tracks** | On decision-review knob apply, snapshot a fresh performance baseline (NAV=contributed capital, excess vs ^FTSE from epoch start) so accumulated P&L does not obscure the effect of parameter changes. | decision-review has applied multiple knob rounds on ai_judgment with enough post-change marks |
+| L110 | **Browser technical sim daily auto-run** | Mirror maybeRunIndependentAuto for technical mode: weekday gate after London settle, optional checkbox, calls runTechnicalPass once per day. | Server technical track exists or browser sims explicitly kept as local-only sandbox |
 
 ### Universe & data
 
@@ -128,6 +133,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L103 | **Gap-fill: scoring — Reconcile `key_metrics.FCF` (−$66.1m) with `cashflow_metrics.free_cashfl** | Reconcile `key_metrics.FCF` (−$66.1m) with `cashflow_metrics.free_cashflow` (+$119m) in `screening_snapshot.json`; drive FCF Yield and cash-conversion overlay from a single filing-aligned definition (OCF − capEx per reported year, USD). | After next weekly email gap-fill pass confirms the gap persists |
 | L104 | **Gap-fill: ingest — Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading** | Retry PDF body extraction for `ir_a9733d0de6aec27d` (April 2026 trading update); gap_fill IR refetch attempted 1 fetch, 0 success—add retry with alternate PDF parser or direct HTML RNS mirror. | After next weekly email gap-fill pass confirms the gap persists |
 | L105 | **Gap-fill: ingest — Extract Annual Report consolidated cash-flow statement and Note 5 except** | Extract Annual Report consolidated cash-flow statement and Note 5 exceptional items as structured tables (currently narrative-only in `ir_0e40d9707e30c3b7.txt`); unlocks WC/capex/M&A bridge without Yahoo fallback. | After next weekly email gap-fill pass confirms the gap persists |
+| L111 | **Full knob counterfactual via archive replay** | Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review. | docs/data/archive has ≥12 months of weekly screens and analysis_review offline_sim queue is active |
 
 ### Ops / reliability
 

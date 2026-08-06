@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-04T06:27:53+00:00",
+  "updated_at": "2026-08-06T13:39:09+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2159,6 +2159,100 @@
       "status": "open",
       "source": "research-gap-fill",
       "added_at": "2026-08-02T13:49:49+00:00"
+    },
+    {
+      "id": "L106",
+      "category": "later",
+      "section": "learning",
+      "title": "Calibrate browser automated sim vs server paper automation",
+      "summary": "Browser automated rebalance churns immediately (no hold buffer, no re-entry cooldown) while server paper_automation uses exit_confirm_screens and hold buffer. Align rules or label them as distinct tracks before tuning conviction/sector caps from learning data.",
+      "revisit_when": "learning_tracks_churn_health has \u22658 weeks of marks and paper-learning review enabled; AI-judgment vs rules-control divergence is measurable",
+      "tags": [
+        "paper",
+        "automation",
+        "calibration",
+        "churn"
+      ],
+      "status": "open",
+      "source": "automated vs technical sim calibration discussion",
+      "added_at": "2026-08-05T17:22:19+00:00"
+    },
+    {
+      "id": "L107",
+      "category": "later",
+      "section": "learning",
+      "title": "Learning tracks performance panel in dashboard",
+      "summary": "Render learning_tracks_review.json and per-track equity curves (rules, ai_judgment, momentum_grace) in Automation or Performance tab \u2014 side-by-side excess vs ^FTSE, NAV, trade count, last knob change.",
+      "revisit_when": "Stage 2b observe period continues; no new tracks until panel makes server books legible",
+      "tags": [
+        "ui",
+        "paper-automation",
+        "visibility"
+      ],
+      "status": "open",
+      "source": "cursor agent paper sims visibility discussion",
+      "added_at": "2026-08-06T13:08:31+00:00"
+    },
+    {
+      "id": "L108",
+      "category": "later",
+      "section": "learning",
+      "title": "Server-side daily technical paper track",
+      "summary": "Wire run_technical_pass into paper-auto as a fourth published track under docs/data/paper_automation/technical/ with same weekday schedule as rules/AI books.",
+      "revisit_when": "Browser technical sim validated or deprecated in favour of server track",
+      "tags": [
+        "paper-automation",
+        "technical"
+      ],
+      "status": "open",
+      "source": "cursor agent paper sims visibility discussion",
+      "added_at": "2026-08-06T13:08:31+00:00"
+    },
+    {
+      "id": "L109",
+      "category": "later",
+      "section": "learning",
+      "title": "Knob-epoch zero datums for learning tracks",
+      "summary": "On decision-review knob apply, snapshot a fresh performance baseline (NAV=contributed capital, excess vs ^FTSE from epoch start) so accumulated P&L does not obscure the effect of parameter changes.",
+      "revisit_when": "decision-review has applied multiple knob rounds on ai_judgment with enough post-change marks",
+      "tags": [
+        "decision-review",
+        "metrics"
+      ],
+      "status": "open",
+      "source": "cursor agent paper sims visibility discussion",
+      "added_at": "2026-08-06T13:08:31+00:00"
+    },
+    {
+      "id": "L110",
+      "category": "later",
+      "section": "learning",
+      "title": "Browser technical sim daily auto-run",
+      "summary": "Mirror maybeRunIndependentAuto for technical mode: weekday gate after London settle, optional checkbox, calls runTechnicalPass once per day.",
+      "revisit_when": "Server technical track exists or browser sims explicitly kept as local-only sandbox",
+      "tags": [
+        "ui",
+        "paper_sims"
+      ],
+      "status": "open",
+      "source": "cursor agent paper sims visibility discussion",
+      "added_at": "2026-08-06T13:08:31+00:00"
+    },
+    {
+      "id": "L111",
+      "category": "later",
+      "section": "research",
+      "title": "Full knob counterfactual via archive replay",
+      "summary": "Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review.",
+      "revisit_when": "docs/data/archive has \u226512 months of weekly screens and analysis_review offline_sim queue is active",
+      "tags": [
+        "counterfactual",
+        "knobs",
+        "offline_sim"
+      ],
+      "status": "open",
+      "source": "knob-epoch and counterfactual discussion",
+      "added_at": "2026-08-06T13:39:09+00:00"
     }
   ]
 }

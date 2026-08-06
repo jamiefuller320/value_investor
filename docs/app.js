@@ -1319,6 +1319,16 @@ function renderLearningTracksPanel(data) {
         excess == null
           ? "—"
           : `<span class="${excess >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`;
+      const epoch = m.epoch || {};
+      const epochReturn =
+        epoch.total_return != null
+          ? `<span class="small">${pct(epoch.total_return)}</span>`
+          : '<span class="small muted">—</span>';
+      const epochExcess = epoch.excess_after_costs;
+      const epochExcessHtml =
+        epochExcess == null
+          ? '<span class="small muted">—</span>'
+          : `<span class="small ${epochExcess >= 0 ? "text-positive" : "text-negative"}">${(Number(epochExcess) * 100).toFixed(1)}%</span>`;
       const curve = Array.isArray(fund.equity_curve) ? fund.equity_curve : [];
       const spark =
         curve.length >= 2
@@ -1338,6 +1348,8 @@ function renderLearningTracksPanel(data) {
         <td>${m.portfolio_value != null ? `£${Number(m.portfolio_value).toFixed(2)}` : "—"}</td>
         <td>${m.total_return != null ? pct(m.total_return) : "—"}</td>
         <td>${excessHtml}</td>
+        <td>${epochReturn}</td>
+        <td>${epochExcessHtml}</td>
         <td>${m.trade_count ?? "—"}</td>
         <td>${m.positions ?? fund.holdings_count ?? "—"}</td>
         <td>${sparkHtml}</td>
@@ -1370,12 +1382,14 @@ function renderLearningTracksPanel(data) {
             <th>NAV</th>
             <th>Return</th>
             <th>Excess vs ^FTSE</th>
+            <th>Epoch return</th>
+            <th>Epoch excess</th>
             <th>Trades</th>
             <th>Positions</th>
             <th>Recent marks</th>
           </tr>
         </thead>
-        <tbody>${rows || '<tr><td colspan="7" class="muted">No track reviews in bundle.</td></tr>'}</tbody>
+        <tbody>${rows || '<tr><td colspan="9" class="muted">No track reviews in bundle.</td></tr>'}</tbody>
       </table>
     </div>
   </section>`;
