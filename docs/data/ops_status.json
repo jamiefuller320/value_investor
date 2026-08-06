@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-08-05T07:46:20.692944+00:00",
+  "run_at": "2026-08-06T07:46:32.002257+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
-      "category": "engineering",
-      "title": "Orphaned pr_open engineering tasks",
-      "summary": "Tasks without matching open PR: eng-20260804-51",
-      "auto_fixable": true,
-      "fixed": true,
-      "action_taken": "reconciled pr_open → open: eng-20260804-51"
+      "category": "workflows",
+      "title": "Recent workflow failure: FTSE Engineering Queue",
+      "summary": "1 failure(s) in last 24h (runs: 30993869397).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
     },
     {
       "severity": "warn",
@@ -21,22 +21,17 @@
       "action_taken": null
     }
   ],
-  "auto_fixes": [
-    {
-      "action": "recover_engineering_queue",
-      "detail": "reconciled pr_open → open: eng-20260804-51"
-    }
-  ],
+  "auto_fixes": [],
   "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-08-05T06:05:21+00:00",
-      "last_success_run_id": 30980176227,
-      "age_hours": 1.7,
+      "last_success_at": "2026-08-05T16:18:46+00:00",
+      "last_success_run_id": 31024664757,
+      "age_hours": 15.5,
       "stale": false,
       "recent_failures_24h": 0
     },
@@ -45,8 +40,8 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-05T07:20:14+00:00",
-      "last_success_run_id": 30984622702,
+      "last_success_at": "2026-08-06T07:20:15+00:00",
+      "last_success_run_id": 31080526032,
       "age_hours": 0.4,
       "stale": false,
       "recent_failures_24h": 0
@@ -55,20 +50,20 @@
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": true,
-      "max_age_hours": 3,
-      "last_success_at": "2026-08-05T07:15:28+00:00",
-      "last_success_run_id": 30984322615,
+      "max_age_hours": 26,
+      "last_success_at": "2026-08-06T07:15:29+00:00",
+      "last_success_run_id": 31080230434,
       "age_hours": 0.5,
       "stale": false,
-      "recent_failures_24h": 0
+      "recent_failures_24h": 1
     },
     {
       "workflow": "ci-main-nightly.yml",
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-05T07:30:55+00:00",
-      "last_success_run_id": 30985321989,
+      "last_success_at": "2026-08-06T07:30:55+00:00",
+      "last_success_run_id": 31081214184,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0
@@ -78,22 +73,22 @@
       "name": "Modelling analysis review",
       "expected_today": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-08-02T11:48:08+00:00",
-      "last_success_run_id": 30746484932,
-      "age_hours": 68.0,
+      "last_success_at": "2026-08-05T11:32:46+00:00",
+      "last_success_run_id": 31001886864,
+      "age_hours": 20.2,
       "stale": false,
       "recent_failures_24h": 0
     }
   ],
   "queue_status": {
     "open_count": 0,
-    "pr_open_count": 1,
+    "pr_open_count": 0,
     "parked_count": 2,
-    "merged_count": 21,
+    "merged_count": 22,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
-    "in_flight_pr": 183,
+    "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
