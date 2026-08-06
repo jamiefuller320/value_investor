@@ -1,0 +1,415 @@
+"""Append-only per-rebalance decision log for paper automation tracks."""
+
+from __future__ import annotations
+
+import json
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+from value_investor.paper_fund import (
+    BUY_SIGNALS,
+    PaperFund,
+    PaperFundConfig,
+    Position,
+    RebalanceState,
+    run_automated_rebalance,
+    run_technical_pass,
+)
+from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
+
+REBALANCE_LOG_FILENAME = "rebalance_log.json"
+LOG_SCHEMA_VERSION = 1
+LOG_KEEP = 104  # ~2 years of weekday passes
+MIN_LOG_ACTED_ENTRIES = 2
+
+_VERDICT_PREVIEW_CHARS = 120
+
+
+def _utcnow_iso() -> str:
+    return datetime.now(UTC).isoformat()
+
+
+def _truncate_verdict(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    if len(text) <= _VERDICT_PREVIEW_CHARS:
+        return text
+    return text[: _VERDICT_PREVIEW_CHARS - 3] + "..."
+
+
+def slim_candidate(row: dict[str, Any]) -> dict[str, Any]:
+    """Decision-time candidate fields needed for faithful selection replay."""
+    trade_plan = row.get("trade_plan") or {}
+    slim: dict[str, Any] = {
+        "ticker": row.get("ticker"),
+        "name": row.get("name"),
+        "signal": row.get("signal"),
+        "adjusted_signal": row.get("adjusted_signal"),
+        "conviction_score": row.get("conviction_score"),
+        "timing_signal": row.get("timing_signal"),
+        "sector": row.get("sector"),
+        "price": row.get("price") if row.get("price") is not None else row.get("last"),
+        "research_verdict": _truncate_verdict(row.get("research_verdict")),
+    }
+    if trade_plan:
+        plan_subset = {
+            key: trade_plan.get(key)
+            for key in (
+                "tactical_stop_loss",
+                "tactical_take_profit",
+                "core_stop_loss",
+                "core_take_profit",
+            )
+            if trade_plan.get(key) is not None
+        }
+        if plan_subset:
+            slim["trade_plan"] = plan_subset
+    return {key: value for key, value in slim.items() if value is not None}
+
+
+def collect_decision_candidates(
+    marked_rows: list[dict[str, Any]],
+    fund: PaperFund,
+    *,
+    use_adjusted_signal: bool,
+) -> list[dict[str, Any]]:
+    """Buy-tier universe plus held names (for exit pricing and replay)."""
+    included: dict[str, dict[str, Any]] = {}
+    for row in marked_rows:
+        ticker = str(row.get("ticker") or "").strip()
+        if not ticker:
+            continue
+        signal = str(row.get("signal") or "")
+        effective = signal
+        if use_adjusted_signal:
+            adjusted = row.get("adjusted_signal")
+            if adjusted is not None and str(adjusted).strip():
+                effective = str(adjusted)
+        if effective in BUY_SIGNALS or ticker in fund.holdings:
+            included[ticker] = slim_candidate(row)
+    return list(included.values())
+
+
+def snapshot_holdings(fund: PaperFund) -> list[dict[str, Any]]:
+    return [
+        {
+            "ticker": ticker,
+            "shares": round(float(pos.shares), 6),
+            "avg_cost": round(float(pos.avg_cost), 4),
+            "sector": pos.sector,
+            "name": pos.name,
+            "momentum_grace": bool(pos.momentum_grace),
+            "stop_loss": pos.stop_loss,
+            "take_profit": pos.take_profit,
+        }
+        for ticker, pos in fund.holdings.items()
+    ]
+
+
+def resolve_screen_source(reports_path: Path | None) -> dict[str, Any]:
+    path = Path(reports_path) if reports_path is not None else Path("docs/data/latest.json")
+    if not path.exists():
+        return {"path": str(path)}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {"path": str(path)}
+    if isinstance(payload, dict):
+        return {
+            "path": str(path),
+            "run_at": payload.get("run_at"),
+            "generated_at": payload.get("generated_at"),
+        }
+    return {"path": str(path)}
+
+
+def load_knob_epoch_started_at(output_dir: Path) -> str | None:
+    epoch_path = Path(output_dir) / "knob_epoch.json"
+    if not epoch_path.exists():
+        return None
+    try:
+        payload = json.loads(epoch_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+    if isinstance(payload, dict):
+        started = str(payload.get("started_at") or "").strip()
+        return started or None
+    return None
+
+
+def build_rebalance_log_entry(
+    *,
+    track_id: str,
+    track_label: str,
+    strategy_mode: str,
+    gate: dict[str, Any],
+    acted: bool,
+    note: str,
+    selection: dict[str, Any],
+    max_positions: int,
+    trade_cost_pct: float,
+    screen_source: dict[str, Any],
+    knob_epoch_started_at: str | None,
+    candidates: list[dict[str, Any]],
+    plan: dict[str, Any],
+    trades: list[dict[str, Any]],
+    nav_before: float,
+    cash_before: float,
+    contributed_capital_before: float,
+    holdings_before: list[dict[str, Any]],
+    rebalance_state_before: dict[str, Any],
+    nav_after: float,
+    cash_after: float,
+    holdings_after: list[dict[str, Any]],
+    rebalance_state_after: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "schema_version": LOG_SCHEMA_VERSION,
+        "logged_at": _utcnow_iso(),
+        "track_id": track_id,
+        "track_label": track_label,
+        "strategy_mode": strategy_mode,
+        "screen_source": screen_source,
+        "knob_epoch_started_at": knob_epoch_started_at,
+        "gate": gate,
+        "acted": bool(acted),
+        "note": note,
+        "selection": dict(selection),
+        "max_positions": int(max_positions),
+        "trade_cost_pct": round(float(trade_cost_pct), 4),
+        "candidates": candidates,
+        "plan": plan,
+        "trades": trades,
+        "nav_before": round(float(nav_before), 2),
+        "cash_before": round(float(cash_before), 2),
+        "contributed_capital_before": round(float(contributed_capital_before), 2),
+        "holdings_before": holdings_before,
+        "rebalance_state_before": rebalance_state_before,
+        "nav_after": round(float(nav_after), 2),
+        "cash_after": round(float(cash_after), 2),
+        "holdings_after": holdings_after,
+        "rebalance_state_after": rebalance_state_after,
+    }
+
+
+def load_rebalance_log(output_dir: Path) -> list[dict[str, Any]]:
+    path = Path(output_dir) / REBALANCE_LOG_FILENAME
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    if not isinstance(payload, list):
+        return []
+    return [row for row in payload if isinstance(row, dict)]
+
+
+def append_rebalance_log(output_dir: Path, entry: dict[str, Any]) -> None:
+    path = Path(output_dir) / REBALANCE_LOG_FILENAME
+    history = load_rebalance_log(output_dir)
+    history.append(entry)
+    history = history[-LOG_KEEP:]
+    path.write_text(json.dumps(history, indent=2) + "\n", encoding="utf-8")
+
+
+def _entry_sort_key(entry: dict[str, Any]) -> str:
+    gate = entry.get("gate") or {}
+    return str(gate.get("local_time") or entry.get("logged_at") or "")
+
+
+def acted_log_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return sorted(
+        [entry for entry in entries if entry.get("acted")],
+        key=_entry_sort_key,
+    )
+
+
+def _price_map_from_candidates(candidates: list[dict[str, Any]]) -> dict[str, float]:
+    prices: dict[str, float] = {}
+    for row in candidates:
+        ticker = str(row.get("ticker") or "")
+        if not ticker:
+            continue
+        price = row.get("price")
+        if price is not None and float(price) > 0:
+            prices[ticker] = float(price)
+    return prices
+
+
+def fund_from_pre_state(entry: dict[str, Any]) -> PaperFund:
+    mode = str(entry.get("strategy_mode") or "automated")
+    if mode not in {"automated", "technical"}:
+        mode = "automated"
+    config = PaperFundConfig(
+        name=str(entry.get("track_label") or "Replay"),
+        mode=mode,  # type: ignore[arg-type]
+        initial_cash=float(entry.get("contributed_capital_before") or 1000.0),
+        trade_cost_pct=float(entry.get("trade_cost_pct") or 0.03),
+        max_positions=int(entry.get("max_positions") or 5),
+    )
+    fund = PaperFund(
+        config=config,
+        cash=float(entry.get("cash_before") or config.initial_cash),
+        contributed_capital=float(
+            entry.get("contributed_capital_before") or config.initial_cash
+        ),
+    )
+    for row in entry.get("holdings_before") or []:
+        if not isinstance(row, dict):
+            continue
+        ticker = str(row.get("ticker") or "")
+        if not ticker:
+            continue
+        fund.holdings[ticker] = Position(
+            ticker=ticker,
+            shares=float(row.get("shares") or 0),
+            avg_cost=float(row.get("avg_cost") or 0),
+            name=str(row.get("name") or ticker),
+            sector=str(row.get("sector") or ""),
+            stop_loss=row.get("stop_loss"),
+            take_profit=row.get("take_profit"),
+            momentum_grace=bool(row.get("momentum_grace", False)),
+        )
+    fund.rebalance_state = RebalanceState.from_dict(entry.get("rebalance_state_before"))
+    return fund
+
+
+def _selection_kwargs_for_replay(
+    entry: dict[str, Any],
+    *,
+    max_positions: int,
+    skip_timing_wait: bool,
+    min_conviction: float,
+    sector_cap: float,
+) -> dict[str, Any]:
+    selection = dict(entry.get("selection") or {})
+    return {
+        "skip_timing_wait": bool(skip_timing_wait),
+        "min_conviction": float(min_conviction),
+        "sector_cap": float(sector_cap),
+        "use_adjusted_signal": bool(selection.get("use_adjusted_signal", False)),
+        "require_research_accumulate": bool(
+            selection.get("require_research_accumulate", False)
+        ),
+        "use_momentum_grace": bool(selection.get("use_momentum_grace", False)),
+        "exit_confirm_screens": int(selection.get("exit_confirm_screens") or 2),
+        "reentry_cooldown_screens": int(selection.get("reentry_cooldown_screens") or 1),
+        "min_rebalance_notional_gbp": float(
+            selection.get("min_rebalance_notional_gbp") or 10.0
+        ),
+        "max_positions": int(max_positions),
+    }
+
+
+def replay_counterfactual_from_log(
+    entries: list[dict[str, Any]],
+    *,
+    max_positions: int,
+    skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = DEFAULT_TARGET_SECTOR_CAP,
+    actual_fund: PaperFund | None = None,
+) -> dict[str, Any] | None:
+    """
+    Replay logged rebalance passes with alternate knobs on a shadow fund.
+
+    Returns None when there are no acted log entries to replay.
+    """
+    acted = acted_log_entries(entries)
+    if not acted:
+        return None
+
+    first = acted[0]
+    last = acted[-1]
+    fund = fund_from_pre_state(first)
+    fund.config.max_positions = int(max_positions)
+    fund.config.trade_cost_pct = float(first.get("trade_cost_pct") or fund.config.trade_cost_pct)
+
+    replay_trades = 0
+    for entry in acted:
+        mode = str(entry.get("strategy_mode") or fund.config.mode)
+        candidates = list(entry.get("candidates") or [])
+        when = str((entry.get("gate") or {}).get("local_time") or entry.get("logged_at") or "")
+        kwargs = _selection_kwargs_for_replay(
+            entry,
+            max_positions=max_positions,
+            skip_timing_wait=skip_timing_wait,
+            min_conviction=min_conviction,
+            sector_cap=sector_cap,
+        )
+        fund.config.max_positions = int(kwargs.pop("max_positions"))
+        if mode == "technical":
+            executed = run_technical_pass(fund, candidates, acted_at=when or None)
+        else:
+            executed = run_automated_rebalance(fund, candidates, acted_at=when or None, **kwargs)
+        replay_trades += len(executed)
+
+    prices = _price_map_from_candidates(list(last.get("candidates") or []))
+    for row in last.get("holdings_after") or []:
+        if isinstance(row, dict):
+            ticker = str(row.get("ticker") or "")
+            avg = row.get("avg_cost")
+            if ticker and ticker not in prices and avg is not None and float(avg) > 0:
+                prices[ticker] = float(avg)
+    sim_perf = fund.performance(prices)
+    sim_costs = sum(float(t.cost or 0.0) for t in fund.trades)
+    baseline_nav = float(first.get("nav_before") or 0.0)
+    sim_nav = float(sim_perf["portfolio_value"] or 0.0)
+    sim_return = ((sim_nav - baseline_nav) / baseline_nav) if baseline_nav > 0 else 0.0
+    contributed = float(first.get("contributed_capital_before") or baseline_nav or 1.0)
+    sim_drag = (sim_costs / contributed) if contributed > 0 else 0.0
+
+    payload: dict[str, Any] = {
+        "scope": "rebalance_log_replay",
+        "knobs": {
+            "max_positions": int(max_positions),
+            "skip_timing_wait": bool(skip_timing_wait),
+            "min_conviction": round(float(min_conviction), 4),
+            "sector_cap": round(float(sector_cap), 4),
+        },
+        "log_entries_total": len(entries),
+        "log_entries_replayed": len(acted),
+        "replay_from": _entry_sort_key(first),
+        "replay_to": _entry_sort_key(last),
+        "simulated_nav": round(sim_nav, 2),
+        "baseline_nav": round(baseline_nav, 2),
+        "simulated_return": round(sim_return, 4),
+        "simulated_total_costs": round(sim_costs, 2),
+        "simulated_cost_drag": round(sim_drag, 4),
+        "simulated_trade_count": replay_trades,
+        "limitations": (
+            "Replay covers logged rebalance passes only; pre-logging history "
+            "needs archive lab (L111). Technical track replays stops/targets "
+            "from logged trade_plan snapshots."
+        ),
+    }
+
+    if actual_fund is not None:
+        actual_costs_window = 0.0
+        start_dt = _entry_sort_key(first)
+        end_dt = _entry_sort_key(last)
+        for trade in actual_fund.trades:
+            acted_at = str(trade.acted_at or "")
+            if start_dt <= acted_at <= end_dt:
+                actual_costs_window += float(trade.cost or 0.0)
+        actual_perf = actual_fund.performance(prices)
+        actual_nav = float(actual_perf["portfolio_value"] or 0.0)
+        actual_return = ((actual_nav - baseline_nav) / baseline_nav) if baseline_nav > 0 else 0.0
+        actual_drag = (actual_costs_window / contributed) if contributed > 0 else 0.0
+        payload.update(
+            {
+                "actual_nav": round(actual_nav, 2),
+                "actual_return_over_window": round(actual_return, 4),
+                "actual_total_costs_over_window": round(actual_costs_window, 2),
+                "actual_cost_drag_over_window": round(actual_drag, 4),
+                "return_delta_vs_actual": round(sim_return - actual_return, 4),
+                "cost_drag_delta_vs_actual": round(actual_drag - sim_drag, 4),
+            }
+        )
+
+    return payload

@@ -25,6 +25,14 @@ from value_investor.paper_fund import (
 )
 from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
+from value_investor.rebalance_log import (
+    append_rebalance_log,
+    build_rebalance_log_entry,
+    collect_decision_candidates,
+    load_knob_epoch_started_at,
+    resolve_screen_source,
+    snapshot_holdings,
+)
 from value_investor.technical_analysis import (
     compute_indicators,
     compute_trade_plan,
@@ -686,6 +694,18 @@ def run_daily_automation(
     marked = refresh_candidate_marks(screen_rows, extra_tickers=owned_tickers)
     select_kwargs = config.selection_kwargs()
 
+    price_map_pre = _marked_price_map(marked, fund)
+    nav_before = fund.nav(price_map_pre)
+    cash_before = float(fund.cash)
+    contributed_before = float(fund.contributed_capital)
+    holdings_before = snapshot_holdings(fund)
+    rebalance_state_before = fund.rebalance_state.to_dict()
+    decision_candidates = collect_decision_candidates(
+        marked,
+        fund,
+        use_adjusted_signal=config.use_adjusted_signal,
+    )
+
     plan: dict[str, Any] = {}
     if fund.config.mode == "automated":
         plan = preview_automated_plan(fund, marked, **select_kwargs)
@@ -781,6 +801,34 @@ def run_daily_automation(
         json.dumps(payload, indent=2),
         encoding="utf-8",
     )
+
+    price_map_post = _marked_price_map(marked, fund)
+    log_entry = build_rebalance_log_entry(
+        track_id=str(config.track_id or "rules"),
+        track_label=str(config.track_label or ""),
+        strategy_mode=str(config.strategy_mode or "automated"),
+        gate=gate,
+        acted=acted,
+        note=note,
+        selection=config.selection_kwargs(),
+        max_positions=int(config.max_positions),
+        trade_cost_pct=float(config.trade_cost_pct),
+        screen_source=resolve_screen_source(reports_path),
+        knob_epoch_started_at=load_knob_epoch_started_at(output_dir),
+        candidates=decision_candidates,
+        plan=plan,
+        trades=trades,
+        nav_before=nav_before,
+        cash_before=cash_before,
+        contributed_capital_before=contributed_before,
+        holdings_before=holdings_before,
+        rebalance_state_before=rebalance_state_before,
+        nav_after=fund.nav(price_map_post),
+        cash_after=float(fund.cash),
+        holdings_after=snapshot_holdings(fund),
+        rebalance_state_after=fund.rebalance_state.to_dict(),
+    )
+    append_rebalance_log(output_dir, log_entry)
     return result
 
 

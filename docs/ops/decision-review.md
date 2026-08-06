@@ -68,6 +68,7 @@ auto-tune is deferred until closed cohorts thicken (see `learning_tracks_exit_sh
 - `decision_review_history.json` — last 52 reviews per track
 - `knob_epoch.json` — active performance baseline after the latest knob apply
 - `knob_epochs.json` — history of knob-epoch snapshots (last 52)
+- `rebalance_log.json` — append-only decision log (candidates, knobs, trades per pass)
 
 ## Knob epochs
 
@@ -88,6 +89,28 @@ cost impact if `max_positions` / `sector_cap` had applied from the first trade
 (lightweight trade replay — no archived screen snapshots). Full P&L replay
 including `min_conviction`, timing gates, and AI overlays needs the offline
 archive lab (`offline_sim`); pass `--no-counterfactual` to skip the preview.
+
+## Rebalance decision log
+
+Every weekday paper-auto pass appends to `rebalance_log.json` per track:
+
+- Screen source (`latest.json` `run_at`), active knobs, knob-epoch id
+- Candidate universe at decision time (conviction, timing, adjusted_signal, research verdict)
+- Plan preview, executed trades, NAV/cash/holdings and churn state before/after
+
+Once a track has **≥2 acted log entries**, decision-review counterfactuals
+graduate to **log replay** (`scope: rebalance_log_replay`) — re-running
+`select_automated_targets` / rebalance on the shadow fund with proposed knobs.
+
+Manual replay:
+
+```bash
+ftse-rebalance-log summary --output-dir docs/data/paper_automation/ai_judgment
+ftse-rebalance-log replay --output-dir docs/data/paper_automation/ai_judgment \
+  --max-positions 3 --min-conviction 0.05 --json
+```
+
+Pre-logging trade history still needs the archive lab (L111) for backfill.
 
 ## Safety
 
