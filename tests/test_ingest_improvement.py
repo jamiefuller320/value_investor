@@ -402,3 +402,59 @@ def test_ingest_improvement_refetches_when_partial_bodies(
     mock_indexed_refetch.assert_called_once()
     assert summary.results[0]["indexed_refetch"]["fetched"] == 2
     assert summary.results[0]["investegate_refetch"]["fetched"] == 2
+
+
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_run_ingest_improvement_pass_passes_bootstrap_seed_cap(mock_bootstrap, tmp_path: Path):
+    output_dir = tmp_path / "output"
+    run_ingest_improvement_pass(
+        reports=[_report("NEW.L", "Newco plc", signal="buy")],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        bootstrap_seed_cap=3,
+        max_targets=0,
+    )
+    mock_bootstrap.assert_called_once()
+    assert mock_bootstrap.call_args.kwargs["seed_cap"] == 3
+
+
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_run_ingest_improvement_pass_stops_at_runtime_budget(
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    output_dir = tmp_path / "output"
+    for ticker in ("AAA.L", "BBB.L"):
+        sources = output_dir / "research" / ticker / "sources" / "filings"
+        sources.mkdir(parents=True)
+        (sources / "filings_index.json").write_text(
+            json.dumps({"summary": {"total": 0, "with_body": 0}, "filings": []}),
+            encoding="utf-8",
+        )
+    mock_ingest_sources.return_value = {"filings_summary": {"with_body": 0}}
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[
+            _report("AAA.L", "Alpha plc"),
+            _report("BBB.L", "Beta plc"),
+        ],
+        output_dir=output_dir,
+        max_targets=2,
+        suggestions_path=tmp_path / "missing.json",
+        max_runtime_seconds=0,
+    )
+
+    assert summary.runtime_cutoff is True
+    assert summary.partial is True
+    assert len(summary.results) == 0
+    mock_ingest_sources.assert_not_called()

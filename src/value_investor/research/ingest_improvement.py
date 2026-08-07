@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -19,6 +20,7 @@ from value_investor.research.filings import (
     sanitize_filings_index,
 )
 from value_investor.research.ingest_bootstrap import (
+    BOOTSTRAP_SEED_CAP,
     bootstrap_buy_tier_research,
     canonical_sources_dir,
     prefer_filing_index_path,
@@ -40,6 +42,7 @@ from value_investor.summary import CompanyReport
 logger = logging.getLogger(__name__)
 
 DEFAULT_INGEST_IMPROVEMENT_CAP = 15
+DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP = 5
 UNMEASURED_PRIORITY_BONUS = 10.0
 KNOWN_SOURCE_IDS = frozenset(
     {
@@ -144,6 +147,9 @@ class IngestImprovementSummary:
     improved: int = 0
     skipped: int = 0
     errors: list[str] = field(default_factory=list)
+    partial: bool = False
+    runtime_seconds: float = 0.0
+    runtime_cutoff: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -164,6 +170,9 @@ class IngestImprovementSummary:
             "improved": self.improved,
             "skipped": self.skipped,
             "errors": self.errors,
+            "partial": self.partial,
+            "runtime_seconds": round(self.runtime_seconds, 1),
+            "runtime_cutoff": self.runtime_cutoff,
         }
 
 
@@ -424,6 +433,8 @@ def run_ingest_improvement_pass(
     market: str | None = None,
     max_targets: int = DEFAULT_INGEST_IMPROVEMENT_CAP,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    bootstrap_seed_cap: int | None = None,
+    max_runtime_seconds: float | None = None,
 ) -> IngestImprovementSummary:
     """
   Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -435,6 +446,7 @@ def run_ingest_improvement_pass(
         reports,
         output_dir=output_dir,
         market=market,
+        seed_cap=bootstrap_seed_cap if bootstrap_seed_cap is not None else BOOTSTRAP_SEED_CAP,
     )
     targets = select_ingest_improvement_targets(
         reports,
@@ -448,8 +460,19 @@ def run_ingest_improvement_pass(
 
     store = ResearchStore(output_dir)
     suggestions_by_ticker = _load_ingest_suggestions(suggestions_path)
+    started = time.monotonic()
 
     for target in targets:
+        if max_runtime_seconds is not None and (time.monotonic() - started) >= max_runtime_seconds:
+            summary.partial = True
+            summary.runtime_cutoff = True
+            logger.warning(
+                "Ingest improvement stopped after %.0fs runtime budget (max=%.0fs)",
+                time.monotonic() - started,
+                max_runtime_seconds,
+            )
+            break
+
         try:
             report = next(
                 (row for row in reports if row.ticker == target.ticker),
@@ -615,6 +638,7 @@ def run_ingest_improvement_pass(
             logger.exception("Ingest improvement pass failed for %s", target.ticker)
             summary.errors.append(message)
 
+    summary.runtime_seconds = time.monotonic() - started
     write_json(
         output_dir / "ingest_improvement_summary.json",
         {

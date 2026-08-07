@@ -17,6 +17,7 @@ from value_investor.engineering_tasks import (
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
     DEFAULT_INGEST_IMPROVEMENT_CAP,
+    DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
     IngestImprovementSummary,
     run_ingest_improvement_pass,
 )
@@ -35,6 +36,7 @@ DEFAULT_RESEARCH_ROOTS = [
 ]
 HEALTH_LOG_KEEP = 52
 DEFAULT_STALL_RUNS = 2
+DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 2400.0
 
 
 def load_health_log_payload(
@@ -99,16 +101,22 @@ class IngestLoopResult:
     micro_compiled: bool
     micro_compile: dict[str, Any] = field(default_factory=dict)
     stalled: bool = False
+    partial: bool = False
+    error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "health_before": self.health_before,
             "health_after": self.health_after,
             "ingest_summary": self.ingest_summary.to_dict() if self.ingest_summary else None,
             "micro_compiled": self.micro_compiled,
             "micro_compile": self.micro_compile,
             "stalled": self.stalled,
+            "partial": self.partial,
         }
+        if self.error:
+            payload["error"] = self.error
+        return payload
 
 
 def reports_from_latest(path: Path = DEFAULT_LATEST_PATH) -> list[CompanyReport]:
@@ -201,6 +209,8 @@ def run_weekday_ingest_loop(
     stall_runs: int = DEFAULT_STALL_RUNS,
     micro_compile_max_tasks: int = 3,
     market: str = "ftse350",
+    bootstrap_seed_cap: int = DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
+    max_runtime_seconds: float = DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS,
 ) -> IngestLoopResult:
     """
     Run bounded ingest improvement on the current buy-tier universe, log health,
@@ -218,6 +228,8 @@ def run_weekday_ingest_loop(
             market=market,
             max_targets=max_targets,
             suggestions_path=suggestions_path,
+            bootstrap_seed_cap=bootstrap_seed_cap,
+            max_runtime_seconds=max_runtime_seconds,
         )
     else:
         logger.warning("No reports in %s — skipping ingest-improvement pass", latest_path)
@@ -263,6 +275,8 @@ def run_weekday_ingest_loop(
     else:
         micro_compile = {"skipped": True, "reason": "ingest health not stalled"}
 
+    partial = bool(ingest_summary and ingest_summary.partial)
+
     return IngestLoopResult(
         health_before=health_before,
         health_after=health_after,
@@ -270,4 +284,5 @@ def run_weekday_ingest_loop(
         micro_compiled=micro_compiled,
         micro_compile=micro_compile,
         stalled=stalled,
+        partial=partial,
     )

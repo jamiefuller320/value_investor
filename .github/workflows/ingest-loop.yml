@@ -100,6 +100,7 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v5
 
@@ -120,15 +121,22 @@ jobs:
 
       - name: Run weekday ingest loop
         id: loop
+        timeout-minutes: 75
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
+          PYTHONUNBUFFERED: "1"
         run: |
           set -euo pipefail
-          ARGS=(run --json)
+          ARGS=(run --json --json-path /tmp/ingest_loop.json)
           if [ -n "${{ github.event.inputs.max_targets }}" ]; then
             ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
           fi
-          ftse-ingest-loop "${ARGS[@]}" > /tmp/ingest_loop.json
+          EXIT=0
+          ftse-ingest-loop "${ARGS[@]}" || EXIT=$?
+          if [ ! -s /tmp/ingest_loop.json ]; then
+            echo "ftse-ingest-loop produced no JSON at /tmp/ingest_loop.json (exit=$EXIT)" >&2
+            exit "${EXIT:-1}"
+          fi
           python3 - <<'PY'
           import json
           import os
@@ -139,7 +147,22 @@ jobs:
               f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n",
               encoding="utf-8",
           )
+          partial = data.get("partial") or (
+              (data.get("ingest_summary") or {}).get("runtime_cutoff")
+          )
+          if partial:
+              print("Ingest loop partial run — committing artifacts from completed targets")
+          if data.get("error"):
+              print(f"Ingest loop reported error: {data['error']}", flush=True)
           PY
+          if [ "$EXIT" -ne 0 ]; then
+            PARTIAL=$(python3 -c "import json; d=json.load(open('/tmp/ingest_loop.json')); print('yes' if d.get('partial') or (d.get('ingest_summary') or {}).get('runtime_cutoff') else 'no')")
+            if [ "$PARTIAL" = "yes" ]; then
+              echo "Partial ingest run — continuing to commit artifacts despite exit $EXIT"
+            else
+              exit "$EXIT"
+            fi
+          fi
 
       - name: Sync main before ingest loop commit
         run: git pull --rebase --autostash origin main

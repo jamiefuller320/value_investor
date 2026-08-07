@@ -239,3 +239,30 @@ def test_ingest_loop_cli_run_json_flag_parsing():
     )
     with patch("value_investor.ingest_loop_cli.run_weekday_ingest_loop", return_value=result):
         assert main(["run", "--json", "--max-targets", "2"]) == 0
+
+
+def test_ingest_loop_cli_writes_json_path(tmp_path: Path):
+    out_path = tmp_path / "ingest_loop.json"
+    result = IngestLoopResult(
+        health_before={"zero_body_buy_tier": 2},
+        health_after={"zero_body_buy_tier": 1},
+        ingest_summary=None,
+        micro_compiled=False,
+        partial=True,
+    )
+    with patch("value_investor.ingest_loop_cli.run_weekday_ingest_loop", return_value=result):
+        assert main(["run", "--json-path", str(out_path)]) == 0
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    assert payload["partial"] is True
+    assert payload["micro_compiled"] is False
+
+
+def test_ingest_loop_cli_writes_json_path_on_failure(tmp_path: Path):
+    out_path = tmp_path / "ingest_loop.json"
+    with patch(
+        "value_investor.ingest_loop_cli.run_weekday_ingest_loop",
+        side_effect=RuntimeError("boom"),
+    ):
+        assert main(["run", "--json-path", str(out_path)]) == 1
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    assert payload["error"] == "boom"
