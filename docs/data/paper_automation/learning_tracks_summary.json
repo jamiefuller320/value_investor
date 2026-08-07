@@ -1,17 +1,35 @@
 {
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
-  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; momentum_grace is an experimental exit overlay.",
+  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay.",
   "tracks": {
-    "rules": {
-      "output_dir": "output/paper_automation",
-      "acted": false,
-      "trades": 0,
-      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+    "technical": {
+      "output_dir": "output/paper_automation/technical",
+      "acted": true,
+      "trades": 3,
+      "note": "Technical pass after open settle (3 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
-        "min_conviction": 0.35,
+        "min_conviction": 0.4,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "rules": {
+      "output_dir": "output/paper_automation",
+      "acted": true,
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.4,
         "sector_cap": 0.3,
         "use_adjusted_signal": false,
         "require_research_accumulate": false,
@@ -23,9 +41,9 @@
     },
     "ai_judgment": {
       "output_dir": "output/paper_automation/ai_judgment",
-      "acted": false,
+      "acted": true,
       "trades": 0,
-      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+      "note": "Rebalanced after open settle (0 trade(s)).",
       "is_primary_learning_track": true,
       "selection": {
         "skip_timing_wait": true,
@@ -41,9 +59,9 @@
     },
     "momentum_grace": {
       "output_dir": "output/paper_automation/momentum_grace",
-      "acted": false,
-      "trades": 0,
-      "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+      "acted": true,
+      "trades": 5,
+      "note": "Rebalanced after open settle (5 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,

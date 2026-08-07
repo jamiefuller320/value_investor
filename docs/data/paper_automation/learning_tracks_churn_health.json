@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-06T07:22:04.173430+00:00",
+  "generated_at": "2026-08-07T08:27:41.836988+00:00",
   "lookback_days": 7,
   "primary_learning_track": "ai_judgment",
   "control_track": "rules",
@@ -16,37 +16,41 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-08-06T07:22:04.125523+00:00",
+        "reviewed_at": "2026-08-07T08:27:41.659063+00:00",
         "applied": true,
         "enough_history": true,
         "cost_drag": 0.1071,
         "total_costs": 107.1,
         "trade_count": 23,
-        "excess_after_costs": -0.1299,
+        "excess_after_costs": -0.1424,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.4,
+          "min_conviction": 0.45,
           "sector_cap": 0.3
         },
         "proposed_changes": {
-          "min_conviction": 0.4
+          "min_conviction": 0.45
         },
         "reasons": [
           "High cost drag (10.7%) — raise min_conviction."
         ]
       },
       "rebalance_state": {
-        "exit_streak": {},
+        "exit_streak": {
+          "MEGP.L": 1,
+          "AEP.L": 1,
+          "BREE.L": 1
+        },
         "reentry_cooldown": {},
-        "buffered_holdings": 0
+        "buffered_holdings": 3
       },
       "last_run": {
-        "acted": false,
-        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+        "acted": true,
+        "note": "Rebalanced after open settle (0 trade(s)).",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 3,
+        "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
@@ -70,13 +74,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-08-06T07:22:04.168282+00:00",
+        "reviewed_at": "2026-08-07T08:27:41.786870+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0291,
         "total_costs": 29.15,
         "trade_count": 5,
-        "excess_after_costs": -0.0382,
+        "excess_after_costs": -0.0506,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -89,16 +93,20 @@
         ]
       },
       "rebalance_state": {
-        "exit_streak": {},
+        "exit_streak": {
+          "MEGP.L": 1,
+          "AEP.L": 1,
+          "BREE.L": 1
+        },
         "reentry_cooldown": {},
-        "buffered_holdings": 0
+        "buffered_holdings": 3
       },
       "last_run": {
-        "acted": false,
-        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+        "acted": true,
+        "note": "Rebalanced after open settle (0 trade(s)).",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 3,
+        "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
@@ -122,13 +130,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-08-06T07:22:04.169602+00:00",
+        "reviewed_at": "2026-08-07T08:27:41.830540+00:00",
         "applied": false,
         "enough_history": false,
-        "cost_drag": 0.0,
-        "total_costs": 0,
-        "trade_count": 0,
-        "excess_after_costs": null,
+        "cost_drag": 0.0291,
+        "total_costs": 29.15,
+        "trade_count": 5,
+        "excess_after_costs": -0.0288,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
@@ -137,8 +145,8 @@
         },
         "proposed_changes": {},
         "reasons": [
-          "Need ≥4 equity marks and ≥2 trades (have 1 marks, 0 trades).",
-          "No knob change warranted from current reviewed outcomes."
+          "Need ≥2 epoch marks and ≥1 epoch trades since last knob apply (or ≥4 lifetime marks and ≥2 trades when no epoch yet) — epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=5.",
+          "Weak excess after costs (-2.9%) — reduce max_positions."
         ]
       },
       "rebalance_state": {
@@ -147,17 +155,71 @@
         "buffered_holdings": 0
       },
       "last_run": {
-        "acted": false,
-        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
-        "trade_count": 0,
+        "acted": true,
+        "note": "Rebalanced after open settle (5 trade(s)).",
+        "trade_count": 5,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 0,
-        "buys": 0,
+        "total": 5,
+        "buys": 5,
+        "sells": 0,
+        "trims": 0,
+        "full_exits": 0,
+        "adjacent_side_flips": [],
+        "adjacent_flip_count": 0
+      }
+    },
+    "technical": {
+      "track_id": "technical",
+      "output_dir": "output/paper_automation/technical",
+      "is_primary_learning_track": false,
+      "guards": {
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      },
+      "decision_review": {
+        "reviewed_at": "2026-08-07T08:27:41.832729+00:00",
+        "applied": false,
+        "enough_history": false,
+        "cost_drag": 0.0087,
+        "total_costs": 8.71,
+        "trade_count": 3,
+        "excess_after_costs": null,
+        "knobs_after": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.4,
+          "sector_cap": 0.3
+        },
+        "proposed_changes": {},
+        "reasons": [
+          "Need ≥2 epoch marks and ≥1 epoch trades since last knob apply (or ≥4 lifetime marks and ≥2 trades when no epoch yet) — epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=3.",
+          "Holdings concentrated in Industrials (67%) — tighten sector_cap.",
+          "Large idle cash with low cost drag — ease min_conviction."
+        ]
+      },
+      "rebalance_state": {
+        "exit_streak": {},
+        "reentry_cooldown": {},
+        "buffered_holdings": 0
+      },
+      "last_run": {
+        "acted": true,
+        "note": "Technical pass after open settle (3 trade(s)).",
+        "trade_count": 3,
+        "duplicate_day_skip": false,
+        "buffer_holds_planned": 0,
+        "reentry_skips_planned": 0,
+        "same_trading_day_as_as_of": true
+      },
+      "trades_last_7d": {
+        "total": 3,
+        "buys": 3,
         "sells": 0,
         "trims": 0,
         "full_exits": 0,

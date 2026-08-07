@@ -1,21 +1,21 @@
 {
-  "reviewed_at": "2026-08-06T07:22:04.125523+00:00",
+  "reviewed_at": "2026-08-07T08:27:41.659063+00:00",
   "enough_history": true,
   "applied": true,
   "knobs_before": {
     "max_positions": 3,
     "skip_timing_wait": true,
-    "min_conviction": 0.35,
+    "min_conviction": 0.4,
     "sector_cap": 0.3
   },
   "knobs_after": {
     "max_positions": 3,
     "skip_timing_wait": true,
-    "min_conviction": 0.4,
+    "min_conviction": 0.45,
     "sector_cap": 0.3
   },
   "proposed_changes": {
-    "min_conviction": 0.4
+    "min_conviction": 0.45
   },
   "reasons": [
     "High cost drag (10.7%) \u2014 raise min_conviction."
@@ -31,14 +31,70 @@
     "sell_count": 9,
     "positions": 5,
     "cash_fraction": 0.0,
-    "equity_marks": 5,
+    "equity_marks": 6,
     "max_sector_weight": 0.2,
     "dominant_sector": "Healthcare",
-    "benchmark_return": 0.0201,
-    "excess_after_costs": -0.1299,
-    "note": ""
+    "benchmark_return": 0.0326,
+    "excess_after_costs": -0.1424,
+    "note": "",
+    "epoch": {
+      "started_at": "2026-08-07T08:27:41.659063+00:00",
+      "knobs": {
+        "max_positions": 3,
+        "skip_timing_wait": true,
+        "min_conviction": 0.45,
+        "sector_cap": 0.3
+      },
+      "seeded_from_history": false,
+      "baseline_nav": 890.23,
+      "portfolio_value": 890.23,
+      "total_return": 0.0,
+      "total_costs": 0,
+      "cost_drag": 0.0,
+      "trade_count": 0,
+      "buy_count": 0,
+      "sell_count": 0,
+      "positions": 5,
+      "cash_fraction": 0.0,
+      "equity_marks": 0,
+      "max_sector_weight": 0.2,
+      "dominant_sector": "Healthcare",
+      "benchmark_return": null,
+      "excess_after_costs": null,
+      "note": "Insufficient epoch marks for benchmark span."
+    }
   },
-  "note": "Applied clamped knob updates from decision review.",
+  "counterfactual_preview": {
+    "scope": "rebalance_log_replay",
+    "knobs": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.45,
+      "sector_cap": 0.3,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "candidate_source": "auto"
+    },
+    "used_screen_buy_tier_pool": true,
+    "log_entries_total": 5,
+    "log_entries_replayed": 5,
+    "replay_from": "2026-07-20T21:32:40.266505+01:00",
+    "replay_to": "2026-08-07T09:27:09.850001+01:00",
+    "simulated_nav": 1007.12,
+    "baseline_nav": 1000.0,
+    "simulated_return": 0.0071,
+    "simulated_total_costs": 67.58,
+    "simulated_cost_drag": 0.0676,
+    "simulated_trade_count": 9,
+    "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+    "actual_nav": 962.24,
+    "actual_return_over_window": -0.0378,
+    "actual_total_costs_over_window": 107.1,
+    "actual_cost_drag_over_window": 0.1071,
+    "return_delta_vs_actual": 0.0449,
+    "cost_drag_delta_vs_actual": 0.0395
+  },
+  "note": "Applied clamped knob updates from decision review; started new knob epoch.",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,
