@@ -193,8 +193,8 @@ def build_project_progress(
         ],
         "commands": [
             "ftse-ingest-loop status --json",
-            "ftse-ingest-loop run --max-targets 15 --json",
-            "gh workflow run ingest-loop.yml -f force=true -f max_targets=20",
+            "ftse-ingest-loop run --max-targets 8 --json",
+            "gh workflow run ingest-loop.yml -f force=true -f max_targets=8",
         ],
     }
 

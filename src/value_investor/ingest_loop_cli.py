@@ -20,7 +20,7 @@ from value_investor.ingest_loop import (
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
-    DEFAULT_INGEST_IMPROVEMENT_CAP,
+    DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
 )
 
@@ -43,7 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     common.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     common.add_argument("--health-log-path", type=Path, default=DEFAULT_HEALTH_LOG_PATH)
     common.add_argument("--suggestions-path", type=Path, default=DEFAULT_SUGGESTIONS_PATH)
-    common.add_argument("--max-targets", type=int, default=DEFAULT_INGEST_IMPROVEMENT_CAP)
+    common.add_argument("--max-targets", type=int, default=DEFAULT_WEEKDAY_BATCH_MAX_TARGETS)
     common.add_argument("--stall-runs", type=int, default=DEFAULT_STALL_RUNS)
     common.add_argument("--micro-compile-max-tasks", type=int, default=3)
     common.add_argument(

@@ -12,7 +12,7 @@
 # Examples:
 #   WORKFLOW=ingest-loop.yml ./scripts/dispatch_github_workflow.sh
 #   WORKFLOW=analysis-review.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
-#   WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"15"}' ./scripts/dispatch_github_workflow.sh
+#   WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"8"}' ./scripts/dispatch_github_workflow.sh
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

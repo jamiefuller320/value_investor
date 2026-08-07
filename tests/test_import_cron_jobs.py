@@ -59,6 +59,47 @@ def test_import_cron_jobs_dry_run_engineering_queue():
     assert payload["schedule"]["minutes"] == [15]
     assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
     assert "engineering-queue.yml" in payload["url"]
+
+
+def test_import_cron_jobs_dry_run_ingest_loop_morning():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "ingest-loop-morning", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE ingest loop (Mon/Wed/Fri morning)"
+    assert payload["schedule"]["hours"] == [7]
+    assert payload["schedule"]["minutes"] == [5]
+    assert payload["schedule"]["wdays"] == [1, 3, 5]
+    body = json.loads(payload["extendedData"]["body"])
+    assert body["inputs"]["max_targets"] == "8"
+    assert "ingest-loop.yml" in payload["url"]
+
+
+def test_import_cron_jobs_dry_run_ingest_loop_afternoon():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "ingest-loop-afternoon", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE ingest loop (Mon/Wed/Fri afternoon)"
+    assert payload["schedule"]["hours"] == [10]
+    assert payload["schedule"]["minutes"] == [5]
+    body = json.loads(payload["extendedData"]["body"])
+    assert body["inputs"]["max_targets"] == "8"
+
+
+def test_import_cron_jobs_dry_run_ops_monitor():
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(
         [sys.executable, str(script), "--job", "ops-monitor", "--dry-run", "--json"],
