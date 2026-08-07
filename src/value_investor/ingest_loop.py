@@ -16,7 +16,7 @@ from value_investor.engineering_tasks import (
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
-    DEFAULT_INGEST_IMPROVEMENT_CAP,
+    DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
     IngestImprovementSummary,
     run_ingest_improvement_pass,
@@ -36,7 +36,7 @@ DEFAULT_RESEARCH_ROOTS = [
 ]
 HEALTH_LOG_KEEP = 52
 DEFAULT_STALL_RUNS = 2
-DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 2400.0
+DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 1500.0
 
 
 def load_health_log_payload(
@@ -205,7 +205,7 @@ def run_weekday_ingest_loop(
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     research_roots: list[Path] | None = None,
-    max_targets: int = DEFAULT_INGEST_IMPROVEMENT_CAP,
+    max_targets: int = DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     stall_runs: int = DEFAULT_STALL_RUNS,
     micro_compile_max_tasks: int = 3,
     market: str = "ftse350",

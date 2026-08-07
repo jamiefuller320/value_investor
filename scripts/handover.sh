@@ -117,7 +117,8 @@ cat <<'EOF'
   Primary production triggers (see docs/ops/orchestrator-cron.md):
     orchestrator-sunday      Sun 06:20 UTC
     orchestrator-weekday     Mon–Fri 08:20 UTC
-    ingest-loop              Mon/Wed/Fri 07:05 + 10:05 UTC  (jobId 8173801)
+    ingest-loop-morning       Mon/Wed/Fri 07:05 UTC
+    ingest-loop-afternoon     Mon/Wed/Fri 10:05 UTC
     analysis-review          Sun 10:35 UTC
     ops-monitor              Daily 07:45 UTC                 (jobId 8180483)
     data-backup              Sun 12:30 UTC                   (jobId 8179967)
@@ -134,7 +135,7 @@ cat <<'EOF'
     GH_PAT                 — fallback (avoid ghs_… integration token in Cursor)
 
   Manual workflow dispatch:
-    WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"15"}' \
+    WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"8"}' \
       ./scripts/dispatch_github_workflow.sh
 
   GitHub repo secrets (workflows): CURSOR_API_KEY, SMTP_*, EMAIL_TO, COMPANIES_HOUSE_API_KEY, …

@@ -5,8 +5,8 @@ name: FTSE Ingest Loop
 # logs ingest_health, and micro-compiles ingest engineering tasks when coverage stalls.
 #
 # Reliability: GitHub schedule is best-effort — use external cron → workflow_dispatch
-# (see docs/ops/orchestrator-cron.md). Primary + catch-up schedules skip when this
-# workflow already succeeded today (or another run is still active).
+# (see docs/ops/orchestrator-cron.md). Two smaller batches per ingest day (morning +
+# afternoon); gate allows up to two successful runs per UTC day.
 on:
   schedule:
     - cron: "0 7 * * 1,3,5"
@@ -16,7 +16,7 @@ on:
       max_targets:
         description: "Max buy-tier tickers for ingest-improvement pass"
         type: string
-        default: "15"
+        default: "8"
       force:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean
@@ -36,11 +36,12 @@ jobs:
     outputs:
       should_run: ${{ steps.gate.outputs.should_run }}
     steps:
-      - name: Skip if ingest loop already ran today
+      - name: Skip when daily ingest batches are complete
         id: gate
         uses: actions/github-script@v8
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
+          MAX_DAILY_SUCCESSES: "2"
         with:
           script: |
             const force = process.env.FORCE === 'true';
@@ -50,6 +51,7 @@ jobs:
               return;
             }
 
+            const maxDaily = parseInt(process.env.MAX_DAILY_SUCCESSES || '2', 10);
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const workflow_id = 'ingest-loop.yml';
@@ -73,10 +75,11 @@ jobs:
               && (r.event === 'workflow_dispatch' || r.event === 'schedule')
             );
 
-            const succeeded = prior.find((r) => r.conclusion === 'success');
-            if (succeeded) {
+            const successes = prior.filter((r) => r.conclusion === 'success');
+            if (successes.length >= maxDaily) {
+              const ids = successes.slice(0, maxDaily).map((r) => r.id).join(', ');
               core.info(
-                `Skipping — ingest loop already succeeded today (run ${succeeded.id} at ${succeeded.created_at})`
+                `Skipping — ingest loop already succeeded ${successes.length} time(s) today (runs: ${ids})`
               );
               core.setOutput('should_run', 'false');
               return;
@@ -93,14 +96,16 @@ jobs:
               return;
             }
 
-            core.info('No successful ingest loop today — running');
+            core.info(
+              `Ingest loop slot open (${successes.length}/${maxDaily} successes today) — running`
+            );
             core.setOutput('should_run', 'true');
 
   ingest-loop:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
 
@@ -121,7 +126,7 @@ jobs:
 
       - name: Run weekday ingest loop
         id: loop
-        timeout-minutes: 75
+        timeout-minutes: 35
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
           PYTHONUNBUFFERED: "1"
