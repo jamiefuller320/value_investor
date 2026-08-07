@@ -34,7 +34,7 @@ the `ghs_…` integration token instead of your user PAT.
 
 | Workflow | Production trigger | External cron (cron-job.org) | GitHub `schedule` backup |
 |----------|-------------------|------------------------------|---------------------------|
-| `automation-orchestrator.yml` | External **primary** | Sun 06:20 `SUITE=sunday`; Mon–Fri 08:20 `SUITE=weekday_paper` | Sun 06/09/12, daily 05:30, weekdays 08/11 |
+| `automation-orchestrator.yml` | External **primary** | Sun 06:20 `SUITE=sunday`; Mon–Fri **08:25 UTC** `SUITE=weekday_paper` | Sun 06/09/12, daily 05:30, weekdays **08:25 / 11:25** |
 | `email-report.yml` | Via orchestrator | ↑ (orchestrator dispatches) | None (by design) |
 | `library-grow.yml` | Via orchestrator | ↑ | None |
 | `library-model-review.yml` | Via orchestrator | ↑ | None |
@@ -152,10 +152,20 @@ SUITE=sunday ./scripts/dispatch_orchestrator.sh
 
 Optional Sunday catch-up: repeat at **09:20 UTC** (`SUITE=sunday` or `SUITE=catchup_today`).
 
-### 2. Orchestrator — weekday paper (08:20 UTC Mon–Fri)
+### 2. Orchestrator — weekday paper (08:25 UTC Mon–Fri)
+
+London settle is **09:15** local (75 min after 08:00 open). Primary dispatch must be
+**≥08:25 UTC** so BST runs land after settle. If cron-job.org was set to 08:20
+**Europe/London** by mistake, paper-auto would fire pre-settle and never trade.
 
 ```bash
 GH_PAT=… SUITE=weekday_paper ./scripts/dispatch_orchestrator.sh
+```
+
+After merging scheduling fixes, refresh the external cron:
+
+```bash
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job orchestrator-weekday-paper
 ```
 
 ### 3. Ingest loop — Mon/Wed/Fri primary + catch-up (one job)
@@ -244,10 +254,10 @@ Payload type must be `automation-orchestrator`.
 
 | Layer | Behaviour |
 |-------|-----------|
-| Primary schedules | Sun 06:17, daily surplus 05:30, weekdays 08:17 UTC |
-| Catch-up schedules | Sun 09:17 + 12:17; weekdays 11:17 UTC |
+| Primary schedules | Sun 06:17, daily surplus 05:30, weekdays **08:25** UTC |
+| Catch-up schedules | Sun 09:17 + 12:17; weekdays **11:25** UTC |
 | Duplicate-run gate | Skip a new orchestrator run when another is `in_progress`/`queued`/`waiting` (unless `force=true`) |
-| Same-day skip | Catch-up does **not** re-run children that already **succeeded or are active** today (`busyToday`) |
+| Same-day skip | Catch-up does **not** re-run children that already **succeeded or are active** today (`busyToday`). **paper-auto** is special: a pre-settle success (`last_run.gate.after_settle=false`) does **not** block a post-settle re-dispatch. |
 | Manual / API | `workflow_dispatch` and `repository_dispatch` (`automation-orchestrator`) |
 
 Force a full re-run: Actions UI → Orchestrator → `force=true`, or `FORCE=true` with the script above.

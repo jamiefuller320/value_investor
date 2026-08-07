@@ -43,10 +43,10 @@ on:
     - cron: "17 12 * * 0"
     # Daily surplus-day gate for library ladder (7th before Pro refresh on 8th)
     - cron: "30 5 * * *"
-    # Weekday paper automation after London open settle
-    - cron: "17 8 * * 1-5"
-    # Weekday paper catch-up if 08:17 was dropped
-    - cron: "17 11 * * 1-5"
+    # Weekday paper automation after London open settle (09:15 local ≈ 08:15 UTC)
+    - cron: "25 8 * * 1-5"
+    # Weekday paper catch-up if primary slot was dropped or pre-settle only
+    - cron: "25 11 * * 1-5"
 
 permissions:
   actions: write
@@ -137,7 +137,7 @@ jobs:
               } else if (hour === 5 || hour === 4) {
                 suite = 'surplus_check';
               } else if (day >= 1 && day <= 5 && hour >= 8 && hour <= 13) {
-                // Weekday paper primary 08:17 + catch-up 11:17
+                // Weekday paper primary 08:25 + catch-up 11:25 UTC (after London settle)
                 suite = 'weekday_paper';
               } else if (day === 0) {
                 suite = 'sunday';
@@ -253,6 +253,31 @@ jobs:
       && (needs.wait.result == 'success' || needs.wait.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Evaluate paper-auto artifact satisfaction
+        id: paper_artifacts
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          from value_investor.paper_auto_scheduling import paper_auto_artifacts_satisfied
+
+          satisfied = paper_auto_artifacts_satisfied(Path("docs/data/paper_automation"))
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(f"satisfied={'true' if satisfied else 'false'}\n")
+          print(f"paper_auto_artifacts_satisfied={satisfied}")
+          PY
+
       - name: Dispatch child workflows
         uses: actions/github-script@v8
         env:
@@ -264,6 +289,7 @@ jobs:
           RUN_PAPER: ${{ needs.decide.outputs.run_paper }}
           SURPLUS_ALLOW: ${{ needs.surplus_gate.outputs.allow_ladder }}
           SURPLUS_RESULT: ${{ needs.surplus_gate.result }}
+          PAPER_ARTIFACTS_SATISFIED: ${{ steps.paper_artifacts.outputs.satisfied }}
         with:
           script: |
             const owner = context.repo.owner;
@@ -295,10 +321,7 @@ jobs:
               return false;
             }
 
-            async function busyToday(workflow_id) {
-              if (await succeededToday(workflow_id)) {
-                return true;
-              }
+            async function isActive(workflow_id) {
               const { data } = await github.rest.actions.listWorkflowRuns({
                 owner, repo, workflow_id, status: 'in_progress', per_page: 5,
               });
@@ -311,6 +334,33 @@ jobs:
                 );
                 return true;
               }
+              return false;
+            }
+
+            async function busyToday(workflow_id) {
+              if (await succeededToday(workflow_id)) {
+                return true;
+              }
+              return isActive(workflow_id);
+            }
+
+            async function shouldSkipPaperAuto() {
+              if (await isActive('paper-auto.yml')) {
+                return true;
+              }
+              const succeeded = await succeededToday('paper-auto.yml');
+              if (!succeeded) {
+                return false;
+              }
+              if (process.env.PAPER_ARTIFACTS_SATISFIED === 'true') {
+                core.info(
+                  'Skipping paper-auto — post-settle pass already committed today',
+                );
+                return true;
+              }
+              core.info(
+                'paper-auto succeeded today but artifacts are pre-settle only — re-dispatching',
+              );
               return false;
             }
 
@@ -376,8 +426,8 @@ jobs:
                 core.info('Skipping email — already succeeded or in progress today');
                 runEmail = false;
               }
-              if (runPaper && await busyToday('paper-auto.yml')) {
-                core.info('Skipping paper-auto — already succeeded or in progress today');
+              if (runPaper && await shouldSkipPaperAuto()) {
+                core.info('Skipping paper-auto — already satisfied or in progress today');
                 runPaper = false;
               }
             }

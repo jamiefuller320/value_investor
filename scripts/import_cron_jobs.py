@@ -25,6 +25,10 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
+from value_investor.paper_auto_scheduling import (
+    WEEKDAY_PAPER_UTC_HOUR,
+    WEEKDAY_PAPER_UTC_MINUTE,
+)
 from value_investor.workflow_pat import require_workflow_dispatch_pat, resolve_workflow_dispatch_pat
 
 REPO = os.environ.get("REPO", "jamiefuller320/value_investor")
@@ -69,8 +73,8 @@ def _job_specs() -> list[CronJobSpec]:
             title="FTSE orchestrator (weekday paper)",
             workflow="automation-orchestrator.yml",
             body={"ref": REF, "inputs": {"suite": "weekday_paper", "force": "false"}},
-            hours=[8],
-            minutes=[20],
+            hours=[WEEKDAY_PAPER_UTC_HOUR],
+            minutes=[WEEKDAY_PAPER_UTC_MINUTE],
             wdays=[1, 2, 3, 4, 5],
         ),
         CronJobSpec(
