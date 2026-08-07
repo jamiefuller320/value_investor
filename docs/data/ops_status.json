@@ -1,72 +1,123 @@
 {
-  "run_at": "2026-08-06T07:46:32.002257+00:00",
-  "overall": "warn",
+  "run_at": "2026-08-07T07:46:22.160784+00:00",
+  "overall": "fail",
   "findings": [
     {
       "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: FTSE Engineering Queue",
-      "summary": "1 failure(s) in last 24h (runs: 30993869397).",
+      "category": "backtest",
+      "title": "Backtest history: missing_model_snapshot",
+      "summary": "Run snapshot without matching models file for stamp 20260719_160212",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     },
     {
       "severity": "warn",
-      "category": "engineering",
-      "title": "Parked engineering tasks need manual review",
-      "summary": "2 parked task(s): eng-20260804-36, eng-20260804-57",
+      "category": "backtest",
+      "title": "Backtest history: missing_model_snapshot",
+      "summary": "Run snapshot without matching models file for stamp 20260720_203227",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "backtest",
+      "title": "Backtest history: missing_model_snapshot",
+      "summary": "Run snapshot without matching models file for stamp 20260724_142613",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "backtest",
+      "title": "Backtest history: missing_model_snapshot",
+      "summary": "Run snapshot without matching models file for stamp 20260726_182046",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "workflows",
+      "title": "Recent workflow failure: FTSE Ingest Loop",
+      "summary": "1 unresolved failure(s) since last success (runs: 31152742648).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: FTSE Ingest Loop",
+      "summary": "No successful run within 30h (last: 2026-08-05T16:18:46+00:00).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     }
   ],
-  "auto_fixes": [],
-  "drafted_task_ids": [],
+  "auto_fixes": [
+    {
+      "action": "housekeep_parked_task",
+      "detail": "cancelled duplicate eng-20260804-36 (of eng-20260726-05)"
+    },
+    {
+      "action": "housekeep_parked_task",
+      "detail": "cancelled duplicate eng-20260804-57 (of eng-20260804-42)"
+    }
+  ],
+  "drafted_task_ids": [
+    "eng-20260807-01"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 30,
       "last_success_at": "2026-08-05T16:18:46+00:00",
       "last_success_run_id": 31024664757,
-      "age_hours": 15.5,
-      "stale": false,
-      "recent_failures_24h": 0
+      "age_hours": 39.5,
+      "stale": true,
+      "recent_failures_24h": 1,
+      "unresolved_failures_12h": 1
     },
     {
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-06T07:20:15+00:00",
-      "last_success_run_id": 31080526032,
-      "age_hours": 0.4,
+      "last_success_at": "2026-08-06T12:28:39+00:00",
+      "last_success_run_id": 31101558115,
+      "age_hours": 19.3,
       "stale": false,
-      "recent_failures_24h": 0
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     },
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": true,
       "max_age_hours": 26,
-      "last_success_at": "2026-08-06T07:15:29+00:00",
-      "last_success_run_id": 31080230434,
+      "last_success_at": "2026-08-07T07:15:29+00:00",
+      "last_success_run_id": 31156952146,
       "age_hours": 0.5,
       "stale": false,
-      "recent_failures_24h": 1
+      "recent_failures_24h": 2,
+      "unresolved_failures_12h": 0
     },
     {
       "workflow": "ci-main-nightly.yml",
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-06T07:30:55+00:00",
-      "last_success_run_id": 31081214184,
+      "last_success_at": "2026-08-07T07:30:51+00:00",
+      "last_success_run_id": 31157949242,
       "age_hours": 0.3,
       "stale": false,
-      "recent_failures_24h": 0
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     },
     {
       "workflow": "analysis-review.yml",
@@ -75,9 +126,10 @@
       "max_age_hours": 36,
       "last_success_at": "2026-08-05T11:32:46+00:00",
       "last_success_run_id": 31001886864,
-      "age_hours": 20.2,
+      "age_hours": 44.2,
       "stale": false,
-      "recent_failures_24h": 0
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
@@ -93,5 +145,5 @@
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false
+  "should_dispatch_engineering": true
 }
