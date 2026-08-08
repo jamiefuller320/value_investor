@@ -87,10 +87,10 @@ ftse-data-backup drill
 | **GitHub cron (backup)** | Same expression | Same-day skip — safe alongside external cron |
 | **Manual** | Any time | Actions → **FTSE Data Backup** → Run workflow |
 
-External dispatch (same `GH_PAT` as orchestrator / ingest / ops monitor):
+External dispatch (same `WORKFLOW_DISPATCH_PAT` as orchestrator / ingest / ops monitor):
 
 ```bash
-WORKFLOW=data-backup.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=data-backup.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Same-day skip: a second successful run the same UTC day exits quickly unless
@@ -107,7 +107,7 @@ behalf.
 
 ```bash
 export CRONJOB_API_KEY=…   # cron-job.org → Settings → API
-export GH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
+export WORKFLOW_DISPATCH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
 
 curl -sS -X PUT 'https://api.cron-job.org/jobs' \
   -H "Authorization: Bearer $CRONJOB_API_KEY" \
@@ -131,7 +131,7 @@ curl -sS -X PUT 'https://api.cron-job.org/jobs' \
       "extendedData": {
         "headers": {
           "Accept": "application/vnd.github+json",
-          "Authorization": "Bearer '"$GH_PAT"'"
+          "Authorization": "Bearer '"$WORKFLOW_DISPATCH_PAT"'"
         },
         "body": "{\"ref\":\"main\"}"
       }
@@ -145,9 +145,9 @@ console (**Run now**) or wait for Sunday.
 **Optional bulk import** (all production jobs — idempotent by title):
 
 ```bash
-CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
+CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --all
 # or just data backup:
-CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --job data-backup
+CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --job data-backup
 ```
 
 Dry-run payloads: `./scripts/import_cron_jobs.py --job data-backup --dry-run --json`
@@ -158,7 +158,7 @@ Dry-run payloads: `./scripts/import_cron_jobs.py --job data-backup --dry-run --j
 2. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/data-backup.yml/dispatches`
 3. **Schedule:** custom `30 12 * * 0` (Sunday 12:30 UTC)
 4. **Request method:** `POST`
-5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <GH_PAT>`
+5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <WORKFLOW_DISPATCH_PAT>`
 6. **Request body:** `{"ref":"main"}`
 7. **Timezone:** UTC
 

@@ -12,10 +12,10 @@ decision-review knobs, or open engineering PRs automatically.
 | GitHub cron (backup) | Sunday 08:30 UTC |
 | Manual | Actions → **FTSE Analysis Review** → Run workflow |
 
-External dispatch (same `GH_PAT` as orchestrator / ingest):
+External dispatch (same `WORKFLOW_DISPATCH_PAT` as orchestrator / ingest):
 
 ```bash
-WORKFLOW=analysis-review.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=analysis-review.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Schedule after the Sunday email quiet bundle so `docs/data/` is fresh. Same-day skip: a second fire exits quickly if a successful run already happened today.

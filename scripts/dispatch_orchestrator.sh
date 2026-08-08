@@ -2,7 +2,7 @@
 # Dispatch the Automation Orchestrator via GitHub API (for external cron hosts).
 #
 # Required:
-#   WORKFLOW_DISPATCH_PAT or GH_PAT — fine-grained PAT with Actions: write on this repo
+#   WORKFLOW_DISPATCH_PAT — fine-grained PAT with Actions: write on this repo
 # Optional:
 #   REPO     — owner/name (default: jamiefuller320/value_investor)
 #   SUITE    — sunday | weekday_paper | surplus_check | catchup_today | … (default: sunday)

@@ -5,7 +5,6 @@ from __future__ import annotations
 import os
 
 WORKFLOW_DISPATCH_PAT_ENV = "WORKFLOW_DISPATCH_PAT"
-GH_PAT_ENV = "GH_PAT"
 
 
 def is_integration_token(token: str | None) -> bool:
@@ -17,15 +16,13 @@ def resolve_workflow_dispatch_pat() -> str | None:
     """
     Return a user PAT suitable for workflow_dispatch.
 
-    Prefers WORKFLOW_DISPATCH_PAT over GH_PAT. Skips ghs_ integration tokens
-    so Cursor-injected GH_PAT does not mask a missing fine-grained PAT.
+    Uses WORKFLOW_DISPATCH_PAT only. Rejects ghs_ integration tokens so a
+    Cursor-injected GH_TOKEN does not satisfy dispatch requirements.
     """
-    for key in (WORKFLOW_DISPATCH_PAT_ENV, GH_PAT_ENV):
-        value = (os.environ.get(key) or "").strip()
-        if not value or is_integration_token(value):
-            continue
-        return value
-    return None
+    value = (os.environ.get(WORKFLOW_DISPATCH_PAT_ENV) or "").strip()
+    if not value or is_integration_token(value):
+        return None
+    return value
 
 
 def require_workflow_dispatch_pat(*, repo: str = "jamiefuller320/value_investor") -> str:
@@ -34,13 +31,13 @@ def require_workflow_dispatch_pat(*, repo: str = "jamiefuller320/value_investor"
         return pat
     has_ghs = any(
         is_integration_token(os.environ.get(key))
-        for key in (WORKFLOW_DISPATCH_PAT_ENV, GH_PAT_ENV, "GH_TOKEN", "GITHUB_TOKEN")
+        for key in (WORKFLOW_DISPATCH_PAT_ENV, "GH_TOKEN", "GITHUB_TOKEN")
     )
     hint = (
         " Set WORKFLOW_DISPATCH_PAT to a fine-grained PAT with Actions: Read and write."
         if has_ghs
-        else " Set WORKFLOW_DISPATCH_PAT (preferred) or GH_PAT."
+        else " Set WORKFLOW_DISPATCH_PAT."
     )
     raise RuntimeError(
-        f"Workflow dispatch PAT required for {repo}.{hint}"
+        f"WORKFLOW_DISPATCH_PAT required for {repo}.{hint}"
     )

@@ -60,7 +60,7 @@ ftse-engineering queue-status --json
 Prefer **`email_only`** — skips library ladder and model review (saves `weekly_ops`).
 
 ```bash
-export WORKFLOW_DISPATCH_PAT=…   # or GH_PAT
+export WORKFLOW_DISPATCH_PAT=…
 
 SUITE=email_only FORCE=true ./scripts/dispatch_orchestrator.sh
 ```

@@ -199,7 +199,7 @@ def github_api_get(path: str, *, token: str | None = None) -> Any:
     if not token:
         raise RuntimeError(
             "GitHub token not configured "
-            "(WORKFLOW_DISPATCH_PAT / GH_PAT / GITHUB_TOKEN / GH_TOKEN)"
+            "(WORKFLOW_DISPATCH_PAT / GITHUB_TOKEN / GH_TOKEN)"
         )
     request = urllib.request.Request(
         f"https://api.github.com{path}",

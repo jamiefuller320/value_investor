@@ -6,11 +6,11 @@ Idempotent by job title.
 
 Required env:
   CRONJOB_API_KEY  — cron-job.org API key (Settings → API)
-  WORKFLOW_DISPATCH_PAT or GH_PAT — fine-grained PAT with Actions: Read and write on the repo
+  WORKFLOW_DISPATCH_PAT — fine-grained PAT with Actions: Read and write on the repo
 
 Examples:
   WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all
-  GH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job data-backup
+  WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job data-backup
   ./scripts/import_cron_jobs.py --all --dry-run
 """
 

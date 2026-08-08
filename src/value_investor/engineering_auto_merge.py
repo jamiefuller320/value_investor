@@ -38,7 +38,12 @@ class AutoMergeDecision:
 
 
 def _github_token() -> str | None:
-    for key in ("GITHUB_TOKEN", "GH_TOKEN", "GH_PAT"):
+    from value_investor.workflow_pat import resolve_workflow_dispatch_pat
+
+    pat = resolve_workflow_dispatch_pat()
+    if pat:
+        return pat
+    for key in ("GITHUB_TOKEN", "GH_TOKEN"):
         value = os.environ.get(key)
         if value:
             return value
