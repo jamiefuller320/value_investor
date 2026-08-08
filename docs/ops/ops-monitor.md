@@ -28,7 +28,7 @@ artifacts, ingest stall detection, and the engineering queue.
 External dispatch:
 
 ```bash
-WORKFLOW=ops-monitor.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ops-monitor.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Runs after the Mon/Wed/Fri ingest loop (~07:05) and before weekday paper
@@ -45,7 +45,7 @@ GitHub on your behalf.
 
 ```bash
 export CRONJOB_API_KEY=…   # cron-job.org → Settings → API
-export GH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
+export WORKFLOW_DISPATCH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
 
 curl -sS -X PUT 'https://api.cron-job.org/jobs' \
   -H "Authorization: Bearer $CRONJOB_API_KEY" \
@@ -69,7 +69,7 @@ curl -sS -X PUT 'https://api.cron-job.org/jobs' \
       "extendedData": {
         "headers": {
           "Accept": "application/vnd.github+json",
-          "Authorization": "Bearer '"$GH_PAT"'"
+          "Authorization": "Bearer '"$WORKFLOW_DISPATCH_PAT"'"
         },
         "body": "{\"ref\":\"main\"}"
       }
@@ -83,9 +83,9 @@ console (**Run now**) or wait for the next 07:45 UTC slot.
 **Optional bulk import** (all production jobs — idempotent by title):
 
 ```bash
-CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
+CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --all
 # or just ops monitor:
-CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --job ops-monitor
+CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --job ops-monitor
 ```
 
 Dry-run payloads: `./scripts/import_cron_jobs.py --job ops-monitor --dry-run --json`
@@ -96,7 +96,7 @@ Dry-run payloads: `./scripts/import_cron_jobs.py --job ops-monitor --dry-run --j
 2. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/ops-monitor.yml/dispatches`
 3. **Schedule:** custom `45 7 * * *` (daily 07:45 UTC)
 4. **Request method:** `POST`
-5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <GH_PAT>`
+5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <WORKFLOW_DISPATCH_PAT>`
 6. **Request body:** `{"ref":"main"}`
 7. **Timezone:** UTC
 

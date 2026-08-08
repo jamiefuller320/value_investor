@@ -131,8 +131,7 @@ EOF
 section "Secrets & dispatch PAT"
 cat <<'EOF'
   Cursor Cloud / local dispatch:
-    WORKFLOW_DISPATCH_PAT  — preferred (fine-grained PAT, Actions: Read and write)
-    GH_PAT                 — fallback (avoid ghs_… integration token in Cursor)
+    WORKFLOW_DISPATCH_PAT  — fine-grained PAT, Actions: Read and write (required for dispatch)
 
   Manual workflow dispatch:
     WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"8"}' \

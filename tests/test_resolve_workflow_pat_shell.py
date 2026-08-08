@@ -18,11 +18,10 @@ def _resolve(env: dict[str, str]) -> subprocess.CompletedProcess[str]:
     )
 
 
-def test_shell_prefers_workflow_dispatch_pat():
+def test_shell_uses_workflow_dispatch_pat():
     proc = _resolve(
         {
             "WORKFLOW_DISPATCH_PAT": "github_pat_preferred",
-            "GH_PAT": "github_pat_other",
             "PATH": "/usr/bin:/bin",
         }
     )
@@ -33,9 +32,15 @@ def test_shell_prefers_workflow_dispatch_pat():
 def test_shell_rejects_integration_token():
     proc = _resolve(
         {
-            "GH_PAT": "ghs_integration_only",
+            "WORKFLOW_DISPATCH_PAT": "ghs_integration_only",
             "PATH": "/usr/bin:/bin",
         }
     )
     assert proc.returncode == 1
     assert "integration token" in proc.stderr
+
+
+def test_shell_requires_workflow_dispatch_pat():
+    proc = _resolve({"PATH": "/usr/bin:/bin"})
+    assert proc.returncode == 1
+    assert "WORKFLOW_DISPATCH_PAT is required" in proc.stderr

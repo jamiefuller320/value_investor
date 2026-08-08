@@ -2,7 +2,7 @@
 # Dispatch any GitHub Actions workflow via workflow_dispatch (for cron-job.org etc.).
 #
 # Required:
-#   WORKFLOW_DISPATCH_PAT or GH_PAT — fine-grained PAT with Actions: write on the repo
+#   WORKFLOW_DISPATCH_PAT — fine-grained PAT with Actions: write on the repo
 #   WORKFLOW    — workflow file name (e.g. analysis-review.yml, ingest-loop.yml)
 # Optional:
 #   REPO        — owner/name (default: jamiefuller320/value_investor)

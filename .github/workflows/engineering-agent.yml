@@ -226,7 +226,6 @@ jobs:
         id: pr
         env:
           WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
-          GH_PAT: ${{ secrets.GH_PAT }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
@@ -236,9 +235,6 @@ jobs:
 
           if [ -n "${WORKFLOW_DISPATCH_PAT:-}" ]; then
             export GH_TOKEN="$WORKFLOW_DISPATCH_PAT"
-            USED_PAT=true
-          elif [ -n "${GH_PAT:-}" ]; then
-            export GH_TOKEN="$GH_PAT"
             USED_PAT=true
           else
             export GH_TOKEN="$GITHUB_TOKEN"

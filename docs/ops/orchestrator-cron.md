@@ -20,9 +20,9 @@ Human-readable inventory also appears on the dashboard automation page
 | Low-stakes hourly polling? | GitHub schedule may suffice; add external cron if misses matter |
 
 **PAT:** fine-grained, **Actions: Read and write** on this repo only. Store as
-`WORKFLOW_DISPATCH_PAT` (preferred) or `GH_PAT` on the cron host and in Cursor Cloud
-secrets — never commit it. Avoid using `GH_TOKEN` alone in Cursor; it may receive
-the `ghs_…` integration token instead of your user PAT.
+`WORKFLOW_DISPATCH_PAT` on the cron host and in Cursor Cloud secrets — never commit
+it. Avoid using `GH_TOKEN` alone in Cursor; it may receive the `ghs_…` integration
+token instead of your user PAT.
 
 **Helper scripts:**
 
@@ -59,13 +59,13 @@ Two layers:
 ### Register jobs on cron-job.org (curl)
 
 `CRONJOB_API_KEY` from [cron-job.org](https://cron-job.org) → Settings → API.
-`WORKFLOW_DISPATCH_PAT` (or `GH_PAT`) is the fine-grained PAT with **Actions: Read and write** on this repo.
+`WORKFLOW_DISPATCH_PAT` is the fine-grained PAT with **Actions: Read and write** on this repo.
 
 **Data backup** (Sunday 12:30 UTC):
 
 ```bash
 export CRONJOB_API_KEY=…
-export GH_PAT=…
+export WORKFLOW_DISPATCH_PAT=…
 
 curl -sS -X PUT 'https://api.cron-job.org/jobs' \
   -H "Authorization: Bearer $CRONJOB_API_KEY" \
@@ -89,7 +89,7 @@ curl -sS -X PUT 'https://api.cron-job.org/jobs' \
       "extendedData": {
         "headers": {
           "Accept": "application/vnd.github+json",
-          "Authorization": "Bearer '"$GH_PAT"'"
+          "Authorization": "Bearer '"$WORKFLOW_DISPATCH_PAT"'"
         },
         "body": "{\"ref\":\"main\"}"
       }
@@ -122,7 +122,7 @@ curl -sS -X PUT 'https://api.cron-job.org/jobs' \
       "extendedData": {
         "headers": {
           "Accept": "application/vnd.github+json",
-          "Authorization": "Bearer '"$GH_PAT"'"
+          "Authorization": "Bearer '"$WORKFLOW_DISPATCH_PAT"'"
         },
         "body": "{\"ref\":\"main\"}"
       }
@@ -135,7 +135,7 @@ Schedule fields: `wdays` `0`=Sunday … `6`=Saturday, `[-1]`=every day; `hours`/
 **Optional bulk import** (all six production jobs — idempotent by title):
 
 ```bash
-CRONJOB_API_KEY=… GH_PAT=… ./scripts/import_cron_jobs.py --all
+CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --all
 ```
 
 Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop-morning`,
@@ -147,7 +147,7 @@ Manual per-job dispatch examples (what cron-job.org calls) below.
 ### 1. Orchestrator — Sunday quiet bundle (06:20 UTC)
 
 ```bash
-export GH_PAT=…
+export WORKFLOW_DISPATCH_PAT=…
 SUITE=sunday ./scripts/dispatch_orchestrator.sh
 ```
 
@@ -160,7 +160,7 @@ London settle is **09:15** local (75 min after 08:00 open). Primary dispatch mus
 **Europe/London** by mistake, paper-auto would fire pre-settle and never trade.
 
 ```bash
-GH_PAT=… SUITE=weekday_paper ./scripts/dispatch_orchestrator.sh
+WORKFLOW_DISPATCH_PAT=… SUITE=weekday_paper ./scripts/dispatch_orchestrator.sh
 ```
 
 After merging scheduling fixes, refresh the external cron:
@@ -177,7 +177,7 @@ the workflow gate allows **up to two successful runs per UTC day** (morning +
 afternoon), not one.
 
 ```bash
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"8"}' GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"8"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Refresh external cron after merge:
@@ -213,7 +213,7 @@ Run **after** the Sunday screen commits `docs/data/` (email via orchestrator oft
 finishes 08:00–11:00 UTC). Schedule: `35 10 * * 0` (optional backup `35 12 * * 0`).
 
 ```bash
-WORKFLOW=analysis-review.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=analysis-review.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Requires `CURSOR_API_KEY` in GitHub repo secrets. Skips cleanly if inputs are thin.
@@ -224,7 +224,7 @@ Runs after Mon/Wed/Fri ingest loop and before weekday paper orchestrator (~08:20
 Schedule: `45 7 * * *`.
 
 ```bash
-WORKFLOW=ops-monitor.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ops-monitor.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Sends SMTP summary on warn/fail or when auto-fixes run. Same-day skip on duplicate success.
@@ -234,7 +234,7 @@ Sends SMTP summary on warn/fail or when auto-fixes run. Same-day skip on duplica
 After the Sunday email bundle commits `docs/data/`. Schedule: `30 12 * * 0`.
 
 ```bash
-WORKFLOW=data-backup.yml GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=data-backup.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Creates `output/backups/ftse-tier1-*.tar.gz` as a GitHub Actions artifact (90-day retention).
@@ -243,9 +243,9 @@ Optional `BACKUP_S3_URI` + AWS secrets for off-repo copy. See [`data-backup.md`]
 ### Generic dispatch (any workflow)
 
 ```bash
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"8"}' GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"8"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 # with inputs:
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"8"}' GH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"8"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Equivalent curl:
@@ -253,7 +253,7 @@ Equivalent curl:
 ```bash
 curl -sS -X POST \
   -H "Accept: application/vnd.github+json" \
-  -H "Authorization: Bearer $GH_PAT" \
+  -H "Authorization: Bearer $WORKFLOW_DISPATCH_PAT" \
   https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/WORKFLOW.yml/dispatches \
   -d '{"ref":"main"}'
 ```
@@ -261,7 +261,7 @@ curl -sS -X POST \
 ### `repository_dispatch` alternative (orchestrator only)
 
 ```bash
-MODE=repository_dispatch SUITE=sunday GH_PAT=… ./scripts/dispatch_orchestrator.sh
+MODE=repository_dispatch SUITE=sunday WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_orchestrator.sh
 ```
 
 Payload type must be `automation-orchestrator`.

@@ -860,7 +860,7 @@ def main(argv: list[str] | None = None) -> int:
     notify_pr_p.add_argument(
         "--used-pat",
         action="store_true",
-        help="Set when PR was opened with WORKFLOW_DISPATCH_PAT / GH_PAT",
+        help="Set when PR was opened with WORKFLOW_DISPATCH_PAT",
     )
     notify_pr_p.add_argument(
         "--no-ci-hint",

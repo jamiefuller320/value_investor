@@ -11,27 +11,24 @@ from value_investor.workflow_pat import (
 )
 
 
-def test_resolve_prefers_workflow_dispatch_pat(monkeypatch):
-    monkeypatch.setenv("GH_PAT", "github_pat_older")
+def test_resolve_uses_workflow_dispatch_pat(monkeypatch):
     monkeypatch.setenv("WORKFLOW_DISPATCH_PAT", "github_pat_preferred")
     assert resolve_workflow_dispatch_pat() == "github_pat_preferred"
 
 
-def test_resolve_falls_back_to_gh_pat(monkeypatch):
+def test_resolve_ignores_gh_pat_env(monkeypatch):
     monkeypatch.delenv("WORKFLOW_DISPATCH_PAT", raising=False)
-    monkeypatch.setenv("GH_PAT", "github_pat_fallback")
-    assert resolve_workflow_dispatch_pat() == "github_pat_fallback"
+    monkeypatch.setenv("GH_PAT", "github_pat_legacy")
+    assert resolve_workflow_dispatch_pat() is None
 
 
 def test_resolve_skips_integration_token(monkeypatch):
     monkeypatch.setenv("WORKFLOW_DISPATCH_PAT", "ghs_integration_token")
-    monkeypatch.setenv("GH_PAT", "github_pat_real")
-    assert resolve_workflow_dispatch_pat() == "github_pat_real"
+    assert resolve_workflow_dispatch_pat() is None
 
 
 def test_require_raises_when_missing(monkeypatch):
     monkeypatch.delenv("WORKFLOW_DISPATCH_PAT", raising=False)
-    monkeypatch.delenv("GH_PAT", raising=False)
     with pytest.raises(RuntimeError, match="WORKFLOW_DISPATCH_PAT"):
         require_workflow_dispatch_pat()
 
