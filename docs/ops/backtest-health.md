@@ -6,7 +6,7 @@ run snapshots (`docs/data/history/run_*.json.gz`).
 ## Goals
 
 - **Monitor** snapshot integrity (schema, benchmark, price coverage, duplicates)
-- **Repair** only by quarantining corrupt or duplicate files — never rewrite payloads
+- **Repair** only by quarantining corrupt, duplicate, or orphan (unpaired) files — never rewrite payloads
 - **Enhance** readiness metrics (`backtest_ready`, horizon count) in `backtest_health.json`
 - **Protect** publish path from invalid new snapshots polluting git-tracked history
 
@@ -37,7 +37,7 @@ ftse-backtest-health --apply
 Daily `ftse-ops-monitor` now:
 
 1. Runs `check_backtest_history()` on `docs/data/history/`
-2. Auto-quarantines fixable issues (corrupt JSON, duplicate plain+gzip twins)
+2. Auto-quarantines fixable issues (corrupt JSON, duplicate plain+gzip twins, run snapshots without a `models_` pair)
 3. Writes `docs/data/backtest_health.json` with readiness + recomputed backtest summary
 
 Warn-only when `valid_runs < 2` (history still seeding).
