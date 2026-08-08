@@ -329,13 +329,16 @@ def audit_history_dir(
             )
         )
     for stamp in sorted(run_stamps - model_stamps):
+        plain = history_dir / f"run_{stamp}.json"
+        gz = history_dir / f"run_{stamp}.json.gz"
+        run_path = gz if gz.exists() else plain
         issues.append(
             SnapshotIssue(
-                path=history_dir.as_posix(),
+                path=run_path.as_posix(),
                 severity="warn",
                 code="missing_model_snapshot",
                 summary=f"Run snapshot without matching models file for stamp {stamp}",
-                auto_fixable=False,
+                auto_fixable=run_path.exists(),
             )
         )
 
@@ -415,13 +418,28 @@ def repair_history_dir(
                     )
                 )
                 seen_paths.add(path.as_posix())
-        elif issue.code in {"corrupt_json", "invalid_root", "invalid_run_at", "future_run_at", "missing_prices", "missing_signals", "invalid_prices", "invalid_signal_rows"}:
+        elif issue.code in {
+            "corrupt_json",
+            "invalid_root",
+            "invalid_run_at",
+            "future_run_at",
+            "missing_prices",
+            "missing_signals",
+            "invalid_prices",
+            "invalid_signal_rows",
+            "missing_model_snapshot",
+        }:
             if path.exists() and path.is_file() and path.as_posix() not in seen_paths:
                 target = _quarantine_path(history_dir, path, now=now)
                 shutil.move(str(path), str(target))
+                action = (
+                    "quarantine_orphan_run"
+                    if issue.code == "missing_model_snapshot"
+                    else "quarantine_corrupt_snapshot"
+                )
                 repairs.append(
                     RepairAction(
-                        action="quarantine_corrupt_snapshot",
+                        action=action,
                         detail=f"moved {path.name} → {target.relative_to(history_dir).as_posix()} ({issue.code})",
                     )
                 )

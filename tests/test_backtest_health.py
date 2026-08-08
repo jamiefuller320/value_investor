@@ -60,6 +60,23 @@ def test_repair_quarantines_corrupt_snapshot(tmp_path: Path):
     assert list((history / "quarantine").glob("*run_20260802_123417.json.gz"))
 
 
+def test_repair_quarantines_orphan_run_without_models(tmp_path: Path):
+    history = tmp_path / "history"
+    history.mkdir()
+    write_json(
+        history / "run_20260719_160212.json.gz",
+        _good_snapshot("2026-07-19T16:02:12+00:00"),
+        compress=True,
+    )
+    issues, stats = audit_history_dir(history)
+    assert stats["valid_runs"] == 1
+    assert any(row.code == "missing_model_snapshot" and row.auto_fixable for row in issues)
+    repairs = repair_history_dir(history, issues, apply=True)
+    assert repairs
+    assert not (history / "run_20260719_160212.json.gz").exists()
+    assert list((history / "quarantine").glob("*run_20260719_160212.json.gz"))
+
+
 def test_repair_removes_duplicate_plain_when_gzip_exists(tmp_path: Path):
     history = tmp_path / "history"
     history.mkdir()
@@ -68,6 +85,11 @@ def test_repair_removes_duplicate_plain_when_gzip_exists(tmp_path: Path):
     gz = history / "run_20260802_123417.json.gz"
     write_json(plain, payload, compact=True)
     write_json(gz, payload, compact=True, compress=True)
+    write_json(
+        history / "models_20260802_123417.json.gz",
+        {"run_at": payload["run_at"], "models": []},
+        compress=True,
+    )
     issues, _ = audit_history_dir(history)
     repairs = repair_history_dir(history, issues, apply=True)
     assert repairs
@@ -93,6 +115,11 @@ def test_publish_skips_invalid_new_snapshot(tmp_path: Path):
     history.mkdir(parents=True)
     committed.mkdir()
     write_json(history / "run_20260802_123417.json.gz", _good_snapshot(), compress=True)
+    write_json(
+        history / "models_20260802_123417.json.gz",
+        {"run_at": "2026-08-02T12:34:17+00:00", "models": []},
+        compress=True,
+    )
     write_json(history / "run_20260803_123417.json.gz", {"broken": True}, compress=True)
     result = publish_committed_run_history(output, committed_dir=committed)
     assert result["copied"] >= 1
@@ -105,6 +132,11 @@ def test_run_backtest_health_writes_status(tmp_path: Path):
     history = tmp_path / "history"
     history.mkdir()
     write_json(history / "run_20260802_123417.json.gz", _good_snapshot(), compress=True)
+    write_json(
+        history / "models_20260802_123417.json.gz",
+        {"run_at": "2026-08-02T12:34:17+00:00", "models": []},
+        compress=True,
+    )
     status = tmp_path / "backtest_health.json"
     report = run_backtest_health(history_dir=history, status_path=status, apply_repairs=False)
     assert status.exists()
