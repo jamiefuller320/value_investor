@@ -6,13 +6,16 @@ import json
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
 from value_investor.scoring import evaluate_universe
 from value_investor.models.risk import EarningsQualityModel
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    fcf_basis_divergence_flagged,
     fcf_values_diverge,
+    parse_company_adjusted_fcf,
     reconcile_fcf,
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
@@ -618,19 +621,42 @@ def test_fcf_values_diverge_on_sign_or_magnitude():
     assert fcf_values_diverge(1_000_000.0, -1_000_000.0) is False
     assert fcf_values_diverge(60_000_000.0, -1_000_000.0) is True
     assert fcf_values_diverge(100.0, 80.0) is False
-    assert fcf_values_diverge(100.0, 70.0, threshold=0.25) is True
+    assert fcf_values_diverge(100.0, 70.0, threshold=0.50) is False
+    assert fcf_values_diverge(100.0, 40.0, threshold=0.50) is True
     assert fcf_values_diverge(100.0, 100.0) is False
     assert fcf_values_diverge(None, -66_125_000.0) is False
 
 
+def test_fcf_basis_divergence_flags_fgp_style_mismatch():
+    flagged = fcf_basis_divergence_flagged(
+        filing_aligned=362_600_000.0,
+        screen_ttm=302_812_512.0,
+        company_adjusted=113_500_000.0,
+        company_adjusted_currency="GBP",
+    )
+    assert flagged is True
+
+
+def test_parse_company_adjusted_fcf_from_ir_prose():
+    amount, currency = parse_company_adjusted_fcf("Free Cash Flow of £113.5m before acquisitions")
+    assert amount == 113_500_000.0
+    assert currency == "GBP"
+
+
 def test_append_fcf_divergence_to_action_note():
+    bundle = reconcile_fcf(
+        screen_ttm=-66_125_000.0,
+        financials=_hik_financials(),
+    )
     note = append_fcf_divergence_to_action_note(
         "Strong Buy — neutral timing",
         canonical=119_000_000.0,
         screen_ttm=-66_125_000.0,
+        fcf_bundle=bundle,
     )
     assert "Strong Buy — neutral timing" in note
-    assert "FCF filing-aligned $119M" in note
+    assert "FCF basis mismatch" in note
+    assert "filing $119M" in note
     assert "screen TTM −$66.1M" in note
 
     unchanged = append_fcf_divergence_to_action_note(
@@ -663,9 +689,11 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     assert snapshot["fcf"]["canonical"] == 119_000_000.0
     assert snapshot["fcf"]["source"] == "filing_aligned_ocf_capex"
     assert snapshot["fcf"]["screen_ttm"] == -66_125_000.0
+    assert snapshot["fcf"]["divergence_flagged"] is True
     assert snapshot["cash_conversion_overlay"] is False
     assert snapshot["adjusted_signal"] == "strong_buy"
-    assert "FCF filing-aligned $119M" in snapshot["action_note"]
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing $119M" in snapshot["action_note"]
     assert "screen TTM −$66.1M" in snapshot["action_note"]
 
 
@@ -687,5 +715,90 @@ def test_build_company_reports_surfaces_fcf_bridge_when_timing_insufficient(tmp_
 
     report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
 
-    assert "FCF filing-aligned $119M" in report.action_note
-    assert "FCF filing-aligned $119M" in report.summary
+    assert "FCF basis mismatch" in report.action_note
+    assert "FCF basis mismatch" in report.summary
+
+
+def _fgp_financials() -> dict:
+    return {
+        "ticker": "FGP.L",
+        "cash_flow": {
+            "2026": {
+                "Operating Cash Flow": 615_600_000.0,
+                "Capital Expenditure": -253_000_000.0,
+                "Free Cash Flow": 362_600_000.0,
+            }
+        },
+    }
+
+
+def _model_results_for_fgp_fcf_basis_cap(*, ticker: str = "FGP.L") -> pd.DataFrame:
+    return pd.DataFrame([
+        {
+            "ticker": ticker,
+            "model_id": "fcf_yield",
+            "model_name": "FCF Yield",
+            "passed": True,
+            "score": 0.9,
+            "reasons": "['FCF yield=37.3%']",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": ticker,
+            "model_id": "composite_value",
+            "model_name": "Composite Value",
+            "passed": True,
+            "score": 0.85,
+            "reasons": "['composite rank strong']",
+            "failed_criteria": "[]",
+        },
+    ])
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_fgp_financials()), encoding="utf-8")
+    (filings / "ir_results.txt").write_text(
+        "Free Cash Flow of £113.5m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="FGP.L",
+            name="FirstGroup plc",
+            sector="Industrials",
+            signal="strong_buy",
+            conviction_score=0.6,
+            free_cashflow=362_600_000.0,
+            free_cashflow_screen_ttm=302_812_512.0,
+        )
+    ])
+    model_results = _model_results_for_fgp_fcf_basis_cap()
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["fcf"]["company_adjusted"] == 113_500_000.0
+    assert snapshot["fcf"]["company_adjusted_currency"] == "GBP"
+    assert snapshot["fcf"]["divergence_flagged"] is True
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.51)
+    assert "company-adj £113.5M" in snapshot["action_note"]

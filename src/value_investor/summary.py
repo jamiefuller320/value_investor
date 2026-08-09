@@ -21,6 +21,7 @@ from value_investor.scoring.fcf import (
     resolve_free_cashflow,
     screen_ttm_from_row,
 )
+from value_investor.scoring.fcf_basis_overlay import apply_fcf_basis_overlay_to_signal
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -74,6 +75,7 @@ class CompanyReport:
     cash_conversion_overlay: bool = False
     dividend_yield_overlay: bool = False
     interim_quality_overlay: bool = False
+    fcf_basis_overlay: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -118,6 +120,7 @@ class CompanyReport:
             "cash_conversion_overlay": self.cash_conversion_overlay,
             "dividend_yield_overlay": self.dividend_yield_overlay,
             "interim_quality_overlay": self.interim_quality_overlay,
+            "fcf_basis_overlay": self.fcf_basis_overlay,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -168,6 +171,7 @@ class CompanyReport:
             cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
             dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
             interim_quality_overlay=bool(data.get("interim_quality_overlay")),
+            fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
             research_risk_level=data.get("research_risk_level"),
@@ -328,6 +332,7 @@ def _brief_summary(
     cash_conversion_overlay: bool = False,
     dividend_yield_overlay: bool = False,
     interim_quality_overlay: bool = False,
+    fcf_basis_overlay: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -352,7 +357,7 @@ def _brief_summary(
         parts.append(format_timing_summary(timing_signal, rsi_14, timing_reasons))
         if action_note:
             parts.append(f"Action: {action_note}.")
-    elif action_note and "FCF filing-aligned" in action_note:
+    elif action_note and ("FCF basis mismatch" in action_note or "FCF filing-aligned" in action_note):
         parts.append(f"Action: {action_note}.")
 
     if signal in ("strong_buy", "buy") and trade_plan is not None:
@@ -407,6 +412,13 @@ def _brief_summary(
         parts.append(
             f"Interim-quality overlay: quality passes but interim EPS declined and FCF/dividend "
             f"coverage is below 1.0× "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if fcf_basis_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"FCF basis overlay: filing, screen TTM, and company-adjusted FCF diverge while "
+            f"yield-dependent screens pass "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -526,6 +538,7 @@ def build_company_reports(
             str(row.get("action_note") or ""),
             canonical=free_cashflow,
             screen_ttm=screen_ttm,
+            fcf_bundle=fcf_bundle,
         )
 
         dividend_yield_overlay_flag = row.get("dividend_yield_overlay")
@@ -568,6 +581,21 @@ def build_company_reports(
                 adjusted_signal=adjusted_signal_str,
             )
 
+        conviction_score = float(row.get("conviction_score") or 0)
+        fcf_basis_overlay_flag = row.get("fcf_basis_overlay")
+        if fcf_basis_overlay_flag is not None and not (
+            isinstance(fcf_basis_overlay_flag, float) and pd.isna(fcf_basis_overlay_flag)
+        ):
+            fcf_basis_overlay = bool(fcf_basis_overlay_flag)
+        else:
+            fcf_basis_overlay, adjusted_signal_str, conviction_score = apply_fcf_basis_overlay_to_signal(
+                signal,
+                divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+                ticker_models=ticker_models,
+                conviction_score=conviction_score,
+                adjusted_signal=adjusted_signal_str,
+            )
+
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
@@ -606,7 +634,7 @@ def build_company_reports(
             metrics_total=int(row.get("metrics_total") or 20),
             weeks_at_signal=int(row.get("weeks_at_signal") or 1),
             signal_trend=str(row.get("signal_trend") or "new"),
-            conviction_score=float(row.get("conviction_score") or 0),
+            conviction_score=conviction_score,
             stability_label=str(row.get("stability_label") or "new"),
             timing_signal=str(row.get("timing_signal") or "insufficient_data"),
             timing_score=float(row.get("timing_score") or 0),
@@ -624,6 +652,7 @@ def build_company_reports(
             cash_conversion_overlay=cash_conversion_overlay,
             dividend_yield_overlay=dividend_yield_overlay,
             interim_quality_overlay=interim_quality_overlay,
+            fcf_basis_overlay=fcf_basis_overlay,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -646,7 +675,7 @@ def build_company_reports(
                 metrics_total=int(row.get("metrics_total") or 20),
                 weeks_at_signal=int(row.get("weeks_at_signal") or 1),
                 signal_trend=str(row.get("signal_trend") or "new"),
-                conviction_score=float(row.get("conviction_score") or 0),
+                conviction_score=conviction_score,
                 stability_label=str(row.get("stability_label") or "new"),
                 timing_signal=str(row.get("timing_signal") or "insufficient_data"),
                 timing_score=float(row.get("timing_score") or 0),
@@ -672,6 +701,7 @@ def build_company_reports(
                 cash_conversion_overlay=cash_conversion_overlay,
                 dividend_yield_overlay=dividend_yield_overlay,
                 interim_quality_overlay=interim_quality_overlay,
+                fcf_basis_overlay=fcf_basis_overlay,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,

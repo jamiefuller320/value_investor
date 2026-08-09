@@ -66,6 +66,25 @@ _RESEARCH_ROOTS = (
     Path("output/research"),
 )
 
+FCF_DIVERGENCE_THRESHOLD = 0.50
+FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
+_FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
+
+_COMPANY_ADJUSTED_FCF_RES = (
+    re.compile(
+        r"(?:group\s+)?(?:adjusted\s+)?free\s+cash\s+flow\s+of\s+([£$€]?)\s*([\d,.]+)\s*m",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"^Free cash flow\s+([\d,.]+)\s+[\d,.]+",
+        re.IGNORECASE | re.MULTILINE,
+    ),
+    re.compile(
+        r"Free Cash Flow\s+[\d.()]+\s+[\d.()]+\s+[\d.()]+\s+[\d.]+\s+([\d,.]+)\b",
+        re.IGNORECASE,
+    ),
+)
+
 
 def _sorted_financial_years(section: dict[str, Any]) -> list[str]:
     return sorted((str(year) for year in section.keys()), reverse=True)
@@ -299,15 +318,158 @@ def compute_filing_aligned_fcf(financials: dict[str, Any]) -> tuple[float | None
     return None, None
 
 
+def _currency_symbol_to_code(symbol: str) -> str:
+    if symbol == "£":
+        return "GBP"
+    if symbol in ("$", ""):
+        return "USD"
+    if symbol == "€":
+        return "EUR"
+    return "USD"
+
+
+def _ticker_reporting_currency(ticker: str) -> str:
+    return "GBP" if ticker.strip().upper().endswith(".L") else "USD"
+
+
+def _normalize_fcf_to_usd(value: float, currency: str | None) -> float:
+    code = (currency or "USD").upper()
+    rate = _FX_TO_USD.get(code, 1.0)
+    return float(value) * rate
+
+
+def _parse_company_adjusted_amount(raw: str) -> float | None:
+    try:
+        amount = float(raw.replace(",", ""))
+    except (TypeError, ValueError):
+        return None
+    if amount == 0:
+        return 0.0
+    return amount * 1_000_000.0
+
+
+def parse_company_adjusted_fcf(text: str, *, default_currency: str = "GBP") -> tuple[float | None, str | None]:
+    """Parse management adjusted FCF (absolute value) and currency from filing prose."""
+    if not text:
+        return None, None
+
+    for pattern in _COMPANY_ADJUSTED_FCF_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        groups = match.groups()
+        if len(groups) == 2:
+            currency = _currency_symbol_to_code(str(groups[0] or "")) or default_currency
+            amount = _parse_company_adjusted_amount(str(groups[1]))
+        else:
+            currency = default_currency
+            amount = _parse_company_adjusted_amount(str(groups[0]))
+        if amount is not None:
+            return amount, currency
+    return None, None
+
+
+def load_filing_bodies_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> list[str]:
+    """Load all cached filing body texts for ``ticker`` when indexed."""
+    bodies: list[str] = []
+    for index_path in _filings_index_candidates(ticker, output_dir):
+        resolved = resolve_json_path(index_path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+
+        for row in payload.get("filings") or []:
+            if not isinstance(row, dict) or not row.get("has_body"):
+                continue
+            body_path = _resolve_filing_body_path(row.get("body_path"))
+            if body_path is None:
+                continue
+            try:
+                body = body_path.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            if body.strip():
+                bodies.append(body)
+    return bodies
+
+
+def extract_company_adjusted_fcf_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> tuple[float | None, str | None]:
+    """Return company-adjusted FCF from IR/filing bodies when prose exposes it."""
+    default_currency = _ticker_reporting_currency(ticker)
+    for body in load_filing_bodies_for_ticker(ticker, output_dir=output_dir):
+        amount, currency = parse_company_adjusted_fcf(body, default_currency=default_currency)
+        if amount is not None:
+            return amount, currency or default_currency
+    return None, None
+
+
+def fcf_basis_values_diverge(
+    left: float | None,
+    right: float | None,
+    *,
+    left_currency: str | None = None,
+    right_currency: str | None = None,
+    threshold: float = FCF_DIVERGENCE_THRESHOLD,
+    sign_min_abs: float = FCF_SIGN_DIVERGENCE_MIN_ABS,
+) -> bool:
+    """True when two FCF bases differ by >50% or >$50m/£50m after USD normalisation."""
+    if left is None or right is None:
+        return False
+    left_usd = _normalize_fcf_to_usd(float(left), left_currency)
+    right_usd = _normalize_fcf_to_usd(float(right), right_currency)
+    return fcf_values_diverge(
+        left_usd,
+        right_usd,
+        threshold=threshold,
+        sign_min_abs=sign_min_abs,
+    )
+
+
+def fcf_basis_divergence_flagged(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+) -> bool:
+    """Auto-flag when any available FCF basis pair exceeds divergence thresholds."""
+    pairs: list[tuple[float | None, str | None, float | None, str | None]] = [
+        (filing_aligned, filing_currency, screen_ttm, filing_currency),
+        (filing_aligned, filing_currency, company_adjusted, company_adjusted_currency),
+        (screen_ttm, filing_currency, company_adjusted, company_adjusted_currency),
+    ]
+    return any(
+        fcf_basis_values_diverge(a, b, left_currency=curr_a, right_currency=curr_b)
+        for a, curr_a, b, curr_b in pairs
+    )
+
+
 def reconcile_fcf(
     *,
     screen_ttm: float | None,
     financials: dict[str, Any] | None = None,
+    company_adjusted: float | None = None,
+    company_adjusted_currency: str | None = None,
 ) -> dict[str, Any]:
     """
     Pick one canonical FCF from screen TTM, ``cashflow_metrics.free_cashflow``, and OCF−CapEx.
 
     Priority: filing-aligned OCF−CapEx, then annual ``Free Cash Flow`` line, then screen TTM.
+    Also surfaces screen TTM and company-adjusted FCF side-by-side with a divergence flag.
     """
     cashflow_metrics = (
         extract_cashflow_metrics_from_annual_financials(financials) if financials else {}
@@ -317,6 +479,7 @@ def reconcile_fcf(
     )
     metrics_fcf = cashflow_metrics.get("free_cashflow")
     metrics_fcf = float(metrics_fcf) if metrics_fcf is not None else None
+    filing_currency = "USD"
 
     if filing_aligned is not None:
         canonical = filing_aligned
@@ -331,6 +494,14 @@ def reconcile_fcf(
         canonical = None
         source = "none"
 
+    divergence_flagged = fcf_basis_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+
     snapshot_metrics = (
         {key: value for key, value in cashflow_metrics.items() if value is not None}
         if cashflow_metrics
@@ -343,8 +514,11 @@ def reconcile_fcf(
         "screen_ttm": screen_ttm,
         "cashflow_metrics_free_cashflow": metrics_fcf,
         "filing_aligned": filing_aligned,
+        "company_adjusted": company_adjusted,
+        "company_adjusted_currency": company_adjusted_currency,
+        "divergence_flagged": divergence_flagged,
         "fiscal_year": fiscal_year,
-        "currency": "USD",
+        "currency": filing_currency,
         "cashflow_metrics": snapshot_metrics,
     }
 
@@ -356,7 +530,16 @@ def reconcile_fcf_for_ticker(
     output_dir: Path | None = None,
 ) -> dict[str, Any]:
     financials = load_cached_financials(ticker, output_dir=output_dir)
-    return reconcile_fcf(screen_ttm=screen_ttm, financials=financials)
+    company_adjusted, company_adjusted_currency = extract_company_adjusted_fcf_for_ticker(
+        ticker,
+        output_dir=output_dir,
+    )
+    return reconcile_fcf(
+        screen_ttm=screen_ttm,
+        financials=financials,
+        company_adjusted=company_adjusted,
+        company_adjusted_currency=company_adjusted_currency,
+    )
 
 
 def _float_or_none(value: Any) -> float | None:
@@ -379,10 +562,6 @@ def screen_ttm_from_row(row: pd.Series) -> float | None:
 def resolve_free_cashflow(row: pd.Series) -> float | None:
     """Canonical FCF for overlays and key metrics."""
     return _float_or_none(row.get("free_cashflow"))
-
-
-FCF_DIVERGENCE_THRESHOLD = 0.25
-FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 
 
 def _fcf_sign(value: float) -> int:
@@ -414,32 +593,57 @@ def fcf_values_diverge(
     return abs_gap / denominator > threshold
 
 
-def _format_fcf_compact(value: float) -> str:
+def _format_fcf_compact(value: float, *, currency: str = "USD") -> str:
     sign = "−" if value < 0 else ""
     abs_val = abs(value)
+    symbol = {"GBP": "£", "EUR": "€"}.get(currency.upper(), "$")
     if abs_val >= 1_000_000:
         scaled = abs_val / 1_000_000
         if scaled == int(scaled):
-            return f"{sign}${int(scaled)}M"
-        return f"{sign}${scaled:.1f}M"
+            return f"{sign}{symbol}{int(scaled)}M"
+        return f"{sign}{symbol}{scaled:.1f}M"
     if abs_val >= 1_000:
         scaled = abs_val / 1_000
         if scaled == int(scaled):
-            return f"{sign}${int(scaled)}K"
-        return f"{sign}${scaled:.1f}K"
+            return f"{sign}{symbol}{int(scaled)}K"
+        return f"{sign}{symbol}{scaled:.1f}K"
     if abs_val == int(abs_val):
-        return f"{sign}${int(abs_val)}"
-    return f"{sign}${abs_val:.1f}"
+        return f"{sign}{symbol}{int(abs_val)}"
+    return f"{sign}{symbol}{abs_val:.1f}"
+
+
+def format_fcf_basis_action_note(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None = None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+) -> str:
+    """Surface filing-aligned, screen TTM, and company-adjusted FCF side-by-side."""
+    parts: list[str] = []
+    if filing_aligned is not None:
+        parts.append(f"filing {_format_fcf_compact(filing_aligned, currency=filing_currency)}")
+    if screen_ttm is not None:
+        parts.append(f"screen TTM {_format_fcf_compact(screen_ttm, currency=filing_currency)}")
+    if company_adjusted is not None:
+        parts.append(
+            "company-adj "
+            f"{_format_fcf_compact(company_adjusted, currency=company_adjusted_currency or 'GBP')}"
+        )
+    return "FCF basis mismatch: " + " | ".join(parts)
 
 
 def format_fcf_divergence_action_note(
     canonical: float,
     screen_ttm: float,
+    *,
+    filing_currency: str = "USD",
 ) -> str:
     """Surface both FCF figures when filing-aligned and screen TTM disagree."""
     return (
-        f"FCF filing-aligned {_format_fcf_compact(canonical)} "
-        f"vs screen TTM {_format_fcf_compact(screen_ttm)}"
+        f"FCF filing-aligned {_format_fcf_compact(canonical, currency=filing_currency)} "
+        f"vs screen TTM {_format_fcf_compact(screen_ttm, currency=filing_currency)}"
     )
 
 
@@ -448,12 +652,37 @@ def append_fcf_divergence_to_action_note(
     *,
     canonical: float | None,
     screen_ttm: float | None,
+    fcf_bundle: dict[str, Any] | None = None,
 ) -> str:
-    """Append a compact FCF bridge note when canonical and screen TTM diverge."""
-    if not fcf_values_diverge(canonical, screen_ttm):
+    """Append a compact FCF bridge note when FCF bases diverge beyond thresholds."""
+    bundle = fcf_bundle or {}
+    filing_aligned = bundle.get("filing_aligned", canonical)
+    company_adjusted = bundle.get("company_adjusted")
+    company_adjusted_currency = bundle.get("company_adjusted_currency")
+    filing_currency = str(bundle.get("currency") or "USD")
+    divergence_flagged = bool(bundle.get("divergence_flagged"))
+
+    if not divergence_flagged and not fcf_values_diverge(canonical, screen_ttm):
         return action_note
-    assert canonical is not None and screen_ttm is not None
-    divergence_note = format_fcf_divergence_action_note(canonical, screen_ttm)
+
+    if company_adjusted is not None or divergence_flagged:
+        divergence_note = format_fcf_basis_action_note(
+            filing_aligned=filing_aligned if filing_aligned is not None else canonical,
+            screen_ttm=screen_ttm,
+            company_adjusted=company_adjusted,
+            filing_currency=filing_currency,
+            company_adjusted_currency=company_adjusted_currency,
+        )
+    else:
+        assert canonical is not None and screen_ttm is not None
+        divergence_note = format_fcf_divergence_action_note(
+            canonical,
+            screen_ttm,
+            filing_currency=filing_currency,
+        )
+
+    if action_note and divergence_note in action_note:
+        return action_note
     if action_note:
         return f"{action_note} | {divergence_note}"
     return divergence_note

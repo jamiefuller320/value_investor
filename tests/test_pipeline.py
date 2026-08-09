@@ -19,6 +19,7 @@ from value_investor.scoring.fcf import (
     enrich_universe_with_filing_metrics,
     parse_interim_eps_decline_pct,
 )
+from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
 from value_investor.scoring.sector_overrides import (
@@ -709,3 +710,65 @@ def test_enrich_signals_with_interim_quality_overlay_not_triggered_without_inter
 
     assert bool(enriched.iloc[0]["interim_quality_overlay"]) is False
     assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
+
+
+def test_enrich_signals_with_fcf_basis_overlay_caps_yield_inflated_strong_buy(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "FGP.L",
+        "cash_flow": {
+            "2026": {
+                "Operating Cash Flow": 615_600_000.0,
+                "Capital Expenditure": -253_000_000.0,
+                "Free Cash Flow": 362_600_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "ir_results.txt").write_text(
+        "Free Cash Flow of £113.5m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame([
+        {
+            "ticker": "FGP.L",
+            "signal": "strong_buy",
+            "conviction_score": 0.6,
+            "free_cashflow": 362_600_000.0,
+            "free_cashflow_screen_ttm": 302_812_512.0,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "FGP.L",
+            "model_id": "fcf_yield",
+            "model_name": "FCF Yield",
+            "passed": True,
+            "score": 0.9,
+            "reasons": "['FCF yield=37.3%']",
+            "failed_criteria": "[]",
+        }
+    ])
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
