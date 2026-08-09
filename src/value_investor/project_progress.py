@@ -141,11 +141,22 @@ def build_project_progress(
 
     ai_excess = evidence.get("ai_excess_after_costs")
     rules_excess = evidence.get("rules_excess_after_costs")
+    tasks_path = Path("docs/data/engineering_tasks.json")
+    tasks_data = _safe_read(tasks_path) or {}
+    merged_task_count = sum(
+        1 for row in (tasks_data.get("tasks") or []) if str(row.get("status")) == "merged"
+    )
+    open_task_count = sum(
+        1
+        for row in (tasks_data.get("tasks") or [])
+        if str(row.get("status")) not in {"merged", "completed", "failed", "cancelled", "parked"}
+    )
+
     strengths = [
         "FTSE 350 live screen and published dashboard are operational.",
         f"Offline library: {evidence['library_graduated_count']} graduated markets (focus: {evidence['library_focus_market'] or '—'}).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue self-repair and 11 merged supervised tasks.",
+        f"Engineering queue: {open_task_count} open, {merged_task_count} merged supervised tasks.",
     ]
     if ai_excess is not None and rules_excess is not None and ai_excess > rules_excess:
         strengths.append(
@@ -165,8 +176,17 @@ def build_project_progress(
         gaps.append(
             f"Ingest bottleneck: zero_body_buy_tier stuck at {evidence.get('zero_body_buy_tier')}."
         )
-    if evidence.get("screen_run_at"):
-        gaps.append(f"Published screen bundle dated {evidence['screen_run_at'][:10]} — confirm Sunday refresh.")
+    screen_run_at = evidence.get("screen_run_at")
+    if screen_run_at:
+        try:
+            run_dt = datetime.fromisoformat(str(screen_run_at).replace("Z", "+00:00"))
+            age_hours = (datetime.now(UTC) - run_dt).total_seconds() / 3600
+            if age_hours > 36:
+                gaps.append(
+                    f"Published screen bundle dated {screen_run_at[:10]} — confirm Sunday refresh."
+                )
+        except ValueError:
+            gaps.append(f"Published screen bundle dated {str(screen_run_at)[:10]} — confirm Sunday refresh.")
 
     next_actions = [
         "Let the learning loop accumulate before adding tracks or knobs.",
