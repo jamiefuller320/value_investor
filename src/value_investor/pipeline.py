@@ -32,6 +32,7 @@ from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_c
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
 from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf, enrich_universe_with_filing_metrics
+from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
@@ -137,6 +138,7 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "healthcare_overlay",
         "cash_conversion_overlay",
         "dividend_yield_overlay",
+        "fcf_basis_overlay",
         "adjusted_signal",
     ]
     present = [c for c in cols if c in signals.columns]
@@ -313,6 +315,11 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_cash_conversion_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_dividend_yield_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_fcf_basis_overlay(
+        signals_out,
+        result.model_results,
+        output_dir=output_dir,
+    )
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
     result.universe.to_csv(paths["universe"], index=False)
