@@ -97,12 +97,6 @@ jobs:
           if [ "${{ github.event.inputs.include_tier2 || 'false' }}" = "true" ]; then
             ARGS+=(--include-tier2)
           fi
-          if [ "${{ github.event.inputs.upload_s3 || 'true' }}" = "true" ]; then
-            ARGS+=(--upload)
-          fi
-          if [ "${{ github.event.inputs.email_backup || 'true' }}" = "true" ]; then
-            ARGS+=(--email)
-          fi
           ftse-data-backup "${ARGS[@]}" > /tmp/backup.json
           python3 - <<'PY'
           import json, os
@@ -115,16 +109,6 @@ jobs:
               encoding="utf-8",
           )
           PY
-        env:
-          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          BACKUP_EMAIL_TO: ${{ secrets.BACKUP_EMAIL_TO }}
 
       - name: Upload backup artifact
         uses: actions/upload-artifact@v4
@@ -136,26 +120,62 @@ jobs:
           retention-days: 90
           if-no-files-found: error
 
-      - name: S3 upload note
+      - name: Optional S3 upload
+        if: ${{ github.event_name != 'workflow_dispatch' || format('{0}', github.event.inputs.upload_s3) != 'false' }}
+        continue-on-error: true
+        env:
+          BACKUP_S3_URI: ${{ secrets.BACKUP_S3_URI }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          set -euo pipefail
+          ftse-data-backup deliver --from-json /tmp/backup.json --upload --json
+
+      - name: Optional email backup
+        if: ${{ github.event_name != 'workflow_dispatch' || format('{0}', github.event.inputs.email_backup) != 'false' }}
+        continue-on-error: true
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          BACKUP_EMAIL_TO: ${{ secrets.BACKUP_EMAIL_TO }}
+        run: |
+          set -euo pipefail
+          ftse-data-backup deliver --from-json /tmp/backup.json --email --json
+
+      - name: Backup delivery summary
         if: always()
         run: |
-          if [ -f /tmp/backup.json ]; then
-            python3 - <<'PY'
+          if [ ! -f /tmp/backup.json ]; then
+            echo "No backup.json — snapshot step did not complete"
+            exit 0
+          fi
+          python3 - <<'PY'
           import json
           from pathlib import Path
           payload = json.loads(Path("/tmp/backup.json").read_text())
           upload = payload.get("upload") or {}
           email = payload.get("email") or {}
+          manifest = payload.get("manifest") or {}
+          print(
+              f"Snapshot ok: {manifest.get('archive_name')} "
+              f"({manifest.get('bytes', 0):,} bytes, {manifest.get('file_count', 0)} files)"
+          )
           if upload.get("uploaded"):
               print(f"S3 upload ok: {upload.get('archive_dest')}")
-          else:
-              print(f"S3 upload skipped: {upload.get('reason', 'not requested')}")
+          elif upload:
+              detail = upload.get("reason") or upload.get("error") or "not requested"
+              print(f"S3 upload skipped/failed: {detail}")
           if email.get("emailed"):
               print(
                   f"Email backup ok: {email.get('email_to')} "
                   f"({email.get('parts')} part(s))"
               )
+          elif email:
+              detail = email.get("error") or "not recorded"
+              print(f"Email backup skipped/failed: {detail}")
           elif "${{ github.event.inputs.email_backup || 'true' }}" == "true":
-              print("Email backup not recorded in snapshot output")
+              print("Email backup not attempted")
           PY
-          fi

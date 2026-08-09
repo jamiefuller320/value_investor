@@ -60,6 +60,9 @@ ftse-data-backup snapshot --upload
 # Email manifest + chunked archive off-GitHub (default: intellaigence101@gmail.com)
 ftse-data-backup snapshot --email
 
+# Upload or email an existing snapshot JSON (used by CI after artifact upload)
+ftse-data-backup deliver --from-json /tmp/backup.json --upload --email
+
 # Reassemble emailed chunks into a tarball
 ftse-data-backup reassemble --output restored.tar.gz ftse-tier1-*.part*
 
@@ -194,6 +197,10 @@ Weekly CI runs email the manifest plus chunked archive to **`intellaigence101@gm
 Snapshots are ~60MB compressed today — above Gmail’s single-attachment limit — so the
 workflow sends **multiple emails** (~15MB parts) plus one manifest message with restore
 instructions. Reassemble locally:
+
+**CI resilience:** the workflow uploads the GitHub Actions artifact **before** optional
+S3/email delivery. Gmail or S3 failures are logged but do **not** fail the job — the
+artifact remains the primary off-repo copy when email is blocked.
 
 ```bash
 ftse-data-backup reassemble --output restored.tar.gz ~/Downloads/ftse-tier1-*.part*

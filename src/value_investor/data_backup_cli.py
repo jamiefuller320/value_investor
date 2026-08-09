@@ -15,6 +15,9 @@ from value_investor.data_backup import (
     restore_backup_snapshot,
     run_restore_drill,
     send_backup_snapshot_email,
+    snapshot_from_payload,
+    try_send_backup_snapshot_email,
+    try_upload_backup_snapshot,
     upload_backup_snapshot,
     verify_backup_snapshot,
 )
@@ -46,7 +49,34 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Email manifest + chunked archive to BACKUP_EMAIL_TO (default: intellaigence101@gmail.com)",
     )
+    snap.add_argument(
+        "--strict-upload",
+        action="store_true",
+        help="Exit non-zero when --upload is set but upload fails",
+    )
+    snap.add_argument(
+        "--strict-email",
+        action="store_true",
+        help="Exit non-zero when --email is set but email delivery fails",
+    )
     snap.set_defaults(func=_cmd_snapshot)
+
+    deliver = sub.add_parser(
+        "deliver",
+        parents=[common],
+        help="Upload or email an existing snapshot described by snapshot --json output",
+    )
+    deliver.add_argument(
+        "--from-json",
+        type=Path,
+        required=True,
+        help="Path to snapshot JSON (updated in place when --upload/--email run)",
+    )
+    deliver.add_argument("--upload", action="store_true", help="Upload when BACKUP_S3_URI is set")
+    deliver.add_argument("--email", action="store_true", help="Email manifest + chunked archive")
+    deliver.add_argument("--strict-upload", action="store_true")
+    deliver.add_argument("--strict-email", action="store_true")
+    deliver.set_defaults(func=_cmd_deliver)
 
     sub.add_parser(
         "list",
@@ -85,12 +115,57 @@ def main(argv: list[str] | None = None) -> int:
         parents=[common],
         help="Merge emailed .partNNN chunks into a tarball",
     )
-    reassemble.add_argument("chunks", nargs="+", type=Path, help="Chunk files (*.part001, *.part002, …)")
+    reassemble.add_argument(
+        "chunks", nargs="+", type=Path, help="Chunk files (*.part001, *.part002, …)"
+    )
     reassemble.add_argument("--output", type=Path, required=True, help="Output .tar.gz path")
     reassemble.set_defaults(func=_cmd_reassemble)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
+
+
+def _upload_snapshot(
+    snapshot,
+    *,
+    strict: bool,
+) -> tuple[dict[str, object] | None, int]:
+    if strict:
+        try:
+            upload_result = upload_backup_snapshot(snapshot)
+        except RuntimeError as exc:
+            print(str(exc), file=sys.stderr)
+            return None, 1
+    else:
+        upload_result = try_upload_backup_snapshot(snapshot)
+    if strict and not upload_result.get("uploaded") and upload_result.get("error"):
+        print(str(upload_result.get("error")), file=sys.stderr)
+        return upload_result, 1
+    return upload_result, 0
+
+
+def _email_snapshot(
+    snapshot,
+    *,
+    strict: bool,
+) -> tuple[dict[str, object] | None, int]:
+    if strict:
+        try:
+            email_result = send_backup_snapshot_email(snapshot)
+        except (ValueError, OSError) as exc:
+            print(str(exc), file=sys.stderr)
+            return None, 1
+        except Exception as exc:
+            print(str(exc), file=sys.stderr)
+            return None, 1
+        return email_result, 0
+    email_result = try_send_backup_snapshot_email(snapshot)
+    if not email_result.get("emailed"):
+        print(
+            f"Backup email skipped/failed: {email_result.get('error', 'unknown')}",
+            file=sys.stderr,
+        )
+    return email_result, 0
 
 
 def _cmd_snapshot(args: argparse.Namespace) -> int:
@@ -101,18 +176,14 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
     )
     upload_result = None
     if args.upload:
-        try:
-            upload_result = upload_backup_snapshot(snapshot)
-        except RuntimeError as exc:
-            print(str(exc), file=sys.stderr)
-            return 1
+        upload_result, code = _upload_snapshot(snapshot, strict=args.strict_upload)
+        if code != 0:
+            return code
     email_result = None
     if args.email:
-        try:
-            email_result = send_backup_snapshot_email(snapshot)
-        except ValueError as exc:
-            print(str(exc), file=sys.stderr)
-            return 1
+        email_result, code = _email_snapshot(snapshot, strict=args.strict_email)
+        if code != 0:
+            return code
     payload = snapshot.to_dict()
     if upload_result is not None:
         payload["upload"] = upload_result
@@ -129,6 +200,28 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
             print(f"  upload: {upload_result}")
         if email_result:
             print(f"  email: {email_result}")
+    return 0
+
+
+def _cmd_deliver(args: argparse.Namespace) -> int:
+    if not args.upload and not args.email:
+        print("deliver requires --upload and/or --email", file=sys.stderr)
+        return 2
+    payload = json.loads(args.from_json.read_text(encoding="utf-8"))
+    snapshot = snapshot_from_payload(payload)
+    if args.upload:
+        upload_result, code = _upload_snapshot(snapshot, strict=args.strict_upload)
+        if code != 0:
+            return code
+        payload["upload"] = upload_result
+    if args.email:
+        email_result, code = _email_snapshot(snapshot, strict=args.strict_email)
+        if code != 0:
+            return code
+        payload["email"] = email_result
+    args.from_json.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    if args.json:
+        print(json.dumps(payload, indent=2))
     return 0
 
 

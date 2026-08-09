@@ -3,16 +3,16 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import logging
 import os
 import shutil
 import subprocess
 import tarfile
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from value_investor.storage import read_json, write_json
 
@@ -248,10 +248,10 @@ def upload_backup_snapshot(
     s3_uri: str | None = None,
 ) -> dict[str, Any]:
     """
-    Upload archive + manifest to optional object storage.
+      Upload archive + manifest to optional object storage.
 
-  Env ``BACKUP_S3_URI`` (e.g. ``s3://my-bucket/ftse-value-investor/``) when ``s3_uri``
-    is omitted. Requires AWS CLI on PATH when using S3.
+    Env ``BACKUP_S3_URI`` (e.g. ``s3://my-bucket/ftse-value-investor/``) when ``s3_uri``
+      is omitted. Requires AWS CLI on PATH when using S3.
     """
     s3_uri = (s3_uri or os.environ.get("BACKUP_S3_URI") or "").strip()
     if not s3_uri:
@@ -283,12 +283,10 @@ def run_restore_drill(
     from value_investor.storage import restore_committed_run_history
 
     repo_root = Path(repo_root or Path.cwd())
-    missing = [
-        rel
-        for rel in TIER1_RELATIVE_PATHS
-        if not (repo_root / rel).exists()
-    ]
-    copied = restore_committed_run_history(output_dir, committed_dir=repo_root / "docs/data/history")
+    missing = [rel for rel in TIER1_RELATIVE_PATHS if not (repo_root / rel).exists()]
+    copied = restore_committed_run_history(
+        output_dir, committed_dir=repo_root / "docs/data/history"
+    )
     return {
         "ok": not missing,
         "missing_tier_paths": missing,
@@ -349,10 +347,10 @@ def send_backup_snapshot_email(
     chunk_bytes: int = DEFAULT_EMAIL_CHUNK_BYTES,
 ) -> dict[str, Any]:
     """
-    Email manifest + chunked archive to an off-GitHub mailbox.
+      Email manifest + chunked archive to an off-GitHub mailbox.
 
-    Large snapshots are split into multiple messages to stay under common SMTP
-  attachment limits (~25MB for Gmail).
+      Large snapshots are split into multiple messages to stay under common SMTP
+    attachment limits (~25MB for Gmail).
     """
     from value_investor.emailer import EmailConfig, send_email
 
@@ -412,3 +410,63 @@ def send_backup_snapshot_email(
         "chunk_bytes": chunk_bytes,
         "part_paths": [str(path) for path in parts],
     }
+
+
+def snapshot_from_payload(data: dict[str, Any]) -> BackupSnapshot:
+    """Rebuild a ``BackupSnapshot`` from ``snapshot --json`` or ``deliver`` payload."""
+    manifest = BackupManifest.from_dict(data.get("manifest") or {})
+    archive_path = Path(data.get("archive_path") or "")
+    manifest_path = Path(data.get("manifest_path") or "")
+    if not archive_path or not manifest_path:
+        raise ValueError("payload missing archive_path or manifest_path")
+    return BackupSnapshot(
+        archive_path=archive_path,
+        manifest_path=manifest_path,
+        manifest=manifest,
+    )
+
+
+def try_upload_backup_snapshot(
+    snapshot: BackupSnapshot,
+    *,
+    s3_uri: str | None = None,
+) -> dict[str, Any]:
+    """Upload snapshot; return a result dict instead of raising on failure."""
+    try:
+        return upload_backup_snapshot(snapshot, s3_uri=s3_uri)
+    except RuntimeError as exc:
+        logger.warning("Backup S3 upload failed: %s", exc)
+        return {
+            "uploaded": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
+
+
+def try_send_backup_snapshot_email(
+    snapshot: BackupSnapshot,
+    *,
+    email_to: str | None = None,
+    chunk_bytes: int = DEFAULT_EMAIL_CHUNK_BYTES,
+) -> dict[str, Any]:
+    """Email snapshot; return a result dict instead of raising on SMTP/config errors."""
+    try:
+        return send_backup_snapshot_email(
+            snapshot,
+            email_to=email_to,
+            chunk_bytes=chunk_bytes,
+        )
+    except (ValueError, OSError) as exc:
+        logger.warning("Backup email failed: %s", exc)
+        return {
+            "emailed": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
+    except Exception as exc:
+        logger.warning("Backup email failed: %s", exc)
+        return {
+            "emailed": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
