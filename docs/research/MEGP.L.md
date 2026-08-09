@@ -1,109 +1,173 @@
 # ME Group International plc (MEGP.L) — Research memo
 
-_Version 3 · Updated 2026-08-05T11:28:38.696473+00:00 · Mode: gap_fill_
+_Version 3 · Updated 2026-08-09T07:30:39.407802+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
-ME Group is a cash-generative operator of photobooths (Photo.ME) and unattended laundry (Wash.ME) across 16 countries, with a long record of profitability and a strategic pivot toward faster-growing laundry. FY2025 delivered record profit before tax of £78.2m on revenue of £315.4m, yet the share trades on screen metrics of ~8× P/E, ~2.4× P/B and ~7% yield — a classic value setup if earnings normalise. The central debate is whether laundry expansion and contract renewals (ASDA, SNCF, RATP) offset a softer photobooth cycle, April’s France-linked profit warning, and rising capex that has compressed net cash and H1 free-cash-flow dividend cover. The quantitative screen rates **Strong Buy** (15/22 models); deep research broadly confirms the valuation case but flags near-term earnings and governance friction.
+ME Group International plc operates automated instant-service vending — chiefly photobooths (Photo.ME) and unattended laundry (Wash.ME) — across 16 countries, with laundry now the primary growth engine. The quantitative screen rates the name a **strong buy** (15/22 models; composite 82%; P/E 8.1×, yield 6.9%, ROE 28.2%, D/E 28%), but an interim-quality overlay already moderates the headline to **Buy** given H1 EPS decline and sub-1.0× FCF/dividend coverage. FY2025 (to 31 October 2025) delivered record profitability (£78.2m PBT, £115.5m cash from operations), yet H1 2026 showed softer April trading in France and revised full-year PBT guidance of **£69–74m** — a step down from FY2025. The investment case rests on a cash-generative, asset-light vending model trading at a deep earnings and dividend yield, with laundry rollout and an £18m buyback supporting returns; the key debate is whether near-term consumer/geopolitical headwinds and photobooth regulatory drag are cyclical, or mark a peak in the earnings cycle that the screen has not fully priced.
 
 ## INVESTMENT THESIS
-The screen’s **Strong Buy** signal rests on five passing families — cheapness, quality, dividend, GARP and risk — with composite score 81% and full data quality (20/20 metrics). Headline multiples (P/E 8.3, P/B 2.4, yield 7.1%, ROE 28.2%, D/E 28%) sit well inside value thresholds, and filing-aligned FY2025 free cash flow of c.$25.2m is materially above the screen’s TTM figure ($15.6m), supporting FCF-yield and quality models.
+For a value investor, MEGP offers a rare combination of **cheapness, quality, dividend, GARP and risk** passes (five of five model families). At ~8× trailing earnings and nearly 7% yield on filing-aligned cash flows, the market appears to discount a meaningful earnings reset already under way: management guides FY2026 PBT **£69–74m** versus **£78.2m** in FY2025, and H1 2026 diluted EPS fell **3.9%** to **6.48p** (from **6.74p**). The screen’s filing-aligned FCF of **£25.2m** (FY2025) versus TTM screen FCF of **£15.6m** highlights the tension — historical cash conversion is strong, but heavy growth capex (£65.6m FY2025; £33.9m in H1 2026 alone) compresses free cash available for dividends.
 
-Business quality aligns with those screens. ME Group operates ~49,000 vending units in high-footfall sites under long-term partner contracts; vending revenue is recurring and EBITDA margins are high (FY2025 group EBITDA margin 38.2%). Laundry is the growth engine: FY2025 laundry revenue rose 17.3% to £112.4m and contributed 46.1% of group EBITDA, with 1,145 net new machines installed. Photobooths remain the larger revenue pool but declined 4.0% in FY2025, partly on German ID regulation and a printer-supplier issue — issues the group is addressing via next-generation biometric kiosks.
+Business quality supports the value case. ME Group holds dominant photobooth positions and is scaling laundry rapidly: net laundry units rose **1,145** in FY2025 to **7,607**, with Wash.ME EBITDA of **£55.5m** approaching Photo.ME’s **£59.3m** (46% of group EBITDA). EBITDA margin improved to **38.2%** (from 37.1%). Net cash stood at **£26.5m** at October 2025 (gross cash **£56.5m**; lease-adjusted), and the board launched an **£18m share buyback** in March 2026 alongside a dividend policy targeting **>55%** of post-tax profits (FY2025 total dividend **8.64p**, up 9.5%).
 
-Capital returns reinforce the income case: FY2025 total dividend rose 9.5% to 8.64p (58% of EPS), alongside a £18m share buyback launched in March 2026. For a value investor, the hook is a dominant, asset-light vending franchise trading below mid-cycle earnings power while management reinvests aggressively in laundry — provided FY2026 guidance of £69–74m PBT proves a floor, not a ceiling.
+The screen’s failures are informative rather than disqualifying: Graham Defensive (current ratio 1.54× vs 2.0× threshold), Piotroski F-Score **6/9**, and Earnings Quality (weak free-cash conversion) — all consistent with a capex-heavy growth phase and recent earnings softness. The adjusted **Buy** (from Strong Buy) on interim overlay aligns with this first-pass view: accumulate on valuation, but size for medium risk around France concentration, governance, and the FY2026 profit step-down.
 
 ## FINANCIAL REVIEW
-**Primary source:** All 17 filing bodies indexed (`filings_index.json`). Core: FY2025 results (`filings/bodies/ir_a006e8bd9b660a9c.txt`), annual reports, H1 FY2026 interim (`ir_3f2f55026f8c6fe6.txt`). Other RNS: Montefiore placing (`71001742a9008234.txt`); Form 8.3/8.5 strategic-review disclosures. Yahoo used only for screen-FCF reconciliation.
+*Primary source: filing bodies (16/16). Figures in £. `filings_index.json`: 8 annual, 1 interim, 0 trading_update, 7 other — all with bodies after this pass.*
 
-**FY2025:** Revenue £315.4m (+2.4%); PBT £78.2m (+6.5%); PAT £56.6m; OCF £115.5m; capex £65.6m; net cash £26.5m; EPS 14.91p; total dividend 8.64p (£32.6m, +9.5%). Filing OCF−capex ~£49.9m covered dividends ~1.5×; screen canonical FCF ~£25.2m covered ~0.8×.
+**FY2025 — annual (12 months to 31 October 2025)**  
+Source: `ir_a006e8bd9b660a9c.txt`, `ir_55af4b8f27e3dd6f.txt`
 
-**H1 FY2026:** Revenue £154.3m (+0.3%); PBT £32.7m (−3.8%); PAT £24.5m; OCF £38.7m; capex £33.9m; implied FCF ~£4.8m; net cash £7.5m; EPS 6.48p (−3.9%); interim dividend 3.60p (£13.5m, −6.5%). FCF cover ~0.36×. Continental Europe 67.1% revenue / 83.1% EBITDA. **No customer ≥10%** (interim note 3). Photo.ME vending £77.6m (−6.2%); Wash.ME +16.3% to £54.8m.
+| Metric | FY2025 | FY2024 (restated) | Change |
+|--------|--------|-------------------|--------|
+| Revenue | £315.4m | £307.9m | +2.4% |
+| EBITDA | £120.4m | £114.2m | +5.4% |
+| Profit before tax | £78.2m | £73.4m | +6.5% |
+| Cash generated from operations | £115.5m | £106.1m | +8.9% |
+| Net cash | £26.5m | £29.5m | −10.2% |
+| Diluted EPS | 14.91p | 14.27p | +4.5% |
+| Total dividend | 8.64p (£32.6m) | 7.90p | +9.5% |
+| Capex (PPE + intangibles) | ~£65.6m | ~£54.6m | +20.1% |
+| FCF (OCF − capex)* | ~£25.2m | ~£31.3m | −19.5% |
 
-**Capital returns:** £18m buyback (£2.7m executed H1). Montefiore sold 12.5m shares at 132p — company received no proceeds.
+*FCF derived from cash-flow statement: net operating cash £90.8m less investing (£60.5m) ≈ £25.2m; corroborated by `financials_annual.json` (secondary).*
 
-**Outlook:** FY2026 PBT £69–74m. CapEx guided £57–59m; H1 run-rate elevated.
+Laundry drove growth (revenue £112.4m, +17.3%; EBITDA £55.5m, 46% of group). Photobooth vending £166.2m (−4.0%). Dividends paid £29.8m exceeded FCF (~0.84× on cash paid, ~0.77× on declared £32.6m) — dividend funded from balance-sheet liquidity, not current free cash.
 
-**Gaps:** No indexed June 2026 profit-warning RNS. Principal-risks register not legible from PDF extracts. France revenue % not in readable segment tables.
+**H1 2026 — interim (six months to 30 April 2026)**  
+Source: `ir_3f2f55026f8c6fe6.txt`
+
+| Metric | H1 2026 | H1 2025 (restated) | Change |
+|--------|---------|---------------------|--------|
+| Revenue | £154.3m | £153.8m | +0.3% |
+| EBITDA | £57.0m | £53.2m | +7.1% |
+| Profit before tax | £32.7m | £34.0m | −3.8% |
+| Cash generated from operations | £38.7m | £47.7m | −18.9% |
+| Capex | £33.9m | £28.8m | +17.7% |
+| Net cash | £7.5m | £27.6m | −72.8% |
+| Diluted EPS | 6.48p | 6.74p | −3.9% |
+| Interim dividend | 3.60p (£13.5m) | 3.85p | −6.5% |
+| H1 FCF (OCF − capex)* | ~£4.8m | — | — |
+
+*From condensed cash-flow statement: cash generated from operations £38.7m less PPE (£32.2m) and intangibles (£1.7m). Dividends paid £14.5m → coverage ~0.33×.*
+
+Cash bridge Oct 2025→Apr 2026 (`ir_3f2f55026f8c6fe6.txt`): net cash £26.5m → £7.5m on capex £33.9m, dividends £14.5m, buybacks £2.7m, tax £5.1m. Revised FY2026 PBT guidance **£69–74m**. £18m buyback launched; £4.5m spent by post-period. Rolling 12-month shareholder returns £34.0m.
+
+**Screen FCF gap (Q4)**
+
+| Measure | Value | Source |
+|---------|-------|--------|
+| Filing-aligned FCF (FY2025) | £25.2m | `screening_snapshot.json` / `ir_a006e8bd9b660a9c.txt` |
+| Screen TTM FCF | £15.6m | `screening_snapshot.json` |
+| Driver | H1 2026 OCF decline + elevated capex + working-capital build | `ir_3f2f55026f8c6fe6.txt` |
+
+**Remaining gaps:** No trading-update RNS body for June 2026 profit warning. Principal-risks register not machine-readable in annual-report body extracts. IR presentation not ingested.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Dividend/cash (medium):** Interim cut to 3.60p; H1 FCF cover ~0.36×. Trailing 7.1% yield overstates forward payout. Net cash £7.5m after capex, buyback and dividends.
+**Evident from filing bodies (this pass)**
 
-**Geographic/contract cyclicality (medium):** CE 67.1% revenue / 83.1% EBITDA; France largest market. UK contract ended; SNCF/RATP renewals mitigate roll-off. **Customer concentration closed** (interim note 3).
+| Risk | Evidence | Path |
+|------|----------|------|
+| Discretionary consumer exposure | Consumer market; high-footfall sites; April France slowdown from consumer confidence | `ir_a006e8bd9b660a9c.txt`, `ir_3f2f55026f8c6fe6.txt` |
+| Dividend vs FCF | FY2025 FCF ~£25.2m < dividends £32.6m declared; H1 FCF ~£4.8m vs £14.5m paid; interim cut 6.5% | `ir_a006e8bd9b660a9c.txt`, `ir_3f2f55026f8c6fe6.txt` |
+| Earnings momentum | EPS −3.9% H1; PBT guide £69–74m vs FY2025 £78.2m; Piotroski turnover/ROA fails | `ir_3f2f55026f8c6fe6.txt`, `screening_snapshot.json` |
+| Capex / balance sheet | Net cash £26.5m → £7.5m in six months; PPE +£29.9m | `ir_3f2f55026f8c6fe6.txt` |
+| France / Germany | France largest market, April weakness; German photo-ID regulation | `ir_3f2f55026f8c6fe6.txt`, `ir_a006e8bd9b660a9c.txt` |
+| Secondary placing | Montefiore exit 12.5m shares at 132p; no company proceeds | `71001742a9008234.txt` |
+| Cash restatement | H1 2025 cash-in-transit error £8.6m; no P&L impact | `ir_3f2f55026f8c6fe6.txt` note 12 |
+| Going concern | Auditor: no material uncertainties | `ir_55af4b8f27e3dd6f.txt` |
+| Dec 2025 stake activity | Norges Bank 2.57%; Peel Hunt connected dealings | `a07391bb968abb3e.txt`, `7d72ac6102a8f63c.txt` |
 
-**Regulatory/technology (medium):** German ID rules hit Photo.ME; biometric rollout is disclosed mitigation. Principal-risks severity **unresolved** — register not extractable from PDF bodies.
+**Still open**
 
-**Governance (medium):** Three family-linked non-independent directors. Strategic review closed without offer. Montefiore exit is overhang, not board action. Investors' Chronicle allegations **unverified** in filings.
-
-**Open:** Principal-risks register (IR presentation); June profit-warning RNS (trading-update ingest); governance detail (IC article); France revenue % (segment note).
+| Risk | Gap | Next source |
+|------|-----|-------------|
+| Principal risks taxonomy | Bodies return TOC/OCR fragments only | Annual Report 2025 PDF pages 40–44 structured extract |
+| June profit-warning detail | Zero trading_update in index | Investegate RNS “profit expectations” June 2026 |
+| Bank covenants | Not in extracted bodies | Annual Report borrowings note |
+| Pension deficit size | Remeasurement noted; deficit not quantified | Annual Report pension note |
+| FTSE universe context | Not in MEGP pack | FTSE350 weekly screen export |
 
 ---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate — a mix of company-specific events and generic “penny stock / dividend” listicles.
+News coverage over the past year is **moderately rich on company-specific events**, though much is secondary listicle content.
 
-**Material company news:**
-- **ME Group Lowers 2026 Profit Expectations Following Weaker Consumer Demand in April (MEGP)** — Yahoo Finance UK, 1 June 2026; shares reportedly fell ~22% (Proactive Investors, same date).
-- **Me Group jumps as trading improves after France wobble** — Yahoo Finance UK, 13 July 2026; follows H1 results and improved May/June trading commentary.
-- **ME Group International H1 Earnings Call Highlights** — Yahoo Finance, 13 July 2026; laundry growth offset softer photobooths; on track for revised FY guidance.
-- **Me Group climbs on Asda washing machine collaboration** — Proactive Investors, 9 April 2026; strategic laundry partnership.
-- **The boardroom problem behind Me Group’s share price tumble** — Investors’ Chronicle, 4 June 2026; governance scrutiny.
-- **We Think That There Are Some Issues For ME Group International (LON:MEGP) Beyond Its Promising Earnings** — simplywall.st, 20 July 2026; sceptical earnings-quality angle.
-- **REG - ME Group Intl. Aberdeen Group PLC - Holding(s) in Company** — TradingView, 21 July 2026; holder disclosure.
-- Filings index: **Proposed secondary placing in ME Group** and **Result of secondary placing** — Investegate, 13–14 January 2026 (bodies not downloaded).
-- **ME Group International (LON:MEGP) Could Become A Multi-Bagger** — Yahoo Finance, 11 January 2026.
+**Material events**
+- **1 June 2026** — “ME Group shares fall 22% after French consumer slowdown hits profits” (Proactive Investors); “ME Group Lowers 2026 Profit Expectations Following Weaker Consumer Demand in April” (Yahoo Finance UK). Profit warning drove the largest share-price move.
+- **4 June 2026** — “The boardroom problem behind Me Group’s share price tumble” (Investors’ Chronicle) — governance/family-control angle.
+- **13 July 2026** — “Me Group jumps as trading improves after France wobble” (Proactive Investors); “ME Group International H1 Earnings Call Highlights” (Yahoo Finance) — interim results, May/June recovery, ASDA partnership, revised **£69–74m** PBT range.
+- **21 July 2026** — H1 2026 earnings call coverage noting strong laundry offsetting photobooth weakness (Yahoo Finance).
+- **January 2026** — “Proposed secondary placing in ME Group” / “Result of secondary placing” (Investegate RNS headlines in filings index; bodies unavailable).
+- **March 2026** — FY2025 results: record profitability, **£18m share buyback** launch, dividend increase (Annual Results RNS).
+- **December 2025** — Strategic review terminated without acceptable offer (disclosed in FY2025 Chairman’s statement).
 
-**Strategy / management:** FY2025 results confirm a failed strategic review (no acceptable offer, December 2025). Vladimir Crasneanscki appointed Deputy CEO (February 2026 per filings). £18m buyback launched March 2026.
+**Thematic coverage**
+- Repeated inclusion in UK dividend-stock and penny-stock screeners (Simply Wall St, Yahoo Finance, May–July 2026) citing **5.9–7.9% yields** — supportive of income investor interest but not independent analysis.
+- Holding disclosures (Aberdeen Group, TradingView, July 2026) reflect ongoing institutional stake monitoring.
 
-**Flag:** Substantial coverage is third-party equity commentary rather than primary news flow; key events (profit warning, interim recovery, placing, strategic review) are captured but detailed RNS bodies for several announcements are missing from the pack.
+No M&A beyond small bolt-ons (Belgium photobooth competitor FY2025; GSL NV acquisition signed July 2026, **€1.9m** initial consideration). Strategy remains organic laundry expansion plus selective tuck-ins.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: caution
 Risk: medium
-Confidence: 0.76
-Rationale: Follow-up gap-fill with 17/17 filing bodies closes customer-concentration risk and clarifies that the interim overlay correctly preceded a dividend trim, leaving headline cheapness intact but forward yield and principal-risks text still insufficient for Strong Buy conviction.
+Confidence: 0.72
+Rationale: Full body coverage (16/16) quantifies the overlay’s FCF/dividend gap and discretionary consumer sensitivity, which weakens the unqualified strong-buy case despite resolved Montefiore placing and intact trailing value metrics.
 
 ## Weekly updates
 
-### 2026-08-05T11:27:52.269276+00:00
-Q: 7.1% yield with interim FCF/dividend coverage below 1.0× raises dividend-cut risk; photo-booth/vending niche may face technology disruption and venue-contract cyclicality — governance and customer concentration are open questions.
+### 2026-08-09T07:30:11.617573+00:00
+Q: Photobooth/vending-style Industrials revenue is discretionary and location-dependent; interim EPS decline and FCF/dividend coverage below 1.0× (per overlay) threaten the 6.9% yield.
 Status: partially_resolved
-Evidence: H1 FY2026 interim (`filings/bodies/ir_3f2f55026f8c6fe6.txt`) cut the interim dividend to 3.60p (−6.5%) while reaffirming a >55% of annual PAT policy; H1 OCF £38.7m less capex £33.9m implies ~£4.8m FCF against £13.5m cash return. Interim note 3 states no customer ≥10% of revenue. Continental Europe contributed 67.1% of H1 revenue and 83.1% of EBITDA — geographic, not customer, concentration. Board includes three Crasnianski-linked non-independent directors. German photo-ID regulation and R&D on next-generation biometric booths are disclosed in FY2025 filings; principal-risks register text remains poorly extracted from annual-report PDFs.
+Evidence: Filings confirm consumer-sector, high-footfall vending (`ir_3f2f55026f8c6fe6.txt`: “equipment aimed at the consumer market”; April 2026 France slowdown from “weaker consumer confidence”). H1 2026 diluted EPS fell 3.9% to 6.48p; PBT −3.8% to £32.7m despite EBITDA +7.1%. Cash-bridge shows net cash fell from £26.5m to £7.5m on capex (£33.9m), dividends (£14.5m paid), and buybacks (£2.7m). Filing-aligned FY2025 FCF ~£25.2m (`financials_annual.json` / annual cash flow) vs dividends paid £29.8m and declared £32.6m → coverage ~0.77–0.85×; H1 2026 OCF £38.7m less capex ~£33.9m implies FCF ~£4.8m against £14.5m dividends paid (~0.33×). Board cut interim dividend 6.5% to 3.60p (£13.5m) but retains >55% PAT policy “subject to market and capital requirements.”
 SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
-NextSources: Company IR / results presentation PDF (`gap_fill_source_map.json` → `company_ir_presentation`) for segment FCF bridges and principal-risks table; June 2026 profit-warning RNS (not indexed)
+NextSources: Company IR / results presentation PDF (`gap_fill_source_map.json` planned_alternate) for segment cash conversion and dividend-bridge tables; June 2026 profit-warning RNS (indexed as news only — `filings_index.json` shows zero trading_update bodies)
 
-Q: Is the 7.1% dividend sustainable given interim EPS decline and sub-1.0× FCF/dividend coverage, or is the interim-quality overlay signalling an imminent payout reset?
+Q: Piotroski and Earnings Quality failures suggest operational momentum may be fading despite strong ROE (28.2%).
 Status: partially_resolved
-Evidence: A partial reset has already occurred — interim dividend cut from 3.85p to 3.60p, returning £13.5m (~55% of H1 PAT £24.5m). FY2025 filing OCF £115.5m less capex £65.6m (~£49.9m) covered total dividends £32.6m ~1.5×; H1 FY2026 FCF cover is ~0.36×. Management guides FY2026 PBT £69–74m and maintains >55% PAT policy subject to market and capital requirements — final-dividend trimming is plausible but not a wholesale abandonment. Screen canonical FCF ~£25.2m (Yahoo/filing-aligned) covered FY2025 dividends ~0.8×, consistent with the Earnings Quality fail and interim overlay.
+Evidence: `screening_snapshot.json` — Piotroski 6/9 (failed: ROA improving, current ratio improving, asset turnover improving; passed: positive NI/OCF, OCF > NI, leverage declining, no dilution, gross margin improving). Earnings Quality fails on “weak free-cash conversion”; Lynch PEG fails on earnings growth −3.9%. Filings show mixed momentum: H1 2026 EBITDA +7.1% and Wash.ME vending +16.3%, but PBT −3.8%, EPS −3.9%, higher depreciation (£23.5m), and net PPE +£29.9m on £57.5m machine capex — consistent with rising asset base and fading asset-turnover signal. ROE 28.2% is screen-calculated; not independently reconciled to filing ROE in this pass.
 SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
-NextSources: Company IR / results presentation PDF for dividend-bridge commentary; FY2026 final-dividend RNS post year-end
+NextSources: Company IR presentation PDF for ROIC/payback metrics by segment; Annual Report note 1.1 going-concern cash-flow scenarios (referenced by auditor, not fully extracted in bodies)
 
-Q: (ME Group International) leads on model breadth with 15/22 passes… Verdict: watchlist — exceptional headline cheapness and moat scores, but the dividend sustainability flag and negative earnings growth (−3.9%) argue for patience.
+Q: Fifteen of 22 models passed (composite 82%, sector-relative 87%) with broad model-family coverage, but interim overlay adjusted strong buy to buy; email pass flagged watchlist given dividend ahead of interim cash flow.
 Status: partially_resolved
-Evidence: `screening_snapshot.json` confirms all cited metrics and overlay (adjusted signal: buy; Piotroski 6/9; Lynch PEG fail). Filing-backed moat support: ~49k-unit estate, SNCF/RATP multi-year renewals, record FY2025 profitability. Near-term headwinds filing-evidenced: H1 EPS 6.48p (−3.9%), April France slowdown, revised FY2026 PBT. May/June recovery and laundry growth (+16.3% Wash.ME vending) partially offset watchlist caution. Montefiore secondary placing (`71001742a9008234.txt`) was a 3.3% seller exit at 132p — not balance-sheet dilution.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
-NextSources: Company IR / results presentation PDF for capital-allocation hierarchy; H2 FY2026 trading update RNS when published
+Evidence: `screening_snapshot.json` confirms 15/22 passes, all five families (cheapness, quality, dividend, GARP, risk), P/E 8.1, P/B 2.3, yield 6.9%, ROE 28.2%, D/E 28%, conviction 53% (new, 1 week), `interim_quality_overlay: true`, `adjusted_signal: buy`. Filing math above confirms overlay rationale (FCF/dividend <1.0×). Value case intact on trailing FY2025 record PBT £78.2m; forward case tempered by revised FY2026 PBT £69–74m (`ir_3f2f55026f8c6fe6.txt`). Secondary placing resolved: Montefiore sold 12.5m shares (3.3%) at 132p, 14 January 2026 — seller exit, no company proceeds (`275c8eb9ff3328e9.txt`, `71001742a9008234.txt`).
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot
+NextSources: none for screen-model confirmation; FTSE cross-universe rank file (not in local pack) if comparing vs FGP.L cluster
+
+Q: FTSE screen is broadly neutral; top candidates uniformly modest conviction (50–56%), new signals, neutral timing; filing-aligned vs TTM FCF gap (MEGP £25.2m vs £15.6m), NCAV unavailable, interim overlay downgrade.
+Status: partially_resolved
+Evidence: MEGP-specific gaps confirmed in `screening_snapshot.json`: filing-aligned FCF £25.2m (FY2025, `source: filing_aligned_ocf_capex`) vs screen TTM £15.6m; NCAV unavailable; interim overlay active. Filing bridge explains TTM weakness: H1 2026 OCF £38.7m (−18.9% YoY) and capex £33.9m compress recent-period FCF. `macro_context.json` present (FTSE 100 10,901; GBP/USD 1.35) — colour only; ME Group cites JPY/EUR FX headwinds in filings. Market-wide FTSE distribution (140 holds / 68 buys / 41 avoids) and cross-name conviction comparison are **not** in the MEGP local source pack.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, macro_context
+NextSources: FTSE350 weekly screen export JSON for universe-level signal distribution; company IR presentation for reconciled TTM FCF bridge
 
 ---
 
-### 2026-08-05T11:28:38.696473+00:00
-Q: 7.1% yield with interim FCF/dividend coverage below 1.0× raises dividend-cut risk; photo-booth/vending niche may face technology disruption and venue-contract cyclicality — governance and customer concentration are open questions.
+### 2026-08-09T07:30:39.407802+00:00
+Q: Photobooth/vending-style Industrials revenue is discretionary and location-dependent; interim EPS decline and FCF/dividend coverage below 1.0× (per overlay) threaten the 6.9% yield.
 Status: partially_resolved
-Evidence: **Customer concentration resolved:** interim note 3 in `filings/bodies/ir_3f2f55026f8c6fe6.txt` states no customer contributed ≥10% of group revenue in H1 FY2026 (nor in H1 FY2025). **Geographic concentration remains:** Continental Europe 67.1% of H1 revenue and 83.1% of EBITDA; France described as largest and most profitable market. **Contract cyclicality evidenced:** SNCF (5-year) and RATP (7-year) renewals in France; UK photobooth contract ended April 2025; April 2026 France photobooth slowdown linked to consumer/geopolitical factors. **Technology/regulatory:** German passport-photo rule change hit Photo.ME H1; group deploying next-generation biometric booths (4,362 installed by 30 April 2026). Annual report (`ir_55af4b8f27e3dd6f.txt`) cites dominant position and high barriers to entry but principal-risks register not legible from PDF extraction. **Governance:** interim lists three non-independent directors (Serge and Tania Crasnianski, Jean-Marc Janailhac); FY2025 results (`ir_a006e8bd9b660a9c.txt`) confirm June–December 2025 strategic review ended without acceptable offer. Montefiore placing bodies (`71001742a9008234.txt`, newly fetched) confirm seller-only exit.
-SourcesTried: filings_bodies (17/17), filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
-NextSources: Company IR / results presentation PDF for principal-risks register and France revenue split; June 2026 profit-warning RNS (still not indexed); full Investors' Chronicle article for governance allegations
+Evidence: `ir_a006e8bd9b660a9c.txt` describes equipment “aimed at the consumer market” in “attractive, high-footfall locations”; FY2025 total dividend 8.64p (£32.6m declared) on record PBT £78.2m. Cash-flow statement in same file: cash generated from operations £115.5m, PPE purchase (£62.1m), intangibles (£3.5m), dividends paid (£29.8m — filing-derived FCF ~£25.2m, coverage ~0.77× on declared dividends, ~0.84× on cash paid). `ir_3f2f55026f8c6fe6.txt` confirms April 2026 France consumer slowdown; H1 diluted EPS −3.9% to 6.48p; cash generated from operations £38.7m, capex £33.9m, dividends paid £14.5m (H1 FCF ~£4.8m vs dividends ~0.33×); interim dividend cut 6.5% to 3.60p (£13.5m) with policy “subject to market and capital requirements”; 12-month shareholder returns £34.0m (dividends + buybacks). Screen yield 6.9% (`screening_snapshot.json`) is trailing; forward yield sustainability not filing-quantified.
+SourcesTried: filings_bodies (16/16, including newly fetched `275c8eb9ff3328e9.txt`, `71001742a9008234.txt`), filings_index, yahoo_financials, screening_snapshot
+NextSources: June 2026 profit-warning RNS (still absent — `filings_index.json` trading_update count 0); company IR results presentation PDF for dividend-bridge and normalised FCF scenario
 
-Q: Is the 7.1% dividend sustainable given interim EPS decline and sub-1.0× FCF/dividend coverage, or is the interim-quality overlay signalling an imminent payout reset?
+Q: Piotroski and Earnings Quality failures suggest operational momentum may be fading despite strong ROE (28.2%).
 Status: partially_resolved
-Evidence: The overlay correctly flagged stress and a **partial reset has occurred**: interim dividend cut to 3.60p from 3.85p (−6.5%, `ir_3f2f55026f8c6fe6.txt`), ~55% of H1 PAT (£24.5m) but only ~0.36× H1 FCF (OCF £38.7m − capex £33.9m ≈ £4.8m). Board reaffirms >55% of annual PAT policy subject to market and capital requirements — not a fixed 7.1% yield. Trailing 7.1% screen yield reflects FY2025 total dividend 8.64p; forward yield likely lower if FY2026 PBT lands at £69–74m. FY2025 filing OCF−capex (~£49.9m) covered £32.6m dividends ~1.5×; screen canonical FCF ~£25.2m covered ~0.8×. Concurrent £18m buyback (£2.7m executed H1) adds cash strain.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
-NextSources: FY2026 final-dividend RNS (post-October 2026 year-end); IR presentation for dividend-vs-capex priority ranking
+Evidence: `screening_snapshot.json` — Piotroski 6/9 (failed: ROA improving, current ratio improving, asset turnover improving; passed: positive NI/OCF, OCF > NI, leverage declining, no dilution, gross margin improving); Earnings Quality fails on “weak free-cash conversion”; Lynch PEG fails on earnings growth −3.9%; ROE 28.2% screen-calculated, not reconciled in filing bodies. `ir_3f2f55026f8c6fe6.txt`: H1 EBITDA +7.1% but PBT −3.8%, EPS −3.9%; net PPE +£29.9m to £176.8m on £57.5m machine capex; inventory +£8.3m — consistent with rising asset base and fading turnover signal despite Wash.ME vending +16.3%. Mixed momentum: laundry growth offsetting photobooth decline (−6.2% vending).
+SourcesTried: filings_bodies, filings_index, screening_snapshot, yahoo_financials
+NextSources: Annual Report note 1.1 cash-flow scenarios (auditor-referenced in `ir_55af4b8f27e3dd6f.txt`, not fully extracted); IR presentation for segment ROIC/payback by Wash.ME vs Photo.ME
 
-Q: (ME Group International) leads on model breadth with 15/22 passes… Verdict: watchlist — exceptional headline cheapness and moat scores, but the dividend sustainability flag and negative earnings growth (−3.9%) argue for patience.
+Q: Fifteen of 22 models passed (composite 82%, sector-relative 87%) with broad model-family coverage, but interim overlay adjusted strong buy to buy; email pass flagged watchlist given dividend ahead of interim cash flow.
 Status: partially_resolved
-Evidence: Full filing pack supports screen metrics: 15/22 passes, composite 81%, adjusted signal buy after interim overlay. Filing-backed quality: record FY2025 PBT £78.2m, long-term site partnerships, SNCF/RATP renewals, laundry EBITDA +18.1% FY2025. Near-term friction: H1 EPS 6.48p (−3.9%), revised FY2026 PBT £69–74m, photobooth EBITDA share fell to 47.7% of group H1. May/June recovery commentary partially offsets. Montefiore placing at 132p clarifies register overhang without company dilution. Form 8.3 filings (Norges Bank, Schroders) relate to terminated strategic review — no live bid. Watchlist caution on dividend/cash remains valid; cheapness not invalidated but timing overlay supports staged entry.
-SourcesTried: filings_bodies (17/17), filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
-NextSources: H2 FY2026 trading-update RNS; IR presentation for capital-allocation hierarchy
+Evidence: `screening_snapshot.json` confirms 15/22 passes, all five families, P/E 8.1, P/B 2.3, yield 6.9%, ROE 28.2%, D/E 28%, conviction 53% (new, 1 week), `interim_quality_overlay: true`, `adjusted_signal: buy`. Filing FCF/dividend gap above validates overlay. Newly fetched placing bodies resolve supply question: `275c8eb9ff3328e9.txt` / `71001742a9008234.txt` — Montefiore sold 12,523,017 shares (3.3%) at 132p on 14 January 2026; company received no proceeds. Revised FY2026 PBT £69–74m in `ir_3f2f55026f8c6fe6.txt` vs FY2025 £78.2m tempers forward value case. Form 8.3/8.5 bodies (`a07391bb968abb3e.txt`, `7d72ac6102a8f63c.txt`) show December 2025 stake activity (Norges Bank 2.57%; Peel Hunt connected-party dealings) — contextual only, not earnings-related.
+SourcesTried: filings_bodies (16/16), filings_index, screening_snapshot, yahoo_financials, news_manifest
+NextSources: none for model-pass confirmation; FTSE350 weekly screen export for cross-name rank vs FGP.L cluster
+
+Q: FTSE screen is broadly neutral; top candidates uniformly modest conviction (50–56%), new signals, neutral timing; filing-aligned vs TTM FCF gap (MEGP £25.2m vs £15.6m), NCAV unavailable, interim overlay downgrade.
+Status: partially_resolved
+Evidence: MEGP-specific items confirmed in `screening_snapshot.json`: filing-aligned FCF £25.2m (FY2025, `source: filing_aligned_ocf_capex`) vs screen TTM £15.6m; NCAV unavailable; conviction 52.7%, timing neutral, interim overlay active. Gap explained by `ir_3f2f55026f8c6fe6.txt`: H1 2026 cash generated from operations £38.7m (−18.9% YoY) and capex £33.9m compress recent-period FCF; working-capital drag (inventory +£8.3m, payables −£6.3m). Market-wide FTSE distribution (140 holds / 68 buys / 41 avoids) and cross-universe conviction comparison are **not** in the MEGP local pack.
+SourcesTried: filings_bodies, filings_index, screening_snapshot, macro_context
+NextSources: FTSE350 weekly screen export JSON for universe-level signal distribution and top-candidate conviction table
 
 ---

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-09T05:43:13.406388+00:00",
+  "generated_at": "2026-08-09T07:31:01.258117+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -998,22 +998,83 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-05T11:31:26.808989+00:00",
-    "task_count": 24,
+    "compiled_at": "2026-08-09T07:31:00.918890+00:00",
+    "task_count": 29,
     "status": {
-      "open_count": 0,
+      "open_count": 5,
       "pr_open_count": 0,
       "parked_count": 2,
       "merged_count": 22,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260809-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260809-01",
+        "area": "ingest",
+        "title": "Build Companies House + LSE/Investegate primary-body pipeline for UK RNS and filed accounts (PDF/iXBRL page-range extract for pensions, covenants, adjusting-ite",
+        "priority": "high",
+        "priority_score": 99.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260809-03",
+        "area": "scoring",
+        "title": "FCF basis reconciliation layer: compute and surface filing-aligned FCF, screen TTM FCF, and company-adjusted FCF side-by-side; auto-flag when divergence exceeds",
+        "priority": "high",
+        "priority_score": 99.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260809-02",
+        "area": "ingest",
+        "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260809-04",
+        "area": "scoring",
+        "title": "Earnings-basis and interim-quality overlays in screen export: flag adjusted-vs-statutory EPS growth sign divergence (FGP.L); auto-apply buy-cap when interim EPS",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260809-05",
+        "area": "ingest",
+        "title": "Fix UK RNS discovery and headline reclassification (trading_update, interim, annual_report patterns; ticker aliases GFTU/GN5; filter mis-attributed news by comp",
+        "priority": "high",
+        "priority_score": 95.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "attention_tasks": [
       {
         "id": "eng-20260804-36",

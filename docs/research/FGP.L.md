@@ -1,117 +1,175 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 1 · Updated 2026-08-05T10:06:40.640893+00:00 · Mode: initial_
+_Version 4 · Updated 2026-08-09T07:24:56.289571+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
-FirstGroup is a UK-focused public transport operator (First Bus and First Rail) that has completed its pivot away from North American operations and is now deploying capital into bus electrification, bolt-on acquisitions, and rail portfolio diversification. The quantitative screen flags the stock as a strong buy on cheapness (P/E 9.2, earnings yield 10.8%, FCF yield 37%), dividend quality, and an eight-of-nine Piotroski score, against a business delivering mid-teens adjusted EPS growth and progressive capital returns. Primary filings show adjusted EPS rising from 16.7p (FY 2024) to 19.4p (FY 2025) and 9.9p in H1 2026 (+16% YoY), with management guiding modest full-year FY 2026 growth and at least flat adjusted EPS in FY 2027. The central debate is whether headline value metrics adequately penalise IFRS 16 lease-adjusted leverage, a bus market in policy transition (£3 fare cap, franchising, weaker commercial volumes), and a front-loaded investment cycle that pushed H1 2026 free cash flow negative and adjusted net debt to £207.6m. London Overground (~£3bn concession from May 2026) and open-access rail expansion offer growth optionality but tie up guarantees and mobilisation capital.
-
----
+FirstGroup plc is a UK-focused public transport operator (First Bus and First Rail) that has completed a multi-year pivot away from North American assets and is now delivering sustained adjusted earnings growth, strong cash conversion, and active capital returns. The quantitative screen rates the name a strong buy on cheapness (P/E ~9.2, earnings yield ~10.9%), exceptional filing-aligned free cash flow (FCF yield ~37%), dividend growth, and a Piotroski F-Score of 8/9, with 11 of 22 models passing across five factor families. The valuation hook is a de-rated, cash-generative UK transport franchise trading below typical quality multiples despite adjusted EPS rising from 11.6p (FY 2024) to 19.4p (FY 2025) and management guiding to modest FY 2026 growth. The central debate is whether earnings diversification (London bus, open-access rail, Rail Services, London Overground) offsets structural headwinds from bus franchising policy, fare-cap transitions, employers’ National Insurance, and the phased transfer of DfT National Rail Contracts to public ownership—issues that screens only partially capture through leverage and liquidity flags.
 
 ## INVESTMENT THESIS
-The screen’s strong-buy signal rests on five passing factor families—cheapness, quality, dividend, GARP, and risk—with 20/20 data quality and models including Earnings Yield, FCF Yield, Low P/E + High Yield, Magic Formula, Acquirer's Multiple, and Piotroski F-Score (8/9). That aligns with a post-restructuring UK transport franchise generating durable adjusted earnings: FY 2025 adjusted operating profit reached £222.8m on adjusted revenue of £1,370.0m, with free cash flow before acquisitions and returns more than doubling to £113.5m, and c.£126m returned via dividends and buybacks.
+For a value investor, FirstGroup offers a rare combination of low headline valuation, improving adjusted profitability, and disciplined capital allocation after a successful portfolio simplification. The screen’s strong-buy signal (composite score 92%, sector-relative 86%) is anchored in metrics that map to real filing trends: adjusted revenue rose from £1,279.6m (FY 2024) to £1,370.0m (FY 2025), adjusted operating profit from £204.3m to £222.8m, and adjusted EPS from 16.7p to 19.4p, with free cash flow before acquisitions and returns more than doubling to £113.5m (FY 2025 presentation). Management returned c.£126m via dividends and buybacks in FY 2025 and launched further repurchase programmes; H1 2026 adjusted EPS of 9.9p (+16% YoY) and an interim dividend of 2.2p support the dividend and GARP model passes.
 
-Business quality supports the screen rather than contradicting it. First Bus is scaling London (RATP acquisition), electrifying c.23% of the fleet, and targeting c.£15m of overhead savings; First Rail is expanding open access (Hull Trains, Lumo, Stirling/Carmarthen paths) while DfT TOC exposure is de-risked under National Rail Contracts. Management’s capital-allocation framework—leverage below 2.0x rail EBITDA, progressive dividend at c.3x cover, surplus cash via buybacks—is being executed: a further £50m programme completed in H1 2026 and a £100m buyback was announced at FY 2025 results. The December 2025 London Overground preferred-operator award (~£3bn over eight years, TfL retains revenue risk) materially diversifies rail earnings.
-
-Where the screen is less informative: Graham-style and moat models fail on leverage (debt/equity 161%, current ratio 0.73), thin margins, and slightly sub-threshold ROE (16.7% vs 18% moat hurdle). For a value investor, the opportunity is a cash-generative, UK-regulated-utility-like operator trading below 10x earnings with a 3.9% yield and active shrinkage of the share count—not a deep net-net or pristine balance-sheet compounder.
-
----
+Business quality is stronger than the “cyclical bus operator” label implies. First Bus is scaling in London (RATP London acquisition), electrifying fleet and depots (c.1,280 zero-emission buses at H1 2026), and building B2B/coach revenues. First Rail combines fee-based DfT TOC exposure (declining but with anticipated c.£125m cash inflow over three years from contract transitions) with higher-quality open-access and Rail Services earnings; the London Overground preferred-operator award (~£3bn over eight years, revenue risk retained by TfL) adds further diversification. The Piotroski score (8/9) and passes on earnings quality, acquirer’s multiple, and composite value corroborate operational improvement, even as Graham-, Buffett-, and moat-style models fail on leverage (debt/equity ~161%), weak liquidity (current ratio ~0.73), and ROE (16.7%) below stricter quality thresholds. The screen’s strong-buy case is therefore best read as “mispriced cash and earnings power in transition,” not pristine balance-sheet quality.
 
 ## FINANCIAL REVIEW
-*Primary source: filing body extracts under `filings/bodies/`. Yahoo (`financials_annual.json`) used only where noted.*
+Primary sources: IR presentations (`ir_5ba5b17047f87036.txt`, `ir_af873270e9c4b29f.txt`), H1 2026 press release (`ir_032b08900a650e14.txt`), Companies House annual bodies (`ch_SC157176_MzQ3MzQwMTk5MmFkaXF6a2N4.txt` et al.). `filings_index.json` confirms all 11 bodies present (`with_body: 11`; refetched 2026-08-09). The new fetch (`d2cdf72fa5d7df13.txt`) is Investegate market commentary—not used for figures below.
 
-### Annual results (Companies House / FY 2025 Annual Report)
+**Adjusted earnings (filings — preferred)**
 
-| Metric | FY 2025 | FY 2024 | Source |
-|--------|---------|---------|--------|
-| Adjusted revenue | £1,370.0m | £1,279.6m | FY 2025 AR body |
-| Adjusted operating profit | £222.8m | £204.3m | FY 2025 AR body |
-| Adjusted EPS | 19.4p | 16.7p | FY 2025 AR body |
-| Dividend per share | 6.5p | 5.5p | FY 2025 AR body |
-| Adjusted net debt/(cash) | £86.9m net debt | £64.1m net cash | FY 2025 AR body |
-| Free cash flow (pre-acquisitions/returns) | £113.5m | £53.9m | FY 2025 results presentation |
+| Period | Adj. revenue | Adj. OP | Adj. EPS | Adj. FCF (pre-acq/returns) | Adj. net debt |
+|--------|-------------|---------|----------|---------------------------|---------------|
+| FY 2024 | £1,279.6m | £204.3m | 16.7p | £53.9m | £64.1m net cash |
+| FY 2025 | £1,370.0m | £222.8m | 19.4p | £113.5m | £86.9m |
+| H1 2026 | £833.6m | £103.6m | 9.9p | £(35.6)m | £207.6m |
 
-FY 2025 highlights from the annual report: First Bus adjusted operating profit rose £12.4m to £96.0m; First Rail to £148.8m (+£5.5m); 54.8m shares repurchased; adjusted year-end net debt £86.9m despite c.£230m capex/growth spend and the £90m First Bus London acquisition. Statutory net debt of £974.8m includes IFRS 16 lease liabilities of £1,203.6m—management’s adjusted net debt metric (excluding leases and ring-fenced cash) is the relevant covenant/leverage measure and remains modest.
+Management guides modest FY 2026 adjusted EPS growth and year-end adjusted net debt £125m–£135m (`ir_032b08900a650e14.txt`).
 
-FY 2024 annual filing (Companies House, August 2024) confirms the step-change in profitability: adjusted operating profit £204.3m (from £161.0m in FY 2023 per the same filing), adjusted EPS 16.7p, and adjusted net cash £64.1m—establishing the balance-sheet strength that funded subsequent acquisitions and buybacks.
+**Statutory vs screen earnings (Yahoo — secondary)**
 
-An older Companies House annual (August 2023) is present but predates the current earnings trajectory; it is not relied upon here.
+Yahoo statutory net income $127.5m→$118.3m drives the −5.9% screen input and Graham/Lynch failures. This diverges from filing-adjusted EPS because rail IFRS 16 consolidation, historical pension settlements (FY 2024 LGPS charge £146.9m in `ch_SC157176_MzQzMTExOTQ4OGFkaXF6a2N4.txt`), and buyback-driven per-share effects sit on different bases.
 
-### Interim results (H1 FY 2026 — 26 weeks to 27 September 2025)
+**Free cash flow — methodology gap**
 
-| Metric | H1 2026 | H1 2025 | Source |
-|--------|---------|---------|--------|
-| Adjusted revenue | £833.6m | £639.6m | H1 2026 press release |
-| Adjusted operating profit | £103.6m | £100.8m | H1 2026 press release |
-| Adjusted EPS | 9.9p | 8.5p | H1 2026 press release |
-| Interim dividend | 2.2p | 1.7p | H1 2026 press release |
-| Free cash flow | £(35.6)m | £2.6m | H1 2026 press release |
-| Adjusted net debt | £207.6m | £0.2m | H1 2026 press release |
+| Metric | FY 2025 | H1 2026 |
+|--------|---------|---------|
+| Screen/Yahoo FCF | ~$362.6m canonical (FY 2026 USD) | — |
+| Company adjusted FCF | £113.5m | £(35.6)m |
 
-H1 2026 revenue rose 30%, driven by First Bus London (£150.2m contribution), open-access rail, and rail services; adjusted operating profit was only marginally higher as National Insurance (£7m), bus cost inflation (£14m), and SWR transfer to DfTO offset acquisition and efficiency gains. Underlying regional bus passenger volumes fell 4% (commercial −7%, concessions +4%) amid the £2→£3 fare-cap transition. Management forecasts FY 2026 adjusted net debt of £125–135m and modest adjusted EPS growth for the full year, with at least maintained EPS in FY 2027.
+FY 2025 bridge (`ir_5ba5b17047f87036.txt`): adjusted EBITDA £163.4m → cash from operations £207.4m → adjusted FCF £113.5m; IFRS 16 leasing strip £248.6m explains most of the gap to statutory flows. H1 2026 outflow reflects accelerated First Bus electrification (net capex c.£105m; FY 2026 guide c.£180m). **The 37.3% screen FCF yield is not normalized owner earnings.**
 
-The November 2025 Companies House interim accounts are **parent-company only** (profit after tax £98.9m; not consolidated group)—they support distributable-reserves mechanics but are not used for group trend analysis.
+**Margins**
 
-### Cash flow and balance-sheet trend
+Group adjusted operating margin 16.3% at FY 2025 compressed to 12.4% H1 2026; First Bus 6.1% (−190 bps) on fare-cap transition, −4% underlying volumes, and NIC headwinds—substantiating Quality Value and Buffett Quality failures.
 
-FY 2025 demonstrated strong conversion (FCF £113.5m pre-acquisitions). H1 2026 saw a £35.6m outflow as decarbonisation net capex (~£105m, H1-weighted) and buybacks (£49m completed programme) ran ahead of seasonal cash generation; management characterises this as timing, with FY 2026 end leverage guided lower.
+**Balance sheet and pension**
 
-Pension: Bus-section triennial valuation completed November 2025 with £20m returned to the Group; c.£65m remains in escrow pending the 2030 review. Greyhound US pension buyout completed December 2024.
+- **Adjusted net debt:** £207.6m at H1 2026 (cash £188.2m less bank borrowings/overdrafts/finance leases/NextGen battery debt £23.6m); excludes ring-fenced TOC cash (£232.8m) and IFRS 16 rail leases (`ir_af873270e9c4b29f.txt`).
+- **Reported net debt:** £992.0m including £1,017.2m IFRS 16 leases.
+- **Pension:** Bus triennial 2024 complete; £20m returned; c.£65m escrow; RPS shared-cost for rail (`ir_032b08900a650e14.txt`). IAS 19 funded-status not in pack.
 
-### Gaps and secondary data
-
-- **No trading updates** in `filings_index.json`.
-- **FY 2026 full-year results** not yet filed; latest consolidated annual is FY 2025 (July 2025 Companies House date).
-- **`macro_context.json` is absent**—no offline regime overlay applied.
-- Yahoo (`financials_annual.json`, USD-denominated) shows FY 2026 FCF of $362.6m and operating cash flow $615.6m; these corroborate the screen’s FCF-yield input but are **not blended** with GBP filing figures above.
+**Remaining gaps:** Full statutory income statement, complete H1 2026 adjusting-items note (body truncates at `ir_032b08900a650e14.txt` line 844), pension IAS 19 and covenant detail from Companies House PDF.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Leverage and liquidity (screen-visible, filing-confirmed):** GAAP net debt ~£992m at H1 2026 includes £1,017m IFRS 16 lease liabilities; adjusted net debt (£207.6m) is the management metric but rose sharply during the investment cycle. Current ratio 0.73 and failed Financial Health / Graham models flag weak short-term liquidity—typical for lease-heavy transport but material for stress scenarios.
+**Evidenced (filings)**
 
-**Bus policy and demand:** H1 2026 underlying volumes −4%; management cites £3 fare cap, lower consumer confidence, and modal shift. Bus franchising legislation and mayoral franchising ambitions create contract-model uncertainty; Manchester is already franchised.
+- **Bus margins and volumes:** First Bus margin 6.1% H1 2026; underlying volumes −4%; £3 fare cap and c.£16m NIC impact (`ir_032b08900a650e14.txt`).
+- **Rail transition:** SWR transferred May 2025; further NRC transfers scheduled; c.£125m cash inflow over three years partially offsets declining TOC fees; London Overground preferred-operator award (~£3bn, TfL retains revenue risk; `aefbcf7637993f73.txt`).
+- **Capex cycle:** H1 adjusted FCF outflow £(35.6)m; adjusted net debt rising £86.9m→£207.6m; FY 2026 net capex guide c.£180m.
+- **Screen metric distortion:** High D/E and low current ratio reflect consolidated IFRS 16 balance sheet; quality-model failures are directionally valid even if headline leverage overstates economic risk.
+- **Pension escrow:** c.£65m held pending 2030 valuations.
 
-**Rail nationalisation / contract transition:** SWR transferred to DfTO in May 2025; Great British Railways legislation (November 2024) signals further public-sector control. FirstGroup mitigates via open access, TfL concessions (London Overground, trams, cable car), and rail services—but DfT TOC fee streams are subject to political and regulatory change.
+**Partially open**
 
-**Investment and M&A execution:** First Bus London integration (purchase price allocation still provisional per H1 auditor commentary), c.£180m FY 2026 bus capex, and c.£500m Hitachi train order for open access create execution and return-on-capital risk; First Bus London not expected to be cash-generative until FY 2027.
+- **Sustainable FCF yield:** Directionally resolved as methodology-inflated; normalised mid-cycle adjusted FCF after FY 2026 electrification peak unquantified.
+- **Statutory earnings decline:** Basis mismatch with growing adjusted EPS; precise FY 2026 adjusting-items schedule incomplete in available bodies.
+- **Covenant headroom:** Policy stated (<2.0×); numeric headroom requires borrowings note from Companies House PDF.
 
-**Pension:** Multi-scheme exposure (RPS shared-cost sections, winding-up Bus DB scheme, escrow balances). No going-concern flag, but triennial outcomes can require cash calls.
+**Secondary context (new body)**
 
-**Going concern / audit:** PwC’s H1 2026 review concluded directors appropriately adopted going concern and **identified no material uncertainties** not adequately disclosed—positive, but review-level assurance only.
+`d2cdf72fa5d7df13.txt` cites dividend rising “from 6.5p to 7.2p”—conflicts with filing-stated FY 2025 total dividend of 6.5p (`ir_5ba5b17047f87036.txt`). Treat 7.2p as unverified commentary.
 
-**Contractual commitments:** London Overground requires a £30m performance bond and £80m parent company guarantee.
-
-**Governance / earnings quality:** Adjusted metrics exclude IFRS 16 rail management-fee impacts and various one-offs; statutory FY 2025 included large LGPS settlement charges (£142.3m) offset by OCI gains—investors must anchor on adjusted EPS consistently.
+PwC H1 2026 review (`ir_032b08900a650e14.txt`) found no material going-concern uncertainties identified by directors; this does not remove bus-policy, rail-transition, or capex-cycle risks.
 
 ---
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate in substance but repetitive in tone**—heavy on buyback notices and promotional "40–55% upside" broker-style pieces (DirectorsTalk), with fewer independent deep dives.
+Coverage over the past year is moderate-to-heavy on capital returns and results, thinner on deep operational analysis. Material items from `news_manifest.json`:
 
-**Strategy and contracts**
-- *"FirstGroup wins $4 billion London Overground rail contract, shares rise"* (Reuters, 9 December 2025) — preferred operator from May 2026; ~£3bn over eight years; TfL retains revenue risk.
-- *"FirstGroup named as preferred operator for Lo..."* (Investegate RNS, 10 December 2025) — confirms £30m bond and £80m PCG.
+- **H1 2026 results (18 November 2025):** “FirstGroup H1 2026: Earnings and Revenue Rise, Shares Tumble” (AskTraders) and “Why did this FTSE 250 growth star just plunge 14%?” (The Twelfth Magpie)—market reaction diverged from adjusted EPS growth to 9.9p.
+- **FY 2025 / capital return (June 2025):** “FirstGroup launches £100 million share buyback to cut share capital” (The Globe and Mail); yfinance summary of FY 2026 earnings call citing 25% revenue increase and £100m buyback.
+- **London Overground (9 December 2025):** “FirstGroup wins $4 billion London Overground rail contract, shares rise” (Reuters); RNS confirms preferred-operator status, ~£3bn/8-year contract from May 2026, TfL retains revenue risk.
+- **AGM and ongoing buybacks (July–August 2026):** “FirstGroup Shareholders Back Board, Dividend and Capital Actions at 2026 AGM” (TipRanks); multiple “Transaction in Own Shares” and buyback progress updates.
+- **Strategy context (May 2025):** “FirstGroup can grow despite rail nationalisation, says broker” (Proactive Investors).
+- **Policy link (July 2025):** “3 UK Transport Stocks Linked To The £2 Bus Fare Cap” (simplywall.st)—relevant backdrop to bus volume pressure.
 
-**Results and guidance**
-- *"FirstGroup PLC (FGROF) Full Year 2026 Earnings Call Highlights: Strong Revenue Growth Amidst..."* (Yahoo Finance, 20 June 2026) — 25% revenue increase cited; £100m buyback.
-- *"FirstGroup falls 10% as results beat forecasts but 'period of transition' begins"* (Proactive Investors, 18 November 2025) — H1 2026 beat but share reaction negative on transition messaging.
-- *"FirstGroup hit by cash outflow and rising debt"* (Investors' Chronicle, 18 November 2025) — H1 cash/debt concerns.
-- *"FirstGroup Confirms In‑Line Trading Ahead of Interim Results"* (TipRanks, 30 July 2026).
-
-**Capital returns**
-- Sustained share buyback programme through July–August 2026 (*"FirstGroup plc Completes Share Buyback, Repurchasing 2.77 Million Shares at 179.85p Average Price"*, Kalkine Media, 27 July 2026; multiple "Transaction in Own Shares" RNS summaries).
-- *"FirstGroup Shareholders Back Board, Dividend and Capital Actions at 2026 AGM"* (TipRanks, 30 July 2026).
-
-**Sector context**
-- *"3 UK Transport Stocks Linked To The £2 Bus Fare Cap"* (simplywall.st, 22 July 2026).
-- *"FirstGroup can grow despite rail nationalisation, says broker"* (Proactive Investors, 12 May 2026).
-
-No material management-change headlines in the manifest; Graham Sutherland remains CEO throughout.
-
----
+Promotional “40–55% upside” pieces from DirectorsTalk dominate lower-signal coverage; treat as sentiment, not fundamental evidence. No material M&A beyond bolt-on coach acquisitions and London Overground award surfaced in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Primary filings confirm a genuine value-and-return story—rising adjusted EPS, strong FY 2025 cash conversion, and credible FY 2026–27 guidance—but medium risk from lease-adjusted leverage optics, bus volume/policy headwinds, and an investment-heavy H1 cash profile prevents full endorsement of the screen’s strong-buy signal without position-sizing discipline.
+Confidence: 0.72
+Rationale: All 11 filing bodies are now present and confirm headline FCF yield and negative earnings growth are largely measurement artefacts, while bus margin compression and rising adjusted net debt remain real—partially supporting, not fully confirming, the quantitative strong-buy signal.
+
+## Weekly updates
+
+### 2026-08-09T07:22:50.420531+00:00
+Q: Negative earnings growth (−5.9%) despite strong FCF yield (37.3%) raises sustainability questions; thin margins caused Quality Value and Buffett Quality failures.
+Status: partially_resolved
+Evidence: The screen’s −5.9% earnings growth (`screening_snapshot.json`) tracks Yahoo statutory net income falling from $127.5m (FY2025) to $118.3m (FY2026) in `financials_annual.json`, while company-adjusted EPS rose 16.7p→19.4p (FY2024→FY2025, `ir_5ba5b17047f87036.txt`) and H1 2026 adjusted EPS grew 16% to 9.9p (`ir_032b08900a650e14.txt`). Margin failure is confirmed at segment level: First Bus adjusted operating margin was 6.1% in H1 2026 (8.2% regional bus), versus group adjusted margin 12.4%; management targets c.10% regional bus margin in H2 2026. Group adjusted margin was 16.3% at FY 2025 (`ch_SC157176_MzQ3MzQwMTk5MmFkaXF6a2N4.txt`), so screen “thin margin” flags reflect bus mix and IFRS-consolidated rail revenue, not a uniform group profile.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
+NextSources: FY 2025 Annual Report statutory income statement and note 3 adjusting-items table (full PDF via Companies House) to quantify FY 2026 statutory-vs-adjusted bridge; none required for the directional conclusion.
+
+Q: Does the 37.3% FCF yield reflect normalized operations or one-off asset sales/leases, and what is the pension and lease-adjusted net debt picture?
+Status: partially_resolved
+Evidence: The 37.3% screen FCF yield uses filing-aligned OCF minus capex of $362.6m (`screening_snapshot.json`, matching Yahoo `financials_annual.json`), which is materially above management’s adjusted free cash flow of £113.5m in FY 2025 and £(35.6)m in H1 2026 (`ir_5ba5b17047f87036.txt`, `ir_af873270e9c4b29f.txt`). FY 2025 statutory-to-adjusted bridge shows adjusted FCF built from adjusted EBITDA £163.4m (not statutory £785.1m), with modest disposal proceeds £17.1m (battery sales to Hitachi JV) and pension cash £(8.7)m—not a dominant one-off, but lease/IFRS 16 stripping (£248.6m leasing adjustment) explains most of the gap. Adjusted net debt was £86.9m at FY 2025 and £207.6m at H1 2026 (bonds/bank debt net of free cash, excluding IFRS 16 leases and ring-fenced cash); reported net debt was £992.0m including £1,017.2m IFRS 16 lease liabilities (`ir_af873270e9c4b29f.txt`). Pension: Bus section 2024 triennial complete, £20m returned to Group, c.£65m in escrow; RPS shared-cost sections for rail (`ir_032b08900a650e14.txt`). Leverage policy: less than 2.0× adjusted net debt to Rail adjusted EBITDA (`ir_5ba5b17047f87036.txt`).
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, alternate_news
+NextSources: Companies House filed accounts PDF for FY 2025 pension note (IAS 19 deficit/surplus figures) and covenant text; would unlock precise pension balance-sheet liability vs cash-flow contribution.
+
+Q: (FirstGroup plc) — Eleven of 22 models passed (composite 92%) but failures cluster on balance-sheet quality (D/E 161%, current ratio 0.73, earnings growth −5.9%); email verdict watchlist. Does deep research confirm or reject the strong-buy signal?
+Status: partially_resolved
+Evidence: Filings support cheapness and adjusted earnings momentum (Piotroski 8/9, adjusted EPS trajectory, progressive dividend, buybacks) but also validate quality-model failures: Yahoo-derived D/E and current ratio (`screening_snapshot.json`) align with transport-sector IFRS 16 consolidation and working-capital structure; company-adjusted net debt is an order of magnitude lower. The headline 37.3% FCF yield is not comparable to management’s adjusted FCF metric and should not be treated as recurring run-rate cash return. Sector concentration (two Industrials names) is a portfolio-level concern outside this issuer pack. Gap-fill moves the overlay from “unresolved cheapness vs quality tension” to “confirmed metric mismatch”: screen strong-buy on cash yield is overstated; adjusted-earnings case remains intact.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context
+NextSources: Full FY 2025 risk-management and viability sections from Companies House PDF; would confirm whether directors flag material balance-sheet uncertainties beyond auditor going-concern language in H1 2026 interim review.
+
+Q: MEGP.L (ME Group International) — Fifteen of 22 models passed; interim-quality overlay adjusted signal to buy; watchlist verdict.
+Status: unresolved
+Evidence: No MEGP.L sources are present in the FGP.L research pack; this question cannot be answered from local evidence.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, macro_context (all FGP.L-scoped)
+NextSources: Run equivalent gap-fill on `output/research/MEGP.L/sources/` including MEGP interim results, dividend/FCF coverage bridge, and interim-quality overlay inputs; would unlock cross-holding Industrials cluster comparison.
+
+---
+
+### 2026-08-09T07:23:09.056438+00:00
+Q: Negative earnings growth (−5.9%) despite strong FCF yield (37.3%) raises sustainability questions; thin margins caused Quality Value and Buffett Quality failures.
+Status: partially_resolved
+Evidence: The screen’s −5.9% (`screening_snapshot.json`) tracks Yahoo statutory net income falling $127.5m→$118.3m (`financials_annual.json`), while filings show adjusted EPS rising 16.7p→19.4p (FY 2024→FY 2025, `ir_5ba5b17047f87036.txt`; `ch_SC157176_MzQ3MzQwMTk5MmFkaXF6a2N4.txt`) and +16% to 9.9p in H1 2026 (`ir_032b08900a650e14.txt`). Thin-margin failures are substantiated at First Bus: adjusted operating margin 6.1% (regional bus 8.2%) in H1 2026 vs group 12.4% (`ir_af873270e9c4b29f.txt`); management targets c.10% regional bus margin in H2 2026. The newly fetched `d2cdf72fa5d7df13.txt` (Investegate commentary, 18 June 2026) describes “25% increase in revenues against flat profitability” at the FY results—consistent with a statutory/adjusted split, but it is market commentary, not audited disclosure.
+SourcesTried: filings_bodies (all 11, incl. new `d2cdf72fa5d7df13.txt`), filings_index, yahoo_financials, screening_snapshot
+NextSources: FY 2025 Annual Report note 3 adjusting-items table (full Companies House PDF/iXBRL)—would quantify FY 2026 statutory profit bridge and confirm whether flat statutory profitability persists.
+
+Q: Does the 37.3% FCF yield reflect normalized operations or one-off asset sales/leases, and what is the pension and lease-adjusted net debt picture?
+Status: partially_resolved
+Evidence: The 37.3% screen yield uses Yahoo OCF−capex of $362.6m (`screening_snapshot.json`; `financials_annual.json`), far above company adjusted FCF of £113.5m (FY 2025) and £(35.6)m (H1 2026) per `ir_5ba5b17047f87036.txt` and `ir_af873270e9c4b29f.txt`. FY 2025 statutory-to-adjusted bridge (`ir_5ba5b17047f87036.txt`): statutory EBITDA £785.1m vs adjusted £163.4m; IFRS 16 leasing adjustment £248.6m is the dominant reconciling item; disposal proceeds £17.1m (Hitachi battery JV) and pension cash £(8.7)m are modest—not one-off driven. Adjusted net debt: £86.9m (FY 2025) → £207.6m (H1 2026), defined as bonds/bank debt net of free cash excluding IFRS 16 leases and ring-fenced TOC cash (`ir_af873270e9c4b29f.txt`); reported net debt £992.0m includes £1,017.2m IFRS 16 lease liabilities (86% rail). Pension: Bus section 2024 triennial complete, £20m returned, c.£65m escrow pending 2030 valuations; RPS shared-cost for rail (`ir_032b08900a650e14.txt`). Leverage policy: <2.0× adjusted net debt to Rail adjusted EBITDA (`ir_5ba5b17047f87036.txt`). IAS 19 balance-sheet deficit/surplus and covenant headroom remain absent from available bodies.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
+NextSources: Companies House FY 2025 accounts PDF—pension note (IAS 19) and borrowings/covenants note; would unlock precise scheme deficit and facility headroom.
+
+Q: (FirstGroup plc) — Eleven of 22 models passed (composite 92%) but failures cluster on balance-sheet quality (D/E 161%, current ratio 0.73, earnings growth −5.9%); email verdict watchlist. Does deep research confirm or reject the strong-buy signal?
+Status: partially_resolved
+Evidence: Filings support the cheapness/adjusted-earnings pillar (adjusted EPS +16% FY 2025 and H1 2026; Piotroski 8/9; progressive dividend 6.5p; £100m buyback announced June 2025 per `ir_5ba5b17047f87036.txt` and `d2cdf72fa5d7df13.txt`) but validate quality-model rejections: Yahoo D/E and current ratio reflect IFRS 16 consolidation; economically relevant adjusted net debt is lower but rising. The headline 37.3% FCF yield is not comparable to management’s adjusted FCF and overstates sustainable cash return. Deep research does not confirm an unqualified strong buy on screen metrics alone; it supports a qualified accumulate on adjusted earnings and capital returns, aligning more with a watchlist-with-work-done stance than a pure quant strong buy. Portfolio Industrials concentration (FGP + MEGP) remains a separate holding-level concern.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, news/alternate news (via `d2cdf72fa5d7df13.txt`)
+NextSources: FY 2025 viability statement and principal-risks section (Companies House PDF)—would test whether directors flag balance-sheet or cash-flow uncertainties beyond H1 2026 auditor going-concern review language.
+
+Q: MEGP.L (ME Group International) — Fifteen of 22 models passed; interim-quality overlay adjusted signal to buy; watchlist verdict.
+Status: unresolved
+Evidence: No MEGP.L sources exist in the FGP.L research pack; the newly fetched FGP body (`d2cdf72fa5d7df13.txt`) contains no ME Group data.
+SourcesTried: filings_bodies, filings_index (FGP.L scope only)
+NextSources: `output/research/MEGP.L/sources/` with MEGP interim results, dividend/FCF coverage bridge, and interim-quality overlay inputs.
+
+---
+
+### 2026-08-09T07:24:56.289571+00:00
+Q: Negative earnings growth (−5.9%) despite strong FCF yield (37.3%) raises sustainability questions; thin margins caused Quality Value and Buffett Quality failures.
+Status: partially_resolved
+Evidence: The screen’s −5.9% (`screening_snapshot.json`, `earnings_growth_pct: -0.059`) follows Yahoo statutory net income falling from $127.5m to $118.3m (`financials_annual.json`), while filing-adjusted EPS rose 16.7p→19.4p (FY 2024→FY 2025, `ir_5ba5b17047f87036.txt`; `ch_SC157176_MzQ3MzQwMTk5MmFkaXF6a2N4.txt`) and +16% to 9.9p in H1 2026 (`ir_032b08900a650e14.txt`). Quality-model margin failures are confirmed at First Bus: adjusted operating margin 6.1% (regional bus 8.2%) in H1 2026 versus group 12.4% (`ir_af873270e9c4b29f.txt`); management targets c.10% regional bus margin in H2 2026. The newly fetched `d2cdf72fa5d7df13.txt` (Investegate, 18 June 2026) describes “25% increase in revenues against flat profitability” at FY results—consistent with a statutory/adjusted split, but secondary commentary only.
+SourcesTried: filings_bodies (all 11, incl. new `d2cdf72fa5d7df13.txt`), filings_index, yahoo_financials, screening_snapshot
+NextSources: FY 2025 Annual Report note 3 adjusting-items table (Companies House PDF/iXBRL)—would quantify the statutory profit bridge and confirm whether flat statutory profitability persists into FY 2026.
+
+Q: Does the 37.3% FCF yield reflect normalized operations or one-off asset sales/leases, and what is the pension and lease-adjusted net debt picture?
+Status: partially_resolved
+Evidence: The 37.3% yield uses screen canonical FCF of $362.6m (`screening_snapshot.json`, source `filing_aligned_ocf_capex`), matching Yahoo OCF−capex (`financials_annual.json`) and materially exceeding company adjusted FCF of £113.5m (FY 2025) and £(35.6)m (H1 2026) per `ir_5ba5b17047f87036.txt` and `ir_af873270e9c4b29f.txt`. FY 2025 statutory-to-adjusted bridge (`ir_5ba5b17047f87036.txt`): statutory EBITDA £785.1m versus adjusted £163.4m; IFRS 16 leasing adjustment £248.6m is the dominant reconciler; disposal proceeds £17.1m (Hitachi battery JV) and pension cash £(8.7)m are modest—not one-off driven. Adjusted net debt: £86.9m (FY 2025) → £207.6m (H1 2026), defined as bonds/bank debt net of free cash excluding IFRS 16 leases and ring-fenced TOC cash (`ir_af873270e9c4b29f.txt`); reported net debt £992.0m includes £1,017.2m IFRS 16 lease liabilities (86% rail). Pension: Bus section 2024 triennial complete, £20m returned, c.£65m escrow pending 2030 valuations; RPS shared-cost for rail (`ir_032b08900a650e14.txt`). Leverage policy <2.0× adjusted net debt to Rail adjusted EBITDA (`ir_5ba5b17047f87036.txt`). IAS 19 balance-sheet figures and covenant headroom remain absent from available bodies.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
+NextSources: Companies House FY 2025 accounts PDF—pension note (IAS 19) and borrowings/covenants note.
+
+Q: (FirstGroup plc) — Eleven of 22 models passed (composite 92%) but failures cluster on balance-sheet quality (D/E 161%, current ratio 0.73, earnings growth −5.9%); email verdict watchlist. Does deep research confirm or reject the strong-buy signal?
+Status: partially_resolved
+Evidence: Filings support cheapness on adjusted earnings (EPS +16% FY 2025 and H1 2026; Piotroski 8/9; dividend 6.5p; £100m buyback per `ir_5ba5b17047f87036.txt`) but validate quality-model rejections: Yahoo D/E 161% and current ratio 0.73 reflect IFRS 16 consolidation; economically relevant adjusted net debt is lower but rising. The 37.3% FCF yield overstates sustainable cash return versus management’s adjusted FCF metric. Deep research does not confirm an unqualified strong buy on screen metrics; it supports a qualified accumulate—closer to watchlist-with-work-done than a pure quant strong buy. Industrials cluster risk (FGP + MEGP) is a portfolio-level item outside this pack.
+SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot
+NextSources: FY 2025 viability statement and principal-risks section (Companies House PDF)—would test whether directors flag balance-sheet or cash-flow uncertainties beyond H1 2026 auditor going-concern review (`ir_032b08900a650e14.txt`).
+
+Q: MEGP.L (ME Group International) — Fifteen of 22 models passed; interim-quality overlay adjusted signal to buy; watchlist verdict.
+Status: unresolved
+Evidence: No MEGP.L sources exist in the FGP.L research pack; the newly fetched body (`d2cdf72fa5d7df13.txt`) contains no ME Group data.
+SourcesTried: filings_bodies, filings_index (FGP.L scope only)
+NextSources: `output/research/MEGP.L/sources/` including interim results, FCF/dividend coverage bridge, and interim-quality overlay inputs.
+
+---
