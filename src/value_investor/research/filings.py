@@ -279,7 +279,9 @@ def _score_ch_body_text(text: str) -> int:
         score += 700
     if "related party" in lower:
         score += 700
-    if "segment" in lower and any(token in lower for token in ("information", "analysis", "reporting")):
+    if "segment" in lower and any(
+        token in lower for token in ("information", "analysis", "reporting")
+    ):
         score += 500
     return score
 
@@ -378,20 +380,18 @@ def fetch_filings_investegate_company(
 
     rows: list[dict[str, Any]] = []
     pattern = re.compile(
-        r'<tr>\s*<td>(\d{2} \w{3} \d{4})</td>\s*<td>([^<]*)</td>[\s\S]*?'
+        r"<tr>\s*<td>(\d{2} \w{3} \d{4})</td>\s*<td>([^<]*)</td>[\s\S]*?"
         r'href="(https://www\.investegate\.co\.uk/announcement/[^"]+)"[^>]*>'
-        r'([^<]+)</a>',
+        r"([^<]+)</a>",
         flags=re.I,
     )
     for match in pattern.finditer(html):
         date_s, _time_s, link, headline = match.groups()
         headline_clean = unescape(headline.strip())
-        if not headline_relevant_to_issuer(headline_clean, company_name, ticker):
-            continue
+        # Issuer company page is already scoped — bare titles like "Trading Update"
+        # rarely repeat the EPIC or company name.
         try:
-            published = (
-                datetime.strptime(date_s, "%d %b %Y").replace(tzinfo=UTC).isoformat()
-            )
+            published = datetime.strptime(date_s, "%d %b %Y").replace(tzinfo=UTC).isoformat()
         except ValueError:
             published = None
         period = classify_filing_period(headline_clean)
@@ -447,9 +447,7 @@ def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
         return False
     source = str(row.get("source") or "")
     return (
-        source in _RNS_BODY_FETCH_SOURCES
-        or "investegate.co.uk" in url
-        or _is_lse_rns_pdf_url(url)
+        source in _RNS_BODY_FETCH_SOURCES or "investegate.co.uk" in url or _is_lse_rns_pdf_url(url)
     )
 
 
@@ -630,6 +628,25 @@ def _base_symbol(ticker: str) -> str:
     return t
 
 
+# Alternate LSE/ISE EPICs seen in RNS headlines and Ticker.app metadata (primary EPIC first).
+_UK_RNS_EPIC_ALIASES: dict[str, tuple[str, ...]] = {
+    "GFTU": ("GN5",),  # Grafton Group: LSE GFTU / ISE GN5
+}
+
+
+def _uk_rns_epics(ticker: str) -> list[str]:
+    """Return primary UK EPIC plus known alternate symbols for the issuer."""
+    primary = _base_symbol(ticker).upper()
+    if not primary:
+        return []
+    epics = [primary]
+    for alias in _UK_RNS_EPIC_ALIASES.get(primary, ()):
+        alias_u = str(alias).strip().upper()
+        if alias_u and alias_u not in epics:
+            epics.append(alias_u)
+    return epics
+
+
 _ISSUER_STOPWORDS = frozenset(
     {
         "plc",
@@ -684,12 +701,13 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     text = (headline or "").lower()
     if not text:
         return False
-    epic = _base_symbol(ticker).lower()
-    if epic and re.search(rf"\b{re.escape(epic)}\b", text, flags=re.IGNORECASE):
-        return True
-    # ASX Markit headlines often end with " - CSL" / " - WOR".
-    if epic and re.search(rf"[-–]\s*{re.escape(epic)}\s*$", text, flags=re.IGNORECASE):
-        return True
+    for epic in _uk_rns_epics(ticker):
+        epic_l = epic.lower()
+        if epic_l and re.search(rf"\b{re.escape(epic_l)}\b", text, flags=re.IGNORECASE):
+            return True
+        # ASX Markit headlines often end with " - CSL" / " - WOR".
+        if epic_l and re.search(rf"[-–]\s*{re.escape(epic_l)}\s*$", text, flags=re.IGNORECASE):
+            return True
     for phrase in _issuer_name_phrases(company_name):
         if phrase in text:
             return True
@@ -1265,9 +1283,7 @@ def filter_misattributed_filings(
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
-        if regime == "uk_rns" and (
-            source == "ticker_rns_api" or source.startswith("google_news")
-        ):
+        if regime == "uk_rns" and (source == "ticker_rns_api" or source.startswith("google_news")):
             if not headline_relevant_to_issuer(headline, company_name, ticker):
                 continue
         if source == "sec_edgar":
@@ -1470,10 +1486,10 @@ def fetch_filings_google_news(
     available from the Google wrapper URL; bodies are filled later when a direct
     publisher URL is known.
     """
-    epic = _base_symbol(ticker)
     if query is None:
+        symbol_terms = " OR ".join(_uk_rns_epics(ticker))
         query = (
-            f'site:investegate.co.uk "{company_name}" OR {epic} '
+            f'site:investegate.co.uk "{company_name}" OR {symbol_terms} '
             f'(Results OR "Annual Report" OR Interim OR "Half-year" OR "Trading Update" OR RNS)'
         )
     url = (
@@ -1688,7 +1704,7 @@ def fetch_filings_tsx_news(
     """Discover Canadian issuer results / SEDAR+ headlines via Google News."""
     epic = _base_symbol(ticker)
     query = (
-        f'(site:sedarplus.ca OR site:sedar.com OR site:newswire.ca) '
+        f"(site:sedarplus.ca OR site:sedar.com OR site:newswire.ca) "
         f'("{company_name}" OR {epic}) '
         f'(Results OR "Annual Report" OR "Annual Financial" OR Interim OR '
         f'"Management\'s Discussion" OR "MD&A" OR "Quarterly Report")'
@@ -1765,10 +1781,12 @@ def _ticker_rns_item_matches_issuer(
     ticker: str,
 ) -> bool:
     """True when API metadata or headline plausibly belongs to the requested issuer."""
-    epic = _base_symbol(ticker).upper()
+    allowed = {sym.upper() for sym in _uk_rns_epics(ticker)}
     item_sym = _ticker_rns_item_symbol(item)
-    if item_sym and item_sym != epic:
+    if item_sym and item_sym.upper() not in allowed:
         return False
+    if item_sym and item_sym.upper() in allowed:
+        return True
     headline = str(item.get("headline") or item.get("title") or "").strip()
     return headline_relevant_to_issuer(headline, company_name, ticker)
 
@@ -1780,28 +1798,16 @@ def _is_ticker_rns_pdf_url(url: str | None) -> bool:
     )
 
 
-def fetch_filings_ticker_api(
+def _fetch_filings_ticker_api_for_epic(
     *,
+    epic: str,
     ticker: str,
-    company_name: str = "",
-    api_key: str | None = None,
-    max_items: int = FILINGS_MAX_ITEMS,
-    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+    company_name: str,
+    api_key: str,
+    max_items: int,
+    lookback_days: int,
 ) -> list[dict[str, Any]]:
-    """
-    Fetch RNS items from Ticker.app when ``TICKER_API_KEY`` is configured.
-
-    Free/lite tiers vary; failures are logged and return an empty list so the
-    Google News path can still populate the index.
-
-    Some plans ignore the ``symbol`` filter and return a global RNS feed — we
-    always drop headlines that do not mention the issuer EPIC / name tokens.
-    """
-    key = api_key or os.environ.get("TICKER_API_KEY") or os.environ.get("RNS_API_KEY")
-    if not key:
-        return []
-
-    epic = _epic(ticker)
+    """Fetch Ticker.app RNS rows for a single EPIC symbol."""
     date_from = (datetime.now(UTC) - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
     params = urllib.parse.urlencode(
         {
@@ -1812,15 +1818,15 @@ def fetch_filings_ticker_api(
     )
     url = f"{TICKER_API_BASE}/disclosures/sources/rns/items?{params}"
     try:
-        payload = _http_get(url, headers={"x-api-key": key, "Accept": "application/json"})
+        payload = _http_get(url, headers={"x-api-key": api_key, "Accept": "application/json"})
         data = json.loads(payload.decode("utf-8"))
     except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-        logger.warning("Ticker RNS API failed for %s: %s", ticker, exc)
+        logger.warning("Ticker RNS API failed for %s (%s): %s", ticker, epic, exc)
         return []
 
     warnings = data.get("warnings") if isinstance(data, dict) else None
     if warnings:
-        logger.info("Ticker RNS API warnings for %s: %s", ticker, warnings)
+        logger.info("Ticker RNS API warnings for %s (%s): %s", ticker, epic, warnings)
 
     items = data.get("data") if isinstance(data, dict) else data
     if not isinstance(items, list):
@@ -1902,12 +1908,57 @@ def fetch_filings_ticker_api(
         )
     if skipped_unrelated:
         logger.info(
-            "Ticker RNS API: dropped %s unrelated headline(s) for %s (kept %s)",
+            "Ticker RNS API (%s): dropped %s unrelated headline(s) for %s (kept %s)",
+            epic,
             skipped_unrelated,
             ticker,
             len(rows),
         )
     return rows
+
+
+def fetch_filings_ticker_api(
+    *,
+    ticker: str,
+    company_name: str = "",
+    api_key: str | None = None,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """
+    Fetch RNS items from Ticker.app when ``TICKER_API_KEY`` is configured.
+
+    Free/lite tiers vary; failures are logged and return an empty list so the
+    Google News path can still populate the index.
+
+    Some plans ignore the ``symbol`` filter and return a global RNS feed — we
+    always drop headlines that do not mention the issuer EPIC / name tokens.
+    When the primary EPIC returns no rows, known alternate symbols (e.g. GN5
+    for GFTU) are tried before giving up.
+    """
+    key = api_key or os.environ.get("TICKER_API_KEY") or os.environ.get("RNS_API_KEY")
+    if not key:
+        return []
+
+    for epic in _uk_rns_epics(ticker):
+        rows = _fetch_filings_ticker_api_for_epic(
+            epic=epic,
+            ticker=ticker,
+            company_name=company_name,
+            api_key=key,
+            max_items=max_items,
+            lookback_days=lookback_days,
+        )
+        if rows:
+            if epic != _base_symbol(ticker):
+                logger.info(
+                    "Ticker RNS API: %s matched via alternate EPIC %s (%d rows)",
+                    ticker,
+                    epic,
+                    len(rows),
+                )
+            return rows
+    return []
 
 
 def _google_news_article_id(url: str) -> str | None:
@@ -1969,7 +2020,14 @@ def _decode_google_news_article_url(url: str) -> str | None:
         if isinstance(parsed, list) and len(parsed) >= 3:
             parsed = parsed[:-2]
         decoded = json.loads(parsed[0][2])
-    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError, IndexError, TypeError) as exc:
+    except (
+        urllib.error.URLError,
+        TimeoutError,
+        OSError,
+        json.JSONDecodeError,
+        IndexError,
+        TypeError,
+    ) as exc:
         logger.debug("Google News batchexecute decode failed for %s: %s", article_id, exc)
         return None
     if (
@@ -2099,11 +2157,7 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
                         text = pdf_body
         else:
             html = raw.decode("utf-8", errors="replace")
-            text = (
-                _extract_ixbrl_html_text(html)
-                if _is_ixbrl_html(html)
-                else _strip_html(html)
-            )
+            text = _extract_ixbrl_html_text(html) if _is_ixbrl_html(html) else _strip_html(html)
         if not _filing_text_is_substantive(text):
             return None
     if len(text) > FILINGS_BODY_MAX_CHARS:
@@ -2191,8 +2245,7 @@ def fetch_filings_ir_allowlist(
         elif any(token in lower for token in ("trading",)):
             period = "trading_update"
         elif any(
-            token in lower
-            for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")
+            token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")
         ):
             period = "interim"
         digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
@@ -2759,7 +2812,9 @@ def prune_orphaned_filing_bodies(filings_dir: Path) -> dict[str, Any]:
         except OSError as exc:
             logger.debug("Failed to prune orphaned body %s: %s", path, exc)
     if removed_paths:
-        logger.info("Pruned %d orphaned filing body file(s) under %s", len(removed_paths), bodies_dir)
+        logger.info(
+            "Pruned %d orphaned filing body file(s) under %s", len(removed_paths), bodies_dir
+        )
     return {"removed": len(removed_paths), "kept": kept, "removed_paths": removed_paths}
 
 
@@ -2877,11 +2932,7 @@ def refetch_companies_house_filing_bodies(
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
-        if (
-            downloaded < max_bodies
-            and _is_ch_filing_row(item)
-            and not item.get("has_body")
-        ):
+        if downloaded < max_bodies and _is_ch_filing_row(item) and not item.get("has_body"):
             body = _fetch_companies_house_body(item)
             if body:
                 filename = f"{item['id']}.txt"
@@ -2950,8 +3001,7 @@ def refetch_investegate_filing_bodies(
     google_news_rejected = sum(
         1
         for row in enriched
-        if not row.get("has_body")
-        and "news.google.com" in str(row.get("url") or "")
+        if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
     missing = [row for row in enriched if _is_rns_body_fetch_candidate(row)]
     if not missing:
@@ -3225,11 +3275,7 @@ def refetch_missing_filing_bodies(
             ticker=ticker,
             company_name=company_name,
         )
-    missing = [
-        row
-        for row in filings
-        if row.get("url") and not row.get("has_body")
-    ]
+    missing = [row for row in filings if row.get("url") and not row.get("has_body")]
     updated = _write_bodies(filings, bodies_dir, max_bodies=max_bodies)
     after = sum(1 for row in updated if row.get("has_body"))
     payload["filings"] = updated
@@ -3420,9 +3466,7 @@ def ingest_filings(
     elif regime == "sec_edgar":
         groups.append(fetch_filings_sec_edgar(ticker=ticker))
     elif regime == "asx_announcements":
-        groups.append(
-            fetch_filings_asx_direct(company_name=company_name, ticker=ticker)
-        )
+        groups.append(fetch_filings_asx_direct(company_name=company_name, ticker=ticker))
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
         groups.append(
@@ -3552,9 +3596,7 @@ def ingest_filings(
         "regime": regime,
         "fetched_at": datetime.now(UTC).isoformat(),
         "note": note,
-        "sources_used": sorted(
-            {str(row.get("source")) for row in merged if row.get("source")}
-        ),
+        "sources_used": sorted({str(row.get("source")) for row in merged if row.get("source")}),
         "summary": summarize_filings(merged),
         "filings": merged,
     }

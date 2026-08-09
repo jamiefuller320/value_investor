@@ -6,7 +6,24 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+import pandas as pd
+
+from value_investor.fetch import CompanyMetrics
+from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
+    _BUILTIN_IR_URLS,
+    _compose_filing_body_with_depth_sections,
+    _compose_pdf_body_text,
+    _extract_investegate_html_text,
+    _extract_ixbrl_html_text,
+    _extract_pdf_depth_sections,
+    _fetch_ir_allowlist_body,
+    _filing_text_is_substantive,
+    _issuer_matches_sec_name,
+    _match_ir_row_to_investegate,
+    _scrub_misattributed_filing_rows,
+    _sec_edgar_supplement_allowed,
+    _uk_ticker_sec_dual_listed,
     asx_markit_file_url,
     classify_companies_house_period,
     classify_filing_entity_type,
@@ -38,19 +55,6 @@ from value_investor.research.filings import (
     resolve_investegate_document_url,
     resolve_investegate_lse_pdf_url,
     summarize_filings,
-    _BUILTIN_IR_URLS,
-    _scrub_misattributed_filing_rows,
-    _issuer_matches_sec_name,
-    _sec_edgar_supplement_allowed,
-    _uk_ticker_sec_dual_listed,
-    _extract_investegate_html_text,
-    _extract_ixbrl_html_text,
-    _compose_pdf_body_text,
-    _compose_filing_body_with_depth_sections,
-    _extract_pdf_depth_sections,
-    _filing_text_is_substantive,
-    _fetch_ir_allowlist_body,
-    _match_ir_row_to_investegate,
 )
 from value_investor.research.ingest import (
     apply_cashflow_metrics_fallback,
@@ -60,9 +64,6 @@ from value_investor.research.ingest import (
     install_fetch_cashflow_fallback,
     supplement_company_metrics_cashflow,
 )
-from value_investor.financials import extract_statement_metrics
-from value_investor.fetch import CompanyMetrics
-import pandas as pd
 
 
 def test_operating_cashflow_aliases_from_yahoo_labels():
@@ -113,7 +114,9 @@ def test_supplement_company_metrics_cashflow_megp_uses_cached_financials(tmp_pat
     sources.mkdir(parents=True)
     financials = {
         "ticker": "MEGP.L",
-        "cash_flow": {"2024": {"Operating Cash Flow": 90_800_000.0, "Free Cash Flow": 55_000_000.0}},
+        "cash_flow": {
+            "2024": {"Operating Cash Flow": 90_800_000.0, "Free Cash Flow": 55_000_000.0}
+        },
     }
     (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
 
@@ -223,9 +226,7 @@ def test_headline_relevant_to_issuer_filters_noise():
     assert headline_relevant_to_issuer(
         "Morgan Sindall Full Year Results", "Morgan Sindall Group plc", "MGNS.L"
     )
-    assert headline_relevant_to_issuer(
-        "MGNS Interim Results", "Morgan Sindall Group plc", "MGNS.L"
-    )
+    assert headline_relevant_to_issuer("MGNS Interim Results", "Morgan Sindall Group plc", "MGNS.L")
     assert headline_relevant_to_issuer(
         "ME Group Full Year Results", "ME Group International plc", "MEGP.L"
     )
@@ -238,9 +239,7 @@ def test_headline_relevant_to_issuer_filters_noise():
     assert not headline_relevant_to_issuer(
         "Form 8.3 - Rotork plc", "Hikma Pharmaceuticals PLC", "HIK.L"
     )
-    assert not headline_relevant_to_issuer(
-        "Net Asset Value(s)", "AEP Plantations Plc", "AEP.L"
-    )
+    assert not headline_relevant_to_issuer("Net Asset Value(s)", "AEP Plantations Plc", "AEP.L")
     assert not headline_relevant_to_issuer(
         "Development Partnership for 294-unit hotel - Investegate",
         "ME Group International plc",
@@ -353,6 +352,104 @@ def test_fetch_filings_investegate_company_parses_company_page(monkeypatch):
     assert "investegate.co.uk/announcement/" in rows[0]["url"]
 
 
+def test_fetch_filings_investegate_company_keeps_bare_rns_headlines(monkeypatch):
+    """Issuer company pages list titles without repeating the EPIC or brand name."""
+    html = """
+    <table>
+      <tr>
+        <td>13 Jul 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/grafton-group-ut-cdi---gftu/trading-update/1">Trading Update</a></td>
+      </tr>
+      <tr>
+        <td>05 Mar 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/grafton-group-ut-cdi---gftu/final-results/2">Final Results</a></td>
+      </tr>
+    </table>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    rows = fetch_filings_investegate_company(
+        ticker="GFTU.L",
+        company_name="Grafton Group plc",
+    )
+    assert len(rows) == 2
+    periods = {row["period"] for row in rows}
+    assert "trading_update" in periods
+    assert "annual" in periods
+
+
+def test_headline_relevant_to_issuer_gftu_gn5_alias():
+    assert headline_relevant_to_issuer(
+        "Grafton Group plc (GN5) Trading Update",
+        "Grafton Group plc",
+        "GFTU.L",
+    )
+    assert headline_relevant_to_issuer(
+        "Grafton Group Full Year Results",
+        "Grafton Group plc",
+        "GFTU.L",
+    )
+
+
+def test_fetch_filings_ticker_api_tries_gn5_alias_when_gftu_empty(monkeypatch):
+    calls: list[str] = []
+
+    def fake_get(url, headers=None, timeout=60):
+        if "symbol=GFTU" in url:
+            return json.dumps({"data": []}).encode("utf-8")
+        if "symbol=GN5" in url:
+            calls.append("GN5")
+            return json.dumps(
+                {
+                    "data": [
+                        {
+                            "headline": "Grafton Group plc Interim Results",
+                            "symbol": "GN5",
+                            "timestamp": "2026-07-01T07:00:00Z",
+                            "url": "https://newswire.tickerapp.net/rns/2026-07-01/gn5/interim.pdf",
+                        },
+                    ],
+                }
+            ).encode("utf-8")
+        raise AssertionError(url)
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    monkeypatch.setenv("TICKER_API_KEY", "test-key")
+    from value_investor.research.filings import fetch_filings_ticker_api
+
+    rows = fetch_filings_ticker_api(
+        ticker="GFTU.L",
+        company_name="Grafton Group plc",
+    )
+    assert calls == ["GN5"]
+    assert len(rows) == 1
+    assert rows[0]["period"] == "interim"
+
+
+def test_filter_misattributed_news_articles_drops_sector_noise():
+    from value_investor.research.ingest import filter_misattributed_news_articles
+
+    articles = [
+        {
+            "id": "good",
+            "title": "Grafton Group plc Trading Update",
+        },
+        {
+            "id": "bad",
+            "title": "Breedon Reports Higher Revenue and Raises Dividend",
+        },
+    ]
+    kept = filter_misattributed_news_articles(
+        articles,
+        company_name="Grafton Group plc",
+        ticker="GFTU.L",
+        market="ftse350",
+    )
+    assert [row["id"] for row in kept] == ["good"]
+
+
 def test_enrich_filing_rows_resolves_google_wrapper(monkeypatch):
     google_row = {
         "id": "g1",
@@ -435,9 +532,7 @@ def test_resolve_investegate_document_url_finds_lse_pdf():
 
 
 def test_resolve_investegate_lse_pdf_url_upgrades_investegate_page(monkeypatch):
-    investegate_url = (
-        "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
-    )
+    investegate_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
     lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
     html = f'<a href="{lse_pdf}">PDF</a>'
     monkeypatch.setattr(
@@ -449,9 +544,7 @@ def test_resolve_investegate_lse_pdf_url_upgrades_investegate_page(monkeypatch):
 
 
 def test_fetch_filing_body_investegate_follows_lse_pdf(monkeypatch):
-    investegate_url = (
-        "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
-    )
+    investegate_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
     lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
     investegate_html = f"""
     <h1>ITV plc Full Year Results 2025</h1>
@@ -536,17 +629,10 @@ def test_fetch_filing_body_rejects_unresolved_google_news_url(monkeypatch):
         "value_investor.research.filings.resolve_google_news_publisher_url",
         lambda url: None,
     )
-    assert (
-        fetch_filing_body(
-            "https://news.google.com/rss/articles/CBMiabc?oc=5"
-        )
-        is None
-    )
+    assert fetch_filing_body("https://news.google.com/rss/articles/CBMiabc?oc=5") is None
 
 
-def test_refetch_investegate_rejects_unresolved_google_news_wrapper(
-    tmp_path, monkeypatch
-):
+def test_refetch_investegate_rejects_unresolved_google_news_wrapper(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
     index = {
@@ -629,9 +715,7 @@ def test_refetch_investegate_fetches_direct_lse_pdf_url(tmp_path, monkeypatch):
     assert (filings_dir / "bodies" / "lse_pdf1.txt").exists()
 
 
-def test_refetch_indexed_without_body_filing_bodies_orchestrates(
-    tmp_path, monkeypatch
-):
+def test_refetch_indexed_without_body_filing_bodies_orchestrates(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
     (filings_dir / "filings_index.json").write_text(
@@ -685,10 +769,7 @@ def test_resolve_investegate_url_decodes_google_news_to_investegate(monkeypatch)
         "url": "https://news.google.com/rss/articles/CBMiabc?oc=5",
         "headline": "ITV plc Full Year Results 2025",
     }
-    assert (
-        resolve_investegate_url(row, ticker="ITV.L", company_name="ITV plc")
-        == decoded
-    )
+    assert resolve_investegate_url(row, ticker="ITV.L", company_name="ITV plc") == decoded
 
 
 def test_fetch_filing_body_parses_pdf(monkeypatch):
@@ -719,11 +800,7 @@ def test_compose_filing_body_with_depth_sections_includes_pension_and_covenant()
         "Net debt to EBITDA must remain below 3.5x\n"
         "Interest cover covenant headroom 18%"
     )
-    adjusting_page = (
-        "ADJUSTING ITEMS\n"
-        "Restructuring costs 45\n"
-        "Asset impairment 72"
-    )
+    adjusting_page = "ADJUSTING ITEMS\nRestructuring costs 45\nAsset impairment 72"
     full = early[:3500] + pension_page + covenant_page + adjusting_page
 
     text = _compose_filing_body_with_depth_sections(full)
@@ -984,8 +1061,7 @@ def test_refetch_ticker_rns_api_filing_bodies_megp_prunes_and_downloads(tmp_path
     monkeypatch.setattr(
         "value_investor.research.filings.fetch_filing_body",
         lambda url: (
-            "ME Group International plc full year results "
-            + ("revenue increased " * 30)
+            "ME Group International plc full year results " + ("revenue increased " * 30)
             if url == pdf_url
             else None
         ),
@@ -1095,17 +1171,23 @@ def test_classify_filing_entity_type_s838_from_body():
         "for the purposes of confirming that the Company now has sufficient distributable reserves."
     )
     assert classify_filing_entity_type(row, body_snippet=s838_body) == "s838_holding"
-    assert classify_filing_entity_type(
-        {
-            "source": "companies_house",
-            "headline": "Companies House accounts — accounts-with-accounts-type-group",
-            "summary": "accounts-with-accounts-type-group",
-        },
-        body_snippet="Vistry Group PLC Annual Report 2022 Strategic report",
-    ) == "consolidated"
-    assert classify_filing_entity_type(
-        {"headline": "Form 8.3 - Rotork plc"},
-    ) == "holding_disclosure"
+    assert (
+        classify_filing_entity_type(
+            {
+                "source": "companies_house",
+                "headline": "Companies House accounts — accounts-with-accounts-type-group",
+                "summary": "accounts-with-accounts-type-group",
+            },
+            body_snippet="Vistry Group PLC Annual Report 2022 Strategic report",
+        )
+        == "consolidated"
+    )
+    assert (
+        classify_filing_entity_type(
+            {"headline": "Form 8.3 - Rotork plc"},
+        )
+        == "holding_disclosure"
+    )
 
 
 def test_sanitize_filings_index_reclassifies_ch_period_and_entity_type(tmp_path: Path):
@@ -1169,13 +1251,18 @@ def test_classify_rns_headline_annual_interim_and_trading_update():
     assert classify_rns_headline("ME Group Full Year Results") == "annual"
     assert classify_rns_headline("Half-year Results for the six months ended 30 June") == "interim"
     assert classify_rns_headline("ITV plc Q1 Trading Update") == "trading_update"
-    assert classify_rns_headline("Trading Statement for the 17 weeks ended 3 May") == "trading_update"
+    assert (
+        classify_rns_headline("Trading Statement for the 17 weeks ended 3 May") == "trading_update"
+    )
     assert classify_rns_headline("Transaction in Own Shares") == "other"
     assert classify_rns_headline("Shell plc First Quarter 2026 Interim Dividend") == "other"
 
 
 def test_classify_filing_period_annual_and_interim():
-    assert classify_filing_period("Shell Plc 4th Quarter 2025 and Full Year Unaudited Results") == "annual"
+    assert (
+        classify_filing_period("Shell Plc 4th Quarter 2025 and Full Year Unaudited Results")
+        == "annual"
+    )
     assert classify_filing_period("Shell Publishes Annual Report and Accounts") == "annual"
     assert classify_filing_period("Half-year Results") == "interim"
     assert classify_filing_period("Q1 Trading Update") == "trading_update"
@@ -1587,7 +1674,9 @@ def test_ingest_filings_euro_regime_includes_sec_dual_list(tmp_path: Path):
             "value_investor.research.filings._sec_edgar_supplement_allowed",
             return_value=True,
         ),
-        patch("value_investor.research.filings.fetch_filings_sec_edgar", return_value=sec_rows) as sec,
+        patch(
+            "value_investor.research.filings.fetch_filings_sec_edgar", return_value=sec_rows
+        ) as sec,
         patch("value_investor.research.filings.fetch_filing_body", return_value=None),
         patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
     ):
@@ -1671,21 +1760,30 @@ def test_ingest_filings_uk_rns_includes_sec_when_dual_listed(tmp_path: Path):
 def test_issuer_matches_sec_name_rejects_us_homonyms():
     from value_investor.research.filings import _issuer_matches_sec_name
 
-    assert _issuer_matches_sec_name(
-        "Costain Group PLC",
-        "COSTCO WHOLESALE CORP /NEW",
-        "COST.L",
-    ) is False
-    assert _issuer_matches_sec_name(
-        "Shell plc",
-        "Shell plc",
-        "SHEL.L",
-    ) is True
-    assert _issuer_matches_sec_name(
-        "Rio Tinto Group",
-        "RIO TINTO PLC",
-        "RIO.L",
-    ) is True
+    assert (
+        _issuer_matches_sec_name(
+            "Costain Group PLC",
+            "COSTCO WHOLESALE CORP /NEW",
+            "COST.L",
+        )
+        is False
+    )
+    assert (
+        _issuer_matches_sec_name(
+            "Shell plc",
+            "Shell plc",
+            "SHEL.L",
+        )
+        is True
+    )
+    assert (
+        _issuer_matches_sec_name(
+            "Rio Tinto Group",
+            "RIO TINTO PLC",
+            "RIO.L",
+        )
+        is True
+    )
 
 
 def test_uk_ticker_sec_dual_listed_rejects_costain_costco_collision(monkeypatch):
@@ -1875,8 +1973,12 @@ def test_ingest_filings_euro_includes_investegate(
     _mock_ir,
     tmp_path: Path,
 ):
-    mock_euro_news.return_value = [{"id": "gn1", "source": "google_news_euro", "headline": "Results"}]
-    mock_investegate.return_value = [{"id": "ig1", "source": "investegate_direct", "headline": "Annual"}]
+    mock_euro_news.return_value = [
+        {"id": "gn1", "source": "google_news_euro", "headline": "Results"}
+    ]
+    mock_investegate.return_value = [
+        {"id": "ig1", "source": "investegate_direct", "headline": "Annual"}
+    ]
     mock_enrich.side_effect = lambda rows, **_: rows
     mock_write_bodies.side_effect = lambda rows, *_a, **_k: rows
 
@@ -2002,8 +2104,7 @@ def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path,
             return None
         return (
             "Trading update revenue growth 2% to 4% and operating profit "
-            "in the range of $720 million with dividend guidance."
-            + ("x" * 220)
+            "in the range of $720 million with dividend guidance." + ("x" * 220)
         )
 
     monkeypatch.setattr(
@@ -2084,8 +2185,7 @@ def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
 
     sample_body = (
         "ITV Studios segment revenue £2,130m. Studios margin 13-15%. "
-        "Dividend policy 5.0p per share. Pro-forma cash flow bridge."
-        + ("x" * 220)
+        "Dividend policy 5.0p per share. Pro-forma cash flow bridge." + ("x" * 220)
     )
     monkeypatch.setattr(
         "value_investor.research.filings.fetch_filing_body",
@@ -2242,8 +2342,7 @@ def test_refetch_ir_allowlist_filing_bodies_investegate_fallback(tmp_path: Path,
     )
     fallback_body = (
         "Hikma reiterates full year 2026 guidance. Revenue growth 2% to 4%. "
-        "Operating profit $720 million to $770 million."
-        + ("x" * 220)
+        "Operating profit $720 million to $770 million." + ("x" * 220)
     )
 
     monkeypatch.setattr(
@@ -2355,13 +2454,10 @@ def test_fetch_filings_ir_allowlist_megp_l_includes_june_trading_update(tmp_path
     trading = [
         row
         for row in rows
-        if row["period"] == "trading_update"
-        and "260601-ME-Group-Trading-Update.pdf" in row["url"]
+        if row["period"] == "trading_update" and "260601-ME-Group-Trading-Update.pdf" in row["url"]
     ]
     assert trading
-    presentation = [
-        row for row in rows if "Annual-Results-Presentation.pdf" in row["url"]
-    ]
+    presentation = [row for row in rows if "Annual-Results-Presentation.pdf" in row["url"]]
     assert presentation
 
 
@@ -2393,4 +2489,3 @@ def test_fetch_filings_ir_allowlist_megp_l(tmp_path: Path):
     assert len(rows) >= 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert all("me-group.com" in row["url"] for row in rows)
-

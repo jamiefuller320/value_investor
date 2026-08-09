@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import logging
 import re
 import urllib.parse
@@ -32,7 +31,9 @@ def _strip_html(text: str) -> str:
     return re.sub(r"\s+", " ", unescape(cleaned)).strip()
 
 
-def _df_years(df: pd.DataFrame | None, *, max_years: int = FINANCIAL_YEARS) -> dict[str, dict[str, float | None]]:
+def _df_years(
+    df: pd.DataFrame | None, *, max_years: int = FINANCIAL_YEARS
+) -> dict[str, dict[str, float | None]]:
     if df is None or df.empty:
         return {}
     out: dict[str, dict[str, float | None]] = {}
@@ -267,7 +268,9 @@ def _normalize_yfinance_article(item: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
-def fetch_yfinance_news(ticker: str, *, max_items: int = YFINANCE_NEWS_MAX_ITEMS) -> list[dict[str, Any]]:
+def fetch_yfinance_news(
+    ticker: str, *, max_items: int = YFINANCE_NEWS_MAX_ITEMS
+) -> list[dict[str, Any]]:
     stock = yf.Ticker(ticker)
     articles: list[dict[str, Any]] = []
     for item in (stock.news or [])[:max_items]:
@@ -404,6 +407,26 @@ def filter_news_since(articles: list[dict[str, Any]], since: datetime) -> list[d
     return fresh
 
 
+def filter_misattributed_news_articles(
+    articles: list[dict[str, Any]],
+    *,
+    company_name: str,
+    ticker: str,
+    market: str | None = None,
+) -> list[dict[str, Any]]:
+    """Drop UK news headlines that never mention the issuer EPIC or company name."""
+    from value_investor.research.filings import headline_relevant_to_issuer, resolve_filings_regime
+
+    if resolve_filings_regime(market, ticker) != "uk_rns":
+        return articles
+    kept: list[dict[str, Any]] = []
+    for article in articles:
+        title = str(article.get("title") or "")
+        if headline_relevant_to_issuer(title, company_name, ticker):
+            kept.append(article)
+    return kept
+
+
 def ingest_research_sources(
     *,
     ticker: str,
@@ -442,6 +465,12 @@ def ingest_research_sources(
     yf_news = fetch_yfinance_news(ticker)
     google_news = fetch_google_news_rss(company_name, ticker, market=market)
     all_news = merge_news_articles(yf_news, google_news)
+    all_news = filter_misattributed_news_articles(
+        all_news,
+        company_name=company_name,
+        ticker=ticker,
+        market=market,
+    )
     if since is not None:
         new_news = filter_news_since(all_news, since)
     else:
