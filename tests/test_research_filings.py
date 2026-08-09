@@ -38,6 +38,7 @@ from value_investor.research.filings import (
     resolve_investegate_document_url,
     resolve_investegate_lse_pdf_url,
     summarize_filings,
+    _BUILTIN_IR_URLS,
     _scrub_misattributed_filing_rows,
     _issuer_matches_sec_name,
     _sec_edgar_supplement_allowed,
@@ -2288,6 +2289,43 @@ def test_fetch_filings_ir_allowlist_hik_l_builtin(tmp_path: Path):
     assert any("april-2026-trading-update-vfinal.pdf" in url for url in urls)
     assert any("annual-report" in url for url in urls)
     assert all(row["source"] == "ir_allowlist" for row in rows)
+
+
+def test_load_ir_url_allowlist_merges_file_with_builtin(tmp_path: Path):
+    """File allowlist URLs are merged with built-in IR URLs (not replaced)."""
+    path = tmp_path / "ir.json"
+    file_hik_urls = [
+        "https://www.hikma.com/investors/annual-report-2024.pdf",
+        "https://www.hikma.com/investors/interim-results.pdf",
+    ]
+    path.write_text(
+        json.dumps(
+            {
+                "urls": {
+                    "HIK.L": file_hik_urls,
+                    "SHEL.L": [
+                        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
+                    ],
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    mapping = load_ir_url_allowlist(path)
+    builtin_hik = _BUILTIN_IR_URLS.get("HIK.L") or []
+    assert all(url in mapping["HIK.L"] for url in file_hik_urls)
+    assert len(mapping["HIK.L"]) == len(file_hik_urls) + len(builtin_hik)
+
+    rows = fetch_filings_ir_allowlist("HIK.L", path=path)
+    assert len(rows) == len(mapping["HIK.L"])
+    assert rows[0]["source"] == "ir_allowlist"
+    assert rows[0]["url"] == file_hik_urls[0]
+    assert rows[0]["period"] == "annual"
+    assert rows[1]["url"] == file_hik_urls[1]
+    assert rows[1]["period"] == "interim"
+    shel = fetch_filings_ir_allowlist("SHEL.L", path=path)
+    assert len(shel) == 1
+    assert shel[0]["period"] == "annual"
 
 
 def test_fetch_filings_ir_allowlist_gftu_l(tmp_path: Path):
