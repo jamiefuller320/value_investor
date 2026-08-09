@@ -357,9 +357,9 @@ def test_ingest_improvement_installs_fetch_cashflow_fallback():
 @patch("value_investor.research.ingest_improvement.ingest_research_sources")
 @patch("value_investor.research.ingest_improvement.sanitize_filings_index")
 @patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
-@patch("value_investor.research.ingest_improvement.refetch_indexed_without_body_filing_bodies")
+@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
 def test_ingest_improvement_refetches_when_partial_bodies(
-    mock_indexed_refetch,
+    mock_primary_refetch,
     mock_bootstrap,
     mock_sanitize,
     mock_ingest_sources,
@@ -383,10 +383,16 @@ def test_ingest_improvement_refetches_when_partial_bodies(
     mock_ingest_sources.return_value = {"filings_summary": {"with_body": 10}}
     mock_alternate.return_value = {"fetched": 0}
     mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
-    mock_indexed_refetch.return_value = {
-        "investegate": {"fetched": 2, "with_body_after": 12},
-        "ticker_rns": {"fetched": 0, "with_body_after": 12},
-        "fetched": 2,
+    mock_primary_refetch.return_value = {
+        "companies_house": {"fetched": 1, "with_body_after": 11},
+        "rns": {
+            "investegate": {"fetched": 2, "with_body_after": 12},
+            "ticker_rns": {"fetched": 0, "with_body_after": 12},
+            "fetched": 2,
+            "with_body_before": 10,
+            "with_body_after": 12,
+        },
+        "fetched": 3,
         "with_body_before": 10,
         "with_body_after": 12,
     }
@@ -399,9 +405,10 @@ def test_ingest_improvement_refetches_when_partial_bodies(
         suggestions_path=tmp_path / "missing.json",
     )
 
-    mock_indexed_refetch.assert_called_once()
+    mock_primary_refetch.assert_called_once()
     assert summary.results[0]["indexed_refetch"]["fetched"] == 2
     assert summary.results[0]["investegate_refetch"]["fetched"] == 2
+    assert summary.results[0]["ch_refetch"]["fetched"] == 1
 
 
 @patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")

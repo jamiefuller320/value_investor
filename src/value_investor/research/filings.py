@@ -181,6 +181,7 @@ _IXBRL_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bNOTES TO THE (?:FINANCIAL|GROUP) STATEMENTS\b", 2),
     (r"\bGOING CONCERN\b", 3),
     (r"\bPENSION\b", 3),
+    (r"\b(?:FINANCIAL )?COVENANTS?\b", 3),
 )
 _INVESTEGATE_COMPANY_URL = "https://www.investegate.co.uk/company/{epic}"
 _INVESTEGATE_USER_AGENT = "value-investor-research/0.1 (+investegate; research@local)"
@@ -240,7 +241,9 @@ def _extract_ixbrl_html_text(html: str) -> str:
     text = re.sub(r"\b\d{10}\b", " ", text)
     text = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", " ", text)
     text = _SEC_MEMBER_TOKEN.sub(" ", text)
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"\s+", " ", text).strip()
+    composed = _compose_filing_body_with_depth_sections(text)
+    return composed or text
 
 
 def _score_ch_body_text(text: str) -> int:
@@ -752,7 +755,11 @@ _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bCASH FLOW STATEMENT\b", 1),
     (r"\b(?:NOTE|NOTES)\s+(?:TO THE )?(?:FINANCIAL|GROUP) STATEMENTS\b", 2),
     (r"\bEXCEPTIONAL ITEMS?\b", 2),
+    (r"\bADJUSTING ITEMS?\b", 2),
     (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*(?:Exceptional|Adjusting items?)", 2),
+    (r"\b(?:DEFINED BENEFIT|PENSION(?: SCHEME| OBLIGATIONS?)?)\b", 2),
+    (r"\b(?:FINANCIAL )?COVENANTS?\b", 2),
+    (r"\bGOING CONCERN\b", 2),
     (r"\bRELATED PARTY TRANSACTIONS?\b", 3),
     (r"\bRELATED PARTIES\b", 3),
     (r"\bSEGMENT(?:AL)? (?:INFORMATION|ANALYSIS|REPORTING)\b", 3),
@@ -763,7 +770,7 @@ _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
 
 
 def _extract_pdf_depth_sections(full_text: str, *, skip_before: int = 0) -> list[str]:
-    """Pull windows for cash-flow statements, exceptional-item notes, and segment tables."""
+    """Pull windows for cash-flow, pensions, covenants, adjusting items, and segment tables."""
     sections: list[str] = []
     used_ranges: list[tuple[int, int]] = []
     for pattern, _rank in _PDF_DEPTH_SECTION_MARKERS:
@@ -784,21 +791,20 @@ def _extract_pdf_depth_sections(full_text: str, *, skip_before: int = 0) -> list
     return sections
 
 
-def _compose_pdf_body_text(pages: list[str]) -> str | None:
+def _compose_filing_body_with_depth_sections(full_text: str) -> str | None:
     """
-    Compose filing body text from PDF pages.
+    Compose filing body text with page-range depth extract.
 
     Keeps the opening narrative, then splices consolidated cash-flow statements,
-    exceptional-item notes, and related-party / geographic segment disclosures that
-    often sit beyond the first ~30 pages of annual reports and IR decks.
+    pension/covenant notes, adjusting items, and related-party / segment disclosures
+    that often sit beyond the first ~30 pages of annual reports and filed accounts.
     """
-    full = "\n".join(page.strip() for page in pages if page and page.strip())
-    if not full.strip():
+    if not full_text.strip():
         return None
 
-    lead_limit = min(_PDF_DEPTH_LEAD_CHARS, len(full))
-    lead = full[:lead_limit].rstrip()
-    depth_sections = _extract_pdf_depth_sections(full, skip_before=lead_limit)
+    lead_limit = min(_PDF_DEPTH_LEAD_CHARS, len(full_text))
+    lead = full_text[:lead_limit].rstrip()
+    depth_sections = _extract_pdf_depth_sections(full_text, skip_before=lead_limit)
 
     parts = [lead]
     for section in depth_sections:
@@ -808,6 +814,12 @@ def _compose_pdf_body_text(pages: list[str]) -> str | None:
     if len(text) > FILINGS_BODY_MAX_CHARS:
         text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
     return text or None
+
+
+def _compose_pdf_body_text(pages: list[str]) -> str | None:
+    """Compose filing body text from PDF pages (see :func:`_compose_filing_body_with_depth_sections`)."""
+    full = "\n".join(page.strip() for page in pages if page and page.strip())
+    return _compose_filing_body_with_depth_sections(full)
 
 
 def _extract_pdf_text(raw: bytes) -> str | None:
@@ -2955,6 +2967,41 @@ def refetch_indexed_without_body_filing_bodies(
         "with_body_after": after,
         "google_news_rejected": int(investegate.get("google_news_rejected") or 0),
         "note": "refetch_indexed_without_body_filing_bodies",
+    }
+
+
+def refetch_uk_primary_filing_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 20,
+) -> dict[str, Any]:
+    """
+    UK primary-body pipeline: Companies House filed accounts + LSE/Investegate RNS.
+
+    Resolves Google News wrappers to Investegate/LSE direct URLs, downloads CH
+    PDF/iXBRL bodies (with page-range depth extract for pensions, covenants,
+    adjusting items, and cash-flow statements), then fills remaining RNS rows.
+    """
+    ch = refetch_companies_house_filing_bodies(filings_dir, max_bodies=max_bodies)
+    rns = refetch_indexed_without_body_filing_bodies(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+    )
+    before = int(ch.get("with_body_before") or 0)
+    after = int(rns.get("with_body_after") or ch.get("with_body_after") or before)
+    return {
+        "companies_house": ch,
+        "rns": rns,
+        "attempted": int(ch.get("attempted") or 0) + int(rns.get("attempted") or 0),
+        "fetched": int(ch.get("fetched") or 0) + int(rns.get("fetched") or 0),
+        "with_body_before": before,
+        "with_body_after": after,
+        "google_news_rejected": int(rns.get("google_news_rejected") or 0),
+        "note": "refetch_uk_primary_filing_bodies",
     }
 
 

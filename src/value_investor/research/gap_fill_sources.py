@@ -22,6 +22,7 @@ from value_investor.research.filings import (
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
     refetch_ticker_rns_api_filing_bodies,
+    refetch_uk_primary_filing_bodies,
 )
 from value_investor.storage import read_json, resolve_json_path, write_json
 
@@ -323,28 +324,18 @@ def prepare_gap_fill_source_pack(
     investegate_refetch: dict[str, Any] = {}
     ticker_rns_refetch: dict[str, Any] = {}
     if _market_bucket(market, ticker) == "uk":
-        ch_refetch = refetch_companies_house_filing_bodies(
-            filings_dir,
-            max_bodies=20,
-        )
-        if int(ch_refetch.get("fetched") or 0) > 0:
-            body_refetch = ch_refetch
-        investegate_refetch = refetch_investegate_filing_bodies(
+        primary_refetch = refetch_uk_primary_filing_bodies(
             filings_dir,
             ticker=ticker,
             company_name=company_name,
             max_bodies=20,
         )
-        if int(investegate_refetch.get("fetched") or 0) > 0:
-            body_refetch = investegate_refetch
-        ticker_rns_refetch = refetch_ticker_rns_api_filing_bodies(
-            filings_dir,
-            ticker=ticker,
-            company_name=company_name,
-            max_bodies=20,
-        )
-        if int(ticker_rns_refetch.get("fetched") or 0) > 0:
-            body_refetch = ticker_rns_refetch
+        ch_refetch = dict(primary_refetch.get("companies_house") or {})
+        rns_refetch = dict(primary_refetch.get("rns") or {})
+        investegate_refetch = dict(rns_refetch.get("investegate") or {})
+        ticker_rns_refetch = dict(rns_refetch.get("ticker_rns") or {})
+        if int(primary_refetch.get("fetched") or 0) > 0:
+            body_refetch = primary_refetch
     ir_refetch: dict[str, Any] = {}
     if fetch_filings_ir_allowlist(ticker):
         ir_refetch = refetch_ir_allowlist_filing_bodies(
@@ -497,7 +488,19 @@ def execute_planned_alternate_sources(
                 market=market,
                 deepen_history=True,
             )
-            if source_id == "investegate_rns_full":
+            if _market_bucket(market, ticker) == "uk" and source_id in {
+                "companies_house_accounts",
+                "investegate_rns_full",
+            }:
+                from value_investor.research.filings import refetch_uk_primary_filing_bodies
+
+                last_refetch = refetch_uk_primary_filing_bodies(
+                    filings_dir,
+                    ticker=ticker,
+                    company_name=company_name,
+                    max_bodies=20,
+                )
+            elif source_id == "investegate_rns_full":
                 from value_investor.research.filings import refetch_investegate_filing_bodies
 
                 last_refetch = refetch_investegate_filing_bodies(
