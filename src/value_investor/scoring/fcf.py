@@ -50,6 +50,29 @@ _INTERIM_EPS_DECLINE_RES = (
     ),
 )
 
+_ADJUSTED_EPS_GROWTH_RES = (
+    re.compile(
+        r"adjusted\s+eps\s+\+?\s*([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"adjusted\s+eps\s+increased\s+by\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"([\d.]+)\s*%\s+growth\s+in\s+adjusted\s+eps",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"growth\s+in\s+adjusted\s+eps[^.\n]{0,80}?([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"adjusted\s+earnings\s+per\s+share\s+[\d.]+\s*p?\s+[\d.]+\s+p?\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+)
+
 _FILING_METRIC_KEYS = (
     "operating_cashflow",
     "operating_cashflow_prev",
@@ -59,6 +82,7 @@ _FILING_METRIC_KEYS = (
     "net_income_adjusted_prev",
     "dividends_paid",
     "interim_eps_decline_pct",
+    "adjusted_eps_growth_pct",
 )
 
 _RESEARCH_ROOTS = (
@@ -181,6 +205,55 @@ def parse_interim_eps_decline_pct(text: str) -> float | None:
     return None
 
 
+def parse_adjusted_eps_growth_pct(text: str) -> float | None:
+    """Return signed growth fraction (e.g. 0.16 for +16%) from filing adjusted-EPS prose."""
+    if not text:
+        return None
+    for pattern in _ADJUSTED_EPS_GROWTH_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        try:
+            pct = float(match.group(1)) / 100.0
+        except (TypeError, ValueError):
+            continue
+        if pct != 0:
+            return pct
+    return None
+
+
+def compute_yoy_growth_rate(current: float | None, previous: float | None) -> float | None:
+    """Year-on-year growth rate when both values are available and prior is non-zero."""
+    if current is None or previous is None:
+        return None
+    if isinstance(current, float) and pd.isna(current):
+        return None
+    if isinstance(previous, float) and pd.isna(previous):
+        return None
+    prev = float(previous)
+    if prev == 0:
+        return None
+    return (float(current) - prev) / abs(prev)
+
+
+def earnings_growth_signs_diverge(
+    statutory_growth: float | None,
+    adjusted_growth: float | None,
+) -> bool:
+    """True when Yahoo statutory and filing-adjusted growth rates differ in sign."""
+    if statutory_growth is None or adjusted_growth is None:
+        return False
+    if isinstance(statutory_growth, float) and pd.isna(statutory_growth):
+        return False
+    if isinstance(adjusted_growth, float) and pd.isna(adjusted_growth):
+        return False
+    statutory = float(statutory_growth)
+    adjusted = float(adjusted_growth)
+    if statutory == 0 or adjusted == 0:
+        return False
+    return (statutory > 0) != (adjusted > 0)
+
+
 def _filings_index_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
     ticker = ticker.strip().upper()
     candidates: list[Path] = []
@@ -257,6 +330,74 @@ def extract_interim_eps_decline_for_ticker(
     if not body:
         return None
     return parse_interim_eps_decline_pct(body)
+
+
+def _iter_filing_bodies(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+    periods: tuple[str, ...] = ("annual", "interim"),
+) -> list[str]:
+    """Load filing body text for ``periods`` in reverse published_at order."""
+    bodies: list[str] = []
+    for index_path in _filings_index_candidates(ticker, output_dir):
+        resolved = resolve_json_path(index_path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+
+        rows = [
+            row
+            for row in payload.get("filings") or []
+            if isinstance(row, dict)
+            and row.get("period") in periods
+            and row.get("has_body")
+        ]
+        if not rows:
+            continue
+
+        rows.sort(
+            key=lambda row: str(row.get("published_at") or ""),
+            reverse=True,
+        )
+        for row in rows:
+            body_path = _resolve_filing_body_path(row.get("body_path"))
+            if body_path is None:
+                continue
+            try:
+                bodies.append(body_path.read_text(encoding="utf-8", errors="replace"))
+            except OSError:
+                continue
+        if bodies:
+            break
+    return bodies
+
+
+def extract_adjusted_eps_growth_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+    financials: dict[str, Any] | None = None,
+) -> float | None:
+    """Parse adjusted-EPS growth from filing bodies, falling back to normalized income YoY."""
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir):
+        parsed = parse_adjusted_eps_growth_pct(body)
+        if parsed is not None:
+            return parsed
+
+    payload = financials if financials is not None else load_cached_financials(ticker, output_dir=output_dir)
+    if not payload:
+        return None
+    income_metrics = extract_income_metrics_from_annual_financials(payload)
+    return compute_yoy_growth_rate(
+        income_metrics.get("net_income_adjusted"),
+        income_metrics.get("net_income_adjusted_prev"),
+    )
 
 
 def extract_filing_metrics_from_annual_financials(
@@ -750,5 +891,15 @@ def enrich_universe_with_filing_metrics(
             current = out.at[index, "interim_eps_decline_pct"]
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, "interim_eps_decline_pct"] = interim_decline
+
+        adjusted_growth = extract_adjusted_eps_growth_for_ticker(
+            ticker,
+            output_dir=output_dir,
+            financials=financials,
+        )
+        if adjusted_growth is not None:
+            current = out.at[index, "adjusted_eps_growth_pct"]
+            if current is None or (isinstance(current, float) and pd.isna(current)):
+                out.at[index, "adjusted_eps_growth_pct"] = adjusted_growth
 
     return out

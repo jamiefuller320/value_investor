@@ -17,9 +17,11 @@ from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_di
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
+    parse_adjusted_eps_growth_pct,
     parse_interim_eps_decline_pct,
 )
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
+from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
 from value_investor.scoring.sector_overrides import (
@@ -772,3 +774,96 @@ def test_enrich_signals_with_fcf_basis_overlay_caps_yield_inflated_strong_buy(tm
     assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
+
+
+def test_parse_adjusted_eps_growth_pct_from_ir_prose():
+    assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(0.16)
+
+
+def test_enrich_universe_with_filing_metrics_extracts_adjusted_eps_growth(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    body_path = filings / "annual.txt"
+    body_path.write_text("Adjusted EPS +16% to 19.4p", encoding="utf-8")
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "annual",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    universe = pd.DataFrame([{"ticker": "FGP.L", "name": "FirstGroup plc"}])
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["adjusted_eps_growth_pct"] == pytest.approx(0.16)
+
+
+def test_enrich_signals_with_earnings_basis_overlay_caps_fgp_like_profile():
+    signals = pd.DataFrame([
+        {
+            "ticker": "FGP.L",
+            "name": "FirstGroup plc",
+            "sector": "Industrials",
+            "signal": "strong_buy",
+            "conviction_score": 0.6,
+            "earnings_growth": -0.059,
+            "adjusted_eps_growth_pct": 0.16,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "FGP.L",
+            "model_id": "neff_pegy",
+            "model_name": "Neff PEGY",
+            "passed": True,
+            "score": 0.85,
+            "reasons": "['PEGY=0.72']",
+            "failed_criteria": "[]",
+        }
+    ])
+
+    enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
+
+    assert enriched.iloc[0]["signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
+
+
+def test_enrich_signals_with_earnings_basis_overlay_not_triggered_without_sign_divergence():
+    signals = pd.DataFrame([
+        {
+            "ticker": "FGP.L",
+            "signal": "strong_buy",
+            "conviction_score": 0.6,
+            "earnings_growth": 0.05,
+            "adjusted_eps_growth_pct": 0.16,
+        }
+    ])
+    model_results = pd.DataFrame([
+        {
+            "ticker": "FGP.L",
+            "model_id": "neff_pegy",
+            "model_name": "Neff PEGY",
+            "passed": True,
+            "score": 0.85,
+            "reasons": "[]",
+            "failed_criteria": "[]",
+        }
+    ])
+
+    enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
+
+    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is False
+    assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"

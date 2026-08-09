@@ -15,6 +15,7 @@ from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
 from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
+from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     reconcile_fcf_for_ticker,
@@ -75,6 +76,7 @@ class CompanyReport:
     cash_conversion_overlay: bool = False
     dividend_yield_overlay: bool = False
     interim_quality_overlay: bool = False
+    earnings_basis_overlay: bool = False
     fcf_basis_overlay: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
@@ -120,6 +122,7 @@ class CompanyReport:
             "cash_conversion_overlay": self.cash_conversion_overlay,
             "dividend_yield_overlay": self.dividend_yield_overlay,
             "interim_quality_overlay": self.interim_quality_overlay,
+            "earnings_basis_overlay": self.earnings_basis_overlay,
             "fcf_basis_overlay": self.fcf_basis_overlay,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
@@ -171,6 +174,7 @@ class CompanyReport:
             cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
             dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
             interim_quality_overlay=bool(data.get("interim_quality_overlay")),
+            earnings_basis_overlay=bool(data.get("earnings_basis_overlay")),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
@@ -246,6 +250,10 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
     growth = row.get("earnings_growth")
     if growth is not None and not (isinstance(growth, float) and pd.isna(growth)):
         inputs["earnings_growth_pct"] = float(growth)
+
+    adjusted_growth = row.get("adjusted_eps_growth_pct")
+    if adjusted_growth is not None and not (isinstance(adjusted_growth, float) and pd.isna(adjusted_growth)):
+        inputs["adjusted_eps_growth_pct"] = float(adjusted_growth)
 
     ncav = row.get("ncav")
     inputs["ncav_available"] = ncav is not None and not (isinstance(ncav, float) and pd.isna(ncav))
@@ -332,6 +340,7 @@ def _brief_summary(
     cash_conversion_overlay: bool = False,
     dividend_yield_overlay: bool = False,
     interim_quality_overlay: bool = False,
+    earnings_basis_overlay: bool = False,
     fcf_basis_overlay: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
@@ -412,6 +421,13 @@ def _brief_summary(
         parts.append(
             f"Interim-quality overlay: quality passes but interim EPS declined and FCF/dividend "
             f"coverage is below 1.0× "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if earnings_basis_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Earnings-basis overlay: statutory and filing-adjusted EPS growth diverge in sign "
+            f"while growth-dependent screens pass "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -582,6 +598,34 @@ def build_company_reports(
             )
 
         conviction_score = float(row.get("conviction_score") or 0)
+        earnings_basis_overlay_flag = row.get("earnings_basis_overlay")
+        if earnings_basis_overlay_flag is not None and not (
+            isinstance(earnings_basis_overlay_flag, float) and pd.isna(earnings_basis_overlay_flag)
+        ):
+            earnings_basis_overlay = bool(earnings_basis_overlay_flag)
+        else:
+            statutory = row.get("earnings_growth")
+            statutory_growth = (
+                float(statutory)
+                if statutory is not None and not (isinstance(statutory, float) and pd.isna(statutory))
+                else None
+            )
+            adjusted_metric = row.get("adjusted_eps_growth_pct")
+            adjusted_growth = (
+                float(adjusted_metric)
+                if adjusted_metric is not None
+                and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
+                else None
+            )
+            earnings_basis_overlay, adjusted_signal_str, conviction_score = apply_earnings_basis_overlay_to_signal(
+                signal,
+                statutory_growth=statutory_growth,
+                adjusted_growth=adjusted_growth,
+                ticker_models=ticker_models,
+                conviction_score=conviction_score,
+                adjusted_signal=adjusted_signal_str,
+            )
+
         fcf_basis_overlay_flag = row.get("fcf_basis_overlay")
         if fcf_basis_overlay_flag is not None and not (
             isinstance(fcf_basis_overlay_flag, float) and pd.isna(fcf_basis_overlay_flag)
@@ -652,6 +696,7 @@ def build_company_reports(
             cash_conversion_overlay=cash_conversion_overlay,
             dividend_yield_overlay=dividend_yield_overlay,
             interim_quality_overlay=interim_quality_overlay,
+            earnings_basis_overlay=earnings_basis_overlay,
             fcf_basis_overlay=fcf_basis_overlay,
         )
 
@@ -701,6 +746,7 @@ def build_company_reports(
                 cash_conversion_overlay=cash_conversion_overlay,
                 dividend_yield_overlay=dividend_yield_overlay,
                 interim_quality_overlay=interim_quality_overlay,
+                earnings_basis_overlay=earnings_basis_overlay,
                 fcf_basis_overlay=fcf_basis_overlay,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
