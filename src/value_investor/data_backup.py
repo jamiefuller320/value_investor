@@ -412,3 +412,63 @@ def send_backup_snapshot_email(
         "chunk_bytes": chunk_bytes,
         "part_paths": [str(path) for path in parts],
     }
+
+
+def snapshot_from_payload(data: dict[str, Any]) -> BackupSnapshot:
+    """Rebuild a ``BackupSnapshot`` from ``snapshot --json`` or ``deliver`` payload."""
+    manifest = BackupManifest.from_dict(data.get("manifest") or {})
+    archive_path = Path(data.get("archive_path") or "")
+    manifest_path = Path(data.get("manifest_path") or "")
+    if not archive_path or not manifest_path:
+        raise ValueError("payload missing archive_path or manifest_path")
+    return BackupSnapshot(
+        archive_path=archive_path,
+        manifest_path=manifest_path,
+        manifest=manifest,
+    )
+
+
+def try_upload_backup_snapshot(
+    snapshot: BackupSnapshot,
+    *,
+    s3_uri: str | None = None,
+) -> dict[str, Any]:
+    """Upload snapshot; return a result dict instead of raising on failure."""
+    try:
+        return upload_backup_snapshot(snapshot, s3_uri=s3_uri)
+    except RuntimeError as exc:
+        logger.warning("Backup S3 upload failed: %s", exc)
+        return {
+            "uploaded": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
+
+
+def try_send_backup_snapshot_email(
+    snapshot: BackupSnapshot,
+    *,
+    email_to: str | None = None,
+    chunk_bytes: int = DEFAULT_EMAIL_CHUNK_BYTES,
+) -> dict[str, Any]:
+    """Email snapshot; return a result dict instead of raising on SMTP/config errors."""
+    try:
+        return send_backup_snapshot_email(
+            snapshot,
+            email_to=email_to,
+            chunk_bytes=chunk_bytes,
+        )
+    except (ValueError, OSError) as exc:
+        logger.warning("Backup email failed: %s", exc)
+        return {
+            "emailed": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
+    except Exception as exc:
+        logger.warning("Backup email failed: %s", exc)
+        return {
+            "emailed": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }

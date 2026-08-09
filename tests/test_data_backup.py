@@ -11,7 +11,10 @@ from value_investor.data_backup import (
     restore_backup_snapshot,
     run_restore_drill,
     send_backup_snapshot_email,
+    snapshot_from_payload,
     split_archive_for_email,
+    try_send_backup_snapshot_email,
+    try_upload_backup_snapshot,
     verify_backup_snapshot,
 )
 
@@ -136,3 +139,72 @@ def test_data_backup_cli_accepts_snapshot_json_after_subcommand(tmp_path: Path, 
     )
     rc = main(["snapshot", "--json", "--backup-dir", str(tmp_path / "backups")])
     assert rc == 0
+
+
+def test_try_send_backup_email_returns_error_dict(monkeypatch, tmp_path: Path):
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+
+    def _boom(**kwargs):
+        raise RuntimeError("smtp blocked")
+
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.com")
+    monkeypatch.setenv("SMTP_USER", "user@example.com")
+    monkeypatch.setenv("SMTP_PASSWORD", "secret")
+    monkeypatch.setattr("value_investor.emailer.send_email", _boom)
+
+    result = try_send_backup_snapshot_email(snapshot)
+    assert result["emailed"] is False
+    assert "smtp blocked" in result["error"]
+
+
+def test_snapshot_from_payload_roundtrip(tmp_path: Path):
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    payload = snapshot.to_dict()
+    restored = snapshot_from_payload(payload)
+    assert restored.archive_path == snapshot.archive_path
+    assert restored.manifest.sha256 == snapshot.manifest.sha256
+
+
+def test_try_upload_without_s3_uri_is_soft_skip(tmp_path: Path):
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    result = try_upload_backup_snapshot(snapshot)
+    assert result["uploaded"] is False
+    assert result.get("reason") == "BACKUP_S3_URI not configured"
+
+
+def test_deliver_cli_updates_json_with_email_failure(monkeypatch, tmp_path: Path):
+    from value_investor.data_backup_cli import main
+
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    payload_path = tmp_path / "backup.json"
+    payload_path.write_text(json.dumps(snapshot.to_dict()), encoding="utf-8")
+
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.com")
+    monkeypatch.setenv("SMTP_USER", "user@example.com")
+    monkeypatch.setenv("SMTP_PASSWORD", "secret")
+    def _boom(**kwargs):
+        raise RuntimeError("blocked")
+
+    monkeypatch.setattr("value_investor.emailer.send_email", _boom)
+
+    rc = main(["deliver", "--from-json", str(payload_path), "--email", "--json"])
+    assert rc == 0
+    saved = json.loads(payload_path.read_text(encoding="utf-8"))
+    assert saved["email"]["emailed"] is False
+    assert "blocked" in saved["email"]["error"]
