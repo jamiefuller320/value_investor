@@ -34,5 +34,10 @@ jobs:
       - name: Check committed data JSON integrity
         run: python3 scripts/check_committed_data_json.py
 
+      - name: Ruff (changed Python since prior nightly)
+        run: |
+          BEFORE=$(git rev-list -n 2 HEAD | tail -1)
+          python3 scripts/check_changed_python.py --base "${BEFORE}" --head HEAD
+
       - name: Pytest
         run: pytest -q

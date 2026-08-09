@@ -51,9 +51,10 @@ Implement ONLY that one task. Rules:
 3. Keep the diff minimal and focused — no drive-by refactors.
 4. Add or update tests that prove the behaviour described in `acceptance_criteria`.
 5. Run the most relevant pytest subset before finishing (e.g. tests covering changed modules).
-6. Do NOT merge branches, open pull requests, or change GitHub workflows unless the task explicitly requires it.
-7. Do NOT change paper-fund, simulator, or live signal thresholds unless the task explicitly requires it.
-8. When `auto_merge` is true on the task, keep the diff minimal and within `allowed_paths` so CI and the path guard can merge automatically.
+6. On any Python file you edit under `src/` or `tests/`, run `ruff check --fix` and `ruff format` on those paths so scoped CI lint passes.
+7. Do NOT merge branches, open pull requests, or change GitHub workflows unless the task explicitly requires it.
+8. Do NOT change paper-fund, simulator, or live signal thresholds unless the task explicitly requires it.
+9. When `auto_merge` is true on the task, keep the diff minimal and within `allowed_paths` so CI and the path guard can merge automatically.
 
 When finished, write a markdown report to:
 {result_path}
@@ -139,10 +140,10 @@ def record_engineering_spend(
     """Record engineering agent spend against the ad-hoc checkpoint pool."""
     from value_investor.agent_model_policy import (
         SPEND_POOL_AD_HOC,
-        record_estimated_spend,
-        spend_since_checkpoint_usd,
-        spend_checkpoint_usd,
         load_policy,
+        record_estimated_spend,
+        spend_checkpoint_usd,
+        spend_since_checkpoint_usd,
     )
 
     record_estimated_spend(estimated_usd, path, pool=SPEND_POOL_AD_HOC)

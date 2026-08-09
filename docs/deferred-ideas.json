@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-06T14:31:54+00:00",
+  "updated_at": "2026-08-09T11:43:19+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2287,6 +2287,38 @@
       "status": "open",
       "source": "pre-logging and offline grace discussion",
       "added_at": "2026-08-06T14:31:54+00:00"
+    },
+    {
+      "id": "L114",
+      "category": "later",
+      "section": "ops",
+      "title": "Static type checking (mypy) in CI",
+      "summary": "Scoped ruff closes most style/bug lint gaps; mypy would catch typing drift but needs gradual rollout and per-module ignores to avoid blocking eng agents.",
+      "revisit_when": "After scoped ruff is stable for 2-3 weeks or when a typing-related production bug appears",
+      "tags": [
+        "ci",
+        "quality",
+        "mypy"
+      ],
+      "status": "open",
+      "source": "cursor/python-quality-ci conversation",
+      "added_at": "2026-08-09T10:25:14+00:00"
+    },
+    {
+      "id": "L115",
+      "category": "later",
+      "section": "ops",
+      "title": "Mirror ingest allowed_paths test files for module tests",
+      "summary": "AREA_ALLOWED_PATHS for ingest lists src/value_investor/companies_house.py but not tests/test_companies_house.py, so engineering agents fix IR allowlist regressions in the wrong test file and trip path guard.",
+      "revisit_when": "Next ingest engineering task touches companies_house or IR allowlist tests",
+      "tags": [
+        "engineering",
+        "path-guard",
+        "tests"
+      ],
+      "status": "open",
+      "source": "PR #200 CI failure analysis",
+      "added_at": "2026-08-09T11:43:19+00:00"
     }
   ]
 }
