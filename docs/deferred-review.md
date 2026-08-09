@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-09T10:25:14+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-09T11:43:19+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -153,6 +153,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L95 | **Mid-week post-run review agent after engineering merges** | Optional LLM triage to reorder the engineering queue when deterministic reprioritize is insufficient — e.g. after multiple ingest merges or contradictory filing signals. | Deterministic reprioritize hook has run for 3+ ingest merges and queue order still feels stale vs Sunday diagnosis |
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
 | L114 | **Static type checking (mypy) in CI** | Scoped ruff closes most style/bug lint gaps; mypy would catch typing drift but needs gradual rollout and per-module ignores to avoid blocking eng agents. | After scoped ruff is stable for 2-3 weeks or when a typing-related production bug appears |
+| L115 | **Mirror ingest allowed_paths test files for module tests** | AREA_ALLOWED_PATHS for ingest lists src/value_investor/companies_house.py but not tests/test_companies_house.py, so engineering agents fix IR allowlist regressions in the wrong test file and trip path guard. | Next ingest engineering task touches companies_house or IR allowlist tests |
 
 ---
 
