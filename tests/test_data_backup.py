@@ -198,6 +198,7 @@ def test_deliver_cli_updates_json_with_email_failure(monkeypatch, tmp_path: Path
     monkeypatch.setenv("SMTP_HOST", "smtp.example.com")
     monkeypatch.setenv("SMTP_USER", "user@example.com")
     monkeypatch.setenv("SMTP_PASSWORD", "secret")
+
     def _boom(**kwargs):
         raise RuntimeError("blocked")
 

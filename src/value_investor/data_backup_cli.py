@@ -115,7 +115,9 @@ def main(argv: list[str] | None = None) -> int:
         parents=[common],
         help="Merge emailed .partNNN chunks into a tarball",
     )
-    reassemble.add_argument("chunks", nargs="+", type=Path, help="Chunk files (*.part001, *.part002, …)")
+    reassemble.add_argument(
+        "chunks", nargs="+", type=Path, help="Chunk files (*.part001, *.part002, …)"
+    )
     reassemble.add_argument("--output", type=Path, required=True, help="Output .tar.gz path")
     reassemble.set_defaults(func=_cmd_reassemble)
 
@@ -128,17 +130,14 @@ def _upload_snapshot(
     *,
     strict: bool,
 ) -> tuple[dict[str, object] | None, int]:
-    try:
-        upload_result = upload_backup_snapshot(snapshot)
-    except RuntimeError as exc:
-        if strict:
+    if strict:
+        try:
+            upload_result = upload_backup_snapshot(snapshot)
+        except RuntimeError as exc:
             print(str(exc), file=sys.stderr)
             return None, 1
-        upload_result = {
-            "uploaded": False,
-            "error": str(exc),
-            "error_type": type(exc).__name__,
-        }
+    else:
+        upload_result = try_upload_backup_snapshot(snapshot)
     if strict and not upload_result.get("uploaded") and upload_result.get("error"):
         print(str(upload_result.get("error")), file=sys.stderr)
         return upload_result, 1
