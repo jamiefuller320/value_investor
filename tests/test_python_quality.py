@@ -19,6 +19,18 @@ def test_git_changed_files_filters_prefix_and_extension(tmp_path: Path):
     (repo / "docs" / "app.js").write_text("", encoding="utf-8")
 
     subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.com"],
+        cwd=repo,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "test"],
+        cwd=repo,
+        check=True,
+        capture_output=True,
+    )
     subprocess.run(["git", "add", "."], cwd=repo, check=True, capture_output=True)
     subprocess.run(
         ["git", "commit", "-m", "init", "--author", "test <test@example.com>"],
