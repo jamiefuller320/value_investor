@@ -94,11 +94,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260809-01.md",
       "branch_name": "cursor/eng-20260809-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-08-09T07:50:46.026536+00:00"
+      "completed_at": "2026-08-09T07:50:46.026536+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/196",
+      "pr_number": 196,
+      "merged_at": "2026-08-09T08:23:54.381171+00:00"
     },
     {
       "id": "eng-20260809-03",
@@ -324,53 +327,6 @@
       "branch_name": "cursor/eng-20260726-01-1de3",
       "pr_number": 112,
       "merged_at": "2026-07-26T09:33:03.742876+00:00"
-    },
-    {
-      "id": "eng-20260809-02",
-      "area": "ingest",
-      "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
-      "summary": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trading-update-vfinal.pdf`), MEGP.L (FCF bridge, segment ROIC, June 2026 profit-warning RNS), GFTU.L, FGP.L",
-      "priority": "high",
-      "priority_score": 98.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [
-          "IR",
-          "PDF",
-          "HIK.L",
-          "MEGP.L",
-          "FCF",
-          "ROIC",
-          "RNS",
-          "GFTU.L",
-          "FGP.L"
-        ],
-        "plan_index": 2
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for IR",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20260809-04",
@@ -679,23 +635,29 @@
       "merged_at": "2026-08-03T15:48:51.080223+00:00"
     },
     {
-      "id": "eng-20260809-05",
+      "id": "eng-20260809-02",
       "area": "ingest",
-      "title": "Fix UK RNS discovery and headline reclassification (trading_update, interim, annual_report patterns; ticker aliases GFTU/GN5; filter mis-attributed news by comp",
-      "summary": "Fix UK RNS discovery and headline reclassification (trading_update, interim, annual_report patterns; ticker aliases GFTU/GN5; filter mis-attributed news by company name)",
+      "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
+      "summary": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trading-update-vfinal.pdf`), MEGP.L (FCF bridge, segment ROIC, June 2026 profit-warning RNS), GFTU.L, FGP.L",
       "priority": "high",
-      "priority_score": 95.0,
+      "priority_score": 94.0,
       "source": "post_run_review",
       "evidence": {
         "tickers": [
-          "UK",
+          "IR",
+          "PDF",
+          "HIK.L",
+          "MEGP.L",
+          "FCF",
+          "ROIC",
           "RNS",
-          "GFTU"
+          "GFTU.L",
+          "FGP.L"
         ],
-        "plan_index": 5
+        "plan_index": 2
       },
       "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for UK",
+        "Add or extend fetch logic with a focused regression test for IR",
         "Do not change live signal thresholds or paper-fund behaviour",
         "Existing ingest-improvement pass can fetch new bodies on the next dry run"
       ],
@@ -818,6 +780,47 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/178",
       "pr_number": 178,
       "merged_at": "2026-08-04T06:01:24.014345+00:00"
+    },
+    {
+      "id": "eng-20260809-05",
+      "area": "ingest",
+      "title": "Fix UK RNS discovery and headline reclassification (trading_update, interim, annual_report patterns; ticker aliases GFTU/GN5; filter mis-attributed news by comp",
+      "summary": "Fix UK RNS discovery and headline reclassification (trading_update, interim, annual_report patterns; ticker aliases GFTU/GN5; filter mis-attributed news by company name)",
+      "priority": "high",
+      "priority_score": 91.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "RNS",
+          "GFTU"
+        ],
+        "plan_index": 5
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for UK",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260726-06",
@@ -1291,6 +1294,17 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-08-09T08:23:59.110044+00:00",
+    "buy_tier_count": 68,
+    "measured_tickers": 68,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 190,
+    "filings_with_body": 579
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-08-09T07:31:00.918860+00:00",
     "buy_tier_count": 63,
     "measured_tickers": 62,
@@ -1302,5 +1316,7 @@
     "zero_body_tickers": [],
     "indexed_without_body": 152,
     "filings_with_body": 515
-  }
+  },
+  "reprioritized_at": "2026-08-09T08:23:59.110192+00:00",
+  "reprioritized_after_task": "eng-20260809-01"
 }
