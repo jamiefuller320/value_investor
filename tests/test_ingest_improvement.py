@@ -96,6 +96,25 @@ def test_planned_sources_includes_ir_presentation_for_itv_l():
     assert fetch_filings_ir_allowlist("ITV.L")
 
 
+def test_planned_sources_includes_ir_presentation_for_gftu_l():
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    inventory = {
+        "thin": ["filings_bodies"],
+        "filings_summary": {"with_body": 2, "total": 5},
+    }
+    planned = _planned_sources_for_ticker(
+        ticker="GFTU.L",
+        market="ftse350",
+        inventory=inventory,
+        ingest_suggestions=[],
+        filings_with_body=2,
+    )
+    planned_ids = {row["id"] for row in planned}
+    assert "company_ir_presentation" in planned_ids
+    assert fetch_filings_ir_allowlist("GFTU.L")
+
+
 def test_planned_sources_includes_ir_presentation_for_fgp_l():
     from value_investor.research.filings import fetch_filings_ir_allowlist
 

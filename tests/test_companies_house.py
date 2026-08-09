@@ -21,6 +21,7 @@ from value_investor.research.companies_house import (
 from value_investor.research.deepen_sources import deepen_sources_for_memo_tickers
 from value_investor.research.document import ResearchDocument
 from value_investor.research.filings import (
+    _BUILTIN_IR_URLS,
     fetch_filings_ir_allowlist,
     ingest_filings,
     load_ir_url_allowlist,
@@ -330,12 +331,21 @@ def test_ir_allowlist_load_and_fetch(tmp_path: Path):
         ),
         encoding="utf-8",
     )
+    file_hik_urls = [
+        "https://www.hikma.com/investors/annual-report-2024.pdf",
+        "https://www.hikma.com/investors/interim-results.pdf",
+    ]
     mapping = load_ir_url_allowlist(path)
-    assert len(mapping["HIK.L"]) == 2
+    builtin_hik = _BUILTIN_IR_URLS.get("HIK.L") or []
+    assert all(url in mapping["HIK.L"] for url in file_hik_urls)
+    assert len(mapping["HIK.L"]) == len(file_hik_urls) + len(builtin_hik)
+
     rows = fetch_filings_ir_allowlist("HIK.L", path=path)
-    assert len(rows) == 2
+    assert len(rows) == len(mapping["HIK.L"])
     assert rows[0]["source"] == "ir_allowlist"
+    assert rows[0]["url"] == file_hik_urls[0]
     assert rows[0]["period"] == "annual"
+    assert rows[1]["url"] == file_hik_urls[1]
     assert rows[1]["period"] == "interim"
     shel = fetch_filings_ir_allowlist("SHEL.L", path=path)
     assert len(shel) == 1
