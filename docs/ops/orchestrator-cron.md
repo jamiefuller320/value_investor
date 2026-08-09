@@ -47,7 +47,7 @@ token instead of your user PAT.
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
 | `engineering-agent.yml` | Queue / manual | No | No |
-| `ci.yml` / `pages.yml` | Push / PR | No | No |
+| `ci.yml` / `pages.yml` | Push to `docs/**` on `main`; **also** `email-report.yml` dispatches after dashboard commit (`[skip ci]` blocks push-triggered Pages) | No | No |
 
 ## One-time external cron setup
 
