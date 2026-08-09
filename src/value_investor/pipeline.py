@@ -31,6 +31,7 @@ from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
+from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf, enrich_universe_with_filing_metrics
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
@@ -138,6 +139,8 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "healthcare_overlay",
         "cash_conversion_overlay",
         "dividend_yield_overlay",
+        "interim_quality_overlay",
+        "earnings_basis_overlay",
         "fcf_basis_overlay",
         "adjusted_signal",
     ]
@@ -315,6 +318,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_cash_conversion_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_dividend_yield_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_earnings_basis_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_fcf_basis_overlay(
         signals_out,
         result.model_results,

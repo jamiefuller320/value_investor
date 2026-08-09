@@ -13,8 +13,10 @@ from value_investor.scoring import evaluate_universe
 from value_investor.models.risk import EarningsQualityModel
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    earnings_growth_signs_diverge,
     fcf_basis_divergence_flagged,
     fcf_values_diverge,
+    parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
     reconcile_fcf,
 )
@@ -802,3 +804,109 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
     assert snapshot["adjusted_signal"] == "buy"
     assert snapshot["conviction_score"] == pytest.approx(0.51)
     assert "company-adj £113.5M" in snapshot["action_note"]
+
+
+def test_earnings_growth_signs_diverge_detects_fgp_style_mismatch():
+    assert earnings_growth_signs_diverge(-0.059, 0.16) is True
+    assert earnings_growth_signs_diverge(0.05, 0.10) is False
+    assert earnings_growth_signs_diverge(-0.05, -0.10) is False
+
+
+def test_parse_adjusted_eps_growth_pct_from_filing_prose():
+    assert parse_adjusted_eps_growth_pct("Adjusted EPS +16% to 19.4p") == pytest.approx(0.16)
+    assert parse_adjusted_eps_growth_pct("16% growth in Adjusted EPS") == pytest.approx(0.16)
+
+
+def _model_results_for_fgp_earnings_basis_cap(*, ticker: str = "FGP.L") -> pd.DataFrame:
+    return pd.DataFrame([
+        {
+            "ticker": ticker,
+            "model_id": "neff_pegy",
+            "model_name": "Neff PEGY",
+            "passed": True,
+            "score": 0.85,
+            "reasons": "['PEGY=0.72']",
+            "failed_criteria": "[]",
+        },
+        {
+            "ticker": ticker,
+            "model_id": "lynch_peg",
+            "model_name": "Lynch PEG",
+            "passed": False,
+            "score": 0.2,
+            "reasons": "[]",
+            "failed_criteria": "['missing or negative earnings growth']",
+        },
+    ])
+
+
+def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (filings / "ir_results.txt").write_text(
+        "Strong financial performance - 16% growth in Adjusted EPS\nAdjusted EPS +16% to 19.4p",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="FGP.L",
+            name="FirstGroup plc",
+            sector="Industrials",
+            signal="strong_buy",
+            conviction_score=0.6,
+            earnings_growth=-0.059,
+            adjusted_eps_growth_pct=0.16,
+        )
+    ])
+    model_results = _model_results_for_fgp_earnings_basis_cap()
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["screening_inputs"]["earnings_growth_pct"] == pytest.approx(-0.059)
+    assert snapshot["screening_inputs"]["adjusted_eps_growth_pct"] == pytest.approx(0.16)
+    assert snapshot["earnings_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.51)
+    assert "Earnings-basis overlay" in report.summary
+
+
+def test_build_company_reports_interim_quality_uses_filing_fcf_for_megp():
+    signals = pd.DataFrame([
+        _signal_row(
+            ticker="MEGP.L",
+            name="ME Group International plc",
+            sector="Industrials",
+            signal="strong_buy",
+            passed_families="cheapness,quality,dividend,garp,risk",
+            free_cashflow=25_153_000.0,
+            interim_eps_decline_pct=0.039,
+            dividends_paid=29_769_000.0,
+        ),
+    ])
+    model_results = pd.DataFrame(
+        columns=["ticker", "model_id", "model_name", "passed", "score", "reasons", "failed_criteria"]
+    )
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["interim_quality_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Interim-quality overlay" in report.summary
