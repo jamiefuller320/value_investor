@@ -14,6 +14,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   email-report:
@@ -71,9 +72,25 @@ jobs:
           git pull --rebase --autostash origin "${{ github.ref_name }}"
 
       - name: Commit dashboard data
+        id: dashboard_commit
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: update dashboard data [skip ci]"
           # Includes docs/data/history/ run snapshots for backtest/sim replay.
           file_pattern: docs/data/** docs/research/* docs/data/engineering_tasks.json
           skip_fetch: false
+
+      # [skip ci] on the commit above skips this workflow's push trigger for Pages;
+      # dispatch pages.yml explicitly so jamiefuller320.github.io picks up latest.json.
+      - name: Deploy dashboard to GitHub Pages
+        if: steps.dashboard_commit.outputs.changes_detected == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'pages.yml',
+              ref: 'main',
+            });
+            core.info('Dispatched pages.yml after dashboard data commit');
