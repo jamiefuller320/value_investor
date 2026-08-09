@@ -1,39 +1,12 @@
 {
-  "run_at": "2026-08-08T07:46:16.642260+00:00",
-  "overall": "warn",
+  "run_at": "2026-08-09T07:46:17.310128+00:00",
+  "overall": "fail",
   "findings": [
     {
-      "severity": "warn",
-      "category": "backtest",
-      "title": "Backtest history: missing_model_snapshot",
-      "summary": "Run snapshot without matching models file for stamp 20260719_160212",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "backtest",
-      "title": "Backtest history: missing_model_snapshot",
-      "summary": "Run snapshot without matching models file for stamp 20260720_203227",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "backtest",
-      "title": "Backtest history: missing_model_snapshot",
-      "summary": "Run snapshot without matching models file for stamp 20260724_142613",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "backtest",
-      "title": "Backtest history: missing_model_snapshot",
-      "summary": "Run snapshot without matching models file for stamp 20260726_182046",
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: Modelling analysis review",
+      "summary": "No successful run within 36h (last: 2026-08-05T11:32:46+00:00).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -49,7 +22,9 @@
       "detail": "cancelled duplicate eng-20260804-57 (of eng-20260804-42)"
     }
   ],
-  "drafted_task_ids": [],
+  "drafted_task_ids": [
+    "eng-20260809-06"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
@@ -58,7 +33,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-08-07T13:47:31+00:00",
       "last_success_run_id": 31184337390,
-      "age_hours": 18.0,
+      "age_hours": 42.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -68,9 +43,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-07T14:41:13+00:00",
-      "last_success_run_id": 31188836439,
-      "age_hours": 17.1,
+      "last_success_at": "2026-08-09T06:09:33+00:00",
+      "last_success_run_id": 31298256329,
+      "age_hours": 1.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -79,10 +54,10 @@
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": false,
-      "max_age_hours": 26,
-      "last_success_at": "2026-08-08T07:08:33+00:00",
-      "last_success_run_id": 31245499323,
-      "age_hours": 0.6,
+      "max_age_hours": 3,
+      "last_success_at": "2026-08-08T08:14:58+00:00",
+      "last_success_run_id": 31247980596,
+      "age_hours": 23.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -92,8 +67,8 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-08T07:30:54+00:00",
-      "last_success_run_id": 31246335780,
+      "last_success_at": "2026-08-09T07:30:55+00:00",
+      "last_success_run_id": 31301327456,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -102,28 +77,28 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-05T11:32:46+00:00",
       "last_success_run_id": 31001886864,
-      "age_hours": 68.2,
-      "stale": false,
+      "age_hours": 92.2,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
-    "open_count": 0,
+    "open_count": 5,
     "pr_open_count": 0,
     "parked_count": 2,
     "merged_count": 22,
     "failed_count": 0,
-    "next_task_id": null,
+    "next_task_id": "eng-20260809-01",
     "in_flight_branch": null,
     "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false
+  "should_dispatch_engineering": true
 }
