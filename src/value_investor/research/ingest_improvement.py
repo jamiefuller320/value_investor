@@ -13,10 +13,8 @@ from typing import Any
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     period_body_coverage,
-    refetch_companies_house_filing_bodies,
-    refetch_indexed_without_body_filing_bodies,
-    refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
+    refetch_uk_primary_filing_bodies,
     sanitize_filings_index,
 )
 from value_investor.research.ingest_bootstrap import (
@@ -510,50 +508,23 @@ def run_ingest_improvement_pass(
             ticker_rns_refetch: dict[str, Any] = {}
             indexed_refetch: dict[str, Any] = {}
             if _is_uk_listed(market=market, ticker=target.ticker):
-                if before == 0:
-                    ch_refetch = refetch_companies_house_filing_bodies(
-                        sources_dir / "filings",
-                        max_bodies=20,
+                primary_refetch = refetch_uk_primary_filing_bodies(
+                    sources_dir / "filings",
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    max_bodies=20,
+                )
+                ch_refetch = dict(primary_refetch.get("companies_house") or {})
+                indexed_refetch = dict(primary_refetch.get("rns") or {})
+                investegate_refetch = dict(indexed_refetch.get("investegate") or {})
+                ticker_rns_refetch = dict(indexed_refetch.get("ticker_rns") or {})
+                if int(primary_refetch.get("fetched") or 0) > 0:
+                    inventory = inspect_local_sources(sources_dir)
+                    before = int(
+                        (inventory.get("filings_summary") or {}).get("with_body")
+                        or inventory.get("filings_indexed_bodies")
+                        or before
                     )
-                    if int(ch_refetch.get("fetched") or 0) > 0:
-                        inventory = inspect_local_sources(sources_dir)
-                        before = int(
-                            (inventory.get("filings_summary") or {}).get("with_body")
-                            or inventory.get("filings_indexed_bodies")
-                            or before
-                        )
-                if target.indexed_without_body > 0:
-                    indexed_refetch = refetch_indexed_without_body_filing_bodies(
-                        sources_dir / "filings",
-                        ticker=target.ticker,
-                        company_name=target.name,
-                        max_bodies=20,
-                    )
-                    investegate_refetch = dict(
-                        indexed_refetch.get("investegate") or {}
-                    )
-                    ticker_rns_refetch = dict(indexed_refetch.get("ticker_rns") or {})
-                    if int(indexed_refetch.get("fetched") or 0) > 0:
-                        inventory = inspect_local_sources(sources_dir)
-                        before = int(
-                            (inventory.get("filings_summary") or {}).get("with_body")
-                            or inventory.get("filings_indexed_bodies")
-                            or before
-                        )
-                elif before == 0:
-                    investegate_refetch = refetch_investegate_filing_bodies(
-                        sources_dir / "filings",
-                        ticker=target.ticker,
-                        company_name=target.name,
-                        max_bodies=20,
-                    )
-                    if int(investegate_refetch.get("fetched") or 0) > 0:
-                        inventory = inspect_local_sources(sources_dir)
-                        before = int(
-                            (inventory.get("filings_summary") or {}).get("with_body")
-                            or inventory.get("filings_indexed_bodies")
-                            or before
-                        )
             planned = _planned_sources_for_ticker(
                 ticker=target.ticker,
                 market=market,

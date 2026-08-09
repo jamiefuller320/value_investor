@@ -32,6 +32,7 @@ from value_investor.research.filings import (
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
     refetch_ticker_rns_api_filing_bodies,
+    refetch_uk_primary_filing_bodies,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
@@ -44,6 +45,7 @@ from value_investor.research.filings import (
     _extract_investegate_html_text,
     _extract_ixbrl_html_text,
     _compose_pdf_body_text,
+    _compose_filing_body_with_depth_sections,
     _extract_pdf_depth_sections,
     _filing_text_is_substantive,
     _fetch_ir_allowlist_body,
@@ -700,6 +702,109 @@ def test_fetch_filing_body_parses_pdf(monkeypatch):
     text = fetch_filing_body("https://example.com/results.pdf")
     assert text is not None
     assert "cash flow bridge" in text
+
+
+def test_compose_filing_body_with_depth_sections_includes_pension_and_covenant():
+    """Regression: depth extract must reach pension, covenant, and adjusting-item notes."""
+    early = "Directors' report and strategic overview " * 900
+    pension_page = (
+        "DEFINED BENEFIT PENSION SCHEME\n"
+        "Scheme assets 1,200\n"
+        "Present value of obligations 1,450\n"
+        "Net pension deficit 250"
+    )
+    covenant_page = (
+        "FINANCIAL COVENANTS\n"
+        "Net debt to EBITDA must remain below 3.5x\n"
+        "Interest cover covenant headroom 18%"
+    )
+    adjusting_page = (
+        "ADJUSTING ITEMS\n"
+        "Restructuring costs 45\n"
+        "Asset impairment 72"
+    )
+    full = early[:3500] + pension_page + covenant_page + adjusting_page
+
+    text = _compose_filing_body_with_depth_sections(full)
+    assert text is not None
+    assert "Directors' report" in text
+    assert "DEFINED BENEFIT PENSION SCHEME" in text
+    assert "Net pension deficit 250" in text
+    assert "FINANCIAL COVENANTS" in text
+    assert "Interest cover covenant headroom 18%" in text
+    assert "ADJUSTING ITEMS" in text
+    assert "Asset impairment 72" in text
+
+
+def test_extract_ixbrl_html_text_splices_late_pension_and_covenant_notes():
+    early = "STRATEGIC REPORT revenue increased operating profit rose " * 650
+    tail = (
+        " DEFINED BENEFIT PENSION obligations 1,450 scheme assets 1,200"
+        " FINANCIAL COVENANTS net debt to EBITDA 3.5x headroom adequate"
+        " CONSOLIDATED STATEMENT OF CASH FLOW operating activities 90.8"
+    )
+    html = f"<html><body><div>{early}{tail}</div></body></html>"
+    text = _extract_ixbrl_html_text(html)
+    assert "STRATEGIC REPORT" in text
+    assert "DEFINED BENEFIT PENSION" in text
+    assert "FINANCIAL COVENANTS" in text
+    assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
+
+
+def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0}}),
+        encoding="utf-8",
+    )
+    ch_result = {
+        "attempted": 2,
+        "fetched": 1,
+        "with_body_before": 0,
+        "with_body_after": 1,
+    }
+    rns_result = {
+        "investegate": {
+            "attempted": 3,
+            "fetched": 2,
+            "with_body_before": 1,
+            "with_body_after": 3,
+            "google_news_rejected": 1,
+        },
+        "ticker_rns": {
+            "attempted": 1,
+            "fetched": 0,
+            "with_body_before": 3,
+            "with_body_after": 3,
+        },
+        "attempted": 4,
+        "fetched": 2,
+        "with_body_before": 1,
+        "with_body_after": 3,
+        "google_news_rejected": 1,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_companies_house_filing_bodies",
+        lambda *args, **kwargs: dict(ch_result),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_indexed_without_body_filing_bodies",
+        lambda *args, **kwargs: dict(rns_result),
+    )
+    result = refetch_uk_primary_filing_bodies(
+        filings_dir,
+        ticker="FGP.L",
+        company_name="FirstGroup plc",
+        max_bodies=20,
+    )
+    assert result["fetched"] == 3
+    assert result["attempted"] == 6
+    assert result["with_body_before"] == 0
+    assert result["with_body_after"] == 3
+    assert result["google_news_rejected"] == 1
+    assert result["companies_house"]["fetched"] == 1
+    assert result["rns"]["investegate"]["fetched"] == 2
 
 
 def test_compose_pdf_body_text_splices_late_cash_flow_and_notes():

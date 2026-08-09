@@ -24,13 +24,11 @@ def test_deepen_thin_filings_skips_when_sufficient(tmp_path: Path):
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
-@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_ch_refetch_for_uk(
     mock_refetch,
-    mock_ch_refetch,
-    mock_investegate_refetch,
+    mock_primary_refetch,
     mock_ir_rows,
     mock_ir_refetch,
     mock_news,
@@ -45,8 +43,16 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
         encoding="utf-8",
     )
     mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_ch_refetch.return_value = {"fetched": 2, "with_body_after": 2}
-    mock_investegate_refetch.return_value = {"fetched": 0, "with_body_after": 2}
+    mock_primary_refetch.return_value = {
+        "fetched": 2,
+        "with_body_after": 2,
+        "companies_house": {"fetched": 2, "with_body_after": 2},
+        "rns": {
+            "fetched": 0,
+            "investegate": {"fetched": 0, "with_body_after": 2},
+            "ticker_rns": {"fetched": 0, "with_body_after": 2},
+        },
+    }
 
     pack = prepare_gap_fill_source_pack(
         ticker="BT-A.L",
@@ -55,8 +61,7 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
         open_questions=["pension deficit"],
         market="ftse350",
     )
-    mock_ch_refetch.assert_called_once()
-    mock_investegate_refetch.assert_called_once()
+    mock_primary_refetch.assert_called_once()
     assert pack["ch_refetch"]["fetched"] == 2
     assert pack["body_refetch"]["fetched"] == 2
 
@@ -64,13 +69,11 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
-@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_investegate_refetch_for_uk(
     mock_refetch,
-    mock_ch_refetch,
-    mock_investegate_refetch,
+    mock_primary_refetch,
     mock_ir_rows,
     mock_ir_refetch,
     mock_news,
@@ -85,8 +88,16 @@ def test_prepare_gap_fill_calls_investegate_refetch_for_uk(
         encoding="utf-8",
     )
     mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_investegate_refetch.return_value = {"fetched": 3, "with_body_after": 3}
+    mock_primary_refetch.return_value = {
+        "fetched": 3,
+        "with_body_after": 3,
+        "companies_house": {"fetched": 0, "with_body_after": 0},
+        "rns": {
+            "fetched": 3,
+            "investegate": {"fetched": 3, "with_body_after": 3},
+            "ticker_rns": {"fetched": 0, "with_body_after": 3},
+        },
+    }
 
     pack = prepare_gap_fill_source_pack(
         ticker="ITV.L",
@@ -95,7 +106,7 @@ def test_prepare_gap_fill_calls_investegate_refetch_for_uk(
         open_questions=["annual results"],
         market="ftse350",
     )
-    mock_investegate_refetch.assert_called_once()
+    mock_primary_refetch.assert_called_once()
     assert pack["investegate_refetch"]["fetched"] == 3
     assert pack["body_refetch"]["fetched"] == 3
 
@@ -183,13 +194,11 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
-@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
     mock_refetch,
-    mock_ch_refetch,
-    mock_investegate_refetch,
+    mock_primary_refetch,
     mock_ir_rows,
     mock_ir_refetch,
     mock_news,
@@ -204,8 +213,11 @@ def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
         encoding="utf-8",
     )
     mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_investegate_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_primary_refetch.return_value = {
+        "fetched": 0,
+        "companies_house": {"fetched": 0},
+        "rns": {"fetched": 0, "investegate": {"fetched": 0}, "ticker_rns": {"fetched": 0}},
+    }
     mock_ir_rows.return_value = [{"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}]
     mock_ir_refetch.return_value = {"fetched": 1, "with_body_after": 1}
 
@@ -225,13 +237,11 @@ def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
-@patch("value_investor.research.gap_fill_sources.refetch_investegate_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_calls_ir_refetch_for_itv_l(
     mock_refetch,
-    mock_ch_refetch,
-    mock_investegate_refetch,
+    mock_primary_refetch,
     mock_ir_rows,
     mock_ir_refetch,
     mock_news,
@@ -246,8 +256,11 @@ def test_prepare_gap_fill_calls_ir_refetch_for_itv_l(
         encoding="utf-8",
     )
     mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_investegate_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_primary_refetch.return_value = {
+        "fetched": 0,
+        "companies_house": {"fetched": 0},
+        "rns": {"fetched": 0, "investegate": {"fetched": 0}, "ticker_rns": {"fetched": 0}},
+    }
     mock_ir_rows.return_value = [
         {
             "id": "ir_itv_fy25",
