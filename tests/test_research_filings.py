@@ -1944,8 +1944,8 @@ def test_merge_ir_allowlist_filings_adds_missing_rows(tmp_path: Path):
         json.dumps(
             {
                 "urls": {
-                    "HIK.L": [
-                        "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf",
+                    "CUSTOM.L": [
+                        "https://example.com/custom-trading-update-vfinal.pdf",
                     ]
                 }
             }
@@ -1959,7 +1959,7 @@ def test_merge_ir_allowlist_filings_adds_missing_rows(tmp_path: Path):
         encoding="utf-8",
     )
 
-    result = merge_ir_allowlist_filings("HIK.L", filings_dir, path=allowlist_path)
+    result = merge_ir_allowlist_filings("CUSTOM.L", filings_dir, path=allowlist_path)
     assert result["added"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert len(saved["filings"]) == 1
@@ -1969,11 +1969,11 @@ def test_merge_ir_allowlist_filings_adds_missing_rows(tmp_path: Path):
 
 def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path, monkeypatch):
     allowlist_path = tmp_path / "ir_urls.json"
-    url = "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf"
-    allowlist_path.write_text(json.dumps({"urls": {"HIK.L": [url]}}), encoding="utf-8")
+    url = "https://example.com/custom-trading-update-vfinal.pdf"
+    allowlist_path.write_text(json.dumps({"urls": {"CUSTOM.L": [url]}}), encoding="utf-8")
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
-    digest = "a9733d0de6aec27d"
+    digest = "553f48faa4590e00"
     (filings_dir / "filings_index.json").write_text(
         json.dumps(
             {
@@ -2016,7 +2016,7 @@ def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path,
 
     result = refetch_ir_allowlist_filing_bodies(
         filings_dir,
-        "HIK.L",
+        "CUSTOM.L",
         max_bodies=5,
         max_retries=2,
         allowlist_path=allowlist_path,
@@ -2025,6 +2025,8 @@ def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path,
     assert result["fetched"] == 1
     assert result["retries_used"] == 1
     assert attempts["count"] == 2
+    assert any(entry["outcome"] == "retry" for entry in result.get("retry_log") or [])
+    assert any(entry["outcome"] == "fetched_pdf" for entry in result.get("retry_log") or [])
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
     assert (filings_dir / "bodies" / f"ir_{digest}.txt").exists()
@@ -2274,6 +2276,55 @@ def test_refetch_ir_allowlist_filing_bodies_investegate_fallback(tmp_path: Path,
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
     assert (filings_dir / "bodies" / f"ir_{digest}.txt").exists()
+
+
+def test_fetch_filings_ir_allowlist_hik_l_builtin(tmp_path: Path):
+    """HIK.L trading-update and results PDFs ship in the built-in IR allowlist."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("HIK.L", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert any("april-2026-trading-update-vfinal.pdf" in url for url in urls)
+    assert any("annual-report" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_gftu_l(tmp_path: Path):
+    """GFTU.L IR results decks are allowlisted for segment and FCF gap-fill."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    mapping = load_ir_url_allowlist(allowlist_path)
+    assert "GFTU.L" in mapping
+    assert len(mapping["GFTU.L"]) >= 4
+
+    rows = fetch_filings_ir_allowlist("GFTU.L", path=allowlist_path)
+    assert len(rows) >= 4
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert all("graftonplc.com" in row["url"] for row in rows)
+    periods = {row["period"] for row in rows}
+    assert "annual" in periods
+    assert "trading_update" in periods
+
+
+def test_fetch_filings_ir_allowlist_megp_l_includes_june_trading_update(tmp_path: Path):
+    """MEGP.L allowlist includes June 2026 profit-warning trading update."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MEGP.L", path=allowlist_path)
+    trading = [
+        row
+        for row in rows
+        if row["period"] == "trading_update"
+        and "260601-ME-Group-Trading-Update.pdf" in row["url"]
+    ]
+    assert trading
+    presentation = [
+        row for row in rows if "Annual-Results-Presentation.pdf" in row["url"]
+    ]
+    assert presentation
 
 
 def test_fetch_filings_ir_allowlist_fgp_l(tmp_path: Path):

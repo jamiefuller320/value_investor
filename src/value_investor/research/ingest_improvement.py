@@ -392,6 +392,14 @@ def _planned_sources_for_ticker(
         if ch_item is not None:
             ranked["companies_house_accounts"] = {**ch_item, "score": "10"}
 
+    if fetch_filings_ir_allowlist(ticker):
+        ir_item = _catalog_item("company_ir_presentation", market=market, ticker=ticker)
+        if ir_item is not None:
+            existing = ranked.get("company_ir_presentation")
+            score = "8"
+            if existing is None or int(existing.get("score") or 0) < int(score):
+                ranked["company_ir_presentation"] = {**ir_item, "score": score}
+
     for row in ingest_suggestions:
         for source_id in map_suggestion_to_source_ids(str(row.get("suggestion") or "")):
             item = _catalog_item(source_id, market=market, ticker=ticker)
@@ -533,17 +541,16 @@ def run_ingest_improvement_pass(
                 filings_with_body=before,
             )
             ir_refetch: dict[str, Any] = {}
-            planned_ids = {str(row.get("id") or "") for row in planned}
-            if (
-                "company_ir_presentation" in planned_ids
-                or fetch_filings_ir_allowlist(target.ticker)
-            ):
+            ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
+            if ir_allowlist_rows:
                 ir_refetch = refetch_ir_allowlist_filing_bodies(
                     sources_dir / "filings",
                     target.ticker,
                     company_name=target.name,
                     max_bodies=20,
                 )
+                ir_refetch["mandatory"] = True
+                ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
                 if int(ir_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(

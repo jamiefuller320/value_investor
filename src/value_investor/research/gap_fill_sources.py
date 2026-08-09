@@ -337,13 +337,16 @@ def prepare_gap_fill_source_pack(
         if int(primary_refetch.get("fetched") or 0) > 0:
             body_refetch = primary_refetch
     ir_refetch: dict[str, Any] = {}
-    if fetch_filings_ir_allowlist(ticker):
+    ir_allowlist_rows = fetch_filings_ir_allowlist(ticker)
+    if ir_allowlist_rows:
         ir_refetch = refetch_ir_allowlist_filing_bodies(
             filings_dir,
             ticker,
             company_name=company_name,
             max_bodies=20,
         )
+        ir_refetch["mandatory"] = True
+        ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
         if int(ir_refetch.get("fetched") or 0) > 0:
             body_refetch = ir_refetch
 

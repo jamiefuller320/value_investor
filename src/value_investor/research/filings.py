@@ -51,6 +51,12 @@ TICKER_API_BASE = "https://api.tickerapp.net/v2"
 DEFAULT_IR_URLS_PATH = Path("docs/data/research_ir_urls.json")
 # Code-shipped IR URLs for tickers not yet in research_ir_urls.json (or needing extra decks).
 _BUILTIN_IR_URLS: dict[str, list[str]] = {
+    "HIK.L": [
+        "https://www.hikma.com/media/wsnfgf3v/1-2025-annual-report.pdf",
+        "https://www.hikma.com/media/etij3sft/hikma-pharmaceuticals-plc-2025-full-year-results-combined-press-release-vfinal.pdf",
+        "https://www.hikma.com/media/5nyls5gx/hikma-2025-interim-results-presentation-07-aug-2025.pdf",
+        "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf",
+    ],
     "ITV.L": [
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%202025%20FY%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20_%202025%20Interim%20Results%20Presentation.pdf",
@@ -59,8 +65,18 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "MEGP.L": [
         "https://me-group.com/wp-content/uploads/2026/03/ME-Group-Annual-Report-2025.pdf",
         "https://me-group.com/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results.pdf",
+        "https://me-group.com/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results-Presentation.pdf",
+        "https://me-group.com/wp-content/uploads/2026/06/260601-ME-Group-Trading-Update.pdf",
         "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-RNS-FINAL.pdf",
         "https://me-group.com/wp-content/uploads/2025/02/ME-Group-Annual-Report-2024.pdf",
+    ],
+    "GFTU.L": [
+        "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/2025%20FULL%20YEAR%20RESULTS%20march%202026/Grafton-Group%20plc-Final%20Results-31-December-2025-FINAL.pdf",
+        "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/2025%20FULL%20YEAR%20RESULTS%20march%202026/Grafton-Group%20plc-Final-Results-2025-Presentation-FINAL.pdf",
+        "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/2025%20FULL%20YEAR%20RESULTS%20march%202026/Grafton-Annual-Report-2025.pdf",
+        "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/Grafton%20CME26%20all%20docs/Grafton_CME26_Full_Presentation_FINAL_website.pdf",
+        "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/trading%20updates%202026/Trading_Update_July_2026_Final.pdf",
+        "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/2025%20HYR/Grafton%20Group%20plc%20-%20Interim%20Results%20-%2030%20June%202025%20Final.pdf",
     ],
     "FGP.L": [
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/firstgroup-plc-fy-2025-results-presentation.pdf",
@@ -2429,6 +2445,7 @@ def refetch_ir_allowlist_filing_bodies(
     downloaded = 0
     retries_used = 0
     investegate_fallbacks = 0
+    retry_log: list[dict[str, Any]] = []
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
@@ -2440,6 +2457,8 @@ def refetch_ir_allowlist_filing_bodies(
         ):
             body = None
             fetch_source: str | None = None
+            row_url = str(item.get("url") or "")
+            row_id = str(item.get("id") or "")
             for attempt in range(max_retries + 1):
                 body, fetch_source = _fetch_ir_allowlist_body(
                     item,
@@ -2448,9 +2467,62 @@ def refetch_ir_allowlist_filing_bodies(
                     investegate_cache=investegate_cache,
                 )
                 if body:
+                    outcome = (
+                        "fetched_investegate"
+                        if fetch_source == "investegate_html"
+                        else "fetched_pdf"
+                    )
+                    retry_log.append(
+                        {
+                            "filing_id": row_id,
+                            "url": row_url,
+                            "attempt": attempt + 1,
+                            "outcome": outcome,
+                            "source": fetch_source,
+                        }
+                    )
+                    logger.info(
+                        "IR allowlist body fetched for %s (%s) on attempt %d via %s",
+                        ticker,
+                        row_id,
+                        attempt + 1,
+                        fetch_source,
+                    )
                     break
                 if attempt < max_retries:
                     retries_used += 1
+                    retry_log.append(
+                        {
+                            "filing_id": row_id,
+                            "url": row_url,
+                            "attempt": attempt + 1,
+                            "outcome": "retry",
+                            "source": None,
+                        }
+                    )
+                    logger.info(
+                        "IR allowlist body fetch retry for %s (%s) attempt %d/%d",
+                        ticker,
+                        row_id,
+                        attempt + 1,
+                        max_retries + 1,
+                    )
+            if not body:
+                retry_log.append(
+                    {
+                        "filing_id": row_id,
+                        "url": row_url,
+                        "attempt": max_retries + 1,
+                        "outcome": "failed",
+                        "source": None,
+                    }
+                )
+                logger.warning(
+                    "IR allowlist body fetch failed for %s (%s) after %d attempt(s)",
+                    ticker,
+                    row_id,
+                    max_retries + 1,
+                )
             if body:
                 filename = f"{item['id']}.txt"
                 path = bodies_dir / filename
@@ -2473,8 +2545,10 @@ def refetch_ir_allowlist_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "retries_used": retries_used,
+        "retry_log": retry_log,
         "investegate_fallbacks": investegate_fallbacks,
         "merge": merge_meta,
+        "mandatory": True,
         "note": "refetch_ir_allowlist_filing_bodies",
     }
 
