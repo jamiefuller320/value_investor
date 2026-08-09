@@ -12,7 +12,6 @@ from typing import Any
 from value_investor.post_run_review import _parse_post_run_review
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
-    KNOWN_SOURCE_IDS,
     map_suggestion_to_source_ids,
 )
 from value_investor.storage import read_json, write_json
@@ -84,16 +83,21 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
     ],
     "ci": [
         ".github/workflows/ci.yml",
+        ".github/workflows/ci-main-nightly.yml",
         ".github/workflows/ci-fix-responder.yml",
         ".github/workflows/engineering-auto-merge.yml",
         "scripts/check_committed_data_json.py",
+        "scripts/check_changed_python.py",
         "src/value_investor/committed_data_json.py",
+        "src/value_investor/python_quality.py",
         "src/value_investor/ci_fix_tasks.py",
         "src/value_investor/engineering_auto_merge.py",
         "tests/conftest.py",
         "tests/test_committed_data_json.py",
+        "tests/test_python_quality.py",
         "tests/test_ci_fix_tasks.py",
         "tests/test_engineering_auto_merge.py",
+        "pyproject.toml",
     ],
 }
 
@@ -313,10 +317,10 @@ def _parse_post_run_plan(post_run_path: Path) -> list[EngineeringTask]:
 
 
 def _tasks_from_suggestions(
-  suggestions_path: Path,
-  *,
-  run_stamp: str,
-  seq_start: int,
+    suggestions_path: Path,
+    *,
+    run_stamp: str,
+    seq_start: int,
 ) -> list[EngineeringTask]:
     if not suggestions_path.exists():
         return []
@@ -363,7 +367,9 @@ def _tasks_from_suggestions(
     return tasks
 
 
-def _tasks_from_gap_fill(gap_fill_path: Path, *, run_stamp: str, seq_start: int) -> list[EngineeringTask]:
+def _tasks_from_gap_fill(
+    gap_fill_path: Path, *, run_stamp: str, seq_start: int
+) -> list[EngineeringTask]:
     if not gap_fill_path.exists():
         return []
     try:
@@ -506,12 +512,12 @@ def build_compiled_task_list(
     tasks: list[EngineeringTask] = []
     tasks.extend(_parse_post_run_plan(output_dir / "post_run_review.md"))
     seq = len(tasks) + 1
-    tasks.extend(
-        _tasks_from_suggestions(suggestions_path, run_stamp=run_stamp, seq_start=seq)
-    )
+    tasks.extend(_tasks_from_suggestions(suggestions_path, run_stamp=run_stamp, seq_start=seq))
     seq = len(tasks) + 1
     tasks.extend(
-        _tasks_from_gap_fill(output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq)
+        _tasks_from_gap_fill(
+            output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq
+        )
     )
     return _dedupe_tasks(tasks)[: max(0, int(max_tasks))]
 
@@ -528,7 +534,9 @@ def sync_committed_engineering_tasks(
         return load_engineering_tasks(committed_path) if committed_path.exists() else None
 
     output_payload = load_engineering_tasks(output_path)
-    committed_payload = load_engineering_tasks(committed_path) if committed_path.exists() else {"tasks": []}
+    committed_payload = (
+        load_engineering_tasks(committed_path) if committed_path.exists() else {"tasks": []}
+    )
     merged_rows = _merge_task_rows(
         list(committed_payload.get("tasks") or []),
         [EngineeringTask.from_dict(row) for row in output_payload.get("tasks") or []],

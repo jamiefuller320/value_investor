@@ -33,6 +33,16 @@ jobs:
       - name: Check committed data JSON integrity
         run: python3 scripts/check_committed_data_json.py
 
+      - name: Ruff (changed Python only)
+        env:
+          BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "Initial push — skipping scoped ruff"
+            exit 0
+          fi
+          python3 scripts/check_changed_python.py --base "${BASE_REF}" --head HEAD
+
       - name: Pytest
         run: pytest -q
 

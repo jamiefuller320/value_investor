@@ -82,6 +82,20 @@ ftse-engineering try-auto-merge --branch cursor/eng-20260802-01-1de3
 - `engineering-path-guard` CI job still runs on every engineering PR
 - Main-branch failures only (push, schedule, workflow_dispatch) — not PR CI
 
+## Scoped Python lint (ruff)
+
+CI and nightly run **ruff check + ruff format --check** only on **changed** `src/` and
+`tests/` Python files in the diff — not the whole tree. Legacy style debt does not block
+merges until a module is touched.
+
+```bash
+# Same check CI runs on a branch
+python3 scripts/check_changed_python.py --base origin/main --head HEAD
+```
+
+Engineering agent prompt asks for `ruff check --fix` and `ruff format` on edited Python
+files. `ci` tasks may edit `pyproject.toml` ruff config and the check script itself.
+
 ## Nightly full CI on main
 
 `docs/data/**` commits and `[skip ci]` automation pushes intentionally skip push CI
