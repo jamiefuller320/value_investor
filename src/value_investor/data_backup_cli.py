@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -18,7 +19,9 @@ from value_investor.data_backup import (
     snapshot_from_payload,
     try_send_backup_snapshot_email,
     try_upload_backup_snapshot,
+    try_upload_monthly_backup_pin,
     upload_backup_snapshot,
+    upload_monthly_backup_pin,
     verify_backup_snapshot,
 )
 
@@ -44,6 +47,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Also include small regenerable dashboard/queue JSON files",
     )
     snap.add_argument("--upload", action="store_true", help="Upload when BACKUP_S3_URI is set")
+    snap.add_argument(
+        "--upload-monthly",
+        action="store_true",
+        help="Pin snapshot to monthly/ key on S3 (overwrite same calendar month)",
+    )
     snap.add_argument(
         "--email",
         action="store_true",
@@ -73,6 +81,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to snapshot JSON (updated in place when --upload/--email run)",
     )
     deliver.add_argument("--upload", action="store_true", help="Upload when BACKUP_S3_URI is set")
+    deliver.add_argument(
+        "--upload-monthly",
+        action="store_true",
+        help="Pin snapshot to monthly/ key on S3 (overwrite same calendar month)",
+    )
     deliver.add_argument("--email", action="store_true", help="Email manifest + chunked archive")
     deliver.add_argument("--strict-upload", action="store_true")
     deliver.add_argument("--strict-email", action="store_true")
@@ -144,6 +157,25 @@ def _upload_snapshot(
     return upload_result, 0
 
 
+def _upload_monthly_pin(
+    snapshot,
+    *,
+    strict: bool,
+) -> tuple[dict[str, object] | None, int]:
+    if strict:
+        try:
+            monthly_result = upload_monthly_backup_pin(snapshot)
+        except (RuntimeError, subprocess.CalledProcessError) as exc:
+            print(str(exc), file=sys.stderr)
+            return None, 1
+    else:
+        monthly_result = try_upload_monthly_backup_pin(snapshot)
+    if strict and not monthly_result.get("uploaded") and monthly_result.get("error"):
+        print(str(monthly_result.get("error")), file=sys.stderr)
+        return monthly_result, 1
+    return monthly_result, 0
+
+
 def _email_snapshot(
     snapshot,
     *,
@@ -179,6 +211,11 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
         upload_result, code = _upload_snapshot(snapshot, strict=args.strict_upload)
         if code != 0:
             return code
+    monthly_result = None
+    if args.upload_monthly:
+        monthly_result, code = _upload_monthly_pin(snapshot, strict=args.strict_upload)
+        if code != 0:
+            return code
     email_result = None
     if args.email:
         email_result, code = _email_snapshot(snapshot, strict=args.strict_email)
@@ -187,6 +224,8 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
     payload = snapshot.to_dict()
     if upload_result is not None:
         payload["upload"] = upload_result
+    if monthly_result is not None:
+        payload["upload_monthly"] = monthly_result
     if email_result is not None:
         payload["email"] = email_result
     if args.json:
@@ -198,14 +237,16 @@ def _cmd_snapshot(args: argparse.Namespace) -> int:
         print(f"  sha256: {snapshot.manifest.sha256}")
         if upload_result:
             print(f"  upload: {upload_result}")
+        if monthly_result:
+            print(f"  upload_monthly: {monthly_result}")
         if email_result:
             print(f"  email: {email_result}")
     return 0
 
 
 def _cmd_deliver(args: argparse.Namespace) -> int:
-    if not args.upload and not args.email:
-        print("deliver requires --upload and/or --email", file=sys.stderr)
+    if not args.upload and not args.upload_monthly and not args.email:
+        print("deliver requires --upload, --upload-monthly, and/or --email", file=sys.stderr)
         return 2
     payload = json.loads(args.from_json.read_text(encoding="utf-8"))
     snapshot = snapshot_from_payload(payload)
@@ -214,6 +255,11 @@ def _cmd_deliver(args: argparse.Namespace) -> int:
         if code != 0:
             return code
         payload["upload"] = upload_result
+    if args.upload_monthly:
+        monthly_result, code = _upload_monthly_pin(snapshot, strict=args.strict_upload)
+        if code != 0:
+            return code
+        payload["upload_monthly"] = monthly_result
     if args.email:
         email_result, code = _email_snapshot(snapshot, strict=args.strict_email)
         if code != 0:

@@ -8,6 +8,7 @@ from pathlib import Path
 from value_investor.data_backup import (
     create_backup_snapshot,
     merge_email_chunks,
+    monthly_backup_dest_names,
     restore_backup_snapshot,
     run_restore_drill,
     send_backup_snapshot_email,
@@ -15,6 +16,8 @@ from value_investor.data_backup import (
     split_archive_for_email,
     try_send_backup_snapshot_email,
     try_upload_backup_snapshot,
+    try_upload_monthly_backup_pin,
+    upload_monthly_backup_pin,
     verify_backup_snapshot,
 )
 
@@ -173,17 +176,6 @@ def test_snapshot_from_payload_roundtrip(tmp_path: Path):
     assert restored.manifest.sha256 == snapshot.manifest.sha256
 
 
-def test_try_upload_without_s3_uri_is_soft_skip(tmp_path: Path):
-    repo = tmp_path / "repo"
-    paper = repo / "docs/data/paper_automation"
-    paper.mkdir(parents=True)
-    (paper / "state.json").write_text("{}", encoding="utf-8")
-    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
-    result = try_upload_backup_snapshot(snapshot)
-    assert result["uploaded"] is False
-    assert result.get("reason") == "BACKUP_S3_URI not configured"
-
-
 def test_deliver_cli_updates_json_with_email_failure(monkeypatch, tmp_path: Path):
     from value_investor.data_backup_cli import main
 
@@ -209,3 +201,104 @@ def test_deliver_cli_updates_json_with_email_failure(monkeypatch, tmp_path: Path
     saved = json.loads(payload_path.read_text(encoding="utf-8"))
     assert saved["email"]["emailed"] is False
     assert "blocked" in saved["email"]["error"]
+
+
+def test_try_upload_without_s3_uri_is_soft_skip(tmp_path: Path):
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    result = try_upload_backup_snapshot(snapshot)
+    assert result["uploaded"] is False
+    assert result.get("reason") == "BACKUP_S3_URI not configured"
+
+
+def test_monthly_backup_dest_names_use_manifest_month(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(
+        repo_root=repo,
+        backup_dir=tmp_path / "backups",
+        now=datetime(2026, 8, 10, 12, 30, tzinfo=UTC),
+    )
+    archive_name, manifest_name = monthly_backup_dest_names(snapshot)
+    assert archive_name == "ftse-tier1-monthly-2026-08.tar.gz"
+    assert manifest_name == "ftse-tier1-monthly-2026-08.manifest.json"
+
+
+def test_upload_monthly_backup_pin_targets_monthly_prefix(monkeypatch, tmp_path: Path):
+    from datetime import UTC, datetime
+
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(
+        repo_root=repo,
+        backup_dir=tmp_path / "backups",
+        now=datetime(2026, 8, 10, 12, 30, tzinfo=UTC),
+    )
+
+    calls: list[list[str]] = []
+
+    def _fake_run(cmd, check=True):
+        calls.append(cmd)
+        return None
+
+    monkeypatch.setenv("BACKUP_S3_URI", "s3://bucket/prefix/")
+    monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/aws" if name == "aws" else None)
+    monkeypatch.setattr("value_investor.data_backup.subprocess.run", _fake_run)
+
+    result = upload_monthly_backup_pin(snapshot)
+    assert result["uploaded"] is True
+    assert result["month_key"] == "2026-08"
+    assert result["archive_dest"] == (
+        "s3://bucket/prefix/monthly/ftse-tier1-monthly-2026-08.tar.gz"
+    )
+    assert result["manifest_dest"] == (
+        "s3://bucket/prefix/monthly/ftse-tier1-monthly-2026-08.manifest.json"
+    )
+    assert len(calls) == 2
+    assert calls[0][0:4] == ["aws", "s3", "cp", str(snapshot.archive_path)]
+    assert calls[0][4] == result["archive_dest"]
+
+
+def test_try_upload_monthly_without_s3_uri_is_soft_skip(tmp_path: Path):
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    result = try_upload_monthly_backup_pin(snapshot)
+    assert result["uploaded"] is False
+    assert result.get("reason") == "BACKUP_S3_URI not configured"
+
+
+def test_deliver_cli_updates_json_with_monthly_upload(monkeypatch, tmp_path: Path):
+    from value_investor.data_backup_cli import main
+
+    repo = tmp_path / "repo"
+    paper = repo / "docs/data/paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "state.json").write_text("{}", encoding="utf-8")
+    snapshot = create_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    payload_path = tmp_path / "backup.json"
+    payload_path.write_text(json.dumps(snapshot.to_dict()), encoding="utf-8")
+
+    monkeypatch.setenv("BACKUP_S3_URI", "s3://bucket/prefix/")
+    monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/aws" if name == "aws" else None)
+    monkeypatch.setattr(
+        "value_investor.data_backup.subprocess.run",
+        lambda cmd, check=True: None,
+    )
+
+    rc = main(["deliver", "--from-json", str(payload_path), "--upload-monthly", "--json"])
+    assert rc == 0
+    saved = json.loads(payload_path.read_text(encoding="utf-8"))
+    assert saved["upload_monthly"]["uploaded"] is True
+    assert "monthly" in saved["upload_monthly"]["archive_dest"]
