@@ -133,6 +133,16 @@ def _safe_float(value: Any) -> float | None:
         return None
 
 
+def _safe_fast_info_attr(fast: Any, attr: str) -> Any:
+    """Read yfinance ``fast_info`` fields without raising on missing keys."""
+    if fast is None:
+        return None
+    try:
+        return getattr(fast, attr)
+    except (AttributeError, KeyError):
+        return None
+
+
 def _is_transient_fetch_error(exc: BaseException) -> bool:
     message = str(exc).lower()
     transient_markers = (
@@ -156,8 +166,17 @@ def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
     for attempt in range(1, FETCH_ATTEMPTS + 1):
         try:
             stock = yf.Ticker(ticker)
-            info = stock.info or {}
+            try:
+                info = stock.info or {}
+            except KeyError as exc:
+                # yfinance may raise KeyError (e.g. exchangeTimezoneName) for bad symbols.
+                info = {}
+                last_exc = exc
             fast = getattr(stock, "fast_info", None)
+            if info or fast is not None:
+                return stock, info, fast
+            if last_exc is not None:
+                raise last_exc
             return stock, info, fast
         except Exception as exc:  # noqa: BLE001
             last_exc = exc
@@ -191,7 +210,12 @@ def resolve_yahoo_ticker(ticker: str) -> str:
     upper = raw.upper()
     known_suffixes = (
         ".AX",
+        ".CO",
         ".DE",
+        ".HE",
+        ".IR",
+        ".LS",
+        ".OL",
         ".PA",
         ".AS",
         ".MI",
@@ -200,9 +224,11 @@ def resolve_yahoo_ticker(ticker: str) -> str:
         ".SW",
         ".HK",
         ".SI",
+        ".ST",
         ".T",
         ".TO",
         ".V",
+        ".VI",
         ".SS",
         ".SZ",
         ".L",
@@ -275,6 +301,18 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
         "lse",
     }:
         return to_lse_ticker(raw)
+    if market_id in {"omxs30", "stockholm", "sweden"}:
+        base = raw.strip().upper()
+        return base if base.endswith(".ST") else f"{base.replace('.', '-')}.ST"
+    if market_id in {"iseq20", "ireland", "dublin"}:
+        base = raw.strip().upper()
+        return base if base.endswith(".IR") else f"{base.replace('.', '-')}.IR"
+    if market_id in {"psi20", "lisbon"}:
+        base = raw.strip().upper()
+        return base if base.endswith(".LS") else f"{base.replace('.', '-')}.LS"
+    if market_id in {"atx", "vienna"}:
+        base = raw.strip().upper()
+        return base if base.endswith(".VI") else f"{base.replace('.', '-')}.VI"
     return resolve_yahoo_ticker(raw)
 
 
@@ -301,7 +339,7 @@ def fetch_company_metrics(
             metrics.name = info.get("longName") or info.get("shortName") or name
             metrics.sector = info.get("sector") or sector
             metrics.market_cap = _safe_float(
-                info.get("marketCap") or getattr(fast, "market_cap", None)
+                info.get("marketCap") or _safe_fast_info_attr(fast, "market_cap")
             )
             metrics.trailing_pe = _safe_float(info.get("trailingPE"))
             metrics.forward_pe = _safe_float(info.get("forwardPE"))
@@ -328,7 +366,8 @@ def fetch_company_metrics(
             metrics.last_price = _safe_float(
                 info.get("regularMarketPrice")
                 or info.get("currentPrice")
-                or getattr(fast, "last_price", None)
+                or _safe_fast_info_attr(fast, "last_price")
+                or _safe_fast_info_attr(fast, "lastPrice")
             )
 
             stmt: dict[str, Any] = {}

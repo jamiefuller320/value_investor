@@ -377,3 +377,56 @@ def test_pick_constituent_table_skips_multiindex_changelogs():
     picked = _pick_constituent_table([changelog, listing])
     assert list(picked.columns) == ["Ticker", "Company"]
     assert len(picked) == 100
+
+
+def test_load_library_metrics_filters_usable_omxs30_rows(tmp_path: Path):
+    from value_investor.library_screen import load_library_metrics, run_library_screen
+
+    def _row(ticker: str, **extra: float) -> dict:
+        base = {
+            "ticker": ticker,
+            "name": ticker,
+            "sector": "Industrials",
+            "market_cap": 1e11,
+            "trailing_pe": 15.0,
+            "forward_pe": 14.0,
+            "price_to_book": 2.0,
+            "dividend_yield": 0.03,
+            "current_ratio": 1.2,
+            "debt_to_equity": 50.0,
+            "return_on_equity": 0.15,
+            "return_on_assets": 0.07,
+            "profit_margins": 0.12,
+            "revenue_growth": 0.04,
+            "earnings_growth": 0.05,
+            "free_cashflow": 1e9,
+            "enterprise_value": 1.1e11,
+            "ebitda": 2e9,
+            "ebit": 1.5e9,
+            "total_revenue": 5e9,
+            "total_assets": 8e9,
+            "total_current_liabilities": 2e9,
+            "total_debt": 1e9,
+            "total_cash": 5e8,
+            "ncav": 1e9,
+            "last_price": 100.0,
+            "errors": [],
+        }
+        base.update(extra)
+        return base
+
+    market_dir = tmp_path / "library" / "markets" / "omxs30" / "metrics"
+    market_dir.mkdir(parents=True)
+    rows = [
+        _row("ABB.ST"),
+        _row("VOLV-B.ST", price_to_book=3.1),
+        {"ticker": "BAD.ST", "errors": ["no market data returned"]},
+    ]
+    write_json(market_dir / "latest.json", rows, compact=False)
+    frame = load_library_metrics(tmp_path / "library", "omxs30")
+    assert len(frame) == 2
+    assert set(frame["ticker"]) == {"ABB.ST", "VOLV-B.ST"}
+
+    result = run_library_screen(tmp_path / "library", "omxs30")
+    assert result.summary["ticker_count"] == 2
+    assert (result.screen_dir / "latest_signals.csv").exists()

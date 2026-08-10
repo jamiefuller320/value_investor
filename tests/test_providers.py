@@ -22,6 +22,11 @@ def test_to_stooq_symbol_maps_lse_class_shares():
     assert to_stooq_symbol("SHEL.L") == "shel.uk"
 
 
+def test_to_stooq_symbol_maps_stockholm_class_shares():
+    assert to_stooq_symbol("ABB.ST") == "abb.st"
+    assert to_stooq_symbol("VOLV-B.ST") == "volv_b.st"
+
+
 def test_merge_provider_result_only_fills_missing():
     metrics = {"market_cap": 10.0, "trailing_pe": None}
     source_map: dict[str, str] = {}

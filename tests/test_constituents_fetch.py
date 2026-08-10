@@ -187,3 +187,54 @@ def test_fetch_company_metrics_resolves_bt_a_symbol():
     assert seen == ["BT-A.L"]
     assert metrics.ticker == "BT-A.L"
     assert metrics.name == "BT Group"
+
+
+def test_resolve_yahoo_ticker_preserves_stockholm_suffix():
+    assert fetch_mod.resolve_yahoo_ticker("ABB.ST") == "ABB.ST"
+    assert fetch_mod.resolve_yahoo_ticker("VOLV-B.ST") == "VOLV-B.ST"
+    assert fetch_mod.resolve_yahoo_ticker_for_market("ABB.ST", "omxs30") == "ABB.ST"
+    assert fetch_mod.resolve_yahoo_ticker_for_market("VOLV-B.ST", "omxs30") == "VOLV-B.ST"
+    assert fetch_mod.resolve_yahoo_ticker_for_market("ABB", "omxs30") == "ABB.ST"
+
+
+def test_fetch_company_metrics_tolerates_fast_info_key_error(monkeypatch):
+    class BrokenFastInfo:
+        @property
+        def market_cap(self):
+            return 5_000_000
+
+        @property
+        def last_price(self):
+            raise KeyError("exchangeTimezoneName")
+
+    class DummyTicker:
+        def __init__(self, symbol: str):
+            self.symbol = symbol
+
+        @property
+        def info(self):
+            return {"longName": "Volvo", "marketCap": 5_000_000, "trailingPE": 12.0}
+
+        @property
+        def fast_info(self):
+            return BrokenFastInfo()
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+    with patch.object(fetch_mod.yf, "Ticker", side_effect=DummyTicker):
+        metrics = fetch_mod.fetch_company_metrics("VOLV-B.ST", market="omxs30")
+
+    assert metrics.ticker == "VOLV-B.ST"
+    assert metrics.market_cap == 5_000_000
+    assert metrics.trailing_pe == 12.0
+    assert metrics.errors == []
