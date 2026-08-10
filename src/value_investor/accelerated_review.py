@@ -89,10 +89,12 @@ def record_midweek_email_only_run(
     log_path: Path = DEFAULT_LOG_PATH,
     merged_task_id: str | None = None,
     note: str | None = None,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     payload = load_accelerated_review_log(log_path)
+    stamp = (now or datetime.now(UTC)).isoformat()
     entry: dict[str, Any] = {
-        "at": datetime.now(UTC).isoformat(),
+        "at": stamp,
         "source": source,
     }
     if merged_task_id:
