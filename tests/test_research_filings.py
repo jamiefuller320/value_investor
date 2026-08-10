@@ -14,6 +14,7 @@ from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
     _compose_filing_body_with_depth_sections,
     _compose_pdf_body_text,
+    _extract_filing_document_text,
     _extract_investegate_html_text,
     _extract_ixbrl_html_text,
     _extract_pdf_depth_sections,
@@ -908,7 +909,13 @@ def test_compose_pdf_body_text_splices_late_cash_flow_and_notes():
         "Sales to associate 12\n"
         "Purchases from joint venture 3"
     )
-    pages = [early[:3500]] * 10 + [cash_flow_page, exceptional_page, segment_page]
+    borrowings_page = (
+        "NOTE 12 Borrowings\n"
+        "Bank loans 450\n"
+        "Revolving credit facility 120\n"
+        "FINANCIAL COVENANTS net debt to EBITDA must remain below 3.5x"
+    )
+    pages = [early[:3500]] * 10 + [cash_flow_page, exceptional_page, borrowings_page, segment_page]
 
     text = _compose_pdf_body_text(pages)
     assert text is not None
@@ -917,9 +924,61 @@ def test_compose_pdf_body_text_splices_late_cash_flow_and_notes():
     assert "Cash generated from operations 90.8" in text
     assert "NOTE 5 Exceptional items" in text
     assert "Legal settlement 72" in text
+    assert "NOTE 12 Borrowings" in text
+    assert "Revolving credit facility 120" in text
+    assert "FINANCIAL COVENANTS" in text
     assert "SEGMENT INFORMATION" in text
     assert "RELATED PARTY TRANSACTIONS" in text
     assert "Sales to associate 12" in text
+
+
+def test_fetch_filing_body_pdf_splices_late_borrowings_pension_and_segment(monkeypatch):
+    """Regression: PDF fetch must reach borrowings, pension, covenant, and segment notes."""
+    early = "Strategic report and chairman's statement " * 900
+    notes_tail = (
+        " NOTE 12 Borrowings bank loans 450 revolving credit facility 120 "
+        " NOTE 24 Defined benefit pension scheme deficit 85 "
+        " FINANCIAL COVENANTS net debt to EBITDA 3.5x headroom adequate "
+        " SEGMENT INFORMATION UK revenue 800 US revenue 400"
+    )
+    full_pdf_text = early[:3500] + notes_tail
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: b"%PDF-fake",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: _compose_filing_body_with_depth_sections(full_pdf_text),
+    )
+    text = fetch_filing_body("https://example.com/accounts.pdf")
+    assert text is not None
+    assert "Strategic report" in text
+    assert "NOTE 12 Borrowings" in text
+    assert "Defined benefit pension" in text
+    assert "FINANCIAL COVENANTS" in text
+    assert "SEGMENT INFORMATION" in text
+
+
+def test_extract_filing_document_text_ocr_applies_depth_sections(monkeypatch):
+    early = "Cover page and contents " * 1200
+    tail = (
+        " CONSOLIDATED STATEMENT OF CASH FLOW operating activities 90.8 "
+        " NOTE 18 Borrowings term loan 200"
+    )
+    ocr_full = early + tail
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_pdf_text",
+        lambda raw: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._ocr_pdf_text",
+        lambda raw: ocr_full,
+    )
+    text = _extract_filing_document_text(b"%PDF-1.4", "application/pdf")
+    assert text is not None
+    assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
+    assert "NOTE 18 Borrowings" in text
 
 
 def test_extract_pdf_depth_sections_skips_lead_window():

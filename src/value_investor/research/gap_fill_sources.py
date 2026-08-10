@@ -42,7 +42,10 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
         {
             "id": "companies_house_accounts",
             "label": "Companies House filed accounts / annual report PDF",
-            "why": "RNS body extracts are often thin; statutory accounts hold pensions, covenants, going-concern language",
+            "why": (
+                "RNS body extracts are often thin; filed PDF/iXBRL accounts hold consolidated "
+                "statements plus pension, borrowings/covenant, cash-flow, and segment notes"
+            ),
         },
         {
             "id": "company_ir_presentation",

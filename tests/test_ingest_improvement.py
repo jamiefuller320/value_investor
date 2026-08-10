@@ -70,6 +70,16 @@ def test_map_suggestion_to_source_ids():
     )
 
 
+def test_map_suggestion_to_companies_house_for_statutory_notes():
+    suggestion = (
+        "Deep-fetch full Companies House PDF/iXBRL notes for pensions, "
+        "borrowings/covenants, consolidated cash flow, and segment information"
+    )
+    ids = map_suggestion_to_source_ids(suggestion)
+    assert "companies_house_accounts" in ids
+    assert ids[0] == "companies_house_accounts"
+
+
 def test_planned_sources_includes_ir_presentation_for_itv_l():
     from value_investor.research.filings import fetch_filings_ir_allowlist
 
