@@ -9,7 +9,11 @@ import pandas as pd
 from value_investor.agent_model_policy import load_policy, save_policy
 from value_investor.data_library import market_dir
 from value_investor.library_ladder import run_library_ladder
-from value_investor.library_screen import research_cap_from_budget, run_library_screen
+from value_investor.library_screen import (
+    assess_library_metrics_health,
+    research_cap_from_budget,
+    run_library_screen,
+)
 from value_investor.storage import write_json
 
 
@@ -75,6 +79,24 @@ def test_run_library_screen_writes_artifacts(tmp_path: Path):
     signals = pd.read_csv(result.screen_dir / "latest_signals.csv")
     assert "signal" in signals.columns
     assert len(signals) == 30
+
+
+def test_assess_library_metrics_health_counts_usable(tmp_path: Path):
+    root = tmp_path / "library"
+    metrics_dir = market_dir(root, "sp500") / "metrics"
+    metrics_dir.mkdir(parents=True)
+    write_json(
+        metrics_dir / "latest.json",
+        [
+            {"ticker": "A", "trailing_pe": 10.0},
+            {"ticker": "B", "trailing_pe": None, "errors": "yahoo 401"},
+        ],
+        compact=False,
+    )
+    health = assess_library_metrics_health(root, "sp500")
+    assert health["total_rows"] == 2
+    assert health["usable_rows"] == 1
+    assert health["sample_tickers"] == ["B"]
 
 
 def test_research_cap_from_budget():

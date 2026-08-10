@@ -37,6 +37,7 @@ from value_investor.library_graduation import (
     run_maintenance_grow,
 )
 from value_investor.library_screen import (
+    assess_library_metrics_health,
     library_research_reports,
     research_cap_from_budget,
     run_library_screen,
@@ -191,7 +192,9 @@ def run_library_ladder(
         result["layers"]["macro_context"] = {"skipped": True, "use_in_scoring": False}
 
     coverage = (status[0] if status else {}) or {}
-    metrics_count = int(coverage.get("coverage_count") or 0)
+    manifest_coverage = int(coverage.get("coverage_count") or 0)
+    metrics_health = assess_library_metrics_health(root, market)
+    usable_metrics = int(metrics_health.get("usable_rows") or 0)
     min_metrics = int(
         policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN
     )
@@ -201,16 +204,34 @@ def run_library_ladder(
     if skip_screen:
         result["layers"]["screen_lite"] = {"skipped": True}
         screen_result = None
-    elif metrics_count < min_metrics:
+    elif usable_metrics < min_metrics:
         result["layers"]["screen_lite"] = {
             "skipped": True,
-            "reason": f"need>={min_metrics} metrics rows, have {metrics_count}",
+            "reason": f"need>={min_metrics} usable metrics rows, have {usable_metrics}",
+            "manifest_coverage_count": manifest_coverage,
+            "usable_metrics_rows": usable_metrics,
+            "total_metrics_rows": int(metrics_health.get("total_rows") or 0),
         }
         screen_result = None
     else:
-        screen_result = run_library_screen(root, market, run_at=run_at)
-        screened_markets.add(market)
-        result["layers"]["screen_lite"] = screen_result.summary
+        try:
+            screen_result = run_library_screen(root, market, run_at=run_at)
+            screened_markets.add(market)
+            result["layers"]["screen_lite"] = {
+                **screen_result.summary,
+                "manifest_coverage_count": manifest_coverage,
+                "usable_metrics_rows": usable_metrics,
+            }
+        except (FileNotFoundError, ValueError) as exc:
+            logger.warning("Screen-lite for focus %s failed: %s", market, exc)
+            result["layers"]["screen_lite"] = {
+                "failed": True,
+                "error": str(exc),
+                "manifest_coverage_count": manifest_coverage,
+                "usable_metrics_rows": usable_metrics,
+                "total_metrics_rows": int(metrics_health.get("total_rows") or 0),
+            }
+            screen_result = None
 
     # C — selective research across focus + graduated markets (optional USD strand)
     policy = load_policy(policy_path)
@@ -468,6 +489,18 @@ def run_library_ladder(
         },
     }
     save_policy(policy, policy_path)
+
+    try:
+        from value_investor.engineering_tasks import draft_library_ladder_engineering_tasks
+
+        result["engineering_tasks"] = draft_library_ladder_engineering_tasks(
+            result,
+            root=root,
+            policy_path=policy_path,
+        )
+    except Exception as exc:  # noqa: BLE001 — drafting must not fail the ladder
+        logger.warning("Library ladder engineering draft failed: %s", exc)
+        result["engineering_tasks"] = {"drafted_count": 0, "error": str(exc)}
 
     write_json(Path(root) / "last_ladder.json", result, compact=False)
     return result

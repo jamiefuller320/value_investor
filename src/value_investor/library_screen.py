@@ -41,12 +41,83 @@ class LibraryScreenResult:
     summary: dict[str, Any]
 
 
-def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
+def _metrics_latest_path(root: Path, market_id: str) -> Path:
     path = market_dir(root, market_id) / "metrics" / "latest.json.gz"
     if not path.exists():
-        # Allow uncompressed local tests
         alt = market_dir(root, market_id) / "metrics" / "latest.json"
         path = alt if alt.exists() else path
+    return path
+
+
+def _usable_metrics_mask(frame: pd.DataFrame) -> pd.Series:
+    if frame.empty:
+        return pd.Series(dtype=bool)
+    if "errors" in frame.columns and "trailing_pe" in frame.columns:
+        usable = frame["trailing_pe"].notna() | frame.get(
+            "price_to_book", pd.Series(dtype=float)
+        ).notna()
+        if "market_cap" in frame.columns:
+            usable = usable | frame["market_cap"].notna()
+        return usable
+    return pd.Series([True] * len(frame), index=frame.index)
+
+
+def assess_library_metrics_health(root: Path, market_id: str) -> dict[str, Any]:
+    """
+    Summarise raw vs usable metrics rows for ladder gating and engineering drafting.
+
+    Usable rows match ``load_library_metrics`` — at least one of trailing_pe,
+    price_to_book, or market_cap is present.
+    """
+    path = _metrics_latest_path(root, market_id)
+    if not path.exists():
+        return {
+            "market": market_id,
+            "metrics_path": str(path),
+            "total_rows": 0,
+            "usable_rows": 0,
+            "sample_tickers": [],
+            "sample_errors": [],
+        }
+    rows = read_json(path)
+    if not rows:
+        return {
+            "market": market_id,
+            "metrics_path": str(path),
+            "total_rows": 0,
+            "usable_rows": 0,
+            "sample_tickers": [],
+            "sample_errors": [],
+        }
+    frame = pd.DataFrame(rows)
+    usable_mask = _usable_metrics_mask(frame)
+    usable_rows = int(usable_mask.sum())
+    failed = frame.loc[~usable_mask] if len(frame) else frame
+    sample_tickers: list[str] = []
+    sample_errors: list[str] = []
+    ticker_col = "ticker" if "ticker" in frame.columns else None
+    errors_col = "errors" if "errors" in frame.columns else None
+    for _, row in failed.head(5).iterrows():
+        if ticker_col:
+            ticker = str(row.get(ticker_col) or "").strip().upper()
+            if ticker:
+                sample_tickers.append(ticker)
+        if errors_col and row.get(errors_col):
+            err = str(row.get(errors_col))
+            if err and err not in sample_errors:
+                sample_errors.append(err[:200])
+    return {
+        "market": market_id,
+        "metrics_path": str(path),
+        "total_rows": int(len(frame)),
+        "usable_rows": usable_rows,
+        "sample_tickers": sample_tickers,
+        "sample_errors": sample_errors[:5],
+    }
+
+
+def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
+    path = _metrics_latest_path(root, market_id)
     if not path.exists():
         raise FileNotFoundError(
             f"No metrics for {market_id} at {path}. Run: ftse-library grow --markets {market_id}"
@@ -55,15 +126,11 @@ def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
     if not rows:
         return pd.DataFrame()
     frame = pd.DataFrame(rows)
-    # Drop rows that failed fetch entirely (no usable fields)
-    if "errors" in frame.columns and "trailing_pe" in frame.columns:
-        usable = (
-            frame["trailing_pe"].notna()
-            | frame.get("price_to_book", pd.Series(dtype=float)).notna()
-        )
-        if "market_cap" in frame.columns:
-            usable = usable | frame["market_cap"].notna()
-        frame = frame.loc[usable].copy()
+    usable_mask = _usable_metrics_mask(frame)
+    if usable_mask.any():
+        frame = frame.loc[usable_mask].copy()
+    else:
+        frame = frame.iloc[0:0].copy()
     return frame.reset_index(drop=True)
 
 

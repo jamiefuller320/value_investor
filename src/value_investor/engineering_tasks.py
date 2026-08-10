@@ -22,6 +22,7 @@ DEFAULT_TASKS_PATH = Path("output/engineering_tasks.json")
 COMMITTED_TASKS_PATH = Path("docs/data/engineering_tasks.json")
 DEFAULT_MAX_COMPILE_TASKS = 8
 DEFAULT_MAX_RUN_TASKS = 1
+DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
 
 BLOCKED_PATHS = (
@@ -100,6 +101,18 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "pyproject.toml",
     ],
 }
+
+LIBRARY_METRICS_ALLOWED_PATHS = [
+    "src/value_investor/providers.py",
+    "src/value_investor/fetch.py",
+    "src/value_investor/data_library.py",
+    "src/value_investor/financials.py",
+    "src/value_investor/library_screen.py",
+    "tests/test_providers.py",
+    "tests/test_data_library.py",
+    "tests/test_constituents_fetch.py",
+    "tests/test_library_screen.py",
+]
 
 _CODE_KEYWORDS = (
     "implement",
@@ -680,6 +693,232 @@ def compile_ingest_engineering_tasks_micro(
         "compiled_count": len(newly_open),
         "task_ids": [str(row.get("id") or "") for row in newly_open],
         "task_count": len(merged_rows),
+    }
+
+
+def _next_engineering_seq_from_rows(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
+    prefix = f"eng-{run_stamp}-"
+    used = [
+        int(str(row.get("id") or "").removeprefix(prefix))
+        for row in existing_rows
+        if str(row.get("id") or "").startswith(prefix)
+        and str(row.get("id") or "").removeprefix(prefix).isdigit()
+    ]
+    return max(used, default=0) + 1
+
+
+def _open_library_metrics_task_for_market(
+    existing_rows: list[dict[str, Any]], market_id: str
+) -> bool:
+    market_lower = market_id.lower()
+    for row in existing_rows:
+        status = str(row.get("status") or "open")
+        if status in TERMINAL_TASK_STATUSES:
+            continue
+        area = str(row.get("area") or "").lower()
+        if area not in {"coverage", "ingest"}:
+            continue
+        evidence = row.get("evidence") or {}
+        if str(evidence.get("market") or "") == market_id:
+            return True
+        if str(evidence.get("focus_market") or "") == market_id:
+            return True
+        title = str(row.get("title") or "").lower()
+        if market_lower in title and (
+            "library metrics" in title or "screen-lite" in title or "stooq" in title
+        ):
+            return True
+    return False
+
+
+def ladder_metrics_block_assessment(
+    ladder_result: dict[str, Any],
+    *,
+    root: Path,
+    policy_path: Path | None = None,
+) -> dict[str, Any] | None:
+    """Return block metadata when focus market cannot run screen-lite on usable metrics."""
+    from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+    from value_investor.data_library import library_status
+    from value_investor.library_screen import assess_library_metrics_health
+
+    focus = str(ladder_result.get("focus_market") or "").strip()
+    if not focus:
+        return None
+
+    layers = ladder_result.get("layers") or {}
+    fundamentals = layers.get("fundamentals") or {}
+    if fundamentals.get("skipped") and not fundamentals.get("status"):
+        return None
+
+    policy_path = policy_path or DEFAULT_POLICY_PATH
+    policy = load_policy(policy_path)
+    ladder_cfg = policy.get("ladder") or {}
+    min_metrics = int(ladder_cfg.get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)
+
+    screen = layers.get("screen_lite") or {}
+    if screen.get("skipped") and screen.get("reason") is None and not screen.get("failed"):
+        return None
+
+    health = assess_library_metrics_health(root, focus)
+    usable = int(health.get("usable_rows") or 0)
+    if usable >= min_metrics:
+        return None
+
+    status_rows = library_status(root, markets=[focus])
+    status_row = status_rows[0] if status_rows else {}
+    ticker_count = int(status_row.get("ticker_count") or 0)
+    total_rows = int(health.get("total_rows") or 0)
+    if ticker_count <= 0 and total_rows <= 0:
+        return None
+
+    screen_failed = bool(screen.get("failed"))
+    screen_skipped = bool(screen.get("skipped"))
+    if screen_skipped:
+        block_reason = "screen_lite_skipped"
+    elif screen_failed:
+        block_reason = "screen_lite_failed"
+    else:
+        block_reason = "usable_metrics_below_threshold"
+
+    manifest_coverage = int(status_row.get("coverage_count") or 0)
+    if screen.get("manifest_coverage_count") is not None:
+        manifest_coverage = int(screen.get("manifest_coverage_count") or manifest_coverage)
+
+    return {
+        "market": focus,
+        "focus_market": focus,
+        "min_metrics_for_screen": min_metrics,
+        "usable_metrics_rows": usable,
+        "total_metrics_rows": total_rows,
+        "ticker_count": ticker_count,
+        "manifest_coverage_count": manifest_coverage,
+        "blocked_layer": "screen_lite",
+        "block_reason": block_reason,
+        "screen_reason": screen.get("reason"),
+        "screen_error": screen.get("error"),
+        "sample_tickers": list(health.get("sample_tickers") or []),
+        "sample_errors": list(health.get("sample_errors") or []),
+        "metrics_path": health.get("metrics_path"),
+    }
+
+
+def draft_library_ladder_engineering_tasks(
+    ladder_result: dict[str, Any],
+    *,
+    root: Path,
+    policy_path: Path | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+    max_tasks: int = 1,
+) -> dict[str, Any]:
+    """Draft a supervised coverage task when library ladder cannot screen the focus market."""
+    if max_tasks <= 0:
+        return {"drafted_count": 0, "reason": "max_tasks=0"}
+
+    assessment = ladder_metrics_block_assessment(
+        ladder_result,
+        root=root,
+        policy_path=policy_path,
+    )
+    if assessment is None:
+        return {"drafted_count": 0, "reason": "no library metrics block detected"}
+
+    market = str(assessment["market"])
+    payload = load_engineering_tasks(committed_path)
+    existing_rows = list(payload.get("tasks") or [])
+    if _open_library_metrics_task_for_market(existing_rows, market):
+        return {
+            "drafted_count": 0,
+            "reason": f"open library metrics task already exists for {market}",
+            "market": market,
+        }
+
+    from value_investor.data_library import MARKET_REGISTRY
+
+    spec = MARKET_REGISTRY.get(market)
+    label = spec.label if spec is not None else market
+    sample_err_text = "; ".join(assessment.get("sample_errors") or [])[:240]
+    title = (
+        f"Fix library metrics fetch for {label} ({market}): "
+        "provider mapping / Yahoo fallback so screen-lite can run"
+    )[:160]
+
+    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
+    seq = _next_engineering_seq_from_rows(existing_rows, run_stamp)
+    summary = (
+        f"Focus market {market} has {assessment['ticker_count']} constituents but only "
+        f"{assessment['usable_metrics_rows']} usable metrics rows "
+        f"(need >={assessment['min_metrics_for_screen']} for screen-lite). "
+        f"Manifest coverage_count={assessment['manifest_coverage_count']}. "
+        f"Block: {assessment['block_reason']}."
+    )
+    if assessment.get("screen_error"):
+        summary += f" Screen error: {assessment['screen_error']}."
+    if sample_err_text:
+        summary += f" Sample errors: {sample_err_text}."
+    summary += (
+        f" Fix provider suffix mapping, Yahoo/yfinance fallback, and metrics grow; "
+        f"verify ftse-library grow --markets {market} + screen succeed offline."
+    )
+
+    min_metrics = int(assessment["min_metrics_for_screen"])
+    acceptance = [
+        f"After grow, {market} metrics/latest has ≥{min_metrics} usable fundamentals rows",
+        f"load_library_metrics / run_library_screen can run on {market} without empty-universe failure",
+        "Add regression tests for the provider/suffix fix on representative tickers",
+        "No change to live FTSE 350 screen path or blocked_paths",
+    ]
+
+    task = EngineeringTask(
+        id=f"eng-{run_stamp}-{seq:02d}",
+        area="coverage",
+        title=title,
+        summary=summary[:500],
+        priority="high",
+        priority_score=92.0,
+        source="library_ladder",
+        evidence={
+            **assessment,
+            "doc": "docs/ops/market-scrutiny.md",
+            "ladder_run_at": ladder_result.get("run_at"),
+        },
+        acceptance_criteria=acceptance,
+        allowed_paths=list(LIBRARY_METRICS_ALLOWED_PATHS),
+        blocked_paths=list(BLOCKED_PATHS),
+    )
+
+    merged_rows = _merge_task_rows(existing_rows, [task])
+    open_ids_before = {
+        str(row.get("id") or "")
+        for row in existing_rows
+        if str(row.get("status") or "open") == "open"
+    }
+    newly_open = [
+        row
+        for row in merged_rows
+        if str(row.get("status") or "open") == "open"
+        and str(row.get("id") or "") not in open_ids_before
+    ]
+    payload = {
+        **payload,
+        "compiled_at": datetime.now(UTC).isoformat(),
+        "task_count": len(merged_rows),
+        "tasks": merged_rows,
+        "library_ladder_compiled": True,
+    }
+    committed_path = Path(committed_path)
+    tasks_path = Path(tasks_path)
+    committed_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(committed_path, payload, compact=False)
+    if tasks_path != committed_path:
+        write_json(tasks_path, payload, compact=False)
+
+    return {
+        "drafted_count": len(newly_open),
+        "task_ids": [str(row.get("id") or "") for row in newly_open],
+        "market": market,
+        "assessment": assessment,
     }
 
 

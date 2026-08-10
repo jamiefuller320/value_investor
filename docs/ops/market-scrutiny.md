@@ -84,7 +84,7 @@ At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports rough
 ### Progression through markets
 
 1. **FTSE ingest** — close 11 unmeasured (this week).
-2. **Fix `omxs30` metrics** — engineering task; then screen-lite + optional `observe_sim_markets: ["sp500", "omxs30"]`.
+2. **Fix `omxs30` metrics** — engineering queue (`eng-20260810-01` or auto-drafted `library_ladder` task); then screen-lite + optional `observe_sim_markets: ["sp500", "omxs30"]`.
 3. **Graduate `omxs30`** → focus advances to **`iseq20`** (queue tail).
 4. **Keep S&P observe sim** accumulating — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
 
