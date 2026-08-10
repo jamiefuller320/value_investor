@@ -117,6 +117,37 @@ ruff format src/ tests/ scripts/
 
 The repo was bulk-formatted once (Aug 2026) so touched files rarely surface legacy lint.
 
+### Mobile / cloud-only dev (Cursor web, iPhone, GitHub apps)
+
+If you work from **Cursor web**, the **Cursor iPhone app**, and **GitHub web/mobile**
+without a laptop clone, you do **not** need `pre-commit install` on the phone. Hooks
+only run where you `git commit` locally; Cloud Agent commits happen in the remote VM,
+and that environment may block hook install (`core.hooksPath` for agent tooling).
+
+| Task | Where it runs | On iPhone? |
+|------|----------------|------------|
+| Edit code | Cursor Cloud Agent VM | Steer agent in Cursor app |
+| `pip install -e ".[dev]"` | Agent VM (automatic during runs) | No — not on the device |
+| `pre-commit install` | Optional on a laptop clone | **Skip** — not needed |
+| Ruff + pytest gate | **GitHub PR CI** | Watch checks in GitHub app |
+| Merge | GitHub web / app | ✅ when CI green |
+| Manual workflows | GitHub Actions → Run workflow | ✅ (backup, orchestrator, etc.) |
+
+**Recommended workflow**
+
+1. **Cursor** — start or resume a Cloud Agent for code changes, CI fixes, ops tasks.
+2. **GitHub app** — open the PR; wait for **CI / test** (and **engineering-path-guard**
+   on eng PRs) to pass.
+3. **Merge** on green. Treat **CI as your pre-commit** — same ruff scope as
+   `check_changed_python.py` on the PR diff.
+4. Optional: ask the agent to run checks before push:
+   `python3 scripts/check_changed_python.py --base origin/main --head HEAD` and
+   `pytest -q`.
+
+**If you later use a full dev environment** (Mac, Codespaces, SSH to a server), run
+`pip install -e ".[dev]"` and `pre-commit install` **there** — still not on the phone
+itself unless that environment is where you commit.
+
 ## Nightly full CI on main
 
 `docs/data/**` commits and `[skip ci]` automation pushes intentionally skip push CI
