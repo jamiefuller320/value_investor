@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from value_investor.technical_analysis import (
+    TechnicalIndicators,
     TimingSignal,
     TradePlanConfig,
     assign_timing_signal,
@@ -12,7 +13,6 @@ from value_investor.technical_analysis import (
     compute_trade_plan,
     format_timing_summary,
     format_trade_plan_summary,
-    TechnicalIndicators,
     trade_plan_from_row,
 )
 
@@ -133,14 +133,16 @@ def test_format_trade_plan_summary_market_core():
 
 
 def test_trade_plan_from_row_reads_legacy_stop_columns():
-    row = pd.Series({
-        "core_order": "limit",
-        "core_limit": 98.0,
-        "tactical_limit": 95.0,
-        "stop_loss": 90.0,
-        "take_profit": 110.0,
-        "trade_plan_summary": "Trade plan example.",
-    })
+    row = pd.Series(
+        {
+            "core_order": "limit",
+            "core_limit": 98.0,
+            "tactical_limit": 95.0,
+            "stop_loss": 90.0,
+            "take_profit": 110.0,
+            "trade_plan_summary": "Trade plan example.",
+        }
+    )
     plan = trade_plan_from_row(row)
     assert plan is not None
     assert plan.tactical_stop_loss == 90.0

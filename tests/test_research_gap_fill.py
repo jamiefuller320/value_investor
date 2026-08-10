@@ -5,7 +5,12 @@ from __future__ import annotations
 from value_investor.deep_analysis import DeepAnalysis, _parse_deep_analysis
 from value_investor.research.document import parse_research_sections
 from value_investor.research.format import format_gap_fill_text
-from value_investor.research.gap_fill import GapFillSummary, GapFillTarget, _unresolved_questions, extract_gap_fill_targets
+from value_investor.research.gap_fill import (
+    GapFillSummary,
+    GapFillTarget,
+    _unresolved_questions,
+    extract_gap_fill_targets,
+)
 from value_investor.summary import CompanyReport
 
 

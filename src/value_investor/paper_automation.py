@@ -4,26 +4,26 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass, field
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
 from value_investor.paper_fund import (
     DEFAULT_EXIT_CONFIRM_SCREENS,
-    DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
-    DEFAULT_REENTRY_COOLDOWN_SCREENS,
     DEFAULT_INITIAL_CASH,
     DEFAULT_MAX_POSITIONS,
+    DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    DEFAULT_REENTRY_COOLDOWN_SCREENS,
     DEFAULT_TRADE_COST_PCT,
     PaperFund,
     PaperFundConfig,
     preview_automated_plan,
+    preview_technical_plan,
     run_automated_rebalance,
     run_technical_pass,
-    preview_technical_plan,
 )
-from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
 from value_investor.rebalance_log import (
     append_rebalance_log,
@@ -144,9 +144,7 @@ class AutomationConfig:
             use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
             require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
             use_momentum_grace=bool(raw.get("use_momentum_grace", False)),
-            exit_confirm_screens=int(
-                raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)
-            ),
+            exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
             reentry_cooldown_screens=int(
                 raw.get("reentry_cooldown_screens", DEFAULT_REENTRY_COOLDOWN_SCREENS)
             ),
@@ -233,7 +231,7 @@ def local_now(config: AutomationConfig, now: datetime | None = None) -> datetime
     if now is None:
         return datetime.now(tz=config.tz())
     if now.tzinfo is None:
-        return now.replace(tzinfo=timezone.utc).astimezone(config.tz())
+        return now.replace(tzinfo=UTC).astimezone(config.tz())
     return now.astimezone(config.tz())
 
 
@@ -442,7 +440,7 @@ def load_watchlist(path: Path) -> list[dict[str, Any]]:
 def save_watchlist(path: Path, holdings: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(UTC).isoformat(),
         "holdings": holdings,
         "note": "Real/live owned names for daily surveillance (not paper-fund cash).",
     }
@@ -656,7 +654,7 @@ class AutomationRunResult:
             "fund": self.fund,
             "note": self.note,
             "exit_shadow_review": self.exit_shadow_review,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": datetime.now(UTC).isoformat(),
         }
 
 

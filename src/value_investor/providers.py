@@ -100,7 +100,9 @@ def http_get_text(url: str, *, timeout: int = HTTP_TIMEOUT_SECONDS) -> str:
     raise last_exc
 
 
-def missing_metric_keys(metrics: dict[str, Any], keys: tuple[str, ...] = FALLBACK_METRIC_KEYS) -> list[str]:
+def missing_metric_keys(
+    metrics: dict[str, Any], keys: tuple[str, ...] = FALLBACK_METRIC_KEYS
+) -> list[str]:
     missing: list[str] = []
     for key in keys:
         value = metrics.get(key)
@@ -149,8 +151,7 @@ class YahooQuoteSummaryProvider:
     def fetch(self, ticker: str) -> ProviderResult:
         modules = "price,summaryDetail,defaultKeyStatistics,financialData"
         url = (
-            "https://query1.finance.yahoo.com/v10/finance/quoteSummary/"
-            f"{ticker}?modules={modules}"
+            f"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{ticker}?modules={modules}"
         )
         try:
             payload = json.loads(http_get_text(url))
@@ -160,10 +161,9 @@ class YahooQuoteSummaryProvider:
         try:
             result = payload["quoteSummary"]["result"][0]
         except (KeyError, IndexError, TypeError):
-            error = (
-                (payload.get("quoteSummary") or {}).get("error")
-                or {"description": "empty quoteSummary"}
-            )
+            error = (payload.get("quoteSummary") or {}).get("error") or {
+                "description": "empty quoteSummary"
+            }
             return ProviderResult(
                 source=self.name,
                 errors=[f"{self.name}: {error.get('description') or error}"],
@@ -246,7 +246,9 @@ class StooqPriceProvider:
             return ProviderResult(source=self.name, errors=[f"{self.name}: {exc}"])
 
         if not text or text.strip().lower().startswith("<!"):
-            return ProviderResult(source=self.name, errors=[f"{self.name}: non-CSV response for {symbol}"])
+            return ProviderResult(
+                source=self.name, errors=[f"{self.name}: non-CSV response for {symbol}"]
+            )
 
         reader = csv.DictReader(io.StringIO(text))
         rows = list(reader)
@@ -260,7 +262,9 @@ class StooqPriceProvider:
             if close is not None:
                 break
         if close is None:
-            return ProviderResult(source=self.name, errors=[f"{self.name}: no close price for {symbol}"])
+            return ProviderResult(
+                source=self.name, errors=[f"{self.name}: no close price for {symbol}"]
+            )
 
         return ProviderResult(source=self.name, metrics={"last_price": close})
 

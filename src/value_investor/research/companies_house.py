@@ -41,7 +41,7 @@ def companies_house_api_key(explicit: str | None = None) -> str | None:
 
 
 def _auth_header(api_key: str) -> str:
-    token = base64.b64encode(f"{api_key}:".encode("utf-8")).decode("ascii")
+    token = base64.b64encode(f"{api_key}:".encode()).decode("ascii")
     return f"Basic {token}"
 
 
@@ -117,11 +117,7 @@ def load_company_number_map(path: Path | None = None) -> dict[str, str]:
     numbers = data.get("numbers") if isinstance(data, dict) else data
     if not isinstance(numbers, dict):
         return {}
-    return {
-        str(k).upper(): str(v).strip()
-        for k, v in numbers.items()
-        if str(v).strip()
-    }
+    return {str(k).upper(): str(v).strip() for k, v in numbers.items() if str(v).strip()}
 
 
 def save_company_number_map(mapping: dict[str, str], path: Path | None = None) -> Path:
@@ -165,9 +161,8 @@ def search_company_number(
     query = (company_name or _base_epic(ticker) or "").strip()
     if not query:
         return None
-    url = (
-        f"{CH_API_BASE}/search/companies?"
-        + urllib.parse.urlencode({"q": query, "items_per_page": 10})
+    url = f"{CH_API_BASE}/search/companies?" + urllib.parse.urlencode(
+        {"q": query, "items_per_page": 10}
     )
     raw = _ch_get(url, api_key=api_key)
     payload = json.loads(raw.decode("utf-8"))
@@ -217,9 +212,7 @@ def resolve_company_number(
     if not key:
         return None
     try:
-        number = search_company_number(
-            company_name=company_name, ticker=ticker, api_key=key
-        )
+        number = search_company_number(company_name=company_name, ticker=ticker, api_key=key)
     except Exception as exc:  # noqa: BLE001
         logger.warning("Companies House search failed for %s: %s", ticker, exc)
         return None
@@ -331,10 +324,10 @@ def fetch_document_bytes(
     metadata: dict[str, Any] | None = None,
 ) -> tuple[bytes, str] | None:
     """
-    Fetch filed document bytes.
+      Fetch filed document bytes.
 
-    Returns (raw_bytes, content_type_hint) or None.
-  When ``prefer`` is set, that MIME type is tried first if present in metadata.
+      Returns (raw_bytes, content_type_hint) or None.
+    When ``prefer`` is set, that MIME type is tried first if present in metadata.
     """
     meta = metadata or fetch_document_metadata(document_metadata_url, api_key=api_key)
     if not meta:

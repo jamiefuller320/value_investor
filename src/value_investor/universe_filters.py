@@ -79,7 +79,9 @@ def partition_investment_vehicles(
         return empty, empty
 
     names = constituents["name"] if "name" in constituents.columns else [None] * len(constituents)
-    sectors = constituents["sector"] if "sector" in constituents.columns else [None] * len(constituents)
+    sectors = (
+        constituents["sector"] if "sector" in constituents.columns else [None] * len(constituents)
+    )
     mask = [
         is_investment_vehicle(name=name, sector=sector)
         for name, sector in zip(names, sectors, strict=True)

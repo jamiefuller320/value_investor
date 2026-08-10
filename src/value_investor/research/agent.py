@@ -108,11 +108,11 @@ The quantitative screen currently rates this name as a {signal_label}.
 
 Existing memo: {existing_markdown_path.resolve()}
 New news batch since last update: {news_batch_path.resolve()}
-Full news archive: {(sources_dir / 'news_manifest.json').resolve()}
-Primary filings index (annual + interim; RNS / SEC / ASX / Euro): {(sources_dir / 'filings' / 'filings_index.json').resolve()}
-Filing body extracts (if any): {(sources_dir / 'filings' / 'bodies').resolve()}
-Yahoo financials (secondary only): {(sources_dir / 'financials_annual.json').resolve()}
-Macro regime context (optional colour only — not a scoring input): {(sources_dir / 'macro_context.json').resolve()}
+Full news archive: {(sources_dir / "news_manifest.json").resolve()}
+Primary filings index (annual + interim; RNS / SEC / ASX / Euro): {(sources_dir / "filings" / "filings_index.json").resolve()}
+Filing body extracts (if any): {(sources_dir / "filings" / "bodies").resolve()}
+Yahoo financials (secondary only): {(sources_dir / "financials_annual.json").resolve()}
+Macro regime context (optional colour only — not a scoring input): {(sources_dir / "macro_context.json").resolve()}
 
 Write ONE section with the heading exactly as shown:
 
@@ -227,7 +227,9 @@ def _gap_fill_prompt(
     screen_signal: str = "strong_buy",
 ) -> str:
     signal_label = _screen_signal_label(screen_signal)
-    numbered = "\n".join(f"{idx}. {question}" for idx, question in enumerate(open_questions, start=1))
+    numbered = "\n".join(
+        f"{idx}. {question}" for idx, question in enumerate(open_questions, start=1)
+    )
     source_map = sources_dir / "gap_fill_source_map.json"
     return f"""You are closing qualitative research gaps on {company_name} ({ticker}).
 
@@ -235,16 +237,16 @@ The quantitative screen currently rates this name as a {signal_label}.
 
 Existing memo: {existing_markdown_path.resolve()}
 Source map (inventory + alternate plan): {source_map.resolve()}
-Primary filings index: {(sources_dir / 'filings' / 'filings_index.json').resolve()}
-Filing body extracts: {(sources_dir / 'filings' / 'bodies').resolve()}
-Yahoo financials (secondary): {(sources_dir / 'financials_annual.json').resolve()}
-News archive (includes alternate themed pulls): {(sources_dir / 'news_manifest.json').resolve()}
-Alternate news batch: {(sources_dir / 'alternate_news.json').resolve()}
-Screen snapshot: {(sources_dir / 'screening_snapshot.json').resolve()}
-Macro context (colour only): {(sources_dir / 'macro_context.json').resolve()}
+Primary filings index: {(sources_dir / "filings" / "filings_index.json").resolve()}
+Filing body extracts: {(sources_dir / "filings" / "bodies").resolve()}
+Yahoo financials (secondary): {(sources_dir / "financials_annual.json").resolve()}
+News archive (includes alternate themed pulls): {(sources_dir / "news_manifest.json").resolve()}
+Alternate news batch: {(sources_dir / "alternate_news.json").resolve()}
+Screen snapshot: {(sources_dir / "screening_snapshot.json").resolve()}
+Macro context (colour only): {(sources_dir / "macro_context.json").resolve()}
 
 Open qualitative questions from this week's deep-analysis / email red-flag pass:
-{numbered or '1. Resolve the qualitative risks highlighted for this name.'}
+{numbered or "1. Resolve the qualitative risks highlighted for this name."}
 
 Evidence discipline:
 1. Read ``gap_fill_source_map.json`` first and walk its ``evidence_ladder`` in order.
@@ -308,12 +310,12 @@ def _gap_fill_followup_prompt(
 
 Newly available filing body extracts were fetched this pass
 (fetched={fetched}, with_body_after={with_body}). Re-read:
-- {(sources_dir / 'filings' / 'bodies').resolve()}
-- {(sources_dir / 'filings' / 'filings_index.json').resolve()}
+- {(sources_dir / "filings" / "bodies").resolve()}
+- {(sources_dir / "filings" / "filings_index.json").resolve()}
 - Existing memo: {existing_markdown_path.resolve()}
 
 Still-open questions only:
-{numbered or '1. Resolve remaining qualitative gaps.'}
+{numbered or "1. Resolve remaining qualitative gaps."}
 
 Rewrite ONLY these sections (same headings and mini-block format as before):
 
@@ -402,7 +404,8 @@ def run_gap_fill_research_agent(
     weekly_entry: dict[str, str] = {
         "date": now.strftime("%Y-%m-%d"),
         "as_of": now.isoformat(),
-        "summary": gap_summary or ("Gap-fill follow-up completed." if follow_up else "Gap-fill pass completed."),
+        "summary": gap_summary
+        or ("Gap-fill follow-up completed." if follow_up else "Gap-fill pass completed."),
         "kind": "gap_fill_followup" if follow_up else "gap_fill",
     }
     if existing.research_verdict != new_verdict:

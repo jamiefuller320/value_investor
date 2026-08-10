@@ -100,8 +100,8 @@ def format_engineering_pr_html(note: EngineeringPrNotification) -> str:
     <li><strong>Task:</strong> {note.task_id}</li>
     <li><strong>Branch:</strong> {note.branch}</li>
     <li><strong>PR:</strong> <a href="{note.pr_url}">{note.pr_url}</a></li>
-    <li><strong>Draft:</strong> {'yes' if note.is_draft else 'no'}</li>
-    <li><strong>Auto-merge:</strong> {'yes' if note.auto_merge else 'no'}</li>
+    <li><strong>Draft:</strong> {"yes" if note.is_draft else "no"}</li>
+    <li><strong>Auto-merge:</strong> {"yes" if note.auto_merge else "no"}</li>
   </ul>
   <p>{pat_note}</p>
   <p>{draft_note}</p>
@@ -235,7 +235,9 @@ def format_queue_block_text(alerts: list[EngineeringQueueAlert]) -> str:
         if alert.task_ids:
             lines.append(f"  Tasks: {', '.join(alert.task_ids)}")
         lines.append("")
-    lines.append("Check Actions engineering-queue / engineering-agent and merge or unpark as needed.")
+    lines.append(
+        "Check Actions engineering-queue / engineering-agent and merge or unpark as needed."
+    )
     return "\n".join(lines).strip()
 
 
@@ -249,7 +251,7 @@ def format_queue_block_html(alerts: list[EngineeringQueueAlert]) -> str:
     return f"""<!DOCTYPE html>
 <html><body style="font-family:Arial,sans-serif;color:#222;max-width:720px">
   <h2>FTSE Engineering queue blocked</h2>
-  <ul>{''.join(items)}</ul>
+  <ul>{"".join(items)}</ul>
   <p>Check Actions <code>engineering-queue</code> / <code>engineering-agent</code> and merge or unpark as needed.</p>
 </body></html>"""
 

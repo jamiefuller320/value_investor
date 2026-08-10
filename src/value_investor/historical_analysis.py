@@ -175,9 +175,15 @@ def historical_analysis_summary_from_dict(data: dict[str, Any]) -> HistoricalAna
         window_end=data.get("window_end"),
         max_years=int(data.get("max_years", MAX_HISTORY_YEARS)),
         smoothing_weeks=int(data.get("smoothing_weeks", DEFAULT_SMOOTHING_WEEKS)),
-        strategy_horizons=[StrategyHorizonResult(**item) for item in data.get("strategy_horizons", [])],
-        model_attribution=[ModelAttributionResult(**item) for item in data.get("model_attribution", [])],
-        overlay_comparison=[OverlayComparison(**item) for item in data.get("overlay_comparison", [])],
+        strategy_horizons=[
+            StrategyHorizonResult(**item) for item in data.get("strategy_horizons", [])
+        ],
+        model_attribution=[
+            ModelAttributionResult(**item) for item in data.get("model_attribution", [])
+        ],
+        overlay_comparison=[
+            OverlayComparison(**item) for item in data.get("overlay_comparison", [])
+        ],
         weekly_series=list(data.get("weekly_series", [])),
         note=str(data.get("note", "")),
     )
@@ -211,7 +217,7 @@ def _pearson(xs: list[float], ys: list[float]) -> float | None:
         return None
     mean_x = sum(xs) / len(xs)
     mean_y = sum(ys) / len(ys)
-    num = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
+    num = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys, strict=True))
     den_x = sum((x - mean_x) ** 2 for x in xs) ** 0.5
     den_y = sum((y - mean_y) ** 2 for y in ys) ** 0.5
     if den_x == 0 or den_y == 0:
@@ -358,10 +364,7 @@ def _weekly_excess_by_strategy(
             buckets.setdefault(tag, {}).setdefault(obs.week_key, []).append(obs.excess_return)
 
     return {
-        strategy: {
-            week: sum(values) / len(values)
-            for week, values in sorted(week_map.items())
-        }
+        strategy: {week: sum(values) / len(values) for week, values in sorted(week_map.items())}
         for strategy, week_map in buckets.items()
     }
 
@@ -416,9 +419,7 @@ def _overlay_comparisons(
         return []
 
     screen_items = [obs for obs in observations if obs.screen_signal in BUY_SIGNALS]
-    overlay_items = [
-        obs for obs in screen_items if obs.adjusted_signal in BUY_SIGNALS
-    ]
+    overlay_items = [obs for obs in screen_items if obs.adjusted_signal in BUY_SIGNALS]
     downgrade_count = sum(
         1 for obs in screen_items if obs.adjusted_signal not in BUY_SIGNALS and obs.research_verdict
     )
@@ -436,7 +437,9 @@ def _overlay_comparisons(
 
     screen_series = [sum(screen_weekly[w]) / len(screen_weekly[w]) for w in weeks]
     overlay_series = [
-        sum(overlay_weekly[w]) / len(overlay_weekly[w]) if overlay_weekly.get(w) else screen_series[i]
+        sum(overlay_weekly[w]) / len(overlay_weekly[w])
+        if overlay_weekly.get(w)
+        else screen_series[i]
         for i, w in enumerate(weeks)
     ]
     screen_smoothed = _rolling_mean(screen_series, smoothing_weeks)
@@ -444,7 +447,9 @@ def _overlay_comparisons(
 
     screen_excess = sum(obs.excess_return for obs in screen_items) / len(screen_items)
     overlay_excess = (
-        sum(obs.excess_return for obs in overlay_items) / len(overlay_items) if overlay_items else 0.0
+        sum(obs.excess_return for obs in overlay_items) / len(overlay_items)
+        if overlay_items
+        else 0.0
     )
 
     return [
@@ -603,7 +608,9 @@ def run_historical_analysis(
 
         weekly = _weekly_excess_by_strategy(observations)
         for strategy, week_map in weekly.items():
-            smoothed = _rolling_mean([week_map[w] for w in sorted(week_map.keys())], config.smoothing_weeks)
+            smoothed = _rolling_mean(
+                [week_map[w] for w in sorted(week_map.keys())], config.smoothing_weeks
+            )
             for index, week in enumerate(sorted(week_map.keys())):
                 weekly_rows.append(
                     {
@@ -694,9 +701,15 @@ def format_historical_analysis_text(summary: HistoricalAnalysisSummary) -> str:
     if summary.model_attribution:
         lines.extend(["", "Top model attribution (smoothed score→return correlation):"])
         for row in summary.model_attribution[:5]:
-            corr = row.smoothed_correlation if row.smoothed_correlation is not None else row.raw_correlation
+            corr = (
+                row.smoothed_correlation
+                if row.smoothed_correlation is not None
+                else row.raw_correlation
+            )
             if corr is None:
                 continue
-            lines.append(f"  {row.model_id} (~{row.horizon_days // 7}w): {corr:+.2f} (n={row.sample_count})")
+            lines.append(
+                f"  {row.model_id} (~{row.horizon_days // 7}w): {corr:+.2f} (n={row.sample_count})"
+            )
 
     return "\n".join(lines)

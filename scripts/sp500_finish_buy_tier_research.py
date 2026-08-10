@@ -137,9 +137,9 @@ def main() -> int:
             "errors": summary.errors,
             "executed": executed,
             "estimated_spend_usd": estimated_spend,
-            "estimated_spend_usd_this_cycle_after": (
-                policy_after.get("budget") or {}
-            ).get("estimated_spend_usd_this_cycle"),
+            "estimated_spend_usd_this_cycle_after": (policy_after.get("budget") or {}).get(
+                "estimated_spend_usd_this_cycle"
+            ),
             "documents": [d.ticker for d in summary.documents],
         }
     )

@@ -96,7 +96,9 @@ def find_in_flight_pr(open_prs: list[dict[str, Any]]) -> dict[str, Any] | None:
             candidates.append(row)
     if not candidates:
         return None
-    candidates.sort(key=lambda row: str(row.get("createdAt") or row.get("created_at") or ""), reverse=True)
+    candidates.sort(
+        key=lambda row: str(row.get("createdAt") or row.get("created_at") or ""), reverse=True
+    )
     return candidates[0]
 
 
@@ -136,9 +138,7 @@ def summarize_queue(
     open_count = sum(1 for row in rows if str(row.get("status") or "open") == DISPATCHABLE_STATUS)
     pr_open_count = sum(1 for row in rows if str(row.get("status") or "") == IN_FLIGHT_STATUS)
     parked_count = sum(1 for row in rows if str(row.get("status") or "") == "parked")
-    merged_count = sum(
-        1 for row in rows if str(row.get("status") or "") in {"merged", "completed"}
-    )
+    merged_count = sum(1 for row in rows if str(row.get("status") or "") in {"merged", "completed"})
     failed_count = sum(1 for row in rows if str(row.get("status") or "") == "failed")
 
     next_tasks = select_engineering_tasks(data, max_tasks=1)
@@ -148,7 +148,9 @@ def summarize_queue(
     in_flight_branch = None
     in_flight_pr = None
     if in_flight is not None:
-        in_flight_branch = str(in_flight.get("headRefName") or in_flight.get("head_branch") or "") or None
+        in_flight_branch = (
+            str(in_flight.get("headRefName") or in_flight.get("head_branch") or "") or None
+        )
         in_flight_pr = int(in_flight["number"]) if in_flight.get("number") is not None else None
 
     policy = load_policy(policy_path)
@@ -351,11 +353,7 @@ def snapshot_ingest_health(
         measured += 1
         if prefer_committed_research:
             canonical = (
-                Path("docs/data/research")
-                / ticker
-                / "sources"
-                / "filings"
-                / "filings_index.json"
+                Path("docs/data/research") / ticker / "sources" / "filings" / "filings_index.json"
             )
             index_path = canonical if canonical.exists() else paths[0]
         else:
@@ -389,9 +387,9 @@ def reprioritize_queue_after_ingest_merge(
     latest_path: Path = Path("docs/data/latest.json"),
 ) -> dict[str, Any]:
     """
-    Deterministically nudge open queue priorities after an ingest engineering merge.
+      Deterministically nudge open queue priorities after an ingest engineering merge.
 
-  No agent call — uses filing coverage deltas and keyword overlap with the merged task.
+    No agent call — uses filing coverage deltas and keyword overlap with the merged task.
     """
     from value_investor.engineering_tasks import load_engineering_tasks
     from value_investor.storage import write_json

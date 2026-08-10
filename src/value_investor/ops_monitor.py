@@ -18,18 +18,20 @@ from value_investor.agent_model_policy import weekly_ops_budget_status
 from value_investor.automation_status import WORKFLOW_SCHEDULES
 from value_investor.backtest_health import (
     DEFAULT_STATUS_PATH as BACKTEST_HEALTH_STATUS_PATH,
+)
+from value_investor.backtest_health import (
     audit_history_dir,
     repair_history_dir,
 )
 from value_investor.emailer import EmailConfig, send_report_email
+from value_investor.engineering_queue import (
+    evaluate_engineering_dispatch,
+    summarize_queue,
+)
 from value_investor.engineering_recovery import (
     housekeep_parked_tasks,
     recover_engineering_queue,
     summarize_parked_tasks_needing_attention,
-)
-from value_investor.engineering_queue import (
-    evaluate_engineering_dispatch,
-    summarize_queue,
 )
 from value_investor.engineering_sync import (
     ENGINEERING_AGENT_WORKFLOW,
@@ -53,8 +55,7 @@ from value_investor.ingest_loop import (
     ingest_health_stalled,
     load_health_log_payload,
 )
-from value_investor.storage import read_json, write_json
-from value_investor.storage import COMMITTED_HISTORY_DIR
+from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
 
 logger = logging.getLogger(__name__)
@@ -186,9 +187,12 @@ def _github_repo() -> str | None:
     value = os.environ.get("GITHUB_REPOSITORY")
     if value and "/" in value:
         return value
-    remote = os.environ.get("GITHUB_SERVER_URL", "https://github.com")
     owner = os.environ.get("GITHUB_REPOSITORY_OWNER")
-    name = os.environ.get("GITHUB_REPOSITORY", "").split("/")[-1] if "/" in os.environ.get("GITHUB_REPOSITORY", "") else None
+    name = (
+        os.environ.get("GITHUB_REPOSITORY", "").split("/")[-1]
+        if "/" in os.environ.get("GITHUB_REPOSITORY", "")
+        else None
+    )
     if owner and name:
         return f"{owner}/{name}"
     return None
@@ -198,8 +202,7 @@ def github_api_get(path: str, *, token: str | None = None) -> Any:
     token = token or _github_token()
     if not token:
         raise RuntimeError(
-            "GitHub token not configured "
-            "(WORKFLOW_DISPATCH_PAT / GITHUB_TOKEN / GH_TOKEN)"
+            "GitHub token not configured (WORKFLOW_DISPATCH_PAT / GITHUB_TOKEN / GH_TOKEN)"
         )
     request = urllib.request.Request(
         f"https://api.github.com{path}",
@@ -213,7 +216,9 @@ def github_api_get(path: str, *, token: str | None = None) -> Any:
         return json.loads(response.read().decode("utf-8"))
 
 
-def list_open_pull_requests(*, repo: str | None = None, token: str | None = None) -> list[dict[str, Any]]:
+def list_open_pull_requests(
+    *, repo: str | None = None, token: str | None = None
+) -> list[dict[str, Any]]:
     repo = repo or _github_repo()
     if not repo:
         return []
@@ -421,7 +426,9 @@ def check_ingest_health_log(path: Path = DEFAULT_HEALTH_LOG_PATH) -> list[OpsFin
     return findings
 
 
-def check_latest_bundle(path: Path = DEFAULT_LATEST_PATH, *, max_age_hours: int = 168) -> list[OpsFinding]:
+def check_latest_bundle(
+    path: Path = DEFAULT_LATEST_PATH, *, max_age_hours: int = 168
+) -> list[OpsFinding]:
     if not path.exists():
         return [
             OpsFinding(
@@ -490,11 +497,11 @@ def _workflow_max_age_hours(spec: dict[str, Any], *, queue_status: dict[str, Any
 
 
 def check_workflow_freshness(
-  *,
-  repo: str | None = None,
-  token: str | None = None,
-  now: datetime | None = None,
-  queue_status: dict[str, Any] | None = None,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+    now: datetime | None = None,
+    queue_status: dict[str, Any] | None = None,
 ) -> tuple[list[OpsFinding], list[dict[str, Any]]]:
     findings: list[OpsFinding] = []
     checks: list[dict[str, Any]] = []
@@ -570,7 +577,9 @@ def check_workflow_freshness(
     recovery_active, recovery_detail = recovery_bundle_in_flight(repo=repo, token=token)
     if recovery_active:
         detail = ", ".join(recovery_detail)
-        name_to_workflow = {str(row.get("name") or ""): str(row.get("workflow") or "") for row in checks}
+        name_to_workflow = {
+            str(row.get("name") or ""): str(row.get("workflow") or "") for row in checks
+        }
         for finding in findings:
             if finding.category != "workflows" or not finding.title.startswith("Workflow overdue:"):
                 continue
@@ -765,9 +774,7 @@ def draft_ops_engineering_tasks(
 ) -> list[str]:
     """Queue ops-area engineering tasks for findings that need a supervised PR."""
     actionable = [
-        row
-        for row in findings
-        if row.severity == "fail" and not row.fixed and not row.auto_fixable
+        row for row in findings if row.severity == "fail" and not row.fixed and not row.auto_fixable
     ]
     if not actionable:
         return []
@@ -858,9 +865,8 @@ def apply_auto_fixes(
 
         housekeep = housekeep_parked_tasks(tasks_path=tasks_path, apply=True)
         for action in housekeep.cancelled:
-            detail = (
-                f"cancelled duplicate {action.task_id}"
-                + (f" (of {action.duplicate_of})" if action.duplicate_of else "")
+            detail = f"cancelled duplicate {action.task_id}" + (
+                f" (of {action.duplicate_of})" if action.duplicate_of else ""
             )
             results.append({"action": "housekeep_parked_task", "detail": detail})
             for finding in findings:
@@ -882,7 +888,10 @@ def apply_auto_fixes(
         )
         backup.write_bytes(health_log_path.read_bytes())
         payload = load_health_log_payload(health_log_path, backup_corrupt=False)
-        write_json(health_log_path, {"entries": payload.get("entries") or [], "updated_at": datetime.now(UTC).isoformat()})
+        write_json(
+            health_log_path,
+            {"entries": payload.get("entries") or [], "updated_at": datetime.now(UTC).isoformat()},
+        )
         action = f"normalized corrupt health log; backup at {backup.name}"
         results.append({"action": "repair_health_log", "detail": action})
         for finding in findings:
@@ -929,9 +938,7 @@ def _overall_status(findings: list[OpsFinding]) -> str:
 
 def workflow_stale_only_failures(findings: list[OpsFinding]) -> bool:
     """True when every unfixed fail finding is a workflow-overdue stale check."""
-    unfixed_fails = [
-        row for row in findings if row.severity == "fail" and not row.fixed
-    ]
+    unfixed_fails = [row for row in findings if row.severity == "fail" and not row.fixed]
     if not unfixed_fails:
         return False
     return all(
@@ -1009,8 +1016,12 @@ def run_ops_monitor(
         auto_fixes.append(repair)
     if sync_report.repairs:
         for finding in findings:
-            if finding.category == "engineering" and finding.auto_fixable and finding.title.startswith(
-                ("Engineering agent sync", "Engineering compile would")
+            if (
+                finding.category == "engineering"
+                and finding.auto_fixable
+                and finding.title.startswith(
+                    ("Engineering agent sync", "Engineering compile would")
+                )
             ):
                 finding.fixed = True
                 finding.action_taken = "; ".join(
@@ -1128,7 +1139,11 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
     for row in report.findings:
         color = severity_colors.get("ok" if row.fixed else row.severity, "#333")
         label = "FIXED" if row.fixed else row.severity.upper()
-        action = f"<br><span style='color:#666;font-size:12px'>Action: {row.action_taken}</span>" if row.action_taken else ""
+        action = (
+            f"<br><span style='color:#666;font-size:12px'>Action: {row.action_taken}</span>"
+            if row.action_taken
+            else ""
+        )
         rows.append(
             f"<li style='margin-bottom:10px'><strong style='color:{color}'>{label}</strong> "
             f"{row.title}<br><span style='color:#555'>{row.summary}</span>{action}</li>"
@@ -1147,10 +1162,10 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
   <p style="color:#666">{report.run_at}</p>
   <p><strong>Overall:</strong> {report.overall.upper()}</p>
   <h3>Findings</h3>
-  <ul>{''.join(rows) if rows else '<li>No issues detected.</li>'}</ul>
-  {'<h3>Auto-fixes</h3><ul>' + fixes + '</ul>' if fixes else ''}
-  {'<h3>Workflow freshness</h3><ul>' + workflows + '</ul>' if workflows else ''}
-  {'<p><strong>Engineering queue ready</strong> for next supervised PR.</p>' if report.should_dispatch_engineering else ''}
+  <ul>{"".join(rows) if rows else "<li>No issues detected.</li>"}</ul>
+  {"<h3>Auto-fixes</h3><ul>" + fixes + "</ul>" if fixes else ""}
+  {"<h3>Workflow freshness</h3><ul>" + workflows + "</ul>" if workflows else ""}
+  {"<p><strong>Engineering queue ready</strong> for next supervised PR.</p>" if report.should_dispatch_engineering else ""}
 </body></html>"""
 
 

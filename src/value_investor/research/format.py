@@ -29,7 +29,11 @@ def _verdict_change_note(doc: ResearchDocument) -> str | None:
     if prior_verdict and prior_verdict != doc.research_verdict:
         prior = VERDICT_LABELS.get(prior_verdict, prior_verdict)
         current = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
-        prefix = "Gap-fill verdict" if latest.get("kind") == "gap_fill" or doc.mode == "gap_fill" else "Verdict"
+        prefix = (
+            "Gap-fill verdict"
+            if latest.get("kind") == "gap_fill" or doc.mode == "gap_fill"
+            else "Verdict"
+        )
         return f"{prefix} revised: {prior} → {current}"
     return None
 
@@ -43,9 +47,7 @@ def _latest_weekly_summary(doc: ResearchDocument) -> str | None:
 
 def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
     if summary is None or (
-        not summary.targets
-        and not summary.errors
-        and not summary.model_suggestions
+        not summary.targets and not summary.errors and not summary.model_suggestions
     ):
         return None
     lines = ["Red-flag gap-fill loop:"]
@@ -55,7 +57,9 @@ def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
     )
     for target in summary.targets:
         q0 = target.questions[0] if target.questions else "qualitative follow-up"
-        lines.append(f"  • {target.name} ({target.ticker}) — {q0[:160]}{'…' if len(q0) > 160 else ''}")
+        lines.append(
+            f"  • {target.name} ({target.ticker}) — {q0[:160]}{'…' if len(q0) > 160 else ''}"
+        )
     by_ticker = {doc.ticker: doc for doc in summary.documents}
     for target in summary.targets:
         doc = by_ticker.get(target.ticker)
@@ -162,7 +166,9 @@ def format_post_run_review_html(review: PostRunReview | None) -> str:
     text = format_post_run_review_text(review)
     if not text:
         return ""
-    body = review.full_text.replace("\n", "<br>") if review is not None else text.replace("\n", "<br>")
+    body = (
+        review.full_text.replace("\n", "<br>") if review is not None else text.replace("\n", "<br>")
+    )
     return f"""
   <div style="background:#f0fff4;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #2f855a">
     <h3 style="margin-top:0">Post-run improvement review</h3>
@@ -199,14 +205,15 @@ def research_documents_for_reports(
     return ordered
 
 
-def format_research_text(summary: ResearchSummary | None, documents: list[ResearchDocument]) -> str | None:
+def format_research_text(
+    summary: ResearchSummary | None, documents: list[ResearchDocument]
+) -> str | None:
     if not documents:
         return None
     lines = ["Research memos (strong buy + top buys):"]
     if summary is not None:
         lines.append(
-            f"  Created {summary.created}, updated {summary.updated}, "
-            f"unchanged {summary.skipped}"
+            f"  Created {summary.created}, updated {summary.updated}, unchanged {summary.skipped}"
         )
         for error in summary.errors:
             lines.append(f"  ! {error}")
@@ -230,7 +237,9 @@ def format_research_text(summary: ResearchSummary | None, documents: list[Resear
     return "\n".join(lines)
 
 
-def format_research_html(documents: list[ResearchDocument], summary: ResearchSummary | None = None) -> str:
+def format_research_html(
+    documents: list[ResearchDocument], summary: ResearchSummary | None = None
+) -> str:
     if not documents:
         return ""
     meta = ""
@@ -242,7 +251,11 @@ def format_research_html(documents: list[ResearchDocument], summary: ResearchSum
         )
     rows = []
     for doc in documents:
-        snippet = doc.executive_summary.replace("\n", "<br>") if doc.executive_summary else "No summary yet."
+        snippet = (
+            doc.executive_summary.replace("\n", "<br>")
+            if doc.executive_summary
+            else "No summary yet."
+        )
         verdict = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
         change = _verdict_change_note(doc)
         weekly = _latest_weekly_summary(doc)
@@ -289,7 +302,7 @@ def format_research_html(documents: list[ResearchDocument], summary: ResearchSum
         </tr>
       </thead>
       <tbody>
-        {''.join(rows)}
+        {"".join(rows)}
       </tbody>
     </table>
   </div>

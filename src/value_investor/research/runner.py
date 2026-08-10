@@ -8,12 +8,19 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.data_quality import MIN_QUALITY_FOR_BUY, MIN_QUALITY_FOR_STRONG_BUY
-from value_investor.research.agent import run_initial_research_agent, run_weekly_research_update_agent
+from value_investor.research.agent import (
+    run_initial_research_agent,
+    run_weekly_research_update_agent,
+)
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.ingest import ingest_research_sources
 from value_investor.research.source_quality import attach_memo_quality
 from value_investor.research.store import ResearchStore
-from value_investor.research.timeline import build_sources_as_of, build_weekly_delta, revision_id_from_datetime
+from value_investor.research.timeline import (
+    build_sources_as_of,
+    build_weekly_delta,
+    revision_id_from_datetime,
+)
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
@@ -34,8 +41,7 @@ def eligible_strong_buys(reports: list[CompanyReport]) -> list[CompanyReport]:
     return [
         report
         for report in reports
-        if report.signal == "strong_buy"
-        and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+        if report.signal == "strong_buy" and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
     ]
 
 
@@ -56,8 +62,7 @@ def eligible_research_targets(
     strong = [
         report
         for report in reports
-        if report.signal == "strong_buy"
-        and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+        if report.signal == "strong_buy" and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
     ]
     buys = [
         report
@@ -315,7 +320,9 @@ def _process_ticker(
     return updated, "updated"
 
 
-def load_existing_research(output_dir: Path, *, tickers: list[str] | None = None) -> list[ResearchDocument]:
+def load_existing_research(
+    output_dir: Path, *, tickers: list[str] | None = None
+) -> list[ResearchDocument]:
     store = ResearchStore(output_dir)
     if tickers:
         docs = [store.load(ticker) for ticker in tickers]

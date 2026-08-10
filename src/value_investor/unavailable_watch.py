@@ -71,7 +71,11 @@ def save_unavailable_watch(payload: dict[str, Any], path: Path | None = None) ->
 
 def unavailable_tickers(path: Path | None = None) -> set[str]:
     payload = load_unavailable_watch(path)
-    return {str(row["ticker"]).strip().upper() for row in payload.get("items") or [] if row.get("ticker")}
+    return {
+        str(row["ticker"]).strip().upper()
+        for row in payload.get("items") or []
+        if row.get("ticker")
+    }
 
 
 def mark_unavailable(
@@ -113,7 +117,9 @@ def mark_unavailable(
 def restore_unavailable(ticker: str, *, path: Path | None = None) -> dict[str, Any]:
     key = str(ticker or "").strip().upper()
     payload = load_unavailable_watch(path)
-    items = [row for row in (payload.get("items") or []) if str(row.get("ticker", "")).upper() != key]
+    items = [
+        row for row in (payload.get("items") or []) if str(row.get("ticker", "")).upper() != key
+    ]
     payload["items"] = items
     save_unavailable_watch(payload, path)
     return payload

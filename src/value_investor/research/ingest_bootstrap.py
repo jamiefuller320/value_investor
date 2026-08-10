@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.storage import read_json, write_json
+from value_investor.storage import write_json
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)

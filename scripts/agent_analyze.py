@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 from pathlib import Path
@@ -34,7 +33,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--output-dir", type=Path, default=Path("output"))
     parser.add_argument("--limit", type=int, default=None, help="Limit universe size for fetch")
-    parser.add_argument("--top", type=int, default=10, help="Number of top signals for agent review")
+    parser.add_argument(
+        "--top", type=int, default=10, help="Number of top signals for agent review"
+    )
     parser.add_argument("--model", default="composer-2.5", help="Cursor model id")
     parser.add_argument(
         "--api-key",
@@ -58,7 +59,10 @@ def main(argv: list[str] | None = None) -> int:
         paths = write_outputs(result, args.output_dir)
         signals_path = paths["latest"]
     elif not signals_path.exists():
-        print(f"No existing signals at {signals_path}; run without --skip-screen first", file=sys.stderr)
+        print(
+            f"No existing signals at {signals_path}; run without --skip-screen first",
+            file=sys.stderr,
+        )
         return 1
 
     prompt = _build_analysis_prompt(signals_path.resolve(), args.top)
@@ -73,7 +77,9 @@ def main(argv: list[str] | None = None) -> int:
             ),
         )
     except CursorAgentError as err:
-        print(f"Agent startup failed: {err.message} (retryable={err.is_retryable})", file=sys.stderr)
+        print(
+            f"Agent startup failed: {err.message} (retryable={err.is_retryable})", file=sys.stderr
+        )
         return 1
 
     if agent_result.status == "error":

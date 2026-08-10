@@ -30,7 +30,9 @@ class NeffPEGYModel(ValueModel):
 
         denominator = (growth or 0) + yld
         if denominator <= 0:
-            return self._result(passed=False, score=0.0, failed_criteria=["no growth or dividend yield"])
+            return self._result(
+                passed=False, score=0.0, failed_criteria=["no growth or dividend yield"]
+            )
 
         pegy = pe / (denominator * 100)
         passed = pegy < self.MAX_PEGY

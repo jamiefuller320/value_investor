@@ -120,7 +120,8 @@ def enrich_signals_with_interim_quality_overlay(
         interim_decline = row.get("interim_eps_decline_pct")
         interim_eps_decline_pct = (
             float(interim_decline)
-            if interim_decline is not None and not (isinstance(interim_decline, float) and pd.isna(interim_decline))
+            if interim_decline is not None
+            and not (isinstance(interim_decline, float) and pd.isna(interim_decline))
             else None
         )
 

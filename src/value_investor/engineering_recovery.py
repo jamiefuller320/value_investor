@@ -16,8 +16,11 @@ from value_investor.engineering_queue import (
     IN_FLIGHT_STATUS,
     reconcile_orphaned_pr_open_tasks,
 )
-from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, load_engineering_tasks, mark_task_status
-
+from value_investor.engineering_tasks import (
+    COMMITTED_TASKS_PATH,
+    load_engineering_tasks,
+    mark_task_status,
+)
 from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
 
 logger = logging.getLogger(__name__)
@@ -165,7 +168,11 @@ def _pr_check_state(
             "any_success": False,
         }
 
-    failures = [row for row in relevant if str(row.get("conclusion") or "").lower() in {"failure", "cancelled", "timed_out"}]
+    failures = [
+        row
+        for row in relevant
+        if str(row.get("conclusion") or "").lower() in {"failure", "cancelled", "timed_out"}
+    ]
     successes = [row for row in relevant if str(row.get("conclusion") or "").lower() == "success"]
     return {
         "available": True,
@@ -203,10 +210,7 @@ def _park_task(
             parked_reason=reason,
             parked_policy=(
                 PARKED_POLICY_CI_BLOCKED
-                if (
-                    "checks still failing" in reason.lower()
-                    or "ci blocked" in reason.lower()
-                )
+                if ("checks still failing" in reason.lower() or "ci blocked" in reason.lower())
                 else PARKED_POLICY_MANUAL
             ),
         )
@@ -240,10 +244,7 @@ def record_agent_no_diff_run(
     count = int(row.get("no_diff_count") or 0) + 1
     stamp = now.isoformat()
     if count >= max(1, int(max_runs)):
-        reason = (
-            f"agent produced no code changes {count} time(s) "
-            f"(cap {max_runs}) — manual review"
-        )
+        reason = f"agent produced no code changes {count} time(s) (cap {max_runs}) — manual review"
         if apply:
             mark_task_status(
                 task_id,
@@ -550,11 +551,11 @@ def housekeep_parked_tasks(
     now: datetime | None = None,
 ) -> ParkedHousekeepResult:
     """
-    Grade parked tasks and take safe automatic actions.
+      Grade parked tasks and take safe automatic actions.
 
-    - Cancel duplicates of already-merged tasks (``duplicate_of`` + merged target).
-    - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
-  Does not reopen or merge tasks — run from daily ops monitor recovery.
+      - Cancel duplicates of already-merged tasks (``duplicate_of`` + merged target).
+      - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
+    Does not reopen or merge tasks — run from daily ops monitor recovery.
     """
     now = now or datetime.now(UTC)
     result = ParkedHousekeepResult()

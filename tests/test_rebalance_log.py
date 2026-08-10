@@ -8,7 +8,6 @@ from value_investor.paper_fund import PaperFund, PaperFundConfig
 from value_investor.rebalance_log import (
     REBALANCE_LOG_FILENAME,
     append_rebalance_log,
-    build_rebalance_log_entry,
     collect_decision_candidates,
     collect_screen_buy_tier,
     gate_excluded_tickers,
@@ -40,9 +39,7 @@ def test_slim_candidate_keeps_replay_fields():
 
 
 def test_collect_decision_candidates_includes_holdings():
-    fund = PaperFund.create(
-        PaperFundConfig(name="Auto", mode="automated", initial_cash=1000)
-    )
+    fund = PaperFund.create(PaperFundConfig(name="Auto", mode="automated", initial_cash=1000))
     fund.buy(
         ticker="HOLD.L",
         price=10,
@@ -98,9 +95,7 @@ def test_resolve_replay_candidates_widens_on_ai_gate_change():
         "candidates": [{"ticker": "BUY.L"}],
     }
     assert resolve_replay_candidates(entry) == entry["candidates"]
-    assert resolve_replay_candidates(entry, use_adjusted_signal=False) == entry[
-        "screen_buy_tier"
-    ]
+    assert resolve_replay_candidates(entry, use_adjusted_signal=False) == entry["screen_buy_tier"]
     assert (
         resolve_replay_candidates(entry, candidate_source="screen_buy_tier")
         == entry["screen_buy_tier"]
@@ -234,6 +229,8 @@ def test_run_daily_automation_appends_rebalance_log(tmp_path, monkeypatch):
     assert any(row["ticker"] == "AAA.L" for row in entry["candidates"])
     assert any(row["ticker"] == "AAA.L" for row in entry["screen_buy_tier"])
     assert entry["gate_excluded"] == []
+
+
 def test_replay_counterfactual_from_log_changes_trade_count(tmp_path: Path):
     out = tmp_path / "track"
     out.mkdir()

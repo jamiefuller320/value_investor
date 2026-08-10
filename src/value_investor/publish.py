@@ -66,7 +66,11 @@ def _load_reports(output_dir: Path) -> tuple[list[dict[str, Any]], str | None]:
     signals = pd.read_csv(signals_path)
     model_results = pd.read_csv(model_results_path)
     reports = [report.to_dict() for report in build_company_reports(signals, model_results)]
-    run_at = str(signals["run_at"].iloc[0]) if "run_at" in signals.columns and not signals.empty else None
+    run_at = (
+        str(signals["run_at"].iloc[0])
+        if "run_at" in signals.columns and not signals.empty
+        else None
+    )
     return reports, run_at
 
 
@@ -203,13 +207,9 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     ingest_improvement = _read_json(output_dir / "ingest_improvement_summary.json")
     engineering_tasks = _read_json(output_dir / "engineering_tasks.json")
     post_run_review = _load_post_run_review(output_dir)
-    research_model_suggestions = _read_json(
-        Path("docs/data/research_model_suggestions.json")
-    )
+    research_model_suggestions = _read_json(Path("docs/data/research_model_suggestions.json"))
     if research_model_suggestions is None:
-        research_model_suggestions = _read_json(
-            output_dir / "research_model_suggestions.json"
-        )
+        research_model_suggestions = _read_json(output_dir / "research_model_suggestions.json")
     paper_automation = _read_json(output_dir / "paper_automation" / "last_run.json")
     learning_tracks_review = _read_json(
         output_dir / "paper_automation" / "learning_tracks_review.json"
@@ -221,9 +221,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     try:
         from value_investor.paper_automation import learning_track_dirs
 
-        for track_id, track_dir in learning_track_dirs(
-            output_dir / "paper_automation"
-        ).items():
+        for track_id, track_dir in learning_track_dirs(output_dir / "paper_automation").items():
             fund_payload = _read_json(track_dir / "automated_fund.json")
             if fund_payload:
                 learning_track_funds[track_id] = {

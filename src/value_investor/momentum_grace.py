@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from typing import Any
 
@@ -76,7 +76,9 @@ def unrealized_gain_pct(*, mark: float, avg_cost: float) -> float:
     return (mark - avg_cost) / avg_cost
 
 
-def momentum_strength(row: dict[str, Any], *, config: MomentumGraceConfig | None = None) -> tuple[bool, list[str]]:
+def momentum_strength(
+    row: dict[str, Any], *, config: MomentumGraceConfig | None = None
+) -> tuple[bool, list[str]]:
     """
     True when price trend still looks supportive after a value downgrade.
 
@@ -124,7 +126,9 @@ def momentum_strength(row: dict[str, Any], *, config: MomentumGraceConfig | None
     return bool(reasons), reasons or ["momentum supportive"]
 
 
-def momentum_broken(row: dict[str, Any], *, config: MomentumGraceConfig | None = None) -> tuple[bool, str]:
+def momentum_broken(
+    row: dict[str, Any], *, config: MomentumGraceConfig | None = None
+) -> tuple[bool, str]:
     cfg = config or MomentumGraceConfig()
     timing = str(row.get("timing_signal") or "")
     if timing == "wait":
@@ -197,7 +201,12 @@ def compute_grace_levels(
     return round(stop, 2), round(take_profit, 2)
 
 
-def grace_expired(grace_started_at: str | None, *, as_of: str | date | datetime, config: MomentumGraceConfig | None = None) -> bool:
+def grace_expired(
+    grace_started_at: str | None,
+    *,
+    as_of: str | date | datetime,
+    config: MomentumGraceConfig | None = None,
+) -> bool:
     started = _parse_date(grace_started_at)
     current = _parse_date(as_of)
     if started is None or current is None:
@@ -314,11 +323,11 @@ def evaluate_grace_holding(
             reason="momentum not strong enough for grace entry",
         )
 
-    entry_floor = max(
-        s
-        for s in [grace_entry_stop, stop_loss, avg_cost]
-        if s is not None and s > 0
-    ) if any(s is not None and s > 0 for s in [grace_entry_stop, stop_loss, avg_cost]) else avg_cost
+    entry_floor = (
+        max(s for s in [grace_entry_stop, stop_loss, avg_cost] if s is not None and s > 0)
+        if any(s is not None and s > 0 for s in [grace_entry_stop, stop_loss, avg_cost])
+        else avg_cost
+    )
     stop, target = compute_grace_levels(
         row,
         avg_cost=avg_cost,

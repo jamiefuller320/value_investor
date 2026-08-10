@@ -14,10 +14,10 @@ from .agent_model_policy import (
     grow_ticker_budget,
     load_policy,
     recommend_cheapest_model,
-    research_model_id,
     review_model,
     save_policy,
 )
+from .cli_args import apply_parsed_globals
 from .data_library import (
     DEFAULT_LIBRARY_ROOT,
     DEFAULT_MAX_TICKERS_PER_RUN,
@@ -29,7 +29,6 @@ from .data_library import (
     refresh_constituents,
 )
 from .library_retention import DEFAULT_MONTHLY_UNTIL_DAYS, DEFAULT_RETENTION_DAYS
-from .cli_args import apply_parsed_globals
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -135,7 +134,9 @@ def build_parser() -> argparse.ArgumentParser:
     grow_p.add_argument("--json", action="store_true", help="Emit JSON summary")
     grow_p.set_defaults(func=cmd_grow)
 
-    policy_p = sub.add_parser("policy", parents=[common], help="Show or update library focus / budget policy")
+    policy_p = sub.add_parser(
+        "policy", parents=[common], help="Show or update library focus / budget policy"
+    )
     policy_p.add_argument("--json", action="store_true")
     policy_p.add_argument("--focus", default="", help="Set focus market id (e.g. sp500)")
     policy_p.add_argument(
@@ -657,7 +658,9 @@ def cmd_grow(args: argparse.Namespace) -> int:
         markets = list(MARKET_REGISTRY)
     else:
         markets = _parse_markets(args.markets) or plan["focus_markets"]
-    max_tickers = int(args.max_tickers) if args.max_tickers is not None else int(plan["max_tickers"])
+    max_tickers = (
+        int(args.max_tickers) if args.max_tickers is not None else int(plan["max_tickers"])
+    )
     results = grow_library(
         args.root,
         markets=markets,
@@ -779,13 +782,8 @@ def cmd_policy(args: argparse.Namespace) -> int:
         f"Ad hoc checkpoint: ${ladder.get('spend_since_checkpoint_usd', 0)} / "
         f"${ladder.get('spend_checkpoint_usd', 60)}"
     )
-    print(
-        f"Research model: {model.get('model_id')} "
-        f"({model.get('pool')}) — {model.get('reason')}"
-    )
-    print(
-        "Set weekly ops envelope: ftse-library policy --weekly-ops-cap-usd 50"
-    )
+    print(f"Research model: {model.get('model_id')} ({model.get('pool')}) — {model.get('reason')}")
+    print("Set weekly ops envelope: ftse-library policy --weekly-ops-cap-usd 50")
     return 0
 
 
@@ -888,7 +886,10 @@ def cmd_ladder(args: argparse.Namespace) -> int:
         print(json.dumps(payload, indent=2))
         return 0
     print(f"Ladder focus: {payload['focus_market']}")
-    if payload.get("focus_market_after") and payload["focus_market_after"] != payload["focus_market"]:
+    if (
+        payload.get("focus_market_after")
+        and payload["focus_market_after"] != payload["focus_market"]
+    ):
         print(f"Focus after graduation: {payload['focus_market_after']}")
     for name, layer in (payload.get("layers") or {}).items():
         if layer.get("skipped"):
@@ -1055,9 +1056,7 @@ def cmd_t212_overlay(args: argparse.Namespace) -> int:
         )
         sample = row.get("non_tradable_sample") or []
         if sample:
-            bits = ", ".join(
-                f"{s['ticker']} ({s.get('basis')})" for s in sample[:5]
-            )
+            bits = ", ".join(f"{s['ticker']} ({s.get('basis')})" for s in sample[:5])
             print(f"    non-tradable sample: {bits}")
     print("\nNext slice candidates:")
     for item in summary.get("next_slices") or []:
@@ -1129,9 +1128,7 @@ def cmd_t212_align(args: argparse.Namespace) -> int:
         extra = ""
         if support:
             extra = f"  catalogue_stocks={support.get('stock_count_on_hints')}"
-        print(
-            f"  [{item.get('priority')}] {item.get('id')}: {item.get('label')}{extra}"
-        )
+        print(f"  [{item.get('priority')}] {item.get('id')}: {item.get('label')}{extra}")
         print(f"      {item.get('rationale')}")
     if not args.dry_run:
         print(f"\nWrote: {t212_coverage_root(args.root) / 'alignment_report.json'}")
@@ -1341,7 +1338,10 @@ def cmd_deepen_thin(args: argparse.Namespace) -> int:
     if args.rememo or args.rememo_all:
         key = (args.api_key or "").strip() or resolve_cursor_api_key()[0]
         if not key:
-            print("CURSOR_API_KEY_V2 / CURSOR_API_KEY required for --rememo / --rememo-all", file=sys.stderr)
+            print(
+                "CURSOR_API_KEY_V2 / CURSOR_API_KEY required for --rememo / --rememo-all",
+                file=sys.stderr,
+            )
             return 1
     payload = deepen_library_research_memos(
         args.root,
@@ -1374,9 +1374,7 @@ def cmd_deepen_thin(args: argparse.Namespace) -> int:
 def cmd_retry_failed(args: argparse.Namespace) -> int:
     from .library_maintenance import retry_failed_metrics
 
-    markets = _parse_markets(args.markets) or [
-        mid for mid in MARKET_REGISTRY if mid != "ftse350"
-    ]
+    markets = _parse_markets(args.markets) or [mid for mid in MARKET_REGISTRY if mid != "ftse350"]
     results = retry_failed_metrics(args.root, markets)
     payload = {"root": str(args.root), "markets": results}
     if args.json:
@@ -1441,7 +1439,7 @@ def cmd_automation_status(args: argparse.Namespace) -> int:
     settings = payload.get("settings") or {}
     library = settings.get("library") or {}
     paper = settings.get("paper") or {}
-    timeline = ((payload.get("achievements") or {}).get("timeline") or [])
+    timeline = (payload.get("achievements") or {}).get("timeline") or []
     print(f"Focus market: {library.get('focus_market')}")
     print(
         f"Graduated: {library.get('graduated_count')}  "

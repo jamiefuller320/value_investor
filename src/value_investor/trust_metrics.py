@@ -6,8 +6,8 @@ from typing import Any
 
 import pandas as pd
 
-from value_investor.fetch import _load_ticker_payload, _safe_float
 from value_investor.constituents import to_lse_ticker
+from value_investor.fetch import _load_ticker_payload, _safe_float
 from value_investor.providers import apply_fallback_providers
 
 # Metrics that matter for closed-end fund / investment-trust screens.
@@ -53,11 +53,7 @@ def _price_in_pounds(
 
     Prefer market_cap / shares when available; otherwise use book-value scale.
     """
-    if (
-        market_cap is not None
-        and shares_outstanding is not None
-        and shares_outstanding > 0
-    ):
+    if market_cap is not None and shares_outstanding is not None and shares_outstanding > 0:
         return float(market_cap) / float(shares_outstanding)
 
     if last_price is None:
@@ -222,7 +218,9 @@ def fetch_trust_metrics(
         else:
             row["name"] = info.get("longName") or info.get("shortName") or name
             row["sector"] = info.get("sector") or sector
-            row["market_cap"] = _safe_float(info.get("marketCap") or getattr(fast, "market_cap", None))
+            row["market_cap"] = _safe_float(
+                info.get("marketCap") or getattr(fast, "market_cap", None)
+            )
             row["trailing_pe"] = _safe_float(info.get("trailingPE"))
             row["price_to_book"] = _safe_float(info.get("priceToBook"))
             row["book_value"] = _safe_float(info.get("bookValue"))

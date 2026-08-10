@@ -6,14 +6,16 @@ from typing import Any
 
 import pandas as pd
 
-from value_investor.models import ALL_MODELS
 from value_investor.model_families import summarize_by_family
 from value_investor.model_weights import apply_weights_to_results
+from value_investor.models import ALL_MODELS
 from value_investor.models.base import ValueModel
 from value_investor.models.fitted import UniverseFittedModel
 
 
-def evaluate_universe(universe: pd.DataFrame, models: list[ValueModel] | None = None) -> pd.DataFrame:
+def evaluate_universe(
+    universe: pd.DataFrame, models: list[ValueModel] | None = None
+) -> pd.DataFrame:
     """
     Evaluate every company against all models.
 

@@ -8,15 +8,14 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
+from value_investor import fetch as fetch_mod
 from value_investor.constituents import (
-    fetch_ftse100_constituents,
     fetch_ftse250_constituents,
     fetch_ftse350_constituents,
     fetch_universe_constituents,
     normalize_tickers,
     to_lse_ticker,
 )
-from value_investor import fetch as fetch_mod
 
 
 @pytest.mark.parametrize(
@@ -57,14 +56,38 @@ def test_fetch_ftse250_parses_ticker_column():
 def test_fetch_ftse350_dedupes_preferring_ftse100():
     ftse100 = pd.DataFrame(
         [
-            {"ticker": "BKG.L", "name": "Berkeley 100", "sector": "Home", "epic": "BKG", "index": "FTSE 100"},
-            {"ticker": "SHEL.L", "name": "Shell", "sector": "Energy", "epic": "SHEL", "index": "FTSE 100"},
+            {
+                "ticker": "BKG.L",
+                "name": "Berkeley 100",
+                "sector": "Home",
+                "epic": "BKG",
+                "index": "FTSE 100",
+            },
+            {
+                "ticker": "SHEL.L",
+                "name": "Shell",
+                "sector": "Energy",
+                "epic": "SHEL",
+                "index": "FTSE 100",
+            },
         ]
     )
     ftse250 = pd.DataFrame(
         [
-            {"ticker": "BKG.L", "name": "Berkeley 250", "sector": "Home", "epic": "BKG", "index": "FTSE 250"},
-            {"ticker": "EZJ.L", "name": "EasyJet", "sector": "Travel", "epic": "EZJ", "index": "FTSE 250"},
+            {
+                "ticker": "BKG.L",
+                "name": "Berkeley 250",
+                "sector": "Home",
+                "epic": "BKG",
+                "index": "FTSE 250",
+            },
+            {
+                "ticker": "EZJ.L",
+                "name": "EasyJet",
+                "sector": "Travel",
+                "epic": "EZJ",
+                "index": "FTSE 250",
+            },
         ]
     )
     with (

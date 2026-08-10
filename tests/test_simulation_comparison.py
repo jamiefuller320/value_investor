@@ -11,7 +11,9 @@ from value_investor.simulator import (
 )
 
 
-def _snapshot(run_at: str, signals: list[dict], prices: dict[str, float] | None = None) -> RunSnapshot:
+def _snapshot(
+    run_at: str, signals: list[dict], prices: dict[str, float] | None = None
+) -> RunSnapshot:
     return RunSnapshot(
         run_at=run_at,
         prices=prices or {"AAA.L": 100.0, "BBB.L": 50.0, BENCHMARK_TICKER: 8000.0},
@@ -92,11 +94,25 @@ def test_comparison_note_when_no_research_data():
     snapshots = [
         _snapshot(
             "2026-06-01T07:00:00+00:00",
-            [{"ticker": "AAA.L", "signal": "strong_buy", "conviction_score": 0.9, "timing_signal": "accumulate"}],
+            [
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "timing_signal": "accumulate",
+                }
+            ],
         ),
         _snapshot(
             "2026-06-15T07:00:00+00:00",
-            [{"ticker": "AAA.L", "signal": "strong_buy", "conviction_score": 0.9, "timing_signal": "accumulate"}],
+            [
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "timing_signal": "accumulate",
+                }
+            ],
             {"AAA.L": 110.0, BENCHMARK_TICKER: 8040.0},
         ),
     ]

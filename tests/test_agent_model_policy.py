@@ -7,6 +7,7 @@ from pathlib import Path
 
 from value_investor.agent_model_policy import (
     SPEND_POOL_WEEKLY_OPS,
+    approve_spend_checkpoint,
     grow_ticker_budget,
     is_surplus_spend_day,
     load_policy,
@@ -14,21 +15,18 @@ from value_investor.agent_model_policy import (
     record_email_run_spend,
     record_estimated_spend,
     record_spend_with_checkpoint,
-    approve_spend_checkpoint,
-    spend_since_checkpoint_usd,
+    remaining_weekly_ops_usd,
     review_model,
     save_policy,
+    spend_since_checkpoint_usd,
     weekly_ops_budget_status,
-    remaining_weekly_ops_usd,
 )
 from value_investor.data_library_cli import main as library_main
 from value_investor.fetch import resolve_yahoo_ticker_for_market
 
 
 def test_recommend_prefers_first_party_composer():
-    pick = recommend_cheapest_model(
-        ["gpt-5.4-nano", "composer-2.5", "claude-opus-4-8", "default"]
-    )
+    pick = recommend_cheapest_model(["gpt-5.4-nano", "composer-2.5", "claude-opus-4-8", "default"])
     assert pick.model_id == "composer-2.5"
     assert pick.pool == "first_party"
 
@@ -92,9 +90,7 @@ def test_weekly_ops_allocation(tmp_path: Path):
     assert status["constraining"] is False
     assert status["flag"] == "enforced"
 
-    plan = grow_ticker_budget(
-        policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC)
-    )
+    plan = grow_ticker_budget(policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC))
     assert plan["weekly_ops_cap_usd"] == 50.0
     assert plan["allow_research"] is True
     assert plan["budget_flag"] == "enforced"
@@ -115,9 +111,7 @@ def test_weekly_ops_constraining_flag(tmp_path: Path):
     assert status["remaining_weekly_ops_usd"] == 0.0
     assert "constraining" in (status.get("note") or "")
 
-    gated = grow_ticker_budget(
-        policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC)
-    )
+    gated = grow_ticker_budget(policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC))
     assert gated["allow_research"] is False
     assert gated["constraining"] is True
 

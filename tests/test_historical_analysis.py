@@ -4,17 +4,18 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pandas as pd
+
+from value_investor.backtest import load_run_snapshots
 from value_investor.historical_analysis import (
     HistoricalAnalysisConfig,
     _build_observations,
     run_historical_analysis,
 )
-from value_investor.backtest import load_run_snapshots
 from value_investor.model_weights import save_model_snapshot
 from value_investor.research.document import ResearchDocument
 from value_investor.research.store import ResearchStore
 from value_investor.research.timeline import archive_revision
-import pandas as pd
 
 
 def _write_run_snapshot(
@@ -129,10 +130,12 @@ def test_historical_analysis_point_in_time_research_and_smoothing(tmp_path: Path
         delta={"verdict_changed": True},
     )
 
-    model_results = pd.DataFrame([
-        {"ticker": "AAA.L", "model_id": "good_model", "passed": True, "score": 0.9},
-        {"ticker": "BBB.L", "model_id": "good_model", "passed": True, "score": 0.2},
-    ])
+    model_results = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "model_id": "good_model", "passed": True, "score": 0.9},
+            {"ticker": "BBB.L", "model_id": "good_model", "passed": True, "score": 0.2},
+        ]
+    )
     save_model_snapshot(
         tmp_path,
         run_at=datetime(2026, 6, 1, 7, 0, tzinfo=UTC),

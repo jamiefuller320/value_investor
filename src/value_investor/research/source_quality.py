@@ -54,11 +54,7 @@ def score_research_sources(
 
     outcomes = list(question_outcomes or [])
     if outcomes:
-        resolved = sum(
-            1
-            for row in outcomes
-            if str(row.get("status") or "").lower() == "resolved"
-        )
+        resolved = sum(1 for row in outcomes if str(row.get("status") or "").lower() == "resolved")
         gap_score = resolved / len(outcomes)
     else:
         gap_score = 1.0

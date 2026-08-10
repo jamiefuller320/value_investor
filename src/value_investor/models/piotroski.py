@@ -115,7 +115,10 @@ class PiotroskiFScoreModel(ValueModel):
             ("positive operating cash flow", ocf is not None and ocf > 0),
             ("ROA improving", roa is not None and roa_prev is not None and roa > roa_prev),
             ("OCF > net income", ocf is not None and ni is not None and ocf > ni),
-            ("leverage declining", leverage is not None and leverage_prev is not None and leverage < leverage_prev),
+            (
+                "leverage declining",
+                leverage is not None and leverage_prev is not None and leverage < leverage_prev,
+            ),
             ("current ratio improving", cr is not None and cr_prev is not None and cr > cr_prev),
             (
                 "no share dilution",

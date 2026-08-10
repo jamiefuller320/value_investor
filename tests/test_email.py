@@ -6,110 +6,119 @@ import pandas as pd
 
 from value_investor.backtest import BacktestSummary, HorizonResult
 from value_investor.deep_analysis import DeepAnalysis
-from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
+from value_investor.emailer import (
+    EmailConfig,
+    format_html_report,
+    format_text_report,
+    send_report_email,
+)
 from value_investor.run_diff import RunDiff
 from value_investor.summary import build_company_reports
 
 
 def _sample_frames():
-    signals = pd.DataFrame([
-        {
-            "ticker": "AAA.L",
-            "name": "Alpha PLC",
-            "sector": "Financials",
-            "signal": "strong_buy",
-            "models_passed": 10,
-            "model_count": 18,
-            "composite_score": 0.8,
-            "sector_composite_score": 0.82,
-            "families_passed": 3,
-            "passed_families": "cheapness,quality,dividend",
-            "data_quality_score": 0.85,
-            "metrics_present": 18,
-            "metrics_total": 20,
-            "weeks_at_signal": 3,
-            "signal_trend": "stable",
-            "conviction_score": 0.72,
-            "stability_label": "building",
-            "timing_signal": "accumulate",
-            "timing_score": 0.75,
-            "rsi_14": 34.0,
-            "price_vs_sma200_pct": -0.08,
-            "timing_reasons": ["RSI below neutral (34)", "below 200-day MA"],
-            "action_note": "Strong Buy — favourable entry timing",
-            "core_order": "limit",
-            "core_limit": 98.5,
-            "core_allocation_pct": 0.65,
-            "tactical_order": "limit",
-            "tactical_limit": 95.0,
-            "tactical_allocation_pct": 0.35,
-            "tactical_stop_loss": 92.0,
-            "tactical_take_profit": 105.0,
-            "trade_plan_summary": (
-                "Trade plan: core 65% limit £98.50; tactical 35% limit £95.00; "
-                "tactical stop £92.00, target £105.00."
-            ),
-            "trailing_pe": 8.0,
-            "price_to_book": 0.9,
-            "dividend_yield": 0.04,
-            "return_on_equity": 0.15,
-        },
-        {
-            "ticker": "BBB.L",
-            "name": "Beta PLC",
-            "sector": "Energy",
-            "signal": "avoid",
-            "models_passed": 2,
-            "model_count": 18,
-            "composite_score": 0.3,
-            "sector_composite_score": 0.25,
-            "families_passed": 1,
-            "passed_families": "cheapness",
-            "data_quality_score": 0.45,
-            "metrics_present": 9,
-            "metrics_total": 20,
-            "weeks_at_signal": 1,
-            "signal_trend": "deteriorating",
-            "conviction_score": 0.15,
-            "stability_label": "new",
-            "timing_signal": "wait",
-            "timing_score": 0.25,
-            "rsi_14": 72.0,
-            "price_vs_sma200_pct": 0.12,
-            "timing_reasons": ["RSI overbought (72)"],
-            "action_note": "Pass — weak fundamentals",
-            "trailing_pe": 25.0,
-            "price_to_book": 3.0,
-            "dividend_yield": 0.01,
-            "return_on_equity": 0.05,
-        },
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "AAA.L",
-            "model_name": "Graham Defensive",
-            "passed": True,
-            "score": 1.0,
-            "reasons": "['P/E < 15: P/E=8.0', 'Dividend payer: yield=4.00%']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "AAA.L",
-            "model_name": "Deep Value",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "['P/E=8.0', 'EV/EBITDA=6.0']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "BBB.L",
-            "model_name": "Graham Defensive",
-            "passed": False,
-            "score": 0.2,
-            "reasons": "[]",
-            "failed_criteria": "['P/E >= 15']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "name": "Alpha PLC",
+                "sector": "Financials",
+                "signal": "strong_buy",
+                "models_passed": 10,
+                "model_count": 18,
+                "composite_score": 0.8,
+                "sector_composite_score": 0.82,
+                "families_passed": 3,
+                "passed_families": "cheapness,quality,dividend",
+                "data_quality_score": 0.85,
+                "metrics_present": 18,
+                "metrics_total": 20,
+                "weeks_at_signal": 3,
+                "signal_trend": "stable",
+                "conviction_score": 0.72,
+                "stability_label": "building",
+                "timing_signal": "accumulate",
+                "timing_score": 0.75,
+                "rsi_14": 34.0,
+                "price_vs_sma200_pct": -0.08,
+                "timing_reasons": ["RSI below neutral (34)", "below 200-day MA"],
+                "action_note": "Strong Buy — favourable entry timing",
+                "core_order": "limit",
+                "core_limit": 98.5,
+                "core_allocation_pct": 0.65,
+                "tactical_order": "limit",
+                "tactical_limit": 95.0,
+                "tactical_allocation_pct": 0.35,
+                "tactical_stop_loss": 92.0,
+                "tactical_take_profit": 105.0,
+                "trade_plan_summary": (
+                    "Trade plan: core 65% limit £98.50; tactical 35% limit £95.00; "
+                    "tactical stop £92.00, target £105.00."
+                ),
+                "trailing_pe": 8.0,
+                "price_to_book": 0.9,
+                "dividend_yield": 0.04,
+                "return_on_equity": 0.15,
+            },
+            {
+                "ticker": "BBB.L",
+                "name": "Beta PLC",
+                "sector": "Energy",
+                "signal": "avoid",
+                "models_passed": 2,
+                "model_count": 18,
+                "composite_score": 0.3,
+                "sector_composite_score": 0.25,
+                "families_passed": 1,
+                "passed_families": "cheapness",
+                "data_quality_score": 0.45,
+                "metrics_present": 9,
+                "metrics_total": 20,
+                "weeks_at_signal": 1,
+                "signal_trend": "deteriorating",
+                "conviction_score": 0.15,
+                "stability_label": "new",
+                "timing_signal": "wait",
+                "timing_score": 0.25,
+                "rsi_14": 72.0,
+                "price_vs_sma200_pct": 0.12,
+                "timing_reasons": ["RSI overbought (72)"],
+                "action_note": "Pass — weak fundamentals",
+                "trailing_pe": 25.0,
+                "price_to_book": 3.0,
+                "dividend_yield": 0.01,
+                "return_on_equity": 0.05,
+            },
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "model_name": "Graham Defensive",
+                "passed": True,
+                "score": 1.0,
+                "reasons": "['P/E < 15: P/E=8.0', 'Dividend payer: yield=4.00%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "AAA.L",
+                "model_name": "Deep Value",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['P/E=8.0', 'EV/EBITDA=6.0']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "BBB.L",
+                "model_name": "Graham Defensive",
+                "passed": False,
+                "score": 0.2,
+                "reasons": "[]",
+                "failed_criteria": "['P/E >= 15']",
+            },
+        ]
+    )
     return signals, model_results
 
 

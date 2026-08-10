@@ -16,25 +16,40 @@ from value_investor.backtest import (
     load_run_snapshots,
     save_run_snapshot,
 )
-from value_investor.constituents import DEFAULT_UNIVERSE, fetch_universe_constituents, universe_label
+from value_investor.constituents import (
+    DEFAULT_UNIVERSE,
+    fetch_universe_constituents,
+    universe_label,
+)
 from value_investor.data_quality import add_data_quality_scores
 from value_investor.fetch import fetch_universe
-from value_investor.research.overlay import enrich_signals_with_research
-from value_investor.run_diff import RunDiff, compute_run_diff
 from value_investor.historical_analysis import (
     run_historical_analysis,
     save_historical_analysis,
 )
-from value_investor.model_weights import load_model_weights, save_model_snapshot, update_model_weights
+from value_investor.model_weights import (
+    load_model_weights,
+    save_model_snapshot,
+    update_model_weights,
+)
 from value_investor.models.trusts import ALL_TRUST_MODELS
+from value_investor.research.overlay import enrich_signals_with_research
+from value_investor.run_diff import RunDiff, compute_run_diff
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
-from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
+from value_investor.scoring.cash_conversion_overlay import (
+    enrich_signals_with_cash_conversion_overlay,
+)
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
-from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
-from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf, enrich_universe_with_filing_metrics
+from value_investor.scoring.fcf import (
+    enrich_universe_with_canonical_fcf,
+    enrich_universe_with_filing_metrics,
+)
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
+from value_investor.scoring.interim_quality_overlay import (
+    enrich_signals_with_interim_quality_overlay,
+)
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
@@ -62,7 +77,10 @@ def _install_research_snapshot_hooks() -> None:
     """Propagate gap-fill verdicts back to per-ticker screening_snapshot.json."""
     from value_investor.research import overlay as research_overlay
     from value_investor.research.store import ResearchStore
-    from value_investor.scoring.snapshot import refresh_snapshot_from_document, sync_research_verdict_snapshots
+    from value_investor.scoring.snapshot import (
+        refresh_snapshot_from_document,
+        sync_research_verdict_snapshots,
+    )
 
     if not getattr(research_overlay.apply_research_overlay, "_snapshot_sync_installed", False):
         _original_overlay = research_overlay.apply_research_overlay
@@ -368,7 +386,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     )
     paths["model_snapshot"] = model_snapshot_path
 
-    weight_state = update_model_weights(output_dir)
+    update_model_weights(output_dir)
     paths["model_weights"] = output_dir / "model_weights.json"
 
     snapshots = load_run_snapshots(output_dir)

@@ -133,9 +133,10 @@ def test_attach_decision_packs_on_buy_tier_only():
     attach_decision_packs(reports)
     assert "decision_pack" in reports[0]
     assert "decision_pack" not in reports[1]
-    assert "Verify" in " ".join(reports[0]["decision_pack"]["verify"]) or reports[0][
-        "decision_pack"
-    ]["verify"]
+    assert (
+        "Verify" in " ".join(reports[0]["decision_pack"]["verify"])
+        or reports[0]["decision_pack"]["verify"]
+    )
 
 
 def test_email_includes_verify_before_trade_section():

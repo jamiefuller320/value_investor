@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from value_investor.storage import read_json, write_json
 
@@ -472,7 +473,9 @@ def record_estimated_spend(
 ) -> dict[str, Any]:
     """Accumulate estimated Cursor spend against weekly / cycle budgets."""
     if pool not in VALID_SPEND_POOLS:
-        raise ValueError(f"Unknown spend pool {pool!r}; expected one of {sorted(VALID_SPEND_POOLS)}")
+        raise ValueError(
+            f"Unknown spend pool {pool!r}; expected one of {sorted(VALID_SPEND_POOLS)}"
+        )
     policy = load_policy(path)
     budget = dict(policy.get("budget") or {})
     now = datetime.now(UTC)
@@ -597,8 +600,6 @@ def grow_ticker_budget(
         "research_model": research_model_id(policy),
         "allow_research": (not enforce) or remaining > 0 or surplus,
         "weekly_ops_research_budget_usd": (
-            None
-            if not enforce
-            else round(remaining + (cap if surplus else 0.0), 4)
+            None if not enforce else round(remaining + (cap if surplus else 0.0), 4)
         ),
     }

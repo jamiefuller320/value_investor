@@ -8,9 +8,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 from pinned_time import weekday_noon_utc
+
 from value_investor.backtest import BENCHMARK_TICKER
 from value_investor.engineering_tasks import load_engineering_tasks
-from value_investor.storage import write_json
 from value_investor.ops_monitor import (
     OpsFinding,
     OpsMonitorReport,
@@ -24,16 +24,21 @@ from value_investor.ops_monitor import (
     draft_ops_engineering_tasks,
     filter_unresolved_workflow_failures,
     format_ops_monitor_text,
-    load_health_log_payload,
     recovery_bundle_in_flight,
     run_ops_monitor,
     workflow_stale_only_failures,
 )
+from value_investor.storage import write_json
 
 
 def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold():
     eight_hours_ago = (weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
         patch(
@@ -65,7 +70,12 @@ def test_filter_unresolved_workflow_failures_ignores_pre_success_failures():
 def test_check_workflow_freshness_ignores_resolved_failures():
     success_at = weekday_noon_utc()
     one_hour_ago = (success_at - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
         patch(
@@ -115,7 +125,12 @@ def test_check_engineering_queue_skips_informational_parked(tmp_path: Path):
 
 def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
     eight_hours_ago = (weekday_noon_utc() - timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    active_queue = {"open_count": 2, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    active_queue = {
+        "open_count": 2,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),
         patch(
@@ -125,7 +140,9 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(queue_status=active_queue, now=weekday_noon_utc())
+        findings, checks = check_workflow_freshness(
+            queue_status=active_queue, now=weekday_noon_utc()
+        )
     eng_checks = [row for row in checks if row["workflow"] == "engineering-queue.yml"]
     assert eng_checks and eng_checks[0]["max_age_hours"] == 3
     assert eng_checks[0]["stale"] is True
@@ -134,7 +151,12 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
 
 def test_check_workflow_freshness_softens_orchestrator_when_recovery_bundle_active():
     thirty_hours_ago = (weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    idle_queue = {"open_count": 0, "pr_open_count": 0, "in_flight_branch": None, "in_flight_pr": None}
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
 
     def fake_latest(workflow_file, **kwargs):
         if workflow_file == "automation-orchestrator.yml" and kwargs.get("status") == "success":
@@ -386,11 +408,15 @@ def test_run_ops_monitor_writes_status(
 ):
     latest = tmp_path / "latest.json"
     latest.write_text(
-        json.dumps({"updated_at": datetime.now(UTC).isoformat(), "reports": [{"ticker": "BT-A.L"}]}),
+        json.dumps(
+            {"updated_at": datetime.now(UTC).isoformat(), "reports": [{"ticker": "BT-A.L"}]}
+        ),
         encoding="utf-8",
     )
     health = tmp_path / "ingest_health_log.json"
-    health.write_text(json.dumps({"entries": [], "updated_at": datetime.now(UTC).isoformat()}), encoding="utf-8")
+    health.write_text(
+        json.dumps({"entries": [], "updated_at": datetime.now(UTC).isoformat()}), encoding="utf-8"
+    )
     status_path = tmp_path / "ops_status.json"
 
     report = run_ops_monitor(

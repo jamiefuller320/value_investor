@@ -13,10 +13,9 @@ import pandas as pd
 import yfinance as yf
 
 from value_investor.backtest import HISTORY_DIR, RunSnapshot, load_run_snapshots
-from value_investor.data_library import market_dir
 from value_investor.library_screen import screen_dir_for
 from value_investor.research.verdict import coerce_research_verdict, compute_adjusted_signal
-from value_investor.simulator import SimulatorConfig, SimulationSummary, run_simulation
+from value_investor.simulator import SimulationSummary, SimulatorConfig, run_simulation
 from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
@@ -361,10 +360,10 @@ def run_library_observe_sim(
     rebuild_snapshots: bool = True,
 ) -> LibraryObserveSimResult:
     """
-  Observe-only offline paper sim for a library market.
+    Observe-only offline paper sim for a library market.
 
-  Writes snapshots under screen/history/ and summary under screen/sim/.
-  Does not touch live FTSE paper automation or decision-review knobs.
+    Writes snapshots under screen/history/ and summary under screen/sim/.
+    Does not touch live FTSE paper automation or decision-review knobs.
     """
     bench = benchmark or benchmark_for_market(market_id)
     screen_dir = screen_dir_for(root, market_id)

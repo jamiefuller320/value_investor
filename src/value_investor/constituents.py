@@ -38,19 +38,109 @@ YFINANCE_EPIC_ALIASES: dict[str, str] = {
 
 # Fallback when Wikipedia is unreachable — update periodically or override via CSV.
 FALLBACK_FTSE100_EPICS = [
-    "III", "ADM", "AAL", "ANTO", "AHT", "ABF", "AZN", "AUTO", "AV", "BA", "BARC", "BATS",
-    "BEZ", "BKG", "BP", "BT-A", "BNZL", "CNA", "CCH", "CPG", "CRDA", "CRH", "DCC",
-    "DGE", "ENT", "EXPN", "FCIT", "FRES", "GLEN", "GSK", "HLMA", "HLN", "HSBA", "HSX",
-    "IMB", "INF", "IHG", "ITRK", "JD", "KGF", "LAND", "LGEN", "LLOY", "LSEG", "MKS", "MRO",
-    "MNDI", "NG", "NXT", "OCDO", "PSON", "PSN", "PHNX", "PRU", "RKT", "REL", "RIO", "RR",
-    "RTO", "SBRY", "SDR", "SGE", "SHEL", "SMIN", "SMT", "SN", "SPX", "SSE", "STAN", "STJ",
-    "SVT", "TSCO", "ULVR", "UU", "UTG", "VOD", "WEIR", "WTB", "WPP",
+    "III",
+    "ADM",
+    "AAL",
+    "ANTO",
+    "AHT",
+    "ABF",
+    "AZN",
+    "AUTO",
+    "AV",
+    "BA",
+    "BARC",
+    "BATS",
+    "BEZ",
+    "BKG",
+    "BP",
+    "BT-A",
+    "BNZL",
+    "CNA",
+    "CCH",
+    "CPG",
+    "CRDA",
+    "CRH",
+    "DCC",
+    "DGE",
+    "ENT",
+    "EXPN",
+    "FCIT",
+    "FRES",
+    "GLEN",
+    "GSK",
+    "HLMA",
+    "HLN",
+    "HSBA",
+    "HSX",
+    "IMB",
+    "INF",
+    "IHG",
+    "ITRK",
+    "JD",
+    "KGF",
+    "LAND",
+    "LGEN",
+    "LLOY",
+    "LSEG",
+    "MKS",
+    "MRO",
+    "MNDI",
+    "NG",
+    "NXT",
+    "OCDO",
+    "PSON",
+    "PSN",
+    "PHNX",
+    "PRU",
+    "RKT",
+    "REL",
+    "RIO",
+    "RR",
+    "RTO",
+    "SBRY",
+    "SDR",
+    "SGE",
+    "SHEL",
+    "SMIN",
+    "SMT",
+    "SN",
+    "SPX",
+    "SSE",
+    "STAN",
+    "STJ",
+    "SVT",
+    "TSCO",
+    "ULVR",
+    "UU",
+    "UTG",
+    "VOD",
+    "WEIR",
+    "WTB",
+    "WPP",
 ]
 
 # Small mid-cap seed list only — used if Wikipedia FTSE 250 is unreachable.
 FALLBACK_FTSE250_EPICS = [
-    "ABDN", "BBY", "BWY", "CWK", "DRX", "EZJ", "FRAS", "HBR", "HIK", "ITV",
-    "JMAT", "OSB", "PETS", "RMV", "RSW", "SCT", "TATE", "TW", "VTY", "WIZZ",
+    "ABDN",
+    "BBY",
+    "BWY",
+    "CWK",
+    "DRX",
+    "EZJ",
+    "FRAS",
+    "HBR",
+    "HIK",
+    "ITV",
+    "JMAT",
+    "OSB",
+    "PETS",
+    "RMV",
+    "RSW",
+    "SCT",
+    "TATE",
+    "TW",
+    "VTY",
+    "WIZZ",
 ]
 
 
@@ -120,7 +210,11 @@ def _parse_constituents_table(html: str, *, index_label: str) -> pd.DataFrame:
     if "sector" not in constituents.columns:
         constituents["sector"] = None
 
-    out = constituents[["ticker", "name", "sector", "epic"]].drop_duplicates("ticker").reset_index(drop=True)
+    out = (
+        constituents[["ticker", "name", "sector", "epic"]]
+        .drop_duplicates("ticker")
+        .reset_index(drop=True)
+    )
     out["index"] = index_label
     return out
 
@@ -196,9 +290,7 @@ def fetch_ftse350_constituents() -> pd.DataFrame:
 
     Names that appear in both lists keep the FTSE 100 row.
     """
-    return _combine_constituents(
-        [fetch_ftse100_constituents(), fetch_ftse250_constituents()]
-    )
+    return _combine_constituents([fetch_ftse100_constituents(), fetch_ftse250_constituents()])
 
 
 def fetch_universe_constituents(universe: str = DEFAULT_UNIVERSE) -> pd.DataFrame:

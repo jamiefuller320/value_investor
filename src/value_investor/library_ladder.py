@@ -192,7 +192,9 @@ def run_library_ladder(
 
     coverage = (status[0] if status else {}) or {}
     metrics_count = int(coverage.get("coverage_count") or 0)
-    min_metrics = int(policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)
+    min_metrics = int(
+        policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN
+    )
     screened_markets: set[str] = set()
 
     # B — screen-lite (focus)

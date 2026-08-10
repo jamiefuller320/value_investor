@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -311,7 +311,9 @@ def build_exit_shadow_review(store: dict[str, Any], *, track_id: str) -> dict[st
             "verdicts": verdicts,
             "avg_peak_since_exit_pct": round(sum(peaks) / len(peaks), 4) if peaks else None,
             "avg_trough_since_exit_pct": round(sum(troughs) / len(troughs), 4) if troughs else None,
-            "avg_final_return_since_exit_pct": round(sum(finals) / len(finals), 4) if finals else None,
+            "avg_final_return_since_exit_pct": round(sum(finals) / len(finals), 4)
+            if finals
+            else None,
         }
 
     by_kind: dict[str, Any] = {}

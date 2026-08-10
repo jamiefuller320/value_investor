@@ -14,9 +14,13 @@ from value_investor.research.document import ResearchDocument
 from value_investor.summary import CompanyReport
 from value_investor.technical_analysis import TradePlan
 
-THESIS_GAP = "No research memo yet — thesis unverified. Do not treat the screen signal as confirmed."
+THESIS_GAP = (
+    "No research memo yet — thesis unverified. Do not treat the screen signal as confirmed."
+)
 LEVELS_GAP = "No structured trade-plan levels — set limits/stops manually before acting."
-SIZE_GAP = "No allocation guidance — size manually (paper-auto uses equal-weight sleeves when automated)."
+SIZE_GAP = (
+    "No allocation guidance — size manually (paper-auto uses equal-weight sleeves when automated)."
+)
 RISKS_GAP = "No research risk section — review filings and news yourself before sizing."
 
 VERIFY_BASE = [
@@ -118,17 +122,13 @@ def _format_levels(plan: TradePlan | None) -> tuple[str, bool]:
 
 
 def _format_size(plan: TradePlan | None, *, timing: str | None) -> tuple[str, bool]:
-    if plan is None or (
-        plan.core_allocation_pct is None and plan.tactical_allocation_pct is None
-    ):
+    if plan is None or (plan.core_allocation_pct is None and plan.tactical_allocation_pct is None):
         return SIZE_GAP, True
     bits: list[str] = []
     if plan.core_allocation_pct is not None:
         bits.append(f"core sleeve ≈ {float(plan.core_allocation_pct):.0%} of planned stake")
     if plan.tactical_allocation_pct is not None:
-        bits.append(
-            f"tactical add ≈ {float(plan.tactical_allocation_pct):.0%} on the dip limit"
-        )
+        bits.append(f"tactical add ≈ {float(plan.tactical_allocation_pct):.0%} on the dip limit")
     if timing == "wait":
         bits.append("timing is wait — prefer smaller starter size or delay entry")
     bits.append("Keep total book exposure inside your sector/position caps.")
@@ -198,9 +198,7 @@ def _verify_checklist(
 
     verdict = (research_verdict or "").lower()
     if verdict in {"caution", "pass"}:
-        items.append(
-            f"Research verdict is {verdict} — de-size or skip despite the screen signal."
-        )
+        items.append(f"Research verdict is {verdict} — de-size or skip despite the screen signal.")
         high_conviction = False
 
     if research_confidence is not None and float(research_confidence) < 0.5:
@@ -289,9 +287,7 @@ def build_decision_pack(
         timing_signal=str(timing) if timing else None,
         adjusted_signal=data.get("adjusted_signal"),
         conviction_score=(
-            float(data["conviction_score"])
-            if data.get("conviction_score") is not None
-            else None
+            float(data["conviction_score"]) if data.get("conviction_score") is not None else None
         ),
         research_verdict=str(research_verdict) if research_verdict else None,
         research_confidence=(
@@ -347,12 +343,12 @@ def format_decision_pack_text(pack: DecisionPack) -> str:
         f"{pack.name} ({pack.ticker}) — {signal}",
         f"  Signal: {signal}"
         + (f" · timing {pack.timing_signal}" if pack.timing_signal else "")
-        + (f" · conviction {pack.conviction_score:.0%}" if pack.conviction_score is not None else "")
         + (
-            f" · research {pack.research_verdict}"
-            if pack.research_verdict
+            f" · conviction {pack.conviction_score:.0%}"
+            if pack.conviction_score is not None
             else ""
-        ),
+        )
+        + (f" · research {pack.research_verdict}" if pack.research_verdict else ""),
         f"  Thesis: {pack.thesis}",
         f"  Levels: {pack.levels}",
         f"  Size: {pack.size}",
@@ -380,19 +376,15 @@ def format_decision_packs_text(packs: list[DecisionPack]) -> str | None:
 
 def format_decision_pack_html(pack: DecisionPack) -> str:
     verify_items = "".join(f"<li>{_escape(item)}</li>" for item in pack.verify)
-    conf = (
-        f"{pack.research_confidence:.0%}"
-        if pack.research_confidence is not None
-        else "—"
-    )
+    conf = f"{pack.research_confidence:.0%}" if pack.research_confidence is not None else "—"
     return f"""
     <div style="margin:12px 0;padding:10px 0;border-top:1px solid #ddd">
       <strong>{_escape(pack.name)}</strong>
       <span style="color:#666">({_escape(pack.ticker)})</span>
       <div style="font-size:13px;margin-top:6px;line-height:1.45">
-        <div><strong>Signal:</strong> {_escape(pack.signal.replace('_', ' '))}
-          · timing {_escape(pack.timing_signal or '—')}
-          · research {_escape(pack.research_verdict or '—')} ({conf})</div>
+        <div><strong>Signal:</strong> {_escape(pack.signal.replace("_", " "))}
+          · timing {_escape(pack.timing_signal or "—")}
+          · research {_escape(pack.research_verdict or "—")} ({conf})</div>
         <div><strong>Thesis:</strong> {_escape(pack.thesis)}</div>
         <div><strong>Levels:</strong> {_escape(pack.levels)}</div>
         <div><strong>Size:</strong> {_escape(pack.size)}</div>

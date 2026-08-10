@@ -12,8 +12,11 @@ import value_investor.pipeline  # noqa: F401 — installs research snapshot hook
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
-from value_investor.scoring.cash_conversion_overlay import enrich_signals_with_cash_conversion_overlay
+from value_investor.scoring.cash_conversion_overlay import (
+    enrich_signals_with_cash_conversion_overlay,
+)
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
+from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
@@ -21,15 +24,19 @@ from value_investor.scoring.fcf import (
     parse_interim_eps_decline_pct,
 )
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
-from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
-from value_investor.scoring.interim_quality_overlay import enrich_signals_with_interim_quality_overlay
+from value_investor.scoring.interim_quality_overlay import (
+    enrich_signals_with_interim_quality_overlay,
+)
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
     apply_sector_overrides,
     resolve_scoring_sector,
 )
-from value_investor.scoring.snapshot import refresh_snapshot_from_document, sync_research_verdict_snapshots
+from value_investor.scoring.snapshot import (
+    refresh_snapshot_from_document,
+    sync_research_verdict_snapshots,
+)
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.storage import write_json
 from value_investor.summary import CompanyReport, build_company_reports
@@ -78,53 +85,57 @@ def _minimal_report(**overrides) -> CompanyReport:
 
 
 def test_screening_snapshot_written_with_failed_models_and_piotroski(tmp_path: Path):
-    signals = pd.DataFrame([
-        {
-            "ticker": "GFTU.L",
-            "name": "Grafton Group plc",
-            "sector": "Industrials",
-            "signal": "strong_buy",
-            "models_passed": 11,
-            "model_count": 22,
-            "composite_score": 0.84,
-            "sector_composite_score": 0.8,
-            "families_passed": 5,
-            "passed_families": "cheapness,quality,dividend,garp,risk",
-            "data_quality_score": 1.0,
-            "metrics_present": 20,
-            "metrics_total": 20,
-            "weeks_at_signal": 1,
-            "signal_trend": "new",
-            "conviction_score": 0.51,
-            "stability_label": "new",
-            "timing_signal": "neutral",
-            "timing_score": 0.5,
-            "rsi_14": 63.0,
-            "price_vs_sma200_pct": 0.0,
-            "timing_reasons": "[]",
-            "action_note": "",
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "GFTU.L",
-            "model_id": "buffett_quality",
-            "model_name": "Buffett Quality",
-            "passed": False,
-            "score": 0.2,
-            "reasons": "[]",
-            "failed_criteria": "['ROE below threshold']",
-        },
-        {
-            "ticker": "GFTU.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": True,
-            "score": 8 / 9,
-            "reasons": "['F-Score=8/9', 'positive net income', 'positive operating cash flow']",
-            "failed_criteria": "['asset turnover improving']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "GFTU.L",
+                "name": "Grafton Group plc",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "models_passed": 11,
+                "model_count": 22,
+                "composite_score": 0.84,
+                "sector_composite_score": 0.8,
+                "families_passed": 5,
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "data_quality_score": 1.0,
+                "metrics_present": 20,
+                "metrics_total": 20,
+                "weeks_at_signal": 1,
+                "signal_trend": "new",
+                "conviction_score": 0.51,
+                "stability_label": "new",
+                "timing_signal": "neutral",
+                "timing_score": 0.5,
+                "rsi_14": 63.0,
+                "price_vs_sma200_pct": 0.0,
+                "timing_reasons": "[]",
+                "action_note": "",
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "GFTU.L",
+                "model_id": "buffett_quality",
+                "model_name": "Buffett Quality",
+                "passed": False,
+                "score": 0.2,
+                "reasons": "[]",
+                "failed_criteria": "['ROE below threshold']",
+            },
+            {
+                "ticker": "GFTU.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": True,
+                "score": 8 / 9,
+                "reasons": "['F-Score=8/9', 'positive net income', 'positive operating cash flow']",
+                "failed_criteria": "['asset turnover improving']",
+            },
+        ]
+    )
 
     snapshot = build_company_reports(signals, model_results)[0].to_dict()
     snapshot_path = tmp_path / "screening_snapshot.json"
@@ -250,73 +261,75 @@ def test_research_store_save_refreshes_screening_snapshot(tmp_path: Path):
 
 def _consumer_defensive_universe_with_plantation() -> pd.DataFrame:
     """Plantation misclassified as Consumer Defensive: cheap vs FMCG, not vs full universe."""
-    return pd.DataFrame([
-        {
-            "ticker": "AEP.L",
-            "name": "AEP Plantations Plc",
-            "sector": "Consumer Defensive",
-            "trailing_pe": 10.0,
-            "price_to_book": 1.5,
-            "dividend_yield": 0.056,
-            "free_cashflow": 80,
-            "market_cap": 1000,
-            "enterprise_value": 950,
-            "ebitda": 120,
-            "return_on_equity": 0.15,
-        },
-        {
-            "ticker": "ULVR.L",
-            "name": "Unilever PLC",
-            "sector": "Consumer Defensive",
-            "trailing_pe": 22.0,
-            "price_to_book": 5.0,
-            "dividend_yield": 0.03,
-            "free_cashflow": 40,
-            "market_cap": 1000,
-            "enterprise_value": 1100,
-            "ebitda": 80,
-            "return_on_equity": 0.12,
-        },
-        {
-            "ticker": "DGE.L",
-            "name": "Diageo plc",
-            "sector": "Consumer Defensive",
-            "trailing_pe": 25.0,
-            "price_to_book": 6.0,
-            "dividend_yield": 0.025,
-            "free_cashflow": 30,
-            "market_cap": 1000,
-            "enterprise_value": 1150,
-            "ebitda": 70,
-            "return_on_equity": 0.10,
-        },
-        {
-            "ticker": "ABF.L",
-            "name": "Associated British Foods",
-            "sector": "Consumer Defensive",
-            "trailing_pe": 28.0,
-            "price_to_book": 4.5,
-            "dividend_yield": 0.02,
-            "free_cashflow": 25,
-            "market_cap": 1000,
-            "enterprise_value": 1200,
-            "ebitda": 65,
-            "return_on_equity": 0.09,
-        },
-        {
-            "ticker": "SHEL.L",
-            "name": "Shell plc",
-            "sector": "Energy",
-            "trailing_pe": 6.0,
-            "price_to_book": 1.0,
-            "dividend_yield": 0.07,
-            "free_cashflow": 120,
-            "market_cap": 1000,
-            "enterprise_value": 900,
-            "ebitda": 180,
-            "return_on_equity": 0.18,
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": "AEP.L",
+                "name": "AEP Plantations Plc",
+                "sector": "Consumer Defensive",
+                "trailing_pe": 10.0,
+                "price_to_book": 1.5,
+                "dividend_yield": 0.056,
+                "free_cashflow": 80,
+                "market_cap": 1000,
+                "enterprise_value": 950,
+                "ebitda": 120,
+                "return_on_equity": 0.15,
+            },
+            {
+                "ticker": "ULVR.L",
+                "name": "Unilever PLC",
+                "sector": "Consumer Defensive",
+                "trailing_pe": 22.0,
+                "price_to_book": 5.0,
+                "dividend_yield": 0.03,
+                "free_cashflow": 40,
+                "market_cap": 1000,
+                "enterprise_value": 1100,
+                "ebitda": 80,
+                "return_on_equity": 0.12,
+            },
+            {
+                "ticker": "DGE.L",
+                "name": "Diageo plc",
+                "sector": "Consumer Defensive",
+                "trailing_pe": 25.0,
+                "price_to_book": 6.0,
+                "dividend_yield": 0.025,
+                "free_cashflow": 30,
+                "market_cap": 1000,
+                "enterprise_value": 1150,
+                "ebitda": 70,
+                "return_on_equity": 0.10,
+            },
+            {
+                "ticker": "ABF.L",
+                "name": "Associated British Foods",
+                "sector": "Consumer Defensive",
+                "trailing_pe": 28.0,
+                "price_to_book": 4.5,
+                "dividend_yield": 0.02,
+                "free_cashflow": 25,
+                "market_cap": 1000,
+                "enterprise_value": 1200,
+                "ebitda": 65,
+                "return_on_equity": 0.09,
+            },
+            {
+                "ticker": "SHEL.L",
+                "name": "Shell plc",
+                "sector": "Energy",
+                "trailing_pe": 6.0,
+                "price_to_book": 1.0,
+                "dividend_yield": 0.07,
+                "free_cashflow": 120,
+                "market_cap": 1000,
+                "enterprise_value": 900,
+                "ebitda": 180,
+                "return_on_equity": 0.18,
+            },
+        ]
+    )
 
 
 def test_resolve_scoring_sector_remaps_aep_and_plantation_names():
@@ -326,7 +339,10 @@ def test_resolve_scoring_sector_remaps_aep_and_plantation_names():
     assert resolve_scoring_sector("XYZ.L", "Consumer Defensive", "Palm Oil Holdings Ltd") == (
         AGRICULTURE_COMMODITIES_SECTOR
     )
-    assert resolve_scoring_sector("XYZ.L", "Consumer Defensive", "Unilever PLC") == "Consumer Defensive"
+    assert (
+        resolve_scoring_sector("XYZ.L", "Consumer Defensive", "Unilever PLC")
+        == "Consumer Defensive"
+    )
     assert resolve_scoring_sector("XYZ.L", "Energy", "Palm Oil Holdings Ltd") == "Energy"
 
 
@@ -336,7 +352,10 @@ def test_apply_sector_overrides_changes_sector_composite_score():
     aep_before = float(before.loc[before["ticker"] == "AEP.L", "sector_composite_score"].iloc[0])
 
     overridden = apply_sector_overrides(universe)
-    assert overridden.loc[overridden["ticker"] == "AEP.L", "sector"].iloc[0] == AGRICULTURE_COMMODITIES_SECTOR
+    assert (
+        overridden.loc[overridden["ticker"] == "AEP.L", "sector"].iloc[0]
+        == AGRICULTURE_COMMODITIES_SECTOR
+    )
 
     after = add_sector_scores(overridden)
     aep_after = float(after.loc[after["ticker"] == "AEP.L", "sector_composite_score"].iloc[0])
@@ -346,26 +365,30 @@ def test_apply_sector_overrides_changes_sector_composite_score():
 
 
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
-    signals = pd.DataFrame([
-        {
-            "ticker": "PHAR.L",
-            "name": "Pharma Weak Ltd",
-            "sector": "Healthcare",
-            "signal": "strong_buy",
-            "free_cashflow": -80.0,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "PHAR.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": False,
-            "score": 4 / 9,
-            "reasons": "['F-Score=4/9']",
-            "failed_criteria": "['F-Score 4/9 below 7']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "name": "Pharma Weak Ltd",
+                "sector": "Healthcare",
+                "signal": "strong_buy",
+                "free_cashflow": -80.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 4 / 9,
+                "reasons": "['F-Score=4/9']",
+                "failed_criteria": "['F-Score 4/9 below 7']",
+            },
+        ]
+    )
 
     enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
 
@@ -375,28 +398,32 @@ def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
 
 
 def test_enrich_signals_with_healthcare_overlay_after_research():
-    signals = pd.DataFrame([
-        {
-            "ticker": "PHAR.L",
-            "name": "Pharma Weak Ltd",
-            "sector": "Healthcare",
-            "signal": "strong_buy",
-            "free_cashflow": -80.0,
-            "adjusted_signal": "strong_buy",
-            "research_verdict": "accumulate",
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "PHAR.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": False,
-            "score": 2 / 9,
-            "reasons": "['F-Score=2/9']",
-            "failed_criteria": "['F-Score 2/9 below 7']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "name": "Pharma Weak Ltd",
+                "sector": "Healthcare",
+                "signal": "strong_buy",
+                "free_cashflow": -80.0,
+                "adjusted_signal": "strong_buy",
+                "research_verdict": "accumulate",
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 2 / 9,
+                "reasons": "['F-Score=2/9']",
+                "failed_criteria": "['F-Score 2/9 below 7']",
+            },
+        ]
+    )
 
     enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
 
@@ -405,28 +432,32 @@ def test_enrich_signals_with_healthcare_overlay_after_research():
 
 
 def test_enrich_signals_with_cash_conversion_overlay_caps_adjusted_signal():
-    signals = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "name": "Hikma Pharmaceuticals PLC",
-            "sector": "Health Care",
-            "signal": "strong_buy",
-            "free_cashflow": -66.1,
-            "shares_outstanding": 240_000_000,
-            "shares_outstanding_prev": 245_000_000,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "model_id": "dividend_growth",
-            "model_name": "Dividend Growth",
-            "passed": True,
-            "score": 0.8,
-            "reasons": "['dividend payer: yield=3.9%']",
-            "failed_criteria": "[]",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "name": "Hikma Pharmaceuticals PLC",
+                "sector": "Health Care",
+                "signal": "strong_buy",
+                "free_cashflow": -66.1,
+                "shares_outstanding": 240_000_000,
+                "shares_outstanding_prev": 245_000_000,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "dividend_growth",
+                "model_name": "Dividend Growth",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "['dividend payer: yield=3.9%']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
 
     enriched = enrich_signals_with_cash_conversion_overlay(signals, model_results)
 
@@ -436,37 +467,41 @@ def test_enrich_signals_with_cash_conversion_overlay_caps_adjusted_signal():
 
 
 def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
-    signals = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "name": "Hikma Pharmaceuticals PLC",
-            "sector": "Health Care",
-            "signal": "strong_buy",
-            "free_cashflow": -66.1,
-            "shares_outstanding": 240_000_000,
-            "shares_outstanding_prev": 245_000_000,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "model_id": "dividend_growth",
-            "model_name": "Dividend Growth",
-            "passed": True,
-            "score": 0.8,
-            "reasons": "['dividend payer: yield=3.9%']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "HIK.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": False,
-            "score": 6 / 9,
-            "reasons": "['F-Score=6/9']",
-            "failed_criteria": "['F-Score 6/9 below 7']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "name": "Hikma Pharmaceuticals PLC",
+                "sector": "Health Care",
+                "signal": "strong_buy",
+                "free_cashflow": -66.1,
+                "shares_outstanding": 240_000_000,
+                "shares_outstanding_prev": 245_000_000,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "dividend_growth",
+                "model_name": "Dividend Growth",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "['dividend payer: yield=3.9%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "HIK.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 6 / 9,
+                "reasons": "['F-Score=6/9']",
+                "failed_criteria": "['F-Score 6/9 below 7']",
+            },
+        ]
+    )
 
     enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
     enriched = enrich_signals_with_cash_conversion_overlay(enriched, model_results)
@@ -478,29 +513,33 @@ def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
 
 def test_enrich_signals_with_cash_conversion_overlay_uses_canonical_fcf():
     """Do not cap when canonical FCF is positive even if preserved screen TTM is negative."""
-    signals = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "name": "Hikma Pharmaceuticals PLC",
-            "sector": "Health Care",
-            "signal": "strong_buy",
-            "free_cashflow": 119_000_000.0,
-            "free_cashflow_screen_ttm": -66_125_000.0,
-            "shares_outstanding": 240_000_000,
-            "shares_outstanding_prev": 245_000_000,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "model_id": "dividend_growth",
-            "model_name": "Dividend Growth",
-            "passed": True,
-            "score": 0.8,
-            "reasons": "['dividend payer: yield=3.9%']",
-            "failed_criteria": "[]",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "name": "Hikma Pharmaceuticals PLC",
+                "sector": "Health Care",
+                "signal": "strong_buy",
+                "free_cashflow": 119_000_000.0,
+                "free_cashflow_screen_ttm": -66_125_000.0,
+                "shares_outstanding": 240_000_000,
+                "shares_outstanding_prev": 245_000_000,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "dividend_growth",
+                "model_name": "Dividend Growth",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "['dividend payer: yield=3.9%']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
 
     enriched = enrich_signals_with_cash_conversion_overlay(signals, model_results)
 
@@ -524,10 +563,16 @@ def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Pat
     }
     (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
 
-    universe = pd.DataFrame([
-        {"ticker": "HIK.L", "name": "Hikma Pharmaceuticals PLC", "free_cashflow": -66_125_000.0},
-        {"ticker": "OTHER.L", "name": "Other plc", "free_cashflow": 10_000_000.0},
-    ])
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "name": "Hikma Pharmaceuticals PLC",
+                "free_cashflow": -66_125_000.0,
+            },
+            {"ticker": "OTHER.L", "name": "Other plc", "free_cashflow": 10_000_000.0},
+        ]
+    )
 
     enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
     hik = enriched[enriched["ticker"] == "HIK.L"].iloc[0]
@@ -554,15 +599,17 @@ def test_enrich_universe_with_filing_metrics_fills_ocf_and_adjusted_earnings(tmp
     }
     (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
 
-    universe = pd.DataFrame([
-        {
-            "ticker": "MEGP.L",
-            "name": "ME Group International plc",
-            "operating_cashflow": None,
-            "free_cashflow": 15_565_750.0,
-            "net_income": 56_572_000.0,
-        }
-    ])
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "name": "ME Group International plc",
+                "operating_cashflow": None,
+                "free_cashflow": 15_565_750.0,
+                "net_income": 56_572_000.0,
+            }
+        ]
+    )
 
     enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
     row = enriched.iloc[0]
@@ -575,43 +622,47 @@ def test_enrich_universe_with_filing_metrics_fills_ocf_and_adjusted_earnings(tmp
 
 
 def test_enrich_signals_with_dividend_yield_overlay_caps_megp_like_profile():
-    signals = pd.DataFrame([
-        {
-            "ticker": "MEGP.L",
-            "name": "ME Group International plc",
-            "sector": "Industrials",
-            "signal": "strong_buy",
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "MEGP.L",
-            "model_id": "high_dividend",
-            "model_name": "High Dividend Yield",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "['yield=7.6%']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "MEGP.L",
-            "model_id": "fcf_yield",
-            "model_name": "FCF Yield",
-            "passed": False,
-            "score": 0.3,
-            "reasons": "[]",
-            "failed_criteria": "['FCF yield 3.7% below 5%']",
-        },
-        {
-            "ticker": "MEGP.L",
-            "model_id": "earnings_quality",
-            "model_name": "Earnings Quality",
-            "passed": False,
-            "score": 0.5,
-            "reasons": "[]",
-            "failed_criteria": "['weak free-cash conversion']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "name": "ME Group International plc",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['yield=7.6%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "MEGP.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": False,
+                "score": 0.3,
+                "reasons": "[]",
+                "failed_criteria": "['FCF yield 3.7% below 5%']",
+            },
+            {
+                "ticker": "MEGP.L",
+                "model_id": "earnings_quality",
+                "model_name": "Earnings Quality",
+                "passed": False,
+                "score": 0.5,
+                "reasons": "[]",
+                "failed_criteria": "['weak free-cash conversion']",
+            },
+        ]
+    )
 
     enriched = enrich_signals_with_dividend_yield_overlay(signals, model_results)
 
@@ -676,18 +727,20 @@ def test_enrich_universe_with_filing_metrics_extracts_interim_eps_decline(tmp_pa
 
 
 def test_enrich_signals_with_interim_quality_overlay_caps_megp_like_profile():
-    signals = pd.DataFrame([
-        {
-            "ticker": "MEGP.L",
-            "name": "ME Group International plc",
-            "sector": "Industrials",
-            "signal": "strong_buy",
-            "passed_families": "cheapness,quality,dividend,garp,risk",
-            "free_cashflow": 25_153_000.0,
-            "interim_eps_decline_pct": 0.039,
-            "dividends_paid": 29_769_000.0,
-        }
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "name": "ME Group International plc",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "free_cashflow": 25_153_000.0,
+                "interim_eps_decline_pct": 0.039,
+                "dividends_paid": 29_769_000.0,
+            }
+        ]
+    )
     model_results = pd.DataFrame([])
 
     enriched = enrich_signals_with_interim_quality_overlay(signals, model_results)
@@ -698,15 +751,17 @@ def test_enrich_signals_with_interim_quality_overlay_caps_megp_like_profile():
 
 
 def test_enrich_signals_with_interim_quality_overlay_not_triggered_without_interim_decline():
-    signals = pd.DataFrame([
-        {
-            "ticker": "MEGP.L",
-            "signal": "strong_buy",
-            "passed_families": "cheapness,quality,dividend,garp,risk",
-            "free_cashflow": 25_153_000.0,
-            "dividends_paid": 29_769_000.0,
-        }
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "free_cashflow": 25_153_000.0,
+                "dividends_paid": 29_769_000.0,
+            }
+        ]
+    )
 
     enriched = enrich_signals_with_interim_quality_overlay(signals, pd.DataFrame())
 
@@ -748,26 +803,30 @@ def test_enrich_signals_with_fcf_basis_overlay_caps_yield_inflated_strong_buy(tm
         encoding="utf-8",
     )
 
-    signals = pd.DataFrame([
-        {
-            "ticker": "FGP.L",
-            "signal": "strong_buy",
-            "conviction_score": 0.6,
-            "free_cashflow": 362_600_000.0,
-            "free_cashflow_screen_ttm": 302_812_512.0,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "FGP.L",
-            "model_id": "fcf_yield",
-            "model_name": "FCF Yield",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "['FCF yield=37.3%']",
-            "failed_criteria": "[]",
-        }
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.6,
+                "free_cashflow": 362_600_000.0,
+                "free_cashflow_screen_ttm": 302_812_512.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['FCF yield=37.3%']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
 
     enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
 
@@ -777,7 +836,9 @@ def test_enrich_signals_with_fcf_basis_overlay_caps_yield_inflated_strong_buy(tm
 
 
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
-    assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(0.16)
+    assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
+        0.16
+    )
 
 
 def test_enrich_universe_with_filing_metrics_extracts_adjusted_eps_growth(tmp_path: Path):
@@ -810,28 +871,32 @@ def test_enrich_universe_with_filing_metrics_extracts_adjusted_eps_growth(tmp_pa
 
 
 def test_enrich_signals_with_earnings_basis_overlay_caps_fgp_like_profile():
-    signals = pd.DataFrame([
-        {
-            "ticker": "FGP.L",
-            "name": "FirstGroup plc",
-            "sector": "Industrials",
-            "signal": "strong_buy",
-            "conviction_score": 0.6,
-            "earnings_growth": -0.059,
-            "adjusted_eps_growth_pct": 0.16,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "FGP.L",
-            "model_id": "neff_pegy",
-            "model_name": "Neff PEGY",
-            "passed": True,
-            "score": 0.85,
-            "reasons": "['PEGY=0.72']",
-            "failed_criteria": "[]",
-        }
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "name": "FirstGroup plc",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "conviction_score": 0.6,
+                "earnings_growth": -0.059,
+                "adjusted_eps_growth_pct": 0.16,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "model_id": "neff_pegy",
+                "model_name": "Neff PEGY",
+                "passed": True,
+                "score": 0.85,
+                "reasons": "['PEGY=0.72']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
 
     enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
 
@@ -842,26 +907,30 @@ def test_enrich_signals_with_earnings_basis_overlay_caps_fgp_like_profile():
 
 
 def test_enrich_signals_with_earnings_basis_overlay_not_triggered_without_sign_divergence():
-    signals = pd.DataFrame([
-        {
-            "ticker": "FGP.L",
-            "signal": "strong_buy",
-            "conviction_score": 0.6,
-            "earnings_growth": 0.05,
-            "adjusted_eps_growth_pct": 0.16,
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "FGP.L",
-            "model_id": "neff_pegy",
-            "model_name": "Neff PEGY",
-            "passed": True,
-            "score": 0.85,
-            "reasons": "[]",
-            "failed_criteria": "[]",
-        }
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.6,
+                "earnings_growth": 0.05,
+                "adjusted_eps_growth_pct": 0.16,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "model_id": "neff_pegy",
+                "model_name": "Neff PEGY",
+                "passed": True,
+                "score": 0.85,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
 
     enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
 

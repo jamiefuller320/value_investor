@@ -10,13 +10,13 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
+from value_investor.ci_fix_tasks import task_eligible_for_auto_merge
 from value_investor.engineering_queue import is_engineering_branch, task_id_from_branch
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     find_engineering_task,
     validate_engineering_pr_paths,
 )
-from value_investor.ci_fix_tasks import task_eligible_for_auto_merge
 
 GITHUB_API_VERSION = "2022-11-28"
 
@@ -104,7 +104,20 @@ def find_open_pr_for_branch(branch: str, *, repo: str | None = None) -> dict[str
     repo = repo or _github_repo()
     if not repo:
         return None
-    result = _run_gh(["pr", "list", "--head", branch, "--base", "main", "--state", "open", "--json", "number,title,isDraft,headRefName"])
+    result = _run_gh(
+        [
+            "pr",
+            "list",
+            "--head",
+            branch,
+            "--base",
+            "main",
+            "--state",
+            "open",
+            "--json",
+            "number,title,isDraft,headRefName",
+        ]
+    )
     if result.returncode != 0:
         return None
     rows = json.loads(result.stdout or "[]")
@@ -128,7 +141,8 @@ def pr_checks_successful(pr_number: int, *, repo: str | None = None) -> tuple[bo
     failed = [
         row
         for row in checks
-        if str(row.get("conclusion") or row.get("state") or "").lower() not in {"success", "skipped", "neutral"}
+        if str(row.get("conclusion") or row.get("state") or "").lower()
+        not in {"success", "skipped", "neutral"}
     ]
     if failed:
         names = ", ".join(str(row.get("name") or "") for row in failed[:3])

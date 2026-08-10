@@ -124,8 +124,7 @@ def summarize_track_churn_health(
     full_exits = [
         trade
         for trade in window_trades
-        if trade.get("side") == "sell"
-        and "trim" not in str(trade.get("note") or "").lower()
+        if trade.get("side") == "sell" and "trim" not in str(trade.get("note") or "").lower()
     ]
     trims = [
         trade

@@ -13,12 +13,26 @@ def _snapshot(run_at: str, ticker: str, signal: str, entry_price: float, exit_pr
         RunSnapshot(
             run_at=run_at,
             prices={ticker: entry_price, "^FTSE": 1000},
-            signals=[{"ticker": ticker, "signal": signal, "conviction_score": 0.8, "data_quality_score": 0.9}],
+            signals=[
+                {
+                    "ticker": ticker,
+                    "signal": signal,
+                    "conviction_score": 0.8,
+                    "data_quality_score": 0.9,
+                }
+            ],
         ),
         RunSnapshot(
             run_at=run_at.replace("T07:", "T08:") if "T07:" in run_at else run_at + "+1w",
             prices={ticker: exit_price, "^FTSE": 1010},
-            signals=[{"ticker": ticker, "signal": signal, "conviction_score": 0.8, "data_quality_score": 0.9}],
+            signals=[
+                {
+                    "ticker": ticker,
+                    "signal": signal,
+                    "conviction_score": 0.8,
+                    "data_quality_score": 0.9,
+                }
+            ],
         ),
     )
 
@@ -27,12 +41,26 @@ def test_compute_backtest_with_two_snapshots():
     entry = RunSnapshot(
         run_at="2026-06-01T07:00:00+00:00",
         prices={"AAA.L": 100.0, "^FTSE": 8000.0},
-        signals=[{"ticker": "AAA.L", "signal": "strong_buy", "conviction_score": 0.8, "data_quality_score": 0.9}],
+        signals=[
+            {
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.8,
+                "data_quality_score": 0.9,
+            }
+        ],
     )
     exit_snap = RunSnapshot(
         run_at="2026-06-15T07:00:00+00:00",
         prices={"AAA.L": 110.0, "^FTSE": 8040.0},
-        signals=[{"ticker": "AAA.L", "signal": "strong_buy", "conviction_score": 0.85, "data_quality_score": 0.9}],
+        signals=[
+            {
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.85,
+                "data_quality_score": 0.9,
+            }
+        ],
     )
 
     summary = compute_backtest([entry, exit_snap])

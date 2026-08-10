@@ -11,8 +11,8 @@ from value_investor.data_backup_cli import main as backup_main
 from value_investor.data_library_cli import main as library_main
 from value_investor.deferred_ideas_cli import main as defer_main
 from value_investor.engineering_cli import main as engineering_main
-from value_investor.ingest_loop_cli import main as ingest_main
 from value_investor.ingest_loop import IngestLoopResult
+from value_investor.ingest_loop_cli import main as ingest_main
 from value_investor.ops_monitor import OpsMonitorReport
 from value_investor.ops_monitor_cli import main as ops_main
 
@@ -30,15 +30,24 @@ def test_engineering_cli_accepts_json_before_subcommand():
 
 
 def test_engineering_cli_accepts_shared_flags_after_subcommand():
-    with patch("value_investor.engineering_cli.load_engineering_tasks", return_value={"tasks": []}) as mock_load:
+    with patch(
+        "value_investor.engineering_cli.load_engineering_tasks", return_value={"tasks": []}
+    ) as mock_load:
         with patch("sys.stdout", StringIO()):
-            assert engineering_main(["list", "--json", "--tasks-path", "docs/data/engineering_tasks.json"]) == 0
+            assert (
+                engineering_main(
+                    ["list", "--json", "--tasks-path", "docs/data/engineering_tasks.json"]
+                )
+                == 0
+            )
         mock_load.assert_called_once()
         assert mock_load.call_args.args[0] == Path("docs/data/engineering_tasks.json")
 
 
 def test_library_cli_accepts_root_after_subcommand():
-    with patch("value_investor.data_library_cli.library_status", return_value={"markets": []}) as mock_status:
+    with patch(
+        "value_investor.data_library_cli.library_status", return_value={"markets": []}
+    ) as mock_status:
         with patch("sys.stdout", StringIO()):
             assert library_main(["status", "--json", "--root", "docs/data/library"]) == 0
         assert mock_status.call_args.args[0] == Path("docs/data/library")

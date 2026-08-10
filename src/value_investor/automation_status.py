@@ -275,8 +275,7 @@ def _timeline_events(
                 "kind": "graduated_market",
                 "title": f"Graduated market: {market.get('market')}",
                 "detail": (
-                    f"coverage={market.get('coverage_pct')} "
-                    f"stale={market.get('stale_pct')}"
+                    f"coverage={market.get('coverage_pct')} stale={market.get('stale_pct')}"
                 ),
             }
         )
@@ -328,9 +327,7 @@ def _timeline_events(
         )
 
     if paper_last and (paper_last.get("generated_at") or paper_last.get("acted") is not None):
-        at = paper_last.get("generated_at") or (
-            (paper_last.get("gate") or {}).get("local_time")
-        )
+        at = paper_last.get("generated_at") or ((paper_last.get("gate") or {}).get("local_time"))
         if at:
             events.append(
                 {
@@ -342,8 +339,7 @@ def _timeline_events(
                         else "Paper automation checked (no action)"
                     ),
                     "detail": (
-                        paper_last.get("note")
-                        or f"trades={paper_last.get('trade_count', 0)}"
+                        paper_last.get("note") or f"trades={paper_last.get('trade_count', 0)}"
                     ),
                 }
             )
@@ -402,9 +398,7 @@ def build_automation_status(
     paper_config_raw = _safe_read(paper_root / "config.json")
     paper_config = paper_config_raw if isinstance(paper_config_raw, dict) else {}
     paper_last_raw = _safe_read(paper_root / "last_run.json")
-    paper_last = _slim_paper_last_run(
-        paper_last_raw if isinstance(paper_last_raw, dict) else None
-    )
+    paper_last = _slim_paper_last_run(paper_last_raw if isinstance(paper_last_raw, dict) else None)
 
     from value_investor.agent_model_policy import weekly_ops_budget_status
     from value_investor.engineering_queue import build_engineering_queue_dashboard
@@ -471,15 +465,11 @@ def build_automation_status(
                 "spend_since_checkpoint_usd": ladder.get("spend_since_checkpoint_usd"),
                 "plan_refresh_day_of_month": budget.get("plan_refresh_day_of_month"),
                 "surplus_day_before_refresh": budget.get("surplus_day_before_refresh"),
-                "estimated_spend_usd_this_week": budget_status.get(
-                    "estimated_spend_usd_this_week"
-                ),
+                "estimated_spend_usd_this_week": budget_status.get("estimated_spend_usd_this_week"),
                 "estimated_spend_weekly_ops_usd_this_week": budget_status.get(
                     "estimated_spend_weekly_ops_usd_this_week"
                 ),
-                "estimated_spend_usd_this_cycle": budget.get(
-                    "estimated_spend_usd_this_cycle"
-                ),
+                "estimated_spend_usd_this_cycle": budget.get("estimated_spend_usd_this_cycle"),
                 "week_id": budget.get("week_id"),
                 "cycle_id": budget.get("cycle_id"),
             },
@@ -519,8 +509,8 @@ def build_automation_status(
         "last_ladder": _slim_ladder(last_ladder),
         "milestones": milestones,
         "paper_last_run": paper_last,
-        "graduation_history": list((focus_grad.get("history") or [])),
-        "model_review_history": list((model_review.get("history") or [])),
+        "graduation_history": list(focus_grad.get("history") or []),
+        "model_review_history": list(model_review.get("history") or []),
     }
 
     return {

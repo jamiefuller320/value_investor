@@ -8,21 +8,18 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.research.ingest import (
-    fetch_google_news_rss,
-    fetch_google_news_rss_query,
-    merge_news_articles,
-)
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
     period_body_coverage,
-    refetch_companies_house_filing_bodies,
-    refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
-    refetch_ticker_rns_api_filing_bodies,
     refetch_uk_primary_filing_bodies,
+)
+from value_investor.research.ingest import (
+    fetch_google_news_rss,
+    fetch_google_news_rss_query,
+    merge_news_articles,
 )
 from value_investor.storage import read_json, resolve_json_path, write_json
 
@@ -162,9 +159,7 @@ def _market_bucket(market: str | None, ticker: str) -> str:
         return "asx"
     if mid in {"tsx60", "tsx", "canada"} or ticker.upper().endswith(".TO"):
         return "tsx"
-    if mid in {"hang_seng", "sti", "hk", "sgx", "asia"} or ticker.upper().endswith(
-        (".HK", ".SI")
-    ):
+    if mid in {"hang_seng", "sti", "hk", "sgx", "asia"} or ticker.upper().endswith((".HK", ".SI")):
         return "asia"
     return "default"
 
@@ -199,7 +194,7 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
     news_path = resolve_json_path(sources_dir / "news_manifest.json")
     if news_path is not None:
         try:
-            news_count = len((read_json(news_path).get("articles") or []))
+            news_count = len(read_json(news_path).get("articles") or [])
         except (OSError, ValueError, TypeError):
             news_count = 0
 
@@ -208,7 +203,8 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         "filings_bodies": has_filing_bodies,
         "yahoo_financials": resolve_json_path(sources_dir / "financials_annual.json") is not None,
         "news_manifest": news_count > 0,
-        "screening_snapshot": resolve_json_path(sources_dir / "screening_snapshot.json") is not None,
+        "screening_snapshot": resolve_json_path(sources_dir / "screening_snapshot.json")
+        is not None,
         "macro_context": resolve_json_path(sources_dir / "macro_context.json") is not None,
         "alternate_news": resolve_json_path(sources_dir / "alternate_news.json") is not None,
     }
@@ -280,9 +276,7 @@ def fetch_alternate_gap_fill_news(
 
     locale = resolve_news_locale(market, ticker)
     symbol = ticker.replace(".L", "")
-    base = fetch_google_news_rss(
-        company_name, ticker, max_items=max_items_per_query, market=market
-    )
+    base = fetch_google_news_rss(company_name, ticker, max_items=max_items_per_query, market=market)
     themed_queries = [
         f'"{company_name}" ("annual report" OR "full year" OR "interim results")',
         f'"{company_name}" (pension OR covenant OR "going concern" OR "working capital")',
@@ -350,9 +344,7 @@ def prepare_gap_fill_source_pack(
         if int(ir_refetch.get("fetched") or 0) > 0:
             body_refetch = ir_refetch
 
-    alternate_articles = fetch_alternate_gap_fill_news(
-        company_name, ticker, market=market
-    )
+    alternate_articles = fetch_alternate_gap_fill_news(company_name, ticker, market=market)
     alternate_path = sources_dir / "alternate_news.json"
     write_json(
         alternate_path,
@@ -390,7 +382,9 @@ def prepare_gap_fill_source_pack(
         {
             "ticker": ticker,
             "updated_at": datetime.now(UTC).isoformat(),
-            "articles": sorted(merged, key=lambda item: item.get("published_at") or "", reverse=True),
+            "articles": sorted(
+                merged, key=lambda item: item.get("published_at") or "", reverse=True
+            ),
         },
         compact=True,
         compress=False,
@@ -441,10 +435,10 @@ def execute_planned_alternate_sources(
     max_sources: int = 3,
 ) -> dict[str, Any]:
     """
-    Execute top-ranked alternate source fetchers before a gap-fill retry.
+      Execute top-ranked alternate source fetchers before a gap-fill retry.
 
-    Re-ingests filings (Investegate/CH/SEC/IR) then refetches bodies. Stops
-  when new bodies are downloaded or the planned list is exhausted.
+      Re-ingests filings (Investegate/CH/SEC/IR) then refetches bodies. Stops
+    when new bodies are downloaded or the planned list is exhausted.
     """
     from value_investor.research.filings import (
         ingest_filings,

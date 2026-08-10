@@ -5,20 +5,25 @@ from __future__ import annotations
 import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from unittest.mock import patch
 
 from value_investor.engineering_recovery import (
     housekeep_parked_tasks,
-    recover_engineering_queue,
     record_agent_no_diff_run,
+    recover_engineering_queue,
     retry_failed_tasks,
     summarize_parked_tasks,
     summarize_parked_tasks_needing_attention,
 )
-from value_investor.engineering_tasks import EngineeringTask, load_engineering_tasks, mark_task_status
+from value_investor.engineering_tasks import (
+    EngineeringTask,
+    load_engineering_tasks,
+    mark_task_status,
+)
 
 
-def _task(task_id: str, *, status: str = "open", title: str = "Build CH PDF fetch") -> EngineeringTask:
+def _task(
+    task_id: str, *, status: str = "open", title: str = "Build CH PDF fetch"
+) -> EngineeringTask:
     return EngineeringTask(
         id=task_id,
         area="ingest",

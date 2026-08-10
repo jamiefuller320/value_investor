@@ -116,7 +116,9 @@ def build_project_progress(
         "screen_company_count": int(meta.get("company_count") or 0),
         "strong_buy_count": int(meta.get("strong_buy_count") or 0),
         "screen_run_at": latest.get("run_at"),
-        "library_graduated_count": int(library.get("graduated_count") or len(library.get("graduated_markets") or [])),
+        "library_graduated_count": int(
+            library.get("graduated_count") or len(library.get("graduated_markets") or [])
+        ),
         "library_focus_market": library.get("focus_market"),
         "decision_review_applied": bool(ai_review.get("applied") or rules_review.get("applied")),
         "ai_excess_after_costs": ai_metrics.get("excess_after_costs"),
@@ -186,7 +188,9 @@ def build_project_progress(
                     f"Published screen bundle dated {screen_run_at[:10]} — confirm Sunday refresh."
                 )
         except ValueError:
-            gaps.append(f"Published screen bundle dated {str(screen_run_at)[:10]} — confirm Sunday refresh.")
+            gaps.append(
+                f"Published screen bundle dated {str(screen_run_at)[:10]} — confirm Sunday refresh."
+            )
 
     next_actions = [
         "Let the learning loop accumulate before adding tracks or knobs.",

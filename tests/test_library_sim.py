@@ -38,10 +38,7 @@ def _write_screen_run(
         ]
     )
     universe = pd.DataFrame(
-        [
-            {"ticker": ticker, "last_price": price}
-            for ticker, price, _signal in tickers
-        ]
+        [{"ticker": ticker, "last_price": price} for ticker, price, _signal in tickers]
     )
     signals.to_csv(screen_dir / f"signals_{stamp}.csv", index=False)
     universe.to_csv(screen_dir / f"universe_{stamp}.csv", index=False)
@@ -62,12 +59,18 @@ def test_enrich_signals_with_library_research_pit(tmp_path: Path):
     research_dir = tmp_path / "research" / "AAA"
     research_dir.mkdir(parents=True)
     (research_dir / "research.json").write_text(
-        '{"ticker":"AAA","created_at":"2026-07-01T12:00:00+00:00",'
-        '"research_verdict":"caution"}',
+        '{"ticker":"AAA","created_at":"2026-07-01T12:00:00+00:00","research_verdict":"caution"}',
         encoding="utf-8",
     )
     signals = pd.DataFrame(
-        [{"ticker": "AAA", "signal": "strong_buy", "conviction_score": 0.9, "data_quality_score": 1.0}]
+        [
+            {
+                "ticker": "AAA",
+                "signal": "strong_buy",
+                "conviction_score": 0.9,
+                "data_quality_score": 1.0,
+            }
+        ]
     )
     run_at = datetime(2026, 7, 2, 12, 0, tzinfo=UTC)
     enriched = enrich_signals_with_library_research(

@@ -14,7 +14,6 @@ from value_investor.paper_automation import (
 )
 from value_investor.paper_fund import PaperFund
 
-
 LONDON = ZoneInfo("Europe/London")
 
 
@@ -184,9 +183,7 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     )
     ai_fund = PaperFund.from_dict(
         __import__("json").loads(
-            (tmp_path / "auto" / "ai_judgment" / "automated_fund.json").read_text(
-                encoding="utf-8"
-            )
+            (tmp_path / "auto" / "ai_judgment" / "automated_fund.json").read_text(encoding="utf-8")
         )
     )
     # Rules may hold both buy-tier names; AI judgment requires research accumulate.

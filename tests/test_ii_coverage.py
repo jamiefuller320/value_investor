@@ -72,11 +72,15 @@ def test_classify_online_phone_and_unknown(tmp_path: Path):
     assert de["tradable_on_ii"] is True
     assert de["ii_exchange"] == "Xetra"
 
-    se = classify_ticker("VOLV-B.ST", market_id="euro_stoxx50", policy=policy, exceptions=exceptions)
+    se = classify_ticker(
+        "VOLV-B.ST", market_id="euro_stoxx50", policy=policy, exceptions=exceptions
+    )
     assert se["tradable_on_ii"] is False
     assert se["deal_channel"] == "phone"
 
-    he = classify_ticker("NDA-FI.HE", market_id="euro_stoxx50", policy=policy, exceptions=exceptions)
+    he = classify_ticker(
+        "NDA-FI.HE", market_id="euro_stoxx50", policy=policy, exceptions=exceptions
+    )
     assert he["tradable_on_ii"] is False
     assert he["basis"] == "unknown_venue"
 

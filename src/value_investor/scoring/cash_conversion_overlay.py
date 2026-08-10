@@ -49,7 +49,10 @@ def active_buyback_detected(
 ) -> bool:
     """Detect repurchases via declining share count or Piotroski non-dilution."""
     if shares_outstanding is not None and shares_outstanding_prev is not None:
-        if float(shares_outstanding) <= float(shares_outstanding_prev) * SHARE_COUNT_STABLE_TOLERANCE:
+        if (
+            float(shares_outstanding)
+            <= float(shares_outstanding_prev) * SHARE_COUNT_STABLE_TOLERANCE
+        ):
             return True
 
     if ticker_models.empty or "model_id" not in ticker_models.columns:
@@ -148,7 +151,8 @@ def enrich_signals_with_cash_conversion_overlay(
         shares_prev = row.get("shares_outstanding_prev")
         shares_outstanding_prev = (
             float(shares_prev)
-            if shares_prev is not None and not (isinstance(shares_prev, float) and pd.isna(shares_prev))
+            if shares_prev is not None
+            and not (isinstance(shares_prev, float) and pd.isna(shares_prev))
             else None
         )
 

@@ -10,8 +10,9 @@ from __future__ import annotations
 import csv
 import logging
 import xml.etree.ElementTree as ET
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from value_investor.ii_coverage import ii_coverage_root, load_ii_policy
 from value_investor.storage import write_json
@@ -82,12 +83,7 @@ def iter_firds_csv_rows(path: Path) -> Iterable[dict[str, str]]:
                 or row.get("Id")
                 or row.get("InstrumentIdentificationCode")
             )
-            mic = (
-                row.get("TradingVenue")
-                or row.get("MIC")
-                or row.get("mic")
-                or row.get("Venue")
-            )
+            mic = row.get("TradingVenue") or row.get("MIC") or row.get("mic") or row.get("Venue")
             name = row.get("FullName") or row.get("Name") or row.get("full_name") or ""
             if isin and mic:
                 yield {
@@ -145,9 +141,7 @@ def write_firds_filter_result(
         "source_path": str(source_path) if source_path else None,
         "mics": sorted(ii_allowed_mics()),
         "row_count": len(rows),
-        "note": (
-            "FIRDS rows on II-advertised online MICs. Venue admission ≠ II order acceptance."
-        ),
+        "note": ("FIRDS rows on II-advertised online MICs. Venue admission ≠ II order acceptance."),
         "rows": rows,
     }
     path = ii_root / "firds_ii_mics.json"

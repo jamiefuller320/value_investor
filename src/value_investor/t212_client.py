@@ -51,14 +51,13 @@ def t212_credentials(
     secret = (api_secret or os.environ.get("TRADING212_API_SECRET") or "").strip()
     if not key or not secret:
         raise Trading212AuthError(
-            "Set TRADING212_API_KEY and TRADING212_API_SECRET "
-            "(API key needs the metadata scope)."
+            "Set TRADING212_API_KEY and TRADING212_API_SECRET (API key needs the metadata scope)."
         )
     return key, secret
 
 
 def _auth_header(api_key: str, api_secret: str) -> str:
-    token = base64.b64encode(f"{api_key}:{api_secret}".encode("utf-8")).decode("ascii")
+    token = base64.b64encode(f"{api_key}:{api_secret}".encode()).decode("ascii")
     return f"Basic {token}"
 
 
@@ -96,9 +95,7 @@ def t212_request(
             raise Trading212AuthError(
                 f"Trading 212 auth failed ({exc.code}) for {path}: {body[:300]}"
             ) from exc
-        raise Trading212APIError(
-            f"Trading 212 HTTP {exc.code} for {path}: {body[:300]}"
-        ) from exc
+        raise Trading212APIError(f"Trading 212 HTTP {exc.code} for {path}: {body[:300]}") from exc
     except URLError as exc:
         raise Trading212APIError(f"Trading 212 network error for {path}: {exc}") from exc
 
@@ -126,9 +123,7 @@ def fetch_instruments(
         timeout=timeout,
     )
     if not isinstance(payload, list):
-        raise Trading212APIError(
-            f"Expected instrument list, got {type(payload).__name__}"
-        )
+        raise Trading212APIError(f"Expected instrument list, got {type(payload).__name__}")
     return [row for row in payload if isinstance(row, dict)]
 
 
@@ -148,7 +143,5 @@ def fetch_exchanges(
         timeout=timeout,
     )
     if not isinstance(payload, list):
-        raise Trading212APIError(
-            f"Expected exchanges list, got {type(payload).__name__}"
-        )
+        raise Trading212APIError(f"Expected exchanges list, got {type(payload).__name__}")
     return [row for row in payload if isinstance(row, dict)]

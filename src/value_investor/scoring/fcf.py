@@ -298,9 +298,7 @@ def load_latest_interim_filing_body(
         interim_rows = [
             row
             for row in payload.get("filings") or []
-            if isinstance(row, dict)
-            and row.get("period") == "interim"
-            and row.get("has_body")
+            if isinstance(row, dict) and row.get("period") == "interim" and row.get("has_body")
         ]
         if not interim_rows:
             continue
@@ -354,9 +352,7 @@ def _iter_filing_bodies(
         rows = [
             row
             for row in payload.get("filings") or []
-            if isinstance(row, dict)
-            and row.get("period") in periods
-            and row.get("has_body")
+            if isinstance(row, dict) and row.get("period") in periods and row.get("has_body")
         ]
         if not rows:
             continue
@@ -390,7 +386,11 @@ def extract_adjusted_eps_growth_for_ticker(
         if parsed is not None:
             return parsed
 
-    payload = financials if financials is not None else load_cached_financials(ticker, output_dir=output_dir)
+    payload = (
+        financials
+        if financials is not None
+        else load_cached_financials(ticker, output_dir=output_dir)
+    )
     if not payload:
         return None
     income_metrics = extract_income_metrics_from_annual_financials(payload)
@@ -414,7 +414,9 @@ def _financials_candidates(ticker: str, output_dir: Path | None = None) -> list[
     ticker = ticker.strip().upper()
     candidates: list[Path] = []
     if output_dir is not None:
-        candidates.append(Path(output_dir) / "research" / ticker / "sources" / "financials_annual.json")
+        candidates.append(
+            Path(output_dir) / "research" / ticker / "sources" / "financials_annual.json"
+        )
     for root in _RESEARCH_ROOTS:
         candidates.append(root / ticker / "sources" / "financials_annual.json")
     return candidates
@@ -430,7 +432,9 @@ def load_cached_financials(ticker: str, *, output_dir: Path | None = None) -> di
             payload = read_json(resolved)
         except (OSError, ValueError, TypeError):
             continue
-        if isinstance(payload, dict) and (payload.get("cash_flow") or payload.get("income_statement")):
+        if isinstance(payload, dict) and (
+            payload.get("cash_flow") or payload.get("income_statement")
+        ):
             return payload
     return None
 
@@ -489,7 +493,9 @@ def _parse_company_adjusted_amount(raw: str) -> float | None:
     return amount * 1_000_000.0
 
 
-def parse_company_adjusted_fcf(text: str, *, default_currency: str = "GBP") -> tuple[float | None, str | None]:
+def parse_company_adjusted_fcf(
+    text: str, *, default_currency: str = "GBP"
+) -> tuple[float | None, str | None]:
     """Parse management adjusted FCF (absolute value) and currency from filing prose."""
     if not text:
         return None, None

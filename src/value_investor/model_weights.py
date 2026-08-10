@@ -60,7 +60,9 @@ class ModelWeightState:
             learning_rate=float(data.get("learning_rate") or DEFAULT_LEARNING_RATE),
             updated_at=str(data.get("updated_at") or ""),
             note=str(data.get("note", "")),
-            model_samples={str(k): int(v) for k, v in dict(data.get("model_samples") or {}).items()},
+            model_samples={
+                str(k): int(v) for k, v in dict(data.get("model_samples") or {}).items()
+            },
         )
 
 
@@ -86,7 +88,9 @@ def load_model_weights(output_dir: Path) -> ModelWeightState:
         return ModelWeightState.from_dict(data)
     except (json.JSONDecodeError, TypeError, ValueError, OSError) as exc:
         logger.warning("Could not load model weights: %s", exc)
-        return ModelWeightState(weights=default_weights(), note="Invalid weights file; using defaults.")
+        return ModelWeightState(
+            weights=default_weights(), note="Invalid weights file; using defaults."
+        )
 
 
 def save_model_weights(output_dir: Path, state: ModelWeightState) -> Path:
@@ -168,7 +172,7 @@ def _pearson(xs: list[float], ys: list[float]) -> float | None:
         return None
     mean_x = sum(xs) / len(xs)
     mean_y = sum(ys) / len(ys)
-    num = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
+    num = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys, strict=True))
     den_x = sum((x - mean_x) ** 2 for x in xs) ** 0.5
     den_y = sum((y - mean_y) ** 2 for y in ys) ** 0.5
     if den_x == 0 or den_y == 0:

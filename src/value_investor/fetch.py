@@ -287,9 +287,7 @@ def fetch_company_metrics(
 ) -> CompanyMetrics:
     """Pull screening metrics via yfinance + fallbacks (LSE by default)."""
     resolved = (
-        resolve_yahoo_ticker_for_market(ticker, market)
-        if market
-        else resolve_yahoo_ticker(ticker)
+        resolve_yahoo_ticker_for_market(ticker, market) if market else resolve_yahoo_ticker(ticker)
     )
     metrics = CompanyMetrics(ticker=resolved, name=name, sector=sector)
 
@@ -302,7 +300,9 @@ def fetch_company_metrics(
         else:
             metrics.name = info.get("longName") or info.get("shortName") or name
             metrics.sector = info.get("sector") or sector
-            metrics.market_cap = _safe_float(info.get("marketCap") or getattr(fast, "market_cap", None))
+            metrics.market_cap = _safe_float(
+                info.get("marketCap") or getattr(fast, "market_cap", None)
+            )
             metrics.trailing_pe = _safe_float(info.get("trailingPE"))
             metrics.forward_pe = _safe_float(info.get("forwardPE"))
             metrics.price_to_book = _safe_float(info.get("priceToBook"))
@@ -379,9 +379,7 @@ def _apply_metric_fallbacks(metrics: CompanyMetrics) -> None:
         # Primary soft-failures are recoverable once fallbacks populate core fields.
         if metrics.market_cap is not None or metrics.last_price is not None:
             metrics.errors = [
-                error
-                for error in metrics.errors
-                if "no market data returned" not in error.lower()
+                error for error in metrics.errors if "no market data returned" not in error.lower()
             ]
 
     for error in provider_errors:

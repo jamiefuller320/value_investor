@@ -51,10 +51,7 @@ class CronJobSpec:
 
     @property
     def url(self) -> str:
-        return (
-            f"https://api.github.com/repos/{REPO}/actions/workflows/"
-            f"{self.workflow}/dispatches"
-        )
+        return f"https://api.github.com/repos/{REPO}/actions/workflows/{self.workflow}/dispatches"
 
 
 _INGEST_LOOP_INPUTS = {"inputs": {"max_targets": "8"}}
@@ -247,8 +244,12 @@ def import_job(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Import cron-job.org production schedules")
     parser.add_argument("--all", action="store_true", help="Import every production job")
-    parser.add_argument("--job", action="append", dest="jobs", help="Import one job key (repeatable)")
-    parser.add_argument("--dry-run", action="store_true", help="Print payloads without calling cron-job.org")
+    parser.add_argument(
+        "--job", action="append", dest="jobs", help="Import one job key (repeatable)"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Print payloads without calling cron-job.org"
+    )
     parser.add_argument("--json", action="store_true", help="Emit machine-readable results")
     args = parser.parse_args(argv)
 
@@ -280,8 +281,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("pass --all or at least one --job")
 
     results = [
-        import_job(spec, api_key=api_key, gh_pat=gh_pat, dry_run=args.dry_run)
-        for spec in selected
+        import_job(spec, api_key=api_key, gh_pat=gh_pat, dry_run=args.dry_run) for spec in selected
     ]
     if args.json or args.dry_run:
         print(json.dumps(results, indent=2))

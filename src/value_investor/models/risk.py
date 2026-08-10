@@ -68,14 +68,17 @@ class EarningsQualityModel(ValueModel):
             accruals = (ni - ocf) / assets
             ok = accruals <= self.MAX_ACCRUALS_TO_ASSETS
             checks.append(
-                (f"accruals/assets <= {self.MAX_ACCRUALS_TO_ASSETS:.0%}", ok, f"ratio={accruals:.2%}")
+                (
+                    f"accruals/assets <= {self.MAX_ACCRUALS_TO_ASSETS:.0%}",
+                    ok,
+                    f"ratio={accruals:.2%}",
+                )
             )
             if not ok:
                 failed.append("high accruals vs assets")
         else:
             checks.append(("accruals", True, "insufficient data — skipped"))
 
-        available = sum(1 for _, ok, _ in checks if ok is not False or "skipped" not in _)
         passed_checks = sum(1 for _, ok, _ in checks if ok)
         score = passed_checks / len(checks) if checks else 0.0
         passed = score >= 0.75 and "negative net income" not in failed
@@ -153,7 +156,11 @@ class FinancialHealthModel(ValueModel):
             coverage = ebit / interest
             ok = coverage >= self.MIN_INTEREST_COVERAGE
             checks.append(
-                (f"interest coverage >= {self.MIN_INTEREST_COVERAGE:.1f}", ok, f"coverage={coverage:.1f}x")
+                (
+                    f"interest coverage >= {self.MIN_INTEREST_COVERAGE:.1f}",
+                    ok,
+                    f"coverage={coverage:.1f}x",
+                )
             )
             if not ok:
                 failed.append("weak interest coverage")
@@ -162,7 +169,12 @@ class FinancialHealthModel(ValueModel):
 
         passed_checks = sum(1 for _, ok, _ in checks if ok)
         score = passed_checks / len(checks) if checks else 0.0
-        hard_fails = {"high debt to equity", "high leverage", "weak liquidity", "high net debt/EBITDA"}
+        hard_fails = {
+            "high debt to equity",
+            "high leverage",
+            "weak liquidity",
+            "high net debt/EBITDA",
+        }
         passed = score >= 0.7 and not (hard_fails & set(failed))
 
         reasons = [detail for _, ok, detail in checks if ok]

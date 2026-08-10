@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Hashable
 from datetime import UTC, date, datetime, timedelta
-from typing import Hashable, Literal, TypeVar
+from typing import Literal, TypeVar
 
 RetentionResolution = Literal["month", "quarter"]
 

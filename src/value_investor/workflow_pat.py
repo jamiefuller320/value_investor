@@ -38,6 +38,4 @@ def require_workflow_dispatch_pat(*, repo: str = "jamiefuller320/value_investor"
         if has_ghs
         else " Set WORKFLOW_DISPATCH_PAT."
     )
-    raise RuntimeError(
-        f"WORKFLOW_DISPATCH_PAT required for {repo}.{hint}"
-    )
+    raise RuntimeError(f"WORKFLOW_DISPATCH_PAT required for {repo}.{hint}")

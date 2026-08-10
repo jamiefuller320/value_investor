@@ -29,13 +29,17 @@ class DeepDiscountTrustModel(UniverseFittedModel):
 
         discount = row.get("discount_to_nav")
         if discount is None or pd.isna(discount):
-            return self._result(passed=False, score=0.0, failed_criteria=["missing discount/NAV proxy"])
+            return self._result(
+                passed=False, score=0.0, failed_criteria=["missing discount/NAV proxy"]
+            )
 
         rank = percentile_rank(
             self._universe["discount_to_nav"], float(discount), higher_is_better=True
         )
         if rank is None:
-            return self._result(passed=False, score=0.0, failed_criteria=["could not rank discount"])
+            return self._result(
+                passed=False, score=0.0, failed_criteria=["could not rank discount"]
+            )
 
         passed = float(discount) >= self.MIN_DISCOUNT and rank >= 0.70
         failed: list[str] = []
@@ -47,7 +51,10 @@ class DeepDiscountTrustModel(UniverseFittedModel):
         return self._result(
             passed=passed,
             score=rank,
-            reasons=[f"discount={float(discount):.0%} to book/NAV proxy", f"universe rank {rank:.0%}"],
+            reasons=[
+                f"discount={float(discount):.0%} to book/NAV proxy",
+                f"universe rank {rank:.0%}",
+            ],
             failed_criteria=failed,
         )
 
@@ -72,9 +79,7 @@ class TrustIncomeModel(UniverseFittedModel):
         if yld is None or pd.isna(yld):
             return self._result(passed=False, score=0.0, failed_criteria=["missing dividend yield"])
 
-        rank = percentile_rank(
-            self._universe["dividend_yield"], float(yld), higher_is_better=True
-        )
+        rank = percentile_rank(self._universe["dividend_yield"], float(yld), higher_is_better=True)
         if rank is None:
             return self._result(passed=False, score=0.0, failed_criteria=["could not rank yield"])
 
@@ -179,9 +184,7 @@ class TrustRelativeValueModel(UniverseFittedModel):
                 failed_criteria=["no positive trailing P/E"],
             )
 
-        rank = percentile_rank(
-            self._universe["trailing_pe"], float(pe), higher_is_better=False
-        )
+        rank = percentile_rank(self._universe["trailing_pe"], float(pe), higher_is_better=False)
         if rank is None:
             return self._result(passed=False, score=0.0, failed_criteria=["could not rank P/E"])
 
@@ -255,7 +258,5 @@ TRUST_MODEL_FAMILIES: dict[str, list[str]] = {
 }
 
 TRUST_MODEL_TO_FAMILY = {
-    model_id: family
-    for family, model_ids in TRUST_MODEL_FAMILIES.items()
-    for model_id in model_ids
+    model_id: family for family, model_ids in TRUST_MODEL_FAMILIES.items() for model_id in model_ids
 }

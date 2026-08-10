@@ -38,7 +38,9 @@ def test_select_deduped_research_targets_prefers_earlier_market():
             SimpleNamespace(ticker="XOM", name="Exxon", signal="buy", conviction_score=0.8),
         ],
         "nasdaq100": [
-            SimpleNamespace(ticker="AAPL", name="Apple", signal="strong_buy", conviction_score=0.95),
+            SimpleNamespace(
+                ticker="AAPL", name="Apple", signal="strong_buy", conviction_score=0.95
+            ),
             SimpleNamespace(ticker="MDB", name="Mongo", signal="buy", conviction_score=0.7),
         ],
     }
@@ -85,13 +87,29 @@ def test_grow_library_reuses_fetch_for_overlap(tmp_path: Path, monkeypatch):
     def fake_constituents(market_id: str) -> pd.DataFrame:
         return pd.DataFrame(
             [
-                {"ticker": "AAPL", "name": "Apple", "sector": "Tech", "epic": "AAPL", "index": market_id, "market": market_id},
-                {"ticker": f"ONLY{market_id[:2].upper()}", "name": "Unique", "sector": "Tech", "epic": "X", "index": market_id, "market": market_id},
+                {
+                    "ticker": "AAPL",
+                    "name": "Apple",
+                    "sector": "Tech",
+                    "epic": "AAPL",
+                    "index": market_id,
+                    "market": market_id,
+                },
+                {
+                    "ticker": f"ONLY{market_id[:2].upper()}",
+                    "name": "Unique",
+                    "sector": "Tech",
+                    "epic": "X",
+                    "index": market_id,
+                    "market": market_id,
+                },
             ]
         )
 
     monkeypatch.setitem(dl.CONSTITUENT_FETCHERS, "sp500", lambda: fake_constituents("sp500"))
-    monkeypatch.setitem(dl.CONSTITUENT_FETCHERS, "nasdaq100", lambda: fake_constituents("nasdaq100"))
+    monkeypatch.setitem(
+        dl.CONSTITUENT_FETCHERS, "nasdaq100", lambda: fake_constituents("nasdaq100")
+    )
 
     calls: list[str] = []
 
