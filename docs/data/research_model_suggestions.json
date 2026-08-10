@@ -1431,7 +1431,135 @@
       "priority": "medium",
       "suggestion": "Compute explicit FCF/dividend and OCF/dividend from latest filing cash-flow statement rather than proxy thresholds — would flag MEGP <1.0× without manual gap-fill.",
       "recorded_at": "2026-08-09T07:30:39.414222+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Auto-refetch Investegate RNS bodies for `period=other` entries tagged “FY results” / “full year” (gap-fill raised bodies 17→37 and unlocked FY 2026 figures previously missing).",
+      "recorded_at": "2026-08-10T18:14:01.555905+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When `fcf.divergence_flagged=true`, display company FCF from latest filing body (£73.8m FY 2026) alongside Yahoo OCF−capex and suppress FCF Yield pass unless within 25% of company definition.",
+      "recorded_at": "2026-08-10T18:14:01.555920+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Compute earnings-growth overlay from filing basic EPS (21.4p vs 21.3p) not Yahoo net income (−7%), to avoid false Graham Enterprising “negative earnings growth” when buybacks lift EPS.",
+      "recorded_at": "2026-08-10T18:14:01.555928+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Pull FY 2026 Annual Report PDF debt note via Companies House iXBRL/PDF for covenant thresholds flagged in `planned_alternate_sources`.",
+      "recorded_at": "2026-08-10T18:14:01.555932+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memo to cite company FCF definition verbatim from filing whenever FCF basis overlay is flagged.",
+      "recorded_at": "2026-08-10T18:14:01.555936+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Key finding:** Investegate body refetch closed the FY 2026 results gap. The FCF “mismatch” is largely **definition and currency**, not missing cash — company FCF £73.8m (FY 2026) vs Yahoo $362.6m. Confidence raised from 0.74 to **0.79**; updated in [`research.md`](output/research/FGP.L/research.md).",
+      "recorded_at": "2026-08-10T18:14:01.555945+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Compute and store two filing-aligned FCF/dividend coverage ratios per name — (a) gross cash-from-operations minus total capex, (b) net operating cash minus capex — and surface both in the interim-quality overlay to avoid false precision from a single definition.",
+      "recorded_at": "2026-08-10T18:14:01.555952+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Add a cyclical-exposure tag derived from filing principal-risks keywords (e.g. “consumer spending”, “travel”, “discretionary”) and segment revenue mix, triggering a dividend-sustainability flag when Photo.ME >50% of EBITDA and interim EPS declines.",
+      "recorded_at": "2026-08-10T18:14:01.555959+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Auto-fetch IR results presentation PDFs listed in `planned_alternate_sources` and extract cash-bridge / capex-split tables (ME-Group-2025-Annual-Results-Presentation.pdf already partially ingested as `ir_59ec4565fa7e453b.txt`; extend to H1 2026 deck referenced by alternate news “ME Group H1 2026 slides”).",
+      "recorded_at": "2026-08-10T18:14:01.555966+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Parse debt-facility and covenant paragraphs from full annual report PDF bodies (not just RNS headline extracts) for UK names where net cash is declining interims.",
+      "recorded_at": "2026-08-10T18:14:01.555970+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "low",
+      "suggestion": "In gap-fill prompts, auto-exclude cross-ticker questions (e.g. FGP.L items in MEGP.L packs) and route them to separate ticker research directories to prevent unresolved noise in per-name gap-fill output.",
+      "recorded_at": "2026-08-10T18:14:01.555973+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Validate IR allowlist body content against filing headline/period — `ir_a9733d0de6aec27d` (April trading-update URL) ingested H1 interim HTML; add hash or title check before marking `has_body: true`.",
+      "recorded_at": "2026-08-10T18:14:01.555979+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch FDA Orange Book patent/expiry data for Hikma ANDA holders and attach as `patent_cliff.json` keyed to products named in filing bodies (testosterone, calcitonin, sodium oxybate, Advair, Ellipta).",
+      "recorded_at": "2026-08-10T18:14:01.555982+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Add NHS Drug Tariff and CMS Medicaid generic pricing RSS/API queries — current 38-body corpus has zero Medicaid/NHS mentions despite UK-listed parent and ~55% US revenue.",
+      "recorded_at": "2026-08-10T18:14:01.555987+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When pipeline-replacement questions are open, require memo to map filing-disclosed headwinds (named products + years) against pipeline counts by segment and flag any gap years before next capacity milestone (Bedford 2028).",
+      "recorded_at": "2026-08-10T18:14:01.555991+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Healthcare overlay flag when quality/income screens pass but all yield-based cheapness models fail and filing language cites \"price erosion\" or \"competition on higher margin products\" — cap conviction independently of composite score.",
+      "recorded_at": "2026-08-10T18:14:01.555997+00:00"
     }
   ],
-  "updated_at": "2026-08-09T07:30:39.414225+00:00"
+  "updated_at": "2026-08-10T18:14:01.555999+00:00"
 }
