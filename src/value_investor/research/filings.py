@@ -196,8 +196,10 @@ _IXBRL_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bDIRECTORS[\u2019'] REPORT\b", 2),
     (r"\bNOTES TO THE (?:FINANCIAL|GROUP) STATEMENTS\b", 2),
     (r"\bGOING CONCERN\b", 3),
-    (r"\bPENSION\b", 3),
+    (r"\b(?:DEFINED BENEFIT|PENSION)\b", 3),
     (r"\b(?:FINANCIAL )?COVENANTS?\b", 3),
+    (r"\bBORROWINGS\b", 3),
+    (r"\bSEGMENT(?:AL)? (?:INFORMATION|ANALYSIS|REPORTING)\b", 3),
 )
 _INVESTEGATE_COMPANY_URL = "https://www.investegate.co.uk/company/{epic}"
 _INVESTEGATE_USER_AGENT = "value-investor-research/0.1 (+investegate; research@local)"
@@ -283,6 +285,8 @@ def _score_ch_body_text(text: str) -> int:
         token in lower for token in ("information", "analysis", "reporting")
     ):
         score += 500
+    if "borrowings" in lower and any(token in lower for token in ("covenant", "facility", "note")):
+        score += 600
     return score
 
 
@@ -776,7 +780,9 @@ def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
         if text and len(text) >= 200:
             return text
         ocr_text = _ocr_pdf_text(raw)
-        return ocr_text or text
+        if ocr_text:
+            return _compose_filing_body_with_depth_sections(ocr_text) or ocr_text
+        return text
     if _is_ixbrl_html(raw) or "xhtml" in (content_type or "").lower():
         return _extract_ixbrl_html_text(raw.decode("utf-8", errors="replace"))
     return _strip_html(raw.decode("utf-8", errors="replace"))
@@ -787,10 +793,15 @@ _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bCONSOLIDATED CASH FLOW STATEMENT", 1),
     (r"\bSTATEMENT OF CASH FLOWS\b", 1),
     (r"\bCASH FLOW STATEMENT\b", 1),
+    (r"\bCONSOLIDATED (?:INCOME|STATEMENT OF COMPREHENSIVE INCOME)\b", 1),
+    (r"\bCONSOLIDATED BALANCE SHEET\b", 1),
+    (r"\bCONSOLIDATED STATEMENT OF FINANCIAL POSITION\b", 1),
     (r"\b(?:NOTE|NOTES)\s+(?:TO THE )?(?:FINANCIAL|GROUP) STATEMENTS\b", 2),
     (r"\bEXCEPTIONAL ITEMS?\b", 2),
     (r"\bADJUSTING ITEMS?\b", 2),
     (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*(?:Exceptional|Adjusting items?)", 2),
+    (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*Borrowings\b", 2),
+    (r"\b(?:NON[- ]CURRENT )?BORROWINGS\b", 2),
     (r"\b(?:DEFINED BENEFIT|PENSION(?: SCHEME| OBLIGATIONS?)?)\b", 2),
     (r"\b(?:FINANCIAL )?COVENANTS?\b", 2),
     (r"\bGOING CONCERN\b", 2),

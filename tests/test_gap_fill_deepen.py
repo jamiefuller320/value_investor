@@ -66,6 +66,18 @@ def test_prepare_gap_fill_calls_ch_refetch_for_uk(
     assert pack["body_refetch"]["fetched"] == 2
 
 
+def test_companies_house_catalog_mentions_consolidated_notes():
+    from value_investor.research.gap_fill_sources import ALTERNATE_SOURCE_CATALOG
+
+    ch = next(
+        item for item in ALTERNATE_SOURCE_CATALOG["uk"] if item["id"] == "companies_house_accounts"
+    )
+    why = ch["why"].lower()
+    assert "borrowings" in why
+    assert "cash-flow" in why or "cash flow" in why
+    assert "segment" in why
+
+
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
