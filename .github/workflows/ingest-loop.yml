@@ -171,9 +171,19 @@ jobs:
           fi
 
       - name: Sync main before ingest loop commit
-        run: git pull --rebase --autostash origin main
+        run: |
+          # Stage ingest outputs so concurrent main pushes (e.g. dashboard refresh)
+          # do not leave untracked filing bodies that block rebase.
+          git add docs/data/ingest_health_log.json \
+            docs/data/ingest_improvement_summary.json \
+            docs/data/ingest_bootstrap_summary.json \
+            docs/data/engineering_tasks.json \
+            docs/data/research 2>/dev/null || true
+          git pull --rebase --autostash origin main
 
       - name: Commit ingest loop artifacts
+        id: commit
+        continue-on-error: true
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: main
@@ -185,6 +195,19 @@ jobs:
             docs/data/research/**
             docs/data/engineering_tasks.json
           skip_fetch: false
+
+      - name: Rebase-push if commit raced with another automation
+        if: steps.commit.outcome == 'failure'
+        run: |
+          git add docs/data/ingest_health_log.json \
+            docs/data/ingest_improvement_summary.json \
+            docs/data/ingest_bootstrap_summary.json \
+            docs/data/engineering_tasks.json \
+            docs/data/research 2>/dev/null || true
+          git stash push -u -m "ingest-loop-artifacts" -- docs/data/ || true
+          git pull --rebase origin main
+          git stash pop || true
+          git push origin HEAD:main
 
       - name: Dispatch engineering queue when tasks were added
         if: steps.loop.outputs.micro_compiled == 'true'
