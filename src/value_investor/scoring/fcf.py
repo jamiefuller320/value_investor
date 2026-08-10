@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import re
 from pathlib import Path
 from typing import Any
@@ -31,6 +32,10 @@ _FREE_CASHFLOW_LABELS = [
 _ADJUSTED_EARNINGS_LABELS = [
     "Normalized Income",
     "Normalized Net Income",
+]
+
+_BASIC_EPS_LABELS = [
+    "Basic EPS",
 ]
 
 _DIVIDENDS_PAID_LABELS = [
@@ -80,6 +85,9 @@ _FILING_METRIC_KEYS = (
     "free_cashflow_prev",
     "net_income_adjusted",
     "net_income_adjusted_prev",
+    "basic_eps",
+    "basic_eps_prev",
+    "basic_eps_growth_pct",
     "dividends_paid",
     "interim_eps_decline_pct",
     "adjusted_eps_growth_pct",
@@ -91,7 +99,9 @@ _RESEARCH_ROOTS = (
 )
 
 FCF_DIVERGENCE_THRESHOLD = 0.50
+FCF_YIELD_COMPANY_TOLERANCE = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
+FCF_YIELD_MODEL_ID = "fcf_yield"
 _FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
 
 _COMPANY_ADJUSTED_FCF_RES = (
@@ -128,24 +138,35 @@ def _annual_label_value(year_rows: dict[str, Any], labels: list[str]) -> float |
     return None
 
 
+def _filing_aligned_fcf_from_year_rows(year_rows: dict[str, Any]) -> float | None:
+    """Reported-year FCF as OCF plus capital expenditure (CapEx is negative in Yahoo)."""
+    ocf = _annual_label_value(year_rows, _OPERATING_CASHFLOW_LABELS)
+    capex = _annual_label_value(year_rows, _CAPEX_LABELS)
+    if ocf is not None and capex is not None:
+        return float(ocf) + float(capex)
+    return _annual_label_value(year_rows, _FREE_CASHFLOW_LABELS)
+
+
 def extract_cashflow_metrics_from_annual_financials(
     financials: dict[str, Any],
 ) -> dict[str, float | None]:
-    """Extract latest (and prior-year) cash-flow metrics from ``financials_annual.json``."""
+    """Extract latest (and prior-year) filing-aligned cash-flow metrics."""
     cash_flow = financials.get("cash_flow") or {}
     if not cash_flow:
         return {}
 
     years = _sorted_financial_years(cash_flow)
     metrics: dict[str, float | None] = {}
-    for key, labels in (
-        ("operating_cashflow", _OPERATING_CASHFLOW_LABELS),
-        ("free_cashflow", _FREE_CASHFLOW_LABELS),
-    ):
-        if years:
-            metrics[key] = _annual_label_value(cash_flow.get(years[0]) or {}, labels)
-        if len(years) > 1:
-            metrics[f"{key}_prev"] = _annual_label_value(cash_flow.get(years[1]) or {}, labels)
+    if years:
+        latest_rows = cash_flow.get(years[0]) or {}
+        metrics["operating_cashflow"] = _annual_label_value(latest_rows, _OPERATING_CASHFLOW_LABELS)
+        metrics["free_cashflow"] = _filing_aligned_fcf_from_year_rows(latest_rows)
+    if len(years) > 1:
+        prior_rows = cash_flow.get(years[1]) or {}
+        metrics["operating_cashflow_prev"] = _annual_label_value(
+            prior_rows, _OPERATING_CASHFLOW_LABELS
+        )
+        metrics["free_cashflow_prev"] = _filing_aligned_fcf_from_year_rows(prior_rows)
     return metrics
 
 
@@ -160,15 +181,19 @@ def extract_income_metrics_from_annual_financials(
     years = _sorted_financial_years(income_statement)
     metrics: dict[str, float | None] = {}
     if years:
-        metrics["net_income_adjusted"] = _annual_label_value(
-            income_statement.get(years[0]) or {},
-            _ADJUSTED_EARNINGS_LABELS,
-        )
+        latest_rows = income_statement.get(years[0]) or {}
+        metrics["net_income_adjusted"] = _annual_label_value(latest_rows, _ADJUSTED_EARNINGS_LABELS)
+        metrics["basic_eps"] = _annual_label_value(latest_rows, _BASIC_EPS_LABELS)
     if len(years) > 1:
+        prior_rows = income_statement.get(years[1]) or {}
         metrics["net_income_adjusted_prev"] = _annual_label_value(
-            income_statement.get(years[1]) or {},
-            _ADJUSTED_EARNINGS_LABELS,
+            prior_rows, _ADJUSTED_EARNINGS_LABELS
         )
+        metrics["basic_eps_prev"] = _annual_label_value(prior_rows, _BASIC_EPS_LABELS)
+    metrics["basic_eps_growth_pct"] = compute_yoy_growth_rate(
+        metrics.get("basic_eps"),
+        metrics.get("basic_eps_prev"),
+    )
     return metrics
 
 
@@ -451,10 +476,9 @@ def compute_filing_aligned_fcf(financials: dict[str, Any]) -> tuple[float | None
 
     fiscal_year = years[0]
     year_rows = cash_flow.get(fiscal_year) or {}
-    ocf = _annual_label_value(year_rows, _OPERATING_CASHFLOW_LABELS)
-    capex = _annual_label_value(year_rows, _CAPEX_LABELS)
-    if ocf is not None and capex is not None:
-        return float(ocf) + float(capex), fiscal_year
+    aligned = _filing_aligned_fcf_from_year_rows(year_rows)
+    if aligned is not None:
+        return aligned, fiscal_year
 
     metrics = extract_cashflow_metrics_from_annual_financials(financials)
     fallback = metrics.get("free_cashflow")
@@ -603,6 +627,118 @@ def fcf_basis_divergence_flagged(
         fcf_basis_values_diverge(a, b, left_currency=curr_a, right_currency=curr_b)
         for a, curr_a, b, curr_b in pairs
     )
+
+
+def fcf_within_company_tolerance(
+    canonical: float | None,
+    company_adjusted: float | None,
+    *,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    threshold: float = FCF_YIELD_COMPANY_TOLERANCE,
+) -> bool:
+    """True when canonical FCF is within ``threshold`` of the company filing definition."""
+    if canonical is None or company_adjusted is None:
+        return False
+    left_usd = _normalize_fcf_to_usd(float(canonical), filing_currency)
+    right_usd = _normalize_fcf_to_usd(float(company_adjusted), company_adjusted_currency)
+    if left_usd == right_usd:
+        return True
+    abs_gap = abs(left_usd - right_usd)
+    denominator = max(abs(left_usd), abs(right_usd))
+    if denominator == 0:
+        return False
+    return abs_gap / denominator <= threshold
+
+
+def fcf_yield_pass_suppressed(
+    *,
+    divergence_flagged: bool,
+    canonical: float | None,
+    company_adjusted: float | None,
+    company_adjusted_currency: str | None = None,
+    filing_currency: str = "USD",
+) -> bool:
+    """True when FCF Yield pass should be suppressed due to basis divergence."""
+    if not divergence_flagged or company_adjusted is None:
+        return False
+    return not fcf_within_company_tolerance(
+        canonical,
+        company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+
+
+def _append_failed_criterion(existing: Any, message: str) -> list[str]:
+    if isinstance(existing, list):
+        failed = [str(item) for item in existing]
+    elif isinstance(existing, str) and existing.strip():
+        try:
+            parsed = ast.literal_eval(existing)
+            failed = [str(item) for item in parsed] if isinstance(parsed, list) else []
+        except (SyntaxError, ValueError):
+            failed = [existing]
+    else:
+        failed = []
+    if message not in failed:
+        failed.append(message)
+    return failed
+
+
+def suppress_fcf_yield_passes(
+    model_results: pd.DataFrame,
+    universe: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Flip FCF Yield passes to fail when divergence exceeds company filing tolerance."""
+    if model_results.empty or universe.empty:
+        return model_results
+
+    out = model_results.copy()
+    for _, urow in universe.iterrows():
+        ticker = str(urow["ticker"])
+        screen_ttm = screen_ttm_from_row(urow)
+        bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        if not fcf_yield_pass_suppressed(
+            divergence_flagged=bool(bundle.get("divergence_flagged")),
+            canonical=bundle.get("canonical"),
+            company_adjusted=bundle.get("company_adjusted"),
+            company_adjusted_currency=bundle.get("company_adjusted_currency"),
+            filing_currency=str(bundle.get("currency") or "USD"),
+        ):
+            continue
+
+        mask = (
+            (out["ticker"] == ticker)
+            & (out["model_id"] == FCF_YIELD_MODEL_ID)
+            & (out["passed"] == True)  # noqa: E712
+        )
+        if not mask.any():
+            continue
+        out.loc[mask, "passed"] = False
+        for index in out.index[mask]:
+            out.at[index, "failed_criteria"] = _append_failed_criterion(
+                out.at[index, "failed_criteria"],
+                "FCF yield suppressed: canonical basis diverges from company filing definition",
+            )
+    return out
+
+
+def resolve_statutory_earnings_growth(row: pd.Series) -> float | None:
+    """Prefer filing basic-EPS YoY growth over Yahoo statutory earnings growth."""
+    basic = row.get("basic_eps_growth_pct")
+    if basic is not None and not (isinstance(basic, float) and pd.isna(basic)):
+        return float(basic)
+    statutory = row.get("earnings_growth")
+    if statutory is None or (isinstance(statutory, float) and pd.isna(statutory)):
+        return None
+    return float(statutory)
 
 
 def reconcile_fcf(

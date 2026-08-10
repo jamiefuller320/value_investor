@@ -44,6 +44,7 @@ from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_ea
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
+    suppress_fcf_yield_passes,
 )
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
@@ -267,6 +268,7 @@ def run_screen(
     universe_df = enrich_universe_with_canonical_fcf(universe_df, out_dir)
     universe_df = enrich_universe_with_filing_metrics(universe_df, out_dir)
     model_results = evaluate_universe(universe_df)
+    model_results = suppress_fcf_yield_passes(model_results, universe_df, output_dir=out_dir)
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
     signals = build_signals(universe_df, model_results, summary)
