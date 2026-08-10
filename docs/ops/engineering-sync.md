@@ -51,6 +51,23 @@ Dispatch target is always re-resolved to a currently open task id.
 - [`ops-monitor.md`](ops-monitor.md) — daily health checks
 - [`ci-fix-automation.md`](ci-fix-automation.md) — scoped CI auto-merge loop
 
+## Library ladder → engineering draft
+
+When the offline ladder cannot run screen-lite on the focus market (usable metrics
+rows below `min_metrics_for_screen`, or screen-lite raises), `run_library_ladder`
+calls `draft_library_ladder_engineering_tasks` and appends a **coverage** task with
+provider/library `allowed_paths` (deduped per market if an open task already exists).
+
+`library-grow.yml` commits `docs/data/engineering_tasks.json` and dispatches
+`engineering-queue.yml` when a new task is drafted — same pattern as ingest-loop
+micro-compile.
+
+Manual replay:
+
+```bash
+ftse-engineering draft-library-ladder --library-root docs/data/library --json
+```
+
 ## Engineering PR CI + email
 
 GitHub often blocks CI on PRs opened by `GITHUB_TOKEN` until a human approves the

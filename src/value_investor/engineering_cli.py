@@ -57,6 +57,7 @@ from value_investor.engineering_tasks import (
     DEFAULT_MAX_RUN_TASKS,
     DEFAULT_TASKS_PATH,
     compile_engineering_tasks,
+    draft_library_ladder_engineering_tasks,
     find_engineering_task,
     load_engineering_tasks,
     mark_task_merged_for_branch,
@@ -65,6 +66,7 @@ from value_investor.engineering_tasks import (
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
 )
+from value_investor.storage import read_json
 
 
 def _print_json(data: object) -> None:
@@ -415,6 +417,31 @@ def _cmd_draft_ci_fix(args: argparse.Namespace) -> int:
     else:
         print("No new CI fix task drafted (duplicate open task or empty scope)")
     return 0 if drafted or not args.require_draft else 1
+
+
+def _cmd_draft_library_ladder(args: argparse.Namespace) -> int:
+    ladder_path = (
+        Path(args.ladder_json) if args.ladder_json else Path(args.library_root) / "last_ladder.json"
+    )
+    if not ladder_path.exists():
+        print(f"Ladder JSON not found: {ladder_path}", file=sys.stderr)
+        return 1
+    ladder_result = read_json(ladder_path)
+    policy_arg = getattr(args, "library_policy_path", None)
+    policy_path = Path(policy_arg) if policy_arg else Path(args.library_root) / "policy.json"
+    result = draft_library_ladder_engineering_tasks(
+        ladder_result,
+        root=Path(args.library_root),
+        policy_path=policy_path if policy_path.exists() else None,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+    )
+    if args.json:
+        _print_json(result)
+    elif int(result.get("drafted_count") or 0) > 0:
+        print(f"Drafted library ladder task(s): {', '.join(result.get('task_ids') or [])}")
+    else:
+        print(f"No new library ladder task: {result.get('reason')}")
+    return 0
 
 
 def _cmd_task_auto_merge(args: argparse.Namespace) -> int:
@@ -840,6 +867,28 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 1 when no new task is drafted",
     )
     draft_ci_p.set_defaults(func=_cmd_draft_ci_fix)
+
+    draft_ladder_p = sub.add_parser(
+        "draft-library-ladder",
+        parents=[common],
+        help="Draft a coverage engineering task when library ladder cannot screen focus market",
+    )
+    draft_ladder_p.add_argument(
+        "--library-root",
+        default="docs/data/library",
+        help="Library root containing last_ladder.json (default: docs/data/library)",
+    )
+    draft_ladder_p.add_argument(
+        "--ladder-json",
+        default=None,
+        help="Path to ladder result JSON (default: <library-root>/last_ladder.json)",
+    )
+    draft_ladder_p.add_argument(
+        "--library-policy-path",
+        default=None,
+        help="Library policy JSON (default: <library-root>/policy.json)",
+    )
+    draft_ladder_p.set_defaults(func=_cmd_draft_library_ladder)
 
     task_auto_p = sub.add_parser(
         "task-auto-merge",

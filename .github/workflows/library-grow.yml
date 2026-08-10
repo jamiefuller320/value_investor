@@ -81,6 +81,7 @@ jobs:
 
       - name: Run offline ladder
         if: steps.plan.outputs.skip != 'true'
+        id: ladder
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
@@ -105,6 +106,8 @@ jobs:
           # Refresh Automation tab snapshot for the dashboard.
           ftse-library --root "$ROOT" --policy "$ROOT/policy.json" automation-status \
             --output docs/data/automation.json
+          DRAFTED=$(python3 -c "import json; d=json.load(open('$ROOT/last_ladder.json')).get('engineering_tasks',{}); print('true' if int(d.get('drafted_count') or 0)>0 else 'false')")
+          echo "engineering_drafted=$DRAFTED" >> "$GITHUB_OUTPUT"
 
       - name: Commit library ladder artifacts
         id: commit
@@ -113,7 +116,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: run offline library ladder (focus market)"
-          file_pattern: "docs/data/library/** docs/data/automation.json"
+          file_pattern: "docs/data/library/** docs/data/automation.json docs/data/engineering_tasks.json"
           # Email report / other automations may push to main while the ladder runs.
           skip_fetch: false
 
@@ -124,3 +127,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      - name: Dispatch engineering queue when ladder drafted tasks
+        if: steps.plan.outputs.skip != 'true' && steps.ladder.outputs.engineering_drafted == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run engineering-queue.yml
+          echo "Dispatched engineering-queue after library ladder metrics draft"
