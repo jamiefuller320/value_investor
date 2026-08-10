@@ -244,6 +244,7 @@ def build_analysis_payload(
     learning_review = _safe_read(paper_root / "learning_tracks_review.json")
     learning_summary = _safe_read(paper_root / "learning_tracks_summary.json")
     exit_shadow = _safe_read(paper_root / "learning_tracks_exit_shadow.json")
+    exit_timing = _safe_read(paper_root / "learning_tracks_exit_timing.json")
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
 
     model_weights = _safe_read(output_dir / "model_weights.json") or _safe_read(
@@ -260,6 +261,7 @@ def build_analysis_payload(
         "learning_tracks_review": learning_review,
         "learning_tracks_summary": learning_summary,
         "exit_shadow": exit_shadow,
+        "exit_timing_cohorts": exit_timing,
         "churn_health": churn_health,
         "model_weights": {
             "sample_count": (model_weights or {}).get("sample_count"),

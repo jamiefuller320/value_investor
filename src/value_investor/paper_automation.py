@@ -10,6 +10,10 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
+from value_investor.exit_timing_cohorts import (
+    run_exit_timing_cohort_pass,
+    summarize_learning_tracks_exit_timing,
+)
 from value_investor.paper_fund import (
     DEFAULT_EXIT_CONFIRM_SCREENS,
     DEFAULT_INITIAL_CASH,
@@ -643,6 +647,7 @@ class AutomationRunResult:
     fund: dict[str, Any] = field(default_factory=dict)
     note: str = ""
     exit_shadow_review: dict[str, Any] = field(default_factory=dict)
+    exit_timing_cohorts_review: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -654,6 +659,7 @@ class AutomationRunResult:
             "fund": self.fund,
             "note": self.note,
             "exit_shadow_review": self.exit_shadow_review,
+            "exit_timing_cohorts_review": self.exit_timing_cohorts_review,
             "generated_at": datetime.now(UTC).isoformat(),
         }
 
@@ -783,6 +789,16 @@ def run_daily_automation(
         prices_by_ticker=price_map,
         as_of=gate["local_time"],
     )
+    exit_timing_cohorts_review = run_exit_timing_cohort_pass(
+        output_dir=output_dir,
+        fund=fund,
+        track_id=config.track_id,
+        candidates=decision_candidates,
+        trades=trades,
+        prices_by_ticker=price_map,
+        trade_cost_pct=float(config.trade_cost_pct),
+        as_of=gate["local_time"],
+    )
 
     result = AutomationRunResult(
         acted=acted,
@@ -793,6 +809,7 @@ def run_daily_automation(
         fund=fund.to_dict(),
         note=note,
         exit_shadow_review=exit_shadow_review,
+        exit_timing_cohorts_review=exit_timing_cohorts_review,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -992,6 +1009,11 @@ def run_learning_tracks(
     shadow_summary = summarize_learning_tracks_exit_shadow(base_dir)
     (base_dir / "learning_tracks_exit_shadow.json").write_text(
         json.dumps(shadow_summary, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    timing_summary = summarize_learning_tracks_exit_timing(base_dir)
+    (base_dir / "learning_tracks_exit_timing.json").write_text(
+        json.dumps(timing_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary

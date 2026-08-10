@@ -50,6 +50,7 @@ def slim_candidate(row: dict[str, Any]) -> dict[str, Any]:
         "signal": row.get("signal"),
         "adjusted_signal": row.get("adjusted_signal"),
         "conviction_score": row.get("conviction_score"),
+        "data_quality_score": row.get("data_quality_score"),
         "timing_signal": row.get("timing_signal"),
         "sector": row.get("sector"),
         "price": row.get("price") if row.get("price") is not None else row.get("last"),
