@@ -1,39 +1,28 @@
 {
-  "run_at": "2026-08-09T07:46:17.310128+00:00",
-  "overall": "fail",
+  "run_at": "2026-08-10T07:46:17.490090+00:00",
+  "overall": "warn",
   "findings": [
     {
-      "severity": "fail",
+      "severity": "warn",
       "category": "workflows",
-      "title": "Workflow overdue: Modelling analysis review",
-      "summary": "No successful run within 36h (last: 2026-08-05T11:32:46+00:00).",
+      "title": "Recent workflow failure: CI main nightly",
+      "summary": "1 unresolved failure(s) since last success (runs: 31366164327).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     }
   ],
-  "auto_fixes": [
-    {
-      "action": "housekeep_parked_task",
-      "detail": "cancelled duplicate eng-20260804-36 (of eng-20260726-05)"
-    },
-    {
-      "action": "housekeep_parked_task",
-      "detail": "cancelled duplicate eng-20260804-57 (of eng-20260804-42)"
-    }
-  ],
-  "drafted_task_ids": [
-    "eng-20260809-06"
-  ],
+  "auto_fixes": [],
+  "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 30,
-      "last_success_at": "2026-08-07T13:47:31+00:00",
-      "last_success_run_id": 31184337390,
-      "age_hours": 42.0,
+      "last_success_at": "2026-08-10T07:05:31+00:00",
+      "last_success_run_id": 31364452090,
+      "age_hours": 0.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -43,9 +32,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-09T06:09:33+00:00",
-      "last_success_run_id": 31298256329,
-      "age_hours": 1.6,
+      "last_success_at": "2026-08-10T06:52:01+00:00",
+      "last_success_run_id": 31363592125,
+      "age_hours": 0.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -53,11 +42,11 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": false,
-      "max_age_hours": 3,
-      "last_success_at": "2026-08-08T08:14:58+00:00",
-      "last_success_run_id": 31247980596,
-      "age_hours": 23.5,
+      "expected_today": true,
+      "max_age_hours": 26,
+      "last_success_at": "2026-08-10T07:15:30+00:00",
+      "last_success_run_id": 31365132103,
+      "age_hours": 0.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -67,38 +56,38 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-09T07:30:55+00:00",
-      "last_success_run_id": 31301327456,
-      "age_hours": 0.3,
+      "last_success_at": "2026-08-09T08:06:07+00:00",
+      "last_success_run_id": 31302709902,
+      "age_hours": 23.7,
       "stale": false,
-      "recent_failures_24h": 0,
-      "unresolved_failures_12h": 0
+      "recent_failures_24h": 1,
+      "unresolved_failures_12h": 1
     },
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-08-05T11:32:46+00:00",
-      "last_success_run_id": 31001886864,
-      "age_hours": 92.2,
-      "stale": true,
+      "last_success_at": "2026-08-09T11:35:07+00:00",
+      "last_success_run_id": 31311153268,
+      "age_hours": 20.2,
+      "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
-    "open_count": 5,
+    "open_count": 0,
     "pr_open_count": 0,
-    "parked_count": 2,
-    "merged_count": 22,
+    "parked_count": 0,
+    "merged_count": 27,
     "failed_count": 0,
-    "next_task_id": "eng-20260809-01",
+    "next_task_id": null,
     "in_flight_branch": null,
     "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true
+  "should_dispatch_engineering": false
 }
