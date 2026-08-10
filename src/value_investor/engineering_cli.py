@@ -427,7 +427,8 @@ def _cmd_draft_library_ladder(args: argparse.Namespace) -> int:
         print(f"Ladder JSON not found: {ladder_path}", file=sys.stderr)
         return 1
     ladder_result = read_json(ladder_path)
-    policy_path = Path(args.policy) if args.policy else Path(args.library_root) / "policy.json"
+    policy_arg = getattr(args, "library_policy_path", None)
+    policy_path = Path(policy_arg) if policy_arg else Path(args.library_root) / "policy.json"
     result = draft_library_ladder_engineering_tasks(
         ladder_result,
         root=Path(args.library_root),
@@ -883,9 +884,9 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to ladder result JSON (default: <library-root>/last_ladder.json)",
     )
     draft_ladder_p.add_argument(
-        "--policy",
+        "--library-policy-path",
         default=None,
-        help="Policy JSON path (default: <library-root>/policy.json)",
+        help="Library policy JSON (default: <library-root>/policy.json)",
     )
     draft_ladder_p.set_defaults(func=_cmd_draft_library_ladder)
 

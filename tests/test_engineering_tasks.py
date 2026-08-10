@@ -5,6 +5,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from value_investor.agent_model_policy import save_policy
+from value_investor.data_library import (
+    MARKET_REGISTRY,
+    empty_manifest,
+    market_dir,
+    save_manifest,
+)
 from value_investor.engineering_tasks import (
     compile_engineering_tasks,
     draft_library_ladder_engineering_tasks,
@@ -41,9 +48,6 @@ def test_needs_engineering_implementation_filters_ingest_retry_only():
 
 
 def test_draft_library_ladder_engineering_tasks(tmp_path: Path):
-    from value_investor.agent_model_policy import save_policy
-    from value_investor.data_library import MARKET_REGISTRY, empty_manifest, market_dir, save_manifest
-
     root = tmp_path / "lib"
     policy = tmp_path / "policy.json"
     tasks_path = tmp_path / "engineering_tasks.json"
