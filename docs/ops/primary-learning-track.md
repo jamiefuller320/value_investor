@@ -39,8 +39,8 @@ cohorts for the exit-timing research strand (P(hold→breakeven) vs P(swap→bet
 - `exit_timing_cohorts_review.json` — readiness + summaries
 - `learning_tracks_exit_timing.json` — rollup across tracks
 
-See [`exit-timing-cohorts.md`](exit-timing-cohorts.md). Pair with exit-shadow and
-`rebalance_log.json` counterfactuals; no knob auto-apply until closed cohort targets are met.
+See also [`exit-timing-cohorts.md`](exit-timing-cohorts.md) for live paper cohorts and
+[`exit-timing-archive-sim.md`](exit-timing-archive-sim.md) for offline near-miss priors.
 
 ## Success datums
 

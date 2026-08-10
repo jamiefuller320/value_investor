@@ -67,3 +67,6 @@ ftse-paper-auto --output-dir docs/data/paper_automation --reports docs/data/late
 ```
 
 Weekly analysis review payload includes `exit_timing_cohorts` when the rollup exists.
+
+For **offline priors** on near-miss names below buy tier, see
+[`exit-timing-archive-sim.md`](exit-timing-archive-sim.md) (`ftse-exit-timing-archive`).
