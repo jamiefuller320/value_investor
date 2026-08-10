@@ -72,12 +72,12 @@ def test_import_cron_jobs_dry_run_ingest_loop_morning():
     rows = json.loads(proc.stdout)
     assert len(rows) == 1
     payload = rows[0]["payload"]["job"]
-    assert payload["title"] == "FTSE ingest loop (Mon/Wed/Fri morning)"
+    assert payload["title"] == "FTSE ingest loop (weekday morning)"
     assert payload["schedule"]["hours"] == [7]
     assert payload["schedule"]["minutes"] == [5]
-    assert payload["schedule"]["wdays"] == [1, 3, 5]
+    assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
     body = json.loads(payload["extendedData"]["body"])
-    assert body["inputs"]["max_targets"] == "8"
+    assert body["inputs"]["max_targets"] == "12"
     assert "ingest-loop.yml" in payload["url"]
 
 
@@ -92,11 +92,11 @@ def test_import_cron_jobs_dry_run_ingest_loop_afternoon():
     rows = json.loads(proc.stdout)
     assert len(rows) == 1
     payload = rows[0]["payload"]["job"]
-    assert payload["title"] == "FTSE ingest loop (Mon/Wed/Fri afternoon)"
+    assert payload["title"] == "FTSE ingest loop (weekday afternoon)"
     assert payload["schedule"]["hours"] == [10]
     assert payload["schedule"]["minutes"] == [5]
     body = json.loads(payload["extendedData"]["body"])
-    assert body["inputs"]["max_targets"] == "8"
+    assert body["inputs"]["max_targets"] == "12"
 
 
 def test_import_cron_jobs_dry_run_ops_monitor():

@@ -5,18 +5,19 @@ name: FTSE Ingest Loop
 # logs ingest_health, and micro-compiles ingest engineering tasks when coverage stalls.
 #
 # Reliability: GitHub schedule is best-effort — use external cron → workflow_dispatch
-# (see docs/ops/orchestrator-cron.md). Two smaller batches per ingest day (morning +
+# (see docs/ops/orchestrator-cron.md). Two batches per ingest day (morning +
 # afternoon); gate allows up to two successful runs per UTC day.
+# Volume plan: docs/ops/market-scrutiny.md
 on:
   schedule:
-    - cron: "0 7 * * 1,3,5"
-    - cron: "0 10 * * 1,3,5"
+    - cron: "5 7 * * 1-5"
+    - cron: "5 10 * * 1-5"
   workflow_dispatch:
     inputs:
       max_targets:
         description: "Max buy-tier tickers for ingest-improvement pass"
         type: string
-        default: "8"
+        default: "12"
       force:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean

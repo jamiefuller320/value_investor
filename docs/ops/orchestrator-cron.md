@@ -39,7 +39,7 @@ token instead of your user PAT.
 | `library-grow.yml` | Via orchestrator | ↑ | None |
 | `library-model-review.yml` | Via orchestrator | ↑ | None |
 | `paper-auto.yml` | Via orchestrator weekdays | ↑ | None |
-| `ingest-loop.yml` | External **primary** | Mon/Wed/Fri **07:05 + 10:05** → two batches (`max_targets=8`) | Mon/Wed/Fri 07:00 + 10:00 |
+| `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05** → two batches (`max_targets=12`) | Mon–Fri 07:05 + 10:05 |
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
 | `ops-monitor.yml` | External **primary** | `45 7 * * *` → `ops-monitor.yml` | Daily 07:45 |
@@ -169,15 +169,17 @@ After merging scheduling fixes, refresh the external cron:
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job orchestrator-weekday-paper
 ```
 
-### 3. Ingest loop — Mon/Wed/Fri two smaller batches per day
+### 3. Ingest loop — weekday two batches per day
 
-Schedules: **07:05** and **10:05 UTC** on Mon/Wed/Fri (`ingest-loop-morning` /
-`ingest-loop-afternoon` cron-job.org keys). Each dispatch uses `max_targets=8`;
+Schedules: **07:05** and **10:05 UTC** on **Mon–Fri** (`ingest-loop-morning` /
+`ingest-loop-afternoon` cron-job.org keys). Each dispatch uses `max_targets=12`;
 the workflow gate allows **up to two successful runs per UTC day** (morning +
 afternoon), not one.
 
+Volume and budget context: [`market-scrutiny.md`](market-scrutiny.md).
+
 ```bash
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"8"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"12"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Refresh external cron after merge:
@@ -193,17 +195,17 @@ if it still exists (superseded by morning + afternoon jobs).
 Same-day gate — safe alongside GitHub `0 7` / `0 10` schedules; skips only after
 two successes or while another run is active.
 
-#### Why Mon/Wed/Fri instead of daily?
+#### Why weekday (Mon–Fri) ingest?
 
-| Factor | Mon/Wed/Fri | Daily |
-|--------|-------------|-------|
-| **Screen cadence** | Sunday screen refreshes buy-tier universe; mid-week ingests close filing gaps before the next screen | Extra runs duplicate work against the same `latest.json` snapshot |
-| **Filing rhythm** | UK RNS / accounts often land Mon–Thu after results; Wed catches post-weekend backlog | Tue/Thu runs rarely add bodies without a fresh screen signal |
-| **API / CI cost** | ~6 runs/week (2 batches × 3 days) vs 14 | Lower GitHub + Yahoo load; same stall detection via ops monitor |
-| **Engineering queue** | Ingest merges on Mon/Wed/Fri still reprioritise open tasks | More noise, not better coverage |
+| Factor | Notes |
+|--------|--------|
+| **FTSE gap closure** | 11 unmeasured buy-tier tickers need bootstrap slots; Tue/Thu add capacity without waiting for Mon/Wed/Fri |
+| **Screen cadence** | Sunday screen refreshes buy-tier; weekday ingest deepens filings against `latest.json` |
+| **Cost** | Ingest-loop uses CH/RNS/API fetch — **not** `weekly_ops` Cursor spend |
+| **Capacity** | 5 days × 2 runs × 12 targets = **120 ticker-slots/week** (see `market-scrutiny.md`) |
 
-The **10:05 UTC afternoon batch** continues coverage after the morning slot (~8
-targets + 3 bootstrap seeds each; ~25 min budget per run). Ops monitor at
+The **10:05 UTC afternoon batch** continues coverage after the morning slot (~12
+targets + 6 bootstrap seeds each; ~25 min budget per run). Ops monitor at
 07:45 UTC still flags buy-tier ingest stalls and can micro-compile ingest tasks
 on any weekday when zero-body counts stop improving.
 
@@ -243,9 +245,9 @@ Optional `BACKUP_S3_URI` + AWS secrets for off-repo copy. See [`data-backup.md`]
 ### Generic dispatch (any workflow)
 
 ```bash
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"8"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"12"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 # with inputs:
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"8"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"12"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Equivalent curl:
