@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-09T21:01:46+00:00",
+  "updated_at": "2026-08-10T23:06:47+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2335,6 +2335,40 @@
       "status": "open",
       "source": "optional housekeeping Aug 9",
       "added_at": "2026-08-09T21:01:46+00:00"
+    },
+    {
+      "id": "L117",
+      "category": "later",
+      "section": "learning",
+      "title": "Hold-to-breakeven vs swap-success exit cohorts",
+      "summary": "Track underwater/downgraded positions: P(recovery to breakeven within N weeks) vs P(rotation improves excess vs replacement). Split by data_quality and exit_kind; observe-only until cohorts mature; feed counterfactual replay priors for hold buffer and grace knobs.",
+      "revisit_when": "exit_shadow has \u226515 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names",
+      "tags": [
+        "exit-timing",
+        "churn",
+        "counterfactual",
+        "exit-shadow"
+      ],
+      "status": "open",
+      "source": "exit-timing-strategy-discussion",
+      "added_at": "2026-08-10T22:50:33+00:00"
+    },
+    {
+      "id": "L118",
+      "category": "later",
+      "section": "research",
+      "title": "Wider offline exit-timing sim on near-miss names",
+      "summary": "Walk archived weekly screens with a relaxed gate (hold/watch/near-miss below primary buy tier) and score hold-recovery vs hypothetical swap paths using forward prices. Useful priors for hold buffer and grace knobs; does not substitute for live paper cohort evidence.",
+      "revisit_when": "exit_timing hold_recovery closed episodes stay below 15 after 8+ weeks of paper-auto, or counterfactual replay shows material churn on names never entered the book",
+      "tags": [
+        "exit_timing",
+        "offline_sim",
+        "counterfactual",
+        "near_miss"
+      ],
+      "status": "open",
+      "source": "PR217 counterfactual exit-timing discussion",
+      "added_at": "2026-08-10T23:06:47+00:00"
     }
   ]
 }

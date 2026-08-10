@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-09T21:01:46+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-10T23:06:47+00:00`).
 
 Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -70,6 +70,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L108 | **Server-side daily technical paper track** | Wire run_technical_pass into paper-auto as a fourth published track under docs/data/paper_automation/technical/ with same weekday schedule as rules/AI books. | Browser technical sim validated or deprecated in favour of server track |
 | L109 | **Knob-epoch zero datums for learning tracks** | On decision-review knob apply, snapshot a fresh performance baseline (NAV=contributed capital, excess vs ^FTSE from epoch start) so accumulated P&L does not obscure the effect of parameter changes. | decision-review has applied multiple knob rounds on ai_judgment with enough post-change marks |
 | L110 | **Browser technical sim daily auto-run** | Mirror maybeRunIndependentAuto for technical mode: weekday gate after London settle, optional checkbox, calls runTechnicalPass once per day. | Server technical track exists or browser sims explicitly kept as local-only sandbox |
+| L117 | **Hold-to-breakeven vs swap-success exit cohorts** | Track underwater/downgraded positions: P(recovery to breakeven within N weeks) vs P(rotation improves excess vs replacement). Split by data_quality and exit_kind; observe-only until cohorts mature; feed counterfactual replay priors for hold buffer and grace knobs. | exit_shadow has ≥15 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names |
 
 ### Universe & data
 
@@ -135,6 +136,7 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L105 | **Gap-fill: ingest — Extract Annual Report consolidated cash-flow statement and Note 5 except** | Extract Annual Report consolidated cash-flow statement and Note 5 exceptional items as structured tables (currently narrative-only in `ir_0e40d9707e30c3b7.txt`); unlocks WC/capex/M&A bridge without Yahoo fallback. | After next weekly email gap-fill pass confirms the gap persists |
 | L111 | **Full knob counterfactual via archive replay** | Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review. | docs/data/archive has ≥12 months of weekly screens and analysis_review offline_sim queue is active |
 | L113 | **AI-judgment rebalance log bootstrap (PIT research)** | Extend bootstrap_rebalance_log to ai_judgment using get_research_as_of per archive date for adjusted_signal and accumulate gates — rules-only bootstrap is live; AI track needs point-in-time memo joins. | ai_judgment track has ≥4 acted rebalance passes in forward logging or ≥8 weeks of archive+research timeline coverage |
+| L118 | **Wider offline exit-timing sim on near-miss names** | Walk archived weekly screens with a relaxed gate (hold/watch/near-miss below primary buy tier) and score hold-recovery vs hypothetical swap paths using forward prices. Useful priors for hold buffer and grace knobs; does not substitute for live paper cohort evidence. | exit_timing hold_recovery closed episodes stay below 15 after 8+ weeks of paper-auto, or counterfactual replay shows material churn on names never entered the book |
 
 ### Ops / reliability
 
