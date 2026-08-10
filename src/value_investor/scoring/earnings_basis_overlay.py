@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import pandas as pd
 
-from value_investor.scoring.fcf import earnings_growth_signs_diverge
+from value_investor.scoring.fcf import (
+    earnings_growth_signs_diverge,
+    resolve_statutory_earnings_growth,
+)
 
 GROWTH_DEPENDENT_MODEL_IDS = ("lynch_peg", "graham_enterprising", "neff_pegy")
 EARNINGS_BASIS_CONVICTION_MULTIPLIER = 0.85
@@ -100,12 +103,7 @@ def enrich_signals_with_earnings_basis_overlay(
         ticker = str(row["ticker"])
         ticker_models = model_results[model_results["ticker"] == ticker]
 
-        statutory = row.get("earnings_growth")
-        statutory_growth = (
-            float(statutory)
-            if statutory is not None and not (isinstance(statutory, float) and pd.isna(statutory))
-            else None
-        )
+        statutory_growth = resolve_statutory_earnings_growth(row)
 
         adjusted_metric = row.get("adjusted_eps_growth_pct")
         adjusted_growth = (

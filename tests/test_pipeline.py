@@ -9,9 +9,11 @@ import pandas as pd
 import pytest
 
 import value_investor.pipeline  # noqa: F401 — installs research snapshot hooks
+from value_investor.models.classic import FCFYieldModel
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
+from value_investor.scoring import evaluate_universe
 from value_investor.scoring.cash_conversion_overlay import (
     enrich_signals_with_cash_conversion_overlay,
 )
@@ -20,8 +22,12 @@ from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_ea
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
+    extract_cashflow_metrics_from_annual_financials,
+    fcf_within_company_tolerance,
+    fcf_yield_pass_suppressed,
     parse_adjusted_eps_growth_pct,
     parse_interim_eps_decline_pct,
+    suppress_fcf_yield_passes,
 )
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
@@ -880,6 +886,7 @@ def test_enrich_signals_with_earnings_basis_overlay_caps_fgp_like_profile():
                 "signal": "strong_buy",
                 "conviction_score": 0.6,
                 "earnings_growth": -0.059,
+                "basic_eps_growth_pct": 0.005,
                 "adjusted_eps_growth_pct": 0.16,
             }
         ]
@@ -901,19 +908,19 @@ def test_enrich_signals_with_earnings_basis_overlay_caps_fgp_like_profile():
     enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
 
     assert enriched.iloc[0]["signal"] == "strong_buy"
-    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is True
-    assert enriched.iloc[0]["adjusted_signal"] == "buy"
-    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
+    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is False
+    assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.6)
 
 
-def test_enrich_signals_with_earnings_basis_overlay_not_triggered_without_sign_divergence():
+def test_enrich_signals_with_earnings_basis_overlay_falls_back_to_yahoo_without_basic_eps():
     signals = pd.DataFrame(
         [
             {
                 "ticker": "FGP.L",
                 "signal": "strong_buy",
                 "conviction_score": 0.6,
-                "earnings_growth": 0.05,
+                "earnings_growth": -0.059,
                 "adjusted_eps_growth_pct": 0.16,
             }
         ]
@@ -934,5 +941,127 @@ def test_enrich_signals_with_earnings_basis_overlay_not_triggered_without_sign_d
 
     enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
 
-    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is False
-    assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
+    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
+
+
+def _fgp_style_research_tree(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "FGP.L",
+        "cash_flow": {
+            "2026": {
+                "Operating Cash Flow": 615_600_000.0,
+                "Capital Expenditure": -253_000_000.0,
+                "Free Cash Flow": 362_600_000.0,
+            }
+        },
+        "income_statement": {
+            "2026": {"Basic EPS": 0.214},
+            "2025": {"Basic EPS": 0.213},
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "ir_results.txt").write_text(
+        "Free Cash Flow of £113.5m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_fcf_yield_pass_suppressed_when_divergence_exceeds_company_tolerance():
+    assert (
+        fcf_within_company_tolerance(
+            362_600_000.0,
+            113_500_000.0,
+            company_adjusted_currency="GBP",
+        )
+        is False
+    )
+    assert (
+        fcf_yield_pass_suppressed(
+            divergence_flagged=True,
+            canonical=362_600_000.0,
+            company_adjusted=113_500_000.0,
+            company_adjusted_currency="GBP",
+        )
+        is True
+    )
+    assert (
+        fcf_yield_pass_suppressed(
+            divergence_flagged=True,
+            canonical=120_000_000.0,
+            company_adjusted=113_500_000.0,
+            company_adjusted_currency="GBP",
+        )
+        is False
+    )
+
+
+def test_extract_cashflow_metrics_use_ocf_capex_for_prior_year():
+    financials = {
+        "cash_flow": {
+            "2026": {
+                "Operating Cash Flow": 615_600_000.0,
+                "Capital Expenditure": -253_000_000.0,
+                "Free Cash Flow": 999_000_000.0,
+            },
+            "2025": {
+                "Operating Cash Flow": 754_200_000.0,
+                "Capital Expenditure": -156_400_000.0,
+                "Free Cash Flow": 999_000_000.0,
+            },
+        }
+    }
+    metrics = extract_cashflow_metrics_from_annual_financials(financials)
+    assert metrics["free_cashflow"] == pytest.approx(362_600_000.0)
+    assert metrics["free_cashflow_prev"] == pytest.approx(597_800_000.0)
+
+
+def test_enrich_universe_with_filing_metrics_extracts_basic_eps_growth(tmp_path: Path):
+    _fgp_style_research_tree(tmp_path)
+    universe = pd.DataFrame([{"ticker": "FGP.L", "name": "FirstGroup plc"}])
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+    assert row["basic_eps"] == pytest.approx(0.214)
+    assert row["basic_eps_prev"] == pytest.approx(0.213)
+    assert row["basic_eps_growth_pct"] == pytest.approx(0.00469483568, rel=1e-4)
+
+
+def test_suppress_fcf_yield_passes_for_fgp_style_mismatch(tmp_path: Path):
+    _fgp_style_research_tree(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "free_cashflow": 362_600_000.0,
+                "market_cap": 973_000_000.0,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    universe = enrich_universe_with_filing_metrics(universe, tmp_path)
+    model_results = evaluate_universe(universe, models=[FCFYieldModel()])
+    fcf_yield_before = model_results.loc[model_results["model_id"] == "fcf_yield", "passed"].iloc[0]
+    assert bool(fcf_yield_before) is True
+
+    model_results = suppress_fcf_yield_passes(model_results, universe, output_dir=tmp_path)
+    fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
+    assert bool(fcf_yield["passed"]) is False
+    assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])

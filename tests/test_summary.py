@@ -803,6 +803,10 @@ def _fgp_financials() -> dict:
                 "Free Cash Flow": 362_600_000.0,
             }
         },
+        "income_statement": {
+            "2026": {"Basic EPS": 0.214},
+            "2025": {"Basic EPS": 0.213},
+        },
     }
 
 
@@ -922,6 +926,7 @@ def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: 
     sources = tmp_path / "research" / "FGP.L" / "sources"
     filings = sources / "filings" / "bodies"
     filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_fgp_financials()), encoding="utf-8")
     (filings / "ir_results.txt").write_text(
         "Strong financial performance - 16% growth in Adjusted EPS\nAdjusted EPS +16% to 19.4p",
         encoding="utf-8",
@@ -950,6 +955,7 @@ def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: 
                 signal="strong_buy",
                 conviction_score=0.6,
                 earnings_growth=-0.059,
+                basic_eps_growth_pct=0.214 / 0.213 - 1.0,
                 adjusted_eps_growth_pct=0.16,
             )
         ]
@@ -960,11 +966,16 @@ def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: 
     snapshot = report.to_dict()
 
     assert snapshot["screening_inputs"]["earnings_growth_pct"] == pytest.approx(-0.059)
+    assert snapshot["screening_inputs"]["basic_eps_growth_pct"] == pytest.approx(
+        0.214 / 0.213 - 1.0
+    )
+    assert snapshot["screening_inputs"]["statutory_earnings_growth_pct"] == pytest.approx(
+        0.214 / 0.213 - 1.0
+    )
     assert snapshot["screening_inputs"]["adjusted_eps_growth_pct"] == pytest.approx(0.16)
-    assert snapshot["earnings_basis_overlay"] is True
-    assert snapshot["adjusted_signal"] == "buy"
-    assert snapshot["conviction_score"] == pytest.approx(0.51)
-    assert "Earnings-basis overlay" in report.summary
+    assert snapshot["earnings_basis_overlay"] is False
+    assert snapshot["adjusted_signal"] == "strong_buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.6)
 
 
 def test_build_company_reports_interim_quality_uses_filing_fcf_for_megp():

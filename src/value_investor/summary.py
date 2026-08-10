@@ -19,6 +19,7 @@ from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     reconcile_fcf_for_ticker,
     resolve_free_cashflow,
+    resolve_statutory_earnings_growth,
     screen_ttm_from_row,
 )
 from value_investor.scoring.fcf_basis_overlay import apply_fcf_basis_overlay_to_signal
@@ -253,8 +254,15 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
         inputs["current_ratio"] = float(cr)
 
     growth = row.get("earnings_growth")
+    basic_growth = row.get("basic_eps_growth_pct")
+    if basic_growth is not None and not (isinstance(basic_growth, float) and pd.isna(basic_growth)):
+        inputs["basic_eps_growth_pct"] = float(basic_growth)
     if growth is not None and not (isinstance(growth, float) and pd.isna(growth)):
         inputs["earnings_growth_pct"] = float(growth)
+
+    statutory_growth = resolve_statutory_earnings_growth(row)
+    if statutory_growth is not None:
+        inputs["statutory_earnings_growth_pct"] = statutory_growth
 
     adjusted_growth = row.get("adjusted_eps_growth_pct")
     if adjusted_growth is not None and not (
@@ -618,13 +626,7 @@ def build_company_reports(
         ):
             earnings_basis_overlay = bool(earnings_basis_overlay_flag)
         else:
-            statutory = row.get("earnings_growth")
-            statutory_growth = (
-                float(statutory)
-                if statutory is not None
-                and not (isinstance(statutory, float) and pd.isna(statutory))
-                else None
-            )
+            statutory_growth = resolve_statutory_earnings_growth(row)
             adjusted_metric = row.get("adjusted_eps_growth_pct")
             adjusted_growth = (
                 float(adjusted_metric)
