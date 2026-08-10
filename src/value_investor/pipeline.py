@@ -39,6 +39,9 @@ from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.scoring.cash_conversion_overlay import (
     enrich_signals_with_cash_conversion_overlay,
 )
+from value_investor.scoring.cyclical_exposure_overlay import (
+    enrich_signals_with_cyclical_exposure_overlay,
+)
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.fcf import (
@@ -48,6 +51,9 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
+from value_investor.scoring.healthcare_price_erosion_overlay import (
+    enrich_signals_with_healthcare_price_erosion_overlay,
+)
 from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
 )
@@ -156,11 +162,17 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "dividend_yield",
         "price_to_book",
         "healthcare_overlay",
+        "healthcare_price_erosion_overlay",
         "cash_conversion_overlay",
         "dividend_yield_overlay",
         "interim_quality_overlay",
+        "cyclical_exposure_overlay",
+        "cyclical_exposure_detected",
         "earnings_basis_overlay",
         "fcf_basis_overlay",
+        "operating_cashflow",
+        "fcf_dividend_coverage_gross",
+        "fcf_dividend_coverage_net",
         "adjusted_signal",
     ]
     present = [c for c in cols if c in signals.columns]
@@ -335,9 +347,19 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out["run_at"] = result.run_at.isoformat()
     signals_out = enrich_signals_with_research(signals_out, output_dir, run_at=result.run_at)
     signals_out = enrich_signals_with_healthcare_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_healthcare_price_erosion_overlay(
+        signals_out,
+        result.model_results,
+        output_dir=output_dir,
+    )
     signals_out = enrich_signals_with_cash_conversion_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_dividend_yield_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_cyclical_exposure_overlay(
+        signals_out,
+        result.model_results,
+        output_dir=output_dir,
+    )
     signals_out = enrich_signals_with_earnings_basis_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_fcf_basis_overlay(
         signals_out,

@@ -1,45 +1,68 @@
-"""Interim quality overlay — cap signals when quality passes but interim EPS falls and FCF cover is thin."""
+"""Cyclical-exposure overlay — flag dividend-sustainability risk on cyclical names."""
 
 from __future__ import annotations
 
+import re
+from pathlib import Path
+
 import pandas as pd
 
-from value_investor.scoring.fcf import fcf_dividend_coverage as compute_fcf_dividend_coverage
-from value_investor.scoring.fcf import resolve_free_cashflow
+from value_investor.scoring.fcf import (
+    fcf_dividend_coverage,
+    load_filing_bodies_for_ticker,
+    resolve_free_cashflow,
+)
+from value_investor.scoring.interim_quality_overlay import (
+    FCF_DIVIDEND_COVERAGE_MAX,
+    quality_family_passed,
+)
 
 INTERIM_EPS_DECLINE_THRESHOLD = 0.03
-FCF_DIVIDEND_COVERAGE_MAX = 1.0
 
-_SIGNAL_RANK = {
-    "strong_buy": 4,
-    "buy": 3,
-    "hold": 2,
-    "avoid": 1,
-    "insufficient_data": 0,
-}
+CYCLICAL_KEYWORD_FRAGMENTS = (
+    "consumer spending",
+    "discretionary spend",
+    "discretionary",
+    "travel",
+    "recession",
+    "economic downturn",
+    "leisure",
+)
+
+_CYCLICAL_KEYWORD_RES = tuple(
+    re.compile(re.escape(fragment), re.IGNORECASE) for fragment in CYCLICAL_KEYWORD_FRAGMENTS
+)
 
 
-# Backward-compatible re-export for tests and callers.
-fcf_dividend_coverage = compute_fcf_dividend_coverage
-
-
-def quality_family_passed(passed_families: str | None) -> bool:
-    """True when the trailing quality model family passes."""
-    if not passed_families:
+def cyclical_exposure_detected(text: str) -> bool:
+    """True when filing prose cites principal cyclical or discretionary demand risks."""
+    if not text:
         return False
-    return "quality" in {part.strip() for part in str(passed_families).split(",") if part.strip()}
+    return any(pattern.search(text) for pattern in _CYCLICAL_KEYWORD_RES)
 
 
-def interim_quality_overlay_triggered(
+def cyclical_exposure_for_ticker(
+    ticker: str,
     *,
+    output_dir: Path | None = None,
+) -> bool:
+    """Scan cached filing bodies for cyclical-exposure language."""
+    bodies = load_filing_bodies_for_ticker(ticker, output_dir=output_dir)
+    return any(cyclical_exposure_detected(body) for body in bodies)
+
+
+def cyclical_exposure_overlay_triggered(
+    *,
+    cyclical_exposure_detected_flag: bool,
     passed_families: str | None,
     interim_eps_decline_pct: float | None,
-    free_cashflow: float | None,
-    dividends_paid: float | None,
-    fcf_dividend_coverage_net: float | None = None,
-    fcf_dividend_coverage_gross: float | None = None,
+    fcf_dividend_coverage_net: float | None,
+    free_cashflow: float | None = None,
+    dividends_paid: float | None = None,
 ) -> bool:
-    """Quality passes, interim EPS decline exceeds 3%, and net FCF/dividend coverage is below 1.0×."""
+    """Cyclical exposure, quality passes, interim EPS decline, and thin net FCF/dividend cover."""
+    if not cyclical_exposure_detected_flag:
+        return False
     if not quality_family_passed(passed_families):
         return False
     if interim_eps_decline_pct is None or (
@@ -50,14 +73,13 @@ def interim_quality_overlay_triggered(
         return False
     coverage = fcf_dividend_coverage_net
     if coverage is None:
-        coverage = compute_fcf_dividend_coverage(free_cashflow, dividends_paid)
+        coverage = fcf_dividend_coverage(free_cashflow, dividends_paid)
     if coverage is None or coverage >= FCF_DIVIDEND_COVERAGE_MAX:
         return False
-    _ = fcf_dividend_coverage_gross
     return True
 
 
-def cap_signal_for_interim_quality_overlay(signal: str) -> str:
+def cap_signal_for_cyclical_exposure_overlay(signal: str) -> str:
     """Cap at research-equivalent caution: strong_buy -> buy, buy -> hold."""
     if signal == "strong_buy":
         return "buy"
@@ -66,55 +88,76 @@ def cap_signal_for_interim_quality_overlay(signal: str) -> str:
     return signal
 
 
+_SIGNAL_RANK = {
+    "strong_buy": 4,
+    "buy": 3,
+    "hold": 2,
+    "avoid": 1,
+    "insufficient_data": 0,
+}
+
+
 def _more_conservative_signal(current: str, candidate: str) -> str:
     current_rank = _SIGNAL_RANK.get(current, 0)
     candidate_rank = _SIGNAL_RANK.get(candidate, 0)
     return current if current_rank <= candidate_rank else candidate
 
 
-def apply_interim_quality_overlay_to_signal(
+def apply_cyclical_exposure_overlay_to_signal(
     signal: str,
     *,
+    cyclical_exposure_detected_flag: bool,
     passed_families: str | None,
     interim_eps_decline_pct: float | None,
-    free_cashflow: float | None,
-    dividends_paid: float | None,
-    fcf_dividend_coverage_net: float | None = None,
-    fcf_dividend_coverage_gross: float | None = None,
+    fcf_dividend_coverage_net: float | None,
+    free_cashflow: float | None = None,
+    dividends_paid: float | None = None,
     adjusted_signal: str | None = None,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
-    if not interim_quality_overlay_triggered(
+    if not cyclical_exposure_overlay_triggered(
+        cyclical_exposure_detected_flag=cyclical_exposure_detected_flag,
         passed_families=passed_families,
         interim_eps_decline_pct=interim_eps_decline_pct,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
         free_cashflow=free_cashflow,
         dividends_paid=dividends_paid,
-        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
-        fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
     ):
         return False, base_adjusted
-    capped = cap_signal_for_interim_quality_overlay(signal)
+    capped = cap_signal_for_cyclical_exposure_overlay(signal)
     return True, _more_conservative_signal(base_adjusted, capped)
 
 
-def enrich_signals_with_interim_quality_overlay(
+def enrich_signals_with_cyclical_exposure_overlay(
     signals: pd.DataFrame,
     model_results: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
 ) -> pd.DataFrame:
-    """Add interim-quality overlay flag and cap ``adjusted_signal`` when triggered."""
+    """Add cyclical-exposure overlay flag and cap ``adjusted_signal`` when triggered."""
     _ = model_results
     out = signals.copy()
     flags: list[bool] = []
+    detected_flags: list[bool] = []
     adjusted: list[str] = []
 
     for _, row in out.iterrows():
+        ticker = str(row["ticker"])
         existing = row.get("adjusted_signal")
         existing_adjusted = (
             str(existing)
             if existing is not None and not (isinstance(existing, float) and pd.isna(existing))
             else None
         )
+
+        cyclical_flag = row.get("cyclical_exposure_detected")
+        if cyclical_flag is not None and not (
+            isinstance(cyclical_flag, float) and pd.isna(cyclical_flag)
+        ):
+            cyclical_detected = bool(cyclical_flag)
+        else:
+            cyclical_detected = cyclical_exposure_for_ticker(ticker, output_dir=output_dir)
 
         interim_decline = row.get("interim_eps_decline_pct")
         interim_eps_decline_pct = (
@@ -138,27 +181,22 @@ def enrich_signals_with_interim_quality_overlay(
             and not (isinstance(coverage_net, float) and pd.isna(coverage_net))
             else None
         )
-        coverage_gross = row.get("fcf_dividend_coverage_gross")
-        fcf_dividend_coverage_gross = (
-            float(coverage_gross)
-            if coverage_gross is not None
-            and not (isinstance(coverage_gross, float) and pd.isna(coverage_gross))
-            else None
-        )
 
-        triggered, new_adjusted = apply_interim_quality_overlay_to_signal(
+        triggered, new_adjusted = apply_cyclical_exposure_overlay_to_signal(
             str(row.get("signal") or "hold"),
+            cyclical_exposure_detected_flag=cyclical_detected,
             passed_families=row.get("passed_families"),
             interim_eps_decline_pct=interim_eps_decline_pct,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
             free_cashflow=resolve_free_cashflow(row),
             dividends_paid=dividends_paid,
-            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
-            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
             adjusted_signal=existing_adjusted,
         )
         flags.append(triggered)
+        detected_flags.append(cyclical_detected)
         adjusted.append(new_adjusted)
 
-    out["interim_quality_overlay"] = flags
+    out["cyclical_exposure_detected"] = detected_flags
+    out["cyclical_exposure_overlay"] = flags
     out["adjusted_signal"] = adjusted
     return out
