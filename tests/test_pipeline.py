@@ -1065,3 +1065,120 @@ def test_suppress_fcf_yield_passes_for_fgp_style_mismatch(tmp_path: Path):
     fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
     assert bool(fcf_yield["passed"]) is False
     assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])
+
+
+def test_enrich_universe_with_filing_metrics_computes_dual_dividend_coverage(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    body_path = filings_dir / "annual.txt"
+    body_path.write_text(
+        "Cash generated from operations £115.5m while net cash generated from operating "
+        "activities was £90.8m.",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "annual",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                        "published_at": "2026-03-23",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Capital Expenditure": -65_609_000.0,
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Dividends Paid": -29_769_000.0,
+            }
+        }
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    enriched = enrich_universe_with_filing_metrics(
+        pd.DataFrame([{"ticker": "MEGP.L", "name": "ME Group International plc"}]),
+        tmp_path,
+    )
+    row = enriched.iloc[0]
+
+    assert row["operating_cashflow"] == pytest.approx(90_762_000.0)
+    assert row["operating_cashflow_gross"] == pytest.approx(115_500_000.0)
+    assert row["fcf_dividend_coverage_net"] == pytest.approx(25_153_000.0 / 29_769_000.0)
+    assert row["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
+
+
+def test_enrich_signals_with_cyclical_exposure_overlay_flags_megp_like_profile():
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "interim_eps_decline_pct": 0.039,
+                "dividends_paid": 29_769_000.0,
+                "fcf_dividend_coverage_net": 0.85,
+                "cyclical_exposure_detected": True,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_cyclical_exposure_overlay(signals, pd.DataFrame())
+
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_signals_with_healthcare_price_erosion_overlay_caps_hik_like_profile():
+    from value_investor.scoring.healthcare_price_erosion_overlay import (
+        enrich_signals_with_healthcare_price_erosion_overlay,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "sector": "Health Care",
+                "signal": "strong_buy",
+                "passed_families": "quality,dividend,garp,risk",
+                "healthcare_price_erosion_detected": True,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": model_id,
+                "passed": False,
+                "score": 0.2,
+            }
+            for model_id in ("high_dividend", "fcf_yield", "earnings_yield", "low_pe_high_yield")
+        ]
+        + [
+            {
+                "ticker": "HIK.L",
+                "model_id": "buffett_quality",
+                "passed": True,
+                "score": 0.8,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_healthcare_price_erosion_overlay(signals, model_results)
+
+    assert bool(enriched.iloc[0]["healthcare_price_erosion_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"

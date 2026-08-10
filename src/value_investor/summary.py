@@ -13,6 +13,9 @@ from value_investor.data_quality import quality_label
 from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
+from value_investor.scoring.cyclical_exposure_overlay import (
+    apply_cyclical_exposure_overlay_to_signal,
+)
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.fcf import (
@@ -26,6 +29,9 @@ from value_investor.scoring.fcf_basis_overlay import apply_fcf_basis_overlay_to_
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
+)
+from value_investor.scoring.healthcare_price_erosion_overlay import (
+    apply_healthcare_price_erosion_overlay_to_signal,
 )
 from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
 from value_investor.technical_analysis import (
@@ -79,11 +85,17 @@ class CompanyReport:
     fcf: dict[str, Any] | None = None
     piotroski_f_score: dict[str, Any] | None = None
     healthcare_overlay: bool = False
+    healthcare_price_erosion_overlay: bool = False
     cash_conversion_overlay: bool = False
     dividend_yield_overlay: bool = False
     interim_quality_overlay: bool = False
+    cyclical_exposure_overlay: bool = False
+    cyclical_exposure_detected: bool = False
     earnings_basis_overlay: bool = False
     fcf_basis_overlay: bool = False
+    operating_cashflow: float | None = None
+    fcf_dividend_coverage_gross: float | None = None
+    fcf_dividend_coverage_net: float | None = None
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -125,11 +137,17 @@ class CompanyReport:
             "fcf": self.fcf,
             "piotroski_f_score": self.piotroski_f_score,
             "healthcare_overlay": self.healthcare_overlay,
+            "healthcare_price_erosion_overlay": self.healthcare_price_erosion_overlay,
             "cash_conversion_overlay": self.cash_conversion_overlay,
             "dividend_yield_overlay": self.dividend_yield_overlay,
             "interim_quality_overlay": self.interim_quality_overlay,
+            "cyclical_exposure_overlay": self.cyclical_exposure_overlay,
+            "cyclical_exposure_detected": self.cyclical_exposure_detected,
             "earnings_basis_overlay": self.earnings_basis_overlay,
             "fcf_basis_overlay": self.fcf_basis_overlay,
+            "operating_cashflow": self.operating_cashflow,
+            "fcf_dividend_coverage_gross": self.fcf_dividend_coverage_gross,
+            "fcf_dividend_coverage_net": self.fcf_dividend_coverage_net,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -177,11 +195,17 @@ class CompanyReport:
             fcf=data.get("fcf"),
             piotroski_f_score=data.get("piotroski_f_score"),
             healthcare_overlay=bool(data.get("healthcare_overlay")),
+            healthcare_price_erosion_overlay=bool(data.get("healthcare_price_erosion_overlay")),
             cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
             dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
             interim_quality_overlay=bool(data.get("interim_quality_overlay")),
+            cyclical_exposure_overlay=bool(data.get("cyclical_exposure_overlay")),
+            cyclical_exposure_detected=bool(data.get("cyclical_exposure_detected")),
             earnings_basis_overlay=bool(data.get("earnings_basis_overlay")),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
+            operating_cashflow=data.get("operating_cashflow"),
+            fcf_dividend_coverage_gross=data.get("fcf_dividend_coverage_gross"),
+            fcf_dividend_coverage_net=data.get("fcf_dividend_coverage_net"),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
             research_risk_level=data.get("research_risk_level"),
@@ -352,11 +376,15 @@ def _brief_summary(
     research_verdict: str | None = None,
     adjusted_signal: str | None = None,
     healthcare_overlay: bool = False,
+    healthcare_price_erosion_overlay: bool = False,
     cash_conversion_overlay: bool = False,
     dividend_yield_overlay: bool = False,
     interim_quality_overlay: bool = False,
+    cyclical_exposure_overlay: bool = False,
     earnings_basis_overlay: bool = False,
     fcf_basis_overlay: bool = False,
+    fcf_dividend_coverage_gross: float | None = None,
+    fcf_dividend_coverage_net: float | None = None,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -435,9 +463,28 @@ def _brief_summary(
         )
 
     if interim_quality_overlay and adjusted_signal and adjusted_signal != signal:
+        coverage_note = ""
+        if fcf_dividend_coverage_gross is not None and fcf_dividend_coverage_net is not None:
+            coverage_note = (
+                f" (gross {fcf_dividend_coverage_gross:.2f}×, net {fcf_dividend_coverage_net:.2f}×)"
+            )
         parts.append(
-            f"Interim-quality overlay: quality passes but interim EPS declined and FCF/dividend "
-            f"coverage is below 1.0× "
+            f"Interim-quality overlay: quality passes but interim EPS declined and net FCF/dividend "
+            f"coverage is below 1.0×{coverage_note} "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if cyclical_exposure_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Cyclical-exposure overlay: discretionary demand risk with interim EPS decline and thin "
+            f"dividend cover "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if healthcare_price_erosion_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Healthcare price-erosion overlay: quality/income pass but yield screens fail with "
+            f"filing pricing pressure "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -484,6 +531,34 @@ def build_company_reports(
         canonical_fcf = fcf_bundle.get("canonical")
         free_cashflow = (
             float(canonical_fcf) if canonical_fcf is not None else resolve_free_cashflow(row)
+        )
+
+        operating_cashflow_raw = row.get("operating_cashflow")
+        operating_cashflow = (
+            float(operating_cashflow_raw)
+            if operating_cashflow_raw is not None
+            and not (isinstance(operating_cashflow_raw, float) and pd.isna(operating_cashflow_raw))
+            else None
+        )
+        if operating_cashflow is None:
+            cashflow_metrics = fcf_bundle.get("cashflow_metrics") or {}
+            ocf_from_metrics = cashflow_metrics.get("operating_cashflow")
+            if ocf_from_metrics is not None:
+                operating_cashflow = float(ocf_from_metrics)
+
+        coverage_gross_raw = row.get("fcf_dividend_coverage_gross")
+        fcf_dividend_coverage_gross = (
+            float(coverage_gross_raw)
+            if coverage_gross_raw is not None
+            and not (isinstance(coverage_gross_raw, float) and pd.isna(coverage_gross_raw))
+            else None
+        )
+        coverage_net_raw = row.get("fcf_dividend_coverage_net")
+        fcf_dividend_coverage_net = (
+            float(coverage_net_raw)
+            if coverage_net_raw is not None
+            and not (isinstance(coverage_net_raw, float) and pd.isna(coverage_net_raw))
+            else None
         )
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
@@ -589,6 +664,20 @@ def build_company_reports(
                 adjusted_signal=adjusted_signal_str,
             )
 
+        interim_decline = row.get("interim_eps_decline_pct")
+        interim_eps_decline_pct = (
+            float(interim_decline)
+            if interim_decline is not None
+            and not (isinstance(interim_decline, float) and pd.isna(interim_decline))
+            else None
+        )
+        dividends = row.get("dividends_paid")
+        dividends_paid = (
+            float(dividends)
+            if dividends is not None and not (isinstance(dividends, float) and pd.isna(dividends))
+            else None
+        )
+
         interim_quality_overlay_flag = row.get("interim_quality_overlay")
         if interim_quality_overlay_flag is not None and not (
             isinstance(interim_quality_overlay_flag, float)
@@ -596,27 +685,67 @@ def build_company_reports(
         ):
             interim_quality_overlay = bool(interim_quality_overlay_flag)
         else:
-            interim_decline = row.get("interim_eps_decline_pct")
-            interim_eps_decline_pct = (
-                float(interim_decline)
-                if interim_decline is not None
-                and not (isinstance(interim_decline, float) and pd.isna(interim_decline))
-                else None
-            )
-            dividends = row.get("dividends_paid")
-            dividends_paid = (
-                float(dividends)
-                if dividends is not None
-                and not (isinstance(dividends, float) and pd.isna(dividends))
-                else None
-            )
             interim_quality_overlay, adjusted_signal_str = apply_interim_quality_overlay_to_signal(
                 signal,
                 passed_families=row.get("passed_families"),
                 interim_eps_decline_pct=interim_eps_decline_pct,
                 free_cashflow=free_cashflow,
                 dividends_paid=dividends_paid,
+                fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+                fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
                 adjusted_signal=adjusted_signal_str,
+            )
+
+        cyclical_overlay_flag = row.get("cyclical_exposure_overlay")
+        cyclical_detected_flag = row.get("cyclical_exposure_detected")
+        if cyclical_detected_flag is not None and not (
+            isinstance(cyclical_detected_flag, float) and pd.isna(cyclical_detected_flag)
+        ):
+            cyclical_exposure_detected = bool(cyclical_detected_flag)
+        else:
+            cyclical_exposure_detected = False
+
+        if cyclical_overlay_flag is not None and not (
+            isinstance(cyclical_overlay_flag, float) and pd.isna(cyclical_overlay_flag)
+        ):
+            cyclical_exposure_overlay = bool(cyclical_overlay_flag)
+        else:
+            cyclical_exposure_overlay, adjusted_signal_str = (
+                apply_cyclical_exposure_overlay_to_signal(
+                    signal,
+                    cyclical_exposure_detected_flag=cyclical_exposure_detected,
+                    passed_families=row.get("passed_families"),
+                    interim_eps_decline_pct=interim_eps_decline_pct,
+                    fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+                    free_cashflow=free_cashflow,
+                    dividends_paid=dividends_paid,
+                    adjusted_signal=adjusted_signal_str,
+                )
+            )
+
+        healthcare_price_erosion_overlay_flag = row.get("healthcare_price_erosion_overlay")
+        if healthcare_price_erosion_overlay_flag is not None and not (
+            isinstance(healthcare_price_erosion_overlay_flag, float)
+            and pd.isna(healthcare_price_erosion_overlay_flag)
+        ):
+            healthcare_price_erosion_overlay = bool(healthcare_price_erosion_overlay_flag)
+        else:
+            from value_investor.scoring.healthcare_price_erosion_overlay import (
+                price_erosion_for_ticker,
+            )
+
+            healthcare_price_erosion_overlay, adjusted_signal_str = (
+                apply_healthcare_price_erosion_overlay_to_signal(
+                    signal,
+                    sector=row.get("sector"),
+                    passed_families=row.get("passed_families"),
+                    ticker_models=ticker_models,
+                    price_erosion_detected=price_erosion_for_ticker(
+                        ticker,
+                        output_dir=output_dir,
+                    ),
+                    adjusted_signal=adjusted_signal_str,
+                )
             )
 
         conviction_score = float(row.get("conviction_score") or 0)
@@ -690,6 +819,14 @@ def build_company_reports(
             else None
         )
 
+        cashflow_metrics = dict(fcf_bundle.get("cashflow_metrics") or {})
+        if operating_cashflow is not None:
+            cashflow_metrics["operating_cashflow"] = operating_cashflow
+        if fcf_dividend_coverage_gross is not None:
+            cashflow_metrics["fcf_dividend_coverage_gross"] = fcf_dividend_coverage_gross
+        if fcf_dividend_coverage_net is not None:
+            cashflow_metrics["fcf_dividend_coverage_net"] = fcf_dividend_coverage_net
+
         summary = _brief_summary(
             signal=signal,
             models_passed=int(row.get("models_passed") or 0),
@@ -720,11 +857,15 @@ def build_company_reports(
             research_verdict=research_verdict_str,
             adjusted_signal=adjusted_signal_str,
             healthcare_overlay=healthcare_overlay,
+            healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
             cash_conversion_overlay=cash_conversion_overlay,
             dividend_yield_overlay=dividend_yield_overlay,
             interim_quality_overlay=interim_quality_overlay,
+            cyclical_exposure_overlay=cyclical_exposure_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
             fcf_basis_overlay=fcf_basis_overlay,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
@@ -763,7 +904,7 @@ def build_company_reports(
                 failed_models=failed_model_names,
                 model_failures=model_failures,
                 screening_inputs=screening_inputs,
-                cashflow_metrics=fcf_bundle.get("cashflow_metrics"),
+                cashflow_metrics=cashflow_metrics or None,
                 fcf={
                     key: value
                     for key, value in fcf_bundle.items()
@@ -772,11 +913,17 @@ def build_company_reports(
                 or None,
                 piotroski_f_score=piotroski_f_score,
                 healthcare_overlay=healthcare_overlay,
+                healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
                 cash_conversion_overlay=cash_conversion_overlay,
                 dividend_yield_overlay=dividend_yield_overlay,
                 interim_quality_overlay=interim_quality_overlay,
+                cyclical_exposure_overlay=cyclical_exposure_overlay,
+                cyclical_exposure_detected=cyclical_exposure_detected,
                 earnings_basis_overlay=earnings_basis_overlay,
                 fcf_basis_overlay=fcf_basis_overlay,
+                operating_cashflow=operating_cashflow,
+                fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+                fcf_dividend_coverage_net=fcf_dividend_coverage_net,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,

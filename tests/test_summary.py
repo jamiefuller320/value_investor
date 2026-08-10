@@ -1011,3 +1011,54 @@ def test_build_company_reports_interim_quality_uses_filing_fcf_for_megp():
     assert snapshot["interim_quality_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
     assert "Interim-quality overlay" in report.summary
+
+
+def test_build_company_reports_exports_operating_cashflow_and_dual_coverage(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Capital Expenditure": -65_609_000.0,
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Dividends Paid": -29_769_000.0,
+            }
+        }
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                operating_cashflow=90_762_000.0,
+                free_cashflow=25_153_000.0,
+                dividends_paid=29_769_000.0,
+                fcf_dividend_coverage_net=25_153_000.0 / 29_769_000.0,
+                fcf_dividend_coverage_gross=49_891_000.0 / 29_769_000.0,
+            ),
+        ]
+    )
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["operating_cashflow"] == pytest.approx(90_762_000.0)
+    assert snapshot["fcf_dividend_coverage_net"] == pytest.approx(25_153_000.0 / 29_769_000.0)
+    assert snapshot["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
+    assert snapshot["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)

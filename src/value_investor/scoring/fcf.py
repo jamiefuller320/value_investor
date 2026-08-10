@@ -78,17 +78,36 @@ _ADJUSTED_EPS_GROWTH_RES = (
     ),
 )
 
+_GROSS_OPERATING_CASHFLOW_RES = (
+    re.compile(
+        r"Cash generated\s+from operations\s+[£$€]?\s*([\d,.]+)\s*m\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"Cash generated from operations\s+[£$€]?\s*([\d,.]+)\s*m\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"Cash generated from operations\s+([\d,]+)\s+[\d,]",
+        re.IGNORECASE,
+    ),
+)
+
 _FILING_METRIC_KEYS = (
     "operating_cashflow",
+    "operating_cashflow_gross",
     "operating_cashflow_prev",
     "free_cashflow",
     "free_cashflow_prev",
+    "capital_expenditure",
     "net_income_adjusted",
     "net_income_adjusted_prev",
     "basic_eps",
     "basic_eps_prev",
     "basic_eps_growth_pct",
     "dividends_paid",
+    "fcf_dividend_coverage_gross",
+    "fcf_dividend_coverage_net",
     "interim_eps_decline_pct",
     "adjusted_eps_growth_pct",
 )
@@ -147,6 +166,100 @@ def _filing_aligned_fcf_from_year_rows(year_rows: dict[str, Any]) -> float | Non
     return _annual_label_value(year_rows, _FREE_CASHFLOW_LABELS)
 
 
+def _parse_gross_operating_amount(raw: str) -> float | None:
+    try:
+        amount = float(raw.replace(",", ""))
+    except (TypeError, ValueError):
+        return None
+    if amount == 0:
+        return 0.0
+    # Table rows in filing bodies are often in thousands; prose uses millions.
+    if amount >= 1_000_000:
+        return amount
+    if amount >= 1_000:
+        return amount * 1_000.0
+    return amount * 1_000_000.0
+
+
+def parse_gross_cash_from_operations(text: str) -> float | None:
+    """Parse gross cash generated from operations from filing prose or tables."""
+    if not text:
+        return None
+    for pattern in _GROSS_OPERATING_CASHFLOW_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        amount = _parse_gross_operating_amount(str(match.group(1)))
+        if amount is not None and amount > 0:
+            return amount
+    return None
+
+
+def extract_gross_cash_from_operations_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> float | None:
+    """Return gross cash-from-operations when filing bodies expose it."""
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir):
+        parsed = parse_gross_cash_from_operations(body)
+        if parsed is not None:
+            return parsed
+    return None
+
+
+def fcf_dividend_coverage(
+    free_cashflow: float | None,
+    dividends_paid: float | None,
+) -> float | None:
+    """Return FCF divided by annual cash dividends when both are available."""
+    if free_cashflow is None or (isinstance(free_cashflow, float) and pd.isna(free_cashflow)):
+        return None
+    if dividends_paid is None or (isinstance(dividends_paid, float) and pd.isna(dividends_paid)):
+        return None
+    dividends = abs(float(dividends_paid))
+    if dividends <= 0:
+        return None
+    return float(free_cashflow) / dividends
+
+
+def filing_aligned_fcf(
+    operating_cashflow: float | None,
+    capital_expenditure: float | None,
+    *,
+    free_cashflow: float | None = None,
+) -> float | None:
+    """FCF as net operating cash plus capital expenditure (CapEx is negative in Yahoo)."""
+    if operating_cashflow is not None and capital_expenditure is not None:
+        return float(operating_cashflow) + float(capital_expenditure)
+    return free_cashflow
+
+
+def compute_dual_fcf_dividend_coverage(
+    *,
+    operating_cashflow: float | None,
+    operating_cashflow_gross: float | None,
+    capital_expenditure: float | None,
+    dividends_paid: float | None,
+    free_cashflow: float | None = None,
+) -> dict[str, float | None]:
+    """Return gross- and net-OCF FCF/dividend coverage ratios from filing cash-flow data."""
+    net_fcf = filing_aligned_fcf(
+        operating_cashflow,
+        capital_expenditure,
+        free_cashflow=free_cashflow,
+    )
+    gross_fcf = (
+        filing_aligned_fcf(operating_cashflow_gross, capital_expenditure)
+        if operating_cashflow_gross is not None
+        else None
+    )
+    return {
+        "fcf_dividend_coverage_net": fcf_dividend_coverage(net_fcf, dividends_paid),
+        "fcf_dividend_coverage_gross": fcf_dividend_coverage(gross_fcf, dividends_paid),
+    }
+
+
 def extract_cashflow_metrics_from_annual_financials(
     financials: dict[str, Any],
 ) -> dict[str, float | None]:
@@ -160,6 +273,7 @@ def extract_cashflow_metrics_from_annual_financials(
     if years:
         latest_rows = cash_flow.get(years[0]) or {}
         metrics["operating_cashflow"] = _annual_label_value(latest_rows, _OPERATING_CASHFLOW_LABELS)
+        metrics["capital_expenditure"] = _annual_label_value(latest_rows, _CAPEX_LABELS)
         metrics["free_cashflow"] = _filing_aligned_fcf_from_year_rows(latest_rows)
     if len(years) > 1:
         prior_rows = cash_flow.get(years[1]) or {}
@@ -432,6 +546,15 @@ def extract_filing_metrics_from_annual_financials(
     metrics = extract_cashflow_metrics_from_annual_financials(financials)
     metrics.update(extract_income_metrics_from_annual_financials(financials))
     metrics["dividends_paid"] = extract_dividends_paid_from_annual_financials(financials)
+    metrics.update(
+        compute_dual_fcf_dividend_coverage(
+            operating_cashflow=metrics.get("operating_cashflow"),
+            operating_cashflow_gross=metrics.get("operating_cashflow_gross"),
+            capital_expenditure=metrics.get("capital_expenditure"),
+            dividends_paid=metrics.get("dividends_paid"),
+            free_cashflow=metrics.get("free_cashflow"),
+        )
+    )
     return metrics
 
 
@@ -1021,11 +1144,26 @@ def enrich_universe_with_filing_metrics(
             continue
 
         extracted = extract_filing_metrics_from_annual_financials(financials)
+        gross_ocf = extract_gross_cash_from_operations_for_ticker(ticker, output_dir=output_dir)
+        if gross_ocf is not None:
+            extracted["operating_cashflow_gross"] = gross_ocf
+
         for key, value in extracted.items():
             if value is None:
                 continue
             current = out.at[index, key]
             if current is None or (isinstance(current, float) and pd.isna(current)):
+                out.at[index, key] = value
+
+        coverage = compute_dual_fcf_dividend_coverage(
+            operating_cashflow=_float_or_none(out.at[index, "operating_cashflow"]),
+            operating_cashflow_gross=_float_or_none(out.at[index, "operating_cashflow_gross"]),
+            capital_expenditure=_float_or_none(out.at[index, "capital_expenditure"]),
+            dividends_paid=_float_or_none(out.at[index, "dividends_paid"]),
+            free_cashflow=_float_or_none(out.at[index, "free_cashflow"]),
+        )
+        for key, value in coverage.items():
+            if value is not None:
                 out.at[index, key] = value
 
         interim_decline = extract_interim_eps_decline_for_ticker(ticker, output_dir=output_dir)
