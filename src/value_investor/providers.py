@@ -134,13 +134,42 @@ def merge_provider_result(
     return filled
 
 
+# Yahoo exchange suffix → Stooq lowercase suffix (Stooq uses ``symbol.suffix``).
+_STOOQ_SUFFIX_BY_YAHOO: dict[str, str] = {
+    ".L": ".uk",
+    ".ST": ".st",
+    ".DE": ".de",
+    ".PA": ".pa",
+    ".AS": ".as",
+    ".MI": ".mi",
+    ".MC": ".mc",
+    ".BR": ".br",
+    ".SW": ".sw",
+    ".HK": ".hk",
+    ".TO": ".to",
+    ".AX": ".ax",
+    ".LS": ".ls",
+    ".IR": ".ir",
+    ".VI": ".vi",
+    ".HE": ".he",
+    ".OL": ".ol",
+    ".CO": ".co",
+}
+
+
 def to_stooq_symbol(ticker: str) -> str:
-    """Convert Yahoo-style ``BT-A.L`` to Stooq ``bt_a.uk``."""
+    """Convert Yahoo-style ``BT-A.L`` / ``VOLV-B.ST`` to Stooq ``bt_a.uk`` / ``volv_b.st``."""
     symbol = ticker.strip().upper()
-    if symbol.endswith(".L"):
-        symbol = symbol[:-2]
+    stooq_suffix = ".uk"
+    for yahoo_suffix, mapped in sorted(
+        _STOOQ_SUFFIX_BY_YAHOO.items(), key=lambda item: len(item[0]), reverse=True
+    ):
+        if symbol.endswith(yahoo_suffix):
+            symbol = symbol[: -len(yahoo_suffix)]
+            stooq_suffix = mapped
+            break
     symbol = symbol.replace("-", "_").replace(".", "_").lower()
-    return f"{symbol}.uk"
+    return f"{symbol}{stooq_suffix}"
 
 
 class YahooQuoteSummaryProvider:
