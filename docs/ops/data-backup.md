@@ -57,11 +57,14 @@ ftse-data-backup snapshot --include-tier2
 # Upload to S3 when BACKUP_S3_URI is set (requires AWS CLI + credentials)
 ftse-data-backup snapshot --upload
 
+# Pin to monthly/ key (overwrite same calendar month; use with --upload on Sunday cron)
+ftse-data-backup snapshot --upload --upload-monthly
+
 # Email manifest + chunked archive off-GitHub (default: intellaigence101@gmail.com)
 ftse-data-backup snapshot --email
 
 # Upload or email an existing snapshot JSON (used by CI after artifact upload)
-ftse-data-backup deliver --from-json /tmp/backup.json --upload --email
+ftse-data-backup deliver --from-json /tmp/backup.json --upload --upload-monthly --email
 
 # Reassemble emailed chunks into a tarball
 ftse-data-backup reassemble --output restored.tar.gz ftse-tier1-*.part*
@@ -186,7 +189,26 @@ Set repository secrets / env:
 | `AWS_SECRET_ACCESS_KEY` | … |
 | `AWS_DEFAULT_REGION` | `eu-west-2` |
 
-Lifecycle rule on the bucket: keep **weekly** objects 90 days, **monthly** pins 1 year.
+Lifecycle rules on the bucket:
+
+| Prefix | Retention | Notes |
+|--------|-----------|-------|
+| Root (`BACKUP_S3_URI`) | **90 days** | Weekly timestamped `ftse-tier1-*.tar.gz` |
+| `monthly/` | **365 days** | One pin per month: `ftse-tier1-monthly-YYYY-MM.tar.gz` (Sunday overwrite) |
+
+Example lifecycle setup (AWS console → bucket → Management → Lifecycle):
+
+1. Rule **weekly-backups**: prefix = your backup prefix (not `monthly/`), expire after 90 days.
+2. Rule **monthly-pins**: prefix = `your-prefix/monthly/`, expire after 365 days.
+
+Manual pin for the current month (if you need one before the next Sunday run):
+
+```bash
+aws s3 cp s3://bucket/prefix/ftse-tier1-....tar.gz \
+  s3://bucket/prefix/monthly/ftse-tier1-monthly-2026-08.tar.gz
+aws s3 cp s3://bucket/prefix/ftse-tier1-....manifest.json \
+  s3://bucket/prefix/monthly/ftse-tier1-monthly-2026-08.manifest.json
+```
 
 ### Email off-GitHub copy (default)
 

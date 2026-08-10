@@ -242,6 +242,58 @@ def list_local_snapshots(backup_dir: Path = DEFAULT_BACKUP_DIR) -> list[dict[str
     return rows
 
 
+def _month_key_from_snapshot(snapshot: BackupSnapshot) -> str:
+    raw = snapshot.manifest.created_at
+    if raw.endswith("Z"):
+        raw = raw[:-1] + "+00:00"
+    created = datetime.fromisoformat(raw)
+    if created.tzinfo is None:
+        created = created.replace(tzinfo=UTC)
+    return created.strftime("%Y-%m")
+
+
+def monthly_backup_dest_names(snapshot: BackupSnapshot) -> tuple[str, str]:
+    """Fixed S3 object names for the snapshot's calendar month (overwrite on each Sunday)."""
+    month_key = _month_key_from_snapshot(snapshot)
+    return (
+        f"ftse-tier1-monthly-{month_key}.tar.gz",
+        f"ftse-tier1-monthly-{month_key}.manifest.json",
+    )
+
+
+def upload_monthly_backup_pin(
+    snapshot: BackupSnapshot,
+    *,
+    s3_uri: str | None = None,
+) -> dict[str, Any]:
+    """
+    Upload snapshot to a fixed monthly key under ``monthly/`` on S3.
+
+    Each Sunday overwrite replaces the pin for that calendar month with the latest
+    Sunday snapshot. Pair with a lifecycle rule on ``monthly/`` (e.g. 365 days).
+    """
+    s3_uri = (s3_uri or os.environ.get("BACKUP_S3_URI") or "").strip()
+    if not s3_uri:
+        return {"uploaded": False, "reason": "BACKUP_S3_URI not configured"}
+
+    if not shutil.which("aws"):
+        raise RuntimeError("aws CLI not found — install AWS CLI or upload artifact manually")
+
+    archive_name, manifest_name = monthly_backup_dest_names(snapshot)
+    base = s3_uri.rstrip("/")
+    monthly_base = f"{base}/monthly"
+    archive_dest = f"{monthly_base}/{archive_name}"
+    manifest_dest = f"{monthly_base}/{manifest_name}"
+    subprocess.run(["aws", "s3", "cp", str(snapshot.archive_path), archive_dest], check=True)
+    subprocess.run(["aws", "s3", "cp", str(snapshot.manifest_path), manifest_dest], check=True)
+    return {
+        "uploaded": True,
+        "month_key": _month_key_from_snapshot(snapshot),
+        "archive_dest": archive_dest,
+        "manifest_dest": manifest_dest,
+    }
+
+
 def upload_backup_snapshot(
     snapshot: BackupSnapshot,
     *,
@@ -436,6 +488,30 @@ def try_upload_backup_snapshot(
         return upload_backup_snapshot(snapshot, s3_uri=s3_uri)
     except RuntimeError as exc:
         logger.warning("Backup S3 upload failed: %s", exc)
+        return {
+            "uploaded": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
+
+
+def try_upload_monthly_backup_pin(
+    snapshot: BackupSnapshot,
+    *,
+    s3_uri: str | None = None,
+) -> dict[str, Any]:
+    """Upload monthly S3 pin; return a result dict instead of raising on failure."""
+    try:
+        return upload_monthly_backup_pin(snapshot, s3_uri=s3_uri)
+    except RuntimeError as exc:
+        logger.warning("Monthly backup S3 pin failed: %s", exc)
+        return {
+            "uploaded": False,
+            "error": str(exc),
+            "error_type": type(exc).__name__,
+        }
+    except subprocess.CalledProcessError as exc:
+        logger.warning("Monthly backup S3 pin failed: %s", exc)
         return {
             "uploaded": False,
             "error": str(exc),

@@ -58,24 +58,16 @@ def test_evaluate_accelerated_email_blocks_on_sunday(tmp_path: Path):
     assert "Sunday" in decision.reason
 
 
-@patch("value_investor.accelerated_review.active_workflow_runs", return_value=[])
-@patch("value_investor.accelerated_review._github_token", return_value="token")
-@patch("value_investor.accelerated_review._github_repo", return_value="owner/repo")
-@patch(
-    "value_investor.agent_model_policy.weekly_ops_budget_status",
-    return_value={
+@patch("value_investor.accelerated_review.weekly_ops_budget_status")
+def test_evaluate_accelerated_email_dispatches_when_guards_pass(
+    mock_budget,
+    tmp_path: Path,
+):
+    mock_budget.return_value = {
         "remaining_weekly_ops_usd": 40.0,
         "weekly_ops_cap_usd": 50.0,
         "constraining": False,
-    },
-)
-def test_evaluate_accelerated_email_dispatches_when_guards_pass(
-    _budget,
-    _repo,
-    _token,
-    _active,
-    tmp_path: Path,
-):
+    }
     tasks = tmp_path / "engineering_tasks.json"
     tasks.write_text(
         """
@@ -111,9 +103,9 @@ def test_evaluate_accelerated_email_blocks_when_weekly_cap_hit(tmp_path: Path):
     log = tmp_path / "log.json"
     now = datetime(2026, 8, 4, 10, 0, tzinfo=UTC)
     for _ in range(2):
-        record_midweek_email_only_run(source="manual", log_path=log)
+        record_midweek_email_only_run(source="manual", log_path=log, now=now)
     with patch(
-        "value_investor.agent_model_policy.weekly_ops_budget_status",
+        "value_investor.accelerated_review.weekly_ops_budget_status",
         return_value={
             "remaining_weekly_ops_usd": 40.0,
             "weekly_ops_cap_usd": 50.0,

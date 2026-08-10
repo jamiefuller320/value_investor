@@ -130,7 +130,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
           set -euo pipefail
-          ftse-data-backup deliver --from-json /tmp/backup.json --upload --json
+          ftse-data-backup deliver --from-json /tmp/backup.json --upload --upload-monthly --json
 
       - name: Optional email backup
         if: ${{ github.event_name != 'workflow_dispatch' || format('{0}', github.event.inputs.email_backup) != 'false' }}
@@ -157,6 +157,7 @@ jobs:
           from pathlib import Path
           payload = json.loads(Path("/tmp/backup.json").read_text())
           upload = payload.get("upload") or {}
+          upload_monthly = payload.get("upload_monthly") or {}
           email = payload.get("email") or {}
           manifest = payload.get("manifest") or {}
           print(
@@ -168,6 +169,14 @@ jobs:
           elif upload:
               detail = upload.get("reason") or upload.get("error") or "not requested"
               print(f"S3 upload skipped/failed: {detail}")
+          if upload_monthly.get("uploaded"):
+              print(
+                  f"S3 monthly pin ok: {upload_monthly.get('archive_dest')} "
+                  f"(month {upload_monthly.get('month_key')})"
+              )
+          elif upload_monthly:
+              detail = upload_monthly.get("reason") or upload_monthly.get("error") or "not requested"
+              print(f"S3 monthly pin skipped/failed: {detail}")
           if email.get("emailed"):
               print(
                   f"Email backup ok: {email.get('email_to')} "
