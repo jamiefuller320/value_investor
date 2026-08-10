@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-09T07:31:00.918890+00:00",
+  "compiled_at": "2026-08-10T15:35:00.000000+00:00",
   "run_at": "2026-08-09T05:44:10.639418+00:00",
-  "task_count": 29,
+  "task_count": 30,
   "tasks": [
     {
       "id": "eng-20260726-05",
@@ -1325,6 +1325,54 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/141",
       "pr_number": 141,
       "merged_at": "2026-07-28T20:14:22.598105+00:00"
+    },
+    {
+      "id": "eng-20260810-01",
+      "area": "coverage",
+      "title": "Fix library metrics fetch for OMX Stockholm 30 (.ST): Stooq suffix + Yahoo fallback so screen-lite can run on focus market",
+      "summary": "Focus market omxs30 has constituents (30/30) but metrics refresh fails for every ticker: Yahoo quoteSummary 401, Stooq mapped to `.uk` (e.g. abb_st.uk), and `exchangeTimezoneName` KeyError. Layer B screen-lite is blocked until ≥25 usable metrics rows exist. Fix provider symbol mapping for `.ST` (and related suffixes), harden Yahoo/yfinance fetch, and verify `ftse-library grow --markets omxs30` + `ftse-library screen --markets omxs30` succeed offline.",
+      "priority": "high",
+      "priority_score": 94.0,
+      "source": "market_scrutiny",
+      "evidence": {
+        "market": "omxs30",
+        "focus_market": "omxs30",
+        "usable_metrics_rows": 0,
+        "ticker_count": 30,
+        "sample_tickers": ["ABB.ST", "VOLV-B.ST", "ERIC-B.ST"],
+        "sample_errors": [
+          "yahoo_quote_summary: HTTP Error 401: Unauthorized",
+          "stooq: non-CSV response for abb_st.uk",
+          "exchangeTimezoneName"
+        ],
+        "doc": "docs/ops/market-scrutiny.md",
+        "blocked_layer": "screen_lite",
+        "min_metrics_for_screen": 25
+      },
+      "acceptance_criteria": [
+        "to_stooq_symbol maps Swedish `.ST` tickers to the correct Stooq suffix (not `.uk`); add tests for VOLV-B.ST and ABB.ST",
+        "After grow, omxs30 metrics/latest has ≥25 rows with usable fundamentals (e.g. trailing_pe, market_cap, or price_to_book)",
+        "load_library_metrics / run_library_screen can run on omxs30 without empty-universe failure",
+        "No change to live FTSE 350 screen path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/providers.py",
+        "src/value_investor/fetch.py",
+        "src/value_investor/data_library.py",
+        "src/value_investor/financials.py",
+        "tests/test_providers.py",
+        "tests/test_data_library.py",
+        "tests/test_constituents_fetch.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     }
   ],
   "ingest_health": {
