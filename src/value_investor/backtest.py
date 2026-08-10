@@ -202,8 +202,7 @@ def _find_exit_snapshot(
     candidates = [
         s
         for s in snapshots
-        if _parse_run_at(s.run_at).timestamp() >= target
-        and _parse_run_at(s.run_at) > entry_at
+        if _parse_run_at(s.run_at).timestamp() >= target and _parse_run_at(s.run_at) > entry_at
     ]
     if not candidates:
         return None
@@ -280,8 +279,7 @@ def format_backtest_text(summary: BacktestSummary) -> str:
             lines.append(f"  ~{weeks}w horizon:")
         excess = f"{result.excess_return:+.1%} vs benchmark"
         lines.append(
-            f"    {result.signal}: {result.avg_return:+.1%} avg "
-            f"(n={result.count}, {excess})"
+            f"    {result.signal}: {result.avg_return:+.1%} avg (n={result.count}, {excess})"
         )
     lines.append(f"Based on {summary.run_count} archived runs.")
     return "\n".join(lines)

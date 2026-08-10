@@ -52,7 +52,9 @@ def test_evaluate_auto_merge_ready_when_scope_and_checks_ok(tmp_path):
             return_value=["tests/test_ops_monitor.py", "src/value_investor/ops_monitor.py"],
         ),
     ):
-        decision = evaluate_auto_merge(branch=branch, tasks_path=tmp_path / "engineering_tasks.json")
+        decision = evaluate_auto_merge(
+            branch=branch, tasks_path=tmp_path / "engineering_tasks.json"
+        )
     assert decision.should_merge
     assert decision.pr_number == 42
 

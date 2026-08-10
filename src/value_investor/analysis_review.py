@@ -52,11 +52,7 @@ class AnalysisReview:
             ("PROPOSED EXPERIMENTS", self.proposed_experiments),
             ("DEFER", self.defer),
         ]
-        return "\n\n".join(
-            f"{heading}\n{body.strip()}"
-            for heading, body in parts
-            if body.strip()
-        )
+        return "\n\n".join(f"{heading}\n{body.strip()}" for heading, body in parts if body.strip())
 
 
 @dataclass
@@ -234,12 +230,10 @@ def build_analysis_payload(
 
     latest = _safe_read(data_dir / "latest.json") or {}
     backtest = _slim_backtest(
-        _safe_read(output_dir / "backtest_summary.json")
-        or latest.get("backtest")
+        _safe_read(output_dir / "backtest_summary.json") or latest.get("backtest")
     )
     simulation = _slim_simulation(
-        _safe_read(output_dir / "simulation_summary.json")
-        or latest.get("simulation")
+        _safe_read(output_dir / "simulation_summary.json") or latest.get("simulation")
     )
     historical = _slim_historical(
         _safe_read(output_dir / "historical_analysis_summary.json")
@@ -403,9 +397,11 @@ def promote_analysis_tasks(
     """
     from value_investor.engineering_tasks import (
         BLOCKED_PATHS,
-        COMMITTED_TASKS_PATH as ENG_COMMITTED,
         _allowed_paths_for_area,
         load_engineering_tasks,
+    )
+    from value_investor.engineering_tasks import (
+        COMMITTED_TASKS_PATH as ENG_COMMITTED,
     )
 
     eng_path = engineering_tasks_path or ENG_COMMITTED

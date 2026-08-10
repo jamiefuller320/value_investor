@@ -6,16 +6,20 @@ from value_investor.run_diff import compute_run_diff, format_run_diff_text
 
 
 def test_compute_run_diff_tracks_upgrades_and_downgrades():
-    previous = pd.DataFrame([
-        {"ticker": "AAA.L", "name": "Alpha", "signal": "buy"},
-        {"ticker": "BBB.L", "name": "Beta", "signal": "strong_buy"},
-        {"ticker": "CCC.L", "name": "Gamma", "signal": "hold"},
-    ])
-    current = pd.DataFrame([
-        {"ticker": "AAA.L", "name": "Alpha", "signal": "strong_buy"},
-        {"ticker": "BBB.L", "name": "Beta", "signal": "buy"},
-        {"ticker": "CCC.L", "name": "Gamma", "signal": "hold"},
-    ])
+    previous = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "name": "Alpha", "signal": "buy"},
+            {"ticker": "BBB.L", "name": "Beta", "signal": "strong_buy"},
+            {"ticker": "CCC.L", "name": "Gamma", "signal": "hold"},
+        ]
+    )
+    current = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "name": "Alpha", "signal": "strong_buy"},
+            {"ticker": "BBB.L", "name": "Beta", "signal": "buy"},
+            {"ticker": "CCC.L", "name": "Gamma", "signal": "hold"},
+        ]
+    )
 
     diff = compute_run_diff(previous, current)
 

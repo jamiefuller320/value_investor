@@ -232,7 +232,11 @@ def validate_snapshot_payload(
             )
 
         if prices and signals:
-            tickers = {str(row.get("ticker")) for row in signals if isinstance(row, dict) and row.get("ticker")}
+            tickers = {
+                str(row.get("ticker"))
+                for row in signals
+                if isinstance(row, dict) and row.get("ticker")
+            }
             covered = sum(1 for ticker in tickers if ticker in prices)
             ratio = covered / max(1, len(tickers))
             if ratio < MIN_PRICE_COVERAGE:
@@ -271,14 +275,10 @@ def audit_history_dir(
         return issues, {"run_files": 0, "model_files": 0, "valid_runs": 0}
 
     run_paths = sorted(
-        path
-        for path in history_dir.iterdir()
-        if path.is_file() and RUN_FILE_RE.match(path.name)
+        path for path in history_dir.iterdir() if path.is_file() and RUN_FILE_RE.match(path.name)
     )
     model_paths = sorted(
-        path
-        for path in history_dir.iterdir()
-        if path.is_file() and MODEL_FILE_RE.match(path.name)
+        path for path in history_dir.iterdir() if path.is_file() and MODEL_FILE_RE.match(path.name)
     )
 
     stamps: dict[str, list[Path]] = {}
@@ -313,9 +313,7 @@ def audit_history_dir(
             )
 
     model_stamps = {
-        match.group(1)
-        for path in model_paths
-        if (match := MODEL_FILE_RE.match(path.name))
+        match.group(1) for path in model_paths if (match := MODEL_FILE_RE.match(path.name))
     }
     run_stamps = set(stamps)
     for stamp in sorted(model_stamps - run_stamps):
@@ -447,7 +445,7 @@ def repair_history_dir(
 
     duplicate_stamps = {issue.summary for issue in issues if issue.code == "duplicate_run_stamp"}
     if duplicate_stamps:
-        for stamp, paths in _group_run_paths_by_stamp(history_dir).items():
+        for _stamp, paths in _group_run_paths_by_stamp(history_dir).items():
             if len(paths) <= 1:
                 continue
             keep = max(paths, key=lambda item: (item.suffix == ".gz", item.stat().st_size))
@@ -556,7 +554,9 @@ def validate_history_before_publish(
     if not source.exists():
         return []
     committed = Path(committed_dir or COMMITTED_HISTORY_DIR)
-    committed_names = {path.name for path in history_snapshot_paths(committed)} if committed.exists() else set()
+    committed_names = (
+        {path.name for path in history_snapshot_paths(committed)} if committed.exists() else set()
+    )
 
     blocking: list[SnapshotIssue] = []
     for path in sorted(source.glob("run_*.json*")):
@@ -574,7 +574,11 @@ def validate_history_before_publish(
                 )
             )
             continue
-        file_issues = [issue for issue in validate_snapshot_payload(payload, path=path) if issue.severity == "fail"]
+        file_issues = [
+            issue
+            for issue in validate_snapshot_payload(payload, path=path)
+            if issue.severity == "fail"
+        ]
         blocking.extend(file_issues)
     return blocking
 

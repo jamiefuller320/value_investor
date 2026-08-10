@@ -101,7 +101,9 @@ def append_signal_history(
                 "run_at": run_at_str,
                 "ticker": row["ticker"],
                 "signal": row["signal"],
-                "signal_rank": int(row.get("signal_rank") or _signal_rank_value(str(row["signal"]))),
+                "signal_rank": int(
+                    row.get("signal_rank") or _signal_rank_value(str(row["signal"]))
+                ),
                 "conviction_score": float(row.get("conviction_score") or 0),
                 "data_quality_score": float(row.get("data_quality_score") or 0),
             }

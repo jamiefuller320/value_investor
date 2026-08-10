@@ -112,7 +112,9 @@ def _cmd_email(args: argparse.Namespace) -> int:
     from value_investor.storage import read_json
 
     if not args.status_path.exists():
-        print(f"No ops status at {args.status_path} — run ftse-ops-monitor run first", file=sys.stderr)
+        print(
+            f"No ops status at {args.status_path} — run ftse-ops-monitor run first", file=sys.stderr
+        )
         return 1
     payload = read_json(args.status_path)
     from value_investor.ops_monitor import OpsFinding, OpsMonitorReport

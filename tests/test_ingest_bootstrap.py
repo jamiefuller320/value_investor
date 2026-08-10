@@ -6,12 +6,12 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+from value_investor.research.filings import sanitize_filings_index
 from value_investor.research.ingest_bootstrap import (
     bootstrap_buy_tier_research,
     canonical_filings_dir,
     ensure_canonical_research_store,
 )
-from value_investor.research.filings import sanitize_filings_index
 from value_investor.summary import CompanyReport
 
 
@@ -59,7 +59,11 @@ def test_ensure_canonical_migrates_library_index(tmp_path: Path, monkeypatch):
                 "summary": {"total": 2, "annual": 0, "interim": 0, "with_body": 0},
                 "filings": [
                     {"headline": "Beazley plc results", "has_body": False, "source": "google_news"},
-                    {"headline": "Breedon Group plc FY results", "has_body": False, "source": "ticker_rns_api"},
+                    {
+                        "headline": "Breedon Group plc FY results",
+                        "has_body": False,
+                        "source": "ticker_rns_api",
+                    },
                 ],
             }
         ),
@@ -84,7 +88,11 @@ def test_sanitize_filings_index_prunes_misattributed_rows(tmp_path: Path):
         json.dumps(
             {
                 "filings": [
-                    {"headline": "Beazley plc FY results", "has_body": False, "source": "google_news"},
+                    {
+                        "headline": "Beazley plc FY results",
+                        "has_body": False,
+                        "source": "google_news",
+                    },
                     {
                         "headline": "Breedon Group plc Full Year Results",
                         "has_body": False,

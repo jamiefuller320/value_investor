@@ -39,9 +39,7 @@ def _cmd_replay(args: argparse.Namespace) -> int:
     config_path = output_dir / CONFIG_FILENAME
     fund_path = output_dir / FUND_FILENAME
     if config_path.exists():
-        config = AutomationConfig.from_dict(
-            json.loads(config_path.read_text(encoding="utf-8"))
-        )
+        config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
     else:
         config = AutomationConfig()
     fund = ensure_automated_fund(fund_path, config) if fund_path.exists() else None
@@ -54,9 +52,7 @@ def _cmd_replay(args: argparse.Namespace) -> int:
         min_conviction=float(args.min_conviction),
         sector_cap=float(args.sector_cap),
         use_adjusted_signal=(
-            False
-            if args.use_raw_signal
-            else (True if args.use_adjusted_signal else None)
+            False if args.use_raw_signal else (True if args.use_adjusted_signal else None)
         ),
         require_research_accumulate=(
             True

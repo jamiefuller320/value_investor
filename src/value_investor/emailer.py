@@ -9,6 +9,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from value_investor.backtest import BacktestSummary, format_backtest_text
 from value_investor.decision_pack import (
     build_decision_packs,
@@ -22,7 +23,6 @@ from value_investor.historical_analysis import (
     format_historical_analysis_text,
 )
 from value_investor.post_run_review import PostRunReview
-from value_investor.research.ingest_improvement import IngestImprovementSummary
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import (
     format_gap_fill_html,
@@ -34,6 +34,7 @@ from value_investor.research.format import (
     format_research_html,
     format_research_text,
 )
+from value_investor.research.ingest_improvement import IngestImprovementSummary
 from value_investor.run_diff import RunDiff, format_run_diff_text
 from value_investor.simulator import SimulationComparison, format_simulation_comparison_text
 from value_investor.summary import CompanyReport
@@ -57,11 +58,15 @@ class EmailConfig:
         password = os.environ.get("SMTP_PASSWORD")
         resolved_to = (email_to or os.environ.get("EMAIL_TO") or "").strip()
 
-        missing = [k for k, v in [
-            ("SMTP_HOST", host),
-            ("SMTP_USER", user),
-            ("SMTP_PASSWORD", password),
-        ] if not v]
+        missing = [
+            k
+            for k, v in [
+                ("SMTP_HOST", host),
+                ("SMTP_USER", user),
+                ("SMTP_PASSWORD", password),
+            ]
+            if not v
+        ]
         if not resolved_to:
             missing.append("EMAIL_TO")
         if missing:
@@ -113,19 +118,12 @@ def _research_overlay_label(report: CompanyReport) -> str | None:
 
 def _favorable_timing_picks(reports: list[CompanyReport]) -> list[CompanyReport]:
     return [
-        r
-        for r in reports
-        if r.signal in ("strong_buy", "buy")
-        and r.timing_signal == "accumulate"
+        r for r in reports if r.signal in ("strong_buy", "buy") and r.timing_signal == "accumulate"
     ]
 
 
 def _buy_tier_trade_plans(reports: list[CompanyReport]) -> list[CompanyReport]:
-    return [
-        r
-        for r in reports
-        if r.signal in ("strong_buy", "buy") and r.trade_plan is not None
-    ]
+    return [r for r in reports if r.signal in ("strong_buy", "buy") and r.trade_plan is not None]
 
 
 def _format_trade_plans_text(reports: list[CompanyReport]) -> str | None:
@@ -136,9 +134,7 @@ def _format_trade_plans_text(reports: list[CompanyReport]) -> str | None:
         "Suggested orders for buy-tier names (core holding + tactical dip entries):",
     ]
     for report in plans:
-        lines.append(
-            f"  • {report.name} ({report.ticker}) — {report.signal.replace('_', ' ')}"
-        )
+        lines.append(f"  • {report.name} ({report.ticker}) — {report.signal.replace('_', ' ')}")
         if report.trade_plan and report.trade_plan.trade_plan_summary:
             lines.append(f"    {report.trade_plan.trade_plan_summary}")
     return "\n".join(lines)
@@ -178,7 +174,7 @@ def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
             <tr>
               <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
                 <strong>{report.name}</strong><br>
-                <span style="color:#666">{report.ticker} · {report.signal.replace('_', ' ')}</span>
+                <span style="color:#666">{report.ticker} · {report.signal.replace("_", " ")}</span>
               </td>
               <td style="padding:10px;border-bottom:1px solid #eee;vertical-align:top">
                 Core: {core_text}<br>
@@ -203,7 +199,7 @@ def _format_trade_plans_html(reports: list[CompanyReport]) -> str:
         </tr>
       </thead>
       <tbody>
-        {''.join(rows)}
+        {"".join(rows)}
       </tbody>
     </table>
   </div>
@@ -259,14 +255,19 @@ def _format_trust_section_text(trust_reports: list[CompanyReport]) -> str | None
         "INVESTMENT TRUST TRACK",
         "-" * 40,
         "Summary: "
-        + ", ".join(f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1])),
+        + ", ".join(
+            f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1])
+        ),
         "Models use discount to book/NAV proxy, distribution yield, and premium risk.",
         "",
     ]
     # Lead with buy-tier trusts, then the rest (cap detail length).
     ordered = sorted(
         trust_reports,
-        key=lambda r: ({"strong_buy": 0, "buy": 1, "hold": 2, "avoid": 3}.get(r.signal, 4), -r.conviction_score),
+        key=lambda r: (
+            {"strong_buy": 0, "buy": 1, "hold": 2, "avoid": 3}.get(r.signal, 4),
+            -r.conviction_score,
+        ),
     )
     for report in ordered[:25]:
         label = report.signal.replace("_", " ").title()
@@ -291,7 +292,10 @@ def _format_trust_section_html(trust_reports: list[CompanyReport]) -> str:
     )
     ordered = sorted(
         trust_reports,
-        key=lambda r: ({"strong_buy": 0, "buy": 1, "hold": 2, "avoid": 3}.get(r.signal, 4), -r.conviction_score),
+        key=lambda r: (
+            {"strong_buy": 0, "buy": 1, "hold": 2, "avoid": 3}.get(r.signal, 4),
+            -r.conviction_score,
+        ),
     )
     rows = []
     for report in ordered[:25]:
@@ -328,7 +332,7 @@ def _format_trust_section_html(trust_reports: list[CompanyReport]) -> str:
       yield, and premium risk — not the operating-company Graham models.
     </p>
     <p>{summary_bits}</p>
-    <table style="width:100%;border-collapse:collapse">{''.join(rows)}</table>
+    <table style="width:100%;border-collapse:collapse">{"".join(rows)}</table>
     {more}
   </div>
 """
@@ -365,20 +369,24 @@ def format_text_report(
         lines.extend(["SIGNAL BACKTEST", "-" * 40, format_backtest_text(backtest), ""])
 
     if simulation is not None:
-        lines.extend([
-            "PORTFOLIO SIMULATION",
-            "-" * 40,
-            format_simulation_comparison_text(simulation),
-            "",
-        ])
+        lines.extend(
+            [
+                "PORTFOLIO SIMULATION",
+                "-" * 40,
+                format_simulation_comparison_text(simulation),
+                "",
+            ]
+        )
 
     if historical_analysis is not None and historical_analysis.has_results():
-        lines.extend([
-            "HISTORICAL ANALYSIS",
-            "-" * 40,
-            format_historical_analysis_text(historical_analysis),
-            "",
-        ])
+        lines.extend(
+            [
+                "HISTORICAL ANALYSIS",
+                "-" * 40,
+                format_historical_analysis_text(historical_analysis),
+                "",
+            ]
+        )
 
     if run_diff is not None:
         lines.extend(["WEEK-OVER-WEEK CHANGES", "-" * 40, format_run_diff_text(run_diff), ""])
@@ -421,7 +429,9 @@ def format_text_report(
 
     lines.append(
         "Summary: "
-        + ", ".join(f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1]))
+        + ", ".join(
+            f"{k.replace('_', ' ')}: {v}" for k, v in sorted(counts.items(), key=lambda x: -x[1])
+        )
     )
     trust_reports = trust_reports or []
     coverage = _universe_coverage_note(
@@ -502,9 +512,7 @@ def format_html_report(
         )
         overlay = _research_overlay_label(report)
         overlay_html = (
-            f"<br><span style='color:#666;font-size:12px'>{overlay}</span>"
-            if overlay
-            else ""
+            f"<br><span style='color:#666;font-size:12px'>{overlay}</span>" if overlay else ""
         )
         rows.append(
             f"""
@@ -562,7 +570,9 @@ def format_html_report(
   </div>
 """
 
-    historical_section = format_historical_analysis_html(historical_analysis) if historical_analysis else ""
+    historical_section = (
+        format_historical_analysis_html(historical_analysis) if historical_analysis else ""
+    )
 
     diff_section = ""
     if run_diff is not None:
@@ -627,7 +637,7 @@ def format_html_report(
       </tr>
     </thead>
     <tbody>
-      {''.join(rows)}
+      {"".join(rows)}
     </tbody>
   </table>
   <p style="color:#888;font-size:12px;margin-top:24px">

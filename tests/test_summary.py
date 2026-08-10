@@ -9,8 +9,8 @@ import pandas as pd
 import pytest
 
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
-from value_investor.scoring import evaluate_universe
 from value_investor.models.risk import EarningsQualityModel
+from value_investor.scoring import evaluate_universe
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     earnings_growth_signs_diverge,
@@ -56,58 +56,62 @@ def _signal_row(**overrides) -> dict:
 
 
 def _model_results_for_hik() -> pd.DataFrame:
-    return pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "model_id": "graham_enterprising",
-            "model_name": "Graham Enterprising",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "['P/E=11.6']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "HIK.L",
-            "model_id": "fcf_yield",
-            "model_name": "FCF Yield",
-            "passed": False,
-            "score": 0.0,
-            "reasons": "[]",
-            "failed_criteria": "['negative free cash flow']",
-        },
-        {
-            "ticker": "HIK.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": False,
-            "score": 6 / 9,
-            "reasons": "['F-Score=6/9', 'positive net income', 'positive operating cash flow']",
-            "failed_criteria": "['F-Score 6/9 below 7', 'ROA improving', 'OCF > net income']",
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['P/E=11.6']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "HIK.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": False,
+                "score": 0.0,
+                "reasons": "[]",
+                "failed_criteria": "['negative free cash flow']",
+            },
+            {
+                "ticker": "HIK.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 6 / 9,
+                "reasons": "['F-Score=6/9', 'positive net income', 'positive operating cash flow']",
+                "failed_criteria": "['F-Score 6/9 below 7', 'ROA improving', 'OCF > net income']",
+            },
+        ]
+    )
 
 
 def _model_results_for_hik_cash_conversion_cap(*, ticker: str = "HIKX.L") -> pd.DataFrame:
-    return pd.DataFrame([
-        {
-            "ticker": ticker,
-            "model_id": "dividend_growth",
-            "model_name": "Dividend Growth",
-            "passed": True,
-            "score": 0.8,
-            "reasons": "['dividend payer: yield=3.9%']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": ticker,
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": True,
-            "score": 7 / 9,
-            "reasons": "['F-Score=7/9', 'positive net income', 'no share dilution']",
-            "failed_criteria": "['OCF > net income']",
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_id": "dividend_growth",
+                "model_name": "Dividend Growth",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "['dividend payer: yield=3.9%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": ticker,
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": True,
+                "score": 7 / 9,
+                "reasons": "['F-Score=7/9', 'positive net income', 'no share dilution']",
+                "failed_criteria": "['OCF > net income']",
+            },
+        ]
+    )
 
 
 def test_build_company_reports_exports_failed_models():
@@ -122,44 +126,48 @@ def test_build_company_reports_exports_failed_models():
 
 
 def test_build_company_reports_exports_model_failures_and_screening_inputs():
-    signals = pd.DataFrame([
-        _signal_row(
-            debt_to_equity=140.0,
-            current_ratio=0.73,
-            earnings_growth=-0.072,
-            dividend_yield=0.04,
-            ncav=None,
-        )
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "model_id": "graham_enterprising",
-            "model_name": "Graham Enterprising",
-            "passed": False,
-            "score": 0.5,
-            "reasons": "[]",
-            "failed_criteria": "['negative earnings growth', 'excessive leverage']",
-        },
-        {
-            "ticker": "HIK.L",
-            "model_id": "graham_net_net",
-            "model_name": "Graham Net-Net",
-            "passed": False,
-            "score": 0.0,
-            "reasons": "[]",
-            "failed_criteria": "['missing NCAV (balance sheet data)']",
-        },
-        {
-            "ticker": "HIK.L",
-            "model_id": "financial_health",
-            "model_name": "Financial Health",
-            "passed": False,
-            "score": 0.4,
-            "reasons": "[]",
-            "failed_criteria": "['high debt to equity', 'weak liquidity']",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                debt_to_equity=140.0,
+                current_ratio=0.73,
+                earnings_growth=-0.072,
+                dividend_yield=0.04,
+                ncav=None,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": False,
+                "score": 0.5,
+                "reasons": "[]",
+                "failed_criteria": "['negative earnings growth', 'excessive leverage']",
+            },
+            {
+                "ticker": "HIK.L",
+                "model_id": "graham_net_net",
+                "model_name": "Graham Net-Net",
+                "passed": False,
+                "score": 0.0,
+                "reasons": "[]",
+                "failed_criteria": "['missing NCAV (balance sheet data)']",
+            },
+            {
+                "ticker": "HIK.L",
+                "model_id": "financial_health",
+                "model_name": "Financial Health",
+                "passed": False,
+                "score": 0.4,
+                "reasons": "[]",
+                "failed_criteria": "['high debt to equity', 'weak liquidity']",
+            },
+        ]
+    )
 
     snapshot = build_company_reports(signals, model_results)[0].to_dict()
 
@@ -184,7 +192,9 @@ def test_build_company_reports_exports_piotroski_component_scores():
     assert snapshot["piotroski_f_score"]["score"] == 6
     assert snapshot["piotroski_f_score"]["max_score"] == 9
     assert snapshot["piotroski_f_score"]["passed"] is False
-    components = {item["name"]: item["passed"] for item in snapshot["piotroski_f_score"]["components"]}
+    components = {
+        item["name"]: item["passed"] for item in snapshot["piotroski_f_score"]["components"]
+    }
     assert components["positive net income"] is True
     assert components["ROA improving"] is False
 
@@ -204,28 +214,40 @@ def test_company_report_to_dict_keeps_existing_fields():
 
 
 def test_piotroski_snapshot_from_evaluated_universe():
-    universe = pd.DataFrame([
-        {
-            "ticker": "AAA.L",
-            "name": "Alpha",
-            "net_income": 100,
-            "operating_cashflow": 150,
-            "return_on_assets": 0.1,
-            "return_on_assets_prev": 0.08,
-            "leverage": 0.3,
-            "leverage_prev": 0.35,
-            "current_ratio_bs": 2.0,
-            "current_ratio_bs_prev": 1.8,
-            "shares_outstanding": 100,
-            "shares_outstanding_prev": 102,
-            "gross_margin": 0.4,
-            "gross_margin_prev": 0.38,
-            "asset_turnover": 1.2,
-            "asset_turnover_prev": 1.1,
-        }
-    ])
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "name": "Alpha",
+                "net_income": 100,
+                "operating_cashflow": 150,
+                "return_on_assets": 0.1,
+                "return_on_assets_prev": 0.08,
+                "leverage": 0.3,
+                "leverage_prev": 0.35,
+                "current_ratio_bs": 2.0,
+                "current_ratio_bs_prev": 1.8,
+                "shares_outstanding": 100,
+                "shares_outstanding_prev": 102,
+                "gross_margin": 0.4,
+                "gross_margin_prev": 0.38,
+                "asset_turnover": 1.2,
+                "asset_turnover_prev": 1.1,
+            }
+        ]
+    )
     model_results = evaluate_universe(universe, models=[PiotroskiFScoreModel()])
-    signals = pd.DataFrame([{"ticker": "AAA.L", "name": "Alpha", "signal": "buy", "models_passed": 1, "model_count": 1}])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "name": "Alpha",
+                "signal": "buy",
+                "models_passed": 1,
+                "model_count": 1,
+            }
+        ]
+    )
 
     snapshot = build_company_reports(signals, model_results)[0].to_dict()
 
@@ -269,25 +291,29 @@ def test_strong_buy_confirmation_unchanged_by_snapshot_export():
 
 
 def test_build_company_reports_exports_overridden_plantation_sector():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="AEP.L",
-            name="AEP Plantations Plc",
-            sector=AGRICULTURE_COMMODITIES_SECTOR,
-            sector_composite_score=0.55,
-        )
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "AEP.L",
-            "model_id": "composite_value",
-            "model_name": "Composite Value",
-            "passed": True,
-            "score": 0.7,
-            "reasons": "[]",
-            "failed_criteria": "[]",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="AEP.L",
+                name="AEP Plantations Plc",
+                sector=AGRICULTURE_COMMODITIES_SECTOR,
+                sector_composite_score=0.55,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "AEP.L",
+                "model_id": "composite_value",
+                "model_name": "Composite Value",
+                "passed": True,
+                "score": 0.7,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
 
     report = build_company_reports(signals, model_results)[0]
 
@@ -297,29 +323,33 @@ def test_build_company_reports_exports_overridden_plantation_sector():
 
 
 def _healthcare_overlay_models(*, f_score: int = 3) -> pd.DataFrame:
-    return pd.DataFrame([
-        {
-            "ticker": "PHAR.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": False,
-            "score": f_score / 9,
-            "reasons": f"['F-Score={f_score}/9']",
-            "failed_criteria": f"['F-Score {f_score}/9 below 7']",
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": f_score / 9,
+                "reasons": f"['F-Score={f_score}/9']",
+                "failed_criteria": f"['F-Score {f_score}/9 below 7']",
+            },
+        ]
+    )
 
 
 def test_healthcare_overlay_caps_strong_buy_when_negative_fcf_and_weak_piotroski():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="PHAR.L",
-            name="Pharma Weak Ltd",
-            sector="Healthcare",
-            signal="strong_buy",
-            free_cashflow=-50.0,
-        )
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="PHAR.L",
+                name="Pharma Weak Ltd",
+                sector="Healthcare",
+                signal="strong_buy",
+                free_cashflow=-50.0,
+            )
+        ]
+    )
     model_results = _healthcare_overlay_models(f_score=3)
 
     report = build_company_reports(signals, model_results)[0]
@@ -332,9 +362,11 @@ def test_healthcare_overlay_caps_strong_buy_when_negative_fcf_and_weak_piotroski
 
 
 def test_healthcare_overlay_not_triggered_for_hik_like_profile():
-    signals = pd.DataFrame([
-        _signal_row(free_cashflow=-100.0),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(free_cashflow=-100.0),
+        ]
+    )
     model_results = _model_results_for_hik()
 
     report = build_company_reports(signals, model_results)[0]
@@ -346,47 +378,51 @@ def test_healthcare_overlay_not_triggered_for_hik_like_profile():
 
 
 def _model_results_for_megp_dividend_overlay(*, ticker: str = "MEGP.L") -> pd.DataFrame:
-    return pd.DataFrame([
-        {
-            "ticker": ticker,
-            "model_id": "high_dividend",
-            "model_name": "High Dividend Yield",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "['yield=7.6%']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": ticker,
-            "model_id": "fcf_yield",
-            "model_name": "FCF Yield",
-            "passed": False,
-            "score": 0.3,
-            "reasons": "[]",
-            "failed_criteria": "['FCF yield 3.7% below 5%']",
-        },
-        {
-            "ticker": ticker,
-            "model_id": "earnings_quality",
-            "model_name": "Earnings Quality",
-            "passed": False,
-            "score": 0.5,
-            "reasons": "[]",
-            "failed_criteria": "['weak free-cash conversion']",
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['yield=7.6%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": ticker,
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": False,
+                "score": 0.3,
+                "reasons": "[]",
+                "failed_criteria": "['FCF yield 3.7% below 5%']",
+            },
+            {
+                "ticker": ticker,
+                "model_id": "earnings_quality",
+                "model_name": "Earnings Quality",
+                "passed": False,
+                "score": 0.5,
+                "reasons": "[]",
+                "failed_criteria": "['weak free-cash conversion']",
+            },
+        ]
+    )
 
 
 def test_dividend_yield_overlay_caps_megp_like_profile():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="MEGP.L",
-            name="ME Group International plc",
-            sector="Industrials",
-            signal="strong_buy",
-            dividend_yield=0.0757,
-        ),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                dividend_yield=0.0757,
+            ),
+        ]
+    )
     model_results = _model_results_for_megp_dividend_overlay()
 
     report = build_company_reports(signals, model_results)[0]
@@ -400,35 +436,37 @@ def test_dividend_yield_overlay_caps_megp_like_profile():
 
 def test_dividend_yield_overlay_not_triggered_when_fcf_yield_passes():
     signals = pd.DataFrame([_signal_row(ticker="MEGP.L", signal="strong_buy")])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "MEGP.L",
-            "model_id": "high_dividend",
-            "model_name": "High Dividend Yield",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "[]",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "MEGP.L",
-            "model_id": "fcf_yield",
-            "model_name": "FCF Yield",
-            "passed": True,
-            "score": 0.8,
-            "reasons": "[]",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": "MEGP.L",
-            "model_id": "earnings_quality",
-            "model_name": "Earnings Quality",
-            "passed": False,
-            "score": 0.5,
-            "reasons": "[]",
-            "failed_criteria": "['weak free-cash conversion']",
-        },
-    ])
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "MEGP.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "MEGP.L",
+                "model_id": "earnings_quality",
+                "model_name": "Earnings Quality",
+                "passed": False,
+                "score": 0.5,
+                "reasons": "[]",
+                "failed_criteria": "['weak free-cash conversion']",
+            },
+        ]
+    )
 
     report = build_company_reports(signals, model_results)[0]
 
@@ -437,20 +475,30 @@ def test_dividend_yield_overlay_not_triggered_when_fcf_yield_passes():
 
 
 def test_interim_quality_overlay_caps_megp_like_profile():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="MEGP.L",
-            name="ME Group International plc",
-            sector="Industrials",
-            signal="strong_buy",
-            passed_families="cheapness,quality,dividend,garp,risk",
-            free_cashflow=25_153_000.0,
-            interim_eps_decline_pct=0.039,
-            dividends_paid=29_769_000.0,
-        ),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                passed_families="cheapness,quality,dividend,garp,risk",
+                free_cashflow=25_153_000.0,
+                interim_eps_decline_pct=0.039,
+                dividends_paid=29_769_000.0,
+            ),
+        ]
+    )
     model_results = pd.DataFrame(
-        columns=["ticker", "model_id", "model_name", "passed", "score", "reasons", "failed_criteria"]
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
     )
 
     report = build_company_reports(signals, model_results)[0]
@@ -463,21 +511,31 @@ def test_interim_quality_overlay_caps_megp_like_profile():
 
 
 def test_interim_quality_overlay_not_triggered_when_fcf_covers_dividends():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="TEST.L",
-            signal="strong_buy",
-            passed_families="cheapness,quality,dividend,garp,risk",
-            free_cashflow=40_000_000.0,
-            interim_eps_decline_pct=0.039,
-            dividends_paid=29_769_000.0,
-        ),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="TEST.L",
+                signal="strong_buy",
+                passed_families="cheapness,quality,dividend,garp,risk",
+                free_cashflow=40_000_000.0,
+                interim_eps_decline_pct=0.039,
+                dividends_paid=29_769_000.0,
+            ),
+        ]
+    )
 
     report = build_company_reports(
         signals,
         pd.DataFrame(
-            columns=["ticker", "model_id", "model_name", "passed", "score", "reasons", "failed_criteria"]
+            columns=[
+                "ticker",
+                "model_id",
+                "model_name",
+                "passed",
+                "score",
+                "reasons",
+                "failed_criteria",
+            ]
         ),
     )[0]
 
@@ -486,15 +544,17 @@ def test_interim_quality_overlay_not_triggered_when_fcf_covers_dividends():
 
 
 def test_cash_conversion_overlay_caps_hik_like_profile():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="HIKX.L",
-            name="Hikma-like Test plc",
-            free_cashflow=-66.1,
-            shares_outstanding=240_000_000,
-            shares_outstanding_prev=245_000_000,
-        ),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="HIKX.L",
+                name="Hikma-like Test plc",
+                free_cashflow=-66.1,
+                shares_outstanding=240_000_000,
+                shares_outstanding_prev=245_000_000,
+            ),
+        ]
+    )
     model_results = _model_results_for_hik_cash_conversion_cap()
 
     report = build_company_reports(signals, model_results)[0]
@@ -508,24 +568,28 @@ def test_cash_conversion_overlay_caps_hik_like_profile():
 
 
 def test_cash_conversion_overlay_not_triggered_without_dividend_screen():
-    signals = pd.DataFrame([
-        _signal_row(
-            free_cashflow=-66.1,
-            shares_outstanding=240_000_000,
-            shares_outstanding_prev=245_000_000,
-        ),
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": "HIK.L",
-            "model_id": "piotroski_f",
-            "model_name": "Piotroski F-Score",
-            "passed": True,
-            "score": 7 / 9,
-            "reasons": "['F-Score=7/9', 'no share dilution']",
-            "failed_criteria": "[]",
-        },
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                free_cashflow=-66.1,
+                shares_outstanding=240_000_000,
+                shares_outstanding_prev=245_000_000,
+            ),
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": True,
+                "score": 7 / 9,
+                "reasons": "['F-Score=7/9', 'no share dilution']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
 
     report = build_company_reports(signals, model_results)[0]
 
@@ -534,17 +598,19 @@ def test_cash_conversion_overlay_not_triggered_without_dividend_screen():
 
 
 def test_cash_conversion_overlay_respects_existing_research_adjusted_signal():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="HIKX.L",
-            name="Hikma-like Test plc",
-            free_cashflow=-66.1,
-            shares_outstanding=240_000_000,
-            shares_outstanding_prev=245_000_000,
-            adjusted_signal="hold",
-            research_verdict="pass",
-        ),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="HIKX.L",
+                name="Hikma-like Test plc",
+                free_cashflow=-66.1,
+                shares_outstanding=240_000_000,
+                shares_outstanding_prev=245_000_000,
+                adjusted_signal="hold",
+                research_verdict="pass",
+            ),
+        ]
+    )
     model_results = _model_results_for_hik_cash_conversion_cap()
 
     report = build_company_reports(signals, model_results)[0]
@@ -554,17 +620,19 @@ def test_cash_conversion_overlay_respects_existing_research_adjusted_signal():
 
 
 def test_healthcare_overlay_respects_existing_research_adjusted_signal():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="PHAR.L",
-            name="Pharma Weak Ltd",
-            sector="Health Care",
-            signal="strong_buy",
-            free_cashflow=-25.0,
-            adjusted_signal="hold",
-            research_verdict="pass",
-        )
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="PHAR.L",
+                name="Pharma Weak Ltd",
+                sector="Health Care",
+                signal="strong_buy",
+                free_cashflow=-25.0,
+                adjusted_signal="hold",
+                research_verdict="pass",
+            )
+        ]
+    )
     model_results = _healthcare_overlay_models(f_score=4)
 
     report = build_company_reports(signals, model_results)[0]
@@ -674,14 +742,16 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     sources.mkdir(parents=True)
     (sources / "financials_annual.json").write_text(json.dumps(_hik_financials()), encoding="utf-8")
 
-    signals = pd.DataFrame([
-        _signal_row(
-            free_cashflow=-66_125_000.0,
-            free_cashflow_screen_ttm=-66_125_000.0,
-            shares_outstanding=240_000_000,
-            shares_outstanding_prev=245_000_000,
-        )
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                free_cashflow=-66_125_000.0,
+                free_cashflow_screen_ttm=-66_125_000.0,
+                shares_outstanding=240_000_000,
+                shares_outstanding_prev=245_000_000,
+            )
+        ]
+    )
     model_results = _model_results_for_hik_cash_conversion_cap(ticker="HIK.L")
 
     snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
@@ -704,15 +774,17 @@ def test_build_company_reports_surfaces_fcf_bridge_when_timing_insufficient(tmp_
     sources.mkdir(parents=True)
     (sources / "financials_annual.json").write_text(json.dumps(_hik_financials()), encoding="utf-8")
 
-    signals = pd.DataFrame([
-        _signal_row(
-            free_cashflow=-66_125_000.0,
-            free_cashflow_screen_ttm=-66_125_000.0,
-            timing_signal="insufficient_data",
-            timing_score=0.0,
-            rsi_14=None,
-        )
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                free_cashflow=-66_125_000.0,
+                free_cashflow_screen_ttm=-66_125_000.0,
+                timing_signal="insufficient_data",
+                timing_score=0.0,
+                rsi_14=None,
+            )
+        ]
+    )
     model_results = _model_results_for_hik_cash_conversion_cap(ticker="HIK.L")
 
     report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
@@ -735,26 +807,28 @@ def _fgp_financials() -> dict:
 
 
 def _model_results_for_fgp_fcf_basis_cap(*, ticker: str = "FGP.L") -> pd.DataFrame:
-    return pd.DataFrame([
-        {
-            "ticker": ticker,
-            "model_id": "fcf_yield",
-            "model_name": "FCF Yield",
-            "passed": True,
-            "score": 0.9,
-            "reasons": "['FCF yield=37.3%']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": ticker,
-            "model_id": "composite_value",
-            "model_name": "Composite Value",
-            "passed": True,
-            "score": 0.85,
-            "reasons": "['composite rank strong']",
-            "failed_criteria": "[]",
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['FCF yield=37.3%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": ticker,
+                "model_id": "composite_value",
+                "model_name": "Composite Value",
+                "passed": True,
+                "score": 0.85,
+                "reasons": "['composite rank strong']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
 
 
 def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path):
@@ -781,17 +855,19 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
         encoding="utf-8",
     )
 
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="FGP.L",
-            name="FirstGroup plc",
-            sector="Industrials",
-            signal="strong_buy",
-            conviction_score=0.6,
-            free_cashflow=362_600_000.0,
-            free_cashflow_screen_ttm=302_812_512.0,
-        )
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="FGP.L",
+                name="FirstGroup plc",
+                sector="Industrials",
+                signal="strong_buy",
+                conviction_score=0.6,
+                free_cashflow=362_600_000.0,
+                free_cashflow_screen_ttm=302_812_512.0,
+            )
+        ]
+    )
     model_results = _model_results_for_fgp_fcf_basis_cap()
 
     report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
@@ -818,26 +894,28 @@ def test_parse_adjusted_eps_growth_pct_from_filing_prose():
 
 
 def _model_results_for_fgp_earnings_basis_cap(*, ticker: str = "FGP.L") -> pd.DataFrame:
-    return pd.DataFrame([
-        {
-            "ticker": ticker,
-            "model_id": "neff_pegy",
-            "model_name": "Neff PEGY",
-            "passed": True,
-            "score": 0.85,
-            "reasons": "['PEGY=0.72']",
-            "failed_criteria": "[]",
-        },
-        {
-            "ticker": ticker,
-            "model_id": "lynch_peg",
-            "model_name": "Lynch PEG",
-            "passed": False,
-            "score": 0.2,
-            "reasons": "[]",
-            "failed_criteria": "['missing or negative earnings growth']",
-        },
-    ])
+    return pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_id": "neff_pegy",
+                "model_name": "Neff PEGY",
+                "passed": True,
+                "score": 0.85,
+                "reasons": "['PEGY=0.72']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": ticker,
+                "model_id": "lynch_peg",
+                "model_name": "Lynch PEG",
+                "passed": False,
+                "score": 0.2,
+                "reasons": "[]",
+                "failed_criteria": "['missing or negative earnings growth']",
+            },
+        ]
+    )
 
 
 def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: Path):
@@ -863,17 +941,19 @@ def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: 
         encoding="utf-8",
     )
 
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="FGP.L",
-            name="FirstGroup plc",
-            sector="Industrials",
-            signal="strong_buy",
-            conviction_score=0.6,
-            earnings_growth=-0.059,
-            adjusted_eps_growth_pct=0.16,
-        )
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="FGP.L",
+                name="FirstGroup plc",
+                sector="Industrials",
+                signal="strong_buy",
+                conviction_score=0.6,
+                earnings_growth=-0.059,
+                adjusted_eps_growth_pct=0.16,
+            )
+        ]
+    )
     model_results = _model_results_for_fgp_earnings_basis_cap()
 
     report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
@@ -888,20 +968,30 @@ def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: 
 
 
 def test_build_company_reports_interim_quality_uses_filing_fcf_for_megp():
-    signals = pd.DataFrame([
-        _signal_row(
-            ticker="MEGP.L",
-            name="ME Group International plc",
-            sector="Industrials",
-            signal="strong_buy",
-            passed_families="cheapness,quality,dividend,garp,risk",
-            free_cashflow=25_153_000.0,
-            interim_eps_decline_pct=0.039,
-            dividends_paid=29_769_000.0,
-        ),
-    ])
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                passed_families="cheapness,quality,dividend,garp,risk",
+                free_cashflow=25_153_000.0,
+                interim_eps_decline_pct=0.039,
+                dividends_paid=29_769_000.0,
+            ),
+        ]
+    )
     model_results = pd.DataFrame(
-        columns=["ticker", "model_id", "model_name", "passed", "score", "reasons", "failed_criteria"]
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
     )
 
     report = build_company_reports(signals, model_results)[0]

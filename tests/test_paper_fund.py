@@ -1,5 +1,6 @@
 """Tests for cash-backed paper funds and parallel strategy books."""
 
+from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot
 from value_investor.paper_fund import (
     PaperFund,
     PaperFundConfig,
@@ -11,7 +12,6 @@ from value_investor.paper_fund import (
     run_technical_pass,
 )
 from value_investor.simulator import SimulatorConfig, run_simulation
-from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot
 
 
 def test_resolve_order_shares_modes_respect_cash():
@@ -113,7 +113,13 @@ def test_automated_rebalance_constrained_by_cash_and_max_positions():
         )
     )
     candidates = [
-        {"ticker": "AAA.L", "name": "A", "signal": "strong_buy", "conviction_score": 0.9, "price": 10},
+        {
+            "ticker": "AAA.L",
+            "name": "A",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "price": 10,
+        },
         {"ticker": "BBB.L", "name": "B", "signal": "buy", "conviction_score": 0.8, "price": 20},
         {"ticker": "CCC.L", "name": "C", "signal": "buy", "conviction_score": 0.7, "price": 5},
         {"ticker": "DDD.L", "name": "D", "signal": "hold", "conviction_score": 0.99, "price": 1},
@@ -221,7 +227,13 @@ def test_preview_automated_plan_explains_next_moves():
     )
     fund.buy(ticker="OLD.L", price=10, sizing_mode="cash", amount=400, name="Old")
     candidates = [
-        {"ticker": "AAA.L", "name": "A", "signal": "strong_buy", "conviction_score": 0.95, "price": 20},
+        {
+            "ticker": "AAA.L",
+            "name": "A",
+            "signal": "strong_buy",
+            "conviction_score": 0.95,
+            "price": 20,
+        },
         {"ticker": "BBB.L", "name": "B", "signal": "buy", "conviction_score": 0.9, "price": 25},
         {
             "ticker": "WAIT.L",
@@ -249,8 +261,12 @@ def test_preview_automated_plan_explains_next_moves():
 
 
 def test_compare_funds_ranks_by_return():
-    a = PaperFund.create(PaperFundConfig(name="A", mode="manual", initial_cash=1000, trade_cost_pct=0))
-    b = PaperFund.create(PaperFundConfig(name="B", mode="manual", initial_cash=1000, trade_cost_pct=0))
+    a = PaperFund.create(
+        PaperFundConfig(name="A", mode="manual", initial_cash=1000, trade_cost_pct=0)
+    )
+    b = PaperFund.create(
+        PaperFundConfig(name="B", mode="manual", initial_cash=1000, trade_cost_pct=0)
+    )
     a.buy(ticker="AAA.L", price=10, sizing_mode="cash", amount=500)
     b.buy(ticker="AAA.L", price=10, sizing_mode="cash", amount=500)
     rows = compare_funds([a, b], {"AAA.L": 12})
@@ -283,7 +299,9 @@ def test_simulator_monthly_deposit_increases_contributed_capital():
     ]
     summary = run_simulation(
         snapshots,
-        SimulatorConfig(initial_capital=1000, trade_cost_pct=0.0, monthly_deposit=100, max_positions=1),
+        SimulatorConfig(
+            initial_capital=1000, trade_cost_pct=0.0, monthly_deposit=100, max_positions=1
+        ),
     )
     assert summary.equity_curve[-1]["contributed_capital"] == 1200
     # Flat prices → final ≈ contributed after fees=0

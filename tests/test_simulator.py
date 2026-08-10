@@ -18,16 +18,36 @@ def test_simulation_grows_with_rising_picks_and_costs_apply():
             "2026-06-01T07:00:00+00:00",
             {"AAA.L": 100.0, "BBB.L": 50.0, BENCHMARK_TICKER: 8000.0},
             [
-                {"ticker": "AAA.L", "signal": "strong_buy", "conviction_score": 0.9, "data_quality_score": 0.8},
-                {"ticker": "BBB.L", "signal": "buy", "conviction_score": 0.7, "data_quality_score": 0.8},
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "data_quality_score": 0.8,
+                },
+                {
+                    "ticker": "BBB.L",
+                    "signal": "buy",
+                    "conviction_score": 0.7,
+                    "data_quality_score": 0.8,
+                },
             ],
         ),
         _snapshot(
             "2026-06-15T07:00:00+00:00",
             {"AAA.L": 110.0, "BBB.L": 52.0, BENCHMARK_TICKER: 8040.0},
             [
-                {"ticker": "AAA.L", "signal": "strong_buy", "conviction_score": 0.92, "data_quality_score": 0.8},
-                {"ticker": "BBB.L", "signal": "buy", "conviction_score": 0.72, "data_quality_score": 0.8},
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.92,
+                    "data_quality_score": 0.8,
+                },
+                {
+                    "ticker": "BBB.L",
+                    "signal": "buy",
+                    "conviction_score": 0.72,
+                    "data_quality_score": 0.8,
+                },
             ],
         ),
     ]
@@ -91,9 +111,7 @@ def test_simulation_skips_wait_timing_for_new_buys():
 
 
 def test_simulation_insufficient_history():
-    summary = run_simulation([
-        _snapshot("2026-06-01T07:00:00+00:00", {"AAA.L": 100.0}, [])
-    ])
+    summary = run_simulation([_snapshot("2026-06-01T07:00:00+00:00", {"AAA.L": 100.0}, [])])
     text = format_simulation_text(summary)
     assert "2 archived runs" in text
 

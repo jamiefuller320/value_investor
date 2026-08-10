@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from unittest.mock import patch
 
+from value_investor.fetch import CompanyMetrics, _apply_metric_fallbacks
 from value_investor.providers import (
     ProviderResult,
     StooqPriceProvider,
@@ -14,7 +15,6 @@ from value_investor.providers import (
     merge_provider_result,
     to_stooq_symbol,
 )
-from value_investor.fetch import CompanyMetrics, _apply_metric_fallbacks
 
 
 def test_to_stooq_symbol_maps_lse_class_shares():
@@ -48,8 +48,14 @@ def test_yahoo_quote_summary_provider_parses_modules():
                         "marketCap": {"raw": 1_000_000},
                     },
                     "summaryDetail": {"trailingPE": {"raw": 11.0}, "dividendYield": {"raw": 0.04}},
-                    "defaultKeyStatistics": {"priceToBook": {"raw": 1.2}, "sharesOutstanding": {"raw": 400_000}},
-                    "financialData": {"returnOnEquity": {"raw": 0.15}, "currentRatio": {"raw": 1.4}},
+                    "defaultKeyStatistics": {
+                        "priceToBook": {"raw": 1.2},
+                        "sharesOutstanding": {"raw": 400_000},
+                    },
+                    "financialData": {
+                        "returnOnEquity": {"raw": 0.15},
+                        "currentRatio": {"raw": 1.4},
+                    },
                 }
             ]
         }
@@ -68,7 +74,9 @@ def test_yahoo_quote_summary_provider_parses_modules():
 
 
 def test_stooq_provider_reads_latest_close():
-    csv_text = "Date,Open,High,Low,Close,Volume\n2026-07-10,1,1,1,1.1,10\n2026-07-11,1,1,1,1.25,12\n"
+    csv_text = (
+        "Date,Open,High,Low,Close,Volume\n2026-07-10,1,1,1,1.1,10\n2026-07-11,1,1,1,1.25,12\n"
+    )
     with patch("value_investor.providers.http_get_text", return_value=csv_text):
         result = StooqPriceProvider().fetch("SHEL.L")
     assert result.metrics["last_price"] == 1.25
@@ -123,7 +131,9 @@ def test_apply_metric_fallbacks_clears_soft_primary_error():
 
 
 def test_yahoo_chart_provider_reads_meta_price():
-    payload = {"chart": {"result": [{"meta": {"regularMarketPrice": 4.2, "shortName": "Chart Co"}}]}}
+    payload = {
+        "chart": {"result": [{"meta": {"regularMarketPrice": 4.2, "shortName": "Chart Co"}}]}
+    }
     with patch("value_investor.providers.http_get_text", return_value=json.dumps(payload)):
         result = YahooChartProvider().fetch("CCC.L")
     assert result.metrics["last_price"] == 4.2

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -32,12 +32,12 @@ STRATEGY_LABELS = {
 
 
 def _utcnow_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _parse_date(value: str | date | datetime | None) -> date:
     if value is None:
-        return datetime.now(timezone.utc).date()
+        return datetime.now(UTC).date()
     if isinstance(value, datetime):
         return value.date()
     if isinstance(value, date):
@@ -73,9 +73,7 @@ class RebalanceState:
     def from_dict(cls, data: dict[str, Any] | None) -> RebalanceState:
         raw = data or {}
         return cls(
-            exit_streak={
-                str(k): int(v) for k, v in (raw.get("exit_streak") or {}).items()
-            },
+            exit_streak={str(k): int(v) for k, v in (raw.get("exit_streak") or {}).items()},
             reentry_cooldown={
                 str(k): int(v) for k, v in (raw.get("reentry_cooldown") or {}).items()
             },
@@ -470,10 +468,7 @@ class PaperFund:
         )
         if shares <= 1e-12:
             raise ValueError("Insufficient cash for this buy")
-        if (
-            ticker not in self.holdings
-            and len(self.holdings) >= self.config.max_positions
-        ):
+        if ticker not in self.holdings and len(self.holdings) >= self.config.max_positions:
             raise ValueError(
                 f"Max positions ({self.config.max_positions}) reached; sell before buying a new name"
             )
@@ -626,10 +621,7 @@ class PaperFund:
             hedge_assumption=str(cfg.get("hedge_assumption") or "none"),
             created_at=str(cfg.get("created_at") or _utcnow_iso()),
         )
-        holdings = {
-            str(k): Position.from_dict(v)
-            for k, v in (data.get("holdings") or {}).items()
-        }
+        holdings = {str(k): Position.from_dict(v) for k, v in (data.get("holdings") or {}).items()}
         trades = [PaperTrade.from_dict(t) for t in data.get("trades") or []]
         return cls(
             config=config,
@@ -788,9 +780,7 @@ def _evaluate_momentum_grace_holdings(
                     position.momentum_grace = True
                     position.grace_started_at = acted_at
                     position.grace_entry_stop = (
-                        position.grace_entry_stop
-                        or position.stop_loss
-                        or position.avg_cost
+                        position.grace_entry_stop or position.stop_loss or position.avg_cost
                     )
                 if decision.stop_loss is not None:
                     position.stop_loss = decision.stop_loss
@@ -853,12 +843,12 @@ def resolve_automated_holdings_to_exit(
     force_exit_tickers: set[str] | None = None,
 ) -> tuple[set[str], set[str]]:
     """
-  Return (keep_tickers, full_exit_tickers).
+    Return (keep_tickers, full_exit_tickers).
 
-  When ``exit_confirm_screens`` > 0, holdings must be outside the target set
-  for that many consecutive rebalance passes before a full exit fires.
-  ``force_exit_tickers`` bypass the hold buffer (e.g. momentum grace failures).
-  """
+    When ``exit_confirm_screens`` > 0, holdings must be outside the target set
+    for that many consecutive rebalance passes before a full exit fires.
+    ``force_exit_tickers`` bypass the hold buffer (e.g. momentum grace failures).
+    """
     state = fund.rebalance_state
     forced = set(force_exit_tickers or ())
     buffer_held: set[str] = set()
@@ -935,7 +925,9 @@ def select_automated_targets(
             continue
         if require_research_accumulate:
             verdict = coerce_research_verdict(
-                str(row.get("research_verdict")) if row.get("research_verdict") is not None else None
+                str(row.get("research_verdict"))
+                if row.get("research_verdict") is not None
+                else None
             )
             if verdict != "accumulate":
                 continue
@@ -1061,15 +1053,11 @@ def preview_automated_plan(
         cash += value * (1 - fund.config.trade_cost_pct)
 
     grace_holds = [
-        item
-        for item in grace_transitions
-        if item.get("action") in {"grace_enter", "grace_hold"}
+        item for item in grace_transitions if item.get("action") in {"grace_enter", "grace_hold"}
     ]
 
     # After hypothetical exits, recompute NAV for target sizing narrative.
-    remaining_holdings = {
-        t: p for t, p in fund.holdings.items() if t in keep_tickers
-    }
+    remaining_holdings = {t: p for t, p in fund.holdings.items() if t in keep_tickers}
     nav_after_exits = portfolio_value(cash, remaining_holdings, price_map)
     target_each = (nav_after_exits / len(targets)) if targets else 0.0
 
@@ -1166,9 +1154,7 @@ def preview_automated_plan(
                     "action": "hold",
                     "ticker": ticker,
                     "name": str(row.get("name") or ticker),
-                    "reason": (
-                        f"Top-up below min trade size (£{min_rebalance_notional_gbp:.0f})"
-                    ),
+                    "reason": (f"Top-up below min trade size (£{min_rebalance_notional_gbp:.0f})"),
                     "value": round(current_value, 2),
                     "target_value": round(target_each, 2),
                     "conviction_score": conviction,
@@ -1181,9 +1167,7 @@ def preview_automated_plan(
                 "action": "buy",
                 "ticker": ticker,
                 "name": str(row.get("name") or ticker),
-                "reason": (
-                    "New sleeve" if current_value <= 0 else "Top-up to equal weight"
-                ),
+                "reason": ("New sleeve" if current_value <= 0 else "Top-up to equal weight"),
                 "value": round(budget, 2),
                 "price": round(price, 4),
                 "target_value": round(target_each, 2),
@@ -1223,8 +1207,7 @@ def preview_automated_plan(
             "reason": "timing_signal=wait — skipped until timing improves",
         }
         for row in candidates
-        if str(row.get("signal") or "") in BUY_SIGNALS
-        and row.get("timing_signal") == "wait"
+        if str(row.get("signal") or "") in BUY_SIGNALS and row.get("timing_signal") == "wait"
     ]
     waitlisted.sort(key=lambda r: r["conviction_score"], reverse=True)
 
@@ -1466,7 +1449,9 @@ def run_automated_rebalance(
                     amount=budget,
                     name=str(row.get("name") or ticker),
                     sector=str(row.get("sector") or ""),
-                    stop_loss=_optional_float((row.get("trade_plan") or {}).get("tactical_stop_loss")),
+                    stop_loss=_optional_float(
+                        (row.get("trade_plan") or {}).get("tactical_stop_loss")
+                    ),
                     take_profit=_optional_float(
                         (row.get("trade_plan") or {}).get("tactical_take_profit")
                     ),

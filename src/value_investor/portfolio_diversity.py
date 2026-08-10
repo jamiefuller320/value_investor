@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-
 DEFAULT_TARGET_SECTOR_CAP = 0.30
 DEFAULT_MAX_POSITIONS = 8
 DEFAULT_MIN_CANDIDATES = 3

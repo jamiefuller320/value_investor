@@ -14,9 +14,7 @@ from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
 
 TICKERS = sorted(
-    p.name
-    for p in Path("output/research").iterdir()
-    if p.is_dir() and p.name.endswith(".L")
+    p.name for p in Path("output/research").iterdir() if p.is_dir() and p.name.endswith(".L")
 )
 
 

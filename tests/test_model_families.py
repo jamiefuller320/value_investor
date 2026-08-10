@@ -6,14 +6,16 @@ from value_investor.model_families import MODEL_FAMILIES, summarize_by_family
 
 
 def test_summarize_by_family_counts_independent_passes():
-    model_results = pd.DataFrame([
-        {"ticker": "AAA.L", "model_id": "graham_defensive", "passed": True, "score": 1.0},
-        {"ticker": "AAA.L", "model_id": "deep_value", "passed": True, "score": 0.9},
-        {"ticker": "AAA.L", "model_id": "piotroski_f", "passed": True, "score": 0.8},
-        {"ticker": "AAA.L", "model_id": "high_dividend", "passed": False, "score": 0.2},
-        {"ticker": "BBB.L", "model_id": "graham_defensive", "passed": True, "score": 0.7},
-        {"ticker": "BBB.L", "model_id": "piotroski_f", "passed": False, "score": 0.3},
-    ])
+    model_results = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "model_id": "graham_defensive", "passed": True, "score": 1.0},
+            {"ticker": "AAA.L", "model_id": "deep_value", "passed": True, "score": 0.9},
+            {"ticker": "AAA.L", "model_id": "piotroski_f", "passed": True, "score": 0.8},
+            {"ticker": "AAA.L", "model_id": "high_dividend", "passed": False, "score": 0.2},
+            {"ticker": "BBB.L", "model_id": "graham_defensive", "passed": True, "score": 0.7},
+            {"ticker": "BBB.L", "model_id": "piotroski_f", "passed": False, "score": 0.3},
+        ]
+    )
 
     summary = summarize_by_family(model_results)
     alpha = summary[summary["ticker"] == "AAA.L"].iloc[0]

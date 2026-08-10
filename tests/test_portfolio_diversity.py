@@ -55,7 +55,9 @@ def test_advise_prefers_underweight_sector():
     assert advice.ranked_candidates
     # Already held BP excluded; high-conviction Energy add should lose to Financials.
     assert advice.ranked_candidates[0].ticker == "HSBA.L"
-    assert advice.ranked_candidates[0].diversity_score > advice.ranked_candidates[-1].diversity_score
+    assert (
+        advice.ranked_candidates[0].diversity_score > advice.ranked_candidates[-1].diversity_score
+    )
 
 
 def test_holdings_from_actions_collapses_legs():
@@ -90,7 +92,13 @@ def test_holdings_from_actions_collapses_legs():
 
 def test_candidates_from_reports_filters_signals():
     reports = [
-        {"ticker": "AAA.L", "name": "A", "sector": "X", "signal": "strong_buy", "conviction_score": 0.8},
+        {
+            "ticker": "AAA.L",
+            "name": "A",
+            "sector": "X",
+            "signal": "strong_buy",
+            "conviction_score": 0.8,
+        },
         {"ticker": "BBB.L", "name": "B", "sector": "Y", "signal": "hold", "conviction_score": 0.9},
         {"ticker": "CCC.L", "name": "C", "sector": "Z", "signal": "buy", "conviction_score": 0.6},
     ]

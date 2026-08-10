@@ -73,9 +73,7 @@ class GrahamEnterprisingModel(ValueModel):
         passed_count = sum(1 for _, ok, _ in checks if ok)
         score = passed_count / len(checks) if checks else 0.0
         # Require core valuation + quality checks
-        core_ok = all(
-            ok for label, ok, _ in checks if label in ("P/E < 25", "P/B < 3", "ROE > 8%")
-        )
+        core_ok = all(ok for label, ok, _ in checks if label in ("P/E < 25", "P/B < 3", "ROE > 8%"))
         passed = core_ok and score >= 0.75
         reasons = [f"{label}: {detail}" for label, ok, detail in checks if ok]
 

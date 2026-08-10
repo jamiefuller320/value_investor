@@ -238,7 +238,7 @@ def test_run_decision_review_applies_when_forced(tmp_path: Path):
             amount=200,
             sector="Banks",
             name=ticker,
-            acted_at=f"2026-01-0{i+1}T12:00:00+00:00",
+            acted_at=f"2026-01-0{i + 1}T12:00:00+00:00",
         )
     for ticker in ["AAA.L", "BBB.L"]:
         fund.sell(
@@ -252,7 +252,7 @@ def test_run_decision_review_applies_when_forced(tmp_path: Path):
         fund.record_mark(
             {t: 9.5 for t in fund.holdings},
             note=f"m{i}",
-            acted_at=f"2026-03-0{i+1}T12:00:00+00:00",
+            acted_at=f"2026-03-0{i + 1}T12:00:00+00:00",
         )
 
     out = tmp_path / "paper"
@@ -287,11 +287,7 @@ def test_run_decision_review_applies_when_forced(tmp_path: Path):
     assert result.proposed_changes or result.applied is False
     if result.proposed_changes:
         assert result.applied is True
-        assert (
-            cfg["min_conviction"] > 0
-            or cfg["max_positions"] < 5
-            or cfg["sector_cap"] < 0.5
-        )
+        assert cfg["min_conviction"] > 0 or cfg["max_positions"] < 5 or cfg["sector_cap"] < 0.5
     assert (out / "decision_review_history.json").exists()
 
 
@@ -394,7 +390,7 @@ def test_counterfactual_preview_blocks_excess_buys():
             amount=150,
             sector=f"Sector{i % 2}",
             name=ticker,
-            acted_at=f"2026-01-0{i+1}T12:00:00+00:00",
+            acted_at=f"2026-01-0{i + 1}T12:00:00+00:00",
         )
     preview = estimate_counterfactual_preview(
         fund,
@@ -423,7 +419,7 @@ def test_run_decision_review_starts_epoch_on_apply(tmp_path: Path):
             amount=200,
             sector="Banks",
             name=ticker,
-            acted_at=f"2026-01-0{i+1}T12:00:00+00:00",
+            acted_at=f"2026-01-0{i + 1}T12:00:00+00:00",
         )
     for ticker in ["AAA.L", "BBB.L"]:
         fund.sell(
@@ -437,7 +433,7 @@ def test_run_decision_review_starts_epoch_on_apply(tmp_path: Path):
         fund.record_mark(
             {t: 9.5 for t in fund.holdings},
             note=f"m{i}",
-            acted_at=f"2026-03-0{i+1}T12:00:00+00:00",
+            acted_at=f"2026-03-0{i + 1}T12:00:00+00:00",
         )
 
     out = tmp_path / "paper"

@@ -142,7 +142,9 @@ def build_trust_reports(signals: pd.DataFrame, model_results: pd.DataFrame) -> l
 
         key_metrics = trust_key_metrics(row)
         composite = row.get("composite_score")
-        composite_score = float(composite) if composite is not None and not pd.isna(composite) else None
+        composite_score = (
+            float(composite) if composite is not None and not pd.isna(composite) else None
+        )
         trade_plan: TradePlan | None = trade_plan_from_row(row)
         signal = str(row.get("signal", "hold"))
         family_count = int(row.get("family_count") or 3)

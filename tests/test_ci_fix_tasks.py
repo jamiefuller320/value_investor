@@ -14,7 +14,6 @@ from value_investor.ci_fix_tasks import (
 )
 from value_investor.engineering_tasks import BLOCKED_PATHS, EngineeringTask, load_engineering_tasks
 
-
 SAMPLE_LOG = """
 tests/test_ops_monitor.py:275: AssertionError
 =========================== short test summary info ============================

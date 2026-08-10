@@ -119,7 +119,13 @@ class SimulationComparison:
         return payload
 
     def has_results(self) -> bool:
-        tracks = [self.screen, self.overlay, self.static_levels, self.trailing_levels, self.momentum_grace]
+        tracks = [
+            self.screen,
+            self.overlay,
+            self.static_levels,
+            self.trailing_levels,
+            self.momentum_grace,
+        ]
         return any(t is not None and t.has_results() for t in tracks)
 
 
@@ -158,14 +164,10 @@ def simulation_comparison_from_dict(data: dict[str, Any]) -> SimulationCompariso
             simulation_summary_from_dict(static_data) if isinstance(static_data, dict) else None
         ),
         trailing_levels=(
-            simulation_summary_from_dict(trailing_data)
-            if isinstance(trailing_data, dict)
-            else None
+            simulation_summary_from_dict(trailing_data) if isinstance(trailing_data, dict) else None
         ),
         momentum_grace=(
-            simulation_summary_from_dict(momentum_data)
-            if isinstance(momentum_data, dict)
-            else None
+            simulation_summary_from_dict(momentum_data) if isinstance(momentum_data, dict) else None
         ),
         comparison_note=str(data.get("comparison_note", "")),
     )
@@ -261,7 +263,9 @@ def _select_targets(snapshot: RunSnapshot, config: SimulatorConfig) -> list[str]
             continue
         if config.require_research_accumulate:
             verdict = coerce_research_verdict(
-                str(row.get("research_verdict")) if row.get("research_verdict") is not None else None
+                str(row.get("research_verdict"))
+                if row.get("research_verdict") is not None
+                else None
             )
             if verdict != "accumulate":
                 continue
@@ -590,7 +594,9 @@ def _rebalance_momentum_grace(
             if decision.enter_grace:
                 state.active = True
                 state.started_at = run_at
-                state.entry_stop = state.entry_stop or state.stop_loss or avg_costs.get(ticker, price)
+                state.entry_stop = (
+                    state.entry_stop or state.stop_loss or avg_costs.get(ticker, price)
+                )
                 state.avg_cost = avg_costs.get(ticker, price)
             if decision.stop_loss is not None:
                 state.stop_loss = decision.stop_loss
@@ -829,7 +835,9 @@ def run_grace_parameter_sweep(
     return results
 
 
-def run_simulation_from_dir(output_dir, config: SimulatorConfig | None = None) -> SimulationComparison:
+def run_simulation_from_dir(
+    output_dir, config: SimulatorConfig | None = None
+) -> SimulationComparison:
     from pathlib import Path
 
     path = Path(output_dir)
@@ -837,7 +845,9 @@ def run_simulation_from_dir(output_dir, config: SimulatorConfig | None = None) -
     return run_simulation_comparison(snapshots, config=config)
 
 
-def _format_single_simulation_text(summary: SimulationSummary, *, heading: str | None = None) -> list[str]:
+def _format_single_simulation_text(
+    summary: SimulationSummary, *, heading: str | None = None
+) -> list[str]:
     if not summary.has_results() and summary.note:
         return [summary.note]
 
@@ -845,19 +855,24 @@ def _format_single_simulation_text(summary: SimulationSummary, *, heading: str |
     lines: list[str] = []
     if heading:
         lines.append(f"{heading}:")
-    lines.extend([
-        f"  Final value: £{summary.final_value:,.2f} ({summary.total_return:+.1%})",
-        f"  FTSE 100 buy-and-hold: {summary.benchmark_return:+.1%}",
-        f"  Excess return: {summary.excess_return:+.1%}",
-        f"  Trades: {summary.trade_count}, total costs: £{summary.total_costs:,.2f}",
-    ])
+    lines.extend(
+        [
+            f"  Final value: £{summary.final_value:,.2f} ({summary.total_return:+.1%})",
+            f"  FTSE 100 buy-and-hold: {summary.benchmark_return:+.1%}",
+            f"  Excess return: {summary.excess_return:+.1%}",
+            f"  Trades: {summary.trade_count}, total costs: £{summary.total_costs:,.2f}",
+        ]
+    )
     if summary.holdings:
         holding_bits = ", ".join(
             f"{ticker} ({shares:.2f} sh)" for ticker, shares in summary.holdings.items()
         )
         lines.append(f"  Current holdings: {holding_bits}")
     if not heading:
-        lines.insert(0, f"Portfolio simulation (£{summary.initial_capital:,.0f} start, {cost_pct:.0f}% per trade):")
+        lines.insert(
+            0,
+            f"Portfolio simulation (£{summary.initial_capital:,.0f} start, {cost_pct:.0f}% per trade):",
+        )
     return lines
 
 

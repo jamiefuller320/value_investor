@@ -18,34 +18,18 @@ from value_investor.agent_model_policy import (
     spend_checkpoint_usd,
     spend_since_checkpoint_usd,
 )
+from value_investor.ci_fix_tasks import (
+    draft_ci_fix_task,
+    parse_pytest_failures_from_log,
+    task_eligible_for_auto_merge,
+)
+from value_investor.cli_args import apply_parsed_globals
 from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.engineering_agent import (
     DEFAULT_ESTIMATED_USD,
     record_engineering_spend,
     run_engineering_agent,
 )
-from value_investor.engineering_tasks import (
-    COMMITTED_TASKS_PATH,
-    DEFAULT_MAX_COMPILE_TASKS,
-    DEFAULT_MAX_RUN_TASKS,
-    DEFAULT_TASKS_PATH,
-    compile_engineering_tasks,
-    load_engineering_tasks,
-    mark_task_merged_for_branch,
-    mark_task_status,
-    select_engineering_tasks,
-    sync_committed_engineering_tasks,
-    validate_engineering_pr_paths_for_task_id,
-    find_engineering_task,
-)
-from value_investor.engineering_recovery import (
-    recover_engineering_queue,
-    record_agent_no_diff_run,
-    retry_failed_tasks,
-    summarize_parked_tasks,
-)
-from value_investor.cli_args import apply_parsed_globals
-from value_investor.ci_fix_tasks import draft_ci_fix_task, parse_pytest_failures_from_log, task_eligible_for_auto_merge
 from value_investor.engineering_auto_merge import evaluate_auto_merge, perform_auto_merge
 from value_investor.engineering_pr_notify import (
     EngineeringPrNotification,
@@ -61,6 +45,25 @@ from value_investor.engineering_queue import (
     reprioritize_queue_after_ingest_merge,
     summarize_queue,
     task_id_from_branch,
+)
+from value_investor.engineering_recovery import (
+    record_agent_no_diff_run,
+    recover_engineering_queue,
+    summarize_parked_tasks,
+)
+from value_investor.engineering_tasks import (
+    COMMITTED_TASKS_PATH,
+    DEFAULT_MAX_COMPILE_TASKS,
+    DEFAULT_MAX_RUN_TASKS,
+    DEFAULT_TASKS_PATH,
+    compile_engineering_tasks,
+    find_engineering_task,
+    load_engineering_tasks,
+    mark_task_merged_for_branch,
+    mark_task_status,
+    select_engineering_tasks,
+    sync_committed_engineering_tasks,
+    validate_engineering_pr_paths_for_task_id,
 )
 
 
@@ -88,10 +91,7 @@ def _cmd_compile(args: argparse.Namespace) -> int:
     else:
         print(f"Compiled {payload['task_count']} engineering task(s) → {args.tasks_path}")
         for row in payload.get("tasks") or []:
-            print(
-                f"  {row['id']} [{row['area']}/{row['priority']}] "
-                f"{row['title'][:100]}"
-            )
+            print(f"  {row['id']} [{row['area']}/{row['priority']}] {row['title'][:100]}")
     return 0
 
 
@@ -238,10 +238,7 @@ def _cmd_record_no_diff(args: argparse.Namespace) -> int:
     elif result.get("skipped"):
         print(result.get("reason") or "Skipped no-diff record")
     elif result.get("parked"):
-        print(
-            f"Parked {result.get('task_id')} after "
-            f"{result.get('no_diff_count')} no-diff run(s)"
-        )
+        print(f"Parked {result.get('task_id')} after {result.get('no_diff_count')} no-diff run(s)")
     else:
         print(
             f"Recorded no-diff run for {result.get('task_id')} "
@@ -647,14 +644,18 @@ def main(argv: list[str] | None = None) -> int:
     _add_shared_flags(common)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    compile_p = sub.add_parser("compile", parents=[common], help="Build engineering_tasks.json from run artifacts")
+    compile_p = sub.add_parser(
+        "compile", parents=[common], help="Build engineering_tasks.json from run artifacts"
+    )
     compile_p.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
     compile_p.set_defaults(func=_cmd_compile)
 
     list_p = sub.add_parser("list", parents=[common], help="List compiled engineering tasks")
     list_p.set_defaults(func=_cmd_list)
 
-    queue_p = sub.add_parser("queue-status", parents=[common], help="Evaluate whether to auto-dispatch the next task")
+    queue_p = sub.add_parser(
+        "queue-status", parents=[common], help="Evaluate whether to auto-dispatch the next task"
+    )
     queue_p.add_argument(
         "--open-prs-json",
         default=None,
@@ -673,7 +674,11 @@ def main(argv: list[str] | None = None) -> int:
     queue_p.add_argument("--force", action="store_true")
     queue_p.set_defaults(func=_cmd_queue_status)
 
-    sync_p = sub.add_parser("sync-queue", parents=[common], help="Copy output/engineering_tasks.json to committed queue path")
+    sync_p = sub.add_parser(
+        "sync-queue",
+        parents=[common],
+        help="Copy output/engineering_tasks.json to committed queue path",
+    )
     sync_p.set_defaults(func=_cmd_sync_queue)
 
     reconcile_p = sub.add_parser(
@@ -724,7 +729,9 @@ def main(argv: list[str] | None = None) -> int:
     record_accel_p.add_argument("--note", default=None)
     record_accel_p.set_defaults(func=_cmd_record_accelerated_email)
 
-    parked_p = sub.add_parser("list-parked", parents=[common], help="List tasks parked for manual review")
+    parked_p = sub.add_parser(
+        "list-parked", parents=[common], help="List tasks parked for manual review"
+    )
     parked_p.set_defaults(func=_cmd_list_parked)
 
     record_no_diff_p = sub.add_parser(
@@ -754,10 +761,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     branch_stale_p.set_defaults(func=_cmd_branch_is_stale)
 
-    next_open_p = sub.add_parser("next-open-id", parents=[common], help="Print the top-priority open engineering task id")
+    next_open_p = sub.add_parser(
+        "next-open-id", parents=[common], help="Print the top-priority open engineering task id"
+    )
     next_open_p.set_defaults(func=_cmd_next_open_id)
 
-    task_title_p = sub.add_parser("task-title", parents=[common], help="Print an engineering task title")
+    task_title_p = sub.add_parser(
+        "task-title", parents=[common], help="Print an engineering task title"
+    )
     task_title_p.add_argument("--task-id", required=True)
     task_title_p.add_argument("--max-len", type=int, default=120)
     task_title_p.set_defaults(func=_cmd_task_title)
@@ -772,7 +783,9 @@ def main(argv: list[str] | None = None) -> int:
     mark_pr_open_p.add_argument("--result-path", required=True)
     mark_pr_open_p.set_defaults(func=_cmd_mark_pr_open)
 
-    merged_p = sub.add_parser("mark-merged", parents=[common], help="Mark an engineering task merged from a branch name")
+    merged_p = sub.add_parser(
+        "mark-merged", parents=[common], help="Mark an engineering task merged from a branch name"
+    )
     merged_p.add_argument("--branch", required=True)
     merged_p.add_argument("--pr-url", default=None)
     merged_p.add_argument("--pr-number", type=int, default=None)
@@ -801,7 +814,9 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Engineering PR branch (cursor/eng-YYYYMMDD-NN-1de3); non-task branches are skipped",
     )
-    check_paths_p.add_argument("--task-id", default=None, help="Override task id parsed from branch")
+    check_paths_p.add_argument(
+        "--task-id", default=None, help="Override task id parsed from branch"
+    )
     check_paths_p.add_argument(
         "--changed-files",
         required=True,
@@ -814,7 +829,9 @@ def main(argv: list[str] | None = None) -> int:
         parents=[common],
         help="Draft a scoped CI-fix engineering task from a failed Actions run log",
     )
-    draft_ci_p.add_argument("--run-id", default=None, help="GitHub Actions run id (uses gh run view --log-failed)")
+    draft_ci_p.add_argument(
+        "--run-id", default=None, help="GitHub Actions run id (uses gh run view --log-failed)"
+    )
     draft_ci_p.add_argument("--log-file", default=None, help="Path to saved failed CI log text")
     draft_ci_p.add_argument("--run-url", default=None, help="Optional link stored in task evidence")
     draft_ci_p.add_argument(
@@ -891,7 +908,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     notify_block_p.set_defaults(func=_cmd_notify_queue_blocked)
 
-    run_p = sub.add_parser("run", parents=[common], help="Run the supervised dev agent for open task(s)")
+    run_p = sub.add_parser(
+        "run", parents=[common], help="Run the supervised dev agent for open task(s)"
+    )
     run_p.add_argument("--task-id", default=None, help="Specific task id (default: top priority)")
     run_p.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_RUN_TASKS)
     run_p.add_argument("--model", default="composer-2.5")

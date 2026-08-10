@@ -40,11 +40,7 @@ class PostRunReview:
             ("PRIORITISED IMPROVEMENT PLAN", self.improvement_plan),
             ("DEFER", self.defer),
         ]
-        return "\n\n".join(
-            f"{heading}\n{body.strip()}"
-            for heading, body in parts
-            if body.strip()
-        )
+        return "\n\n".join(f"{heading}\n{body.strip()}" for heading, body in parts if body.strip())
 
 
 def _normalize_heading(line: str) -> str:
@@ -101,11 +97,7 @@ def _load_suggestions(path: Path) -> list[dict[str, Any]]:
 def _suggestion_rollup(suggestions: list[dict[str, Any]]) -> dict[str, Any]:
     by_area = Counter(str(row.get("area") or "research") for row in suggestions)
     by_priority = Counter(str(row.get("priority") or "medium") for row in suggestions)
-    high = [
-        row
-        for row in suggestions
-        if str(row.get("priority") or "").lower() == "high"
-    ]
+    high = [row for row in suggestions if str(row.get("priority") or "").lower() == "high"]
     return {
         "total": len(suggestions),
         "by_area": dict(by_area),
@@ -179,9 +171,7 @@ def _filing_coverage_for_ticker(store: ResearchStore, ticker: str) -> dict[str, 
     filings = list(index.get("filings") or [])
     coverage["filings_annual"] = int((index.get("summary") or {}).get("annual") or 0)
     coverage["filings_interim"] = int((index.get("summary") or {}).get("interim") or 0)
-    coverage["indexed_without_body"] = sum(
-        1 for row in filings if not row.get("has_body")
-    )
+    coverage["indexed_without_body"] = sum(1 for row in filings if not row.get("has_body"))
     return coverage
 
 
@@ -236,8 +226,7 @@ def build_post_run_payload(
         unresolved = [
             row
             for row in gap_fill_summary.question_outcomes
-            if str(row.get("status") or "").lower()
-            in {"unresolved", "partially_resolved"}
+            if str(row.get("status") or "").lower() in {"unresolved", "partially_resolved"}
         ]
         gap_fill_payload = {
             "targets": [
@@ -268,8 +257,7 @@ def build_post_run_payload(
     thin_filings = [
         row
         for row in filing_coverage
-        if row["filings_total"] > 0
-        and row["filings_with_body"] < max(1, row["filings_annual"])
+        if row["filings_total"] > 0 and row["filings_with_body"] < max(1, row["filings_annual"])
     ]
 
     return {

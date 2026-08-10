@@ -67,8 +67,12 @@ def summarize_by_family(model_results: pd.DataFrame) -> pd.DataFrame:
     )
     family_summary["family_passed"] = family_summary["family_models_passed"] > 0
 
-    pivot_passed = family_summary.pivot(index="ticker", columns="family", values="family_passed").fillna(False)
-    pivot_scores = family_summary.pivot(index="ticker", columns="family", values="family_mean_score")
+    pivot_passed = family_summary.pivot(
+        index="ticker", columns="family", values="family_passed"
+    ).fillna(False)
+    pivot_scores = family_summary.pivot(
+        index="ticker", columns="family", values="family_mean_score"
+    )
 
     rows: list[dict[str, Any]] = []
     for ticker in pivot_passed.index:
@@ -90,7 +94,9 @@ def summarize_by_family(model_results: pd.DataFrame) -> pd.DataFrame:
                 "families_passed": len(passed_families),
                 "family_count": len(MODEL_FAMILIES),
                 "passed_families": ",".join(passed_families),
-                "family_mean_score": sum(family_scores.values()) / len(family_scores) if family_scores else 0.0,
+                "family_mean_score": sum(family_scores.values()) / len(family_scores)
+                if family_scores
+                else 0.0,
                 "risk_family_passed": risk_passed,
                 "risk_mean_score": risk_mean_score,
             }

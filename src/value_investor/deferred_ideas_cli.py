@@ -34,7 +34,9 @@ def main(argv: list[str] | None = None) -> int:
         default="later",
     )
     add_p.add_argument("--revisit-when", default="")
-    add_p.add_argument("--section", default=None, help="learning|universe|research|ops|not_now|security")
+    add_p.add_argument(
+        "--section", default=None, help="learning|universe|research|ops|not_now|security"
+    )
     add_p.add_argument("--tags", default="", help="Comma-separated tags")
     add_p.add_argument("--source", default="", help="Agent URL or bc-id")
     add_p.add_argument("--allow-duplicate", action="store_true")
@@ -43,7 +45,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("render", help="Regenerate docs/deferred-review.md from JSON")
 
     list_p = sub.add_parser("list", help="List open ideas")
-    list_p.add_argument("--category", choices=["not_now", "later", "security", "both", "all"], default="all")
+    list_p.add_argument(
+        "--category", choices=["not_now", "later", "security", "both", "all"], default="all"
+    )
     list_p.add_argument("--json", action="store_true")
 
     status_p = sub.add_parser("status", help="Set idea status (open|done|drop|now)")

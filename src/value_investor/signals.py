@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 import pandas as pd
 
@@ -13,7 +13,7 @@ from value_investor.data_quality import (
 )
 
 
-class Signal(str, Enum):
+class Signal(StrEnum):
     STRONG_BUY = "strong_buy"
     BUY = "buy"
     HOLD = "hold"
@@ -57,9 +57,7 @@ def assign_signal(
         return Signal.INSUFFICIENT_DATA
 
     pass_rate = models_passed / model_count
-    score_for_blend = (
-        weighted_model_score if weighted_model_score is not None else mean_model_score
-    )
+    score_for_blend = weighted_model_score if weighted_model_score is not None else mean_model_score
     composite = composite_score if composite_score is not None else score_for_blend
     sector_composite = sector_composite_score if sector_composite_score is not None else composite
     blended_composite = (composite + sector_composite) / 2
@@ -120,7 +118,9 @@ def build_signals(
             float(sector_score) if sector_score is not None and not pd.isna(sector_score) else None
         )
         composite = row.get("composite_score")
-        composite_score = float(composite) if composite is not None and not pd.isna(composite) else None
+        composite_score = (
+            float(composite) if composite is not None and not pd.isna(composite) else None
+        )
 
         weighted_score = row.get("weighted_model_score")
         weighted_model_score = (
@@ -129,9 +129,13 @@ def build_signals(
             else None
         )
         risk_passed = row.get("risk_family_passed")
-        risk_family_passed = bool(risk_passed) if risk_passed is not None and not pd.isna(risk_passed) else False
+        risk_family_passed = (
+            bool(risk_passed) if risk_passed is not None and not pd.isna(risk_passed) else False
+        )
         risk_score = row.get("risk_mean_score")
-        risk_mean_score = float(risk_score) if risk_score is not None and not pd.isna(risk_score) else 0.0
+        risk_mean_score = (
+            float(risk_score) if risk_score is not None and not pd.isna(risk_score) else 0.0
+        )
 
         signals.append(
             assign_signal(

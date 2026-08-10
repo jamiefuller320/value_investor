@@ -24,7 +24,9 @@ from value_investor.engineering_tasks import (
 )
 
 
-def _task(task_id: str, *, status: str = "open", title: str = "Build CH PDF fetch") -> EngineeringTask:
+def _task(
+    task_id: str, *, status: str = "open", title: str = "Build CH PDF fetch"
+) -> EngineeringTask:
     return EngineeringTask(
         id=task_id,
         area="ingest",
@@ -59,7 +61,11 @@ def test_is_safe_to_clear_stale_branch():
 def test_find_in_flight_pr_matches_engineering_branch():
     prs = [
         {"number": 10, "headRefName": "cursor/weekly-ops-budget-1de3", "title": "feat: budget"},
-        {"number": 11, "headRefName": "cursor/eng-20260726-02-1de3", "title": "feat(engineering): ingest"},
+        {
+            "number": 11,
+            "headRefName": "cursor/eng-20260726-02-1de3",
+            "title": "feat(engineering): ingest",
+        },
     ]
     found = find_in_flight_pr(prs)
     assert found is not None
@@ -77,7 +83,13 @@ def test_evaluate_dispatch_blocks_when_pr_open(tmp_path: Path):
     tasks_path.write_text(json.dumps(payload), encoding="utf-8")
     decision = evaluate_engineering_dispatch(
         tasks_path=tasks_path,
-        open_prs=[{"number": 112, "headRefName": "cursor/eng-20260726-02-1de3", "title": "feat(engineering): x"}],
+        open_prs=[
+            {
+                "number": 112,
+                "headRefName": "cursor/eng-20260726-02-1de3",
+                "title": "feat(engineering): x",
+            }
+        ],
     )
     assert decision.should_dispatch is False
     assert "open engineering PR" in decision.reason
@@ -205,10 +217,16 @@ def test_reprioritize_boosts_scoring_when_ingest_improves(tmp_path: Path):
         "ingest_health": {"zero_body_buy_tier": 3, "indexed_without_body": 10},
         "tasks": [
             {
-                **_task("eng-20260726-01", status="merged", title="Companies House filed-accounts PDF fetch").to_dict(),
+                **_task(
+                    "eng-20260726-01",
+                    status="merged",
+                    title="Companies House filed-accounts PDF fetch",
+                ).to_dict(),
             },
             {
-                **_task("eng-20260726-02", title="Replace Google News wrapper URLs with Investegate").to_dict(),
+                **_task(
+                    "eng-20260726-02", title="Replace Google News wrapper URLs with Investegate"
+                ).to_dict(),
             },
             {
                 "id": "eng-20260726-05",

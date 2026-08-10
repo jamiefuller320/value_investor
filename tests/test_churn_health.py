@@ -7,7 +7,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.churn_health import (
-    build_churn_health,
     summarize_track_churn_health,
     write_churn_health,
 )

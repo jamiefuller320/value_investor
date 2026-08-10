@@ -142,7 +142,8 @@ def build_trust_signals(
             mean_model_score=float(row.get("mean_model_score") or 0),
             composite_score=(
                 float(row["composite_score"])
-                if row.get("composite_score") is not None and not pd.isna(row.get("composite_score"))
+                if row.get("composite_score") is not None
+                and not pd.isna(row.get("composite_score"))
                 else None
             ),
             families_passed=int(row.get("families_passed") or 0),
@@ -155,9 +156,7 @@ def build_trust_signals(
         signals.append(signal.value)
 
     merged["signal"] = signals
-    merged["signal_rank"] = merged["signal"].map(
-        lambda s: SIGNAL_ORDER.get(Signal(s), 0)
-    )
+    merged["signal_rank"] = merged["signal"].map(lambda s: SIGNAL_ORDER.get(Signal(s), 0))
     # Defaults expected by report/email enrichers
     for col, default in (
         ("weeks_at_signal", 1),
@@ -176,10 +175,9 @@ def build_trust_signals(
 
     if "conviction_score" in merged.columns:
         # Simple conviction from composite × quality for trusts (no history yet).
-        merged["conviction_score"] = (
-            merged["composite_score"].fillna(0).clip(0, 1)
-            * merged["data_quality_score"].fillna(0).clip(0, 1)
-        )
+        merged["conviction_score"] = merged["composite_score"].fillna(0).clip(0, 1) * merged[
+            "data_quality_score"
+        ].fillna(0).clip(0, 1)
 
     sort_cols = ["signal_rank", "conviction_score", "composite_score", "models_passed"]
     present = [c for c in sort_cols if c in merged.columns]

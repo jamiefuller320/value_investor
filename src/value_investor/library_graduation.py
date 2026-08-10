@@ -291,9 +291,7 @@ def run_maintenance_grow(
     if not markets:
         return {"skipped": True, "reason": "no_graduated_markets", "markets": []}
 
-    max_tickers, is_full = resolve_maintenance_max_tickers(
-        cfg, root=root, markets=markets
-    )
+    max_tickers, is_full = resolve_maintenance_max_tickers(cfg, root=root, markets=markets)
     if refresh_constituents_first is None:
         refresh_constituents_first = bool(cfg.get("maintenance_refresh_constituents", True))
     results = grow_library(

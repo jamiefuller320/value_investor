@@ -13,19 +13,28 @@ from value_investor.engineering_tasks import (
 
 
 def test_needs_engineering_implementation_filters_ingest_retry_only():
-    assert needs_engineering_implementation(
-        area="ingest",
-        suggestion="Fetch Hikma IR results presentation PDF from hikma.com",
-        source_ids=["company_ir_presentation"],
-    ) is False
-    assert needs_engineering_implementation(
-        area="ingest",
-        suggestion="Replace Google News wrapper URLs with Investegate direct HTML fetch",
-    ) is True
-    assert needs_engineering_implementation(
-        area="scoring",
-        suggestion="Export failed_models into screening_snapshot.json",
-    ) is True
+    assert (
+        needs_engineering_implementation(
+            area="ingest",
+            suggestion="Fetch Hikma IR results presentation PDF from hikma.com",
+            source_ids=["company_ir_presentation"],
+        )
+        is False
+    )
+    assert (
+        needs_engineering_implementation(
+            area="ingest",
+            suggestion="Replace Google News wrapper URLs with Investegate direct HTML fetch",
+        )
+        is True
+    )
+    assert (
+        needs_engineering_implementation(
+            area="scoring",
+            suggestion="Export failed_models into screening_snapshot.json",
+        )
+        is True
+    )
 
 
 def test_compile_engineering_tasks_from_post_run_review(tmp_path: Path):

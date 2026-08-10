@@ -220,7 +220,9 @@ def publish_committed_run_history(
     dest = committed_dir or COMMITTED_HISTORY_DIR
     dest.mkdir(parents=True, exist_ok=True)
     blocked = validate_history_before_publish(output_dir, committed_dir=dest)
-    blocked_names = {Path(row.path).name for row in blocked if Path(row.path).suffix in {".json", ".gz"}}
+    blocked_names = {
+        Path(row.path).name for row in blocked if Path(row.path).suffix in {".json", ".gz"}
+    }
     copied = 0
     skipped = 0
     if source.exists():
@@ -285,11 +287,11 @@ def prune_dashboard_archives(
     if keep < 1 or not archive_dir.exists():
         return []
     archives = [
-        path
-        for path in archive_dir.iterdir()
-        if path.is_file() and _archive_date(path) is not None
+        path for path in archive_dir.iterdir() if path.is_file() and _archive_date(path) is not None
     ]
-    archives.sort(key=lambda path: _archive_date(path) or datetime.min.replace(tzinfo=UTC), reverse=True)
+    archives.sort(
+        key=lambda path: _archive_date(path) or datetime.min.replace(tzinfo=UTC), reverse=True
+    )
     removed: list[Path] = []
     for path in archives[keep:]:
         path.unlink(missing_ok=True)
@@ -306,6 +308,10 @@ def apply_output_retention(
     """Run all local output retention passes; return counts removed per bucket."""
     return {
         "history": len(prune_history_dir(output_dir, max_years=max_years, now=now)),
-        "timestamped_outputs": len(prune_timestamped_outputs(output_dir, max_years=max_years, now=now)),
-        "research_batches": len(prune_research_source_batches(output_dir, max_years=max_years, now=now)),
+        "timestamped_outputs": len(
+            prune_timestamped_outputs(output_dir, max_years=max_years, now=now)
+        ),
+        "research_batches": len(
+            prune_research_source_batches(output_dir, max_years=max_years, now=now)
+        ),
     }

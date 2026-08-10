@@ -96,6 +96,27 @@ python3 scripts/check_changed_python.py --base origin/main --head HEAD
 Engineering agent prompt asks for `ruff check --fix` and `ruff format` on edited Python
 files. `ci` tasks may edit `pyproject.toml` ruff config and the check script itself.
 
+### Local pre-commit (optional)
+
+After `pip install -e ".[dev]"`, install hooks once:
+
+```bash
+pre-commit install
+```
+
+Hooks run `ruff check --fix` and `ruff format` on staged Python files before each
+commit. CI still scopes ruff to the PR diff — pre-commit is an early warning, not a
+substitute.
+
+### Full-tree ruff (one-off / periodic)
+
+```bash
+ruff check --fix src/ tests/ scripts/
+ruff format src/ tests/ scripts/
+```
+
+The repo was bulk-formatted once (Aug 2026) so touched files rarely surface legacy lint.
+
 ## Nightly full CI on main
 
 `docs/data/**` commits and `[skip ci]` automation pushes intentionally skip push CI

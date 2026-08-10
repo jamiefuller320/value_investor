@@ -4,22 +4,27 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.backtest import BacktestSummary
-from value_investor.cursor_api_key import resolve_cursor_api_key
-from value_investor.historical_analysis import HistoricalAnalysisSummary, load_historical_analysis_summary
-from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
-from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
-from value_investor.emailer import EmailConfig, format_html_report, format_text_report, send_report_email
 from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES, universe_label
+from value_investor.cursor_api_key import resolve_cursor_api_key
+from value_investor.deep_analysis import DeepAnalysis, run_deep_analysis
+from value_investor.emailer import (
+    EmailConfig,
+    format_html_report,
+    format_text_report,
+    send_report_email,
+)
+from value_investor.historical_analysis import (
+    HistoricalAnalysisSummary,
+    load_historical_analysis_summary,
+)
 from value_investor.pipeline import run_screen, write_outputs
 from value_investor.publish import publish_dashboard
-from value_investor.run_diff import RunDiff
 from value_investor.research.format import research_documents_for_reports
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.runner import (
@@ -27,6 +32,8 @@ from value_investor.research.runner import (
     load_existing_research,
     run_research_for_strong_buys,
 )
+from value_investor.run_diff import RunDiff
+from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
 from value_investor.storage import write_json
 from value_investor.summary import build_company_reports
 from value_investor.trust_summary import build_trust_reports
@@ -253,7 +260,7 @@ def main(argv: list[str] | None = None) -> int:
         strong_buys = sum(1 for r in reports_data if r.get("signal") == "strong_buy")
         run_line = text_path.read_text(encoding="utf-8").splitlines()[0]
         date_match = None
-        if (match := re.search(r"(\d{4}-\d{2}-\d{2})", run_line)):
+        if match := re.search(r"(\d{4}-\d{2}-\d{2})", run_line):
             date_match = match.group(1)
         subject = f"FTSE Value Screen — {strong_buys} strong buys — {date_match or 'report'}"
         try:
@@ -334,9 +341,7 @@ def main(argv: list[str] | None = None) -> int:
     reports = build_company_reports(signals, model_results)
     trust_reports = (
         build_trust_reports(trust_signals, trust_model_results)
-        if trust_signals is not None
-        and trust_model_results is not None
-        and not trust_signals.empty
+        if trust_signals is not None and trust_model_results is not None and not trust_signals.empty
         else []
     )
     run_at_str = run_at.strftime("%Y-%m-%d %H:%M UTC")
@@ -389,9 +394,7 @@ def main(argv: list[str] | None = None) -> int:
                 weekly_cap=args.research_cap,
                 continue_alumni=not args.no_continue_alumni,
                 alumni_cap=(
-                    args.alumni_cap
-                    if args.alumni_cap is not None
-                    else DEFAULT_RESEARCH_ALUMNI_CAP
+                    args.alumni_cap if args.alumni_cap is not None else DEFAULT_RESEARCH_ALUMNI_CAP
                 ),
             )
         except RuntimeError as err:

@@ -40,12 +40,15 @@ def test_strip_auth_on_redirect_drops_authorization():
         },
         method="GET",
     )
+
     # Minimal fake redirect response headers
     class _Hdrs(dict):
         def get_all(self, name, default=None):  # noqa: ANN001
             return [self[name]] if name in self else default
 
-    headers = _Hdrs({"Location": "https://s3.eu-west-2.amazonaws.com/bucket/doc?X-Amz-Algorithm=AWS4"})
+    headers = _Hdrs(
+        {"Location": "https://s3.eu-west-2.amazonaws.com/bucket/doc?X-Amz-Algorithm=AWS4"}
+    )
     new_req = handler.redirect_request(
         req,
         fp=None,
@@ -215,8 +218,7 @@ def test_fetch_accounts_filing_rows_limits_and_shapes(monkeypatch):
                 "date": f"202{i % 5}-03-15",
                 "links": {
                     "document_metadata": (
-                        f"https://document-api.company-information.service.gov.uk/"
-                        f"document/{i}"
+                        f"https://document-api.company-information.service.gov.uk/document/{i}"
                     )
                 },
             }

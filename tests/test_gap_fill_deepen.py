@@ -111,19 +111,11 @@ def test_prepare_gap_fill_calls_investegate_refetch_for_uk(
     assert pack["body_refetch"]["fetched"] == 3
 
 
-@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
-@patch("value_investor.research.gap_fill_sources.refetch_companies_house_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.execute_planned_alternate_sources")
 @patch("value_investor.research.gap_fill_sources.prepare_gap_fill_source_pack")
 def test_deepen_thin_filings_runs_when_thin(
     mock_prepare,
     mock_execute,
-    mock_refetch,
-    mock_ch_refetch,
-    mock_ir_rows,
-    mock_ir_refetch,
     tmp_path: Path,
 ):
     filings_dir = tmp_path / "filings"
@@ -134,8 +126,6 @@ def test_deepen_thin_filings_runs_when_thin(
     )
     mock_prepare.return_value = {"planned_alternate_sources": [{"id": "exchange_filings_full"}]}
     mock_execute.return_value = {"sources_tried": ["exchange_filings_full"], "fetched": 2}
-    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
-    mock_ch_refetch.return_value = {"fetched": 0, "with_body_after": 0}
 
     # Simulate bodies added after execute
     (filings_dir / "filings_index.json").write_text(
@@ -218,7 +208,9 @@ def test_prepare_gap_fill_calls_ir_refetch_for_allowlisted_ticker(
         "companies_house": {"fetched": 0},
         "rns": {"fetched": 0, "investegate": {"fetched": 0}, "ticker_rns": {"fetched": 0}},
     }
-    mock_ir_rows.return_value = [{"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}]
+    mock_ir_rows.return_value = [
+        {"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}
+    ]
     mock_ir_refetch.return_value = {"fetched": 1, "with_body_after": 1}
 
     pack = prepare_gap_fill_source_pack(
@@ -262,7 +254,9 @@ def test_prepare_gap_fill_source_map_includes_ir_retry_log(
         "companies_house": {"fetched": 0},
         "rns": {"fetched": 0, "investegate": {"fetched": 0}, "ticker_rns": {"fetched": 0}},
     }
-    mock_ir_rows.return_value = [{"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}]
+    mock_ir_rows.return_value = [
+        {"id": "ir_test", "source": "ir_allowlist", "url": "https://x/y.pdf"}
+    ]
     mock_ir_refetch.return_value = {
         "fetched": 0,
         "attempted": 1,

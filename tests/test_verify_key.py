@@ -38,6 +38,7 @@ def test_verify_key_blank(monkeypatch):
     assert not result.ok
     assert "not set" in result.detail
 
+
 def test_verify_key_success(monkeypatch):
     user = _user()
     monkeypatch.setattr(

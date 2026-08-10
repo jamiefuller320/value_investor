@@ -30,24 +30,26 @@ def test_conviction_increases_with_persistence():
 
 
 def test_compute_stability_detects_persistent_signal():
-    history = pd.DataFrame([
-        {
-            "run_at": "2026-06-10T07:00:00+00:00",
-            "ticker": "AAA.L",
-            "signal": "strong_buy",
-            "signal_rank": 4,
-            "conviction_score": 0.7,
-            "data_quality_score": 0.8,
-        },
-        {
-            "run_at": "2026-06-17T07:00:00+00:00",
-            "ticker": "AAA.L",
-            "signal": "strong_buy",
-            "signal_rank": 4,
-            "conviction_score": 0.72,
-            "data_quality_score": 0.8,
-        },
-    ])
+    history = pd.DataFrame(
+        [
+            {
+                "run_at": "2026-06-10T07:00:00+00:00",
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "signal_rank": 4,
+                "conviction_score": 0.7,
+                "data_quality_score": 0.8,
+            },
+            {
+                "run_at": "2026-06-17T07:00:00+00:00",
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "signal_rank": 4,
+                "conviction_score": 0.72,
+                "data_quality_score": 0.8,
+            },
+        ]
+    )
     info = compute_stability(
         history,
         ticker="AAA.L",
@@ -65,21 +67,30 @@ def test_compute_stability_detects_persistent_signal():
 
 
 def test_enrich_signals_adds_conviction_columns():
-    signals = pd.DataFrame([
-        {
-            "ticker": "AAA.L",
-            "signal": "buy",
-            "signal_rank": 3,
-            "composite_score": 0.7,
-            "sector_composite_score": 0.75,
-            "families_passed": 2,
-            "family_count": 4,
-            "data_quality_score": 0.8,
-        }
-    ])
-    history = pd.DataFrame(columns=[
-        "run_at", "ticker", "signal", "signal_rank", "conviction_score", "data_quality_score"
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "signal": "buy",
+                "signal_rank": 3,
+                "composite_score": 0.7,
+                "sector_composite_score": 0.75,
+                "families_passed": 2,
+                "family_count": 4,
+                "data_quality_score": 0.8,
+            }
+        ]
+    )
+    history = pd.DataFrame(
+        columns=[
+            "run_at",
+            "ticker",
+            "signal",
+            "signal_rank",
+            "conviction_score",
+            "data_quality_score",
+        ]
+    )
     out = enrich_signals_with_stability(
         signals,
         history,

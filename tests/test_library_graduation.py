@@ -168,7 +168,11 @@ def test_maintenance_includes_focus_when_queue_complete(tmp_path: Path, monkeypa
     monkeypatch.setattr(
         "value_investor.library_graduation.library_status",
         lambda root_path, markets=None, **kwargs: [
-            {"market": m, "coverage_pct": 1.0, "ticker_count": {"sp500": 503, "euro_stoxx50": 50, "asx200": 200}[m]}
+            {
+                "market": m,
+                "coverage_pct": 1.0,
+                "ticker_count": {"sp500": 503, "euro_stoxx50": 50, "asx200": 200}[m],
+            }
             for m in (markets or [])
         ],
     )

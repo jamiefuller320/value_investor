@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
 from io import StringIO
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 from urllib.request import Request, urlopen
 
 import pandas as pd
@@ -304,9 +305,7 @@ def fetch_nasdaq100_constituents() -> pd.DataFrame:
 def fetch_dax_constituents() -> pd.DataFrame:
     tables = _wiki_tables("https://en.wikipedia.org/wiki/DAX")
     table = _pick_constituent_table(tables)
-    return _normalize_wiki_constituents(
-        table, market_id="dax", yahoo_suffix="", index_label="DAX"
-    )
+    return _normalize_wiki_constituents(table, market_id="dax", yahoo_suffix="", index_label="DAX")
 
 
 def fetch_cac40_constituents() -> pd.DataFrame:
@@ -365,9 +364,7 @@ def fetch_ftse_mib_constituents() -> pd.DataFrame:
 def fetch_aex_constituents() -> pd.DataFrame:
     tables = _wiki_tables("https://en.wikipedia.org/wiki/AEX_index")
     table = _pick_constituent_table(tables)
-    return _normalize_wiki_constituents(
-        table, market_id="aex", yahoo_suffix="", index_label="AEX"
-    )
+    return _normalize_wiki_constituents(table, market_id="aex", yahoo_suffix="", index_label="AEX")
 
 
 def fetch_bel20_constituents() -> pd.DataFrame:
@@ -385,7 +382,9 @@ def fetch_bel20_constituents() -> pd.DataFrame:
     # Columns: Company / ICB Sector / Ticker symbol (``Euronext Brussels: ABI``).
     # Do not use _normalize_wiki_constituents — it splits on spaces and keeps "Euronext".
     ticker_col = next(c for c in table.columns if "ticker" in str(c).lower())
-    name_col = next(c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower())
+    name_col = next(
+        c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower()
+    )
     sector_col = next((c for c in table.columns if "sector" in str(c).lower()), None)
     rows: list[dict[str, Any]] = []
     for _, row in table.iterrows():
@@ -406,7 +405,9 @@ def fetch_bel20_constituents() -> pd.DataFrame:
             {
                 "ticker": ticker,
                 "name": str(row.get(name_col) or ticker),
-                "sector": None if sector_val is None or (isinstance(sector_val, float) and pd.isna(sector_val)) else str(sector_val),
+                "sector": None
+                if sector_val is None or (isinstance(sector_val, float) and pd.isna(sector_val))
+                else str(sector_val),
                 "epic": _strip_exchange_prefix(raw),
                 "index": "BEL 20",
                 "market": "bel20",
@@ -464,9 +465,7 @@ def fetch_sti_constituents() -> pd.DataFrame:
     rename: dict[str, str] = {}
     for col in table.columns:
         key = str(col).strip().lower()
-        if "raw_ticker" not in rename.values() and (
-            "symbol" in key or key in {"ticker", "code"}
-        ):
+        if "raw_ticker" not in rename.values() and ("symbol" in key or key in {"ticker", "code"}):
             rename[col] = "raw_ticker"
         elif "name" not in rename.values() and (
             key in {"company", "name", "security"} or "company" in key
@@ -511,8 +510,18 @@ US_ADR_ASIA_SEED: list[dict[str, str | None]] = [
     {"ticker": "TM", "name": "Toyota Motor", "sector": "Consumer Cyclical", "home": "Japan"},
     {"ticker": "SONY", "name": "Sony Group", "sector": "Technology", "home": "Japan"},
     {"ticker": "HMC", "name": "Honda Motor", "sector": "Consumer Cyclical", "home": "Japan"},
-    {"ticker": "MUFG", "name": "Mitsubishi UFJ Financial", "sector": "Financial Services", "home": "Japan"},
-    {"ticker": "SMFG", "name": "Sumitomo Mitsui Financial", "sector": "Financial Services", "home": "Japan"},
+    {
+        "ticker": "MUFG",
+        "name": "Mitsubishi UFJ Financial",
+        "sector": "Financial Services",
+        "home": "Japan",
+    },
+    {
+        "ticker": "SMFG",
+        "name": "Sumitomo Mitsui Financial",
+        "sector": "Financial Services",
+        "home": "Japan",
+    },
     {"ticker": "MFG", "name": "Mizuho Financial", "sector": "Financial Services", "home": "Japan"},
     {"ticker": "NMR", "name": "Nomura Holdings", "sector": "Financial Services", "home": "Japan"},
     {"ticker": "TAK", "name": "Takeda Pharmaceutical", "sector": "Healthcare", "home": "Japan"},
@@ -574,7 +583,10 @@ def fetch_psi20_constituents() -> pd.DataFrame:
     name_col = next(
         c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower()
     )
-    sector_col = next((c for c in table.columns if "industry" in str(c).lower() or "sector" in str(c).lower()), None)
+    sector_col = next(
+        (c for c in table.columns if "industry" in str(c).lower() or "sector" in str(c).lower()),
+        None,
+    )
     rows: list[dict[str, Any]] = []
     for _, row in table.iterrows():
         raw = str(row.get(ticker_col) or "").strip()
@@ -616,7 +628,9 @@ def fetch_smi_constituents() -> pd.DataFrame:
         table = _pick_constituent_table(tables)
     ticker_col = next(c for c in table.columns if "ticker" in str(c).lower())
     name_col = next(
-        c for c in table.columns if str(c).strip().lower() in {"name", "company"} or "name" in str(c).lower()
+        c
+        for c in table.columns
+        if str(c).strip().lower() in {"name", "company"} or "name" in str(c).lower()
     )
     sector_col = next((c for c in table.columns if "sector" in str(c).lower()), None)
     rows: list[dict[str, Any]] = []
@@ -673,7 +687,9 @@ def fetch_iseq20_constituents() -> pd.DataFrame:
         for c in table.columns
         if "mnem" in str(c).lower() or str(c).strip().lower() in {"code", "ticker", "symbol"}
     )
-    name_col = next(c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower())
+    name_col = next(
+        c for c in table.columns if "company" in str(c).lower() or "name" in str(c).lower()
+    )
     rows: list[dict[str, Any]] = []
     for _, row in table.iterrows():
         raw = str(row.get(code_col) or "").replace("\xa0", " ").strip()
@@ -999,9 +1015,7 @@ def refresh_constituents(root: Path, market_id: str) -> dict[str, Any]:
 def _metric_field_names(row: dict[str, Any]) -> list[str]:
     skip = {"ticker", "name", "sector", "errors", "data_sources"}
     return sorted(
-        key
-        for key, value in row.items()
-        if key not in skip and value is not None and value != ""
+        key for key, value in row.items() if key not in skip and value is not None and value != ""
     )
 
 

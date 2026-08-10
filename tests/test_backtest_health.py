@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import gzip
-import json
 from pathlib import Path
 
 from value_investor.backtest import BENCHMARK_TICKER

@@ -293,9 +293,7 @@ def fund_from_pre_state(entry: dict[str, Any]) -> PaperFund:
     fund = PaperFund(
         config=config,
         cash=float(entry.get("cash_before") or config.initial_cash),
-        contributed_capital=float(
-            entry.get("contributed_capital_before") or config.initial_cash
-        ),
+        contributed_capital=float(entry.get("contributed_capital_before") or config.initial_cash),
     )
     for row in entry.get("holdings_before") or []:
         if not isinstance(row, dict):
@@ -345,9 +343,7 @@ def _selection_kwargs_for_replay(
         "use_momentum_grace": bool(selection.get("use_momentum_grace", False)),
         "exit_confirm_screens": int(selection.get("exit_confirm_screens") or 2),
         "reentry_cooldown_screens": int(selection.get("reentry_cooldown_screens") or 1),
-        "min_rebalance_notional_gbp": float(
-            selection.get("min_rebalance_notional_gbp") or 10.0
-        ),
+        "min_rebalance_notional_gbp": float(selection.get("min_rebalance_notional_gbp") or 10.0),
         "max_positions": int(max_positions),
     }
 
@@ -378,11 +374,10 @@ def resolve_replay_candidates(
         return candidates
 
     ai_gate_changed = (
-        (use_adjusted_signal is not None and bool(use_adjusted_signal) != logged_use_adj)
-        or (
-            require_research_accumulate is not None
-            and bool(require_research_accumulate) != logged_req_acc
-        )
+        use_adjusted_signal is not None and bool(use_adjusted_signal) != logged_use_adj
+    ) or (
+        require_research_accumulate is not None
+        and bool(require_research_accumulate) != logged_req_acc
     )
     if ai_gate_changed and screen:
         return screen
@@ -719,9 +714,7 @@ def bootstrap_rebalance_log(
         return {"ok": False, "reason": "missing automated_fund.json", "entries": 0}
 
     if config_path.exists():
-        config = AutomationConfig.from_dict(
-            json.loads(config_path.read_text(encoding="utf-8"))
-        )
+        config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
     else:
         config = AutomationConfig()
 
@@ -776,16 +769,12 @@ def bootstrap_rebalance_log(
             price_hints=price_hints,
             fetch_prices=fetch_prices,
         )
-        selection = selection_at_time(
-            config, knob_timeline, acted_at, initial_knobs=initial_knobs
-        )
+        selection = selection_at_time(config, knob_timeline, acted_at, initial_knobs=initial_knobs)
         max_pos = int(selection.get("max_positions") or config.max_positions)
         replay_fund.config.max_positions = max_pos
 
         prices_pre = {
-            t: float(p.avg_cost)
-            for t, p in replay_fund.holdings.items()
-            if p.avg_cost > 0
+            t: float(p.avg_cost) for t, p in replay_fund.holdings.items() if p.avg_cost > 0
         }
         for row in marked:
             ticker = str(row.get("ticker") or "")

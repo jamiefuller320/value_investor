@@ -166,9 +166,7 @@ class BookMetrics:
                 None if self.benchmark_return is None else round(self.benchmark_return, 4)
             ),
             "excess_after_costs": (
-                None
-                if self.excess_after_costs is None
-                else round(self.excess_after_costs, 4)
+                None if self.excess_after_costs is None else round(self.excess_after_costs, 4)
             ),
             "note": self.note,
         }
@@ -734,25 +732,15 @@ def propose_knob_updates(
             if new_floor > proposed.min_conviction + 1e-9:
                 proposed.min_conviction = new_floor
                 changes["min_conviction"] = new_floor
-                reasons.append(
-                    f"High cost drag ({metrics.cost_drag:.1%}) — raise min_conviction."
-                )
+                reasons.append(f"High cost drag ({metrics.cost_drag:.1%}) — raise min_conviction.")
 
     # 2) Weak excess + costs → shrink book slightly.
-    if (
-        excess is not None
-        and excess <= WEAK_EXCESS
-        and metrics.cost_drag >= HIGH_COST_DRAG / 2
-    ):
-        new_max = int(
-            _clamp(proposed.max_positions - MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS)
-        )
+    if excess is not None and excess <= WEAK_EXCESS and metrics.cost_drag >= HIGH_COST_DRAG / 2:
+        new_max = int(_clamp(proposed.max_positions - MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS))
         if new_max < proposed.max_positions:
             proposed.max_positions = new_max
             changes["max_positions"] = new_max
-            reasons.append(
-                f"Weak excess after costs ({excess:+.1%}) — reduce max_positions."
-            )
+            reasons.append(f"Weak excess after costs ({excess:+.1%}) — reduce max_positions.")
 
     # 3) Strong excess + tight cash use → allow one more sleeve.
     if (
@@ -762,15 +750,11 @@ def propose_knob_updates(
         and metrics.cash_fraction < 0.15
         and metrics.positions >= knobs.max_positions
     ):
-        new_max = int(
-            _clamp(proposed.max_positions + MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS)
-        )
+        new_max = int(_clamp(proposed.max_positions + MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS))
         if new_max > proposed.max_positions:
             proposed.max_positions = new_max
             changes["max_positions"] = new_max
-            reasons.append(
-                f"Strong excess after costs ({excess:+.1%}) — raise max_positions."
-            )
+            reasons.append(f"Strong excess after costs ({excess:+.1%}) — raise max_positions.")
 
     # 4) Sector concentration above current cap → tighten.
     if metrics.max_sector_weight > proposed.sector_cap + 1e-9 and metrics.positions >= 2:
@@ -852,9 +836,7 @@ def run_decision_review(
     fund_path = output_dir / FUND_FILENAME
 
     if config_path.exists():
-        config = AutomationConfig.from_dict(
-            json.loads(config_path.read_text(encoding="utf-8"))
-        )
+        config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
     else:
         config = AutomationConfig()
 
@@ -886,9 +868,7 @@ def run_decision_review(
         knobs_after = proposed
         if apply and changes:
             knobs_after.apply_to_config(config)
-            config_path.write_text(
-                json.dumps(config.to_dict(), indent=2) + "\n", encoding="utf-8"
-            )
+            config_path.write_text(json.dumps(config.to_dict(), indent=2) + "\n", encoding="utf-8")
             from value_investor.paper_automation import sync_fund_from_automation_config
 
             sync_fund_from_automation_config(fund, config)
@@ -1101,11 +1081,7 @@ def compare_learning_tracks(
             else (
                 "beating_market"
                 if beat_market
-                else (
-                    "underperforming"
-                    if primary_excess is not None
-                    else "insufficient_data"
-                )
+                else ("underperforming" if primary_excess is not None else "insufficient_data")
             )
         ),
         "reviews": reviews,
@@ -1117,4 +1093,3 @@ def compare_learning_tracks(
 
     summary["churn_health"] = write_churn_health(base_dir)
     return summary
-

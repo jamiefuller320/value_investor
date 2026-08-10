@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from value_investor.research.overlay_refresh import refresh_dashboard_bundle
 from value_investor.research.document import ResearchDocument
+from value_investor.research.overlay_refresh import refresh_dashboard_bundle
 from value_investor.research.store import ResearchStore
 from value_investor.storage import write_json
 

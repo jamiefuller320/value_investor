@@ -13,7 +13,6 @@ from value_investor.research.companies_house import (
 )
 from value_investor.research.filings import (
     _extract_filing_document_text,
-    _extract_ixbrl_html_text,
     _fetch_companies_house_body,
     _ocr_pdf_text,
     _score_ch_body_text,
@@ -51,7 +50,9 @@ def test_fetch_document_bytes_uses_prefer_mime(monkeypatch):
         return b"<html>ixbrl accounts</html>"
 
     monkeypatch.setattr("value_investor.research.companies_house._ch_get", fake_get)
-    monkeypatch.setattr("value_investor.research.companies_house.time.sleep", lambda *_a, **_k: None)
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.time.sleep", lambda *_a, **_k: None
+    )
     fetched = fetch_document_bytes(
         "https://document-api.company-information.service.gov.uk/document/abc",
         api_key="test-key",
@@ -103,7 +104,7 @@ def test_fetch_companies_house_body_uses_ixbrl_when_pdf_empty(monkeypatch):
 
 def test_extract_filing_document_text_routes_ixbrl():
     html = (
-        b"<html xmlns:ix=\"http://www.xbrl.org/2013/inlineXBRL\">"
+        b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
         b"<ix:hidden>noise</ix:hidden><div>STRATEGIC REPORT</div>"
         b"<p>Revenue was GBP 500 million with pension and covenant disclosures.</p>"
         b"</html>"

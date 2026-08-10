@@ -54,13 +54,17 @@ def test_resolve_dispatch_task_id_falls_back_when_stale(tmp_path: Path):
 
 def test_audit_compile_drop_risk_empty_without_artifacts(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
-    tasks_path.write_text(json.dumps({"tasks": [_task("eng-20260802-02").to_dict()]}), encoding="utf-8")
+    tasks_path.write_text(
+        json.dumps({"tasks": [_task("eng-20260802-02").to_dict()]}), encoding="utf-8"
+    )
     assert audit_compile_drop_risk(tasks_path=tasks_path, output_dir=tmp_path / "output") == []
 
 
 def test_run_engineering_sync_flags_recent_failures(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
-    tasks_path.write_text(json.dumps({"tasks": [_task("eng-20260803-29").to_dict()]}), encoding="utf-8")
+    tasks_path.write_text(
+        json.dumps({"tasks": [_task("eng-20260803-29").to_dict()]}), encoding="utf-8"
+    )
     report = run_engineering_sync(
         tasks_path=tasks_path,
         recent_agent_failures=[{"id": 1, "created_at": "2026-08-03T08:00:00Z"}],

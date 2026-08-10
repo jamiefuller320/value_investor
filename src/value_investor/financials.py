@@ -66,7 +66,10 @@ def extract_statement_metrics(
         metrics[key] = _row_value(source, labels, 0)
         metrics[f"{key}_prev"] = _row_value(source, labels, 1)
 
-    if metrics.get("total_current_assets") is not None and metrics.get("total_liabilities") is not None:
+    if (
+        metrics.get("total_current_assets") is not None
+        and metrics.get("total_liabilities") is not None
+    ):
         metrics["ncav"] = metrics["total_current_assets"] - metrics["total_liabilities"]
 
     if metrics.get("gross_profit") is not None and metrics.get("total_revenue"):
@@ -101,6 +104,8 @@ def extract_statement_metrics(
         metrics["asset_turnover"] = metrics["total_revenue"] / metrics["total_assets"]
 
     if metrics.get("total_revenue_prev") and metrics.get("total_assets_prev"):
-        metrics["asset_turnover_prev"] = metrics["total_revenue_prev"] / metrics["total_assets_prev"]
+        metrics["asset_turnover_prev"] = (
+            metrics["total_revenue_prev"] / metrics["total_assets_prev"]
+        )
 
     return metrics

@@ -327,11 +327,7 @@ def _pick_instrument(
     exch_map = _suffix_exchange_map(policy)
     wanted = {c.upper() for c in exch_map.get(yahoo_suf, [])}
     if wanted:
-        matched = [
-            r
-            for r in rows
-            if (r.get("exchangeCode") or "").upper() in wanted
-        ]
+        matched = [r for r in rows if (r.get("exchangeCode") or "").upper() in wanted]
         if len(matched) == 1:
             return matched[0]
         if len(matched) > 1:
@@ -535,9 +531,7 @@ def classify_ticker(
                 "Venue listed as phone orders only on legacy allowlist"
                 if phone_only
                 else (
-                    None
-                    if online
-                    else "Not matched in T212 catalogue; allowlist marks non-online"
+                    None if online else "Not matched in T212 catalogue; allowlist marks non-online"
                 )
             ),
             updated_at=now,
@@ -620,9 +614,7 @@ def build_market_overlay(
 ) -> list[dict[str, Any]]:
     root = t212_coverage_root(library_root)
     policy = policy or load_t212_policy(root)
-    exceptions = (
-        exceptions if exceptions is not None else load_t212_exceptions(root)
-    )
+    exceptions = exceptions if exceptions is not None else load_t212_exceptions(root)
     if catalogue_index is None:
         catalogue_index = load_catalogue_index(library_root)
     isins = _isin_lookup_for_market(library_root, market_id)
@@ -779,9 +771,7 @@ def build_t212_overlays(
             "markets": len(per_market),
             "tickers": sum(m["ticker_count"] for m in per_market.values()),
             "tradable": sum(m["tradable_count"] for m in per_market.values()),
-            "catalogue_hits": sum(
-                m.get("catalogue_hit_count", 0) for m in per_market.values()
-            ),
+            "catalogue_hits": sum(m.get("catalogue_hit_count", 0) for m in per_market.values()),
             "unknown_venue": sum(m["unknown_venue_count"] for m in per_market.values()),
         },
     }
@@ -902,9 +892,7 @@ def _catalogue_exchange_stats(index: dict[str, Any] | None) -> dict[str, Any]:
         if str(row.get("type") or "").upper() == "STOCK":
             stock_exchange_counts[code] = stock_exchange_counts.get(code, 0) + 1
     return {
-        "exchange_counts": dict(
-            sorted(exchange_counts.items(), key=lambda kv: (-kv[1], kv[0]))
-        ),
+        "exchange_counts": dict(sorted(exchange_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
         "stock_exchange_counts": dict(
             sorted(stock_exchange_counts.items(), key=lambda kv: (-kv[1], kv[0]))
         ),
@@ -1024,9 +1012,7 @@ def assess_t212_alignment(
         "catalogue_exchange_stats": exch_stats if has_catalogue else None,
         "suggested_ladder_markets": suggestions,
         "weak_existing_markets": weak_existing,
-        "covered_library_markets": sorted(
-            mid for mid in MARKET_REGISTRY if mid != "ftse350"
-        ),
+        "covered_library_markets": sorted(mid for mid in MARKET_REGISTRY if mid != "ftse350"),
     }
     if write:
         t212_root.mkdir(parents=True, exist_ok=True)
@@ -1085,9 +1071,7 @@ def annotate_dashboard_reports(
 ) -> list[dict[str, Any]]:
     """Annotate live dashboard reports with T212 overlay fields (advisory)."""
     try:
-        return annotate_shortlist_rows(
-            reports, market_id=market_id, library_root=library_root
-        )
+        return annotate_shortlist_rows(reports, market_id=market_id, library_root=library_root)
     except FileNotFoundError:
         logger.warning("T212 coverage policy missing — skipping dashboard annotation")
         return reports

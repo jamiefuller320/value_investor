@@ -1,7 +1,7 @@
 """Tests for adaptive model weight learning."""
 
 import json
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -15,10 +15,12 @@ from value_investor.scoring import summarize_by_ticker
 
 
 def test_summarize_by_ticker_applies_weights():
-    model_results = pd.DataFrame([
-        {"ticker": "AAA.L", "model_id": "model_a", "passed": True, "score": 1.0},
-        {"ticker": "AAA.L", "model_id": "model_b", "passed": False, "score": 0.0},
-    ])
+    model_results = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "model_id": "model_a", "passed": True, "score": 1.0},
+            {"ticker": "AAA.L", "model_id": "model_b", "passed": False, "score": 0.0},
+        ]
+    )
     summary = summarize_by_ticker(model_results, weights={"model_a": 2.0, "model_b": 0.5})
     row = summary.iloc[0]
     assert row["mean_model_score"] == 0.5
@@ -31,9 +33,7 @@ def test_update_model_weights_from_archived_history(tmp_path: Path):
     tickers = [f"T{i:02d}.L" for i in range(10)]
 
     prices_1 = {ticker: 100.0 + i for i, ticker in enumerate(tickers)}
-    prices_2 = {
-        ticker: prices_1[ticker] * (1.05 + i * 0.01) for i, ticker in enumerate(tickers)
-    }
+    prices_2 = {ticker: prices_1[ticker] * (1.05 + i * 0.01) for i, ticker in enumerate(tickers)}
     prices_1["^FTSE"] = 8000.0
     prices_2["^FTSE"] = 8040.0
 
@@ -41,7 +41,12 @@ def test_update_model_weights_from_archived_history(tmp_path: Path):
     history_dir.mkdir(parents=True)
 
     signals = [
-        {"ticker": ticker, "signal": "strong_buy", "conviction_score": 0.8, "data_quality_score": 0.8}
+        {
+            "ticker": ticker,
+            "signal": "strong_buy",
+            "conviction_score": 0.8,
+            "data_quality_score": 0.8,
+        }
         for ticker in tickers
     ]
     (history_dir / "run_20260601_070000.json").write_text(
@@ -56,10 +61,20 @@ def test_update_model_weights_from_archived_history(tmp_path: Path):
         aligned_score = i / 9
         inverse_score = 1.0 - aligned_score
         model_rows.append(
-            {"ticker": ticker, "model_id": "aligned_model", "passed": aligned_score > 0.5, "score": aligned_score}
+            {
+                "ticker": ticker,
+                "model_id": "aligned_model",
+                "passed": aligned_score > 0.5,
+                "score": aligned_score,
+            }
         )
         model_rows.append(
-            {"ticker": ticker, "model_id": "inverse_model", "passed": inverse_score > 0.5, "score": inverse_score}
+            {
+                "ticker": ticker,
+                "model_id": "inverse_model",
+                "passed": inverse_score > 0.5,
+                "score": inverse_score,
+            }
         )
 
     save_model_snapshot(

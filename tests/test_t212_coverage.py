@@ -57,9 +57,7 @@ def test_catalogue_match_by_isin_and_short_name():
     index = build_catalogue_index(instruments)
     policy = {"yahoo_suffix_to_t212_exchanges": {"": ["US"], ".DE": ["DE"]}}
 
-    by_isin = match_catalogue(
-        "AAPL", isin="US0378331005", index=index, policy=policy
-    )
+    by_isin = match_catalogue("AAPL", isin="US0378331005", index=index, policy=policy)
     assert by_isin is not None
     assert by_isin["ticker"] == "AAPL_US_EQ"
 

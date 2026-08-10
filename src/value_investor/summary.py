@@ -14,7 +14,6 @@ from value_investor.model_families import format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
-from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
@@ -27,7 +26,13 @@ from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
 )
-from value_investor.technical_analysis import TradePlan, format_timing_summary, format_trade_plan_text, trade_plan_from_row
+from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
+from value_investor.technical_analysis import (
+    TradePlan,
+    format_timing_summary,
+    format_trade_plan_text,
+    trade_plan_from_row,
+)
 
 SIGNAL_LABELS = {
     "strong_buy": "Strong Buy",
@@ -252,7 +257,9 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
         inputs["earnings_growth_pct"] = float(growth)
 
     adjusted_growth = row.get("adjusted_eps_growth_pct")
-    if adjusted_growth is not None and not (isinstance(adjusted_growth, float) and pd.isna(adjusted_growth)):
+    if adjusted_growth is not None and not (
+        isinstance(adjusted_growth, float) and pd.isna(adjusted_growth)
+    ):
         inputs["adjusted_eps_growth_pct"] = float(adjusted_growth)
 
     ncav = row.get("ncav")
@@ -366,7 +373,9 @@ def _brief_summary(
         parts.append(format_timing_summary(timing_signal, rsi_14, timing_reasons))
         if action_note:
             parts.append(f"Action: {action_note}.")
-    elif action_note and ("FCF basis mismatch" in action_note or "FCF filing-aligned" in action_note):
+    elif action_note and (
+        "FCF basis mismatch" in action_note or "FCF filing-aligned" in action_note
+    ):
         parts.append(f"Action: {action_note}.")
 
     if signal in ("strong_buy", "buy") and trade_plan is not None:
@@ -466,9 +475,7 @@ def build_company_reports(
         fcf_bundle = reconcile_fcf_for_ticker(ticker, screen_ttm=screen_ttm, output_dir=output_dir)
         canonical_fcf = fcf_bundle.get("canonical")
         free_cashflow = (
-            float(canonical_fcf)
-            if canonical_fcf is not None
-            else resolve_free_cashflow(row)
+            float(canonical_fcf) if canonical_fcf is not None else resolve_free_cashflow(row)
         )
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
@@ -484,7 +491,9 @@ def build_company_reports(
 
         key_metrics = _key_metrics_row(row, canonical_fcf=free_cashflow)
         composite = row.get("composite_score")
-        composite_score = float(composite) if composite is not None and not pd.isna(composite) else None
+        composite_score = (
+            float(composite) if composite is not None and not pd.isna(composite) else None
+        )
         sector_score = row.get("sector_composite_score")
         sector_composite_score = (
             float(sector_score) if sector_score is not None and not pd.isna(sector_score) else None
@@ -504,7 +513,8 @@ def build_company_reports(
         adjusted_signal = row.get("adjusted_signal")
         adjusted_signal_str = (
             str(adjusted_signal)
-            if adjusted_signal is not None and not (isinstance(adjusted_signal, float) and pd.isna(adjusted_signal))
+            if adjusted_signal is not None
+            and not (isinstance(adjusted_signal, float) and pd.isna(adjusted_signal))
             else None
         )
         healthcare_overlay_flag = row.get("healthcare_overlay")
@@ -531,13 +541,15 @@ def build_company_reports(
         shares_prev = row.get("shares_outstanding_prev")
         shares_outstanding_prev = (
             float(shares_prev)
-            if shares_prev is not None and not (isinstance(shares_prev, float) and pd.isna(shares_prev))
+            if shares_prev is not None
+            and not (isinstance(shares_prev, float) and pd.isna(shares_prev))
             else None
         )
 
         cash_conversion_overlay_flag = row.get("cash_conversion_overlay")
         if cash_conversion_overlay_flag is not None and not (
-            isinstance(cash_conversion_overlay_flag, float) and pd.isna(cash_conversion_overlay_flag)
+            isinstance(cash_conversion_overlay_flag, float)
+            and pd.isna(cash_conversion_overlay_flag)
         ):
             cash_conversion_overlay = bool(cash_conversion_overlay_flag)
         else:
@@ -571,7 +583,8 @@ def build_company_reports(
 
         interim_quality_overlay_flag = row.get("interim_quality_overlay")
         if interim_quality_overlay_flag is not None and not (
-            isinstance(interim_quality_overlay_flag, float) and pd.isna(interim_quality_overlay_flag)
+            isinstance(interim_quality_overlay_flag, float)
+            and pd.isna(interim_quality_overlay_flag)
         ):
             interim_quality_overlay = bool(interim_quality_overlay_flag)
         else:
@@ -585,7 +598,8 @@ def build_company_reports(
             dividends = row.get("dividends_paid")
             dividends_paid = (
                 float(dividends)
-                if dividends is not None and not (isinstance(dividends, float) and pd.isna(dividends))
+                if dividends is not None
+                and not (isinstance(dividends, float) and pd.isna(dividends))
                 else None
             )
             interim_quality_overlay, adjusted_signal_str = apply_interim_quality_overlay_to_signal(
@@ -607,7 +621,8 @@ def build_company_reports(
             statutory = row.get("earnings_growth")
             statutory_growth = (
                 float(statutory)
-                if statutory is not None and not (isinstance(statutory, float) and pd.isna(statutory))
+                if statutory is not None
+                and not (isinstance(statutory, float) and pd.isna(statutory))
                 else None
             )
             adjusted_metric = row.get("adjusted_eps_growth_pct")
@@ -617,13 +632,15 @@ def build_company_reports(
                 and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
                 else None
             )
-            earnings_basis_overlay, adjusted_signal_str, conviction_score = apply_earnings_basis_overlay_to_signal(
-                signal,
-                statutory_growth=statutory_growth,
-                adjusted_growth=adjusted_growth,
-                ticker_models=ticker_models,
-                conviction_score=conviction_score,
-                adjusted_signal=adjusted_signal_str,
+            earnings_basis_overlay, adjusted_signal_str, conviction_score = (
+                apply_earnings_basis_overlay_to_signal(
+                    signal,
+                    statutory_growth=statutory_growth,
+                    adjusted_growth=adjusted_growth,
+                    ticker_models=ticker_models,
+                    conviction_score=conviction_score,
+                    adjusted_signal=adjusted_signal_str,
+                )
             )
 
         fcf_basis_overlay_flag = row.get("fcf_basis_overlay")
@@ -632,36 +649,42 @@ def build_company_reports(
         ):
             fcf_basis_overlay = bool(fcf_basis_overlay_flag)
         else:
-            fcf_basis_overlay, adjusted_signal_str, conviction_score = apply_fcf_basis_overlay_to_signal(
-                signal,
-                divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
-                ticker_models=ticker_models,
-                conviction_score=conviction_score,
-                adjusted_signal=adjusted_signal_str,
+            fcf_basis_overlay, adjusted_signal_str, conviction_score = (
+                apply_fcf_basis_overlay_to_signal(
+                    signal,
+                    divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+                    ticker_models=ticker_models,
+                    conviction_score=conviction_score,
+                    adjusted_signal=adjusted_signal_str,
+                )
             )
 
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
-            if research_verdict is not None and not (isinstance(research_verdict, float) and pd.isna(research_verdict))
+            if research_verdict is not None
+            and not (isinstance(research_verdict, float) and pd.isna(research_verdict))
             else None
         )
         research_risk = row.get("research_risk_level")
         research_risk_str = (
             str(research_risk)
-            if research_risk is not None and not (isinstance(research_risk, float) and pd.isna(research_risk))
+            if research_risk is not None
+            and not (isinstance(research_risk, float) and pd.isna(research_risk))
             else None
         )
         research_conf = row.get("research_confidence")
         research_confidence = (
             float(research_conf)
-            if research_conf is not None and not (isinstance(research_conf, float) and pd.isna(research_conf))
+            if research_conf is not None
+            and not (isinstance(research_conf, float) and pd.isna(research_conf))
             else None
         )
         research_rat = row.get("research_rationale")
         research_rationale_str = (
             str(research_rat)
-            if research_rat is not None and not (isinstance(research_rat, float) and pd.isna(research_rat))
+            if research_rat is not None
+            and not (isinstance(research_rat, float) and pd.isna(research_rat))
             else None
         )
 
@@ -682,7 +705,9 @@ def build_company_reports(
             stability_label=str(row.get("stability_label") or "new"),
             timing_signal=str(row.get("timing_signal") or "insufficient_data"),
             timing_score=float(row.get("timing_score") or 0),
-            rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
+            rsi_14=float(row["rsi_14"])
+            if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14"))
+            else None,
             timing_reasons=timing_reasons,
             action_note=action_note,
             trade_plan=trade_plan,
@@ -724,7 +749,9 @@ def build_company_reports(
                 stability_label=str(row.get("stability_label") or "new"),
                 timing_signal=str(row.get("timing_signal") or "insufficient_data"),
                 timing_score=float(row.get("timing_score") or 0),
-                rsi_14=float(row["rsi_14"]) if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14")) else None,
+                rsi_14=float(row["rsi_14"])
+                if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14"))
+                else None,
                 price_vs_sma200_pct=price_vs_sma200_pct,
                 action_note=action_note,
                 trade_plan=trade_plan,

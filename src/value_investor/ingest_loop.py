@@ -238,9 +238,7 @@ def run_weekday_ingest_loop(
     improved_tickers = []
     if ingest_summary is not None:
         improved_tickers = [
-            str(row.get("ticker"))
-            for row in ingest_summary.results
-            if row.get("improved")
+            str(row.get("ticker")) for row in ingest_summary.results if row.get("improved")
         ]
 
     append_health_log_entry(

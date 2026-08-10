@@ -212,7 +212,9 @@ def ensure_buy_tier_charts(
             ticker=ticker,
             name=str(report.get("name") or ticker),
             series=series,
-            trade_plan=report.get("trade_plan") if isinstance(report.get("trade_plan"), dict) else None,
+            trade_plan=report.get("trade_plan")
+            if isinstance(report.get("trade_plan"), dict)
+            else None,
             signal=str(report.get("signal") or ""),
             as_of=as_of,
         )

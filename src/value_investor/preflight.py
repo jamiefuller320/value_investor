@@ -45,11 +45,15 @@ def run_preflight(
     output_dir = Path(output_dir)
 
     if output_dir.exists() and os.access(output_dir, os.W_OK):
-        report.checks.append(PreflightCheck("output_dir", "ok", f"Writable: {output_dir.resolve()}"))
+        report.checks.append(
+            PreflightCheck("output_dir", "ok", f"Writable: {output_dir.resolve()}")
+        )
     else:
         try:
             output_dir.mkdir(parents=True, exist_ok=True)
-            report.checks.append(PreflightCheck("output_dir", "ok", f"Created: {output_dir.resolve()}"))
+            report.checks.append(
+                PreflightCheck("output_dir", "ok", f"Created: {output_dir.resolve()}")
+            )
         except OSError as err:
             report.checks.append(PreflightCheck("output_dir", "fail", str(err)))
 
@@ -58,9 +62,7 @@ def run_preflight(
     if not missing_email:
         report.checks.append(PreflightCheck("smtp", "ok", "SMTP secrets present"))
     elif require_email:
-        report.checks.append(
-            PreflightCheck("smtp", "fail", f"Missing: {', '.join(missing_email)}")
-        )
+        report.checks.append(PreflightCheck("smtp", "fail", f"Missing: {', '.join(missing_email)}"))
     else:
         report.checks.append(
             PreflightCheck(
@@ -73,7 +75,9 @@ def run_preflight(
     if os.environ.get("CURSOR_API_KEY"):
         report.checks.append(PreflightCheck("cursor_api", "ok", "CURSOR_API_KEY set"))
     elif require_agents:
-        report.checks.append(PreflightCheck("cursor_api", "fail", "CURSOR_API_KEY required for agents"))
+        report.checks.append(
+            PreflightCheck("cursor_api", "fail", "CURSOR_API_KEY required for agents")
+        )
     else:
         report.checks.append(
             PreflightCheck(
@@ -102,7 +106,11 @@ def run_preflight(
 
     restore_committed_run_history(output_dir)
     snapshots = load_run_snapshots(output_dir)
-    committed_runs = len(list(COMMITTED_HISTORY_DIR.glob("run_*.json*"))) if COMMITTED_HISTORY_DIR.exists() else 0
+    committed_runs = (
+        len(list(COMMITTED_HISTORY_DIR.glob("run_*.json*")))
+        if COMMITTED_HISTORY_DIR.exists()
+        else 0
+    )
     if len(snapshots) >= 2:
         report.checks.append(
             PreflightCheck(
@@ -137,9 +145,11 @@ def run_preflight(
             )
         )
 
-    timeline_count = sum(
-        1 for ticker_dir in research_dir.glob("*") if (ticker_dir / "timeline.json").exists()
-    ) if research_dir.exists() else 0
+    timeline_count = (
+        sum(1 for ticker_dir in research_dir.glob("*") if (ticker_dir / "timeline.json").exists())
+        if research_dir.exists()
+        else 0
+    )
     if timeline_count:
         report.checks.append(
             PreflightCheck(
@@ -159,7 +169,9 @@ def run_preflight(
 
     docs_data = Path("docs/data/latest.json")
     if docs_data.exists():
-        report.checks.append(PreflightCheck("dashboard", "ok", "Dashboard data present in docs/data/"))
+        report.checks.append(
+            PreflightCheck("dashboard", "ok", "Dashboard data present in docs/data/")
+        )
     else:
         report.checks.append(
             PreflightCheck(

@@ -203,9 +203,7 @@ def reingest_research_filings(
 
     Used to backfill ASX / Euro regimes written before those sources existed.
     """
-    targets = list_research_filings_targets(
-        root, markets, only_unsupported=only_unsupported
-    )
+    targets = list_research_filings_targets(root, markets, only_unsupported=only_unsupported)
     results: list[dict[str, Any]] = []
     for target in targets:
         company_name = target["company_name"]
@@ -264,11 +262,7 @@ def list_failed_metric_tickers(root: Path, market_id: str) -> list[str]:
     if not metrics_path.exists():
         return []
     rows = read_json(metrics_path)
-    return [
-        str(row["ticker"])
-        for row in rows
-        if row.get("ticker") and row.get("errors")
-    ]
+    return [str(row["ticker"]) for row in rows if row.get("ticker") and row.get("errors")]
 
 
 def retry_failed_metrics(
@@ -430,7 +424,9 @@ def _memo_updated_date(ticker_dir: Path) -> str | None:
     memo = ticker_dir / "research.md"
     if not memo.exists():
         return None
-    match = re.search(r"Updated (\d{4}-\d{2}-\d{2})", memo.read_text(encoding="utf-8", errors="ignore"))
+    match = re.search(
+        r"Updated (\d{4}-\d{2}-\d{2})", memo.read_text(encoding="utf-8", errors="ignore")
+    )
     return match.group(1) if match else None
 
 
@@ -584,7 +580,9 @@ def deepen_library_research_memos(
                 market=market,
                 deepen_history=True,
             )
-            row["bodies_after_ingest"] = int((meta.get("filings_summary") or {}).get("with_body") or 0)
+            row["bodies_after_ingest"] = int(
+                (meta.get("filings_summary") or {}).get("with_body") or 0
+            )
 
             source_pack = prepare_gap_fill_source_pack(
                 ticker=ticker,
@@ -756,9 +754,13 @@ def repair_library_research_memos(
             row["bodies_after"] = after_bodies
             row["filings_total"] = int((meta.get("filings_summary") or {}).get("total") or 0)
             row["regime"] = meta.get("filings_regime")
-            should_rememo = rememo_all or bool(
-                {"sec_collision", "yahoo_only", "uk_library", "asia_pacific_gap"} & set(reasons)
-            ) or (after_bodies > before_bodies)
+            should_rememo = (
+                rememo_all
+                or bool(
+                    {"sec_collision", "yahoo_only", "uk_library", "asia_pacific_gap"} & set(reasons)
+                )
+                or (after_bodies > before_bodies)
+            )
             row["rememo"] = should_rememo
             if should_rememo:
                 snapshot_path = sources_dir / "screening_snapshot.json"

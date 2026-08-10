@@ -7,8 +7,9 @@ SHEL) are treated as distinct because they are separate Yahoo instruments.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 
 def canonical_library_ticker(ticker: str) -> str:
@@ -114,7 +115,7 @@ def select_deduped_research_targets(
 def summarize_ticker_overlaps(
     market_tickers: dict[str, Iterable[str]],
 ) -> dict[str, Any]:
-    """ pairwise exact-ticker overlaps for status / CLI."""
+    """pairwise exact-ticker overlaps for status / CLI."""
     normalized: dict[str, set[str]] = {
         mid: {canonical_library_ticker(t) for t in tickers if t}
         for mid, tickers in market_tickers.items()

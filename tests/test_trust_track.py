@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pandas as pd
 
+from value_investor.emailer import format_html_report, format_text_report
 from value_investor.models.trusts import (
     ALL_TRUST_MODELS,
     DeepDiscountTrustModel,
@@ -20,7 +21,6 @@ from value_investor.trust_metrics import (
 )
 from value_investor.trust_signals import assign_trust_signal, build_trust_signals
 from value_investor.trust_summary import build_trust_reports, trust_key_metrics
-from value_investor.emailer import format_html_report, format_text_report
 
 
 def test_normalize_yield_handles_percent_and_fraction():
@@ -43,14 +43,17 @@ def test_resolve_trust_dividend_yield_from_rate_and_mcap():
     assert 0.08 < yld < 0.12
 
     # Prefer explicit percent yield when present.
-    assert resolve_trust_dividend_yield(
-        dividend_yield=10.47,
-        dividend_rate=0.076,
-        last_price=73.2,
-        book_value=1.04,
-        market_cap=1e9,
-        shares_outstanding=1e9,
-    ) == 0.1047
+    assert (
+        resolve_trust_dividend_yield(
+            dividend_yield=10.47,
+            dividend_rate=0.076,
+            last_price=73.2,
+            book_value=1.04,
+            market_cap=1e9,
+            shares_outstanding=1e9,
+        )
+        == 0.1047
+    )
 
 
 def test_discount_from_price_to_book():
@@ -82,11 +85,21 @@ def test_trust_quality_scores_discount_fields():
 def test_deep_discount_and_premium_risk_models():
     universe = pd.DataFrame(
         [
-            {"ticker": "CHEAP.L", "discount_to_nav": 0.25, "dividend_yield": 0.08, "trailing_pe": 6},
+            {
+                "ticker": "CHEAP.L",
+                "discount_to_nav": 0.25,
+                "dividend_yield": 0.08,
+                "trailing_pe": 6,
+            },
             {"ticker": "A.L", "discount_to_nav": 0.12, "dividend_yield": 0.04, "trailing_pe": 10},
             {"ticker": "B.L", "discount_to_nav": 0.08, "dividend_yield": 0.035, "trailing_pe": 11},
             {"ticker": "MID.L", "discount_to_nav": 0.05, "dividend_yield": 0.03, "trailing_pe": 12},
-            {"ticker": "RICH.L", "discount_to_nav": -0.15, "dividend_yield": 0.02, "trailing_pe": 20},
+            {
+                "ticker": "RICH.L",
+                "discount_to_nav": -0.15,
+                "dividend_yield": 0.02,
+                "trailing_pe": 20,
+            },
         ]
     )
     discount_model = DeepDiscountTrustModel().fit(universe)

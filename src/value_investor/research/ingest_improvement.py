@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import re
 import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -17,12 +16,6 @@ from value_investor.research.filings import (
     refetch_uk_primary_filing_bodies,
     sanitize_filings_index,
 )
-from value_investor.research.ingest_bootstrap import (
-    BOOTSTRAP_SEED_CAP,
-    bootstrap_buy_tier_research,
-    canonical_sources_dir,
-    prefer_filing_index_path,
-)
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.gap_fill_sources import (
     ALTERNATE_SOURCE_CATALOG,
@@ -33,6 +26,12 @@ from value_investor.research.gap_fill_sources import (
     suggest_alternate_sources,
 )
 from value_investor.research.ingest import ingest_research_sources, install_fetch_cashflow_fallback
+from value_investor.research.ingest_bootstrap import (
+    BOOTSTRAP_SEED_CAP,
+    bootstrap_buy_tier_research,
+    canonical_sources_dir,
+    prefer_filing_index_path,
+)
 from value_investor.research.store import ResearchStore
 from value_investor.storage import read_json, write_json
 from value_investor.summary import CompanyReport
@@ -233,15 +232,11 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
         coverage["filings_annual"] = int(summary.get("annual") or 0)
         coverage["filings_interim"] = int(summary.get("interim") or 0)
         coverage["filings_trading_update"] = int(summary.get("trading_update") or 0)
-        coverage["indexed_without_body"] = sum(
-            1 for row in filings if not row.get("has_body")
-        )
+        coverage["indexed_without_body"] = sum(1 for row in filings if not row.get("has_body"))
         period_cov = period_body_coverage(filings)
         coverage["annual_with_body"] = int(period_cov["annual"]["with_body"])
         coverage["interim_with_body"] = int(period_cov["interim"]["with_body"])
-        coverage["trading_update_with_body"] = int(
-            period_cov["trading_update"]["with_body"]
-        )
+        coverage["trading_update_with_body"] = int(period_cov["trading_update"]["with_body"])
     except (OSError, ValueError, TypeError):
         pass
     return coverage
@@ -279,8 +274,7 @@ def _priority_score(
             score += 2.0 + min(interim_gap, 3)
         trading_gap = max(
             0,
-            coverage.get("filings_trading_update", 0)
-            - coverage.get("trading_update_with_body", 0),
+            coverage.get("filings_trading_update", 0) - coverage.get("trading_update_with_body", 0),
         )
         if trading_gap > 0:
             score += 0.5
@@ -444,10 +438,10 @@ def run_ingest_improvement_pass(
     max_runtime_seconds: float | None = None,
 ) -> IngestImprovementSummary:
     """
-  Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
+    Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
 
-  Uses only existing fetchers (Companies House, Investegate, IR PDFs, SEC/SEDAR).
-  Does not modify scoring, prompts, or repository code.
+    Uses only existing fetchers (Companies House, Investegate, IR PDFs, SEC/SEDAR).
+    Does not modify scoring, prompts, or repository code.
     """
     bootstrap_buy_tier_research(
         reports,
@@ -562,9 +556,7 @@ def run_ingest_improvement_pass(
                 {
                     source_id
                     for row in ingest_suggestions
-                    for source_id in map_suggestion_to_source_ids(
-                        str(row.get("suggestion") or "")
-                    )
+                    for source_id in map_suggestion_to_source_ids(str(row.get("suggestion") or ""))
                 }
             )
 

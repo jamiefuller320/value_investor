@@ -25,43 +25,47 @@ def _report(
     conviction_score: float = 0.72,
     composite_score: float = 0.8,
 ):
-    signals = pd.DataFrame([
-        {
-            "ticker": ticker,
-            "name": name,
-            "sector": "Financials",
-            "signal": signal,
-            "models_passed": 10,
-            "model_count": 18,
-            "composite_score": composite_score,
-            "sector_composite_score": 0.82,
-            "families_passed": 3,
-            "passed_families": "cheapness,quality,dividend",
-            "data_quality_score": data_quality_score,
-            "metrics_present": 18,
-            "metrics_total": 20,
-            "weeks_at_signal": 3,
-            "signal_trend": "stable",
-            "conviction_score": conviction_score,
-            "stability_label": "building",
-            "timing_signal": "accumulate",
-            "timing_score": 0.75,
-            "rsi_14": 34.0,
-            "price_vs_sma200_pct": -0.08,
-            "timing_reasons": ["RSI below neutral (34)"],
-            "action_note": "Strong Buy — favourable entry timing",
-        }
-    ])
-    model_results = pd.DataFrame([
-        {
-            "ticker": ticker,
-            "model_name": "Graham Defensive",
-            "passed": True,
-            "score": 1.0,
-            "reasons": "[]",
-            "failed_criteria": "[]",
-        }
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "name": name,
+                "sector": "Financials",
+                "signal": signal,
+                "models_passed": 10,
+                "model_count": 18,
+                "composite_score": composite_score,
+                "sector_composite_score": 0.82,
+                "families_passed": 3,
+                "passed_families": "cheapness,quality,dividend",
+                "data_quality_score": data_quality_score,
+                "metrics_present": 18,
+                "metrics_total": 20,
+                "weeks_at_signal": 3,
+                "signal_trend": "stable",
+                "conviction_score": conviction_score,
+                "stability_label": "building",
+                "timing_signal": "accumulate",
+                "timing_score": 0.75,
+                "rsi_14": 34.0,
+                "price_vs_sma200_pct": -0.08,
+                "timing_reasons": ["RSI below neutral (34)"],
+                "action_note": "Strong Buy — favourable entry timing",
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_name": "Graham Defensive",
+                "passed": True,
+                "score": 1.0,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
     return build_company_reports(signals, model_results)[0]
 
 

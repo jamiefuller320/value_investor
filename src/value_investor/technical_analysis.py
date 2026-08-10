@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import logging
 from dataclasses import asdict, dataclass, field, fields
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -79,7 +79,7 @@ def save_trade_plan_config(path: Path, config: TradePlanConfig) -> Path:
     return path
 
 
-class TimingSignal(str, Enum):
+class TimingSignal(StrEnum):
     ACCUMULATE = "accumulate"
     NEUTRAL = "neutral"
     WAIT = "wait"
@@ -234,11 +234,7 @@ def compute_trade_plan(
         if p is not None
     )
     tactical_stop_loss = _round_price(support_floor * cfg.tactical_stop_below_support)
-    if (
-        cfg.atr_stop_multiplier is not None
-        and tech.atr_14 is not None
-        and tech.atr_14 > 0
-    ):
+    if cfg.atr_stop_multiplier is not None and tech.atr_14 is not None and tech.atr_14 > 0:
         atr_stop = _round_price(price - float(cfg.atr_stop_multiplier) * float(tech.atr_14))
         if atr_stop > 0:
             tactical_stop_loss = _round_price(min(tactical_stop_loss, atr_stop))
@@ -295,9 +291,7 @@ def format_trade_plan_summary(
     else:
         core_text = f"core {core_pct} limit £{core_limit:.2f}"
     tactical_text = f"tactical {tactical_pct} limit £{tactical_limit:.2f}"
-    risk_text = (
-        f"tactical stop £{tactical_stop_loss:.2f}, target £{tactical_take_profit:.2f}"
-    )
+    risk_text = f"tactical stop £{tactical_stop_loss:.2f}, target £{tactical_take_profit:.2f}"
     return f"Trade plan: {core_text}; {tactical_text}; {risk_text}."
 
 
@@ -340,7 +334,8 @@ def trade_plan_from_row(row: pd.Series) -> TradePlan | None:
         tactical_limit=_optional_float("tactical_limit"),
         tactical_allocation_pct=_optional_float("tactical_allocation_pct"),
         tactical_stop_loss=_optional_float("tactical_stop_loss") or _optional_float("stop_loss"),
-        tactical_take_profit=_optional_float("tactical_take_profit") or _optional_float("take_profit"),
+        tactical_take_profit=_optional_float("tactical_take_profit")
+        or _optional_float("take_profit"),
         trade_plan_summary=summary,
     )
 
@@ -363,7 +358,9 @@ def _macd_histogram(close: pd.Series) -> tuple[pd.Series, pd.Series]:
     return macd - signal, macd
 
 
-def _atr(high: pd.Series, low: pd.Series, close: pd.Series, *, period: int = ATR_PERIOD) -> pd.Series:
+def _atr(
+    high: pd.Series, low: pd.Series, close: pd.Series, *, period: int = ATR_PERIOD
+) -> pd.Series:
     prev_close = close.shift(1)
     tr = pd.concat(
         [
@@ -426,9 +423,7 @@ def compute_indicators(price_data: pd.Series | pd.DataFrame) -> TechnicalIndicat
 
     atr_14 = None
     if high is not None and low is not None:
-        aligned = pd.concat(
-            {"high": high, "low": low, "close": close}, axis=1
-        ).dropna()
+        aligned = pd.concat({"high": high, "low": low, "close": close}, axis=1).dropna()
         if len(aligned) >= MIN_BARS:
             atr_series = _atr(aligned["high"], aligned["low"], aligned["close"])
             if pd.notna(atr_series.iloc[-1]):
@@ -608,9 +603,7 @@ def fetch_price_history(
             if frame is None:
                 return {}
             return {
-                ticker: frame
-                for ticker, mapped in symbol_by_ticker.items()
-                if mapped == symbol
+                ticker: frame for ticker, mapped in symbol_by_ticker.items() if mapped == symbol
             }
         data = yf.download(
             symbols,
@@ -631,7 +624,9 @@ def fetch_price_history(
         return {}
 
 
-def fetch_close_history(tickers: list[str], *, period: str = LOOKBACK_PERIOD) -> dict[str, pd.Series]:
+def fetch_close_history(
+    tickers: list[str], *, period: str = LOOKBACK_PERIOD
+) -> dict[str, pd.Series]:
     """Batch-fetch daily close prices (thin wrapper over OHLCV history)."""
     frames = fetch_price_history(tickers, period=period)
     return {

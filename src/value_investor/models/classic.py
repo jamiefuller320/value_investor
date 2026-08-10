@@ -25,7 +25,9 @@ class LynchPEGModel(ValueModel):
             return self._result(passed=False, score=0.0, failed_criteria=["missing positive P/E"])
 
         if growth is None or growth <= 0:
-            return self._result(passed=False, score=0.2, failed_criteria=["missing or negative earnings growth"])
+            return self._result(
+                passed=False, score=0.2, failed_criteria=["missing or negative earnings growth"]
+            )
 
         if growth < self.MIN_GROWTH:
             failed.append(f"growth {growth:.1%} below {self.MIN_GROWTH:.0%} floor")
@@ -130,7 +132,9 @@ class FCFYieldModel(ValueModel):
         failed: list[str] = []
 
         if fcf is None or mcap is None or mcap <= 0:
-            return self._result(passed=False, score=0.0, failed_criteria=["missing FCF or market cap"])
+            return self._result(
+                passed=False, score=0.0, failed_criteria=["missing FCF or market cap"]
+            )
 
         yld = fcf / mcap
         passed = yld >= self.MIN_YIELD

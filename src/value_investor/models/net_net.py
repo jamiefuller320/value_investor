@@ -26,7 +26,9 @@ class NetNetModel(ValueModel):
         failed: list[str] = []
 
         if ncav is None:
-            return self._result(passed=False, score=0.0, failed_criteria=["missing NCAV (balance sheet data)"])
+            return self._result(
+                passed=False, score=0.0, failed_criteria=["missing NCAV (balance sheet data)"]
+            )
 
         if mcap is None or mcap <= 0:
             return self._result(passed=False, score=0.0, failed_criteria=["missing market cap"])

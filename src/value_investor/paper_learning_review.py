@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 import os
-import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -12,7 +11,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
-from value_investor.analysis_review import AnalysisTask, _EXPERIMENT_LINE
+from value_investor.analysis_review import _EXPERIMENT_LINE, AnalysisTask
 from value_investor.churn_health import CHURN_HEALTH_FILENAME, build_churn_health
 from value_investor.review_policy import (
     DEFAULT_REVIEW_POLICY_PATH,
@@ -30,7 +29,9 @@ COMMITTED_REVIEW_PATH = DEFAULT_DATA_DIR / "paper_learning_review.json"
 COMMITTED_REVIEW_MD_PATH = DEFAULT_DATA_DIR / "paper_learning_review.md"
 COMMITTED_TASKS_PATH = DEFAULT_DATA_DIR / "paper_learning_tasks.json"
 
-_PAPER_CHURN_AREAS = frozenset({"paper_churn", "paper_knobs", "offline_sim", "monitoring", "analysis"})
+_PAPER_CHURN_AREAS = frozenset(
+    {"paper_churn", "paper_knobs", "offline_sim", "monitoring", "analysis"}
+)
 
 
 @dataclass
@@ -48,11 +49,7 @@ class PaperLearningReview:
             ("PROPOSED EXPERIMENTS", self.proposed_experiments),
             ("DEFER", self.defer),
         ]
-        return "\n\n".join(
-            f"{heading}\n{body.strip()}"
-            for heading, body in parts
-            if body.strip()
-        )
+        return "\n\n".join(f"{heading}\n{body.strip()}" for heading, body in parts if body.strip())
 
 
 def _normalize_heading(line: str) -> str:
@@ -161,8 +158,10 @@ def compile_paper_learning_tasks(
             continue
         title = match.group("title").strip()
         task_id = f"plr-{stamp}-{seq:02d}"
-        experiment_type = "churn_probe" if area == "paper_churn" else (
-            "decision_review_probe" if area == "paper_knobs" else area
+        experiment_type = (
+            "churn_probe"
+            if area == "paper_churn"
+            else ("decision_review_probe" if area == "paper_knobs" else area)
         )
         promote_to = "manual" if area != "paper_knobs" else "decision_review_manual"
         new_tasks.append(

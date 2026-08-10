@@ -110,7 +110,8 @@ def enrich_signals_with_earnings_basis_overlay(
         adjusted_metric = row.get("adjusted_eps_growth_pct")
         adjusted_growth = (
             float(adjusted_metric)
-            if adjusted_metric is not None and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
+            if adjusted_metric is not None
+            and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
             else None
         )
 

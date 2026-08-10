@@ -77,7 +77,13 @@ def test_ingest_writes_macro_context_when_market_set(tmp_path: Path):
             "value_investor.research.filings.ingest_filings",
             return_value={
                 "filings_index_path": str(sources / "filings" / "filings_index.json"),
-                "filings_summary": {"total": 0, "annual": 0, "interim": 0, "other": 0, "with_body": 0},
+                "filings_summary": {
+                    "total": 0,
+                    "annual": 0,
+                    "interim": 0,
+                    "other": 0,
+                    "with_body": 0,
+                },
                 "filings_sources": [],
                 "filings_regime": "asx_announcements",
             },

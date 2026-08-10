@@ -23,11 +23,11 @@ from value_investor.data_library import (
     refresh_constituents,
     refresh_metrics,
 )
+from value_investor.data_library_cli import main as library_main
+from value_investor.storage import read_json, write_json
 
 # Fixed "today" for retention tests (matches suite era).
 _RETENTION_TODAY = date(2026, 7, 19)
-from value_investor.data_library_cli import main as library_main
-from value_investor.storage import read_json, write_json
 
 
 def _fake_constituents(market_id: str) -> pd.DataFrame:
@@ -77,7 +77,9 @@ def test_select_refresh_prefers_never_then_stale():
 
 def test_refresh_constituents_writes_latest_and_dated(tmp_path: Path, monkeypatch):
     monkeypatch.setitem(
-        __import__("value_investor.data_library", fromlist=["CONSTITUENT_FETCHERS"]).CONSTITUENT_FETCHERS,
+        __import__(
+            "value_investor.data_library", fromlist=["CONSTITUENT_FETCHERS"]
+        ).CONSTITUENT_FETCHERS,
         "sp500",
         lambda: _fake_constituents("sp500"),
     )
@@ -108,16 +110,12 @@ def test_progressive_metrics_grow_and_status(tmp_path: Path, monkeypatch):
         )
 
     root = tmp_path / "library"
-    first = refresh_metrics(
-        root, "asx200", max_tickers=2, stale_days=7, fetch_fn=fake_fetch
-    )
+    first = refresh_metrics(root, "asx200", max_tickers=2, stale_days=7, fetch_fn=fake_fetch)
     assert first["updated"] == 2
     assert first["coverage_count"] == 2
     assert first["ticker_count"] == 3
 
-    second = refresh_metrics(
-        root, "asx200", max_tickers=2, stale_days=7, fetch_fn=fake_fetch
-    )
+    second = refresh_metrics(root, "asx200", max_tickers=2, stale_days=7, fetch_fn=fake_fetch)
     # Remaining never-fetched ticker plus one already covered (budget 2)
     assert second["coverage_count"] == 3
     assert len(second["selected"]) == 2
@@ -326,7 +324,7 @@ def test_atx_curated_and_suffix_helpers():
 
 
 def test_hk_and_sg_yahoo_helpers():
-    from value_investor.data_library import _to_hk_yahoo, _to_sg_yahoo, _to_bel_yahoo
+    from value_investor.data_library import _to_bel_yahoo, _to_hk_yahoo, _to_sg_yahoo
 
     assert _to_hk_yahoo("SEHK: 5") == "0005.HK"
     assert _to_hk_yahoo("388") == "0388.HK"
@@ -336,7 +334,11 @@ def test_hk_and_sg_yahoo_helpers():
 
 def test_normalize_keeps_prequalified_euro_tickers():
     table = pd.DataFrame(
-        {"Ticker": ["ADS.DE", "AIR.PA"], "Company": ["Adidas", "Airbus"], "Sector": ["Consumer", "Industrials"]}
+        {
+            "Ticker": ["ADS.DE", "AIR.PA"],
+            "Company": ["Adidas", "Airbus"],
+            "Sector": ["Consumer", "Industrials"],
+        }
     )
     dax = _normalize_wiki_constituents(table, market_id="dax", yahoo_suffix="", index_label="DAX")
     assert list(dax["ticker"]) == ["ADS.DE", "AIR.PA"]
@@ -344,9 +346,15 @@ def test_normalize_keeps_prequalified_euro_tickers():
 
 def test_normalize_tsx_appends_to_suffix():
     table = pd.DataFrame(
-        {"Symbol": ["AEM", "BMO"], "Company": ["Agnico", "BMO"], "Sector": ["Materials", "Financials"]}
+        {
+            "Symbol": ["AEM", "BMO"],
+            "Company": ["Agnico", "BMO"],
+            "Sector": ["Materials", "Financials"],
+        }
     )
-    tsx = _normalize_wiki_constituents(table, market_id="tsx60", yahoo_suffix=".TO", index_label="TSX60")
+    tsx = _normalize_wiki_constituents(
+        table, market_id="tsx60", yahoo_suffix=".TO", index_label="TSX60"
+    )
     assert list(tsx["ticker"]) == ["AEM.TO", "BMO.TO"]
 
 

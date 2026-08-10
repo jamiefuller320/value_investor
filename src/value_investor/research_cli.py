@@ -186,7 +186,9 @@ def main(argv: list[str] | None = None) -> int:
 
         analysis_path = args.output_dir / "deep_analysis.txt"
         if not analysis_path.exists():
-            print("Missing deep_analysis.txt; run ftse-email --deep-analysis first", file=sys.stderr)
+            print(
+                "Missing deep_analysis.txt; run ftse-email --deep-analysis first", file=sys.stderr
+            )
             return 1
         deep_analysis = _parse_deep_analysis(analysis_path.read_text(encoding="utf-8"))
         targets = extract_gap_fill_targets(

@@ -76,7 +76,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(result.to_dict(), indent=2))
     else:
-        cols = ["ticker", "name", "signal", "models_passed", "composite_score", "trailing_pe", "dividend_yield"]
+        cols = [
+            "ticker",
+            "name",
+            "signal",
+            "models_passed",
+            "composite_score",
+            "trailing_pe",
+            "dividend_yield",
+        ]
         display_cols = [c for c in cols if c in top.columns]
         print(top[display_cols].to_string(index=False))
         print(f"\nUniverse: {universe_label(args.universe)} ({len(result.universe)} companies)")

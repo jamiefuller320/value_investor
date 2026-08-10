@@ -57,7 +57,10 @@ def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
     frame = pd.DataFrame(rows)
     # Drop rows that failed fetch entirely (no usable fields)
     if "errors" in frame.columns and "trailing_pe" in frame.columns:
-        usable = frame["trailing_pe"].notna() | frame.get("price_to_book", pd.Series(dtype=float)).notna()
+        usable = (
+            frame["trailing_pe"].notna()
+            | frame.get("price_to_book", pd.Series(dtype=float)).notna()
+        )
         if "market_cap" in frame.columns:
             usable = usable | frame["market_cap"].notna()
         frame = frame.loc[usable].copy()
@@ -119,7 +122,11 @@ def run_library_screen(
     # Shortlist buy-tier for ladder layer C
     buy_mask = signals["signal"].isin(["strong_buy", "buy"])
     shortlist = signals.loc[buy_mask].copy()
-    sort_cols = [c for c in ("conviction_score", "composite_score", "data_quality_score") if c in shortlist.columns]
+    sort_cols = [
+        c
+        for c in ("conviction_score", "composite_score", "data_quality_score")
+        if c in shortlist.columns
+    ]
     if sort_cols:
         shortlist = shortlist.sort_values(sort_cols, ascending=False)
 

@@ -106,12 +106,18 @@ def test_enrich_signals_with_research_uses_point_in_time_verdict(tmp_path: Path)
             mode="weekly_update",
         ),
         run_at=datetime(2026, 6, 8, 7, 0, tzinfo=UTC),
-        delta={"weekly_update": "Thesis broken", "verdict_changed": True, "prior_verdict": "accumulate"},
+        delta={
+            "weekly_update": "Thesis broken",
+            "verdict_changed": True,
+            "prior_verdict": "accumulate",
+        },
     )
 
-    signals = pd.DataFrame([
-        {"ticker": "AAA.L", "signal": "strong_buy"},
-    ])
+    signals = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "signal": "strong_buy"},
+        ]
+    )
 
     early = enrich_signals_with_research(
         signals,

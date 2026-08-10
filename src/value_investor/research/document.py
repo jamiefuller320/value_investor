@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-
 RESEARCH_SECTIONS = (
     "executive_summary",
     "investment_thesis",
@@ -148,7 +147,12 @@ def parse_research_sections(text: str) -> dict[str, str]:
     """Parse agent output into named research sections."""
     sections = {
         key: ""
-        for key in (*RESEARCH_SECTIONS, "weekly_update", "gap_fill_update", "research_model_suggestions")
+        for key in (
+            *RESEARCH_SECTIONS,
+            "weekly_update",
+            "gap_fill_update",
+            "research_model_suggestions",
+        )
     }
     heading_to_key = {v.upper(): k for k, v in SECTION_HEADINGS.items()}
 

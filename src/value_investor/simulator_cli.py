@@ -87,9 +87,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
         )
     elif args.grace_sma200_floor is not None:
-        grace_config = MomentumGraceConfig(
-            archive_sma200_floor_pct=float(args.grace_sma200_floor)
-        )
+        grace_config = MomentumGraceConfig(archive_sma200_floor_pct=float(args.grace_sma200_floor))
 
     config = SimulatorConfig(
         initial_capital=args.capital,

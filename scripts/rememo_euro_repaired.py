@@ -6,12 +6,12 @@ from __future__ import annotations
 from pathlib import Path
 
 from value_investor.cursor_api_key import resolve_cursor_api_key
+from value_investor.data_library import market_dir
 from value_investor.library_maintenance import (
     _company_name_for_memo,
     _filings_body_count,
     deepen_library_research_memos,
 )
-from value_investor.data_library import market_dir
 
 
 def main() -> int:

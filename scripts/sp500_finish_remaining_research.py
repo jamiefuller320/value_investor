@@ -14,10 +14,10 @@ import pandas as pd
 from value_investor.agent_model_policy import (
     load_policy,
     record_spend_with_checkpoint,
-    spend_checkpoint_usd,
-    spend_since_checkpoint_usd,
     research_model_id,
     save_policy,
+    spend_checkpoint_usd,
+    spend_since_checkpoint_usd,
 )
 from value_investor.data_quality import MIN_QUALITY_FOR_STRONG_BUY
 from value_investor.research.runner import run_research_for_strong_buys
@@ -142,17 +142,32 @@ def main() -> int:
             "errors": summary.errors,
             "executed": executed,
             "estimated_spend_usd": estimated_spend,
-            "estimated_spend_usd_this_cycle_after": (
-                policy_after.get("budget") or {}
-            ).get("estimated_spend_usd_this_cycle"),
+            "estimated_spend_usd_this_cycle_after": (policy_after.get("budget") or {}).get(
+                "estimated_spend_usd_this_cycle"
+            ),
             "documents": [d.ticker for d in summary.documents],
         }
     )
     LOG.write_text(json.dumps(log, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({k: log[k] for k in (
-        "executed", "created", "updated", "errors", "estimated_spend_usd",
-        "elapsed_seconds", "estimated_spend_usd_this_cycle_after", "documents",
-    )}, indent=2), flush=True)
+    print(
+        json.dumps(
+            {
+                k: log[k]
+                for k in (
+                    "executed",
+                    "created",
+                    "updated",
+                    "errors",
+                    "estimated_spend_usd",
+                    "elapsed_seconds",
+                    "estimated_spend_usd_this_cycle_after",
+                    "documents",
+                )
+            },
+            indent=2,
+        ),
+        flush=True,
+    )
     return 0 if not summary.errors else 1
 
 

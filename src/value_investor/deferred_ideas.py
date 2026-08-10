@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
@@ -32,7 +32,7 @@ CATEGORY_TO_SECTION = {
 
 
 def _utcnow() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    return datetime.now(UTC).replace(microsecond=0).isoformat()
 
 
 def _norm_title(title: str) -> str:
@@ -138,7 +138,9 @@ def set_idea_status(
     raise KeyError(f"Unknown idea id: {idea_id}")
 
 
-def render_markdown(store: dict[str, Any] | None = None, *, store_path: Path = DEFAULT_STORE) -> str:
+def render_markdown(
+    store: dict[str, Any] | None = None, *, store_path: Path = DEFAULT_STORE
+) -> str:
     store = store or load_store(store_path)
     ideas = [i for i in store.get("ideas") or [] if i.get("status", "open") == "open"]
     sessions = store.get("sessions_mined") or []
@@ -193,17 +195,19 @@ def render_markdown(store: dict[str, Any] | None = None, *, store_path: Path = D
         return out
 
     not_now = [i for i in ideas if i.get("category") == "not_now" or i.get("section") == "not_now"]
-    later = [i for i in ideas if i.get("category") in {"later", "both"} and i.get("section") != "not_now"]
-    security = [i for i in ideas if i.get("category") == "security" or i.get("section") == "security"]
+    later = [
+        i for i in ideas if i.get("category") in {"later", "both"} and i.get("section") != "not_now"
+    ]
+    security = [
+        i for i in ideas if i.get("category") == "security" or i.get("section") == "security"
+    ]
 
     lines.extend(["", "---", "", f"## {SECTION_LABELS['not_now']}"])
     lines.extend(_table(not_now) if not_now else ["", "_None._"])
 
     lines.extend(["", "---", "", "## Potentially useful later"])
     for section_key in ("learning", "universe", "research", "ops"):
-        section_rows = [
-            i for i in later if (i.get("section") or "learning") == section_key
-        ]
+        section_rows = [i for i in later if (i.get("section") or "learning") == section_key]
         lines.extend(["", f"### {SECTION_LABELS[section_key]}"])
         lines.extend(_table(section_rows) if section_rows else ["", "_None._"])
 

@@ -34,7 +34,9 @@ def _company_report_from_dict(data: dict[str, Any]) -> CompanyReport:
         signal=str(data.get("signal") or "hold"),
         models_passed=int(data.get("models_passed") or 0),
         model_count=int(data.get("model_count") or 0),
-        composite_score=float(composite) if composite is not None and not pd.isna(composite) else None,
+        composite_score=float(composite)
+        if composite is not None and not pd.isna(composite)
+        else None,
         sector_composite_score=(
             float(sector_score) if sector_score is not None and not pd.isna(sector_score) else None
         ),
@@ -61,7 +63,8 @@ def _company_report_from_dict(data: dict[str, Any]) -> CompanyReport:
         research_risk_level=data.get("research_risk_level"),
         research_confidence=(
             float(research_conf)
-            if research_conf is not None and not (isinstance(research_conf, float) and pd.isna(research_conf))
+            if research_conf is not None
+            and not (isinstance(research_conf, float) and pd.isna(research_conf))
             else None
         ),
         research_rationale=data.get("research_rationale"),

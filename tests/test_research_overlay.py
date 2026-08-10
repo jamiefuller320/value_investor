@@ -12,34 +12,44 @@ from value_investor.summary import build_company_reports
 
 
 def _sample_frames():
-    signals = pd.DataFrame([
-        {
-            "ticker": "AAA.L",
-            "name": "Alpha PLC",
-            "sector": "Financials",
-            "signal": "strong_buy",
-            "models_passed": 10,
-            "model_count": 18,
-            "composite_score": 0.8,
-            "sector_composite_score": 0.82,
-            "families_passed": 3,
-            "passed_families": "cheapness,quality,dividend",
-            "data_quality_score": 0.85,
-            "metrics_present": 18,
-            "metrics_total": 20,
-            "weeks_at_signal": 3,
-            "signal_trend": "stable",
-            "conviction_score": 0.72,
-            "stability_label": "building",
-            "timing_signal": "accumulate",
-            "timing_score": 0.75,
-            "rsi_14": 34.0,
-            "action_note": "Strong Buy — favourable entry timing",
-        },
-    ])
-    model_results = pd.DataFrame([
-        {"ticker": "AAA.L", "model_name": "Graham", "passed": True, "score": 0.9, "reasons": "['Low P/E']"},
-    ])
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "name": "Alpha PLC",
+                "sector": "Financials",
+                "signal": "strong_buy",
+                "models_passed": 10,
+                "model_count": 18,
+                "composite_score": 0.8,
+                "sector_composite_score": 0.82,
+                "families_passed": 3,
+                "passed_families": "cheapness,quality,dividend",
+                "data_quality_score": 0.85,
+                "metrics_present": 18,
+                "metrics_total": 20,
+                "weeks_at_signal": 3,
+                "signal_trend": "stable",
+                "conviction_score": 0.72,
+                "stability_label": "building",
+                "timing_signal": "accumulate",
+                "timing_score": 0.75,
+                "rsi_14": 34.0,
+                "action_note": "Strong Buy — favourable entry timing",
+            },
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "model_name": "Graham",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['Low P/E']",
+            },
+        ]
+    )
     return signals, model_results
 
 
