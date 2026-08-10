@@ -424,9 +424,7 @@ def update_swap_rotations(
         for window in cfg.shadow_windows_days:
             if days_elapsed < window or window in scored_days:
                 continue
-            avg_sell = (
-                sum(sell_returns.values()) / len(sell_returns) if sell_returns else None
-            )
+            avg_sell = sum(sell_returns.values()) / len(sell_returns) if sell_returns else None
             avg_buy = sum(buy_returns.values()) / len(buy_returns) if buy_returns else None
             rotation.setdefault("checkpoints", []).append(
                 {
@@ -581,7 +579,11 @@ def run_exit_timing_cohort_pass(
     output_dir = Path(output_dir)
     cohorts_path = output_dir / COHORTS_FILENAME
     review_path = output_dir / REVIEW_FILENAME
-    when = as_of.isoformat() if isinstance(as_of, datetime) else str(as_of or datetime.now(UTC).isoformat())
+    when = (
+        as_of.isoformat()
+        if isinstance(as_of, datetime)
+        else str(as_of or datetime.now(UTC).isoformat())
+    )
 
     store = load_exit_timing_cohorts(cohorts_path)
     store.setdefault("schema_version", 1)
