@@ -54,7 +54,7 @@ class CronJobSpec:
         return f"https://api.github.com/repos/{REPO}/actions/workflows/{self.workflow}/dispatches"
 
 
-_INGEST_LOOP_INPUTS = {"inputs": {"max_targets": "8"}}
+_INGEST_LOOP_INPUTS = {"inputs": {"max_targets": "12"}}
 
 
 def _job_specs() -> list[CronJobSpec]:
@@ -79,21 +79,21 @@ def _job_specs() -> list[CronJobSpec]:
         ),
         CronJobSpec(
             key="ingest-loop-morning",
-            title="FTSE ingest loop (Mon/Wed/Fri morning)",
+            title="FTSE ingest loop (weekday morning)",
             workflow="ingest-loop.yml",
             body={"ref": REF, **_INGEST_LOOP_INPUTS},
             hours=[7],
             minutes=[5],
-            wdays=[1, 3, 5],
+            wdays=[1, 2, 3, 4, 5],
         ),
         CronJobSpec(
             key="ingest-loop-afternoon",
-            title="FTSE ingest loop (Mon/Wed/Fri afternoon)",
+            title="FTSE ingest loop (weekday afternoon)",
             workflow="ingest-loop.yml",
             body={"ref": REF, **_INGEST_LOOP_INPUTS},
             hours=[10],
             minutes=[5],
-            wdays=[1, 3, 5],
+            wdays=[1, 2, 3, 4, 5],
         ),
         CronJobSpec(
             key="analysis-review",

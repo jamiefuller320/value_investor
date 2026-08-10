@@ -98,6 +98,8 @@ Cheapest agent for plan efficiency: **`composer-2.5`** (first-party pool). Curso
 
 When `weekly_ops` is spent, orchestrator research is skipped (`budget_flag=constraining`). Ad-hoc work pauses at the checkpoint until human approval.
 
+Offline scrutiny plan (ingest volume, budgets): [`docs/ops/market-scrutiny.md`](ops/market-scrutiny.md).
+
 ```bash
 ftse-library policy                    # focus + both spend pools
 ftse-library policy --weekly-ops-cap-usd 50
