@@ -53,9 +53,10 @@ def _usable_metrics_mask(frame: pd.DataFrame) -> pd.Series:
     if frame.empty:
         return pd.Series(dtype=bool)
     if "errors" in frame.columns and "trailing_pe" in frame.columns:
-        usable = frame["trailing_pe"].notna() | frame.get(
-            "price_to_book", pd.Series(dtype=float)
-        ).notna()
+        usable = (
+            frame["trailing_pe"].notna()
+            | frame.get("price_to_book", pd.Series(dtype=float)).notna()
+        )
         if "market_cap" in frame.columns:
             usable = usable | frame["market_cap"].notna()
         return usable
