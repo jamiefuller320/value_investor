@@ -894,6 +894,30 @@ def _extract_pdf_text(raw: bytes) -> str | None:
         return None
 
 
+def _extract_pdf_text_fitz(raw: bytes) -> str | None:
+    """Alternate PDF text extract via pymupdf when pypdf output fails validation."""
+    try:
+        import fitz  # pymupdf
+    except ImportError:
+        return None
+    try:
+        doc = fitz.open(stream=raw, filetype="pdf")
+        pages: list[str] = []
+        for index, page in enumerate(doc):
+            if index >= _PDF_EXTRACT_MAX_PAGES:
+                break
+            try:
+                page_text = page.get_text() or ""
+            except Exception:  # noqa: BLE001
+                continue
+            if page_text.strip():
+                pages.append(page_text)
+        return _compose_pdf_body_text(pages)
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("pymupdf PDF extract failed: %s", exc)
+        return None
+
+
 def resolve_filings_regime(market: str | None, ticker: str) -> str:
     """
     Choose filing source regime for a ticker.
@@ -2292,6 +2316,103 @@ _IR_PERIOD_HEADLINE_CUES: dict[str, tuple[str, ...]] = {
     "interim": ("half year", "interim", "h1 ", "h2 "),
     "trading_update": ("trading update", "trading statement", "trading"),
 }
+_IR_WRONG_PERIOD_MARKERS: dict[str, tuple[str, ...]] = {
+    "trading_update": (
+        r"\bhalf[- ]year results\b",
+        r"\binterim results\b",
+        r"\bh1 results\b",
+        r"\bsix months ended\b",
+        r"\binterim report\b",
+    ),
+    "interim": (
+        r"\bfull[- ]year results\b",
+        r"\bfinal results\b",
+        r"\bannual results\b",
+        r"\bannual report\b",
+    ),
+    "annual": (
+        r"\btrading update\b",
+        r"\btrading statement\b",
+    ),
+}
+
+
+def _ir_body_content_hash(body: str) -> str:
+    normalized = re.sub(r"\s+", " ", (body or "").strip().lower())[:8000]
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16]
+
+
+def _ir_body_title_tokens_match(row: dict[str, Any], body: str) -> bool:
+    tokens = _ir_row_search_tokens(row)
+    if not tokens:
+        return True
+    sample = (body or "")[:4000].lower()
+    meaningful = [t for t in tokens if len(t) >= 4 or re.fullmatch(r"20\d{2}", t)]
+    if not meaningful:
+        return True
+    return any(tok in sample for tok in meaningful)
+
+
+def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple[bool, str | None]:
+    """
+    Title/period/hash gate before marking IR allowlist rows ``has_body``.
+
+    Rejects bodies whose period cues or URL title tokens clearly mismatch the row.
+    """
+    if not _filing_text_is_substantive(body, min_chars=IR_BODY_MIN_CHARS):
+        return False, "too_short"
+
+    expected = str(row.get("period") or "other")
+    sample = (body or "")[:4000].lower()
+
+    wrong_markers = _IR_WRONG_PERIOD_MARKERS.get(expected, ())
+    if wrong_markers and any(re.search(pat, sample) for pat in wrong_markers):
+        expected_cues = _IR_PERIOD_HEADLINE_CUES.get(expected, ())
+        if not any(cue in sample for cue in expected_cues):
+            return False, "period_mismatch"
+
+    if not _ir_body_title_tokens_match(row, body):
+        return False, "title_mismatch"
+
+    url = str(row.get("url") or "")
+    row_id = str(row.get("id") or "")
+    if row_id.startswith("ir_") and url:
+        url_digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
+        if row_id != f"ir_{url_digest}":
+            return False, "id_hash_mismatch"
+
+    return True, None
+
+
+def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
+    """Try alternate PDF parsers (pymupdf, OCR) when the primary extract fails validation."""
+    if not url or not url.startswith("http"):
+        return []
+    try:
+        raw = _http_get(url, timeout=60)
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("IR PDF alternate download failed for %s: %s", url, exc)
+        return []
+    if raw[:4] != b"%PDF" and not str(url).lower().endswith(".pdf"):
+        return []
+
+    seen: set[str] = set()
+    candidates: list[tuple[str, str]] = []
+
+    def _add(text: str | None, parser: str) -> None:
+        if not text or not _filing_text_is_substantive(text, min_chars=IR_BODY_MIN_CHARS):
+            return
+        key = text[:500]
+        if key in seen:
+            return
+        seen.add(key)
+        candidates.append((text, parser))
+
+    _add(_extract_pdf_text_fitz(raw), "pymupdf")
+    ocr_text = _ocr_pdf_text(raw)
+    if ocr_text:
+        _add(_compose_filing_body_with_depth_sections(ocr_text) or ocr_text, "ocr")
+    return candidates
 
 
 def _ir_row_search_tokens(row: dict[str, Any]) -> set[str]:
@@ -2367,16 +2488,36 @@ def _fetch_ir_allowlist_body(
     """
     Fetch IR allowlist text from the PDF URL, falling back to Investegate RNS HTML.
 
-    Returns ``(body, source)`` where ``source`` is ``pdf``, ``investegate_html``, or ``None``.
-    Bodies shorter than :data:`IR_BODY_MIN_CHARS` or failing the substantive gate are rejected.
+    Returns ``(body, source)`` where ``source`` is ``pdf``, ``pdf_pymupdf``, ``pdf_ocr``,
+    ``investegate_html``, or ``None``. Bodies must pass title/period/hash validation before
+    acceptance; alternate PDF parsers are tried when the primary extract fails validation.
     """
     url = str(row.get("url") or "")
     if not url:
         return None, None
 
     body = fetch_filing_body(url)
-    if body and _filing_text_is_substantive(body, min_chars=IR_BODY_MIN_CHARS):
-        return body, "pdf"
+    if body:
+        valid, reason = _validate_ir_allowlist_body_content(row, body)
+        if valid:
+            return body, "pdf"
+        logger.debug(
+            "IR allowlist primary PDF body rejected for %s: %s",
+            row.get("id"),
+            reason,
+        )
+
+    for alt_body, parser in _fetch_ir_pdf_alternate_candidates(url):
+        valid, reason = _validate_ir_allowlist_body_content(row, alt_body)
+        if valid:
+            source = "pdf" if parser == "pypdf" else f"pdf_{parser}"
+            return alt_body, source
+        logger.debug(
+            "IR allowlist alternate PDF body rejected for %s via %s: %s",
+            row.get("id"),
+            parser,
+            reason,
+        )
 
     if not str(ticker or "").upper().endswith(".L"):
         return None, None
@@ -2390,7 +2531,14 @@ def _fetch_ir_allowlist_body(
     ig_url = str(matched.get("url") or "")
     html_body = _fetch_investegate_html_body(ig_url)
     if html_body:
-        return html_body, "investegate_html"
+        valid, reason = _validate_ir_allowlist_body_content(row, html_body)
+        if valid:
+            return html_body, "investegate_html"
+        logger.debug(
+            "IR allowlist Investegate body rejected for %s: %s",
+            row.get("id"),
+            reason,
+        )
     return None, None
 
 
@@ -2531,11 +2679,12 @@ def refetch_ir_allowlist_filing_bodies(
                     investegate_cache=investegate_cache,
                 )
                 if body:
-                    outcome = (
-                        "fetched_investegate"
-                        if fetch_source == "investegate_html"
-                        else "fetched_pdf"
-                    )
+                    if fetch_source == "investegate_html":
+                        outcome = "fetched_investegate"
+                    elif fetch_source and fetch_source.startswith("pdf"):
+                        outcome = "fetched_pdf"
+                    else:
+                        outcome = "fetched"
                     retry_log.append(
                         {
                             "filing_id": row_id,
@@ -2593,6 +2742,9 @@ def refetch_ir_allowlist_filing_bodies(
                 path.write_text(body, encoding="utf-8")
                 item["has_body"] = True
                 item["body_path"] = str(path)
+                item["body_content_hash"] = _ir_body_content_hash(body)
+                if fetch_source and fetch_source.startswith("pdf_"):
+                    item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
                 if fetch_source == "investegate_html":
                     investegate_fallbacks += 1
                 downloaded += 1
