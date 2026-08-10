@@ -25,6 +25,7 @@ def test_slim_candidate_keeps_replay_fields():
         "signal": "buy",
         "adjusted_signal": "strong_buy",
         "conviction_score": 0.8,
+        "data_quality_score": 0.92,
         "timing_signal": "neutral",
         "sector": "Banks",
         "price": 10.5,
@@ -34,6 +35,7 @@ def test_slim_candidate_keeps_replay_fields():
     slim = slim_candidate(row)
     assert slim["ticker"] == "AAA.L"
     assert slim["adjusted_signal"] == "strong_buy"
+    assert slim["data_quality_score"] == 0.92
     assert slim["trade_plan"]["tactical_stop_loss"] == 9.0
     assert "noise" not in slim.get("trade_plan", {})
 

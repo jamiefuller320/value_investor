@@ -30,6 +30,18 @@ scores post-exit price paths at 1/4/8/12 weeks. Artifacts per track:
 Verdicts (`good_exit`, `early_exit`, `neutral`) are **not** wired to auto-tune grace knobs yet —
 wait for a thicker closed cohort before promoting parameter changes.
 
+## Exit-timing cohorts (observe-only)
+
+On the same paper-auto pass, each track also records **hold-recovery** and **swap-rotation**
+cohorts for the exit-timing research strand (P(hold→breakeven) vs P(swap→better prospect)):
+
+- `exit_timing_cohorts.json` — open + closed episodes per track
+- `exit_timing_cohorts_review.json` — readiness + summaries
+- `learning_tracks_exit_timing.json` — rollup across tracks
+
+See [`exit-timing-cohorts.md`](exit-timing-cohorts.md). Pair with exit-shadow and
+`rebalance_log.json` counterfactuals; no knob auto-apply until closed cohort targets are met.
+
 ## Success datums
 
 1. **Market:** excess return after costs vs FTSE 100 (`^FTSE`) on the primary book.
