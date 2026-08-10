@@ -424,5 +424,71 @@
     "track_label": "Screen rules + momentum grace",
     "is_primary_learning_track": false,
     "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  },
+  {
+    "reviewed_at": "2026-08-10T08:27:18.698277+00:00",
+    "enough_history": false,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "knobs_after": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "proposed_changes": {},
+    "reasons": [
+      "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
+      "Weak excess after costs (-3.2%) \u2014 reduce max_positions."
+    ],
+    "metrics": {
+      "portfolio_value": 970.87,
+      "contributed_capital": 1000.0,
+      "total_return": -0.0291,
+      "total_costs": 29.15,
+      "cost_drag": 0.0291,
+      "trade_count": 5,
+      "buy_count": 5,
+      "sell_count": 0,
+      "positions": 5,
+      "cash_fraction": 0.0,
+      "equity_marks": 3,
+      "max_sector_weight": 0.2,
+      "dominant_sector": "Agriculture/Commodities",
+      "benchmark_return": 0.0028,
+      "excess_after_costs": -0.0319,
+      "note": ""
+    },
+    "counterfactual_preview": {
+      "scope": "lifetime_trade_replay",
+      "knobs": {
+        "max_positions": 4,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
+      "executed_trades": 4,
+      "blocked_buys": 1,
+      "blocked_orphan_sells": 0,
+      "actual_total_costs": 29.15,
+      "simulated_total_costs": 23.32,
+      "estimated_cost_savings_gbp": 5.83,
+      "actual_cost_drag": 0.0291,
+      "simulated_cost_drag": 0.0233,
+      "cost_drag_delta": 0.0058,
+      "log_entries_replayed": 1,
+      "graduates_at_acted_entries": 2
+    },
+    "note": "Proposal only \u2014 history too thin to apply.",
+    "track_id": "momentum_grace",
+    "track_label": "Screen rules + momentum grace",
+    "is_primary_learning_track": false,
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
   }
 ]

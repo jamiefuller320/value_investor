@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-09T07:31:01.258117+00:00",
+  "generated_at": "2026-08-10T08:27:19.515480+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -17,8 +17,8 @@
       "trade_cost_pct": 0.03,
       "max_positions": 3,
       "skip_timing_wait": true,
-      "min_conviction": 0.45,
-      "sector_cap": 0.3,
+      "min_conviction": 0.5,
+      "sector_cap": 0.25,
       "strategy_mode": "automated",
       "track_id": "rules",
       "track_label": "Screen rules (control)",
@@ -190,15 +190,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 29.6,
+        "remaining_weekly_ops_usd": 23.2,
         "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 58.8,
-        "estimated_spend_weekly_ops_usd_this_week": 20.4,
-        "estimated_spend_usd_this_cycle": 76.0,
+        "estimated_spend_usd_this_week": 71.2,
+        "estimated_spend_weekly_ops_usd_this_week": 26.8,
+        "estimated_spend_usd_this_cycle": 88.4,
         "week_id": "2026-W32",
         "cycle_id": "2026-08-d8"
       },
@@ -226,7 +226,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-09T05:21:42.459139+00:00"
+      "updated_at": "2026-08-09T12:10:31.766986+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -249,7 +249,7 @@
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
+        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -321,21 +321,21 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-08-07T08:27:20.286753+00:00",
+        "at": "2026-08-10T08:26:57.762677+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (0 trade(s))."
+        "detail": "Rebalanced after open settle (6 trade(s))."
       },
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-02T12:33:10.531346+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: smi → omxs30",
+        "title": "Focus advanced: smi \u2192 omxs30",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -347,7 +347,7 @@
       {
         "at": "2026-07-26T18:19:32.036441+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: psi20 → smi",
+        "title": "Focus advanced: psi20 \u2192 smi",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -359,7 +359,7 @@
       {
         "at": "2026-07-26T05:41:29.750591+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: atx → psi20",
+        "title": "Focus advanced: atx \u2192 psi20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -371,7 +371,7 @@
       {
         "at": "2026-07-25T06:02:07.067074+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: us_adr_asia → atx",
+        "title": "Focus advanced: us_adr_asia \u2192 atx",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -395,7 +395,7 @@
       {
         "at": "2026-07-18T18:33:47.281863+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sti → us_adr_asia",
+        "title": "Focus advanced: sti \u2192 us_adr_asia",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -407,7 +407,7 @@
       {
         "at": "2026-07-18T18:33:47.280727+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: hang_seng → sti",
+        "title": "Focus advanced: hang_seng \u2192 sti",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -419,7 +419,7 @@
       {
         "at": "2026-07-18T18:33:47.279140+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: bel20 → hang_seng",
+        "title": "Focus advanced: bel20 \u2192 hang_seng",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -431,7 +431,7 @@
       {
         "at": "2026-07-18T18:33:47.278138+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aex → bel20",
+        "title": "Focus advanced: aex \u2192 bel20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -443,7 +443,7 @@
       {
         "at": "2026-07-18T18:33:47.277118+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_mib → aex",
+        "title": "Focus advanced: ftse_mib \u2192 aex",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -455,7 +455,7 @@
       {
         "at": "2026-07-18T18:33:47.275978+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ibex35 → ftse_mib",
+        "title": "Focus advanced: ibex35 \u2192 ftse_mib",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -467,7 +467,7 @@
       {
         "at": "2026-07-18T18:33:47.274723+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aim → ibex35",
+        "title": "Focus advanced: aim \u2192 ibex35",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -479,7 +479,7 @@
       {
         "at": "2026-07-18T18:04:30.214468+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: tsx60 → aim",
+        "title": "Focus advanced: tsx60 \u2192 aim",
         "detail": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       },
       {
@@ -527,32 +527,32 @@
       {
         "at": "2026-07-18T13:49:17.502997+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: cac40 → tsx60",
+        "title": "Focus advanced: cac40 \u2192 tsx60",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.501764+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: dax → cac40",
+        "title": "Focus advanced: dax \u2192 cac40",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.500540+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: nasdaq100 → dax",
+        "title": "Focus advanced: nasdaq100 \u2192 dax",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.498573+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_smallcap → nasdaq100",
+        "title": "Focus advanced: ftse_smallcap \u2192 nasdaq100",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-17T04:51:50.477798+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:51:50.477265+00:00",
@@ -594,12 +594,12 @@
         "at": "2026-07-17T04:28:29.172645+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:28:29.172198+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: euro_stoxx50 → asx200",
+        "title": "Focus advanced: euro_stoxx50 \u2192 asx200",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -636,12 +636,12 @@
         "at": "2026-07-17T04:23:00.290382+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sp500 → euro_stoxx50",
+        "title": "Focus advanced: sp500 \u2192 euro_stoxx50",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -653,7 +653,7 @@
       {
         "at": "2026-07-16T14:09:40.872338+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       }
     ],
@@ -791,24 +791,67 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-08-07T08:27:20.286753+00:00",
+      "generated_at": "2026-08-10T08:26:57.762677+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "note": "Rebalanced after open settle (6 trade(s)).",
       "gate": {
-        "local_time": "2026-08-07T09:27:09.850001+01:00",
+        "local_time": "2026-08-10T09:26:48.007593+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-08-07T08:00:00+01:00",
-        "settle_at": "2026-08-07T09:15:00+01:00",
+        "market_open_at": "2026-08-10T08:00:00+01:00",
+        "settle_at": "2026-08-10T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 0,
-      "trades_sample": [],
+      "trade_count": 6,
+      "trades_sample": [
+        {
+          "acted_at": "2026-08-10T09:26:48.007593+01:00",
+          "ticker": "MEGP.L",
+          "side": "sell",
+          "name": "ME Group International plc",
+          "net_cash": 196.3
+        },
+        {
+          "acted_at": "2026-08-10T09:26:48.007593+01:00",
+          "ticker": "AEP.L",
+          "side": "sell",
+          "name": "AEP Plantations Plc",
+          "net_cash": 179.45
+        },
+        {
+          "acted_at": "2026-08-10T09:26:48.007593+01:00",
+          "ticker": "BREE.L",
+          "side": "sell",
+          "name": "Breedon Group plc",
+          "net_cash": 199.69
+        },
+        {
+          "acted_at": "2026-08-10T09:26:48.007593+01:00",
+          "ticker": "FGP.L",
+          "side": "buy",
+          "name": "FirstGroup plc",
+          "net_cash": -315.01
+        },
+        {
+          "acted_at": "2026-08-10T09:26:48.007593+01:00",
+          "ticker": "HIK.L",
+          "side": "buy",
+          "name": "Hikma Pharmaceuticals PLC",
+          "net_cash": -122.98
+        },
+        {
+          "acted_at": "2026-08-10T09:26:48.007593+01:00",
+          "ticker": "ITV.L",
+          "side": "buy",
+          "name": "ITV plc",
+          "net_cash": -137.46
+        }
+      ],
       "fund": {
         "cash": 0.0,
         "nav": null,
-        "holdings_count": 5
+        "holdings_count": 3
       }
     },
     "graduation_history": [
@@ -1001,105 +1044,19 @@
     "compiled_at": "2026-08-09T07:31:00.918890+00:00",
     "task_count": 29,
     "status": {
-      "open_count": 5,
+      "open_count": 0,
       "pr_open_count": 0,
-      "parked_count": 2,
-      "merged_count": 22,
+      "parked_count": 0,
+      "merged_count": 27,
       "failed_count": 0,
-      "next_task_id": "eng-20260809-01",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260809-01",
-        "area": "ingest",
-        "title": "Build Companies House + LSE/Investegate primary-body pipeline for UK RNS and filed accounts (PDF/iXBRL page-range extract for pensions, covenants, adjusting-ite",
-        "priority": "high",
-        "priority_score": 99.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260809-03",
-        "area": "scoring",
-        "title": "FCF basis reconciliation layer: compute and surface filing-aligned FCF, screen TTM FCF, and company-adjusted FCF side-by-side; auto-flag when divergence exceeds",
-        "priority": "high",
-        "priority_score": 99.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260809-02",
-        "area": "ingest",
-        "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260809-04",
-        "area": "scoring",
-        "title": "Earnings-basis and interim-quality overlays in screen export: flag adjusted-vs-statutory EPS growth sign divergence (FGP.L); auto-apply buy-cap when interim EPS",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260809-05",
-        "area": "ingest",
-        "title": "Fix UK RNS discovery and headline reclassification (trading_update, interim, annual_report patterns; ticker aliases GFTU/GN5; filter mis-attributed news by comp",
-        "priority": "high",
-        "priority_score": 95.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      }
-    ],
-    "attention_tasks": [
-      {
-        "id": "eng-20260804-36",
-        "area": "scoring",
-        "title": "Export `failed_models`, Piotroski component scores (currently cited at 3/9 externally but not stored), and per-model failure reasons into `screening_snapshot.js",
-        "priority": "high",
-        "priority_score": 43.0,
-        "status": "parked",
-        "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260804-57",
-        "area": "scoring",
-        "title": "Add FCF bridge overlay comparing screen TTM FCF to filing FY OCF minus capex/intangibles; flag names where sign diverges by >$50m or >50%",
-        "priority": "high",
-        "priority_score": 43.0,
-        "status": "parked",
-        "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      }
-    ]
+    "queued_tasks": [],
+    "attention_tasks": []
   }
 }
