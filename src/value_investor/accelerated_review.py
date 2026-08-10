@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -15,7 +15,7 @@ from value_investor.agent_model_policy import (
 )
 from value_investor.engineering_queue import EngineeringQueueStatus, summarize_queue
 from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, find_engineering_task
-from value_investor.ops_monitor import active_workflow_runs, _github_repo, _github_token
+from value_investor.ops_monitor import _github_repo, _github_token, active_workflow_runs
 from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
