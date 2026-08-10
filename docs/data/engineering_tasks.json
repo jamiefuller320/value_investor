@@ -465,11 +465,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260810-02.md",
       "branch_name": "cursor/eng-20260810-02-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-08-10T18:27:24.738593+00:00"
+      "completed_at": "2026-08-10T18:27:24.738593+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/213",
+      "pr_number": 213,
+      "merged_at": "2026-08-10T19:15:13.952621+00:00"
     },
     {
       "id": "eng-20260809-04",
@@ -743,6 +746,45 @@
       "merged_at": "2026-08-04T05:21:39.749546+00:00"
     },
     {
+      "id": "eng-20260810-04",
+      "area": "ingest",
+      "title": "Add IR allowlist fetch + content-validation gate (title/period/hash check before `has_body: true`; retry with alternate parser on mismatch) for company results ",
+      "summary": "Add IR allowlist fetch + content-validation gate (title/period/hash check before `has_body: true`; retry with alternate parser on mismatch) for company results presentations",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR"
+        ],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260810-05",
       "area": "scoring",
       "title": "Populate `operating_cashflow` and dual FCF/dividend coverage ratios in `CompanyMetrics` from filing or Yahoo cash-flow statements; add cyclical-exposure and hea",
@@ -820,45 +862,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/169",
       "pr_number": 169,
       "merged_at": "2026-08-03T15:48:51.080223+00:00"
-    },
-    {
-      "id": "eng-20260810-04",
-      "area": "ingest",
-      "title": "Add IR allowlist fetch + content-validation gate (title/period/hash check before `has_body: true`; retry with alternate parser on mismatch) for company results ",
-      "summary": "Add IR allowlist fetch + content-validation gate (title/period/hash check before `has_body: true`; retry with alternate parser on mismatch) for company results presentations",
-      "priority": "high",
-      "priority_score": 96.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [
-          "IR"
-        ],
-        "plan_index": 4
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for IR",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20260809-02",
@@ -1540,6 +1543,17 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-08-10T19:15:21.216963+00:00",
+    "buy_tier_count": 70,
+    "measured_tickers": 70,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 691,
+    "filings_with_body": 975
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-08-10T18:14:26.403811+00:00",
     "buy_tier_count": 68,
     "measured_tickers": 68,
@@ -1549,5 +1563,7 @@
     "zero_body_tickers": [],
     "indexed_without_body": 637,
     "filings_with_body": 911
-  }
+  },
+  "reprioritized_at": "2026-08-10T19:15:21.217102+00:00",
+  "reprioritized_after_task": "eng-20260810-02"
 }
