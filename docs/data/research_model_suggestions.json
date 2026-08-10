@@ -1559,7 +1559,135 @@
       "priority": "medium",
       "suggestion": "Healthcare overlay flag when quality/income screens pass but all yield-based cheapness models fail and filing language cites \"price erosion\" or \"competition on higher margin products\" — cap conviction independently of composite score.",
       "recorded_at": "2026-08-10T18:14:01.555997+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extract structured cash-flow reconciliation from annual-report PDF bodies (`ir_55af4b8f27e3dd6f.txt`) — specifically the delta between “cash generated from operations” (£115.5m) and net operating cash flow (£90.8m), and map which line covenants reference.",
+      "recorded_at": "2026-08-10T22:22:14.696896+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When filing KPI OCF exceeds statutory OCF by >15%, emit dual FCF/dividend coverage ratios and flag `fcf_definition_divergence` rather than reporting a single 0.84× figure.",
+      "recorded_at": "2026-08-10T22:22:14.696910+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Trigger `cyclical_exposure_overlay` when indexed principal-risk filings contain recession/discretionary-spending language AND a trading update shows >10% monthly revenue variance (April 2026 Photo.ME −17% qualifies).",
+      "recorded_at": "2026-08-10T22:22:14.696918+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Parse AGM circular and corporate governance sections from annual-report PDFs into structured fields: board independence count, Concert Party membership, related-party transactions, auditor vote percentages.",
+      "recorded_at": "2026-08-10T22:22:14.696923+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Gap-fill prompt should require explicit status per sub-question (customer concentration, governance, dividend, cyclicality) rather than treating compound question 1 as a single resolved/unresolved block.",
+      "recorded_at": "2026-08-10T22:22:14.696926+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When `fcf.divergence_flagged` is true, suppress screen TTM FCF in yield/coverage models and use `fcf.filing_aligned` only",
+      "recorded_at": "2026-08-10T22:22:14.696929+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch native PDF text from Hikma IR presentation URLs for segment margin and capex bridge tables",
+      "recorded_at": "2026-08-10T22:22:14.696932+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Dedup `ir_a9733d0de6aec27d` Investegate fallback against April trading RNS by headline/date",
+      "recorded_at": "2026-08-10T22:22:14.696936+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Separate “patent cliff” (dated LOE table) from “generic price erosion” (filing language) in healthcare gap-fill prompts",
+      "recorded_at": "2026-08-10T22:22:14.696941+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Optional FDA Orange Book ingest for US generic revenue concentration on healthcare overlay failures",
+      "recorded_at": "2026-08-10T22:22:14.696944+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Full text is in [`output/research/HIK.L/research.md`](output/research/HIK.L/research.md).",
+      "recorded_at": "2026-08-10T22:22:14.696947+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Page-range extract for annual report Risk Management (pp. 31–38) and Viability Statement (pp. 39+) — TOC present in `ir_b9e18372b456fd3b.txt` but body stops before principal-risk text; main blocker on Brexit/regulatory risk closure",
+      "recorded_at": "2026-08-10T22:22:14.696953+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Classify refetched RNS bodies by information value — 20 new transaction-in-own-shares extracts add buyback price levels but should not inflate `with_body` coverage scores for financial completeness",
+      "recorded_at": "2026-08-10T22:22:14.696958+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Trigger cyclical_exposure_overlay when GB segment LFL is negative in two consecutive trading updates regardless of maintained group profit guidance",
+      "recorded_at": "2026-08-10T22:22:14.696962+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Attach FTSE350 weekly universe summary to each ticker gap-fill pack — question 3 remains unresolved without it",
+      "recorded_at": "2026-08-10T22:22:14.696966+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ops",
+      "priority": "low",
+      "suggestion": "Emit explicit keyword-search audit trail (term, hit count, files searched) in gap-fill output when open questions cite missing disclosure topics such as Brexit",
+      "recorded_at": "2026-08-10T22:22:14.696969+00:00"
     }
   ],
-  "updated_at": "2026-08-10T18:14:01.555999+00:00"
+  "updated_at": "2026-08-10T22:22:14.696971+00:00"
 }
