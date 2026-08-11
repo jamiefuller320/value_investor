@@ -130,8 +130,16 @@ def test_evaluate_dispatch_blocks_at_parallel_cap(tmp_path: Path):
     decision = evaluate_engineering_dispatch(
         tasks_path=tasks_path,
         open_prs=[
-            {"number": 1, "headRefName": "cursor/eng-20260726-02-1de3", "title": "feat(engineering): a"},
-            {"number": 2, "headRefName": "cursor/eng-20260726-03-1de3", "title": "feat(engineering): b"},
+            {
+                "number": 1,
+                "headRefName": "cursor/eng-20260726-02-1de3",
+                "title": "feat(engineering): a",
+            },
+            {
+                "number": 2,
+                "headRefName": "cursor/eng-20260726-03-1de3",
+                "title": "feat(engineering): b",
+            },
         ],
         max_parallel=2,
     )

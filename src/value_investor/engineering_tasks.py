@@ -606,8 +606,7 @@ def compile_engineering_tasks(
     added_open_ids = [
         str(row.get("id") or "")
         for row in merged_rows
-        if str(row.get("id") or "") not in before_ids
-        and str(row.get("status") or "open") == "open"
+        if str(row.get("id") or "") not in before_ids and str(row.get("status") or "open") == "open"
     ]
     from value_investor.engineering_queue import snapshot_ingest_health
 
