@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T08:54:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T09:24:35+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -29,24 +29,19 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 
 | ID | Fragment | Tags |
 |----|----------|------|
-| frag-20260811-01 | Exit timing: live paper cohorts (hold-recovery, swap-rotation) are observe-only — need shared denominator before comparing hold→breakeven vs swap-success rates. | exit_timing, counterfactual, paper |
 | frag-20260811-02 | Archive near-miss sim gives offline priors for below-buy-tier names; reconcile with live cohort counts before trusting exit-timing knobs. | exit_timing, archive_sim, evidence |
 | frag-20260811-03 | Counterfactual evidence still thin: near-miss archive does not yet answer what would have happened on names we actually held or swapped. | counterfactual, exit_timing |
 | frag-20260811-04 | CI ruff autofix on cursor/* PRs works but ~5min lag can look like unresolved failure — PR comment on push should reduce confusion. | ci, autofix, ops |
 | frag-20260811-05 | Autofix covers ruff only; pytest failures and check_committed_data_json still need manual fix or main-branch ci-fix-responder. | ci, pytest |
-| frag-20260811-06 | Fragment capture at end of rich agent sessions may suffice; defer L120 transcript mining unless open fragments stay high with near-zero PROMOTE rate. | fragments, horizon, privacy |
 | frag-20260811-07 | Horizon scan shipped (L119) but no committed horizon_scan.md/json yet — first monthly run + manual review before enabling apply_defer/apply_fragments. | horizon, ops |
 | frag-20260811-08 | Operational rhythm: weekly analysis_review + monthly horizon scan + quarterly deferred-review pass — calendar alignment not yet registered as single runbook anchor. | ops, review |
-| frag-20260811-09 | Richness before breadth holds: exit-timing and horizon infra are stage-2 evidence; AIM/Europe widen (N1) still gated on stable FTSE350 decision-review loop. | universe, stages |
 | frag-20260811-10 | Value downgrade vs rising price: rotate on screen downgrade vs ride recognition-phase momentum while the name is no longer cheap — core tension for exit overlays, not stock picking. | momentum, value_screen, exit_overlay |
 | frag-20260811-11 | Bounded momentum grace may cut winner churn but risks style drift — holding non-cheap names when the trend breaks. | momentum, style_drift, risk |
 | frag-20260811-12 | Post-close regret is ambiguous: price rising after exit does not prove a wrong sell — exit-shadow learning needs risk-adjusted and opportunity-cost framing. | exit_shadow, post_close, learning |
-| frag-20260811-13 | Browser localStorage paper funds and server paper_automation tracks are different books — same strategy names, different canonical sources for decision-review. | paper_automation, sandbox, alignment |
 | frag-20260811-14 | Daily weekday paper-auto surveillance vs weekly decision-review knob learning — UI 'self-improving' narrative overshoots actual adaptation cadence. | decision_review, cadence, ux |
 | frag-20260811-15 | Archive ftse-simulate, browser paper_sims, and server learning tracks coexist without one anchor for which automated model is under evaluation. | simulation_ux, visibility, parallel_sims |
 | frag-20260811-16 | Stage 2b primary track still negative excess after costs while ops/library infra ran ahead — when does doctrine pause breadth until AI excess turns positive? | stages, learning, doctrine |
 | frag-20260811-17 | Ingest canonical bootstrap increases counted zero-body buy-tier stalls before depth pays off — stall metrics may need a third state beyond pass/fail. | ingest, metrics, ops_monitor |
-| frag-20260811-18 | Sunday screen refresh vs Mon/Wed/Fri capped ingest — buy-tier memo depth may need a guaranteed post-Sunday ingest pass at full cap. | ingest, scheduling, stage_2b |
 | frag-20260811-19 | Ops micro-compile can false-green ingest stalls when the engineering queue is empty and zero-body count unchanged — targeted escalation policy still open. | ops_monitor, ingest, automation |
 | frag-20260811-20 | Cloud agents often cannot workflow_dispatch; production ingest/ops triggers depend on cron-job.org PATs and fresh-agent secret injection. | ops, cursor_cloud, cron |
 | frag-20260811-21 | Offline parallel per-market observe sims lack defined promotion criteria — when does local-benchmark excess justify a second live learning track vs staying frozen-signal? | offline_sim, parallel_markets, stage_4 |
@@ -54,6 +49,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-23 | Compile/dispatch races and analysis-review on pre-merge screens can desync dashboard conclusions from merged code — loop-level artifact freshness checks may be needed. | sync, analysis_review, engineering_queue |
 | frag-20260811-24 | Auto-merge is scoped to narrow CI-fix tasks; ingest/scoring engineering PRs stay human-merge — implicit throughput ceiling on self-improvement. | auto_merge, engineering, policy |
 | frag-20260811-25 | Research spend scales with researched-name count R not universe N — widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates. | research, cost, research_cap |
+| frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
 
 ---
 
@@ -109,6 +105,10 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L110 | **Browser technical sim daily auto-run** | Mirror maybeRunIndependentAuto for technical mode: weekday gate after London settle, optional checkbox, calls runTechnicalPass once per day. | Server technical track exists or browser sims explicitly kept as local-only sandbox |
 | L117 | **Hold-to-breakeven vs swap-success exit cohorts** | Track underwater/downgraded positions: P(recovery to breakeven within N weeks) vs P(rotation improves excess vs replacement). Split by data_quality and exit_kind; observe-only until cohorts mature; feed counterfactual replay priors for hold buffer and grace knobs. | exit_shadow has ≥15 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names |
 | L120 | **Conversation transcript mining for strategic capture** | Automated export/summarise of Cursor agent transcripts into the repo. Deferred in favour of ftse-defer fragment + monthly horizon scan; revisit only if fragment capture remains patchy. | Open fragment count stays high but horizon scan PROMOTE rate is near zero for 3+ months |
+| L121 | **Reconcile live vs archive exit-timing denominators** | Shared episode definitions before comparing hold→breakeven vs swap-success rates | `exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15. |
+| L122 | **Align browser vs server paper books** | Label or align hold-buffer/reentry rules before tuning conviction/sector caps from learning data (L106) | `learning_tracks_churn_health` reaches ≥8 weeks of marks per L106 revisit trigger. |
+| L123 | **Post-Sunday full-cap ingest pass for buy-tier** | Guarantee memo depth after weekly screen refresh | next Sunday email run shows buy-tier names with `has_body: false` on primary filing gaps. |
+| L127 | **Offline observe-sim promotion criteria** | Define minimum archive depth and local-benchmark excess bar before any non-UK market graduates from frozen-signal observe sim to a second live paper learning track. | library_policy.observe_sim_markets expands beyond sp500 and history_run_count >= 12 |
 
 ### Universe & data
 
@@ -195,6 +195,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L114 | **Static type checking (mypy) in CI** | Scoped ruff closes most style/bug lint gaps; mypy would catch typing drift but needs gradual rollout and per-module ignores to avoid blocking eng agents. | After scoped ruff is stable for 2-3 weeks or when a typing-related production bug appears |
 | L115 | **Mirror ingest allowed_paths test files for module tests** | AREA_ALLOWED_PATHS for ingest lists src/value_investor/companies_house.py but not tests/test_companies_house.py, so engineering agents fix IR allowlist regressions in the wrong test file and trip path guard. | Next ingest engineering task touches companies_house or IR allowlist tests |
 | L116 | **S3 tier-1 backup repository secrets** | Configure BACKUP_S3_URI plus AWS credentials in GitHub Actions so weekly backup has off-repo copy beyond Gmail artifacts when email is blocked. | After merging backup resilience PR or next ops setup session |
+| L124 | **Unified ops review runbook anchor** | Register weekly analysis_review, monthly horizon scan, and quarterly deferred-review as one calendar/runbook sequence with owners and artifact paths. | First horizon_scan.md review complete and operational-rhythm fragments still open |
+| L125 | **Ingest stall third state (bootstrap vs true stall)** | Distinguish counted zero-body buy-tier names during canonical bootstrap from persistent post-depth stalls in ops monitor metrics. | eng-20260729-01 CH PDF fetch unparked and zero-body count unchanged after successful body extraction |
+| L126 | **Analysis-review artifact freshness gate** | Block or flag dashboard/analysis conclusions when compile/dispatch or pre-merge screens desync merged code from reviewed artifacts. | Next Sunday analysis_review runs on screens generated before an ingest/scoring merge lands |
 
 ---
 
