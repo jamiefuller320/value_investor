@@ -46,6 +46,8 @@ from value_investor.research.filings import (
     merge_ir_allowlist_filings,
     period_body_coverage,
     prune_orphaned_filing_bodies,
+    reconcile_filing_body_flags,
+    reconcile_filings_index_body_flags,
     refetch_companies_house_filing_bodies,
     refetch_indexed_without_body_filing_bodies,
     refetch_investegate_filing_bodies,
@@ -1510,6 +1512,141 @@ def test_merge_filings_prefers_body_and_ticker_source():
     merged = merge_filings(google, ticker)
     assert len(merged) == 1
     assert merged[0]["source"] == "ticker_rns_api"
+
+
+def test_reconcile_filing_body_flags_restores_disk_bodies(tmp_path: Path):
+    bodies_dir = tmp_path / "bodies"
+    bodies_dir.mkdir()
+    row_id = "abcd1234abcd1234"
+    body_path = bodies_dir / f"{row_id}.txt"
+    body_path.write_text(
+        "Annual results for Example PLC with revenue and profit and dividend commentary. "
+        "The group reported strong revenue growth and operating profit improvement "
+        "with net debt reduction and cash flow from operations remaining robust.",
+        encoding="utf-8",
+    )
+    filings = [
+        {
+            "id": row_id,
+            "headline": "Full Year Results",
+            "published_at": "2026-01-01",
+            "has_body": False,
+            "body_path": None,
+        }
+    ]
+    reconciled = reconcile_filing_body_flags(
+        filings,
+        bodies_dir,
+        company_name="Example PLC",
+        ticker="EXAM.L",
+    )
+    assert reconciled[0]["has_body"] is True
+    assert reconciled[0]["body_path"] == str(body_path)
+
+
+def test_reconcile_filings_index_body_flags_updates_summary(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "abcd1234abcd1234"
+    (bodies_dir / f"{row_id}.txt").write_text(
+        "Interim results for Example PLC with revenue and operating profit growth. "
+        "The group reported revenue and earnings improvement with dividend maintained "
+        "and net debt reduced while cash flow from operations remained positive.",
+        encoding="utf-8",
+    )
+    index = {
+        "ticker": "EXAM.L",
+        "filings": [
+            {
+                "id": row_id,
+                "headline": "Half-year Results",
+                "published_at": "2026-01-01",
+                "has_body": False,
+                "body_path": None,
+            }
+        ],
+        "summary": {"with_body": 0, "annual": 0, "interim": 0, "other": 0},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    result = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name="Example PLC",
+        ticker="EXAM.L",
+    )
+    assert result["restored"] == 1
+    data = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert data["summary"]["with_body"] == 1
+
+
+def test_ingest_filings_preserves_prior_body_on_reingest(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "abcd1234abcd1234"
+    body_path = bodies_dir / f"{row_id}.txt"
+    body_path.write_text(
+        "Annual results for Example PLC with revenue and profit and dividend commentary. "
+        "The group reported strong revenue growth and operating profit improvement "
+        "with net debt reduction and cash flow from operations remaining robust.",
+        encoding="utf-8",
+    )
+    prior = {
+        "ticker": "EXAM.L",
+        "company_name": "Example PLC",
+        "filings": [
+            {
+                "id": row_id,
+                "source": "investegate_rns_full",
+                "headline": "Full Year Results",
+                "published_at": "2026-02-05T07:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/example/full-year/1",
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(body_path),
+                "priority": 120,
+            }
+        ],
+        "summary": {"with_body": 1, "annual": 1, "interim": 0, "other": 0},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(prior), encoding="utf-8")
+
+    fresh_rows = [
+        {
+            "id": row_id,
+            "source": "google_news_investegate",
+            "headline": "Full Year Results",
+            "published_at": "2026-02-05T07:00:00+00:00",
+            "url": "https://news.google.com/rss/articles/x",
+            "period": "annual",
+            "has_body": False,
+            "body_path": None,
+            "priority": 120,
+        }
+    ]
+    with (
+        patch("value_investor.research.filings.fetch_filings_ticker_api", return_value=[]),
+        patch("value_investor.research.filings.fetch_filings_google_news", return_value=fresh_rows),
+        patch("value_investor.research.filings.fetch_filing_body", return_value=None),
+        patch(
+            "value_investor.research.companies_house.fetch_filings_companies_house",
+            return_value=[],
+        ),
+        patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
+        patch(
+            "value_investor.research.filings.fetch_filings_investegate_company",
+            return_value=[],
+        ),
+    ):
+        meta = ingest_filings(
+            ticker="EXAM.L",
+            company_name="Example PLC",
+            sources_dir=tmp_path,
+        )
+
+    assert meta["filings_summary"]["with_body"] >= 1
+    data = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert any(row.get("has_body") for row in data["filings"])
 
 
 def test_summarize_filings_counts_periods():

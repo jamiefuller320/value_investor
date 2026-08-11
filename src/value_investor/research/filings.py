@@ -2960,6 +2960,119 @@ def _scrub_misattributed_filing_rows(
     return cleaned
 
 
+def _load_prior_filings_rows(filings_dir: Path) -> list[dict[str, Any]]:
+    """Return rows from an existing ``filings_index.json`` when re-ingesting."""
+    index_path = Path(filings_dir) / "filings_index.json"
+    if not index_path.exists():
+        return []
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        logger.debug("Could not read prior filings index at %s: %s", index_path, exc)
+        return []
+    filings = payload.get("filings")
+    return list(filings) if isinstance(filings, list) else []
+
+
+def reconcile_filing_body_flags(
+    filings: list[dict[str, Any]],
+    bodies_dir: Path,
+    *,
+    company_name: str,
+    ticker: str,
+) -> list[dict[str, Any]]:
+    """
+    Re-link on-disk body files when index rows lost ``has_body`` during a rewrite.
+
+    Refetch passes may download ``bodies/{id}.txt`` then a later ``ingest_filings``
+    re-ingest clears flags without deleting the files. Book metrics use index
+    ``summary.with_body``, so reconciliation prevents silent net-downgrades.
+    """
+    bodies_dir = Path(bodies_dir)
+    reconciled: list[dict[str, Any]] = []
+    restored = 0
+    for row in filings:
+        item = dict(row)
+        if item.get("has_body"):
+            reconciled.append(item)
+            continue
+        row_id = str(item.get("id") or "").strip()
+        if not row_id:
+            reconciled.append(item)
+            continue
+        candidate = bodies_dir / f"{row_id}.txt"
+        if not candidate.is_file():
+            reconciled.append(item)
+            continue
+        try:
+            sample = candidate.read_text(encoding="utf-8", errors="replace")[:4000]
+        except OSError:
+            reconciled.append(item)
+            continue
+        if _body_clearly_misattributed(sample, company_name, ticker):
+            reconciled.append(item)
+            continue
+        if not _filing_text_is_substantive(sample):
+            reconciled.append(item)
+            continue
+        item["has_body"] = True
+        item["body_path"] = str(candidate)
+        restored += 1
+        reconciled.append(item)
+    if restored:
+        logger.info(
+            "Reconciled %d filing body flag(s) from disk for %s",
+            restored,
+            ticker,
+        )
+    return reconciled
+
+
+def reconcile_filings_index_body_flags(
+    filings_dir: Path,
+    *,
+    company_name: str,
+    ticker: str,
+) -> dict[str, Any]:
+    """Reconcile ``filings_index.json`` body flags against on-disk ``bodies/*.txt``."""
+    from value_investor.storage import read_json, write_json
+
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    if not index_path.exists():
+        return {"restored": 0, "with_body_before": 0, "with_body_after": 0, "note": "no index"}
+    try:
+        payload = read_json(index_path)
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "restored": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": str(exc),
+        }
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    reconciled = reconcile_filing_body_flags(
+        filings,
+        filings_dir / "bodies",
+        company_name=company_name,
+        ticker=ticker,
+    )
+    after = sum(1 for row in reconciled if row.get("has_body"))
+    restored = after - before
+    if restored > 0:
+        payload["filings"] = reconciled
+        payload["summary"] = summarize_filings(reconciled)
+        payload["reconciled_at"] = datetime.now(UTC).isoformat()
+        write_json(index_path, payload, compact=True, compress=False)
+    return {
+        "restored": restored,
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "reconcile_filings_index_body_flags",
+    }
+
+
 def prune_orphaned_filing_bodies(filings_dir: Path) -> dict[str, Any]:
     """
     Delete ``bodies/*.txt`` files not referenced by ``filings_index.json``.
@@ -3622,6 +3735,9 @@ def ingest_filings(
 
     regime = resolve_filings_regime(market, ticker)
     groups: list[list[dict[str, Any]]] = []
+    prior_filings = _load_prior_filings_rows(filings_dir)
+    if prior_filings:
+        groups.append(prior_filings)
     ch_accounts = max_ch_accounts
     if ch_accounts is None:
         ch_accounts = DEEPEN_MAX_ACCOUNTS if deepen_history else DEFAULT_MAX_ACCOUNTS
@@ -3725,6 +3841,12 @@ def ingest_filings(
     max_bodies = 20 if deepen_history else 12
     merged = _write_bodies(merged, bodies_dir, max_bodies=max_bodies)
     merged = _scrub_misattributed_filing_rows(
+        merged,
+        bodies_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    merged = reconcile_filing_body_flags(
         merged,
         bodies_dir,
         company_name=company_name,

@@ -651,6 +651,13 @@ def run_ingest_improvement_pass(
                 market=market,
                 filings_summary=source_meta.get("filings_summary") or {},
             )
+            from value_investor.research.filings import reconcile_filings_index_body_flags
+
+            reconcile_filings_index_body_flags(
+                sources_dir / "filings",
+                company_name=target.name,
+                ticker=target.ticker,
+            )
             after_inventory = inspect_local_sources(sources_dir)
             after = int(
                 (after_inventory.get("filings_summary") or {}).get("with_body")
