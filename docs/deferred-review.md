@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T08:30:43+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T08:54:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -18,6 +18,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | Ftse key verification | https://cursor.com/agents/bc-9bff5dd3-473b-4cf0-9374-3bc91363ec15 | ftse-verify-key (little deferred) |
 | Merge request commit failure | https://cursor.com/agents/bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5 | Models roadmap, research overlay, data gaps |
 | Exit timing, horizon scan, CI autofix session | https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb | exit timing cohorts, near-miss sim, horizon scan L119, fragments harvest, ci-pr-autofix |
+| Stock momentum overlay | https://cursor.com/agents/bc-e32bed38-9850-40ab-8ef2-12b8e20d1de3 | momentum grace paper track, exit shadow, stop/take-profit |
+| Ftse ingest loop workflow | https://cursor.com/agents/bc-ab6d3014-38c9-4d9a-af36-9d5f957f485f | ingest loop, parallel offline sims, auto-merge, sync races |
+| Ftse ops monitor cron | https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028 | ops monitor cron, backup, stage-2b progress, ingest stalls |
 
 ---
 
@@ -35,6 +38,22 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-07 | Horizon scan shipped (L119) but no committed horizon_scan.md/json yet — first monthly run + manual review before enabling apply_defer/apply_fragments. | horizon, ops |
 | frag-20260811-08 | Operational rhythm: weekly analysis_review + monthly horizon scan + quarterly deferred-review pass — calendar alignment not yet registered as single runbook anchor. | ops, review |
 | frag-20260811-09 | Richness before breadth holds: exit-timing and horizon infra are stage-2 evidence; AIM/Europe widen (N1) still gated on stable FTSE350 decision-review loop. | universe, stages |
+| frag-20260811-10 | Value downgrade vs rising price: rotate on screen downgrade vs ride recognition-phase momentum while the name is no longer cheap — core tension for exit overlays, not stock picking. | momentum, value_screen, exit_overlay |
+| frag-20260811-11 | Bounded momentum grace may cut winner churn but risks style drift — holding non-cheap names when the trend breaks. | momentum, style_drift, risk |
+| frag-20260811-12 | Post-close regret is ambiguous: price rising after exit does not prove a wrong sell — exit-shadow learning needs risk-adjusted and opportunity-cost framing. | exit_shadow, post_close, learning |
+| frag-20260811-13 | Browser localStorage paper funds and server paper_automation tracks are different books — same strategy names, different canonical sources for decision-review. | paper_automation, sandbox, alignment |
+| frag-20260811-14 | Daily weekday paper-auto surveillance vs weekly decision-review knob learning — UI 'self-improving' narrative overshoots actual adaptation cadence. | decision_review, cadence, ux |
+| frag-20260811-15 | Archive ftse-simulate, browser paper_sims, and server learning tracks coexist without one anchor for which automated model is under evaluation. | simulation_ux, visibility, parallel_sims |
+| frag-20260811-16 | Stage 2b primary track still negative excess after costs while ops/library infra ran ahead — when does doctrine pause breadth until AI excess turns positive? | stages, learning, doctrine |
+| frag-20260811-17 | Ingest canonical bootstrap increases counted zero-body buy-tier stalls before depth pays off — stall metrics may need a third state beyond pass/fail. | ingest, metrics, ops_monitor |
+| frag-20260811-18 | Sunday screen refresh vs Mon/Wed/Fri capped ingest — buy-tier memo depth may need a guaranteed post-Sunday ingest pass at full cap. | ingest, scheduling, stage_2b |
+| frag-20260811-19 | Ops micro-compile can false-green ingest stalls when the engineering queue is empty and zero-body count unchanged — targeted escalation policy still open. | ops_monitor, ingest, automation |
+| frag-20260811-20 | Cloud agents often cannot workflow_dispatch; production ingest/ops triggers depend on cron-job.org PATs and fresh-agent secret injection. | ops, cursor_cloud, cron |
+| frag-20260811-21 | Offline parallel per-market observe sims lack defined promotion criteria — when does local-benchmark excess justify a second live learning track vs staying frozen-signal? | offline_sim, parallel_markets, stage_4 |
+| frag-20260811-22 | Recurring observe sim beats one-shot passes but thin run_count is infrastructure not signal — run_count/archive gate for experiment promotion undefined. | offline_sim, evidence, screen_lite |
+| frag-20260811-23 | Compile/dispatch races and analysis-review on pre-merge screens can desync dashboard conclusions from merged code — loop-level artifact freshness checks may be needed. | sync, analysis_review, engineering_queue |
+| frag-20260811-24 | Auto-merge is scoped to narrow CI-fix tasks; ingest/scoring engineering PRs stay human-merge — implicit throughput ceiling on self-improvement. | auto_merge, engineering, policy |
+| frag-20260811-25 | Research spend scales with researched-name count R not universe N — widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates. | research, cost, research_cap |
 
 ---
 

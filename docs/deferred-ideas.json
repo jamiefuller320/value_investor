@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-11T08:30:43+00:00",
+  "updated_at": "2026-08-11T08:54:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -31,6 +31,21 @@
       "name": "Exit timing, horizon scan, CI autofix session",
       "url": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
       "focus": "exit timing cohorts, near-miss sim, horizon scan L119, fragments harvest, ci-pr-autofix"
+    },
+    {
+      "name": "Stock momentum overlay",
+      "url": "https://cursor.com/agents/bc-e32bed38-9850-40ab-8ef2-12b8e20d1de3",
+      "focus": "momentum grace paper track, exit shadow, stop/take-profit"
+    },
+    {
+      "name": "Ftse ingest loop workflow",
+      "url": "https://cursor.com/agents/bc-ab6d3014-38c9-4d9a-af36-9d5f957f485f",
+      "focus": "ingest loop, parallel offline sims, auto-merge, sync races"
+    },
+    {
+      "name": "Ftse ops monitor cron",
+      "url": "https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028",
+      "focus": "ops monitor cron, backup, stage-2b progress, ingest stalls"
     }
   ],
   "ideas": [
@@ -2515,6 +2530,198 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
       "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-10",
+      "text": "Value downgrade vs rising price: rotate on screen downgrade vs ride recognition-phase momentum while the name is no longer cheap \u2014 core tension for exit overlays, not stock picking.",
+      "tags": [
+        "momentum",
+        "value_screen",
+        "exit_overlay"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e32bed38-9850-40ab-8ef2-12b8e20d1de3",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-11",
+      "text": "Bounded momentum grace may cut winner churn but risks style drift \u2014 holding non-cheap names when the trend breaks.",
+      "tags": [
+        "momentum",
+        "style_drift",
+        "risk"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e32bed38-9850-40ab-8ef2-12b8e20d1de3",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-12",
+      "text": "Post-close regret is ambiguous: price rising after exit does not prove a wrong sell \u2014 exit-shadow learning needs risk-adjusted and opportunity-cost framing.",
+      "tags": [
+        "exit_shadow",
+        "post_close",
+        "learning"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e32bed38-9850-40ab-8ef2-12b8e20d1de3",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-13",
+      "text": "Browser localStorage paper funds and server paper_automation tracks are different books \u2014 same strategy names, different canonical sources for decision-review.",
+      "tags": [
+        "paper_automation",
+        "sandbox",
+        "alignment"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-957a7c96-f14d-494a-83f8-5f2a618a3446",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-14",
+      "text": "Daily weekday paper-auto surveillance vs weekly decision-review knob learning \u2014 UI 'self-improving' narrative overshoots actual adaptation cadence.",
+      "tags": [
+        "decision_review",
+        "cadence",
+        "ux"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-957a7c96-f14d-494a-83f8-5f2a618a3446",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-15",
+      "text": "Archive ftse-simulate, browser paper_sims, and server learning tracks coexist without one anchor for which automated model is under evaluation.",
+      "tags": [
+        "simulation_ux",
+        "visibility",
+        "parallel_sims"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-957a7c96-f14d-494a-83f8-5f2a618a3446",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-16",
+      "text": "Stage 2b primary track still negative excess after costs while ops/library infra ran ahead \u2014 when does doctrine pause breadth until AI excess turns positive?",
+      "tags": [
+        "stages",
+        "learning",
+        "doctrine"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-17",
+      "text": "Ingest canonical bootstrap increases counted zero-body buy-tier stalls before depth pays off \u2014 stall metrics may need a third state beyond pass/fail.",
+      "tags": [
+        "ingest",
+        "metrics",
+        "ops_monitor"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-18",
+      "text": "Sunday screen refresh vs Mon/Wed/Fri capped ingest \u2014 buy-tier memo depth may need a guaranteed post-Sunday ingest pass at full cap.",
+      "tags": [
+        "ingest",
+        "scheduling",
+        "stage_2b"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-19",
+      "text": "Ops micro-compile can false-green ingest stalls when the engineering queue is empty and zero-body count unchanged \u2014 targeted escalation policy still open.",
+      "tags": [
+        "ops_monitor",
+        "ingest",
+        "automation"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-20",
+      "text": "Cloud agents often cannot workflow_dispatch; production ingest/ops triggers depend on cron-job.org PATs and fresh-agent secret injection.",
+      "tags": [
+        "ops",
+        "cursor_cloud",
+        "cron"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0134dee6-9cf6-4949-934d-bd1c2ca3f028",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-21",
+      "text": "Offline parallel per-market observe sims lack defined promotion criteria \u2014 when does local-benchmark excess justify a second live learning track vs staying frozen-signal?",
+      "tags": [
+        "offline_sim",
+        "parallel_markets",
+        "stage_4"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-ab6d3014-38c9-4d9a-af36-9d5f957f485f",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-22",
+      "text": "Recurring observe sim beats one-shot passes but thin run_count is infrastructure not signal \u2014 run_count/archive gate for experiment promotion undefined.",
+      "tags": [
+        "offline_sim",
+        "evidence",
+        "screen_lite"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-ab6d3014-38c9-4d9a-af36-9d5f957f485f",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-23",
+      "text": "Compile/dispatch races and analysis-review on pre-merge screens can desync dashboard conclusions from merged code \u2014 loop-level artifact freshness checks may be needed.",
+      "tags": [
+        "sync",
+        "analysis_review",
+        "engineering_queue"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-ab6d3014-38c9-4d9a-af36-9d5f957f485f",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-24",
+      "text": "Auto-merge is scoped to narrow CI-fix tasks; ingest/scoring engineering PRs stay human-merge \u2014 implicit throughput ceiling on self-improvement.",
+      "tags": [
+        "auto_merge",
+        "engineering",
+        "policy"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-ab6d3014-38c9-4d9a-af36-9d5f957f485f",
+      "added_at": "2026-08-11T08:54:04+00:00"
+    },
+    {
+      "id": "frag-20260811-25",
+      "text": "Research spend scales with researched-name count R not universe N \u2014 widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates.",
+      "tags": [
+        "research",
+        "cost",
+        "research_cap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-84f8eb22-819f-4ea2-b70d-18ab2f010668",
+      "added_at": "2026-08-11T08:54:04+00:00"
     }
   ]
 }
