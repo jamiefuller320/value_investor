@@ -92,7 +92,8 @@ When **CI fails on a `cursor/*` pull request** due to scoped **ruff** (format or
    `src/` / `tests/` files only
 3. Re-runs scoped ruff + full `pytest` locally in the workflow
 4. Commits `chore(ci): autofix ruff on changed Python files` and pushes to the PR branch
-5. CI re-runs on the new commit
+5. Posts a **PR comment** with links to the failed run and fix commit (so red CI is not mistaken for an unresolved failure)
+6. CI re-runs on the new commit
 
 **Guardrails:**
 
