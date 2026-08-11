@@ -268,6 +268,189 @@ def acted_log_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     )
 
 
+_TRACK_SUBDIRS: dict[str, str] = {
+    "rules": "",
+    "ai_judgment": "ai_judgment",
+    "momentum_grace": "momentum_grace",
+    "technical": "technical",
+}
+
+
+def resolve_track_dir(paper_root: Path, track_id: str) -> Path:
+    """Map learning track id to its rebalance_log directory under paper_root."""
+    sub = _TRACK_SUBDIRS.get(str(track_id or "").strip(), str(track_id or "").strip())
+    root = Path(paper_root)
+    return root if not sub else root / sub
+
+
+def load_learning_track_logs(
+    paper_root: Path,
+    track_ids: tuple[str, ...] = ("rules", "ai_judgment"),
+) -> list[dict[str, Any]]:
+    """Load rebalance_log entries from one or more paper automation tracks."""
+    combined: list[dict[str, Any]] = []
+    for track_id in track_ids:
+        track_dir = resolve_track_dir(paper_root, track_id)
+        for entry in load_rebalance_log(track_dir):
+            if not str(entry.get("track_id") or "").strip():
+                entry = {**entry, "track_id": track_id}
+            combined.append(entry)
+    return combined
+
+
+def _effective_signal_from_row(row: dict[str, Any]) -> str:
+    adjusted = str(row.get("adjusted_signal") or "").strip()
+    if adjusted:
+        return adjusted
+    return str(row.get("signal") or "").strip()
+
+
+def _candidate_by_ticker(entry: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    mapped: dict[str, dict[str, Any]] = {}
+    # Decision-time candidates override raw screen rows (adjusted_signal / AI gates).
+    for pool in (entry.get("screen_buy_tier") or [], entry.get("candidates") or []):
+        for row in pool:
+            if not isinstance(row, dict):
+                continue
+            ticker = str(row.get("ticker") or "").strip()
+            if ticker:
+                mapped[ticker] = row
+    return mapped
+
+
+def collect_buy_tier_history_tickers(entries: list[dict[str, Any]]) -> frozenset[str]:
+    """Tickers that ever appeared in buy-tier screen rows or were bought on an acted pass."""
+    history: set[str] = set()
+    for entry in acted_log_entries(entries):
+        for row in entry.get("screen_buy_tier") or []:
+            if not isinstance(row, dict):
+                continue
+            ticker = str(row.get("ticker") or "").strip()
+            signal = str(row.get("signal") or "")
+            if ticker and signal in BUY_SIGNALS:
+                history.add(ticker)
+        for row in entry.get("candidates") or []:
+            if not isinstance(row, dict):
+                continue
+            ticker = str(row.get("ticker") or "").strip()
+            if ticker and _effective_signal_from_row(row) in BUY_SIGNALS:
+                history.add(ticker)
+        for trade in entry.get("trades") or []:
+            if not isinstance(trade, dict):
+                continue
+            if str(trade.get("side") or "") == "buy":
+                ticker = str(trade.get("ticker") or "").strip()
+                if ticker:
+                    history.add(ticker)
+    return frozenset(history)
+
+
+def extract_held_stress_episode_seeds(
+    entries: list[dict[str, Any]],
+    *,
+    buy_tier_history: frozenset[str] | None = None,
+) -> list[dict[str, Any]]:
+    """
+    Held positions with effective signal below buy-tier on an acted pass.
+
+    Requires buy-tier history (prior buy screen or buy trade) so archive replay
+    covers names that entered the book, not only below-buy-tier near-miss gates.
+    """
+    history = (
+        buy_tier_history
+        if buy_tier_history is not None
+        else collect_buy_tier_history_tickers(entries)
+    )
+    seeds: list[dict[str, Any]] = []
+    seen: set[tuple[str, str, str]] = set()
+
+    for entry in acted_log_entries(entries):
+        track_id = str(entry.get("track_id") or "rules")
+        when = _entry_sort_key(entry)
+        cmap = _candidate_by_ticker(entry)
+        exit_streak = dict((entry.get("rebalance_state_before") or {}).get("exit_streak") or {})
+
+        for holding in entry.get("holdings_before") or []:
+            if not isinstance(holding, dict):
+                continue
+            ticker = str(holding.get("ticker") or "").strip()
+            if not ticker or ticker not in history:
+                continue
+            candidate = cmap.get(ticker) or {}
+            signal = _effective_signal_from_row(candidate)
+            if signal in BUY_SIGNALS:
+                continue
+
+            key = (track_id, ticker, when)
+            if key in seen:
+                continue
+            seen.add(key)
+
+            avg_cost = float(holding.get("avg_cost") or 0)
+            mark = float(candidate.get("price") or avg_cost or 0)
+            unrealized = (mark - avg_cost) / avg_cost if avg_cost > 0 and mark > 0 else 0.0
+            triggers: list[str] = ["signal_downgrade"]
+            if int(exit_streak.get(ticker, 0)) >= 1:
+                triggers.append("exit_streak")
+            if bool(holding.get("momentum_grace", False)):
+                triggers.append("momentum_grace")
+
+            seeds.append(
+                {
+                    "track_id": track_id,
+                    "ticker": ticker,
+                    "name": str(holding.get("name") or candidate.get("name") or ""),
+                    "started_at": when,
+                    "avg_cost": avg_cost,
+                    "mark_price": mark,
+                    "unrealized_pct_at_start": round(unrealized, 4),
+                    "screen_signal": str(candidate.get("signal") or ""),
+                    "effective_signal": signal,
+                    "data_quality_score": candidate.get("data_quality_score"),
+                    "conviction_score": candidate.get("conviction_score"),
+                    "exit_streak_at_start": int(exit_streak.get(ticker, 0)),
+                    "momentum_grace": bool(holding.get("momentum_grace", False)),
+                    "stress_triggers": triggers,
+                }
+            )
+    return seeds
+
+
+def extract_log_swap_rotation_seeds(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Same-pass sell+buy rotations from acted log entries (trim sells excluded)."""
+    seeds: list[dict[str, Any]] = []
+    seen: set[str] = set()
+
+    for entry in acted_log_entries(entries):
+        when = _entry_sort_key(entry)
+        track_id = str(entry.get("track_id") or "rules")
+        trades = [t for t in (entry.get("trades") or []) if isinstance(t, dict)]
+        sells = [
+            t
+            for t in trades
+            if str(t.get("side") or "") == "sell" and "trim" not in str(t.get("note") or "").lower()
+        ]
+        buys = [t for t in trades if str(t.get("side") or "") == "buy"]
+        if not sells or not buys:
+            continue
+
+        rotation_id = f"{track_id}:{when}"
+        if rotation_id in seen:
+            continue
+        seen.add(rotation_id)
+        seeds.append(
+            {
+                "rotation_id": rotation_id,
+                "track_id": track_id,
+                "logged_at": when,
+                "trade_cost_pct": float(entry.get("trade_cost_pct") or 0),
+                "sells": sells,
+                "buys": buys,
+            }
+        )
+    return seeds
+
+
 def filter_acted_log_entries_since(
     entries: list[dict[str, Any]],
     *,
