@@ -191,6 +191,99 @@ def _slim_ladder(last_ladder: dict[str, Any] | None) -> dict[str, Any] | None:
     }
 
 
+def _slim_epoch_track(track_id: str, review_row: dict[str, Any]) -> dict[str, Any]:
+    """Observe-only knob-epoch datum for one learning track."""
+    from value_investor.decision_review import MIN_EPOCH_MARKS, enough_epoch_history
+
+    epoch = (review_row.get("metrics") or {}).get("epoch") or {}
+    equity_marks = int(epoch.get("equity_marks") or 0)
+    return {
+        "track_id": track_id,
+        "track_label": review_row.get("track_label") or track_id,
+        "is_primary_learning_track": bool(review_row.get("is_primary_learning_track")),
+        "applied": bool(review_row.get("applied")),
+        "epoch_started_at": epoch.get("started_at"),
+        "baseline_nav": epoch.get("baseline_nav"),
+        "epoch_nav": epoch.get("portfolio_value"),
+        "epoch_return": epoch.get("total_return"),
+        "post_apply_trade_count": int(epoch.get("trade_count") or 0),
+        "equity_marks": equity_marks,
+        "benchmark_span_available": equity_marks >= MIN_EPOCH_MARKS,
+        "benchmark_return": epoch.get("benchmark_return"),
+        "excess_after_costs": epoch.get("excess_after_costs"),
+        "enough_epoch_history": enough_epoch_history(epoch),
+        "note": str(epoch.get("note") or ""),
+        "knobs": dict(epoch.get("knobs") or {}),
+    }
+
+
+def build_learning_track_epoch_datum(*, paper_root: Path | None = None) -> dict[str, Any]:
+    """
+    Surface per-track knob-epoch zero datums for the dashboard (observe-only).
+
+    Reads learning_tracks_review.json when present; otherwise falls back to per-track
+    decision_review.json files under each learning track directory.
+    """
+    from value_investor.decision_review import MIN_EPOCH_MARKS, MIN_EPOCH_TRADES
+
+    paper_root = Path(paper_root or DEFAULT_PAPER_ROOT)
+    review_raw = _safe_read(paper_root / "learning_tracks_review.json")
+    reviews: dict[str, Any] = {}
+    primary_track: str | None = None
+
+    if isinstance(review_raw, dict):
+        primary_track = review_raw.get("primary_learning_track")
+        raw_reviews = review_raw.get("reviews") or {}
+        if isinstance(raw_reviews, dict):
+            reviews = {k: v for k, v in raw_reviews.items() if isinstance(v, dict)}
+    else:
+        try:
+            from value_investor.paper_automation import learning_track_dirs
+
+            for track_id, track_dir in learning_track_dirs(paper_root).items():
+                row = _safe_read(track_dir / "decision_review.json")
+                if isinstance(row, dict):
+                    reviews[track_id] = row
+        except Exception:  # noqa: BLE001
+            reviews = {}
+
+    tracks = {
+        track_id: _slim_epoch_track(track_id, row) for track_id, row in sorted(reviews.items())
+    }
+    benchmark_ready = sum(1 for row in tracks.values() if row.get("benchmark_span_available"))
+    with_trades = sum(
+        1 for row in tracks.values() if int(row.get("post_apply_trade_count") or 0) > 0
+    )
+    with_epoch = sum(1 for row in tracks.values() if row.get("epoch_started_at"))
+    insufficient_notes = sum(
+        1
+        for row in tracks.values()
+        if "insufficient epoch marks" in str(row.get("note") or "").lower()
+    )
+
+    return {
+        "schema_version": 1,
+        "generated_at": datetime.now(UTC).isoformat(),
+        "observe_only": True,
+        "note": (
+            "Per-track knob-epoch zero datums from decision-review apply baselines. "
+            "Benchmark span needs ≥"
+            f"{MIN_EPOCH_MARKS} equity marks and ≥{MIN_EPOCH_TRADES} post-apply trade "
+            "before epoch-scoped excess is used for knob proposals — no auto-apply from this panel."
+        ),
+        "primary_learning_track": primary_track,
+        "tracks": tracks,
+        "summary": {
+            "track_count": len(tracks),
+            "tracks_with_epoch": with_epoch,
+            "tracks_benchmark_span_ready": benchmark_ready,
+            "tracks_with_post_apply_trades": with_trades,
+            "tracks_insufficient_epoch_marks": insufficient_notes,
+            "all_benchmark_spans_insufficient": bool(tracks) and benchmark_ready == 0,
+        },
+    }
+
+
 def _slim_paper_last_run(last_run: dict[str, Any] | None) -> dict[str, Any] | None:
     if not isinstance(last_run, dict):
         return None
@@ -524,6 +617,7 @@ def build_automation_status(
         "settings": settings,
         "achievements": achievements,
         "engineering_queue": build_engineering_queue_dashboard(),
+        "learning_track_epoch_datum": build_learning_track_epoch_datum(paper_root=paper_root),
     }
 
 
