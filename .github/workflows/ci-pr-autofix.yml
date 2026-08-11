@@ -9,7 +9,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: read
+  pull-requests: write
 
 concurrency:
   group: ci-pr-autofix-${{ github.event.workflow_run.head_branch }}
@@ -82,6 +82,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Commit and push autofix
+        id: push
         if: steps.autofix.outputs.fixed == 'true'
         env:
           BRANCH: ${{ github.event.workflow_run.head_branch }}
@@ -89,8 +90,45 @@ jobs:
           set -euo pipefail
           git add src/ tests/ scripts/
           if git diff --staged --quiet; then
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             echo "No staged changes after autofix"
             exit 0
           fi
           git commit -m "chore(ci): autofix ruff on changed Python files"
           git push origin "HEAD:${BRANCH}"
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on pull request
+        if: steps.push.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          FAILED_RUN_ID: ${{ github.event.workflow_run.id }}
+          FAILED_RUN_URL: ${{ github.event.workflow_run.html_url }}
+          COMMIT_SHA: ${{ steps.push.outputs.commit_sha }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          pr_number="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')"
+          if [ -z "$pr_number" ] || [ "$pr_number" = "null" ]; then
+            echo "No open PR for branch $BRANCH — skipping comment"
+            exit 0
+          fi
+          docs_url="https://github.com/${REPO}/blob/main/docs/ops/ci-fix-automation.md#pr-ruff-autofix"
+          sed 's/^ *//' > /tmp/autofix_comment.md <<EOF
+          ## CI autofix (ruff)
+
+          Scoped **ruff** autofix was applied and pushed to this branch after the failed CI run.
+
+          | | |
+          |--|--|
+          | Failed run | [${FAILED_RUN_ID}](${FAILED_RUN_URL}) |
+          | Fix commit | \`${COMMIT_SHA}\` |
+          | Commit message | \`chore(ci): autofix ruff on changed Python files\` |
+
+          CI should re-run on the new commit automatically. This workflow does **not** autofix pytest or \`check_committed_data_json\` failures.
+
+          Details: [ci-fix-automation — PR ruff autofix](${docs_url})
+          EOF
+          gh pr comment "$pr_number" --body-file /tmp/autofix_comment.md
