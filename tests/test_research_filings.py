@@ -1056,6 +1056,75 @@ def test_refetch_companies_house_filing_bodies_pdf_extract(tmp_path, monkeypatch
     assert saved["filings"][1]["has_body"] is False
 
 
+def test_refetch_companies_house_filing_bodies_retries_stale_has_body(tmp_path, monkeypatch):
+    """Regression: re-fetch when index marks has_body but on-disk text is missing."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch-stale"
+    index = {
+        "filings": [
+            {
+                "id": "ch_stale",
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": ch_url,
+                "document_metadata_url": ch_url,
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(bodies_dir / "ch_stale.txt"),
+                "priority": 140,
+            }
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    body_text = "A" * 220 + " statutory accounts pension going concern covenant"
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: body_text,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=3)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    assert (bodies_dir / "ch_stale.txt").read_text(encoding="utf-8") == body_text
+
+
+def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monkeypatch):
+    """Regression: MER.L-style index with several CH rows and zero bodies."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch"
+    rows = [
+        {
+            "id": f"ch_row_{idx}",
+            "source": "companies_house",
+            "headline": f"Companies House accounts — group {idx}",
+            "url": f"{ch_url}{idx}",
+            "document_metadata_url": f"{ch_url}{idx}",
+            "period": "annual",
+            "has_body": False,
+            "body_path": None,
+            "priority": 140,
+        }
+        for idx in range(5)
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"ticker": "MER.L", "filings": rows, "summary": {"total": 5, "with_body": 0}}),
+        encoding="utf-8",
+    )
+    body_text = "A" * 220 + " consolidated income pension covenant going concern"
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: body_text,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=2)
+    assert result["attempted"] == 5
+    assert result["fetched"] == 2
+    assert result["with_body_after"] == 2
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert sum(1 for row in saved["filings"] if row.get("has_body")) == 2
+
+
 def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
@@ -1076,6 +1145,15 @@ def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):
     }
     (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
     monkeypatch.setattr(
+        "value_investor.research.filings.refetch_companies_house_filing_bodies",
+        lambda *args, **kwargs: {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+        },
+    )
+    monkeypatch.setattr(
         "value_investor.research.filings.fetch_filing_body",
         lambda url: "Body text " + ("x" * 220),
     )
@@ -1084,6 +1162,37 @@ def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):
     assert result["with_body_after"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
+
+
+def test_refetch_missing_filing_bodies_delegates_ch_rows(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch1"
+    index = {
+        "filings": [
+            {
+                "id": "ch_row",
+                "source": "companies_house",
+                "headline": "Companies House accounts",
+                "url": ch_url,
+                "document_metadata_url": ch_url,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 140,
+            }
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    body_text = "A" * 220 + " statutory accounts pension going concern"
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: body_text,
+    )
+    result = refetch_missing_filing_bodies(filings_dir, max_bodies=4)
+    assert result["fetched"] == 1
+    assert result["with_body_after"] == 1
+    assert (filings_dir / "bodies" / "ch_row.txt").exists()
 
 
 def test_refetch_ticker_rns_api_filing_bodies_megp_prunes_and_downloads(tmp_path, monkeypatch):

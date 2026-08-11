@@ -2141,6 +2141,24 @@ def _is_ch_filing_row(row: dict[str, Any]) -> bool:
     )
 
 
+def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
+    """True when an indexed CH row lacks a substantive on-disk body extract."""
+    if not _is_ch_filing_row(row):
+        return False
+    if not row.get("has_body"):
+        return True
+    row_id = str(row.get("id") or "")
+    body_path = row.get("body_path")
+    candidate = Path(str(body_path)) if body_path else Path(bodies_dir) / f"{row_id}.txt"
+    if not candidate.is_file():
+        return True
+    try:
+        text = candidate.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return True
+    return not _filing_text_is_substantive(text, min_chars=200)
+
+
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
@@ -3079,8 +3097,9 @@ def refetch_companies_house_filing_bodies(
 
     filings = list(payload.get("filings") or [])
     before = sum(1 for row in filings if row.get("has_body"))
+    bodies_dir.mkdir(parents=True, exist_ok=True)
     ch_rows = [row for row in filings if _is_ch_filing_row(row)]
-    missing = [row for row in ch_rows if not row.get("has_body")]
+    missing = [row for row in ch_rows if _ch_row_needs_body_refetch(row, bodies_dir)]
     if not missing:
         return {
             "attempted": 0,
@@ -3090,12 +3109,11 @@ def refetch_companies_house_filing_bodies(
             "note": "no missing CH bodies",
         }
 
-    bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
-        if downloaded < max_bodies and _is_ch_filing_row(item) and not item.get("has_body"):
+        if downloaded < max_bodies and _ch_row_needs_body_refetch(item, bodies_dir):
             body = _fetch_companies_house_body(item)
             if body:
                 filename = f"{item['id']}.txt"
@@ -3104,6 +3122,9 @@ def refetch_companies_house_filing_bodies(
                 item["has_body"] = True
                 item["body_path"] = str(path)
                 downloaded += 1
+            elif item.get("has_body"):
+                item["has_body"] = False
+                item["body_path"] = None
         updated.append(item)
 
     after = sum(1 for row in updated if row.get("has_body"))
@@ -3113,7 +3134,7 @@ def refetch_companies_house_filing_bodies(
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return {
         "attempted": len(missing),
-        "fetched": max(0, after - before),
+        "fetched": downloaded,
         "with_body_before": before,
         "with_body_after": after,
         "note": "refetch_companies_house_filing_bodies",
@@ -3438,16 +3459,25 @@ def refetch_missing_filing_bodies(
             ticker=ticker,
             company_name=company_name,
         )
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    ch_result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=max_bodies)
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        payload = {"filings": filings}
+    filings = list(payload.get("filings") or filings)
+    remaining = max(0, max_bodies - int(ch_result.get("fetched") or 0))
+    mid = int(ch_result.get("with_body_after") or before)
     missing = [row for row in filings if row.get("url") and not row.get("has_body")]
-    updated = _write_bodies(filings, bodies_dir, max_bodies=max_bodies)
+    updated = _write_bodies(filings, bodies_dir, max_bodies=remaining)
     after = sum(1 for row in updated if row.get("has_body"))
     payload["filings"] = updated
     payload["summary"] = summarize_filings(updated)
     payload["refetched_at"] = datetime.now(UTC).isoformat()
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return {
-        "attempted": len(missing),
-        "fetched": max(0, after - before),
+        "attempted": int(ch_result.get("attempted") or 0) + len(missing),
+        "fetched": int(ch_result.get("fetched") or 0) + max(0, after - mid),
         "with_body_before": before,
         "with_body_after": after,
         "note": "refetch_missing_filing_bodies",
