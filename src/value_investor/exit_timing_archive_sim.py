@@ -363,9 +363,7 @@ def run_exit_timing_archive_sim(
     swap_rotations: list[dict[str, Any]] = []
 
     for entry in snapshots[:-1]:
-        near_miss_rows = [
-            row for row in entry.signals if _is_near_miss(row, cfg)
-        ]
+        near_miss_rows = [row for row in entry.signals if _is_near_miss(row, cfg)]
         near_miss_rows.sort(
             key=lambda row: float(row.get("conviction_score") or 0),
             reverse=True,
