@@ -285,12 +285,19 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         unavailable_watch = {"items": []}
 
     try:
-        from value_investor.automation_status import build_automation_status
+        from value_investor.automation_status import (
+            build_automation_status,
+            build_learning_track_epoch_datum,
+        )
 
         automation = build_automation_status()
+        learning_track_epoch_datum = build_learning_track_epoch_datum(
+            paper_root=output_dir / "paper_automation"
+        )
     except Exception as exc:  # noqa: BLE001
         logger.warning("Automation status assembly skipped: %s", exc)
         automation = None
+        learning_track_epoch_datum = None
 
     try:
         from value_investor.project_progress import build_project_progress
@@ -336,6 +343,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "learning_tracks_review": learning_tracks_review,
         "learning_tracks_summary": learning_tracks_summary,
         "learning_track_funds": learning_track_funds,
+        "learning_track_epoch_datum": learning_track_epoch_datum,
         "automation": automation,
         "project_progress": project_progress,
     }

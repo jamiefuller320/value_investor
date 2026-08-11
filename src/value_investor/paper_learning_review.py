@@ -12,6 +12,7 @@ from typing import Any
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
 from value_investor.analysis_review import _EXPERIMENT_LINE, AnalysisTask
+from value_investor.automation_status import build_learning_track_epoch_datum
 from value_investor.churn_health import CHURN_HEALTH_FILENAME, build_churn_health
 from value_investor.review_policy import (
     DEFAULT_REVIEW_POLICY_PATH,
@@ -109,6 +110,7 @@ def build_paper_learning_payload(
         "churn_health": churn_health,
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
+        "learning_track_epoch_datum": build_learning_track_epoch_datum(paper_root=paper_root),
         "exit_shadow": _safe_read(paper_root / "learning_tracks_exit_shadow.json"),
         "guardrails": {
             "observe_only": True,
@@ -196,7 +198,8 @@ def _build_paper_learning_prompt(payload_path: Path) -> str:
 Read the structured JSON at: {payload_path}
 
 Focus on churn_health (cost drag, trade counts, hold-buffer state, duplicate-day skips,
-adjacent buy/sell flips) and learning_tracks_review. This is observe-only — do not propose
+adjacent buy/sell flips), learning_tracks_review, and learning_track_epoch_datum (per-track
+epoch NAV, post-apply trade count, benchmark span readiness). This is observe-only — do not propose
 auto-applying decision-review knobs or changing live execution.
 
 Write FOUR plain-text sections with headings exactly as shown:
