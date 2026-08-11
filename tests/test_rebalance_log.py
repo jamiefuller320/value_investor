@@ -10,8 +10,10 @@ from value_investor.rebalance_log import (
     append_rebalance_log,
     collect_decision_candidates,
     collect_screen_buy_tier,
+    compare_rebalance_counterfactual_previews,
     gate_excluded_tickers,
     load_rebalance_log,
+    replay_counterfactual_from_archive,
     replay_counterfactual_from_log,
     resolve_replay_candidates,
     slim_candidate,
@@ -368,3 +370,168 @@ def test_estimate_counterfactual_with_log_uses_preview_when_log_thin(tmp_path: P
     )
     assert preview["scope"] == "lifetime_trade_replay"
     assert preview["graduates_at_acted_entries"] == 2
+
+
+def _write_archive(
+    archive_dir: Path,
+    stamp: str,
+    run_at: str,
+    reports: list[dict],
+) -> None:
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    (archive_dir / f"{stamp}.json").write_text(
+        __import__("json").dumps({"run_at": run_at, "reports": reports}),
+        encoding="utf-8",
+    )
+
+
+def test_archive_rebalance_replay_walks_more_passes_than_log(tmp_path: Path, monkeypatch):
+    monkeypatch.setattr(
+        "value_investor.archive_history.snapshot_prices",
+        lambda tickers: {t: 10.0 for t in tickers},
+    )
+    track = tmp_path / "rules"
+    track.mkdir()
+    archive = tmp_path / "archive"
+    reports = [
+        {
+            "ticker": "AAA.L",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "timing_signal": "neutral",
+            "sector": "Banks",
+            "price": 10,
+        },
+        {
+            "ticker": "BBB.L",
+            "signal": "buy",
+            "conviction_score": 0.8,
+            "timing_signal": "neutral",
+            "sector": "Mining",
+            "price": 10,
+        },
+    ]
+    _write_archive(archive, "2026-01-01", "2026-01-01T12:00:00+00:00", reports)
+    _write_archive(archive, "2026-01-08", "2026-01-08T12:00:00+00:00", reports)
+    _write_archive(archive, "2026-01-15", "2026-01-15T12:00:00+00:00", reports)
+
+    base_entry = {
+        "schema_version": 2,
+        "strategy_mode": "automated",
+        "trade_cost_pct": 0.0,
+        "max_positions": 5,
+        "acted": True,
+        "selection": {
+            "skip_timing_wait": True,
+            "min_conviction": 0.0,
+            "sector_cap": 1.0,
+            "use_adjusted_signal": False,
+            "require_research_accumulate": False,
+            "use_momentum_grace": False,
+            "exit_confirm_screens": 0,
+            "reentry_cooldown_screens": 0,
+            "min_rebalance_notional_gbp": 0.0,
+        },
+        "nav_before": 1000.0,
+        "cash_before": 1000.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": [],
+        "rebalance_state_before": {},
+        "candidates": reports,
+        "holdings_after": [],
+        "rebalance_state_after": {},
+    }
+    append_rebalance_log(
+        track,
+        {**base_entry, "gate": {"local_time": "2026-01-01T13:00:00+00:00"}},
+    )
+    append_rebalance_log(
+        track,
+        {**base_entry, "gate": {"local_time": "2026-01-08T13:00:00+00:00"}},
+    )
+
+    archive_preview = replay_counterfactual_from_archive(
+        track,
+        max_positions=2,
+        min_conviction=0.55,
+        sector_cap=0.2,
+        archive_dir=archive,
+    )
+    log_preview = replay_counterfactual_from_log(
+        load_rebalance_log(track),
+        max_positions=2,
+        min_conviction=0.55,
+        sector_cap=0.2,
+    )
+    assert archive_preview is not None and log_preview is not None
+    assert archive_preview["scope"] == "archive_rebalance_replay"
+    assert archive_preview["archive_passes_replayed"] >= log_preview["log_entries_replayed"]
+    assert archive_preview["archive_passes_replayed"] == 3
+
+
+def test_compare_rebalance_counterfactual_previews_structure(tmp_path: Path, monkeypatch):
+    monkeypatch.setattr(
+        "value_investor.archive_history.snapshot_prices",
+        lambda tickers: {t: 10.0 for t in tickers},
+    )
+    track = tmp_path / "rules"
+    track.mkdir()
+    archive = tmp_path / "archive"
+    reports = [
+        {
+            "ticker": "AAA.L",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "timing_signal": "neutral",
+            "sector": "Banks",
+            "price": 10,
+        }
+    ]
+    _write_archive(archive, "2026-01-01", "2026-01-01T12:00:00+00:00", reports)
+    _write_archive(archive, "2026-01-08", "2026-01-08T12:00:00+00:00", reports)
+
+    entry = {
+        "schema_version": 2,
+        "strategy_mode": "automated",
+        "trade_cost_pct": 0.0,
+        "max_positions": 5,
+        "acted": True,
+        "gate": {"local_time": "2026-01-01T13:00:00+00:00"},
+        "selection": {
+            "skip_timing_wait": True,
+            "min_conviction": 0.0,
+            "sector_cap": 1.0,
+            "use_adjusted_signal": False,
+            "require_research_accumulate": False,
+            "use_momentum_grace": False,
+            "exit_confirm_screens": 0,
+            "reentry_cooldown_screens": 0,
+            "min_rebalance_notional_gbp": 0.0,
+        },
+        "nav_before": 1000.0,
+        "cash_before": 1000.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": [],
+        "rebalance_state_before": {},
+        "candidates": reports,
+        "holdings_after": [],
+        "rebalance_state_after": {},
+    }
+    append_rebalance_log(track, entry)
+    append_rebalance_log(track, {**entry, "gate": {"local_time": "2026-01-08T13:00:00+00:00"}})
+
+    comparison = compare_rebalance_counterfactual_previews(
+        track,
+        max_positions=1,
+        min_conviction=0.55,
+        sector_cap=0.2,
+        archive_dir=archive,
+    )
+    assert comparison is not None
+    assert comparison["scope"] == "rebalance_counterfactual_comparison"
+    assert comparison["observe_only"] is True
+    assert comparison["log_preview"] is not None
+    assert comparison["archive_preview"] is not None
+    cmp = comparison["comparison"]
+    assert cmp["archive_passes_replayed"] >= cmp["log_entries_replayed"]
+    assert "return_delta_gap_archive_minus_log" in cmp

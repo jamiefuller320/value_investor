@@ -548,6 +548,386 @@ def replay_counterfactual_from_log(
     return payload
 
 
+def _filter_snapshots_from(
+    snapshots: list[Any],
+    start_when: str,
+) -> list[Any]:
+    start_dt = _parse_iso_datetime(start_when)
+    if start_dt is None:
+        return list(snapshots)
+    if start_dt.tzinfo is None:
+        start_dt = start_dt.replace(tzinfo=UTC)
+    start_day = start_dt.date()
+    from value_investor.backtest import _parse_run_at
+
+    filtered: list[Any] = []
+    for snapshot in snapshots:
+        snap_dt = _parse_run_at(str(getattr(snapshot, "run_at", "") or ""))
+        if snap_dt.date() >= start_day:
+            filtered.append(snapshot)
+    return filtered
+
+
+def _snapshot_to_marked_rows(snapshot: Any) -> list[dict[str, Any]]:
+    marked: list[dict[str, Any]] = []
+    for row in snapshot.signals:
+        ticker = str(row.get("ticker") or "")
+        if not ticker:
+            continue
+        item = dict(row)
+        price = snapshot.prices.get(ticker)
+        if price is not None and float(price) > 0:
+            item["price"] = float(price)
+            item["last"] = float(price)
+        marked.append(item)
+    return marked
+
+
+def _resolve_archive_replay_passes(
+    data_dir: Path,
+    *,
+    start_when: str,
+    archive_dir: Path | None,
+    fetch_prices: bool,
+) -> list[tuple[str, list[dict[str, Any]]]]:
+    """
+    Prefer backfilled history/run_* snapshots (priced) and fall back to dashboard
+    archives for weeks missing from history.
+    """
+    from value_investor.archive_history import list_dashboard_archives
+    from value_investor.backtest import load_run_snapshots
+
+    data_dir = Path(data_dir)
+    history = _filter_snapshots_from(load_run_snapshots(data_dir), start_when)
+    history_by_day: dict[str, tuple[str, list[dict[str, Any]]]] = {}
+    for snapshot in history:
+        from value_investor.backtest import _parse_run_at
+
+        day = _parse_run_at(snapshot.run_at).date().isoformat()
+        history_by_day[day] = (snapshot.run_at, _snapshot_to_marked_rows(snapshot))
+
+    archives = _filter_archives_from(
+        list_dashboard_archives(Path(archive_dir or data_dir / "archive")),
+        start_when,
+    )
+    passes: list[tuple[str, list[dict[str, Any]]]] = []
+    seen_days: set[str] = set()
+    for run_at, archive_path in archives:
+        from value_investor.backtest import _parse_run_at
+
+        day = _parse_run_at(run_at.isoformat()).date().isoformat()
+        if day in seen_days:
+            continue
+        seen_days.add(day)
+        if day in history_by_day:
+            passes.append(history_by_day[day])
+            continue
+        marked = archive_to_marked_rows(
+            archive_path,
+            price_hints={},
+            fetch_prices=fetch_prices,
+        )
+        if marked:
+            passes.append((run_at.isoformat(), marked))
+    return passes
+
+
+def _filter_archives_from(
+    archives: list[tuple[datetime, Path]],
+    start_when: str,
+) -> list[tuple[datetime, Path]]:
+    start_dt = _parse_iso_datetime(start_when)
+    if start_dt is None:
+        return list(archives)
+    if start_dt.tzinfo is None:
+        start_dt = start_dt.replace(tzinfo=UTC)
+    start_day = start_dt.date()
+    filtered: list[tuple[datetime, Path]] = []
+    for run_at, path in archives:
+        archive_dt = run_at if run_at.tzinfo is not None else run_at.replace(tzinfo=UTC)
+        if archive_dt.date() >= start_day:
+            filtered.append((run_at, path))
+    return filtered
+
+
+def _counterfactual_actual_window(
+    actual_fund: PaperFund | None,
+    *,
+    start_when: str,
+    end_when: str,
+    baseline_nav: float,
+    contributed: float,
+    mark_prices: dict[str, float],
+) -> dict[str, Any]:
+    if actual_fund is None:
+        return {}
+    actual_costs_window = 0.0
+    for trade in actual_fund.trades:
+        acted_at = str(trade.acted_at or "")
+        if start_when <= acted_at <= end_when:
+            actual_costs_window += float(trade.cost or 0.0)
+    actual_perf = actual_fund.performance(mark_prices)
+    actual_nav = float(actual_perf["portfolio_value"] or 0.0)
+    actual_return = ((actual_nav - baseline_nav) / baseline_nav) if baseline_nav > 0 else 0.0
+    actual_drag = (actual_costs_window / contributed) if contributed > 0 else 0.0
+    return {
+        "actual_nav": round(actual_nav, 2),
+        "actual_return_over_window": round(actual_return, 4),
+        "actual_total_costs_over_window": round(actual_costs_window, 2),
+        "actual_cost_drag_over_window": round(actual_drag, 4),
+    }
+
+
+def replay_counterfactual_from_archive(
+    track_dir: Path,
+    *,
+    max_positions: int,
+    skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = DEFAULT_TARGET_SECTOR_CAP,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
+    archive_dir: Path | None = None,
+    fetch_prices: bool = True,
+    actual_fund: PaperFund | None = None,
+) -> dict[str, Any] | None:
+    """
+    Walk archived weekly screens from the first acted rebalance log pass and
+    re-run automated rebalance with alternate knobs on a shadow fund.
+
+    Observe-only counterfactual — complements the shorter log-entry replay when
+    pre-logging history or sparse weekday passes leave gaps in ``rebalance_log``.
+    """
+    from value_investor.paper_automation import CONFIG_FILENAME, AutomationConfig
+
+    track_dir = Path(track_dir)
+    entries = load_rebalance_log(track_dir)
+    acted = acted_log_entries(entries)
+    if not acted:
+        return None
+
+    first = acted[0]
+    last = acted[-1]
+    replay_from = _entry_sort_key(first)
+    replay_to = _entry_sort_key(last)
+
+    if (track_dir / CONFIG_FILENAME).exists():
+        config = AutomationConfig.from_dict(
+            json.loads((track_dir / CONFIG_FILENAME).read_text(encoding="utf-8"))
+        )
+    else:
+        config = AutomationConfig()
+
+    data_dir = Path(archive_dir).parent if archive_dir else Path("docs/data")
+    replay_passes = _resolve_archive_replay_passes(
+        data_dir,
+        start_when=replay_from,
+        archive_dir=archive_dir,
+        fetch_prices=fetch_prices,
+    )
+    if not replay_passes:
+        return None
+
+    fund = fund_from_pre_state(first)
+    fund.config.max_positions = int(max_positions)
+    fund.config.trade_cost_pct = float(first.get("trade_cost_pct") or fund.config.trade_cost_pct)
+
+    selection = dict(first.get("selection") or {})
+    effective_use_adj = (
+        bool(config.use_adjusted_signal)
+        if use_adjusted_signal is None
+        else bool(use_adjusted_signal)
+    )
+    effective_req_acc = (
+        bool(config.require_research_accumulate)
+        if require_research_accumulate is None
+        else bool(require_research_accumulate)
+    )
+
+    price_hints: dict[str, float] = {}
+    for row in first.get("holdings_before") or []:
+        if isinstance(row, dict):
+            ticker = str(row.get("ticker") or "")
+            avg = row.get("avg_cost")
+            if ticker and avg is not None and float(avg) > 0:
+                price_hints[ticker] = float(avg)
+
+    replay_trades = 0
+    archive_passes: list[str] = []
+    for when, marked in replay_passes:
+        if not marked:
+            continue
+        for row in marked:
+            ticker = str(row.get("ticker") or "")
+            price = row.get("price")
+            if ticker and price is not None and float(price) > 0:
+                price_hints[ticker] = float(price)
+
+        candidates = collect_decision_candidates(
+            marked,
+            fund,
+            use_adjusted_signal=effective_use_adj,
+        )
+        kwargs = {
+            "skip_timing_wait": bool(skip_timing_wait),
+            "min_conviction": float(min_conviction),
+            "sector_cap": float(sector_cap),
+            "use_adjusted_signal": effective_use_adj,
+            "require_research_accumulate": effective_req_acc,
+            "use_momentum_grace": bool(selection.get("use_momentum_grace", False)),
+            "exit_confirm_screens": int(selection.get("exit_confirm_screens") or 2),
+            "reentry_cooldown_screens": int(selection.get("reentry_cooldown_screens") or 1),
+            "min_rebalance_notional_gbp": float(
+                selection.get("min_rebalance_notional_gbp") or 10.0
+            ),
+        }
+        mode = str(first.get("strategy_mode") or fund.config.mode)
+        if mode == "technical":
+            executed = run_technical_pass(fund, marked, acted_at=when)
+        else:
+            executed = run_automated_rebalance(fund, candidates, acted_at=when, **kwargs)
+        replay_trades += len(executed)
+        archive_passes.append(when)
+
+    if not archive_passes:
+        return None
+
+    last_marked = replay_passes[-1][1]
+    prices = _merge_candidate_price_maps(last_marked)
+    for row in last.get("holdings_after") or []:
+        if isinstance(row, dict):
+            ticker = str(row.get("ticker") or "")
+            avg = row.get("avg_cost")
+            if ticker and ticker not in prices and avg is not None and float(avg) > 0:
+                prices[ticker] = float(avg)
+    for ticker, pos in fund.holdings.items():
+        if ticker not in prices and pos.avg_cost > 0:
+            prices[ticker] = float(pos.avg_cost)
+
+    sim_perf = fund.performance(prices)
+    sim_costs = sum(float(t.cost or 0.0) for t in fund.trades)
+    baseline_nav = float(first.get("nav_before") or 0.0)
+    sim_nav = float(sim_perf["portfolio_value"] or 0.0)
+    sim_return = ((sim_nav - baseline_nav) / baseline_nav) if baseline_nav > 0 else 0.0
+    contributed = float(first.get("contributed_capital_before") or baseline_nav or 1.0)
+    sim_drag = (sim_costs / contributed) if contributed > 0 else 0.0
+
+    payload: dict[str, Any] = {
+        "scope": "archive_rebalance_replay",
+        "knobs": {
+            "max_positions": int(max_positions),
+            "skip_timing_wait": bool(skip_timing_wait),
+            "min_conviction": round(float(min_conviction), 4),
+            "sector_cap": round(float(sector_cap), 4),
+            "use_adjusted_signal": effective_use_adj,
+            "require_research_accumulate": effective_req_acc,
+        },
+        "archive_passes_replayed": len(archive_passes),
+        "archive_replay_from": archive_passes[0],
+        "archive_replay_to": archive_passes[-1],
+        "log_replay_from": replay_from,
+        "log_replay_to": replay_to,
+        "log_entries_replayed": len(acted),
+        "simulated_nav": round(sim_nav, 2),
+        "baseline_nav": round(baseline_nav, 2),
+        "simulated_return": round(sim_return, 4),
+        "simulated_total_costs": round(sim_costs, 2),
+        "simulated_cost_drag": round(sim_drag, 4),
+        "simulated_trade_count": replay_trades,
+        "limitations": (
+            "Observe-only archive walk — one rebalance per archived weekly screen "
+            "from first logged pass. Does not mutate live knobs. AI overlay gates "
+            "need PIT research joins for ai_judgment tracks (L113)."
+        ),
+    }
+
+    actual_window = _counterfactual_actual_window(
+        actual_fund,
+        start_when=replay_from,
+        end_when=replay_to,
+        baseline_nav=baseline_nav,
+        contributed=contributed,
+        mark_prices=prices,
+    )
+    if actual_window:
+        actual_return = float(actual_window["actual_return_over_window"])
+        payload.update(actual_window)
+        payload["return_delta_vs_actual"] = round(sim_return - actual_return, 4)
+        payload["cost_drag_delta_vs_actual"] = round(
+            float(actual_window["actual_cost_drag_over_window"]) - sim_drag,
+            4,
+        )
+
+    return payload
+
+
+def compare_rebalance_counterfactual_previews(
+    track_dir: Path,
+    *,
+    max_positions: int,
+    skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = DEFAULT_TARGET_SECTOR_CAP,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
+    candidate_source: str = "auto",
+    archive_dir: Path | None = None,
+    fetch_prices: bool = True,
+    actual_fund: PaperFund | None = None,
+) -> dict[str, Any] | None:
+    """Run log replay and archive replay side-by-side for the same knob set."""
+    track_dir = Path(track_dir)
+    entries = load_rebalance_log(track_dir)
+    log_preview = replay_counterfactual_from_log(
+        entries,
+        max_positions=max_positions,
+        skip_timing_wait=skip_timing_wait,
+        min_conviction=min_conviction,
+        sector_cap=sector_cap,
+        use_adjusted_signal=use_adjusted_signal,
+        require_research_accumulate=require_research_accumulate,
+        candidate_source=candidate_source,
+        actual_fund=actual_fund,
+    )
+    archive_preview = replay_counterfactual_from_archive(
+        track_dir,
+        max_positions=max_positions,
+        skip_timing_wait=skip_timing_wait,
+        min_conviction=min_conviction,
+        sector_cap=sector_cap,
+        use_adjusted_signal=use_adjusted_signal,
+        require_research_accumulate=require_research_accumulate,
+        archive_dir=archive_dir,
+        fetch_prices=fetch_prices,
+        actual_fund=actual_fund,
+    )
+    if log_preview is None and archive_preview is None:
+        return None
+
+    log_delta = (log_preview or {}).get("return_delta_vs_actual")
+    archive_delta = (archive_preview or {}).get("return_delta_vs_actual")
+    gap: float | None = None
+    if log_delta is not None and archive_delta is not None:
+        gap = round(float(archive_delta) - float(log_delta), 4)
+
+    return {
+        "scope": "rebalance_counterfactual_comparison",
+        "observe_only": True,
+        "knobs": (log_preview or archive_preview or {}).get("knobs"),
+        "log_preview": log_preview,
+        "archive_preview": archive_preview,
+        "comparison": {
+            "log_entries_replayed": (log_preview or {}).get("log_entries_replayed"),
+            "archive_passes_replayed": (archive_preview or {}).get("archive_passes_replayed"),
+            "log_return_delta_vs_actual": log_delta,
+            "archive_return_delta_vs_actual": archive_delta,
+            "return_delta_gap_archive_minus_log": gap,
+            "log_simulated_return": (log_preview or {}).get("simulated_return"),
+            "archive_simulated_return": (archive_preview or {}).get("simulated_return"),
+        },
+    }
+
+
 def _parse_iso_datetime(value: str | None) -> datetime | None:
     if not value:
         return None

@@ -17,6 +17,7 @@ from value_investor.paper_automation import (
 from value_investor.rebalance_log import (
     REBALANCE_LOG_FILENAME,
     acted_log_entries,
+    compare_rebalance_counterfactual_previews,
     load_rebalance_log,
     replay_counterfactual_from_log,
 )
@@ -87,6 +88,66 @@ def _cmd_replay(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_archive_replay(args: argparse.Namespace) -> int:
+    output_dir = Path(args.output_dir)
+    config_path = output_dir / CONFIG_FILENAME
+    fund_path = output_dir / FUND_FILENAME
+    if config_path.exists():
+        config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
+    else:
+        config = AutomationConfig()
+    fund = ensure_automated_fund(fund_path, config) if fund_path.exists() else None
+
+    comparison = compare_rebalance_counterfactual_previews(
+        output_dir,
+        max_positions=int(args.max_positions),
+        skip_timing_wait=not args.allow_timing_wait,
+        min_conviction=float(args.min_conviction),
+        sector_cap=float(args.sector_cap),
+        use_adjusted_signal=(
+            False if args.use_raw_signal else (True if args.use_adjusted_signal else None)
+        ),
+        require_research_accumulate=(
+            True
+            if args.require_research_accumulate
+            else (False if args.no_research_accumulate else None)
+        ),
+        candidate_source=str(args.candidate_source),
+        archive_dir=args.archive_dir,
+        fetch_prices=bool(args.fetch_prices),
+        actual_fund=fund,
+    )
+    if comparison is None:
+        print("No rebalance log entries or archives to replay.", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(comparison, indent=2))
+    else:
+        archive = comparison.get("archive_preview") or {}
+        log = comparison.get("log_preview") or {}
+        cmp = comparison.get("comparison") or {}
+        print("Archive vs log rebalance counterfactual (observe-only)")
+        print(f"  Knobs: {comparison.get('knobs')}")
+        print(
+            f"  Log replay: {cmp.get('log_entries_replayed', 0)} passes | "
+            f"sim {cmp.get('log_simulated_return', 0):+.1%} | "
+            f"Δ vs actual {cmp.get('log_return_delta_vs_actual', 0):+.1%}"
+        )
+        print(
+            f"  Archive replay: {cmp.get('archive_passes_replayed', 0)} passes | "
+            f"sim {cmp.get('archive_simulated_return', 0):+.1%} | "
+            f"Δ vs actual {cmp.get('archive_return_delta_vs_actual', 0):+.1%}"
+        )
+        gap = cmp.get("return_delta_gap_archive_minus_log")
+        if gap is not None:
+            print(f"  Archive minus log return delta: {gap:+.1%}")
+        if archive.get("limitations"):
+            print(f"  Note: {archive.get('limitations')}")
+        if log.get("limitations"):
+            print(f"  Log note: {log.get('limitations')}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Inspect rebalance decision logs and replay knob counterfactuals."
@@ -139,6 +200,41 @@ def main(argv: list[str] | None = None) -> int:
     )
     replay.add_argument("--json", action="store_true")
     replay.set_defaults(func=_cmd_replay)
+
+    archive_replay = sub.add_parser(
+        "archive-replay",
+        help="Compare full archive-screen replay vs logged-pass replay",
+    )
+    archive_replay.add_argument("--max-positions", type=int, default=5)
+    archive_replay.add_argument("--min-conviction", type=float, default=0.55)
+    archive_replay.add_argument("--sector-cap", type=float, default=0.2)
+    archive_replay.add_argument(
+        "--archive-dir",
+        type=Path,
+        default=None,
+        help="Dashboard archive directory (default: docs/data/archive)",
+    )
+    archive_replay.add_argument(
+        "--fetch-prices",
+        action="store_true",
+        help="Fetch missing marks from yfinance when archives lack prices",
+    )
+    archive_replay.add_argument(
+        "--allow-timing-wait",
+        action="store_true",
+        help="Do not skip timing_signal=wait on new buys",
+    )
+    archive_replay.add_argument("--use-raw-signal", action="store_true")
+    archive_replay.add_argument("--use-adjusted-signal", action="store_true")
+    archive_replay.add_argument("--require-research-accumulate", action="store_true")
+    archive_replay.add_argument("--no-research-accumulate", action="store_true")
+    archive_replay.add_argument(
+        "--candidate-source",
+        choices=("auto", "candidates", "screen_buy_tier"),
+        default="auto",
+    )
+    archive_replay.add_argument("--json", action="store_true")
+    archive_replay.set_defaults(func=_cmd_archive_replay)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
