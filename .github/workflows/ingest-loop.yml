@@ -22,6 +22,14 @@ on:
         description: "Python runtime budget for ingest-improvement (seconds)"
         type: string
         default: "2100"
+      max_bodies:
+        description: "Max bodies to refetch per ticker (backfill bursts: 40)"
+        type: string
+        default: "20"
+      bootstrap_seed_cap:
+        description: "Canonical index seeds per run (0 = body-drain only)"
+        type: string
+        default: ""
       force:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean
@@ -146,6 +154,14 @@ jobs:
             RUNTIME="2100"
           fi
           ARGS+=(--max-runtime-seconds "$RUNTIME")
+          BODIES="${{ github.event.inputs.max_bodies }}"
+          if [ -n "$BODIES" ]; then
+            ARGS+=(--max-bodies "$BODIES")
+          fi
+          SEED_CAP="${{ github.event.inputs.bootstrap_seed_cap }}"
+          if [ -n "$SEED_CAP" ]; then
+            ARGS+=(--bootstrap-seed-cap "$SEED_CAP")
+          fi
           EXIT=0
           ftse-ingest-loop "${ARGS[@]}" || EXIT=$?
           if [ ! -s /tmp/ingest_loop.json ]; then

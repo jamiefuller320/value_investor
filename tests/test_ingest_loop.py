@@ -19,6 +19,7 @@ from value_investor.ingest_loop import (
     reports_from_latest,
 )
 from value_investor.ingest_loop_cli import main
+from value_investor.research.ingest_improvement import IngestImprovementSummary
 
 
 def test_reports_from_latest_builds_company_reports(tmp_path: Path):
@@ -266,3 +267,66 @@ def test_ingest_loop_cli_writes_json_path_on_failure(tmp_path: Path):
         assert main(["run", "--json-path", str(out_path)]) == 1
     payload = json.loads(out_path.read_text(encoding="utf-8"))
     assert payload["error"] == "boom"
+
+
+def test_run_weekday_ingest_loop_logs_book_deltas(tmp_path: Path, monkeypatch):
+    from value_investor.ingest_loop import run_weekday_ingest_loop
+
+    latest = tmp_path / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {
+                "reports": [
+                    {
+                        "ticker": "BT-A.L",
+                        "name": "BT",
+                        "signal": "buy",
+                        "models_passed": 10,
+                        "model_count": 22,
+                        "composite_score": 0.8,
+                        "sector_composite_score": 0.7,
+                        "families_passed": 4,
+                        "passed_families": "cheapness",
+                        "data_quality_score": 1.0,
+                        "metrics_present": 20,
+                        "metrics_total": 20,
+                        "weeks_at_signal": 1,
+                        "signal_trend": "new",
+                        "conviction_score": 0.5,
+                        "stability_label": "new",
+                        "timing_signal": "neutral",
+                        "timing_score": 0.0,
+                        "action_note": "",
+                        "summary": "Test",
+                        "passed_models": [],
+                        "key_metrics": {},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    health_log = tmp_path / "ingest_health_log.json"
+    monkeypatch.setattr(
+        "value_investor.ingest_loop.snapshot_ingest_health",
+        lambda **kwargs: {
+            "zero_body_buy_tier": 0,
+            "indexed_without_body": 100,
+            "filings_with_body": 500,
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.ingest_loop.run_ingest_improvement_pass",
+        lambda **kwargs: IngestImprovementSummary(targets=[]),
+    )
+    monkeypatch.setattr("value_investor.ingest_loop.ingest_health_stalled", lambda *a, **k: False)
+
+    run_weekday_ingest_loop(
+        latest_path=latest,
+        data_dir=tmp_path,
+        health_log_path=health_log,
+        tasks_path=tmp_path / "engineering_tasks.json",
+    )
+    entry = json.loads(health_log.read_text(encoding="utf-8"))["entries"][-1]
+    assert entry["delta_indexed_without_body"] == 0
+    assert entry["delta_filings_with_body"] == 0
