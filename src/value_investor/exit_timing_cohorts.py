@@ -104,6 +104,7 @@ def framework_metadata() -> dict[str, Any]:
         "related_artifacts": [
             "exit_shadow.json (post-exit path after sell)",
             "rebalance_log.json (counterfactual replay)",
+            "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
             "learning_tracks_churn_health.json",
         ],
     }

@@ -546,6 +546,7 @@ def estimate_counterfactual_with_log(
     from value_investor.rebalance_log import (
         MIN_LOG_ACTED_ENTRIES,
         acted_log_entries,
+        compare_rebalance_counterfactual_previews,
         load_rebalance_log,
         replay_counterfactual_from_log,
     )
@@ -562,6 +563,17 @@ def estimate_counterfactual_with_log(
             actual_fund=fund,
         )
         if replay is not None:
+            comparison = compare_rebalance_counterfactual_previews(
+                output_dir,
+                max_positions=int(knobs.max_positions),
+                skip_timing_wait=bool(knobs.skip_timing_wait),
+                min_conviction=float(knobs.min_conviction),
+                sector_cap=float(knobs.sector_cap),
+                actual_fund=fund,
+            )
+            if comparison is not None:
+                replay["archive_rebalance_replay"] = comparison.get("archive_preview")
+                replay["archive_vs_log"] = comparison.get("comparison")
             return replay
 
     preview = estimate_counterfactual_preview(fund, knobs=knobs)
@@ -1000,6 +1012,15 @@ def format_review_text(result: DecisionReviewResult) -> str:
                 f"actual {preview.get('actual_return_over_window', 0):+.1%} | "
                 f"cost drag Δ {preview.get('cost_drag_delta_vs_actual', 0):+.1%}"
             )
+            archive_vs_log = preview.get("archive_vs_log") or {}
+            if archive_vs_log.get("archive_passes_replayed"):
+                lines.append(
+                    "  Counterfactual (archive replay): "
+                    f"{archive_vs_log.get('archive_passes_replayed', 0)} archive passes | "
+                    f"archive Δ {archive_vs_log.get('archive_return_delta_vs_actual', 0):+.1%} "
+                    f"vs log Δ {archive_vs_log.get('log_return_delta_vs_actual', 0):+.1%} "
+                    f"(gap {archive_vs_log.get('return_delta_gap_archive_minus_log', 0):+.1%})"
+                )
         else:
             lines.append(
                 "  Counterfactual (lifetime replay): "
