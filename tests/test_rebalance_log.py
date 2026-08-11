@@ -10,7 +10,10 @@ from value_investor.rebalance_log import (
     append_rebalance_log,
     collect_decision_candidates,
     collect_screen_buy_tier,
+    compare_buffered_hold_across_tracks,
+    compare_buffered_hold_counterfactual,
     compare_rebalance_counterfactual_previews,
+    filter_acted_log_entries_since,
     gate_excluded_tickers,
     load_rebalance_log,
     replay_counterfactual_from_archive,
@@ -535,3 +538,228 @@ def test_compare_rebalance_counterfactual_previews_structure(tmp_path: Path, mon
     cmp = comparison["comparison"]
     assert cmp["archive_passes_replayed"] >= cmp["log_entries_replayed"]
     assert "return_delta_gap_archive_minus_log" in cmp
+
+
+def _buffered_hold_base_entry(**overrides):
+    base = {
+        "schema_version": 2,
+        "track_id": "rules",
+        "strategy_mode": "automated",
+        "trade_cost_pct": 0.03,
+        "max_positions": 3,
+        "acted": True,
+        "selection": {
+            "skip_timing_wait": True,
+            "min_conviction": 0.0,
+            "sector_cap": 1.0,
+            "use_adjusted_signal": False,
+            "require_research_accumulate": False,
+            "use_momentum_grace": False,
+            "exit_confirm_screens": 2,
+            "reentry_cooldown_screens": 1,
+            "min_rebalance_notional_gbp": 0.0,
+        },
+        "nav_before": 1000.0,
+        "cash_before": 400.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": [
+            {
+                "ticker": "HIK.L",
+                "shares": 10,
+                "avg_cost": 10,
+                "sector": "Healthcare",
+                "name": "Hikma",
+            },
+            {
+                "ticker": "ITV.L",
+                "shares": 10,
+                "avg_cost": 10,
+                "sector": "Communication Services",
+                "name": "ITV",
+            },
+            {
+                "ticker": "FGP.L",
+                "shares": 10,
+                "avg_cost": 10,
+                "sector": "Industrials",
+                "name": "FirstGroup",
+            },
+        ],
+        "rebalance_state_before": {
+            "exit_streak": {"HIK.L": 0, "ITV.L": 0, "FGP.L": 0},
+            "reentry_cooldown": {},
+        },
+        "candidates": [
+            {
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.95,
+                "price": 10,
+                "sector": "Banks",
+            },
+            {
+                "ticker": "BBB.L",
+                "signal": "buy",
+                "conviction_score": 0.9,
+                "price": 10,
+                "sector": "Mining",
+            },
+            {
+                "ticker": "CCC.L",
+                "signal": "buy",
+                "conviction_score": 0.85,
+                "price": 10,
+                "sector": "Tech",
+            },
+            {
+                "ticker": "HIK.L",
+                "signal": "hold",
+                "conviction_score": 0.4,
+                "price": 10,
+                "sector": "Healthcare",
+            },
+            {
+                "ticker": "ITV.L",
+                "signal": "hold",
+                "conviction_score": 0.4,
+                "price": 10,
+                "sector": "Communication Services",
+            },
+            {
+                "ticker": "FGP.L",
+                "signal": "hold",
+                "conviction_score": 0.4,
+                "price": 10,
+                "sector": "Industrials",
+            },
+        ],
+        "holdings_after": [
+            {
+                "ticker": "HIK.L",
+                "shares": 10,
+                "avg_cost": 10,
+                "sector": "Healthcare",
+                "name": "Hikma",
+            },
+            {
+                "ticker": "ITV.L",
+                "shares": 10,
+                "avg_cost": 10,
+                "sector": "Communication Services",
+                "name": "ITV",
+            },
+            {
+                "ticker": "FGP.L",
+                "shares": 10,
+                "avg_cost": 10,
+                "sector": "Industrials",
+                "name": "FirstGroup",
+            },
+        ],
+        "rebalance_state_after": {
+            "exit_streak": {"HIK.L": 1, "ITV.L": 1, "FGP.L": 1},
+            "reentry_cooldown": {},
+        },
+        "trades": [],
+    }
+    base.update(overrides)
+    return base
+
+
+def test_filter_acted_log_entries_since_respects_lookback():
+    from datetime import UTC, datetime
+
+    entries = [
+        {"acted": True, "gate": {"local_time": "2026-08-01T12:00:00+00:00"}},
+        {"acted": True, "gate": {"local_time": "2026-08-08T12:00:00+00:00"}},
+        {"acted": True, "gate": {"local_time": "2026-08-10T12:00:00+00:00"}},
+        {"acted": False, "gate": {"local_time": "2026-08-10T13:00:00+00:00"}},
+    ]
+    filtered = filter_acted_log_entries_since(
+        entries,
+        lookback_days=7,
+        as_of=datetime(2026, 8, 11, 12, 0, tzinfo=UTC),
+    )
+    assert [e["gate"]["local_time"] for e in filtered] == [
+        "2026-08-08T12:00:00+00:00",
+        "2026-08-10T12:00:00+00:00",
+    ]
+
+
+def test_exit_confirm_screens_counterfactual_changes_trade_count(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    out = tmp_path / "rules"
+    out.mkdir()
+    entry = _buffered_hold_base_entry(gate={"local_time": "2026-08-10T12:00:00+00:00"})
+    append_rebalance_log(out, entry)
+
+    as_of = datetime(2026, 8, 11, 12, 0, tzinfo=UTC)
+    buffered = replay_counterfactual_from_log(
+        load_rebalance_log(out),
+        max_positions=3,
+        exit_confirm_screens=2,
+        lookback_days=7,
+        as_of=as_of,
+    )
+    immediate = replay_counterfactual_from_log(
+        load_rebalance_log(out),
+        max_positions=3,
+        exit_confirm_screens=1,
+        lookback_days=7,
+        as_of=as_of,
+    )
+    assert buffered is not None and immediate is not None
+    assert buffered["knobs"]["exit_confirm_screens"] == 2
+    assert immediate["knobs"]["exit_confirm_screens"] == 1
+    assert immediate["simulated_trade_count"] > buffered["simulated_trade_count"]
+
+
+def test_compare_buffered_hold_counterfactual_structure(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    out = tmp_path / "rules"
+    out.mkdir()
+    append_rebalance_log(
+        out,
+        _buffered_hold_base_entry(gate={"local_time": "2026-08-10T12:00:00+00:00"}),
+    )
+    comparison = compare_buffered_hold_counterfactual(
+        out,
+        lookback_days=7,
+        as_of=datetime(2026, 8, 11, 12, 0, tzinfo=UTC),
+    )
+    assert comparison is not None
+    assert comparison["scope"] == "buffered_hold_counterfactual"
+    assert comparison["observe_only"] is True
+    assert comparison["churn_context"]["buffered_holdings"] == 3
+    assert set(comparison["churn_context"]["exit_streak"]) == {"HIK.L", "ITV.L", "FGP.L"}
+    assert "1" in comparison["variants"]
+    assert "2" in comparison["variants"]
+    assert comparison["comparison"]["trade_count_delta_lower_minus_higher"] >= 0
+
+
+def test_compare_buffered_hold_across_tracks(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    paper = tmp_path / "paper_automation"
+    rules = paper
+    ai = paper / "ai_judgment"
+    ai.mkdir(parents=True)
+    as_of = datetime(2026, 8, 11, 12, 0, tzinfo=UTC)
+    for track_dir, track_id in ((rules, "rules"), (ai, "ai_judgment")):
+        append_rebalance_log(
+            track_dir,
+            _buffered_hold_base_entry(
+                track_id=track_id,
+                gate={"local_time": "2026-08-10T12:00:00+00:00"},
+            ),
+        )
+    comparison = compare_buffered_hold_across_tracks(
+        paper,
+        lookback_days=7,
+        as_of=as_of,
+    )
+    assert comparison is not None
+    assert comparison["scope"] == "buffered_hold_counterfactual_multi"
+    assert set(comparison["tracks"]) == {"rules", "ai_judgment"}
