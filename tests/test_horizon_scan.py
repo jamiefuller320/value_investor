@@ -118,21 +118,21 @@ def test_build_horizon_payload_includes_fragments(tmp_path: Path):
 def test_promote_horizon_engineering_tasks(tmp_path: Path):
     horizon_path = tmp_path / "horizon_tasks.json"
     eng_path = tmp_path / "engineering_tasks.json"
-    compile_horizon_tasks(
-        parse_horizon_scan(
-            """
-ACCELERATE
-1. [offline_sim] Archive rebalance replay — learn P&L path
-"""
-        ),
-        tasks_path=horizon_path,
+    eng_path.write_text('{"tasks": []}\n', encoding="utf-8")
+    review = parse_horizon_scan(
+        "ACCELERATE\n"
+        "1. [offline_sim] Archive replay — full P&L\n"
+        "2. [paper_knobs] Hold knobs — manual only\n"
     )
+    compile_horizon_tasks(review, tasks_path=horizon_path)
     result = promote_horizon_engineering_tasks(
-        ["hor-20260811-01"],
+        promote_all_engineering=True,
         horizon_tasks_path=horizon_path,
         engineering_tasks_path=eng_path,
     )
+    assert len(result["promoted"]) == 1
     assert result["promoted_count"] == 1
     assert result["should_dispatch_queue"] is True
+    assert any(skip["reason"].startswith("area paper_knobs") for skip in result["skipped"])
     eng = json.loads(eng_path.read_text(encoding="utf-8"))
-    assert any(row.get("id") == "eng-20260811-01" for row in eng.get("tasks") or [])
+    assert any(row["id"].startswith("eng-") for row in eng["tasks"])

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T09:24:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T10:05:49+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -120,6 +120,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L13 | **SQLite / columnar history store** | Deferred after gzip+retention | Larger universe or local history pain |
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
 | L48 | **Improve Yahoo↔T212 mapping for weak catalogue markets** | After live catalogue fetch, hang_seng/sti show 0% catalogue hits and several EU/AU markets are well below 70% while allowlist still marks them tradable. Tighten ISIN/shortName mapping or trim via unavailable_watch. | Next t212-align after catalogue refresh, or when researching those markets for paper/live trading |
+| L128 | **Currency hedge overlay for global benchmark parity** | At stage 4+ multi-currency books, evaluate optional FX hedge overlay so portfolio returns compare cleanly to local benchmarks (e.g. hedged vs unhedged excess) and paper NAV assumptions stay explicit. | First non-GBP market enters a live paper learning track OR multi-currency NAV policy is re-opened for stage 4 |
 
 ### Research & portfolio product
 

@@ -133,6 +133,29 @@ def _cmd_apply_defer(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_promote_engineering(args: argparse.Namespace) -> int:
+    if not args.task_ids and not args.all_engineering:
+        print(
+            "Pass horizon task id(s) or --all-engineering",
+            file=sys.stderr,
+        )
+        return 1
+    result = promote_horizon_engineering_tasks(
+        list(args.task_ids) if args.task_ids else None,
+        horizon_tasks_path=args.tasks_path,
+        engineering_tasks_path=args.engineering_tasks_path,
+        promote_all_engineering=args.all_engineering,
+    )
+    if args.json:
+        _print_json(result)
+    else:
+        print(f"Promoted: {', '.join(result['promoted']) or '(none)'}")
+        for row in result["skipped"]:
+            print(f"  skipped {row['id']}: {row['reason']}")
+        print(f"Engineering tasks → {result['engineering_tasks_path']}")
+    return 0
+
+
 def _cmd_apply_fragments(args: argparse.Namespace) -> int:
     text = args.review_file.read_text(encoding="utf-8")
     review = parse_horizon_scan(text)
