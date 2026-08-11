@@ -120,7 +120,7 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v5
 
@@ -141,7 +141,7 @@ jobs:
 
       - name: Run weekday ingest loop
         id: loop
-        timeout-minutes: 35
+        timeout-minutes: 40
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
           PYTHONUNBUFFERED: "1"
