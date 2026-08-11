@@ -9,6 +9,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.ingest_backlog import (
+    DEFAULT_BACKLOG_PATH,
+    backlog_tickers,
+    load_ingest_backlog,
+    prioritize_backlog_targets,
+    record_ingest_backlog_after_pass,
+)
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     period_body_coverage,
@@ -41,6 +48,8 @@ logger = logging.getLogger(__name__)
 DEFAULT_INGEST_IMPROVEMENT_CAP = 15
 DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 12
 DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP = 6
+DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
+PER_TICKER_MIN_BUDGET_SECONDS = 120.0
 UNMEASURED_PRIORITY_BONUS = 10.0
 KNOWN_SOURCE_IDS = frozenset(
     {
@@ -156,9 +165,13 @@ class IngestImprovementSummary:
     partial: bool = False
     runtime_seconds: float = 0.0
     runtime_cutoff: bool = False
+    targets_planned: int = 0
+    targets_completed: int = 0
+    targets_deferred: int = 0
+    cutoff_reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "targets": [
                 {
                     "ticker": target.ticker,
@@ -179,7 +192,12 @@ class IngestImprovementSummary:
             "partial": self.partial,
             "runtime_seconds": round(self.runtime_seconds, 1),
             "runtime_cutoff": self.runtime_cutoff,
+            "targets_planned": self.targets_planned,
+            "targets_completed": self.targets_completed,
+            "targets_deferred": self.targets_deferred,
+            "cutoff_reason": self.cutoff_reason,
         }
+        return payload
 
 
 def map_suggestion_to_source_ids(suggestion: str) -> list[str]:
@@ -313,6 +331,7 @@ def select_ingest_improvement_targets(
     output_dir: Path,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     max_targets: int = DEFAULT_INGEST_IMPROVEMENT_CAP,
+    backlog_tickers: list[str] | None = None,
 ) -> list[IngestImprovementTarget]:
     """Rank buy-tier tickers that need ingest hardening before gap-fill."""
     store = ResearchStore(output_dir)
@@ -353,6 +372,8 @@ def select_ingest_improvement_targets(
             -row.ingest_suggestion_count,
         )
     )
+    if backlog_tickers:
+        candidates = prioritize_backlog_targets(candidates, backlog_tickers)
     return candidates[: max(0, int(max_targets))]
 
 
@@ -435,6 +456,31 @@ def _planned_sources_for_ticker(
     return planned[:3]
 
 
+def _ingest_pass_should_cutoff(
+    started: float,
+    *,
+    max_runtime_seconds: float | None,
+    per_ticker_max_seconds: float | None,
+) -> tuple[bool, str | None]:
+    if max_runtime_seconds is None:
+        return False, None
+    elapsed = time.monotonic() - started
+    if elapsed >= max_runtime_seconds:
+        return True, "runtime_budget"
+    if per_ticker_max_seconds is not None and elapsed + per_ticker_max_seconds > max_runtime_seconds:
+        return True, "per_ticker_budget"
+    return False, None
+
+
+def _finalize_ingest_cutoff(summary: IngestImprovementSummary, reason: str | None) -> None:
+    summary.partial = True
+    summary.runtime_cutoff = True
+    summary.cutoff_reason = reason
+    summary.targets_planned = len(summary.targets)
+    summary.targets_completed = len(summary.results)
+    summary.targets_deferred = max(0, summary.targets_planned - summary.targets_completed)
+
+
 def run_ingest_improvement_pass(
     *,
     reports: list[CompanyReport],
@@ -444,6 +490,8 @@ def run_ingest_improvement_pass(
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     bootstrap_seed_cap: int | None = None,
     max_runtime_seconds: float | None = None,
+    per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
+    backlog_path: Path = DEFAULT_BACKLOG_PATH,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -457,14 +505,24 @@ def run_ingest_improvement_pass(
         market=market,
         seed_cap=bootstrap_seed_cap if bootstrap_seed_cap is not None else BOOTSTRAP_SEED_CAP,
     )
+    backlog_payload = load_ingest_backlog(backlog_path)
+    pending_backlog = backlog_tickers(backlog_payload)
     targets = select_ingest_improvement_targets(
         reports,
         output_dir=output_dir,
         suggestions_path=suggestions_path,
         max_targets=max_targets,
+        backlog_tickers=pending_backlog or None,
     )
     summary = IngestImprovementSummary(targets=targets)
+    summary.targets_planned = len(targets)
     if not targets:
+        record_ingest_backlog_after_pass(
+            targets=[],
+            completed_tickers=[],
+            runtime_cutoff=False,
+            path=backlog_path,
+        )
         return summary
 
     store = ResearchStore(output_dir)
@@ -472,13 +530,18 @@ def run_ingest_improvement_pass(
     started = time.monotonic()
 
     for target in targets:
-        if max_runtime_seconds is not None and (time.monotonic() - started) >= max_runtime_seconds:
-            summary.partial = True
-            summary.runtime_cutoff = True
+        should_cutoff, cutoff_reason = _ingest_pass_should_cutoff(
+            started,
+            max_runtime_seconds=max_runtime_seconds,
+            per_ticker_max_seconds=per_ticker_max_seconds,
+        )
+        if should_cutoff:
+            _finalize_ingest_cutoff(summary, cutoff_reason)
             logger.warning(
-                "Ingest improvement stopped after %.0fs runtime budget (max=%.0fs)",
+                "Ingest improvement stopped (%s) after %.0fs runtime budget (max=%.0fs)",
+                cutoff_reason or "cutoff",
                 time.monotonic() - started,
-                max_runtime_seconds,
+                max_runtime_seconds or 0,
             )
             break
 
@@ -618,10 +681,21 @@ def run_ingest_improvement_pass(
             summary.errors.append(message)
 
     summary.runtime_seconds = time.monotonic() - started
+    if not summary.runtime_cutoff:
+        summary.targets_completed = len(summary.results)
+        summary.targets_deferred = max(0, summary.targets_planned - summary.targets_completed)
+    completed_tickers = [str(row.get("ticker") or "") for row in summary.results]
+    backlog_result = record_ingest_backlog_after_pass(
+        targets=targets,
+        completed_tickers=completed_tickers,
+        runtime_cutoff=summary.runtime_cutoff,
+        path=backlog_path,
+    )
     write_json(
         output_dir / "ingest_improvement_summary.json",
         {
             "run_at": datetime.now(UTC).isoformat(),
+            "backlog": backlog_result,
             **summary.to_dict(),
         },
         compact=True,

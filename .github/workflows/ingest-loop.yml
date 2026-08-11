@@ -18,6 +18,10 @@ on:
         description: "Max buy-tier tickers for ingest-improvement pass"
         type: string
         default: "12"
+      max_runtime_seconds:
+        description: "Python runtime budget for ingest-improvement (seconds)"
+        type: string
+        default: "2100"
       force:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean
@@ -137,6 +141,11 @@ jobs:
           if [ -n "${{ github.event.inputs.max_targets }}" ]; then
             ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
           fi
+          RUNTIME="${{ github.event.inputs.max_runtime_seconds }}"
+          if [ -z "$RUNTIME" ]; then
+            RUNTIME="2100"
+          fi
+          ARGS+=(--max-runtime-seconds "$RUNTIME")
           EXIT=0
           ftse-ingest-loop "${ARGS[@]}" || EXIT=$?
           if [ ! -s /tmp/ingest_loop.json ]; then
@@ -149,12 +158,18 @@ jobs:
           from pathlib import Path
           data = json.loads(Path("/tmp/ingest_loop.json").read_text())
           out = Path(os.environ["GITHUB_OUTPUT"])
-          out.write_text(
-              f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n",
-              encoding="utf-8",
-          )
           partial = data.get("partial") or (
               (data.get("ingest_summary") or {}).get("runtime_cutoff")
+          )
+          ingest_summary = data.get("ingest_summary") or {}
+          targets_deferred = int(ingest_summary.get("targets_deferred") or 0)
+          chain = partial and targets_deferred > 0
+          out.write_text(
+              f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n"
+              f"partial={'true' if partial else 'false'}\n"
+              f"chain_dispatch={'true' if chain else 'false'}\n"
+              f"targets_deferred={targets_deferred}\n",
+              encoding="utf-8",
           )
           if partial:
               print("Ingest loop partial run — committing artifacts from completed targets")
@@ -177,6 +192,7 @@ jobs:
           git add docs/data/ingest_health_log.json \
             docs/data/ingest_improvement_summary.json \
             docs/data/ingest_bootstrap_summary.json \
+            docs/data/ingest_backlog.json \
             docs/data/engineering_tasks.json \
             docs/data/research 2>/dev/null || true
           git pull --rebase --autostash origin main
@@ -192,6 +208,7 @@ jobs:
             docs/data/ingest_health_log.json
             docs/data/ingest_improvement_summary.json
             docs/data/ingest_bootstrap_summary.json
+            docs/data/ingest_backlog.json
             docs/data/research/**
             docs/data/engineering_tasks.json
           skip_fetch: false
@@ -202,12 +219,33 @@ jobs:
           git add docs/data/ingest_health_log.json \
             docs/data/ingest_improvement_summary.json \
             docs/data/ingest_bootstrap_summary.json \
+            docs/data/ingest_backlog.json \
             docs/data/engineering_tasks.json \
             docs/data/research 2>/dev/null || true
           git stash push -u -m "ingest-loop-artifacts" -- docs/data/ || true
           git pull --rebase origin main
           git stash pop || true
           git push origin HEAD:main
+
+      - name: Chain ingest chunk when runtime cutoff deferred targets
+        if: >-
+          steps.loop.outputs.partial == 'true'
+          && steps.loop.outputs.chain_dispatch == 'true'
+          && github.event.inputs.force != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          DEFERRED="${{ steps.loop.outputs.targets_deferred }}"
+          if [ -z "$DEFERRED" ] || [ "$DEFERRED" -le 0 ]; then
+            echo "No deferred targets — skip chain dispatch"
+            exit 0
+          fi
+          CHUNK="$DEFERRED"
+          if [ "$CHUNK" -gt 8 ]; then
+            CHUNK=8
+          fi
+          gh workflow run ingest-loop.yml -f max_targets="$CHUNK" -f max_runtime_seconds=2100
+          echo "Dispatched ingest-loop chunk (max_targets=$CHUNK) to drain backlog"
 
       - name: Dispatch engineering queue when tasks were added
         if: steps.loop.outputs.micro_compiled == 'true'
