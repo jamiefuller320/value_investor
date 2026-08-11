@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T07:50:32+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T08:30:43+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -17,13 +17,24 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | Ftse verify key models | https://cursor.com/agents/bc-f66d83fe-cfe6-44a6-b3de-51c10d6ae515 | Env/gitignore, secrets hygiene |
 | Ftse key verification | https://cursor.com/agents/bc-9bff5dd3-473b-4cf0-9374-3bc91363ec15 | ftse-verify-key (little deferred) |
 | Merge request commit failure | https://cursor.com/agents/bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5 | Models roadmap, research overlay, data gaps |
+| Exit timing, horizon scan, CI autofix session | https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb | exit timing cohorts, near-miss sim, horizon scan L119, fragments harvest, ci-pr-autofix |
 
 ---
 
 ## Open fragments (scratch pad)
 
 
-_None — use `ftse-defer fragment` for half-formed thoughts._
+| ID | Fragment | Tags |
+|----|----------|------|
+| frag-20260811-01 | Exit timing: live paper cohorts (hold-recovery, swap-rotation) are observe-only — need shared denominator before comparing hold→breakeven vs swap-success rates. | exit_timing, counterfactual, paper |
+| frag-20260811-02 | Archive near-miss sim gives offline priors for below-buy-tier names; reconcile with live cohort counts before trusting exit-timing knobs. | exit_timing, archive_sim, evidence |
+| frag-20260811-03 | Counterfactual evidence still thin: near-miss archive does not yet answer what would have happened on names we actually held or swapped. | counterfactual, exit_timing |
+| frag-20260811-04 | CI ruff autofix on cursor/* PRs works but ~5min lag can look like unresolved failure — PR comment on push should reduce confusion. | ci, autofix, ops |
+| frag-20260811-05 | Autofix covers ruff only; pytest failures and check_committed_data_json still need manual fix or main-branch ci-fix-responder. | ci, pytest |
+| frag-20260811-06 | Fragment capture at end of rich agent sessions may suffice; defer L120 transcript mining unless open fragments stay high with near-zero PROMOTE rate. | fragments, horizon, privacy |
+| frag-20260811-07 | Horizon scan shipped (L119) but no committed horizon_scan.md/json yet — first monthly run + manual review before enabling apply_defer/apply_fragments. | horizon, ops |
+| frag-20260811-08 | Operational rhythm: weekly analysis_review + monthly horizon scan + quarterly deferred-review pass — calendar alignment not yet registered as single runbook anchor. | ops, review |
+| frag-20260811-09 | Richness before breadth holds: exit-timing and horizon infra are stage-2 evidence; AIM/Europe widen (N1) still gated on stable FTSE350 decision-review loop. | universe, stages |
 
 ---
 
@@ -78,7 +89,6 @@ _None — use `ftse-defer fragment` for half-formed thoughts._
 | L109 | **Knob-epoch zero datums for learning tracks** | On decision-review knob apply, snapshot a fresh performance baseline (NAV=contributed capital, excess vs ^FTSE from epoch start) so accumulated P&L does not obscure the effect of parameter changes. | decision-review has applied multiple knob rounds on ai_judgment with enough post-change marks |
 | L110 | **Browser technical sim daily auto-run** | Mirror maybeRunIndependentAuto for technical mode: weekday gate after London settle, optional checkbox, calls runTechnicalPass once per day. | Server technical track exists or browser sims explicitly kept as local-only sandbox |
 | L117 | **Hold-to-breakeven vs swap-success exit cohorts** | Track underwater/downgraded positions: P(recovery to breakeven within N weeks) vs P(rotation improves excess vs replacement). Split by data_quality and exit_kind; observe-only until cohorts mature; feed counterfactual replay priors for hold buffer and grace knobs. | exit_shadow has ≥15 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names |
-| L119 | **Horizon scan agent (monthly strategic foresight)** | Scheduled read-only agent over stage gates, deferred ideas, learning/evidence readiness, and engineering queue — outputs PARK proposals and acceleration options distinct from weekly analysis_review. | analysis_review runs reliably for 4+ weeks AND paper primary track has 8+ weeks forward marks OR user requests strategic planning sprint |
 | L120 | **Conversation transcript mining for strategic capture** | Automated export/summarise of Cursor agent transcripts into the repo. Deferred in favour of ftse-defer fragment + monthly horizon scan; revisit only if fragment capture remains patchy. | Open fragment count stays high but horizon scan PROMOTE rate is near zero for 3+ months |
 
 ### Universe & data

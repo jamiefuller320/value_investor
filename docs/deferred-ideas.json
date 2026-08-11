@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-11T07:50:32+00:00",
+  "updated_at": "2026-08-11T08:30:43+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -26,6 +26,11 @@
       "name": "Merge request commit failure",
       "url": "https://cursor.com/agents/bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5",
       "focus": "Models roadmap, research overlay, data gaps"
+    },
+    {
+      "name": "Exit timing, horizon scan, CI autofix session",
+      "url": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "focus": "exit timing cohorts, near-miss sim, horizon scan L119, fragments harvest, ci-pr-autofix"
     }
   ],
   "ideas": [
@@ -2384,9 +2389,10 @@
         "counterfactual",
         "evidence"
       ],
-      "status": "open",
+      "status": "done",
       "source": "horizon scan architecture discussion",
-      "added_at": "2026-08-11T07:04:32+00:00"
+      "added_at": "2026-08-11T07:04:32+00:00",
+      "updated_at": "2026-08-11T08:30:43+00:00"
     },
     {
       "id": "L120",
@@ -2406,5 +2412,109 @@
       "added_at": "2026-08-11T07:50:32+00:00"
     }
   ],
-  "fragments": []
+  "fragments": [
+    {
+      "id": "frag-20260811-01",
+      "text": "Exit timing: live paper cohorts (hold-recovery, swap-rotation) are observe-only \u2014 need shared denominator before comparing hold\u2192breakeven vs swap-success rates.",
+      "tags": [
+        "exit_timing",
+        "counterfactual",
+        "paper"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-02",
+      "text": "Archive near-miss sim gives offline priors for below-buy-tier names; reconcile with live cohort counts before trusting exit-timing knobs.",
+      "tags": [
+        "exit_timing",
+        "archive_sim",
+        "evidence"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-03",
+      "text": "Counterfactual evidence still thin: near-miss archive does not yet answer what would have happened on names we actually held or swapped.",
+      "tags": [
+        "counterfactual",
+        "exit_timing"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-04",
+      "text": "CI ruff autofix on cursor/* PRs works but ~5min lag can look like unresolved failure \u2014 PR comment on push should reduce confusion.",
+      "tags": [
+        "ci",
+        "autofix",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-05",
+      "text": "Autofix covers ruff only; pytest failures and check_committed_data_json still need manual fix or main-branch ci-fix-responder.",
+      "tags": [
+        "ci",
+        "pytest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-06",
+      "text": "Fragment capture at end of rich agent sessions may suffice; defer L120 transcript mining unless open fragments stay high with near-zero PROMOTE rate.",
+      "tags": [
+        "fragments",
+        "horizon",
+        "privacy"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-07",
+      "text": "Horizon scan shipped (L119) but no committed horizon_scan.md/json yet \u2014 first monthly run + manual review before enabling apply_defer/apply_fragments.",
+      "tags": [
+        "horizon",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-08",
+      "text": "Operational rhythm: weekly analysis_review + monthly horizon scan + quarterly deferred-review pass \u2014 calendar alignment not yet registered as single runbook anchor.",
+      "tags": [
+        "ops",
+        "review"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    },
+    {
+      "id": "frag-20260811-09",
+      "text": "Richness before breadth holds: exit-timing and horizon infra are stage-2 evidence; AIM/Europe widen (N1) still gated on stable FTSE350 decision-review loop.",
+      "tags": [
+        "universe",
+        "stages"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-75e111ed-99a1-47a0-8778-c3b9439adfeb",
+      "added_at": "2026-08-11T08:30:43+00:00"
+    }
+  ]
 }
