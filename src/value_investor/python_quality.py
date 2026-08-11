@@ -81,6 +81,36 @@ def run_ruff_on_files(files: list[Path]) -> tuple[int, list[str]]:
     return 0, logs
 
 
+def apply_ruff_autofix(files: list[Path]) -> tuple[int, list[str]]:
+    """Run ruff check --fix and ruff format on ``files`` (no --check)."""
+    if not files:
+        return 0, ["No changed Python files — nothing to autofix."]
+    existing = [path for path in files if path.exists()]
+    if not existing:
+        return 0, ["Only deletions in scope — nothing to autofix."]
+    paths = [path.as_posix() for path in existing]
+    logs: list[str] = [f"Autofix scope ({len(paths)} file(s)): {', '.join(paths)}"]
+    for label, args in (
+        ("check --fix", ["check", "--fix", *paths]),
+        ("format", ["format", *paths]),
+    ):
+        proc = subprocess.run(
+            [sys.executable, "-m", "ruff", *args],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if proc.stdout:
+            logs.append(proc.stdout.rstrip())
+        if proc.stderr:
+            logs.append(proc.stderr.rstrip())
+        if proc.returncode != 0:
+            logs.append(f"ruff {label} failed (exit {proc.returncode})")
+            return proc.returncode, logs
+    logs.append("ruff autofix applied")
+    return 0, logs
+
+
 def check_changed_python(
     *,
     base_ref: str,

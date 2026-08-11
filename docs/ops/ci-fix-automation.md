@@ -82,6 +82,33 @@ ftse-engineering try-auto-merge --branch cursor/eng-20260802-01-1de3
 - `engineering-path-guard` CI job still runs on every engineering PR
 - Main-branch failures only (push, schedule, workflow_dispatch) — not PR CI
 
+## PR ruff autofix (cursor branches)
+
+When **CI fails on a `cursor/*` pull request** due to scoped **ruff** (format or check),
+`ci-pr-autofix.yml` runs after the failed CI workflow:
+
+1. Fetches failed job logs (`gh run view --log-failed`)
+2. Runs `scripts/ci_pr_autofix.py` — applies `ruff check --fix` + `ruff format` on changed
+   `src/` / `tests/` files only
+3. Re-runs scoped ruff + full `pytest` locally in the workflow
+4. Commits `chore(ci): autofix ruff on changed Python files` and pushes to the PR branch
+5. CI re-runs on the new commit
+
+**Guardrails:**
+
+- Only `cursor/*` PR branches (matches cloud-agent branch naming)
+- Skips if the latest commit already starts with `chore(ci): autofix` (one attempt per failure cycle)
+- Does **not** autofix pytest or `check_committed_data_json` failures — those still use
+  main-branch `ci-fix-responder` or manual fixes
+- Does not run on main push failures (existing `ci-fix-responder` behaviour)
+
+**Local dry-run:**
+
+```bash
+gh run view <run-id> --log-failed > /tmp/ci_failed.log
+python3 scripts/ci_pr_autofix.py --base origin/main --head HEAD --log-file /tmp/ci_failed.log --json
+```
+
 ## Scoped Python lint (ruff)
 
 CI and nightly run **ruff check + ruff format --check** only on **changed** `src/` and

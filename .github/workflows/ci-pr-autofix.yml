@@ -1,0 +1,96 @@
+name: CI PR Autofix
+
+# When CI fails on a cursor/* pull request, attempt scoped ruff autofix, push, and
+# re-trigger CI. See docs/ops/ci-fix-automation.md#pr-ruff-autofix.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: ci-pr-autofix-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  autofix:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure'
+      && github.event.workflow_run.event == 'pull_request'
+      && startsWith(github.event.workflow_run.head_branch, 'cursor/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package + test deps
+        run: pip install -e ".[dev]"
+
+      - name: Skip if autofix already attempted
+        id: gate
+        run: |
+          if git log -1 --pretty=%s | grep -q 'chore(ci): autofix'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Latest commit is already an autofix — skipping to avoid loops"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fetch failed CI logs
+        if: steps.gate.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run view "${{ github.event.workflow_run.id }}" --log-failed > /tmp/ci_failed.log 2>&1 || true
+
+      - name: Attempt ruff autofix
+        if: steps.gate.outputs.skip != 'true'
+        id: autofix
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          if python3 scripts/ci_pr_autofix.py \
+            --base origin/main \
+            --head HEAD \
+            --log-file /tmp/ci_failed.log \
+            --out /tmp/autofix_result.json; then
+            echo "fixed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fixed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify autofix (ruff + pytest)
+        if: steps.autofix.outputs.fixed == 'true'
+        run: |
+          python3 scripts/check_changed_python.py --base origin/main --head HEAD
+          pytest -q
+
+      - name: Configure git author
+        if: steps.autofix.outputs.fixed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push autofix
+        if: steps.autofix.outputs.fixed == 'true'
+        env:
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+          git add src/ tests/ scripts/
+          if git diff --staged --quiet; then
+            echo "No staged changes after autofix"
+            exit 0
+          fi
+          git commit -m "chore(ci): autofix ruff on changed Python files"
+          git push origin "HEAD:${BRANCH}"
