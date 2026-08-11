@@ -16,6 +16,7 @@ from value_investor.engineering_tasks import (
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
+    DEFAULT_INGEST_REFETCH_MAX_BODIES,
     DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
     IngestImprovementSummary,
@@ -211,6 +212,7 @@ def run_weekday_ingest_loop(
     market: str = "ftse350",
     bootstrap_seed_cap: int = DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
     max_runtime_seconds: float = DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS,
+    max_bodies: int | None = None,
 ) -> IngestLoopResult:
     """
     Run bounded ingest improvement on the current buy-tier universe, log health,
@@ -230,6 +232,7 @@ def run_weekday_ingest_loop(
             suggestions_path=suggestions_path,
             bootstrap_seed_cap=bootstrap_seed_cap,
             max_runtime_seconds=max_runtime_seconds,
+            max_bodies=max_bodies if max_bodies is not None else DEFAULT_INGEST_REFETCH_MAX_BODIES,
         )
     else:
         logger.warning("No reports in %s — skipping ingest-improvement pass", latest_path)
@@ -249,6 +252,10 @@ def run_weekday_ingest_loop(
             "health_after": health_after,
             "delta_zero_body": int(health_before.get("zero_body_buy_tier") or 0)
             - int(health_after.get("zero_body_buy_tier") or 0),
+            "delta_indexed_without_body": int(health_before.get("indexed_without_body") or 0)
+            - int(health_after.get("indexed_without_body") or 0),
+            "delta_filings_with_body": int(health_after.get("filings_with_body") or 0)
+            - int(health_before.get("filings_with_body") or 0),
             "ingest_targets": len(ingest_summary.targets) if ingest_summary else 0,
             "ingest_improved": len(improved_tickers),
             "improved_tickers": improved_tickers,
@@ -273,6 +280,10 @@ def run_weekday_ingest_loop(
             latest_path=latest_path,
         )
         micro_compiled = int(micro_compile.get("compiled_count") or 0) > 0
+        if micro_compiled:
+            from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+            refresh_engineering_queue_ui(tasks_path=tasks_path)
     elif stalled:
         micro_compile = {"skipped": True, "reason": "open ingest engineering task already queued"}
     else:

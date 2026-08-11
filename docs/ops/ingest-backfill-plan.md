@@ -11,12 +11,13 @@ Weekday **ingest-loop** runs bounded ingest-improvement against buy-tier names i
 | `max_runtime_seconds` | **2100** (35 min) | Step timeout 35 min |
 | `per_ticker_max_seconds` | **320** | — |
 | `max_targets` | **12** | — |
-| Bodies per ticker refetch | **20** | — |
+| Bodies per ticker refetch | **20** (burst: **40** via `max_bodies`) | — |
+| `bootstrap_seed_cap` | **6** (burst drain: **0**) | — |
 
 Dispatch overrides:
 
 ```bash
-gh workflow run ingest-loop.yml -f max_targets=8 -f max_runtime_seconds=2100 -f force=true
+gh workflow run ingest-loop.yml -f max_targets=8 -f max_runtime_seconds=2100 -f max_bodies=40 -f bootstrap_seed_cap=0 -f force=true
 ```
 
 ## Backlog resume (`docs/data/ingest_backlog.json`)

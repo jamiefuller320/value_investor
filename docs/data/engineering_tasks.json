@@ -431,14 +431,27 @@
     {
       "id": "eng-20260729-01",
       "area": "ingest",
-      "title": "Build CH PDF fetch",
-      "summary": "Build CH PDF fetch",
+      "title": "CH filed-accounts PDF/iXBRL body fetch for indexed rows without text",
+      "summary": "Re-fetch Companies House filed-accounts PDF and iXBRL bodies for indexed rows missing text; prior agent runs failed because allowed_paths was empty.",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
       "evidence": {},
-      "acceptance_criteria": [],
-      "allowed_paths": [],
+      "acceptance_criteria": [
+        "Add or extend CH body fetch with a focused regression test",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "refetch_companies_house_filing_bodies succeeds on a ticker with missing CH bodies"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
       "blocked_paths": [
         "src/value_investor/paper_fund.py",
         "src/value_investor/simulator.py",
@@ -447,12 +460,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
-      "failure_count": 2,
-      "last_failed_at": "2026-08-11T07:51:30.008171+00:00",
-      "parked_reason": "agent failed 2 time(s) — manual review",
-      "parked_policy": "manual",
-      "parked_at": "2026-08-11T07:51:30.008377+00:00"
+      "status": "open"
     },
     {
       "id": "eng-20260810-02",
@@ -1217,7 +1225,8 @@
         "tests/test_rebalance_log.py",
         "tests/test_exit_timing_archive_sim.py",
         "tests/test_exit_timing_cohorts.py",
-        "docs/data/exit_timing_near_miss.json"
+        "docs/data/exit_timing_near_miss.json",
+        "docs/data/exit_timing_near_miss_review.json"
       ],
       "blocked_paths": [
         "src/value_investor/paper_fund.py",
@@ -1227,7 +1236,11 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open"
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20260811-04.md",
+      "branch_name": "cursor/eng-20260811-04-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-08-11T11:34:14.125609+00:00"
     },
     {
       "id": "eng-20260811-05",
