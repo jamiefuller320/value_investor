@@ -475,15 +475,17 @@ def promote_horizon_engineering_tasks(
     promote_all_engineering: bool = False,
 ) -> dict[str, Any]:
     """
-    Promote horizon ACCELERATE tasks into engineering_tasks.json.
+      Promote horizon ACCELERATE tasks into engineering_tasks.json.
 
-    Only ``offline_sim``, ``monitoring``, and ``paper_churn`` areas with code
-  paths are appended. ``paper_knobs`` experiments stay manual (process, not PR).
+      Only ``offline_sim``, ``monitoring``, and ``paper_churn`` areas with code
+    paths are appended. ``paper_knobs`` experiments stay manual (process, not PR).
     """
     from value_investor.engineering_tasks import (
         BLOCKED_PATHS,
-        COMMITTED_TASKS_PATH as ENG_COMMITTED,
         load_engineering_tasks,
+    )
+    from value_investor.engineering_tasks import (
+        COMMITTED_TASKS_PATH as ENG_COMMITTED,
     )
 
     eng_path = engineering_tasks_path or ENG_COMMITTED

@@ -1,6 +1,5 @@
 """Tests for monthly horizon scan synthesis."""
 
-import json
 from pathlib import Path
 
 from value_investor.horizon_scan import (
