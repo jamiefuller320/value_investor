@@ -65,4 +65,4 @@ stay manual (config guard tuning).
 - No base `assign_signal()` changes (N3)
 - LLM synthesis only; knob changes remain rule-based (N24)
 
-See also: [`primary-learning-track.md`](primary-learning-track.md), deferred L87.
+See also: [`horizon-scan.md`](horizon-scan.md) (monthly strategic foresight + fragments).

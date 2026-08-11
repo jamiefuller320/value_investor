@@ -30,4 +30,12 @@ Rules:
 4. Do **not** hand-edit `docs/deferred-review.md` — it is generated from `docs/deferred-ideas.json`.
 5. If several ideas appear in one answer, add each separately.
 
+For thoughts **not ready** for a full defer entry (no clear revisit trigger yet), use a scratch fragment:
+
+```bash
+ftse-defer fragment --text "Half-formed observation" --tags "comma,separated" --source "…"
+```
+
+Monthly `ftse-horizon-scan` clusters open fragments and may suggest PROMOTE/DROP — see [`docs/ops/horizon-scan.md`](docs/ops/horizon-scan.md).
+
 Human-readable review page: [`docs/deferred-review.md`](docs/deferred-review.md).

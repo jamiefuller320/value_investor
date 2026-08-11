@@ -1,8 +1,8 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-10T23:06:47+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T07:50:32+00:00`).
 
-Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
+Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
 **How to use:** Review quarterly (or after ~8–12 weekly archives). Move items to done/drop/now via `ftse-defer status`.
 
@@ -17,6 +17,13 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | Ftse verify key models | https://cursor.com/agents/bc-f66d83fe-cfe6-44a6-b3de-51c10d6ae515 | Env/gitignore, secrets hygiene |
 | Ftse key verification | https://cursor.com/agents/bc-9bff5dd3-473b-4cf0-9374-3bc91363ec15 | ftse-verify-key (little deferred) |
 | Merge request commit failure | https://cursor.com/agents/bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5 | Models roadmap, research overlay, data gaps |
+
+---
+
+## Open fragments (scratch pad)
+
+
+_None — use `ftse-defer fragment` for half-formed thoughts._
 
 ---
 
@@ -71,6 +78,8 @@ Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). Do n
 | L109 | **Knob-epoch zero datums for learning tracks** | On decision-review knob apply, snapshot a fresh performance baseline (NAV=contributed capital, excess vs ^FTSE from epoch start) so accumulated P&L does not obscure the effect of parameter changes. | decision-review has applied multiple knob rounds on ai_judgment with enough post-change marks |
 | L110 | **Browser technical sim daily auto-run** | Mirror maybeRunIndependentAuto for technical mode: weekday gate after London settle, optional checkbox, calls runTechnicalPass once per day. | Server technical track exists or browser sims explicitly kept as local-only sandbox |
 | L117 | **Hold-to-breakeven vs swap-success exit cohorts** | Track underwater/downgraded positions: P(recovery to breakeven within N weeks) vs P(rotation improves excess vs replacement). Split by data_quality and exit_kind; observe-only until cohorts mature; feed counterfactual replay priors for hold buffer and grace knobs. | exit_shadow has ≥15 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names |
+| L119 | **Horizon scan agent (monthly strategic foresight)** | Scheduled read-only agent over stage gates, deferred ideas, learning/evidence readiness, and engineering queue — outputs PARK proposals and acceleration options distinct from weekly analysis_review. | analysis_review runs reliably for 4+ weeks AND paper primary track has 8+ weeks forward marks OR user requests strategic planning sprint |
+| L120 | **Conversation transcript mining for strategic capture** | Automated export/summarise of Cursor agent transcripts into the repo. Deferred in favour of ftse-defer fragment + monthly horizon scan; revisit only if fragment capture remains patchy. | Open fragment count stays high but horizon scan PROMOTE rate is near zero for 3+ months |
 
 ### Universe & data
 
