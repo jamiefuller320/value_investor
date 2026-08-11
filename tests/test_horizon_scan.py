@@ -1,5 +1,6 @@
 """Tests for monthly horizon scan synthesis."""
 
+import json
 from pathlib import Path
 
 from value_investor.horizon_scan import (
@@ -130,6 +131,8 @@ def test_promote_horizon_engineering_tasks(tmp_path: Path):
         engineering_tasks_path=eng_path,
     )
     assert len(result["promoted"]) == 1
+    assert result["promoted_count"] == 1
+    assert result["should_dispatch_queue"] is True
     assert any(skip["reason"].startswith("area paper_knobs") for skip in result["skipped"])
-    eng = __import__("json").loads(eng_path.read_text())
+    eng = json.loads(eng_path.read_text(encoding="utf-8"))
     assert any(row["id"].startswith("eng-") for row in eng["tasks"])

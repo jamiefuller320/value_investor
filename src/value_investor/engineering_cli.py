@@ -42,6 +42,7 @@ from value_investor.engineering_queue import (
     is_engineering_branch,
     is_safe_to_clear_stale_branch,
     reconcile_orphaned_pr_open_tasks,
+    refresh_engineering_queue_ui,
     reprioritize_queue_after_ingest_merge,
     summarize_queue,
     task_id_from_branch,
@@ -123,6 +124,8 @@ def _cmd_queue_status(args: argparse.Namespace) -> int:
         policy_path=args.policy,
         open_prs=open_prs,
         engineering_agent_running=args.agent_running,
+        agent_running_count=args.agent_running_count,
+        max_parallel=args.max_parallel,
         force=args.force,
     )
     if args.json:
@@ -137,9 +140,23 @@ def _cmd_queue_status(args: argparse.Namespace) -> int:
         )
         if status.next_task:
             print(f"Next task: {status.next_task.id} — {status.next_task.title[:100]}")
+        if decision.next_task_ids:
+            print(f"Dispatch task ids: {', '.join(decision.next_task_ids)}")
         if status.in_flight_pr:
             print(f"In-flight PR: #{status.in_flight_pr} ({status.in_flight_branch})")
     return 0 if decision.should_dispatch or not args.require_dispatch else 1
+
+
+def _cmd_refresh_queue_ui(args: argparse.Namespace) -> int:
+    result = refresh_engineering_queue_ui()
+    if args.json:
+        _print_json(result)
+    else:
+        print(
+            f"Refreshed engineering queue UI → {result['automation_path']} "
+            f"(open={result.get('open_count')}, pr_open={result.get('pr_open_count')})"
+        )
+    return 0
 
 
 def _cmd_mark_merged(args: argparse.Namespace) -> int:
@@ -694,12 +711,31 @@ def main(argv: list[str] | None = None) -> int:
         help="Set when engineering-agent workflow is already in progress",
     )
     queue_p.add_argument(
+        "--agent-running-count",
+        type=int,
+        default=None,
+        help="Count of engineering-agent workflows queued or in progress",
+    )
+    queue_p.add_argument(
+        "--max-parallel",
+        type=int,
+        default=None,
+        help="Max concurrent engineering agents (default: policy or 2)",
+    )
+    queue_p.add_argument(
         "--require-dispatch",
         action="store_true",
         help="Exit 1 unless dispatch is recommended (for workflow gates)",
     )
     queue_p.add_argument("--force", action="store_true")
     queue_p.set_defaults(func=_cmd_queue_status)
+
+    refresh_ui_p = sub.add_parser(
+        "refresh-queue-ui",
+        parents=[common],
+        help="Publish engineering queue status to automation.json and latest.json",
+    )
+    refresh_ui_p.set_defaults(func=_cmd_refresh_queue_ui)
 
     sync_p = sub.add_parser(
         "sync-queue",

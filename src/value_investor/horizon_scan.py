@@ -475,13 +475,15 @@ def promote_horizon_engineering_tasks(
     promote_all_engineering: bool = False,
 ) -> dict[str, Any]:
     """
-      Promote horizon ACCELERATE tasks into engineering_tasks.json.
+    Promote horizon ACCELERATE tasks into engineering_tasks.json.
 
-      Only ``offline_sim``, ``monitoring``, and ``paper_churn`` areas with code
+    Only ``offline_sim``, ``monitoring``, and ``paper_churn`` areas with code
     paths are appended. ``paper_knobs`` experiments stay manual (process, not PR).
     """
     from value_investor.engineering_tasks import (
         BLOCKED_PATHS,
+        EngineeringTask,
+        _merge_task_rows,
         load_engineering_tasks,
     )
     from value_investor.engineering_tasks import (
@@ -496,6 +498,7 @@ def promote_horizon_engineering_tasks(
     promoted: list[str] = []
     skipped: list[dict[str, str]] = []
     wanted = {tid.strip() for tid in (task_ids or []) if tid.strip()}
+    new_engineering: list[EngineeringTask] = []
 
     updated_horizon: list[dict[str, Any]] = []
     for row in horizon_payload.get("tasks") or []:
@@ -526,25 +529,25 @@ def promote_horizon_engineering_tasks(
             continue
         eng_id = task.id.replace("hor-", "eng-", 1)
         priority_score = 92.0 - float(task.evidence.get("plan_index") or 0)
-        eng_rows.append(
-            {
-                "id": eng_id,
-                "area": "ops",
-                "title": task.title[:160],
-                "summary": task.summary,
-                "priority": "high",
-                "priority_score": priority_score,
-                "source": "horizon_scan",
-                "evidence": {"horizon_task_id": task.id, **task.evidence},
-                "acceptance_criteria": [
+        new_engineering.append(
+            EngineeringTask(
+                id=eng_id,
+                area="ops",
+                title=task.title[:160],
+                summary=task.summary,
+                priority="high",
+                priority_score=priority_score,
+                source="horizon_scan",
+                evidence={"horizon_task_id": task.id, **task.evidence},
+                acceptance_criteria=[
                     "Behaviour covered by unit or integration tests",
                     "Observe-only / offline — no live knob auto-apply",
                     "Diff stays within allowed_paths and blocked_paths",
                 ],
-                "allowed_paths": allowed,
-                "blocked_paths": list(BLOCKED_PATHS),
-                "status": "open",
-            }
+                allowed_paths=allowed,
+                blocked_paths=list(BLOCKED_PATHS),
+                status="open",
+            )
         )
         task.status = "promoted"
         promoted.append(task.id)
@@ -552,15 +555,24 @@ def promote_horizon_engineering_tasks(
 
     horizon_payload["tasks"] = updated_horizon
     horizon_payload["task_count"] = len(updated_horizon)
-    eng_payload["tasks"] = eng_rows
-    eng_payload["task_count"] = len(eng_rows)
+    merged_rows = _merge_task_rows(eng_rows, new_engineering)
+    eng_payload["tasks"] = merged_rows
+    eng_payload["task_count"] = len(merged_rows)
     eng_payload["compiled_at"] = datetime.now(UTC).isoformat()
     write_json(horizon_tasks_path, horizon_payload, compact=True)
     write_json(eng_path, eng_payload, compact=False)
+    try:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=eng_path)
+    except OSError:
+        pass
     return {
         "promoted": promoted,
+        "promoted_count": len(promoted),
         "skipped": skipped,
         "engineering_tasks_path": str(eng_path),
+        "should_dispatch_queue": len(promoted) > 0,
     }
 
 

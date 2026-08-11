@@ -20,10 +20,14 @@ on:
         description: "Apply FRAGMENT CLUSTERING actions after agent run"
         type: boolean
         default: false
+      promote_engineering:
+        description: "Promote proposed horizon ACCELERATE tasks into engineering queue"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
-  actions: read
+  actions: write
 
 concurrency:
   group: ftse-horizon-scan
@@ -116,6 +120,26 @@ jobs:
           if [ "$APPLY_FRAGMENTS" = "true" ]; then args+=(--apply-fragments); fi
           ftse-horizon-scan "${args[@]}"
 
+      - name: Promote horizon engineering tasks
+        if: >-
+          steps.ready.outputs.skip != 'true'
+          && (github.event.inputs.promote_engineering == 'true')
+        id: promote
+        run: |
+          ftse-horizon-scan promote-engineering --all-engineering --json | tee /tmp/horizon_promote.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/horizon_promote.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"promoted_count={int(data.get('promoted_count') or len(data.get('promoted') or []))}\n"
+              f"should_dispatch_queue={'true' if data.get('should_dispatch_queue') else 'false'}\n",
+              encoding="utf-8",
+          )
+          PY
+
       - name: Sync main before commit
         if: steps.ready.outputs.skip != 'true'
         run: |
@@ -132,6 +156,19 @@ jobs:
             docs/data/horizon_scan.json
             docs/data/horizon_scan.md
             docs/data/horizon_tasks.json
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
             docs/deferred-ideas.json
             docs/deferred-review.md
           skip_fetch: false
+
+      - name: Dispatch engineering queue after horizon promote
+        if: >-
+          steps.ready.outputs.skip != 'true'
+          && steps.promote.outputs.should_dispatch_queue == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run engineering-queue.yml
+          echo "Dispatched engineering-queue after horizon promote-engineering"

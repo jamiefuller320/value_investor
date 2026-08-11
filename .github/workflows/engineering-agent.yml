@@ -28,7 +28,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: ftse-engineering-agent
+  group: ftse-engineering-agent-${{ github.event.inputs.task_id || 'auto' }}
   cancel-in-progress: false
 
 jobs:
@@ -216,7 +216,10 @@ jobs:
         with:
           branch: main
           commit_message: "chore: update engineering queue no-diff count [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json
+          file_pattern: |
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
           skip_fetch: false
 
       - name: Push branch and open draft PR
@@ -337,6 +340,7 @@ jobs:
             --task-id "${{ steps.task.outputs.task_id }}" \
             --branch "${{ steps.task.outputs.branch }}" \
             --result-path "output/engineering_result_${{ steps.task.outputs.task_id }}.md"
+          ftse-engineering refresh-queue-ui --json || true
 
       - name: Sync main before pr_open queue commit
         if: >-
@@ -352,5 +356,8 @@ jobs:
         with:
           branch: main
           commit_message: "chore: mark engineering task pr_open [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json
+          file_pattern: |
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
           skip_fetch: false

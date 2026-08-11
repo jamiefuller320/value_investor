@@ -17,8 +17,9 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 |-------|-----------|
 | **Merge guard** | `_merge_task_rows` preserves all `open` tasks, not only terminal/`pr_open` rows |
 | **Agent workflow** | Skips compile when `task_id` is provided; resolves stale ids via `resolve_dispatch_task_id` |
-| **Queue workflow** | Hourly sync check + re-dispatch when agent failures coincide with open tasks |
+| **Queue workflow** | Hourly sync check + parallel dispatch (default max 2 agents) + event triggers from ingest-loop, library-grow, horizon promote |
 | **Ops monitor** | Daily `check_engineering_sync()`; reconciles queue and can dispatch `engineering-queue.yml` |
+| **Dashboard UI** | `ftse-engineering refresh-queue-ui` on task status changes → `automation.json` + `latest.json` |
 
 ## CLI / module
 

@@ -72,12 +72,13 @@ def test_find_in_flight_pr_matches_engineering_branch():
     assert found["number"] == 11
 
 
-def test_evaluate_dispatch_blocks_when_pr_open(tmp_path: Path):
+def test_evaluate_dispatch_allows_parallel_when_pr_open_below_cap(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
         "tasks": [
             _task("eng-20260726-01", status="open").to_dict(),
             _task("eng-20260726-02", status="pr_open").to_dict(),
+            _task("eng-20260726-03", status="open", title="Third task").to_dict(),
         ]
     }
     tasks_path.write_text(json.dumps(payload), encoding="utf-8")
@@ -90,9 +91,86 @@ def test_evaluate_dispatch_blocks_when_pr_open(tmp_path: Path):
                 "title": "feat(engineering): x",
             }
         ],
+        max_parallel=2,
+    )
+    assert decision.should_dispatch is True
+    assert decision.next_task_id == "eng-20260726-01"
+    assert decision.next_task_ids == ["eng-20260726-01"]
+
+
+def test_evaluate_dispatch_parallel_two_slots(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260726-01").to_dict(),
+            _task("eng-20260726-02", title="Second task").to_dict(),
+            _task("eng-20260726-03", title="Third task").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(
+        tasks_path=tasks_path,
+        open_prs=[],
+        max_parallel=2,
+    )
+    assert decision.should_dispatch is True
+    assert decision.next_task_ids == ["eng-20260726-01", "eng-20260726-02"]
+
+
+def test_evaluate_dispatch_blocks_at_parallel_cap(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260726-01", status="open").to_dict(),
+            _task("eng-20260726-02", status="pr_open").to_dict(),
+            _task("eng-20260726-03", status="pr_open").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(
+        tasks_path=tasks_path,
+        open_prs=[
+            {
+                "number": 1,
+                "headRefName": "cursor/eng-20260726-02-1de3",
+                "title": "feat(engineering): a",
+            },
+            {
+                "number": 2,
+                "headRefName": "cursor/eng-20260726-03-1de3",
+                "title": "feat(engineering): b",
+            },
+        ],
+        max_parallel=2,
     )
     assert decision.should_dispatch is False
-    assert "open engineering PR" in decision.reason
+    assert "parallel cap" in decision.reason
+
+
+def test_refresh_engineering_queue_ui_updates_automation(tmp_path: Path):
+    from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    automation_path = tmp_path / "automation.json"
+    latest_path = tmp_path / "latest.json"
+    payload = {"tasks": [_task("eng-20260726-01").to_dict()]}
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    automation_path.write_text(
+        json.dumps({"schema_version": 1, "settings": {}}),
+        encoding="utf-8",
+    )
+    latest_path.write_text(json.dumps({"reports": []}), encoding="utf-8")
+
+    result = refresh_engineering_queue_ui(
+        automation_path=automation_path,
+        latest_path=latest_path,
+        tasks_path=tasks_path,
+    )
+    auto = json.loads(automation_path.read_text(encoding="utf-8"))
+    latest = json.loads(latest_path.read_text(encoding="utf-8"))
+    assert auto["engineering_queue"]["status"]["open_count"] == 1
+    assert latest["automation"]["engineering_queue"]["status"]["open_count"] == 1
+    assert result["open_count"] == 1
 
 
 def test_evaluate_dispatch_ready_when_queue_open_and_no_pr(tmp_path: Path):

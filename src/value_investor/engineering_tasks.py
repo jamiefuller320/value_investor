@@ -600,7 +600,14 @@ def compile_engineering_tasks(
             if existing_rows:
                 break
 
+    before_ids = {str(row.get("id") or "") for row in existing_rows if row.get("id")}
+
     merged_rows = _merge_task_rows(existing_rows, tasks)
+    added_open_ids = [
+        str(row.get("id") or "")
+        for row in merged_rows
+        if str(row.get("id") or "") not in before_ids and str(row.get("status") or "open") == "open"
+    ]
     from value_investor.engineering_queue import snapshot_ingest_health
 
     ingest_health = snapshot_ingest_health()
@@ -617,6 +624,14 @@ def compile_engineering_tasks(
     committed_path = Path(committed_path)
     committed_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(committed_path, payload, compact=False)
+    try:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=committed_path)
+    except OSError:
+        pass
+    payload["added_open_task_ids"] = added_open_ids
+    payload["added_open_count"] = len(added_open_ids)
     return payload
 
 
@@ -988,6 +1003,13 @@ def _update_task_queue(
         committed = Path(committed_path)
         committed.parent.mkdir(parents=True, exist_ok=True)
         _write_task_queue(data, path=committed)
+        if committed.resolve() == Path(COMMITTED_TASKS_PATH).resolve() and "status" in fields:
+            try:
+                from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+                refresh_engineering_queue_ui(tasks_path=committed)
+            except OSError:
+                pass
     return updated
 
 
