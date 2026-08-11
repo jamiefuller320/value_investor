@@ -81,11 +81,15 @@ jobs:
           fi
 
       - name: Refresh queue from Sunday artifacts when present
+        id: refresh
         run: |
+          ADDED=0
           if [ -f output/post_run_review.md ]; then
-            ftse-engineering --output-dir output compile --json
+            ftse-engineering --output-dir output compile --json | tee /tmp/eng_compile.json
+            ADDED=$(python3 -c "import json; print(int(json.load(open('/tmp/eng_compile.json')).get('added_open_count') or 0))")
           fi
           ftse-engineering list || true
+          echo "tasks_added=$ADDED" >> "$GITHUB_OUTPUT"
 
       - name: Collect open PRs and running agent workflows
         id: probe
@@ -95,9 +99,26 @@ jobs:
           gh pr list --state open --limit 30 \
             --json number,title,headRefName,createdAt \
             > /tmp/open_prs.json
-          RUNNING=$(gh run list --workflow engineering-agent.yml --limit 5 --json status \
-            | python3 -c 'import json,sys; print("true" if any(r.get("status") in {"queued","in_progress","waiting"} for r in json.load(sys.stdin)) else "false")')
-          echo "agent_running=$RUNNING" >> "$GITHUB_OUTPUT"
+          python3 - <<'PY' | tee /tmp/agent_probe.txt
+          import json
+          import os
+          import subprocess
+          raw = subprocess.check_output(
+              [
+                  "gh", "run", "list",
+                  "--workflow", "engineering-agent.yml",
+                  "--limit", "10",
+                  "--json", "status",
+              ],
+              text=True,
+          )
+          runs = json.loads(raw)
+          active = [r for r in runs if r.get("status") in {"queued", "in_progress", "waiting"}]
+          count = len(active)
+          out = open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8")
+          out.write(f"agent_running_count={count}\n")
+          out.write(f"agent_running={'true' if count > 0 else 'false'}\n")
+          PY
 
       - name: Recover engineering queue
         run: |
@@ -140,12 +161,18 @@ jobs:
       - name: Sync main before queue file commit
         run: git pull --rebase --autostash origin main
 
+      - name: Refresh engineering queue UI snapshot
+        run: ftse-engineering refresh-queue-ui --json || true
+
       - name: Commit reconciled queue state
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: main
           commit_message: "chore: engineering queue recovery [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json
+          file_pattern: |
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
           skip_fetch: false
 
       - name: Evaluate queue dispatch
@@ -154,11 +181,9 @@ jobs:
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
           ARGS="--json queue-status --open-prs-json /tmp/open_prs.json"
+          ARGS="$ARGS --agent-running-count ${{ steps.probe.outputs.agent_running_count }}"
           if [ "$FORCE" = "true" ]; then
             ARGS="$ARGS --force"
-          fi
-          if [ "${{ steps.probe.outputs.agent_running }}" = "true" ]; then
-            ARGS="$ARGS --agent-running"
           fi
           ftse-engineering $ARGS | tee /tmp/queue_status.json
           python3 - <<'PY'
@@ -167,13 +192,19 @@ jobs:
           from pathlib import Path
           from value_investor.engineering_sync import resolve_dispatch_task_id
           data = json.loads(Path("/tmp/queue_status.json").read_text())
-          raw_task_id = data.get("next_task_id") or ""
-          resolved = resolve_dispatch_task_id(raw_task_id) or ""
+          raw_ids = list(data.get("next_task_ids") or [])
+          if not raw_ids and data.get("next_task_id"):
+              raw_ids = [data.get("next_task_id")]
+          resolved = [
+              tid
+              for tid in (resolve_dispatch_task_id(raw) or "" for raw in raw_ids)
+              if tid
+          ]
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
               f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
               f"reason={data.get('reason', '')}\n"
-              f"next_task_id={resolved}\n",
+              f"next_task_ids={','.join(resolved)}\n",
               encoding="utf-8",
           )
           PY
@@ -186,15 +217,28 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
-          INPUTS=()
-          if [ -n "${{ steps.gate.outputs.next_task_id }}" ]; then
-            INPUTS+=( -f task_id="${{ steps.gate.outputs.next_task_id }}" )
+          TASK_IDS="${{ steps.gate.outputs.next_task_ids }}"
+          if [ -z "$TASK_IDS" ]; then
+            INPUTS=()
+            if [ "$FORCE" = "true" ]; then
+              INPUTS+=( -f force=true )
+            fi
+            gh workflow run engineering-agent.yml "${INPUTS[@]}"
+            echo "Dispatched engineering-agent for top open task"
+            exit 0
           fi
-          if [ "$FORCE" = "true" ]; then
-            INPUTS+=( -f force=true )
-          fi
-          gh workflow run engineering-agent.yml "${INPUTS[@]}"
-          echo "Dispatched engineering-agent for ${{ steps.gate.outputs.next_task_id || 'top open task' }}"
+          IFS=',' read -ra IDS <<< "$TASK_IDS"
+          for TASK_ID in "${IDS[@]}"; do
+            if [ -z "$TASK_ID" ]; then
+              continue
+            fi
+            INPUTS=( -f task_id="$TASK_ID" )
+            if [ "$FORCE" = "true" ]; then
+              INPUTS+=( -f force=true )
+            fi
+            gh workflow run engineering-agent.yml "${INPUTS[@]}"
+            echo "Dispatched engineering-agent for $TASK_ID"
+          done
 
       - name: Sync main before merge queue commit
         if: steps.eng_branch.outputs.is_task == 'true'
@@ -206,7 +250,10 @@ jobs:
         with:
           branch: main
           commit_message: "chore: update engineering queue after merge [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json
+          file_pattern: |
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
           skip_fetch: false
 
       - name: Evaluate accelerated email_only chain

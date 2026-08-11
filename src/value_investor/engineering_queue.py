@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -20,7 +20,11 @@ from value_investor.engineering_tasks import (
     select_engineering_tasks,
     task_title_key,
 )
-from value_investor.storage import write_json
+from value_investor.storage import read_json, write_json
+
+DEFAULT_MAX_PARALLEL_AGENTS = 2
+DEFAULT_AUTOMATION_PATH = Path("docs/data/automation.json")
+DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 
 ENGINEERING_BRANCH_RE = re.compile(r"^cursor/eng-\d{8}-\d{2}-1de3$")
 ENGINEERING_PR_TITLE_PREFIX = "feat(engineering):"
@@ -66,12 +70,20 @@ class EngineeringDispatchDecision:
     reason: str
     status: EngineeringQueueStatus
     next_task_id: str | None = None
+    next_task_ids: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if self.next_task_id and not self.next_task_ids:
+            self.next_task_ids = [self.next_task_id]
+        elif self.next_task_ids and not self.next_task_id:
+            self.next_task_id = self.next_task_ids[0]
 
     def to_dict(self) -> dict[str, Any]:
         payload = {
             "should_dispatch": self.should_dispatch,
             "reason": self.reason,
             "next_task_id": self.next_task_id,
+            "next_task_ids": list(self.next_task_ids or []),
             "status": self.status.to_dict(),
             "evaluated_at": datetime.now(UTC).isoformat(),
         }
@@ -86,20 +98,48 @@ def is_engineering_pr_title(title: str | None) -> bool:
     return bool(title and title.strip().lower().startswith(ENGINEERING_PR_TITLE_PREFIX))
 
 
-def find_in_flight_pr(open_prs: list[dict[str, Any]]) -> dict[str, Any] | None:
-    """Return the newest open engineering PR, if any."""
+def find_in_flight_prs(open_prs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return open engineering PRs, newest first."""
     candidates: list[dict[str, Any]] = []
     for row in open_prs:
         branch = str(row.get("headRefName") or row.get("head_branch") or "")
         title = str(row.get("title") or "")
         if is_engineering_branch(branch) or is_engineering_pr_title(title):
             candidates.append(row)
-    if not candidates:
-        return None
     candidates.sort(
         key=lambda row: str(row.get("createdAt") or row.get("created_at") or ""), reverse=True
     )
-    return candidates[0]
+    return candidates
+
+
+def find_in_flight_pr(open_prs: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Return the newest open engineering PR, if any."""
+    candidates = find_in_flight_prs(open_prs)
+    return candidates[0] if candidates else None
+
+
+def max_parallel_agents_from_policy(policy_path: Path | None = None) -> int:
+    """Read optional ladder.max_parallel_engineering_agents from library policy."""
+    policy = load_policy(policy_path)
+    ladder = policy.get("ladder") or {}
+    raw = ladder.get("max_parallel_engineering_agents")
+    if raw is None:
+        return DEFAULT_MAX_PARALLEL_AGENTS
+    try:
+        return max(1, int(raw))
+    except (TypeError, ValueError):
+        return DEFAULT_MAX_PARALLEL_AGENTS
+
+
+def compute_dispatch_slots(
+    status: EngineeringQueueStatus,
+    *,
+    agent_running_count: int = 0,
+    max_parallel: int = DEFAULT_MAX_PARALLEL_AGENTS,
+) -> int:
+    """How many new engineering-agent runs the queue may start now."""
+    occupied = int(status.pr_open_count) + max(0, int(agent_running_count))
+    return max(0, int(max_parallel) - occupied)
 
 
 def task_id_from_branch(branch: str) -> str | None:
@@ -178,6 +218,8 @@ def evaluate_engineering_dispatch(
     policy_path: Path | None = None,
     open_prs: list[dict[str, Any]] | None = None,
     engineering_agent_running: bool = False,
+    agent_running_count: int | None = None,
+    max_parallel: int | None = None,
     force: bool = False,
 ) -> EngineeringDispatchDecision:
     """Decide whether the queue processor should dispatch engineering-agent."""
@@ -186,22 +228,40 @@ def evaluate_engineering_dispatch(
         policy_path=policy_path,
         open_prs=open_prs,
     )
+    running_count = (
+        int(agent_running_count)
+        if agent_running_count is not None
+        else (1 if engineering_agent_running else 0)
+    )
+    parallel_cap = int(max_parallel or max_parallel_agents_from_policy(policy_path))
+    slots = compute_dispatch_slots(
+        status,
+        agent_running_count=running_count,
+        max_parallel=parallel_cap,
+    )
 
-    if engineering_agent_running:
+    if slots <= 0:
+        if running_count > 0 and status.pr_open_count == 0:
+            reason = (
+                f"engineering-agent workflow(s) already running "
+                f"({running_count} active; max_parallel={parallel_cap})"
+            )
+        elif status.pr_open_count > 0:
+            reason = (
+                f"parallel cap reached — {status.pr_open_count} pr_open, "
+                f"{running_count} agent run(s) (max_parallel={parallel_cap})"
+            )
+        else:
+            reason = f"no dispatch slots (max_parallel={parallel_cap})"
         return EngineeringDispatchDecision(
             should_dispatch=False,
-            reason="engineering-agent workflow already running",
+            reason=reason,
             status=status,
         )
 
-    if status.in_flight_pr is not None:
-        return EngineeringDispatchDecision(
-            should_dispatch=False,
-            reason=f"open engineering PR #{status.in_flight_pr} ({status.in_flight_branch})",
-            status=status,
-        )
-
-    if status.next_task is None:
+    data = load_engineering_tasks(tasks_path)
+    next_tasks = select_engineering_tasks(data, max_tasks=slots)
+    if not next_tasks:
         return EngineeringDispatchDecision(
             should_dispatch=False,
             reason="no open engineering tasks in queue",
@@ -218,11 +278,21 @@ def evaluate_engineering_dispatch(
             status=status,
         )
 
+    task_ids = [task.id for task in next_tasks]
+    dispatch_count = len(task_ids)
+    if dispatch_count == 1:
+        reason = "queue ready — dispatch next open task"
+    else:
+        reason = (
+            f"queue ready — dispatch {dispatch_count} open task(s) "
+            f"(slots={slots}, max_parallel={parallel_cap})"
+        )
     return EngineeringDispatchDecision(
         should_dispatch=True,
-        reason="queue ready — dispatch next open task",
+        reason=reason,
         status=status,
-        next_task_id=status.next_task.id,
+        next_task_id=task_ids[0],
+        next_task_ids=task_ids,
     )
 
 
@@ -500,8 +570,69 @@ def build_engineering_queue_dashboard(
 
     return {
         "compiled_at": data.get("compiled_at"),
+        "queue_ui_updated_at": datetime.now(UTC).isoformat(),
         "task_count": int(data.get("task_count") or len(rows)),
         "status": status.to_dict(),
         "queued_tasks": _active_rows(ACTIVE_QUEUE_STATUSES),
         "attention_tasks": _active_rows(ATTENTION_STATUSES),
+    }
+
+
+def refresh_engineering_queue_ui(
+    *,
+    automation_path: Path = DEFAULT_AUTOMATION_PATH,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+) -> dict[str, Any]:
+    """
+    Publish engineering queue status to automation.json and embed in latest.json.
+
+    Called when task status changes so the dashboard Automation tab stays current
+    without a full screen republish.
+    """
+    dashboard_slice = build_engineering_queue_dashboard(tasks_path=tasks_path)
+    now = datetime.now(UTC).isoformat()
+    automation_path = Path(automation_path)
+    latest_path = Path(latest_path)
+
+    if automation_path.exists():
+        try:
+            auto = read_json(automation_path)
+        except (OSError, ValueError, TypeError):
+            auto = {}
+        if not isinstance(auto, dict):
+            auto = {}
+        auto["engineering_queue"] = dashboard_slice
+        auto["generated_at"] = now
+        automation_path.parent.mkdir(parents=True, exist_ok=True)
+        write_json(automation_path, auto, compact=False)
+    else:
+        from value_investor.automation_status import write_automation_status
+
+        write_automation_status(path=automation_path)
+
+    if latest_path.exists():
+        try:
+            latest = read_json(latest_path)
+        except (OSError, ValueError, TypeError):
+            latest = None
+        if isinstance(latest, dict):
+            automation = latest.get("automation")
+            if isinstance(automation, dict):
+                automation["engineering_queue"] = dashboard_slice
+                automation["generated_at"] = now
+            else:
+                latest["automation"] = {
+                    "engineering_queue": dashboard_slice,
+                    "generated_at": now,
+                }
+            latest["generated_at"] = now
+            write_json(latest_path, latest, compact=True, compress=False)
+
+    return {
+        "automation_path": str(automation_path),
+        "latest_path": str(latest_path) if latest_path.exists() else None,
+        "queue_ui_updated_at": dashboard_slice.get("queue_ui_updated_at"),
+        "open_count": dashboard_slice.get("status", {}).get("open_count"),
+        "pr_open_count": dashboard_slice.get("status", {}).get("pr_open_count"),
     }

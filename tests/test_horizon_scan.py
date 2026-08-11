@@ -1,5 +1,6 @@
 """Tests for monthly horizon scan synthesis."""
 
+import json
 from pathlib import Path
 
 from value_investor.horizon_scan import (
@@ -11,6 +12,7 @@ from value_investor.horizon_scan import (
     parse_fragment_actions,
     parse_horizon_scan,
     parse_park_proposals,
+    promote_horizon_engineering_tasks,
 )
 
 SAMPLE_REVIEW = """
@@ -111,3 +113,26 @@ def test_build_horizon_payload_includes_fragments(tmp_path: Path):
     assert len(payload.get("open_fragments") or []) == 1
     ok, _ = has_enough_horizon_inputs(payload)
     assert ok
+
+
+def test_promote_horizon_engineering_tasks(tmp_path: Path):
+    horizon_path = tmp_path / "horizon_tasks.json"
+    eng_path = tmp_path / "engineering_tasks.json"
+    compile_horizon_tasks(
+        parse_horizon_scan(
+            """
+ACCELERATE
+1. [offline_sim] Archive rebalance replay — learn P&L path
+"""
+        ),
+        tasks_path=horizon_path,
+    )
+    result = promote_horizon_engineering_tasks(
+        ["hor-20260811-01"],
+        horizon_tasks_path=horizon_path,
+        engineering_tasks_path=eng_path,
+    )
+    assert result["promoted_count"] == 1
+    assert result["should_dispatch_queue"] is True
+    eng = json.loads(eng_path.read_text(encoding="utf-8"))
+    assert any(row.get("id") == "eng-20260811-01" for row in eng.get("tasks") or [])

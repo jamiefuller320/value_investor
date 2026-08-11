@@ -1219,6 +1219,7 @@ function renderEngineeringQueueSection(queue) {
     ${status.in_flight_pr ? settingRow("In-flight PR", `<a href="https://github.com/jamiefuller320/value_investor/pull/${esc(String(status.in_flight_pr))}" target="_blank" rel="noopener">#${esc(String(status.in_flight_pr))}</a>`) : ""}
     ${spendHtml}
     ${settingRow("Compiled", esc(fmtDate(queue.compiled_at)))}
+    ${queue.queue_ui_updated_at ? settingRow("Queue UI", esc(fmtDate(queue.queue_ui_updated_at))) : ""}
   `;
 
   const taskRows = (tasks) =>

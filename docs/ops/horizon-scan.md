@@ -55,7 +55,14 @@ ftse-horizon-scan apply-fragments --dry-run
 ftse-horizon-scan apply-fragments
 
 ftse-horizon-scan list
+
+# Promote code-backed ACCELERATE into engineering queue (local; CI dispatches engineering-queue):
+ftse-horizon-scan promote-engineering --all-engineering
 ```
+
+`promote-engineering` refreshes the dashboard queue snapshot. Workflow input
+`promote_engineering=true` promotes after the agent run and dispatches
+`engineering-queue.yml` when new tasks land.
 
 `apply-defer` and `apply-fragments` update `docs/deferred-ideas.json` and refresh
 `deferred-review.md`. Workflow auto-apply is **off** by default — use dispatch inputs
