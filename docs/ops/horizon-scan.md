@@ -55,11 +55,20 @@ ftse-horizon-scan apply-fragments --dry-run
 ftse-horizon-scan apply-fragments
 
 ftse-horizon-scan list
-```
 
 `apply-defer` and `apply-fragments` update `docs/deferred-ideas.json` and refresh
 `deferred-review.md`. Workflow auto-apply is **off** by default — use dispatch inputs
 `apply_defer` / `apply_fragments` only after reviewing the markdown.
+
+Promote code-backed ACCELERATE lines into the engineering queue:
+
+```bash
+ftse-horizon-scan promote-engineering --all-engineering
+# or: ftse-horizon-scan promote-engineering hor-20260811-01 hor-20260811-04
+```
+
+Skips `paper_knobs` (manual process). Appends `eng-*` tasks with scoped
+`allowed_paths` and marks horizon tasks `promoted`.
 
 ## Guardrails
 

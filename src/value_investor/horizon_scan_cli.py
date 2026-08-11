@@ -23,6 +23,7 @@ from value_investor.horizon_scan import (
     load_horizon_tasks,
     parse_horizon_scan,
     parse_park_proposals,
+    promote_horizon_engineering_tasks,
     run_horizon_scan,
 )
 
@@ -132,6 +133,29 @@ def _cmd_apply_defer(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_promote_engineering(args: argparse.Namespace) -> int:
+    if not args.task_ids and not args.all_engineering:
+        print(
+            "Pass horizon task id(s) or --all-engineering",
+            file=sys.stderr,
+        )
+        return 1
+    result = promote_horizon_engineering_tasks(
+        list(args.task_ids) if args.task_ids else None,
+        horizon_tasks_path=args.tasks_path,
+        engineering_tasks_path=args.engineering_tasks_path,
+        promote_all_engineering=args.all_engineering,
+    )
+    if args.json:
+        _print_json(result)
+    else:
+        print(f"Promoted: {', '.join(result['promoted']) or '(none)'}")
+        for row in result["skipped"]:
+            print(f"  skipped {row['id']}: {row['reason']}")
+        print(f"Engineering tasks → {result['engineering_tasks_path']}")
+    return 0
+
+
 def _cmd_apply_fragments(args: argparse.Namespace) -> int:
     text = args.review_file.read_text(encoding="utf-8")
     review = parse_horizon_scan(text)
@@ -221,6 +245,29 @@ def main(argv: list[str] | None = None) -> int:
         help="Mark PROMOTE fragments done without creating deferred ideas",
     )
     apply_frag.set_defaults(func=_cmd_apply_fragments)
+
+    promote_eng = sub.add_parser(
+        "promote-engineering",
+        help="Promote horizon ACCELERATE tasks into engineering_tasks.json",
+    )
+    add_json_flags(promote_eng)
+    promote_eng.add_argument(
+        "task_ids",
+        nargs="*",
+        help="Horizon task ids (e.g. hor-20260811-01). Omit with --all-engineering.",
+    )
+    promote_eng.add_argument(
+        "--all-engineering",
+        action="store_true",
+        help="Promote all proposed offline_sim/monitoring/paper_churn tasks",
+    )
+    promote_eng.add_argument("--tasks-path", type=Path, default=COMMITTED_TASKS_PATH)
+    promote_eng.add_argument(
+        "--engineering-tasks-path",
+        type=Path,
+        default=Path("docs/data/engineering_tasks.json"),
+    )
+    promote_eng.set_defaults(func=_cmd_promote_engineering)
 
     args = parser.parse_args(argv)
     return int(args.func(args))

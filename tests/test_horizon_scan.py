@@ -11,6 +11,7 @@ from value_investor.horizon_scan import (
     parse_fragment_actions,
     parse_horizon_scan,
     parse_park_proposals,
+    promote_horizon_engineering_tasks,
 )
 
 SAMPLE_REVIEW = """
@@ -111,3 +112,24 @@ def test_build_horizon_payload_includes_fragments(tmp_path: Path):
     assert len(payload.get("open_fragments") or []) == 1
     ok, _ = has_enough_horizon_inputs(payload)
     assert ok
+
+
+def test_promote_horizon_engineering_tasks(tmp_path: Path):
+    horizon_path = tmp_path / "horizon_tasks.json"
+    eng_path = tmp_path / "engineering_tasks.json"
+    eng_path.write_text('{"tasks": []}\n', encoding="utf-8")
+    review = parse_horizon_scan(
+        "ACCELERATE\n"
+        "1. [offline_sim] Archive replay — full P&L\n"
+        "2. [paper_knobs] Hold knobs — manual only\n"
+    )
+    compile_horizon_tasks(review, tasks_path=horizon_path)
+    result = promote_horizon_engineering_tasks(
+        promote_all_engineering=True,
+        horizon_tasks_path=horizon_path,
+        engineering_tasks_path=eng_path,
+    )
+    assert len(result["promoted"]) == 1
+    assert any(skip["reason"].startswith("area paper_knobs") for skip in result["skipped"])
+    eng = __import__("json").loads(eng_path.read_text())
+    assert any(row["id"].startswith("eng-") for row in eng["tasks"])
