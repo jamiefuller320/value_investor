@@ -58,31 +58,44 @@ jobs:
         with:
           script: |
             const force = process.env.FORCE === 'true';
-            if (force) {
-              core.info('force=true — running ingest loop');
-              core.setOutput('should_run', 'true');
-              return;
-            }
-
-            const maxDaily = parseInt(process.env.MAX_DAILY_SUCCESSES || '2', 10);
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const workflow_id = 'ingest-loop.yml';
             const runId = context.runId;
 
-            function startOfUtcDay(d = new Date()) {
-              return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())).toISOString();
-            }
-
-            const dayStart = startOfUtcDay();
-            const { data } = await github.rest.actions.listWorkflowRuns({
+            const { data: allRuns } = await github.rest.actions.listWorkflowRuns({
               owner,
               repo,
               workflow_id,
               per_page: 30,
             });
 
-            const prior = (data.workflow_runs || []).filter((r) =>
+            const active = (allRuns.workflow_runs || []).find((r) =>
+              r.id !== runId
+              && ['in_progress', 'queued', 'waiting', 'pending'].includes(r.status)
+            );
+            if (active) {
+              core.info(
+                `Skipping — ingest loop run ${active.id} already ${active.status} (force does not bypass single-flight)`
+              );
+              core.setOutput('should_run', 'false');
+              return;
+            }
+
+            if (force) {
+              core.info('force=true — running ingest loop (daily success cap bypassed)');
+              core.setOutput('should_run', 'true');
+              return;
+            }
+
+            const maxDaily = parseInt(process.env.MAX_DAILY_SUCCESSES || '2', 10);
+
+            function startOfUtcDay(d = new Date()) {
+              return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())).toISOString();
+            }
+
+            const dayStart = startOfUtcDay();
+            const prior = (allRuns.workflow_runs || []).filter((r) =>
               r.id !== runId
               && r.created_at >= dayStart
               && (r.event === 'workflow_dispatch' || r.event === 'schedule')
@@ -93,17 +106,6 @@ jobs:
               const ids = successes.slice(0, maxDaily).map((r) => r.id).join(', ');
               core.info(
                 `Skipping — ingest loop already succeeded ${successes.length} time(s) today (runs: ${ids})`
-              );
-              core.setOutput('should_run', 'false');
-              return;
-            }
-
-            const active = prior.find((r) =>
-              ['in_progress', 'queued', 'waiting', 'pending'].includes(r.status)
-            );
-            if (active) {
-              core.info(
-                `Skipping — ingest loop already active today (run ${active.id}, status=${active.status})`
               );
               core.setOutput('should_run', 'false');
               return;
@@ -201,47 +203,8 @@ jobs:
             fi
           fi
 
-      - name: Sync main before ingest loop commit
-        run: |
-          # Stage ingest outputs so concurrent main pushes (e.g. dashboard refresh)
-          # do not leave untracked filing bodies that block rebase.
-          git add docs/data/ingest_health_log.json \
-            docs/data/ingest_improvement_summary.json \
-            docs/data/ingest_bootstrap_summary.json \
-            docs/data/ingest_backlog.json \
-            docs/data/engineering_tasks.json \
-            docs/data/research 2>/dev/null || true
-          git pull --rebase --autostash origin main
-
-      - name: Commit ingest loop artifacts
-        id: commit
-        continue-on-error: true
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: weekday ingest loop [skip ci]"
-          file_pattern: |
-            docs/data/ingest_health_log.json
-            docs/data/ingest_improvement_summary.json
-            docs/data/ingest_bootstrap_summary.json
-            docs/data/ingest_backlog.json
-            docs/data/research/**
-            docs/data/engineering_tasks.json
-          skip_fetch: false
-
-      - name: Rebase-push if commit raced with another automation
-        if: steps.commit.outcome == 'failure'
-        run: |
-          git add docs/data/ingest_health_log.json \
-            docs/data/ingest_improvement_summary.json \
-            docs/data/ingest_bootstrap_summary.json \
-            docs/data/ingest_backlog.json \
-            docs/data/engineering_tasks.json \
-            docs/data/research 2>/dev/null || true
-          git stash push -u -m "ingest-loop-artifacts" -- docs/data/ || true
-          git pull --rebase origin main
-          git stash pop || true
-          git push origin HEAD:main
+      - name: Commit and push ingest loop artifacts
+        run: bash scripts/push_ingest_loop_artifacts.sh "chore: weekday ingest loop [skip ci]"
 
       - name: Chain ingest chunk when runtime cutoff deferred targets
         if: >-

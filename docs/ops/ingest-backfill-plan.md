@@ -36,6 +36,9 @@ at 8, using the remaining daily slot (2 successes/day gate).
 
 Manual `force=true` dispatches do **not** auto-chain (avoids runaway bursts).
 
+`force=true` bypasses the **daily success cap** only — another ingest-loop run
+that is already active or queued will still block dispatch (single-flight).
+
 ## Tuning loop
 
 Health log entries now include `targets_planned`, `targets_completed`,
