@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T10:05:49+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T11:08:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -199,6 +199,10 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L124 | **Unified ops review runbook anchor** | Register weekly analysis_review, monthly horizon scan, and quarterly deferred-review as one calendar/runbook sequence with owners and artifact paths. | First horizon_scan.md review complete and operational-rhythm fragments still open |
 | L125 | **Ingest stall third state (bootstrap vs true stall)** | Distinguish counted zero-body buy-tier names during canonical bootstrap from persistent post-depth stalls in ops monitor metrics. | eng-20260729-01 CH PDF fetch unparked and zero-body count unchanged after successful body extraction |
 | L126 | **Analysis-review artifact freshness gate** | Block or flag dashboard/analysis conclusions when compile/dispatch or pre-merge screens desync merged code from reviewed artifacts. | Next Sunday analysis_review runs on screens generated before an ingest/scoring merge lands |
+| L129 | **Ingest backlog resume after runtime cutoff** | Persist remaining_target_ids from partial ingest runs in docs/data/ingest_backlog.json and prioritize them on the next pass so cutoff does not re-rank away unfinished tickers. | Second partial ingest run in one week or backlog drain needed for strong-buy Tier A names |
+| L130 | **Ingest loop chunk self-dispatch on partial** | When ingest loop ends with runtime_cutoff and daily slot remains, workflow_dispatch ingest-loop with force=true and backlog chunk (4-6 targets) to drain remainder same day. | ingest_backlog.json exists and partial runs are frequent |
+| L131 | **Per-ticker ingest time budget** | Cap wall time per ticker in run_ingest_improvement_pass so one slow name cannot consume the entire weekday runtime budget; defer remainder to backlog. | Cutoff runs complete 0-2 tickers despite 12 planned |
+| L132 | **Ops alert on ingest runtime_cutoff** | Extend ops_monitor check_ingest_health_log to flag partial/runtime_cutoff runs with targets_deferred count, not only zero-body stall. | Backlog resume shipped or partial runs exceed one per week |
 
 ---
 
