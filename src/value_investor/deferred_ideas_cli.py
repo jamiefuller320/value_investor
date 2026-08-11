@@ -10,8 +10,11 @@ from pathlib import Path
 from value_investor.deferred_ideas import (
     DEFAULT_MARKDOWN,
     DEFAULT_STORE,
+    add_fragment,
     add_idea,
+    list_open_fragments,
     load_store,
+    set_fragment_status,
     set_idea_status,
     write_markdown,
 )
@@ -49,10 +52,29 @@ def main(argv: list[str] | None = None) -> int:
         "--category", choices=["not_now", "later", "security", "both", "all"], default="all"
     )
     list_p.add_argument("--json", action="store_true")
+    list_p.add_argument(
+        "--fragments",
+        action="store_true",
+        help="List open fragments instead of deferred ideas",
+    )
 
     status_p = sub.add_parser("status", help="Set idea status (open|done|drop|now)")
     status_p.add_argument("idea_id")
     status_p.add_argument("status", choices=["open", "done", "drop", "now"])
+
+    fragment_p = sub.add_parser("fragment", help="Append a scratch-pad thought fragment")
+    fragment_p.add_argument("--text", required=True)
+    fragment_p.add_argument("--tags", default="", help="Comma-separated tags")
+    fragment_p.add_argument("--source", default="")
+    fragment_p.add_argument("--allow-duplicate", action="store_true")
+    fragment_p.add_argument("--json", action="store_true")
+
+    frag_status_p = sub.add_parser(
+        "fragment-status",
+        help="Set fragment status (open|done|drop|now) — done = promoted/resolved",
+    )
+    frag_status_p.add_argument("fragment_id")
+    frag_status_p.add_argument("status", choices=["open", "done", "drop", "now"])
 
     args = parser.parse_args(argv)
 
@@ -84,6 +106,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "list":
+        if args.fragments:
+            fragments = list_open_fragments(store_path=args.store)
+            if args.json:
+                print(json.dumps(fragments, indent=2))
+            else:
+                for row in fragments:
+                    print(f"{row.get('id')}\t{row.get('text')}")
+            return 0
         store = load_store(args.store)
         ideas = [i for i in store.get("ideas") or [] if i.get("status", "open") == "open"]
         if args.category != "all":
@@ -102,6 +132,30 @@ def main(argv: list[str] | None = None) -> int:
         idea = set_idea_status(args.idea_id, args.status, store_path=args.store)
         write_markdown(store_path=args.store, markdown_path=args.markdown)
         print(f"Set {idea['id']} -> {idea['status']}")
+        return 0
+
+    if args.command == "fragment":
+        tags = [t.strip() for t in args.tags.split(",") if t.strip()]
+        fragment, created = add_fragment(
+            args.text,
+            tags=tags,
+            source=args.source,
+            store_path=args.store,
+            allow_duplicate=args.allow_duplicate,
+        )
+        write_markdown(store_path=args.store, markdown_path=args.markdown)
+        if args.json:
+            print(json.dumps({"created": created, "fragment": fragment}, indent=2))
+        else:
+            verb = "Added" if created else "Already present"
+            print(f"{verb} fragment {fragment['id']}")
+            print(f"Updated {args.markdown}")
+        return 0
+
+    if args.command == "fragment-status":
+        row = set_fragment_status(args.fragment_id, args.status, store_path=args.store)
+        write_markdown(store_path=args.store, markdown_path=args.markdown)
+        print(f"Set fragment {row['id']} -> {row['status']}")
         return 0
 
     return 1

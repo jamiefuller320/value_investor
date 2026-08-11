@@ -1,0 +1,137 @@
+name: FTSE Horizon Scan
+
+# Monthly strategic foresight — stage gates, fragments, defer, evidence strands.
+# Observe-only; does not change paper books or signals. See docs/ops/horizon-scan.md.
+on:
+  schedule:
+    # First Sunday monthly 11:00 UTC (after weekly analysis-review).
+    - cron: "0 11 1-7 * 0"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Run even if horizon scan already succeeded this month"
+        type: boolean
+        default: false
+      apply_defer:
+        description: "Apply PARK bullets to deferred-ideas.json after agent run"
+        type: boolean
+        default: false
+      apply_fragments:
+        description: "Apply FRAGMENT CLUSTERING actions after agent run"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: ftse-horizon-scan
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - name: Skip if horizon scan already ran this month
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        with:
+          script: |
+            const force = process.env.FORCE === 'true';
+            if (force) {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflow_id = 'horizon-scan.yml';
+            const runId = context.runId;
+            const now = new Date();
+            const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner, repo, workflow_id, per_page: 15,
+            });
+            const prior = (data.workflow_runs || []).filter((r) =>
+              r.id !== runId
+              && r.created_at >= monthStart
+              && (r.event === 'workflow_dispatch' || r.event === 'schedule')
+            );
+            const succeeded = prior.find((r) => r.conclusion === 'success');
+            if (succeeded) {
+              core.info(`Skipping — horizon scan already succeeded this month (run ${succeeded.id})`);
+              core.setOutput('should_run', 'false');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
+  horizon-scan:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Restore committed run history
+        run: |
+          mkdir -p output/history
+          if [ -d docs/data/history ]; then
+            cp -f docs/data/history/run_* output/history/ 2>/dev/null || true
+          fi
+
+      - name: Check horizon inputs
+        id: ready
+        run: |
+          set +e
+          ftse-horizon-scan payload --json > /tmp/horizon_payload.json
+          code=$?
+          cat /tmp/horizon_payload.json
+          if [ "$code" -ne 0 ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Horizon inputs not ready — skipping agent run"
+            exit 0
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Run horizon scan
+        if: steps.ready.outputs.skip != 'true'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          APPLY_DEFER: ${{ github.event.inputs.apply_defer || 'false' }}
+          APPLY_FRAGMENTS: ${{ github.event.inputs.apply_fragments || 'false' }}
+        run: |
+          args=(run --json)
+          if [ "$APPLY_DEFER" = "true" ]; then args+=(--apply-park); fi
+          if [ "$APPLY_FRAGMENTS" = "true" ]; then args+=(--apply-fragments); fi
+          ftse-horizon-scan "${args[@]}"
+
+      - name: Sync main before commit
+        if: steps.ready.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main
+
+      - name: Commit horizon scan artifacts
+        if: steps.ready.outputs.skip != 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: monthly horizon scan [skip ci]"
+          file_pattern: |
+            docs/data/horizon_scan.json
+            docs/data/horizon_scan.md
+            docs/data/horizon_tasks.json
+            docs/deferred-ideas.json
+            docs/deferred-review.md
+          skip_fetch: false

@@ -46,8 +46,11 @@ def load_store(path: Path = DEFAULT_STORE) -> dict[str, Any]:
             "updated_at": _utcnow(),
             "sessions_mined": [],
             "ideas": [],
+            "fragments": [],
         }
-    return json.loads(path.read_text(encoding="utf-8"))
+    store = json.loads(path.read_text(encoding="utf-8"))
+    store.setdefault("fragments", [])
+    return store
 
 
 def save_store(store: dict[str, Any], path: Path = DEFAULT_STORE) -> None:
@@ -72,6 +75,19 @@ def _next_id(store: dict[str, Any], category: str) -> str:
         if idea_id.startswith(prefix) and idea_id[1:].isdigit():
             numbers.append(int(idea_id[1:]))
     return f"{prefix}{(max(numbers) if numbers else 0) + 1}"
+
+
+def _next_fragment_id(store: dict[str, Any]) -> str:
+    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
+    prefix = f"frag-{run_stamp}-"
+    used = [
+        int(str(row.get("id") or "").removeprefix(prefix))
+        for row in store.get("fragments") or []
+        if str(row.get("id") or "").startswith(prefix)
+        and str(row.get("id") or "").removeprefix(prefix).isdigit()
+    ]
+    seq = max(used, default=0) + 1
+    return f"{prefix}{seq:02d}"
 
 
 def add_idea(
@@ -122,6 +138,69 @@ def add_idea(
     return idea, True
 
 
+def add_fragment(
+    text: str,
+    *,
+    tags: list[str] | None = None,
+    source: str = "",
+    status: Status = "open",
+    store_path: Path = DEFAULT_STORE,
+    allow_duplicate: bool = False,
+) -> tuple[dict[str, Any], bool]:
+    """Append a low-friction thought fragment (below full defer shape)."""
+    normalized = text.strip()
+    if not normalized:
+        raise ValueError("fragment text is required")
+
+    store = load_store(store_path)
+    fragments: list[dict[str, Any]] = store.setdefault("fragments", [])
+    needle = _norm_title(normalized)
+    for row in fragments:
+        if str(row.get("status") or "open") != "open":
+            continue
+        if _norm_title(str(row.get("text") or "")) == needle:
+            if allow_duplicate:
+                break
+            return row, False
+
+    fragment = {
+        "id": _next_fragment_id(store),
+        "text": normalized,
+        "tags": tags or [],
+        "status": status,
+        "source": source.strip(),
+        "added_at": _utcnow(),
+    }
+    fragments.append(fragment)
+    save_store(store, store_path)
+    return fragment, True
+
+
+def set_fragment_status(
+    fragment_id: str,
+    status: Status,
+    *,
+    store_path: Path = DEFAULT_STORE,
+) -> dict[str, Any]:
+    store = load_store(store_path)
+    for row in store.get("fragments") or []:
+        if row.get("id") == fragment_id:
+            row["status"] = status
+            row["updated_at"] = _utcnow()
+            save_store(store, store_path)
+            return row
+    raise KeyError(f"Unknown fragment id: {fragment_id}")
+
+
+def list_open_fragments(
+    store: dict[str, Any] | None = None, *, store_path: Path = DEFAULT_STORE
+) -> list[dict[str, Any]]:
+    store = store or load_store(store_path)
+    return [
+        row for row in store.get("fragments") or [] if str(row.get("status") or "open") == "open"
+    ]
+
+
 def set_idea_status(
     idea_id: str,
     status: Status,
@@ -143,6 +222,7 @@ def render_markdown(
 ) -> str:
     store = store or load_store(store_path)
     ideas = [i for i in store.get("ideas") or [] if i.get("status", "open") == "open"]
+    fragments = list_open_fragments(store)
     sessions = store.get("sessions_mined") or []
     updated = store.get("updated_at") or _utcnow()
 
@@ -152,7 +232,8 @@ def render_markdown(
         f"Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) "
         f"(updated `{updated}`).",
         "",
-        "Agents append new parked ideas with `ftse-defer add …` (see `AGENTS.md`). "
+        "Agents append parked ideas with `ftse-defer add …` and scratch fragments with "
+        "`ftse-defer fragment …` (see `AGENTS.md`). "
         "Do not hand-edit this markdown; edit the JSON store or use the CLI, then "
         "`ftse-defer render`.",
         "",
@@ -174,6 +255,23 @@ def render_markdown(
             )
     else:
         lines.append("| — | — | — |")
+
+    lines.extend(["", "---", "", "## Open fragments (scratch pad)", ""])
+    if fragments:
+        lines.extend(
+            [
+                "",
+                "| ID | Fragment | Tags |",
+                "|----|----------|------|",
+            ]
+        )
+        for row in fragments:
+            tags = ", ".join(row.get("tags") or []) or "—"
+            text = str(row.get("text") or "").replace("|", "\\|")
+            lines.append(f"| {row.get('id', '')} | {text} | {tags} |")
+    else:
+        lines.append("")
+        lines.append("_None — use `ftse-defer fragment` for half-formed thoughts._")
 
     def _table(rows: list[dict[str, Any]], *, security: bool = False) -> list[str]:
         out = [
