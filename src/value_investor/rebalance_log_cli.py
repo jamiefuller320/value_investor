@@ -17,6 +17,8 @@ from value_investor.paper_automation import (
 from value_investor.rebalance_log import (
     REBALANCE_LOG_FILENAME,
     acted_log_entries,
+    compare_buffered_hold_across_tracks,
+    compare_buffered_hold_counterfactual,
     compare_rebalance_counterfactual_previews,
     load_rebalance_log,
     replay_counterfactual_from_log,
@@ -60,6 +62,10 @@ def _cmd_replay(args: argparse.Namespace) -> int:
             if args.require_research_accumulate
             else (False if args.no_research_accumulate else None)
         ),
+        exit_confirm_screens=(
+            int(args.exit_confirm_screens) if args.exit_confirm_screens is not None else None
+        ),
+        lookback_days=int(args.lookback_days) if args.lookback_days is not None else None,
         candidate_source=str(args.candidate_source),
         actual_fund=fund,
     )
@@ -148,6 +154,67 @@ def _cmd_archive_replay(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_buffered_hold(args: argparse.Namespace) -> int:
+    if args.paper_root is not None:
+        comparison = compare_buffered_hold_across_tracks(
+            Path(args.paper_root),
+            track_ids=tuple(args.tracks.split(",")),
+            lookback_days=int(args.lookback_days),
+            exit_confirm_variants=tuple(int(v) for v in args.exit_confirm_variants.split(",")),
+        )
+    else:
+        output_dir = Path(args.output_dir)
+        config_path = output_dir / CONFIG_FILENAME
+        fund_path = output_dir / FUND_FILENAME
+        fund = None
+        if fund_path.exists() and config_path.exists():
+            config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
+            fund = ensure_automated_fund(fund_path, config)
+        comparison = compare_buffered_hold_counterfactual(
+            output_dir,
+            lookback_days=int(args.lookback_days),
+            exit_confirm_variants=tuple(int(v) for v in args.exit_confirm_variants.split(",")),
+            actual_fund=fund,
+        )
+    if comparison is None:
+        print("No rebalance log entries in lookback window to replay.", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(comparison, indent=2))
+    else:
+        print("Buffered-hold counterfactual (observe-only)")
+        print(f"  Scope: {comparison.get('scope')}")
+        print(f"  Lookback: {comparison.get('lookback_days')}d")
+        tracks = comparison.get("tracks")
+        if isinstance(tracks, dict):
+            for track_id, row in tracks.items():
+                ctx = row.get("churn_context") or {}
+                cmp = row.get("comparison") or {}
+                print(
+                    f"  [{track_id}] buffered={ctx.get('buffered_holdings')} "
+                    f"full_exits={ctx.get('full_exits_in_window')} "
+                    f"exit_streak={ctx.get('exit_streak')}"
+                )
+                delta = cmp.get("trade_count_delta_lower_minus_higher")
+                drag = cmp.get("cost_drag_delta_lower_minus_higher")
+                if delta is not None:
+                    print(f"    screens=1 vs 2: trade_delta={delta:+d} cost_drag_delta={drag:+.1%}")
+        else:
+            ctx = comparison.get("churn_context") or {}
+            cmp = comparison.get("comparison") or {}
+            print(f"  Track: {comparison.get('track_id')}")
+            print(f"  Buffered holdings: {ctx.get('buffered_holdings')}")
+            print(f"  Full exits in window: {ctx.get('full_exits_in_window')}")
+            print(f"  Exit streak: {ctx.get('exit_streak')}")
+            delta = cmp.get("trade_count_delta_lower_minus_higher")
+            drag = cmp.get("cost_drag_delta_lower_minus_higher")
+            if delta is not None:
+                print(f"  screens=1 vs 2: trade_delta={delta:+d} cost_drag_delta={drag:+.1%}")
+        if comparison.get("limitations"):
+            print(f"  Note: {comparison.get('limitations')}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Inspect rebalance decision logs and replay knob counterfactuals."
@@ -198,8 +265,50 @@ def main(argv: list[str] | None = None) -> int:
         default="auto",
         help="Candidate pool for replay (default: auto — widens when AI gates change)",
     )
+    replay.add_argument(
+        "--exit-confirm-screens",
+        type=int,
+        default=None,
+        help="Counterfactual: override hold-buffer exit_confirm_screens knob",
+    )
+    replay.add_argument(
+        "--lookback-days",
+        type=int,
+        default=None,
+        help="Replay only passes within the last N days",
+    )
     replay.add_argument("--json", action="store_true")
     replay.set_defaults(func=_cmd_replay)
+
+    buffered_hold = sub.add_parser(
+        "buffered-hold",
+        help="Compare exit_confirm_screens variants on recent log passes (observe-only)",
+    )
+    buffered_hold.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DEFAULT_AUTOMATION_DIR,
+        help="Single paper automation track directory",
+    )
+    buffered_hold.add_argument(
+        "--paper-root",
+        type=Path,
+        default=None,
+        help="Paper automation root — compare rules and ai_judgment tracks",
+    )
+    buffered_hold.add_argument(
+        "--tracks",
+        default="rules,ai_judgment",
+        help="Comma-separated track ids when --paper-root is set",
+    )
+    buffered_hold.add_argument("--lookback-days", type=int, default=7)
+    buffered_hold.add_argument(
+        "--exit-confirm-variants",
+        default="1,2",
+        help="Comma-separated exit_confirm_screens values to compare",
+    )
+    buffered_hold.add_argument("--json", action="store_true")
+    buffered_hold.set_defaults(func=_cmd_buffered_hold)
 
     archive_replay = sub.add_parser(
         "archive-replay",
