@@ -482,10 +482,12 @@ def promote_horizon_engineering_tasks(
     """
     from value_investor.engineering_tasks import (
         BLOCKED_PATHS,
-        COMMITTED_TASKS_PATH as ENG_COMMITTED,
         EngineeringTask,
-        load_engineering_tasks,
         _merge_task_rows,
+        load_engineering_tasks,
+    )
+    from value_investor.engineering_tasks import (
+        COMMITTED_TASKS_PATH as ENG_COMMITTED,
     )
 
     eng_path = engineering_tasks_path or ENG_COMMITTED
