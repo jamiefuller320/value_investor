@@ -20,6 +20,7 @@ from value_investor.ingest_loop import (
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
+    DEFAULT_INGEST_REFETCH_MAX_BODIES,
     DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
 )
@@ -57,6 +58,12 @@ def main(argv: list[str] | None = None) -> int:
         type=float,
         default=DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS,
         help="Stop ingest-improvement targets after this many seconds (partial run)",
+    )
+    common.add_argument(
+        "--max-bodies",
+        type=int,
+        default=DEFAULT_INGEST_REFETCH_MAX_BODIES,
+        help="Max filing bodies to refetch per ticker (backfill bursts: 40)",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -104,6 +111,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
             micro_compile_max_tasks=args.micro_compile_max_tasks,
             bootstrap_seed_cap=args.bootstrap_seed_cap,
             max_runtime_seconds=args.max_runtime_seconds,
+            max_bodies=args.max_bodies,
         )
     except Exception as exc:  # noqa: BLE001
         error = str(exc)

@@ -50,6 +50,8 @@ DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 12
 DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP = 6
 DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
 PER_TICKER_MIN_BUDGET_SECONDS = 120.0
+DEFAULT_INGEST_REFETCH_MAX_BODIES = 20
+DEFAULT_BACKFILL_MAX_BODIES = 40
 UNMEASURED_PRIORITY_BONUS = 10.0
 KNOWN_SOURCE_IDS = frozenset(
     {
@@ -495,6 +497,7 @@ def run_ingest_improvement_pass(
     max_runtime_seconds: float | None = None,
     per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
     backlog_path: Path = DEFAULT_BACKLOG_PATH,
+    max_bodies: int = DEFAULT_INGEST_REFETCH_MAX_BODIES,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -588,7 +591,7 @@ def run_ingest_improvement_pass(
                     sources_dir / "filings",
                     ticker=target.ticker,
                     company_name=target.name,
-                    max_bodies=20,
+                    max_bodies=max_bodies,
                 )
                 ch_refetch = dict(primary_refetch.get("companies_house") or {})
                 indexed_refetch = dict(primary_refetch.get("rns") or {})
@@ -615,7 +618,7 @@ def run_ingest_improvement_pass(
                     sources_dir / "filings",
                     target.ticker,
                     company_name=target.name,
-                    max_bodies=20,
+                    max_bodies=max_bodies,
                 )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
