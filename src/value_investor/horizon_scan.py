@@ -427,6 +427,141 @@ def load_horizon_tasks(path: Path = COMMITTED_TASKS_PATH) -> dict[str, Any]:
     return data if isinstance(data, dict) else {"tasks": []}
 
 
+_HORIZON_ENGINEERING_AREAS = frozenset({"offline_sim", "monitoring", "paper_churn"})
+
+_OFFLINE_SIM_PATHS = [
+    "src/value_investor/rebalance_log.py",
+    "src/value_investor/rebalance_log_cli.py",
+    "src/value_investor/decision_review.py",
+    "src/value_investor/exit_timing_archive_sim.py",
+    "src/value_investor/exit_timing_archive_cli.py",
+    "src/value_investor/exit_timing_cohorts.py",
+    "tests/test_rebalance_log.py",
+    "tests/test_exit_timing_archive_sim.py",
+    "tests/test_exit_timing_cohorts.py",
+    "docs/data/exit_timing_near_miss.json",
+]
+
+_MONITORING_PATHS = [
+    "src/value_investor/automation_status.py",
+    "src/value_investor/publish.py",
+    "src/value_investor/paper_learning_review.py",
+    "tests/test_automation_status.py",
+]
+
+_PAPER_CHURN_PATHS = [
+    "src/value_investor/rebalance_log.py",
+    "src/value_investor/rebalance_log_cli.py",
+    "tests/test_rebalance_log.py",
+]
+
+
+def _allowed_paths_for_horizon_area(area: str) -> list[str]:
+    normalized = str(area or "").strip().lower()
+    if normalized == "offline_sim":
+        return list(_OFFLINE_SIM_PATHS)
+    if normalized == "monitoring":
+        return list(_MONITORING_PATHS)
+    if normalized == "paper_churn":
+        return list(_PAPER_CHURN_PATHS)
+    return []
+
+
+def promote_horizon_engineering_tasks(
+    task_ids: list[str] | None = None,
+    *,
+    horizon_tasks_path: Path = COMMITTED_TASKS_PATH,
+    engineering_tasks_path: Path | None = None,
+    promote_all_engineering: bool = False,
+) -> dict[str, Any]:
+    """
+    Promote horizon ACCELERATE tasks into engineering_tasks.json.
+
+    Only ``offline_sim``, ``monitoring``, and ``paper_churn`` areas with code
+  paths are appended. ``paper_knobs`` experiments stay manual (process, not PR).
+    """
+    from value_investor.engineering_tasks import (
+        BLOCKED_PATHS,
+        COMMITTED_TASKS_PATH as ENG_COMMITTED,
+        load_engineering_tasks,
+    )
+
+    eng_path = engineering_tasks_path or ENG_COMMITTED
+    horizon_payload = load_horizon_tasks(horizon_tasks_path)
+    eng_payload = load_engineering_tasks(eng_path)
+    eng_rows = list(eng_payload.get("tasks") or [])
+
+    promoted: list[str] = []
+    skipped: list[dict[str, str]] = []
+    wanted = {tid.strip() for tid in (task_ids or []) if tid.strip()}
+
+    updated_horizon: list[dict[str, Any]] = []
+    for row in horizon_payload.get("tasks") or []:
+        task = AnalysisTask.from_dict(row)
+        should_promote = task.id in wanted or (
+            promote_all_engineering and task.status == "proposed"
+        )
+        if not should_promote:
+            updated_horizon.append(task.to_dict())
+            continue
+        if task.status == "promoted":
+            skipped.append({"id": task.id, "reason": "already promoted"})
+            updated_horizon.append(task.to_dict())
+            continue
+        if task.area not in _HORIZON_ENGINEERING_AREAS:
+            skipped.append(
+                {
+                    "id": task.id,
+                    "reason": f"area {task.area} is manual (not engineering_queue)",
+                }
+            )
+            updated_horizon.append(task.to_dict())
+            continue
+        allowed = _allowed_paths_for_horizon_area(task.area)
+        if not allowed:
+            skipped.append({"id": task.id, "reason": "no allowed_paths for area"})
+            updated_horizon.append(task.to_dict())
+            continue
+        eng_id = task.id.replace("hor-", "eng-", 1)
+        priority_score = 92.0 - float(task.evidence.get("plan_index") or 0)
+        eng_rows.append(
+            {
+                "id": eng_id,
+                "area": "ops",
+                "title": task.title[:160],
+                "summary": task.summary,
+                "priority": "high",
+                "priority_score": priority_score,
+                "source": "horizon_scan",
+                "evidence": {"horizon_task_id": task.id, **task.evidence},
+                "acceptance_criteria": [
+                    "Behaviour covered by unit or integration tests",
+                    "Observe-only / offline — no live knob auto-apply",
+                    "Diff stays within allowed_paths and blocked_paths",
+                ],
+                "allowed_paths": allowed,
+                "blocked_paths": list(BLOCKED_PATHS),
+                "status": "open",
+            }
+        )
+        task.status = "promoted"
+        promoted.append(task.id)
+        updated_horizon.append(task.to_dict())
+
+    horizon_payload["tasks"] = updated_horizon
+    horizon_payload["task_count"] = len(updated_horizon)
+    eng_payload["tasks"] = eng_rows
+    eng_payload["task_count"] = len(eng_rows)
+    eng_payload["compiled_at"] = datetime.now(UTC).isoformat()
+    write_json(horizon_tasks_path, horizon_payload, compact=True)
+    write_json(eng_path, eng_payload, compact=False)
+    return {
+        "promoted": promoted,
+        "skipped": skipped,
+        "engineering_tasks_path": str(eng_path),
+    }
+
+
 def _build_horizon_prompt(payload_path: Path) -> str:
     return f"""You are the strategic horizon analyst for an automated value portfolio project.
 
