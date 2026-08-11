@@ -192,12 +192,12 @@ def set_fragment_status(
     raise KeyError(f"Unknown fragment id: {fragment_id}")
 
 
-def list_open_fragments(store: dict[str, Any] | None = None, *, store_path: Path = DEFAULT_STORE) -> list[dict[str, Any]]:
+def list_open_fragments(
+    store: dict[str, Any] | None = None, *, store_path: Path = DEFAULT_STORE
+) -> list[dict[str, Any]]:
     store = store or load_store(store_path)
     return [
-        row
-        for row in store.get("fragments") or []
-        if str(row.get("status") or "open") == "open"
+        row for row in store.get("fragments") or [] if str(row.get("status") or "open") == "open"
     ]
 
 
