@@ -548,6 +548,34 @@ def ingest_research_sources(
                 },
                 "filings_sources": [],
             }
+        else:
+            from value_investor.research.filings import (
+                refetch_companies_house_filing_bodies,
+                resolve_filings_regime,
+            )
+
+            if resolve_filings_regime(market, ticker) == "uk_rns":
+                summary = filings_meta.get("filings_summary") or {}
+                if int(summary.get("with_body") or 0) == 0 and int(summary.get("total") or 0) > 0:
+                    ch_refetch = refetch_companies_house_filing_bodies(
+                        sources_dir / "filings",
+                        max_bodies=12,
+                    )
+                    if int(ch_refetch.get("fetched") or 0) > 0:
+                        index_path = sources_dir / "filings" / "filings_index.json"
+                        resolved_index = resolve_json_path(index_path)
+                        if resolved_index is not None:
+                            try:
+                                index_payload = read_json(resolved_index)
+                                filings_meta["filings_summary"] = dict(
+                                    index_payload.get("summary") or summary
+                                )
+                                filings_meta["filings_sources"] = list(
+                                    index_payload.get("sources_used") or []
+                                )
+                            except (OSError, ValueError, TypeError):
+                                pass
+                        filings_meta["ch_body_refetch"] = ch_refetch
 
         if deepen_history:
             from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed

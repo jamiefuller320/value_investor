@@ -193,6 +193,41 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
     assert result["body_refetch"]["fetched"] == 1
 
 
+@patch("value_investor.research.filings.prune_orphaned_filing_bodies")
+@patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.refetch_companies_house_filing_bodies")
+def test_execute_planned_companies_house_uses_ch_refetch(
+    mock_ch_refetch,
+    mock_ingest,
+    mock_prune,
+    tmp_path: Path,
+):
+    from value_investor.research.gap_fill_sources import execute_planned_alternate_sources
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    mock_ingest.return_value = {"filings_summary": {"with_body": 0}}
+    mock_ch_refetch.return_value = {
+        "attempted": 3,
+        "fetched": 2,
+        "with_body_before": 0,
+        "with_body_after": 2,
+    }
+
+    result = execute_planned_alternate_sources(
+        ticker="MER.L",
+        company_name="Merchants Trust PLC",
+        sources_dir=tmp_path,
+        planned=[{"id": "companies_house_accounts", "score": "3"}],
+        market="ftse350",
+    )
+
+    mock_ch_refetch.assert_called_once()
+    assert result["sources_tried"] == ["companies_house_accounts"]
+    assert result["fetched"] == 2
+    assert result["body_refetch"]["fetched"] == 2
+
+
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")

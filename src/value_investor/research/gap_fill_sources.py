@@ -488,10 +488,11 @@ def execute_planned_alternate_sources(
                 market=market,
                 deepen_history=True,
             )
-            if _market_bucket(market, ticker) == "uk" and source_id in {
-                "companies_house_accounts",
-                "investegate_rns_full",
-            }:
+            if _market_bucket(market, ticker) == "uk" and source_id == "companies_house_accounts":
+                from value_investor.research.filings import refetch_companies_house_filing_bodies
+
+                last_refetch = refetch_companies_house_filing_bodies(filings_dir, max_bodies=20)
+            elif _market_bucket(market, ticker) == "uk" and source_id == "investegate_rns_full":
                 from value_investor.research.filings import refetch_uk_primary_filing_bodies
 
                 last_refetch = refetch_uk_primary_filing_bodies(
