@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "track_id": "archive_near_miss",
+  "generated_at": "2026-08-11T11:33:48.332771+00:00",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ],
+    "scope": "archive_near_miss",
+    "near_miss_gate": {
+      "below_buy_tier": true,
+      "held_book_from_rebalance_log": true,
+      "default_signals": [
+        "hold"
+      ],
+      "default_min_conviction": 0.35
+    },
+    "note": "Observe-only priors from archived weekly screens plus rebalance_log held-ticker episodes. Does not replace live paper exit_timing cohorts."
+  },
+  "readiness": {
+    "ready_for_probability_analysis": false,
+    "hold_closed_count": 7,
+    "swap_closed_count": 8,
+    "hold_with_data_quality_count": 10,
+    "gaps": [
+      "hold_recovery closed episodes=7 (target >=15)",
+      "swap_rotation closed rotations=8 (target >=10)"
+    ],
+    "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+  },
+  "hold_recovery": {
+    "open": {
+      "count": 3,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 3
+      }
+    },
+    "closed": {
+      "count": 7,
+      "recovered_to_breakeven": 4,
+      "close_reasons": {
+        "recovered_archive_end": 4,
+        "underwater_archive_end": 3
+      }
+    }
+  },
+  "swap_rotation": {
+    "open": {
+      "count": 3,
+      "verdicts": {
+        "open": 3
+      }
+    },
+    "closed": {
+      "count": 8,
+      "verdicts": {
+        "inconclusive": 7,
+        "exit_outperformed": 1
+      }
+    }
+  },
+  "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence.",
+  "scope": "archive_near_miss",
+  "snapshot_count": 7,
+  "episodes_opened": {
+    "hold_recovery": 10,
+    "hold_recovery_near_miss": 10,
+    "hold_recovery_held_book": 0,
+    "swap_rotation": 11,
+    "swap_rotation_near_miss": 10,
+    "swap_rotation_log_book": 1
+  }
+}

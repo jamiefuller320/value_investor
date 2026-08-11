@@ -17,8 +17,8 @@ from value_investor.exit_timing_archive_sim import (
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Observe-only exit-timing priors from archived weekly screens: "
-            "score hold-recovery and swap paths for near-miss names below buy tier."
+            "Observe-only exit-timing priors from archived weekly screens and "
+            "rebalance_log held-book episodes: score hold-recovery and swap paths."
         )
     )
     parser.add_argument(
@@ -51,15 +51,37 @@ def main(argv: list[str] | None = None) -> int:
         default=10,
         help="Cap near-miss episodes opened per snapshot week (default: 10)",
     )
+    parser.add_argument(
+        "--paper-root",
+        type=Path,
+        default=None,
+        help="Paper automation root for rebalance_log held-book episodes "
+        "(default: <output-dir>/paper_automation when present)",
+    )
+    parser.add_argument(
+        "--tracks",
+        type=str,
+        default="rules,ai_judgment",
+        help="Comma-separated track ids for rebalance_log ingest (default: rules,ai_judgment)",
+    )
+    parser.add_argument(
+        "--no-held-episodes",
+        action="store_true",
+        help="Skip rebalance_log held-book hold/swap episode ingest",
+    )
     parser.add_argument("--json", action="store_true", help="Print full review JSON")
     args = parser.parse_args(argv)
 
     signal_set = frozenset(s.strip() for s in args.signals.split(",") if s.strip())
+    track_ids = tuple(t.strip() for t in args.tracks.split(",") if t.strip()) or ("rules",)
     config = ExitTimingArchiveSimConfig(
         min_conviction=float(args.min_conviction),
         min_data_quality=float(args.min_data_quality),
         near_miss_signals=signal_set or frozenset({"hold"}),
         max_episodes_per_week=int(args.max_episodes_per_week),
+        include_held_episodes=not args.no_held_episodes,
+        paper_root=args.paper_root,
+        track_ids=track_ids,
     )
     review = run_exit_timing_archive_sim(args.output_dir, config=config)
 

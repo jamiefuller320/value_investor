@@ -8,11 +8,14 @@ from value_investor.paper_fund import PaperFund, PaperFundConfig
 from value_investor.rebalance_log import (
     REBALANCE_LOG_FILENAME,
     append_rebalance_log,
+    collect_buy_tier_history_tickers,
     collect_decision_candidates,
     collect_screen_buy_tier,
     compare_buffered_hold_across_tracks,
     compare_buffered_hold_counterfactual,
     compare_rebalance_counterfactual_previews,
+    extract_held_stress_episode_seeds,
+    extract_log_swap_rotation_seeds,
     filter_acted_log_entries_since,
     gate_excluded_tickers,
     load_rebalance_log,
@@ -763,3 +766,58 @@ def test_compare_buffered_hold_across_tracks(tmp_path: Path):
     assert comparison is not None
     assert comparison["scope"] == "buffered_hold_counterfactual_multi"
     assert set(comparison["tracks"]) == {"rules", "ai_judgment"}
+
+
+def test_collect_buy_tier_history_tickers_from_log():
+    entries = [
+        {
+            "acted": True,
+            "gate": {"local_time": "2026-01-01T12:00:00+00:00"},
+            "screen_buy_tier": [{"ticker": "AAA.L", "signal": "buy"}],
+            "candidates": [{"ticker": "BBB.L", "signal": "strong_buy"}],
+            "trades": [{"ticker": "CCC.L", "side": "buy"}],
+        }
+    ]
+    history = collect_buy_tier_history_tickers(entries)
+    assert history == frozenset({"AAA.L", "BBB.L", "CCC.L"})
+
+
+def test_extract_held_stress_and_log_swap_seeds():
+    entries = [
+        {
+            "acted": True,
+            "track_id": "rules",
+            "trade_cost_pct": 0.03,
+            "gate": {"local_time": "2026-01-08T13:00:00+00:00"},
+            "holdings_before": [
+                {"ticker": "HELD.L", "avg_cost": 100.0, "name": "Held", "momentum_grace": True}
+            ],
+            "rebalance_state_before": {"exit_streak": {"HELD.L": 2}},
+            "candidates": [
+                {
+                    "ticker": "HELD.L",
+                    "signal": "strong_buy",
+                    "adjusted_signal": "hold",
+                    "conviction_score": 0.4,
+                    "price": 92.0,
+                }
+            ],
+            "screen_buy_tier": [{"ticker": "HELD.L", "signal": "strong_buy"}],
+            "trades": [
+                {"ticker": "HELD.L", "side": "sell", "price": 92.0, "note": "Automated exit"},
+                {"ticker": "NEW.L", "side": "buy", "price": 50.0, "note": "Automated buy"},
+            ],
+        }
+    ]
+    history = collect_buy_tier_history_tickers(entries)
+    held = extract_held_stress_episode_seeds(entries, buy_tier_history=history)
+    assert len(held) == 1
+    assert held[0]["ticker"] == "HELD.L"
+    assert "signal_downgrade" in held[0]["stress_triggers"]
+    assert "exit_streak" in held[0]["stress_triggers"]
+
+    swaps = extract_log_swap_rotation_seeds(entries)
+    assert len(swaps) == 1
+    assert swaps[0]["rotation_id"] == "rules:2026-01-08T13:00:00+00:00"
+    assert swaps[0]["sells"][0]["ticker"] == "HELD.L"
+    assert swaps[0]["buys"][0]["ticker"] == "NEW.L"
