@@ -204,7 +204,7 @@ jobs:
           fi
 
       - name: Commit and push ingest loop artifacts
-        run: bash scripts/push_ingest_loop_artifacts.sh "chore: weekday ingest loop [skip ci]"
+        run: "bash scripts/push_ingest_loop_artifacts.sh 'chore: weekday ingest loop [skip ci]'"
 
       - name: Chain ingest chunk when runtime cutoff deferred targets
         if: >-
