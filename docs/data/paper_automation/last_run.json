@@ -1,118 +1,21 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-10T09:26:48.007593+01:00",
+    "local_time": "2026-08-11T09:27:23.761404+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-10T08:00:00+01:00",
-    "settle_at": "2026-08-10T09:15:00+01:00",
+    "market_open_at": "2026-08-11T08:00:00+01:00",
+    "settle_at": "2026-08-11T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "a2082639-34c0-4e4f-bb47-9ba80164085e",
-      "fund_id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
-      "acted_at": "2026-08-10T09:26:48.007593+01:00",
-      "ticker": "MEGP.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 1.689247,
-      "price": 119.8,
-      "gross": 202.37,
-      "cost": 6.07,
-      "net_cash": 196.3,
-      "note": "Automated exit \u2014 left target set",
-      "name": "ME Group International plc",
-      "avg_cost_at_exit": 105.4,
-      "position_closed": true
-    },
-    {
-      "id": "2c9059b9-2a24-4408-b5e4-0f3c8fc33698",
-      "fund_id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
-      "acted_at": "2026-08-10T09:26:48.007593+01:00",
-      "ticker": "AEP.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 1.023256,
-      "price": 180.8,
-      "gross": 185.0,
-      "cost": 5.55,
-      "net_cash": 179.45,
-      "note": "Automated exit \u2014 left target set",
-      "name": "AEP Plantations Plc",
-      "avg_cost_at_exit": 174.0,
-      "position_closed": true
-    },
-    {
-      "id": "3a8ecb06-f76f-4bfd-ae42-c1ab4cc5f634",
-      "fund_id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
-      "acted_at": "2026-08-10T09:26:48.007593+01:00",
-      "ticker": "BREE.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.584526,
-      "price": 352.2,
-      "gross": 205.87,
-      "cost": 6.18,
-      "net_cash": 199.69,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Breedon Group plc",
-      "avg_cost_at_exit": 304.6,
-      "position_closed": true
-    },
-    {
-      "id": "ccb33dd0-00ad-4d30-9574-74995f9ff303",
-      "fund_id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
-      "acted_at": "2026-08-10T09:26:48.007593+01:00",
-      "ticker": "FGP.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.659458,
-      "price": 184.3,
-      "gross": 305.84,
-      "cost": 9.18,
-      "net_cash": -315.01,
-      "note": "Automated buy",
-      "name": "FirstGroup plc"
-    },
-    {
-      "id": "5656f9f1-7bde-4614-b2a0-f98e9ecfe454",
-      "fund_id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
-      "acted_at": "2026-08-10T09:26:48.007593+01:00",
-      "ticker": "HIK.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.071282,
-      "price": 1675.0,
-      "gross": 119.4,
-      "cost": 3.58,
-      "net_cash": -122.98,
-      "note": "Automated buy",
-      "name": "Hikma Pharmaceuticals PLC"
-    },
-    {
-      "id": "3ee18a14-b44c-4a9a-a17a-13d5c8b92387",
-      "fund_id": "bf98e24a-afaf-4493-bd5e-ddbde4a38e45",
-      "acted_at": "2026-08-10T09:26:48.007593+01:00",
-      "ticker": "ITV.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.840729,
-      "price": 72.5,
-      "gross": 133.45,
-      "cost": 4.0,
-      "net_cash": -137.46,
-      "note": "Automated buy",
-      "name": "ITV plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
-      "Conviction floor: min_conviction=0.45.",
-      "Sector cap: at most 1 name(s) per known sector (cap=30%).",
+      "Conviction floor: min_conviction=0.50.",
+      "Sector cap: at most 1 name(s) per known sector (cap=25%).",
       "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
       "Costs: 3.0% applied on each buy and sell.",
@@ -120,87 +23,119 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 928.28,
+    "nav": 914.92,
     "cash": 0.0,
     "max_positions": 3,
-    "min_conviction": 0.45,
-    "sector_cap": 0.3,
+    "min_conviction": 0.5,
+    "sector_cap": 0.25,
     "skip_timing_wait": true,
     "use_momentum_grace": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 309.43,
+    "target_sleeve_value": 295.82,
     "targets": [
       {
-        "ticker": "FGP.L",
-        "name": "FirstGroup plc",
+        "ticker": "MEGP.L",
+        "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6559,
-        "price": 184.3
+        "conviction_score": 0.6383000000000001,
+        "price": 116.3176
       },
       {
-        "ticker": "HIK.L",
-        "name": "Hikma Pharmaceuticals PLC",
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6364000000000001,
-        "price": 1675.0
+        "conviction_score": 0.5988000000000001,
+        "price": 177.6
       },
       {
-        "ticker": "ITV.L",
-        "name": "ITV plc",
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6048000000000001,
-        "price": 72.5
+        "conviction_score": 0.5593,
+        "price": 1110.5
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "HIK.L",
+        "name": "Hikma Pharmaceuticals PLC",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.185929,
+        "price": 1635.0,
+        "value": 303.99
+      },
+      {
+        "action": "sell",
+        "ticker": "ITV.L",
+        "name": "ITV plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 4.289788,
+        "price": 71.7,
+        "value": 307.58
+      },
+      {
+        "action": "sell",
+        "ticker": "FGP.L",
+        "name": "FirstGroup plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.659458,
+        "price": 182.8,
+        "value": 303.35
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "HIK.L",
-        "name": "Hikma Pharmaceuticals PLC",
-        "reason": "Already near equal-weight target",
-        "value": 311.43,
-        "target_value": 309.43,
-        "conviction_score": 0.6364000000000001,
+        "action": "buy",
+        "ticker": "MEGP.L",
+        "name": "ME Group International plc",
+        "reason": "New sleeve",
+        "value": 295.82,
+        "price": 116.3176,
+        "target_value": 295.82,
+        "conviction_score": 0.6383000000000001,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
-        "ticker": "ITV.L",
-        "name": "ITV plc",
-        "reason": "Already near equal-weight target",
-        "value": 311.01,
-        "target_value": 309.43,
-        "conviction_score": 0.6048000000000001,
+        "action": "buy",
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "reason": "New sleeve",
+        "value": 295.82,
+        "price": 177.6,
+        "target_value": 295.82,
+        "conviction_score": 0.5988000000000001,
         "signal": "strong_buy"
-      }
-    ],
-    "skipped": [
+      },
       {
-        "ticker": "FGP.L",
-        "name": "FirstGroup plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 309.43,
-        "conviction_score": 0.6559,
+        "action": "buy",
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
+        "reason": "New sleeve",
+        "value": 295.82,
+        "price": 1110.5,
+        "target_value": 295.82,
+        "conviction_score": 0.5593,
         "signal": "strong_buy"
       }
     ],
+    "anticipated_holds": [],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 3 name(s) that left the set; deploy cash into 3 buy(s)."
   },
   "alerts": [
     {
       "ticker": "HIK.L",
       "name": "Hikma Pharmaceuticals PLC",
       "source": "paper",
-      "severity": "action",
-      "message": "Mark 1675.00 at/over take-profit 1661.10",
-      "mark": 1675.0,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 1635.0,
       "stop_loss": 1411.78,
       "take_profit": 1661.1,
       "timing_signal": "insufficient_data"
@@ -211,7 +146,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 72.5,
+      "mark": 71.69999694824219,
       "stop_loss": 65.1,
       "take_profit": 79.11,
       "timing_signal": "insufficient_data"
@@ -222,7 +157,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 184.3000030517578,
+      "mark": 182.8000030517578,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -840,23 +775,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-11T09:27:23.761404+01:00",
+        "portfolio_value": 914.92,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-10T09:26:48.007593+01:00",
+    "last_mark_at": "2026-08-11T09:27:23.761404+01:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "MEGP.L": 1,
-        "AEP.L": 1,
-        "BREE.L": 1
-      }
+      "exit_streak": {
+        "HIK.L": 1,
+        "ITV.L": 1,
+        "FGP.L": 1
+      },
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (6 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-08-10T08:26:57.762158+00:00",
+    "generated_at": "2026-08-11T08:27:35.580257+00:00",
     "open_count": 3,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -869,17 +820,109 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 3,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
-  "generated_at": "2026-08-10T08:26:57.762677+00:00",
+  "exit_timing_cohorts_review": {
+    "schema_version": 1,
+    "track_id": "rules",
+    "generated_at": "2026-08-11T08:27:35.580790+00:00",
+    "framework": {
+      "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+      "hold_recovery": {
+        "question": "When a position is stressed but still held, does it recover to breakeven?",
+        "episode_triggers": [
+          "unrealized below underwater_threshold",
+          "exit_streak >= 1 (hold buffer active)",
+          "momentum_grace on position",
+          "effective signal no longer buy-tier while still held"
+        ],
+        "outcomes": [
+          "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+          "sold_while_underwater",
+          "max_window_elapsed"
+        ],
+        "fields_for_later_analysis": [
+          "data_quality_score",
+          "conviction_score",
+          "screen_signal",
+          "effective_signal",
+          "exit_streak",
+          "stress_triggers",
+          "checkpoints"
+        ]
+      },
+      "swap_rotation": {
+        "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+        "pairing": "same rebalance pass sells vs buys on one track",
+        "outcomes": [
+          "replacement_outperformed",
+          "exit_outperformed",
+          "inconclusive"
+        ],
+        "fields_for_later_analysis": [
+          "sell_tickers",
+          "buy_tickers",
+          "sell_realized_pct",
+          "post_rotation_returns",
+          "trade_costs"
+        ]
+      },
+      "related_artifacts": [
+        "exit_shadow.json (post-exit path after sell)",
+        "rebalance_log.json (counterfactual replay)",
+        "learning_tracks_churn_health.json"
+      ]
+    },
+    "readiness": {
+      "ready_for_probability_analysis": false,
+      "hold_closed_count": 0,
+      "swap_closed_count": 0,
+      "hold_with_data_quality_count": 3,
+      "gaps": [
+        "hold_recovery closed episodes=0 (target >=15)",
+        "swap_rotation closed rotations=0 (target >=10)"
+      ],
+      "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+    },
+    "hold_recovery": {
+      "open": {
+        "count": 3,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "open": 3
+        }
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "swap_rotation": {
+      "open": {
+        "count": 0
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
+    "ingested_this_pass": {
+      "hold_episodes": 3,
+      "swap_rotations": 0
+    },
+    "checkpoints_added_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    }
+  },
+  "generated_at": "2026-08-11T08:27:35.581305+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,
   "selection": {
     "skip_timing_wait": true,
-    "min_conviction": 0.45,
-    "sector_cap": 0.3,
+    "min_conviction": 0.5,
+    "sector_cap": 0.25,
     "use_adjusted_signal": false,
     "require_research_accumulate": false,
     "use_momentum_grace": false,

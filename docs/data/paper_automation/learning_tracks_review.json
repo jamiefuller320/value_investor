@@ -2,31 +2,31 @@
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
   "success_criterion": "Primary AI-judgment track outperforms ^FTSE after costs; rules track is the control datum.",
-  "primary_excess_after_costs": -0.0269,
-  "control_excess_after_costs": -0.121,
+  "primary_excess_after_costs": -0.0233,
+  "control_excess_after_costs": -0.1173,
   "beat_market": false,
   "beat_control": true,
   "verdict": "underperforming",
   "reviews": {
     "rules": {
-      "reviewed_at": "2026-08-10T08:27:18.546524+00:00",
+      "reviewed_at": "2026-08-11T08:28:00.864311+00:00",
       "enough_history": true,
       "applied": true,
       "knobs_before": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.45,
-        "sector_cap": 0.3
+        "min_conviction": 0.5,
+        "sector_cap": 0.25
       },
       "knobs_after": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.5,
-        "sector_cap": 0.25
+        "min_conviction": 0.55,
+        "sector_cap": 0.2
       },
       "proposed_changes": {
-        "min_conviction": 0.5,
-        "sector_cap": 0.25
+        "min_conviction": 0.55,
+        "sector_cap": 0.2
       },
       "reasons": [
         "High cost drag (14.2%) \u2014 raise min_conviction.",
@@ -43,19 +43,19 @@
         "sell_count": 12,
         "positions": 3,
         "cash_fraction": 0.0,
-        "equity_marks": 7,
+        "equity_marks": 8,
         "max_sector_weight": 0.3405,
         "dominant_sector": "Communication Services",
-        "benchmark_return": 0.0358,
-        "excess_after_costs": -0.121,
+        "benchmark_return": 0.0321,
+        "excess_after_costs": -0.1173,
         "note": "",
         "epoch": {
-          "started_at": "2026-08-10T08:27:18.546524+00:00",
+          "started_at": "2026-08-11T08:28:00.864311+00:00",
           "knobs": {
             "max_positions": 3,
             "skip_timing_wait": true,
-            "min_conviction": 0.5,
-            "sector_cap": 0.25
+            "min_conviction": 0.55,
+            "sector_cap": 0.2
           },
           "seeded_from_history": false,
           "baseline_nav": 914.78,
@@ -81,8 +81,8 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.5,
-          "sector_cap": 0.25,
+          "min_conviction": 0.55,
+          "sector_cap": 0.2,
           "use_adjusted_signal": false,
           "require_research_accumulate": false,
           "candidate_source": "auto"
@@ -91,20 +91,20 @@
         "log_entries_total": 5,
         "log_entries_replayed": 5,
         "replay_from": "2026-07-20T21:32:40.266505+01:00",
-        "replay_to": "2026-08-10T09:26:48.007593+01:00",
-        "simulated_nav": 998.13,
+        "replay_to": "2026-08-11T09:27:23.761404+01:00",
+        "simulated_nav": 974.68,
         "baseline_nav": 1000.0,
-        "simulated_return": -0.0019,
-        "simulated_total_costs": 67.12,
-        "simulated_cost_drag": 0.0671,
-        "simulated_trade_count": 6,
+        "simulated_return": -0.0253,
+        "simulated_total_costs": 68.82,
+        "simulated_cost_drag": 0.0688,
+        "simulated_trade_count": 7,
         "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-        "actual_nav": 928.28,
-        "actual_return_over_window": -0.0717,
+        "actual_nav": 914.92,
+        "actual_return_over_window": -0.0851,
         "actual_total_costs_over_window": 141.66,
         "actual_cost_drag_over_window": 0.1417,
-        "return_delta_vs_actual": 0.0699,
-        "cost_drag_delta_vs_actual": 0.0745
+        "return_delta_vs_actual": 0.0598,
+        "cost_drag_delta_vs_actual": 0.0728
       },
       "note": "Applied clamped knob updates from decision review; started new knob epoch.",
       "track_id": "rules",
@@ -113,27 +113,29 @@
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "ai_judgment": {
-      "reviewed_at": "2026-08-10T08:27:18.641912+00:00",
+      "reviewed_at": "2026-08-11T08:28:00.941947+00:00",
       "enough_history": true,
       "applied": true,
       "knobs_before": {
-        "max_positions": 3,
+        "max_positions": 4,
         "skip_timing_wait": true,
         "min_conviction": 0.0,
-        "sector_cap": 0.3
+        "sector_cap": 0.25
       },
       "knobs_after": {
-        "max_positions": 4,
+        "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.0,
-        "sector_cap": 0.25
+        "min_conviction": 0.05,
+        "sector_cap": 0.2
       },
       "proposed_changes": {
-        "max_positions": 4,
-        "sector_cap": 0.25
+        "min_conviction": 0.05,
+        "max_positions": 3,
+        "sector_cap": 0.2
       },
       "reasons": [
-        "Strong excess after costs (+2.7%) \u2014 raise max_positions.",
+        "High cost drag (6.7%) \u2014 raise min_conviction.",
+        "Weak excess after costs (-2.3%) \u2014 reduce max_positions.",
         "Holdings concentrated in Communication Services (34%) \u2014 tighten sector_cap."
       ],
       "metrics": {
@@ -147,19 +149,19 @@
         "sell_count": 3,
         "positions": 3,
         "cash_fraction": 0.0,
-        "equity_marks": 6,
+        "equity_marks": 7,
         "max_sector_weight": 0.3404,
         "dominant_sector": "Communication Services",
-        "benchmark_return": 0.0246,
-        "excess_after_costs": -0.0269,
+        "benchmark_return": 0.021,
+        "excess_after_costs": -0.0233,
         "note": "",
         "epoch": {
-          "started_at": "2026-08-10T08:27:18.641912+00:00",
+          "started_at": "2026-08-11T08:28:00.941947+00:00",
           "knobs": {
-            "max_positions": 4,
+            "max_positions": 3,
             "skip_timing_wait": true,
-            "min_conviction": 0.0,
-            "sector_cap": 0.25
+            "min_conviction": 0.05,
+            "sector_cap": 0.2
           },
           "seeded_from_history": false,
           "baseline_nav": 997.72,
@@ -183,10 +185,10 @@
       "counterfactual_preview": {
         "scope": "lifetime_trade_replay",
         "knobs": {
-          "max_positions": 4,
+          "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.0,
-          "sector_cap": 0.25
+          "min_conviction": 0.05,
+          "sector_cap": 0.2
         },
         "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
         "executed_trades": 5,
@@ -208,9 +210,9 @@
       "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on this track; AI-judgment is the primary learning track, rules is the control."
     },
     "momentum_grace": {
-      "reviewed_at": "2026-08-10T08:27:18.698277+00:00",
-      "enough_history": false,
-      "applied": false,
+      "reviewed_at": "2026-08-11T08:28:01.016476+00:00",
+      "enough_history": true,
+      "applied": true,
       "knobs_before": {
         "max_positions": 5,
         "skip_timing_wait": true,
@@ -218,15 +220,16 @@
         "sector_cap": 0.3
       },
       "knobs_after": {
-        "max_positions": 5,
+        "max_positions": 4,
         "skip_timing_wait": true,
         "min_conviction": 0.0,
         "sector_cap": 0.3
       },
-      "proposed_changes": {},
+      "proposed_changes": {
+        "max_positions": 4
+      },
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
-        "Weak excess after costs (-3.2%) \u2014 reduce max_positions."
+        "Weak excess after costs (-2.8%) \u2014 reduce max_positions."
       ],
       "metrics": {
         "portfolio_value": 970.87,
@@ -239,12 +242,38 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.0,
-        "equity_marks": 3,
+        "equity_marks": 4,
         "max_sector_weight": 0.2,
         "dominant_sector": "Agriculture/Commodities",
-        "benchmark_return": 0.0028,
-        "excess_after_costs": -0.0319,
-        "note": ""
+        "benchmark_return": -0.0008,
+        "excess_after_costs": -0.0283,
+        "note": "",
+        "epoch": {
+          "started_at": "2026-08-11T08:28:01.016476+00:00",
+          "knobs": {
+            "max_positions": 4,
+            "skip_timing_wait": true,
+            "min_conviction": 0.0,
+            "sector_cap": 0.3
+          },
+          "seeded_from_history": false,
+          "baseline_nav": 970.87,
+          "portfolio_value": 970.87,
+          "total_return": 0.0,
+          "total_costs": 0,
+          "cost_drag": 0.0,
+          "trade_count": 0,
+          "buy_count": 0,
+          "sell_count": 0,
+          "positions": 5,
+          "cash_fraction": 0.0,
+          "equity_marks": 0,
+          "max_sector_weight": 0.2,
+          "dominant_sector": "Agriculture/Commodities",
+          "benchmark_return": null,
+          "excess_after_costs": null,
+          "note": "Insufficient epoch marks for benchmark span."
+        }
       },
       "counterfactual_preview": {
         "scope": "lifetime_trade_replay",
@@ -267,32 +296,32 @@
         "log_entries_replayed": 1,
         "graduates_at_acted_entries": 2
       },
-      "note": "Proposal only \u2014 history too thin to apply.",
+      "note": "Applied clamped knob updates from decision review; started new knob epoch.",
       "track_id": "momentum_grace",
       "track_label": "Screen rules + momentum grace",
       "is_primary_learning_track": false,
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "technical": {
-      "reviewed_at": "2026-08-10T08:27:18.700245+00:00",
+      "reviewed_at": "2026-08-11T08:28:01.028350+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.45,
-        "sector_cap": 0.3
+        "min_conviction": 0.5,
+        "sector_cap": 0.25
       },
       "knobs_after": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.45,
-        "sector_cap": 0.3
+        "min_conviction": 0.5,
+        "sector_cap": 0.25
       },
       "proposed_changes": {},
       "reasons": [
         "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=3.",
-        "Holdings concentrated in Industrials (33%) \u2014 tighten sector_cap.",
+        "Holdings concentrated in Industrials (67%) \u2014 tighten sector_cap.",
         "Large idle cash with low cost drag \u2014 ease min_conviction."
       ],
       "metrics": {
@@ -307,7 +336,7 @@
         "positions": 3,
         "cash_fraction": 0.707,
         "equity_marks": 2,
-        "max_sector_weight": 0.3343,
+        "max_sector_weight": 0.6676,
         "dominant_sector": "Industrials",
         "benchmark_return": null,
         "excess_after_costs": null,
@@ -318,19 +347,19 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.4,
-          "sector_cap": 0.25
+          "min_conviction": 0.45,
+          "sector_cap": 0.2
         },
         "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 3,
-        "blocked_buys": 0,
+        "executed_trades": 2,
+        "blocked_buys": 1,
         "blocked_orphan_sells": 0,
         "actual_total_costs": 8.71,
-        "simulated_total_costs": 8.71,
-        "estimated_cost_savings_gbp": 0.0,
+        "simulated_total_costs": 5.81,
+        "estimated_cost_savings_gbp": 2.9,
         "actual_cost_drag": 0.0087,
-        "simulated_cost_drag": 0.0087,
-        "cost_drag_delta": 0.0,
+        "simulated_cost_drag": 0.0058,
+        "cost_drag_delta": 0.0029,
         "log_entries_replayed": 1,
         "graduates_at_acted_entries": 2
       },

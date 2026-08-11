@@ -1,25 +1,27 @@
 {
-  "reviewed_at": "2026-08-10T08:27:18.641912+00:00",
+  "reviewed_at": "2026-08-11T08:28:00.941947+00:00",
   "enough_history": true,
   "applied": true,
   "knobs_before": {
-    "max_positions": 3,
+    "max_positions": 4,
     "skip_timing_wait": true,
     "min_conviction": 0.0,
-    "sector_cap": 0.3
+    "sector_cap": 0.25
   },
   "knobs_after": {
-    "max_positions": 4,
+    "max_positions": 3,
     "skip_timing_wait": true,
-    "min_conviction": 0.0,
-    "sector_cap": 0.25
+    "min_conviction": 0.05,
+    "sector_cap": 0.2
   },
   "proposed_changes": {
-    "max_positions": 4,
-    "sector_cap": 0.25
+    "min_conviction": 0.05,
+    "max_positions": 3,
+    "sector_cap": 0.2
   },
   "reasons": [
-    "Strong excess after costs (+2.7%) \u2014 raise max_positions.",
+    "High cost drag (6.7%) \u2014 raise min_conviction.",
+    "Weak excess after costs (-2.3%) \u2014 reduce max_positions.",
     "Holdings concentrated in Communication Services (34%) \u2014 tighten sector_cap."
   ],
   "metrics": {
@@ -33,19 +35,19 @@
     "sell_count": 3,
     "positions": 3,
     "cash_fraction": 0.0,
-    "equity_marks": 6,
+    "equity_marks": 7,
     "max_sector_weight": 0.3404,
     "dominant_sector": "Communication Services",
-    "benchmark_return": 0.0246,
-    "excess_after_costs": -0.0269,
+    "benchmark_return": 0.021,
+    "excess_after_costs": -0.0233,
     "note": "",
     "epoch": {
-      "started_at": "2026-08-10T08:27:18.641912+00:00",
+      "started_at": "2026-08-11T08:28:00.941947+00:00",
       "knobs": {
-        "max_positions": 4,
+        "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.0,
-        "sector_cap": 0.25
+        "min_conviction": 0.05,
+        "sector_cap": 0.2
       },
       "seeded_from_history": false,
       "baseline_nav": 997.72,
@@ -69,10 +71,10 @@
   "counterfactual_preview": {
     "scope": "lifetime_trade_replay",
     "knobs": {
-      "max_positions": 4,
+      "max_positions": 3,
       "skip_timing_wait": true,
-      "min_conviction": 0.0,
-      "sector_cap": 0.25
+      "min_conviction": 0.05,
+      "sector_cap": 0.2
     },
     "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
     "executed_trades": 5,
