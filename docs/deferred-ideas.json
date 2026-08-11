@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-11T10:05:49+00:00",
+  "updated_at": "2026-08-11T11:08:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2540,6 +2540,68 @@
       "status": "open",
       "source": "user horizon follow-up 2026-08-11",
       "added_at": "2026-08-11T10:05:49+00:00"
+    },
+    {
+      "id": "L129",
+      "category": "later",
+      "section": "ops",
+      "title": "Ingest backlog resume after runtime cutoff",
+      "summary": "Persist remaining_target_ids from partial ingest runs in docs/data/ingest_backlog.json and prioritize them on the next pass so cutoff does not re-rank away unfinished tickers.",
+      "revisit_when": "Second partial ingest run in one week or backlog drain needed for strong-buy Tier A names",
+      "tags": [
+        "ingest",
+        "cutoff",
+        "backfill"
+      ],
+      "status": "open",
+      "source": "cutoff-protection discussion",
+      "added_at": "2026-08-11T11:08:22+00:00"
+    },
+    {
+      "id": "L130",
+      "category": "later",
+      "section": "ops",
+      "title": "Ingest loop chunk self-dispatch on partial",
+      "summary": "When ingest loop ends with runtime_cutoff and daily slot remains, workflow_dispatch ingest-loop with force=true and backlog chunk (4-6 targets) to drain remainder same day.",
+      "revisit_when": "ingest_backlog.json exists and partial runs are frequent",
+      "tags": [
+        "ingest",
+        "gha",
+        "cutoff"
+      ],
+      "status": "open",
+      "source": "cutoff-protection discussion",
+      "added_at": "2026-08-11T11:08:22+00:00"
+    },
+    {
+      "id": "L131",
+      "category": "later",
+      "section": "ops",
+      "title": "Per-ticker ingest time budget",
+      "summary": "Cap wall time per ticker in run_ingest_improvement_pass so one slow name cannot consume the entire weekday runtime budget; defer remainder to backlog.",
+      "revisit_when": "Cutoff runs complete 0-2 tickers despite 12 planned",
+      "tags": [
+        "ingest",
+        "cutoff"
+      ],
+      "status": "open",
+      "source": "cutoff-protection discussion",
+      "added_at": "2026-08-11T11:08:22+00:00"
+    },
+    {
+      "id": "L132",
+      "category": "later",
+      "section": "ops",
+      "title": "Ops alert on ingest runtime_cutoff",
+      "summary": "Extend ops_monitor check_ingest_health_log to flag partial/runtime_cutoff runs with targets_deferred count, not only zero-body stall.",
+      "revisit_when": "Backlog resume shipped or partial runs exceed one per week",
+      "tags": [
+        "ingest",
+        "monitoring"
+      ],
+      "status": "open",
+      "source": "cutoff-protection discussion",
+      "added_at": "2026-08-11T11:08:22+00:00"
     }
   ],
   "fragments": [

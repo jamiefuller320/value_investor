@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -268,6 +268,55 @@ def acted_log_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     )
 
 
+def filter_acted_log_entries_since(
+    entries: list[dict[str, Any]],
+    *,
+    lookback_days: int,
+    as_of: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Return acted log entries whose pass timestamp falls within the lookback window."""
+    when = as_of or datetime.now(UTC)
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=UTC)
+    since = when - timedelta(days=int(lookback_days))
+    filtered: list[dict[str, Any]] = []
+    for entry in acted_log_entries(entries):
+        when_text = _entry_sort_key(entry)
+        entry_dt = _parse_iso_datetime(when_text)
+        if entry_dt is None:
+            continue
+        entry_utc = entry_dt.astimezone(UTC) if entry_dt.tzinfo else entry_dt.replace(tzinfo=UTC)
+        if since <= entry_utc <= when:
+            filtered.append(entry)
+    return filtered
+
+
+def _count_full_exits_in_entries(entries: list[dict[str, Any]]) -> int:
+    count = 0
+    for entry in entries:
+        for trade in entry.get("trades") or []:
+            if not isinstance(trade, dict):
+                continue
+            if trade.get("side") != "sell":
+                continue
+            if "trim" in str(trade.get("note") or "").lower():
+                continue
+            count += 1
+    return count
+
+
+def _buffered_hold_context(entries: list[dict[str, Any]]) -> dict[str, Any]:
+    last = entries[-1] if entries else {}
+    state = (last.get("rebalance_state_after") or {}) if isinstance(last, dict) else {}
+    exit_streak = dict(state.get("exit_streak") or {})
+    return {
+        "exit_streak": exit_streak,
+        "buffered_holdings": len(exit_streak),
+        "full_exits_in_window": _count_full_exits_in_entries(entries),
+        "log_entries_in_window": len(entries),
+    }
+
+
 def _price_map_from_candidates(candidates: list[dict[str, Any]]) -> dict[str, float]:
     prices: dict[str, float] = {}
     for row in candidates:
@@ -325,10 +374,12 @@ def _selection_kwargs_for_replay(
     sector_cap: float,
     use_adjusted_signal: bool | None = None,
     require_research_accumulate: bool | None = None,
+    exit_confirm_screens: int | None = None,
 ) -> dict[str, Any]:
     selection = dict(entry.get("selection") or {})
     logged_use_adj = bool(selection.get("use_adjusted_signal", False))
     logged_req_acc = bool(selection.get("require_research_accumulate", False))
+    logged_exit_confirm = int(selection.get("exit_confirm_screens") or 2)
     return {
         "skip_timing_wait": bool(skip_timing_wait),
         "min_conviction": float(min_conviction),
@@ -342,7 +393,9 @@ def _selection_kwargs_for_replay(
             else bool(require_research_accumulate)
         ),
         "use_momentum_grace": bool(selection.get("use_momentum_grace", False)),
-        "exit_confirm_screens": int(selection.get("exit_confirm_screens") or 2),
+        "exit_confirm_screens": (
+            logged_exit_confirm if exit_confirm_screens is None else int(exit_confirm_screens)
+        ),
         "reentry_cooldown_screens": int(selection.get("reentry_cooldown_screens") or 1),
         "min_rebalance_notional_gbp": float(selection.get("min_rebalance_notional_gbp") or 10.0),
         "max_positions": int(max_positions),
@@ -401,7 +454,10 @@ def replay_counterfactual_from_log(
     sector_cap: float = DEFAULT_TARGET_SECTOR_CAP,
     use_adjusted_signal: bool | None = None,
     require_research_accumulate: bool | None = None,
+    exit_confirm_screens: int | None = None,
     candidate_source: str = "auto",
+    lookback_days: int | None = None,
+    as_of: datetime | None = None,
     actual_fund: PaperFund | None = None,
 ) -> dict[str, Any] | None:
     """
@@ -410,9 +466,18 @@ def replay_counterfactual_from_log(
     When ``screen_buy_tier`` is present, AI-gate counterfactuals can widen the
     replay pool to raw screen buy-tier names (or force via ``candidate_source``).
 
+    Pass ``lookback_days`` to replay only passes within that window (observe-only
+    churn probe). ``exit_confirm_screens`` overrides the logged hold-buffer knob.
+
     Returns None when there are no acted log entries to replay.
     """
     acted = acted_log_entries(entries)
+    if lookback_days is not None:
+        acted = filter_acted_log_entries_since(
+            entries,
+            lookback_days=int(lookback_days),
+            as_of=as_of,
+        )
     if not acted:
         return None
 
@@ -455,6 +520,7 @@ def replay_counterfactual_from_log(
             sector_cap=sector_cap,
             use_adjusted_signal=use_adjusted_signal,
             require_research_accumulate=require_research_accumulate,
+            exit_confirm_screens=exit_confirm_screens,
         )
         fund.config.max_positions = int(kwargs.pop("max_positions"))
         if mode == "technical":
@@ -492,6 +558,11 @@ def replay_counterfactual_from_log(
         if require_research_accumulate is None
         else bool(require_research_accumulate)
     )
+    effective_exit_confirm = (
+        int(selection.get("exit_confirm_screens") or 2)
+        if exit_confirm_screens is None
+        else int(exit_confirm_screens)
+    )
     payload: dict[str, Any] = {
         "scope": "rebalance_log_replay",
         "knobs": {
@@ -501,11 +572,13 @@ def replay_counterfactual_from_log(
             "sector_cap": round(float(sector_cap), 4),
             "use_adjusted_signal": effective_use_adj,
             "require_research_accumulate": effective_req_acc,
+            "exit_confirm_screens": effective_exit_confirm,
             "candidate_source": str(candidate_source or "auto"),
         },
         "used_screen_buy_tier_pool": used_screen_pool,
         "log_entries_total": len(entries),
         "log_entries_replayed": len(acted),
+        "lookback_days": int(lookback_days) if lookback_days is not None else None,
         "replay_from": _entry_sort_key(first),
         "replay_to": _entry_sort_key(last),
         "simulated_nav": round(sim_nav, 2),
@@ -859,6 +932,190 @@ def replay_counterfactual_from_archive(
         )
 
     return payload
+
+
+def compare_buffered_hold_counterfactual(
+    track_dir: Path,
+    *,
+    lookback_days: int = 7,
+    exit_confirm_variants: tuple[int, ...] = (1, 2),
+    as_of: datetime | None = None,
+    max_positions: int | None = None,
+    skip_timing_wait: bool | None = None,
+    min_conviction: float | None = None,
+    sector_cap: float | None = None,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
+    actual_fund: PaperFund | None = None,
+) -> dict[str, Any] | None:
+    """
+    Compare hold-buffer sensitivity by replaying recent log passes at alternate
+    ``exit_confirm_screens`` values (observe-only — no live knob apply).
+    """
+    track_dir = Path(track_dir)
+    entries = load_rebalance_log(track_dir)
+    window_entries = filter_acted_log_entries_since(
+        entries,
+        lookback_days=int(lookback_days),
+        as_of=as_of,
+    )
+    if not window_entries:
+        return None
+
+    first = window_entries[0]
+    selection = dict(first.get("selection") or {})
+    replay_max_positions = int(
+        max_positions if max_positions is not None else first.get("max_positions") or 5
+    )
+    replay_skip_timing = (
+        bool(selection.get("skip_timing_wait", True))
+        if skip_timing_wait is None
+        else bool(skip_timing_wait)
+    )
+    replay_min_conviction = (
+        float(selection.get("min_conviction") or 0.0)
+        if min_conviction is None
+        else float(min_conviction)
+    )
+    replay_sector_cap = (
+        float(selection.get("sector_cap") or DEFAULT_TARGET_SECTOR_CAP)
+        if sector_cap is None
+        else float(sector_cap)
+    )
+
+    variants: dict[str, dict[str, Any]] = {}
+    for screens in exit_confirm_variants:
+        preview = replay_counterfactual_from_log(
+            entries,
+            max_positions=replay_max_positions,
+            skip_timing_wait=replay_skip_timing,
+            min_conviction=replay_min_conviction,
+            sector_cap=replay_sector_cap,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
+            exit_confirm_screens=int(screens),
+            lookback_days=int(lookback_days),
+            as_of=as_of,
+            actual_fund=actual_fund,
+        )
+        if preview is not None:
+            variants[str(int(screens))] = preview
+
+    if not variants:
+        return None
+
+    ordered = sorted(int(key) for key in variants)
+    comparison: dict[str, Any] = {
+        "exit_confirm_variants": ordered,
+    }
+    if len(ordered) >= 2:
+        low, high = ordered[0], ordered[-1]
+        low_preview = variants[str(low)]
+        high_preview = variants[str(high)]
+        comparison.update(
+            {
+                "trade_count_delta_lower_minus_higher": int(
+                    low_preview.get("simulated_trade_count") or 0
+                )
+                - int(high_preview.get("simulated_trade_count") or 0),
+                "cost_drag_delta_lower_minus_higher": round(
+                    float(low_preview.get("simulated_cost_drag") or 0.0)
+                    - float(high_preview.get("simulated_cost_drag") or 0.0),
+                    4,
+                ),
+                "return_delta_lower_minus_higher": round(
+                    float(low_preview.get("simulated_return") or 0.0)
+                    - float(high_preview.get("simulated_return") or 0.0),
+                    4,
+                ),
+            }
+        )
+        if low_preview.get("return_delta_vs_actual") is not None:
+            comparison["return_delta_vs_actual_lower_minus_higher"] = round(
+                float(low_preview.get("return_delta_vs_actual") or 0.0)
+                - float(high_preview.get("return_delta_vs_actual") or 0.0),
+                4,
+            )
+
+    when = as_of or datetime.now(UTC)
+    return {
+        "scope": "buffered_hold_counterfactual",
+        "observe_only": True,
+        "track_id": str(first.get("track_id") or track_dir.name or "rules"),
+        "lookback_days": int(lookback_days),
+        "as_of": when.isoformat(),
+        "churn_context": _buffered_hold_context(window_entries),
+        "variants": variants,
+        "comparison": comparison,
+        "limitations": (
+            "Observe-only replay of logged passes in the lookback window; "
+            "does not mutate live exit_confirm_screens. Lower screen count "
+            "exits sooner (more churn); higher count buffers longer."
+        ),
+    }
+
+
+def compare_buffered_hold_across_tracks(
+    paper_root: Path,
+    *,
+    track_ids: tuple[str, ...] = ("rules", "ai_judgment"),
+    lookback_days: int = 7,
+    exit_confirm_variants: tuple[int, ...] = (1, 2),
+    as_of: datetime | None = None,
+) -> dict[str, Any] | None:
+    """Run buffered-hold counterfactual on rules and ai_judgment learning tracks."""
+    from value_investor.paper_automation import (
+        CONFIG_FILENAME,
+        FUND_FILENAME,
+        AutomationConfig,
+        ensure_automated_fund,
+        learning_track_dirs,
+    )
+
+    paper_root = Path(paper_root)
+    dirs = learning_track_dirs(paper_root)
+    tracks: dict[str, Any] = {}
+    for track_id in track_ids:
+        track_dir = dirs.get(track_id)
+        if track_dir is None or not track_dir.exists():
+            continue
+        fund_path = track_dir / FUND_FILENAME
+        config_path = track_dir / CONFIG_FILENAME
+        fund = None
+        if fund_path.exists() and config_path.exists():
+            config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
+            fund = ensure_automated_fund(fund_path, config)
+        preview = compare_buffered_hold_counterfactual(
+            track_dir,
+            lookback_days=lookback_days,
+            exit_confirm_variants=exit_confirm_variants,
+            as_of=as_of,
+            actual_fund=fund,
+        )
+        if preview is not None:
+            tracks[track_id] = preview
+
+    if not tracks:
+        return None
+
+    when = as_of or datetime.now(UTC)
+    return {
+        "scope": "buffered_hold_counterfactual_multi",
+        "observe_only": True,
+        "lookback_days": int(lookback_days),
+        "as_of": when.isoformat(),
+        "tracks": tracks,
+        "summary": {
+            track_id: {
+                "churn_context": (row.get("churn_context") or {}),
+                "comparison": (row.get("comparison") or {}),
+                "logged_exit_confirm_screens": (
+                    ((row.get("variants") or {}).get("2") or {}).get("knobs") or {}
+                ).get("exit_confirm_screens"),
+            }
+            for track_id, row in tracks.items()
+        },
+    }
 
 
 def compare_rebalance_counterfactual_previews(
