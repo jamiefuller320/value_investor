@@ -436,6 +436,31 @@ def test_restored_health_log_passes_ingest_checks():
     assert not corrupt
 
 
+def test_check_ingest_health_log_warns_on_runtime_cutoff(tmp_path: Path):
+    health = tmp_path / "ingest_health_log.json"
+    health.write_text(
+        json.dumps(
+            {
+                "entries": [
+                    {"run_at": "2026-08-10T07:00:00+00:00", "targets_deferred": 0},
+                    {
+                        "run_at": "2026-08-11T07:34:00+00:00",
+                        "runtime_cutoff": True,
+                        "targets_deferred": 7,
+                        "targets_completed": 5,
+                        "cutoff_reason": "per_ticker_budget",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    findings = check_ingest_health_log(health)
+    cutoff = [row for row in findings if row.title == "Ingest loop hit runtime cutoff"]
+    assert len(cutoff) == 1
+    assert "7 ticker" in cutoff[0].summary
+
+
 def test_ops_monitor_cli_accepts_run_json_after_subcommand():
     from value_investor.ops_monitor_cli import main
 

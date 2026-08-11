@@ -423,6 +423,22 @@ def check_ingest_health_log(path: Path = DEFAULT_HEALTH_LOG_PATH) -> list[OpsFin
                 auto_fixable=True,
             )
         )
+    latest = entries[-1] if entries else {}
+    if latest.get("runtime_cutoff") and int(latest.get("targets_deferred") or 0) > 0:
+        deferred = int(latest.get("targets_deferred") or 0)
+        completed = int(latest.get("targets_completed") or 0)
+        reason = str(latest.get("cutoff_reason") or "runtime_cutoff")
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="ingest",
+                title="Ingest loop hit runtime cutoff",
+                summary=(
+                    f"Last run deferred {deferred} ticker(s) after completing {completed} "
+                    f"({reason}) — backlog resume or chained chunk should drain remainder."
+                ),
+            )
+        )
     return findings
 
 

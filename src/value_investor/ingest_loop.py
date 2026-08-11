@@ -36,7 +36,7 @@ DEFAULT_RESEARCH_ROOTS = [
 ]
 HEALTH_LOG_KEEP = 52
 DEFAULT_STALL_RUNS = 2
-DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 1500.0
+DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 2100.0
 
 
 def load_health_log_payload(
@@ -252,6 +252,11 @@ def run_weekday_ingest_loop(
             "ingest_targets": len(ingest_summary.targets) if ingest_summary else 0,
             "ingest_improved": len(improved_tickers),
             "improved_tickers": improved_tickers,
+            "runtime_cutoff": bool(ingest_summary and ingest_summary.runtime_cutoff),
+            "targets_planned": ingest_summary.targets_planned if ingest_summary else 0,
+            "targets_completed": ingest_summary.targets_completed if ingest_summary else 0,
+            "targets_deferred": ingest_summary.targets_deferred if ingest_summary else 0,
+            "cutoff_reason": ingest_summary.cutoff_reason if ingest_summary else None,
         },
         path=health_log_path,
     )

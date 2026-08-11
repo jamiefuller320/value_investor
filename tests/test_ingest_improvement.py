@@ -492,5 +492,8 @@ def test_run_ingest_improvement_pass_stops_at_runtime_budget(
 
     assert summary.runtime_cutoff is True
     assert summary.partial is True
+    assert summary.targets_planned == 2
+    assert summary.targets_completed == 0
+    assert summary.targets_deferred == 2
     assert len(summary.results) == 0
     mock_ingest_sources.assert_not_called()
