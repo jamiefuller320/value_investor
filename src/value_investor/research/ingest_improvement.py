@@ -467,7 +467,10 @@ def _ingest_pass_should_cutoff(
     elapsed = time.monotonic() - started
     if elapsed >= max_runtime_seconds:
         return True, "runtime_budget"
-    if per_ticker_max_seconds is not None and elapsed + per_ticker_max_seconds > max_runtime_seconds:
+    if (
+        per_ticker_max_seconds is not None
+        and elapsed + per_ticker_max_seconds > max_runtime_seconds
+    ):
         return True, "per_ticker_budget"
     return False, None
 
