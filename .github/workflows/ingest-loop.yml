@@ -171,7 +171,7 @@ jobs:
           if [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
             ARGS+=(--record-trial)
             ARGS+=(--trial-title "Single-ticker ingest depth trial")
-            ARGS+=(--trial-summary "Top priority_score buy-tier name; review for eng-idle orchestration and global ingest policy.")
+            ARGS+=(--trial-summary "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.")
             ARGS+=(--trial-review-trigger horizon_scan)
           fi
           EXIT=0

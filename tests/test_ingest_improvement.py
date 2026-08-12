@@ -267,6 +267,93 @@ def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Pa
     assert targets[0].ingest_suggestion_count == 1
 
 
+def test_select_ingest_improvement_targets_require_gaps_skips_suggestion_rich_full_coverage(
+    tmp_path: Path,
+):
+    """Trials should not pick high-suggestion tickers with no indexed/period gaps."""
+    output_dir = tmp_path / "output"
+    suggestions_path = tmp_path / "suggestions.json"
+    suggestions_path.write_text(
+        json.dumps(
+            {
+                "suggestions": [
+                    {
+                        "ticker": "MEGP.L",
+                        "area": "ingest",
+                        "priority": "high",
+                        "title": f"suggestion {idx}",
+                    }
+                    for idx in range(10)
+                ]
+                + [
+                    {
+                        "ticker": "VCT.L",
+                        "area": "ingest",
+                        "priority": "medium",
+                        "title": "one gap",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    megp_sources = output_dir / "research" / "MEGP.L" / "sources" / "filings"
+    megp_sources.mkdir(parents=True)
+    (megp_sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 4,
+                    "annual": 2,
+                    "interim": 2,
+                    "trading_update": 0,
+                    "with_body": 4,
+                },
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    vct_sources = output_dir / "research" / "VCT.L" / "sources" / "filings"
+    vct_sources.mkdir(parents=True)
+    (vct_sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 3, "annual": 1, "interim": 1, "with_body": 2},
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                    {"period": "trading_update", "has_body": False},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    all_targets = select_ingest_improvement_targets(
+        [_report("MEGP.L", "ME Group"), _report("VCT.L", "Victrex", signal="buy")],
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        max_targets=1,
+    )
+    assert all_targets[0].ticker == "MEGP.L"
+
+    gap_targets = select_ingest_improvement_targets(
+        [_report("MEGP.L", "ME Group"), _report("VCT.L", "Victrex", signal="buy")],
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        max_targets=1,
+        require_outstanding_gaps=True,
+    )
+    assert len(gap_targets) == 1
+    assert gap_targets[0].ticker == "VCT.L"
+
+
 def test_select_ingest_improvement_targets_prioritises_unmeasured_over_thin_indexed(
     tmp_path: Path,
 ):
