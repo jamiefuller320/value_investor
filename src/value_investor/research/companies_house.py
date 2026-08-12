@@ -282,8 +282,9 @@ def fetch_accounts_filing_rows(
 
 MIME_PDF = "application/pdf"
 MIME_XHTML = "application/xhtml+xml"
+MIME_ZIP = "application/zip"
 MIME_XML = "application/xml"
-DOCUMENT_MIME_PRIORITY = (MIME_PDF, MIME_XHTML, MIME_XML)
+DOCUMENT_MIME_PRIORITY = (MIME_PDF, MIME_XHTML, MIME_ZIP, MIME_XML)
 
 
 def fetch_document_metadata(
@@ -351,13 +352,21 @@ def fetch_document_bytes(
         if accept == MIME_PDF:
             length = int((resources.get(MIME_PDF) or {}).get("content_length") or 0)
             if length > MAX_DOCUMENT_BYTES:
+                alternatives = [mime for mime in candidates if mime != MIME_PDF]
+                if alternatives:
+                    logger.info(
+                        "Skipping oversized CH PDF (%s bytes > %s) for %s — trying %s",
+                        length,
+                        MAX_DOCUMENT_BYTES,
+                        document_metadata_url,
+                        ", ".join(alternatives),
+                    )
+                    continue
                 logger.info(
-                    "Skipping oversized CH PDF (%s bytes > %s) for %s",
+                    "Attempting oversized CH PDF (%s bytes) — only format for %s",
                     length,
-                    MAX_DOCUMENT_BYTES,
                     document_metadata_url,
                 )
-                continue
         try:
             raw = _ch_get(
                 doc_url,

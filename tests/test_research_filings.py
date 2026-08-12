@@ -1128,6 +1128,154 @@ def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monk
     assert sum(1 for row in saved["filings"] if row.get("has_body")) == 2
 
 
+def test_fetch_document_bytes_attempts_oversized_pdf_when_only_format(monkeypatch):
+    """Regression: do not skip PDF when it is the only available CH format."""
+    from value_investor.research.companies_house import (
+        MIME_PDF,
+        fetch_document_bytes,
+    )
+
+    meta = {
+        "links": {"document": "/document/vct-only/content"},
+        "resources": {MIME_PDF: {"content_length": 95_000_000}},
+    }
+    calls: list[str] = []
+
+    def fake_get(url, *, api_key, accept="application/json", timeout=60.0, retries=2):
+        if url.endswith("/document/vct-only"):
+            return json.dumps(meta).encode("utf-8")
+        calls.append(accept)
+        return b"%PDF-1.4 oversized statutory accounts"
+
+    monkeypatch.setattr("value_investor.research.companies_house._ch_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.time.sleep", lambda *_a, **_k: None
+    )
+    fetched = fetch_document_bytes(
+        "https://document-api.company-information.service.gov.uk/document/vct-only",
+        api_key="test-key",
+    )
+    assert fetched is not None
+    assert fetched[1] == MIME_PDF
+    assert MIME_PDF in calls
+
+
+_VCT_IXBRL_FIXTURE_HTML = (
+    b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+    b"<body><div>STRATEGIC REPORT</div>"
+    b"<p>Victrex plc consolidated revenue pension covenant going concern borrowings. "
+    b"Segment information and related party transactions for the group. "
+    b"Notes to the financial statements cover exceptional items and adjusting items. "
+    b"Consolidated cash flow statement and consolidated balance sheet disclosures.</p>"
+    b"</body></html>"
+)
+
+
+def test_extract_filing_document_text_parses_ch_zip_ixbrl_package():
+    import io
+    import zipfile
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("reports/report.html", _VCT_IXBRL_FIXTURE_HTML)
+    text = _extract_filing_document_text(buf.getvalue(), "application/zip")
+    assert text is not None
+    assert "STRATEGIC REPORT" in text
+    assert "Victrex" in text
+
+
+def test_refetch_companies_house_filing_bodies_vct_l_zip_ixbrl_gap(tmp_path, monkeypatch):
+    """Regression: VCT.L FY2025 CH annual gap (ch_02793780_MzUwMzgzMTQyOWFkaXF6a2N4)."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = (
+        "https://document-api.company-information.service.gov.uk/document/"
+        "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    )
+    index = {
+        "ticker": "VCT.L",
+        "company_name": "Victrex plc",
+        "filings": [
+            {
+                "id": "ch_02793780_MzUwMzgzMTQyOWFkaXF6a2N4",
+                "source": "companies_house",
+                "headline": "Companies House accounts — accounts-with-accounts-type-group",
+                "published_at": "2026-02-09T00:00:00+00:00",
+                "url": ch_url,
+                "document_metadata_url": ch_url,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 100,
+                "company_number": "02793780",
+            }
+        ],
+        "summary": {"total": 1, "annual": 1, "with_body": 0},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    body_text = (
+        "A" * 220
+        + " Victrex plc consolidated income statement pension covenant going concern borrowings"
+    )
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: body_text if row.get("id") == "ch_02793780_MzUwMzgzMTQyOWFkaXF6a2N4" else None,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=5)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    assert result["with_body_after"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / "ch_02793780_MzUwMzgzMTQyOWFkaXF6a2N4.txt").exists()
+
+
+def test_fetch_companies_house_body_vct_l_zip_ixbrl_end_to_end(monkeypatch):
+    """End-to-end: zip-only CH metadata yields substantive Victrex accounts text."""
+    import io
+    import zipfile
+
+    from value_investor.research.companies_house import MIME_ZIP, iter_ch_document_downloads
+    from value_investor.research.filings import _fetch_companies_house_body
+
+    ch_url = (
+        "https://document-api.company-information.service.gov.uk/document/"
+        "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    )
+    html = _VCT_IXBRL_FIXTURE_HTML
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("reports/report.html", html)
+    zip_payload = buf.getvalue()
+
+    meta = {
+        "links": {"document": "/document/vct/content"},
+        "resources": {MIME_ZIP: {"content_length": len(zip_payload)}},
+    }
+
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_document_metadata",
+        lambda *args, **kwargs: meta,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_document_bytes",
+        lambda *args, **kwargs: (zip_payload, MIME_ZIP),
+    )
+    downloads = iter_ch_document_downloads(ch_url, api_key="test-key")
+    assert len(downloads) == 1
+    row = {
+        "id": "ch_02793780_MzUwMzgzMTQyOWFkaXF6a2N4",
+        "document_metadata_url": ch_url,
+        "url": ch_url,
+    }
+    body = _fetch_companies_house_body(row)
+    assert body is not None
+    assert "Victrex" in body
+    assert "STRATEGIC REPORT" in body
+
+
 def test_refetch_missing_filing_bodies(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
