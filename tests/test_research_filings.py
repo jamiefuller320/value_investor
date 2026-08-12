@@ -305,6 +305,105 @@ def test_fetch_filing_body_parses_sec_inline_xbrl(monkeypatch):
     assert "RioTintoLimitedMember" not in text
 
 
+def test_fetch_filing_body_resolves_sec_pdf_wrapper(monkeypatch):
+    """Regression: HLN.L 6-K indexed as -pdf.htm must follow the linked exhibit PDF."""
+    cover_html = """
+    <html><body>
+    <div>FORM 6-K REPORT OF FOREIGN PRIVATE ISSUER</div>
+    <p>Haleon plc Commission File Number: 001-41411</p>
+    <a href="a2418q.pdf">Exhibit 99.1</a>
+    </body></html>
+    """
+    pdf_text = (
+        "Haleon plc: Cash tender offer for outstanding 2027 3.375% Fixed Rate Notes. "
+        "London, 11 August 2026: Haleon plc announces a cash tender offer for "
+        "$1,999 million of outstanding senior notes due March 2027. Bondholders will "
+        "receive a price equal to the tender offer consideration plus accrued interest. "
+        "The tender offer expires on 8 September 2026 unless extended. "
+        "Full results of the tender offer will be announced after the expiration date."
+    )
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("a2418q-pdf.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("a2418q.pdf"):
+            return pdf_text.encode("utf-8")
+        raise AssertionError(f"unexpected url: {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: raw.decode("utf-8"),
+    )
+    url = "https://www.sec.gov/Archives/edgar/data/1900304/000165495426007463/a2418q-pdf.htm"
+    text = fetch_filing_body(url)
+    assert text is not None
+    assert "Cash tender offer" in text
+    assert "2027 3.375%" in text
+
+
+def test_refetch_residual_filing_bodies_fetches_sec_pdf_wrapper(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sec_url = "https://www.sec.gov/Archives/edgar/data/1900304/000165495426007463/a2418q-pdf.htm"
+    index = {
+        "ticker": "HLN.L",
+        "company_name": "Haleon plc",
+        "filings": [
+            {
+                "id": "209e954fb6528f31",
+                "source": "sec_edgar",
+                "headline": "6-K: CASH TENDER OFFER FOR OUTSTANDING 2027 3.375% FIXED RATE NOTES",
+                "published_at": "2026-08-11T00:00:00+00:00",
+                "url": sec_url,
+                "period": "interim",
+                "has_body": False,
+                "body_path": None,
+                "priority": 80,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    pdf_text = (
+        "Haleon plc: Cash tender offer for outstanding 2027 3.375% Fixed Rate Notes. "
+        "London, 11 August 2026: Haleon plc announces a cash tender offer for "
+        "$1,999 million of outstanding senior notes due March 2027. Bondholders will "
+        "receive a price equal to the tender offer consideration plus accrued interest. "
+        "The tender offer expires on 8 September 2026 unless extended. "
+        "Full results of the tender offer will be announced after the expiration date."
+    )
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("a2418q-pdf.htm"):
+            return (
+                b"<html><body><div>FORM 6-K</div>"
+                b'<a href="a2418q.pdf">Exhibit 99.1</a></body></html>'
+            )
+        if url.endswith("a2418q.pdf"):
+            return pdf_text.encode("utf-8")
+        raise AssertionError(f"unexpected url: {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: raw.decode("utf-8"),
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="HLN.L",
+        company_name="Haleon plc",
+        max_bodies=4,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+
+
 def test_extract_ixbrl_html_text_prefers_statutory_sections():
     html = """
     <html><body>
