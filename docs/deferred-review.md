@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T05:50:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T06:37:20+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -84,6 +84,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N24 | **Do not route automated paper-auto or decision-review through LLMs** | Learning loop knobs (decision-review, future L85 grace auto-tune) must stay rule-based on structured JSON marks. Pro+ model access is for human/agent synthesis and selective research only — not live paper trading decisions. | Never for live automation; only reconsider if building a separate experimental LLM paper track with its own control datum |
 | N25 | **Keep exit-shadow cohort observe-only until maturity** | Post-exit shadow (exit_shadow.json / exit_shadow_review.json) is wired for all three paper tracks but must stay read-only for knob changes until per-track closed cohorts mature. Do not wire verdicts into decision-review or L85 grace auto-tune prematurely. | learning_tracks_exit_shadow.json shows ≥15 closed exits per track with stable 1/4/8/12-week scoring; L85 grace threshold (≥30 grace exits) met separately before any auto-tune |
 | N26 | **Do not nudge decision-review portfolio knobs below history floor** | Automated decision-review knob steps (max positions, timing strictness, conviction floor, sector cap) should not fire until the target track has ≥4 weekly marks and ≥2 closed trades. Below that floor, accumulate data hands-off. | Each paper track (ai_judgment, rules, momentum_grace) crosses the floor independently; then enable per-track knob review in decision-review |
+| N27 | **Gate AI judgment on confidence or memo_quality thresholds** | Tempting to filter accumulate names by research_confidence or memo_quality, but that is a live paper knob before observe-only counterfactuals exist; keep verdict/adjusted_signal gating until evidence. | After observe-only counterfactuals show confidence/memo_quality predict adverse outcomes |
 
 ---
 
@@ -110,6 +111,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L122 | **Align browser vs server paper books** | Label or align hold-buffer/reentry rules before tuning conviction/sector caps from learning data (L106) | `learning_tracks_churn_health` reaches ≥8 weeks of marks per L106 revisit trigger. |
 | L123 | **Post-Sunday full-cap ingest pass for buy-tier** | Guarantee memo depth after weekly screen refresh | next Sunday email run shows buy-tier names with `has_body: false` on primary filing gaps. |
 | L127 | **Offline observe-sim promotion criteria** | Define minimum archive depth and local-benchmark excess bar before any non-UK market graduates from frozen-signal observe sim to a second live paper learning track. | library_policy.observe_sim_markets expands beyond sp500 and history_run_count >= 12 |
+| L139 | **Observe-only log confidence/risk/unresolved for counterfactuals** | Log research_confidence, research_risk_level, and unresolved question counts on rebalance/review snapshots so counterfactuals can test gates before any live AI-judgment change. | Rebalance-log or paper-learning review enrichment |
 
 ### Universe & data
 
@@ -177,6 +179,10 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L111 | **Full knob counterfactual via archive replay** | Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review. | docs/data/archive has ≥12 months of weekly screens and analysis_review offline_sim queue is active |
 | L113 | **AI-judgment rebalance log bootstrap (PIT research)** | Extend bootstrap_rebalance_log to ai_judgment using get_research_as_of per archive date for adjusted_signal and accumulate gates — rules-only bootstrap is live; AI track needs point-in-time memo joins. | ai_judgment track has ≥4 acted rebalance passes in forward logging or ≥8 weeks of archive+research timeline coverage |
 | L118 | **Wider offline exit-timing sim on near-miss names** | Walk archived weekly screens with a relaxed gate (hold/watch/near-miss below primary buy tier) and score hold-recovery vs hypothetical swap paths using forward prices. Useful priors for hold buffer and grace knobs; does not substitute for live paper cohort evidence. | exit_timing hold_recovery closed episodes stay below 15 after 8+ weeks of paper-auto, or counterfactual replay shows material churn on names never entered the book |
+| L135 | **Persist gap-fill question_outcomes on ResearchDocument** | Gap-fill already parses Q/Status/Evidence outcomes, but they are not stored on the memo, so weekly refresh and decision packs cannot carry unresolved risks/questions forward. | Next research schema or gap-fill enrichment task |
+| L136 | **Weekly refresh: inject prior risks and open questions into prompt** | Weekly updates re-read research.md but are not forced to address unresolved risks/questions; inject structured carry-forward so agents update the decision-relevant uncertainty set. | After question_outcomes are persisted on ResearchDocument |
+| L137 | **Surface unresolved questions and memo_quality in decision packs** | Decision packs already show thesis/risks prose; add unresolved open questions and memo_quality grade so human verification targets known gaps. | After open questions are first-class on ResearchDocument |
+| L138 | **Typed risk tags alongside free-text risks_and_flags** | Keep narrative risks for humans, but ask agents for a small enum/tag list (liquidity, leverage, customer concentration, etc.) usable by overlays and learning without parsing prose. | Research prompt/schema enrichment pass |
 
 ### Ops / reliability
 

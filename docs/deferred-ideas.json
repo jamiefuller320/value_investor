@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-12T05:50:10+00:00",
+  "updated_at": "2026-08-12T06:37:20+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2635,6 +2635,106 @@
       "status": "open",
       "source": "horizon scan + idle queue discussion",
       "added_at": "2026-08-12T05:42:07+00:00"
+    },
+    {
+      "id": "L135",
+      "category": "later",
+      "section": "research",
+      "title": "Persist gap-fill question_outcomes on ResearchDocument",
+      "summary": "Gap-fill already parses Q/Status/Evidence outcomes, but they are not stored on the memo, so weekly refresh and decision packs cannot carry unresolved risks/questions forward.",
+      "revisit_when": "Next research schema or gap-fill enrichment task",
+      "tags": [
+        "research",
+        "memos",
+        "gap-fill",
+        "agents"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:37:19+00:00"
+    },
+    {
+      "id": "L136",
+      "category": "later",
+      "section": "research",
+      "title": "Weekly refresh: inject prior risks and open questions into prompt",
+      "summary": "Weekly updates re-read research.md but are not forced to address unresolved risks/questions; inject structured carry-forward so agents update the decision-relevant uncertainty set.",
+      "revisit_when": "After question_outcomes are persisted on ResearchDocument",
+      "tags": [
+        "research",
+        "memos",
+        "weekly",
+        "agents"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:37:19+00:00"
+    },
+    {
+      "id": "L137",
+      "category": "later",
+      "section": "research",
+      "title": "Surface unresolved questions and memo_quality in decision packs",
+      "summary": "Decision packs already show thesis/risks prose; add unresolved open questions and memo_quality grade so human verification targets known gaps.",
+      "revisit_when": "After open questions are first-class on ResearchDocument",
+      "tags": [
+        "research",
+        "decision-packs",
+        "memos"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:37:19+00:00"
+    },
+    {
+      "id": "L138",
+      "category": "later",
+      "section": "research",
+      "title": "Typed risk tags alongside free-text risks_and_flags",
+      "summary": "Keep narrative risks for humans, but ask agents for a small enum/tag list (liquidity, leverage, customer concentration, etc.) usable by overlays and learning without parsing prose.",
+      "revisit_when": "Research prompt/schema enrichment pass",
+      "tags": [
+        "research",
+        "memos",
+        "structured-risks"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:37:19+00:00"
+    },
+    {
+      "id": "L139",
+      "category": "later",
+      "section": "learning",
+      "title": "Observe-only log confidence/risk/unresolved for counterfactuals",
+      "summary": "Log research_confidence, research_risk_level, and unresolved question counts on rebalance/review snapshots so counterfactuals can test gates before any live AI-judgment change.",
+      "revisit_when": "Rebalance-log or paper-learning review enrichment",
+      "tags": [
+        "research",
+        "learning",
+        "observe-only",
+        "memos"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:37:20+00:00"
+    },
+    {
+      "id": "N27",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Gate AI judgment on confidence or memo_quality thresholds",
+      "summary": "Tempting to filter accumulate names by research_confidence or memo_quality, but that is a live paper knob before observe-only counterfactuals exist; keep verdict/adjusted_signal gating until evidence.",
+      "revisit_when": "After observe-only counterfactuals show confidence/memo_quality predict adverse outcomes",
+      "tags": [
+        "research",
+        "paper",
+        "ai-judgment",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:37:20+00:00"
     }
   ],
   "fragments": [
