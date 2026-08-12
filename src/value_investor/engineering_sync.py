@@ -110,6 +110,13 @@ def run_engineering_sync(
             open_prs=open_prs,
             apply=True,
         )
+        if recovery.merged:
+            repairs.append(
+                {
+                    "action": "mark_merged_pr",
+                    "detail": ", ".join(recovery.merged),
+                }
+            )
         if recovery.reconciled:
             repairs.append(
                 {

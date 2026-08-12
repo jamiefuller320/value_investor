@@ -17,7 +17,7 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 |-------|-----------|
 | **Merge guard** | `_merge_task_rows` preserves all `open` tasks, not only terminal/`pr_open` rows |
 | **Agent workflow** | Skips compile when `task_id` is provided; resolves stale ids via `resolve_dispatch_task_id` |
-| **Queue workflow** | Hourly sync check + parallel dispatch (default max 2 agents) + event triggers from ingest-loop, library-grow, horizon promote |
+| **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset) |
 | **Ops monitor** | Daily `check_engineering_sync()`; reconciles queue and can dispatch `engineering-queue.yml` |
 | **Dashboard UI** | `ftse-engineering refresh-queue-ui` on task status changes → `automation.json` + `latest.json` |
 
@@ -35,7 +35,11 @@ from value_investor.engineering_sync import (
 ran against present `output/post_run_review.md` artifacts.
 
 `run_engineering_sync(apply=True)` runs safe queue recovery only — it never
-rewrites task payloads or deletes tasks.
+rewrites task payloads or deletes tasks. Recovery order:
+
+1. **Mark merged** — `pr_open` / wrongly-reset `open` tasks whose engineering PR merged on GitHub
+2. **Reconcile orphans** — reset `pr_open` only when no open PR and no merged PR exists
+3. Retry failed tasks / park CI-blocked `pr_open`
 
 ## Auto-restart policy
 

@@ -5,9 +5,11 @@ from __future__ import annotations
 import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 from value_investor.engineering_recovery import (
     housekeep_parked_tasks,
+    reconcile_merged_pr_open_tasks,
     record_agent_no_diff_run,
     recover_engineering_queue,
     retry_failed_tasks,
@@ -70,6 +72,71 @@ def test_retry_failed_tasks_parks_when_retries_exhausted(tmp_path: Path):
     updated = load_engineering_tasks(tasks_path)
     assert updated["tasks"][0]["status"] == "parked"
     assert "manual review" in str(updated["tasks"][0].get("parked_reason"))
+
+
+def test_recover_engineering_queue_marks_merged_before_orphan_reset(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260812-04", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260812-04-1de3"},
+            _task("eng-20260729-02", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260729-02-1de3"},
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    def fake_merged(branch: str, **kwargs: object) -> dict[str, Any] | None:
+        if branch == "cursor/eng-20260812-04-1de3":
+            return {
+                "html_url": "https://github.com/jamiefuller320/value_investor/pull/260",
+                "number": 260,
+                "merged_at": "2026-08-12T12:34:00Z",
+            }
+        return None
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        fake_merged,
+    )
+
+    result = recover_engineering_queue(tasks_path=tasks_path, open_prs=[], apply=True)
+    assert result.merged == ["eng-20260812-04"]
+    assert result.reconciled == ["eng-20260729-02"]
+    updated = load_engineering_tasks(tasks_path)
+    by_id = {row["id"]: row for row in updated["tasks"]}
+    assert by_id["eng-20260812-04"]["status"] == "merged"
+    assert by_id["eng-20260812-04"]["pr_number"] == 260
+    assert by_id["eng-20260729-02"]["status"] == "open"
+
+
+def test_reconcile_merged_restores_open_task_without_branch_name(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260812-04", status="open").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        lambda branch, **kwargs: (
+            {
+                "html_url": "https://github.com/jamiefuller320/value_investor/pull/260",
+                "number": 260,
+                "merged_at": "2026-08-12T12:34:00Z",
+            }
+            if branch == "cursor/eng-20260812-04-1de3"
+            else None
+        ),
+    )
+
+    merged = reconcile_merged_pr_open_tasks(tasks_path=tasks_path, apply=True)
+    assert merged == ["eng-20260812-04"]
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "merged"
+    assert updated["tasks"][0]["branch_name"] == "cursor/eng-20260812-04-1de3"
 
 
 def test_recover_engineering_queue_reconciles_orphans(tmp_path: Path):

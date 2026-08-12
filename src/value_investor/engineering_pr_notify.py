@@ -161,6 +161,20 @@ def collect_queue_block_alerts(
     dispatch = dispatch or {}
     status = dict(dispatch.get("status") or {})
 
+    merged = [str(task_id) for task_id in recovery.get("merged") or [] if task_id]
+    if merged:
+        alerts.append(
+            EngineeringQueueAlert(
+                kind="merged_reconcile",
+                title="Merged engineering PRs reconciled",
+                summary=(
+                    f"Marked {len(merged)} task(s) merged from GitHub after queue drift: "
+                    f"{', '.join(merged[:8])}"
+                ),
+                task_ids=merged,
+            )
+        )
+
     reconciled = [str(task_id) for task_id in recovery.get("reconciled") or [] if task_id]
     if reconciled:
         alerts.append(
