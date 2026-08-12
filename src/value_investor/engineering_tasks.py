@@ -723,9 +723,9 @@ def compile_ingest_engineering_task_from_trial(
     from value_investor.ingest_gap_closure import (
         DEFAULT_RUNS_PATH,
         MAX_GAP_CLOSURE_CHAIN_ROUNDS,
-        should_auto_compile_gap_engineering,
         gap_closure_chain_root_id,
         gap_closure_refetch_stats,
+        should_auto_compile_gap_engineering,
     )
 
     chain_root = gap_closure_chain_root_id(trial)

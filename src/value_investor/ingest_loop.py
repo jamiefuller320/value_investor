@@ -266,9 +266,7 @@ def run_weekday_ingest_loop(
             "pin_tickers": list(pin_tickers or []),
         }
         parent_run_id = str(
-            gap_closure_spec.get("parent_run_id")
-            or gap_closure_spec.get("parent_trial_id")
-            or ""
+            gap_closure_spec.get("parent_run_id") or gap_closure_spec.get("parent_trial_id") or ""
         )
         gap_closure_record = record_ingest_gap_closure_run(
             title=str(gap_closure_spec.get("title") or "Ingest gap-closure run"),
