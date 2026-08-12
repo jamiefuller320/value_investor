@@ -59,6 +59,7 @@ from value_investor.research.filings import (
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
     resolve_investegate_lse_pdf_url,
+    sanitize_filings_index,
     summarize_filings,
 )
 from value_investor.research.ingest import (
@@ -2160,6 +2161,133 @@ def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
         regime="euro_filings",
     )
     assert [row["id"] for row in filtered] == ["good"]
+
+
+def test_headline_relevant_to_issuer_rejects_vct_trust_for_victrex():
+    """VCT.L (Victrex) must not match unrelated Venture Capital Trust RNS headlines."""
+    reject = [
+        'Foresight 4 VCT PLC (the "Company") - Investegate',
+        "Albion Technology & General VCT PLC: Annual Financial Report",
+        "ProVen VCT plc: Annual Financial Report - Investegate",
+    ]
+    accept = [
+        "Victrex plc Preliminary Results",
+        "Full Year Results - VCT",
+        "Interim Management Statement - VCT",
+    ]
+    for headline in reject:
+        assert headline_relevant_to_issuer(headline, "Victrex plc", "VCT.L") is False
+    for headline in accept:
+        assert headline_relevant_to_issuer(headline, "Victrex plc", "VCT.L") is True
+
+
+def test_filter_misattributed_filings_drops_investegate_resolved_vct_trust():
+    rows = [
+        {
+            "id": "noise",
+            "source": "investegate_resolved",
+            "headline": 'Foresight 4 VCT PLC (the "Company") - Investegate',
+            "url": "https://www.investegate.co.uk/announcement/rns/foresight-enterprise-vct--ftf/x/6610520",
+        },
+        {
+            "id": "good_direct",
+            "source": "investegate_direct",
+            "headline": "Annual Financial Report",
+            "url": "https://www.investegate.co.uk/announcement/rns/victrex--vct/annual/1",
+        },
+        {
+            "id": "good_resolved",
+            "source": "investegate_resolved",
+            "headline": "Victrex plc Trading Statement - Investegate",
+            "url": "https://www.investegate.co.uk/announcement/rns/victrex--vct/trading/2",
+        },
+    ]
+    filtered = filter_misattributed_filings(
+        rows,
+        company_name="Victrex plc",
+        ticker="VCT.L",
+        regime="uk_rns",
+    )
+    assert [row["id"] for row in filtered] == ["good_direct", "good_resolved"]
+
+
+def test_refetch_investegate_prunes_vct_trust_noise_for_vct_l(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "filings": [
+            {
+                "id": "vct_noise",
+                "source": "investegate_resolved",
+                "headline": 'Foresight 4 VCT PLC (the "Company") - Investegate',
+                "url": "https://www.investegate.co.uk/announcement/rns/foresight-enterprise-vct--ftf/x/6610520",
+                "has_body": False,
+            },
+            {
+                "id": "ch_gap",
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": "https://document-api.company-information.service.gov.uk/document/ch1",
+                "document_metadata_url": "https://document-api.company-information.service.gov.uk/document/ch1",
+                "has_body": False,
+            },
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, **kwargs: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="VCT.L",
+        company_name="Victrex plc",
+        max_bodies=5,
+    )
+    assert result["misattributed_pruned"] == 1
+    assert result["attempted"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert [row["id"] for row in saved["filings"]] == ["ch_gap"]
+
+
+def test_sanitize_filings_index_prunes_vct_l_vct_trust_rows(tmp_path):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "filings": [
+            {
+                "id": "vct_noise",
+                "source": "investegate_resolved",
+                "headline": "ProVen VCT plc: Annual Financial Report - Investegate",
+                "has_body": False,
+            },
+            {
+                "id": "victrex",
+                "source": "investegate_direct",
+                "headline": "Annual Financial Report",
+                "has_body": True,
+                "body_path": str(filings_dir / "bodies" / "victrex.txt"),
+            },
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir()
+    (bodies_dir / "victrex.txt").write_text(
+        "Victrex plc annual results " + ("x" * 300), encoding="utf-8"
+    )
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Victrex plc",
+        ticker="VCT.L",
+    )
+    assert result["pruned"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert [row["id"] for row in saved["filings"]] == ["victrex"]
 
 
 def test_asx_markit_file_url():

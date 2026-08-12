@@ -700,6 +700,45 @@ def _issuer_name_phrases(company_name: str) -> list[str]:
     return phrases
 
 
+# UK EPICs that collide with unrelated issuer tokens (VCT = Victrex vs Venture Capital Trust).
+_AMBIGUOUS_UK_EPICS: frozenset[str] = frozenset({"VCT"})
+
+_VCT_TRUST_HEADLINE = re.compile(
+    r"\b(?:\d+\s+)?(?:[\w&]+\s+)*vct\s+plc\b",
+    re.I,
+)
+
+
+def _issuer_distinctive_tokens(company_name: str) -> list[str]:
+    return [
+        tok
+        for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
+        if len(tok) >= 4 and tok not in _ISSUER_STOPWORDS
+    ]
+
+
+def _epic_match_is_ambiguous_noise(
+    text: str,
+    epic: str,
+    *,
+    company_name: str,
+) -> bool:
+    """True when an EPIC word-boundary hit is a known homonym (e.g. VCT trust vs Victrex)."""
+    if epic.upper() not in _AMBIGUOUS_UK_EPICS:
+        return False
+    lower = (text or "").lower()
+    if any(tok in lower for tok in _issuer_distinctive_tokens(company_name)):
+        return False
+    epic_l = epic.lower()
+    # Victrex RNS often ends with " - VCT".
+    if re.search(rf"[-–]\s*{re.escape(epic_l)}\s*$", lower):
+        return False
+    if _VCT_TRUST_HEADLINE.search(lower):
+        return True
+    # "ProVen VCT", "Foresight 4 VCT", etc.
+    return bool(re.search(r"\b\w+\s+vct\b", lower))
+
+
 def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -> bool:
     """True when the headline mentions the EPIC or a meaningful company-name token."""
     text = (headline or "").lower()
@@ -708,6 +747,8 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     for epic in _uk_rns_epics(ticker):
         epic_l = epic.lower()
         if epic_l and re.search(rf"\b{re.escape(epic_l)}\b", text, flags=re.IGNORECASE):
+            if _epic_match_is_ambiguous_noise(text, epic, company_name=company_name):
+                continue
             return True
         # ASX Markit headlines often end with " - CSL" / " - WOR".
         if epic_l and re.search(rf"[-–]\s*{re.escape(epic_l)}\s*$", text, flags=re.IGNORECASE):
@@ -1318,7 +1359,11 @@ def filter_misattributed_filings(
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
-        if regime == "uk_rns" and (source == "ticker_rns_api" or source.startswith("google_news")):
+        if regime == "uk_rns" and (
+            source == "ticker_rns_api"
+            or source == "investegate_resolved"
+            or source.startswith("google_news")
+        ):
             if not headline_relevant_to_issuer(headline, company_name, ticker):
                 continue
         if source == "sec_edgar":
@@ -3295,14 +3340,29 @@ def refetch_investegate_filing_bodies(
         ticker=ticker,
         company_name=company_name,
     )
+    filtered = filter_misattributed_filings(
+        enriched,
+        company_name=company_name,
+        ticker=ticker,
+        regime="uk_rns",
+    )
+    misattributed_pruned = len(enriched) - len(filtered)
+    if misattributed_pruned:
+        logger.info(
+            "Pruned %d misattributed filing row(s) for %s during Investegate refetch",
+            misattributed_pruned,
+            ticker,
+        )
+    enriched = filtered
     google_news_rejected = sum(
         1
         for row in enriched
         if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
     missing = [row for row in enriched if _is_rns_body_fetch_candidate(row)]
+    index_changed = enriched != filings or misattributed_pruned > 0
     if not missing:
-        if enriched != filings:
+        if index_changed:
             payload["filings"] = enriched
             payload["summary"] = summarize_filings(enriched)
             index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -3312,6 +3372,7 @@ def refetch_investegate_filing_bodies(
             "with_body_before": before,
             "with_body_after": before,
             "google_news_rejected": google_news_rejected,
+            "misattributed_pruned": misattributed_pruned,
             "note": "no missing Investegate/LSE bodies",
         }
 
@@ -3348,6 +3409,7 @@ def refetch_investegate_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "google_news_rejected": google_news_rejected,
+        "misattributed_pruned": misattributed_pruned,
         "note": "refetch_investegate_filing_bodies",
     }
 
