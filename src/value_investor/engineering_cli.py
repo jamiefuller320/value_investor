@@ -223,6 +223,8 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
     if args.json:
         _print_json(result.to_dict())
     else:
+        if result.merged:
+            print(f"Marked merged from GitHub: {', '.join(result.merged)}")
         if result.reconciled:
             print(f"Reconciled orphaned pr_open: {', '.join(result.reconciled)}")
         if result.reopened:

@@ -147,6 +147,15 @@ def task_id_from_branch(branch: str) -> str | None:
     return match.group(1) if match else None
 
 
+def engineering_branch_for_task_id(task_id: str) -> str | None:
+    """Canonical engineering-agent branch for a supervised task id."""
+    token = str(task_id or "").strip()
+    if not token:
+        return None
+    branch = f"cursor/{token}-1de3"
+    return branch if is_engineering_branch(branch) else None
+
+
 def branch_has_open_pr(branch: str, open_prs: list[dict[str, Any]] | None = None) -> bool:
     wanted = branch.strip()
     for row in open_prs or []:

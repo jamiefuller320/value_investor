@@ -13,12 +13,15 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.engineering_queue import (
+    DISPATCHABLE_STATUS,
     IN_FLIGHT_STATUS,
+    engineering_branch_for_task_id,
     reconcile_orphaned_pr_open_tasks,
 )
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     load_engineering_tasks,
+    mark_task_merged_for_branch,
     mark_task_status,
 )
 from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
@@ -96,6 +99,7 @@ class RecoveryAction:
 
 @dataclass
 class RecoveryResult:
+    merged: list[str] = field(default_factory=list)
     reconciled: list[str] = field(default_factory=list)
     reopened: list[str] = field(default_factory=list)
     parked: list[RecoveryAction] = field(default_factory=list)
@@ -103,11 +107,12 @@ class RecoveryResult:
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "merged": self.merged,
             "reconciled": self.reconciled,
             "reopened": self.reopened,
             "parked": [row.to_dict() for row in self.parked],
             "skipped": self.skipped,
-            "action_count": len(self.reconciled) + len(self.reopened) + len(self.parked),
+            "action_count": len(self.merged) + len(self.reconciled) + len(self.reopened) + len(self.parked),
         }
 
 
@@ -390,6 +395,80 @@ def park_ci_blocked_pr_open_tasks(
     return parked
 
 
+def find_merged_pull_for_branch(
+    branch: str,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> dict[str, Any] | None:
+    """Return the most recently merged closed PR for a head branch, if any."""
+    branch = str(branch or "").strip()
+    repo = repo or _github_repo()
+    if not branch or not repo:
+        return None
+    token = token or _github_token()
+    if not token:
+        return None
+    owner, name = repo.split("/", 1)
+    head = f"{owner}:{branch}"
+    try:
+        pulls = _github_api_get(
+            f"/repos/{owner}/{name}/pulls?state=closed&head={head}&per_page=10",
+            token=token,
+        )
+    except (OSError, ValueError, RuntimeError) as exc:
+        logger.warning("Merged PR lookup failed for %s: %s", branch, exc)
+        return None
+    if not isinstance(pulls, list):
+        return None
+    merged = [row for row in pulls if row.get("merged_at")]
+    if not merged:
+        return None
+    merged.sort(key=lambda row: str(row.get("merged_at") or ""), reverse=True)
+    return dict(merged[0])
+
+
+def reconcile_merged_pr_open_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
+    apply: bool = True,
+) -> list[str]:
+    """
+    Mark pr_open/open tasks merged when their engineering PR merged on GitHub.
+
+    Runs before orphan reconcile so merged tasks are not reset to open.
+    """
+    merged_ids: list[str] = []
+    data = load_engineering_tasks(tasks_path)
+    for row in data.get("tasks") or []:
+        if row.get("merged_at"):
+            continue
+        status = str(row.get("status") or "")
+        if status not in {IN_FLIGHT_STATUS, DISPATCHABLE_STATUS}:
+            continue
+        task_id = str(row.get("id") or "")
+        branch = str(row.get("branch_name") or "").strip()
+        if not branch:
+            branch = engineering_branch_for_task_id(task_id) or ""
+        if not branch:
+            continue
+        pr = find_merged_pull_for_branch(branch, repo=repo, token=token)
+        if not pr or not pr.get("merged_at"):
+            continue
+        if apply:
+            mark_task_merged_for_branch(
+                branch,
+                path=tasks_path,
+                committed_path=tasks_path,
+                pr_url=str(pr.get("html_url") or ""),
+                pr_number=int(pr["number"]) if pr.get("number") is not None else None,
+            )
+        merged_ids.append(task_id)
+    return merged_ids
+
+
 def recover_engineering_queue(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
@@ -408,6 +487,13 @@ def recover_engineering_queue(
     3. Park pr_open tasks blocked on long-running red CI
     """
     result = RecoveryResult()
+
+    result.merged = reconcile_merged_pr_open_tasks(
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+        apply=apply,
+    )
 
     if apply:
         reconcile = reconcile_orphaned_pr_open_tasks(
