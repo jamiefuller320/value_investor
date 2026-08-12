@@ -1086,9 +1086,136 @@ def test_refetch_residual_filing_bodies_prunes_unfetchable_google_news(tmp_path,
     )
     assert result["attempted"] == 1
     assert result["fetched"] == 0
-    assert result["pruned"] == 1
+    assert result["pruned_noise"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"] == []
+
+
+def test_refetch_residual_filing_bodies_prunes_share_price_headline_noise(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "JD.L",
+        "company_name": "JD Sports Fashion Plc",
+        "filings": [
+            {
+                "id": "gn1",
+                "source": "google_news_investegate",
+                "headline": "JD Sports Fashion (JD.) Share Price - investegate.co.uk",
+                "published_at": "2026-01-15T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/jd/share-price",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 10,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="JD.L",
+        company_name="JD Sports Fashion Plc",
+        max_bodies=4,
+    )
+    assert result["pruned_noise"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"] == []
+
+
+def test_refetch_residual_filing_bodies_intensive_prunes_after_failed_fetch(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sec_url = "https://www.sec.gov/Archives/edgar/data/123/000123456789012345/accession.htm"
+    index = {
+        "ticker": "HLN.L",
+        "company_name": "Haleon plc",
+        "filings": [
+            {
+                "id": "sec1",
+                "source": "sec_edgar",
+                "headline": "6-K: Tender offer",
+                "published_at": "2026-01-15T00:00:00+00:00",
+                "url": sec_url,
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 80,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="HLN.L",
+        company_name="Haleon plc",
+        max_bodies=4,
+        prune_unfetchable_after_attempt=True,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    assert result["pruned_unfetchable"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"] == []
+
+
+def test_refetch_residual_weekday_keeps_failed_sec_row(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sec_url = "https://www.sec.gov/Archives/edgar/data/123/000123456789012345/accession.htm"
+    index = {
+        "ticker": "HLN.L",
+        "company_name": "Haleon plc",
+        "filings": [
+            {
+                "id": "sec1",
+                "source": "sec_edgar",
+                "headline": "6-K: Tender offer",
+                "published_at": "2026-01-15T00:00:00+00:00",
+                "url": sec_url,
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 80,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="HLN.L",
+        company_name="Haleon plc",
+        max_bodies=4,
+        prune_unfetchable_after_attempt=False,
+    )
+    assert result["attempted"] == 1
+    assert result["pruned_unfetchable"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert len(saved["filings"]) == 1
 
 
 def test_compose_pdf_body_text_splices_late_cash_flow_and_notes():

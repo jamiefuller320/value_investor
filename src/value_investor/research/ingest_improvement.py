@@ -531,6 +531,8 @@ def run_ingest_improvement_pass(
     max_bodies: int = DEFAULT_INGEST_REFETCH_MAX_BODIES,
     require_outstanding_gaps: bool = False,
     pin_tickers: list[str] | None = None,
+    intensive_gap_closure: bool = False,
+    prune_failed_residual_fetches: bool = False,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -647,6 +649,7 @@ def run_ingest_improvement_pass(
                     ticker=target.ticker,
                     company_name=target.name,
                     max_bodies=max_bodies,
+                    prune_unfetchable_after_attempt=prune_failed_residual_fetches,
                 )
                 if int(residual_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)

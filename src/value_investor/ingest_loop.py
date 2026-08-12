@@ -254,6 +254,7 @@ def run_weekday_ingest_loop(
             "bootstrap_seed_cap": bootstrap_seed_cap,
             "max_runtime_seconds": max_runtime_seconds,
             "require_outstanding_gaps": trial_require_gaps,
+            "intensive_gap_closure": trial_require_gaps,
             "pin_tickers": list(pin_tickers or []),
         }
         trial_record = record_ingest_trial(
@@ -278,6 +279,8 @@ def run_weekday_ingest_loop(
             max_bodies=max_bodies if max_bodies is not None else DEFAULT_INGEST_REFETCH_MAX_BODIES,
             require_outstanding_gaps=trial_require_gaps,
             pin_tickers=pin_tickers,
+            intensive_gap_closure=trial_require_gaps,
+            prune_failed_residual_fetches=False,
         )
     else:
         logger.warning("No reports in %s — skipping ingest-improvement pass", latest_path)
