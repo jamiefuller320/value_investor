@@ -33,6 +33,9 @@ FRAGMENT CLUSTERING
 - DROP frag-20260811-01
 - PROMOTE frag-20260811-02 → **Hold buffer priors** — needs archive sim. Revisit when: 15 closed holds
 
+INGEST TRIALS REVIEW
+- trial-20260811-01: marginal depth gain — DISMISS repeat unless eng queue idle 48h+
+
 PARK
 - **Archive daily marks** — optional resolution upgrade. Revisit when: weekly snapshots too coarse
 

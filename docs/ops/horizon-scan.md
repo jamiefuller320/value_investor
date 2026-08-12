@@ -37,6 +37,22 @@ Run after weekly `analysis-review` when possible.
 | `docs/data/horizon_scan.md` | Human-readable synthesis |
 | `docs/data/horizon_scan.json` | Structured sections |
 | `docs/data/horizon_tasks.json` | ACCELERATE experiments (`status: proposed`) |
+| `docs/data/ingest_trials.json` | Completed ingest experiments awaiting review (`--record-trial` on ingest-loop) |
+
+## Ingest trials
+
+Bounded ingest experiments (e.g. single-ticker depth) can be flagged for review:
+
+```bash
+ftse-ingest-loop run --max-targets 1 --record-trial \
+  --trial-title "Single-ticker depth trial" \
+  --trial-summary "…" \
+  --trial-review-trigger horizon_scan
+```
+
+Workflow input `record_trial=true` does the same. Outcomes land in `ingest_trials.json`;
+the monthly horizon scan payload includes `ingest_trials_pending_review` and an
+**INGEST TRIALS REVIEW** section in the agent prompt.
 
 ## Commands
 

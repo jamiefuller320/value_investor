@@ -65,6 +65,30 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_INGEST_REFETCH_MAX_BODIES,
         help="Max filing bodies to refetch per ticker (backfill bursts: 40)",
     )
+    common.add_argument(
+        "--record-trial",
+        action="store_true",
+        help="Record this run in docs/data/ingest_trials.json for horizon/analysis review",
+    )
+    common.add_argument(
+        "--trial-title",
+        type=str,
+        default="",
+        help="Title when --record-trial is set",
+    )
+    common.add_argument(
+        "--trial-summary",
+        type=str,
+        default="",
+        help="Summary when --record-trial is set",
+    )
+    common.add_argument(
+        "--trial-review-trigger",
+        type=str,
+        default="horizon_scan",
+        choices=("horizon_scan", "analysis_review", "both"),
+        help="Which review cadence should surface this trial",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     run_p = sub.add_parser(
@@ -112,6 +136,15 @@ def _cmd_run(args: argparse.Namespace) -> int:
             bootstrap_seed_cap=args.bootstrap_seed_cap,
             max_runtime_seconds=args.max_runtime_seconds,
             max_bodies=args.max_bodies,
+            record_trial=(
+                {
+                    "title": args.trial_title or "Ingest trial",
+                    "summary": args.trial_summary or "",
+                    "review_trigger": args.trial_review_trigger,
+                }
+                if args.record_trial
+                else None
+            ),
         )
     except Exception as exc:  # noqa: BLE001
         error = str(exc)

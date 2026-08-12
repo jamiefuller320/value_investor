@@ -34,6 +34,10 @@ on:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean
         default: false
+      record_trial:
+        description: "Record run in ingest_trials.json for horizon/analysis review"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -163,6 +167,12 @@ jobs:
           SEED_CAP="${{ github.event.inputs.bootstrap_seed_cap }}"
           if [ -n "$SEED_CAP" ]; then
             ARGS+=(--bootstrap-seed-cap "$SEED_CAP")
+          fi
+          if [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
+            ARGS+=(--record-trial)
+            ARGS+=(--trial-title "Single-ticker ingest depth trial")
+            ARGS+=(--trial-summary "Top priority_score buy-tier name; review for eng-idle orchestration and global ingest policy.")
+            ARGS+=(--trial-review-trigger horizon_scan)
           fi
           EXIT=0
           ftse-ingest-loop "${ARGS[@]}" || EXIT=$?

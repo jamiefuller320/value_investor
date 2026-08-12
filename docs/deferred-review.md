@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T11:48:19+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T05:50:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -50,6 +50,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-24 | Auto-merge is scoped to narrow CI-fix tasks; ingest/scoring engineering PRs stay human-merge — implicit throughput ceiling on self-improvement. | auto_merge, engineering, policy |
 | frag-20260811-25 | Research spend scales with researched-name count R not universe N — widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates. | research, cost, research_cap |
 | frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
+| frag-20260812-01 | Eng-idle single-ticker ingest depth hook — dispatch max_targets=1 when engineering_queue open_count=0 and buy-tier gaps remain on paper holdings; outcome of trial-20260812-01 informs PROMOTE/DEFER. | ingest, engineering_queue, orchestration |
 
 ---
 
@@ -204,6 +205,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L131 | **Per-ticker ingest time budget** | Cap wall time per ticker in run_ingest_improvement_pass so one slow name cannot consume the entire weekday runtime budget; defer remainder to backlog. | Cutoff runs complete 0-2 tickers despite 12 planned |
 | L132 | **Ops alert on ingest runtime_cutoff** | Extend ops_monitor check_ingest_health_log to flag partial/runtime_cutoff runs with targets_deferred count, not only zero-body stall. | Backlog resume shipped or partial runs exceed one per week |
 | L133 | **Include exit_timing_near_miss_review.json in offline_sim allowed_paths** | Horizon offline_sim _OFFLINE_SIM_PATHS lists exit_timing_near_miss.json but omits the companion review artifact, so engineering agents that regenerate both trip the path guard (as on PR 233). | Next offline_sim / exit-timing-archive engineering task is drafted or promoted |
+| L134 | **Eng-idle single-ticker ingest depth hook** | When engineering_queue open_count=0 and buy-tier gaps remain, dispatch a bounded ingest pass on the top priority_score ticker (or top paper-book holding) instead of leaving cron idle — orchestration only, reuse ingest_improvement. | Engineering queue idle for 48h+ while indexed_without_body>50 on names in ai_judgment holdings or strong_buy shortlist |
 
 ---
 
