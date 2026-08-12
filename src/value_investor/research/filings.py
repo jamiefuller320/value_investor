@@ -28,9 +28,11 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+import zipfile
 from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
 from html import unescape
+from io import BytesIO
 from pathlib import Path
 from typing import Any
 
@@ -814,17 +816,53 @@ def _ocr_pdf_text(raw: bytes, *, max_pages: int | None = None) -> str | None:
         return None
 
 
+def _extract_ch_zip_ixbrl(raw: bytes) -> str | None:
+    """Extract narrative text from a Companies House iXBRL zip package."""
+    try:
+        with zipfile.ZipFile(BytesIO(raw)) as zf:
+            html_names = sorted(
+                (
+                    name
+                    for name in zf.namelist()
+                    if name.lower().endswith((".html", ".xhtml", ".htm"))
+                    and not name.startswith("__MACOSX")
+                ),
+                key=lambda name: zf.getinfo(name).file_size,
+                reverse=True,
+            )
+            for name in html_names:
+                try:
+                    payload = zf.read(name)
+                except (KeyError, OSError):
+                    continue
+                text = _extract_ixbrl_html_text(payload.decode("utf-8", errors="replace"))
+                if not text or len(text) < 200:
+                    text = _strip_html(payload.decode("utf-8", errors="replace"))
+                if text and len(text) >= 200:
+                    composed = _compose_filing_body_with_depth_sections(text)
+                    return composed or text
+    except (zipfile.BadZipFile, OSError) as exc:
+        logger.debug("CH zip iXBRL extract failed: %s", exc)
+    return None
+
+
 def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
-    """Extract searchable text from a filing document (PDF, HTML, or iXBRL)."""
-    if raw[:4] == b"%PDF" or "pdf" in (content_type or "").lower():
+    """Extract searchable text from a filing document (PDF, HTML, iXBRL, or zip)."""
+    ct = (content_type or "").lower()
+    if ct == "application/zip" or raw[:2] == b"PK":
+        return _extract_ch_zip_ixbrl(raw)
+    if raw[:4] == b"%PDF" or "pdf" in ct:
         text = _extract_pdf_text(raw)
+        if text and len(text) >= 200:
+            return text
+        text = _extract_pdf_text_fitz(raw)
         if text and len(text) >= 200:
             return text
         ocr_text = _ocr_pdf_text(raw)
         if ocr_text:
             return _compose_filing_body_with_depth_sections(ocr_text) or ocr_text
         return text
-    if _is_ixbrl_html(raw) or "xhtml" in (content_type or "").lower():
+    if _is_ixbrl_html(raw) or "xhtml" in ct:
         return _extract_ixbrl_html_text(raw.decode("utf-8", errors="replace"))
     return _strip_html(raw.decode("utf-8", errors="replace"))
 
