@@ -1,0 +1,1780 @@
+{
+  "runs": [
+    {
+      "id": "trial-20260812-01",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Top priority_score buy-tier name; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "MEGP.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0
+      },
+      "review_trigger": "horizon_scan",
+      "recorded_at": "2026-08-12T05:54:25.460285+00:00",
+      "completed_at": "2026-08-12T05:55:05.269704+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "MEGP.L"
+        ],
+        "results": [
+          {
+            "ticker": "MEGP.L",
+            "name": "ME Group International plc",
+            "with_body_before": 64,
+            "with_body_after": 64,
+            "improved": false,
+            "mapped_source_ids": [
+              "companies_house_accounts",
+              "company_ir_presentation",
+              "investegate_rns_full"
+            ],
+            "planned_sources": [
+              "company_ir_presentation",
+              "companies_house_accounts",
+              "investegate_rns_full"
+            ],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 64,
+              "with_body_after": 64,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 64,
+              "with_body_after": 64,
+              "google_news_rejected": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 64,
+              "with_body_after": 64,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 64,
+                "with_body_after": 64,
+                "google_news_rejected": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 64,
+                "with_body_after": 64,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 64,
+              "with_body_after": 64,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 64,
+              "with_body_after": 64,
+              "investegate_fallbacks": 0,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 6,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies",
+              "mandatory": true,
+              "allowlist_count": 6
+            },
+            "alternate_sources": {
+              "sources_tried": [
+                "company_ir_presentation",
+                "companies_house_accounts",
+                "investegate_rns_full"
+              ],
+              "body_refetch": {
+                "companies_house": {
+                  "attempted": 0,
+                  "fetched": 0,
+                  "with_body_before": 64,
+                  "with_body_after": 64,
+                  "note": "no missing CH bodies"
+                },
+                "rns": {
+                  "investegate": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 64,
+                    "with_body_after": 64,
+                    "google_news_rejected": 0,
+                    "note": "no missing Investegate/LSE bodies"
+                  },
+                  "ticker_rns": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 64,
+                    "with_body_after": 64,
+                    "pruned": 0,
+                    "note": "no missing ticker_rns_api bodies"
+                  },
+                  "attempted": 0,
+                  "fetched": 0,
+                  "with_body_before": 64,
+                  "with_body_after": 64,
+                  "google_news_rejected": 0,
+                  "note": "refetch_indexed_without_body_filing_bodies"
+                },
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 64,
+                "with_body_after": 64,
+                "google_news_rejected": 0,
+                "note": "refetch_uk_primary_filing_bodies"
+              },
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 64,
+              "with_body_after": 64
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "MEGP.L",
+            "with_body_before": 64,
+            "with_body_after": 64,
+            "improved": false
+          }
+        ]
+      },
+      "engineering_task_id": "eng-20260812-01"
+    },
+    {
+      "id": "trial-20260812-02",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "VCT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true
+      },
+      "review_trigger": "horizon_scan",
+      "recorded_at": "2026-08-12T06:12:33.078274+00:00",
+      "completed_at": "2026-08-12T06:12:59.828905+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "VCT.L"
+        ],
+        "results": [
+          {
+            "ticker": "VCT.L",
+            "name": "Victrex plc",
+            "with_body_before": 67,
+            "with_body_after": 67,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "google_news_rejected": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 67,
+                "with_body_after": 67,
+                "google_news_rejected": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 67,
+                "with_body_after": 67,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 67,
+              "with_body_after": 67
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "VCT.L",
+            "with_body_before": 67,
+            "with_body_after": 67,
+            "improved": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "trial-20260812-03",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "VCT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "recorded_at": "2026-08-12T06:42:44.873829+00:00",
+      "completed_at": "2026-08-12T06:43:18.187788+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "VCT.L"
+        ],
+        "results": [
+          {
+            "ticker": "VCT.L",
+            "name": "Victrex plc",
+            "with_body_before": 67,
+            "with_body_after": 67,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "google_news_rejected": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 67,
+                "with_body_after": 67,
+                "google_news_rejected": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 67,
+                "with_body_after": 67,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 67,
+              "with_body_after": 67
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "VCT.L",
+            "with_body_before": 67,
+            "with_body_after": 67,
+            "improved": false
+          }
+        ]
+      },
+      "engineering_task_id": "eng-20260812-01"
+    },
+    {
+      "id": "trial-20260812-04",
+      "status": "pending_review",
+      "title": "Ingest trial rerun after engineering",
+      "summary": "Verification rerun for trial trial-20260812-03",
+      "ticker": "VCT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "VCT.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "recorded_at": "2026-08-12T06:56:40.868398+00:00",
+      "completed_at": "2026-08-12T06:57:00.443353+00:00",
+      "outcome": {
+        "delta_filings_with_body": -13,
+        "delta_indexed_without_body": 2,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "VCT.L"
+        ],
+        "results": [
+          {
+            "ticker": "VCT.L",
+            "name": "Victrex plc",
+            "with_body_before": 54,
+            "with_body_after": 54,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 54,
+                "with_body_after": 54,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 54,
+                "with_body_after": 54,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 54,
+              "with_body_after": 54
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "VCT.L",
+            "with_body_before": 54,
+            "with_body_after": 54,
+            "improved": false
+          }
+        ]
+      },
+      "parent_trial_id": "trial-20260812-03"
+    },
+    {
+      "id": "trial-20260812-05",
+      "status": "pending_review",
+      "title": "Ingest trial rerun after engineering",
+      "summary": "Verification rerun for trial trial-20260812-03",
+      "ticker": "VCT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "VCT.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-03",
+      "chain_attempt": 2,
+      "recorded_at": "2026-08-12T07:10:37.819910+00:00",
+      "completed_at": "2026-08-12T07:10:55.085528+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "VCT.L"
+        ],
+        "results": [
+          {
+            "ticker": "VCT.L",
+            "name": "Victrex plc",
+            "with_body_before": 54,
+            "with_body_after": 54,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 54,
+                "with_body_after": 54,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 54,
+                "with_body_after": 54,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 54,
+              "with_body_after": 54
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "VCT.L",
+            "with_body_before": 54,
+            "with_body_after": 54,
+            "improved": false
+          }
+        ]
+      },
+      "parent_trial_id": "trial-20260812-03"
+    },
+    {
+      "id": "trial-20260812-06",
+      "status": "pending_review",
+      "title": "Ingest trial rerun after engineering",
+      "summary": "Verification rerun for trial trial-20260812-05",
+      "ticker": "VCT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "VCT.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-03",
+      "chain_attempt": 3,
+      "recorded_at": "2026-08-12T08:12:16.055338+00:00",
+      "completed_at": "2026-08-12T08:12:39.119687+00:00",
+      "outcome": {
+        "delta_filings_with_body": 1,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "VCT.L"
+        ],
+        "results": [
+          {
+            "ticker": "VCT.L",
+            "name": "Victrex plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 55,
+              "with_body_after": 55
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "VCT.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          }
+        ]
+      },
+      "parent_trial_id": "trial-20260812-05"
+    },
+    {
+      "id": "trial-20260812-07",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "GSK.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-07",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T08:19:37.858279+00:00",
+      "completed_at": "2026-08-12T08:20:09.712458+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "GSK.L"
+        ],
+        "results": [
+          {
+            "ticker": "GSK.L",
+            "name": "GSK plc",
+            "with_body_before": 113,
+            "with_body_after": 113,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 113,
+              "with_body_after": 113,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 113,
+              "with_body_after": 113,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 113,
+              "with_body_after": 113,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 113,
+                "with_body_after": 113,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 113,
+                "with_body_after": 113,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 113,
+              "with_body_after": 113,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 113,
+              "with_body_after": 113
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "GSK.L",
+            "with_body_before": 113,
+            "with_body_after": 113,
+            "improved": false
+          }
+        ]
+      },
+      "engineering_task_id": "eng-20260812-03"
+    },
+    {
+      "id": "trial-20260812-08",
+      "status": "pending_review",
+      "title": "Ingest trial rerun after engineering",
+      "summary": "Verification rerun for trial trial-20260812-07",
+      "ticker": "GSK.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "GSK.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-07",
+      "chain_attempt": 2,
+      "recorded_at": "2026-08-12T08:47:40.928853+00:00",
+      "completed_at": "2026-08-12T08:48:40.033505+00:00",
+      "outcome": {
+        "delta_filings_with_body": 2,
+        "delta_indexed_without_body": 2,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "GSK.L"
+        ],
+        "results": [
+          {
+            "ticker": "GSK.L",
+            "name": "GSK plc",
+            "with_body_before": 115,
+            "with_body_after": 115,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 115,
+              "with_body_after": 115,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 115,
+              "with_body_after": 115,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 115,
+              "with_body_after": 115,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 115,
+                "with_body_after": 115,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 115,
+                "with_body_after": 115,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 115,
+              "with_body_after": 115,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 115,
+              "with_body_after": 115
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "GSK.L",
+            "with_body_before": 115,
+            "with_body_after": 115,
+            "improved": false
+          }
+        ]
+      },
+      "parent_trial_id": "trial-20260812-07"
+    },
+    {
+      "id": "trial-20260812-09",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "JD.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-09",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T10:40:46.480966+00:00",
+      "completed_at": "2026-08-12T10:41:28.107293+00:00",
+      "outcome": {
+        "delta_filings_with_body": 2,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "JD.L"
+        ],
+        "results": [
+          {
+            "ticker": "JD.L",
+            "name": "JD Sports Fashion Plc",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "google_news_rejected": 2,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 16,
+                "with_body_after": 16,
+                "google_news_rejected": 2,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 16,
+                "with_body_after": 16,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "google_news_rejected": 2,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 16,
+              "with_body_after": 16
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "JD.L",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "trial-20260812-10",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "SBRY.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "SBRY.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-10",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T10:42:55.080154+00:00",
+      "completed_at": "2026-08-12T10:43:19.702681+00:00",
+      "outcome": {
+        "delta_filings_with_body": 2,
+        "delta_indexed_without_body": 2,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "SBRY.L"
+        ],
+        "results": [
+          {
+            "ticker": "SBRY.L",
+            "name": "J Sainsbury plc",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 56,
+              "with_body_after": 56
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "SBRY.L",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "trial-20260812-11",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "EDV.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "EDV.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-11",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T10:45:11.566088+00:00",
+      "completed_at": "2026-08-12T10:45:33.138818+00:00",
+      "outcome": {
+        "delta_filings_with_body": 1,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "EDV.L"
+        ],
+        "results": [
+          {
+            "ticker": "EDV.L",
+            "name": "Endeavour Mining plc",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 62,
+              "with_body_after": 62
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "EDV.L",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "trial-20260812-12",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "HLN.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": [
+          "HLN.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-12",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T11:07:42.911964+00:00",
+      "completed_at": "2026-08-12T11:07:59.593760+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "HLN.L"
+        ],
+        "results": [
+          {
+            "ticker": "HLN.L",
+            "name": "Haleon plc",
+            "with_body_before": 98,
+            "with_body_after": 98,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 98,
+                "with_body_after": 98,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 98,
+                "with_body_after": 98,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 98,
+              "with_body_after": 98
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "HLN.L",
+            "with_body_before": 98,
+            "with_body_after": 98,
+            "improved": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "trial-20260812-13",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "JD.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "JD.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-13",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T12:25:11.500341+00:00",
+      "completed_at": "2026-08-12T12:26:09.194830+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 2,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "JD.L"
+        ],
+        "results": [
+          {
+            "ticker": "JD.L",
+            "name": "JD Sports Fashion Plc",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "google_news_rejected": 2,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 16,
+                "with_body_after": 16,
+                "google_news_rejected": 2,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 16,
+                "with_body_after": 16,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "google_news_rejected": 2,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "pruned": 2,
+              "pruned_noise": 2,
+              "pruned_unfetchable": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 16,
+              "with_body_after": 16
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "JD.L",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "trial-20260812-14",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "HLN.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "HLN.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-14",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-12T12:27:45.220072+00:00",
+      "completed_at": "2026-08-12T12:28:06.079475+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "HLN.L"
+        ],
+        "results": [
+          {
+            "ticker": "HLN.L",
+            "name": "Haleon plc",
+            "with_body_before": 98,
+            "with_body_after": 98,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 98,
+                "with_body_after": 98,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 98,
+                "with_body_after": 98,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 98,
+              "with_body_after": 98
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "HLN.L",
+            "with_body_before": 98,
+            "with_body_after": 98,
+            "improved": false
+          }
+        ]
+      },
+      "engineering_task_id": "eng-20260812-04"
+    },
+    {
+      "id": "trial-20260812-15",
+      "status": "pending_review",
+      "title": "Ingest trial rerun after engineering",
+      "summary": "Verification rerun for trial trial-20260812-14",
+      "ticker": "HLN.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "HLN.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "trial-20260812-14",
+      "chain_attempt": 2,
+      "recorded_at": "2026-08-12T12:35:57.771290+00:00",
+      "completed_at": "2026-08-12T12:36:16.101257+00:00",
+      "outcome": {
+        "delta_filings_with_body": 1,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "HLN.L"
+        ],
+        "results": [
+          {
+            "ticker": "HLN.L",
+            "name": "Haleon plc",
+            "with_body_before": 99,
+            "with_body_after": 99,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 99,
+              "with_body_after": 99,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 99,
+              "with_body_after": 99,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 99,
+              "with_body_after": 99,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 99,
+                "with_body_after": 99,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 99,
+                "with_body_after": 99,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 99,
+              "with_body_after": 99,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 99,
+              "with_body_after": 99,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 99,
+              "with_body_after": 99
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "HLN.L",
+            "with_body_before": 99,
+            "with_body_after": 99,
+            "improved": false
+          }
+        ]
+      },
+      "parent_trial_id": "trial-20260812-14"
+    }
+  ],
+  "updated_at": "2026-08-12T12:36:16.101267+00:00",
+  "migrated_from": "docs/data/ingest_trials.json"
+}

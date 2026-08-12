@@ -80,9 +80,9 @@ jobs:
             ftse-engineering --json reprioritize --merged-task-id "$TASK_ID"
           fi
 
-      - name: Evaluate ingest trial rerun after gap-fix merge
+      - name: Evaluate ingest gap-closure rerun after gap-fix merge
         if: steps.eng_branch.outputs.is_task == 'true'
-        id: trial_rerun
+        id: gap_rerun
         run: |
           TASK_ID=$(python3 - <<'PY'
           from value_investor.engineering_queue import task_id_from_branch
@@ -91,30 +91,31 @@ jobs:
           )
           echo "merged_task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
           export TASK_ID
-          python3 - <<'PY' | tee /tmp/trial_rerun.json
+          python3 - <<'PY' | tee /tmp/gap_rerun.json
           import json
           import os
-          from value_investor.engineering_queue import ingest_trial_rerun_dispatch
+          from value_investor.engineering_queue import ingest_gap_closure_rerun_dispatch
           task_id = os.environ.get("TASK_ID", "")
-          print(json.dumps(ingest_trial_rerun_dispatch(task_id), indent=2))
+          print(json.dumps(ingest_gap_closure_rerun_dispatch(task_id), indent=2))
           PY
           python3 - <<'PY'
           import json
           import os
           from pathlib import Path
-          data = json.loads(Path("/tmp/trial_rerun.json").read_text())
+          data = json.loads(Path("/tmp/gap_rerun.json").read_text())
+          parent = data.get("parent_run_id") or data.get("parent_trial_id") or ""
           out = Path(os.environ["GITHUB_OUTPUT"])
           with out.open("a", encoding="utf-8") as handle:
               handle.write(
-                  f"should_rerun_trial={'true' if data.get('should_dispatch') else 'false'}\n"
+                  f"should_rerun_gap_closure={'true' if data.get('should_dispatch') else 'false'}\n"
                   f"pin_ticker={data.get('pin_ticker', '')}\n"
-                  f"trial_parent_id={data.get('trial_parent_id', '')}\n"
-                  f"trial_rerun_reason={data.get('reason', '')}\n"
+                  f"gap_closure_parent_id={parent}\n"
+                  f"gap_rerun_reason={data.get('reason', '')}\n"
               )
           PY
 
-      - name: Rerun ingest trial after engineering merge
-        if: steps.trial_rerun.outputs.should_rerun_trial == 'true'
+      - name: Rerun ingest gap-closure after engineering merge
+        if: steps.gap_rerun.outputs.should_rerun_gap_closure == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -124,10 +125,10 @@ jobs:
             -f bootstrap_seed_cap=0 \
             -f max_runtime_seconds=2100 \
             -f force=true \
-            -f record_trial=true \
-            -f pin_ticker="${{ steps.trial_rerun.outputs.pin_ticker }}" \
-            -f trial_parent_id="${{ steps.trial_rerun.outputs.trial_parent_id }}"
-          echo "Dispatched ingest-loop verification trial for ${{ steps.trial_rerun.outputs.pin_ticker }}"
+            -f record_gap_closure=true \
+            -f pin_ticker="${{ steps.gap_rerun.outputs.pin_ticker }}" \
+            -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
+          echo "Dispatched ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }}"
 
       - name: Refresh queue from Sunday artifacts when present
         id: refresh
@@ -365,10 +366,61 @@ jobs:
           file_pattern: docs/data/accelerated_review.json
           skip_fetch: false
 
+      - name: Evaluate eng-idle gap-closure dispatch
+        if: steps.gate.outputs.should_dispatch != 'true'
+        id: eng_idle_gap
+        run: |
+          python3 - <<'PY' | tee /tmp/eng_idle_gap.json
+          import json
+          from pathlib import Path
+          from value_investor.ingest_gap_closure import evaluate_eng_idle_gap_closure_dispatch
+          queue = json.loads(Path("/tmp/queue_status.json").read_text())
+          status = queue.get("status") or {}
+          result = evaluate_eng_idle_gap_closure_dispatch(
+              open_count=int(status.get("open_count") or queue.get("open_count") or 0),
+              pr_open_count=int(status.get("pr_open_count") or queue.get("pr_open_count") or 0),
+              agent_running_count=int("${{ steps.probe.outputs.agent_running_count }}" or 0),
+          )
+          print(json.dumps(result, indent=2))
+          PY
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/eng_idle_gap.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+              f"pin_ticker={data.get('pin_ticker', '')}\n"
+              f"gap_closure_trigger={data.get('trigger', 'eng_idle')}\n"
+              f"eng_idle_gap_reason={data.get('reason', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch eng-idle ingest gap-closure
+        if: steps.eng_idle_gap.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run ingest-loop.yml \
+            -f max_targets=1 \
+            -f max_bodies=40 \
+            -f bootstrap_seed_cap=0 \
+            -f max_runtime_seconds=2100 \
+            -f force=true \
+            -f record_gap_closure=true \
+            -f pin_ticker="${{ steps.eng_idle_gap.outputs.pin_ticker }}" \
+            -f gap_closure_trigger="${{ steps.eng_idle_gap.outputs.gap_closure_trigger }}"
+          echo "Dispatched eng-idle gap-closure for ${{ steps.eng_idle_gap.outputs.pin_ticker }}"
+
       - name: Queue idle summary
         if: steps.gate.outputs.should_dispatch != 'true'
         run: |
           echo "No dispatch: ${{ steps.gate.outputs.reason }}"
+          if [ "${{ steps.eng_idle_gap.outputs.should_dispatch }}" = "true" ]; then
+            echo "Eng-idle gap-closure dispatched instead: ${{ steps.eng_idle_gap.outputs.eng_idle_gap_reason }}"
+          fi
 
       - name: Email engineering queue blocks
         if: steps.gate.outputs.should_dispatch != 'true'

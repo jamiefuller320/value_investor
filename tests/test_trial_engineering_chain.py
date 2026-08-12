@@ -353,4 +353,5 @@ def test_chain_exhausted_after_max_engineering_rounds(tmp_path: Path):
     assert should is False
     assert reason == "chain_exhausted"
     store = json.loads(trials_path.read_text(encoding="utf-8"))
-    assert store["trials"][0]["chain_status"] == "exhausted"
+    rows = store.get("runs") or store.get("trials") or []
+    assert rows[0]["chain_status"] == "exhausted"

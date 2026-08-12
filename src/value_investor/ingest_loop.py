@@ -102,6 +102,9 @@ class IngestLoopResult:
     ingest_summary: IngestImprovementSummary | None
     micro_compiled: bool
     micro_compile: dict[str, Any] = field(default_factory=dict)
+    recorded_gap_closure: bool = False
+    gap_closure_compiled: bool = False
+    gap_closure_compile: dict[str, Any] = field(default_factory=dict)
     trial_compiled: bool = False
     trial_compile: dict[str, Any] = field(default_factory=dict)
     stalled: bool = False
@@ -115,8 +118,11 @@ class IngestLoopResult:
             "ingest_summary": self.ingest_summary.to_dict() if self.ingest_summary else None,
             "micro_compiled": self.micro_compiled,
             "micro_compile": self.micro_compile,
-            "trial_compiled": self.trial_compiled,
-            "trial_compile": self.trial_compile,
+            "recorded_gap_closure": self.recorded_gap_closure,
+            "gap_closure_compiled": self.gap_closure_compiled,
+            "gap_closure_compile": self.gap_closure_compile,
+            "trial_compiled": self.gap_closure_compiled,
+            "trial_compile": self.gap_closure_compile,
             "stalled": self.stalled,
             "partial": self.partial,
         }
@@ -218,6 +224,7 @@ def run_weekday_ingest_loop(
     bootstrap_seed_cap: int = DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
     max_runtime_seconds: float = DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS,
     max_bodies: int | None = None,
+    record_gap_closure: dict[str, Any] | None = None,
     record_trial: dict[str, Any] | None = None,
     pin_tickers: list[str] | None = None,
 ) -> IngestLoopResult:
@@ -229,12 +236,13 @@ def run_weekday_ingest_loop(
     health_before = snapshot_ingest_health(latest_path=latest_path, research_roots=roots)
     reports = reports_from_latest(latest_path)
 
-    trial_record: dict[str, Any] | None = None
-    trial_require_gaps = False
-    if record_trial:
-        trial_require_gaps = True
-    if record_trial and reports:
-        from value_investor.ingest_trials import record_ingest_trial
+    gap_closure_record: dict[str, Any] | None = None
+    gap_closure_spec = record_gap_closure or record_trial
+    gap_closure_require_gaps = False
+    if gap_closure_spec:
+        gap_closure_require_gaps = True
+    if gap_closure_spec and reports:
+        from value_investor.ingest_gap_closure import record_ingest_gap_closure_run
         from value_investor.research.ingest_improvement import select_ingest_improvement_targets
 
         preview = select_ingest_improvement_targets(
@@ -242,28 +250,32 @@ def run_weekday_ingest_loop(
             output_dir=data_dir,
             suggestions_path=suggestions_path,
             max_targets=max(1, int(max_targets)),
-            require_outstanding_gaps=trial_require_gaps,
+            require_outstanding_gaps=gap_closure_require_gaps,
             pin_tickers=pin_tickers,
         )
-        trial_ticker = preview[0].ticker if preview else ""
-        if pin_tickers and not trial_ticker:
-            trial_ticker = str(pin_tickers[0] or "").strip().upper()
+        gap_ticker = preview[0].ticker if preview else ""
+        if pin_tickers and not gap_ticker:
+            gap_ticker = str(pin_tickers[0] or "").strip().upper()
         params = {
             "max_targets": max_targets,
             "max_bodies": max_bodies,
             "bootstrap_seed_cap": bootstrap_seed_cap,
             "max_runtime_seconds": max_runtime_seconds,
-            "require_outstanding_gaps": trial_require_gaps,
-            "intensive_gap_closure": trial_require_gaps,
+            "require_outstanding_gaps": gap_closure_require_gaps,
+            "intensive_gap_closure": gap_closure_require_gaps,
             "pin_tickers": list(pin_tickers or []),
         }
-        trial_record = record_ingest_trial(
-            title=str(record_trial.get("title") or "Ingest trial"),
-            summary=str(record_trial.get("summary") or ""),
-            ticker=trial_ticker,
+        parent_run_id = str(
+            gap_closure_spec.get("parent_run_id") or gap_closure_spec.get("parent_trial_id") or ""
+        )
+        gap_closure_record = record_ingest_gap_closure_run(
+            title=str(gap_closure_spec.get("title") or "Ingest gap-closure run"),
+            summary=str(gap_closure_spec.get("summary") or ""),
+            ticker=gap_ticker,
             params=params,
-            review_trigger=str(record_trial.get("review_trigger") or "horizon_scan"),
-            parent_trial_id=str(record_trial.get("parent_trial_id") or ""),
+            review_trigger=str(gap_closure_spec.get("review_trigger") or "horizon_scan"),
+            parent_run_id=parent_run_id,
+            trigger=str(gap_closure_spec.get("trigger") or ""),
         )
 
     ingest_summary: IngestImprovementSummary | None = None
@@ -277,9 +289,9 @@ def run_weekday_ingest_loop(
             bootstrap_seed_cap=bootstrap_seed_cap,
             max_runtime_seconds=max_runtime_seconds,
             max_bodies=max_bodies if max_bodies is not None else DEFAULT_INGEST_REFETCH_MAX_BODIES,
-            require_outstanding_gaps=trial_require_gaps,
+            require_outstanding_gaps=gap_closure_require_gaps,
             pin_tickers=pin_tickers,
-            intensive_gap_closure=trial_require_gaps,
+            intensive_gap_closure=gap_closure_require_gaps,
             prune_failed_residual_fetches=False,
         )
     else:
@@ -339,28 +351,28 @@ def run_weekday_ingest_loop(
 
     partial = bool(ingest_summary and ingest_summary.partial)
 
-    finalized_trial: dict[str, Any] | None = None
-    if trial_record is not None:
-        from value_investor.ingest_trials import finalize_pending_ingest_trial
+    finalized_gap_closure: dict[str, Any] | None = None
+    if gap_closure_record is not None:
+        from value_investor.ingest_gap_closure import finalize_pending_gap_closure_run
 
-        finalized_trial = finalize_pending_ingest_trial(
+        finalized_gap_closure = finalize_pending_gap_closure_run(
             health_before=health_before,
             health_after=health_after,
             ingest_summary=ingest_summary,
         )
 
-    trial_compiled = False
-    trial_compile: dict[str, Any] = {"skipped": True}
-    if finalized_trial is not None:
-        trial_compile = compile_ingest_engineering_task_from_trial(
-            finalized_trial,
+    gap_closure_compiled = False
+    gap_closure_compile: dict[str, Any] = {"skipped": True}
+    if finalized_gap_closure is not None:
+        gap_closure_compile = compile_ingest_engineering_task_from_trial(
+            finalized_gap_closure,
             tasks_path=tasks_path,
             committed_path=tasks_path,
             data_dir=data_dir,
         )
-        trial_compiled = int(trial_compile.get("compiled_count") or 0) > 0
+        gap_closure_compiled = int(gap_closure_compile.get("compiled_count") or 0) > 0
 
-    if trial_compiled or micro_compiled:
+    if gap_closure_compiled or micro_compiled:
         from value_investor.engineering_queue import refresh_engineering_queue_ui
 
         refresh_engineering_queue_ui(tasks_path=tasks_path)
@@ -371,8 +383,11 @@ def run_weekday_ingest_loop(
         ingest_summary=ingest_summary,
         micro_compiled=micro_compiled,
         micro_compile=micro_compile,
-        trial_compiled=trial_compiled,
-        trial_compile=trial_compile,
+        recorded_gap_closure=gap_closure_record is not None,
+        gap_closure_compiled=gap_closure_compiled,
+        gap_closure_compile=gap_closure_compile,
+        trial_compiled=gap_closure_compiled,
+        trial_compile=gap_closure_compile,
         stalled=stalled,
         partial=partial,
     )

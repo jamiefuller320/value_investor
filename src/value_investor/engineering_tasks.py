@@ -720,47 +720,48 @@ def compile_ingest_engineering_task_from_trial(
     data_dir: Path = Path("docs/data"),
 ) -> dict[str, Any]:
     """Queue a scoped ingest engineering task when a gap trial fails to fetch bodies."""
-    from value_investor.ingest_trials import (
-        DEFAULT_TRIALS_PATH,
-        MAX_TRIAL_GAP_CHAIN_ROUNDS,
+    from value_investor.ingest_gap_closure import (
+        DEFAULT_RUNS_PATH,
+        MAX_GAP_CLOSURE_CHAIN_ROUNDS,
+        gap_closure_chain_root_id,
+        gap_closure_refetch_stats,
         should_auto_compile_gap_engineering,
-        trial_chain_root_id,
-        trial_refetch_stats,
     )
 
-    chain_root = trial_chain_root_id(trial)
+    chain_root = gap_closure_chain_root_id(trial)
     should_compile, compile_reason = should_auto_compile_gap_engineering(
         trial,
         data_dir=data_dir,
         tasks_path=committed_path,
-        trials_path=DEFAULT_TRIALS_PATH,
+        runs_path=DEFAULT_RUNS_PATH,
     )
     if not should_compile:
         return {"compiled_count": 0, "reason": compile_reason}
 
-    trial_id = str(trial.get("id") or "")
+    run_id = str(trial.get("id") or "")
     ticker = str(trial.get("ticker") or "").strip().upper()
     existing_payload = load_engineering_tasks(committed_path)
     existing_rows = list(existing_payload.get("tasks") or [])
     for row in existing_rows:
         evidence = row.get("evidence") or {}
-        if str(evidence.get("trial_id") or "") == trial_id:
+        linked = str(evidence.get("gap_closure_run_id") or evidence.get("trial_id") or "")
+        if linked == run_id:
             status = str(row.get("status") or "open")
             if status in {"open", "pr_open"}:
                 return {
                     "compiled_count": 0,
-                    "reason": "engineering task already queued for trial",
+                    "reason": "engineering task already queued for gap-closure run",
                     "task_id": row.get("id"),
                 }
 
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     seq = _next_engineering_seq_from_rows(existing_rows, run_stamp)
-    stats = trial_refetch_stats(trial)
+    stats = gap_closure_refetch_stats(trial)
     chain_round = (
         sum(
             1
             for row in existing_rows
-            if str(row.get("source") or "") == "ingest_trial"
+            if str(row.get("source") or "") in {"ingest_gap_closure", "ingest_trial"}
             and str((row.get("evidence") or {}).get("chain_root_id") or "") == chain_root
             and str(row.get("status") or "open") not in {"cancelled", "failed", "parked"}
         )
@@ -768,32 +769,35 @@ def compile_ingest_engineering_task_from_trial(
     )
     title = (
         f"Close stubborn ingest gaps for {ticker} "
-        f"(chain {chain_round}/{MAX_TRIAL_GAP_CHAIN_ROUNDS}: "
-        f"{stats['fetched']}/{stats['attempted']} bodies, trial {trial_id})"
+        f"(chain {chain_round}/{MAX_GAP_CLOSURE_CHAIN_ROUNDS}: "
+        f"{stats['fetched']}/{stats['attempted']} bodies, run {run_id})"
     )
     task = EngineeringTask(
         id=f"eng-{run_stamp}-{seq:02d}",
         area="ingest",
         title=title,
         summary=(
-            f"Ingest trial {trial_id} (chain root {chain_root}, round {chain_round}) targeted "
+            f"Ingest gap-closure run {run_id} (chain root {chain_root}, round {chain_round}) targeted "
             f"{ticker} with outstanding indexed gaps after refetch yield "
             f"{stats['fetched']}/{stats['attempted']}. Investigate source mapping, URL "
             "resolution, or parser gaps; add a focused fix and regression test so the "
-            "next pinned verification trial closes the gap."
+            "next pinned verification run closes the gap."
         ),
         priority="high",
         priority_score=88.0,
-        source="ingest_trial",
+        source="ingest_gap_closure",
         evidence={
-            "trial_id": trial_id,
+            "gap_closure_run_id": run_id,
+            "trial_id": run_id,
             "chain_root_id": chain_root,
             "chain_round": chain_round,
             "tickers": [ticker],
             "ticker": ticker,
+            "rerun_ingest_gap_closure": True,
             "rerun_ingest_trial": True,
             "refetch_attempted": stats["attempted"],
             "refetch_fetched": stats["fetched"],
+            "gap_closure_params": dict(trial.get("params") or {}),
             "trial_params": dict(trial.get("params") or {}),
             "compile_reason": compile_reason,
         },
@@ -818,8 +822,9 @@ def compile_ingest_engineering_task_from_trial(
         "compiled_at": datetime.now(UTC).isoformat(),
         "task_count": len(merged_rows),
         "tasks": merged_rows,
-        "micro_compile_source": "ingest_trial",
-        "source_trial_id": trial_id,
+        "micro_compile_source": "ingest_gap_closure",
+        "source_gap_closure_run_id": run_id,
+        "source_trial_id": run_id,
         "source_chain_root_id": chain_root,
     }
     committed_path = Path(committed_path)
@@ -835,14 +840,15 @@ def compile_ingest_engineering_task_from_trial(
     except OSError:
         pass
     if newly_open:
-        from value_investor.ingest_trials import attach_engineering_task_to_trial
+        from value_investor.ingest_gap_closure import attach_engineering_task_to_run
 
-        attach_engineering_task_to_trial(trial_id, str(newly_open[0].get("id") or ""))
+        attach_engineering_task_to_run(run_id, str(newly_open[0].get("id") or ""))
     return {
         "compiled_count": len(newly_open),
         "task_ids": [str(row.get("id") or "") for row in newly_open],
         "task_count": len(merged_rows),
-        "trial_id": trial_id,
+        "gap_closure_run_id": run_id,
+        "trial_id": run_id,
         "ticker": ticker,
     }
 
