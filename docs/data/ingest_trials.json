@@ -275,7 +275,115 @@
           }
         ]
       }
+    },
+    {
+      "id": "trial-20260812-03",
+      "status": "pending_review",
+      "title": "Single-ticker ingest depth trial",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "VCT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "recorded_at": "2026-08-12T06:42:44.873829+00:00",
+      "completed_at": "2026-08-12T06:43:18.187788+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "VCT.L"
+        ],
+        "results": [
+          {
+            "ticker": "VCT.L",
+            "name": "Victrex plc",
+            "with_body_before": 67,
+            "with_body_after": 67,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "google_news_rejected": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 67,
+                "with_body_after": 67,
+                "google_news_rejected": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 67,
+                "with_body_after": 67,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 67,
+              "with_body_after": 67,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 67,
+              "with_body_after": 67
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "VCT.L",
+            "with_body_before": 67,
+            "with_body_after": 67,
+            "improved": false
+          }
+        ]
+      },
+      "engineering_task_id": "eng-20260812-01"
     }
   ],
-  "updated_at": "2026-08-12T06:24:20.063253+00:00"
+  "updated_at": "2026-08-12T06:43:18.214073+00:00"
 }
