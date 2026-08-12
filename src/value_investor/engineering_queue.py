@@ -312,6 +312,8 @@ def reconcile_orphaned_pr_open_tasks(
     for row in data.get("tasks") or []:
         if str(row.get("status") or "") != IN_FLIGHT_STATUS:
             continue
+        if row.get("merged_at"):
+            continue
         branch = str(row.get("branch_name") or "").strip()
         if branch and branch in open_branches:
             continue
