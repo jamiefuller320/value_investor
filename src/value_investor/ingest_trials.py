@@ -201,7 +201,8 @@ def should_auto_compile_gap_engineering(
 
     outcome = trial.get("outcome") or {}
     if int(outcome.get("delta_filings_with_body") or 0) > 0:
-        return False, "book_improved"
+        if not trial_ticker_has_gaps(ticker, data_dir=data_dir):
+            return False, "gaps_closed_after_improvement"
     per_ticker = outcome.get("per_ticker") or []
     if per_ticker and per_ticker[0].get("improved"):
         return False, "ticker_improved"
@@ -378,7 +379,13 @@ def trial_refetch_stats(trial: dict[str, Any]) -> dict[str, int]:
     row = results[0]
     attempted = 0
     fetched = 0
-    for key in ("ch_refetch", "investegate_refetch", "ticker_rns_refetch", "indexed_refetch"):
+    for key in (
+        "ch_refetch",
+        "investegate_refetch",
+        "ticker_rns_refetch",
+        "indexed_refetch",
+        "residual_refetch",
+    ):
         block = row.get(key) or {}
         if not isinstance(block, dict):
             continue

@@ -53,6 +53,7 @@ from value_investor.research.filings import (
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
     refetch_missing_filing_bodies,
+    refetch_residual_filing_bodies,
     refetch_ticker_rns_api_filing_bodies,
     refetch_uk_primary_filing_bodies,
     resolve_filings_regime,
@@ -979,6 +980,17 @@ def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monk
         "value_investor.research.filings.refetch_indexed_without_body_filing_bodies",
         lambda *args, **kwargs: dict(rns_result),
     )
+    residual_result = {
+        "attempted": 0,
+        "fetched": 0,
+        "pruned": 0,
+        "with_body_before": 3,
+        "with_body_after": 3,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_residual_filing_bodies",
+        lambda *args, **kwargs: dict(residual_result),
+    )
     result = refetch_uk_primary_filing_bodies(
         filings_dir,
         ticker="FGP.L",
@@ -992,6 +1004,91 @@ def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monk
     assert result["google_news_rejected"] == 1
     assert result["companies_house"]["fetched"] == 1
     assert result["rns"]["investegate"]["fetched"] == 2
+
+
+def test_refetch_residual_filing_bodies_fetches_sec_edgar(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sec_url = "https://www.sec.gov/Archives/edgar/data/123/000123456789012345/accession.htm"
+    index = {
+        "ticker": "HLN.L",
+        "company_name": "Haleon plc",
+        "filings": [
+            {
+                "id": "sec1",
+                "source": "sec_edgar",
+                "headline": "6-K: Tender offer",
+                "published_at": "2026-01-15T00:00:00+00:00",
+                "url": sec_url,
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 80,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: "SEC exhibit body " + ("x" * 220) if "sec.gov" in url else None,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="HLN.L",
+        company_name="Haleon plc",
+        max_bodies=4,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+
+
+def test_refetch_residual_filing_bodies_prunes_unfetchable_google_news(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    gnews_url = "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1QVElPVGsx"
+    index = {
+        "ticker": "JD.L",
+        "company_name": "JD Sports Fashion Plc",
+        "filings": [
+            {
+                "id": "gn1",
+                "source": "google_news_investegate",
+                "headline": "JD Sports Fashion (JD.) Share Price - Investegate",
+                "published_at": "2026-01-15T00:00:00+00:00",
+                "url": gnews_url,
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 10,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="JD.L",
+        company_name="JD Sports Fashion Plc",
+        max_bodies=4,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    assert result["pruned"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"] == []
 
 
 def test_compose_pdf_body_text_splices_late_cash_flow_and_notes():

@@ -247,6 +247,53 @@ def test_should_auto_compile_after_verification_gaps_remain(tmp_path: Path):
     assert reason in {"verification_gaps_remain", "zero_yield_refetch"}
 
 
+def test_should_auto_compile_when_partial_improvement_leaves_gaps(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    filings = data_dir / "research" / "JD.L" / "sources" / "filings"
+    filings.mkdir(parents=True)
+    (filings / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 3, "with_body": 2},
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                    {"period": "other", "has_body": False, "url": "https://example.com/a"},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    trials_path = data_dir / "ingest_trials.json"
+    trials_path.write_text(json.dumps({"trials": []}), encoding="utf-8")
+    eng_path = data_dir / "engineering_tasks.json"
+    eng_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    trial = {
+        "id": "trial-partial",
+        "status": "pending_review",
+        "ticker": "JD.L",
+        "chain_root_id": "trial-partial",
+        "params": {"require_outstanding_gaps": True},
+        "outcome": {
+            "delta_filings_with_body": 2,
+            "per_ticker": [{"ticker": "JD.L", "improved": False}],
+            "results": [
+                {
+                    "residual_refetch": {"attempted": 1, "fetched": 0},
+                }
+            ],
+        },
+    }
+    should, reason = should_auto_compile_gap_engineering(
+        trial,
+        data_dir=data_dir,
+        tasks_path=eng_path,
+        trials_path=trials_path,
+    )
+    assert should is True
+    assert reason == "zero_yield_refetch"
+
+
 def test_chain_exhausted_after_max_engineering_rounds(tmp_path: Path):
     data_dir = tmp_path / "docs" / "data"
     filings = data_dir / "research" / "VCT.L" / "sources" / "filings"

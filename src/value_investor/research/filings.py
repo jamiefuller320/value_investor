@@ -3570,6 +3570,91 @@ def refetch_indexed_without_body_filing_bodies(
     }
 
 
+def refetch_residual_filing_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 20,
+    prune_unfetchable_google_news: bool = True,
+) -> dict[str, Any]:
+    """
+    Final sweep for indexed rows still lacking bodies after source-specific pipelines.
+
+    Covers SEC Edgar HTML, direct PDFs, and other URLs skipped by Investegate/CH
+    refetch. Prunes unresolvable Google News wrapper rows so share-price noise does
+    not count as outstanding ingest gaps.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists():
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "pruned": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": "no filings_index.json",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "pruned": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": f"unreadable index: {exc}",
+        }
+
+    filings = list(payload.get("filings") or [])
+    before = sum(1 for row in filings if row.get("has_body"))
+    enriched = enrich_filing_rows(
+        filings,
+        ticker=ticker,
+        company_name=company_name,
+    )
+    missing = [row for row in enriched if row.get("url") and not row.get("has_body")]
+    if not missing:
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "pruned": 0,
+            "with_body_before": before,
+            "with_body_after": before,
+            "note": "no residual gaps",
+        }
+
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    updated = _write_bodies(enriched, bodies_dir, max_bodies=max_bodies)
+    pruned = 0
+    if prune_unfetchable_google_news:
+        kept: list[dict[str, Any]] = []
+        for row in updated:
+            url = str(row.get("url") or "")
+            if not row.get("has_body") and "news.google.com" in url:
+                pruned += 1
+                continue
+            kept.append(row)
+        updated = kept
+
+    after = sum(1 for row in updated if row.get("has_body"))
+    payload["filings"] = updated
+    payload["summary"] = summarize_filings(updated)
+    payload["residual_refetched_at"] = datetime.now(UTC).isoformat()
+    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": len(missing),
+        "fetched": max(0, after - before),
+        "pruned": pruned,
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "refetch_residual_filing_bodies",
+    }
+
+
 def refetch_uk_primary_filing_bodies(
     filings_dir: Path,
     *,
@@ -3583,6 +3668,7 @@ def refetch_uk_primary_filing_bodies(
     Resolves Google News wrappers to Investegate/LSE direct URLs, downloads CH
     PDF/iXBRL bodies (with page-range depth extract for pensions, covenants,
     adjusting items, and cash-flow statements), then fills remaining RNS rows.
+    A residual sweep runs last for SEC Edgar and other direct URLs still lacking bodies.
     """
     ch = refetch_companies_house_filing_bodies(filings_dir, max_bodies=max_bodies)
     rns = refetch_indexed_without_body_filing_bodies(
@@ -3591,13 +3677,28 @@ def refetch_uk_primary_filing_bodies(
         company_name=company_name,
         max_bodies=max_bodies,
     )
+    residual = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+    )
     before = int(ch.get("with_body_before") or 0)
-    after = int(rns.get("with_body_after") or ch.get("with_body_after") or before)
+    after = int(residual.get("with_body_after") or rns.get("with_body_after") or before)
     return {
         "companies_house": ch,
         "rns": rns,
-        "attempted": int(ch.get("attempted") or 0) + int(rns.get("attempted") or 0),
-        "fetched": int(ch.get("fetched") or 0) + int(rns.get("fetched") or 0),
+        "residual": residual,
+        "attempted": (
+            int(ch.get("attempted") or 0)
+            + int(rns.get("attempted") or 0)
+            + int(residual.get("attempted") or 0)
+        ),
+        "fetched": (
+            int(ch.get("fetched") or 0)
+            + int(rns.get("fetched") or 0)
+            + int(residual.get("fetched") or 0)
+        ),
         "with_body_before": before,
         "with_body_after": after,
         "google_news_rejected": int(rns.get("google_news_rejected") or 0),
