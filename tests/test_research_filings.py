@@ -576,6 +576,109 @@ def test_fetch_filing_body_investegate_follows_lse_pdf(monkeypatch):
     assert "revenue increased" in text
 
 
+def test_resolve_investegate_document_url_follows_gsk_annual_report_microsite(monkeypatch):
+    """GSK stub RNS pages link to annualreport.gsk.com instead of an LSE PDF."""
+    investegate_html = """
+    <h1>GSK publishes Annual Report 2025</h1>
+    <p>Available on the company website.</p>
+    <a href="https://annualreport.gsk.com">Annual Report 2025</a>
+    """
+    microsite_html = """
+    <a href="/media/kn0bknmd/annual-report-2025.pdf">Annual Report 2025</a>
+    <a href="/media/immdjzop/financial-statements-2025.pdf">Financial statements</a>
+    """
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == "https://annualreport.gsk.com":
+            return microsite_html.encode("utf-8")
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    assert resolve_investegate_document_url(investegate_html) == (
+        "https://www.gsk.com/media/kn0bknmd/annual-report-2025.pdf"
+    )
+
+
+def test_fetch_filing_body_investegate_follows_gsk_annual_report_microsite(monkeypatch):
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/gsk--gsk/"
+        "gsk-publishes-annual-report-2025/9460267"
+    )
+    microsite_url = "https://annualreport.gsk.com"
+    gsk_pdf = "https://www.gsk.com/media/kn0bknmd/annual-report-2025.pdf"
+    investegate_html = f"""
+    <h1>GSK publishes Annual Report 2025</h1>
+    <p>Available on the company website.</p>
+    <a href="{microsite_url}">Annual Report 2025</a>
+    """
+    microsite_html = '<a href="/media/kn0bknmd/annual-report-2025.pdf">Annual Report</a>'
+    pdf_text = "Annual report narrative " + ("revenue increased " * 40)
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == investegate_url:
+            return investegate_html.encode("utf-8")
+        if url == microsite_url:
+            return microsite_html.encode("utf-8")
+        if url == gsk_pdf:
+            return b"%PDF-fake"
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: pdf_text,
+    )
+    text = fetch_filing_body(investegate_url)
+    assert text is not None
+    assert "Annual report narrative" in text
+
+
+def test_refetch_investegate_filing_bodies_gsk_annual_report_stub(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/gsk--gsk/"
+        "gsk-publishes-annual-report-2025/9460267"
+    )
+    index = {
+        "ticker": "GSK.L",
+        "company_name": "GSK plc",
+        "filings": [
+            {
+                "id": "db941b0e4174a2a7",
+                "source": "investegate_resolved",
+                "headline": "GSK publishes Annual Report 2025 - Investegate",
+                "published_at": "2026-03-05T10:02:32+00:00",
+                "url": investegate_url,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: "Annual report narrative " + ("revenue increased " * 40),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="GSK.L",
+        company_name="GSK plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / "db941b0e4174a2a7.txt").exists()
+
+
 def test_refetch_investegate_filing_bodies_resolves_and_downloads(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()

@@ -211,6 +211,8 @@ _INVESTEGATE_LSE_PDF_PATTERNS = (
     r'https?://(?:www\.)?rns-pdf\.londonstockexchange\.com/rns/[^"\s<>]+\.pdf',
     r'https?://(?:www\.)?docs\.londonstockexchange\.com/[^"\s<>]+\.pdf',
 )
+# Stub RNS pages ("publishes annual report") often link to IR microsites instead of LSE PDFs.
+_INVESTEGATE_PUBLISHER_LINK_PATTERNS = (r"https?://annualreport\.[a-z0-9.-]+",)
 _SUBSTANTIVE_FILING_TERMS = (
     "revenue",
     "earnings",
@@ -457,13 +459,90 @@ def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
     )
 
 
+def _annual_report_microsite_media_base(publisher_url: str) -> str:
+    """Map annual-report microsite hosts to the corporate media CDN base URL."""
+    parsed = urllib.parse.urlparse(publisher_url)
+    host = parsed.netloc.lower()
+    if host.startswith("annualreport."):
+        brand = host.split("annualreport.", 1)[1]
+        return f"https://www.{brand}"
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+
+def _score_annual_report_pdf_href(href: str) -> int:
+    """Prefer full annual-report PDFs over section splits or 20-F duplicates."""
+    lower = href.lower()
+    score = 0
+    if "annual-report" in lower or "annual_report" in lower:
+        score += 100
+    if re.search(r"annual-report-20\d{2}\.pdf", lower):
+        score += 50
+    if "financial-statements" in lower:
+        score += 40
+    if "form-20-f" in lower or "/20-f" in lower:
+        score -= 30
+    year_match = re.search(r"20\d{2}", lower)
+    if year_match:
+        score += int(year_match.group(0)) - 2000
+    return score
+
+
+def _resolve_annual_report_microsite_pdf(publisher_url: str) -> str | None:
+    """
+    Follow annual-report microsites (e.g. annualreport.gsk.com) to a downloadable PDF.
+
+    Microsites often serve HTML shells at ``/media/*.pdf`` paths; the real PDFs live on
+    the parent ``www.{brand}.com/media/...`` CDN.
+    """
+    if not publisher_url or not publisher_url.startswith("http"):
+        return None
+    try:
+        raw = _http_get(
+            publisher_url.rstrip("/"),
+            headers={"User-Agent": _INVESTEGATE_USER_AGENT},
+            timeout=40,
+        )
+        page_html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("Annual-report microsite fetch failed for %s: %s", publisher_url, exc)
+        return None
+
+    hrefs = re.findall(r'href="([^"]+\.pdf[^"]*)"', page_html, flags=re.I)
+    if not hrefs:
+        return None
+
+    media_base = _annual_report_microsite_media_base(publisher_url)
+    ranked = sorted(set(hrefs), key=_score_annual_report_pdf_href, reverse=True)
+    for href in ranked:
+        if href.startswith("http"):
+            candidate = href
+        elif href.startswith("/"):
+            candidate = urllib.parse.urljoin(media_base, href)
+        else:
+            candidate = urllib.parse.urljoin(publisher_url.rstrip("/") + "/", href)
+        if candidate.startswith("http"):
+            return candidate
+    return None
+
+
+def _resolve_investegate_publisher_annual_report_pdf(html: str) -> str | None:
+    """Resolve stub Investegate RNS pages that link to IR annual-report microsites."""
+    for pattern in _INVESTEGATE_PUBLISHER_LINK_PATTERNS:
+        for match in re.finditer(pattern, html or "", flags=re.I):
+            publisher_url = match.group(0).rstrip("/\"'")
+            pdf_url = _resolve_annual_report_microsite_pdf(publisher_url)
+            if pdf_url:
+                return pdf_url
+    return None
+
+
 def resolve_investegate_document_url(html: str) -> str | None:
-    """Extract a direct LSE RNS PDF URL embedded in an Investegate announcement page."""
+    """Extract a direct document URL embedded in an Investegate announcement page."""
     for pattern in _INVESTEGATE_LSE_PDF_PATTERNS:
         match = re.search(pattern, html or "", flags=re.I)
         if match:
             return match.group(0)
-    return None
+    return _resolve_investegate_publisher_annual_report_pdf(html)
 
 
 def resolve_investegate_lse_pdf_url(url: str | None) -> str | None:
