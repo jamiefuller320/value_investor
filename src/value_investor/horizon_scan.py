@@ -56,6 +56,7 @@ class HorizonScanReview:
     automation_risks: str
     counterfactual_gaps: str
     fragment_clustering: str
+    ingest_trials_review: str
     park: str
     accelerate: str
 
@@ -67,6 +68,7 @@ class HorizonScanReview:
             ("AUTOMATION RISKS", self.automation_risks),
             ("COUNTERFACTUAL GAPS", self.counterfactual_gaps),
             ("FRAGMENT CLUSTERING", self.fragment_clustering),
+            ("INGEST TRIALS REVIEW", self.ingest_trials_review),
             ("PARK", self.park),
             ("ACCELERATE", self.accelerate),
         ]
@@ -87,6 +89,7 @@ def parse_horizon_scan(text: str) -> HorizonScanReview:
         "AUTOMATION RISKS": "automation_risks",
         "COUNTERFACTUAL GAPS": "counterfactual_gaps",
         "FRAGMENT CLUSTERING": "fragment_clustering",
+        "INGEST TRIALS REVIEW": "ingest_trials_review",
         "PARK": "park",
         "ACCELERATE": "accelerate",
     }
@@ -198,12 +201,17 @@ def build_horizon_payload(
 
     library_policy = _safe_read(LIBRARY_POLICY_PATH)
 
+    from value_investor.ingest_trials import list_trials_pending_review
+
+    ingest_trials_review = list_trials_pending_review(trigger="horizon_scan")
+
     payload = {
         **metrics,
         "scan_at": effective_run_at.isoformat(),
         "project_objective_excerpt": _project_objective_excerpt(),
         "open_deferred_ideas": open_deferred,
         "open_fragments": open_fragments,
+        "ingest_trials_pending_review": ingest_trials_review,
         "open_engineering_tasks": _slim_open_engineering(data_dir / "engineering_tasks.json"),
         "latest_analysis_review": {
             "reviewed_at": (analysis_review or {}).get("reviewed_at"),
@@ -582,10 +590,11 @@ def _build_horizon_prompt(payload_path: Path) -> str:
 Read the structured JSON at: {payload_path}
 
 It contains north-star stage context, open deferred ideas (L/N items), scratch fragments,
-open engineering tasks, weekly analysis_review excerpts, paper learning metrics,
+pending ingest trials (completed experiments awaiting review), open engineering tasks,
+weekly analysis_review excerpts, paper learning metrics,
 exit-timing cohort readiness, and library ladder state.
 
-Write SEVEN plain-text sections with headings exactly as shown:
+Write EIGHT plain-text sections with headings exactly as shown:
 
 STAGE READINESS
 Bullets on current stage (0–2b focus), exit criteria met vs thin, and richness-before-breadth
@@ -608,6 +617,12 @@ Use action lines ONLY when confident:
   - DROP frag-YYYYMMDD-NN
   - PROMOTE frag-YYYYMMDD-NN → **Title** — summary. Revisit when: trigger
 Mark stale duplicate fragments DROP. Do not PROMOTE without a clear revisit trigger.
+
+INGEST TRIALS REVIEW
+For each row in ingest_trials_pending_review: summarize outcome deltas and recommend
+PROMOTE (wire into ingest-loop / engineering policy), DEFER (park as deferred idea), or
+DISMISS (trial not worth repeating). Reference trial id (trial-YYYYMMDD-NN). If none pending,
+state "No ingest trials pending review."
 
 PARK
 Bullets for NEW deferred ideas not already in open_deferred_ideas. Format each line:

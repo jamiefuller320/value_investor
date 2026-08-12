@@ -17,6 +17,7 @@ stage_ingest_artifacts() {
   git add docs/data/ingest_health_log.json \
     docs/data/ingest_improvement_summary.json \
     docs/data/ingest_bootstrap_summary.json \
+    docs/data/ingest_trials.json \
     docs/data/engineering_tasks.json \
     docs/data/research 2>/dev/null || true
   # -u stages updates and deletions (backlog is removed when a pass completes).

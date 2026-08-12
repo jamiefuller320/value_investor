@@ -213,6 +213,7 @@ def run_weekday_ingest_loop(
     bootstrap_seed_cap: int = DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
     max_runtime_seconds: float = DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS,
     max_bodies: int | None = None,
+    record_trial: dict[str, Any] | None = None,
 ) -> IngestLoopResult:
     """
     Run bounded ingest improvement on the current buy-tier universe, log health,
@@ -221,6 +222,32 @@ def run_weekday_ingest_loop(
     roots = research_roots or list(DEFAULT_RESEARCH_ROOTS)
     health_before = snapshot_ingest_health(latest_path=latest_path, research_roots=roots)
     reports = reports_from_latest(latest_path)
+
+    trial_record: dict[str, Any] | None = None
+    if record_trial and reports:
+        from value_investor.ingest_trials import record_ingest_trial
+        from value_investor.research.ingest_improvement import select_ingest_improvement_targets
+
+        preview = select_ingest_improvement_targets(
+            reports,
+            output_dir=data_dir,
+            suggestions_path=suggestions_path,
+            max_targets=max(1, int(max_targets)),
+        )
+        if preview:
+            params = {
+                "max_targets": max_targets,
+                "max_bodies": max_bodies,
+                "bootstrap_seed_cap": bootstrap_seed_cap,
+                "max_runtime_seconds": max_runtime_seconds,
+            }
+            trial_record = record_ingest_trial(
+                title=str(record_trial.get("title") or "Ingest trial"),
+                summary=str(record_trial.get("summary") or ""),
+                ticker=preview[0].ticker,
+                params=params,
+                review_trigger=str(record_trial.get("review_trigger") or "horizon_scan"),
+            )
 
     ingest_summary: IngestImprovementSummary | None = None
     if reports:
@@ -290,6 +317,15 @@ def run_weekday_ingest_loop(
         micro_compile = {"skipped": True, "reason": "ingest health not stalled"}
 
     partial = bool(ingest_summary and ingest_summary.partial)
+
+    if trial_record is not None:
+        from value_investor.ingest_trials import finalize_pending_ingest_trial
+
+        finalize_pending_ingest_trial(
+            health_before=health_before,
+            health_after=health_after,
+            ingest_summary=ingest_summary,
+        )
 
     return IngestLoopResult(
         health_before=health_before,
