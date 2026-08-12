@@ -224,6 +224,9 @@ def run_weekday_ingest_loop(
     reports = reports_from_latest(latest_path)
 
     trial_record: dict[str, Any] | None = None
+    trial_require_gaps = False
+    if record_trial:
+        trial_require_gaps = True
     if record_trial and reports:
         from value_investor.ingest_trials import record_ingest_trial
         from value_investor.research.ingest_improvement import select_ingest_improvement_targets
@@ -233,21 +236,23 @@ def run_weekday_ingest_loop(
             output_dir=data_dir,
             suggestions_path=suggestions_path,
             max_targets=max(1, int(max_targets)),
+            require_outstanding_gaps=trial_require_gaps,
         )
-        if preview:
-            params = {
-                "max_targets": max_targets,
-                "max_bodies": max_bodies,
-                "bootstrap_seed_cap": bootstrap_seed_cap,
-                "max_runtime_seconds": max_runtime_seconds,
-            }
-            trial_record = record_ingest_trial(
-                title=str(record_trial.get("title") or "Ingest trial"),
-                summary=str(record_trial.get("summary") or ""),
-                ticker=preview[0].ticker,
-                params=params,
-                review_trigger=str(record_trial.get("review_trigger") or "horizon_scan"),
-            )
+        trial_ticker = preview[0].ticker if preview else ""
+        params = {
+            "max_targets": max_targets,
+            "max_bodies": max_bodies,
+            "bootstrap_seed_cap": bootstrap_seed_cap,
+            "max_runtime_seconds": max_runtime_seconds,
+            "require_outstanding_gaps": trial_require_gaps,
+        }
+        trial_record = record_ingest_trial(
+            title=str(record_trial.get("title") or "Ingest trial"),
+            summary=str(record_trial.get("summary") or ""),
+            ticker=trial_ticker,
+            params=params,
+            review_trigger=str(record_trial.get("review_trigger") or "horizon_scan"),
+        )
 
     ingest_summary: IngestImprovementSummary | None = None
     if reports:
@@ -260,6 +265,7 @@ def run_weekday_ingest_loop(
             bootstrap_seed_cap=bootstrap_seed_cap,
             max_runtime_seconds=max_runtime_seconds,
             max_bodies=max_bodies if max_bodies is not None else DEFAULT_INGEST_REFETCH_MAX_BODIES,
+            require_outstanding_gaps=trial_require_gaps,
         )
     else:
         logger.warning("No reports in %s — skipping ingest-improvement pass", latest_path)

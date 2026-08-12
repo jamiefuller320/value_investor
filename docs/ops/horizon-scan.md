@@ -50,7 +50,10 @@ ftse-ingest-loop run --max-targets 1 --record-trial \
   --trial-review-trigger horizon_scan
 ```
 
-Workflow input `record_trial=true` does the same. Outcomes land in `ingest_trials.json`;
+Workflow input `record_trial=true` does the same. Trial runs require outstanding ingest gaps
+(indexed_without_body or period bucket gaps) so candidates are highest interest among
+names that still need bodies, not suggestion-rich fully-covered tickers. Outcomes land in
+`ingest_trials.json`;
 the monthly horizon scan payload includes `ingest_trials_pending_review` and an
 **INGEST TRIALS REVIEW** section in the agent prompt.
 

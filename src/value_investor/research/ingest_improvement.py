@@ -274,6 +274,29 @@ def _is_uk_listed(*, market: str | None, ticker: str) -> bool:
     return _market_bucket(market, ticker) == "uk"
 
 
+def _has_outstanding_ingest_gap(coverage: dict[str, int]) -> bool:
+    """True when indexed filings or period buckets still lack bodies."""
+    if coverage["filings_total"] == 0:
+        return True
+    if coverage["indexed_without_body"] > 0:
+        return True
+    if coverage["filings_with_body"] == 0 and coverage["filings_total"] > 0:
+        return True
+    annual_gap = max(
+        0,
+        coverage["filings_annual"] - coverage.get("annual_with_body", 0),
+    )
+    interim_gap = max(
+        0,
+        coverage["filings_interim"] - coverage.get("interim_with_body", 0),
+    )
+    trading_gap = max(
+        0,
+        coverage.get("filings_trading_update", 0) - coverage.get("trading_update_with_body", 0),
+    )
+    return annual_gap > 0 or interim_gap > 0 or trading_gap > 0
+
+
 def _priority_score(
     coverage: dict[str, int],
     suggestions: list[dict[str, Any]],
@@ -334,6 +357,7 @@ def select_ingest_improvement_targets(
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     max_targets: int = DEFAULT_INGEST_IMPROVEMENT_CAP,
     backlog_tickers: list[str] | None = None,
+    require_outstanding_gaps: bool = False,
 ) -> list[IngestImprovementTarget]:
     """Rank buy-tier tickers that need ingest hardening before gap-fill."""
     store = ResearchStore(output_dir)
@@ -353,6 +377,8 @@ def select_ingest_improvement_targets(
             ticker=report.ticker,
         )
         if score <= 0:
+            continue
+        if require_outstanding_gaps and not _has_outstanding_ingest_gap(coverage):
             continue
         candidates.append(
             IngestImprovementTarget(
@@ -498,6 +524,7 @@ def run_ingest_improvement_pass(
     per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
     backlog_path: Path = DEFAULT_BACKLOG_PATH,
     max_bodies: int = DEFAULT_INGEST_REFETCH_MAX_BODIES,
+    require_outstanding_gaps: bool = False,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -519,6 +546,7 @@ def run_ingest_improvement_pass(
         suggestions_path=suggestions_path,
         max_targets=max_targets,
         backlog_tickers=pending_backlog or None,
+        require_outstanding_gaps=require_outstanding_gaps,
     )
     summary = IngestImprovementSummary(targets=targets)
     summary.targets_planned = len(targets)
