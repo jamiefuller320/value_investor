@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-12T06:55:17+00:00",
+  "updated_at": "2026-08-12T06:58:16+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2745,8 +2745,8 @@
       "category": "not_now",
       "section": "not_now",
       "title": "Do not fold full memo-utility synthesis into horizon scan",
-      "summary": "Memo usefulness (question_outcomes, risk_tags, memo_quality, gap-fill rollups) already belongs to the weekly research loop via post_run_review + engineering_tasks. Horizon should stay stage/fragment/trial foresight; at most consume a slim monthly memo-utility rollup.",
-      "revisit_when": "PR #247 patterns accumulate across several Sunday gap-fill runs AND post_run_review is consistently producing improvement plans",
+      "summary": "Do not move weekly memo usefulness synthesis (gap-fill rollups, per-ticker open-question triage, research_model_suggestions eng compile) into the monthly horizon agent. Horizon may still strategically ask whether memo schema should better aid AI judgment (see L141); implementation stays in the research/post_run loop.",
+      "revisit_when": "If someone proposes putting gap-fill/post_run_review ownership inside horizon_scan.py",
       "tags": [
         "horizon",
         "research",
@@ -2773,6 +2773,24 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
       "added_at": "2026-08-12T06:55:17+00:00"
+    },
+    {
+      "id": "L141",
+      "category": "later",
+      "section": "research",
+      "title": "Horizon scan: ask if memo schema aids AI judgment",
+      "summary": "In STAGE READINESS / AUTOMATION RISKS / COUNTERFACTUAL GAPS (and ACCELERATE as offline_sim or paper_knobs), horizon may strategically ask whether research memo fields (verdict-only vs confidence, risk_tags, unresolved questions) should better support the AI-judgment paper track. Does not own weekly gap-fill synthesis \u2014 only whether product/schema experiments are stage-relevant.",
+      "revisit_when": "After PR #247 merges and a few Sunday runs accumulate question_outcomes/risk_tags; ideally with L140 slim rollup in the payload",
+      "tags": [
+        "horizon",
+        "research",
+        "memos",
+        "ai-judgment",
+        "later"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-019ff0a5-71a0-7091-b81b-e4d2b6f073ba",
+      "added_at": "2026-08-12T06:58:16+00:00"
     }
   ],
   "fragments": [
