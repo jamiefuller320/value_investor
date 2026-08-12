@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from tests.test_ingest_improvement import _report
 from value_investor.engineering_queue import ingest_trial_rerun_dispatch
 from value_investor.engineering_tasks import compile_ingest_engineering_task_from_trial
 from value_investor.ingest_trials import (
@@ -15,6 +14,38 @@ from value_investor.ingest_trials import (
     trial_refetch_stats,
 )
 from value_investor.research.ingest_improvement import select_ingest_improvement_targets
+from value_investor.summary import CompanyReport
+
+
+def _report(ticker: str, name: str, signal: str = "strong_buy") -> CompanyReport:
+    return CompanyReport(
+        ticker=ticker,
+        name=name,
+        sector="Industrials",
+        signal=signal,
+        models_passed=5,
+        model_count=10,
+        composite_score=0.7,
+        sector_composite_score=0.8,
+        families_passed=4,
+        passed_families="cheapness,quality",
+        data_quality_score=0.9,
+        metrics_present=18,
+        metrics_total=20,
+        weeks_at_signal=1,
+        signal_trend="new",
+        conviction_score=0.5,
+        stability_label="new",
+        timing_signal="neutral",
+        timing_score=0.0,
+        rsi_14=50.0,
+        price_vs_sma200_pct=0.0,
+        action_note="",
+        trade_plan=None,
+        summary="test",
+        passed_models=[],
+        key_metrics={},
+    )
 
 
 def _failed_gap_trial(tmp_path: Path) -> dict:
