@@ -137,7 +137,9 @@ def _cmd_run(args: argparse.Namespace) -> int:
     result = None
     error: str | None = None
     try:
-        pin_tickers = [args.pin_ticker.strip().upper()] if str(args.pin_ticker or "").strip() else None
+        pin_tickers = (
+            [args.pin_ticker.strip().upper()] if str(args.pin_ticker or "").strip() else None
+        )
         result = run_weekday_ingest_loop(
             latest_path=args.latest_path,
             data_dir=args.data_dir,

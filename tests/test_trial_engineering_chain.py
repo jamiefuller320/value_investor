@@ -27,14 +27,24 @@ def _failed_gap_trial(tmp_path: Path) -> dict:
         path=path,
     )
     finalize_pending_ingest_trial(
-        health_before={"filings_with_body": 100, "indexed_without_body": 14, "zero_body_buy_tier": 0},
-        health_after={"filings_with_body": 100, "indexed_without_body": 14, "zero_body_buy_tier": 0},
+        health_before={
+            "filings_with_body": 100,
+            "indexed_without_body": 14,
+            "zero_body_buy_tier": 0,
+        },
+        health_after={
+            "filings_with_body": 100,
+            "indexed_without_body": 14,
+            "zero_body_buy_tier": 0,
+        },
         ingest_summary=None,
         path=path,
     )
     trial["outcome"] = {
         "delta_filings_with_body": 0,
-        "per_ticker": [{"ticker": "VCT.L", "improved": False, "with_body_before": 67, "with_body_after": 67}],
+        "per_ticker": [
+            {"ticker": "VCT.L", "improved": False, "with_body_before": 67, "with_body_after": 67}
+        ],
         "results": [
             {
                 "ch_refetch": {"attempted": 1, "fetched": 0},
