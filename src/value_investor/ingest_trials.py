@@ -151,7 +151,10 @@ def has_open_ingest_engineering_for_chain(
     for row in payload.get("tasks") or []:
         if str(row.get("area") or "").lower() != "ingest":
             continue
-        if str(row.get("status") or "open") not in {"open", "pr_open"}:
+        status = str(row.get("status") or "open")
+        if status not in {"open", "pr_open"}:
+            continue
+        if row.get("merged_at"):
             continue
         evidence = row.get("evidence") or {}
         if str(evidence.get("chain_root_id") or "") == chain_root_id:
