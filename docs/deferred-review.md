@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T06:37:20+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T06:54:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -85,6 +85,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N25 | **Keep exit-shadow cohort observe-only until maturity** | Post-exit shadow (exit_shadow.json / exit_shadow_review.json) is wired for all three paper tracks but must stay read-only for knob changes until per-track closed cohorts mature. Do not wire verdicts into decision-review or L85 grace auto-tune prematurely. | learning_tracks_exit_shadow.json shows ≥15 closed exits per track with stable 1/4/8/12-week scoring; L85 grace threshold (≥30 grace exits) met separately before any auto-tune |
 | N26 | **Do not nudge decision-review portfolio knobs below history floor** | Automated decision-review knob steps (max positions, timing strictness, conviction floor, sector cap) should not fire until the target track has ≥4 weekly marks and ≥2 closed trades. Below that floor, accumulate data hands-off. | Each paper track (ai_judgment, rules, momentum_grace) crosses the floor independently; then enable per-track knob review in decision-review |
 | N27 | **Gate AI judgment on confidence or memo_quality thresholds** | Tempting to filter accumulate names by research_confidence or memo_quality, but that is a live paper knob before observe-only counterfactuals exist; keep verdict/adjusted_signal gating until evidence. | After observe-only counterfactuals show confidence/memo_quality predict adverse outcomes |
+| N28 | **Do not fold full memo-utility synthesis into horizon scan** | Memo usefulness (question_outcomes, risk_tags, memo_quality, gap-fill rollups) already belongs to the weekly research loop via post_run_review + engineering_tasks from research_model_suggestions/gap_fill_summary. Horizon scan should stay stage/fragment/trial foresight; at most consume a slim monthly memo-utility rollup as a stage-readiness signal. | PR #247 patterns accumulate across several Sunday gap-fill runs AND L91/post_run_review is consistently producing improvement plans |
 
 ---
 
@@ -183,6 +184,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L136 | **Weekly refresh: inject prior risks and open questions into prompt** | Weekly updates re-read research.md but are not forced to address unresolved risks/questions; inject structured carry-forward so agents update the decision-relevant uncertainty set. | After question_outcomes are persisted on ResearchDocument |
 | L137 | **Surface unresolved questions and memo_quality in decision packs** | Decision packs already show thesis/risks prose; add unresolved open questions and memo_quality grade so human verification targets known gaps. | After open questions are first-class on ResearchDocument |
 | L138 | **Typed risk tags alongside free-text risks_and_flags** | Keep narrative risks for humans, but ask agents for a small enum/tag list (liquidity, leverage, customer concentration, etc.) usable by overlays and learning without parsing prose. | Research prompt/schema enrichment pass |
+| L140 | **Slim memo-utility rollup as horizon stage signal** | Optionally add a deterministic aggregate (grade histogram, top unresolved risk_tags, recurring open questions across buy-tier memos) into build_horizon_payload for STAGE READINESS / COUNTERFACTUAL GAPS — not a new agent section that re-plans ingest/prompt work. | Enough ResearchDocuments carry question_outcomes + memo_quality after PR #247 merges and weekly runs |
 
 ### Ops / reliability
 
