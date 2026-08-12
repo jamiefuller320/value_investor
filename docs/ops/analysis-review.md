@@ -41,6 +41,14 @@ If history is still seeding, the workflow logs `payload` readiness and skips the
 | `docs/data/analysis_review.md` | Human-readable synthesis |
 | `docs/data/analysis_review.json` | Structured sections + metadata |
 | `docs/data/analysis_tasks.json` | Proposed experiments (`status: proposed`) |
+| `docs/data/ingest_trials.json` | Ingest experiments with `review_trigger: analysis_review` or `both` |
+
+## Ingest trials
+
+Runs recorded with `--trial-review-trigger analysis_review` (or `both`) appear in the
+weekly payload as `ingest_trials_pending_review`. The agent should reference them under
+**PROPOSED EXPERIMENTS** (ingest area). Horizon-flagged trials (`horizon_scan`) are
+reviewed in the monthly horizon scan instead.
 
 ## Manual promotion to engineering
 

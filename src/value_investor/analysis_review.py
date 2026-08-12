@@ -252,6 +252,13 @@ def build_analysis_payload(
         data_dir / "model_weights.json"
     )
 
+    from value_investor.ingest_trials import list_trials_pending_review
+
+    ingest_trials_pending_review = list_trials_pending_review(
+        trigger="analysis_review",
+        path=data_dir / "ingest_trials.json",
+    )
+
     return {
         "run_at": effective_run_at.isoformat(),
         "history_run_count": _history_run_count(data_dir, output_dir),
@@ -277,6 +284,7 @@ def build_analysis_payload(
         }
         if model_weights
         else None,
+        "ingest_trials_pending_review": ingest_trials_pending_review,
         "guardrails": {
             "no_live_paper_changes": True,
             "no_base_signal_mutation": True,
@@ -502,6 +510,8 @@ Numbered top 5 experiments for the next sprint. Each line MUST use this format:
 Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
 Use scoring/ingest only when a code change is the right next step; prefer offline_sim,
 paper_knobs, or paper_churn for knob/counterfactual ideas (human gate required).
+If ingest_trials_pending_review is non-empty, include at least one [ingest] line referencing
+the trial id(s), outcome deltas, and whether to PROMOTE engineering, DEFER, or DISMISS.
 
 DEFER
 Bullets for ideas that must NOT be automated yet (evolution, live knob apply, base signal

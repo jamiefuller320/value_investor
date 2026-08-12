@@ -66,6 +66,43 @@ def test_build_analysis_payload_reads_learning_tracks(tmp_path: Path):
     assert ok is True
 
 
+def test_build_analysis_payload_includes_ingest_trials_for_analysis_trigger(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    paper = data_dir / "paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "learning_tracks_review.json").write_text(
+        json.dumps({"primary_excess_after_costs": -0.03}),
+        encoding="utf-8",
+    )
+    (data_dir / "ingest_trials.json").write_text(
+        json.dumps(
+            {
+                "trials": [
+                    {
+                        "id": "trial-20260812-99",
+                        "status": "pending_review",
+                        "review_trigger": "analysis_review",
+                        "completed_at": "2026-08-12T00:00:00+00:00",
+                        "title": "Weekly ingest trial",
+                    },
+                    {
+                        "id": "trial-20260812-01",
+                        "status": "pending_review",
+                        "review_trigger": "horizon_scan",
+                        "completed_at": "2026-08-12T00:00:00+00:00",
+                        "title": "Horizon-only trial",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
+    pending = payload["ingest_trials_pending_review"]
+    assert len(pending) == 1
+    assert pending[0]["id"] == "trial-20260812-99"
+
+
 def test_compile_and_promote_analysis_tasks(tmp_path: Path):
     review = parse_analysis_review(
         "PROPOSED EXPERIMENTS\n1. [scoring] Add sector overlay — test attribution\n"
