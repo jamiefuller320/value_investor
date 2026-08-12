@@ -244,11 +244,7 @@ def run_ingest_utilization_audit(
     """Build per-buy-tier utilization matrix from published screen + committed research stores."""
     reports = _load_latest_reports(latest_path)
     research_index = _load_research_index(latest_path)
-    buy_tier = [
-        row
-        for row in reports
-        if str(row.get("signal") or "") in BUY_SIGNALS
-    ]
+    buy_tier = [row for row in reports if str(row.get("signal") or "") in BUY_SIGNALS]
 
     rows: list[UtilizationRow] = []
     for row in buy_tier:
@@ -297,10 +293,7 @@ def run_ingest_utilization_audit(
         effective = _effective_buy_signal(signal, adjusted_str)
         verdict = row.get("research_verdict")
         verdict_str = str(verdict) if verdict is not None else None
-        ai_eligible = (
-            effective in BUY_SIGNALS
-            and verdict_str == "accumulate"
-        )
+        ai_eligible = effective in BUY_SIGNALS and verdict_str == "accumulate"
 
         rows.append(
             UtilizationRow(
@@ -350,11 +343,7 @@ def run_ingest_utilization_audit(
 
     gap_tickers = [r.ticker for r in rows if r.indexed_without_body > 0]
     no_memo = [r.ticker for r in rows if not r.has_memo]
-    ingest_only = [
-        r.ticker
-        for r in rows
-        if r.has_sources and not r.has_memo
-    ]
+    ingest_only = [r.ticker for r in rows if r.has_sources and not r.has_memo]
 
     generated_at = datetime.now(UTC).isoformat()
     try:
