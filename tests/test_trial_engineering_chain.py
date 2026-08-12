@@ -8,8 +8,10 @@ from pathlib import Path
 from value_investor.engineering_queue import ingest_trial_rerun_dispatch
 from value_investor.engineering_tasks import compile_ingest_engineering_task_from_trial
 from value_investor.ingest_trials import (
+    MAX_TRIAL_GAP_CHAIN_ROUNDS,
     finalize_pending_ingest_trial,
     record_ingest_trial,
+    should_auto_compile_gap_engineering,
     trial_needs_gap_engineering,
     trial_refetch_stats,
 )
@@ -167,3 +169,121 @@ def test_select_targets_pin_ticker(tmp_path: Path):
     )
     assert len(targets) == 1
     assert targets[0].ticker == "VCT.L"
+
+
+def test_should_auto_compile_after_verification_gaps_remain(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    filings = data_dir / "research" / "VCT.L" / "sources" / "filings"
+    filings.mkdir(parents=True)
+    (filings / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "annual": 1, "interim": 1, "with_body": 1},
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": False},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    trials_path = data_dir / "ingest_trials.json"
+    trials_path.write_text(
+        json.dumps(
+            {
+                "trials": [
+                    {
+                        "id": "trial-root",
+                        "chain_root_id": "trial-root",
+                        "status": "pending_review",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    eng_path = data_dir / "engineering_tasks.json"
+    eng_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    verification = {
+        "id": "trial-verify",
+        "status": "pending_review",
+        "ticker": "VCT.L",
+        "parent_trial_id": "trial-root",
+        "chain_root_id": "trial-root",
+        "params": {"require_outstanding_gaps": True},
+        "outcome": {
+            "delta_filings_with_body": 0,
+            "per_ticker": [{"ticker": "VCT.L", "improved": False}],
+            "results": [{"ch_refetch": {"attempted": 1, "fetched": 0}}],
+        },
+    }
+    should, reason = should_auto_compile_gap_engineering(
+        verification,
+        data_dir=data_dir,
+        tasks_path=eng_path,
+        trials_path=trials_path,
+    )
+    assert should is True
+    assert reason in {"verification_gaps_remain", "zero_yield_refetch"}
+
+
+def test_chain_exhausted_after_max_engineering_rounds(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    filings = data_dir / "research" / "VCT.L" / "sources" / "filings"
+    filings.mkdir(parents=True)
+    (filings / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "annual": 1, "interim": 1, "with_body": 1},
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": False},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    trials_path = data_dir / "ingest_trials.json"
+    trials_path.write_text(
+        json.dumps({"trials": [{"id": "trial-root", "chain_root_id": "trial-root"}]}),
+        encoding="utf-8",
+    )
+    eng_path = data_dir / "engineering_tasks.json"
+    eng_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": f"eng-{idx}",
+                        "source": "ingest_trial",
+                        "status": "merged",
+                        "evidence": {"chain_root_id": "trial-root"},
+                    }
+                    for idx in range(MAX_TRIAL_GAP_CHAIN_ROUNDS)
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    trial = {
+        "id": "trial-verify",
+        "status": "pending_review",
+        "ticker": "VCT.L",
+        "parent_trial_id": "trial-root",
+        "chain_root_id": "trial-root",
+        "params": {"require_outstanding_gaps": True},
+        "outcome": {
+            "per_ticker": [{"improved": False}],
+            "results": [{"ch_refetch": {"attempted": 1, "fetched": 0}}],
+        },
+    }
+    should, reason = should_auto_compile_gap_engineering(
+        trial,
+        data_dir=data_dir,
+        tasks_path=eng_path,
+        trials_path=trials_path,
+    )
+    assert should is False
+    assert reason == "chain_exhausted"
+    store = json.loads(trials_path.read_text(encoding="utf-8"))
+    assert store["trials"][0]["chain_status"] == "exhausted"

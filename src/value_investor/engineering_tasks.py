@@ -716,12 +716,26 @@ def compile_ingest_engineering_task_from_trial(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     committed_path: Path = COMMITTED_TASKS_PATH,
+    data_dir: Path = Path("docs/data"),
 ) -> dict[str, Any]:
     """Queue a scoped ingest engineering task when a gap trial fails to fetch bodies."""
-    from value_investor.ingest_trials import trial_needs_gap_engineering, trial_refetch_stats
+    from value_investor.ingest_trials import (
+        DEFAULT_TRIALS_PATH,
+        MAX_TRIAL_GAP_CHAIN_ROUNDS,
+        should_auto_compile_gap_engineering,
+        trial_chain_root_id,
+        trial_refetch_stats,
+    )
 
-    if not trial_needs_gap_engineering(trial):
-        return {"compiled_count": 0, "reason": "trial does not need gap engineering"}
+    chain_root = trial_chain_root_id(trial)
+    should_compile, compile_reason = should_auto_compile_gap_engineering(
+        trial,
+        data_dir=data_dir,
+        tasks_path=committed_path,
+        trials_path=DEFAULT_TRIALS_PATH,
+    )
+    if not should_compile:
+        return {"compiled_count": 0, "reason": compile_reason}
 
     trial_id = str(trial.get("id") or "")
     ticker = str(trial.get("ticker") or "").strip().upper()
@@ -737,46 +751,50 @@ def compile_ingest_engineering_task_from_trial(
                     "reason": "engineering task already queued for trial",
                     "task_id": row.get("id"),
                 }
-        if (
-            str(row.get("area") or "").lower() == "ingest"
-            and str(row.get("status") or "open") in {"open", "pr_open"}
-            and ticker in [str(t or "").upper() for t in (evidence.get("tickers") or [])]
-            and str(evidence.get("trial_id") or "")
-        ):
-            return {
-                "compiled_count": 0,
-                "reason": "open ingest trial engineering task for ticker",
-                "task_id": row.get("id"),
-            }
 
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     seq = _next_engineering_seq_from_rows(existing_rows, run_stamp)
     stats = trial_refetch_stats(trial)
+    chain_round = (
+        sum(
+            1
+            for row in existing_rows
+            if str(row.get("source") or "") == "ingest_trial"
+            and str((row.get("evidence") or {}).get("chain_root_id") or "") == chain_root
+            and str(row.get("status") or "open") not in {"cancelled", "failed", "parked"}
+        )
+        + 1
+    )
     title = (
         f"Close stubborn ingest gaps for {ticker} "
-        f"({stats['fetched']}/{stats['attempted']} refetch bodies from trial {trial_id})"
+        f"(chain {chain_round}/{MAX_TRIAL_GAP_CHAIN_ROUNDS}: "
+        f"{stats['fetched']}/{stats['attempted']} bodies, trial {trial_id})"
     )
     task = EngineeringTask(
         id=f"eng-{run_stamp}-{seq:02d}",
         area="ingest",
         title=title,
         summary=(
-            f"Ingest trial {trial_id} targeted {ticker} with outstanding indexed gaps but "
-            f"primary refetch paths returned zero bodies ({stats['attempted']} attempted). "
-            "Investigate source mapping, URL resolution, or parser gaps; add a focused fix "
-            "and regression test so the next ingest trial rerun closes the gap."
+            f"Ingest trial {trial_id} (chain root {chain_root}, round {chain_round}) targeted "
+            f"{ticker} with outstanding indexed gaps after refetch yield "
+            f"{stats['fetched']}/{stats['attempted']}. Investigate source mapping, URL "
+            "resolution, or parser gaps; add a focused fix and regression test so the "
+            "next pinned verification trial closes the gap."
         ),
         priority="high",
         priority_score=88.0,
         source="ingest_trial",
         evidence={
             "trial_id": trial_id,
+            "chain_root_id": chain_root,
+            "chain_round": chain_round,
             "tickers": [ticker],
             "ticker": ticker,
             "rerun_ingest_trial": True,
             "refetch_attempted": stats["attempted"],
             "refetch_fetched": stats["fetched"],
             "trial_params": dict(trial.get("params") or {}),
+            "compile_reason": compile_reason,
         },
         acceptance_criteria=_default_acceptance_criteria("ingest", [ticker]),
         allowed_paths=_allowed_paths_for_area("ingest"),
@@ -801,6 +819,7 @@ def compile_ingest_engineering_task_from_trial(
         "tasks": merged_rows,
         "micro_compile_source": "ingest_trial",
         "source_trial_id": trial_id,
+        "source_chain_root_id": chain_root,
     }
     committed_path = Path(committed_path)
     tasks_path = Path(tasks_path)

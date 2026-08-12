@@ -348,18 +348,14 @@ def run_weekday_ingest_loop(
 
     trial_compiled = False
     trial_compile: dict[str, Any] = {"skipped": True}
-    if finalized_trial and not has_open_ingest_engineering_tasks(tasks_path):
+    if finalized_trial is not None:
         trial_compile = compile_ingest_engineering_task_from_trial(
             finalized_trial,
             tasks_path=tasks_path,
             committed_path=tasks_path,
+            data_dir=data_dir,
         )
         trial_compiled = int(trial_compile.get("compiled_count") or 0) > 0
-    elif finalized_trial and has_open_ingest_engineering_tasks(tasks_path):
-        trial_compile = {
-            "skipped": True,
-            "reason": "open ingest engineering task already queued",
-        }
 
     if trial_compiled or micro_compiled:
         from value_investor.engineering_queue import refresh_engineering_queue_ui

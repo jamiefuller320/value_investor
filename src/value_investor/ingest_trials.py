@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_TRIALS_PATH = Path("docs/data/ingest_trials.json")
 ReviewTrigger = Literal["horizon_scan", "analysis_review", "both"]
+MAX_TRIAL_GAP_CHAIN_ROUNDS = 3
 
 _STATUS_PENDING = "pending_review"
 _STATUS_REVIEWED = "reviewed"
@@ -47,6 +48,169 @@ def _next_trial_id(store: dict[str, Any]) -> str:
     return f"{prefix}{index:02d}"
 
 
+def _resolve_chain_root_id(parent_trial_id: str, store: dict[str, Any]) -> str:
+    for row in store.get("trials") or []:
+        if str(row.get("id") or "") == parent_trial_id:
+            return str(row.get("chain_root_id") or parent_trial_id)
+    return parent_trial_id
+
+
+def _count_chain_trials(store: dict[str, Any], chain_root_id: str) -> int:
+    return sum(
+        1
+        for row in store.get("trials") or []
+        if str(row.get("chain_root_id") or row.get("id") or "") == chain_root_id
+    )
+
+
+def trial_chain_root_id(trial: dict[str, Any], *, path: Path = DEFAULT_TRIALS_PATH) -> str:
+    explicit = str(trial.get("chain_root_id") or "").strip()
+    if explicit:
+        return explicit
+    parent = str(trial.get("parent_trial_id") or "").strip()
+    if parent:
+        store = load_ingest_trials(path)
+        return _resolve_chain_root_id(parent, store)
+    return str(trial.get("id") or "")
+
+
+def count_chain_engineering_rounds(
+    chain_root_id: str,
+    *,
+    tasks_path: Path,
+) -> int:
+    from value_investor.engineering_tasks import load_engineering_tasks
+
+    if not chain_root_id:
+        return 0
+    payload = load_engineering_tasks(tasks_path)
+    count = 0
+    for row in payload.get("tasks") or []:
+        if str(row.get("source") or "") != "ingest_trial":
+            continue
+        status = str(row.get("status") or "open")
+        if status in {"cancelled", "failed", "parked"}:
+            continue
+        evidence = row.get("evidence") or {}
+        if str(evidence.get("chain_root_id") or "") == chain_root_id:
+            count += 1
+            continue
+        trial_id = str(evidence.get("trial_id") or "")
+        if trial_id and trial_id == chain_root_id:
+            count += 1
+    return count
+
+
+def trial_ticker_has_gaps(
+    ticker: str,
+    *,
+    data_dir: Path = Path("docs/data"),
+) -> bool:
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    token = str(ticker or "").strip().upper()
+    if not token:
+        return False
+    store = ResearchStore(data_dir)
+    coverage = _filing_coverage(store, token, data_dir)
+    return _has_outstanding_ingest_gap(coverage)
+
+
+def mark_trial_chain_exhausted(
+    chain_root_id: str,
+    *,
+    reason: str = "",
+    path: Path = DEFAULT_TRIALS_PATH,
+) -> None:
+    path = Path(path)
+    store = load_ingest_trials(path)
+    for row in store.get("trials") or []:
+        if str(row.get("id") or "") != chain_root_id:
+            continue
+        row["chain_status"] = "exhausted"
+        row["chain_exhausted_at"] = datetime.now(UTC).isoformat()
+        if reason.strip():
+            row["chain_exhausted_reason"] = reason.strip()
+        store["updated_at"] = datetime.now(UTC).isoformat()
+        write_json(path, store, compact=False)
+        return
+
+
+def has_open_ingest_engineering_for_chain(
+    chain_root_id: str,
+    *,
+    tasks_path: Path,
+) -> bool:
+    from value_investor.engineering_tasks import load_engineering_tasks
+
+    payload = load_engineering_tasks(tasks_path)
+    for row in payload.get("tasks") or []:
+        if str(row.get("area") or "").lower() != "ingest":
+            continue
+        if str(row.get("status") or "open") not in {"open", "pr_open"}:
+            continue
+        evidence = row.get("evidence") or {}
+        if str(evidence.get("chain_root_id") or "") == chain_root_id:
+            return True
+        if (
+            str(row.get("source") or "") == "ingest_trial"
+            and str(evidence.get("trial_id") or "") == chain_root_id
+        ):
+            return True
+    return False
+
+
+def should_auto_compile_gap_engineering(
+    trial: dict[str, Any],
+    *,
+    data_dir: Path = Path("docs/data"),
+    tasks_path: Path = Path("docs/data/engineering_tasks.json"),
+    trials_path: Path = DEFAULT_TRIALS_PATH,
+) -> tuple[bool, str]:
+    """Whether to queue another ingest-trial engineering round for gap closure."""
+    if str(trial.get("status") or "") != _STATUS_PENDING:
+        return False, "trial_not_pending"
+    ticker = str(trial.get("ticker") or "").strip().upper()
+    if not ticker:
+        return False, "no_ticker"
+    params = trial.get("params") or {}
+    if not params.get("require_outstanding_gaps"):
+        return False, "not_gap_trial"
+    if not trial_ticker_has_gaps(ticker, data_dir=data_dir):
+        return False, "gaps_closed"
+
+    chain_root = trial_chain_root_id(trial, path=trials_path)
+    rounds = count_chain_engineering_rounds(chain_root, tasks_path=tasks_path)
+    if rounds >= MAX_TRIAL_GAP_CHAIN_ROUNDS:
+        mark_trial_chain_exhausted(
+            chain_root,
+            reason=f"max engineering rounds ({MAX_TRIAL_GAP_CHAIN_ROUNDS}) reached",
+            path=trials_path,
+        )
+        return False, "chain_exhausted"
+
+    if has_open_ingest_engineering_for_chain(chain_root, tasks_path=tasks_path):
+        return False, "eng_in_flight_for_chain"
+
+    outcome = trial.get("outcome") or {}
+    if int(outcome.get("delta_filings_with_body") or 0) > 0:
+        return False, "book_improved"
+    per_ticker = outcome.get("per_ticker") or []
+    if per_ticker and per_ticker[0].get("improved"):
+        return False, "ticker_improved"
+
+    stats = trial_refetch_stats(trial)
+    if stats["attempted"] > 0 and stats["fetched"] <= 0:
+        return True, "zero_yield_refetch"
+    if str(trial.get("parent_trial_id") or "").strip():
+        return True, "verification_gaps_remain"
+    return False, "no_actionable_failure"
+
+
 def record_ingest_trial(
     *,
     title: str,
@@ -60,14 +224,20 @@ def record_ingest_trial(
     """Append a trial record before dispatch; finalized after the ingest loop completes."""
     path = Path(path)
     store = load_ingest_trials(path)
+    trial_id = _next_trial_id(store)
+    chain_root_id = trial_id
+    if parent_trial_id.strip():
+        chain_root_id = _resolve_chain_root_id(parent_trial_id.strip(), store)
     trial = {
-        "id": _next_trial_id(store),
+        "id": trial_id,
         "status": _STATUS_PENDING,
         "title": title.strip(),
         "summary": summary.strip(),
         "ticker": str(ticker or "").strip().upper(),
         "params": dict(params),
         "review_trigger": review_trigger,
+        "chain_root_id": chain_root_id,
+        "chain_attempt": _count_chain_trials(store, chain_root_id) + 1,
         "recorded_at": datetime.now(UTC).isoformat(),
         "completed_at": None,
         "outcome": None,
@@ -143,6 +313,8 @@ def finalize_pending_ingest_trial(
     row["status"] = _STATUS_PENDING  # stays pending until horizon reviews
     row["completed_at"] = datetime.now(UTC).isoformat()
     row["outcome"] = outcome
+    if not row.get("chain_root_id"):
+        row["chain_root_id"] = trial_chain_root_id(row, path=path)
     trials[pending_idx] = row
     store["trials"] = trials
     store["updated_at"] = datetime.now(UTC).isoformat()
