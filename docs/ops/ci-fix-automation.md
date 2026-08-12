@@ -82,7 +82,41 @@ ftse-engineering try-auto-merge --branch cursor/eng-20260802-01-1de3
 - `engineering-path-guard` CI job still runs on every engineering PR
 - Main-branch failures only (push, schedule, workflow_dispatch) — not PR CI
 
-## PR ruff autofix (cursor branches)
+## PR CI monitoring (`cursor/*` pull requests)
+
+When **CI fails on a `cursor/*` pull request**, `ci-pr-autofix.yml` runs after the
+failed CI workflow:
+
+1. Classifies failure kinds from failed job logs (ruff, pytest, path guard, data JSON)
+2. Attempts **scoped ruff** autofix when applicable
+3. On **`cursor/eng-*` engineering branches**, attempts **path-guard allowlist expand**
+   when `engineering-path-guard` fails (adds missing `allowed_paths` on the task in
+   `docs/data/engineering_tasks.json`, then re-validates)
+4. Verifies with scoped ruff + full pytest + path guard (engineering branches)
+5. Commits with `chore(ci): …` and pushes when a fix was applied
+6. **Always posts a PR comment** with diagnosis (failure kinds, violations, pytest
+   nodes, hints) — even when no automatic fix was possible
+
+**Guardrails:**
+
+- Only `cursor/*` PR branches
+- Skips when the latest commit already starts with `chore(ci):` (one bot attempt per push)
+- Pytest and committed-data JSON failures are **diagnosed but not auto-fixed** on PRs
+- Path-guard expand only adds non-blocked paths; blocked paths still need agent/human edits
+
+**Local dry-run:**
+
+```bash
+gh run view <run-id> --log-failed > /tmp/ci_failed.log
+python3 scripts/ci_pr_autofix.py \
+  --base origin/main \
+  --head HEAD \
+  --branch cursor/eng-20260812-03-1de3 \
+  --log-file /tmp/ci_failed.log \
+  --json
+```
+
+## PR ruff autofix (legacy section — see PR CI monitoring above)
 
 When **CI fails on a `cursor/*` pull request** due to scoped **ruff** (format or check),
 `ci-pr-autofix.yml` runs after the failed CI workflow:

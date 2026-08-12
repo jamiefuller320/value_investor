@@ -1,7 +1,7 @@
 name: CI PR Autofix
 
-# When CI fails on a cursor/* pull request, attempt scoped ruff autofix, push, and
-# re-trigger CI. See docs/ops/ci-fix-automation.md#pr-ruff-autofix.
+# When CI fails on a cursor/* pull request, attempt scoped fixes (ruff; engineering
+# path-guard allowlist expand), push, and post a diagnosis comment. See docs/ops/ci-fix-automation.md.
 on:
   workflow_run:
     workflows: ["CI"]
@@ -36,12 +36,12 @@ jobs:
       - name: Install package + test deps
         run: pip install -e ".[dev]"
 
-      - name: Skip if autofix already attempted
+      - name: Skip if CI bot already attempted on latest commit
         id: gate
         run: |
-          if git log -1 --pretty=%s | grep -q 'chore(ci): autofix'; then
+          if git log -1 --pretty=%s | grep -q '^chore(ci):'; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Latest commit is already an autofix — skipping to avoid loops"
+            echo "Latest commit is already a CI bot fix — skipping to avoid loops"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
@@ -53,27 +53,49 @@ jobs:
         run: |
           gh run view "${{ github.event.workflow_run.id }}" --log-failed > /tmp/ci_failed.log 2>&1 || true
 
-      - name: Attempt ruff autofix
+      - name: Attempt CI autofix pipeline
         if: steps.gate.outputs.skip != 'true'
         id: autofix
+        env:
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
           set -euo pipefail
           git fetch origin main
           if python3 scripts/ci_pr_autofix.py \
             --base origin/main \
             --head HEAD \
+            --branch "$BRANCH" \
             --log-file /tmp/ci_failed.log \
-            --out /tmp/autofix_result.json; then
+            --out /tmp/autofix_result.json \
+            --diagnosis-out /tmp/ci_diagnosis.json; then
             echo "fixed=true" >> "$GITHUB_OUTPUT"
           else
             echo "fixed=false" >> "$GITHUB_OUTPUT"
           fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("/tmp/autofix_result.json").read_text())
+          actions = data.get("actions") or []
+          Path("/tmp/autofix_actions.txt").write_text(",".join(actions))
+          commit_msg = data.get("commit_message") or ""
+          Path("/tmp/autofix_commit_message.txt").write_text(commit_msg)
+          PY
 
-      - name: Verify autofix (ruff + pytest)
+      - name: Verify autofix (ruff + pytest + path guard)
         if: steps.autofix.outputs.fixed == 'true'
+        env:
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
+          set -euo pipefail
           python3 scripts/check_changed_python.py --base origin/main --head HEAD
           pytest -q
+          if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
+            git diff --name-only origin/main...HEAD > /tmp/changed_files.txt
+            ftse-engineering check-pr-paths \
+              --branch "$BRANCH" \
+              --changed-files /tmp/changed_files.txt
+          fi
 
       - name: Configure git author
         if: steps.autofix.outputs.fixed == 'true'
@@ -88,25 +110,35 @@ jobs:
           BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
           set -euo pipefail
+          ACTIONS="$(cat /tmp/autofix_actions.txt)"
           git add src/ tests/ scripts/
+          if [[ "$ACTIONS" == *"path_guard_expand"* ]]; then
+            git add docs/data/engineering_tasks.json
+          fi
           if git diff --staged --quiet; then
             echo "pushed=false" >> "$GITHUB_OUTPUT"
             echo "No staged changes after autofix"
             exit 0
           fi
-          git commit -m "chore(ci): autofix ruff on changed Python files"
+          COMMIT_MSG="$(cat /tmp/autofix_commit_message.txt)"
+          if [ -z "$COMMIT_MSG" ]; then
+            COMMIT_MSG="chore(ci): autofix on changed files"
+          fi
+          git commit -m "$COMMIT_MSG"
           git push origin "HEAD:${BRANCH}"
           echo "pushed=true" >> "$GITHUB_OUTPUT"
           echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "commit_message=$COMMIT_MSG" >> "$GITHUB_OUTPUT"
 
       - name: Comment on pull request
-        if: steps.push.outputs.pushed == 'true'
+        if: always() && steps.gate.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ github.event.workflow_run.head_branch }}
           FAILED_RUN_ID: ${{ github.event.workflow_run.id }}
           FAILED_RUN_URL: ${{ github.event.workflow_run.html_url }}
           COMMIT_SHA: ${{ steps.push.outputs.commit_sha }}
+          PUSHED: ${{ steps.push.outputs.pushed }}
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
@@ -115,20 +147,41 @@ jobs:
             echo "No open PR for branch $BRANCH — skipping comment"
             exit 0
           fi
-          docs_url="https://github.com/${REPO}/blob/main/docs/ops/ci-fix-automation.md#pr-ruff-autofix"
-          sed 's/^ *//' > /tmp/autofix_comment.md <<EOF
-          ## CI autofix (ruff)
+          if [ ! -f /tmp/autofix_result.json ]; then
+            echo "No autofix result — skipping comment"
+            exit 0
+          fi
+          docs_url="https://github.com/${REPO}/blob/main/docs/ops/ci-fix-automation.md#pr-ci-monitoring"
+          DOCS_URL="$docs_url" python3 - <<'PY' > /tmp/autofix_comment.md
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.ci_pr_autofix import PrCiDiagnosis, format_pr_ci_comment
 
-          Scoped **ruff** autofix was applied and pushed to this branch after the failed CI run.
+          result = json.loads(Path("/tmp/autofix_result.json").read_text())
+          diagnosis_path = Path("/tmp/ci_diagnosis.json")
+          diagnosis = result.get("diagnosis") or {}
+          if diagnosis_path.exists() and not diagnosis:
+              diagnosis = json.loads(diagnosis_path.read_text())
 
-          | | |
-          |--|--|
-          | Failed run | [${FAILED_RUN_ID}](${FAILED_RUN_URL}) |
-          | Fix commit | \`${COMMIT_SHA}\` |
-          | Commit message | \`chore(ci): autofix ruff on changed Python files\` |
-
-          CI should re-run on the new commit automatically. This workflow does **not** autofix pytest or \`check_committed_data_json\` failures.
-
-          Details: [ci-fix-automation — PR ruff autofix](${docs_url})
-          EOF
+          diag = PrCiDiagnosis(
+              kinds=list(diagnosis.get("kinds") or []),
+              branch=str(diagnosis.get("branch") or os.environ["BRANCH"]),
+              engineering_task_id=diagnosis.get("engineering_task_id"),
+              path_guard_violations=list(diagnosis.get("path_guard_violations") or []),
+              pytest_failures=list(diagnosis.get("pytest_failures") or []),
+              hints=list(diagnosis.get("hints") or []),
+          )
+          fixed = os.environ.get("PUSHED") == "true"
+          body = format_pr_ci_comment(
+              diagnosis=diag,
+              failed_run_id=os.environ["FAILED_RUN_ID"],
+              failed_run_url=os.environ["FAILED_RUN_URL"],
+              fixed=fixed,
+              actions=list(result.get("actions") or []),
+              commit_sha=os.environ.get("COMMIT_SHA") or None,
+              docs_url=os.environ.get("DOCS_URL"),
+          )
+          print(body, end="")
+          PY
           gh pr comment "$pr_number" --body-file /tmp/autofix_comment.md
