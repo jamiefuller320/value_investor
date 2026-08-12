@@ -131,9 +131,7 @@ def diagnose_pr_ci_failure(
     kinds = classify_ci_log_failures(log_text)
     task_id = task_id_from_branch(branch) if is_engineering_branch(branch) else None
     path_violations = parse_path_guard_violations(log_text) if "path_guard" in kinds else []
-    pytest_failures = (
-        parse_pytest_failures_from_log(log_text) if "pytest" in kinds else []
-    )
+    pytest_failures = parse_pytest_failures_from_log(log_text) if "pytest" in kinds else []
     hints: list[str] = []
     if "path_guard" in kinds and task_id:
         hints.append(
@@ -287,7 +285,9 @@ def attempt_engineering_path_guard_autofix(
             if "outside allowed_paths:" in line
         ]
 
-    expand_paths = list(dict.fromkeys([*violation_paths, *_suggest_companion_paths(violation_paths)]))
+    expand_paths = list(
+        dict.fromkeys([*violation_paths, *_suggest_companion_paths(violation_paths)])
+    )
     if not expand_paths:
         return AutofixResult(
             fixed=False,
