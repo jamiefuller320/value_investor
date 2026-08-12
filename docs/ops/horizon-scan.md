@@ -55,7 +55,9 @@ Workflow input `record_trial=true` does the same. Trial runs require outstanding
 names that still need bodies, not suggestion-rich fully-covered tickers. When a gap trial
 fails refetch (`0/N` bodies), ingest-loop auto-compiles a scoped engineering task and
 dispatches **engineering-queue**; after the engineering PR merges, engineering-queue chains
-a verification **ingest-loop** rerun pinned to the same ticker. Outcomes land in
+a verification **ingest-loop** rerun pinned to the same ticker. If gaps remain after
+verification, another engineering round is compiled automatically (up to **3 rounds per
+chain**); the root trial is marked `chain_status: exhausted` when the cap is hit. Outcomes land in
 `ingest_trials.json`;
 the monthly horizon scan payload includes `ingest_trials_pending_review` and an
 **INGEST TRIALS REVIEW** section in the agent prompt.
