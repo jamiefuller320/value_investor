@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from datetime import UTC, datetime
 from pathlib import Path
@@ -125,6 +126,8 @@ def mark_trial_chain_exhausted(
     *,
     reason: str = "",
     path: Path = DEFAULT_TRIALS_PATH,
+    data_dir: Path | None = None,
+    prune_failed_residual_fetches: bool = True,
 ) -> None:
     path = Path(path)
     store = load_ingest_trials(path)
@@ -137,6 +140,28 @@ def mark_trial_chain_exhausted(
             row["chain_exhausted_reason"] = reason.strip()
         store["updated_at"] = datetime.now(UTC).isoformat()
         write_json(path, store, compact=False)
+        if prune_failed_residual_fetches and data_dir is not None:
+            ticker = str(row.get("ticker") or "").strip().upper()
+            if ticker:
+                from value_investor.research.filings import refetch_residual_filing_bodies
+
+                filings_dir = Path(data_dir) / "research" / ticker / "sources" / "filings"
+                if filings_dir.is_dir():
+                    company_name = ticker
+                    index_path = filings_dir / "filings_index.json"
+                    if index_path.is_file():
+                        try:
+                            index_payload = json.loads(index_path.read_text(encoding="utf-8"))
+                            company_name = str(index_payload.get("company_name") or company_name)
+                        except (OSError, ValueError, TypeError):
+                            pass
+                    refetch_residual_filing_bodies(
+                        filings_dir,
+                        ticker=ticker,
+                        company_name=company_name,
+                        max_bodies=40,
+                        prune_unfetchable_after_attempt=True,
+                    )
         return
 
 
@@ -193,6 +218,7 @@ def should_auto_compile_gap_engineering(
             chain_root,
             reason=f"max engineering rounds ({MAX_TRIAL_GAP_CHAIN_ROUNDS}) reached",
             path=trials_path,
+            data_dir=data_dir,
         )
         return False, "chain_exhausted"
 
@@ -201,7 +227,8 @@ def should_auto_compile_gap_engineering(
 
     outcome = trial.get("outcome") or {}
     if int(outcome.get("delta_filings_with_body") or 0) > 0:
-        return False, "book_improved"
+        if not trial_ticker_has_gaps(ticker, data_dir=data_dir):
+            return False, "gaps_closed_after_improvement"
     per_ticker = outcome.get("per_ticker") or []
     if per_ticker and per_ticker[0].get("improved"):
         return False, "ticker_improved"
@@ -378,7 +405,13 @@ def trial_refetch_stats(trial: dict[str, Any]) -> dict[str, int]:
     row = results[0]
     attempted = 0
     fetched = 0
-    for key in ("ch_refetch", "investegate_refetch", "ticker_rns_refetch", "indexed_refetch"):
+    for key in (
+        "ch_refetch",
+        "investegate_refetch",
+        "ticker_rns_refetch",
+        "indexed_refetch",
+        "residual_refetch",
+    ):
         block = row.get(key) or {}
         if not isinstance(block, dict):
             continue

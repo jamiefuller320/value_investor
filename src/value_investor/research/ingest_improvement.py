@@ -20,6 +20,7 @@ from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     period_body_coverage,
     refetch_ir_allowlist_filing_bodies,
+    refetch_residual_filing_bodies,
     refetch_uk_primary_filing_bodies,
     sanitize_filings_index,
 )
@@ -530,6 +531,8 @@ def run_ingest_improvement_pass(
     max_bodies: int = DEFAULT_INGEST_REFETCH_MAX_BODIES,
     require_outstanding_gaps: bool = False,
     pin_tickers: list[str] | None = None,
+    intensive_gap_closure: bool = False,
+    prune_failed_residual_fetches: bool = False,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -620,6 +623,7 @@ def run_ingest_improvement_pass(
             investegate_refetch: dict[str, Any] = {}
             ticker_rns_refetch: dict[str, Any] = {}
             indexed_refetch: dict[str, Any] = {}
+            residual_refetch: dict[str, Any] = {}
             if _is_uk_listed(market=market, ticker=target.ticker):
                 primary_refetch = refetch_uk_primary_filing_bodies(
                     sources_dir / "filings",
@@ -631,7 +635,23 @@ def run_ingest_improvement_pass(
                 indexed_refetch = dict(primary_refetch.get("rns") or {})
                 investegate_refetch = dict(indexed_refetch.get("investegate") or {})
                 ticker_rns_refetch = dict(indexed_refetch.get("ticker_rns") or {})
+                residual_refetch = dict(primary_refetch.get("residual") or {})
                 if int(primary_refetch.get("fetched") or 0) > 0:
+                    inventory = inspect_local_sources(sources_dir)
+                    before = int(
+                        (inventory.get("filings_summary") or {}).get("with_body")
+                        or inventory.get("filings_indexed_bodies")
+                        or before
+                    )
+            else:
+                residual_refetch = refetch_residual_filing_bodies(
+                    sources_dir / "filings",
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    max_bodies=max_bodies,
+                    prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+                )
+                if int(residual_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(
                         (inventory.get("filings_summary") or {}).get("with_body")
@@ -717,6 +737,7 @@ def run_ingest_improvement_pass(
                     "investegate_refetch": investegate_refetch,
                     "ticker_rns_refetch": ticker_rns_refetch,
                     "indexed_refetch": indexed_refetch,
+                    "residual_refetch": residual_refetch,
                     "ir_refetch": ir_refetch,
                     "alternate_sources": alternate,
                     "deepen": deepen,
