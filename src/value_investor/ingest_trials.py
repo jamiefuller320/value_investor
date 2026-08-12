@@ -152,9 +152,7 @@ def mark_trial_chain_exhausted(
                     if index_path.is_file():
                         try:
                             index_payload = json.loads(index_path.read_text(encoding="utf-8"))
-                            company_name = str(
-                                index_payload.get("company_name") or company_name
-                            )
+                            company_name = str(index_payload.get("company_name") or company_name)
                         except (OSError, ValueError, TypeError):
                             pass
                     refetch_residual_filing_bodies(
