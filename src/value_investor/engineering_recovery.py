@@ -112,7 +112,10 @@ class RecoveryResult:
             "reopened": self.reopened,
             "parked": [row.to_dict() for row in self.parked],
             "skipped": self.skipped,
-            "action_count": len(self.merged) + len(self.reconciled) + len(self.reopened) + len(self.parked),
+            "action_count": len(self.merged)
+            + len(self.reconciled)
+            + len(self.reopened)
+            + len(self.parked),
         }
 
 

@@ -9,8 +9,8 @@ from typing import Any
 
 from value_investor.engineering_recovery import (
     housekeep_parked_tasks,
-    record_agent_no_diff_run,
     reconcile_merged_pr_open_tasks,
+    record_agent_no_diff_run,
     recover_engineering_queue,
     retry_failed_tasks,
     summarize_parked_tasks,
@@ -121,13 +121,15 @@ def test_reconcile_merged_restores_open_task_without_branch_name(tmp_path: Path,
 
     monkeypatch.setattr(
         "value_investor.engineering_recovery.find_merged_pull_for_branch",
-        lambda branch, **kwargs: {
-            "html_url": "https://github.com/jamiefuller320/value_investor/pull/260",
-            "number": 260,
-            "merged_at": "2026-08-12T12:34:00Z",
-        }
-        if branch == "cursor/eng-20260812-04-1de3"
-        else None,
+        lambda branch, **kwargs: (
+            {
+                "html_url": "https://github.com/jamiefuller320/value_investor/pull/260",
+                "number": 260,
+                "merged_at": "2026-08-12T12:34:00Z",
+            }
+            if branch == "cursor/eng-20260812-04-1de3"
+            else None
+        ),
     )
 
     merged = reconcile_merged_pr_open_tasks(tasks_path=tasks_path, apply=True)
