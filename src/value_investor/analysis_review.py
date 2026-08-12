@@ -252,12 +252,17 @@ def build_analysis_payload(
         data_dir / "model_weights.json"
     )
 
-    from value_investor.ingest_trials import list_trials_pending_review
+    from value_investor.ingest_gap_closure import list_gap_closure_runs_pending_review
 
-    ingest_trials_pending_review = list_trials_pending_review(
+    ingest_trials_pending_review = list_gap_closure_runs_pending_review(
         trigger="analysis_review",
-        path=data_dir / "ingest_trials.json",
+        path=data_dir / "ingest_gap_closure_runs.json",
     )
+    if not ingest_trials_pending_review:
+        ingest_trials_pending_review = list_gap_closure_runs_pending_review(
+            trigger="analysis_review",
+            path=data_dir / "ingest_trials.json",
+        )
 
     return {
         "run_at": effective_run_at.isoformat(),

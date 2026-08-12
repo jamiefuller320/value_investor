@@ -37,30 +37,38 @@ Run after weekly `analysis-review` when possible.
 | `docs/data/horizon_scan.md` | Human-readable synthesis |
 | `docs/data/horizon_scan.json` | Structured sections |
 | `docs/data/horizon_tasks.json` | ACCELERATE experiments (`status: proposed`) |
-| `docs/data/ingest_trials.json` | Completed ingest experiments awaiting review (`--record-trial` on ingest-loop) |
+| `docs/data/ingest_gap_closure_runs.json` | Completed ingest gap-closure runs awaiting review (`--record-gap-closure` on ingest-loop) |
+| `docs/data/ingest_trials.json` | Legacy alias path (migrated into ingest_gap_closure_runs.json) |
 
-## Ingest trials
+## Ingest gap-closure runs
 
-Bounded ingest experiments (e.g. single-ticker depth) can be flagged for review:
+Bounded intensive gap-closure passes (e.g. single-ticker depth) can be flagged for horizon review:
 
 ```bash
-ftse-ingest-loop run --max-targets 1 --record-trial \
-  --trial-title "Single-ticker depth trial" \
-  --trial-summary "…" \
-  --trial-review-trigger horizon_scan
+ftse-ingest-loop run --max-targets 1 --record-gap-closure \
+  --gap-closure-title "Single-ticker gap-closure pass" \
+  --gap-closure-summary "…" \
+  --gap-closure-review-trigger horizon_scan
 ```
 
-Workflow input `record_trial=true` does the same. Trial runs require outstanding ingest gaps
-(indexed_without_body or period bucket gaps) so candidates are highest interest among
-names that still need bodies, not suggestion-rich fully-covered tickers. When a gap trial
-fails refetch (`0/N` bodies), ingest-loop auto-compiles a scoped engineering task and
-dispatches **engineering-queue**; after the engineering PR merges, engineering-queue chains
-a verification **ingest-loop** rerun pinned to the same ticker. If gaps remain after
-verification, another engineering round is compiled automatically (up to **3 rounds per
-chain**); the root trial is marked `chain_status: exhausted` when the cap is hit. Outcomes land in
-`ingest_trials.json`;
-the monthly horizon scan payload includes `ingest_trials_pending_review` and an
-**INGEST TRIALS REVIEW** section in the agent prompt.
+Workflow input `record_gap_closure=true` does the same (`record_trial` is a deprecated alias).
+Runs require outstanding ingest gaps (indexed_without_body or period bucket gaps). When a gap-closure
+run fails refetch (`0/N` bodies), ingest-loop auto-compiles a scoped engineering task and dispatches
+**engineering-queue**; after the engineering PR merges, engineering-queue chains a verification
+**ingest-loop** rerun pinned to the same ticker. If gaps remain after verification, another
+engineering round is compiled automatically (up to **3 rounds per chain**); the root run is marked
+`chain_status: exhausted` when the cap is hit.
+
+**Automation (post-trial success):**
+- **Weekly follow-up:** after a weekday batch ingest, ingest-loop dispatches `max_targets=1`
+  gap-closure when buy-tier gaps persist (`trigger: weekly_followup`).
+- **Eng-idle hook:** when engineering-queue is idle (`open_count=0`) and paper holdings or top
+  buy-tier names still have gaps, engineering-queue dispatches intensive gap closure
+  (`trigger: eng_idle`).
+
+Outcomes land in `ingest_gap_closure_runs.json`; the monthly horizon scan payload includes
+`ingest_gap_closure_pending_review` (alias `ingest_trials_pending_review`) and an
+**INGEST GAP CLOSURE REVIEW** section in the agent prompt.
 
 ## Commands
 

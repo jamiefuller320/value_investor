@@ -34,16 +34,28 @@ on:
         description: "Re-run even if ingest loop already succeeded today"
         type: boolean
         default: false
+      record_gap_closure:
+        description: "Record run in ingest_gap_closure_runs.json for horizon/analysis review"
+        type: boolean
+        default: false
       record_trial:
-        description: "Record run in ingest_trials.json for horizon/analysis review"
+        description: "Deprecated alias for record_gap_closure"
         type: boolean
         default: false
       pin_ticker:
-        description: "Pin ingest-improvement to one buy-tier ticker (trial reruns)"
+        description: "Pin ingest-improvement to one buy-tier ticker (gap-closure reruns)"
+        type: string
+        default: ""
+      gap_closure_parent_id:
+        description: "Parent gap-closure run id when recording a verification rerun"
         type: string
         default: ""
       trial_parent_id:
-        description: "Parent trial id when recording a verification rerun"
+        description: "Deprecated alias for gap_closure_parent_id"
+        type: string
+        default: ""
+      gap_closure_trigger:
+        description: "Orchestration trigger (weekly_followup, eng_idle, verification_rerun, manual)"
         type: string
         default: ""
 
@@ -176,17 +188,30 @@ jobs:
           if [ -n "$SEED_CAP" ]; then
             ARGS+=(--bootstrap-seed-cap "$SEED_CAP")
           fi
-          if [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
-            ARGS+=(--record-trial)
-            if [ -n "${{ github.event.inputs.trial_parent_id }}" ]; then
-              ARGS+=(--trial-title "Ingest trial rerun after engineering")
-              ARGS+=(--trial-summary "Verification rerun for trial ${{ github.event.inputs.trial_parent_id }}")
-              ARGS+=(--trial-parent-id "${{ github.event.inputs.trial_parent_id }}")
+          RECORD_GAP_CLOSURE="${{ github.event.inputs.record_gap_closure }}"
+          if [ "$RECORD_GAP_CLOSURE" != "true" ] && [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
+            RECORD_GAP_CLOSURE=true
+          fi
+          PARENT_ID="${{ github.event.inputs.gap_closure_parent_id }}"
+          if [ -z "$PARENT_ID" ]; then
+            PARENT_ID="${{ github.event.inputs.trial_parent_id }}"
+          fi
+          TRIGGER="${{ github.event.inputs.gap_closure_trigger }}"
+          if [ "$RECORD_GAP_CLOSURE" = "true" ]; then
+            ARGS+=(--record-gap-closure)
+            if [ -n "$PARENT_ID" ]; then
+              ARGS+=(--gap-closure-title "Ingest gap-closure rerun after engineering")
+              ARGS+=(--gap-closure-summary "Verification rerun for gap-closure run $PARENT_ID")
+              ARGS+=(--gap-closure-parent-id "$PARENT_ID")
+              ARGS+=(--gap-closure-trigger verification_rerun)
             else
-              ARGS+=(--trial-title "Single-ticker ingest depth trial")
-              ARGS+=(--trial-summary "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.")
+              ARGS+=(--gap-closure-title "Single-ticker ingest gap-closure pass")
+              ARGS+=(--gap-closure-summary "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.")
+              if [ -n "$TRIGGER" ]; then
+                ARGS+=(--gap-closure-trigger "$TRIGGER")
+              fi
             fi
-            ARGS+=(--trial-review-trigger horizon_scan)
+            ARGS+=(--gap-closure-review-trigger horizon_scan)
           fi
           PIN="${{ github.event.inputs.pin_ticker }}"
           if [ -n "$PIN" ]; then
@@ -212,7 +237,9 @@ jobs:
           chain = partial and targets_deferred > 0
           out.write_text(
               f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n"
-              f"trial_compiled={'true' if data.get('trial_compiled') else 'false'}\n"
+              f"gap_closure_compiled={'true' if data.get('gap_closure_compiled') or data.get('trial_compiled') else 'false'}\n"
+              f"trial_compiled={'true' if data.get('gap_closure_compiled') or data.get('trial_compiled') else 'false'}\n"
+              f"recorded_gap_closure={'true' if data.get('recorded_gap_closure') else 'false'}\n"
               f"partial={'true' if partial else 'false'}\n"
               f"chain_dispatch={'true' if chain else 'false'}\n"
               f"targets_deferred={targets_deferred}\n",
@@ -255,12 +282,61 @@ jobs:
           gh workflow run ingest-loop.yml -f max_targets="$CHUNK" -f max_runtime_seconds=2100
           echo "Dispatched ingest-loop chunk (max_targets=$CHUNK) to drain backlog"
 
+      - name: Evaluate weekly gap-closure follow-up
+        id: gap_followup
+        if: >-
+          steps.loop.outputs.partial != 'true'
+          && steps.loop.outputs.recorded_gap_closure != 'true'
+        run: |
+          python3 - <<'PY' | tee /tmp/gap_followup.json
+          import json
+          from pathlib import Path
+          from value_investor.ingest_gap_closure import evaluate_weekly_gap_closure_followup
+          loop = json.loads(Path("/tmp/ingest_loop.json").read_text())
+          result = evaluate_weekly_gap_closure_followup(
+              health_after=loop.get("health_after") or {},
+              was_gap_closure_run=bool(loop.get("recorded_gap_closure")),
+          )
+          print(json.dumps(result, indent=2))
+          PY
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/gap_followup.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+              f"pin_ticker={data.get('pin_ticker', '')}\n"
+              f"gap_closure_trigger={data.get('trigger', 'weekly_followup')}\n"
+              f"gap_followup_reason={data.get('reason', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch gap-closure follow-up after weekday batch
+        if: steps.gap_followup.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run ingest-loop.yml \
+            -f max_targets=1 \
+            -f max_bodies=40 \
+            -f bootstrap_seed_cap=0 \
+            -f max_runtime_seconds=2100 \
+            -f force=true \
+            -f record_gap_closure=true \
+            -f pin_ticker="${{ steps.gap_followup.outputs.pin_ticker }}" \
+            -f gap_closure_trigger="${{ steps.gap_followup.outputs.gap_closure_trigger }}"
+          echo "Dispatched ingest-loop gap-closure follow-up for ${{ steps.gap_followup.outputs.pin_ticker }}"
+
       - name: Dispatch engineering queue when tasks were added
         if: >-
           steps.loop.outputs.micro_compiled == 'true'
+          || steps.loop.outputs.gap_closure_compiled == 'true'
           || steps.loop.outputs.trial_compiled == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run engineering-queue.yml
-          echo "Dispatched engineering-queue after ingest micro-compile or trial gap task"
+          echo "Dispatched engineering-queue after ingest micro-compile or gap-closure task"

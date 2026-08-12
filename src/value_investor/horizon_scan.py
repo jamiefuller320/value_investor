@@ -201,9 +201,9 @@ def build_horizon_payload(
 
     library_policy = _safe_read(LIBRARY_POLICY_PATH)
 
-    from value_investor.ingest_trials import list_trials_pending_review
+    from value_investor.ingest_gap_closure import list_gap_closure_runs_pending_review
 
-    ingest_trials_review = list_trials_pending_review(trigger="horizon_scan")
+    ingest_gap_closure_review = list_gap_closure_runs_pending_review(trigger="horizon_scan")
 
     payload = {
         **metrics,
@@ -211,7 +211,8 @@ def build_horizon_payload(
         "project_objective_excerpt": _project_objective_excerpt(),
         "open_deferred_ideas": open_deferred,
         "open_fragments": open_fragments,
-        "ingest_trials_pending_review": ingest_trials_review,
+        "ingest_gap_closure_pending_review": ingest_gap_closure_review,
+        "ingest_trials_pending_review": ingest_gap_closure_review,
         "open_engineering_tasks": _slim_open_engineering(data_dir / "engineering_tasks.json"),
         "latest_analysis_review": {
             "reviewed_at": (analysis_review or {}).get("reviewed_at"),
@@ -618,11 +619,11 @@ Use action lines ONLY when confident:
   - PROMOTE frag-YYYYMMDD-NN → **Title** — summary. Revisit when: trigger
 Mark stale duplicate fragments DROP. Do not PROMOTE without a clear revisit trigger.
 
-INGEST TRIALS REVIEW
-For each row in ingest_trials_pending_review: summarize outcome deltas and recommend
+INGEST GAP CLOSURE REVIEW
+For each row in ingest_gap_closure_pending_review (alias ingest_trials_pending_review): summarize outcome deltas and recommend
 PROMOTE (wire into ingest-loop / engineering policy), DEFER (park as deferred idea), or
-DISMISS (trial not worth repeating). Reference trial id (trial-YYYYMMDD-NN). If none pending,
-state "No ingest trials pending review."
+DISMISS (run not worth repeating). Reference run id (igc-YYYYMMDD-NN or legacy trial-YYYYMMDD-NN). If none pending,
+state "No ingest gap-closure runs pending review."
 
 PARK
 Bullets for NEW deferred ideas not already in open_deferred_ideas. Format each line:

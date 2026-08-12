@@ -21,7 +21,7 @@ def test_record_and_finalize_ingest_trial(tmp_path: Path):
         params={"max_targets": 1},
         path=path,
     )
-    assert trial["id"].startswith("trial-")
+    assert trial["id"].startswith("igc-")
     assert trial["status"] == "pending_review"
 
     finalized = finalize_pending_ingest_trial(
@@ -45,7 +45,7 @@ def test_record_and_finalize_ingest_trial(tmp_path: Path):
     assert pending[0]["id"] == trial["id"]
 
     store = load_ingest_trials(path)
-    assert store["trials"][0]["completed_at"] is not None
+    assert store["runs"][0]["completed_at"] is not None
 
 
 def test_list_trials_pending_review_filters_by_trigger(tmp_path: Path):

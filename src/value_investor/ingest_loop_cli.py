@@ -66,40 +66,76 @@ def main(argv: list[str] | None = None) -> int:
         help="Max filing bodies to refetch per ticker (backfill bursts: 40)",
     )
     common.add_argument(
+        "--record-gap-closure",
+        action="store_true",
+        help="Record this run in docs/data/ingest_gap_closure_runs.json for horizon/analysis review",
+    )
+    common.add_argument(
         "--record-trial",
         action="store_true",
-        help="Record this run in docs/data/ingest_trials.json for horizon/analysis review",
+        help="Deprecated alias for --record-gap-closure",
+    )
+    common.add_argument(
+        "--gap-closure-title",
+        type=str,
+        default="",
+        help="Title when --record-gap-closure is set",
     )
     common.add_argument(
         "--trial-title",
         type=str,
         default="",
-        help="Title when --record-trial is set",
+        help="Deprecated alias for --gap-closure-title",
+    )
+    common.add_argument(
+        "--gap-closure-summary",
+        type=str,
+        default="",
+        help="Summary when --record-gap-closure is set",
     )
     common.add_argument(
         "--trial-summary",
         type=str,
         default="",
-        help="Summary when --record-trial is set",
+        help="Deprecated alias for --gap-closure-summary",
+    )
+    common.add_argument(
+        "--gap-closure-review-trigger",
+        type=str,
+        default="horizon_scan",
+        choices=("horizon_scan", "analysis_review", "both"),
+        help="Which review cadence should surface this run",
     )
     common.add_argument(
         "--trial-review-trigger",
         type=str,
         default="horizon_scan",
         choices=("horizon_scan", "analysis_review", "both"),
-        help="Which review cadence should surface this trial",
+        help="Deprecated alias for --gap-closure-review-trigger",
     )
     common.add_argument(
         "--pin-ticker",
         type=str,
         default="",
-        help="Restrict ingest-improvement to this buy-tier ticker (trial reruns)",
+        help="Restrict ingest-improvement to this buy-tier ticker (gap-closure reruns)",
+    )
+    common.add_argument(
+        "--gap-closure-parent-id",
+        type=str,
+        default="",
+        help="Parent gap-closure run id when recording a verification rerun",
     )
     common.add_argument(
         "--trial-parent-id",
         type=str,
         default="",
-        help="Parent ingest trial id when recording a verification rerun",
+        help="Deprecated alias for --gap-closure-parent-id",
+    )
+    common.add_argument(
+        "--gap-closure-trigger",
+        type=str,
+        default="",
+        help="Orchestration trigger label (weekly_followup, eng_idle, verification_rerun, manual)",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -132,6 +168,24 @@ def _emit_json(payload: dict[str, Any], args: argparse.Namespace) -> None:
         sys.stdout.flush()
 
 
+def _gap_closure_spec(args: argparse.Namespace) -> dict[str, Any] | None:
+    if not (args.record_gap_closure or args.record_trial):
+        return None
+    title = args.gap_closure_title or args.trial_title or "Ingest gap-closure run"
+    summary = args.gap_closure_summary or args.trial_summary or ""
+    review_trigger = args.gap_closure_review_trigger or args.trial_review_trigger
+    parent_id = args.gap_closure_parent_id or args.trial_parent_id or ""
+    spec: dict[str, Any] = {
+        "title": title,
+        "summary": summary,
+        "review_trigger": review_trigger,
+        "parent_run_id": parent_id,
+    }
+    if args.gap_closure_trigger:
+        spec["trigger"] = args.gap_closure_trigger
+    return spec
+
+
 def _cmd_run(args: argparse.Namespace) -> int:
     exit_code = 0
     result = None
@@ -152,16 +206,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
             max_runtime_seconds=args.max_runtime_seconds,
             max_bodies=args.max_bodies,
             pin_tickers=pin_tickers,
-            record_trial=(
-                {
-                    "title": args.trial_title or "Ingest trial",
-                    "summary": args.trial_summary or "",
-                    "review_trigger": args.trial_review_trigger,
-                    "parent_trial_id": args.trial_parent_id or "",
-                }
-                if args.record_trial
-                else None
-            ),
+            record_gap_closure=_gap_closure_spec(args),
         )
     except Exception as exc:  # noqa: BLE001
         error = str(exc)
@@ -178,6 +223,8 @@ def _cmd_run(args: argparse.Namespace) -> int:
                 "ingest_summary": None,
                 "micro_compiled": False,
                 "micro_compile": {},
+                "gap_closure_compiled": False,
+                "gap_closure_compile": {},
                 "stalled": False,
                 "partial": False,
             }
@@ -190,12 +237,14 @@ def _cmd_run(args: argparse.Namespace) -> int:
         print(
             f"Ingest loop complete: zero_body_buy_tier {before} → {after}; "
             f"stalled={result.stalled}; micro_compiled={result.micro_compiled}; "
-            f"trial_compiled={result.trial_compiled}; partial={result.partial}"
+            f"gap_closure_compiled={result.gap_closure_compiled}; partial={result.partial}"
         )
         if result.micro_compiled:
             print(f"  added tasks: {', '.join(result.micro_compile.get('task_ids') or [])}")
-        if result.trial_compiled:
-            print(f"  trial tasks: {', '.join(result.trial_compile.get('task_ids') or [])}")
+        if result.gap_closure_compiled:
+            print(
+                f"  gap-closure tasks: {', '.join(result.gap_closure_compile.get('task_ids') or [])}"
+            )
     elif error:
         print(f"Ingest loop failed: {error}", file=sys.stderr)
 
