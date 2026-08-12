@@ -21,6 +21,60 @@ _RISK_LABELS = {
     "high": "High",
 }
 
+ALLOWED_RISK_TAGS = frozenset(
+    {
+        "regulatory",
+        "cyclical",
+        "governance",
+        "pension",
+        "competitive",
+        "liquidity",
+        "leverage",
+        "customer_concentration",
+        "key_person",
+        "litigation",
+        "accounting",
+        "other",
+    }
+)
+
+_RISK_TAG_ALIASES = {
+    "customer-concentration": "customer_concentration",
+    "customer concentration": "customer_concentration",
+    "concentration": "customer_concentration",
+    "key-person": "key_person",
+    "key person": "key_person",
+    "keyperson": "key_person",
+    "balance sheet": "leverage",
+    "going concern": "liquidity",
+}
+
+
+def parse_risk_tags(text: str) -> list[str]:
+    """Parse ``RiskTags: a, b, c`` from risks prose or free text; keep known tags only."""
+    tags: list[str] = []
+    for line in (text or "").splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        lower = stripped.lower()
+        if not (
+            lower.startswith("risktags:")
+            or lower.startswith("risk tags:")
+            or lower.startswith("tags:")
+        ):
+            continue
+        raw = stripped.split(":", 1)[1]
+        for part in raw.split(","):
+            token = re.sub(r"[^a-z0-9_\-\s]", "", part.strip().lower())
+            token = token.strip()
+            if not token:
+                continue
+            normalised = _RISK_TAG_ALIASES.get(token, token.replace("-", "_").replace(" ", "_"))
+            if normalised in ALLOWED_RISK_TAGS and normalised not in tags:
+                tags.append(normalised)
+    return tags
+
 
 def _normalise_verdict(value: str | None) -> ResearchVerdict | None:
     if not value:

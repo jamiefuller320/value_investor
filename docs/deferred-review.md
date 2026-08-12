@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T06:37:20+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T06:44:05+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -179,10 +179,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L111 | **Full knob counterfactual via archive replay** | Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review. | docs/data/archive has ≥12 months of weekly screens and analysis_review offline_sim queue is active |
 | L113 | **AI-judgment rebalance log bootstrap (PIT research)** | Extend bootstrap_rebalance_log to ai_judgment using get_research_as_of per archive date for adjusted_signal and accumulate gates — rules-only bootstrap is live; AI track needs point-in-time memo joins. | ai_judgment track has ≥4 acted rebalance passes in forward logging or ≥8 weeks of archive+research timeline coverage |
 | L118 | **Wider offline exit-timing sim on near-miss names** | Walk archived weekly screens with a relaxed gate (hold/watch/near-miss below primary buy tier) and score hold-recovery vs hypothetical swap paths using forward prices. Useful priors for hold buffer and grace knobs; does not substitute for live paper cohort evidence. | exit_timing hold_recovery closed episodes stay below 15 after 8+ weeks of paper-auto, or counterfactual replay shows material churn on names never entered the book |
-| L135 | **Persist gap-fill question_outcomes on ResearchDocument** | Gap-fill already parses Q/Status/Evidence outcomes, but they are not stored on the memo, so weekly refresh and decision packs cannot carry unresolved risks/questions forward. | Next research schema or gap-fill enrichment task |
-| L136 | **Weekly refresh: inject prior risks and open questions into prompt** | Weekly updates re-read research.md but are not forced to address unresolved risks/questions; inject structured carry-forward so agents update the decision-relevant uncertainty set. | After question_outcomes are persisted on ResearchDocument |
-| L137 | **Surface unresolved questions and memo_quality in decision packs** | Decision packs already show thesis/risks prose; add unresolved open questions and memo_quality grade so human verification targets known gaps. | After open questions are first-class on ResearchDocument |
-| L138 | **Typed risk tags alongside free-text risks_and_flags** | Keep narrative risks for humans, but ask agents for a small enum/tag list (liquidity, leverage, customer concentration, etc.) usable by overlays and learning without parsing prose. | Research prompt/schema enrichment pass |
 
 ### Ops / reliability
 

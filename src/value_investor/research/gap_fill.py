@@ -39,12 +39,9 @@ _DEEPER_RESEARCH_SPLIT = re.compile(
 
 
 def _unresolved_questions(question_outcomes: list[dict[str, Any]]) -> list[str]:
-    return [
-        str(row.get("question") or "").strip()
-        for row in question_outcomes
-        if str(row.get("status") or "").lower() in {"unresolved", "partially_resolved"}
-        and str(row.get("question") or "").strip()
-    ]
+    from value_investor.research.document import unresolved_questions
+
+    return unresolved_questions(question_outcomes)
 
 
 @dataclass

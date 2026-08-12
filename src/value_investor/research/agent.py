@@ -10,8 +10,12 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
-from value_investor.research.document import ResearchDocument, parse_research_sections
-from value_investor.research.verdict import parse_research_verdict
+from value_investor.research.document import (
+    ResearchDocument,
+    parse_research_sections,
+    unresolved_questions,
+)
+from value_investor.research.verdict import parse_research_verdict, parse_risk_tags
 from value_investor.summary import CompanyReport
 
 
@@ -69,6 +73,8 @@ Do not invent numbers. Note gaps if interim or annual filings are missing from t
 RISKS AND RED FLAGS
 Regulatory, cyclical, governance, pension, or competitive risks not fully captured by screens.
 Use filing language (going concern, contingencies, covenants) when present in bodies.
+End the section with EXACTLY one line of machine tags (comma-separated; pick from the allowed set):
+RiskTags: regulatory | cyclical | governance | pension | competitive | liquidity | leverage | customer_concentration | key_person | litigation | accounting | other
 
 NEWS HIGHLIGHTS
 Summarise material news from the past year: strategy shifts, management changes, regulatory actions, M&A.
@@ -100,8 +106,20 @@ def _weekly_update_prompt(
     news_batch_path: Path,
     existing_markdown_path: Path,
     screen_signal: str = "strong_buy",
+    prior_risks: str = "",
+    open_questions: list[str] | None = None,
+    prior_risk_tags: list[str] | None = None,
 ) -> str:
     signal_label = _screen_signal_label(screen_signal)
+    risks_block = (prior_risks or "").strip() or "(none recorded)"
+    tags_block = ", ".join(prior_risk_tags or []) or "(none recorded)"
+    questions = open_questions or []
+    if questions:
+        numbered = "\n".join(
+            f"{idx}. {question}" for idx, question in enumerate(questions, start=1)
+        )
+    else:
+        numbered = "None — no open questions on file."
     return f"""You are updating an existing research memo on {company_name} ({ticker}).
 
 The quantitative screen currently rates this name as a {signal_label}.
@@ -114,6 +132,14 @@ Filing body extracts (if any): {(sources_dir / "filings" / "bodies").resolve()}
 Yahoo financials (secondary only): {(sources_dir / "financials_annual.json").resolve()}
 Macro regime context (optional colour only — not a scoring input): {(sources_dir / "macro_context.json").resolve()}
 
+Prior RISKS AND RED FLAGS (carry forward; update if news/filings change them):
+{risks_block}
+
+Prior RiskTags: {tags_block}
+
+Unresolved / partially resolved open questions from prior gap-fill:
+{numbered}
+
 Write ONE section with the heading exactly as shown:
 
 WEEKLY UPDATE
@@ -122,6 +148,13 @@ You may briefly note macro_context.json as background colour if relevant; do not
 If nothing material changed, say so in 2–3 sentences.
 Reference article/filing titles and dates where relevant.
 Do not repeat the full prior memo.
+If open questions are listed above, explicitly state for EACH whether this week's news/filings
+resolved it, left it open, or had no bearing — use the mini-block format:
+Q: <question text>
+Status: resolved | partially_resolved | unresolved
+Evidence: one or two sentences (or "no bearing this week")
+When risks change, note which items changed. If RiskTags should change, end with:
+RiskTags: … (same allowed set as the prior memo)
 
 Then add a RESEARCH VERDICT section (revise conviction only if material news changes the investment case; otherwise repeat the prior verdict unchanged):
 
@@ -194,6 +227,7 @@ def run_initial_research_agent(
     )
     sections = parse_research_sections(text)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
+    risk_tags = parse_risk_tags(sections.get("risks_and_flags", "")) or parse_risk_tags(text)
     now = datetime.now(UTC).isoformat()
     doc = ResearchDocument(
         ticker=report.ticker,
@@ -212,6 +246,7 @@ def run_initial_research_agent(
         research_risk_level=verdict_fields["research_risk_level"],  # type: ignore[arg-type]
         research_confidence=verdict_fields["research_confidence"],  # type: ignore[arg-type]
         research_rationale=verdict_fields["research_rationale"],  # type: ignore[arg-type]
+        risk_tags=risk_tags,
         agent_id=agent_id,
     )
     return doc, agent_id
@@ -270,6 +305,8 @@ Prefer filing body extracts; if falling back to Yahoo/news, say so. Note remaini
 
 RISKS AND RED FLAGS
 Rewrite risks with the same honesty: evidenced vs still open, and which alternate source would close each open item.
+End with EXACTLY one machine-tag line:
+RiskTags: regulatory | cyclical | governance | pension | competitive | liquidity | leverage | customer_concentration | key_person | litigation | accounting | other
 
 RESEARCH VERDICT
 Use EXACTLY these lines:
@@ -324,6 +361,7 @@ GAP FILL UPDATE
 
 FINANCIAL REVIEW
 RISKS AND RED FLAGS
+(End RISKS with RiskTags: … using the allowed tag set.)
 RESEARCH VERDICT
 RESEARCH MODEL SUGGESTIONS
 
@@ -401,6 +439,9 @@ def run_gap_fill_research_agent(
     new_rationale = verdict_fields.get("research_rationale") or existing.research_rationale
     financial_review = sections.get("financial_review", "").strip() or existing.financial_review
     risks_and_flags = sections.get("risks_and_flags", "").strip() or existing.risks_and_flags
+    risk_tags = (
+        parse_risk_tags(risks_and_flags) or parse_risk_tags(text) or list(existing.risk_tags)
+    )
     weekly_entry: dict[str, str] = {
         "date": now.strftime("%Y-%m-%d"),
         "as_of": now.isoformat(),
@@ -428,8 +469,11 @@ def run_gap_fill_research_agent(
         research_risk_level=new_risk,
         research_confidence=new_confidence,
         research_rationale=new_rationale,
+        risk_tags=risk_tags,
+        question_outcomes=question_outcomes,
         weekly_updates=[*existing.weekly_updates, weekly_entry],
         source_counts=existing.source_counts,
+        memo_quality=dict(existing.memo_quality or {}),
         agent_id=agent_id or existing.agent_id,
     )
     return GapFillAgentResult(
@@ -450,6 +494,9 @@ def run_weekly_research_update_agent(
     cwd: str | None = None,
     screen_signal: str | None = None,
 ) -> ResearchDocument:
+    from value_investor.research.gap_fill_sources import parse_question_outcomes
+
+    open_qs = unresolved_questions(existing.question_outcomes)
     prompt = _weekly_update_prompt(
         ticker=existing.ticker,
         company_name=existing.name,
@@ -457,6 +504,9 @@ def run_weekly_research_update_agent(
         news_batch_path=news_batch_path,
         existing_markdown_path=markdown_path,
         screen_signal=screen_signal or existing.signal,
+        prior_risks=existing.risks_and_flags,
+        open_questions=open_qs,
+        prior_risk_tags=list(existing.risk_tags),
     )
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
@@ -468,6 +518,11 @@ def run_weekly_research_update_agent(
     sections = parse_research_sections(text)
     update_summary = sections.get("weekly_update", "").strip()
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
+    parsed_outcomes = parse_question_outcomes(update_summary) or parse_question_outcomes(
+        sections.get("gap_fill_update", "")
+    )
+    question_outcomes = parsed_outcomes or list(existing.question_outcomes)
+    risk_tags = parse_risk_tags(update_summary) or parse_risk_tags(text) or list(existing.risk_tags)
     now = datetime.now(UTC)
     new_verdict = verdict_fields.get("research_verdict") or existing.research_verdict
     new_risk = verdict_fields.get("research_risk_level") or existing.research_risk_level
@@ -502,11 +557,14 @@ def run_weekly_research_update_agent(
         research_risk_level=new_risk,
         research_confidence=new_confidence,
         research_rationale=new_rationale,
+        risk_tags=risk_tags,
+        question_outcomes=question_outcomes,
         weekly_updates=[
             *existing.weekly_updates,
             weekly_entry,
         ],
         source_counts=existing.source_counts,
+        memo_quality=dict(existing.memo_quality or {}),
         agent_id=agent_id or existing.agent_id,
     )
     return updated
