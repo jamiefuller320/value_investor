@@ -108,9 +108,7 @@ def test_document_round_trip_keeps_outcomes_and_risk_tags():
     )
     restored = ResearchDocument.from_dict(doc.to_dict())
     assert restored.risk_tags == ["pension", "leverage"]
-    assert unresolved_questions(restored.question_outcomes) == [
-        "Is the pension deficit funded?"
-    ]
+    assert unresolved_questions(restored.question_outcomes) == ["Is the pension deficit funded?"]
     markdown = render_research_markdown(restored)
     assert "RiskTags: pension, leverage" in markdown
     assert "## OPEN QUESTIONS" in markdown

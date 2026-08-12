@@ -428,9 +428,7 @@ def format_decision_packs_text(packs: list[DecisionPack]) -> str | None:
 
 def format_decision_pack_html(pack: DecisionPack) -> str:
     verify_items = "".join(f"<li>{_escape(item)}</li>" for item in pack.verify)
-    open_items = "".join(
-        f"<li>{_escape(question)}</li>" for question in pack.unresolved_questions
-    )
+    open_items = "".join(f"<li>{_escape(question)}</li>" for question in pack.unresolved_questions)
     open_block = (
         f"<div><strong>Open questions:</strong>"
         f'<ul style="margin:4px 0 0 18px;padding:0">{open_items}</ul></div>'
@@ -441,10 +439,7 @@ def format_decision_pack_html(pack: DecisionPack) -> str:
     quality = ""
     if pack.memo_quality_grade:
         if pack.memo_quality_score is not None:
-            quality = (
-                f" · memo {_escape(pack.memo_quality_grade)} "
-                f"({pack.memo_quality_score:.2f})"
-            )
+            quality = f" · memo {_escape(pack.memo_quality_grade)} ({pack.memo_quality_score:.2f})"
         else:
             quality = f" · memo {_escape(pack.memo_quality_grade)}"
     return f"""

@@ -115,7 +115,9 @@ def _weekly_update_prompt(
     tags_block = ", ".join(prior_risk_tags or []) or "(none recorded)"
     questions = open_questions or []
     if questions:
-        numbered = "\n".join(f"{idx}. {question}" for idx, question in enumerate(questions, start=1))
+        numbered = "\n".join(
+            f"{idx}. {question}" for idx, question in enumerate(questions, start=1)
+        )
     else:
         numbered = "None — no open questions on file."
     return f"""You are updating an existing research memo on {company_name} ({ticker}).
@@ -438,9 +440,7 @@ def run_gap_fill_research_agent(
     financial_review = sections.get("financial_review", "").strip() or existing.financial_review
     risks_and_flags = sections.get("risks_and_flags", "").strip() or existing.risks_and_flags
     risk_tags = (
-        parse_risk_tags(risks_and_flags)
-        or parse_risk_tags(text)
-        or list(existing.risk_tags)
+        parse_risk_tags(risks_and_flags) or parse_risk_tags(text) or list(existing.risk_tags)
     )
     weekly_entry: dict[str, str] = {
         "date": now.strftime("%Y-%m-%d"),
@@ -522,11 +522,7 @@ def run_weekly_research_update_agent(
         sections.get("gap_fill_update", "")
     )
     question_outcomes = parsed_outcomes or list(existing.question_outcomes)
-    risk_tags = (
-        parse_risk_tags(update_summary)
-        or parse_risk_tags(text)
-        or list(existing.risk_tags)
-    )
+    risk_tags = parse_risk_tags(update_summary) or parse_risk_tags(text) or list(existing.risk_tags)
     now = datetime.now(UTC)
     new_verdict = verdict_fields.get("research_verdict") or existing.research_verdict
     new_risk = verdict_fields.get("research_risk_level") or existing.research_risk_level
