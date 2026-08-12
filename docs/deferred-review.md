@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-11T11:08:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T06:36:25+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -83,6 +83,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N24 | **Do not route automated paper-auto or decision-review through LLMs** | Learning loop knobs (decision-review, future L85 grace auto-tune) must stay rule-based on structured JSON marks. Pro+ model access is for human/agent synthesis and selective research only — not live paper trading decisions. | Never for live automation; only reconsider if building a separate experimental LLM paper track with its own control datum |
 | N25 | **Keep exit-shadow cohort observe-only until maturity** | Post-exit shadow (exit_shadow.json / exit_shadow_review.json) is wired for all three paper tracks but must stay read-only for knob changes until per-track closed cohorts mature. Do not wire verdicts into decision-review or L85 grace auto-tune prematurely. | learning_tracks_exit_shadow.json shows ≥15 closed exits per track with stable 1/4/8/12-week scoring; L85 grace threshold (≥30 grace exits) met separately before any auto-tune |
 | N26 | **Do not nudge decision-review portfolio knobs below history floor** | Automated decision-review knob steps (max positions, timing strictness, conviction floor, sector cap) should not fire until the target track has ≥4 weekly marks and ≥2 closed trades. Below that floor, accumulate data hands-off. | Each paper track (ai_judgment, rules, momentum_grace) crosses the floor independently; then enable per-track knob review in decision-review |
+| N27 | **Gate AI judgment on confidence or memo_quality thresholds** | Do not add research_confidence or memo_quality floors to ai_judgment eligibility until observe-only counterfactuals show they improve cost-adjusted excess vs accumulate+adjusted_signal alone. Would touch paper_fund/paper_automation live knobs. | Rebalance-log has thick history of confidence/risk fields AND AI judgment beats rules on the same window |
 
 ---
 
@@ -109,6 +110,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L122 | **Align browser vs server paper books** | Label or align hold-buffer/reentry rules before tuning conviction/sector caps from learning data (L106) | `learning_tracks_churn_health` reaches ≥8 weeks of marks per L106 revisit trigger. |
 | L123 | **Post-Sunday full-cap ingest pass for buy-tier** | Guarantee memo depth after weekly screen refresh | next Sunday email run shows buy-tier names with `has_body: false` on primary filing gaps. |
 | L127 | **Offline observe-sim promotion criteria** | Define minimum archive depth and local-benchmark excess bar before any non-UK market graduates from frozen-signal observe sim to a second live paper learning track. | library_policy.observe_sim_markets expands beyond sp500 and history_run_count >= 12 |
+| L135 | **Observe-only log confidence/risk/unresolved for counterfactuals** | Append research_confidence, research_risk_level, and unresolved-question counts to rebalance_log decision snapshots so AI-judgment gates can be studied offline without changing live paper eligibility. | Rebalance-log enrichment pass or before any confidence/memo_quality paper gate is proposed |
 
 ### Universe & data
 
@@ -176,6 +178,10 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L111 | **Full knob counterfactual via archive replay** | Walk archived weekly screens and re-run paper rebalance with alternate knob sets from inception for true P&L paths (min_conviction, timing, AI gates). Complements the lightweight trade-replay preview in decision-review. | docs/data/archive has ≥12 months of weekly screens and analysis_review offline_sim queue is active |
 | L113 | **AI-judgment rebalance log bootstrap (PIT research)** | Extend bootstrap_rebalance_log to ai_judgment using get_research_as_of per archive date for adjusted_signal and accumulate gates — rules-only bootstrap is live; AI track needs point-in-time memo joins. | ai_judgment track has ≥4 acted rebalance passes in forward logging or ≥8 weeks of archive+research timeline coverage |
 | L118 | **Wider offline exit-timing sim on near-miss names** | Walk archived weekly screens with a relaxed gate (hold/watch/near-miss below primary buy tier) and score hold-recovery vs hypothetical swap paths using forward prices. Useful priors for hold buffer and grace knobs; does not substitute for live paper cohort evidence. | exit_timing hold_recovery closed episodes stay below 15 after 8+ weeks of paper-auto, or counterfactual replay shows material churn on names never entered the book |
+| L133 | **Persist gap-fill question_outcomes on ResearchDocument** | Store structured open/unresolved questions (Q/Status/Evidence) on the memo itself so weekly refresh and decision packs can re-read them without depending on gap_fill_summary.json ephemera. Research schema + agent prompts only; do not gate paper knobs yet. | Next research schema or weekly-refresh prompt pass; after gap-fill outcomes are stable for several Sunday runs |
+| L134 | **Surface unresolved questions and memo_quality in decision packs** | Include open/unresolved gap questions and memo_quality grade in verify-before-trade packs so humans see evidence gaps that already exist in gap-fill outcomes and source_quality scoring. | After question_outcomes persist on ResearchDocument or decision_pack enrichment is scheduled |
+| L136 | **Typed risk tags alongside free-text risks_and_flags** | Optionally parse or prompt for structured risk tags (pension, covenant, FCF divergence, governance) while keeping prose RISKS AND RED FLAGS. Enrich packs and weekly prompts; keep compute_adjusted_signal verdict-only until evidence justifies overlay changes. | Memo schema enrichment or L16 structured-JSON revisit; after filing-body richness improves for UK names |
+| L137 | **Weekly refresh: inject prior risks and open questions into prompt** | Weekly update currently points at full research.md but only asks for WEEKLY UPDATE + RESEARCH VERDICT; explicitly paste prior risks_and_flags and unresolved questions into the prompt so refresh cannot silently drop open items. | Next weekly research prompt tuning pass |
 
 ### Ops / reliability
 
