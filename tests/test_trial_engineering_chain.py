@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.test_ingest_improvement import _report
 from value_investor.engineering_queue import ingest_trial_rerun_dispatch
 from value_investor.engineering_tasks import compile_ingest_engineering_task_from_trial
 from value_investor.ingest_trials import (
@@ -14,7 +15,6 @@ from value_investor.ingest_trials import (
     trial_refetch_stats,
 )
 from value_investor.research.ingest_improvement import select_ingest_improvement_targets
-from tests.test_ingest_improvement import _report
 
 
 def _failed_gap_trial(tmp_path: Path) -> dict:
