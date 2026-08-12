@@ -89,6 +89,18 @@ def main(argv: list[str] | None = None) -> int:
         choices=("horizon_scan", "analysis_review", "both"),
         help="Which review cadence should surface this trial",
     )
+    common.add_argument(
+        "--pin-ticker",
+        type=str,
+        default="",
+        help="Restrict ingest-improvement to this buy-tier ticker (trial reruns)",
+    )
+    common.add_argument(
+        "--trial-parent-id",
+        type=str,
+        default="",
+        help="Parent ingest trial id when recording a verification rerun",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     run_p = sub.add_parser(
@@ -125,6 +137,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
     result = None
     error: str | None = None
     try:
+        pin_tickers = [args.pin_ticker.strip().upper()] if str(args.pin_ticker or "").strip() else None
         result = run_weekday_ingest_loop(
             latest_path=args.latest_path,
             data_dir=args.data_dir,
@@ -136,11 +149,13 @@ def _cmd_run(args: argparse.Namespace) -> int:
             bootstrap_seed_cap=args.bootstrap_seed_cap,
             max_runtime_seconds=args.max_runtime_seconds,
             max_bodies=args.max_bodies,
+            pin_tickers=pin_tickers,
             record_trial=(
                 {
                     "title": args.trial_title or "Ingest trial",
                     "summary": args.trial_summary or "",
                     "review_trigger": args.trial_review_trigger,
+                    "parent_trial_id": args.trial_parent_id or "",
                 }
                 if args.record_trial
                 else None
@@ -173,10 +188,12 @@ def _cmd_run(args: argparse.Namespace) -> int:
         print(
             f"Ingest loop complete: zero_body_buy_tier {before} → {after}; "
             f"stalled={result.stalled}; micro_compiled={result.micro_compiled}; "
-            f"partial={result.partial}"
+            f"trial_compiled={result.trial_compiled}; partial={result.partial}"
         )
         if result.micro_compiled:
             print(f"  added tasks: {', '.join(result.micro_compile.get('task_ids') or [])}")
+        if result.trial_compiled:
+            print(f"  trial tasks: {', '.join(result.trial_compile.get('task_ids') or [])}")
     elif error:
         print(f"Ingest loop failed: {error}", file=sys.stderr)
 

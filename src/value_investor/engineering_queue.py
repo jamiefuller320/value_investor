@@ -636,3 +636,36 @@ def refresh_engineering_queue_ui(
         "open_count": dashboard_slice.get("status", {}).get("open_count"),
         "pr_open_count": dashboard_slice.get("status", {}).get("pr_open_count"),
     }
+
+
+def ingest_trial_rerun_dispatch(
+    task_id: str,
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+) -> dict[str, Any]:
+    """After an ingest-trial engineering merge, return ingest-loop dispatch params."""
+    payload = load_engineering_tasks(tasks_path)
+    row = next(
+        (task for task in payload.get("tasks") or [] if str(task.get("id") or "") == task_id),
+        None,
+    )
+    if not isinstance(row, dict):
+        return {"should_dispatch": False, "reason": "task not found"}
+    evidence = row.get("evidence") or {}
+    if not evidence.get("rerun_ingest_trial"):
+        return {"should_dispatch": False, "reason": "task not flagged for ingest trial rerun"}
+    ticker = str(evidence.get("ticker") or "").strip().upper()
+    if not ticker and evidence.get("tickers"):
+        tickers = evidence.get("tickers") or []
+        if tickers:
+            ticker = str(tickers[0] or "").strip().upper()
+    if not ticker:
+        return {"should_dispatch": False, "reason": "no ticker on ingest trial task"}
+    trial_id = str(evidence.get("trial_id") or "")
+    return {
+        "should_dispatch": True,
+        "reason": "ingest trial verification rerun after engineering merge",
+        "pin_ticker": ticker,
+        "trial_parent_id": trial_id,
+        "task_id": task_id,
+    }

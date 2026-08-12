@@ -711,6 +711,122 @@ def compile_ingest_engineering_tasks_micro(
     }
 
 
+def compile_ingest_engineering_task_from_trial(
+    trial: dict[str, Any],
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+) -> dict[str, Any]:
+    """Queue a scoped ingest engineering task when a gap trial fails to fetch bodies."""
+    from value_investor.ingest_trials import trial_needs_gap_engineering, trial_refetch_stats
+
+    if not trial_needs_gap_engineering(trial):
+        return {"compiled_count": 0, "reason": "trial does not need gap engineering"}
+
+    trial_id = str(trial.get("id") or "")
+    ticker = str(trial.get("ticker") or "").strip().upper()
+    existing_payload = load_engineering_tasks(committed_path)
+    existing_rows = list(existing_payload.get("tasks") or [])
+    for row in existing_rows:
+        evidence = row.get("evidence") or {}
+        if str(evidence.get("trial_id") or "") == trial_id:
+            status = str(row.get("status") or "open")
+            if status in {"open", "pr_open"}:
+                return {
+                    "compiled_count": 0,
+                    "reason": "engineering task already queued for trial",
+                    "task_id": row.get("id"),
+                }
+        if (
+            str(row.get("area") or "").lower() == "ingest"
+            and str(row.get("status") or "open") in {"open", "pr_open"}
+            and ticker in [str(t or "").upper() for t in (evidence.get("tickers") or [])]
+            and str(evidence.get("trial_id") or "")
+        ):
+            return {
+                "compiled_count": 0,
+                "reason": "open ingest trial engineering task for ticker",
+                "task_id": row.get("id"),
+            }
+
+    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
+    seq = _next_engineering_seq_from_rows(existing_rows, run_stamp)
+    stats = trial_refetch_stats(trial)
+    title = (
+        f"Close stubborn ingest gaps for {ticker} "
+        f"({stats['fetched']}/{stats['attempted']} refetch bodies from trial {trial_id})"
+    )
+    task = EngineeringTask(
+        id=f"eng-{run_stamp}-{seq:02d}",
+        area="ingest",
+        title=title,
+        summary=(
+            f"Ingest trial {trial_id} targeted {ticker} with outstanding indexed gaps but "
+            f"primary refetch paths returned zero bodies ({stats['attempted']} attempted). "
+            "Investigate source mapping, URL resolution, or parser gaps; add a focused fix "
+            "and regression test so the next ingest trial rerun closes the gap."
+        ),
+        priority="high",
+        priority_score=88.0,
+        source="ingest_trial",
+        evidence={
+            "trial_id": trial_id,
+            "tickers": [ticker],
+            "ticker": ticker,
+            "rerun_ingest_trial": True,
+            "refetch_attempted": stats["attempted"],
+            "refetch_fetched": stats["fetched"],
+            "trial_params": dict(trial.get("params") or {}),
+        },
+        acceptance_criteria=_default_acceptance_criteria("ingest", [ticker]),
+        allowed_paths=_allowed_paths_for_area("ingest"),
+        blocked_paths=list(BLOCKED_PATHS),
+    )
+    merged_rows = _merge_task_rows(existing_rows, [task])
+    open_ids_before = {
+        str(row.get("id") or "")
+        for row in existing_rows
+        if str(row.get("status") or "open") == "open"
+    }
+    newly_open = [
+        row
+        for row in merged_rows
+        if str(row.get("status") or "open") == "open"
+        and str(row.get("id") or "") not in open_ids_before
+    ]
+    payload = {
+        **existing_payload,
+        "compiled_at": datetime.now(UTC).isoformat(),
+        "task_count": len(merged_rows),
+        "tasks": merged_rows,
+        "micro_compile_source": "ingest_trial",
+        "source_trial_id": trial_id,
+    }
+    committed_path = Path(committed_path)
+    tasks_path = Path(tasks_path)
+    committed_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(committed_path, payload, compact=False)
+    if tasks_path != committed_path:
+        write_json(tasks_path, payload, compact=False)
+    try:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=committed_path)
+    except OSError:
+        pass
+    if newly_open:
+        from value_investor.ingest_trials import attach_engineering_task_to_trial
+
+        attach_engineering_task_to_trial(trial_id, str(newly_open[0].get("id") or ""))
+    return {
+        "compiled_count": len(newly_open),
+        "task_ids": [str(row.get("id") or "") for row in newly_open],
+        "task_count": len(merged_rows),
+        "trial_id": trial_id,
+        "ticker": ticker,
+    }
+
+
 def _next_engineering_seq_from_rows(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
