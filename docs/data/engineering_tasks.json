@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-12T07:13:53.118789+00:00",
+  "compiled_at": "2026-08-12T08:20:09.807651+00:00",
   "run_at": "2026-08-10T20:14:51.755918+00:00",
-  "task_count": 41,
+  "task_count": 42,
   "tasks": [
     {
       "id": "eng-20260726-05",
@@ -1220,6 +1220,61 @@
       "merged_at": "2026-08-11T11:11:18.747990+00:00"
     },
     {
+      "id": "eng-20260812-03",
+      "area": "ingest",
+      "title": "Close stubborn ingest gaps for GSK.L (chain 1/3: 0/4 bodies, trial trial-20260812-07)",
+      "summary": "Ingest trial trial-20260812-07 (chain root trial-20260812-07, round 1) targeted GSK.L with outstanding indexed gaps after refetch yield 0/4. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification trial closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_trial",
+      "evidence": {
+        "trial_id": "trial-20260812-07",
+        "chain_root_id": "trial-20260812-07",
+        "chain_round": 1,
+        "tickers": [
+          "GSK.L"
+        ],
+        "ticker": "GSK.L",
+        "rerun_ingest_trial": true,
+        "refetch_attempted": 4,
+        "refetch_fetched": 0,
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "pin_tickers": []
+        },
+        "compile_reason": "zero_yield_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for GSK.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260812-02",
       "area": "ingest",
       "title": "Close stubborn ingest gaps for VCT.L (chain 2/3: 0/1 bodies, trial trial-20260812-05)",
@@ -1275,8 +1330,7 @@
       ],
       "auto_merge": false,
       "status": "open",
-      "no_diff_count": 1,
-      "last_no_diff_at": "2026-08-12T08:18:41.666423+00:00"
+      "no_diff_count": 0
     },
     {
       "id": "eng-20260812-01",
@@ -1915,6 +1969,6 @@
   "reprioritized_at": "2026-08-11T12:44:57.561112+00:00",
   "reprioritized_after_task": "eng-20260729-01",
   "micro_compile_source": "ingest_trial",
-  "source_trial_id": "trial-20260812-05",
-  "source_chain_root_id": "trial-20260812-03"
+  "source_trial_id": "trial-20260812-07",
+  "source_chain_root_id": "trial-20260812-07"
 }
