@@ -39,6 +39,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/research/gap_fill_sources.py",
         "src/value_investor/research/ingest.py",
         "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
         "src/value_investor/companies_house.py",
         "tests/test_research_filings.py",
         "tests/test_gap_fill_deepen.py",
