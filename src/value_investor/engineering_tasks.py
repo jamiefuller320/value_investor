@@ -1282,6 +1282,43 @@ def find_engineering_task(
     return None
 
 
+def expand_task_allowed_paths(
+    task_id: str,
+    extra_paths: list[str],
+    *,
+    path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+) -> tuple[EngineeringTask | None, list[str]]:
+    """Append safe paths to a task allowlist (used by CI path-guard autofix)."""
+    task = find_engineering_task(task_id, path=path)
+    if task is None:
+        return None, []
+
+    blocked = list(dict.fromkeys([*BLOCKED_PATHS, *(task.blocked_paths or [])]))
+    allowed = list(task.allowed_paths or [])
+    added: list[str] = []
+
+    for raw in extra_paths:
+        normalized = normalize_repo_path(raw)
+        if not normalized or normalized in allowed:
+            continue
+        if any(path_matches_blocked_pattern(normalized, pattern) for pattern in blocked):
+            continue
+        allowed.append(normalized)
+        added.append(normalized)
+
+    if not added:
+        return task, []
+
+    return mark_task_status(
+        task_id,
+        str(task.status or "open"),
+        path=path,
+        committed_path=committed_path,
+        allowed_paths=allowed,
+    ), added
+
+
 def validate_engineering_pr_paths(
     *,
     task: EngineeringTask,

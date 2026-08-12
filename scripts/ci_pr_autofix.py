@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply scoped ruff autofix after a failed PR CI run."""
+"""Apply scoped CI autofixes after a failed PR CI run."""
 
 from __future__ import annotations
 
@@ -8,7 +8,12 @@ import json
 import sys
 from pathlib import Path
 
-from value_investor.ci_pr_autofix import attempt_pr_ci_autofix, write_autofix_result
+from value_investor.ci_pr_autofix import (
+    AUTOFIX_COMMIT_PREFIX,
+    PATH_EXPAND_COMMIT_PREFIX,
+    run_pr_ci_autofix_pipeline,
+    write_autofix_result,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -19,6 +24,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Git base ref for changed-file scope (e.g. origin/main)",
     )
     parser.add_argument("--head", default="HEAD", help="Git head ref (default: HEAD)")
+    parser.add_argument(
+        "--branch",
+        required=True,
+        help="PR head branch name (e.g. cursor/eng-20260812-03-1de3)",
+    )
     parser.add_argument(
         "--log-file",
         type=Path,
@@ -35,6 +45,12 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Write result JSON to this path",
     )
+    parser.add_argument(
+        "--diagnosis-out",
+        type=Path,
+        default=None,
+        help="Write diagnosis JSON to this path",
+    )
     args = parser.parse_args(argv)
 
     log_text = ""
@@ -43,17 +59,33 @@ def main(argv: list[str] | None = None) -> int:
     elif not sys.stdin.isatty():
         log_text = sys.stdin.read()
 
-    result = attempt_pr_ci_autofix(
+    result, diagnosis = run_pr_ci_autofix_pipeline(
+        branch=args.branch,
         base_ref=args.base,
         head_ref=args.head,
         log_text=log_text,
     )
 
+    payload = {
+        **result.to_dict(),
+        "diagnosis": diagnosis.to_dict(),
+        "commit_message": None,
+    }
+    if result.fixed and result.actions == ["ruff"]:
+        payload["commit_message"] = f"{AUTOFIX_COMMIT_PREFIX} ruff on changed Python files"
+    elif result.fixed and "path_guard_expand" in result.actions:
+        payload["commit_message"] = PATH_EXPAND_COMMIT_PREFIX
+
     if args.out is not None:
-        write_autofix_result(args.out, result)
+        args.out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    if args.diagnosis_out is not None:
+        args.diagnosis_out.write_text(
+            json.dumps(diagnosis.to_dict(), indent=2) + "\n",
+            encoding="utf-8",
+        )
 
     if args.json or args.out is not None:
-        print(json.dumps(result.to_dict(), indent=2))
+        print(json.dumps(payload, indent=2))
 
     if result.fixed:
         return 0
