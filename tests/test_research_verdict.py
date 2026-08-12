@@ -7,6 +7,7 @@ from value_investor.research.verdict import (
     compute_adjusted_signal,
     format_research_action_note,
     parse_research_verdict,
+    parse_risk_tags,
 )
 
 
@@ -63,3 +64,20 @@ def test_format_research_action_note():
     assert "Caution" in note
     assert "adjusted to buy" in note
     assert "Governance" in note
+
+
+def test_parse_risk_tags_keeps_known_and_aliases():
+    text = """
+Cyclical fee income and pension deficit.
+RiskTags: leverage, Pension, key person, invented_risk, customer concentration
+"""
+    assert parse_risk_tags(text) == [
+        "leverage",
+        "pension",
+        "key_person",
+        "customer_concentration",
+    ]
+
+
+def test_parse_risk_tags_missing_line():
+    assert parse_risk_tags("Just prose risks.") == []

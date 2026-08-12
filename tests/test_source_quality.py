@@ -76,3 +76,24 @@ def test_attach_memo_quality_uses_local_inventory(tmp_path: Path):
     assert "source_quality_score" in doc.memo_quality
     assert "grade" in doc.memo_quality
     assert doc.memo_quality["drivers"]["gap_resolution"] < 1.0
+
+
+def test_attach_memo_quality_falls_back_to_document_outcomes(tmp_path: Path):
+    doc = ResearchDocument(
+        ticker="AAA.L",
+        name="Alpha",
+        signal="strong_buy",
+        version=1,
+        created_at="2026-07-01T00:00:00+00:00",
+        updated_at="2026-07-01T00:00:00+00:00",
+        mode="gap_fill",
+        source_counts={
+            "filings_total": 4,
+            "filings_with_body": 2,
+            "financial_years": 3,
+            "news_articles": 10,
+        },
+        question_outcomes=[{"status": "unresolved"}],
+    )
+    attach_memo_quality(doc, sources_dir=tmp_path)
+    assert doc.memo_quality["drivers"]["gap_resolution"] < 1.0

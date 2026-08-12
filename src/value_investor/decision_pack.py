@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-from value_investor.research.document import ResearchDocument
+from value_investor.research.document import ResearchDocument, unresolved_questions
 from value_investor.summary import CompanyReport
 from value_investor.technical_analysis import TradePlan
 
@@ -46,6 +46,10 @@ class DecisionPack:
     research_verdict: str | None = None
     research_confidence: float | None = None
     research_risk_level: str | None = None
+    risk_tags: list[str] = field(default_factory=list)
+    unresolved_questions: list[str] = field(default_factory=list)
+    memo_quality_grade: str | None = None
+    memo_quality_score: float | None = None
     action_note: str | None = None
     gaps: list[str] = field(default_factory=list)
     high_conviction: bool = False
@@ -56,6 +60,8 @@ class DecisionPack:
             payload["conviction_score"] = round(float(self.conviction_score), 4)
         if self.research_confidence is not None:
             payload["research_confidence"] = round(float(self.research_confidence), 4)
+        if self.memo_quality_score is not None:
+            payload["memo_quality_score"] = round(float(self.memo_quality_score), 4)
         return payload
 
 
@@ -167,6 +173,9 @@ def _risks_from_sources(
     )
     if risk_level:
         bits.append(f"Research risk level: {risk_level}.")
+    risk_tags = list(getattr(research, "risk_tags", None) or [])
+    if risk_tags:
+        bits.append("Risk tags: " + ", ".join(risk_tags) + ".")
     dq = data.get("data_quality_score")
     try:
         if dq is not None and float(dq) < 0.6:
@@ -185,6 +194,8 @@ def _verify_checklist(
     gaps: list[str],
     research_verdict: str | None,
     research_confidence: float | None,
+    unresolved: list[str] | None = None,
+    memo_quality_grade: str | None = None,
 ) -> tuple[list[str], bool]:
     items = list(VERIFY_BASE)
     high_conviction = True
@@ -205,6 +216,21 @@ def _verify_checklist(
         items.append(
             f"Research confidence is low ({float(research_confidence):.0%}) — "
             "prefer a starter size or wait for better evidence."
+        )
+        high_conviction = False
+
+    open_qs = [q for q in (unresolved or []) if str(q).strip()]
+    if open_qs:
+        preview = "; ".join(open_qs[:3])
+        if len(open_qs) > 3:
+            preview += f"; +{len(open_qs) - 3} more"
+        items.append(f"Open research questions remain ({len(open_qs)}): {preview}.")
+        high_conviction = False
+
+    grade = (memo_quality_grade or "").strip().lower()
+    if grade in {"thin", "poor"}:
+        items.append(
+            f"Memo quality grade is {grade} — prefer smaller size or wait for better sources."
         )
         high_conviction = False
 
@@ -265,6 +291,15 @@ def build_decision_pack(
     research_risk = data.get("research_risk_level") or (
         research.research_risk_level if research else None
     )
+    open_qs = unresolved_questions(research.question_outcomes if research else None)
+    risk_tags = list(research.risk_tags) if research is not None else []
+    memo_quality = dict(research.memo_quality or {}) if research is not None else {}
+    memo_grade = str(memo_quality.get("grade") or "").strip() or None
+    memo_score_raw = memo_quality.get("source_quality_score")
+    try:
+        memo_score = float(memo_score_raw) if memo_score_raw is not None else None
+    except (TypeError, ValueError):
+        memo_score = None
 
     verify, high_conviction = _verify_checklist(
         data,
@@ -273,6 +308,8 @@ def build_decision_pack(
         research_confidence=(
             float(research_confidence) if research_confidence is not None else None
         ),
+        unresolved=open_qs,
+        memo_quality_grade=memo_grade,
     )
 
     return DecisionPack(
@@ -294,6 +331,10 @@ def build_decision_pack(
             float(research_confidence) if research_confidence is not None else None
         ),
         research_risk_level=str(research_risk) if research_risk else None,
+        risk_tags=risk_tags,
+        unresolved_questions=open_qs,
+        memo_quality_grade=memo_grade,
+        memo_quality_score=memo_score,
         action_note=str(data.get("action_note") or "") or None,
         gaps=gaps,
         high_conviction=high_conviction,
@@ -339,6 +380,12 @@ def attach_decision_packs(
 
 def format_decision_pack_text(pack: DecisionPack) -> str:
     signal = pack.signal.replace("_", " ")
+    quality = ""
+    if pack.memo_quality_grade:
+        if pack.memo_quality_score is not None:
+            quality = f" · memo {pack.memo_quality_grade} ({pack.memo_quality_score:.2f})"
+        else:
+            quality = f" · memo {pack.memo_quality_grade}"
     lines = [
         f"{pack.name} ({pack.ticker}) — {signal}",
         f"  Signal: {signal}"
@@ -348,13 +395,18 @@ def format_decision_pack_text(pack: DecisionPack) -> str:
             if pack.conviction_score is not None
             else ""
         )
-        + (f" · research {pack.research_verdict}" if pack.research_verdict else ""),
+        + (f" · research {pack.research_verdict}" if pack.research_verdict else "")
+        + quality,
         f"  Thesis: {pack.thesis}",
         f"  Levels: {pack.levels}",
         f"  Size: {pack.size}",
         f"  Risks: {pack.risks}",
-        "  Verify before trade:",
     ]
+    if pack.unresolved_questions:
+        lines.append("  Open questions:")
+        for question in pack.unresolved_questions:
+            lines.append(f"    - {question}")
+    lines.append("  Verify before trade:")
     for item in pack.verify:
         lines.append(f"    - {item}")
     return "\n".join(lines)
@@ -376,7 +428,25 @@ def format_decision_packs_text(packs: list[DecisionPack]) -> str | None:
 
 def format_decision_pack_html(pack: DecisionPack) -> str:
     verify_items = "".join(f"<li>{_escape(item)}</li>" for item in pack.verify)
+    open_items = "".join(
+        f"<li>{_escape(question)}</li>" for question in pack.unresolved_questions
+    )
+    open_block = (
+        f"<div><strong>Open questions:</strong>"
+        f'<ul style="margin:4px 0 0 18px;padding:0">{open_items}</ul></div>'
+        if open_items
+        else ""
+    )
     conf = f"{pack.research_confidence:.0%}" if pack.research_confidence is not None else "—"
+    quality = ""
+    if pack.memo_quality_grade:
+        if pack.memo_quality_score is not None:
+            quality = (
+                f" · memo {_escape(pack.memo_quality_grade)} "
+                f"({pack.memo_quality_score:.2f})"
+            )
+        else:
+            quality = f" · memo {_escape(pack.memo_quality_grade)}"
     return f"""
     <div style="margin:12px 0;padding:10px 0;border-top:1px solid #ddd">
       <strong>{_escape(pack.name)}</strong>
@@ -384,11 +454,12 @@ def format_decision_pack_html(pack: DecisionPack) -> str:
       <div style="font-size:13px;margin-top:6px;line-height:1.45">
         <div><strong>Signal:</strong> {_escape(pack.signal.replace("_", " "))}
           · timing {_escape(pack.timing_signal or "—")}
-          · research {_escape(pack.research_verdict or "—")} ({conf})</div>
+          · research {_escape(pack.research_verdict or "—")} ({conf}){quality}</div>
         <div><strong>Thesis:</strong> {_escape(pack.thesis)}</div>
         <div><strong>Levels:</strong> {_escape(pack.levels)}</div>
         <div><strong>Size:</strong> {_escape(pack.size)}</div>
         <div><strong>Risks:</strong> {_escape(pack.risks)}</div>
+        {open_block}
         <div><strong>Verify before trade:</strong>
           <ul style="margin:4px 0 0 18px;padding:0">{verify_items}</ul>
         </div>

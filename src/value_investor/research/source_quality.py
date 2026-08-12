@@ -94,9 +94,10 @@ def attach_memo_quality(
 ) -> ResearchDocument:
     """Compute and attach memo_quality to a research document."""
     inventory = inspect_local_sources(sources_dir) if sources_dir else {}
+    outcomes = question_outcomes if question_outcomes is not None else list(doc.question_outcomes)
     doc.memo_quality = score_research_sources(
         source_counts=doc.source_counts,
         inventory=inventory,
-        question_outcomes=question_outcomes,
+        question_outcomes=outcomes,
     )
     return doc

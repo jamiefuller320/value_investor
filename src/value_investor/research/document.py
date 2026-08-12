@@ -26,6 +26,18 @@ SECTION_HEADINGS = {
     "research_model_suggestions": "RESEARCH MODEL SUGGESTIONS",
 }
 
+_UNRESOLVED_STATUSES = frozenset({"unresolved", "partially_resolved"})
+
+
+def unresolved_questions(question_outcomes: list[dict[str, Any]] | None) -> list[str]:
+    """Return question text still open after gap-fill / weekly carry-forward."""
+    return [
+        str(row.get("question") or "").strip()
+        for row in (question_outcomes or [])
+        if str(row.get("status") or "").lower() in _UNRESOLVED_STATUSES
+        and str(row.get("question") or "").strip()
+    ]
+
 
 @dataclass
 class ResearchDocument:
@@ -45,6 +57,8 @@ class ResearchDocument:
     research_risk_level: str | None = None
     research_confidence: float | None = None
     research_rationale: str | None = None
+    risk_tags: list[str] = field(default_factory=list)
+    question_outcomes: list[dict[str, Any]] = field(default_factory=list)
     weekly_updates: list[dict[str, str]] = field(default_factory=list)
     source_counts: dict[str, int] = field(default_factory=dict)
     memo_quality: dict[str, Any] = field(default_factory=dict)
@@ -89,6 +103,8 @@ class ResearchDocument:
             "research_risk_level": self.research_risk_level,
             "research_confidence": self.research_confidence,
             "research_rationale": self.research_rationale,
+            "risk_tags": list(self.risk_tags),
+            "question_outcomes": list(self.question_outcomes),
             "weekly_updates": self.weekly_updates,
             "source_counts": self.source_counts,
             "memo_quality": self.memo_quality,
@@ -119,6 +135,10 @@ class ResearchDocument:
                 else None
             ),
             research_rationale=data.get("research_rationale"),
+            risk_tags=[str(tag) for tag in (data.get("risk_tags") or []) if str(tag).strip()],
+            question_outcomes=[
+                dict(row) for row in (data.get("question_outcomes") or []) if isinstance(row, dict)
+            ],
             weekly_updates=list(data.get("weekly_updates") or []),
             source_counts=dict(data.get("source_counts") or {}),
             memo_quality=dict(data.get("memo_quality") or {}),
@@ -193,13 +213,22 @@ def render_research_markdown(doc: ResearchDocument) -> str:
         "",
         f"## {SECTION_HEADINGS['risks_and_flags']}",
         doc.risks_and_flags,
-        "",
-        f"## {SECTION_HEADINGS['news_highlights']}",
-        doc.news_highlights,
     ]
+    if doc.risk_tags:
+        lines.append(f"RiskTags: {', '.join(doc.risk_tags)}")
+    lines.extend(
+        [
+            "",
+            f"## {SECTION_HEADINGS['news_highlights']}",
+            doc.news_highlights,
+        ]
+    )
     verdict_lines = _render_verdict_lines(doc)
     if verdict_lines:
         lines.extend(["", f"## {SECTION_HEADINGS['research_verdict']}", *verdict_lines])
+    outcome_lines = _render_question_outcome_lines(doc)
+    if outcome_lines:
+        lines.extend(["", "## OPEN QUESTIONS", *outcome_lines])
     if doc.weekly_updates:
         lines.extend(["", "## Weekly updates"])
         for item in doc.weekly_updates:
@@ -219,4 +248,15 @@ def _render_verdict_lines(doc: ResearchDocument) -> list[str]:
         lines.append(f"Confidence: {doc.research_confidence:.2f}")
     if doc.research_rationale:
         lines.append(f"Rationale: {doc.research_rationale}")
+    return lines
+
+
+def _render_question_outcome_lines(doc: ResearchDocument) -> list[str]:
+    lines: list[str] = []
+    for row in doc.question_outcomes or []:
+        question = str(row.get("question") or "").strip()
+        if not question:
+            continue
+        status = str(row.get("status") or "unresolved").strip().lower() or "unresolved"
+        lines.append(f"- [{status}] {question}")
     return lines

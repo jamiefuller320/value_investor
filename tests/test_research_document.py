@@ -4,6 +4,7 @@ from value_investor.research.document import (
     ResearchDocument,
     parse_research_sections,
     render_research_markdown,
+    unresolved_questions,
 )
 
 
@@ -87,3 +88,31 @@ def test_render_research_markdown_includes_verdict():
     assert "RESEARCH VERDICT" in markdown
     assert "Verdict: accumulate" in markdown
     assert "Thesis confirmed." in markdown
+
+
+def test_document_round_trip_keeps_outcomes_and_risk_tags():
+    doc = ResearchDocument(
+        ticker="AAA.L",
+        name="Alpha PLC",
+        signal="strong_buy",
+        version=1,
+        created_at="2026-01-01T00:00:00+00:00",
+        updated_at="2026-07-08T00:00:00+00:00",
+        mode="gap_fill",
+        risks_and_flags="Pension deficit remains open.",
+        risk_tags=["pension", "leverage"],
+        question_outcomes=[
+            {"question": "Is the pension deficit funded?", "status": "unresolved"},
+            {"question": "Covenant headroom?", "status": "resolved"},
+        ],
+    )
+    restored = ResearchDocument.from_dict(doc.to_dict())
+    assert restored.risk_tags == ["pension", "leverage"]
+    assert unresolved_questions(restored.question_outcomes) == [
+        "Is the pension deficit funded?"
+    ]
+    markdown = render_research_markdown(restored)
+    assert "RiskTags: pension, leverage" in markdown
+    assert "## OPEN QUESTIONS" in markdown
+    assert "[unresolved] Is the pension deficit funded?" in markdown
+    assert "[resolved] Covenant headroom?" in markdown

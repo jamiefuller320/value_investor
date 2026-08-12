@@ -146,3 +146,39 @@ def test_email_includes_verify_before_trade_section():
     packs_text = format_decision_packs_text([build_decision_pack(_report())])
     assert packs_text is not None
     assert "Thesis:" in packs_text
+
+
+def test_pack_surfaces_unresolved_questions_and_thin_memo_quality():
+    research = ResearchDocument(
+        ticker="AAA.L",
+        name="Alpha PLC",
+        signal="strong_buy",
+        version=2,
+        created_at="2026-07-01T00:00:00+00:00",
+        updated_at="2026-07-08T00:00:00+00:00",
+        mode="gap_fill",
+        investment_thesis="Franchise cash generation supports the cheap valuation.",
+        risks_and_flags="Pension deficit remains open.",
+        risk_tags=["pension"],
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        question_outcomes=[
+            {"question": "Is the pension deficit funded?", "status": "unresolved"},
+            {"question": "Covenant headroom?", "status": "resolved"},
+        ],
+        memo_quality={"grade": "thin", "source_quality_score": 0.34},
+    )
+    pack = build_decision_pack(_report(), research)
+    assert pack.unresolved_questions == ["Is the pension deficit funded?"]
+    assert pack.memo_quality_grade == "thin"
+    assert pack.memo_quality_score == 0.34
+    assert pack.high_conviction is False
+    assert "Risk tags: pension" in pack.risks
+    joined = " ".join(pack.verify).lower()
+    assert "open research questions" in joined
+    assert "thin" in joined
+    text = format_decision_packs_text([pack])
+    assert text is not None
+    assert "Open questions:" in text
+    assert "memo thin" in text

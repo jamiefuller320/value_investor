@@ -113,17 +113,29 @@ function decisionPackHtml(report) {
   const verifyList = verify.length
     ? `<ul class="decision-pack-verify">${verify.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
     : "";
+  const openQs = Array.isArray(pack.unresolved_questions) ? pack.unresolved_questions : [];
+  const openList = openQs.length
+    ? `<p class="small"><strong>Open questions:</strong></p><ul class="decision-pack-verify">${openQs
+        .map((item) => `<li>${esc(item)}</li>`)
+        .join("")}</ul>`
+    : "";
+  const grade = pack.memo_quality_grade
+    ? pack.memo_quality_score != null
+      ? ` · memo ${esc(pack.memo_quality_grade)} (${Number(pack.memo_quality_score).toFixed(2)})`
+      : ` · memo ${esc(pack.memo_quality_grade)}`
+    : "";
   const gapNote = pack.high_conviction
     ? ""
     : '<p class="small decision-pack-caution">Evidence incomplete or cautious — do not size as high-conviction.</p>';
   return `
     <div class="decision-pack">
-      <p class="small decision-pack-title"><strong>Verify before trade</strong></p>
+      <p class="small decision-pack-title"><strong>Verify before trade</strong>${grade}</p>
       ${gapNote}
       <p class="small"><strong>Thesis:</strong> ${esc(pack.thesis || "—")}</p>
       <p class="small"><strong>Levels:</strong> ${esc(pack.levels || "—")}</p>
       <p class="small"><strong>Size:</strong> ${esc(pack.size || "—")}</p>
       <p class="small"><strong>Risks:</strong> ${esc(pack.risks || "—")}</p>
+      ${openList}
       ${verifyList}
     </div>`;
 }
