@@ -11,6 +11,7 @@ from typing import Any
 from value_investor.engineering_queue import snapshot_ingest_health
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
+    compile_ingest_engineering_task_from_trial,
     compile_ingest_engineering_tasks_micro,
     load_engineering_tasks,
 )
@@ -101,6 +102,8 @@ class IngestLoopResult:
     ingest_summary: IngestImprovementSummary | None
     micro_compiled: bool
     micro_compile: dict[str, Any] = field(default_factory=dict)
+    trial_compiled: bool = False
+    trial_compile: dict[str, Any] = field(default_factory=dict)
     stalled: bool = False
     partial: bool = False
     error: str | None = None
@@ -112,6 +115,8 @@ class IngestLoopResult:
             "ingest_summary": self.ingest_summary.to_dict() if self.ingest_summary else None,
             "micro_compiled": self.micro_compiled,
             "micro_compile": self.micro_compile,
+            "trial_compiled": self.trial_compiled,
+            "trial_compile": self.trial_compile,
             "stalled": self.stalled,
             "partial": self.partial,
         }
@@ -214,6 +219,7 @@ def run_weekday_ingest_loop(
     max_runtime_seconds: float = DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS,
     max_bodies: int | None = None,
     record_trial: dict[str, Any] | None = None,
+    pin_tickers: list[str] | None = None,
 ) -> IngestLoopResult:
     """
     Run bounded ingest improvement on the current buy-tier universe, log health,
@@ -237,14 +243,18 @@ def run_weekday_ingest_loop(
             suggestions_path=suggestions_path,
             max_targets=max(1, int(max_targets)),
             require_outstanding_gaps=trial_require_gaps,
+            pin_tickers=pin_tickers,
         )
         trial_ticker = preview[0].ticker if preview else ""
+        if pin_tickers and not trial_ticker:
+            trial_ticker = str(pin_tickers[0] or "").strip().upper()
         params = {
             "max_targets": max_targets,
             "max_bodies": max_bodies,
             "bootstrap_seed_cap": bootstrap_seed_cap,
             "max_runtime_seconds": max_runtime_seconds,
             "require_outstanding_gaps": trial_require_gaps,
+            "pin_tickers": list(pin_tickers or []),
         }
         trial_record = record_ingest_trial(
             title=str(record_trial.get("title") or "Ingest trial"),
@@ -252,6 +262,7 @@ def run_weekday_ingest_loop(
             ticker=trial_ticker,
             params=params,
             review_trigger=str(record_trial.get("review_trigger") or "horizon_scan"),
+            parent_trial_id=str(record_trial.get("parent_trial_id") or ""),
         )
 
     ingest_summary: IngestImprovementSummary | None = None
@@ -266,6 +277,7 @@ def run_weekday_ingest_loop(
             max_runtime_seconds=max_runtime_seconds,
             max_bodies=max_bodies if max_bodies is not None else DEFAULT_INGEST_REFETCH_MAX_BODIES,
             require_outstanding_gaps=trial_require_gaps,
+            pin_tickers=pin_tickers,
         )
     else:
         logger.warning("No reports in %s — skipping ingest-improvement pass", latest_path)
@@ -324,14 +336,35 @@ def run_weekday_ingest_loop(
 
     partial = bool(ingest_summary and ingest_summary.partial)
 
+    finalized_trial: dict[str, Any] | None = None
     if trial_record is not None:
         from value_investor.ingest_trials import finalize_pending_ingest_trial
 
-        finalize_pending_ingest_trial(
+        finalized_trial = finalize_pending_ingest_trial(
             health_before=health_before,
             health_after=health_after,
             ingest_summary=ingest_summary,
         )
+
+    trial_compiled = False
+    trial_compile: dict[str, Any] = {"skipped": True}
+    if finalized_trial and not has_open_ingest_engineering_tasks(tasks_path):
+        trial_compile = compile_ingest_engineering_task_from_trial(
+            finalized_trial,
+            tasks_path=tasks_path,
+            committed_path=tasks_path,
+        )
+        trial_compiled = int(trial_compile.get("compiled_count") or 0) > 0
+    elif finalized_trial and has_open_ingest_engineering_tasks(tasks_path):
+        trial_compile = {
+            "skipped": True,
+            "reason": "open ingest engineering task already queued",
+        }
+
+    if trial_compiled or micro_compiled:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=tasks_path)
 
     return IngestLoopResult(
         health_before=health_before,
@@ -339,6 +372,8 @@ def run_weekday_ingest_loop(
         ingest_summary=ingest_summary,
         micro_compiled=micro_compiled,
         micro_compile=micro_compile,
+        trial_compiled=trial_compiled,
+        trial_compile=trial_compile,
         stalled=stalled,
         partial=partial,
     )

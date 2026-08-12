@@ -358,14 +358,18 @@ def select_ingest_improvement_targets(
     max_targets: int = DEFAULT_INGEST_IMPROVEMENT_CAP,
     backlog_tickers: list[str] | None = None,
     require_outstanding_gaps: bool = False,
+    pin_tickers: list[str] | None = None,
 ) -> list[IngestImprovementTarget]:
     """Rank buy-tier tickers that need ingest hardening before gap-fill."""
     store = ResearchStore(output_dir)
     suggestions_by_ticker = _load_ingest_suggestions(suggestions_path)
     candidates: list[IngestImprovementTarget] = []
+    pin_set = {str(t or "").strip().upper() for t in (pin_tickers or []) if str(t or "").strip()}
 
     for report in reports:
         if report.signal not in ("strong_buy", "buy"):
+            continue
+        if pin_set and report.ticker.upper() not in pin_set:
             continue
         coverage = _filing_coverage(store, report.ticker, output_dir)
         suggestions = suggestions_by_ticker.get(report.ticker.upper(), [])
@@ -525,6 +529,7 @@ def run_ingest_improvement_pass(
     backlog_path: Path = DEFAULT_BACKLOG_PATH,
     max_bodies: int = DEFAULT_INGEST_REFETCH_MAX_BODIES,
     require_outstanding_gaps: bool = False,
+    pin_tickers: list[str] | None = None,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
@@ -547,6 +552,7 @@ def run_ingest_improvement_pass(
         max_targets=max_targets,
         backlog_tickers=pending_backlog or None,
         require_outstanding_gaps=require_outstanding_gaps,
+        pin_tickers=pin_tickers,
     )
     summary = IngestImprovementSummary(targets=targets)
     summary.targets_planned = len(targets)

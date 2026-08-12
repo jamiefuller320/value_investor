@@ -52,7 +52,10 @@ ftse-ingest-loop run --max-targets 1 --record-trial \
 
 Workflow input `record_trial=true` does the same. Trial runs require outstanding ingest gaps
 (indexed_without_body or period bucket gaps) so candidates are highest interest among
-names that still need bodies, not suggestion-rich fully-covered tickers. Outcomes land in
+names that still need bodies, not suggestion-rich fully-covered tickers. When a gap trial
+fails refetch (`0/N` bodies), ingest-loop auto-compiles a scoped engineering task and
+dispatches **engineering-queue**; after the engineering PR merges, engineering-queue chains
+a verification **ingest-loop** rerun pinned to the same ticker. Outcomes land in
 `ingest_trials.json`;
 the monthly horizon scan payload includes `ingest_trials_pending_review` and an
 **INGEST TRIALS REVIEW** section in the agent prompt.

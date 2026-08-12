@@ -54,6 +54,7 @@ def record_ingest_trial(
     ticker: str,
     params: dict[str, Any],
     review_trigger: ReviewTrigger = "horizon_scan",
+    parent_trial_id: str = "",
     path: Path = DEFAULT_TRIALS_PATH,
 ) -> dict[str, Any]:
     """Append a trial record before dispatch; finalized after the ingest loop completes."""
@@ -71,6 +72,8 @@ def record_ingest_trial(
         "completed_at": None,
         "outcome": None,
     }
+    if parent_trial_id.strip():
+        trial["parent_trial_id"] = parent_trial_id.strip()
     trials = list(store.get("trials") or [])
     trials.append(trial)
     store["trials"] = trials
@@ -189,3 +192,60 @@ def mark_trial_reviewed(
         write_json(path, store, compact=False)
         return dict(row)
     raise KeyError(f"Unknown ingest trial id: {trial_id}")
+
+
+def trial_refetch_stats(trial: dict[str, Any]) -> dict[str, int]:
+    """Sum refetch attempted/fetched across primary ingest-improvement steps."""
+    outcome = trial.get("outcome") or {}
+    results = outcome.get("results") or []
+    if not results or not isinstance(results[0], dict):
+        return {"attempted": 0, "fetched": 0}
+    row = results[0]
+    attempted = 0
+    fetched = 0
+    for key in ("ch_refetch", "investegate_refetch", "ticker_rns_refetch", "indexed_refetch"):
+        block = row.get(key) or {}
+        if not isinstance(block, dict):
+            continue
+        attempted += int(block.get("attempted") or 0)
+        fetched += int(block.get("fetched") or 0)
+    return {"attempted": attempted, "fetched": fetched}
+
+
+def trial_needs_gap_engineering(trial: dict[str, Any]) -> bool:
+    """True when a gap-required trial ran refetches but did not close indexed gaps."""
+    if str(trial.get("status") or "") != _STATUS_PENDING:
+        return False
+    if not str(trial.get("ticker") or "").strip():
+        return False
+    params = trial.get("params") or {}
+    if not params.get("require_outstanding_gaps"):
+        return False
+    outcome = trial.get("outcome") or {}
+    if int(outcome.get("delta_filings_with_body") or 0) > 0:
+        return False
+    per_ticker = outcome.get("per_ticker") or []
+    if per_ticker and per_ticker[0].get("improved"):
+        return False
+    stats = trial_refetch_stats(trial)
+    if stats["attempted"] <= 0:
+        return False
+    return stats["fetched"] <= 0
+
+
+def attach_engineering_task_to_trial(
+    trial_id: str,
+    engineering_task_id: str,
+    *,
+    path: Path = DEFAULT_TRIALS_PATH,
+) -> dict[str, Any] | None:
+    path = Path(path)
+    store = load_ingest_trials(path)
+    for row in store.get("trials") or []:
+        if str(row.get("id") or "") != trial_id:
+            continue
+        row["engineering_task_id"] = str(engineering_task_id)
+        store["updated_at"] = datetime.now(UTC).isoformat()
+        write_json(path, store, compact=False)
+        return dict(row)
+    return None

@@ -80,6 +80,55 @@ jobs:
             ftse-engineering --json reprioritize --merged-task-id "$TASK_ID"
           fi
 
+      - name: Evaluate ingest trial rerun after gap-fix merge
+        if: steps.eng_branch.outputs.is_task == 'true'
+        id: trial_rerun
+        run: |
+          TASK_ID=$(python3 - <<'PY'
+          from value_investor.engineering_queue import task_id_from_branch
+          print(task_id_from_branch("${{ github.event.pull_request.head.ref }}") or "")
+          PY
+          )
+          echo "merged_task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+          export TASK_ID
+          python3 - <<'PY' | tee /tmp/trial_rerun.json
+          import json
+          import os
+          from value_investor.engineering_queue import ingest_trial_rerun_dispatch
+          task_id = os.environ.get("TASK_ID", "")
+          print(json.dumps(ingest_trial_rerun_dispatch(task_id), indent=2))
+          PY
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/trial_rerun.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"should_rerun_trial={'true' if data.get('should_dispatch') else 'false'}\n"
+                  f"pin_ticker={data.get('pin_ticker', '')}\n"
+                  f"trial_parent_id={data.get('trial_parent_id', '')}\n"
+                  f"trial_rerun_reason={data.get('reason', '')}\n"
+              )
+          PY
+
+      - name: Rerun ingest trial after engineering merge
+        if: steps.trial_rerun.outputs.should_rerun_trial == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run ingest-loop.yml \
+            -f max_targets=1 \
+            -f max_bodies=40 \
+            -f bootstrap_seed_cap=0 \
+            -f max_runtime_seconds=2100 \
+            -f force=true \
+            -f record_trial=true \
+            -f pin_ticker="${{ steps.trial_rerun.outputs.pin_ticker }}" \
+            -f trial_parent_id="${{ steps.trial_rerun.outputs.trial_parent_id }}"
+          echo "Dispatched ingest-loop verification trial for ${{ steps.trial_rerun.outputs.pin_ticker }}"
+
       - name: Refresh queue from Sunday artifacts when present
         id: refresh
         run: |

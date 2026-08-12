@@ -38,6 +38,14 @@ on:
         description: "Record run in ingest_trials.json for horizon/analysis review"
         type: boolean
         default: false
+      pin_ticker:
+        description: "Pin ingest-improvement to one buy-tier ticker (trial reruns)"
+        type: string
+        default: ""
+      trial_parent_id:
+        description: "Parent trial id when recording a verification rerun"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -170,9 +178,19 @@ jobs:
           fi
           if [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
             ARGS+=(--record-trial)
-            ARGS+=(--trial-title "Single-ticker ingest depth trial")
-            ARGS+=(--trial-summary "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.")
+            if [ -n "${{ github.event.inputs.trial_parent_id }}" ]; then
+              ARGS+=(--trial-title "Ingest trial rerun after engineering")
+              ARGS+=(--trial-summary "Verification rerun for trial ${{ github.event.inputs.trial_parent_id }}")
+              ARGS+=(--trial-parent-id "${{ github.event.inputs.trial_parent_id }}")
+            else
+              ARGS+=(--trial-title "Single-ticker ingest depth trial")
+              ARGS+=(--trial-summary "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.")
+            fi
             ARGS+=(--trial-review-trigger horizon_scan)
+          fi
+          PIN="${{ github.event.inputs.pin_ticker }}"
+          if [ -n "$PIN" ]; then
+            ARGS+=(--pin-ticker "$PIN")
           fi
           EXIT=0
           ftse-ingest-loop "${ARGS[@]}" || EXIT=$?
@@ -194,6 +212,7 @@ jobs:
           chain = partial and targets_deferred > 0
           out.write_text(
               f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n"
+              f"trial_compiled={'true' if data.get('trial_compiled') else 'false'}\n"
               f"partial={'true' if partial else 'false'}\n"
               f"chain_dispatch={'true' if chain else 'false'}\n"
               f"targets_deferred={targets_deferred}\n",
@@ -237,9 +256,11 @@ jobs:
           echo "Dispatched ingest-loop chunk (max_targets=$CHUNK) to drain backlog"
 
       - name: Dispatch engineering queue when tasks were added
-        if: steps.loop.outputs.micro_compiled == 'true'
+        if: >-
+          steps.loop.outputs.micro_compiled == 'true'
+          || steps.loop.outputs.trial_compiled == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run engineering-queue.yml
-          echo "Dispatched engineering-queue after micro-compile"
+          echo "Dispatched engineering-queue after ingest micro-compile or trial gap task"
