@@ -60,8 +60,16 @@ def test_list_trials_pending_review_filters_by_trigger(tmp_path: Path):
             path=path,
         )
         finalize_pending_ingest_trial(
-            health_before={"filings_with_body": 1, "indexed_without_body": 1, "zero_body_buy_tier": 0},
-            health_after={"filings_with_body": 1, "indexed_without_body": 1, "zero_body_buy_tier": 0},
+            health_before={
+                "filings_with_body": 1,
+                "indexed_without_body": 1,
+                "zero_body_buy_tier": 0,
+            },
+            health_after={
+                "filings_with_body": 1,
+                "indexed_without_body": 1,
+                "zero_body_buy_tier": 0,
+            },
             ingest_summary=None,
             path=path,
         )
