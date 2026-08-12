@@ -97,25 +97,6 @@ def test_trial_needs_gap_engineering_detects_zero_yield_refetch(tmp_path: Path):
     assert stats["fetched"] == 0
 
 
-def _vct_gap_data_dir(tmp_path: Path) -> Path:
-    data_dir = tmp_path / "docs" / "data"
-    filings = data_dir / "research" / "VCT.L" / "sources" / "filings"
-    filings.mkdir(parents=True)
-    (filings / "filings_index.json").write_text(
-        json.dumps(
-            {
-                "summary": {"total": 2, "annual": 1, "interim": 1, "with_body": 1},
-                "filings": [
-                    {"period": "annual", "has_body": True},
-                    {"period": "interim", "has_body": False},
-                ],
-            }
-        ),
-        encoding="utf-8",
-    )
-    return data_dir
-
-
 def test_compile_ingest_engineering_task_from_trial(tmp_path: Path):
     trial = _failed_gap_trial(tmp_path)
     eng_path = tmp_path / "engineering_tasks.json"
@@ -124,7 +105,6 @@ def test_compile_ingest_engineering_task_from_trial(tmp_path: Path):
         trial,
         tasks_path=eng_path,
         committed_path=eng_path,
-        data_dir=_vct_gap_data_dir(tmp_path),
     )
     assert result["compiled_count"] == 1
     payload = json.loads(eng_path.read_text(encoding="utf-8"))
