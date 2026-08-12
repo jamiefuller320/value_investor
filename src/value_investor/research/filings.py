@@ -331,6 +331,49 @@ def _filing_text_is_substantive(text: str, *, min_chars: int = 200) -> bool:
     return hits >= 2 or len(text) >= 1_200
 
 
+def _sec_filing_base_url(url: str) -> str | None:
+    match = re.match(
+        r"(https://www\.sec\.gov/Archives/edgar/data/\d+/\d+)/",
+        url,
+        flags=re.I,
+    )
+    return match.group(1) if match else None
+
+
+def _resolve_sec_pdf_candidates(url: str, html: str | None = None) -> list[str]:
+    """Build candidate PDF URLs when a SEC primary doc is cover-only HTML."""
+    candidates: list[str] = []
+    seen: set[str] = set()
+    base = _sec_filing_base_url(url)
+
+    def _add(candidate: str) -> None:
+        cleaned = candidate.strip()
+        if cleaned and cleaned not in seen:
+            candidates.append(cleaned)
+            seen.add(cleaned)
+
+    if url.lower().endswith("-pdf.htm"):
+        _add(url[:-8] + ".pdf")
+
+    if html:
+        for href in re.findall(r'href=["\']([^"\']+\.pdf)["\']', html, flags=re.I):
+            if href.startswith("http"):
+                _add(href)
+            elif base:
+                _add(f"{base}/{href.lstrip('/')}")
+
+    return candidates
+
+
+def _try_sec_linked_pdf_body(url: str, html: str) -> str | None:
+    """Follow SEC -pdf.htm wrappers and inline PDF hrefs to the substantive exhibit."""
+    for pdf_url in _resolve_sec_pdf_candidates(url, html):
+        body = fetch_filing_body(pdf_url, allow_sec_exhibits=False)
+        if body and _filing_text_is_substantive(body, min_chars=400):
+            return body
+    return None
+
+
 def _try_sec_exhibit_body(url: str) -> str | None:
     """When a 6-K primary doc is cover-only, try linked exhibits from the filing index."""
     match = re.match(
@@ -340,7 +383,8 @@ def _try_sec_exhibit_body(url: str) -> str | None:
     )
     if not match:
         return None
-    base, _primary = match.groups()
+    base, primary_name = match.groups()
+    primary_lower = primary_name.lower()
     accession_nodash = base.rsplit("/", 1)[-1]
     if len(accession_nodash) != 18:
         return None
@@ -354,14 +398,26 @@ def _try_sec_exhibit_body(url: str) -> str | None:
         return None
 
     candidates: list[str] = []
-    for href in re.findall(r'href="([^"]+\.htm)"', html, flags=re.I):
+    for href in re.findall(r'href="([^"]+\.(?:htm|pdf))"', html, flags=re.I):
         if any(skip in href.lower() for skip in ("-index.htm", ".xsd", ".xml", ".xsl")):
             continue
         if href.startswith("http"):
-            candidates.append(href)
+            candidate = href
         else:
-            candidates.append(f"{base}/{href.lstrip('/')}")
-    for exhibit_url in candidates[:6]:
+            candidate = f"{base}/{href.lstrip('/')}"
+        name = candidate.rsplit("/", 1)[-1].lower()
+        if name == primary_lower:
+            continue
+        candidates.append(candidate)
+
+    def _candidate_rank(candidate: str) -> tuple[int, str]:
+        name = candidate.rsplit("/", 1)[-1].lower()
+        if name.endswith(".pdf"):
+            return (0, name)
+        return (1, name)
+
+    candidates.sort(key=_candidate_rank)
+    for exhibit_url in candidates[:8]:
         body = fetch_filing_body(exhibit_url, allow_sec_exhibits=False)
         if body and _filing_text_is_substantive(body, min_chars=400):
             return body
@@ -2385,11 +2441,16 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
             return None
     else:
         if "sec.gov" in url:
-            text = _extract_sec_html_text(raw.decode("utf-8", errors="replace"))
+            html = raw.decode("utf-8", errors="replace")
+            text = _extract_sec_html_text(html)
             if allow_sec_exhibits and not _filing_text_is_substantive(text, min_chars=400):
-                exhibit = _try_sec_exhibit_body(url)
-                if exhibit:
-                    text = exhibit
+                pdf_body = _try_sec_linked_pdf_body(url, html)
+                if pdf_body:
+                    text = pdf_body
+                else:
+                    exhibit = _try_sec_exhibit_body(url)
+                    if exhibit:
+                        text = exhibit
         elif "investegate.co.uk" in url:
             html = raw.decode("utf-8", errors="replace")
             text = _extract_investegate_html_text(html)
