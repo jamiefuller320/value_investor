@@ -2,20 +2,20 @@
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
   "success_criterion": "Primary AI-judgment track outperforms ^FTSE after costs; rules track is the control datum.",
-  "primary_excess_after_costs": -0.0789,
-  "control_excess_after_costs": -0.168,
+  "primary_excess_after_costs": -0.0778,
+  "control_excess_after_costs": -0.167,
   "beat_market": false,
   "beat_control": true,
   "verdict": "underperforming",
   "reviews": {
     "rules": {
-      "reviewed_at": "2026-08-12T09:36:42.012926+00:00",
+      "reviewed_at": "2026-08-13T08:27:25.441397+00:00",
       "enough_history": true,
-      "applied": true,
+      "applied": false,
       "knobs_before": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.55,
+        "min_conviction": 0.6,
         "sector_cap": 0.2
       },
       "knobs_after": {
@@ -24,11 +24,9 @@
         "min_conviction": 0.6,
         "sector_cap": 0.2
       },
-      "proposed_changes": {
-        "min_conviction": 0.6
-      },
+      "proposed_changes": {},
       "reasons": [
-        "High cost drag (19.5%) \u2014 raise min_conviction."
+        "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
         "portfolio_value": 862.27,
@@ -41,11 +39,11 @@
         "sell_count": 15,
         "positions": 3,
         "cash_fraction": 0.0,
-        "equity_marks": 9,
+        "equity_marks": 10,
         "max_sector_weight": 0.3333,
         "dominant_sector": "Agriculture/Commodities",
-        "benchmark_return": 0.0303,
-        "excess_after_costs": -0.168,
+        "benchmark_return": 0.0293,
+        "excess_after_costs": -0.167,
         "note": "",
         "epoch": {
           "started_at": "2026-08-12T09:36:42.012926+00:00",
@@ -55,7 +53,7 @@
             "min_conviction": 0.6,
             "sector_cap": 0.2
           },
-          "seeded_from_history": false,
+          "seeded_from_history": true,
           "baseline_nav": 862.27,
           "portfolio_value": 862.27,
           "total_return": 0.0,
@@ -66,7 +64,7 @@
           "sell_count": 0,
           "positions": 3,
           "cash_fraction": 0.0,
-          "equity_marks": 0,
+          "equity_marks": 1,
           "max_sector_weight": 0.3333,
           "dominant_sector": "Agriculture/Commodities",
           "benchmark_return": null,
@@ -74,101 +72,30 @@
           "note": "Insufficient epoch marks for benchmark span."
         }
       },
-      "counterfactual_preview": {
-        "scope": "rebalance_log_replay",
-        "knobs": {
-          "max_positions": 3,
-          "skip_timing_wait": true,
-          "min_conviction": 0.6,
-          "sector_cap": 0.2,
-          "use_adjusted_signal": false,
-          "require_research_accumulate": false,
-          "exit_confirm_screens": 2,
-          "candidate_source": "auto"
-        },
-        "used_screen_buy_tier_pool": true,
-        "log_entries_total": 5,
-        "log_entries_replayed": 5,
-        "lookback_days": null,
-        "replay_from": "2026-07-20T21:32:40.266505+01:00",
-        "replay_to": "2026-08-12T10:36:12.231162+01:00",
-        "simulated_nav": 970.87,
-        "baseline_nav": 1000.0,
-        "simulated_return": -0.0291,
-        "simulated_total_costs": 29.13,
-        "simulated_cost_drag": 0.0291,
-        "simulated_trade_count": 3,
-        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-        "actual_nav": 862.27,
-        "actual_return_over_window": -0.1377,
-        "actual_total_costs_over_window": 194.99,
-        "actual_cost_drag_over_window": 0.195,
-        "return_delta_vs_actual": 0.1086,
-        "cost_drag_delta_vs_actual": 0.1659,
-        "archive_rebalance_replay": {
-          "scope": "archive_rebalance_replay",
-          "knobs": {
-            "max_positions": 3,
-            "skip_timing_wait": true,
-            "min_conviction": 0.6,
-            "sector_cap": 0.2,
-            "use_adjusted_signal": false,
-            "require_research_accumulate": false
-          },
-          "archive_passes_replayed": 8,
-          "archive_replay_from": "2026-07-24T14:26:13.037476+00:00",
-          "archive_replay_to": "2026-08-10T20:14:51.755918+00:00",
-          "log_replay_from": "2026-07-20T21:32:40.266505+01:00",
-          "log_replay_to": "2026-08-12T10:36:12.231162+01:00",
-          "log_entries_replayed": 5,
-          "simulated_nav": 1000.0,
-          "baseline_nav": 1000.0,
-          "simulated_return": 0.0,
-          "simulated_total_costs": 0,
-          "simulated_cost_drag": 0.0,
-          "simulated_trade_count": 0,
-          "limitations": "Observe-only archive walk \u2014 one rebalance per archived weekly screen from first logged pass. Does not mutate live knobs. AI overlay gates need PIT research joins for ai_judgment tracks (L113).",
-          "actual_nav": 855.57,
-          "actual_return_over_window": -0.1444,
-          "actual_total_costs_over_window": 194.99,
-          "actual_cost_drag_over_window": 0.195,
-          "return_delta_vs_actual": 0.1444,
-          "cost_drag_delta_vs_actual": 0.195
-        },
-        "archive_vs_log": {
-          "log_entries_replayed": 5,
-          "archive_passes_replayed": 8,
-          "log_return_delta_vs_actual": 0.1086,
-          "archive_return_delta_vs_actual": 0.1444,
-          "return_delta_gap_archive_minus_log": 0.0358,
-          "log_simulated_return": -0.0291,
-          "archive_simulated_return": 0.0
-        }
-      },
-      "note": "Applied clamped knob updates from decision review; started new knob epoch.",
+      "note": "Reviewed; no knob changes to apply.",
       "track_id": "rules",
       "track_label": "Screen rules (control)",
       "is_primary_learning_track": false,
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "ai_judgment": {
-      "reviewed_at": "2026-08-12T09:38:13.804462+00:00",
+      "reviewed_at": "2026-08-13T08:27:25.495495+00:00",
       "enough_history": true,
       "applied": true,
       "knobs_before": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.05,
+        "min_conviction": 0.1,
         "sector_cap": 0.2
       },
       "knobs_after": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.1,
+        "min_conviction": 0.15,
         "sector_cap": 0.2
       },
       "proposed_changes": {
-        "min_conviction": 0.1
+        "min_conviction": 0.15
       },
       "reasons": [
         "High cost drag (12.5%) \u2014 raise min_conviction."
@@ -184,18 +111,18 @@
         "sell_count": 6,
         "positions": 3,
         "cash_fraction": 0.0,
-        "equity_marks": 8,
+        "equity_marks": 9,
         "max_sector_weight": 0.3333,
         "dominant_sector": "Industrials",
-        "benchmark_return": 0.0193,
-        "excess_after_costs": -0.0789,
+        "benchmark_return": 0.0182,
+        "excess_after_costs": -0.0778,
         "note": "",
         "epoch": {
-          "started_at": "2026-08-12T09:38:13.804462+00:00",
+          "started_at": "2026-08-13T08:27:25.495495+00:00",
           "knobs": {
             "max_positions": 3,
             "skip_timing_wait": true,
-            "min_conviction": 0.1,
+            "min_conviction": 0.15,
             "sector_cap": 0.2
           },
           "seeded_from_history": false,
@@ -222,7 +149,7 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.1,
+          "min_conviction": 0.15,
           "sector_cap": 0.2
         },
         "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
@@ -245,11 +172,11 @@
       "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on this track; AI-judgment is the primary learning track, rules is the control."
     },
     "momentum_grace": {
-      "reviewed_at": "2026-08-12T09:38:13.931369+00:00",
+      "reviewed_at": "2026-08-13T08:27:25.559828+00:00",
       "enough_history": true,
-      "applied": true,
+      "applied": false,
       "knobs_before": {
-        "max_positions": 4,
+        "max_positions": 3,
         "skip_timing_wait": true,
         "min_conviction": 0.0,
         "sector_cap": 0.3
@@ -260,11 +187,9 @@
         "min_conviction": 0.0,
         "sector_cap": 0.3
       },
-      "proposed_changes": {
-        "max_positions": 3
-      },
+      "proposed_changes": {},
       "reasons": [
-        "Weak excess after costs (-2.7%) \u2014 reduce max_positions."
+        "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
         "portfolio_value": 970.87,
@@ -277,11 +202,11 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.0,
-        "equity_marks": 5,
+        "equity_marks": 6,
         "max_sector_weight": 0.2,
         "dominant_sector": "Agriculture/Commodities",
-        "benchmark_return": -0.0025,
-        "excess_after_costs": -0.0266,
+        "benchmark_return": -0.0035,
+        "excess_after_costs": -0.0256,
         "note": "",
         "epoch": {
           "started_at": "2026-08-12T09:38:13.931369+00:00",
@@ -291,7 +216,7 @@
             "min_conviction": 0.0,
             "sector_cap": 0.3
           },
-          "seeded_from_history": false,
+          "seeded_from_history": true,
           "baseline_nav": 970.87,
           "portfolio_value": 970.87,
           "total_return": 0.0,
@@ -302,7 +227,7 @@
           "sell_count": 0,
           "positions": 5,
           "cash_fraction": 0.0,
-          "equity_marks": 0,
+          "equity_marks": 1,
           "max_sector_weight": 0.2,
           "dominant_sector": "Agriculture/Commodities",
           "benchmark_return": null,
@@ -310,47 +235,26 @@
           "note": "Insufficient epoch marks for benchmark span."
         }
       },
-      "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
-        "knobs": {
-          "max_positions": 3,
-          "skip_timing_wait": true,
-          "min_conviction": 0.0,
-          "sector_cap": 0.3
-        },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 3,
-        "blocked_buys": 2,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 29.15,
-        "simulated_total_costs": 17.49,
-        "estimated_cost_savings_gbp": 11.66,
-        "actual_cost_drag": 0.0291,
-        "simulated_cost_drag": 0.0175,
-        "cost_drag_delta": 0.0117,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
-      },
-      "note": "Applied clamped knob updates from decision review; started new knob epoch.",
+      "note": "Reviewed; no knob changes to apply.",
       "track_id": "momentum_grace",
       "track_label": "Screen rules + momentum grace",
       "is_primary_learning_track": false,
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "technical": {
-      "reviewed_at": "2026-08-12T09:38:13.942676+00:00",
+      "reviewed_at": "2026-08-13T08:27:25.561698+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.55,
+        "min_conviction": 0.6,
         "sector_cap": 0.2
       },
       "knobs_after": {
         "max_positions": 3,
         "skip_timing_wait": true,
-        "min_conviction": 0.55,
+        "min_conviction": 0.6,
         "sector_cap": 0.2
       },
       "proposed_changes": {},
@@ -359,7 +263,7 @@
         "Large idle cash with low cost drag \u2014 ease min_conviction."
       ],
       "metrics": {
-        "portfolio_value": 991.28,
+        "portfolio_value": 991.29,
         "contributed_capital": 1000.0,
         "total_return": -0.0087,
         "total_costs": 8.71,
@@ -370,8 +274,8 @@
         "positions": 3,
         "cash_fraction": 0.707,
         "equity_marks": 2,
-        "max_sector_weight": 0.6676,
-        "dominant_sector": "Industrials",
+        "max_sector_weight": 0.3343,
+        "dominant_sector": "Consumer Cyclical",
         "benchmark_return": null,
         "excess_after_costs": null,
         "note": "Benchmark unavailable; excess_after_costs omitted."
@@ -381,19 +285,19 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.5,
+          "min_conviction": 0.55,
           "sector_cap": 0.2
         },
         "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 2,
-        "blocked_buys": 1,
+        "executed_trades": 3,
+        "blocked_buys": 0,
         "blocked_orphan_sells": 0,
         "actual_total_costs": 8.71,
-        "simulated_total_costs": 5.81,
-        "estimated_cost_savings_gbp": 2.9,
+        "simulated_total_costs": 8.71,
+        "estimated_cost_savings_gbp": 0.0,
         "actual_cost_drag": 0.0087,
-        "simulated_cost_drag": 0.0058,
-        "cost_drag_delta": 0.0029,
+        "simulated_cost_drag": 0.0087,
+        "cost_drag_delta": 0.0,
         "log_entries_replayed": 1,
         "graduates_at_acted_entries": 2
       },

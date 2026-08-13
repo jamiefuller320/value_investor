@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-12T10:36:31.419684+01:00",
+    "local_time": "2026-08-13T09:27:15.390445+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-12T08:00:00+01:00",
-    "settle_at": "2026-08-12T09:15:00+01:00",
+    "market_open_at": "2026-08-13T08:00:00+01:00",
+    "settle_at": "2026-08-13T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -16,7 +16,7 @@
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
       "Conviction floor: min_conviction=0.00.",
       "Sector cap: at most 1 name(s) per known sector (cap=30%).",
-      "Ranking: highest conviction_score first, keep at most 4 names.",
+      "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
       "Costs: 3.0% applied on each buy and sell.",
       "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
@@ -24,9 +24,9 @@
       "Dust guard: skip trim/top-up adjustments below \u00a310.",
       "Momentum grace: holdings that leave buy-tier but still show strong price trend may be kept for up to 6 weeks with tightened trailing stops."
     ],
-    "nav": 958.86,
+    "nav": 958.27,
     "cash": 0.0,
-    "max_positions": 4,
+    "max_positions": 3,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
     "skip_timing_wait": true,
@@ -34,35 +34,28 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 239.71,
+    "target_sleeve_value": 319.42,
     "targets": [
       {
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
+        "ticker": "DOM.L",
+        "name": "Domino's Pizza Group plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6883000000000001,
-        "price": 118.6312
+        "conviction_score": 1.0,
+        "price": 196.9
       },
       {
-        "ticker": "AEP.L",
-        "name": "AEP Plantations Plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.6488000000000002,
-        "price": 178.8
+        "ticker": "GSK.L",
+        "name": "GSK plc",
+        "signal": "buy",
+        "conviction_score": 1.0,
+        "price": 1850.5
       },
       {
-        "ticker": "SN.L",
-        "name": "Smith & Nephew plc",
+        "ticker": "POLN.L",
+        "name": "Pollen Street Group Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.6093000000000001,
-        "price": 1102.5
-      },
-      {
-        "ticker": "JUP.L",
-        "name": "Jupiter Fund Management Plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.6003000000000001,
-        "price": 160.8
+        "conviction_score": 0.9903000000000004,
+        "price": 840.0
       }
     ],
     "anticipated_exits": [],
@@ -87,6 +80,20 @@
         "reason": "still buy-tier",
         "stop_loss": null,
         "take_profit": null
+      },
+      {
+        "ticker": "AEP.L",
+        "action": "grace_hold",
+        "reason": "still buy-tier",
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "JUP.L",
+        "action": "grace_hold",
+        "reason": "still buy-tier",
+        "stop_loss": null,
+        "take_profit": null
       }
     ],
     "anticipated_trims": [],
@@ -94,40 +101,32 @@
     "anticipated_holds": [],
     "skipped": [
       {
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
+        "ticker": "DOM.L",
+        "name": "Domino's Pizza Group plc",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 239.71,
-        "conviction_score": 0.6883000000000001,
+        "target_value": 319.42,
+        "conviction_score": 1.0,
         "signal": "strong_buy"
       },
       {
-        "ticker": "AEP.L",
-        "name": "AEP Plantations Plc",
+        "ticker": "GSK.L",
+        "name": "GSK plc",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 239.71,
-        "conviction_score": 0.6488000000000002,
-        "signal": "strong_buy"
+        "target_value": 319.42,
+        "conviction_score": 1.0,
+        "signal": "buy"
       },
       {
-        "ticker": "SN.L",
-        "name": "Smith & Nephew plc",
+        "ticker": "POLN.L",
+        "name": "Pollen Street Group Limited",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 239.71,
-        "conviction_score": 0.6093000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "ticker": "JUP.L",
-        "name": "Jupiter Fund Management Plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 239.71,
-        "conviction_score": 0.6003000000000001,
+        "target_value": 319.42,
+        "conviction_score": 0.9903000000000004,
         "signal": "strong_buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 4 equal-weight sleeve(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s)."
   },
   "alerts": [
     {
@@ -136,7 +135,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 184.0,
+      "mark": 182.39999389648438,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -147,7 +146,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1647.60302734375,
+      "mark": 1636.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -169,7 +168,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 178.8000030517578,
+      "mark": 178.60000610351562,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -180,7 +179,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 160.8000030517578,
+      "mark": 163.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -193,7 +192,7 @@
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.03,
-      "max_positions": 4,
+      "max_positions": 3,
       "reporting_currency": "GBP",
       "hedge_assumption": "none",
       "id": "e9fa6e19-8b8d-4c3e-83bc-b97c179ab590",
@@ -422,9 +421,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-13T09:27:15.390445+01:00",
+        "portfolio_value": 958.27,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-12T10:36:31.419684+01:00",
+    "last_mark_at": "2026-08-13T09:27:15.390445+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -434,7 +449,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "momentum_grace",
-    "generated_at": "2026-08-12T09:36:40.791650+00:00",
+    "generated_at": "2026-08-13T08:27:24.459125+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -453,7 +468,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "momentum_grace",
-    "generated_at": "2026-08-12T09:36:40.792081+00:00",
+    "generated_at": "2026-08-13T08:27:24.459574+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -544,7 +559,7 @@
       "swap_rotations": 0
     }
   },
-  "generated_at": "2026-08-12T09:36:40.792467+00:00",
+  "generated_at": "2026-08-13T08:27:24.459985+00:00",
   "track_id": "momentum_grace",
   "track_label": "Screen rules + momentum grace",
   "is_primary_learning_track": false,
