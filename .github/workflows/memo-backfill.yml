@@ -1,0 +1,62 @@
+name: Memo backfill (buy-tier)
+
+# Batch-create research memos for buy-tier names with committed ingest but no
+# published memo. Re-dispatch until docs/data/memo_backfill_state.json shows
+# remaining: [].
+on:
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: "Max new memos per run"
+        required: false
+        default: "6"
+        type: string
+
+concurrency:
+  group: memo-backfill
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  memo-backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install system deps (CH accounts OCR)
+        run: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Show backlog
+        run: ftse-research-backfill --status
+
+      - name: Run memo backfill batch
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          ftse-research-backfill --batch-size "${{ inputs.batch_size }}" -v
+
+      - name: Sync main before commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin "${{ github.ref_name }}"
+
+      - name: Commit memo backfill artifacts
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: memo backfill batch [skip ci]"
+          file_pattern: |
+            docs/research/*
+            docs/data/research/**
+            docs/data/latest.json
+            docs/data/memo_backfill_state.json
+          skip_fetch: false
