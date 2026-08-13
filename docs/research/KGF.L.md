@@ -1,0 +1,99 @@
+# Kingfisher plc (KGF.L) — Research memo
+
+_Version 1 · Updated 2026-08-13T07:13:35.402338+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Kingfisher is a pan-European home-improvement retailer (B&Q, Screwfix, Castorama, Brico Dépôt) whose shares screen as a buy on cheapness (P/B 0.88), free-cash-flow yield, dividend continuity and balance-sheet quality, with seven of 22 quantitative models passing across all four factor families. FY 25/26 results (year ended 31 January 2026) show adjusted PBT up 6% to £560m, FCF of £512m and net leverage reduced to 1.4×, alongside a renewed £300m buyback and flat 12.40p dividend. The central debate is whether structural gains in UK trade, e-commerce and marketplace (trade penetration 30%, e-commerce 21%) can offset cyclical softness in France and continental big-ticket categories, and whether sub-10% ROCE and recurring adjusting charges fully explain the discount to book. Q1 26/27 trading was resilient but LFL-negative on weather, with management reiterating FY guidance.
+
+## INVESTMENT THESIS
+For a value investor, Kingfisher offers asset-backed cheapness with a credible capital-return wrapper. The screen flags Schloss Low P/B, Deep Value and FCF Yield alongside Dividend Growth, Piotroski F-Score, Earnings Quality and Financial Health — a profile consistent with a cash-generative, below-book retailer rather than a deep cyclical trap. Reported P/B of 0.88 and D/E of 38% sit on a balance sheet the company describes as investment-grade (BBB/Stable at Fitch and S&P), with £1.1bn+ liquidity, covenant headroom (interest cover requirement met at 31 January 2026), and net debt/adjusted EBITDA at 1.4× versus a 2.0× ceiling.
+
+Business quality is uneven but improving where it matters for the valuation anchor. UK & Ireland (52% of sales) delivered retail profit of £575m at an 8.5% margin, with B&Q LFL +3.3% and Screwfix +3.2%; gross margin expanded 80bps group-wide to 38.1% on sourcing scale, marketplace/retail media and inventory discipline. Management has returned £1.2bn via buybacks since September 2021 and announced a further £300m programme, signalling confidence in surplus capital after capex (~£388m) and a maintained dividend. The hidden asset angle is material: an October 2025 external valuation placed the property portfolio at £2.8bn on a sale-and-leaseback basis versus £2.2bn net book value.
+
+The screen’s “quality” and “risk” passes are partially validated by filing evidence — five-day inventory improvement, FCF broadly stable at ~£512m for two years, and strategic execution in trade (+23% ex-Screwfix) and marketplace (GMV +58% to £518m). The offset is that reported ROE (3.9% on screen inputs) and group ROCE (8.2% vs WACC 8.4%) remain thin, and statutory earnings are heavily adjusted. Value investors buying here are essentially underwriting UK execution, continued FCF conversion, and book-value support, not a re-rating on earnings momentum alone.
+
+## FINANCIAL REVIEW
+**Annual results (FY 25/26, year ended 31 January 2026)** — sourced from Final Results RNS body extract (24 March 2026).
+
+| Metric | FY 25/26 | FY 24/25 | Change |
+|--------|----------|----------|--------|
+| Total sales | £12,945m | £12,784m | +1.3% |
+| Underlying LFL sales | +1.4% | — | — |
+| Gross margin | 38.1% | 37.3% | +80bps |
+| Retail profit | £734m | £696m | +5.4% |
+| Adjusted PBT | £560m | £528m | +6.0% |
+| Adjusted basic EPS | 23.8p | 20.7p | +14.9% |
+| Statutory PBT | £378m | £307m | +23.0% |
+| Statutory basic EPS | 14.0p | 10.1p | +39.5% |
+| Free cash flow | £512m | £511m | +0.1% |
+| Net debt | £1,878m | £2,015m | −£137m |
+| Net leverage (net debt/adj. EBITDA) | 1.4× | 1.6× | −0.2× |
+| Total dividend | 12.40p | 12.40p | flat |
+| Post-tax ROCE | 8.2% | 7.4% | +80bps |
+
+Revenue growth was volume-led in the UK (+3.3% LFL UK & Ireland) but offset by France (group LFL in France −2.2%) and Poland (−1.1%). Excluding Romania (disposed May 2025), total sales rose 1.8%. Adjusted profit growth reflected gross margin expansion and lower net finance costs (£91m vs £100m), partly offset by higher central costs (+£18m). Statutory PBT benefited from lower adjusting charges (£182m vs £221m) but still included £111m of store/goodwill impairments, a £31m Romania disposal loss, and full impairment of the Turkey joint venture (Koçtaş carrying value reduced to nil).
+
+Cash flow remained robust: operating cash flow before leases £1,433m; working capital inflow £74m (five-day inventory reduction); gross capex £388m (+22%); FCF £512m. Capital allocation: £218m dividends, £256m buybacks, net debt reduction. Pension: net defined-benefit asset £83m (UK surplus £181m; overseas net deficit £98m); employer contributions suspended to July 2028 per agreed funding principles.
+
+Geographic profit mix underscores concentration risk: UK & Ireland ROCE 15.5% vs France 4.4% and Poland 6.1%. France retail profit £97m at 2.5% margin — management targets 5–7% medium term but notes market decline of ~10% since 2024 delays timing.
+
+**Trend context (prior years):** Yahoo `financials_annual.json` aligns with filing statutory figures for FY 24/25 and FY 25/26 (e.g. revenue £12.784bn → £12.945bn; statutory net income £185m → £245m) and shows a longer erosion in reported earnings from FY 2023 (£471m net income on £13.06bn revenue) through FY 24/25, before FY 25/26 recovery on an adjusted basis. Primary filing comparatives confirm adjusted EPS progression 20.7p → 23.8p; statutory EPS remains more volatile due to adjusting items.
+
+**Interim / trading update coverage:** The filings index contains **no interim or half-year results** (`interim: 0`). The Q1 Trading Update (26 May 2026) provides the most recent operational read:
+
+- Underlying LFL (0.7)%; total sales including marketplace GMS +0.8%
+- Trade sales +17% ex-Screwfix; e-commerce +14% ex-Screwfix; marketplace GMV +39% to £163m
+- Banner split: Screwfix LFL +4.1%; B&Q LFL (4.1)% on late spring/seasonal weakness; France LFL (2.1)%; Poland (0.2)% outperforming market
+- FY 26/27 guidance unchanged: adjusted PBT £565m–£625m; FCF £450m–£510m; £300m buyback ongoing
+- First standalone TradePoint store opened
+
+Q1 confirms strategic drivers (trade, digital) are intact but near-term top-line is weather- and cycle-sensitive; B&Q seasonal exposure remains a swing factor.
+
+**Annual Financial Report (2 April 2026):** Publication notice only — no additional financial data in the extracted body. Full accounts are referenced on NSM/company website but not parsed here.
+
+**Data gaps:** No H1 26/27 interim filing in corpus; H2 25/26 detail only via full-year release. Segment statutory cash flows and full going-concern wording not separately extracted from Annual Report body.
+
+## RISKS AND RED FLAGS
+**Cyclical / demand:** Management describes “mixed consumer environment” with elevated savings rates in France; Q1 markets declined low single digits across geographies. Big-ticket (15% of sales) remains subdued — bathroom weakness cited in Q1 with reviews planned for 2026. Late-spring weather drove B&Q LFL (4.1)% in Q1 against tough comps. Screen cyclical overlay not triggered, but revenue is inherently tied to housing turnover and discretionary DIY spend.
+
+**Geographic / competitive:** France is structurally challenged — market down ~3% in FY 25/26, Castorama LFL (2.2)%, goodwill impairment charges, and retail margin only 2.5% vs a 5–7% medium-term target contingent on market recovery. Poland retail profit fell 6.4% to £87m. Screwfix France still loss-making (£31m retail loss). Filing language merges “changing customer expectations and competitor behaviour” into a single market-landscape risk and adds technology-resilience risk — relevant given 21% e-commerce penetration and AI/marketplace investment.
+
+**Adjusting items / accounting:** Adjusting charges of £182m (FY 25/26) and £221m (prior year) create a persistent gap between adjusted EPS (23.8p) and statutory EPS (14.0p). Impairments (£111m store/goodwill), Turkey JV write-down, and Romania disposal loss (£31m) are not one-offs in pattern. Dividend cover 1.9× sits below management’s 2.25–2.75× target range — flat dividend maintained via adjusted earnings and buybacks.
+
+**Pension:** Net £83m asset masks overseas £98m deficit; 2025 UK actuarial valuation ongoing. Contribution holiday to July 2028 reduces near-term cash drain but leaves longevity/rates exposure.
+
+**Balance sheet / leverage:** Net leverage improved and covenants complied, but £2,238m lease liabilities underpin much of “net debt”; interest cover covenant excludes lease interest. Liquidity is strong (£462m cash + undrawn £650m RCF) — not a near-term stress case, but fixed-charge burden rises if consumer downturn compresses EBITDA.
+
+**Governance / sentiment:** Eve Henrikson appointed non-executive director (effective September 2026) to strengthen digital expertise — positive but untested. News flow flagged Kingfisher as the most-shorted UK stock of 2025 (Investment Week, 21 January 2026), suggesting bearish positioning despite recent results strength.
+
+**Regulatory / tax:** EC state aid refund (£64m plus interest) boosted prior-period cash but is non-recurring; adjusted ETR 26% with sensitivity to geographic profit mix.
+
+No explicit going-concern qualification appears in the extracted Final Results body; principal risks are cross-referenced to the Annual Report, which was not fully extracted.
+
+RiskTags: cyclical, competitive, pension, accounting, leverage
+RiskTags: cyclical, competitive, pension, accounting, leverage
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is moderate-to-heavy on results and capital returns, lighter on structural M&A.
+
+**Results and capital allocation (March 2026):** Final results drove widespread coverage — e.g. “Kingfisher flies higher as £300m buyback renewed as profits improve” (Proactive Investors, 24 March 2026); “Kingfisher keeps its focus on trade customers” (Investors’ Chronicle, 24 March 2026). Themes: profit growth, renewed £300m buyback, trade/digital strategy, European weakness.
+
+**Trading update (May 2026):** “Kingfisher Like-for-Like Sales Fall Despite Tool Business Boost” (Wall Street Journal via yfinance, 26 May 2026) — Screwfix +4.1% LFL but group LFL negative on late spring; management affirmed guidance.
+
+**Buyback execution (2026):** Repeated TipRanks headlines on buyback tranches and share cancellations (4 August, 11 August 2026).
+
+**Analyst sentiment:** Mixed fine-tuning — “Kingfisher (LSE:KGF) Stock Fair Value Edges Lower As Analysts Fine Tune Targets” (Yahoo Finance, 16 June 2026); UBS neutral FTSE view cited (Kalkine Media, 25 March 2026). Bearish third-party view: “Kingfisher Plc: Green Shoots Likely To Be Cut Off” (Seeking Alpha, 28 March 2026).
+
+**Short interest / sentiment:** “Kingfisher takes the perch as most shorted UK stock of 2025” (Investment Week, 21 January 2026) — partially contradicted later by “B&Q owner Kingfisher confounds short sellers with strong sales growth” (Financial Times, 23 September 2025).
+
+**Governance:** Directorate change — Eve Henrikson board appointment (RNS, 31 March 2026).
+
+**Noise filter:** Several yfinance/Google hits conflate Kingfisher plc with unrelated mining entities (e.g. Barrick/Kingfisher mining, July 2026) — excluded as irrelevant.
+
+Overall: material news centres on FY results, buybacks, Q1 weather impact and analyst target drift; no major M&A or regulatory enforcement actions identified in the manifest.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Primary filings corroborate the screen’s cheapness, FCF and balance-sheet case and ongoing capital returns, but cyclical demand, France profitability gap and the adjusted-to-statutory earnings divergence warrant measured sizing rather than full-conviction endorsement of the buy signal alone.

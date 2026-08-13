@@ -1,0 +1,97 @@
+# Drax Group plc (DRX.L) — Research memo
+
+_Version 1 · Updated 2026-08-13T07:10:55.593355+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Drax Group is a UK-listed renewable and flexible power generator pivoting from biomass-heavy earnings toward a broader portfolio of batteries, gas peakers, solar/wind and optimisation platforms. The quantitative screen flags a **buy** on cash yield, dividend and composite value metrics, but headline P/E (91x) and ROE (0.8%) reflect depressed reported earnings after impairments, not classic earnings cheapness. FY2025 Adjusted EBITDA was £947m (down 11% YoY); H1 2026 fell further to £279m on lower power prices, though management reiterates FY2026 consensus (~£665m) and targets £650–800m by 2029. The central debate is whether contracted cash flows, capital returns and the BSIF/BESS growth plan offset biomass policy risk, leverage from the ~£1.1bn BSIF deal, and cyclical power-price exposure.
+
+## INVESTMENT THESIS
+For a value investor, Drax offers a **cash-and-contracts** rather than **P/E** story. The screen passes seven of 22 models across all four families (cheapness, dividend, GARP, risk), with composite score 67% versus sector-relative 47%. Standout inputs include **FCF yield ~21%** (Yahoo FCF £516m), **4.2% dividend yield**, Magic Formula / Acquirer's Multiple passes, and PEGY 0.23 — though reported earnings growth is **-19.5%**, limiting GARP quality.
+
+Business quality rests on system-critical assets: Drax Power Station supplies ~6% of UK power and ~10% of renewables (filings); pumped storage, hydro and new OCGTs provide flexibility; and over **£1bn** of forward power sales (2026–28) plus **~£650m** of Capacity Market revenue to 2043 (Apr 2026 trading update) underpin visibility. Capital allocation has been shareholder-friendly: ten consecutive years of dividend growth (expected **32.2p** FY2026 vs 29.0p in 2025), plus **>£1.2bn** returned via dividends and buybacks since 2017 (H1 2026 RNS). Net debt/Adjusted EBITDA was **<1x** at FY2025 year-end and **1.3x** at Jun 2026 — below the ~2x target pre-BSIF, though the pending acquisition adds leverage.
+
+The buy case assumes the market underprices (i) sustainable FCF from hedged generation, (ii) the step-change from BESS tolling (~£0.5bn committed) and BSIF (~0.9GW operating solar/wind), and (iii) optionality at the 4GW Selby site (data centre, CfD from Apr 2027). Timing is neutral (RSI ~40, below 200-day MA), consistent with accumulating on weakness rather than momentum.
+
+## FINANCIAL REVIEW
+**Annual trend (primary filings first)**
+
+| Metric | FY2024 (CH accounts, OCR) | FY2025 (CH accounts, OCR) | Source |
+|--------|----------------------------|----------------------------|--------|
+| Adjusted EBITDA | ~£854m (OCR: "£854m") | **£947m** (-11% YoY) | `ch_05562053_MzUy…` |
+| Net debt | £992m | **£784m** | Same |
+| Net debt / Adj. EBITDA | — | **<1x** | Same |
+| Cash & committed facilities | — | **£942m** | Same |
+| Dividend per share | 26.0p (implied) | **28.0p** (+11%) | Same |
+| Biomass Gen. Adj. EBITDA | £814m | **£725m** | Same |
+| Pellet Production Adj. EBITDA | £143m | **£129m** | Same |
+| FlexGen (Pumped/Hydro) Adj. EBITDA | £136m (OCR) | **£111m** | Same |
+
+FY2025 revenue and reported earnings are **not clearly extractable** from the OCR annual report body; the RNS annual-report notice (`8c571b5c…`) references full-year results released 26 Feb 2026 but does not carry figures. **Yahoo fallback (FY2025):** revenue **£5.39bn** (from £6.16bn in 2024), IFRS EBITDA **£508m**, net income **£73m** (impairments £383m on Canadian pellet assets), FCF **£516m**, net debt **£627m** — use with caution versus filing-based Adjusted metrics.
+
+Directionally, Adjusted EBITDA peaked in the elevated power-price environment and is normalising: **-11%** in FY2025 and a sharper **-39%** in H1 2026 (£279m vs £460m). Biomass Generation drove the decline (H1 2026: **£159m** vs £332m). Partial offsets came from Energy Solutions (**£27m**, up from £18m), first OCGT contribution, and Flexitricity (acquired Mar 2026 for £36m net of cash).
+
+**Interim / trading (H1 2026 and Apr 2026 update)**
+
+From the H1 2026 RNS body (`4028c372…`):
+- Adjusted EBITDA **£279m**; operating profit **£265m**; profit before tax **£222m**
+- Net debt **£1,025m** (from £784m at Dec 2025); cash & committed facilities **£630m**
+- LTM Adjusted EBITDA **£765m**; net debt/LTM Adj. EBITDA **1.3x**
+- Cash from operations **£79m** (vs £378m H1 2025) — working capital outflow on ROC build-up, expected to reverse H2
+- Interim dividend **12.9p**; expected FY dividend **32.2p** (+11%)
+- FY2026 Adj. EBITDA guidance **in line with consensus £665m** (range £643–681m)
+- Medium-term target: **£650–800m** Adj. EBITDA by 2029 (ex-BSIF benefit)
+
+Apr 2026 trading update (`ab7f2b917…`) confirmed operational performance and consensus EBITDA before H1 print.
+
+**Balance sheet and liquidity**
+
+Credit ratings reaffirmed post-BSIF announcement: S&P/Fitch **BB+ stable**, DBRS **BBB (low)**. A **£1,083m bridging facility** supports BSIF completion. Going concern adopted at H1 2026 after scenario testing "both excluding and including" BSIF; Board cites covenant and liquidity headroom through Jul 2027.
+
+**Gaps:** No downloadable body for the Feb 2026 full-year results RNS; Companies House accounts for 2022–2024 lack body extracts; 2025 CH extract is OCR-degraded (e.g. "£947 milion", "£725 million was a decrease of 11% on 2024 (€814 million)"). Figures above are taken from filing bodies where stated; Yahoo fills only where noted.
+
+## RISKS AND RED FLAGS
+**Regulatory / biomass:** Biomass Acceptability remains a principal risk (H1 2026 references 2025 annual report pp. 41–48). Campaigning against biomass and policy change could affect RO/CfD economics. UK Government plans to remove Carbon Price Support from Apr 2028; Electricity Generator Levy extended/increased — Drax expects **no EGL impact in 2026** and CfD biomass from Apr 2027 is exempt. FCA investigation (Jan 2022–Mar 2024, biomass sourcing disclosures) **closed 18 Jun 2026 with no action** — reduces near-term governance overhang but does not eliminate policy debate (news coverage remains active, e.g. "Hardest Biomass Credibility Test", Kalkine, 12 Aug 2026).
+
+**Operational:** Cruachan units 3–4 forced outage from Dec 2025 grid connection failure (SPEN-owned assets); restoration expected **2027**. Major Drax Power Station outage scheduled summer 2026. Canadian pellet strategic review; Williams Lake closure announced Dec 2025.
+
+**Leverage / M&A:** BSIF acquisition (EV **~£1,082m**, equity **~£561m**) materially increases scale and debt; buyback **paused**. Net debt rose **£241m** in H1 2026 before full BSIF draw. Integration and tolling/optimisation execution risk on BESS pipeline (~710MW, ~£0.5bn commitments).
+
+**Cyclical / commodity:** H1 EBITDA sensitivity to achieved power prices is high (Biomass Gen. -52% YoY segment EBITDA). Forward book averages **~£83/MWh** (2026 RO/hydro/gas) vs prior-year realisations — earnings remain commodity-linked despite hedging.
+
+**Governance / key person:** Interim CFO appointed Mar 2026 (Globe and Mail); Frank Lemmink signed H1 2026 accounts as CFO — transition risk during heavy M&A/capex cycle.
+
+**Pension:** Retirement benefit **surplus £35.7m** at Jun 2026 (H1 balance sheet) — not a near-term funding red flag.
+
+**Going concern / covenants:** No going-concern qualification; explicit covenant headroom cited. No material litigation contingencies surfaced in available bodies beyond biomass regulatory exposure.
+
+RiskTags: regulatory, cyclical, leverage, governance, competitive, key_person, accounting
+RiskTags: regulatory, cyclical, leverage, governance, competitive, key_person, accounting
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **heavy on syndicated commentary** (notably Kalkine Media) and lighter on primary investigative journalism; material corporate events come mainly from RNS.
+
+**Strategy / M&A**
+- **"Drax agrees $755m all-cash acquisition of BSIF"** (Yahoo, 1 Jun 2026) — recommended offer; scheme effective **31 Jul 2026** per subsequent RNS headlines.
+- **"Drax Group Pauses Buyback as £561M Bluefield Solar Deal Boosts UK Renewables"** (Yahoo, 1 Jun 2026).
+- **"Drax acquires UK energy asset optimizer Flexitricity"** (Investing.com / Drax Global, 21 Jan 2026); completed Mar 2026.
+- **"Acquisition of asset optimisation platform"** (Drax Global, 21 Jan 2026).
+
+**Results / guidance**
+- **"Drax Group H1 Earnings Call Highlights"** (Yahoo, 30 Jul 2026) — H1 Adj. EBITDA £279m; 2029 EBITDA target $650–800m.
+- **"Drax Group plc Just Recorded A 21% Revenue Beat"** (simplywall.st, 3 Aug 2026) — post-H1 analyst reaction.
+
+**Regulatory / governance**
+- **"REG - Drax Group Plc - Closure of Investigation by the FCA"** (TradingView, 17 Jun 2026).
+- **"UK Regulator Investigates Drax Over Biomass Claims"** (Baystreet.ca, 28 Aug 2025) — prior investigation context.
+
+**Other**
+- **"Drax appoints interim CFO as finance chief takes medical leave"** (Globe and Mail, 6 Mar 2026).
+- **"Drax flicks switch on data centre plan"** (Investors' Chronicle, 26 Feb 2026).
+- **"Commissioning of First OCGT Plant"** (RNS headline, 29 May 2026 — body not in corpus).
+- Analyst sentiment mixed: **"Drax down 3% as it is cut to 'sell' on fading biomass economics"** (Proactive Investors, 31 Oct 2025) vs more constructive recent target revisions (Yahoo, 12 Aug 2026).
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.62
+Rationale: Deep research partially confirms the screen’s cash-yield and dividend case but moderates it given normalising EBITDA, rising leverage from BSIF, and enduring biomass regulatory overhang that screens do not fully capture.
