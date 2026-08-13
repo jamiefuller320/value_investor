@@ -95,8 +95,12 @@ def test_normalize_task_plan_filters_invalid_types():
 
 
 def test_estimate_director_worker_cost_scales_with_workers():
-    one = estimate_director_worker_cost_usd(worker_count=1, director_model="grok-4.6", worker_model="composer-2.5")
-    three = estimate_director_worker_cost_usd(worker_count=3, director_model="grok-4.6", worker_model="composer-2.5")
+    one = estimate_director_worker_cost_usd(
+        worker_count=1, director_model="grok-4.6", worker_model="composer-2.5"
+    )
+    three = estimate_director_worker_cost_usd(
+        worker_count=3, director_model="grok-4.6", worker_model="composer-2.5"
+    )
     assert three > one
 
 

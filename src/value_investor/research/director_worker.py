@@ -19,7 +19,7 @@ from value_investor.research.document import (
     parse_research_sections,
     render_research_markdown,
 )
-from value_investor.research.gap_fill_sources import EVIDENCE_LADDER, inspect_local_sources
+from value_investor.research.gap_fill_sources import EVIDENCE_LADDER
 from value_investor.research.model_ab import (
     estimate_model_memo_usd,
     prepare_shared_research_sources,
@@ -102,7 +102,9 @@ def load_report_from_latest(
     reports = payload.get("reports") if isinstance(payload, dict) else None
     if not isinstance(reports, list):
         return None
-    row = next((item for item in reports if str(item.get("ticker", "")).upper() == ticker.upper()), None)
+    row = next(
+        (item for item in reports if str(item.get("ticker", "")).upper() == ticker.upper()), None
+    )
     if row is None:
         return None
     return CompanyReport.from_dict(row)
