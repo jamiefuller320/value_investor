@@ -19,6 +19,7 @@ from value_investor.research.document import (
     parse_research_sections,
     render_research_markdown,
 )
+from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH, _persist_model_suggestions
 from value_investor.research.gap_fill_sources import EVIDENCE_LADDER
 from value_investor.research.model_ab import (
     estimate_model_memo_usd,
@@ -563,6 +564,60 @@ def run_director_synthesis(
     return doc, agent_id
 
 
+def procedural_suggestions_to_model_rows(
+    *,
+    report: CompanyReport,
+    procedural_suggestions: list[dict[str, Any]],
+    run_id: str,
+    director_model: str,
+) -> list[dict[str, Any]]:
+    """Map director procedural_suggestions to research_model_suggestions rows."""
+    rows: list[dict[str, Any]] = []
+    for item in procedural_suggestions:
+        if not isinstance(item, dict):
+            continue
+        summary = str(item.get("summary") or item.get("suggestion") or "").strip()
+        if not summary:
+            continue
+        area = str(item.get("area") or "research").strip().lower()
+        priority = str(item.get("priority") or "medium").strip().lower()
+        if priority not in {"high", "medium", "low"}:
+            priority = "medium"
+        rows.append(
+            {
+                "ticker": report.ticker,
+                "name": report.name,
+                "area": area,
+                "priority": priority,
+                "suggestion": summary,
+                "source": "director_worker",
+                "run_id": run_id,
+                "director_model": director_model,
+            }
+        )
+    return rows
+
+
+def persist_director_procedural_suggestions(
+    *,
+    report: CompanyReport,
+    task_plan: dict[str, Any],
+    run_id: str,
+    director_model: str,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+) -> list[dict[str, Any]]:
+    """Append director procedural suggestions to the canonical suggestions ledger."""
+    rows = procedural_suggestions_to_model_rows(
+        report=report,
+        procedural_suggestions=list(task_plan.get("procedural_suggestions") or []),
+        run_id=run_id,
+        director_model=director_model,
+    )
+    if not rows:
+        return []
+    return _persist_model_suggestions(rows, path=suggestions_path)
+
+
 def estimate_director_worker_cost_usd(
     *,
     worker_count: int,
@@ -590,6 +645,8 @@ def run_director_worker_trial(
     memo_usd: float = 0.4,
     record_spend: bool = True,
     policy_path: Path | None = None,
+    persist_suggestions: bool = True,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
 ) -> DirectorWorkerRun:
     """Run a single-ticker director–worker research trial."""
     run_id = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
@@ -692,6 +749,21 @@ def run_director_worker_trial(
     if record_spend:
         record_estimated_spend(estimated, policy_path, pool=SPEND_POOL_AD_HOC)
 
+    if persist_suggestions:
+        appended = persist_director_procedural_suggestions(
+            report=report,
+            task_plan=task_plan,
+            run_id=run_id,
+            director_model=director_model,
+            suggestions_path=suggestions_path,
+        )
+        if appended:
+            write_json(
+                run_dir / "procedural_suggestions_appended.json",
+                {"appended": appended, "count": len(appended)},
+                compact=False,
+            )
+
     return run
 
 
@@ -735,7 +807,9 @@ __all__ = [
     "build_fallback_task_plan",
     "extract_json_object",
     "load_report_from_latest",
+    "persist_director_procedural_suggestions",
     "preview_director_worker_trial",
+    "procedural_suggestions_to_model_rows",
     "report_for_ticker",
     "run_director_worker_trial",
 ]

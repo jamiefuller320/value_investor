@@ -10,6 +10,8 @@ from value_investor.research.director_worker import (
     estimate_director_worker_cost_usd,
     extract_json_object,
     normalize_task_plan,
+    persist_director_procedural_suggestions,
+    procedural_suggestions_to_model_rows,
     run_director_worker_trial,
 )
 from value_investor.research.document import ResearchDocument
@@ -104,6 +106,55 @@ def test_estimate_director_worker_cost_scales_with_workers():
     assert three > one
 
 
+def test_procedural_suggestions_to_model_rows_maps_summary_and_metadata():
+    report = _report()
+    rows = procedural_suggestions_to_model_rows(
+        report=report,
+        procedural_suggestions=[
+            {"area": "ingest", "summary": "De-duplicate filing bodies."},
+            {"area": "prompt", "priority": "high", "summary": "Require audit-delay extract."},
+            {"area": "sources", "summary": ""},
+        ],
+        run_id="20260813T120000Z",
+        director_model="grok-4.6",
+    )
+    assert len(rows) == 2
+    assert rows[0]["suggestion"] == "De-duplicate filing bodies."
+    assert rows[0]["area"] == "ingest"
+    assert rows[0]["priority"] == "medium"
+    assert rows[0]["source"] == "director_worker"
+    assert rows[0]["run_id"] == "20260813T120000Z"
+    assert rows[1]["priority"] == "high"
+
+
+def test_persist_director_procedural_suggestions_dedupes_by_text(tmp_path: Path):
+    suggestions_path = tmp_path / "research_model_suggestions.json"
+    report = _report()
+    task_plan = {
+        "procedural_suggestions": [
+            {"area": "ingest", "summary": "Unique director-worker ingest idea."},
+        ]
+    }
+    appended = persist_director_procedural_suggestions(
+        report=report,
+        task_plan=task_plan,
+        run_id="run-1",
+        director_model="grok-4.6",
+        suggestions_path=suggestions_path,
+    )
+    assert len(appended) == 1
+    assert suggestions_path.exists()
+
+    again = persist_director_procedural_suggestions(
+        report=report,
+        task_plan=task_plan,
+        run_id="run-2",
+        director_model="grok-4.6",
+        suggestions_path=suggestions_path,
+    )
+    assert again == []
+
+
 @patch("value_investor.research.director_worker.run_director_synthesis")
 @patch("value_investor.research.director_worker.run_worker_task")
 @patch("value_investor.research.director_worker.run_director_plan")
@@ -178,6 +229,7 @@ def test_run_director_worker_trial_writes_manifest(
         output_root=tmp_path / "dw",
         primary_output_dir=tmp_path / "output",
         record_spend=False,
+        persist_suggestions=False,
     )
 
     assert (run.output_dir / "director_plan.json").exists()
