@@ -110,7 +110,7 @@ def test_report_for_ticker_case_insensitive():
 
 
 @patch("value_investor.research.model_ab.run_initial_research_agent")
-@patch("value_investor.research.model_ab._prepare_shared_sources")
+@patch("value_investor.research.model_ab.prepare_shared_research_sources")
 def test_run_model_ab_compare_writes_artifacts(
     mock_prepare,
     mock_agent,

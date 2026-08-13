@@ -230,7 +230,7 @@ def _source_counts_from_inventory(inventory: dict[str, Any], sources_dir: Path) 
     }
 
 
-def _prepare_shared_sources(
+def prepare_shared_research_sources(
     *,
     report: CompanyReport,
     primary_store: ResearchStore,
@@ -403,7 +403,7 @@ def run_model_ab_compare(
     sources_dir.mkdir(parents=True, exist_ok=True)
 
     primary_store = ResearchStore(primary_output_dir or Path("output"))
-    inventory, source_counts = _prepare_shared_sources(
+    inventory, source_counts = prepare_shared_research_sources(
         report=report,
         primary_store=primary_store,
         sources_dir=sources_dir,
