@@ -223,7 +223,33 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Disable observe-only director escalation logging on normal research runs",
     )
+    parser.add_argument(
+        "--escalation-candidates",
+        action="store_true",
+        help=(
+            "List director escalation candidates for the current ISO week "
+            "(approval queue; no agents)"
+        ),
+    )
     args = parser.parse_args(argv)
+
+    if args.escalation_candidates:
+        from value_investor.research.director_escalation_candidates import (
+            DEFAULT_ESCALATION_CANDIDATES_PATH,
+            aggregate_escalation_candidates,
+            write_escalation_candidates,
+        )
+        from value_investor.research.format import format_director_escalation_candidates_text
+
+        queue = aggregate_escalation_candidates()
+        write_escalation_candidates(queue, path=DEFAULT_ESCALATION_CANDIDATES_PATH)
+        preview = format_director_escalation_candidates_text(queue)
+        if preview:
+            print(preview)
+        else:
+            print("No director escalation candidates for the current week.")
+        print(f"Wrote {DEFAULT_ESCALATION_CANDIDATES_PATH}")
+        return 0
 
     if args.director_worker:
         from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
@@ -628,6 +654,21 @@ def main(argv: list[str] | None = None) -> int:
     if shadow_preview:
         print()
         print(shadow_preview)
+
+    from value_investor.research.director_escalation_candidates import (
+        DEFAULT_ESCALATION_CANDIDATES_PATH,
+        aggregate_escalation_candidates,
+        write_escalation_candidates,
+    )
+    from value_investor.research.format import format_director_escalation_candidates_text
+
+    queue = aggregate_escalation_candidates(run_entries=summary.director_shadow)
+    if queue.candidates or summary.director_shadow:
+        write_escalation_candidates(queue, path=DEFAULT_ESCALATION_CANDIDATES_PATH)
+    candidates_preview = format_director_escalation_candidates_text(queue)
+    if candidates_preview:
+        print()
+        print(candidates_preview)
 
     if summary.errors:
         return 2

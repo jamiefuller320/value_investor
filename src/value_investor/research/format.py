@@ -67,6 +67,66 @@ def format_director_shadow_text(entries: list[dict[str, Any]] | None) -> str | N
     return "\n".join(lines)
 
 
+def _candidate_trigger_summary(entry: dict[str, Any]) -> str:
+    triggers = list(entry.get("escalation", {}).get("triggers") or [])
+    material = entry.get("material_change") or {}
+    if isinstance(material, dict):
+        triggers.extend(material.get("triggers") or [])
+    reasons = list(entry.get("escalation", {}).get("reasons") or [])
+    if isinstance(material, dict):
+        reasons.extend(material.get("reasons") or [])
+    trigger_text = ", ".join(triggers) or "triggers pending"
+    reason_text = "; ".join(reasons[:2]) if reasons else ""
+    if reason_text:
+        return f"{trigger_text} — {reason_text}"
+    return trigger_text
+
+
+def format_director_escalation_candidates_text(summary) -> str | None:
+    """Human approval queue for director–worker runs (no auto-dispatch)."""
+    if summary is None:
+        return None
+    candidates = list(getattr(summary, "candidates", None) or [])
+    if not candidates:
+        return None
+    if not bool(getattr(summary, "surface_in_email", True)):
+        return None
+
+    cap = dict(getattr(summary, "cap_status", None) or {})
+    lines = [
+        "Director escalation candidates (approval required — not auto-run):",
+        (
+            f"  Week {getattr(summary, 'week_id', '')}: {len(candidates)} candidate(s); "
+            f"DW cap {cap.get('runs_this_week', 0)}/{cap.get('weekly_cap', '?')} used "
+            f"({cap.get('remaining', '?')} remaining)"
+        ),
+    ]
+    if bool(getattr(summary, "auto_escalate_enabled", False)):
+        lines.append("  ! auto_escalate_director=true in policy — still manual until wired")
+    else:
+        lines.append("  auto_escalate_director=false — approve per ticker below")
+
+    for entry in candidates:
+        action = str(entry.get("recommended_action") or "escalate_director")
+        ticker = str(entry.get("ticker") or "")
+        lines.append(f"  • {ticker}: {action} [{_candidate_trigger_summary(entry)}]")
+        lines.append(f"    → ftse-research --director-worker {ticker}")
+    return "\n".join(lines)
+
+
+def format_director_escalation_candidates_html(summary) -> str:
+    text = format_director_escalation_candidates_text(summary)
+    if not text:
+        return ""
+    body = text.replace("\n", "<br>")
+    return f"""
+  <div style="background:#fffaf0;padding:16px;border-radius:8px;margin:16px 0;border-left:4px solid #dd6b20">
+    <h3 style="margin-top:0">Director escalation candidates</h3>
+    <p style="margin-bottom:0">{body}</p>
+  </div>
+"""
+
+
 def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
     if summary is None or (
         not summary.targets and not summary.errors and not summary.model_suggestions

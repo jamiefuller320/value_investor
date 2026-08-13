@@ -222,10 +222,14 @@ def default_policy() -> dict[str, Any]:
             "auto_tighten_enabled": True,
             "auto_tighten_min_weeks": 8,
             "auto_tighten_max_reescalation_rate": 0.35,
+            "auto_escalate_director": False,
+            "surface_escalation_candidates_in_email": True,
             "note": (
                 "Exploration phase allows more director–worker runs per week while "
                 "paper turnover is unknown; auto-tighten moves to steady cap when "
-                "re-escalation rate stabilises."
+                "re-escalation rate stabilises. Shadow log surfaces escalation "
+                "candidates in the Sunday email for manual approval; "
+                "auto_escalate_director stays false until calibrated."
             ),
         },
         "updated_at": None,

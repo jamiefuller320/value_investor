@@ -12,6 +12,9 @@ from value_investor.emailer import (
     format_text_report,
     send_report_email,
 )
+from value_investor.research.director_escalation_candidates import (
+    DirectorEscalationCandidates,
+)
 from value_investor.run_diff import RunDiff
 from value_investor.summary import build_company_reports
 
@@ -280,6 +283,46 @@ def test_format_reports_include_strong_buy_trade_plans():
     alpha = reports[0]
     assert alpha.trade_plan is not None
     assert "Trade plan:" in alpha.summary
+
+
+def test_format_reports_include_director_escalation_candidates():
+    signals, model_results = _sample_frames()
+    reports = build_company_reports(signals, model_results)
+    queue = DirectorEscalationCandidates(
+        candidates=[
+            {
+                "ticker": "AAA.L",
+                "recommended_action": "escalate_director",
+                "escalation": {
+                    "triggers": ["thin_sources"],
+                    "reasons": ["Source quality grade is thin"],
+                },
+            }
+        ],
+        cap_status={
+            "weekly_cap": 15,
+            "runs_this_week": 1,
+            "remaining": 14,
+        },
+        auto_escalate_enabled=False,
+        surface_in_email=True,
+        week_id="2026-W33",
+        generated_at="2026-08-13T12:00:00+00:00",
+    )
+    text = format_text_report(
+        run_at="2026-08-13",
+        reports=reports,
+        director_escalation_candidates=queue,
+    )
+    html = format_html_report(
+        run_at="2026-08-13",
+        reports=reports,
+        director_escalation_candidates=queue,
+    )
+    assert "DIRECTOR ESCALATION CANDIDATES" in text
+    assert "ftse-research --director-worker AAA.L" in text
+    assert "Director escalation candidates" in html
+    assert "AAA.L" in html
 
 
 @patch("value_investor.emailer.smtplib.SMTP")

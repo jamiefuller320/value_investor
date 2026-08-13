@@ -351,6 +351,7 @@ def main(argv: list[str] | None = None) -> int:
     gap_fill_summary = None
     ingest_improvement_summary = None
     post_run_review = None
+    director_escalation_candidates = None
     research_documents = research_documents_for_reports(
         reports,
         load_existing_research(
@@ -507,6 +508,23 @@ def main(argv: list[str] | None = None) -> int:
     if research_documents:
         reports = apply_research_overlay(reports, research_documents)
 
+    from value_investor.research.director_escalation_candidates import (
+        DEFAULT_ESCALATION_CANDIDATES_PATH,
+        aggregate_escalation_candidates,
+        write_escalation_candidates,
+    )
+
+    director_escalation_candidates = aggregate_escalation_candidates(
+        run_entries=research_summary.director_shadow if research_summary else None,
+    )
+    if director_escalation_candidates.candidates or (
+        research_summary and research_summary.director_shadow
+    ):
+        write_escalation_candidates(
+            director_escalation_candidates,
+            path=DEFAULT_ESCALATION_CANDIDATES_PATH,
+        )
+
     signals = enrich_signals_with_research(signals, args.output_dir, run_at=run_at)
     signals_path = args.output_dir / "latest_signals.csv"
     signals.to_csv(signals_path, index=False)
@@ -524,6 +542,7 @@ def main(argv: list[str] | None = None) -> int:
         gap_fill_summary=gap_fill_summary,
         ingest_improvement_summary=ingest_improvement_summary,
         post_run_review=post_run_review,
+        director_escalation_candidates=director_escalation_candidates,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
@@ -541,6 +560,7 @@ def main(argv: list[str] | None = None) -> int:
         gap_fill_summary=gap_fill_summary,
         ingest_improvement_summary=ingest_improvement_summary,
         post_run_review=post_run_review,
+        director_escalation_candidates=director_escalation_candidates,
         screen_label=universe_label(screen_universe),
         excluded_investment_vehicles=excluded_investment_vehicles,
         trust_reports=trust_reports,
