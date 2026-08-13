@@ -14,6 +14,7 @@ from value_investor.agent_model_policy import (
     record_estimated_spend,
 )
 from value_investor.research.agent import _run_agent_prompt
+from value_investor.research.director_baseline import build_director_baseline
 from value_investor.research.document import (
     ResearchDocument,
     parse_research_sections,
@@ -830,12 +831,24 @@ def run_director_worker_trial(
         cwd=cwd,
     )
     document.source_counts = dict(source_counts)
-    rubric = score_memo_rubric(document, inventory=inventory)
-    source_quality = score_research_sources(
+    document.memo_quality = score_research_sources(
         source_counts=source_counts,
         inventory=inventory,
         question_outcomes=document.question_outcomes,
     )
+    document.director_baseline = build_director_baseline(
+        report=report,
+        task_plan=task_plan,
+        worker_results=worker_results,
+        inventory=inventory,
+        source_counts=source_counts,
+        run_id=run_id,
+        output_dir=str(run_dir),
+        research_verdict=document.research_verdict,
+        research_confidence=document.research_confidence,
+    )
+    rubric = score_memo_rubric(document, inventory=inventory)
+    source_quality = document.memo_quality
 
     markdown_path = run_dir / "research.md"
     markdown_path.write_text(render_research_markdown(document), encoding="utf-8")

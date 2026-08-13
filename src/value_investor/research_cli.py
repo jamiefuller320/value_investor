@@ -19,7 +19,6 @@ from value_investor.research.runner import (
     run_research_for_strong_buys,
     select_research_targets,
 )
-from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
 
 
@@ -204,10 +203,22 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Bypass weekly director–worker run cap (exploration/steady guard)",
     )
+    parser.add_argument(
+        "--skip-escalation-gate",
+        action="store_true",
+        help="Run --director-worker even when no escalation triggers fire",
+    )
+    parser.add_argument(
+        "--escalation-check-only",
+        action="store_true",
+        help="With --director-worker: evaluate escalation triggers and exit (no agents)",
+    )
     args = parser.parse_args(argv)
 
     if args.director_worker:
         from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+        from value_investor.research.director_baseline import evaluate_material_change
+        from value_investor.research.director_escalation import evaluate_director_escalation
         from value_investor.research.director_worker import (
             load_report_from_latest,
             preview_director_worker_trial,
@@ -217,6 +228,9 @@ def main(argv: list[str] | None = None) -> int:
             check_director_worker_cap,
             record_director_worker_run,
         )
+        from value_investor.research.gap_fill_sources import inspect_local_sources
+        from value_investor.research.source_quality import score_research_sources
+        from value_investor.research.store import ResearchStore
 
         report = load_report_from_latest(args.director_worker, args.reports_json)
         if report is None:
@@ -226,11 +240,33 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 1
         market = "ftse350" if args.universe.startswith("ftse") else args.universe
+        store = ResearchStore(args.output_dir)
+        existing_doc = store.load(report.ticker)
+        sources_dir = store.sources_dir(report.ticker)
+        inventory = inspect_local_sources(sources_dir) if sources_dir.exists() else {}
+        source_counts = dict(existing_doc.source_counts) if existing_doc else {}
+        source_quality = score_research_sources(
+            source_counts=source_counts,
+            inventory=inventory,
+            question_outcomes=existing_doc.question_outcomes if existing_doc else None,
+        )
+        escalation = evaluate_director_escalation(
+            report=report,
+            existing_doc=existing_doc,
+            inventory=inventory,
+            source_quality=source_quality,
+        )
+        material = evaluate_material_change(
+            baseline=existing_doc.director_baseline if existing_doc else None,
+            report=report,
+            inventory=inventory,
+            source_counts=source_counts,
+        )
         cap_status = check_director_worker_cap(
             report.ticker,
             policy_path=DEFAULT_POLICY_PATH,
         )
-        if args.dry_run:
+        if args.dry_run or args.escalation_check_only:
             preview = preview_director_worker_trial(
                 report=report,
                 primary_output_dir=args.output_dir,
@@ -238,22 +274,50 @@ def main(argv: list[str] | None = None) -> int:
                 max_worker_tasks=args.max_worker_tasks,
             )
             plan = preview["task_plan"]
+            label = "Escalation check" if args.escalation_check_only else "Director–worker dry-run"
+            print(f"{label}: {report.name} ({report.ticker})")
             print(
-                f"Director–worker dry-run: {report.name} ({report.ticker}) "
-                f"director={args.director_model} worker={args.worker_model}"
+                f"Escalation: {'yes' if escalation.should_escalate else 'no'} "
+                f"({', '.join(escalation.triggers) or 'none'})"
             )
+            for reason in escalation.reasons:
+                print(f"  • {reason}")
+            if existing_doc and existing_doc.director_baseline:
+                print(
+                    f"Material change vs baseline: "
+                    f"{'yes' if material.material_change else 'no'} "
+                    f"({', '.join(material.triggers) or 'none'})"
+                )
             print(
                 f"Cap: {cap_status.runs_this_week}/{cap_status.weekly_cap} "
                 f"this week ({cap_status.phase}); "
                 f"re-escalation={'yes' if cap_status.is_reescalation else 'no'}"
             )
-            print(f"Estimated worker tasks: {preview['estimated_tasks']}")
-            for task in plan.get("tasks") or []:
-                print(
-                    f"  • [{task.get('type')}] {task.get('id')}: "
-                    f"{task.get('target')} — {str(task.get('focus', ''))[:100]}"
-                )
+            if not args.escalation_check_only:
+                print(f"Estimated worker tasks: {preview['estimated_tasks']}")
+                for task in plan.get("tasks") or []:
+                    print(
+                        f"  • [{task.get('type')}] {task.get('id')}: "
+                        f"{task.get('target')} — {str(task.get('focus', ''))[:100]}"
+                    )
             return 0
+        if not escalation.should_escalate and not args.skip_escalation_gate:
+            print("Director escalation gate: not triggered", file=sys.stderr)
+            for reason in escalation.reasons:
+                print(f"  • {reason}", file=sys.stderr)
+            print("Use --skip-escalation-gate to run anyway.", file=sys.stderr)
+            return 1
+        if (
+            existing_doc
+            and existing_doc.director_baseline
+            and not material.material_change
+            and not args.skip_escalation_gate
+        ):
+            print("Director re-escalation gate: no material change since baseline", file=sys.stderr)
+            for reason in material.reasons:
+                print(f"  • {reason}", file=sys.stderr)
+            print("Use --skip-escalation-gate to re-run anyway.", file=sys.stderr)
+            return 1
         if not cap_status.allowed and not args.skip_dw_cap:
             print(cap_status.reason, file=sys.stderr)
             return 1
