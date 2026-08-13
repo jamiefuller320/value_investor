@@ -240,7 +240,14 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
     base = default_policy()
     base.update(data)
     # Ensure nested defaults
-    for key in ("budget", "model_review", "focus_graduation", "paper_fx", "macro_context", "director_worker"):
+    for key in (
+        "budget",
+        "model_review",
+        "focus_graduation",
+        "paper_fx",
+        "macro_context",
+        "director_worker",
+    ):
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})
         merged.update(file_section)

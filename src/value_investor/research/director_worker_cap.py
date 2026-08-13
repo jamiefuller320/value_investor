@@ -8,7 +8,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
-from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy, save_policy
+from value_investor.agent_model_policy import load_policy, save_policy
 from value_investor.storage import read_json, write_json
 
 DEFAULT_DW_LEDGER_PATH = Path("docs/data/research_director_worker/ledger.json")
