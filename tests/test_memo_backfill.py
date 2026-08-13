@@ -172,3 +172,23 @@ def test_run_missing_memo_backfill_dry_run(mock_process: object, tmp_path: Path)
     assert summary.selected == ["ONE.L"]
     assert len(summary.remaining) == 1
     mock_process.assert_not_called()
+
+
+def test_list_legacy_rememo_reports_prioritizes_strong_buy(tmp_path: Path):
+    from value_investor.research.memo_backfill import list_legacy_rememo_reports
+
+    memo_dir = tmp_path / "memos"
+    memo_dir.mkdir()
+    (memo_dir / "SB.L.md").write_text("# memo", encoding="utf-8")
+    (memo_dir / "LEG.L.md").write_text("# memo", encoding="utf-8")
+    reports = [
+        _report("LEG.L", signal="buy", conviction=0.9),
+        _report("SB.L", signal="strong_buy", conviction=0.4),
+    ]
+    legacy = list_legacy_rememo_reports(
+        reports,
+        memo_dir=memo_dir,
+        committed_dir=tmp_path / "data",
+        output_dir=tmp_path / "output",
+    )
+    assert [row.ticker for row in legacy] == ["SB.L", "LEG.L"]
