@@ -62,6 +62,7 @@ class ResearchDocument:
     weekly_updates: list[dict[str, str]] = field(default_factory=list)
     source_counts: dict[str, int] = field(default_factory=dict)
     memo_quality: dict[str, Any] = field(default_factory=dict)
+    director_baseline: dict[str, Any] = field(default_factory=dict)
     agent_id: str | None = None
     research_path: str | None = None
 
@@ -108,6 +109,7 @@ class ResearchDocument:
             "weekly_updates": self.weekly_updates,
             "source_counts": self.source_counts,
             "memo_quality": self.memo_quality,
+            "director_baseline": dict(self.director_baseline),
             "agent_id": self.agent_id,
             "research_path": self.research_path,
         }
@@ -142,6 +144,7 @@ class ResearchDocument:
             weekly_updates=list(data.get("weekly_updates") or []),
             source_counts=dict(data.get("source_counts") or {}),
             memo_quality=dict(data.get("memo_quality") or {}),
+            director_baseline=dict(data.get("director_baseline") or {}),
             agent_id=data.get("agent_id"),
             research_path=data.get("research_path"),
         )
@@ -157,6 +160,7 @@ class ResearchSummary:
     active_count: int = 0
     alumni_count: int = 0
     alumni_updated: int = 0
+    director_shadow: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def has_documents(self) -> bool:

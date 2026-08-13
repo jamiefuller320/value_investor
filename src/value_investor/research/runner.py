@@ -154,6 +154,7 @@ def run_research_for_strong_buys(
     continue_alumni: bool = True,
     alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
     market: str | None = None,
+    director_shadow: bool = True,
 ) -> ResearchSummary:
     """
     Create or update per-ticker research memos.
@@ -165,6 +166,9 @@ def run_research_for_strong_buys(
     First run: ingest Yahoo financials, news, and primary filings (UK RNS or
     US SEC EDGAR — annual + interim when discoverable), then deep agent pass.
     Subsequent weekly runs: refresh filings/news and append a weekly update section.
+
+    When ``director_shadow`` is True (default), log observe-only escalation decisions
+    after each Composer memo without calling director–worker agents.
     """
     store = ResearchStore(output_dir)
     active, alumni = select_research_targets(
@@ -185,6 +189,12 @@ def run_research_for_strong_buys(
         active_count=len(active),
         alumni_count=len(alumni),
     )
+
+    if director_shadow:
+        from value_investor.research.director_shadow import (
+            record_director_shadow_entry,
+            write_shadow_run_summary,
+        )
 
     for report in targets:
         try:
@@ -208,10 +218,22 @@ def run_research_for_strong_buys(
                     summary.alumni_updated += 1
             else:
                 summary.skipped += 1
+            if director_shadow and action in {"created", "updated"}:
+                entry = record_director_shadow_entry(
+                    report=report,
+                    doc=doc,
+                    sources_dir=store.sources_dir(report.ticker),
+                    research_action=action,
+                    run_output_dir=str(output_dir),
+                )
+                summary.director_shadow.append(entry)
         except Exception as exc:  # noqa: BLE001
             message = f"{report.ticker}: {exc}"
             logger.exception("Research failed for %s", report.ticker)
             summary.errors.append(message)
+
+    if director_shadow and summary.director_shadow:
+        write_shadow_run_summary(summary.director_shadow, output_dir=output_dir)
 
     summary.documents.sort(key=lambda item: item.name)
     return summary

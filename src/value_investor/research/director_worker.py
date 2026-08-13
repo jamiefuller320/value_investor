@@ -14,11 +14,13 @@ from value_investor.agent_model_policy import (
     record_estimated_spend,
 )
 from value_investor.research.agent import _run_agent_prompt
+from value_investor.research.director_baseline import build_director_baseline
 from value_investor.research.document import (
     ResearchDocument,
     parse_research_sections,
     render_research_markdown,
 )
+from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH, _persist_model_suggestions
 from value_investor.research.gap_fill_sources import EVIDENCE_LADDER
 from value_investor.research.model_ab import (
     estimate_model_memo_usd,
@@ -37,6 +39,30 @@ DEFAULT_WORKER_MODEL = "composer-2.5"
 DEFAULT_DW_OUTPUT_DIR = Path("docs/data/research_director_worker")
 DEFAULT_MAX_WORKER_TASKS = 5
 ORCHESTRATION_VERSION = 1
+
+VALID_PROCEDURAL_AREAS = frozenset(
+    {
+        "ingest",
+        "prompt",
+        "sources",
+        "orchestration",
+        "monitoring",
+        "schema",
+        "scoring",
+        "research",
+    }
+)
+
+VALID_META_REFLECTION_TOPICS = frozenset(
+    {
+        "evidence_ladder",
+        "task_schema",
+        "monitoring",
+        "memo_structure",
+        "methodology",
+        "other",
+    }
+)
 
 VALID_TASK_TYPES = frozenset(
     {
@@ -253,6 +279,7 @@ def build_fallback_task_plan(
         "orchestration_version": ORCHESTRATION_VERSION,
         "source": "fallback_rules",
         "open_questions": open_questions,
+        "meta_reflection": [],
         "procedural_suggestions": [],
         "tasks": tasks[:max_tasks],
     }
@@ -282,15 +309,25 @@ Read ONLY:
 - financials_annual.json metadata if present
 
 Your job:
-1. List open qualitative questions for a verify-before-trade memo.
-2. Propose up to {max_tasks} **worker tasks** for Composer agents (bounded reads only).
-3. Suggest procedural improvements (ingest, prompt, source gaps) — do not implement them.
+1. List open qualitative questions for a verify-before-trade memo (ticker-specific).
+2. Reflect on methodology: is the evidence ladder / task decomposition / memo structure adequate?
+   What blind spots might we have missed (sources, prompt rules, monitoring, schema)?
+   Record these in `meta_reflection` (system-level) — not in `open_questions`.
+3. Propose up to {max_tasks} **worker tasks** for Composer agents (bounded reads only).
+4. Suggest procedural improvements (ingest, prompt, sources, orchestration, monitoring, schema) — do not implement them.
 
 Return a single JSON object (no prose outside JSON) with this shape:
 {{
   "schema_version": 1,
-  "open_questions": ["..."],
-  "procedural_suggestions": [{{"area": "ingest|prompt|sources", "summary": "..."}}],
+  "open_questions": ["ticker-specific verify-before-trade questions"],
+  "meta_reflection": [
+    {{
+      "topic": "evidence_ladder|task_schema|monitoring|memo_structure|methodology|other",
+      "observation": "system-level adequacy or blind-spot note",
+      "priority": "high|medium|low"
+    }}
+  ],
+  "procedural_suggestions": [{{"area": "ingest|prompt|sources|orchestration|monitoring|schema|scoring", "summary": "...", "priority": "high|medium|low"}}],
   "tasks": [
     {{
       "id": "unique_id",
@@ -307,7 +344,45 @@ Rules:
 - Assign summarize_filing_body tasks for annual and interim bodies when present.
 - Include gap_inventory when thin steps exist.
 - Do not assign tasks that require inventing unavailable sources.
+- Use meta_reflection for "is the structure adequate?" and "what have we not considered?" at the methodology level.
+- Keep ticker-specific investment doubts in open_questions only.
 """
+
+
+def _normalize_meta_reflection(raw_items: list[Any]) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
+        observation = str(item.get("observation") or item.get("summary") or "").strip()
+        if not observation:
+            continue
+        topic = str(item.get("topic") or "other").strip().lower()
+        if topic not in VALID_META_REFLECTION_TOPICS:
+            topic = "other"
+        priority = str(item.get("priority") or "medium").strip().lower()
+        if priority not in {"high", "medium", "low"}:
+            priority = "medium"
+        rows.append({"topic": topic, "observation": observation, "priority": priority})
+    return rows
+
+
+def _normalize_procedural_suggestions(raw_items: list[Any]) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
+        summary = str(item.get("summary") or item.get("suggestion") or "").strip()
+        if not summary:
+            continue
+        area = str(item.get("area") or "research").strip().lower()
+        if area not in VALID_PROCEDURAL_AREAS:
+            area = "research"
+        priority = str(item.get("priority") or "medium").strip().lower()
+        if priority not in {"high", "medium", "low"}:
+            priority = "medium"
+        rows.append({"area": area, "summary": summary, "priority": priority})
+    return rows
 
 
 def _worker_task_prompt(
@@ -432,7 +507,10 @@ def normalize_task_plan(
         "orchestration_version": ORCHESTRATION_VERSION,
         "source": str(raw.get("source") or "director"),
         "open_questions": [str(q) for q in (raw.get("open_questions") or []) if str(q).strip()],
-        "procedural_suggestions": list(raw.get("procedural_suggestions") or []),
+        "meta_reflection": _normalize_meta_reflection(list(raw.get("meta_reflection") or [])),
+        "procedural_suggestions": _normalize_procedural_suggestions(
+            list(raw.get("procedural_suggestions") or [])
+        ),
         "tasks": tasks,
     }
 
@@ -563,6 +641,112 @@ def run_director_synthesis(
     return doc, agent_id
 
 
+def meta_reflection_to_model_rows(
+    *,
+    report: CompanyReport,
+    meta_reflection: list[dict[str, Any]],
+    run_id: str,
+    director_model: str,
+) -> list[dict[str, Any]]:
+    """Map director meta_reflection observations to research_model_suggestions rows."""
+    topic_to_area = {
+        "evidence_ladder": "sources",
+        "task_schema": "orchestration",
+        "monitoring": "monitoring",
+        "memo_structure": "schema",
+        "methodology": "orchestration",
+        "other": "research",
+    }
+    rows: list[dict[str, Any]] = []
+    for item in meta_reflection:
+        if not isinstance(item, dict):
+            continue
+        observation = str(item.get("observation") or item.get("summary") or "").strip()
+        if not observation:
+            continue
+        topic = str(item.get("topic") or "other").strip().lower()
+        area = topic_to_area.get(topic, topic if topic in VALID_PROCEDURAL_AREAS else "research")
+        priority = str(item.get("priority") or "medium").strip().lower()
+        if priority not in {"high", "medium", "low"}:
+            priority = "medium"
+        rows.append(
+            {
+                "ticker": report.ticker,
+                "name": report.name,
+                "area": area,
+                "priority": priority,
+                "suggestion": observation,
+                "source": "director_worker_meta",
+                "run_id": run_id,
+                "director_model": director_model,
+                "meta_topic": topic,
+            }
+        )
+    return rows
+
+
+def procedural_suggestions_to_model_rows(
+    *,
+    report: CompanyReport,
+    procedural_suggestions: list[dict[str, Any]],
+    run_id: str,
+    director_model: str,
+) -> list[dict[str, Any]]:
+    """Map director procedural_suggestions to research_model_suggestions rows."""
+    rows: list[dict[str, Any]] = []
+    for item in procedural_suggestions:
+        if not isinstance(item, dict):
+            continue
+        summary = str(item.get("summary") or item.get("suggestion") or "").strip()
+        if not summary:
+            continue
+        area = str(item.get("area") or "research").strip().lower()
+        priority = str(item.get("priority") or "medium").strip().lower()
+        if priority not in {"high", "medium", "low"}:
+            priority = "medium"
+        rows.append(
+            {
+                "ticker": report.ticker,
+                "name": report.name,
+                "area": area,
+                "priority": priority,
+                "suggestion": summary,
+                "source": "director_worker",
+                "run_id": run_id,
+                "director_model": director_model,
+            }
+        )
+    return rows
+
+
+def persist_director_procedural_suggestions(
+    *,
+    report: CompanyReport,
+    task_plan: dict[str, Any],
+    run_id: str,
+    director_model: str,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+) -> list[dict[str, Any]]:
+    """Append director plan suggestions and meta-reflection to the suggestions ledger."""
+    rows = procedural_suggestions_to_model_rows(
+        report=report,
+        procedural_suggestions=list(task_plan.get("procedural_suggestions") or []),
+        run_id=run_id,
+        director_model=director_model,
+    )
+    rows.extend(
+        meta_reflection_to_model_rows(
+            report=report,
+            meta_reflection=list(task_plan.get("meta_reflection") or []),
+            run_id=run_id,
+            director_model=director_model,
+        )
+    )
+    if not rows:
+        return []
+    return _persist_model_suggestions(rows, path=suggestions_path)
+
+
 def estimate_director_worker_cost_usd(
     *,
     worker_count: int,
@@ -590,6 +774,8 @@ def run_director_worker_trial(
     memo_usd: float = 0.4,
     record_spend: bool = True,
     policy_path: Path | None = None,
+    persist_suggestions: bool = True,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
 ) -> DirectorWorkerRun:
     """Run a single-ticker director–worker research trial."""
     run_id = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
@@ -645,12 +831,24 @@ def run_director_worker_trial(
         cwd=cwd,
     )
     document.source_counts = dict(source_counts)
-    rubric = score_memo_rubric(document, inventory=inventory)
-    source_quality = score_research_sources(
+    document.memo_quality = score_research_sources(
         source_counts=source_counts,
         inventory=inventory,
         question_outcomes=document.question_outcomes,
     )
+    document.director_baseline = build_director_baseline(
+        report=report,
+        task_plan=task_plan,
+        worker_results=worker_results,
+        inventory=inventory,
+        source_counts=source_counts,
+        run_id=run_id,
+        output_dir=str(run_dir),
+        research_verdict=document.research_verdict,
+        research_confidence=document.research_confidence,
+    )
+    rubric = score_memo_rubric(document, inventory=inventory)
+    source_quality = document.memo_quality
 
     markdown_path = run_dir / "research.md"
     markdown_path.write_text(render_research_markdown(document), encoding="utf-8")
@@ -691,6 +889,21 @@ def run_director_worker_trial(
 
     if record_spend:
         record_estimated_spend(estimated, policy_path, pool=SPEND_POOL_AD_HOC)
+
+    if persist_suggestions:
+        appended = persist_director_procedural_suggestions(
+            report=report,
+            task_plan=task_plan,
+            run_id=run_id,
+            director_model=director_model,
+            suggestions_path=suggestions_path,
+        )
+        if appended:
+            write_json(
+                run_dir / "procedural_suggestions_appended.json",
+                {"appended": appended, "count": len(appended)},
+                compact=False,
+            )
 
     return run
 
@@ -735,7 +948,10 @@ __all__ = [
     "build_fallback_task_plan",
     "extract_json_object",
     "load_report_from_latest",
+    "meta_reflection_to_model_rows",
+    "persist_director_procedural_suggestions",
     "preview_director_worker_trial",
+    "procedural_suggestions_to_model_rows",
     "report_for_ticker",
     "run_director_worker_trial",
 ]

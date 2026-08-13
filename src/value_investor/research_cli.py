@@ -12,14 +12,13 @@ import pandas as pd
 
 from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES
 from value_investor.cursor_api_key import resolve_cursor_api_key
-from value_investor.research.format import format_research_text
+from value_investor.research.format import format_director_shadow_text, format_research_text
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_ALUMNI_CAP,
     DEFAULT_RESEARCH_WEEKLY_CAP,
     run_research_for_strong_buys,
     select_research_targets,
 )
-from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
 
 
@@ -199,15 +198,76 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Do not record estimated spend for --director-worker in library policy",
     )
+    parser.add_argument(
+        "--skip-dw-cap",
+        action="store_true",
+        help="Bypass weekly director–worker run cap (exploration/steady guard)",
+    )
+    parser.add_argument(
+        "--skip-escalation-gate",
+        action="store_true",
+        help="Run --director-worker even when no escalation triggers fire",
+    )
+    parser.add_argument(
+        "--escalation-check-only",
+        action="store_true",
+        help="With --director-worker: evaluate escalation triggers and exit (no agents)",
+    )
+    parser.add_argument(
+        "--no-promote-baseline",
+        action="store_true",
+        help="Do not merge director baseline onto live research memo after --director-worker",
+    )
+    parser.add_argument(
+        "--no-director-shadow",
+        action="store_true",
+        help="Disable observe-only director escalation logging on normal research runs",
+    )
+    parser.add_argument(
+        "--escalation-candidates",
+        action="store_true",
+        help=(
+            "List director escalation candidates for the current ISO week "
+            "(approval queue; no agents)"
+        ),
+    )
     args = parser.parse_args(argv)
+
+    if args.escalation_candidates:
+        from value_investor.research.director_escalation_candidates import (
+            DEFAULT_ESCALATION_CANDIDATES_PATH,
+            aggregate_escalation_candidates,
+            write_escalation_candidates,
+        )
+        from value_investor.research.format import format_director_escalation_candidates_text
+
+        queue = aggregate_escalation_candidates()
+        write_escalation_candidates(queue, path=DEFAULT_ESCALATION_CANDIDATES_PATH)
+        preview = format_director_escalation_candidates_text(queue)
+        if preview:
+            print(preview)
+        else:
+            print("No director escalation candidates for the current week.")
+        print(f"Wrote {DEFAULT_ESCALATION_CANDIDATES_PATH}")
+        return 0
 
     if args.director_worker:
         from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+        from value_investor.research.director_baseline import evaluate_material_change
+        from value_investor.research.director_escalation import evaluate_director_escalation
+        from value_investor.research.director_promotion import promote_director_baseline_to_store
         from value_investor.research.director_worker import (
             load_report_from_latest,
             preview_director_worker_trial,
             run_director_worker_trial,
         )
+        from value_investor.research.director_worker_cap import (
+            check_director_worker_cap,
+            record_director_worker_run,
+        )
+        from value_investor.research.gap_fill_sources import inspect_local_sources
+        from value_investor.research.source_quality import score_research_sources
+        from value_investor.research.store import ResearchStore
 
         report = load_report_from_latest(args.director_worker, args.reports_json)
         if report is None:
@@ -217,7 +277,33 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 1
         market = "ftse350" if args.universe.startswith("ftse") else args.universe
-        if args.dry_run:
+        store = ResearchStore(args.output_dir)
+        existing_doc = store.load(report.ticker)
+        sources_dir = store.sources_dir(report.ticker)
+        inventory = inspect_local_sources(sources_dir) if sources_dir.exists() else {}
+        source_counts = dict(existing_doc.source_counts) if existing_doc else {}
+        source_quality = score_research_sources(
+            source_counts=source_counts,
+            inventory=inventory,
+            question_outcomes=existing_doc.question_outcomes if existing_doc else None,
+        )
+        escalation = evaluate_director_escalation(
+            report=report,
+            existing_doc=existing_doc,
+            inventory=inventory,
+            source_quality=source_quality,
+        )
+        material = evaluate_material_change(
+            baseline=existing_doc.director_baseline if existing_doc else None,
+            report=report,
+            inventory=inventory,
+            source_counts=source_counts,
+        )
+        cap_status = check_director_worker_cap(
+            report.ticker,
+            policy_path=DEFAULT_POLICY_PATH,
+        )
+        if args.dry_run or args.escalation_check_only:
             preview = preview_director_worker_trial(
                 report=report,
                 primary_output_dir=args.output_dir,
@@ -225,17 +311,53 @@ def main(argv: list[str] | None = None) -> int:
                 max_worker_tasks=args.max_worker_tasks,
             )
             plan = preview["task_plan"]
+            label = "Escalation check" if args.escalation_check_only else "Director–worker dry-run"
+            print(f"{label}: {report.name} ({report.ticker})")
             print(
-                f"Director–worker dry-run: {report.name} ({report.ticker}) "
-                f"director={args.director_model} worker={args.worker_model}"
+                f"Escalation: {'yes' if escalation.should_escalate else 'no'} "
+                f"({', '.join(escalation.triggers) or 'none'})"
             )
-            print(f"Estimated worker tasks: {preview['estimated_tasks']}")
-            for task in plan.get("tasks") or []:
+            for reason in escalation.reasons:
+                print(f"  • {reason}")
+            if existing_doc and existing_doc.director_baseline:
                 print(
-                    f"  • [{task.get('type')}] {task.get('id')}: "
-                    f"{task.get('target')} — {str(task.get('focus', ''))[:100]}"
+                    f"Material change vs baseline: "
+                    f"{'yes' if material.material_change else 'no'} "
+                    f"({', '.join(material.triggers) or 'none'})"
                 )
+            print(
+                f"Cap: {cap_status.runs_this_week}/{cap_status.weekly_cap} "
+                f"this week ({cap_status.phase}); "
+                f"re-escalation={'yes' if cap_status.is_reescalation else 'no'}"
+            )
+            if not args.escalation_check_only:
+                print(f"Estimated worker tasks: {preview['estimated_tasks']}")
+                for task in plan.get("tasks") or []:
+                    print(
+                        f"  • [{task.get('type')}] {task.get('id')}: "
+                        f"{task.get('target')} — {str(task.get('focus', ''))[:100]}"
+                    )
             return 0
+        if not escalation.should_escalate and not args.skip_escalation_gate:
+            print("Director escalation gate: not triggered", file=sys.stderr)
+            for reason in escalation.reasons:
+                print(f"  • {reason}", file=sys.stderr)
+            print("Use --skip-escalation-gate to run anyway.", file=sys.stderr)
+            return 1
+        if (
+            existing_doc
+            and existing_doc.director_baseline
+            and not material.material_change
+            and not args.skip_escalation_gate
+        ):
+            print("Director re-escalation gate: no material change since baseline", file=sys.stderr)
+            for reason in material.reasons:
+                print(f"  • {reason}", file=sys.stderr)
+            print("Use --skip-escalation-gate to re-run anyway.", file=sys.stderr)
+            return 1
+        if not cap_status.allowed and not args.skip_dw_cap:
+            print(cap_status.reason, file=sys.stderr)
+            return 1
         if not args.api_key:
             print("CURSOR_API_KEY required for --director-worker", file=sys.stderr)
             return 1
@@ -245,6 +367,11 @@ def main(argv: list[str] | None = None) -> int:
             f"Director–worker trial: {report.name} ({report.ticker}) — "
             f"director={args.director_model} worker={args.worker_model} "
             f"max_tasks={args.max_worker_tasks}"
+        )
+        print(
+            f"Cap: {cap_status.runs_this_week + 1}/{cap_status.weekly_cap} "
+            f"this week ({cap_status.phase}); "
+            f"re-escalation={'yes' if cap_status.is_reescalation else 'no'}"
         )
         run = run_director_worker_trial(
             report=report,
@@ -259,11 +386,47 @@ def main(argv: list[str] | None = None) -> int:
             record_spend=not args.no_record_dw_spend,
             policy_path=DEFAULT_POLICY_PATH,
         )
+        if not args.skip_dw_cap:
+            ledger_info = record_director_worker_run(
+                ticker=report.ticker,
+                run_id=run.run_id,
+                policy_path=DEFAULT_POLICY_PATH,
+            )
+            tighten = ledger_info.get("auto_tighten") or {}
+            if tighten.get("applied"):
+                print(
+                    "Auto-tighten: moved to steady phase "
+                    f"(cap {tighten.get('steady_weekly_cap')}, "
+                    f"re-escalation rate {tighten.get('reescalation_rate')})"
+                )
         print(f"Workers completed: {len(run.worker_results)}")
+        meta_count = len(run.task_plan.get("meta_reflection") or [])
+        if meta_count:
+            print(f"Meta-reflection items: {meta_count}")
         print(f"Rubric composite: {run.rubric.get('composite')}")
         print(f"Verdict: {run.document.research_verdict} ({run.document.research_confidence})")
         print(f"Est. cost: ${run.estimated_cost_usd:.2f}")
         print(f"Wrote {run.output_dir / 'research.md'}")
+        if not args.no_promote_baseline:
+            try:
+                store = ResearchStore(args.output_dir)
+                promoted = promote_director_baseline_to_store(
+                    store=store,
+                    director_doc=run.document,
+                    run_id=run.run_id,
+                    trial_output_dir=str(run.output_dir),
+                )
+                print(
+                    f"Promoted director baseline to live memo "
+                    f"({store.metadata_path(report.ticker)})"
+                )
+                if promoted.director_baseline.get("open_questions"):
+                    print(
+                        f"  Baseline open questions: "
+                        f"{len(promoted.director_baseline['open_questions'])}"
+                    )
+            except ValueError as exc:
+                print(f"Baseline promotion skipped: {exc}", file=sys.stderr)
         return 0
 
     if args.deepen_sources:
@@ -457,6 +620,7 @@ def main(argv: list[str] | None = None) -> int:
         weekly_cap=args.research_cap,
         continue_alumni=not args.no_continue_alumni,
         alumni_cap=args.alumni_cap,
+        director_shadow=not args.no_director_shadow,
     )
 
     summary_path = args.output_dir / "research_summary.json"
@@ -477,6 +641,7 @@ def main(argv: list[str] | None = None) -> int:
             "active_count": summary.active_count,
             "alumni_count": summary.alumni_count,
             "alumni_updated": summary.alumni_updated,
+            "director_shadow": summary.director_shadow,
             "documents": [doc.to_dict() for doc in summary.documents],
         },
         compact=True,
@@ -485,6 +650,25 @@ def main(argv: list[str] | None = None) -> int:
     preview = format_research_text(summary, summary.documents)
     if preview:
         print(preview)
+    shadow_preview = format_director_shadow_text(summary.director_shadow)
+    if shadow_preview:
+        print()
+        print(shadow_preview)
+
+    from value_investor.research.director_escalation_candidates import (
+        DEFAULT_ESCALATION_CANDIDATES_PATH,
+        aggregate_escalation_candidates,
+        write_escalation_candidates,
+    )
+    from value_investor.research.format import format_director_escalation_candidates_text
+
+    queue = aggregate_escalation_candidates(run_entries=summary.director_shadow)
+    if queue.candidates or summary.director_shadow:
+        write_escalation_candidates(queue, path=DEFAULT_ESCALATION_CANDIDATES_PATH)
+    candidates_preview = format_director_escalation_candidates_text(queue)
+    if candidates_preview:
+        print()
+        print(candidates_preview)
 
     if summary.errors:
         return 2

@@ -214,6 +214,24 @@ def default_policy() -> dict[str, Any]:
                 "Never wire into quantitative scores or weights."
             ),
         },
+        "director_worker": {
+            "phase": "exploration",
+            "exploration_weekly_cap": 15,
+            "steady_weekly_cap": 5,
+            "enforce_weekly_cap": True,
+            "auto_tighten_enabled": True,
+            "auto_tighten_min_weeks": 8,
+            "auto_tighten_max_reescalation_rate": 0.35,
+            "auto_escalate_director": False,
+            "surface_escalation_candidates_in_email": True,
+            "note": (
+                "Exploration phase allows more director–worker runs per week while "
+                "paper turnover is unknown; auto-tighten moves to steady cap when "
+                "re-escalation rate stabilises. Shadow log surfaces escalation "
+                "candidates in the Sunday email for manual approval; "
+                "auto_escalate_director stays false until calibrated."
+            ),
+        },
         "updated_at": None,
     }
 
@@ -226,7 +244,14 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
     base = default_policy()
     base.update(data)
     # Ensure nested defaults
-    for key in ("budget", "model_review", "focus_graduation", "paper_fx", "macro_context"):
+    for key in (
+        "budget",
+        "model_review",
+        "focus_graduation",
+        "paper_fx",
+        "macro_context",
+        "director_worker",
+    ):
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})
         merged.update(file_section)

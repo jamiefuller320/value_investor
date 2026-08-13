@@ -25,6 +25,8 @@ from value_investor.historical_analysis import (
 from value_investor.post_run_review import PostRunReview
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import (
+    format_director_escalation_candidates_html,
+    format_director_escalation_candidates_text,
     format_gap_fill_html,
     format_gap_fill_text,
     format_ingest_improvement_html,
@@ -352,6 +354,7 @@ def format_text_report(
     gap_fill_summary=None,
     ingest_improvement_summary: IngestImprovementSummary | None = None,
     post_run_review: PostRunReview | None = None,
+    director_escalation_candidates=None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
@@ -419,6 +422,10 @@ def format_text_report(
     if gap_text:
         lines.extend(["RED-FLAG RESEARCH LOOP", "-" * 40, gap_text, ""])
 
+    director_text = format_director_escalation_candidates_text(director_escalation_candidates)
+    if director_text:
+        lines.extend(["DIRECTOR ESCALATION CANDIDATES", "-" * 40, director_text, ""])
+
     post_run_text = format_post_run_review_text(post_run_review)
     if post_run_text:
         lines.extend(["POST-RUN IMPROVEMENT REVIEW", "-" * 40, post_run_text, ""])
@@ -474,6 +481,7 @@ def format_html_report(
     gap_fill_summary=None,
     ingest_improvement_summary: IngestImprovementSummary | None = None,
     post_run_review: PostRunReview | None = None,
+    director_escalation_candidates=None,
     screen_label: str = "FTSE 350",
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
@@ -604,6 +612,7 @@ def format_html_report(
     research_section = format_research_html(research_documents or [], research_summary)
     ingest_section = format_ingest_improvement_html(ingest_improvement_summary)
     gap_fill_section = format_gap_fill_html(gap_fill_summary)
+    director_section = format_director_escalation_candidates_html(director_escalation_candidates)
     post_run_section = format_post_run_review_html(post_run_review)
 
     return f"""<!DOCTYPE html>
@@ -621,6 +630,7 @@ def format_html_report(
   {research_section}
   {ingest_section}
   {gap_fill_section}
+  {director_section}
   {post_run_section}
   {diff_section}
   <p><strong>Operating companies</strong> — {summary_bits}</p>
