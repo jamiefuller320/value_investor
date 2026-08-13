@@ -28,10 +28,11 @@ MODEL_API_RATES: dict[str, tuple[float, float]] = {
     "kimi-k2.7-code": (0.95, 4.00),
     "glm-5.2": (1.40, 4.40),
     "grok-4.5": (2.00, 6.00),
+    "grok-4.6": (2.00, 6.00),
 }
 
 # Draw from the generous first-party pool on individual plans (prefer for subscription budget).
-FIRST_PARTY_MODEL_IDS = frozenset({"default", "composer-2.5", "grok-4.5"})
+FIRST_PARTY_MODEL_IDS = frozenset({"default", "composer-2.5", "grok-4.5", "grok-4.6"})
 
 DEFAULT_POLICY_PATH = Path("docs/data/library/policy.json")
 DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro subscription (included pool metadata)

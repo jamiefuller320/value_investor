@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-12T11:08:57+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-13T08:27:23+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -182,6 +182,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L118 | **Wider offline exit-timing sim on near-miss names** | Walk archived weekly screens with a relaxed gate (hold/watch/near-miss below primary buy tier) and score hold-recovery vs hypothetical swap paths using forward prices. Useful priors for hold buffer and grace knobs; does not substitute for live paper cohort evidence. | exit_timing hold_recovery closed episodes stay below 15 after 8+ weeks of paper-auto, or counterfactual replay shows material churn on names never entered the book |
 | L140 | **Slim memo-utility rollup as horizon stage signal** | Optionally add a deterministic aggregate (grade histogram, top unresolved risk_tags, recurring open questions across buy-tier memos) into build_horizon_payload for STAGE READINESS / COUNTERFACTUAL GAPS — not a new agent section that re-plans ingest/prompt work. | Enough ResearchDocuments carry question_outcomes + memo_quality after PR #247 merges and weekly runs |
 | L141 | **Horizon scan: ask if memo schema aids AI judgment** | In STAGE READINESS / AUTOMATION RISKS / COUNTERFACTUAL GAPS (and ACCELERATE as offline_sim or paper_knobs), horizon may strategically ask whether research memo fields (verdict-only vs confidence, risk_tags, unresolved questions) should better support the AI-judgment paper track. Does not own weekly gap-fill synthesis — only whether product/schema experiments are stage-relevant. | After PR #247 merges and a few Sunday runs accumulate question_outcomes/risk_tags; ideally with L140 slim rollup in the payload |
+| L143 | **Two-stage research memo pipeline (Composer draft + Grok verify)** | Run composer-2.5 for source walk, section draft, and gap inventory; pass structured draft + citation map to grok-4.6 for verification, verdict calibration, and final memo. Cheaper than full Grok per name if frontier model only sees condensed context. Revisit after L88 cohort shows which dimension (citation vs gap honesty) drives outcomes. | L88 A/B has ≥6 tickers with human spot-checks; or library ladder exceeds ~25 selective memos/week |
+| L144 | **Director–worker research orchestration (Grok director, Composer workers)** | Grok plans memo strategy (gaps, source ladder, subtasks); Composer executes bounded reads/summaries/drafts; director synthesises verdict. Distinct from L143 linear draft→verify. Needs task schema, worker output contracts, and spend caps per director session. | L88/L143 pilots show frontier tier justified; weekly_ops headroom after ≥10 ruled cohort memos; task schema drafted |
 
 ### Ops / reliability
 

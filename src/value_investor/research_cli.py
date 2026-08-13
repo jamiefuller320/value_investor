@@ -127,7 +127,144 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Comma-separated tickers for --deepen-sources (default: all memos in output-dir)",
     )
+    parser.add_argument(
+        "--model-ab",
+        metavar="TICKER",
+        default=None,
+        help=(
+            "L88 pilot: run baseline vs challenger initial memos on one ticker "
+            "(default composer-2.5 vs grok-4.6)"
+        ),
+    )
+    parser.add_argument(
+        "--baseline-model",
+        default="composer-2.5",
+        help="Baseline model for --model-ab (default: composer-2.5)",
+    )
+    parser.add_argument(
+        "--challenger-model",
+        default="grok-4.6",
+        help="Challenger model for --model-ab (default: grok-4.6)",
+    )
+    parser.add_argument(
+        "--ab-output-dir",
+        type=Path,
+        default=Path("docs/data/research_model_ab"),
+        help="Output root for --model-ab runs (default: docs/data/research_model_ab)",
+    )
+    parser.add_argument(
+        "--no-record-ab-spend",
+        action="store_true",
+        help="Do not record estimated spend for --model-ab in library policy",
+    )
+    parser.add_argument(
+        "--director-worker",
+        metavar="TICKER",
+        default=None,
+        help=(
+            "Trial director–worker memo: Grok plans + synthesises, "
+            "Composer executes bounded worker tasks"
+        ),
+    )
+    parser.add_argument(
+        "--director-model",
+        default="grok-4.6",
+        help="Director model for --director-worker (default: grok-4.6)",
+    )
+    parser.add_argument(
+        "--worker-model",
+        default="composer-2.5",
+        help="Worker model for --director-worker (default: composer-2.5)",
+    )
+    parser.add_argument(
+        "--dw-output-dir",
+        type=Path,
+        default=Path("docs/data/research_director_worker"),
+        help="Output root for --director-worker runs",
+    )
+    parser.add_argument(
+        "--max-worker-tasks",
+        type=int,
+        default=5,
+        help="Max Composer worker tasks per --director-worker run (default: 5)",
+    )
+    parser.add_argument(
+        "--reports-json",
+        type=Path,
+        default=Path("docs/data/latest.json"),
+        help="Fallback report source when screening CSV is absent (default: docs/data/latest.json)",
+    )
+    parser.add_argument(
+        "--no-record-dw-spend",
+        action="store_true",
+        help="Do not record estimated spend for --director-worker in library policy",
+    )
     args = parser.parse_args(argv)
+
+    if args.director_worker:
+        from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+        from value_investor.research.director_worker import (
+            load_report_from_latest,
+            preview_director_worker_trial,
+            run_director_worker_trial,
+        )
+
+        report = load_report_from_latest(args.director_worker, args.reports_json)
+        if report is None:
+            print(
+                f"Ticker {args.director_worker!r} not found in {args.reports_json}",
+                file=sys.stderr,
+            )
+            return 1
+        market = "ftse350" if args.universe.startswith("ftse") else args.universe
+        if args.dry_run:
+            preview = preview_director_worker_trial(
+                report=report,
+                primary_output_dir=args.output_dir,
+                market=market,
+                max_worker_tasks=args.max_worker_tasks,
+            )
+            plan = preview["task_plan"]
+            print(
+                f"Director–worker dry-run: {report.name} ({report.ticker}) "
+                f"director={args.director_model} worker={args.worker_model}"
+            )
+            print(f"Estimated worker tasks: {preview['estimated_tasks']}")
+            for task in plan.get("tasks") or []:
+                print(
+                    f"  • [{task.get('type')}] {task.get('id')}: "
+                    f"{task.get('target')} — {str(task.get('focus', ''))[:100]}"
+                )
+            return 0
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --director-worker", file=sys.stderr)
+            return 1
+        policy = load_policy(DEFAULT_POLICY_PATH)
+        memo_usd = float((policy.get("ladder") or {}).get("estimated_memo_usd") or 0.4)
+        print(
+            f"Director–worker trial: {report.name} ({report.ticker}) — "
+            f"director={args.director_model} worker={args.worker_model} "
+            f"max_tasks={args.max_worker_tasks}"
+        )
+        run = run_director_worker_trial(
+            report=report,
+            api_key=args.api_key,
+            output_root=args.dw_output_dir,
+            primary_output_dir=args.output_dir,
+            director_model=args.director_model,
+            worker_model=args.worker_model,
+            market=market,
+            max_worker_tasks=args.max_worker_tasks,
+            memo_usd=memo_usd,
+            record_spend=not args.no_record_dw_spend,
+            policy_path=DEFAULT_POLICY_PATH,
+        )
+        print(f"Workers completed: {len(run.worker_results)}")
+        print(f"Rubric composite: {run.rubric.get('composite')}")
+        print(f"Verdict: {run.document.research_verdict} ({run.document.research_confidence})")
+        print(f"Est. cost: ${run.estimated_cost_usd:.2f}")
+        print(f"Wrote {run.output_dir / 'research.md'}")
+        return 0
 
     if args.deepen_sources:
         from value_investor.research.deepen_sources import deepen_sources_for_memo_tickers
@@ -175,6 +312,50 @@ def main(argv: list[str] | None = None) -> int:
         model_results = result.model_results
 
     reports = build_company_reports(signals, model_results)
+
+    if args.model_ab:
+        from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+        from value_investor.research.model_ab import report_for_ticker, run_model_ab_compare
+
+        report = report_for_ticker(reports, args.model_ab)
+        if report is None:
+            print(f"Ticker {args.model_ab!r} not found in latest screen output", file=sys.stderr)
+            return 1
+        if args.dry_run:
+            print(
+                f"Model A/B dry-run: {report.name} ({report.ticker}) "
+                f"{args.baseline_model} vs {args.challenger_model}"
+            )
+            return 0
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --model-ab", file=sys.stderr)
+            return 1
+        policy = load_policy(DEFAULT_POLICY_PATH)
+        memo_usd = float((policy.get("ladder") or {}).get("estimated_memo_usd") or 0.4)
+        market = "ftse350" if args.universe.startswith("ftse") else args.universe
+        print(
+            f"Model A/B: {report.name} ({report.ticker}) — "
+            f"{args.baseline_model} vs {args.challenger_model}"
+        )
+        comparison = run_model_ab_compare(
+            report=report,
+            api_key=args.api_key,
+            output_root=args.ab_output_dir,
+            primary_output_dir=args.output_dir,
+            baseline_model=args.baseline_model,
+            challenger_model=args.challenger_model,
+            market=market,
+            memo_usd=memo_usd,
+            record_spend=not args.no_record_ab_spend,
+            policy_path=DEFAULT_POLICY_PATH,
+        )
+        print(f"Winner (rubric): {comparison.winner}")
+        print(
+            f"Composite: baseline={comparison.baseline.rubric.composite:.3f} "
+            f"challenger={comparison.challenger.rubric.composite:.3f}"
+        )
+        print(f"Wrote {comparison.output_dir / 'comparison.md'}")
+        return 0
 
     if args.gap_fill:
         from value_investor.deep_analysis import _parse_deep_analysis
