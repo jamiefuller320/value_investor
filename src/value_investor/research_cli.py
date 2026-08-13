@@ -199,6 +199,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Do not record estimated spend for --director-worker in library policy",
     )
+    parser.add_argument(
+        "--skip-dw-cap",
+        action="store_true",
+        help="Bypass weekly director–worker run cap (exploration/steady guard)",
+    )
     args = parser.parse_args(argv)
 
     if args.director_worker:
@@ -207,6 +212,10 @@ def main(argv: list[str] | None = None) -> int:
             load_report_from_latest,
             preview_director_worker_trial,
             run_director_worker_trial,
+        )
+        from value_investor.research.director_worker_cap import (
+            check_director_worker_cap,
+            record_director_worker_run,
         )
 
         report = load_report_from_latest(args.director_worker, args.reports_json)
@@ -217,6 +226,10 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 1
         market = "ftse350" if args.universe.startswith("ftse") else args.universe
+        cap_status = check_director_worker_cap(
+            report.ticker,
+            policy_path=DEFAULT_POLICY_PATH,
+        )
         if args.dry_run:
             preview = preview_director_worker_trial(
                 report=report,
@@ -229,6 +242,11 @@ def main(argv: list[str] | None = None) -> int:
                 f"Director–worker dry-run: {report.name} ({report.ticker}) "
                 f"director={args.director_model} worker={args.worker_model}"
             )
+            print(
+                f"Cap: {cap_status.runs_this_week}/{cap_status.weekly_cap} "
+                f"this week ({cap_status.phase}); "
+                f"re-escalation={'yes' if cap_status.is_reescalation else 'no'}"
+            )
             print(f"Estimated worker tasks: {preview['estimated_tasks']}")
             for task in plan.get("tasks") or []:
                 print(
@@ -236,6 +254,9 @@ def main(argv: list[str] | None = None) -> int:
                     f"{task.get('target')} — {str(task.get('focus', ''))[:100]}"
                 )
             return 0
+        if not cap_status.allowed and not args.skip_dw_cap:
+            print(cap_status.reason, file=sys.stderr)
+            return 1
         if not args.api_key:
             print("CURSOR_API_KEY required for --director-worker", file=sys.stderr)
             return 1
@@ -245,6 +266,11 @@ def main(argv: list[str] | None = None) -> int:
             f"Director–worker trial: {report.name} ({report.ticker}) — "
             f"director={args.director_model} worker={args.worker_model} "
             f"max_tasks={args.max_worker_tasks}"
+        )
+        print(
+            f"Cap: {cap_status.runs_this_week + 1}/{cap_status.weekly_cap} "
+            f"this week ({cap_status.phase}); "
+            f"re-escalation={'yes' if cap_status.is_reescalation else 'no'}"
         )
         run = run_director_worker_trial(
             report=report,
@@ -259,7 +285,23 @@ def main(argv: list[str] | None = None) -> int:
             record_spend=not args.no_record_dw_spend,
             policy_path=DEFAULT_POLICY_PATH,
         )
+        if not args.skip_dw_cap:
+            ledger_info = record_director_worker_run(
+                ticker=report.ticker,
+                run_id=run.run_id,
+                policy_path=DEFAULT_POLICY_PATH,
+            )
+            tighten = ledger_info.get("auto_tighten") or {}
+            if tighten.get("applied"):
+                print(
+                    "Auto-tighten: moved to steady phase "
+                    f"(cap {tighten.get('steady_weekly_cap')}, "
+                    f"re-escalation rate {tighten.get('reescalation_rate')})"
+                )
         print(f"Workers completed: {len(run.worker_results)}")
+        meta_count = len(run.task_plan.get("meta_reflection") or [])
+        if meta_count:
+            print(f"Meta-reflection items: {meta_count}")
         print(f"Rubric composite: {run.rubric.get('composite')}")
         print(f"Verdict: {run.document.research_verdict} ({run.document.research_confidence})")
         print(f"Est. cost: ${run.estimated_cost_usd:.2f}")

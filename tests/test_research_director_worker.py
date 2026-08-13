@@ -9,6 +9,7 @@ from value_investor.research.director_worker import (
     build_fallback_task_plan,
     estimate_director_worker_cost_usd,
     extract_json_object,
+    meta_reflection_to_model_rows,
     normalize_task_plan,
     persist_director_procedural_suggestions,
     procedural_suggestions_to_model_rows,
@@ -89,11 +90,70 @@ def test_normalize_task_plan_filters_invalid_types():
         "tasks": [
             {"id": "a", "type": "invalid_type", "target": "x"},
             {"id": "b", "type": "screen_context", "target": "screening_snapshot.json"},
-        ]
+        ],
+        "meta_reflection": [
+            {"topic": "evidence_ladder", "observation": "Ladder thin.", "priority": "high"},
+            {"topic": "bogus", "observation": "Ignored topic.", "priority": "low"},
+        ],
+        "procedural_suggestions": [
+            {"area": "orchestration", "summary": "Add monitor schema.", "priority": "medium"},
+            {"area": "bogus_area", "summary": "Fallback area.", "priority": "low"},
+        ],
     }
     plan = normalize_task_plan(raw, max_tasks=5)
     assert plan["tasks"][0]["type"] == "summarize_filing_body"
     assert plan["tasks"][1]["type"] == "screen_context"
+    assert plan["meta_reflection"][0]["topic"] == "evidence_ladder"
+    assert plan["meta_reflection"][1]["topic"] == "other"
+    assert plan["procedural_suggestions"][0]["area"] == "orchestration"
+    assert plan["procedural_suggestions"][1]["area"] == "research"
+
+
+def test_meta_reflection_to_model_rows_maps_topic_to_area():
+    report = _report()
+    rows = meta_reflection_to_model_rows(
+        report=report,
+        meta_reflection=[
+            {
+                "topic": "task_schema",
+                "observation": "Worker task types may be inadequate for CH-only packs.",
+                "priority": "high",
+            }
+        ],
+        run_id="20260813T120000Z",
+        director_model="grok-4.6",
+    )
+    assert rows[0]["area"] == "orchestration"
+    assert rows[0]["source"] == "director_worker_meta"
+    assert rows[0]["meta_topic"] == "task_schema"
+
+
+def test_persist_director_plan_includes_meta_reflection(tmp_path: Path):
+    suggestions_path = tmp_path / "research_model_suggestions.json"
+    report = _report()
+    task_plan = {
+        "procedural_suggestions": [
+            {"area": "ingest", "summary": "Fix period tagging."},
+        ],
+        "meta_reflection": [
+            {
+                "topic": "monitoring",
+                "observation": "No Composer delta monitor exists yet for director baselines.",
+                "priority": "medium",
+            }
+        ],
+    }
+    appended = persist_director_procedural_suggestions(
+        report=report,
+        task_plan=task_plan,
+        run_id="run-1",
+        director_model="grok-4.6",
+        suggestions_path=suggestions_path,
+    )
+    assert len(appended) == 2
+    areas = {row["area"] for row in appended}
+    assert "ingest" in areas
+    assert "monitoring" in areas
 
 
 def test_estimate_director_worker_cost_scales_with_workers():
