@@ -127,6 +127,36 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Comma-separated tickers for --deepen-sources (default: all memos in output-dir)",
     )
+    parser.add_argument(
+        "--model-ab",
+        metavar="TICKER",
+        default=None,
+        help=(
+            "L88 pilot: run baseline vs challenger initial memos on one ticker "
+            "(default composer-2.5 vs grok-4.6)"
+        ),
+    )
+    parser.add_argument(
+        "--baseline-model",
+        default="composer-2.5",
+        help="Baseline model for --model-ab (default: composer-2.5)",
+    )
+    parser.add_argument(
+        "--challenger-model",
+        default="grok-4.6",
+        help="Challenger model for --model-ab (default: grok-4.6)",
+    )
+    parser.add_argument(
+        "--ab-output-dir",
+        type=Path,
+        default=Path("docs/data/research_model_ab"),
+        help="Output root for --model-ab runs (default: docs/data/research_model_ab)",
+    )
+    parser.add_argument(
+        "--no-record-ab-spend",
+        action="store_true",
+        help="Do not record estimated spend for --model-ab in library policy",
+    )
     args = parser.parse_args(argv)
 
     if args.deepen_sources:
@@ -175,6 +205,50 @@ def main(argv: list[str] | None = None) -> int:
         model_results = result.model_results
 
     reports = build_company_reports(signals, model_results)
+
+    if args.model_ab:
+        from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+        from value_investor.research.model_ab import report_for_ticker, run_model_ab_compare
+
+        report = report_for_ticker(reports, args.model_ab)
+        if report is None:
+            print(f"Ticker {args.model_ab!r} not found in latest screen output", file=sys.stderr)
+            return 1
+        if args.dry_run:
+            print(
+                f"Model A/B dry-run: {report.name} ({report.ticker}) "
+                f"{args.baseline_model} vs {args.challenger_model}"
+            )
+            return 0
+        if not args.api_key:
+            print("CURSOR_API_KEY required for --model-ab", file=sys.stderr)
+            return 1
+        policy = load_policy(DEFAULT_POLICY_PATH)
+        memo_usd = float((policy.get("ladder") or {}).get("estimated_memo_usd") or 0.4)
+        market = "ftse350" if args.universe.startswith("ftse") else args.universe
+        print(
+            f"Model A/B: {report.name} ({report.ticker}) — "
+            f"{args.baseline_model} vs {args.challenger_model}"
+        )
+        comparison = run_model_ab_compare(
+            report=report,
+            api_key=args.api_key,
+            output_root=args.ab_output_dir,
+            primary_output_dir=args.output_dir,
+            baseline_model=args.baseline_model,
+            challenger_model=args.challenger_model,
+            market=market,
+            memo_usd=memo_usd,
+            record_spend=not args.no_record_ab_spend,
+            policy_path=DEFAULT_POLICY_PATH,
+        )
+        print(f"Winner (rubric): {comparison.winner}")
+        print(
+            f"Composite: baseline={comparison.baseline.rubric.composite:.3f} "
+            f"challenger={comparison.challenger.rubric.composite:.3f}"
+        )
+        print(f"Wrote {comparison.output_dir / 'comparison.md'}")
+        return 0
 
     if args.gap_fill:
         from value_investor.deep_analysis import _parse_deep_analysis
