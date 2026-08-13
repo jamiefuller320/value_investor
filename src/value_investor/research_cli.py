@@ -12,7 +12,7 @@ import pandas as pd
 
 from value_investor.constituents import DEFAULT_UNIVERSE, VALID_UNIVERSES
 from value_investor.cursor_api_key import resolve_cursor_api_key
-from value_investor.research.format import format_research_text
+from value_investor.research.format import format_director_shadow_text, format_research_text
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_ALUMNI_CAP,
     DEFAULT_RESEARCH_WEEKLY_CAP,
@@ -213,12 +213,23 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="With --director-worker: evaluate escalation triggers and exit (no agents)",
     )
+    parser.add_argument(
+        "--no-promote-baseline",
+        action="store_true",
+        help="Do not merge director baseline onto live research memo after --director-worker",
+    )
+    parser.add_argument(
+        "--no-director-shadow",
+        action="store_true",
+        help="Disable observe-only director escalation logging on normal research runs",
+    )
     args = parser.parse_args(argv)
 
     if args.director_worker:
         from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
         from value_investor.research.director_baseline import evaluate_material_change
         from value_investor.research.director_escalation import evaluate_director_escalation
+        from value_investor.research.director_promotion import promote_director_baseline_to_store
         from value_investor.research.director_worker import (
             load_report_from_latest,
             preview_director_worker_trial,
@@ -370,6 +381,26 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Verdict: {run.document.research_verdict} ({run.document.research_confidence})")
         print(f"Est. cost: ${run.estimated_cost_usd:.2f}")
         print(f"Wrote {run.output_dir / 'research.md'}")
+        if not args.no_promote_baseline:
+            try:
+                store = ResearchStore(args.output_dir)
+                promoted = promote_director_baseline_to_store(
+                    store=store,
+                    director_doc=run.document,
+                    run_id=run.run_id,
+                    trial_output_dir=str(run.output_dir),
+                )
+                print(
+                    f"Promoted director baseline to live memo "
+                    f"({store.metadata_path(report.ticker)})"
+                )
+                if promoted.director_baseline.get("open_questions"):
+                    print(
+                        f"  Baseline open questions: "
+                        f"{len(promoted.director_baseline['open_questions'])}"
+                    )
+            except ValueError as exc:
+                print(f"Baseline promotion skipped: {exc}", file=sys.stderr)
         return 0
 
     if args.deepen_sources:
@@ -563,6 +594,7 @@ def main(argv: list[str] | None = None) -> int:
         weekly_cap=args.research_cap,
         continue_alumni=not args.no_continue_alumni,
         alumni_cap=args.alumni_cap,
+        director_shadow=not args.no_director_shadow,
     )
 
     summary_path = args.output_dir / "research_summary.json"
@@ -583,6 +615,7 @@ def main(argv: list[str] | None = None) -> int:
             "active_count": summary.active_count,
             "alumni_count": summary.alumni_count,
             "alumni_updated": summary.alumni_updated,
+            "director_shadow": summary.director_shadow,
             "documents": [doc.to_dict() for doc in summary.documents],
         },
         compact=True,
@@ -591,6 +624,10 @@ def main(argv: list[str] | None = None) -> int:
     preview = format_research_text(summary, summary.documents)
     if preview:
         print(preview)
+    shadow_preview = format_director_shadow_text(summary.director_shadow)
+    if shadow_preview:
+        print()
+        print(shadow_preview)
 
     if summary.errors:
         return 2

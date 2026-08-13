@@ -355,3 +355,45 @@ def test_run_research_updates_alumni(mock_ingest, mock_initial, mock_weekly, tmp
     assert {doc.ticker for doc in summary.documents} == {"AAA.L", "OLD.L"}
     mock_weekly.assert_called_once()
     assert mock_weekly.call_args.kwargs["screen_signal"] == "hold"
+
+
+@patch("value_investor.research.runner.run_initial_research_agent")
+@patch("value_investor.research.runner.ingest_research_sources")
+def test_run_research_records_director_shadow(mock_ingest, mock_initial, tmp_path):
+    mock_ingest.return_value = {
+        "financials_path": "f.json",
+        "snapshot_path": "s.json",
+        "news_manifest_path": "n.json",
+        "news_batch_path": "b.json",
+        "financial_years": 0,
+        "news_total": 0,
+        "news_new": 0,
+        "filings_summary": {"total": 7, "annual": 0, "interim": 0, "with_body": 7},
+    }
+    mock_initial.return_value = (
+        ResearchDocument(
+            ticker="VTY.L",
+            name="Vistry Group PLC",
+            signal="strong_buy",
+            version=1,
+            created_at="2026-08-13T00:00:00+00:00",
+            updated_at="2026-08-13T00:00:00+00:00",
+            mode="initial",
+            executive_summary="Thin pack.",
+            research_verdict="accumulate",
+            research_confidence=0.65,
+            agent_id="agent-1",
+        ),
+        "agent-1",
+    )
+
+    summary = run_research_for_strong_buys(
+        reports=[_report(ticker="VTY.L", name="Vistry Group PLC", signal="strong_buy")],
+        output_dir=tmp_path,
+        api_key="test-key",
+        director_shadow=True,
+    )
+
+    assert len(summary.director_shadow) == 1
+    assert summary.director_shadow[0]["ticker"] == "VTY.L"
+    assert (tmp_path / "director_shadow.json").exists()

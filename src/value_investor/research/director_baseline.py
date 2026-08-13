@@ -144,11 +144,12 @@ def evaluate_material_change(
                 f"{prior.get('filings_with_body')} → {current.get('filings_with_body')}"
             )
 
-    prior_thin = set(prior.get("thin") or [])
-    current_thin = set(current.get("thin") or [])
-    if current_thin < prior_thin:
-        triggers.append("ladder_improved")
-        reasons.append(f"Thin ladder steps reduced: {sorted(prior_thin - current_thin)}")
+    if inventory is not None:
+        prior_thin = set(prior.get("thin") or [])
+        current_thin = set(current.get("thin") or [])
+        if current_thin < prior_thin:
+            triggers.append("ladder_improved")
+            reasons.append(f"Thin ladder steps reduced: {sorted(prior_thin - current_thin)}")
 
     return MaterialChangeDecision(
         material_change=bool(triggers),

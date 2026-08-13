@@ -160,6 +160,7 @@ class ResearchSummary:
     active_count: int = 0
     alumni_count: int = 0
     alumni_updated: int = 0
+    director_shadow: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def has_documents(self) -> bool:

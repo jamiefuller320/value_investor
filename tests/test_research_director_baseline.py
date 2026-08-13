@@ -91,6 +91,27 @@ def test_material_change_detects_new_annual_filing():
     assert "new_filings_annual" in decision.triggers
 
 
+def test_material_change_skips_thin_ladder_when_inventory_not_inspected():
+    baseline = build_director_baseline(
+        report=_report(),
+        task_plan={"open_questions": [], "meta_reflection": []},
+        worker_results=[],
+        inventory={"thin": ["news_manifest"]},
+        source_counts={"filings_annual": 1, "filings_with_body": 7},
+        run_id="run-1",
+        output_dir="out",
+        research_verdict="caution",
+        research_confidence=0.4,
+    )
+    decision = evaluate_material_change(
+        baseline=baseline,
+        report=_report(),
+        inventory=None,
+        source_counts={"filings_annual": 1, "filings_with_body": 7},
+    )
+    assert decision.material_change is False
+
+
 def test_material_change_false_when_unchanged():
     baseline = build_director_baseline(
         report=_report(),

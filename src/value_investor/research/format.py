@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.summary import CompanyReport
@@ -43,6 +43,30 @@ def _latest_weekly_summary(doc: ResearchDocument) -> str | None:
         return None
     summary = doc.weekly_updates[-1].get("summary", "").strip()
     return summary or None
+
+
+def format_director_shadow_text(entries: list[dict[str, Any]] | None) -> str | None:
+    if not entries:
+        return None
+    lines = ["Director shadow (observe-only — no agents called):"]
+    counts: dict[str, int] = {}
+    for entry in entries:
+        action = str(entry.get("recommended_action") or "none")
+        counts[action] = counts.get(action, 0) + 1
+    lines.append(
+        "  " + ", ".join(f"{name}={count}" for name, count in sorted(counts.items()))
+    )
+    for entry in entries:
+        if entry.get("recommended_action") in {"none", "monitor_composer"}:
+            continue
+        triggers = entry.get("escalation", {}).get("triggers") or []
+        material = entry.get("material_change", {}) or {}
+        mat_triggers = material.get("triggers") or []
+        lines.append(
+            f"  • {entry.get('ticker')}: {entry.get('recommended_action')} "
+            f"[{', '.join(triggers + mat_triggers) or 'triggers pending'}]"
+        )
+    return "\n".join(lines)
 
 
 def format_gap_fill_text(summary: GapFillSummary | None) -> str | None:
