@@ -1,0 +1,129 @@
+# Galliford Try Holdings plc (GFRD.L) — Research memo
+
+_Version 1 · Updated 2026-08-13T06:55:16.555611+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Galliford Try is a UK tier-one construction group focused on public and regulated-sector building and infrastructure, trading on a net-cash balance sheet with a £4.3bn order book and no defined-benefit pension liabilities. The quantitative screen flags the name as a buy on cheapness, quality, dividend, GARP and risk factors — notably 10.5% FCF yield, PEG 0.89, 30.3% ROE and a 3.2% dividend yield — though timing suggests waiting for a pullback (RSI ~62, price above the 200-day moving average). Filings show a sustained recovery: FY2025 adjusted profit before tax rose 29% to £45.0m on revenue of £1,875m, with H1 FY2026 momentum continuing and management guiding FY2026 adjusted PBT to the top end of £51.4m–£53.4m. The central debate is whether premium headline multiples (P/E 17.5, P/B 5.1) are justified by margin progression toward a 4.0% 2030 target and framework-backed visibility, or whether construction cyclicality, contract-accounting judgements and legacy fire-safety contingencies cap re-rating.
+
+---
+
+## INVESTMENT THESIS
+For a value-oriented investor, Galliford Try offers a rare combination in UK construction: profitable growth, strong cash conversion and capital returns without balance-sheet leverage. The screen passes 11 of 22 models across five factor families — cheapness (FCF Yield, Acquirer's Multiple), quality (Buffett Quality, Piotroski F-Score, Earnings Quality), dividend (Dividend Growth), GARP (Lynch PEG, Neff PEGY) and risk (Composite Value, Magic Formula) — with full data coverage (20/20 metrics).
+
+Business quality supports the signal. Roughly 95% of the order book sits in public and regulated sectors; 87% of contracts run through frameworks, giving multi-year revenue visibility (98% of FY2026 and ~90% of FY2027 secured per the July 2026 trading update). Management has delivered six consecutive years of revenue, profit and cash growth, with divisional adjusted operating margin rising from 2.5% (FY2025) to 3.2% (H1 FY2026), tracking toward a 4.0% 2030 target. Capital allocation is disciplined: 1.8x earnings dividend cover, three completed £10m buyback programmes, and bolt-on M&A (e.g. Nene Valley Fire & Acoustics, ~£10m) funded from operating cash rather than debt.
+
+The screen's "buy — wait for pullback" timing overlay is relevant: at ~17.5x earnings and 5.1x book, the market has already rewarded the turnaround (shares rejoined the FTSE 250 in September 2025). The value case rests less on deep discount to assets than on sustained FCF generation (£63m per Yahoo FY2025 cash flow, corroborated by filing-reported net cash of £237.6m rising to £258.8m at FY2026 year-end) and earnings compounding at sub-1.0x PEG.
+
+---
+
+## FINANCIAL REVIEW
+*Primary source: Companies House annual accounts (FY2021–FY2025) and Investegate RNS interim/trading updates. Yahoo Finance used only where noted.*
+
+### Annual trend (Companies House consolidated accounts)
+
+| Metric | FY2025 (Jun-25) | FY2024 (Jun-24) | FY2023 (Jun-23) | FY2022 (Jun-22) | FY2021 (Jun-21) |
+|---|---|---|---|---|---|
+| Revenue | £1,875.2m | £1,772.8m | £1,394m | £1,237.2m | £1,124.8m |
+| Adj. operating profit | £40.6m | £29.6m | £19.1m | £18.5m* | £10.1m |
+| Divisional adj. op. margin | 3.0% | 2.5% | 2.4% | 2.4% | n/a |
+| Adj. PBT | £45.0m | £35.0m† | £20.6m | £19.1m | n/a |
+| Statutory PBT | £44.1m | £30.9m (£32.7m pre-exceptional) | £10.1m | £5.4m | £11.4m |
+| Adj. basic EPS | 34.4p | 29.6p† | 16.6p | 16.0p | n/a |
+| Full-year dividend | 19.0p | 15.5p | 10.5p | 8.0p | 4.7p |
+| Net cash (year-end) | £237.6m | n/a in extract | n/a | n/a | £216.2m |
+| Avg. month-end cash | £178.7m | £154.8m | £135m | £174m | £164m |
+| Order book | £4.1bn | £3.8bn | £3.7bn | £3.4bn | n/a |
+
+*FY2022 figure labelled "pre-exceptional operating profit before amortisation" in the FY2023 annual report extract. †FY2025 reports FY2024 adjusted PBT as £35.0m restated; FY2024 annual extract shows pre-exceptional PBT £32.7m — restatement relates to IFRS 15 contract-combination correction (£8.8m retained earnings adjustment disclosed in H1 FY2026 interim notes).*
+
+**FY2025 highlights** (annual report, published December 2025): Revenue grew 6.3% driven by AMP7 run-off in Environment and robust Highways. Adjusted PBT rose 28.6% to £45.0m; divisional margin hit 3.0%, reaching the prior 2026 target one year early. Dividend increased 22.6% to 19.0p. Balance sheet: £237.6m cash, £38.6m PPP assets, no drawn debt, no pension liabilities. Completed first £10m buyback; second £10m programme announced September 2025.
+
+**Multi-year trajectory:** Revenue has compounded from ~£1.1bn (FY2021) to ~£1.9bn (FY2025), with the step-change in FY2024 reflecting the nmcn water acquisition integration. Profitability inflected post-restructuring: statutory PBT was £5.4m (FY2022) versus £44.1m (FY2025). Margins have expanded 60bps over three years (2.4% → 3.0%), with management targeting 4.0% by 2030.
+
+### Interim H1 FY2026 (RNS, 4 March 2026)
+
+- Revenue £934.9m (+1.3% YoY); adjusted PBT £24.7m (+20.5%); divisional adjusted operating margin 3.2% (+54bps).
+- Building margin 3.1% (from 2.7%); Infrastructure 3.3% (from 2.7%).
+- Net cash £211.7m; 12-month average month-end cash £189.9m; PPP assets £38.5m.
+- Order book £4.1bn (+5.1%); 98% of FY2026 revenue secured.
+- Interim dividend 6.5p (+18.2%); third buyback underway (£9.0m of £10m repurchased by 27 February 2026).
+- **Going concern:** Directors confirm adequate resources for at least 12 months; BDO review found no material going-concern uncertainties undisclosed.
+- **Auditor:** Half-year accounts reviewed (not audited); FY2025 statutory accounts received unqualified audit opinion per interim note 1.
+
+### Trading update FY2026 (RNS, 15 July 2026)
+
+Full-year audited results due 17 September 2026 — not yet in the filings index. Management expects:
+- Revenue growth ~3%; adjusted PBT at top end of analyst range £51.4m–£53.4m.
+- Sixth consecutive year of revenue, profit and cash growth; margin progression toward 4.0%.
+- Average month-end cash £216.2m (+21%); year-end cash £258.8m; PPP assets £37.2m.
+- Order book £4.3bn; ~90% of FY2027 revenue secured.
+- Capital returned: £20.3m dividends, £38.4m on acquisitions/buybacks (including completed third £10m buyback at ~£5.11 average).
+
+### Balance sheet and cash flow
+
+Filings consistently describe a **debt-free** capital structure: £25m revolving credit facility undrawn (H1 FY2026); lease liabilities ~£52m (Yahoo FY2025: total debt £53.8m, all capital leases). Working capital is negative (£50.5m per Yahoo FY2025), typical for construction contract accounting.
+
+**Free cash flow** (Yahoo fallback — not separately disclosed in annual OCR extracts): FY2025 FCF £63.3m on operating cash flow £65.7m; FY2024 FCF £55.2m. This supports the screen's 10.5% FCF yield.
+
+**Provisions** (H1 FY2026 balance sheet): £52.5m total — rectification £49.2m (including £13.1m for a single long-warranty infrastructure joint-operation contract with estimated range £7.1m–£13.1m), onerous contracts £3.3m.
+
+**Contract judgements:** Top five unagreed variations/claims positions carry estimated end-of-contract claims of £95.8m on £517.1m overall contract value (H1 FY2026 note 2).
+
+### Gaps and caveats
+
+- FY2026 **full-year audited accounts** are not yet filed; the July 2026 trading update is the latest consolidated guidance.
+- Companies House annual body extracts are OCR-derived with incomplete risk-management and notes sections; detailed principal-risk tables (pages 59–62 of FY2025 annual report) are referenced in the interim but not fully reproduced in the corpus.
+- Prior-year **IFRS 15 restatement** affects comparability of FY2024 revenue (£1,763.7m restated vs £1,772.8m originally reported).
+
+---
+
+## RISKS AND RED FLAGS
+**Cyclical / customer concentration.** ~95% of the order book is public or regulated sector (H1 FY2026). Revenue visibility is high near term, but medium-term volumes depend on UK fiscal policy, framework renewal and the £725bn infrastructure plan cited in the July 2026 trading update. A slowdown in government capital spend or framework re-procurement would disproportionately affect Galliford Try.
+
+**Project delivery and margin risk.** Principal risks flagged in H1 FY2026 (unchanged from FY2025 annual report) include work winning, project delivery, resources and regulatory compliance. Construction remains low-margin; a reversion from 3.2% toward historical ~2.4% would materially affect earnings. AMP8 water transition created revenue headwinds in Environment during H1 FY2026 (noted in the interim financial review).
+
+**Regulatory / fire safety / litigation.** The interim discloses: (i) a pool of non-fire-related contingent claims with collective range £nil–£6.6m; (ii) three fire-safety-related claims where management states it is "not practicable" to value the pool, though it "cannot fully rule out that material settlements may result"; (iii) ongoing Building Safety Act uncertainty for historical cladding contracts. Bond/guarantee utilisation of £150.7m (H1 FY2026) is normal course but reflects contractual obligations. Directors state existing litigation resolution should not materially affect financial position, but construction dispute outcomes are inherently uncertain.
+
+**Accounting / contract judgements.** The FY2025 IFRS 15 contract-combination restatement (£8.8m retained earnings reduction) raises governance-of-controls questions, though the interim notes state no further primary-statement impact. Revenue recognition on variations and claims (£95.8m estimated on top five positions) carries estimation risk; auditors highlight critical judgements unchanged from FY2025.
+
+**Competitive dynamics.** Framework-based procurement (90%+ of order book) limits pricing power; success depends on quality scoring (c.80% of bid criteria) rather than price alone, but peer competition on major DfE, National Grid and housing frameworks is intense.
+
+**Positive mitigants.** Net cash (£258.8m year-end FY2026 per trading update), no DB pension liabilities, undrawn RCF, 97% of supply-chain invoices paid within 60 days, and unqualified FY2025 audit with going-concern confirmation in H1 FY2026.
+
+RiskTags: cyclical, regulatory, customer_concentration, accounting, competitive, litigation
+
+---
+RiskTags: cyclical, regulatory, customer_concentration, accounting, competitive, litigation
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-good**, dominated by results, framework wins and capital returns rather than controversy.
+
+**Results and guidance**
+- *"Galliford Try shares rise after profit beats forecasts"* (Proactive Investors, 4 March 2026) and *"Galliford Try upgrades guidance again"* (Investors' Chronicle, 4 March 2026) — H1 FY2026 beat and raised FY2026 expectations.
+- *"Galliford Try H1 Earnings Call Highlights"* (Yahoo Finance, 4 March 2026) and CFO interview on 11th consecutive half-year profit growth (Yahoo Finance, 3 March 2026).
+
+**Strategy / M&A**
+- Acquisition of Nene Valley Fire & Acoustics (~£10m, February 2026) to expand higher-margin passive fire protection (Yahoo Finance small-cap snapshot, 6 March 2026).
+- Nene Valley integration "ahead of pre-acquisition investment case" per July 2026 trading update.
+
+**Contract wins**
+- £15.4bn DfE Construction Framework 25 appointment (RNS/Proactive, 18 February 2026).
+- £750m Sovereign Network Group affordable homes framework and £15.4bn UK schools framework (Yahoo Finance, 22 April 2026 and 18 February 2026).
+- Clarion Housing affordable homes scheme (£26m), RAF Lakenheath munitions facility (£60m) cited in July 2026 trading update.
+
+**Capital returns**
+- Third £10m share buyback completed at ~£5.11 average (RNS, 22–23 April 2026).
+
+**Market / sentiment**
+- *"Galliford Try share price hits record high as it rejoins FTSE 250"* (Construction News, 29 September 2025).
+- Simply Wall St articles flag valuation debate (*"25% Share Price Surge Not Quite Adding Up"*, 5 October 2025; *"Could Be 28% Above Intrinsic Value"*, 10 February 2026).
+
+No material management departures or regulatory enforcement actions appear in the news manifest. Third-party valuation scepticism is worth noting given the screen's timing "wait" signal.
+
+---
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.74
+Rationale: Filings corroborate the screen's buy thesis — rising margins, net-cash balance sheet, FCF generation and framework-backed visibility — but elevated trading multiples and construction-specific contingent liabilities warrant phased entry aligned with the screen's pullback timing rather than aggressive chase.
