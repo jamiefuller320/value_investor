@@ -1,0 +1,120 @@
+# The Sage Group plc (SGE.L) — Research memo
+
+_Version 1 · Updated 2026-08-13T06:39:29.841154+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+The Sage Group is a FTSE 100 provider of mission-critical accounting, HR and payroll software for small and mid-sized businesses, with a highly recurring revenue model (97% recurring; renewal by value above 100%) and a multi-year track record of double-digit underlying revenue growth and margin expansion. The quantitative screen rates SGE.L as a buy on quality, cash generation, dividend growth and GARP characteristics (FCF yield ~5%, PEGY 0.11, 14% growth), though headline multiples remain elevated (P/E 26.1, P/B 43.9) and timing flags overbought conditions (RSI 73; “wait for pullback”). Primary filings confirm accelerating FY26 momentum—H1 underlying revenue +11%, nine-month revenue +11% with Q3 at +12%—alongside aggressive capital return (£600m buybacks announced in H1) that has pushed leverage to the top of management’s 1–2× net debt/EBITDA range. The central debate is whether durable SMB software economics and AI-led upsell justify a premium multiple, or whether buybacks, goodwill-heavy accounting and competitive AI execution risk cap upside from current levels.
+
+---
+
+## INVESTMENT THESIS
+For a value-oriented investor, Sage offers a rare combination of **predictable cash flows and improving returns on capital** rather than deep cyclical cheapness. The screen passes six models across five factor families—cheapness (FCF Yield), quality (Economic Moat, Earnings Quality, Magic Formula), dividend (Dividend Growth) and GARP (Neff PEGY)—with full data quality (20/20 metrics). That profile aligns with the business: subscription penetration at 84%, ARR growing 11%, underlying operating margin stable at 23.9%, and underlying cash conversion of 110–116% in recent periods.
+
+FY23–FY25 statutory revenue rose from £2,184m to £2,513m while underlying operating profit margin expanded from 20.9% to 23.9%; ROCE reached 33% in H1 FY26 per the half-year RNS. Free cash flow remains robust—£469m in FY25 per Yahoo, £241m in H1 FY26 per the May 2026 results release—supporting a progressive dividend (21.85p full-year FY25; interim 8.05p H1 FY26, +8%) and ongoing buybacks. The screen’s buy call is therefore grounded in **business quality and cash-backed growth at a reasonable earnings-growth price (PEGY 0.11)**, not low absolute P/E. Near-term entry timing is less compelling given the screen’s “wait for pullback” overlay and 12% premium to the 200-day SMA.
+
+---
+
+## FINANCIAL REVIEW
+**Source hierarchy:** Companies House annual accounts (FY23–FY25) and Investegate RNS bodies for H1 FY26 and the nine-month trading update. Yahoo (`financials_annual.json`) used only where annual body extracts lack balance-sheet/cash-flow detail, as noted below.
+
+**Coverage gap:** `filings_index.json` lists five annual filings and one trading update but **zero filings tagged `interim`**. Half-year results for the six months to 31 March 2026 exist as an RNS body (`d592ebfb710312ed.txt`, 21 May 2026) but are classified `other` in the index.
+
+### Annual trend (year ended 30 September)
+
+| Metric | FY23 | FY24 | FY25 | Source |
+|--------|------|------|------|--------|
+| Underlying total revenue | £2,184m (+10%) | £2,332m (+9%) | £2,513m (+10%) | CH annual bodies |
+| Underlying operating profit | £456m (20.9% margin) | £529m (22.7%) | £600m (23.9%) | CH annual bodies |
+| Underlying basic EPS | 32.3p | 37.9p | 43.2p | CH annual bodies |
+| Statutory revenue | £2,184m | £2,332m | £2,513m | CH annual bodies |
+| Statutory operating profit | — | £452m | £530m | CH annual bodies |
+| Net cash from operating activities | £387m | £491m | £660m (110% cash conversion) | CH annual bodies |
+| Full-year dividend (proposed/paid) | — | 20.45p | 21.85p | CH annual bodies |
+
+Revenue growth has been broad-based across North America (~45% of revenue), UKIA (~29%) and Europe (~26%), driven by Sage Business Cloud and Sage Intacct. FY25 ARR growth was 11% with 97% recurring revenue and 101% renewal by value (FY25 annual highlights).
+
+**Yahoo fallback (FY25, year ended Sep 2025):** free cash flow £469m; net debt £1,086m; total debt £1,579m; cash £390m; shareholders’ equity £720m. These reconcile directionally with the H1 FY26 balance sheet (see below) but the annual CH body extracts do not include full statutory balance-sheet lines—figures should be verified against the complete FY25 accounts PDF if precision is required.
+
+### Half-year FY26 (six months to 31 March 2026)
+
+From the RNS results body (21 May 2026):
+
+- **Underlying total revenue:** £1,363m (+11% organic +10%)
+- **Underlying operating profit:** £326m (+15%); margin **23.9%** (+80 bps)
+- **Statutory operating profit:** £293m (+15%)
+- **ARR:** £2,727m (+11%); **renewal rate by value 102%**
+- **Sage Business Cloud revenue:** £1,162m (+15%); cloud native +25%
+- **Underlying cash conversion:** 116%; **free cash flow:** £241m
+- **Net debt:** £1,504m; **net debt/underlying EBITDA:** 2.0× (target range 1–2×); liquidity £1.1bn; undrawn £630m RCF; S&P **BBB+** (stable)
+- **ROCE:** 33% (H1 25: 29%)
+- **Interim dividend:** 8.05p (+8%)
+- **Share buybacks:** £600m announced in H1 (£300m completed Feb 2026; further £300m programme underway)
+
+Going concern: directors confirm adequate resources for at least 12 months after approval, with stress tests (75% churn uplift, reduced new sales) showing no need to draw the RCF.
+
+### Nine-month trading update (to 30 June 2026)
+
+From the RNS trading update (29 July 2026):
+
+- **Total revenue (underlying):** £2,062m (+11%; organic +10%)
+- **Q3 revenue:** £699m (+12%)
+- **Sage Business Cloud:** £1,762m (+15%); cloud native £794m (+25%)
+- **Recurring revenue:** £2,002m (+11%); subscription penetration 84%
+- **Guidance reiterated:** organic total revenue growth **above 9%** for FY26; operating margins to trend upward
+
+**Trajectory:** Growth is accelerating through FY26 (FY25 +10% → H1 +11% → 9M +11% with Q3 +12%), with margins holding at peak FY25 levels and cash conversion remaining strong. Leverage has risen with debt-funded buybacks (net debt/EBITDA 2.0× vs 1.5× prior year), which warrants monitoring even as liquidity remains ample.
+
+---
+
+## RISKS AND RED FLAGS
+**Competitive / technology:** Principal risk #1 in the H1 FY26 filing is Customer Experience—failure to deliver ongoing value threatens renewal-led growth. Sage is investing heavily in AI agents and Sage Copilot, but execution against Intuit, Xero, Oracle NetSuite and cloud-native entrants remains the strategic battleground. The H1 body references principal risks from the FY25 annual report; the extract is truncated mid-risk #1, so full risk taxonomy should be verified in the complete annual report.
+
+**Leverage and capital allocation:** Net debt/underlying EBITDA at **2.0×** sits at the upper bound of the stated 1–2× medium-term range. H1 FY26 saw €500m bond issuance (2033 maturity, 3.821% coupon) alongside £353m of buyback cash outflow in the period. Aggressive repurchases have compressed reported equity (net assets £220m at 31 March 2026 per H1 balance sheet) and contribute to very high reported P/B (43.9 on screen).
+
+**Goodwill / intangibles:** Goodwill of £2,276m and total intangibles £2,489m at H1 FY26 on total assets £3,987m imply **negative tangible book value**—a structural feature, not a near-term impairment signal, but it limits balance-sheet margin of safety.
+
+**Key person / governance:** CFO transition—Jonathan Howell departed 31 December 2025; Jacqui Cartin appointed 1 January 2026. CPO Walid Abu-Hadba stepped down 31 March 2026; Krish Vitaldevara appointed from 18 May 2026; Anand Swaminathan joined as Chief Strategy Officer from 15 June 2026. News headline (30 May 2026): “Chief Technology Officer Of Sage Group Sold 28% Of Their Shares” (simplywall.st)—insider selling worth noting though not necessarily thesis-breaking.
+
+**Regulatory:** Compliance tailwinds (UK Making Tax Digital, French e-invoicing, Spanish anti-fraud rules) support demand, but regulatory change also raises product delivery risk and regional complexity.
+
+**Pension:** Post-employment benefit liability **£25m** at 31 March 2026—immaterial relative to group scale.
+
+**Going concern / liquidity:** H1 filing language is unequivocally supportive; severe stress scenarios do not require RCF drawdown. No covenant breach language identified in available extracts.
+
+**Macro / SMB cyclicality:** Revenue is diversified geographically and 97% recurring, but SMB customers remain economically sensitive; the screen’s cyclical overlay did not flag elevated exposure.
+
+RiskTags: competitive, leverage, key_person, regulatory, accounting
+
+---
+RiskTags: competitive, leverage, key_person, regulatory, accounting
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **material on results and strategy but thin on independent hard news**—much of the Google News feed comprises repetitive Kalkine Media SEO articles on “UK AI stocks.”
+
+**Results and guidance**
+- *The Sage Group H1 Earnings Call Highlights* (Yahoo Finance, 21 May 2026): CEO described an “excellent first half”; double-digit revenue, margin expansion, AI investment.
+- *Sage shares dip despite beating first-half expectations* (Yahoo Finance UK, 21 May 2026): market reaction muted despite beats.
+- *The Sage Group Q3 Earnings Call Highlights* (Yahoo Finance, 29 July 2026): 11% nine-month revenue growth to £2.1bn; Q3 acceleration.
+- *Trading update for nine months ended 30 June 2026* (RNS, 29 July 2026): guidance reiterated above 9% organic revenue growth.
+
+**Strategy / product**
+- *Sage launches Sage HCM to connect HR, payroll...* (23 April 2026); *Sage expands AI agents across finance, HR and...* (29 April 2026); *Sage Deepens Collaboration with AWS* (29 April 2026)—AI platform and cloud migration push.
+- Acquisitions: Criterion (HCM, Oct 2025), Akao, Doyen AI (post-period, Apr 2026) per H1 filing.
+
+**Management**
+- *Sage appoints new Chief Product Officer and Chief Strategy Officer* (14 May 2026): Vitaldevara and Swaminathan join ELT.
+
+**Capital markets**
+- Sustained share buyback programme (multiple RNS “Transaction in Own Shares” April–May 2026).
+- *Sage Group (LSE:SGE) Stock Fair Value Falls As Analysts Debate Growth And Valuation* (Yahoo Finance, 30 June 2026): fair value estimate cut to £10.79 from £11.40; Street range cited 900p–1,165p.
+- *Sage Group (SGPYY) Upgraded to Buy* (Zacks, 13 March 2026).
+
+**Noise / misattribution:** Headlines such as *SGE Plans £35 Billion Small Nuclear Reactor Fleet in UK* (1 July 2026) appear to conflate the “SGE” ticker with a different entity and should be disregarded for Sage Group plc.
+
+---
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Deep research confirms the screen’s quality-and-cash-flow buy case—accelerating revenue, strong renewals and robust conversion—but elevated multiples, peak leverage, overbought timing and goodwill-heavy accounts temper conviction for immediate full-weight entry.
