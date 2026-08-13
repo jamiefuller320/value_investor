@@ -24,6 +24,7 @@ DEFAULT_MEMO_DIR = Path("docs/research")
 DEFAULT_COMMITTED_RESEARCH = Path("docs/data/research")
 DEFAULT_OUTPUT_DIR = Path("output")
 DEFAULT_STATE_PATH = Path("docs/data/memo_backfill_state.json")
+DEFAULT_LEGACY_REMEMO_STATE_PATH = Path("docs/data/legacy_rememo_state.json")
 DEFAULT_BATCH_SIZE = 6
 
 
@@ -99,6 +100,49 @@ def load_buy_tier_reports(latest_path: Path = DEFAULT_LATEST_PATH) -> list[Compa
             continue
         reports.append(CompanyReport.from_dict(row))
     return reports
+
+
+def has_canonical_research_json(
+    ticker: str,
+    *,
+    committed_dir: Path = DEFAULT_COMMITTED_RESEARCH,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+) -> bool:
+    ticker = ticker.strip().upper()
+    if (committed_dir / ticker / "research.json").exists():
+        return True
+    if (output_dir / "research" / ticker / "research.json").exists():
+        return True
+    return False
+
+
+def list_legacy_rememo_reports(
+    reports: list[CompanyReport],
+    *,
+    memo_dir: Path = DEFAULT_MEMO_DIR,
+    committed_dir: Path = DEFAULT_COMMITTED_RESEARCH,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+) -> list[CompanyReport]:
+    """Buy-tier names with published markdown but no canonical ``research.json`` store."""
+    legacy = [
+        report
+        for report in reports
+        if (memo_dir / f"{report.ticker.strip().upper()}.md").exists()
+        and not has_canonical_research_json(
+            report.ticker,
+            committed_dir=committed_dir,
+            output_dir=output_dir,
+        )
+    ]
+    legacy.sort(
+        key=lambda report: (
+            0 if report.signal == "strong_buy" else 1,
+            -filings_with_body_count(report.ticker, committed_dir=committed_dir),
+            -(report.conviction_score or 0.0),
+            report.ticker,
+        )
+    )
+    return legacy
 
 
 def list_missing_memo_reports(
@@ -333,6 +377,151 @@ def run_missing_memo_backfill(
             "errors": summary.errors,
             "remaining": summary.remaining,
             "published": summary.published,
+        },
+        path=state_path,
+    )
+    return summary
+
+
+def rebuild_full_research_index(
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+    *,
+    committed_dir: Path = DEFAULT_COMMITTED_RESEARCH,
+    dest_dir: Path = Path("docs"),
+) -> dict[str, Any]:
+    """Copy all committed research trees to output and refresh dashboard index + overlay."""
+    output_root = output_dir / "research"
+    output_root.mkdir(parents=True, exist_ok=True)
+    for ticker_dir in sorted(committed_dir.iterdir()):
+        if not ticker_dir.is_dir():
+            continue
+        if not (ticker_dir / "research.json").exists():
+            continue
+        dest = output_root / ticker_dir.name
+        if dest.exists():
+            shutil.rmtree(dest)
+        shutil.copytree(ticker_dir, dest)
+    return publish_memo_backfill_batch(
+        output_dir,
+        dest_dir=dest_dir,
+        latest_path=dest_dir / "data" / "latest.json",
+    )
+
+
+def run_legacy_rememo_pass(
+    *,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+    memo_dir: Path = DEFAULT_MEMO_DIR,
+    committed_dir: Path = DEFAULT_COMMITTED_RESEARCH,
+    state_path: Path = DEFAULT_LEGACY_REMEMO_STATE_PATH,
+    batch_size: int = DEFAULT_BATCH_SIZE,
+    api_key: str,
+    model: str = "composer-2.5",
+    cwd: str | None = None,
+    market: str = "ftse350",
+    publish: bool = True,
+    dest_dir: Path = Path("docs"),
+    dry_run: bool = False,
+    rebuild_index: bool = False,
+) -> MemoBackfillSummary:
+    """Force-initial research pass for legacy markdown memos missing canonical JSON."""
+    reports = load_buy_tier_reports(latest_path)
+    legacy = list_legacy_rememo_reports(
+        reports,
+        memo_dir=memo_dir,
+        committed_dir=committed_dir,
+        output_dir=output_dir,
+    )
+    batch_size = max(1, int(batch_size))
+    selected_reports = legacy[:batch_size]
+    summary = MemoBackfillSummary(
+        batch_size=batch_size,
+        selected=[report.ticker for report in selected_reports],
+        remaining=[report.ticker for report in legacy[batch_size:]],
+    )
+
+    if dry_run:
+        write_backfill_state(
+            {
+                "schema_version": 1,
+                "updated_at": datetime.now(UTC).isoformat(),
+                "dry_run": True,
+                "legacy_count": len(legacy),
+                "remaining": summary.remaining,
+                "next_batch": summary.selected,
+            },
+            path=state_path,
+        )
+        return summary
+
+    store = ResearchStore(output_dir)
+    run_at = datetime.now(UTC)
+    data_dir = committed_dir.parent if committed_dir.name == "research" else committed_dir
+
+    for report in selected_reports:
+        try:
+            ensure_canonical_research_store(
+                report.ticker,
+                report.name,
+                output_dir=data_dir,
+                screening_snapshot=report.to_dict(),
+                market=market,
+                seed_if_missing=False,
+            )
+            ensure_canonical_research_store(
+                report.ticker,
+                report.name,
+                output_dir=output_dir,
+                screening_snapshot=report.to_dict(),
+                market=market,
+                seed_if_missing=False,
+            )
+            doc, action = _process_ticker(
+                report=report,
+                store=store,
+                api_key=api_key,
+                model=model,
+                cwd=cwd,
+                force_initial=True,
+                run_at=run_at,
+                market=market,
+            )
+            if action == "created":
+                summary.created.append(report.ticker)
+                logger.info("Re-memoed %s (bodies=%s)", report.ticker, doc.source_counts)
+            else:
+                summary.skipped.append(report.ticker)
+        except Exception as exc:  # noqa: BLE001
+            message = f"{report.ticker}: {exc}"
+            logger.exception("Legacy re-memo failed for %s", report.ticker)
+            summary.errors.append(message)
+
+    if publish and summary.created:
+        summary.published = publish_memo_backfill_batch(
+            output_dir,
+            dest_dir=dest_dir,
+            latest_path=dest_dir / "data" / "latest.json",
+        )
+    if rebuild_index and not summary.remaining:
+        summary.published = rebuild_full_research_index(
+            output_dir,
+            committed_dir=committed_dir,
+            dest_dir=dest_dir,
+        )
+
+    write_backfill_state(
+        {
+            "schema_version": 1,
+            "updated_at": datetime.now(UTC).isoformat(),
+            "batch_size": batch_size,
+            "legacy_before": len(legacy),
+            "rememoed": summary.created,
+            "skipped": summary.skipped,
+            "errors": summary.errors,
+            "remaining": summary.remaining,
+            "published": summary.published,
+            "complete": not summary.remaining and not summary.errors,
         },
         path=state_path,
     )
