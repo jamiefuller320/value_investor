@@ -129,9 +129,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(summary.to_dict(), indent=2))
     else:
-        print(
-            f"Created {len(summary.created)} memo(s): {', '.join(summary.created) or '—'}"
-        )
+        print(f"Created {len(summary.created)} memo(s): {', '.join(summary.created) or '—'}")
         if summary.skipped:
             print(f"Skipped: {', '.join(summary.skipped)}")
         if summary.errors:

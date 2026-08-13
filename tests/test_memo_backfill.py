@@ -10,7 +10,6 @@ from value_investor.research.document import ResearchDocument
 from value_investor.research.memo_backfill import (
     has_published_memo,
     list_missing_memo_reports,
-    load_buy_tier_reports,
     publish_memo_backfill_batch,
     run_missing_memo_backfill,
 )

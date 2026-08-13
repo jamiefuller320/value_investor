@@ -66,8 +66,12 @@ def has_published_memo(
     return False
 
 
-def filings_with_body_count(ticker: str, *, committed_dir: Path = DEFAULT_COMMITTED_RESEARCH) -> int:
-    index_path = committed_dir / ticker.strip().upper() / "sources" / "filings" / "filings_index.json"
+def filings_with_body_count(
+    ticker: str, *, committed_dir: Path = DEFAULT_COMMITTED_RESEARCH
+) -> int:
+    index_path = (
+        committed_dir / ticker.strip().upper() / "sources" / "filings" / "filings_index.json"
+    )
     if not index_path.exists():
         return 0
     try:
