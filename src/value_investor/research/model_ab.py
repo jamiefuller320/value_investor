@@ -15,7 +15,11 @@ from value_investor.agent_model_policy import (
     record_estimated_spend,
 )
 from value_investor.research.agent import run_initial_research_agent
-from value_investor.research.document import RESEARCH_SECTIONS, ResearchDocument, render_research_markdown
+from value_investor.research.document import (
+    RESEARCH_SECTIONS,
+    ResearchDocument,
+    render_research_markdown,
+)
 from value_investor.research.gap_fill_sources import inspect_local_sources
 from value_investor.research.ingest import ingest_research_sources
 from value_investor.research.source_quality import score_research_sources
@@ -167,15 +171,14 @@ def score_memo_rubric(
 
     section_count = sum(1 for key in RESEARCH_SECTIONS if getattr(doc, key, "").strip())
     verdict_ok = bool(doc.research_verdict and doc.research_confidence is not None)
-    structural = round(min(1.0, (section_count / len(RESEARCH_SECTIONS)) * (1.0 if verdict_ok else 0.7)), 3)
+    structural = round(
+        min(1.0, (section_count / len(RESEARCH_SECTIONS)) * (1.0 if verdict_ok else 0.7)), 3
+    )
     if not verdict_ok:
         notes.append("RESEARCH VERDICT block incomplete.")
 
     composite = round(
-        0.35 * citation_accuracy
-        + 0.30 * filing_alignment
-        + 0.20 * gap_honesty
-        + 0.15 * structural,
+        0.35 * citation_accuracy + 0.30 * filing_alignment + 0.20 * gap_honesty + 0.15 * structural,
         3,
     )
     return MemoRubricScore(
@@ -333,10 +336,7 @@ def format_comparison_markdown(comparison: ModelAbComparison) -> str:
         "",
         "## Rubric (same source snapshot)",
         "",
-        "| Dimension | Baseline ({}) | Challenger ({}) |".format(
-            base.model_id,
-            chall.model_id,
-        ),
+        f"| Dimension | Baseline ({base.model_id}) | Challenger ({chall.model_id}) |",
         "| --- | ---: | ---: |",
         f"| Citation accuracy | {base.rubric.citation_accuracy:.3f} | {chall.rubric.citation_accuracy:.3f} |",
         f"| Filing alignment | {base.rubric.filing_alignment:.3f} | {chall.rubric.filing_alignment:.3f} |",
