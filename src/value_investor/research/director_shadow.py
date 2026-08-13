@@ -67,11 +67,7 @@ def evaluate_director_shadow(
     research_action: str,
 ) -> DirectorShadowDecision:
     """Evaluate escalation/material-change without calling director agents."""
-    inventory = (
-        inspect_local_sources(sources_dir)
-        if sources_dir and sources_dir.exists()
-        else None
-    )
+    inventory = inspect_local_sources(sources_dir) if sources_dir and sources_dir.exists() else None
     source_quality = score_research_sources(
         source_counts=doc.source_counts,
         inventory=inventory,

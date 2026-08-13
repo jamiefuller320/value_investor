@@ -53,9 +53,7 @@ def format_director_shadow_text(entries: list[dict[str, Any]] | None) -> str | N
     for entry in entries:
         action = str(entry.get("recommended_action") or "none")
         counts[action] = counts.get(action, 0) + 1
-    lines.append(
-        "  " + ", ".join(f"{name}={count}" for name, count in sorted(counts.items()))
-    )
+    lines.append("  " + ", ".join(f"{name}={count}" for name, count in sorted(counts.items())))
     for entry in entries:
         if entry.get("recommended_action") in {"none", "monitor_composer"}:
             continue
