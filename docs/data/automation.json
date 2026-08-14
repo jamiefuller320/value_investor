@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-13T08:27:26.368823+00:00",
+  "generated_at": "2026-08-14T08:27:42.336898+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -321,10 +321,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-08-13T08:27:06.594277+00:00",
+        "at": "2026-08-14T08:27:20.259537+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (0 trade(s))."
+        "detail": "Rebalanced after open settle (4 trade(s))."
       },
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
@@ -791,20 +791,49 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-08-13T08:27:06.594277+00:00",
+      "generated_at": "2026-08-14T08:27:20.259537+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "note": "Rebalanced after open settle (4 trade(s)).",
       "gate": {
-        "local_time": "2026-08-13T09:26:57.278946+01:00",
+        "local_time": "2026-08-14T09:27:09.897708+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-08-13T08:00:00+01:00",
-        "settle_at": "2026-08-13T09:15:00+01:00",
+        "market_open_at": "2026-08-14T08:00:00+01:00",
+        "settle_at": "2026-08-14T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 0,
-      "trades_sample": [],
+      "trade_count": 4,
+      "trades_sample": [
+        {
+          "acted_at": "2026-08-14T09:27:09.897708+01:00",
+          "ticker": "AEP.L",
+          "side": "sell",
+          "name": "AEP Plantations Plc",
+          "net_cash": 278.49
+        },
+        {
+          "acted_at": "2026-08-14T09:27:09.897708+01:00",
+          "ticker": "SN.L",
+          "side": "sell",
+          "name": "Smith & Nephew plc",
+          "net_cash": 276.53
+        },
+        {
+          "acted_at": "2026-08-14T09:27:09.897708+01:00",
+          "ticker": "DOM.L",
+          "side": "buy",
+          "name": "Domino's Pizza Group plc",
+          "net_cash": -281.76
+        },
+        {
+          "acted_at": "2026-08-14T09:27:09.897708+01:00",
+          "ticker": "POLN.L",
+          "side": "buy",
+          "name": "Pollen Street Group Limited",
+          "net_cash": -273.26
+        }
+      ],
       "fund": {
         "cash": 0.0,
         "nav": null,
@@ -999,7 +1028,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-08-12T12:28:06.176369+00:00",
-    "queue_ui_updated_at": "2026-08-13T08:27:26.370067+00:00",
+    "queue_ui_updated_at": "2026-08-14T08:27:42.338198+00:00",
     "task_count": 43,
     "status": {
       "open_count": 0,
@@ -1019,7 +1048,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-13T08:27:26.387339+00:00",
+    "generated_at": "2026-08-14T08:27:42.355230+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1029,9 +1058,9 @@
         "track_label": "AI judgment (research accumulate + adjusted_signal)",
         "is_primary_learning_track": true,
         "applied": true,
-        "epoch_started_at": "2026-08-13T08:27:25.495495+00:00",
-        "baseline_nav": 940.36,
-        "epoch_nav": 940.36,
+        "epoch_started_at": "2026-08-14T08:27:41.421464+00:00",
+        "baseline_nav": 901.1,
+        "epoch_nav": 901.1,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
         "equity_marks": 0,
@@ -1043,7 +1072,7 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.15,
+          "min_conviction": 0.2,
           "sector_cap": 0.2
         }
       },
@@ -1057,12 +1086,12 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 1,
-        "benchmark_span_available": false,
-        "benchmark_return": null,
-        "excess_after_costs": null,
+        "equity_marks": 2,
+        "benchmark_span_available": true,
+        "benchmark_return": -0.0056,
+        "excess_after_costs": 0.0056,
         "enough_epoch_history": false,
-        "note": "Insufficient epoch marks for benchmark span.",
+        "note": "",
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -1077,15 +1106,15 @@
         "applied": false,
         "epoch_started_at": "2026-08-12T09:36:42.012926+00:00",
         "baseline_nav": 862.27,
-        "epoch_nav": 862.27,
-        "epoch_return": 0.0,
-        "post_apply_trade_count": 0,
-        "equity_marks": 1,
-        "benchmark_span_available": false,
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "enough_epoch_history": false,
-        "note": "Insufficient epoch marks for benchmark span.",
+        "epoch_nav": 826.27,
+        "epoch_return": -0.0418,
+        "post_apply_trade_count": 4,
+        "equity_marks": 2,
+        "benchmark_span_available": true,
+        "benchmark_return": -0.0056,
+        "excess_after_costs": -0.0362,
+        "enough_epoch_history": true,
+        "note": "",
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -1115,10 +1144,10 @@
     "summary": {
       "track_count": 4,
       "tracks_with_epoch": 3,
-      "tracks_benchmark_span_ready": 0,
-      "tracks_with_post_apply_trades": 0,
-      "tracks_insufficient_epoch_marks": 3,
-      "all_benchmark_spans_insufficient": true
+      "tracks_benchmark_span_ready": 2,
+      "tracks_with_post_apply_trades": 1,
+      "tracks_insufficient_epoch_marks": 1,
+      "all_benchmark_spans_insufficient": false
     }
   }
 }
