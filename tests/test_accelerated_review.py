@@ -227,7 +227,10 @@ def test_wednesday_anchor_blocks_when_fresh_and_no_ingest_change(tmp_path: Path)
         queue_status=_idle_status(),
         log_path=tmp_path / "log.json",
         latest_path=latest,
-        ingest_loop={"health_before": {"filings_with_body": 5}, "health_after": {"filings_with_body": 5}},
+        ingest_loop={
+            "health_before": {"filings_with_body": 5},
+            "health_after": {"filings_with_body": 5},
+        },
         now=wed_afternoon,
     )
     assert not decision.should_dispatch
