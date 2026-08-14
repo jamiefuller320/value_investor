@@ -49,7 +49,9 @@ def test_merge_intraday_flags_day_not_stressed_on_daily_close():
             {"date": "2026-01-15", "close": 7980.0},
         ]
     )
-    hourly_features = aggregate_hourly_daily_features(_hourly_day(date(2026, 1, 15), crash_pct=-0.02))
+    hourly_features = aggregate_hourly_daily_features(
+        _hourly_day(date(2026, 1, 15), crash_pct=-0.02)
+    )
     merged = merge_intraday_into_daily_decisions(
         daily,
         hourly_features,

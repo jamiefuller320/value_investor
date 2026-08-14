@@ -101,7 +101,9 @@ def _rolling_std(values: Sequence[float], window: int) -> float | None:
     return math.sqrt(var)
 
 
-def enrich_daily_bars(bars: list[dict[str, Any]], *, thresholds: IndexStressThresholds) -> list[dict[str, Any]]:
+def enrich_daily_bars(
+    bars: list[dict[str, Any]], *, thresholds: IndexStressThresholds
+) -> list[dict[str, Any]]:
     """Add return, vol-z, and drawdown features to sorted daily bars."""
     if not bars:
         return []
@@ -200,7 +202,9 @@ def default_fetch_daily_bars(symbol: str, start: date, end: date) -> list[dict[s
         return []
 
     try:
-        frame = yf.Ticker(symbol).history(start=start.isoformat(), end=end.isoformat(), auto_adjust=True)
+        frame = yf.Ticker(symbol).history(
+            start=start.isoformat(), end=end.isoformat(), auto_adjust=True
+        )
     except Exception as exc:  # noqa: BLE001
         logger.debug("Index history fetch failed for %s: %s", symbol, exc)
         return []
