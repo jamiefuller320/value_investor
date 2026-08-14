@@ -30,6 +30,7 @@ Weekday **ingest-loop** (Mon/Wed/Fri) improves filing bodies offline; this runbo
 | **0 — Baseline** | **Next Sunday cycle** (scheduled engineering-loop test) | Let `SUITE=sunday` run normally. Confirm compile → queue → agent → merge. Do **not** run this runbook yet. |
 | **1 — First manual cycle** | **After** Sunday succeeds **and** the weekday engineering queue drains (`open_count=0`, no `pr_open`) | Follow [Procedure](#procedure) below once. Record spend and whether Analysis conclusions changed materially. |
 | **2 — Habit or automation** | After Phase 1 succeeds | Repeat manually when needed, **or** rely on **auto-chain** (L97): when an ingest/scoring/prompt/coverage engineering PR merges and the queue idles, `engineering-queue.yml` may dispatch `automation-orchestrator` `suite=email_only` (max **2/week**, `weekly_ops` headroom ≥ ~$18, no active email/orchestrator run). Log: `docs/data/accelerated_review.json`. |
+| **2b — Wednesday anchor** | After Wed afternoon ingest | `ingest-loop.yml` evaluates `ftse-engineering try-wednesday-anchor` after the afternoon batch (UTC ≥ 10:00). **Does not count** toward the L97 eng-chain cap (max **1/week**). Still requires idle queue, `weekly_ops` headroom, and material change (screen stale ≥48h **or** ingest body delta). Log source: `wednesday_anchor`. |
 
 **First planned use:** the week starting **Sunday 2026-08-03** (after the baseline Sunday run completes and engineering tasks from that compile are merged or parked).
 
@@ -149,6 +150,29 @@ Guards (all must pass):
 | No active runs | `email-report.yml` and `automation-orchestrator.yml` not in flight |
 
 Manual override remains available via [Procedure](#procedure) step 1.
+
+## Wednesday anchor (L97b)
+
+Scheduled mid-week publish after weekday ingest deepens filing bodies — separate from
+the eng-chain reactive cap.
+
+| Guard | Detail |
+|-------|--------|
+| Day/time | Wednesday, UTC hour ≥ 10 (afternoon ingest batch) |
+| Weekly cap | Max **1** `wednesday_anchor` per ISO week (independent of L97 2/week) |
+| Queue idle | `open_count=0`, `pr_open_count=0` |
+| Material change | Screen `run_at` ≥48h old **or** ingest body/indexed gap improved this run |
+| Defer | Skip when ingest run `micro_compiled` / `gap_closure_compiled` (eng-chain handles refresh) |
+| `weekly_ops` headroom | ≥ ~$18 remaining |
+| No active runs | `email-report.yml` and `automation-orchestrator.yml` not in flight |
+
+Hook: end of `.github/workflows/ingest-loop.yml` (after artifact commit).
+
+```bash
+ftse-engineering try-wednesday-anchor \
+  --ingest-loop-json /tmp/ingest_loop.json \
+  --allow-skip --json
+```
 
 ## Costs and side effects
 

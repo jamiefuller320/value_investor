@@ -340,3 +340,53 @@ jobs:
         run: |
           gh workflow run engineering-queue.yml
           echo "Dispatched engineering-queue after ingest micro-compile or gap-closure task"
+
+      - name: Evaluate Wednesday anchor email_only
+        id: wed_anchor
+        if: >-
+          steps.loop.outputs.partial != 'true'
+          || steps.loop.outputs.chain_dispatch != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ftse-engineering try-wednesday-anchor \
+            --ingest-loop-json /tmp/ingest_loop.json \
+            --allow-skip --json | tee /tmp/wed_anchor.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/wed_anchor.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+                  f"reason={data.get('reason', '')}\n"
+              )
+          PY
+
+      - name: Chain Wednesday anchor orchestrator
+        if: steps.wed_anchor.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ftse-engineering record-accelerated-email \
+            --source wednesday_anchor \
+            --note "${{ steps.wed_anchor.outputs.reason }}"
+          gh workflow run automation-orchestrator.yml \
+            -f suite=email_only \
+            -f force=true
+          echo "Dispatched automation-orchestrator email_only (Wednesday anchor)"
+
+      - name: Sync main before Wednesday anchor log commit
+        if: steps.wed_anchor.outputs.should_dispatch == 'true'
+        run: git pull --rebase --autostash origin main
+
+      - name: Commit Wednesday anchor log
+        if: steps.wed_anchor.outputs.should_dispatch == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: log Wednesday anchor email_only [skip ci]"
+          file_pattern: docs/data/accelerated_review.json
+          skip_fetch: false

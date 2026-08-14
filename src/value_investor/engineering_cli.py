@@ -11,6 +11,7 @@ from typing import Any
 
 from value_investor.accelerated_review import (
     evaluate_accelerated_email_only_dispatch,
+    evaluate_wednesday_anchor_dispatch,
     record_midweek_email_only_run,
 )
 from value_investor.agent_model_policy import (
@@ -306,6 +307,33 @@ def _cmd_record_accelerated_email(args: argparse.Namespace) -> int:
     else:
         print(f"Recorded mid-week email_only run ({entry.get('source')})")
     return 0
+
+
+def _load_ingest_loop_json(path: str | None) -> dict[str, Any] | None:
+    if not path:
+        return None
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    return payload if isinstance(payload, dict) else None
+
+
+def _cmd_try_wednesday_anchor(args: argparse.Namespace) -> int:
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    status = summarize_queue(
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        open_prs=open_prs,
+    )
+    decision = evaluate_wednesday_anchor_dispatch(
+        queue_status=status,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        policy_path=args.policy,
+        latest_path=Path(args.latest_path),
+        ingest_loop=_load_ingest_loop_json(args.ingest_loop_json),
+    )
+    if args.json:
+        _print_json(decision.to_dict())
+    else:
+        print(decision.reason)
+    return 0 if decision.should_dispatch or args.allow_skip else 1
 
 
 def _cmd_branch_is_stale(args: argparse.Namespace) -> int:
@@ -793,6 +821,29 @@ def main(argv: list[str] | None = None) -> int:
     record_accel_p.add_argument("--merged-task-id", default=None)
     record_accel_p.add_argument("--note", default=None)
     record_accel_p.set_defaults(func=_cmd_record_accelerated_email)
+
+    try_wed_anchor_p = sub.add_parser(
+        "try-wednesday-anchor",
+        parents=[common],
+        help="Decide whether to chain email_only after Wed afternoon ingest (L97b)",
+    )
+    try_wed_anchor_p.add_argument("--open-prs-json", default=None)
+    try_wed_anchor_p.add_argument(
+        "--ingest-loop-json",
+        default=None,
+        help="Path to ingest-loop run JSON for materiality checks",
+    )
+    try_wed_anchor_p.add_argument(
+        "--latest-path",
+        default="docs/data/latest.json",
+        help="Path to latest.json for screen staleness",
+    )
+    try_wed_anchor_p.add_argument(
+        "--allow-skip",
+        action="store_true",
+        help="Exit 0 when dispatch is not applicable (for workflow conditions)",
+    )
+    try_wed_anchor_p.set_defaults(func=_cmd_try_wednesday_anchor)
 
     parked_p = sub.add_parser(
         "list-parked", parents=[common], help="List tasks parked for manual review"
