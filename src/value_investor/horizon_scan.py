@@ -444,11 +444,19 @@ _OFFLINE_SIM_PATHS = [
     "src/value_investor/decision_review.py",
     "src/value_investor/exit_timing_archive_sim.py",
     "src/value_investor/exit_timing_archive_cli.py",
+    "src/value_investor/index_stress_archive_sim.py",
+    "src/value_investor/index_stress_archive_cli.py",
+    "src/value_investor/index_stress.py",
+    "src/value_investor/index_stress_intraday.py",
+    "src/value_investor/index_stress_exit_replay.py",
     "src/value_investor/exit_timing_cohorts.py",
     "tests/test_rebalance_log.py",
     "tests/test_exit_timing_archive_sim.py",
+    "tests/test_index_stress_archive_sim.py",
     "tests/test_exit_timing_cohorts.py",
     "docs/data/exit_timing_near_miss.json",
+    "docs/data/index_stress_archive.json",
+    "docs/data/index_stress_archive_review.json",
 ]
 
 _MONITORING_PATHS = [

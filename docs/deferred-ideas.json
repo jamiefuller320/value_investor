@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-13T08:27:23+00:00",
+  "updated_at": "2026-08-14T10:09:50+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2841,6 +2841,56 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-5c49cf71-3cc0-4320-ae6a-6732548fd07b",
       "added_at": "2026-08-13T08:27:23+00:00"
+    },
+    {
+      "id": "L145",
+      "category": "later",
+      "section": "research",
+      "title": "Portfolio panic circuit breaker (index stress overlay)",
+      "summary": "When ^FTSE (or domain index) drops sharply over 1\u20135 sessions, suspend per-name stop enforcement and screen-rotation exits for N days; optionally widen ATR stop multipliers or require human ack before sells. Distinct from momentum grace (per-name trend) and exit_confirm_screens (noise buffer).",
+      "revisit_when": "exit-shadow and hold-recovery cohorts mature (\u226515 closed exits/track); offline archive sim shows stop-outs cluster on index gap days and hurt excess return",
+      "tags": [
+        "risk",
+        "geopolitical",
+        "stops",
+        "circuit-breaker"
+      ],
+      "status": "open",
+      "source": "cursor agent: black swan geopolitical discussion",
+      "added_at": "2026-08-14T10:09:50+00:00"
+    },
+    {
+      "id": "L146",
+      "category": "later",
+      "section": "research",
+      "title": "Panic-deployment buy ladder (staged adds on index drawdown)",
+      "summary": "Optional inverse overlay: pre-defined tranches to add to high-conviction watchlist when index is in stress (e.g. FTSE \u22125% week) without changing base value screen signals. Paper track only; measure vs rules control.",
+      "revisit_when": "Primary learning track has \u22658 weeks marks and cash deployment policy is defined for live capital",
+      "tags": [
+        "risk",
+        "geopolitical",
+        "deployment",
+        "value"
+      ],
+      "status": "open",
+      "source": "cursor agent: black swan geopolitical discussion",
+      "added_at": "2026-08-14T10:09:50+00:00"
+    },
+    {
+      "id": "N29",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Wire macro_context into automated exit veto",
+      "summary": "macro_context is research-only by design (policy use_in_scoring=false). Auto-blocking sells on macro markers would blur attribution and fight the stage-2b learning loop before panic circuit rules are calibrated offline.",
+      "revisit_when": "Portfolio panic circuit breaker is designed and backtested offline",
+      "tags": [
+        "macro",
+        "risk",
+        "automation"
+      ],
+      "status": "open",
+      "source": "cursor agent: black swan geopolitical discussion",
+      "added_at": "2026-08-14T10:09:50+00:00"
     }
   ],
   "fragments": [
