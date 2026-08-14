@@ -84,8 +84,6 @@ def assess_offline_universe_progression(
     health = snapshot_focus_market_health(root=root, policy_path=policy_path, market_id=market)
     usable = int(health.get("usable_metrics_rows") or 0)
     honest_pct = float(health.get("honest_coverage_pct") or 0.0)
-    ticker_count = int(health.get("ticker_count") or 0)
-    failed = int(health.get("failed_fetch_count") or 0)
 
     if has_open_library_coverage_tasks(tasks_path, market_id=market):
         return {
@@ -188,7 +186,10 @@ def evaluate_eng_idle_offline_dispatch(
     if int(agent_running_count) > 0:
         return {"should_dispatch": False, "reason": "engineering agent still running"}
     if now.weekday() == 6:
-        return {"should_dispatch": False, "reason": "Sunday — scheduled library ladder handles offline"}
+        return {
+            "should_dispatch": False,
+            "reason": "Sunday — scheduled library ladder handles offline",
+        }
 
     progression = assess_offline_universe_progression(
         root=root,

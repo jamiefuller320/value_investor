@@ -95,12 +95,15 @@ def test_assess_offline_progression_growing(tmp_path: Path):
 
 def test_eng_idle_offline_dispatches_when_growing(tmp_path: Path):
     run_now = datetime(2026, 8, 4, 10, 0, tzinfo=UTC)
-    with patch(
-        "value_investor.library_progression.assess_offline_universe_progression",
-        return_value={"status": "growing", "market": "omxs30", "reason": "growing"},
-    ), patch(
-        "value_investor.library_progression._last_ladder_run_at",
-        return_value=run_now - timedelta(hours=48),
+    with (
+        patch(
+            "value_investor.library_progression.assess_offline_universe_progression",
+            return_value={"status": "growing", "market": "omxs30", "reason": "growing"},
+        ),
+        patch(
+            "value_investor.library_progression._last_ladder_run_at",
+            return_value=run_now - timedelta(hours=48),
+        ),
     ):
         result = evaluate_eng_idle_offline_dispatch(
             open_count=0,
