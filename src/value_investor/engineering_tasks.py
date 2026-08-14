@@ -938,7 +938,13 @@ def ladder_metrics_block_assessment(
     else:
         block_reason = "usable_metrics_below_threshold"
 
-    manifest_coverage = int(status_row.get("coverage_count") or 0)
+    manifest_coverage = int(
+        status_row.get("honest_coverage_count") or status_row.get("coverage_count") or 0
+    )
+    ticker_total = int(status_row.get("ticker_count") or 0)
+    failed_fetch = int(status_row.get("failed_fetch_count") or 0)
+    if ticker_total > 0 and usable == 0 and (failed_fetch > 0 or manifest_coverage < ticker_total):
+        block_reason = "latent_fetch_failure"
     if screen.get("manifest_coverage_count") is not None:
         manifest_coverage = int(screen.get("manifest_coverage_count") or manifest_coverage)
 

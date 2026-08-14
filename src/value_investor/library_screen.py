@@ -49,17 +49,32 @@ def _metrics_latest_path(root: Path, market_id: str) -> Path:
     return path
 
 
+def _metric_value_present(value: Any) -> bool:
+    if value is None:
+        return False
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return True
+    if number != number:
+        return False
+    return True
+
+
+def metrics_row_is_usable(row: dict[str, Any]) -> bool:
+    """Whether a metrics dict has enough fields for library screen-lite."""
+    return any(
+        _metric_value_present(row.get(key)) for key in ("trailing_pe", "price_to_book", "market_cap")
+    )
+
+
 def _usable_metrics_mask(frame: pd.DataFrame) -> pd.Series:
     if frame.empty:
         return pd.Series(dtype=bool)
-    if "errors" in frame.columns and "trailing_pe" in frame.columns:
-        usable = (
-            frame["trailing_pe"].notna()
-            | frame.get("price_to_book", pd.Series(dtype=float)).notna()
-        )
-        if "market_cap" in frame.columns:
-            usable = usable | frame["market_cap"].notna()
-        return usable
+    if "errors" in frame.columns and (
+        "trailing_pe" in frame.columns or "price_to_book" in frame.columns or "market_cap" in frame.columns
+    ):
+        return frame.apply(lambda row: metrics_row_is_usable(row.to_dict()), axis=1)
     return pd.Series([True] * len(frame), index=frame.index)
 
 

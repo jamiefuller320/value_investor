@@ -176,7 +176,8 @@ def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
             if info or fast is not None:
                 return stock, info, fast
             if last_exc is not None:
-                raise last_exc
+                logger.debug("Soft yfinance info failure for %s: %s", ticker, last_exc)
+                return stock, {}, fast
             return stock, info, fast
         except Exception as exc:  # noqa: BLE001
             last_exc = exc
@@ -415,10 +416,17 @@ def _apply_metric_fallbacks(metrics: CompanyMetrics) -> None:
 
     if source_map:
         metrics.data_sources = source_map
-        # Primary soft-failures are recoverable once fallbacks populate core fields.
-        if metrics.market_cap is not None or metrics.last_price is not None:
+        from value_investor.library_screen import metrics_row_is_usable
+
+        payload = metrics.to_dict()
+        if metrics_row_is_usable(payload):
+            metrics.errors = []
+        elif metrics.market_cap is not None or metrics.last_price is not None:
             metrics.errors = [
-                error for error in metrics.errors if "no market data returned" not in error.lower()
+                error
+                for error in metrics.errors
+                if "no market data returned" not in str(error).lower()
+                and "exchangetimezonename" not in str(error).lower()
             ]
 
     for error in provider_errors:
