@@ -162,15 +162,11 @@ def library_grow_stalled(
     usable_counts = [
         int((row.get("health_after") or {}).get("usable_metrics_rows") or 0) for row in recent
     ]
-    ok_counts = [
-        int((row.get("health_after") or {}).get("ok_fetch_count") or 0) for row in recent
-    ]
+    ok_counts = [int((row.get("health_after") or {}).get("ok_fetch_count") or 0) for row in recent]
     failed_counts = [
         int((row.get("health_after") or {}).get("failed_fetch_count") or 0) for row in recent
     ]
-    latent_flags = [
-        bool((row.get("health_after") or {}).get("latent_failure")) for row in recent
-    ]
+    latent_flags = [bool((row.get("health_after") or {}).get("latent_failure")) for row in recent]
 
     if not any(failed_counts) and not any(latent_flags):
         return False

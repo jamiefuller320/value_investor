@@ -497,7 +497,9 @@ def run_library_ladder(
             record_library_grow_health,
         )
 
-        grow_health = record_library_grow_health(root=root, policy_path=policy_path, market_id=market)
+        grow_health = record_library_grow_health(
+            root=root, policy_path=policy_path, market_id=market
+        )
         result["library_grow_health"] = grow_health
         stall_compile = compile_library_stall_engineering_task(
             root=root,
@@ -510,9 +512,10 @@ def run_library_ladder(
             root=root,
             policy_path=policy_path,
         )
-        if int(result["engineering_tasks"].get("drafted_count") or 0) == 0 and int(
-            stall_compile.get("compiled_count") or 0
-        ) > 0:
+        if (
+            int(result["engineering_tasks"].get("drafted_count") or 0) == 0
+            and int(stall_compile.get("compiled_count") or 0) > 0
+        ):
             result["engineering_tasks"] = {
                 **result["engineering_tasks"],
                 "drafted_count": stall_compile.get("compiled_count"),
