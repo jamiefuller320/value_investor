@@ -85,6 +85,12 @@ Mirrors weekday **ingest stall** detection (`ingest_health_log.json` → `compil
 
 Dedup: stall compile and ladder draft both skip when an open `coverage` task already exists for the focus market.
 
+**Eng-idle offline progression:** when the engineering queue is idle and live ingest gap-closure is not needed, `evaluate_eng_idle_offline_dispatch()` chains `automation-orchestrator suite=ladder_only` (weekdays, max 1/week via accelerated review log). Skips when fetch is stalled (engineering owns the fix).
+
+**Post-coverage-merge verify:** when a `coverage` engineering task merges, `try-accelerated-ladder` chains `ladder_only` to re-grow and verify the fetch fix before the next Sunday.
+
+**Tail-market grow:** `effective_focus_grow_tickers()` sweeps the full focus universe in one Sunday pass when ticker count fits the plan cap (omxs30=30, iseq20=20).
+
 ```bash
 # Inspect grow health (local)
 python3 -c "from value_investor.library_grow_health import snapshot_focus_market_health; import json; print(json.dumps(snapshot_focus_market_health(), indent=2))"

@@ -144,7 +144,15 @@ def run_library_ladder(
 
     # A — fundamentals (focus market)
     if not skip_grow:
-        tickers = int(max_tickers if max_tickers is not None else plan["max_tickers"])
+        plan_tickers = int(max_tickers if max_tickers is not None else plan["max_tickers"])
+        from value_investor.library_progression import effective_focus_grow_tickers
+
+        tickers = effective_focus_grow_tickers(
+            root=root,
+            policy_path=policy_path,
+            market_id=market,
+            plan_max_tickers=plan_tickers,
+        )
         grow_results = grow_library(
             root,
             markets=markets,
@@ -156,6 +164,7 @@ def run_library_ladder(
             "grew": grow_results,
             "status": status,
             "max_tickers": tickers,
+            "plan_max_tickers": plan_tickers,
         }
     else:
         status = library_status(root, markets=markets)
@@ -525,6 +534,19 @@ def run_library_ladder(
     except Exception as exc:  # noqa: BLE001 — drafting must not fail the ladder
         logger.warning("Library ladder engineering draft failed: %s", exc)
         result["engineering_tasks"] = {"drafted_count": 0, "error": str(exc)}
+
+    try:
+        from value_investor.library_progression import assess_offline_universe_progression
+
+        drafted_count = int((result.get("engineering_tasks") or {}).get("drafted_count") or 0)
+        progression = assess_offline_universe_progression(
+            root=root,
+            policy_path=policy_path,
+        )
+        progression["engineering_drafted"] = drafted_count > 0
+        result["offline_universe_progression"] = progression
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Offline progression assessment failed: %s", exc)
 
     write_json(Path(root) / "last_ladder.json", result, compact=False)
     return result

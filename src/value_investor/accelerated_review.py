@@ -25,15 +25,17 @@ DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_MIN_HEADROOM_USD = 18.0
 DEFAULT_ESTIMATED_EMAIL_ONLY_USD = 18.0
 DEFAULT_MAX_MIDWEEK_PER_WEEK = 2
+DEFAULT_MAX_MIDWEEK_LADDER_PER_WEEK = 1
 DEFAULT_MAX_WEDNESDAY_ANCHOR_PER_WEEK = 1
 DEFAULT_SCREEN_STALE_HOURS = 48.0
 DEFAULT_WEDNESDAY_ANCHOR_MIN_UTC_HOUR = 10
 WEDNESDAY_ANCHOR_SOURCE = "wednesday_anchor"
 MATERIAL_MERGE_AREAS = frozenset({"ingest", "scoring", "prompt", "coverage"})
+LADDER_CHAIN_AREAS = frozenset({"coverage"})
 
 
 @dataclass
-class AcceleratedEmailDecision:
+class AcceleratedDispatchDecision:
     should_dispatch: bool
     reason: str
     checks: dict[str, Any] = field(default_factory=dict)
@@ -47,22 +49,31 @@ class AcceleratedEmailDecision:
         }
 
 
+AcceleratedEmailDecision = AcceleratedDispatchDecision
+
+
 def _iso_week_key(moment: datetime) -> str:
     iso = moment.isocalendar()
     return f"{iso.year}-W{iso.week:02d}"
 
 
 def load_accelerated_review_log(path: Path = DEFAULT_LOG_PATH) -> dict[str, Any]:
+    empty = {
+        "schema_version": 1,
+        "midweek_email_only_runs": [],
+        "midweek_ladder_runs": [],
+    }
     if not path.exists():
-        return {"schema_version": 1, "midweek_email_only_runs": []}
+        return dict(empty)
     try:
         payload = read_json(path)
     except (OSError, ValueError, TypeError):
-        return {"schema_version": 1, "midweek_email_only_runs": []}
+        return dict(empty)
     if not isinstance(payload, dict):
-        return {"schema_version": 1, "midweek_email_only_runs": []}
+        return dict(empty)
     payload.setdefault("schema_version", 1)
     payload.setdefault("midweek_email_only_runs", [])
+    payload.setdefault("midweek_ladder_runs", [])
     return payload
 
 
@@ -122,6 +133,43 @@ def wednesday_anchor_count(
     now = now or datetime.now(UTC)
     rows = load_accelerated_review_log(log_path).get("midweek_email_only_runs") or []
     return _runs_this_iso_week(rows, now=now, source_filter=frozenset({WEDNESDAY_ANCHOR_SOURCE}))
+
+
+def midweek_ladder_count(
+    *,
+    log_path: Path = DEFAULT_LOG_PATH,
+    now: datetime | None = None,
+) -> int:
+    now = now or datetime.now(UTC)
+    rows = load_accelerated_review_log(log_path).get("midweek_ladder_runs") or []
+    return _runs_this_iso_week(rows, now=now)
+
+
+def record_midweek_ladder_run(
+    *,
+    source: str,
+    log_path: Path = DEFAULT_LOG_PATH,
+    merged_task_id: str | None = None,
+    note: str | None = None,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    payload = load_accelerated_review_log(log_path)
+    stamp = (now or datetime.now(UTC)).isoformat()
+    entry: dict[str, Any] = {
+        "at": stamp,
+        "source": source,
+    }
+    if merged_task_id:
+        entry["merged_task_id"] = merged_task_id
+    if note:
+        entry["note"] = note
+    rows = list(payload.get("midweek_ladder_runs") or [])
+    rows.append(entry)
+    payload["midweek_ladder_runs"] = rows[-50:]
+    payload["last_midweek_ladder_at"] = entry["at"]
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(log_path, payload, compact=False)
+    return entry
 
 
 def record_midweek_email_only_run(
@@ -464,19 +512,121 @@ def evaluate_wednesday_anchor_dispatch(
     )
 
 
+def evaluate_accelerated_ladder_dispatch(
+    *,
+    queue_status: EngineeringQueueStatus | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    policy_path: Path | None = None,
+    log_path: Path = DEFAULT_LOG_PATH,
+    merged_task_id: str | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    now: datetime | None = None,
+    max_midweek_per_week: int = DEFAULT_MAX_MIDWEEK_LADDER_PER_WEEK,
+) -> AcceleratedDispatchDecision:
+    """Chain orchestrator suite=ladder_only after a coverage fix merges and queue drains."""
+    now = now or datetime.now(UTC)
+    repo = repo or _github_repo()
+    token = token or _github_token()
+    status = queue_status or summarize_queue(tasks_path=tasks_path)
+    checks: dict[str, Any] = {
+        "open_count": status.open_count,
+        "pr_open_count": status.pr_open_count,
+        "merged_task_id": merged_task_id,
+        "utc_weekday": now.weekday(),
+        "iso_week": _iso_week_key(now),
+    }
+
+    if status.open_count > 0 or status.pr_open_count > 0:
+        return AcceleratedDispatchDecision(
+            should_dispatch=False,
+            reason="engineering queue not idle",
+            checks=checks,
+        )
+
+    if now.weekday() == 6:
+        return AcceleratedDispatchDecision(
+            should_dispatch=False,
+            reason="Sunday — use scheduled SUITE=sunday instead",
+            checks=checks,
+        )
+
+    if merged_task_id:
+        task = find_engineering_task(merged_task_id, path=tasks_path)
+        if task is None:
+            return AcceleratedDispatchDecision(
+                should_dispatch=False,
+                reason=f"merged task {merged_task_id} not found",
+                checks=checks,
+            )
+        area = str(task.area or "").lower()
+        checks["merged_task_area"] = area
+        if area not in LADDER_CHAIN_AREAS:
+            return AcceleratedDispatchDecision(
+                should_dispatch=False,
+                reason=f"merged task area {area} does not require offline ladder verify",
+                checks=checks,
+            )
+
+    from value_investor.library_progression import assess_offline_universe_progression
+
+    progression = assess_offline_universe_progression(tasks_path=tasks_path)
+    checks["offline_progression_status"] = progression.get("status")
+    prog_status = str(progression.get("status") or "")
+    if prog_status in {"blocked_by_engineering", "complete"}:
+        return AcceleratedDispatchDecision(
+            should_dispatch=False,
+            reason=progression.get("reason") or prog_status,
+            checks=checks,
+        )
+
+    midweek_count = midweek_ladder_count(log_path=log_path, now=now)
+    checks["midweek_ladder_this_week"] = midweek_count
+    checks["max_midweek_ladder_per_week"] = max_midweek_per_week
+    if midweek_count >= max_midweek_per_week:
+        return AcceleratedDispatchDecision(
+            should_dispatch=False,
+            reason=f"mid-week ladder_only cap reached ({midweek_count}/{max_midweek_per_week})",
+            checks=checks,
+        )
+
+    if repo and token:
+        for workflow in ("library-grow.yml", "automation-orchestrator.yml"):
+            active = active_workflow_runs(workflow, repo=repo, token=token)
+            if active:
+                checks["blocking_workflow"] = workflow
+                checks["blocking_run_id"] = active[0].get("id")
+                return AcceleratedDispatchDecision(
+                    should_dispatch=False,
+                    reason=f"{workflow} already active",
+                    checks=checks,
+                )
+
+    return AcceleratedDispatchDecision(
+        should_dispatch=True,
+        reason="queue idle after coverage merge — verify offline library fetch fix",
+        checks=checks,
+    )
+
+
 __all__ = [
     "DEFAULT_LOG_PATH",
     "DEFAULT_MAX_MIDWEEK_PER_WEEK",
+    "DEFAULT_MAX_MIDWEEK_LADDER_PER_WEEK",
     "DEFAULT_MAX_WEDNESDAY_ANCHOR_PER_WEEK",
     "DEFAULT_SCREEN_STALE_HOURS",
     "WEDNESDAY_ANCHOR_SOURCE",
+    "AcceleratedDispatchDecision",
     "AcceleratedEmailDecision",
     "evaluate_accelerated_email_only_dispatch",
+    "evaluate_accelerated_ladder_dispatch",
     "evaluate_wednesday_anchor_dispatch",
     "ingest_loop_materiality",
     "load_accelerated_review_log",
     "midweek_email_only_count",
+    "midweek_ladder_count",
     "record_midweek_email_only_run",
+    "record_midweek_ladder_run",
     "screen_run_age_hours",
     "wednesday_anchor_count",
 ]

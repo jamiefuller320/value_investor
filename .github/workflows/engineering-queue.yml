@@ -306,6 +306,53 @@ jobs:
             docs/data/latest.json
           skip_fetch: false
 
+      - name: Evaluate accelerated ladder chain (coverage verify)
+        if: >-
+          steps.eng_branch.outputs.is_task == 'true'
+          && steps.gate.outputs.should_dispatch != 'true'
+        id: accel_ladder
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGED_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          TASK_ID=$(python3 - <<'PY'
+          from value_investor.engineering_queue import task_id_from_branch
+          import os
+          print(task_id_from_branch(os.environ.get("MERGED_BRANCH", "")) or "")
+          PY
+          )
+          echo "merged_task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+          ftse-engineering try-accelerated-ladder \
+            --open-prs-json /tmp/open_prs.json \
+            --merged-task-id "$TASK_ID" \
+            --allow-skip --json | tee /tmp/accel_ladder.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/accel_ladder.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+                  f"reason={data.get('reason', '')}\n"
+              )
+          PY
+
+      - name: Chain ladder_only orchestrator (coverage verify)
+        if: steps.accel_ladder.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ftse-engineering record-accelerated-ladder \
+            --source auto_queue_drain \
+            --merged-task-id "${{ steps.accel_ladder.outputs.merged_task_id }}" \
+            --note "${{ steps.accel_ladder.outputs.reason }}"
+          gh workflow run automation-orchestrator.yml \
+            -f suite=ladder_only \
+            -f force=true
+          echo "Dispatched automation-orchestrator ladder_only after coverage merge"
+
       - name: Evaluate accelerated email_only chain
         if: >-
           steps.eng_branch.outputs.is_task == 'true'
@@ -414,12 +461,56 @@ jobs:
             -f gap_closure_trigger="${{ steps.eng_idle_gap.outputs.gap_closure_trigger }}"
           echo "Dispatched eng-idle gap-closure for ${{ steps.eng_idle_gap.outputs.pin_ticker }}"
 
+      - name: Evaluate eng-idle offline ladder dispatch
+        if: >-
+          steps.gate.outputs.should_dispatch != 'true'
+          && steps.eng_idle_gap.outputs.should_dispatch != 'true'
+        id: eng_idle_offline
+        run: |
+          python3 - <<'PY' | tee /tmp/eng_idle_offline.json
+          import json
+          from pathlib import Path
+          from value_investor.library_progression import evaluate_eng_idle_offline_dispatch
+          queue = json.loads(Path("/tmp/queue_status.json").read_text())
+          status = queue.get("status") or {}
+          result = evaluate_eng_idle_offline_dispatch(
+              open_count=int(status.get("open_count") or queue.get("open_count") or 0),
+              pr_open_count=int(status.get("pr_open_count") or queue.get("pr_open_count") or 0),
+              agent_running_count=int("${{ steps.probe.outputs.agent_running_count }}" or 0),
+          )
+          print(json.dumps(result, indent=2))
+          PY
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/eng_idle_offline.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+              f"eng_idle_offline_reason={data.get('reason', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch eng-idle offline ladder
+        if: steps.eng_idle_offline.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run automation-orchestrator.yml \
+            -f suite=ladder_only \
+            -f force=true
+          echo "Dispatched eng-idle offline ladder: ${{ steps.eng_idle_offline.outputs.eng_idle_offline_reason }}"
+
       - name: Queue idle summary
         if: steps.gate.outputs.should_dispatch != 'true'
         run: |
           echo "No dispatch: ${{ steps.gate.outputs.reason }}"
           if [ "${{ steps.eng_idle_gap.outputs.should_dispatch }}" = "true" ]; then
             echo "Eng-idle gap-closure dispatched instead: ${{ steps.eng_idle_gap.outputs.eng_idle_gap_reason }}"
+          elif [ "${{ steps.eng_idle_offline.outputs.should_dispatch }}" = "true" ]; then
+            echo "Eng-idle offline ladder dispatched: ${{ steps.eng_idle_offline.outputs.eng_idle_offline_reason }}"
           fi
 
       - name: Email engineering queue blocks
