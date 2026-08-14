@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "focus_market": "omxs30",
+  "focus_market": "iseq20",
   "market_queue": [
     "sp500",
     "euro_stoxx50",
@@ -136,6 +136,12 @@
     {
       "market": "smi",
       "graduated_at": "2026-08-02T12:33:10.531346+00:00",
+      "coverage_pct": 1.0,
+      "stale_pct": 0.0
+    },
+    {
+      "market": "omxs30",
+      "graduated_at": "2026-08-14T15:46:47.564038+00:00",
       "coverage_pct": 1.0,
       "stale_pct": 0.0
     }
@@ -315,6 +321,14 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "advanced"
+      },
+      {
+        "at": "2026-08-14T15:46:47.564038+00:00",
+        "from_market": "omxs30",
+        "to_market": "iseq20",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
       }
     ],
     "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
@@ -373,7 +387,19 @@
     "use_in_scoring": false,
     "note": "Offline macro / regime markers for research memos and paper notes only. Never wire into quantitative scores or weights."
   },
-  "updated_at": "2026-08-12T12:41:57.365362+00:00",
+  "director_worker": {
+    "phase": "exploration",
+    "exploration_weekly_cap": 15,
+    "steady_weekly_cap": 5,
+    "enforce_weekly_cap": true,
+    "auto_tighten_enabled": true,
+    "auto_tighten_min_weeks": 8,
+    "auto_tighten_max_reescalation_rate": 0.35,
+    "auto_escalate_director": false,
+    "surface_escalation_candidates_in_email": true,
+    "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
+  },
+  "updated_at": "2026-08-14T15:46:47.565271+00:00",
   "ladder": {
     "enabled": true,
     "layers": [
@@ -386,374 +412,22 @@
     "research_hard_cap": 100,
     "research_all_graduated": true,
     "last_run": {
-      "run_at": "2026-08-02T11:04:38.063888+00:00",
-      "focus_market": "smi",
-      "focus_market_after": "omxs30",
-      "screen_shortlist": 0,
+      "run_at": "2026-08-14T15:46:25.292541+00:00",
+      "focus_market": "omxs30",
+      "focus_market_after": "iseq20",
+      "screen_shortlist": 12,
       "research": {
-        "model": "composer-2.5",
-        "research_cap": 75,
-        "research_markets": [
-          "sp500",
-          "euro_stoxx50",
-          "asx200",
-          "ftse_smallcap",
-          "nasdaq100",
-          "dax",
-          "cac40",
-          "tsx60",
-          "aim",
-          "ibex35",
-          "ftse_mib",
-          "aex",
-          "bel20",
-          "hang_seng",
-          "sti",
-          "us_adr_asia",
-          "atx",
-          "psi20",
-          "smi",
-          "omxs30",
-          "iseq20"
-        ],
-        "research_all_graduated": true,
-        "spend_pool": "weekly_ops",
-        "enforce_weekly_ops_cap": true,
-        "unrestricted_budget": false,
-        "spend_checkpoint_usd": 60.0,
-        "spend_since_checkpoint_usd": 10.4,
-        "weekly_ops_cap_usd": 80.0,
-        "estimated_spend_weekly_ops_usd_this_week": 10.4,
-        "constraining": false,
-        "near_limit": false,
-        "budget_flag": "enforced",
-        "remaining_usd_before": 50.0,
-        "dedupe": {
-          "already_researched_count": 337,
-          "skipped_count": 322,
-          "skipped_sample": [
-            {
-              "market": "sp500",
-              "ticker": "FIS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "ACN",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CTSH",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "APA",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "SWK",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "LDOS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CI",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "EXE",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "AOS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "PNR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "UPS",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "VZ",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "SNA",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "BBY",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "QCOM",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "BMY",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "STZ",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "CF",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "sp500",
-              "ticker": "TROW",
-              "reason": "duplicate_ticker"
-            }
-          ],
-          "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
-        },
-        "targets": [
-          {
-            "market": "sp500",
-            "ticker": "PPG",
-            "name": "PPG Industries, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.4297
-          },
-          {
-            "market": "euro_stoxx50",
-            "ticker": "ABI.BR",
-            "name": "Anheuser-Busch InBev SA/NV",
-            "signal": "buy",
-            "conviction_score": 0.3633
-          },
-          {
-            "market": "nasdaq100",
-            "ticker": "MDLZ",
-            "name": "Mondelez International, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.2247
-          },
-          {
-            "market": "cac40",
-            "ticker": "ORA.PA",
-            "name": "ORANGE",
-            "signal": "strong_buy",
-            "conviction_score": 0.3744
-          },
-          {
-            "market": "tsx60",
-            "ticker": "PPL.TO",
-            "name": "Pembina Pipeline Corporation",
-            "signal": "buy",
-            "conviction_score": 0.3031
-          },
-          {
-            "market": "ibex35",
-            "ticker": "NTGY.MC",
-            "name": "Naturgy Energy Group, S.A.",
-            "signal": "strong_buy",
-            "conviction_score": 0.4877
-          },
-          {
-            "market": "ftse_mib",
-            "ticker": "AZM.MI",
-            "name": "Azimut Holding S.p.A.",
-            "signal": "buy",
-            "conviction_score": 0.3938
-          },
-          {
-            "market": "aex",
-            "ticker": "PHIA.AS",
-            "name": "Koninklijke Philips N.V.",
-            "signal": "buy",
-            "conviction_score": 0.3969
-          },
-          {
-            "market": "bel20",
-            "ticker": "APAM.AS",
-            "name": "Aperam S.A.",
-            "signal": "buy",
-            "conviction_score": 0.2927
-          },
-          {
-            "market": "hang_seng",
-            "ticker": "1177.HK",
-            "name": "Sino Biopharmaceutical Limited",
-            "signal": "buy",
-            "conviction_score": 0.2178
-          },
-          {
-            "market": "smi",
-            "ticker": "RO.SW",
-            "name": "Roche Holding AG",
-            "signal": "buy",
-            "conviction_score": 0.3555
-          },
-          {
-            "market": "sp500",
-            "ticker": "CRH",
-            "name": "CRH PLC",
-            "signal": "buy",
-            "conviction_score": 0.4118
-          },
-          {
-            "market": "nasdaq100",
-            "ticker": "ORLY",
-            "name": "O'Reilly Automotive, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.2243
-          },
-          {
-            "market": "cac40",
-            "ticker": "VIE.PA",
-            "name": "Veolia Environnement SA",
-            "signal": "buy",
-            "conviction_score": 0.3913
-          },
-          {
-            "market": "ibex35",
-            "ticker": "SCYR.MC",
-            "name": "Sacyr, S.A.",
-            "signal": "buy",
-            "conviction_score": 0.3026
-          },
-          {
-            "market": "ftse_mib",
-            "ticker": "FCT.MI",
-            "name": "FINCANTIERI",
-            "signal": "buy",
-            "conviction_score": 0.2442
-          },
-          {
-            "market": "sp500",
-            "ticker": "VLO",
-            "name": "Valero Energy Corporation",
-            "signal": "buy",
-            "conviction_score": 0.3719
-          },
-          {
-            "market": "nasdaq100",
-            "ticker": "SBUX",
-            "name": "Starbucks Corporation",
-            "signal": "buy",
-            "conviction_score": 0.1866
-          },
-          {
-            "market": "sp500",
-            "ticker": "CB",
-            "name": "Chubb Limited",
-            "signal": "buy",
-            "conviction_score": 0.3557
-          },
-          {
-            "market": "sp500",
-            "ticker": "KVUE",
-            "name": "Kenvue Inc.",
-            "signal": "buy",
-            "conviction_score": 0.3552
-          },
-          {
-            "market": "sp500",
-            "ticker": "EQR",
-            "name": "Equity Residential",
-            "signal": "buy",
-            "conviction_score": 0.3357
-          },
-          {
-            "market": "sp500",
-            "ticker": "AVB",
-            "name": "AvalonBay Communities, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.3217
-          },
-          {
-            "market": "sp500",
-            "ticker": "CVX",
-            "name": "Chevron Corporation",
-            "signal": "buy",
-            "conviction_score": 0.3078
-          },
-          {
-            "market": "sp500",
-            "ticker": "FTV",
-            "name": "Fortive Corporation",
-            "signal": "buy",
-            "conviction_score": 0.2868
-          },
-          {
-            "market": "sp500",
-            "ticker": "DELL",
-            "name": "Dell Technologies Inc.",
-            "signal": "buy",
-            "conviction_score": 0.258
-          },
-          {
-            "market": "sp500",
-            "ticker": "ALGN",
-            "name": "Align Technology, Inc.",
-            "signal": "buy",
-            "conviction_score": 0.2088
-          }
-        ],
-        "executed": 26,
-        "created": 26,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 10.4,
-        "remaining_usd_after": 39.6
+        "skipped": true
       },
       "graduation": {
         "graduated": true,
-        "from_market": "smi",
-        "to_market": "omxs30",
+        "from_market": "omxs30",
+        "to_market": "iseq20",
         "reason": "advanced"
       },
       "maintenance": {
-        "skipped": false,
-        "markets": [
-          "sp500",
-          "euro_stoxx50",
-          "asx200",
-          "ftse_smallcap",
-          "nasdaq100",
-          "dax",
-          "cac40",
-          "tsx60",
-          "aim",
-          "ibex35",
-          "ftse_mib",
-          "aex",
-          "bel20",
-          "hang_seng",
-          "sti",
-          "us_adr_asia",
-          "atx",
-          "psi20"
-        ]
+        "skipped": true,
+        "markets": []
       }
     },
     "spend_checkpoint_usd": 60.0,
