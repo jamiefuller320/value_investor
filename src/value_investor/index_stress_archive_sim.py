@@ -17,7 +17,19 @@ from value_investor.index_stress import (
     stress_by_date,
     weekly_proxy_stress,
 )
-from value_investor.paper_fund import BUY_SIGNALS
+from value_investor.index_stress_exit_replay import (
+    ExitPolicyReplayConfig,
+    replay_exit_policy_counterfactual,
+)
+from value_investor.index_stress_intraday import (
+    aggregate_hourly_daily_features,
+    default_fetch_hourly_bars,
+    intraday_stress_triggers,
+    load_persisted_hourly_bars,
+    merge_intraday_into_daily_decisions,
+    persist_intraday_bars,
+)
+from value_investor.paper_fund import BUY_SIGNALS, DEFAULT_EXIT_CONFIRM_SCREENS
 from value_investor.storage import write_json
 
 COHORTS_FILENAME = "index_stress_archive.json"
@@ -34,6 +46,11 @@ class IndexStressArchiveConfig:
         IndexStressThresholds(abs_1d=-0.04, abs_5d=-0.07, drawdown_from_peak=-0.08),
     )
     min_data_quality: float = 0.0
+    fetch_hourly: bool = True
+    persist_hourly: bool = True
+    exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
+    use_momentum_grace: bool = True
+    max_positions: int = 3
 
 
 def _effective_signal(row: dict[str, Any]) -> str:
@@ -121,6 +138,8 @@ def framework_metadata() -> dict[str, Any]:
             "returns are a coarse fallback only."
         ),
         "recommended_trigger_stack": [
+            "hourly abs_1h (flash crash / gap hour)",
+            "hourly session_return (open-to-close stress day)",
             "daily abs_1d (gap capture)",
             "daily abs_5d (panic week)",
             "vol_z_1d (unusual vs recent vol)",
@@ -261,6 +280,7 @@ def run_index_stress_archive_sim(
     *,
     config: IndexStressArchiveConfig | None = None,
     fetch_daily_bars: FetchDailyBars | None = None,
+    fetch_hourly_bars: Any | None = None,
 ) -> dict[str, Any]:
     """Label index stress episodes and replay stop-out counterfactuals on archives."""
     cfg = config or IndexStressArchiveConfig()
@@ -285,7 +305,33 @@ def run_index_stress_archive_sim(
     fetch = fetch_daily_bars or default_fetch_daily_bars
     daily_bars = fetch(cfg.symbol, start_day, end_day)
 
+    hourly_bars: list[dict[str, Any]] = []
+    intraday_features: dict[str, dict[str, Any]] = {}
+    intraday_store_path: str | None = None
+    if cfg.fetch_hourly and cfg.thresholds.use_intraday:
+        hourly_fetch = fetch_hourly_bars or default_fetch_hourly_bars
+        hourly_bars = load_persisted_hourly_bars(cfg.symbol, start=start_day, end=end_day)
+        fetched = hourly_fetch(cfg.symbol, start_day, end_day)
+        if fetched:
+            by_ts = {str(bar.get("ts")): bar for bar in hourly_bars if bar.get("ts")}
+            for bar in fetched:
+                if bar.get("ts"):
+                    by_ts[str(bar["ts"])] = bar
+            hourly_bars = sorted(by_ts.values(), key=lambda row: str(row.get("ts") or ""))
+        if cfg.persist_hourly and hourly_bars:
+            store_path = persist_intraday_bars(symbol=cfg.symbol, hourly_bars=hourly_bars)
+            intraday_store_path = str(store_path)
+        intraday_features = aggregate_hourly_daily_features(hourly_bars)
+
     decisions = label_daily_stress(daily_bars, thresholds=cfg.thresholds)
+    daily_only_stressed = sum(1 for row in decisions if row.stressed)
+    if intraday_features and cfg.thresholds.use_intraday:
+        decisions = merge_intraday_into_daily_decisions(
+            decisions,
+            intraday_features,
+            abs_1h=cfg.thresholds.abs_1h,
+            abs_session=cfg.thresholds.abs_session,
+        )
     by_date = stress_by_date(decisions)
     replay = replay_stop_counterfactual(
         snapshots,
@@ -293,6 +339,16 @@ def run_index_stress_archive_sim(
         thresholds=cfg.thresholds,
         min_data_quality=cfg.min_data_quality,
         use_daily_stress=bool(daily_bars),
+    )
+    stress_flags = [bool(ep.get("stressed")) for ep in replay.get("episodes") or []]
+    exit_policy = replay_exit_policy_counterfactual(
+        snapshots,
+        stress_by_window=stress_flags,
+        policy=ExitPolicyReplayConfig(
+            exit_confirm_screens=cfg.exit_confirm_screens,
+            use_momentum_grace=cfg.use_momentum_grace,
+            max_positions=cfg.max_positions,
+        ),
     )
     sweep = run_threshold_sweep(
         snapshots,
@@ -302,14 +358,29 @@ def run_index_stress_archive_sim(
     )
 
     stressed_episodes = [row for row in replay["episodes"] if row.get("stressed")]
-    daily_sensitivity = {
+    combined_stressed = sum(1 for row in decisions if row.stressed)
+    sensitivity = {
         "daily_bars_available": bool(daily_bars),
         "daily_bar_count": len(daily_bars),
-        "stressed_days_primary": sum(1 for row in decisions if row.stressed),
+        "hourly_bars_available": bool(hourly_bars),
+        "hourly_bar_count": len(hourly_bars),
+        "intraday_feature_days": len(intraday_features),
+        "stressed_days_primary": combined_stressed,
+        "stressed_days_daily_only": daily_only_stressed,
+        "intraday_incremental_stress_days": max(0, combined_stressed - daily_only_stressed),
+        "intraday_trigger_days": sum(
+            1
+            for feats in intraday_features.values()
+            if intraday_stress_triggers(
+                feats,
+                abs_1h=cfg.thresholds.abs_1h,
+                abs_session=cfg.thresholds.abs_session,
+            )
+        ),
         "note": (
-            "Daily ROC is necessary for intraweek gap sensitivity. "
-            "Use abs_1d + abs_5d + vol_z + drawdown together — daily alone "
-            "over-fires in volatile but non-panic regimes."
+            "Hourly bars catch flash moves between daily marks; daily+5d+vol-z+drawdown "
+            "still anchor the stack. Intraday adds sensitivity for open-session gaps "
+            "that a single daily close can mask."
         ),
     }
 
@@ -320,14 +391,17 @@ def run_index_stress_archive_sim(
         "snapshot_count": len(snapshots),
         "symbol": cfg.symbol,
         "primary_thresholds": cfg.thresholds.to_dict(),
-        "daily_sensitivity": daily_sensitivity,
+        "intraday_store_path": intraday_store_path,
+        "sensitivity": sensitivity,
         "primary_replay": {k: v for k, v in replay.items() if k != "episodes"},
+        "exit_policy_replay": {k: v for k, v in exit_policy.items() if k != "episodes"},
         "threshold_sweep": sweep,
         "stress_episodes": stressed_episodes,
         "readiness": {
             "ready": len(daily_bars) >= 30 and len(snapshots) >= 4,
             "snapshot_count": len(snapshots),
             "daily_bar_count": len(daily_bars),
+            "hourly_bar_count": len(hourly_bars),
             "reason": (
                 "Sufficient for framework validation; extend archive history for calibration."
                 if len(daily_bars) >= 30
@@ -341,8 +415,11 @@ def run_index_stress_archive_sim(
         "generated_at": generated_at,
         "symbol": cfg.symbol,
         "daily_bars": daily_bars[-120:],
+        "hourly_bars": hourly_bars[-240:],
+        "intraday_features": dict(list(intraday_features.items())[-60:]),
         "daily_stress": [row.to_dict() for row in decisions if row.stressed][-60:],
         "episodes": replay["episodes"],
+        "exit_policy_episodes": exit_policy.get("episodes") or [],
     }
     _write_artifacts(output_dir, cohorts, review)
     return review
@@ -354,20 +431,30 @@ def format_index_stress_archive_text(review: dict[str, Any]) -> str:
     lines.append(f"  {framework.get('note', '')}".strip())
 
     readiness = review.get("readiness") or {}
+    sens = review.get("sensitivity") or {}
     lines.append(
         f"  Snapshots: {review.get('snapshot_count', 0)} | "
-        f"daily bars: {(review.get('daily_sensitivity') or {}).get('daily_bar_count', 0)} | "
+        f"daily bars: {sens.get('daily_bar_count', 0)} | "
+        f"hourly bars: {sens.get('hourly_bar_count', 0)} | "
         f"ready: {readiness.get('ready', False)}"
     )
 
     primary = review.get("primary_replay") or {}
     if primary:
         lines.append(
-            f"  Primary replay: {primary.get('stress_windows', 0)}/{primary.get('windows', 0)} "
-            f"stress windows; stop hits {primary.get('stop_hits_total', 0)} "
-            f"({primary.get('stop_hits_stress_windows', 0)} on stress weeks — "
-            f"counterfactual sells avoided if suspended: "
-            f"{primary.get('counterfactual_sells_avoided', 0)})"
+            f"  Tactical stops: {primary.get('stop_hits_total', 0)} hits "
+            f"({primary.get('stop_hits_stress_windows', 0)} on stress windows)"
+        )
+
+    policy = review.get("exit_policy_replay") or {}
+    if policy:
+        lines.append(
+            f"  Exit policy: mechanical={policy.get('mechanical_exits_total', 0)} "
+            f"(stops={policy.get('tactical_stop_hits', 0)}, "
+            f"rotation={policy.get('rotation_exits', 0)}, "
+            f"grace={policy.get('grace_exits', 0)}, "
+            f"buffer_holds={policy.get('buffer_holds', 0)}) — "
+            f"counterfactual avoided on stress: {policy.get('counterfactual_exits_avoided', 0)}"
         )
 
     sweep = review.get("threshold_sweep") or []
@@ -380,9 +467,15 @@ def format_index_stress_archive_text(review: dict[str, Any]) -> str:
                 f"stop_hits_stress={row.get('stop_hits_stress_windows')}"
             )
 
-    sens = review.get("daily_sensitivity") or {}
+    sens = review.get("sensitivity") or {}
     if sens.get("note"):
         lines.append(f"  Sensitivity: {sens['note']}")
+    if sens.get("intraday_incremental_stress_days") is not None:
+        lines.append(
+            f"  Intraday uplift: +{sens.get('intraday_incremental_stress_days', 0)} stressed days "
+            f"vs daily-only ({sens.get('stressed_days_daily_only', 0)} → "
+            f"{sens.get('stressed_days_primary', 0)})"
+        )
 
     note = review.get("note")
     if note:

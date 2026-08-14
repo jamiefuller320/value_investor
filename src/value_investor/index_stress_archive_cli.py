@@ -63,6 +63,34 @@ def main(argv: list[str] | None = None) -> int:
         default=0.0,
         help="Minimum data_quality_score for buy-tier stop counterfactual (default: 0)",
     )
+    parser.add_argument(
+        "--no-hourly",
+        action="store_true",
+        help="Skip hourly intraday fetch/merge (daily triggers only)",
+    )
+    parser.add_argument(
+        "--abs-1h",
+        type=float,
+        default=-0.015,
+        help="Hourly intraday ROC trigger (default: -0.015)",
+    )
+    parser.add_argument(
+        "--abs-session",
+        type=float,
+        default=-0.03,
+        help="Session open-to-close trigger (default: -0.03; use 0 to disable)",
+    )
+    parser.add_argument(
+        "--exit-confirm-screens",
+        type=int,
+        default=2,
+        help="Hold buffer before screen-rotation exit in policy replay (default: 2)",
+    )
+    parser.add_argument(
+        "--no-momentum-grace",
+        action="store_true",
+        help="Disable momentum-grace overlay in exit-policy replay",
+    )
     parser.add_argument("--json", action="store_true", help="Print full review JSON")
     args = parser.parse_args(argv)
 
@@ -71,11 +99,17 @@ def main(argv: list[str] | None = None) -> int:
         abs_5d=float(args.abs_5d),
         drawdown_from_peak=float(args.drawdown),
         vol_z=float(args.vol_z),
+        abs_1h=float(args.abs_1h),
+        abs_session=float(args.abs_session) if float(args.abs_session) != 0 else None,
+        use_intraday=not args.no_hourly,
     )
     config = IndexStressArchiveConfig(
         symbol=str(args.symbol),
         thresholds=thresholds,
         min_data_quality=float(args.min_data_quality),
+        fetch_hourly=not args.no_hourly,
+        exit_confirm_screens=int(args.exit_confirm_screens),
+        use_momentum_grace=not args.no_momentum_grace,
     )
     review = run_index_stress_archive_sim(args.output_dir, config=config)
 

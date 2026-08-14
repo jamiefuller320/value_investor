@@ -32,6 +32,9 @@ class IndexStressThresholds:
     drawdown_window: int = 20
     drawdown_from_peak: float = -0.06
     weekly_abs_fallback: float = -0.05
+    abs_1h: float = -0.015
+    abs_session: float | None = -0.03
+    use_intraday: bool = True
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -42,6 +45,9 @@ class IndexStressThresholds:
             "drawdown_window": self.drawdown_window,
             "drawdown_from_peak": self.drawdown_from_peak,
             "weekly_abs_fallback": self.weekly_abs_fallback,
+            "abs_1h": self.abs_1h,
+            "abs_session": self.abs_session,
+            "use_intraday": self.use_intraday,
         }
 
 

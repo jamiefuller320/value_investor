@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-13T08:27:23+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-14T10:09:50+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -86,6 +86,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N26 | **Do not nudge decision-review portfolio knobs below history floor** | Automated decision-review knob steps (max positions, timing strictness, conviction floor, sector cap) should not fire until the target track has ≥4 weekly marks and ≥2 closed trades. Below that floor, accumulate data hands-off. | Each paper track (ai_judgment, rules, momentum_grace) crosses the floor independently; then enable per-track knob review in decision-review |
 | N27 | **Gate AI judgment on confidence or memo_quality thresholds** | Tempting to filter accumulate names by research_confidence or memo_quality, but that is a live paper knob before observe-only counterfactuals exist; keep verdict/adjusted_signal gating until evidence. | After observe-only counterfactuals show confidence/memo_quality predict adverse outcomes |
 | N28 | **Do not fold full memo-utility synthesis into horizon scan** | Do not move weekly memo usefulness synthesis (gap-fill rollups, per-ticker open-question triage, research_model_suggestions eng compile) into the monthly horizon agent. Horizon may still strategically ask whether memo schema should better aid AI judgment (see L141); implementation stays in the research/post_run loop. | If someone proposes putting gap-fill/post_run_review ownership inside horizon_scan.py |
+| N29 | **Wire macro_context into automated exit veto** | macro_context is research-only by design (policy use_in_scoring=false). Auto-blocking sells on macro markers would blur attribution and fight the stage-2b learning loop before panic circuit rules are calibrated offline. | Portfolio panic circuit breaker is designed and backtested offline |
 
 ---
 
@@ -184,6 +185,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L141 | **Horizon scan: ask if memo schema aids AI judgment** | In STAGE READINESS / AUTOMATION RISKS / COUNTERFACTUAL GAPS (and ACCELERATE as offline_sim or paper_knobs), horizon may strategically ask whether research memo fields (verdict-only vs confidence, risk_tags, unresolved questions) should better support the AI-judgment paper track. Does not own weekly gap-fill synthesis — only whether product/schema experiments are stage-relevant. | After PR #247 merges and a few Sunday runs accumulate question_outcomes/risk_tags; ideally with L140 slim rollup in the payload |
 | L143 | **Two-stage research memo pipeline (Composer draft + Grok verify)** | Run composer-2.5 for source walk, section draft, and gap inventory; pass structured draft + citation map to grok-4.6 for verification, verdict calibration, and final memo. Cheaper than full Grok per name if frontier model only sees condensed context. Revisit after L88 cohort shows which dimension (citation vs gap honesty) drives outcomes. | L88 A/B has ≥6 tickers with human spot-checks; or library ladder exceeds ~25 selective memos/week |
 | L144 | **Director–worker research orchestration (Grok director, Composer workers)** | Grok plans memo strategy (gaps, source ladder, subtasks); Composer executes bounded reads/summaries/drafts; director synthesises verdict. Distinct from L143 linear draft→verify. Needs task schema, worker output contracts, and spend caps per director session. | L88/L143 pilots show frontier tier justified; weekly_ops headroom after ≥10 ruled cohort memos; task schema drafted |
+| L145 | **Portfolio panic circuit breaker (index stress overlay)** | When ^FTSE (or domain index) drops sharply over 1–5 sessions, suspend per-name stop enforcement and screen-rotation exits for N days; optionally widen ATR stop multipliers or require human ack before sells. Distinct from momentum grace (per-name trend) and exit_confirm_screens (noise buffer). | exit-shadow and hold-recovery cohorts mature (≥15 closed exits/track); offline archive sim shows stop-outs cluster on index gap days and hurt excess return |
+| L146 | **Panic-deployment buy ladder (staged adds on index drawdown)** | Optional inverse overlay: pre-defined tranches to add to high-conviction watchlist when index is in stress (e.g. FTSE −5% week) without changing base value screen signals. Paper track only; measure vs rules control. | Primary learning track has ≥8 weeks marks and cash deployment policy is defined for live capital |
 
 ### Ops / reliability
 

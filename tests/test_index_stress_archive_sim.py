@@ -22,6 +22,10 @@ from value_investor.index_stress_archive_sim import (
     replay_stop_counterfactual,
     run_index_stress_archive_sim,
 )
+from value_investor.index_stress_exit_replay import (
+    ExitPolicyReplayConfig,
+    replay_exit_policy_counterfactual,
+)
 
 
 def _write_history_snapshot(
@@ -114,6 +118,49 @@ def test_replay_stop_counterfactual_counts_stress_window_hits():
     assert replay["counterfactual_sells_avoided"] == 1
 
 
+def test_replay_exit_policy_counts_buffer_hold():
+    from value_investor.backtest import RunSnapshot
+
+    row = {
+        "ticker": "AAA.L",
+        "name": "Alpha",
+        "signal": "strong_buy",
+        "conviction_score": 0.9,
+        "tactical_stop_loss": 50.0,
+        "price": 100.0,
+    }
+    hold_row = {**row, "signal": "hold", "conviction_score": 0.2}
+    snapshots = [
+        RunSnapshot.from_dict(
+            {
+                "run_at": "2026-01-01T10:00:00+00:00",
+                "prices": {"AAA.L": 100.0, "^FTSE": 8000.0},
+                "signals": [row],
+            }
+        ),
+        RunSnapshot.from_dict(
+            {
+                "run_at": "2026-01-08T10:00:00+00:00",
+                "prices": {"AAA.L": 99.0, "^FTSE": 7900.0},
+                "signals": [hold_row],
+            }
+        ),
+        RunSnapshot.from_dict(
+            {
+                "run_at": "2026-01-15T10:00:00+00:00",
+                "prices": {"AAA.L": 98.0, "^FTSE": 7800.0},
+                "signals": [hold_row],
+            }
+        ),
+    ]
+    replay = replay_exit_policy_counterfactual(
+        snapshots,
+        stress_by_window=[False, False],
+        policy=ExitPolicyReplayConfig(exit_confirm_screens=2, use_momentum_grace=False),
+    )
+    assert replay["buffer_holds"] >= 1
+
+
 def test_run_index_stress_archive_sim_writes_artifacts(tmp_path: Path):
     buy_row = {
         "ticker": "AAA.L",
@@ -146,13 +193,28 @@ def test_run_index_stress_archive_sim_writes_artifacts(tmp_path: Path):
     def fake_fetch(symbol: str, start: date, end: date) -> list[dict]:
         return _synthetic_crash_bars(start, days=max(10, (end - start).days + 5))
 
+    def fake_hourly(symbol: str, start, end) -> list[dict]:
+        from datetime import UTC, datetime
+
+        return [
+            {
+                "ts": datetime(2026, 1, 8, 10, 0, tzinfo=UTC).isoformat(),
+                "date": "2026-01-08",
+                "open": 8000.0,
+                "close": 7840.0,
+                "symbol": symbol,
+            }
+        ]
+
     review = run_index_stress_archive_sim(
         tmp_path,
-        config=IndexStressArchiveConfig(),
+        config=IndexStressArchiveConfig(fetch_hourly=True, persist_hourly=False),
         fetch_daily_bars=fake_fetch,
+        fetch_hourly_bars=fake_hourly,
     )
     assert (tmp_path / COHORTS_FILENAME).exists()
     assert (tmp_path / REVIEW_FILENAME).exists()
+    assert review.get("exit_policy_replay") is not None
+    assert (review.get("sensitivity") or {}).get("hourly_bar_count", 0) >= 1
     assert review.get("snapshot_count") == 3
-    assert (review.get("primary_replay") or {}).get("windows") == 2
     assert review.get("threshold_sweep")

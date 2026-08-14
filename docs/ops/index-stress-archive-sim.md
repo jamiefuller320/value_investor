@@ -3,34 +3,42 @@
 Offline lab for **rule-based index stress triggers** and stop-out counterfactuals.
 Calibrates future portfolio panic circuit breakers without touching live paper books.
 
-## Why daily rate of change?
+## Frequency: daily vs hourly
 
-**Daily ROC is necessary but not sufficient on its own.**
+**Daily ROC is necessary but not sufficient.** **Hourly adds meaningful sensitivity** for flash moves that a single daily close can mask (e.g. −8% Monday, −0.5% Friday close).
 
-| Horizon | Captures | Misses |
-|---------|----------|--------|
-| **Daily 1d** | Intraweek gaps, crash days | Noisy in volatile but non-panic weeks |
-| **Daily 5d** | Panic weeks | Slower to fire |
-| **Vol-z (20d)** | Unusual vs recent regime | Backward-looking vol |
-| **Drawdown from peak** | Sustained stress | Lags the first gap day |
-| **Weekly snapshot only** | Coarse trend | **Intraweek gaps** (e.g. −8% Mon, flat Fri) |
+| Frequency | Captures | Limit |
+|-----------|----------|-------|
+| **Daily 1d/5d + vol-z + drawdown** | Panic weeks, regime stress | Misses intraday gap structure |
+| **Hourly `abs_1h`** | Worst hour-over-hour move in session | Yahoo ~730d depth |
+| **Hourly session return** | Open→close stress day | Same |
+| **Sub-hourly (1m/5m)** | Microstructure noise | Not worth it for weekly rebalance cadence |
 
-Recommended production stack: **OR** across `abs_1d`, `abs_5d`, `vol_z`, and `drawdown`,
-then apply a **cooldown** before re-enabling exits (not implemented live yet).
+Recommended stack: **OR** across hourly + daily triggers, then cooldown before re-enabling exits.
+
+Hourly bars persist under `docs/data/library/macro/index_intraday/` on each run (more-data-now).
 
 ## Commands
 
 ```bash
-# Default thresholds: 1d −3%, 5d −5%, drawdown −6%, vol-z 2.5
+# Default: daily + hourly, exit_confirm_screens=2, momentum grace on
 ftse-index-stress-archive --output-dir docs/data
 
-# Custom primary thresholds + JSON output
+# Daily-only triggers
+ftse-index-stress-archive --no-hourly
+
+# Custom thresholds
 ftse-index-stress-archive \
-  --output-dir docs/data \
   --abs-1d -0.025 \
   --abs-5d -0.06 \
+  --abs-1h -0.02 \
+  --abs-session -0.04 \
   --drawdown -0.08 \
   --json
+
+# Exit-policy replay knobs
+ftse-index-stress-archive --exit-confirm-screens 2
+ftse-index-stress-archive --no-momentum-grace
 ```
 
 Backfill weekly snapshots first if history is thin:
@@ -43,33 +51,35 @@ ftse-archive-history --data-dir docs/data
 
 Written to `--output-dir`:
 
-- `index_stress_archive.json` — recent daily bars, stressed days, per-window episodes
-- `index_stress_archive_review.json` — primary replay + threshold sweep summary
+- `index_stress_archive.json` — daily/hourly bars, stressed days, episodes
+- `index_stress_archive_review.json` — replay + sweep + `exit_policy_replay`
 
-## Primary replay metrics
+Persisted hourly store: `docs/data/library/macro/index_intraday/ftse_1h.json`
 
-For each consecutive weekly snapshot window:
+## Replay metrics
 
-- Whether **any daily stress trigger** fired between snapshot dates
-- Buy-tier names whose forward price would have **hit `tactical_stop_loss`**
-- `counterfactual_sells_avoided` — stop hits on stress windows (if suspension had been active)
+### Tactical stops (`primary_replay`)
+
+- Stress windows between weekly snapshots
+- Buy-tier `tactical_stop_loss` hits
+- `counterfactual_sells_avoided` on stress windows
+
+### Exit policy (`exit_policy_replay`)
+
+- **`exit_confirm_screens`** — rotation buffer before screen-based exit
+- **Momentum grace** — hold after downgrade when trend intact
+- `mechanical_exits_total` = stops + rotation + grace exits
+- `counterfactual_exits_avoided` on stress windows
 
 ## Threshold sweep
 
-Runs three preset threshold bundles (tight / default / loose) and reports:
-
-- `stressed_days` on daily bars
-- `stress_windows` across the snapshot chain
-- `stop_hits_stress_windows` per bundle
-
-Use sweep output to pick thresholds before any paper-auto wiring.
+Three preset bundles (tight / default / loose): stressed days, stress windows, stop hits.
 
 ## Limitations
 
-- Stop counterfactual uses **weekly snapshot prices**, not daily marks — conservative for gap risk.
-- Hypothetical book = buy-tier names on each snapshot, not actual paper holdings.
-- Does not model `exit_confirm_screens` hold buffer or momentum grace yet.
-- Archive chain is still short — treat readiness flag as guidance, not sign-off.
+- Position marks still use **weekly snapshot prices** between rebalance dates.
+- Hypothetical book seeded from top buy-tier names — not actual paper holdings.
+- Archive chain is still short — treat readiness flag as guidance.
 
 ## Pairing evidence
 
