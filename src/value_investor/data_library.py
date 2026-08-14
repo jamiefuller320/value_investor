@@ -1189,11 +1189,44 @@ def refresh_metrics(
 
 def _recompute_coverage(manifest: dict[str, Any]) -> None:
     tickers = list(manifest.get("tickers") or [])
-    state = manifest.get("ticker_state") or {}
-    covered = [t for t in tickers if (state.get(t) or {}).get("last_refresh")]
+    fetch = summarize_manifest_fetch_health(manifest)
+    covered = list(fetch.get("ok_tickers") or [])
     manifest["covered_tickers"] = covered
     manifest["coverage_count"] = len(covered)
     manifest["coverage_pct"] = round((len(covered) / len(tickers)), 4) if tickers else 0.0
+    manifest["ok_fetch_count"] = int(fetch.get("ok_fetch_count") or 0)
+    manifest["failed_fetch_count"] = int(fetch.get("failed_fetch_count") or 0)
+    manifest["honest_coverage_count"] = int(fetch.get("honest_coverage_count") or 0)
+    manifest["honest_coverage_pct"] = fetch.get("honest_coverage_pct")
+
+
+def summarize_manifest_fetch_health(manifest: dict[str, Any]) -> dict[str, Any]:
+    """Classify per-ticker fetch outcomes — failed refreshes are not honest coverage."""
+    tickers = list(manifest.get("tickers") or [])
+    state = manifest.get("ticker_state") or {}
+    ok_tickers: list[str] = []
+    failed_tickers: list[str] = []
+    for ticker in tickers:
+        entry = state.get(ticker) or {}
+        status = str(entry.get("fetch_status") or "")
+        fields = list(entry.get("fields_present") or [])
+        if status == "ok" or (status != "failed" and fields):
+            ok_tickers.append(ticker)
+        elif status == "failed" or (entry.get("errors") and not fields):
+            failed_tickers.append(ticker)
+        elif entry.get("last_refresh"):
+            failed_tickers.append(ticker)
+    ticker_count = len(tickers)
+    honest_count = len(ok_tickers)
+    return {
+        "ticker_count": ticker_count,
+        "ok_fetch_count": len(ok_tickers),
+        "failed_fetch_count": len(failed_tickers),
+        "ok_tickers": ok_tickers,
+        "failed_tickers": failed_tickers,
+        "honest_coverage_count": honest_count,
+        "honest_coverage_pct": round(honest_count / ticker_count, 4) if ticker_count else 0.0,
+    }
 
 
 def _freshness_buckets(
@@ -1238,6 +1271,7 @@ def library_status(
         spec = MARKET_REGISTRY[market_id]
         manifest = load_manifest(root, market_id)
         buckets = _freshness_buckets(manifest, stale_days=stale_days)
+        fetch = summarize_manifest_fetch_health(manifest)
         rows.append(
             {
                 "market": market_id,
@@ -1245,6 +1279,9 @@ def library_status(
                 "ticker_count": manifest.get("ticker_count") or 0,
                 "coverage_count": manifest.get("coverage_count") or 0,
                 "coverage_pct": manifest.get("coverage_pct") or 0.0,
+                "ok_fetch_count": fetch.get("ok_fetch_count") or 0,
+                "failed_fetch_count": fetch.get("failed_fetch_count") or 0,
+                "honest_coverage_pct": fetch.get("honest_coverage_pct") or 0.0,
                 "last_constituents_refresh": manifest.get("last_constituents_refresh"),
                 "last_metrics_refresh": manifest.get("last_metrics_refresh"),
                 "fields_present": len(manifest.get("fields_present") or []),

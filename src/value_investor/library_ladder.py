@@ -144,7 +144,15 @@ def run_library_ladder(
 
     # A — fundamentals (focus market)
     if not skip_grow:
-        tickers = int(max_tickers if max_tickers is not None else plan["max_tickers"])
+        plan_tickers = int(max_tickers if max_tickers is not None else plan["max_tickers"])
+        from value_investor.library_progression import effective_focus_grow_tickers
+
+        tickers = effective_focus_grow_tickers(
+            root=root,
+            policy_path=policy_path,
+            market_id=market,
+            plan_max_tickers=plan_tickers,
+        )
         grow_results = grow_library(
             root,
             markets=markets,
@@ -156,6 +164,7 @@ def run_library_ladder(
             "grew": grow_results,
             "status": status,
             "max_tickers": tickers,
+            "plan_max_tickers": plan_tickers,
         }
     else:
         status = library_status(root, markets=markets)
@@ -492,15 +501,52 @@ def run_library_ladder(
 
     try:
         from value_investor.engineering_tasks import draft_library_ladder_engineering_tasks
+        from value_investor.library_grow_health import (
+            compile_library_stall_engineering_task,
+            record_library_grow_health,
+        )
+
+        grow_health = record_library_grow_health(
+            root=root, policy_path=policy_path, market_id=market
+        )
+        result["library_grow_health"] = grow_health
+        stall_compile = compile_library_stall_engineering_task(
+            root=root,
+            policy_path=policy_path,
+        )
+        result["library_grow_stall_compile"] = stall_compile
 
         result["engineering_tasks"] = draft_library_ladder_engineering_tasks(
             result,
             root=root,
             policy_path=policy_path,
         )
+        if (
+            int(result["engineering_tasks"].get("drafted_count") or 0) == 0
+            and int(stall_compile.get("compiled_count") or 0) > 0
+        ):
+            result["engineering_tasks"] = {
+                **result["engineering_tasks"],
+                "drafted_count": stall_compile.get("compiled_count"),
+                "task_ids": stall_compile.get("task_ids"),
+                "source": "library_grow_stall",
+            }
     except Exception as exc:  # noqa: BLE001 — drafting must not fail the ladder
         logger.warning("Library ladder engineering draft failed: %s", exc)
         result["engineering_tasks"] = {"drafted_count": 0, "error": str(exc)}
+
+    try:
+        from value_investor.library_progression import assess_offline_universe_progression
+
+        drafted_count = int((result.get("engineering_tasks") or {}).get("drafted_count") or 0)
+        progression = assess_offline_universe_progression(
+            root=root,
+            policy_path=policy_path,
+        )
+        progression["engineering_drafted"] = drafted_count > 0
+        result["offline_universe_progression"] = progression
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Offline progression assessment failed: %s", exc)
 
     write_json(Path(root) / "last_ladder.json", result, compact=False)
     return result

@@ -10,6 +10,7 @@ from unittest.mock import patch
 from value_investor.accelerated_review import (
     WEDNESDAY_ANCHOR_SOURCE,
     evaluate_accelerated_email_only_dispatch,
+    evaluate_accelerated_ladder_dispatch,
     evaluate_wednesday_anchor_dispatch,
     ingest_loop_materiality,
     midweek_email_only_count,
@@ -136,6 +137,43 @@ def test_evaluate_accelerated_email_blocks_when_weekly_cap_hit(tmp_path: Path):
         )
     assert not decision.should_dispatch
     assert "cap reached" in decision.reason
+
+
+@patch("value_investor.library_progression.assess_offline_universe_progression")
+def test_evaluate_accelerated_ladder_dispatches_for_coverage_merge(
+    mock_progression,
+    tmp_path: Path,
+):
+    mock_progression.return_value = {"status": "growing", "market": "omxs30"}
+    tasks = tmp_path / "engineering_tasks.json"
+    tasks.write_text(
+        """
+        {
+          "tasks": [
+            {
+              "id": "eng-20260810-01",
+              "area": "coverage",
+              "title": "Fix omxs30 fetch",
+              "summary": "s",
+              "priority": "high",
+              "priority_score": 92,
+              "source": "library_ladder",
+              "allowed_paths": ["src/value_investor/fetch.py"],
+              "status": "merged"
+            }
+          ]
+        }
+        """,
+        encoding="utf-8",
+    )
+    decision = evaluate_accelerated_ladder_dispatch(
+        queue_status=_idle_status(),
+        tasks_path=tasks,
+        log_path=tmp_path / "log.json",
+        merged_task_id="eng-20260810-01",
+        now=datetime(2026, 8, 4, 10, 0, tzinfo=UTC),
+    )
+    assert decision.should_dispatch
 
 
 def test_eng_chain_cap_ignores_wednesday_anchor(tmp_path: Path):

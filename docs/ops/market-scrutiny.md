@@ -12,7 +12,7 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 |------|--------|-----|
 | **FTSE live ingest** | 52/63 buy-tier measured; **11 unindexed** | `VSVS.L`, `INCH.L`, `BOY.L`, `GCP.L`, `BKG.L`, `PETS.L`, `KGF.L`, `DRX.L`, `BWY.L`, `PTEC.L`, `MGAM.L` |
 | **FTSE filing depth** | 496 bodies; 167 indexed without body | Ongoing weekday depth (not one-shot) |
-| **Focus `omxs30`** | Layer A constituents 100%; **metrics 0/30 usable** | Yahoo 401 / Stooq failures — **blocks screen-lite** |
+| **Focus `omxs30`** | Layer A constituents 100%; metrics fetch **stalls in CI** (Yahoo 401) | `grow_health_log.json` + engineering `coverage` task on stall |
 | **S&P 500 observe sim** | Running after Sunday screen-lite | Continue weekly |
 | **`weekly_ops`** | $50 cap → **$80** after this plan | Sunday email + ladder selective research |
 
@@ -70,6 +70,31 @@ Requires **≥25 tickers with usable metrics** (`min_metrics_for_screen`). **`om
 **Next engineering focus:** Swedish `.ST` metrics provider path (not more Sunday memo budget).
 
 When metrics work: one `ftse-library ladder` Sunday pass screens 30 names + observe sim if configured.
+
+### Library grow health log + stall → engineering (latent failures)
+
+Mirrors weekday **ingest stall** detection (`ingest_health_log.json` → `compile_ingest_engineering_task` in ops-monitor). Offline library ladder now records honest fetch health after each run:
+
+| Artifact | Path | Purpose |
+|----------|------|---------|
+| Grow health log | `docs/data/library/grow_health_log.json` | Per-run focus-market snapshot: `ok_fetch_count`, `failed_fetch_count`, `usable_metrics_rows`, deltas vs previous run |
+| Honest coverage | manifest `honest_coverage_count` / `library_status.json` | Counts only `fetch_status=ok` — failed refreshes no longer inflate `coverage_pct` |
+| Stall compile | `library_grow_stall` via `compile_library_stall_engineering_task` | After **≥2** ladder runs with flat zero progress (failed fetches persist, usable metrics unchanged at 0), drafts a supervised `coverage` engineering task |
+
+**Latent failure** = manifest looked complete (`coverage_count == ticker_count`) but every row failed fetch or metrics are unusable (e.g. chart-only price with no P/E). `ladder_metrics_block_assessment` tags these as `latent_fetch_failure`.
+
+Dedup: stall compile and ladder draft both skip when an open `coverage` task already exists for the focus market.
+
+**Eng-idle offline progression:** when the engineering queue is idle and live ingest gap-closure is not needed, `evaluate_eng_idle_offline_dispatch()` chains `automation-orchestrator suite=ladder_only` (weekdays, max 1/week via accelerated review log). Skips when fetch is stalled (engineering owns the fix).
+
+**Post-coverage-merge verify:** when a `coverage` engineering task merges, `try-accelerated-ladder` chains `ladder_only` to re-grow and verify the fetch fix before the next Sunday.
+
+**Tail-market grow:** `effective_focus_grow_tickers()` sweeps the full focus universe in one Sunday pass when ticker count fits the plan cap (omxs30=30, iseq20=20).
+
+```bash
+# Inspect grow health (local)
+python3 -c "from value_investor.library_grow_health import snapshot_focus_market_health; import json; print(json.dumps(snapshot_focus_market_health(), indent=2))"
+```
 
 ### Layer C selective research + observe sim
 

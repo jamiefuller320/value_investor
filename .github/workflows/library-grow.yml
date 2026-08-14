@@ -39,16 +39,18 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Ensure weekly_ops budget ($50) + plan tickers
+      - name: Ensure weekly_ops budget + plan tickers
         id: plan
         run: |
           ROOT="docs/data/library"
           mkdir -p "$ROOT"
           # Preserve focus_market / graduated_markets — do not force sp500.
-          # Subscription ($20) is metadata; orchestrator runs use weekly_ops ($50 default).
+          # Keep committed weekly_ops cap when higher than the orchestrator floor.
+          EXISTING_CAP=$(python3 -c "import json; print(json.load(open('$ROOT/policy.json')).get('budget',{}).get('weekly_ops_cap_usd', 50))" 2>/dev/null || echo 50)
+          WEEKLY_CAP=$(python3 -c "print(max(float('$EXISTING_CAP'), 50.0))")
           ftse-library --policy "$ROOT/policy.json" policy \
             --plan-monthly-usd 20 \
-            --weekly-ops-cap-usd 50 \
+            --weekly-ops-cap-usd "$WEEKLY_CAP" \
             --refresh-day 8 >/dev/null
           python3 - <<'PY'
           import json
@@ -116,7 +118,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: run offline library ladder (focus market)"
-          file_pattern: "docs/data/library/** docs/data/automation.json docs/data/engineering_tasks.json"
+          file_pattern: "docs/data/library/** docs/data/automation.json docs/data/engineering_tasks.json docs/data/library/grow_health_log.json"
           # Email report / other automations may push to main while the ladder runs.
           skip_fetch: false
 

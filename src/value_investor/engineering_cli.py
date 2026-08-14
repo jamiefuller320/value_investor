@@ -11,8 +11,10 @@ from typing import Any
 
 from value_investor.accelerated_review import (
     evaluate_accelerated_email_only_dispatch,
+    evaluate_accelerated_ladder_dispatch,
     evaluate_wednesday_anchor_dispatch,
     record_midweek_email_only_run,
+    record_midweek_ladder_run,
 )
 from value_investor.agent_model_policy import (
     load_policy,
@@ -334,6 +336,38 @@ def _cmd_try_wednesday_anchor(args: argparse.Namespace) -> int:
     else:
         print(decision.reason)
     return 0 if decision.should_dispatch or args.allow_skip else 1
+
+
+def _cmd_try_accelerated_ladder(args: argparse.Namespace) -> int:
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    status = summarize_queue(
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        open_prs=open_prs,
+    )
+    decision = evaluate_accelerated_ladder_dispatch(
+        queue_status=status,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        policy_path=args.policy,
+        merged_task_id=str(args.merged_task_id).strip() if args.merged_task_id else None,
+    )
+    if args.json:
+        _print_json(decision.to_dict())
+    else:
+        print(decision.reason)
+    return 0 if decision.should_dispatch or args.allow_skip else 1
+
+
+def _cmd_record_accelerated_ladder(args: argparse.Namespace) -> int:
+    entry = record_midweek_ladder_run(
+        source=str(args.source).strip(),
+        merged_task_id=str(args.merged_task_id).strip() if args.merged_task_id else None,
+        note=str(args.note).strip() if args.note else None,
+    )
+    if args.json:
+        _print_json({"recorded": entry})
+    else:
+        print(f"Recorded mid-week ladder_only run ({entry.get('source')})")
+    return 0
 
 
 def _cmd_branch_is_stale(args: argparse.Namespace) -> int:
@@ -844,6 +878,30 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 0 when dispatch is not applicable (for workflow conditions)",
     )
     try_wed_anchor_p.set_defaults(func=_cmd_try_wednesday_anchor)
+
+    try_accel_ladder_p = sub.add_parser(
+        "try-accelerated-ladder",
+        parents=[common],
+        help="Decide whether to chain orchestrator ladder_only after coverage merge",
+    )
+    try_accel_ladder_p.add_argument("--open-prs-json", default=None)
+    try_accel_ladder_p.add_argument("--merged-task-id", default=None)
+    try_accel_ladder_p.add_argument(
+        "--allow-skip",
+        action="store_true",
+        help="Exit 0 when dispatch is not applicable (for workflow conditions)",
+    )
+    try_accel_ladder_p.set_defaults(func=_cmd_try_accelerated_ladder)
+
+    record_accel_ladder_p = sub.add_parser(
+        "record-accelerated-ladder",
+        parents=[common],
+        help="Record a mid-week ladder_only orchestrator dispatch in the log",
+    )
+    record_accel_ladder_p.add_argument("--source", required=True)
+    record_accel_ladder_p.add_argument("--merged-task-id", default=None)
+    record_accel_ladder_p.add_argument("--note", default=None)
+    record_accel_ladder_p.set_defaults(func=_cmd_record_accelerated_ladder)
 
     parked_p = sub.add_parser(
         "list-parked", parents=[common], help="List tasks parked for manual review"

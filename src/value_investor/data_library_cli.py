@@ -83,6 +83,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     grow_p = sub.add_parser(
         "grow",
+        parents=[common],
         help="Refresh constituents (optional) and fetch a budgeted set of ticker metrics",
     )
     grow_p.add_argument(
