@@ -2578,8 +2578,133 @@
         ]
       },
       "trigger": "eng_idle"
+    },
+    {
+      "id": "igc-20260814-02",
+      "status": "pending_review",
+      "title": "Single-ticker ingest gap-closure pass",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "POLN.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "POLN.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260814-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-14T08:57:16.036580+00:00",
+      "completed_at": "2026-08-14T08:59:33.963383+00:00",
+      "outcome": {
+        "delta_filings_with_body": 43,
+        "delta_indexed_without_body": 43,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "POLN.L"
+        ],
+        "results": [
+          {
+            "ticker": "POLN.L",
+            "name": "Pollen Street Group Limited",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 23,
+              "with_body_after": 23,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 33,
+              "fetched": 33,
+              "with_body_before": 23,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 33,
+                "fetched": 33,
+                "with_body_before": 23,
+                "with_body_after": 56,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 33,
+              "fetched": 33,
+              "with_body_before": 23,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 23,
+              "with_body_after": 23
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "POLN.L",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "eng_idle"
     }
   ],
-  "updated_at": "2026-08-14T02:19:06.179875+00:00",
+  "updated_at": "2026-08-14T08:59:33.963392+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
