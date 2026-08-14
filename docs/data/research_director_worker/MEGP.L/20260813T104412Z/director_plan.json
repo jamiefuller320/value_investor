@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Why were FY25 audited statements delayed (RNS 25 Feb and 12 Mar 2026), and does the 23 Mar 2025 Annual Results pack show a clean audit opinion, emphasis of matter, restatement, or control finding that still matters for a trade?",
+    "After the 1 Jun 2026 trading update cut FY26 profit expectations on weaker French consumer demand (~22% share-price headlines) and the 13 Jul 2026 H1 pack claiming the group is on track for revised guidance, what is the current PBT/EBITDA range and how much of any recovery is France versus Wash.ME/laundry mix?",
+    "Is the screen yield (~6.9%) and dividend-growth family still valid given Yahoo FY25 FCF of £25.2m versus dividends paid of £29.8m, screen notes of FCF coverage below 1.0× (gross −0.90×, net 0.84×), rising machine capex, and falling cash (£77.5m to £56.5m)—does the filing definition of cash generation cover the stated policy, or is a trim still the base case?",
+    "Is Identification/photobooth structurally impaired (German ID-photo rule change; H1 photobooth and margin pressure) such that quality/moat screens are stale, or do laundry, ASDA Wash.ME, and unit economics offset with durable returns on incremental machines?",
+    "What residual governance, control, and overhang risk remains after the Dec 2025 offer-period/Form 8.3–8.5 activity, Jan 2026 secondary placing, GM/Rule 9 waiver and buyback, Deputy CEO/COO/duty changes, and the June 2026 ‘boardroom problem’ headlines?",
+    "The snapshot is strong_buy (15/22 models, new 1-week signal, price slightly below the 200-day MA) while the embedded research overlay still says Accumulate/Medium and an interim-quality haircut to Buy—should the memo confirm strong-buy or keep the overlay?",
+    "Do FY25 notes confirm customer/site concentration and bank-covenant headroom after cash drawdown, inventory build, and the buyback, or are those still gaps versus the overlay’s claim that concentration was resolved?"
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "De-duplicate filings: Investegate RNS, IR allowlist PDFs, and Google News mirrors often share body_path; IR trading-update is tagged period=interim while the RNS is trading_update; ‘Notice of Annual/Interim Results’ is ranked as annual/interim ahead of the actual results; Companies House headlines lack fiscal year; index body_path still points at docs/data/research/MEGP.L rather than the trial tree; 65 body files vs 64 indexed."
+    },
+    {
+      "area": "sources",
+      "summary": "alternate_news is thin/unavailable (inventory false) even though news_batch_*.json files sit in sources; news_manifest is headline-only with duplicate Google News URLs and generic penny-stock/dividend listicles; Yahoo financials_annual has empty quarterly_income so H1 2026 figures are not in the Yahoo pack and must come from the interim body."
+    },
+    {
+      "area": "prompt",
+      "summary": "Director/worker prompts should forbid selecting Notice of Results as the annual/interim body, require audit-delay and June guidance-cut as mandatory extracts, and instruct workers to take P&L/cash/FCF/dividend figures from filing bodies rather than Yahoo when both exist. Do not spawn workers against invented alternate_news."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy25_annual",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/f40be706e75a10ae.txt",
+      "focus": "FY25 Annual Results RNS (23 Mar 2026), not the February notice. Extract FY25 vs FY24 revenue, operating profit, PBT, EPS, OCF, capex, FCF (quote the definition used), net cash/debt, dividend (pence and cover), segment and geography mix (photobooth vs laundry; France vs UK/other), customer/site concentration, covenants/headroom, going-concern and audit opinion including any link to the Feb–Mar accounts delay, related-party/control and capital-return language. Prefer these figures over Yahoo.",
+      "priority": 1
+    },
+    {
+      "id": "filing_h1_2026_interim",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ac9d0c965a93c3fd.txt",
+      "focus": "2026 Interim Results RNS (13 Jul 2026). Extract H1 2026 vs H1 2025 P&L, cash, net debt, interim dividend, cash generation vs dividend, original vs revised FY26 guidance and whether management says it is on track, France/consumer-demand commentary versus the 1 Jun trading update, photobooth vs Wash.ME/laundry trends, ASDA or other partnership contribution, and any change to dividend policy or capex. Do not use Yahoo quarterly (empty).",
+      "priority": 1
+    },
+    {
+      "id": "news_manifest_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Headline-only digest: cluster duplicates; keep material items (Jun profit-expectation cut and France wobble, Jul H1 ‘on track’/earnings-quality critiques, boardroom article, ASDA partnership, German photobooth rules, Aberdeen holding); discount penny-stock and generic dividend roundups; flag claims that cannot be verified without article bodies. Do not treat this as alternate_news.",
+      "priority": 2
+    },
+    {
+      "id": "screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Reconcile strong_buy (15/22 models; families cheapness, quality, dividend, GARP, risk; P/E 7.8, P/B 2.2, yield 6.9%, ROE 28.2%, D/E 28%; Yahoo FCF £25.2m; 1 week at signal; RSI 54; price −0.1% vs SMA200) with action_note/research_verdict Accumulate/Medium and the interim-quality overlay (interim EPS down, FCF coverage <1×, adjusted Buy). List which screen claims filings must confirm or overturn. Do not treat Yahoo FCF as filing-grade.",
+      "priority": 2
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Record thin/missing ladder steps, especially alternate_news=false. Note Yahoo quarterly_income empty, news_batch files present but not classified as alternate_news, 65 body files vs 64 indexed, duplicate/shared body_paths, and IR published_at null. List what the memo cannot verify locally. Do not invent unavailable sources.",
+      "priority": 3
+    }
+  ],
+  "director_agent_id": "agent-ebd038fc-9e5f-4aea-8aa1-c3f18ab5b5e3"
+}

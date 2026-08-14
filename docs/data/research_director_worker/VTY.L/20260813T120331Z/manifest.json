@@ -1,0 +1,673 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "ticker": "VTY.L",
+  "company_name": "Vistry Group PLC",
+  "signal": "strong_buy",
+  "run_id": "20260813T120331Z",
+  "output_dir": "docs/data/research_director_worker/VTY.L/20260813T120331Z",
+  "director_model": "grok-4.6",
+  "worker_model": "composer-2.5",
+  "estimated_cost_usd": 3.26,
+  "director_agent_ids": {
+    "plan": "agent-17c9cb47-8db4-4903-ab1c-46057438b01f",
+    "synthesis": "agent-aa654b84-a0be-42ff-ae60-63d284a079ba"
+  },
+  "task_plan": {
+    "schema_version": 1,
+    "orchestration_version": 1,
+    "source": "director",
+    "open_questions": [
+      "Do the 25 Jun 2026 Companies House group accounts (catalogued as period=other, accounts-type-group, likely FY25) confirm the screen’s strong-buy on revenue, operating profit/PBT, EPS, operating cash flow, net cash/debt, completions/ASP, partnership versus private mix, land bank, and dividend—and is the audit opinion clean with going-concern and covenant headroom intact?",
+      "Why does this uk_rns pack contain no LSE annual or interim results RNS (only CH statutory accounts, one Rugeley project RNS, and a Google News ‘Short Positions’ page)—has trading, guidance, or provisioning since the last statutory period deteriorated in a way the screen cannot see?",
+      "The only interim body is CH interim accounts dated 12 Sep 2024; without H1 2025 or H1 2026, does that stale half-year still support or weaken the strong-buy case on H2 weighting, cash conversion, forward sales, and net debt seasonality?",
+      "What fire-safety / Building Safety Act / cladding provisions, customer-deposit liabilities, and land-creditor or RCF covenants sit in the latest group accounts, and do they overturn cheapness or quality the (locally missing) screen may be using?",
+      "What does the 14 Aug 2025 Investegate RNS ‘Vistry to deliver 2,300 homes in Rugeley’ imply for capital intensity, timing, partnership versus private mix, and whether that volume is already in the land bank versus incremental execution risk?",
+      "Is the 28 Feb 2025 ‘Short Positions’ body a material short-interest/overhang disclosure or a mis-ingested aggregator page, and does residual short interest still matter for entry?",
+      "With screening_snapshot, yahoo_financials, news_manifest, alternate_news, and macro_context all thin or absent, which strong-buy claims (multiples, yield, FCF cover, model count, SMA200/RSI timing, UK rates/housing policy) cannot be verified locally—should the memo refuse to confirm strong-buy until those ladder steps are ingested?"
+    ],
+    "procedural_suggestions": [
+      {
+        "area": "ingest",
+        "summary": "Period tagging failed: all 7 filings are period=other despite CH summaries accounts-with-accounts-type-group (annual) and accounts-with-accounts-type-interim. Map those types to period=annual|interim, put the fiscal year in the headline, and rewrite body_path from output/research/VTY.L/... to the trial sources tree. For uk_rns names, pull primary Investegate/RNS annual, interim, and trading-update bodies rather than CH statutory accounts plus Google News mirrors; quarantine aggregator pages such as ‘Short Positions’."
+      },
+      {
+        "area": "sources",
+        "summary": "Trial sources contain only filings_index and 7 bodies. yahoo_financials, news_manifest, screening_snapshot, macro_context, and alternate_news are thin/absent (news_article_count 0; no financials_annual.json). Copy the screen snapshot and Yahoo pack into the trial tree so a strong-buy can be reconciled, and ingest a real news_manifest / RNS results set before synthesis."
+      },
+      {
+        "area": "prompt",
+        "summary": "Director/worker prompts should treat CH accounts-type-group as annual and accounts-type-interim as interim when period=other; require extracting the fiscal year from the body; forbid digest_news_manifest and screen_context when those files are missing; instruct workers to take P&L/cash/leverage from filing bodies not Yahoo; for UK housebuilders require fire-safety provisions, partnership mix, completions/ASP, and land bank as mandatory extracts."
+      }
+    ],
+    "tasks": [
+      {
+        "id": "filing_fy25_annual",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+        "focus": "Latest Companies House group accounts (filed 25 Jun 2026; treat as annual despite period=other). Extract fiscal year, FY vs prior-year revenue, operating profit, PBT, EPS, OCF, capex, FCF (quote definition), net cash/debt, dividend, completions/ASP, partnership vs private mix, land bank, fire-safety/Building Safety Act provisions, covenants/headroom, going-concern and audit opinion. Prefer these figures over Yahoo (absent).",
+        "priority": 1
+      },
+      {
+        "id": "filing_h1_2024_interim",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+        "focus": "Companies House interim accounts (filed 12 Sep 2024; treat as interim despite period=other). Extract H1 vs prior H1 P&L, cash, net debt, dividend, completions/forward sales, partnership mix, and any guidance. Flag that this is the only interim body and is stale versus a 2026 trade; do not invent later interims.",
+        "priority": 1
+      },
+      {
+        "id": "filing_rugeley_rns",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/0dd1d1a3748702d6.txt",
+        "focus": "14 Aug 2025 Investegate RNS ‘Vistry to deliver 2,300 homes in Rugeley’. Extract counterparty/partnership vs private, unit count and tenure mix, capital/cash timing, whether homes are already in the land bank, and any link to current-year completions or guidance. This is not an annual/interim results RNS.",
+        "priority": 2
+      },
+      {
+        "id": "gap_inventory",
+        "type": "gap_inventory",
+        "target": "source_inventory",
+        "focus": "Record thin/missing ladder steps: yahoo_financials, news_manifest, screening_snapshot, macro_context, alternate_news. Note filings_index summary annual=0 interim=0 other=7 despite CH group/interim types; index body_path points at output/research/VTY.L not the trial tree; no financials_annual.json; news_article_count 0. List what a verify-before-trade memo cannot confirm locally (screen multiples/models, Yahoo FCF, recent RNS results, UK housing macro). Do not invent unavailable sources.",
+        "priority": 3
+      }
+    ],
+    "director_agent_id": "agent-17c9cb47-8db4-4903-ab1c-46057438b01f"
+  },
+  "worker_results": [
+    {
+      "task_id": "filing_fy25_annual",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "Source is Vistry Group PLC Annual Report and Accounts 2025 (Companies House filing dated 13/06/2026 on cover; user treats as FY2025 annual accounts filed 25 Jun 2026). Fiscal period is year ended 31 December 2025 (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Extract ends at page 10 (Chief Executive's review); financial review (p24), cash flow statement (p150), going concern/viability (p83), and independent auditors' report (p134) are referenced in contents but not present in this body text.",
+        "FY2025 adjusted revenue £4,155.3m vs FY2024 £4,329.2m (−4.0%); reported revenue £3,613.7m vs £3,779.3m (−4.4%) per 2025 highlights (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "CEO review rounds adjusted revenue to £4.2bn (2024: £4.3bn) on 15,658 completions (2024: 17,225); group average selling price £282k (+3%), reflecting geographic mix and larger open-market homes (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Adjusted operating profit £353.8m (2024: £358.2m); reported operating profit £222.6m (2024: £167.0m) (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Adjusted profit before tax £268.8m (2024: £263.5m); reported PBT £196.2m (2024: £104.9m) (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Adjusted basic EPS 59.3p (2024: 55.9p); reported basic EPS 42.2p (2024: 22.0p); ROCE 13.9% (2024: 14.6%) (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Partner Funded completions 11,593 (−8% vs 12,633) at ASP £246k (2024: £236k), representing 74% of total completions; Open Market 4,065 (−11% vs 4,592) at ASP £391k (2024: £385k), 26% of completions (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Tenure mix within completions: PRS 18% of total (2024: 21%); £106 affordable 26% (2024: 27%); additional affordable 30% (2024: 25%) (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Owned and controlled land bank 71,501 plots (2024: 74,020); strategic land bank 76,368 plots at 31 Dec 2025 (2024: 76,219); 12,599 plots secured across 44 sites in 2025 (2024: 16,508) (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Net debt £144.2m at 31 December 2025 (2024: £180.7m), a £36.5m reduction; average daily debt £734m (2024: £698m). Chair expects to end 2026 with a net cash position and much reduced average daily debt in H2 (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "Capital allocation: ongoing share buyback with £29m remaining expected to conclude in 2026; Board to review subsequent distributions thereafter. No dividend per share disclosed in available pages (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt).",
+        "No Building Safety Act, fire-safety remediation provisions, banking covenant headroom, going-concern assessment text, or audit opinion wording appears in the extracted source; only table-of-contents references."
+      ],
+      "figures": [
+        {
+          "metric": "fiscal_year_end",
+          "value": "31 December 2025",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "Annual Report and Accounts 2025"
+        },
+        {
+          "metric": "adjusted_revenue",
+          "value": "£4,155.3m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "adjusted_revenue_prior",
+          "value": "£4,329.2m",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_revenue",
+          "value": "£3,613.7m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_revenue_prior",
+          "value": "£3,779.3m",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights; prior year label OCR-corrupted as '2026'"
+        },
+        {
+          "metric": "adjusted_operating_profit",
+          "value": "£353.8m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "adjusted_operating_profit_prior",
+          "value": "£358.2m",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_operating_profit",
+          "value": "£222.6m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_operating_profit_prior",
+          "value": "£167.0m",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "adjusted_pbt",
+          "value": "£268.8m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights; CEO review confirms"
+        },
+        {
+          "metric": "adjusted_pbt_prior",
+          "value": "£263.5m",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights; CEO review confirms"
+        },
+        {
+          "metric": "reported_pbt",
+          "value": "£196.2m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_pbt_prior",
+          "value": "£104.9m",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "adjusted_basic_eps",
+          "value": "59.3p",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "adjusted_basic_eps_prior",
+          "value": "55.9p",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_basic_eps",
+          "value": "42.2p",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "reported_basic_eps_prior",
+          "value": "22.0p",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 highlights"
+        },
+        {
+          "metric": "roce",
+          "value": "13.9%",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "Return on capital employed; 2025 highlights"
+        },
+        {
+          "metric": "completions",
+          "value": "15,658",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "Group total"
+        },
+        {
+          "metric": "completions_prior",
+          "value": "17,225",
+          "period": "FY2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "Group total"
+        },
+        {
+          "metric": "group_asp",
+          "value": "£282k",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "+3% YoY; CEO review"
+        },
+        {
+          "metric": "partner_funded_completions",
+          "value": "11,593",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "74% of total completions; −8% vs prior year"
+        },
+        {
+          "metric": "partner_funded_asp",
+          "value": "£246k",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2024: £236k"
+        },
+        {
+          "metric": "open_market_completions",
+          "value": "4,065",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "26% of total; −11% vs prior year"
+        },
+        {
+          "metric": "open_market_asp",
+          "value": "£391k",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2024: £385k"
+        },
+        {
+          "metric": "prs_share_of_completions",
+          "value": "18%",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2024: 21%"
+        },
+        {
+          "metric": "owned_controlled_plots",
+          "value": "71,501",
+          "period": "31 Dec 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2024: 74,020"
+        },
+        {
+          "metric": "strategic_land_bank_plots",
+          "value": "76,368",
+          "period": "31 Dec 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2024: 76,219"
+        },
+        {
+          "metric": "plots_secured_in_year",
+          "value": "12,599",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "44 sites; 2024: 16,508"
+        },
+        {
+          "metric": "net_debt",
+          "value": "£144.2m",
+          "period": "31 Dec 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "Year-end net debt; not net cash"
+        },
+        {
+          "metric": "net_debt_prior",
+          "value": "£180.7m",
+          "period": "31 Dec 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "CEO review"
+        },
+        {
+          "metric": "average_daily_debt",
+          "value": "£734m",
+          "period": "FY2025",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2024: £698m"
+        },
+        {
+          "metric": "share_buyback_remaining",
+          "value": "£29m",
+          "period": "Mar 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "Expected to conclude 2026; not a dividend figure"
+        }
+      ],
+      "gaps": [
+        "Operating cash flow (OCF) not in extracted source (cash flow statement p150 absent).",
+        "Capital expenditure not disclosed in available pages.",
+        "Free cash flow (FCF) and company FCF definition not in extracted source.",
+        "Dividend per share / total dividend for FY2025 not stated; only share buyback (£29m remaining) referenced.",
+        "Building Safety Act / fire-safety remediation provisions not mentioned in available text.",
+        "Banking covenant terms and headroom not disclosed in available text.",
+        "Going concern and viability statement text (referenced p83) not present.",
+        "Independent auditors' report and audit opinion (referenced p134) not present.",
+        "Financial review detail (p24) and adjusted-measure reconciliations (pp32–35) not present.",
+        "Source truncates at ~page 10 of ~205-page report; downstream financial statements unavailable."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-d4b20279-5f1a-4ab2-93f1-3de55a24a5ae"
+    },
+    {
+      "task_id": "filing_h1_2024_interim",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "Only interim filing body available: unaudited parent-company interim accounts for the six months ended 30 June 2024, prepared under s836/s838 Companies Act 2006 to confirm distributable reserves for a proposed distribution; approved by the board on 4 September 2024 and stamped at Companies House 06/09/2024 (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt).",
+        "Stale versus a 2026 trade view: parent-only, distributable-reserves filing with no consolidated group P&L, cash flow, completions, forward sales, partnership mix, or management guidance; do not treat as a substitute for later group interims (none present in this source).",
+        "Income statement compares H1 2024 to the full year ended 31 December 2023, not prior-year H1; H1 2024 profit for the period was £237.8m (dividend income £250.0m, finance income £6.3m, finance costs £18.5m) versus full-year 2023 profit £172.1m (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt).",
+        "Note 2 states H1 2024 distributable profits arose from receipt of a £250m cash-settled dividend plus finance income on amounts owed from subsidiaries, offset by external finance costs of £18.5m on borrowing facilities (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt).",
+        "Parent cash rose to £151.9m at 30 June 2024 from £18.9m at 31 December 2023; borrowings were broadly flat at £496.5m versus £495.8m, implying parent net debt (borrowings less cash) of c.£344.6m at 30 June 2024 versus c.£476.9m at year-end 2023 (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt).",
+        "Capital return: £100m ordinary share buyback announced 14 March 2024 (commencing April 2024); full £100m treated as reduction in distributable reserves at balance sheet date; 4.0m shares repurchased for £50.5m by 30 June 2024; profits available for distribution £394.8m after own shares held in trust of £9.9m (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt).",
+        "No interim dividend paid in H1 2024 is disclosed; equity statement shows £110.4m dividends paid in full-year 2023 (/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt)."
+      ],
+      "figures": [
+        {
+          "metric": "Dividend income (parent)",
+          "value": "£250.0m",
+          "period": "H1 2024 (6m to 30 Jun 2024)",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Cash-settled dividend received per Note 2"
+        },
+        {
+          "metric": "Finance income (parent)",
+          "value": "£6.3m",
+          "period": "H1 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "On amounts owed from subsidiaries"
+        },
+        {
+          "metric": "Finance costs (parent)",
+          "value": "£(18.5)m",
+          "period": "H1 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "External borrowing facility costs"
+        },
+        {
+          "metric": "Profit for the period (parent)",
+          "value": "£237.8m",
+          "period": "H1 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Profit before tax equals profit for period; no tax charge shown for H1 2024"
+        },
+        {
+          "metric": "Profit for the year (parent)",
+          "value": "£172.1m",
+          "period": "FY 2023 (comparator column, not prior H1)",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Full-year comparator only; not H1 2023"
+        },
+        {
+          "metric": "Cash and cash equivalents (parent)",
+          "value": "£151.9m",
+          "period": "30 Jun 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Versus £18.9m at 31 Dec 2023"
+        },
+        {
+          "metric": "Borrowings (parent)",
+          "value": "£496.5m",
+          "period": "30 Jun 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Non-current borrowings; £495.8m at 31 Dec 2023"
+        },
+        {
+          "metric": "Net debt (parent, derived)",
+          "value": "c.£344.6m",
+          "period": "30 Jun 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Borrowings £496.5m less cash £151.9m; not labelled in filing"
+        },
+        {
+          "metric": "Net debt (parent, derived)",
+          "value": "c.£476.9m",
+          "period": "31 Dec 2023",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Borrowings £495.8m less cash £18.9m; not labelled in filing"
+        },
+        {
+          "metric": "Cash-settled dividend received",
+          "value": "£250m",
+          "period": "H1 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Upstream from group; not an interim dividend paid to external shareholders"
+        },
+        {
+          "metric": "Share buyback programme",
+          "value": "£100m announced; £50.5m executed (4.0m shares)",
+          "period": "Announced 14 Mar 2024; progress to 30 Jun 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "Full £100m reserved against distributable reserves at balance sheet date"
+        },
+        {
+          "metric": "Profits available for distribution",
+          "value": "£394.8m",
+          "period": "30 Jun 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "After own shares held in trust of £9.9m"
+        },
+        {
+          "metric": "Dividends paid to shareholders",
+          "value": "£110.4m",
+          "period": "FY 2023",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "From statement of changes in equity; none shown for H1 2024"
+        }
+      ],
+      "gaps": [
+        "No prior-year H1 (six months to 30 June 2023) P&L column; comparator is full-year 2023 only.",
+        "No consolidated/group income statement, revenue, completions, unit sales, forward sales, or order book.",
+        "No partnership mix (e.g. Open Market vs Partnerships) or segment disclosure.",
+        "No management guidance, trading update, or operational KPIs.",
+        "No consolidated net debt or group cash flow statement.",
+        "Parent net debt is derived (borrowings less cash), not explicitly reported.",
+        "No later interim filing bodies in this source; this parent s838 filing is the sole interim body and predates a 2026 trade by ~18 months."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-39655aba-b6ef-4c02-a3e4-3d289eea1629"
+    },
+    {
+      "task_id": "filing_rugeley_rns",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "Vistry Group PLC acquired the 139-hectare former Rugeley Power Station site in Staffordshire from ENGIE; the release does not describe a joint venture or third-party development partner for this deal (source: /workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt).",
+        "The brownfield site has undergone extensive remediation and holds outline planning permission for 2,300 homes (source: /workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt).",
+        "The planned neighbourhood will include an all-through school, riverside park, commercial space, and homes across affordable, PRS, and open market sale tenures (source: /workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt).",
+        "CEO Greg Fitzgerald frames the deal as regenerating a large brownfield site into thousands of high-quality, mixed-tenure homes using placemaking skills; no delivery phasing, start-on-site date, or completion timeline is given (source: /workspace/docs/data/reresearch_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt)."
+      ],
+      "figures": [
+        {
+          "metric": "Site area",
+          "value": "139 hectares",
+          "period": "As at announcement (14 Aug 2025)",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt",
+          "note": "Former Rugeley Power Station brownfield site"
+        },
+        {
+          "metric": "Homes (outline planning permission)",
+          "value": "2,300",
+          "period": "As at announcement (14 Aug 2025)",
+          "source_path": "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt",
+          "note": "Total permitted units; tenure split not quantified"
+        }
+      ],
+      "gaps": [
+        "Purchase price, consideration structure, and any capital or cash outflow timing are not disclosed.",
+        "No breakdown of the 2,300 homes by affordable, PRS, and open market sale.",
+        "No explicit statement that the site is included in Vistry's land bank, short- or long-term pipeline, or plot count.",
+        "No link to current-year (FY2025) completions, forward sales, or group guidance.",
+        "No construction start date, phased delivery schedule, or expected first/legal completions.",
+        "No detail on whether acquisition is via Partnerships (Countryside Partnerships) or wholly private/open-market channels."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-c6748dab-9d5d-429c-a7af-7277d0e929a0"
+    },
+    {
+      "task_id": "gap_inventory",
+      "task_type": "gap_inventory",
+      "status": "partial",
+      "findings": [
+        "sources tree contains only filings/ (filings_index.json plus seven body .txt files); no yahoo_financials, news_manifest, screening_snapshot, macro_context, alternate_news, or financials_annual.json (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources)",
+        "filings_index.json summary: total=7, annual=0, interim=0, other=7, with_body=7 — all seven filings tagged period=other despite Companies House headlines naming accounts-with-accounts-type-group and accounts-with-accounts-type-interim (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+        "every body_path in filings_index points at output/research/VTY.L/sources/filings/bodies/... rather than the trial tree docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/...; bodies are nevertheless present locally under the trial tree (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+        "sources_used lists companies_house, google_news_investegate, investegate_resolved only — no Yahoo finance ladder step (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+        "Corpus mix: five Companies House account filings (published 2023-06-08 to 2026-06-25), one Investegate operational RNS (Rugeley acquisition, 2025-08-14), one Investegate short-positions listing page (2025-02-28) — no trading-update, half-year, or full-year results RNS bodies (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+        "FY2025 and FY2024 group annual report PDF text bodies are present (Companies House group accounts); H1 2024 body is unaudited interim parent company statements only, not consolidated group results (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt, ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt, ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt)",
+        "No news article corpus or manifest under sources — local news_article_count effectively zero; verify-before-trade memo cannot confirm recent press/RNS flow beyond the single Rugeley RNS and short-positions scrape",
+        "Verify-before-trade memo cannot locally confirm: screening multiples/models (no screening_snapshot), Yahoo-derived FCF and quote multiples (no yahoo_financials), timely RNS trading/results announcements (absent from filings index), or UK housing macro context (no macro_context)"
+      ],
+      "figures": [
+        {
+          "metric": "filings_index_total",
+          "value": "7",
+          "period": "as at fetched_at 2026-08-02",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+          "note": "summary.total"
+        },
+        {
+          "metric": "filings_index_annual_count",
+          "value": "0",
+          "period": "as at fetched_at 2026-08-02",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+          "note": "summary.annual despite group annual report bodies present"
+        },
+        {
+          "metric": "filings_index_interim_count",
+          "value": "0",
+          "period": "as at fetched_at 2026-08-02",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+          "note": "summary.interim despite CH accounts-with-accounts-type-interim headline"
+        },
+        {
+          "metric": "filings_index_other_count",
+          "value": "7",
+          "period": "as at fetched_at 2026-08-02",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+          "note": "summary.other"
+        },
+        {
+          "metric": "filings_with_body",
+          "value": "7",
+          "period": "as at fetched_at 2026-08-02",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+          "note": "summary.with_body"
+        },
+        {
+          "metric": "adjusted_revenue",
+          "value": "£4,155.3m",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS from Annual Report and Accounts 2025"
+        },
+        {
+          "metric": "reported_revenue",
+          "value": "£3,613.7m",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS"
+        },
+        {
+          "metric": "completions",
+          "value": "15,658",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS"
+        },
+        {
+          "metric": "adjusted_operating_profit",
+          "value": "£353.8m",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS"
+        },
+        {
+          "metric": "adjusted_profit_before_tax",
+          "value": "£268.8m",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS"
+        },
+        {
+          "metric": "adjusted_basic_eps",
+          "value": "59.3p",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS"
+        },
+        {
+          "metric": "ROCE",
+          "value": "13.9%",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+          "note": "2025 HIGHLIGHTS return on capital employed"
+        },
+        {
+          "metric": "adjusted_revenue",
+          "value": "£4,329.2m",
+          "period": "FY2024",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt",
+          "note": "2024 HIGHLIGHTS"
+        },
+        {
+          "metric": "adjusted_operating_profit",
+          "value": "£358.2m",
+          "period": "FY2024",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt",
+          "note": "2024 HIGHLIGHTS"
+        },
+        {
+          "metric": "parent_profit_before_tax",
+          "value": "£237.8m",
+          "period": "H1 2024 (6 months to 30 June 2024)",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+          "note": "unaudited interim parent company income statement; not consolidated group"
+        },
+        {
+          "metric": "rugeley_homes_planned",
+          "value": "2,300",
+          "period": "RNS 2025-08-14",
+          "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt",
+          "note": "operational RNS only recent results-style announcement in corpus"
+        }
+      ],
+      "gaps": [
+        "yahoo_financials absent — cannot verify Yahoo FCF, cash flow, or quote-based multiples locally",
+        "screening_snapshot absent — cannot verify screener multiples, peer comps, or valuation model inputs",
+        "macro_context absent — cannot verify UK housing starts, mortgage rates, Help to Buy, or sector demand locally",
+        "news_manifest and alternate_news absent — no structured news corpus; news_article_count zero in sources",
+        "financials_annual.json absent — no normalised structured annual financials extract for modelling",
+        "filings period taxonomy broken (annual=0, interim=0, other=7) despite group and interim CH account types in headlines",
+        "body_path references output/research/VTY.L not the trial tree path — portability/linking risk for downstream tooling",
+        "no recent trading-update, H1, or FY results RNS filings in index — cannot confirm market-facing guidance or announcement timing locally",
+        "H1 2024 filing is parent-company-only; consolidated interim group P&L not available in sources",
+        "short-positions Investegate page is not a substitute for fundamentals or results RNS",
+        "no local share price, enterprise value, net debt bridge, or dividend policy extract beyond static annual-report highlights"
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzM4MTYxMTQ2MWFkaXF6a2N4.txt",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQyMjk2ODEwOWFkaXF6a2N4.txt",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt",
+        "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/47907269a7c0f90e.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-41312611-a10c-4f22-8deb-f878332092ec"
+    }
+  ],
+  "rubric": {
+    "citation_accuracy": 0.714,
+    "filing_alignment": 1.0,
+    "gap_honesty": 1.0,
+    "structural": 1.0,
+    "composite": 0.9,
+    "notes": []
+  },
+  "research_verdict": "caution",
+  "research_confidence": 0.42,
+  "markdown_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/research.md"
+}

@@ -1,0 +1,154 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "sources tree contains only filings/ (filings_index.json plus seven body .txt files); no yahoo_financials, news_manifest, screening_snapshot, macro_context, alternate_news, or financials_annual.json (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources)",
+    "filings_index.json summary: total=7, annual=0, interim=0, other=7, with_body=7 — all seven filings tagged period=other despite Companies House headlines naming accounts-with-accounts-type-group and accounts-with-accounts-type-interim (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+    "every body_path in filings_index points at output/research/VTY.L/sources/filings/bodies/... rather than the trial tree docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/...; bodies are nevertheless present locally under the trial tree (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+    "sources_used lists companies_house, google_news_investegate, investegate_resolved only — no Yahoo finance ladder step (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+    "Corpus mix: five Companies House account filings (published 2023-06-08 to 2026-06-25), one Investegate operational RNS (Rugeley acquisition, 2025-08-14), one Investegate short-positions listing page (2025-02-28) — no trading-update, half-year, or full-year results RNS bodies (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json)",
+    "FY2025 and FY2024 group annual report PDF text bodies are present (Companies House group accounts); H1 2024 body is unaudited interim parent company statements only, not consolidated group results (docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt, ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt, ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt)",
+    "No news article corpus or manifest under sources — local news_article_count effectively zero; verify-before-trade memo cannot confirm recent press/RNS flow beyond the single Rugeley RNS and short-positions scrape",
+    "Verify-before-trade memo cannot locally confirm: screening multiples/models (no screening_snapshot), Yahoo-derived FCF and quote multiples (no yahoo_financials), timely RNS trading/results announcements (absent from filings index), or UK housing macro context (no macro_context)"
+  ],
+  "figures": [
+    {
+      "metric": "filings_index_total",
+      "value": "7",
+      "period": "as at fetched_at 2026-08-02",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+      "note": "summary.total"
+    },
+    {
+      "metric": "filings_index_annual_count",
+      "value": "0",
+      "period": "as at fetched_at 2026-08-02",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+      "note": "summary.annual despite group annual report bodies present"
+    },
+    {
+      "metric": "filings_index_interim_count",
+      "value": "0",
+      "period": "as at fetched_at 2026-08-02",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+      "note": "summary.interim despite CH accounts-with-accounts-type-interim headline"
+    },
+    {
+      "metric": "filings_index_other_count",
+      "value": "7",
+      "period": "as at fetched_at 2026-08-02",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+      "note": "summary.other"
+    },
+    {
+      "metric": "filings_with_body",
+      "value": "7",
+      "period": "as at fetched_at 2026-08-02",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+      "note": "summary.with_body"
+    },
+    {
+      "metric": "adjusted_revenue",
+      "value": "£4,155.3m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS from Annual Report and Accounts 2025"
+    },
+    {
+      "metric": "reported_revenue",
+      "value": "£3,613.7m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS"
+    },
+    {
+      "metric": "completions",
+      "value": "15,658",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS"
+    },
+    {
+      "metric": "adjusted_operating_profit",
+      "value": "£353.8m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS"
+    },
+    {
+      "metric": "adjusted_profit_before_tax",
+      "value": "£268.8m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS"
+    },
+    {
+      "metric": "adjusted_basic_eps",
+      "value": "59.3p",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS"
+    },
+    {
+      "metric": "ROCE",
+      "value": "13.9%",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "note": "2025 HIGHLIGHTS return on capital employed"
+    },
+    {
+      "metric": "adjusted_revenue",
+      "value": "£4,329.2m",
+      "period": "FY2024",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt",
+      "note": "2024 HIGHLIGHTS"
+    },
+    {
+      "metric": "adjusted_operating_profit",
+      "value": "£358.2m",
+      "period": "FY2024",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt",
+      "note": "2024 HIGHLIGHTS"
+    },
+    {
+      "metric": "parent_profit_before_tax",
+      "value": "£237.8m",
+      "period": "H1 2024 (6 months to 30 June 2024)",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+      "note": "unaudited interim parent company income statement; not consolidated group"
+    },
+    {
+      "metric": "rugeley_homes_planned",
+      "value": "2,300",
+      "period": "RNS 2025-08-14",
+      "source_path": "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt",
+      "note": "operational RNS only recent results-style announcement in corpus"
+    }
+  ],
+  "gaps": [
+    "yahoo_financials absent — cannot verify Yahoo FCF, cash flow, or quote-based multiples locally",
+    "screening_snapshot absent — cannot verify screener multiples, peer comps, or valuation model inputs",
+    "macro_context absent — cannot verify UK housing starts, mortgage rates, Help to Buy, or sector demand locally",
+    "news_manifest and alternate_news absent — no structured news corpus; news_article_count zero in sources",
+    "financials_annual.json absent — no normalised structured annual financials extract for modelling",
+    "filings period taxonomy broken (annual=0, interim=0, other=7) despite group and interim CH account types in headlines",
+    "body_path references output/research/VTY.L not the trial tree path — portability/linking risk for downstream tooling",
+    "no recent trading-update, H1, or FY results RNS filings in index — cannot confirm market-facing guidance or announcement timing locally",
+    "H1 2024 filing is parent-company-only; consolidated interim group P&L not available in sources",
+    "short-positions Investegate page is not a substitute for fundamentals or results RNS",
+    "no local share price, enterprise value, net debt bridge, or dividend policy extract beyond static annual-report highlights"
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzM4MTYxMTQ2MWFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQyMjk2ODEwOWFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzQ2OTM0NTU1OGFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/0dd1d1a3748702d6.txt",
+    "docs/data/research_director_worker/VTY.L/20260813T120331Z/sources/filings/bodies/47907269a7c0f90e.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-41312611-a10c-4f22-8deb-f878332092ec"
+}

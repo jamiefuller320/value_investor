@@ -1,0 +1,111 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "Evidence ladder step alternate_news is absent from sources: no alternate_news file or flag exists; 19 news_batch_*.json files and news_manifest.json supply headline/summary/url metadata only (keys: id, source, title, summary, published_at, url, query) — not classified or usable as alternate_news bodies (sources/news_manifest.json; sources/news_batch_20260812_055432.json).",
+    "Yahoo financials pack has empty quarterly_income ({}) whilst annual income_statement covers FY2021–FY2025; H1 FY2026 P&L cannot be sourced from Yahoo and must come from interim filing bodies (sources/financials_annual.json).",
+    "Filings index reports 64 filings all with_body=64, but filings/bodies/ contains 65 .txt files: 62 unique indexed basenames plus 3 extra on-disk copies not referenced by any body_path (275c8eb9ff3328e9.txt, 9a2605c4e3c03eb3.txt, fdaf9a327c1fe640.txt) (sources/filings/filings_index.json; sources/filings/bodies/).",
+    "Two body_path values are shared across duplicate index entries: 46201199d52b83a0.txt (ids 275c8eb9ff3328e9 investegate_direct and 46201199d52b83a0 investegate_resolved, headline 'Proposed secondary placing in ME Group') and cf78bf0ef97531b3.txt (ids fdaf9a327c1fe640 and cf78bf0ef97531b3, headline 'Director/PDMR Shareholding') (sources/filings/filings_index.json).",
+    "All six ir_allowlist filings have published_at=null (annual reports/results PDFs and interim presentation); chronological ordering of IR documents cannot be verified from index metadata alone (sources/filings/filings_index.json).",
+    "Index body_path strings point to docs/data/research/MEGP.L/sources/filings/bodies/… whilst bodies in this pack live under sources/filings/bodies/; all 62 unique indexed basenames are present locally but paths are cross-pack references (sources/filings/filings_index.json).",
+    "Index note references optional SEC 20-F when dual-listed, but sources_used lists only companies_house, google_news_investegate, investegate_direct, investegate_resolved, ir_allowlist and zero SEC filings are indexed (sources/filings/filings_index.json).",
+    "news_manifest consolidates 41 unique articles (31 google_news, 10 yfinance) with 8 duplicate URLs; material headlines (Jun-2026 profit cut, Jul-2026 H1 call, boardroom article, Asda partnership, German photobooth rules) are present as titles/summaries only — full article text not in pack (sources/news_manifest.json).",
+    "screening_snapshot flags unresolved research gaps (FCF-definition, cyclical-quantification, dividend-trim risk) and null overlay fields (fcf_dividend_coverage_gross/net, operating_cashflow, trade_plan, research_rationale) despite key_metrics showing P/E 7.8, yield 6.9%, FCF 25153000.0 (sources/screening_snapshot.json).",
+    "macro_context is present as secondary regime markers only (GBP/USD 1.3492, FTSE 100 10901.10 as of Aug-2026) with explicit note not to use as scoring input (sources/macro_context.json)."
+  ],
+  "figures": [
+    {
+      "metric": "filings_index_total",
+      "value": "64",
+      "period": "as of 2026-08-12",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "summary.total; all with_body"
+    },
+    {
+      "metric": "filings_body_files_on_disk",
+      "value": "65",
+      "period": "as of 2026-08-12",
+      "source_path": "sources/filings/bodies/",
+      "note": "3 extra files not indexed by body_path"
+    },
+    {
+      "metric": "filings_indexed_unique_body_basenames",
+      "value": "62",
+      "period": "as of 2026-08-12",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "64 index rows; 2 body_paths each shared by 2 filings"
+    },
+    {
+      "metric": "quarterly_income_periods",
+      "value": "0",
+      "period": "Yahoo fetch 2026-08-12",
+      "source_path": "sources/financials_annual.json",
+      "note": "quarterly_income is empty object {}"
+    },
+    {
+      "metric": "news_batch_file_count",
+      "value": "19",
+      "period": "2026-08-02 to 2026-08-12",
+      "source_path": "sources/",
+      "note": "news_batch_*.json present; not alternate_news"
+    },
+    {
+      "metric": "news_manifest_article_count",
+      "value": "41",
+      "period": "updated 2026-08-12",
+      "source_path": "sources/news_manifest.json",
+      "note": "31 google_news + 10 yfinance; headline-only"
+    },
+    {
+      "metric": "ir_allowlist_published_at_null",
+      "value": "6",
+      "period": "as of 2026-08-12",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "all ir_allowlist entries lack published_at"
+    },
+    {
+      "metric": "duplicate_shared_body_paths",
+      "value": "2",
+      "period": "as of 2026-08-12",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "46201199d52b83a0.txt and cf78bf0ef97531b3.txt"
+    },
+    {
+      "metric": "annual_revenue_fy2025",
+      "value": "315393000",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "income_statement.2025.Total Revenue"
+    },
+    {
+      "metric": "free_cash_flow_fy2025",
+      "value": "25153000",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "cash_flow.2025.Free Cash Flow; matches screening key_metrics FCF"
+    }
+  ],
+  "gaps": [
+    "alternate_news ladder step unavailable locally — no full-text news/article bodies; memo cannot verify third-party news claims (Simply Wall St earnings-quality critique, Investors' Chronicle boardroom analysis, Proactive/Kalkine detail) beyond headline/summary.",
+    "H1 FY2026 interim revenue, EPS, cash flow and dividend metrics not in Yahoo quarterly_income; must be extracted manually from interim filing bodies (ir_3f2f55026f8c6fe6 and related RNS).",
+    "IR allowlist publication dates missing (published_at null for all six); cannot date annual/interim IR PDFs from index alone.",
+    "SEC 20-F not fetched despite dual-listing note in filings_index; US GAAP/20-F disclosures not locally verifiable.",
+    "Duplicate index rows sharing body_paths (placing announcement; PDMR shareholding) — memo cannot distinguish canonical filing id without external Investegate metadata.",
+    "Three orphan body files on disk (275c8eb9ff3328e9, 9a2605c4e3c03eb3, fdaf9a327c1fe640) are not indexed; 9a2605c4e3c03eb3 appears to be an unindexed variant of Montefiore placing content.",
+    "body_path references use docs/data/research/MEGP.L/ prefix not this worker pack path — cross-pack resolution required if tooling expects literal paths.",
+    "screening_snapshot null FCF/dividend-coverage overlay fields and research_rationale prevent local reconciliation of screen overlay vs filing-derived FCF definitions.",
+    "news_manifest duplicate URLs (8 pairs) — memo cannot verify which syndicated headline is authoritative without fetching external URLs."
+  ],
+  "sources_read": [
+    "sources/filings/filings_index.json",
+    "sources/filings/bodies/",
+    "sources/financials_annual.json",
+    "sources/news_manifest.json",
+    "sources/news_batch_20260812_055432.json",
+    "sources/screening_snapshot.json",
+    "sources/macro_context.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-e6720f8c-eb68-4910-9db1-bc2773928d7e"
+}

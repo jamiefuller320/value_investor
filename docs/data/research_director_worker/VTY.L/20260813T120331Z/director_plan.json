@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Do the 25 Jun 2026 Companies House group accounts (catalogued as period=other, accounts-type-group, likely FY25) confirm the screen’s strong-buy on revenue, operating profit/PBT, EPS, operating cash flow, net cash/debt, completions/ASP, partnership versus private mix, land bank, and dividend—and is the audit opinion clean with going-concern and covenant headroom intact?",
+    "Why does this uk_rns pack contain no LSE annual or interim results RNS (only CH statutory accounts, one Rugeley project RNS, and a Google News ‘Short Positions’ page)—has trading, guidance, or provisioning since the last statutory period deteriorated in a way the screen cannot see?",
+    "The only interim body is CH interim accounts dated 12 Sep 2024; without H1 2025 or H1 2026, does that stale half-year still support or weaken the strong-buy case on H2 weighting, cash conversion, forward sales, and net debt seasonality?",
+    "What fire-safety / Building Safety Act / cladding provisions, customer-deposit liabilities, and land-creditor or RCF covenants sit in the latest group accounts, and do they overturn cheapness or quality the (locally missing) screen may be using?",
+    "What does the 14 Aug 2025 Investegate RNS ‘Vistry to deliver 2,300 homes in Rugeley’ imply for capital intensity, timing, partnership versus private mix, and whether that volume is already in the land bank versus incremental execution risk?",
+    "Is the 28 Feb 2025 ‘Short Positions’ body a material short-interest/overhang disclosure or a mis-ingested aggregator page, and does residual short interest still matter for entry?",
+    "With screening_snapshot, yahoo_financials, news_manifest, alternate_news, and macro_context all thin or absent, which strong-buy claims (multiples, yield, FCF cover, model count, SMA200/RSI timing, UK rates/housing policy) cannot be verified locally—should the memo refuse to confirm strong-buy until those ladder steps are ingested?"
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Period tagging failed: all 7 filings are period=other despite CH summaries accounts-with-accounts-type-group (annual) and accounts-with-accounts-type-interim. Map those types to period=annual|interim, put the fiscal year in the headline, and rewrite body_path from output/research/VTY.L/... to the trial sources tree. For uk_rns names, pull primary Investegate/RNS annual, interim, and trading-update bodies rather than CH statutory accounts plus Google News mirrors; quarantine aggregator pages such as ‘Short Positions’."
+    },
+    {
+      "area": "sources",
+      "summary": "Trial sources contain only filings_index and 7 bodies. yahoo_financials, news_manifest, screening_snapshot, macro_context, and alternate_news are thin/absent (news_article_count 0; no financials_annual.json). Copy the screen snapshot and Yahoo pack into the trial tree so a strong-buy can be reconciled, and ingest a real news_manifest / RNS results set before synthesis."
+    },
+    {
+      "area": "prompt",
+      "summary": "Director/worker prompts should treat CH accounts-type-group as annual and accounts-type-interim as interim when period=other; require extracting the fiscal year from the body; forbid digest_news_manifest and screen_context when those files are missing; instruct workers to take P&L/cash/leverage from filing bodies not Yahoo; for UK housebuilders require fire-safety provisions, partnership mix, completions/ASP, and land bank as mandatory extracts."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy25_annual",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ch_00306718_MzUyNzg4NzYyMGFkaXF6a2N4.txt",
+      "focus": "Latest Companies House group accounts (filed 25 Jun 2026; treat as annual despite period=other). Extract fiscal year, FY vs prior-year revenue, operating profit, PBT, EPS, OCF, capex, FCF (quote definition), net cash/debt, dividend, completions/ASP, partnership vs private mix, land bank, fire-safety/Building Safety Act provisions, covenants/headroom, going-concern and audit opinion. Prefer these figures over Yahoo (absent).",
+      "priority": 1
+    },
+    {
+      "id": "filing_h1_2024_interim",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ch_00306718_MzQzNTM3MzAyMGFkaXF6a2N4.txt",
+      "focus": "Companies House interim accounts (filed 12 Sep 2024; treat as interim despite period=other). Extract H1 vs prior H1 P&L, cash, net debt, dividend, completions/forward sales, partnership mix, and any guidance. Flag that this is the only interim body and is stale versus a 2026 trade; do not invent later interims.",
+      "priority": 1
+    },
+    {
+      "id": "filing_rugeley_rns",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/0dd1d1a3748702d6.txt",
+      "focus": "14 Aug 2025 Investegate RNS ‘Vistry to deliver 2,300 homes in Rugeley’. Extract counterparty/partnership vs private, unit count and tenure mix, capital/cash timing, whether homes are already in the land bank, and any link to current-year completions or guidance. This is not an annual/interim results RNS.",
+      "priority": 2
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Record thin/missing ladder steps: yahoo_financials, news_manifest, screening_snapshot, macro_context, alternate_news. Note filings_index summary annual=0 interim=0 other=7 despite CH group/interim types; index body_path points at output/research/VTY.L not the trial tree; no financials_annual.json; news_article_count 0. List what a verify-before-trade memo cannot confirm locally (screen multiples/models, Yahoo FCF, recent RNS results, UK housing macro). Do not invent unavailable sources.",
+      "priority": 3
+    }
+  ],
+  "director_agent_id": "agent-17c9cb47-8db4-4903-ab1c-46057438b01f"
+}

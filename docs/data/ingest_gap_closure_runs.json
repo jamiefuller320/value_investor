@@ -2828,8 +2828,3651 @@
         ]
       },
       "trigger": "eng_idle"
+    },
+    {
+      "id": "igc-20260814-04",
+      "status": "pending_review",
+      "title": "Manual FTSE gap burst 3",
+      "summary": "Cloud-agent burst to clear remaining buy-tier indexed-without-body gaps",
+      "ticker": "FGP.L",
+      "params": {
+        "max_targets": 12,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 6,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260814-04",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-14T16:34:52.057637+00:00",
+      "completed_at": "2026-08-14T16:47:07.817156+00:00",
+      "outcome": {
+        "delta_filings_with_body": 395,
+        "delta_indexed_without_body": 396,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 12,
+        "targets_completed": 11,
+        "runtime_cutoff": false,
+        "tickers": [
+          "FGP.L",
+          "GFRD.L",
+          "DNLM.L",
+          "PFD.L",
+          "RS1.L",
+          "KNOS.L",
+          "BBY.L",
+          "VSVS.L",
+          "KGF.L",
+          "BME.L",
+          "INCH.L",
+          "PETS.L"
+        ],
+        "results": [
+          {
+            "ticker": "FGP.L",
+            "name": "FirstGroup plc",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false,
+            "mapped_source_ids": [
+              "companies_house_accounts",
+              "company_ir_presentation",
+              "investegate_rns_full"
+            ],
+            "planned_sources": [
+              "company_ir_presentation",
+              "companies_house_accounts",
+              "investegate_rns_full"
+            ],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "investegate_fallbacks": 0,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 3,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies",
+              "mandatory": true,
+              "allowlist_count": 3
+            },
+            "alternate_sources": {
+              "sources_tried": [
+                "company_ir_presentation",
+                "companies_house_accounts",
+                "investegate_rns_full"
+              ],
+              "body_refetch": {
+                "companies_house": {
+                  "attempted": 1,
+                  "fetched": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "note": "refetch_companies_house_filing_bodies"
+                },
+                "rns": {
+                  "investegate": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 62,
+                    "with_body_after": 62,
+                    "google_news_rejected": 0,
+                    "misattributed_pruned": 0,
+                    "note": "no missing Investegate/LSE bodies"
+                  },
+                  "ticker_rns": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 62,
+                    "with_body_after": 62,
+                    "pruned": 0,
+                    "note": "no missing ticker_rns_api bodies"
+                  },
+                  "attempted": 0,
+                  "fetched": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "google_news_rejected": 0,
+                  "note": "refetch_indexed_without_body_filing_bodies"
+                },
+                "residual": {
+                  "attempted": 1,
+                  "fetched": 0,
+                  "pruned": 0,
+                  "pruned_noise": 0,
+                  "pruned_unfetchable": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "note": "refetch_residual_filing_bodies"
+                },
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "note": "refetch_uk_primary_filing_bodies"
+              },
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 62,
+              "with_body_after": 62
+            }
+          },
+          {
+            "ticker": "GFRD.L",
+            "name": "Galliford Try Holdings plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 25,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 25,
+              "with_body_after": 25
+            }
+          },
+          {
+            "ticker": "DNLM.L",
+            "name": "Dunelm Group plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 25,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 25,
+              "with_body_after": 25
+            }
+          },
+          {
+            "ticker": "PFD.L",
+            "name": "Premier Foods plc",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 26,
+              "with_body_after": 26,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 26,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 26,
+                "with_body_after": 56,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 26,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 26,
+              "with_body_after": 26
+            }
+          },
+          {
+            "ticker": "RS1.L",
+            "name": "RS Group plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 25,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 25,
+              "with_body_after": 25
+            }
+          },
+          {
+            "ticker": "KNOS.L",
+            "name": "Kainos Group plc",
+            "with_body_before": 59,
+            "with_body_after": 59,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 28,
+              "with_body_after": 28,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 31,
+              "fetched": 31,
+              "with_body_before": 28,
+              "with_body_after": 59,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 31,
+                "fetched": 31,
+                "with_body_before": 28,
+                "with_body_after": 59,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 59,
+                "with_body_after": 59,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 31,
+              "fetched": 31,
+              "with_body_before": 28,
+              "with_body_after": 59,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 28,
+              "with_body_after": 28
+            }
+          },
+          {
+            "ticker": "BBY.L",
+            "name": "Balfour Beatty plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 27,
+              "fetched": 27,
+              "with_body_before": 25,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 27,
+                "fetched": 27,
+                "with_body_before": 25,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 27,
+              "fetched": 27,
+              "with_body_before": 25,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 25,
+              "with_body_after": 25
+            }
+          },
+          {
+            "ticker": "VSVS.L",
+            "name": "Vesuvius plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 25,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 25,
+              "with_body_after": 25
+            }
+          },
+          {
+            "ticker": "KGF.L",
+            "name": "Kingfisher plc",
+            "with_body_before": 51,
+            "with_body_after": 51,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 21,
+              "with_body_after": 21,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 28,
+              "with_body_before": 21,
+              "with_body_after": 49,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 49,
+              "with_body_after": 49,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 28,
+                "with_body_before": 21,
+                "with_body_after": 49,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 49,
+                "with_body_after": 49,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 28,
+              "with_body_before": 21,
+              "with_body_after": 49,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 2,
+              "fetched": 2,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 49,
+              "with_body_after": 51,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 21,
+              "with_body_after": 21
+            }
+          },
+          {
+            "ticker": "INCH.L",
+            "name": "Inchcape plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 23,
+              "with_body_after": 23,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 29,
+              "fetched": 29,
+              "with_body_before": 23,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 29,
+                "fetched": 29,
+                "with_body_before": 23,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 29,
+              "fetched": 29,
+              "with_body_before": 23,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 23,
+              "with_body_after": 23
+            }
+          },
+          {
+            "ticker": "PETS.L",
+            "name": "Pets at Home Group Plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 22,
+              "with_body_after": 22,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 22,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 22,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 22,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 22,
+              "with_body_after": 22
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "FGP.L",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false
+          },
+          {
+            "ticker": "GFRD.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "DNLM.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "PFD.L",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false
+          },
+          {
+            "ticker": "RS1.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "KNOS.L",
+            "with_body_before": 59,
+            "with_body_after": 59,
+            "improved": false
+          },
+          {
+            "ticker": "BBY.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "VSVS.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "KGF.L",
+            "with_body_before": 51,
+            "with_body_after": 51,
+            "improved": false
+          },
+          {
+            "ticker": "INCH.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "PETS.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "manual",
+      "engineering_task_id": "eng-20260814-01"
+    },
+    {
+      "id": "igc-20260814-05",
+      "status": "pending_review",
+      "title": "Manual FTSE gap burst 4",
+      "summary": "Second cloud-agent burst pass on remaining buy-tier body gaps",
+      "ticker": "FGP.L",
+      "params": {
+        "max_targets": 12,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 6,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260814-05",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-14T16:47:27.333532+00:00",
+      "completed_at": "2026-08-14T17:00:50.620985+00:00",
+      "outcome": {
+        "delta_filings_with_body": 368,
+        "delta_indexed_without_body": 340,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 12,
+        "targets_completed": 12,
+        "runtime_cutoff": false,
+        "tickers": [
+          "FGP.L",
+          "BME.L",
+          "ABDN.L",
+          "DRX.L",
+          "BWY.L",
+          "CNA.L",
+          "GCP.L",
+          "ABF.L",
+          "DATA.L",
+          "GAMA.L",
+          "TW.L",
+          "PAF.L"
+        ],
+        "results": [
+          {
+            "ticker": "FGP.L",
+            "name": "FirstGroup plc",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false,
+            "mapped_source_ids": [
+              "companies_house_accounts",
+              "company_ir_presentation",
+              "investegate_rns_full"
+            ],
+            "planned_sources": [
+              "company_ir_presentation",
+              "companies_house_accounts",
+              "investegate_rns_full"
+            ],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "investegate_fallbacks": 0,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 3,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies",
+              "mandatory": true,
+              "allowlist_count": 3
+            },
+            "alternate_sources": {
+              "sources_tried": [
+                "company_ir_presentation",
+                "companies_house_accounts",
+                "investegate_rns_full"
+              ],
+              "body_refetch": {
+                "companies_house": {
+                  "attempted": 1,
+                  "fetched": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "note": "refetch_companies_house_filing_bodies"
+                },
+                "rns": {
+                  "investegate": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 62,
+                    "with_body_after": 62,
+                    "google_news_rejected": 0,
+                    "misattributed_pruned": 0,
+                    "note": "no missing Investegate/LSE bodies"
+                  },
+                  "ticker_rns": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 62,
+                    "with_body_after": 62,
+                    "pruned": 0,
+                    "note": "no missing ticker_rns_api bodies"
+                  },
+                  "attempted": 0,
+                  "fetched": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "google_news_rejected": 0,
+                  "note": "refetch_indexed_without_body_filing_bodies"
+                },
+                "residual": {
+                  "attempted": 1,
+                  "fetched": 0,
+                  "pruned": 0,
+                  "pruned_noise": 0,
+                  "pruned_unfetchable": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "note": "refetch_residual_filing_bodies"
+                },
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "note": "refetch_uk_primary_filing_bodies"
+              },
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 62,
+              "with_body_after": 62
+            }
+          },
+          {
+            "ticker": "BME.L",
+            "name": "B&M European Value Retail plc",
+            "with_body_before": 58,
+            "with_body_after": 58,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 27,
+              "with_body_after": 27,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 32,
+              "fetched": 31,
+              "with_body_before": 27,
+              "with_body_after": 58,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "pruned": 0,
+              "note": "refetch_ticker_rns_api_filing_bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 32,
+                "fetched": 31,
+                "with_body_before": 27,
+                "with_body_after": 58,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 1,
+                "fetched": 0,
+                "with_body_before": 58,
+                "with_body_after": 58,
+                "pruned": 0,
+                "note": "refetch_ticker_rns_api_filing_bodies"
+              },
+              "attempted": 33,
+              "fetched": 31,
+              "with_body_before": 27,
+              "with_body_after": 58,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 27,
+              "with_body_after": 27
+            }
+          },
+          {
+            "ticker": "ABDN.L",
+            "name": "Aberdeen Group Plc",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 19,
+              "with_body_after": 19,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 37,
+              "fetched": 37,
+              "with_body_before": 19,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 37,
+                "fetched": 37,
+                "with_body_before": 19,
+                "with_body_after": 56,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 37,
+              "fetched": 37,
+              "with_body_before": 19,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 19,
+              "with_body_after": 19
+            }
+          },
+          {
+            "ticker": "DRX.L",
+            "name": "Drax Group plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 22,
+              "with_body_after": 22,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 22,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 22,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 22,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 22,
+              "with_body_after": 22
+            }
+          },
+          {
+            "ticker": "BWY.L",
+            "name": "Bellway p.l.c.",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 24,
+              "with_body_after": 24,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 31,
+              "fetched": 31,
+              "with_body_before": 24,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 31,
+                "fetched": 31,
+                "with_body_before": 24,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 31,
+              "fetched": 31,
+              "with_body_before": 24,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 24,
+              "with_body_after": 24
+            }
+          },
+          {
+            "ticker": "CNA.L",
+            "name": "Centrica plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 30,
+                "fetched": 30,
+                "with_body_before": 25,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 30,
+              "fetched": 30,
+              "with_body_before": 25,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 25,
+              "with_body_after": 25
+            }
+          },
+          {
+            "ticker": "GCP.L",
+            "name": "GCP Infrastructure Investments Limited",
+            "with_body_before": 57,
+            "with_body_after": 57,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 22,
+              "with_body_after": 22,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 35,
+              "fetched": 35,
+              "with_body_before": 22,
+              "with_body_after": 57,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 35,
+                "fetched": 35,
+                "with_body_before": 22,
+                "with_body_after": 57,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 57,
+                "with_body_after": 57,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 35,
+              "fetched": 35,
+              "with_body_before": 22,
+              "with_body_after": 57,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 22,
+              "with_body_after": 22
+            }
+          },
+          {
+            "ticker": "ABF.L",
+            "name": "Associated British Foods plc",
+            "with_body_before": 57,
+            "with_body_after": 57,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 24,
+              "with_body_after": 24,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 33,
+              "fetched": 33,
+              "with_body_before": 24,
+              "with_body_after": 57,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 33,
+                "fetched": 33,
+                "with_body_before": 24,
+                "with_body_after": 57,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 57,
+                "with_body_after": 57,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 33,
+              "fetched": 33,
+              "with_body_before": 24,
+              "with_body_after": 57,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 24,
+              "with_body_after": 24
+            }
+          },
+          {
+            "ticker": "DATA.L",
+            "name": "GlobalData Plc",
+            "with_body_before": 81,
+            "with_body_after": 81,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 43,
+              "with_body_after": 43,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 38,
+              "fetched": 38,
+              "with_body_before": 43,
+              "with_body_after": 81,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 81,
+              "with_body_after": 81,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 38,
+                "fetched": 38,
+                "with_body_before": 43,
+                "with_body_after": 81,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 81,
+                "with_body_after": 81,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 38,
+              "fetched": 38,
+              "with_body_before": 43,
+              "with_body_after": 81,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 81,
+              "with_body_after": 81,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 43,
+              "with_body_after": 43
+            }
+          },
+          {
+            "ticker": "GAMA.L",
+            "name": "Gamma Communications plc",
+            "with_body_before": 105,
+            "with_body_after": 105,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 76,
+              "with_body_after": 76,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 29,
+              "fetched": 29,
+              "with_body_before": 76,
+              "with_body_after": 105,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 105,
+              "with_body_after": 105,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 29,
+                "fetched": 29,
+                "with_body_before": 76,
+                "with_body_after": 105,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 105,
+                "with_body_after": 105,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 29,
+              "fetched": 29,
+              "with_body_before": 76,
+              "with_body_after": 105,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 105,
+              "with_body_after": 105,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 76,
+              "with_body_after": 76
+            }
+          },
+          {
+            "ticker": "TW.L",
+            "name": "Taylor Wimpey plc",
+            "with_body_before": 5,
+            "with_body_after": 5,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 5,
+                "with_body_after": 5,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 5,
+                "with_body_after": 5,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 5,
+              "with_body_after": 5
+            }
+          },
+          {
+            "ticker": "PAF.L",
+            "name": "Pan African Resources PLC",
+            "with_body_before": 50,
+            "with_body_after": 50,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 5,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 50,
+                "with_body_after": 50,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 50,
+                "with_body_after": 50,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 5,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 50,
+              "with_body_after": 50
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "FGP.L",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false
+          },
+          {
+            "ticker": "BME.L",
+            "with_body_before": 58,
+            "with_body_after": 58,
+            "improved": false
+          },
+          {
+            "ticker": "ABDN.L",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false
+          },
+          {
+            "ticker": "DRX.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "BWY.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "CNA.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "GCP.L",
+            "with_body_before": 57,
+            "with_body_after": 57,
+            "improved": false
+          },
+          {
+            "ticker": "ABF.L",
+            "with_body_before": 57,
+            "with_body_after": 57,
+            "improved": false
+          },
+          {
+            "ticker": "DATA.L",
+            "with_body_before": 81,
+            "with_body_after": 81,
+            "improved": false
+          },
+          {
+            "ticker": "GAMA.L",
+            "with_body_before": 105,
+            "with_body_after": 105,
+            "improved": false
+          },
+          {
+            "ticker": "TW.L",
+            "with_body_before": 5,
+            "with_body_after": 5,
+            "improved": false
+          },
+          {
+            "ticker": "PAF.L",
+            "with_body_before": 50,
+            "with_body_after": 50,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "manual",
+      "engineering_task_id": "eng-20260814-02"
+    },
+    {
+      "id": "igc-20260814-06",
+      "status": "pending_review",
+      "title": "Manual FTSE gap burst 5 — final tail",
+      "summary": "Final cloud-agent burst for last 15 buy-tier indexed-without-body gaps",
+      "ticker": "FGP.L",
+      "params": {
+        "max_targets": 15,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 6,
+        "max_runtime_seconds": 2400.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": []
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260814-06",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-14T17:01:09.778037+00:00",
+      "completed_at": "2026-08-14T17:09:01.218125+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 2,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 15,
+        "targets_completed": 15,
+        "runtime_cutoff": false,
+        "tickers": [
+          "FGP.L",
+          "TW.L",
+          "PAF.L",
+          "BBY.L",
+          "INCH.L",
+          "ABF.L",
+          "PETS.L",
+          "ABDN.L",
+          "DRX.L",
+          "BWY.L",
+          "CNA.L",
+          "BME.L",
+          "JD.L",
+          "DSCV.L",
+          "BTRW.L"
+        ],
+        "results": [
+          {
+            "ticker": "FGP.L",
+            "name": "FirstGroup plc",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false,
+            "mapped_source_ids": [
+              "companies_house_accounts",
+              "company_ir_presentation",
+              "investegate_rns_full"
+            ],
+            "planned_sources": [
+              "company_ir_presentation",
+              "companies_house_accounts",
+              "investegate_rns_full"
+            ],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 62,
+              "with_body_after": 62,
+              "investegate_fallbacks": 0,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 3,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies",
+              "mandatory": true,
+              "allowlist_count": 3
+            },
+            "alternate_sources": {
+              "sources_tried": [
+                "company_ir_presentation",
+                "companies_house_accounts",
+                "investegate_rns_full"
+              ],
+              "body_refetch": {
+                "companies_house": {
+                  "attempted": 1,
+                  "fetched": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "note": "refetch_companies_house_filing_bodies"
+                },
+                "rns": {
+                  "investegate": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 62,
+                    "with_body_after": 62,
+                    "google_news_rejected": 0,
+                    "misattributed_pruned": 0,
+                    "note": "no missing Investegate/LSE bodies"
+                  },
+                  "ticker_rns": {
+                    "attempted": 0,
+                    "fetched": 0,
+                    "with_body_before": 62,
+                    "with_body_after": 62,
+                    "pruned": 0,
+                    "note": "no missing ticker_rns_api bodies"
+                  },
+                  "attempted": 0,
+                  "fetched": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "google_news_rejected": 0,
+                  "note": "refetch_indexed_without_body_filing_bodies"
+                },
+                "residual": {
+                  "attempted": 1,
+                  "fetched": 0,
+                  "pruned": 0,
+                  "pruned_noise": 0,
+                  "pruned_unfetchable": 0,
+                  "with_body_before": 62,
+                  "with_body_after": 62,
+                  "note": "refetch_residual_filing_bodies"
+                },
+                "attempted": 2,
+                "fetched": 0,
+                "with_body_before": 62,
+                "with_body_after": 62,
+                "google_news_rejected": 0,
+                "note": "refetch_uk_primary_filing_bodies"
+              },
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 62,
+              "with_body_after": 62
+            }
+          },
+          {
+            "ticker": "TW.L",
+            "name": "Taylor Wimpey plc",
+            "with_body_before": 5,
+            "with_body_after": 5,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 5,
+                "with_body_after": 5,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 5,
+                "with_body_after": 5,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 5,
+              "with_body_after": 5
+            }
+          },
+          {
+            "ticker": "PAF.L",
+            "name": "Pan African Resources PLC",
+            "with_body_before": 50,
+            "with_body_after": 50,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 5,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 50,
+                "with_body_after": 50,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 50,
+                "with_body_after": 50,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 5,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 50,
+              "with_body_after": 50
+            }
+          },
+          {
+            "ticker": "BBY.L",
+            "name": "Balfour Beatty plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 52,
+              "with_body_after": 52
+            }
+          },
+          {
+            "ticker": "INCH.L",
+            "name": "Inchcape plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 52,
+              "with_body_after": 52
+            }
+          },
+          {
+            "ticker": "ABF.L",
+            "name": "Associated British Foods plc",
+            "with_body_before": 57,
+            "with_body_after": 57,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 57,
+                "with_body_after": 57,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 57,
+                "with_body_after": 57,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 57,
+              "with_body_after": 57,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 57,
+              "with_body_after": 57
+            }
+          },
+          {
+            "ticker": "PETS.L",
+            "name": "Pets at Home Group Plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 52,
+              "with_body_after": 52
+            }
+          },
+          {
+            "ticker": "ABDN.L",
+            "name": "Aberdeen Group Plc",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 56,
+              "with_body_after": 56
+            }
+          },
+          {
+            "ticker": "DRX.L",
+            "name": "Drax Group plc",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 52,
+                "with_body_after": 52,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 52,
+              "with_body_after": 52,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 52,
+              "with_body_after": 52
+            }
+          },
+          {
+            "ticker": "BWY.L",
+            "name": "Bellway p.l.c.",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 55,
+              "with_body_after": 55
+            }
+          },
+          {
+            "ticker": "CNA.L",
+            "name": "Centrica plc",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 55,
+                "with_body_after": 55,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 3,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 55,
+              "with_body_after": 55,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 55,
+              "with_body_after": 55
+            }
+          },
+          {
+            "ticker": "BME.L",
+            "name": "B&M European Value Retail plc",
+            "with_body_before": 58,
+            "with_body_after": 58,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "pruned": 0,
+              "note": "refetch_ticker_rns_api_filing_bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 1,
+                "fetched": 0,
+                "with_body_before": 58,
+                "with_body_after": 58,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 1,
+                "fetched": 0,
+                "with_body_before": 58,
+                "with_body_after": 58,
+                "pruned": 0,
+                "note": "refetch_ticker_rns_api_filing_bodies"
+              },
+              "attempted": 2,
+              "fetched": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 2,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 58,
+              "with_body_after": 58
+            }
+          },
+          {
+            "ticker": "JD.L",
+            "name": "JD Sports Fashion Plc",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "google_news_rejected": 1,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 16,
+                "with_body_after": 16,
+                "google_news_rejected": 1,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 16,
+                "with_body_after": 16,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "google_news_rejected": 1,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 1,
+              "pruned_noise": 1,
+              "pruned_unfetchable": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 16,
+              "with_body_after": 16
+            }
+          },
+          {
+            "ticker": "DSCV.L",
+            "name": "discoverIE Group plc",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "refetch_companies_house_filing_bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 56,
+                "with_body_after": 56,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 56,
+              "with_body_after": 56,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 56,
+              "with_body_after": 56
+            }
+          },
+          {
+            "ticker": "BTRW.L",
+            "name": "Barratt Redrow plc",
+            "with_body_before": 59,
+            "with_body_after": 59,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "google_news_rejected": 1,
+              "misattributed_pruned": 0,
+              "note": "no missing Investegate/LSE bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 59,
+                "with_body_after": 59,
+                "google_news_rejected": 1,
+                "misattributed_pruned": 0,
+                "note": "no missing Investegate/LSE bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 59,
+                "with_body_after": 59,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "google_news_rejected": 1,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 1,
+              "fetched": 0,
+              "pruned": 1,
+              "pruned_noise": 1,
+              "pruned_unfetchable": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 59,
+              "with_body_after": 59
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "FGP.L",
+            "with_body_before": 62,
+            "with_body_after": 62,
+            "improved": false
+          },
+          {
+            "ticker": "TW.L",
+            "with_body_before": 5,
+            "with_body_after": 5,
+            "improved": false
+          },
+          {
+            "ticker": "PAF.L",
+            "with_body_before": 50,
+            "with_body_after": 50,
+            "improved": false
+          },
+          {
+            "ticker": "BBY.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "INCH.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "ABF.L",
+            "with_body_before": 57,
+            "with_body_after": 57,
+            "improved": false
+          },
+          {
+            "ticker": "PETS.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "ABDN.L",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false
+          },
+          {
+            "ticker": "DRX.L",
+            "with_body_before": 52,
+            "with_body_after": 52,
+            "improved": false
+          },
+          {
+            "ticker": "BWY.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "CNA.L",
+            "with_body_before": 55,
+            "with_body_after": 55,
+            "improved": false
+          },
+          {
+            "ticker": "BME.L",
+            "with_body_before": 58,
+            "with_body_after": 58,
+            "improved": false
+          },
+          {
+            "ticker": "JD.L",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false
+          },
+          {
+            "ticker": "DSCV.L",
+            "with_body_before": 56,
+            "with_body_after": 56,
+            "improved": false
+          },
+          {
+            "ticker": "BTRW.L",
+            "with_body_before": 59,
+            "with_body_after": 59,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "manual",
+      "engineering_task_id": "eng-20260814-03"
     }
   ],
-  "updated_at": "2026-08-14T15:21:09.137813+00:00",
+  "updated_at": "2026-08-14T17:09:01.301931+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }

@@ -1,0 +1,38 @@
+{
+  "appended": [
+    {
+      "ticker": "VTY.L",
+      "name": "Vistry Group PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Period tagging failed: all 7 filings are period=other despite CH summaries accounts-with-accounts-type-group (annual) and accounts-with-accounts-type-interim. Map those types to period=annual|interim, put the fiscal year in the headline, and rewrite body_path from output/research/VTY.L/... to the trial sources tree. For uk_rns names, pull primary Investegate/RNS annual, interim, and trading-update bodies rather than CH statutory accounts plus Google News mirrors; quarantine aggregator pages such as ‘Short Positions’.",
+      "source": "director_worker",
+      "run_id": "20260813T120331Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-13T12:07:36.785676+00:00"
+    },
+    {
+      "ticker": "VTY.L",
+      "name": "Vistry Group PLC",
+      "area": "sources",
+      "priority": "medium",
+      "suggestion": "Trial sources contain only filings_index and 7 bodies. yahoo_financials, news_manifest, screening_snapshot, macro_context, and alternate_news are thin/absent (news_article_count 0; no financials_annual.json). Copy the screen snapshot and Yahoo pack into the trial tree so a strong-buy can be reconciled, and ingest a real news_manifest / RNS results set before synthesis.",
+      "source": "director_worker",
+      "run_id": "20260813T120331Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-13T12:07:36.785685+00:00"
+    },
+    {
+      "ticker": "VTY.L",
+      "name": "Vistry Group PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Director/worker prompts should treat CH accounts-type-group as annual and accounts-type-interim as interim when period=other; require extracting the fiscal year from the body; forbid digest_news_manifest and screen_context when those files are missing; instruct workers to take P&L/cash/leverage from filing bodies not Yahoo; for UK housebuilders require fire-safety provisions, partnership mix, completions/ASP, and land bank as mandatory extracts.",
+      "source": "director_worker",
+      "run_id": "20260813T120331Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-13T12:07:36.785692+00:00"
+    }
+  ],
+  "count": 3
+}

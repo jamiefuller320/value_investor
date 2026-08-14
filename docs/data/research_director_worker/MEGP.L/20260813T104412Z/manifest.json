@@ -1,0 +1,868 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "ticker": "MEGP.L",
+  "company_name": "ME Group International plc",
+  "signal": "strong_buy",
+  "run_id": "20260813T104412Z",
+  "output_dir": "docs/data/research_director_worker/MEGP.L/20260813T104412Z",
+  "director_model": "grok-4.6",
+  "worker_model": "composer-2.5",
+  "estimated_cost_usd": 3.66,
+  "director_agent_ids": {
+    "plan": "agent-ebd038fc-9e5f-4aea-8aa1-c3f18ab5b5e3",
+    "synthesis": "agent-8dffd5e9-8a04-4f22-9e37-9ee93ec53c1b"
+  },
+  "task_plan": {
+    "schema_version": 1,
+    "orchestration_version": 1,
+    "source": "director",
+    "open_questions": [
+      "Why were FY25 audited statements delayed (RNS 25 Feb and 12 Mar 2026), and does the 23 Mar 2025 Annual Results pack show a clean audit opinion, emphasis of matter, restatement, or control finding that still matters for a trade?",
+      "After the 1 Jun 2026 trading update cut FY26 profit expectations on weaker French consumer demand (~22% share-price headlines) and the 13 Jul 2026 H1 pack claiming the group is on track for revised guidance, what is the current PBT/EBITDA range and how much of any recovery is France versus Wash.ME/laundry mix?",
+      "Is the screen yield (~6.9%) and dividend-growth family still valid given Yahoo FY25 FCF of £25.2m versus dividends paid of £29.8m, screen notes of FCF coverage below 1.0× (gross −0.90×, net 0.84×), rising machine capex, and falling cash (£77.5m to £56.5m)—does the filing definition of cash generation cover the stated policy, or is a trim still the base case?",
+      "Is Identification/photobooth structurally impaired (German ID-photo rule change; H1 photobooth and margin pressure) such that quality/moat screens are stale, or do laundry, ASDA Wash.ME, and unit economics offset with durable returns on incremental machines?",
+      "What residual governance, control, and overhang risk remains after the Dec 2025 offer-period/Form 8.3–8.5 activity, Jan 2026 secondary placing, GM/Rule 9 waiver and buyback, Deputy CEO/COO/duty changes, and the June 2026 ‘boardroom problem’ headlines?",
+      "The snapshot is strong_buy (15/22 models, new 1-week signal, price slightly below the 200-day MA) while the embedded research overlay still says Accumulate/Medium and an interim-quality haircut to Buy—should the memo confirm strong-buy or keep the overlay?",
+      "Do FY25 notes confirm customer/site concentration and bank-covenant headroom after cash drawdown, inventory build, and the buyback, or are those still gaps versus the overlay’s claim that concentration was resolved?"
+    ],
+    "procedural_suggestions": [
+      {
+        "area": "ingest",
+        "summary": "De-duplicate filings: Investegate RNS, IR allowlist PDFs, and Google News mirrors often share body_path; IR trading-update is tagged period=interim while the RNS is trading_update; ‘Notice of Annual/Interim Results’ is ranked as annual/interim ahead of the actual results; Companies House headlines lack fiscal year; index body_path still points at docs/data/research/MEGP.L rather than the trial tree; 65 body files vs 64 indexed."
+      },
+      {
+        "area": "sources",
+        "summary": "alternate_news is thin/unavailable (inventory false) even though news_batch_*.json files sit in sources; news_manifest is headline-only with duplicate Google News URLs and generic penny-stock/dividend listicles; Yahoo financials_annual has empty quarterly_income so H1 2026 figures are not in the Yahoo pack and must come from the interim body."
+      },
+      {
+        "area": "prompt",
+        "summary": "Director/worker prompts should forbid selecting Notice of Results as the annual/interim body, require audit-delay and June guidance-cut as mandatory extracts, and instruct workers to take P&L/cash/FCF/dividend figures from filing bodies rather than Yahoo when both exist. Do not spawn workers against invented alternate_news."
+      }
+    ],
+    "tasks": [
+      {
+        "id": "filing_fy25_annual",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/f40be706e75a10ae.txt",
+        "focus": "FY25 Annual Results RNS (23 Mar 2026), not the February notice. Extract FY25 vs FY24 revenue, operating profit, PBT, EPS, OCF, capex, FCF (quote the definition used), net cash/debt, dividend (pence and cover), segment and geography mix (photobooth vs laundry; France vs UK/other), customer/site concentration, covenants/headroom, going-concern and audit opinion including any link to the Feb–Mar accounts delay, related-party/control and capital-return language. Prefer these figures over Yahoo.",
+        "priority": 1
+      },
+      {
+        "id": "filing_h1_2026_interim",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/ac9d0c965a93c3fd.txt",
+        "focus": "2026 Interim Results RNS (13 Jul 2026). Extract H1 2026 vs H1 2025 P&L, cash, net debt, interim dividend, cash generation vs dividend, original vs revised FY26 guidance and whether management says it is on track, France/consumer-demand commentary versus the 1 Jun trading update, photobooth vs Wash.ME/laundry trends, ASDA or other partnership contribution, and any change to dividend policy or capex. Do not use Yahoo quarterly (empty).",
+        "priority": 1
+      },
+      {
+        "id": "news_manifest_digest",
+        "type": "digest_news_manifest",
+        "target": "news_manifest.json",
+        "focus": "Headline-only digest: cluster duplicates; keep material items (Jun profit-expectation cut and France wobble, Jul H1 ‘on track’/earnings-quality critiques, boardroom article, ASDA partnership, German photobooth rules, Aberdeen holding); discount penny-stock and generic dividend roundups; flag claims that cannot be verified without article bodies. Do not treat this as alternate_news.",
+        "priority": 2
+      },
+      {
+        "id": "screen_context",
+        "type": "screen_context",
+        "target": "screening_snapshot.json",
+        "focus": "Reconcile strong_buy (15/22 models; families cheapness, quality, dividend, GARP, risk; P/E 7.8, P/B 2.2, yield 6.9%, ROE 28.2%, D/E 28%; Yahoo FCF £25.2m; 1 week at signal; RSI 54; price −0.1% vs SMA200) with action_note/research_verdict Accumulate/Medium and the interim-quality overlay (interim EPS down, FCF coverage <1×, adjusted Buy). List which screen claims filings must confirm or overturn. Do not treat Yahoo FCF as filing-grade.",
+        "priority": 2
+      },
+      {
+        "id": "gap_inventory",
+        "type": "gap_inventory",
+        "target": "source_inventory",
+        "focus": "Record thin/missing ladder steps, especially alternate_news=false. Note Yahoo quarterly_income empty, news_batch files present but not classified as alternate_news, 65 body files vs 64 indexed, duplicate/shared body_paths, and IR published_at null. List what the memo cannot verify locally. Do not invent unavailable sources.",
+        "priority": 3
+      }
+    ],
+    "director_agent_id": "agent-ebd038fc-9e5f-4aea-8aa1-c3f18ab5b5e3"
+  },
+  "worker_results": [
+    {
+      "task_id": "filing_fy25_annual",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "FY25 (12 months ended 31 October 2025) audited annual results RNS dated 23 March 2026; FY24 comparatives restated for cash-in-transit reclassification (no impact on total assets, equity, P&L or EPS) — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Group revenue £315.4m (+2.4% reported; +3.0% constant currency) vs FY24 £307.9m restated — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Operating profit £78.1m (+5.0%) vs FY24 £74.4m; statutory operating profit £78,138k vs £74,390k — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Profit before tax record £78.2m (+6.5%; +7.1% CC) vs FY24 £73.4m — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Diluted EPS 14.91p (+4.5%) vs FY24 14.27p; basic EPS 15.00p vs 14.36p — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Cash generated from operations £115.5m (+8.9%) vs FY24 £106.1m (restated) — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Capital expenditure £65.6m (+20.1%); segment note £65,609k excluding right-of-use assets vs FY24 £54,614k — sources/filings/bodies/f40be706e75a10ae.txt",
+        "No explicit free cash flow metric or Group definition disclosed; net cash from operating activities £90.8m and net cash used in investing £(60.5)m are the closest disclosed bridge items — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Closing net cash £26.5m (FY24 £29.5m restated); gross cash £56.5m (FY24 £77.5m restated); non-current borrowings £(12.4)m, current borrowings £(17.6)m — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Net cash defined as cash and cash equivalents less current and non-current borrowings, excluding lease liabilities (£13.0m FY25; £11.8m FY24) — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Total dividend FY25 8.64p (interim 3.85p paid 28 Nov 2025; proposed final 4.79p for 29 May 2026) vs FY24 7.90p (+9.5%); £32.6m total shareholder return; payout 58.0% of FY25 EPS; policy targets >55% of PAT — sources/filings/bodies/f40be706e75a10ae.txt",
+        "£18m share buyback programme announced alongside results — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Segment revenue mix: Photo.ME total revenue £168.6m (53.5% of group) vs £175.0m FY24; Wash.ME laundry £112.4m (35.6%) vs £95.8m (31.1%); photobooth vending revenue -4.0% to £166.2m — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Geography: Continental Europe £215.5m (68.3% revenue, 80.1% EBITDA); UK & Ireland £50.1m (15.9%); Asia Pacific £49.8m (15.8%); all three regions grew revenue — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Laundry machines 7,607 (+17.7%); mostly France and UK & Ireland; photobooths 30,520 (62.0% of vending estate by units) — sources/filings/bodies/f40be706e75a10ae.txt",
+        "No major customer ≥10% of revenue; no single site-owner account >2% of turnover; commercial risk flagged on France and UK trading conditions — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Directors prepare accounts on going-concern basis; FY25 audit complete; FY24 audit unqualified with no emphasis matters or s498(2)/(3) statements — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Chairman 'Update on suspension': annual report expected later on 23 March 2026, after which the Company will apply for restoration of listing and trading — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Prior-period cash-in-transit error drove FY24 gross/net cash and OCF restatement; RNS does not explicitly link the Feb–Mar 2026 accounts delay to audit opinion or going concern — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Related-party/control: Serge Crasnianski CEO & Deputy Chairman; Vlad Crasneanschi (family name) joined Board 3 Jun 2025, appointed Deputy CEO 2 Feb 2026 post year-end; strategic review (Jun 2025) terminated Dec 2025 with no acceptable offer — sources/filings/bodies/f40be706e75a10ae.txt",
+        "Capital return language: 9.5% dividend increase, £32.6m dividends, £18m buyback, dividend policy >55% PAT, acquisition appetite strictly related to core business — sources/filings/bodies/f40be706e75a10ae.txt"
+      ],
+      "figures": [
+        {
+          "metric": "Revenue",
+          "value": "£315.4m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Reported; +2.4% YoY"
+        },
+        {
+          "metric": "Revenue",
+          "value": "£307.9m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Restated reported comparator"
+        },
+        {
+          "metric": "Operating profit",
+          "value": "£78.1m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Geographic segment total; +5.0%"
+        },
+        {
+          "metric": "Operating profit",
+          "value": "£74.4m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Geographic segment total"
+        },
+        {
+          "metric": "Profit before tax",
+          "value": "£78.2m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "+6.5% reported"
+        },
+        {
+          "metric": "Profit before tax",
+          "value": "£73.4m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Restated comparator"
+        },
+        {
+          "metric": "Diluted EPS",
+          "value": "14.91p",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "+4.5%"
+        },
+        {
+          "metric": "Diluted EPS",
+          "value": "14.27p",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "Cash generated from operations",
+          "value": "£115.5m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "+8.9%"
+        },
+        {
+          "metric": "Cash generated from operations",
+          "value": "£106.1m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Restated"
+        },
+        {
+          "metric": "Capital expenditure",
+          "value": "£65.6m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Laundry £31.8m; photobooths £12.8m; excludes ROU per segment note"
+        },
+        {
+          "metric": "Capital expenditure",
+          "value": "£54.6m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "£54,614k excluding ROU assets in segment note"
+        },
+        {
+          "metric": "Net cash generated from operating activities",
+          "value": "£90.8m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "After tax, interest and provision payments; not labelled FCF"
+        },
+        {
+          "metric": "Net cash used in investing activities",
+          "value": "£(60.5)m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Includes capex and acquisitions"
+        },
+        {
+          "metric": "Net cash",
+          "value": "£26.5m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Cash less borrowings; excludes £13.0m lease liabilities"
+        },
+        {
+          "metric": "Net cash",
+          "value": "£29.5m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Restated"
+        },
+        {
+          "metric": "Gross cash (cash and cash equivalents)",
+          "value": "£56.5m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "Gross cash (cash and cash equivalents)",
+          "value": "£77.5m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Restated"
+        },
+        {
+          "metric": "Total dividend per ordinary share",
+          "value": "8.64p",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Interim 3.85p + proposed final 4.79p"
+        },
+        {
+          "metric": "Total dividend per ordinary share",
+          "value": "7.90p",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "Dividend payout ratio",
+          "value": "58.0%",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Of Group EPS; no explicit 'cover' ratio stated"
+        },
+        {
+          "metric": "Photo.ME total revenue",
+          "value": "£168.6m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Vending revenue £166.2m"
+        },
+        {
+          "metric": "Photo.ME total revenue",
+          "value": "£175.0m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "Wash.ME total revenue",
+          "value": "£112.4m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "35.6% of group revenue"
+        },
+        {
+          "metric": "Wash.ME total revenue",
+          "value": "£95.8m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "31.1% of group revenue"
+        },
+        {
+          "metric": "Continental Europe revenue",
+          "value": "£215.5m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "68.3% of group; France not split separately"
+        },
+        {
+          "metric": "Continental Europe revenue",
+          "value": "£209.0m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "UK & Republic of Ireland revenue",
+          "value": "£50.1m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "15.9% of group"
+        },
+        {
+          "metric": "UK & Republic of Ireland revenue",
+          "value": "£49.2m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "Asia Pacific revenue",
+          "value": "£49.8m",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "15.8% of group"
+        },
+        {
+          "metric": "Asia Pacific revenue",
+          "value": "£49.7m",
+          "period": "FY24",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": null
+        },
+        {
+          "metric": "Share buyback programme",
+          "value": "£18m",
+          "period": "FY25 announcement",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Launch announced with results"
+        },
+        {
+          "metric": "Maximum site-owner concentration",
+          "value": "<2% of turnover",
+          "period": "FY25",
+          "source_path": "sources/filings/bodies/f40be706e75a10ae.txt",
+          "note": "Per principal risks disclosure"
+        }
+      ],
+      "gaps": [
+        "Free cash flow not defined or reported as a named metric in this RNS",
+        "Bank/loan covenant terms and covenant headroom not disclosed",
+        "Standalone France revenue not broken out (only within Continental Europe)",
+        "FY25 auditor report wording (qualified/unqualified, emphasis of matter) not reproduced; only states audit is complete",
+        "Explicit link between Feb–Mar 2026 listing suspension/accounts delay and audit opinion or going-concern assessment not provided",
+        "Formal related-party transactions schedule not included in this announcement"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/f40be706e75a10ae.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-53195016-65de-439e-a198-9efc17e4d7cd"
+    },
+    {
+      "task_id": "filing_h1_2026_interim",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "H1 2026 group revenue £154.3m (+0.3% vs H1 2025 £153.8m); EBITDA £57.0m (+7.1%); profit before tax £32.7m (−3.8%); profit after tax £24.5m (−4.3%); diluted EPS 6.48p (−3.9%) — source: ac9d0c965a93c3fd.txt",
+        "April slowdown: vending revenue weakened, principally photobooth (−17% Photo.ME vending revenue in April vs prior year) and to a lesser extent laundry (+3.0% Wash.ME in April vs +16.3% for full H1); Board cites cautious consumer environment, especially France (weaker confidence, geopolitical/Middle East uncertainty) — source: ac9d0c965a93c3fd.txt",
+        "Wash.ME H1 vending revenue +16.3% to £54.8m (H1 2025 £47.1m); EBITDA +20.9% to £30.7m; 499 net new machines (8,106 total); now 38.4% of group vending revenue and 53.9% of group EBITDA — source: ac9d0c965a93c3fd.txt",
+        "Photo.ME H1 vending revenue −6.2% to £77.6m (H1 2025 £82.7m); EBITDA −8.1% to £27.2m; drivers include Germany photo-ID regulation, yen weakness, April travel-related weakness; photobooth estate 30,356 units (−201 YoY) — source: ac9d0c965a93c3fd.txt",
+        "H2-to-date recovery: May 2026 total vending revenue +11.1% vs May 2025 (Wash.ME +25.9%, Photo.ME +1.8%); positive trend continued in June; France trading improved since April; laundry back to first-five-months levels; photobooth only partially recovered — source: ac9d0c965a93c3fd.txt",
+        "Gross cash £52.8m at 30 Apr 2026 (H1 2025 £66.4m restated); net cash £7.5m (H1 2025 £27.6m), excluding £10.0m lease liabilities; net cash fell from £26.5m at 31 Oct 2025 — source: ac9d0c965a93c3fd.txt",
+        "Group reports net cash, not net debt; financial liabilities on balance sheet £31.8m non-current and £23.6m current at 30 Apr 2026 — source: ac9d0c965a93c3fd.txt",
+        "Cash generated from operations £38.7m H1 2026 (−18.9% vs £47.7m H1 2025), driven by working capital (inventory +£8.3m); net cash from operating activities £32.2m — source: ac9d0c965a93c3fd.txt",
+        "Interim dividend declared 3.60p (−6.5% vs 3.85p H1 2025), returning £13.5m; payable 27 Nov 2026; dividends paid in H1 period £14.5m (prior-year interim) — source: ac9d0c965a93c3fd.txt",
+        "H1 cash generation (£38.7m) comfortably covers declared interim dividend (£13.5m), but net cash position reduced after capex (£33.9m), dividends paid (£14.5m), tax (£5.1m) and buybacks (£2.7m) — source: ac9d0c965a93c3fd.txt",
+        "Revised FY26 guidance: profit before tax £69m–£74m; management repeatedly states on track to meet revised full-year expectations; Board takes cautious view but confident in laundry expansion — source: ac9d0c965a93c3fd.txt",
+        "Original (pre-revision) FY26 PBT guidance not restated in this interim report — source: ac9d0c965a93c3fd.txt",
+        "ASDA partnership: largest laundry partnership in group history; first machine installed in June 2026; ambition up to 700 machines long term; large-scale H2 rollout planned; no H1 revenue contribution quantified — source: ac9d0c965a93c3fd.txt",
+        "Other partnerships: Aldi Austria pilot (25 laundry + 25 photobooths); France SNCF (5-year) and RATP (7-year) renewals together >£9.0m revenue — source: ac9d0c965a93c3fd.txt",
+        "Dividend policy unchanged: committed to annual dividends of more than 55% of annual profits after tax, subject to market and capital requirements; new £18.0m share buyback launched March 2026 (£4.5m spent to date post-period) — source: ac9d0c965a93c3fd.txt",
+        "H1 capex £33.9m vs £28.8m H1 2025 (+17.7%); 68% on laundry (£14.9m) and photobooth (£8.2m); c.800 laundry installations planned H2 to reach ~1,300 FY target; no explicit change to capex policy stated — source: ac9d0c965a93c3fd.txt"
+      ],
+      "figures": [
+        {
+          "metric": "Revenue",
+          "value": "£154.3m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 £153.8m (+0.3% reported)"
+        },
+        {
+          "metric": "Revenue",
+          "value": "£153.8m",
+          "period": "H1 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Restated comparator"
+        },
+        {
+          "metric": "EBITDA",
+          "value": "£57.0m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Margin 36.9%; vs H1 2025 £53.2m (+7.1%)"
+        },
+        {
+          "metric": "EBITDA",
+          "value": "£53.2m",
+          "period": "H1 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Restated comparator"
+        },
+        {
+          "metric": "Profit before tax",
+          "value": "£32.7m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 £34.0m (−3.8%)"
+        },
+        {
+          "metric": "Profit before tax",
+          "value": "£34.0m",
+          "period": "H1 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Restated comparator"
+        },
+        {
+          "metric": "Profit after tax",
+          "value": "£24.5m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 £25.6m (−4.3%)"
+        },
+        {
+          "metric": "Operating profit",
+          "value": "£33.5m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "£33,468k per financial statements"
+        },
+        {
+          "metric": "Gross cash",
+          "value": "£52.8m",
+          "period": "30 Apr 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 £66.4m"
+        },
+        {
+          "metric": "Net cash",
+          "value": "£7.5m",
+          "period": "30 Apr 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Excludes £10.0m lease liabilities; vs H1 2025 £27.6m"
+        },
+        {
+          "metric": "Cash generated from operations",
+          "value": "£38.7m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 £47.7m"
+        },
+        {
+          "metric": "Interim dividend per share",
+          "value": "3.60p",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "−6.5% vs 3.85p H1 2025; returns £13.5m"
+        },
+        {
+          "metric": "Interim dividend per share",
+          "value": "3.85p",
+          "period": "H1 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Prior-year interim comparator"
+        },
+        {
+          "metric": "Dividends paid (cash flow)",
+          "value": "£14.5m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Prior-year interim dividend paid in period"
+        },
+        {
+          "metric": "Capital expenditure",
+          "value": "£33.9m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 £28.8m; 68% laundry/photobooth"
+        },
+        {
+          "metric": "Wash.ME vending revenue",
+          "value": "£54.8m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "+16.3% vs H1 2025 £47.1m"
+        },
+        {
+          "metric": "Photo.ME vending revenue",
+          "value": "£77.6m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "−6.2% vs H1 2025 £82.7m"
+        },
+        {
+          "metric": "Wash.ME EBITDA",
+          "value": "£30.7m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "+20.9% vs H1 2025 £25.4m"
+        },
+        {
+          "metric": "Photo.ME EBITDA",
+          "value": "£27.2m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "−8.1% vs H1 2025 £29.6m"
+        },
+        {
+          "metric": "FY26 PBT guidance (revised)",
+          "value": "£69m–£74m",
+          "period": "FY 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Management on track to meet revised expectations"
+        },
+        {
+          "metric": "May 2026 total vending revenue growth",
+          "value": "+11.1%",
+          "period": "May 2026 vs May 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "Wash.ME +25.9%; Photo.ME +1.8%"
+        },
+        {
+          "metric": "Diluted EPS",
+          "value": "6.48p",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt",
+          "note": "vs H1 2025 6.74p"
+        }
+      ],
+      "gaps": [
+        "Original (pre-revision) FY26 profit guidance not disclosed in this interim report; only revised PBT range £69m–£74m stated",
+        "Net debt not reported; group discloses net cash position only (lease liabilities £10.0m excluded from net cash)",
+        "1 June 2026 trading update not in this source — cannot compare France/consumer-demand commentary directly against that document",
+        "ASDA (and Aldi) H1 revenue or EBITDA contribution not quantified; ASDA described as strategic rollout from June onwards",
+        "June 2026 trading metrics not quantified beyond statement that positive trend continued"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/filings/bodies/ac9d0c965a93c3fd.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-9f8ffa55-2e89-4b5f-9735-60126845f985"
+    },
+    {
+      "task_id": "news_manifest_digest",
+      "task_type": "digest_news_manifest",
+      "status": "partial",
+      "findings": [
+        "Jun 2026 profit-warning cluster (1 Jun, multiple syndicated headlines): ME Group lowered 2026 profit expectations after weaker consumer demand in April; Proactive headline states shares fell 22% after French consumer slowdown hit profits (manifest ids f6e63f7b2d2e091f, f1629b5aec2e5438, 418d334a09eeacf7). Revised guidance level not stated in manifest.",
+        "Jun 2026 France/trading wobble context: same Jun cluster ties profit cut to French consumer weakness; later Jul headlines describe trading improvement after the France wobble (3c7cf740bb7b4acd, 98c5413f9def0459, 46028d220a3fadf6 — duplicates of one story).",
+        "Jun 2026 boardroom/governance (4 Jun, Investors' Chronicle duplicate pair 13373788e1e4bce4, 7cd78c56f5928170): headline links a boardroom problem to Me Group’s share price tumble; no board names, actions or governance detail in manifest — unverified without article body.",
+        "Jul 2026 H1 ‘on track’ cluster (13 Jul, Yahoo Finance 0e82ac62-a08c-3a49-8e03-02c1093da524 plus ‘jumps after France wobble’ duplicates): company said it remains on track to meet revised full-year profit expectations after a mixed H1; laundry/Wash.ME growth offset softer photobooth trading and lower equipment sales; Deputy CEO Vladimir Crasneanscki quoted in truncated summary.",
+        "Jul 2026 earnings-quality critique cluster (20 Jul, Kalkine duplicate pair 747116d4665d8ea2/f564d8685e0c4ddb; Simply Wall St 6846cf34f23745b6): headlines flag fresh questions and issues beyond promising earnings; specific accounting/quality concerns not in manifest — unverified without bodies.",
+        "Jul 2026 H1 earnings call follow-up (21 Jul, Yahoo 1dcbea01-4a08-313a-bc81-62ff8358677b): summary cites robust Wash.ME growth and major deals, with challenges in photobooth revenue and profit margins; no numeric margins or deal values in manifest.",
+        "Jul 2026 Aberdeen holding RNS (21 Jul, duplicate REG entries d9d232857c43f19a, 0a188550540027a6): ‘Aberdeen Group PLC — Holding(s) in Company’ for ME Group Intl; stake size, direction and threshold not in manifest — unverified without filing body.",
+        "Apr 2026 ASDA Wash.ME partnership (9 Apr, Proactive 6e7a26b7febc3e72): Me Group climbed on Asda washing-machine collaboration; store rollout, economics and duration not in manifest — unverified without body.",
+        "Nov 2025 German photobooth regulation (7 Nov, Proactive ae635861afd0ddc6): photo-booth revenues hit by German rule changes; magnitude and duration of impact not quantified in manifest — unverified without body.",
+        "Discounted as non-material noise (not extracted): penny-stock roundups (147c4391bafcc76e, 0f0653ff-1224-37e5-98f8-0eccc323b4f0, 2db717dc-4fa8-3171-9e14-9b8a36b291b5, 43bf4e95fad74d51, yfinance gem/penny lists); generic dividend roundups (511a79fd5cadb531, 345787a3-9142-3b92-99d0-40695da7bb75, 54b2ecd101fd0fe6, 41a7fe3ceba1d3d1); yield-promo pieces (226948c89891b361, 865b35c93e0cd64a); aggregator/ticker pages (398d61c46bed82fa); puff ‘multi-bagger’ (34099dadc9ba0393); broad market-news mentions (1591937eaf3adfca, 024106a4b1d53473, 5143fbfa0d4aba4f)."
+      ],
+      "figures": [
+        {
+          "metric": "Share price move (headline)",
+          "value": "−22%",
+          "period": "2026-06-01 (reported reaction to French consumer slowdown/profit hit)",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/news_manifest.json",
+          "note": "From Proactive headline only; trigger timing and closing price not in manifest."
+        },
+        {
+          "metric": "Reporting period referenced",
+          "value": "H1 2026",
+          "period": "H1 FY2026",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/news_manifest.json",
+          "note": "From Yahoo earnings-call headline (id 1dcbea01-4a08-313a-bc81-62ff8358677b); no revenue/EBIT numbers in manifest."
+        }
+      ],
+      "gaps": [
+        "Revised FY2026 profit guidance range and prior guidance comparison not present in manifest.",
+        "Boardroom/governance allegations (Investors’ Chronicle, Jun 2026) require full article for specifics.",
+        "Aberdeen Group holding size, change and disclosure threshold not in REG headline entries.",
+        "ASDA collaboration scope, rollout timetable and financial terms absent.",
+        "German photobooth rule-change impact (revenue/profit quantification) absent.",
+        "Earnings-quality critique details (Kalkine, Simply Wall St, Jul 2026) absent beyond headlines.",
+        "H1 2026 numeric results (revenue, EBITDA, margins, photobooth vs Wash.ME split) not in manifest summaries.",
+        "Jul 2026 ‘trading improves’ reaction size (share price move) not stated in manifest."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/news_manifest.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-39f1b095-6674-4916-a297-4fcda75da37b"
+    },
+    {
+      "task_id": "screen_context",
+      "task_type": "screen_context",
+      "status": "partial",
+      "findings": [
+        "Screen signal is strong_buy (15/22 models pass; composite 83.6%, sector-relative 88.7%) with five factor families passed: cheapness, quality, dividend, GARP and risk (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Conviction is new/low-stability: 1 week at signal, conviction score 0.638 (~54% in summary), stability_label and signal_trend both 'new' (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Timing overlay is neutral (timing_score 0.625); RSI(14) 54.4; price −0.11% vs 200-day SMA (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Key valuation/quality metrics on screen: P/E 7.8, P/B 2.2, dividend yield 6.9%, ROE 28.2%; summary also cites D/E 28% (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Screen FCF figure £25.153m (key_metrics.FCF 25153000.0) is market/Yahoo-sourced — not filing-grade and must not be used as audited cash-flow evidence (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Interim-quality overlay (in summary): quality family still passes but interim EPS declined and FCF/dividend coverage is below 1.0× (gross −0.90×, net 0.84×); screen narrative says signal was adjusted to Buy, while adjusted_signal field remains strong_buy (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Research overlay diverges from raw strong_buy: research_verdict accumulate, research_risk_level medium, research_confidence 0.75; action_note repeats 'Accumulate, Medium risk' (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Reconciliation: mechanical screen remains strong_buy on cheapness, quality, dividend, GARP and risk passes, but research blocks full strong-buy confirmation because filings confirm dividend-trim risk and leave FCF-definition and cyclical-quantification gaps (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Filings (42 bodies, per action_note/summary) already resolve customer concentration and add covenant, governance and dividend-policy evidence (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Screen claims filings must still confirm or overturn: (1) interim EPS decline and whether it is cyclical/temporary or structural; (2) FCF/dividend coverage below 1.0× (gross −0.90×, net 0.84×) using filing-grade FCF and dividend definitions; (3) dividend-trim/sustainability risk (filings confirm rather than dismiss); (4) FCF-definition consistency (screen vs filing cash-flow lines); (5) cyclical-exposure quantification; (6) cheapness/quality headline ratios (P/E, P/B, ROE, yield) vs audited earnings, book and payout; (7) leverage/risk pass (D/E 28%) vs filing net debt/covenant headroom (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Passed models include Graham Enterprising, Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Quality Value, Buffett Quality, Economic Moat, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Composite Value and Financial Health; no failed_models listed (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json).",
+        "Trade plan in summary (not structured): core 60% limit £109.05; tactical 40% limit £105.40; stop £102.24; target £123.27 (/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json)."
+      ],
+      "figures": [
+        {
+          "metric": "models_passed",
+          "value": "15/22",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "strong_buy signal"
+        },
+        {
+          "metric": "composite_score",
+          "value": "83.6%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "0.8358"
+        },
+        {
+          "metric": "sector_composite_score",
+          "value": "88.7%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "sector-relative"
+        },
+        {
+          "metric": "P/E",
+          "value": "7.8",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "key_metrics; filing confirmation required"
+        },
+        {
+          "metric": "P/B",
+          "value": "2.2",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "summary cites 2.23 threshold check"
+        },
+        {
+          "metric": "dividend_yield",
+          "value": "6.9%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "High Dividend Yield model pass"
+        },
+        {
+          "metric": "ROE",
+          "value": "28.2%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "quality family input"
+        },
+        {
+          "metric": "debt_to_equity",
+          "value": "28%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "from summary text only"
+        },
+        {
+          "metric": "FCF",
+          "value": "£25.153m",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "Yahoo/market-sourced; not filing-grade"
+        },
+        {
+          "metric": "weeks_at_signal",
+          "value": "1",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "new signal"
+        },
+        {
+          "metric": "RSI_14",
+          "value": "54.4",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "neutral timing"
+        },
+        {
+          "metric": "price_vs_sma200",
+          "value": "−0.11%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "below 200-day MA"
+        },
+        {
+          "metric": "fcf_dividend_coverage_gross",
+          "value": "−0.90×",
+          "period": "interim (summary)",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "interim-quality overlay; structured field null"
+        },
+        {
+          "metric": "fcf_dividend_coverage_net",
+          "value": "0.84×",
+          "period": "interim (summary)",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "below 1.0×; filing-grade FCF required"
+        },
+        {
+          "metric": "research_confidence",
+          "value": "0.75",
+          "period": "research overlay",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "Accumulate verdict"
+        },
+        {
+          "metric": "conviction_score",
+          "value": "63.8%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json",
+          "note": "summary rounds to 54%; field value 0.6383"
+        }
+      ],
+      "gaps": [
+        "Structured fcf_dividend_coverage_gross/net, fcf, cashflow_metrics and operating_cashflow fields are null; coverage figures exist only in summary narrative.",
+        "Interim EPS decline magnitude and period not quantified in this source.",
+        "FCF-definition gap explicitly unresolved per research overlay; Yahoo FCF cannot confirm FCF Yield or dividend-coverage model inputs.",
+        "Cyclical-exposure quantification gap explicitly unresolved.",
+        "Tension between summary 'adjusted to Buy' and adjusted_signal field still 'strong_buy'.",
+        "research_rationale field is null; rationale only in action_note/summary prose.",
+        "D/E 28% appears in summary only, not in key_metrics.",
+        "Trade-plan levels present in summary only; trade_plan field is null.",
+        "Dividend-trim risk confirmed by filings but extent/ timing not quantified in this source."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/MEGP.L/20260813T104412Z/sources/screening_snapshot.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-d2f530ff-9242-4c4b-ad8b-8673b4958c7a"
+    },
+    {
+      "task_id": "gap_inventory",
+      "task_type": "gap_inventory",
+      "status": "partial",
+      "findings": [
+        "Evidence ladder step alternate_news is absent from sources: no alternate_news file or flag exists; 19 news_batch_*.json files and news_manifest.json supply headline/summary/url metadata only (keys: id, source, title, summary, published_at, url, query) — not classified or usable as alternate_news bodies (sources/news_manifest.json; sources/news_batch_20260812_055432.json).",
+        "Yahoo financials pack has empty quarterly_income ({}) whilst annual income_statement covers FY2021–FY2025; H1 FY2026 P&L cannot be sourced from Yahoo and must come from interim filing bodies (sources/financials_annual.json).",
+        "Filings index reports 64 filings all with_body=64, but filings/bodies/ contains 65 .txt files: 62 unique indexed basenames plus 3 extra on-disk copies not referenced by any body_path (275c8eb9ff3328e9.txt, 9a2605c4e3c03eb3.txt, fdaf9a327c1fe640.txt) (sources/filings/filings_index.json; sources/filings/bodies/).",
+        "Two body_path values are shared across duplicate index entries: 46201199d52b83a0.txt (ids 275c8eb9ff3328e9 investegate_direct and 46201199d52b83a0 investegate_resolved, headline 'Proposed secondary placing in ME Group') and cf78bf0ef97531b3.txt (ids fdaf9a327c1fe640 and cf78bf0ef97531b3, headline 'Director/PDMR Shareholding') (sources/filings/filings_index.json).",
+        "All six ir_allowlist filings have published_at=null (annual reports/results PDFs and interim presentation); chronological ordering of IR documents cannot be verified from index metadata alone (sources/filings/filings_index.json).",
+        "Index body_path strings point to docs/data/research/MEGP.L/sources/filings/bodies/… whilst bodies in this pack live under sources/filings/bodies/; all 62 unique indexed basenames are present locally but paths are cross-pack references (sources/filings/filings_index.json).",
+        "Index note references optional SEC 20-F when dual-listed, but sources_used lists only companies_house, google_news_investegate, investegate_direct, investegate_resolved, ir_allowlist and zero SEC filings are indexed (sources/filings/filings_index.json).",
+        "news_manifest consolidates 41 unique articles (31 google_news, 10 yfinance) with 8 duplicate URLs; material headlines (Jun-2026 profit cut, Jul-2026 H1 call, boardroom article, Asda partnership, German photobooth rules) are present as titles/summaries only — full article text not in pack (sources/news_manifest.json).",
+        "screening_snapshot flags unresolved research gaps (FCF-definition, cyclical-quantification, dividend-trim risk) and null overlay fields (fcf_dividend_coverage_gross/net, operating_cashflow, trade_plan, research_rationale) despite key_metrics showing P/E 7.8, yield 6.9%, FCF 25153000.0 (sources/screening_snapshot.json).",
+        "macro_context is present as secondary regime markers only (GBP/USD 1.3492, FTSE 100 10901.10 as of Aug-2026) with explicit note not to use as scoring input (sources/macro_context.json)."
+      ],
+      "figures": [
+        {
+          "metric": "filings_index_total",
+          "value": "64",
+          "period": "as of 2026-08-12",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "summary.total; all with_body"
+        },
+        {
+          "metric": "filings_body_files_on_disk",
+          "value": "65",
+          "period": "as of 2026-08-12",
+          "source_path": "sources/filings/bodies/",
+          "note": "3 extra files not indexed by body_path"
+        },
+        {
+          "metric": "filings_indexed_unique_body_basenames",
+          "value": "62",
+          "period": "as of 2026-08-12",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "64 index rows; 2 body_paths each shared by 2 filings"
+        },
+        {
+          "metric": "quarterly_income_periods",
+          "value": "0",
+          "period": "Yahoo fetch 2026-08-12",
+          "source_path": "sources/financials_annual.json",
+          "note": "quarterly_income is empty object {}"
+        },
+        {
+          "metric": "news_batch_file_count",
+          "value": "19",
+          "period": "2026-08-02 to 2026-08-12",
+          "source_path": "sources/",
+          "note": "news_batch_*.json present; not alternate_news"
+        },
+        {
+          "metric": "news_manifest_article_count",
+          "value": "41",
+          "period": "updated 2026-08-12",
+          "source_path": "sources/news_manifest.json",
+          "note": "31 google_news + 10 yfinance; headline-only"
+        },
+        {
+          "metric": "ir_allowlist_published_at_null",
+          "value": "6",
+          "period": "as of 2026-08-12",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "all ir_allowlist entries lack published_at"
+        },
+        {
+          "metric": "duplicate_shared_body_paths",
+          "value": "2",
+          "period": "as of 2026-08-12",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "46201199d52b83a0.txt and cf78bf0ef97531b3.txt"
+        },
+        {
+          "metric": "annual_revenue_fy2025",
+          "value": "315393000",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "income_statement.2025.Total Revenue"
+        },
+        {
+          "metric": "free_cash_flow_fy2025",
+          "value": "25153000",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "cash_flow.2025.Free Cash Flow; matches screening key_metrics FCF"
+        }
+      ],
+      "gaps": [
+        "alternate_news ladder step unavailable locally — no full-text news/article bodies; memo cannot verify third-party news claims (Simply Wall St earnings-quality critique, Investors' Chronicle boardroom analysis, Proactive/Kalkine detail) beyond headline/summary.",
+        "H1 FY2026 interim revenue, EPS, cash flow and dividend metrics not in Yahoo quarterly_income; must be extracted manually from interim filing bodies (ir_3f2f55026f8c6fe6 and related RNS).",
+        "IR allowlist publication dates missing (published_at null for all six); cannot date annual/interim IR PDFs from index alone.",
+        "SEC 20-F not fetched despite dual-listing note in filings_index; US GAAP/20-F disclosures not locally verifiable.",
+        "Duplicate index rows sharing body_paths (placing announcement; PDMR shareholding) — memo cannot distinguish canonical filing id without external Investegate metadata.",
+        "Three orphan body files on disk (275c8eb9ff3328e9, 9a2605c4e3c03eb3, fdaf9a327c1fe640) are not indexed; 9a2605c4e3c03eb3 appears to be an unindexed variant of Montefiore placing content.",
+        "body_path references use docs/data/research/MEGP.L/ prefix not this worker pack path — cross-pack resolution required if tooling expects literal paths.",
+        "screening_snapshot null FCF/dividend-coverage overlay fields and research_rationale prevent local reconciliation of screen overlay vs filing-derived FCF definitions.",
+        "news_manifest duplicate URLs (8 pairs) — memo cannot verify which syndicated headline is authoritative without fetching external URLs."
+      ],
+      "sources_read": [
+        "sources/filings/filings_index.json",
+        "sources/filings/bodies/",
+        "sources/financials_annual.json",
+        "sources/news_manifest.json",
+        "sources/news_batch_20260812_055432.json",
+        "sources/screening_snapshot.json",
+        "sources/macro_context.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-e6720f8c-eb68-4910-9db1-bc2773928d7e"
+    }
+  ],
+  "rubric": {
+    "citation_accuracy": 0.6,
+    "filing_alignment": 1.0,
+    "gap_honesty": 1.0,
+    "structural": 1.0,
+    "composite": 0.86,
+    "notes": []
+  },
+  "research_verdict": "accumulate",
+  "research_confidence": 0.7,
+  "markdown_path": "docs/data/research_director_worker/MEGP.L/20260813T104412Z/research.md"
+}

@@ -1,0 +1,102 @@
+# Vistry Group PLC (VTY.L) — Research memo
+
+_Version 1 · Updated 2026-08-13T07:23:38.868975+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Vistry Group is the UK’s largest volume housebuilder by completions, operating almost entirely through a capital-light, partner-funded mixed-tenure model (~74% of FY2025 completions presold to registered providers, local authorities, and PRS). The quantitative screen rates the stock a **strong buy** on deep value metrics (substantially sub-book, low P/E, moderate leverage), but the filing set reveals a business still digesting the 2024 South Division cost-forecasting crisis and working through elevated inventory and average daily debt despite improving year-end net debt.
+
+FY2025 adjusted profit before tax rose modestly to **£268.8m** (2024: £263.5m) on lower volumes (**15,658** completions vs 17,225), while reported PBT recovered sharply to **£196.2m** (2024: £104.9m). The central debate is whether statutory/book-value cheapness and a structurally undersupplied affordable-housing pipeline (Social and Affordable Homes Programme, rent convergence) outweigh cyclical open-market weakness, governance/control scars, and the gap between medium-term **40% ROCE** targets and current **13.9%** ROCE.
+
+---
+
+## INVESTMENT THESIS
+For a value investor, Vistry presents a contrarian cyclical deep-value case anchored in business quality that screens well on asset-based and cash-flow metrics, even if reported ROE looks thin.
+
+**Quantitative screen (user-stated strong buy; `screening_snapshot.json` not in pack):** Archive screen data (Aug 2026) shows **12/22 models passed**, **93% composite score**, families **cheapness, quality, GARP, risk**, with **P/E ~5.9**, **P/B ~0.24**, **D/E ~18%**, **Piotroski 7/9**, and passes on Schloss/Deep Value, Earnings Yield, FCF Yield, Acquirer’s Multiple, Magic Formula, and Financial Health. Dividend-oriented models fail (no meaningful yield; distributions suspended/paused in favour of buybacks). The screen’s value signal is coherent with a stock trading well below tangible equity after the 2024 earnings collapse and restatement.
+
+**Business quality supporting the screen:**
+
+- **Differentiated model:** Partner-funded completions provide revenue visibility and reduce pure open-market cyclicality; the Group delivered **one in seven** UK affordable homes in FY2025 (Chair’s statement, 2025 AR).
+- **Operational recovery:** FY2025 results were in line with guidance; adjusted PBT edged up despite volume decline; net debt fell to **£144.2m** at 31 December 2025 from **£180.7m** (2025 AR).
+- **Structural tailwind:** Alignment with the **£39bn SAHP (2026–2036)**, **£2bn** affordable top-up funding (Group allocation **£50m**), CPI+1% rent settlement from April 2026, and **PlacePoint** JV with Homes England (**£150m** capital).
+- **Quality markers:** Fifth/sixth consecutive **5-star HBF** customer satisfaction; timber-frame scale via **Vistry Works** (4,643 units in 2025).
+
+The strong-buy screen signal is **partially confirmed** by improving balance-sheet trajectory and a durable partnerships franchise, but **not fully validated** by filing evidence on earnings quality (2023–24 restatements), ROCE gap to target, and missing group interim accounts.
+
+---
+
+## FINANCIAL REVIEW
+**Source hierarchy:** All figures below are from Companies House filing body extracts unless noted. No `financials_annual.json` fallback was required or used.
+
+**Index gaps:** `filings_index.json` classifies all seven items as `period: other` (0 annual, 0 interim). In practice, four bodies are full **Annual Reports** (2022–2025). The only interim filing is **unaudited parent-company** accounts for the six months to **30 June 2024** — not consolidated group half-year results. **No RNS trading updates or group interim results** appear in the index.
+
+### Annual trend (group, adjusted unless stated)
+
+| Metric | FY2023 AR | FY2024 AR | FY2025 AR |
+|--------|-----------|-----------|-----------|
+| Adjusted revenue | £4,042.1m | £4,329.2m | £4.2bn (~£4,155m reported adj. table) |
+| Adjusted operating profit | £487.9m | £358.2m¹ | £353.8m |
+| Adjusted PBT | £419.1m | £263.5m¹ | £268.8m |
+| Adjusted basic EPS | 88.2p | 55.9p¹ | 59.3p |
+| Reported revenue | £3,564.2m | £3,779.3m | £3,613.7m |
+| Reported PBT | £304.8m | £104.9m | £196.2m |
+| Completions | 16,118 | 17,225 | 15,658 |
+| ROCE | 21.3% | 14.6%¹ | 13.9% |
+| Net debt (year-end) | £88.8m | £180.7m² | £144.2m |
+| Owned/controlled plots | 76,434 | 74,020 | 71,501 |
+
+¹FY2024 AR restated 2023 comparatives downward (South Division cost-forecasting error).  
+²Per FY2025 AR (references 30 December 2024).
+
+**Narrative:**
+
+- **FY2023:** Post-Countryside integration year; robust adjusted PBT **£419.1m**; strategic pivot to pure Partnerships announced September 2023; net debt **£88.8m**; fire safety provision **£289.0m**; medium-term target **£1bn** shareholder distributions over three years (2023 AR).
+- **FY2024 — inflection down:** South Division cost forecasting issues cut **£91.5m** from adjusted PBT; total full-life cost adjustments **£165m** (with **£53m** future-year impact). Adjusted PBT fell **35%** to **£263.5m** despite **7%** volume growth to 17,225. Reported PBT collapsed to **£104.9m**. Net debt rose; no final ordinary distribution for 2024 (buybacks only). ROCE fell to **14.6%** vs **40%** medium-term target.
+- **FY2025 — stabilisation:** Management describes results in line with guidance, strong H2. Adjusted PBT **+2%** to **£268.8m** on **-9%** volumes; reported metrics improved materially (operating profit **£222.6m**, PBT **£196.2m**). Partner-funded mix **74%**; open market **-11%** to 4,065 units. Land sales contributed **£180m** revenue (vs **£91m** in FY2024). Net debt reduced **£36.5m** to **£144.2m**, but **average daily debt £734m** (2024: £698m) reflects delayed partner deals and inventory drag. ROCE **13.9%** — still far below target. Capital priority: deleveraging toward **net cash** by end-2026; **£29m** buyback remaining.
+
+**Interim (parent company only — not group):**  
+Six months to **30 June 2024** (filed September 2024): parent profit before tax **£237.8m**, driven by **£250m** dividend income from subsidiaries; distributable reserves **£394.8m** after **£100.7m** share buyback commitment. **Cannot be used to infer consolidated H1 2024 group trading performance.** No group interim filing in index.
+
+**Balance sheet / cash:** Large inventory and land bank (**71,501** plots) tie up capital; land replenishment **12,599** plots on 44 sites in FY2025 (heavy H2). Fire safety provision **£289.0m** at end-2023 (2023 AR); remediation ongoing under Developer Remediation Contract.
+
+**Going concern / viability:** Section headings reference viability and going concern statements (2025 AR p.83; 2024 AR p.76), but **full statement text is not present in the extracted bodies** — cannot confirm specific assumptions or covenant headroom from this pack.
+
+---
+
+## RISKS AND RED FLAGS
+**Accounting / controls (material):** October 2024 South Division cost-forecasting failure led to **£165m** full-life cost adjustments, **2023 restatements**, and an independent forensic review finding insufficient management capability and non-compliant commercial processes confined to the former housebuilding South Division (2024 AR). Enhanced controls now embedded (Investment Committee, CVR process), but **recurrence risk is unproven** through a full cycle.
+
+**Governance:** Greg Fitzgerald holds combined **Executive Chair and CEO** since May 2024 AGM — acknowledged departure from UK Corporate Governance Code separation requirement; Senior Independent Director Rob Woodward carries enhanced oversight. CEO succession plan referenced but transition timing unclear (2025 AR).
+
+**Cyclical / operational:** Open market units **-11%** in FY2025; sales rate **0.96** vs **1.07** prior year; Autumn 2025 Budget uncertainty delayed partner-funded deals. Medium-term margin target **12%** vs current adjusted operating margin implied ~**8.5%** (£353.8m / £4.2bn). Inventory-heavy model; average daily debt elevated.
+
+**Regulatory:** CMA housebuilding sector investigation concluded; Group among seven builders offering voluntary commitments (July 2025, 2025 AR). Fire safety remediation obligations; **RPDT** ~4% of relevant profits. Second-staircase requirement added **£19.3m** expense (2023 AR).
+
+**Leverage / liquidity:** Year-end net debt improving but working-capital intensity high; FY2024 priority was cash generation after indebtedness exceeded expectations. Distribution policy paused (no 2024 final dividend).
+
+**Competitive / market:** PRS volumes **-23%** in FY2025; partner funding uncertainty around budget timing. Elevated short interest visible on Investegate (e.g. GLG Partners **2.24%**, Schonfeld UK **2.44%**, Feb 2025 snapshot) — suggests sceptical institutional positioning.
+
+**Pension:** No pension deficit figures in extracted bodies — **data gap**.
+
+RiskTags: regulatory, cyclical, governance, leverage, accounting, competitive
+
+---
+RiskTags: regulatory, cyclical, governance, leverage, accounting, competitive
+
+## NEWS HIGHLIGHTS
+**News coverage is thin:** `news_manifest.json` is missing; only two Investegate-derived items appear in the filing index.
+
+- **“Vistry to deliver 2,300 homes in Rugeley”** — 14 August 2025 (RNS/Reach): acquisition of former Rugeley Power Station site from ENGIE; **2,300 homes** with outline planning; mixed tenures including affordable, PRS, open market. Aligns with FY2025 strategic land purchases (Worcester, Rugeley, Bury St Edmunds ~5,000 plots combined).
+- **“Vistry Group (VTY) Short Positions”** — Investegate short-register page, indexed 28 February 2025: documents multiple active short positions >0.5% (not a corporate announcement).
+
+Annual report narrative (not news manifest) also references: CMA voluntary commitments (July 2025); PlacePoint JV first site transfer (December 2025); SAHP bidding opened end-February 2026; Board addition Sue Farr (October 2025).
+
+**Flag:** Insufficient structured news feed to assess M&A, management turnover, or trading updates over the past year beyond the Rugeley release.
+
+---
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: high
+Confidence: 0.65
+Rationale: Filing evidence supports the screen’s deep-value hook (sub-book, deleveraging, partnerships moat) but the 2024 restatement, ROCE/margin shortfall vs targets, inventory-heavy balance sheet, and missing group interim/news/screen snapshot files prevent full confirmation of an uninqualified strong buy.
