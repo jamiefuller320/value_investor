@@ -35,6 +35,8 @@ _STAMP_RE = re.compile(r"signals_(\d{8}_\d{6})\.csv$")
 
 
 DEFAULT_OBSERVE_SIM_MARKETS: tuple[str, ...] = ("sp500",)
+OBSERVE_SIM_MARKETS_MODE_EXPLICIT = "explicit"
+OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK = "graduated_benchmark"
 
 
 def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
@@ -42,12 +44,23 @@ def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
     ladder = policy.get("ladder") or {}
     if not ladder.get("observe_sim_after_screen", True):
         return []
-    configured = ladder.get("observe_sim_markets")
-    if configured is None:
-        markets = list(DEFAULT_OBSERVE_SIM_MARKETS)
+    mode = str(ladder.get("observe_sim_markets_mode") or OBSERVE_SIM_MARKETS_MODE_EXPLICIT)
+    if mode == OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK:
+        from value_investor.library_graduation import graduated_market_ids
+
+        markets = graduated_market_ids(policy)
     else:
-        markets = [str(mid) for mid in configured if str(mid).strip()]
-    return [mid for mid in markets if mid in MARKET_BENCHMARKS]
+        configured = ladder.get("observe_sim_markets")
+        if configured is None:
+            markets = list(DEFAULT_OBSERVE_SIM_MARKETS)
+        else:
+            markets = [str(mid) for mid in configured if str(mid).strip()]
+    extra = [str(mid) for mid in (ladder.get("observe_sim_markets_extra") or []) if str(mid).strip()]
+    ordered: list[str] = []
+    for mid in [*markets, *extra]:
+        if mid not in ordered:
+            ordered.append(mid)
+    return [mid for mid in ordered if mid in MARKET_BENCHMARKS]
 
 
 def run_observe_sims_for_screened_markets(

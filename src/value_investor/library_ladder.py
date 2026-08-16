@@ -44,6 +44,7 @@ from value_investor.library_screen import (
 )
 from value_investor.library_sim import (
     DEFAULT_OBSERVE_SIM_MARKETS,
+    OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK,
     observe_sim_markets_for_policy,
     run_observe_sims_for_screened_markets,
 )
@@ -60,6 +61,7 @@ logger = logging.getLogger(__name__)
 ESTIMATED_MEMO_USD = 0.40
 DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 DEFAULT_WEEKLY_PAPER_SHARD_MARKETS: tuple[str, ...] = ("sp500", "euro_stoxx50")
+DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY = 2
 
 
 def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
@@ -71,9 +73,12 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("research_hard_cap", 50)
     ladder.setdefault("research_all_graduated", True)
     ladder.setdefault("observe_sim_after_screen", True)
+    ladder.setdefault("observe_sim_markets_mode", OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK)
     ladder.setdefault("observe_sim_markets", list(DEFAULT_OBSERVE_SIM_MARKETS))
+    ladder.setdefault("observe_sim_screen_when_research_skipped", True)
     ladder.setdefault("weekly_paper_shard_after_screen", True)
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
+    ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
     ladder.setdefault("spend_checkpoint_usd", DEFAULT_SPEND_CHECKPOINT_USD)
     ladder.setdefault("spend_since_checkpoint_usd", 0.0)
     ladder.setdefault("last_run", None)
@@ -99,6 +104,39 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
         if mid and mid not in ordered:
             ordered.append(mid)
     return ordered or ([focus] if focus else [])
+
+
+def _screen_observe_sim_markets(
+    root: Path,
+    policy: dict[str, Any],
+    *,
+    screened_markets: set[str],
+    run_at: datetime,
+) -> dict[str, Any]:
+    """Screen-lite for observe-sim markets when the research pass did not screen them."""
+    targets = [
+        mid for mid in observe_sim_markets_for_policy(policy) if mid not in screened_markets
+    ]
+    if not targets:
+        return {"skipped": True, "reason": "all observe-sim markets already screened"}
+    screened: list[str] = []
+    errors: dict[str, str] = {}
+    for mid in targets:
+        try:
+            run_library_screen(root, mid, run_at=run_at)
+            screened_markets.add(mid)
+            screened.append(mid)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Observe-sim screen-lite for %s failed: %s", mid, exc)
+            errors[mid] = str(exc)
+    if not screened:
+        return {
+            "skipped": True,
+            "reason": "observe-sim screen-lite failed for all targets",
+            "targets": targets,
+            "errors": errors,
+        }
+    return {"skipped": False, "markets": screened, "errors": errors}
 
 
 def run_library_ladder(
@@ -468,6 +506,35 @@ def run_library_ladder(
                 if checkpoint_reached:
                     layer["paused_for_approval"] = True
         result["layers"]["selective_research"] = layer
+
+    # B1b — screen-lite for observe-sim markets when research pass skipped (no memos)
+    policy = load_policy(policy_path)
+    research_layer = result["layers"].get("selective_research") or {}
+    ladder_cfg = policy.get("ladder") or {}
+    if (
+        skip_screen
+        or not ladder_cfg.get("observe_sim_screen_when_research_skipped", True)
+        or not research_layer.get("skipped")
+    ):
+        result["layers"]["observe_sim_screen"] = {
+            "skipped": True,
+            "reason": (
+                "screen-lite disabled"
+                if skip_screen
+                else (
+                    "research pass ran — markets already screened"
+                    if not research_layer.get("skipped")
+                    else "observe_sim_screen_when_research_skipped is off"
+                )
+            ),
+        }
+    else:
+        result["layers"]["observe_sim_screen"] = _screen_observe_sim_markets(
+            root,
+            policy,
+            screened_markets=screened_markets,
+            run_at=run_at,
+        )
 
     # B2 — observe-only paper sim for pilot library markets (after screen + research)
     policy = load_policy(policy_path)
