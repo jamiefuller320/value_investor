@@ -28,6 +28,7 @@ MARKET_BENCHMARKS: dict[str, str] = {
     "dax": "^GDAXI",
     "cac40": "^FCHI",
     "tsx60": "^GSPTSE",
+    "iseq20": "^IETP",
 }
 
 _STAMP_RE = re.compile(r"signals_(\d{8}_\d{6})\.csv$")
@@ -266,6 +267,12 @@ def build_library_run_snapshot(
     prices = dict(price_by_ticker)
     if bench_px is not None:
         prices[benchmark] = bench_px
+
+    signals = signals.copy()
+    if "conviction_score" not in signals.columns:
+        signals["conviction_score"] = 0.0
+    if "data_quality_score" not in signals.columns:
+        signals["data_quality_score"] = 1.0
 
     signal_cols = ["ticker", "signal", "conviction_score", "data_quality_score"]
     for optional in ("adjusted_signal", "research_verdict", "timing_signal"):

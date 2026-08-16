@@ -115,6 +115,35 @@ def test_observe_sim_markets_from_policy_respects_toggle(tmp_path: Path):
     assert observe_sim_markets_for_policy(policy) == []
     policy = {"ladder": {"observe_sim_after_screen": True, "observe_sim_markets": ["sp500"]}}
     assert observe_sim_markets_for_policy(policy) == ["sp500"]
+    policy = {
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets": ["sp500", "euro_stoxx50", "iseq20", "unknown_market"],
+        }
+    }
+    assert observe_sim_markets_for_policy(policy) == ["sp500", "euro_stoxx50", "iseq20"]
+
+
+def test_benchmark_for_iseq20():
+    from value_investor.library_sim import benchmark_for_market
+
+    assert benchmark_for_market("iseq20") == "^IETP"
+
+
+def test_build_library_run_snapshot_defaults_missing_conviction(tmp_path: Path):
+    signals = pd.DataFrame(
+        [{"ticker": "AAA", "signal": "buy", "data_quality_score": 0.9}]
+    )
+    universe = pd.DataFrame([{"ticker": "AAA", "last_price": 10.0}])
+    benchmark_series = pd.Series({pd.Timestamp("2026-07-01", tz="UTC"): 100.0})
+    snapshot = build_library_run_snapshot(
+        signals=signals,
+        universe=universe,
+        run_at=datetime(2026, 7, 1, 12, 0, tzinfo=UTC),
+        benchmark="^IETP",
+        benchmark_closes=benchmark_series,
+    )
+    assert snapshot.signals[0]["conviction_score"] == 0.0
 
 
 def test_run_observe_sims_for_screened_markets_skips_when_not_screened(tmp_path: Path):
