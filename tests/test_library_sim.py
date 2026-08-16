@@ -131,9 +131,7 @@ def test_benchmark_for_iseq20():
 
 
 def test_build_library_run_snapshot_defaults_missing_conviction(tmp_path: Path):
-    signals = pd.DataFrame(
-        [{"ticker": "AAA", "signal": "buy", "data_quality_score": 0.9}]
-    )
+    signals = pd.DataFrame([{"ticker": "AAA", "signal": "buy", "data_quality_score": 0.9}])
     universe = pd.DataFrame([{"ticker": "AAA", "last_price": 10.0}])
     benchmark_series = pd.Series({pd.Timestamp("2026-07-01", tz="UTC"): 100.0})
     snapshot = build_library_run_snapshot(
