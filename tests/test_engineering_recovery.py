@@ -74,6 +74,46 @@ def test_retry_failed_tasks_parks_when_retries_exhausted(tmp_path: Path):
     assert "manual review" in str(updated["tasks"][0].get("parked_reason"))
 
 
+def test_retry_failed_tasks_does_not_mirror_isolated_fixture_to_committed(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: tmp_path queue updates must not overwrite committed queue."""
+    committed_path = tmp_path / "committed" / "engineering_tasks.json"
+    committed_path.parent.mkdir(parents=True)
+    committed_path.write_text(
+        json.dumps({"tasks": [_task("eng-real-queue-task").to_dict()]}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_tasks.COMMITTED_TASKS_PATH",
+        committed_path,
+    )
+
+    isolated_path = tmp_path / "fixture" / "engineering_tasks.json"
+    isolated_path.parent.mkdir(parents=True)
+    isolated_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    _task("eng-20260729-01", status="failed").to_dict()
+                    | {
+                        "failure_count": 2,
+                        "last_failed_at": datetime.now(UTC).isoformat(),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    retry_failed_tasks(tasks_path=isolated_path, apply=True, max_retries=2)
+
+    committed = load_engineering_tasks(committed_path)
+    assert [row["id"] for row in committed["tasks"]] == ["eng-real-queue-task"]
+    isolated = load_engineering_tasks(isolated_path)
+    assert isolated["tasks"][0]["status"] == "parked"
+
+
 def test_recover_engineering_queue_marks_merged_before_orphan_reset(tmp_path: Path, monkeypatch):
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {

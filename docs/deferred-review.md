@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-14T10:09:50+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-16T16:25:17+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -216,6 +216,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L132 | **Ops alert on ingest runtime_cutoff** | Extend ops_monitor check_ingest_health_log to flag partial/runtime_cutoff runs with targets_deferred count, not only zero-body stall. | Backlog resume shipped or partial runs exceed one per week |
 | L133 | **Include exit_timing_near_miss_review.json in offline_sim allowed_paths** | Horizon offline_sim _OFFLINE_SIM_PATHS lists exit_timing_near_miss.json but omits the companion review artifact, so engineering agents that regenerate both trip the path guard (as on PR 233). | Next offline_sim / exit-timing-archive engineering task is drafted or promoted |
 | L134 | **Eng-idle single-ticker ingest depth hook** | When engineering_queue open_count=0 and buy-tier gaps remain, dispatch a bounded ingest pass on the top priority_score ticker (or top paper-book holding) instead of leaving cron idle — orchestration only, reuse ingest_improvement. | Engineering queue idle for 48h+ while indexed_without_body>50 on names in ai_judgment holdings or strong_buy shortlist |
+| L147 | **Universal automation completion watchdog** | Extend workflow_run responders + ops monitor to cover all scheduled bundle workflows with typed recovery (rerun vs draft vs noop), not just ladder/ingest/email. Full auto-fix for every failure class is unsafe — keep human/eng-agent path for logic bugs and policy changes. | After PR #272 responders have 4+ weeks of stable operation and ops monitor false-positive rate is known |
 
 ---
 
