@@ -92,7 +92,7 @@ failed CI workflow:
 3. On **`cursor/eng-*` engineering branches**, attempts **path-guard allowlist expand**
    when `engineering-path-guard` fails (adds missing `allowed_paths` on the task in
    `docs/data/engineering_tasks.json`, then re-validates)
-4. Verifies with scoped ruff + full pytest + path guard (engineering branches)
+4. Verifies with scoped ruff + path guard (engineering branches) + full pytest
 5. Commits with `chore(ci): …` and pushes when a fix was applied
 6. **Always posts a PR comment** with diagnosis (failure kinds, violations, pytest
    nodes, hints) — even when no automatic fix was possible

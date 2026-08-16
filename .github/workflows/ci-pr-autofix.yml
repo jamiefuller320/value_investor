@@ -82,20 +82,20 @@ jobs:
           Path("/tmp/autofix_commit_message.txt").write_text(commit_msg)
           PY
 
-      - name: Verify autofix (ruff + pytest + path guard)
+      - name: Verify autofix (ruff + path guard + pytest)
         if: steps.autofix.outputs.fixed == 'true'
         env:
           BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
           set -euo pipefail
           python3 scripts/check_changed_python.py --base origin/main --head HEAD
-          pytest -q
           if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
             git diff --name-only origin/main...HEAD > /tmp/changed_files.txt
             ftse-engineering check-pr-paths \
               --branch "$BRANCH" \
               --changed-files /tmp/changed_files.txt
           fi
+          pytest -q
 
       - name: Configure git author
         if: steps.autofix.outputs.fixed == 'true'

@@ -1161,12 +1161,26 @@ def _update_task_queue(
     return updated
 
 
+def _mirror_committed_path_for_queue(path: Path, committed_path: Path | None) -> Path:
+    """Mirror queue writes to the committed file only for canonical queue paths."""
+    if committed_path is not None:
+        return Path(committed_path)
+    resolved = Path(path).resolve()
+    canonical = {
+        Path(COMMITTED_TASKS_PATH).resolve(),
+        Path(DEFAULT_TASKS_PATH).resolve(),
+    }
+    if resolved in canonical:
+        return COMMITTED_TASKS_PATH
+    return Path(path)
+
+
 def mark_task_status(
     task_id: str,
     status: str,
     *,
     path: Path = DEFAULT_TASKS_PATH,
-    committed_path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path | None = None,
     result_path: str | None = None,
     branch_name: str | None = None,
     pr_url: str | None = None,
@@ -1204,7 +1218,7 @@ def mark_task_status(
     return _update_task_queue(
         task_id,
         path=path,
-        committed_path=committed_path,
+        committed_path=_mirror_committed_path_for_queue(path, committed_path),
         **fields,
     )
 
