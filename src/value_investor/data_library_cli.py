@@ -926,10 +926,7 @@ def cmd_shard_status(args: argparse.Namespace) -> int:
     print(f"Phase rollup: {COMMITTED_PHASES_PATH}")
     capacity = weekly_paper_shard_capacity_for_policy(policy)
     slots = weekly_paper_shard_markets_for_policy(policy)
-    print(
-        f"Weekly paper capacity: {len(slots)}/{capacity} slots "
-        f"({', '.join(slots) or '—'})"
-    )
+    print(f"Weekly paper capacity: {len(slots)}/{capacity} slots ({', '.join(slots) or '—'})")
     observe = observe_sim_markets_for_policy(policy)
     print(f"Observe sim markets ({len(observe)}): {', '.join(observe) or '—'}")
     for market_id in markets:

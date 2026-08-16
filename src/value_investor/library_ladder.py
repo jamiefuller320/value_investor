@@ -114,9 +114,7 @@ def _screen_observe_sim_markets(
     run_at: datetime,
 ) -> dict[str, Any]:
     """Screen-lite for observe-sim markets when the research pass did not screen them."""
-    targets = [
-        mid for mid in observe_sim_markets_for_policy(policy) if mid not in screened_markets
-    ]
+    targets = [mid for mid in observe_sim_markets_for_policy(policy) if mid not in screened_markets]
     if not targets:
         return {"skipped": True, "reason": "all observe-sim markets already screened"}
     screened: list[str] = []

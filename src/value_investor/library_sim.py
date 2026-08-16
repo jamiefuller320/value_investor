@@ -55,7 +55,9 @@ def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
             markets = list(DEFAULT_OBSERVE_SIM_MARKETS)
         else:
             markets = [str(mid) for mid in configured if str(mid).strip()]
-    extra = [str(mid) for mid in (ladder.get("observe_sim_markets_extra") or []) if str(mid).strip()]
+    extra = [
+        str(mid) for mid in (ladder.get("observe_sim_markets_extra") or []) if str(mid).strip()
+    ]
     ordered: list[str] = []
     for mid in [*markets, *extra]:
         if mid not in ordered:
