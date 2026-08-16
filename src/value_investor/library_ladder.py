@@ -44,7 +44,13 @@ from value_investor.library_screen import (
 )
 from value_investor.library_sim import (
     DEFAULT_OBSERVE_SIM_MARKETS,
+    observe_sim_markets_for_policy,
     run_observe_sims_for_screened_markets,
+)
+from value_investor.market_paper_shard import run_weekly_paper_shards_for_screened_markets
+from value_investor.market_shard_phases import (
+    refresh_committed_phase_rollup,
+    weekly_paper_shard_markets_for_policy,
 )
 from value_investor.research.runner import eligible_research_targets, run_research_for_strong_buys
 from value_investor.storage import write_json
@@ -53,6 +59,7 @@ logger = logging.getLogger(__name__)
 
 ESTIMATED_MEMO_USD = 0.40
 DEFAULT_MIN_METRICS_FOR_SCREEN = 25
+DEFAULT_WEEKLY_PAPER_SHARD_MARKETS: tuple[str, ...] = ("sp500", "euro_stoxx50")
 
 
 def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
@@ -65,6 +72,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("research_all_graduated", True)
     ladder.setdefault("observe_sim_after_screen", True)
     ladder.setdefault("observe_sim_markets", list(DEFAULT_OBSERVE_SIM_MARKETS))
+    ladder.setdefault("weekly_paper_shard_after_screen", True)
+    ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
     ladder.setdefault("spend_checkpoint_usd", DEFAULT_SPEND_CHECKPOINT_USD)
     ladder.setdefault("spend_since_checkpoint_usd", 0.0)
     ladder.setdefault("last_run", None)
@@ -472,6 +481,33 @@ def run_library_ladder(
             root,
             policy,
             screened_markets,
+        )
+
+    # B3 — weekly paper shard for Phase-2 markets (after observe sim + screen)
+    policy = load_policy(policy_path)
+    if skip_screen or not screened_markets:
+        result["layers"]["weekly_paper_shard"] = {
+            "skipped": True,
+            "reason": "screen-lite did not run this pass",
+        }
+    else:
+        result["layers"]["weekly_paper_shard"] = run_weekly_paper_shards_for_screened_markets(
+            root,
+            policy,
+            screened_markets,
+        )
+
+    # Phase advancement rollup (observe + weekly-paper policy markets)
+    policy = load_policy(policy_path)
+    phase_markets = sorted(
+        set(observe_sim_markets_for_policy(policy))
+        | set(weekly_paper_shard_markets_for_policy(policy))
+    )
+    if phase_markets:
+        result["shard_phases"] = refresh_committed_phase_rollup(
+            phase_markets,
+            library_root=root,
+            policy=policy,
         )
 
     # D — graduation (after grow + screen so floors reflect this run)

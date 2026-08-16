@@ -7,6 +7,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 from .agent_model_policy import (
     DEFAULT_POLICY_PATH,
@@ -209,6 +210,37 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sim_p.add_argument("--json", action="store_true")
     sim_p.set_defaults(func=cmd_sim)
+
+    shard_status_p = sub.add_parser(
+        "shard-status",
+        parents=[common],
+        help="Show market-shard phase gates, blockers, and advancement triggers",
+    )
+    shard_status_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: observe + weekly-paper policy markets)",
+    )
+    shard_status_p.add_argument("--json", action="store_true")
+    shard_status_p.set_defaults(func=cmd_shard_status)
+
+    shard_paper_p = sub.add_parser(
+        "shard-paper",
+        parents=[common],
+        help="Run Phase 2 weekly paper shard batch for eligible markets",
+    )
+    shard_paper_p.add_argument(
+        "--markets",
+        default="sp500,euro_stoxx50",
+        help="Comma-separated market ids",
+    )
+    shard_paper_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Force paper-auto pass even outside settle window",
+    )
+    shard_paper_p.add_argument("--json", action="store_true")
+    shard_paper_p.set_defaults(func=cmd_shard_paper)
 
     ladder_p = sub.add_parser(
         "ladder",
@@ -864,6 +896,103 @@ def cmd_sim(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_shard_status(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.library_sim import observe_sim_markets_for_policy
+    from value_investor.market_shard_phases import (
+        COMMITTED_PHASES_PATH,
+        evaluate_market_phase,
+        refresh_committed_phase_rollup,
+        weekly_paper_shard_markets_for_policy,
+    )
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets)
+    if not markets:
+        markets = sorted(
+            set(observe_sim_markets_for_policy(policy))
+            | set(weekly_paper_shard_markets_for_policy(policy))
+        )
+    rollup = refresh_committed_phase_rollup(
+        markets,
+        library_root=args.root,
+        policy=policy,
+        path=COMMITTED_PHASES_PATH,
+    )
+    if args.json:
+        print(json.dumps(rollup, indent=2))
+        return 0
+    print(f"Phase rollup: {COMMITTED_PHASES_PATH}")
+    for market_id in markets:
+        evaluation = (rollup.get("markets") or {}).get(market_id) or evaluate_market_phase(
+            market_id,
+            library_root=args.root,
+            policy=policy,
+        )
+        blockers = evaluation.get("blockers") or []
+        print(
+            f"\n{market_id}: phase={evaluation.get('current_phase')}  "
+            f"next={evaluation.get('next_phase')}  "
+            f"benchmark={evaluation.get('benchmark_ticker')}"
+        )
+        p1 = evaluation.get("phase1") or {}
+        p2 = evaluation.get("phase2") or {}
+        print(
+            f"  Phase 1: archives={p1.get('screen_archives')}/"
+            f"{p1.get('min_archives')}  "
+            f"snapshots={p1.get('observe_snapshot_count')}  "
+            f"ready={evaluation.get('phase1_ready')}"
+        )
+        print(
+            f"  Phase 2: batches={p2.get('weekly_batch_count')}/"
+            f"{p2.get('min_weekly_batches')}  "
+            f"beat_control={p2.get('beat_control_latest')}  "
+            f"ready={evaluation.get('phase2_ready')}"
+        )
+        if blockers:
+            for blocker in blockers:
+                print(f"  blocker: {blocker}")
+    return 0
+
+
+def cmd_shard_paper(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.market_paper_shard import run_weekly_market_paper_shard
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets) or ["sp500", "euro_stoxx50"]
+    payloads: dict[str, Any] = {}
+    for market_id in markets:
+        try:
+            result = run_weekly_market_paper_shard(
+                market_id,
+                library_root=args.root,
+                force=True,
+                policy=policy,
+            )
+            payloads[market_id] = result
+            if not args.json:
+                review = result.get("review") or {}
+                phase = result.get("phase") or {}
+                print(
+                    f"{market_id}: verdict={review.get('verdict')}  "
+                    f"phase={phase.get('current_phase')}"
+                )
+                print(
+                    f"  beat_control={review.get('beat_control')}  "
+                    f"excess={review.get('primary_excess_after_costs')}"
+                )
+                for blocker in phase.get("blockers") or []:
+                    print(f"  blocker: {blocker}")
+        except Exception as exc:  # noqa: BLE001
+            payloads[market_id] = {"error": str(exc)}
+            if not args.json:
+                print(f"{market_id}: ERROR — {exc}", file=sys.stderr)
+    if args.json:
+        print(json.dumps({"markets": payloads}, indent=2))
+    return 0 if all("error" not in row for row in payloads.values()) else 1
+
+
 def cmd_ladder(args: argparse.Namespace) -> int:
     from .library_ladder import run_library_ladder
 
@@ -931,6 +1060,36 @@ def cmd_ladder(args: argparse.Namespace) -> int:
                 f"event={ev.get('reason')}  "
                 f"{ev.get('from_market')}→{ev.get('to_market')}"
             )
+        elif name == "observe_sim":
+            if layer.get("skipped"):
+                print(f"  observe_sim: skipped — {layer.get('reason')}")
+            else:
+                for mid, row in (layer.get("markets") or {}).items():
+                    if row.get("error"):
+                        print(f"  observe_sim [{mid}]: error — {row['error']}")
+                    else:
+                        print(
+                            f"  observe_sim [{mid}]: snapshots={row.get('snapshot_count')}  "
+                            f"excess={row.get('screen_rules_excess')}"
+                        )
+        elif name == "weekly_paper_shard":
+            if layer.get("skipped"):
+                print(f"  weekly_paper_shard: skipped — {layer.get('reason')}")
+            else:
+                for mid, row in (layer.get("markets") or {}).items():
+                    if row.get("error"):
+                        print(f"  weekly_paper_shard [{mid}]: error — {row['error']}")
+                    else:
+                        print(
+                            f"  weekly_paper_shard [{mid}]: verdict={row.get('verdict')}  "
+                            f"phase={row.get('current_phase')}  "
+                            f"batches_ready={row.get('phase2_ready')}"
+                        )
+    if payload.get("shard_phases"):
+        markets = payload["shard_phases"].get("markets") or {}
+        ready = [mid for mid, ev in markets.items() if ev.get("phase2_ready")]
+        if ready:
+            print(f"  shard_phases: Phase 2 exit met for {', '.join(ready)}")
     return 0
 
 

@@ -79,10 +79,11 @@ Artifacts: `docs/data/library/markets/sp500/screen/` (signals, shortlist, histor
 
 **Observe-only paper sim (S&P 500 pilot):**
 
-Runs automatically after screen-lite when `sp500` is screened in `ftse-library ladder` (policy: `ladder.observe_sim_after_screen`, default on). Manual refresh:
+Runs automatically after screen-lite when a market in `ladder.observe_sim_markets` is screened in `ftse-library ladder` (policy: `ladder.observe_sim_after_screen`, default on). Phase gates and timescale: [`docs/ops/market-sharded-learning.md`](ops/market-sharded-learning.md). Manual refresh:
 
 ```bash
 ftse-library sim --markets sp500
+ftse-library sim --markets sp500,euro_stoxx50,iseq20
 ```
 
 Rebuilds `screen/history/` snapshots from all dated screen-lite CSVs, runs screen-rules / research-overlay / AI-judgment tracks vs **^GSPC**, and writes `screen/sim/observe_summary.json`. Evidence accumulates with each screen pass — still observe-only and **not** wired to `ftse-decision-review` or live FTSE paper books.

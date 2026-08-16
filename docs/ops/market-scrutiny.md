@@ -104,7 +104,7 @@ python3 -c "from value_investor.library_grow_health import snapshot_focus_market
 |------|-------|--------|
 | `weekly_ops_cap_usd` | **80** | ~$30 more headroom for Sunday bundle |
 | `research_hard_cap` | **100** | Max memos per ladder run |
-| `observe_sim_markets` | `sp500` | S&P observe sim after screen-lite |
+| `observe_sim_markets` | `sp500`, `euro_stoxx50`, `iseq20` | Per-market observe sim after screen-lite — see [`market-sharded-learning.md`](market-sharded-learning.md) |
 
 At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports roughly **~40–60 selective memos/week** across graduated markets (round-robin buy-tier).
 

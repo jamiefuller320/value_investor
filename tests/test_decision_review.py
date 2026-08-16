@@ -1,6 +1,7 @@
 """Tests for decision-review learning knobs and proposals."""
 
 from pathlib import Path
+from unittest.mock import patch
 
 from value_investor.decision_review import (
     BookMetrics,
@@ -463,3 +464,48 @@ def test_run_decision_review_starts_epoch_on_apply(tmp_path: Path):
         assert (out / "knob_epoch.json").exists()
         epoch = __import__("json").loads((out / "knob_epoch.json").read_text(encoding="utf-8"))
         assert epoch["knobs"]["max_positions"] <= 5
+
+
+def test_benchmark_ticker_for_shard_meta(tmp_path: Path):
+    from value_investor.decision_review import benchmark_ticker_for_dir, compare_learning_tracks
+
+    shard_root = tmp_path / "markets" / "sp500"
+    shard_root.mkdir(parents=True)
+    (shard_root / "shard_meta.json").write_text(
+        '{"benchmark_ticker":"^GSPC"}',
+        encoding="utf-8",
+    )
+    assert benchmark_ticker_for_dir(shard_root) == "^GSPC"
+
+    (shard_root / "config.json").write_text("{}", encoding="utf-8")
+    (shard_root / "automated_fund.json").write_text(
+        __import__("json").dumps(
+            __import__("value_investor.paper_fund", fromlist=["PaperFund"])
+            .PaperFund.create(
+                __import__(
+                    "value_investor.paper_fund", fromlist=["PaperFundConfig"]
+                ).PaperFundConfig(
+                    name="rules",
+                    mode="automated",
+                    initial_cash=1000,
+                    trade_cost_pct=0.03,
+                    max_positions=5,
+                )
+            )
+            .to_dict()
+        ),
+        encoding="utf-8",
+    )
+    ai_dir = shard_root / "ai_judgment"
+    ai_dir.mkdir()
+    (ai_dir / "config.json").write_text(
+        '{"track_id":"ai_judgment","is_primary_learning_track":true}', encoding="utf-8"
+    )
+    (ai_dir / "automated_fund.json").write_text(
+        (shard_root / "automated_fund.json").read_text(), encoding="utf-8"
+    )
+
+    with patch("value_investor.churn_health.write_churn_health", return_value={}):
+        summary = compare_learning_tracks(base_dir=shard_root, force=True, fetch_benchmark=False)
+    assert summary["benchmark_ticker"] == "^GSPC"
+    assert "^GSPC" in summary["success_criterion"]
