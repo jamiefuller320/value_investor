@@ -174,6 +174,11 @@ morning run that reports orchestrator staleness before catch-up still commits
 | Engineering queue | Weekdays | **3h** when open/pr_open tasks exist; **26h** when the queue is fully idle |
 | Analysis review | Sunday | No success within 36h |
 | **Library ladder** | Sunday | No success within 36h |
+| **Library model review** | Sunday | No success within 36h |
+| **Email report** | Sunday | No success within 36h |
+| **Data backup** | Sunday | No success within 36h (12:30 UTC slot) |
+| **Paper automation** | Weekdays | No success within 28h |
+| **Ops monitor** | Daily | No success within 28h (self-check) |
 
 Engineering queue reliability depends on external cron (`engineering-queue` job in
 `import_cron_jobs.py`); GitHub `schedule` is backup only.
@@ -186,7 +191,7 @@ failed log and take a guarded next step (no blind infinite reruns).
 | Responder | Trigger | Actions |
 |-----------|---------|---------|
 | **Library Ladder Responder** | `library-grow.yml` failure | Classify log → **one guarded rerun per ~20h** when partial success / transient / fixed corrupt-json; else draft engineering task |
-| **Workflow Failure Responder** | `ingest-loop`, `email-report`, `analysis-review`, `library-model-review` failures | Match log signature → draft scoped `workflow_failure` engineering task |
+| **Workflow Failure Responder** | `ingest-loop`, `email-report`, `analysis-review`, `library-model-review`, `data-backup`, `paper-auto`, `horizon-scan`, `automation-orchestrator` failures | Match log signature → draft scoped `workflow_failure` engineering task |
 | **CI Fix Responder** | `CI` / `CI Main Nightly` pytest failures | Existing pytest-scoped auto-merge path |
 
 Ledger: `docs/data/library/ladder_responder_log.json` records ladder reruns for

@@ -9,6 +9,10 @@ on:
       - "FTSE Email Report"
       - "FTSE Analysis Review"
       - "FTSE Library Model Review"
+      - "FTSE Data Backup"
+      - "FTSE Paper Automation"
+      - "FTSE Horizon Scan"
+      - "Automation Orchestrator"
     types: [completed]
 
 permissions:
@@ -50,6 +54,10 @@ jobs:
             "FTSE Email Report") FILE="email-report.yml" ;;
             "FTSE Analysis Review") FILE="analysis-review.yml" ;;
             "FTSE Library Model Review") FILE="library-model-review.yml" ;;
+            "FTSE Data Backup") FILE="data-backup.yml" ;;
+            "FTSE Paper Automation") FILE="paper-auto.yml" ;;
+            "FTSE Horizon Scan") FILE="horizon-scan.yml" ;;
+            "Automation Orchestrator") FILE="automation-orchestrator.yml" ;;
             *) FILE="" ;;
           esac
           echo "workflow_file=$FILE" >> "$GITHUB_OUTPUT"

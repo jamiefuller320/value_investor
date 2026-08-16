@@ -480,3 +480,19 @@ def test_monitored_workflows_include_library_ladder():
     assert ladder["workflow"] == "library-grow.yml"
     assert ladder["weekdays"] == {6}
     assert ladder["max_age_hours"] == 36
+
+
+def test_monitored_workflows_include_safe_extensions():
+    keys = {row["key"] for row in MONITORED_WORKFLOWS}
+    assert {
+        "model_review",
+        "email_report",
+        "data_backup",
+        "paper_auto",
+        "ops_monitor",
+    } <= keys
+    sunday = {row["key"] for row in MONITORED_WORKFLOWS if row["weekdays"] == {6}}
+    assert {"model_review", "email_report", "data_backup"} <= sunday
+    paper = next(row for row in MONITORED_WORKFLOWS if row["key"] == "paper_auto")
+    assert paper["weekdays"] == {0, 1, 2, 3, 4}
+    assert paper["max_age_hours"] == 28

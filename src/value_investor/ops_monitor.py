@@ -107,6 +107,36 @@ MONITORED_WORKFLOWS: tuple[dict[str, Any], ...] = (
         "weekdays": {6},
         "max_age_hours": 36,
     },
+    {
+        "key": "model_review",
+        "workflow": "library-model-review.yml",
+        "weekdays": {6},
+        "max_age_hours": 36,
+    },
+    {
+        "key": "email_report",
+        "workflow": "email-report.yml",
+        "weekdays": {6},
+        "max_age_hours": 36,
+    },
+    {
+        "key": "data_backup",
+        "workflow": "data-backup.yml",
+        "weekdays": {6},
+        "max_age_hours": 36,
+    },
+    {
+        "key": "paper_auto",
+        "workflow": "paper-auto.yml",
+        "weekdays": {0, 1, 2, 3, 4},
+        "max_age_hours": 28,
+    },
+    {
+        "key": "ops_monitor",
+        "workflow": "ops-monitor.yml",
+        "weekdays": set(range(7)),
+        "max_age_hours": 28,
+    },
 )
 
 # Sunday quiet bundle + orchestrator — soften overdue findings while a run is active.
