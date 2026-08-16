@@ -27,6 +27,13 @@ def test_to_stooq_symbol_maps_stockholm_class_shares():
     assert to_stooq_symbol("VOLV-B.ST") == "volv_b.st"
 
 
+def test_to_stooq_symbol_maps_iseq_irish_tickers():
+    assert to_stooq_symbol("A5G.IR") == "a5g.ir"
+    assert to_stooq_symbol("BIRG.IR") == "birg.ir"
+    # Legacy mangled symbol from mistaken LSE conversion
+    assert to_stooq_symbol("A5G-IR.L") == "a5g.ir"
+
+
 def test_merge_provider_result_only_fills_missing():
     metrics = {"market_cap": 10.0, "trailing_pe": None}
     source_map: dict[str, str] = {}
