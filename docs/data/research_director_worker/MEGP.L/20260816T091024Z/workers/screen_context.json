@@ -1,0 +1,178 @@
+{
+  "task_id": "screen_context",
+  "task_type": "screen_context",
+  "status": "completed",
+  "findings": [
+    "Screen signal is strong_buy (15/22 models passed, composite 0.8358 / 84%; sector-relative 0.8869 / 89%) — source: screening_snapshot.json",
+    "Adjusted signal is buy (downgraded from strong_buy) due to interim_quality_overlay=true: quality passes but interim EPS declined and net FCF/dividend coverage is below 1.0× (gross −0.90×, net 0.84×) — source: screening_snapshot.json",
+    "Signal is new (signal_trend=new, stability_label=new, weeks_at_signal=1); conviction_score=0.5383 (54%); timing_signal=neutral (timing_score=0.5); action_note='Strong Buy — neutral timing' — source: screening_snapshot.json",
+    "Failed models (7/22): Graham Defensive, Graham Net-Net, Schloss Low P/B, Deep Value, Lynch PEG, Piotroski F-Score, Earnings Quality — source: screening_snapshot.json",
+    "Graham Defensive failed on current ratio < 2 (screening_inputs.current_ratio=1.542) — source: screening_snapshot.json",
+    "Piotroski F-Score 6/9 (below 7 threshold); failed components: ROA improving, current ratio improving, asset turnover improving — source: screening_snapshot.json",
+    "Lynch PEG failed: missing or negative earnings growth (screening_inputs.earnings_growth_pct=−0.039) — source: screening_snapshot.json",
+    "Earnings Quality failed: weak free-cash conversion — source: screening_snapshot.json",
+    "FCF canonical/filing_aligned=25,153,000 USD (fiscal_year 2025, currency USD, source filing_aligned_ocf_capex) vs screen_ttm=15,565,750; divergence_flagged=false — source: screening_snapshot.json",
+    "Trade plan: core 60% limit £110.24; tactical 40% limit £105.40; tactical stop £102.24, target £124.74 — source: screening_snapshot.json",
+    "Passed families (5): cheapness, quality, dividend, garp, risk; data_quality_score=1.0 (20/20 metrics present) — source: screening_snapshot.json",
+    "Timing context: RSI 14=56.10 (elevated); price_vs_sma200_pct=−8.87% (below 200-day MA) — source: screening_snapshot.json",
+    "Screen claims requiring filing confirmation: interim EPS decline; FCF 25.2m USD filing-aligned vs screen TTM 15.6m; gross FCF/dividend coverage −0.90× and net 0.84×; weak FCF conversion (earnings quality); current ratio 1.54; earnings growth −3.9% (Lynch PEG); Piotroski 6/9 component trends; operating cashflow £90.8m and capex £65.6m; debt/equity 27.8%; dividend yield 7.1%; key valuation metrics P/E 7.9, P/B 2.3, ROE 28.2%; missing NCAV (Graham Net-Net) — source: screening_snapshot.json"
+  ],
+  "figures": [
+    {
+      "metric": "models_passed",
+      "value": "15/22",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "signal strong_buy"
+    },
+    {
+      "metric": "adjusted_signal",
+      "value": "buy",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "downgraded by interim-quality overlay"
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.8358 (84%)",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": ""
+    },
+    {
+      "metric": "conviction_score",
+      "value": "54%",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "new signal, 1 week at signal"
+    },
+    {
+      "metric": "weeks_at_signal",
+      "value": "1",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "signal_trend=new"
+    },
+    {
+      "metric": "fcf_dividend_coverage_gross",
+      "value": "−0.90×",
+      "period": "interim overlay",
+      "source_path": "screening_snapshot.json",
+      "note": "interim_quality_overlay trigger"
+    },
+    {
+      "metric": "fcf_dividend_coverage_net",
+      "value": "0.84×",
+      "period": "interim overlay",
+      "source_path": "screening_snapshot.json",
+      "note": "below 1.0× threshold"
+    },
+    {
+      "metric": "piotroski_f_score",
+      "value": "6/9",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "failed; threshold 7"
+    },
+    {
+      "metric": "current_ratio",
+      "value": "1.54",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Graham Defensive fail (<2)"
+    },
+    {
+      "metric": "fcf_filing_aligned",
+      "value": "25.2m USD",
+      "period": "FY2025",
+      "source_path": "screening_snapshot.json",
+      "note": "canonical 25153000.0; source filing_aligned_ocf_capex"
+    },
+    {
+      "metric": "fcf_screen_ttm",
+      "value": "15.6m USD",
+      "period": "screen TTM",
+      "source_path": "screening_snapshot.json",
+      "note": "15565750.0; divergence_flagged=false"
+    },
+    {
+      "metric": "core_limit",
+      "value": "£110.24",
+      "period": "trade plan",
+      "source_path": "screening_snapshot.json",
+      "note": "60% allocation, limit order"
+    },
+    {
+      "metric": "tactical_limit",
+      "value": "£105.40",
+      "period": "trade plan",
+      "source_path": "screening_snapshot.json",
+      "note": "40% allocation, limit order"
+    },
+    {
+      "metric": "tactical_stop_loss",
+      "value": "£102.24",
+      "period": "trade plan",
+      "source_path": "screening_snapshot.json",
+      "note": ""
+    },
+    {
+      "metric": "tactical_take_profit",
+      "value": "£124.74",
+      "period": "trade plan",
+      "source_path": "screening_snapshot.json",
+      "note": ""
+    },
+    {
+      "metric": "earnings_growth_pct",
+      "value": "−3.9%",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Lynch PEG failure driver"
+    },
+    {
+      "metric": "adjusted_eps_growth_pct",
+      "value": "0.36%",
+      "period": "screen snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "interim EPS context"
+    },
+    {
+      "metric": "P/E",
+      "value": "7.9",
+      "period": "key metrics",
+      "source_path": "screening_snapshot.json",
+      "note": ""
+    },
+    {
+      "metric": "dividend_yield",
+      "value": "7.1%",
+      "period": "key metrics",
+      "source_path": "screening_snapshot.json",
+      "note": "raw 7.06%"
+    },
+    {
+      "metric": "RSI_14",
+      "value": "56.1",
+      "period": "timing",
+      "source_path": "screening_snapshot.json",
+      "note": "elevated; neutral timing"
+    }
+  ],
+  "gaps": [
+    "Interim EPS decline asserted by overlay but no filing period or YoY/H1 figure cited in this source",
+    "FCF filing-aligned 25.2m USD vs screen TTM 15.6m not reconciled here despite divergence_flagged=false",
+    "Gross FCF/dividend coverage −0.90×: dividend denominator and interim vs annual basis not specified",
+    "Weak free-cash conversion (Earnings Quality fail) lacks underlying ratio or filing reference",
+    "Lynch PEG: earnings growth −3.9% basis (statutory vs adjusted) not disambiguated in source",
+    "Graham Net-Net: NCAV unavailable (ncav_available=false); balance-sheet filing data needed",
+    "Piotroski failed components (ROA, current ratio, asset turnover improving) need prior-period filing comparison",
+    "Trade-plan limits (£110.24 / £105.40) derivation (e.g. vs spot, SMA, or model price) not stated",
+    "research_verdict, research_risk_level, research_confidence, research_rationale all null — no research overlay in this source"
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-3983da01-fd63-400e-aa5e-58899cab4302"
+}

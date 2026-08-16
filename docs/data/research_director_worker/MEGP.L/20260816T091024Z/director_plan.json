@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Is the 7.1% dividend sustainable after FY25 filing-aligned FCF of ~25.2m versus ~29.8m dividends (screen net cover 0.84×, gross −0.90×), rising capex, and the H1 2026 profit-guidance cut?",
+    "After the June 2026 trading update (French consumer slowdown, ~22% share-price drop) and 13 July 2026 interim, what is the current FY26 profit/revenue guidance and did H1 restore, hold, or further cut the revised outlook?",
+    "How durable is Identification/photobooth versus Wash.ME/laundry mix after German ID-rule changes (Nov 2025), photobooth revenue/margin pressure, and weaker equipment sales — is the 7.9× P/E a fading-core value trap?",
+    "Why were FY25 audited statements delayed (RNS 25 Feb and 12 Mar 2026), and do the 2025 annual results/report clear auditor opinion, going-concern, and accounting issues?",
+    "After the Dec 2025 offer-period/Form 8 termination, Jan 2026 secondary placing, Rule 9 waiver and buyback, Deputy CEO/COO appointments, executive-duty change, and Investors' Chronicle 'boardroom problem' coverage, is control/governance risk still live for a new strong-buy?",
+    "Do H1 EPS decline, weak free-cash conversion, Piotroski 6/9 (ROA, current ratio, asset turnover not improving), and current ratio 1.54 invalidate the quality/GARP/dividend family passes that produced strong_buy (already overlay-adjusted to buy)?",
+    "Are screen figures (P/E 7.9, ROE 28.2%, FCF 25.2m tagged USD) consistent with the filing reporting currency and units for this LSE name, or is Yahoo/screen metadata mis-scaled?",
+    "Is cash falling 77.5m→56.5m, inventory up, and working capital down a Wash.ME growth-capex story or operating deterioration that the £110.24/£105.40 limit plan is buying too early (1 week at signal, conviction 54%)?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first ladder is adequate in principle and this pack has 11 annual + 4 interim bodies, but alternate_news is a dead step while news_manifest is populated; trading_update is first-class in the index summary yet sits outside the annual/interim assignment rule, so a June profit-warning can be skipped. Period tags also pollute the ladder: 'Notice of Annual/Interim Results' are labelled annual/interim, and the IR trading-update PDF is tagged interim.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a 5-task cap cannot dedicate a bounded read to trading updates, audit-delay RNS, or governance (offer/placing/Rule 9/buyback). Fallback first-of-period selection would assign Notice of Annual Results rather than 2025 results. No task type exists to reconcile screen/Yahoo figures against filing currency.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen scores from Yahoo/TTM (empty quarterly_income, FCF currency USD on MEGP.L) while workers are told to prefer filing bodies — overlay inputs (interim EPS down, FCF/dividend cover <1×) may never be re-derived from the RNS. Dividend-family pass versus sub-1× FCF cover, and headline strong_buy versus adjusted_signal buy, are scoring/overlay tensions the director prompt does not force workers to reconcile.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "weeks_at_signal=1, conviction 54%, overlay downgrade, and a mid-year guidance cut have no watch schema (next trading update, dividend declaration, FR consumer, DE ID rules). The trial has no post-memo monitor for guidance delivery or cover deterioration on a new strong-buy.",
+      "priority": "medium"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "Six synthesis sections are workable, but FINANCIAL REVIEW will miss H1 if workers only see Yahoo annuals, and RISKS has no forced slot for guidance revision or audit delay. No currency-reconciliation requirement before citing screen multiples.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index body_path values point at docs/data/research/MEGP.L/sources/... rather than this trial snapshot; RNS/IR/CH duplicates and Google News RSS wrappers inflate coverage counts without adding article text.",
+      "priority": "low"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Separate notice-of-results from actual results; do not tag IR trading-update PDFs as interim; label Companies House accounts by year; de-duplicate RNS vs IR vs CH before task assignment.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual and interim *results* bodies (not notices). When a trading_update exists, reserve one of the five slots for it instead of a duplicate IR PDF.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require workers on annual/interim bodies to extract guidance revisions, audit-delay language, segment mix (Identification vs Wash.ME), dividend vs FCF cover, and reporting currency — and to flag if the assigned file is only a notice.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Either populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income is empty and the overlay depends on H1.",
+      "priority": "medium"
+    },
+    {
+      "area": "scoring",
+      "summary": "Do not let the dividend family pass unchecked when net FCF cover is below 1.0×; surface adjusted_signal (buy) as the actionable label when interim-quality overlay has already downgraded strong_buy; flag currency mismatches (USD on an LSE reporter).",
+      "priority": "high"
+    },
+    {
+      "area": "schema",
+      "summary": "Add guidance_revision and reporting_currency fields on the screening snapshot; allow summarize_filing_body to carry a period hint (annual|interim|trading_update) so directors can assign the June update without inventing a source.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For new strong-buy names with an overlay downgrade and a recent guidance cut, emit watch items (next trading update, dividend declaration, FR/DE photobooth regulation) rather than only lowering conviction_score.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy25_annual_results",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/f40be706e75a10ae.txt",
+      "focus": "FY25 Annual Results RNS (23 Mar 2026): extract reporting currency; revenue/EBIT/EPS vs FY24; OCF, capex, FCF, cash, net debt/leases; dividend declared vs FCF cover; segment mix (Identification/photobooth vs Wash.ME/laundry vs other); auditor/going-concern and any language explaining the Feb–Mar FY25 audit delay. Prefer these figures over Yahoo.",
+      "priority": 1
+    },
+    {
+      "id": "filing_h1_2026_interim",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ac9d0c965a93c3fd.txt",
+      "focus": "2026 Interim Results RNS (13 Jul 2026): H1 revenue/profit/EPS vs H1 2025 and vs the 1 Jun 2026 trading-update guidance cut; current FY26 outlook; Wash.ME vs photobooth/equipment trends; H1 cash, capex, FCF, dividend/interim dividend and cover; France/Germany demand and any covenant or liquidity comments.",
+      "priority": 1
+    },
+    {
+      "id": "news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster the 16 headlines: June 2026 profit warning and 22% drop; H1 2026 earnings-call caveats (photobooth/margins vs Wash.ME); boardroom/governance articles; German photobooth rule changes; ex-dividend/yield pieces. Note duplicates and that Google News items are RSS titles only — do not invent article-body facts.",
+      "priority": 2
+    },
+    {
+      "id": "screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Record strong_buy 15/22 vs adjusted_signal buy; interim-quality overlay (EPS down, FCF cover gross −0.90× / net 0.84×); failed models (Piotroski 6/9, earnings quality, Lynch PEG, current ratio 1.54); FCF 25.2m USD tag vs screen TTM; new 1-week signal, conviction 54%, trade-plan limits. List which screen claims must be confirmed from filings.",
+      "priority": 3
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Document thin ladder step alternate_news (unavailable). Note Yahoo quarterly_income is empty so H1 is filing-only; no dedicated worker on the 1 Jun 2026 trading-update body (e5f6ebdd46934d00 / ir_8a1ddede4c8b6528), FY25 audit-delay RNS, or offer/placing/Rule 9 pack. List what the memo cannot verify without those reads.",
+      "priority": 1
+    }
+  ],
+  "director_agent_id": "agent-5916cd62-2396-463f-b19a-5ee6f6631fee"
+}

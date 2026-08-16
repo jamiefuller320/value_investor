@@ -1840,7 +1840,156 @@
       "priority": "medium",
       "suggestion": "Require gap-fill memos to explicitly state pension surplus vs deficit from note 3.8/3.2 filing extracts before accepting “pension risk” from screen failures.",
       "recorded_at": "2026-08-16T07:19:32.015263+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Separate notice-of-results from actual results; do not tag IR trading-update PDFs as interim; label Companies House accounts by year; de-duplicate RNS vs IR vs CH before task assignment.",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.371971+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Select the latest dated annual and interim *results* bodies (not notices). When a trading_update exists, reserve one of the five slots for it instead of a duplicate IR PDF.",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.371986+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require workers on annual/interim bodies to extract guidance revisions, audit-delay language, segment mix (Identification vs Wash.ME), dividend vs FCF cover, and reporting currency — and to flag if the assigned file is only a notice.",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.371992+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "sources",
+      "priority": "medium",
+      "suggestion": "Either populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income is empty and the overlay depends on H1.",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.371995+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Do not let the dividend family pass unchecked when net FCF cover is below 1.0×; surface adjusted_signal (buy) as the actionable label when interim-quality overlay has already downgraded strong_buy; flag currency mismatches (USD on an LSE reporter).",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.372000+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Add guidance_revision and reporting_currency fields on the screening snapshot; allow summarize_filing_body to carry a period hint (annual|interim|trading_update) so directors can assign the June update without inventing a source.",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.372002+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For new strong-buy names with an overlay downgrade and a recent guidance cut, emit watch items (next trading update, dividend declaration, FR/DE photobooth regulation) rather than only lowering conviction_score.",
+      "source": "director_worker",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-08-16T09:15:43.372004+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first ladder is adequate in principle and this pack has 11 annual + 4 interim bodies, but alternate_news is a dead step while news_manifest is populated; trading_update is first-class in the index summary yet sits outside the annual/interim assignment rule, so a June profit-warning can be skipped. Period tags also pollute the ladder: 'Notice of Annual/Interim Results' are labelled annual/interim, and the IR trading-update PDF is tagged interim.",
+      "source": "director_worker_meta",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-08-16T09:15:43.372006+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a 5-task cap cannot dedicate a bounded read to trading updates, audit-delay RNS, or governance (offer/placing/Rule 9/buyback). Fallback first-of-period selection would assign Notice of Annual Results rather than 2025 results. No task type exists to reconcile screen/Yahoo figures against filing currency.",
+      "source": "director_worker_meta",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-08-16T09:15:43.372008+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen scores from Yahoo/TTM (empty quarterly_income, FCF currency USD on MEGP.L) while workers are told to prefer filing bodies — overlay inputs (interim EPS down, FCF/dividend cover <1×) may never be re-derived from the RNS. Dividend-family pass versus sub-1× FCF cover, and headline strong_buy versus adjusted_signal buy, are scoring/overlay tensions the director prompt does not force workers to reconcile.",
+      "source": "director_worker_meta",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-08-16T09:15:43.372013+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "weeks_at_signal=1, conviction 54%, overlay downgrade, and a mid-year guidance cut have no watch schema (next trading update, dividend declaration, FR consumer, DE ID rules). The trial has no post-memo monitor for guidance delivery or cover deterioration on a new strong-buy.",
+      "source": "director_worker_meta",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-08-16T09:15:43.372015+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Six synthesis sections are workable, but FINANCIAL REVIEW will miss H1 if workers only see Yahoo annuals, and RISKS has no forced slot for guidance revision or audit delay. No currency-reconciliation requirement before citing screen multiples.",
+      "source": "director_worker_meta",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-08-16T09:15:43.372021+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "research",
+      "priority": "low",
+      "suggestion": "filings_index body_path values point at docs/data/research/MEGP.L/sources/... rather than this trial snapshot; RNS/IR/CH duplicates and Google News RSS wrappers inflate coverage counts without adding article text.",
+      "source": "director_worker_meta",
+      "run_id": "20260816T091024Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-08-16T09:15:43.372023+00:00"
     }
   ],
-  "updated_at": "2026-08-16T07:19:32.015266+00:00"
+  "updated_at": "2026-08-16T09:15:43.372024+00:00"
 }
