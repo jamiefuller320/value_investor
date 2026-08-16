@@ -28,7 +28,15 @@ def _write_latest_artifacts(screen_dir: Path) -> None:
         ]
     ).to_csv(screen_dir / "latest_signals.csv", index=False)
     pd.DataFrame(
-        [{"ticker": "AAPL", "model_score": 0.9, "score": 0.9, "passed": True, "model_name": "value"}]
+        [
+            {
+                "ticker": "AAPL",
+                "model_score": 0.9,
+                "score": 0.9,
+                "passed": True,
+                "model_name": "value",
+            }
+        ]
     ).to_csv(
         screen_dir / "latest_model_results.csv",
         index=False,

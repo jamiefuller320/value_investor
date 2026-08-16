@@ -77,7 +77,9 @@ def test_run_weekly_market_paper_shard(tmp_path: Path):
     }
     with (
         patch("value_investor.market_paper_shard.run_learning_tracks", return_value=fake_tracks),
-        patch("value_investor.market_paper_shard.compare_learning_tracks", return_value=fake_review),
+        patch(
+            "value_investor.market_paper_shard.compare_learning_tracks", return_value=fake_review
+        ),
     ):
         result = run_weekly_market_paper_shard(
             "sp500",

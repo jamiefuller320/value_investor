@@ -51,7 +51,9 @@ def _seed_phase1_ready(root: Path, market_id: str) -> None:
         },
         compact=False,
     )
-    screen_dir.joinpath("latest_signals.csv").write_text("ticker,signal\nAAA,buy\n", encoding="utf-8")
+    screen_dir.joinpath("latest_signals.csv").write_text(
+        "ticker,signal\nAAA,buy\n", encoding="utf-8"
+    )
     screen_dir.joinpath("latest_model_results.csv").write_text("ticker\nAAA\n", encoding="utf-8")
 
 
@@ -86,9 +88,9 @@ def test_markets_eligible_for_weekly_paper(tmp_path: Path):
             "weekly_paper_shard_markets": ["sp500", "euro_stoxx50"],
         }
     }
-    assert markets_eligible_for_weekly_paper(policy, library_root=root, screened_markets={"sp500"}) == [
-        "sp500"
-    ]
+    assert markets_eligible_for_weekly_paper(
+        policy, library_root=root, screened_markets={"sp500"}
+    ) == ["sp500"]
 
 
 def test_evaluate_market_phase_blockers_for_iseq20(tmp_path: Path):
@@ -135,7 +137,9 @@ def test_refresh_committed_phase_rollup_writes_files(tmp_path: Path, monkeypatch
 
 def test_append_weekly_batch_log(tmp_path: Path):
     shard_root = tmp_path / "sp500"
-    append_weekly_batch_log(shard_root, {"run_at": datetime.now(UTC).isoformat(), "verdict": "insufficient_data"})
+    append_weekly_batch_log(
+        shard_root, {"run_at": datetime.now(UTC).isoformat(), "verdict": "insufficient_data"}
+    )
     payload = read_json(shard_root / "weekly_batch_log.json")
     assert len(payload["entries"]) == 1
 

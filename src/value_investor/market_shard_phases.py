@@ -6,12 +6,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.library_screen import screen_dir_for
 from value_investor.library_sim import (
     MARKET_BENCHMARKS,
     benchmark_for_market,
     iter_library_screen_runs,
 )
-from value_investor.library_screen import screen_dir_for
 from value_investor.storage import read_json, write_json
 
 PHASE_OBSERVE = 1

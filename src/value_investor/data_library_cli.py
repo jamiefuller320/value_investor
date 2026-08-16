@@ -1086,7 +1086,7 @@ def cmd_ladder(args: argparse.Namespace) -> int:
                             f"batches_ready={row.get('phase2_ready')}"
                         )
     if payload.get("shard_phases"):
-        markets = (payload["shard_phases"].get("markets") or {})
+        markets = payload["shard_phases"].get("markets") or {}
         ready = [mid for mid, ev in markets.items() if ev.get("phase2_ready")]
         if ready:
             print(f"  shard_phases: Phase 2 exit met for {', '.join(ready)}")

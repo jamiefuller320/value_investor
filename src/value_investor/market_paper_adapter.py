@@ -8,7 +8,11 @@ from typing import Any
 
 import pandas as pd
 
-from value_investor.library_screen import LibraryScreenResult, library_research_reports, screen_dir_for
+from value_investor.library_screen import (
+    LibraryScreenResult,
+    library_research_reports,
+    screen_dir_for,
+)
 from value_investor.library_sim import benchmark_for_market
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
@@ -21,9 +25,7 @@ def _default_conviction(signals: pd.DataFrame) -> pd.DataFrame:
         return signals
     out = signals.copy()
     if "composite_score" in out.columns:
-        out["conviction_score"] = pd.to_numeric(out["composite_score"], errors="coerce").fillna(
-            0.0
-        )
+        out["conviction_score"] = pd.to_numeric(out["composite_score"], errors="coerce").fillna(0.0)
     else:
         out["conviction_score"] = 0.0
     return out
@@ -55,13 +57,13 @@ def load_library_screen_result(
         except (OSError, ValueError, TypeError):
             pass
     shortlist_path = screen_dir / "latest_shortlist.csv"
-    shortlist = (
-        pd.read_csv(shortlist_path)
-        if shortlist_path.exists()
-        else signals.iloc[0:0].copy()
-    )
+    shortlist = pd.read_csv(shortlist_path) if shortlist_path.exists() else signals.iloc[0:0].copy()
     universe_cols = ["ticker", "last_price"] if "last_price" in signals.columns else ["ticker"]
-    universe = signals[universe_cols].copy() if "last_price" in signals.columns else signals[["ticker"]].copy()
+    universe = (
+        signals[universe_cols].copy()
+        if "last_price" in signals.columns
+        else signals[["ticker"]].copy()
+    )
     return LibraryScreenResult(
         market=market_id,
         run_at=run_at,

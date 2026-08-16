@@ -628,7 +628,9 @@ def load_shard_meta(base_dir: Path) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
-def benchmark_ticker_for_dir(base_dir: Path | None = None, *, output_dir: Path | None = None) -> str:
+def benchmark_ticker_for_dir(
+    base_dir: Path | None = None, *, output_dir: Path | None = None
+) -> str:
     """Resolve benchmark ticker from shard meta or default FTSE."""
     for candidate in (base_dir, output_dir, (output_dir.parent if output_dir else None)):
         if not candidate:

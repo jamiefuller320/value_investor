@@ -480,7 +480,8 @@ def test_benchmark_ticker_for_shard_meta(tmp_path: Path):
     (shard_root / "config.json").write_text("{}", encoding="utf-8")
     (shard_root / "automated_fund.json").write_text(
         __import__("json").dumps(
-            __import__("value_investor.paper_fund", fromlist=["PaperFund"]).PaperFund.create(
+            __import__("value_investor.paper_fund", fromlist=["PaperFund"])
+            .PaperFund.create(
                 __import__(
                     "value_investor.paper_fund", fromlist=["PaperFundConfig"]
                 ).PaperFundConfig(
@@ -490,14 +491,19 @@ def test_benchmark_ticker_for_shard_meta(tmp_path: Path):
                     trade_cost_pct=0.03,
                     max_positions=5,
                 )
-            ).to_dict()
+            )
+            .to_dict()
         ),
         encoding="utf-8",
     )
     ai_dir = shard_root / "ai_judgment"
     ai_dir.mkdir()
-    (ai_dir / "config.json").write_text('{"track_id":"ai_judgment","is_primary_learning_track":true}', encoding="utf-8")
-    (ai_dir / "automated_fund.json").write_text((shard_root / "automated_fund.json").read_text(), encoding="utf-8")
+    (ai_dir / "config.json").write_text(
+        '{"track_id":"ai_judgment","is_primary_learning_track":true}', encoding="utf-8"
+    )
+    (ai_dir / "automated_fund.json").write_text(
+        (shard_root / "automated_fund.json").read_text(), encoding="utf-8"
+    )
 
     with patch("value_investor.churn_health.write_churn_health", return_value={}):
         summary = compare_learning_tracks(base_dir=shard_root, force=True, fetch_benchmark=False)

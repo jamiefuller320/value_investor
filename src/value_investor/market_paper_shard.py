@@ -13,7 +13,6 @@ from value_investor.library_sim import benchmark_for_market
 from value_investor.market_paper_adapter import write_market_screen_bundle
 from value_investor.market_shard_phases import (
     DEFAULT_LIBRARY_ROOT,
-    DEFAULT_SHARD_ROOT,
     append_weekly_batch_log,
     evaluate_market_phase,
     markets_eligible_for_weekly_paper,
