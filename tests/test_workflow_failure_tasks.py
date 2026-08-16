@@ -48,3 +48,27 @@ def test_draft_workflow_failure_task_appends_open_task(tmp_path: Path):
     task = payload["tasks"][0]
     assert task["source"] == "workflow_failure"
     assert task["evidence"]["workflow"] == "ingest-loop.yml"
+
+
+def test_match_library_model_review_signature():
+    log = "agent_model_policy.review_model failed: CURSOR_API_KEY missing"
+    spec = match_workflow_failure_signature("library-model-review.yml", log)
+    assert spec is not None
+    assert "library-model-review.yml" in spec["allowed_paths"][0]
+
+
+def test_generic_fallback_matches_data_backup_failure():
+    log = "##[error]Process completed with exit code 1."
+    spec = match_workflow_failure_signature("data-backup.yml", log)
+    assert spec is not None
+    assert spec["title"] == "Workflow fix: data backup failure"
+
+
+def test_generic_fallback_ignored_for_unlisted_workflow():
+    log = "##[error]Process completed with exit code 1."
+    assert match_workflow_failure_signature("pages.yml", log) is None
+
+
+def test_generic_fallback_requires_failure_markers():
+    log = "workflow finished normally with no issues"
+    assert match_workflow_failure_signature("paper-auto.yml", log) is None

@@ -66,7 +66,167 @@ _WORKFLOW_SIGNATURES: tuple[dict[str, Any], ...] = (
             "tests/test_analysis_review.py",
         ],
     },
+    {
+        "workflow": "library-model-review.yml",
+        "patterns": (
+            r"model.review",
+            r"agent_model_policy",
+            r"review_model",
+            r"recommend_cheapest_model",
+        ),
+        "title": "Workflow fix: library model review failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/library-model-review.yml",
+            "src/value_investor/agent_model_policy.py",
+            "docs/data/library/policy.json",
+            "tests/test_agent_model_policy.py",
+        ],
+    },
+    {
+        "workflow": "data-backup.yml",
+        "patterns": (
+            r"ftse-data-backup",
+            r"data.backup",
+            r"BACKUP_",
+            r"tarfile",
+            r"manifest",
+        ),
+        "title": "Workflow fix: data backup failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/data-backup.yml",
+            "src/value_investor/data_backup.py",
+            "src/value_investor/data_backup_cli.py",
+            "tests/test_data_backup.py",
+        ],
+    },
+    {
+        "workflow": "paper-auto.yml",
+        "patterns": (
+            r"paper.auto",
+            r"ftse-paper",
+            r"paper_automation",
+            r"surveillance",
+        ),
+        "title": "Workflow fix: paper automation failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/paper-auto.yml",
+            "src/value_investor/paper_automation.py",
+            "docs/data/paper_automation/",
+            "tests/test_paper_automation.py",
+        ],
+    },
+    {
+        "workflow": "horizon-scan.yml",
+        "patterns": (
+            r"horizon.scan",
+            r"ftse-horizon",
+            r"horizon_scan",
+            r"compile_horizon_tasks",
+        ),
+        "title": "Workflow fix: horizon scan failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/horizon-scan.yml",
+            "src/value_investor/horizon_scan.py",
+            "src/value_investor/horizon_scan_cli.py",
+            "docs/data/horizon_scan.json",
+            "tests/test_horizon_scan.py",
+        ],
+    },
+    {
+        "workflow": "automation-orchestrator.yml",
+        "patterns": (
+            r"orchestrator",
+            r"dispatch_github_workflow",
+            r"workflow_dispatch",
+            r"automation.orchestrator",
+        ),
+        "title": "Workflow fix: automation orchestrator failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/automation-orchestrator.yml",
+            "scripts/dispatch_orchestrator.sh",
+            "scripts/dispatch_github_workflow.sh",
+            "src/value_investor/automation_status.py",
+            "tests/test_import_cron_jobs.py",
+        ],
+    },
 )
+
+_GENERIC_WORKFLOW_SPECS: dict[str, dict[str, Any]] = {
+    "library-model-review.yml": {
+        "workflow": "library-model-review.yml",
+        "title": "Workflow fix: library model review failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/library-model-review.yml",
+            "src/value_investor/agent_model_policy.py",
+            "docs/data/library/policy.json",
+            "tests/test_agent_model_policy.py",
+        ],
+    },
+    "data-backup.yml": {
+        "workflow": "data-backup.yml",
+        "title": "Workflow fix: data backup failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/data-backup.yml",
+            "src/value_investor/data_backup.py",
+            "src/value_investor/data_backup_cli.py",
+            "tests/test_data_backup.py",
+        ],
+    },
+    "paper-auto.yml": {
+        "workflow": "paper-auto.yml",
+        "title": "Workflow fix: paper automation failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/paper-auto.yml",
+            "src/value_investor/paper_automation.py",
+            "docs/data/paper_automation/",
+            "tests/test_paper_automation.py",
+        ],
+    },
+    "horizon-scan.yml": {
+        "workflow": "horizon-scan.yml",
+        "title": "Workflow fix: horizon scan failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/horizon-scan.yml",
+            "src/value_investor/horizon_scan.py",
+            "src/value_investor/horizon_scan_cli.py",
+            "docs/data/horizon_scan.json",
+            "tests/test_horizon_scan.py",
+        ],
+    },
+    "automation-orchestrator.yml": {
+        "workflow": "automation-orchestrator.yml",
+        "title": "Workflow fix: automation orchestrator failure",
+        "area": "ops",
+        "allowed_paths": [
+            ".github/workflows/automation-orchestrator.yml",
+            "scripts/dispatch_orchestrator.sh",
+            "scripts/dispatch_github_workflow.sh",
+            "src/value_investor/automation_status.py",
+            "tests/test_import_cron_jobs.py",
+        ],
+    },
+}
+
+_FAILURE_LOG_MARKERS = re.compile(
+    r"(?i)(##\[error\]|process completed with exit code [1-9]|traceback \(most recent|"
+    r"AssertionError|fatal error|command failed)",
+)
+
+
+def _looks_like_failure_log(log_text: str) -> bool:
+    text = (log_text or "").strip()
+    if not text:
+        return False
+    return bool(_FAILURE_LOG_MARKERS.search(text))
 
 
 def match_workflow_failure_signature(
@@ -82,6 +242,9 @@ def match_workflow_failure_signature(
         for pattern in spec.get("patterns") or ():
             if re.search(pattern, text, re.IGNORECASE | re.DOTALL):
                 return dict(spec)
+    generic = _GENERIC_WORKFLOW_SPECS.get(workflow_file)
+    if generic is not None and _looks_like_failure_log(text):
+        return dict(generic)
     return None
 
 
