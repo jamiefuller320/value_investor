@@ -1,0 +1,96 @@
+name: Library Ladder Responder
+
+# When FTSE Library Ladder fails after the Sunday quiet bundle, classify the log
+# and either dispatch a guarded rerun or draft a supervised engineering task.
+# See docs/ops/ops-monitor.md (workflow recovery section).
+on:
+  workflow_run:
+    workflows: ["FTSE Library Ladder"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: library-ladder-responder
+  cancel-in-progress: false
+
+jobs:
+  respond:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure'
+      && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Classify failure and decide recovery action
+        id: respond
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          RUN_ID="${{ github.event.workflow_run.id }}"
+          RUN_URL="${{ github.event.workflow_run.html_url }}"
+          ftse-engineering respond-library-ladder \
+            --run-id "$RUN_ID" \
+            --run-url "$RUN_URL" \
+            --json > /tmp/library_ladder_respond.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/library_ladder_respond.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_rerun={'true' if data.get('should_rerun') else 'false'}\n"
+              f"should_draft={'true' if data.get('should_draft_task') else 'false'}\n"
+              f"drafted={'true' if data.get('drafted') else 'false'}\n"
+              f"action={data.get('action','')}\n"
+              f"reason={data.get('reason','')}\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(data, indent=2))
+          PY
+
+      - name: Sync main before commit
+        if: steps.respond.outputs.should_draft == 'true'
+        run: git pull --rebase --autostash origin main
+
+      - name: Commit drafted engineering tasks
+        if: steps.respond.outputs.should_draft == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: draft library ladder recovery task [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json docs/data/library/ladder_responder_log.json
+          skip_fetch: false
+
+      - name: Dispatch engineering queue
+        if: steps.respond.outputs.should_draft == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run engineering-queue.yml
+
+      - name: Guarded ladder rerun
+        if: steps.respond.outputs.should_rerun == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run library-grow.yml
+          echo "Dispatched guarded library-grow rerun (${{ steps.respond.outputs.reason }})"

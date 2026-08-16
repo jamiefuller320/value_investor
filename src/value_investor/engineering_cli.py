@@ -478,6 +478,24 @@ def _cmd_draft_ci_fix(args: argparse.Namespace) -> int:
         return 2
 
     failures = parse_pytest_failures_from_log(log_text)
+    if not failures and getattr(args, "workflow_file", None):
+        from value_investor.workflow_failure_tasks import draft_workflow_failure_task
+
+        drafted = draft_workflow_failure_task(
+            workflow_file=str(args.workflow_file),
+            log_text=log_text,
+            run_id=args.run_id,
+            run_url=args.run_url,
+            tasks_path=_resolve_tasks_path(args.tasks_path),
+        )
+        if args.json:
+            _print_json({"drafted": drafted, "reason": "workflow_failure_signature"})
+        elif drafted:
+            print(f"Drafted workflow-failure task(s): {', '.join(drafted)}")
+        else:
+            print("No workflow-failure signature matched log")
+        return 0 if drafted or not args.require_draft else 1
+
     if not failures:
         if args.json:
             _print_json({"drafted": [], "reason": "no pytest failures parsed"})
@@ -498,6 +516,114 @@ def _cmd_draft_ci_fix(args: argparse.Namespace) -> int:
     else:
         print("No new CI fix task drafted (duplicate open task or empty scope)")
     return 0 if drafted or not args.require_draft else 1
+
+
+def _cmd_draft_workflow_failure(args: argparse.Namespace) -> int:
+    log_text = ""
+    if args.log_file:
+        log_text = Path(args.log_file).read_text(encoding="utf-8", errors="replace")
+    elif args.run_id:
+        result = subprocess.run(
+            ["gh", "run", "view", str(args.run_id), "--log-failed"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        log_text = (result.stdout or "") + (result.stderr or "")
+        if result.returncode != 0 and not log_text.strip():
+            print(result.stderr or result.stdout or "gh run view failed", file=sys.stderr)
+            return 1
+    else:
+        print("Provide --run-id or --log-file", file=sys.stderr)
+        return 2
+
+    from value_investor.workflow_failure_tasks import draft_workflow_failure_task
+
+    drafted = draft_workflow_failure_task(
+        workflow_file=str(args.workflow_file),
+        log_text=log_text,
+        run_id=args.run_id,
+        run_url=args.run_url,
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+    )
+    if args.json:
+        _print_json({"drafted": drafted, "workflow": args.workflow_file})
+    elif drafted:
+        print(f"Drafted workflow-failure task(s): {', '.join(drafted)}")
+    else:
+        print("No workflow-failure signature matched log")
+    return 0 if drafted or not args.require_draft else 1
+
+
+def _cmd_respond_library_ladder(args: argparse.Namespace) -> int:
+    log_text = ""
+    if args.log_file:
+        log_text = Path(args.log_file).read_text(encoding="utf-8", errors="replace")
+    elif args.run_id:
+        result = subprocess.run(
+            ["gh", "run", "view", str(args.run_id), "--log-failed"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        log_text = (result.stdout or "") + (result.stderr or "")
+        if result.returncode != 0 and not log_text.strip():
+            print(result.stderr or result.stdout or "gh run view failed", file=sys.stderr)
+            return 1
+    else:
+        print("Provide --run-id or --log-file", file=sys.stderr)
+        return 2
+
+    from value_investor.library_ladder_responder import (
+        ACTION_RERUN,
+        respond_to_library_ladder_failure,
+    )
+    from value_investor.workflow_failure_tasks import draft_workflow_failure_task
+
+    library_root = Path(args.library_root)
+    payload = respond_to_library_ladder_failure(
+        log_text,
+        run_id=args.run_id,
+        run_url=args.run_url,
+        ladder_json_path=library_root / "last_ladder.json",
+        log_path=library_root / "ladder_responder_log.json",
+    )
+    drafted: list[str] = []
+    if payload.get("should_draft_task"):
+        classification = payload.get("classification") or {}
+        if classification.get("kind") == "metrics_stall" and (library_root / "last_ladder.json").exists():
+            ladder_result = read_json(library_root / "last_ladder.json")
+            policy_path = library_root / "policy.json"
+            draft_result = draft_library_ladder_engineering_tasks(
+                ladder_result,
+                root=library_root,
+                policy_path=policy_path if policy_path.exists() else None,
+                tasks_path=_resolve_tasks_path(args.tasks_path),
+            )
+            drafted = list(draft_result.get("task_ids") or [])
+        if not drafted:
+            drafted = draft_workflow_failure_task(
+                workflow_file="library-grow.yml",
+                log_text=log_text,
+                run_id=args.run_id,
+                run_url=args.run_url,
+                tasks_path=_resolve_tasks_path(args.tasks_path),
+            )
+
+    if args.json:
+        _print_json({**payload, "drafted": drafted})
+    else:
+        print(f"Classification: {payload.get('classification', {}).get('kind')}")
+        print(f"Action: {payload.get('action')} — {payload.get('reason')}")
+        if drafted:
+            print(f"Drafted task(s): {', '.join(drafted)}")
+    if payload.get("action") == ACTION_RERUN and payload.get("should_rerun"):
+        return 0
+    if payload.get("action") == ACTION_DRAFT_TASK and drafted:
+        return 0
+    if payload.get("action") == "noop_already_recovered":
+        return 0
+    return 0 if not args.require_action else 1
 
 
 def _cmd_draft_library_ladder(args: argparse.Namespace) -> int:
@@ -1009,11 +1135,48 @@ def main(argv: list[str] | None = None) -> int:
     draft_ci_p.add_argument("--log-file", default=None, help="Path to saved failed CI log text")
     draft_ci_p.add_argument("--run-url", default=None, help="Optional link stored in task evidence")
     draft_ci_p.add_argument(
+        "--workflow-file",
+        default=None,
+        help="When set and no pytest failures match, try workflow_failure signature drafting",
+    )
+    draft_ci_p.add_argument(
         "--require-draft",
         action="store_true",
         help="Exit 1 when no new task is drafted",
     )
     draft_ci_p.set_defaults(func=_cmd_draft_ci_fix)
+
+    draft_wf_p = sub.add_parser(
+        "draft-workflow-failure",
+        parents=[common],
+        help="Draft a scoped engineering task from a failed workflow log signature",
+    )
+    draft_wf_p.add_argument("--workflow-file", required=True)
+    draft_wf_p.add_argument("--run-id", default=None)
+    draft_wf_p.add_argument("--log-file", default=None)
+    draft_wf_p.add_argument("--run-url", default=None)
+    draft_wf_p.add_argument("--require-draft", action="store_true")
+    draft_wf_p.set_defaults(func=_cmd_draft_workflow_failure)
+
+    respond_ladder_p = sub.add_parser(
+        "respond-library-ladder",
+        parents=[common],
+        help="Classify a failed library-grow run and choose rerun vs engineering draft",
+    )
+    respond_ladder_p.add_argument("--run-id", default=None)
+    respond_ladder_p.add_argument("--log-file", default=None)
+    respond_ladder_p.add_argument("--run-url", default=None)
+    respond_ladder_p.add_argument(
+        "--library-root",
+        default="docs/data/library",
+        help="Library root for last_ladder.json and responder log",
+    )
+    respond_ladder_p.add_argument(
+        "--require-action",
+        action="store_true",
+        help="Exit 1 when no rerun or draft action is taken",
+    )
+    respond_ladder_p.set_defaults(func=_cmd_respond_library_ladder)
 
     draft_ladder_p = sub.add_parser(
         "draft-library-ladder",
