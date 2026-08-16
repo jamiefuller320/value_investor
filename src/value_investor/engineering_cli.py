@@ -592,7 +592,10 @@ def _cmd_respond_library_ladder(args: argparse.Namespace) -> int:
     drafted: list[str] = []
     if payload.get("should_draft_task"):
         classification = payload.get("classification") or {}
-        if classification.get("kind") == "metrics_stall" and (library_root / "last_ladder.json").exists():
+        if (
+            classification.get("kind") == "metrics_stall"
+            and (library_root / "last_ladder.json").exists()
+        ):
             ladder_result = read_json(library_root / "last_ladder.json")
             policy_path = library_root / "policy.json"
             draft_result = draft_library_ladder_engineering_tasks(

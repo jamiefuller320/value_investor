@@ -80,7 +80,10 @@ def workflow_fix_present(workflow_path: Path = DEFAULT_WORKFLOW_PATH) -> bool:
     text = workflow_path.read_text(encoding="utf-8", errors="replace")
     if 'tee "$ROOT/last_ladder.json"' in text or "tee '$ROOT/last_ladder.json'" in text:
         return False
-    return "run_library_ladder already writes" in text or "json.load(open('$ROOT/last_ladder.json'))" in text
+    return (
+        "run_library_ladder already writes" in text
+        or "json.load(open('$ROOT/last_ladder.json'))" in text
+    )
 
 
 def classify_library_ladder_failure(
