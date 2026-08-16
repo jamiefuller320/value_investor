@@ -1,0 +1,75 @@
+# Skanska AB (publ) (SKA-B.ST) — Research memo
+
+_Version 1 · Updated 2026-08-16T13:08:56.653803+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Skanska AB is a Nordic-headquartered construction and project-development group with meaningful exposure to the US and European infrastructure markets. The quantitative screen rates it a strong buy on a blend of moderate valuation (P/E 16.7, P/B 1.8), a 3.2% dividend yield, low reported leverage (debt/equity 25%), and a Piotroski F-Score of 8/9. The investment case rests on a capital-light pivot—recycling property and residential assets while winning large infrastructure and data-centre contracts—and on operating cash flow that has materially exceeded net income in recent years. The central debate is whether headline earnings and book value adequately reflect cyclical construction risk, thin margins, and large work-in-progress balances, particularly given that no primary regulatory filings were retrieved for this memo. Without annual reports or interim releases in the filing index, conviction must stay provisional despite the screen signal.
+
+## INVESTMENT THESIS
+The screen passes nine of 22 models across five families—cheapness, quality, dividend, GARP, and risk—giving a composite score of 78.9% (sector-relative 71.2%) with full data quality (20/20 metrics). Skanska fits the enterprising-value profile: Graham Enterprising, Lynch PEG, Neff PEGY, Magic Formula, Dreman Contrarian, Composite Value, and Financial Health all pass, supported by P/E below 25, P/B below 3, and conservative balance-sheet leverage. Quality is adequate rather than exceptional—ROE 11.1% sits below moat thresholds—and the screen correctly flags weak free-cash conversion (FCF yield 1.8%) and thin margins as model failures.
+
+For a value investor, the hook is a franchise-quality Nordic contractor trading at a modest multiple after earnings normalised down from a 2022 peak, while operating cash flow recovered strongly (USD 9.1bn in 2024; USD 7.4bn in 2025 per Yahoo fallback). The Piotroski profile (leverage declining, ROA improving, OCF exceeding net income) suggests fundamental repair rather than purely cyclical re-rating. Recent news flow—record Q2 order intake, Penn Station master-developer selection, and a pipeline of US/European infrastructure wins—supports backlog visibility, while property divestments (e.g. Warsaw Studio II, €159m) align with a lower-capital-intensity strategy. The screen’s strong-buy signal is therefore directionally coherent with a business mixing recurring construction cash generation and asset recycling, though it is not a deep-value or net-net candidate (Graham Net-Net, Deep Value, and Schloss Low P/B all fail).
+
+## FINANCIAL REVIEW
+**Primary filings:** The `filings_index.json` catalogue contains zero entries (annual 0, interim 0, trading updates 0; no body extracts under `filings/bodies/`). The index regime is labelled `uk_rns`, which is inappropriate for a Stockholm-listed Swedish issuer; no Euro register, Investegate, or company IR filings were captured. Going-concern language, segment detail, contract provisions, and covenant disclosures cannot be verified from primary sources. All figures below are sourced from `financials_annual.json` (Yahoo Finance); currency appears to be USD throughout.
+
+**Revenue and earnings trend (annual, Yahoo fallback):**
+
+| Year | Revenue (USD bn) | Net income (USD bn) | Diluted EPS | Operating income (USD bn) |
+|------|-------------------|----------------------|-------------|----------------------------|
+| 2022 | 163.2 | 8.26 | 19.90 | 7.69 |
+| 2023 | 167.2 | 5.00 | 12.07 | 3.92 |
+| 2024 | 176.5 | 5.55 | 13.40 | 5.77 |
+| 2025 | 176.7 | 5.70 | 13.76 | 6.21 |
+
+Revenue grew roughly 8% from 2022 to 2025, but net income fell sharply from the 2022 peak (USD 8.3bn) and has stabilised in the USD 5.5–5.7bn range—consistent with normalisation after what Yahoo tags as large property-related gains/losses in the cash-flow reconciliation (e.g. “Gain/Loss on Sale of PPE” of USD −2.06bn in 2025). Gross margin remains thin (~8.4% in 2025: USD 14.8bn on USD 176.7bn revenue); operating margin is ~3.5%. EBITDA was USD 11.4bn in 2025 versus USD 13.1bn in 2022.
+
+**Cash flow and capital allocation (Yahoo fallback):**
+
+| Year | Operating CF (USD bn) | Free cash flow (USD bn) | Dividends paid (USD bn) |
+|------|----------------------|-------------------------|-------------------------|
+| 2022 | 0.51 | −1.75 | 4.12 |
+| 2023 | 3.21 | 0.61 | 3.08 |
+| 2024 | 9.11 | 6.44 | 2.26 |
+| 2025 | 7.36 | 4.19 | 3.30 |
+
+Operating cash flow has exceeded net income since 2023, supporting the screen’s Piotroski “OCF > net income” pass. However, FCF yield remains low at 1.8% (screen TTM FCF USD 2.0bn on a different basis vs. annual Yahoo FCF USD 4.2bn in 2025—basis divergence worth noting). Dividend growth model passes, but gross FCF coverage of the USD 3.3bn 2025 dividend payout is tight on an annual FCF basis (~1.3×).
+
+**Balance sheet (Yahoo fallback, year-end 2025):** Total equity USD 61.8bn; total debt USD 15.9bn (down from USD 19.1bn in 2024); cash and equivalents USD 10.5bn (down from USD 18.4bn). Debt/equity ~25% aligns with the screen. Current ratio 1.54 (below Graham Defensive threshold of 2.0). Inventory/work-in-progress is very large—USD 55.7bn “finished goods” line—typical of construction accounting but a key working-capital and provisioning risk. Defined pension benefit asset USD 3.5bn with non-current pension/post-retirement liabilities USD 1.9bn; pension expense in cash flow USD 274m (2025).
+
+**Interim / quarterly (Yahoo cached quarterly income only; no interim filing bodies):** A 2026 quarter shows revenue USD 39.4bn and net income USD 1.17bn (diluted EPS USD 2.81) versus a comparable 2025 quarter of USD 42.3bn revenue and USD 1.07bn net income (EPS USD 2.57)—suggesting stable-to-improving profitability on a quarterly basis, though Yahoo does not label the fiscal period explicitly and no half-year report is available in the filing index.
+
+**Gaps:** No annual report, interim report, or trading update text was available. Segment splits (Construction US/Europe, Residential Development, Commercial Property Development), order backlog, and construction-provision movements cannot be cited from filings. Verify-before-trade: pull Skanska’s Swedish annual report (Årsredovisning) and Q2 2026 interim release from the company IR site or Eurofiling registers before sizing a position.
+
+## RISKS AND RED FLAGS
+**Cyclical and operational:** Construction and project development remain highly cyclical; the screen’s cyclical-exposure overlay did not trigger, but revenue concentration in infrastructure bidding and US commercial construction exposes earnings to macro slowdowns, labour inflation, and project delays. Thin margins (~3–4% operating) leave limited buffer for cost overruns—an endemic industry risk the quality models partially flag.
+
+**Accounting and working capital:** Very large inventory/WIP balances (USD 55.7bn) and “current provisions” (USD 9.8bn) are structurally significant; without filing bodies, provision adequacy, percentage-of-completion assumptions, and contingency disclosures cannot be assessed. The screen’s Earnings Quality failure (weak free-cash conversion on some metrics) and volatile annual FCF (negative in 2022, low in 2023) warrant caution.
+
+**Pension:** Defined-benefit pension exposure (USD 3.5bn asset; USD 1.9bn non-current liability) creates mark-to-market and discount-rate sensitivity typical of Nordic industrials.
+
+**Leverage and liquidity:** Reported leverage is modest, but cash fell USD 7.9bn in 2025 (to USD 10.5bn) alongside net investment outflows (USD 5.8bn net investment purchases per Yahoo cash flow)—suggesting active treasury/investment activity that compresses liquidity headroom. Current ratio below 2.0 fails Graham Defensive criteria.
+
+**Governance / regulatory:** No filing language on going concern, litigation, or covenants is available. As a Swedish publ AB, disclosure would normally sit in annual/interim reports rather than UK RNS; the empty filing index is a material research gap, not evidence of absence of risk.
+
+**Competitive:** Large global contractors (ACS, Vinci, Fluor, etc.) compete for the same mega-projects; Skanska’s Penn Station and data-centre wins are positive but do not eliminate bid-risk and margin pressure.
+
+RiskTags: cyclical, pension, competitive, accounting, liquidity
+RiskTags: cyclical, pension, competitive, accounting, liquidity
+
+## NEWS HIGHLIGHTS
+News coverage is moderate (eight articles in `news_manifest.json`; `alternate_news.json` empty). Material themes over the past year:
+
+- **Order intake and backlog (17 Jul 2026):** “Skanska reports record $7B order intake for Q2”—CFO Pontus Winqvist cautioned against extrapolating one quarter (“you can’t build a trend on one quarter”), per Construction Dive/Yahoo.
+- **Contract wins:** Norway aluminium facility, NOK 1.10bn / USD 111m (6 Jul 2026); 55 Old Broad Street, London, £282m (30 Jun 2026); collective ~USD 580m in two US jobs (26 Jun 2026); USD 94m Virginia data-centre contract and Penn Station master-developer preferred-bidder status (referenced in May–Jul 2026 articles).
+- **Asset recycling:** Sale of Studio II office tower, Warsaw, €159m, alongside other property divestments in Poland and Sweden (Jun–Jul 2026)—consistent with reducing commercial development capital tied up.
+- **Management:** “Punch List: Skanska, ABC make executive changes” (22 May 2026)—details sparse in manifest summaries.
+- **Valuation commentary:** Third-party articles note strong three-year share performance (~96%) yet argue remaining upside on cash-flow vs. earnings (5 Jul 2026).
+
+No regulatory enforcement, major M&A, or strategy reversal appears in the manifest. Coverage skews toward construction-trade and aggregator outlets rather than deep Nordic equity research—another gap for confirmatory work.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: The quantitative strong-buy case is plausible on valuation, balance-sheet leverage, dividend, and improving cash-generation metrics, but the complete absence of primary filings and thin margin/FCF-quality flags prevent full confirmation of the screen signal.

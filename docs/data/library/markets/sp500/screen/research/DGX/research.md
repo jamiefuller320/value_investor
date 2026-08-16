@@ -1,0 +1,81 @@
+# Quest Diagnostics Incorporated (DGX) — Research memo
+
+_Version 1 · Updated 2026-08-16T13:11:35.455744+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Quest Diagnostics Incorporated (DGX) is the second-largest US clinical laboratory operator, operating a high-volume diagnostics information services (DIS) franchise (>95% of revenue) alongside smaller risk-assessment and health IT businesses. The quantitative screen rates the name a buy (5/22 models; composite 55%), driven by quality, dividend, GARP and risk factors rather than classic deep-value metrics — P/E 24.9x and P/B 3.4x fail most cheapness screens, yet Neff PEGY (0.15), Piotroski F-Score (8/9) and earnings-quality passes signal improving fundamentals at a premium multiple. FY2025 net revenues rose 11.8% to $11.0bn (10-K), with operating margin expanding to 14.1% and free cash flow reaching ~$1.36bn; the central debate is whether M&A-led scale (LifeLabs, hospital outreach tuck-ins) and Project Nova IT modernisation can sustain mid-teens earnings growth against persistent reimbursement pressure, elevated leverage and a goodwill-heavy balance sheet.
+
+## INVESTMENT THESIS
+For a value investor, DGX offers a **quality compounder at a reasonable growth-adjusted price**, not a statistically cheap stock. The screen’s buy signal rests on five distinct families — cheapness (Neff PEGY only), quality (Magic Formula, Piotroski 8/9, Earnings Quality), dividend (Dividend Growth), GARP and risk — which collectively describe a business converting earnings to cash reliably while growing at ~15% (screen input). Primary filings confirm the quality narrative: FY2025 diluted EPS of $8.75 (+14% vs $7.69 in FY2024), operating cash flow of $1,886m (+41%), and net income attributable to Quest of $992m (+14%), per the FY2025 10-K (filed 26 Feb 2026). FCF of approximately $1,359m (OCF less $527m capex) covers dividends 3.8x and funds buybacks ($450m in FY2025).
+
+Business quality rests on scale in a US duopoly, diversified payer mix (healthcare insurers ~39%, client payers ~31%, government ~16%, patients ~14% in FY2025), and a bolt-on M&A strategy — LifeLabs (Canada, Aug 2024, ~$1.0bn net consideration), Allina Health outreach (Sep 2024), OhioHealth outreach ($200m, Oct 2024) — that extends geographic reach without transforming the core model. Project Nova, a multi-year “order-to-cash” modernisation launched Feb 2025, targets lower operating costs and faster revenue capture. The screen’s failure on Graham, Deep Value, FCF Yield (3.5%) and Acquirer’s Multiple (EV/EBIT 20.6) correctly flags that absolute valuation is not distressed; the buy case assumes earnings durability and growth justify the multiple, not a re-rating from deep discount.
+
+## FINANCIAL REVIEW
+**Annual results (primary source: SEC 10-K body extracts)**
+
+| Metric | FY2025 | FY2024 | FY2023 | Source |
+|---|---|---|---|---|
+| Net revenues | $11,035m | $9,872m | $9,252m | FY2025 10-K |
+| Operating income | $1,556m | $1,346m | $1,262m | FY2025 10-K |
+| Net income (attrib. Quest) | $992m | $871m | $854m | FY2025 10-K |
+| Diluted EPS | $8.75 | $7.69 | $7.49 | FY2025 10-K |
+| Operating cash flow | $1,886m | $1,334m | $1,272m | FY2025 10-K |
+| Capex | ($527m) | ($425m) | ($408m) | FY2025 10-K |
+| FCF (derived) | ~$1,359m | ~$909m | ~$864m | Derived from 10-K |
+| Total assets | $16,225m | $16,153m | — | FY2025 10-K |
+| Cash | $420m | $549m | — | FY2025 10-K |
+| Total debt (current + LT) | ~$5,671m | — | — | FY2025 10-K |
+| Goodwill | $8,945m | $8,856m | — | FY2025 10-K |
+| Stockholders’ equity | $7,206m | $6,813m | — | FY2025 10-K |
+
+Revenue growth of 11.8% in FY2025 partly reflects a full year of LifeLabs versus a partial FY2024 contribution ($241m in FY2024 per the FY2024 10-K). Pro forma net revenues were $10,320m (FY2024) and $9,917m (FY2023), implying underlying growth closer to ~4% before the step-up from consolidation timing — a material distinction for assessing organic momentum. Gross margin was stable at ~33%, while operating margin expanded 50bp to 14.1%, helped by revenue leverage and lower other operating expense ($12m income vs $1m expense in FY2024). Interest expense, net rose to $264m (from $201m), reflecting acquisition-related debt; the company repaid $1,012m of debt in FY2025 while issuing $410m of new borrowings.
+
+Balance-sheet quality is mixed. Goodwill and intangibles total $10.6bn (65% of assets); tangible book value is deeply negative. The current ratio is approximately 1.04 (current assets $2,378m vs current liabilities $2,278m), matching the screen’s flagged weak liquidity. Accounts receivable grew to $1,408m (+8% YoY); contractual allowance estimation is identified as a critical audit matter in the 10-K. No going-concern language appears in available filing extracts; liquidity disclosure states that cash, operations and credit facilities ($750m revolving facility; no borrowings outstanding as of Jun 2025–Jun 2026 per interim 10-Q MD&A extracts) are sufficient for foreseeable needs.
+
+**Interim results**
+
+Seven interim 10-Q filings are indexed (Mar 2024 through Jun 2026), but body extracts contain only MD&A liquidity sections — **no consolidated income-statement tables are present in the interim filing bodies**. Interim trend analysis therefore falls back to Yahoo (`financials_annual.json` cached quarterly):
+
+- Q2 2026 (three months): net revenue $2,895m, diluted EPS $2.24, operating income $404m
+- Q2 2025 (three months): net revenue $2,816m, diluted EPS $2.16, operating income $386m
+
+This implies YoY Q2 revenue growth of ~2.8% and EPS growth of ~3.7% — a deceleration from FY2025’s full-year pace, consistent with tougher comps post-LifeLabs annualisation. Filing MD&A confirms ongoing capex guidance of ~$550m for 2026 (vs ~$500m for 2025) and Project Nova spend continuing through 2026–2027. An 8-K dated 22 Jul 2025 (body available) confirms Q2 FY2025 results were released but does not embed the figures themselves.
+
+**Gaps:** Risk-factor (Item 1A) and business-overview sections are truncated in 10-K body extracts; eight 8-K filings in the index lack downloadable bodies. Interim P&L must rely on Yahoo until full 10-Q tables are ingested.
+
+## RISKS AND RED FLAGS
+**Regulatory and reimbursement.** Medicare and Medicaid represented ~11% of consolidated net revenues in FY2023–FY2025; total government payers rose to ~16% in FY2025 (from 13% in FY2024), with Canadian government programmes adding ~5%. Interim MD&A explicitly cites “reimbursement and revenue recognition for clinical laboratory testing” and government policy changes as forward-looking risk factors. PAMA and broader pricing pressure are industry-wide overhangs not fully detailed in truncated extracts but implied by payer-mix disclosure and receivables complexity.
+
+**Leverage and liquidity.** Total debt of ~$5.7bn against equity of $7.2bn (D/E ~79%, consistent with the screen’s 81%) and net debt of ~$5.3bn constrain financial flexibility. Interest expense consumed ~27% of operating income in FY2025. The current ratio of ~1.04 failed the Piotroski current-ratio component. Credit facilities carry financial covenants (receivables facility and revolving credit, per 10-Q MD&A). A $500m 3.45% senior notes maturity fell due Jun 2026 (disclosed in interim filings).
+
+**Goodwill and acquisition integration.** Goodwill of $8.9bn plus intangibles of $1.6bn create impairment sensitivity; LifeLabs valuation was a critical audit matter in FY2024. FY2024 investing cash outflows included $2,164m for acquisitions; FY2025 slowed to $101m, suggesting the integration phase is underway but execution risk on LifeLabs, Allina and OhioHealth remains.
+
+**Receivables and collection.** Patient receivables represent the largest credit-risk bucket; accounts receivable rose 8% in FY2025 while revenue grew 12%, warranting monitoring. Contractual allowance estimation is inherently judgemental.
+
+**Competitive.** Q2 2024 10-Q MD&A notes that “competition regarding clinical laboratory testing” may “come in new forms.” LabCorp (LH) remains the primary scaled rival; a sector article (10 Aug 2026) highlights LH’s improved growth but rich valuation — a relevant peer read-through.
+
+**Project Nova execution.** Multi-year IT transformation carries cost overrun and disruption risk; benefits (lower operating costs, accelerated revenue) are prospective, not yet quantified in filings.
+
+RiskTags: regulatory, competitive, leverage, liquidity, accounting, customer_concentration
+RiskTags: regulatory, competitive, leverage, liquidity, accounting, customer_concentration
+
+## NEWS HIGHLIGHTS
+News coverage in the manifest is **thin** — only one DGX-specific headline in the past year:
+
+- *“Quest Diagnostics (DGX) Is Up 2.29% in One Week: What You Should Know”* (yfinance, 14 Aug 2026) — momentum-oriented, no fundamental disclosure.
+
+The remaining manifest entries are unrelated healthcare names. Material corporate developments must be sourced from filings instead:
+
+- **LifeLabs acquisition** (Aug 2024, ~$1.0bn) — Canadian market entry (FY2024/FY2025 10-K)
+- **Allina Health and OhioHealth outreach acquisitions** (Sep–Oct 2024) — US hospital-lab tuck-ins
+- **Project Nova launch** (Feb 2025) — order-to-cash IT modernisation
+- **Share repurchase authorisation increased by $1bn** (per Q1/Q2 2026 10-Q MD&A, cumulative authorisation $14bn since 2003)
+- **Q2 FY2025 results** announced via 8-K (22 Jul 2025)
+
+Peer context: *“Is Labcorp Stock a Buy as Growth Improves but Valuation Stays Rich?”* (10 Aug 2026) suggests the lab-duopoly group is seeing improved growth but faces valuation scrutiny — relevant sector colour, not DGX-specific.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.68
+Rationale: Primary filings confirm accelerating earnings, cash generation and balance-sheet deleveraging that support the screen’s quality-and-GARP buy signal, but absolute valuation remains rich, interim P&L must rely on Yahoo fallback, and reimbursement plus leverage risks prevent full conviction.

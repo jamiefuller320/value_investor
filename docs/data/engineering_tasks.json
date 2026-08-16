@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-16T07:19:55.129242+00:00",
+  "compiled_at": "2026-08-16T13:33:33.702179+00:00",
   "run_at": "2026-08-16T06:19:37.808906+00:00",
-  "task_count": 43,
+  "task_count": 44,
   "tasks": [
     {
       "id": "eng-20260726-05",
@@ -1137,6 +1137,71 @@
       "merged_at": "2026-08-09T12:31:35.924242+00:00"
     },
     {
+      "id": "eng-20260816-01",
+      "area": "coverage",
+      "title": "Fix library metrics fetch for ISEQ 20 (iseq20): provider mapping / Yahoo fallback so screen-lite can run",
+      "summary": "Focus market iseq20 has 20 constituents but only 20 usable metrics rows (need >=25 for screen-lite). Manifest coverage_count=20. Block: screen_lite_skipped. Sample errors: [\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorized', 'yahoo_chart: HTTP Error 404: Not Found', 'stooq: non-CSV response for a5g_ir.uk']; [\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorize. Fix provider suffix mapping, Yahoo/yfinance fallback, and metrics grow; verify ftse-li",
+      "priority": "high",
+      "priority_score": 92.0,
+      "source": "library_ladder",
+      "evidence": {
+        "market": "iseq20",
+        "focus_market": "iseq20",
+        "min_metrics_for_screen": 25,
+        "usable_metrics_rows": 20,
+        "total_metrics_rows": 40,
+        "ticker_count": 20,
+        "manifest_coverage_count": 20,
+        "blocked_layer": "screen_lite",
+        "block_reason": "screen_lite_skipped",
+        "screen_reason": "need>=25 usable metrics rows, have 20",
+        "screen_error": null,
+        "sample_tickers": [
+          "A5G-IR.L",
+          "BIRG-IR.L",
+          "C5H-IR.L",
+          "DQ7A-IR.L",
+          "EG7-IR.L"
+        ],
+        "sample_errors": [
+          "[\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorized', 'yahoo_chart: HTTP Error 404: Not Found', 'stooq: non-CSV response for a5g_ir.uk']",
+          "[\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorized', 'yahoo_chart: HTTP Error 404: Not Found', 'stooq: non-CSV response for birg_ir.uk']",
+          "[\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorized', 'yahoo_chart: HTTP Error 404: Not Found', 'stooq: non-CSV response for c5h_ir.uk']",
+          "[\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorized', 'yahoo_chart: HTTP Error 404: Not Found', 'stooq: non-CSV response for dq7a_ir.uk']",
+          "[\"'exchangeTimezoneName'\", 'yahoo_quote_summary: HTTP Error 401: Unauthorized', 'yahoo_chart: HTTP Error 404: Not Found', 'stooq: non-CSV response for eg7_ir.uk']"
+        ],
+        "metrics_path": "docs/data/library/markets/iseq20/metrics/latest.json.gz",
+        "doc": "docs/ops/market-scrutiny.md",
+        "ladder_run_at": "2026-08-16T11:58:34.144147+00:00"
+      },
+      "acceptance_criteria": [
+        "After grow, iseq20 metrics/latest has ≥25 usable fundamentals rows",
+        "load_library_metrics / run_library_screen can run on iseq20 without empty-universe failure",
+        "Add regression tests for the provider/suffix fix on representative tickers",
+        "No change to live FTSE 350 screen path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/providers.py",
+        "src/value_investor/fetch.py",
+        "src/value_investor/data_library.py",
+        "src/value_investor/financials.py",
+        "src/value_investor/library_screen.py",
+        "tests/test_providers.py",
+        "tests/test_data_library.py",
+        "tests/test_constituents_fetch.py",
+        "tests/test_library_screen.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260811-01",
       "area": "ops",
       "title": "Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass — full P&L path vs 5-entry preview; validates whether +",
@@ -2032,5 +2097,6 @@
     "zero_body_tickers": [],
     "indexed_without_body": 695,
     "filings_with_body": 2981
-  }
+  },
+  "library_ladder_compiled": true
 }

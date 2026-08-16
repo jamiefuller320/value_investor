@@ -1,0 +1,74 @@
+# The Mosaic Company (MOS) — Research memo
+
+_Version 1 · Updated 2026-08-16T13:29:04.699509+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+The Mosaic Company (MOS) is a vertically integrated phosphate and potash producer with leading North American and Brazilian positions, trading at a deep discount to book (P/B ~0.6x; EV/EBITDA ~7.5x) with a ~4.1% dividend yield. The quantitative screen flags a buy on cheapness, balance-sheet resilience (Piotroski F-Score 8/9), and financial health, despite failing FCF-yield and quality-moat models. FY2025 showed a meaningful earnings recovery, but H1 2026 filings reveal a sharp cyclical reversal: phosphate margins collapsed on elevated sulfur costs, production was curtailed, and portfolio restructuring triggered large impairments. The investment case rests on asset-backed value and normalised mid-cycle cash generation; the key debate is whether current losses are transient input-cost pain or a longer margin reset in a leveraged, regulation-heavy commodity business.
+
+## INVESTMENT THESIS
+For a value investor, MOS offers a scaled franchise—~10% of global phosphate production, ~12% of global potash, and the largest Brazilian fertiliser distribution platform—at a price that embeds trough-like expectations. The screen passes six of 22 models across cheapness, quality, and risk families: Deep Value, Magic Formula, Acquirer's Multiple, Piotroski F-Score (8/9), Composite Value, and Financial Health. Cheapness is anchored in P/B 0.6x and an earnings-yield rank in the 89th percentile, whilst the Piotroski score reflects positive net income and operating cash flow (on a trailing basis), improving gross margins and asset turnover, and no share dilution—partially offset by leverage not declining.
+
+Business quality, read through filings, is real if cyclical: captive phosphate rock, integrated logistics (sulfur barges, Gulf terminals, Canpotex export access), and differentiated products (MicroEssentials®) support cost and distribution advantages that commodity screens under-weight. Management under CEO Bruce Bodine (from January 2024) is actively reshaping the portfolio—selling Patos de Minas, Taquari potash, Carlsbad K-Mag, and the Araxá complex—whilst extending liquidity ($2.5bn revolver to 2030; $1.0bn term loan in June 2026). The screen's buy signal is therefore coherent: asset-heavy, oligopolistic nutrient supply trading below replacement value. What the screen cannot fully capture is the H1 2026 earnings collapse and negative free cash flow, which explain why FCF Yield, Economic Moat, and Buffett Quality models fail. Value investors can underwrite MOS if they accept cyclical timing risk and trust in mid-cycle normalisation of sulfur/ammonia inputs and phosphate pricing.
+
+## FINANCIAL REVIEW
+**Annual results (FY2025 10-K; FY2024 10-K)**
+
+Annual consolidated income-statement and cash-flow figures are not present in the downloaded 10-K body extracts (filings truncate before Item 8 financial tables). The following annual figures are taken from `financials_annual.json` (Yahoo Finance fallback), cross-checked for consistency with interim filings where possible.
+
+| Metric | FY2025 | FY2024 | FY2023 |
+|--------|--------|--------|--------|
+| Revenue | $12,052m | $11,123m | $13,696m |
+| Net income | $541m | $175m | $1,165m |
+| Diluted EPS | $1.70 | $0.55 | $3.50 |
+| Operating income | $1,079m | $622m | $1,282m |
+
+FY2025 net income recovered sharply from FY2024's $175m, which was depressed by a $686m loss on Ma'aden equity securities (per Yahoo adjustments). Revenue rose 8% year-on-year, reflecting improved phosphate/potash pricing and volumes relative to the 2024 trough. However, FY2025 free cash flow was **negative $535m** (operating cash flow $825m less capex $1,359m), driven by inventory build ($3,363m at year-end vs $2,548m in FY2024, per Yahoo balance sheet) and sustained capital spending. Dividends paid were $280m (~4.1% yield on current price).
+
+Balance sheet at 31 December 2025 (Yahoo fallback; partially corroborated by Q2 2026 10-Q opening balances): total assets $24,480m; stockholders' equity $12,085m; total debt $5,280m; cash $277m; net debt ~$4,777m. Debt-to-equity ~52% per screen inputs. The 10-K business narrative (filed 27 February 2026) confirms FY2025 portfolio actions: Patos de Minas sale ($111m), Taquari potash sale ($12m at closing; ~$66m impairment), Carlsbad potash held-for-sale (~$185m impairment), and a $900m senior notes offering (November 2025).
+
+**Interim results (10-Q filings — primary source)**
+
+*Q3 2025 (10-Q, nine months ended 30 September 2025):* Net sales $9,079m (+9% vs $8,307m prior year). Net earnings attributable to Mosaic $1,060m vs $6m (prior year weighed by investment losses). Nine-month operating earnings $923m vs $522m. Q3 alone: net sales $3,452m; net earnings $411m; diluted EPS $1.29. Balance sheet at 30 September 2025: total assets $24,668m; stockholders' equity $12,781m; cash $153m.
+
+*Q1 2026 (10-Q, three months ended 31 March 2026):* Net sales $2,998m (+14% vs $2,621m). Operating **loss** $(373)m vs operating earnings $339m prior year, including a $233m loss on assets held for sale and $240m other operating expense (Araxá/Patrocínio restructuring).
+
+*H1 2026 (10-Q, six months ended 30 June 2026):* Net sales $5,822m (+3% vs $5,627m). Gross margin collapsed to $450m from $1,007m. Operating **loss** $(408)m vs earnings $583m. Net loss attributable to Mosaic $(530)m vs profit $649m. Diluted EPS $(1.67) vs $2.04. Q2 2026 alone: net sales $2,824m (−6%); gross margin $215m (−59%); net loss $(273)m; EPS $(0.86).
+
+Segment disclosure (Q2/H1 2026 10-Q): Phosphate gross margin turned **negative** in Q2 2026 ($(4.5)m vs +$103m prior year)—consistent with elevated sulfur input costs. Mosaic Fertilizantes H1 operating loss $(463)m includes $233m loss on assets to be sold and restructuring costs from Araxá divestiture and Patrocínio idling. Potash remained profitable (Q2 operating earnings $196m).
+
+**Liquidity and cash flow (H1 2026 10-Q):** Operating cash flow $272m (down from $652m H1 2025). Capex $677m. Cash $294m at 30 June 2026. Total debt ~$5.9bn (current $1,021m + long-term $4,768m + current maturities $67m). June 2026: $1.0bn unsecured term loan ($500m drawn; remaining $500m drawn 14 July 2026 per filing). Commercial paper $519m at 4.07%. Revolver covenant compliance confirmed (leverage ≤0.65x; interest coverage ≥3.0x).
+
+**Gaps:** 10-K body extracts lack audited annual financial tables; annual figures above rely on Yahoo fallback. Eight 8-K filings in the index have no body extracts. No trading-update regime filings present.
+
+## RISKS AND RED FLAGS
+**Cyclical / input-cost exposure:** Filings and Q2 2026 results show phosphate margins eroded by unusually high sulfur prices and constrained supply, prompting US and Brazilian production curtailments. Potash and phosphate demand remain tied to global crop economics, inventory cycles, and seasonal working-capital swings ($3,668m inventory at June 2026).
+
+**Leverage and liquidity:** Net debt ~$4.8bn against thin cash (~$294m). H1 2026 negative FCF and new term-loan borrowing underscore reliance on capital markets and the $2.5bn revolver. Covenants are currently met, but leverage did not improve on the Piotroski scorecard. Debt tender and new notes (August 2026 news) indicate active liability management.
+
+**Regulatory / environmental:** Long-dated gypstack closure obligations are material—undiscounted ~$2.3bn, present value ~$1.1bn for facilities under 2015 RCRA consent decrees (Q2 2026 10-Q, Note 10). Ongoing New Wales stack liner repairs add uncertainty. Mine reclamation and ARO total ~$2.5bn.
+
+**Trade and tariff policy:** FY2025 10-K flags risk of US tariffs on Canadian potash (25% tariff proposed February 2025; USMCA exemption since March 2025, but reintroduction risk remains). Countervailing-duty orders on Moroccan/Russian phosphate remain subject to litigation.
+
+**Litigation:** Putative US antitrust class actions filed from March 2026, consolidated in Kansas (June 2026). Brazil judicial/administrative claims allege up to ~$537m damages (~$76m accrued). Brazil tax contingencies up to ~$816m (mostly indemnified by Vale). $1.4bn gross unrecognized tax benefit on Taquari divestiture under IRS review.
+
+**Portfolio / accounting:** H1 2026 impairments and held-for-sale charges ($239m H1; Carlsbad, Araxá) create earnings volatility. No going-concern language identified in available filing bodies; liquidity described as adequate with covenant headroom, but near-term profitability is under pressure.
+
+RiskTags: cyclical, regulatory, leverage, litigation, competitive
+RiskTags: cyclical, regulatory, leverage, litigation, competitive
+
+## NEWS HIGHLIGHTS
+News coverage over the past year is **thin and earnings-clustered** (ten articles, mostly August 2026). Key items:
+
+- **Q2 2026 results (4–5 August 2026):** "Mosaic (MOS) Q2 Earnings Top Estimates" — adjusted EPS beat but revenue miss (−7.3%); sales ~$2.8bn. "MOS Q2 Earnings Beat Estimates, Sales Miss on Lower Volumes" — weaker volumes and higher sulfur costs; 2026 capex guidance cut.
+- **Management commentary (5–8 August 2026):** "Mosaic Q2 Earnings Call Highlights" and related transcripts — CEO Bruce Bodine cited a difficult phosphate market; **production curtailed** in the US and Brazil due to high sulfur prices; emphasis on cost discipline and liquidity.
+- **Capital structure (12 August 2026):** "What Is Mosaic (MOS) Signaling With Its Debt Tender And New Notes?" — cash tender for existing debt funded by new senior notes to adjust maturity profile.
+- **Broader context (29 July 2026):** Bloomberg "Farm-Belt Senate Candidates Target Ag Giants in Populist Turn" — political scrutiny of large agribusinesses (indirect reputational/regulatory risk).
+- **Analyst sentiment (4 August 2026):** Moderately optimistic Wall Street targets despite weak share performance.
+
+No material M&A beyond disclosed asset sales; CFO transition to Luciano Siani Pires (January 2025) noted in the 10-K rather than news flow.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.62
+Rationale: Deep research supports the screen's cheapness case—scaled nutrient assets below book with covenant-compliant liquidity—but H1 2026 filing losses, negative phosphate margins, and persistent negative FCF weaken conviction that the trough is fully priced.

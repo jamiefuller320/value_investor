@@ -1,0 +1,97 @@
+# AB Volvo (publ) (VOLV-B.ST) — Research memo
+
+_Version 1 · Updated 2026-08-16T13:01:44.587709+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+AB Volvo (publ) (VOLV-B.ST) screens as a **Strong Buy** on the quantitative stack (7/22 models; composite 79%; sector-relative 78%), driven chiefly by growth-adjusted value (PEG ~0.48), quality/dividend metrics, and a 20.9% ROE. The industrial franchise—global trucks, buses, construction equipment, and power solutions—is structurally attractive, but the name is mid-cycle: Yahoo-sourced financials (no primary filings in the research pack) show revenue and earnings retreating from 2023–24 peaks. At 19.3× P/E and 3.6× P/B the stock is not deep value; the debate is whether normalised earnings power and electrification/services mix justify a quality-compounder rating, or whether cyclical de-rating and balance-sheet leverage cap upside.
+
+## INVESTMENT THESIS
+The screen flags **Strong Buy** with five families passing—cheapness (growth-adjusted), quality, dividend, GARP, and risk—and high data completeness (20/20 metrics). Standout passes include Lynch PEG, Neff PEGY (PEGY ~0.07), Quality Value, Dividend Growth, Magic Formula, Composite Value, and Earnings Quality. That profile fits a value investor seeking **quality at a reasonable growth price** rather than net-net or deep cyclical trough exposure.
+
+Business quality anchors the case: AB Volvo is a global OEM leader with scale in heavy commercial vehicles and construction equipment, substantial R&D (~SEK 26bn in FY2025 per Yahoo), and recurring revenue from services, financing, and aftermarket. ROE of 20.9% and positive operating cash flow (SEK 45.6bn TTM on the screen) support the quality bucket. The dividend (2.5% yield; Dividend Growth pass) adds income while the screen’s 40.1% earnings-growth input drives an unusually low PEG—suggesting the market may be pricing cyclical trough or one-off compression rather than structural impairment.
+
+What the screen **does not** capture fully: absolute cheapness (fails Graham, Schloss, Deep Value, FCF Yield, Acquirer’s Multiple), balance-sheet heaviness (debt/equity 147%; Financial Health fail), and middling Piotroski F-Score (5/9). For a value investor, the thesis is **accumulate a cyclical quality compounder on growth-adjusted metrics**, not a classic asset bargain.
+
+## FINANCIAL REVIEW
+**Source limitation:** `filings_index.json` contains **zero** annual, interim, or trading-update filings (regime tagged `uk_rns`, which is mismatched for a Swedish issuer). No body extracts exist under `filings/bodies/`. All figures below are from **`financials_annual.json` (Yahoo)**; currency appears to be **SEK**. Interim filing analysis is **not possible** from primary sources; Yahoo provides partial quarterly income for 2025 and 2026 only.
+
+**Revenue and profitability (annual, Yahoo fallback)**
+
+| Year | Revenue (SEK bn) | Operating income (SEK bn) | Net income (SEK bn) | Diluted EPS (SEK) |
+|------|------------------|---------------------------|---------------------|-------------------|
+| 2022 | 473.5            | 49.6                      | 32.7                | 16.09             |
+| 2023 | 552.3            | 80.5                      | 49.8                | 24.50             |
+| 2024 | 526.8            | 69.8                      | 50.4                | 24.78             |
+| 2025 | 479.2            | 49.5                      | 34.5                | 16.94             |
+
+Trend: Revenue peaked in 2023, moderated through 2025 (−9% vs 2024). Operating income roughly halved from the 2023 peak (SEK 80.5bn → 49.5bn). Net income fell ~32% in 2025 to SEK 34.5bn (EPS SEK 16.94 vs SEK 24.78). Gross margin compressed (gross profit SEK 116.9bn on revenue SEK 479.2bn ≈ 24.4% in 2025 vs ~27.3% in 2024). R&D remained elevated at SEK 26.2bn, consistent with electrification and autonomous investment.
+
+**Cash flow (annual, Yahoo fallback)**
+
+| Year | Operating CF (SEK bn) | CapEx (SEK bn) | FCF (SEK bn) |
+|------|-------------------------|----------------|--------------|
+| 2022 | 33.2                    | 25.8           | 7.4          |
+| 2023 | 21.4                    | 18.4           | 3.0          |
+| 2024 | 46.4                    | 18.4           | 28.1         |
+| 2025 | 45.6                    | 26.1           | 19.5         |
+
+Operating cash generation stayed robust in 2024–25 despite lower reported earnings, but FCF fell in 2025 as capex rose (SEK 26.1bn). The screen’s canonical FCF (~SEK 24.0bn TTM, USD-labelled in snapshot) aligns directionally. Dividends paid were heavy: SEK 37.6bn in 2025 vs SEK 36.6bn in 2024, implying payout pressure in a softer earnings year.
+
+**Balance sheet (FY2025, Yahoo fallback)**
+
+- Total assets: SEK 648.6bn; equity: SEK 178.4bn  
+- Total debt: SEK 247.0bn; net debt: SEK 174.3bn; cash: SEK 64.8bn  
+- Net debt / EBITDA (2025 EBITDA SEK 71.2bn): ~2.4×  
+- Current ratio: ~1.15 (inventory SEK 66.0bn; receivables SEK 139.2bn)  
+- Pension/post-retirement liabilities (non-current): SEK 8.7bn; defined pension benefit asset SEK 1.8bn  
+- Goodwill + intangibles: SEK 46.6bn (~26% of equity)
+
+Leverage is material for a Graham-style value lens (screen debt/equity 147%) but manageable if EBITDA normalises. Working capital absorbed SEK 17.1bn in 2025 (receivables build).
+
+**Interim / quarterly (Yahoo only; no filing bodies)**
+
+Yahoo quarterly income shows Q1-style periods only:
+
+- **2025:** Revenue SEK 110.7bn; net income SEK 7.5bn; EPS SEK ~3.71 (implied from SEK 7.54bn on ~2.03bn shares)  
+- **2026:** Revenue SEK 110.8bn; net income SEK 8.3bn; EPS SEK 4.09  
+
+Sequential revenue is flat; 2026 net income slightly higher—too little coverage to confirm a recovery without H1/H2 reports from Volvo’s Swedish disclosure channel (not ingested here).
+
+**Gaps:** No annual report, interim report, or trading-update text to verify segment mix (Trucks vs CE vs Financial Services), order intake, or management guidance. Normalised vs statutory earnings (2023 had SEK 11.5bn unusual items per Yahoo) cannot be cross-checked against filings.
+
+## RISKS AND RED FLAGS
+**Cyclical exposure:** FY2025 Yahoo data shows a clear earnings downcycle from 2023–24 peaks. Heavy-truck and construction-equipment demand is volume- and capex-sensitive; inventory (SEK 66bn) and receivables (SEK 139bn) remain large working-capital sinks.
+
+**Leverage and liquidity:** Total debt SEK 247bn and net debt SEK 174bn; current ratio ~1.15. The screen fails Financial Health, Buffett Quality (debt), and Economic Moat (leverage). Short-term debt SEK 108.5bn requires rolling/refinancing capacity—cannot assess covenant language without filing bodies.
+
+**Pension:** Non-current pension/post-retirement obligations SEK 8.7bn (plus defined-benefit items)—moderate but worth monitoring in a higher-rate environment.
+
+**Competitive / technology:** Electrification capex and Chinese OEM competition in trucks/CE are structural pressures; R&D at ~5.5% of revenue signals sustained spend. No filing text on contingent liabilities, litigation, or going-concern qualifications available in this pack.
+
+**Governance / disclosure gap:** Zero indexed regulatory filings for a Stockholm-listed issuer is a research red flag in itself—verify-before-trade on segment KPIs, related-party items, and audit opinion.
+
+**Screen–fundamental tension:** Trailing EPS fell ~32% (2024→2025) while the screen cites 40.1% earnings growth—likely forward or adjusted basis. PEG attractiveness may rely on recovery assumptions not validated here.
+
+RiskTags: cyclical, leverage, competitive, pension, accounting
+RiskTags: cyclical, leverage, competitive, pension, accounting
+
+## NEWS HIGHLIGHTS
+Coverage in `news_manifest.json` is **thin (six articles)** and **heavily conflated with Volvo Cars AB** (a separate Geely-linked passenger-car group, not AB Volvo). Treat the following with caution:
+
+**Likely AB Volvo Group (relevant)**  
+- *“Toyota to join Volvo, Daimler heavy-duty fuel-cell JV”* (3 Aug 2025) — Toyota joining the cellcentric hydrogen JV aligns with AB Volvo’s commercial-vehicle decarbonisation strategy.  
+- *“Volvo Trucks: $60M Saved with OTA Updates [24% Fewer Stops]”* (13 Aug 2025) — Software/OTA for Volvo Trucks supports services-led differentiation and uptime economics.
+
+**Likely Volvo Cars (not AB Volvo)**  
+- *“Volvo Car Sales Slip 4% on China Weakness”* (WSJ, 4 Aug 2025)  
+- *“Volvo reports 4% YoY sales slide from May through July”* (5 Aug 2025)  
+- *“Volvo Cars expects turnaround despite ‘challenging environment’”* (27 Jul 2025)  
+- *“‘I’m terrified my car will burst into flames’: Volvo drivers in revolt over ‘faulty’ EVs”* (26 Jul 2025)
+
+No material AB Volvo-specific headlines on M&A, CEO change, or regulatory action appear in the manifest. `alternate_news.json` is empty. **News coverage for VOLV-B.ST is insufficient for a standalone catalyst view**; do not infer passenger-car weakness as Group weakness without separate Trucks/CE order data.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: The quantitative Strong Buy is directionally supported by quality, cash generation, and growth-adjusted valuation, but absent primary filings, a visible earnings downcycle, elevated leverage, and thin or misattributed news prevent full confirmation of the screen’s conviction level.

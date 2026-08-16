@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-16T07:19:55.539805+00:00",
+  "generated_at": "2026-08-16T13:33:36.287864+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -175,10 +175,16 @@
           "graduated_at": "2026-08-14T15:46:47.564038+00:00",
           "coverage_pct": 1.0,
           "stale_pct": 0.0
+        },
+        {
+          "market": "iseq20",
+          "graduated_at": "2026-08-16T13:33:33.655405+00:00",
+          "coverage_pct": 1.0,
+          "stale_pct": 0.0
         }
       ],
-      "graduated_count": 20,
-      "queue_complete": false,
+      "graduated_count": 21,
+      "queue_complete": true,
       "focus_graduation": {
         "auto_advance": true,
         "min_coverage_pct": 0.95,
@@ -196,15 +202,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 65.6,
+        "remaining_weekly_ops_usd": 37.2,
         "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 34.8,
-        "estimated_spend_weekly_ops_usd_this_week": 14.4,
-        "estimated_spend_usd_this_cycle": 123.2,
+        "estimated_spend_usd_this_week": 66.86,
+        "estimated_spend_weekly_ops_usd_this_week": 42.8,
+        "estimated_spend_usd_this_cycle": 155.26,
         "week_id": "2026-W33",
         "cycle_id": "2026-08-d8"
       },
@@ -232,7 +238,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-14T15:46:47.565271+00:00"
+      "updated_at": "2026-08-16T13:33:33.657076+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -327,6 +333,24 @@
   "achievements": {
     "timeline": [
       {
+        "at": "2026-08-16T13:33:33.655405+00:00",
+        "kind": "graduation",
+        "title": "Queue milestone: iseq20 (queue_complete)",
+        "detail": "coverage=1.0 stale=0.0 reason=queue_complete"
+      },
+      {
+        "at": "2026-08-16T13:33:33.655405+00:00",
+        "kind": "graduated_market",
+        "title": "Graduated market: iseq20",
+        "detail": "coverage=1.0 stale=0.0"
+      },
+      {
+        "at": "2026-08-16T11:58:34.144147+00:00",
+        "kind": "ladder_run",
+        "title": "Library ladder run (focus iseq20)",
+        "detail": "shortlist=None research created=53 updated=0 spend≈21.2"
+      },
+      {
         "at": "2026-08-14T15:46:47.564038+00:00",
         "kind": "graduation",
         "title": "Focus advanced: omxs30 → iseq20",
@@ -337,12 +361,6 @@
         "kind": "graduated_market",
         "title": "Graduated market: omxs30",
         "detail": "coverage=1.0 stale=0.0"
-      },
-      {
-        "at": "2026-08-14T15:46:25.292541+00:00",
-        "kind": "ladder_run",
-        "title": "Library ladder run (focus omxs30)",
-        "detail": "shortlist=12 research created=None updated=None spend≈None"
       },
       {
         "at": "2026-08-14T08:27:20.259537+00:00",
@@ -682,8 +700,8 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-08-14T15:46:25.292541+00:00",
-      "focus_market": "omxs30",
+      "run_at": "2026-08-16T11:58:34.144147+00:00",
+      "focus_market": "iseq20",
       "graduated_markets": [
         "sp500",
         "euro_stoxx50",
@@ -704,7 +722,8 @@
         "atx",
         "psi20",
         "smi",
-        "omxs30"
+        "omxs30",
+        "iseq20"
       ],
       "plan": {
         "max_tickers": 40,
@@ -714,15 +733,36 @@
       },
       "layers": {
         "fundamentals_skipped": false,
-        "maintenance_skipped": true,
-        "maintenance_markets": [],
-        "screen_shortlist": 12,
-        "screen_strong_buy": 6,
-        "screen_buy": 6,
-        "research_executed": null,
-        "research_created": null,
-        "research_updated": null,
-        "research_estimated_spend_usd": null,
+        "maintenance_skipped": false,
+        "maintenance_markets": [
+          "sp500",
+          "euro_stoxx50",
+          "asx200",
+          "ftse_smallcap",
+          "nasdaq100",
+          "dax",
+          "cac40",
+          "tsx60",
+          "aim",
+          "ibex35",
+          "ftse_mib",
+          "aex",
+          "bel20",
+          "hang_seng",
+          "sti",
+          "us_adr_asia",
+          "atx",
+          "psi20",
+          "smi",
+          "omxs30"
+        ],
+        "screen_shortlist": null,
+        "screen_strong_buy": null,
+        "screen_buy": null,
+        "research_executed": 53,
+        "research_created": 53,
+        "research_updated": 0,
+        "research_estimated_spend_usd": 21.2,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1084,6 +1124,14 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "advanced"
+      },
+      {
+        "at": "2026-08-16T13:33:33.655405+00:00",
+        "from_market": "iseq20",
+        "to_market": null,
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "queue_complete"
       }
     ],
     "model_review_history": [
@@ -1104,28 +1152,41 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-16T07:19:55.129242+00:00",
-    "queue_ui_updated_at": "2026-08-16T07:19:55.541011+00:00",
-    "task_count": 43,
+    "compiled_at": "2026-08-16T13:33:33.702179+00:00",
+    "queue_ui_updated_at": "2026-08-16T13:33:36.289404+00:00",
+    "task_count": 44,
     "status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 41,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260816-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260816-01",
+        "area": "coverage",
+        "title": "Fix library metrics fetch for ISEQ 20 (iseq20): provider mapping / Yahoo fallback so screen-lite can run",
+        "priority": "high",
+        "priority_score": 92.0,
+        "status": "open",
+        "source": "library_ladder",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-16T07:19:55.553070+00:00",
+    "generated_at": "2026-08-16T13:33:36.364613+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",

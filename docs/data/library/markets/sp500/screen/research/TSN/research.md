@@ -1,0 +1,105 @@
+# Tyson Foods, Inc. (TSN) — Research memo
+
+_Version 1 · Updated 2026-08-16T13:18:24.851125+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Tyson Foods is a family-controlled US protein processor (Beef, Pork, Chicken, Prepared Foods) whose shares screen as a buy on asset-backed cheapness, free cash flow, and dividend yield rather than earnings quality. The quantitative hook is P/B ~1.1x, FCF yield ~5.8%, dividend yield ~3.5%, and moderate leverage (D/E ~44%), with eight models passing across cheapness, dividend, GARP, and risk families. The central debate is whether branded Chicken and Prepared Foods cash generation can offset a structurally loss-making Beef cycle tied to historic US cattle shortages, $343m of prior Beef goodwill impairment, and ongoing network restructuring. Filings confirm recovery in nine-month earnings versus the prior year, but Beef remains deeply unprofitable and news flow is dominated by August 2026 plant closures—making this a cyclical value accumulation idea, not a quality compounder.
+
+## INVESTMENT THESIS
+The screen flags TSN as a buy primarily because valuation sits near book (P/B 1.13), cash generation remains positive (TTM FCF ~$1.19bn per screen; operating cash flow ~$2.16bn), and the dividend (~3.5%) passes yield and growth models alongside Lynch/Neff PEG-style metrics. Debt is manageable (D/E 44%; current ratio 1.55), and the Piotroski F-Score of 6/9 reflects positive earnings and cash flow, declining leverage, and no dilution—though it fails on ROA, current ratio, and gross margin trends.
+
+Business quality is mixed. Tyson is the largest US meat processor by scale, with iconic brands (Tyson®, Jimmy Dean®, Hillshire Farm®, Ball Park®) and ~$54bn of sales (FY2025, see Financial Review). Chicken ($1.34bn nine-month segment operating income) and Prepared Foods ($982m) are the profit engines; Beef posted a $(701)m nine-month operating loss for the period ended 27 June 2026. The screen’s failures on Graham, Buffett Quality, Economic Moat, Piotroski (full pass), and Quality Value—all citing low ROE (3.3%), thin margins, and elevated P/E (35.9x)—are consistent with a cyclical trough in reported earnings rather than a durable high-ROIC franchise.
+
+For a value investor, the case is: (1) tangible book and FCF underpin the equity at ~1.1x book; (2) the dividend appears covered by operating cash flow; (3) Pork has swung back to profitability and Chicken remains robust; (4) management is actively shrinking the loss-making Beef footprint via a network optimisation plan. The screen’s “buy” is credible on balance-sheet and cash-return metrics, but business-quality screens correctly withhold endorsement until Beef losses abate and ROE normalises.
+
+## FINANCIAL REVIEW
+**Source note:** Two annual 10-K filings (FY2024, filed 12 Nov 2024; FY2025, filed 10 Nov 2025) and seven interim 10-Q filings are indexed with body extracts. However, both 10-K body extracts are truncated before Item 8 consolidated financial statements; annual income-statement, balance-sheet, and cash-flow figures below are taken from `financials_annual.json` (Yahoo) with that fallback stated explicitly. Interim figures are from SEC 10-Q body extracts.
+
+**Annual trend (Yahoo fallback — FY ends late September)**
+
+| Metric | FY2025 | FY2024 | FY2023 | FY2022 |
+|--------|--------|--------|--------|--------|
+| Revenue ($m) | 54,441 | 53,309 | 52,881 | 53,282 |
+| Operating income ($m) | 1,441 | 1,409 | 386 | 4,410 |
+| Net income ($m) | 474 | 800 | (648) | 3,238 |
+| Diluted EPS | $1.33 | $2.25 | $(1.87) | $8.92 |
+| Operating cash flow ($m) | 2,155 | 2,590 | 1,752 | 2,687 |
+| Free cash flow ($m) | 1,177 | 1,458 | (187) | 800 |
+| Total debt ($m) | 8,830 | 9,787 | 9,506 | 8,321 |
+| Stockholders’ equity ($m) | 18,085 | 18,390 | 18,133 | 19,702 |
+| Cash ($m) | 1,229 | 1,717 | 573 | 1,031 |
+
+FY2025 revenue rose ~2% but net income fell ~41% to $474m, reflecting commodity-cycle pressure and $343m of Beef goodwill impairment (recorded in Q3 FY2025 per interim filings). FY2023’s $(648)m loss included $781m of asset impairments. FY2022 remains the cycle peak. FY2025 FCF of ~$1.18bn covered dividends paid of ~$697m (Yahoo).
+
+Annual segment detail is not available in the truncated 10-K extracts; segment analysis relies on interim filings.
+
+**Interim trend (SEC 10-Q filings)**
+
+*Q1 FY2026 (three months ended 27 Dec 2025):* Sales $14,313m (+5% y/y); operating income $302m (vs $580m); net income attributable to Tyson $85m (vs $359m). Beef segment operating loss $(319)m vs $(26)m prior-year quarter. Total assets $36,019m; total debt $8,362m; cash $1,229m (unchanged from FY2025 year-end per balance sheet).
+
+*Nine months ended 27 Jun 2026 (Q3 FY2026 10-Q):*
+
+- Sales $41,834m (+3.1% vs $40,581m)
+- Gross profit $2,691m (margin compression: 6.4% vs 7.0%)
+- Operating income $1,099m (+17% vs $940m; prior year included $343m goodwill impairment)
+- Net income attributable to Tyson $527m (+23% vs $427m); diluted EPS $1.49 vs $1.20
+- Q3 alone: sales flat at $13,868m; net income $182m vs $61m; operating income $362m vs $260m
+
+*Nine-month segment operating income (27 Jun 2026 vs 28 Jun 2025):*
+
+| Segment | 9M FY2026 | 9M FY2025 |
+|---------|----------|----------|
+| Beef | $(701)m | $(707)m |
+| Pork | $151m | $(58)m |
+| Chicken | $1,344m | $1,302m |
+| Prepared Foods | $982m | $1,016m |
+| International | $127m | $154m |
+
+Beef remains the drag; Pork recovery is the main y/y improvement. Chicken and Prepared Foods are stable but not accelerating.
+
+*Cash flow and balance sheet (9M FY2026):* Operating cash flow $1,469m (vs $1,620m); capex $(556)m; implied nine-month FCF ~$913m. Cash fell to $740m from $1,229m at FY2025 year-end; total debt $8,006m (current debt rose to $1,427m). Shareholders’ equity ~$18.2bn. Dividends paid $529m in nine months; share repurchases ~$109m under the buyback programme.
+
+*FY2025 interim reference (9M ended 28 Jun 2025):* The Q3 FY2025 10-Q recorded a $343m Beef goodwill impairment and legal contingency accruals of $93m (Beef) and $250m (Pork) over nine months. Management disclosed the Beef reporting unit had less than 10% excess fair value over carrying value—heightened impairment risk.
+
+*Restructuring:* A network optimisation plan initiated in Q1 FY2025 targets global footprint rationalisation. As of Q3 FY2026, expected pretax net charges for approved actions were ~$241m through 27 Jun 2026, including Beef harvesting facility closures and Prepared Foods plant shutdowns.
+
+**Gaps:** Consolidated annual statements in 10-K body extracts are unavailable due to truncation. No trading-update regime filings. Nine of ten 8-K filings lack body extracts. Full-year FY2026 results are not yet filed.
+
+## RISKS AND RED FLAGS
+**Cyclical / Beef:** Filings describe “one of the most historic cattle shortages” and limited herd rebuild timing. Nine-month Beef operating losses of ~$(701)m persist despite network cuts. August 2026 news reports additional closures (Joslin IL, Eagle Mountain UT, Pasco WA sale), ~2,500 layoffs, and roughly one-third of prior beef capacity exited—confirming structural shrinkage rather than a near-term margin snapback.
+
+**Accounting / impairment:** $343m Beef goodwill impairment in Q3 FY2025; goodwill and indefinite-life intangibles totalled ~$13.5bn (~37% of assets) at FY2025 year-end per 10-K risk disclosures. Beef reporting unit flagged at heightened impairment risk (<10% fair-value cushion). Q3 FY2026 qualitative tests passed, but International goodwill ($0.2bn) remains at heightened risk.
+
+**Litigation:** Legal contingency accruals in 9M FY2026 include $98m (Chicken), $90m (Beef), and $60m (Pork). The 10-Q references broiler antitrust litigation with trials expected to begin in fiscal 2026 after summary judgment motions were denied (March 2025).
+
+**Customer concentration:** Walmart accounted for ~18.7% of FY2025 consolidated sales (10-K); loss of this customer would be material.
+
+**Governance:** Tyson Limited Partnership and Tyson family control ~71.9% of voting power (10-K); the company uses NYSE “controlled company” exemptions.
+
+**Pension:** Participation in a multiemployer pension plan with reported significant underfunding; defined-benefit plans underfunded by ~$146m at FY2025 year-end (10-K risk factors). Withdrawal liability could be material.
+
+**Leverage / liquidity:** Total debt ~$8.0–8.8bn; cash declined to $740m at Jun 2026. Revolving credit facility ($2.5bn) requires minimum interest expense coverage ratio; filings state compliance at Jun 2026 and Jun 2025. No going-concern language identified. Item 3 (Defaults Upon Senior Securities) reported none.
+
+**Competitive / operational:** ~31,000 US employees under collective bargaining; ~47% of covered workers at sites with contracts expiring or under negotiation in fiscal 2026. Commodity feed costs (~53% of domestic chicken grow cost in FY2025). Disease risk (HPAI, ASF) explicitly flagged.
+
+**Screen-quality mismatch:** ROE 3.3%, P/E 35.9x, and earnings yield 2.8% indicate the market prices normalised earnings above current reported levels—value case depends on cycle normalisation, not present GAAP earnings power.
+
+RiskTags: cyclical, competitive, customer_concentration, governance, pension, litigation, leverage, accounting
+RiskTags: cyclical, competitive, customer_concentration, governance, pension, litigation, leverage, accounting
+
+## NEWS HIGHLIGHTS
+News coverage in the manifest is **thin and heavily clustered**: all ten articles date from 14–16 August 2026 and focus on a single event—Beef network restructuring amid historic cattle shortages.
+
+- *“Tyson Is Shrinking Its Beef Business to Tackle Mounting Losses”* (Barron’s, 14 Aug 2026) — investors reportedly welcomed capacity cuts as losses mount.
+- *“Tyson Foods closing beef plants amid U.S. cattle shortage”* (Yahoo Finance, 14 Aug 2026) — closures at Joslin IL and Eagle Mountain UT; Pasco WA plant for sale.
+- *“Tyson Foods to shut down Illinois beef facility, leaving 2,500 jobless”* (Yahoo Finance, 14 Aug 2026) — local impact of national restructuring.
+- *“Tyson Foods beef plant closures come as severe drought makes U.S. cattle shortages worse”* (Yahoo Finance, 14 Aug 2026) — links drought to supply tightness flagged in filings.
+- *“How Investors Are Reacting To Tyson Foods (TSN) Beef Plant Closures Amid Historic Cattle Shortages”* (Yahoo Finance, 16 Aug 2026) — market reaction piece.
+
+No manifest coverage of management changes, M&A, or regulatory actions beyond what filings already disclose (plant closures, litigation accruals). Strategy shift is clear: shrink Beef footprint, consolidate around three central US sites, and preserve harvest capacity while reducing losses. Broader twelve-month context (earnings recovery, $343m impairment, network optimisation plan launch) comes from filings, not news.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.64
+Rationale: Deep research partially confirms the screen’s buy case on P/B, FCF, and dividend support, but low ROE, elevated P/E, persistent Beef losses, and impairment/litigation overhangs limit conviction until cycle and restructuring outcomes are clearer.
