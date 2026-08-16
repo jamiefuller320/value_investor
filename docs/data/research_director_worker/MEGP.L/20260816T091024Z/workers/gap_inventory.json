@@ -1,0 +1,110 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "Evidence-ladder step alternate_news is absent from the sources pack: there is no alternate_news artefact under sources/, only news_manifest.json (16 articles) and 18 news_batch_*.json files — sources/financials_annual.json and sources/news_manifest.json.",
+    "Yahoo financials_annual.json has quarterly_income as an empty object ({}); annual income_statement/balance_sheet/cash_flow run FY2021–FY2025 only — H1/interim metrics must come from filing bodies, not Yahoo — sources/financials_annual.json.",
+    "Filings pack is filing-rich (63 indexed bodies, all with_body true): 11 annual, 4 interim, 1 trading_update, 47 other — sources/filings/filings_index.json.",
+    "Director trial assigns five workers (FY25 annual, H1 2026 interim, news_digest, screen_context, gap_inventory); workers/ contains only four outputs — no worker targets the 1 Jun 2026 trading-update bodies e5f6ebdd46934d00 (Investegate RNS) or ir_8a1ddede4c8b6528 (IR PDF duplicate) — sources/filings/filings_index.json.",
+    "Trading-update bodies exist and state H1 2026 group revenue +2%, FY26 PBT guidance cut to £69m–£74m, April Photo.ME −17% vs H1 −6%, Wash.ME April +3% vs H1 +17%, equipment sales −14%, Middle East consumer-confidence narrative — sources/filings/bodies/e5f6ebdd46934d00.txt; sources/filings/bodies/ir_8a1ddede4c8b6528.txt.",
+    "H1 interim worker (ac9d0c965a93c3fd) reaffirms revised FY26 PBT £69m–£74m but notes no prior guidance level and no explicit link to the 1 Jun trading update — gap for guidance-revision chronology — sources/filings/bodies/ac9d0c965a93c3fd.txt.",
+    "FY25 audit-delay RNS bodies exist (25 Feb 2026: 4e623d8eb77b8f49; 12 Mar 2026 update: 32f4d3a0361630fd) citing Forvis Mazars needing more time, share suspension from 2 Mar 2026, no material audit issues disclosed, publication pushed to 23 Mar 2026 — no dedicated worker read — sources/filings/filings_index.json.",
+    "FY25 annual-results worker (f40be706e75a10ae) confirms unqualified FY25 audit and going concern but explicitly lacks Feb–Mar audit-delay explanation — sources/filings/bodies/f40be706e75a10ae.txt (via workers/filing_fy25_annual_results.json gap note).",
+    "Governance/capital-structure pack bodies exist but have no dedicated worker: offer-period termination (4430d9a965d6d46e, 5 Dec 2025); Jan 2026 Montefiore secondary placing proposed (275c8eb9ff3328e9) and completed at 132p for 12,523,017 shares (71001742a9008234); Rule 9 waiver / GM buyback circular (050e503ab7d4e46e); GM/buyback result (40147467451781c7); Form 8.3 disclosures (a07391bb968abb3e, faaf483e0fb258a0, 5c2172aaa8d82c6a) — sources/filings/filings_index.json.",
+    "Rule 9 circular states Concert Party holds >30% but <50% of voting rights, blocking prior buyback authority until Panel waiver subject to independent shareholder approval — sources/filings/bodies/050e503ab7d4e46e.txt.",
+    "news_digest is partial: Google News entries are RSS title stubs only; Investors' Chronicle boardroom headline (4 Jun 2026) has no article body in manifest; cannot verify governance allegations from news alone — sources/news_manifest.json.",
+    "Screening snapshot tags FCF fiscal_year 2025 currency USD and key_metrics FCF 25.2m while FY25 RNS reports in GBP (£); Yahoo annuals lack quarterly bridge — screen/Yahoo vs filing currency reconciliation unassigned — sources/screening_snapshot.json; sources/financials_annual.json.",
+    "filings_index mis-tags trading-update IR PDF (ir_8a1ddede4c8b6528) as period interim, which can cause orchestration to skip the June profit-warning in favour of interim-results bodies — sources/filings/filings_index.json."
+  ],
+  "figures": [
+    {
+      "metric": "quarterly_income records",
+      "value": "0 (empty object)",
+      "period": "Yahoo fetch 2026-08-16",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/financials_annual.json",
+      "note": "H1/interim not available from Yahoo; filing-only path required"
+    },
+    {
+      "metric": "News manifest articles",
+      "value": "16",
+      "period": "updated 2026-08-16",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/news_manifest.json",
+      "note": "alternate_news step unavailable; no secondary news feed in sources/"
+    },
+    {
+      "metric": "Indexed filing bodies",
+      "value": "63 (all with_body)",
+      "period": "fetched 2026-08-16",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/filings_index.json",
+      "note": "11 annual, 4 interim, 1 trading_update, 47 other"
+    },
+    {
+      "metric": "FY26 PBT guidance (revised)",
+      "value": "£69m–£74m",
+      "period": "1 Jun 2026 trading update",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/e5f6ebdd46934d00.txt",
+      "note": "Prior FY26 PBT range not stated in assigned worker outputs"
+    },
+    {
+      "metric": "H1 2026 group revenue growth",
+      "value": "+2%",
+      "period": "six months to 30 Apr 2026 (trading update)",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/e5f6ebdd46934d00.txt",
+      "note": "Interim RNS reports +0.3% (£154.3m); reconciliation not worker-assigned"
+    },
+    {
+      "metric": "Montefiore placing price",
+      "value": "132p per share",
+      "period": "14 Jan 2026",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/71001742a9008234.txt",
+      "note": "12,523,017 shares (~3.3% issued); seller exited; no worker read"
+    },
+    {
+      "metric": "Screen FCF tag currency",
+      "value": "USD",
+      "period": "FY2025 screen inputs",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/screening_snapshot.json",
+      "note": "Conflicts with GBP filing presentation; reconciliation unassigned"
+    },
+    {
+      "metric": "Screen FCF",
+      "value": "25.15m",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/screening_snapshot.json",
+      "note": "fcf.canonical 25153000; filing-aligned; dividend cover gross −0.90× / net 0.84×"
+    }
+  ],
+  "gaps": [
+    "alternate_news unavailable — no cross-feed triangulation beyond news_manifest RSS/yfinance stubs",
+    "Prior FY26 profit guidance before the 1 Jun 2026 cut to £69m–£74m — not extracted by any assigned worker",
+    "Whether H1 interim restored, held, or further cut the June revised outlook beyond restating £69m–£74m — trading-update vs interim chronology unassigned",
+    "Root cause and audit-procedure detail behind FY25 Forvis Mazars delays (25 Feb and 12 Mar 2026 RNS) — only headline facts in bodies, no worker synthesis",
+    "Offer-period history: interested parties, terms considered, and why discussions terminated (5 Dec 2025) — body unread by workers",
+    "Concert Party identity, exact control percentage, and Rule 9 waiver GM vote outcome (26 Feb 2026) — circular/result bodies unread",
+    "Montefiore placing control/governance implications and post-placing register — placing pack unread",
+    "Form 8.3 / offer-period disclosure table narrative during Dec 2025 offer window — unread",
+    "Investors' Chronicle 'boardroom problem' claims — news_manifest title only, no article body",
+    "German photobooth ID-rule revenue impact quantification beyond H1 interim segment text — no dedicated worker on Nov 2025 news cluster",
+    "Yahoo quarterly_income empty — screen interim-quality overlay (EPS decline, FCF/dividend cover) not re-derived from Yahoo; relies on screening_snapshot unless filing workers cover it",
+    "Screen P/E 7.9, ROE 28.2%, FCF USD 25.2m vs filing GBP presentation — currency/unit reconciliation not worker-assigned",
+    "Trading-update H1 revenue +2% vs interim RNS +0.3% — definitional/timing reconciliation without dedicated trading-update read"
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/financials_annual.json",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/news_manifest.json",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/filings_index.json",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/screening_snapshot.json",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/e5f6ebdd46934d00.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/ir_8a1ddede4c8b6528.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/4e623d8eb77b8f49.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/32f4d3a0361630fd.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/4430d9a965d6d46e.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/275c8eb9ff3328e9.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/71001742a9008234.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/050e503ab7d4e46e.txt",
+    "/workspace/docs/data/research_director_worker/MEGP.L/20260816T091024Z/sources/filings/bodies/ac9d0c965a93c3fd.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-28e6f0e6-21a0-4f7f-9c77-5bdd27a1e37c"
+}

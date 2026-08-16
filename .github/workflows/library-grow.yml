@@ -99,7 +99,9 @@ jobs:
           if [ -z "$CURSOR_API_KEY" ]; then
             ARGS="$ARGS --dry-run-research"
           fi
-          ftse-library $ARGS | tee "$ROOT/last_ladder.json"
+          # run_library_ladder already writes $ROOT/last_ladder.json; do not tee stdout
+          # over it (automation-status logs would corrupt JSON for engineering_drafted).
+          ftse-library $ARGS
           FOCUS=$(python3 -c "import json; print(json.load(open('$ROOT/policy.json')).get('focus_market','sp500'))")
           ftse-library --root "$ROOT" --policy "$ROOT/policy.json" status --markets "$FOCUS" --json \
             | tee "$ROOT/status_snapshot.json"

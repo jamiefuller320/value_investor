@@ -1,6 +1,6 @@
 # ME Group International plc (MEGP.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:26:24.296483+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-16T09:15:43.374835+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 ME Group International is a FTSE 350 operator of coin-operated instant-service equipment—chiefly Photo.ME photobooths and Wash.ME laundry machines—across 16 countries, with ~49,000 units in the field. The quantitative screen flags a strong buy on cheapness (P/E 7.8×, P/B 2.2×, FCF yield), quality (ROE 28.2%), dividend (6.9% yield) and financial health (D/E ~28%), with 15 of 22 models passing across five factor families. The valuation hook is a cash-generative, net-cash business trading at a mid-single-digit earnings multiple whilst pivoting mix toward higher-growth, higher-margin laundry. The central debate is whether laundry rollout and capital returns can offset photobooth regulatory erosion (notably Germany), April 2026 cyclical softness in France, and a tightening free-cash-flow versus dividend/buyback burden as net cash falls from £26.5m at FY25 year-end to £7.5m at H1 26.
