@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-14T08:27:42.336898+00:00",
+  "generated_at": "2026-08-16T07:19:55.539805+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -31,7 +31,7 @@
       "min_rebalance_notional_gbp": 10.0
     },
     "library": {
-      "focus_market": "omxs30",
+      "focus_market": "iseq20",
       "market_queue": [
         "sp500",
         "euro_stoxx50",
@@ -169,9 +169,15 @@
           "graduated_at": "2026-08-02T12:33:10.531346+00:00",
           "coverage_pct": 1.0,
           "stale_pct": 0.0
+        },
+        {
+          "market": "omxs30",
+          "graduated_at": "2026-08-14T15:46:47.564038+00:00",
+          "coverage_pct": 1.0,
+          "stale_pct": 0.0
         }
       ],
-      "graduated_count": 19,
+      "graduated_count": 20,
       "queue_complete": false,
       "focus_graduation": {
         "auto_advance": true,
@@ -226,7 +232,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-12T12:41:57.365362+00:00"
+      "updated_at": "2026-08-14T15:46:47.565271+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -249,7 +255,7 @@
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
+        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -321,6 +327,24 @@
   "achievements": {
     "timeline": [
       {
+        "at": "2026-08-14T15:46:47.564038+00:00",
+        "kind": "graduation",
+        "title": "Focus advanced: omxs30 → iseq20",
+        "detail": "coverage=1.0 stale=0.0 reason=advanced"
+      },
+      {
+        "at": "2026-08-14T15:46:47.564038+00:00",
+        "kind": "graduated_market",
+        "title": "Graduated market: omxs30",
+        "detail": "coverage=1.0 stale=0.0"
+      },
+      {
+        "at": "2026-08-14T15:46:25.292541+00:00",
+        "kind": "ladder_run",
+        "title": "Library ladder run (focus omxs30)",
+        "detail": "shortlist=12 research created=None updated=None spend≈None"
+      },
+      {
         "at": "2026-08-14T08:27:20.259537+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
@@ -329,13 +353,13 @@
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-02T12:33:10.531346+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: smi \u2192 omxs30",
+        "title": "Focus advanced: smi → omxs30",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -347,7 +371,7 @@
       {
         "at": "2026-07-26T18:19:32.036441+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: psi20 \u2192 smi",
+        "title": "Focus advanced: psi20 → smi",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -359,7 +383,7 @@
       {
         "at": "2026-07-26T05:41:29.750591+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: atx \u2192 psi20",
+        "title": "Focus advanced: atx → psi20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -371,7 +395,7 @@
       {
         "at": "2026-07-25T06:02:07.067074+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: us_adr_asia \u2192 atx",
+        "title": "Focus advanced: us_adr_asia → atx",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -395,7 +419,7 @@
       {
         "at": "2026-07-18T18:33:47.281863+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sti \u2192 us_adr_asia",
+        "title": "Focus advanced: sti → us_adr_asia",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -407,7 +431,7 @@
       {
         "at": "2026-07-18T18:33:47.280727+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: hang_seng \u2192 sti",
+        "title": "Focus advanced: hang_seng → sti",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -419,7 +443,7 @@
       {
         "at": "2026-07-18T18:33:47.279140+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: bel20 \u2192 hang_seng",
+        "title": "Focus advanced: bel20 → hang_seng",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -431,7 +455,7 @@
       {
         "at": "2026-07-18T18:33:47.278138+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aex \u2192 bel20",
+        "title": "Focus advanced: aex → bel20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -443,7 +467,7 @@
       {
         "at": "2026-07-18T18:33:47.277118+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_mib \u2192 aex",
+        "title": "Focus advanced: ftse_mib → aex",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -455,7 +479,7 @@
       {
         "at": "2026-07-18T18:33:47.275978+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ibex35 \u2192 ftse_mib",
+        "title": "Focus advanced: ibex35 → ftse_mib",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -467,7 +491,7 @@
       {
         "at": "2026-07-18T18:33:47.274723+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aim \u2192 ibex35",
+        "title": "Focus advanced: aim → ibex35",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -479,7 +503,7 @@
       {
         "at": "2026-07-18T18:04:30.214468+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: tsx60 \u2192 aim",
+        "title": "Focus advanced: tsx60 → aim",
         "detail": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       },
       {
@@ -527,32 +551,32 @@
       {
         "at": "2026-07-18T13:49:17.502997+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: cac40 \u2192 tsx60",
+        "title": "Focus advanced: cac40 → tsx60",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.501764+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: dax \u2192 cac40",
+        "title": "Focus advanced: dax → cac40",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.500540+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: nasdaq100 \u2192 dax",
+        "title": "Focus advanced: nasdaq100 → dax",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.498573+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_smallcap \u2192 nasdaq100",
+        "title": "Focus advanced: ftse_smallcap → nasdaq100",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-17T04:51:50.477798+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=\u2014"
+        "detail": "market=—"
       },
       {
         "at": "2026-07-17T04:51:50.477265+00:00",
@@ -594,12 +618,12 @@
         "at": "2026-07-17T04:28:29.172645+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=\u2014"
+        "detail": "market=—"
       },
       {
         "at": "2026-07-17T04:28:29.172198+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: euro_stoxx50 \u2192 asx200",
+        "title": "Focus advanced: euro_stoxx50 → asx200",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -636,12 +660,12 @@
         "at": "2026-07-17T04:23:00.290382+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=\u2014"
+        "detail": "market=—"
       },
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sp500 \u2192 euro_stoxx50",
+        "title": "Focus advanced: sp500 → euro_stoxx50",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -653,11 +677,56 @@
       {
         "at": "2026-07-16T14:09:40.872338+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       }
     ],
-    "last_ladder": null,
+    "last_ladder": {
+      "run_at": "2026-08-14T15:46:25.292541+00:00",
+      "focus_market": "omxs30",
+      "graduated_markets": [
+        "sp500",
+        "euro_stoxx50",
+        "asx200",
+        "ftse_smallcap",
+        "nasdaq100",
+        "dax",
+        "cac40",
+        "tsx60",
+        "aim",
+        "ibex35",
+        "ftse_mib",
+        "aex",
+        "bel20",
+        "hang_seng",
+        "sti",
+        "us_adr_asia",
+        "atx",
+        "psi20",
+        "smi",
+        "omxs30"
+      ],
+      "plan": {
+        "max_tickers": 40,
+        "surplus_day": false,
+        "research_model": "composer-2.5",
+        "allow_research": true
+      },
+      "layers": {
+        "fundamentals_skipped": false,
+        "maintenance_skipped": true,
+        "maintenance_markets": [],
+        "screen_shortlist": 12,
+        "screen_strong_buy": 6,
+        "screen_buy": 6,
+        "research_executed": null,
+        "research_created": null,
+        "research_updated": null,
+        "research_estimated_spend_usd": null,
+        "graduation_skipped": false,
+        "graduated_to": null
+      }
+    },
     "milestones": {
       "ladder_complete": {
         "completed_at": "2026-07-18T13:49:27.390054+00:00",
@@ -1007,6 +1076,14 @@
         "coverage_pct": 1.0,
         "stale_pct": 0.0,
         "reason": "advanced"
+      },
+      {
+        "at": "2026-08-14T15:46:47.564038+00:00",
+        "from_market": "omxs30",
+        "to_market": "iseq20",
+        "coverage_pct": 1.0,
+        "stale_pct": 0.0,
+        "reason": "advanced"
       }
     ],
     "model_review_history": [
@@ -1027,8 +1104,8 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-12T12:28:06.176369+00:00",
-    "queue_ui_updated_at": "2026-08-14T08:27:42.338198+00:00",
+    "compiled_at": "2026-08-16T07:19:55.129242+00:00",
+    "queue_ui_updated_at": "2026-08-16T07:19:55.541011+00:00",
     "task_count": 43,
     "status": {
       "open_count": 0,
@@ -1048,9 +1125,9 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-14T08:27:42.355230+00:00",
+    "generated_at": "2026-08-16T07:19:55.553070+00:00",
     "observe_only": true,
-    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
+    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
     "tracks": {
       "ai_judgment": {

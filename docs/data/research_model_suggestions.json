@@ -1720,7 +1720,127 @@
       "run_id": "20260813T120331Z",
       "director_model": "grok-4.6",
       "recorded_at": "2026-08-13T12:07:36.785692+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Align gross FCF/dividend coverage to the same fiscal period as capex and dividends — MEGP shows −0.90× gross because H1 gross OCF (£38.7m) is subtracted from FY capex (£65.6m); annual-consistent gross coverage is ~1.68×.",
+      "recorded_at": "2026-08-16T07:19:32.015186+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Attach weekly FTSE350 screen run manifest to each ticker gap-fill pack so universe-level signal counts are verifiable locally.",
+      "recorded_at": "2026-08-16T07:19:32.015198+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse IR presentation cash-bridge slides (`ir_59ec4565fa7e453b.txt`) into structured FCF/dividend metrics for gap-fill prompts.",
+      "recorded_at": "2026-08-16T07:19:32.015204+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Flag `divergence_flagged` when filing-aligned FCF and screen TTM FCF differ by >25% (MEGP: £25.2m vs £15.7m).",
+      "recorded_at": "2026-08-16T07:19:32.015209+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When interim_quality_overlay fires, require explicit gross vs net FCF/dividend coverage period reconciliation in gap-fill output.",
+      "recorded_at": "2026-08-16T07:19:32.015213+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Reject Investegate HTML fallbacks that fail period validation — this pass marked `ir_a9733d0de6aec27d` (April trading-update URL) as fetched with body, but content is H1 2026 interim duplicate; enforce headline/period keyword gate before `has_body: true` and prefer matched RNS (`94eb1f8d38a51fa6.txt`) as canonical trading-update source.",
+      "recorded_at": "2026-08-16T07:19:32.015221+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When `fcf.divergence_flagged` and `fcf.source == filing_aligned_ocf_capex`, exclude Yahoo `screen_ttm` from FCF Yield and Earnings Quality model inputs and display filing FCF in action notes — prevents $14.4m TTM from suppressing an otherwise passing quality-income profile.",
+      "recorded_at": "2026-08-16T07:19:32.015228+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Extract annual report principal risks pages 84–88 as a dedicated chunk from `ir_3a67962eb8770824.txt` — indexed but not present in body text, blocking full regulatory-risk scoring.",
+      "recorded_at": "2026-08-16T07:19:32.015234+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest Yahoo quarterly cash-flow statements into `financials_annual.json` to enable mechanical TTM FCF reconciliation in gap-fill passes rather than leaving the $14.4m vs $119m gap unexplained at quarter level.",
+      "recorded_at": "2026-08-16T07:19:32.015238+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Gap-fill prompt should flag misattributed bodies (trading-update URL carrying interim content) as an explicit ingest failure in GAP FILL UPDATE, not silently treat refetch as success.",
+      "recorded_at": "2026-08-16T07:19:32.015241+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Persist full IR results-presentation PDF text (FCF bridge pages currently truncate mid-table in `ir_0d388cd522a7cf4c.txt`) so company-adjusted FCF reconciles to the correct fiscal year.",
+      "recorded_at": "2026-08-16T07:19:32.015244+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When `fcf.company_adjusted` diverges from latest RNS free-cash-flow by >15%, flag stale basis and auto-fail Dividend Growth / High Dividend Yield unless RNS-adjusted cover exceeds 1.0×.",
+      "recorded_at": "2026-08-16T07:19:32.015250+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add media-sector cyclical overlay using filed TAR YoY from latest trading update (e.g. Q3 guide **−6%**) to down-weight conviction on yield passes when TAR trailing 12m is negative.",
+      "recorded_at": "2026-08-16T07:19:32.015255+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest TR-1 major-holding RNS bodies (Liberty Global notifications now present) into a structured `major_holders` field for governance red-flag surfacing.",
+      "recorded_at": "2026-08-16T07:19:32.015259+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to explicitly state pension surplus vs deficit from note 3.8/3.2 filing extracts before accepting “pension risk” from screen failures.",
+      "recorded_at": "2026-08-16T07:19:32.015263+00:00"
     }
   ],
-  "updated_at": "2026-08-13T12:07:36.785696+00:00"
+  "updated_at": "2026-08-16T07:19:32.015266+00:00"
 }

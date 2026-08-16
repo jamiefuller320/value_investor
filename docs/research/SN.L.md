@@ -1,90 +1,80 @@
 # Smith & Nephew plc (SN.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:32:48.375722+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-16T06:44:03.695251+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Smith & Nephew is a global medtech business (Orthopaedics, Sports Medicine & ENT, Advanced Wound Management) that the quantitative screen rates **Strong Buy** on cheapness, quality, dividend, GARP and risk metrics (P/E ~20, P/B ~2.4, yield ~2.6%, D/E ~73%, FCF ~$852m). The value case rests on a multi-year earnings and cash-flow recovery, disciplined capital return ($500m buyback completed in 2025; another $500m announced May 2026), and a portfolio shift toward higher-growth Sports Medicine. The central debate is whether H2 2026 product launches and reimbursement stabilisation can offset visible near-term weakness in US knees (−10.3% in Q1) and skin substitutes, after Q2 underlying growth of 1.6% missed expectations. Primary filing coverage in this pack is thin (one trading update, no indexed annual or interim accounts), so conviction is **partially confirmed** rather than fully validated.
-
----
+Smith & Nephew plc (SN.L) is a FTSE 100 medical-technology group spanning Orthopaedics, Sports Medicine & ENT, and Advanced Wound Management, dual-listed in London and New York. The quantitative screen rates the name a **strong buy** (8/22 models; composite 72%), supported by moderate valuation (P/E 20.3, P/B 2.4), improving free cash flow, dividend coverage, and a Piotroski F-Score of 7/9. The investment case rests on a multi-year earnings recovery, the RISE growth strategy, innovation-led share gains (notably Sports Medicine), and aggressive capital return—$502m of buybacks in FY2025 per Yahoo data, plus a new $500m programme announced in the Q1 2026 trading update. The central debate is whether portfolio rebalancing (Sports Medicine now larger than Orthopaedic Reconstruction) and product launches can offset US knee share loss, skin-substitute reimbursement pressure, and tariff headwinds (~$60m guided for 2026). Filing coverage in this pack is thin: no annual report or interim/H1 filing is indexed; analysis leans on the May 2026 trading update and Yahoo annuals.
 
 ## INVESTMENT THESIS
-The screen’s Strong Buy signal is grounded in a business that screens as **cheap relative to improving fundamentals**. Yahoo-sourced annual data (no indexed annual report in `filings_index.json`) shows revenue rising from $5.5bn (2023) to $6.2bn (2025), net income from $263m to $625m, and FCF from $181m to **$852m** — a step-change in cash generation that supports the FCF Yield, Earnings Quality, Financial Health and Piotroski passes. ROE of ~11.9% and dividend growth screening sit alongside shareholder-friendly allocation: ~$330m annual dividends plus ~$502m repurchases in 2025, with management guiding ~$800m FCF for 2026 and committing to return >$835m (buyback plus ordinary dividend) over the next twelve months per the Q1 trading update.
+For a value investor, SN.L offers a **quality compounder at a reasonable price** rather than deep value. The screen passes five metric families—cheapness, quality, dividend, GARP, and risk—with models including Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Piotroski F-Score, Composite Value, Earnings Quality, and Financial Health. That profile fits a business generating **$852m FCF in FY2025** (Yahoo; aligned with the screen’s filing-aligned OCF/capex basis), covering dividends ~2.6× on a net basis, with debt/equity of 73% and a current ratio of 2.6—adequate, not pristine.
 
-Business quality is improving structurally, not only cyclically. The Q1 2026 RNS reports Sports Medicine has overtaken Orthopaedic Reconstruction in size; innovation launched in the last five years drove more than half of growth; and the RISE strategy targets ~6% underlying revenue growth and >10% adjusted ROIC. For a value investor, the hook is a **quality medtech franchise trading at modest multiples** while undergoing portfolio mix improvement, with Cevian Capital building a ~14% stake (news, Aug 2026) adding a governance/catalyst overlay the screen does not capture. Timing is neutral (RSI ~44, price below 200-day MA), which suits accumulation rather than momentum chasing.
+Business quality is improving. Yahoo annuals show revenue rising from **$5.55bn (2023) to $6.16bn (2025)** and net income from **$263m to $625m**, with basic EPS **$0.30 → $0.72** over the same period—statutory figures flattered by lower restructuring charges in 2025 ($63m vs $203m in 2024). The Q1 2026 trading update (primary filing) confirms operational momentum: underlying revenue growth **3.1%** (4.7% on an adjusted daily-sales basis), innovation contributing more than half of growth, and FY2026 guidance unchanged at **~6% underlying revenue growth**, **~$1.3bn trading profit**, and **~$800m FCF**. Management is returning surplus capital: a **$500m buyback** announced in May 2026 follows the completed 2025 programme, with Cevian Capital building a **~14% stake** (news, Aug 2026)—a catalyst for operational focus.
 
----
+What keeps this in “strong buy” territory for screens rather than “moat” territory: ROE **11.9%** (below Buffett/Magic Formula thresholds), PEG ~3.6, and EV/EBIT ~14.4. The name fails deep-value and wide-moat screens but passes enterprising-value and cash-return tests—appropriate for a patient value accumulator betting on execution under RISE and activist oversight, not a net-net.
 
 ## FINANCIAL REVIEW
-### Primary filings
+**Filing coverage gap.** The `filings_index.json` catalogue contains **zero annual and zero interim** filings. Available primary material is: one **trading update** (Q1 2026, 6 May 2026) and product/management RNS items; a Companies House extract is a 2007 administrative form, not accounts. **No half-year or full-year statutory accounts are available in this pack**; the H1/Q2 results release scheduled for 4 August 2026 is not indexed. Annual trend analysis below therefore **falls back to `financials_annual.json` (Yahoo)**, explicitly labelled.
 
-**Indexed coverage:** 8 filings — **0 annual**, **0 interim**, **1 trading update**, 7 other (product/regulatory releases; one legacy 2007 Companies House form; misindexed items). **No annual report, 10-K/20-F, or half-year/interim results are available in this source pack.** Annual and balance-sheet analysis below falls back to Yahoo `financials_annual.json`; interim colour comes solely from the Q1 2026 trading update RNS (6 May 2026).
-
-**Q1 2026 trading update (primary — RNS body):**
-- Revenue **$1,501m** (2025: $1,407m); underlying growth **+3.1%** (+4.7% on adjusted daily sales basis); reported **+6.6%** (350bps FX tailwind).
-- Segment highlights: Sports Medicine & ENT **+6.7%** underlying; Advanced Wound Management **+2.2%**; Orthopaedics **+0.8%** (US Knee Implants **−10.3%**).
-- FY2026 guidance **unchanged**: ~**6%** underlying revenue growth; ~**$1.3bn** trading profit (post-Integrity Orthopaedics); ~**$800m** free cash flow; >**10%** adjusted ROIC (ex-Integrity).
-- Disclosed headwinds: ~**$60m** tariff impact; **$20–40m** incremental skin-substitute reimbursement reset; Integrity acquisition marginally dilutive to trading profit in 2026.
-- Capital allocation: new **$500m** share buyback (follows $500m completed in 2025); financed from FCF and cash.
-- Management cites a **strong balance sheet**; H2 weighted for revenue and profit (product launches, skin-substitute stabilisation, US knee trajectory, extra trading day in Q4).
-
-**Annual trends (fallback — Yahoo `financials_annual.json`; USD):**
+**Annual trends (Yahoo fallback, USD).**
 
 | Metric | 2023 | 2024 | 2025 |
 |--------|------|------|------|
 | Revenue | $5,549m | $5,810m | $6,164m |
 | Operating income | $620m | $860m | $857m |
 | Net income | $263m | $412m | $625m |
-| Diluted EPS | $0.30 | $0.47 | $0.72 |
+| Basic EPS | $0.30 | $0.47 | $0.72 |
 | Operating cash flow | $608m | $987m | $1,285m |
-| Free cash flow | $181m | $606m | **$852m** |
-| Net debt | $2,583m | $2,506m | $2,554m |
-| Total debt | $3,084m | $3,321m | $3,327m |
-| Stockholders' equity | $5,217m | $5,265m | $5,289m |
-| Cash | $302m | $619m | $557m |
+| Free cash flow | $181m | $606m | $852m |
+| Capex | ($427m) | ($381m) | ($433m) |
+| Dividends paid | ($327m) | ($327m) | ($330m) |
+| Share buybacks | — | — | ($502m) |
 
-**Interpretation:** Revenue CAGR and margin recovery from the 2023 trough are clear. FCF conversion improved materially in 2024–25 (working-capital release in 2025: inventory −$208m per cash-flow statement). Restructuring/M&A charges persisted ($62m in 2025; $184m in 2024 per income statement) but normalised earnings trend is upward. Leverage is moderate: net debt/equity ~48% on Yahoo figures; interest expense $179m vs operating income $857m. Goodwill and intangibles of **$3.99bn** versus tangible book **$1.30bn** warrants scrutiny but is typical for medtech.
+Revenue CAGR 2023–25 is ~5.5%; the earnings inflection reflects both top-line recovery and lower exceptional restructuring ($195m in 2023, $203m in 2024, $63m in 2025). Gross margin held broadly stable (~68%). Balance sheet at FY2025 (Yahoo): **total debt $3.33bn**, **net debt $2.55bn**, **equity $5.29bn**, **cash $557m**; goodwill and intangibles **$3.99bn** (~38% of total assets)—typical for medtech but limits tangible book. Inventory **$2.12bn** fell from $2.39bn in 2024, aiding working-capital release (inventory change +$208m in the 2025 cash-flow statement).
 
-**Interim gap:** No indexed H1 2026 or FY2025 annual report bodies. Q2 performance is visible only via news (“Smith & Nephew SNATS Q2 Earnings Call Highlights”, 9 Aug 2026): underlying revenue growth **1.6%**, below expectations, with US Orthopaedics and Advanced Wound Bioactives weak — a flag that H1 operational momentum lags full-year guidance assumptions. **Verify full H1 results and FY2025 annual report before sizing positions.**
+**Interim / trading update (primary filing: Q1 2026, 6 May 2026).**
 
----
+- **Q1 revenue $1,501m** (2025: $1,407m): reported **+6.6%**, underlying **+3.1%**; FX tailwind ~350bps.
+- By division (underlying): Sports Medicine & ENT **+6.7%**; Advanced Wound Management **+2.2%**; Orthopaedics **+0.8%**.
+- **US knee implants −10.3%** underlying, deliberately managed ahead of LANDMARK launch; US hips **+5.8%** (fourth consecutive quarter above market).
+- **Advanced Wound Bioactives −1.7%** on skin-substitute reimbursement reset (guided **$20–40m** full-year impact).
+- **FY2026 guidance maintained**: ~**6%** underlying revenue growth; ~**8%** organic trading-profit growth; ~**$1.3bn** trading profit (including Integrity Orthopaedics dilution); ~**$800m** FCF; **>10%** adjusted ROIC.
+- **Capital allocation**: new **$500m** buyback over 12 months; prior $500m programme completed in 2025.
+- FY2025 group sales cited in the release: **$6.2bn**.
+
+**Interim gap.** With no indexed H1 2026 or FY2025 annual report body, H2-weighted guidance, tariff impact (~$60m), and post-Q1 trading (news suggests Q2 underlying growth **1.6%**, below plan) cannot be verified from primary filings in this pack.
 
 ## RISKS AND RED FLAGS
-**Operational / competitive:** US Knee Implants declined 10.3% in Q1 (deliberate set-placement discipline ahead of LANDMARK launch); Q2 group underlying growth of 1.6% (news) suggests recovery is not yet evident. Orthopaedics competes against Stryker, Zimmer and others in robotics and cementless knees.
+**Operational / competitive.** US knee market share remains the weakest link: Q1 US knees **−10.3%** underlying as the group thins its customer base ahead of the LANDMARK cementless launch (expected Q3 2026). Orthopaedics leadership turnover—**Nathan Folkert** replacing **Craig Gaffin** as President, Orthopaedics (May 2026 RNS)—adds execution risk during a critical product cycle. Robotics competition (Stryker, Zimmer, etc.) intensifies as CORI XT rolls out.
 
-**Regulatory / reimbursement:** Skin-substitute reimbursement reset ($20–40m guided impact); China Volume-Based Procurement delayed to H2 2026 (ENT inventory reduction in Q1). Tariffs ~$60m. FDA/regulatory pipeline is active (TESSA De Novo, CATALYSTEM 510(k)) but approval does not guarantee uptake or reimbursement.
+**Regulatory / reimbursement.** Advanced Wound Bioactives faces a **2026 reimbursement reset** for skin substitutes; management guides **$20–40m** incremental impact and notes billing inefficiency and inventory clearing. **Volume-Based Procurement in China** for Sports Medicine/ENT, delayed to H2 2026, could disrupt growth that was strong in Q1. Forward-looking RNS language flags **regulatory approvals, reimbursement decisions, product recalls, and patent litigation** as material uncertainties.
 
-**Governance / activism:** Cevian Capital stake ~14.21% (Aug 2026) increases pressure for operational improvement and capital discipline; Orthopaedics leadership change (Nathan Folkert replacing Craig Gaffin, per Q1 RNS).
+**Macro / cyclical.** Guided **~$60m tariff impact** in 2026. Healthcare-provider spending, FX (Euro/USD tailwind in Q1), and payer budget pressure remain sensitivities. No going-concern or covenant breach language appears in indexed bodies; balance-sheet leverage (D/E 73%) is manageable but above “fortress” quality screens.
 
-**Balance sheet / pension:** Net debt ~$2.55bn (Yahoo); non-current pension and post-retirement obligations **$84m** (2025 balance sheet). No going-concern, covenant or contingency language in indexed filing bodies — those disclosures would sit in missing annual/interim accounts.
+**Governance / activist.** **Cevian Capital ~14.2%** (Aug 2026 news) increases pressure for margin and portfolio discipline—potentially positive for value, but raises strategic-change and key-person risk if disagreements emerge with CEO **Deepak Nath**’s RISE plan.
 
-**Macro / FX:** ~350bps FX tailwind in Q1; GBP/USD ~1.35 (macro context) affects sterling-reported figures for UK-listed holders.
+**Pension / accounting.** Non-current pension and post-retirement liabilities **$84m** (Yahoo FY2025); defined-benefit obligation **$64m**. High goodwill/intangibles and recurring restructuring lines ($63–203m annually) warrant scrutiny of adjusted vs statutory earnings; screen statutory EPS growth ~53% vs adjusted ~16% highlights the gap.
 
-**Filing risk:** Thin primary coverage — no annual or interim filings indexed; legacy Companies House entry (2007) is not usable. Do not treat Yahoo and RNS trading updates as a complete audit trail.
+**Pack limitations.** Absence of annual/interim statutory filings in the index prevents verification of audit opinion, segment trading profit, pension note detail, or litigation contingencies from primary sources.
 
-RiskTags: regulatory, competitive, cyclical, leverage, governance
-
----
-RiskTags: regulatory, competitive, cyclical, leverage, governance
+RiskTags: regulatory, competitive, cyclical, leverage, governance, pension, litigation
+RiskTags: regulatory, competitive, cyclical, leverage, governance, pension, litigation
 
 ## NEWS HIGHLIGHTS
-Coverage is **moderately thin** on hard news; many Google News hits are mis-tagged “.SN” tickers unrelated to Smith & Nephew.
+Coverage is **moderately thin on hard news** and noisy on ticker “SN” false positives (Chilean stocks, options chains); material Smith & Nephew items include:
 
-**Material items (past year):**
+- **“Smith & Nephew SNATS Q2 Earnings Call Highlights”** (9 Aug 2026, yfinance): Q2 underlying revenue growth **1.6%**, below expectations; US Orthopaedics and Advanced Wound Bioactives weak; Sports Medicine and ENT resilient.
+- **“Smith & Nephew (SNN) Q2 2026 Earnings Call Transcript”** (5 Aug 2026): CEO Nath on orthopaedics gaps and skin-substitute headwinds.
+- **“Cevian Capital Boosts Smith & Nephew (SN.) Stake to 14.21%”** (12 Aug 2026, Kalkine): activist accumulation.
+- **“Smith & Nephew (SN.) Finalizes $250 Million Share Buyback…”** (13 Aug 2026, Kalkine): progress on repurchase programme.
+- **“Smith & Nephew and 4 More Stocks See Action From Activist Investors”** (5 Jun 2026, Barron’s/yfinance): Cevian activity flagged.
+- **“Smith+Nephew Expands ASC Platform to Support Value-Based Care”** (23 Jul 2026): ambulatory-surgery-centre strategy.
+- **“Smith & Nephew share price jumps 2% as Fitch tags it BBB+”** (1 Feb 2026): investment-grade credit affirmation.
+- Product/strategy RNS in pack: **Q1 2026 trading update** (6 May 2026); **CORI XT first clinical cases** (8 Jun 2026); **ALLEVYN COMPLETE CARE launch** (10 Mar 2026); **Integrity Orthopaedics** acquisition referenced in Q1 update.
 
-- **Q2 2026 earnings miss vs expectations** — “Smith & Nephew SNATS Q2 Earnings Call Highlights” (9 Aug 2026); “Smith & Nephew (SNN) Q2 2026 Earnings Call Transcript” (5 Aug 2026): underlying growth 1.6%, US Orthopaedics and skin substitutes cited as weak.
-- **Activist stake build** — “Cevian Capital Boosts Smith & Nephew (SN.) Stake to 14.21% After August 2026 Acquisition” (12 Aug 2026); “Smith & Nephew and 4 More Stocks See Action From Activist Investors” (5 Jun 2026).
-- **Buybacks** — “Smith & Nephew (SN.) Acquires 1.4 Million Shares in Latest Buyback Phase, Allocates $236.5M of $250M Plan” (7 Aug 2026); Q1 RNS $500m new programme (May 2026).
-- **Strategy / guidance** — “Smith & Nephew Upbeat on Further Earnings Growth as Transformation Plan Wraps Up” (2 Mar 2026); “Smith & Nephew Eyes Accelerated Earnings Growth Under New 'Ambitious but Achievable' Strategy” (8 Dec 2025).
-- **Credit** — “Smith & Nephew share price jumps 2% as Fitch tags it BBB+” (1 Feb 2026).
-- **Analyst** — “Bernstein Cuts PT on Smith & Nephew plc (SNN)” to $31.85 from $36.20, Market Perform (26 May 2026).
-- **Product / regulatory** — TESSA De Novo FDA (Jul 2026); CORI XT clinical cases (Jun 2026); ASC platform expansion (Jul 2026); CATALYSTEM hip 510(k) (Jul 2024).
-
-No major M&A beyond Integrity Orthopaedics (referenced in Q1 RNS). Management changes limited to Orthopaedics president per Q1 filing.
-
----
+No major M&A beyond Integrity Orthopaedics; no FDA enforcement actions in the manifest. Near-term narrative: activist stake + buybacks vs softer Q2 growth.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Deep research **partially confirms** the Strong Buy screen — improving FCF, reasonable multiples and active capital return support the case, but missing annual/interim filings and Q2 operational softness mean verify-before-trade on full-year accounts and H1 results is essential.
+Rationale: The strong-buy screen is partially confirmed by FCF recovery, balance-sheet capacity, and capital return, but missing annual/interim filings and Q2 growth miss versus guidance weaken conviction pending verified H1 accounts.

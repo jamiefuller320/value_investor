@@ -1,95 +1,118 @@
 # GSK plc (GSK.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T00:58:27.526240+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-16T06:41:19.904605+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-GSK plc presents a value-oriented buy case anchored on a large-cap biopharma franchise trading at modest multiples (P/E ~16x, FCF yield ~6%, dividend yield ~3.5%) while delivering mid-single-digit organic growth in core earnings. The investment hook is the mismatch between steady core operating momentum—Specialty Medicines and Vaccines growing through HIV long-acting injectables, oncology launches, and Shingrix/Arexvy—and a share price that screens cheap on cash generation, quality, and dividend metrics (11/22 models passed; composite score 67%). The central debate is whether pipeline acceleration and bolt-on M&A (notably the ~$10.6bn Nuvalent lung-cancer deal) can offset patent expiry on dolutegravir (2028–2030), recurring pipeline setbacks (camlipixant discontinued July 2026), and rising net debt/contingent consideration tied to ViiV Healthcare.
+GSK is a post-Haleon focused biopharma generating consistent top-line and core earnings growth, with specialty medicines now the engine of the portfolio. The quantitative screen flags a strong buy on cheapness, quality, dividend, GARP and risk metrics (P/E 15.4, FCF yield 6.5%, ROE 33.4%, Piotroski 8/9), though classic deep-value screens fail on leverage and balance-sheet liquidity. The valuation hook is a cash-generative franchise trading below its 200-day moving average (RSI ~34) while management targets >£40bn sales by 2031 and navigates dolutegravir patent expiry in 2028–2030. The central debate is whether pipeline execution, oncology M&A (notably Nuvalent) and a new cost programme can offset patent cliffs and rising debt — not whether the business is structurally impaired.
+
+---
 
 ## INVESTMENT THESIS
-The quantitative screen flags GSK as a **buy** with unusually broad model support: cheapness (FCF Yield, Acquirer's Multiple, Composite Value), quality (Buffett Quality, Economic Moat, Piotroski F-Score, Earnings Quality), dividend (Dividend Growth), and GARP (Neff PEGY at 0.06). Data quality is full (20/20 metrics), and sector-relative composite (69%) exceeds the headline score—consistent with a FTSE 100 defensive that is inexpensive versus UK healthcare peers without obvious balance-sheet distress.
+For a value-oriented investor, GSK offers a rare combination in large-cap pharma: visible earnings power, improving cash conversion, and a shareholder-return framework that screens well without relying on distressed pricing.
 
-Business quality supports the screen rather than contradicting it. FY2025 filings show turnover of **£32.7bn** (+7% CER), **core operating profit of £9.8bn** (+11% CER), and **core EPS of 172.0p** (+12% CER), with **free cash flow of £4.0bn** and cash from operations of **£8.9bn** (Annual Report 2025). H1 2026 interim results (SEC 6-K, 28 July 2026) show continued momentum: turnover **£16.0bn** (+5% CER), core operating profit **£5.45bn** (+8% CER), core EPS **97.1p** (+9% CER), and H1 free cash inflow **£2.81bn**. Management reaffirmed 2026 guidance for turnover +3–5%, core operating profit +7–9%, and core EPS +7–9% at CER, with a **70p** expected full-year dividend.
+**Quantitative alignment.** The screen passes 11 of 22 models across five families — cheapness (FCF Yield, Acquirer's Multiple), quality (Quality Value, Buffett Quality, Economic Moat, Earnings Quality), dividend (Dividend Growth), GARP (Neff PEGY at 0.05), and risk (Piotroski F-Score 8/9, Composite Value). Key metrics: P/E 15.4, P/B 4.1, dividend yield 3.7%, ROE 33.4%, FCF $4.76bn (FY2025, filing-aligned). FCF covers the dividend on a net basis (coverage ~1.85x per screen). Data quality is full (20/20 metrics).
 
-For a value investor, the thesis is not deep biotech optionality but **cash-backed compounding at a discount**: high ROE (~33% per screen), durable HIV/Vaccines cash flows, active capital return (£2bn buyback completed June 2026), and a stated **>£40bn sales ambition by 2031**. The screen's negative headline earnings growth (-69.5%) reflects statutory volatility from impairments and contingent-consideration remeasurements—not core economics—making core metrics the appropriate anchor.
+**Business quality behind the numbers.** Companies House annual reports document four consecutive years of turnover growth at constant exchange rates (CER), with specialty medicines driving mix improvement. FY2025 turnover reached £32.7bn (+7% CER); core operating profit £9.8bn (+11% CER); core EPS 172.0p (+12% CER). Cash from operations was £8.9bn and free cash flow £4.0bn. Management cites 19 consecutive quarters of sales growth through Q4 2025. R&D investment was £6.6bn in FY2025 (annual report narrative).
+
+**Why not a pure deep-value pick.** Graham, Schloss and Financial Health models fail on P/B ≥3, debt/equity ~106%, and current ratio ~0.82. The investment case is quality-at-a-reasonable-price with a pipeline option, not net-net or asset-play value.
+
+**Timing overlay.** The screen assigns neutral timing: price below 50- and 200-day MAs despite strong fundamentals — consistent with accumulating on weakness rather than momentum chasing.
+
+---
 
 ## FINANCIAL REVIEW
-**Annual results (FY2025 — primary source: Annual Report 2025 RNS body, 5 March 2026)**
+### Annual results (Companies House — primary source)
 
-| Metric | FY2025 | FY2024 (comparator) | Trend |
-|--------|--------|---------------------|-------|
-| Turnover | £32.7bn (+7% CER) | £31.4bn | Accelerating top-line |
-| Core operating profit | £9.8bn (+11% CER) | £9.1bn | Margin expansion |
-| Core EPS | 172.0p (+12% CER) | 159.3p | Core earnings compounding |
-| Total operating profit | £7.9bn | £4.0bn | Statutory rebound post-Zantac |
-| Cash from operations | £8.9bn | £7.9bn | Strong conversion |
-| Free cash flow | £4.0bn | £2.9bn | Step-up in distributable cash |
+Five consolidated annual accounts are indexed (FY2021–FY2025 filings; bodies available for all five). Figures below are from annual report KPI sections in the filing extracts (GBP, AER/CER as stated).
 
-Segment mix (FY2025): Specialty Medicines **£13.5bn** (+17% CER), Vaccines **£9.2bn** (+2% CER), General Medicines **£10.0bn** (-1% CER)—confirming portfolio shift toward higher-growth, higher-margin franchises.
+| Metric | FY2023 | FY2024 | FY2025 |
+|---|---|---|---|
+| Group turnover | £30.3bn | £31.4bn (+7% CER) | £32.7bn (+7% CER) |
+| Core/adjusted operating profit | £8.8bn (+12% CER) | £9.11bn (+11% CER) | £9.8bn (+11% CER) |
+| Core/adjusted EPS | 155.1p (+16% CER) | 159.3p (+10% CER) | 172.0p (+12% CER) |
+| Total operating profit | £6.7bn | £4.0bn* | £7.9bn |
+| Cash from operations | — | £7.9bn | £8.9bn |
+| Free cash flow | — | £2.9bn | £4.0bn |
 
-Balance sheet (31 December 2025, filing body): total assets **£61.1bn**, total liabilities **£45.2bn**, total equity **£16.0bn**. Gross borrowings **£17.7bn** (£3.0bn current + £14.7bn long-term) against cash and equivalents **£3.4bn**. **Contingent consideration liabilities total £6.7bn** (£1.3bn current, £5.4bn non-current), principally ViiV/Shionogi-related. **Pension and post-employment obligations: £1.7bn**. Directors state accounts are prepared on a **going concern** basis with adequate resources for the foreseeable future, while noting future cash needs for acquisitions and buybacks may require capital markets access.
+\*FY2024 total operating profit and EPS depressed by a £1.8bn Zantac settlement charge (annual report 2024).
 
-FY2024 total results were depressed by a **£1.8bn Zantac settlement charge** (disclosed in annual report KPI footnote)—a key reason statutory P/E and growth screens can mislead without core-adjustment.
+**Trend commentary.** Revenue has compounded steadily from £30.3bn (2023) to £32.7bn (2025), entirely on an organic/specialty-medicines mix shift rather than consumer demerger effects (Haleon separated in 2022). Core profitability has outpaced turnover: core operating margin expanded from ~29% to ~30% over the period. FCF rebounded sharply in FY2025 (£4.0bn vs £2.9bn in FY2024), supporting the screen's FCF Yield pass.
 
-**Interim / half-year (H1 2026 — primary source: SEC 6-K "2nd Quarter Results", 28 July 2026; corroborated by Investegate RNS)**
+**Product mix (FY2025).** Specialty Medicines £13.5bn (+17% CER); Vaccines £9.2bn (+2% CER); General Medicines £10.0bn (−1% CER).
 
-H1 2026 turnover **£16,038m** (+5% CER). Q2 turnover **£8,409m** (+5% CER), driven by Specialty Medicines **£3.8bn** (+14%) and Vaccines **£2.3bn** (+8%). Core operating profit H1 **£5,450m** (+8% CER); Q2 core operating profit **£2,800m** (+7% CER). Core EPS H1 **97.1p** (+9% CER).
+**Balance sheet and cash flow (Yahoo fallback — filing bodies lack structured balance-sheet tables).** Per `financials_annual.json` (USD, FY2025): total revenue $32.7bn; net income $5.7bn; operating cash flow $7.7bn; capex ($3.0bn); FCF $4.8bn; total debt $17.7bn; net debt $13.7bn; stockholders' equity $16.4bn; tangible book value negative ($7.4bn) reflecting £23.8bn goodwill/intangibles. Non-current pension obligations ~$1.7bn. Working capital is negative ($3.9bn), consistent with the screen's weak current-ratio flag (0.82).
 
-Statutory H1 operating profit **£2,774m** (-31% CER) and Q2 total EPS **10.8p** (-69%) were heavily distorted by **£1.3bn camlipixant impairment**, **£371m Alector collaboration termination**, and **£770m H1 contingent-consideration remeasurement charges**—underscoring the material gap between Total and Core results that GSK itself guides on.
+**Dividend.** FY2025 dividend 66p (CEO statement, annual report 2025). Nuvalent 6-K (9 June 2026) reiterates 70p expected dividend for 2026 and progressive policy thereafter.
 
-Cash: H1 cash from operations **£4,256m** (+14%); H1 free cash inflow **£2,809m** (+54%). **Net debt at 30 June 2026: £15,132m** (vs **£14,453m** at 31 December 2025), reflecting Nuvalent/RAPT acquisition outflows (£2.1bn net M&A), dividends (£1.4bn), and completed buyback (£634m in H1).
+### Interim / half-year (gap noted)
 
-**Gaps and caveats**
+The filings index lists 41 interim items but **no downloadable body for the Q2 2026 results release** (6-K "2nd Quarter Results", 28 July 2026 — `has_body: false`). Interim operational commentary therefore cannot be sourced from filing extracts.
 
-- The filings index contains **no trading-update** period filings and no standalone UK "half-year report" tagged as interim; H1 figures come from the Q2 results 6-K/RNS rather than a discrete UK interim accounts filing.
-- Companies House group accounts are present (2022–2026) but the annual RNS extract and 6-K provide richer consolidated KPIs; statutory parent-only CH figures were not used for turnover/profit.
-- Yahoo `financials_annual.json` aligns closely with filing figures for FY2025 (revenue £32.67bn, FCF £4.76bn, net debt £13.74bn per Yahoo vs £14.45bn per H1 filing at year-end boundary)—used only as cross-check, not blended.
+**Directional interim context (news summaries citing company release — not primary filings):**
+- Q2 2026 turnover ~£8.4bn (+5% CER)
+- Core operating profit ~£2.80bn (+7% CER)
+- Core EPS +9% CER
+- New ~£1.9bn cost-saving programme announced alongside results
+- 2026 core EPS guidance trimmed for Nuvalent acquisition costs (per earnings-call summaries)
+
+No verified interim filing figures are available in the source pack; treat H1/H2 2026 line items as unresolved until the Q2 6-K body or H1 RNS accounts are ingested.
+
+### Strategic financial targets (filings)
+
+Management reiterates ambition for **>£40bn sales by 2031** (Nuvalent 6-K, 9 June 2026) and identifies **dolutegravir loss of exclusivity (2028–2030)** as the key earnings bridge to cross (annual report 2025, CEO statement). Nuvalent ($10.6bn / £8.0bn equity value; ~$9.4bn net of cash) is expected to be accretive to core operating profit from 2027 and core EPS from 2029, funded primarily from debt facilities plus cash with no expected credit-rating impact (6-K, 9 June 2026). Acquisition completed 15 July 2026 (6-K).
+
+---
 
 ## RISKS AND RED FLAGS
-**Pipeline and R&D execution.** Camlipixant development in refractory chronic cough was halted after disappointing Phase III data (17 July 2026), triggering a **£1.3bn impairment** in Q2. The Alector collaboration termination added a further **£371m** impairment. These events validate that late-stage setbacks can materially hit statutory earnings and sentiment even when core operations remain intact.
+**Patent cliff / pipeline execution.** The annual report 2025 explicitly flags dolutegravir exclusivity loss in 2028–2030 as a priority to address. Failure to launch Exdensur, Blenrep, oncology ADCs and newly acquired lung-cancer assets on schedule would impair the 2031 sales ambition.
 
-**Patent cliff / concentration.** Management explicitly flags **dolutegravir loss of exclusivity in 2028–2030** as a margin headwind; HIV LAIs (Cabenuva, Apretude) are growing but mature portfolio lines (Triumeq, Tivicay) are declining. General Medicines (Trelegy, Advair/Seretide) face ongoing US pricing and Medicare design pressure (-9% CER in H1 2026).
+**Leverage and liquidity.** Screen fails Financial Health on debt/equity ~106% and current ratio ~0.82. Nuvalent adds ~$9.4bn net investment, increasing gross debt though management asserts investment-grade profile is preserved. Negative tangible equity and negative working capital are structural for acquisitive pharma but limit balance-sheet margin of safety.
 
-**Leverage and contingent liabilities.** Net debt rose to **£15.1bn** at H1 2026 following **~$10.6bn Nuvalent** and other BD. **Contingent consideration** remeasurements remain volatile—H1 2026 charge of **£680m** on the Shionogi/ViiV liability alone, with **£710m cash payments to Shionogi** in H1. Total contingent consideration on balance sheet exceeded **£6.7bn** at FY2025 year-end.
+**Regulatory and pricing.** The annual report 2025 references a US pricing agreement reached in December 2025 and ongoing geopolitical/regulatory complexity in the largest market. FDA approval timing for zidesamtinib (Sept 2026) and neladalkib (Nov 2026) is binary for the Nuvalent thesis.
 
-**Regulatory and pricing.** GSK entered US **Generous Model** manufacturer agreements (effective June 2026) linked to Section 232 tariff relief through January 2029—embedding US pricing/rebate complexity into forward guidance. Broader pharma pricing scrutiny (IRA, state supplemental rebates) remains a structural overhang.
+**Litigation.** FY2024 results were materially distorted by a £1.8bn Zantac charge; the 2024 chair's statement describes settlement of the vast majority of US cases "without any admission of liability." Residual product-liability exposure is referenced historically in earlier annual reports but not quantified in available body extracts — verify in full notes to accounts.
 
-**Litigation and provisions.** Zantac settlement (**£1.8bn** charge in 2024) is largely behind the group, but filings note ongoing valuation of **provisions and contingent liabilities** and uncertain tax positions including transfer pricing. Q2 filing references tax provisions where ultimate liability may vary from amounts provided.
+**M&A integration and capital allocation.** 2025 included IDRx and RAPT acquisitions; 2026 adds Nuvalent plus ongoing share buybacks (multiple "Transaction in Own Shares" 6-Ks). Reprioritisation and synergy assumptions underpin accretion targets that are not yet observable.
 
-**Pension.** **£1.7bn** net pension/post-employment obligation at FY2025; remeasurement gains in H1 2026 reduced the liability but rate sensitivity persists.
+**Management transition.** Emma Walmsley stepped down as CEO at end-December 2025; Luke Miels (former Chief Commercial Officer) succeeded. Dr Hal Barron joined the board (June 2026); Roy Jakobs joined (July 2026). CEO transitions add execution risk during a heavy launch and M&A cycle.
 
-**Governance / accounting complexity.** Heavy reliance on **Core (non-IFRS) metrics** for guidance; Total results swing on fair-value remeasurement of contingent consideration—an area auditors flag as significant judgement (going concern assessment, contingent consideration valuation, pension estimates per audit commentary in annual report extract).
+**Pension.** ~$1.8bn combined pension/post-retirement obligations (Yahoo fallback, FY2025) — manageable relative to ~$61bn assets but a long-tail liability not captured by earnings screens.
 
-**M&A integration risk.** Nuvalent, RAPT Therapeutics, and 35Pharma acquisitions compress near-term core EPS (low-single-digit dilution expected 2026–2028 per deal announcements) before projected accretion from 2027–2029.
+**Going concern.** No going-concern qualification appears in available filing body extracts; full auditor opinion text was not captured in the Companies House extracts (image-redacted sections). Confirm in verify-before-trade pack.
 
-RiskTags: regulatory, competitive, litigation, leverage, pension, key_person, accounting
-RiskTags: regulatory, competitive, litigation, leverage, pension, key_person, accounting
+RiskTags: regulatory, competitive, leverage, litigation, key_person, pension
+
+---
+RiskTags: regulatory, competitive, leverage, litigation, key_person, pension
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-good** on corporate events but **thin on independent sell-side depth**—dominated by retail-oriented commentary (The Twelfth Magpie) and syndicated healthcare pieces (Kalkine, simplywall.st).
+Coverage over the past year is **material and frequent**, skewed toward earnings, M&A and retail-investor commentary rather than investigative journalism.
 
-**Strategy and operations**
-- **"GSK delivers strong Q2 core results… Accelerate Growth programme"** (Q2 results, 28 July 2026): £1.9bn annual cost savings targeted by 2029 (£2.4bn programme cost); 20+ Phase III starts in 2026; Cambridge flagship R&D centre announced.
-- **"GSK (LSE:GSK) Opens Cambridge Research Hub And Teams Up With Relation Therapeutics"** (Yahoo Finance, 1 August 2026).
-- **"GSK Stock Rises as $2.52 Billion Savings Plan Funds Pipeline"** (Yahoo Finance, 28 July 2026).
+**Strategy and M&A**
+- "GSK bets big on lung cancer with $11bn deal" / "Nuvalent shares surge 39% after UK's GSK agrees to buy the cancer drugmaker for $10.6 billion" (CNBC, Investors' Chronicle — 9 June 2026): Nuvalent acquisition for lung-cancer ROS1/ALK assets.
+- "GSK completes acquisition of Nuvalent, Inc" (RNS/filing, 15 July 2026).
+- "GSK (LSE:GSK) Opens Cambridge Research Hub And Teams Up With Relation Therapeutics" (Yahoo Finance, 1 August 2026): flagship R&D centre, >1,000 scientists.
 
-**M&A**
-- **"GSK enters agreement to acquire Nuvalent, Inc."** (~$10.6bn; 9 June 2026) — lung cancer ROS1/ALK assets; completed 15 July 2026.
-- **"GSK completes acquisition of RAPT Therapeutics"** (3 March 2026) and **35Pharma Inc.** (15 April 2026).
+**Earnings and cost programme**
+- "GSK shares rise as $2.5B cost-cutting plan unveiled" (BioSpace, 28 July 2026).
+- "GSK Beats Q2 Earnings & Revenue Estimates, Announces Cost-Saving Plan" (Yahoo Finance, 29 July 2026).
+- "GSK PLC (GSK) (Q2 2026) Earnings Call Highlights: Strong Sales Growth and Accelerated Pipeline ..." (Yahoo Finance, 30 July 2026): notes lowered 2026 EPS guidance on Nuvalent costs.
+- "Specialty Medicines Growth Boosts GSK's 2025 Earnings; Long-term Outlooks Reaffirmed" (Yahoo Finance UK, 4 February 2026): FY2025 results reaction.
 
-**Pipeline setbacks and approvals**
-- **"GSK Shares Slide After Drugmaker Drops Chronic Cough Treatment"** (WSJ, 17 July 2026) — camlipixant discontinuation.
-- **Jideytro FDA approval** for certain lung cancers (22 July 2026); **Tebipenem FDA approval** (17 June 2026); positive **bepirovirsen** Phase III hepatitis B data (28 May 2026).
+**Management and governance**
+- CEO transition from Walmsley to Miels (annual report 2025, December 2025).
+- "Dr Hal Barron – New Directorship" (RNS, 9 June 2026); "Roy Jakobs to join GSK Board" (6-K, 9 July 2026).
+- "Audit tender conclusion" (RNS, 17 July 2026).
 
-**Results reception**
-- **"GSK Beats Q2 Earnings & Revenue Estimates, Announces Cost-Saving Plan"** (Yahoo Finance, 29 July 2026).
-- **"GSK: What We Think of the Stock After Earnings"** (Morningstar, 29 July 2026).
-- **"GSK shares healthy after annual results"** (Interactive Investor, 4 February 2026) following FY2025 beat.
+**Pipeline / regulatory**
+- Positive Phase 3 bepirovirsen data (May 2026); Jemperli rectal-cancer data (13 July 2026); Tebipenem FDA approval (17 June 2026); Jideytro US approval for certain lung cancers (22 July 2026).
 
-**Management**
-- Luke Miels (CEO) driving product-centric strategy and BD acceleration; Dr Hal Barron new directorship noted (9 June 2026).
+**Share-price narrative.** Multiple retail-facing pieces frame GSK as undervalued post-results (Twelfth Magpie, simplywall.st, Morningstar — Feb–July 2026). Treat as sentiment colour, not independent analysis.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filing-backed core earnings growth, strong free cash flow, and broad quantitative cheapness/quality support the screen's buy signal, partially offset by pipeline impairment volatility, rising leverage from Nuvalent, and the approaching dolutegravir patent cliff.
+Confidence: 0.74
+Rationale: Filings confirm sustained core earnings and cash generation that support the quantitative strong-buy signal, but elevated leverage, the dolutegravir cliff, Nuvalent integration and missing Q2 2026 filing body prevent full conviction until interim accounts and post-deal balance sheet are verified.
