@@ -197,6 +197,14 @@ def test_resolve_yahoo_ticker_preserves_stockholm_suffix():
     assert fetch_mod.resolve_yahoo_ticker_for_market("ABB", "omxs30") == "ABB.ST"
 
 
+def test_resolve_yahoo_ticker_repairs_mangled_iseq_symbols():
+    assert fetch_mod.repair_mangled_yahoo_ticker("A5G-IR.L") == "A5G.IR"
+    assert fetch_mod.normalize_yahoo_ticker("A5G-IR.L", "iseq20") == "A5G.IR"
+    assert fetch_mod.normalize_yahoo_ticker("A5G.IR", "iseq20") == "A5G.IR"
+    assert fetch_mod.normalize_yahoo_ticker("A5G", "iseq20") == "A5G.IR"
+    assert fetch_mod.resolve_yahoo_ticker_for_market("A5G.IR", "ftse350") == "A5G.IR"
+
+
 def test_fetch_company_metrics_tolerates_fast_info_key_error(monkeypatch):
     class BrokenFastInfo:
         @property

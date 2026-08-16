@@ -11,6 +11,7 @@ from value_investor.data_library import market_dir
 from value_investor.library_ladder import run_library_ladder
 from value_investor.library_screen import (
     assess_library_metrics_health,
+    load_library_metrics,
     research_cap_from_budget,
     run_library_screen,
 )
@@ -81,6 +82,13 @@ def test_run_library_screen_writes_artifacts(tmp_path: Path):
     assert len(signals) == 30
 
 
+def test_run_library_screen_iseq20_tail_market(tmp_path: Path):
+    root = tmp_path / "library"
+    _seed_metrics(root, "iseq20", n=20)
+    result = run_library_screen(root, "iseq20")
+    assert result.summary["ticker_count"] == 20
+
+
 def test_assess_library_metrics_health_counts_usable(tmp_path: Path):
     root = tmp_path / "library"
     metrics_dir = market_dir(root, "sp500") / "metrics"
@@ -96,7 +104,47 @@ def test_assess_library_metrics_health_counts_usable(tmp_path: Path):
     health = assess_library_metrics_health(root, "sp500")
     assert health["total_rows"] == 2
     assert health["usable_rows"] == 1
+    assert health["honest_usable_rows"] == 1
     assert health["sample_tickers"] == ["B"]
+
+
+def test_assess_iseq20_dedupes_mangled_rows_and_meets_screen_floor(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "iseq20"
+    tickers = [f"T{i}.IR" for i in range(20)]
+
+    def _row(ticker: str, **extra: object) -> dict:
+        base = {
+            "ticker": ticker,
+            "market_cap": 1e9,
+            "trailing_pe": 12.0,
+            "price_to_book": 1.5,
+        }
+        base.update(extra)
+        return base
+
+    metrics_dir = market_dir(root, market) / "metrics"
+    metrics_dir.mkdir(parents=True)
+    rows = [_row(t) for t in tickers]
+    rows.extend(
+        _row(t.replace(".IR", "-IR.L"), market_cap=None, trailing_pe=None, errors=["stooq fail"])
+        for t in tickers
+    )
+    write_json(metrics_dir / "latest.json.gz", rows, compact=True, compress=True)
+    write_json(
+        market_dir(root, market) / "manifest.json",
+        {"tickers": tickers, "ticker_count": 20},
+        compact=False,
+    )
+    health = assess_library_metrics_health(root, market)
+    assert health["total_rows"] == 20
+    assert health["honest_usable_rows"] == 20
+    assert health["usable_rows"] == 25
+    assert health["effective_min_metrics_for_screen"] == 20
+
+    universe = load_library_metrics(root, market)
+    assert len(universe) == 20
+    assert set(universe["ticker"]) == set(tickers)
 
 
 def test_research_cap_from_budget():

@@ -430,3 +430,19 @@ def test_load_library_metrics_filters_usable_omxs30_rows(tmp_path: Path):
     result = run_library_screen(tmp_path / "library", "omxs30")
     assert result.summary["ticker_count"] == 2
     assert (result.screen_dir / "latest_signals.csv").exists()
+
+
+def test_prune_metrics_drops_mangled_iseq_duplicates(tmp_path: Path):
+    from value_investor.data_library import _prune_metrics_by_manifest
+
+    by_metrics = {
+        "A5G.IR": {"ticker": "A5G.IR", "market_cap": 1e9, "trailing_pe": 11.0},
+        "A5G-IR.L": {
+            "ticker": "A5G-IR.L",
+            "errors": ["'exchangeTimezoneName'", "stooq: non-CSV response for a5g_ir.uk"],
+        },
+    }
+    pruned = _prune_metrics_by_manifest(by_metrics, ["A5G.IR"], market_id="iseq20")
+    assert list(pruned) == ["A5G.IR"]
+    assert pruned["A5G.IR"]["market_cap"] == 1e9
+    assert "iseq20" in PREQUALIFIED_YAHOO_MARKETS

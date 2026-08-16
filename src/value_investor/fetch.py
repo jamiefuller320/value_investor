@@ -16,6 +16,33 @@ from value_investor.providers import apply_fallback_providers
 
 logger = logging.getLogger(__name__)
 
+# Yahoo exchange suffixes that must not be rewritten via ``to_lse_ticker`` (→ ``.L``).
+YAHOO_KNOWN_SUFFIXES: tuple[str, ...] = (
+    ".AX",
+    ".CO",
+    ".DE",
+    ".HE",
+    ".IR",
+    ".LS",
+    ".OL",
+    ".PA",
+    ".AS",
+    ".MI",
+    ".MC",
+    ".BR",
+    ".SW",
+    ".HK",
+    ".SI",
+    ".ST",
+    ".T",
+    ".TO",
+    ".V",
+    ".VI",
+    ".SS",
+    ".SZ",
+    ".L",
+)
+
 FETCH_ATTEMPTS = 3
 FETCH_RETRY_DELAY_SECONDS = 2.0
 
@@ -197,6 +224,32 @@ def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
     raise last_exc
 
 
+def repair_mangled_yahoo_ticker(ticker: str) -> str:
+    """
+    Undo mistaken LSE conversion of Irish symbols (``A5G-IR.L`` → ``A5G.IR``).
+
+    ``to_lse_ticker`` treats dots as class shares and appends ``.L``, which breaks
+    Euronext Dublin ``.IR`` tickers when market context was missing.
+    """
+    upper = str(ticker or "").strip().upper()
+    if upper.endswith("-IR.L") and not upper.endswith(".IR"):
+        return f"{upper[:-5]}.IR"
+    return upper
+
+
+def _has_yahoo_suffix(ticker: str) -> bool:
+    upper = str(ticker or "").strip().upper()
+    return any(upper.endswith(suffix) for suffix in YAHOO_KNOWN_SUFFIXES)
+
+
+def normalize_yahoo_ticker(ticker: str, market: str | None = None) -> str:
+    """Repair legacy mangled symbols, then resolve for Yahoo/yfinance fetch."""
+    repaired = repair_mangled_yahoo_ticker(ticker)
+    if market:
+        return resolve_yahoo_ticker_for_market(repaired, market)
+    return resolve_yahoo_ticker(repaired)
+
+
 def resolve_yahoo_ticker(ticker: str) -> str:
     """
     Resolve a ticker for Yahoo Finance.
@@ -205,36 +258,11 @@ def resolve_yahoo_ticker(ticker: str) -> str:
     (US bare tickers, ``.AX``, ``.DE``, etc.) are left intact so offline
     multi-market libraries are not rewritten to ``.L``.
     """
-    raw = str(ticker or "").strip()
+    raw = repair_mangled_yahoo_ticker(ticker)
     if not raw:
         return raw
     upper = raw.upper()
-    known_suffixes = (
-        ".AX",
-        ".CO",
-        ".DE",
-        ".HE",
-        ".IR",
-        ".LS",
-        ".OL",
-        ".PA",
-        ".AS",
-        ".MI",
-        ".MC",
-        ".BR",
-        ".SW",
-        ".HK",
-        ".SI",
-        ".ST",
-        ".T",
-        ".TO",
-        ".V",
-        ".VI",
-        ".SS",
-        ".SZ",
-        ".L",
-    )
-    if any(upper.endswith(suffix) for suffix in known_suffixes):
+    if _has_yahoo_suffix(upper):
         return upper
     # Default project universe is LSE (bare EPICs, class shares like BT.A, and .L).
     # Non-LSE bare symbols (e.g. US) must pass market= via resolve_yahoo_ticker_for_market.
@@ -301,7 +329,10 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
         "uk",
         "lse",
     }:
-        return to_lse_ticker(raw)
+        upper = repair_mangled_yahoo_ticker(raw)
+        if _has_yahoo_suffix(upper) and not upper.endswith(".L"):
+            return upper
+        return to_lse_ticker(upper)
     if market_id in {"omxs30", "stockholm", "sweden"}:
         base = raw.strip().upper()
         return base if base.endswith(".ST") else f"{base.replace('.', '-')}.ST"
@@ -325,9 +356,7 @@ def fetch_company_metrics(
     market: str | None = None,
 ) -> CompanyMetrics:
     """Pull screening metrics via yfinance + fallbacks (LSE by default)."""
-    resolved = (
-        resolve_yahoo_ticker_for_market(ticker, market) if market else resolve_yahoo_ticker(ticker)
-    )
+    resolved = normalize_yahoo_ticker(ticker, market)
     metrics = CompanyMetrics(ticker=resolved, name=name, sector=sector)
 
     try:

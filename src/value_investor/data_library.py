@@ -69,6 +69,7 @@ PREQUALIFIED_YAHOO_MARKETS = frozenset(
         "aex",
         "bel20",
         "omxs30",
+        "iseq20",
     }
 )
 
@@ -1012,6 +1013,52 @@ def refresh_constituents(root: Path, market_id: str) -> dict[str, Any]:
     return manifest
 
 
+def _normalize_metrics_store_row(row: dict[str, Any], *, market_id: str) -> dict[str, Any]:
+    """Repair legacy mangled Yahoo symbols in stored metrics rows."""
+    from value_investor.fetch import repair_mangled_yahoo_ticker
+
+    out = dict(row)
+    raw = str(out.get("ticker") or "").strip()
+    if raw:
+        out["ticker"] = repair_mangled_yahoo_ticker(raw)
+    return out
+
+
+def _prune_metrics_by_manifest(
+    by_metrics: dict[str, dict[str, Any]],
+    manifest_tickers: list[str],
+    *,
+    market_id: str,
+) -> dict[str, dict[str, Any]]:
+    """Drop stale rows and merge legacy mangled keys (``A5G-IR.L``) into manifest tickers."""
+    from value_investor.fetch import repair_mangled_yahoo_ticker
+
+    allowed = {str(t) for t in manifest_tickers}
+    canonical_to_manifest = {repair_mangled_yahoo_ticker(t): t for t in manifest_tickers}
+    pruned: dict[str, dict[str, Any]] = {}
+
+    for key, row in by_metrics.items():
+        row_ticker = repair_mangled_yahoo_ticker(str(row.get("ticker") or key))
+        manifest_key = canonical_to_manifest.get(row_ticker)
+        if manifest_key is None or manifest_key not in allowed:
+            continue
+        normalized = _normalize_metrics_store_row(row, market_id=market_id)
+        normalized["ticker"] = manifest_key
+        existing = pruned.get(manifest_key)
+        if existing is None:
+            pruned[manifest_key] = normalized
+            continue
+        # Prefer the row with more populated fields / fewer errors.
+        existing_fields = len(_metric_field_names(existing))
+        new_fields = len(_metric_field_names(normalized))
+        existing_errors = bool(existing.get("errors"))
+        new_errors = bool(normalized.get("errors"))
+        if new_fields > existing_fields or (existing_errors and not new_errors):
+            pruned[manifest_key] = normalized
+
+    return pruned
+
+
 def _metric_field_names(row: dict[str, Any]) -> list[str]:
     skip = {"ticker", "name", "sector", "errors", "data_sources"}
     return sorted(
@@ -1121,6 +1168,16 @@ def refresh_metrics(
     total = len(selected)
 
     def _checkpoint(*, final: bool = False) -> None:
+        manifest_tickers = list(manifest.get("tickers") or [])
+        by_metrics.update(
+            {
+                t: _normalize_metrics_store_row(r, market_id=market_id)
+                for t, r in list(by_metrics.items())
+            }
+        )
+        pruned = _prune_metrics_by_manifest(by_metrics, manifest_tickers, market_id=market_id)
+        by_metrics.clear()
+        by_metrics.update(pruned)
         rows = list(by_metrics.values())
         for row in rows:
             field_union.update(_metric_field_names(row))
@@ -1161,6 +1218,8 @@ def refresh_metrics(
             errors += 1
         fields = _metric_field_names(row)
         field_union.update(fields)
+        row = _normalize_metrics_store_row(row, market_id=market_id)
+        row["ticker"] = ticker
         by_metrics[ticker] = row
         state = dict(manifest.get("ticker_state") or {})
         errors_list = list(row.get("errors") or [])

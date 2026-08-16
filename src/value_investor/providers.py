@@ -158,8 +158,13 @@ _STOOQ_SUFFIX_BY_YAHOO: dict[str, str] = {
 
 
 def to_stooq_symbol(ticker: str) -> str:
-    """Convert Yahoo-style ``BT-A.L`` / ``VOLV-B.ST`` to Stooq ``bt_a.uk`` / ``volv_b.st``."""
-    symbol = ticker.strip().upper()
+    """Convert Yahoo-style ``BT-A.L`` / ``A5G.IR`` to Stooq ``bt_a.uk`` / ``a5g.ir``."""
+    from value_investor.fetch import repair_mangled_yahoo_ticker
+
+    symbol = repair_mangled_yahoo_ticker(ticker).strip().upper()
+    # Legacy rows may store ``A5G-IR.L`` — normalize before suffix mapping.
+    if symbol.endswith("-IR.L"):
+        symbol = f"{symbol[:-5]}.IR"
     stooq_suffix = ".uk"
     for yahoo_suffix, mapped in sorted(
         _STOOQ_SUFFIX_BY_YAHOO.items(), key=lambda item: len(item[0]), reverse=True
@@ -321,9 +326,12 @@ def apply_fallback_providers(
 
     Returns ``(metrics, source_map, provider_errors)``.
     """
+    from value_investor.fetch import normalize_yahoo_ticker
+
     source_map: dict[str, str] = {}
     provider_errors: list[str] = []
     chain = providers if providers is not None else DEFAULT_FALLBACK_PROVIDERS
+    fetch_ticker = normalize_yahoo_ticker(ticker)
 
     errors = metrics.get("errors") or []
     needs_fallback = force or bool(errors) or metrics.get("market_cap") is None
@@ -335,10 +343,12 @@ def apply_fallback_providers(
         if not still_missing and not force:
             break
         try:
-            result = provider.fetch(ticker)
+            result = provider.fetch(fetch_ticker)
         except Exception as exc:  # noqa: BLE001
             provider_errors.append(f"{provider.name}: {exc}")
-            logger.warning("Fallback provider %s failed for %s: %s", provider.name, ticker, exc)
+            logger.warning(
+                "Fallback provider %s failed for %s: %s", provider.name, fetch_ticker, exc
+            )
             continue
 
         provider_errors.extend(result.errors)
@@ -348,7 +358,7 @@ def apply_fallback_providers(
                 "Fallback %s filled %s for %s",
                 provider.name,
                 ",".join(filled),
-                ticker,
+                fetch_ticker,
             )
 
     # Derive market cap if we recovered price + shares.

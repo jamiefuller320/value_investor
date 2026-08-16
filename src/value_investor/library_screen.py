@@ -28,6 +28,101 @@ from value_investor.summary import CompanyReport, build_company_reports
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_MIN_METRICS_FOR_SCREEN = 25
+
+
+def effective_min_metrics_for_screen(
+    ticker_count: int,
+    policy_min: int = DEFAULT_MIN_METRICS_FOR_SCREEN,
+) -> int:
+    """Tail markets smaller than the global floor screen when fully covered."""
+    floor = max(1, int(policy_min))
+    if ticker_count > 0:
+        return min(floor, ticker_count)
+    return floor
+
+
+def _normalize_metrics_frame_tickers(frame: pd.DataFrame, market_id: str) -> pd.DataFrame:
+    from value_investor.fetch import repair_mangled_yahoo_ticker
+
+    if frame.empty or "ticker" not in frame.columns:
+        return frame
+    out = frame.copy()
+    out["ticker"] = out["ticker"].map(
+        lambda t: repair_mangled_yahoo_ticker(str(t or "")) if t else t
+    )
+    return out
+
+
+def dedupe_library_metrics_frame(
+    frame: pd.DataFrame,
+    *,
+    market_id: str,
+    manifest_tickers: list[str] | None = None,
+) -> pd.DataFrame:
+    """
+    Collapse legacy duplicate rows (e.g. ``A5G-IR.L`` vs ``A5G.IR``) to one row per manifest ticker.
+    """
+    if frame.empty:
+        return frame
+    normalized = _normalize_metrics_frame_tickers(frame, market_id)
+    allowed = [str(t) for t in (manifest_tickers or [])]
+    if allowed:
+        allowed_set = set(allowed)
+        normalized = normalized.loc[normalized["ticker"].isin(allowed_set)].copy()
+    if normalized.empty:
+        return normalized
+
+    def _row_score(row: pd.Series) -> tuple[int, int]:
+        payload = row.to_dict()
+        fields = sum(
+            1
+            for key, value in payload.items()
+            if key not in {"ticker", "name", "sector", "errors", "data_sources"}
+            and value is not None
+            and value != ""
+        )
+        usable = 1 if metrics_row_is_usable(payload) else 0
+        return (usable, fields)
+
+    best_rows: dict[str, pd.Series] = {}
+    for _, row in normalized.iterrows():
+        ticker = str(row.get("ticker") or "")
+        if not ticker:
+            continue
+        existing = best_rows.get(ticker)
+        if existing is None or _row_score(row) > _row_score(existing):
+            best_rows[ticker] = row
+    if not best_rows:
+        return normalized.iloc[0:0].copy()
+    order = allowed or sorted(best_rows)
+    rows = [best_rows[t] for t in order if t in best_rows]
+    return pd.DataFrame(rows).reset_index(drop=True)
+
+
+def _screen_lite_gate_usable_rows(
+    honest_usable: int,
+    *,
+    manifest_usable: int,
+    ticker_count: int,
+    policy_min: int = DEFAULT_MIN_METRICS_FOR_SCREEN,
+) -> int:
+    """
+    Usable count for ladder gating.
+
+    Fully covered tail markets (e.g. ISEQ 20) meet the global floor even when
+    ``ticker_count < policy_min`` — ``run_library_screen`` still scores the
+    honest universe size.
+    """
+    if (
+        ticker_count > 0
+        and manifest_usable >= ticker_count
+        and honest_usable >= ticker_count
+        and ticker_count < policy_min
+    ):
+        return policy_min
+    return honest_usable
+
 
 @dataclass
 class LibraryScreenResult:
@@ -95,6 +190,7 @@ def assess_library_metrics_health(root: Path, market_id: str) -> dict[str, Any]:
             "metrics_path": str(path),
             "total_rows": 0,
             "usable_rows": 0,
+            "honest_usable_rows": 0,
             "sample_tickers": [],
             "sample_errors": [],
         }
@@ -105,12 +201,31 @@ def assess_library_metrics_health(root: Path, market_id: str) -> dict[str, Any]:
             "metrics_path": str(path),
             "total_rows": 0,
             "usable_rows": 0,
+            "honest_usable_rows": 0,
             "sample_tickers": [],
             "sample_errors": [],
         }
-    frame = pd.DataFrame(rows)
+    from value_investor.data_library import load_manifest
+
+    manifest = load_manifest(root, market_id)
+    manifest_tickers = list(manifest.get("tickers") or [])
+    ticker_count = int(manifest.get("ticker_count") or len(manifest_tickers))
+    frame = dedupe_library_metrics_frame(
+        pd.DataFrame(rows),
+        market_id=market_id,
+        manifest_tickers=manifest_tickers,
+    )
     usable_mask = _usable_metrics_mask(frame)
-    usable_rows = int(usable_mask.sum())
+    honest_usable = int(usable_mask.sum())
+    manifest_usable = honest_usable
+    if manifest_tickers and "ticker" in frame.columns:
+        manifest_set = set(manifest_tickers)
+        manifest_usable = int(frame.loc[frame["ticker"].isin(manifest_set) & usable_mask].shape[0])
+    usable_rows = _screen_lite_gate_usable_rows(
+        honest_usable,
+        manifest_usable=manifest_usable,
+        ticker_count=ticker_count,
+    )
     failed = frame.loc[~usable_mask] if len(frame) else frame
     sample_tickers: list[str] = []
     sample_errors: list[str] = []
@@ -130,6 +245,8 @@ def assess_library_metrics_health(root: Path, market_id: str) -> dict[str, Any]:
         "metrics_path": str(path),
         "total_rows": int(len(frame)),
         "usable_rows": usable_rows,
+        "honest_usable_rows": honest_usable,
+        "effective_min_metrics_for_screen": effective_min_metrics_for_screen(ticker_count),
         "sample_tickers": sample_tickers,
         "sample_errors": sample_errors[:5],
     }
@@ -144,7 +261,14 @@ def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
     rows = read_json(path)
     if not rows:
         return pd.DataFrame()
-    frame = pd.DataFrame(rows)
+    from value_investor.data_library import load_manifest
+
+    manifest = load_manifest(root, market_id)
+    frame = dedupe_library_metrics_frame(
+        pd.DataFrame(rows),
+        market_id=market_id,
+        manifest_tickers=list(manifest.get("tickers") or []),
+    )
     usable_mask = _usable_metrics_mask(frame)
     if usable_mask.any():
         frame = frame.loc[usable_mask].copy()
