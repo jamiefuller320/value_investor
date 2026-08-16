@@ -12,7 +12,10 @@ See also: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-
 |------------|------|
 | `docs/data/paper_automation/` | FTSE 350 live learning (4 strategy tracks) |
 | `docs/data/library/markets/<id>/screen/sim/` | Phase 1 observe sim (frozen screen history) |
-| `docs/data/paper_automation/markets/<id>/` | Phase 2+ full paper stack *(not wired yet)* |
+| `docs/data/paper_automation/markets/<id>/` | Phase 2+ full paper stack |
+| `docs/data/library/shard_phases.json` | Committed phase rollup (advancement triggers) |
+| `docs/data/paper_automation/markets/<id>/shard_phase.json` | Per-market phase status + blockers |
+| `docs/data/paper_automation/markets/<id>/weekly_batch_log.json` | Phase 2 weekly batch marks |
 
 Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50E`, `^IETP`, …).
 
@@ -38,15 +41,27 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **Parallelism:** Add markets to `observe_sim_markets` as soon as benchmark is wired; sim runs even with thin history (caveat in summary JSON) but **do not promote** on &lt;12 archives.
 
-### Phase 2 — Weekly paper shard *(engineering + 8 Sundays)*
+### Phase 2 — Weekly paper shard *(wired Aug 2026)*
 
-**What runs:** Full track set (rules, AI judgment, grace, technical), exit-shadow and exit-timing cohorts, churn health — **Sunday batch only** after ladder, using library screen → reports adapter. No weekday settle stepping yet.
+**What runs:** Full track set (rules, AI judgment, grace, technical), exit-shadow and exit-timing cohorts, churn health — **Sunday batch only** after ladder, using library screen → reports adapter. No weekday settle stepping yet; no `--apply` on knobs.
 
-**Enter when:** Phase 1 gate met for that market **and** engineering delivers shard adapter + orchestrator hook.
+**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`.
 
-**Exit gate:** ≥ **8** weekly batch marks per shard; churn health populated; AI vs rules separation visible in shard rollup (same spirit as `learning_tracks_churn_health`).
+**Orchestration:** After observe sim in `ftse-library ladder`, `run_weekly_paper_shards_for_screened_markets` runs for markets that passed Phase 1 and were screened this run. Phase rollup refreshes to `docs/data/library/shard_phases.json`.
 
-**Timescale:** **8 Sunday cycles** hands-off after the first weekly batch deploy (~2 months). Build work for the first pilot (`sp500`) can start in parallel with `iseq20` Phase 1 accumulation.
+**Enter when:** Phase 1 gate met for that market **and** market is in `weekly_paper_shard_markets`.
+
+**Exit gate:** ≥ **8** weekly batch marks in `weekly_batch_log.json`; `learning_tracks_review.json` shows `beat_control=true` on latest review.
+
+**Advancement triggers (automatic):**
+
+| Trigger | Source | Effect |
+|---------|--------|--------|
+| Phase 1 → 2 | `phase1_gate_met()` — ≥12 archives, ≥12 observe snapshots, AI beat rules on observe sim | Eligible for weekly paper shard when in policy |
+| Phase 2 → 3 | `phase2_gate_met()` — ≥8 weekly batches + beat_control | `shard_phase.json` reports `next_phase=3`; weekday shard still manual |
+| Rollup refresh | Every ladder pass + `ftse-library shard-status` | Updates `shard_phases.json` and per-shard `shard_phase.json` with blockers |
+
+**Timescale:** **8 Sunday cycles** hands-off after the first weekly batch deploy (~2 months).
 
 **Pilot order:** `sp500` → `euro_stoxx50` → `iseq20` (largest history first).
 
@@ -105,10 +120,17 @@ A market may graduate from **Phase 2** to **Phase 3 weekday shard** when:
 # Manual observe sim refresh (Phase 1)
 ftse-library sim --markets sp500,euro_stoxx50,iseq20
 
-# Policy
-ftse-library policy   # ladder.observe_sim_markets
+# Phase gates and advancement triggers
+ftse-library shard-status
+ftse-library shard-status --markets sp500,euro_stoxx50 --json
 
-# Sunday ladder (automatic observe sim when market screened)
+# Manual Phase 2 weekly paper batch
+ftse-library shard-paper --markets sp500,euro_stoxx50
+
+# Policy
+ftse-library policy   # ladder.observe_sim_markets, ladder.weekly_paper_shard_markets
+
+# Sunday ladder (automatic observe sim + weekly paper shard when eligible)
 ftse-library ladder
 ```
 

@@ -13,6 +13,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.backtest import BENCHMARK_TICKER
 from value_investor.paper_automation import (
     CONFIG_FILENAME,
     DEFAULT_AUTOMATION_DIR,
@@ -28,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 REVIEW_FILENAME = "decision_review.json"
 REVIEW_HISTORY_FILENAME = "decision_review_history.json"
+SHARD_META_FILENAME = "shard_meta.json"
 KNOB_EPOCH_FILENAME = "knob_epoch.json"
 KNOB_EPOCHS_HISTORY_FILENAME = "knob_epochs.json"
 
@@ -348,6 +350,7 @@ def _compute_epoch_metrics(
     *,
     benchmark_return: float | None = None,
     fetch_benchmark: bool = True,
+    benchmark_ticker: str | None = None,
 ) -> dict[str, Any]:
     prices = _mark_prices(fund)
     perf = fund.performance(prices)
@@ -363,12 +366,13 @@ def _compute_epoch_metrics(
     max_sector_weight, dominant = _sector_concentration(fund, prices)
 
     bench = benchmark_return
+    ticker = benchmark_ticker or BENCHMARK_TICKER
     note = ""
     if bench is None and fetch_benchmark and len(epoch_marks) >= 2:
         start_dt = _parse_iso_date(epoch.started_at)
         end_dt = _parse_iso_date(str((epoch_marks[-1] or {}).get("at") or ""))
         if start_dt and end_dt:
-            bench = fetch_benchmark_return(start_dt, end_dt)
+            bench = fetch_benchmark_return(start_dt, end_dt, ticker=ticker)
             if bench is None:
                 note = "Benchmark unavailable for epoch window."
         else:
@@ -612,16 +616,43 @@ def _sector_concentration(fund: PaperFund, prices: dict[str, float]) -> tuple[fl
     return dominant[1] / invested, dominant[0]
 
 
-def fetch_benchmark_return(start: datetime, end: datetime) -> float | None:
-    """FTSE 100 buy-and-hold over the equity-curve span (best effort)."""
+def load_shard_meta(base_dir: Path) -> dict[str, Any] | None:
+    """Load shard_meta.json when present (market paper shards)."""
+    path = Path(base_dir) / SHARD_META_FILENAME
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def benchmark_ticker_for_dir(base_dir: Path | None = None, *, output_dir: Path | None = None) -> str:
+    """Resolve benchmark ticker from shard meta or default FTSE."""
+    for candidate in (base_dir, output_dir, (output_dir.parent if output_dir else None)):
+        if not candidate:
+            continue
+        meta = load_shard_meta(Path(candidate))
+        if meta and meta.get("benchmark_ticker"):
+            return str(meta["benchmark_ticker"])
+    return BENCHMARK_TICKER
+
+
+def fetch_benchmark_return(
+    start: datetime,
+    end: datetime,
+    *,
+    ticker: str | None = None,
+) -> float | None:
+    """Buy-and-hold benchmark return over the equity-curve span (best effort)."""
     if end <= start:
         return None
+    symbol = ticker or BENCHMARK_TICKER
     try:
         import yfinance as yf
 
-        from value_investor.backtest import BENCHMARK_TICKER
-
-        hist = yf.Ticker(BENCHMARK_TICKER).history(
+        hist = yf.Ticker(symbol).history(
             start=start.date().isoformat(),
             end=(end.date()).isoformat(),
             auto_adjust=True,
@@ -646,6 +677,7 @@ def compute_book_metrics(
     *,
     benchmark_return: float | None = None,
     fetch_benchmark: bool = True,
+    benchmark_ticker: str | None = None,
     knob_epoch: KnobEpoch | None = None,
 ) -> BookMetrics:
     prices = _mark_prices(fund)
@@ -660,12 +692,13 @@ def compute_book_metrics(
     max_sector_weight, dominant = _sector_concentration(fund, prices)
 
     bench = benchmark_return
+    ticker = benchmark_ticker or BENCHMARK_TICKER
     note = ""
     if bench is None and fetch_benchmark and len(fund.equity_curve) >= 2:
         start_dt = _parse_iso_date(str((fund.equity_curve[0] or {}).get("at") or ""))
         end_dt = _parse_iso_date(str((fund.equity_curve[-1] or {}).get("at") or ""))
         if start_dt and end_dt:
-            bench = fetch_benchmark_return(start_dt, end_dt)
+            bench = fetch_benchmark_return(start_dt, end_dt, ticker=ticker)
             if bench is None:
                 note = "Benchmark unavailable; excess_after_costs omitted."
         else:
@@ -683,6 +716,7 @@ def compute_book_metrics(
             knob_epoch,
             benchmark_return=benchmark_return,
             fetch_benchmark=fetch_benchmark,
+            benchmark_ticker=benchmark_ticker,
         )
 
     return BookMetrics(
@@ -834,6 +868,7 @@ def run_decision_review(
     force: bool = False,
     benchmark_return: float | None = None,
     fetch_benchmark: bool = True,
+    benchmark_ticker: str | None = None,
     counterfactual: bool = True,
 ) -> DecisionReviewResult:
     """
@@ -846,6 +881,7 @@ def run_decision_review(
     output_dir.mkdir(parents=True, exist_ok=True)
     config_path = output_dir / CONFIG_FILENAME
     fund_path = output_dir / FUND_FILENAME
+    bench_ticker = benchmark_ticker or benchmark_ticker_for_dir(output_dir=output_dir)
 
     if config_path.exists():
         config = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
@@ -859,6 +895,7 @@ def run_decision_review(
         fund,
         benchmark_return=benchmark_return,
         fetch_benchmark=fetch_benchmark,
+        benchmark_ticker=bench_ticker,
         knob_epoch=knob_epoch,
     )
     epoch_ok = enough_epoch_history(metrics.epoch)
@@ -892,6 +929,7 @@ def run_decision_review(
                 fund,
                 benchmark_return=benchmark_return,
                 fetch_benchmark=fetch_benchmark,
+                benchmark_ticker=bench_ticker,
                 knob_epoch=load_knob_epoch(output_dir),
             )
         elif apply and not changes:
@@ -939,7 +977,7 @@ def run_decision_review(
         track_label=str(config.track_label or ""),
         is_primary_learning_track=bool(config.is_primary_learning_track),
         success_criterion=(
-            "Outperformance after costs vs market benchmark (^FTSE) on this track; "
+            f"Outperformance after costs vs market benchmark ({bench_ticker}) on this track; "
             "AI-judgment is the primary learning track, rules is the control."
             if config.is_primary_learning_track
             else (
@@ -988,15 +1026,15 @@ def format_review_text(result: DecisionReviewResult) -> str:
     excess = m.get("excess_after_costs")
     if excess is not None:
         lines.append(
-            f"  Excess after costs vs FTSE: {excess:+.1%} "
+            f"  Excess after costs vs benchmark: {excess:+.1%} "
             f"(benchmark {m.get('benchmark_return'):+.1%})"
         )
     else:
-        lines.append("  Excess after costs vs FTSE: unavailable (need benchmark + marks)")
+        lines.append("  Excess after costs vs benchmark: unavailable (need benchmark + marks)")
     epoch_excess = epoch.get("excess_after_costs")
     if epoch and epoch_excess is not None:
         lines.append(
-            f"  Epoch excess vs FTSE: {epoch_excess:+.1%} "
+            f"  Epoch excess vs benchmark: {epoch_excess:+.1%} "
             f"(benchmark {epoch.get('benchmark_return'):+.1%})"
         )
     if result.proposed_changes:
@@ -1064,6 +1102,7 @@ def compare_learning_tracks(
     base_dir = Path(base_dir)
     ensure_learning_track_configs(base_dir)
     dirs = learning_track_dirs(base_dir)
+    bench_ticker = benchmark_ticker_for_dir(base_dir)
     reviews: dict[str, Any] = {}
     for track_id, track_dir in dirs.items():
         result = run_decision_review(
@@ -1071,6 +1110,7 @@ def compare_learning_tracks(
             apply=apply,
             force=force,
             fetch_benchmark=fetch_benchmark,
+            benchmark_ticker=bench_ticker,
             counterfactual=counterfactual,
         )
         reviews[track_id] = result.to_dict()
@@ -1089,9 +1129,10 @@ def compare_learning_tracks(
         "schema_version": 1,
         "primary_learning_track": AI_JUDGMENT_TRACK_ID,
         "success_criterion": (
-            "Primary AI-judgment track outperforms ^FTSE after costs; "
+            f"Primary AI-judgment track outperforms {bench_ticker} after costs; "
             "rules track is the control datum."
         ),
+        "benchmark_ticker": bench_ticker,
         "primary_excess_after_costs": primary_excess,
         "control_excess_after_costs": control_excess,
         "beat_market": beat_market,
