@@ -110,6 +110,7 @@ jobs:
           # Refresh Automation tab snapshot for the dashboard.
           ftse-library --root "$ROOT" --policy "$ROOT/policy.json" automation-status \
             --output docs/data/automation.json
+          python3 -c "import json; json.load(open('$ROOT/last_ladder.json'))"
           DRAFTED=$(python3 -c "import json; d=json.load(open('$ROOT/last_ladder.json')).get('engineering_tasks',{}); print('true' if int(d.get('drafted_count') or 0)>0 else 'false')")
           echo "engineering_drafted=$DRAFTED" >> "$GITHUB_OUTPUT"
 
