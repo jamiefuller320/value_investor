@@ -1,9 +1,21 @@
 {
-  "run_at": "2026-08-15T07:46:24.226191+00:00",
-  "overall": "ok",
-  "findings": [],
+  "run_at": "2026-08-16T07:46:20.518646+00:00",
+  "overall": "fail",
+  "findings": [
+    {
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: Modelling analysis review",
+      "summary": "No successful run within 36h (last: 2026-08-09T11:35:07+00:00).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    }
+  ],
   "auto_fixes": [],
-  "drafted_task_ids": [],
+  "drafted_task_ids": [
+    "eng-20260816-01"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
@@ -12,7 +24,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-08-14T22:11:00+00:00",
       "last_success_run_id": 31845592911,
-      "age_hours": 9.6,
+      "age_hours": 33.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -22,8 +34,8 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-15T05:52:15+00:00",
-      "last_success_run_id": 31868018886,
+      "last_success_at": "2026-08-16T05:55:07+00:00",
+      "last_success_run_id": 31930136129,
       "age_hours": 1.9,
       "stale": false,
       "recent_failures_24h": 0,
@@ -36,7 +48,7 @@
       "max_age_hours": 26,
       "last_success_at": "2026-08-14T23:15:30+00:00",
       "last_success_run_id": 31849711450,
-      "age_hours": 8.5,
+      "age_hours": 32.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -46,8 +58,8 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-15T07:31:02+00:00",
-      "last_success_run_id": 31872146690,
+      "last_success_at": "2026-08-16T07:30:54+00:00",
+      "last_success_run_id": 31934065314,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -56,12 +68,12 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-09T11:35:07+00:00",
       "last_success_run_id": 31311153268,
-      "age_hours": 140.2,
-      "stale": false,
+      "age_hours": 164.2,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     }
@@ -79,5 +91,5 @@
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false
+  "should_dispatch_engineering": true
 }
