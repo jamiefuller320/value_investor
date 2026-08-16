@@ -1,0 +1,68 @@
+[
+  {
+    "reviewed_at": "2026-08-16T19:03:13.165635+00:00",
+    "enough_history": false,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "knobs_after": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "proposed_changes": {},
+    "reasons": [
+      "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=0.",
+      "No knob change warranted from current reviewed outcomes."
+    ],
+    "metrics": {
+      "portfolio_value": 1000.0,
+      "contributed_capital": 1000.0,
+      "total_return": 0.0,
+      "total_costs": 0,
+      "cost_drag": 0.0,
+      "trade_count": 0,
+      "buy_count": 0,
+      "sell_count": 0,
+      "positions": 0,
+      "cash_fraction": 1.0,
+      "equity_marks": 2,
+      "max_sector_weight": 0.0,
+      "dominant_sector": null,
+      "benchmark_return": null,
+      "excess_after_costs": null,
+      "note": "Benchmark unavailable; excess_after_costs omitted."
+    },
+    "counterfactual_preview": {
+      "scope": "lifetime_trade_replay",
+      "knobs": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3
+      },
+      "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
+      "executed_trades": 0,
+      "blocked_buys": 0,
+      "blocked_orphan_sells": 0,
+      "actual_total_costs": 0,
+      "simulated_total_costs": 0.0,
+      "estimated_cost_savings_gbp": 0.0,
+      "actual_cost_drag": 0.0,
+      "simulated_cost_drag": 0.0,
+      "cost_drag_delta": 0.0,
+      "log_entries_replayed": 1,
+      "graduates_at_acted_entries": 2
+    },
+    "note": "Forced proposal with thin history (not applied).",
+    "track_id": "rules",
+    "track_label": "Screen rules (control)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  }
+]
