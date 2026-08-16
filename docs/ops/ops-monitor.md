@@ -173,9 +173,32 @@ morning run that reports orchestrator staleness before catch-up still commits
 
 | Engineering queue | Weekdays | **3h** when open/pr_open tasks exist; **26h** when the queue is fully idle |
 | Analysis review | Sunday | No success within 36h |
+| **Library ladder** | Sunday | No success within 36h |
 
 Engineering queue reliability depends on external cron (`engineering-queue` job in
 `import_cron_jobs.py`); GitHub `schedule` is backup only.
+
+## Workflow failure recovery
+
+When a Sunday bundle child fails on **main**, dedicated responders classify the
+failed log and take a guarded next step (no blind infinite reruns).
+
+| Responder | Trigger | Actions |
+|-----------|---------|---------|
+| **Library Ladder Responder** | `library-grow.yml` failure | Classify log → **one guarded rerun per ~20h** when partial success / transient / fixed corrupt-json; else draft engineering task |
+| **Workflow Failure Responder** | `ingest-loop`, `email-report`, `analysis-review`, `library-model-review` failures | Match log signature → draft scoped `workflow_failure` engineering task |
+| **CI Fix Responder** | `CI` / `CI Main Nightly` pytest failures | Existing pytest-scoped auto-merge path |
+
+Ledger: `docs/data/library/ladder_responder_log.json` records ladder reruns for
+cooldown. Ops monitor surfaces **unresolved** `library-grow` failures on Sundays
+via the workflow freshness table above.
+
+CLI (local / Actions):
+
+```bash
+ftse-engineering respond-library-ladder --run-id <id>
+ftse-engineering draft-workflow-failure --workflow-file ingest-loop.yml --run-id <id>
+```
 
 ## Email policy
 
