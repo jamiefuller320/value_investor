@@ -1,0 +1,102 @@
+name: Workflow Failure Responder
+
+# Draft supervised engineering tasks when key bundle workflows fail on main
+# without pytest failures (ingest-loop, email report, analysis review, etc.).
+on:
+  workflow_run:
+    workflows:
+      - "FTSE Ingest Loop"
+      - "FTSE Email Report"
+      - "FTSE Analysis Review"
+      - "FTSE Library Model Review"
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: workflow-failure-responder-${{ github.event.workflow_run.name }}
+  cancel-in-progress: false
+
+jobs:
+  respond:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure'
+      && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Map workflow name to file
+        id: map
+        run: |
+          case "${{ github.event.workflow_run.name }}" in
+            "FTSE Ingest Loop") FILE="ingest-loop.yml" ;;
+            "FTSE Email Report") FILE="email-report.yml" ;;
+            "FTSE Analysis Review") FILE="analysis-review.yml" ;;
+            "FTSE Library Model Review") FILE="library-model-review.yml" ;;
+            *) FILE="" ;;
+          esac
+          echo "workflow_file=$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Draft workflow-failure engineering task
+        id: draft
+        if: steps.map.outputs.workflow_file != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          RUN_ID="${{ github.event.workflow_run.id }}"
+          RUN_URL="${{ github.event.workflow_run.html_url }}"
+          ftse-engineering draft-workflow-failure \
+            --workflow-file "${{ steps.map.outputs.workflow_file }}" \
+            --run-id "$RUN_ID" \
+            --run-url "$RUN_URL" \
+            --json > /tmp/workflow_failure_draft.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/workflow_failure_draft.json").read_text())
+          drafted = list(data.get("drafted") or [])
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"drafted={'true' if drafted else 'false'}\n"
+              f"task_ids={','.join(drafted)}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Sync main before commit
+        if: steps.draft.outputs.drafted == 'true'
+        run: git pull --rebase --autostash origin main
+
+      - name: Commit drafted workflow-failure task
+        if: steps.draft.outputs.drafted == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          branch: main
+          commit_message: "chore: draft workflow-failure engineering task [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json
+          skip_fetch: false
+
+      - name: Dispatch engineering queue
+        if: steps.draft.outputs.drafted == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run engineering-queue.yml

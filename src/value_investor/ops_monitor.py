@@ -101,6 +101,12 @@ MONITORED_WORKFLOWS: tuple[dict[str, Any], ...] = (
         "weekdays": {6},
         "max_age_hours": 36,
     },
+    {
+        "key": "library_ladder",
+        "workflow": "library-grow.yml",
+        "weekdays": {6},
+        "max_age_hours": 36,
+    },
 )
 
 # Sunday quiet bundle + orchestrator — soften overdue findings while a run is active.

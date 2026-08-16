@@ -12,6 +12,7 @@ from pinned_time import weekday_noon_utc
 from value_investor.backtest import BENCHMARK_TICKER
 from value_investor.engineering_tasks import load_engineering_tasks
 from value_investor.ops_monitor import (
+    MONITORED_WORKFLOWS,
     OpsFinding,
     OpsMonitorReport,
     apply_auto_fixes,
@@ -472,3 +473,10 @@ def test_ops_monitor_cli_accepts_run_json_after_subcommand():
         with patch("value_investor.ops_monitor_cli.append_monitor_log_entry"):
             rc = main(["run", "--json", "--no-apply", "--no-draft"])
     assert rc == 0
+
+
+def test_monitored_workflows_include_library_ladder():
+    ladder = next(row for row in MONITORED_WORKFLOWS if row["key"] == "library_ladder")
+    assert ladder["workflow"] == "library-grow.yml"
+    assert ladder["weekdays"] == {6}
+    assert ladder["max_age_hours"] == 36
