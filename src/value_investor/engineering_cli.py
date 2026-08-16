@@ -575,6 +575,7 @@ def _cmd_respond_library_ladder(args: argparse.Namespace) -> int:
         return 2
 
     from value_investor.library_ladder_responder import (
+        ACTION_DRAFT_TASK,
         ACTION_RERUN,
         respond_to_library_ladder_failure,
     )
