@@ -872,11 +872,23 @@ function renderSimTrackDetail(track, data, simulation) {
       track.id === "static" || track.id === "trailing" ? " and trade-plan fields" : ""
     }.</div>`;
   }
+  const zeroTradeLevels =
+    (track.id === "static" || track.id === "trailing") && Number(data.trade_count || 0) === 0;
+  const levelCallout = zeroTradeLevels
+    ? `<div class="callout callout-warn" style="margin:0.75rem 0">
+        <strong>No trades in this window.</strong>
+        ${esc(
+          data.note ||
+            "Static/trailing tracks only enter when spot is at or below the published core limit. The screen track uses market-style rebalance and may trade while these stay in cash."
+        )}
+      </div>`
+    : "";
   const holdings = Object.entries(data.holdings || {})
     .map(([ticker, shares]) => `<li>${esc(ticker)}: ${shares} shares</li>`)
     .join("");
   return `
     <p class="small muted">${esc(track.blurb)}</p>
+    ${levelCallout}
     <div class="table-wrap">
       <table>
         <thead><tr><th>Final value</th><th>Return</th><th>vs FTSE</th><th>Trades</th><th>Costs</th></tr></thead>
@@ -1304,7 +1316,9 @@ function renderEngineeringQueueSection(queue) {
 }
 
 function renderLearningTracksPanel(data) {
-  const review = data.learning_tracks_review;
+  const review =
+    data.learning_tracks_review ||
+    (data.paper_automation || {}).learning_tracks_review;
   if (!review || !review.reviews) {
     return `<section class="automation-section learning-tracks-section">
       <h2>Learning tracks (server)</h2>
@@ -1313,6 +1327,7 @@ function renderLearningTracksPanel(data) {
   }
 
   const funds = data.learning_track_funds || {};
+  const technicalMissing = !review.reviews.technical;
   const trackOrder = [
     ["technical", "Technical (levels baseline)"],
     ["rules", "Rules (control)"],
@@ -1381,6 +1396,11 @@ function renderLearningTracksPanel(data) {
       Weekday paper-auto books published from CI — not the browser local sandbox.
       Primary success = AI judgment excess vs ^FTSE after costs; rules is control; technical is timing/levels baseline.
     </p>
+    ${
+      technicalMissing
+        ? `<p class="small muted">Technical server track not published yet (L108) — use <strong>Performance → Static/Trailing</strong> for archived level sims, or <strong>Portfolio → Technical</strong> for the browser sandbox.</p>`
+        : ""
+    }
     <div class="learning-tracks-headline">
       <span>Verdict: <strong>${esc(verdict)}</strong></span>
       <span>AI excess vs ^FTSE: <strong>${primaryExcess != null ? pct(primaryExcess) : "—"}</strong></span>
