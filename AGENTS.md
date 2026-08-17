@@ -39,3 +39,26 @@ ftse-defer fragment --text "Half-formed observation" --tags "comma,separated" --
 Monthly `ftse-horizon-scan` clusters open fragments and may suggest PROMOTE/DROP — see [`docs/ops/horizon-scan.md`](docs/ops/horizon-scan.md).
 
 Human-readable review page: [`docs/deferred-review.md`](docs/deferred-review.md).
+
+Prefer `ftse-defer list` (and `add` / `fragment`) over reading `docs/deferred-ideas.json` or `docs/deferred-review.md` during unrelated work. Open those files only when the task is about the deferred store itself.
+
+## Codebase inspection (token efficiency)
+
+Bulk artifacts under `docs/data/` dominate token spend when agents Grep the whole tree. Defaults:
+
+1. **Do not** run repo-wide Grep / Glob / explore over:
+   - `docs/data/library/`
+   - `docs/data/research/`
+   - `docs/data/charts/`
+   - `docs/data/archive/`
+   - `docs/data/history/`
+   - `docs/data/research_director_worker/`
+   - `docs/data/paper_automation/`
+   - `docs/data/latest.json`
+2. Scope searches to `src/`, `tests/`, `.github/`, `docs/ops/`, or other code/docs paths.
+3. When an ops task needs state, **Read a named file** (e.g. `docs/data/engineering_tasks.json`, `docs/data/automation.json`, `docs/data/ops_status.json`) — do not discover it via unbounded Grep under `docs/data/`.
+4. Search bulk dirs only when the user or task explicitly requires that artifact.
+
+Indexing: those bulk paths are listed in [`.cursorindexingignore`](.cursorindexingignore) so they stay out of default codebase search while remaining readable via Read / Shell when named. Do **not** put them in `.cursorignore` (that would block Agent Read / `@`).
+
+Prefer a **new agent session** for a new major workstream after a long multi-topic chat (roughly 20–30 user turns), so context tax does not compound across unrelated PRs.

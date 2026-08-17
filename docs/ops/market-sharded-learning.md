@@ -27,25 +27,31 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **What runs:** After screen-lite in `ftse-library ladder`, `run_observe_sims_for_screened_markets` refreshes frozen-signal sims (screen rules / research overlay / AI judgment) vs local benchmark. Writes `screen/sim/observe_summary.json`.
 
-**Policy:** `ladder.observe_sim_after_screen`, `ladder.observe_sim_markets`.
+**Policy:** `ladder.observe_sim_after_screen`, `ladder.observe_sim_markets_mode`, optional `ladder.observe_sim_markets` / `observe_sim_markets_extra`.
+
+**Markets mode (Aug 2026):** `graduated_benchmark` — all graduated markets with a wired benchmark (`^GSPC`, `^STOXX50E`, `^AXJO`, …). Eight index slices today; others accumulate library richness until a benchmark is added. Explicit list mode remains available via `observe_sim_markets_mode: "explicit"`.
+
+**Screen cadence:** When selective research is skipped (`weekly_ops` exhausted, checkpoint, or `--skip-research`), ladder runs a memo-free screen-lite pass for observe-sim markets (`observe_sim_screen_when_research_skipped`, default on) so Phase 1 archives do not stall to focus-only cadence.
 
 **Exit gate (per market):** ≥ **12** dated `signals_YYYYMMDD_HHMMSS.csv` files under `markets/<id>/screen/` (same bar as backtest history and L127 revisit).
 
-| Market | Screen archives (Aug 2026) | Phase 1 status |
-|--------|----------------------------|----------------|
-| `sp500` | 12 | **Ready** — gate met |
-| `euro_stoxx50` | 13 | **Ready** — gate met |
-| `iseq20` | 1 | **Accumulating** — ~11 more Sunday passes |
+| Market (benchmark wired) | Benchmark | Phase 1 notes |
+|--------------------------|-----------|---------------|
+| `sp500` | ^GSPC | Archives met; blocked Phase 2 until AI beat rules on observe sim |
+| `euro_stoxx50` | ^STOXX50E | Phase 2 weekly shard (capacity slot) |
+| `nasdaq100`, `asx200`, `dax`, `cac40`, `tsx60`, `iseq20` | local | Observe sim on — archives accumulating |
 
 **Timescale:** Markets already at 12 archives are done with Phase 1 *accumulation* today. New graduates need ~**11 Sunday ladder cycles** (~3 months at weekly cadence) before Phase 2 evidence is meaningful.
 
-**Parallelism:** Add markets to `observe_sim_markets` as soon as benchmark is wired; sim runs even with thin history (caveat in summary JSON) but **do not promote** on &lt;12 archives.
+**Parallelism:** Graduation + benchmark wiring adds markets to Tier 1 automatically; sim runs even with thin history (caveat in summary JSON) but **do not promote** on &lt;12 archives.
 
 ### Phase 2 — Weekly paper shard *(wired Aug 2026)*
 
 **What runs:** Full track set (rules, AI judgment, grace, technical), exit-shadow and exit-timing cohorts, churn health — **Sunday batch only** after ladder, using library screen → reports adapter. No weekday settle stepping yet; no `--apply` on knobs.
 
-**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`.
+**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (default **2** slots).
+
+**Capacity ladder:** Phase 1 is broad (all benchmark-wired graduated markets). Phase 2 is capped — only markets listed in `weekly_paper_shard_markets` run, truncated to `weekly_paper_shard_capacity`. Promote into a slot manually when `ftse-library shard-status` shows `phase1_ready` and ops headroom; demote or swap when a pilot completes Phase 2 or stalls.
 
 **Orchestration:** After observe sim in `ftse-library ladder`, `run_weekly_paper_shards_for_screened_markets` runs for markets that passed Phase 1 and were screened this run. Phase rollup refreshes to `docs/data/library/shard_phases.json`.
 
@@ -128,10 +134,18 @@ ftse-library shard-status --markets sp500,euro_stoxx50 --json
 ftse-library shard-paper --markets sp500,euro_stoxx50
 
 # Policy
-ftse-library policy   # ladder.observe_sim_markets, ladder.weekly_paper_shard_markets
+ftse-library policy   # observe_sim_markets_mode, weekly_paper_shard_capacity
 
 # Sunday ladder (automatic observe sim + weekly paper shard when eligible)
 ftse-library ladder
+```
+
+## Capacity tiers (summary)
+
+```text
+Tier 1 — Phase 1 observe sim     graduated_benchmark mode (~free; archive-gated)
+Tier 2 — Phase 2 weekly paper  weekly_paper_shard_markets[:capacity]  (default cap 2)
+Tier 3 — Phase 3 weekday shard   one manual pilot at a time
 ```
 
 ## Guardrails

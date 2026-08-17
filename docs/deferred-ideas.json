@@ -908,23 +908,6 @@
       "added_at": "2026-08-16T16:25:17+00:00"
     },
     {
-      "id": "L149",
-      "category": "later",
-      "section": "ops",
-      "title": "Label Analysis weaknesses as snapshot not eng tickets",
-      "summary": "Dashboard Analysis post-run weaknesses/plan look like open work while engineering queue is idle by design until compile. A short UI note that Analysis is last-run narrative and queue is the actionable ticket list would reduce confusion.",
-      "revisit_when": "Next dashboard UX pass on Automation/Analysis tabs",
-      "tags": [
-        "dashboard",
-        "analysis",
-        "engineering-queue",
-        "ux"
-      ],
-      "status": "open",
-      "source": "https://cursor.com/agents/bc-01a010e4-0703-710c-83c6-ee4e59ecba6e",
-      "added_at": "2026-08-17T19:23:02+00:00"
-    },
-    {
       "id": "L148",
       "category": "later",
       "section": "ops",
@@ -942,6 +925,24 @@
       "added_at": "2026-08-17T18:04:15+00:00"
     },
     {
+      "id": "L149",
+      "category": "later",
+      "section": "ops",
+      "title": "Split long-lived product sessions to cap context tax",
+      "summary": "bc-5c49cf71 ran 56 user turns / 13 PRs in one session (16.8MB transcript). Multi-topic follow-ups multiply context far more than focused grok run (7 turns, 0.86MB). Prefer new agent per major workstream.",
+      "revisit_when": "When establishing cloud-agent operating norms or after another session exceeds ~30 user turns",
+      "tags": [
+        "agents",
+        "tokens",
+        "session",
+        "context"
+      ],
+      "status": "done",
+      "source": "transcript-efficiency-analysis-2026-08-17",
+      "added_at": "2026-08-17T08:35:07+00:00",
+      "updated_at": "2026-08-17T18:03:55+00:00"
+    },
+    {
       "id": "L15",
       "category": "later",
       "section": "research",
@@ -954,6 +955,42 @@
       ],
       "status": "open",
       "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "L150",
+      "category": "later",
+      "section": "ops",
+      "title": "Exclude docs/data from default agent grep scope",
+      "summary": "Composer transcript analysis shows ripgrep alone was ~56% of tool-result bytes; one search hit 1669 files (1656 under docs/data/library|research). Default explore/grep should exclude docs/data artifacts, charts, and research dumps unless explicitly needed.",
+      "revisit_when": "Next AGENTS.md or cursor rules pass on agent efficiency; or after another multi-day mega-session with large grep tool-result share",
+      "tags": [
+        "agents",
+        "tokens",
+        "grep",
+        "docs-data",
+        "efficiency"
+      ],
+      "status": "done",
+      "source": "transcript-efficiency-analysis-2026-08-17",
+      "added_at": "2026-08-17T08:35:07+00:00",
+      "updated_at": "2026-08-17T18:03:55+00:00"
+    },
+    {
+      "id": "L151",
+      "category": "later",
+      "section": "ops",
+      "title": "Label Analysis weaknesses as snapshot not eng tickets",
+      "summary": "Dashboard Analysis post-run weaknesses/plan look like open work while engineering queue is idle by design until compile. A short UI note that Analysis is last-run narrative and queue is the actionable ticket list would reduce confusion.",
+      "revisit_when": "Next dashboard UX pass on Automation/Analysis tabs",
+      "tags": [
+        "dashboard",
+        "analysis",
+        "engineering-queue",
+        "ux"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a010e4-0703-710c-83c6-ee4e59ecba6e",
+      "added_at": "2026-08-17T19:23:02+00:00"
     },
     {
       "id": "L16",
@@ -2816,6 +2853,23 @@
       ],
       "status": "open",
       "source": "bc-8c2f37c7-9320-4eeb-bd4d-297612b773a5"
+    },
+    {
+      "id": "N30",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Keep deferred-ideas.json out of exploratory Reads/greps",
+      "summary": "Full deferred-ideas.json is ~134KB and appeared in broad greps; prefer ftse-defer CLI / targeted queries over reading the JSON or deferred-review.md during unrelated tasks.",
+      "revisit_when": "If agents keep opening deferred-ideas.json during non-defer work",
+      "tags": [
+        "agents",
+        "deferred-ideas",
+        "tokens"
+      ],
+      "status": "done",
+      "source": "transcript-efficiency-analysis-2026-08-17",
+      "added_at": "2026-08-17T08:35:07+00:00",
+      "updated_at": "2026-08-17T18:03:55+00:00"
     },
     {
       "id": "N4",

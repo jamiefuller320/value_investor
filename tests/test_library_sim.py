@@ -124,6 +124,28 @@ def test_observe_sim_markets_from_policy_respects_toggle(tmp_path: Path):
     assert observe_sim_markets_for_policy(policy) == ["sp500", "euro_stoxx50", "iseq20"]
 
 
+def test_observe_sim_markets_graduated_benchmark_mode():
+    from value_investor.library_sim import OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK
+
+    policy = {
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets_mode": OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK,
+        },
+        "graduated_markets": [
+            {"market": "sp500"},
+            {"market": "aim"},
+            {"market": "iseq20"},
+            {"market": "euro_stoxx50"},
+        ],
+    }
+    assert observe_sim_markets_for_policy(policy) == [
+        "sp500",
+        "iseq20",
+        "euro_stoxx50",
+    ]
+
+
 def test_benchmark_for_iseq20():
     from value_investor.library_sim import benchmark_for_market
 

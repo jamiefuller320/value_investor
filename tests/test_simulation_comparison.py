@@ -120,3 +120,42 @@ def test_comparison_note_when_no_research_data():
     comparison = run_simulation_comparison(snapshots, SimulatorConfig(max_positions=1))
     assert comparison.screen.final_value == comparison.overlay.final_value
     assert "No research verdicts" in comparison.comparison_note
+
+
+def test_static_levels_zero_trades_note_when_limits_unfilled():
+    snapshots = [
+        RunSnapshot(
+            run_at="2026-08-01T12:00:00+00:00",
+            prices={"AAA.L": 110.0, BENCHMARK_TICKER: 8000.0},
+            signals=[
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "core_order": "limit",
+                    "core_limit": 100.0,
+                    "tactical_stop_loss": 95.0,
+                    "tactical_take_profit": 120.0,
+                }
+            ],
+        ),
+        RunSnapshot(
+            run_at="2026-08-08T12:00:00+00:00",
+            prices={"AAA.L": 110.0, BENCHMARK_TICKER: 8040.0},
+            signals=[
+                {
+                    "ticker": "AAA.L",
+                    "signal": "strong_buy",
+                    "conviction_score": 0.9,
+                    "core_order": "limit",
+                    "core_limit": 100.0,
+                    "tactical_stop_loss": 95.0,
+                    "tactical_take_profit": 120.0,
+                }
+            ],
+        ),
+    ]
+    comparison = run_simulation_comparison(snapshots)
+    assert comparison.static_levels.trade_count == 0
+    assert "core limit entries never filled" in comparison.static_levels.note
+    assert "Static levels" in comparison.comparison_note

@@ -22,6 +22,7 @@ PHASE_LIVE_SCREEN = 4
 PHASE1_MIN_SCREEN_ARCHIVES = 12
 PHASE2_MIN_WEEKLY_BATCHES = 8
 PHASE2_AI_BEAT_RULES_SNAPSHOTS = 8
+DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY = 2
 
 DEFAULT_SHARD_ROOT = Path("docs/data/paper_automation/markets")
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
@@ -71,6 +72,17 @@ def ai_beat_rules_on_observe_sim(library_root: Path, market_id: str) -> bool | N
     return float(ai_excess) > float(rules_excess)
 
 
+def weekly_paper_shard_capacity_for_policy(policy: dict[str, Any]) -> int:
+    ladder = policy.get("ladder") or {}
+    raw = ladder.get("weekly_paper_shard_capacity")
+    if raw is None:
+        return DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY
+    try:
+        return max(0, int(raw))
+    except (TypeError, ValueError):
+        return DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY
+
+
 def weekly_paper_shard_markets_for_policy(policy: dict[str, Any]) -> list[str]:
     ladder = policy.get("ladder") or {}
     if not ladder.get("weekly_paper_shard_after_screen", True):
@@ -78,7 +90,11 @@ def weekly_paper_shard_markets_for_policy(policy: dict[str, Any]) -> list[str]:
     configured = ladder.get("weekly_paper_shard_markets")
     if not configured:
         return []
-    return [str(mid) for mid in configured if str(mid).strip()]
+    markets = [str(mid) for mid in configured if str(mid).strip()]
+    capacity = weekly_paper_shard_capacity_for_policy(policy)
+    if capacity > 0:
+        markets = markets[:capacity]
+    return markets
 
 
 def phase1_gate_met(
