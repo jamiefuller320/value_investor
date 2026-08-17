@@ -903,6 +903,7 @@ def cmd_shard_status(args: argparse.Namespace) -> int:
         COMMITTED_PHASES_PATH,
         evaluate_market_phase,
         refresh_committed_phase_rollup,
+        weekly_paper_shard_capacity_for_policy,
         weekly_paper_shard_markets_for_policy,
     )
 
@@ -923,6 +924,11 @@ def cmd_shard_status(args: argparse.Namespace) -> int:
         print(json.dumps(rollup, indent=2))
         return 0
     print(f"Phase rollup: {COMMITTED_PHASES_PATH}")
+    capacity = weekly_paper_shard_capacity_for_policy(policy)
+    slots = weekly_paper_shard_markets_for_policy(policy)
+    print(f"Weekly paper capacity: {len(slots)}/{capacity} slots ({', '.join(slots) or '—'})")
+    observe = observe_sim_markets_for_policy(policy)
+    print(f"Observe sim markets ({len(observe)}): {', '.join(observe) or '—'}")
     for market_id in markets:
         evaluation = (rollup.get("markets") or {}).get(market_id) or evaluate_market_phase(
             market_id,
@@ -1085,6 +1091,11 @@ def cmd_ladder(args: argparse.Namespace) -> int:
                             f"phase={row.get('current_phase')}  "
                             f"batches_ready={row.get('phase2_ready')}"
                         )
+        elif name == "observe_sim_screen":
+            if layer.get("skipped"):
+                print(f"  observe_sim_screen: skipped — {layer.get('reason')}")
+            else:
+                print(f"  observe_sim_screen: markets={', '.join(layer.get('markets') or [])}")
     if payload.get("shard_phases"):
         markets = payload["shard_phases"].get("markets") or {}
         ready = [mid for mid, ev in markets.items() if ev.get("phase2_ready")]

@@ -196,16 +196,30 @@ def _comparison_note(
     overlay: SimulationSummary,
     *,
     has_overlay_data: bool,
+    static_levels: SimulationSummary | None = None,
+    trailing_levels: SimulationSummary | None = None,
 ) -> str:
     if not screen.has_results():
         return screen.note or overlay.note
+    parts: list[str] = []
     if not has_overlay_data:
-        return "No research verdicts in archived runs; overlay track matches screen-only."
-    delta = overlay.total_return - screen.total_return
-    if abs(delta) < 0.0001:
-        return "Research overlay produced identical returns to screen-only over this window."
-    direction = "outperformed" if delta > 0 else "underperformed"
-    return f"Research overlay {direction} screen-only by {delta:+.1%} total return."
+        parts.append("No research verdicts in archived runs; overlay track matches screen-only.")
+    else:
+        delta = overlay.total_return - screen.total_return
+        if abs(delta) < 0.0001:
+            parts.append(
+                "Research overlay produced identical returns to screen-only over this window."
+            )
+        else:
+            direction = "outperformed" if delta > 0 else "underperformed"
+            parts.append(f"Research overlay {direction} screen-only by {delta:+.1%} total return.")
+    for label, track in (
+        ("Static levels", static_levels),
+        ("Trailing stop", trailing_levels),
+    ):
+        if track is not None and track.trade_count == 0 and track.note:
+            parts.append(f"{label}: {track.note}")
+    return " ".join(parts)
 
 
 def run_simulation_comparison(
@@ -241,13 +255,21 @@ def run_simulation_comparison(
         replace(base, use_momentum_grace=True),
     )
     has_overlay_data = _snapshots_have_research_overlay(snapshots)
+    static_levels = _annotate_unfilled_level_sim(static_levels, snapshots, base)
+    trailing_levels = _annotate_unfilled_level_sim(trailing_levels, snapshots, base)
     return SimulationComparison(
         screen=screen,
         overlay=overlay,
         static_levels=static_levels,
         trailing_levels=trailing_levels,
         momentum_grace=momentum_grace,
-        comparison_note=_comparison_note(screen, overlay, has_overlay_data=has_overlay_data),
+        comparison_note=_comparison_note(
+            screen,
+            overlay,
+            has_overlay_data=has_overlay_data,
+            static_levels=static_levels,
+            trailing_levels=trailing_levels,
+        ),
     )
 
 
@@ -351,12 +373,49 @@ def _optional_float(value: Any) -> float | None:
     if value is None:
         return None
     try:
-        number = float(value)
+        out = float(value)
     except (TypeError, ValueError):
         return None
-    if number != number:  # NaN
+    if out != out:  # NaN
         return None
-    return number
+    return out
+
+
+def _annotate_unfilled_level_sim(
+    summary: SimulationSummary,
+    snapshots: list[RunSnapshot],
+    base: SimulatorConfig,
+) -> SimulationSummary:
+    """Explain zero-trade static/trailing runs (core limit never reached)."""
+    if summary.trade_count > 0:
+        return summary
+    attempts = 0
+    unfilled = 0
+    level_cfg = replace(base, use_trade_plan_levels=True)
+    for snap in snapshots:
+        targets = _select_targets(snap, level_cfg)
+        by_ticker = _signal_rows_by_ticker(snap)
+        for ticker in targets:
+            row = by_ticker.get(ticker) or {}
+            core_limit = _optional_float(row.get("core_limit"))
+            price = snap.prices.get(ticker)
+            if core_limit is None or price is None or price <= 0:
+                continue
+            attempts += 1
+            if price > core_limit:
+                unfilled += 1
+    if attempts == 0:
+        note = (
+            "No trades: no buy-tier names with core limit prices in archived runs. "
+            "Needs trade_plan fields on screen snapshots."
+        )
+    else:
+        note = (
+            f"No trades: core limit entries never filled ({unfilled}/{attempts} "
+            f"opportunities — spot stayed above core_limit). Screen track rebalances "
+            f"at market; static/trailing honour limit gates."
+        )
+    return replace(summary, note=note)
 
 
 def _effective_stop(

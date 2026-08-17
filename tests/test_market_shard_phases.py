@@ -69,6 +69,20 @@ def test_weekly_paper_shard_markets_respects_toggle():
     assert weekly_paper_shard_markets_for_policy(policy) == ["sp500"]
 
 
+def test_weekly_paper_shard_capacity_truncates():
+    from value_investor.market_shard_phases import weekly_paper_shard_capacity_for_policy
+
+    policy = {
+        "ladder": {
+            "weekly_paper_shard_after_screen": True,
+            "weekly_paper_shard_capacity": 2,
+            "weekly_paper_shard_markets": ["sp500", "euro_stoxx50", "iseq20"],
+        }
+    }
+    assert weekly_paper_shard_capacity_for_policy(policy) == 2
+    assert weekly_paper_shard_markets_for_policy(policy) == ["sp500", "euro_stoxx50"]
+
+
 def test_phase1_gate_requires_archives_and_snapshots(tmp_path: Path):
     root = tmp_path / "library"
     market_id = "sp500"

@@ -79,7 +79,7 @@ Artifacts: `docs/data/library/markets/sp500/screen/` (signals, shortlist, histor
 
 **Observe-only paper sim (S&P 500 pilot):**
 
-Runs automatically after screen-lite when a market in `ladder.observe_sim_markets` is screened in `ftse-library ladder` (policy: `ladder.observe_sim_after_screen`, default on). Phase gates and timescale: [`docs/ops/market-sharded-learning.md`](ops/market-sharded-learning.md). Manual refresh:
+Runs automatically after screen-lite when a market in the observe-sim set is screened in `ftse-library ladder` (policy: `ladder.observe_sim_after_screen`, `ladder.observe_sim_markets_mode`, default `graduated_benchmark`). Phase gates and timescale: [`docs/ops/market-sharded-learning.md`](ops/market-sharded-learning.md). Manual refresh:
 
 ```bash
 ftse-library sim --markets sp500
