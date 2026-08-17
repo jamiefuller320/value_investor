@@ -1,85 +1,37 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-14T09:27:20.279983+01:00",
+    "local_time": "2026-08-17T09:27:20.569663+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-14T08:00:00+01:00",
-    "settle_at": "2026-08-14T09:15:00+01:00",
+    "market_open_at": "2026-08-17T08:00:00+01:00",
+    "settle_at": "2026-08-17T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
   "trades": [
     {
-      "id": "982bdbe6-c1fd-4d4d-b867-1ea4a083d2ba",
+      "id": "cb552403-8170-4670-b1d7-bb084091976b",
       "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
-      "acted_at": "2026-08-14T09:27:20.279983+01:00",
-      "ticker": "AEP.L",
+      "acted_at": "2026-08-17T09:27:20.569663+01:00",
+      "ticker": "MEGP.L",
       "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 1.753099,
-      "price": 178.6,
-      "gross": 313.1,
-      "cost": 9.39,
-      "net_cash": 303.71,
-      "note": "Automated exit \u2014 left target set",
-      "name": "AEP Plantations Plc",
-      "avg_cost_at_exit": 178.8,
-      "position_closed": true
-    },
-    {
-      "id": "7f5e8a16-2244-4df8-b70a-41d57fcb0fe0",
-      "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
-      "acted_at": "2026-08-14T09:27:20.279983+01:00",
-      "ticker": "SN.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.284312,
-      "price": 1093.5,
-      "gross": 310.9,
-      "cost": 9.33,
-      "net_cash": 301.57,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Smith & Nephew plc",
-      "avg_cost_at_exit": 1102.5,
-      "position_closed": true
-    },
-    {
-      "id": "10e7067e-c6fd-4a8c-b71a-95a78c64a05f",
-      "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
-      "acted_at": "2026-08-14T09:27:20.279983+01:00",
-      "ticker": "DOM.L",
-      "side": "buy",
       "sizing_mode": "cash",
-      "shares": 1.484199,
-      "price": 201.0,
-      "gross": 298.32,
-      "cost": 8.95,
-      "net_cash": -307.27,
-      "note": "Automated buy",
-      "name": "Domino's Pizza Group plc"
-    },
-    {
-      "id": "b90d44ae-f525-44cc-97a5-fc085abbe3f6",
-      "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
-      "acted_at": "2026-08-14T09:27:20.279983+01:00",
-      "ticker": "POLN.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.338652,
-      "price": 854.3449,
-      "gross": 289.33,
-      "cost": 8.68,
-      "net_cash": -298.01,
-      "note": "Automated buy",
-      "name": "Pollen Street Group Limited"
+      "shares": 0.136006,
+      "price": 119.2,
+      "gross": 16.21,
+      "cost": 0.49,
+      "net_cash": 15.73,
+      "note": "Automated trim",
+      "name": "ME Group International plc",
+      "avg_cost_at_exit": 118.6312
     }
   ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
-      "Conviction floor: min_conviction=0.15.",
+      "Conviction floor: min_conviction=0.20.",
       "Sector cap: at most 1 name(s) per known sector (cap=20%).",
       "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
@@ -88,92 +40,90 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 904.19,
-    "cash": 0.0,
+    "nav": 897.21,
+    "cash": 15.73,
     "max_positions": 3,
-    "min_conviction": 0.15,
+    "min_conviction": 0.2,
     "sector_cap": 0.2,
     "skip_timing_wait": true,
     "use_momentum_grace": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 301.4,
+    "target_sleeve_value": 293.24,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 1.0,
-        "price": 119.8
+        "conviction_score": 0.6383000000000001,
+        "price": 119.2
       },
       {
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.5944,
+        "price": 180.2
+      },
+      {
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "signal": "strong_buy",
+        "conviction_score": 0.5448,
+        "price": 2584.0
+      }
+    ],
+    "anticipated_exits": [
+      {
+        "action": "sell",
         "ticker": "DOM.L",
         "name": "Domino's Pizza Group plc",
-        "signal": "strong_buy",
-        "conviction_score": 1.0,
-        "price": 201.0
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.484199,
+        "price": 196.4,
+        "value": 291.5
       },
       {
+        "action": "sell",
         "ticker": "POLN.L",
         "name": "Pollen Street Group Limited",
-        "signal": "strong_buy",
-        "conviction_score": 1.0,
-        "price": 854.3449
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.338652,
+        "price": 860.0,
+        "value": 291.24
       }
     ],
-    "anticipated_exits": [],
     "anticipated_grace_holds": [],
-    "anticipated_trims": [
-      {
-        "action": "trim",
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
-        "reason": "Overweight vs equal-weight sleeve (301 target)",
-        "value": 15.15,
-        "price": 119.8,
-        "conviction_score": 1.0,
-        "signal": "strong_buy"
-      }
-    ],
+    "anticipated_trims": [],
     "anticipated_buys": [
       {
         "action": "buy",
-        "ticker": "POLN.L",
-        "name": "Pollen Street Group Limited",
-        "reason": "Top-up to equal weight",
-        "value": 12.07,
-        "price": 854.3449,
-        "target_value": 301.4,
-        "conviction_score": 1.0,
-        "signal": "strong_buy"
-      }
-    ],
-    "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
-        "reason": "Already near equal-weight target",
-        "value": 301.4,
-        "target_value": 301.4,
-        "conviction_score": 1.0,
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "reason": "New sleeve",
+        "value": 293.24,
+        "price": 180.2,
+        "target_value": 293.24,
+        "conviction_score": 0.5944,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
-        "ticker": "DOM.L",
-        "name": "Domino's Pizza Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 298.32,
-        "target_value": 301.4,
-        "conviction_score": 1.0,
+        "action": "buy",
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "reason": "New sleeve",
+        "value": 287.74,
+        "price": 2584.0,
+        "target_value": 293.24,
+        "conviction_score": 0.5448,
         "signal": "strong_buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); trim 1 overweight sleeve(s); deploy cash into 1 buy(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
   },
   "alerts": [
     {
@@ -182,7 +132,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 119.80000305175781,
+      "mark": 119.19999694824219,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -193,7 +143,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 201.0,
+      "mark": 196.39999389648438,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -204,7 +154,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 854.3449096679688,
+      "mark": 860.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -223,13 +173,13 @@
       "id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
       "created_at": "2026-07-23T07:21:14.018803+00:00"
     },
-    "cash": 0.0,
+    "cash": 15.73,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "MEGP.L": {
         "ticker": "MEGP.L",
-        "shares": 2.642257,
+        "shares": 2.506251,
         "avg_cost": 118.6312,
         "name": "ME Group International plc",
         "sector": "Industrials",
@@ -592,6 +542,22 @@
         "net_cash": -298.01,
         "note": "Automated buy",
         "name": "Pollen Street Group Limited"
+      },
+      {
+        "id": "cb552403-8170-4670-b1d7-bb084091976b",
+        "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
+        "acted_at": "2026-08-17T09:27:20.569663+01:00",
+        "ticker": "MEGP.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.136006,
+        "price": 119.2,
+        "gross": 16.21,
+        "cost": 0.49,
+        "net_cash": 15.73,
+        "note": "Automated trim",
+        "name": "ME Group International plc",
+        "avg_cost_at_exit": 118.6312
       }
     ],
     "equity_curve": [
@@ -766,22 +732,38 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-17T09:27:20.569663+01:00",
+        "portfolio_value": 897.21,
+        "cash": 15.73,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-14T09:27:20.279983+01:00",
+    "last_mark_at": "2026-08-17T09:27:20.569663+01:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "AEP.L": 1,
-        "SN.L": 1
-      }
+      "exit_streak": {
+        "DOM.L": 1,
+        "POLN.L": 1
+      },
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (4 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-14T08:27:30.080296+00:00",
+    "generated_at": "2026-08-17T08:27:35.395939+00:00",
     "open_count": 8,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -794,13 +776,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 2,
-    "checkpoints_added_this_pass": 0
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 3
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-14T08:27:30.080903+00:00",
+    "generated_at": "2026-08-17T08:27:35.396593+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -854,17 +836,20 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 0,
+      "hold_with_data_quality_count": 2,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
-        "swap_rotation closed rotations=0 (target >=10)",
-        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
+        "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 0
+        "count": 2,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "open": 2
+        }
       },
       "closed": {
         "count": 0
@@ -872,10 +857,7 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 1,
-        "verdicts": {
-          "open": 1
-        }
+        "count": 0
       },
       "closed": {
         "count": 0
@@ -883,21 +865,21 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 1
+      "hold_episodes": 2,
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     }
   },
-  "generated_at": "2026-08-14T08:27:30.081389+00:00",
+  "generated_at": "2026-08-17T08:27:35.397168+00:00",
   "track_id": "ai_judgment",
   "track_label": "AI judgment (research accumulate + adjusted_signal)",
   "is_primary_learning_track": true,
   "selection": {
     "skip_timing_wait": true,
-    "min_conviction": 0.15,
+    "min_conviction": 0.2,
     "sector_cap": 0.2,
     "use_adjusted_signal": true,
     "require_research_accumulate": true,

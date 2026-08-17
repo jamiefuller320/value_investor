@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-08-16T07:46:20.518646+00:00",
+  "run_at": "2026-08-17T07:46:21.853489+00:00",
   "overall": "fail",
   "findings": [
     {
       "severity": "fail",
       "category": "workflows",
-      "title": "Workflow overdue: Modelling analysis review",
-      "summary": "No successful run within 36h (last: 2026-08-09T11:35:07+00:00).",
+      "title": "Workflow overdue: FTSE Paper Automation",
+      "summary": "No successful run within 28h (last: 2026-08-14T08:26:15+00:00).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -14,17 +14,17 @@
   ],
   "auto_fixes": [],
   "drafted_task_ids": [
-    "eng-20260816-01"
+    "eng-20260817-01"
   ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 30,
-      "last_success_at": "2026-08-14T22:11:00+00:00",
-      "last_success_run_id": 31845592911,
-      "age_hours": 33.6,
+      "last_success_at": "2026-08-17T07:05:27+00:00",
+      "last_success_run_id": 32004279147,
+      "age_hours": 0.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -34,9 +34,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-16T05:55:07+00:00",
-      "last_success_run_id": 31930136129,
-      "age_hours": 1.9,
+      "last_success_at": "2026-08-17T06:01:31+00:00",
+      "last_success_run_id": 31999984229,
+      "age_hours": 1.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -44,11 +44,11 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 26,
-      "last_success_at": "2026-08-14T23:15:30+00:00",
-      "last_success_run_id": 31849711450,
-      "age_hours": 32.5,
+      "last_success_at": "2026-08-17T07:41:23+00:00",
+      "last_success_run_id": 32006915937,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -58,8 +58,8 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-16T07:30:54+00:00",
-      "last_success_run_id": 31934065314,
+      "last_success_at": "2026-08-17T07:30:59+00:00",
+      "last_success_run_id": 32006155001,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -68,12 +68,84 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-08-09T11:35:07+00:00",
-      "last_success_run_id": 31311153268,
-      "age_hours": 164.2,
+      "last_success_at": "2026-08-16T11:35:07+00:00",
+      "last_success_run_id": 31944724120,
+      "age_hours": 20.2,
+      "stale": false,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
+    },
+    {
+      "workflow": "library-grow.yml",
+      "name": "FTSE Library Ladder",
+      "expected_today": false,
+      "max_age_hours": 36,
+      "last_success_at": "2026-08-09T05:21:06+00:00",
+      "last_success_run_id": 31296497685,
+      "age_hours": 194.4,
+      "stale": false,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
+    },
+    {
+      "workflow": "library-model-review.yml",
+      "name": "Library model review",
+      "expected_today": false,
+      "max_age_hours": 36,
+      "last_success_at": "2026-08-16T06:18:46+00:00",
+      "last_success_run_id": 31931113892,
+      "age_hours": 25.5,
+      "stale": false,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
+    },
+    {
+      "workflow": "email-report.yml",
+      "name": "Email report",
+      "expected_today": false,
+      "max_age_hours": 36,
+      "last_success_at": "2026-08-16T06:18:47+00:00",
+      "last_success_run_id": 31931114240,
+      "age_hours": 25.5,
+      "stale": false,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
+    },
+    {
+      "workflow": "data-backup.yml",
+      "name": "FTSE Data Backup",
+      "expected_today": false,
+      "max_age_hours": 36,
+      "last_success_at": "2026-08-16T13:06:02+00:00",
+      "last_success_run_id": 31948869382,
+      "age_hours": 18.7,
+      "stale": false,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
+    },
+    {
+      "workflow": "paper-auto.yml",
+      "name": "FTSE Paper Automation",
+      "expected_today": true,
+      "max_age_hours": 28,
+      "last_success_at": "2026-08-14T08:26:15+00:00",
+      "last_success_run_id": 31783890481,
+      "age_hours": 71.3,
       "stale": true,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
+    },
+    {
+      "workflow": "ops-monitor.yml",
+      "name": "FTSE Ops Monitor",
+      "expected_today": true,
+      "max_age_hours": 28,
+      "last_success_at": "2026-08-16T07:57:21+00:00",
+      "last_success_run_id": 31935208892,
+      "age_hours": 23.8,
+      "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     }
@@ -82,7 +154,7 @@
     "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 0,
-    "merged_count": 41,
+    "merged_count": 42,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
