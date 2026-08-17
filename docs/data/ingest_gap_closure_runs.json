@@ -3453,8 +3453,133 @@
         ]
       },
       "trigger": "eng_idle"
+    },
+    {
+      "id": "igc-20260817-03",
+      "status": "pending_review",
+      "title": "Single-ticker ingest gap-closure pass",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "BME.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "BME.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260817-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-17T13:17:20.048836+00:00",
+      "completed_at": "2026-08-17T13:18:42.294460+00:00",
+      "outcome": {
+        "delta_filings_with_body": 41,
+        "delta_indexed_without_body": 41,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "BME.L"
+        ],
+        "results": [
+          {
+            "ticker": "BME.L",
+            "name": "B&M European Value Retail plc",
+            "with_body_before": 59,
+            "with_body_after": 59,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 27,
+              "with_body_after": 27,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 32,
+              "fetched": 32,
+              "with_body_before": 27,
+              "with_body_after": 59,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 32,
+                "fetched": 32,
+                "with_body_before": 27,
+                "with_body_after": 59,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 59,
+                "with_body_after": 59,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 32,
+              "fetched": 32,
+              "with_body_before": 27,
+              "with_body_after": 59,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 59,
+              "with_body_after": 59,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 27,
+              "with_body_after": 27
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "BME.L",
+            "with_body_before": 59,
+            "with_body_after": 59,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "eng_idle"
     }
   ],
-  "updated_at": "2026-08-17T06:32:59.098081+00:00",
+  "updated_at": "2026-08-17T13:18:42.294470+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
