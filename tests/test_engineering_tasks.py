@@ -162,6 +162,35 @@ DEFER
     assert "paper_fund.py" in "".join(selected[0].blocked_paths)
 
 
+def test_compile_engineering_tasks_accepts_prompt_format_without_bold(tmp_path: Path):
+    """Post-run prompt asks for ``N. [area] Action`` without mandatory markdown bold."""
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    (output_dir / "post_run_review.md").write_text(
+        """PRIORITISED IMPROVEMENT PLAN
+1. [scoring] Implement canonical filing-aligned FCF as sole input for FCF Yield — expected impact: fewer overlay downgrades.
+
+2. [ingest] Ship Yahoo quarterly cash-flow ingest into financials_annual.json — expected impact: period-aligned OCF.
+
+DEFER
+- ignore me
+""",
+        encoding="utf-8",
+    )
+    payload = compile_engineering_tasks(
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_tasks=5,
+        tasks_path=output_dir / "engineering_tasks.json",
+        committed_path=tmp_path / "committed" / "engineering_tasks.json",
+    )
+    assert payload["task_count"] == 2
+    areas = {row["area"] for row in payload["tasks"]}
+    assert areas == {"scoring", "ingest"}
+    assert all(row["source"] == "post_run_review" for row in payload["tasks"])
+    assert all(row["status"] == "open" for row in payload["tasks"])
+
+
 def test_compile_preserves_merged_task_status(tmp_path: Path):
     committed = tmp_path / "committed.json"
     committed.write_text(
