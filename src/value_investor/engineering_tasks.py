@@ -136,8 +136,9 @@ _CODE_KEYWORDS = (
 )
 
 _TICKER_RE = re.compile(r"\b([A-Z]{1,5}(?:\.[A-Z]{1,2})?)\b")
+# Match post_run prompt ``N. [area] Action`` and bold variants ``N. **[area] Action**``.
 _PLAN_LINE = re.compile(
-    r"^\s*(?P<index>\d+)\.\s*\*\*\[(?P<area>[^\]]+)\]\s*(?P<title>.+)$",
+    r"^\s*(?P<index>\d+)\.\s*(?:\*\*)?\[(?P<area>[^\]]+)\](?:\*\*)?\s*(?P<title>.+)$",
     re.IGNORECASE,
 )
 

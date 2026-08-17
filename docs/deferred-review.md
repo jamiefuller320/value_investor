@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T18:04:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T19:23:02+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -206,6 +206,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L134 | **Eng-idle single-ticker ingest depth hook** | When engineering_queue open_count=0 and buy-tier gaps remain, dispatch a bounded ingest pass on the top priority_score ticker (or top paper-book holding) instead of leaving cron idle — orchestration only, reuse ingest_improvement. | Engineering queue idle for 48h+ while indexed_without_body>50 on names in ai_judgment holdings or strong_buy shortlist |
 | L147 | **Universal automation completion watchdog** | Extend workflow_run responders + ops monitor to cover all scheduled bundle workflows with typed recovery (rerun vs draft vs noop), not just ladder/ingest/email. Full auto-fix for every failure class is unsafe — keep human/eng-agent path for logic bugs and policy changes. | After PR #272 responders have 4+ weeks of stable operation and ops monitor false-positive rate is known |
 | L148 | **Retry gh API probes in engineering-queue on 503** | The Collect open PRs step failed once on HTTP 503 from GitHub GraphQL. A short retry/backoff around gh pr list and gh run list would avoid flaky hourly failures. | Engineering queue fails again on transient GitHub 5xx, or ops wants fewer false-red runs |
+| L151 | **Label Analysis weaknesses as snapshot not eng tickets** | Dashboard Analysis post-run weaknesses/plan look like open work while engineering queue is idle by design until compile. A short UI note that Analysis is last-run narrative and queue is the actionable ticket list would reduce confusion. | Next dashboard UX pass on Automation/Analysis tabs |
 | L22 | **Prove Monday GitHub cron** | Confirm 17 7 * * 1 (or Schedule→dispatch wrapper) | Next Monday after cron window |
 | L23 | **Parallel fetch + caching** | Sequential yfinance loop | Weekly runtime becomes painful |
 | L25 | **Private live-holdings surveillance bridge** | Watchlist/--add-watch is the safe path; true personal live sync needs non-git storage | Need CI surveillance of personal live book |
