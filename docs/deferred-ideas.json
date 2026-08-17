@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-16T16:25:17+00:00",
+  "updated_at": "2026-08-17T18:04:15+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -2907,6 +2907,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/ci-autofix-committed-path",
       "added_at": "2026-08-16T16:25:17+00:00"
+    },
+    {
+      "id": "L148",
+      "category": "later",
+      "section": "ops",
+      "title": "Retry gh API probes in engineering-queue on 503",
+      "summary": "The Collect open PRs step failed once on HTTP 503 from GitHub GraphQL. A short retry/backoff around gh pr list and gh run list would avoid flaky hourly failures.",
+      "revisit_when": "Engineering queue fails again on transient GitHub 5xx, or ops wants fewer false-red runs",
+      "tags": [
+        "engineering-queue",
+        "github-api",
+        "retry",
+        "ci"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a010e4-0703-710c-83c6-ee4e59ecba6e",
+      "added_at": "2026-08-17T18:04:15+00:00"
     }
   ],
   "fragments": [
