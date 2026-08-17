@@ -30,6 +30,25 @@ from value_investor.trust_summary import build_trust_reports
 
 logger = logging.getLogger(__name__)
 
+COMMITTED_PAPER_AUTOMATION = Path("docs/data/paper_automation")
+
+
+def _resolve_paper_automation_dir(output_dir: Path) -> Path:
+    """Prefer fresh output/paper_automation; fall back to committed docs/data artifacts."""
+    candidates = (
+        output_dir / "paper_automation",
+        COMMITTED_PAPER_AUTOMATION,
+    )
+    for path in candidates:
+        if (path / "learning_tracks_review.json").exists() or (path / "last_run.json").exists():
+            return path
+    return output_dir / "paper_automation"
+
+
+def _read_paper_automation_json(output_dir: Path, name: str) -> dict[str, Any] | list[Any] | None:
+    root = _resolve_paper_automation_dir(output_dir)
+    return _read_json(root / name)
+
 
 def _read_json(path: Path) -> dict[str, Any] | list[Any] | None:
     if not path.exists():
@@ -212,24 +231,27 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     research_model_suggestions = _read_json(Path("docs/data/research_model_suggestions.json"))
     if research_model_suggestions is None:
         research_model_suggestions = _read_json(output_dir / "research_model_suggestions.json")
-    paper_automation = _read_json(output_dir / "paper_automation" / "last_run.json")
-    learning_tracks_review = _read_json(
-        output_dir / "paper_automation" / "learning_tracks_review.json"
-    )
-    learning_tracks_summary = _read_json(
-        output_dir / "paper_automation" / "learning_tracks_summary.json"
-    )
+    paper_automation = _read_paper_automation_json(output_dir, "last_run.json")
+    learning_tracks_review = _read_paper_automation_json(output_dir, "learning_tracks_review.json")
+    learning_tracks_summary = _read_paper_automation_json(output_dir, "learning_tracks_summary.json")
     learning_track_funds: dict[str, Any] = {}
     try:
         from value_investor.paper_automation import learning_track_dirs
 
-        for track_id, track_dir in learning_track_dirs(output_dir / "paper_automation").items():
+        paper_root = _resolve_paper_automation_dir(output_dir)
+        for track_id, track_dir in learning_track_dirs(paper_root).items():
             fund_payload = _read_json(track_dir / "automated_fund.json")
             if fund_payload:
+                curve = fund_payload.get("equity_curve") or []
+                last_nav = None
+                if curve:
+                    last_pt = curve[-1]
+                    if isinstance(last_pt, dict):
+                        last_nav = last_pt.get("portfolio_value") or last_pt.get("nav")
                 learning_track_funds[track_id] = {
-                    "nav": fund_payload.get("nav"),
+                    "nav": last_nav,
                     "total_return": fund_payload.get("total_return"),
-                    "equity_curve": (fund_payload.get("equity_curve") or [])[-24:],
+                    "equity_curve": curve[-24:],
                     "holdings_count": len(fund_payload.get("holdings") or {}),
                 }
     except Exception as exc:  # noqa: BLE001
