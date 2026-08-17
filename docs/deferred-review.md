@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-16T16:25:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T19:23:02+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -217,6 +217,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L133 | **Include exit_timing_near_miss_review.json in offline_sim allowed_paths** | Horizon offline_sim _OFFLINE_SIM_PATHS lists exit_timing_near_miss.json but omits the companion review artifact, so engineering agents that regenerate both trip the path guard (as on PR 233). | Next offline_sim / exit-timing-archive engineering task is drafted or promoted |
 | L134 | **Eng-idle single-ticker ingest depth hook** | When engineering_queue open_count=0 and buy-tier gaps remain, dispatch a bounded ingest pass on the top priority_score ticker (or top paper-book holding) instead of leaving cron idle — orchestration only, reuse ingest_improvement. | Engineering queue idle for 48h+ while indexed_without_body>50 on names in ai_judgment holdings or strong_buy shortlist |
 | L147 | **Universal automation completion watchdog** | Extend workflow_run responders + ops monitor to cover all scheduled bundle workflows with typed recovery (rerun vs draft vs noop), not just ladder/ingest/email. Full auto-fix for every failure class is unsafe — keep human/eng-agent path for logic bugs and policy changes. | After PR #272 responders have 4+ weeks of stable operation and ops monitor false-positive rate is known |
+| L148 | **Label Analysis weaknesses as snapshot not eng tickets** | Dashboard Analysis post-run weaknesses/plan look like open work while engineering queue is idle by design until compile. A short UI note that Analysis is last-run narrative and queue is the actionable ticket list would reduce confusion. | Next dashboard UX pass on Automation/Analysis tabs |
 
 ---
 
