@@ -233,7 +233,9 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         research_model_suggestions = _read_json(output_dir / "research_model_suggestions.json")
     paper_automation = _read_paper_automation_json(output_dir, "last_run.json")
     learning_tracks_review = _read_paper_automation_json(output_dir, "learning_tracks_review.json")
-    learning_tracks_summary = _read_paper_automation_json(output_dir, "learning_tracks_summary.json")
+    learning_tracks_summary = _read_paper_automation_json(
+        output_dir, "learning_tracks_summary.json"
+    )
     learning_track_funds: dict[str, Any] = {}
     try:
         from value_investor.paper_automation import learning_track_dirs
