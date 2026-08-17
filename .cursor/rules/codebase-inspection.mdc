@@ -1,0 +1,25 @@
+---
+description: Limit default Grep/explore to avoid docs/data bulk dumps
+alwaysApply: true
+---
+
+# Codebase inspection (token efficiency)
+
+When searching or exploring, **do not** run repo-wide Grep/Glob/explore over bulk artifacts unless the task names a specific path:
+
+- `docs/data/library/`
+- `docs/data/research/`
+- `docs/data/charts/`
+- `docs/data/archive/`
+- `docs/data/history/`
+- `docs/data/research_director_worker/`
+- `docs/data/paper_automation/`
+- `docs/data/latest.json`
+
+Prefer:
+
+1. Scope Grep/Glob with an explicit `path` under `src/`, `tests/`, `.github/`, or `docs/ops/`.
+2. Open **named** ops/state files when needed (e.g. `docs/data/engineering_tasks.json`, `docs/data/automation.json`, `docs/data/ops_status.json`).
+3. Only search bulk dirs after the user or task explicitly requires that artifact.
+
+These paths are also listed in `.cursorindexingignore` (indexing only — still readable via Read/Shell).
