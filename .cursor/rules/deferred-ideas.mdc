@@ -1,7 +1,9 @@
 ---
-description: Append parked/later ideas to deferred-ideas store
+description: Append parked/later ideas via ftse-defer; avoid reading deferred JSON by default
 alwaysApply: true
 ---
+
+# Deferred ideas
 
 When you recommend something that is **not relevant now** or **useful later**, append it with:
 
@@ -9,4 +11,9 @@ When you recommend something that is **not relevant now** or **useful later**, a
 ftse-defer add --category not_now|later|security|both --title "…" --summary "…" --revisit-when "…" --section learning|universe|research|ops|not_now|security
 ```
 
-Do not hand-edit `docs/deferred-review.md`. Deduping is by title. See `AGENTS.md`.
+Rules:
+
+- Prefer `ftse-defer add` / `ftse-defer list` / `ftse-defer fragment` over reading `docs/deferred-ideas.json` or `docs/deferred-review.md`.
+- Do **not** Grep or Read those deferred files during unrelated work.
+- Read them only when the task is about the deferred store (status changes, horizon scan, bulk review).
+- Do not hand-edit `docs/deferred-review.md`. Deduping is by title. See `AGENTS.md`.
