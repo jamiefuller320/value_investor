@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T08:35:07+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T18:03:55+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -87,7 +87,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N27 | **Gate AI judgment on confidence or memo_quality thresholds** | Tempting to filter accumulate names by research_confidence or memo_quality, but that is a live paper knob before observe-only counterfactuals exist; keep verdict/adjusted_signal gating until evidence. | After observe-only counterfactuals show confidence/memo_quality predict adverse outcomes |
 | N28 | **Do not fold full memo-utility synthesis into horizon scan** | Do not move weekly memo usefulness synthesis (gap-fill rollups, per-ticker open-question triage, research_model_suggestions eng compile) into the monthly horizon agent. Horizon may still strategically ask whether memo schema should better aid AI judgment (see L141); implementation stays in the research/post_run loop. | If someone proposes putting gap-fill/post_run_review ownership inside horizon_scan.py |
 | N29 | **Wire macro_context into automated exit veto** | macro_context is research-only by design (policy use_in_scoring=false). Auto-blocking sells on macro markers would blur attribution and fight the stage-2b learning loop before panic circuit rules are calibrated offline. | Portfolio panic circuit breaker is designed and backtested offline |
-| N30 | **Keep deferred-ideas.json out of exploratory Reads/greps** | Full deferred-ideas.json is ~134KB and appeared in broad greps; prefer ftse-defer CLI / targeted queries over reading the JSON or deferred-review.md during unrelated tasks. | If agents keep opening deferred-ideas.json during non-defer work |
 
 ---
 
@@ -218,8 +217,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L133 | **Include exit_timing_near_miss_review.json in offline_sim allowed_paths** | Horizon offline_sim _OFFLINE_SIM_PATHS lists exit_timing_near_miss.json but omits the companion review artifact, so engineering agents that regenerate both trip the path guard (as on PR 233). | Next offline_sim / exit-timing-archive engineering task is drafted or promoted |
 | L134 | **Eng-idle single-ticker ingest depth hook** | When engineering_queue open_count=0 and buy-tier gaps remain, dispatch a bounded ingest pass on the top priority_score ticker (or top paper-book holding) instead of leaving cron idle — orchestration only, reuse ingest_improvement. | Engineering queue idle for 48h+ while indexed_without_body>50 on names in ai_judgment holdings or strong_buy shortlist |
 | L147 | **Universal automation completion watchdog** | Extend workflow_run responders + ops monitor to cover all scheduled bundle workflows with typed recovery (rerun vs draft vs noop), not just ladder/ingest/email. Full auto-fix for every failure class is unsafe — keep human/eng-agent path for logic bugs and policy changes. | After PR #272 responders have 4+ weeks of stable operation and ops monitor false-positive rate is known |
-| L148 | **Exclude docs/data from default agent grep scope** | Composer transcript analysis shows ripgrep alone was ~56% of tool-result bytes; one search hit 1669 files (1656 under docs/data/library|research). Default explore/grep should exclude docs/data artifacts, charts, and research dumps unless explicitly needed. | Next AGENTS.md or cursor rules pass on agent efficiency; or after another multi-day mega-session with large grep tool-result share |
-| L149 | **Split long-lived product sessions to cap context tax** | bc-5c49cf71 ran 56 user turns / 13 PRs in one session (16.8MB transcript). Multi-topic follow-ups multiply context far more than focused grok run (7 turns, 0.86MB). Prefer new agent per major workstream. | When establishing cloud-agent operating norms or after another session exceeds ~30 user turns |
 
 ---
 
