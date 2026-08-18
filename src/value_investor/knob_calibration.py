@@ -5,10 +5,11 @@ from __future__ import annotations
 import itertools
 import json
 import math
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from value_investor.decision_review import LearningKnobs
 from value_investor.cohort_selection_fitness import (
