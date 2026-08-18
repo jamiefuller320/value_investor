@@ -139,4 +139,5 @@ Compare forward marks vs primary before promoting knobs to `ai_judgment/config.j
 - Thin history → low confidence priors
 - Evolution (L2/N2) remains deferred
 
-See also: [decision-review.md](decision-review.md), [analysis-review.md](analysis-review.md).
+See also: [decision-review.md](decision-review.md), [analysis-review.md](analysis-review.md),
+[human-tasks-checklist.md](human-tasks-checklist.md).

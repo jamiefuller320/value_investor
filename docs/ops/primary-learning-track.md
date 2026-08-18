@@ -51,6 +51,12 @@ See also [`exit-timing-cohorts.md`](exit-timing-cohorts.md) for live paper cohor
 Human verify-before-trade packs remain useful for live capital, but they are
 **not** the primary learning loop.
 
+## Human tasks checklist
+
+Weekly manual gates (Sunday priors review, shadow vs primary, promotion rules)
+live in [`human-tasks-checklist.md`](human-tasks-checklist.md) and on the
+dashboard **Automation → Human tasks** panel.
+
 ## Commands
 
 ```bash

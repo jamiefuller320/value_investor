@@ -110,6 +110,7 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     assert bundle["reports"][0].get("tradable_on_t212") is True
     assert bundle["reports"][0].get("tradable_on_ii") is True
     assert bundle["reports"][0].get("ii_deal_channel") == "online"
+    assert bundle.get("human_tasks_checklist", {}).get("sections")
 
 
 def test_publish_dashboard_writes_latest_json(tmp_path: Path):
