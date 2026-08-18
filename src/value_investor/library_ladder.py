@@ -62,6 +62,8 @@ ESTIMATED_MEMO_USD = 0.40
 DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 DEFAULT_WEEKLY_PAPER_SHARD_MARKETS: tuple[str, ...] = ("sp500", "euro_stoxx50")
 DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY = 2
+DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS = 25
+DEFAULT_STRONG_BUY_PROBE_MAX_MARKETS = 4
 
 
 def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
@@ -79,6 +81,10 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("weekly_paper_shard_after_screen", True)
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
+    ladder.setdefault("strong_buy_metrics_probe_after_maintenance", True)
+    ladder.setdefault("strong_buy_metrics_probe_when_eng_idle", True)
+    ladder.setdefault("strong_buy_metrics_probe_max_tickers", DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS)
+    ladder.setdefault("strong_buy_metrics_probe_max_markets", DEFAULT_STRONG_BUY_PROBE_MAX_MARKETS)
     ladder.setdefault("spend_checkpoint_usd", DEFAULT_SPEND_CHECKPOINT_USD)
     ladder.setdefault("spend_since_checkpoint_usd", 0.0)
     ladder.setdefault("last_run", None)
@@ -221,6 +227,24 @@ def run_library_ladder(
     else:
         policy = load_policy(policy_path)
         result["layers"]["maintenance"] = run_maintenance_grow(root, policy)
+
+    # A2b — strong-buy-first metrics probe (eng-idle; feeds coverage engineering)
+    policy = load_policy(policy_path)
+    try:
+        from value_investor.library_strong_buy_probe import run_strong_buy_metrics_probe
+
+        result["layers"]["strong_buy_metrics_probe"] = run_strong_buy_metrics_probe(
+            root,
+            policy,
+            policy_path=policy_path,
+        )
+    except Exception as exc:  # noqa: BLE001 — probe must not fail the ladder
+        logger.warning("Strong-buy metrics probe failed: %s", exc)
+        result["layers"]["strong_buy_metrics_probe"] = {
+            "skipped": True,
+            "reason": str(exc),
+            "error": str(exc),
+        }
 
     # A3 — offline macro / regime context (research & paper notes only — never scoring)
     macro_cfg = dict(policy.get("macro_context") or {})
