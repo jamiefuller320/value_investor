@@ -11,7 +11,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.decision_review import LearningKnobs
 from value_investor.cohort_selection_fitness import (
     DEFAULT_COHORT_FITNESS_WEIGHT,
     MIN_SCORE_GAP_FOR_PRIOR,
@@ -21,6 +20,7 @@ from value_investor.cohort_selection_fitness import (
     score_cohort_selection,
     score_gap_vs_runner_up,
 )
+from value_investor.decision_review import LearningKnobs
 from value_investor.paper_automation import (
     AI_JUDGMENT_CALIBRATED_TRACK_ID,
     AI_JUDGMENT_TRACK_ID,
@@ -126,7 +126,13 @@ def grid_axes_from_cli(
 ) -> tuple[KnobGridAxis, ...]:
     if not any(
         value is not None
-        for value in (max_positions, min_conviction, sector_cap, skip_timing_wait, exit_confirm_screens)
+        for value in (
+            max_positions,
+            min_conviction,
+            sector_cap,
+            skip_timing_wait,
+            exit_confirm_screens,
+        )
     ):
         return default_grid_axes(include_churn_knobs=include_churn_knobs)
 
@@ -155,9 +161,7 @@ def grid_axes_from_cli(
         axes.append(KnobGridAxis("skip_timing_wait", (True,)))
     if include_churn_knobs or exit_confirm_screens:
         values = (
-            parse_grid_values(exit_confirm_screens, kind="int")
-            if exit_confirm_screens
-            else (1, 2)
+            parse_grid_values(exit_confirm_screens, kind="int") if exit_confirm_screens else (1, 2)
         )
         axes.append(KnobGridAxis("exit_confirm_screens", values))
     return tuple(axes)
@@ -595,9 +599,7 @@ def calibrate_track(
         use_adjusted_signal=use_adjusted_signal,
         require_research_accumulate=require_research_accumulate,
     )
-    current_score = (
-        float(current_walk_forward["composite_score"]) if current_walk_forward else None
-    )
+    current_score = float(current_walk_forward["composite_score"]) if current_walk_forward else None
     current_blended = current_score
     if use_cohort_fitness:
         current_cohort_wf = cohort_walk_forward_score(
@@ -640,7 +642,11 @@ def calibrate_track(
             float((top.get("walk_forward") or {}).get("fold_stability") or 0.0) if top else None
         ),
     )
-    if score_gap is not None and score_gap < MIN_SCORE_GAP_FOR_PRIOR and confidence != "insufficient":
+    if (
+        score_gap is not None
+        and score_gap < MIN_SCORE_GAP_FOR_PRIOR
+        and confidence != "insufficient"
+    ):
         confidence = "low"
 
     return {
@@ -755,9 +761,7 @@ def _apply_prior_knobs_to_config(config: AutomationConfig, knobs: dict[str, Any]
     ):
         config.skip_timing_wait = bool(knobs["skip_timing_wait"])
         changed["skip_timing_wait"] = config.skip_timing_wait
-    if "min_conviction" in knobs and float(knobs["min_conviction"]) != float(
-        config.min_conviction
-    ):
+    if "min_conviction" in knobs and float(knobs["min_conviction"]) != float(config.min_conviction):
         config.min_conviction = float(knobs["min_conviction"])
         changed["min_conviction"] = round(config.min_conviction, 4)
     if "sector_cap" in knobs and float(knobs["sector_cap"]) != float(config.sector_cap):

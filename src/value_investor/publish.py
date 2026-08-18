@@ -249,9 +249,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
                 provenance = load_calibration_provenance(track_dir)
                 learning_track_configs[track_id] = {
                     "track_label": cfg_payload.get("track_label"),
-                    "is_primary_learning_track": bool(
-                        cfg_payload.get("is_primary_learning_track")
-                    ),
+                    "is_primary_learning_track": bool(cfg_payload.get("is_primary_learning_track")),
                     "is_calibration_shadow": bool(cfg_payload.get("is_calibration_shadow")),
                     "calibration_parent_track": cfg_payload.get("calibration_parent_track"),
                     "selection": {

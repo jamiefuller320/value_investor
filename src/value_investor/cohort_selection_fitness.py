@@ -6,7 +6,11 @@ import math
 from dataclasses import dataclass
 from typing import Any
 
-from value_investor.paper_fund import BUY_SIGNALS, PaperFund, run_automated_rebalance, run_technical_pass
+from value_investor.paper_fund import (
+    BUY_SIGNALS,
+    run_automated_rebalance,
+    run_technical_pass,
+)
 from value_investor.rebalance_log import (
     _candidate_by_ticker,
     _effective_signal_from_row,
@@ -14,7 +18,6 @@ from value_investor.rebalance_log import (
     fund_from_pre_state,
     resolve_replay_candidates,
 )
-
 
 DEFAULT_COHORT_FITNESS_WEIGHT = 0.6
 DEFAULT_PORTFOLIO_FITNESS_WEIGHT = 0.4
@@ -32,7 +35,9 @@ class CohortObservation:
     conviction_score: float | None = None
 
 
-def _ticker_price(entry: dict[str, Any], ticker: str, *, fallback: float | None = None) -> float | None:
+def _ticker_price(
+    entry: dict[str, Any], ticker: str, *, fallback: float | None = None
+) -> float | None:
     row = _candidate_by_ticker(entry).get(ticker) or {}
     raw = row.get("price")
     if raw is not None and float(raw) > 0:
@@ -80,10 +85,10 @@ def collect_cohort_observations(
     exit_confirm_screens: int | None = None,
 ) -> list[CohortObservation]:
     """
-  Replay knob settings and score forward returns for selected vs rejected names.
+    Replay knob settings and score forward returns for selected vs rejected names.
 
-  Uses mark prices from the next acted pass's candidate pool (observe-only).
-  """
+    Uses mark prices from the next acted pass's candidate pool (observe-only).
+    """
     if len(acted) < 2:
         return []
 
@@ -195,11 +200,7 @@ def _mean(values: list[float]) -> float | None:
 
 
 def summarize_cohort_observations(observations: list[CohortObservation]) -> dict[str, Any]:
-    selected = [
-        obs.forward_return
-        for obs in observations
-        if obs.role in {"selected", "new_buy"}
-    ]
+    selected = [obs.forward_return for obs in observations if obs.role in {"selected", "new_buy"}]
     rejected = [obs.forward_return for obs in observations if obs.role == "rejected"]
     new_buys = [obs.forward_return for obs in observations if obs.role == "new_buy"]
 
@@ -211,7 +212,9 @@ def summarize_cohort_observations(observations: list[CohortObservation]) -> dict
         else None
     )
     hit_rate = (sum(1 for value in selected if value > 0) / len(selected)) if selected else None
-    new_buy_hit_rate = (sum(1 for value in new_buys if value > 0) / len(new_buys)) if new_buys else None
+    new_buy_hit_rate = (
+        (sum(1 for value in new_buys if value > 0) / len(new_buys)) if new_buys else None
+    )
 
     cohort_fitness = _cohort_fitness_scalar(
         hit_rate=hit_rate,
@@ -339,7 +342,9 @@ def discover_knob_axis_discriminability(
     return discriminability
 
 
-def score_gap_vs_runner_up(scored_rows: list[dict[str, Any]], *, score_key: str = "blended_score") -> float | None:
+def score_gap_vs_runner_up(
+    scored_rows: list[dict[str, Any]], *, score_key: str = "blended_score"
+) -> float | None:
     if len(scored_rows) < 2:
         return None
     top = float(scored_rows[0].get(score_key) or 0.0)

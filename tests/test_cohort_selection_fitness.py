@@ -9,10 +9,9 @@ from value_investor.cohort_selection_fitness import (
     blend_calibration_score,
     collect_cohort_observations,
     discover_knob_axis_discriminability,
-    score_cohort_selection,
     summarize_cohort_observations,
 )
-from value_investor.knob_calibration import KnobCandidate, calibrate_track
+from value_investor.knob_calibration import calibrate_track
 from value_investor.paper_automation import AutomationConfig
 from value_investor.rebalance_log import append_rebalance_log
 
@@ -38,16 +37,72 @@ def _calibration_log_entry(**overrides):
             "exit_confirm_screens": 2,
         },
         "screen_buy_tier": [
-            {"ticker": "AAA.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.9, "price": 100},
-            {"ticker": "BBB.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.8, "price": 100},
-            {"ticker": "CCC.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.7, "price": 100},
-            {"ticker": "DDD.L", "signal": "buy", "adjusted_signal": "buy", "conviction_score": 0.4, "price": 100},
+            {
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.9,
+                "price": 100,
+            },
+            {
+                "ticker": "BBB.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.8,
+                "price": 100,
+            },
+            {
+                "ticker": "CCC.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.7,
+                "price": 100,
+            },
+            {
+                "ticker": "DDD.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.4,
+                "price": 100,
+            },
         ],
         "candidates": [
-            {"ticker": "AAA.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.9, "price": 100, "sector": "Banks", "research_verdict": "accumulate"},
-            {"ticker": "BBB.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.8, "price": 100, "sector": "Mining", "research_verdict": "accumulate"},
-            {"ticker": "CCC.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.7, "price": 100, "sector": "Tech", "research_verdict": "accumulate"},
-            {"ticker": "DDD.L", "signal": "buy", "adjusted_signal": "buy", "conviction_score": 0.4, "price": 100, "sector": "Tech", "research_verdict": "accumulate"},
+            {
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.9,
+                "price": 100,
+                "sector": "Banks",
+                "research_verdict": "accumulate",
+            },
+            {
+                "ticker": "BBB.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.8,
+                "price": 100,
+                "sector": "Mining",
+                "research_verdict": "accumulate",
+            },
+            {
+                "ticker": "CCC.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.7,
+                "price": 100,
+                "sector": "Tech",
+                "research_verdict": "accumulate",
+            },
+            {
+                "ticker": "DDD.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.4,
+                "price": 100,
+                "sector": "Tech",
+                "research_verdict": "accumulate",
+            },
         ],
         "holdings_before": [],
         "holdings_after": [],
@@ -66,10 +121,42 @@ def test_collect_cohort_observations_tracks_selected_and_rejected(tmp_path: Path
             _calibration_log_entry(
                 gate={"local_time": f"2026-08-{day:02d}T12:00:00+00:00"},
                 candidates=[
-                    {"ticker": "AAA.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.9, "price": prices, "sector": "Banks", "research_verdict": "accumulate"},
-                    {"ticker": "BBB.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.8, "price": prices, "sector": "Mining", "research_verdict": "accumulate"},
-                    {"ticker": "CCC.L", "signal": "strong_buy", "adjusted_signal": "strong_buy", "conviction_score": 0.7, "price": prices, "sector": "Tech", "research_verdict": "accumulate"},
-                    {"ticker": "DDD.L", "signal": "buy", "adjusted_signal": "buy", "conviction_score": 0.4, "price": prices, "sector": "Tech", "research_verdict": "accumulate"},
+                    {
+                        "ticker": "AAA.L",
+                        "signal": "strong_buy",
+                        "adjusted_signal": "strong_buy",
+                        "conviction_score": 0.9,
+                        "price": prices,
+                        "sector": "Banks",
+                        "research_verdict": "accumulate",
+                    },
+                    {
+                        "ticker": "BBB.L",
+                        "signal": "strong_buy",
+                        "adjusted_signal": "strong_buy",
+                        "conviction_score": 0.8,
+                        "price": prices,
+                        "sector": "Mining",
+                        "research_verdict": "accumulate",
+                    },
+                    {
+                        "ticker": "CCC.L",
+                        "signal": "strong_buy",
+                        "adjusted_signal": "strong_buy",
+                        "conviction_score": 0.7,
+                        "price": prices,
+                        "sector": "Tech",
+                        "research_verdict": "accumulate",
+                    },
+                    {
+                        "ticker": "DDD.L",
+                        "signal": "buy",
+                        "adjusted_signal": "buy",
+                        "conviction_score": 0.4,
+                        "price": prices,
+                        "sector": "Tech",
+                        "research_verdict": "accumulate",
+                    },
                 ],
             )
         )
@@ -152,7 +239,9 @@ def test_calibrate_track_enables_cohort_fitness_for_ai_judgment(tmp_path: Path):
         encoding="utf-8",
     )
     for day in (1, 3, 5, 7, 9, 11):
-        append_rebalance_log(track, _calibration_log_entry(gate={"local_time": f"2026-08-{day:02d}T12:00:00+00:00"}))
+        append_rebalance_log(
+            track, _calibration_log_entry(gate={"local_time": f"2026-08-{day:02d}T12:00:00+00:00"})
+        )
 
     result = calibrate_track(track, n_folds=3)
     assert result["readiness"]["use_cohort_fitness"] is True

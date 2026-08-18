@@ -1013,7 +1013,9 @@ def run_learning_tracks(
         MOMENTUM_GRACE_TRACK_ID,
     ]
     if AI_JUDGMENT_CALIBRATED_TRACK_ID in configs:
-        default_tracks.insert(default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1, AI_JUDGMENT_CALIBRATED_TRACK_ID)
+        default_tracks.insert(
+            default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1, AI_JUDGMENT_CALIBRATED_TRACK_ID
+        )
     wanted = list(tracks) if tracks else default_tracks
     results: dict[str, Any] = {}
     for track_id in wanted:

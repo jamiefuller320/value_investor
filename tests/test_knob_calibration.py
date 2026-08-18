@@ -50,9 +50,27 @@ def _calibration_log_entry(**overrides):
             {"ticker": "CCC.L", "signal": "buy", "conviction_score": 0.7, "price": 10},
         ],
         "candidates": [
-            {"ticker": "AAA.L", "signal": "buy", "conviction_score": 0.9, "price": 10, "sector": "Banks"},
-            {"ticker": "BBB.L", "signal": "buy", "conviction_score": 0.8, "price": 10, "sector": "Mining"},
-            {"ticker": "CCC.L", "signal": "buy", "conviction_score": 0.7, "price": 10, "sector": "Tech"},
+            {
+                "ticker": "AAA.L",
+                "signal": "buy",
+                "conviction_score": 0.9,
+                "price": 10,
+                "sector": "Banks",
+            },
+            {
+                "ticker": "BBB.L",
+                "signal": "buy",
+                "conviction_score": 0.8,
+                "price": 10,
+                "sector": "Mining",
+            },
+            {
+                "ticker": "CCC.L",
+                "signal": "buy",
+                "conviction_score": 0.7,
+                "price": 10,
+                "sector": "Tech",
+            },
         ],
         "holdings_before": [],
         "holdings_after": [],
@@ -169,7 +187,9 @@ def _seed_ai_judgment_parent(tmp_path: Path) -> Path:
     config.sector_cap = 0.2
     config.initial_cash = 1000.0
     (ai_dir / "config.json").write_text(json.dumps(config.to_dict()), encoding="utf-8")
-    (paper_root / "config.json").write_text(json.dumps(AutomationConfig().to_dict()), encoding="utf-8")
+    (paper_root / "config.json").write_text(
+        json.dumps(AutomationConfig().to_dict()), encoding="utf-8"
+    )
     priors = {
         "scope": "knob_calibration_multi",
         "calibrated_at": "2026-08-18T00:00:00+00:00",
