@@ -37,6 +37,30 @@ composite = mean(fold fitness) - stability_penalty × std(fold fitness)
 
 Defaults: `λ = 0.5`, `stability_penalty = 0.25`.
 
+## Cohort-selection fitness (AI judgment tracks)
+
+For `ai_judgment` (and calibrated shadow), ranking blends **portfolio replay**
+with **name-level cohort outcomes** from consecutive rebalance passes:
+
+| Cohort metric | Meaning |
+|---------------|---------|
+| `cohort_hit_rate` | Share of held/selected names with positive forward return to next pass |
+| `cohort_mean_forward_return` | Mean forward return of selected cohort |
+| `selection_spread` | Selected mean minus rejected eligible mean |
+| `new_buy_hit_rate` | Hit rate on fresh entries only |
+
+Blended score (default):
+
+```
+blended = 0.4 × portfolio_walk_forward + 0.6 × cohort_walk_forward
+```
+
+`knob_axis_discriminability` flags axes with negligible separation (e.g. `sector_cap`
+tying across values). Priors require `score_gap_vs_runner_up ≥ 0.005` for
+`ready_for_priors=true`.
+
+Disable with `ftse-knob-calibrate run ... --no-cohort-fitness`.
+
 ## Default search space
 
 | Knob | Values |

@@ -40,7 +40,10 @@ def _cmd_run(args: argparse.Namespace) -> int:
         "stability_penalty": float(args.stability_penalty),
         "archive_dir": Path(args.archive_dir) if args.archive_dir else None,
         "fetch_prices": bool(args.fetch_prices),
+        "use_cohort_fitness": False if args.no_cohort_fitness else None,
     }
+    if args.cohort_weight is not None:
+        kwargs["cohort_weight"] = float(args.cohort_weight)
     if args.track_dir is not None:
         payload = calibrate_track(Path(args.track_dir), **kwargs)
     else:
@@ -80,7 +83,8 @@ def _cmd_run(args: argparse.Namespace) -> int:
                 prior = row.get("recommended_prior") or {}
                 print(
                     f"  [{track_id}] acted={row.get('readiness', {}).get('acted_entries')} "
-                    f"top_score={prior.get('composite_score')} "
+                    f"top_blended={prior.get('blended_score') or prior.get('composite_score')} "
+                    f"gap={row.get('readiness', {}).get('score_gap_vs_runner_up')} "
                     f"confidence={prior.get('confidence')}"
                 )
         else:
@@ -189,6 +193,17 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--stability-penalty", type=float, default=0.25)
     run.add_argument("--archive-dir", type=Path, default=None)
     run.add_argument("--fetch-prices", action="store_true")
+    run.add_argument(
+        "--no-cohort-fitness",
+        action="store_true",
+        help="Disable cohort-selection fitness (portfolio replay only)",
+    )
+    run.add_argument(
+        "--cohort-weight",
+        type=float,
+        default=None,
+        help="Blend weight for cohort fitness when enabled (default 0.6 for AI tracks)",
+    )
     run.add_argument(
         "--write",
         action="store_true",

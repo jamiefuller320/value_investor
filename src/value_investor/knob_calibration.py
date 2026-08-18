@@ -11,6 +11,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.cohort_selection_fitness import (
+    DEFAULT_COHORT_FITNESS_WEIGHT,
+    MIN_SCORE_GAP_FOR_PRIOR,
+    blend_calibration_score,
+    cohort_walk_forward_score,
+    discover_knob_axis_discriminability,
+    score_cohort_selection,
+    score_gap_vs_runner_up,
+)
 from value_investor.decision_review import LearningKnobs
 from value_investor.paper_automation import (
     AI_JUDGMENT_CALIBRATED_TRACK_ID,
@@ -323,6 +332,9 @@ def _build_recommended_prior(
     *,
     confidence: str,
     current_score: float | None,
+    score_gap: float | None = None,
+    cohort_selection: dict[str, Any] | None = None,
+    use_blended_score: bool = False,
 ) -> dict[str, Any] | None:
     if recommended is None:
         return None
@@ -332,21 +344,72 @@ def _build_recommended_prior(
         for key, value in recommended_knobs.items()
         if current.to_dict().get(key) != value
     }
+    score_key = "blended_score" if use_blended_score else "composite_score"
+    recommended_score = recommended.get(score_key) or recommended.get("composite_score")
+    rationale = (
+        "Top walk-forward blended score (portfolio replay + cohort-selection fitness). "
+        "Seed config.json / shadow track manually; do not auto-apply."
+        if use_blended_score
+        else (
+            "Top walk-forward composite score on rebalance-log replay. "
+            "Seed config.json / decision-review probes manually; do not auto-apply."
+        )
+    )
+    if score_gap is not None and score_gap < MIN_SCORE_GAP_FOR_PRIOR:
+        rationale += (
+            f" Warning: score gap vs runner-up ({score_gap}) is below "
+            f"{MIN_SCORE_GAP_FOR_PRIOR} — weak discrimination."
+        )
     return {
         "knobs": recommended_knobs,
         "composite_score": recommended.get("composite_score"),
+        "blended_score": recommended.get("blended_score"),
+        "portfolio_score": recommended.get("portfolio_score"),
         "confidence": confidence,
         "changed_vs_current": changed,
+        "score_gap_vs_runner_up": score_gap,
+        "cohort_selection": cohort_selection,
         "fitness_delta_vs_current": (
             None
-            if current_score is None
-            else round(float(recommended["composite_score"]) - current_score, 4)
+            if current_score is None or recommended_score is None
+            else round(float(recommended_score) - current_score, 4)
         ),
-        "rationale": (
-            "Top walk-forward composite score on rebalance-log replay. "
-            "Seed config.json / decision-review probes manually; do not auto-apply."
-        ),
+        "rationale": rationale,
     }
+
+
+def _cohort_kwargs(
+    candidate: KnobCandidate,
+    *,
+    use_adjusted_signal: bool | None,
+    require_research_accumulate: bool | None,
+) -> dict[str, Any]:
+    kwargs: dict[str, Any] = {
+        "max_positions": candidate.max_positions,
+        "skip_timing_wait": candidate.skip_timing_wait,
+        "min_conviction": candidate.min_conviction,
+        "sector_cap": candidate.sector_cap,
+        "use_adjusted_signal": use_adjusted_signal,
+        "require_research_accumulate": require_research_accumulate,
+    }
+    if candidate.exit_confirm_screens is not None:
+        kwargs["exit_confirm_screens"] = candidate.exit_confirm_screens
+    return kwargs
+
+
+def _slim_cohort(summary: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not summary:
+        return None
+    keys = (
+        "cohort_hit_rate",
+        "cohort_mean_forward_return",
+        "selection_spread",
+        "new_buy_hit_rate",
+        "cohort_fitness",
+        "selected_slots",
+        "rejected_slots",
+    )
+    return {key: summary[key] for key in keys if key in summary}
 
 
 def calibrate_track(
@@ -359,6 +422,8 @@ def calibrate_track(
     stability_penalty: float = DEFAULT_STABILITY_PENALTY,
     archive_dir: Path | None = None,
     fetch_prices: bool = False,
+    use_cohort_fitness: bool | None = None,
+    cohort_weight: float = DEFAULT_COHORT_FITNESS_WEIGHT,
 ) -> dict[str, Any]:
     """Grid-search knob combinations with walk-forward scoring on rebalance logs."""
     track_dir = Path(track_dir)
@@ -386,6 +451,11 @@ def calibrate_track(
     candidates = iter_grid_candidates(grid_axes)
     use_adjusted_signal = bool(config.use_adjusted_signal)
     require_research_accumulate = bool(config.require_research_accumulate)
+    if use_cohort_fitness is None:
+        use_cohort_fitness = (
+            str(config.track_id or "") in {AI_JUDGMENT_TRACK_ID, AI_JUDGMENT_CALIBRATED_TRACK_ID}
+            or use_adjusted_signal
+        )
 
     warnings: list[str] = []
     if any(entry.get("bootstrapped") for entry in acted):
@@ -399,8 +469,21 @@ def calibrate_track(
     if len(acted) < MIN_ACTED_FOR_CONFIDENT_PRIORS:
         warnings.append(f"only {len(acted)} acted log entries — priors are low confidence")
 
+    if len(acted) < MIN_ACTED_FOR_CONFIDENT_PRIORS:
+        warnings.append(f"only {len(acted)} acted log entries — priors are low confidence")
+    if use_cohort_fitness:
+        warnings.append(
+            "cohort-selection fitness enabled — ranking blends portfolio replay with "
+            f"name-level forward outcomes (weight={cohort_weight:.2f})"
+        )
+
     scored: list[dict[str, Any]] = []
     for candidate in candidates:
+        cohort_kwargs = _cohort_kwargs(
+            candidate,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
+        )
         walk_forward = score_candidate_walk_forward(
             acted,
             candidate,
@@ -433,27 +516,78 @@ def calibrate_track(
         if walk_forward is None and full_window is None and archive is None:
             continue
         if walk_forward is not None:
-            composite_score = float(walk_forward["composite_score"])
+            portfolio_score = float(walk_forward["composite_score"])
         elif full_window is not None:
-            composite_score = fold_fitness(full_window, cost_drag_lambda=cost_drag_lambda)
+            portfolio_score = fold_fitness(full_window, cost_drag_lambda=cost_drag_lambda)
         elif archive is not None:
-            composite_score = fold_fitness(archive, cost_drag_lambda=cost_drag_lambda)
+            portfolio_score = fold_fitness(archive, cost_drag_lambda=cost_drag_lambda)
         else:
-            composite_score = -999.0
+            portfolio_score = -999.0
+
+        cohort_summary = None
+        cohort_wf = None
+        if use_cohort_fitness:
+            cohort_wf = cohort_walk_forward_score(
+                acted,
+                n_folds=n_folds,
+                stability_penalty=stability_penalty,
+                **cohort_kwargs,
+            )
+            cohort_summary = score_cohort_selection(acted, **cohort_kwargs)
+            cohort_score = (
+                float(cohort_wf["composite_score"])
+                if cohort_wf is not None
+                else float(cohort_summary.get("cohort_fitness") or -999.0)
+            )
+            blended_score = blend_calibration_score(
+                portfolio_score,
+                cohort_score,
+                cohort_weight=cohort_weight,
+            )
+        else:
+            cohort_score = None
+            blended_score = portfolio_score
+
+        rank_score = blended_score if use_cohort_fitness else portfolio_score
         scored.append(
             {
                 "knobs": candidate.to_dict(),
-                "composite_score": round(composite_score, 4),
+                "composite_score": round(portfolio_score, 4),
+                "portfolio_score": round(portfolio_score, 4),
+                "cohort_score": round(cohort_score, 4) if cohort_score is not None else None,
+                "blended_score": round(blended_score, 4),
                 "walk_forward": walk_forward,
+                "cohort_walk_forward": cohort_wf,
+                "cohort_selection": _slim_cohort(cohort_summary),
                 "full_window_log_replay": _slim_replay(full_window),
                 "archive_replay": _slim_replay(archive),
+                "_rank_score": rank_score,
             }
         )
 
-    scored.sort(key=lambda row: float(row["composite_score"]), reverse=True)
+    scored.sort(key=lambda row: float(row["_rank_score"]), reverse=True)
+    for row in scored:
+        row.pop("_rank_score", None)
     for rank, row in enumerate(scored[:TOP_CANDIDATES_KEPT], start=1):
         row["rank"] = rank
     scored = scored[:TOP_CANDIDATES_KEPT]
+
+    score_key = "blended_score" if use_cohort_fitness else "composite_score"
+    knob_axis_discriminability = (
+        discover_knob_axis_discriminability(
+            scored,
+            tuple(axis.name for axis in grid_axes),
+            score_key=score_key,
+        )
+        if use_cohort_fitness and scored
+        else {}
+    )
+    for axis_name, axis_info in knob_axis_discriminability.items():
+        if not axis_info.get("discriminatory"):
+            warnings.append(
+                f"knob axis '{axis_name}' shows negligible cohort discrimination "
+                f"(range={axis_info.get('range')})"
+            )
 
     current_walk_forward = score_candidate_walk_forward(
         acted,
@@ -466,16 +600,54 @@ def calibrate_track(
         require_research_accumulate=require_research_accumulate,
     )
     current_score = float(current_walk_forward["composite_score"]) if current_walk_forward else None
+    current_blended = current_score
+    if use_cohort_fitness:
+        current_cohort_wf = cohort_walk_forward_score(
+            acted,
+            n_folds=n_folds,
+            stability_penalty=stability_penalty,
+            **_cohort_kwargs(
+                current_candidate,
+                use_adjusted_signal=use_adjusted_signal,
+                require_research_accumulate=require_research_accumulate,
+            ),
+        )
+        current_cohort = score_cohort_selection(
+            acted,
+            **_cohort_kwargs(
+                current_candidate,
+                use_adjusted_signal=use_adjusted_signal,
+                require_research_accumulate=require_research_accumulate,
+            ),
+        )
+        current_cohort_score = (
+            float(current_cohort_wf["composite_score"])
+            if current_cohort_wf is not None
+            else float(current_cohort.get("cohort_fitness") or -999.0)
+        )
+        if current_score is not None:
+            current_blended = blend_calibration_score(
+                current_score,
+                current_cohort_score,
+                cohort_weight=cohort_weight,
+            )
 
     top = scored[0] if scored else None
+    score_gap = score_gap_vs_runner_up(scored, score_key=score_key) if scored else None
     confidence = _prior_confidence(
         acted_count=len(acted),
-        recommended_score=float(top["composite_score"]) if top else None,
-        current_score=current_score,
+        recommended_score=float(top[score_key]) if top else None,
+        current_score=current_blended if use_cohort_fitness else current_score,
         fold_stability=(
             float((top.get("walk_forward") or {}).get("fold_stability") or 0.0) if top else None
         ),
     )
+    if (
+        score_gap is not None
+        and score_gap < MIN_SCORE_GAP_FOR_PRIOR
+        and confidence != "insufficient"
+    ):
+        confidence = "low"
 
     return {
         "scope": "knob_calibration",
@@ -487,25 +659,42 @@ def calibrate_track(
             "acted_entries": len(acted),
             "walk_forward_folds": len(walk_forward_fold_ranges(len(acted), n_folds)),
             "grid_size": len(candidates),
-            "ready_for_priors": bool(scored and len(acted) >= MIN_ACTED_FOR_CALIBRATION),
+            "ready_for_priors": bool(
+                scored
+                and len(acted) >= MIN_ACTED_FOR_CALIBRATION
+                and (score_gap is None or score_gap >= MIN_SCORE_GAP_FOR_PRIOR)
+            ),
             "warnings": warnings,
+            "use_cohort_fitness": use_cohort_fitness,
+            "cohort_weight": cohort_weight if use_cohort_fitness else None,
+            "score_gap_vs_runner_up": score_gap,
         },
         "current_knobs": current_candidate.to_dict(),
         "current_score": current_score,
+        "current_blended_score": current_blended if use_cohort_fitness else None,
         "search_space": {axis.name: list(axis.values) for axis in grid_axes},
         "cost_drag_lambda": cost_drag_lambda,
         "stability_penalty": stability_penalty,
+        "knob_axis_discriminability": knob_axis_discriminability,
         "candidates_ranked": scored,
         "recommended_prior": _build_recommended_prior(
             top,
             current_candidate,
             confidence=confidence,
-            current_score=current_score,
+            current_score=current_blended if use_cohort_fitness else current_score,
+            score_gap=score_gap,
+            cohort_selection=(top or {}).get("cohort_selection"),
+            use_blended_score=use_cohort_fitness,
         ),
         "limitations": (
-            "Observe-only walk-forward calibration on rebalance_log replay. "
-            "Does not auto-apply knobs. Full archive P&L needs thicker weekly screens (L111). "
-            "Promote priors via manual config.json edit or paper_knobs experiment."
+            "Observe-only walk-forward calibration on rebalance_log replay"
+            + (
+                " with cohort-selection fitness for AI-judgment tracks."
+                if use_cohort_fitness
+                else "."
+            )
+            + " Does not auto-apply knobs. Full archive P&L needs thicker weekly screens (L111). "
+            "Promote priors via manual config.json edit, shadow track, or paper_knobs experiment."
         ),
     }
 
