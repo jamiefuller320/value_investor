@@ -30,6 +30,22 @@ def quality_family_passed(passed_families: str | None) -> bool:
     return "quality" in {part.strip() for part in str(passed_families).split(",") if part.strip()}
 
 
+def resolve_fcf_dividend_coverage_for_overlay(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    fcf_dividend_coverage_gross: float | None,
+    free_cashflow: float | None,
+    dividends_paid: float | None,
+) -> float | None:
+    """Annual-aligned FCF/dividend coverage for interim-quality overlay decisions."""
+    coverage = fcf_dividend_coverage_net
+    if coverage is None and fcf_dividend_coverage_gross is not None:
+        coverage = fcf_dividend_coverage_gross
+    if coverage is None:
+        coverage = compute_fcf_dividend_coverage(free_cashflow, dividends_paid)
+    return coverage
+
+
 def interim_quality_overlay_triggered(
     *,
     passed_families: str | None,
@@ -48,12 +64,14 @@ def interim_quality_overlay_triggered(
         return False
     if float(interim_eps_decline_pct) <= INTERIM_EPS_DECLINE_THRESHOLD:
         return False
-    coverage = fcf_dividend_coverage_net
-    if coverage is None:
-        coverage = compute_fcf_dividend_coverage(free_cashflow, dividends_paid)
+    coverage = resolve_fcf_dividend_coverage_for_overlay(
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+        free_cashflow=free_cashflow,
+        dividends_paid=dividends_paid,
+    )
     if coverage is None or coverage >= FCF_DIVIDEND_COVERAGE_MAX:
         return False
-    _ = fcf_dividend_coverage_gross
     return True
 
 

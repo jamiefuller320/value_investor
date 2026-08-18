@@ -201,8 +201,8 @@ def extract_gross_cash_from_operations_for_ticker(
     *,
     output_dir: Path | None = None,
 ) -> float | None:
-    """Return gross cash-from-operations when filing bodies expose it."""
-    for body in _iter_filing_bodies(ticker, output_dir=output_dir):
+    """Return annual gross cash-from-operations when annual filing bodies expose it."""
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("annual",)):
         parsed = parse_gross_cash_from_operations(body)
         if parsed is not None:
             return parsed
@@ -244,7 +244,11 @@ def compute_dual_fcf_dividend_coverage(
     dividends_paid: float | None,
     free_cashflow: float | None = None,
 ) -> dict[str, float | None]:
-    """Return gross- and net-OCF FCF/dividend coverage ratios from filing cash-flow data."""
+    """Return gross- and net-OCF FCF/dividend coverage ratios from one fiscal period.
+
+    All inputs must refer to the same annual period (annual OCF, annual capex, annual
+    dividends). Never pair interim/H1 operating cash with full-year capex or dividends.
+    """
     net_fcf = filing_aligned_fcf(
         operating_cashflow,
         capital_expenditure,
@@ -1203,6 +1207,7 @@ def enrich_universe_with_filing_metrics(
         gross_ocf = extract_gross_cash_from_operations_for_ticker(ticker, output_dir=output_dir)
         if gross_ocf is not None:
             extracted["operating_cashflow_gross"] = gross_ocf
+            out.at[index, "operating_cashflow_gross"] = gross_ocf
 
         for key, value in extracted.items():
             if value is None:

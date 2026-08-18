@@ -14,6 +14,7 @@ from value_investor.scoring import evaluate_universe
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     earnings_growth_signs_diverge,
+    enrich_universe_with_filing_metrics,
     fcf_basis_divergence_flagged,
     fcf_filing_screen_mismatch,
     fcf_values_diverge,
@@ -1092,3 +1093,88 @@ def test_build_company_reports_exports_operating_cashflow_and_dual_coverage(tmp_
     assert snapshot["fcf_dividend_coverage_net"] == pytest.approx(25_153_000.0 / 29_769_000.0)
     assert snapshot["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
     assert snapshot["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)
+
+
+def test_build_company_reports_exports_annual_aligned_gross_coverage(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    annual_body = filings_dir / "annual.txt"
+    annual_body.write_text(
+        "Cash generated from operations £115.5m while net cash generated from operating "
+        "activities was £90.8m.",
+        encoding="utf-8",
+    )
+    interim_body = filings_dir / "interim.txt"
+    interim_body.write_text(
+        "Cash generated from operations £38.7m while net cash generated from operating "
+        "activities was £38.7m. Diluted earnings per share of 6.48 pence, a decline of 3.9%.",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "interim",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(interim_body),
+                        "published_at": "2026-07-13",
+                    },
+                    {
+                        "id": "annual",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(annual_body),
+                        "published_at": "2026-03-23",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Capital Expenditure": -65_609_000.0,
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Dividends Paid": -29_769_000.0,
+            }
+        }
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                passed_families="cheapness,quality,dividend,garp,risk",
+                free_cashflow=25_153_000.0,
+            ),
+        ]
+    )
+    signals = enrich_universe_with_filing_metrics(signals, tmp_path)
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
+    assert snapshot["fcf_dividend_coverage_gross"] > 1.0
+    assert snapshot["interim_quality_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
