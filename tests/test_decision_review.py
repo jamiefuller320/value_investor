@@ -505,7 +505,10 @@ def test_benchmark_ticker_for_shard_meta(tmp_path: Path):
         (shard_root / "automated_fund.json").read_text(), encoding="utf-8"
     )
 
-    with patch("value_investor.churn_health.write_churn_health", return_value={}):
+    with (
+        patch("value_investor.churn_health.write_churn_health", return_value={}),
+        patch("value_investor.rebalance_log.write_buffered_hold_counterfactual", return_value=None),
+    ):
         summary = compare_learning_tracks(base_dir=shard_root, force=True, fetch_benchmark=False)
     assert summary["benchmark_ticker"] == "^GSPC"
     assert "^GSPC" in summary["success_criterion"]

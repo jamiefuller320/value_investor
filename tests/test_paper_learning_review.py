@@ -51,6 +51,36 @@ def test_build_payload_includes_churn_health(tmp_path: Path):
     assert payload["churn_health"]["tracks"]["rules"]["decision_review"]["cost_drag"] == 0.05
 
 
+def test_build_payload_includes_buffered_hold_counterfactual(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    paper = data_dir / "paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "learning_tracks_churn_health.json").write_text(
+        json.dumps({"tracks": {"rules": {}}}),
+        encoding="utf-8",
+    )
+    (paper / "buffered_hold_counterfactual.json").write_text(
+        json.dumps(
+            {
+                "scope": "buffered_hold_counterfactual_multi",
+                "tracks": {
+                    "ai_judgment": {
+                        "comparison": {"trade_count_delta_lower_minus_higher": 2},
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = build_paper_learning_payload(data_dir=data_dir, output_dir=tmp_path / "output")
+    assert (
+        payload["buffered_hold_counterfactual"]["tracks"]["ai_judgment"]["comparison"][
+            "trade_count_delta_lower_minus_higher"
+        ]
+        == 2
+    )
+
+
 def test_compile_paper_learning_tasks_filters_areas(tmp_path: Path):
     review = parse_paper_learning_review(
         "PROPOSED EXPERIMENTS\n"
