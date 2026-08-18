@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-18T07:40:37+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-18T10:47:18+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -88,6 +88,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N8 | **Resource/reserve miner metrics** | Sector-specific, hard data | Dedicated resources feed |
 | N9 | **Extra storage compression / same-day cron micro-tests** | Explicitly skipped after earlier storage/cron work | Local output/history/ pain returns |
 | N31 | **Backfill all buy-tier other-RNS filing bodies** | Most remaining indexed_without_body rows are category=other (PDMR, own shares, etc.). Technically fetchable via existing URLs but intentionally capped by max_bodies; full backfill is low value vs period/CH gaps. | Priority period gaps (annual/interim/trading_update/CH accounts) are closed on buy-tier and research quality still cites missing other-RNS text |
+| N32 | **Full filing ingest on non-UK library strong-buys ahead of tier** | Cloning FTSE RNS/CH full ingest onto library strong_buy shortlists would poorly probe EU/US fetch issues (wrong source stack) and dilute stage-2b/metrics focus. Prefer metrics grow stalls + market-aware filing smoke after Layer B is stable; L30 memos already exist for selective research. | Phase 2 shard shows beat_control with stable metrics, and a market-aware filing provider exists for that market (SEC/SEDAR/etc.) |
 
 ---
 
@@ -221,6 +222,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L89 | **Revisit library weekly_usage_gbp after Pro+ upgrade** | Pro+ expands Composer/Auto and API pools. If library ladder is frequently constraining at £30/week, consider raising weekly_usage_gbp or selective_memo caps — only after reviewing ftse-library policy and actual spend vs envelope. | ftse-library policy shows constraining flag for ≥3 consecutive weeks despite Pro+ headroom |
 | L95 | **Mid-week post-run review agent after engineering merges** | Optional LLM triage to reorder the engineering queue when deterministic reprioritize is insufficient — e.g. after multiple ingest merges or contradictory filing signals. | Deterministic reprioritize hook has run for 3+ ingest merges and queue order still feels stale vs Sunday diagnosis |
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
+| L153 | **Strong-buy-first metrics probe to feed coverage engineering** | When eng queue is idle, optionally prioritize library metrics grow/refetch on offline strong_buy/buy names (not full filing ingest) to surface provider failures early across Phase 1/2 markets. Overlaps L33 signal-priority maintenance; keep filing depth FTSE-first until market-aware sources exist. | Engineering queue idle 48h+ while Phase 1/2 markets still show provider errors or usable_metrics below screen floors |
 
 ---
 
