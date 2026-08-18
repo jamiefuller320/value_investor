@@ -890,6 +890,9 @@ def run_decision_review(
     else:
         config = AutomationConfig()
 
+    if config.is_calibration_shadow and apply:
+        apply = False
+
     fund = ensure_automated_fund(fund_path, config)
     knobs_before = LearningKnobs.from_config(config)
     knob_epoch = ensure_knob_epoch(output_dir)
@@ -936,6 +939,9 @@ def run_decision_review(
             )
         elif apply and not changes:
             note = "Reviewed; no knob changes to apply."
+            knobs_after = knobs_before
+        elif config.is_calibration_shadow:
+            note = "Calibration shadow — knobs frozen; decision-review apply skipped."
             knobs_after = knobs_before
         elif force and not apply:
             note = "Forced proposal with thin history (not applied)."

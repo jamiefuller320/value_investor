@@ -83,6 +83,9 @@ class AutomationConfig:
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
     use_momentum_grace: bool = False
+    # Calibration shadow — frozen knobs from knob_calibration priors (not decision-review).
+    is_calibration_shadow: bool = False
+    calibration_parent_track: str | None = None
     # Churn guards — tuneable via config.json (not decision-review knobs yet).
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
@@ -148,6 +151,12 @@ class AutomationConfig:
             use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
             require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
             use_momentum_grace=bool(raw.get("use_momentum_grace", False)),
+            is_calibration_shadow=bool(raw.get("is_calibration_shadow", False)),
+            calibration_parent_track=(
+                str(raw["calibration_parent_track"])
+                if raw.get("calibration_parent_track")
+                else None
+            ),
             exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
             reentry_cooldown_screens=int(
                 raw.get("reentry_cooldown_screens", DEFAULT_REENTRY_COOLDOWN_SCREENS)
@@ -159,15 +168,18 @@ class AutomationConfig:
 
 
 AI_JUDGMENT_TRACK_ID = "ai_judgment"
+AI_JUDGMENT_CALIBRATED_TRACK_ID = "ai_judgment_calibrated"
 RULES_TRACK_ID = "rules"
 MOMENTUM_GRACE_TRACK_ID = "momentum_grace"
 TECHNICAL_TRACK_ID = "technical"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
+AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
 TECHNICAL_SUBDIR = "technical"
 LEARNING_TRACK_IDS = (
     RULES_TRACK_ID,
     AI_JUDGMENT_TRACK_ID,
+    AI_JUDGMENT_CALIBRATED_TRACK_ID,
     MOMENTUM_GRACE_TRACK_ID,
     TECHNICAL_TRACK_ID,
 )
@@ -223,12 +235,16 @@ def default_rules_config(base: AutomationConfig | None = None) -> AutomationConf
 def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     """Map track_id → output directory under the paper-automation root."""
     root = Path(base_dir)
-    return {
+    dirs: dict[str, Path] = {
         RULES_TRACK_ID: root,
         AI_JUDGMENT_TRACK_ID: root / AI_JUDGMENT_SUBDIR,
         MOMENTUM_GRACE_TRACK_ID: root / MOMENTUM_GRACE_SUBDIR,
         TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
     }
+    calibrated_dir = root / AI_JUDGMENT_CALIBRATED_SUBDIR
+    if (calibrated_dir / CONFIG_FILENAME).exists():
+        dirs[AI_JUDGMENT_CALIBRATED_TRACK_ID] = calibrated_dir
+    return dirs
 
 
 def local_now(config: AutomationConfig, now: datetime | None = None) -> datetime:
@@ -942,6 +958,33 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         tech = default_technical_config(rules)
     tech_path.write_text(json.dumps(tech.to_dict(), indent=2), encoding="utf-8")
     configs[TECHNICAL_TRACK_ID] = tech
+
+    calibrated_dir = base_dir / AI_JUDGMENT_CALIBRATED_SUBDIR
+    calibrated_path = calibrated_dir / CONFIG_FILENAME
+    if calibrated_path.exists():
+        calibrated = AutomationConfig.from_dict(
+            json.loads(calibrated_path.read_text(encoding="utf-8"))
+        )
+        calibrated.track_id = AI_JUDGMENT_CALIBRATED_TRACK_ID
+        calibrated.is_primary_learning_track = False
+        calibrated.is_calibration_shadow = True
+        calibrated.calibration_parent_track = (
+            calibrated.calibration_parent_track or AI_JUDGMENT_TRACK_ID
+        )
+        calibrated.use_adjusted_signal = True
+        calibrated.require_research_accumulate = True
+        calibrated.track_label = calibrated.track_label or (
+            "AI judgment calibrated shadow (frozen priors)"
+        )
+        calibrated.timezone = rules.timezone
+        calibrated.market_open = rules.market_open
+        calibrated.settle_minutes_after_open = rules.settle_minutes_after_open
+        calibrated.weekdays_only = rules.weekdays_only
+        calibrated.trade_cost_pct = rules.trade_cost_pct
+        calibrated.initial_cash = rules.initial_cash
+        calibrated_path.write_text(json.dumps(calibrated.to_dict(), indent=2), encoding="utf-8")
+        configs[AI_JUDGMENT_CALIBRATED_TRACK_ID] = calibrated
+
     return configs
 
 
@@ -963,11 +1006,15 @@ def run_learning_tracks(
     base_dir = Path(base_dir)
     configs = ensure_learning_track_configs(base_dir)
     dirs = learning_track_dirs(base_dir)
-    wanted = (
-        list(tracks)
-        if tracks
-        else [TECHNICAL_TRACK_ID, RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID, MOMENTUM_GRACE_TRACK_ID]
-    )
+    default_tracks = [
+        TECHNICAL_TRACK_ID,
+        RULES_TRACK_ID,
+        AI_JUDGMENT_TRACK_ID,
+        MOMENTUM_GRACE_TRACK_ID,
+    ]
+    if AI_JUDGMENT_CALIBRATED_TRACK_ID in configs:
+        default_tracks.insert(default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1, AI_JUDGMENT_CALIBRATED_TRACK_ID)
+    wanted = list(tracks) if tracks else default_tracks
     results: dict[str, Any] = {}
     for track_id in wanted:
         if track_id not in configs:

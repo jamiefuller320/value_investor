@@ -86,6 +86,28 @@ ftse-knob-calibrate status --paper-root docs/data/paper_automation --json
 
 Do **not** wire auto-apply from calibration until forward epochs confirm uplift.
 
+## Calibrated shadow track (phase 1 — ai_judgment only)
+
+Forward-validation book with **frozen** calibration priors, running alongside the
+primary `ai_judgment` track. Decision-review `--apply` is disabled on the shadow.
+
+| Step | Command / trigger |
+|------|-------------------|
+| **Spawn (manual)** | `ftse-knob-calibrate spawn-shadow --paper-root docs/data/paper_automation` |
+| **After calibration** | `ftse-knob-calibrate run ... --write --spawn-shadow` |
+| **Weekday paper-auto** | `spawn-shadow` before learning tracks (idempotent) |
+
+Artifacts under `docs/data/paper_automation/ai_judgment_calibrated/`:
+
+| File | Purpose |
+|------|---------|
+| `config.json` | Parent AI gates + calibrated knobs; `is_calibration_shadow: true` |
+| `automated_fund.json` | Fresh book at same `initial_cash` as parent |
+| `calibration_provenance.json` | Prior source, confidence, `changed_vs_parent` |
+
+Dashboard: Automation tab shows knob parameters and a **calibrated shadow** badge.
+Compare forward marks vs primary before promoting knobs to `ai_judgment/config.json`.
+
 ## Guardrails
 
 - Observe-only — no `decision-review --apply`

@@ -12,6 +12,7 @@ from value_investor.knob_calibration import (
     calibrate_learning_tracks,
     calibrate_track,
     grid_axes_from_cli,
+    spawn_calibrated_shadow_track,
     write_knob_calibration_priors,
 )
 from value_investor.paper_automation import DEFAULT_AUTOMATION_DIR, learning_track_dirs
@@ -50,9 +51,25 @@ def _cmd_run(args: argparse.Namespace) -> int:
         )
     if args.write:
         write_knob_calibration_priors(Path(args.paper_root), payload)
+    spawn_result = None
+    if args.spawn_shadow:
+        spawn_result = spawn_calibrated_shadow_track(
+            Path(args.paper_root),
+            force_respawn=bool(args.force_respawn),
+        )
     if args.json:
-        _print_json(payload)
+        out = payload if spawn_result is None else {"calibration": payload, "shadow_spawn": spawn_result}
+        _print_json(out)
     else:
+        if spawn_result is not None:
+            if spawn_result.get("spawned"):
+                print(
+                    f"\nShadow track: {spawn_result.get('shadow_track_id')} "
+                    f"at {spawn_result.get('shadow_dir')} "
+                    f"(confidence={spawn_result.get('confidence')})"
+                )
+            else:
+                print(f"\nShadow spawn skipped: {spawn_result.get('reason')}", file=sys.stderr)
         if payload.get("scope") == "knob_calibration_multi":
             print("Knob calibration (multi-track, observe-only)")
             for track_id, row in (payload.get("tracks") or {}).items():
@@ -81,6 +98,24 @@ def _cmd_run(args: argparse.Namespace) -> int:
     else:
         ready = bool(payload.get("candidates_ranked"))
     return 0 if ready or args.allow_empty else 1
+
+
+def _cmd_spawn_shadow(args: argparse.Namespace) -> int:
+    result = spawn_calibrated_shadow_track(
+        Path(args.paper_root),
+        force_respawn=bool(args.force_respawn),
+    )
+    if args.json:
+        _print_json(result)
+    elif result.get("spawned"):
+        print(f"Spawned {result.get('shadow_track_id')} at {result.get('shadow_dir')}")
+        print(f"  Confidence: {result.get('confidence')}")
+        print(f"  Changed vs parent: {result.get('changed_vs_parent')}")
+        print(f"  Provenance: {result.get('provenance_path')}")
+    else:
+        print(f"Shadow spawn failed: {result.get('reason')}", file=sys.stderr)
+        return 1
+    return 0
 
 
 def _cmd_status(args: argparse.Namespace) -> int:
@@ -164,7 +199,30 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Exit 0 even when no candidates were scored",
     )
+    run.add_argument(
+        "--spawn-shadow",
+        action="store_true",
+        help="Spawn ai_judgment_calibrated shadow track from recommended_prior",
+    )
+    run.add_argument(
+        "--force-respawn",
+        action="store_true",
+        help="With --spawn-shadow, reset fund and recreate shadow config",
+    )
     run.set_defaults(func=_cmd_run)
+
+    spawn = sub.add_parser(
+        "spawn-shadow",
+        parents=[common],
+        help="Spawn ai_judgment calibrated shadow track from priors artifact",
+    )
+    spawn.add_argument(
+        "--force-respawn",
+        action="store_true",
+        help="Reset fund and recreate shadow config",
+    )
+    spawn.add_argument("--json", action="store_true")
+    spawn.set_defaults(func=_cmd_spawn_shadow)
 
     status = sub.add_parser("status", parents=[common], help="Show last calibration artifact")
     status.add_argument("--json", action="store_true")

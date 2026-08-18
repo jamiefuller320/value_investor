@@ -237,11 +237,32 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         output_dir, "learning_tracks_summary.json"
     )
     learning_track_funds: dict[str, Any] = {}
+    learning_track_configs: dict[str, Any] = {}
     try:
+        from value_investor.knob_calibration import load_calibration_provenance
         from value_investor.paper_automation import learning_track_dirs
 
         paper_root = _resolve_paper_automation_dir(output_dir)
         for track_id, track_dir in learning_track_dirs(paper_root).items():
+            cfg_payload = _read_json(track_dir / "config.json")
+            if cfg_payload:
+                provenance = load_calibration_provenance(track_dir)
+                learning_track_configs[track_id] = {
+                    "track_label": cfg_payload.get("track_label"),
+                    "is_primary_learning_track": bool(
+                        cfg_payload.get("is_primary_learning_track")
+                    ),
+                    "is_calibration_shadow": bool(cfg_payload.get("is_calibration_shadow")),
+                    "calibration_parent_track": cfg_payload.get("calibration_parent_track"),
+                    "selection": {
+                        "max_positions": cfg_payload.get("max_positions"),
+                        "min_conviction": cfg_payload.get("min_conviction"),
+                        "sector_cap": cfg_payload.get("sector_cap"),
+                        "skip_timing_wait": cfg_payload.get("skip_timing_wait"),
+                        "exit_confirm_screens": cfg_payload.get("exit_confirm_screens"),
+                    },
+                    "calibration_provenance": provenance,
+                }
             fund_payload = _read_json(track_dir / "automated_fund.json")
             if fund_payload:
                 curve = fund_payload.get("equity_curve") or []
@@ -369,6 +390,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "learning_tracks_review": learning_tracks_review,
         "learning_tracks_summary": learning_tracks_summary,
         "learning_track_funds": learning_track_funds,
+        "learning_track_configs": learning_track_configs,
         "learning_track_epoch_datum": learning_track_epoch_datum,
         "automation": automation,
         "project_progress": project_progress,

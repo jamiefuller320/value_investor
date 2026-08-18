@@ -1315,6 +1315,18 @@ function renderEngineeringQueueSection(queue) {
     </section>`;
 }
 
+function formatTrackKnobs(trackConfigs, trackId) {
+  const cfg = (trackConfigs || {})[trackId];
+  if (!cfg || !cfg.selection) return "";
+  const s = cfg.selection;
+  const parts = [];
+  if (s.max_positions != null) parts.push(`max_pos=${s.max_positions}`);
+  if (s.min_conviction != null) parts.push(`min_conv=${Number(s.min_conviction).toFixed(2)}`);
+  if (s.sector_cap != null) parts.push(`sector=${Number(s.sector_cap).toFixed(2)}`);
+  if (s.skip_timing_wait != null) parts.push(`skip_wait=${s.skip_timing_wait ? "Y" : "N"}`);
+  return parts.join(" · ");
+}
+
 function renderLearningTracksPanel(data) {
   const review =
     data.learning_tracks_review ||
@@ -1327,11 +1339,13 @@ function renderLearningTracksPanel(data) {
   }
 
   const funds = data.learning_track_funds || {};
+  const trackConfigs = data.learning_track_configs || {};
   const technicalMissing = !review.reviews.technical;
   const trackOrder = [
     ["technical", "Technical (levels baseline)"],
     ["rules", "Rules (control)"],
     ["ai_judgment", "AI judgment (primary)"],
+    ["ai_judgment_calibrated", "AI judgment calibrated (shadow)"],
     ["momentum_grace", "Momentum grace"],
   ];
 
@@ -1341,7 +1355,17 @@ function renderLearningTracksPanel(data) {
       if (!row) return "";
       const m = row.metrics || {};
       const fund = funds[id] || {};
+      const cfg = trackConfigs[id] || {};
       const primary = row.is_primary_learning_track ? ' <span class="badge badge-buy">primary</span>' : "";
+      const shadowBadge = cfg.is_calibration_shadow
+        ? ` <span class="badge badge-hold" title="Frozen calibration priors — decision-review apply disabled">calibrated shadow</span>`
+        : "";
+      const confidence = (cfg.calibration_provenance || {}).recommended_prior?.confidence;
+      const confBadge =
+        confidence && cfg.is_calibration_shadow
+          ? ` <span class="badge badge-neutral" title="Calibration prior confidence">${esc(confidence)} conf</span>`
+          : "";
+      const knobsHtml = formatTrackKnobs(trackConfigs, id);
       const excess = m.excess_after_costs;
       const excessHtml =
         excess == null
@@ -1372,7 +1396,9 @@ function renderLearningTracksPanel(data) {
               .join(" → ")}</span>`
           : '<span class="small muted">—</span>';
       return `<tr>
-        <td><strong>${esc(label)}</strong>${primary}<br><span class="small muted">${esc(id)}</span></td>
+        <td><strong>${esc(label)}</strong>${primary}${shadowBadge}${confBadge}<br><span class="small muted">${esc(id)}</span>${
+          knobsHtml ? `<br><span class="small muted">${esc(knobsHtml)}</span>` : ""
+        }</td>
         <td>${m.portfolio_value != null ? `£${Number(m.portfolio_value).toFixed(2)}` : "—"}</td>
         <td>${m.total_return != null ? pct(m.total_return) : "—"}</td>
         <td>${excessHtml}</td>
@@ -1395,6 +1421,7 @@ function renderLearningTracksPanel(data) {
     <p class="small muted" style="margin-top:0">
       Weekday paper-auto books published from CI — not the browser local sandbox.
       Primary success = AI judgment excess vs ^FTSE after costs; rules is control; technical is timing/levels baseline.
+      Calibrated shadow runs frozen knob priors alongside primary AI judgment (no auto-promotion).
     </p>
     ${
       technicalMissing

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import itertools
+import json
 import math
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -11,10 +12,14 @@ from typing import Any, Iterable
 
 from value_investor.decision_review import LearningKnobs
 from value_investor.paper_automation import (
+    AI_JUDGMENT_CALIBRATED_TRACK_ID,
+    AI_JUDGMENT_TRACK_ID,
     CONFIG_FILENAME,
     FUND_FILENAME,
     AutomationConfig,
+    default_ai_judgment_config,
     ensure_automated_fund,
+    ensure_learning_track_configs,
     learning_track_dirs,
 )
 from value_investor.paper_fund import PaperFund
@@ -27,6 +32,7 @@ from value_investor.rebalance_log import (
 from value_investor.storage import read_json, write_json
 
 KNOB_CALIBRATION_PRIORS_FILENAME = "knob_calibration_priors.json"
+CALIBRATION_PROVENANCE_FILENAME = "calibration_provenance.json"
 DEFAULT_COST_DRAG_LAMBDA = 0.5
 DEFAULT_STABILITY_PENALTY = 0.25
 MIN_ACTED_FOR_CALIBRATION = 2
@@ -539,3 +545,166 @@ def write_knob_calibration_priors(
     path = paper_root / KNOB_CALIBRATION_PRIORS_FILENAME
     write_json(path, payload, compact=False)
     return path
+
+
+def _track_calibration_row(
+    priors_payload: dict[str, Any],
+    track_id: str,
+) -> dict[str, Any] | None:
+    if priors_payload.get("scope") == "knob_calibration_multi":
+        row = (priors_payload.get("tracks") or {}).get(track_id)
+        return row if isinstance(row, dict) else None
+    if priors_payload.get("track_id") == track_id:
+        return priors_payload
+    return None
+
+
+def _apply_prior_knobs_to_config(config: AutomationConfig, knobs: dict[str, Any]) -> dict[str, Any]:
+    changed: dict[str, Any] = {}
+    if "max_positions" in knobs and int(knobs["max_positions"]) != int(config.max_positions):
+        config.max_positions = int(knobs["max_positions"])
+        changed["max_positions"] = config.max_positions
+    if "skip_timing_wait" in knobs and bool(knobs["skip_timing_wait"]) != bool(
+        config.skip_timing_wait
+    ):
+        config.skip_timing_wait = bool(knobs["skip_timing_wait"])
+        changed["skip_timing_wait"] = config.skip_timing_wait
+    if "min_conviction" in knobs and float(knobs["min_conviction"]) != float(
+        config.min_conviction
+    ):
+        config.min_conviction = float(knobs["min_conviction"])
+        changed["min_conviction"] = round(config.min_conviction, 4)
+    if "sector_cap" in knobs and float(knobs["sector_cap"]) != float(config.sector_cap):
+        config.sector_cap = float(knobs["sector_cap"])
+        changed["sector_cap"] = round(config.sector_cap, 4)
+    if "exit_confirm_screens" in knobs and int(knobs["exit_confirm_screens"]) != int(
+        config.exit_confirm_screens
+    ):
+        config.exit_confirm_screens = int(knobs["exit_confirm_screens"])
+        changed["exit_confirm_screens"] = config.exit_confirm_screens
+    return changed
+
+
+def spawn_calibrated_shadow_track(
+    paper_root: Path,
+    *,
+    parent_track_id: str = AI_JUDGMENT_TRACK_ID,
+    priors_path: Path | None = None,
+    force_respawn: bool = False,
+) -> dict[str, Any]:
+    """
+    Spawn a forward-validation shadow book with frozen calibration priors.
+
+    Copies parent AI gates, applies recommended_prior knobs, and starts a fresh
+    automated_fund at the parent's initial_cash. Idempotent unless force_respawn.
+    """
+    paper_root = Path(paper_root)
+    if parent_track_id != AI_JUDGMENT_TRACK_ID:
+        return {
+            "spawned": False,
+            "reason": f"Only {AI_JUDGMENT_TRACK_ID} shadow tracks are supported in phase 1",
+        }
+
+    priors_file = priors_path or (paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
+    if not priors_file.exists():
+        return {
+            "spawned": False,
+            "reason": f"No calibration priors at {priors_file}",
+        }
+
+    priors_payload = read_json(priors_file)
+    track_row = _track_calibration_row(priors_payload, parent_track_id)
+    if not track_row:
+        return {
+            "spawned": False,
+            "reason": f"No calibration row for {parent_track_id} in {priors_file}",
+        }
+
+    recommended = track_row.get("recommended_prior") or {}
+    prior_knobs = recommended.get("knobs")
+    if not isinstance(prior_knobs, dict) or not prior_knobs:
+        return {
+            "spawned": False,
+            "reason": "recommended_prior.knobs missing — run ftse-knob-calibrate first",
+        }
+
+    configs = ensure_learning_track_configs(paper_root)
+    parent = configs.get(parent_track_id)
+    if parent is None:
+        return {"spawned": False, "reason": f"Parent track {parent_track_id} config missing"}
+
+    shadow_dir = paper_root / "ai_judgment_calibrated"
+    shadow_dir.mkdir(parents=True, exist_ok=True)
+    config_path = shadow_dir / CONFIG_FILENAME
+    fund_path = shadow_dir / FUND_FILENAME
+    provenance_path = shadow_dir / CALIBRATION_PROVENANCE_FILENAME
+
+    existed = config_path.exists()
+    if existed and not force_respawn:
+        shadow = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
+        respawned_fund = False
+    else:
+        shadow = default_ai_judgment_config(parent)
+        shadow.track_id = AI_JUDGMENT_CALIBRATED_TRACK_ID
+        shadow.track_label = "AI judgment calibrated shadow (frozen priors)"
+        shadow.is_primary_learning_track = False
+        shadow.is_calibration_shadow = True
+        shadow.calibration_parent_track = parent_track_id
+        if fund_path.exists():
+            fund_path.unlink()
+        ensure_automated_fund(fund_path, shadow)
+        respawned_fund = True
+
+    parent_knobs = KnobCandidate.from_learning_knobs(
+        LearningKnobs.from_config(parent),
+        exit_confirm_screens=parent.exit_confirm_screens,
+    ).to_dict()
+    changed_vs_parent = _apply_prior_knobs_to_config(shadow, prior_knobs)
+    shadow.is_calibration_shadow = True
+    shadow.calibration_parent_track = parent_track_id
+    shadow.is_primary_learning_track = False
+    shadow.track_id = AI_JUDGMENT_CALIBRATED_TRACK_ID
+    shadow.track_label = shadow.track_label or "AI judgment calibrated shadow (frozen priors)"
+    config_path.write_text(json.dumps(shadow.to_dict(), indent=2) + "\n", encoding="utf-8")
+    ensure_automated_fund(fund_path, shadow)
+
+    provenance = {
+        "schema_version": 1,
+        "spawned_at": datetime.now(UTC).isoformat(),
+        "parent_track_id": parent_track_id,
+        "shadow_track_id": AI_JUDGMENT_CALIBRATED_TRACK_ID,
+        "priors_source": str(priors_file),
+        "priors_calibrated_at": priors_payload.get("calibrated_at")
+        or track_row.get("calibrated_at"),
+        "recommended_prior": recommended,
+        "parent_knobs_at_spawn": parent_knobs,
+        "shadow_knobs": shadow.selection_kwargs(),
+        "changed_vs_parent": changed_vs_parent,
+        "confidence": recommended.get("confidence"),
+        "force_respawn": bool(force_respawn),
+        "respawned_fund": respawned_fund,
+        "note": (
+            "Frozen calibration shadow — decision-review --apply is disabled. "
+            "Compare forward marks vs primary ai_judgment before promotion."
+        ),
+    }
+    write_json(provenance_path, provenance, compact=False)
+
+    return {
+        "spawned": True,
+        "created": not existed or force_respawn,
+        "shadow_track_id": AI_JUDGMENT_CALIBRATED_TRACK_ID,
+        "shadow_dir": str(shadow_dir),
+        "confidence": recommended.get("confidence"),
+        "changed_vs_parent": changed_vs_parent,
+        "respawned_fund": respawned_fund,
+        "provenance_path": str(provenance_path),
+    }
+
+
+def load_calibration_provenance(track_dir: Path) -> dict[str, Any] | None:
+    path = Path(track_dir) / CALIBRATION_PROVENANCE_FILENAME
+    if not path.exists():
+        return None
+    payload = read_json(path)
+    return payload if isinstance(payload, dict) else None
