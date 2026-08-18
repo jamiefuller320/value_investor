@@ -15,6 +15,7 @@ from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     earnings_growth_signs_diverge,
     fcf_basis_divergence_flagged,
+    fcf_filing_screen_mismatch,
     fcf_values_diverge,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
@@ -695,6 +696,35 @@ def test_fcf_values_diverge_on_sign_or_magnitude():
     assert fcf_values_diverge(100.0, 40.0, threshold=0.50) is True
     assert fcf_values_diverge(100.0, 100.0) is False
     assert fcf_values_diverge(None, -66_125_000.0) is False
+
+
+def test_fcf_filing_screen_mismatch_uses_25_pct_threshold():
+    assert fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=70_000_000.0,
+        divergence_flagged=False,
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=92_000_000.0,
+        divergence_flagged=False,
+    )
+    assert fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=92_000_000.0,
+        divergence_flagged=True,
+    )
+
+
+def test_append_fcf_divergence_note_when_filing_screen_gap_exceeds_25_pct():
+    note = append_fcf_divergence_to_action_note(
+        "",
+        canonical=100_000_000.0,
+        screen_ttm=70_000_000.0,
+        fcf_bundle={"filing_aligned": 100_000_000.0, "divergence_flagged": False},
+    )
+    assert "FCF filing-aligned $100M" in note
+    assert "screen TTM $70M" in note
 
 
 def test_fcf_basis_divergence_flags_fgp_style_mismatch():

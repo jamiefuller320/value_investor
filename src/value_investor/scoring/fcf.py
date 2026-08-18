@@ -118,6 +118,7 @@ _RESEARCH_ROOTS = (
 )
 
 FCF_DIVERGENCE_THRESHOLD = 0.50
+FCF_FILING_SCREEN_DIVERGENCE_THRESHOLD = 0.25
 FCF_YIELD_COMPANY_TOLERANCE = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 FCF_YIELD_MODEL_ID = "fcf_yield"
@@ -999,6 +1000,49 @@ def fcf_values_diverge(
     return abs_gap / denominator > threshold
 
 
+def fcf_filing_screen_mismatch(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    divergence_flagged: bool = False,
+    threshold: float = FCF_FILING_SCREEN_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """True when FCF Yield, Earnings Quality, and overlays should ignore Yahoo screen TTM."""
+    if divergence_flagged:
+        return True
+    if filing_aligned is None or screen_ttm is None:
+        return False
+    return fcf_values_diverge(filing_aligned, screen_ttm, threshold=threshold)
+
+
+def overlay_free_cashflow_from_bundle(
+    row: pd.Series,
+    fcf_bundle: dict[str, Any],
+) -> float | None:
+    """Pick filing-aligned or screen TTM FCF for yield, quality, and overlay inputs."""
+    screen_ttm = screen_ttm_from_row(row)
+    filing_aligned = fcf_bundle.get("filing_aligned")
+    if isinstance(filing_aligned, (int, float)):
+        filing_aligned = float(filing_aligned)
+    else:
+        filing_aligned = None
+
+    if fcf_filing_screen_mismatch(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+    ):
+        canonical = fcf_bundle.get("canonical")
+        if canonical is not None:
+            return float(canonical)
+        if filing_aligned is not None:
+            return filing_aligned
+
+    if screen_ttm is not None:
+        return screen_ttm
+    return resolve_free_cashflow(row)
+
+
 def _format_fcf_compact(value: float, *, currency: str = "USD") -> str:
     sign = "−" if value < 0 else ""
     abs_val = abs(value)
@@ -1067,8 +1111,13 @@ def append_fcf_divergence_to_action_note(
     company_adjusted_currency = bundle.get("company_adjusted_currency")
     filing_currency = str(bundle.get("currency") or "USD")
     divergence_flagged = bool(bundle.get("divergence_flagged"))
+    filing_for_mismatch = filing_aligned if filing_aligned is not None else canonical
 
-    if not divergence_flagged and not fcf_values_diverge(canonical, screen_ttm):
+    if not fcf_filing_screen_mismatch(
+        filing_aligned=filing_for_mismatch,
+        screen_ttm=screen_ttm,
+        divergence_flagged=divergence_flagged,
+    ):
         return action_note
 
     if company_adjusted is not None or divergence_flagged:
@@ -1114,7 +1163,14 @@ def enrich_universe_with_canonical_fcf(
             output_dir=output_dir,
         )
         screen_ttms.append(screen_ttm)
-        canonicals.append(bundle.get("canonical"))
+        if fcf_filing_screen_mismatch(
+            filing_aligned=bundle.get("filing_aligned"),
+            screen_ttm=screen_ttm,
+            divergence_flagged=bool(bundle.get("divergence_flagged")),
+        ):
+            canonicals.append(bundle.get("canonical"))
+        else:
+            canonicals.append(screen_ttm)
 
     out["free_cashflow_screen_ttm"] = screen_ttms
     out["free_cashflow"] = [

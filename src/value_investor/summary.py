@@ -20,6 +20,7 @@ from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_o
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    overlay_free_cashflow_from_bundle,
     reconcile_fcf_for_ticker,
     resolve_free_cashflow,
     resolve_statutory_earnings_growth,
@@ -528,10 +529,9 @@ def build_company_reports(
         piotroski_f_score = _piotroski_f_score_from_models(ticker_models)
         screen_ttm = screen_ttm_from_row(row)
         fcf_bundle = reconcile_fcf_for_ticker(ticker, screen_ttm=screen_ttm, output_dir=output_dir)
-        canonical_fcf = fcf_bundle.get("canonical")
-        free_cashflow = (
-            float(canonical_fcf) if canonical_fcf is not None else resolve_free_cashflow(row)
-        )
+        free_cashflow = overlay_free_cashflow_from_bundle(row, fcf_bundle)
+        if free_cashflow is None:
+            free_cashflow = resolve_free_cashflow(row)
 
         operating_cashflow_raw = row.get("operating_cashflow")
         operating_cashflow = (
