@@ -20,6 +20,7 @@ import yfinance as yf
 logger = logging.getLogger(__name__)
 
 FINANCIAL_YEARS = 5
+FINANCIAL_QUARTERS = 4
 NEWS_LOOKBACK_DAYS = 365
 GOOGLE_NEWS_MAX_ITEMS = 40
 YFINANCE_NEWS_MAX_ITEMS = 30
@@ -50,6 +51,33 @@ def _df_years(
     return out
 
 
+def _period_key(column: Any) -> str:
+    if hasattr(column, "strftime"):
+        return column.strftime("%Y-%m-%d")
+    text = str(column)
+    return text[:10] if len(text) >= 10 else text
+
+
+def _df_periods(
+    df: pd.DataFrame | None, *, max_periods: int = FINANCIAL_QUARTERS
+) -> dict[str, dict[str, float | None]]:
+    """Serialize quarterly statement columns keyed by period-end ISO date."""
+    if df is None or df.empty:
+        return {}
+    out: dict[str, dict[str, float | None]] = {}
+    for column in list(df.columns)[:max_periods]:
+        period = _period_key(column)
+        period_rows: dict[str, float | None] = {}
+        for label, value in df[column].items():
+            if pd.notna(value):
+                try:
+                    period_rows[str(label)] = float(value)
+                except (TypeError, ValueError):
+                    period_rows[str(label)] = None
+        out[period] = period_rows
+    return out
+
+
 # yfinance cash-flow label variants (mirrors value_investor.financials aliases).
 _CASHFLOW_LABEL_ALIASES: dict[str, list[str]] = {
     "operating_cashflow": [
@@ -63,11 +91,22 @@ _CASHFLOW_LABEL_ALIASES: dict[str, list[str]] = {
     ],
 }
 
+_CAPEX_LABELS = [
+    "Capital Expenditure",
+    "Capital Expenditures",
+    "Purchase Of PPE",
+    "Purchase Of Property Plant And Equipment",
+]
+
 CASHFLOW_METRIC_KEYS = tuple(_CASHFLOW_LABEL_ALIASES.keys())
 
 
 def _sorted_financial_years(section: dict[str, Any]) -> list[str]:
     return sorted((str(year) for year in section.keys()), reverse=True)
+
+
+def _sorted_period_keys(section: dict[str, Any]) -> list[str]:
+    return sorted((str(key) for key in section.keys()), reverse=True)
 
 
 def _annual_label_value(year_rows: dict[str, Any], labels: list[str]) -> float | None:
@@ -84,21 +123,69 @@ def _annual_label_value(year_rows: dict[str, Any], labels: list[str]) -> float |
     return None
 
 
+def extract_ttm_cashflow_metrics_from_quarterly(
+    financials: dict[str, Any],
+    *,
+    max_quarters: int = FINANCIAL_QUARTERS,
+) -> dict[str, float | None]:
+    """Sum the latest quarterly cash-flow lines into trailing-twelve-month metrics."""
+    quarterly = financials.get("quarterly_cashflow") or {}
+    if not quarterly:
+        return {}
+
+    periods = _sorted_period_keys(quarterly)[:max_quarters]
+    if not periods:
+        return {}
+
+    ocf_total = 0.0
+    capex_total = 0.0
+    fcf_total = 0.0
+    ocf_count = 0
+    capex_count = 0
+    fcf_count = 0
+
+    for period in periods:
+        rows = quarterly.get(period) or {}
+        ocf = _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["operating_cashflow"])
+        capex = _annual_label_value(rows, _CAPEX_LABELS)
+        fcf = _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"])
+        if ocf is not None:
+            ocf_total += ocf
+            ocf_count += 1
+        if capex is not None:
+            capex_total += capex
+            capex_count += 1
+        if fcf is not None:
+            fcf_total += fcf
+            fcf_count += 1
+
+    metrics: dict[str, float | None] = {}
+    if ocf_count:
+        metrics["operating_cashflow_ttm"] = ocf_total
+    if capex_count:
+        metrics["capital_expenditure_ttm"] = capex_total
+    if fcf_count:
+        metrics["free_cashflow_ttm"] = fcf_total
+    elif ocf_count and capex_count and ocf_count == capex_count == len(periods):
+        metrics["free_cashflow_ttm"] = ocf_total + capex_total
+    return metrics
+
+
 def extract_cashflow_metrics_from_annual_financials(
     financials: dict[str, Any],
 ) -> dict[str, float | None]:
-    """Extract latest (and prior-year) cash-flow metrics from ``financials_annual.json``."""
-    cash_flow = financials.get("cash_flow") or {}
-    if not cash_flow:
-        return {}
-
-    years = _sorted_financial_years(cash_flow)
+    """Extract annual and TTM cash-flow metrics from ``financials_annual.json``."""
     metrics: dict[str, float | None] = {}
-    for key, labels in _CASHFLOW_LABEL_ALIASES.items():
-        if years:
-            metrics[key] = _annual_label_value(cash_flow.get(years[0]) or {}, labels)
-        if len(years) > 1:
-            metrics[f"{key}_prev"] = _annual_label_value(cash_flow.get(years[1]) or {}, labels)
+    cash_flow = financials.get("cash_flow") or {}
+    if cash_flow:
+        years = _sorted_financial_years(cash_flow)
+        for key, labels in _CASHFLOW_LABEL_ALIASES.items():
+            if years:
+                metrics[key] = _annual_label_value(cash_flow.get(years[0]) or {}, labels)
+            if len(years) > 1:
+                metrics[f"{key}_prev"] = _annual_label_value(cash_flow.get(years[1]) or {}, labels)
+
+    metrics.update(extract_ttm_cashflow_metrics_from_quarterly(financials))
     return metrics
 
 
@@ -237,6 +324,10 @@ def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dic
         "balance_sheet": _df_years(stock.balance_sheet, max_years=years),
         "cash_flow": _df_years(stock.cashflow, max_years=years),
         "quarterly_income": _df_years(getattr(stock, "quarterly_financials", None), max_years=4),
+        "quarterly_cashflow": _df_periods(
+            getattr(stock, "quarterly_cashflow", None),
+            max_periods=FINANCIAL_QUARTERS,
+        ),
     }
     cashflow_metrics = extract_cashflow_metrics_from_annual_financials(payload)
     if cashflow_metrics:
