@@ -1213,6 +1213,64 @@ function resolveEngineeringQueue(data) {
   };
 }
 
+function humanTaskDocUrl(checklist, task) {
+  if (!checklist || !task) return null;
+  const base = String(checklist.repo_docs_base || "").replace(/\/$/, "");
+  const path = String(task.doc_path || "").replace(/^\//, "");
+  if (!base || !path) return null;
+  const anchor = task.doc_anchor ? `#${task.doc_anchor}` : "";
+  return `${base}/${path}${anchor}`;
+}
+
+function renderHumanTasksChecklistSection(checklist) {
+  if (!checklist || !Array.isArray(checklist.sections) || !checklist.sections.length) {
+    return `
+      <section class="automation-section automation-section-full human-tasks-section">
+        <h2>Human tasks</h2>
+        <p class="muted">Checklist not published yet.</p>
+      </section>`;
+  }
+
+  const runbookUrl = humanTaskDocUrl(checklist, {
+    doc_path: checklist.runbook_path || "docs/ops/human-tasks-checklist.md",
+  });
+
+  const sectionsHtml = checklist.sections
+    .map((section) => {
+      const tasksHtml = (section.tasks || [])
+        .map((task) => {
+          const docUrl = humanTaskDocUrl(checklist, task);
+          const docLink = docUrl
+            ? ` <a href="${esc(docUrl)}" target="_blank" rel="noopener" class="small">runbook</a>`
+            : "";
+          const autoBadge = task.automated
+            ? ' <span class="badge badge-neutral" title="Handled by CI">automated</span>'
+            : ' <span class="badge badge-watch" title="Requires human review">human</span>';
+          return `<li class="human-task-item${task.automated ? " human-task-auto" : ""}">
+            <strong>${esc(task.title || task.id || "Task")}</strong>${autoBadge}${docLink}
+            <div class="small muted">${esc(task.summary || "")}</div>
+          </li>`;
+        })
+        .join("");
+      return `<div class="human-tasks-cadence">
+        <h3>${esc(section.title || section.id || "Tasks")}</h3>
+        <ul class="human-tasks-list">${tasksHtml}</ul>
+      </div>`;
+    })
+    .join("");
+
+  return `
+    <section class="automation-section automation-section-full human-tasks-section">
+      <h2>Human tasks</h2>
+      <p class="small muted" style="margin-top:0">
+        Manual gates for learning-loop promotion and Sunday review.
+        ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Full checklist</a>` : ""}
+        ${checklist.updated_at ? ` · updated ${esc(checklist.updated_at)}` : ""}
+      </p>
+      ${sectionsHtml}
+    </section>`;
+}
+
 function renderEngineeringQueueSection(queue) {
   if (!queue) {
     return `
@@ -1524,6 +1582,7 @@ function renderAutomation(data) {
 
   panel.innerHTML = `
     ${renderLearningTracksPanel(data)}
+    ${renderHumanTasksChecklistSection(data.human_tasks_checklist)}
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
 
     <div class="automation-grid">

@@ -330,6 +330,14 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         unavailable_watch = {"items": []}
 
     try:
+        from value_investor.human_tasks_checklist import load_human_tasks_checklist
+
+        human_tasks_checklist = load_human_tasks_checklist()
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Human tasks checklist skipped: %s", exc)
+        human_tasks_checklist = None
+
+    try:
         from value_investor.automation_status import (
             build_automation_status,
             build_learning_track_epoch_datum,
@@ -392,6 +400,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "learning_track_epoch_datum": learning_track_epoch_datum,
         "automation": automation,
         "project_progress": project_progress,
+        "human_tasks_checklist": human_tasks_checklist,
     }
 
 

@@ -1,0 +1,20 @@
+---
+description: Keep the human tasks checklist in sync when introducing manual ops gates
+alwaysApply: true
+---
+
+# Human tasks checklist (required)
+
+When you add or change a **human** ops step (review gate, promotion checklist item,
+manual triage cadence, or “do not automate yet” workflow), update **both**:
+
+1. [`docs/human_tasks_checklist.json`](../../docs/human_tasks_checklist.json) — canonical for the dashboard UI
+2. [`docs/ops/human-tasks-checklist.md`](../../docs/ops/human-tasks-checklist.md) — human runbook
+
+Each task entry needs: stable `id`, `title`, `summary`, `automated` (true/false),
+`doc_path` (repo-relative), optional `doc_anchor` (markdown heading slug).
+
+After edits, run `pytest tests/test_human_tasks_checklist.py`.
+
+Do **not** add human-only gates only in prose, PR descriptions, or deferred ideas —
+register them in the checklist unless explicitly told to park the idea via `ftse-defer`.

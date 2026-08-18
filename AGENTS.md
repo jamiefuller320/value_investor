@@ -62,3 +62,14 @@ Bulk artifacts under `docs/data/` dominate token spend when agents Grep the whol
 Indexing: those bulk paths are listed in [`.cursorindexingignore`](.cursorindexingignore) so they stay out of default codebase search while remaining readable via Read / Shell when named. Do **not** put them in `.cursorignore` (that would block Agent Read / `@`).
 
 Prefer a **new agent session** for a new major workstream after a long multi-topic chat (roughly 20–30 user turns), so context tax does not compound across unrelated PRs.
+
+## Human tasks checklist (required)
+
+When you add or change a **manual** ops step (review gate, promotion checklist,
+cadence item), update **both**:
+
+- [`docs/human_tasks_checklist.json`](docs/human_tasks_checklist.json) — dashboard UI source
+- [`docs/ops/human-tasks-checklist.md`](docs/ops/human-tasks-checklist.md) — human runbook
+
+Run `pytest tests/test_human_tasks_checklist.py` after edits. See
+[`.cursor/rules/human-tasks-checklist.mdc`](.cursor/rules/human-tasks-checklist.mdc).

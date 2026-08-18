@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "updated_at": "2026-08-18",
+  "title": "Human tasks checklist",
+  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate.",
+  "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
+  "runbook_path": "docs/ops/human-tasks-checklist.md",
+  "sections": [
+    {
+      "id": "weekday",
+      "title": "Weekday (Mon–Fri)",
+      "cadence": "weekday",
+      "tasks": [
+        {
+          "id": "weekday-verify-paper-auto",
+          "title": "Spot-check learning tracks after paper-auto",
+          "summary": "Confirm weekday CI acted; on Automation tab compare AI judgment excess vs ^FTSE, rules control, and calibrated shadow knobs.",
+          "automated": false,
+          "doc_path": "docs/ops/primary-learning-track.md",
+          "doc_anchor": "commands"
+        },
+        {
+          "id": "weekday-paper-auto-runs",
+          "title": "Paper-auto + decision-review apply",
+          "summary": "Runs all learning tracks, refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Calibrated shadow is observe-only (no --apply).",
+          "automated": true,
+          "doc_path": "docs/ops/decision-review.md",
+          "doc_anchor": "commands"
+        }
+      ]
+    },
+    {
+      "id": "sunday",
+      "title": "Sunday",
+      "cadence": "sunday",
+      "tasks": [
+        {
+          "id": "sunday-read-analysis-review",
+          "title": "Read analysis review synthesis",
+          "summary": "After analysis-review (~10:35 UTC), read analysis_review.md for backward metrics, proposed experiments, and ingest trials.",
+          "automated": false,
+          "doc_path": "docs/ops/analysis-review.md",
+          "doc_anchor": "artifacts"
+        },
+        {
+          "id": "sunday-knob-calibration-priors",
+          "title": "Review knob calibration priors",
+          "summary": "Inspect knob_calibration_priors.json: ready_for_priors, confidence, score_gap_vs_runner_up, cohort discriminability, and changed_vs_current.",
+          "automated": false,
+          "doc_path": "docs/ops/knob-calibration.md",
+          "doc_anchor": "promoting-a-prior-human-gate"
+        },
+        {
+          "id": "sunday-shadow-vs-primary",
+          "title": "Compare calibrated shadow vs primary AI judgment",
+          "summary": "On Automation tab, compare forward marks and epoch excess for ai_judgment vs ai_judgment_calibrated before promoting any prior.",
+          "automated": false,
+          "doc_path": "docs/ops/knob-calibration.md",
+          "doc_anchor": "calibrated-shadow-track-phase-1--ai_judgment-only"
+        },
+        {
+          "id": "sunday-promote-knobs-gate",
+          "title": "Promote knob priors only when gates pass",
+          "summary": "Do not edit ai_judgment config until ready_for_priors, score gap ≥ 0.005, confidence acceptable, and shadow forward marks support the change.",
+          "automated": false,
+          "doc_path": "docs/ops/knob-calibration.md",
+          "doc_anchor": "promoting-a-prior-human-gate"
+        },
+        {
+          "id": "sunday-analysis-tasks",
+          "title": "Triage analysis_tasks experiments",
+          "summary": "Promote scoring/ingest candidates manually via ftse-analysis-review promote; keep paper_knobs and offline_sim experiments manual.",
+          "automated": false,
+          "doc_path": "docs/ops/analysis-review.md",
+          "doc_anchor": "manual-promotion-to-engineering"
+        },
+        {
+          "id": "sunday-knob-calibrate-runs",
+          "title": "Knob calibration + analysis-review agent",
+          "summary": "analysis-review.yml runs ftse-knob-calibrate (with cohort fitness for AI tracks) and spawns calibrated shadow when priors exist.",
+          "automated": true,
+          "doc_path": "docs/ops/knob-calibration.md",
+          "doc_anchor": "when-to-run"
+        }
+      ]
+    },
+    {
+      "id": "monthly",
+      "title": "Monthly",
+      "cadence": "monthly",
+      "tasks": [
+        {
+          "id": "monthly-horizon-scan",
+          "title": "Horizon scan + deferred fragments",
+          "summary": "First Sunday 11:00 UTC: read horizon scan output; triage open ftse-defer fragments and deferred ideas.",
+          "automated": false,
+          "doc_path": "docs/ops/horizon-scan.md",
+          "doc_anchor": "when-it-runs"
+        }
+      ]
+    },
+    {
+      "id": "quarterly",
+      "title": "Quarterly",
+      "cadence": "quarterly",
+      "tasks": [
+        {
+          "id": "quarterly-deferred-review",
+          "title": "Deferred ideas review pass",
+          "summary": "Review deferred-review.md; move items via ftse-defer status (done / drop / promote).",
+          "automated": false,
+          "doc_path": "docs/deferred-review.md",
+          "doc_anchor": null
+        }
+      ]
+    },
+    {
+      "id": "ad_hoc",
+      "title": "Ad hoc (when triggered)",
+      "cadence": "ad_hoc",
+      "tasks": [
+        {
+          "id": "adhoc-live-capital-pack",
+          "title": "Verify decision packs before live capital",
+          "summary": "For real-money trades, use decision-pack verify checklist and primary sources — separate from the automated learning loop.",
+          "automated": false,
+          "doc_path": "docs/ops/primary-learning-track.md",
+          "doc_anchor": "success-datums"
+        },
+        {
+          "id": "adhoc-paper-learning-review",
+          "title": "Paper-learning review experiments",
+          "summary": "When churn or exit-timing cohorts mature, run paper-learning review probes manually; do not auto-apply from shadow cohorts yet.",
+          "automated": false,
+          "doc_path": "docs/ops/paper-learning-review.md",
+          "doc_anchor": null
+        }
+      ]
+    }
+  ]
+}
