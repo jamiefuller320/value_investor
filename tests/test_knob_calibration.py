@@ -6,16 +6,22 @@ import json
 from pathlib import Path
 
 from value_investor.knob_calibration import (
+    CALIBRATION_PROVENANCE_FILENAME,
     KNOB_CALIBRATION_PRIORS_FILENAME,
     KnobCandidate,
     KnobGridAxis,
     calibrate_track,
     fold_fitness,
     iter_grid_candidates,
+    spawn_calibrated_shadow_track,
     walk_forward_fold_ranges,
     write_knob_calibration_priors,
 )
-from value_investor.paper_automation import AutomationConfig
+from value_investor.paper_automation import (
+    AI_JUDGMENT_CALIBRATED_TRACK_ID,
+    AutomationConfig,
+    learning_track_dirs,
+)
 from value_investor.rebalance_log import append_rebalance_log
 
 
@@ -165,3 +171,81 @@ def test_write_knob_calibration_priors(tmp_path: Path):
     path = write_knob_calibration_priors(tmp_path, payload)
     assert path == tmp_path / KNOB_CALIBRATION_PRIORS_FILENAME
     assert path.exists()
+
+
+def _seed_ai_judgment_parent(tmp_path: Path) -> Path:
+    paper_root = tmp_path / "paper"
+    ai_dir = paper_root / "ai_judgment"
+    ai_dir.mkdir(parents=True)
+    config = AutomationConfig()
+    config.track_id = "ai_judgment"
+    config.is_primary_learning_track = True
+    config.use_adjusted_signal = True
+    config.require_research_accumulate = True
+    config.max_positions = 3
+    config.min_conviction = 0.3
+    config.sector_cap = 0.2
+    config.initial_cash = 1000.0
+    (ai_dir / "config.json").write_text(json.dumps(config.to_dict()), encoding="utf-8")
+    (paper_root / "config.json").write_text(
+        json.dumps(AutomationConfig().to_dict()), encoding="utf-8"
+    )
+    priors = {
+        "scope": "knob_calibration_multi",
+        "calibrated_at": "2026-08-18T00:00:00+00:00",
+        "tracks": {
+            "ai_judgment": {
+                "recommended_prior": {
+                    "knobs": {
+                        "max_positions": 5,
+                        "skip_timing_wait": True,
+                        "min_conviction": 0.0,
+                        "sector_cap": 0.2,
+                    },
+                    "confidence": "low",
+                }
+            }
+        },
+    }
+    write_knob_calibration_priors(paper_root, priors)
+    return paper_root
+
+
+def test_spawn_calibrated_shadow_track_creates_frozen_book(tmp_path: Path):
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    result = spawn_calibrated_shadow_track(paper_root)
+    assert result["spawned"] is True
+    assert result["shadow_track_id"] == AI_JUDGMENT_CALIBRATED_TRACK_ID
+    shadow_dir = paper_root / "ai_judgment_calibrated"
+    assert (shadow_dir / "config.json").exists()
+    assert (shadow_dir / "automated_fund.json").exists()
+    assert (shadow_dir / CALIBRATION_PROVENANCE_FILENAME).exists()
+    cfg = json.loads((shadow_dir / "config.json").read_text(encoding="utf-8"))
+    assert cfg["is_calibration_shadow"] is True
+    assert cfg["max_positions"] == 5
+    assert cfg["min_conviction"] == 0.0
+    assert AI_JUDGMENT_CALIBRATED_TRACK_ID in learning_track_dirs(paper_root)
+
+
+def test_spawn_calibrated_shadow_idempotent_without_force(tmp_path: Path):
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    first = spawn_calibrated_shadow_track(paper_root)
+    fund_path = paper_root / "ai_judgment_calibrated" / "automated_fund.json"
+    fund_path.write_text(fund_path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    second = spawn_calibrated_shadow_track(paper_root)
+    assert first["spawned"] is True
+    assert second["spawned"] is True
+    assert second["respawned_fund"] is False
+
+
+def test_decision_review_skips_apply_for_calibration_shadow(tmp_path: Path):
+    from value_investor.decision_review import run_decision_review
+
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    spawn_calibrated_shadow_track(paper_root)
+    shadow_dir = paper_root / "ai_judgment_calibrated"
+    result = run_decision_review(output_dir=shadow_dir, apply=True, force=True)
+    assert result.applied is False
+    assert "frozen" in (result.note or "").lower()
+    cfg = json.loads((shadow_dir / "config.json").read_text(encoding="utf-8"))
+    assert cfg["max_positions"] == 5

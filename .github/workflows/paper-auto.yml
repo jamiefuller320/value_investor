@@ -36,16 +36,23 @@ jobs:
 
       - name: Seed paper automation state from dashboard data
         run: |
-          mkdir -p output/paper_automation output/paper_automation/ai_judgment output/paper_automation/momentum_grace
+          mkdir -p output/paper_automation output/paper_automation/ai_judgment output/paper_automation/momentum_grace output/paper_automation/ai_judgment_calibrated
           if [ -d docs/data/paper_automation ]; then
             cp -f docs/data/paper_automation/*.json output/paper_automation/ 2>/dev/null || true
           fi
           if [ -d docs/data/paper_automation/ai_judgment ]; then
             cp -f docs/data/paper_automation/ai_judgment/*.json output/paper_automation/ai_judgment/ 2>/dev/null || true
           fi
+          if [ -d docs/data/paper_automation/ai_judgment_calibrated ]; then
+            cp -f docs/data/paper_automation/ai_judgment_calibrated/*.json output/paper_automation/ai_judgment_calibrated/ 2>/dev/null || true
+          fi
           if [ -d docs/data/paper_automation/momentum_grace ]; then
             cp -f docs/data/paper_automation/momentum_grace/*.json output/paper_automation/momentum_grace/ 2>/dev/null || true
           fi
+
+      - name: Ensure calibrated AI-judgment shadow track
+        run: |
+          ftse-knob-calibrate spawn-shadow --paper-root output/paper_automation || true
 
       - name: Refresh research overlay on dashboard reports
         run: |
@@ -88,6 +95,7 @@ jobs:
           dest = Path("docs/data/paper_automation")
           dest.mkdir(parents=True, exist_ok=True)
           (dest / "ai_judgment").mkdir(parents=True, exist_ok=True)
+          (dest / "ai_judgment_calibrated").mkdir(parents=True, exist_ok=True)
           (dest / "momentum_grace").mkdir(parents=True, exist_ok=True)
 
           root_names = (
@@ -125,6 +133,21 @@ jobs:
               path = src / "ai_judgment" / name
               if path.exists():
                   shutil.copy2(path, dest / "ai_judgment" / name)
+
+          for name in (
+              "last_run.json",
+              "automated_fund.json",
+              "config.json",
+              "decision_review.json",
+              "decision_review_history.json",
+              "rebalance_log.json",
+              "exit_shadow.json",
+              "exit_shadow_review.json",
+              "calibration_provenance.json",
+          ):
+              path = src / "ai_judgment_calibrated" / name
+              if path.exists():
+                  shutil.copy2(path, dest / "ai_judgment_calibrated" / name)
 
           for name in (
               "last_run.json",
