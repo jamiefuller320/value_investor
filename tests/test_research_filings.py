@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 
 from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
@@ -66,11 +67,79 @@ from value_investor.research.filings import (
 from value_investor.research.ingest import (
     apply_cashflow_metrics_fallback,
     extract_cashflow_metrics_from_annual_financials,
+    extract_ttm_cashflow_metrics_from_quarterly,
     fetch_annual_financials,
     ingest_research_sources,
     install_fetch_cashflow_fallback,
     supplement_company_metrics_cashflow,
 )
+
+
+def test_extract_ttm_cashflow_metrics_from_quarterly():
+    """Regression: mechanical TTM FCF from four Yahoo quarterly cash-flow columns."""
+    financials = {
+        "quarterly_cashflow": {
+            "2025-09-30": {
+                "Operating Cash Flow": 29_728_000_000.0,
+                "Capital Expenditure": -3_242_000_000.0,
+                "Free Cash Flow": 26_486_000_000.0,
+            },
+            "2025-06-30": {
+                "Operating Cash Flow": 53_925_000_000.0,
+                "Capital Expenditure": -2_373_000_000.0,
+                "Free Cash Flow": 51_552_000_000.0,
+            },
+            "2025-03-31": {
+                "Operating Cash Flow": 28_702_000_000.0,
+                "Capital Expenditure": -1_971_000_000.0,
+                "Free Cash Flow": 26_731_000_000.0,
+            },
+            "2024-12-31": {
+                "Operating Cash Flow": 34_369_000_000.0,
+                "Capital Expenditure": -2_455_000_000.0,
+                "Free Cash Flow": 31_914_000_000.0,
+            },
+        }
+    }
+    metrics = extract_ttm_cashflow_metrics_from_quarterly(financials)
+    assert metrics["operating_cashflow_ttm"] == pytest.approx(146_724_000_000.0)
+    assert metrics["capital_expenditure_ttm"] == pytest.approx(-10_041_000_000.0)
+    assert metrics["free_cashflow_ttm"] == pytest.approx(136_683_000_000.0)
+
+
+def test_extract_cashflow_metrics_merges_annual_and_ttm():
+    financials = {
+        "cash_flow": {
+            "2025": {"Operating Cash Flow": 436_000_000.0, "Free Cash Flow": 119_000_000.0},
+        },
+        "quarterly_cashflow": {
+            "2025-06-30": {
+                "Operating Cash Flow": 214_000_000.0,
+                "Capital Expenditure": -122_000_000.0,
+                "Free Cash Flow": 92_000_000.0,
+            },
+            "2024-12-31": {
+                "Operating Cash Flow": 150_000_000.0,
+                "Capital Expenditure": -80_000_000.0,
+                "Free Cash Flow": 70_000_000.0,
+            },
+            "2024-09-30": {
+                "Operating Cash Flow": 120_000_000.0,
+                "Capital Expenditure": -60_000_000.0,
+                "Free Cash Flow": 60_000_000.0,
+            },
+            "2024-06-30": {
+                "Operating Cash Flow": 110_000_000.0,
+                "Capital Expenditure": -55_000_000.0,
+                "Free Cash Flow": 55_000_000.0,
+            },
+        },
+    }
+    metrics = extract_cashflow_metrics_from_annual_financials(financials)
+    assert metrics["operating_cashflow"] == 436_000_000.0
+    assert metrics["free_cashflow"] == 119_000_000.0
+    assert metrics["operating_cashflow_ttm"] == pytest.approx(594_000_000.0)
+    assert metrics["free_cashflow_ttm"] == pytest.approx(277_000_000.0)
 
 
 def test_operating_cashflow_aliases_from_yahoo_labels():
@@ -216,17 +285,29 @@ def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
         {"2024": [90_800_000.0, 55_000_000.0]},
         index=["Operating Cash Flow", "Free Cash Flow"],
     )
+    quarterly_cashflow_df = pd.DataFrame(
+        {
+            pd.Timestamp("2025-09-30"): [29_728_000_000.0, -3_242_000_000.0, 26_486_000_000.0],
+            pd.Timestamp("2025-06-30"): [53_925_000_000.0, -2_373_000_000.0, 51_552_000_000.0],
+            pd.Timestamp("2025-03-31"): [28_702_000_000.0, -1_971_000_000.0, 26_731_000_000.0],
+            pd.Timestamp("2024-12-31"): [34_369_000_000.0, -2_455_000_000.0, 31_914_000_000.0],
+        },
+        index=["Operating Cash Flow", "Capital Expenditure", "Free Cash Flow"],
+    )
 
     class DummyTicker:
         financials = pd.DataFrame()
         balance_sheet = pd.DataFrame()
         cashflow = cashflow_df
         quarterly_financials = None
+        quarterly_cashflow = quarterly_cashflow_df
 
     monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
     payload = fetch_annual_financials("MEGP.L")
     assert payload["cashflow_metrics"]["operating_cashflow"] == 90_800_000.0
     assert payload["cashflow_metrics"]["free_cashflow"] == 55_000_000.0
+    assert payload["quarterly_cashflow"]["2025-09-30"]["Operating Cash Flow"] == 29_728_000_000.0
+    assert payload["cashflow_metrics"]["free_cashflow_ttm"] == pytest.approx(136_683_000_000.0)
 
 
 def test_headline_relevant_to_issuer_filters_noise():
@@ -2334,6 +2415,7 @@ def test_ingest_research_sources_keeps_filings_separate_from_yahoo(tmp_path: Pat
                 "balance_sheet": {},
                 "cash_flow": {},
                 "quarterly_income": {},
+                "quarterly_cashflow": {},
             },
         ),
         patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[]),
