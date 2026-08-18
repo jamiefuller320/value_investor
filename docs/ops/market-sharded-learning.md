@@ -55,6 +55,8 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **Orchestration:** After observe sim in `ftse-library ladder`, `run_weekly_paper_shards_for_screened_markets` runs for markets that passed Phase 1 and were screened this run. Phase rollup refreshes to `docs/data/library/shard_phases.json`.
 
+**Strong-buy metrics probe (L153):** After maintenance, when the engineering queue is idle, the ladder re-fetches metrics for offline screen `strong_buy`/`buy` names on Phase 2 then observe-sim markets (`strong_buy_metrics_probe_*` policy knobs). Surfaces provider failures early and can draft a coverage task; does **not** run FTSE-style filing ingest on non-UK names.
+
 **Enter when:** Phase 1 gate met for that market **and** market is in `weekly_paper_shard_markets`.
 
 **Exit gate:** ≥ **8** weekly batch marks in `weekly_batch_log.json`; `learning_tracks_review.json` shows `beat_control=true` on latest review.

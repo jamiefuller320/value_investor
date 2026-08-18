@@ -1041,6 +1041,20 @@ def cmd_ladder(args: argparse.Namespace) -> int:
                 f"  maintenance: markets={', '.join(layer.get('markets') or []) or '—'}  "
                 f"max_tickers={layer.get('max_tickers')}"
             )
+        elif name == "strong_buy_metrics_probe":
+            if layer.get("skipped"):
+                print(
+                    f"  strong_buy_metrics_probe: skipped — {layer.get('reason') or 'flagged'}"
+                )
+            else:
+                drafted = layer.get("drafted_task_ids") or []
+                print(
+                    f"  strong_buy_metrics_probe: markets="
+                    f"{', '.join(layer.get('market_ids') or []) or '—'}  "
+                    f"selected={layer.get('total_selected')}  "
+                    f"errors={layer.get('total_errors')}  "
+                    f"drafted={', '.join(drafted) if drafted else '—'}"
+                )
         elif name == "screen_lite":
             print(
                 f"  screen_lite: tickers={layer.get('ticker_count')}  "
