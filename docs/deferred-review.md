@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T19:23:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-18T07:40:37+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -87,6 +87,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N7 | **Level 2 / ADVFN order book** | Weak fit for weekly batch without licensed depth | Licensed L2 + trade-plan overlay needed |
 | N8 | **Resource/reserve miner metrics** | Sector-specific, hard data | Dedicated resources feed |
 | N9 | **Extra storage compression / same-day cron micro-tests** | Explicitly skipped after earlier storage/cron work | Local output/history/ pain returns |
+| N31 | **Backfill all buy-tier other-RNS filing bodies** | Most remaining indexed_without_body rows are category=other (PDMR, own shares, etc.). Technically fetchable via existing URLs but intentionally capped by max_bodies; full backfill is low value vs period/CH gaps. | Priority period gaps (annual/interim/trading_update/CH accounts) are closed on buy-tier and research quality still cites missing other-RNS text |
 
 ---
 
@@ -126,6 +127,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L26 | **Incorporate offline libraries into live/paper screen (stage 4)** | When a non-UK market library has PIT constituents, coverage, and data-quality floors comparable to FTSE 350, wire it into paper screening only — not before. | docs/data/library manifests show high coverage + freshness for a target market and FTSE richness goals are met |
 | L48 | **Improve Yahoo↔T212 mapping for weak catalogue markets** | After live catalogue fetch, hang_seng/sti show 0% catalogue hits and several EU/AU markets are well below 70% while allowlist still marks them tradable. Tighten ISIN/shortName mapping or trim via unavailable_watch. | Next t212-align after catalogue refresh, or when researching those markets for paper/live trading |
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
+| L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
 
 ### Research & portfolio product
 
