@@ -12,6 +12,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 
 logger = logging.getLogger(__name__)
@@ -247,6 +248,7 @@ def build_analysis_payload(
     exit_timing = _safe_read(paper_root / "learning_tracks_exit_timing.json")
     exit_timing_near_miss = _safe_read(data_dir / "exit_timing_near_miss_review.json")
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
+    knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
 
     model_weights = _safe_read(output_dir / "model_weights.json") or _safe_read(
         data_dir / "model_weights.json"
@@ -277,6 +279,7 @@ def build_analysis_payload(
         "exit_timing_cohorts": exit_timing,
         "exit_timing_near_miss": exit_timing_near_miss,
         "churn_health": churn_health,
+        "knob_calibration_priors": knob_calibration,
         "model_weights": {
             "sample_count": (model_weights or {}).get("sample_count"),
             "updated_at": (model_weights or {}).get("updated_at"),
@@ -489,7 +492,9 @@ Read the structured JSON at: {payload_path}
 
 It contains archived backtest/simulation/historical-analysis summaries, paper learning
 track reviews (AI judgment vs rules control vs momentum grace), exit-shadow rollups,
-churn_health (cost drag, trade churn, hold-buffer state), and adaptive model-weight state.
+churn_health (cost drag, trade churn, hold-buffer state), knob_calibration_priors
+(walk-forward ranked knob priors â€” observe-only, human gate before seeding config),
+and adaptive model-weight state.
 
 Write SIX plain-text sections with headings exactly as shown:
 
@@ -506,8 +511,9 @@ What archived signal backtest / historical analysis / offline sim tracks show â€
 horizons, excess returns, and run_count. If run_count < 2, say history is still seeding.
 
 PAPER TRACK COMPARISON
-Compare ai_judgment, rules, and momentum_grace using learning_tracks_review and
-exit_shadow when present. Note unrealized vs realized marks only if present in JSON.
+Compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
+knob_calibration_priors (recommended_prior per track, confidence, changed_vs_current),
+and exit_shadow when present. Note unrealized vs realized marks only if present in JSON.
 
 PROPOSED EXPERIMENTS
 Numbered top 5 experiments for the next sprint. Each line MUST use this format:

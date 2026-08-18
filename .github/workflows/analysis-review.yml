@@ -86,6 +86,13 @@ jobs:
             cp -f docs/data/history/models_* output/history/ 2>/dev/null || true
           fi
 
+      - name: Knob calibration priors (observe-only)
+        run: |
+          ftse-knob-calibrate run \
+            --paper-root docs/data/paper_automation \
+            --tracks rules,ai_judgment \
+            --write --allow-empty
+
       - name: Check analysis inputs
         id: ready
         run: |
@@ -122,4 +129,5 @@ jobs:
             docs/data/analysis_review.json
             docs/data/analysis_review.md
             docs/data/analysis_tasks.json
+            docs/data/paper_automation/knob_calibration_priors.json
           skip_fetch: false
