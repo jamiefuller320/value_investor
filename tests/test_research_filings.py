@@ -28,6 +28,7 @@ from value_investor.research.filings import (
     _sec_edgar_supplement_allowed,
     _uk_ticker_sec_dual_listed,
     _validate_ir_allowlist_body_content,
+    _validate_rns_filing_body_content,
     asx_markit_file_url,
     classify_companies_house_period,
     classify_filing_entity_type,
@@ -1003,6 +1004,181 @@ def test_refetch_investegate_fetches_direct_lse_pdf_url(tmp_path, monkeypatch):
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
     assert (filings_dir / "bodies" / "lse_pdf1.txt").exists()
+
+
+def test_validate_rns_filing_body_rejects_period_mismatch():
+    row = {
+        "headline": "ITV plc Full Year Results 2025",
+        "period": "annual",
+    }
+    interim_body = (
+        "ITV plc half year interim results for six months ended 30 June 2025. "
+        "Advertising revenue down 3% with interim dividend maintained." + ("x" * 220)
+    )
+    valid, reason = _validate_rns_filing_body_content(
+        row,
+        interim_body,
+        company_name="ITV plc",
+        ticker="ITV.L",
+    )
+    assert valid is False
+    assert reason == "period_mismatch"
+
+    annual_body = (
+        "ITV plc full year results for the year ended 31 December 2025. "
+        "Total revenue £3.5bn with final dividend of 5.0p per share." + ("x" * 220)
+    )
+    valid, reason = _validate_rns_filing_body_content(
+        row,
+        annual_body,
+        company_name="ITV plc",
+        ticker="ITV.L",
+    )
+    assert valid is True
+    assert reason is None
+
+
+def test_validate_rns_filing_body_rejects_misattributed_issuer():
+    row = {
+        "headline": "ME Group Full Year Results",
+        "period": "annual",
+    }
+    foreign_body = (
+        "Dollar General Corporation reports full year results with revenue growth "
+        "across rural America stores and strong cash generation." + ("x" * 220)
+    )
+    valid, reason = _validate_rns_filing_body_content(
+        row,
+        foreign_body,
+        company_name="ME Group International plc",
+        ticker="MEGP.L",
+    )
+    assert valid is False
+    assert reason == "issuer_mismatch"
+
+
+def test_refetch_investegate_rejects_misattributed_body(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "itv_fy",
+                "source": "investegate_resolved",
+                "headline": "ITV plc Full Year Results 2025",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1",
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    interim_body = (
+        "ITV plc half year interim results for six months ended 30 June 2025. "
+        "Advertising revenue down 3%." + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: interim_body,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    assert result["body_rejected"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is False
+    assert not (filings_dir / "bodies" / "itv_fy.txt").exists()
+
+
+def test_refetch_investegate_reclassifies_period_from_body(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "itv_q1",
+                "source": "investegate_resolved",
+                "headline": "ITV plc Q1 Trading Update",
+                "published_at": "2026-04-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/q1/1",
+                "period": "interim",
+                "has_body": False,
+                "body_path": None,
+                "priority": 80,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    trading_body = (
+        "ITV plc trading update for the three months to 31 March 2026. "
+        "Total advertising revenue up 2% with ITV Studios performing ahead of plan." + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: trading_body,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["period"] == "trading_update"
+    assert saved["filings"][0]["has_body"] is True
+
+
+def test_compose_filing_body_includes_principal_risks_section():
+    lead = "Annual report narrative " + ("overview " * 5000)
+    risks = (
+        "\n\nPRINCIPAL RISKS AND UNCERTAINTIES\n"
+        "Legal and regulatory risk: pricing pressure in US generics may intensify. "
+        "Product pipeline risk: launch delays could affect revenue guidance." + (" detail " * 800)
+    )
+    composed = _compose_filing_body_with_depth_sections(lead + risks)
+    assert composed is not None
+    assert "PRINCIPAL RISKS AND UNCERTAINTIES" in composed
+    assert "Legal and regulatory risk" in composed
+
+
+def test_period_body_coverage_excludes_s838_holding():
+    filings = [
+        {
+            "headline": "Companies House interim accounts",
+            "period": "interim",
+            "entity_type": "s838_holding",
+            "has_body": True,
+        },
+        {
+            "headline": "ME Group Interim Results",
+            "period": "interim",
+            "entity_type": "consolidated",
+            "has_body": False,
+        },
+    ]
+    coverage = period_body_coverage(filings)
+    assert coverage["interim"] == {"total": 1, "with_body": 0}
 
 
 def test_refetch_indexed_without_body_filing_bodies_orchestrates(tmp_path, monkeypatch):

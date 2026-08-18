@@ -291,6 +291,10 @@ def _score_ch_body_text(text: str) -> int:
         score += 500
     if "borrowings" in lower and any(token in lower for token in ("covenant", "facility", "note")):
         score += 600
+    if "principal risk" in lower:
+        score += 500
+    if "defined benefit" in lower or "pension scheme" in lower:
+        score += 400
     return score
 
 
@@ -1054,6 +1058,10 @@ _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bGEOGRAPHIC(?:AL)? (?:INFORMATION|SEGMENTS?|ANALYSIS)\b", 3),
     (r"\bANALYSIS BY SEGMENT\b", 3),
     (r"\bOPERATING SEGMENTS?\b", 3),
+    (r"\bPRINCIPAL RISKS?(?: AND UNCERTAINTIES)?\b", 2),
+    (r"\bVIABILITY STATEMENT\b", 2),
+    (r"\b(?:LEGAL|REGULATORY)[-/ ]RISKS?\b", 2),
+    (r"\bRISK MANAGEMENT\b", 3),
 )
 
 
@@ -2603,6 +2611,11 @@ _IR_WRONG_PERIOD_MARKERS: dict[str, tuple[str, ...]] = {
     "annual": (
         r"\btrading update\b",
         r"\btrading statement\b",
+        r"\bhalf[- ]year results\b",
+        r"\binterim results\b",
+        r"\bh1 results\b",
+        r"\bsix months ended\b",
+        r"\binterim report\b",
     ),
 }
 
@@ -2623,6 +2636,69 @@ def _ir_body_title_tokens_match(row: dict[str, Any], body: str) -> bool:
     return any(tok in sample for tok in meaningful)
 
 
+def _validate_filing_body_period_content(row: dict[str, Any], body: str) -> tuple[bool, str | None]:
+    """Reject bodies whose period cues clearly mismatch the indexed row tag."""
+    expected = str(row.get("period") or "other")
+    if expected not in ("annual", "interim", "trading_update"):
+        return True, None
+    sample = (body or "")[:4000].lower()
+    wrong_markers = _IR_WRONG_PERIOD_MARKERS.get(expected, ())
+    if wrong_markers and any(re.search(pat, sample) for pat in wrong_markers):
+        expected_cues = _IR_PERIOD_HEADLINE_CUES.get(expected, ())
+        if not any(cue in sample for cue in expected_cues):
+            return False, "period_mismatch"
+    return True, None
+
+
+def _validate_rns_filing_body_content(
+    row: dict[str, Any],
+    body: str,
+    *,
+    company_name: str,
+    ticker: str,
+) -> tuple[bool, str | None]:
+    """
+    Period/headline/issuer gate before marking UK RNS rows ``has_body``.
+
+    Used by Investegate/LSE and ticker_rns_api refetch passes to reject
+    misattributed or period-mismatched PDF/HTML extracts.
+    """
+    if not body or len(body) < IR_BODY_MIN_CHARS:
+        return False, "too_short"
+    valid, reason = _validate_filing_body_period_content(row, body)
+    if not valid:
+        return False, reason
+    if _body_clearly_misattributed(body[:4000], company_name, ticker):
+        return False, "issuer_mismatch"
+    return True, None
+
+
+def _try_persist_rns_filing_body(
+    item: dict[str, Any],
+    body: str,
+    *,
+    company_name: str,
+    ticker: str,
+    bodies_dir: Path,
+) -> tuple[dict[str, Any], str | None]:
+    """Validate, reclassify ``period``, and persist an RNS body when the gate passes."""
+    valid, reason = _validate_rns_filing_body_content(
+        item,
+        body,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    if not valid:
+        return item, reason
+    updated = _apply_headline_period(item, body_snippet=body[:4000])
+    filename = f"{updated['id']}.txt"
+    path = bodies_dir / filename
+    path.write_text(body, encoding="utf-8")
+    updated["has_body"] = True
+    updated["body_path"] = str(path)
+    return updated, None
+
+
 def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple[bool, str | None]:
     """
     Title/period/hash gate before marking IR allowlist rows ``has_body``.
@@ -2632,14 +2708,9 @@ def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple
     if not _filing_text_is_substantive(body, min_chars=IR_BODY_MIN_CHARS):
         return False, "too_short"
 
-    expected = str(row.get("period") or "other")
-    sample = (body or "")[:4000].lower()
-
-    wrong_markers = _IR_WRONG_PERIOD_MARKERS.get(expected, ())
-    if wrong_markers and any(re.search(pat, sample) for pat in wrong_markers):
-        expected_cues = _IR_PERIOD_HEADLINE_CUES.get(expected, ())
-        if not any(cue in sample for cue in expected_cues):
-            return False, "period_mismatch"
+    valid, reason = _validate_filing_body_period_content(row, body)
+    if not valid:
+        return False, reason
 
     if not _ir_body_title_tokens_match(row, body):
         return False, "title_mismatch"
@@ -3831,6 +3902,7 @@ def refetch_investegate_filing_bodies(
 
     bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
+    body_rejected = 0
     updated: list[dict[str, Any]] = []
     missing_ids = {row.get("id") for row in missing}
     for row in enriched:
@@ -3843,12 +3915,17 @@ def refetch_investegate_filing_bodies(
         ):
             body = fetch_filing_body(str(item["url"]))
             if body:
-                filename = f"{item['id']}.txt"
-                path = bodies_dir / filename
-                path.write_text(body, encoding="utf-8")
-                item["has_body"] = True
-                item["body_path"] = str(path)
-                downloaded += 1
+                item, reject_reason = _try_persist_rns_filing_body(
+                    item,
+                    body,
+                    company_name=company_name,
+                    ticker=ticker,
+                    bodies_dir=bodies_dir,
+                )
+                if reject_reason:
+                    body_rejected += 1
+                elif item.get("has_body"):
+                    downloaded += 1
         updated.append(item)
 
     after = sum(1 for row in updated if row.get("has_body"))
@@ -3863,6 +3940,7 @@ def refetch_investegate_filing_bodies(
         "with_body_after": after,
         "google_news_rejected": google_news_rejected,
         "misattributed_pruned": misattributed_pruned,
+        "body_rejected": body_rejected,
         "note": "refetch_investegate_filing_bodies",
     }
 
@@ -4146,6 +4224,7 @@ def refetch_ticker_rns_api_filing_bodies(
 
     bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
+    body_rejected = 0
     missing_ids = {row.get("id") for row in missing}
     updated: list[dict[str, Any]] = []
     for row in filtered:
@@ -4158,12 +4237,17 @@ def refetch_ticker_rns_api_filing_bodies(
         ):
             body = fetch_filing_body(str(item["url"]))
             if body:
-                filename = f"{item['id']}.txt"
-                path = bodies_dir / filename
-                path.write_text(body, encoding="utf-8")
-                item["has_body"] = True
-                item["body_path"] = str(path)
-                downloaded += 1
+                item, reject_reason = _try_persist_rns_filing_body(
+                    item,
+                    body,
+                    company_name=company_name,
+                    ticker=ticker,
+                    bodies_dir=bodies_dir,
+                )
+                if reject_reason:
+                    body_rejected += 1
+                elif item.get("has_body"):
+                    downloaded += 1
         updated.append(item)
 
     after = sum(1 for row in updated if row.get("has_body"))
@@ -4177,6 +4261,7 @@ def refetch_ticker_rns_api_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "pruned": pruned,
+        "body_rejected": body_rejected,
         "note": "refetch_ticker_rns_api_filing_bodies",
     }
 
@@ -4248,11 +4333,19 @@ def refetch_missing_filing_bodies(
     }
 
 
+def _row_counts_toward_period_coverage(row: dict[str, Any]) -> bool:
+    """Parent-only s.838 stubs must not satisfy interim/annual body-gap scoring."""
+    entity = str(row.get("entity_type") or "other")
+    return entity not in ("s838_holding", "holding_disclosure")
+
+
 def period_body_coverage(filings: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
     """Count indexed filings and downloaded bodies per ``period`` tag."""
     periods = ("annual", "interim", "trading_update", "other")
     coverage = {period: {"total": 0, "with_body": 0} for period in periods}
     for row in filings:
+        if not _row_counts_toward_period_coverage(row):
+            continue
         period = str(row.get("period") or "other")
         if period not in coverage:
             period = "other"
