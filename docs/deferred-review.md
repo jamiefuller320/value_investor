@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-17T19:23:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-18T07:18:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -87,6 +87,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N7 | **Level 2 / ADVFN order book** | Weak fit for weekly batch without licensed depth | Licensed L2 + trade-plan overlay needed |
 | N8 | **Resource/reserve miner metrics** | Sector-specific, hard data | Dedicated resources feed |
 | N9 | **Extra storage compression / same-day cron micro-tests** | Explicitly skipped after earlier storage/cron work | Local output/history/ pain returns |
+| N31 | **Backfill all buy-tier other-RNS filing bodies** | Most remaining indexed_without_body rows are category=other (PDMR, own shares, etc.). Technically fetchable via existing URLs but intentionally capped by max_bodies; full backfill is low value vs period/CH gaps. | Priority period gaps (annual/interim/trading_update/CH accounts) are closed on buy-tier and research quality still cites missing other-RNS text |
 
 ---
 
