@@ -109,7 +109,7 @@ def test_calibrate_track_ranks_candidates(tmp_path: Path):
         ),
         encoding="utf-8",
     )
-    for index, day in enumerate((1, 3, 5, 7, 9, 11)):
+    for _index, day in enumerate((1, 3, 5, 7, 9, 11)):
         append_rebalance_log(
             track,
             _calibration_log_entry(
