@@ -23,6 +23,7 @@ from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
     extract_cashflow_metrics_from_annual_financials,
+    fcf_filing_screen_mismatch,
     fcf_within_company_tolerance,
     fcf_yield_pass_suppressed,
     parse_adjusted_eps_growth_pct,
@@ -587,6 +588,63 @@ def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Pat
     assert hik["free_cashflow_screen_ttm"] == -66_125_000.0
     assert hik["free_cashflow"] == 119_000_000.0
     assert other["free_cashflow"] == 10_000_000.0
+
+
+def test_enrich_universe_keeps_screen_ttm_when_filing_within_25_pct(tmp_path: Path):
+    sources = tmp_path / "research" / "CLOSE.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "CLOSE.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 200_000_000.0,
+                "Capital Expenditure": -100_000_000.0,
+                "Free Cash Flow": 100_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame(
+        [{"ticker": "CLOSE.L", "name": "Close Match plc", "free_cashflow": 92_000_000.0}]
+    )
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["free_cashflow_screen_ttm"] == 92_000_000.0
+    assert row["free_cashflow"] == 92_000_000.0
+
+
+def test_enrich_universe_uses_filing_when_gap_exceeds_25_pct_without_divergence_flag(
+    tmp_path: Path,
+):
+    sources = tmp_path / "research" / "GAP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "GAP.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 200_000_000.0,
+                "Capital Expenditure": -100_000_000.0,
+                "Free Cash Flow": 100_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame(
+        [{"ticker": "GAP.L", "name": "Gap Match plc", "free_cashflow": 70_000_000.0}]
+    )
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=70_000_000.0,
+        divergence_flagged=False,
+    )
+    assert row["free_cashflow_screen_ttm"] == 70_000_000.0
+    assert row["free_cashflow"] == 100_000_000.0
 
 
 def test_enrich_universe_with_filing_metrics_fills_ocf_and_adjusted_earnings(tmp_path: Path):
