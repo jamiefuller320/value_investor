@@ -73,9 +73,12 @@ def test_build_payload_includes_buffered_hold_counterfactual(tmp_path: Path):
         encoding="utf-8",
     )
     payload = build_paper_learning_payload(data_dir=data_dir, output_dir=tmp_path / "output")
-    assert payload["buffered_hold_counterfactual"]["tracks"]["ai_judgment"]["comparison"][
-        "trade_count_delta_lower_minus_higher"
-    ] == 2
+    assert (
+        payload["buffered_hold_counterfactual"]["tracks"]["ai_judgment"]["comparison"][
+            "trade_count_delta_lower_minus_higher"
+        ]
+        == 2
+    )
 
 
 def test_compile_paper_learning_tasks_filters_areas(tmp_path: Path):
