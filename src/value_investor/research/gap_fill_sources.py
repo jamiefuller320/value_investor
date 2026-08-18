@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.research.filings import (
+    extract_ir_presentation_metrics,
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
     period_body_coverage,
@@ -21,7 +22,12 @@ from value_investor.research.ingest import (
     fetch_google_news_rss_query,
     merge_news_articles,
 )
-from value_investor.storage import read_json, resolve_json_path, write_json
+from value_investor.storage import (
+    COMMITTED_HISTORY_DIR,
+    read_json,
+    resolve_json_path,
+    write_json,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +39,8 @@ EVIDENCE_LADDER = (
     "news_manifest",
     "alternate_news",
     "screening_snapshot",
+    "screen_run_manifest",
+    "ir_presentation_metrics",
     "macro_context",
 )
 
@@ -208,6 +216,10 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         "news_manifest": news_count > 0,
         "screening_snapshot": resolve_json_path(sources_dir / "screening_snapshot.json")
         is not None,
+        "screen_run_manifest": resolve_json_path(sources_dir / "screen_run_manifest.json")
+        is not None,
+        "ir_presentation_metrics": resolve_json_path(sources_dir / "ir_presentation_metrics.json")
+        is not None,
         "macro_context": resolve_json_path(sources_dir / "macro_context.json") is not None,
         "alternate_news": resolve_json_path(sources_dir / "alternate_news.json") is not None,
     }
@@ -300,6 +312,115 @@ def fetch_alternate_gap_fill_news(
     return merge_news_articles(base, themed)
 
 
+DEFAULT_LATEST_SCREEN_PATH = Path("docs/data/latest.json")
+
+
+def _latest_history_run_paths(history_dir: Path) -> tuple[Path, Path] | None:
+    """Return paired (run_path, models_path) for the newest committed snapshot."""
+    history_dir = Path(history_dir)
+    if not history_dir.is_dir():
+        return None
+    run_paths = sorted(
+        {
+            *history_dir.glob("run_*.json.gz"),
+            *history_dir.glob("run_*.json"),
+        }
+    )
+    if not run_paths:
+        return None
+    run_path = run_paths[-1]
+    if run_path.suffix == ".json" and run_path.with_suffix(".json.gz").exists():
+        run_path = run_path.with_suffix(".json.gz")
+    stamp = run_path.name.removeprefix("run_")
+    models_gz = history_dir / f"models_{stamp}"
+    models_plain = history_dir / f"models_{stamp.removesuffix('.gz')}"
+    if models_gz.is_file():
+        return run_path, models_gz
+    if models_plain.is_file():
+        return run_path, models_plain
+    return None
+
+
+def attach_screen_run_manifest(
+    sources_dir: Path,
+    ticker: str,
+    *,
+    market: str | None = None,
+    history_dir: Path | None = None,
+    latest_path: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Attach the latest FTSE350 screen run manifest slice for ``ticker``.
+
+    Writes ``screen_run_manifest.json`` with universe-level signal counts and
+    per-ticker signal/model rows from ``docs/data/history/run_*.json.gz`` and
+    paired ``models_*.json.gz`` snapshots.
+    """
+    sources_dir = Path(sources_dir)
+    bucket = _market_bucket(market, ticker)
+    mid = (market or "").lower()
+    if bucket != "uk" and not mid.startswith("ftse"):
+        return {"attached": False, "reason": "not_ftse350"}
+
+    paired = _latest_history_run_paths(history_dir or COMMITTED_HISTORY_DIR)
+    if paired is None:
+        return {"attached": False, "reason": "no_history_snapshots"}
+    run_path, models_path = paired
+
+    try:
+        run_payload = read_json(run_path)
+        models_payload = read_json(models_path)
+    except (OSError, ValueError, TypeError) as exc:
+        return {"attached": False, "reason": f"unreadable_snapshot: {exc}"}
+
+    run_at = str(run_payload.get("run_at") or "")
+    signals = list(run_payload.get("signals") or [])
+    ticker_signal = next((row for row in signals if row.get("ticker") == ticker), None)
+    ticker_models = [
+        row for row in (models_payload.get("models") or []) if row.get("ticker") == ticker
+    ]
+
+    universe_meta: dict[str, Any] = {}
+    latest_file = latest_path or DEFAULT_LATEST_SCREEN_PATH
+    resolved_latest = resolve_json_path(latest_file)
+    if resolved_latest is not None:
+        try:
+            latest_payload = read_json(resolved_latest)
+            if str(latest_payload.get("run_at") or "") == run_at:
+                universe_meta = dict(latest_payload.get("meta") or {})
+        except (OSError, ValueError, TypeError):
+            universe_meta = {}
+
+    if not universe_meta and signals:
+        counts: dict[str, int] = {}
+        for row in signals:
+            label = str(row.get("adjusted_signal") or row.get("signal") or "unknown")
+            counts[label] = counts.get(label, 0) + 1
+        universe_meta = {
+            "company_count": len(signals),
+            "signal_counts": counts,
+            "universe": "ftse350",
+        }
+
+    manifest = {
+        "ticker": ticker,
+        "run_at": run_at,
+        "attached_at": datetime.now(UTC).isoformat(),
+        "history_run_path": str(run_path),
+        "history_models_path": str(models_path),
+        "universe_meta": universe_meta,
+        "ticker_signal": ticker_signal,
+        "ticker_models": ticker_models,
+        "models_passed": sum(1 for row in ticker_models if row.get("passed")),
+        "models_total": len(ticker_models),
+    }
+    manifest_path = sources_dir / "screen_run_manifest.json"
+    write_json(manifest_path, manifest, compact=False, compress=False)
+    manifest["attached"] = True
+    manifest["manifest_path"] = str(manifest_path)
+    return manifest
+
+
 def prepare_gap_fill_source_pack(
     *,
     ticker: str,
@@ -346,6 +467,17 @@ def prepare_gap_fill_source_pack(
         ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
         if int(ir_refetch.get("fetched") or 0) > 0:
             body_refetch = ir_refetch
+
+    screen_run_manifest = attach_screen_run_manifest(
+        sources_dir,
+        ticker,
+        market=market,
+    )
+    ir_presentation_metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        ticker,
+        sources_dir=sources_dir,
+    )
 
     alternate_articles = fetch_alternate_gap_fill_news(company_name, ticker, market=market)
     alternate_path = sources_dir / "alternate_news.json"
@@ -411,6 +543,11 @@ def prepare_gap_fill_source_pack(
         "investegate_refetch": investegate_refetch,
         "ticker_rns_refetch": ticker_rns_refetch,
         "ir_refetch": ir_refetch,
+        "screen_run_manifest": screen_run_manifest,
+        "ir_presentation_metrics": {
+            "bridge_count": ir_presentation_metrics.get("bridge_count", 0),
+            "path": str(sources_dir / "ir_presentation_metrics.json"),
+        },
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
         "planned_alternate_sources": planned,
@@ -418,6 +555,8 @@ def prepare_gap_fill_source_pack(
         "instructions": (
             "Walk evidence_ladder in order. Cite what was tried. "
             "Prefer filings/bodies/*.txt when present. "
+            "Use screen_run_manifest.json for universe-level signal counts and "
+            "ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines. "
             "If still unresolved, pick from planned_alternate_sources and emit "
             "RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
         ),

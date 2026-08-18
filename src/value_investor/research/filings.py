@@ -3039,6 +3039,248 @@ def refetch_ir_allowlist_filing_bodies(
     }
 
 
+_BRIDGE_HEADER_RE = re.compile(
+    r"\b("
+    r"net\s+cash\s+bridge|free\s+cash\s+flow\s+bridge|cash\s+flow\s+bridge|"
+    r"adjusted\s+free\s+cash\s+flow"
+    r")\b",
+    re.IGNORECASE,
+)
+_CURRENCY_MILLIONS_RE = re.compile(r"£\s*(\d+(?:\.\d+)?)\s*m", re.IGNORECASE)
+_SCRAMBLED_AMOUNT_RE = re.compile(r"\((\d+(?:\.\d+)?)\)|(?<![(\d.])(\d+(?:\.\d+)?)(?!\d)")
+_MIDDLE_BRIDGE_LABELS = (
+    "operating_cash_flow",
+    "acquisitions",
+    "sales_of_assets",
+    "capex_infrastructure",
+    "released_from_restricted_deposits",
+    "tax",
+    "dividends_paid",
+    "interest_finance_lease",
+)
+
+
+def _parse_bridge_amount_millions(raw: str, *, negative: bool = False) -> float:
+    value = float(raw)
+    return -value if negative else value
+
+
+def _currency_amounts_millions(section: str) -> list[float]:
+    return [
+        _parse_bridge_amount_millions(match.group(1))
+        for match in _CURRENCY_MILLIONS_RE.finditer(section)
+    ]
+
+
+def _extract_bridge_section(text: str) -> tuple[str, str] | None:
+    """Return (bridge_type, section_text) when a cash-bridge slide block is found."""
+    match = _BRIDGE_HEADER_RE.search(text)
+    if not match:
+        return None
+    start = match.start()
+    tail = text[start : start + 3500]
+    # Stop at the next major narrative section after label/amount cluster.
+    stop = re.search(
+        r"\n(?:Continental Europe|North America|United Kingdom|Group overview|"
+        r"Appendix|Notes to|ME Group International plc\d+\n£\d)",
+        tail,
+        re.IGNORECASE,
+    )
+    section = tail[: stop.start()] if stop else tail
+    bridge_type = re.sub(r"\s+", "_", match.group(1).strip().lower())
+    return bridge_type, section
+
+
+def _middle_bridge_amounts(section: str) -> list[float]:
+    closing_idx = re.search(r"closing\s+net\s+cash", section, re.IGNORECASE)
+    if not closing_idx:
+        return []
+    amount_blob = section[closing_idx.end() :]
+    # Drop explicit opening/closing currency markers; keep the scrambled numeric cluster.
+    amount_blob = _CURRENCY_MILLIONS_RE.sub(" ", amount_blob)
+    amounts: list[float] = []
+    for match in _SCRAMBLED_AMOUNT_RE.finditer(amount_blob):
+        raw = match.group(1) or match.group(2)
+        negative = bool(match.group(1))
+        try:
+            value = _parse_bridge_amount_millions(raw, negative=negative)
+        except ValueError:
+            continue
+        # Skip chart-axis ticks, footnote markers, and calendar years from slide headers.
+        if abs(value) >= 1900 or abs(value) > 200:
+            continue
+        if value in {28.0, 29.0, 30.0, 31.0} and value == int(value):
+            continue
+        if abs(value) < 2 and value not in {1.0, -1.6}:
+            continue
+        amounts.append(value)
+    return amounts
+
+
+def _map_middle_bridge_lines(amounts: list[float]) -> list[dict[str, Any]]:
+    """Heuristically map scrambled slide amounts onto bridge line labels."""
+    if not amounts:
+        return []
+
+    remaining = list(amounts)
+    lines: list[dict[str, Any]] = []
+
+    def _take(label: str, predicate, *, pick: str = "first") -> None:
+        nonlocal remaining
+        matches = [(idx, amount) for idx, amount in enumerate(remaining) if predicate(amount)]
+        if not matches:
+            return
+        if pick == "min":
+            idx, amount = min(matches, key=lambda row: row[1])
+        elif pick == "max":
+            idx, amount = max(matches, key=lambda row: row[1])
+        else:
+            idx, amount = matches[0]
+        lines.append({"label": label, "amount_millions": amount})
+        remaining.pop(idx)
+
+    _take("operating_cash_flow", lambda value: 50 < value <= 200)
+    _take("capex_infrastructure", lambda value: value <= -50)
+    _take("dividends_paid", lambda value: -40 <= value <= -20, pick="min")
+    _take("acquisitions", lambda value: -25 <= value <= -15)
+    _take("interest_finance_lease", lambda value: -15 <= value <= -5)
+    _take("sales_of_assets", lambda value: 0 < value <= 10)
+    _take("released_from_restricted_deposits", lambda value: value == 1.0)
+    _take("tax", lambda value: -5 <= value <= -1)
+
+    label_cycle = [
+        label for label in _MIDDLE_BRIDGE_LABELS if label not in {row["label"] for row in lines}
+    ]
+    for amount, label in zip(remaining, label_cycle, strict=False):
+        lines.append({"label": label, "amount_millions": amount})
+    return lines
+
+
+def parse_ir_cash_bridge_slides(body_text: str) -> dict[str, Any] | None:
+    """
+    Parse IR presentation cash-bridge slides into structured bridge metrics.
+
+    Handles PDF extraction noise where labels and amounts are interleaved
+    (e.g. ME Group ``Net cash bridge`` deck).
+    """
+    if not body_text or not body_text.strip():
+        return None
+    extracted = _extract_bridge_section(body_text)
+    if extracted is None:
+        return None
+    bridge_type, section = extracted
+    currency_amounts = _currency_amounts_millions(section)
+    opening = currency_amounts[0] if currency_amounts else None
+    closing = currency_amounts[1] if len(currency_amounts) >= 2 else None
+    middle_amounts = _middle_bridge_amounts(section)
+    lines: list[dict[str, Any]] = []
+    if opening is not None:
+        lines.append({"label": "opening_net_cash", "amount_millions": opening})
+    lines.extend(_map_middle_bridge_lines(middle_amounts))
+    if closing is not None:
+        lines.append({"label": "closing_net_cash", "amount_millions": closing})
+    if len(lines) < 2:
+        return None
+
+    by_label = {row["label"]: row["amount_millions"] for row in lines}
+    derived: dict[str, Any] = {}
+    operating = by_label.get("operating_cash_flow")
+    capex = by_label.get("capex_infrastructure")
+    if operating is not None and capex is not None:
+        derived["operating_minus_capex_millions"] = operating + capex
+    dividends = by_label.get("dividends_paid")
+    if operating is not None and capex is not None and dividends is not None:
+        derived["fcf_minus_dividends_millions"] = operating + capex + dividends
+
+    confidence = "high" if opening is not None and closing is not None else "medium"
+    return {
+        "bridge_type": bridge_type,
+        "currency": "GBP",
+        "lines": lines,
+        "derived": derived,
+        "parse_confidence": confidence,
+    }
+
+
+def extract_ir_presentation_metrics(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    sources_dir: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Scan IR allowlist filing bodies and extract cash-bridge metrics when present.
+
+    Writes ``ir_presentation_metrics.json`` under ``sources_dir`` when provided.
+    """
+    from value_investor.storage import write_json
+
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    payload: dict[str, Any] = {
+        "ticker": ticker,
+        "extracted_at": datetime.now(UTC).isoformat(),
+        "bridges": [],
+    }
+    if not index_path.exists():
+        payload["note"] = "no filings_index.json"
+        if sources_dir is not None:
+            write_json(
+                Path(sources_dir) / "ir_presentation_metrics.json",
+                payload,
+                compact=False,
+                compress=False,
+            )
+        return payload
+
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        payload["note"] = f"unreadable index: {exc}"
+        if sources_dir is not None:
+            write_json(
+                Path(sources_dir) / "ir_presentation_metrics.json",
+                payload,
+                compact=False,
+                compress=False,
+            )
+        return payload
+
+    bodies_dir = filings_dir / "bodies"
+    for row in index.get("filings") or []:
+        if not _is_ir_allowlist_row(row) or not row.get("has_body"):
+            continue
+        body_path = row.get("body_path")
+        path = Path(str(body_path)) if body_path else bodies_dir / f"{row['id']}.txt"
+        if not path.is_file():
+            continue
+        try:
+            body_text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        parsed = parse_ir_cash_bridge_slides(body_text)
+        if not parsed:
+            continue
+        payload["bridges"].append(
+            {
+                "source_body_id": row.get("id"),
+                "headline": row.get("headline"),
+                "period": row.get("period"),
+                **parsed,
+            }
+        )
+
+    payload["bridge_count"] = len(payload["bridges"])
+    if sources_dir is not None:
+        write_json(
+            Path(sources_dir) / "ir_presentation_metrics.json",
+            payload,
+            compact=False,
+            compress=False,
+        )
+    return payload
+
+
 def merge_filings(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Merge filing rows, preferring entries with bodies and higher priority."""
     merged: dict[str, dict[str, Any]] = {}
