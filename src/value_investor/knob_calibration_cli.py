@@ -97,10 +97,7 @@ def _cmd_status(args: argparse.Namespace) -> int:
     if payload.get("scope") == "knob_calibration_multi":
         for track_id, row in (payload.get("tracks") or {}).items():
             prior = row.get("recommended_prior") or {}
-            print(
-                f"  [{track_id}] confidence={prior.get('confidence')} "
-                f"knobs={prior.get('knobs')}"
-            )
+            print(f"  [{track_id}] confidence={prior.get('confidence')} knobs={prior.get('knobs')}")
     else:
         prior = payload.get("recommended_prior") or {}
         print(f"  Track: {payload.get('track_id')}")

@@ -111,7 +111,13 @@ def grid_axes_from_cli(
 ) -> tuple[KnobGridAxis, ...]:
     if not any(
         value is not None
-        for value in (max_positions, min_conviction, sector_cap, skip_timing_wait, exit_confirm_screens)
+        for value in (
+            max_positions,
+            min_conviction,
+            sector_cap,
+            skip_timing_wait,
+            exit_confirm_screens,
+        )
     ):
         return default_grid_axes(include_churn_knobs=include_churn_knobs)
 
@@ -140,9 +146,7 @@ def grid_axes_from_cli(
         axes.append(KnobGridAxis("skip_timing_wait", (True,)))
     if include_churn_knobs or exit_confirm_screens:
         values = (
-            parse_grid_values(exit_confirm_screens, kind="int")
-            if exit_confirm_screens
-            else (1, 2)
+            parse_grid_values(exit_confirm_screens, kind="int") if exit_confirm_screens else (1, 2)
         )
         axes.append(KnobGridAxis("exit_confirm_screens", values))
     return tuple(axes)
@@ -455,9 +459,7 @@ def calibrate_track(
         use_adjusted_signal=use_adjusted_signal,
         require_research_accumulate=require_research_accumulate,
     )
-    current_score = (
-        float(current_walk_forward["composite_score"]) if current_walk_forward else None
-    )
+    current_score = float(current_walk_forward["composite_score"]) if current_walk_forward else None
 
     top = scored[0] if scored else None
     confidence = _prior_confidence(
