@@ -380,3 +380,84 @@ def test_prepare_gap_fill_calls_ir_refetch_for_itv_l(
     mock_ir_refetch.assert_called_once()
     assert pack["ir_refetch"]["fetched"] == 1
     assert pack["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_attaches_screen_run_manifest(
+    mock_refetch,
+    mock_primary_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+    monkeypatch,
+):
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+    from value_investor.storage import write_json
+
+    history_dir = tmp_path / "history"
+    history_dir.mkdir()
+    monkeypatch.setattr(
+        "value_investor.research.gap_fill_sources.COMMITTED_HISTORY_DIR",
+        history_dir,
+    )
+    run_at = "2026-08-16T06:19:37.808906+00:00"
+    write_json(
+        history_dir / "run_20260816_061937.json.gz",
+        {
+            "run_at": run_at,
+            "prices": {"MEGP.L": 100.0},
+            "signals": [
+                {
+                    "ticker": "MEGP.L",
+                    "signal": "strong_buy",
+                    "adjusted_signal": "buy",
+                    "models_passed": 15.0,
+                }
+            ],
+        },
+        compress=True,
+    )
+    write_json(
+        history_dir / "models_20260816_061937.json.gz",
+        {
+            "run_at": run_at,
+            "models": [
+                {"ticker": "MEGP.L", "model_id": "graham", "passed": True, "score": 0.8},
+            ],
+        },
+        compress=True,
+    )
+
+    filings_dir = tmp_path / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_primary_refetch.return_value = {
+        "fetched": 0,
+        "companies_house": {},
+        "rns": {"investegate": {}, "ticker_rns": {}},
+    }
+    mock_ir_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        sources_dir=tmp_path / "sources",
+        open_questions=["fcf bridge"],
+        market="ftse350",
+    )
+
+    manifest_path = tmp_path / "sources" / "screen_run_manifest.json"
+    assert manifest_path.exists()
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["ticker_signal"]["signal"] == "strong_buy"
+    assert manifest["models_passed"] == 1
+    assert pack["screen_run_manifest"]["attached"] is True

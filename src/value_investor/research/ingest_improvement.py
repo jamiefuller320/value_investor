@@ -28,6 +28,7 @@ from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.gap_fill_sources import (
     ALTERNATE_SOURCE_CATALOG,
     _market_bucket,
+    attach_screen_run_manifest,
     deepen_thin_filings_if_needed,
     execute_planned_alternate_sources,
     inspect_local_sources,
@@ -666,6 +667,7 @@ def run_ingest_improvement_pass(
                 filings_with_body=before,
             )
             ir_refetch: dict[str, Any] = {}
+            ir_presentation_metrics: dict[str, Any] = {}
             ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
             if ir_allowlist_rows:
                 ir_refetch = refetch_ir_allowlist_filing_bodies(
@@ -676,6 +678,13 @@ def run_ingest_improvement_pass(
                 )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
+                from value_investor.research.filings import extract_ir_presentation_metrics
+
+                ir_presentation_metrics = extract_ir_presentation_metrics(
+                    sources_dir / "filings",
+                    target.ticker,
+                    sources_dir=sources_dir,
+                )
                 if int(ir_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(
@@ -683,6 +692,11 @@ def run_ingest_improvement_pass(
                         or inventory.get("filings_indexed_bodies")
                         or before
                     )
+            screen_run_manifest = attach_screen_run_manifest(
+                sources_dir,
+                target.ticker,
+                market=market,
+            )
             mapped_source_ids = sorted(
                 {
                     source_id
@@ -739,6 +753,8 @@ def run_ingest_improvement_pass(
                     "indexed_refetch": indexed_refetch,
                     "residual_refetch": residual_refetch,
                     "ir_refetch": ir_refetch,
+                    "ir_presentation_metrics": ir_presentation_metrics,
+                    "screen_run_manifest": screen_run_manifest,
                     "alternate_sources": alternate,
                     "deepen": deepen,
                 }

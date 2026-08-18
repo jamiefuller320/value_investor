@@ -3762,3 +3762,66 @@ def test_fetch_filings_ir_allowlist_megp_l(tmp_path: Path):
     assert len(rows) >= 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert all("me-group.com" in row["url"] for row in rows)
+
+
+def test_parse_ir_cash_bridge_slides_megp_fixture():
+    from value_investor.research.filings import parse_ir_cash_bridge_slides
+
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_59ec4565fa7e453b.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP IR body fixture not present")
+    parsed = parse_ir_cash_bridge_slides(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["bridge_type"] == "net_cash_bridge"
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["opening_net_cash"] == 29.5
+    assert by_label["closing_net_cash"] == 26.5
+    assert by_label["operating_cash_flow"] == 115.5
+    assert by_label["capex_infrastructure"] == -65.6
+    assert by_label["dividends_paid"] == -29.8
+
+
+def test_extract_ir_presentation_metrics_from_ir_body(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_id = "ir_59ec4565fa7e453b"
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_59ec4565fa7e453b.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP IR body fixture not present")
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "MEGP FY2025 results presentation",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "MEGP.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["bridge_count"] == 1
+    assert (sources_dir / "ir_presentation_metrics.json").exists()
+    bridge = metrics["bridges"][0]
+    assert bridge["source_body_id"] == body_id
+    labels = {row["label"] for row in bridge["lines"]}
+    assert "operating_cash_flow" in labels
+    assert "dividends_paid" in labels
