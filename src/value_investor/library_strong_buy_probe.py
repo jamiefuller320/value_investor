@@ -320,7 +320,11 @@ def run_strong_buy_metrics_probe(
             root=root, policy_path=policy_path, market_id=market_id
         )
         draft: dict[str, Any] = {"drafted_count": 0}
-        if errors > 0 or health.get("latent_failure") or int(health.get("failed_fetch_count") or 0) > 0:
+        if (
+            errors > 0
+            or health.get("latent_failure")
+            or int(health.get("failed_fetch_count") or 0) > 0
+        ):
             # Only draft one coverage task per ladder run.
             if not drafted_ids:
                 draft = draft_coverage_from_probe_market(

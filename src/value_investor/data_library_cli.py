@@ -1043,9 +1043,7 @@ def cmd_ladder(args: argparse.Namespace) -> int:
             )
         elif name == "strong_buy_metrics_probe":
             if layer.get("skipped"):
-                print(
-                    f"  strong_buy_metrics_probe: skipped — {layer.get('reason') or 'flagged'}"
-                )
+                print(f"  strong_buy_metrics_probe: skipped — {layer.get('reason') or 'flagged'}")
             else:
                 drafted = layer.get("drafted_task_ids") or []
                 print(

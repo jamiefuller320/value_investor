@@ -83,12 +83,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
     ladder.setdefault("strong_buy_metrics_probe_after_maintenance", True)
     ladder.setdefault("strong_buy_metrics_probe_when_eng_idle", True)
-    ladder.setdefault(
-        "strong_buy_metrics_probe_max_tickers", DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS
-    )
-    ladder.setdefault(
-        "strong_buy_metrics_probe_max_markets", DEFAULT_STRONG_BUY_PROBE_MAX_MARKETS
-    )
+    ladder.setdefault("strong_buy_metrics_probe_max_tickers", DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS)
+    ladder.setdefault("strong_buy_metrics_probe_max_markets", DEFAULT_STRONG_BUY_PROBE_MAX_MARKETS)
     ladder.setdefault("spend_checkpoint_usd", DEFAULT_SPEND_CHECKPOINT_USD)
     ladder.setdefault("spend_since_checkpoint_usd", 0.0)
     ladder.setdefault("last_run", None)

@@ -23,14 +23,14 @@ def _write_screen(root: Path, market_id: str, rows: list[dict]) -> Path:
     headers = ["ticker", "signal", "name"]
     lines = [",".join(headers)]
     for row in rows:
-        lines.append(
-            ",".join(str(row.get(h) or "") for h in headers)
-        )
+        lines.append(",".join(str(row.get(h) or "") for h in headers))
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return path
 
 
-def _write_manifest(root: Path, market_id: str, tickers: list[str], *, failed: list[str] | None = None) -> None:
+def _write_manifest(
+    root: Path, market_id: str, tickers: list[str], *, failed: list[str] | None = None
+) -> None:
     market = root / "markets" / market_id
     market.mkdir(parents=True, exist_ok=True)
     state = {}
