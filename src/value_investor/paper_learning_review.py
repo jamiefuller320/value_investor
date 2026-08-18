@@ -14,6 +14,7 @@ from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 from value_investor.analysis_review import _EXPERIMENT_LINE, AnalysisTask
 from value_investor.automation_status import build_learning_track_epoch_datum
 from value_investor.churn_health import CHURN_HEALTH_FILENAME, build_churn_health
+from value_investor.rebalance_log import BUFFERED_HOLD_COUNTERFACTUAL_FILENAME
 from value_investor.review_policy import (
     DEFAULT_REVIEW_POLICY_PATH,
     load_review_policy,
@@ -108,6 +109,9 @@ def build_paper_learning_payload(
         "run_at": effective_run_at.isoformat(),
         "review_policy": load_review_policy(paper_root / "review_policy.json"),
         "churn_health": churn_health,
+        "buffered_hold_counterfactual": _safe_read(
+            paper_root / BUFFERED_HOLD_COUNTERFACTUAL_FILENAME
+        ),
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
         "learning_track_epoch_datum": build_learning_track_epoch_datum(paper_root=paper_root),
@@ -198,9 +202,11 @@ def _build_paper_learning_prompt(payload_path: Path) -> str:
 Read the structured JSON at: {payload_path}
 
 Focus on churn_health (cost drag, trade counts, hold-buffer state, duplicate-day skips,
-adjacent buy/sell flips), learning_tracks_review, and learning_track_epoch_datum (per-track
-epoch NAV, post-apply trade count, benchmark span readiness). This is observe-only — do not propose
-auto-applying decision-review knobs or changing live execution.
+adjacent buy/sell flips), buffered_hold_counterfactual (exit_confirm_screens 1 vs 2
+replay per track — trade_count_delta, cost_drag_delta, churn_context), learning_tracks_review,
+and learning_track_epoch_datum (per-track epoch NAV, post-apply trade count, benchmark span
+readiness). This is observe-only — do not propose auto-applying decision-review knobs or
+changing live execution.
 
 Write FOUR plain-text sections with headings exactly as shown:
 
@@ -210,7 +216,8 @@ single biggest operational learning gap.
 
 PER-TRACK DIAGNOSIS
 Bullets per track (rules, ai_judgment, momentum_grace): cost_drag, trade_count,
-exit_streak / reentry_cooldown, adjacent flips, duplicate-day skip notes. Cite JSON only.
+exit_streak / reentry_cooldown, adjacent flips, duplicate-day skip notes, and
+buffered-hold comparison (screens=1 vs 2) when present. Cite JSON only.
 
 PROPOSED EXPERIMENTS
 Numbered top 3 experiments. Each line MUST use:

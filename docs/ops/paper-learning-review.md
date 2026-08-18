@@ -16,6 +16,7 @@ Disable before live capital cutover:
 | Layer | Artifact | When |
 |-------|----------|------|
 | Deterministic rollup | `learning_tracks_churn_health.json` | After weekday `ftse-decision-review --tracks all` |
+| Buffered-hold counterfactual | `buffered_hold_counterfactual.json` | After weekday `ftse-decision-review --tracks all` |
 | Rule-based knobs | `decision_review.json` | Weekday paper-auto (`--apply`) |
 | Broad modelling review | `analysis_review.md` | Sunday `analysis-review.yml` (includes `churn_health` in payload) |
 | **This module** | `paper_learning_review.md` | Sunday `paper-learning-review.yml` (if enabled) |
@@ -36,6 +37,7 @@ and ideally after the Sunday analysis bundle; schedule is 10 minutes after analy
 | File | Purpose |
 |------|---------|
 | `docs/data/paper_automation/learning_tracks_churn_health.json` | Deterministic cost/churn metrics per track |
+| `docs/data/paper_automation/buffered_hold_counterfactual.json` | Observe-only exit_confirm_screens 1 vs 2 replay per track |
 | `docs/data/paper_automation/review_policy.json` | Kill switch (`paper_learning_review.enabled`) |
 | `docs/data/paper_learning_review.md` | Human-readable churn synthesis |
 | `docs/data/paper_learning_review.json` | Structured sections |
