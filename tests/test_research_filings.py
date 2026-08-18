@@ -1362,6 +1362,60 @@ def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monk
     assert result["rns"]["investegate"]["fetched"] == 2
 
 
+def test_uk_primary_pipeline_investegate_lse_pdf_persists_with_validation_gate(
+    tmp_path, monkeypatch
+):
+    """UK primary refetch persists Investegate/LSE bodies that pass period/issuer validation."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "itv_fy",
+                "source": "investegate_resolved",
+                "headline": "ITV plc Full Year Results 2025",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1",
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    annual_body = (
+        "ITV plc full year results for the year ended 31 December 2025. "
+        "Total revenue £3.5bn with final dividend of 5.0p per share." + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: annual_body,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: None,
+    )
+    result = refetch_uk_primary_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+    )
+    assert result["fetched"] >= 1
+    assert result["rns"]["investegate"]["fetched"] >= 1
+    assert (filings_dir / "bodies" / "itv_fy.txt").exists()
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert saved["filings"][0]["period"] == "annual"
+
+
 def test_refetch_residual_filing_bodies_fetches_sec_edgar(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
@@ -1667,6 +1721,36 @@ def test_extract_filing_document_text_ocr_applies_depth_sections(monkeypatch):
     assert text is not None
     assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
     assert "NOTE 18 Borrowings" in text
+
+
+def test_extract_filing_document_text_ocr_upgrades_shallow_pypdf_extract(monkeypatch):
+    """Image-only CH PDFs that yield CEO-only pypdf text should fall through to OCR depth."""
+    shallow = (
+        "Strategic report and chairman's statement for the year ended 31 December 2025. "
+        "Revenue increased and the board recommends a final dividend." + (" overview " * 80)
+    )
+    ocr_full = shallow + (
+        " CONSOLIDATED STATEMENT OF CASH FLOW operating activities 90.8 "
+        " Defined benefit pension scheme obligations 45.2 "
+        " NOTE 18 Borrowings covenant compliance maintained"
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_pdf_text",
+        lambda raw: shallow,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_pdf_text_fitz",
+        lambda raw: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._ocr_pdf_text",
+        lambda raw: ocr_full,
+    )
+    text = _extract_filing_document_text(b"%PDF-1.4", "application/pdf")
+    assert text is not None
+    assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
+    assert "Defined benefit pension" in text
+    assert "Borrowings covenant" in text
 
 
 def test_extract_pdf_depth_sections_skips_lead_window():

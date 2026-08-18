@@ -298,6 +298,24 @@ def _score_ch_body_text(text: str) -> int:
     return score
 
 
+_CH_FINANCIAL_DEPTH_MARKERS: tuple[str, ...] = (
+    "cash flow",
+    "defined benefit",
+    "pension scheme",
+    "borrowings",
+    "covenant",
+    "principal risk",
+    "going concern",
+    "related party",
+)
+
+
+def _ch_body_lacks_financial_depth(text: str) -> bool:
+    """True when extracted PDF text looks like front-matter only (no notes/statements)."""
+    lower = (text or "").lower()
+    return not any(marker in lower for marker in _CH_FINANCIAL_DEPTH_MARKERS)
+
+
 def _extract_investegate_html_text(html: str) -> str:
     """Extract the RNS announcement body from an Investegate HTML page."""
     lower = (html or "").lower()
@@ -1021,14 +1039,22 @@ def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
         return _extract_ch_zip_ixbrl(raw)
     if raw[:4] == b"%PDF" or "pdf" in ct:
         text = _extract_pdf_text(raw)
+        if not text or len(text) < 200:
+            text = _extract_pdf_text_fitz(raw)
+        needs_ocr = not text or len(text) < 200 or _ch_body_lacks_financial_depth(text)
+        if needs_ocr:
+            ocr_text = _ocr_pdf_text(raw)
+            if ocr_text:
+                ocr_composed = _compose_filing_body_with_depth_sections(ocr_text) or ocr_text
+                if text and len(text) >= 200:
+                    return (
+                        ocr_composed
+                        if _score_ch_body_text(ocr_composed) > _score_ch_body_text(text)
+                        else text
+                    )
+                return ocr_composed
         if text and len(text) >= 200:
             return text
-        text = _extract_pdf_text_fitz(raw)
-        if text and len(text) >= 200:
-            return text
-        ocr_text = _ocr_pdf_text(raw)
-        if ocr_text:
-            return _compose_filing_body_with_depth_sections(ocr_text) or ocr_text
         return text
     if _is_ixbrl_html(raw) or "xhtml" in ct:
         return _extract_ixbrl_html_text(raw.decode("utf-8", errors="replace"))
