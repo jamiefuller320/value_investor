@@ -19,6 +19,7 @@ from value_investor.paper_fund import (
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
 
 REBALANCE_LOG_FILENAME = "rebalance_log.json"
+BUFFERED_HOLD_COUNTERFACTUAL_FILENAME = "buffered_hold_counterfactual.json"
 LOG_SCHEMA_VERSION = 2
 LOG_KEEP = 104  # ~2 years of weekday passes
 MIN_LOG_ACTED_ENTRIES = 2
@@ -1299,6 +1300,29 @@ def compare_buffered_hold_across_tracks(
             for track_id, row in tracks.items()
         },
     }
+
+
+def write_buffered_hold_counterfactual(
+    paper_root: Path,
+    *,
+    lookback_days: int = 7,
+    exit_confirm_variants: tuple[int, ...] = (1, 2),
+    as_of: datetime | None = None,
+) -> dict[str, Any] | None:
+    """Write observe-only buffered-hold counterfactual rollup for learning tracks."""
+    from value_investor.storage import write_json
+
+    paper_root = Path(paper_root)
+    payload = compare_buffered_hold_across_tracks(
+        paper_root,
+        lookback_days=lookback_days,
+        exit_confirm_variants=exit_confirm_variants,
+        as_of=as_of,
+    )
+    if payload is None:
+        return None
+    write_json(paper_root / BUFFERED_HOLD_COUNTERFACTUAL_FILENAME, payload, compact=False)
+    return payload
 
 
 def compare_rebalance_counterfactual_previews(

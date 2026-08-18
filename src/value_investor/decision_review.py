@@ -1154,6 +1154,8 @@ def compare_learning_tracks(
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"
     )
     from value_investor.churn_health import write_churn_health
+    from value_investor.rebalance_log import write_buffered_hold_counterfactual
 
     summary["churn_health"] = write_churn_health(base_dir)
+    summary["buffered_hold_counterfactual"] = write_buffered_hold_counterfactual(base_dir)
     return summary

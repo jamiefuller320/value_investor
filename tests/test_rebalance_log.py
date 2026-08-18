@@ -768,6 +768,33 @@ def test_compare_buffered_hold_across_tracks(tmp_path: Path):
     assert set(comparison["tracks"]) == {"rules", "ai_judgment"}
 
 
+def test_write_buffered_hold_counterfactual(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    from value_investor.rebalance_log import (
+        BUFFERED_HOLD_COUNTERFACTUAL_FILENAME,
+        append_rebalance_log,
+        write_buffered_hold_counterfactual,
+    )
+
+    paper = tmp_path / "paper_automation"
+    rules = paper
+    ai = paper / "ai_judgment"
+    ai.mkdir(parents=True)
+    as_of = datetime(2026, 8, 11, 12, 0, tzinfo=UTC)
+    for track_dir, track_id in ((rules, "rules"), (ai, "ai_judgment")):
+        append_rebalance_log(
+            track_dir,
+            _buffered_hold_base_entry(
+                track_id=track_id,
+                gate={"local_time": "2026-08-10T12:00:00+00:00"},
+            ),
+        )
+    payload = write_buffered_hold_counterfactual(paper, lookback_days=7, as_of=as_of)
+    assert payload is not None
+    assert (paper / BUFFERED_HOLD_COUNTERFACTUAL_FILENAME).exists()
+
+
 def test_collect_buy_tier_history_tickers_from_log():
     entries = [
         {
