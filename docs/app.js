@@ -1082,6 +1082,11 @@ function renderAnalysis(data) {
     const body = esc(postRun.full_text || postRun.executive_summary || "").replace(/\n/g, "<br>");
     postRunHtml = `
       <h2 style="margin-top:1.5rem">Post-run improvement review</h2>
+      <p class="small muted" style="margin-top:0">
+        Snapshot from the last Sunday email / deep-analysis pass — narrative weaknesses and plan items,
+        not live engineering tickets. Actionable work lives on the
+        <strong>Automation</strong> tab → Engineering queue (compile may be idle until the next review).
+      </p>
       <div class="card">
         <p>${body}</p>
       </div>`;
