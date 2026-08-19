@@ -98,7 +98,69 @@ _CAPEX_LABELS = [
     "Purchase Of Property Plant And Equipment",
 ]
 
+_QUARTERLY_CASHFLOW_ATTRS = (
+    "quarterly_cashflow",
+    "quarterly_cash_flow",
+)
+
+_TTM_CASHFLOW_METRIC_KEYS = (
+    "operating_cashflow_ttm",
+    "capital_expenditure_ttm",
+    "free_cashflow_ttm",
+)
+
 CASHFLOW_METRIC_KEYS = tuple(_CASHFLOW_LABEL_ALIASES.keys())
+
+
+def _resolve_yahoo_quarterly_cashflow_df(stock: Any) -> tuple[pd.DataFrame | None, str | None]:
+    """Return the first non-empty quarterly cash-flow frame exposed by yfinance."""
+    for attr in _QUARTERLY_CASHFLOW_ATTRS:
+        df = getattr(stock, attr, None)
+        if df is not None and not df.empty:
+            return df, attr
+    for method_name in ("get_cashflow", "get_cash_flow"):
+        method = getattr(stock, method_name, None)
+        if not callable(method):
+            continue
+        try:
+            df = method(freq="quarterly")
+        except (TypeError, ValueError):
+            continue
+        if df is not None and not df.empty:
+            return df, f"{method_name}(quarterly)"
+    return None, None
+
+
+def quarterly_cashflow_has_usable_series(quarterly: dict[str, Any]) -> bool:
+    """True when at least one quarterly period has OCF, FCF, or capex lines."""
+    if not quarterly:
+        return False
+    for rows in quarterly.values():
+        if not rows:
+            continue
+        if _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["operating_cashflow"]) is not None:
+            return True
+        if _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"]) is not None:
+            return True
+        if _annual_label_value(rows, _CAPEX_LABELS) is not None:
+            return True
+    return False
+
+
+def apply_ttm_cashflow_gate(
+    financials: dict[str, Any],
+    metrics: dict[str, Any],
+) -> dict[str, Any]:
+    """Drop mechanical TTM metrics and flag when the quarterly cash-flow series is empty."""
+    if quarterly_cashflow_has_usable_series(financials.get("quarterly_cashflow") or {}):
+        return metrics
+
+    gated = dict(metrics)
+    for key in _TTM_CASHFLOW_METRIC_KEYS:
+        gated.pop(key, None)
+    gated["ttm_cashflow_suppressed"] = True
+    gated["ttm_cashflow_suppressed_reason"] = "quarterly_cashflow_empty"
+    return gated
 
 
 def _sorted_financial_years(section: dict[str, Any]) -> list[str]:
@@ -186,7 +248,7 @@ def extract_cashflow_metrics_from_annual_financials(
                 metrics[f"{key}_prev"] = _annual_label_value(cash_flow.get(years[1]) or {}, labels)
 
     metrics.update(extract_ttm_cashflow_metrics_from_quarterly(financials))
-    return metrics
+    return apply_ttm_cashflow_gate(financials, metrics)
 
 
 def apply_cashflow_metrics_fallback(
@@ -317,6 +379,7 @@ def install_fetch_cashflow_fallback() -> None:
 def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dict[str, Any]:
     """Pull up to five years of annual statements from yfinance."""
     stock = yf.Ticker(ticker)
+    quarterly_df, quarterly_source = _resolve_yahoo_quarterly_cashflow_df(stock)
     payload: dict[str, Any] = {
         "ticker": ticker,
         "fetched_at": datetime.now(UTC).isoformat(),
@@ -325,10 +388,12 @@ def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dic
         "cash_flow": _df_years(stock.cashflow, max_years=years),
         "quarterly_income": _df_years(getattr(stock, "quarterly_financials", None), max_years=4),
         "quarterly_cashflow": _df_periods(
-            getattr(stock, "quarterly_cashflow", None),
+            quarterly_df,
             max_periods=FINANCIAL_QUARTERS,
         ),
     }
+    if quarterly_source:
+        payload["quarterly_cashflow_source"] = quarterly_source
     cashflow_metrics = extract_cashflow_metrics_from_annual_financials(payload)
     if cashflow_metrics:
         payload["cashflow_metrics"] = cashflow_metrics
