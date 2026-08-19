@@ -5,7 +5,7 @@ from __future__ import annotations
 from cursor_sdk import AuthenticationError, ConfigurationError, NetworkError
 from cursor_sdk.types import SDKModel, SDKUser
 
-from value_investor.verify_key import verify_cursor_api_key
+from value_investor.verify_key import require_verified_cursor_api_key, verify_cursor_api_key
 from value_investor.verify_key_cli import main as verify_key_main
 
 
@@ -166,3 +166,22 @@ def test_cli_missing_key(monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "not set" in out
     assert "CURSOR_API_KEY_V2" in out
+
+
+def test_require_verified_cursor_api_key_ok(monkeypatch):
+    user = _user()
+    monkeypatch.setattr("value_investor.verify_key.Cursor.me", lambda **_: user)
+    assert require_verified_cursor_api_key("cursor_test") == "cursor_test"
+
+
+def test_require_verified_cursor_api_key_rejects_invalid(monkeypatch):
+    def _raise(**_kwargs):
+        raise AuthenticationError("invalid key")
+
+    monkeypatch.setattr("value_investor.verify_key.Cursor.me", _raise)
+    try:
+        require_verified_cursor_api_key("bad-key")
+    except RuntimeError as err:
+        assert "preflight failed" in str(err)
+    else:
+        raise AssertionError("expected RuntimeError")
