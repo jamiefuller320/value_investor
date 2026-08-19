@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:29:42.646666+00:00 · Mode: initial_
+_Version 2 · Updated 2026-08-19T08:45:07.034919+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
 AEP Plantations Plc is a London-listed, Indonesia- and Malaysia-focused palm oil producer that the quantitative screen rates as a **Strong Buy** on cheapness, quality, dividend, GARP and risk metrics (P/E 10.4×, P/B 1.6×, yield 5.6%, ROE 15.1%). Primary filings show a **net-cash plantation compounder** with accelerating earnings: FY2025 revenue rose 25% to **$465.2m**, profit before tax **35%** to **$119.3m**, and basic EPS **35%** to **231.42 US cents**, with a **81 US cent** total dividend and active capital returns (10-for-1 share split, £8m buyback). The valuation hook is a business trading modestly above book despite mid-teens ROE, strong cash generation, and a growing land bank, while the market prices in commodity and Indonesia regulatory risk. The central debate is whether replanting-related volume drag and policy uncertainty (export centralisation, RSPO/EUDR compliance) are adequately compensated by earnings momentum, M&A optionality, and the proposed Kalimantan subsidiary IPO.
@@ -21,7 +21,7 @@ The screen’s Strong Buy signal aligns with a business that passes classic valu
 ---
 
 ## FINANCIAL REVIEW
-*Primary source: Companies House consolidated annual accounts (reporting currency USD). Yahoo (`financials_annual.json`) used only where filing body extracts lack line-item detail — noted explicitly.*
+*Primary source: Companies House consolidated annual body extracts (USD reporting). Yahoo (`financials_annual.json`) used for cash-flow statement, full balance-sheet totals, and pension where filing OCR did not yield line items — noted explicitly.*
 
 ### Annual trend (FY2022–FY2025)
 
@@ -37,56 +37,56 @@ The screen’s Strong Buy signal aligns with a business that passes classic valu
 | Cash net of ST borrowings ($m) | 221.5 | 153.0 | 181.9 | **231.8** | +27% |
 | NAV/share (US c) | 1,176 | 1,298 | 1,395 | **1,497** | +7% |
 
-*FY2022 PBT from filing financial record; later years from chairman’s statements and financial highlights.*
+*FY2022–FY2025 income-statement and balance-sheet lines from FY2025 financial record table (`ch_01884630_MzUyODQ4NTgzM2FkaXF6a2N4.txt`); PBT for FY2022–FY2024 cross-checked against prior annual extracts.*
 
-**Interpretation.** Revenue and earnings rebounded sharply in FY2025 after a soft FY2023–FY2024 period when revenue was ~$370–372m. FY2023 was affected by South Sumatra disposals, minority consolidation costs, and weaker CPO pricing versus FY2022’s peak ($447.6m revenue). FY2025 strength came from **volume growth and favourable CPO/PK prices** (chairman’s statement). Balance sheet improved: cash rose $50m, treasury shares increased to **$13.8m** (reflecting buybacks), and non-controlling interests fell to **$4.2m** from $109.6m in FY2022 post buyouts.
+**Interpretation.** Deepened FY2025 filing bodies confirm the earnings rebound: chairman's statement attributes FY2025 revenue (+25%) and PBT (+35%) to **higher own and third-party FFB volumes** (own FFB +6%, CPO +7%, PK +13%) and **stronger CPO/PK prices**. FY2023 trough ($370–372m revenue) followed South Sumatra disposals, minority buyouts ($87.8m), and weaker CPO pricing versus FY2022's peak. Balance sheet strengthened further: cash net of ST borrowings rose $50m to **$231.8m**, treasury shares **$13.8m**, NCI **$4.2m** (vs $109.6m FY2022).
 
-**Earnings quality note.** Palm oil groups report under IAS 41 biological asset fair-value movements. FY2023 filing discloses PBT **$78.7m before BA movement vs $77.8m after** — modest distortion that year; FY2025 filing bodies do not extract BA-adjusted figures, so reported EPS may include fair-value noise not visible in available extracts.
+**Operational scale (FY2025 filing body).** ~56k ha mature palms across 13 Indonesian estates plus one Malaysian estate; weighted average tree age ~14 years; **~1.2m mt** external FFB purchased; seven mills at **400 mt/hr** combined capacity; OER 19.8%, KER 4.9%; 2.1m mt FFB throughput producing ~0.4m mt CPO and ~0.1m mt PK. KAP mill under construction — annual report targets Jan 2027 commissioning; Jun 2026 trading update guides **Dec 2026** (treat trading update as more current).
 
-**Leverage and liquidity.** Total liabilities **$51.0m** vs total assets **$635.9m** (Yahoo fallback for balance-sheet totals not in annual body extracts) imply **negligible financial leverage**. Current ratio **8.69×** (screen). Pension obligation **$7.97m** non-current (Yahoo fallback). No covenant or going-concern language appears in available filing extracts; full auditor report text was not extracted.
+**Earnings quality note.** IAS 41 biological-asset fair-value movements can distort comparability. FY2023 extract discloses operating profit **$70.6m before BA vs $69.7m after** (modest). **FY2025 extract does not include BA before/after PBT** — reported EPS may embed fair-value noise not visible in available text; full notes required.
 
-**Cash flow.** FY2025 operating cash flow **$113.8m** and free cash flow **$83.6m** (Yahoo fallback; filing index lists cash-flow statements but body OCR did not yield usable line items). Capex **~$30m**; dividends paid **$34.6m**; buybacks **$11.4m**. FCF/dividend coverage ~2.4× gross.
+**Leverage and liquidity.** Total liabilities **$51.0m** vs total assets **$635.9m** (Yahoo fallback). Total debt **$0.5m** capital leases (Yahoo). Pension obligation **$7.97m** non-current (Yahoo). Screen current ratio **8.69×**. **Going-concern, covenant, and auditor emphasis-of-matter text not extracted** from FY2025 body despite TOC listing Independent Auditor's Report at page 137.
+
+**Cash flow (Yahoo fallback).** FY2025 operating cash flow **$113.8m**, FCF **$83.6m**; capex **~$30m**; dividends paid **$34.6m**; buybacks **$11.4m**; FCF/dividend coverage ~2.4×. Filing index lists Consolidated Statement of Cash Flows but body OCR stopped before financial-statement pages.
 
 ### Interim and trading updates
 
-**Gap:** The filings index contains **one interim filing only** — unaudited **parent-company** accounts for 1 Jan–2 Jun 2023 (Companies House, filed Apr 2024), prepared solely for dividend distributable-reserve testing. **No consolidated H1 2024, H1 2025, or H1 2026 accounts** are in the index. Interim trend analysis for the group is therefore incomplete from primary filings.
+**Gap (unchanged):** Only one interim filing — unaudited **parent-company** accounts for 1 Jan–2 Jun 2023 (`ch_01884630_MzQxOTk5ODk1NGFkaXF6a2N4.txt`), prepared solely for distributable-reserve testing under CA 2006 ss 836/838. **No consolidated H1 2024, H1 2025, or H1 2026** in index.
 
-**AGM trading update (15 Jun 2026, RNS body):** For the five months to 31 May 2026:
-- Own FFB **421,900 mt** (−2.7% YoY) — replanting and lower North Sumatra/Riau yields
-- External FFB purchased **524,000 mt** (+6.5%), including Pinago Group
-- CPO production **173,200 mt** (−1.8%)
-- Average CPO ex-mill **$859/mt** (−2.2%); PK **$802/mt** (+8.1%)
-- Replanting: 641 ha YTD; ~4,800 ha since 2024 toward ~10,000 ha five-year target
-- Management expects **minimal direct impact** from Indonesia’s DSI export centralisation as CPO is sold domestically to refineries
+**AGM trading update (15 Jun 2026, RNS body):** Five months to 31 May 2026:
+- Own FFB **421,900 mt** (−2.7% YoY) — replanting, suspended fertiliser in replant areas, delayed North Sumatra cropping
+- External FFB purchased **524,000 mt** (+6.5%), including Pinago Group (~4.2% of growth)
+- CPO production **173,200 mt** (−1.8%); PK **43,500 mt** (flat)
+- Average CPO ex-mill **$859/mt** (−2.2%); PK **$802/mt** (+8.1%); ex-Rotterdam CPO **$1,416/mt** (flat YoY)
+- Replanting: 641 ha YTD; ~4,800 ha since 2024 toward ~10,000 ha five-year target; KAP mill ~65% complete
+- CEO guidance: confidence in meeting market expectations; minimal direct impact from Indonesia DSI export centralisation (domestic refinery sales)
 
-Early 2026 operational softness from replanting is partially offset by acquisitions and third-party intake; management guided confidence in meeting market expectations for full-year 2026.
-
-### Share structure
-
-A **10-for-1 share split** (25p → 2.5p shares) took effect **25 Jun 2026**, increasing ordinary shares in issue to **399,762,720**. All EPS/NAV figures above are pre-split nominal; economic per-share metrics scale accordingly. Final dividend for FY2025: **43.7 US cents** (33.03p sterling equivalent, paid Jul 2026).
+**Corporate actions (2026 RNS).** PT JJU acquisition completed 31 Jul 2026 (7,169 ha HGU, Central Kalimantan). **£8m buyback** from 6 Jul 2026; **1,586,446 shares** repurchased by 18 Aug 2026 (~17.76m in treasury). Proposed Kalimantan IPO (~15% float, Q4 2026 target) still in progress.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Commodity cyclicality.** Earnings remain levered to CPO and PK prices. FY2022 peak revenue ($447.6m) vs FY2023 trough ($370.4m) illustrates volatility. FY2025 benefited from favourable pricing; a CPO downturn would compress margins despite operational improvements.
+**Commodity cyclicality (evidenced).** FY2022 peak revenue ($447.6m) vs FY2023 trough ($370.4m) in FY2025 financial record table; FY2025 rebound ($465.2m) driven by higher volumes and stronger CPO/PK (chairman's statement). Jun 2026 AGM update shows ex-mill CPO −2.2% but ex-Rotterdam flat at $1,416/mt — trailing screen earnings understate forward commodity sensitivity.
 
-**Replanting and volume drag.** The five-month 2026 update shows own FFB and CPO down YoY as ageing palms are replanted and fertiliser is suspended in replant areas. This is strategically necessary but creates **near-term production headwinds** that screens based on trailing earnings may understate.
+**Replanting and volume drag (evidenced).** Jun 2026 trading update: own FFB −2.7%, CPO −1.8% in five months; replanting 641 ha YTD toward ~10,000 ha five-year target (~4,800 ha since 2024). Near-term headwind partially offset by third-party intake (+6.5%), Pinago, and PT JJU (7,169 ha HGU, completed Jul 2026).
 
-**Indonesia regulatory and policy risk.** May 2026 market reaction to Indonesia export-control proposals (London South East, 20 May 2026) highlights sensitivity. AEP states domestic sales limit direct export impact, but broader policy shifts (DSI centralisation from Jan 2027, biodiesel mandates, tax) can affect the sector sentiment and input costs. The proposed **Kalimantan IPO** adds execution and regulatory-approval risk (OJK, IDX).
+**Indonesia regulatory and policy risk (evidenced, partially mitigated).** May 2026 sector selloff on export-control proposals (Investors Chronicle alternate news, 27 May 2026). Jun 2026 RNS clarifies DSI centralisation from **1 Jan 2027** with phased transition; group sells CPO domestically to refineries — **minimal direct impact stated, not independently verified**. Broader biodiesel (B50) and tax policy remain sentiment drivers. Kalimantan IPO (~15% float, Q4 2026) adds OJK/IDX execution risk; prospectus would clarify dilution and capex.
 
-**Sustainability compliance costs.** FY2023 chairman’s statement cites up to **~$18m** to achieve full RSPO certification over five years, plus ongoing EUDR due-diligence expectations. Non-compliance could restrict EU market access for certified-sustainable premiums, though AEP cites NDPE policy since 2019.
+**Sustainability compliance costs (partially open).** FY2023 chairman cites up to **~$18m** over five years for full RSPO certification; EUDR due-diligence discussed. **FY2025 extract does not update RSPO/EUDR progress** — certification timeline and spend remain open; IR sustainability report or RSPO membership status would close this.
 
-**Biological asset accounting.** Fair-value movements under IAS 41 can distort year-on-year comparability; FY2023 showed meaningful before/after BA divergence. Investors relying on reported EPS alone may misread underlying cash economics.
+**Biological asset accounting (open for FY2025).** FY2023 before/after BA disclosed (operating profit $70.6m before vs $69.7m after). FY2025 BA adjustment **not in extracted body** — rely on Yahoo-reported EPS with caution; IAS 41 note in full PDF (page 157+) required.
 
-**M&A and IPO complexity.** Active acquisition pipeline (Pinago, PT JJU, CB Industrial divestment per Oct 2025 news) creates integration and capital-allocation risk. IPO of ~15% of AEP Nusantara dilutes group economic interest in Kalimantan growth assets while raising local capital.
+**M&A and IPO complexity (evidenced).** PT JJU completed Jul 2026; Pinago in five-month results; CB Industrial divestment Oct 2025 (news). IPO of PT AEP Nusantara (~19k ha Kalimantan planted area, ~15% new shares) dilutes group economic interest while funding local capex — terms and valuation **not yet in filings**.
 
-**Governance and concentration.** Premium LSE listing with long operating history, but plantation operations are geographically concentrated in Indonesia (~93% of estate area). Major holder Nokia Bell Pensioenfonds OFP reported **~16%** voting rights (Jun 2026 RNS), creating single-holder influence.
+**Governance and concentration (evidenced).** Indonesia/Malaysia geographic concentration (~93% estate area Indonesia). Nokia Bell Pensioenfonds OFP **15.99%** voting rights (24 Jun 2026 RNS, down from ~17%). Active buyback may exceed 25% of ADV (Jul 2026 programme RNS) — liquidity/market-impact consideration for entry sizing.
 
-**News/data noise.** Several Google News hits reference **American Electric Power (US utility “AEP”)**, not this issuer — verify sources carefully.
+**Leverage and pension (low concern, Yahoo-backed).** Net-cash balance sheet; pension **$7.97m** — immaterial relative to $231.8m cash. **Auditor going-concern and covenant disclosures not extracted** — full FY2025 auditor report (page 137+) required before treating as cleared.
 
-**Filing gaps.** No consolidated interim accounts in index; going-concern, contingency, and covenant disclosures not available in extracted body text — full PDF annual report review recommended before sizing.
+**News/data noise (evidenced).** Alternate and primary news batches include US utility **American Electric Power (NASDAQ:AEP)** options and dividend articles — exclude from issuer analysis.
 
-RiskTags: regulatory, cyclical, competitive, accounting, other
+**Remaining filing gaps.** No consolidated interim accounts post-FY2025; no extracted Risk Management Committee Report (FY2025 TOC page 119); `ir_presentation_metrics.json` empty (0 bridges). Full annual-report PDF and IDX/OJK prospectus are the primary paths to close open items.
+
+RiskTags: regulatory | cyclical | governance | pension | competitive | accounting | other
 
 ---
 RiskTags: regulatory, cyclical, competitive, accounting, other
@@ -119,5 +119,19 @@ Coverage is **moderate but noisy**: material company-specific items are concentr
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Primary annual filings and the Jun 2026 trading update confirm a high-quality, net-cash plantation compounder with accelerating earnings, rising dividends, and active buybacks that substantiate the quantitative Strong Buy, partially offset by commodity cyclicality, replanting-related volume drag, and Indonesia regulatory uncertainty that screens cannot fully capture.
+Confidence: 0.75
+Rationale: Deepened filing bodies confirm FY2025 earnings momentum, net-cash balance sheet, and 2026 operational/capital-return updates, strengthening the quantitative Strong Buy case while cash-flow verification, FY2025 biological-asset adjustment, RSPO progress, and auditor or going-concern text remain dependent on full PDF extracts.
+
+## OPEN QUESTIONS
+- [partially_resolved] Re-verify FINANCIAL REVIEW and RISKS against newly deepened filing bodies; close any remaining gaps.
+
+## Weekly updates
+
+### 2026-08-19T08:45:07.034919+00:00
+Q: Re-verify FINANCIAL REVIEW and RISKS against newly deepened filing bodies; close any remaining gaps.
+Status: partially_resolved
+Evidence: All 63 filing bodies indexed (`filings_index.json`; `gap_fill_source_map.json` confirms 63/63 with body). FY2025 consolidated annual extract (`ch_01884630_MzUyODQ4NTgzM2FkaXF6a2N4.txt`) confirms financial record and chairman's statement (revenue $465.2m, PBT $119.3m, EPS 231.42c, dividend 81c, cash net of ST borrowings $231.8m, NAV/share 1,497c; ~56k ha mature palms, ~1.2m mt third-party FFB, seven mills). Jun 2026 AGM trading update, PT JJU completion (Jul 2026), and Jul–Aug 2026 buyback RNS (1,586,446 shares to 18 Aug; ~17.76m in treasury) corroborate near-term operational and capital-return picture. Extract stops at chairman/strategic front matter — cash-flow statement, auditor report, IAS 41 note, Risk Management Committee report, and FY2025 biological-asset before/after PBT remain absent; only parent-company interim accounts exist (Jan–Jun 2023).
+SourcesTried: filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, screen_run_manifest, ir_presentation_metrics, macro_context
+NextSources: Companies House FY2025 PDF pages 137–157 (auditor report, cash-flow statement, IAS 41 note); investor-relations annual report PDF at https://aepplantations.com (Operational & Financial Review, Risk Management Committee Report); IDX/OJK prospectus draft for PT AEP Nusantara IPO (Kalimantan capex, dilution mechanics); consolidated H1 2025/H1 2026 interim accounts when filed at Companies House
+
+---

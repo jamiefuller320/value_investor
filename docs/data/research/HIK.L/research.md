@@ -1,6 +1,6 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:27:19.144258+00:00 · Mode: initial_
+_Version 2 · Updated 2026-08-19T08:46:33.742017+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
 Hikma Pharmaceuticals PLC is a FTSE 100 multinational generic and branded pharmaceutical group operating across US Injectables, US retail generics (Hikma Rx), and MENA Branded medicines. The quantitative screen rates the name a **Strong Buy** (10/22 models passing; composite score 81%, sector-relative 91%), supported by cheapness (P/E 12.6, P/B 1.9), quality (ROE 15.4%), dividend yield (3.8%), and financial health (net debt/core EBITDA 1.6x at FY2025 year-end). Filings show earnings recovery after a difficult 2023–2024 period: FY2025 core operating profit rose 3% to $741m on revenue of $3,349m, and H1 2026 delivered a further 9% core operating profit growth to $405m with full-year guidance reiterated. The valuation hook is a quality generic franchise trading below typical pharma multiples, with capital return via a $250m buyback and a 5% dividend increase. The central debate is whether Branded and Hikma Rx momentum can offset structurally lower Injectables margins (31.0% FY2025 vs 35.3% FY2024; 27.6% H1 2026) and whether FY2025’s depressed free cash flow ($119m) represents a trough rather than a new normal.
@@ -123,4 +123,22 @@ Coverage over the past year is **moderate-to-good** on corporate actions and res
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filings confirm the screen’s cheapness/quality case and partially resolve FY2025 FCF as a settlement- and investment-driven trough, but filing-evidenced Injectables margin pressure, withdrawn medium-term guidance, and unresolved product-level competition prevent full Strong Buy confirmation.
+Rationale: Deepened filings strengthen the cheapness/quality case and explain FY2025 FCF, but Injectables margin pressure and withdrawn medium-term guidance prevent full Strong Buy confirmation.
+
+## OPEN QUESTIONS
+- [unresolved] Re-verify FINANCIAL REVIEW and RISKS against newly deepened filing bodies; close any remaining gaps.
+
+## Weekly updates
+
+### 2026-08-19T08:46:33.742017+00:00
+Q: Re-verify FINANCIAL REVIEW and RISKS against newly deepened filing bodies; close any remaining gaps.  
+**Status:** partially_resolved  
+**Evidence:** All 66/66 filing bodies are present. FY2025 (`ir_0e40d9707e30c3b7.txt`, `ir_3a67962eb8770824.txt`) and H1 2026 (`5f26e81d036b3596.txt`) confirm core financials, segment margins, settlement cash, buyback progress, wholesaler concentration, and a 12-category principal-risk register with H1 deltas. Annual report pages 80–88 remain unextracted (TOC only); `ir_presentation_metrics.json` is still empty.  
+**SourcesTried:** filings_bodies, filings_index, yahoo_financials, news_manifest, alternate_news, screening_snapshot, screen_run_manifest, ir_presentation_metrics, macro_context  
+**NextSources:** H1 2026 results presentation PDF; annual report pages 80–88 OCR; FDA Orange Book for testosterone/calcitonin; H1 2026 earnings-call transcript
+
+## Bottom line
+
+**FINANCIAL REVIEW** — Filing-verified recovery: FY2025 core OP $741m on $3,349m revenue; FY2025 implied FCF ≈$119m (settlement + capex trough); H1 2026 core OP $405m (+9%) with OCF $214m (+33%) and implied H1 FCF ≈$61m. Branded (+15% H1 revenue) offsets Injectables margin compression (27.6% H1 vs 31.0% FY2025). Medium-term guidance withdrawn at FY2025 results.
+
+**RISKS** — Evidenced: regulatory/tariff exposure, Injectables competition, MENA geopolitics, wholesaler concentration, leverage/liquidity (1.9x net debt, FCF below dividends+buyback), litigation (sodium oxybate settled; Amarin win), governance transition (Acting CFO). Still open: product-level competition quantification; full annual-report risk register.
