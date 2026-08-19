@@ -109,3 +109,16 @@ def verify_cursor_api_key(
         user=user,
         models=models,
     )
+
+
+def require_verified_cursor_api_key(api_key: str | None) -> str:
+    """Validate ``api_key`` against Cursor `/v0/me` before launching agents.
+
+    Gap-fill and other Agent.create paths previously assumed a present env var
+    was enough; presence of a stale/invalid key fails mid-loop. Call this once
+    before the first agent launch (N22).
+    """
+    result = verify_cursor_api_key(api_key)
+    if not result.ok:
+        raise RuntimeError(f"Cursor API key preflight failed: {result.detail}")
+    return (api_key or "").strip()

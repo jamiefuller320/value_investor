@@ -302,6 +302,11 @@ def run_red_flag_gap_fill(
     if not targets:
         return summary
 
+    # Fail fast on stale/invalid keys before the first Agent.create (N22).
+    from value_investor.verify_key import require_verified_cursor_api_key
+
+    api_key = require_verified_cursor_api_key(api_key)
+
     store = ResearchStore(output_dir)
     effective_run_at = run_at or datetime.now(UTC)
 

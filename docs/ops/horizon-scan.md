@@ -30,6 +30,8 @@ Horizon scan clusters them and may suggest `DROP` / `PROMOTE` actions (manual by
 
 Run after weekly `analysis-review` when possible.
 
+Cadence context: [ops-review-cadence.md](ops-review-cadence.md) (weekly → monthly → quarterly).
+
 ## Artifacts
 
 | File | Purpose |
