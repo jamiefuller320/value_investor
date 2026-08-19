@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-19T11:34:33.625430+00:00",
+  "compiled_at": "2026-08-19T17:33:38.187403+00:00",
   "run_at": "2026-08-19T10:24:14.725305+00:00",
-  "task_count": 53,
+  "task_count": 54,
   "tasks": [
     {
       "id": "eng-20260817-01",
@@ -1383,21 +1383,32 @@
       "merged_at": "2026-08-09T12:06:54.365673+00:00"
     },
     {
-      "id": "eng-20260819-04",
+      "id": "eng-20260819-05",
       "area": "ingest",
-      "title": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with m",
-      "summary": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with mandatory extraction on gap-fill targets",
+      "title": "Rework verify round 2/3: Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segme",
+      "summary": "Post-merge acceptance pytest failed for eng-20260819-04. Re-implement until acceptance tests pass (chain eng-20260819-04, round 2/3). pytest rc=1: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3: No module named pytest",
       "priority": "high",
-      "priority_score": 93.0,
-      "source": "post_run_review",
+      "priority_score": 94.0,
+      "source": "post_merge_verify_rework",
       "evidence": {
+        "verify_chain_root_id": "eng-20260819-04",
+        "parent_task_id": "eng-20260819-04",
+        "verify_round": 2,
+        "max_verify_rounds": 3,
+        "prior_pr_url": "https://github.com/jamiefuller320/value_investor/pull/306",
+        "prior_pr_number": 306,
+        "pytest_returncode": 1,
+        "pytest_paths": [
+          "tests/test_research_filings.py",
+          "tests/test_gap_fill_deepen.py",
+          "tests/test_ingest_improvement.py"
+        ],
         "tickers": [
           "IR",
           "PDF",
           "FCF",
           "IFRS"
-        ],
-        "plan_index": 5
+        ]
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for IR",
@@ -1423,11 +1434,70 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260819-04",
+      "area": "ingest",
+      "title": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with m",
+      "summary": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with mandatory extraction on gap-fill targets",
+      "priority": "high",
+      "priority_score": 93.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "PDF",
+          "FCF",
+          "IFRS"
+        ],
+        "plan_index": 5,
+        "verify_status": "rework_queued",
+        "verify_chain_root_id": "eng-20260819-04",
+        "verify_rework_task_id": "eng-20260819-05",
+        "verify_failed_at": "2026-08-19T17:33:38.189129+00:00",
+        "verify_pytest": {
+          "returncode": 1,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py"
+          ],
+          "output_tail": "/opt/hostedtoolcache/Python/3.12.13/x64/bin/python3: No module named pytest"
+        }
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260819-04.md",
       "branch_name": "cursor/eng-20260819-04-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-08-19T15:16:00.100723+00:00"
+      "completed_at": "2026-08-19T15:16:00.100723+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/306",
+      "pr_number": 306,
+      "merged_at": "2026-08-19T17:33:38.189642+00:00"
     },
     {
       "id": "eng-20260726-03",
@@ -2541,7 +2611,7 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-08-19T14:43:16.364273+00:00",
+    "snapshot_at": "2026-08-19T17:33:36.309986+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
@@ -2552,7 +2622,7 @@
     "filings_with_body": 3603
   },
   "ingest_health_before": {
-    "snapshot_at": "2026-08-19T14:23:24.571133+00:00",
+    "snapshot_at": "2026-08-19T14:43:16.364273+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
@@ -2562,6 +2632,6 @@
     "indexed_without_body": 15,
     "filings_with_body": 3603
   },
-  "reprioritized_at": "2026-08-19T14:43:16.364406+00:00",
-  "reprioritized_after_task": "eng-20260819-01"
+  "reprioritized_at": "2026-08-19T17:33:36.310082+00:00",
+  "reprioritized_after_task": "eng-20260819-04"
 }
