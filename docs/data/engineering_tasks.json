@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-19T17:33:38.187403+00:00",
+  "compiled_at": "2026-08-19T18:43:53.677478+00:00",
   "run_at": "2026-08-19T10:24:14.725305+00:00",
-  "task_count": 54,
+  "task_count": 55,
   "tasks": [
     {
       "id": "eng-20260817-01",
@@ -1326,6 +1326,60 @@
       "merged_at": "2026-08-18T06:04:42.143663+00:00"
     },
     {
+      "id": "eng-20260819-06",
+      "area": "ingest",
+      "title": "Rework verify round 3/3: Rework verify round 2/3: Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lea",
+      "summary": "Post-merge acceptance pytest failed for eng-20260819-05. Re-implement until acceptance tests pass (chain eng-20260819-04, round 3/3). pytest rc=1: /opt/hostedtoolcache/Python/3.12.14/x64/bin/python3: No module named pytest",
+      "priority": "high",
+      "priority_score": 95.0,
+      "source": "post_merge_verify_rework",
+      "evidence": {
+        "verify_chain_root_id": "eng-20260819-04",
+        "parent_task_id": "eng-20260819-05",
+        "verify_round": 3,
+        "max_verify_rounds": 3,
+        "prior_pr_url": "https://github.com/jamiefuller320/value_investor/pull/307",
+        "prior_pr_number": 307,
+        "pytest_returncode": 1,
+        "pytest_paths": [
+          "tests/test_research_filings.py",
+          "tests/test_gap_fill_deepen.py",
+          "tests/test_ingest_improvement.py"
+        ],
+        "tickers": [
+          "IR",
+          "PDF",
+          "FCF",
+          "IFRS"
+        ]
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260809-02",
       "area": "ingest",
       "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
@@ -1408,7 +1462,19 @@
           "PDF",
           "FCF",
           "IFRS"
-        ]
+        ],
+        "verify_status": "rework_queued",
+        "verify_rework_task_id": "eng-20260819-06",
+        "verify_failed_at": "2026-08-19T18:43:53.679804+00:00",
+        "verify_pytest": {
+          "returncode": 1,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py"
+          ],
+          "output_tail": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3: No module named pytest"
+        }
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for IR",
@@ -1434,12 +1500,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "no_diff_count": 0,
       "last_no_diff_at": "2026-08-19T17:36:22.306970+00:00",
       "result_path": "output/engineering_result_eng-20260819-05.md",
       "branch_name": "cursor/eng-20260819-05-1de3",
-      "completed_at": "2026-08-19T18:19:29.396626+00:00"
+      "completed_at": "2026-08-19T18:19:29.396626+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/307",
+      "pr_number": 307,
+      "merged_at": "2026-08-19T18:43:53.680541+00:00"
     },
     {
       "id": "eng-20260819-04",
@@ -2616,7 +2685,7 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-08-19T17:33:36.309986+00:00",
+    "snapshot_at": "2026-08-19T18:43:51.137478+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
@@ -2627,7 +2696,7 @@
     "filings_with_body": 3603
   },
   "ingest_health_before": {
-    "snapshot_at": "2026-08-19T14:43:16.364273+00:00",
+    "snapshot_at": "2026-08-19T17:33:36.309986+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
@@ -2637,6 +2706,6 @@
     "indexed_without_body": 15,
     "filings_with_body": 3603
   },
-  "reprioritized_at": "2026-08-19T17:33:36.310082+00:00",
-  "reprioritized_after_task": "eng-20260819-04"
+  "reprioritized_at": "2026-08-19T18:43:51.137577+00:00",
+  "reprioritized_after_task": "eng-20260819-05"
 }
