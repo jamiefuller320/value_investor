@@ -236,6 +236,10 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     learning_tracks_summary = _read_paper_automation_json(
         output_dir, "learning_tracks_summary.json"
     )
+    churn_health = _read_paper_automation_json(output_dir, "learning_tracks_churn_health.json")
+    buffered_hold_counterfactual = _read_paper_automation_json(
+        output_dir, "buffered_hold_counterfactual.json"
+    )
     learning_track_funds: dict[str, Any] = {}
     learning_track_configs: dict[str, Any] = {}
     try:
@@ -398,6 +402,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "learning_track_funds": learning_track_funds,
         "learning_track_configs": learning_track_configs,
         "learning_track_epoch_datum": learning_track_epoch_datum,
+        "churn_health": churn_health,
+        "buffered_hold_counterfactual": buffered_hold_counterfactual,
         "automation": automation,
         "project_progress": project_progress,
         "human_tasks_checklist": human_tasks_checklist,

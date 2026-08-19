@@ -1222,6 +1222,195 @@ function humanTaskDocUrl(checklist, task) {
   return `${base}/${path}${anchor}`;
 }
 
+function githubOpsDocUrl(path, anchor) {
+  const base = "https://github.com/jamiefuller320/value_investor/blob/main";
+  const clean = String(path || "").replace(/^\//, "");
+  if (!clean) return null;
+  return anchor ? `${base}/${clean}#${anchor}` : `${base}/${clean}`;
+}
+
+function pctOrDash(value, digits = 1) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  return `${(Number(value) * 100).toFixed(digits)}%`;
+}
+
+function numOrDash(value, digits = 2) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  return Number(value).toFixed(digits);
+}
+
+function renderChurnCounterfactualPanel(data) {
+  const churn = data.churn_health;
+  const counterfactual = data.buffered_hold_counterfactual;
+  if (!churn && !counterfactual) {
+    return `
+      <section class="automation-section automation-section-full churn-counterfactual-section">
+        <h2>Churn &amp; counterfactual</h2>
+        <p class="muted">No churn health or buffered-hold counterfactual published yet — runs after weekday decision-review.</p>
+      </section>`;
+  }
+
+  const lookback =
+    churn?.lookback_days ?? counterfactual?.lookback_days ?? 7;
+  const asOf = churn?.generated_at || counterfactual?.as_of;
+  const docChurn = githubOpsDocUrl("docs/ops/paper-learning-review.md");
+  const docCf = githubOpsDocUrl("docs/ops/decision-review.md", "rebalance-decision-log");
+
+  const trackLabels = {
+    rules: "Rules (control)",
+    ai_judgment: "AI judgment (primary)",
+    ai_judgment_calibrated: "AI judgment calibrated (shadow)",
+    momentum_grace: "Momentum grace",
+    technical: "Technical",
+  };
+
+  const alerts = churn?.alerts || [];
+  const alertsHtml = alerts.length
+    ? `<ul class="churn-alerts">
+        ${alerts
+          .map(
+            (alert) => `
+          <li class="churn-alert severity-${esc(alert.severity || "info")}">
+            <strong>${esc(alert.title || "Alert")}</strong>
+            <span class="small muted"> · ${esc(alert.track || "—")}</span>
+            <div class="small">${esc(alert.summary || "")}</div>
+          </li>`
+          )
+          .join("")}
+      </ul>`
+    : `<p class="small muted">No churn alerts in the ${lookback}-day window.</p>`;
+
+  const churnTracks = churn?.tracks || {};
+  const churnRows = Object.entries(churnTracks)
+    .map(([trackId, row]) => {
+      const windowKey = Object.keys(row).find((key) => key.startsWith("trades_last_"));
+      const window = (windowKey && row[windowKey]) || {};
+      const review = row.decision_review || {};
+      const guards = row.guards || {};
+      const state = row.rebalance_state || {};
+      const costDrag = review.cost_drag;
+      const costClass =
+        costDrag != null && Number(costDrag) >= 0.06 ? "text-negative" : "";
+      return `<tr>
+        <td><strong>${esc(trackLabels[trackId] || trackId)}</strong><br><span class="small muted">${esc(trackId)}</span></td>
+        <td class="${costClass}">${pctOrDash(costDrag)}</td>
+        <td>${review.trade_count ?? "—"}</td>
+        <td>${window.full_exits ?? "—"}</td>
+        <td>${window.adjacent_flip_count ?? "—"}</td>
+        <td>${state.buffered_holdings ?? "—"}</td>
+        <td>${guards.exit_confirm_screens ?? "—"}</td>
+        <td>${row.last_run?.buffer_holds_planned ?? "—"}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const cfTracks = counterfactual?.tracks || {};
+  const cfRows = Object.entries(cfTracks)
+    .map(([trackId, row]) => {
+      const comparison = row.comparison || {};
+      const variants = row.variants || {};
+      const v1 = variants["1"] || variants[1] || {};
+      const v2 = variants["2"] || variants[2] || {};
+      const tradeDelta = comparison.trade_count_delta_lower_minus_higher;
+      const costDelta = comparison.cost_drag_delta_lower_minus_higher;
+      const returnDelta = comparison.return_delta_lower_minus_higher;
+      const hasSignal =
+        tradeDelta != null &&
+        (Math.abs(Number(tradeDelta)) > 0 ||
+          Math.abs(Number(costDelta || 0)) > 0.0001 ||
+          Math.abs(Number(returnDelta || 0)) > 0.0001);
+      const signalBadge = hasSignal
+        ? '<span class="badge badge-buy">discriminatory</span>'
+        : '<span class="badge badge-neutral">flat</span>';
+      const ctx = row.churn_context || {};
+      return `<tr>
+        <td><strong>${esc(trackLabels[trackId] || trackId)}</strong> ${signalBadge}<br><span class="small muted">${esc(trackId)}</span></td>
+        <td>${ctx.log_entries_in_window ?? "—"}</td>
+        <td>${ctx.full_exits_in_window ?? "—"}</td>
+        <td>${ctx.buffered_holdings ?? "—"}</td>
+        <td>${pctOrDash(v1.simulated_cost_drag)}</td>
+        <td>${pctOrDash(v2.simulated_cost_drag)}</td>
+        <td>${numOrDash(costDelta, 4)}</td>
+        <td>${numOrDash(returnDelta, 4)}</td>
+        <td>${tradeDelta ?? "—"}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const cfSummary = counterfactual?.summary || {};
+  const flatTracks = Object.entries(cfSummary)
+    .filter(([, row]) => {
+      const cmp = row.comparison || {};
+      return (
+        Number(cmp.trade_count_delta_lower_minus_higher || 0) === 0 &&
+        Math.abs(Number(cmp.cost_drag_delta_lower_minus_higher || 0)) < 0.0001
+      );
+    })
+    .map(([trackId]) => trackLabels[trackId] || trackId);
+
+  const noteHtml =
+    flatTracks.length && cfRows
+      ? `<p class="small muted churn-note">exit_confirm_screens 1 vs 2 is <strong>flat</strong> for ${esc(
+          flatTracks.join(", ")
+        )} in the ${lookback}-day window — wait for more live log entries before tuning churn guards.</p>`
+      : "";
+
+  return `
+    <section class="automation-section automation-section-full churn-counterfactual-section">
+      <h2>Churn &amp; counterfactual</h2>
+      <p class="small muted" style="margin-top:0">
+        Observe-only rollups from weekday decision-review (${lookback}-day lookback).
+        ${asOf ? `Updated ${esc(fmtDate(asOf))}.` : ""}
+        ${docChurn ? `<a href="${esc(docChurn)}" target="_blank" rel="noopener">Paper learning review</a>` : ""}
+        ${docCf ? ` · <a href="${esc(docCf)}" target="_blank" rel="noopener">Rebalance log replay</a>` : ""}
+      </p>
+
+      <h3>Churn alerts</h3>
+      ${alertsHtml}
+
+      <h3>Churn health by track</h3>
+      <div class="table-wrap">
+        <table class="churn-counterfactual-table">
+          <thead>
+            <tr>
+              <th>Track</th>
+              <th>Cost drag</th>
+              <th>Trades (review)</th>
+              <th>Full exits (${lookback}d)</th>
+              <th>Side flips</th>
+              <th>Buffered</th>
+              <th>exit_confirm</th>
+              <th>Buffer holds (last run)</th>
+            </tr>
+          </thead>
+          <tbody>${churnRows || '<tr><td colspan="8" class="muted">No churn health tracks.</td></tr>'}</tbody>
+        </table>
+      </div>
+
+      <h3>Buffered-hold counterfactual (exit_confirm 1 vs 2)</h3>
+      <p class="small muted">Lower screen count exits sooner (more churn); higher count buffers longer. Observe-only — does not change live config.</p>
+      ${noteHtml}
+      <div class="table-wrap">
+        <table class="churn-counterfactual-table">
+          <thead>
+            <tr>
+              <th>Track</th>
+              <th>Log entries</th>
+              <th>Full exits</th>
+              <th>Buffered now</th>
+              <th>Cost drag (confirm=1)</th>
+              <th>Cost drag (confirm=2)</th>
+              <th>Δ cost drag</th>
+              <th>Δ return</th>
+              <th>Δ trades</th>
+            </tr>
+          </thead>
+          <tbody>${cfRows || '<tr><td colspan="9" class="muted">No counterfactual tracks in lookback window yet (rules needs fresh weekday logs).</td></tr>'}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
 function renderHumanTasksChecklistSection(checklist) {
   if (!checklist || !Array.isArray(checklist.sections) || !checklist.sections.length) {
     return `
@@ -1582,6 +1771,7 @@ function renderAutomation(data) {
 
   panel.innerHTML = `
     ${renderLearningTracksPanel(data)}
+    ${renderChurnCounterfactualPanel(data)}
     ${renderHumanTasksChecklistSection(data.human_tasks_checklist)}
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
 
