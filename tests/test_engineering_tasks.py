@@ -13,6 +13,7 @@ from value_investor.data_library import (
     save_manifest,
 )
 from value_investor.engineering_tasks import (
+    AREA_ALLOWED_PATHS,
     compile_engineering_tasks,
     draft_library_ladder_engineering_tasks,
     load_engineering_tasks,
@@ -20,6 +21,12 @@ from value_investor.engineering_tasks import (
     select_engineering_tasks,
 )
 from value_investor.storage import write_json
+
+
+def test_ingest_allowed_paths_include_companies_house_module_tests():
+    paths = AREA_ALLOWED_PATHS["ingest"]
+    assert "src/value_investor/companies_house.py" in paths
+    assert "tests/test_companies_house.py" in paths
 
 
 def test_needs_engineering_implementation_filters_ingest_retry_only():

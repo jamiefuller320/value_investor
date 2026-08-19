@@ -44,6 +44,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "tests/test_research_filings.py",
         "tests/test_gap_fill_deepen.py",
         "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py",
     ],
     "scoring": [
         "src/value_investor/pipeline.py",
