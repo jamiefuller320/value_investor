@@ -161,6 +161,7 @@ def test_deepen_thin_filings_runs_when_thin(
     mock_execute.assert_called_once()
 
 
+@patch("value_investor.research.gap_fill_sources.extract_ir_presentation_metrics")
 @patch("value_investor.research.filings.prune_orphaned_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.merge_ir_allowlist_filings")
@@ -168,6 +169,7 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
     mock_merge,
     mock_ir_refetch,
     mock_prune,
+    mock_extract,
     tmp_path: Path,
 ):
     from value_investor.research.gap_fill_sources import execute_planned_alternate_sources
@@ -178,6 +180,12 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
         "fetched": 1,
         "with_body_before": 0,
         "with_body_after": 1,
+    }
+    mock_extract.return_value = {
+        "bridge_count": 1,
+        "segment_split_count": 1,
+        "lease_maturity_count": 0,
+        "mandatory": True,
     }
 
     result = execute_planned_alternate_sources(
@@ -191,6 +199,7 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
     mock_merge.assert_called_once()
     mock_ir_refetch.assert_called_once()
     mock_prune.assert_called_once()
+    mock_extract.assert_called_once()
     assert result["sources_tried"] == ["company_ir_presentation"]
     assert result["fetched"] == 1
     assert result["body_refetch"]["fetched"] == 1

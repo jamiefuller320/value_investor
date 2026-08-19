@@ -564,6 +564,9 @@ def prepare_gap_fill_source_pack(
         "screen_run_manifest": screen_run_manifest,
         "ir_presentation_metrics": {
             "bridge_count": ir_presentation_metrics.get("bridge_count", 0),
+            "segment_split_count": ir_presentation_metrics.get("segment_split_count", 0),
+            "lease_maturity_count": ir_presentation_metrics.get("lease_maturity_count", 0),
+            "mandatory": ir_presentation_metrics.get("mandatory", False),
             "path": str(sources_dir / "ir_presentation_metrics.json"),
         },
         "alternate_news_added": added,
@@ -574,7 +577,8 @@ def prepare_gap_fill_source_pack(
             "Walk evidence_ladder in order. Cite what was tried. "
             "Prefer filings/bodies/*.txt when present. "
             "Use screen_run_manifest.json for universe-level signal counts and "
-            "ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines. "
+            "ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, "
+            "segment revenue splits, and IFRS 16 lease maturity tables. "
             "If still unresolved, pick from planned_alternate_sources and emit "
             "RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
         ),
@@ -632,7 +636,13 @@ def execute_planned_alternate_sources(
                 company_name=company_name,
                 max_bodies=20,
             )
+            last_refetch["mandatory"] = True
             prune_orphaned_filing_bodies(filings_dir)
+            extract_ir_presentation_metrics(
+                filings_dir,
+                ticker,
+                sources_dir=sources_dir,
+            )
             fetched = int(last_refetch.get("fetched") or 0)
             fetched_total += fetched
             if fetched > 0:

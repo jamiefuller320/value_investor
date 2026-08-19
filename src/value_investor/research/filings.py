@@ -3372,6 +3372,280 @@ def parse_ir_cash_bridge_slides(body_text: str) -> dict[str, Any] | None:
     }
 
 
+_FCF_DIVISION_SECTION_RE = re.compile(
+    r"Appendix:\s*Cash flow by division",
+    re.IGNORECASE,
+)
+_FCF_DIVISION_LABELS = (
+    "open_access_other_rail",
+    "dft_tocs",
+    "first_bus",
+    "group_items",
+    "total",
+)
+_SEGMENT_REVENUE_HEADER_RE = re.compile(
+    r"\b("
+    r"Segmental core revenue|Segment revenue|Revenue by (?:business )?segment|"
+    r"Total Studios revenue|Total M&E revenue"
+    r")\b",
+    re.IGNORECASE,
+)
+_SEGMENT_REVENUE_LINE_RE = re.compile(
+    r"^\s*([A-Za-z][A-Za-z0-9 \.&'-]+?)\s+([\d,]+(?:\.\d+)?)\s+([\d,]+(?:\.\d+)?)\s*$"
+)
+_GEOGRAPHIC_REGION_NAMES = (
+    "Island of Ireland",
+    "Great Britain",
+    "Northern Europe",
+    "Continental Europe",
+    "North America",
+    "United Kingdom",
+    "Iberia",
+    "GB",
+    "MENA",
+)
+
+
+def _split_geographic_region_line(line: str) -> list[str]:
+    remaining = line.strip()
+    regions: list[str] = []
+    ordered = sorted(_GEOGRAPHIC_REGION_NAMES, key=len, reverse=True)
+    while remaining:
+        matched = False
+        for name in ordered:
+            if remaining.lower().startswith(name.lower()):
+                regions.append(name if name != "GB" else "GB")
+                remaining = remaining[len(name) :].strip()
+                matched = True
+                break
+        if not matched:
+            break
+    return regions
+
+
+def _recent_percentage_block(lines: list[str], end_index: int, count: int) -> list[float] | None:
+    values: list[float] = []
+    for line in reversed(lines[max(0, end_index - 15) : end_index]):
+        match = re.search(r"(\d+(?:\.\d+)?)\s*%", line)
+        if match is None:
+            break
+        value = float(match.group(1))
+        if 0 < value < 100:
+            values.append(value)
+    if len(values) < count:
+        return None
+    values.reverse()
+    return values[:count]
+
+
+def parse_ir_geographic_revenue_share(body_text: str) -> dict[str, Any] | None:
+    """Parse geographic revenue share percentages from IR deck region slides."""
+    if not body_text or not body_text.strip():
+        return None
+
+    best: tuple[list[str], list[float]] | None = None
+    lines = body_text.splitlines()
+    for index, line in enumerate(lines):
+        regions = _split_geographic_region_line(line)
+        if len(regions) < 3:
+            continue
+        share_values = _recent_percentage_block(lines, index, len(regions))
+        if share_values is None:
+            continue
+        if best is None or len(regions) > len(best[0]):
+            best = (regions, share_values)
+
+    if best is None:
+        return None
+    regions, share_values = best
+    segments = [
+        {"segment": region, "group_revenue_pct": pct}
+        for region, pct in zip(regions, share_values, strict=True)
+    ]
+    return {
+        "split_type": "geographic_revenue_share",
+        "currency": "GBP",
+        "segments": segments,
+        "parse_confidence": "medium",
+    }
+
+
+_LEASE_MATURITY_SECTION_RE = re.compile(
+    r"maturity profile of the Group.s financial liabilities",
+    re.IGNORECASE,
+)
+_LEASES_MATURITY_ROW_RE = re.compile(
+    r"^Leases\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,–\-]+)\s+([\d,]+)",
+    re.MULTILINE | re.IGNORECASE,
+)
+_IFRS16_LIABILITY_TOTAL_RE = re.compile(
+    r"£\s*([\d,.]+)\s*m(?:illion)? of IFRS\s*16 lease liabilities",
+    re.IGNORECASE,
+)
+_LEASE_MATURITY_BUCKETS = (
+    "within_one_year",
+    "year_2",
+    "year_3",
+    "year_4",
+    "year_5",
+    "over_5_years",
+    "total",
+)
+
+
+def _parse_signed_bridge_amounts(blob: str) -> list[float]:
+    amounts: list[float] = []
+    for match in re.finditer(r"\((\d+(?:\.\d+)?)\)|(-?\d+(?:\.\d+)?)", blob):
+        if match.group(1):
+            amounts.append(-float(match.group(1)))
+        else:
+            amounts.append(float(match.group(2)))
+    return amounts
+
+
+def _parse_table_number(raw: str) -> float | None:
+    cleaned = raw.strip().replace(",", "").replace("–", "").replace("-", "")
+    if not cleaned:
+        return None
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None
+
+
+def parse_ir_fcf_division_bridge(body_text: str) -> dict[str, Any] | None:
+    """Parse divisional free-cash-flow bridge tables (e.g. FirstGroup appendix)."""
+    if not body_text or not body_text.strip():
+        return None
+    match = _FCF_DIVISION_SECTION_RE.search(body_text)
+    if match is None:
+        return None
+    section = body_text[match.start() : match.start() + 2500]
+    for line in section.splitlines():
+        if not re.match(r"^\s*Free cash flow\b", line, re.IGNORECASE):
+            continue
+        tail = re.split(r"Free cash flow", line, maxsplit=1, flags=re.IGNORECASE)[-1]
+        amounts = _parse_signed_bridge_amounts(tail)
+        if len(amounts) < 5:
+            continue
+        period_amounts = amounts[:5]
+        bridge_lines = [
+            {"label": label, "amount_millions": amount}
+            for label, amount in zip(_FCF_DIVISION_LABELS, period_amounts, strict=True)
+        ]
+        return {
+            "bridge_type": "fcf_by_division",
+            "currency": "GBP",
+            "lines": bridge_lines,
+            "derived": {"total_fcf_millions": period_amounts[-1]},
+            "parse_confidence": "high",
+        }
+    return None
+
+
+def parse_ir_segment_revenue_splits(body_text: str) -> dict[str, Any] | None:
+    """Parse segment revenue split tables from IR presentation PDF extracts."""
+    if not body_text or not body_text.strip():
+        return None
+    match = _SEGMENT_REVENUE_HEADER_RE.search(body_text)
+    if match is None:
+        return None
+    section = body_text[match.start() : match.start() + 900]
+    currency = "USD" if "$" in section[:250] else "GBP"
+    segments: list[dict[str, Any]] = []
+    for line in section.splitlines()[1:]:
+        if re.match(r"^\s*Total\b", line, re.IGNORECASE):
+            break
+        row_match = _SEGMENT_REVENUE_LINE_RE.match(line)
+        if row_match is None:
+            continue
+        name = row_match.group(1).strip()
+        if name.lower() in {"total", "group", "notes"}:
+            continue
+        current = _parse_table_number(row_match.group(2))
+        prior = _parse_table_number(row_match.group(3))
+        if current is None or prior is None:
+            continue
+        segments.append(
+            {
+                "segment": name,
+                "revenue_current": current,
+                "revenue_prior": prior,
+            }
+        )
+        if len(segments) >= 8:
+            break
+    if len(segments) < 2:
+        return None
+    return {
+        "split_type": re.sub(r"\s+", "_", match.group(1).strip().lower()),
+        "currency": currency,
+        "segments": segments,
+        "parse_confidence": "high" if len(segments) >= 3 else "medium",
+    }
+
+
+def parse_ir_ifrs16_lease_maturity(body_text: str) -> dict[str, Any] | None:
+    """Parse IFRS 16 lease maturity tables or headline lease liability totals."""
+    if not body_text or not body_text.strip():
+        return None
+
+    section_match = _LEASE_MATURITY_SECTION_RE.search(body_text)
+    if section_match is not None:
+        section = body_text[section_match.start() : section_match.start() + 2500]
+        date_markers = list(re.finditer(r"At\s+31\s+\w+\s+\d{4}", section, flags=re.IGNORECASE))
+        search_from = date_markers[-1].start() if date_markers else 0
+        leases_match = _LEASES_MATURITY_ROW_RE.search(section[search_from:])
+        if leases_match is not None:
+            values = [_parse_table_number(raw) for raw in leases_match.groups()]
+            if all(value is not None for value in values):
+                rows = [
+                    {"bucket": bucket, "amount_thousands": value}
+                    for bucket, value in zip(_LEASE_MATURITY_BUCKETS, values, strict=True)
+                ]
+                reporting_date = date_markers[-1].group(0) if date_markers else None
+                return {
+                    "table_type": "ifrs16_lease_maturity",
+                    "currency": "GBP",
+                    "unit": "thousands",
+                    "reporting_date": reporting_date,
+                    "buckets": rows,
+                    "parse_confidence": "high",
+                }
+
+    total_match = _IFRS16_LIABILITY_TOTAL_RE.search(body_text)
+    if total_match is not None:
+        total = _parse_table_number(total_match.group(1))
+        if total is not None:
+            return {
+                "table_type": "ifrs16_lease_liability_total",
+                "currency": "GBP",
+                "unit": "millions",
+                "total_lease_liabilities": total,
+                "parse_confidence": "medium",
+            }
+    return None
+
+
+def _write_ir_presentation_metrics_payload(
+    payload: dict[str, Any],
+    *,
+    sources_dir: Path | None,
+) -> None:
+    from value_investor.storage import write_json
+
+    payload["bridge_count"] = len(payload.get("bridges") or [])
+    payload["segment_split_count"] = len(payload.get("segment_revenue_splits") or [])
+    payload["lease_maturity_count"] = len(payload.get("ifrs_16_lease_maturity") or [])
+    if sources_dir is not None:
+        write_json(
+            Path(sources_dir) / "ir_presentation_metrics.json",
+            payload,
+            compact=False,
+            compress=False,
+        )
+
+
 def extract_ir_presentation_metrics(
     filings_dir: Path,
     ticker: str,
@@ -3379,41 +3653,32 @@ def extract_ir_presentation_metrics(
     sources_dir: Path | None = None,
 ) -> dict[str, Any]:
     """
-    Scan IR allowlist filing bodies and extract cash-bridge metrics when present.
+    Scan IR allowlist filing bodies and extract presentation-grade metrics.
 
-    Writes ``ir_presentation_metrics.json`` under ``sources_dir`` when provided.
+    Parses cash-flow bridges, segment revenue splits, and IFRS 16 lease tables
+    when present in IR PDF body extracts. Writes ``ir_presentation_metrics.json``
+    under ``sources_dir`` when provided.
     """
-    from value_investor.storage import write_json
-
     filings_dir = Path(filings_dir)
     index_path = filings_dir / "filings_index.json"
     payload: dict[str, Any] = {
         "ticker": ticker,
         "extracted_at": datetime.now(UTC).isoformat(),
         "bridges": [],
+        "segment_revenue_splits": [],
+        "ifrs_16_lease_maturity": [],
+        "mandatory": bool(fetch_filings_ir_allowlist(ticker)),
     }
     if not index_path.exists():
         payload["note"] = "no filings_index.json"
-        if sources_dir is not None:
-            write_json(
-                Path(sources_dir) / "ir_presentation_metrics.json",
-                payload,
-                compact=False,
-                compress=False,
-            )
+        _write_ir_presentation_metrics_payload(payload, sources_dir=sources_dir)
         return payload
 
     try:
         index = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError) as exc:
         payload["note"] = f"unreadable index: {exc}"
-        if sources_dir is not None:
-            write_json(
-                Path(sources_dir) / "ir_presentation_metrics.json",
-                payload,
-                compact=False,
-                compress=False,
-            )
+        _write_ir_presentation_metrics_payload(payload, sources_dir=sources_dir)
         return payload
 
     bodies_dir = filings_dir / "bodies"
@@ -3428,26 +3693,29 @@ def extract_ir_presentation_metrics(
             body_text = path.read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
-        parsed = parse_ir_cash_bridge_slides(body_text)
-        if not parsed:
-            continue
-        payload["bridges"].append(
-            {
-                "source_body_id": row.get("id"),
-                "headline": row.get("headline"),
-                "period": row.get("period"),
-                **parsed,
-            }
-        )
 
-    payload["bridge_count"] = len(payload["bridges"])
-    if sources_dir is not None:
-        write_json(
-            Path(sources_dir) / "ir_presentation_metrics.json",
-            payload,
-            compact=False,
-            compress=False,
-        )
+        source_meta = {
+            "source_body_id": row.get("id"),
+            "headline": row.get("headline"),
+            "period": row.get("period"),
+        }
+        cash_bridge = parse_ir_cash_bridge_slides(body_text)
+        if cash_bridge:
+            payload["bridges"].append({**source_meta, **cash_bridge})
+        fcf_division = parse_ir_fcf_division_bridge(body_text)
+        if fcf_division:
+            payload["bridges"].append({**source_meta, **fcf_division})
+        segment_split = parse_ir_segment_revenue_splits(body_text)
+        if segment_split:
+            payload["segment_revenue_splits"].append({**source_meta, **segment_split})
+        geo_share = parse_ir_geographic_revenue_share(body_text)
+        if geo_share:
+            payload["segment_revenue_splits"].append({**source_meta, **geo_share})
+        lease_table = parse_ir_ifrs16_lease_maturity(body_text)
+        if lease_table:
+            payload["ifrs_16_lease_maturity"].append({**source_meta, **lease_table})
+
+    _write_ir_presentation_metrics_payload(payload, sources_dir=sources_dir)
     return payload
 
 
