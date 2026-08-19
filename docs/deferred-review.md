@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-19T11:34:06+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-19T14:34:58+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -229,6 +229,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L89 | **Revisit library weekly_usage_gbp after Pro+ upgrade** | Pro+ expands Composer/Auto and API pools. If library ladder is frequently constraining at £30/week, consider raising weekly_usage_gbp or selective_memo caps — only after reviewing ftse-library policy and actual spend vs envelope. | ftse-library policy shows constraining flag for ≥3 consecutive weeks despite Pro+ headroom |
 | L95 | **Mid-week post-run review agent after engineering merges** | Optional LLM triage to reorder the engineering queue when deterministic reprioritize is insufficient — e.g. after multiple ingest merges or contradictory filing signals. | Deterministic reprioritize hook has run for 3+ ingest merges and queue order still feels stale vs Sunday diagnosis |
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
+| L161 | **Generalize post-merge engineering proof + capped rework** | Extend ingest gap-closure verify-then-recompile pattern to other engineering areas (scoring/FCF overlays): after merge, run a task-scoped acceptance/smoke check; on failure reopen the same task with a hard round cap (e.g. 3) instead of unbounded immediate agent rework. | After eng-20260819 ingest/FCF queue drains, or when a merged engineering PR repeatedly fails its VERIFY NEXT RUN / acceptance intent on the next ingest or screen pass |
 
 ---
 
