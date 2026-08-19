@@ -140,8 +140,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 0
+      "status": "merged",
+      "no_diff_count": 0,
+      "branch_name": "cursor/eng-20260819-01-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/303",
+      "pr_number": 303,
+      "merged_at": "2026-08-19T14:43:08.228027+00:00"
     },
     {
       "id": "eng-20260819-03",
@@ -1322,49 +1326,6 @@
       "merged_at": "2026-08-18T06:04:42.143663+00:00"
     },
     {
-      "id": "eng-20260819-04",
-      "area": "ingest",
-      "title": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with m",
-      "summary": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with mandatory extraction on gap-fill targets",
-      "priority": "high",
-      "priority_score": 97.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [
-          "IR",
-          "PDF",
-          "FCF",
-          "IFRS"
-        ],
-        "plan_index": 5
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for IR",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
-    },
-    {
       "id": "eng-20260809-02",
       "area": "ingest",
       "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
@@ -1420,6 +1381,49 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/200",
       "pr_number": 200,
       "merged_at": "2026-08-09T12:06:54.365673+00:00"
+    },
+    {
+      "id": "eng-20260819-04",
+      "area": "ingest",
+      "title": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with m",
+      "summary": "Parse IR PDF allowlist outputs into structured fields (`ir_presentation_metrics.json` FCF bridges, IFRS 16 lease maturity tables, segment revenue splits) with mandatory extraction on gap-fill targets",
+      "priority": "high",
+      "priority_score": 93.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "PDF",
+          "FCF",
+          "IFRS"
+        ],
+        "plan_index": 5
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260726-03",
@@ -2533,7 +2537,7 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-08-19T14:23:24.571133+00:00",
+    "snapshot_at": "2026-08-19T14:43:16.364273+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
@@ -2544,16 +2548,16 @@
     "filings_with_body": 3603
   },
   "ingest_health_before": {
-    "snapshot_at": "2026-08-19T11:34:33.625402+00:00",
-    "buy_tier_count": 70,
-    "measured_tickers": 70,
+    "snapshot_at": "2026-08-19T14:23:24.571133+00:00",
+    "buy_tier_count": 66,
+    "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 1,
-    "filings_with_body": 3789
+    "indexed_without_body": 15,
+    "filings_with_body": 3603
   },
-  "reprioritized_at": "2026-08-19T14:23:24.571270+00:00",
-  "reprioritized_after_task": "eng-20260819-02"
+  "reprioritized_at": "2026-08-19T14:43:16.364406+00:00",
+  "reprioritized_after_task": "eng-20260819-01"
 }
