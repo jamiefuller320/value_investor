@@ -55,6 +55,9 @@ PER_TICKER_MIN_BUDGET_SECONDS = 120.0
 DEFAULT_INGEST_REFETCH_MAX_BODIES = 20
 DEFAULT_BACKFILL_MAX_BODIES = 40
 UNMEASURED_PRIORITY_BONUS = 10.0
+# Buy-tier tickers with recurring indexed-without-body gaps — batch-prioritized in ingest pass.
+BODY_GAP_BATCH_TICKERS = frozenset({"ITV.L", "GFTU.L", "MGNS.L", "AEP.L"})
+BODY_GAP_BATCH_PRIORITY_BONUS = 8.0
 KNOWN_SOURCE_IDS = frozenset(
     {
         "companies_house_accounts",
@@ -349,6 +352,8 @@ def _priority_score(
             score += 0.5
     if signal == "strong_buy":
         score += 2.0
+    if ticker.upper() in BODY_GAP_BATCH_TICKERS and coverage["indexed_without_body"] > 0:
+        score += BODY_GAP_BATCH_PRIORITY_BONUS
     return score
 
 

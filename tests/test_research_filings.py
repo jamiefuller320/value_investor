@@ -62,6 +62,8 @@ from value_investor.research.filings import (
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
     resolve_investegate_lse_pdf_url,
+    resolve_lse_document_url,
+    resolve_lse_rns_document_url,
     sanitize_filings_index,
     summarize_filings,
 )
@@ -790,6 +792,81 @@ def test_resolve_investegate_lse_pdf_url_upgrades_investegate_page(monkeypatch):
     assert resolve_investegate_lse_pdf_url(lse_pdf) == lse_pdf
 
 
+def test_resolve_lse_document_url_finds_embedded_pdf():
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    html = f"""
+    <html><body>
+    <p>View the associated PDF document.</p>
+    <a href="{lse_pdf}">PDF</a>
+    </body></html>
+    """
+    assert resolve_lse_document_url(html) == lse_pdf
+
+
+def test_resolve_lse_rns_document_url_upgrades_html_wrapper(monkeypatch):
+    lse_html = "https://docs.londonstockexchange.com/rns/abc123/announcement.html"
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    page_html = f'<a href="{lse_pdf}">Download PDF</a>'
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == lse_html:
+            return page_html.encode("utf-8")
+        raise AssertionError(url)
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    assert resolve_lse_rns_document_url(lse_html) == lse_pdf
+    assert resolve_lse_rns_document_url(lse_pdf) == lse_pdf
+
+
+def test_fetch_filing_body_lse_html_wrapper_follows_pdf(monkeypatch):
+    lse_html = "https://docs.londonstockexchange.com/rns/abc123/announcement.html"
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    page_html = f'<a href="{lse_pdf}">Download PDF</a>'
+    pdf_text = "A" * 250 + " revenue increased and operating profit rose sharply."
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == lse_html:
+            return page_html.encode("utf-8")
+        if url == lse_pdf:
+            return b"%PDF-fake"
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        lambda raw, content_type: pdf_text,
+    )
+    text = fetch_filing_body(lse_html)
+    assert text is not None
+    assert "revenue increased" in text
+
+
+def test_fetch_filings_investegate_company_tries_gn5_alias_for_gftu(monkeypatch):
+    html = """
+    <table>
+      <tr>
+        <td>05 Mar 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/grafton-group-ut-cdi---gftu/final-results/2">Final Results</a></td>
+      </tr>
+    </table>
+    """
+
+    def fake_get(url, headers=None, timeout=60):
+        if "/company/GFTU" in url:
+            return b"<html></html>"
+        if "/company/GN5" in url:
+            return html.encode("utf-8")
+        raise AssertionError(url)
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    rows = fetch_filings_investegate_company(
+        ticker="GFTU.L",
+        company_name="Grafton Group plc",
+    )
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+
+
 def test_fetch_filing_body_investegate_follows_lse_pdf(monkeypatch):
     investegate_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
     lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
@@ -1515,6 +1592,54 @@ def test_refetch_residual_filing_bodies_fetches_sec_edgar(tmp_path, monkeypatch)
     assert result["fetched"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
+
+
+def test_refetch_residual_filing_bodies_validates_uk_rns_body(tmp_path, monkeypatch):
+    """Residual sweep applies period/issuer validation for LSE RNS rows."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    lse_html = "https://docs.londonstockexchange.com/rns/itv/fy2025.html"
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "itv_residual",
+                "source": "ticker_rns_api",
+                "headline": "ITV plc Full Year Results 2025",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": lse_html,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    interim_body = (
+        "ITV plc half year interim results for six months ended 30 June 2025. "
+        "Advertising revenue down 3%." + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: interim_body,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=4,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is False
+    assert not (filings_dir / "bodies" / "itv_residual.txt").exists()
 
 
 def test_refetch_residual_filing_bodies_prunes_unfetchable_google_news(tmp_path, monkeypatch):

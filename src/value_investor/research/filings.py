@@ -446,24 +446,11 @@ def _try_sec_exhibit_body(url: str) -> str | None:
     return None
 
 
-def fetch_filings_investegate_company(
+def _parse_investegate_company_page_html(
+    html: str,
     *,
-    ticker: str,
-    company_name: str,
-    max_items: int = _INVESTEGATE_MAX_ITEMS,
+    max_items: int,
 ) -> list[dict[str, Any]]:
-    """Fetch recent RNS announcements from the issuer's Investegate company page."""
-    epic = _base_symbol(ticker)
-    if not epic:
-        return []
-    url = _INVESTEGATE_COMPANY_URL.format(epic=urllib.parse.quote(epic))
-    try:
-        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
-        html = raw.decode("utf-8", errors="replace")
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        logger.warning("Investegate company page failed for %s: %s", ticker, exc)
-        return []
-
     rows: list[dict[str, Any]] = []
     pattern = re.compile(
         r"<tr>\s*<td>(\d{2} \w{3} \d{4})</td>\s*<td>([^<]*)</td>[\s\S]*?"
@@ -504,14 +491,90 @@ def fetch_filings_investegate_company(
         )
         if len(rows) >= max_items:
             break
-    if rows:
-        logger.info("Investegate company page: %s → %d announcements", ticker, len(rows))
     return rows
 
 
-def _is_lse_rns_pdf_url(url: str | None) -> bool:
+def _fetch_filings_investegate_company_for_epic(
+    *,
+    epic: str,
+    max_items: int = _INVESTEGATE_MAX_ITEMS,
+) -> list[dict[str, Any]]:
+    url = _INVESTEGATE_COMPANY_URL.format(epic=urllib.parse.quote(epic))
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("Investegate company page failed for EPIC %s: %s", epic, exc)
+        return []
+    return _parse_investegate_company_page_html(html, max_items=max_items)
+
+
+def fetch_filings_investegate_company(
+    *,
+    ticker: str,
+    company_name: str,
+    max_items: int = _INVESTEGATE_MAX_ITEMS,
+) -> list[dict[str, Any]]:
+    """Fetch recent RNS announcements from the issuer's Investegate company page."""
+    primary = _base_symbol(ticker)
+    if not primary:
+        return []
+    for epic in _uk_rns_epics(ticker):
+        rows = _fetch_filings_investegate_company_for_epic(epic=epic, max_items=max_items)
+        if rows:
+            if epic != primary:
+                logger.info(
+                    "Investegate company page: %s matched via alternate EPIC %s (%d rows)",
+                    ticker,
+                    epic,
+                    len(rows),
+                )
+            else:
+                logger.info("Investegate company page: %s → %d announcements", ticker, len(rows))
+            return rows
+    logger.warning("Investegate company page returned no rows for %s", ticker)
+    return []
+
+
+def _is_lse_rns_url(url: str | None) -> bool:
+    """True for LSE RNS hosts including HTML wrapper pages and direct PDFs."""
     lower = (url or "").lower()
-    return any(host in lower for host in _LSE_RNS_PDF_HOSTS) and lower.endswith(".pdf")
+    return any(host in lower for host in _LSE_RNS_PDF_HOSTS)
+
+
+def _is_lse_rns_pdf_url(url: str | None) -> bool:
+    return _is_lse_rns_url(url) and (url or "").lower().endswith(".pdf")
+
+
+def resolve_lse_document_url(html: str) -> str | None:
+    """Extract an embedded LSE RNS PDF URL from an LSE HTML wrapper page."""
+    for pattern in _INVESTEGATE_LSE_PDF_PATTERNS:
+        match = re.search(pattern, html or "", flags=re.I)
+        if match:
+            return match.group(0)
+    return None
+
+
+def resolve_lse_rns_document_url(url: str | None) -> str | None:
+    """
+    Upgrade an LSE RNS HTML wrapper to the linked PDF when present.
+
+    Returns ``url`` unchanged when it already points at a PDF or is not LSE RNS.
+    """
+    if not url or not url.startswith("http"):
+        return url
+    if _is_lse_rns_pdf_url(url):
+        return url
+    if not _is_lse_rns_url(url):
+        return url
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("LSE RNS page fetch failed for %s: %s", url, exc)
+        return url
+    pdf_url = resolve_lse_document_url(html)
+    return pdf_url or url
 
 
 _RNS_BODY_FETCH_SOURCES = frozenset(
@@ -561,9 +624,7 @@ def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
     if "news.google.com" in url:
         return False
     source = str(row.get("source") or "")
-    return (
-        source in _RNS_BODY_FETCH_SOURCES or "investegate.co.uk" in url or _is_lse_rns_pdf_url(url)
-    )
+    return source in _RNS_BODY_FETCH_SOURCES or "investegate.co.uk" in url or _is_lse_rns_url(url)
 
 
 def _annual_report_microsite_media_base(publisher_url: str) -> str:
@@ -645,10 +706,9 @@ def _resolve_investegate_publisher_annual_report_pdf(html: str) -> str | None:
 
 def resolve_investegate_document_url(html: str) -> str | None:
     """Extract a direct document URL embedded in an Investegate announcement page."""
-    for pattern in _INVESTEGATE_LSE_PDF_PATTERNS:
-        match = re.search(pattern, html or "", flags=re.I)
-        if match:
-            return match.group(0)
+    pdf_url = resolve_lse_document_url(html)
+    if pdf_url:
+        return pdf_url
     return _resolve_investegate_publisher_annual_report_pdf(html)
 
 
@@ -716,13 +776,13 @@ def resolve_investegate_url(
 ) -> str | None:
     """Resolve a Google News wrapper URL to a direct Investegate announcement URL."""
     url = str(row.get("url") or "")
-    if "investegate.co.uk/announcement/" in url or _is_lse_rns_pdf_url(url):
+    if "investegate.co.uk/announcement/" in url or _is_lse_rns_url(url):
         return url
     if "news.google.com" in url:
         decoded = resolve_google_news_publisher_url(url)
         if decoded and "news.google.com" not in decoded:
             lower = decoded.lower()
-            if "investegate.co.uk/announcement/" in lower or _is_lse_rns_pdf_url(decoded):
+            if "investegate.co.uk/announcement/" in lower or _is_lse_rns_url(decoded):
                 return decoded
     if "news.google.com" not in url:
         return None
@@ -2456,10 +2516,12 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
     url = resolve_asx_publisher_document_url(url) or url
     if "investegate.co.uk/announcement/" in url:
         url = resolve_investegate_lse_pdf_url(url) or url
+    elif _is_lse_rns_url(url) and not _is_lse_rns_pdf_url(url):
+        url = resolve_lse_rns_document_url(url) or url
     headers: dict[str, str] = {}
     if "sec.gov" in url:
         headers["User-Agent"] = _sec_user_agent()
-    elif "investegate.co.uk" in url or _is_lse_rns_pdf_url(url):
+    elif "investegate.co.uk" in url or _is_lse_rns_url(url):
         headers["User-Agent"] = _INVESTEGATE_USER_AGENT
     try:
         raw = _http_get(url, headers=headers, timeout=60)
@@ -2494,6 +2556,17 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
                     pdf_body = fetch_filing_body(pdf_url, allow_sec_exhibits=allow_sec_exhibits)
                     if pdf_body:
                         text = pdf_body
+        elif _is_lse_rns_url(url):
+            html = raw.decode("utf-8", errors="replace")
+            pdf_url = resolve_lse_document_url(html)
+            if pdf_url and pdf_url != url:
+                pdf_body = fetch_filing_body(pdf_url, allow_sec_exhibits=allow_sec_exhibits)
+                if pdf_body:
+                    text = pdf_body
+                else:
+                    text = _strip_html(html)
+            else:
+                text = _strip_html(html)
         else:
             html = raw.decode("utf-8", errors="replace")
             text = _extract_ixbrl_html_text(html) if _is_ixbrl_html(html) else _strip_html(html)
@@ -3422,6 +3495,8 @@ def _write_bodies(
     *,
     max_bodies: int = 12,
     attempted_ids: set[str] | None = None,
+    ticker: str = "",
+    company_name: str = "",
 ) -> list[dict[str, Any]]:
     """Fetch bodies for the highest-priority filings with direct URLs."""
     bodies_dir.mkdir(parents=True, exist_ok=True)
@@ -3450,12 +3525,23 @@ def _write_bodies(
                 elif row.get("url"):
                     body = fetch_filing_body(str(row["url"]))
                 if body:
-                    filename = f"{row['id']}.txt"
-                    path = bodies_dir / filename
-                    path.write_text(body, encoding="utf-8")
-                    row["has_body"] = True
-                    row["body_path"] = str(path)
-                    downloaded += 1
+                    if ticker and company_name and _is_rns_body_fetch_candidate(row):
+                        row, _reject_reason = _try_persist_rns_filing_body(
+                            row,
+                            body,
+                            company_name=company_name,
+                            ticker=ticker,
+                            bodies_dir=bodies_dir,
+                        )
+                        if row.get("has_body"):
+                            downloaded += 1
+                    else:
+                        filename = f"{row['id']}.txt"
+                        path = bodies_dir / filename
+                        path.write_text(body, encoding="utf-8")
+                        row["has_body"] = True
+                        row["body_path"] = str(path)
+                        downloaded += 1
         updated.append(row)
     return updated
 
@@ -4100,6 +4186,8 @@ def refetch_residual_filing_bodies(
         bodies_dir,
         max_bodies=max_bodies,
         attempted_ids=attempted_ids,
+        ticker=ticker,
+        company_name=company_name,
     )
     updated, pruned_noise, pruned_unfetchable = _prune_residual_index_rows(
         updated,

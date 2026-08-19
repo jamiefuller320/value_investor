@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
+    BODY_GAP_BATCH_TICKERS,
     IngestImprovementSummary,
     IngestImprovementTarget,
     _planned_sources_for_ticker,
@@ -265,6 +266,47 @@ def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Pa
     assert targets[0].ticker == "BT-A.L"
     assert targets[0].indexed_without_body == 5
     assert targets[0].ingest_suggestion_count == 1
+
+
+def test_select_ingest_improvement_targets_prioritizes_body_gap_batch(tmp_path: Path):
+    """Batch-pinned buy-tier tickers with indexed-without-body gaps rank ahead of peers."""
+    output_dir = tmp_path / "output"
+
+    def _write_index(ticker: str, *, without_body: int, with_body: int) -> None:
+        filings_dir = output_dir / "research" / ticker / "sources" / "filings"
+        filings_dir.mkdir(parents=True)
+        rows = [{"has_body": False}] * without_body + [{"has_body": True}] * with_body
+        (filings_dir / "filings_index.json").write_text(
+            json.dumps(
+                {
+                    "summary": {
+                        "total": len(rows),
+                        "annual": without_body,
+                        "interim": 0,
+                        "with_body": with_body,
+                    },
+                    "filings": rows,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    _write_index("ITV.L", without_body=5, with_body=1)
+    _write_index("OTHER.L", without_body=5, with_body=1)
+
+    targets = select_ingest_improvement_targets(
+        [
+            _report("OTHER.L", "Other plc", signal="buy"),
+            _report("ITV.L", "ITV plc", signal="buy"),
+        ],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=2,
+    )
+
+    assert targets[0].ticker == "ITV.L"
+    assert targets[0].ticker in BODY_GAP_BATCH_TICKERS
+    assert targets[0].priority_score > targets[1].priority_score
 
 
 def test_select_ingest_improvement_targets_require_gaps_skips_suggestion_rich_full_coverage(
