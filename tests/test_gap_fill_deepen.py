@@ -6,7 +6,10 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
+from value_investor.research.gap_fill_sources import (
+    deepen_thin_filings_if_needed,
+    inspect_local_sources,
+)
 
 
 def test_deepen_thin_filings_skips_when_sufficient(tmp_path: Path):
@@ -461,3 +464,28 @@ def test_prepare_gap_fill_attaches_screen_run_manifest(
     assert manifest["ticker_signal"]["signal"] == "strong_buy"
     assert manifest["models_passed"] == 1
     assert pack["screen_run_manifest"]["attached"] is True
+
+
+def test_inspect_local_sources_flags_empty_quarterly_cashflow(tmp_path: Path):
+    sources = tmp_path / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "HIK.L",
+                "cash_flow": {"2025": {"Operating Cash Flow": 436_000_000.0}},
+                "quarterly_cashflow": {},
+                "cashflow_metrics": {
+                    "operating_cashflow": 436_000_000.0,
+                    "ttm_cashflow_suppressed": True,
+                    "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    inventory = inspect_local_sources(sources)
+    assert inventory["available"]["yahoo_financials"] is True
+    assert inventory["available"]["yahoo_quarterly_cashflow"] is False
+    assert "yahoo_quarterly_cashflow" in inventory["thin"]

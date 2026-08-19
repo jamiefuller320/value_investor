@@ -36,6 +36,7 @@ EVIDENCE_LADDER = (
     "filings_bodies",
     "filings_index",
     "yahoo_financials",
+    "yahoo_quarterly_cashflow",
     "news_manifest",
     "alternate_news",
     "screening_snapshot",
@@ -175,6 +176,22 @@ def _market_bucket(market: str | None, ticker: str) -> str:
     return "default"
 
 
+def _yahoo_quarterly_cashflow_usable(sources_dir: Path) -> bool:
+    """True when cached Yahoo financials include a usable quarterly cash-flow series."""
+    from value_investor.research.ingest import quarterly_cashflow_has_usable_series
+
+    financials_path = resolve_json_path(sources_dir / "financials_annual.json")
+    if financials_path is None:
+        return False
+    try:
+        payload = read_json(financials_path)
+    except (OSError, ValueError, TypeError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    return quarterly_cashflow_has_usable_series(payload.get("quarterly_cashflow") or {})
+
+
 def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
     """Summarise which local research sources are present and usable."""
     sources_dir = Path(sources_dir)
@@ -213,6 +230,7 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         "filings_index": resolved_index is not None,
         "filings_bodies": has_filing_bodies,
         "yahoo_financials": resolve_json_path(sources_dir / "financials_annual.json") is not None,
+        "yahoo_quarterly_cashflow": _yahoo_quarterly_cashflow_usable(sources_dir),
         "news_manifest": news_count > 0,
         "screening_snapshot": resolve_json_path(sources_dir / "screening_snapshot.json")
         is not None,

@@ -42,7 +42,7 @@ from value_investor.research.ingest_bootstrap import (
     prefer_filing_index_path,
 )
 from value_investor.research.store import ResearchStore
-from value_investor.storage import read_json, write_json
+from value_investor.storage import read_json, resolve_json_path, write_json
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
@@ -745,6 +745,19 @@ def run_ingest_improvement_pass(
                     "with_body_before": before,
                     "with_body_after": after,
                     "improved": improved,
+                    "quarterly_cashflow_usable": bool(
+                        (after_inventory.get("available") or {}).get("yahoo_quarterly_cashflow")
+                    ),
+                    "ttm_cashflow_suppressed": bool(
+                        (
+                            read_json(sources_dir / "financials_annual.json").get(
+                                "cashflow_metrics"
+                            )
+                            or {}
+                        ).get("ttm_cashflow_suppressed")
+                        if resolve_json_path(sources_dir / "financials_annual.json") is not None
+                        else False
+                    ),
                     "mapped_source_ids": mapped_source_ids,
                     "planned_sources": [row.get("id") for row in planned],
                     "ch_refetch": ch_refetch,
