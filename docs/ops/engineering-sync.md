@@ -56,6 +56,41 @@ Dispatch target is always re-resolved to a currently open task id.
 - [`ops-monitor.md`](ops-monitor.md) — daily health checks
 - [`ci-fix-automation.md`](ci-fix-automation.md) — scoped CI auto-merge loop
 
+## Post-merge acceptance verify + capped rework (L161)
+
+After an engineering PR merges, the queue runs a **task-scoped acceptance pytest**
+gate (`ftse-engineering verify-merged`) unless the task is an ingest gap-closure
+fix (those keep the existing outcome-based ingest-loop verification chain).
+
+```mermaid
+flowchart LR
+  M[Engineering PR merged] --> G{Gap-closure task?}
+  G -->|yes| I[Dispatch ingest-loop verify]
+  G -->|no| V[pytest allowed_paths tests/]
+  V -->|pass| D[Stamp verify_status=passed]
+  V -->|fail and rounds under cap| R[Queue linked rework task]
+  V -->|fail and rounds exhausted| X[Stamp verify_status=exhausted]
+  R --> Q[Hourly queue dispatches agent]
+```
+
+Rules:
+
+- Only runs when the merged task lists `tests/…` under `allowed_paths`.
+- Rework is a **new open task** (new id/branch) linked via
+  `evidence.verify_chain_root_id` / `parent_task_id` — avoids colliding with the
+  merged branch reconcile path.
+- Hard cap: **3** engineering attempts in the verify chain
+  (`MAX_VERIFY_REWORK_ROUNDS`).
+- Does **not** auto-merge rework; same draft-PR / human-merge policy as the parent
+  unless the parent was already `auto_merge: true` (CI-fix).
+
+Manual:
+
+```bash
+ftse-engineering --json verify-merged --task-id eng-YYYYMMDD-NN
+ftse-engineering --json verify-merged --task-id eng-YYYYMMDD-NN --dry-run
+```
+
 ## Library ladder → engineering draft
 
 When the offline ladder cannot run screen-lite on the focus market (usable metrics

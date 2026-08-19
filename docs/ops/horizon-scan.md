@@ -61,6 +61,10 @@ run fails refetch (`0/N` bodies), ingest-loop auto-compiles a scoped engineering
 engineering round is compiled automatically (up to **3 rounds per chain**); the root run is marked
 `chain_status: exhausted` when the cap is hit.
 
+Non–gap-closure engineering merges use a sibling gate (`ftse-engineering verify-merged`):
+scoped acceptance pytest on `main`, then a capped rework task if tests fail — see
+[engineering-sync.md](engineering-sync.md#post-merge-acceptance-verify--capped-rework-l161).
+
 **Automation (post-trial success):**
 - **Weekly follow-up:** after a weekday batch ingest, ingest-loop dispatches `max_targets=1`
   gap-closure when buy-tier gaps persist (`trigger: weekly_followup`).
