@@ -5124,8 +5124,332 @@
         ]
       },
       "trigger": "eng_idle"
+    },
+    {
+      "id": "igc-20260819-02",
+      "status": "pending_review",
+      "title": "Single-ticker ingest gap-closure pass",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "GAMA.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "GAMA.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260819-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-19T10:21:24.189645+00:00",
+      "completed_at": "2026-08-19T10:22:14.591024+00:00",
+      "outcome": {
+        "delta_filings_with_body": 27,
+        "delta_indexed_without_body": 20,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "GAMA.L"
+        ],
+        "results": [
+          {
+            "ticker": "GAMA.L",
+            "name": "Gamma Communications plc",
+            "with_body_before": 130,
+            "with_body_after": 130,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 110,
+              "with_body_after": 110,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 20,
+              "fetched": 20,
+              "with_body_before": 110,
+              "with_body_after": 130,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "body_rejected": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 130,
+              "with_body_after": 130,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 20,
+                "fetched": 20,
+                "with_body_before": 110,
+                "with_body_after": 130,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "body_rejected": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 130,
+                "with_body_after": 130,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 20,
+              "fetched": 20,
+              "with_body_before": 110,
+              "with_body_after": 130,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 130,
+              "with_body_after": 130,
+              "note": "no residual gaps"
+            },
+            "ir_refetch": {},
+            "ir_presentation_metrics": {},
+            "screen_run_manifest": {
+              "ticker": "GAMA.L",
+              "run_at": "2026-08-16T06:19:37.808906+00:00",
+              "attached_at": "2026-08-19T10:22:07.678358+00:00",
+              "history_run_path": "docs/data/history/run_20260816_061937.json.gz",
+              "history_models_path": "docs/data/history/models_20260816_061937.json.gz",
+              "universe_meta": {
+                "company_count": 249,
+                "signal_counts": {
+                  "strong_buy": 20,
+                  "buy": 50,
+                  "hold": 134,
+                  "avoid": 44,
+                  "insufficient_data": 1
+                },
+                "strong_buy_count": 20,
+                "universe": "ftse350",
+                "universe_label": "FTSE 350",
+                "excluded_investment_vehicles": 101,
+                "include_investment_trusts": false,
+                "screen_trusts": true,
+                "trust_count": 101,
+                "trust_signal_counts": {
+                  "strong_buy": 16,
+                  "buy": 24,
+                  "hold": 42,
+                  "avoid": 19
+                },
+                "broker_overlay": "trading212",
+                "t212_overlay": true,
+                "ii_overlay": true,
+                "unavailable_watch_count": 0
+              },
+              "ticker_signal": {
+                "ticker": "GAMA.L",
+                "signal": "buy",
+                "conviction_score": 0.327675,
+                "data_quality_score": 1.0,
+                "timing_signal": "neutral",
+                "timing_score": 0.375,
+                "action_note": "Buy — neutral timing",
+                "models_passed": 9.0,
+                "weighted_model_score": 0.6290500000000001,
+                "research_verdict": null,
+                "adjusted_signal": "hold",
+                "research_as_of": null,
+                "core_order": "limit",
+                "core_limit": 920.98,
+                "core_allocation_pct": 0.6,
+                "tactical_limit": 902.56,
+                "tactical_allocation_pct": 0.4,
+                "tactical_stop_loss": 870.54,
+                "tactical_take_profit": 1024.28,
+                "trade_plan_summary": "Trade plan: core 60% limit £920.98; tactical 40% limit £902.56; tactical stop £870.54, target £1024.28.",
+                "atr_14": 27.3121,
+                "volume_ratio_20": 0.5774
+              },
+              "ticker_models": [
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "graham_defensive",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "graham_enterprising",
+                  "passed": true,
+                  "score": 0.8
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "graham_net_net",
+                  "passed": false,
+                  "score": 0.0
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "schloss",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "deep_value",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "earnings_yield",
+                  "passed": false,
+                  "score": 0.5894
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "fcf_yield",
+                  "passed": true,
+                  "score": 0.7363
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "low_pe_high_yield",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "lynch_peg",
+                  "passed": false,
+                  "score": 0.2
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "neff_pegy",
+                  "passed": true,
+                  "score": 0.9382
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "quality_value",
+                  "passed": true,
+                  "score": 1.0
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "buffett_quality",
+                  "passed": true,
+                  "score": 1.0
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "economic_moat",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "high_dividend",
+                  "passed": false,
+                  "score": 0.3935
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "dividend_growth",
+                  "passed": true,
+                  "score": 0.6667
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "magic_formula",
+                  "passed": true,
+                  "score": 0.7788
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "acquirers_multiple",
+                  "passed": true,
+                  "score": 0.7581
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "dreman_contrarian",
+                  "passed": false,
+                  "score": 0.5243
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "piotroski_f",
+                  "passed": false,
+                  "score": 0.5556
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "composite_value",
+                  "passed": false,
+                  "score": 0.5982
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "earnings_quality",
+                  "passed": true,
+                  "score": 1.0
+                },
+                {
+                  "ticker": "GAMA.L",
+                  "model_id": "financial_health",
+                  "passed": false,
+                  "score": 0.8
+                }
+              ],
+              "models_passed": 9,
+              "models_total": 22,
+              "attached": true,
+              "manifest_path": "docs/data/research/GAMA.L/sources/screen_run_manifest.json"
+            },
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 110,
+              "with_body_after": 110
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "GAMA.L",
+            "with_body_before": 130,
+            "with_body_after": 130,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "eng_idle"
     }
   ],
-  "updated_at": "2026-08-19T03:52:59.832856+00:00",
+  "updated_at": "2026-08-19T10:22:14.591034+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
