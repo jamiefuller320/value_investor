@@ -55,7 +55,6 @@ from value_investor.engineering_recovery import (
     recover_engineering_queue,
     summarize_parked_tasks,
 )
-from value_investor.engineering_verify import verify_merged_task
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     DEFAULT_MAX_COMPILE_TASKS,
@@ -71,6 +70,7 @@ from value_investor.engineering_tasks import (
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
 )
+from value_investor.engineering_verify import verify_merged_task
 from value_investor.storage import read_json
 
 

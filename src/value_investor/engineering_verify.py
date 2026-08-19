@@ -10,9 +10,10 @@ from __future__ import annotations
 
 import logging
 import subprocess
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
@@ -84,9 +85,10 @@ def count_verify_chain_rounds(
         if str(evidence.get("verify_chain_root_id") or "") == chain_root:
             count += 1
             continue
-        if str(evidence.get("parent_task_id") or "") == chain_root and str(
-            row.get("source") or ""
-        ) == VERIFY_SOURCE:
+        if (
+            str(evidence.get("parent_task_id") or "") == chain_root
+            and str(row.get("source") or "") == VERIFY_SOURCE
+        ):
             count += 1
     return count
 
@@ -104,9 +106,10 @@ def has_open_verify_rework_for_chain(
         evidence = row.get("evidence") or {}
         if str(evidence.get("verify_chain_root_id") or "") == chain_root:
             return True
-        if str(row.get("source") or "") == VERIFY_SOURCE and str(
-            evidence.get("parent_task_id") or ""
-        ) == chain_root:
+        if (
+            str(row.get("source") or "") == VERIFY_SOURCE
+            and str(evidence.get("parent_task_id") or "") == chain_root
+        ):
             return True
     return False
 
@@ -219,7 +222,9 @@ def _queue_rework_task(
         "prior_pr_url": parent.get("pr_url"),
         "prior_pr_number": parent.get("pr_number"),
         "pytest_returncode": pytest_result.get("returncode"),
-        "pytest_paths": list(pytest_result.get("existing_paths") or pytest_result.get("paths") or []),
+        "pytest_paths": list(
+            pytest_result.get("existing_paths") or pytest_result.get("paths") or []
+        ),
         "tickers": list((parent.get("evidence") or {}).get("tickers") or []),
     }
     rework = EngineeringTask(
