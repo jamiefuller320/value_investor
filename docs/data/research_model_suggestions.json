@@ -1989,7 +1989,143 @@
       "director_model": "grok-4.6",
       "meta_topic": "other",
       "recorded_at": "2026-08-16T09:15:43.372023+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Prioritise full-text extract of FY 2026 results RNS and Annual Report PDF (FCA NSM / `firstgroupplc.com`) over Companies House OCR for UK transport names — the refetched `3bf5ff09fbc5c747.txt` contained the full FCF bridge and adjusting-items disclosure that OCR and Yahoo missed.",
+      "recorded_at": "2026-08-19T11:34:06.545543+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "For UK RNS issuers, compute statutory earnings growth from filing basic/adjusted EPS rather than Yahoo net income — FGP’s **−5.9%** overlay contradicts filing EPS **21.4p vs 21.3p** and triggers a false earnings-basis downgrade.",
+      "recorded_at": "2026-08-19T11:34:06.545556+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Populate `ir_presentation_metrics.json` with parsed FCF bridge tables from IR PDFs (company definition vs OCF−capex vs adjusted cash flow); current `bridge_count: 0` left the three-way FCF mismatch unresolved until manual RNS read.",
+      "recorded_at": "2026-08-19T11:34:06.545563+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Add a UK transport leverage overlay using **adjusted net debt / Rail-adjusted EBITDA** (company-disclosed) alongside reported D/E, flagging divergence when IFRS 16 lease liabilities exceed **2×** common equity — would prevent Graham/Financial Health failures from dominating without economic context.",
+      "recorded_at": "2026-08-19T11:34:06.545570+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to cite the company’s explicit FCF definition (movement in adjusted net debt ex acquisitions/dividends/buybacks) whenever screen FCF Yield fails, and map Yahoo OCF−capex as a separate line item labelled “cash-flow-statement basis, not company FCF.”",
+      "recorded_at": "2026-08-19T11:34:06.545576+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Reject Investegate HTML fallback when body content_hash matches a different indexed filing — `ir_a9733d0de6aec27d` (April trading update URL) ingested H1 interim text.",
+      "recorded_at": "2026-08-19T11:34:06.545581+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; flag and suppress TTM when series empty (HIK.L TTM $14.4m vs filing $119m).",
+      "recorded_at": "2026-08-19T11:34:06.545584+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Direct-download IR allowlist PDFs from hikma.com before Investegate fallback for trading updates and presentations.",
+      "recorded_at": "2026-08-19T11:34:06.545587+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Surface dual dividend coverage (OCF/dividend and FCF/dividend) from filing cash-flow statements when FCF Yield and Dividend Growth models diverge.",
+      "recorded_at": "2026-08-19T11:34:06.545591+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "low",
+      "suggestion": "Gap-fill pass should report indexed body count and flag mis-attributed refetches explicitly in GAP FILL UPDATE Evidence lines.",
+      "recorded_at": "2026-08-19T11:34:06.545593+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Follow-up note:** The single newly refetched body (`ir_a9733d0de6aec27d.txt`) did not resolve any open question — it duplicates H1 2026 interim content despite being indexed as the April 2026 trading update. All three questions remain **partially_resolved**. Memo updated at `output/research/HIK.L/research.md`.",
+      "recorded_at": "2026-08-19T11:34:06.545600+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as explicit overlay inputs; MEGP's net-cash metric excludes £13m lease liabilities per filing note 8, which the current D/E 28% screen pass does not surface.",
+      "recorded_at": "2026-08-19T11:34:06.545605+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse IFRS 16 lease maturity tables and covenant language from annual report PDF notes (referenced as note 20 in FY2025 body but not extracted) into structured fields for leverage red-flag checks.",
+      "recorded_at": "2026-08-19T11:34:06.545608+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Extract H1 results presentation segment bridges (monthly vending revenue, France vs UK split) from IR PDF allowlist — gap map flags this as the unlock for cyclicality quantification beyond April anecdote.",
+      "recorded_at": "2026-08-19T11:34:06.545612+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to compute interim-period FCF and dividend coverage from filing cash-flow statements when screen coverage uses trailing annual FCF only — H1 FY2026 implied coverage ~0.33× vs screen's 0.84× FY2025 figure.",
+      "recorded_at": "2026-08-19T11:34:06.545617+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "coverage",
+      "priority": "low",
+      "suggestion": "Index Montefiore secondary placing body text (now in `filings/bodies/71001742a9008234.txt` after RNS refetch) under governance/capital-actions tag for automatic surfacing in key-person and overhang sections.",
+      "recorded_at": "2026-08-19T11:34:06.545620+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "The memo at `output/research/MEGP.L/research.md` has been updated to v2 with these sections integrated.",
+      "recorded_at": "2026-08-19T11:34:06.545623+00:00"
     }
   ],
-  "updated_at": "2026-08-16T09:15:43.372024+00:00"
+  "updated_at": "2026-08-19T11:34:06.545625+00:00"
 }

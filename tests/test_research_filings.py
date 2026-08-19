@@ -72,6 +72,7 @@ from value_investor.research.ingest import (
     fetch_annual_financials,
     ingest_research_sources,
     install_fetch_cashflow_fallback,
+    quarterly_cashflow_has_usable_series,
     supplement_company_metrics_cashflow,
 )
 
@@ -141,6 +142,64 @@ def test_extract_cashflow_metrics_merges_annual_and_ttm():
     assert metrics["free_cashflow"] == 119_000_000.0
     assert metrics["operating_cashflow_ttm"] == pytest.approx(594_000_000.0)
     assert metrics["free_cashflow_ttm"] == pytest.approx(277_000_000.0)
+
+
+def test_apply_ttm_cashflow_gate_suppresses_when_quarterly_empty():
+    """Regression: HIK.L-style empty quarterly_cashflow must not emit mechanical TTM FCF."""
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 436_000_000.0,
+                "Capital Expenditure": -317_000_000.0,
+                "Free Cash Flow": 119_000_000.0,
+            },
+        },
+        "quarterly_cashflow": {},
+    }
+    metrics = extract_cashflow_metrics_from_annual_financials(financials)
+    assert metrics["free_cashflow"] == 119_000_000.0
+    assert "free_cashflow_ttm" not in metrics
+    assert metrics["ttm_cashflow_suppressed"] is True
+    assert metrics["ttm_cashflow_suppressed_reason"] == "quarterly_cashflow_empty"
+
+
+def test_quarterly_cashflow_has_usable_series_requires_cashflow_lines():
+    assert not quarterly_cashflow_has_usable_series({})
+    assert not quarterly_cashflow_has_usable_series({"2025-06-30": {"Repayment Of Debt": -1.0}})
+    assert quarterly_cashflow_has_usable_series(
+        {"2025-06-30": {"Operating Cash Flow": 214_000_000.0}}
+    )
+
+
+def test_fetch_annual_financials_resolves_quarterly_cashflow_from_alternate_attr(monkeypatch):
+    cashflow_df = pd.DataFrame(
+        {"2024": [90_800_000.0, 55_000_000.0]},
+        index=["Operating Cash Flow", "Free Cash Flow"],
+    )
+    quarterly_cashflow_df = pd.DataFrame(
+        {
+            pd.Timestamp("2025-06-30"): [214_000_000.0, -122_000_000.0, 92_000_000.0],
+            pd.Timestamp("2024-12-31"): [150_000_000.0, -80_000_000.0, 70_000_000.0],
+            pd.Timestamp("2024-09-30"): [120_000_000.0, -60_000_000.0, 60_000_000.0],
+            pd.Timestamp("2024-06-30"): [110_000_000.0, -55_000_000.0, 55_000_000.0],
+        },
+        index=["Operating Cash Flow", "Capital Expenditure", "Free Cash Flow"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = cashflow_df
+        quarterly_financials = None
+        quarterly_cashflow = pd.DataFrame()
+        quarterly_cash_flow = quarterly_cashflow_df
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    payload = fetch_annual_financials("HIK.L")
+    assert payload["quarterly_cashflow_source"] == "quarterly_cash_flow"
+    assert payload["quarterly_cashflow"]["2025-06-30"]["Operating Cash Flow"] == 214_000_000.0
+    assert payload["cashflow_metrics"]["free_cashflow_ttm"] == pytest.approx(277_000_000.0)
+    assert "ttm_cashflow_suppressed" not in payload["cashflow_metrics"]
 
 
 def test_operating_cashflow_aliases_from_yahoo_labels():

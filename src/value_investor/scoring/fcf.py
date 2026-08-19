@@ -1010,13 +1010,22 @@ def fcf_filing_screen_mismatch(
     screen_ttm: float | None,
     divergence_flagged: bool = False,
     threshold: float = FCF_FILING_SCREEN_DIVERGENCE_THRESHOLD,
+    sign_min_abs: float = FCF_SIGN_DIVERGENCE_MIN_ABS,
 ) -> bool:
     """True when FCF Yield, Earnings Quality, and overlays should ignore Yahoo screen TTM."""
     if divergence_flagged:
         return True
     if filing_aligned is None or screen_ttm is None:
         return False
-    return fcf_values_diverge(filing_aligned, screen_ttm, threshold=threshold)
+    if filing_aligned == screen_ttm:
+        return False
+    abs_gap = abs(filing_aligned - screen_ttm)
+    if _fcf_sign(filing_aligned) != _fcf_sign(screen_ttm):
+        return abs_gap > sign_min_abs
+    filing_abs = abs(filing_aligned)
+    if filing_abs == 0:
+        return False
+    return abs_gap / filing_abs > threshold
 
 
 def overlay_free_cashflow_from_bundle(

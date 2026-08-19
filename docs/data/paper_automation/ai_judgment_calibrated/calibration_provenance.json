@@ -1,25 +1,36 @@
 {
   "schema_version": 1,
-  "spawned_at": "2026-08-18T17:06:30.969910+00:00",
+  "spawned_at": "2026-08-19T08:59:46.828947+00:00",
   "parent_track_id": "ai_judgment",
   "shadow_track_id": "ai_judgment_calibrated",
-  "priors_source": "docs/data/paper_automation/knob_calibration_priors.json",
-  "priors_calibrated_at": "2026-08-18T15:41:45.742688+00:00",
+  "priors_source": "output/paper_automation/knob_calibration_priors.json",
+  "priors_calibrated_at": "2026-08-18T18:01:09.232189+00:00",
   "recommended_prior": {
     "knobs": {
-      "max_positions": 5,
+      "max_positions": 3,
       "skip_timing_wait": true,
       "min_conviction": 0.0,
       "sector_cap": 0.2
     },
-    "composite_score": 0.6216,
+    "composite_score": 0.6136,
+    "blended_score": 0.1169,
+    "portfolio_score": 0.6136,
     "confidence": "low",
     "changed_vs_current": {
-      "max_positions": 5,
       "min_conviction": 0.0
     },
-    "fitness_delta_vs_current": 0.008,
-    "rationale": "Top walk-forward composite score on rebalance-log replay. Seed config.json / decision-review probes manually; do not auto-apply."
+    "score_gap_vs_runner_up": 0.0,
+    "cohort_selection": {
+      "cohort_hit_rate": 0.0,
+      "cohort_mean_forward_return": 0.0,
+      "selection_spread": 0.0,
+      "new_buy_hit_rate": 0.0,
+      "cohort_fitness": -0.225,
+      "selected_slots": 15,
+      "rejected_slots": 35
+    },
+    "fitness_delta_vs_current": -0.0,
+    "rationale": "Top walk-forward blended score (portfolio replay + cohort-selection fitness). Seed config.json / shadow track manually; do not auto-apply. Warning: score gap vs runner-up (0.0) is below 0.005 — weak discrimination."
   },
   "parent_knobs_at_spawn": {
     "max_positions": 3,
@@ -40,11 +51,10 @@
     "min_rebalance_notional_gbp": 10.0
   },
   "changed_vs_parent": {
-    "max_positions": 5,
-    "min_conviction": 0.0
+    "max_positions": 3
   },
   "confidence": "low",
   "force_respawn": false,
-  "respawned_fund": true,
+  "respawned_fund": false,
   "note": "Frozen calibration shadow — decision-review --apply is disabled. Compare forward marks vs primary ai_judgment before promotion."
 }
