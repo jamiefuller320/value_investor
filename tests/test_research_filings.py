@@ -4269,3 +4269,103 @@ def test_extract_ir_presentation_metrics_from_ir_body(tmp_path: Path):
     labels = {row["label"] for row in bridge["lines"]}
     assert "operating_cash_flow" in labels
     assert "dividends_paid" in labels
+
+
+def test_parse_ir_fcf_division_bridge_fgp_fixture():
+    from value_investor.research.filings import parse_ir_fcf_division_bridge
+
+    fixture = Path("docs/data/research/FGP.L/sources/filings/bodies/ir_af873270e9c4b29f.txt")
+    if not fixture.is_file():
+        pytest.skip("FGP IR body fixture not present")
+    parsed = parse_ir_fcf_division_bridge(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["bridge_type"] == "fcf_by_division"
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["total"] == -35.6
+    assert by_label["first_bus"] == -44.6
+
+
+def test_parse_ir_segment_revenue_splits_hik_fixture():
+    from value_investor.research.filings import parse_ir_segment_revenue_splits
+
+    fixture = Path("docs/data/research/HIK.L/sources/filings/bodies/ir_3a67962eb8770824.txt")
+    if not fixture.is_file():
+        pytest.skip("HIK IR body fixture not present")
+    parsed = parse_ir_segment_revenue_splits(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["currency"] == "USD"
+    segments = {row["segment"]: row for row in parsed["segments"]}
+    assert segments["Injectables"]["revenue_current"] == 1423.0
+    assert segments["Branded"]["revenue_current"] == 849.0
+
+
+def test_parse_ir_ifrs16_lease_maturity_megp_fixture():
+    from value_investor.research.filings import parse_ir_ifrs16_lease_maturity
+
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_55af4b8f27e3dd6f.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP annual report IR body fixture not present")
+    parsed = parse_ir_ifrs16_lease_maturity(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["table_type"] == "ifrs16_lease_maturity"
+    buckets = {row["bucket"]: row["amount_thousands"] for row in parsed["buckets"]}
+    assert buckets["within_one_year"] == 4953.0
+    assert buckets["total"] == 12271.0
+
+
+def test_extract_ir_presentation_metrics_structured_fields(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+
+    fixtures = [
+        (
+            "ir_fgp",
+            Path("docs/data/research/FGP.L/sources/filings/bodies/ir_af873270e9c4b29f.txt"),
+            "annual",
+        ),
+        (
+            "ir_hik",
+            Path("docs/data/research/HIK.L/sources/filings/bodies/ir_3a67962eb8770824.txt"),
+            "annual",
+        ),
+    ]
+    filings: list[dict[str, object]] = []
+    for body_id, fixture, period in fixtures:
+        if not fixture.is_file():
+            pytest.skip(f"{fixture} not present")
+        body_path = bodies_dir / f"{body_id}.txt"
+        body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+        filings.append(
+            {
+                "id": body_id,
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {body_id}",
+                "period": period,
+                "has_body": True,
+                "body_path": str(body_path),
+            }
+        )
+
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings}),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "FGP.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["bridge_count"] >= 1
+    assert metrics["segment_split_count"] >= 1
+    assert metrics["mandatory"] is True
+    assert (sources_dir / "ir_presentation_metrics.json").exists()
+    bridge_types = {row["bridge_type"] for row in metrics["bridges"]}
+    assert "fcf_by_division" in bridge_types
+    assert any(
+        row["split_type"] == "segmental_core_revenue" for row in metrics["segment_revenue_splits"]
+    )
