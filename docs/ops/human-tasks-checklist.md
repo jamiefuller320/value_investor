@@ -6,6 +6,8 @@ most automation — this list is what still needs a human.
 
 **Dashboard:** Automation tab → **Human tasks** (links below mirror this doc).
 
+**Cadence map:** [`ops-review-cadence.md`](ops-review-cadence.md) — weekly analysis → monthly horizon → quarterly deferred.
+
 **Canonical JSON:** [`docs/human_tasks_checklist.json`](../human_tasks_checklist.json)
 — update this file **and** this markdown when adding tasks (see
 [maintenance rule](#maintenance)).
@@ -41,6 +43,7 @@ Do **not** promote calibration priors to `ai_judgment/config.json` until:
 
 | Task | Who | Doc |
 |------|-----|-----|
+| Follow **unified ops review cadence** (weekly → monthly → quarterly) | Human | [ops-review-cadence.md](ops-review-cadence.md#sequence) |
 | **Horizon scan** + triage open `ftse-defer` fragments | Human | [horizon-scan.md](horizon-scan.md#when-it-runs) |
 
 ## Quarterly
@@ -68,5 +71,6 @@ When you introduce a **new human task** (ops gate, promotion step, review cadenc
 
 Agents: follow `.cursor/rules/human-tasks-checklist.mdc`.
 
-See also: [primary-learning-track.md](primary-learning-track.md),
+See also: [ops-review-cadence.md](ops-review-cadence.md),
+[primary-learning-track.md](primary-learning-track.md),
 [knob-calibration.md](knob-calibration.md).
