@@ -18,6 +18,7 @@ from value_investor.scoring.fcf import (
     fcf_basis_divergence_flagged,
     fcf_filing_screen_mismatch,
     fcf_values_diverge,
+    overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
     reconcile_fcf,
@@ -715,6 +716,43 @@ def test_fcf_filing_screen_mismatch_uses_25_pct_threshold():
         screen_ttm=92_000_000.0,
         divergence_flagged=True,
     )
+
+
+def test_fcf_filing_screen_mismatch_measures_gap_against_filing_fcf():
+    """Gap vs filing FCF, not max(filing, screen), when screen TTM exceeds filing."""
+    assert fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=126_000_000.0,
+        divergence_flagged=False,
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=124_000_000.0,
+        divergence_flagged=False,
+    )
+
+
+def test_overlay_free_cashflow_from_bundle_suppresses_screen_ttm_on_mismatch():
+    row = pd.Series(
+        {
+            "free_cashflow": 70_000_000.0,
+            "free_cashflow_screen_ttm": 70_000_000.0,
+        }
+    )
+    bundle = {
+        "canonical": 100_000_000.0,
+        "filing_aligned": 100_000_000.0,
+        "divergence_flagged": False,
+    }
+    assert overlay_free_cashflow_from_bundle(row, bundle) == 100_000_000.0
+
+    close_row = pd.Series(
+        {
+            "free_cashflow": 92_000_000.0,
+            "free_cashflow_screen_ttm": 92_000_000.0,
+        }
+    )
+    assert overlay_free_cashflow_from_bundle(close_row, bundle) == 92_000_000.0
 
 
 def test_append_fcf_divergence_note_when_filing_screen_gap_exceeds_25_pct():
