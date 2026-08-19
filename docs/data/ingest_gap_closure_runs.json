@@ -4800,8 +4800,332 @@
         ]
       },
       "trigger": "eng_idle"
+    },
+    {
+      "id": "igc-20260819-01",
+      "status": "pending_review",
+      "title": "Single-ticker ingest gap-closure pass",
+      "summary": "Highest priority_score buy-tier name with outstanding ingest gaps; review for eng-idle orchestration and global ingest policy.",
+      "ticker": "TSCO.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "bootstrap_seed_cap": 0,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "TSCO.L"
+        ]
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260819-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-08-19T03:37:48.099457+00:00",
+      "completed_at": "2026-08-19T03:52:59.832844+00:00",
+      "outcome": {
+        "delta_filings_with_body": 56,
+        "delta_indexed_without_body": 50,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": 1,
+        "targets_completed": 1,
+        "runtime_cutoff": false,
+        "tickers": [
+          "TSCO.L"
+        ],
+        "results": [
+          {
+            "ticker": "TSCO.L",
+            "name": "Tesco",
+            "with_body_before": 65,
+            "with_body_after": 65,
+            "improved": false,
+            "mapped_source_ids": [],
+            "planned_sources": [],
+            "ch_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 18,
+              "with_body_after": 18,
+              "note": "no missing CH bodies"
+            },
+            "investegate_refetch": {
+              "attempted": 47,
+              "fetched": 40,
+              "with_body_before": 18,
+              "with_body_after": 58,
+              "google_news_rejected": 0,
+              "misattributed_pruned": 0,
+              "body_rejected": 0,
+              "note": "refetch_investegate_filing_bodies"
+            },
+            "ticker_rns_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "with_body_before": 58,
+              "with_body_after": 58,
+              "pruned": 0,
+              "note": "no missing ticker_rns_api bodies"
+            },
+            "indexed_refetch": {
+              "investegate": {
+                "attempted": 47,
+                "fetched": 40,
+                "with_body_before": 18,
+                "with_body_after": 58,
+                "google_news_rejected": 0,
+                "misattributed_pruned": 0,
+                "body_rejected": 0,
+                "note": "refetch_investegate_filing_bodies"
+              },
+              "ticker_rns": {
+                "attempted": 0,
+                "fetched": 0,
+                "with_body_before": 58,
+                "with_body_after": 58,
+                "pruned": 0,
+                "note": "no missing ticker_rns_api bodies"
+              },
+              "attempted": 47,
+              "fetched": 40,
+              "with_body_before": 18,
+              "with_body_after": 58,
+              "google_news_rejected": 0,
+              "note": "refetch_indexed_without_body_filing_bodies"
+            },
+            "residual_refetch": {
+              "attempted": 7,
+              "fetched": 7,
+              "pruned": 0,
+              "pruned_noise": 0,
+              "pruned_unfetchable": 0,
+              "with_body_before": 58,
+              "with_body_after": 65,
+              "note": "refetch_residual_filing_bodies"
+            },
+            "ir_refetch": {},
+            "ir_presentation_metrics": {},
+            "screen_run_manifest": {
+              "ticker": "TSCO.L",
+              "run_at": "2026-08-16T06:19:37.808906+00:00",
+              "attached_at": "2026-08-19T03:52:56.087381+00:00",
+              "history_run_path": "docs/data/history/run_20260816_061937.json.gz",
+              "history_models_path": "docs/data/history/models_20260816_061937.json.gz",
+              "universe_meta": {
+                "company_count": 249,
+                "signal_counts": {
+                  "strong_buy": 20,
+                  "buy": 50,
+                  "hold": 134,
+                  "avoid": 44,
+                  "insufficient_data": 1
+                },
+                "strong_buy_count": 20,
+                "universe": "ftse350",
+                "universe_label": "FTSE 350",
+                "excluded_investment_vehicles": 101,
+                "include_investment_trusts": false,
+                "screen_trusts": true,
+                "trust_count": 101,
+                "trust_signal_counts": {
+                  "strong_buy": 16,
+                  "buy": 24,
+                  "hold": 42,
+                  "avoid": 19
+                },
+                "broker_overlay": "trading212",
+                "t212_overlay": true,
+                "ii_overlay": true,
+                "unavailable_watch_count": 0
+              },
+              "ticker_signal": {
+                "ticker": "TSCO.L",
+                "signal": "buy",
+                "conviction_score": 0.3445,
+                "data_quality_score": 1.0,
+                "timing_signal": "neutral",
+                "timing_score": 0.625,
+                "action_note": "Buy — neutral timing",
+                "models_passed": 8.0,
+                "weighted_model_score": 0.5276454545454545,
+                "research_verdict": null,
+                "adjusted_signal": "buy",
+                "research_as_of": null,
+                "core_order": "limit",
+                "core_limit": 456.88,
+                "core_allocation_pct": 0.6,
+                "tactical_limit": 438.42,
+                "tactical_allocation_pct": 0.4,
+                "tactical_stop_loss": 411.84,
+                "tactical_take_profit": 469.01,
+                "trade_plan_summary": "Trade plan: core 60% limit £456.88; tactical 40% limit £438.42; tactical stop £411.84, target £469.01.",
+                "atr_14": 10.0754,
+                "volume_ratio_20": 1.3714
+              },
+              "ticker_models": [
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "graham_defensive",
+                  "passed": false,
+                  "score": 0.25
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "graham_enterprising",
+                  "passed": true,
+                  "score": 0.8
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "graham_net_net",
+                  "passed": false,
+                  "score": 0.0
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "schloss",
+                  "passed": false,
+                  "score": 0.0
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "deep_value",
+                  "passed": false,
+                  "score": 0.0
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "earnings_yield",
+                  "passed": false,
+                  "score": 0.4875
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "fcf_yield",
+                  "passed": true,
+                  "score": 0.7817
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "low_pe_high_yield",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "lynch_peg",
+                  "passed": true,
+                  "score": 0.6817
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "neff_pegy",
+                  "passed": true,
+                  "score": 0.9535
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "quality_value",
+                  "passed": false,
+                  "score": 0.6
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "buffett_quality",
+                  "passed": false,
+                  "score": 0.5
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "economic_moat",
+                  "passed": false,
+                  "score": 0.0
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "high_dividend",
+                  "passed": false,
+                  "score": 0.5417
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "dividend_growth",
+                  "passed": true,
+                  "score": 1.0
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "magic_formula",
+                  "passed": true,
+                  "score": 0.5396
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "acquirers_multiple",
+                  "passed": false,
+                  "score": 0.5163
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "dreman_contrarian",
+                  "passed": false,
+                  "score": 0.5108
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "piotroski_f",
+                  "passed": true,
+                  "score": 0.7778
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "composite_value",
+                  "passed": false,
+                  "score": 0.5676
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "earnings_quality",
+                  "passed": true,
+                  "score": 1.0
+                },
+                {
+                  "ticker": "TSCO.L",
+                  "model_id": "financial_health",
+                  "passed": false,
+                  "score": 0.6
+                }
+              ],
+              "models_passed": 8,
+              "models_total": 22,
+              "attached": true,
+              "manifest_path": "docs/data/research/TSCO.L/sources/screen_run_manifest.json"
+            },
+            "alternate_sources": {
+              "sources_tried": [],
+              "body_refetch": {},
+              "fetched": 0
+            },
+            "deepen": {
+              "skipped": true,
+              "reason": "sufficient_bodies",
+              "with_body_before": 18,
+              "with_body_after": 18
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "TSCO.L",
+            "with_body_before": 65,
+            "with_body_after": 65,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "eng_idle"
     }
   ],
-  "updated_at": "2026-08-18T21:20:51.179566+00:00",
+  "updated_at": "2026-08-19T03:52:59.832856+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
