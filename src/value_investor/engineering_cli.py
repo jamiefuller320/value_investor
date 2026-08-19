@@ -55,6 +55,7 @@ from value_investor.engineering_recovery import (
     recover_engineering_queue,
     summarize_parked_tasks,
 )
+from value_investor.engineering_verify import verify_merged_task
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     DEFAULT_MAX_COMPILE_TASKS,
@@ -176,6 +177,28 @@ def _cmd_mark_merged(args: argparse.Namespace) -> int:
         _print_json(updated.to_dict())
     else:
         print(f"Marked {updated.id} as merged")
+    return 0
+
+
+def _cmd_verify_merged(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    result = verify_merged_task(
+        args.task_id,
+        tasks_path=tasks_path,
+        cwd=Path(args.cwd) if args.cwd else Path.cwd(),
+        apply=not args.dry_run,
+    )
+    if args.json:
+        _print_json(result)
+    else:
+        action = result.get("action")
+        reason = result.get("reason")
+        print(f"verify-merged {args.task_id}: {action} ({reason})")
+        if result.get("rework_task_id"):
+            print(f"  rework task: {result['rework_task_id']}")
+    # Non-zero only on unexpected skip-not-found; pytest failure queues rework (exit 0).
+    if result.get("reason") == "task not found":
+        return 1
     return 0
 
 
@@ -1094,6 +1117,27 @@ def main(argv: list[str] | None = None) -> int:
     merged_p.add_argument("--pr-url", default=None)
     merged_p.add_argument("--pr-number", type=int, default=None)
     merged_p.set_defaults(func=_cmd_mark_merged)
+
+    verify_merged_p = sub.add_parser(
+        "verify-merged",
+        parents=[common],
+        help=(
+            "Post-merge acceptance pytest gate: on failure queue capped rework "
+            "(skips ingest gap-closure tasks that own their own verify chain)"
+        ),
+    )
+    verify_merged_p.add_argument("--task-id", required=True)
+    verify_merged_p.add_argument(
+        "--cwd",
+        default=None,
+        help="Repo root for pytest (default: current directory)",
+    )
+    verify_merged_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Evaluate without writing queue / rework task changes",
+    )
+    verify_merged_p.set_defaults(func=_cmd_verify_merged)
 
     reprioritize_p = sub.add_parser(
         "reprioritize",

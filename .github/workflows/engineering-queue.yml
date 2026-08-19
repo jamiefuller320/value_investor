@@ -130,6 +130,52 @@ jobs:
             -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
           echo "Dispatched ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }}"
 
+      # L161: generic post-merge acceptance proof + capped rework (skips gap-closure tasks).
+      - name: Post-merge acceptance verify (pytest) + capped rework
+        if: >-
+          steps.eng_branch.outputs.is_task == 'true'
+          && steps.gap_rerun.outputs.should_rerun_gap_closure != 'true'
+        id: accept_verify
+        run: |
+          TASK_ID="${{ steps.gap_rerun.outputs.merged_task_id }}"
+          if [ -z "$TASK_ID" ]; then
+            TASK_ID=$(python3 - <<'PY'
+          from value_investor.engineering_queue import task_id_from_branch
+          print(task_id_from_branch("${{ github.event.pull_request.head.ref }}") or "")
+          PY
+            )
+          fi
+          echo "merged_task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
+          if [ -z "$TASK_ID" ]; then
+            echo "should_rework=false" >> "$GITHUB_OUTPUT"
+            echo "verify_action=skip" >> "$GITHUB_OUTPUT"
+            echo "verify_reason=no_task_id" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          ftse-engineering --json verify-merged --task-id "$TASK_ID" | tee /tmp/accept_verify.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/accept_verify.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"should_rework={'true' if data.get('should_rework') else 'false'}\n"
+                  f"verify_action={data.get('action', '')}\n"
+                  f"verify_reason={data.get('reason', '')}\n"
+                  f"rework_task_id={data.get('rework_task_id') or ''}\n"
+              )
+          print(
+              f"Post-merge verify: {data.get('action')} ({data.get('reason')})"
+              + (
+                  f"; rework={data.get('rework_task_id')}"
+                  if data.get("rework_task_id")
+                  else ""
+              )
+          )
+          PY
+
       - name: Refresh queue from Sunday artifacts when present
         id: refresh
         run: |
