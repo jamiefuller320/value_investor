@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-18T08:28:06.906787+00:00",
+  "generated_at": "2026-08-19T09:01:25.097609+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -26,6 +26,8 @@
       "use_adjusted_signal": false,
       "require_research_accumulate": false,
       "use_momentum_grace": false,
+      "is_calibration_shadow": false,
+      "calibration_parent_track": null,
       "exit_confirm_screens": 2,
       "reentry_cooldown_screens": 1,
       "min_rebalance_notional_gbp": 10.0
@@ -231,14 +233,14 @@
         "pool": "first_party"
       },
       "model_review": {
-        "last_reviewed_at": "2026-08-02T12:34:15.511570+00:00",
+        "last_reviewed_at": "2026-08-19T08:26:14.657702+00:00",
         "review_interval_days": 14
       },
       "macro_context": {
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-18T07:32:33.090846+00:00"
+      "updated_at": "2026-08-19T08:26:14.657706+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -333,10 +335,16 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-08-18T08:27:41.092777+00:00",
+        "at": "2026-08-19T09:00:13.579501+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (4 trade(s))."
+        "detail": "Rebalanced after open settle (3 trade(s))."
+      },
+      {
+        "at": "2026-08-19T08:26:14.657687+00:00",
+        "kind": "model_review",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "detail": "pool=first_party"
       },
       {
         "at": "2026-08-16T13:33:33.655405+00:00",
@@ -900,53 +908,46 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-08-18T08:27:41.092777+00:00",
+      "generated_at": "2026-08-19T09:00:13.579501+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (4 trade(s)).",
+      "note": "Rebalanced after open settle (3 trade(s)).",
       "gate": {
-        "local_time": "2026-08-18T09:27:29.616761+01:00",
+        "local_time": "2026-08-19T10:00:03.657336+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-08-18T08:00:00+01:00",
-        "settle_at": "2026-08-18T09:15:00+01:00",
+        "market_open_at": "2026-08-19T08:00:00+01:00",
+        "settle_at": "2026-08-19T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 4,
+      "trade_count": 3,
       "trades_sample": [
         {
-          "acted_at": "2026-08-18T09:27:29.616761+01:00",
-          "ticker": "DOM.L",
-          "side": "sell",
-          "name": "Domino's Pizza Group plc",
-          "net_cash": 255.97
-        },
-        {
-          "acted_at": "2026-08-18T09:27:29.616761+01:00",
-          "ticker": "POLN.L",
-          "side": "sell",
-          "name": "Pollen Street Group Limited",
-          "net_cash": 256.33
-        },
-        {
-          "acted_at": "2026-08-18T09:27:29.616761+01:00",
+          "acted_at": "2026-08-19T10:00:03.657336+01:00",
           "ticker": "MEGP.L",
-          "side": "buy",
+          "side": "sell",
           "name": "ME Group International plc",
-          "net_cash": -111.61
+          "net_cash": 125.7
         },
         {
-          "acted_at": "2026-08-18T09:27:29.616761+01:00",
+          "acted_at": "2026-08-19T10:00:03.657336+01:00",
           "ticker": "AEP.L",
-          "side": "buy",
+          "side": "sell",
           "name": "AEP Plantations Plc",
-          "net_cash": -400.7
+          "net_cash": 139.63
+        },
+        {
+          "acted_at": "2026-08-19T10:00:03.657336+01:00",
+          "ticker": "IMB.L",
+          "side": "buy",
+          "name": "Imperial Brands PLC",
+          "net_cash": -265.33
         }
       ],
       "fund": {
         "cash": 0.0,
         "nav": null,
-        "holdings_count": 2
+        "holdings_count": 3
       }
     },
     "graduation_history": [
@@ -1148,12 +1149,19 @@
         "previous_model_id": "composer-2.5",
         "pool": "first_party",
         "available_count": 34
+      },
+      {
+        "reviewed_at": "2026-08-19T08:26:14.657687+00:00",
+        "model_id": "composer-2.5",
+        "previous_model_id": "composer-2.5",
+        "pool": "first_party",
+        "available_count": 36
       }
     ]
   },
   "engineering_queue": {
     "compiled_at": "2026-08-17T22:06:11.264838+00:00",
-    "queue_ui_updated_at": "2026-08-18T08:28:06.907937+00:00",
+    "queue_ui_updated_at": "2026-08-19T09:01:25.099134+00:00",
     "task_count": 49,
     "status": {
       "open_count": 0,
@@ -1173,7 +1181,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-18T08:28:06.920838+00:00",
+    "generated_at": "2026-08-19T09:01:25.116736+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1183,7 +1191,7 @@
         "track_label": "AI judgment (research accumulate + adjusted_signal)",
         "is_primary_learning_track": true,
         "applied": true,
-        "epoch_started_at": "2026-08-18T08:28:06.174013+00:00",
+        "epoch_started_at": "2026-08-19T09:00:44.251059+00:00",
         "baseline_nav": 855.02,
         "epoch_nav": 855.02,
         "epoch_return": 0.0,
@@ -1197,9 +1205,27 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.3,
+          "min_conviction": 0.35,
           "sector_cap": 0.2
         }
+      },
+      "ai_judgment_calibrated": {
+        "track_id": "ai_judgment_calibrated",
+        "track_label": "AI judgment calibrated shadow (frozen priors)",
+        "is_primary_learning_track": false,
+        "applied": false,
+        "epoch_started_at": null,
+        "baseline_nav": null,
+        "epoch_nav": null,
+        "epoch_return": null,
+        "post_apply_trade_count": 0,
+        "equity_marks": 0,
+        "benchmark_span_available": false,
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "enough_epoch_history": false,
+        "note": "",
+        "knobs": {}
       },
       "momentum_grace": {
         "track_id": "momentum_grace",
@@ -1211,10 +1237,10 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 4,
+        "equity_marks": 5,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0077,
-        "excess_after_costs": 0.0077,
+        "benchmark_return": -0.0097,
+        "excess_after_costs": 0.0097,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1231,13 +1257,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-12T09:36:42.012926+00:00",
         "baseline_nav": 862.27,
-        "epoch_nav": 784.81,
-        "epoch_return": -0.0898,
-        "post_apply_trade_count": 8,
-        "equity_marks": 4,
+        "epoch_nav": 772.96,
+        "epoch_return": -0.1036,
+        "post_apply_trade_count": 11,
+        "equity_marks": 5,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0077,
-        "excess_after_costs": -0.0822,
+        "benchmark_return": -0.0097,
+        "excess_after_costs": -0.0939,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1267,7 +1293,7 @@
       }
     },
     "summary": {
-      "track_count": 4,
+      "track_count": 5,
       "tracks_with_epoch": 3,
       "tracks_benchmark_span_ready": 2,
       "tracks_with_post_apply_trades": 1,
