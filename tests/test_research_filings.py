@@ -4369,3 +4369,52 @@ def test_extract_ir_presentation_metrics_structured_fields(tmp_path: Path):
     assert any(
         row["split_type"] == "segmental_core_revenue" for row in metrics["segment_revenue_splits"]
     )
+
+
+def test_extract_ir_presentation_metrics_includes_ifrs16_lease_maturity(tmp_path: Path):
+    """End-to-end: MEGP annual-report IR body yields IFRS 16 lease maturity rows."""
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_id = "ir_55af4b8f27e3dd6f"
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_55af4b8f27e3dd6f.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP annual report IR body fixture not present")
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "MEGP FY2025 annual report",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "MEGP.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["lease_maturity_count"] >= 1
+    assert metrics["mandatory"] is True
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    lease_rows = saved["ifrs_16_lease_maturity"]
+    assert lease_rows
+    assert lease_rows[0]["table_type"] == "ifrs16_lease_maturity"
+    buckets = {row["bucket"]: row["amount_thousands"] for row in lease_rows[0]["buckets"]}
+    assert buckets["within_one_year"] == 4953.0
+    assert buckets["total"] == 12271.0
