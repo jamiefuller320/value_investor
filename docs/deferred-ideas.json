@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-18T10:53:52+00:00",
+  "updated_at": "2026-08-19T11:34:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3066,6 +3066,118 @@
       "source": "conversation: add strong-buy metrics probe to ladder",
       "added_at": "2026-08-18T10:47:18+00:00",
       "updated_at": "2026-08-18T10:53:52+00:00"
+    },
+    {
+      "id": "L154",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Prioritise full-text extract of FY 2026 results RNS and Annual Report PD",
+      "summary": "Prioritise full-text extract of FY 2026 results RNS and Annual Report PDF (FCA NSM / `firstgroupplc.com`) over Companies House OCR for UK transport names \u2014 the refetched `3bf5ff09fbc5c747.txt` contained the full FCF bridge and adjusting-items disclosure that OCR and Yahoo missed.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
+    },
+    {
+      "id": "L155",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: scoring \u2014 For UK RNS issuers, compute statutory earnings growth from filing basic/",
+      "summary": "For UK RNS issuers, compute statutory earnings growth from filing basic/adjusted EPS rather than Yahoo net income \u2014 FGP\u2019s **\u22125.9%** overlay contradicts filing EPS **21.4p vs 21.3p** and triggers a false earnings-basis downgrade.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "scoring"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
+    },
+    {
+      "id": "L156",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Populate `ir_presentation_metrics.json` with parsed FCF bridge tables fr",
+      "summary": "Populate `ir_presentation_metrics.json` with parsed FCF bridge tables from IR PDFs (company definition vs OCF\u2212capex vs adjusted cash flow); current `bridge_count: 0` left the three-way FCF mismatch unresolved until manual RNS read.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
+    },
+    {
+      "id": "L157",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Reject Investegate HTML fallback when body content_hash matches a differ",
+      "summary": "Reject Investegate HTML fallback when body content_hash matches a different indexed filing \u2014 `ir_a9733d0de6aec27d` (April trading update URL) ingested H1 interim text.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
+    },
+    {
+      "id": "L158",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; fl",
+      "summary": "Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; flag and suppress TTM when series empty (HIK.L TTM $14.4m vs filing $119m).",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
+    },
+    {
+      "id": "L159",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: scoring \u2014 Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as",
+      "summary": "Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as explicit overlay inputs; MEGP's net-cash metric excludes \u00a313m lease liabilities per filing note 8, which the current D/E 28% screen pass does not surface.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "scoring"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
+    },
+    {
+      "id": "L160",
+      "category": "later",
+      "section": "research",
+      "title": "Gap-fill: ingest \u2014 Parse IFRS 16 lease maturity tables and covenant language from annual re",
+      "summary": "Parse IFRS 16 lease maturity tables and covenant language from annual report PDF notes (referenced as note 20 in FY2025 body but not extracted) into structured fields for leverage red-flag checks.",
+      "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+      "tags": [
+        "gap-fill",
+        "research-model",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "research-gap-fill",
+      "added_at": "2026-08-19T11:34:06+00:00"
     }
   ],
   "fragments": [
