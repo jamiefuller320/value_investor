@@ -861,6 +861,8 @@ _EXCHANGE_SUFFIXES = (
     ".IR",
     ".LS",
     ".AT",
+    ".VI",
+    ".ST",
     ".SW",
     ".HK",
     ".SI",
@@ -1270,12 +1272,18 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
         return "asx_announcements"
     if m in {
         "euro_stoxx50",
+        "euro_depth",
         "dax",
         "cac40",
         "ibex35",
         "ftse_mib",
         "aex",
         "bel20",
+        "atx",
+        "psi20",
+        "smi",
+        "omxs30",
+        "iseq20",
         "eu",
     }:
         return "euro_filings"

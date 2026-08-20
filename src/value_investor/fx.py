@@ -12,7 +12,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_CURRENCIES = ("GBP", "USD", "EUR", "AUD", "CAD", "HKD", "SGD")
+SUPPORTED_CURRENCIES = ("GBP", "USD", "EUR", "AUD", "CAD", "HKD", "SGD", "CHF", "SEK")
 
 # Yahoo FX pairs quoted as BASEQUOTE=X → price of 1 BASE in QUOTE units.
 _YAHOO_PAIR: dict[tuple[str, str], str] = {
@@ -22,18 +22,26 @@ _YAHOO_PAIR: dict[tuple[str, str], str] = {
     ("CAD", "USD"): "CADUSD=X",
     ("HKD", "USD"): "HKDUSD=X",
     ("SGD", "USD"): "SGDUSD=X",
+    ("CHF", "USD"): "CHFUSD=X",
+    ("SEK", "USD"): "SEKUSD=X",
     ("GBP", "EUR"): "GBPEUR=X",
     ("EUR", "GBP"): "EURGBP=X",
     ("AUD", "GBP"): "AUDGBP=X",
     ("CAD", "GBP"): "CADGBP=X",
     ("HKD", "GBP"): "HKDGBP=X",
     ("SGD", "GBP"): "SGDGBP=X",
+    ("CHF", "GBP"): "CHFGBP=X",
+    ("SEK", "GBP"): "SEKGBP=X",
+    ("CHF", "EUR"): "CHFEUR=X",
+    ("SEK", "EUR"): "SEKEUR=X",
     ("USD", "GBP"): "GBPUSD=X",  # invert
     ("USD", "EUR"): "EURUSD=X",  # invert
     ("USD", "AUD"): "AUDUSD=X",  # invert
     ("USD", "CAD"): "USDCAD=X",
     ("USD", "HKD"): "USDHKD=X",
     ("USD", "SGD"): "USDSGD=X",
+    ("USD", "CHF"): "USDCHF=X",
+    ("USD", "SEK"): "USDSEK=X",
 }
 
 _INVERT_PAIRS = {
@@ -41,6 +49,9 @@ _INVERT_PAIRS = {
     ("USD", "EUR"),
     ("USD", "AUD"),
 }
+
+# Multi-currency books: resolve FX from Yahoo suffix, not market default.
+MULTI_CURRENCY_MARKETS = frozenset({"euro_depth"})
 
 MARKET_CURRENCY = {
     "ftse350": "GBP",
@@ -50,12 +61,18 @@ MARKET_CURRENCY = {
     "nasdaq100": "USD",
     "us_adr_asia": "USD",
     "euro_stoxx50": "EUR",
+    "euro_depth": "EUR",
     "dax": "EUR",
     "cac40": "EUR",
     "ibex35": "EUR",
     "ftse_mib": "EUR",
     "aex": "EUR",
     "bel20": "EUR",
+    "atx": "EUR",
+    "psi20": "EUR",
+    "iseq20": "EUR",
+    "smi": "CHF",
+    "omxs30": "SEK",
     "asx200": "AUD",
     "tsx60": "CAD",
     "hang_seng": "HKD",
@@ -108,9 +125,7 @@ def currency_for_market(market: str | None) -> str:
     return MARKET_CURRENCY.get((market or "").strip().lower(), "GBP")
 
 
-def currency_for_ticker(ticker: str, *, market: str | None = None) -> str:
-    if market:
-        return currency_for_market(market)
+def _currency_from_yahoo_suffix(ticker: str) -> str | None:
     t = (ticker or "").upper()
     if t.endswith(".L"):
         return "GBP"
@@ -118,12 +133,34 @@ def currency_for_ticker(ticker: str, *, market: str | None = None) -> str:
         return "AUD"
     if t.endswith(".TO"):
         return "CAD"
-    if any(t.endswith(s) for s in (".DE", ".PA", ".AS", ".MI", ".BR", ".HE", ".MC")):
-        return "EUR"
     if t.endswith(".HK"):
         return "HKD"
     if t.endswith(".SI"):
         return "SGD"
+    if t.endswith(".ST"):
+        return "SEK"
+    if t.endswith(".SW"):
+        return "CHF"
+    if any(
+        t.endswith(s)
+        for s in (".DE", ".PA", ".AS", ".MI", ".BR", ".HE", ".MC", ".IR", ".LS", ".VI", ".AT")
+    ):
+        return "EUR"
+    return None
+
+
+def currency_for_ticker(ticker: str, *, market: str | None = None) -> str:
+    mid = (market or "").strip().lower()
+    suffix_ccy = _currency_from_yahoo_suffix(ticker)
+    # Depth-first EU book mixes EUR/CHF/SEK — prefer ticker suffix.
+    if mid in MULTI_CURRENCY_MARKETS:
+        if suffix_ccy:
+            return suffix_ccy
+        return currency_for_market(mid)
+    if mid:
+        return currency_for_market(mid)
+    if suffix_ccy:
+        return suffix_ccy
     return "USD"
 
 

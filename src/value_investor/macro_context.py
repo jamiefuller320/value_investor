@@ -53,6 +53,7 @@ MARKET_TO_DOMAIN: dict[str, str] = {
     "ftse_smallcap": "uk",
     "aim": "uk",
     "euro_stoxx50": "euro",
+    "euro_depth": "euro",
     "dax": "euro",
     "cac40": "euro",
     "ibex35": "euro",
@@ -67,7 +68,7 @@ MARKET_TO_DOMAIN: dict[str, str] = {
     "psi20": "euro",
     "smi": "euro",
     "omxs30": "euro",
-    "iseq20": "uk",
+    "iseq20": "euro",
 }
 
 

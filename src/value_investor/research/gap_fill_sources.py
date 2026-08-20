@@ -155,6 +155,7 @@ def _market_bucket(market: str | None, ticker: str) -> str:
         return "us"
     if mid in {
         "euro_stoxx50",
+        "euro_depth",
         "dax",
         "cac40",
         "ibex35",
@@ -165,6 +166,7 @@ def _market_bucket(market: str | None, ticker: str) -> str:
         "psi20",
         "smi",
         "omxs30",
+        "iseq20",
     }:
         return "euro"
     if mid in {"asx200", "asx"} or ticker.upper().endswith(".AX"):

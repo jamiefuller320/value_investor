@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T21:46:18.519761+00:00",
+  "updated_at": "2026-08-20T20:00:48.300172+00:00",
   "markets": {
     "asx200": {
       "market_id": "asx200",
@@ -76,16 +76,17 @@
     "euro_stoxx50": {
       "market_id": "euro_stoxx50",
       "benchmark_ticker": "^STOXX50E",
-      "current_phase": 2,
-      "next_phase": 2,
+      "current_phase": 1,
+      "next_phase": 1,
       "phase1_ready": true,
       "phase2_ready": false,
-      "weekly_paper_enabled": true,
+      "weekly_paper_enabled": false,
       "phase1": {
         "screen_archives": 13,
         "observe_snapshot_count": 13,
         "min_archives": 12,
-        "ai_beat_rules_observe_sim": true
+        "ai_beat_rules_observe_sim": true,
+        "phase1_require_ai_beat_rules": false
       },
       "phase2": {
         "weekly_batch_count": 1,
@@ -93,10 +94,9 @@
         "beat_control_latest": false
       },
       "blockers": [
-        "need 8 weekly batch marks (have 1)",
-        "primary track must beat rules control on latest review"
+        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
       ],
-      "evaluated_at": "2026-08-16T21:46:18.516227+00:00"
+      "evaluated_at": "2026-08-20T20:00:48.300167+00:00"
     },
     "iseq20": {
       "market_id": "iseq20",
@@ -153,14 +153,15 @@
       "benchmark_ticker": "^GSPC",
       "current_phase": 1,
       "next_phase": 1,
-      "phase1_ready": false,
+      "phase1_ready": true,
       "phase2_ready": false,
-      "weekly_paper_enabled": true,
+      "weekly_paper_enabled": false,
       "phase1": {
         "screen_archives": 12,
         "observe_snapshot_count": 12,
         "min_archives": 12,
-        "ai_beat_rules_observe_sim": false
+        "ai_beat_rules_observe_sim": false,
+        "phase1_require_ai_beat_rules": false
       },
       "phase2": {
         "weekly_batch_count": 0,
@@ -168,9 +169,9 @@
         "beat_control_latest": null
       },
       "blockers": [
-        "AI-judgment must beat rules on observe sim before Phase 2"
+        "sp500 not in ladder.weekly_paper_shard_markets"
       ],
-      "evaluated_at": "2026-08-16T21:46:18.518672+00:00"
+      "evaluated_at": "2026-08-20T20:00:48.299448+00:00"
     },
     "tsx60": {
       "market_id": "tsx60",
@@ -195,6 +196,32 @@
         "need 12 observe snapshots (have 0)"
       ],
       "evaluated_at": "2026-08-16T21:46:18.519537+00:00"
+    },
+    "euro_depth": {
+      "market_id": "euro_depth",
+      "benchmark_ticker": "^STOXX50E",
+      "current_phase": 1,
+      "next_phase": 1,
+      "phase1_ready": false,
+      "phase2_ready": false,
+      "weekly_paper_enabled": true,
+      "phase1": {
+        "screen_archives": 0,
+        "observe_snapshot_count": 0,
+        "min_archives": 12,
+        "ai_beat_rules_observe_sim": null,
+        "phase1_require_ai_beat_rules": false
+      },
+      "phase2": {
+        "weekly_batch_count": 0,
+        "min_weekly_batches": 8,
+        "beat_control_latest": null
+      },
+      "blockers": [
+        "need 12 screen archives (have 0)",
+        "need 12 observe snapshots (have 0)"
+      ],
+      "evaluated_at": "2026-08-20T20:00:48.298557+00:00"
     }
   }
 }

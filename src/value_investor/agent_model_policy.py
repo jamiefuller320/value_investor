@@ -271,7 +271,7 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         }
         ladder.update(dict(data.get("ladder") or {}))
         base["ladder"] = ladder
-    if not base.get("market_queue"):
+    if "market_queue" not in base or base.get("market_queue") is None:
         base["market_queue"] = list(DEFAULT_MARKET_QUEUE)
     if not base.get("focus_market"):
         base["focus_market"] = DEFAULT_FOCUS_MARKET
