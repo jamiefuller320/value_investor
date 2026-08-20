@@ -34,6 +34,10 @@ def test_to_stooq_symbol_maps_iseq_irish_tickers():
     assert to_stooq_symbol("A5G-IR.L") == "a5g.ir"
 
 
+def test_to_stooq_symbol_maps_mangled_stockholm():
+    assert to_stooq_symbol("ABB-ST.L") == "abb.st"
+
+
 def test_merge_provider_result_only_fills_missing():
     metrics = {"market_cap": 10.0, "trailing_pe": None}
     source_map: dict[str, str] = {}

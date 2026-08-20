@@ -200,6 +200,8 @@ def test_resolve_yahoo_ticker_preserves_stockholm_suffix():
 def test_resolve_yahoo_ticker_repairs_mangled_iseq_symbols():
     assert fetch_mod.repair_mangled_yahoo_ticker("A5G-IR.L") == "A5G.IR"
     assert fetch_mod.normalize_yahoo_ticker("A5G-IR.L", "iseq20") == "A5G.IR"
+    assert fetch_mod.repair_mangled_yahoo_ticker("ABB-ST.L") == "ABB.ST"
+    assert fetch_mod.normalize_yahoo_ticker("ABB-ST.L", "omxs30") == "ABB.ST"
     assert fetch_mod.normalize_yahoo_ticker("A5G.IR", "iseq20") == "A5G.IR"
     assert fetch_mod.normalize_yahoo_ticker("A5G", "iseq20") == "A5G.IR"
     assert fetch_mod.resolve_yahoo_ticker_for_market("A5G.IR", "ftse350") == "A5G.IR"

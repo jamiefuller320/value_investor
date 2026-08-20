@@ -15,7 +15,7 @@ from value_investor.library_screen import (
     research_cap_from_budget,
     run_library_screen,
 )
-from value_investor.storage import write_json
+from value_investor.storage import read_json, write_json
 
 
 def _seed_metrics(root: Path, market: str = "sp500", n: int = 30) -> None:
@@ -145,6 +145,54 @@ def test_assess_iseq20_dedupes_mangled_rows_and_meets_screen_floor(tmp_path: Pat
     universe = load_library_metrics(root, market)
     assert len(universe) == 20
     assert set(universe["ticker"]) == set(tickers)
+
+
+def test_ladder_screens_iseq_sized_market_with_policy_min_25(tmp_path: Path):
+    """Tail markets with ticker_count < policy min must still screen when fully covered."""
+    root = tmp_path / "library"
+    policy = tmp_path / "policy.json"
+    market = "iseq20"
+    _seed_metrics(root, market, n=20)
+    # Rewrite tickers to look Irish while keeping full metric columns.
+    metrics_path = market_dir(root, market) / "metrics" / "latest.json.gz"
+    rows = read_json(metrics_path)
+    for i, row in enumerate(rows):
+        row["ticker"] = f"T{i:02d}.IR"
+    write_json(metrics_path, rows, compact=True, compress=True)
+    tickers = [r["ticker"] for r in rows]
+    write_json(
+        market_dir(root, market) / "manifest.json",
+        {
+            "market": market,
+            "ticker_count": 20,
+            "coverage_count": 20,
+            "coverage_pct": 1.0,
+            "tickers": tickers,
+            "ticker_state": {t: {"last_refresh": "2026-08-16T00:00:00+00:00"} for t in tickers},
+        },
+        compact=False,
+    )
+    base = load_policy(policy)
+    base["focus_market"] = market
+    base["market_queue"] = [market]
+    base["graduated_markets"] = []
+    base["ladder"] = {
+        "min_metrics_for_screen": 25,
+        "research_hard_cap": 0,
+        "observe_sim_after_screen": False,
+        "research_all_graduated": False,
+    }
+    save_policy(base, policy)
+
+    payload = run_library_ladder(
+        root=root,
+        policy_path=policy,
+        skip_grow=True,
+        skip_research=True,
+    )
+    screen = payload["layers"]["screen_lite"]
+    assert not screen.get("skipped"), screen
+    assert screen.get("ticker_count") == 20
 
 
 def test_research_cap_from_budget():

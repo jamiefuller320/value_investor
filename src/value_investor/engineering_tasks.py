@@ -899,7 +899,10 @@ def ladder_metrics_block_assessment(
     """Return block metadata when focus market cannot run screen-lite on usable metrics."""
     from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
     from value_investor.data_library import library_status
-    from value_investor.library_screen import assess_library_metrics_health
+    from value_investor.library_screen import (
+        assess_library_metrics_health,
+        effective_min_metrics_for_screen,
+    )
 
     focus = str(ladder_result.get("focus_market") or "").strip()
     if not focus:
@@ -913,22 +916,26 @@ def ladder_metrics_block_assessment(
     policy_path = policy_path or DEFAULT_POLICY_PATH
     policy = load_policy(policy_path)
     ladder_cfg = policy.get("ladder") or {}
-    min_metrics = int(ladder_cfg.get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)
+    policy_min = int(ladder_cfg.get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN)
 
     screen = layers.get("screen_lite") or {}
     if screen.get("skipped") and screen.get("reason") is None and not screen.get("failed"):
         return None
 
     health = assess_library_metrics_health(root, focus)
-    usable = int(health.get("usable_rows") or 0)
-    if usable >= min_metrics:
-        return None
-
     status_rows = library_status(root, markets=[focus])
     status_row = status_rows[0] if status_rows else {}
     ticker_count = int(status_row.get("ticker_count") or 0)
     total_rows = int(health.get("total_rows") or 0)
     if ticker_count <= 0 and total_rows <= 0:
+        return None
+    min_metrics = effective_min_metrics_for_screen(ticker_count, policy_min=policy_min)
+    usable = int(
+        health.get("honest_usable_rows")
+        if health.get("honest_usable_rows") is not None
+        else health.get("usable_rows") or 0
+    )
+    if usable >= min_metrics:
         return None
 
     screen_failed = bool(screen.get("failed"))

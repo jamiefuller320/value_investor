@@ -226,14 +226,17 @@ def _load_ticker_payload(ticker: str) -> tuple[Any, dict[str, Any], Any]:
 
 def repair_mangled_yahoo_ticker(ticker: str) -> str:
     """
-    Undo mistaken LSE conversion of Irish symbols (``A5G-IR.L`` → ``A5G.IR``).
+    Undo mistaken LSE conversion of non-UK Yahoo suffixes.
 
     ``to_lse_ticker`` treats dots as class shares and appends ``.L``, which breaks
-    Euronext Dublin ``.IR`` tickers when market context was missing.
+    Euronext Dublin ``.IR`` (``A5G-IR.L`` → ``A5G.IR``) and Nordic ``.ST``
+    (``ABB-ST.L`` → ``ABB.ST``) when market context was missing.
     """
     upper = str(ticker or "").strip().upper()
-    if upper.endswith("-IR.L") and not upper.endswith(".IR"):
-        return f"{upper[:-5]}.IR"
+    for yahoo_suffix in (".IR", ".ST", ".HE", ".OL", ".CO", ".VI", ".LS"):
+        mangled = yahoo_suffix.replace(".", "-") + ".L"
+        if upper.endswith(mangled) and not upper.endswith(yahoo_suffix):
+            return f"{upper[: -len(mangled)]}{yahoo_suffix}"
     return upper
 
 

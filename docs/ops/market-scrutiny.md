@@ -13,7 +13,7 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 | **FTSE live ingest** | 70/70 buy-tier measured; **0 zero-body** | 13 tickers with 1–5 residual indexed-without-body (unfetchable tail) |
 | **FTSE filing depth** | ~3,700 bodies; global indexed-without-body ~36 | Weekday depth continues; not a one-shot sprint |
 | **Offline queue** | **Tail complete** — `iseq20` focus; Sunday ladder graduated in CI but commit failed on JSON parse (fixed in workflow) | Re-run ladder or wait for next Sunday to persist graduation + `last_ladder.json` |
-| **Focus `iseq20`** | Constituents 100%; metrics **stale on main** (honest fetch 0% until grow pass) | Same `.ST`/Yahoo metrics engineering path as `omxs30` |
+| **Focus `iseq20`** | Constituents 100%; honest metrics usable; screen-lite gated by `effective_min` (=20) | Provider mapping fixed; ladder uses tail-market floor so 20/20 coverage can screen |
 | **S&P 500 observe sim** | Running after Sunday screen-lite | Continue weekly |
 | **`weekly_ops`** | $80 cap | Sunday email + ladder selective research |
 | **Director–worker** | Exploration phase (15/week); **MEGP.L** trial run 2026-08-16 | `auto_escalate_director` stays false until calibrated |
@@ -67,11 +67,13 @@ gh workflow run ingest-loop.yml -f max_targets=12 -f force=true
 
 ### Layer B screen-lite (focus market)
 
-Requires **≥25 tickers with usable metrics** (`min_metrics_for_screen`). **`omxs30` graduated** (Aug 2026); **`iseq20` is focus** — metrics refresh still blocked on Yahoo/Stooq until the Swedish `.ST` provider path lands.
+Requires **≥`effective_min_metrics_for_screen`** usable rows (`min(policy_min=25, ticker_count)`).
+**`omxs30`** and **`iseq20`** both have honest Yahoo fetches working (``.ST`` / ``.IR`` repair + Stooq suffix map).
+ISEQ 20 is only 20 names — the ladder must use the effective floor (20), not a hard 25, or screen-lite never runs.
 
-**Next engineering focus:** Swedish `.ST` metrics provider path (applies to `iseq20` and any future Nordic slices — not more Sunday memo budget).
+**Resolved (Aug 2026):** Irish ``A5G-IR.L`` mangling → ``A5G.IR``; Nordic ``ABB-ST.L`` → ``ABB.ST``; Stooq ``a5g.ir`` / ``abb.st``; ladder gate uses `effective_min_metrics_for_screen`.
 
-When metrics work: one `ftse-library ladder` Sunday pass screens 20 names + observe sim if configured.
+When metrics work: one `ftse-library ladder` Sunday pass screens focus names + observe sim if configured.
 
 ### Library grow health log + stall → engineering (latent failures)
 
@@ -110,10 +112,9 @@ At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports rough
 
 ### Progression through markets
 
-1. **FTSE ingest** — close 11 unmeasured (this week).
-2. **Fix `omxs30` metrics** — engineering queue (`eng-20260810-01` or auto-drafted `library_ladder` task); then screen-lite + optional `observe_sim_markets: ["sp500", "omxs30"]`.
-3. **Graduate `omxs30`** → focus advances to **`iseq20`** (queue tail).
-4. **Keep S&P observe sim** accumulating — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
+1. **FTSE ingest** — residual indexed-without-body depth (buy-tier measured).
+2. **`omxs30` / `iseq20` metrics** — provider mapping + effective screen floor landed; Sunday ladder should run screen-lite on focus.
+3. **Keep S&P observe sim** accumulating — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
 
 ## Commands
 
@@ -121,7 +122,7 @@ At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports rough
 ftse-ingest-loop status --json
 ftse-library policy                    # weekly_ops cap + ladder knobs
 ftse-library ladder --dry-run-research # Sunday shortlist preview
-ftse-library screen --markets omxs30   # after metrics fix
+ftse-library screen --markets iseq20   # focus screen-lite (20-name floor)
 ```
 
 ## Cron alignment

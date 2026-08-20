@@ -162,9 +162,6 @@ def to_stooq_symbol(ticker: str) -> str:
     from value_investor.fetch import repair_mangled_yahoo_ticker
 
     symbol = repair_mangled_yahoo_ticker(ticker).strip().upper()
-    # Legacy rows may store ``A5G-IR.L`` — normalize before suffix mapping.
-    if symbol.endswith("-IR.L"):
-        symbol = f"{symbol[:-5]}.IR"
     stooq_suffix = ".uk"
     for yahoo_suffix, mapped in sorted(
         _STOOQ_SUFFIX_BY_YAHOO.items(), key=lambda item: len(item[0]), reverse=True
