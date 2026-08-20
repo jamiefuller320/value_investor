@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T16:26:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T16:35:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -87,6 +87,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N33 | **Do not search assign_signal thresholds for historical edge** | Retrospective tuning of frozen screen filters (composites, pass rates, quality floors) to catch winners over the monitoring period would look like edge today but conflicts with N3 and stage-5 counterfactual safety; keep such work research-only offline_sim if ever run, never auto-write into assign_signal. | Explicit product decision to override N3 / frozen-signal regime for a controlled research experiment |
 | N34 | **Stage-4 live universe expansion before 2b edge** | Keep live screen on FTSE 350; offline library (iseq20 screen-lite) is enough until primary AI track beats ^FTSE after costs. | Stage 2b AI judgment excess vs ^FTSE is positive with thick history |
 | N35 | **Do not use weekly historical shadow rewind as promotion proof** | Rewinding competing shadows through known history to pick a winner overfits the same window used for bootstrap; keep weekly consistency as a diagnostic, and reserve promotion for forward endurance vs market/rules. | Only if a held-out weekly archive path (true walk-forward / purged CV) is implemented under L111 |
+| N36 | **Do not auto-promote surviving shadows into ai_judgment** | Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. | Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors |
 
 ---
 
@@ -113,6 +114,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L87 | **LLM synthesis layer for periodic learning-track meta-reports** | Monthly or quarterly agent pass that reads learning_tracks_review.json, learning_tracks_exit_shadow.json, and historical_analysis_summary.json and produces a human-readable diagnosis (AI vs control, grace vs rules, cost drag, suggested experiments). Uses frontier/API-pool models; keep automated knobs deterministic. | ≥8 weeks of learning_tracks_review marks and ≥15 closed exit-shadow cohorts; paper-auto artifacts stable |
 | L90 | **Promote momentum grace into rules control after shadow evidence** | If momentum_grace track beats rules on cost-adjusted excess return and exit_shadow shows materially fewer early_exit vs screen_rotation on comparable sells, merge grace overlay into the rules control book and retire the separate third track to reduce operational surface. | ≥6 months of three-track marks; grace vs rules excess and exit-shadow verdict rates diverge consistently in grace favour |
 | L163 | **Weekly consistency report for bootstrap shadow candidates** | Observe-only: step competing bootstrap knob groups through chronological weekly slices (log and later archive) and report week-on-week stability of excess/hit-rate — surface alongside fold_stability, do not re-rank solely on in-sample consistency or auto-cull shadows. | After bootstrap shadows have published endurance marks and L111 archive replay can supply weekly screen passes |
+| L164 | **Held-out / purged walk-forward for bootstrap promotion** | Strengthen winner selection by requiring bootstrap priors to clear a held-out chronological slice (or purged CV) before shadow spawn counts as promotion-ready, reducing in-sample double-dip between full-period rank and historical consistency. | Acted logs ≥~20 per track or L111 weekly archives cover ≥12 months |
 
 ### Universe & data
 
@@ -221,6 +223,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L89 | **Revisit library weekly_usage_gbp after Pro+ upgrade** | Pro+ expands Composer/Auto and API pools. If library ladder is frequently constraining at £30/week, consider raising weekly_usage_gbp or selective_memo caps — only after reviewing ftse-library policy and actual spend vs envelope. | ftse-library policy shows constraining flag for ≥3 consecutive weeks despite Pro+ headroom |
 | L95 | **Mid-week post-run review agent after engineering merges** | Optional LLM triage to reorder the engineering queue when deterministic reprioritize is insufficient — e.g. after multiple ingest merges or contradictory filing signals. | Deterministic reprioritize hook has run for 3+ ingest merges and queue order still feels stale vs Sunday diagnosis |
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
+| L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
 
 ---
 
