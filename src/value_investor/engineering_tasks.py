@@ -933,8 +933,7 @@ def ladder_metrics_block_assessment(
     usable = int(
         health.get("honest_usable_rows")
         if health.get("honest_usable_rows") is not None
-        else health.get("usable_rows")
-        or 0
+        else health.get("usable_rows") or 0
     )
     if usable >= min_metrics:
         return None

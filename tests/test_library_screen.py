@@ -168,9 +168,7 @@ def test_ladder_screens_iseq_sized_market_with_policy_min_25(tmp_path: Path):
             "coverage_count": 20,
             "coverage_pct": 1.0,
             "tickers": tickers,
-            "ticker_state": {
-                t: {"last_refresh": "2026-08-16T00:00:00+00:00"} for t in tickers
-            },
+            "ticker_state": {t: {"last_refresh": "2026-08-16T00:00:00+00:00"} for t in tickers},
         },
         compact=False,
     )

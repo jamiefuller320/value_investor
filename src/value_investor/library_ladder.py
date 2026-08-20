@@ -277,8 +277,7 @@ def run_library_ladder(
     usable_metrics = int(
         metrics_health.get("honest_usable_rows")
         if metrics_health.get("honest_usable_rows") is not None
-        else metrics_health.get("usable_rows")
-        or 0
+        else metrics_health.get("usable_rows") or 0
     )
     policy_min = int(
         policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN
