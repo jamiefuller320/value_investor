@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T15:11:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T15:23:26+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -110,7 +110,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L85 | **Auto-tune momentum grace knobs from exit-shadow review** | When exit_shadow_review shows ≥30 closed grace exits with stable early_exit vs good_exit balance vs rules screen_rotation, allow decision-review-style small steps on grace_weeks, ATR stop multiplier, and take-profit extension on the momentum_grace track only. | learning_tracks_exit_shadow.json shows ≥30 closed grace exits and grace vs screen_rotation verdict rates diverge materially |
 | L87 | **LLM synthesis layer for periodic learning-track meta-reports** | Monthly or quarterly agent pass that reads learning_tracks_review.json, learning_tracks_exit_shadow.json, and historical_analysis_summary.json and produces a human-readable diagnosis (AI vs control, grace vs rules, cost drag, suggested experiments). Uses frontier/API-pool models; keep automated knobs deterministic. | ≥8 weeks of learning_tracks_review marks and ≥15 closed exit-shadow cohorts; paper-auto artifacts stable |
 | L90 | **Promote momentum grace into rules control after shadow evidence** | If momentum_grace track beats rules on cost-adjusted excess return and exit_shadow shows materially fewer early_exit vs screen_rotation on comparable sells, merge grace overlay into the rules control book and retire the separate third track to reduce operational surface. | ≥6 months of three-track marks; grace vs rules excess and exit-shadow verdict rates diverge consistently in grace favour |
-| L162 | **Bootstrap shadow sims from full-period knob retrospective** | Separate from the live learning loop: search the monitoring window for portfolio-knob groups that would have worked up to now (catch enough top buy-tier performers, exclude enough poor ones for excess vs ^FTSE). Seed those as competing observe-only shadow sims; the real test is whether they endure forward. Survivors become a starting prior for learning-loop refinement (not an auto-apply into live knobs). Complements L111/calibration; keeps N3 screen thresholds frozen. | Ready to run once rebalance logs ≥~12 acted/track or archives thicken (L111 milestone); promote only after forward shadow marks beat market and rules control |
 
 ### Universe & data
 
