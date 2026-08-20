@@ -147,7 +147,8 @@ auto-applied.
 | Step | Command / trigger |
 |------|-------------------|
 | **Retrospective + spawn** | Sunday `analysis-review.yml` (`full_period_retrospective`, `--spawn-shadow`) |
-| **Weekday** | Idempotent `spawn-shadow --top-n 3` + `endurance` |
+| **Persist** | Sunday commits priors, endurance, and `ai_judgment_calibrated*` even if the modelling agent is skipped |
+| **Weekday** | Idempotent `spawn-shadow --top-n 3` (GC drops stale ranks) + `endurance` |
 | **Manual** | `ftse-knob-calibrate spawn-shadow --top-n 3` |
 
 Each shadow: `is_calibration_shadow: true`, parent AI gates, frozen knobs,

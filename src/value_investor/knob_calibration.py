@@ -5,6 +5,7 @@ from __future__ import annotations
 import itertools
 import json
 import math
+import shutil
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -1014,6 +1015,24 @@ def _spawn_one_calibrated_shadow(
     }
 
 
+def _gc_calibrated_shadow_dirs(
+    paper_root: Path,
+    *,
+    keep_ranks: list[int],
+) -> list[str]:
+    """Remove calibrated shadow dirs whose rank is outside the active top-N set."""
+    keep = {int(rank) for rank in keep_ranks if int(rank) > 0}
+    removed: list[str] = []
+    for rank in discover_calibration_shadow_ranks(paper_root):
+        if rank in keep:
+            continue
+        path = Path(paper_root) / calibrated_shadow_subdir(rank)
+        if path.exists() and path.is_dir():
+            shutil.rmtree(path)
+            removed.append(str(path))
+    return removed
+
+
 def spawn_calibration_shadow_tracks(
     paper_root: Path,
     *,
@@ -1085,8 +1104,10 @@ def spawn_calibration_shadow_tracks(
 
     n = max(1, min(int(top_n), len(priors)))
     shadows: list[dict[str, Any]] = []
+    kept_ranks: list[int] = []
     for index, prior in enumerate(priors[:n], start=1):
         rank = int(prior.get("rank") or index)
+        kept_ranks.append(rank)
         result = _spawn_one_calibrated_shadow(
             paper_root,
             parent=parent,
@@ -1100,12 +1121,14 @@ def spawn_calibration_shadow_tracks(
         )
         shadows.append(result)
 
+    gc = _gc_calibrated_shadow_dirs(paper_root, keep_ranks=kept_ranks)
     spawned_any = any(row.get("spawned") for row in shadows)
     return {
         "spawned": spawned_any,
         "top_n": n,
         "ranking_mode": track_row.get("ranking_mode"),
         "shadows": shadows,
+        "gc_removed": gc,
         # Back-compat fields for phase-1 callers / CLI.
         "shadow_track_id": (shadows[0].get("shadow_track_id") if shadows else None),
         "shadow_dir": (shadows[0].get("shadow_dir") if shadows else None),

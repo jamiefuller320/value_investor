@@ -97,6 +97,19 @@ jobs:
             --spawn-shadow || true
           ftse-knob-calibrate endurance --paper-root docs/data/paper_automation || true
 
+      - name: Commit knob bootstrap artifacts
+        # Persist even when the modelling agent is skipped — otherwise Sunday
+        # calibrate/spawn is lost and weekday paper-auto never sees r2/r3.
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: knob bootstrap priors + calibrated shadows [skip ci]"
+          file_pattern: |
+            docs/data/paper_automation/knob_calibration_priors.json
+            docs/data/paper_automation/calibration_shadow_endurance.json
+            docs/data/paper_automation/ai_judgment_calibrated/**
+            docs/data/paper_automation/ai_judgment_calibrated_r*/**
+          skip_fetch: false
+
       - name: Check analysis inputs
         id: ready
         run: |

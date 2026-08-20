@@ -406,6 +406,18 @@ def test_spawn_competing_shadow_tracks(tmp_path: Path):
     assert cfg_r2["min_conviction"] == 0.15
 
 
+def test_spawn_shadow_gc_removes_stale_ranks(tmp_path: Path):
+    paper_root = _seed_ai_judgment_parent(tmp_path, with_bootstrap=True)
+    spawn_calibration_shadow_tracks(paper_root, top_n=3)
+    assert (paper_root / "ai_judgment_calibrated_r3").exists()
+    result = spawn_calibration_shadow_tracks(paper_root, top_n=2)
+    assert result["spawned"] is True
+    assert (paper_root / "ai_judgment_calibrated").exists()
+    assert (paper_root / "ai_judgment_calibrated_r2").exists()
+    assert not (paper_root / "ai_judgment_calibrated_r3").exists()
+    assert any("ai_judgment_calibrated_r3" in path for path in (result.get("gc_removed") or []))
+
+
 def test_spawn_calibrated_shadow_idempotent_without_force(tmp_path: Path):
     paper_root = _seed_ai_judgment_parent(tmp_path)
     first = spawn_calibrated_shadow_track(paper_root)
