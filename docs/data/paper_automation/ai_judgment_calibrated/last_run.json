@@ -1,61 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-19T10:00:23.967158+01:00",
+    "local_time": "2026-08-20T09:27:13.370563+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-19T08:00:00+01:00",
-    "settle_at": "2026-08-19T09:15:00+01:00",
+    "market_open_at": "2026-08-20T08:00:00+01:00",
+    "settle_at": "2026-08-20T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "99b87fb9-3e15-4ec5-a5e2-8fa141f255e6",
-      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
-      "acted_at": "2026-08-19T10:00:23.967158+01:00",
-      "ticker": "MEGP.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 2.756786,
-      "price": 117.392,
-      "gross": 323.62,
-      "cost": 9.71,
-      "net_cash": -333.33,
-      "note": "Automated buy",
-      "name": "ME Group International plc"
-    },
-    {
-      "id": "1c243ab7-7087-46ee-b557-c188ef16f31a",
-      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
-      "acted_at": "2026-08-19T10:00:23.967158+01:00",
-      "ticker": "AEP.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.676811,
-      "price": 193.0,
-      "gross": 323.62,
-      "cost": 9.71,
-      "net_cash": -333.33,
-      "note": "Automated buy",
-      "name": "AEP Plantations Plc"
-    },
-    {
-      "id": "577ae918-34dd-43b2-99c4-e67f29bd52b6",
-      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
-      "acted_at": "2026-08-19T10:00:23.967158+01:00",
-      "ticker": "IMB.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.126219,
-      "price": 2564.0,
-      "gross": 323.62,
-      "cost": 9.71,
-      "net_cash": -333.33,
-      "note": "Automated buy",
-      "name": "Imperial Brands PLC"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -69,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 970.87,
+    "nav": 962.3,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.0,
@@ -79,69 +33,60 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 323.62,
+    "target_sleeve_value": 317.62,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7383000000000002,
-        "price": 117.392
+        "conviction_score": 0.6327,
+        "price": 117.942
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6944000000000001,
-        "price": 193.0
+        "conviction_score": 0.5821000000000001,
+        "price": 192.4
       },
       {
-        "ticker": "IMB.L",
-        "name": "Imperial Brands PLC",
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6448,
-        "price": 2564.0
+        "conviction_score": 0.5593,
+        "price": 1071.5
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.126219,
+        "price": 2492.0,
+        "value": 314.54
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
-        "reason": "Already near equal-weight target",
-        "value": 323.62,
-        "target_value": 323.62,
-        "conviction_score": 0.7383000000000002,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "AEP.L",
-        "name": "AEP Plantations Plc",
-        "reason": "Already near equal-weight target",
-        "value": 323.62,
-        "target_value": 323.62,
-        "conviction_score": 0.6944000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "IMB.L",
-        "name": "Imperial Brands PLC",
-        "reason": "Already near equal-weight target",
-        "value": 323.62,
-        "target_value": 323.62,
-        "conviction_score": 0.6448,
+        "action": "buy",
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
+        "reason": "New sleeve",
+        "value": 305.1,
+        "price": 1071.5,
+        "target_value": 317.62,
+        "conviction_score": 0.5593,
         "signal": "strong_buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s)."
   },
   "alerts": [
     {
@@ -150,7 +95,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 117.39199829101562,
+      "mark": 117.94200134277344,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -161,7 +106,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 193.0,
+      "mark": 192.39999389648438,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -172,7 +117,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2564.0,
+      "mark": 2492.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -314,19 +259,37 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-20T09:27:13.370563+01:00",
+        "portfolio_value": 962.3,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-19T10:00:23.967158+01:00",
+    "last_mark_at": "2026-08-20T09:27:13.370563+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "IMB.L": 1
+      },
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated",
-    "generated_at": "2026-08-19T09:00:33.590181+00:00",
+    "generated_at": "2026-08-20T08:27:22.390214+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -345,7 +308,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated",
-    "generated_at": "2026-08-19T09:00:33.590492+00:00",
+    "generated_at": "2026-08-20T08:27:22.390692+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -399,17 +362,20 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 0,
+      "hold_with_data_quality_count": 1,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
-        "swap_rotation closed rotations=0 (target >=10)",
-        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
+        "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 0
+        "count": 1,
+        "recovered_to_breakeven": 0,
+        "close_reasons": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -425,7 +391,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -433,7 +399,7 @@
       "swap_rotations": 0
     }
   },
-  "generated_at": "2026-08-19T09:00:33.590842+00:00",
+  "generated_at": "2026-08-20T08:27:22.391071+00:00",
   "track_id": "ai_judgment_calibrated",
   "track_label": "AI judgment calibrated shadow (frozen priors)",
   "is_primary_learning_track": false,
