@@ -62,6 +62,7 @@ def _wiki_tables(url: str) -> list[pd.DataFrame]:
 PREQUALIFIED_YAHOO_MARKETS = frozenset(
     {
         "euro_stoxx50",
+        "euro_depth",
         "dax",
         "cac40",
         "ibex35",
@@ -70,7 +71,23 @@ PREQUALIFIED_YAHOO_MARKETS = frozenset(
         "bel20",
         "omxs30",
         "iseq20",
+        "smi",
+        "atx",
+        "psi20",
     }
+)
+
+# Depth-first EU composite: STOXX50 + low-overlap periphery (not DAX/CAC/MIB).
+# Order matters — first wins on ticker dedupe (STOXX preferred).
+EURO_DEPTH_COMPONENTS: tuple[str, ...] = (
+    "euro_stoxx50",
+    "aex",
+    "bel20",
+    "smi",
+    "omxs30",
+    "atx",
+    "psi20",
+    "iseq20",
 )
 
 
@@ -673,6 +690,65 @@ def fetch_omxs30_constituents() -> pd.DataFrame:
     )
 
 
+def _constituents_frame_from_disk(
+    market_id: str, *, library_root: Path | None = None
+) -> pd.DataFrame:
+    """Load ``constituents/latest.json`` for a component market (offline fallback)."""
+    root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    path = root / "markets" / market_id / "constituents" / "latest.json"
+    if not path.exists():
+        return pd.DataFrame()
+    raw = read_json(path)
+    rows = raw if isinstance(raw, list) else (raw.get("constituents") or [])
+    if not rows:
+        return pd.DataFrame()
+    frame = pd.DataFrame(rows)
+    if "ticker" not in frame.columns and "symbol" in frame.columns:
+        frame = frame.rename(columns={"symbol": "ticker"})
+    return frame
+
+
+def fetch_euro_depth_constituents(*, library_root: Path | None = None) -> pd.DataFrame:
+    """
+    Union EURO STOXX 50 with low-overlap European periphery indices.
+
+    Dedupes on Yahoo ticker (STOXX / earlier components win). Live component
+    fetchers are preferred; on failure, falls back to on-disk library snapshots
+    so offline CI / depth seeding still works.
+    """
+    frames: list[pd.DataFrame] = []
+    for mid in EURO_DEPTH_COMPONENTS:
+        frame: pd.DataFrame | None = None
+        fetcher = CONSTITUENT_FETCHERS.get(mid)
+        if fetcher is not None:
+            try:
+                frame = fetcher()
+            except Exception as exc:  # noqa: BLE001 — fall back to disk
+                logger.warning("euro_depth component fetch %s failed: %s", mid, exc)
+                frame = None
+        if frame is None or frame.empty:
+            frame = _constituents_frame_from_disk(mid, library_root=library_root)
+        if frame is None or frame.empty:
+            logger.warning("euro_depth missing component constituents for %s", mid)
+            continue
+        part = frame.copy()
+        part["component_market"] = mid
+        frames.append(part)
+    if not frames:
+        return pd.DataFrame(
+            columns=["ticker", "name", "sector", "epic", "index", "market", "component_market"]
+        )
+    out = pd.concat(frames, ignore_index=True)
+    if "ticker" not in out.columns:
+        raise ValueError("euro_depth components missing ticker column")
+    out["ticker"] = out["ticker"].astype(str).str.strip()
+    out = out[out["ticker"].astype(bool)]
+    out = out.drop_duplicates(subset=["ticker"], keep="first")
+    out["market"] = "euro_depth"
+    out["index"] = "EU depth composite"
+    return out.reset_index(drop=True)
+
+
 def fetch_iseq20_constituents() -> pd.DataFrame:
     tables = _wiki_tables("https://en.wikipedia.org/wiki/ISEQ_20")
     table = None
@@ -740,6 +816,14 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         currency="EUR",
         yahoo_suffix="",
         constituent_source="wikipedia",
+    ),
+    "euro_depth": MarketSpec(
+        market_id="euro_depth",
+        label="EU depth composite (STOXX50 + periphery)",
+        exchange="EU",
+        currency="EUR",
+        yahoo_suffix="",
+        constituent_source="composite",
     ),
     "asx200": MarketSpec(
         market_id="asx200",
@@ -902,6 +986,7 @@ CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
     "ftse350": fetch_ftse350_library_constituents,
     "sp500": fetch_sp500_constituents,
     "euro_stoxx50": fetch_euro_stoxx50_constituents,
+    "euro_depth": fetch_euro_depth_constituents,
     "asx200": fetch_asx200_constituents,
     "ftse_smallcap": fetch_ftse_smallcap_constituents,
     "nasdaq100": fetch_nasdaq100_constituents,

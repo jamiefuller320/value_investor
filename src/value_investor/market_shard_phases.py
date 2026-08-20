@@ -102,18 +102,24 @@ def phase1_gate_met(
     market_id: str,
     *,
     min_archives: int = PHASE1_MIN_SCREEN_ARCHIVES,
+    policy: dict[str, Any] | None = None,
+    require_ai_beat_rules: bool | None = None,
 ) -> tuple[bool, dict[str, Any]]:
     archives = count_screen_archives(library_root, market_id)
     snapshots = observe_snapshot_count(library_root, market_id)
     ai_beat_rules = ai_beat_rules_on_observe_sim(library_root, market_id)
+    if require_ai_beat_rules is None:
+        ladder = (policy or {}).get("ladder") or {}
+        require_ai_beat_rules = bool(ladder.get("phase1_require_ai_beat_rules", True))
     ok = archives >= min_archives and snapshots >= min_archives
-    if ai_beat_rules is False:
+    if require_ai_beat_rules and ai_beat_rules is False:
         ok = False
     return ok, {
         "screen_archives": archives,
         "observe_snapshot_count": snapshots,
         "min_archives": min_archives,
         "ai_beat_rules_observe_sim": ai_beat_rules,
+        "phase1_require_ai_beat_rules": require_ai_beat_rules,
     }
 
 
@@ -159,7 +165,7 @@ def evaluate_market_phase(
     shard_root = Path(shard_root or shard_root_for_market(market_id))
     policy = policy or {}
 
-    p1_ok, p1_detail = phase1_gate_met(library_root, market_id)
+    p1_ok, p1_detail = phase1_gate_met(library_root, market_id, policy=policy)
     p2_ok, p2_detail = phase2_gate_met(shard_root)
     in_weekly_policy = market_id in weekly_paper_shard_markets_for_policy(policy)
 
@@ -179,7 +185,10 @@ def evaluate_market_phase(
                 f"need {PHASE1_MIN_SCREEN_ARCHIVES} observe snapshots "
                 f"(have {p1_detail['observe_snapshot_count']})"
             )
-        if p1_detail.get("ai_beat_rules_observe_sim") is False:
+        if (
+            p1_detail.get("phase1_require_ai_beat_rules", True)
+            and p1_detail.get("ai_beat_rules_observe_sim") is False
+        ):
             blockers.append("AI-judgment must beat rules on observe sim before Phase 2")
     elif not in_weekly_policy:
         current = PHASE_OBSERVE
@@ -302,7 +311,7 @@ def markets_eligible_for_weekly_paper(
     for market_id in configured:
         if screened and market_id not in screened:
             continue
-        ready, _ = phase1_gate_met(library_root, market_id)
+        ready, _ = phase1_gate_met(library_root, market_id, policy=policy)
         if ready:
             eligible.append(market_id)
     return eligible

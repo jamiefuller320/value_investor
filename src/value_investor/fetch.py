@@ -296,6 +296,7 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
         return _to_sg_yahoo(raw)
     if market_id in {
         "euro_stoxx50",
+        "euro_depth",
         "dax",
         "cac40",
         "ibex35",
@@ -317,6 +318,8 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
             ".IR",
             ".LS",
             ".AT",
+            ".VI",
+            ".ST",
             ".SW",
         ):
             hyphen = suf.replace(".", "-")
@@ -348,6 +351,9 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
     if market_id in {"atx", "vienna"}:
         base = raw.strip().upper()
         return base if base.endswith(".VI") else f"{base.replace('.', '-')}.VI"
+    if market_id in {"smi", "swiss", "switzerland"}:
+        base = raw.strip().upper()
+        return base if base.endswith(".SW") else f"{base.replace('.', '-')}.SW"
     return resolve_yahoo_ticker(raw)
 
 

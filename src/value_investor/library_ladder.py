@@ -65,6 +65,7 @@ DEFAULT_WEEKLY_PAPER_SHARD_MARKETS: tuple[str, ...] = ("sp500", "euro_stoxx50")
 DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY = 2
 DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS = 25
 DEFAULT_STRONG_BUY_PROBE_MAX_MARKETS = 4
+DEFAULT_PHASE1_REQUIRE_AI_BEAT_RULES = True
 
 
 def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
@@ -82,6 +83,7 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("weekly_paper_shard_after_screen", True)
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
+    ladder.setdefault("phase1_require_ai_beat_rules", DEFAULT_PHASE1_REQUIRE_AI_BEAT_RULES)
     ladder.setdefault("strong_buy_metrics_probe_after_maintenance", True)
     ladder.setdefault("strong_buy_metrics_probe_when_eng_idle", True)
     ladder.setdefault("strong_buy_metrics_probe_max_tickers", DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS)

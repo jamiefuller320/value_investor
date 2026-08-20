@@ -44,6 +44,12 @@ MARKET_SESSION_DEFAULTS: dict[str, dict[str, Any]] = {
         "settle_minutes_after_open": 30,
         "weekdays_only": False,
     },
+    "euro_depth": {
+        "timezone": "Europe/Paris",
+        "market_open": "09:00",
+        "settle_minutes_after_open": 30,
+        "weekdays_only": False,
+    },
 }
 
 DEFAULT_SESSION: dict[str, Any] = {

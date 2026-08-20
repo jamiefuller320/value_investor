@@ -58,6 +58,8 @@ DEFAULT_SUFFIX_EXCHANGES: dict[str, list[str]] = {
     ".ST": ["ST", "SS", "SE"],
     ".SW": ["SW", "VX", "CH"],
     ".HE": ["HE", "FH", "FI"],
+    ".VI": ["VI", "AV", "AT"],
+    ".LS": ["PL", "LS", "PT"],
 }
 
 
