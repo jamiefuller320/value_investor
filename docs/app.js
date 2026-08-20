@@ -1268,6 +1268,8 @@ function renderChurnCounterfactualPanel(data) {
     momentum_grace: "Momentum grace",
     technical: "Technical",
   };
+  const trackLabel = (trackId) =>
+    trackLabels[trackId] || learningTrackLabel(trackId, data.learning_track_configs || {});
 
   const alerts = churn?.alerts || [];
   const alertsHtml = alerts.length
@@ -1297,7 +1299,7 @@ function renderChurnCounterfactualPanel(data) {
       const costClass =
         costDrag != null && Number(costDrag) >= 0.06 ? "text-negative" : "";
       return `<tr>
-        <td><strong>${esc(trackLabels[trackId] || trackId)}</strong><br><span class="small muted">${esc(trackId)}</span></td>
+        <td><strong>${esc(trackLabel(trackId))}</strong><br><span class="small muted">${esc(trackId)}</span></td>
         <td class="${costClass}">${pctOrDash(costDrag)}</td>
         <td>${review.trade_count ?? "—"}</td>
         <td>${window.full_exits ?? "—"}</td>
@@ -1329,7 +1331,7 @@ function renderChurnCounterfactualPanel(data) {
         : '<span class="badge badge-neutral">flat</span>';
       const ctx = row.churn_context || {};
       return `<tr>
-        <td><strong>${esc(trackLabels[trackId] || trackId)}</strong> ${signalBadge}<br><span class="small muted">${esc(trackId)}</span></td>
+        <td><strong>${esc(trackLabel(trackId))}</strong> ${signalBadge}<br><span class="small muted">${esc(trackId)}</span></td>
         <td>${ctx.log_entries_in_window ?? "—"}</td>
         <td>${ctx.full_exits_in_window ?? "—"}</td>
         <td>${ctx.buffered_holdings ?? "—"}</td>
@@ -1351,7 +1353,7 @@ function renderChurnCounterfactualPanel(data) {
         Math.abs(Number(cmp.cost_drag_delta_lower_minus_higher || 0)) < 0.0001
       );
     })
-    .map(([trackId]) => trackLabels[trackId] || trackId);
+    .map(([trackId]) => trackLabel(trackId));
 
   const noteHtml =
     flatTracks.length && cfRows
@@ -1579,6 +1581,174 @@ function formatTrackKnobs(trackConfigs, trackId) {
   return parts.join(" · ");
 }
 
+function learningTrackLabel(trackId, trackConfigs) {
+  const cfg = (trackConfigs || {})[trackId] || {};
+  if (cfg.track_label) return cfg.track_label;
+  const defaults = {
+    rules: "Rules (control)",
+    ai_judgment: "AI judgment (primary)",
+    ai_judgment_calibrated: "AI judgment calibrated (shadow)",
+    momentum_grace: "Momentum grace",
+    technical: "Technical (levels baseline)",
+  };
+  if (defaults[trackId]) return defaults[trackId];
+  const rankMatch = /^ai_judgment_calibrated_r(\d+)$/.exec(trackId || "");
+  if (rankMatch) {
+    return `AI judgment calibrated shadow (rank ${rankMatch[1]})`;
+  }
+  return trackId;
+}
+
+function formatKnobDict(knobs) {
+  if (!knobs || typeof knobs !== "object") return "";
+  const bits = [];
+  if (knobs.max_positions != null) bits.push(`pos=${knobs.max_positions}`);
+  if (knobs.min_conviction != null) bits.push(`conv=${Number(knobs.min_conviction).toFixed(2)}`);
+  if (knobs.sector_cap != null) bits.push(`sect=${Number(knobs.sector_cap).toFixed(2)}`);
+  if (knobs.skip_timing_wait != null) bits.push(`skipWait=${knobs.skip_timing_wait ? "Y" : "N"}`);
+  if (knobs.exit_confirm_screens != null) bits.push(`exitConfirm=${knobs.exit_confirm_screens}`);
+  return bits.join(" · ");
+}
+
+function renderKnobBootstrapPanel(data) {
+  const priors = data.knob_calibration_priors;
+  const endurance = data.calibration_shadow_endurance;
+  if (!priors && !endurance) {
+    return `
+      <section class="automation-section automation-section-full knob-bootstrap-section">
+        <h2>Knob bootstrap lab</h2>
+        <p class="muted">No full-period calibration priors or shadow endurance published yet — Sunday analysis-review writes these after <code>ftse-knob-calibrate</code>.</p>
+      </section>`;
+  }
+
+  const docUrl = githubOpsDocUrl("docs/ops/knob-calibration.md", "competing-calibrated-shadows");
+  const aiRow =
+    (priors && priors.scope === "knob_calibration_multi"
+      ? (priors.tracks || {}).ai_judgment
+      : priors) || {};
+  const readiness = aiRow.readiness || {};
+  const bootstrap = aiRow.bootstrap_priors || [];
+  const rankingMode = aiRow.ranking_mode || priors?.ranking_mode || "—";
+  const calibratedAt = aiRow.calibrated_at || priors?.calibrated_at;
+  const readyBootstrap = readiness.ready_for_shadow_bootstrap;
+  const readyPriors = readiness.ready_for_priors;
+  const acted = readiness.acted_entries;
+  const scoreGap = readiness.score_gap_vs_runner_up;
+
+  const readyBadge = (value, label) =>
+    value
+      ? `<span class="badge badge-buy">${esc(label)}</span>`
+      : `<span class="badge badge-neutral">${esc(label)} no</span>`;
+
+  const priorRows = bootstrap
+    .map((row) => {
+      const wl = row.winner_loser || {};
+      const catchRate = wl.catch_rate;
+      const excludeRate = wl.exclude_rate;
+      return `<tr>
+        <td>r${esc(String(row.rank ?? "—"))}<br><span class="small muted">${esc(row.shadow_track_id || "")}</span></td>
+        <td><span class="small">${esc(formatKnobDict(row.knobs) || "—")}</span></td>
+        <td>${numOrDash(row.full_period_score, 4)}</td>
+        <td>${esc(row.confidence || "—")}</td>
+        <td>${catchRate == null ? "—" : pctOrDash(catchRate)}</td>
+        <td>${excludeRate == null ? "—" : pctOrDash(excludeRate)}</td>
+        <td class="small muted">${esc((wl.top_buy_tier_caught || []).slice(0, 4).join(", ") || "—")}</td>
+        <td class="small muted">${esc((wl.bottom_buy_tier_avoided || []).slice(0, 4).join(", ") || "—")}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const shadows = (endurance && endurance.shadows) || [];
+  const survivors = (endurance && endurance.survivors) || [];
+  const statusBadge = (status) => {
+    const value = status || "observing";
+    if (value === "surviving") return `<span class="badge badge-buy">${esc(value)}</span>`;
+    if (value === "failed") return `<span class="badge badge-avoid">${esc(value)}</span>`;
+    return `<span class="badge badge-hold">${esc(value)}</span>`;
+  };
+  const enduranceRows = shadows
+    .map((row) => {
+      const metrics = row.metrics || {};
+      const excess = metrics.excess_after_costs;
+      const excessHtml =
+        excess == null
+          ? "—"
+          : `<span class="${Number(excess) >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`;
+      return `<tr>
+        <td><strong>r${esc(String(row.rank ?? "—"))}</strong> ${statusBadge(row.status)}<br><span class="small muted">${esc(row.shadow_track_id || "")}</span></td>
+        <td><span class="small">${esc(formatKnobDict(row.knobs) || "—")}</span></td>
+        <td>${excessHtml}</td>
+        <td>${numOrDash(row.excess_vs_primary, 4)}</td>
+        <td>${numOrDash(row.excess_vs_rules, 4)}</td>
+        <td>${metrics.equity_marks ?? "—"}</td>
+        <td>${numOrDash(row.full_period_score, 4)}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const survivorNote = survivors.length
+    ? `<p class="small">Survivors ready for human learning-loop prior review: <strong>${esc(
+        survivors.map((row) => row.shadow_track_id).join(", ")
+      )}</strong> — do not auto-apply.</p>`
+    : `<p class="small muted">No survivors yet — keep observing forward marks on competing shadows.</p>`;
+
+  return `
+    <section class="automation-section automation-section-full knob-bootstrap-section">
+      <h2>Knob bootstrap lab</h2>
+      <p class="small muted" style="margin-top:0">
+        Full-period retrospective priors seed competing calibrated shadows; endurance decides what may become a learning-loop starting prior.
+        ${calibratedAt ? `Calibrated ${esc(fmtDate(calibratedAt))}.` : ""}
+        ${endurance?.updated_at ? `Endurance ${esc(fmtDate(endurance.updated_at))}.` : ""}
+        ${docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener">Knob calibration</a>` : ""}
+      </p>
+      <div class="learning-tracks-headline">
+        <span>Ranking: <strong>${esc(rankingMode)}</strong></span>
+        <span>Acted logs: <strong>${acted ?? "—"}</strong></span>
+        <span>Score gap: <strong>${numOrDash(scoreGap, 4)}</strong></span>
+        <span>${readyBadge(readyBootstrap, "bootstrap ready")}</span>
+        <span>${readyBadge(readyPriors, "priors ready")}</span>
+      </div>
+
+      <h3>Bootstrap priors (retrospective)</h3>
+      <div class="table-wrap">
+        <table class="knob-bootstrap-table">
+          <thead>
+            <tr>
+              <th>Rank / shadow</th>
+              <th>Knobs</th>
+              <th>Full-period score</th>
+              <th>Confidence</th>
+              <th>Catch rate</th>
+              <th>Exclude rate</th>
+              <th>Caught winners</th>
+              <th>Avoided losers</th>
+            </tr>
+          </thead>
+          <tbody>${priorRows || '<tr><td colspan="8" class="muted">No bootstrap_priors in published calibration artifact.</td></tr>'}</tbody>
+        </table>
+      </div>
+
+      <h3>Forward endurance (competing shadows)</h3>
+      ${survivorNote}
+      <div class="table-wrap">
+        <table class="knob-bootstrap-table">
+          <thead>
+            <tr>
+              <th>Shadow</th>
+              <th>Knobs</th>
+              <th>Excess vs ^FTSE</th>
+              <th>Δ vs primary</th>
+              <th>Δ vs rules</th>
+              <th>Marks</th>
+              <th>Retrospective score</th>
+            </tr>
+          </thead>
+          <tbody>${enduranceRows || '<tr><td colspan="7" class="muted">No calibrated shadows in endurance ledger yet.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
 function renderLearningTracksPanel(data) {
   const review =
     data.learning_tracks_review ||
@@ -1593,18 +1763,38 @@ function renderLearningTracksPanel(data) {
   const funds = data.learning_track_funds || {};
   const trackConfigs = data.learning_track_configs || {};
   const technicalMissing = !review.reviews.technical;
-  const trackOrder = [
-    ["technical", "Technical (levels baseline)"],
-    ["rules", "Rules (control)"],
-    ["ai_judgment", "AI judgment (primary)"],
-    ["ai_judgment_calibrated", "AI judgment calibrated (shadow)"],
-    ["momentum_grace", "Momentum grace"],
-  ];
+  const baseOrder = ["technical", "rules", "ai_judgment", "momentum_grace"];
+  const shadowIds = Object.keys(review.reviews)
+    .filter(
+      (id) =>
+        id === "ai_judgment_calibrated" ||
+        /^ai_judgment_calibrated_r\d+$/.test(id) ||
+        (trackConfigs[id] || {}).is_calibration_shadow
+    )
+    .sort((a, b) => {
+      const rank = (id) => {
+        if (id === "ai_judgment_calibrated") return 1;
+        const match = /^ai_judgment_calibrated_r(\d+)$/.exec(id);
+        return match ? Number(match[1]) : 99;
+      };
+      return rank(a) - rank(b);
+    });
+  const trackOrder = [];
+  for (const id of baseOrder) {
+    trackOrder.push(id);
+    if (id === "ai_judgment") {
+      for (const shadowId of shadowIds) trackOrder.push(shadowId);
+    }
+  }
+  for (const id of Object.keys(review.reviews)) {
+    if (!trackOrder.includes(id)) trackOrder.push(id);
+  }
 
   const rows = trackOrder
-    .map(([id, label]) => {
+    .map((id) => {
       const row = review.reviews[id];
       if (!row) return "";
+      const label = learningTrackLabel(id, trackConfigs);
       const m = row.metrics || {};
       const fund = funds[id] || {};
       const cfg = trackConfigs[id] || {};
@@ -1612,7 +1802,9 @@ function renderLearningTracksPanel(data) {
       const shadowBadge = cfg.is_calibration_shadow
         ? ` <span class="badge badge-hold" title="Frozen calibration priors — decision-review apply disabled">calibrated shadow</span>`
         : "";
-      const confidence = (cfg.calibration_provenance || {}).recommended_prior?.confidence;
+      const confidence =
+        (cfg.calibration_provenance || {}).confidence ||
+        (cfg.calibration_provenance || {}).recommended_prior?.confidence;
       const confBadge =
         confidence && cfg.is_calibration_shadow
           ? ` <span class="badge badge-neutral" title="Calibration prior confidence">${esc(confidence)} conf</span>`
@@ -1673,7 +1865,7 @@ function renderLearningTracksPanel(data) {
     <p class="small muted" style="margin-top:0">
       Weekday paper-auto books published from CI — not the browser local sandbox.
       Primary success = AI judgment excess vs ^FTSE after costs; rules is control; technical is timing/levels baseline.
-      Calibrated shadow runs frozen knob priors alongside primary AI judgment (no auto-promotion).
+      Competing calibrated shadows run frozen knob priors alongside primary AI judgment (no auto-promotion).
     </p>
     ${
       technicalMissing
@@ -1776,6 +1968,7 @@ function renderAutomation(data) {
 
   panel.innerHTML = `
     ${renderLearningTracksPanel(data)}
+    ${renderKnobBootstrapPanel(data)}
     ${renderChurnCounterfactualPanel(data)}
     ${renderHumanTasksChecklistSection(data.human_tasks_checklist)}
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>

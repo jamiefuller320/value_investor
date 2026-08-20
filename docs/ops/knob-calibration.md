@@ -133,6 +133,10 @@ ftse-knob-calibrate status --paper-root docs/data/paper_automation --json
 | `ai_judgment_calibrated_r2/` … | Competing shadows for ranks 2+ |
 | Sunday `analysis_review` payload | Agent reads calibration priors for synthesis |
 
+**Dashboard:** Automation tab → **Knob bootstrap lab** (priors + endurance) and
+**Learning tracks** (competing calibrated shadows). Published via `ftse-publish`
+from the paper-automation artifacts above.
+
 ## Competing calibrated shadows
 
 Bootstrap priors that “worked up to now” are seeded as **observe-only** books.

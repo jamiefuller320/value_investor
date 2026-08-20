@@ -97,6 +97,65 @@ def _write_sample_output(output_dir: Path) -> None:
 
 def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     _write_sample_output(tmp_path)
+    paper = tmp_path / "paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "last_run.json").write_text(
+        json.dumps({"acted": True, "note": "test fixture"}),
+        encoding="utf-8",
+    )
+    (paper / "knob_calibration_priors.json").write_text(
+        json.dumps(
+            {
+                "scope": "knob_calibration_multi",
+                "calibrated_at": "2026-08-20T12:00:00+00:00",
+                "tracks": {
+                    "ai_judgment": {
+                        "ranking_mode": "full_period_retrospective",
+                        "readiness": {
+                            "acted_entries": 8,
+                            "ready_for_shadow_bootstrap": True,
+                            "ready_for_priors": True,
+                            "score_gap_vs_runner_up": 0.01,
+                        },
+                        "bootstrap_priors": [
+                            {
+                                "rank": 1,
+                                "shadow_track_id": "ai_judgment_calibrated",
+                                "knobs": {"max_positions": 4, "min_conviction": 0.0},
+                                "full_period_score": 0.1,
+                                "confidence": "low",
+                                "winner_loser": {
+                                    "catch_rate": 0.4,
+                                    "exclude_rate": 0.6,
+                                    "top_buy_tier_caught": ["AAA.L"],
+                                    "bottom_buy_tier_avoided": ["DDD.L"],
+                                },
+                            }
+                        ],
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper / "calibration_shadow_endurance.json").write_text(
+        json.dumps(
+            {
+                "updated_at": "2026-08-20T12:05:00+00:00",
+                "shadows": [
+                    {
+                        "rank": 1,
+                        "shadow_track_id": "ai_judgment_calibrated",
+                        "status": "observing",
+                        "knobs": {"max_positions": 4},
+                        "metrics": {"excess_after_costs": None, "equity_marks": 1},
+                    }
+                ],
+                "survivors": [],
+            }
+        ),
+        encoding="utf-8",
+    )
     bundle = build_dashboard_bundle(tmp_path)
     assert bundle["meta"]["company_count"] == 2
     assert bundle["meta"]["strong_buy_count"] == 1
@@ -111,10 +170,10 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     assert bundle["reports"][0].get("tradable_on_ii") is True
     assert bundle["reports"][0].get("ii_deal_channel") == "online"
     assert bundle.get("human_tasks_checklist", {}).get("sections")
-    assert (
-        bundle.get("churn_health", {}).get("tracks") is not None
-        or bundle.get("buffered_hold_counterfactual") is not None
+    assert bundle["knob_calibration_priors"]["tracks"]["ai_judgment"]["ranking_mode"] == (
+        "full_period_retrospective"
     )
+    assert bundle["calibration_shadow_endurance"]["shadows"][0]["status"] == "observing"
 
 
 def test_publish_dashboard_writes_latest_json(tmp_path: Path):
