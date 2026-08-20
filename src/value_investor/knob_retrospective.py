@@ -254,8 +254,8 @@ def score_full_period_retrospective(
         )
     else:
         full_period_score = (
-            (1.0 - WINNER_LOSER_WEIGHT) * portfolio_score + WINNER_LOSER_WEIGHT * wl_bonus
-        )
+            1.0 - WINNER_LOSER_WEIGHT
+        ) * portfolio_score + WINNER_LOSER_WEIGHT * wl_bonus
 
     return {
         "full_period_score": round(full_period_score, 4),

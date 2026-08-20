@@ -55,9 +55,7 @@ DEFAULT_BOOTSTRAP_TOP_N = 3
 RANKING_WALK_FORWARD = "walk_forward"
 RANKING_FULL_PERIOD = "full_period_retrospective"
 RANKING_BLENDED = "blended"
-VALID_RANKING_MODES = frozenset(
-    {RANKING_WALK_FORWARD, RANKING_FULL_PERIOD, RANKING_BLENDED}
-)
+VALID_RANKING_MODES = frozenset({RANKING_WALK_FORWARD, RANKING_FULL_PERIOD, RANKING_BLENDED})
 BLENDED_FULL_PERIOD_WEIGHT = 0.5
 
 
@@ -582,12 +580,7 @@ def calibrate_track(
             top_k=winner_loser_top_k,
             bottom_k=winner_loser_bottom_k,
         )
-        if (
-            walk_forward is None
-            and full_window is None
-            and archive is None
-            and full_period is None
-        ):
+        if walk_forward is None and full_window is None and archive is None and full_period is None:
             continue
         if walk_forward is not None:
             portfolio_score = float(walk_forward["composite_score"])
@@ -629,10 +622,9 @@ def calibrate_track(
         if mode == RANKING_FULL_PERIOD:
             rank_score = full_period_score
         elif mode == RANKING_BLENDED:
-            rank_score = (
-                (1.0 - BLENDED_FULL_PERIOD_WEIGHT) * float(wf_rank_score)
-                + BLENDED_FULL_PERIOD_WEIGHT * float(full_period_score)
-            )
+            rank_score = (1.0 - BLENDED_FULL_PERIOD_WEIGHT) * float(
+                wf_rank_score
+            ) + BLENDED_FULL_PERIOD_WEIGHT * float(full_period_score)
         else:
             rank_score = wf_rank_score
 
@@ -673,7 +665,11 @@ def calibrate_track(
         for row in scored:
             row["blended_full_period_score"] = round(
                 (1.0 - BLENDED_FULL_PERIOD_WEIGHT)
-                * float(row.get("blended_score") if use_cohort_fitness else row.get("composite_score") or 0.0)
+                * float(
+                    row.get("blended_score")
+                    if use_cohort_fitness
+                    else row.get("composite_score") or 0.0
+                )
                 + BLENDED_FULL_PERIOD_WEIGHT * float(row.get("full_period_score") or 0.0),
                 4,
             )

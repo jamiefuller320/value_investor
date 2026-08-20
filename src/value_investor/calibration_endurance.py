@@ -102,13 +102,9 @@ def refresh_calibration_endurance(
     paper_root = Path(paper_root)
     dirs = learning_track_dirs(paper_root)
     primary_metrics = (
-        _fund_metrics_snapshot(dirs[AI_JUDGMENT_TRACK_ID])
-        if AI_JUDGMENT_TRACK_ID in dirs
-        else {}
+        _fund_metrics_snapshot(dirs[AI_JUDGMENT_TRACK_ID]) if AI_JUDGMENT_TRACK_ID in dirs else {}
     )
-    rules_metrics = (
-        _fund_metrics_snapshot(dirs[RULES_TRACK_ID]) if RULES_TRACK_ID in dirs else {}
-    )
+    rules_metrics = _fund_metrics_snapshot(dirs[RULES_TRACK_ID]) if RULES_TRACK_ID in dirs else {}
     primary_excess = primary_metrics.get("excess_after_costs")
     rules_excess = rules_metrics.get("excess_after_costs")
 
