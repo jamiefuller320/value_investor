@@ -43,16 +43,21 @@ jobs:
           if [ -d docs/data/paper_automation/ai_judgment ]; then
             cp -f docs/data/paper_automation/ai_judgment/*.json output/paper_automation/ai_judgment/ 2>/dev/null || true
           fi
-          if [ -d docs/data/paper_automation/ai_judgment_calibrated ]; then
-            cp -f docs/data/paper_automation/ai_judgment_calibrated/*.json output/paper_automation/ai_judgment_calibrated/ 2>/dev/null || true
-          fi
           if [ -d docs/data/paper_automation/momentum_grace ]; then
             cp -f docs/data/paper_automation/momentum_grace/*.json output/paper_automation/momentum_grace/ 2>/dev/null || true
           fi
+          # Competing calibrated shadows (rank 1 + r2/r3/…)
+          for src in docs/data/paper_automation/ai_judgment_calibrated*; do
+            [ -d "$src" ] || continue
+            name=$(basename "$src")
+            mkdir -p "output/paper_automation/$name"
+            cp -f "$src"/*.json "output/paper_automation/$name/" 2>/dev/null || true
+          done
 
-      - name: Ensure calibrated AI-judgment shadow track
+      - name: Ensure calibrated AI-judgment shadow tracks
         run: |
-          ftse-knob-calibrate spawn-shadow --paper-root output/paper_automation || true
+          # Idempotent: keep existing competing shadows; create rank-1 if priors exist.
+          ftse-knob-calibrate spawn-shadow --paper-root output/paper_automation --top-n 3 || true
 
       - name: Refresh research overlay on dashboard reports
         run: |
@@ -84,6 +89,11 @@ jobs:
           # Propose always; apply only when enough equity marks/trades exist.
           ftse-decision-review --output-dir output/paper_automation --tracks all --apply
 
+      - name: Refresh calibrated-shadow endurance ledger
+        if: ${{ github.event.inputs.surveillance_only != 'true' }}
+        run: |
+          ftse-knob-calibrate endurance --paper-root output/paper_automation || true
+
       - name: Publish automation artifacts to dashboard data
         run: |
           python3 - <<'PY'
@@ -95,7 +105,6 @@ jobs:
           dest = Path("docs/data/paper_automation")
           dest.mkdir(parents=True, exist_ok=True)
           (dest / "ai_judgment").mkdir(parents=True, exist_ok=True)
-          (dest / "ai_judgment_calibrated").mkdir(parents=True, exist_ok=True)
           (dest / "momentum_grace").mkdir(parents=True, exist_ok=True)
 
           root_names = (
@@ -114,27 +123,15 @@ jobs:
               "learning_tracks_churn_health.json",
               "buffered_hold_counterfactual.json",
               "review_policy.json",
+              "knob_calibration_priors.json",
+              "calibration_shadow_endurance.json",
           )
           for name in root_names:
               path = src / name
               if path.exists():
                   shutil.copy2(path, dest / name)
 
-          for name in (
-              "last_run.json",
-              "automated_fund.json",
-              "config.json",
-              "decision_review.json",
-              "decision_review_history.json",
-              "rebalance_log.json",
-              "exit_shadow.json",
-              "exit_shadow_review.json",
-          ):
-              path = src / "ai_judgment" / name
-              if path.exists():
-                  shutil.copy2(path, dest / "ai_judgment" / name)
-
-          for name in (
+          track_file_names = (
               "last_run.json",
               "automated_fund.json",
               "config.json",
@@ -144,10 +141,22 @@ jobs:
               "exit_shadow.json",
               "exit_shadow_review.json",
               "calibration_provenance.json",
-          ):
-              path = src / "ai_judgment_calibrated" / name
+          )
+
+          for name in track_file_names:
+              path = src / "ai_judgment" / name
               if path.exists():
-                  shutil.copy2(path, dest / "ai_judgment_calibrated" / name)
+                  shutil.copy2(path, dest / "ai_judgment" / name)
+
+          for shadow_dir in sorted(src.glob("ai_judgment_calibrated*")):
+              if not shadow_dir.is_dir():
+                  continue
+              out = dest / shadow_dir.name
+              out.mkdir(parents=True, exist_ok=True)
+              for name in track_file_names:
+                  path = shadow_dir / name
+                  if path.exists():
+                      shutil.copy2(path, out / name)
 
           for name in (
               "last_run.json",

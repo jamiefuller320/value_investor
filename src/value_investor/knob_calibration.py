@@ -48,7 +48,15 @@ DEFAULT_STABILITY_PENALTY = 0.25
 MIN_ACTED_FOR_CALIBRATION = 2
 MIN_FOLDS_FOR_WALK_FORWARD = 2
 MIN_ACTED_FOR_CONFIDENT_PRIORS = 4
+MIN_ACTED_FOR_SHADOW_BOOTSTRAP = 8
+MIN_ACTED_FOR_SHADOW_BOOTSTRAP_IDEAL = 12
 TOP_CANDIDATES_KEPT = 20
+DEFAULT_BOOTSTRAP_TOP_N = 3
+RANKING_WALK_FORWARD = "walk_forward"
+RANKING_FULL_PERIOD = "full_period_retrospective"
+RANKING_BLENDED = "blended"
+VALID_RANKING_MODES = frozenset({RANKING_WALK_FORWARD, RANKING_FULL_PERIOD, RANKING_BLENDED})
+BLENDED_FULL_PERIOD_WEIGHT = 0.5
 
 
 @dataclass(frozen=True)
@@ -412,6 +420,35 @@ def _slim_cohort(summary: dict[str, Any] | None) -> dict[str, Any] | None:
     return {key: summary[key] for key in keys if key in summary}
 
 
+def calibrated_shadow_track_id(rank: int) -> str:
+    """Stable track id for competing calibrated shadows (rank 1 keeps legacy id)."""
+    if int(rank) <= 1:
+        return AI_JUDGMENT_CALIBRATED_TRACK_ID
+    return f"{AI_JUDGMENT_CALIBRATED_TRACK_ID}_r{int(rank)}"
+
+
+def calibrated_shadow_subdir(rank: int) -> str:
+    if int(rank) <= 1:
+        return "ai_judgment_calibrated"
+    return f"ai_judgment_calibrated_r{int(rank)}"
+
+
+def discover_calibration_shadow_ranks(paper_root: Path) -> list[int]:
+    """Return ranks of existing calibrated shadow dirs under paper_root."""
+    root = Path(paper_root)
+    ranks: list[int] = []
+    primary = root / calibrated_shadow_subdir(1)
+    if (primary / CONFIG_FILENAME).exists():
+        ranks.append(1)
+    for path in sorted(root.glob("ai_judgment_calibrated_r*")):
+        if not path.is_dir() or not (path / CONFIG_FILENAME).exists():
+            continue
+        suffix = path.name.removeprefix("ai_judgment_calibrated_r")
+        if suffix.isdigit():
+            ranks.append(int(suffix))
+    return sorted(set(ranks))
+
+
 def calibrate_track(
     track_dir: Path,
     *,
@@ -424,8 +461,20 @@ def calibrate_track(
     fetch_prices: bool = False,
     use_cohort_fitness: bool | None = None,
     cohort_weight: float = DEFAULT_COHORT_FITNESS_WEIGHT,
+    ranking_mode: str = RANKING_WALK_FORWARD,
+    bootstrap_top_n: int = DEFAULT_BOOTSTRAP_TOP_N,
+    winner_loser_top_k: int = 5,
+    winner_loser_bottom_k: int = 5,
 ) -> dict[str, Any]:
-    """Grid-search knob combinations with walk-forward scoring on rebalance logs."""
+    """Grid-search knob combinations with walk-forward / full-period scoring."""
+    from value_investor.knob_retrospective import score_full_period_retrospective
+
+    mode = str(ranking_mode or RANKING_WALK_FORWARD).strip().lower()
+    if mode not in VALID_RANKING_MODES:
+        raise ValueError(
+            f"ranking_mode must be one of {sorted(VALID_RANKING_MODES)}; got {ranking_mode!r}"
+        )
+
     track_dir = Path(track_dir)
     entries = load_rebalance_log(track_dir)
     acted = acted_log_entries(entries)
@@ -468,9 +517,16 @@ def calibrate_track(
         )
     if len(acted) < MIN_ACTED_FOR_CONFIDENT_PRIORS:
         warnings.append(f"only {len(acted)} acted log entries — priors are low confidence")
-
-    if len(acted) < MIN_ACTED_FOR_CONFIDENT_PRIORS:
-        warnings.append(f"only {len(acted)} acted log entries — priors are low confidence")
+    if len(acted) < MIN_ACTED_FOR_SHADOW_BOOTSTRAP:
+        warnings.append(
+            f"only {len(acted)} acted log entries — shadow bootstrap prefers ≥"
+            f"{MIN_ACTED_FOR_SHADOW_BOOTSTRAP} (ideal ≥{MIN_ACTED_FOR_SHADOW_BOOTSTRAP_IDEAL})"
+        )
+    if mode != RANKING_WALK_FORWARD:
+        warnings.append(
+            f"ranking_mode={mode} — bootstrap priors ranked on full-period retrospective "
+            "(observe-only; does not auto-apply live knobs)"
+        )
     if use_cohort_fitness:
         warnings.append(
             "cohort-selection fitness enabled — ranking blends portfolio replay with "
@@ -513,7 +569,18 @@ def calibrate_track(
             fetch_prices=fetch_prices,
             actual_fund=fund,
         )
-        if walk_forward is None and full_window is None and archive is None:
+        full_period = score_full_period_retrospective(
+            acted,
+            candidate,
+            actual_fund=fund,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
+            cost_drag_lambda=cost_drag_lambda,
+            use_cohort_fitness=use_cohort_fitness,
+            top_k=winner_loser_top_k,
+            bottom_k=winner_loser_bottom_k,
+        )
+        if walk_forward is None and full_window is None and archive is None and full_period is None:
             continue
         if walk_forward is not None:
             portfolio_score = float(walk_forward["composite_score"])
@@ -548,7 +615,19 @@ def calibrate_track(
             cohort_score = None
             blended_score = portfolio_score
 
-        rank_score = blended_score if use_cohort_fitness else portfolio_score
+        wf_rank_score = blended_score if use_cohort_fitness else portfolio_score
+        full_period_score = (
+            float(full_period["full_period_score"]) if full_period is not None else wf_rank_score
+        )
+        if mode == RANKING_FULL_PERIOD:
+            rank_score = full_period_score
+        elif mode == RANKING_BLENDED:
+            rank_score = (1.0 - BLENDED_FULL_PERIOD_WEIGHT) * float(
+                wf_rank_score
+            ) + BLENDED_FULL_PERIOD_WEIGHT * float(full_period_score)
+        else:
+            rank_score = wf_rank_score
+
         scored.append(
             {
                 "knobs": candidate.to_dict(),
@@ -556,11 +635,14 @@ def calibrate_track(
                 "portfolio_score": round(portfolio_score, 4),
                 "cohort_score": round(cohort_score, 4) if cohort_score is not None else None,
                 "blended_score": round(blended_score, 4),
+                "full_period_score": round(full_period_score, 4),
                 "walk_forward": walk_forward,
                 "cohort_walk_forward": cohort_wf,
                 "cohort_selection": _slim_cohort(cohort_summary),
                 "full_window_log_replay": _slim_replay(full_window),
                 "archive_replay": _slim_replay(archive),
+                "full_period_retrospective": full_period,
+                "winner_loser": (full_period or {}).get("winner_loser"),
                 "_rank_score": rank_score,
             }
         )
@@ -572,7 +654,26 @@ def calibrate_track(
         row["rank"] = rank
     scored = scored[:TOP_CANDIDATES_KEPT]
 
-    score_key = "blended_score" if use_cohort_fitness else "composite_score"
+    if mode == RANKING_FULL_PERIOD:
+        score_key = "full_period_score"
+    elif mode == RANKING_BLENDED:
+        score_key = "full_period_score" if use_cohort_fitness else "full_period_score"
+    else:
+        score_key = "blended_score" if use_cohort_fitness else "composite_score"
+    if mode == RANKING_BLENDED:
+        # Prefer explicit blended key when present on rows.
+        for row in scored:
+            row["blended_full_period_score"] = round(
+                (1.0 - BLENDED_FULL_PERIOD_WEIGHT)
+                * float(
+                    row.get("blended_score")
+                    if use_cohort_fitness
+                    else row.get("composite_score") or 0.0
+                )
+                + BLENDED_FULL_PERIOD_WEIGHT * float(row.get("full_period_score") or 0.0),
+                4,
+            )
+        score_key = "blended_full_period_score"
     knob_axis_discriminability = (
         discover_knob_axis_discriminability(
             scored,
@@ -634,9 +735,10 @@ def calibrate_track(
 
     top = scored[0] if scored else None
     score_gap = score_gap_vs_runner_up(scored, score_key=score_key) if scored else None
+    recommended_score = float(top[score_key]) if top and top.get(score_key) is not None else None
     confidence = _prior_confidence(
         acted_count=len(acted),
-        recommended_score=float(top[score_key]) if top else None,
+        recommended_score=recommended_score,
         current_score=current_blended if use_cohort_fitness else current_score,
         fold_stability=(
             float((top.get("walk_forward") or {}).get("fold_stability") or 0.0) if top else None
@@ -649,12 +751,46 @@ def calibrate_track(
     ):
         confidence = "low"
 
+    top_n = max(1, int(bootstrap_top_n))
+    bootstrap_priors: list[dict[str, Any]] = []
+    for row in scored[:top_n]:
+        prior = _build_recommended_prior(
+            row,
+            current_candidate,
+            confidence=confidence,
+            current_score=current_blended if use_cohort_fitness else current_score,
+            score_gap=score_gap,
+            cohort_selection=row.get("cohort_selection"),
+            use_blended_score=use_cohort_fitness,
+        )
+        if prior is None:
+            continue
+        prior["rank"] = row.get("rank")
+        prior["full_period_score"] = row.get("full_period_score")
+        prior["winner_loser"] = row.get("winner_loser")
+        prior["shadow_track_id"] = calibrated_shadow_track_id(int(row.get("rank") or 1))
+        if mode != RANKING_WALK_FORWARD:
+            prior["rationale"] = (
+                "Top full-period retrospective score (portfolio replay + cohort + "
+                "winner/loser catch/exclude). Seed competing shadow sims for forward "
+                "endurance; do not auto-apply to the live learning loop."
+            )
+        bootstrap_priors.append(prior)
+
+    ready_for_shadow_bootstrap = bool(
+        scored
+        and len(acted) >= MIN_ACTED_FOR_SHADOW_BOOTSTRAP
+        and (score_gap is None or score_gap >= MIN_SCORE_GAP_FOR_PRIOR)
+        and confidence != "insufficient"
+    )
+
     return {
         "scope": "knob_calibration",
         "observe_only": True,
         "calibrated_at": datetime.now(UTC).isoformat(),
         "track_id": str(config.track_id or track_dir.name or "rules"),
         "track_label": str(config.track_label or ""),
+        "ranking_mode": mode,
         "readiness": {
             "acted_entries": len(acted),
             "walk_forward_folds": len(walk_forward_fold_ranges(len(acted), n_folds)),
@@ -664,10 +800,14 @@ def calibrate_track(
                 and len(acted) >= MIN_ACTED_FOR_CALIBRATION
                 and (score_gap is None or score_gap >= MIN_SCORE_GAP_FOR_PRIOR)
             ),
+            "ready_for_shadow_bootstrap": ready_for_shadow_bootstrap,
+            "shadow_bootstrap_acted_floor": MIN_ACTED_FOR_SHADOW_BOOTSTRAP,
+            "shadow_bootstrap_acted_ideal": MIN_ACTED_FOR_SHADOW_BOOTSTRAP_IDEAL,
             "warnings": warnings,
             "use_cohort_fitness": use_cohort_fitness,
             "cohort_weight": cohort_weight if use_cohort_fitness else None,
             "score_gap_vs_runner_up": score_gap,
+            "ranking_score_key": score_key,
         },
         "current_knobs": current_candidate.to_dict(),
         "current_score": current_score,
@@ -677,24 +817,23 @@ def calibrate_track(
         "stability_penalty": stability_penalty,
         "knob_axis_discriminability": knob_axis_discriminability,
         "candidates_ranked": scored,
-        "recommended_prior": _build_recommended_prior(
-            top,
-            current_candidate,
-            confidence=confidence,
-            current_score=current_blended if use_cohort_fitness else current_score,
-            score_gap=score_gap,
-            cohort_selection=(top or {}).get("cohort_selection"),
-            use_blended_score=use_cohort_fitness,
-        ),
+        "bootstrap_priors": bootstrap_priors,
+        "recommended_prior": bootstrap_priors[0] if bootstrap_priors else None,
         "limitations": (
-            "Observe-only walk-forward calibration on rebalance_log replay"
+            "Observe-only calibration on rebalance_log replay"
             + (
                 " with cohort-selection fitness for AI-judgment tracks."
                 if use_cohort_fitness
                 else "."
             )
+            + (
+                " Ranking uses full-period retrospective for shadow bootstrap."
+                if mode != RANKING_WALK_FORWARD
+                else " Ranking uses walk-forward composite."
+            )
             + " Does not auto-apply knobs. Full archive P&L needs thicker weekly screens (L111). "
-            "Promote priors via manual config.json edit, shadow track, or paper_knobs experiment."
+            "Bootstrap shadows for forward endurance; promote survivors manually into "
+            "learning-loop priors."
         ),
     }
 
@@ -775,55 +914,24 @@ def _apply_prior_knobs_to_config(config: AutomationConfig, knobs: dict[str, Any]
     return changed
 
 
-def spawn_calibrated_shadow_track(
+def _spawn_one_calibrated_shadow(
     paper_root: Path,
     *,
-    parent_track_id: str = AI_JUDGMENT_TRACK_ID,
-    priors_path: Path | None = None,
-    force_respawn: bool = False,
+    parent: AutomationConfig,
+    parent_track_id: str,
+    prior: dict[str, Any],
+    rank: int,
+    priors_file: Path,
+    priors_payload: dict[str, Any],
+    track_row: dict[str, Any],
+    force_respawn: bool,
 ) -> dict[str, Any]:
-    """
-    Spawn a forward-validation shadow book with frozen calibration priors.
-
-    Copies parent AI gates, applies recommended_prior knobs, and starts a fresh
-    automated_fund at the parent's initial_cash. Idempotent unless force_respawn.
-    """
-    paper_root = Path(paper_root)
-    if parent_track_id != AI_JUDGMENT_TRACK_ID:
-        return {
-            "spawned": False,
-            "reason": f"Only {AI_JUDGMENT_TRACK_ID} shadow tracks are supported in phase 1",
-        }
-
-    priors_file = priors_path or (paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
-    if not priors_file.exists():
-        return {
-            "spawned": False,
-            "reason": f"No calibration priors at {priors_file}",
-        }
-
-    priors_payload = read_json(priors_file)
-    track_row = _track_calibration_row(priors_payload, parent_track_id)
-    if not track_row:
-        return {
-            "spawned": False,
-            "reason": f"No calibration row for {parent_track_id} in {priors_file}",
-        }
-
-    recommended = track_row.get("recommended_prior") or {}
-    prior_knobs = recommended.get("knobs")
+    prior_knobs = prior.get("knobs")
     if not isinstance(prior_knobs, dict) or not prior_knobs:
-        return {
-            "spawned": False,
-            "reason": "recommended_prior.knobs missing — run ftse-knob-calibrate first",
-        }
+        return {"spawned": False, "rank": rank, "reason": "prior knobs missing"}
 
-    configs = ensure_learning_track_configs(paper_root)
-    parent = configs.get(parent_track_id)
-    if parent is None:
-        return {"spawned": False, "reason": f"Parent track {parent_track_id} config missing"}
-
-    shadow_dir = paper_root / "ai_judgment_calibrated"
+    track_id = calibrated_shadow_track_id(rank)
+    shadow_dir = paper_root / calibrated_shadow_subdir(rank)
     shadow_dir.mkdir(parents=True, exist_ok=True)
     config_path = shadow_dir / CONFIG_FILENAME
     fund_path = shadow_dir / FUND_FILENAME
@@ -835,8 +943,12 @@ def spawn_calibrated_shadow_track(
         respawned_fund = False
     else:
         shadow = default_ai_judgment_config(parent)
-        shadow.track_id = AI_JUDGMENT_CALIBRATED_TRACK_ID
-        shadow.track_label = "AI judgment calibrated shadow (frozen priors)"
+        shadow.track_id = track_id
+        shadow.track_label = (
+            "AI judgment calibrated shadow (frozen priors)"
+            if rank <= 1
+            else f"AI judgment calibrated shadow rank {rank} (frozen priors)"
+        )
         shadow.is_primary_learning_track = False
         shadow.is_calibration_shadow = True
         shadow.calibration_parent_track = parent_track_id
@@ -853,29 +965,37 @@ def spawn_calibrated_shadow_track(
     shadow.is_calibration_shadow = True
     shadow.calibration_parent_track = parent_track_id
     shadow.is_primary_learning_track = False
-    shadow.track_id = AI_JUDGMENT_CALIBRATED_TRACK_ID
-    shadow.track_label = shadow.track_label or "AI judgment calibrated shadow (frozen priors)"
+    shadow.track_id = track_id
+    shadow.track_label = shadow.track_label or (
+        "AI judgment calibrated shadow (frozen priors)"
+        if rank <= 1
+        else f"AI judgment calibrated shadow rank {rank} (frozen priors)"
+    )
     config_path.write_text(json.dumps(shadow.to_dict(), indent=2) + "\n", encoding="utf-8")
     ensure_automated_fund(fund_path, shadow)
 
     provenance = {
-        "schema_version": 1,
+        "schema_version": 2,
         "spawned_at": datetime.now(UTC).isoformat(),
         "parent_track_id": parent_track_id,
-        "shadow_track_id": AI_JUDGMENT_CALIBRATED_TRACK_ID,
+        "shadow_track_id": track_id,
+        "bootstrap_rank": int(rank),
         "priors_source": str(priors_file),
         "priors_calibrated_at": priors_payload.get("calibrated_at")
         or track_row.get("calibrated_at"),
-        "recommended_prior": recommended,
+        "ranking_mode": track_row.get("ranking_mode"),
+        "recommended_prior": prior,
         "parent_knobs_at_spawn": parent_knobs,
         "shadow_knobs": shadow.selection_kwargs(),
         "changed_vs_parent": changed_vs_parent,
-        "confidence": recommended.get("confidence"),
+        "confidence": prior.get("confidence"),
+        "full_period_score": prior.get("full_period_score"),
+        "winner_loser": prior.get("winner_loser"),
         "force_respawn": bool(force_respawn),
         "respawned_fund": respawned_fund,
         "note": (
             "Frozen calibration shadow — decision-review --apply is disabled. "
-            "Compare forward marks vs primary ai_judgment before promotion."
+            "Compare forward endurance vs primary ai_judgment and ^FTSE before promotion."
         ),
     }
     write_json(provenance_path, provenance, compact=False)
@@ -883,13 +1003,142 @@ def spawn_calibrated_shadow_track(
     return {
         "spawned": True,
         "created": not existed or force_respawn,
-        "shadow_track_id": AI_JUDGMENT_CALIBRATED_TRACK_ID,
+        "rank": int(rank),
+        "shadow_track_id": track_id,
         "shadow_dir": str(shadow_dir),
-        "confidence": recommended.get("confidence"),
+        "confidence": prior.get("confidence"),
         "changed_vs_parent": changed_vs_parent,
         "respawned_fund": respawned_fund,
         "provenance_path": str(provenance_path),
+        "knobs": prior_knobs,
     }
+
+
+def spawn_calibration_shadow_tracks(
+    paper_root: Path,
+    *,
+    parent_track_id: str = AI_JUDGMENT_TRACK_ID,
+    priors_path: Path | None = None,
+    top_n: int = DEFAULT_BOOTSTRAP_TOP_N,
+    force_respawn: bool = False,
+    require_ready: bool = False,
+) -> dict[str, Any]:
+    """
+    Spawn up to top_n competing calibrated shadow books from bootstrap_priors.
+
+    Rank 1 keeps the legacy `ai_judgment_calibrated` directory; ranks 2+ use
+    `ai_judgment_calibrated_rN`. Observe-only — never auto-applies live knobs.
+    """
+    paper_root = Path(paper_root)
+    if parent_track_id != AI_JUDGMENT_TRACK_ID:
+        return {
+            "spawned": False,
+            "reason": f"Only {AI_JUDGMENT_TRACK_ID} shadow tracks are supported in phase 1",
+            "shadows": [],
+        }
+
+    priors_file = priors_path or (paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
+    if not priors_file.exists():
+        return {
+            "spawned": False,
+            "reason": f"No calibration priors at {priors_file}",
+            "shadows": [],
+        }
+
+    priors_payload = read_json(priors_file)
+    track_row = _track_calibration_row(priors_payload, parent_track_id)
+    if not track_row:
+        return {
+            "spawned": False,
+            "reason": f"No calibration row for {parent_track_id} in {priors_file}",
+            "shadows": [],
+        }
+
+    if require_ready and not (track_row.get("readiness") or {}).get("ready_for_shadow_bootstrap"):
+        return {
+            "spawned": False,
+            "reason": "ready_for_shadow_bootstrap is false — thicken acted logs or re-run retrospective",
+            "shadows": [],
+            "readiness": track_row.get("readiness"),
+        }
+
+    priors = list(track_row.get("bootstrap_priors") or [])
+    if not priors:
+        recommended = track_row.get("recommended_prior") or {}
+        if isinstance(recommended, dict) and recommended.get("knobs"):
+            priors = [recommended]
+    if not priors:
+        return {
+            "spawned": False,
+            "reason": "bootstrap_priors/recommended_prior.knobs missing — run ftse-knob-calibrate first",
+            "shadows": [],
+        }
+
+    configs = ensure_learning_track_configs(paper_root)
+    parent = configs.get(parent_track_id)
+    if parent is None:
+        return {
+            "spawned": False,
+            "reason": f"Parent track {parent_track_id} config missing",
+            "shadows": [],
+        }
+
+    n = max(1, min(int(top_n), len(priors)))
+    shadows: list[dict[str, Any]] = []
+    for index, prior in enumerate(priors[:n], start=1):
+        rank = int(prior.get("rank") or index)
+        result = _spawn_one_calibrated_shadow(
+            paper_root,
+            parent=parent,
+            parent_track_id=parent_track_id,
+            prior=prior,
+            rank=rank,
+            priors_file=priors_file,
+            priors_payload=priors_payload,
+            track_row=track_row,
+            force_respawn=force_respawn,
+        )
+        shadows.append(result)
+
+    spawned_any = any(row.get("spawned") for row in shadows)
+    return {
+        "spawned": spawned_any,
+        "top_n": n,
+        "ranking_mode": track_row.get("ranking_mode"),
+        "shadows": shadows,
+        # Back-compat fields for phase-1 callers / CLI.
+        "shadow_track_id": (shadows[0].get("shadow_track_id") if shadows else None),
+        "shadow_dir": (shadows[0].get("shadow_dir") if shadows else None),
+        "confidence": (shadows[0].get("confidence") if shadows else None),
+        "changed_vs_parent": (shadows[0].get("changed_vs_parent") if shadows else None),
+        "provenance_path": (shadows[0].get("provenance_path") if shadows else None),
+        "respawned_fund": (shadows[0].get("respawned_fund") if shadows else None),
+        "created": (shadows[0].get("created") if shadows else None),
+        "reason": None if spawned_any else "no shadows spawned",
+    }
+
+
+def spawn_calibrated_shadow_track(
+    paper_root: Path,
+    *,
+    parent_track_id: str = AI_JUDGMENT_TRACK_ID,
+    priors_path: Path | None = None,
+    force_respawn: bool = False,
+) -> dict[str, Any]:
+    """
+    Spawn a forward-validation shadow book with frozen calibration priors.
+
+    Copies parent AI gates, applies recommended_prior knobs, and starts a fresh
+    automated_fund at the parent's initial_cash. Idempotent unless force_respawn.
+    """
+    return spawn_calibration_shadow_tracks(
+        paper_root,
+        parent_track_id=parent_track_id,
+        priors_path=priors_path,
+        top_n=1,
+        force_respawn=force_respawn,
+        require_ready=False,
+    )
 
 
 def load_calibration_provenance(track_dir: Path) -> dict[str, Any] | None:

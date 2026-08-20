@@ -1,20 +1,20 @@
 {
   "version": 1,
-  "updated_at": "2026-08-19",
+  "updated_at": "2026-08-20",
   "title": "Human tasks checklist",
-  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
+  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "sections": [
     {
       "id": "weekday",
-      "title": "Weekday (Mon–Fri)",
+      "title": "Weekday (Mon\u2013Fri)",
       "cadence": "weekday",
       "tasks": [
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "Confirm weekday CI acted; on Automation tab compare AI judgment excess vs ^FTSE, rules control, and calibrated shadow knobs.",
+          "summary": "Confirm weekday CI acted; on Automation tab compare AI judgment excess vs ^FTSE, rules control, and competing calibrated shadow knobs.",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "commands"
@@ -22,7 +22,7 @@
         {
           "id": "weekday-paper-auto-runs",
           "title": "Paper-auto + decision-review apply",
-          "summary": "Runs all learning tracks, refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Calibrated shadow is observe-only (no --apply).",
+          "summary": "Runs all learning tracks (including competing calibrated shadows), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows are observe-only (no --apply); endurance ledger refreshes after review.",
           "automated": true,
           "doc_path": "docs/ops/decision-review.md",
           "doc_anchor": "commands"
@@ -45,23 +45,31 @@
         {
           "id": "sunday-knob-calibration-priors",
           "title": "Review knob calibration priors",
-          "summary": "Inspect knob_calibration_priors.json: ready_for_priors, confidence, score_gap_vs_runner_up, cohort discriminability, and changed_vs_current.",
+          "summary": "Inspect knob_calibration_priors.json: ranking_mode, ready_for_shadow_bootstrap, bootstrap_priors, confidence, score_gap_vs_runner_up, and winner/loser catch rates.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
         },
         {
-          "id": "sunday-shadow-vs-primary",
-          "title": "Compare calibrated shadow vs primary AI judgment",
-          "summary": "On Automation tab, compare forward marks and epoch excess for ai_judgment vs ai_judgment_calibrated before promoting any prior.",
+          "id": "sunday-shadow-endurance",
+          "title": "Review competing shadow endurance",
+          "summary": "Read calibration_shadow_endurance.json: which bootstrap shadows are observing/surviving/failed vs ^FTSE, rules, and primary.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
-          "doc_anchor": "calibrated-shadow-track-phase-1--ai_judgment-only"
+          "doc_anchor": "competing-calibrated-shadows"
+        },
+        {
+          "id": "sunday-shadow-vs-primary",
+          "title": "Compare calibrated shadows vs primary AI judgment",
+          "summary": "On Automation tab, compare forward marks for ai_judgment vs competing calibrated shadows before promoting any prior.",
+          "automated": false,
+          "doc_path": "docs/ops/knob-calibration.md",
+          "doc_anchor": "competing-calibrated-shadows"
         },
         {
           "id": "sunday-promote-knobs-gate",
           "title": "Promote knob priors only when gates pass",
-          "summary": "Do not edit ai_judgment config until ready_for_priors, score gap ≥ 0.005, confidence acceptable, and shadow forward marks support the change.",
+          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement \u2014 never auto-apply.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
@@ -76,8 +84,8 @@
         },
         {
           "id": "sunday-knob-calibrate-runs",
-          "title": "Knob calibration + analysis-review agent",
-          "summary": "analysis-review.yml runs ftse-knob-calibrate (with cohort fitness for AI tracks) and spawns calibrated shadow when priors exist.",
+          "title": "Full-period knob calibrate + shadow bootstrap",
+          "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors, spawns competing shadows, and refreshes endurance.",
           "automated": true,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "when-to-run"
@@ -92,7 +100,7 @@
         {
           "id": "monthly-ops-review-cadence",
           "title": "Follow unified ops review cadence",
-          "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
+          "summary": "Use the weekly \u2192 monthly \u2192 quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
           "automated": false,
           "doc_path": "docs/ops/ops-review-cadence.md",
           "doc_anchor": "sequence"
@@ -130,7 +138,7 @@
         {
           "id": "adhoc-live-capital-pack",
           "title": "Verify decision packs before live capital",
-          "summary": "For real-money trades, use decision-pack verify checklist and primary sources — separate from the automated learning loop.",
+          "summary": "For real-money trades, use decision-pack verify checklist and primary sources \u2014 separate from the automated learning loop.",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "success-datums"
