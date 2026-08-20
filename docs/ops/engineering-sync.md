@@ -76,6 +76,9 @@ flowchart LR
 Rules:
 
 - Only runs when the merged task lists `tests/…` under `allowed_paths`.
+- `engineering-queue.yml` installs `.[dev]` so `pytest` is available for this gate.
+- Missing/`ModuleNotFoundError: pytest` is treated as **infra** (`action=infra_error`,
+  no rework) — do not mint verify-rework tasks for environment gaps.
 - Rework is a **new open task** (new id/branch) linked via
   `evidence.verify_chain_root_id` / `parent_task_id` — avoids colliding with the
   merged branch reconcile path.
