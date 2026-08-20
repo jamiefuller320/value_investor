@@ -240,6 +240,12 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     buffered_hold_counterfactual = _read_paper_automation_json(
         output_dir, "buffered_hold_counterfactual.json"
     )
+    knob_calibration_priors = _read_paper_automation_json(
+        output_dir, "knob_calibration_priors.json"
+    )
+    calibration_shadow_endurance = _read_paper_automation_json(
+        output_dir, "calibration_shadow_endurance.json"
+    )
     learning_track_funds: dict[str, Any] = {}
     learning_track_configs: dict[str, Any] = {}
     try:
@@ -404,6 +410,8 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "learning_track_epoch_datum": learning_track_epoch_datum,
         "churn_health": churn_health,
         "buffered_hold_counterfactual": buffered_hold_counterfactual,
+        "knob_calibration_priors": knob_calibration_priors,
+        "calibration_shadow_endurance": calibration_shadow_endurance,
         "automation": automation,
         "project_progress": project_progress,
         "human_tasks_checklist": human_tasks_checklist,
