@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T19:40:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T19:48:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -129,6 +129,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L48 | **Improve Yahoo↔T212 mapping for weak catalogue markets** | After live catalogue fetch, hang_seng/sti show 0% catalogue hits and several EU/AU markets are well below 70% while allowlist still marks them tradable. Tighten ISIN/shortName mapping or trim via unavailable_watch. | Next t212-align after catalogue refresh, or when researching those markets for paper/live trading |
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
 | L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
+| L167 | **EU depth-first pilot as composite ~150-250 names not 21 thin shards** | For the first non-UK FTSE-parity build, group smaller European index slices into one isolated universe sized near the live FTSE screen (~150-250 unique names; buy-tier depth ~30-70). Prefer euro_stoxx50 alone as filing-stack proof, then expand with low-overlap periphery (ISEQ/OMXS/ATX/BEL/AEX/SMI/PSI) rather than stacking DAX+CAC+MIB (heavy STOXX overlap). One book needs one benchmark; keep US/APAC out of this pilot. | Depth-first doctrine (N37) accepted and euro_filings provider is being chosen for the first parallel universe |
 
 ### Research & portfolio product
 
