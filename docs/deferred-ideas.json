@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-20T15:59:20+00:00",
+  "updated_at": "2026-08-20T16:35:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3257,6 +3257,91 @@
       "status": "open",
       "source": "offline metrics fix conversation",
       "added_at": "2026-08-20T15:59:20+00:00"
+    },
+    {
+      "id": "L163",
+      "category": "later",
+      "section": "learning",
+      "title": "Weekly consistency report for bootstrap shadow candidates",
+      "summary": "Observe-only: step competing bootstrap knob groups through chronological weekly slices (log and later archive) and report week-on-week stability of excess/hit-rate \u2014 surface alongside fold_stability, do not re-rank solely on in-sample consistency or auto-cull shadows.",
+      "revisit_when": "After bootstrap shadows have published endurance marks and L111 archive replay can supply weekly screen passes",
+      "tags": [
+        "knobs",
+        "bootstrap",
+        "consistency",
+        "walk-forward",
+        "L111"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a01fb2-9a3f-74ad-8a2f-0fd11c37aa7c",
+      "added_at": "2026-08-20T16:26:16+00:00"
+    },
+    {
+      "id": "N35",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not use weekly historical shadow rewind as promotion proof",
+      "summary": "Rewinding competing shadows through known history to pick a winner overfits the same window used for bootstrap; keep weekly consistency as a diagnostic, and reserve promotion for forward endurance vs market/rules.",
+      "revisit_when": "Only if a held-out weekly archive path (true walk-forward / purged CV) is implemented under L111",
+      "tags": [
+        "overfitting",
+        "shadows",
+        "promotion",
+        "N2"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a01fb2-9a3f-74ad-8a2f-0fd11c37aa7c",
+      "added_at": "2026-08-20T16:26:16+00:00"
+    },
+    {
+      "id": "L164",
+      "category": "later",
+      "section": "learning",
+      "title": "Held-out / purged walk-forward for bootstrap promotion",
+      "summary": "Strengthen winner selection by requiring bootstrap priors to clear a held-out chronological slice (or purged CV) before shadow spawn counts as promotion-ready, reducing in-sample double-dip between full-period rank and historical consistency.",
+      "revisit_when": "Acted logs \u2265~20 per track or L111 weekly archives cover \u226512 months",
+      "tags": [
+        "bootstrap",
+        "walk-forward",
+        "overfitting",
+        "promotion"
+      ],
+      "status": "open",
+      "source": "system architecture review",
+      "added_at": "2026-08-20T16:35:52+00:00"
+    },
+    {
+      "id": "L165",
+      "category": "later",
+      "section": "ops",
+      "title": "Shadow GC and max concurrent calibrated books",
+      "summary": "Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday.",
+      "revisit_when": "More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks",
+      "tags": [
+        "shadows",
+        "ops",
+        "dashboard",
+        "GC"
+      ],
+      "status": "open",
+      "source": "system architecture review",
+      "added_at": "2026-08-20T16:35:52+00:00"
+    },
+    {
+      "id": "N36",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not auto-promote surviving shadows into ai_judgment",
+      "summary": "Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough.",
+      "revisit_when": "Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors",
+      "tags": [
+        "promotion",
+        "automation",
+        "N26"
+      ],
+      "status": "open",
+      "source": "system architecture review",
+      "added_at": "2026-08-20T16:35:52+00:00"
     }
   ],
   "fragments": [
