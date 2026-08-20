@@ -1377,12 +1377,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
+      "status": "cancelled",
       "no_diff_count": 2,
       "last_no_diff_at": "2026-08-19T19:23:13.904150+00:00",
       "parked_reason": "agent produced no code changes 2 time(s) (cap 2) — manual review",
       "parked_at": "2026-08-19T19:23:13.904150+00:00",
-      "parked_policy": "no_diff_cap"
+      "parked_policy": "cancelled_infra_false_positive",
+      "cancelled_reason": "False-positive verify rework: post-merge gate lacked pytest (pip install -e . without [dev]). IR structured-field parsing already merged via #306/#307; acceptance tests pass. Infra fixed in engineering-queue.",
+      "cancelled_at": "2026-08-20T14:55:29.941197+00:00"
     },
     {
       "id": "eng-20260809-02",
@@ -1468,18 +1470,20 @@
           "FCF",
           "IFRS"
         ],
-        "verify_status": "rework_queued",
+        "verify_status": "passed",
         "verify_rework_task_id": "eng-20260819-06",
         "verify_failed_at": "2026-08-19T18:43:53.679804+00:00",
         "verify_pytest": {
-          "returncode": 1,
+          "returncode": 0,
           "paths": [
             "tests/test_research_filings.py",
             "tests/test_gap_fill_deepen.py",
             "tests/test_ingest_improvement.py"
           ],
-          "output_tail": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3: No module named pytest"
-        }
+          "output_tail": "........................................................................ [ 41%]\n........................................................................ [ 82%]\n..............................                                           [100%]\n174 passed in 29.77s"
+        },
+        "verified_at": "2026-08-20T14:55:29.940453+00:00",
+        "verify_note": "Re-verified after infra fix; prior rework_queued was pytest_not_installed false positive"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for IR",
@@ -1513,7 +1517,7 @@
       "completed_at": "2026-08-19T18:19:29.396626+00:00",
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/307",
       "pr_number": 307,
-      "merged_at": "2026-08-19T18:43:53.680541+00:00"
+      "merged_at": "2026-08-20T14:55:29.989428+00:00"
     },
     {
       "id": "eng-20260819-04",
@@ -1531,19 +1535,21 @@
           "IFRS"
         ],
         "plan_index": 5,
-        "verify_status": "rework_queued",
+        "verify_status": "passed",
         "verify_chain_root_id": "eng-20260819-04",
         "verify_rework_task_id": "eng-20260819-05",
         "verify_failed_at": "2026-08-19T17:33:38.189129+00:00",
         "verify_pytest": {
-          "returncode": 1,
+          "returncode": 0,
           "paths": [
             "tests/test_research_filings.py",
             "tests/test_gap_fill_deepen.py",
             "tests/test_ingest_improvement.py"
           ],
-          "output_tail": "/opt/hostedtoolcache/Python/3.12.13/x64/bin/python3: No module named pytest"
-        }
+          "output_tail": "........................................................................ [ 41%]\n........................................................................ [ 82%]\n..............................                                           [100%]\n174 passed in 29.77s"
+        },
+        "verified_at": "2026-08-20T14:55:29.940453+00:00",
+        "verify_note": "Re-verified after infra fix; prior rework_queued was pytest_not_installed false positive"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for IR",
@@ -1576,7 +1582,7 @@
       "completed_at": "2026-08-19T15:16:00.100723+00:00",
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/306",
       "pr_number": 306,
-      "merged_at": "2026-08-19T17:33:38.189642+00:00"
+      "merged_at": "2026-08-20T14:55:29.966305+00:00"
     },
     {
       "id": "eng-20260726-03",

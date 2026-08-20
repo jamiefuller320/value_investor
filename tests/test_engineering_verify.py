@@ -10,6 +10,7 @@ from value_investor.engineering_verify import (
     VERIFY_SOURCE,
     acceptance_test_paths,
     count_verify_chain_rounds,
+    is_pytest_infra_failure,
     should_run_acceptance_verify,
     verify_merged_task,
 )
@@ -185,6 +186,50 @@ def test_verify_merged_exhausts_at_max_rounds(tmp_path: Path):
         if t["id"] == latest["id"]
     )
     assert updated["evidence"]["verify_status"] == "exhausted"
+
+
+def test_is_pytest_infra_failure_detects_missing_module():
+    assert is_pytest_infra_failure(
+        {
+            "ok": False,
+            "returncode": 1,
+            "output": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3: No module named pytest",
+        }
+    )
+    assert not is_pytest_infra_failure(
+        {
+            "ok": False,
+            "returncode": 1,
+            "output": "FAILED tests/test_pipeline.py::test_fcf - AssertionError",
+        }
+    )
+
+
+def test_verify_merged_skips_rework_on_pytest_infra_failure(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(tasks_path, [_merged_scoring_task()])
+
+    def runner(paths, cwd):
+        return {
+            "ok": False,
+            "returncode": 1,
+            "paths": paths,
+            "existing_paths": paths,
+            "output": "python3: No module named pytest",
+        }
+
+    result = verify_merged_task(
+        "eng-20260819-03",
+        tasks_path=tasks_path,
+        cwd=tmp_path,
+        pytest_runner=runner,
+    )
+    assert result["action"] == "infra_error"
+    assert result["should_rework"] is False
+    assert result["reason"] == "pytest_not_installed"
+    payload = json.loads(tasks_path.read_text(encoding="utf-8"))
+    assert len(payload["tasks"]) == 1
+    assert "verify_status" not in (payload["tasks"][0].get("evidence") or {})
 
 
 def test_verify_merged_dry_run_does_not_write(tmp_path: Path):
