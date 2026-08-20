@@ -31,6 +31,24 @@ PARKED_POLICY_VERIFY_EXHAUSTED = "verify_rework_exhausted"
 
 PytestRunner = Callable[[list[str], Path], dict[str, Any]]
 
+# Infra / environment failures must not mint rework tasks (agents then no-diff park).
+_PYTEST_INFRA_MARKERS = (
+    "No module named pytest",
+    "No module named 'pytest'",
+)
+
+
+def is_pytest_infra_failure(pytest_result: dict[str, Any]) -> bool:
+    """True when pytest could not run at all (missing install), not a test failure."""
+    output = str(pytest_result.get("output") or "")
+    if any(marker in output for marker in _PYTEST_INFRA_MARKERS):
+        return True
+    # python3 -m pytest exits 1 with ModuleNotFoundError when pytest is absent
+    if int(pytest_result.get("returncode") or 0) == 1 and "ModuleNotFoundError" in output:
+        if "pytest" in output.lower():
+            return True
+    return False
+
 
 def acceptance_test_paths(task: dict[str, Any] | EngineeringTask) -> list[str]:
     """Return unique test file/dir paths listed on the task's allowed_paths."""
@@ -388,6 +406,22 @@ def verify_merged_task(
             "action": "passed",
             "should_rework": False,
             "reason": "acceptance_pytest_passed",
+            "verify_chain_root_id": chain_root,
+            "verify_round": rounds,
+            "pytest": pytest_result,
+        }
+
+    if is_pytest_infra_failure(pytest_result):
+        logger.warning(
+            "Post-merge verify infra failure for %s (not queuing rework): %s",
+            task_id,
+            str(pytest_result.get("output") or "")[:200],
+        )
+        return {
+            "task_id": task_id,
+            "action": "infra_error",
+            "should_rework": False,
+            "reason": "pytest_not_installed",
             "verify_chain_root_id": chain_root,
             "verify_round": rounds,
             "pytest": pytest_result,
