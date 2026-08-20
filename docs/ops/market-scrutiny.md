@@ -12,9 +12,9 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 |------|--------|-----|
 | **FTSE live ingest** | 70/70 buy-tier measured; **0 zero-body** | 13 tickers with 1–5 residual indexed-without-body (unfetchable tail) |
 | **FTSE filing depth** | ~3,700 bodies; global indexed-without-body ~36 | Weekday depth continues; not a one-shot sprint |
-| **Offline queue** | **Tail complete** — `iseq20` focus; Sunday ladder graduated in CI but commit failed on JSON parse (fixed in workflow) | Re-run ladder or wait for next Sunday to persist graduation + `last_ladder.json` |
-| **Focus `iseq20`** | Constituents 100%; honest metrics usable; screen-lite gated by `effective_min` (=20) | Provider mapping fixed; ladder uses tail-market floor so 20/20 coverage can screen |
-| **S&P 500 observe sim** | Running after Sunday screen-lite | Continue weekly |
+| **Offline queue** | Breadth queue complete; **depth-first focus `euro_depth`** (~194 names) | Grow metrics + screen archives; deepen `euro_filings` on buy-tier |
+| **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday ladder concentrates weekly_ops on this book only |
+| **S&P / STOXX shards** | Demoted from weekly slot under depth-first policy | Layer A maintenance only until euro_depth filing parity |
 | **`weekly_ops`** | $80 cap | Sunday email + ladder selective research |
 | **Director–worker** | Exploration phase (15/week); **MEGP.L** trial run 2026-08-16 | `auto_escalate_director` stays false until calibrated |
 
@@ -113,8 +113,9 @@ At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports rough
 ### Progression through markets
 
 1. **FTSE ingest** — residual indexed-without-body depth (buy-tier measured).
-2. **`omxs30` / `iseq20` metrics** — provider mapping + effective screen floor landed; Sunday ladder should run screen-lite on focus.
-3. **Keep S&P observe sim** accumulating — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
+2. **`euro_depth` metrics + screen archives** — sole offline research/observe/weekly focus.
+3. **Deepen `euro_filings`** on euro_depth buy-tier before treating AI tracks as FTSE-equivalent.
+4. **Keep Layer A maintenance** on other graduated markets — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
 
 ## Commands
 

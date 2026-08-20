@@ -48,6 +48,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 |------|-----|-----|
 | Follow **unified ops review cadence** (weekly → monthly → quarterly) | Human | [ops-review-cadence.md](ops-review-cadence.md#sequence) |
 | **Horizon scan** + triage open `ftse-defer` fragments | Human | [horizon-scan.md](horizon-scan.md#when-it-runs) |
+| Review **euro_depth filing/memo parity** vs FTSE before AI-gate / Phase 3 | Human | [market-sharded-learning.md](market-sharded-learning.md#depth-first-eu-pilot-aug-2026) |
 
 ## Quarterly
 

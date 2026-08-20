@@ -1,29 +1,7 @@
 {
   "schema_version": 1,
-  "focus_market": "iseq20",
-  "market_queue": [
-    "sp500",
-    "euro_stoxx50",
-    "asx200",
-    "ftse_smallcap",
-    "nasdaq100",
-    "dax",
-    "cac40",
-    "tsx60",
-    "aim",
-    "ibex35",
-    "ftse_mib",
-    "aex",
-    "bel20",
-    "hang_seng",
-    "sti",
-    "us_adr_asia",
-    "atx",
-    "psi20",
-    "smi",
-    "omxs30",
-    "iseq20"
-  ],
+  "focus_market": "euro_depth",
+  "market_queue": [],
   "graduated_markets": [
     {
       "market": "sp500",
@@ -155,7 +133,7 @@
   "focus_graduation": {
     "min_coverage_pct": 0.95,
     "max_stale_pct": 0.15,
-    "auto_advance": true,
+    "auto_advance": false,
     "maintenance_enabled": true,
     "maintenance_max_tickers": "full",
     "maintenance_include_focus_when_queue_complete": true,
@@ -345,7 +323,7 @@
         "reason": "queue_complete"
       }
     ],
-    "note": "Advance to next queue market when focus meets floors; graduated markets get a full-universe maintenance refresh (set maintenance_max_tickers to an int to throttle later). Include focus once queue is complete; refresh constituents each maintenance pass."
+    "note": "Depth-first EU pilot (euro_depth): do not advance focus; other graduated markets stay Layer A maintenance only."
   },
   "research_model": {
     "model_id": "composer-2.5",
@@ -418,7 +396,7 @@
     "auto_tighten_max_reescalation_rate": 0.35,
     "auto_escalate_director": false,
     "surface_escalation_candidates_in_email": true,
-    "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
+    "note": "Exploration phase allows more director\u2013worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
   "updated_at": "2026-08-19T19:23:09.653128+00:00",
   "ladder": {
@@ -431,7 +409,7 @@
     "min_metrics_for_screen": 25,
     "estimated_memo_usd": 0.4,
     "research_hard_cap": 100,
-    "research_all_graduated": true,
+    "research_all_graduated": false,
     "last_run": {
       "run_at": "2026-08-16T11:58:34.144147+00:00",
       "focus_market": "iseq20",
@@ -593,7 +571,7 @@
           {
             "market": "euro_stoxx50",
             "ticker": "MUV2.DE",
-            "name": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
+            "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
             "signal": "strong_buy",
             "conviction_score": 0.4056
           },
@@ -998,18 +976,21 @@
     "spend_since_checkpoint_usd": 10.4,
     "last_checkpoint_approved_at": "2026-07-25T12:42:06.653087+00:00",
     "observe_sim_after_screen": true,
-    "observe_sim_markets_mode": "graduated_benchmark",
-    "observe_sim_markets": [],
+    "observe_sim_markets_mode": "explicit",
+    "observe_sim_markets": [
+      "euro_depth"
+    ],
     "observe_sim_screen_when_research_skipped": true,
     "weekly_paper_shard_after_screen": true,
-    "weekly_paper_shard_capacity": 2,
+    "weekly_paper_shard_capacity": 1,
     "weekly_paper_shard_markets": [
-      "sp500",
-      "euro_stoxx50"
+      "euro_depth"
     ],
     "strong_buy_metrics_probe_after_maintenance": true,
     "strong_buy_metrics_probe_when_eng_idle": true,
     "strong_buy_metrics_probe_max_tickers": 25,
-    "strong_buy_metrics_probe_max_markets": 4
+    "strong_buy_metrics_probe_max_markets": 4,
+    "observe_sim_markets_extra": [],
+    "phase1_require_ai_beat_rules": false
   }
 }

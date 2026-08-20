@@ -57,11 +57,11 @@ Fundamentals alone are **necessary but not sufficient** for a rich stage-4 expan
 
 Prefer B for breadth of history; use C on buy-tier shortlists (hard cap raised while Cursor research remains cheap). Do **not** memo every name in an index.
 
-**Tradable north star (offline):** expand index slices toward stocks available on **Trading 212** (Invest / Stocks ISA catalogue). Index-slice queue:
+**Tradable north star (offline):** expand index slices toward stocks available on **Trading 212** (Invest / Stocks ISA catalogue). Index-slice queue historically:
 
 `sp500` → `euro_stoxx50` → `asx200` → `ftse_smallcap` → `nasdaq100` → `dax` → `cac40` → `tsx60`
 
-(FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) Advance focus when coverage ≥95% and stale ≤15%. Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research round-robins buy-tier names across focus + graduated markets (`research_all_graduated`). Rating-priority maintenance is **L33**.
+(FTSE 350 live screen unchanged; FTSE SmallCap ≈ All-Share gap vs 350.) That breadth queue is **complete**. Current offline focus is depth-first **`euro_depth`** (STOXX50 ∪ periphery ≈ 150–250 names) — see [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md). Graduated markets get **full-universe** maintenance (`maintenance_max_tickers: "full"`). Selective research targets the focus market only (`research_all_graduated: false`). Rating-priority maintenance is **L33**.
 
 **Broker coverage:** `docs/data/library/t212_coverage/` is the tradable overlay. Fetch the official instrument book with `ftse-library t212-catalogue` (env: `TRADING212_API_KEY`, `TRADING212_API_SECRET`, optional `TRADING212_ENV=demo|live`), then join library tickers via `ftse-library t212-overlay` (ISIN / shortName catalogue hits; venue allowlist fallback). Advisory only — does not filter screens. Dashboard **Unavailable** bypass keeps unactionable names on a watched list and excludes them from suggested trades / paper auto-entries. Optional FIRDS MIC filter remains enrichment only (`ftse-library firds-filter`).
 

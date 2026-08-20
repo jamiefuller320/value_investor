@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T19:48:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T20:00:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -88,7 +88,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N34 | **Stage-4 live universe expansion before 2b edge** | Keep live screen on FTSE 350; offline library (iseq20 screen-lite) is enough until primary AI track beats ^FTSE after costs. | Stage 2b AI judgment excess vs ^FTSE is positive with thick history |
 | N35 | **Do not use weekly historical shadow rewind as promotion proof** | Rewinding competing shadows through known history to pick a winner overfits the same window used for bootstrap; keep weekly consistency as a diagnostic, and reserve promotion for forward endurance vs market/rules. | Only if a held-out weekly archive path (true walk-forward / purged CV) is implemented under L111 |
 | N36 | **Do not auto-promote surviving shadows into ai_judgment** | Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. | Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors |
-| N37 | **Depth-first single-market FTSE-parity before parallel learning shards** | Stop treating multi-market Phase 1/2 promotion (AI beat rules on thin memos) as the path to equivalent learning. Instead sequentially deepen one small market to FTSE-like filings+memo+weekday cadence, then clone the weekly development system as an isolated parallel universe. Keep Layer A maintenance on other markets cheap; do not round-robin weekly_ops research across 21 thin shards. | FTSE stage 2b still primary OR eng capacity free; pick pilot market (prefer euro_stoxx50 or iseq20 over sp500) with a market-aware filing provider ready; weekly_ops can fund buy-tier depth for that one slice |
 
 ---
 
@@ -129,7 +128,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L48 | **Improve Yahoo↔T212 mapping for weak catalogue markets** | After live catalogue fetch, hang_seng/sti show 0% catalogue hits and several EU/AU markets are well below 70% while allowlist still marks them tradable. Tighten ISIN/shortName mapping or trim via unavailable_watch. | Next t212-align after catalogue refresh, or when researching those markets for paper/live trading |
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
 | L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
-| L167 | **EU depth-first pilot as composite ~150-250 names not 21 thin shards** | For the first non-UK FTSE-parity build, group smaller European index slices into one isolated universe sized near the live FTSE screen (~150-250 unique names; buy-tier depth ~30-70). Prefer euro_stoxx50 alone as filing-stack proof, then expand with low-overlap periphery (ISEQ/OMXS/ATX/BEL/AEX/SMI/PSI) rather than stacking DAX+CAC+MIB (heavy STOXX overlap). One book needs one benchmark; keep US/APAC out of this pilot. | Depth-first doctrine (N37) accepted and euro_filings provider is being chosen for the first parallel universe |
 
 ### Research & portfolio product
 
@@ -226,7 +224,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L95 | **Mid-week post-run review agent after engineering merges** | Optional LLM triage to reorder the engineering queue when deterministic reprioritize is insufficient — e.g. after multiple ingest merges or contradictory filing signals. | Deterministic reprioritize hook has run for 3+ ingest merges and queue order still feels stale vs Sunday diagnosis |
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
 | L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
-| L166 | **Rewire shard promotion gates off AI-beat-rules until filing parity** | Current Phase 1→2 gate requires AI judgment to beat screen rules on observe sim, which is often unachievable or meaningless when memos lack filing bodies. Until a depth-first pilot has FTSE-comparable research inputs, gate Phase 2 on archives+metrics stability only (or screen-rules experiments), and reserve AI-track promotion for post-parity weekday shards. | Depth-first pilot doctrine accepted, or sp500 remains blocked on AI-beat-rules while euro_stoxx50 Phase 2 stalls on thin overlay |
 
 ---
 

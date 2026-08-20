@@ -6,6 +6,31 @@ Live FTSE 350 screen and weekday primary learning track stay unchanged (stage 2b
 
 See also: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-track.md`](primary-learning-track.md), [`market-scrutiny.md`](market-scrutiny.md).
 
+## Depth-first EU pilot *(Aug 2026)*
+
+Policy focus is **`euro_depth`**: EURO STOXX 50 ∪ low-overlap periphery
+(`aex`, `bel20`, `smi`, `omxs30`, `atx`, `psi20`, `iseq20`) ≈ **150–250** unique
+names (currently ~194). One book, benchmark `^STOXX50E`.
+
+| Knob | Depth-first value | Effect |
+|------|-------------------|--------|
+| `focus_market` | `euro_depth` | Ladder grow/screen/research target |
+| `research_all_graduated` | `false` | Selective research only on focus (stops 21-market memo spray) |
+| `observe_sim_markets_mode` | `explicit` | Observe sim only `euro_depth` |
+| `weekly_paper_shard_markets` | `["euro_depth"]` | Capacity 1 isolated learning book |
+| `phase1_require_ai_beat_rules` | `false` | Phase 1→2 on archives until filing parity (L166) |
+| `focus_graduation.auto_advance` | `false` | Do not advance focus away from the pilot |
+
+Other graduated markets stay **Layer A maintenance only**. FTSE live learning is unchanged.
+Do **not** expand with DAX/CAC/MIB until this pilot has euro_filings depth comparable
+to FTSE buy-tier.
+
+```bash
+ftse-library grow --market euro_depth
+ftse-library ladder                 # research + observe + weekly shard for euro_depth
+ftse-library shard-status --markets euro_depth
+```
+
 ## Architecture
 
 | Shard root | Role |
@@ -23,39 +48,35 @@ Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50
 
 Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The Sunday quiet bundle is the natural heartbeat (~1 screen-lite pass per market per week when that market is in the maintenance/screen set).
 
-### Phase 1 — Observe sim shards *(start now)*
+### Phase 1 — Observe sim shards
 
 **What runs:** After screen-lite in `ftse-library ladder`, `run_observe_sims_for_screened_markets` refreshes frozen-signal sims (screen rules / research overlay / AI judgment) vs local benchmark. Writes `screen/sim/observe_summary.json`.
 
 **Policy:** `ladder.observe_sim_after_screen`, `ladder.observe_sim_markets_mode`, optional `ladder.observe_sim_markets` / `observe_sim_markets_extra`.
 
-**Markets mode (Aug 2026):** `graduated_benchmark` — all graduated markets with a wired benchmark (`^GSPC`, `^STOXX50E`, `^AXJO`, …). Eight index slices today; others accumulate library richness until a benchmark is added. Explicit list mode remains available via `observe_sim_markets_mode: "explicit"`.
+**Markets mode (depth-first):** `explicit` with `observe_sim_markets: ["euro_depth"]`. Legacy `graduated_benchmark` mode remains available for breadth experiments.
 
 **Screen cadence:** When selective research is skipped (`weekly_ops` exhausted, checkpoint, or `--skip-research`), ladder runs a memo-free screen-lite pass for observe-sim markets (`observe_sim_screen_when_research_skipped`, default on) so Phase 1 archives do not stall to focus-only cadence.
 
-**Exit gate (per market):** ≥ **12** dated `signals_YYYYMMDD_HHMMSS.csv` files under `markets/<id>/screen/` (same bar as backtest history and L127 revisit).
+**Exit gate (per market):** ≥ **12** dated `signals_YYYYMMDD_HHMMSS.csv` files under `markets/<id>/screen/` (same bar as backtest history and L127 revisit). When `phase1_require_ai_beat_rules` is true (code default), AI must also beat rules on observe sim; depth-first policy sets this **false** until filing parity.
 
 | Market (benchmark wired) | Benchmark | Phase 1 notes |
 |--------------------------|-----------|---------------|
-| `sp500` | ^GSPC | Archives met; blocked Phase 2 until AI beat rules on observe sim |
-| `euro_stoxx50` | ^STOXX50E | Phase 2 weekly shard (capacity slot) |
-| `nasdaq100`, `asx200`, `dax`, `cac40`, `tsx60`, `iseq20` | local | Observe sim on — archives accumulating |
+| `euro_depth` | ^STOXX50E | Depth-first pilot — sole observe/weekly slot |
+| `sp500` | ^GSPC | Legacy archives; not in weekly shard list under depth-first |
+| `euro_stoxx50` | ^STOXX50E | Component of `euro_depth`; demoted from weekly slot |
 
-**Timescale:** Markets already at 12 archives are done with Phase 1 *accumulation* today. New graduates need ~**11 Sunday ladder cycles** (~3 months at weekly cadence) before Phase 2 evidence is meaningful.
-
-**Parallelism:** Graduation + benchmark wiring adds markets to Tier 1 automatically; sim runs even with thin history (caveat in summary JSON) but **do not promote** on &lt;12 archives.
+**Timescale:** New depth book needs ~**11 Sunday ladder cycles** (~3 months at weekly cadence) before Phase 2 evidence is meaningful.
 
 ### Phase 2 — Weekly paper shard *(wired Aug 2026)*
 
 **What runs:** Full track set (rules, AI judgment, grace, technical), exit-shadow and exit-timing cohorts, churn health — **Sunday batch only** after ladder, using library screen → reports adapter. No weekday settle stepping yet; no `--apply` on knobs.
 
-**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (default **2** slots).
-
-**Capacity ladder:** Phase 1 is broad (all benchmark-wired graduated markets). Phase 2 is capped — only markets listed in `weekly_paper_shard_markets` run, truncated to `weekly_paper_shard_capacity`. Promote into a slot manually when `ftse-library shard-status` shows `phase1_ready` and ops headroom; demote or swap when a pilot completes Phase 2 or stalls.
+**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (depth-first: capacity **1**, markets `["euro_depth"]`).
 
 **Orchestration:** After observe sim in `ftse-library ladder`, `run_weekly_paper_shards_for_screened_markets` runs for markets that passed Phase 1 and were screened this run. Phase rollup refreshes to `docs/data/library/shard_phases.json`.
 
-**Strong-buy metrics probe (L153):** After maintenance, when the engineering queue is idle, the ladder re-fetches metrics for offline screen `strong_buy`/`buy` names on Phase 2 then observe-sim markets (`strong_buy_metrics_probe_*` policy knobs). Surfaces provider failures early and can draft a coverage task; does **not** run FTSE-style filing ingest on non-UK names.
+**Strong-buy metrics probe (L153):** After maintenance, when the engineering queue is idle, the ladder re-fetches metrics for offline screen `strong_buy`/`buy` names on Phase 2 then observe-sim markets (`strong_buy_metrics_probe_*` policy knobs). Surfaces provider failures early and can draft a coverage task; does **not** run FTSE-style filing ingest on non-UK names — deepen via `euro_filings` for the pilot instead.
 
 **Enter when:** Phase 1 gate met for that market **and** market is in `weekly_paper_shard_markets`.
 
@@ -65,13 +86,13 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 | Trigger | Source | Effect |
 |---------|--------|--------|
-| Phase 1 → 2 | `phase1_gate_met()` — ≥12 archives, ≥12 observe snapshots, AI beat rules on observe sim | Eligible for weekly paper shard when in policy |
+| Phase 1 → 2 | `phase1_gate_met()` — ≥12 archives, ≥12 observe snapshots; AI-beat-rules only if `phase1_require_ai_beat_rules` | Eligible for weekly paper shard when in policy |
 | Phase 2 → 3 | `phase2_gate_met()` — ≥8 weekly batches + beat_control | `shard_phase.json` reports `next_phase=3`; weekday shard still manual |
 | Rollup refresh | Every ladder pass + `ftse-library shard-status` | Updates `shard_phases.json` and per-shard `shard_phase.json` with blockers |
 
 **Timescale:** **8 Sunday cycles** hands-off after the first weekly batch deploy (~2 months).
 
-**Pilot order:** `sp500` → `euro_stoxx50` → `iseq20` (largest history first).
+**Pilot order:** `euro_depth` first (depth-first). Revisit `sp500` / standalone `euro_stoxx50` after filing parity.
 
 ### Phase 3 — Weekday paper shard *(one market at a time, 8–12 weeks)*
 
@@ -96,12 +117,10 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 ## End-to-end timeline (realistic)
 
 ```text
-Now          Phase 1 observe sim for sp500 + euro_stoxx50 + iseq20 (policy)
-~0–3 mo      iseq20 reaches 12 screen archives; sp500/euro already there
-~1–2 mo      Phase 2 engineering for sp500 weekly shard (parallel with above)
-~2–4 mo      sp500 Phase 2 hands-off (8 Sundays)
-~4–7 mo      sp500 Phase 3 weekday pilot if promotion bar met
-~7+ mo       Second shard (euro_stoxx50) only after first pilot stable
+Now          Focus euro_depth; seed constituents (~194); grow metrics + screen archives
+~0–3 mo      euro_depth reaches 12 screen archives / observe snapshots (AI gate off)
+~2–4 mo      euro_depth Phase 2 weekly shard (8 Sundays) while deepening euro_filings
+~4–7 mo      Phase 3 weekday pilot only after filing/memo parity looks FTSE-like
 Stage 4      Live screen expansion — after FTSE 2b + shard Phase 3 evidence
 ```
 
@@ -113,7 +132,7 @@ A market may graduate from **Phase 1 observe sim** to **Phase 2 weekly paper sha
 
 1. ≥ 12 dated screen-lite CSV archives.
 2. Observe sim `snapshot_count` ≥ 12 in latest `observe_summary.json`.
-3. AI-judgment track **beat rules control** on local benchmark over the last 8 snapshots (same-window comparison in observe summary).
+3. AI-judgment track **beat rules control** on local benchmark over the last 8 snapshots — **required only when** `ladder.phase1_require_ai_beat_rules` is true (depth-first `euro_depth` keeps this false until filing parity).
 
 A market may graduate from **Phase 2** to **Phase 3 weekday shard** when:
 
@@ -126,14 +145,14 @@ A market may graduate from **Phase 2** to **Phase 3 weekday shard** when:
 
 ```bash
 # Manual observe sim refresh (Phase 1)
-ftse-library sim --markets sp500,euro_stoxx50,iseq20
+ftse-library sim --markets euro_depth
 
 # Phase gates and advancement triggers
 ftse-library shard-status
-ftse-library shard-status --markets sp500,euro_stoxx50 --json
+ftse-library shard-status --markets euro_depth --json
 
 # Manual Phase 2 weekly paper batch
-ftse-library shard-paper --markets sp500,euro_stoxx50
+ftse-library shard-paper --markets euro_depth
 
 # Policy
 ftse-library policy   # observe_sim_markets_mode, weekly_paper_shard_capacity
@@ -145,8 +164,8 @@ ftse-library ladder
 ## Capacity tiers (summary)
 
 ```text
-Tier 1 — Phase 1 observe sim     graduated_benchmark mode (~free; archive-gated)
-Tier 2 — Phase 2 weekly paper  weekly_paper_shard_markets[:capacity]  (default cap 2)
+Tier 1 — Phase 1 observe sim     explicit [euro_depth] under depth-first policy
+Tier 2 — Phase 2 weekly paper  weekly_paper_shard_markets[:capacity]  (depth-first cap 1)
 Tier 3 — Phase 3 weekday shard   one manual pilot at a time
 ```
 
@@ -154,5 +173,5 @@ Tier 3 — Phase 3 weekday shard   one manual pilot at a time
 
 - Shards do **not** write FTSE `docs/data/latest.json` or FTSE `paper_automation/` configs.
 - Knob apply on shards stays off until Phase 3 and N26 history floors per track.
-- `weekly_ops` caps selective research — full stacks for 21 markets at FTSE depth is out of scope; round-robin research continues.
+- `weekly_ops` funds **euro_depth** selective research — not round-robin across 21 thin markets.
 - FTSE stage 2b primary track remains the capital-attention loop until it beats ^FTSE.
