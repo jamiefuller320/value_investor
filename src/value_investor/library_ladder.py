@@ -38,6 +38,7 @@ from value_investor.library_graduation import (
 )
 from value_investor.library_screen import (
     assess_library_metrics_health,
+    effective_min_metrics_for_screen,
     library_research_reports,
     research_cap_from_budget,
     run_library_screen,
@@ -272,10 +273,20 @@ def run_library_ladder(
     coverage = (status[0] if status else {}) or {}
     manifest_coverage = int(coverage.get("coverage_count") or 0)
     metrics_health = assess_library_metrics_health(root, market)
-    usable_metrics = int(metrics_health.get("usable_rows") or 0)
-    min_metrics = int(
+    # Prefer honest usable count; small indices use effective_min (≤ ticker_count).
+    usable_metrics = int(
+        metrics_health.get("honest_usable_rows")
+        if metrics_health.get("honest_usable_rows") is not None
+        else metrics_health.get("usable_rows")
+        or 0
+    )
+    policy_min = int(
         policy["ladder"].get("min_metrics_for_screen") or DEFAULT_MIN_METRICS_FOR_SCREEN
     )
+    ticker_count = int(coverage.get("ticker_count") or 0)
+    if ticker_count <= 0:
+        ticker_count = int(metrics_health.get("total_rows") or usable_metrics or 0)
+    min_metrics = effective_min_metrics_for_screen(ticker_count, policy_min=policy_min)
     screened_markets: set[str] = set()
 
     # B — screen-lite (focus)
@@ -289,6 +300,9 @@ def run_library_ladder(
             "manifest_coverage_count": manifest_coverage,
             "usable_metrics_rows": usable_metrics,
             "total_metrics_rows": int(metrics_health.get("total_rows") or 0),
+            "policy_min_metrics_for_screen": policy_min,
+            "effective_min_metrics_for_screen": min_metrics,
+            "ticker_count": ticker_count,
         }
         screen_result = None
     else:
