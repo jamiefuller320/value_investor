@@ -1,12 +1,14 @@
-# Knob calibration (walk-forward priors)
+# Knob calibration (walk-forward + full-period bootstrap)
 
-Observe-only **walk-forward grid search** over decision-review knobs using
-`rebalance_log` replay (and optional archive replay). Produces ranked knob priors
-for manual seeding — does **not** auto-apply live knobs.
+Observe-only **grid search** over decision-review knobs using `rebalance_log`
+replay (and optional archive replay). Produces ranked knob priors and optional
+**competing calibrated shadow sims** — does **not** auto-apply live knobs.
 
 Complements:
 
 - **L1 decision-review** — reactive small steps on forward paper marks
+- **Full-period retrospective bootstrap** — quicker starting priors that “worked
+  up to now”; forward endurance decides what survives into learning-loop refinement
 - **L86 / L111** — archive counterfactual labs for parameter priors
 - **buffered_hold_counterfactual** — churn-guard (`exit_confirm_screens`) sensitivity
 
@@ -14,13 +16,30 @@ Complements:
 
 | Trigger | Command |
 |---------|---------|
-| **Sunday analysis-review** | `analysis-review.yml` runs calibration before the modelling agent |
+| **Sunday analysis-review** | `analysis-review.yml` runs full-period retrospective + shadow spawn |
+| **Weekday paper-auto** | Idempotent `spawn-shadow --top-n 3` + endurance ledger refresh |
 | **Manual** | `ftse-knob-calibrate run --paper-root docs/data/paper_automation --write` |
 
 Requires **≥2 acted** `rebalance_log` entries per track. Confidence stays **low**
-until ≥4 entries (and higher with thicker walk-forward folds).
+until ≥4 entries. Shadow bootstrap prefers **≥8 acted** (ideal ≥12).
 
-## Fitness function
+## Ranking modes
+
+| Mode | Flag | Use |
+|------|------|-----|
+| Walk-forward (default) | `--ranking-mode walk_forward` | Stability-aware priors for L1-style seeding |
+| Full-period retrospective | `--ranking-mode full_period_retrospective` | Bootstrap competing shadows from the monitoring window |
+| Blended | `--ranking-mode blended` | 50/50 walk-forward + full-period |
+
+Full-period score combines:
+
+1. Full-log portfolio replay fitness (return − λ×cost drag)
+2. Cohort-selection fitness (selected vs rejected name outcomes)
+3. Winner/loser catch/exclude rates among buy-tier names
+
+Screen thresholds stay frozen (**N3**) — only portfolio knobs are searched.
+
+## Fitness function (walk-forward)
 
 Per fold:
 
@@ -39,7 +58,7 @@ Defaults: `λ = 0.5`, `stability_penalty = 0.25`.
 
 ## Cohort-selection fitness (AI judgment tracks)
 
-For `ai_judgment` (and calibrated shadow), ranking blends **portfolio replay**
+For `ai_judgment` (and calibrated shadows), ranking blends **portfolio replay**
 with **name-level cohort outcomes** from consecutive rebalance passes:
 
 | Cohort metric | Meaning |
@@ -78,18 +97,27 @@ to track config until L113 PIT bootstrap.
 ## Commands
 
 ```bash
-# Rules + ai_judgment, write artifact
+# Sunday-style full-period bootstrap + competing shadows
+ftse-knob-calibrate run \
+  --paper-root docs/data/paper_automation \
+  --tracks rules,ai_judgment \
+  --ranking-mode full_period_retrospective \
+  --bootstrap-top-n 3 \
+  --write --spawn-shadow --json
+
+# Walk-forward only (legacy default)
 ftse-knob-calibrate run \
   --paper-root docs/data/paper_automation \
   --tracks rules,ai_judgment \
   --write --json
 
-# Single track, custom grid
-ftse-knob-calibrate run \
-  --track-dir docs/data/paper_automation/ai_judgment \
-  --max-positions-grid 3,4 \
-  --min-conviction-grid 0.15,0.25,0.35 \
-  --write
+# Spawn / refresh competing shadows from last priors
+ftse-knob-calibrate spawn-shadow \
+  --paper-root docs/data/paper_automation \
+  --top-n 3
+
+# Forward endurance ledger
+ftse-knob-calibrate endurance --paper-root docs/data/paper_automation --json
 
 # Inspect last artifact
 ftse-knob-calibrate status --paper-root docs/data/paper_automation --json
@@ -99,44 +127,44 @@ ftse-knob-calibrate status --paper-root docs/data/paper_automation --json
 
 | File | Purpose |
 |------|---------|
-| `docs/data/paper_automation/knob_calibration_priors.json` | Ranked candidates + `recommended_prior` per track |
-| Sunday `analysis_review` payload | Agent reads `knob_calibration_priors` for synthesis |
+| `knob_calibration_priors.json` | Ranked candidates, `bootstrap_priors`, `recommended_prior`, readiness |
+| `calibration_shadow_endurance.json` | Forward marks / status for competing shadows |
+| `ai_judgment_calibrated/` | Rank-1 frozen shadow |
+| `ai_judgment_calibrated_r2/` … | Competing shadows for ranks 2+ |
+| Sunday `analysis_review` payload | Agent reads calibration priors for synthesis |
 
-## Promoting a prior (human gate)
+## Competing calibrated shadows
 
-1. Review `recommended_prior.confidence` and `changed_vs_current`
-2. If acceptable, edit track `config.json` (and optionally reset knob epoch)
-3. Or file a `paper_knobs` experiment via analysis / paper-learning review
-
-Do **not** wire auto-apply from calibration until forward epochs confirm uplift.
-
-## Calibrated shadow track (phase 1 — ai_judgment only)
-
-Forward-validation book with **frozen** calibration priors, running alongside the
-primary `ai_judgment` track. Decision-review `--apply` is disabled on the shadow.
+Bootstrap priors that “worked up to now” are seeded as **observe-only** books.
+The real question is whether they **endure forward** vs `^FTSE` and the rules
+control. Survivors become starting priors for learning-loop refinement — never
+auto-applied.
 
 | Step | Command / trigger |
 |------|-------------------|
-| **Spawn (manual)** | `ftse-knob-calibrate spawn-shadow --paper-root docs/data/paper_automation` |
-| **After calibration** | `ftse-knob-calibrate run ... --write --spawn-shadow` |
-| **Weekday paper-auto** | `spawn-shadow` before learning tracks (idempotent) |
+| **Retrospective + spawn** | Sunday `analysis-review.yml` (`full_period_retrospective`, `--spawn-shadow`) |
+| **Weekday** | Idempotent `spawn-shadow --top-n 3` + `endurance` |
+| **Manual** | `ftse-knob-calibrate spawn-shadow --top-n 3` |
 
-Artifacts under `docs/data/paper_automation/ai_judgment_calibrated/`:
+Each shadow: `is_calibration_shadow: true`, parent AI gates, frozen knobs,
+`calibration_provenance.json`. Decision-review `--apply` is disabled.
 
-| File | Purpose |
-|------|---------|
-| `config.json` | Parent AI gates + calibrated knobs; `is_calibration_shadow: true` |
-| `automated_fund.json` | Fresh book at same `initial_cash` as parent |
-| `calibration_provenance.json` | Prior source, confidence, `changed_vs_parent` |
+## Promoting a prior (human gate)
 
-Dashboard: Automation tab shows knob parameters and a **calibrated shadow** badge.
-Compare forward marks vs primary before promoting knobs to `ai_judgment/config.json`.
+1. Review `ready_for_shadow_bootstrap` / `ready_for_priors`, confidence, score gap
+2. Compare competing shadows in `calibration_shadow_endurance.json` (`surviving`)
+3. Only then seed `ai_judgment/config.json` (or a `paper_knobs` experiment) from a survivor
+4. Optionally reset the knob epoch after a live config edit
+
+Do **not** auto-apply from calibration or endurance — survivors are priors for
+refinement, not live writes.
 
 ## Guardrails
 
-- Observe-only — no `decision-review --apply`
+- Observe-only — no `decision-review --apply` on shadows
+- Screen signals frozen (N3) — portfolio knobs only
 - Bootstrapped logs flagged (L113 AI-gate caveat)
-- Thin history → low confidence priors
+- Thin history → low confidence / bootstrap not ready
 - Evolution (L2/N2) remains deferred
 
 See also: [decision-review.md](decision-review.md), [analysis-review.md](analysis-review.md),

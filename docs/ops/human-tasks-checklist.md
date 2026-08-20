@@ -16,28 +16,31 @@ most automation — this list is what still needs a human.
 
 | Task | Who | Doc |
 |------|-----|-----|
-| **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, calibrated shadow knobs | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
-| Paper-auto + decision-review `--apply` (all tracks; shadow observe-only) | CI | [decision-review.md](decision-review.md#commands) |
+| **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
+| Paper-auto + decision-review `--apply` (all tracks; shadows observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 
 ## Sunday
 
 | Task | Who | Doc |
 |------|-----|-----|
 | Read **analysis review** synthesis (`analysis_review.md`) | Human | [analysis-review.md](analysis-review.md#artifacts) |
-| Review **knob calibration priors** (`ready_for_priors`, confidence, score gap, cohort axes) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
-| Compare **calibrated shadow vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#calibrated-shadow-track-phase-1--ai_judgment-only) |
-| **Promote knob priors** only when gates pass (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
+| Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
+| Review **competing shadow endurance** (`calibration_shadow_endurance.json`) | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
+| Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
+| **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Triage **analysis_tasks** — promote scoring/ingest via `ftse-analysis-review promote` | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
-| Knob calibrate + analysis-review agent (cohort fitness, spawn shadow) | CI | [knob-calibration.md](knob-calibration.md#when-to-run) |
+| Full-period knob calibrate + shadow bootstrap + endurance | CI | [knob-calibration.md](knob-calibration.md#when-to-run) |
 
 ### Promotion gate (AI judgment knobs)
 
 Do **not** promote calibration priors to `ai_judgment/config.json` until:
 
-1. `ready_for_priors: true` in `knob_calibration_priors.json`
-2. `score_gap_vs_runner_up ≥ 0.005`
-3. `recommended_prior.confidence` is acceptable (not `insufficient` / thin `low`)
-4. Calibrated **shadow** forward marks support the change vs primary
+1. A competing shadow is **surviving** in `calibration_shadow_endurance.json` (or equivalent forward evidence)
+2. `ready_for_priors: true` / `ready_for_shadow_bootstrap` look sound in `knob_calibration_priors.json`
+3. `score_gap_vs_runner_up ≥ 0.005`
+4. `recommended_prior.confidence` is acceptable (not `insufficient` / thin `low`)
+
+Survivors are **starting priors for learning-loop refinement** — never auto-apply.
 
 ## Monthly
 

@@ -234,6 +234,12 @@ def default_rules_config(base: AutomationConfig | None = None) -> AutomationConf
 
 def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     """Map track_id → output directory under the paper-automation root."""
+    from value_investor.knob_calibration import (
+        calibrated_shadow_subdir,
+        calibrated_shadow_track_id,
+        discover_calibration_shadow_ranks,
+    )
+
     root = Path(base_dir)
     dirs: dict[str, Path] = {
         RULES_TRACK_ID: root,
@@ -241,9 +247,9 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
         MOMENTUM_GRACE_TRACK_ID: root / MOMENTUM_GRACE_SUBDIR,
         TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
     }
-    calibrated_dir = root / AI_JUDGMENT_CALIBRATED_SUBDIR
-    if (calibrated_dir / CONFIG_FILENAME).exists():
-        dirs[AI_JUDGMENT_CALIBRATED_TRACK_ID] = calibrated_dir
+    for rank in discover_calibration_shadow_ranks(root):
+        track_id = calibrated_shadow_track_id(rank)
+        dirs[track_id] = root / calibrated_shadow_subdir(rank)
     return dirs
 
 
@@ -985,6 +991,40 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         calibrated_path.write_text(json.dumps(calibrated.to_dict(), indent=2), encoding="utf-8")
         configs[AI_JUDGMENT_CALIBRATED_TRACK_ID] = calibrated
 
+    # Competing calibrated shadows (rank 2+)
+    from value_investor.knob_calibration import (
+        calibrated_shadow_subdir,
+        calibrated_shadow_track_id,
+        discover_calibration_shadow_ranks,
+    )
+
+    for rank in discover_calibration_shadow_ranks(base_dir):
+        if rank <= 1:
+            continue
+        track_id = calibrated_shadow_track_id(rank)
+        shadow_dir = base_dir / calibrated_shadow_subdir(rank)
+        shadow_path = shadow_dir / CONFIG_FILENAME
+        if not shadow_path.exists():
+            continue
+        shadow = AutomationConfig.from_dict(json.loads(shadow_path.read_text(encoding="utf-8")))
+        shadow.track_id = track_id
+        shadow.is_primary_learning_track = False
+        shadow.is_calibration_shadow = True
+        shadow.calibration_parent_track = shadow.calibration_parent_track or AI_JUDGMENT_TRACK_ID
+        shadow.use_adjusted_signal = True
+        shadow.require_research_accumulate = True
+        shadow.track_label = shadow.track_label or (
+            f"AI judgment calibrated shadow rank {rank} (frozen priors)"
+        )
+        shadow.timezone = rules.timezone
+        shadow.market_open = rules.market_open
+        shadow.settle_minutes_after_open = rules.settle_minutes_after_open
+        shadow.weekdays_only = rules.weekdays_only
+        shadow.trade_cost_pct = rules.trade_cost_pct
+        shadow.initial_cash = rules.initial_cash
+        shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
+        configs[track_id] = shadow
+
     return configs
 
 
@@ -1012,10 +1052,16 @@ def run_learning_tracks(
         AI_JUDGMENT_TRACK_ID,
         MOMENTUM_GRACE_TRACK_ID,
     ]
-    if AI_JUDGMENT_CALIBRATED_TRACK_ID in configs:
-        default_tracks.insert(
-            default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1, AI_JUDGMENT_CALIBRATED_TRACK_ID
-        )
+    shadow_ids = [
+        track_id
+        for track_id, cfg in configs.items()
+        if getattr(cfg, "is_calibration_shadow", False)
+    ]
+    insert_at = default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1
+    for track_id in sorted(shadow_ids):
+        if track_id not in default_tracks:
+            default_tracks.insert(insert_at, track_id)
+            insert_at += 1
     wanted = list(tracks) if tracks else default_tracks
     results: dict[str, Any] = {}
     for track_id in wanted:

@@ -86,12 +86,16 @@ jobs:
             cp -f docs/data/history/models_* output/history/ 2>/dev/null || true
           fi
 
-      - name: Knob calibration priors (observe-only)
+      - name: Knob calibration priors + shadow bootstrap (observe-only)
         run: |
           ftse-knob-calibrate run \
             --paper-root docs/data/paper_automation \
             --tracks rules,ai_judgment \
-            --write --allow-empty
+            --ranking-mode full_period_retrospective \
+            --bootstrap-top-n 3 \
+            --write --allow-empty \
+            --spawn-shadow || true
+          ftse-knob-calibrate endurance --paper-root docs/data/paper_automation || true
 
       - name: Check analysis inputs
         id: ready
