@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T09:33:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T09:43:30+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -118,6 +118,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L168 | **Spawn-aligned zero datum for calibrated shadow endurance** | Endurance survivor gates should key off excess since shadow spawn/fund reset (true OOS), not lifetime from first equity mark. Keep first-snapshot/lifetime market-beat as diagnostic context only — backdating the zero datum lengthens the series without adding OOS information and double-counts the bootstrap window that selected the prior. | Next endurance/calibration hardening pass, or when a shadow approaches survivor with thin post-spawn marks |
 | L169 | **Test wider paper books (4–5 max_positions) as shadow/lab, not live default** | Live tracks sit at max_positions=3 after cost-drag clamping; that is enough for sleeve mechanics but too concentrated for stable excess learning. Prefer a competing shadow or calibration grid cell at 4–5 before widening the primary book, given ~3% round-trip costs. | After spawn-aligned endurance zero datum lands, or when primary cost_drag falls and decision-review proposes max_positions up |
 | L170 | **Low-turnover broad shortlist shadow (not naive 20-name weekly churn)** | A diversified top-N book can reduce concentration noise vs 3-name sleeves, but with 3% per-side costs a naive 20-name equal-weight weekly rebalance will likely lose to the market on costs alone. If tested, use strong churn controls (replace-on-exit only, exit confirm, reentry cooldown) and treat it as a lab/diagnostic shadow — possibly with a lower paper cost assumption — rather than widening the primary learning book. | After 4–5 position competing shadow exists, or when designing a diversification diagnostic track |
+| L171 | **PIT warm-start shadow seed then forward-only endurance** | Allow calibrated/lab shadows to be populated via archive/rebalance replay from a chosen sim start with per-name entry marks, then freeze a zero datum at seed end so endurance/promotion uses only post-seed forward marks. Must be PIT (no target list chosen with future info) and must not mix backdated P&L into survivor gates. | Building competing 4–5 or broad shortlist shadows, or next calibration/endurance hardening pass |
 
 ### Universe & data
 
