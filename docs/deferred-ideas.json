@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-20T20:00:28+00:00",
+  "updated_at": "2026-08-21T04:03:35+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3399,6 +3399,23 @@
       "source": "https://cursor.com/agents/bc-01a020a5-6699-72b7-815a-8cc66ebabed3",
       "added_at": "2026-08-20T19:48:48+00:00",
       "updated_at": "2026-08-20T20:00:28+00:00"
+    },
+    {
+      "id": "L168",
+      "category": "later",
+      "section": "ops",
+      "title": "Shared ticker metrics/filings store keyed by Yahoo symbol",
+      "summary": "Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker.",
+      "revisit_when": "euro_depth maintenance plus component market maintenance shows material duplicate Yahoo fetch cost or disk bloat, or filing deepen needs one home per issuer",
+      "tags": [
+        "library",
+        "dedupe",
+        "storage",
+        "euro_depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a020a5-6699-72b7-815a-8cc66ebabed3",
+      "added_at": "2026-08-21T04:03:35+00:00"
     }
   ],
   "fragments": [
