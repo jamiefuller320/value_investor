@@ -95,6 +95,11 @@ jobs:
             --bootstrap-top-n 3 \
             --write --allow-empty \
             --spawn-shadow || true
+          # PIT warm-start: populate shadows from parent log replay, freeze
+          # forward-only endurance zero datum (skip if already seeded).
+          ftse-knob-calibrate warm-start-shadow \
+            --paper-root docs/data/paper_automation \
+            --parent-track ai_judgment || true
           ftse-knob-calibrate endurance --paper-root docs/data/paper_automation || true
 
       - name: Commit knob bootstrap artifacts
