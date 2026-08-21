@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T09:13:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T09:27:32+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -116,6 +116,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L163 | **Weekly consistency report for bootstrap shadow candidates** | Observe-only: step competing bootstrap knob groups through chronological weekly slices (log and later archive) and report week-on-week stability of excess/hit-rate — surface alongside fold_stability, do not re-rank solely on in-sample consistency or auto-cull shadows. | After bootstrap shadows have published endurance marks and L111 archive replay can supply weekly screen passes |
 | L164 | **Held-out / purged walk-forward for bootstrap promotion** | Strengthen winner selection by requiring bootstrap priors to clear a held-out chronological slice (or purged CV) before shadow spawn counts as promotion-ready, reducing in-sample double-dip between full-period rank and historical consistency. | Acted logs ≥~20 per track or L111 weekly archives cover ≥12 months |
 | L168 | **Spawn-aligned zero datum for calibrated shadow endurance** | Endurance survivor gates should key off excess since shadow spawn/fund reset (true OOS), not lifetime from first equity mark. Keep first-snapshot/lifetime market-beat as diagnostic context only — backdating the zero datum lengthens the series without adding OOS information and double-counts the bootstrap window that selected the prior. | Next endurance/calibration hardening pass, or when a shadow approaches survivor with thin post-spawn marks |
+| L169 | **Test wider paper books (4–5 max_positions) as shadow/lab, not live default** | Live tracks sit at max_positions=3 after cost-drag clamping; that is enough for sleeve mechanics but too concentrated for stable excess learning. Prefer a competing shadow or calibration grid cell at 4–5 before widening the primary book, given ~3% round-trip costs. | After spawn-aligned endurance zero datum lands, or when primary cost_drag falls and decision-review proposes max_positions up |
 
 ### Universe & data
 
