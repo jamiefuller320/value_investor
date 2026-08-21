@@ -296,9 +296,7 @@ def _cmd_warm_start_shadow(args: argparse.Namespace) -> int:
                 f"replayed={((row.get('seed_stats') or {}).get('log_entries_replayed'))}"
             )
         elif row.get("skipped"):
-            print(
-                f"Skipped [{row.get('rank')}] {row.get('shadow_track_id')}: {row.get('reason')}"
-            )
+            print(f"Skipped [{row.get('rank')}] {row.get('shadow_track_id')}: {row.get('reason')}")
         else:
             print(
                 f"Failed [{row.get('rank')}] {row.get('shadow_track_id')}: {row.get('reason')}",

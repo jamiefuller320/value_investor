@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.decision_review import (
-    KnobEpoch,
     LearningKnobs,
     _compute_epoch_metrics,
     save_knob_epoch,

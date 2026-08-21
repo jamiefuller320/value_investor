@@ -581,9 +581,7 @@ def test_warm_start_shadow_materializes_fund_and_zero_datum(tmp_path: Path):
     )
     assert len(fund.holdings) >= 1
     assert len(fund.equity_curve) >= 1
-    provenance = json.loads(
-        (shadow / CALIBRATION_PROVENANCE_FILENAME).read_text(encoding="utf-8")
-    )
+    provenance = json.loads((shadow / CALIBRATION_PROVENANCE_FILENAME).read_text(encoding="utf-8"))
     assert provenance["endurance_zero_datum"]["started_at"] == zero["started_at"]
     assert (shadow / "knob_epoch.json").exists()
 
@@ -660,9 +658,9 @@ def test_endurance_gates_on_post_seed_not_seed_pnl(tmp_path: Path):
     fund = PaperFund.from_dict(
         json.loads((shadow / "automated_fund.json").read_text(encoding="utf-8"))
     )
-    zero_at = json.loads(
-        (shadow / CALIBRATION_PROVENANCE_FILENAME).read_text(encoding="utf-8")
-    )["endurance_zero_datum"]["started_at"]
+    zero_at = json.loads((shadow / CALIBRATION_PROVENANCE_FILENAME).read_text(encoding="utf-8"))[
+        "endurance_zero_datum"
+    ]["started_at"]
     prices = {ticker: float(pos.avg_cost or 10) for ticker, pos in fund.holdings.items()}
     for i in range(1, 5):
         fund.record_mark(
