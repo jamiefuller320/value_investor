@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-20T20:00:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T09:13:02+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -115,6 +115,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L90 | **Promote momentum grace into rules control after shadow evidence** | If momentum_grace track beats rules on cost-adjusted excess return and exit_shadow shows materially fewer early_exit vs screen_rotation on comparable sells, merge grace overlay into the rules control book and retire the separate third track to reduce operational surface. | ≥6 months of three-track marks; grace vs rules excess and exit-shadow verdict rates diverge consistently in grace favour |
 | L163 | **Weekly consistency report for bootstrap shadow candidates** | Observe-only: step competing bootstrap knob groups through chronological weekly slices (log and later archive) and report week-on-week stability of excess/hit-rate — surface alongside fold_stability, do not re-rank solely on in-sample consistency or auto-cull shadows. | After bootstrap shadows have published endurance marks and L111 archive replay can supply weekly screen passes |
 | L164 | **Held-out / purged walk-forward for bootstrap promotion** | Strengthen winner selection by requiring bootstrap priors to clear a held-out chronological slice (or purged CV) before shadow spawn counts as promotion-ready, reducing in-sample double-dip between full-period rank and historical consistency. | Acted logs ≥~20 per track or L111 weekly archives cover ≥12 months |
+| L168 | **Spawn-aligned zero datum for calibrated shadow endurance** | Endurance survivor gates should key off excess since shadow spawn/fund reset (true OOS), not lifetime from first equity mark. Keep first-snapshot/lifetime market-beat as diagnostic context only — backdating the zero datum lengthens the series without adding OOS information and double-counts the bootstrap window that selected the prior. | Next endurance/calibration hardening pass, or when a shadow approaches survivor with thin post-spawn marks |
 
 ### Universe & data
 
