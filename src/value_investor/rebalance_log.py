@@ -475,6 +475,156 @@ def filter_acted_log_entries_since(
     return filtered
 
 
+def filter_acted_log_entries_from_sim_start(
+    entries: list[dict[str, Any]],
+    *,
+    sim_start: str | datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Return acted log entries on/after ``sim_start`` (inclusive)."""
+    acted = acted_log_entries(entries)
+    if sim_start is None:
+        return acted
+    if isinstance(sim_start, datetime):
+        start_dt = sim_start
+    else:
+        start_dt = _parse_iso_datetime(str(sim_start))
+    if start_dt is None:
+        return acted
+    if start_dt.tzinfo is None:
+        start_dt = start_dt.replace(tzinfo=UTC)
+    start_utc = start_dt.astimezone(UTC)
+    filtered: list[dict[str, Any]] = []
+    for entry in acted:
+        when_text = _entry_sort_key(entry)
+        entry_dt = _parse_iso_datetime(when_text)
+        if entry_dt is None:
+            continue
+        entry_utc = entry_dt.astimezone(UTC) if entry_dt.tzinfo else entry_dt.replace(tzinfo=UTC)
+        if entry_utc >= start_utc:
+            filtered.append(entry)
+    return filtered
+
+
+def build_replay_fund_from_log(
+    entries: list[dict[str, Any]],
+    *,
+    max_positions: int,
+    skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = DEFAULT_TARGET_SECTOR_CAP,
+    use_adjusted_signal: bool | None = None,
+    require_research_accumulate: bool | None = None,
+    exit_confirm_screens: int | None = None,
+    candidate_source: str = "auto",
+    sim_start: str | datetime | None = None,
+    lookback_days: int | None = None,
+    as_of: datetime | None = None,
+    fund_name: str | None = None,
+) -> tuple[PaperFund, dict[str, Any]] | None:
+    """
+    Materialize a PaperFund by replaying logged rebalance passes with alternate knobs.
+
+    Uses only each pass's logged candidates / screen_buy_tier (PIT at entry).
+    Does not fetch live prices. Returns None when no acted entries remain after filters.
+    """
+    if lookback_days is not None:
+        acted = filter_acted_log_entries_since(
+            entries,
+            lookback_days=int(lookback_days),
+            as_of=as_of,
+        )
+    else:
+        acted = filter_acted_log_entries_from_sim_start(entries, sim_start=sim_start)
+    if not acted:
+        return None
+
+    first = acted[0]
+    last = acted[-1]
+    fund = fund_from_pre_state(first)
+    if fund_name:
+        fund.config.name = str(fund_name)
+    fund.config.max_positions = int(max_positions)
+    fund.config.trade_cost_pct = float(first.get("trade_cost_pct") or fund.config.trade_cost_pct)
+
+    replay_trades = 0
+    used_screen_pool = False
+    for entry in acted:
+        mode = str(entry.get("strategy_mode") or fund.config.mode)
+        screen_pool = list(entry.get("screen_buy_tier") or [])
+        candidates = resolve_replay_candidates(
+            entry,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
+            candidate_source=candidate_source,
+        )
+        if screen_pool:
+            screen_tickers = {
+                str(row.get("ticker") or "").strip()
+                for row in screen_pool
+                if str(row.get("ticker") or "").strip()
+            }
+            replay_tickers = {
+                str(row.get("ticker") or "").strip()
+                for row in candidates
+                if str(row.get("ticker") or "").strip()
+            }
+            if screen_tickers and replay_tickers == screen_tickers:
+                used_screen_pool = True
+        when = str((entry.get("gate") or {}).get("local_time") or entry.get("logged_at") or "")
+        kwargs = _selection_kwargs_for_replay(
+            entry,
+            max_positions=max_positions,
+            skip_timing_wait=skip_timing_wait,
+            min_conviction=min_conviction,
+            sector_cap=sector_cap,
+            use_adjusted_signal=use_adjusted_signal,
+            require_research_accumulate=require_research_accumulate,
+            exit_confirm_screens=exit_confirm_screens,
+        )
+        fund.config.max_positions = int(kwargs.pop("max_positions"))
+        if mode == "technical":
+            executed = run_technical_pass(fund, candidates, acted_at=when or None)
+        else:
+            executed = run_automated_rebalance(fund, candidates, acted_at=when or None, **kwargs)
+        replay_trades += len(executed)
+
+    prices = _merge_candidate_price_maps(
+        list(last.get("candidates") or []),
+        list(last.get("screen_buy_tier") or []),
+    )
+    for row in last.get("holdings_after") or []:
+        if isinstance(row, dict):
+            ticker = str(row.get("ticker") or "")
+            avg = row.get("avg_cost")
+            if ticker and ticker not in prices and avg is not None and float(avg) > 0:
+                prices[ticker] = float(avg)
+    # Ensure a terminal equity mark at seed end for zero-datum baseline.
+    seed_end = _entry_sort_key(last)
+    last_mark_at = str((fund.equity_curve[-1] or {}).get("at") or "") if fund.equity_curve else ""
+    if not fund.equity_curve or seed_end > last_mark_at:
+        fund.record_mark(prices, acted_at=seed_end or None, note="Warm-start seed end")
+
+    sim_perf = fund.performance(prices)
+    stats = {
+        "scope": "rebalance_log_materialize",
+        "log_entries_replayed": len(acted),
+        "replay_from": _entry_sort_key(first),
+        "replay_to": _entry_sort_key(last),
+        "simulated_nav": round(float(sim_perf["portfolio_value"] or 0.0), 2),
+        "simulated_trade_count": replay_trades,
+        "positions": int(sim_perf.get("positions") or 0),
+        "used_screen_buy_tier_pool": used_screen_pool,
+        "equity_marks": len(fund.equity_curve or []),
+        "trade_count": len(fund.trades or []),
+        "sim_start_applied": (
+            None
+            if sim_start is None
+            else (sim_start.isoformat() if isinstance(sim_start, datetime) else str(sim_start))
+        ),
+    }
+    return fund, stats
+
+
 def _count_full_exits_in_entries(entries: list[dict[str, Any]]) -> int:
     count = 0
     for entry in entries:
