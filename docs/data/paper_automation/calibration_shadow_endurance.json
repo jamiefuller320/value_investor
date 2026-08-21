@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "observe_only": true,
+  "updated_at": "2026-08-21T08:27:55.271075+00:00",
+  "paper_root": "output/paper_automation",
+  "benchmark_note": "excess_after_costs comes from decision_review when available",
+  "gates": {
+    "min_marks_for_survivor": 4,
+    "min_excess_vs_market": 0.0,
+    "promotion": "Survivors are starting priors for human learning-loop refinement only — never auto-apply to ai_judgment/config.json"
+  },
+  "primary": {
+    "track_id": "ai_judgment",
+    "metrics": {
+      "total_return": -0.1666,
+      "cost_drag": 0.2125,
+      "excess_after_costs": -0.1768,
+      "equity_marks": 15,
+      "trade_count": 29,
+      "epoch_excess_after_costs": null,
+      "source": "decision_review"
+    }
+  },
+  "rules_control": {
+    "track_id": "rules",
+    "metrics": {
+      "total_return": -0.2472,
+      "cost_drag": 0.2897,
+      "excess_after_costs": -0.2684,
+      "equity_marks": 16,
+      "trade_count": 48,
+      "epoch_excess_after_costs": -0.1191,
+      "source": "decision_review"
+    }
+  },
+  "shadows": [
+    {
+      "rank": 1,
+      "shadow_track_id": "ai_judgment_calibrated",
+      "shadow_dir": "output/paper_automation/ai_judgment_calibrated",
+      "spawned_at": "2026-08-21T08:26:37.744308+00:00",
+      "knobs": {
+        "max_positions": 3,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.2,
+        "exit_confirm_screens": 2
+      },
+      "full_period_score": null,
+      "confidence": "low",
+      "metrics": {
+        "total_return": -0.0548,
+        "cost_drag": 0.0482,
+        "excess_after_costs": -0.0567,
+        "equity_marks": 4,
+        "trade_count": 6,
+        "epoch_excess_after_costs": null,
+        "source": "decision_review"
+      },
+      "excess_vs_primary": 0.1201,
+      "excess_vs_rules": 0.2117,
+      "status": "failed",
+      "provenance_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
+    }
+  ],
+  "survivors": []
+}
