@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T04:03:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-22T16:58:21+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -196,6 +196,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L158 | **Gap-fill: ingest — Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; fl** | Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; flag and suppress TTM when series empty (HIK.L TTM $14.4m vs filing $119m). | After next weekly email gap-fill pass confirms the gap persists |
 | L159 | **Gap-fill: scoring — Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as** | Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as explicit overlay inputs; MEGP's net-cash metric excludes £13m lease liabilities per filing note 8, which the current D/E 28% screen pass does not surface. | After next weekly email gap-fill pass confirms the gap persists |
 | L160 | **Gap-fill: ingest — Parse IFRS 16 lease maturity tables and covenant language from annual re** | Parse IFRS 16 lease maturity tables and covenant language from annual report PDF notes (referenced as note 20 in FY2025 body but not extracted) into structured fields for leverage red-flag checks. | After next weekly email gap-fill pass confirms the gap persists |
+| L169 | **Commercial EU regulatory filing API fallback** | If in-house Euronext/ESEF/direct-exchange fetch still leaves large indexed-without-body gaps on euro_depth buy-tier, evaluate a paid regulatory news or filing API (LSEG, Refinitiv, etc.) for headline+PDF retrieval — only after DIY provider MVP is measured. | euro_depth buy-tier has ≥30 memos but filings_with_body/total ratio still below 0.5 after 4 weeks of weekday EU ingest-loop |
 
 ### Ops / reliability
 
