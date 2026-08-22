@@ -33,9 +33,34 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 | Layer | Command / workflow | Cadence |
 |-------|-------------------|---------|
 | Metrics grow (full ~194) | `ftse-library grow --market euro_depth` | Day 1 burst (`focus_grow_cap: 200`) |
-| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays 2×/day via `euro-ingest-loop.yml` |
+| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays via `euro-ingest-loop.yml` — **2×/day sprint**, **1×/day maintenance**, **idle when parity met** |
 | Screen + observe + weekly shard | `ftse-library ladder` | Daily `ladder_only` when eng idle + Sundays |
 | Phase 3 weekday shard | `ftse-library shard-weekday --markets euro_depth` | Weekdays after Phase 2 gate |
+
+### Completion gate (ingest throttle)
+
+`ftse-library euro-ingest-dispatch` evaluates Phase 3 + buy-tier filing parity and
+persists `docs/data/library/euro_ingest_dispatch.json`:
+
+| Mode | When | Ingest cadence | Cron jobs |
+|------|------|----------------|-----------|
+| `sprint` | Phase 3 not ready | 2×/day, 12 targets | morning + afternoon + weekday ladder |
+| `maintenance` | Phase 3 ready, filing gaps remain | 1×/day, 4 targets | morning only |
+| `idle` | Phase 3 ready + no unmeasured/zero-body buy-tier | skip | all euro ingest + weekday ladder crons disabled |
+
+The gate runs at the start of `euro-ingest-loop.yml`, after each ingest loop, and after
+library ladder when `euro_depth` is in the phase rollup. With `CRONJOB_API_KEY` in GitHub
+secrets, the workflow also calls `scripts/sync_euro_ingest_cron.py` to toggle cron-job.org
+jobs automatically.
+
+Register production crons (one-time):
+
+```bash
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all
+```
+
+New job keys: `euro-ingest-loop-morning`, `euro-ingest-loop-afternoon`,
+`orchestrator-ladder-weekday`.
 
 ### Filing sources (euro_filings)
 

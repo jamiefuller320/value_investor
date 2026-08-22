@@ -16,6 +16,7 @@ git_clean_state() {
 stage_library_ingest_artifacts() {
   git add docs/data/library/euro_ingest_health_log.json \
     docs/data/library/euro_ingest_summary.json \
+    docs/data/library/euro_ingest_dispatch.json \
     docs/data/library/markets 2>/dev/null || true
 }
 

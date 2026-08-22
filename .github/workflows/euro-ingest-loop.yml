@@ -2,6 +2,9 @@ name: Euro library ingest loop
 
 # Weekday buy-tier filing deepen for euro_depth (and warm-start euro_stoxx50).
 # No weekly_ops spend — ESEF + euro_filings + IR allowlist body fetch only.
+#
+# Completion gate: ftse-library euro-ingest-dispatch throttles or skips when
+# Phase 3 is ready and filing parity is met (see euro_depth_ingest_dispatch.py).
 on:
   schedule:
     - cron: "15 7 * * 1-5"
@@ -15,7 +18,7 @@ on:
       max_targets:
         description: "Max buy-tier tickers per run"
         type: string
-        default: "12"
+        default: ""
       max_runtime_seconds:
         description: "Runtime budget (seconds)"
         type: string
@@ -25,7 +28,7 @@ on:
         type: string
         default: "20"
       force:
-        description: "Re-run even if already succeeded today"
+        description: "Re-run even if already succeeded today or dispatch is idle"
         type: boolean
         default: false
 
@@ -41,16 +44,63 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.gate.outputs.should_run }}
+      max_targets: ${{ steps.dispatch.outputs.max_targets }}
     steps:
-      - name: Skip when daily batches are complete
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Evaluate euro ingest completion gate
+        id: dispatch
+        run: |
+          set -euo pipefail
+          ftse-library euro-ingest-dispatch --json | tee /tmp/euro_ingest_dispatch.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/euro_ingest_dispatch.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"mode={data.get('mode', '')}\n"
+              f"max_daily_successes={data.get('max_daily_successes', 0)}\n"
+              f"max_targets={data.get('max_targets', 12)}\n"
+              f"should_run_ingest={'true' if data.get('should_run_ingest') else 'false'}\n"
+              f"dispatch_reason={data.get('reason', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Skip when completion gate or daily batches are complete
         id: gate
         uses: actions/github-script@v8
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
-          MAX_DAILY_SUCCESSES: "2"
+          SHOULD_RUN_INGEST: ${{ steps.dispatch.outputs.should_run_ingest }}
+          MAX_DAILY_SUCCESSES: ${{ steps.dispatch.outputs.max_daily_successes }}
+          DISPATCH_MODE: ${{ steps.dispatch.outputs.mode }}
+          DISPATCH_REASON: ${{ steps.dispatch.outputs.dispatch_reason }}
         with:
           script: |
             const force = process.env.FORCE === 'true';
+            if (force) {
+              core.setOutput('should_run', 'true');
+              core.info('force=true — bypassing completion gate');
+              return;
+            }
+            if (process.env.SHOULD_RUN_INGEST !== 'true') {
+              core.setOutput('should_run', 'false');
+              core.info(
+                `Skipping euro ingest: mode=${process.env.DISPATCH_MODE} `
+                + `(${process.env.DISPATCH_REASON})`
+              );
+              return;
+            }
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const workflow_id = 'euro-ingest-loop.yml';
@@ -61,10 +111,6 @@ jobs:
               workflow_id,
               per_page: 30,
             });
-            if (force) {
-              core.setOutput('should_run', 'true');
-              return;
-            }
             function startOfUtcDay(d = new Date()) {
               return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())).toISOString();
             }
@@ -78,6 +124,7 @@ jobs:
             const maxDaily = parseInt(process.env.MAX_DAILY_SUCCESSES || '2', 10);
             if (successes.length >= maxDaily) {
               core.setOutput('should_run', 'false');
+              core.info(`Daily cap reached (${successes.length}/${maxDaily})`);
               return;
             }
             core.setOutput('should_run', 'true');
@@ -106,10 +153,8 @@ jobs:
         run: |
           set -euo pipefail
           MARKET="${{ github.event.inputs.market || 'euro_depth' }}"
-          ARGS=(ingest-loop --market "$MARKET" --json)
-          if [ -n "${{ github.event.inputs.max_targets }}" ]; then
-            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
-          fi
+          MAX_TARGETS="${{ github.event.inputs.max_targets || needs.check.outputs.max_targets || '12' }}"
+          ARGS=(ingest-loop --market "$MARKET" --json --max-targets "$MAX_TARGETS")
           if [ -n "${{ github.event.inputs.max_runtime_seconds }}" ]; then
             ARGS+=(--max-runtime-seconds "${{ github.event.inputs.max_runtime_seconds }}")
           fi
@@ -117,6 +162,12 @@ jobs:
             ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
           fi
           ftse-library "${ARGS[@]}" | tee /tmp/euro_ingest_loop.json
+
+      - name: Refresh completion gate and sync euro crons
+        env:
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+        run: |
+          ftse-library euro-ingest-dispatch --refresh --sync-cron --json | tee /tmp/euro_dispatch_refresh.json
 
       - name: Commit and push library ingest artifacts
         run: bash scripts/push_library_ingest_artifacts.sh 'chore: euro_depth ingest loop [skip ci]'

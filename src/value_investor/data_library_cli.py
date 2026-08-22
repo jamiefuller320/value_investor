@@ -258,6 +258,29 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_loop_p.add_argument("--json", action="store_true")
     ingest_loop_p.set_defaults(func=cmd_library_ingest_loop)
 
+    euro_dispatch_p = sub.add_parser(
+        "euro-ingest-dispatch",
+        parents=[common],
+        help="Evaluate euro_depth ingest completion gate and cron throttle state",
+    )
+    euro_dispatch_p.add_argument(
+        "--market",
+        default="euro_depth",
+        help="Library market id (default: euro_depth)",
+    )
+    euro_dispatch_p.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Persist dispatch JSON to docs/data/library/euro_ingest_dispatch.json",
+    )
+    euro_dispatch_p.add_argument(
+        "--sync-cron",
+        action="store_true",
+        help="Enable/disable cron-job.org euro ingest + ladder jobs (needs CRONJOB_API_KEY)",
+    )
+    euro_dispatch_p.add_argument("--json", action="store_true")
+    euro_dispatch_p.set_defaults(func=cmd_euro_ingest_dispatch)
+
     shard_weekday_p = sub.add_parser(
         "shard-weekday",
         parents=[common],
@@ -1051,6 +1074,40 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         for err in result.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not result.errors or result.improved else 1
+
+
+def cmd_euro_ingest_dispatch(args: argparse.Namespace) -> int:
+    from value_investor.euro_depth_ingest_dispatch import (
+        evaluate_euro_ingest_dispatch,
+        refresh_euro_ingest_dispatch,
+    )
+
+    if args.refresh or args.sync_cron:
+        payload = refresh_euro_ingest_dispatch(
+            market_id=args.market,
+            library_root=args.root,
+            policy_path=args.policy,
+            sync_cron=bool(args.sync_cron),
+        )
+    else:
+        payload = evaluate_euro_ingest_dispatch(
+            market_id=args.market,
+            library_root=args.root,
+            policy_path=args.policy,
+        )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(
+            f"{args.market}: mode={payload.get('mode')} "
+            f"should_run_ingest={payload.get('should_run_ingest')} "
+            f"max_daily={payload.get('max_daily_successes')} "
+            f"max_targets={payload.get('max_targets')}"
+        )
+        print(f"  reason: {payload.get('reason')}")
+        for blocker in payload.get("phase_blockers") or []:
+            print(f"  blocker: {blocker}")
+    return 0
 
 
 def cmd_shard_weekday(args: argparse.Namespace) -> int:
