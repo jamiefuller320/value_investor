@@ -115,7 +115,9 @@ def load_library_buy_tier_reports(
     result = load_library_screen_result(library_root, market_id)
     reports = library_research_reports(result)
     buy = [row for row in reports if row.signal in ("strong_buy", "buy")]
-    buy.sort(key=lambda row: (0 if row.signal == "strong_buy" else 1, -row.conviction_score, row.ticker))
+    buy.sort(
+        key=lambda row: (0 if row.signal == "strong_buy" else 1, -row.conviction_score, row.ticker)
+    )
     return buy
 
 
@@ -240,9 +242,9 @@ def run_library_ingest_loop(
     health_log_path: Path = DEFAULT_LIBRARY_INGEST_HEALTH_LOG,
 ) -> LibraryIngestLoopResult:
     """
-    Weekday deepen pass for library buy-tier names (euro_depth / euro_stoxx50).
+      Weekday deepen pass for library buy-tier names (euro_depth / euro_stoxx50).
 
-  No weekly_ops spend — filing fetches only, mirroring FTSE ingest-loop economics.
+    No weekly_ops spend — filing fetches only, mirroring FTSE ingest-loop economics.
     """
     library_root = Path(library_root)
     result = LibraryIngestLoopResult(market_id=market_id)

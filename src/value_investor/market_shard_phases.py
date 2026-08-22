@@ -148,9 +148,7 @@ def phase1_gate_met(
     require_ai_beat_rules: bool | None = None,
 ) -> tuple[bool, dict[str, Any]]:
     min_required = (
-        min_archives
-        if min_archives is not None
-        else phase1_min_archives_for_policy(policy)
+        min_archives if min_archives is not None else phase1_min_archives_for_policy(policy)
     )
     archives = count_screen_archives(library_root, market_id)
     snapshots = observe_snapshot_count(library_root, market_id)
@@ -297,8 +295,7 @@ def evaluate_market_phase(
         min_archives = p1_detail["min_archives"]
         if p1_detail["screen_archives"] < min_archives:
             blockers.append(
-                f"need {min_archives} screen archives "
-                f"(have {p1_detail['screen_archives']})"
+                f"need {min_archives} screen archives (have {p1_detail['screen_archives']})"
             )
         if p1_detail["observe_snapshot_count"] < min_archives:
             blockers.append(
@@ -337,15 +334,15 @@ def evaluate_market_phase(
         min_exit = int(p3_detail.get("min_exit_shadow_closed") or 0)
         closed = int(p3_detail.get("exit_shadow_closed") or 0)
         if min_exit > 0 and closed < min_exit:
-            blockers.append(
-                f"need {min_exit} closed exit-shadow episodes (have {closed})"
-            )
+            blockers.append(f"need {min_exit} closed exit-shadow episodes (have {closed})")
     elif weekday_enabled and p3_ok:
         current = PHASE_WEEKDAY_PAPER
         blockers = []
     else:
         current = PHASE_WEEKDAY_PAPER
-        blockers = ["Phase 3 weekday shard not wired — enable ladder.weekday_paper_shard_after_weekly"]
+        blockers = [
+            "Phase 3 weekday shard not wired — enable ladder.weekday_paper_shard_after_weekly"
+        ]
 
     if current >= PHASE_WEEKDAY_PAPER and p3_ok:
         next_phase = PHASE_LIVE_SCREEN

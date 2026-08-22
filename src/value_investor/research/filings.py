@@ -2149,7 +2149,9 @@ def fetch_filings_esef_direct(
         report_path = str(attrs.get("report_url") or "").strip()
         if not report_path:
             continue
-        file_url = report_path if report_path.startswith("http") else f"{ESEF_FILINGS_BASE}{report_path}"
+        file_url = (
+            report_path if report_path.startswith("http") else f"{ESEF_FILINGS_BASE}{report_path}"
+        )
         headline = f"ESEF report period end {period_end or 'unknown'}"
         period = classify_filing_period(headline, form="ESEF")
         if period == "other" and period_end:
@@ -5046,9 +5048,7 @@ def ingest_filings(
         groups.append(fetch_filings_asx_direct(company_name=company_name, ticker=ticker))
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
-        groups.append(
-            fetch_filings_esef_direct(company_name=company_name, ticker=ticker)
-        )
+        groups.append(fetch_filings_esef_direct(company_name=company_name, ticker=ticker))
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
         )
