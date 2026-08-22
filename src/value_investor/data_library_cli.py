@@ -242,6 +242,35 @@ def build_parser() -> argparse.ArgumentParser:
     shard_paper_p.add_argument("--json", action="store_true")
     shard_paper_p.set_defaults(func=cmd_shard_paper)
 
+    ingest_loop_p = sub.add_parser(
+        "ingest-loop",
+        parents=[common],
+        help="Weekday buy-tier filing deepen for a library market (euro_depth pilot)",
+    )
+    ingest_loop_p.add_argument(
+        "--market",
+        default="euro_depth",
+        help="Library market id (default: euro_depth)",
+    )
+    ingest_loop_p.add_argument("--max-targets", type=int, default=12)
+    ingest_loop_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
+    ingest_loop_p.add_argument("--max-bodies", type=int, default=20)
+    ingest_loop_p.add_argument("--json", action="store_true")
+    ingest_loop_p.set_defaults(func=cmd_library_ingest_loop)
+
+    shard_weekday_p = sub.add_parser(
+        "shard-weekday",
+        parents=[common],
+        help="Run Phase 3 weekday paper shard batch for Phase-2-ready markets",
+    )
+    shard_weekday_p.add_argument(
+        "--markets",
+        default="euro_depth",
+        help="Comma-separated market ids",
+    )
+    shard_weekday_p.add_argument("--json", action="store_true")
+    shard_weekday_p.set_defaults(func=cmd_shard_weekday)
+
     ladder_p = sub.add_parser(
         "ladder",
         help="Run offline ladder: fundamentals → maintenance → screen-lite → research → graduate",
@@ -987,6 +1016,66 @@ def cmd_shard_paper(args: argparse.Namespace) -> int:
                 print(
                     f"  beat_control={review.get('beat_control')}  "
                     f"excess={review.get('primary_excess_after_costs')}"
+                )
+                for blocker in phase.get("blockers") or []:
+                    print(f"  blocker: {blocker}")
+        except Exception as exc:  # noqa: BLE001
+            payloads[market_id] = {"error": str(exc)}
+            if not args.json:
+                print(f"{market_id}: ERROR — {exc}", file=sys.stderr)
+    if args.json:
+        print(json.dumps({"markets": payloads}, indent=2))
+    return 0 if all("error" not in row for row in payloads.values()) else 1
+
+
+def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
+    from value_investor.library_ingest_loop import run_library_ingest_loop
+
+    result = run_library_ingest_loop(
+        args.market,
+        library_root=args.root,
+        max_targets=args.max_targets,
+        max_runtime_seconds=args.max_runtime_seconds,
+        max_bodies=args.max_bodies,
+    )
+    payload = result.to_dict()
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(
+            f"{args.market}: targets={len(result.targets)} improved={len(result.improved)} "
+            f"partial={result.partial}"
+        )
+        for ticker in result.improved:
+            print(f"  improved {ticker}")
+        for err in result.errors:
+            print(f"  error: {err}", file=sys.stderr)
+    return 0 if not result.errors or result.improved else 1
+
+
+def cmd_shard_weekday(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.market_paper_shard import run_weekday_market_paper_shard
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets) or ["euro_depth"]
+    payloads: dict[str, Any] = {}
+    for market_id in markets:
+        try:
+            result = run_weekday_market_paper_shard(
+                market_id,
+                library_root=args.root,
+                force=True,
+                policy=policy,
+            )
+            payloads[market_id] = result
+            if not args.json:
+                review = result.get("review") or {}
+                phase = result.get("phase") or {}
+                print(
+                    f"{market_id}: verdict={review.get('verdict')}  "
+                    f"phase={phase.get('current_phase')}  "
+                    f"phase3_ready={phase.get('phase3_ready')}"
                 )
                 for blocker in phase.get("blockers") or []:
                     print(f"  blocker: {blocker}")

@@ -2044,6 +2044,140 @@ def fetch_filings_asx_news(
     )
 
 
+ESEF_API_BASE = "https://filings.xbrl.org/api"
+ESEF_FILINGS_BASE = "https://filings.xbrl.org"
+
+
+def _esef_entity_name_variants(company_name: str) -> list[str]:
+    """Candidate legal names for filings.xbrl.org entity search."""
+    raw = (company_name or "").strip()
+    if not raw:
+        return []
+    variants: list[str] = []
+    seen: set[str] = set()
+
+    def _add(name: str) -> None:
+        cleaned = " ".join(name.split()).strip()
+        if cleaned and cleaned.lower() not in seen:
+            seen.add(cleaned.lower())
+            variants.append(cleaned)
+
+    _add(raw)
+    simplified = re.sub(
+        r"\b(AG|SE|SA|S\.A\.|plc|PLC|N\.V\.|NV|AB|A/S|ASA|SE & Co\. KGaA|KGaA)\b",
+        "",
+        raw,
+        flags=re.I,
+    )
+    simplified = re.sub(r"\s+", " ", simplified).strip(" ,.-")
+    if simplified:
+        _add(simplified)
+    parts = raw.replace(",", " ").split()
+    if len(parts) >= 2:
+        _add(" ".join(parts[:2]))
+    if len(parts) >= 3:
+        _add(" ".join(parts[:3]))
+    return variants
+
+
+def _esef_search_entity_identifier(company_name: str) -> str | None:
+    """Resolve an ESEF entity LEI/identifier via name search."""
+    for name in _esef_entity_name_variants(company_name):
+        query = urllib.parse.urlencode(
+            {
+                "filter[name]": name,
+                "page[size]": "5",
+            }
+        )
+        url = f"{ESEF_API_BASE}/entities?{query}"
+        try:
+            payload = json.loads(_http_get(url, timeout=30).decode("utf-8"))
+        except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+            logger.warning("ESEF entity search failed for %r: %s", name, exc)
+            continue
+        for row in payload.get("data") or []:
+            attrs = row.get("attributes") or {}
+            identifier = str(attrs.get("identifier") or "").strip()
+            if identifier:
+                return identifier
+    return None
+
+
+def fetch_filings_esef_direct(
+    *,
+    company_name: str,
+    ticker: str,
+    max_items: int = FILINGS_MAX_ITEMS,
+    lookback_days: int = FILINGS_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """
+    Fetch EU annual/interim ESEF/iXBRL filings via the public filings.xbrl.org API.
+
+    Returns metadata rows with direct XHTML report URLs suitable for body extraction.
+    """
+    identifier = _esef_search_entity_identifier(company_name)
+    if not identifier:
+        return []
+    query = urllib.parse.urlencode(
+        {
+            "filter[entity.identifier]": identifier,
+            "page[size]": str(max(1, min(max_items, 20))),
+            "sort": "-period_end",
+        }
+    )
+    url = f"{ESEF_API_BASE}/filings?{query}"
+    try:
+        payload = json.loads(_http_get(url, timeout=40).decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        logger.warning("ESEF filings fetch failed for %s (%s): %s", ticker, company_name, exc)
+        return []
+
+    cutoff = datetime.now(UTC) - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    for item in payload.get("data") or []:
+        attrs = item.get("attributes") or {}
+        period_end = str(attrs.get("period_end") or "")
+        published: str | None = period_end or None
+        if period_end:
+            try:
+                published_dt = datetime.strptime(period_end, "%Y-%m-%d").replace(tzinfo=UTC)
+                if published_dt < cutoff:
+                    continue
+                published = published_dt.isoformat()
+            except ValueError:
+                published = period_end
+        report_path = str(attrs.get("report_url") or "").strip()
+        if not report_path:
+            continue
+        file_url = report_path if report_path.startswith("http") else f"{ESEF_FILINGS_BASE}{report_path}"
+        headline = f"ESEF report period end {period_end or 'unknown'}"
+        period = classify_filing_period(headline, form="ESEF")
+        if period == "other" and period_end:
+            month = int(period_end[5:7]) if len(period_end) >= 7 else 0
+            period = "interim" if month in {6, 9} else "annual"
+        rows.append(
+            {
+                "id": _filing_id("esef_direct", report_path),
+                "source": "esef_direct",
+                "headline": headline,
+                "published_at": published,
+                "url": file_url,
+                "period": period,
+                "category": "ESEF",
+                "summary": headline,
+                "has_body": False,
+                "body_path": None,
+                "priority": _priority_score(headline, period) + 20,
+                "entity_identifier": identifier,
+            }
+        )
+        if len(rows) >= max_items:
+            break
+    if rows:
+        logger.info("ESEF direct: %s → %d filings", ticker, len(rows))
+    return rows
+
+
 def fetch_filings_euro_news(
     *,
     company_name: str,
@@ -4912,6 +5046,9 @@ def ingest_filings(
         groups.append(fetch_filings_asx_direct(company_name=company_name, ticker=ticker))
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
+        groups.append(
+            fetch_filings_esef_direct(company_name=company_name, ticker=ticker)
+        )
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
         )

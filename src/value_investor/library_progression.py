@@ -50,6 +50,13 @@ def effective_focus_grow_tickers(
     if ticker_count <= 0:
         return max(1, int(plan_max_tickers))
     cap = max(1, int(plan_max_tickers))
+    ladder = (policy or {}).get("ladder") or {}
+    focus_cap = ladder.get("focus_grow_cap")
+    if focus_cap is not None:
+        try:
+            cap = max(cap, int(focus_cap))
+        except (TypeError, ValueError):
+            pass
     return min(cap, ticker_count) if ticker_count <= cap else cap
 
 

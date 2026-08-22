@@ -49,7 +49,10 @@ from value_investor.library_sim import (
     observe_sim_markets_for_policy,
     run_observe_sims_for_screened_markets,
 )
-from value_investor.market_paper_shard import run_weekly_paper_shards_for_screened_markets
+from value_investor.market_paper_shard import (
+    run_weekday_paper_shards_for_markets,
+    run_weekly_paper_shards_for_screened_markets,
+)
 from value_investor.market_shard_phases import (
     refresh_committed_phase_rollup,
     weekly_paper_shard_markets_for_policy,
@@ -84,6 +87,12 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
     ladder.setdefault("phase1_require_ai_beat_rules", DEFAULT_PHASE1_REQUIRE_AI_BEAT_RULES)
+    ladder.setdefault("phase1_min_screen_archives", 12)
+    ladder.setdefault("phase2_min_weekly_batches", 8)
+    ladder.setdefault("phase3_min_weekday_batches", 8)
+    ladder.setdefault("phase3_min_exit_shadow_closed", 15)
+    ladder.setdefault("weekday_paper_shard_after_weekly", False)
+    ladder.setdefault("focus_grow_cap", 25)
     ladder.setdefault("strong_buy_metrics_probe_after_maintenance", True)
     ladder.setdefault("strong_buy_metrics_probe_when_eng_idle", True)
     ladder.setdefault("strong_buy_metrics_probe_max_tickers", DEFAULT_STRONG_BUY_PROBE_MAX_TICKERS)
@@ -599,6 +608,19 @@ def run_library_ladder(
             root,
             policy,
             screened_markets,
+        )
+
+    # B4 — weekday paper shard for Phase-3 markets (after weekly when enabled)
+    policy = load_policy(policy_path)
+    if not ladder_cfg.get("weekday_paper_shard_after_weekly", False):
+        result["layers"]["weekday_paper_shard"] = {
+            "skipped": True,
+            "reason": "weekday_paper_shard_after_weekly is off",
+        }
+    else:
+        result["layers"]["weekday_paper_shard"] = run_weekday_paper_shards_for_markets(
+            root,
+            policy,
         )
 
     # Phase advancement rollup (observe + weekly-paper policy markets)
