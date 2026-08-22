@@ -25,6 +25,9 @@ Other graduated markets stay **Layer A maintenance only**. FTSE live learning is
 Do **not** expand with DAX/CAC/MIB until this pilot has euro_filings depth comparable
 to FTSE buy-tier.
 
+**30-day sprint:** compressed phase gates + weekday ingest/shard automation — see
+[`euro-depth-sprint.md`](euro-depth-sprint.md).
+
 ```bash
 ftse-library grow --market euro_depth
 ftse-library ladder                 # research + observe + weekly shard for euro_depth

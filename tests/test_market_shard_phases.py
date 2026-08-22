@@ -11,10 +11,12 @@ from value_investor.market_shard_phases import (
     PHASE1_MIN_SCREEN_ARCHIVES,
     PHASE_OBSERVE,
     PHASE_WEEKLY_PAPER,
+    append_weekday_batch_log,
     append_weekly_batch_log,
     evaluate_market_phase,
     markets_eligible_for_weekly_paper,
     phase1_gate_met,
+    phase3_gate_met,
     refresh_committed_phase_rollup,
     weekly_paper_shard_markets_for_policy,
 )
@@ -147,6 +149,46 @@ def test_refresh_committed_phase_rollup_writes_files(tmp_path: Path, monkeypatch
     assert "sp500" in rollup["markets"]
     assert (shard_root / "shard_phase.json").exists()
     assert (tmp_path / "shard_phases.json").exists()
+
+
+def test_phase1_gate_respects_sprint_policy(tmp_path: Path):
+    root = tmp_path / "library"
+    market_id = "euro_depth"
+    screen_dir = root / "markets" / market_id / "screen"
+    for idx in range(4):
+        stamp = f"202607{idx + 1:02d}_120000"
+        _write_screen_archive(screen_dir, stamp)
+    sim_dir = screen_dir / "sim"
+    sim_dir.mkdir(parents=True, exist_ok=True)
+    write_json(
+        sim_dir / "observe_summary.json",
+        {"snapshot_count": 4, "tracks": {}},
+        compact=False,
+    )
+    policy = {"ladder": {"phase1_min_screen_archives": 4, "phase1_require_ai_beat_rules": False}}
+    ok, detail = phase1_gate_met(root, market_id, policy=policy)
+    assert ok is True
+    assert detail["min_archives"] == 4
+
+
+def test_phase3_gate_weekday_batches(tmp_path: Path, monkeypatch):
+    shard_root = tmp_path / "shards" / "euro_depth"
+    shard_root.mkdir(parents=True)
+    for _ in range(8):
+        append_weekday_batch_log(shard_root, {"run_at": "2026-08-01T12:00:00+00:00"})
+    monkeypatch.setattr(
+        "value_investor.market_shard_phases.exit_shadow_closed_count",
+        lambda *_args, **_kwargs: 10,
+    )
+    policy = {
+        "ladder": {
+            "phase3_min_weekday_batches": 8,
+            "phase3_min_exit_shadow_closed": 8,
+        }
+    }
+    ok, detail = phase3_gate_met(shard_root, policy=policy)
+    assert ok is True
+    assert detail["weekday_batch_count"] == 8
 
 
 def test_append_weekly_batch_log(tmp_path: Path):

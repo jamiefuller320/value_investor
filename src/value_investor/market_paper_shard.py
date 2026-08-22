@@ -13,10 +13,14 @@ from value_investor.library_sim import benchmark_for_market
 from value_investor.market_paper_adapter import write_market_screen_bundle
 from value_investor.market_shard_phases import (
     DEFAULT_LIBRARY_ROOT,
+    append_weekday_batch_log,
     append_weekly_batch_log,
     evaluate_market_phase,
     markets_eligible_for_weekly_paper,
+    phase2_gate_met,
     shard_root_for_market,
+    weekday_paper_shard_enabled_for_policy,
+    weekly_paper_shard_markets_for_policy,
     write_market_phase_status,
 )
 from value_investor.paper_automation import (
@@ -215,5 +219,115 @@ def run_weekly_paper_shards_for_screened_markets(
             }
         except Exception as exc:  # noqa: BLE001
             logger.warning("Weekly paper shard for %s failed: %s", market_id, exc)
+            markets_out[market_id] = {"error": str(exc)}
+    return {"skipped": False, "markets": markets_out}
+
+
+def markets_eligible_for_weekday_paper(
+    policy: dict[str, Any],
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+) -> list[str]:
+    """Markets configured for Phase 3 that passed Phase 2."""
+    if not weekday_paper_shard_enabled_for_policy(policy):
+        return []
+    configured = weekly_paper_shard_markets_for_policy(policy)
+    eligible: list[str] = []
+    for market_id in configured:
+        shard_root = shard_root_for_market(market_id)
+        ready, _ = phase2_gate_met(shard_root, policy=policy)
+        if ready:
+            eligible.append(market_id)
+    return eligible
+
+
+def run_weekday_market_paper_shard(
+    market_id: str,
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    shard_root: Path | None = None,
+    force: bool = True,
+    policy: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Phase 3 weekday batch: same track set as weekly, weekday cadence mark."""
+    library_root = Path(library_root)
+    shard_root = Path(shard_root or shard_root_for_market(market_id))
+    meta = ensure_shard_meta(market_id, shard_root, phase=3)
+    apply_shard_session_to_configs(shard_root, meta)
+
+    bundle_path = write_market_screen_bundle(library_root, market_id, shard_root)
+    track_summary = run_learning_tracks(
+        base_dir=shard_root,
+        reports_path=bundle_path,
+        force=force,
+    )
+    review = compare_learning_tracks(
+        base_dir=shard_root,
+        apply=False,
+        force=force,
+    )
+    batch_entry = {
+        "run_at": datetime.now(UTC).isoformat(),
+        "cadence": "weekday",
+        "screen_bundle": bundle_path.name,
+        "primary_excess_after_costs": review.get("primary_excess_after_costs"),
+        "beat_control": review.get("beat_control"),
+        "beat_market": review.get("beat_market"),
+        "verdict": review.get("verdict"),
+        "tracks_acted": {
+            track_id: row.get("acted")
+            for track_id, row in (track_summary.get("tracks") or {}).items()
+        },
+    }
+    append_weekday_batch_log(shard_root, batch_entry)
+    evaluation = evaluate_market_phase(
+        market_id,
+        library_root=library_root,
+        shard_root=shard_root,
+        policy=policy or {},
+    )
+    write_market_phase_status(evaluation, shard_root=shard_root)
+    return {
+        "market_id": market_id,
+        "shard_root": str(shard_root),
+        "screen_bundle": str(bundle_path),
+        "learning_tracks": track_summary,
+        "review": review,
+        "phase": evaluation,
+    }
+
+
+def run_weekday_paper_shards_for_markets(
+    root: Path,
+    policy: dict[str, Any],
+) -> dict[str, Any]:
+    """Refresh Phase 3 weekday paper shards for markets that cleared Phase 2."""
+    eligible = markets_eligible_for_weekday_paper(policy, library_root=root)
+    if not eligible:
+        return {
+            "skipped": True,
+            "reason": "no Phase-3-eligible markets (Phase 2 gate or policy off)",
+            "configured": markets_eligible_for_weekday_paper(policy, library_root=root),
+        }
+    markets_out: dict[str, Any] = {}
+    for market_id in eligible:
+        try:
+            result = run_weekday_market_paper_shard(
+                market_id,
+                library_root=root,
+                policy=policy,
+                force=True,
+            )
+            review = result.get("review") or {}
+            phase = result.get("phase") or {}
+            markets_out[market_id] = {
+                "verdict": review.get("verdict"),
+                "beat_control": review.get("beat_control"),
+                "current_phase": phase.get("current_phase"),
+                "phase3_ready": phase.get("phase3_ready"),
+                "blockers": phase.get("blockers"),
+            }
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Weekday paper shard for %s failed: %s", market_id, exc)
             markets_out[market_id] = {"error": str(exc)}
     return {"skipped": False, "markets": markets_out}

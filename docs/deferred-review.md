@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-21T11:40:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-22T17:45:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -199,6 +199,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L158 | **Gap-fill: ingest — Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; fl** | Populate or gate Yahoo `quarterly_cashflow` before computing TTM FCF; flag and suppress TTM when series empty (HIK.L TTM $14.4m vs filing $119m). | After next weekly email gap-fill pass confirms the gap persists |
 | L159 | **Gap-fill: scoring — Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as** | Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as explicit overlay inputs; MEGP's net-cash metric excludes £13m lease liabilities per filing note 8, which the current D/E 28% screen pass does not surface. | After next weekly email gap-fill pass confirms the gap persists |
 | L160 | **Gap-fill: ingest — Parse IFRS 16 lease maturity tables and covenant language from annual re** | Parse IFRS 16 lease maturity tables and covenant language from annual report PDF notes (referenced as note 20 in FY2025 body but not extracted) into structured fields for leverage red-flag checks. | After next weekly email gap-fill pass confirms the gap persists |
+| L174 | **Commercial EU regulatory filing API fallback** | If in-house Euronext/ESEF/direct-exchange fetch still leaves large indexed-without-body gaps on euro_depth buy-tier, evaluate a paid regulatory news or filing API (LSEG, Refinitiv, etc.) for headline+PDF retrieval — only after DIY provider MVP is measured. | euro_depth buy-tier has ≥30 memos but filings_with_body/total ratio still below 0.5 after 4 weeks of weekday EU ingest-loop |
 
 ### Ops / reliability
 
@@ -227,6 +228,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L95 | **Mid-week post-run review agent after engineering merges** | Optional LLM triage to reorder the engineering queue when deterministic reprioritize is insufficient — e.g. after multiple ingest merges or contradictory filing signals. | Deterministic reprioritize hook has run for 3+ ingest merges and queue order still feels stale vs Sunday diagnosis |
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
 | L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
+| L173 | **Shared ticker metrics/filings store keyed by Yahoo symbol** | Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker. | euro_depth maintenance plus component market maintenance shows material duplicate Yahoo fetch cost or disk bloat, or filing deepen needs one home per issuer |
 
 ---
 

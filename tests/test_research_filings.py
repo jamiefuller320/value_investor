@@ -37,6 +37,7 @@ from value_investor.research.filings import (
     enrich_filing_rows,
     fetch_filing_body,
     fetch_filings_asx_direct,
+    fetch_filings_esef_direct,
     fetch_filings_euro_news,
     fetch_filings_investegate_company,
     fetch_filings_ir_allowlist,
@@ -3422,6 +3423,42 @@ def test_fetch_filings_asx_direct_parses_markit_json(mock_get):
     assert rows[0]["source"] == "asx_direct"
     assert rows[0]["period"] == "interim"
     assert rows[0]["url"] == asx_markit_file_url("2924-03107929-2A1682457")
+
+
+@patch("value_investor.research.filings._http_get")
+def test_fetch_filings_esef_direct_parses_xbrl_api(mock_get):
+    entity_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "name": "SAP SE",
+                    "identifier": "529900D6BF99LW9R2E68",
+                }
+            }
+        ]
+    }
+    filings_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "period_end": "2024-12-31",
+                    "report_url": "/529900/example/reports/sap-2024.xhtml",
+                }
+            }
+        ]
+    }
+
+    def _fake_get(url: str, **kwargs):
+        if "/entities?" in url:
+            return json.dumps(entity_payload).encode("utf-8")
+        return json.dumps(filings_payload).encode("utf-8")
+
+    mock_get.side_effect = _fake_get
+    rows = fetch_filings_esef_direct(company_name="SAP SE", ticker="SAP.DE")
+    assert len(rows) == 1
+    assert rows[0]["source"] == "esef_direct"
+    assert rows[0]["url"].endswith("sap-2024.xhtml")
+    assert rows[0]["period"] == "annual"
 
 
 def test_prune_orphaned_filing_bodies(tmp_path: Path):

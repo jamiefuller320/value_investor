@@ -1,0 +1,122 @@
+name: Euro library ingest loop
+
+# Weekday buy-tier filing deepen for euro_depth (and warm-start euro_stoxx50).
+# No weekly_ops spend — ESEF + euro_filings + IR allowlist body fetch only.
+on:
+  schedule:
+    - cron: "15 7 * * 1-5"
+    - cron: "15 10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      market:
+        description: "Library market id"
+        type: string
+        default: "euro_depth"
+      max_targets:
+        description: "Max buy-tier tickers per run"
+        type: string
+        default: "12"
+      max_runtime_seconds:
+        description: "Runtime budget (seconds)"
+        type: string
+        default: "2100"
+      max_bodies:
+        description: "Max bodies to refetch per ticker"
+        type: string
+        default: "20"
+      force:
+        description: "Re-run even if already succeeded today"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: euro-ingest-loop
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - name: Skip when daily batches are complete
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+          MAX_DAILY_SUCCESSES: "2"
+        with:
+          script: |
+            const force = process.env.FORCE === 'true';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflow_id = 'euro-ingest-loop.yml';
+            const runId = context.runId;
+            const { data: allRuns } = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id,
+              per_page: 30,
+            });
+            if (force) {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            function startOfUtcDay(d = new Date()) {
+              return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())).toISOString();
+            }
+            const dayStart = startOfUtcDay();
+            const prior = (allRuns.workflow_runs || []).filter((r) =>
+              r.id !== runId
+              && r.created_at >= dayStart
+              && (r.event === 'workflow_dispatch' || r.event === 'schedule')
+            );
+            const successes = prior.filter((r) => r.conclusion === 'success');
+            const maxDaily = parseInt(process.env.MAX_DAILY_SUCCESSES || '2', 10);
+            if (successes.length >= maxDaily) {
+              core.setOutput('should_run', 'false');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
+  euro-ingest-loop:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run library ingest loop
+        run: |
+          set -euo pipefail
+          MARKET="${{ github.event.inputs.market || 'euro_depth' }}"
+          ARGS=(ingest-loop --market "$MARKET" --json)
+          if [ -n "${{ github.event.inputs.max_targets }}" ]; then
+            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
+          fi
+          if [ -n "${{ github.event.inputs.max_runtime_seconds }}" ]; then
+            ARGS+=(--max-runtime-seconds "${{ github.event.inputs.max_runtime_seconds }}")
+          fi
+          if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
+            ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
+          fi
+          ftse-library "${ARGS[@]}" | tee /tmp/euro_ingest_loop.json
+
+      - name: Commit and push library ingest artifacts
+        run: bash scripts/push_library_ingest_artifacts.sh 'chore: euro_depth ingest loop [skip ci]'
