@@ -11,6 +11,10 @@ from value_investor.calibration_endurance import (
     ENDURANCE_FILENAME,
     refresh_calibration_endurance,
 )
+from value_investor.calibration_warm_start import (
+    warm_start_calibration_shadow,
+    warm_start_calibration_shadows,
+)
 from value_investor.knob_calibration import (
     DEFAULT_BOOTSTRAP_TOP_N,
     KNOB_CALIBRATION_PRIORS_FILENAME,
@@ -215,6 +219,7 @@ def _cmd_endurance(args: argparse.Namespace) -> int:
         Path(args.paper_root),
         min_marks_for_survivor=int(args.min_marks),
         min_excess_vs_market=float(args.min_excess),
+        fetch_benchmark=bool(getattr(args, "fetch_benchmark", False)),
     )
     if args.json:
         _print_json(payload)
@@ -223,10 +228,17 @@ def _cmd_endurance(args: argparse.Namespace) -> int:
     print(f"  Shadows: {len(payload.get('shadows') or [])}")
     for row in payload.get("shadows") or []:
         metrics = row.get("metrics") or {}
+        gate_excess = metrics.get("gate_excess_after_costs")
+        if gate_excess is None:
+            gate_excess = metrics.get("excess_after_costs")
+        gate_marks = metrics.get("gate_equity_marks")
+        if gate_marks is None:
+            gate_marks = metrics.get("equity_marks")
+        post = "post-seed" if row.get("gate_uses_post_seed") else "lifetime"
         print(
             f"  [{row.get('rank')}] {row.get('shadow_track_id')} "
-            f"status={row.get('status')} "
-            f"excess={metrics.get('excess_after_costs')} "
+            f"status={row.get('status')} gate={post} "
+            f"excess={gate_excess} marks={gate_marks} "
             f"vs_primary={row.get('excess_vs_primary')} "
             f"vs_rules={row.get('excess_vs_rules')}"
         )
@@ -238,6 +250,59 @@ def _cmd_endurance(args: argparse.Namespace) -> int:
     else:
         print("  Survivors: none yet (keep observing forward marks)")
     return 0
+
+
+def _cmd_warm_start_shadow(args: argparse.Namespace) -> int:
+    paper_root = Path(args.paper_root)
+    sim_start = str(args.sim_start).strip() if args.sim_start else None
+    if args.rank is not None:
+        result = warm_start_calibration_shadow(
+            paper_root,
+            rank=int(args.rank),
+            parent_track_id=str(args.parent_track),
+            sim_start=sim_start,
+            source=str(args.source),
+            force=bool(args.force),
+        )
+        results = [result]
+        payload = {"shadows": results, "warm_started": bool(result.get("warm_started"))}
+    else:
+        payload = warm_start_calibration_shadows(
+            paper_root,
+            parent_track_id=str(args.parent_track),
+            sim_start=sim_start,
+            source=str(args.source),
+            force=bool(args.force),
+        )
+        results = list(payload.get("shadows") or [])
+
+    if args.json:
+        _print_json(payload)
+        return 0 if payload.get("warm_started") or any(r.get("skipped") for r in results) else 1
+
+    if not results:
+        print(f"Warm-start failed: {payload.get('reason')}", file=sys.stderr)
+        return 1
+
+    ok = 0
+    for row in results:
+        if row.get("warm_started"):
+            ok += 1
+            zero = row.get("endurance_zero_datum") or {}
+            print(
+                f"Warm-started [{row.get('rank')}] {row.get('shadow_track_id')} "
+                f"positions={row.get('positions')} "
+                f"zero_at={zero.get('started_at')} "
+                f"replayed={((row.get('seed_stats') or {}).get('log_entries_replayed'))}"
+            )
+        elif row.get("skipped"):
+            print(f"Skipped [{row.get('rank')}] {row.get('shadow_track_id')}: {row.get('reason')}")
+        else:
+            print(
+                f"Failed [{row.get('rank')}] {row.get('shadow_track_id')}: {row.get('reason')}",
+                file=sys.stderr,
+            )
+    return 0 if ok or any(r.get("skipped") for r in results) else 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -373,8 +438,51 @@ def main(argv: list[str] | None = None) -> int:
     )
     endurance.add_argument("--min-marks", type=int, default=4)
     endurance.add_argument("--min-excess", type=float, default=0.0)
+    endurance.add_argument(
+        "--fetch-benchmark",
+        action="store_true",
+        help="Fetch ^FTSE for post-seed excess when decision_review epoch is thin",
+    )
     endurance.add_argument("--json", action="store_true")
     endurance.set_defaults(func=_cmd_endurance)
+
+    warm = sub.add_parser(
+        "warm-start-shadow",
+        parents=[common],
+        help=(
+            "PIT warm-start calibrated shadows from parent rebalance_log replay, "
+            "then freeze a forward-only endurance zero datum (Sunday / manual only)"
+        ),
+    )
+    warm.add_argument(
+        "--rank",
+        type=int,
+        default=None,
+        help="Single shadow rank (default: all discovered calibrated shadows)",
+    )
+    warm.add_argument(
+        "--parent-track",
+        default="ai_judgment",
+        help="Parent track whose rebalance_log is replayed (default: ai_judgment)",
+    )
+    warm.add_argument(
+        "--sim-start",
+        default=None,
+        help="ISO timestamp — only replay acted log passes on/after this time",
+    )
+    warm.add_argument(
+        "--source",
+        default="log",
+        choices=["log"],
+        help="Seed source (log = PIT rebalance_log materialize; archive later)",
+    )
+    warm.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-seed even when endurance_zero_datum already exists",
+    )
+    warm.add_argument("--json", action="store_true")
+    warm.set_defaults(func=_cmd_warm_start_shadow)
 
     args = parser.parse_args(argv)
     if args.command == "run" and args.track_dir is None:

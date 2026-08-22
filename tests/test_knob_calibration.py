@@ -494,3 +494,203 @@ def test_endurance_ledger_lists_competing_shadows(tmp_path: Path):
     rank1 = next(row for row in payload["shadows"] if row["rank"] == 1)
     assert rank1["status"] == "surviving"
     assert payload["survivors"]
+
+
+def _parent_acted_log_entry(*, when: str, tickers: list[tuple[str, str, float]]) -> dict:
+    """Minimal acted ai_judgment log pass for warm-start materialize tests."""
+    candidates = [
+        {
+            "ticker": ticker,
+            "name": ticker,
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "conviction_score": conviction,
+            "price": 10.0,
+            "sector": sector,
+            "timing_signal": "accumulate",
+            "research_verdict": "accumulate",
+        }
+        for ticker, sector, conviction in tickers
+    ]
+    return {
+        "schema_version": 2,
+        "acted": True,
+        "track_id": "ai_judgment",
+        "strategy_mode": "automated",
+        "trade_cost_pct": 0.0,
+        "max_positions": 5,
+        "gate": {"local_time": when},
+        "logged_at": when,
+        "selection": {
+            "skip_timing_wait": True,
+            "min_conviction": 0.0,
+            "sector_cap": 1.0,
+            "use_adjusted_signal": True,
+            "require_research_accumulate": True,
+            "use_momentum_grace": False,
+            "exit_confirm_screens": 0,
+            "reentry_cooldown_screens": 0,
+            "min_rebalance_notional_gbp": 0.0,
+        },
+        "nav_before": 1000.0,
+        "cash_before": 1000.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": [],
+        "rebalance_state_before": {},
+        "candidates": candidates,
+        "screen_buy_tier": candidates,
+        "holdings_after": [],
+        "rebalance_state_after": {},
+    }
+
+
+def test_warm_start_shadow_materializes_fund_and_zero_datum(tmp_path: Path):
+    from value_investor.calibration_warm_start import warm_start_calibration_shadow
+    from value_investor.paper_fund import PaperFund
+
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    spawn_calibrated_shadow_track(paper_root)
+    ai_dir = paper_root / "ai_judgment"
+    for when, names in (
+        (
+            "2026-08-10T12:00:00+00:00",
+            [("AAA.L", "Banks", 0.9), ("BBB.L", "Energy", 0.8), ("CCC.L", "Tech", 0.7)],
+        ),
+        (
+            "2026-08-11T12:00:00+00:00",
+            [("AAA.L", "Banks", 0.9), ("BBB.L", "Energy", 0.8), ("CCC.L", "Tech", 0.7)],
+        ),
+        (
+            "2026-08-12T12:00:00+00:00",
+            [("AAA.L", "Banks", 0.9), ("BBB.L", "Energy", 0.8), ("DDD.L", "Health", 0.75)],
+        ),
+    ):
+        append_rebalance_log(ai_dir, _parent_acted_log_entry(when=when, tickers=names))
+
+    result = warm_start_calibration_shadow(paper_root, rank=1, force=True)
+    assert result["warm_started"] is True
+    assert result["positions"] >= 1
+    zero = result["endurance_zero_datum"]
+    assert zero["started_at"]
+    assert zero["seed_source"] == "log"
+    assert zero["log_entries_replayed"] == 3
+
+    shadow = paper_root / "ai_judgment_calibrated"
+    fund = PaperFund.from_dict(
+        json.loads((shadow / "automated_fund.json").read_text(encoding="utf-8"))
+    )
+    assert len(fund.holdings) >= 1
+    assert len(fund.equity_curve) >= 1
+    provenance = json.loads((shadow / CALIBRATION_PROVENANCE_FILENAME).read_text(encoding="utf-8"))
+    assert provenance["endurance_zero_datum"]["started_at"] == zero["started_at"]
+    assert (shadow / "knob_epoch.json").exists()
+
+    # Idempotent without force
+    again = warm_start_calibration_shadow(paper_root, rank=1, force=False)
+    assert again["warm_started"] is False
+    assert again.get("skipped") is True
+
+
+def test_endurance_gates_on_post_seed_not_seed_pnl(tmp_path: Path):
+    """Seed lifetime excess must not alone make a shadow surviving."""
+    from value_investor.calibration_warm_start import warm_start_calibration_shadow
+    from value_investor.paper_fund import PaperFund
+
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    spawn_calibrated_shadow_track(paper_root)
+    ai_dir = paper_root / "ai_judgment"
+    append_rebalance_log(
+        ai_dir,
+        _parent_acted_log_entry(
+            when="2026-08-10T12:00:00+00:00",
+            tickers=[("AAA.L", "Banks", 0.9), ("BBB.L", "Energy", 0.8)],
+        ),
+    )
+    append_rebalance_log(
+        ai_dir,
+        _parent_acted_log_entry(
+            when="2026-08-11T12:00:00+00:00",
+            tickers=[("AAA.L", "Banks", 0.9), ("BBB.L", "Energy", 0.8)],
+        ),
+    )
+    warm_start_calibration_shadow(paper_root, rank=1, force=True)
+
+    shadow = paper_root / "ai_judgment_calibrated"
+    # Fake flattering lifetime decision_review (seed window) — must not gate.
+    (shadow / "decision_review.json").write_text(
+        json.dumps(
+            {
+                "metrics": {
+                    "total_return": 0.25,
+                    "cost_drag": 0.01,
+                    "excess_after_costs": 0.20,
+                    "equity_marks": 8,
+                    "trade_count": 4,
+                    "epoch": {
+                        "excess_after_costs": None,
+                        "equity_marks": 0,
+                        "trade_count": 0,
+                    },
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper_root / "ai_judgment" / "decision_review.json").write_text(
+        json.dumps({"metrics": {"excess_after_costs": 0.0, "equity_marks": 6}}),
+        encoding="utf-8",
+    )
+    (paper_root / "decision_review.json").write_text(
+        json.dumps({"metrics": {"excess_after_costs": -0.05, "equity_marks": 6}}),
+        encoding="utf-8",
+    )
+
+    payload = refresh_calibration_endurance(paper_root)
+    rank1 = next(row for row in payload["shadows"] if row["rank"] == 1)
+    assert rank1["gate_uses_post_seed"] is True
+    # No post-seed marks yet → observing (not surviving on seed lifetime excess)
+    assert rank1["status"] == "observing"
+    metrics = rank1["metrics"]
+    assert metrics.get("gate_uses_post_seed") is True
+    assert metrics.get("excess_after_costs") == 0.20  # lifetime diagnostic preserved
+
+    # Append a forward mark after zero datum and recompute — still need marks ≥ min
+    fund = PaperFund.from_dict(
+        json.loads((shadow / "automated_fund.json").read_text(encoding="utf-8"))
+    )
+    zero_at = json.loads((shadow / CALIBRATION_PROVENANCE_FILENAME).read_text(encoding="utf-8"))[
+        "endurance_zero_datum"
+    ]["started_at"]
+    prices = {ticker: float(pos.avg_cost or 10) for ticker, pos in fund.holdings.items()}
+    for i in range(1, 5):
+        fund.record_mark(
+            prices,
+            acted_at=f"2026-08-2{i}T12:00:00+00:00",
+            note=f"Forward mark {i}",
+        )
+    assert zero_at  # zero exists
+    (shadow / "automated_fund.json").write_text(
+        json.dumps(fund.to_dict(), indent=2), encoding="utf-8"
+    )
+    # Clear decision_review epoch so endurance computes from fund + zero datum.
+    (shadow / "decision_review.json").write_text(
+        json.dumps(
+            {
+                "metrics": {
+                    "total_return": 0.25,
+                    "excess_after_costs": 0.20,
+                    "equity_marks": 8,
+                    "trade_count": 4,
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload2 = refresh_calibration_endurance(paper_root)
+    rank1b = next(row for row in payload2["shadows"] if row["rank"] == 1)
+    assert rank1b["gate_uses_post_seed"] is True
+    assert int((rank1b["metrics"] or {}).get("gate_equity_marks") or 0) >= 4
+    # Without benchmark, post-seed excess stays None → observing (never
+    # promote on flattering lifetime seed excess alone).
+    assert rank1b["status"] == "observing"
+    assert (rank1b["metrics"] or {}).get("excess_after_costs") == 0.20

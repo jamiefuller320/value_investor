@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-22T16:58:21+00:00",
+  "updated_at": "2026-08-22T17:45:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3403,6 +3403,96 @@
     {
       "id": "L168",
       "category": "later",
+      "section": "learning",
+      "title": "Spawn-aligned zero datum for calibrated shadow endurance",
+      "summary": "Endurance survivor gates should key off excess since shadow spawn/fund reset (true OOS), not lifetime from first equity mark. Keep first-snapshot/lifetime market-beat as diagnostic context only \u2014 backdating the zero datum lengthens the series without adding OOS information and double-counts the bootstrap window that selected the prior.",
+      "revisit_when": "Next endurance/calibration hardening pass, or when a shadow approaches survivor with thin post-spawn marks",
+      "tags": [
+        "calibration",
+        "shadows",
+        "endurance",
+        "methodology"
+      ],
+      "status": "done",
+      "source": "end-of-week shadow zero-datum discussion",
+      "added_at": "2026-08-21T09:13:02+00:00",
+      "updated_at": "2026-08-21T11:46:00+00:00"
+    },
+    {
+      "id": "L169",
+      "category": "later",
+      "section": "learning",
+      "title": "Test wider paper books (4\u20135 max_positions) as shadow/lab, not live default",
+      "summary": "Live tracks sit at max_positions=3 after cost-drag clamping; that is enough for sleeve mechanics but too concentrated for stable excess learning. Prefer a competing shadow or calibration grid cell at 4\u20135 before widening the primary book, given ~3% round-trip costs.",
+      "revisit_when": "After spawn-aligned endurance zero datum lands, or when primary cost_drag falls and decision-review proposes max_positions up",
+      "tags": [
+        "paper",
+        "max_positions",
+        "diversification",
+        "costs"
+      ],
+      "status": "open",
+      "source": "end-of-week max_positions discussion",
+      "added_at": "2026-08-21T09:27:32+00:00"
+    },
+    {
+      "id": "L170",
+      "category": "later",
+      "section": "learning",
+      "title": "Low-turnover broad shortlist shadow (not naive 20-name weekly churn)",
+      "summary": "A diversified top-N book can reduce concentration noise vs 3-name sleeves, but with 3% per-side costs a naive 20-name equal-weight weekly rebalance will likely lose to the market on costs alone. If tested, use strong churn controls (replace-on-exit only, exit confirm, reentry cooldown) and treat it as a lab/diagnostic shadow \u2014 possibly with a lower paper cost assumption \u2014 rather than widening the primary learning book.",
+      "revisit_when": "After 4\u20135 position competing shadow exists, or when designing a diversification diagnostic track",
+      "tags": [
+        "paper",
+        "diversification",
+        "max_positions",
+        "costs",
+        "churn"
+      ],
+      "status": "open",
+      "source": "discussion: would 20 best picks beat the market",
+      "added_at": "2026-08-21T09:33:05+00:00"
+    },
+    {
+      "id": "L171",
+      "category": "later",
+      "section": "learning",
+      "title": "PIT warm-start shadow seed then forward-only endurance",
+      "summary": "Allow calibrated/lab shadows to be populated via archive/rebalance replay from a chosen sim start with per-name entry marks, then freeze a zero datum at seed end so endurance/promotion uses only post-seed forward marks. Must be PIT (no target list chosen with future info) and must not mix backdated P&L into survivor gates.",
+      "revisit_when": "Building competing 4\u20135 or broad shortlist shadows, or next calibration/endurance hardening pass",
+      "tags": [
+        "paper",
+        "shadows",
+        "replay",
+        "PIT",
+        "endurance",
+        "backdate"
+      ],
+      "status": "done",
+      "source": "discussion: flexible backdating for populated shadows",
+      "added_at": "2026-08-21T09:43:30+00:00",
+      "updated_at": "2026-08-21T11:46:00+00:00"
+    },
+    {
+      "id": "L172",
+      "category": "later",
+      "section": "learning",
+      "title": "Endurance hysteresis grace (not seed-advantage cushion)",
+      "summary": "Avoid using warm-start/in-sample seed P&L as a pseudo head-start for survivor gates. Prefer explicit OOS grace: longer min_marks, wider fail band or consecutive underperformance before failed, and keep seed excess diagnostic-only.",
+      "revisit_when": "After warm-start shadows accumulate post-seed marks and early false fails appear",
+      "tags": [
+        "calibration",
+        "endurance",
+        "grace",
+        "methodology"
+      ],
+      "status": "open",
+      "source": "discussion: artificial market advantage as grace",
+      "added_at": "2026-08-21T11:40:22+00:00"
+    },
+    {
+      "id": "L173",
+      "category": "later",
       "section": "ops",
       "title": "Shared ticker metrics/filings store keyed by Yahoo symbol",
       "summary": "Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker.",
@@ -3418,7 +3508,7 @@
       "added_at": "2026-08-21T04:03:35+00:00"
     },
     {
-      "id": "L169",
+      "id": "L174",
       "category": "later",
       "section": "research",
       "title": "Commercial EU regulatory filing API fallback",

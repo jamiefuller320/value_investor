@@ -1,0 +1,74 @@
+# SIEMENS AG                    N (SIE.DE) — Research memo
+
+_Version 1 · Updated 2026-08-21T21:44:56.646820+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Siemens AG screens as a buy on quality, dividend, GARP, and risk families rather than classic deep value: P/E 27.6, P/B 3.1, dividend yield 1.9%, ROE 12.5%, with Neff PEGY at 0.13 on ~12.8% earnings growth. The investment case rests on a diversified industrial technology platform—automation, software (Digital Industries), smart infrastructure, and mobility—benefiting from electrification, industrial AI, and data-centre power demand, while management pursues the “ONE Tech Company” simplification and a planned Siemens Healthineers deconsolidation. Yahoo-sourced financials (no filing bodies available) show revenue rising from €72.0bn (FY2022) to €78.9bn (FY2025), FCF of €10.8bn, and diluted EPS of €12.11, though statutory earnings include recurring special items and a €2.1bn discontinued-operations contribution in FY2025. The central debate is whether mid-teens growth and portfolio streamlining justify a premium multiple against elevated leverage (debt/equity 66%), €52.9bn of goodwill/intangibles, and third-party flags on earnings quality—without primary filing verification.
+
+## INVESTMENT THESIS
+The quantitative screen identifies Siemens as a **quality-GARP compounder**, not a Graham-style bargain. Four of four signal families pass (quality, dividend, GARP, risk), with standout metrics in Neff PEGY (0.13), earnings quality, dividend growth, and financial health—while failing all deep-value, contrarian, and moat screens (Graham Defensive/Enterprising, Schloss, Buffett Quality, Economic Moat, FCF Yield). That profile fits a value investor seeking **durable cash generation at a reasonable growth-adjusted price** rather than asset-backed cheapness.
+
+Business quality anchors the case: FY2025 operating cash flow of €13.3bn and free cash flow of €10.8bn (Yahoo) comfortably cover dividends (€4.1bn paid) and support buybacks (€2.3bn repurchased in FY2025). Revenue has compounded steadily (+9.6% over FY2022–25), operating margin has normalised above €9bn, and the Piotroski F-Score of 5/9 confirms baseline financial health (positive NI, OCF, ROA improvement, OCF > NI, no dilution) but flags worsening leverage and flat margins/turnover. Strategic news—ONE Tech Company (Nov 2025) and Healthineers deconsolidation (Nov 2025)—points to a simpler, software-weighted Siemens with potential sum-of-the-parts upside. For a value-oriented allocator, the screen’s buy signal is best read as **accumulate a quality industrial on growth-adjusted metrics**, accepting that absolute valuation (P/E, P/B, EV/EBIT) remains rich versus the universe.
+
+## FINANCIAL REVIEW
+**Primary filings:** `filings_index.json` contains **zero entries** (0 annual, 0 interim, 0 trading updates, 0 bodies under `filings/bodies/`). No regulatory text is available for going-concern, contingency, covenant, or pension footnote language. All figures below are sourced from **`financials_annual.json` (Yahoo Finance)** with explicit fallback notation.
+
+**Income statement trend (Yahoo, FY2022–FY2025):**
+
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
+|--------|--------|--------|--------|--------|
+| Revenue | €72.0bn | €74.9bn | €75.9bn | €78.9bn |
+| Operating income | €7.3bn | €9.4bn | €9.5bn | €9.1bn |
+| Net income | €3.7bn | €7.9bn | €8.3bn | €9.6bn |
+| Diluted EPS | €4.59 | €9.91 | €10.38 | €12.11 |
+| EBITDA | €11.4bn | €16.0bn | €16.2bn | €15.9bn |
+
+FY2022 net income was depressed by large write-offs (€2.6bn special charges). FY2023–25 show normalised earnings progression, though each year includes €0.7–2.4bn of special income/charges. FY2025 net income includes **€2.1bn from discontinued operations**, so continuing-operations NI was €8.3bn—material for earnings-quality assessment.
+
+**Cash flow (Yahoo):** Operating cash flow rose from €10.2bn (FY2022) to €13.3bn (FY2025). FCF improved from €8.2bn to €10.8bn; capex remained modest at €2.4bn. TTM FCF per Yahoo quarterly roll-forward: **€11.8bn** (OCF €14.3bn less capex €2.5bn). OCF consistently exceeds net income (supporting the Earnings Quality screen pass), aided by depreciation (~€3.4bn) and working-capital releases in some periods.
+
+**Balance sheet (Yahoo, FY2025):** Total assets €166.2bn; stockholders’ equity €62.2bn; **total debt €56.0bn; net debt €38.3bn**. Goodwill and intangibles total **€52.9bn** versus tangible book value of **€9.4bn**—a significant intangible asset base that limits asset-based downside protection. Current ratio 1.37 (screen input). Combined pension and post-retirement obligations: **€6.2bn** (€5.5bn current + €0.7bn non-current per Yahoo line items).
+
+**Capital allocation (Yahoo, FY2025):** Dividends €4.1bn; share repurchases €2.3bn; **business acquisitions €14.2bn** (largest investing outflow)—indicating an active M&A year that warrants filing-level scrutiny unavailable here. Net debt issuance of €8.8bn suggests leverage increased to fund acquisitions and returns.
+
+**Interim / quarterly (Yahoo fallback):** Most recent quarter labelled 2026 (likely Q3 FY2026): revenue **€19.8bn**, diluted EPS **€2.58**, operating income **€2.7bn**. Quarterly cash flow to 30 Jun 2026: OCF **€4.8bn**, FCF **€4.1bn**—seasonally strong. No half-year or trading-update filing is indexed to corroborate management commentary, segment mix, or order backlog.
+
+**Gaps:** No annual report, no interim release, no IR presentation metrics (segment splits, FCF bridges all empty in `ir_presentation_metrics.json`). Interim trend cannot be validated against primary sources. Verify-before-trade is essential.
+
+## RISKS AND RED FLAGS
+- **Filing vacuum:** Zero regulatory bodies means going-concern, litigation, covenant, and contingency disclosures cannot be assessed from primary sources.
+- **Leverage:** Debt/equity 66.4% (screen); net debt rose from €35.7bn (FY2024) to €38.3bn (FY2025); Piotroski “leverage declining” failed. FY2025 included €14.2bn of acquisitions and €8.8bn net debt issuance (Yahoo).
+- **Earnings quality:** Recurring special items (€0.7–2.4bn annually); FY2025 discontinued operations contributed €2.1bn to NI. Third-party articles flagged statutory-profit concerns (“Siemens' (ETR:SIE) Solid Earnings May Rest On Weak Foundations”, simplywall.st, 23 May 2025; “Shareholders May Want To Dig Deeper Than Statutory Profit”, Yahoo Finance, 19 May 2025).
+- **Intangible-heavy balance sheet:** Goodwill/intangibles €52.9bn vs tangible book €9.4bn—impairment or write-down risk in a downturn.
+- **Pension:** ~€6.2bn combined pension obligations on balance sheet (Yahoo); no filing detail on funding status or discount-rate sensitivity.
+- **Cyclical / macro:** Industrial automation, mobility, and building products remain cyclically exposed; screen did not trigger cyclical overlay but order intake sensitivity is unverified without filings.
+- **Portfolio complexity:** Healthineers deconsolidation (Nov 2025) and ONE Tech Company restructuring introduce execution and governance risk around timing, tax, and stranded costs.
+- **Valuation:** Fails FCF Yield (3.1%), Earnings Yield (3.6%), Lynch PEG (2.15), and Acquirer’s Multiple (EV/EBIT 28.6)—limited margin of safety on absolute metrics.
+- **Competitive:** Industrial software faces competition from Schneider, ABB, Rockwell, and Dassault; AI/chip-design push (Jul 2025 news) is early-stage.
+
+RiskTags: cyclical, leverage, pension, accounting, governance, competitive
+RiskTags: cyclical, leverage, pension, accounting, governance, competitive
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate but tilted toward valuation commentary** rather than hard corporate events; several headlines are ticker-confusion noise (PlayStation/SIE articles).
+
+**Material Siemens-specific items:**
+
+- **“Siemens enters next stage of growth with its ONE Tech Company prog…”** (Siemens press, 13 Nov 2025) — strategic simplification toward a unified technology company.
+- **“Siemens plans to deconsolidate Siemens Healthineers”** (Siemens press, 12 Nov 2025) — major portfolio action; potential value unlock but reduces consolidated healthcare exposure.
+- **“Siemens (XTRA:SIE) Stock Draws Fresh Attention After EPS Lift And Buyback”** (simplywall.st, 7 Aug 2025) — market reacting to earnings momentum and capital returns.
+- **“Will Siemens' (XTRA:SIE) AI-Focused Chip Design Push Reshape Its Digitalization Narrative?”** (simplywall.st, 17 Jul 2025) — software/EDA angle via chip-design tools.
+- **“Siemens (XTRA:SIE) Stock May Be 39% Undervalued As Industrial AI Ties Deepen”** (Yahoo Finance, 6 Jul 2025) — narrative around AI/data-centre demand.
+- **“Siemens' (ETR:SIE) Solid Earnings May Rest On Weak Foundations”** (simplywall.st, 23 May 2025) and **“Shareholders May Want To Dig Deeper Than Statutory Profit”** (Yahoo Finance, 19 May 2025) — counter-narrative on earnings quality.
+- **“He Runs a $251 Billion Company and Responds to Emails with Just 2 Letters”** (Yahoo Finance, 18 Aug 2025) — CEO Roland Busch management culture piece.
+- **“Siemens Stock Split Overview: Key Dates and History”** (Capital.com, 20 Jan 2026) — corporate action reference.
+
+**Related but distinct:** Babcock & Wilcox / **Siemens Energy** steam-turbine agreement (Aug 2025) refers to Siemens Energy AG, not Siemens AG parent—do not conflate.
+
+**Thin areas:** No indexed interim results releases, no regulatory enforcement actions, no major M&A closing announcements beyond Yahoo cash-flow acquisition totals. News alone cannot confirm order book or guidance.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: The quality-GARP screen buy is directionally supported by strong OCF/FCF, EPS growth, and strategic simplification news, but confidence is capped by absent primary filings, recurring special items, rising leverage, and intangible-heavy balance sheet that prevent full confirmation of earnings quality.

@@ -6,6 +6,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.calibration_warm_start import load_endurance_zero_datum
+from value_investor.decision_review import (
+    KnobEpoch,
+    _compute_epoch_metrics,
+    load_knob_epoch,
+)
 from value_investor.knob_calibration import (
     CALIBRATION_PROVENANCE_FILENAME,
     calibrated_shadow_subdir,
@@ -29,37 +35,99 @@ DEFAULT_MIN_MARKS_FOR_SURVIVOR = 4
 DEFAULT_MIN_EXCESS_VS_MARKET = 0.0
 
 
-def _fund_metrics_snapshot(track_dir: Path) -> dict[str, Any]:
+def _fund_metrics_snapshot(
+    track_dir: Path,
+    *,
+    prefer_post_seed: bool = False,
+    fetch_benchmark: bool = False,
+) -> dict[str, Any]:
+    """
+    Snapshot metrics for endurance classification.
+
+    When ``prefer_post_seed`` and an endurance zero datum / knob epoch exists,
+    gate fields use post-seed excess and mark counts; lifetime figures remain
+    as diagnostics only.
+    """
     review_path = track_dir / "decision_review.json"
+    lifetime: dict[str, Any] = {"source": "missing"}
     if review_path.exists():
         payload = read_json(review_path)
         metrics = payload.get("metrics") or {}
         epoch = metrics.get("epoch") if isinstance(metrics.get("epoch"), dict) else {}
-        return {
+        lifetime = {
             "total_return": metrics.get("total_return"),
             "cost_drag": metrics.get("cost_drag"),
             "excess_after_costs": metrics.get("excess_after_costs"),
             "equity_marks": metrics.get("equity_marks"),
             "trade_count": metrics.get("trade_count"),
             "epoch_excess_after_costs": epoch.get("excess_after_costs"),
+            "epoch_equity_marks": epoch.get("equity_marks"),
             "source": "decision_review",
         }
+    else:
+        fund_path = track_dir / FUND_FILENAME
+        if fund_path.exists():
+            fund = PaperFund.from_dict(read_json(fund_path))
+            marks = len(fund.equity_curve or [])
+            perf = fund.performance({})
+            lifetime = {
+                "total_return": perf.get("total_return"),
+                "cost_drag": None,
+                "excess_after_costs": None,
+                "equity_marks": marks,
+                "trade_count": len(fund.trades or []),
+                "epoch_excess_after_costs": None,
+                "epoch_equity_marks": None,
+                "source": "fund",
+            }
 
-    fund_path = track_dir / FUND_FILENAME
-    if not fund_path.exists():
-        return {"source": "missing"}
-    fund = PaperFund.from_dict(read_json(fund_path))
-    marks = len(fund.equity_curve or [])
-    perf = fund.performance({})
-    return {
-        "total_return": perf.get("total_return"),
-        "cost_drag": None,
-        "excess_after_costs": None,
-        "equity_marks": marks,
-        "trade_count": len(fund.trades or []),
-        "epoch_excess_after_costs": None,
-        "source": "fund",
+    zero = load_endurance_zero_datum(track_dir) if prefer_post_seed else None
+    if not zero:
+        return lifetime
+
+    post_seed_excess = lifetime.get("epoch_excess_after_costs")
+    post_seed_marks = lifetime.get("epoch_equity_marks")
+    post_seed_return = None
+    post_seed_source = "decision_review_epoch"
+
+    epoch = load_knob_epoch(track_dir)
+    if epoch is None:
+        epoch = KnobEpoch.from_dict(zero)
+
+    need_compute = post_seed_excess is None or post_seed_marks is None
+    if need_compute and epoch is not None:
+        fund_path = track_dir / FUND_FILENAME
+        if fund_path.exists():
+            fund = PaperFund.from_dict(read_json(fund_path))
+            computed = _compute_epoch_metrics(
+                fund,
+                epoch,
+                fetch_benchmark=bool(fetch_benchmark),
+            )
+            post_seed_excess = computed.get("excess_after_costs")
+            post_seed_marks = computed.get("equity_marks")
+            post_seed_return = computed.get("total_return")
+            post_seed_source = "computed_since_zero_datum"
+            lifetime["epoch_excess_after_costs"] = post_seed_excess
+            lifetime["epoch_equity_marks"] = post_seed_marks
+            lifetime["epoch_total_return"] = post_seed_return
+            lifetime["epoch_note"] = computed.get("note")
+
+    lifetime["endurance_zero_datum"] = {
+        "started_at": zero.get("started_at"),
+        "baseline_nav": zero.get("baseline_nav"),
+        "seed_source": zero.get("seed_source"),
+        "sim_start": zero.get("sim_start"),
+        "seed_end": zero.get("seed_end"),
     }
+    lifetime["post_seed_excess_after_costs"] = post_seed_excess
+    lifetime["post_seed_equity_marks"] = post_seed_marks
+    lifetime["post_seed_total_return"] = post_seed_return
+    lifetime["post_seed_source"] = post_seed_source
+    lifetime["gate_excess_after_costs"] = post_seed_excess
+    lifetime["gate_equity_marks"] = post_seed_marks
+    lifetime["gate_uses_post_seed"] = True
+    return lifetime
 
 
 def _classify_status(
@@ -92,12 +160,14 @@ def refresh_calibration_endurance(
     *,
     min_marks_for_survivor: int = DEFAULT_MIN_MARKS_FOR_SURVIVOR,
     min_excess_vs_market: float = DEFAULT_MIN_EXCESS_VS_MARKET,
+    fetch_benchmark: bool = False,
 ) -> dict[str, Any]:
     """
     Build/update an observe-only endurance ledger for calibrated shadows.
 
     Survivors are flagged for human review as learning-loop starting priors —
-    never auto-applied.
+    never auto-applied. When a warm-start zero datum exists, classification
+    uses post-seed excess/marks only.
     """
     paper_root = Path(paper_root)
     dirs = learning_track_dirs(paper_root)
@@ -114,18 +184,28 @@ def refresh_calibration_endurance(
         track_id = calibrated_shadow_track_id(rank)
         track_dir = paper_root / calibrated_shadow_subdir(rank)
         provenance = load_calibration_provenance(track_dir) or {}
-        metrics = _fund_metrics_snapshot(track_dir)
-        excess = metrics.get("excess_after_costs")
+        metrics = _fund_metrics_snapshot(
+            track_dir,
+            prefer_post_seed=True,
+            fetch_benchmark=fetch_benchmark,
+        )
+        if metrics.get("gate_uses_post_seed"):
+            # Never fall back to lifetime seed P&L for classification.
+            gate_excess = metrics.get("gate_excess_after_costs")
+            gate_marks = metrics.get("gate_equity_marks")
+        else:
+            gate_excess = metrics.get("excess_after_costs")
+            gate_marks = metrics.get("equity_marks")
+
         vs_primary = None
         vs_rules = None
-        if excess is not None and primary_excess is not None:
-            vs_primary = round(float(excess) - float(primary_excess), 4)
-        if excess is not None and rules_excess is not None:
-            vs_rules = round(float(excess) - float(rules_excess), 4)
-        marks = metrics.get("equity_marks")
+        if gate_excess is not None and primary_excess is not None:
+            vs_primary = round(float(gate_excess) - float(primary_excess), 4)
+        if gate_excess is not None and rules_excess is not None:
+            vs_rules = round(float(gate_excess) - float(rules_excess), 4)
         status = _classify_status(
-            marks=int(marks) if marks is not None else None,
-            excess=float(excess) if excess is not None else None,
+            marks=int(gate_marks) if gate_marks is not None else None,
+            excess=float(gate_excess) if gate_excess is not None else None,
             vs_primary=vs_primary,
             vs_rules=vs_rules,
             min_marks=min_marks_for_survivor,
@@ -156,16 +236,20 @@ def refresh_calibration_endurance(
                 "excess_vs_rules": vs_rules,
                 "status": status,
                 "provenance_path": str(track_dir / CALIBRATION_PROVENANCE_FILENAME),
+                "gate_uses_post_seed": bool(metrics.get("gate_uses_post_seed")),
             }
         )
 
     survivors = [row for row in shadows if row.get("status") == "surviving"]
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "observe_only": True,
         "updated_at": datetime.now(UTC).isoformat(),
         "paper_root": str(paper_root),
-        "benchmark_note": "excess_after_costs comes from decision_review when available",
+        "benchmark_note": (
+            "When endurance_zero_datum exists, survivor gates use post-seed "
+            "excess/marks only; lifetime excess remains diagnostic."
+        ),
         "gates": {
             "min_marks_for_survivor": min_marks_for_survivor,
             "min_excess_vs_market": min_excess_vs_market,
@@ -173,6 +257,7 @@ def refresh_calibration_endurance(
                 "Survivors are starting priors for human learning-loop refinement only — "
                 "never auto-apply to ai_judgment/config.json"
             ),
+            "post_seed_required_for_clean_oos": True,
         },
         "primary": {"track_id": AI_JUDGMENT_TRACK_ID, "metrics": primary_metrics},
         "rules_control": {"track_id": RULES_TRACK_ID, "metrics": rules_metrics},
@@ -182,7 +267,10 @@ def refresh_calibration_endurance(
                 "shadow_track_id": row["shadow_track_id"],
                 "rank": row["rank"],
                 "knobs": row.get("knobs"),
-                "excess_after_costs": (row.get("metrics") or {}).get("excess_after_costs"),
+                "excess_after_costs": (row.get("metrics") or {}).get("gate_excess_after_costs")
+                if (row.get("metrics") or {}).get("gate_excess_after_costs") is not None
+                else (row.get("metrics") or {}).get("excess_after_costs"),
+                "gate_uses_post_seed": row.get("gate_uses_post_seed"),
             }
             for row in survivors
         ],

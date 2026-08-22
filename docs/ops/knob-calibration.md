@@ -119,6 +119,11 @@ ftse-knob-calibrate spawn-shadow \
 # Forward endurance ledger
 ftse-knob-calibrate endurance --paper-root docs/data/paper_automation --json
 
+# PIT warm-start shadows (after spawn; Sunday / manual)
+ftse-knob-calibrate warm-start-shadow \
+  --paper-root docs/data/paper_automation \
+  --parent-track ai_judgment
+
 # Inspect last artifact
 ftse-knob-calibrate status --paper-root docs/data/paper_automation --json
 ```
@@ -147,12 +152,37 @@ auto-applied.
 | Step | Command / trigger |
 |------|-------------------|
 | **Retrospective + spawn** | Sunday `analysis-review.yml` (`full_period_retrospective`, `--spawn-shadow`) |
+| **PIT warm-start** | Sunday `warm-start-shadow` — replay parent `rebalance_log` into the shadow fund, freeze `endurance_zero_datum` at seed end |
 | **Persist** | Sunday commits priors, endurance, and `ai_judgment_calibrated*` even if the modelling agent is skipped |
-| **Weekday** | Idempotent `spawn-shadow --top-n 3` (GC drops stale ranks) + `endurance` |
-| **Manual** | `ftse-knob-calibrate spawn-shadow --top-n 3` |
+| **Weekday** | Idempotent `spawn-shadow --top-n 3` (GC drops stale ranks) + `endurance` — does **not** re-warm-start |
+| **Manual** | `ftse-knob-calibrate spawn-shadow --top-n 3` then `warm-start-shadow` |
 
 Each shadow: `is_calibration_shadow: true`, parent AI gates, frozen knobs,
 `calibration_provenance.json`. Decision-review `--apply` is disabled.
+
+### Warm-start zero datum (forward-only endurance)
+
+```bash
+# After spawn — replay parent ai_judgment log into all calibrated shadows
+ftse-knob-calibrate warm-start-shadow \
+  --paper-root docs/data/paper_automation \
+  --parent-track ai_judgment
+
+# Optional: start replay on/after a sim date; force re-seed
+ftse-knob-calibrate warm-start-shadow \
+  --paper-root docs/data/paper_automation \
+  --sim-start 2026-08-01T00:00:00+00:00 \
+  --force
+```
+
+Warm-start:
+
+1. Replays **only** each pass’s logged candidates / screen buy-tier (PIT at entry)
+2. Writes `automated_fund.json` holdings, trades, equity marks, cost basis
+3. Freezes `endurance_zero_datum` (+ `knob_epoch.json`) at seed end
+4. Endurance survivor gates use **post-seed** excess/marks only — seed P&L is diagnostic
+
+Do **not** run warm-start on every weekday pass (would re-inject historical P&L).
 
 ## Promoting a prior (human gate)
 
