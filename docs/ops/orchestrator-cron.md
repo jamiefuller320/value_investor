@@ -29,6 +29,7 @@ token instead of your user PAT.
 - `scripts/dispatch_orchestrator.sh` — Sunday / weekday paper / surplus suites
 - `scripts/dispatch_github_workflow.sh` — any single workflow file
 - `scripts/import_cron_jobs.py` — bulk import/update cron-job.org jobs via API
+- `scripts/sync_euro_ingest_cron.py` — toggle euro_depth ingest + weekday ladder crons from completion gate
 
 ## Coverage matrix
 
@@ -46,6 +47,8 @@ token instead of your user PAT.
 | `ci-main-nightly.yml` | External **primary** | `30 7 * * *` → `ci-main-nightly.yml` | Daily 07:30 |
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
+| `euro-ingest-loop.yml` | External **primary** | Mon–Fri **07:15 + 10:15** → `euro-ingest-loop.yml` (throttled by completion gate) | Mon–Fri 07:15 + 10:15 |
+| `automation-orchestrator.yml` (`ladder_only`) | External **primary** (sprint) | Mon–Fri **06:50** → `suite=ladder_only` (disabled when Phase 3 + parity idle) | No |
 | `engineering-agent.yml` | Queue / manual | No | No |
 | `ci.yml` / `pages.yml` | Push to `docs/**` on `main`; **also** `email-report.yml` dispatches after dashboard commit (`[skip ci]` blocks push-triggered Pages) | No | No |
 

@@ -635,6 +635,16 @@ def run_library_ladder(
             library_root=root,
             policy=policy,
         )
+        if "euro_depth" in phase_markets:
+            try:
+                from value_investor.euro_depth_ingest_dispatch import refresh_euro_ingest_dispatch
+
+                result["euro_ingest_dispatch"] = refresh_euro_ingest_dispatch(
+                    library_root=root,
+                    policy_path=policy_path,
+                )
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Euro ingest dispatch refresh failed: %s", exc)
 
     # D — graduation (after grow + screen so floors reflect this run)
     if skip_graduation:

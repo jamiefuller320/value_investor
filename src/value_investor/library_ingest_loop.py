@@ -306,6 +306,13 @@ def run_library_ingest_loop(
         {"run_at": datetime.now(UTC).isoformat(), **result.to_dict()},
         compact=False,
     )
+    if market_id == "euro_depth":
+        try:
+            from value_investor.euro_depth_ingest_dispatch import refresh_euro_ingest_dispatch
+
+            refresh_euro_ingest_dispatch(library_root=library_root, market_id=market_id)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Euro ingest dispatch refresh failed: %s", exc)
     return result
 
 

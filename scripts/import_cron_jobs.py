@@ -25,6 +25,11 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
+from value_investor.euro_depth_ingest_dispatch import (
+    cron_enabled_for_dispatch,
+    evaluate_euro_ingest_dispatch,
+    load_euro_ingest_dispatch,
+)
 from value_investor.paper_auto_scheduling import (
     WEEKDAY_PAPER_UTC_HOUR,
     WEEKDAY_PAPER_UTC_MINUTE,
@@ -55,6 +60,17 @@ class CronJobSpec:
 
 
 _INGEST_LOOP_INPUTS = {"inputs": {"max_targets": "12"}}
+_EURO_INGEST_LOOP_INPUTS = {
+    "inputs": {
+        "market": "euro_depth",
+        "max_targets": "12",
+    }
+}
+
+
+def _euro_dispatch_enabled() -> dict[str, bool]:
+    evaluation = load_euro_ingest_dispatch() or evaluate_euro_ingest_dispatch()
+    return cron_enabled_for_dispatch(evaluation)
 
 
 def _job_specs() -> list[CronJobSpec]:
@@ -149,6 +165,33 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[15],
             wdays=[1, 2, 3, 4, 5],
         ),
+        CronJobSpec(
+            key="euro-ingest-loop-morning",
+            title="Euro ingest loop (weekday morning)",
+            workflow="euro-ingest-loop.yml",
+            body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
+            hours=[7],
+            minutes=[15],
+            wdays=[1, 2, 3, 4, 5],
+        ),
+        CronJobSpec(
+            key="euro-ingest-loop-afternoon",
+            title="Euro ingest loop (weekday afternoon)",
+            workflow="euro-ingest-loop.yml",
+            body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
+            hours=[10],
+            minutes=[15],
+            wdays=[1, 2, 3, 4, 5],
+        ),
+        CronJobSpec(
+            key="orchestrator-ladder-weekday",
+            title="FTSE orchestrator (weekday ladder)",
+            workflow="automation-orchestrator.yml",
+            body={"ref": REF, "inputs": {"suite": "ladder_only", "force": "false"}},
+            hours=[6],
+            minutes=[50],
+            wdays=[1, 2, 3, 4, 5],
+        ),
     ]
 
 
@@ -187,12 +230,24 @@ def _list_jobs(api_key: str) -> list[dict[str, Any]]:
     return list(payload.get("jobs") or [])
 
 
+def _job_enabled(spec: CronJobSpec) -> bool:
+    euro_keys = {
+        "euro-ingest-loop-morning": "morning",
+        "euro-ingest-loop-afternoon": "afternoon",
+        "orchestrator-ladder-weekday": "ladder_weekday",
+    }
+    slot = euro_keys.get(spec.key)
+    if slot is None:
+        return True
+    return bool(_euro_dispatch_enabled().get(slot))
+
+
 def _build_job_payload(spec: CronJobSpec, gh_pat: str) -> dict[str, Any]:
     return {
         "job": {
             "title": spec.title,
             "url": spec.url,
-            "enabled": True,
+            "enabled": _job_enabled(spec),
             "saveResponses": True,
             "requestMethod": REQUEST_METHOD_POST,
             "schedule": {
