@@ -170,4 +170,6 @@ jobs:
           ftse-library euro-ingest-dispatch --refresh --sync-cron --json | tee /tmp/euro_dispatch_refresh.json
 
       - name: Commit and push library ingest artifacts
-        run: bash scripts/push_library_ingest_artifacts.sh 'chore: euro_depth ingest loop [skip ci]'
+        run: |
+          bash scripts/push_library_ingest_artifacts.sh \
+            'chore: euro_depth ingest loop [skip ci]'
