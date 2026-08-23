@@ -42,7 +42,9 @@ def _direction(from_signal: str, to_signal: str) -> str:
 
 
 def _row_map(snapshot: RunSnapshot) -> dict[str, dict[str, Any]]:
-    return {str(row.get("ticker") or "").strip(): row for row in snapshot.signals if row.get("ticker")}
+    return {
+        str(row.get("ticker") or "").strip(): row for row in snapshot.signals if row.get("ticker")
+    }
 
 
 def _forward_return(
@@ -98,9 +100,7 @@ def build_transition_events(
             if not (signal_changed or timing_changed or conviction_changed or adjusted_changed):
                 continue
 
-            transition_key = (
-                f"{from_signal}->{to_signal}" if signal_changed else "signal_unchanged"
-            )
+            transition_key = f"{from_signal}->{to_signal}" if signal_changed else "signal_unchanged"
             event_id = f"tr-{curr.run_at[:10].replace('-', '')}-{ticker}"
             events.append(
                 {

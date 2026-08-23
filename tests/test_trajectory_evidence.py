@@ -30,12 +30,26 @@ def test_build_transition_events_detects_signal_upgrade():
         ),
         _snap(
             "2026-08-16T00:00:00+00:00",
-            [{"ticker": "A.L", "signal": "buy", "conviction_score": 0.4, "timing_signal": "neutral"}],
+            [
+                {
+                    "ticker": "A.L",
+                    "signal": "buy",
+                    "conviction_score": 0.4,
+                    "timing_signal": "neutral",
+                }
+            ],
             prices={"A.L": 100.0},
         ),
         _snap(
             "2026-08-23T00:00:00+00:00",
-            [{"ticker": "A.L", "signal": "buy", "conviction_score": 0.41, "timing_signal": "neutral"}],
+            [
+                {
+                    "ticker": "A.L",
+                    "signal": "buy",
+                    "conviction_score": 0.41,
+                    "timing_signal": "neutral",
+                }
+            ],
             prices={"A.L": 110.0},
         ),
     ]
@@ -64,8 +78,16 @@ def test_build_boundary_watch_panel_tags_pre_buy():
 
 def test_summarize_transition_outcomes_groups_direction():
     events = [
-        {"transition_key": "hold->buy", "direction": "upgrade", "outcomes": {"forward_return_1w": 0.05}},
-        {"transition_key": "buy->hold", "direction": "downgrade", "outcomes": {"forward_return_1w": -0.02}},
+        {
+            "transition_key": "hold->buy",
+            "direction": "upgrade",
+            "outcomes": {"forward_return_1w": 0.05},
+        },
+        {
+            "transition_key": "buy->hold",
+            "direction": "downgrade",
+            "outcomes": {"forward_return_1w": -0.02},
+        },
     ]
     summary = summarize_transition_outcomes(events)
     assert summary["labeled_event_count"] == 2
@@ -86,7 +108,14 @@ def test_run_trajectory_evidence_writes_artifacts(tmp_path: Path):
         json.dumps(
             _snap(
                 "2026-08-16T00:00:00+00:00",
-                [{"ticker": "A.L", "signal": "buy", "conviction_score": 0.4, "timing_signal": "neutral"}],
+                [
+                    {
+                        "ticker": "A.L",
+                        "signal": "buy",
+                        "conviction_score": 0.4,
+                        "timing_signal": "neutral",
+                    }
+                ],
             ).to_dict()
         ),
         encoding="utf-8",
