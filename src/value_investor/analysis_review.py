@@ -247,6 +247,7 @@ def build_analysis_payload(
     exit_shadow = _safe_read(paper_root / "learning_tracks_exit_shadow.json")
     exit_timing = _safe_read(paper_root / "learning_tracks_exit_timing.json")
     exit_timing_near_miss = _safe_read(data_dir / "exit_timing_near_miss_review.json")
+    exclusion_universe = _safe_read(data_dir / "exclusion_universe_review.json")
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
 
@@ -278,6 +279,7 @@ def build_analysis_payload(
         "exit_shadow": exit_shadow,
         "exit_timing_cohorts": exit_timing,
         "exit_timing_near_miss": exit_timing_near_miss,
+        "exclusion_universe": exclusion_universe,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "model_weights": {

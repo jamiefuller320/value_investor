@@ -1,0 +1,360 @@
+{
+  "schema_version": 1,
+  "scope": "exclusion_universe_archive",
+  "track_id": "exclusion_universe_archive",
+  "framework": {
+    "scope": "exclusion_universe_archive",
+    "observe_only": true,
+    "comparison": "equal_weight_universe vs equal_weight_universe_minus_exclusions",
+    "pit_exclusions": true,
+    "hindsight_quartiles": "evaluation_only",
+    "costs_included": false,
+    "note": "Archive exclusion-universe lab \u2014 graduated tightening ladders on weekly screen snapshots. Pair with rebalance_log replay before live knob promotion."
+  },
+  "generated_at": "2026-08-23T05:36:05.237418+00:00",
+  "snapshot_count": 9,
+  "universe_mode": "buy_tier_only",
+  "config": {
+    "use_adjusted_signal": false,
+    "resolve_research_pit": true,
+    "max_positions": 5,
+    "min_filtered_pool": 15,
+    "min_week_pairs": 4
+  },
+  "ladder": [
+    {
+      "step_id": "u0",
+      "label": "Baseline universe",
+      "exclude_signals": [],
+      "exclude_timing_wait": false,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u1",
+      "label": "Exclude avoid",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": false,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u2",
+      "label": "Exclude avoid + timing wait",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u3",
+      "label": "\u2026 + conviction >= 0.25",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.25,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.35,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u5",
+      "label": "\u2026 + conviction >= 0.45",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.45,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    }
+  ],
+  "ladder_results": [
+    {
+      "step_id": "u0",
+      "label": "Baseline universe",
+      "step": {
+        "step_id": "u0",
+        "label": "Baseline universe",
+        "exclude_signals": [],
+        "exclude_timing_wait": false,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 8,
+        "mean_weekly_exclusion_alpha": 0.0,
+        "cumulative_exclusion_alpha": 0.0,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 65.62,
+        "avg_filtered_pool_size": 65.62,
+        "min_filtered_pool_size": 60,
+        "pool_reduction_pct": 0.0
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 8,
+        "mean_bottom_quartile_exclude_rate": 0.0,
+        "mean_top_quartile_retain_rate": 1.0,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      }
+    },
+    {
+      "step_id": "u1",
+      "label": "Exclude avoid",
+      "step": {
+        "step_id": "u1",
+        "label": "Exclude avoid",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": false,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 8,
+        "mean_weekly_exclusion_alpha": 0.0,
+        "cumulative_exclusion_alpha": 0.0,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 65.62,
+        "avg_filtered_pool_size": 65.62,
+        "min_filtered_pool_size": 60,
+        "pool_reduction_pct": 0.0
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 8,
+        "mean_bottom_quartile_exclude_rate": 0.0,
+        "mean_top_quartile_retain_rate": 1.0,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      }
+    },
+    {
+      "step_id": "u2",
+      "label": "Exclude avoid + timing wait",
+      "step": {
+        "step_id": "u2",
+        "label": "Exclude avoid + timing wait",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 8,
+        "mean_weekly_exclusion_alpha": 0.00033,
+        "cumulative_exclusion_alpha": 0.002643,
+        "positive_alpha_weeks": 5,
+        "positive_alpha_rate": 0.625,
+        "median_weekly_alpha": 0.000228,
+        "avg_baseline_pool_size": 65.62,
+        "avg_filtered_pool_size": 60.25,
+        "min_filtered_pool_size": 58,
+        "pool_reduction_pct": 0.0819
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 8,
+        "mean_bottom_quartile_exclude_rate": 0.0755,
+        "mean_top_quartile_retain_rate": 0.9559,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      }
+    },
+    {
+      "step_id": "u3",
+      "label": "\u2026 + conviction >= 0.25",
+      "step": {
+        "step_id": "u3",
+        "label": "\u2026 + conviction >= 0.25",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.25,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 8,
+        "mean_weekly_exclusion_alpha": 0.00015,
+        "cumulative_exclusion_alpha": 0.0012,
+        "positive_alpha_weeks": 4,
+        "positive_alpha_rate": 0.5,
+        "median_weekly_alpha": 8.7e-05,
+        "avg_baseline_pool_size": 65.62,
+        "avg_filtered_pool_size": 56.25,
+        "min_filtered_pool_size": 49,
+        "pool_reduction_pct": 0.1429
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 8,
+        "mean_bottom_quartile_exclude_rate": 0.1427,
+        "mean_top_quartile_retain_rate": 0.873,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      }
+    },
+    {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "step": {
+        "step_id": "u4",
+        "label": "\u2026 + conviction >= 0.35",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.35,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 8,
+        "mean_weekly_exclusion_alpha": 0.000657,
+        "cumulative_exclusion_alpha": 0.00526,
+        "positive_alpha_weeks": 3,
+        "positive_alpha_rate": 0.375,
+        "median_weekly_alpha": -0.000124,
+        "avg_baseline_pool_size": 65.62,
+        "avg_filtered_pool_size": 38.88,
+        "min_filtered_pool_size": 29,
+        "pool_reduction_pct": 0.4076
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 8,
+        "mean_bottom_quartile_exclude_rate": 0.448,
+        "mean_top_quartile_retain_rate": 0.6544,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      }
+    },
+    {
+      "step_id": "u5",
+      "label": "\u2026 + conviction >= 0.45",
+      "step": {
+        "step_id": "u5",
+        "label": "\u2026 + conviction >= 0.45",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.45,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 8,
+        "mean_weekly_exclusion_alpha": 0.000456,
+        "cumulative_exclusion_alpha": 0.003645,
+        "positive_alpha_weeks": 4,
+        "positive_alpha_rate": 0.5,
+        "median_weekly_alpha": 0.001363,
+        "avg_baseline_pool_size": 65.62,
+        "avg_filtered_pool_size": 6.75,
+        "min_filtered_pool_size": 3,
+        "pool_reduction_pct": 0.8971
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 8,
+        "mean_bottom_quartile_exclude_rate": 0.8946,
+        "mean_top_quartile_retain_rate": 0.1201,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      }
+    }
+  ],
+  "recommended_step": {
+    "step_id": "u4",
+    "label": "\u2026 + conviction >= 0.35",
+    "cumulative_exclusion_alpha": 0.00526,
+    "positive_alpha_rate": 0.375,
+    "avg_filtered_pool_size": 38.88,
+    "selection_note": "Highest cumulative exclusion alpha among steps with >=4 week pairs and avg pool >=15"
+  },
+  "updated_at": "2026-08-23T05:36:05.237440+00:00",
+  "readiness": {
+    "ready_for_priors": true,
+    "week_pairs": 8,
+    "min_week_pairs": 4,
+    "min_filtered_pool": 15,
+    "recommended_step": {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "cumulative_exclusion_alpha": 0.00526,
+      "positive_alpha_rate": 0.375,
+      "avg_filtered_pool_size": 38.88,
+      "selection_note": "Highest cumulative exclusion alpha among steps with >=4 week pairs and avg pool >=15"
+    }
+  },
+  "note": "Exclusion-universe archive sim (observe-only). Positive exclusion_alpha means the filtered equal-weight universe beat the baseline universe gross of costs. Use recommended_step as a prior for offline_sim / paper_knobs \u2014 not auto-apply."
+}

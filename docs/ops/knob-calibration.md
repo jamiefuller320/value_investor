@@ -39,6 +39,10 @@ Full-period score combines:
 
 Screen thresholds stay frozen (**N3**) — only portfolio knobs are searched.
 
+**Exclusion-universe archive** (`ftse-exclusion-universe-archive`) complements
+calibration with high-N universe EW deltas (all vs all−exclusions) gross of costs.
+See [exclusion-universe-archive-sim.md](exclusion-universe-archive-sim.md).
+
 ## Fitness function (walk-forward)
 
 Per fold:
