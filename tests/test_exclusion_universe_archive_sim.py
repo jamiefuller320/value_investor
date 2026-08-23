@@ -3,19 +3,18 @@
 import json
 from pathlib import Path
 
-from value_investor.backtest import HISTORY_DIR
+from value_investor.backtest import HISTORY_DIR, RunSnapshot
 from value_investor.exclusion_universe_archive_sim import (
     COHORTS_FILENAME,
     REVIEW_FILENAME,
+    UNIVERSE_BUY_TIER_ONLY,
     ExclusionStep,
     ExclusionUniverseArchiveConfig,
-    UNIVERSE_BUY_TIER_ONLY,
     _equal_weight_forward_return,
     _passes_exclusion_step,
     default_exclusion_ladder,
     run_exclusion_universe_archive_sim,
 )
-from value_investor.backtest import RunSnapshot
 
 
 def _write_history_snapshot(

@@ -152,7 +152,11 @@ def _resolve_row_fields(
     verdict = row.get("research_verdict")
     verdict_str = str(verdict).strip() if verdict is not None and str(verdict).strip() else None
 
-    if use_adjusted_signal and resolve_research_pit and not str(row.get("adjusted_signal") or "").strip():
+    if (
+        use_adjusted_signal
+        and resolve_research_pit
+        and not str(row.get("adjusted_signal") or "").strip()
+    ):
         from value_investor.backtest import _parse_run_at
         from value_investor.historical_analysis import _resolve_overlay_fields
 
@@ -331,9 +335,7 @@ def _summarize_weekly_deltas(weekly: list[dict[str, Any]]) -> dict[str, Any]:
     positive = sum(1 for alpha in alphas if alpha > 0)
     avg_baseline = sum(baseline_sizes) / len(baseline_sizes) if baseline_sizes else 0.0
     avg_filtered = sum(filtered_sizes) / len(filtered_sizes) if filtered_sizes else 0.0
-    pool_reduction = (
-        (avg_baseline - avg_filtered) / avg_baseline if avg_baseline > 0 else None
-    )
+    pool_reduction = (avg_baseline - avg_filtered) / avg_baseline if avg_baseline > 0 else None
 
     return {
         "week_pairs": len(valid),
@@ -493,9 +495,7 @@ def run_exclusion_universe_archive_sim(
                 for row in enriched_rows
                 if _in_baseline_universe(row, universe_mode=universe_mode, entry=entry)
             ]
-            filtered_rows = [
-                row for row in baseline_rows if _passes_exclusion_step(row, step)
-            ]
+            filtered_rows = [row for row in baseline_rows if _passes_exclusion_step(row, step)]
 
             baseline_tickers = [str(row["ticker"]) for row in baseline_rows]
             filtered_tickers = [str(row["ticker"]) for row in filtered_rows]
@@ -559,9 +559,7 @@ def run_exclusion_universe_archive_sim(
                         None if exclusion_alpha is None else round(exclusion_alpha, 6)
                     ),
                     "book_alpha_vs_baseline": (
-                        None
-                        if book_alpha_vs_baseline is None
-                        else round(book_alpha_vs_baseline, 6)
+                        None if book_alpha_vs_baseline is None else round(book_alpha_vs_baseline, 6)
                     ),
                     "book_alpha_vs_filtered_ew": (
                         None
