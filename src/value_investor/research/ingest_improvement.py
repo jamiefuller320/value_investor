@@ -753,6 +753,9 @@ def run_ingest_improvement_pass(
                     "quarterly_cashflow_usable": bool(
                         (after_inventory.get("available") or {}).get("yahoo_quarterly_cashflow")
                     ),
+                    "quarterly_income_usable": bool(
+                        (after_inventory.get("available") or {}).get("yahoo_quarterly_income")
+                    ),
                     "ttm_cashflow_suppressed": bool(
                         (
                             read_json(sources_dir / "financials_annual.json").get(

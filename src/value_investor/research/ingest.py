@@ -103,6 +103,22 @@ _QUARTERLY_CASHFLOW_ATTRS = (
     "quarterly_cash_flow",
 )
 
+_QUARTERLY_INCOME_ATTRS = (
+    "quarterly_financials",
+    "quarterly_income_stmt",
+)
+
+_INCOME_EPS_LABELS = [
+    "Diluted EPS",
+    "Basic EPS",
+]
+
+_INCOME_REVENUE_LABELS = [
+    "Total Revenue",
+    "Operating Revenue",
+    "Revenue",
+]
+
 _TTM_CASHFLOW_METRIC_KEYS = (
     "operating_cashflow_ttm",
     "capital_expenditure_ttm",
@@ -131,6 +147,25 @@ def _resolve_yahoo_quarterly_cashflow_df(stock: Any) -> tuple[pd.DataFrame | Non
     return None, None
 
 
+def _resolve_yahoo_quarterly_income_df(stock: Any) -> tuple[pd.DataFrame | None, str | None]:
+    """Return the first non-empty quarterly income frame exposed by yfinance."""
+    for attr in _QUARTERLY_INCOME_ATTRS:
+        df = getattr(stock, attr, None)
+        if df is not None and not df.empty:
+            return df, attr
+    for method_name in ("get_income_stmt", "get_financials"):
+        method = getattr(stock, method_name, None)
+        if not callable(method):
+            continue
+        try:
+            df = method(freq="quarterly")
+        except (TypeError, ValueError):
+            continue
+        if df is not None and not df.empty:
+            return df, f"{method_name}(quarterly)"
+    return None, None
+
+
 def quarterly_cashflow_has_usable_series(quarterly: dict[str, Any]) -> bool:
     """True when at least one quarterly period has OCF, FCF, or capex lines."""
     if not quarterly:
@@ -143,6 +178,20 @@ def quarterly_cashflow_has_usable_series(quarterly: dict[str, Any]) -> bool:
         if _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"]) is not None:
             return True
         if _annual_label_value(rows, _CAPEX_LABELS) is not None:
+            return True
+    return False
+
+
+def quarterly_income_has_usable_series(quarterly: dict[str, Any]) -> bool:
+    """True when at least one quarterly period has EPS or revenue lines."""
+    if not quarterly:
+        return False
+    for rows in quarterly.values():
+        if not rows:
+            continue
+        if _annual_label_value(rows, _INCOME_EPS_LABELS) is not None:
+            return True
+        if _annual_label_value(rows, _INCOME_REVENUE_LABELS) is not None:
             return True
     return False
 
@@ -376,9 +425,95 @@ def install_fetch_cashflow_fallback() -> None:
     fetch_mod.fetch_company_metrics = fetch_company_metrics_with_cashflow_fallback
 
 
+def summarize_yahoo_quarterly_for_snapshot(financials: dict[str, Any]) -> dict[str, Any]:
+    """Build compact Yahoo quarterly income/cash-flow rows keyed by period-end labels."""
+    quarterly_income = financials.get("quarterly_income") or {}
+    quarterly_cashflow = financials.get("quarterly_cashflow") or {}
+    cashflow_metrics = financials.get("cashflow_metrics") or {}
+
+    income_periods: list[dict[str, Any]] = []
+    for period in _sorted_period_keys(quarterly_income)[:FINANCIAL_QUARTERS]:
+        rows = quarterly_income.get(period) or {}
+        entry: dict[str, Any] = {
+            "period_end": period,
+            "period_label": period,
+        }
+        diluted_eps = _annual_label_value(rows, ["Diluted EPS"])
+        basic_eps = _annual_label_value(rows, ["Basic EPS"])
+        revenue = _annual_label_value(rows, _INCOME_REVENUE_LABELS)
+        if diluted_eps is not None:
+            entry["diluted_eps"] = diluted_eps
+        if basic_eps is not None:
+            entry["basic_eps"] = basic_eps
+        if revenue is not None:
+            entry["total_revenue"] = revenue
+        if len(entry) > 2:
+            income_periods.append(entry)
+
+    cashflow_periods: list[dict[str, Any]] = []
+    for period in _sorted_period_keys(quarterly_cashflow)[:FINANCIAL_QUARTERS]:
+        rows = quarterly_cashflow.get(period) or {}
+        entry = {
+            "period_end": period,
+            "period_label": period,
+        }
+        ocf = _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["operating_cashflow"])
+        fcf = _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"])
+        capex = _annual_label_value(rows, _CAPEX_LABELS)
+        if ocf is not None:
+            entry["operating_cashflow"] = ocf
+        if fcf is not None:
+            entry["free_cashflow"] = fcf
+        if capex is not None:
+            entry["capital_expenditure"] = capex
+        if len(entry) > 2:
+            cashflow_periods.append(entry)
+
+    summary: dict[str, Any] = {}
+    if income_periods:
+        summary["quarterly_income"] = income_periods
+    if cashflow_periods:
+        summary["quarterly_cashflow"] = cashflow_periods
+
+    ttm_payload = {
+        key: cashflow_metrics[key]
+        for key in _TTM_CASHFLOW_METRIC_KEYS
+        if cashflow_metrics.get(key) is not None
+    }
+    if ttm_payload:
+        summary["ttm_cashflow"] = ttm_payload
+    if cashflow_metrics.get("ttm_cashflow_suppressed"):
+        summary["ttm_cashflow_suppressed"] = True
+        reason = cashflow_metrics.get("ttm_cashflow_suppressed_reason")
+        if reason:
+            summary["ttm_cashflow_suppressed_reason"] = reason
+
+    income_source = financials.get("quarterly_income_source")
+    if income_source:
+        summary["quarterly_income_source"] = income_source
+    cashflow_source = financials.get("quarterly_cashflow_source")
+    if cashflow_source:
+        summary["quarterly_cashflow_source"] = cashflow_source
+    return summary
+
+
+def enrich_screening_snapshot_with_yahoo_quarterly(
+    snapshot: dict[str, Any],
+    financials: dict[str, Any],
+) -> dict[str, Any]:
+    """Attach period-labelled Yahoo quarterly rows to a screening snapshot dict."""
+    yahoo_quarterly = summarize_yahoo_quarterly_for_snapshot(financials)
+    if not yahoo_quarterly:
+        return snapshot
+    updated = dict(snapshot)
+    updated["yahoo_quarterly"] = yahoo_quarterly
+    return updated
+
+
 def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dict[str, Any]:
     """Pull up to five years of annual statements from yfinance."""
     stock = yf.Ticker(ticker)
+    quarterly_income_df, quarterly_income_source = _resolve_yahoo_quarterly_income_df(stock)
     quarterly_df, quarterly_source = _resolve_yahoo_quarterly_cashflow_df(stock)
     payload: dict[str, Any] = {
         "ticker": ticker,
@@ -386,12 +521,17 @@ def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dic
         "income_statement": _df_years(stock.financials, max_years=years),
         "balance_sheet": _df_years(stock.balance_sheet, max_years=years),
         "cash_flow": _df_years(stock.cashflow, max_years=years),
-        "quarterly_income": _df_years(getattr(stock, "quarterly_financials", None), max_years=4),
+        "quarterly_income": _df_periods(
+            quarterly_income_df,
+            max_periods=FINANCIAL_QUARTERS,
+        ),
         "quarterly_cashflow": _df_periods(
             quarterly_df,
             max_periods=FINANCIAL_QUARTERS,
         ),
     }
+    if quarterly_income_source:
+        payload["quarterly_income_source"] = quarterly_income_source
     if quarterly_source:
         payload["quarterly_cashflow_source"] = quarterly_source
     cashflow_metrics = extract_cashflow_metrics_from_annual_financials(payload)
@@ -616,7 +756,12 @@ def ingest_research_sources(
     write_json(financials_path, financials, compact=True, compress=False)
 
     snapshot_path = sources_dir / "screening_snapshot.json"
-    write_json(snapshot_path, screening_snapshot, compact=True, compress=False)
+    write_json(
+        snapshot_path,
+        enrich_screening_snapshot_with_yahoo_quarterly(screening_snapshot, financials),
+        compact=True,
+        compress=False,
+    )
 
     yf_news = fetch_yfinance_news(ticker)
     google_news = fetch_google_news_rss(company_name, ticker, market=market)

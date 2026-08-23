@@ -76,12 +76,15 @@ from value_investor.research.filings import (
 )
 from value_investor.research.ingest import (
     apply_cashflow_metrics_fallback,
+    enrich_screening_snapshot_with_yahoo_quarterly,
     extract_cashflow_metrics_from_annual_financials,
     extract_ttm_cashflow_metrics_from_quarterly,
     fetch_annual_financials,
     ingest_research_sources,
     install_fetch_cashflow_fallback,
     quarterly_cashflow_has_usable_series,
+    quarterly_income_has_usable_series,
+    summarize_yahoo_quarterly_for_snapshot,
     supplement_company_metrics_cashflow,
 )
 
@@ -209,6 +212,108 @@ def test_fetch_annual_financials_resolves_quarterly_cashflow_from_alternate_attr
     assert payload["quarterly_cashflow"]["2025-06-30"]["Operating Cash Flow"] == 214_000_000.0
     assert payload["cashflow_metrics"]["free_cashflow_ttm"] == pytest.approx(277_000_000.0)
     assert "ttm_cashflow_suppressed" not in payload["cashflow_metrics"]
+
+
+def test_fetch_annual_financials_quarterly_income_uses_period_keys(monkeypatch):
+    quarterly_income_df = pd.DataFrame(
+        {
+            pd.Timestamp("2026-06-30"): [94_000_000_000.0, 1.57, 1.58],
+            pd.Timestamp("2026-03-31"): [95_400_000_000.0, 1.65, 1.66],
+            pd.Timestamp("2025-12-31"): [124_300_000_000.0, 2.4, 2.41],
+            pd.Timestamp("2025-09-30"): [94_900_000_000.0, 1.64, 1.65],
+        },
+        index=["Total Revenue", "Basic EPS", "Diluted EPS"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = pd.DataFrame()
+        quarterly_financials = quarterly_income_df
+        quarterly_cashflow = pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    payload = fetch_annual_financials("AAPL")
+    assert payload["quarterly_income_source"] == "quarterly_financials"
+    assert list(payload["quarterly_income"].keys()) == [
+        "2026-06-30",
+        "2026-03-31",
+        "2025-12-31",
+        "2025-09-30",
+    ]
+    assert payload["quarterly_income"]["2026-06-30"]["Diluted EPS"] == pytest.approx(1.58)
+
+
+def test_fetch_annual_financials_resolves_quarterly_income_from_alternate_attr(monkeypatch):
+    quarterly_income_df = pd.DataFrame(
+        {
+            pd.Timestamp("2025-04-30"): [315_400_000.0, 0.0648],
+            pd.Timestamp("2024-10-31"): [307_900_000.0, 0.0674],
+        },
+        index=["Total Revenue", "Diluted EPS"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = pd.DataFrame()
+        quarterly_financials = pd.DataFrame()
+        quarterly_income_stmt = quarterly_income_df
+        quarterly_cashflow = pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    payload = fetch_annual_financials("MEGP.L")
+    assert payload["quarterly_income_source"] == "quarterly_income_stmt"
+    assert payload["quarterly_income"]["2025-04-30"]["Diluted EPS"] == pytest.approx(0.0648)
+
+
+def test_quarterly_income_has_usable_series_requires_eps_or_revenue():
+    assert not quarterly_income_has_usable_series({})
+    assert not quarterly_income_has_usable_series({"2025-06-30": {"Tax Rate For Calcs": 0.25}})
+    assert quarterly_income_has_usable_series({"2025-06-30": {"Diluted EPS": 0.15}})
+    assert quarterly_income_has_usable_series({"2025-06-30": {"Total Revenue": 100.0}})
+
+
+def test_summarize_yahoo_quarterly_for_snapshot_period_labels():
+    financials = {
+        "quarterly_income": {
+            "2025-04-30": {"Diluted EPS": 0.0648, "Total Revenue": 315_400_000.0},
+            "2024-10-31": {"Diluted EPS": 0.0674, "Total Revenue": 307_900_000.0},
+        },
+        "quarterly_cashflow": {
+            "2025-04-30": {
+                "Operating Cash Flow": 25_200_000.0,
+                "Free Cash Flow": 20_000_000.0,
+            }
+        },
+        "cashflow_metrics": {
+            "free_cashflow_ttm": 15_600_000.0,
+            "ttm_cashflow_suppressed": False,
+        },
+        "quarterly_income_source": "quarterly_income_stmt",
+        "quarterly_cashflow_source": "quarterly_cashflow",
+    }
+    summary = summarize_yahoo_quarterly_for_snapshot(financials)
+    assert summary["quarterly_income"][0]["period_label"] == "2025-04-30"
+    assert summary["quarterly_income"][0]["diluted_eps"] == pytest.approx(0.0648)
+    assert summary["quarterly_cashflow"][0]["period_label"] == "2025-04-30"
+    assert summary["quarterly_cashflow"][0]["free_cashflow"] == pytest.approx(20_000_000.0)
+    assert summary["ttm_cashflow"]["free_cashflow_ttm"] == pytest.approx(15_600_000.0)
+
+
+def test_enrich_screening_snapshot_with_yahoo_quarterly():
+    snapshot = {"ticker": "MEGP.L", "signal": "strong_buy"}
+    financials = {
+        "quarterly_income": {"2025-04-30": {"Diluted EPS": 0.0648}},
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {
+            "ttm_cashflow_suppressed": True,
+            "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+        },
+    }
+    enriched = enrich_screening_snapshot_with_yahoo_quarterly(snapshot, financials)
+    assert enriched["yahoo_quarterly"]["quarterly_income"][0]["period_label"] == "2025-04-30"
+    assert enriched["yahoo_quarterly"]["ttm_cashflow_suppressed"] is True
 
 
 def test_operating_cashflow_aliases_from_yahoo_labels():
@@ -3081,8 +3186,18 @@ def test_ingest_research_sources_keeps_filings_separate_from_yahoo(tmp_path: Pat
                 "income_statement": {"2025": {"Total Revenue": 1.0}},
                 "balance_sheet": {},
                 "cash_flow": {},
-                "quarterly_income": {},
-                "quarterly_cashflow": {},
+                "quarterly_income": {
+                    "2025-04-30": {"Diluted EPS": 0.0648, "Total Revenue": 315_400_000.0},
+                },
+                "quarterly_cashflow": {
+                    "2025-04-30": {
+                        "Operating Cash Flow": 25_200_000.0,
+                        "Free Cash Flow": 20_000_000.0,
+                    }
+                },
+                "cashflow_metrics": {
+                    "free_cashflow_ttm": 15_600_000.0,
+                },
             },
         ),
         patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[]),
@@ -3132,6 +3247,9 @@ def test_ingest_research_sources_keeps_filings_separate_from_yahoo(tmp_path: Pat
     assert "income_statement" in yahoo
     assert "filings" in filings
     assert yahoo != filings
+    snapshot = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert snapshot["yahoo_quarterly"]["quarterly_income"][0]["period_label"] == "2025-04-30"
+    assert snapshot["yahoo_quarterly"]["quarterly_cashflow"][0]["period_label"] == "2025-04-30"
 
 
 def test_ingest_filings_saves_body_for_direct_url(tmp_path: Path):
