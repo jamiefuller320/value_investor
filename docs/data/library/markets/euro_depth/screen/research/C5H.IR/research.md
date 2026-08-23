@@ -1,0 +1,90 @@
+# Cairn Homes plc (C5H.IR) — Research memo
+
+_Version 1 · Updated 2026-08-23T06:16:25.164287+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Cairn Homes plc is Ireland’s largest private residential developer, dual-listed on Euronext Dublin (C5H) and the LSE (CRN). The quantitative screen rates the name a **buy** on cheapness (P/E ~12, P/B ~1.9), quality (ROE ~16.6%), dividend yield (~4%), and financial health, though a cash-conversion overlay flags negative trailing free cash flow alongside ongoing dividends and buybacks. FY2025 Yahoo data (no filing bodies available) shows revenue approaching €945m and net income of €133m, with H1 2026 news reporting a sharp acceleration in sales. The central debate is whether structural Irish housing undersupply and a €1.32bn order book (news headline only; unverified in filings) justify the valuation, or whether inventory-heavy working capital and cyclical housing risk will erode reported earnings quality.
+
+## INVESTMENT THESIS
+For a value investor, Cairn offers a rare combination of mid-teens returns on equity, a sub-15 P/E, and a ~4% dividend yield in a sector typically priced for cyclicality rather than compounding. The screen passes 14 of 22 models across five families — cheapness, quality, dividend, GARP, and risk — including Graham Defensive/Enterprising, Quality Value, Buffett Quality, Dividend Growth, and Financial Health. A current ratio of ~5.1x and debt-to-equity of ~28% suggest balance-sheet resilience relative to peers, while statutory earnings growth of ~50% on the screen (likely TTM-basis) and FY2025 net income up ~16% year-on-year (Yahoo) point to operational momentum.
+
+Business quality appears supported by scale in Irish private housing, a multi-year order book, and management commentary (via news) citing “exceptional demand” and raised 2026 guidance at the March 2026 FY2025 results. Capital return is active: FY2025 Yahoo cash-flow data shows €52.9m in dividends and €7.8m in buybacks, consistent with a shareholder-return-oriented model. The screen’s failure on FCF Yield, Piotroski F-Score (4/9), and Earnings Quality is the main pushback — homebuilders naturally tie cash to land and WIP inventory, and FY2025 saw a €173m inventory build (Yahoo) that depressed operating cash conversion despite strong reported profit. That tension is precisely what makes the name a **value-with-caveats** rather than a deep-value net-net: the market may be discounting cyclical and working-capital risk that the quality metrics partially offset.
+
+## FINANCIAL REVIEW
+**Primary filings gap:** `filings_index.json` contains zero indexed filings (annual, interim, trading update, or other) and no body extracts under `filings/bodies/`. All figures below fall back to **Yahoo `financials_annual.json`** unless noted. Interim/H1 2026 operational detail is referenced from news headlines only and cannot be verified against filing text.
+
+**Income statement trend (Yahoo, €m):**
+
+| Period | Revenue | Operating income | Net income | Diluted EPS |
+|--------|---------|------------------|------------|-------------|
+| FY2022 | 617.4 | 103.0 | 81.0 | €0.114 |
+| FY2023 | 666.8 | 113.4 | 85.4 | €0.126 |
+| FY2024 | 859.9 | 150.0 | 114.6 | €0.178 |
+| FY2025 | 944.6 | 168.6 | 132.7 | €0.211 |
+
+Revenue compounded strongly from FY2022–FY2025 (+53%), with FY2025 revenue up ~10% and net income up ~16% versus FY2024. Gross profit rose to €208.8m (FY2025) from €187.0m (FY2024), implying a stable-to-modest gross margin (~22%). EBITDA was €170.4m (FY2025) versus €152.3m (FY2024). Interest expense increased to €15.4m (FY2025) from €14.7m (FY2024), reflecting higher debt balances.
+
+**Balance sheet (Yahoo, FY2025 year-end, €m):** Total assets €1,306m; shareholders’ equity €837m; total debt €232m; net debt €171m; cash €55m. Inventory totalled €1,115m (finished goods €701m, WIP €414m), up from €862m at FY2024 — a €253m build consistent with scaling output ahead of completions. Working capital was €1,032m. Tangible book value €832m; goodwill/intangibles immaterial at €4.5m. The balance sheet is characteristic of a land-and-build developer: equity is substantial, but liquidity is tied to inventory conversion rather than cash on hand.
+
+**Cash flow (Yahoo, €m):**
+
+| Period | Operating CF | CapEx | Free CF | Dividends | Buybacks |
+|--------|-------------|-------|---------|-----------|----------|
+| FY2023 | 107.0 | (4.1) | 102.9 | (41.9) | (45.9) |
+| FY2024 | 134.7 | (4.4) | 130.3 | (44.7) | (75.6) |
+| FY2025 | 70.6 | (2.9) | 67.8 | (52.9) | (7.8) |
+
+FY2025 operating cash flow fell sharply despite higher net income, driven by a €173m increase in inventory and offset partly by receivable/payable movements. Yahoo reports positive FY2025 FCF of €67.8m, but the **screen’s TTM FCF is −€24.7m (USD basis)**, triggering the cash-conversion overlay that adjusts the headline signal toward Hold. Operating cash flow of €70.6m was below net income of €132.7m, failing the screen’s “OCF > net income” Piotroski component. Quarterly cash-flow detail is absent (`quarterly_cashflow` empty; TTM suppressed).
+
+**Interim / H1 2026:** No interim filing body is indexed. News headlines (7 July 2026) report a ~60% H1 revenue/sales increase and a trading update dated 6 July 2026; full interim results were scheduled for 2 September 2026 (Investing.com, 7–8 August 2026). These figures cannot be incorporated as verified financials.
+
+**Annual FY2025 context (news only):** Investing.com (4 March 2026) cited FY25 slides showing revenue up 10% and an order book of €1.32bn; this aligns directionally with Yahoo revenue but the order book is **not corroborated in filing extracts**.
+
+## RISKS AND RED FLAGS
+Without filing bodies, going-concern statements, debt covenants, contingent liabilities, and pension disclosures **cannot be reviewed** — a material evidence gap for a leveraged, inventory-intensive builder. Available data still surfaces several concerns:
+
+**Cyclical and macro:** Irish residential demand is policy-supported but remains sensitive to mortgage rates, affordability, and completion timelines. Macro context (secondary only) shows elevated global yields (US 10y ~4.74%) and a firm EUR/USD (~1.17); no automatic veto applied, but rate persistence could compress buyer demand.
+
+**Working capital / liquidity:** Inventory of €1.1bn exceeds equity; FY2025’s inventory build absorbed significant cash. Homebuilders can look profitable while FCF turns negative during land banking and build-out phases — consistent with the screen’s negative TTM FCF and failed Earnings Quality model.
+
+**Leverage:** Net debt of €171m and total debt €232m against equity €837m is moderate (D/E ~28% on screen inputs), but debt rose in FY2025 (from €188m total debt at FY2024). Revolving facility usage and covenant headroom are unknown without filings.
+
+**Regulatory / planning:** News and analyst commentary repeatedly cite execution and regulatory risk around build rates, infrastructure, and planning in Ireland. No primary filing language available to assess specific contingencies.
+
+**Governance / capital structure:** Routine block-listing and SAYE scheme reviews; 3.4m shares issued for employee incentives (April 2026); FIL Limited exceeded 9% voting rights (August 2026). Pat Farrell appointed to the board effective October 2026. None appear adverse, but dilution from incentive plans is ongoing.
+
+**Competitive:** Irish housebuilding is consolidating; Cairn’s scale is an advantage, but margin pressure from input costs, labour, and competing developers is a sector-wide risk not captured in static value screens.
+
+**Screen-specific flags:** Piotroski F-Score 4/9; FCF yield −1.6%; failed Deep Value (P/B >1.0); Graham Net-Net unavailable (no NCAV data). Cash-conversion overlay active.
+
+RiskTags: cyclical, regulatory, liquidity, leverage, competitive, governance
+RiskTags: cyclical, regulatory, liquidity, leverage, competitive, governance
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate-to-good** (31 articles in manifest), though many are syndicated headlines rather than primary RNS text.
+
+**Operating performance and guidance**
+- *“Cairn Homes FY25 slides: revenue up 10%, order book hits €1.32bn”* — Investing.com, 4 March 2026
+- *“Cairn Homes H2 Earnings Call Highlights”* / management raised 2026 guidance citing strong demand — Yahoo Finance, 4 March 2026
+- *“Cairn Homes Plc: H1 2026 Trading Update”* — TradingView, 6 July 2026
+- *“Cairn Homes reports 60% revenue increase in first half”* — Investing.com, 7 July 2026; *“Cairn Homes shares rise as sales jump 60%”* — Business Post, 7 July 2026
+
+**Corporate / governance**
+- *“Cairn Homes Publishes 2025 Annual Report and AGM Materials”* — TipRanks, 28 April 2026
+- *“Cairn Homes Announces Appointment of Pat Farrell to Board, Effective October 1, 2026”* — marketscreener.com, 12 August 2026
+- *“FIL Limited Surpasses 9% Voting Rights Mark in Cairn Homes Plc (CRN) Shareholding”* — Kalkine Media, 4 August 2026
+
+**Capital markets / routine**
+- *“Cairn Homes to release interim results on September 2”* — Investing.com UK, 7 August 2026
+- *“Cairn Homes issues 3.4 million shares for employee incentive plan”* — Investing.com, 2 April 2026
+- Block listing interim reviews for SAYE scheme — August 2026
+
+**Analyst narrative (Yahoo Finance, secondary):** Multiple articles (March–June 2026) describe fair-value estimates clustering around £2.33–£2.39 with higher bull targets (~£2.45 / €3), anchored on housing shortage and policy support; these are opinion pieces, not company disclosures.
+
+No material M&A, regulatory enforcement, or management departures were flagged in the manifest. News on H1 2026 is positive but headline-level; full interim accounts were pending at pack date.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Quantitative cheapness and quality metrics align with a growing, dividend-paying Irish housebuilder, but absent primary filings and with screen-flagged weak TTM cash conversion, the buy case is supported directionally yet not fully verified.
