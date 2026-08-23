@@ -4677,3 +4677,96 @@ def test_extract_ir_presentation_metrics_includes_ifrs16_lease_maturity(tmp_path
     buckets = {row["bucket"]: row["amount_thousands"] for row in lease_rows[0]["buckets"]}
     assert buckets["within_one_year"] == 4953.0
     assert buckets["total"] == 12271.0
+
+
+def test_parse_ir_operating_cash_flow_highlights_hik_fixture():
+    from value_investor.research.filings import parse_ir_operating_cash_flow_highlights
+
+    fixture = Path("docs/data/research/HIK.L/sources/filings/bodies/ir_a70365d580129295.txt")
+    if not fixture.is_file():
+        pytest.skip("HIK interim IR body fixture not present")
+    parsed = parse_ir_operating_cash_flow_highlights(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["bridge_type"] == "operating_cash_flow_highlight"
+    assert parsed["currency"] == "USD"
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["operating_cash_flow_prior"] == 198.0
+    assert by_label["operating_cash_flow_current"] == 161.0
+
+
+def test_parse_ir_segment_operating_margins_hik_fixture():
+    from value_investor.research.filings import parse_ir_segment_operating_margins
+
+    fixture = Path("docs/data/research/HIK.L/sources/filings/bodies/ir_a70365d580129295.txt")
+    if not fixture.is_file():
+        pytest.skip("HIK interim IR body fixture not present")
+    parsed = parse_ir_segment_operating_margins(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["split_type"] == "segment_operating_margin"
+    segments = {row["segment"]: row for row in parsed["segments"]}
+    assert segments["Injectables"]["margin_prior_pct"] == 36.3
+    assert segments["Injectables"]["margin_current_pct"] == 30.0
+    assert segments["Hikma Rx"]["margin_current_pct"] == 17.6
+
+
+def test_parse_ir_interim_segment_revenue_hik_fixture():
+    from value_investor.research.filings import parse_ir_interim_segment_revenue
+
+    fixture = Path("docs/data/research/HIK.L/sources/filings/bodies/ir_a70365d580129295.txt")
+    if not fixture.is_file():
+        pytest.skip("HIK interim IR body fixture not present")
+    parsed = parse_ir_interim_segment_revenue(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["split_type"] == "interim_segment_revenue"
+    segments = {row["segment"]: row for row in parsed["segments"]}
+    assert segments["Injectables"]["revenue_current"] == 683.0
+    assert segments["Branded"]["revenue_current"] == 437.0
+    assert segments["Hikma Rx"]["revenue_current"] == 522.0
+
+
+def test_extract_ir_presentation_metrics_hik_interim_fixture(tmp_path: Path):
+    """End-to-end: HIK H1 results presentation yields OCF bridge and segment tables."""
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_id = "ir_a70365d580129295"
+    fixture = Path("docs/data/research/HIK.L/sources/filings/bodies/ir_a70365d580129295.txt")
+    if not fixture.is_file():
+        pytest.skip("HIK interim IR body fixture not present")
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "Hikma 2025 interim results presentation",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "HIK.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["bridge_count"] >= 1
+    assert metrics["segment_split_count"] >= 2
+    assert (sources_dir / "ir_presentation_metrics.json").exists()
+    bridge_types = {row["bridge_type"] for row in metrics["bridges"]}
+    assert "operating_cash_flow_highlight" in bridge_types
+    split_types = {row["split_type"] for row in metrics["segment_revenue_splits"]}
+    assert "interim_segment_revenue" in split_types
+    assert "segment_operating_margin" in split_types
