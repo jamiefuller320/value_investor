@@ -21,6 +21,22 @@ Success is measured on the **filtered cohort** first (mostly-decent names), not 
 3-position hero portfolio alone. History length is fixed; **monitoring horizon** extends
 via regular re-analysis and regime checks.
 
+## Prediction philosophy
+
+The aim remains to **predict future growth in value** of individual stocks. Useful
+patterns are **changes in trajectory** — signals that it is time to **change opinion**
+on a particular name (upgrade, downgrade, exclude, re-enter) — not a perfect
+retrospective account of why a stock behaved as it did.
+
+| Seek | Avoid |
+|------|-------|
+| Opinion-flip timing (conviction trend, timing overlay shifts) | Static level-fit on history |
+| Forward cohort quality drift | In-sample narrative backstory |
+| Early exclusion before damage compounds | Explaining every past loser in hindsight |
+
+Structured in JSON as `prediction_philosophy` in
+[`learning_director_vision.json`](../data/learning_director_vision.json).
+
 ## Weekly director (active — v1)
 
 | Output section | Purpose |

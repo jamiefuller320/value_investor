@@ -243,10 +243,12 @@ Write SIX plain-text sections with headings exactly as shown:
 REGIME & ASSUMPTION CHECK
 3–4 sentences: does exclusion alpha, cohort quality, and primary track evidence still
 hold as history extends? Cite regime_summary windows and flags. Note decay or reversal.
+Prioritise **trajectory change** (opinion-flip signals) over static historical fit.
 
 CONVERGENCE
 Reconcile top-pick (ai_judgment, conviction, sleeves) vs bottom-filter (exclusion ladder,
 universe archive). State whether strands are converging toward a bettable filtered cohort.
+Frame success as timely opinion updates (prediction_philosophy), not perfect backstory.
 
 COMPLEXITY & EXPERIMENT INVENTORY
 Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer
