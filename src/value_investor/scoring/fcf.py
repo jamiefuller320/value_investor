@@ -869,6 +869,23 @@ def resolve_statutory_earnings_growth(row: pd.Series) -> float | None:
     return float(statutory)
 
 
+def resolve_model_earnings_growth(row: pd.Series) -> float | None:
+    """Prefer filing adjusted- or basic-EPS growth over Yahoo screen TTM earnings growth."""
+    adjusted = row.get("adjusted_eps_growth_pct")
+    if adjusted is not None and not (isinstance(adjusted, float) and pd.isna(adjusted)):
+        return float(adjusted)
+    basic = row.get("basic_eps_growth_pct")
+    if basic is not None and not (isinstance(basic, float) and pd.isna(basic)):
+        return float(basic)
+    screen = row.get("earnings_growth_screen_ttm")
+    if screen is not None and not (isinstance(screen, float) and pd.isna(screen)):
+        return float(screen)
+    statutory = row.get("earnings_growth")
+    if statutory is None or (isinstance(statutory, float) and pd.isna(statutory)):
+        return None
+    return float(statutory)
+
+
 def reconcile_fcf(
     *,
     screen_ttm: float | None,
@@ -892,7 +909,11 @@ def reconcile_fcf(
     metrics_fcf = float(metrics_fcf) if metrics_fcf is not None else None
     filing_currency = "USD"
 
-    if filing_aligned is not None:
+    if company_adjusted is not None:
+        canonical = float(company_adjusted)
+        source = "company_adjusted"
+        filing_currency = str(company_adjusted_currency or filing_currency)
+    elif filing_aligned is not None:
         canonical = filing_aligned
         source = "filing_aligned_ocf_capex"
     elif metrics_fcf is not None:
@@ -1032,7 +1053,11 @@ def overlay_free_cashflow_from_bundle(
     row: pd.Series,
     fcf_bundle: dict[str, Any],
 ) -> float | None:
-    """Pick filing-aligned or screen TTM FCF for yield, quality, and overlay inputs."""
+    """Pick company-adjusted, filing-aligned, or screen TTM FCF for yield and overlay inputs."""
+    company_adjusted = fcf_bundle.get("company_adjusted")
+    if isinstance(company_adjusted, (int, float)):
+        return float(company_adjusted)
+
     screen_ttm = screen_ttm_from_row(row)
     filing_aligned = fcf_bundle.get("filing_aligned")
     if isinstance(filing_aligned, (int, float)):
@@ -1176,7 +1201,9 @@ def enrich_universe_with_canonical_fcf(
             output_dir=output_dir,
         )
         screen_ttms.append(screen_ttm)
-        if fcf_filing_screen_mismatch(
+        if bundle.get("company_adjusted") is not None:
+            canonicals.append(bundle.get("company_adjusted"))
+        elif fcf_filing_screen_mismatch(
             filing_aligned=bundle.get("filing_aligned"),
             screen_ttm=screen_ttm,
             divergence_flagged=bool(bundle.get("divergence_flagged")),
@@ -1205,9 +1232,19 @@ def enrich_universe_with_filing_metrics(
     for key in _FILING_METRIC_KEYS:
         if key not in out.columns:
             out[key] = None
+    if "earnings_growth_screen_ttm" not in out.columns:
+        out["earnings_growth_screen_ttm"] = None
 
     for index, row in out.iterrows():
         ticker = str(row["ticker"])
+        screen_growth = _float_or_none(row.get("earnings_growth"))
+        if screen_growth is not None:
+            current_screen = out.at[index, "earnings_growth_screen_ttm"]
+            if current_screen is None or (
+                isinstance(current_screen, float) and pd.isna(current_screen)
+            ):
+                out.at[index, "earnings_growth_screen_ttm"] = screen_growth
+
         financials = load_cached_financials(ticker, output_dir=output_dir)
         if not financials:
             continue
@@ -1251,5 +1288,19 @@ def enrich_universe_with_filing_metrics(
             current = out.at[index, "adjusted_eps_growth_pct"]
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, "adjusted_eps_growth_pct"] = adjusted_growth
+
+        company_adjusted, _company_currency = extract_company_adjusted_fcf_for_ticker(
+            ticker,
+            output_dir=output_dir,
+        )
+        dividends_paid = _float_or_none(out.at[index, "dividends_paid"])
+        if company_adjusted is not None and dividends_paid is not None:
+            company_coverage = fcf_dividend_coverage(company_adjusted, dividends_paid)
+            if company_coverage is not None:
+                out.at[index, "fcf_dividend_coverage_net"] = company_coverage
+
+        filing_growth = resolve_model_earnings_growth(out.loc[index])
+        if filing_growth is not None:
+            out.at[index, "earnings_growth"] = filing_growth
 
     return out
