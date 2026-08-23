@@ -14,11 +14,9 @@ from value_investor.learning_director import (
     DEFAULT_DATA_DIR,
     DEFAULT_OUTPUT_DIR,
     build_learning_director_payload,
-    compile_horizon_fragments,
     compile_learning_director_tasks,
     has_enough_learning_director_inputs,
     parse_learning_director_review,
-    parse_horizon_fragment_lines,
     run_learning_director,
 )
 from value_investor.learning_director_regime import VISION_PATH

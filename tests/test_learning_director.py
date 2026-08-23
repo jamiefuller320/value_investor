@@ -51,9 +51,7 @@ DEFER
 
 
 def test_parse_horizon_fragment_lines():
-    rows = parse_horizon_fragment_lines(
-        "- [tags] First idea\nNONE\n- Second without tags\n"
-    )
+    rows = parse_horizon_fragment_lines("- [tags] First idea\nNONE\n- Second without tags\n")
     assert len(rows) == 2
     assert rows[0]["tags"] == ["tags"]
     assert rows[0]["text"].startswith("First")
