@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "title": "Learning Director — capability roadmap",
+  "updated_at": "2026-08-23T00:00:00+00:00",
+  "north_star": "Converge winner-picking (top) and loser-filtering (bottom) into a bettable model: progressively narrow the eligible pool into a mostly-decent cohort, then allocate sleeves — with regime monitoring so assumptions expire safely.",
+  "convergence_thesis": {
+    "bottom_filter": "Raise the floor — exclude recurrent loser signatures before concentration.",
+    "top_pick": "Among survivors, allocate sleeves by conviction, sector caps, and research overlay.",
+    "primary_metric": "Filtered cohort excess (gross then net) before hero 3-position P&L.",
+    "bet_gate": "Promote only when cohort floor, retain rate, and deployable book agree over extending windows."
+  },
+  "complexity_budget": {
+    "max_parallel_open_experiments": 5,
+    "max_frozen_shadow_tracks": 4,
+    "note": "Director should recommend retire/merge/defer when budget exceeded."
+  },
+  "phases": [
+    {
+      "id": "v1_weekly_director",
+      "status": "active",
+      "label": "Weekly Learning Director prompt",
+      "summary": "Read-only weekly synthesis: regime check, convergence narrative, experiment inventory, vision roadmap review.",
+      "revisit_when": "Always on — core orchestration layer.",
+      "dependencies": ["analysis_review", "exclusion_universe", "learning_tracks_review"]
+    },
+    {
+      "id": "regime_slices_8_16_24",
+      "status": "planned",
+      "label": "Rolling regime slices (8 / 16 / 24 weeks)",
+      "summary": "Deterministic rollups comparing exclusion alpha, cohort hit rate, and exclude/retain rates across extending windows; flag decay and reversals.",
+      "revisit_when": "history_run_count >= 16 and exclusion archive has >= 12 consecutive week pairs",
+      "dependencies": ["v1_weekly_director", "exclusion_universe_archive weekly persistence"]
+    },
+    {
+      "id": "filtered_cohort_track",
+      "status": "planned",
+      "label": "Filtered cohort paper track (15–20 EW sleeves)",
+      "summary": "Deploy ladder-filtered buy-tier as equal-weight cohort track; measure cohort excess separately from 3-pos primary.",
+      "revisit_when": "u4 exclusion alpha positive over full sample AND exclusion_ladder_replay ready_for_shadow_spawn true for >= 4 weeks",
+      "dependencies": ["exclusion_ladder_replay", "exclusion_universe_archive"]
+    },
+    {
+      "id": "loser_pattern_lab",
+      "status": "planned",
+      "label": "Loser pattern lab (feature attribution)",
+      "summary": "PIT feature store on bottom-quartile buy-tier names; propose human-readable exclusion rules mapped to knobs/overlays.",
+      "revisit_when": "filtered_cohort_track active OR history_run_count >= 20",
+      "dependencies": ["regime_slices_8_16_24"]
+    },
+    {
+      "id": "filter_invention_loop",
+      "status": "planned",
+      "label": "Automated filter invention search",
+      "summary": "Search filter combinations maximising exclude_rate subject to top-quartile retain floor and minimum pool size.",
+      "revisit_when": "loser_pattern_lab has >= 3 validated patterns with stable out-of-sample exclude lift",
+      "dependencies": ["loser_pattern_lab"]
+    },
+    {
+      "id": "dual_objective_calibration",
+      "status": "planned",
+      "label": "Dual-objective knob ranking",
+      "summary": "Blend exclude_rate and catch_rate in calibration/endurance, not winner-only cohort fitness.",
+      "revisit_when": "filtered_cohort_track has >= 8 epoch marks",
+      "dependencies": ["filtered_cohort_track"]
+    },
+    {
+      "id": "super_director_auto_promote",
+      "status": "deferred",
+      "label": "Auto-promote experiments to engineering",
+      "summary": "Never default — human promote gates remain. Revisit only if triage load is unsustainable.",
+      "revisit_when": "Explicit human ops decision",
+      "dependencies": []
+    }
+  ],
+  "guardrails": {
+    "observe_only": true,
+    "no_screen_mutation": true,
+    "no_decision_review_apply": true,
+    "no_auto_engineering_promote": true,
+    "human_promotion_required": true
+  }
+}
