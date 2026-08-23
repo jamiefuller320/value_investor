@@ -41,9 +41,7 @@ def _sector_context(reports: list[dict[str, Any]], sector: str | None) -> dict[s
         }
     peers = [row for row in reports if str(row.get("sector") or "") == sector]
     avoid_count = sum(1 for row in peers if str(row.get("signal") or "") == "avoid")
-    buy_count = sum(
-        1 for row in peers if str(row.get("signal") or "").lower() in BUY_SIGNALS
-    )
+    buy_count = sum(1 for row in peers if str(row.get("signal") or "").lower() in BUY_SIGNALS)
     peer_count = len(peers)
     return {
         "sector": sector,
@@ -77,7 +75,9 @@ def _opinion_flip_triggers(row: dict[str, Any]) -> list[str]:
     return triggers[:5]
 
 
-def _summary_lines(row: dict[str, Any], *, cohorts: list[str], sector_ctx: dict[str, Any]) -> list[str]:
+def _summary_lines(
+    row: dict[str, Any], *, cohorts: list[str], sector_ctx: dict[str, Any]
+) -> list[str]:
     signal = str(row.get("signal") or "hold").upper()
     conviction = float(row.get("conviction_score") or 0)
     timing = str(row.get("timing_signal") or "n/a")
@@ -207,10 +207,10 @@ def run_loser_snapshot_cards(
     run_at: datetime | None = None,
 ) -> dict[str, Any]:
     """
-    Build loser-cohort snapshot cards from latest screen + research alumni.
+      Build loser-cohort snapshot cards from latest screen + research alumni.
 
-    Does **not** scan the full index — only avoid-tier names and failed-buy alumni
-  (names with a research memo that are no longer buy-tier).
+      Does **not** scan the full index — only avoid-tier names and failed-buy alumni
+    (names with a research memo that are no longer buy-tier).
     """
     data_dir = Path(data_dir)
     latest_path = data_dir / "latest.json"
