@@ -1102,7 +1102,24 @@ def test_enrich_universe_with_filing_metrics_extracts_basic_eps_growth(tmp_path:
     assert row["basic_eps_growth_pct"] == pytest.approx(0.00469483568, rel=1e-4)
 
 
-def test_suppress_fcf_yield_passes_for_fgp_style_mismatch(tmp_path: Path):
+def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(tmp_path: Path):
+    _fgp_style_research_tree(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "free_cashflow": 362_600_000.0,
+                "market_cap": 973_000_000.0,
+            }
+        ]
+    )
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    row = enriched.iloc[0]
+    assert row["free_cashflow_screen_ttm"] == 362_600_000.0
+    assert row["free_cashflow"] == 113_500_000.0
+
+
+def test_suppress_fcf_yield_passes_skips_when_company_fcf_is_canonical(tmp_path: Path):
     _fgp_style_research_tree(tmp_path)
     universe = pd.DataFrame(
         [
@@ -1121,8 +1138,24 @@ def test_suppress_fcf_yield_passes_for_fgp_style_mismatch(tmp_path: Path):
 
     model_results = suppress_fcf_yield_passes(model_results, universe, output_dir=tmp_path)
     fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
-    assert bool(fcf_yield["passed"]) is False
-    assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])
+    assert bool(fcf_yield["passed"]) is True
+    assert "FCF yield suppressed" not in str(fcf_yield["failed_criteria"])
+
+
+def test_enrich_universe_with_filing_metrics_canonicalizes_earnings_growth(tmp_path: Path):
+    _fgp_style_research_tree(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "earnings_growth": -0.059,
+            }
+        ]
+    )
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+    assert row["earnings_growth_screen_ttm"] == pytest.approx(-0.059)
+    assert row["earnings_growth"] == pytest.approx(row["basic_eps_growth_pct"])
 
 
 def test_enrich_universe_with_filing_metrics_computes_dual_dividend_coverage(tmp_path: Path):

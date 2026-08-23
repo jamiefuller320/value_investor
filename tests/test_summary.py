@@ -685,6 +685,7 @@ def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
     bundle = reconcile_fcf(screen_ttm=-66_125_000.0, financials=_hik_financials())
     assert bundle["canonical"] == 119_000_000.0
     assert bundle["source"] == "filing_aligned_ocf_capex"
+    assert bundle["source"] == "filing_aligned_ocf_capex"
     assert bundle["screen_ttm"] == -66_125_000.0
     assert bundle["cashflow_metrics_free_cashflow"] == 119_000_000.0
 
@@ -730,6 +731,29 @@ def test_fcf_filing_screen_mismatch_measures_gap_against_filing_fcf():
         screen_ttm=124_000_000.0,
         divergence_flagged=False,
     )
+
+
+def test_reconcile_fcf_prefers_company_adjusted_when_present():
+    bundle = reconcile_fcf(
+        screen_ttm=362_600_000.0,
+        financials=_fgp_financials(),
+        company_adjusted=113_500_000.0,
+        company_adjusted_currency="GBP",
+    )
+    assert bundle["canonical"] == 113_500_000.0
+    assert bundle["source"] == "company_adjusted"
+    assert bundle["divergence_flagged"] is True
+
+
+def test_overlay_free_cashflow_from_bundle_uses_company_adjusted():
+    row = pd.Series({"ticker": "FGP.L", "free_cashflow": 362_600_000.0})
+    bundle = {
+        "company_adjusted": 113_500_000.0,
+        "filing_aligned": 362_600_000.0,
+        "canonical": 113_500_000.0,
+        "divergence_flagged": True,
+    }
+    assert overlay_free_cashflow_from_bundle(row, bundle) == 113_500_000.0
 
 
 def test_overlay_free_cashflow_from_bundle_suppresses_screen_ttm_on_mismatch():
