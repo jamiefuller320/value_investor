@@ -747,7 +747,20 @@
           "FY",
           "RNS"
         ],
-        "plan_index": 2
+        "plan_index": 2,
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260823-02",
+        "verified_at": "2026-08-23T18:19:50.509089+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 36%]\n........................................................................ [ 73%]\n.....................................................                    [100%]\n197 passed in 66.42s (0:01:06)"
+        }
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for UK",
@@ -774,11 +787,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260823-02.md",
       "branch_name": "cursor/eng-20260823-02-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-08-23T18:13:18.614772+00:00"
+      "completed_at": "2026-08-23T18:13:18.614772+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/326",
+      "pr_number": 326,
+      "merged_at": "2026-08-23T18:19:50.509789+00:00"
     },
     {
       "id": "eng-20260819-02",
@@ -1296,6 +1312,45 @@
       "merged_at": "2026-08-10T20:02:43.896654+00:00"
     },
     {
+      "id": "eng-20260823-04",
+      "area": "ingest",
+      "title": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
+      "summary": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260823-03",
       "area": "ingest",
       "title": "Extract IR presentation and annual-report structured tables (cash-flow bridges, segment margins, debt/IFRS 16 maturity, product revenue) into `ir_presentation_m",
@@ -1474,45 +1529,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/288",
       "pr_number": 288,
       "merged_at": "2026-08-18T06:04:42.143663+00:00"
-    },
-    {
-      "id": "eng-20260823-04",
-      "area": "ingest",
-      "title": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
-      "summary": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
-      "priority": "high",
-      "priority_score": 96.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [],
-        "plan_index": 4
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20260819-06",
@@ -2885,6 +2901,17 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-08-23T18:18:40.705855+00:00",
+    "buy_tier_count": 62,
+    "measured_tickers": 62,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 0,
+    "filings_with_body": 3396
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-08-23T07:23:23.356598+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
@@ -2894,5 +2921,7 @@
     "zero_body_tickers": [],
     "indexed_without_body": 0,
     "filings_with_body": 3702
-  }
+  },
+  "reprioritized_at": "2026-08-23T18:18:40.705991+00:00",
+  "reprioritized_after_task": "eng-20260823-02"
 }
