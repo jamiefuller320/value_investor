@@ -34,6 +34,16 @@ retrospective account of why a stock behaved as it did.
 | Forward cohort quality drift | In-sample narrative backstory |
 | Early exclusion before damage compounds | Explaining every past loser in hindsight |
 
+**Exits use the same lens:** sell when the thesis trajectory flips (conviction decay,
+timing overlay deterioration), not when a static calendar or stop rule fires. Hold-to-breakeven
+vs swap-success cohorts ask whether waiting or rotating was the right opinion update.
+
+**Portfolio shape:** the deployable end state may be a **broad book of small sleeves**
+(many names, modest weights each), not a 3-position hero portfolio. Index edge may come
+chiefly from **removing a handful of poor performers** (asymmetric left-tail damage).
+Some underperformers are an **irreducible base rate** of prediction — optimise
+minimise-rate and speed-of-exit, not zero-error classification.
+
 Structured in JSON as `prediction_philosophy` in
 [`learning_director_vision.json`](../data/learning_director_vision.json).
 
