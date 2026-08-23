@@ -116,8 +116,10 @@ file exists.
 
 1. Confirm positive `cumulative_exclusion_alpha` on buy-tier mode
 2. Check hindsight bottom-quartile exclude rate rises without collapsing pool size
-3. Replay winning rung on `rebalance_log` (`offline_sim`) with costs
-4. Only then seed `paper_knobs` or a paper track ladder experiment
+3. Replay winning rung on `rebalance_log` with costs — `ftse-exclusion-ladder-replay run`
+4. Only then spawn shadow / seed `paper_knobs` (human gate)
+
+See [exclusion-ladder-replay.md](exclusion-ladder-replay.md).
 
 Do **not** auto-apply from archive priors — N3 screen thresholds stay frozen.
 

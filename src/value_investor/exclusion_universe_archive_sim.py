@@ -58,6 +58,20 @@ class ExclusionStep:
         }
 
 
+def exclusion_step_from_dict(data: dict[str, Any]) -> ExclusionStep:
+    """Parse ladder step from archive review JSON."""
+    return ExclusionStep(
+        step_id=str(data.get("step_id") or ""),
+        label=str(data.get("label") or data.get("step_id") or ""),
+        exclude_signals=frozenset(str(s) for s in (data.get("exclude_signals") or [])),
+        exclude_timing_wait=bool(data.get("exclude_timing_wait")),
+        min_conviction=float(data.get("min_conviction") or 0),
+        require_effective_buy_tier=bool(data.get("require_effective_buy_tier")),
+        require_research_accumulate=bool(data.get("require_research_accumulate")),
+        min_data_quality=float(data.get("min_data_quality") or 0),
+    )
+
+
 @dataclass
 class ExclusionUniverseArchiveConfig:
     universe_mode: str = UNIVERSE_BUY_TIER_ONLY
@@ -725,6 +739,7 @@ __all__ = [
     "ExclusionUniverseArchiveConfig",
     "archive_sim_metadata",
     "default_exclusion_ladder",
+    "exclusion_step_from_dict",
     "format_exclusion_universe_text",
     "run_exclusion_universe_archive_sim",
 ]

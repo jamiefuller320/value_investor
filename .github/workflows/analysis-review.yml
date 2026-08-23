@@ -105,6 +105,12 @@ jobs:
       - name: Exclusion-universe archive priors (observe-only)
         run: ftse-exclusion-universe-archive --output-dir docs/data || true
 
+      - name: Exclusion ladder replay (rebalance_log + costs)
+        run: |
+          ftse-exclusion-ladder-replay run \
+            --paper-root docs/data/paper_automation \
+            --data-dir docs/data || true
+
       - name: Commit knob bootstrap artifacts
         # Persist even when the modelling agent is skipped — otherwise Sunday
         # calibrate/spawn is lost and weekday paper-auto never sees r2/r3.
@@ -118,6 +124,9 @@ jobs:
             docs/data/paper_automation/ai_judgment_calibrated_r*/**
             docs/data/exclusion_universe_archive.json
             docs/data/exclusion_universe_review.json
+            docs/data/paper_automation/exclusion_ladder_replay.json
+            docs/data/paper_automation/exclusion_ladder_replay_review.json
+            docs/data/paper_automation/ai_judgment_exclusion_*/**
           skip_fetch: false
 
       - name: Check analysis inputs

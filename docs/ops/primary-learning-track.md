@@ -15,6 +15,7 @@ trade checklist — it is a performance comparison to market datums. Success =
 | **Technical** *(baseline)* | `docs/data/paper_automation/technical/` | Stops/targets from `trade_plan`, tactical entries | Timing/levels floor vs stock-picking |
 | **Screen rules** *(control)* | `docs/data/paper_automation/` | Raw buy-tier screen signal | Baseline datum |
 | **Momentum grace** *(experimental)* | `docs/data/paper_automation/momentum_grace/` | Screen rules + bounded hold on value downgrade when price trend stays strong | Exit-overlay experiment |
+| **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 
