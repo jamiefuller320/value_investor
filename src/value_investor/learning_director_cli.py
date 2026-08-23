@@ -84,6 +84,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         api_key=api_key,
         model=args.model,
         compile_tasks=not args.no_compile_tasks,
+        compile_fragments=not args.no_compile_fragments,
         policy_path=args.policy_path,
     )
     if args.json:
@@ -97,6 +98,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
                     "complexity_inventory": review.complexity_inventory,
                     "vision_roadmap_review": review.vision_roadmap_review,
                     "proposed_actions": review.proposed_actions,
+                    "horizon_fragments": review.horizon_fragments,
                     "defer": review.defer,
                 },
             }
@@ -166,6 +168,7 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--api-key", default="")
     run.add_argument("--model", default="composer-2.5")
     run.add_argument("--no-compile-tasks", action="store_true")
+    run.add_argument("--no-compile-fragments", action="store_true")
     run.add_argument(
         "--allow-disabled",
         action="store_true",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -18,6 +19,8 @@ from value_investor.analysis_review import (
     _history_run_count,
     _promote_target_for_area,
 )
+from value_investor.deferred_ideas import DEFAULT_STORE as DEFAULT_DEFER_STORE
+from value_investor.deferred_ideas import add_fragment, list_open_fragments, write_markdown
 from value_investor.learning_director_regime import (
     VISION_PATH,
     build_experiment_inventory,
@@ -39,6 +42,11 @@ PAPER_ROOT = DEFAULT_DATA_DIR / "paper_automation"
 COMMITTED_REVIEW_PATH = DEFAULT_DATA_DIR / "learning_director_review.json"
 COMMITTED_REVIEW_MD_PATH = DEFAULT_DATA_DIR / "learning_director_review.md"
 COMMITTED_TASKS_PATH = DEFAULT_DATA_DIR / "learning_director_tasks.json"
+MAX_HORIZON_FRAGMENTS = 2
+
+_FRAGMENT_LINE = re.compile(
+    r"^\s*-\s*(?:\[(?P<tags>[^\]]+)\]\s*)?(?P<text>.+)$",
+)
 
 _LEARNING_DIRECTOR_AREAS = frozenset(
     {
@@ -61,6 +69,7 @@ class LearningDirectorReview:
     complexity_inventory: str
     vision_roadmap_review: str
     proposed_actions: str
+    horizon_fragments: str
     defer: str
 
     @property
@@ -71,6 +80,7 @@ class LearningDirectorReview:
             ("COMPLEXITY & EXPERIMENT INVENTORY", self.complexity_inventory),
             ("VISION ROADMAP REVIEW", self.vision_roadmap_review),
             ("PROPOSED ACTIONS", self.proposed_actions),
+            ("HORIZON FRAGMENTS", self.horizon_fragments),
             ("DEFER", self.defer),
         ]
         return "\n\n".join(f"{heading}\n{body.strip()}" for heading, body in parts if body.strip())
@@ -92,6 +102,7 @@ def parse_learning_director_review(text: str) -> LearningDirectorReview:
         "COMPLEXITY AND EXPERIMENT INVENTORY": "complexity_inventory",
         "VISION ROADMAP REVIEW": "vision_roadmap_review",
         "PROPOSED ACTIONS": "proposed_actions",
+        "HORIZON FRAGMENTS": "horizon_fragments",
         "DEFER": "defer",
     }
     buckets: dict[str, list[str]] = {value: [] for value in section_keys.values()}
@@ -109,8 +120,59 @@ def parse_learning_director_review(text: str) -> LearningDirectorReview:
         complexity_inventory="\n".join(buckets["complexity_inventory"]).strip(),
         vision_roadmap_review="\n".join(buckets["vision_roadmap_review"]).strip(),
         proposed_actions="\n".join(buckets["proposed_actions"]).strip(),
+        horizon_fragments="\n".join(buckets["horizon_fragments"]).strip(),
         defer="\n".join(buckets["defer"]).strip(),
     )
+
+
+def parse_horizon_fragment_lines(text: str) -> list[dict[str, Any]]:
+    """Parse HORIZON FRAGMENTS bullets into {text, tags} rows."""
+    rows: list[dict[str, Any]] = []
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.upper() in {"NONE", "(NONE)", "N/A"}:
+            continue
+        match = _FRAGMENT_LINE.match(line)
+        if not match:
+            continue
+        body = str(match.group("text") or "").strip()
+        if not body or body.upper() in {"NONE", "N/A"}:
+            continue
+        tags_raw = str(match.group("tags") or "").strip()
+        tags = [tag.strip() for tag in tags_raw.split(",") if tag.strip()] if tags_raw else []
+        rows.append({"text": body, "tags": tags})
+    return rows[:MAX_HORIZON_FRAGMENTS]
+
+
+def compile_horizon_fragments(
+    review: LearningDirectorReview,
+    *,
+    run_stamp: str | None = None,
+    store_path: Path = DEFAULT_DEFER_STORE,
+) -> dict[str, Any]:
+    """Append HORIZON FRAGMENTS to deferred-ideas scratch pad (not task queue)."""
+    stamp = run_stamp or datetime.now(UTC).strftime("%Y%m%d")
+    source = f"learning_director:{stamp}"
+    created: list[dict[str, Any]] = []
+    skipped: list[str] = []
+    for row in parse_horizon_fragment_lines(review.horizon_fragments):
+        fragment, was_created = add_fragment(
+            row["text"],
+            tags=row.get("tags") or [],
+            source=source,
+            store_path=store_path,
+        )
+        if was_created:
+            created.append(fragment)
+        else:
+            skipped.append(str(fragment.get("id") or row["text"][:80]))
+    return {
+        "compiled_at": datetime.now(UTC).isoformat(),
+        "run_stamp": stamp,
+        "created_count": len(created),
+        "skipped_duplicates": skipped,
+        "fragments": created,
+    }
 
 
 def _safe_read(path: Path) -> dict[str, Any] | None:
@@ -157,6 +219,7 @@ def build_learning_director_payload(
         "exclusion_ladder_replay": _safe_read(paper_root / "exclusion_ladder_replay_review.json"),
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
+        "open_fragments": list_open_fragments(store_path=DEFAULT_DEFER_STORE),
         "guardrails": {
             **(vision.get("guardrails") or {}),
             "vision_activation_proposal_only": True,
@@ -238,7 +301,7 @@ You coordinate winner-pick vs loser-filter evidence across weekly reviews. This 
 observe-only — do not propose auto-applying knobs, mutating screens, spawning tracks,
 or opening engineering PRs. Vision phase activation is **proposal-only** (human ack).
 
-Write SIX plain-text sections with headings exactly as shown:
+Write SEVEN plain-text sections with headings exactly as shown:
 
 REGIME & ASSUMPTION CHECK
 3–4 sentences: does exclusion alpha, cohort quality, and primary track evidence still
@@ -264,12 +327,20 @@ Numbered top 3–5 actions. Each line MUST use:
 Areas allowed: analysis, monitoring, offline_sim, paper_churn, paper_knobs, universe,
 research, ops.
 
+HORIZON FRAGMENTS
+Up to {MAX_HORIZON_FRAGMENTS} speculative observations **not** tied to existing tasks or
+vision phases — blue-sky pattern ideas, assumption challenges, or "what if we optimised
+X instead?" thoughts for monthly horizon scan to cluster later. Format each line:
+``- [comma,tags] One or two sentences``
+Do **not** duplicate open_fragments already in the payload. Write ``NONE`` if nothing
+worth capturing. These are **not** experiments — they feed ``ftse-defer fragment`` only.
+
 DEFER
 Ideas that must stay manual until revisit triggers or more history (cite vision phase ids).
 
 Rules:
-- Do not invent metrics.
-- Cite JSON paths only.
+- Tactical sections (regime through proposed actions): cite JSON paths; do not invent metrics.
+- HORIZON FRAGMENTS may speculate beyond current artifacts — label clearly as hypothesis.
 - Be specific enough for a human operator to act next week.
 """
 
@@ -284,7 +355,9 @@ def run_learning_director(
     cwd: str | None = None,
     run_at: datetime | None = None,
     compile_tasks: bool = True,
+    compile_fragments: bool = True,
     policy_path: Path = DEFAULT_REVIEW_POLICY_PATH,
+    defer_store_path: Path = DEFAULT_DEFER_STORE,
 ) -> LearningDirectorReview:
     """Run a single Learning Director agent pass."""
     if not learning_director_enabled(policy_path):
@@ -323,22 +396,36 @@ def run_learning_director(
     text = (agent_result.result or "").strip()
     review = parse_learning_director_review(text)
     COMMITTED_REVIEW_MD_PATH.write_text(review.full_text + "\n", encoding="utf-8")
+    fragment_result: dict[str, Any] | None = None
+    if compile_fragments and review.horizon_fragments.strip():
+        fragment_result = compile_horizon_fragments(
+            review,
+            store_path=defer_store_path,
+        )
+        if fragment_result.get("created_count"):
+            write_markdown(store_path=defer_store_path)
+
+    review_payload: dict[str, Any] = {
+        "reviewed_at": datetime.now(UTC).isoformat(),
+        "run_at": payload.get("run_at"),
+        "enabled": True,
+        "history_run_count": payload.get("history_run_count"),
+        "sections": {
+            "regime_assumption_check": review.regime_assumption_check,
+            "convergence": review.convergence,
+            "complexity_inventory": review.complexity_inventory,
+            "vision_roadmap_review": review.vision_roadmap_review,
+            "proposed_actions": review.proposed_actions,
+            "horizon_fragments": review.horizon_fragments,
+            "defer": review.defer,
+        },
+    }
+    if fragment_result is not None:
+        review_payload["fragments_compiled"] = fragment_result
+
     write_json(
         COMMITTED_REVIEW_PATH,
-        {
-            "reviewed_at": datetime.now(UTC).isoformat(),
-            "run_at": payload.get("run_at"),
-            "enabled": True,
-            "history_run_count": payload.get("history_run_count"),
-            "sections": {
-                "regime_assumption_check": review.regime_assumption_check,
-                "convergence": review.convergence,
-                "complexity_inventory": review.complexity_inventory,
-                "vision_roadmap_review": review.vision_roadmap_review,
-                "proposed_actions": review.proposed_actions,
-                "defer": review.defer,
-            },
-        },
+        review_payload,
         compact=True,
     )
     if compile_tasks and review.proposed_actions.strip():

@@ -24,6 +24,9 @@ ftse-learning-director run
 # Compile tasks from a saved review markdown
 ftse-learning-director compile docs/data/learning_director_review.md
 
+# Skip fragment compile on run (tasks only)
+ftse-learning-director run --no-compile-fragments
+
 # List proposed tasks
 ftse-learning-director list
 ```
@@ -35,6 +38,7 @@ ftse-learning-director list
 | `docs/data/learning_director_review.json` | Structured sections from latest run |
 | `docs/data/learning_director_review.md` | Human-readable review |
 | `docs/data/learning_director_tasks.json` | Proposed actions (status=proposed) |
+| `docs/deferred-ideas.json` | HORIZON FRAGMENTS appended via `ftse-defer fragment` |
 | `output/learning_director_payload.json` | Agent input snapshot (local runs) |
 
 ## Enable / disable

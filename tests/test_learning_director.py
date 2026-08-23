@@ -7,8 +7,10 @@ from pathlib import Path
 
 from value_investor.learning_director import (
     build_learning_director_payload,
+    compile_horizon_fragments,
     compile_learning_director_tasks,
     has_enough_learning_director_inputs,
+    parse_horizon_fragment_lines,
     parse_learning_director_review,
 )
 from value_investor.learning_director_regime import (
@@ -34,6 +36,9 @@ VISION ROADMAP REVIEW
 PROPOSED ACTIONS
 1. [universe] Persist weekly exclusion metrics — enable rolling slices
 
+HORIZON FRAGMENTS
+- [cohort,breadth] What if deployable book is 30 equal sleeves not 3 hero picks?
+
 DEFER
 - filtered_cohort_track until u4 stable 4 weeks
 """
@@ -42,6 +47,26 @@ DEFER
     assert "diverge" in review.convergence
     assert "regime_slices" in review.vision_roadmap_review
     assert "[universe]" in review.proposed_actions
+    assert "equal sleeves" in review.horizon_fragments
+
+
+def test_parse_horizon_fragment_lines():
+    rows = parse_horizon_fragment_lines("- [tags] First idea\nNONE\n- Second without tags\n")
+    assert len(rows) == 2
+    assert rows[0]["tags"] == ["tags"]
+    assert rows[0]["text"].startswith("First")
+    assert rows[1]["tags"] == []
+
+
+def test_compile_horizon_fragments_writes_defer_store(tmp_path: Path):
+    review = parse_learning_director_review(
+        "HORIZON FRAGMENTS\n- [test] Blue sky cohort sizing hypothesis\n"
+    )
+    store_path = tmp_path / "deferred-ideas.json"
+    result = compile_horizon_fragments(review, run_stamp="20260823", store_path=store_path)
+    assert result["created_count"] == 1
+    store = json.loads(store_path.read_text())
+    assert store["fragments"][0]["source"] == "learning_director:20260823"
 
 
 def test_build_payload_includes_vision_and_regime(tmp_path: Path):
