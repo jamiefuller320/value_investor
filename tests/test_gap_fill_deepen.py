@@ -498,3 +498,22 @@ def test_inspect_local_sources_flags_empty_quarterly_cashflow(tmp_path: Path):
     assert inventory["available"]["yahoo_financials"] is True
     assert inventory["available"]["yahoo_quarterly_cashflow"] is False
     assert "yahoo_quarterly_cashflow" in inventory["thin"]
+
+
+def test_inspect_local_sources_flags_empty_quarterly_income(tmp_path: Path):
+    sources = tmp_path / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "MEGP.L",
+                "income_statement": {"2025": {"Total Revenue": 315_400_000.0}},
+                "quarterly_income": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    inventory = inspect_local_sources(sources)
+    assert inventory["available"]["yahoo_quarterly_income"] is False
+    assert "yahoo_quarterly_income" in inventory["thin"]
