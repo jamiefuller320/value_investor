@@ -46,6 +46,7 @@ Structured in JSON as `prediction_philosophy` in
 | **COMPLEXITY & EXPERIMENT INVENTORY** | Open experiments, shadow tracks, budget |
 | **VISION ROADMAP REVIEW** | Read `learning_director_vision.json`; recommend **activate / defer / retire** phases |
 | **PROPOSED ACTIONS** | Numbered experiments and ops steps (human gate) |
+| **HORIZON FRAGMENTS** | Up to 2 blue-sky observations → `ftse-defer fragment` (not tasks) |
 | **DEFER** | Park until revisit triggers met |
 
 The director **should** read the vision and recommend when to add roadmap elements —
@@ -75,3 +76,18 @@ builds; it proposes activation with explicit triggers cited from JSON.
 - Vision activation recommendations are **proposals** — human ack in ops review
 
 See [learning-director.md](learning-director.md) for commands and workflow.
+
+## Agent roles (who challenges direction?)
+
+| Agent | Cadence | Role |
+|-------|---------|------|
+| **Learning Director** | Weekly | Tactical orchestration + capped blue-sky **fragments** |
+| **Horizon scan** | Monthly | Stage gates, evidence gaps, fragment clustering, PARK new defer ideas |
+| **Quarterly defer review** | Quarterly | Promote/drop parked ideas |
+
+Horizon scan is the **strategic challenger** today: it reads stage readiness, open
+fragments, and deferred ideas, and may PARK new assumptions to challenge. It does not
+yet have a dedicated section to attack `learning_director_vision.json` north-star
+assumptions weekly — that gap is partly filled by director **HORIZON FRAGMENTS** (capture)
+and horizon **FRAGMENT CLUSTERING / PARK** (synthesis). A separate devil's-advocate
+agent is unnecessary unless monthly horizon proves insufficient after 2–3 cycles.
