@@ -83,5 +83,18 @@ builds; it proposes activation with explicit triggers cited from JSON.
 - Observe-only — no `decision-review --apply`, no N3 screen writes
 - Engineering promote remains manual (`ftse-analysis-review promote`, etc.)
 - Vision activation recommendations are **proposals** — human ack in ops review
+- **Human auditable** — deployable rule set stays inspectable (named signals, explicit
+  knobs, documented ladder steps, readable memos). No opaque black-box filters.
+
+## Evidence balance
+
+| Strand | What we have | Gap |
+|--------|--------------|-----|
+| Winner research | Memos on strong_buy/buy; alumni refresh when names leave buy tier | — |
+| Quantitative avoid | Screen `avoid` signal; exclusion ladder step `u1` | No qualitative forensics |
+| Loser learning | Exclusion archive hindsight quartiles | Why avoids were right/wrong |
+
+The Learning Director should flag this imbalance and propose observe-only steps
+(e.g. `loser_pattern_lab`) — not expand memo spend without human ack.
 
 See [learning-director.md](learning-director.md) for commands and workflow.
