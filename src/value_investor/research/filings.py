@@ -345,6 +345,54 @@ def _extract_investegate_html_text(html: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _extract_investegate_html_headline(html: str) -> str | None:
+    """Extract the announcement ``<h1>`` title from an Investegate HTML page."""
+    match = re.search(r"<h1[^>]*>([\s\S]*?)</h1>", html or "", flags=re.I)
+    if not match:
+        return None
+    headline = _strip_html(match.group(1))
+    return headline or None
+
+
+def _infer_filing_period_from_row(row: dict[str, Any]) -> str:
+    """Resolve the effective period tag from indexed metadata and headline/URL cues."""
+    period = str(row.get("period") or "other")
+    if period != "other":
+        return period
+    headline = str(row.get("headline") or "")
+    inferred = classify_filing_period(headline, category=row.get("category"))
+    if inferred != "other":
+        return inferred
+    url_slug = str(row.get("url") or "").rsplit("/", 1)[-1].replace("-", " ")
+    return classify_filing_period(url_slug, category=row.get("category"))
+
+
+def _is_other_results_rns_row(row: dict[str, Any]) -> bool:
+    """True when an indexed ``period=other`` row looks like FY/interim results worth refetching."""
+    if str(row.get("period") or "other") != "other" or row.get("has_body"):
+        return False
+    headline = str(row.get("headline") or "").lower()
+    headline = re.sub(r"\s*-\s*investegate\s*$", "", headline, flags=re.I)
+    blob = f"{headline} {str(row.get('url') or '').rsplit('/', 1)[-1].replace('-', ' ')}"
+    if classify_filing_period(blob, category=row.get("category")) != "other":
+        return True
+    return bool(re.search(r"\bfy\s*20\d{2}\b|\bfy20\d{2}\b", blob))
+
+
+def _other_results_rns_priority(row: dict[str, Any]) -> int:
+    """Rank ``period=other`` results rows ahead of routine RNS trivia during refetch."""
+    if not _is_other_results_rns_row(row):
+        return 0
+    headline = str(row.get("headline") or "").lower()
+    if any(re.search(pat, headline) for pat in _ANNUAL_PATTERNS):
+        return 120
+    if any(re.search(pat, headline) for pat in _INTERIM_PATTERNS):
+        return 110
+    if any(re.search(pat, headline) for pat in _TRADING_UPDATE_PATTERNS):
+        return 100
+    return 90
+
+
 def _filing_text_is_substantive(text: str, *, min_chars: int = 200) -> bool:
     if not text or len(text) < min_chars:
         return False
@@ -757,6 +805,14 @@ def _apply_headline_period(
             category=category,
             form=item.get("form"),
         )
+    if period == "other" and body_snippet:
+        body_period = classify_filing_period(
+            body_snippet[:4000],
+            category=category,
+            form=item.get("form"),
+        )
+        if body_period != "other":
+            period = body_period
     item["period"] = period
     item["entity_type"] = classify_filing_entity_type(item, body_snippet=body_snippet)
     item["priority"] = _priority_score(
@@ -2879,9 +2935,28 @@ def _ir_body_title_tokens_match(row: dict[str, Any], body: str) -> bool:
     return any(tok in sample for tok in meaningful)
 
 
+def _validate_rns_html_headline_match(
+    row: dict[str, Any],
+    extracted_headline: str | None,
+) -> tuple[bool, str | None]:
+    """Reject Investegate HTML when the page ``<h1>`` period disagrees with the indexed row."""
+    if not extracted_headline:
+        return True, None
+    expected = _infer_filing_period_from_row(row)
+    if expected not in ("annual", "interim", "trading_update"):
+        return True, None
+    extracted_period = classify_filing_period(
+        extracted_headline,
+        category=row.get("category"),
+    )
+    if extracted_period != "other" and extracted_period != expected:
+        return False, "headline_mismatch"
+    return True, None
+
+
 def _validate_filing_body_period_content(row: dict[str, Any], body: str) -> tuple[bool, str | None]:
     """Reject bodies whose period cues clearly mismatch the indexed row tag."""
-    expected = str(row.get("period") or "other")
+    expected = _infer_filing_period_from_row(row)
     if expected not in ("annual", "interim", "trading_update"):
         return True, None
     sample = (body or "")[:4000].lower()
@@ -2899,6 +2974,7 @@ def _validate_rns_filing_body_content(
     *,
     company_name: str,
     ticker: str,
+    extracted_headline: str | None = None,
 ) -> tuple[bool, str | None]:
     """
     Period/headline/issuer gate before marking UK RNS rows ``has_body``.
@@ -2908,6 +2984,10 @@ def _validate_rns_filing_body_content(
     """
     if not body or len(body) < IR_BODY_MIN_CHARS:
         return False, "too_short"
+    if extracted_headline:
+        valid, reason = _validate_rns_html_headline_match(row, extracted_headline)
+        if not valid:
+            return False, reason
     valid, reason = _validate_filing_body_period_content(row, body)
     if not valid:
         return False, reason
@@ -2923,6 +3003,7 @@ def _try_persist_rns_filing_body(
     company_name: str,
     ticker: str,
     bodies_dir: Path,
+    extracted_headline: str | None = None,
 ) -> tuple[dict[str, Any], str | None]:
     """Validate, reclassify ``period``, and persist an RNS body when the gate passes."""
     valid, reason = _validate_rns_filing_body_content(
@@ -2930,6 +3011,7 @@ def _try_persist_rns_filing_body(
         body,
         company_name=company_name,
         ticker=ticker,
+        extracted_headline=extracted_headline,
     )
     if not valid:
         return item, reason
@@ -3060,6 +3142,34 @@ def _fetch_investegate_html_body(url: str) -> str | None:
     if len(text) > FILINGS_BODY_MAX_CHARS:
         text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
     return text
+
+
+def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None]:
+    """
+    Fetch an RNS body for indexed-without-body refetch.
+
+    Tries the PDF/HTML primary path first, then Investegate HTML-only fallback.
+    Returns ``(body, extracted_h1_headline)`` where ``extracted_h1_headline`` is set
+    only for the HTML fallback path (used to reject period/headline mismatches).
+    """
+    body = fetch_filing_body(url)
+    if body:
+        return body, None
+    if "investegate.co.uk/announcement/" not in url:
+        return None, None
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("Investegate HTML refetch failed for %s: %s", url, exc)
+        return None, None
+    extracted_headline = _extract_investegate_html_headline(html)
+    text = _extract_investegate_html_text(html)
+    if not _filing_text_is_substantive(text, min_chars=IR_BODY_MIN_CHARS):
+        return None, extracted_headline
+    if len(text) > FILINGS_BODY_MAX_CHARS:
+        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return text, extracted_headline
 
 
 def _fetch_ir_allowlist_body(
@@ -4408,6 +4518,13 @@ def refetch_investegate_filing_bodies(
         if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
     missing = [row for row in enriched if _is_rns_body_fetch_candidate(row)]
+    missing.sort(
+        key=lambda row: (
+            -_other_results_rns_priority(row),
+            -(row.get("priority") or 0),
+        )
+    )
+    other_results_candidates = sum(1 for row in missing if _is_other_results_rns_row(row))
     index_changed = enriched != filings or misattributed_pruned > 0
     if not missing:
         if index_changed:
@@ -4427,8 +4544,16 @@ def refetch_investegate_filing_bodies(
     bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
     body_rejected = 0
+    html_fallbacks = 0
     updated: list[dict[str, Any]] = []
     missing_ids = {row.get("id") for row in missing}
+    enriched.sort(
+        key=lambda row: (
+            0 if row.get("id") in missing_ids else 1,
+            -_other_results_rns_priority(row),
+            -(row.get("priority") or 0),
+        )
+    )
     for row in enriched:
         item = dict(row)
         if (
@@ -4437,14 +4562,17 @@ def refetch_investegate_filing_bodies(
             and item.get("url")
             and not item.get("has_body")
         ):
-            body = fetch_filing_body(str(item["url"]))
+            body, extracted_headline = _fetch_rns_filing_body_for_refetch(str(item["url"]))
             if body:
+                if extracted_headline:
+                    html_fallbacks += 1
                 item, reject_reason = _try_persist_rns_filing_body(
                     item,
                     body,
                     company_name=company_name,
                     ticker=ticker,
                     bodies_dir=bodies_dir,
+                    extracted_headline=extracted_headline,
                 )
                 if reject_reason:
                     body_rejected += 1
@@ -4465,6 +4593,8 @@ def refetch_investegate_filing_bodies(
         "google_news_rejected": google_news_rejected,
         "misattributed_pruned": misattributed_pruned,
         "body_rejected": body_rejected,
+        "html_fallbacks": html_fallbacks,
+        "other_results_candidates": other_results_candidates,
         "note": "refetch_investegate_filing_bodies",
     }
 
