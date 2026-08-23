@@ -46,7 +46,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     run_p.add_argument("--json", action="store_true")
 
-    spawn_p = sub.add_parser("spawn-shadow", help="Create exclusion shadow track from recommended step")
+    spawn_p = sub.add_parser(
+        "spawn-shadow", help="Create exclusion shadow track from recommended step"
+    )
     spawn_p.add_argument("--paper-root", type=Path, default=Path("docs/data/paper_automation"))
     spawn_p.add_argument("--data-dir", type=Path, default=Path("docs/data"))
     spawn_p.add_argument("--parent-track", type=str, default=DEFAULT_PARENT_TRACK)

@@ -11,17 +11,24 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.decision_review import LearningKnobs, _compute_epoch_metrics, save_knob_epoch, start_knob_epoch
+from value_investor.decision_review import (
+    LearningKnobs,
+    _compute_epoch_metrics,
+    save_knob_epoch,
+    start_knob_epoch,
+)
 from value_investor.exclusion_universe_archive_sim import (
     REVIEW_FILENAME as EXCLUSION_ARCHIVE_REVIEW_FILENAME,
+)
+from value_investor.exclusion_universe_archive_sim import (
     ExclusionStep,
     default_exclusion_ladder,
     exclusion_step_from_dict,
 )
 from value_investor.paper_automation import (
+    AI_JUDGMENT_TRACK_ID,
     CONFIG_FILENAME,
     FUND_FILENAME,
-    AI_JUDGMENT_TRACK_ID,
     AutomationConfig,
     default_ai_judgment_config,
     ensure_automated_fund,
@@ -81,9 +88,7 @@ def load_ladder_from_archive_review(
     if not review:
         return default_exclusion_ladder(include_ai_overlay_steps=False), None
     ladder_raw = review.get("ladder") or []
-    ladder = tuple(
-        exclusion_step_from_dict(row) for row in ladder_raw if isinstance(row, dict)
-    )
+    ladder = tuple(exclusion_step_from_dict(row) for row in ladder_raw if isinstance(row, dict))
     if not ladder:
         ladder = default_exclusion_ladder(include_ai_overlay_steps=False)
     return ladder, review.get("recommended_step")
@@ -555,9 +560,7 @@ def format_exclusion_ladder_replay_text(review: dict[str, Any]) -> str:
             marker = "*" if row.get("is_recommended") else " "
             sim_s = f"{sim:+.1%}" if sim is not None else "n/a"
             delta_s = f"{delta:+.1%}" if delta is not None else "n/a"
-            lines.append(
-                f"    {marker}{row.get('step_id')}: sim {sim_s} | Δ vs actual {delta_s}"
-            )
+            lines.append(f"    {marker}{row.get('step_id')}: sim {sim_s} | Δ vs actual {delta_s}")
     note = review.get("note")
     if note:
         lines.append(f"  Note: {note}")

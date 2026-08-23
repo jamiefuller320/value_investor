@@ -116,7 +116,13 @@ def test_run_exclusion_ladder_replay_writes_artifacts(tmp_path: Path):
             "nav_before": 1000.0,
             "cash_before": 500.0,
             "holdings_before": [
-                {"ticker": "GOOD.L", "shares": 50, "avg_cost": 10, "sector": "Banks", "name": "Good"}
+                {
+                    "ticker": "GOOD.L",
+                    "shares": 50,
+                    "avg_cost": 10,
+                    "sector": "Banks",
+                    "name": "Good",
+                }
             ],
         },
     )
