@@ -86,6 +86,10 @@ class AutomationConfig:
     # Calibration shadow — frozen knobs from knob_calibration priors (not decision-review).
     is_calibration_shadow: bool = False
     calibration_parent_track: str | None = None
+    # Exclusion shadow — frozen knobs from exclusion-universe archive ladder priors.
+    is_exclusion_shadow: bool = False
+    exclusion_parent_track: str | None = None
+    exclusion_ladder_step_id: str | None = None
     # Churn guards — tuneable via config.json (not decision-review knobs yet).
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
@@ -155,6 +159,15 @@ class AutomationConfig:
             calibration_parent_track=(
                 str(raw["calibration_parent_track"])
                 if raw.get("calibration_parent_track")
+                else None
+            ),
+            is_exclusion_shadow=bool(raw.get("is_exclusion_shadow", False)),
+            exclusion_parent_track=(
+                str(raw["exclusion_parent_track"]) if raw.get("exclusion_parent_track") else None
+            ),
+            exclusion_ladder_step_id=(
+                str(raw["exclusion_ladder_step_id"])
+                if raw.get("exclusion_ladder_step_id")
                 else None
             ),
             exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
@@ -234,6 +247,11 @@ def default_rules_config(base: AutomationConfig | None = None) -> AutomationConf
 
 def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     """Map track_id → output directory under the paper-automation root."""
+    from value_investor.exclusion_ladder_replay import (
+        discover_exclusion_shadow_step_ids,
+        exclusion_shadow_subdir,
+        exclusion_shadow_track_id,
+    )
     from value_investor.knob_calibration import (
         calibrated_shadow_subdir,
         calibrated_shadow_track_id,
@@ -250,6 +268,9 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     for rank in discover_calibration_shadow_ranks(root):
         track_id = calibrated_shadow_track_id(rank)
         dirs[track_id] = root / calibrated_shadow_subdir(rank)
+    for step_id in discover_exclusion_shadow_step_ids(root):
+        track_id = exclusion_shadow_track_id(step_id)
+        dirs[track_id] = root / exclusion_shadow_subdir(step_id)
     return dirs
 
 
@@ -1025,6 +1046,39 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
         configs[track_id] = shadow
 
+    from value_investor.exclusion_ladder_replay import (
+        discover_exclusion_shadow_step_ids,
+        exclusion_shadow_subdir,
+        exclusion_shadow_track_id,
+    )
+
+    for step_id in discover_exclusion_shadow_step_ids(base_dir):
+        track_id = exclusion_shadow_track_id(step_id)
+        shadow_dir = base_dir / exclusion_shadow_subdir(step_id)
+        shadow_path = shadow_dir / CONFIG_FILENAME
+        if not shadow_path.exists():
+            continue
+        shadow = AutomationConfig.from_dict(json.loads(shadow_path.read_text(encoding="utf-8")))
+        shadow.track_id = track_id
+        shadow.is_primary_learning_track = False
+        shadow.is_exclusion_shadow = True
+        shadow.exclusion_parent_track = shadow.exclusion_parent_track or AI_JUDGMENT_TRACK_ID
+        shadow.exclusion_ladder_step_id = shadow.exclusion_ladder_step_id or step_id
+        shadow.is_calibration_shadow = False
+        shadow.use_adjusted_signal = True
+        shadow.require_research_accumulate = True
+        shadow.track_label = shadow.track_label or (
+            f"AI judgment exclusion ladder {step_id} (frozen priors)"
+        )
+        shadow.timezone = rules.timezone
+        shadow.market_open = rules.market_open
+        shadow.settle_minutes_after_open = rules.settle_minutes_after_open
+        shadow.weekdays_only = rules.weekdays_only
+        shadow.trade_cost_pct = rules.trade_cost_pct
+        shadow.initial_cash = rules.initial_cash
+        shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
+        configs[track_id] = shadow
+
     return configs
 
 
@@ -1056,6 +1110,7 @@ def run_learning_tracks(
         track_id
         for track_id, cfg in configs.items()
         if getattr(cfg, "is_calibration_shadow", False)
+        or getattr(cfg, "is_exclusion_shadow", False)
     ]
     insert_at = default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1
     for track_id in sorted(shadow_ids):
