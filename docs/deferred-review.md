@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-22T17:45:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-23T04:30:13+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -200,6 +200,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L159 | **Gap-fill: scoring — Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as** | Add lease-adjusted net debt and FCF/dividend coverage (gross and net) as explicit overlay inputs; MEGP's net-cash metric excludes £13m lease liabilities per filing note 8, which the current D/E 28% screen pass does not surface. | After next weekly email gap-fill pass confirms the gap persists |
 | L160 | **Gap-fill: ingest — Parse IFRS 16 lease maturity tables and covenant language from annual re** | Parse IFRS 16 lease maturity tables and covenant language from annual report PDF notes (referenced as note 20 in FY2025 body but not extracted) into structured fields for leverage red-flag checks. | After next weekly email gap-fill pass confirms the gap persists |
 | L174 | **Commercial EU regulatory filing API fallback** | If in-house Euronext/ESEF/direct-exchange fetch still leaves large indexed-without-body gaps on euro_depth buy-tier, evaluate a paid regulatory news or filing API (LSEG, Refinitiv, etc.) for headline+PDF retrieval — only after DIY provider MVP is measured. | euro_depth buy-tier has ≥30 memos but filings_with_body/total ratio still below 0.5 after 4 weeks of weekday EU ingest-loop |
+| L175 | **Graduated loser-filter tightening ladder experiment** | Complement winner-selection calibration with an observe-only paper track or offline_sim that steps portfolio knobs tighter on a schedule (or when bottom-quartile buy-tier names enter the book), ranking primarily on exclude_rate and bottom_buy_tier_held rather than catch_rate. Mirrors momentum_grace track pattern; keeps N3 screen thresholds frozen. | Primary AI track has ≥8 acted rebalance_log entries and knob calibration still shows negligible min_conviction/sector_cap discrimination |
 
 ### Ops / reliability
 
