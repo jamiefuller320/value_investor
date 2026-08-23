@@ -1,8 +1,47 @@
 {
-  "compiled_at": "2026-08-19T18:43:53.677478+00:00",
-  "run_at": "2026-08-19T10:24:14.725305+00:00",
-  "task_count": 55,
+  "compiled_at": "2026-08-23T07:23:23.356628+00:00",
+  "run_at": "2026-08-23T06:22:09.407971+00:00",
+  "task_count": 59,
   "tasks": [
+    {
+      "id": "eng-20260823-01",
+      "area": "scoring",
+      "title": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists — use company FCF for FCF Yield/dividend-coverage mo",
+      "summary": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists — use company FCF for FCF Yield/dividend-coverage models, compute EPS growth from filing periods, and flag >50% divergence vs screen TTM",
+      "priority": "high",
+      "priority_score": 101.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "EPS",
+          "TTM"
+        ],
+        "plan_index": 1
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
     {
       "id": "eng-20260817-01",
       "area": "scoring",
@@ -677,6 +716,51 @@
       "merged_at": "2026-08-18T07:43:55.796641+00:00"
     },
     {
+      "id": "eng-20260823-02",
+      "area": "ingest",
+      "title": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label ≠ extracted headline",
+      "summary": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label ≠ extracted headline/date, and auto-refetch `period=other` FY/interim-tagged RNS",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "LSE",
+          "HTML",
+          "FY",
+          "RNS"
+        ],
+        "plan_index": 2
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for UK",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260819-02",
       "area": "ingest",
       "title": "Populate or gate Yahoo `quarterly_cashflow` before TTM FCF computation; suppress and flag TTM when the series is empty",
@@ -1192,6 +1276,48 @@
       "merged_at": "2026-08-10T20:02:43.896654+00:00"
     },
     {
+      "id": "eng-20260823-03",
+      "area": "ingest",
+      "title": "Extract IR presentation and annual-report structured tables (cash-flow bridges, segment margins, debt/IFRS 16 maturity, product revenue) into `ir_presentation_m",
+      "summary": "Extract IR presentation and annual-report structured tables (cash-flow bridges, segment margins, debt/IFRS 16 maturity, product revenue) into `ir_presentation_metrics.json` from allowlisted PDFs",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "IFRS"
+        ],
+        "plan_index": 3
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260810-05",
       "area": "scoring",
       "title": "Populate `operating_cashflow` and dual FCF/dividend coverage ratios in `CompanyMetrics` from filing or Yahoo cash-flow statements; add cyclical-exposure and hea",
@@ -1324,6 +1450,45 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/288",
       "pr_number": 288,
       "merged_at": "2026-08-18T06:04:42.143663+00:00"
+    },
+    {
+      "id": "eng-20260823-04",
+      "area": "ingest",
+      "title": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
+      "summary": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
+      "priority": "high",
+      "priority_score": 96.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260819-06",
@@ -2696,27 +2861,14 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-08-19T18:43:51.137478+00:00",
+    "snapshot_at": "2026-08-23T07:23:23.356598+00:00",
     "buy_tier_count": 66,
     "measured_tickers": 66,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 15,
-    "filings_with_body": 3603
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-08-19T17:33:36.309986+00:00",
-    "buy_tier_count": 66,
-    "measured_tickers": 66,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 15,
-    "filings_with_body": 3603
-  },
-  "reprioritized_at": "2026-08-19T18:43:51.137577+00:00",
-  "reprioritized_after_task": "eng-20260819-05"
+    "indexed_without_body": 0,
+    "filings_with_body": 3702
+  }
 }

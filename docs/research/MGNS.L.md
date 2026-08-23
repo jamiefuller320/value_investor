@@ -1,87 +1,99 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 1 · Updated 2026-08-19T10:36:24.858042+00:00 · Mode: initial_
+_Version 1 · Updated 2026-08-23T06:33:01.364247+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Morgan Sindall is a UK-listed construction and partnerships group trading at roughly 11.5× earnings and 2.7× book, with a 3.6% dividend yield, on the back of record profitability, a £531m net cash balance sheet, and a secured plus preferred-bidder order book totalling £19.1bn at year-end 2025. The quantitative screen rates the name a strong buy (16/22 models; composite 76%), supported by cheapness, quality, dividend, GARP and risk metrics, including a Piotroski F-Score of 8/9 and low leverage (debt/equity ~18%). The central debate is whether Fit Out and public-sector Construction/Infrastructure can keep compounding through a subdued private housing cycle, and whether rising partnership capital employed (£603m at FY 2025) will dilute returns before housing recovers. Deep filing review broadly corroborates the screen, with material gaps around full statutory detail in some RNS extracts and no macro overlay file in the source pack.
+Morgan Sindall is a UK partnerships, fit-out and construction services group trading on roughly 11.5× earnings with a 3.7% yield, net cash of £418–531m, and a record £19.5bn secured order book plus preferred-bidder pipeline. FY2025 and H1 2026 filings show sustained profit growth driven by Fit Out and Construction, partially offset by housing-related partnership investment and near-term losses in Mixed Use Partnerships. The quantitative screen’s strong-buy signal aligns with demonstrable earnings momentum, balance-sheet strength (Piotroski 8/9), and dividend growth, though the stock sits below its 200-day moving average with neutral timing. The central debate is whether office/infrastructure earnings can keep compounding while £500m+ of capital sits in slower-moving residential regeneration—and whether that cyclical drag is already in the multiple.
 
 ## INVESTMENT THESIS
-For a value investor, MGNS combines a statistically cheap multiple set with unusually strong business quality for UK construction: adjusted profit before tax has compounded at an 18% CAGR over ten years (per FY 2025 RNS), net cash has been maintained through the cycle, and dividend cover sits at 2.4× on a 158p full-year payout (+20% year on year). The screen passes 16 of 22 models spanning Graham Enterprising, earnings/FCF yield, Lynch/Neff PEG, Magic Formula, Acquirer's Multiple, Buffett Quality, dividend growth, Piotroski, and composite value/health checks — a breadth that is rare in cyclical industrials. Failures are instructive rather than disqualifying: Graham Defensive and net-net screens fail on P/B and current ratio (1.23×); deep-value screens fail because the market prices quality; Economic Moat fails on ROA/margins, which is typical for contracting but mitigated by framework-led, negotiated work and a decentralised five-division model. Fit Out (operating profit £139.9m, margin 7.8% in FY 2025) and Construction/Infrastructure provide cash-generative ballast while Partnership Housing and Mixed Use Partnerships invest for long-dated regeneration upside aligned to government housing and infrastructure spend. Timing overlay (accumulate; RSI ~40; slightly below 200-day MA) aligns with a stock that has de-rated despite accelerating fundamentals.
+The screen flags MGNS across cheapness, quality, dividend, GARP and risk families (composite 0.77; sector-relative 0.80; 20/20 data quality). That is consistent with the filing record: adjusted profit before tax rose 35% to £232.6m in FY2025 (revenue £5,019m, +10%) and a further 21% to £116.1m in H1 2026, on an 18% ten-year adjusted PBT CAGR cited by management. Adjusted EPS was 370.0p (FY2025) and 186.1p (H1 2026); the full-year dividend was raised 20% to 158p (2.4× cover), with interim 55p (+10%) proposed for 2026.
+
+Quality metrics in the screen (ROE 26.1%, D/E 18%, FCF yield, Piotroski 8/9) map to reported cash generation: FY2025 operating cash inflow £195.9m and free cash flow £161.5m; LTM operating cash to June 2026 £202.6m. FCF dividend coverage (net) of ~2.6× on screen inputs is supported by filing-aligned FCF of £170.7m versus dividends paid £65.8m in FY2025.
+
+The business model is genuinely differentiated for a contractor: a decentralised five-division structure, net-cash fortress balance sheet (explicit capital allocation hierarchy prioritising solvency), and long-dated public/regulated order books. Fit Out (£139.9m operating profit, 7.8% margin in FY2025) and Construction (£37.0m OP, margin inside target) fund partnership investment in affordable housing and urban regeneration—creating optionality on UK housing policy (National Housing Bank, £39bn Affordable Homes Programme) without balance-sheet leverage.
+
+For a value investor, the hook is mid-single-digit earnings yield on a compounding, cash-generative franchise with visible backlog, not deep net-net or Schloss territory (screen failures on P/B >1, Graham Defensive current ratio, and Economic Moat ROA). The name fits “quality at a reasonable price” rather than distressed deep value—yet still screens cheap versus sector and history given growth and balance-sheet quality.
 
 ## FINANCIAL REVIEW
-**Primary source:** UK RNS filings (Investegate) and Companies House annual accounts. Interim HY 2026 and FY 2025 results include full condensed financial statements in the filing body; earlier Companies House extracts (2022–2025) corroborate the multi-year trend but are partially OCR-degraded.
+**Primary source:** RNS results announcements (25 Feb 2026 FY2025; 23 Jul 2026 H1 2026; 2 Oct 2025 trading update). **Fallback:** Yahoo `financials_annual.json` used only where noted for multi-year context; figures align closely with filings.
 
-**Annual trend (FY 2023–FY 2025, RNS / Companies House)**
+**FY2025 (year ended 31 Dec 2025)** — *Results for the Full Year*, 25 Feb 2026:
 
-| Metric | FY 2023 | FY 2024 | FY 2025 |
-|--------|---------|---------|---------|
-| Revenue | £4,118m (CH 2024 AR) | £4,546m | £5,019m |
-| Adj. operating profit | £141.3m (CH) | £162.6m | £225.7m |
-| Adj. PBT | £144.6m (CH) | £172.5m | £232.6m |
-| Adj. EPS | — | 278.8p | 370.0p |
-| Net cash (year-end) | — | £492m | £531m |
-| Secured order book | £8,920m (CH) | £11,419m | £11,972m |
-| Total dividend | 114.0p (CH) | 131.5p | 158.0p |
+| Metric | FY2025 | FY2024 | Change |
+|--------|--------|--------|--------|
+| Revenue | £5,019m | £4,546m | +10% |
+| Adj. operating profit | £225.7m | £162.6m | +39% |
+| Adj. PBT | £232.6m | £172.5m | +35% |
+| Adj. EPS | 370.0p | 278.8p | +33% |
+| Reported PBT | £231.8m | £171.9m | +35% |
+| Net cash (year-end) | £531m | £492m | +£39m |
+| Total dividend | 158.0p | 131.5p | +20% |
 
-FY 2025 (RNS, 25 February 2026): revenue +10%; adjusted PBT +35% to £232.6m; PBTA margin 4.6% (from 3.8%); reported PBT £231.8m; basic EPS 372.1p. Free cash flow £161.5m (operating cash flow £195.9m; capex £44.4m including leases); operating cash represented 87% of adjusted operating profit. Average daily net cash £368m; lowest single-day net cash in the year £270m. Partnership capital employed rose £190m to £603m, reflecting deliberate investment in housing partnerships. Building safety exceptional net charge £0.4m; provisions for building safety £56.9m at year-end (per HY 2026 note cross-reference).
+Operating cash flow £195.9m (87% of adj. operating profit); free cash flow £161.5m. Average daily net cash £368m. Secured order book £12.0bn (+5%); preferred bidder £7.1bn; total visibility £19.1bn (+17%). PBTA margin expanded to 4.6% (3.8% prior year).
 
-**Interim HY 2026 (RNS, 23 July 2026)**
+Divisional drivers (FY2025 adj. operating profit): Fit Out £139.9m (+41%, revenue £1,784m); Construction £37.0m (+20%); Infrastructure £37.2m (−3%, early framework works); Partnership Housing £42.0m (+16%); Mixed Use Partnerships loss £(5.3)m (investment phase); Property Services £2.0m (remediation complete; merged into Construction from Jan 2026).
 
-Revenue £2,562m (+8%); adjusted PBT £116.1m (+21%); adjusted EPS 186.1p (+22%); adjusted operating margin 4.4%. Net cash £418m (HY 2025: £390m); average daily net cash £423m. Secured order book £12.2bn; preferred bidder work £7.3bn (total £19.5bn). Interim dividend raised 10% to 55.0p.
+Partnership capital employed rose sharply: Partnership Housing average £445.7m (+£108m YoY); Mixed Use £125.1m. Net investment in Partnership Housing £124.6m in the year. Inventories £603.3m (+£127m), reflecting WIP on mixed-tenure sites amid slower open-market sales.
 
-H1 cash was seasonally weak: operating cash outflow £10.0m and free cash outflow £27.5m, driven by £122m net investment in Partnership Housing and normal H1 working-capital patterns in Construction/Fit Out; LTM operating cash inflow was £202.6m. Inventories rose to £693.5m (from £603.3m at Dec 2025), consistent with partnership WIP build.
+**H1 2026 (six months to 30 Jun 2026)** — *Results for the Half Year*, 23 Jul 2026:
 
-Divisional mix (HY 2026): Fit Out revenue +19% with operating profit £69.1m; Construction +18% revenue, +47% operating profit; Infrastructure stable; Partnership Housing revenue −14% with flat profit (£13.2m); Mixed Use Partnerships small loss (£1.1m). Management maintained full-year guidance in line with prior expectations and raised medium-term targets for Fit Out (£100m–£130m annual operating profit) and Construction (margin 3.5%–4.0%).
+| Metric | H1 2026 | H1 2025 | Change |
+|--------|---------|---------|--------|
+| Revenue | £2,562m | £2,370m | +8% |
+| Adj. PBT | £116.1m | £95.9m | +21% |
+| Adj. EPS | 186.1p | 153.1p | +22% |
+| Net cash (period-end) | £418m | £390m | +£28m |
+| Interim dividend (proposed) | 55.0p | 50.0p | +10% |
 
-**Trading update (2 October 2025)**
+Secured order book £12.2bn; with preferred bidder, £19.5bn. Fit Out H1 OP £69.1m (+19%); Construction £24.4m (+47%, margin 3.3%); Infrastructure £18.3m (stable); Partnership Housing £13.2m (flat YoY on −14% revenue); Mixed Use loss £(1.1)m. Management maintained full-year 2026 guidance “in line with current expectations” (set in Feb 2026 trading update) despite housing headwinds.
 
-Ahead of FY 2025 results, the group guided full-year performance significantly ahead of prior expectations, driven by Fit Out; secured order book £12.2bn; average daily net cash expected above £350m for the year.
+H1 operating cash outflow £10.0m (seasonal; Partnership Housing investment £122m); free cash outflow £27.5m. LTM operating cash inflow £202.6m. Average daily net cash H1 £423m; guidance for FY2026 average daily net cash “in excess of £400m.”
 
-**Balance sheet and going concern (HY 2026 interim accounts in RNS body)**
+Condensed balance sheet at 30 Jun 2026 (unaudited interim): equity £773m; net cash £418m; £180m undrawn committed facilities (maturity 2028). Going concern basis adopted through 23 Jul 2027; directors modelled downside scenarios with covenant headroom.
 
-Net cash £418.3m (cash £491.6m less overdrafts £73.3m). Undrawn committed revolving credit facilities £180m (maturing 2028). Directors adopted going concern through 23 July 2027 after downside scenario testing. Total equity £773.3m (30 June 2026). No defined-benefit pension liability flagged in available filing extracts; Yahoo balance sheet shows zero non-current pension provision from 2023 onward (secondary confirmation only).
+**Trading update (2 Oct 2025):** Management upgraded FY2025 expectations—Fit Out “significantly ahead,” group secured order book £12.2bn at 31 Aug 2025, average daily net cash guidance raised to >£350m (from £330m).
 
-**Screen vs filings on cash metrics**
+**Multi-year trend (Yahoo fallback, cross-checked to filings):** Revenue progressed £4.12bn (2023) → £4.55bn (2024) → £5.02bn (2025 per filing/Yahoo £5,019m). Net income £117.7m → £131.7m → £174.9m (reported). Net cash strengthened from £492m to £531m. Yahoo balance sheet shows no material defined-benefit pension liability in recent years (non-current pension £0 in 2024–2025).
 
-The screen's filing-aligned FCF of £170.7m for FY 2025 matches the RNS free cash flow of £161.5m within rounding/reconciliation differences; both confirm strong cash conversion and ~2.6× net dividend coverage.
-
-**Gaps:** `macro_context.json` is absent from the source pack. Full 2025 Annual Report statutory notes are referenced but not fully extracted in bodies (published 24 March 2026 — index entry only). HY 2025 interim RNS is not in the filings index; H1 2025 comparatives appear only within HY 2026 filing.
+**Gaps:** Full statutory annual report PDF body is indexed (24 Mar 2026) but the extract in the pack is largely a risk appendix summary, not full notes. H1 2026 building-safety note truncated in the extract; provision table shows £51.8m building safety provision at 30 Jun 2026. No separate US SEC filings (UK RNS regime only).
 
 ## RISKS AND RED FLAGS
-**Cyclical / end-market:** Filings repeatedly flag exposure to the UK private housing market — open market sales down, London apartment products slow-moving, Partnership Housing ROCE falling (10% FY 2025; 8% LTM at HY 2026). Mixed Use Partnerships expected to report a small full-year loss in 2026 as schemes start on site. A downturn in Fit Out office volumes (75% London-weighted) would disproportionately hit the highest-margin division.
+**Cyclical / end-market:** Filing language repeatedly flags UK private housing weakness—open market unit completions down, slower London apartment sales, ROCE in Partnership Housing falling to 8–10%, and FY2026 partnership profits expected slightly below 2025. Mixed Use Partnerships guided to a small full-year loss in 2026 as schemes start on site. A macro downturn would pressure Fit Out (75% London, 87% commercial offices) and the negative working-capital construction model; management mitigates via net-cash “buffer” and public-sector skew.
 
-**Regulatory / building safety:** Legacy fire-safety obligations under the Developers Pledge and Building Safety Act remain live. Building safety provisions £51.8m at 30 June 2026; BSF reimbursements may commence H2 2026. Contingent liabilities on sureties, guarantees and cladding-related claims are disclosed; insurance mitigates but timing of recovery is uncertain.
+**Regulatory / building safety:** Developers Pledge and Building Safety Act obligations remain live. FY2025 exceptional building safety charge £0.4m; H1 2026 provision £51.8m with BSF reimbursements expected from H2 2026. Contingent liabilities on surety bonds, guarantees and subcontractor claims are disclosed; insurance recoveries recognised when virtually certain.
 
-**Working capital / capital allocation:** Partnership Housing average capital employed guided to £500m–£580m in 2026 (from £446m in 2025). Filings classify mismanagement of working capital risk as *increasing*. H1 2026 inventory build (+£90m) warrants monitoring if housing sales remain subdued.
+**Working capital / investment:** Inventories rose to £693.5m at H1 2026 (+£134m vs H1 2025), driven by partnership WIP—risk of capital trap if housing recovery stalls. H1 free cash outflow is seasonal but bears monitoring.
 
-**Operational / people:** Principal risks include health and safety incidents, skills shortages, partner/subcontractor insolvency, poor contract selectivity, and cyber attack (risk status *increased* in 2025 Annual Report appendix). Construction margin discipline is good today but historically volatile sector-wide.
+**Operational:** Health & safety, poor contract selectivity, project delivery and supply-chain insolvency are standing construction risks; LTIR improved to 0.18 in FY2025. Partner insolvency risk flagged as “decrease” in severity but still present.
 
-**Governance:** Board changes (dissolution of Responsible Business Committee; Kelly Gangotra expanded to CFO & Commercial Officer from April 2026) are disclosed but immaterial. Founder-CEO John Morgan remains central to culture and strategy — key-person concentration in a decentralised model.
+**Governance:** Feb 2026 board changes—Responsible Business Committee dissolved; CFO Kelly Gangotra becomes Chief Financial and Commercial Officer from Apr 2026 (absorbing retired Group Commercial Director role). Founder CEO John Morgan remains central—a key-person concentration typical of founder-led UK mid-caps.
 
-**Liquidity / leverage:** Not a near-term red flag — net cash, undrawn facilities, and explicit capital allocation hierarchy prioritising balance sheet strength. Screen current ratio 1.23× is below Graham Defensive threshold.
+**Cyber:** Annual report appendix rates cyber-attack risk as *increased*; Group holds MOD Cyber Certification.
 
-**Pension:** No material pension deficit identified in available sources; not a current red flag.
+**Liquidity / covenants:** Not a near-term concern—net cash, undrawn £180m RCF, going concern confirmed—but partnership capital employed guided up to £500–580m in Partnership Housing alone in 2026.
 
-RiskTags: cyclical, regulatory, competitive, key_person
-RiskTags: cyclical, regulatory, competitive, key_person
+**Screen blind spots:** Economic Moat model failed (ROA <8%); current ratio 1.23 fails Graham Defensive; cyclical exposure overlay not triggered despite clear housing cyclicality in filings.
+
+RiskTags: cyclical, regulatory, key_person, liquidity, competitive, governance, other
+RiskTags: cyclical, regulatory, key_person, liquidity, competitive, governance, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate and skewed toward results-driven and syndicated equity commentary rather than investigative journalism.
+Coverage over the past year is moderate—dominated by results, trading updates and third-party commentary rather than deep investigative journalism.
 
-Material operational/financial news (from `news_manifest.json`):
+Material items from `news_manifest.json`:
 
-- **23 July 2026** — "Morgan Sindall Group H1 Earnings Call Highlights" (Yahoo): record first half; Fit Out, Construction and Infrastructure offset housing weakness.
-- **25 February 2026** — FY 2025 results cluster: "Morgan Sindall FY 2025 slides: record profits driven by 41% Fit Out surge" (Investing.com UK); "Morgan Sindall looks to housing to drive growth" (Investors' Chronicle); H2 earnings call citing decade of record profits except COVID.
-- **16 April 2026** — "Morgan Sindall shares jump 10% after construction group upgrades full-year profit outlook" (Yahoo Finance UK).
-- **12 February 2026** — "Morgan Sindall jumps 7% after upbeat trading update" (Yahoo Finance UK).
-- **2 October 2025** — Trading update (RNS body): FY 2025 significantly ahead on Fit Out; order book £12.2bn.
+- **23 Jul 2026** — “Morgan Sindall Group H1 Earnings Call Highlights” (Yahoo): record first half; Fit Out/Construction strength; housing weakness.
+- **25 Feb 2026** — FY2025 results day coverage: “Morgan Sindall FY 2025 slides: record profits driven by 41% Fit Out surge” (Investing.com UK); “Morgan Sindall looks to housing to drive growth” (Investors’ Chronicle); H2 earnings call noting decade of record profits except COVID.
+- **12 Feb 2026** — “Morgan Sindall jumps 7% after upbeat trading update” (Yahoo Finance UK): pre-results guidance upgrade.
+- **16 Apr 2026** — “Morgan Sindall shares jump 10% after construction group upgrades full-year profit outlook” (Proactive Investors): trading/outlook revision.
+- **2 Oct 2025** — Trading update (filing): Fit Out significantly ahead of expectations (also reflected in RNS body).
+- **Aug 2026** — “Morgan Sindall Group Independent Non-Executive Director Acquires 82% More Stock” (Simply Wall St); Plymouth retrofit deal ~£6.5m (Ad-hoc-news.de, 21–22 Aug 2026).
+- **Ongoing** — Routine RNS on Sharesave listings, voting rights, PDMR dealings (no M&A or regulatory enforcement flagged in manifest).
 
-Corporate/actions: repeated RNS on Sharesave-related equity issuance (e.g. "Morgan Sindall Expands Share Capital to Meet Sharesave Option Demand", TipRanks, 5 August 2026); independent NED share purchase flagged (Simply Wall St, 4 August 2026). No material M&A, regulatory enforcement, or management scandal in the manifest. Sector context pieces from Kalkine Media on UK construction/infrastructure demand are generic.
-
-**Assessment:** News flow confirms the earnings momentum narrative but adds little incremental risk analysis; treat syndicated articles with caution.
+No major acquisition, management scandal, or regulatory fine appears in the news pack. Strategy emphasis: integration of Property Services into Construction (Jan 2026), raised medium-term targets for Fit Out (£100–130m OP) and Construction (3.5–4.0% margin), and continued partnership housing/regeneration wins (e.g. Druids Heath, Cardiff/Vale).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.76
-Rationale: Primary filings confirm record earnings, net cash, order-book visibility and dividend growth that substantiate the quantitative strong-buy signal, partially offset by housing-cycle capital intensity, building-safety overhang, and inherent construction cyclicality.
+Confidence: 0.74
+Rationale: Primary filings confirm the screen’s quality-cheapness case—record earnings, net cash, dividend growth and backlog visibility—but medium risk from housing cyclicality, rising partnership capital and construction-sector tail risks prevents full conviction upgrade beyond the quantitative strong-buy signal.

@@ -1,58 +1,42 @@
 {
   "ticker": "IMB.L",
-  "run_at": "2026-08-19T10:24:14.725305+00:00",
-  "attached_at": "2026-08-21T07:24:06.901866+00:00",
-  "history_run_path": "docs/data/history/run_20260819_102414.json.gz",
-  "history_models_path": "docs/data/history/models_20260819_102414.json.gz",
+  "run_at": "2026-08-23T06:22:09.407971+00:00",
+  "attached_at": "2026-08-23T07:08:09.715620+00:00",
+  "history_run_path": "docs/data/history/run_20260823_062209.json.gz",
+  "history_models_path": "docs/data/history/models_20260823_062209.json.gz",
   "universe_meta": {
-    "company_count": 249,
+    "company_count": 248,
     "signal_counts": {
-      "strong_buy": 20,
-      "buy": 46,
-      "hold": 142,
-      "avoid": 41
+      "buy": 35,
+      "strong_buy": 12,
+      "hold": 158,
+      "avoid": 43
     },
-    "strong_buy_count": 20,
-    "universe": "ftse350",
-    "universe_label": "FTSE 350",
-    "excluded_investment_vehicles": 101,
-    "include_investment_trusts": false,
-    "screen_trusts": true,
-    "trust_count": 101,
-    "trust_signal_counts": {
-      "strong_buy": 17,
-      "buy": 26,
-      "hold": 42,
-      "avoid": 16
-    },
-    "broker_overlay": "trading212",
-    "t212_overlay": true,
-    "ii_overlay": true,
-    "unavailable_watch_count": 0
+    "universe": "ftse350"
   },
   "ticker_signal": {
     "ticker": "IMB.L",
     "signal": "strong_buy",
-    "conviction_score": 0.4448,
+    "conviction_score": 0.4615,
     "data_quality_score": 1.0,
-    "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Strong Buy — neutral timing",
-    "models_passed": 12.0,
-    "weighted_model_score": 0.6086909090909091,
+    "timing_signal": "accumulate",
+    "timing_score": 0.75,
+    "action_note": "Strong Buy — favourable entry timing",
+    "models_passed": 13.0,
+    "weighted_model_score": 0.6358227272727273,
     "research_verdict": null,
     "adjusted_signal": "strong_buy",
     "research_as_of": null,
-    "core_order": "limit",
-    "core_limit": 2537.47,
-    "core_allocation_pct": 0.6,
-    "tactical_limit": 2434.95,
-    "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 2287.31,
-    "tactical_take_profit": 2755.16,
-    "trade_plan_summary": "Trade plan: core 60% limit £2537.47; tactical 40% limit £2434.95; tactical stop £2287.31, target £2755.16.",
-    "atr_14": 64.1691,
-    "volume_ratio_20": 0.0304
+    "core_order": "market",
+    "core_limit": NaN,
+    "core_allocation_pct": 0.75,
+    "tactical_limit": 2377.85,
+    "tactical_allocation_pct": 0.25,
+    "tactical_stop_loss": 2233.68,
+    "tactical_take_profit": 2742.64,
+    "trade_plan_summary": "Trade plan: core 75% at market (~£2503.00); tactical 25% limit £2377.85; tactical stop £2233.68, target £2742.64.",
+    "atr_14": 62.5132,
+    "volume_ratio_20": 0.4931
   },
   "ticker_models": [
     {
@@ -89,7 +73,7 @@
       "ticker": "IMB.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.6925
+      "score": 0.7091
     },
     {
       "ticker": "IMB.L",
@@ -100,8 +84,8 @@
     {
       "ticker": "IMB.L",
       "model_id": "low_pe_high_yield",
-      "passed": false,
-      "score": 0.5
+      "passed": true,
+      "score": 1.0
     },
     {
       "ticker": "IMB.L",
@@ -113,7 +97,7 @@
       "ticker": "IMB.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9803
+      "score": 0.9813
     },
     {
       "ticker": "IMB.L",
@@ -137,7 +121,7 @@
       "ticker": "IMB.L",
       "model_id": "high_dividend",
       "passed": true,
-      "score": 0.9493
+      "score": 0.9491
     },
     {
       "ticker": "IMB.L",
@@ -149,19 +133,19 @@
       "ticker": "IMB.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.7987
+      "score": 0.8118
     },
     {
       "ticker": "IMB.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.7488
+      "score": 0.7757
     },
     {
       "ticker": "IMB.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.6478
+      "score": 0.6652
     },
     {
       "ticker": "IMB.L",
@@ -173,7 +157,7 @@
       "ticker": "IMB.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.7404
+      "score": 0.7625
     },
     {
       "ticker": "IMB.L",
@@ -188,6 +172,6 @@
       "score": 0.6
     }
   ],
-  "models_passed": 12,
+  "models_passed": 13,
   "models_total": 22
 }

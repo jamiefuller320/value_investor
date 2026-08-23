@@ -2125,7 +2125,135 @@
       "priority": "medium",
       "suggestion": "The memo at `output/research/MEGP.L/research.md` has been updated to v2 with these sections integrated.",
       "recorded_at": "2026-08-19T11:34:06.545623+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Auto-fetch FY 2026 results presentation PDF from IR allowlist and extract FCF bridge, ROIC, and IFRS 16 maturity tables into `ir_presentation_metrics.json` (currently only FY 2025/H1 bridges parsed).",
+      "recorded_at": "2026-08-23T07:22:59.243681+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When `fcf.company_adjusted` exists in filings, use it as canonical FCF for FCF Yield and dividend-coverage models instead of Yahoo OCF−capex; flag coverage ratio separately when bases diverge >50%.",
+      "recorded_at": "2026-08-23T07:22:59.243697+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Compute statutory earnings growth from filing EPS or adjusted earnings per filing period, not Yahoo net income alone, to avoid false sign divergence vs adjusted EPS.",
+      "recorded_at": "2026-08-23T07:22:59.243703+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest Yahoo quarterly cashflow (currently empty/suppressed for FGP.L) so screen TTM FCF ($302.8m) can be verified or replaced with filing-aligned TTM.",
+      "recorded_at": "2026-08-23T07:22:59.243707+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Require gap-fill memos to include a three-row FCF reconciliation table (statutory OCF−capex, company FCF definition, screen canonical) with explicit add-back lines from filing cash-flow notes.",
+      "recorded_at": "2026-08-23T07:22:59.243713+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Reject Investegate HTML fallback when IR allowlist PDF period label (e.g. april-2026-trading-update) does not match extracted body date/headline — `ir_a9733d0de6aec27d.txt` still stores H1 interim after refetch.",
+      "recorded_at": "2026-08-23T07:22:59.243719+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Extract IR presentation cash-flow bridges from `ir_a70365d580129295.txt` (capex/debt charts present) into `ir_presentation_metrics.json`; bridge_count remains 0.",
+      "recorded_at": "2026-08-23T07:22:59.243723+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Parse FY2025 annual report Note 9/11 debt maturity and IFRS 16 lease tables from `ir_3a67962eb8770824.txt` for leverage follow-up.",
+      "recorded_at": "2026-08-23T07:22:59.243727+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest Yahoo quarterly cashflow/income to reconcile screen TTM FCF ($14.4m) and statutory EPS growth (−4.7%) vs filing-aligned FY2025.",
+      "recorded_at": "2026-08-23T07:22:59.243732+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Tag healthcare price-erosion overlay severity by segment using filing qualifiers (\"modest\", \"in line with recent history\" vs guided margin cut) rather than binary phrase detection.",
+      "recorded_at": "2026-08-23T07:22:59.243736+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "*Net assessment:** All five questions remain **partially_resolved**. The refetch pass improved body count but did not close any open item. The watchlist framing is partially addressed — filings support **accumulate with patience** rather than pass, but TTM screen divergences and weak net dividend coverage block full strong-buy restoration. Memo updated at `output/research/HIK.L/research.md`.",
+      "recorded_at": "2026-08-23T07:22:59.243746+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse H1/H2 investor presentation PDFs into product-level vending revenue tables (fun photo vs official ID vs laundry) — 61 RNS bodies now available but none disaggregate Photo.ME revenue by use case, leaving the core durability question partially open.",
+      "recorded_at": "2026-08-23T07:22:59.243753+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Auto-extract interim FCF and dividend-paid bridges from half-year RNS cash-flow notes (OCF, capex, dividends paid, buybacks) and surface half-year coverage ratios separately from full-year filing-aligned metrics in `screening_snapshot.json`.",
+      "recorded_at": "2026-08-23T07:22:59.243756+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When interim EPS is negative YoY but statutory FY EPS growth is positive, flag `earnings_basis_mismatch: interim_vs_fy` on the snapshot to prevent overlay models treating the two figures as conflicting statutory series.",
+      "recorded_at": "2026-08-23T07:22:59.243760+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Tag governance-event RNS bodies (GM/buyback authorisation, AGM dividend votes, strategic-review termination, secondary placing) as `period: governance` in `filings_index.json` — these 29 newly fetched bodies materially inform capital-allocation risk but are buried among voting-rights notices.",
+      "recorded_at": "2026-08-23T07:22:59.243766+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "low",
+      "suggestion": "Require gap-fill follow-ups to cite whether newly fetched body count changed the status of each open question (resolved / partially_resolved / unresolved) versus the prior pass, avoiding duplicate analysis when bodies add governance colour but not product economics.",
+      "recorded_at": "2026-08-23T07:22:59.243770+00:00"
     }
   ],
-  "updated_at": "2026-08-19T11:34:06.545625+00:00"
+  "updated_at": "2026-08-23T07:22:59.243772+00:00"
 }

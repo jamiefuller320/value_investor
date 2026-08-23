@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-23T06:18:29.171316+00:00",
+  "generated_at": "2026-08-23T07:23:23.783324+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1132,28 +1132,77 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-19T18:43:53.677478+00:00",
-    "queue_ui_updated_at": "2026-08-23T06:18:29.172988+00:00",
-    "task_count": 55,
+    "compiled_at": "2026-08-23T07:23:23.356628+00:00",
+    "queue_ui_updated_at": "2026-08-23T07:23:23.784655+00:00",
+    "task_count": 59,
     "status": {
-      "open_count": 0,
+      "open_count": 4,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 52,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260823-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260823-01",
+        "area": "scoring",
+        "title": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists — use company FCF for FCF Yield/dividend-coverage mo",
+        "priority": "high",
+        "priority_score": 101.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260823-02",
+        "area": "ingest",
+        "title": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label ≠ extracted headline",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260823-03",
+        "area": "ingest",
+        "title": "Extract IR presentation and annual-report structured tables (cash-flow bridges, segment margins, debt/IFRS 16 maturity, product revenue) into `ir_presentation_m",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260823-04",
+        "area": "ingest",
+        "title": "Populate Yahoo quarterly cashflow/income (currently empty/suppressed) and surface in `screening_snapshot.json` with period labels",
+        "priority": "high",
+        "priority_score": 96.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-23T06:18:29.190758+00:00",
+    "generated_at": "2026-08-23T07:23:23.784963+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
