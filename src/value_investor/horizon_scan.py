@@ -457,6 +457,8 @@ _OFFLINE_SIM_PATHS = [
     "tests/test_rebalance_log.py",
     "tests/test_exit_timing_archive_sim.py",
     "tests/test_exclusion_universe_archive_sim.py",
+    "src/value_investor/loser_snapshot_cards.py",
+    "tests/test_loser_snapshot_cards.py",
     "tests/test_exclusion_ladder_replay.py",
     "tests/test_index_stress_archive_sim.py",
     "tests/test_exit_timing_cohorts.py",

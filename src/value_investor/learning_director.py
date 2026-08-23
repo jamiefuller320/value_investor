@@ -217,6 +217,7 @@ def build_learning_director_payload(
         "prior_learning_director_review": _safe_read(COMMITTED_REVIEW_PATH),
         "exclusion_universe": _safe_read(data_dir / "exclusion_universe_review.json"),
         "exclusion_ladder_replay": _safe_read(paper_root / "exclusion_ladder_replay_review.json"),
+        "loser_snapshot_cards": _safe_read(data_dir / "loser_snapshot_cards.json"),
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
         "open_fragments": list_open_fragments(store_path=DEFAULT_DEFER_STORE),
