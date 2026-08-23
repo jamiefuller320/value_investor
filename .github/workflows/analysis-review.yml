@@ -111,6 +111,9 @@ jobs:
             --paper-root docs/data/paper_automation \
             --data-dir docs/data || true
 
+      - name: Loser snapshot cards (avoid + failed-buy alumni)
+        run: ftse-loser-snapshot-cards --data-dir docs/data || true
+
       - name: Commit knob bootstrap artifacts
         # Persist even when the modelling agent is skipped — otherwise Sunday
         # calibrate/spawn is lost and weekday paper-auto never sees r2/r3.
@@ -127,6 +130,8 @@ jobs:
             docs/data/paper_automation/exclusion_ladder_replay.json
             docs/data/paper_automation/exclusion_ladder_replay_review.json
             docs/data/paper_automation/ai_judgment_exclusion_*/**
+            docs/data/loser_snapshot_cards.json
+            docs/data/loser_snapshot_cards.md
           skip_fetch: false
 
       - name: Check analysis inputs
