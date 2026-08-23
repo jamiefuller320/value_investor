@@ -65,9 +65,7 @@ def _cmd_payload(args: argparse.Namespace) -> int:
     if args.json:
         _print_json(payload)
     else:
-        print(
-            f"ready={ok} history_runs={payload.get('history_run_count')} — {note}"
-        )
+        print(f"ready={ok} history_runs={payload.get('history_run_count')} — {note}")
     return 0 if ok or args.allow_thin else 1
 
 

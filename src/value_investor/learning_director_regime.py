@@ -102,10 +102,10 @@ def build_regime_summary(
     history_run_count: int = 0,
 ) -> dict[str, Any]:
     """
-    Regime-oriented snapshot from available artifacts.
+      Regime-oriented snapshot from available artifacts.
 
-  Full 8/16/24-week slices require persisted weekly series (planned phase
-  `regime_slices_8_16_24`). Until then, report full-sample metrics and history depth.
+    Full 8/16/24-week slices require persisted weekly series (planned phase
+    `regime_slices_8_16_24`). Until then, report full-sample metrics and history depth.
     """
     data_dir = Path(data_dir)
     paper_root = Path(paper_root or data_dir / "paper_automation")
@@ -116,9 +116,7 @@ def build_regime_summary(
     knob = _safe_read(paper_root / "knob_calibration_priors.json") or {}
 
     recommended = exclusion.get("recommended_step") or {}
-    rec_step_id = (
-        recommended.get("step_id") if isinstance(recommended, dict) else recommended
-    )
+    rec_step_id = recommended.get("step_id") if isinstance(recommended, dict) else recommended
     ladder_results = exclusion.get("ladder_results") or []
     rec_row = next(
         (row for row in ladder_results if row.get("step_id") == rec_step_id),
@@ -141,9 +139,7 @@ def build_regime_summary(
             "exclusion_week_pairs": rec_summary.get("week_pairs"),
             "cumulative_exclusion_alpha": rec_summary.get("cumulative_exclusion_alpha"),
             "positive_alpha_rate": rec_summary.get("positive_alpha_rate"),
-            "bottom_quartile_exclude_rate": rec_hindsight.get(
-                "mean_bottom_quartile_exclude_rate"
-            ),
+            "bottom_quartile_exclude_rate": rec_hindsight.get("mean_bottom_quartile_exclude_rate"),
             "top_quartile_retain_rate": rec_hindsight.get("mean_top_quartile_retain_rate"),
             "replay_return_delta_vs_actual": (
                 (rec_replay or {}).get("return_delta_vs_actual") if rec_replay else None
@@ -165,9 +161,10 @@ def build_regime_summary(
         readiness_flags.append("missing:exclusion_universe_review")
     if not ladder_replay:
         readiness_flags.append("missing:exclusion_ladder_replay")
-    if rec_summary.get("positive_alpha_rate") is not None and float(
-        rec_summary.get("positive_alpha_rate") or 0
-    ) < 0.5:
+    if (
+        rec_summary.get("positive_alpha_rate") is not None
+        and float(rec_summary.get("positive_alpha_rate") or 0) < 0.5
+    ):
         readiness_flags.append("exclusion_alpha_inconsistent:<50%_positive_weeks")
     if learning.get("beat_market") is False:
         readiness_flags.append("primary_underperforming_market")
@@ -176,9 +173,10 @@ def build_regime_summary(
         "generated_at": datetime.now(UTC).isoformat(),
         "windows": windows,
         "recommended_exclusion_step": rec_step_id,
-        "knob_calibration_ready": (knob.get("tracks") or {}).get("ai_judgment", {}).get(
-            "readiness", {}
-        ).get("ready_for_priors"),
+        "knob_calibration_ready": (knob.get("tracks") or {})
+        .get("ai_judgment", {})
+        .get("readiness", {})
+        .get("ready_for_priors"),
         "ladder_replay_readiness": ladder_replay.get("readiness"),
         "flags": readiness_flags,
     }

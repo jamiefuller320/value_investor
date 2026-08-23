@@ -13,10 +13,10 @@ from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
 from value_investor.analysis_review import (
     _EXPERIMENT_LINE,
+    AnalysisTask,
     _experiment_type_for_area,
     _history_run_count,
     _promote_target_for_area,
-    AnalysisTask,
 )
 from value_investor.learning_director_regime import (
     VISION_PATH,
@@ -154,9 +154,7 @@ def build_learning_director_payload(
         "paper_learning_review": _safe_read(data_dir / "paper_learning_review.json"),
         "prior_learning_director_review": _safe_read(COMMITTED_REVIEW_PATH),
         "exclusion_universe": _safe_read(data_dir / "exclusion_universe_review.json"),
-        "exclusion_ladder_replay": _safe_read(
-            paper_root / "exclusion_ladder_replay_review.json"
-        ),
+        "exclusion_ladder_replay": _safe_read(paper_root / "exclusion_ladder_replay_review.json"),
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
         "guardrails": {

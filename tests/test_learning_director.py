@@ -119,9 +119,7 @@ def test_compile_learning_director_tasks_filters_areas(tmp_path: Path):
         "2. [scoring] Change assign_signal — not allowed here\n"
     )
     tasks_path = tmp_path / "learning_director_tasks.json"
-    compiled = compile_learning_director_tasks(
-        review, run_stamp="20260823", tasks_path=tasks_path
-    )
+    compiled = compile_learning_director_tasks(review, run_stamp="20260823", tasks_path=tasks_path)
     assert compiled["task_count"] == 1
     assert compiled["tasks"][0]["area"] == "universe"
     assert compiled["tasks"][0]["source"] == "learning_director"
