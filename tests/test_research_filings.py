@@ -13,15 +13,20 @@ from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
+    _apply_headline_period,
     _compose_filing_body_with_depth_sections,
     _compose_pdf_body_text,
     _extract_filing_document_text,
+    _extract_investegate_html_headline,
     _extract_investegate_html_text,
     _extract_ixbrl_html_text,
     _extract_pdf_depth_sections,
     _fetch_ir_allowlist_body,
+    _fetch_rns_filing_body_for_refetch,
     _filing_text_is_substantive,
+    _infer_filing_period_from_row,
     _ir_body_content_hash,
+    _is_other_results_rns_row,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
     _scrub_misattributed_filing_rows,
@@ -29,6 +34,7 @@ from value_investor.research.filings import (
     _uk_ticker_sec_dual_listed,
     _validate_ir_allowlist_body_content,
     _validate_rns_filing_body_content,
+    _validate_rns_html_headline_match,
     asx_markit_file_url,
     classify_companies_house_period,
     classify_filing_entity_type,
@@ -1192,6 +1198,222 @@ def test_validate_rns_filing_body_rejects_misattributed_issuer():
     )
     assert valid is False
     assert reason == "issuer_mismatch"
+
+
+def test_extract_investegate_html_headline_parses_h1():
+    html = """
+    <html><body>
+    <h1>ITV plc Full Year Results 2025</h1>
+    <p>Revenue up 3% with final dividend maintained.</p>
+    </body></html>
+    """
+    assert _extract_investegate_html_headline(html) == "ITV plc Full Year Results 2025"
+
+
+def test_infer_filing_period_from_other_row_headline():
+    row = {
+        "period": "other",
+        "headline": "ITV plc Full Year Results 2025 - Investegate",
+        "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1",
+    }
+    assert _infer_filing_period_from_row(row) == "annual"
+
+
+def test_validate_rns_html_headline_match_rejects_period_mismatch():
+    row = {
+        "headline": "April 2026 Trading Update",
+        "period": "trading_update",
+        "url": "https://www.hikma.com/media/april-2026-trading-update-vfinal.pdf",
+    }
+    valid, reason = _validate_rns_html_headline_match(row, "Half Year Interim Results 2026")
+    assert valid is False
+    assert reason == "headline_mismatch"
+
+
+def test_validate_rns_filing_body_rejects_other_row_with_mismatched_html_headline():
+    row = {
+        "headline": "April 2026 Trading Update",
+        "period": "other",
+        "url": "https://www.hikma.com/media/april-2026-trading-update-vfinal.pdf",
+    }
+    body = (
+        "Hikma Pharmaceuticals PLC trading update April 2026: group revenue growth "
+        "2% to 4% and operating profit guidance maintained." + ("x" * 220)
+    )
+    valid, reason = _validate_rns_filing_body_content(
+        row,
+        body,
+        company_name="Hikma Pharmaceuticals PLC",
+        ticker="HIK.L",
+        extracted_headline="Half Year Interim Results 2026",
+    )
+    assert valid is False
+    assert reason == "headline_mismatch"
+
+
+def test_apply_headline_period_upgrades_other_from_body_cues():
+    row = {
+        "headline": "Results",
+        "period": "other",
+        "source": "investegate_resolved",
+    }
+    body_snippet = (
+        "FirstGroup plc full year results for the year ended 31 March 2026. "
+        "Revenue £5.2bn with adjusted operating profit of £420m."
+    )
+    updated = _apply_headline_period(row, body_snippet=body_snippet)
+    assert updated["period"] == "annual"
+
+
+def test_is_other_results_rns_row_detects_fy_headline():
+    row = {
+        "period": "other",
+        "headline": "FY2025 Full Year Results - Investegate",
+        "has_body": False,
+        "url": "https://www.investegate.co.uk/announcement/rns/example/fy/1",
+    }
+    assert _is_other_results_rns_row(row) is True
+
+
+def test_refetch_investegate_rejects_html_fallback_headline_mismatch(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "HIK.L",
+        "company_name": "Hikma Pharmaceuticals PLC",
+        "filings": [
+            {
+                "id": "hik_trading",
+                "source": "investegate_resolved",
+                "headline": "Hikma Pharmaceuticals PLC April 2026 Trading Update",
+                "published_at": "2026-04-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/hikma/trading/1",
+                "period": "trading_update",
+                "has_body": False,
+                "body_path": None,
+                "priority": 90,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    interim_body = (
+        "Hikma Pharmaceuticals PLC half year interim results for six months ended June 2025. "
+        "Revenue up 8% with interim dividend maintained." + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (interim_body, "Half Year Interim Results 2026"),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    assert result["body_rejected"] == 1
+    assert result["html_fallbacks"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is False
+
+
+def test_refetch_investegate_prioritizes_other_results_rows(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "FGP.L",
+        "company_name": "FirstGroup plc",
+        "filings": [
+            {
+                "id": "trivia",
+                "source": "investegate_direct",
+                "headline": "Total Voting Rights",
+                "published_at": "2026-02-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/firstgroup/tvr/1",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 10,
+            },
+            {
+                "id": "fy_other",
+                "source": "investegate_direct",
+                "headline": "FY2025 Full Year Results",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/firstgroup/fy/1",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 50,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    fetch_order: list[str] = []
+
+    def fake_fetch(url):
+        fetch_order.append(url)
+        return "Annual results narrative " + ("x" * 220)
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (fake_fetch(url), None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="FGP.L",
+        company_name="FirstGroup plc",
+        max_bodies=1,
+    )
+    assert result["attempted"] == 2
+    assert result["fetched"] == 1
+    assert result["other_results_candidates"] == 1
+    assert fetch_order[0].endswith("/fy/1")
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["fy_other"]["has_body"] is True
+    assert by_id["fy_other"]["period"] == "annual"
+    assert by_id["trivia"]["has_body"] is False
+
+
+def test_fetch_rns_filing_body_for_refetch_uses_html_fallback(monkeypatch):
+    investegate_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/itv-plc-full-year-results-2025/9459201"
+    html = (
+        """
+    <html><body>
+    <h1>ITV plc Full Year Results 2025</h1>
+    <p>Revenue up 3% with adjusted operating profit ahead of expectations.</p>
+    """
+        + ("detail " * 120)
+        + """
+    </body></html>
+    """
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, **kwargs: html.encode("utf-8"),
+    )
+    body, headline = _fetch_rns_filing_body_for_refetch(investegate_url)
+    assert headline == "ITV plc Full Year Results 2025"
+    assert body is not None
+    assert "Full Year Results 2025" in body
 
 
 def test_refetch_investegate_rejects_misattributed_body(tmp_path, monkeypatch):
