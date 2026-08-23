@@ -9,6 +9,7 @@ map (L124 / frag-20260811-08).
 | Cadence | When (UTC) | Human job | Primary artifacts | Runbook |
 |---------|------------|-----------|-------------------|---------|
 | **Weekly** | Sunday after email quiet bundle (~10:35) | Read analysis review; triage experiments; knob-calibration gates | `docs/data/analysis_review.md`, `analysis_tasks.json`, `knob_calibration_priors.json` | [analysis-review.md](analysis-review.md) · [knob-calibration.md](knob-calibration.md) |
+| **Weekly** | Sunday ~10:55 UTC (after paper-learning-review) | Learning Director: regime, convergence, vision roadmap activation proposals | `docs/data/learning_director_review.md`, `learning_director_tasks.json`, `learning_director_vision.json` | [learning-director.md](learning-director.md) · [learning-director-vision.md](learning-director-vision.md) |
 | **Monthly** | First Sunday **11:00** (after weekly when possible) | Horizon scan; triage open `ftse-defer` fragments / ACCELERATE | `docs/data/horizon_scan.md`, `horizon_scan.json`, `horizon_tasks.json` | [horizon-scan.md](horizon-scan.md) |
 | **Quarterly** | Calendar quarter review | Deferred ideas pass (`ftse-defer status` done/drop/now) | `docs/deferred-review.md`, `docs/deferred-ideas.json` | [deferred-review.md](../deferred-review.md) |
 
@@ -20,6 +21,7 @@ tracks on the Automation tab — see [human-tasks-checklist.md](human-tasks-chec
 | Loop | Owner | Notes |
 |------|-------|-------|
 | Weekly analysis / knobs | Human (portfolio operator) | Do not promote knobs until shadow gates pass |
+| Weekly learning director | Human (portfolio operator) | Vision phase ACTIVATE recommendations are proposals only |
 | Monthly horizon | Human | Observe-only for paper books; promote ACCELERATE manually |
 | Quarterly deferred | Human | Prefer `ftse-defer` CLI over hand-editing JSON |
 

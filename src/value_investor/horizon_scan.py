@@ -469,7 +469,10 @@ _MONITORING_PATHS = [
     "src/value_investor/automation_status.py",
     "src/value_investor/publish.py",
     "src/value_investor/paper_learning_review.py",
+    "src/value_investor/learning_director.py",
+    "src/value_investor/learning_director_regime.py",
     "tests/test_automation_status.py",
+    "tests/test_learning_director.py",
 ]
 
 _PAPER_CHURN_PATHS = [

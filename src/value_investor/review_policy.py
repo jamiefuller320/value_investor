@@ -21,6 +21,14 @@ def default_review_policy() -> dict[str, Any]:
                 "Disable before live capital cutover."
             ),
         },
+        "learning_director": {
+            "enabled": True,
+            "cadence": "weekly",
+            "note": (
+                "Observe-only Learning Director synthesis over analysis, exclusion, "
+                "and vision roadmap. Disable before live capital cutover."
+            ),
+        },
     }
 
 
@@ -33,11 +41,18 @@ def load_review_policy(path: Path = DEFAULT_REVIEW_POLICY_PATH) -> dict[str, Any
     incoming = raw.get("paper_learning_review")
     if isinstance(incoming, dict):
         policy["paper_learning_review"].update(incoming)
+    director = raw.get("learning_director")
+    if isinstance(director, dict):
+        policy["learning_director"].update(director)
     return policy
 
 
 def paper_learning_review_enabled(path: Path = DEFAULT_REVIEW_POLICY_PATH) -> bool:
     return bool(load_review_policy(path).get("paper_learning_review", {}).get("enabled", True))
+
+
+def learning_director_enabled(path: Path = DEFAULT_REVIEW_POLICY_PATH) -> bool:
+    return bool(load_review_policy(path).get("learning_director", {}).get("enabled", True))
 
 
 def save_review_policy(policy: dict[str, Any], path: Path = DEFAULT_REVIEW_POLICY_PATH) -> Path:
