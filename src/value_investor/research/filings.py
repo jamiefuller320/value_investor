@@ -3771,6 +3771,146 @@ def parse_ir_ifrs16_lease_maturity(body_text: str) -> dict[str, Any] | None:
     return None
 
 
+_OCF_HIGHLIGHT_SECTION_RE = re.compile(
+    r"Cash flow,\s*capex,\s*and balance sheet",
+    re.IGNORECASE,
+)
+_OCF_HIGHLIGHT_PAIR_RE = re.compile(
+    r"Operating cash flow\s+([\d,]+)\s+([\d,]+)",
+    re.IGNORECASE,
+)
+_SEGMENT_MARGIN_BLOCK_RE = re.compile(
+    r"Core\s+operating\s+margin\s+((?:\d+(?:\.\d+)?%\s*){3,8})",
+    re.IGNORECASE | re.DOTALL,
+)
+_INTERIM_SEGMENT_SLIDE_RE = re.compile(
+    r"Three high quality businesses|Core\s+Op\s*\nProfit\s*\nCore\s*\nRevenue",
+    re.IGNORECASE,
+)
+_INTERIM_PERIOD_MARKER_RE = re.compile(r"\b1H24\s+1H25\b", re.IGNORECASE)
+_INTERIM_NUMBER_PAIR_RE = re.compile(r"^\s*([\d,]+)\s+([\d,]+)\s*$")
+_HIKMA_SEGMENT_NAMES = ("Injectables", "Branded", "Hikma Rx")
+
+
+def parse_ir_operating_cash_flow_highlights(body_text: str) -> dict[str, Any] | None:
+    """Parse USD/GBP IR deck operating-cash-flow period pairs (e.g. Hikma H1 slides)."""
+    if not body_text or not body_text.strip():
+        return None
+    section_match = _OCF_HIGHLIGHT_SECTION_RE.search(body_text)
+    if section_match is None:
+        return None
+    section = body_text[section_match.start() : section_match.start() + 1200]
+    pair_match = _OCF_HIGHLIGHT_PAIR_RE.search(section)
+    if pair_match is None:
+        return None
+    prior = _parse_table_number(pair_match.group(1))
+    current = _parse_table_number(pair_match.group(2))
+    if prior is None or current is None:
+        return None
+    currency = "USD" if "$" in section[:400] else "GBP"
+    lines = [
+        {"label": "operating_cash_flow_prior", "amount_millions": prior},
+        {"label": "operating_cash_flow_current", "amount_millions": current},
+    ]
+    return {
+        "bridge_type": "operating_cash_flow_highlight",
+        "currency": currency,
+        "lines": lines,
+        "derived": {"operating_cash_flow_change_millions": current - prior},
+        "parse_confidence": "high",
+    }
+
+
+def parse_ir_segment_operating_margins(body_text: str) -> dict[str, Any] | None:
+    """Parse segment core operating margin percentages from IR presentation decks."""
+    if not body_text or not body_text.strip():
+        return None
+    margin_match = _SEGMENT_MARGIN_BLOCK_RE.search(body_text)
+    if margin_match is None:
+        return None
+    percentages = [
+        float(value)
+        for value in re.findall(r"(\d+(?:\.\d+)?)\s*%", margin_match.group(1))
+        if 0 < float(value) < 100
+    ]
+    if len(percentages) < 4 or len(percentages) % 2 != 0:
+        return None
+    segment_names = list(_HIKMA_SEGMENT_NAMES)
+    if not re.search(r"\bInjectables\b", body_text, re.IGNORECASE):
+        segment_names = [f"segment_{index + 1}" for index in range(len(percentages) // 2)]
+    segments: list[dict[str, Any]] = []
+    for index in range(len(percentages) // 2):
+        name = segment_names[index] if index < len(segment_names) else f"segment_{index + 1}"
+        segments.append(
+            {
+                "segment": name,
+                "margin_prior_pct": percentages[index * 2],
+                "margin_current_pct": percentages[index * 2 + 1],
+            }
+        )
+    if len(segments) < 2:
+        return None
+    return {
+        "split_type": "segment_operating_margin",
+        "currency": "USD" if "$" in body_text else "GBP",
+        "segments": segments,
+        "parse_confidence": "high" if len(segments) >= 3 else "medium",
+    }
+
+
+def _interim_segment_number_pairs(section: str) -> list[tuple[float, float]]:
+    pairs: list[tuple[float, float]] = []
+    for line in section.splitlines():
+        match = _INTERIM_NUMBER_PAIR_RE.match(line)
+        if match is None:
+            continue
+        prior = _parse_table_number(match.group(1))
+        current = _parse_table_number(match.group(2))
+        if prior is None or current is None:
+            continue
+        if prior >= 900 or current >= 900:
+            continue
+        pairs.append((prior, current))
+    return pairs
+
+
+def parse_ir_interim_segment_revenue(body_text: str) -> dict[str, Any] | None:
+    """Parse interim segment revenue and core operating profit pairs from IR decks."""
+    if not body_text or not body_text.strip():
+        return None
+    slide_match = _INTERIM_SEGMENT_SLIDE_RE.search(body_text)
+    if slide_match is None or not _INTERIM_PERIOD_MARKER_RE.search(body_text):
+        return None
+    section = body_text[max(0, slide_match.start() - 1200) : slide_match.start()]
+    pairs = _interim_segment_number_pairs(section)
+    if len(pairs) < 6:
+        return None
+    revenue_pairs = pairs[1::2][:3]
+    profit_pairs = pairs[0::2][:3]
+    if len(revenue_pairs) < 3 or len(profit_pairs) < 3:
+        return None
+    segment_names = list(_HIKMA_SEGMENT_NAMES)
+    if not re.search(r"\bInjectables\b", body_text, re.IGNORECASE):
+        segment_names = [f"segment_{index + 1}" for index in range(3)]
+    segments = [
+        {
+            "segment": segment_names[index],
+            "core_operating_profit_prior": profit_pairs[index][0],
+            "core_operating_profit_current": profit_pairs[index][1],
+            "revenue_prior": revenue_pairs[index][0],
+            "revenue_current": revenue_pairs[index][1],
+        }
+        for index in range(3)
+    ]
+    return {
+        "split_type": "interim_segment_revenue",
+        "currency": "USD" if "$" in section else "GBP",
+        "period_labels": ["1H24", "1H25"],
+        "segments": segments,
+        "parse_confidence": "high",
+    }
+
+
 def _write_ir_presentation_metrics_payload(
     payload: dict[str, Any],
     *,
@@ -3846,12 +3986,21 @@ def extract_ir_presentation_metrics(
         cash_bridge = parse_ir_cash_bridge_slides(body_text)
         if cash_bridge:
             payload["bridges"].append({**source_meta, **cash_bridge})
+        ocf_highlight = parse_ir_operating_cash_flow_highlights(body_text)
+        if ocf_highlight:
+            payload["bridges"].append({**source_meta, **ocf_highlight})
         fcf_division = parse_ir_fcf_division_bridge(body_text)
         if fcf_division:
             payload["bridges"].append({**source_meta, **fcf_division})
         segment_split = parse_ir_segment_revenue_splits(body_text)
         if segment_split:
             payload["segment_revenue_splits"].append({**source_meta, **segment_split})
+        interim_segment = parse_ir_interim_segment_revenue(body_text)
+        if interim_segment:
+            payload["segment_revenue_splits"].append({**source_meta, **interim_segment})
+        segment_margin = parse_ir_segment_operating_margins(body_text)
+        if segment_margin:
+            payload["segment_revenue_splits"].append({**source_meta, **segment_margin})
         geo_share = parse_ir_geographic_revenue_share(body_text)
         if geo_share:
             payload["segment_revenue_splits"].append({**source_meta, **geo_share})
