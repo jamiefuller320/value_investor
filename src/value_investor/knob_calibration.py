@@ -1123,6 +1123,14 @@ def spawn_calibration_shadow_tracks(
 
     gc = _gc_calibrated_shadow_dirs(paper_root, keep_ranks=kept_ranks)
     spawned_any = any(row.get("spawned") for row in shadows)
+    if spawned_any:
+        try:
+            from value_investor.sunday_review_dashboard import ensure_experiment_assessment_fresh
+
+            data_dir = paper_root.parent
+            ensure_experiment_assessment_fresh(data_dir, paper_root=paper_root)
+        except Exception:  # noqa: BLE001
+            pass
     return {
         "spawned": spawned_any,
         "top_n": n,

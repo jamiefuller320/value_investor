@@ -661,6 +661,21 @@ def refresh_experiment_assessment(
     experiments.extend(_experiments_from_experimental_tracks(ctx, fetch_benchmark=fetch_benchmark))
     experiments.extend(_experiments_from_task_queues(ctx))
 
+    previous = _safe_read(data_dir / ASSESSMENT_FILENAME) or {}
+    previous_by_id = {
+        str(row.get("experiment_id")): row
+        for row in (previous.get("experiments") or [])
+        if row.get("experiment_id")
+    }
+    now = datetime.now(UTC).isoformat()
+    for row in experiments:
+        exp_id = str(row.get("experiment_id") or "")
+        prior = previous_by_id.get(exp_id) or {}
+        if prior.get("initiated_at"):
+            row["initiated_at"] = prior["initiated_at"]
+        elif exp_id and exp_id not in previous_by_id:
+            row["initiated_at"] = now
+
     sync_result: dict[str, Any] | None = None
     if sync_task_status:
         sync_result = sync_task_assessment_status(experiments, data_dir)

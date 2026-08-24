@@ -448,6 +448,27 @@ def publish_dashboard(
         bundle["research"] = []
 
     data_dir = dest_dir / "data"
+    try:
+        from value_investor.experiment_assessment import slim_experiment_assessment_for_review
+        from value_investor.sunday_review_dashboard import build_sunday_review_dashboard
+
+        bundle["sunday_review"] = build_sunday_review_dashboard(
+            data_dir,
+            paper_root=_resolve_paper_automation_dir(output_dir),
+            output_dir=output_dir,
+            archive_dir=data_dir / "archive",
+            run_at=bundle.get("run_at"),
+            persist_history=True,
+            refresh_experiments=True,
+        )
+        refreshed_assessment = _read_json(data_dir / "experiment_assessment.json")
+        if refreshed_assessment:
+            bundle["experiment_assessment"] = slim_experiment_assessment_for_review(
+                refreshed_assessment
+            )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Sunday review dashboard assembly skipped: %s", exc)
+
     data_dir.mkdir(parents=True, exist_ok=True)
     charts_dest = data_dir / "charts"
     charts_source = output_dir / "charts"

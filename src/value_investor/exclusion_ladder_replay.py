@@ -421,6 +421,13 @@ def spawn_exclusion_shadow(
             force=force,
         )
 
+    try:
+        from value_investor.sunday_review_dashboard import ensure_experiment_assessment_fresh
+
+        ensure_experiment_assessment_fresh(data_dir, paper_root=paper_root)
+    except Exception:  # noqa: BLE001 — spawn must succeed
+        pass
+
     return {
         "spawned": True,
         "track_id": track_id,
