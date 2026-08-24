@@ -72,6 +72,21 @@ builds; it proposes activation with explicit triggers cited from JSON.
 - ≤4 frozen shadow tracks (calibration + exclusion + experimental)
 - Director recommends **merge / retire / defer** when over budget
 
+## Discrete specialist pipelines (director as oversight)
+
+Prefer **narrow producers → specialist reviews → director audit**, not one mega-agent
+owning every experiment:
+
+| Pipeline | Specialist review | Director role |
+|----------|-------------------|---------------|
+| Assessment models / scoring | analysis-review | Check scoring experiments cite trajectory / loser cards |
+| Loser filters / exclusion | analysis-review (+ manual spawn) | Convergence of filter vs pick strands |
+| Churn / exit overlays | paper-learning-review | Inventory budget; do not duplicate churn experiments |
+| Stage / vision activation | director + monthly horizon | ACTIVATE / HOLD / RETIRE only |
+
+Director **PROPOSED ACTIONS** should stay thin (≤3–5), prefer `[analysis]` / `[monitoring]`
+follow-ups when a specialist missed a trigger — not parallel `[scoring]` workstreams.
+
 ## Guardrails
 
 - Observe-only — no `decision-review --apply`, no N3 screen writes

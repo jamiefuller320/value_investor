@@ -83,6 +83,22 @@
           "doc_anchor": "manual-promotion-to-engineering"
         },
         {
+          "id": "sunday-exclusion-shadow-spawn",
+          "title": "Exclusion ladder shadow spawn gate",
+          "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually. Never auto-spawn.",
+          "automated": false,
+          "doc_path": "docs/ops/exclusion-ladder-replay.md",
+          "doc_anchor": "promotion-workflow-human-gate"
+        },
+        {
+          "id": "sunday-triage-plr-director-tasks",
+          "title": "Triage paper-learning and learning-director tasks",
+          "summary": "These queues have no promote CLI. Enact paper_churn/paper_knobs config probes manually, or mark done/cancelled. Prefer analysis-review for scoring/engineering.",
+          "automated": false,
+          "doc_path": "docs/ops/paper-learning-review.md",
+          "doc_anchor": "enacting-proposed-experiments"
+        },
+        {
           "id": "sunday-knob-calibrate-runs",
           "title": "Full-period knob calibrate + shadow bootstrap",
           "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors, spawns competing shadows, PIT warm-starts them from parent rebalance_log (forward-only endurance zero datum), and refreshes endurance.",

@@ -134,12 +134,113 @@ def test_build_analysis_payload_includes_trajectory_focus(tmp_path: Path):
         ),
         encoding="utf-8",
     )
+    (data_dir / "loser_snapshot_cards.json").write_text(
+        json.dumps(
+            {
+                "card_count": 2,
+                "cohort_counts": {"avoid": 1, "failed_buy_alumni": 1},
+                "scope_note": "test",
+                "cards": [
+                    {
+                        "ticker": "A.L",
+                        "cohorts": ["avoid"],
+                        "screen": {
+                            "signal": "avoid",
+                            "failed_families": ["quality", "cheapness"],
+                        },
+                        "opinion_flip_triggers": ["conviction_drop"],
+                        "summary_lines": ["Avoid on quality fail"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (data_dir / "exclusion_universe_review.json").write_text(
+        json.dumps(
+            {
+                "recommended_step": {"step_id": "u4"},
+                "readiness": {"ready_for_priors": True, "week_pairs": 6},
+                "ladder_results": [
+                    {
+                        "step_id": "u4",
+                        "label": "conviction >= 0.35",
+                        "summary": {
+                            "cumulative_exclusion_alpha": 0.01,
+                            "week_pairs": 6,
+                            "mean_filtered_pool": 40,
+                        },
+                        "hindsight_summary": {"mean_bottom_quartile_exclude_rate": 0.4},
+                    }
+                ],
+                "note": "observe-only",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper / "exclusion_ladder_replay_review.json").write_text(
+        json.dumps(
+            {
+                "recommended_step_id": "u4",
+                "readiness": {
+                    "ready_for_shadow_spawn": True,
+                    "primary_return_delta_vs_actual": 0.02,
+                },
+                "tracks": {
+                    "ai_judgment": {
+                        "best_replay_step_id": "u4",
+                        "ladder_steps": [
+                            {
+                                "step_id": "u4",
+                                "replay": {
+                                    "return_delta_vs_actual": 0.02,
+                                    "log_entries_replayed": 4,
+                                },
+                            }
+                        ],
+                    }
+                },
+                "note": "replay",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper / "learning_tracks_exit_timing.json").write_text(
+        json.dumps(
+            {
+                "readiness": {
+                    "ready_for_probability_analysis": False,
+                    "hold_closed_count": 5,
+                    "swap_closed_count": 2,
+                },
+                "hold_recovery": {"closed": {"count": 5}},
+                "swap_rotation": {"closed": {"count": 2}},
+                "note": "thin",
+            }
+        ),
+        encoding="utf-8",
+    )
     payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
     traj = payload["trajectory_evidence"]
     assert traj is not None
     assert traj["labeled_event_count"] == 40
     assert traj["model_focus_candidates"]
     assert traj["model_focus_candidates"][0]["key"] == "hold->buy"
+    losers = payload["loser_snapshot_cards"]
+    assert losers["card_count"] == 2
+    assert losers["top_failed_families"][0][0] == "quality"
+    assert "cards" not in losers
+    excl = payload["exclusion_universe"]
+    assert excl["readiness"]["ready_for_priors"] is True
+    assert excl["ladder_results_slim"][0]["step_id"] == "u4"
+    assert "ladder_results" not in excl
+    replay = payload["exclusion_ladder_replay"]
+    assert replay["readiness"]["ready_for_shadow_spawn"] is True
+    assert replay["tracks_slim"]["ai_judgment"]["log_entries_replayed"] == 4
+    timing = payload["exit_timing_cohorts"]
+    assert timing["readiness"]["hold_closed_count"] == 5
+    assert timing["hold_recovery_closed"]["count"] == 5
+    assert "purpose" in timing
 
 
 def test_compile_and_promote_analysis_tasks(tmp_path: Path):

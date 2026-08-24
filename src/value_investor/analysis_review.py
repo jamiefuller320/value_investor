@@ -221,6 +221,136 @@ def _slim_historical(payload: dict[str, Any] | None) -> dict[str, Any] | None:
     }
 
 
+def _slim_loser_snapshot_cards(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Compact loser cards for scoring/filter hypotheses — not the full card dump."""
+    if not isinstance(payload, dict):
+        return None
+    cards = payload.get("cards") or []
+    if not isinstance(cards, list):
+        cards = []
+    family_counts: dict[str, int] = {}
+    sample: list[dict[str, Any]] = []
+    for card in cards[:12]:
+        if not isinstance(card, dict):
+            continue
+        screen = card.get("screen") or {}
+        for family in screen.get("failed_families") or []:
+            key = str(family)
+            family_counts[key] = family_counts.get(key, 0) + 1
+        sample.append(
+            {
+                "ticker": card.get("ticker"),
+                "cohorts": card.get("cohorts"),
+                "signal": screen.get("signal"),
+                "failed_families": screen.get("failed_families"),
+                "opinion_flip_triggers": card.get("opinion_flip_triggers"),
+                "summary_lines": (card.get("summary_lines") or [])[:2],
+            }
+        )
+    top_failed_families = sorted(family_counts.items(), key=lambda item: item[1], reverse=True)[:6]
+    return {
+        "purpose": (
+            "Tier-1 loser forensics — failed families / opinion-flip patterns that should "
+            "feed [scoring] or [offline_sim] filter hypotheses in PROPOSED EXPERIMENTS"
+        ),
+        "observe_only": True,
+        "card_count": payload.get("card_count"),
+        "cohort_counts": payload.get("cohort_counts"),
+        "top_failed_families": top_failed_families,
+        "sample_cards": sample,
+        "scope_note": payload.get("scope_note"),
+    }
+
+
+def _slim_exclusion_universe(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not isinstance(payload, dict):
+        return None
+    ladder_slim: list[dict[str, Any]] = []
+    for row in (payload.get("ladder_results") or [])[:8]:
+        if not isinstance(row, dict):
+            continue
+        summary = row.get("summary") or {}
+        hindsight = row.get("hindsight_summary") or {}
+        ladder_slim.append(
+            {
+                "step_id": row.get("step_id"),
+                "label": row.get("label"),
+                "cumulative_exclusion_alpha": summary.get("cumulative_exclusion_alpha"),
+                "week_pairs": summary.get("week_pairs"),
+                "mean_filtered_pool": summary.get("mean_filtered_pool"),
+                "mean_bottom_quartile_exclude_rate": hindsight.get(
+                    "mean_bottom_quartile_exclude_rate"
+                ),
+            }
+        )
+    return {
+        "purpose": (
+            "Loser-filter ladder priors — positive exclusion_alpha / recommended_step should "
+            "drive [offline_sim] or [paper_knobs] experiments (not auto-apply)"
+        ),
+        "observe_only": True,
+        "recommended_step": payload.get("recommended_step"),
+        "readiness": payload.get("readiness"),
+        "ladder_results_slim": ladder_slim,
+        "note": payload.get("note"),
+    }
+
+
+def _slim_exclusion_ladder_replay(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not isinstance(payload, dict):
+        return None
+    tracks_slim: dict[str, Any] = {}
+    for track_id, track in (payload.get("tracks") or {}).items():
+        if not isinstance(track, dict):
+            continue
+        steps = track.get("ladder_steps") or []
+        recommended_id = payload.get("recommended_step_id")
+        recommended = next(
+            (
+                row
+                for row in steps
+                if isinstance(row, dict) and row.get("step_id") == recommended_id
+            ),
+            None,
+        )
+        replay = (recommended or {}).get("replay") or {}
+        tracks_slim[str(track_id)] = {
+            "best_replay_step_id": track.get("best_replay_step_id"),
+            "recommended_return_delta_vs_actual": replay.get("return_delta_vs_actual"),
+            "log_entries_replayed": replay.get("log_entries_replayed"),
+        }
+    return {
+        "purpose": (
+            "Cost-aware exclusion ladder replay — when readiness.ready_for_shadow_spawn, "
+            "propose human spawn gate (not auto-spawn) via [paper_knobs] or [ops]"
+        ),
+        "observe_only": True,
+        "recommended_step_id": payload.get("recommended_step_id"),
+        "readiness": payload.get("readiness"),
+        "tracks_slim": tracks_slim,
+        "note": payload.get("note"),
+    }
+
+
+def _slim_exit_timing(payload: dict[str, Any] | None, *, label: str) -> dict[str, Any] | None:
+    if not isinstance(payload, dict):
+        return None
+    readiness = payload.get("readiness") or {}
+    hold = (payload.get("hold_recovery") or {}).get("closed") or {}
+    swap = (payload.get("swap_rotation") or {}).get("closed") or {}
+    return {
+        "purpose": (
+            f"{label} — when readiness.ready_for_probability_analysis (or closed counts near "
+            "targets), propose [paper_churn] / [offline_sim] hold-vs-swap experiments"
+        ),
+        "observe_only": True,
+        "readiness": readiness,
+        "hold_recovery_closed": hold,
+        "swap_rotation_closed": swap,
+        "note": payload.get("note"),
+    }
+
+
 def build_analysis_payload(
     *,
     data_dir: Path = DEFAULT_DATA_DIR,
@@ -246,13 +376,26 @@ def build_analysis_payload(
     learning_review = _safe_read(paper_root / "learning_tracks_review.json")
     learning_summary = _safe_read(paper_root / "learning_tracks_summary.json")
     exit_shadow = _safe_read(paper_root / "learning_tracks_exit_shadow.json")
-    exit_timing = _safe_read(paper_root / "learning_tracks_exit_timing.json")
-    exit_timing_near_miss = _safe_read(data_dir / "exit_timing_near_miss_review.json")
-    exclusion_universe = _safe_read(data_dir / "exclusion_universe_review.json")
-    exclusion_ladder_replay = _safe_read(paper_root / "exclusion_ladder_replay_review.json")
+    exit_timing = _slim_exit_timing(
+        _safe_read(paper_root / "learning_tracks_exit_timing.json"),
+        label="Live exit-timing cohorts",
+    )
+    exit_timing_near_miss = _slim_exit_timing(
+        _safe_read(data_dir / "exit_timing_near_miss_review.json"),
+        label="Archive near-miss exit-timing",
+    )
+    exclusion_universe = _slim_exclusion_universe(
+        _safe_read(data_dir / "exclusion_universe_review.json")
+    )
+    exclusion_ladder_replay = _slim_exclusion_ladder_replay(
+        _safe_read(paper_root / "exclusion_ladder_replay_review.json")
+    )
     trajectory_review = _safe_read(data_dir / "trajectory_evidence_review.json")
     trajectory_evidence = slim_trajectory_evidence_for_review(
         trajectory_review if isinstance(trajectory_review, dict) else None
+    )
+    loser_snapshot_cards = _slim_loser_snapshot_cards(
+        _safe_read(data_dir / "loser_snapshot_cards.json")
     )
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
@@ -288,6 +431,7 @@ def build_analysis_payload(
         "exclusion_universe": exclusion_universe,
         "exclusion_ladder_replay": exclusion_ladder_replay,
         "trajectory_evidence": trajectory_evidence,
+        "loser_snapshot_cards": loser_snapshot_cards,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "model_weights": {
@@ -501,23 +645,18 @@ def _build_analysis_prompt(payload_path: Path) -> str:
 Read the structured JSON at: {payload_path}
 
 The **purpose of this review** is to turn evidence into **focus areas that refine
-assessment models** (signal families, conviction, timing overlay, adaptive weights) —
-not to archive metrics for their own sake. Trajectory evidence (PIT know-when vs
-what-happened-next) is the primary diagnostic for those models. Paper-track P&L
-and backtests are context; scoring experiments are the intended output when
-model_focus_candidates exist.
-
-It also contains archived backtest/simulation/historical-analysis summaries, paper
-learning track reviews (AI judgment vs rules control vs momentum grace), exit-shadow
-rollups, churn_health, knob_calibration_priors (observe-only), and adaptive
-model-weight state.
+assessment models and portfolio filters** — not to archive metrics for their own sake.
+Primary diagnostics for assessment models: trajectory_evidence + loser_snapshot_cards.
+Primary diagnostics for loser filters / churn: exclusion_universe, exclusion_ladder_replay,
+exit_timing_cohorts, exit_shadow. Paper-track P&L and backtests are context.
 
 Write SIX plain-text sections with headings exactly as shown:
 
 EXECUTIVE SUMMARY
 3–5 sentences on whether the quant stack and paper tracks are improving, and the single
-biggest modelling/analysis gap this week. If trajectory_evidence.model_focus_candidates
-is non-empty, name the top candidate as a scoring focus.
+biggest modelling/analysis gap this week. Prefer naming a concrete focus from
+trajectory_evidence.model_focus_candidates, loser_snapshot_cards.top_failed_families,
+or exclusion readiness when present.
 
 PERFORMANCE DIAGNOSIS
 Bullets on primary vs control vs market excess after costs, cost drag, and whether marks
@@ -528,13 +667,18 @@ What archived signal backtest / historical analysis / offline sim tracks show �
 horizons, excess returns, and run_count. If run_count < 2, say history is still seeding.
 When trajectory_evidence is present, cite labeled_event_count, prediction_hit_rate_by_horizon,
 weeks_to_realization, and each model_focus_candidate.why. Treat weak transition keys
-(e.g. hold→buy with low 1w positive_rate) as assessment-model hypotheses, not as
-live-screen mutation.
+as assessment-model hypotheses, not live-screen mutation (N3).
+When loser_snapshot_cards is present, cite card_count, cohort_counts, and
+top_failed_families — these are Tier-1 forensics for scoring/filter hypotheses.
+When exclusion_universe is present, cite recommended_step and readiness.ready_for_priors
+plus cumulative_exclusion_alpha on the recommended rung.
 
 PAPER TRACK COMPARISON
 Compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
 knob_calibration_priors (recommended_prior per track, confidence, changed_vs_current),
-and exit_shadow when present. Note unrealized vs realized marks only if present in JSON.
+and exit_shadow when present. Cite exit_timing_cohorts.readiness (hold/swap closed counts)
+and exclusion_ladder_replay.readiness.ready_for_shadow_spawn when present.
+Note unrealized vs realized marks only if present in JSON.
 
 PROPOSED EXPERIMENTS
 Numbered top 5 experiments for the next sprint. Each line MUST use this format:
@@ -542,16 +686,30 @@ Numbered top 5 experiments for the next sprint. Each line MUST use this format:
 Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
 Use scoring/ingest only when a code change is the right next step; prefer offline_sim,
 paper_knobs, or paper_churn for knob/counterfactual ideas (human gate required).
-If trajectory_evidence.model_focus_candidates is non-empty, include **at least one**
-[scoring] or [offline_sim] line that cites a candidate key and hypothesises a model
-tweak (conviction delta, timing wait, family weight, overlay gate) — never assign_signal
-threshold search (N3).
-If ingest_trials_pending_review is non-empty, include at least one [ingest] line referencing
-the trial id(s), outcome deltas, and whether to PROMOTE engineering, DEFER, or DISMISS.
+
+Action contracts (include a line when the trigger fires — do not invent metrics):
+1. If trajectory_evidence.model_focus_candidates is non-empty → ≥1 [scoring] or [offline_sim]
+   citing a candidate key (conviction/timing/family weight/overlay — never assign_signal
+   threshold search / N3).
+2. If loser_snapshot_cards.top_failed_families is non-empty → ≥1 [scoring] or [offline_sim]
+   citing a failed family / opinion-flip pattern from sample_cards.
+3. If exclusion_universe.readiness.ready_for_priors is true OR recommended_step shows
+   positive cumulative_exclusion_alpha → ≥1 [offline_sim] or [paper_knobs] citing the
+   recommended step_id (human gate; not auto-apply).
+4. If exclusion_ladder_replay.readiness.ready_for_shadow_spawn is true → ≥1 [monitoring] or
+   [paper_knobs] line: human should run ftse-exclusion-ladder-replay spawn-shadow
+   (never auto-spawn; do not open an engineering PR for the spawn itself).
+5. If exit_timing_cohorts.readiness.ready_for_probability_analysis is true OR
+   exit_timing_near_miss.readiness.ready_for_probability_analysis is true → ≥1
+   [paper_churn] or [offline_sim] hold-vs-swap experiment citing closed counts.
+6. If ingest_trials_pending_review is non-empty → ≥1 [ingest] line with trial id(s) and
+   PROMOTE / DEFER / DISMISS.
+
+Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 
 DEFER
 Bullets for ideas that must NOT be automated yet (evolution, live knob apply, base signal
-changes), each with a one-line revisit trigger.
+changes, auto-spawn shadows), each with a one-line revisit trigger.
 
 Rules:
 - Do not invent metrics — only use the JSON.

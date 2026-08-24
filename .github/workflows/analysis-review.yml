@@ -114,6 +114,12 @@ jobs:
       - name: Trajectory evidence (transitions, boundary, loser cards, outcomes)
         run: ftse-trajectory-evidence --data-dir docs/data || true
 
+      - name: Exit-timing archive near-miss priors (observe-only)
+        run: |
+          # Consumer (analysis-review) already reads exit_timing_near_miss_review.json;
+          # produce it when history exists. Soft-fail until archives are thick.
+          ftse-exit-timing-archive --output-dir docs/data || true
+
       - name: Commit knob bootstrap artifacts
         # Persist even when the modelling agent is skipped — otherwise Sunday
         # calibrate/spawn is lost and weekday paper-auto never sees r2/r3.
@@ -136,6 +142,8 @@ jobs:
             docs/data/trajectory_boundary_watch.json
             docs/data/trajectory_evidence_review.json
             docs/data/trajectory_evidence_review.md
+            docs/data/exit_timing_near_miss.json
+            docs/data/exit_timing_near_miss_review.json
           skip_fetch: false
 
       - name: Check analysis inputs
