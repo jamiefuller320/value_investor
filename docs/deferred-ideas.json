@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-24T07:45:04+00:00",
+  "updated_at": "2026-08-24T08:36:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3623,6 +3623,138 @@
       "status": "open",
       "source": "cursor agent: PIT turn-by-turn strategy Q&A (PR #331)",
       "added_at": "2026-08-24T07:45:04+00:00"
+    },
+    {
+      "id": "L179",
+      "category": "later",
+      "section": "research",
+      "title": "Wire exit-timing archive into Sunday analysis-review.yml",
+      "summary": "exit_timing_near_miss is consumed by analysis payload when present, but no workflow runs ftse-exit-timing-archive. Schedule observe-only generation alongside trajectory/exclusion on Sundays once history is thick enough.",
+      "revisit_when": "history_run_count >= 8 and exit_timing live cohorts show readiness flags",
+      "tags": [
+        "exit_timing",
+        "archive_sim",
+        "analysis_review",
+        "info_action_gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
+      "added_at": "2026-08-24T08:33:57+00:00"
+    },
+    {
+      "id": "L180",
+      "category": "later",
+      "section": "ops",
+      "title": "Learning director promote path for ops/universe tasks",
+      "summary": "learning_director_tasks can set promote_to=engineering_queue for ops (via shared _promote_target_for_area) but CLI has no promote command. Either add ftse-learning-director promote for ops-only, or force all director tasks to manual and route scoring exclusively through analysis.",
+      "revisit_when": "learning_director_tasks accumulate open ops experiments that humans keep re-keying into engineering queue",
+      "tags": [
+        "learning_director",
+        "promote",
+        "engineering",
+        "info_action_gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
+      "added_at": "2026-08-24T08:33:58+00:00"
+    },
+    {
+      "id": "N40",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Auto-spawn exclusion ladder shadows from Sunday readiness",
+      "summary": "exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet \u2014 keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows.",
+      "revisit_when": "exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate",
+      "tags": [
+        "exclusion",
+        "shadow",
+        "human_gate",
+        "info_action_gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
+      "added_at": "2026-08-24T08:33:58+00:00"
+    },
+    {
+      "id": "L181",
+      "category": "later",
+      "section": "learning",
+      "title": "Wire loser snapshot cards into analysis-review",
+      "summary": "Sunday generates loser_snapshot_cards with trajectory evidence, but analysis-review payload omits them (director-only). Cards should feed scoring/filter hypotheses in the modelling review.",
+      "revisit_when": "Trajectory model_focus_candidates already drive scoring experiments for 2+ Sundays",
+      "tags": [
+        "loser-cards",
+        "analysis-review",
+        "info-action"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a032a9-501d-71fd-9ae1-66179169fd25",
+      "added_at": "2026-08-24T08:35:59+00:00"
+    },
+    {
+      "id": "L182",
+      "category": "later",
+      "section": "learning",
+      "title": "Analysis-review prompt action contracts for exclusion and exit-timing",
+      "summary": "exclusion_universe, exclusion_ladder_replay, exit_timing_cohorts, and exit_timing_near_miss are in the analysis payload but the prompt only contracts action for trajectory candidates, ingest trials, and exit_shadow. Extend required experiment lines when readiness/alpha signals fire.",
+      "revisit_when": "Next Sunday analysis-review prompt hardening pass after trajectory wiring lands",
+      "tags": [
+        "analysis-review",
+        "exclusion",
+        "exit-timing",
+        "info-action"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a032a9-501d-71fd-9ae1-66179169fd25",
+      "added_at": "2026-08-24T08:35:59+00:00"
+    },
+    {
+      "id": "L183",
+      "category": "later",
+      "section": "ops",
+      "title": "Promote path for paper-learning and learning-director tasks",
+      "summary": "paper_learning_tasks and learning_director_tasks compile to JSON with no promote CLI; only analysis-review and horizon-scan can enqueue engineering. Either add promote helpers for ops/manual gates or register explicit weekly checklist triage.",
+      "revisit_when": "Human ops review finds untriaged PLR/director tasks accumulating for 3+ Sundays",
+      "tags": [
+        "promote",
+        "checklist",
+        "info-action"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a032a9-501d-71fd-9ae1-66179169fd25",
+      "added_at": "2026-08-24T08:35:59+00:00"
+    },
+    {
+      "id": "N41",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Auto-spawn exclusion ladder shadow when ready",
+      "summary": "ready_for_shadow_spawn is computed Sunday but spawn-shadow stays manual; auto-spawn would couple lab noise to weekday tracks before human ack. Keep CLI spawn + register checklist gate instead.",
+      "revisit_when": "Exclusion u4 shadow has been manually spawned and observed for >=4 weeks with clear ops load",
+      "tags": [
+        "exclusion",
+        "shadow",
+        "automation"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a032a9-501d-71fd-9ae1-66179169fd25",
+      "added_at": "2026-08-24T08:36:00+00:00"
+    },
+    {
+      "id": "L184",
+      "category": "later",
+      "section": "learning",
+      "title": "Schedule exit-timing archive near-miss producer",
+      "summary": "Analysis payload reads exit_timing_near_miss_review.json but no workflow runs ftse-exit-timing-archive; consumers see null until history is thick and a Sunday step is added.",
+      "revisit_when": "exit_timing live cohorts reach readiness gates (L117) or history_run_count >= 12",
+      "tags": [
+        "exit-timing",
+        "archive",
+        "info-action"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a032a9-501d-71fd-9ae1-66179169fd25",
+      "added_at": "2026-08-24T08:36:00+00:00"
     }
   ],
   "fragments": [
