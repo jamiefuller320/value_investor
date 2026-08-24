@@ -1054,6 +1054,233 @@ function memoQualityBadge(item) {
   return `<span class="badge badge-${esc(grade)}">${esc(label)}</span>`;
 }
 
+function renderSundayReview(data) {
+  const review = data.sunday_review;
+  if (!review) {
+    return `
+      <section class="automation-section automation-section-full sunday-review-section">
+        <h2>Sunday review</h2>
+        <p class="muted">No Sunday review tables published yet — run <code>ftse-publish</code> after analysis-review.</p>
+      </section>`;
+  }
+
+  const current = review.current || {};
+  const exclusion = current.exclusion || {};
+  const weekly = exclusion.weekly || [];
+  const history = review.history || [];
+  const experiments = current.experiments || [];
+
+  const alphaClass = (value) => {
+    if (value == null || Number.isNaN(Number(value))) return "";
+    return Number(value) >= 0 ? "text-positive" : "text-negative";
+  };
+
+  const exclusionRows = weekly
+    .map((row) => {
+      const alpha = row.exclusion_alpha;
+      const vsBench = row.filtered_vs_benchmark;
+      return `<tr>
+        <td class="small">${esc(fmtDate(row.week_start))}<br><span class="muted">→ ${esc(fmtDate(row.week_end))}</span></td>
+        <td>${pctOrDash(row.baseline_ew_return)}</td>
+        <td>${pctOrDash(row.filtered_ew_return)}</td>
+        <td>${pctOrDash(row.benchmark_return)}</td>
+        <td class="${alphaClass(alpha)}">${pctOrDash(alpha)}</td>
+        <td class="${alphaClass(vsBench)}">${pctOrDash(vsBench)}</td>
+        <td>${row.filtered_pool_size ?? "—"} / ${row.baseline_pool_size ?? "—"}</td>
+        <td>${pctOrDash(row.bottom_quartile_exclude_rate)}</td>
+        <td>${pctOrDash(row.top_quartile_retain_rate)}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const exclusionTable = weekly.length
+    ? `<div class="table-wrap">
+        <table class="eng-queue-table sunday-review-table">
+          <thead>
+            <tr>
+              <th>Week pair</th>
+              <th>Baseline EW</th>
+              <th>Filtered EW</th>
+              <th>^FTSE</th>
+              <th>Exclusion α</th>
+              <th>Filtered − mkt</th>
+              <th>Pool (filt/base)</th>
+              <th>Bottom-Q excl</th>
+              <th>Top-Q retain</th>
+            </tr>
+          </thead>
+          <tbody>${exclusionRows}</tbody>
+        </table>
+      </div>`
+    : `<p class="muted">No exclusion week-pairs yet — needs ≥2 archived runs and <code>ftse-exclusion-universe-archive</code>.</p>`;
+
+  const regimeRows = history
+    .map((snap) => {
+      const regime = snap.regime || {};
+      const excl = snap.exclusion?.summary || {};
+      return `<tr>
+        <td><strong>${esc(snap.week_ending || "—")}</strong><br><span class="small muted">${esc(fmtDate(snap.reviewed_at))}</span></td>
+        <td>${esc(regime.recommended_exclusion_step || review.recommended_exclusion_step || "—")}</td>
+        <td class="${alphaClass(excl.cumulative_exclusion_alpha)}">${pctOrDash(excl.cumulative_exclusion_alpha)}</td>
+        <td>${pctOrDash(regime.positive_alpha_rate)}</td>
+        <td>${regime.exclusion_week_pairs ?? "—"}</td>
+        <td class="${alphaClass(regime.primary_excess_after_costs)}">${pctOrDash(regime.primary_excess_after_costs)}</td>
+        <td>${regime.beat_market ? '<span class="badge badge-buy">yes</span>' : '<span class="badge badge-avoid">no</span>'}</td>
+        <td>${regime.ready_for_shadow_spawn ? '<span class="badge badge-buy">yes</span>' : '<span class="badge badge-neutral">no</span>'}</td>
+        <td class="small">${esc((regime.flags || []).slice(0, 2).join(", ") || "—")}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const regimeTable = history.length
+    ? `<div class="table-wrap">
+        <table class="eng-queue-table sunday-review-table">
+          <thead>
+            <tr>
+              <th>Week ending</th>
+              <th>Step</th>
+              <th>Cumul. excl. α</th>
+              <th>+α rate</th>
+              <th>Pairs</th>
+              <th>Primary excess</th>
+              <th>Beat mkt</th>
+              <th>Shadow ready</th>
+              <th>Flags</th>
+            </tr>
+          </thead>
+          <tbody>${regimeRows}</tbody>
+        </table>
+      </div>`
+    : `<p class="muted">Regime history fills as <code>ftse-publish</code> runs each week.</p>`;
+
+  const trackWeekRows = [];
+  for (const snap of history) {
+    for (const track of snap.paper_tracks || []) {
+      trackWeekRows.push({
+        week_ending: snap.week_ending,
+        ...track,
+      });
+    }
+  }
+  trackWeekRows.sort((a, b) => String(b.week_ending).localeCompare(String(a.week_ending)));
+
+  const paperTrackTableRows = trackWeekRows
+    .map(
+      (row) => `<tr>
+        <td>${esc(row.week_ending || "—")}</td>
+        <td><strong>${esc(row.track_label || row.track_id)}</strong><br><span class="small muted">${esc(row.track_id || "")}</span></td>
+        <td class="${alphaClass(row.excess_after_costs)}">${pctOrDash(row.excess_after_costs)}</td>
+        <td>${pctOrDash(row.benchmark_return)}</td>
+        <td>${pctOrDash(row.cost_drag)}</td>
+        <td>${row.trade_count ?? "—"}</td>
+        <td>${row.equity_marks ?? "—"}</td>
+        <td>${row.min_conviction != null ? Number(row.min_conviction).toFixed(2) : "—"}</td>
+        <td class="${alphaClass(row.epoch_excess_after_costs)}">${pctOrDash(row.epoch_excess_after_costs)}</td>
+      </tr>`
+    )
+    .join("");
+
+  const paperTrackTable = trackWeekRows.length
+    ? `<div class="table-wrap">
+        <table class="eng-queue-table sunday-review-table">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Track</th>
+              <th>Excess vs ^FTSE</th>
+              <th>Benchmark</th>
+              <th>Cost drag</th>
+              <th>Trades</th>
+              <th>Marks</th>
+              <th>min_conv</th>
+              <th>Epoch excess</th>
+            </tr>
+          </thead>
+          <tbody>${paperTrackTableRows}</tbody>
+        </table>
+      </div>`
+    : `<p class="muted">Paper track weekly snapshots appear after publish archives learning marks.</p>`;
+
+  const experimentStatusBadge = (status) => {
+    const value = status || "proposed";
+    if (value === "recommend") return `<span class="badge badge-buy">${esc(value)}</span>`;
+    if (value === "fail") return `<span class="badge badge-avoid">${esc(value)}</span>`;
+    if (value === "continue") return `<span class="badge badge-info">${esc(value)}</span>`;
+    return `<span class="badge badge-neutral">${esc(value)}</span>`;
+  };
+
+  const experimentRows = experiments
+    .map(
+      (row) => `<tr>
+        <td><code>${esc(row.experiment_id || "—")}</code><br><span class="small muted">${esc(row.kind || "")}</span></td>
+        <td>${experimentStatusBadge(row.status)}</td>
+        <td>${esc(row.pipeline || "—")}</td>
+        <td class="small">${esc((row.title || "").slice(0, 80))}${(row.title || "").length > 80 ? "…" : ""}</td>
+        <td class="${alphaClass(row.gate_excess_after_costs)}">${pctOrDash(row.gate_excess_after_costs)}</td>
+        <td>${row.gate_marks ?? "—"}</td>
+        <td class="small muted">${esc(fmtDate(row.initiated_at))}</td>
+      </tr>`
+    )
+    .join("");
+
+  const experimentTable = experiments.length
+    ? `<div class="table-wrap">
+        <table class="eng-queue-table sunday-review-table">
+          <thead>
+            <tr>
+              <th>Experiment</th>
+              <th>Status</th>
+              <th>Pipeline</th>
+              <th>Title</th>
+              <th>Gate excess</th>
+              <th>Marks</th>
+              <th>Initiated</th>
+            </tr>
+          </thead>
+          <tbody>${experimentRows}</tbody>
+        </table>
+      </div>`
+    : `<p class="muted">No experiments in the unified assessment ledger.</p>`;
+
+  const summary = review.experiment_summary || {};
+  const readiness = review.readiness || {};
+  const headline = current.analysis_headline
+    ? `<p class="small">${esc(current.analysis_headline)}${current.analysis_headline.length >= 400 ? "…" : ""}</p>`
+    : "";
+
+  return `
+    <section class="automation-section automation-section-full sunday-review-section">
+      <h2>Sunday review</h2>
+      <p class="small muted" style="margin-top:0">
+        Week-by-week tables from analysis-review JSON — exclusion ladder, paper tracks, regime flags, and experiments.
+        Updated ${esc(fmtDate(review.generated_at))} · week ending <strong>${esc(review.week_ending || "—")}</strong>
+        · ladder step <strong>${esc(review.recommended_exclusion_step || "—")}</strong>
+      </p>
+      <div class="settings-grid" style="margin-bottom:1rem">
+        ${settingRow("Exclusion priors ready", readiness.ready_for_priors ? "yes" : "no")}
+        ${settingRow("Shadow spawn ready", readiness.ready_for_shadow_spawn ? "yes" : "no")}
+        ${settingRow("Experiments", `${summary.total ?? experiments.length ?? 0} total · ${summary.recommend ?? 0} recommend`)}
+      </div>
+      ${headline}
+
+      <h3>Exclusion ladder — week pairs (${esc(exclusion.recommended_step_id || review.recommended_exclusion_step || "u4")})</h3>
+      <p class="small muted">Forward equal-weight returns per archived week pair (gross of costs).</p>
+      ${exclusionTable}
+
+      <h3>Regime snapshots by week</h3>
+      <p class="small muted">One row per publish week — cumulative exclusion alpha, primary excess, readiness flags.</p>
+      ${regimeTable}
+
+      <h3>Paper tracks by week</h3>
+      <p class="small muted">Learning-track excess vs ^FTSE and cost drag from each archived dashboard snapshot.</p>
+      ${paperTrackTable}
+
+      <h3>Experiments</h3>
+      <p class="small muted">Unified assessment ledger — new shadows and tracks appear automatically when spawned.</p>
+      ${experimentTable}
+    </section>`;
+}
+
 function renderAnalysis(data) {
   const deep = data.deep_analysis;
   const postRun = data.post_run_review;
@@ -1118,7 +1345,8 @@ function renderAnalysis(data) {
   }
 
   panel.innerHTML = `
-    <h2 class="small muted" style="margin-top:0">Portfolio deep analysis</h2>
+    ${renderSundayReview(data)}
+    <h2 class="small muted" style="margin-top:1.5rem">Portfolio deep analysis</h2>
     ${deepHtml}
     ${postRunHtml}
     <h2 style="margin-top:1.5rem">Strong buy research memos</h2>
