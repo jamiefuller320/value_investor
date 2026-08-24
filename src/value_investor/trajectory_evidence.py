@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 from pathlib import Path
-from statistics import mean
+from statistics import mean, median
 from typing import Any
 
 from value_investor.backtest import RunSnapshot, load_run_snapshots
@@ -26,6 +26,12 @@ SIGNAL_RANK = {
 }
 
 CONVICTION_MATERIAL_DELTA = 0.08
+FORWARD_HORIZONS_WEEKS = (1, 4, 8, 12)
+MAX_REALIZATION_WEEKS = 12
+MIN_FOCUS_SAMPLE_COUNT = 8
+WEAK_POSITIVE_RATE = 0.40
+WEAK_HIT_RATE = 0.50
+MAX_FOCUS_CANDIDATES = 6
 
 
 def _signal_rank(signal: str | None) -> int:
@@ -61,6 +67,122 @@ def _forward_return(
     return round((float(p1) / float(p0)) - 1.0, 6)
 
 
+def _expected_return_sign(
+    *,
+    direction: str,
+    conviction_delta: float,
+    timing_flipped: bool,
+    from_timing: str | None,
+    to_timing: str | None,
+) -> int | None:
+    """+1 bullish, -1 bearish, None when no directional prediction is implied."""
+    if direction == "upgrade":
+        return 1
+    if direction == "downgrade":
+        return -1
+    if abs(conviction_delta) >= CONVICTION_MATERIAL_DELTA:
+        return 1 if conviction_delta > 0 else -1
+    if timing_flipped and from_timing == "wait" and to_timing and to_timing != "wait":
+        return 1
+    if timing_flipped and to_timing == "wait" and from_timing and from_timing != "wait":
+        return -1
+    return None
+
+
+def _prediction_success(expected_sign: int | None, forward_return: float | None) -> bool | None:
+    if expected_sign is None or forward_return is None:
+        return None
+    if expected_sign > 0:
+        return forward_return > 0
+    return forward_return < 0
+
+
+def _forward_returns_at_horizons(
+    ticker: str,
+    entry: RunSnapshot,
+    sorted_snaps: list[RunSnapshot],
+    entry_index: int,
+) -> dict[str, float | None]:
+    returns: dict[str, float | None] = {}
+    for weeks in FORWARD_HORIZONS_WEEKS:
+        forward_index = entry_index + weeks
+        forward_snap = sorted_snaps[forward_index] if forward_index < len(sorted_snaps) else None
+        returns[f"forward_return_{weeks}w"] = _forward_return(ticker, entry, forward_snap)
+    return returns
+
+
+def _weeks_to_realization(
+    ticker: str,
+    entry: RunSnapshot,
+    sorted_snaps: list[RunSnapshot],
+    entry_index: int,
+    expected_sign: int | None,
+) -> int | None:
+    """First archive week (1..MAX_REALIZATION_WEEKS) where return aligns with prediction."""
+    if expected_sign is None:
+        return None
+    max_weeks = min(MAX_REALIZATION_WEEKS, len(sorted_snaps) - entry_index - 1)
+    for weeks in range(1, max_weeks + 1):
+        forward_snap = sorted_snaps[entry_index + weeks]
+        forward_return = _forward_return(ticker, entry, forward_snap)
+        if _prediction_success(expected_sign, forward_return):
+            return weeks
+    return None
+
+
+def _build_outcome_labels(
+    *,
+    ticker: str,
+    curr: RunSnapshot,
+    sorted_snaps: list[RunSnapshot],
+    entry_index: int,
+    direction: str,
+    conviction_delta: float,
+    timing_flipped: bool,
+    from_timing: str | None,
+    to_timing: str | None,
+) -> dict[str, Any]:
+    expected_sign = _expected_return_sign(
+        direction=direction,
+        conviction_delta=conviction_delta,
+        timing_flipped=timing_flipped,
+        from_timing=from_timing,
+        to_timing=to_timing,
+    )
+    horizon_returns = _forward_returns_at_horizons(ticker, curr, sorted_snaps, entry_index)
+    outcomes: dict[str, Any] = dict(horizon_returns)
+    for weeks in FORWARD_HORIZONS_WEEKS:
+        key = f"forward_return_{weeks}w"
+        outcomes[f"prediction_success_{weeks}w"] = _prediction_success(
+            expected_sign,
+            horizon_returns.get(key),
+        )
+    weeks_to_realization = _weeks_to_realization(
+        ticker,
+        curr,
+        sorted_snaps,
+        entry_index,
+        expected_sign,
+    )
+    outcomes["expected_return_sign"] = expected_sign
+    outcomes["weeks_to_realization"] = weeks_to_realization
+    outcomes["realization_within_12w"] = (
+        weeks_to_realization is not None if expected_sign is not None else None
+    )
+    max_horizon = max(FORWARD_HORIZONS_WEEKS)
+    if entry_index + 1 >= len(sorted_snaps):
+        outcomes["label_note"] = "Awaiting next archive for forward labels"
+    elif entry_index + max_horizon >= len(sorted_snaps):
+        outcomes["label_note"] = (
+            f"Partial horizons — need {entry_index + max_horizon + 1} snapshots for {max_horizon}w labels"
+        )
+    else:
+        outcomes["label_note"] = (
+            "Forward returns from transition week_to at 1/4/8/12 archive-week horizons"
+        )
+    return outcomes
+
+
 def build_transition_events(
     snapshots: list[RunSnapshot],
     *,
@@ -77,7 +199,6 @@ def build_transition_events(
         curr = sorted_snaps[index]
         prev_rows = _row_map(prev)
         curr_rows = _row_map(curr)
-        forward_snap = sorted_snaps[index + 1] if index + 1 < len(sorted_snaps) else None
 
         for ticker in sorted(set(prev_rows) & set(curr_rows)):
             before = prev_rows[ticker]
@@ -121,14 +242,17 @@ def build_transition_events(
                     "from_adjusted_signal": from_adj or None,
                     "to_adjusted_signal": to_adj or None,
                     "adjusted_signal_changed": adjusted_changed,
-                    "outcomes": {
-                        "forward_return_1w": _forward_return(ticker, curr, forward_snap),
-                        "label_note": (
-                            "1-week forward return from transition week_to to next archive"
-                            if forward_snap
-                            else "Awaiting next archive for forward label"
-                        ),
-                    },
+                    "outcomes": _build_outcome_labels(
+                        ticker=ticker,
+                        curr=curr,
+                        sorted_snaps=sorted_snaps,
+                        entry_index=index,
+                        direction=_direction(from_signal, to_signal),
+                        conviction_delta=conv_delta,
+                        timing_flipped=timing_changed,
+                        from_timing=from_timing or None,
+                        to_timing=to_timing or None,
+                    ),
                 }
             )
     return events
@@ -182,24 +306,27 @@ def build_boundary_watch_panel(reports: list[dict[str, Any]]) -> list[dict[str, 
     return panel
 
 
-def summarize_transition_outcomes(events: list[dict[str, Any]]) -> dict[str, Any]:
-    """Stratified outcome labels by transition type (evaluation only)."""
-    labeled = [
-        event
-        for event in events
-        if (event.get("outcomes") or {}).get("forward_return_1w") is not None
-    ]
-    if not labeled:
-        return {
-            "labeled_event_count": 0,
-            "note": "Need >=3 archive snapshots for 1-week forward labels on transitions",
-        }
+def _outcome_bucket(values: list[float]) -> dict[str, Any]:
+    if not values:
+        return {"count": 0}
+    positive = sum(1 for value in values if value > 0)
+    return {
+        "count": len(values),
+        "mean_forward_return": round(mean(values), 6),
+        "positive_rate": round(positive / len(values), 4),
+    }
 
+
+def _direction_buckets(events: list[dict[str, Any]], horizon_weeks: int) -> dict[str, Any]:
+    return_key = f"forward_return_{horizon_weeks}w"
+    labeled = [
+        event for event in events if (event.get("outcomes") or {}).get(return_key) is not None
+    ]
     by_key: dict[str, list[float]] = {}
     upgrades: list[float] = []
     downgrades: list[float] = []
     for event in labeled:
-        ret = float((event.get("outcomes") or {})["forward_return_1w"])
+        ret = float((event.get("outcomes") or {})[return_key])
         key = str(event.get("transition_key") or "unknown")
         by_key.setdefault(key, []).append(ret)
         direction = str(event.get("direction") or "")
@@ -207,23 +334,215 @@ def summarize_transition_outcomes(events: list[dict[str, Any]]) -> dict[str, Any
             upgrades.append(ret)
         elif direction == "downgrade":
             downgrades.append(ret)
-
-    def _bucket(name: str, values: list[float]) -> dict[str, Any]:
-        if not values:
-            return {"count": 0}
-        positive = sum(1 for value in values if value > 0)
-        return {
-            "count": len(values),
-            "mean_forward_return_1w": round(mean(values), 6),
-            "positive_rate": round(positive / len(values), 4),
-        }
-
     return {
         "labeled_event_count": len(labeled),
-        "by_transition_key": {key: _bucket(key, vals) for key, vals in sorted(by_key.items())},
-        "upgrade_events": _bucket("upgrade", upgrades),
-        "downgrade_events": _bucket("downgrade", downgrades),
+        "by_transition_key": {key: _outcome_bucket(vals) for key, vals in sorted(by_key.items())},
+        "upgrade_events": _outcome_bucket(upgrades),
+        "downgrade_events": _outcome_bucket(downgrades),
+    }
+
+
+def summarize_transition_outcomes(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """Stratified outcome labels by transition type (evaluation only)."""
+    labeled_1w = [
+        event
+        for event in events
+        if (event.get("outcomes") or {}).get("forward_return_1w") is not None
+    ]
+    if not labeled_1w:
+        return {
+            "labeled_event_count": 0,
+            "note": "Need >=3 archive snapshots for 1-week forward labels on transitions",
+        }
+
+    by_horizon = {
+        f"{weeks}w": _direction_buckets(events, weeks) for weeks in FORWARD_HORIZONS_WEEKS
+    }
+    realization_weeks = [
+        int((event.get("outcomes") or {})["weeks_to_realization"])
+        for event in events
+        if (event.get("outcomes") or {}).get("weeks_to_realization") is not None
+    ]
+    scorable = [
+        event
+        for event in events
+        if (event.get("outcomes") or {}).get("expected_return_sign") is not None
+    ]
+    realized_12w = [
+        event
+        for event in scorable
+        if (event.get("outcomes") or {}).get("realization_within_12w") is True
+    ]
+
+    def _prediction_rate(horizon_weeks: int) -> dict[str, Any]:
+        key = f"prediction_success_{horizon_weeks}w"
+        scored = [
+            bool((event.get("outcomes") or {})[key])
+            for event in scorable
+            if (event.get("outcomes") or {}).get(key) is not None
+        ]
+        if not scored:
+            return {"scored_event_count": 0}
+        hits = sum(1 for value in scored if value)
+        return {
+            "scored_event_count": len(scored),
+            "prediction_hit_rate": round(hits / len(scored), 4),
+        }
+
+    horizon_1w = by_horizon["1w"]
+    return {
+        "labeled_event_count": horizon_1w["labeled_event_count"],
+        "by_transition_key": horizon_1w["by_transition_key"],
+        "upgrade_events": horizon_1w["upgrade_events"],
+        "downgrade_events": horizon_1w["downgrade_events"],
+        "by_horizon": by_horizon,
+        "prediction_hit_rate_by_horizon": {
+            f"{weeks}w": _prediction_rate(weeks) for weeks in FORWARD_HORIZONS_WEEKS
+        },
+        "weeks_to_realization": {
+            "realized_event_count": len(realization_weeks),
+            "scorable_event_count": len(scorable),
+            "realized_within_12w_count": len(realized_12w),
+            "realized_within_12w_rate": (
+                round(len(realized_12w) / len(scorable), 4) if scorable else None
+            ),
+            "median_weeks": round(median(realization_weeks), 2) if realization_weeks else None,
+            "within_4w_rate": (
+                round(
+                    sum(1 for weeks in realization_weeks if weeks <= 4) / len(realization_weeks),
+                    4,
+                )
+                if realization_weeks
+                else None
+            ),
+        },
         "note": "Hindsight labels for marker development — not used to define live signals",
+    }
+
+
+def build_model_focus_candidates(outcome_summary: dict[str, Any]) -> list[dict[str, Any]]:
+    """Rank assessment-model weak spots for analysis-review scoring experiments."""
+    if int(outcome_summary.get("labeled_event_count") or 0) <= 0:
+        return []
+
+    candidates: list[dict[str, Any]] = []
+    for key, stats in (outcome_summary.get("by_transition_key") or {}).items():
+        if not isinstance(stats, dict):
+            continue
+        count = int(stats.get("count") or 0)
+        if count < MIN_FOCUS_SAMPLE_COUNT:
+            continue
+        positive_rate = stats.get("positive_rate")
+        mean_return = stats.get("mean_forward_return")
+        if mean_return is None:
+            mean_return = stats.get("mean_forward_return_1w")
+        if positive_rate is None:
+            continue
+        weak_direction = float(positive_rate) < WEAK_POSITIVE_RATE
+        weak_mean = mean_return is not None and float(mean_return) < 0
+        if not (weak_direction or weak_mean):
+            continue
+        candidates.append(
+            {
+                "kind": "transition_key",
+                "key": str(key),
+                "horizon": "1w",
+                "count": count,
+                "positive_rate": positive_rate,
+                "mean_forward_return": mean_return,
+                "why": (
+                    f"{key} 1w positive_rate={positive_rate} mean={mean_return} n={count} "
+                    "— opinion flip did not match next-week price"
+                ),
+            }
+        )
+    candidates.sort(
+        key=lambda row: (
+            float(row.get("positive_rate") or 1.0),
+            float(row.get("mean_forward_return") or 0.0),
+        )
+    )
+
+    for horizon, stats in (outcome_summary.get("prediction_hit_rate_by_horizon") or {}).items():
+        if not isinstance(stats, dict):
+            continue
+        scored = int(stats.get("scored_event_count") or 0)
+        hit_rate = stats.get("prediction_hit_rate")
+        if scored < MIN_FOCUS_SAMPLE_COUNT or hit_rate is None:
+            continue
+        if float(hit_rate) >= WEAK_HIT_RATE:
+            continue
+        candidates.append(
+            {
+                "kind": "horizon_hit_rate",
+                "key": str(horizon),
+                "horizon": str(horizon),
+                "count": scored,
+                "prediction_hit_rate": hit_rate,
+                "why": (
+                    f"Directional hit_rate={hit_rate} at {horizon} (n={scored}) "
+                    "— implied upgrade/downgrade/conviction sign is not beating chance"
+                ),
+            }
+        )
+
+    realization = outcome_summary.get("weeks_to_realization") or {}
+    hit_1w = (outcome_summary.get("prediction_hit_rate_by_horizon") or {}).get("1w") or {}
+    hit_rate_1w = hit_1w.get("prediction_hit_rate")
+    within_4w = realization.get("within_4w_rate")
+    realized_n = int(realization.get("realized_event_count") or 0)
+    if (
+        hit_rate_1w is not None
+        and within_4w is not None
+        and float(hit_rate_1w) < WEAK_HIT_RATE
+        and float(within_4w) >= 0.70
+        and realized_n >= MIN_FOCUS_SAMPLE_COUNT
+    ):
+        candidates.append(
+            {
+                "kind": "realization_lag",
+                "key": "weeks_to_realization",
+                "horizon": "1w_vs_4w",
+                "count": realized_n,
+                "prediction_hit_rate": hit_rate_1w,
+                "median_weeks": realization.get("median_weeks"),
+                "within_4w_rate": within_4w,
+                "why": (
+                    f"1w hit_rate={hit_rate_1w} but within_4w realization={within_4w} "
+                    f"(median={realization.get('median_weeks')}w, n={realized_n}) "
+                    "— opinion changes may fire before price; timing/conviction delay candidate"
+                ),
+            }
+        )
+
+    return candidates[:MAX_FOCUS_CANDIDATES]
+
+
+def slim_trajectory_evidence_for_review(review: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Compact payload for analysis-review / learning-director (no event dump)."""
+    if not isinstance(review, dict):
+        return None
+    summary = review.get("outcome_summary") or {}
+    if not isinstance(summary, dict):
+        summary = {}
+    candidates = review.get("model_focus_candidates")
+    if not isinstance(candidates, list):
+        candidates = build_model_focus_candidates(summary)
+    return {
+        "purpose": (
+            "PIT prediction calibration — output is model_focus_candidates for "
+            "assessment-model (scoring/timing/conviction) refinement, not a standalone dataset"
+        ),
+        "observe_only": True,
+        "snapshot_count": review.get("snapshot_count"),
+        "transition_event_count": review.get("transition_event_count"),
+        "labeled_event_count": summary.get("labeled_event_count"),
+        "prediction_hit_rate_by_horizon": summary.get("prediction_hit_rate_by_horizon"),
+        "weeks_to_realization": summary.get("weeks_to_realization"),
+        "upgrade_events": summary.get("upgrade_events"),
+        "downgrade_events": summary.get("downgrade_events"),
+        "model_focus_candidates": candidates,
+        "note": summary.get("note"),
     }
 
 
@@ -247,20 +566,44 @@ def format_trajectory_evidence_markdown(payload: dict[str, Any]) -> str:
         up = review.get("upgrade_events") or {}
         down = review.get("downgrade_events") or {}
         lines.append(
-            f"- Upgrades: n={up.get('count')} mean={up.get('mean_forward_return_1w')} "
+            f"- Upgrades: n={up.get('count')} mean={up.get('mean_forward_return')} "
             f"positive_rate={up.get('positive_rate')}"
         )
         lines.append(
-            f"- Downgrades: n={down.get('count')} mean={down.get('mean_forward_return_1w')} "
+            f"- Downgrades: n={down.get('count')} mean={down.get('mean_forward_return')} "
             f"positive_rate={down.get('positive_rate')}"
         )
         lines.append("")
         lines.append("### By transition key")
         for key, row in (review.get("by_transition_key") or {}).items():
             lines.append(
-                f"- {key}: n={row.get('count')} mean={row.get('mean_forward_return_1w')} "
+                f"- {key}: n={row.get('count')} mean={row.get('mean_forward_return')} "
                 f"positive_rate={row.get('positive_rate')}"
             )
+        lines.extend(["", "## Multi-horizon prediction calibration", ""])
+        for horizon, stats in (review.get("prediction_hit_rate_by_horizon") or {}).items():
+            lines.append(
+                f"- {horizon}: scored={stats.get('scored_event_count')} "
+                f"hit_rate={stats.get('prediction_hit_rate')}"
+            )
+        real = review.get("weeks_to_realization") or {}
+        lines.extend(
+            [
+                "",
+                "## Weeks to realization",
+                "",
+                f"- Realized within 12w: {real.get('realized_within_12w_count')}/"
+                f"{real.get('scorable_event_count')} "
+                f"(rate={real.get('realized_within_12w_rate')})",
+                f"- Median weeks: {real.get('median_weeks')}",
+                f"- Within 4w rate: {real.get('within_4w_rate')}",
+            ]
+        )
+    candidates = payload.get("model_focus_candidates") or []
+    if candidates:
+        lines.extend(["", "## Model focus candidates (for analysis-review scoring)", ""])
+        for row in candidates:
+            lines.append(f"- [{row.get('kind')}] {row.get('why')}")
     lines.append("")
     return "\n".join(lines)
 
@@ -289,6 +632,7 @@ def run_trajectory_evidence(
     reports = list(latest.get("reports") or [])
     boundary = build_boundary_watch_panel(reports)
     outcome_summary = summarize_transition_outcomes(events)
+    focus_candidates = build_model_focus_candidates(outcome_summary)
 
     loser_payload: dict[str, Any] | None = None
     if include_loser_cards:
@@ -328,6 +672,7 @@ def run_trajectory_evidence(
         "boundary_watch_count": len(boundary),
         "loser_card_count": (loser_payload or {}).get("card_count"),
         "outcome_summary": outcome_summary,
+        "model_focus_candidates": focus_candidates,
         "loser_cohort_counts": (loser_payload or {}).get("cohort_counts"),
     }
 
@@ -347,10 +692,13 @@ def run_trajectory_evidence(
 
 __all__ = [
     "BOUNDARY_FILENAME",
+    "FORWARD_HORIZONS_WEEKS",
     "REVIEW_FILENAME",
     "TRANSITIONS_FILENAME",
     "build_boundary_watch_panel",
+    "build_model_focus_candidates",
     "build_transition_events",
     "run_trajectory_evidence",
+    "slim_trajectory_evidence_for_review",
     "summarize_transition_outcomes",
 ]

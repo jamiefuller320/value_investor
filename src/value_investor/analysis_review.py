@@ -14,6 +14,7 @@ from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
 from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
+from value_investor.trajectory_evidence import slim_trajectory_evidence_for_review
 
 logger = logging.getLogger(__name__)
 
@@ -249,6 +250,10 @@ def build_analysis_payload(
     exit_timing_near_miss = _safe_read(data_dir / "exit_timing_near_miss_review.json")
     exclusion_universe = _safe_read(data_dir / "exclusion_universe_review.json")
     exclusion_ladder_replay = _safe_read(paper_root / "exclusion_ladder_replay_review.json")
+    trajectory_review = _safe_read(data_dir / "trajectory_evidence_review.json")
+    trajectory_evidence = slim_trajectory_evidence_for_review(
+        trajectory_review if isinstance(trajectory_review, dict) else None
+    )
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
 
@@ -282,6 +287,7 @@ def build_analysis_payload(
         "exit_timing_near_miss": exit_timing_near_miss,
         "exclusion_universe": exclusion_universe,
         "exclusion_ladder_replay": exclusion_ladder_replay,
+        "trajectory_evidence": trajectory_evidence,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "model_weights": {
@@ -494,17 +500,24 @@ def _build_analysis_prompt(payload_path: Path) -> str:
 
 Read the structured JSON at: {payload_path}
 
-It contains archived backtest/simulation/historical-analysis summaries, paper learning
-track reviews (AI judgment vs rules control vs momentum grace), exit-shadow rollups,
-churn_health (cost drag, trade churn, hold-buffer state), knob_calibration_priors
-(walk-forward ranked knob priors — observe-only, human gate before seeding config),
-and adaptive model-weight state.
+The **purpose of this review** is to turn evidence into **focus areas that refine
+assessment models** (signal families, conviction, timing overlay, adaptive weights) —
+not to archive metrics for their own sake. Trajectory evidence (PIT know-when vs
+what-happened-next) is the primary diagnostic for those models. Paper-track P&L
+and backtests are context; scoring experiments are the intended output when
+model_focus_candidates exist.
+
+It also contains archived backtest/simulation/historical-analysis summaries, paper
+learning track reviews (AI judgment vs rules control vs momentum grace), exit-shadow
+rollups, churn_health, knob_calibration_priors (observe-only), and adaptive
+model-weight state.
 
 Write SIX plain-text sections with headings exactly as shown:
 
 EXECUTIVE SUMMARY
 3–5 sentences on whether the quant stack and paper tracks are improving, and the single
-biggest modelling/analysis gap this week.
+biggest modelling/analysis gap this week. If trajectory_evidence.model_focus_candidates
+is non-empty, name the top candidate as a scoring focus.
 
 PERFORMANCE DIAGNOSIS
 Bullets on primary vs control vs market excess after costs, cost drag, and whether marks
@@ -513,6 +526,10 @@ are thick enough to trust. Do NOT recommend auto-applying decision-review knobs.
 SIGNAL & BACKTEST FINDINGS
 What archived signal backtest / historical analysis / offline sim tracks show — cite
 horizons, excess returns, and run_count. If run_count < 2, say history is still seeding.
+When trajectory_evidence is present, cite labeled_event_count, prediction_hit_rate_by_horizon,
+weeks_to_realization, and each model_focus_candidate.why. Treat weak transition keys
+(e.g. hold→buy with low 1w positive_rate) as assessment-model hypotheses, not as
+live-screen mutation.
 
 PAPER TRACK COMPARISON
 Compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
@@ -525,6 +542,10 @@ Numbered top 5 experiments for the next sprint. Each line MUST use this format:
 Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
 Use scoring/ingest only when a code change is the right next step; prefer offline_sim,
 paper_knobs, or paper_churn for knob/counterfactual ideas (human gate required).
+If trajectory_evidence.model_focus_candidates is non-empty, include **at least one**
+[scoring] or [offline_sim] line that cites a candidate key and hypothesises a model
+tweak (conviction delta, timing wait, family weight, overlay gate) — never assign_signal
+threshold search (N3).
 If ingest_trials_pending_review is non-empty, include at least one [ingest] line referencing
 the trial id(s), outcome deltas, and whether to PROMOTE engineering, DEFER, or DISMISS.
 

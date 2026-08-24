@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T07:08:55+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T07:45:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -89,6 +89,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N35 | **Do not use weekly historical shadow rewind as promotion proof** | Rewinding competing shadows through known history to pick a winner overfits the same window used for bootstrap; keep weekly consistency as a diagnostic, and reserve promotion for forward endurance vs market/rules. | Only if a held-out weekly archive path (true walk-forward / purged CV) is implemented under L111 |
 | N36 | **Do not auto-promote surviving shadows into ai_judgment** | Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. | Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors |
 | N38 | **Live capital dynamic rotation before paper evidence thickens** | Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation. | Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off |
+| N39 | **Full-universe deep memo PIT replay** | Re-running full research memos for every name on each archived weekly turn is out of scope; use logged screen/overlay fields at t instead (see ftse-trajectory-evidence). | Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features) |
 
 ---
 
@@ -121,6 +122,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L172 | **Endurance hysteresis grace (not seed-advantage cushion)** | Avoid using warm-start/in-sample seed P&L as a pseudo head-start for survivor gates. Prefer explicit OOS grace: longer min_marks, wider fail band or consecutive underperformance before failed, and keep seed excess diagnostic-only. | After warm-start shadows accumulate post-seed marks and early false fails appear |
 | L176 | **Conviction-weighted sleeve sizing (replace equal-weight)** | When max_positions widens to 4-8, rank sleeves by conviction_score (with sector_cap floor) instead of strict NAV/positions equal-weight; cap any single name at e.g. 1.5x the median sleeve. | Primary learning track has >=12 weeks marks at max_positions>=4 and cost_drag is stable; compare vs equal-weight in rebalance_log replay |
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
+| L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 
 ### Universe & data
 
