@@ -668,6 +668,7 @@ def run_exclusion_universe_archive_sim(
                 "summary": row["summary"],
                 "book_summary": row["book_summary"],
                 "hindsight_summary": row["hindsight_summary"],
+                "weekly": row.get("weekly") or [],
             }
             for row in ladder_results
         ],

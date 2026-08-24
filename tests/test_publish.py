@@ -194,6 +194,47 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     assert bundle["experiment_assessment"]["summary"]["total"] == 1
 
 
+def test_publish_dashboard_includes_sunday_review(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    dest_dir = tmp_path / "docs"
+    data_dir = dest_dir / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    archive_dir = data_dir / "archive"
+    archive_dir.mkdir(parents=True)
+
+    _write_sample_output(output_dir)
+    (paper_root / "learning_tracks_review.json").write_text(
+        json.dumps(
+            {
+                "primary_learning_track": "ai_judgment",
+                "reviews": {
+                    "ai_judgment": {
+                        "track_id": "ai_judgment",
+                        "track_label": "AI judgment",
+                        "metrics": {"excess_after_costs": -0.1, "equity_marks": 5},
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (data_dir / "exclusion_universe_archive.json").write_text(
+        json.dumps({"recommended_step": {"step_id": "u4"}, "ladder_results": []}),
+        encoding="utf-8",
+    )
+    (data_dir / "experiment_assessment.json").write_text(
+        json.dumps({"schema_version": 2, "summary": {"total": 0}, "experiments": []}),
+        encoding="utf-8",
+    )
+
+    path = publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=False)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data.get("sunday_review", {}).get("schema_version") == 1
+    assert "current" in data["sunday_review"]
+    assert (data_dir / "review_history.json").exists()
+
+
 def test_publish_dashboard_writes_latest_json(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"

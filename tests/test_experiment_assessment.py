@@ -168,3 +168,44 @@ def test_sync_task_assessment_status_flags_recommend(tmp_path: Path):
     assert task["status"] == "proposed"
     assert task["evidence"]["assessment_recommend"] is True
     assert task["evidence"]["assessment_status"] == "recommend"
+
+
+def test_refresh_preserves_and_sets_initiated_at(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    prior_time = "2026-08-01T00:00:00+00:00"
+    (data_dir / "experiment_assessment.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 2,
+                "experiments": [
+                    {
+                        "experiment_id": "ai_judgment_calibrated",
+                        "kind": "calibration_shadow",
+                        "initiated_at": prior_time,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper_root / "calibration_shadow_endurance.json").write_text(
+        json.dumps(
+            {
+                "shadows": [
+                    {
+                        "shadow_track_id": "ai_judgment_calibrated",
+                        "rank": 1,
+                        "status": "observing",
+                        "knobs": {},
+                        "metrics": {"equity_marks": 1},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    row = next(r for r in payload["experiments"] if r["experiment_id"] == "ai_judgment_calibrated")
+    assert row["initiated_at"] == prior_time
