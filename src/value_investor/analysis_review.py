@@ -306,7 +306,11 @@ def _slim_exclusion_ladder_replay(payload: dict[str, Any] | None) -> dict[str, A
         steps = track.get("ladder_steps") or []
         recommended_id = payload.get("recommended_step_id")
         recommended = next(
-            (row for row in steps if isinstance(row, dict) and row.get("step_id") == recommended_id),
+            (
+                row
+                for row in steps
+                if isinstance(row, dict) and row.get("step_id") == recommended_id
+            ),
             None,
         )
         replay = (recommended or {}).get("replay") or {}
