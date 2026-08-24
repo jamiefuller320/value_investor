@@ -10,8 +10,11 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
-from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, compile_ingest_engineering_task_from_trial
 from value_investor.engineering_queue import _coverage_from_index, _filing_index_paths_for_ticker
+from value_investor.engineering_tasks import (
+    COMMITTED_TASKS_PATH,
+    compile_ingest_engineering_task_from_trial,
+)
 from value_investor.ingest_loop import has_open_ingest_engineering_tasks
 from value_investor.library_ingest_escalation import (
     DEFAULT_STALL_RUNS,
@@ -339,8 +342,7 @@ def run_library_ingest_loop(
     """
     library_root = Path(library_root)
     health_log_path = Path(
-        health_log_path
-        or resolve_library_ingest_health_log_path(library_root, market_id)
+        health_log_path or resolve_library_ingest_health_log_path(library_root, market_id)
     )
     result = LibraryIngestLoopResult(market_id=market_id)
     result.health_before = snapshot_library_ingest_health(market_id, library_root=library_root)
@@ -411,7 +413,9 @@ def run_library_ingest_loop(
     )
     if pin_tickers and result.targets:
         pin_set = {str(t or "").strip().upper() for t in pin_tickers if str(t or "").strip()}
-        result.targets = [row for row in result.targets if row.ticker.upper() in pin_set] or result.targets[:1]
+        result.targets = [
+            row for row in result.targets if row.ticker.upper() in pin_set
+        ] or result.targets[:1]
 
     started = time.monotonic()
     for target in result.targets:
@@ -493,7 +497,10 @@ def run_library_ingest_loop(
         )
         result.micro_compiled = int(result.micro_compile.get("compiled_count") or 0) > 0
     elif result.stalled:
-        result.micro_compile = {"skipped": True, "reason": "open ingest engineering task already queued"}
+        result.micro_compile = {
+            "skipped": True,
+            "reason": "open ingest engineering task already queued",
+        }
     else:
         result.micro_compile = {"skipped": True, "reason": "library ingest health not stalled"}
 

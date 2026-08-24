@@ -18,7 +18,6 @@ from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     EngineeringTask,
     _allowed_paths_for_area,
-    _default_acceptance_criteria,
     _merge_task_rows,
     _next_engineering_seq_from_rows,
     load_engineering_tasks,
@@ -54,9 +53,7 @@ def resolve_library_ingest_health_log_path(library_root: Path, market_id: str) -
 
 
 def library_ingest_filing_gaps(health: dict[str, Any]) -> int:
-    return int(health.get("unmeasured_buy_tier") or 0) + int(
-        health.get("zero_body_buy_tier") or 0
-    )
+    return int(health.get("unmeasured_buy_tier") or 0) + int(health.get("zero_body_buy_tier") or 0)
 
 
 def library_ingest_ticker_has_gaps(
@@ -136,7 +133,10 @@ def has_open_library_ingest_task_for_market(
         if str(evidence.get("market_id") or "") == market_id:
             return True
         source = str(row.get("source") or "")
-        if source in LIBRARY_INGEST_STALL_SOURCES and str(evidence.get("market_id") or "") == market_id:
+        if (
+            source in LIBRARY_INGEST_STALL_SOURCES
+            and str(evidence.get("market_id") or "") == market_id
+        ):
             return True
     return False
 

@@ -54,6 +54,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: euro-ingest-loop
@@ -170,6 +171,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Run library ingest loop
+        id: loop
         run: |
           set -euo pipefail
           MARKET="${{ github.event.inputs.market || 'euro_depth' }}"
@@ -208,6 +210,30 @@ jobs:
             ARGS+=(--pin-ticker "$PIN")
           fi
           ftse-library "${ARGS[@]}" | tee /tmp/euro_ingest_loop.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/euro_ingest_loop.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n"
+              f"gap_closure_compiled={'true' if data.get('gap_closure_compiled') else 'false'}\n"
+              f"recorded_gap_closure={'true' if data.get('recorded_gap_closure') else 'false'}\n"
+              f"partial={'true' if data.get('partial') else 'false'}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch engineering queue when tasks were added
+        if: >-
+          steps.loop.outputs.micro_compiled == 'true'
+          || steps.loop.outputs.gap_closure_compiled == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run engineering-queue.yml
+          echo "Dispatched engineering-queue after library ingest micro-compile or gap-closure task"
 
       - name: Refresh completion gate and sync euro crons
         env:

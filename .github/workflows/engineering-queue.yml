@@ -112,6 +112,8 @@ jobs:
                   f"pin_ticker={data.get('pin_ticker', '')}\n"
                   f"gap_closure_parent_id={parent}\n"
                   f"gap_rerun_reason={data.get('reason', '')}\n"
+                  f"rerun_workflow={data.get('rerun_workflow', 'ingest-loop.yml')}\n"
+                  f"market_id={data.get('market_id', '')}\n"
               )
           PY
 
@@ -120,16 +122,37 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh workflow run ingest-loop.yml \
-            -f max_targets=1 \
-            -f max_bodies=40 \
-            -f bootstrap_seed_cap=0 \
-            -f max_runtime_seconds=2100 \
-            -f force=true \
-            -f record_gap_closure=true \
-            -f pin_ticker="${{ steps.gap_rerun.outputs.pin_ticker }}" \
-            -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
-          echo "Dispatched ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }}"
+          WORKFLOW="${{ steps.gap_rerun.outputs.rerun_workflow }}"
+          if [ -z "$WORKFLOW" ]; then
+            WORKFLOW="ingest-loop.yml"
+          fi
+          if [ "$WORKFLOW" = "euro-ingest-loop.yml" ]; then
+            MARKET="${{ steps.gap_rerun.outputs.market_id }}"
+            if [ -z "$MARKET" ]; then
+              MARKET="euro_depth"
+            fi
+            gh workflow run euro-ingest-loop.yml \
+              -f market="$MARKET" \
+              -f max_targets=1 \
+              -f max_bodies=40 \
+              -f max_runtime_seconds=2100 \
+              -f force=true \
+              -f record_gap_closure=true \
+              -f pin_ticker="${{ steps.gap_rerun.outputs.pin_ticker }}" \
+              -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
+            echo "Dispatched euro-ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }} ($MARKET)"
+          else
+            gh workflow run ingest-loop.yml \
+              -f max_targets=1 \
+              -f max_bodies=40 \
+              -f bootstrap_seed_cap=0 \
+              -f max_runtime_seconds=2100 \
+              -f force=true \
+              -f record_gap_closure=true \
+              -f pin_ticker="${{ steps.gap_rerun.outputs.pin_ticker }}" \
+              -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
+            echo "Dispatched ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }}"
+          fi
 
       # L161: generic post-merge acceptance proof + capped rework (skips gap-closure tasks).
       - name: Post-merge acceptance verify (pytest) + capped rework

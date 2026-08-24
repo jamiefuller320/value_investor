@@ -79,6 +79,13 @@ gh workflow run euro-ingest-loop.yml -f market=euro_depth -f record_gap_closure=
 ftse-library euro-ingest-dispatch --json
 ```
 
+## Workflow hooks (FTSE parity)
+
+| Hook | Workflow | Behaviour |
+|------|----------|-----------|
+| Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
+| Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
+
 ## Adding a new market
 
 1. Ensure `ftse-library grow` + `screen-lite` produce a buy-tier shortlist.
