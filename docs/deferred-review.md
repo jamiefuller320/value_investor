@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T08:33:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T08:36:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -91,6 +91,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N38 | **Live capital dynamic rotation before paper evidence thickens** | Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation. | Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off |
 | N39 | **Full-universe deep memo PIT replay** | Re-running full research memos for every name on each archived weekly turn is out of scope; use logged screen/overlay fields at t instead (see ftse-trajectory-evidence). | Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features) |
 | N40 | **Auto-spawn exclusion ladder shadows from Sunday readiness** | exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet — keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows. | exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate |
+| N41 | **Auto-spawn exclusion ladder shadow when ready** | ready_for_shadow_spawn is computed Sunday but spawn-shadow stays manual; auto-spawn would couple lab noise to weekday tracks before human ack. Keep CLI spawn + register checklist gate instead. | Exclusion u4 shadow has been manually spawned and observed for >=4 weeks with clear ops load |
 
 ---
 
@@ -124,6 +125,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L176 | **Conviction-weighted sleeve sizing (replace equal-weight)** | When max_positions widens to 4-8, rank sleeves by conviction_score (with sector_cap floor) instead of strict NAV/positions equal-weight; cap any single name at e.g. 1.5x the median sleeve. | Primary learning track has >=12 weeks marks at max_positions>=4 and cost_drag is stable; compare vs equal-weight in rebalance_log replay |
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
+| L181 | **Wire loser snapshot cards into analysis-review** | Sunday generates loser_snapshot_cards with trajectory evidence, but analysis-review payload omits them (director-only). Cards should feed scoring/filter hypotheses in the modelling review. | Trajectory model_focus_candidates already drive scoring experiments for 2+ Sundays |
+| L182 | **Analysis-review prompt action contracts for exclusion and exit-timing** | exclusion_universe, exclusion_ladder_replay, exit_timing_cohorts, and exit_timing_near_miss are in the analysis payload but the prompt only contracts action for trajectory candidates, ingest trials, and exit_shadow. Extend required experiment lines when readiness/alpha signals fire. | Next Sunday analysis-review prompt hardening pass after trajectory wiring lands |
+| L184 | **Schedule exit-timing archive near-miss producer** | Analysis payload reads exit_timing_near_miss_review.json but no workflow runs ftse-exit-timing-archive; consumers see null until history is thick and a Sunday step is added. | exit_timing live cohorts reach readiness gates (L117) or history_run_count >= 12 |
 
 ### Universe & data
 
@@ -238,6 +242,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
 | L173 | **Shared ticker metrics/filings store keyed by Yahoo symbol** | Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker. | euro_depth maintenance plus component market maintenance shows material duplicate Yahoo fetch cost or disk bloat, or filing deepen needs one home per issuer |
 | L180 | **Learning director promote path for ops/universe tasks** | learning_director_tasks can set promote_to=engineering_queue for ops (via shared _promote_target_for_area) but CLI has no promote command. Either add ftse-learning-director promote for ops-only, or force all director tasks to manual and route scoring exclusively through analysis. | learning_director_tasks accumulate open ops experiments that humans keep re-keying into engineering queue |
+| L183 | **Promote path for paper-learning and learning-director tasks** | paper_learning_tasks and learning_director_tasks compile to JSON with no promote CLI; only analysis-review and horizon-scan can enqueue engineering. Either add promote helpers for ops/manual gates or register explicit weekly checklist triage. | Human ops review finds untriaged PLR/director tasks accumulating for 3+ Sundays |
 
 ---
 
