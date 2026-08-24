@@ -6,8 +6,10 @@ narrative, experiment inventory, and **vision roadmap activation proposals**.
 
 Does **not** apply knobs, mutate screens, spawn tracks, or open engineering PRs.
 Scoring / assessment-model experiments stay in [analysis-review.md](analysis-review.md);
-the director only checks that trajectory `model_focus_candidates` were turned into
-those experiments.
+churn experiments stay in [paper-learning-review.md](paper-learning-review.md). The
+director only checks that trajectory / exclusion / exit-timing triggers were turned into
+those specialist experiments — prefer thin `[analysis]` / `[monitoring]` follow-ups over
+a second experiment queue. See [learning-director-vision.md](learning-director-vision.md#discrete-specialist-pipelines-director-as-oversight).
 
 Vision doc: [learning-director-vision.md](learning-director-vision.md) ·
 structured roadmap: [`docs/data/learning_director_vision.json`](../data/learning_director_vision.json).

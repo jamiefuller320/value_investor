@@ -14,6 +14,16 @@ Accelerate data gathering for:
 This is **observe-only** — priors for hold-buffer and grace knob design until live paper
 cohorts mature (deferred L118). Does not auto-apply knobs.
 
+## When it runs
+
+| Trigger | Schedule |
+|---------|----------|
+| **Sunday analysis-review** | After trajectory evidence; soft-fail if history thin |
+| Manual | `ftse-exit-timing-archive --output-dir docs/data` |
+
+Artifacts feed slim `exit_timing_near_miss` into the analysis-review payload (hold/swap
+readiness → `[paper_churn]` / `[offline_sim]` action contracts).
+
 ## How it works
 
 1. Loads `history/run_*.json.gz` snapshots from `docs/data` (same chain as `ftse-simulate`).

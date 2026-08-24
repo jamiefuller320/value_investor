@@ -58,6 +58,19 @@ stay off-limits (N3).
 
 See [trajectory-evidence.md](trajectory-evidence.md).
 
+## Loser cards, exclusion, and exit-timing → filter experiments
+
+The same Sunday payload includes slim:
+
+| Key | Action contract |
+|-----|-----------------|
+| `loser_snapshot_cards` | ≥1 `[scoring]` / `[offline_sim]` when `top_failed_families` non-empty |
+| `exclusion_universe` | ≥1 `[offline_sim]` / `[paper_knobs]` when `ready_for_priors` or positive exclusion alpha |
+| `exclusion_ladder_replay` | ≥1 `[monitoring]` / `[paper_knobs]` spawn-shadow gate when `ready_for_shadow_spawn` (human CLI; never auto) |
+| `exit_timing_cohorts` / `exit_timing_near_miss` | ≥1 `[paper_churn]` / `[offline_sim]` when probability readiness fires |
+
+Cap five experiment lines; overflow goes to **DEFER**.
+
 ## Ingest trials
 
 Runs recorded with `--trial-review-trigger analysis_review` (or `both`) appear in the

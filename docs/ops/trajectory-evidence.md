@@ -30,10 +30,11 @@ ftse-loser-snapshot-cards --data-dir docs/data   # piece 3 only
 
 The ledger is **not** a standalone dataset. Sunday `ftse-trajectory-evidence` ranks
 **model focus candidates** (weak transition keys, sub-chance directional hit rates,
-early-vs-price lag). Those candidates are the input to **analysis-review**, whose
-output is proposed `[scoring]` / `[offline_sim]` experiments to refine assessment
-models (conviction, timing overlay, family weights). Learning Director checks that
-analysis-review actually proposed those experiments — it does not run a second scoring loop.
+early-vs-price lag). Those candidates — together with slim **loser snapshot cards**,
+**exclusion** ladder priors, and **exit-timing** readiness — feed **analysis-review**,
+whose output is proposed experiments to refine assessment models and filters.
+Learning Director checks that specialist reviews actually proposed those experiments —
+it does not run a second scoring or churn loop.
 
 See [analysis-review.md](analysis-review.md) and [learning-director.md](learning-director.md).
 

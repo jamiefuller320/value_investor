@@ -42,6 +42,7 @@ Sunday `analysis-review.yml` after `ftse-exclusion-universe-archive` (same data 
 
 ## Relation to loser_pattern_lab
 
-Tier 1 cards feed human review and monthly horizon fragment clustering. Tier 2
+Tier 1 cards feed **analysis-review** (slim `loser_snapshot_cards` → `[scoring]` /
+`[offline_sim]` hypotheses) and monthly horizon fragment clustering. Tier 2
 (quantitative feature rollups on hindsight bottom quartile) remains planned in
 `loser_pattern_lab` vision phase.
