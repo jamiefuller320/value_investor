@@ -22,17 +22,17 @@ from value_investor.analysis_review import (
 from value_investor.deferred_ideas import DEFAULT_STORE as DEFAULT_DEFER_STORE
 from value_investor.deferred_ideas import add_fragment, list_open_fragments, write_markdown
 from value_investor.experiment_assessment import slim_experiment_assessment_for_review
-from value_investor.review_payload_slim import (
-    slim_exclusion_ladder_replay,
-    slim_exclusion_universe,
-    slim_exit_timing,
-    slim_loser_snapshot_cards,
-)
 from value_investor.learning_director_regime import (
     VISION_PATH,
     build_experiment_inventory,
     build_regime_summary,
     load_learning_director_vision,
+)
+from value_investor.review_payload_slim import (
+    slim_exclusion_ladder_replay,
+    slim_exclusion_universe,
+    slim_exit_timing,
+    slim_loser_snapshot_cards,
 )
 from value_investor.review_policy import (
     DEFAULT_REVIEW_POLICY_PATH,

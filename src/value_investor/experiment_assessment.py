@@ -564,7 +564,7 @@ def sync_task_assessment_status(
     skipped: list[str] = []
     now = datetime.now(UTC).isoformat()
 
-    for filename, _, kind, _ in TASK_STORES:
+    for filename, _, _kind, _ in TASK_STORES:
         path = data_dir / filename
         raw = _safe_read(path)
         if not raw:
