@@ -121,9 +121,9 @@ def exit_urgency(
     use_adjusted_signal: bool = False,
 ) -> float:
     """
-    Score 0–1 for how urgently to reduce or exit a holding.
+      Score 0–1 for how urgently to reduce or exit a holding.
 
-  Harvest (still in target) vs rotation (left target) use the same scale.
+    Harvest (still in target) vs rotation (left target) use the same scale.
     """
     score = 0.0
     signal = _screen_signal(row or {}, use_adjusted_signal=use_adjusted_signal)
@@ -271,9 +271,7 @@ def score_rebalance_candidates(
         position = holdings.get(ticker)
         current_value = (position.shares * price) if position and price else 0.0
         appetite = entry_appetite(row, use_adjusted_signal=use_adjusted_signal)
-        fraction = entry_sleeve_fraction(
-            row, config=cfg, use_adjusted_signal=use_adjusted_signal
-        )
+        fraction = entry_sleeve_fraction(row, config=cfg, use_adjusted_signal=use_adjusted_signal)
         entries.append(
             {
                 "ticker": ticker,

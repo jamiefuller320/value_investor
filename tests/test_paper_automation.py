@@ -196,8 +196,7 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     assert (tmp_path / "auto" / "momentum_grace" / "config.json").exists()
     assert "graduated_allocation" in summary["tracks"]
     assert (
-        summary["tracks"]["graduated_allocation"]["selection"]["use_graduated_allocation"]
-        is True
+        summary["tracks"]["graduated_allocation"]["selection"]["use_graduated_allocation"] is True
     )
     assert (tmp_path / "auto" / "graduated_allocation" / "config.json").exists()
     assert "technical" in summary["tracks"]

@@ -63,7 +63,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--tracks",
         default="all",
-        choices=["all", "rules", "ai_judgment", "momentum_grace", "graduated_allocation", "technical"],
+        choices=[
+            "all",
+            "rules",
+            "ai_judgment",
+            "momentum_grace",
+            "graduated_allocation",
+            "technical",
+        ],
         help="Which learning track(s) to run (default: all)",
     )
     parser.add_argument(
