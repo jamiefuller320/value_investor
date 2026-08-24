@@ -28,6 +28,10 @@ SIGNAL_RANK = {
 CONVICTION_MATERIAL_DELTA = 0.08
 FORWARD_HORIZONS_WEEKS = (1, 4, 8, 12)
 MAX_REALIZATION_WEEKS = 12
+MIN_FOCUS_SAMPLE_COUNT = 8
+WEAK_POSITIVE_RATE = 0.40
+WEAK_HIT_RATE = 0.50
+MAX_FOCUS_CANDIDATES = 6
 
 
 def _signal_rank(signal: str | None) -> int:
@@ -416,6 +420,132 @@ def summarize_transition_outcomes(events: list[dict[str, Any]]) -> dict[str, Any
     }
 
 
+def build_model_focus_candidates(outcome_summary: dict[str, Any]) -> list[dict[str, Any]]:
+    """Rank assessment-model weak spots for analysis-review scoring experiments."""
+    if int(outcome_summary.get("labeled_event_count") or 0) <= 0:
+        return []
+
+    candidates: list[dict[str, Any]] = []
+    for key, stats in (outcome_summary.get("by_transition_key") or {}).items():
+        if not isinstance(stats, dict):
+            continue
+        count = int(stats.get("count") or 0)
+        if count < MIN_FOCUS_SAMPLE_COUNT:
+            continue
+        positive_rate = stats.get("positive_rate")
+        mean_return = stats.get("mean_forward_return")
+        if mean_return is None:
+            mean_return = stats.get("mean_forward_return_1w")
+        if positive_rate is None:
+            continue
+        weak_direction = float(positive_rate) < WEAK_POSITIVE_RATE
+        weak_mean = mean_return is not None and float(mean_return) < 0
+        if not (weak_direction or weak_mean):
+            continue
+        candidates.append(
+            {
+                "kind": "transition_key",
+                "key": str(key),
+                "horizon": "1w",
+                "count": count,
+                "positive_rate": positive_rate,
+                "mean_forward_return": mean_return,
+                "why": (
+                    f"{key} 1w positive_rate={positive_rate} mean={mean_return} n={count} "
+                    "— opinion flip did not match next-week price"
+                ),
+            }
+        )
+    candidates.sort(
+        key=lambda row: (
+            float(row.get("positive_rate") or 1.0),
+            float(row.get("mean_forward_return") or 0.0),
+        )
+    )
+
+    for horizon, stats in (outcome_summary.get("prediction_hit_rate_by_horizon") or {}).items():
+        if not isinstance(stats, dict):
+            continue
+        scored = int(stats.get("scored_event_count") or 0)
+        hit_rate = stats.get("prediction_hit_rate")
+        if scored < MIN_FOCUS_SAMPLE_COUNT or hit_rate is None:
+            continue
+        if float(hit_rate) >= WEAK_HIT_RATE:
+            continue
+        candidates.append(
+            {
+                "kind": "horizon_hit_rate",
+                "key": str(horizon),
+                "horizon": str(horizon),
+                "count": scored,
+                "prediction_hit_rate": hit_rate,
+                "why": (
+                    f"Directional hit_rate={hit_rate} at {horizon} (n={scored}) "
+                    "— implied upgrade/downgrade/conviction sign is not beating chance"
+                ),
+            }
+        )
+
+    realization = outcome_summary.get("weeks_to_realization") or {}
+    hit_1w = (outcome_summary.get("prediction_hit_rate_by_horizon") or {}).get("1w") or {}
+    hit_rate_1w = hit_1w.get("prediction_hit_rate")
+    within_4w = realization.get("within_4w_rate")
+    realized_n = int(realization.get("realized_event_count") or 0)
+    if (
+        hit_rate_1w is not None
+        and within_4w is not None
+        and float(hit_rate_1w) < WEAK_HIT_RATE
+        and float(within_4w) >= 0.70
+        and realized_n >= MIN_FOCUS_SAMPLE_COUNT
+    ):
+        candidates.append(
+            {
+                "kind": "realization_lag",
+                "key": "weeks_to_realization",
+                "horizon": "1w_vs_4w",
+                "count": realized_n,
+                "prediction_hit_rate": hit_rate_1w,
+                "median_weeks": realization.get("median_weeks"),
+                "within_4w_rate": within_4w,
+                "why": (
+                    f"1w hit_rate={hit_rate_1w} but within_4w realization={within_4w} "
+                    f"(median={realization.get('median_weeks')}w, n={realized_n}) "
+                    "— opinion changes may fire before price; timing/conviction delay candidate"
+                ),
+            }
+        )
+
+    return candidates[:MAX_FOCUS_CANDIDATES]
+
+
+def slim_trajectory_evidence_for_review(review: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Compact payload for analysis-review / learning-director (no event dump)."""
+    if not isinstance(review, dict):
+        return None
+    summary = review.get("outcome_summary") or {}
+    if not isinstance(summary, dict):
+        summary = {}
+    candidates = review.get("model_focus_candidates")
+    if not isinstance(candidates, list):
+        candidates = build_model_focus_candidates(summary)
+    return {
+        "purpose": (
+            "PIT prediction calibration — output is model_focus_candidates for "
+            "assessment-model (scoring/timing/conviction) refinement, not a standalone dataset"
+        ),
+        "observe_only": True,
+        "snapshot_count": review.get("snapshot_count"),
+        "transition_event_count": review.get("transition_event_count"),
+        "labeled_event_count": summary.get("labeled_event_count"),
+        "prediction_hit_rate_by_horizon": summary.get("prediction_hit_rate_by_horizon"),
+        "weeks_to_realization": summary.get("weeks_to_realization"),
+        "upgrade_events": summary.get("upgrade_events"),
+        "downgrade_events": summary.get("downgrade_events"),
+        "model_focus_candidates": candidates,
+        "note": summary.get("note"),
+    }
+
+
 def format_trajectory_evidence_markdown(payload: dict[str, Any]) -> str:
     review = payload.get("outcome_summary") or {}
     lines = [
@@ -469,6 +599,11 @@ def format_trajectory_evidence_markdown(payload: dict[str, Any]) -> str:
                 f"- Within 4w rate: {real.get('within_4w_rate')}",
             ]
         )
+    candidates = payload.get("model_focus_candidates") or []
+    if candidates:
+        lines.extend(["", "## Model focus candidates (for analysis-review scoring)", ""])
+        for row in candidates:
+            lines.append(f"- [{row.get('kind')}] {row.get('why')}")
     lines.append("")
     return "\n".join(lines)
 
@@ -497,6 +632,7 @@ def run_trajectory_evidence(
     reports = list(latest.get("reports") or [])
     boundary = build_boundary_watch_panel(reports)
     outcome_summary = summarize_transition_outcomes(events)
+    focus_candidates = build_model_focus_candidates(outcome_summary)
 
     loser_payload: dict[str, Any] | None = None
     if include_loser_cards:
@@ -536,6 +672,7 @@ def run_trajectory_evidence(
         "boundary_watch_count": len(boundary),
         "loser_card_count": (loser_payload or {}).get("card_count"),
         "outcome_summary": outcome_summary,
+        "model_focus_candidates": focus_candidates,
         "loser_cohort_counts": (loser_payload or {}).get("cohort_counts"),
     }
 
@@ -559,7 +696,9 @@ __all__ = [
     "REVIEW_FILENAME",
     "TRANSITIONS_FILENAME",
     "build_boundary_watch_panel",
+    "build_model_focus_candidates",
     "build_transition_events",
     "run_trajectory_evidence",
+    "slim_trajectory_evidence_for_review",
     "summarize_transition_outcomes",
 ]

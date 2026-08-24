@@ -5,6 +5,9 @@ paper-learning-review each Sunday. Synthesises regime checks, convergence
 narrative, experiment inventory, and **vision roadmap activation proposals**.
 
 Does **not** apply knobs, mutate screens, spawn tracks, or open engineering PRs.
+Scoring / assessment-model experiments stay in [analysis-review.md](analysis-review.md);
+the director only checks that trajectory `model_focus_candidates` were turned into
+those experiments.
 
 Vision doc: [learning-director-vision.md](learning-director-vision.md) ·
 structured roadmap: [`docs/data/learning_director_vision.json`](../data/learning_director_vision.json).

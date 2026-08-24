@@ -1,8 +1,11 @@
 # Modelling & analysis review
 
 Read-only agent synthesis over backtest, historical analysis, offline simulation,
-and paper learning-track artifacts. **Does not** change live paper books, apply
-decision-review knobs, or open engineering PRs automatically.
+paper learning-track artifacts, and **trajectory evidence** (PIT prediction
+calibration). The review’s job is to turn that evidence into **focus areas that
+refine assessment models** — proposed `[scoring]` / `[offline_sim]` experiments —
+not to archive metrics for their own sake. **Does not** change live paper books,
+apply decision-review knobs, or open engineering PRs automatically.
 
 ## When it runs
 
@@ -41,7 +44,19 @@ If history is still seeding, the workflow logs `payload` readiness and skips the
 | `docs/data/analysis_review.md` | Human-readable synthesis |
 | `docs/data/analysis_review.json` | Structured sections + metadata |
 | `docs/data/analysis_tasks.json` | Proposed experiments (`status: proposed`) |
+| `docs/data/trajectory_evidence_review.json` | PIT transition outcomes + `model_focus_candidates` (payload input) |
 | `docs/data/ingest_trials.json` | Ingest experiments with `review_trigger: analysis_review` or `both` |
+
+## Trajectory evidence → scoring experiments
+
+Sunday `analysis-review.yml` runs `ftse-trajectory-evidence` **before** the modelling
+agent. The payload includes a slim `trajectory_evidence` object (hit rates, lag,
+`model_focus_candidates`). When candidates exist, the agent must propose at least
+one `[scoring]` or `[offline_sim]` experiment citing a candidate — human promote
+still required (`ftse-analysis-review promote`). Frozen `assign_signal()` thresholds
+stay off-limits (N3).
+
+See [trajectory-evidence.md](trajectory-evidence.md).
 
 ## Ingest trials
 

@@ -8,8 +8,10 @@ from pathlib import Path
 from value_investor.backtest import RunSnapshot
 from value_investor.trajectory_evidence import (
     build_boundary_watch_panel,
+    build_model_focus_candidates,
     build_transition_events,
     run_trajectory_evidence,
+    slim_trajectory_evidence_for_review,
     summarize_transition_outcomes,
 )
 
@@ -168,6 +170,58 @@ def test_summarize_transition_outcomes_weeks_to_realization():
     assert real["within_4w_rate"] == 1.0
 
 
+def test_build_model_focus_candidates_ranks_weak_transitions():
+    summary = {
+        "labeled_event_count": 40,
+        "by_transition_key": {
+            "hold->buy": {"count": 20, "mean_forward_return": -0.008, "positive_rate": 0.25},
+            "buy->hold": {"count": 16, "mean_forward_return": 0.014, "positive_rate": 0.56},
+            "tiny": {"count": 3, "mean_forward_return": -0.2, "positive_rate": 0.0},
+        },
+        "prediction_hit_rate_by_horizon": {
+            "1w": {"scored_event_count": 30, "prediction_hit_rate": 0.40},
+            "4w": {"scored_event_count": 20, "prediction_hit_rate": 0.52},
+        },
+        "weeks_to_realization": {
+            "realized_event_count": 18,
+            "median_weeks": 1,
+            "within_4w_rate": 0.94,
+        },
+    }
+    candidates = build_model_focus_candidates(summary)
+    kinds = {row["kind"] for row in candidates}
+    keys = {row["key"] for row in candidates}
+    assert "hold->buy" in keys
+    assert "tiny" not in keys
+    assert "horizon_hit_rate" in kinds
+    assert "realization_lag" in kinds
+
+
+def test_slim_trajectory_evidence_for_review_omits_event_dump():
+    slim = slim_trajectory_evidence_for_review(
+        {
+            "snapshot_count": 10,
+            "transition_event_count": 383,
+            "outcome_summary": {
+                "labeled_event_count": 40,
+                "by_transition_key": {
+                    "hold->buy": {"count": 20, "mean_forward_return": -0.01, "positive_rate": 0.25}
+                },
+                "prediction_hit_rate_by_horizon": {
+                    "1w": {"scored_event_count": 30, "prediction_hit_rate": 0.4}
+                },
+                "weeks_to_realization": {"median_weeks": 1},
+            },
+            "events": [{"ticker": "A.L"}],
+        }
+    )
+    assert slim is not None
+    assert "events" not in slim
+    assert slim["labeled_event_count"] == 40
+    assert slim["model_focus_candidates"]
+    assert "assessment-model" in slim["purpose"]
+
+
 def test_run_trajectory_evidence_writes_artifacts(tmp_path: Path):
     data_dir = tmp_path / "docs" / "data"
     history = data_dir / "history"
@@ -217,6 +271,7 @@ def test_run_trajectory_evidence_writes_artifacts(tmp_path: Path):
 
     payload = run_trajectory_evidence(data_dir=data_dir, include_loser_cards=False)
     assert payload["transition_event_count"] == 1
+    assert "model_focus_candidates" in payload
     assert (data_dir / "trajectory_transitions.json").exists()
     assert (data_dir / "trajectory_boundary_watch.json").exists()
     assert (data_dir / "trajectory_evidence_review.json").exists()

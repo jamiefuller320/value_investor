@@ -116,6 +116,7 @@ def test_build_payload_includes_vision_and_regime(tmp_path: Path):
     assert payload["vision"]["phases"][0]["id"] == "v1_weekly_director"
     assert payload["regime_summary"]["recommended_exclusion_step"] == "u4"
     assert "primary_underperforming_market" in payload["regime_summary"]["flags"]
+    assert payload["trajectory_evidence"] is None
 
 
 def test_build_experiment_inventory_counts_open_tasks(tmp_path: Path):

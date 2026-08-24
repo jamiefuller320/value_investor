@@ -33,6 +33,7 @@ from value_investor.review_policy import (
     load_review_policy,
 )
 from value_investor.storage import read_json, write_json
+from value_investor.trajectory_evidence import slim_trajectory_evidence_for_review
 
 logger = logging.getLogger(__name__)
 
@@ -218,7 +219,9 @@ def build_learning_director_payload(
         "exclusion_universe": _safe_read(data_dir / "exclusion_universe_review.json"),
         "exclusion_ladder_replay": _safe_read(paper_root / "exclusion_ladder_replay_review.json"),
         "loser_snapshot_cards": _safe_read(data_dir / "loser_snapshot_cards.json"),
-        "trajectory_evidence_review": _safe_read(data_dir / "trajectory_evidence_review.json"),
+        "trajectory_evidence": slim_trajectory_evidence_for_review(
+            _safe_read(data_dir / "trajectory_evidence_review.json")
+        ),
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
         "open_fragments": list_open_fragments(store_path=DEFAULT_DEFER_STORE),
@@ -303,21 +306,31 @@ You coordinate winner-pick vs loser-filter evidence across weekly reviews. This 
 observe-only — do not propose auto-applying knobs, mutating screens, spawning tracks,
 or opening engineering PRs. Vision phase activation is **proposal-only** (human ack).
 
+Trajectory evidence exists to **highlight assessment-model weak spots** (scoring,
+conviction, timing). Scoring experiments belong in analysis-review (promotable to
+engineering). Your job is to check that analysis_review proposed those experiments
+when trajectory_evidence.model_focus_candidates is non-empty — if it missed them,
+propose an [analysis] follow-up, do not invent a parallel scoring loop.
+
 Write SEVEN plain-text sections with headings exactly as shown:
 
 REGIME & ASSUMPTION CHECK
 3–4 sentences: does exclusion alpha, cohort quality, and primary track evidence still
 hold as history extends? Cite regime_summary windows and flags. Note decay or reversal.
 Prioritise **trajectory change** (opinion-flip signals) over static historical fit.
+Cite trajectory_evidence prediction_hit_rate_by_horizon and weeks_to_realization when present.
 
 CONVERGENCE
 Reconcile top-pick (ai_judgment, conviction, sleeves) vs bottom-filter (exclusion ladder,
 universe archive). State whether strands are converging toward a bettable filtered cohort.
 Frame success as timely opinion updates (prediction_philosophy), not perfect backstory.
+If model_focus_candidates exist, say which assessment-model gap they imply.
 
 COMPLEXITY & EXPERIMENT INVENTORY
 Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer
 if over budget (max_parallel_open_experiments, max_frozen_shadow_tracks).
+Note whether analysis_review already has a scoring experiment covering the top
+trajectory focus candidate.
 
 VISION ROADMAP REVIEW
 Read vision.phases. For each planned/deferred phase recommend ACTIVATE, HOLD, or RETIRE.
@@ -328,6 +341,9 @@ Numbered top 3–5 actions. Each line MUST use:
 ``N. [area] Action title — expected learning value``
 Areas allowed: analysis, monitoring, offline_sim, paper_churn, paper_knobs, universe,
 research, ops.
+Do **not** use [scoring] here — that area is analysis-review + human promote.
+If trajectory focus candidates were not turned into analysis_tasks, add
+``N. [analysis] Ensure scoring experiment for <candidate.key> — …``
 
 HORIZON FRAGMENTS
 Up to {MAX_HORIZON_FRAGMENTS} speculative observations **not** tied to existing tasks or

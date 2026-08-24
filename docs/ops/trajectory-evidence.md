@@ -26,6 +26,17 @@ ftse-loser-snapshot-cards --data-dir docs/data   # piece 3 only
 - `timing_wait_on_buy_tier` — buy/strong_buy with timing wait
 - `avoid_recovery_candidate` — avoid with conviction ≥ 0.20
 
+## Why this exists
+
+The ledger is **not** a standalone dataset. Sunday `ftse-trajectory-evidence` ranks
+**model focus candidates** (weak transition keys, sub-chance directional hit rates,
+early-vs-price lag). Those candidates are the input to **analysis-review**, whose
+output is proposed `[scoring]` / `[offline_sim]` experiments to refine assessment
+models (conviction, timing overlay, family weights). Learning Director checks that
+analysis-review actually proposed those experiments — it does not run a second scoring loop.
+
+See [analysis-review.md](analysis-review.md) and [learning-director.md](learning-director.md).
+
 ## Outcome horizons
 
 Each transition event records what the screen asserted at `week_to` (signal, conviction,
@@ -41,8 +52,9 @@ Per event (`trajectory_transitions.json` → `outcomes`):
 | `weeks_to_realization` | First week (1–12) where cumulative return matched prediction |
 | `realization_within_12w` | Whether prediction materialized within 12 archive weeks |
 
-Review rollup adds `prediction_hit_rate_by_horizon` and `weeks_to_realization` summary
-(median lag, within-4w rate).
+Review rollup adds `prediction_hit_rate_by_horizon`, `weeks_to_realization` summary
+(median lag, within-4w rate), and **`model_focus_candidates`** — ranked weak spots
+for analysis-review scoring experiments.
 
 ## When to run
 
