@@ -26,6 +26,7 @@ from value_investor.paper_fund import (
     preview_automated_plan,
     preview_technical_plan,
     run_automated_rebalance,
+    run_graduated_rebalance,
     run_technical_pass,
 )
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
@@ -53,6 +54,11 @@ FUND_FILENAME = "automated_fund.json"
 WATCHLIST_FILENAME = "owned_watchlist.json"
 REPORT_FILENAME = "last_run.json"
 CONFIG_FILENAME = "config.json"
+
+
+def _rebalance_kwargs(selection: dict[str, Any]) -> dict[str, Any]:
+    """Strip track-mode flags that rebalance/plan helpers do not accept."""
+    return {k: v for k, v in selection.items() if k != "use_graduated_allocation"}
 
 
 @dataclass
@@ -83,6 +89,7 @@ class AutomationConfig:
     use_adjusted_signal: bool = False
     require_research_accumulate: bool = False
     use_momentum_grace: bool = False
+    use_graduated_allocation: bool = False
     # Calibration shadow — frozen knobs from knob_calibration priors (not decision-review).
     is_calibration_shadow: bool = False
     calibration_parent_track: str | None = None
@@ -115,6 +122,7 @@ class AutomationConfig:
             "use_adjusted_signal": bool(self.use_adjusted_signal),
             "require_research_accumulate": bool(self.require_research_accumulate),
             "use_momentum_grace": bool(self.use_momentum_grace),
+            "use_graduated_allocation": bool(self.use_graduated_allocation),
             "exit_confirm_screens": int(self.exit_confirm_screens),
             "reentry_cooldown_screens": int(self.reentry_cooldown_screens),
             "min_rebalance_notional_gbp": round(float(self.min_rebalance_notional_gbp), 2),
@@ -155,6 +163,7 @@ class AutomationConfig:
             use_adjusted_signal=bool(raw.get("use_adjusted_signal", False)),
             require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
             use_momentum_grace=bool(raw.get("use_momentum_grace", False)),
+            use_graduated_allocation=bool(raw.get("use_graduated_allocation", False)),
             is_calibration_shadow=bool(raw.get("is_calibration_shadow", False)),
             calibration_parent_track=(
                 str(raw["calibration_parent_track"])
@@ -184,16 +193,19 @@ AI_JUDGMENT_TRACK_ID = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_TRACK_ID = "ai_judgment_calibrated"
 RULES_TRACK_ID = "rules"
 MOMENTUM_GRACE_TRACK_ID = "momentum_grace"
+GRADUATED_ALLOCATION_TRACK_ID = "graduated_allocation"
 TECHNICAL_TRACK_ID = "technical"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
+GRADUATED_ALLOCATION_SUBDIR = "graduated_allocation"
 TECHNICAL_SUBDIR = "technical"
 LEARNING_TRACK_IDS = (
     RULES_TRACK_ID,
     AI_JUDGMENT_TRACK_ID,
     AI_JUDGMENT_CALIBRATED_TRACK_ID,
     MOMENTUM_GRACE_TRACK_ID,
+    GRADUATED_ALLOCATION_TRACK_ID,
     TECHNICAL_TRACK_ID,
 )
 
@@ -216,6 +228,17 @@ def default_momentum_grace_config(base: AutomationConfig | None = None) -> Autom
     cfg.track_label = "Screen rules + momentum grace"
     cfg.is_primary_learning_track = False
     cfg.use_momentum_grace = True
+    return cfg
+
+
+def default_graduated_allocation_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Experimental track: screen rules + trade-plan graduated entry/harvest skims."""
+    cfg = default_rules_config(base)
+    cfg.track_id = GRADUATED_ALLOCATION_TRACK_ID
+    cfg.track_label = "Screen rules + graduated allocation"
+    cfg.is_primary_learning_track = False
+    cfg.use_graduated_allocation = True
+    cfg.max_positions = max(int(cfg.max_positions), 4)
     return cfg
 
 
@@ -263,6 +286,7 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
         RULES_TRACK_ID: root,
         AI_JUDGMENT_TRACK_ID: root / AI_JUDGMENT_SUBDIR,
         MOMENTUM_GRACE_TRACK_ID: root / MOMENTUM_GRACE_SUBDIR,
+        GRADUATED_ALLOCATION_TRACK_ID: root / GRADUATED_ALLOCATION_SUBDIR,
         TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
     }
     for rank in discover_calibration_shadow_ranks(root):
@@ -742,6 +766,7 @@ def run_daily_automation(
     owned_tickers = list(fund.holdings.keys()) + [str(w["ticker"]) for w in watchlist]
     marked = refresh_candidate_marks(screen_rows, extra_tickers=owned_tickers)
     select_kwargs = config.selection_kwargs()
+    rebalance_kwargs = _rebalance_kwargs(select_kwargs)
 
     price_map_pre = _marked_price_map(marked, fund)
     nav_before = fund.nav(price_map_pre)
@@ -759,7 +784,7 @@ def run_daily_automation(
 
     plan: dict[str, Any] = {}
     if fund.config.mode == "automated":
-        plan = preview_automated_plan(fund, marked, **select_kwargs)
+        plan = preview_automated_plan(fund, marked, **rebalance_kwargs)
     elif fund.config.mode == "technical":
         plan = preview_technical_plan(fund, marked)
     alerts = [
@@ -792,9 +817,13 @@ def run_daily_automation(
         fund.apply_deposits_to(gate["local_time"])
         if fund.config.mode == "technical":
             executed = run_technical_pass(fund, marked, acted_at=gate["local_time"])
+        elif config.use_graduated_allocation:
+            executed = run_graduated_rebalance(
+                fund, marked, acted_at=gate["local_time"], **rebalance_kwargs
+            )
         else:
             executed = run_automated_rebalance(
-                fund, marked, acted_at=gate["local_time"], **select_kwargs
+                fund, marked, acted_at=gate["local_time"], **rebalance_kwargs
             )
         trades = [t.to_dict() for t in executed]
         save_automated_fund(fund_path, fund)
@@ -805,7 +834,7 @@ def run_daily_automation(
             else f"Rebalanced after open settle ({len(trades)} trade(s))."
         )
         if fund.config.mode == "automated":
-            plan = preview_automated_plan(fund, marked, **select_kwargs)
+            plan = preview_automated_plan(fund, marked, **rebalance_kwargs)
         else:
             plan = preview_technical_plan(fund, marked)
         alerts = [
@@ -963,6 +992,31 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
     mg_path.write_text(json.dumps(mg.to_dict(), indent=2), encoding="utf-8")
     configs[MOMENTUM_GRACE_TRACK_ID] = mg
 
+    ga_dir = dirs[GRADUATED_ALLOCATION_TRACK_ID]
+    ga_path = ga_dir / CONFIG_FILENAME
+    ga_dir.mkdir(parents=True, exist_ok=True)
+    if ga_path.exists():
+        ga = AutomationConfig.from_dict(json.loads(ga_path.read_text(encoding="utf-8")))
+        ga.track_id = GRADUATED_ALLOCATION_TRACK_ID
+        ga.is_primary_learning_track = False
+        ga.use_adjusted_signal = False
+        ga.require_research_accumulate = False
+        ga.use_graduated_allocation = True
+        ga.use_momentum_grace = False
+        ga.track_label = ga.track_label or "Screen rules + graduated allocation"
+        ga.timezone = rules.timezone
+        ga.market_open = rules.market_open
+        ga.settle_minutes_after_open = rules.settle_minutes_after_open
+        ga.weekdays_only = rules.weekdays_only
+        ga.trade_cost_pct = rules.trade_cost_pct
+        ga.initial_cash = rules.initial_cash
+        if int(ga.max_positions) < 4:
+            ga.max_positions = 4
+    else:
+        ga = default_graduated_allocation_config(rules)
+    ga_path.write_text(json.dumps(ga.to_dict(), indent=2), encoding="utf-8")
+    configs[GRADUATED_ALLOCATION_TRACK_ID] = ga
+
     tech_dir = dirs[TECHNICAL_TRACK_ID]
     tech_path = tech_dir / CONFIG_FILENAME
     tech_dir.mkdir(parents=True, exist_ok=True)
@@ -1105,6 +1159,7 @@ def run_learning_tracks(
         RULES_TRACK_ID,
         AI_JUDGMENT_TRACK_ID,
         MOMENTUM_GRACE_TRACK_ID,
+        GRADUATED_ALLOCATION_TRACK_ID,
     ]
     shadow_ids = [
         track_id
@@ -1148,7 +1203,8 @@ def run_learning_tracks(
             "Outperformance after costs vs market benchmark (^FTSE) on the "
             "primary AI-judgment track; rules track is the control; "
             "technical track is the timing/levels baseline; "
-            "momentum_grace is an experimental exit overlay."
+            "momentum_grace is an experimental exit overlay; "
+            "graduated_allocation tests trade-plan entry sizing and harvest skims."
         ),
         "tracks": results,
     }
