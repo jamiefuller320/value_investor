@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:30:13+00:00",
+  "updated_at": "2026-08-24T07:08:55+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3540,6 +3540,56 @@
       "status": "open",
       "source": "cursor agent \u2014 graduated tightening vs winner selection",
       "added_at": "2026-08-23T04:30:13+00:00"
+    },
+    {
+      "id": "L176",
+      "category": "later",
+      "section": "learning",
+      "title": "Conviction-weighted sleeve sizing (replace equal-weight)",
+      "summary": "When max_positions widens to 4-8, rank sleeves by conviction_score (with sector_cap floor) instead of strict NAV/positions equal-weight; cap any single name at e.g. 1.5x the median sleeve.",
+      "revisit_when": "Primary learning track has >=12 weeks marks at max_positions>=4 and cost_drag is stable; compare vs equal-weight in rebalance_log replay",
+      "tags": [
+        "capital-allocation",
+        "sizing",
+        "conviction",
+        "rebalance"
+      ],
+      "status": "open",
+      "source": "capital allocation model discussion",
+      "added_at": "2026-08-24T07:08:55+00:00"
+    },
+    {
+      "id": "L177",
+      "category": "later",
+      "section": "learning",
+      "title": "Position cycle-phase state machine for graduated entry/exit",
+      "summary": "Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance.",
+      "revisit_when": "Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess",
+      "tags": [
+        "capital-allocation",
+        "cycle",
+        "graduated-entry",
+        "graduated-exit"
+      ],
+      "status": "open",
+      "source": "capital allocation model discussion",
+      "added_at": "2026-08-24T07:08:55+00:00"
+    },
+    {
+      "id": "N38",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Live capital dynamic rotation before paper evidence thickens",
+      "summary": "Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation.",
+      "revisit_when": "Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off",
+      "tags": [
+        "capital-allocation",
+        "live-capital",
+        "stage6"
+      ],
+      "status": "open",
+      "source": "capital allocation model discussion",
+      "added_at": "2026-08-24T07:08:55+00:00"
     }
   ],
   "fragments": [
