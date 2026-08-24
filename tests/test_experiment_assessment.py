@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from value_investor.calibration_endurance import ENDURANCE_FILENAME, refresh_calibration_endurance
+from value_investor.calibration_endurance import refresh_calibration_endurance
 from value_investor.experiment_assessment import (
     map_endurance_status_to_assessment,
     refresh_experiment_assessment,

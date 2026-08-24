@@ -79,7 +79,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Unified experiment assessment ledger")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    refresh_p = sub.add_parser("refresh", parents=[common], help="Rebuild experiment assessment ledger")
+    refresh_p = sub.add_parser(
+        "refresh", parents=[common], help="Rebuild experiment assessment ledger"
+    )
     refresh_p.add_argument("--min-marks", default="4")
     refresh_p.add_argument("--min-excess", default="0.0")
     refresh_p.add_argument("--min-excess-vs-parent", default="0.0")

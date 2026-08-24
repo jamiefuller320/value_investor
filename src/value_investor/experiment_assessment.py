@@ -257,9 +257,7 @@ def refresh_experiment_assessment(
     endurance = _safe_read(paper_root / ENDURANCE_FILENAME)
 
     experiments: list[dict[str, Any]] = []
-    experiments.extend(
-        _experiments_from_calibration_endurance(endurance, min_marks=min_marks)
-    )
+    experiments.extend(_experiments_from_calibration_endurance(endurance, min_marks=min_marks))
     experiments.extend(
         _experiments_from_exclusion_shadows(
             paper_root,

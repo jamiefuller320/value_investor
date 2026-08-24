@@ -12,8 +12,8 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
-from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.experiment_assessment import slim_experiment_assessment_for_review
+from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 from value_investor.trajectory_evidence import slim_trajectory_evidence_for_review
 
