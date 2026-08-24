@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "spawned_at": "2026-08-24T08:26:46.903005+00:00",
+  "spawned_at": "2026-08-24T08:26:47.861893+00:00",
   "parent_track_id": "ai_judgment",
-  "shadow_track_id": "ai_judgment_calibrated",
-  "bootstrap_rank": 1,
+  "shadow_track_id": "ai_judgment_calibrated_r2",
+  "bootstrap_rank": 2,
   "priors_source": "output/paper_automation/knob_calibration_priors.json",
   "priors_calibrated_at": "2026-08-23T08:55:02.847887+00:00",
   "ranking_mode": "full_period_retrospective",
@@ -12,7 +12,7 @@
       "max_positions": 5,
       "skip_timing_wait": true,
       "min_conviction": 0.0,
-      "sector_cap": 0.2
+      "sector_cap": 0.25
     },
     "composite_score": 0.6489,
     "blended_score": 0.1549,
@@ -20,7 +20,8 @@
     "confidence": "low",
     "changed_vs_current": {
       "max_positions": 5,
-      "min_conviction": 0.0
+      "min_conviction": 0.0,
+      "sector_cap": 0.25
     },
     "score_gap_vs_runner_up": 0.0,
     "cohort_selection": {
@@ -34,7 +35,7 @@
     },
     "fitness_delta_vs_current": 0.0099,
     "rationale": "Top full-period retrospective score (portfolio replay + cohort + winner/loser catch/exclude). Seed competing shadow sims for forward endurance; do not auto-apply to the live learning loop.",
-    "rank": 1,
+    "rank": 2,
     "full_period_score": -0.023,
     "winner_loser": {
       "top_buy_tier": [
@@ -77,7 +78,7 @@
       "observation_count": 158,
       "universe_observation_slots": 190
     },
-    "shadow_track_id": "ai_judgment_calibrated"
+    "shadow_track_id": "ai_judgment_calibrated_r2"
   },
   "parent_knobs_at_spawn": {
     "max_positions": 3,
@@ -89,7 +90,7 @@
   "shadow_knobs": {
     "skip_timing_wait": true,
     "min_conviction": 0.0,
-    "sector_cap": 0.2,
+    "sector_cap": 0.25,
     "use_adjusted_signal": true,
     "require_research_accumulate": true,
     "use_momentum_grace": false,
@@ -99,7 +100,9 @@
     "min_rebalance_notional_gbp": 10.0
   },
   "changed_vs_parent": {
-    "max_positions": 5
+    "max_positions": 5,
+    "min_conviction": 0.0,
+    "sector_cap": 0.25
   },
   "confidence": "low",
   "full_period_score": -0.023,
@@ -145,6 +148,6 @@
     "universe_observation_slots": 190
   },
   "force_respawn": false,
-  "respawned_fund": false,
+  "respawned_fund": true,
   "note": "Frozen calibration shadow — decision-review --apply is disabled. Compare forward endurance vs primary ai_judgment and ^FTSE before promotion."
 }

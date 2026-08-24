@@ -1,23 +1,25 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-08-21T08:27:55.271075+00:00",
+  "updated_at": "2026-08-24T08:28:22.140782+00:00",
   "paper_root": "output/paper_automation",
-  "benchmark_note": "excess_after_costs comes from decision_review when available",
+  "benchmark_note": "When endurance_zero_datum exists, survivor gates use post-seed excess/marks only; lifetime excess remains diagnostic.",
   "gates": {
     "min_marks_for_survivor": 4,
     "min_excess_vs_market": 0.0,
-    "promotion": "Survivors are starting priors for human learning-loop refinement only — never auto-apply to ai_judgment/config.json"
+    "promotion": "Survivors are starting priors for human learning-loop refinement only — never auto-apply to ai_judgment/config.json",
+    "post_seed_required_for_clean_oos": true
   },
   "primary": {
     "track_id": "ai_judgment",
     "metrics": {
       "total_return": -0.1666,
       "cost_drag": 0.2125,
-      "excess_after_costs": -0.1768,
-      "equity_marks": 15,
+      "excess_after_costs": -0.1833,
+      "equity_marks": 16,
       "trade_count": 29,
       "epoch_excess_after_costs": null,
+      "epoch_equity_marks": 0,
       "source": "decision_review"
     }
   },
@@ -26,10 +28,11 @@
     "metrics": {
       "total_return": -0.2472,
       "cost_drag": 0.2897,
-      "excess_after_costs": -0.2684,
-      "equity_marks": 16,
+      "excess_after_costs": -0.2749,
+      "equity_marks": 17,
       "trade_count": 48,
-      "epoch_excess_after_costs": -0.1191,
+      "epoch_excess_after_costs": -0.1254,
+      "epoch_equity_marks": 8,
       "source": "decision_review"
     }
   },
@@ -38,29 +41,91 @@
       "rank": 1,
       "shadow_track_id": "ai_judgment_calibrated",
       "shadow_dir": "output/paper_automation/ai_judgment_calibrated",
-      "spawned_at": "2026-08-21T08:26:37.744308+00:00",
+      "spawned_at": "2026-08-24T08:26:46.903005+00:00",
       "knobs": {
-        "max_positions": 3,
+        "max_positions": 5,
         "skip_timing_wait": true,
         "min_conviction": 0.0,
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "full_period_score": null,
+      "full_period_score": -0.023,
       "confidence": "low",
       "metrics": {
-        "total_return": -0.0548,
-        "cost_drag": 0.0482,
-        "excess_after_costs": -0.0567,
-        "equity_marks": 4,
-        "trade_count": 6,
+        "total_return": -0.0629,
+        "cost_drag": 0.0658,
+        "excess_after_costs": -0.0712,
+        "equity_marks": 5,
+        "trade_count": 10,
         "epoch_excess_after_costs": null,
+        "epoch_equity_marks": null,
         "source": "decision_review"
       },
-      "excess_vs_primary": 0.1201,
-      "excess_vs_rules": 0.2117,
+      "excess_vs_primary": 0.1121,
+      "excess_vs_rules": 0.2037,
       "status": "failed",
-      "provenance_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
+      "provenance_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json",
+      "gate_uses_post_seed": false
+    },
+    {
+      "rank": 2,
+      "shadow_track_id": "ai_judgment_calibrated_r2",
+      "shadow_dir": "output/paper_automation/ai_judgment_calibrated_r2",
+      "spawned_at": "2026-08-24T08:26:47.861893+00:00",
+      "knobs": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.25,
+        "exit_confirm_screens": 2
+      },
+      "full_period_score": -0.023,
+      "confidence": "low",
+      "metrics": {
+        "total_return": -0.0291,
+        "cost_drag": 0.0291,
+        "excess_after_costs": null,
+        "equity_marks": 2,
+        "trade_count": 5,
+        "epoch_excess_after_costs": null,
+        "epoch_equity_marks": null,
+        "source": "decision_review"
+      },
+      "excess_vs_primary": null,
+      "excess_vs_rules": null,
+      "status": "observing",
+      "provenance_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
+      "gate_uses_post_seed": false
+    },
+    {
+      "rank": 3,
+      "shadow_track_id": "ai_judgment_calibrated_r3",
+      "shadow_dir": "output/paper_automation/ai_judgment_calibrated_r3",
+      "spawned_at": "2026-08-24T08:26:47.950815+00:00",
+      "knobs": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "exit_confirm_screens": 2
+      },
+      "full_period_score": -0.023,
+      "confidence": "low",
+      "metrics": {
+        "total_return": -0.0291,
+        "cost_drag": 0.0291,
+        "excess_after_costs": null,
+        "equity_marks": 2,
+        "trade_count": 5,
+        "epoch_excess_after_costs": null,
+        "epoch_equity_marks": null,
+        "source": "decision_review"
+      },
+      "excess_vs_primary": null,
+      "excess_vs_rules": null,
+      "status": "observing",
+      "provenance_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
+      "gate_uses_post_seed": false
     }
   ],
   "survivors": []
