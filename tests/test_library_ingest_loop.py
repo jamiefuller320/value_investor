@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from value_investor.library_ingest_loop import (
+    _filing_coverage_for_ticker,
     select_library_ingest_targets,
 )
 from value_investor.storage import write_json
@@ -67,3 +68,63 @@ def test_select_library_ingest_targets_prioritizes_unmeasured(tmp_path: Path):
     )
     assert targets[0].ticker == "AAA.DE"
     assert targets[0].reason == "unmeasured"
+
+
+def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "euro_depth"
+    ticker = "PHIA.AS"
+
+    stale_dir = root / "markets" / "aex" / "screen" / "research" / ticker / "sources" / "filings"
+    stale_dir.mkdir(parents=True)
+    write_json(
+        stale_dir / "filings_index.json",
+        {"summary": {"total": 0, "with_body": 0}, "filings": []},
+        compact=False,
+    )
+
+    canonical_dir = (
+        root / "markets" / market / "screen" / "research" / ticker / "sources" / "filings"
+    )
+    canonical_dir.mkdir(parents=True)
+    write_json(
+        canonical_dir / "filings_index.json",
+        {"summary": {"total": 2, "with_body": 2}, "filings": [{}, {}]},
+        compact=False,
+    )
+
+    coverage = _filing_coverage_for_ticker(
+        ticker,
+        library_root=root,
+        market_id=market,
+    )
+    assert coverage == {"filings_total": 2, "filings_with_body": 2}
+
+
+def test_filing_coverage_uses_best_fallback_when_canonical_missing(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "euro_depth"
+    ticker = "PHIA.AS"
+
+    stale_dir = root / "markets" / "aex" / "screen" / "research" / ticker / "sources" / "filings"
+    stale_dir.mkdir(parents=True)
+    write_json(
+        stale_dir / "filings_index.json",
+        {"summary": {"total": 0, "with_body": 0}, "filings": []},
+        compact=False,
+    )
+
+    other_dir = root / "markets" / "dax" / "screen" / "research" / ticker / "sources" / "filings"
+    other_dir.mkdir(parents=True)
+    write_json(
+        other_dir / "filings_index.json",
+        {"summary": {"total": 4, "with_body": 3}, "filings": [{}, {}, {}, {}]},
+        compact=False,
+    )
+
+    coverage = _filing_coverage_for_ticker(
+        ticker,
+        library_root=root,
+        market_id=market,
+    )
+    assert coverage == {"filings_total": 4, "filings_with_body": 3}

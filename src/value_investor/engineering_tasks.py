@@ -742,6 +742,8 @@ def compile_ingest_engineering_task_from_trial(
 
     run_id = str(trial.get("id") or "")
     ticker = str(trial.get("ticker") or "").strip().upper()
+    params = trial.get("params") or {}
+    market_id = str(params.get("market_id") or "").strip()
     existing_payload = load_engineering_tasks(committed_path)
     existing_rows = list(existing_payload.get("tasks") or [])
     for row in existing_rows:
@@ -774,6 +776,12 @@ def compile_ingest_engineering_task_from_trial(
         f"(chain {chain_round}/{MAX_GAP_CLOSURE_CHAIN_ROUNDS}: "
         f"{stats['fetched']}/{stats['attempted']} bodies, run {run_id})"
     )
+    if market_id:
+        title = (
+            f"Close library ingest gaps for {market_id} / {ticker} "
+            f"(chain {chain_round}/{MAX_GAP_CLOSURE_CHAIN_ROUNDS}: "
+            f"{stats['fetched']}/{stats['attempted']} improved, run {run_id})"
+        )[:160]
     task = EngineeringTask(
         id=f"eng-{run_stamp}-{seq:02d}",
         area="ingest",
@@ -795,8 +803,12 @@ def compile_ingest_engineering_task_from_trial(
             "chain_round": chain_round,
             "tickers": [ticker],
             "ticker": ticker,
+            "market_id": market_id or None,
+            "library_market": market_id or None,
+            "universe": "library" if market_id else "ftse350",
             "rerun_ingest_gap_closure": True,
             "rerun_ingest_trial": True,
+            "rerun_library_ingest_loop": bool(market_id),
             "refetch_attempted": stats["attempted"],
             "refetch_fetched": stats["fetched"],
             "gap_closure_params": dict(trial.get("params") or {}),

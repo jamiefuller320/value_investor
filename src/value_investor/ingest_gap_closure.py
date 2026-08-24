@@ -150,16 +150,22 @@ def gap_closure_ticker_has_gaps(
     ticker: str,
     *,
     data_dir: Path = Path("docs/data"),
+    market_id: str | None = None,
 ) -> bool:
+    token = str(ticker or "").strip().upper()
+    if not token:
+        return False
+    market = str(market_id or "").strip() or None
+    if market:
+        from value_investor.library_ingest_escalation import library_ingest_ticker_has_gaps
+
+        return library_ingest_ticker_has_gaps(token, market_id=market)
     from value_investor.research.ingest_improvement import (
         _filing_coverage,
         _has_outstanding_ingest_gap,
     )
     from value_investor.research.store import ResearchStore
 
-    token = str(ticker or "").strip().upper()
-    if not token:
-        return False
     store = ResearchStore(data_dir)
     coverage = _filing_coverage(store, token, data_dir)
     return _has_outstanding_ingest_gap(coverage)
@@ -278,7 +284,8 @@ def should_auto_compile_gap_engineering(
     params = run.get("params") or {}
     if not params.get("require_outstanding_gaps"):
         return False, "not_gap_run"
-    if not gap_closure_ticker_has_gaps(ticker, data_dir=data_dir):
+    market_id = str(params.get("market_id") or "").strip() or None
+    if not gap_closure_ticker_has_gaps(ticker, data_dir=data_dir, market_id=market_id):
         return False, "gaps_closed"
 
     chain_root = gap_closure_chain_root_id(run, path=effective_runs_path)
@@ -297,7 +304,7 @@ def should_auto_compile_gap_engineering(
 
     outcome = run.get("outcome") or {}
     if int(outcome.get("delta_filings_with_body") or 0) > 0:
-        if not gap_closure_ticker_has_gaps(ticker, data_dir=data_dir):
+        if not gap_closure_ticker_has_gaps(ticker, data_dir=data_dir, market_id=market_id):
             return False, "gaps_closed_after_improvement"
     per_ticker = outcome.get("per_ticker") or []
     if per_ticker and per_ticker[0].get("improved"):
@@ -424,16 +431,21 @@ def finalize_pending_gap_closure_run(
         "results": getattr(ingest_summary, "results", None) if ingest_summary else None,
     }
     if ingest_summary is not None and hasattr(ingest_summary, "results"):
-        outcome["per_ticker"] = [
-            {
-                "ticker": r.get("ticker"),
-                "with_body_before": r.get("with_body_before"),
-                "with_body_after": r.get("with_body_after"),
-                "improved": r.get("improved"),
-            }
-            for r in (ingest_summary.results or [])
-            if isinstance(r, dict)
-        ]
+        per_ticker: list[dict[str, Any]] = []
+        for r in ingest_summary.results or []:
+            if not isinstance(r, dict):
+                continue
+            before = r.get("before") if isinstance(r.get("before"), dict) else {}
+            after = r.get("after") if isinstance(r.get("after"), dict) else {}
+            per_ticker.append(
+                {
+                    "ticker": r.get("ticker"),
+                    "with_body_before": r.get("with_body_before", before.get("filings_with_body")),
+                    "with_body_after": r.get("with_body_after", after.get("filings_with_body")),
+                    "improved": r.get("improved"),
+                }
+            )
+        outcome["per_ticker"] = per_ticker
 
     row["status"] = _STATUS_PENDING
     row["completed_at"] = datetime.now(UTC).isoformat()
@@ -531,6 +543,18 @@ def mark_trial_reviewed(
 
 def gap_closure_refetch_stats(run: dict[str, Any]) -> dict[str, int]:
     """Sum refetch attempted/fetched across primary ingest-improvement steps."""
+    params = run.get("params") or {}
+    if str(params.get("market_id") or "").strip():
+        outcome = run.get("outcome") or {}
+        per_ticker = list(outcome.get("per_ticker") or [])
+        if per_ticker:
+            attempted = len(per_ticker)
+            fetched = sum(1 for row in per_ticker if row.get("improved"))
+            return {"attempted": attempted, "fetched": fetched}
+        results = list(outcome.get("results") or [])
+        attempted = len(results)
+        fetched = sum(1 for row in results if isinstance(row, dict) and row.get("improved"))
+        return {"attempted": attempted, "fetched": fetched}
     outcome = run.get("outcome") or {}
     results = outcome.get("results") or []
     if not results or not isinstance(results[0], dict):

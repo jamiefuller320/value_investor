@@ -404,3 +404,35 @@ def test_build_engineering_queue_dashboard_lists_open_and_pr_open(tmp_path: Path
         "eng-20260804-02",
     ]
     assert payload["attention_tasks"][0]["id"] == "eng-20260804-03"
+
+
+def test_ingest_gap_closure_rerun_dispatch_library_market(tmp_path: Path):
+    from value_investor.engineering_queue import ingest_gap_closure_rerun_dispatch
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260824-01",
+                        "area": "ingest",
+                        "status": "merged",
+                        "evidence": {
+                            "rerun_ingest_gap_closure": True,
+                            "rerun_library_ingest_loop": True,
+                            "market_id": "euro_depth",
+                            "ticker": "SHELL.AS",
+                            "gap_closure_run_id": "igc-20260824-01",
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = ingest_gap_closure_rerun_dispatch("eng-20260824-01", tasks_path=tasks_path)
+    assert result["should_dispatch"] is True
+    assert result["rerun_workflow"] == "euro-ingest-loop.yml"
+    assert result["market_id"] == "euro_depth"
+    assert result["pin_ticker"] == "SHELL.AS"

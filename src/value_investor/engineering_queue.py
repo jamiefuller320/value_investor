@@ -674,7 +674,10 @@ def ingest_gap_closure_rerun_dispatch(
     if not ticker:
         return {"should_dispatch": False, "reason": "no ticker on gap-closure task"}
     run_id = str(evidence.get("gap_closure_run_id") or evidence.get("trial_id") or "")
-    return {
+    market_id = str(evidence.get("market_id") or evidence.get("library_market") or "").strip()
+    rerun_library = bool(evidence.get("rerun_library_ingest_loop")) or bool(market_id)
+    workflow = "euro-ingest-loop.yml" if rerun_library else "ingest-loop.yml"
+    payload: dict[str, Any] = {
         "should_dispatch": True,
         "reason": "gap-closure verification rerun after engineering merge",
         "pin_ticker": ticker,
@@ -682,7 +685,11 @@ def ingest_gap_closure_rerun_dispatch(
         "parent_trial_id": run_id,
         "trial_parent_id": run_id,
         "task_id": task_id,
+        "rerun_workflow": workflow,
     }
+    if market_id:
+        payload["market_id"] = market_id
+    return payload
 
 
 def ingest_trial_rerun_dispatch(

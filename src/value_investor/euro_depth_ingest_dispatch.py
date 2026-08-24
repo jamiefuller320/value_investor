@@ -9,10 +9,7 @@ from typing import Any
 
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
-from value_investor.library_ingest_loop import (
-    _filing_coverage_for_ticker,
-    load_library_buy_tier_reports,
-)
+from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
 from value_investor.market_shard_phases import evaluate_market_phase
 from value_investor.storage import read_json, write_json
 
@@ -54,59 +51,6 @@ EURO_INGEST_CRON_TITLES = {
     "afternoon": "Euro ingest loop (weekday afternoon)",
     "ladder_weekday": "FTSE orchestrator (weekday ladder)",
 }
-
-
-def snapshot_library_buy_tier_filing_health(
-    market_id: str,
-    *,
-    library_root: Path = DEFAULT_LIBRARY_ROOT,
-) -> dict[str, Any]:
-    """Summarise buy-tier filing body coverage for a library market screen."""
-    library_root = Path(library_root)
-    try:
-        reports = load_library_buy_tier_reports(library_root, market_id)
-    except FileNotFoundError:
-        return {
-            "snapshot_at": datetime.now(UTC).isoformat(),
-            "market_id": market_id,
-            "buy_tier_count": 0,
-            "unmeasured_buy_tier": 0,
-            "zero_body_buy_tier": 0,
-            "thin_body_buy_tier": 0,
-            "unmeasured_tickers": [],
-            "zero_body_tickers": [],
-            "error": "screen shortlist missing",
-        }
-
-    unmeasured_tickers: list[str] = []
-    zero_body_tickers: list[str] = []
-    thin_body_tickers: list[str] = []
-    for report in reports:
-        coverage = _filing_coverage_for_ticker(
-            report.ticker,
-            library_root=library_root,
-            market_id=market_id,
-        )
-        total = int(coverage.get("filings_total") or 0)
-        with_body = int(coverage.get("filings_with_body") or 0)
-        if total == 0:
-            unmeasured_tickers.append(report.ticker)
-        elif with_body == 0:
-            zero_body_tickers.append(report.ticker)
-        elif with_body < max(3, total // 2):
-            thin_body_tickers.append(report.ticker)
-
-    return {
-        "snapshot_at": datetime.now(UTC).isoformat(),
-        "market_id": market_id,
-        "buy_tier_count": len(reports),
-        "unmeasured_buy_tier": len(unmeasured_tickers),
-        "zero_body_buy_tier": len(zero_body_tickers),
-        "thin_body_buy_tier": len(thin_body_tickers),
-        "unmeasured_tickers": unmeasured_tickers[:25],
-        "zero_body_tickers": zero_body_tickers[:25],
-        "thin_body_tickers": thin_body_tickers[:25],
-    }
 
 
 def evaluate_euro_ingest_dispatch(

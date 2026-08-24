@@ -255,6 +255,28 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_loop_p.add_argument("--max-targets", type=int, default=12)
     ingest_loop_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
     ingest_loop_p.add_argument("--max-bodies", type=int, default=20)
+    ingest_loop_p.add_argument("--stall-runs", type=int, default=2)
+    ingest_loop_p.add_argument("--micro-compile-max-tasks", type=int, default=1)
+    ingest_loop_p.add_argument(
+        "--record-gap-closure",
+        action="store_true",
+        help="Record run in ingest_gap_closure_runs.json for horizon/analysis review",
+    )
+    ingest_loop_p.add_argument(
+        "--record-trial",
+        action="store_true",
+        help="Deprecated alias for --record-gap-closure",
+    )
+    ingest_loop_p.add_argument("--gap-closure-title", default="")
+    ingest_loop_p.add_argument("--gap-closure-summary", default="")
+    ingest_loop_p.add_argument(
+        "--gap-closure-review-trigger",
+        default="horizon_scan",
+        choices=["horizon_scan", "analysis_review", "both"],
+    )
+    ingest_loop_p.add_argument("--gap-closure-parent-id", default="")
+    ingest_loop_p.add_argument("--gap-closure-trigger", default="")
+    ingest_loop_p.add_argument("--pin-ticker", default="")
     ingest_loop_p.add_argument("--json", action="store_true")
     ingest_loop_p.set_defaults(func=cmd_library_ingest_loop)
 
@@ -1051,26 +1073,60 @@ def cmd_shard_paper(args: argparse.Namespace) -> int:
     return 0 if all("error" not in row for row in payloads.values()) else 1
 
 
+def _library_gap_closure_spec(args: argparse.Namespace) -> dict[str, Any] | None:
+    if not (args.record_gap_closure or args.record_trial):
+        return None
+    spec: dict[str, Any] = {
+        "title": args.gap_closure_title or "Library ingest gap-closure run",
+        "summary": args.gap_closure_summary or "",
+        "review_trigger": args.gap_closure_review_trigger,
+        "parent_run_id": args.gap_closure_parent_id or "",
+    }
+    if args.gap_closure_trigger:
+        spec["trigger"] = args.gap_closure_trigger
+    return spec
+
+
 def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
     from value_investor.library_ingest_loop import run_library_ingest_loop
 
+    pin_tickers = [args.pin_ticker.strip().upper()] if str(args.pin_ticker or "").strip() else None
     result = run_library_ingest_loop(
         args.market,
         library_root=args.root,
         max_targets=args.max_targets,
         max_runtime_seconds=args.max_runtime_seconds,
         max_bodies=args.max_bodies,
+        stall_runs=args.stall_runs,
+        micro_compile_max_tasks=args.micro_compile_max_tasks,
+        pin_tickers=pin_tickers,
+        record_gap_closure=_library_gap_closure_spec(args),
     )
     payload = result.to_dict()
     if args.json:
         print(json.dumps(payload, indent=2))
     else:
+        gaps_before = int(result.health_before.get("unmeasured_buy_tier") or 0) + int(
+            result.health_before.get("zero_body_buy_tier") or 0
+        )
+        gaps_after = int(result.health_after.get("unmeasured_buy_tier") or 0) + int(
+            result.health_after.get("zero_body_buy_tier") or 0
+        )
         print(
             f"{args.market}: targets={len(result.targets)} improved={len(result.improved)} "
-            f"partial={result.partial}"
+            f"filing_gaps {gaps_before} → {gaps_after}; stalled={result.stalled}; "
+            f"micro_compiled={result.micro_compiled}; "
+            f"gap_closure_compiled={result.gap_closure_compiled}; partial={result.partial}"
         )
         for ticker in result.improved:
             print(f"  improved {ticker}")
+        if result.micro_compiled:
+            print(f"  added tasks: {', '.join(result.micro_compile.get('task_ids') or [])}")
+        if result.gap_closure_compiled:
+            print(
+                f"  gap-closure tasks: "
+                f"{', '.join(result.gap_closure_compile.get('task_ids') or [])}"
+            )
         for err in result.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not result.errors or result.improved else 1

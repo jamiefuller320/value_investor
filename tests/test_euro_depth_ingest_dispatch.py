@@ -63,7 +63,7 @@ def test_snapshot_library_buy_tier_filing_health_counts_gaps(tmp_path: Path):
             compact=False,
         )
     with patch(
-        "value_investor.euro_depth_ingest_dispatch.load_library_buy_tier_reports",
+        "value_investor.library_ingest_loop.load_library_buy_tier_reports",
         return_value=[_report("AAA.DE"), _report("BBB.DE"), _report("CCC.DE")],
     ):
         health = snapshot_library_buy_tier_filing_health(market, library_root=root)
