@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T16:07:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T16:41:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -241,6 +241,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L180 | **Learning director promote path for ops/universe tasks** | learning_director_tasks can set promote_to=engineering_queue for ops (via shared _promote_target_for_area) but CLI has no promote command. Either add ftse-learning-director promote for ops-only, or force all director tasks to manual and route scoring exclusively through analysis. | learning_director_tasks accumulate open ops experiments that humans keep re-keying into engineering queue |
 | L183 | **Promote path for paper-learning and learning-director tasks** | paper_learning_tasks and learning_director_tasks compile to JSON with no promote CLI; only analysis-review and horizon-scan can enqueue engineering. Either add promote helpers for ops/manual gates or register explicit weekly checklist triage. | Human ops review finds untriaged PLR/director tasks accumulating for 3+ Sundays |
 | L185 | **Keep PLR and director task queues checklist-triaged not promote CLI** | Sunday checklist now requires human triage of paper_learning_tasks and learning_director_tasks. A promote CLI is only worth building if untriaged tasks accumulate for 3+ Sundays after this gate is live. | Untriaged PLR/director tasks accumulate for 3+ Sundays after sunday-triage-plr-director-tasks checklist is in use |
+| L188 | **Sunday review weekly tables on dashboard** | Publish slim week-by-week rows from exclusion_universe_archive (u4 weekly: exclusion_alpha, filtered vs baseline vs benchmark), learning_tracks_review per-track excess, and regime readiness flags into latest.json; render sortable tables on Analysis or Automation tab. Persist dated review snapshots (extend publish archive or docs/data/review_history/) so rows accumulate beyond the current Sunday overwrite. | Human Sunday review habit forms and JSON file hopping becomes friction — or when regime_slices_8_16_24 phase activates |
 
 ---
 
