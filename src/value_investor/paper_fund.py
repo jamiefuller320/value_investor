@@ -1468,6 +1468,237 @@ def run_automated_rebalance(
     return trades
 
 
+def run_graduated_rebalance(
+    fund: PaperFund,
+    candidates: list[dict[str, Any]],
+    *,
+    acted_at: str | None = None,
+    skip_timing_wait: bool = True,
+    min_conviction: float = 0.0,
+    sector_cap: float = 1.0,
+    use_adjusted_signal: bool = False,
+    require_research_accumulate: bool = False,
+    use_momentum_grace: bool = False,
+    exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS,
+    reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
+    min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    capital_allocation_config: Any | None = None,
+) -> list[PaperTrade]:
+    """
+    Graduated rebalance: trade-plan-weighted entries and urgency-based harvest skims.
+
+    Still uses top-N conviction selection and churn guards; differs from equal-weight
+    rebalance in per-sleeve target sizing and partial trims on extended winners.
+    """
+    from value_investor.capital_allocation import (
+        CapitalAllocationConfig,
+        entry_appetite,
+        entry_sleeve_fraction,
+        exit_urgency,
+        skim_fraction,
+        unrealized_gain_pct,
+    )
+
+    if fund.config.mode != "automated":
+        raise ValueError("Graduated rebalance requires an automated fund")
+    alloc_cfg = capital_allocation_config or CapitalAllocationConfig()
+    when = acted_at or _utcnow_iso()
+    fund.apply_deposits_to(when)
+    targets = select_automated_targets(
+        candidates,
+        max_positions=fund.config.max_positions,
+        skip_timing_wait=skip_timing_wait,
+        min_conviction=min_conviction,
+        sector_cap=sector_cap,
+        use_adjusted_signal=use_adjusted_signal,
+        require_research_accumulate=require_research_accumulate,
+    )
+    target_tickers = {str(row["ticker"]) for row in targets}
+    by_ticker = {str(row.get("ticker")): row for row in candidates if row.get("ticker")}
+    price_map = {
+        str(row["ticker"]): float(_candidate_price(row) or 0)
+        for row in candidates
+        if _candidate_price(row)
+    }
+    for ticker, position in fund.holdings.items():
+        if ticker not in price_map and position.avg_cost > 0:
+            price_map[ticker] = float(position.avg_cost)
+    trades: list[PaperTrade] = []
+
+    grace_kept: set[str] = set()
+    grace_force_exit: set[str] = set()
+    sold_this_pass: set[str] = set()
+    if use_momentum_grace:
+        grace_kept, grace_transitions = _evaluate_momentum_grace_holdings(
+            fund,
+            candidates,
+            target_tickers,
+            use_adjusted_signal=use_adjusted_signal,
+            acted_at=when,
+            mutate=True,
+        )
+        grace_force_exit = {
+            str(item["ticker"])
+            for item in grace_transitions
+            if item.get("action") in {"grace_exit", "sell"}
+        }
+    _, sell_tickers = resolve_automated_holdings_to_exit(
+        fund,
+        target_tickers=target_tickers,
+        grace_kept=grace_kept,
+        exit_confirm_screens=exit_confirm_screens,
+        mutate_state=True,
+        force_exit_tickers=grace_force_exit,
+    )
+
+    for ticker in list(fund.holdings):
+        if ticker not in sell_tickers:
+            continue
+        price = price_map.get(ticker) or fund.holdings[ticker].avg_cost
+        if not price or price <= 0:
+            continue
+        note = (
+            "Momentum grace exit"
+            if fund.holdings[ticker].momentum_grace
+            else "Graduated exit — left target set"
+        )
+        trades.append(
+            fund.sell(
+                ticker=ticker,
+                price=price,
+                sizing_mode="shares",
+                amount=fund.holdings[ticker].shares,
+                note=note,
+                acted_at=when,
+                prices_for_nav=price_map,
+            )
+        )
+        sold_this_pass.add(ticker)
+        mark_reentry_cooldown(fund, ticker, reentry_cooldown_screens)
+
+    if not targets:
+        fund.record_mark(price_map, acted_at=when, note="Graduated rebalance (no targets)")
+        return trades
+
+    nav = fund.nav(price_map)
+    target_each = nav / len(targets)
+
+    # Harvest skims on in-target holdings approaching cycle end (extended / wait timing).
+    for ticker, position in list(fund.holdings.items()):
+        if ticker in sell_tickers or ticker not in target_tickers:
+            continue
+        price = price_map.get(ticker) or position.avg_cost
+        if not price or price <= 0:
+            continue
+        row = by_ticker.get(ticker) or {}
+        current_value = position.shares * float(price)
+        if current_value <= target_each * REBALANCE_TRIM_TOLERANCE:
+            continue
+        urgency = exit_urgency(
+            row=row,
+            mark=float(price),
+            avg_cost=float(position.avg_cost or 0),
+            in_target_set=True,
+            exit_streak=0,
+            momentum_grace=bool(position.momentum_grace),
+            use_adjusted_signal=use_adjusted_signal,
+        )
+        gain = unrealized_gain_pct(mark=float(price), avg_cost=float(position.avg_cost or 0))
+        if urgency < alloc_cfg.skim_urgency_threshold:
+            continue
+        if gain < alloc_cfg.harvest_gain_pct_floor:
+            continue
+        excess = current_value - target_each
+        trim_amount = excess * skim_fraction(urgency, config=alloc_cfg)
+        if not _rebalance_adjustment_worthwhile(trim_amount, min_rebalance_notional_gbp):
+            continue
+        trades.append(
+            fund.sell(
+                ticker=ticker,
+                price=float(price),
+                sizing_mode="cash",
+                amount=trim_amount,
+                note="Graduated harvest skim",
+                acted_at=when,
+                prices_for_nav=price_map,
+            )
+        )
+
+    ranked_targets = sorted(
+        targets,
+        key=lambda row: entry_appetite(row, use_adjusted_signal=use_adjusted_signal),
+        reverse=True,
+    )
+    for row in ranked_targets:
+        ticker = str(row["ticker"])
+        price = float(_candidate_price(row) or 0)
+        if price <= 0:
+            continue
+        if reentry_blocked(fund, ticker):
+            continue
+        sleeve_fraction = entry_sleeve_fraction(
+            row,
+            config=alloc_cfg,
+            use_adjusted_signal=use_adjusted_signal,
+        )
+        sleeve_target = target_each * sleeve_fraction
+        current = fund.holdings.get(ticker)
+        current_value = (current.shares * price) if current else 0.0
+
+        if current and current_value > sleeve_target * REBALANCE_TRIM_TOLERANCE:
+            excess = current_value - sleeve_target
+            if _rebalance_adjustment_worthwhile(excess, min_rebalance_notional_gbp):
+                trades.append(
+                    fund.sell(
+                        ticker=ticker,
+                        price=price,
+                        sizing_mode="cash",
+                        amount=excess,
+                        note="Graduated trim to sleeve target",
+                        acted_at=when,
+                        prices_for_nav=price_map,
+                    )
+                )
+                current = fund.holdings.get(ticker)
+                current_value = (current.shares * price) if current else 0.0
+
+        shortfall = sleeve_target - current_value
+        if shortfall <= REBALANCE_CASH_FLOOR or fund.cash <= REBALANCE_CASH_FLOOR:
+            continue
+        is_new_sleeve = current_value <= 0
+        if not is_new_sleeve and not _rebalance_adjustment_worthwhile(
+            shortfall, min_rebalance_notional_gbp
+        ):
+            continue
+        budget = min(shortfall, fund.cash)
+        try:
+            trades.append(
+                fund.buy(
+                    ticker=ticker,
+                    price=price,
+                    sizing_mode="cash",
+                    amount=budget,
+                    name=str(row.get("name") or ticker),
+                    sector=str(row.get("sector") or ""),
+                    stop_loss=_optional_float(
+                        (row.get("trade_plan") or {}).get("tactical_stop_loss")
+                    ),
+                    take_profit=_optional_float(
+                        (row.get("trade_plan") or {}).get("tactical_take_profit")
+                    ),
+                    note="Graduated buy",
+                    acted_at=when,
+                    prices_for_nav=price_map,
+                )
+            )
+        except ValueError:
+            continue
+
+    tick_reentry_cooldowns(fund, skip_tickers=sold_this_pass)
+    fund.record_mark(price_map, acted_at=when, note="Graduated rebalance")
+    return trades
+
+
 def run_technical_pass(
     fund: PaperFund,
     candidates: list[dict[str, Any]],

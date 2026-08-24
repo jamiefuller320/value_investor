@@ -57,6 +57,9 @@ builds; it proposes activation with explicit triggers cited from JSON.
 
 | Phase | What | Activate when |
 |-------|------|----------------|
+| `graduated_allocation_track` | Trade-plan starter sizing + harvest skims (v1 shadow) | **Active** — compare vs rules after ≥8 marks |
+| `capital_rotation_coordinator` | Swap-score gate for sell→buy rotations | Exit-timing cohorts + graduated track history |
+| `conviction_weighted_sizing` | Conviction-weighted sleeves vs equal-weight | Graduated track cost_drag stable |
 | `regime_slices_8_16_24` | Rolling 8/16/24-week metric slices | ≥16 archive weeks |
 | `filtered_cohort_track` | 15–20 EW sleeve cohort after ladder filter | u4 stable + replay gate |
 | `loser_pattern_lab` | PIT loser feature attribution | Cohort track or ≥20 history runs |

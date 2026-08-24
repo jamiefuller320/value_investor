@@ -29,6 +29,37 @@ def _open_tasks(tasks_path: Path, *, source: str | None = None) -> list[dict[str
     return [row for row in rows if str(row.get("status") or "proposed") == "proposed"]
 
 
+def _experimental_track_inventory(paper_root: Path) -> list[dict[str, Any]]:
+    """Non-shadow experimental paper tracks (momentum grace, graduated allocation, …)."""
+    inventory: list[dict[str, Any]] = []
+    root = Path(paper_root)
+    if not root.exists():
+        return inventory
+
+    for config_path in sorted(root.glob("**/config.json")):
+        try:
+            cfg = read_json(config_path)
+        except (OSError, ValueError):
+            continue
+        if not isinstance(cfg, dict):
+            continue
+        if cfg.get("is_calibration_shadow") or cfg.get("is_exclusion_shadow"):
+            continue
+        if not (cfg.get("use_momentum_grace") or cfg.get("use_graduated_allocation")):
+            continue
+        inventory.append(
+            {
+                "track_id": cfg.get("track_id"),
+                "track_label": cfg.get("track_label"),
+                "path": str(config_path.parent.relative_to(root)),
+                "use_momentum_grace": bool(cfg.get("use_momentum_grace")),
+                "use_graduated_allocation": bool(cfg.get("use_graduated_allocation")),
+                "max_positions": cfg.get("max_positions"),
+            }
+        )
+    return inventory
+
+
 def _shadow_track_inventory(paper_root: Path) -> list[dict[str, Any]]:
     inventory: list[dict[str, Any]] = []
     root = Path(paper_root)
@@ -92,6 +123,8 @@ def build_experiment_inventory(
         },
         "shadow_tracks": _shadow_track_inventory(paper_root),
         "shadow_track_count": len(_shadow_track_inventory(paper_root)),
+        "experimental_paper_tracks": _experimental_track_inventory(paper_root),
+        "experimental_paper_track_count": len(_experimental_track_inventory(paper_root)),
     }
 
 

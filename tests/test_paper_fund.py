@@ -580,3 +580,54 @@ def test_min_notional_skips_dust_trim_and_top_up():
         reentry_cooldown_screens=0,
     )
     assert trades == []
+
+
+def test_graduated_rebalance_starter_size_below_full_equal_weight():
+    from value_investor.paper_fund import run_graduated_rebalance
+
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Graduated",
+            mode="automated",
+            initial_cash=1000.0,
+            trade_cost_pct=0.0,
+            max_positions=2,
+        )
+    )
+    candidates = [
+        {
+            "ticker": "AAA.L",
+            "name": "Alpha",
+            "signal": "buy",
+            "conviction_score": 0.8,
+            "price": 100.0,
+            "timing_signal": "wait",
+            "trade_plan": {"core_allocation_pct": 0.5},
+        },
+        {
+            "ticker": "BBB.L",
+            "name": "Beta",
+            "signal": "strong_buy",
+            "conviction_score": 0.9,
+            "price": 50.0,
+            "timing_signal": "accumulate",
+            "trade_plan": {"core_allocation_pct": 0.75},
+        },
+    ]
+    trades = run_graduated_rebalance(
+        fund,
+        candidates,
+        acted_at="2026-07-20T09:15:00+01:00",
+        skip_timing_wait=False,
+        exit_confirm_screens=0,
+        reentry_cooldown_screens=0,
+    )
+    buys = [t for t in trades if t.side == "buy"]
+    assert len(buys) == 2
+    aaa = next(t for t in buys if t.ticker == "AAA.L")
+    bbb = next(t for t in buys if t.ticker == "BBB.L")
+    assert aaa.gross < bbb.gross
+    nav = fund.nav({"AAA.L": 100.0, "BBB.L": 50.0})
+    equal_each = nav / 2
+    assert aaa.gross < equal_each * 0.55
+    assert bbb.gross > equal_each * 0.6

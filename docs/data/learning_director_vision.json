@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "title": "Learning Director — capability roadmap",
-  "updated_at": "2026-08-23T00:00:00+00:00",
+  "updated_at": "2026-08-24T00:00:00+00:00",
   "north_star": "Converge winner-picking (top) and loser-filtering (bottom) into a bettable model: progressively narrow the eligible pool into a mostly-decent cohort, then allocate sleeves — with regime monitoring so assumptions expire safely.",
   "prediction_philosophy": {
     "primary_aim": "Predict future growth in value of individual stocks — not perfect historical explanation.",
@@ -74,6 +74,30 @@
       "summary": "Blend exclude_rate and catch_rate in calibration/endurance, not winner-only cohort fitness.",
       "revisit_when": "filtered_cohort_track has >= 8 epoch marks",
       "dependencies": ["filtered_cohort_track"]
+    },
+    {
+      "id": "graduated_allocation_track",
+      "status": "active",
+      "label": "Graduated allocation paper track (v1)",
+      "summary": "Experimental screen-rules book: trade-plan starter sizing, urgency-based harvest skims, max_positions=4. Algorithmic rebalance only; compare churn and excess vs rules/momentum_grace.",
+      "revisit_when": "Track has >=8 weekly marks; review cost_drag and swap-rotation cohorts before v2 swap-score gate.",
+      "dependencies": ["v1_weekly_director", "exit_timing_cohorts"]
+    },
+    {
+      "id": "capital_rotation_coordinator",
+      "status": "planned",
+      "label": "Swap-score capital rotation gate",
+      "summary": "Coordinate exits and entries in one rebalance pass; rotate only when swap_score clears 2x round-trip cost margin.",
+      "revisit_when": "exit_timing_cohorts readiness gates met (>=10 closed swap rotations) and graduated_allocation_track has >=4 rebalance_log entries",
+      "dependencies": ["graduated_allocation_track"]
+    },
+    {
+      "id": "conviction_weighted_sizing",
+      "status": "planned",
+      "label": "Conviction-weighted sleeves (replace equal-weight denominator)",
+      "summary": "Size sleeves by conviction_score with sector_cap floor; cap any name at ~1.5x median sleeve.",
+      "revisit_when": "graduated_allocation_track >=8 epoch marks and cost_drag stable vs rules control",
+      "dependencies": ["graduated_allocation_track", "capital_rotation_coordinator"]
     },
     {
       "id": "super_director_auto_promote",
