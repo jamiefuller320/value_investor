@@ -202,6 +202,14 @@ jobs:
           print("Published paper automation (+ AI judgment track) artifacts")
           PY
 
+      - name: Refresh unified experiment assessment ledger
+        if: ${{ github.event.inputs.surveillance_only != 'true' }}
+        run: |
+          ftse-experiment-assess refresh \
+            --data-dir docs/data \
+            --paper-root docs/data/paper_automation \
+            --sync-task-status || true
+
       - name: Commit automation artifacts
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
