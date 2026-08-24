@@ -111,8 +111,8 @@ jobs:
             --paper-root docs/data/paper_automation \
             --data-dir docs/data || true
 
-      - name: Loser snapshot cards (avoid + failed-buy alumni)
-        run: ftse-loser-snapshot-cards --data-dir docs/data || true
+      - name: Trajectory evidence (transitions, boundary, loser cards, outcomes)
+        run: ftse-trajectory-evidence --data-dir docs/data || true
 
       - name: Commit knob bootstrap artifacts
         # Persist even when the modelling agent is skipped — otherwise Sunday
@@ -132,6 +132,10 @@ jobs:
             docs/data/paper_automation/ai_judgment_exclusion_*/**
             docs/data/loser_snapshot_cards.json
             docs/data/loser_snapshot_cards.md
+            docs/data/trajectory_transitions.json
+            docs/data/trajectory_boundary_watch.json
+            docs/data/trajectory_evidence_review.json
+            docs/data/trajectory_evidence_review.md
           skip_fetch: false
 
       - name: Check analysis inputs
