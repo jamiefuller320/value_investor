@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-24T07:45:04+00:00",
+  "updated_at": "2026-08-24T08:33:58+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3623,6 +3623,57 @@
       "status": "open",
       "source": "cursor agent: PIT turn-by-turn strategy Q&A (PR #331)",
       "added_at": "2026-08-24T07:45:04+00:00"
+    },
+    {
+      "id": "L179",
+      "category": "later",
+      "section": "research",
+      "title": "Wire exit-timing archive into Sunday analysis-review.yml",
+      "summary": "exit_timing_near_miss is consumed by analysis payload when present, but no workflow runs ftse-exit-timing-archive. Schedule observe-only generation alongside trajectory/exclusion on Sundays once history is thick enough.",
+      "revisit_when": "history_run_count >= 8 and exit_timing live cohorts show readiness flags",
+      "tags": [
+        "exit_timing",
+        "archive_sim",
+        "analysis_review",
+        "info_action_gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
+      "added_at": "2026-08-24T08:33:57+00:00"
+    },
+    {
+      "id": "L180",
+      "category": "later",
+      "section": "ops",
+      "title": "Learning director promote path for ops/universe tasks",
+      "summary": "learning_director_tasks can set promote_to=engineering_queue for ops (via shared _promote_target_for_area) but CLI has no promote command. Either add ftse-learning-director promote for ops-only, or force all director tasks to manual and route scoring exclusively through analysis.",
+      "revisit_when": "learning_director_tasks accumulate open ops experiments that humans keep re-keying into engineering queue",
+      "tags": [
+        "learning_director",
+        "promote",
+        "engineering",
+        "info_action_gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
+      "added_at": "2026-08-24T08:33:58+00:00"
+    },
+    {
+      "id": "N40",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Auto-spawn exclusion ladder shadows from Sunday readiness",
+      "summary": "exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet \u2014 keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows.",
+      "revisit_when": "exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate",
+      "tags": [
+        "exclusion",
+        "shadow",
+        "human_gate",
+        "info_action_gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
+      "added_at": "2026-08-24T08:33:58+00:00"
     }
   ],
   "fragments": [
