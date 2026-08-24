@@ -101,6 +101,8 @@ jobs:
             --paper-root docs/data/paper_automation \
             --parent-track ai_judgment || true
           ftse-knob-calibrate endurance --paper-root docs/data/paper_automation || true
+          ftse-experiment-assess refresh --data-dir docs/data \
+            --paper-root docs/data/paper_automation || true
 
       - name: Exclusion-universe archive priors (observe-only)
         run: ftse-exclusion-universe-archive --output-dir docs/data || true
@@ -129,6 +131,7 @@ jobs:
           file_pattern: |
             docs/data/paper_automation/knob_calibration_priors.json
             docs/data/paper_automation/calibration_shadow_endurance.json
+            docs/data/experiment_assessment.json
             docs/data/paper_automation/ai_judgment_calibrated/**
             docs/data/paper_automation/ai_judgment_calibrated_r*/**
             docs/data/exclusion_universe_archive.json

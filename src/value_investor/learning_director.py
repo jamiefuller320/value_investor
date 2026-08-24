@@ -21,6 +21,7 @@ from value_investor.analysis_review import (
 )
 from value_investor.deferred_ideas import DEFAULT_STORE as DEFAULT_DEFER_STORE
 from value_investor.deferred_ideas import add_fragment, list_open_fragments, write_markdown
+from value_investor.experiment_assessment import slim_experiment_assessment_for_review
 from value_investor.learning_director_regime import (
     VISION_PATH,
     build_experiment_inventory,
@@ -216,6 +217,9 @@ def build_learning_director_payload(
         "analysis_review": _safe_read(data_dir / "analysis_review.json"),
         "paper_learning_review": _safe_read(data_dir / "paper_learning_review.json"),
         "prior_learning_director_review": _safe_read(COMMITTED_REVIEW_PATH),
+        "experiment_assessment": slim_experiment_assessment_for_review(
+            _safe_read(data_dir / "experiment_assessment.json")
+        ),
         "exclusion_universe": _safe_read(data_dir / "exclusion_universe_review.json"),
         "exclusion_ladder_replay": _safe_read(paper_root / "exclusion_ladder_replay_review.json"),
         "loser_snapshot_cards": _safe_read(data_dir / "loser_snapshot_cards.json"),
@@ -330,6 +334,7 @@ If model_focus_candidates exist, say which assessment-model gap they imply.
 COMPLEXITY & EXPERIMENT INVENTORY
 Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer
 if over budget (max_parallel_open_experiments, max_frozen_shadow_tracks).
+Cite experiment_assessment.summary and any recommend rows (human ack only — never auto-apply).
 Note whether analysis_review already has a scoring experiment covering the top
 trajectory focus candidate.
 
