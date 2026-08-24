@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-08-24T10:31:31.875459+00:00",
+  "updated_at": "2026-08-24T12:17:11.097698+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -17,14 +17,21 @@
     ],
     "promotion": "recommend rows are human-gate only — never auto-apply knobs, config, or engineering tasks"
   },
+  "context": {
+    "history_run_count": 10,
+    "backtest_run_count": 10,
+    "trajectory_labeled_events": 336,
+    "exit_shadow_closed_total": 0,
+    "experimental_track_count": 1
+  },
   "summary": {
-    "continue": 0,
-    "proposed": 4,
-    "observing": 8,
-    "fail": 1,
     "recommend": 0,
+    "observing": 8,
+    "proposed": 2,
+    "fail": 2,
+    "continue": 2,
     "human_ack_pending": 0,
-    "total": 13
+    "total": 14
   },
   "experiments": [
     {
@@ -121,16 +128,95 @@
       "evidence_path": "docs/data/paper_automation/ai_judgment_exclusion_u4/exclusion_provenance.json"
     },
     {
+      "experiment_id": "momentum_grace",
+      "kind": "experimental_paper_track",
+      "title": "Screen rules + momentum grace",
+      "area": "paper_churn",
+      "pipeline": "paper_automation",
+      "status": "fail",
+      "source_status": "failed",
+      "human_ack_required": false,
+      "track_id": "momentum_grace",
+      "gate_marks": 13,
+      "gate_excess_after_costs": -0.0241,
+      "excess_vs_primary": 0.1592,
+      "forward_evidence": {
+        "source": "learning_track_metrics",
+        "use_momentum_grace": true,
+        "use_graduated_allocation": false
+      },
+      "evidence_path": "docs/data/paper_automation/momentum_grace/config.json"
+    },
+    {
       "experiment_id": "ana-20260728-01",
       "kind": "analysis_task",
       "title": "Seed second+ archived weekly run and replay rules vs ai_judgment vs momentum_grace sim tracks — unlock excess_return, trade_count, and total_costs comparisons once run_count ≥ 2.",
       "area": "offline_sim",
       "pipeline": "analysis_review",
-      "status": "proposed",
+      "status": "continue",
       "source_status": "proposed",
       "human_ack_required": false,
       "task_status": "proposed",
       "promote_to": "manual",
+      "forward_evidence": {
+        "trajectory": {
+          "labeled_event_count": 336,
+          "model_focus_candidates": [
+            {
+              "kind": "transition_key",
+              "key": "hold->buy",
+              "horizon": "1w",
+              "count": 20,
+              "positive_rate": 0.25,
+              "mean_forward_return": -0.008424,
+              "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "buy->strong_buy",
+              "horizon": "1w",
+              "count": 12,
+              "positive_rate": 0.25,
+              "mean_forward_return": -0.00492,
+              "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "signal_unchanged",
+              "horizon": "1w",
+              "count": 239,
+              "positive_rate": 0.3431,
+              "mean_forward_return": -0.002598,
+              "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+            }
+          ]
+        },
+        "archive": {
+          "history_run_count": 10,
+          "backtest_run_count": 10,
+          "simulation_ready": true
+        },
+        "loser_cards": {
+          "top_failed_families": [
+            [
+              "quality",
+              37
+            ],
+            [
+              "dividend",
+              35
+            ],
+            [
+              "garp",
+              28
+            ],
+            [
+              "risk",
+              21
+            ]
+          ]
+        }
+      },
       "evidence_path": "docs/data/analysis_tasks.json"
     },
     {
@@ -144,6 +230,7 @@
       "human_ack_required": false,
       "task_status": "proposed",
       "promote_to": "decision_review_manual",
+      "forward_evidence": null,
       "evidence_path": "docs/data/analysis_tasks.json"
     },
     {
@@ -157,6 +244,12 @@
       "human_ack_required": false,
       "task_status": "proposed",
       "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": false
+        }
+      },
       "evidence_path": "docs/data/analysis_tasks.json"
     },
     {
@@ -165,11 +258,17 @@
       "title": "Historical-analysis window bootstrap: archive two consecutive weekly runs with overlay_comparison populated — test whether research_overlay / adjusted_signal ranks predict forward 4w/12w excess once t",
       "area": "analysis",
       "pipeline": "analysis_review",
-      "status": "proposed",
+      "status": "observing",
       "source_status": "proposed",
       "human_ack_required": false,
       "task_status": "proposed",
       "promote_to": "manual",
+      "forward_evidence": {
+        "archive": {
+          "history_run_count": 10,
+          "backtest_run_count": 10
+        }
+      },
       "evidence_path": "docs/data/analysis_tasks.json"
     },
     {
@@ -183,6 +282,12 @@
       "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": false
+        }
+      },
       "evidence_path": "docs/data/learning_director_tasks.json"
     },
     {
@@ -196,6 +301,12 @@
       "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": false
+        }
+      },
       "evidence_path": "docs/data/learning_director_tasks.json"
     },
     {
@@ -204,11 +315,70 @@
       "title": "Archive-lab full-period rebalance replay (L111 gap) — expected learning value: reconcile +2.19% 7d signal excess (`analysis_review.sections.signal_backtest_findings`) with −17.68% primary excess (`reg",
       "area": "offline_sim",
       "pipeline": "learning_director",
-      "status": "observing",
+      "status": "continue",
       "source_status": "accepted",
       "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
+      "forward_evidence": {
+        "trajectory": {
+          "labeled_event_count": 336,
+          "model_focus_candidates": [
+            {
+              "kind": "transition_key",
+              "key": "hold->buy",
+              "horizon": "1w",
+              "count": 20,
+              "positive_rate": 0.25,
+              "mean_forward_return": -0.008424,
+              "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "buy->strong_buy",
+              "horizon": "1w",
+              "count": 12,
+              "positive_rate": 0.25,
+              "mean_forward_return": -0.00492,
+              "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "signal_unchanged",
+              "horizon": "1w",
+              "count": 239,
+              "positive_rate": 0.3431,
+              "mean_forward_return": -0.002598,
+              "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+            }
+          ]
+        },
+        "archive": {
+          "history_run_count": 10,
+          "backtest_run_count": 10,
+          "simulation_ready": true
+        },
+        "loser_cards": {
+          "top_failed_families": [
+            [
+              "quality",
+              37
+            ],
+            [
+              "dividend",
+              35
+            ],
+            [
+              "garp",
+              28
+            ],
+            [
+              "risk",
+              21
+            ]
+          ]
+        }
+      },
       "evidence_path": "docs/data/learning_director_tasks.json"
     },
     {
@@ -222,6 +392,12 @@
       "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": false
+        }
+      },
       "evidence_path": "docs/data/learning_director_tasks.json"
     },
     {
@@ -235,14 +411,35 @@
       "human_ack_required": false,
       "task_status": "done",
       "promote_to": "manual",
+      "forward_evidence": {
+        "archive": {
+          "history_run_count": 10,
+          "backtest_run_count": 10
+        }
+      },
       "evidence_path": "docs/data/learning_director_tasks.json"
     }
   ],
   "recommendations": [],
+  "task_sync": {
+    "updated": [
+      "ana-20260728-01",
+      "ana-20260728-02",
+      "ana-20260728-04",
+      "ana-20260728-05",
+      "ldr-20260823-01",
+      "ldr-20260823-02",
+      "ldr-20260823-03",
+      "ldr-20260823-04",
+      "ldr-20260823-05"
+    ],
+    "skipped": []
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
     "paper_learning_tasks": "docs/data/paper_learning_tasks.json",
-    "learning_director_tasks": "docs/data/learning_director_tasks.json"
+    "learning_director_tasks": "docs/data/learning_director_tasks.json",
+    "trajectory_evidence_review": "docs/data/trajectory_evidence_review.json"
   }
 }
