@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T08:56:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T09:16:59+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -48,7 +48,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-24 | Auto-merge is scoped to narrow CI-fix tasks; ingest/scoring engineering PRs stay human-merge — implicit throughput ceiling on self-improvement. | auto_merge, engineering, policy |
 | frag-20260811-25 | Research spend scales with researched-name count R not universe N — widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates. | research, cost, research_cap |
 | frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
-| frag-20260824-01 | Discrete specialist pipelines feeding director oversight is the right shape: analysis owns scoring/filter experiments; PLR owns churn; director audits and budgets. Avoid giving the director a second scoring queue. | learning-director, architecture |
 
 ---
 
@@ -91,6 +90,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N36 | **Do not auto-promote surviving shadows into ai_judgment** | Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. | Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors |
 | N38 | **Live capital dynamic rotation before paper evidence thickens** | Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation. | Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off |
 | N39 | **Full-universe deep memo PIT replay** | Re-running full research memos for every name on each archived weekly turn is out of scope; use logged screen/overlay fields at t instead (see ftse-trajectory-evidence). | Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features) |
+| N40 | **Auto-spawn exclusion ladder shadows from Sunday readiness** | exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet — keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows. | exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate |
+| N41 | **Auto-spawn exclusion ladder shadow when ready** | ready_for_shadow_spawn is computed Sunday but spawn-shadow stays manual; auto-spawn would couple lab noise to weekday tracks before human ack. Keep CLI spawn + register checklist gate instead. | Exclusion u4 shadow has been manually spawned and observed for >=4 weeks with clear ops load |
 
 ---
 
@@ -236,7 +237,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
 | L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
 | L173 | **Shared ticker metrics/filings store keyed by Yahoo symbol** | Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker. | euro_depth maintenance plus component market maintenance shows material duplicate Yahoo fetch cost or disk bloat, or filing deepen needs one home per issuer |
-| L179 | **Keep PLR and director task queues checklist-triaged not promote CLI** | Sunday checklist now requires human triage of paper_learning_tasks and learning_director_tasks. A promote CLI is only worth building if untriaged tasks accumulate for 3+ Sundays after this gate is live. | Untriaged PLR/director tasks accumulate for 3+ Sundays after sunday-triage-plr-director-tasks checklist is in use |
+| L180 | **Learning director promote path for ops/universe tasks** | learning_director_tasks can set promote_to=engineering_queue for ops (via shared _promote_target_for_area) but CLI has no promote command. Either add ftse-learning-director promote for ops-only, or force all director tasks to manual and route scoring exclusively through analysis. | learning_director_tasks accumulate open ops experiments that humans keep re-keying into engineering queue |
+| L183 | **Promote path for paper-learning and learning-director tasks** | paper_learning_tasks and learning_director_tasks compile to JSON with no promote CLI; only analysis-review and horizon-scan can enqueue engineering. Either add promote helpers for ops/manual gates or register explicit weekly checklist triage. | Human ops review finds untriaged PLR/director tasks accumulating for 3+ Sundays |
+| L185 | **Keep PLR and director task queues checklist-triaged not promote CLI** | Sunday checklist now requires human triage of paper_learning_tasks and learning_director_tasks. A promote CLI is only worth building if untriaged tasks accumulate for 3+ Sundays after this gate is live. | Untriaged PLR/director tasks accumulate for 3+ Sundays after sunday-triage-plr-director-tasks checklist is in use |
 
 ---
 
