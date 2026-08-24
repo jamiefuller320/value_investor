@@ -41,6 +41,7 @@ If history is still seeding, the workflow logs `payload` readiness and skips the
 
 | File | Purpose |
 |------|---------|
+| `docs/data/experiment_assessment.json` | Unified experiment loop (continue / fail / recommend) |
 | `docs/data/analysis_review.md` | Human-readable synthesis |
 | `docs/data/analysis_review.json` | Structured sections + metadata |
 | `docs/data/analysis_tasks.json` | Proposed experiments (`status: proposed`) |
@@ -70,6 +71,13 @@ The same Sunday payload includes slim:
 | `exit_timing_cohorts` / `exit_timing_near_miss` | ≥1 `[paper_churn]` / `[offline_sim]` when probability readiness fires |
 
 Cap five experiment lines; overflow goes to **DEFER**.
+
+## Experiment assessment ledger
+
+Sunday workflow runs `ftse-experiment-assess refresh` after knob endurance. The payload
+includes slim `experiment_assessment` (`summary`, `recommendations`, `by_status`).
+When `recommendations` is non-empty, include a `[monitoring]` line — human ack only;
+never auto-apply. See [experiment-assessment.md](experiment-assessment.md).
 
 ## Ingest trials
 

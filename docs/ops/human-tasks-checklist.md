@@ -25,7 +25,7 @@ most automation — this list is what still needs a human.
 |------|-----|-----|
 | Read **analysis review** synthesis (`analysis_review.md`) | Human | [analysis-review.md](analysis-review.md#artifacts) |
 | Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
-| Review **competing shadow endurance** (`calibration_shadow_endurance.json`) | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
+| Review **unified experiment assessment** (`experiment_assessment.json`) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
 | **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Triage **analysis_tasks** — promote scoring/ingest via `ftse-analysis-review promote` | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
@@ -37,7 +37,7 @@ most automation — this list is what still needs a human.
 
 Do **not** promote calibration priors to `ai_judgment/config.json` until:
 
-1. A competing shadow is **surviving** in `calibration_shadow_endurance.json` (or equivalent forward evidence)
+1. A shadow has status **recommend** in `experiment_assessment.json` (or **surviving** in `calibration_shadow_endurance.json`)
 2. `ready_for_priors: true` / `ready_for_shadow_bootstrap` look sound in `knob_calibration_priors.json`
 3. `score_gap_vs_runner_up ≥ 0.005`
 4. `recommended_prior.confidence` is acceptable (not `insufficient` / thin `low`)

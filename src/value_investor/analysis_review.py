@@ -12,6 +12,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.experiment_assessment import slim_experiment_assessment_for_review
 from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 from value_investor.trajectory_evidence import slim_trajectory_evidence_for_review
@@ -399,6 +400,9 @@ def build_analysis_payload(
     )
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
+    experiment_assessment = slim_experiment_assessment_for_review(
+        _safe_read(data_dir / "experiment_assessment.json")
+    )
 
     model_weights = _safe_read(output_dir / "model_weights.json") or _safe_read(
         data_dir / "model_weights.json"
@@ -434,6 +438,7 @@ def build_analysis_payload(
         "loser_snapshot_cards": loser_snapshot_cards,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
+        "experiment_assessment": experiment_assessment,
         "model_weights": {
             "sample_count": (model_weights or {}).get("sample_count"),
             "updated_at": (model_weights or {}).get("updated_at"),
@@ -704,6 +709,9 @@ Action contracts (include a line when the trigger fires — do not invent metric
    [paper_churn] or [offline_sim] hold-vs-swap experiment citing closed counts.
 6. If ingest_trials_pending_review is non-empty → ≥1 [ingest] line with trial id(s) and
    PROMOTE / DEFER / DISMISS.
+7. If experiment_assessment.recommendations is non-empty → ≥1 [monitoring] line listing
+   experiment_id(s) with status recommend and human_ack_required (never auto-apply;
+   cite gate_marks / gate_excess_after_costs when present).
 
 Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 
