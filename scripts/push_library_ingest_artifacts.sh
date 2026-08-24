@@ -17,7 +17,9 @@ stage_library_ingest_artifacts() {
   git add docs/data/library/euro_ingest_health_log.json \
     docs/data/library/euro_ingest_summary.json \
     docs/data/library/euro_ingest_dispatch.json \
-    docs/data/library/markets 2>/dev/null || true
+    docs/data/library/markets \
+    docs/data/engineering_tasks.json \
+    docs/data/ingest_gap_closure_runs.json 2>/dev/null || true
 }
 
 STASH_LABEL="library-ingest-artifacts-$(date +%s)"

@@ -31,6 +31,26 @@ on:
         description: "Re-run even if already succeeded today or dispatch is idle"
         type: boolean
         default: false
+      record_gap_closure:
+        description: "Record run in ingest_gap_closure_runs.json for horizon/analysis review"
+        type: boolean
+        default: false
+      record_trial:
+        description: "Deprecated alias for record_gap_closure"
+        type: boolean
+        default: false
+      pin_ticker:
+        description: "Pin ingest-loop to one buy-tier ticker (gap-closure reruns)"
+        type: string
+        default: ""
+      gap_closure_parent_id:
+        description: "Parent gap-closure run id when recording a verification rerun"
+        type: string
+        default: ""
+      gap_closure_trigger:
+        description: "Orchestration trigger (weekly_followup, eng_idle, verification_rerun, manual)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -160,6 +180,32 @@ jobs:
           fi
           if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
             ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
+          fi
+          RECORD_GAP_CLOSURE="${{ github.event.inputs.record_gap_closure }}"
+          if [ "$RECORD_GAP_CLOSURE" != "true" ] && [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
+            RECORD_GAP_CLOSURE=true
+          fi
+          PARENT_ID="${{ github.event.inputs.gap_closure_parent_id }}"
+          TRIGGER="${{ github.event.inputs.gap_closure_trigger }}"
+          if [ "$RECORD_GAP_CLOSURE" = "true" ]; then
+            ARGS+=(--record-gap-closure)
+            if [ -n "$PARENT_ID" ]; then
+              ARGS+=(--gap-closure-title "Library ingest gap-closure rerun after engineering")
+              ARGS+=(--gap-closure-summary "Verification rerun for gap-closure run $PARENT_ID")
+              ARGS+=(--gap-closure-parent-id "$PARENT_ID")
+              ARGS+=(--gap-closure-trigger verification_rerun)
+            else
+              ARGS+=(--gap-closure-title "Single-ticker library ingest gap-closure pass")
+              ARGS+=(--gap-closure-summary "Highest-priority buy-tier name with outstanding library filing gaps.")
+              if [ -n "$TRIGGER" ]; then
+                ARGS+=(--gap-closure-trigger "$TRIGGER")
+              fi
+            fi
+            ARGS+=(--gap-closure-review-trigger horizon_scan)
+          fi
+          PIN="${{ github.event.inputs.pin_ticker }}"
+          if [ -n "$PIN" ]; then
+            ARGS+=(--pin-ticker "$PIN")
           fi
           ftse-library "${ARGS[@]}" | tee /tmp/euro_ingest_loop.json
 
