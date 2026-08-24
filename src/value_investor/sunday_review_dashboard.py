@@ -276,7 +276,11 @@ def upsert_review_history(
     weeks.append(snapshot)
     weeks.sort(key=lambda row: str(row.get("week_ending") or ""), reverse=True)
 
-    limit = keep_weeks if keep_weeks is not None else int(history.get("keep_weeks") or DEFAULT_HISTORY_KEEP_WEEKS)
+    limit = (
+        keep_weeks
+        if keep_weeks is not None
+        else int(history.get("keep_weeks") or DEFAULT_HISTORY_KEEP_WEEKS)
+    )
     weeks = weeks[: max(1, limit)]
 
     return {
