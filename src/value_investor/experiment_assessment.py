@@ -395,10 +395,7 @@ def _experiments_from_experimental_tracks(
 
 
 def _task_text(task: dict[str, Any]) -> str:
-    return " ".join(
-        str(task.get(key) or "")
-        for key in ("title", "summary", "area")
-    ).lower()
+    return " ".join(str(task.get(key) or "") for key in ("title", "summary", "area")).lower()
 
 
 def _assess_task_row(
