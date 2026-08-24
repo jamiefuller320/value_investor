@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T07:45:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T08:33:58+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -90,6 +90,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N36 | **Do not auto-promote surviving shadows into ai_judgment** | Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. | Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors |
 | N38 | **Live capital dynamic rotation before paper evidence thickens** | Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation. | Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off |
 | N39 | **Full-universe deep memo PIT replay** | Re-running full research memos for every name on each archived weekly turn is out of scope; use logged screen/overlay fields at t instead (see ftse-trajectory-evidence). | Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features) |
+| N40 | **Auto-spawn exclusion ladder shadows from Sunday readiness** | exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet — keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows. | exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate |
 
 ---
 
@@ -206,6 +207,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L160 | **Gap-fill: ingest — Parse IFRS 16 lease maturity tables and covenant language from annual re** | Parse IFRS 16 lease maturity tables and covenant language from annual report PDF notes (referenced as note 20 in FY2025 body but not extracted) into structured fields for leverage red-flag checks. | After next weekly email gap-fill pass confirms the gap persists |
 | L174 | **Commercial EU regulatory filing API fallback** | If in-house Euronext/ESEF/direct-exchange fetch still leaves large indexed-without-body gaps on euro_depth buy-tier, evaluate a paid regulatory news or filing API (LSEG, Refinitiv, etc.) for headline+PDF retrieval — only after DIY provider MVP is measured. | euro_depth buy-tier has ≥30 memos but filings_with_body/total ratio still below 0.5 after 4 weeks of weekday EU ingest-loop |
 | L175 | **Graduated loser-filter tightening ladder experiment** | Complement winner-selection calibration with an observe-only paper track or offline_sim that steps portfolio knobs tighter on a schedule (or when bottom-quartile buy-tier names enter the book), ranking primarily on exclude_rate and bottom_buy_tier_held rather than catch_rate. Mirrors momentum_grace track pattern; keeps N3 screen thresholds frozen. | Primary AI track has ≥8 acted rebalance_log entries and knob calibration still shows negligible min_conviction/sector_cap discrimination |
+| L179 | **Wire exit-timing archive into Sunday analysis-review.yml** | exit_timing_near_miss is consumed by analysis payload when present, but no workflow runs ftse-exit-timing-archive. Schedule observe-only generation alongside trajectory/exclusion on Sundays once history is thick enough. | history_run_count >= 8 and exit_timing live cohorts show readiness flags |
 
 ### Ops / reliability
 
@@ -235,6 +237,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
 | L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
 | L173 | **Shared ticker metrics/filings store keyed by Yahoo symbol** | Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker. | euro_depth maintenance plus component market maintenance shows material duplicate Yahoo fetch cost or disk bloat, or filing deepen needs one home per issuer |
+| L180 | **Learning director promote path for ops/universe tasks** | learning_director_tasks can set promote_to=engineering_queue for ops (via shared _promote_target_for_area) but CLI has no promote command. Either add ftse-learning-director promote for ops-only, or force all director tasks to manual and route scoring exclusively through analysis. | learning_director_tasks accumulate open ops experiments that humans keep re-keying into engineering queue |
 
 ---
 
