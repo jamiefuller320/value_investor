@@ -65,7 +65,9 @@ def test_build_transition_events_detects_signal_upgrade():
 
 
 def test_build_transition_events_multi_horizon_returns():
-    rows_hold = [{"ticker": "A.L", "signal": "hold", "conviction_score": 0.2, "timing_signal": "wait"}]
+    rows_hold = [
+        {"ticker": "A.L", "signal": "hold", "conviction_score": 0.2, "timing_signal": "wait"}
+    ]
     rows_buy = [
         {
             "ticker": "A.L",

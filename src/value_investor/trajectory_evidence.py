@@ -316,9 +316,7 @@ def _outcome_bucket(values: list[float]) -> dict[str, Any]:
 def _direction_buckets(events: list[dict[str, Any]], horizon_weeks: int) -> dict[str, Any]:
     return_key = f"forward_return_{horizon_weeks}w"
     labeled = [
-        event
-        for event in events
-        if (event.get("outcomes") or {}).get(return_key) is not None
+        event for event in events if (event.get("outcomes") or {}).get(return_key) is not None
     ]
     by_key: dict[str, list[float]] = {}
     upgrades: list[float] = []
@@ -334,9 +332,7 @@ def _direction_buckets(events: list[dict[str, Any]], horizon_weeks: int) -> dict
             downgrades.append(ret)
     return {
         "labeled_event_count": len(labeled),
-        "by_transition_key": {
-            key: _outcome_bucket(vals) for key, vals in sorted(by_key.items())
-        },
+        "by_transition_key": {key: _outcome_bucket(vals) for key, vals in sorted(by_key.items())},
         "upgrade_events": _outcome_bucket(upgrades),
         "downgrade_events": _outcome_bucket(downgrades),
     }
