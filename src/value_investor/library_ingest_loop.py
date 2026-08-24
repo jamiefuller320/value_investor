@@ -84,25 +84,82 @@ def _research_roots_for_market(library_root: Path, market_id: str) -> list[Path]
     ]
 
 
+def _canonical_filing_index_path(
+    ticker: str,
+    *,
+    library_root: Path,
+    market_id: str,
+) -> Path:
+    return (
+        screen_dir_for(library_root, market_id)
+        / "research"
+        / ticker
+        / "sources"
+        / "filings"
+        / "filings_index.json"
+    )
+
+
+def _coverage_from_filing_index_path(path: Path) -> dict[str, int] | None:
+    try:
+        read_json(path)
+    except (OSError, ValueError, TypeError):
+        return None
+    summary = _coverage_from_index(path)
+    return {
+        "filings_total": int(summary.get("filings_total") or 0),
+        "filings_with_body": int(summary.get("filings_with_body") or 0),
+    }
+
+
+def _best_filing_coverage(paths: list[Path]) -> dict[str, int]:
+    best = {"filings_total": 0, "filings_with_body": 0}
+    seen: set[str] = set()
+    for path in paths:
+        key = str(path.resolve())
+        if key in seen:
+            continue
+        seen.add(key)
+        coverage = _coverage_from_filing_index_path(path)
+        if coverage is None:
+            continue
+        total = coverage["filings_total"]
+        with_body = coverage["filings_with_body"]
+        if with_body > best["filings_with_body"] or (
+            with_body == best["filings_with_body"] and total > best["filings_total"]
+        ):
+            best = coverage
+    return best
+
+
 def _filing_coverage_for_ticker(
     ticker: str,
     *,
     library_root: Path,
     market_id: str,
 ) -> dict[str, int]:
+    """
+    Return filing coverage for a library market ticker.
+
+    Prefer the active market's canonical screen research index so stale empty
+    indexes from other graduated shards (e.g. aex vs euro_depth) do not shadow
+    fresh euro_depth ingest writes.
+    """
+    canonical = _canonical_filing_index_path(
+        ticker,
+        library_root=library_root,
+        market_id=market_id,
+    )
+    if canonical.exists():
+        coverage = _coverage_from_filing_index_path(canonical)
+        if coverage is not None:
+            return coverage
+
     roots = _research_roots_for_market(library_root, market_id)
     paths = _filing_index_paths_for_ticker(ticker, roots=roots)
     if not paths:
         return {"filings_total": 0, "filings_with_body": 0}
-    try:
-        read_json(paths[0])
-    except (OSError, ValueError, TypeError):
-        return {"filings_total": 0, "filings_with_body": 0}
-    summary = _coverage_from_index(paths[0])
-    return {
-        "filings_total": int(summary.get("filings_total") or 0),
-        "filings_with_body": int(summary.get("filings_with_body") or 0),
-    }
+    return _best_filing_coverage(paths)
 
 
 def load_library_buy_tier_reports(
