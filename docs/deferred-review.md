@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T08:56:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T08:56:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -236,6 +236,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L96 | **Email alert when engineering draft PR opens** | Send a short SMTP email (reuse EMAIL_TO / Sunday report secrets) when engineering-agent opens a draft PR or when the queue is blocked (checkpoint, agent failure, orphan reconcile). | After two engineering PRs were missed because GitHub notifications alone were insufficient |
 | L165 | **Shadow GC and max concurrent calibrated books** | Cap competing calibrated shadows (e.g. top-3) and retire failed/stale ranks so weekday paper-auto and the dashboard stay readable as bootstrap refreshes each Sunday. | More than 3 calibrated shadow dirs exist in production or Sunday spawn starts stacking ranks |
 | L173 | **Shared ticker metrics/filings store keyed by Yahoo symbol** | Library markets currently silo metrics JSON per market folder; grow only caches fetches in-memory within a run. A canonical docs/data/library/tickers/<YAHOO>/ layer (or symlink/join) would let overlapping index membership share one metrics+filings record while markets keep membership lists. Research already dedupes by exact Yahoo ticker. | euro_depth maintenance plus component market maintenance shows material duplicate Yahoo fetch cost or disk bloat, or filing deepen needs one home per issuer |
+| L179 | **Keep PLR and director task queues checklist-triaged not promote CLI** | Sunday checklist now requires human triage of paper_learning_tasks and learning_director_tasks. A promote CLI is only worth building if untriaged tasks accumulate for 3+ Sundays after this gate is live. | Untriaged PLR/director tasks accumulate for 3+ Sundays after sunday-triage-plr-director-tasks checklist is in use |
 
 ---
 
