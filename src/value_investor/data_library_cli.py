@@ -1106,13 +1106,11 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
     if args.json:
         print(json.dumps(payload, indent=2))
     else:
-        gaps_before = (
-            int(result.health_before.get("unmeasured_buy_tier") or 0)
-            + int(result.health_before.get("zero_body_buy_tier") or 0)
+        gaps_before = int(result.health_before.get("unmeasured_buy_tier") or 0) + int(
+            result.health_before.get("zero_body_buy_tier") or 0
         )
-        gaps_after = (
-            int(result.health_after.get("unmeasured_buy_tier") or 0)
-            + int(result.health_after.get("zero_body_buy_tier") or 0)
+        gaps_after = int(result.health_after.get("unmeasured_buy_tier") or 0) + int(
+            result.health_after.get("zero_body_buy_tier") or 0
         )
         print(
             f"{args.market}: targets={len(result.targets)} improved={len(result.improved)} "
