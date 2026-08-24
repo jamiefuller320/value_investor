@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T07:27:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T07:08:55+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -88,7 +88,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N34 | **Stage-4 live universe expansion before 2b edge** | Keep live screen on FTSE 350; offline library (iseq20 screen-lite) is enough until primary AI track beats ^FTSE after costs. | Stage 2b AI judgment excess vs ^FTSE is positive with thick history |
 | N35 | **Do not use weekly historical shadow rewind as promotion proof** | Rewinding competing shadows through known history to pick a winner overfits the same window used for bootstrap; keep weekly consistency as a diagnostic, and reserve promotion for forward endurance vs market/rules. | Only if a held-out weekly archive path (true walk-forward / purged CV) is implemented under L111 |
 | N36 | **Do not auto-promote surviving shadows into ai_judgment** | Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. | Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors |
-| N38 | **Full-universe deep memo PIT replay** | Systematically re-running full research memos for every FTSE name on each archived weekly turn would leak cost and hindsight bias; project philosophy targets opinion-flip timing on cohorts, not retrospective narrative fit on all names. | Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features) |
+| N38 | **Live capital dynamic rotation before paper evidence thickens** | Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation. | Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off |
 
 ---
 
@@ -119,7 +119,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L169 | **Test wider paper books (4–5 max_positions) as shadow/lab, not live default** | Live tracks sit at max_positions=3 after cost-drag clamping; that is enough for sleeve mechanics but too concentrated for stable excess learning. Prefer a competing shadow or calibration grid cell at 4–5 before widening the primary book, given ~3% round-trip costs. | After spawn-aligned endurance zero datum lands, or when primary cost_drag falls and decision-review proposes max_positions up |
 | L170 | **Low-turnover broad shortlist shadow (not naive 20-name weekly churn)** | A diversified top-N book can reduce concentration noise vs 3-name sleeves, but with 3% per-side costs a naive 20-name equal-weight weekly rebalance will likely lose to the market on costs alone. If tested, use strong churn controls (replace-on-exit only, exit confirm, reentry cooldown) and treat it as a lab/diagnostic shadow — possibly with a lower paper cost assumption — rather than widening the primary learning book. | After 4–5 position competing shadow exists, or when designing a diversification diagnostic track |
 | L172 | **Endurance hysteresis grace (not seed-advantage cushion)** | Avoid using warm-start/in-sample seed P&L as a pseudo head-start for survivor gates. Prefer explicit OOS grace: longer min_marks, wider fail band or consecutive underperformance before failed, and keep seed excess diagnostic-only. | After warm-start shadows accumulate post-seed marks and early false fails appear |
-| L176 | **Universe-scale PIT trajectory feature store** | As archive weeks accumulate, persist per-name turn-by-turn quant features (conviction delta, signal_trend, timing shifts, overlay flips) across full screened universe — cheaper than memo replay and feeds loser_pattern_lab / regime slices. | history_run_count >= 16 and exclusion archive has >= 12 consecutive week pairs (regime_slices_8_16_24 gate) |
+| L176 | **Conviction-weighted sleeve sizing (replace equal-weight)** | When max_positions widens to 4-8, rank sleeves by conviction_score (with sector_cap floor) instead of strict NAV/positions equal-weight; cap any single name at e.g. 1.5x the median sleeve. | Primary learning track has >=12 weeks marks at max_positions>=4 and cost_drag is stable; compare vs equal-weight in rebalance_log replay |
+| L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 
 ### Universe & data
 
