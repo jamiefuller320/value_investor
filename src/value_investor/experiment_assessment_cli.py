@@ -29,6 +29,7 @@ def _cmd_refresh(args: argparse.Namespace) -> int:
         min_excess_vs_market=float(args.min_excess),
         min_excess_vs_parent=float(args.min_excess_vs_parent),
         fetch_benchmark=bool(args.fetch_benchmark),
+        sync_task_status=bool(args.sync_task_status),
         output_path=Path(args.output) if args.output else None,
     )
     if args.json:
@@ -86,6 +87,7 @@ def main(argv: list[str] | None = None) -> int:
     refresh_p.add_argument("--min-excess", default="0.0")
     refresh_p.add_argument("--min-excess-vs-parent", default="0.0")
     refresh_p.add_argument("--fetch-benchmark", action="store_true")
+    refresh_p.add_argument("--sync-task-status", action="store_true")
     refresh_p.add_argument("--output", default=None)
     refresh_p.set_defaults(func=_cmd_refresh)
 

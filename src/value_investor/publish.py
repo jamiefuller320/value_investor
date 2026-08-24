@@ -246,6 +246,12 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     calibration_shadow_endurance = _read_paper_automation_json(
         output_dir, "calibration_shadow_endurance.json"
     )
+    from value_investor.experiment_assessment import slim_experiment_assessment_for_review
+
+    experiment_assessment = slim_experiment_assessment_for_review(
+        _read_json(output_dir / "experiment_assessment.json")
+        or _read_json(Path("docs/data/experiment_assessment.json"))
+    )
     learning_track_funds: dict[str, Any] = {}
     learning_track_configs: dict[str, Any] = {}
     try:
@@ -412,6 +418,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "buffered_hold_counterfactual": buffered_hold_counterfactual,
         "knob_calibration_priors": knob_calibration_priors,
         "calibration_shadow_endurance": calibration_shadow_endurance,
+        "experiment_assessment": experiment_assessment,
         "automation": automation,
         "project_progress": project_progress,
         "human_tasks_checklist": human_tasks_checklist,

@@ -156,6 +156,23 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
         ),
         encoding="utf-8",
     )
+    (tmp_path / "experiment_assessment.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 2,
+                "summary": {"total": 1, "recommend": 0},
+                "experiments": [
+                    {
+                        "experiment_id": "ai_judgment_calibrated",
+                        "kind": "calibration_shadow",
+                        "status": "observing",
+                    }
+                ],
+                "recommendations": [],
+            }
+        ),
+        encoding="utf-8",
+    )
     bundle = build_dashboard_bundle(tmp_path)
     assert bundle["meta"]["company_count"] == 2
     assert bundle["meta"]["strong_buy_count"] == 1
@@ -174,6 +191,7 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
         "full_period_retrospective"
     )
     assert bundle["calibration_shadow_endurance"]["shadows"][0]["status"] == "observing"
+    assert bundle["experiment_assessment"]["summary"]["total"] == 1
 
 
 def test_publish_dashboard_writes_latest_json(tmp_path: Path):

@@ -117,6 +117,9 @@ def test_build_payload_includes_vision_and_regime(tmp_path: Path):
     assert payload["regime_summary"]["recommended_exclusion_step"] == "u4"
     assert "primary_underperforming_market" in payload["regime_summary"]["flags"]
     assert payload["trajectory_evidence"] is None
+    assert payload["exclusion_universe"]["purpose"]
+    assert "ladder_results_slim" in payload["exclusion_universe"]
+    assert "cards" not in (payload.get("loser_snapshot_cards") or {})
 
 
 def test_build_experiment_inventory_counts_open_tasks(tmp_path: Path):

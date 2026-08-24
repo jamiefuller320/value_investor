@@ -10,6 +10,7 @@ from value_investor.experiment_assessment import (
     map_endurance_status_to_assessment,
     refresh_experiment_assessment,
     slim_experiment_assessment_for_review,
+    sync_task_assessment_status,
 )
 
 
@@ -97,6 +98,22 @@ def test_refresh_experiment_assessment_includes_shadows_and_tasks(tmp_path: Path
         ),
         encoding="utf-8",
     )
+    (data_dir / "trajectory_evidence_review.json").write_text(
+        json.dumps(
+            {
+                "outcome_summary": {"labeled_event_count": 50},
+                "model_focus_candidates": [
+                    {
+                        "kind": "transition_key",
+                        "key": "hold->buy",
+                        "count": 25,
+                        "why": "weak hit rate",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
 
     payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
     assert (data_dir / "experiment_assessment.json").exists()
@@ -107,8 +124,47 @@ def test_refresh_experiment_assessment_includes_shadows_and_tasks(tmp_path: Path
     shadow_row = next(row for row in payload["experiments"] if row["kind"] == "calibration_shadow")
     assert shadow_row["status"] in {"continue", "recommend", "observing", "fail"}
     task_row = next(row for row in payload["experiments"] if row["kind"] == "analysis_task")
-    assert task_row["status"] == "proposed"
+    assert task_row["status"] == "recommend"
+    assert task_row["forward_evidence"]["trajectory"]["labeled_event_count"] == 50
+    assert payload["schema_version"] == 2
 
     slim = slim_experiment_assessment_for_review(payload)
     assert slim is not None
     assert slim["summary"]["total"] == len(payload["experiments"])
+
+
+def test_sync_task_assessment_status_flags_recommend(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir(parents=True)
+    tasks_path = data_dir / "analysis_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-test-01",
+                        "area": "scoring",
+                        "title": "Scoring tweak",
+                        "status": "proposed",
+                        "evidence": {},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    experiments = [
+        {
+            "experiment_id": "ana-test-01",
+            "kind": "analysis_task",
+            "status": "recommend",
+            "forward_evidence": {"trajectory": {"labeled_event_count": 40}},
+        }
+    ]
+    result = sync_task_assessment_status(experiments, data_dir)
+    assert "ana-test-01" in result["updated"]
+    saved = json.loads(tasks_path.read_text(encoding="utf-8"))
+    task = saved["tasks"][0]
+    assert task["status"] == "proposed"
+    assert task["evidence"]["assessment_recommend"] is True
+    assert task["evidence"]["assessment_status"] == "recommend"
