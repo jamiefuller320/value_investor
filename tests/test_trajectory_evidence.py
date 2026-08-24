@@ -57,7 +57,39 @@ def test_build_transition_events_detects_signal_upgrade():
     assert len(events) == 1
     assert events[0]["transition_key"] == "hold->buy"
     assert events[0]["direction"] == "upgrade"
-    assert events[0]["outcomes"]["forward_return_1w"] == 0.1
+    outcomes = events[0]["outcomes"]
+    assert outcomes["forward_return_1w"] == 0.1
+    assert outcomes["prediction_success_1w"] is True
+    assert outcomes["weeks_to_realization"] == 1
+    assert outcomes["expected_return_sign"] == 1
+
+
+def test_build_transition_events_multi_horizon_returns():
+    rows_hold = [{"ticker": "A.L", "signal": "hold", "conviction_score": 0.2, "timing_signal": "wait"}]
+    rows_buy = [
+        {
+            "ticker": "A.L",
+            "signal": "buy",
+            "conviction_score": 0.4,
+            "timing_signal": "neutral",
+        }
+    ]
+    price_path = [100.0, 100.0, 110.0, 115.0, 120.0, 130.0]
+    snaps = [
+        _snap(
+            f"2026-08-{9 + index:02d}T00:00:00+00:00",
+            rows_hold if index == 0 else rows_buy,
+            prices={"A.L": price_path[index]},
+        )
+        for index in range(6)
+    ]
+    events = build_transition_events(snaps)
+    assert len(events) == 1
+    outcomes = events[0]["outcomes"]
+    assert outcomes["forward_return_1w"] == 0.1
+    assert outcomes["forward_return_4w"] == 0.3
+    assert outcomes["prediction_success_4w"] is True
+    assert outcomes["weeks_to_realization"] == 1
 
 
 def test_build_boundary_watch_panel_tags_pre_buy():
@@ -81,18 +113,57 @@ def test_summarize_transition_outcomes_groups_direction():
         {
             "transition_key": "hold->buy",
             "direction": "upgrade",
-            "outcomes": {"forward_return_1w": 0.05},
+            "outcomes": {
+                "forward_return_1w": 0.05,
+                "expected_return_sign": 1,
+                "prediction_success_1w": True,
+            },
         },
         {
             "transition_key": "buy->hold",
             "direction": "downgrade",
-            "outcomes": {"forward_return_1w": -0.02},
+            "outcomes": {
+                "forward_return_1w": -0.02,
+                "expected_return_sign": -1,
+                "prediction_success_1w": True,
+            },
         },
     ]
     summary = summarize_transition_outcomes(events)
     assert summary["labeled_event_count"] == 2
     assert summary["upgrade_events"]["count"] == 1
-    assert summary["downgrade_events"]["mean_forward_return_1w"] == -0.02
+    assert summary["downgrade_events"]["mean_forward_return"] == -0.02
+    assert summary["prediction_hit_rate_by_horizon"]["1w"]["prediction_hit_rate"] == 1.0
+
+
+def test_summarize_transition_outcomes_weeks_to_realization():
+    events = [
+        {
+            "direction": "upgrade",
+            "outcomes": {
+                "expected_return_sign": 1,
+                "weeks_to_realization": 2,
+                "realization_within_12w": True,
+                "forward_return_1w": 0.01,
+                "prediction_success_1w": True,
+            },
+        },
+        {
+            "direction": "upgrade",
+            "outcomes": {
+                "expected_return_sign": 1,
+                "weeks_to_realization": 4,
+                "realization_within_12w": True,
+                "forward_return_1w": 0.01,
+                "prediction_success_1w": True,
+            },
+        },
+    ]
+    summary = summarize_transition_outcomes(events)
+    real = summary["weeks_to_realization"]
+    assert real["realized_event_count"] == 2
+    assert real["median_weeks"] == 3.0
+    assert real["within_4w_rate"] == 1.0
 
 
 def test_run_trajectory_evidence_writes_artifacts(tmp_path: Path):
