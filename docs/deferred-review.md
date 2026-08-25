@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T13:32:14+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T16:51:46+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -215,6 +215,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L175 | **Graduated loser-filter tightening ladder experiment** | Complement winner-selection calibration with an observe-only paper track or offline_sim that steps portfolio knobs tighter on a schedule (or when bottom-quartile buy-tier names enter the book), ranking primarily on exclude_rate and bottom_buy_tier_held rather than catch_rate. Mirrors momentum_grace track pattern; keeps N3 screen thresholds frozen. | Primary AI track has ≥8 acted rebalance_log entries and knob calibration still shows negligible min_conviction/sector_cap discrimination |
 | L187 | **Excluded-loser short overlay vs index (offline diagnostic)** | Complement survivor EW cohort tracking with an observe-only long-index / short-excluded overlay replay on archive weeks. Isolates avoidance alpha separately from winner-pick concentration; keep gross-of-borrow offline until filtered_cohort_track shows stable cohort excess vs ^FTSE. | filtered_cohort_track active with >=8 epoch marks and survivor cohort excess vs index is flat or ambiguous |
 | L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
+| L194 | **Scan-then-target euro/FTSE ingest (index discovery before deepen)** | Current ingest scores local coverage then deepens a fixed top-N batch; it does not scan providers across the buy-tier/index for newly published filings. Add a cheap discovery pass (ESEF/CH/RNS index only) that diffs vs filings_index, then run bounded body ingest on the hit list. | Euro sprint filing gaps are mostly closed (maintenance/idle) or buy-tier rewalks stop finding new bodies while fresh results are still missing |
 
 ### Ops / reliability
 
