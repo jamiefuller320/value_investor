@@ -5,10 +5,13 @@ name: Euro library ingest loop
 #
 # Completion gate: ftse-library euro-ingest-dispatch throttles or skips when
 # Phase 3 is ready and filing parity is met (see euro_depth_ingest_dispatch.py).
+# Sprint: 4×/day × 24 targets (07:15 / 10:15 / 13:15 / 16:15 UTC).
 on:
   schedule:
     - cron: "15 7 * * 1-5"
     - cron: "15 10 * * 1-5"
+    - cron: "15 13 * * 1-5"
+    - cron: "15 16 * * 1-5"
   workflow_dispatch:
     inputs:
       market:
@@ -22,11 +25,11 @@ on:
       max_runtime_seconds:
         description: "Runtime budget (seconds)"
         type: string
-        default: "2100"
+        default: "2700"
       max_bodies:
         description: "Max bodies to refetch per ticker"
         type: string
-        default: "20"
+        default: "40"
       force:
         description: "Re-run even if already succeeded today or dispatch is idle"
         type: boolean

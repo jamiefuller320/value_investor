@@ -92,9 +92,18 @@ def test_evaluate_dispatch_sprint_when_phase3_not_ready():
         result = evaluate_euro_ingest_dispatch()
     assert result["mode"] == MODE_SPRINT
     assert result["should_run_ingest"] is True
-    assert result["max_daily_successes"] == 2
-    assert result["max_targets"] == 12
+    assert result["max_daily_successes"] == 4
+    assert result["max_targets"] == 24
     assert result["cron_afternoon"] is True
+    assert result["cron_midafternoon"] is True
+    assert result["cron_evening"] is True
+    assert cron_enabled_for_dispatch(result) == {
+        "morning": True,
+        "afternoon": True,
+        "midafternoon": True,
+        "evening": True,
+        "ladder_weekday": True,
+    }
 
 
 def test_evaluate_dispatch_maintenance_when_phase3_with_gaps():
@@ -116,6 +125,15 @@ def test_evaluate_dispatch_maintenance_when_phase3_with_gaps():
     assert result["max_daily_successes"] == 1
     assert result["max_targets"] == 4
     assert result["cron_afternoon"] is False
+    assert result["cron_midafternoon"] is False
+    assert result["cron_evening"] is False
+    assert cron_enabled_for_dispatch(result) == {
+        "morning": True,
+        "afternoon": False,
+        "midafternoon": False,
+        "evening": False,
+        "ladder_weekday": False,
+    }
 
 
 def test_evaluate_dispatch_idle_when_phase3_and_parity():
@@ -138,6 +156,8 @@ def test_evaluate_dispatch_idle_when_phase3_and_parity():
     assert cron_enabled_for_dispatch(result) == {
         "morning": False,
         "afternoon": False,
+        "midafternoon": False,
+        "evening": False,
         "ladder_weekday": False,
     }
 
