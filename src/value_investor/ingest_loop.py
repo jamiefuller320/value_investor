@@ -280,6 +280,9 @@ def run_weekday_ingest_loop(
 
     ingest_summary: IngestImprovementSummary | None = None
     if reports:
+        # Full buy-tier scan-then-target for routine weekday passes; skip when a
+        # single ticker is pinned (gap-closure verification) to avoid N× listing cost.
+        enable_discovery = not bool(pin_tickers) and not gap_closure_require_gaps
         ingest_summary = run_ingest_improvement_pass(
             reports=reports,
             output_dir=data_dir,
@@ -293,16 +296,20 @@ def run_weekday_ingest_loop(
             pin_tickers=pin_tickers,
             intensive_gap_closure=gap_closure_require_gaps,
             prune_failed_residual_fetches=False,
+            discovery_scan=enable_discovery,
+            discovery_scan_cap=None,
         )
     else:
         logger.warning("No reports in %s — skipping ingest-improvement pass", latest_path)
 
     health_after = snapshot_ingest_health(latest_path=latest_path, research_roots=roots)
     improved_tickers = []
+    discovery_meta: dict[str, Any] = {}
     if ingest_summary is not None:
         improved_tickers = [
             str(row.get("ticker")) for row in ingest_summary.results if row.get("improved")
         ]
+        discovery_meta = dict(ingest_summary.discovery_scan or {})
 
     append_health_log_entry(
         {
@@ -324,6 +331,7 @@ def run_weekday_ingest_loop(
             "targets_completed": ingest_summary.targets_completed if ingest_summary else 0,
             "targets_deferred": ingest_summary.targets_deferred if ingest_summary else 0,
             "cutoff_reason": ingest_summary.cutoff_reason if ingest_summary else None,
+            "discovery_scan": discovery_meta or None,
         },
         path=health_log_path,
     )

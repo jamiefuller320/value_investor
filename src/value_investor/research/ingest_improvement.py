@@ -176,6 +176,7 @@ class IngestImprovementSummary:
     targets_completed: int = 0
     targets_deferred: int = 0
     cutoff_reason: str | None = None
+    discovery_scan: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload = {
@@ -203,6 +204,7 @@ class IngestImprovementSummary:
             "targets_completed": self.targets_completed,
             "targets_deferred": self.targets_deferred,
             "cutoff_reason": self.cutoff_reason,
+            "discovery_scan": self.discovery_scan,
         }
         return payload
 
@@ -309,6 +311,7 @@ def _priority_score(
     signal: str,
     market: str | None = None,
     ticker: str = "",
+    discovery_bonus: float = 0.0,
 ) -> float:
     score = 0.0
     if coverage["filings_total"] == 0:
@@ -354,6 +357,8 @@ def _priority_score(
         score += 2.0
     if ticker.upper() in BODY_GAP_BATCH_TICKERS and coverage["indexed_without_body"] > 0:
         score += BODY_GAP_BATCH_PRIORITY_BONUS
+    if discovery_bonus > 0:
+        score += float(discovery_bonus)
     return score
 
 
@@ -366,10 +371,12 @@ def select_ingest_improvement_targets(
     backlog_tickers: list[str] | None = None,
     require_outstanding_gaps: bool = False,
     pin_tickers: list[str] | None = None,
+    discovery_bonus_by_ticker: dict[str, float] | None = None,
 ) -> list[IngestImprovementTarget]:
     """Rank buy-tier tickers that need ingest hardening before gap-fill."""
     store = ResearchStore(output_dir)
     suggestions_by_ticker = _load_ingest_suggestions(suggestions_path)
+    discovery_bonus_by_ticker = discovery_bonus_by_ticker or {}
     candidates: list[IngestImprovementTarget] = []
     pin_set = {str(t or "").strip().upper() for t in (pin_tickers or []) if str(t or "").strip()}
 
@@ -380,17 +387,22 @@ def select_ingest_improvement_targets(
             continue
         coverage = _filing_coverage(store, report.ticker, output_dir)
         suggestions = suggestions_by_ticker.get(report.ticker.upper(), [])
+        discovery_bonus = float(discovery_bonus_by_ticker.get(report.ticker.upper()) or 0.0)
         score = _priority_score(
             coverage,
             suggestions,
             signal=report.signal,
             market="ftse350" if report.ticker.upper().endswith(".L") else None,
             ticker=report.ticker,
+            discovery_bonus=discovery_bonus,
         )
         if score <= 0:
             continue
         if require_outstanding_gaps and not _has_outstanding_ingest_gap(coverage):
-            continue
+            # Discovery hits still qualify — new index rows need deepen even without
+            # prior outstanding gaps.
+            if discovery_bonus <= 0:
+                continue
         candidates.append(
             IngestImprovementTarget(
                 ticker=report.ticker,
@@ -539,12 +551,16 @@ def run_ingest_improvement_pass(
     pin_tickers: list[str] | None = None,
     intensive_gap_closure: bool = False,
     prune_failed_residual_fetches: bool = False,
+    discovery_scan: bool = True,
+    discovery_scan_cap: int | None = None,
 ) -> IngestImprovementSummary:
     """
     Run bounded ingest hardening on thin buy-tier tickers before gap-fill.
 
-    Uses only existing fetchers (Companies House, Investegate, IR PDFs, SEC/SEDAR).
-    Does not modify scoring, prompts, or repository code.
+    When ``discovery_scan`` is true (default for FTSE maintenance), listing-only
+    discovery runs across buy-tier first; new index rows boost target priority
+    so deepen focuses on fresh filings. ``discovery_scan_cap`` is reserved for
+    later compute throttling (``None`` = no throttle).
     """
     bootstrap_buy_tier_research(
         reports,
@@ -552,6 +568,33 @@ def run_ingest_improvement_pass(
         market=market,
         seed_cap=bootstrap_seed_cap if bootstrap_seed_cap is not None else BOOTSTRAP_SEED_CAP,
     )
+
+    discovery_bonus_by_ticker: dict[str, float] = {}
+    discovery_payload: dict[str, Any] | None = None
+    if discovery_scan:
+        from value_investor.ingest_discovery_scan import run_buy_tier_discovery_scan
+
+        scan = run_buy_tier_discovery_scan(
+            reports,
+            output_dir=output_dir,
+            market=market or "ftse350",
+            scan_cap=discovery_scan_cap,
+            persist_index=True,
+            persist_summary=True,
+        )
+        discovery_bonus_by_ticker = {
+            ticker: hit.priority_bonus(scan.prioritization_weights)
+            for ticker, hit in scan.hits_by_ticker().items()
+        }
+        discovery_payload = {
+            "scanned": scan.scanned,
+            "hits": scan.hits,
+            "new_rows_total": scan.new_rows_total,
+            "curiosity_total": scan.curiosity_total,
+            "errors": scan.errors,
+            "prioritization_weights": scan.prioritization_weights,
+        }
+
     backlog_payload = load_ingest_backlog(backlog_path)
     pending_backlog = backlog_tickers(backlog_payload)
     targets = select_ingest_improvement_targets(
@@ -562,8 +605,9 @@ def run_ingest_improvement_pass(
         backlog_tickers=pending_backlog or None,
         require_outstanding_gaps=require_outstanding_gaps,
         pin_tickers=pin_tickers,
+        discovery_bonus_by_ticker=discovery_bonus_by_ticker,
     )
-    summary = IngestImprovementSummary(targets=targets)
+    summary = IngestImprovementSummary(targets=targets, discovery_scan=discovery_payload)
     summary.targets_planned = len(targets)
     if not targets:
         record_ingest_backlog_after_pass(

@@ -10,7 +10,7 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 
 | Lane | Status | Gap |
 |------|--------|-----|
-| **FTSE live ingest** | 70/70 buy-tier measured; **0 zero-body** | 13 tickers with 1–5 residual indexed-without-body (unfetchable tail) |
+| **FTSE live ingest** | 70/70 buy-tier measured; **0 zero-body**; **scan-then-target** maintenance | Residual soft enrichment + new-filing discovery (see [`ingest-scan-then-target.md`](ingest-scan-then-target.md)) |
 | **FTSE filing depth** | ~3,700 bodies; global indexed-without-body ~36 | Weekday depth continues; not a one-shot sprint |
 | **Offline queue** | Breadth queue complete; **depth-first focus `euro_depth`** (~194 names) | Grow metrics + screen archives; deepen `euro_filings` on buy-tier |
 | **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday ladder concentrates weekly_ops on this book only |
@@ -112,7 +112,7 @@ At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports rough
 
 ### Progression through markets
 
-1. **FTSE ingest** — residual indexed-without-body depth (buy-tier measured).
+1. **FTSE ingest** — scan-then-target maintenance for new filings (buy-tier measured).
 2. **`euro_depth` metrics + screen archives** — sole offline research/observe/weekly focus.
 3. **Deepen `euro_filings`** on euro_depth buy-tier before treating AI tracks as FTSE-equivalent.
 4. **Keep Layer A maintenance** on other graduated markets — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
