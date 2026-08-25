@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-25T16:51:46+00:00",
+  "updated_at": "2026-08-25T16:57:53+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4008,6 +4008,42 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
       "added_at": "2026-08-25T16:51:46+00:00"
+    },
+    {
+      "id": "L195",
+      "category": "later",
+      "section": "universe",
+      "title": "Market ingest lifecycle: sprint deepen then scan-maintain while next market sprints",
+      "summary": "Doctrine: once a market buy-tier is filing-deepened, switch it to scan-then-target maintenance (cheap index discovery + bounded body ingest) running alongside learning experiments; start the next market on sprint deepen. FTSE is the first candidate now (hard gaps closed); euro_depth stays sprint until parity. Regime adapters still need per-market fetch work \u2014 do not assume FTSE eng fully transfers to ESEF/IR.",
+      "revisit_when": "Designing FTSE maintenance throttle or euro_depth Phase 3 exit / filing parity review",
+      "tags": [
+        "ingest",
+        "lifecycle",
+        "ftse",
+        "euro_depth",
+        "shards",
+        "maintenance"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T16:57:53+00:00"
+    },
+    {
+      "id": "L196",
+      "category": "later",
+      "section": "ops",
+      "title": "FTSE-first scan-then-target maintenance ingest",
+      "summary": "Implement scan-then-target on live FTSE buy-tier now that hard gaps are closed (0 unmeasured/zero-body): cheap RNS/CH/Investegate index scan across buy-tier (optionally strong_buy first), queue new/changed filings, deepen only hits within max_targets. Replaces no-op strong_buy rewalks; frees capacity for euro sprint.",
+      "revisit_when": "Next ingest/ops engineering slot after euro 4x24 cadence is stable, or when FTSE weekday runs show improved=0 for several days while new RNS appear",
+      "tags": [
+        "ingest",
+        "ftse",
+        "maintenance",
+        "discovery"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T16:57:53+00:00"
     }
   ],
   "fragments": [
