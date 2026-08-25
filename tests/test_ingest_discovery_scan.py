@@ -199,7 +199,7 @@ def test_discovery_bonus_raises_priority_and_selects_hit(tmp_path: Path):
             {
                 "id": f"{ticker}-{i}",
                 "headline": f"H{i}",
-                "published_at": f"2024-0{i+1}-01",
+                "published_at": f"2024-0{i + 1}-01",
                 "period": "annual",
                 "has_body": True,
                 "body_path": f"bodies/{i}.txt",
