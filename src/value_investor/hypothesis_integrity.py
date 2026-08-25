@@ -403,9 +403,7 @@ def run_hypothesis_integrity_pass(
     cfg = config or DEFAULT_HYPOTHESIS_CONFIG
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    by_ticker = {
-        str(row.get("ticker")): row for row in candidates if row.get("ticker") is not None
-    }
+    by_ticker = {str(row.get("ticker")): row for row in candidates if row.get("ticker") is not None}
     prices = dict(prices_by_ticker or {})
     when = (
         as_of.isoformat()
@@ -442,9 +440,7 @@ def run_hypothesis_integrity_pass(
             float(row.get("unrealized_pct") or 0),
         )
     )
-    feedback = portfolio_loser_feedback(
-        assessments, position_values=position_values, config=cfg
-    )
+    feedback = portfolio_loser_feedback(assessments, position_values=position_values, config=cfg)
     payload = {
         "schema_version": 1,
         "scope": "hypothesis_integrity",
