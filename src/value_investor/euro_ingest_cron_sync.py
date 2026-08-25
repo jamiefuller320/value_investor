@@ -85,6 +85,8 @@ def sync_euro_ingest_cron_jobs(
     title_map = {
         EURO_INGEST_CRON_TITLES["morning"]: desired["morning"],
         EURO_INGEST_CRON_TITLES["afternoon"]: desired["afternoon"],
+        EURO_INGEST_CRON_TITLES["midafternoon"]: desired["midafternoon"],
+        EURO_INGEST_CRON_TITLES["evening"]: desired["evening"],
         EURO_INGEST_CRON_TITLES["ladder_weekday"]: desired["ladder_weekday"],
     }
     if dry_run:

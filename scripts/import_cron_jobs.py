@@ -63,7 +63,7 @@ _INGEST_LOOP_INPUTS = {"inputs": {"max_targets": "12"}}
 _EURO_INGEST_LOOP_INPUTS = {
     "inputs": {
         "market": "euro_depth",
-        "max_targets": "12",
+        "max_targets": "24",
     }
 }
 
@@ -184,6 +184,24 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[1, 2, 3, 4, 5],
         ),
         CronJobSpec(
+            key="euro-ingest-loop-midafternoon",
+            title="Euro ingest loop (weekday mid-afternoon)",
+            workflow="euro-ingest-loop.yml",
+            body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
+            hours=[13],
+            minutes=[15],
+            wdays=[1, 2, 3, 4, 5],
+        ),
+        CronJobSpec(
+            key="euro-ingest-loop-evening",
+            title="Euro ingest loop (weekday evening)",
+            workflow="euro-ingest-loop.yml",
+            body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
+            hours=[16],
+            minutes=[15],
+            wdays=[1, 2, 3, 4, 5],
+        ),
+        CronJobSpec(
             key="orchestrator-ladder-weekday",
             title="FTSE orchestrator (weekday ladder)",
             workflow="automation-orchestrator.yml",
@@ -234,6 +252,8 @@ def _job_enabled(spec: CronJobSpec) -> bool:
     euro_keys = {
         "euro-ingest-loop-morning": "morning",
         "euro-ingest-loop-afternoon": "afternoon",
+        "euro-ingest-loop-midafternoon": "midafternoon",
+        "euro-ingest-loop-evening": "evening",
         "orchestrator-ladder-weekday": "ladder_weekday",
     }
     slot = euro_keys.get(spec.key)

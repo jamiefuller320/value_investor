@@ -24,10 +24,12 @@ MODE_IDLE = "idle"
 
 MODE_CONFIG: dict[str, dict[str, Any]] = {
     MODE_SPRINT: {
-        "max_daily_successes": 2,
-        "max_targets": 12,
+        "max_daily_successes": 4,
+        "max_targets": 24,
         "cron_morning": True,
         "cron_afternoon": True,
+        "cron_midafternoon": True,
+        "cron_evening": True,
         "cron_ladder_weekday": True,
     },
     MODE_MAINTENANCE: {
@@ -35,6 +37,8 @@ MODE_CONFIG: dict[str, dict[str, Any]] = {
         "max_targets": 4,
         "cron_morning": True,
         "cron_afternoon": False,
+        "cron_midafternoon": False,
+        "cron_evening": False,
         "cron_ladder_weekday": False,
     },
     MODE_IDLE: {
@@ -42,6 +46,8 @@ MODE_CONFIG: dict[str, dict[str, Any]] = {
         "max_targets": 0,
         "cron_morning": False,
         "cron_afternoon": False,
+        "cron_midafternoon": False,
+        "cron_evening": False,
         "cron_ladder_weekday": False,
     },
 }
@@ -49,6 +55,8 @@ MODE_CONFIG: dict[str, dict[str, Any]] = {
 EURO_INGEST_CRON_TITLES = {
     "morning": "Euro ingest loop (weekday morning)",
     "afternoon": "Euro ingest loop (weekday afternoon)",
+    "midafternoon": "Euro ingest loop (weekday mid-afternoon)",
+    "evening": "Euro ingest loop (weekday evening)",
     "ladder_weekday": "FTSE orchestrator (weekday ladder)",
 }
 
@@ -64,7 +72,7 @@ def evaluate_euro_ingest_dispatch(
     Decide euro_depth ingest cadence from Phase 3 completion + filing parity.
 
     Modes:
-    - sprint: Phase 3 not ready — 2×/day ingest, weekday ladder cron
+    - sprint: Phase 3 not ready — 4×/day ingest (24 targets), weekday ladder cron
     - maintenance: Phase 3 ready but filing gaps — 1×/day ingest
     - idle: Phase 3 ready and no unmeasured/zero-body buy-tier gaps — skip ingest
     """
@@ -109,6 +117,8 @@ def evaluate_euro_ingest_dispatch(
         "max_targets": int(config["max_targets"]),
         "cron_morning": bool(config["cron_morning"]),
         "cron_afternoon": bool(config["cron_afternoon"]),
+        "cron_midafternoon": bool(config["cron_midafternoon"]),
+        "cron_evening": bool(config["cron_evening"]),
         "cron_ladder_weekday": bool(config["cron_ladder_weekday"]),
         "should_run_ingest": mode != MODE_IDLE,
         "evaluated_at": datetime.now(UTC).isoformat(),
@@ -166,6 +176,8 @@ def cron_enabled_for_dispatch(evaluation: dict[str, Any]) -> dict[str, bool]:
     return {
         "morning": bool(evaluation.get("cron_morning")),
         "afternoon": bool(evaluation.get("cron_afternoon")),
+        "midafternoon": bool(evaluation.get("cron_midafternoon")),
+        "evening": bool(evaluation.get("cron_evening")),
         "ladder_weekday": bool(evaluation.get("cron_ladder_weekday")),
     }
 

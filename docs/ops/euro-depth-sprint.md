@@ -33,7 +33,7 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 | Layer | Command / workflow | Cadence |
 |-------|-------------------|---------|
 | Metrics grow (full ~194) | `ftse-library grow --market euro_depth` | Day 1 burst (`focus_grow_cap: 200`) |
-| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays via `euro-ingest-loop.yml` — **2×/day sprint**, **1×/day maintenance**, **idle when parity met**; **stall → eng task** (see [`library-ingest-escalation.md`](library-ingest-escalation.md)) |
+| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays via `euro-ingest-loop.yml` — **4×/day sprint (24 targets)**, **1×/day maintenance**, **idle when parity met**; **stall → eng task** (see [`library-ingest-escalation.md`](library-ingest-escalation.md)) |
 | Screen + observe + weekly shard | `ftse-library ladder` | Daily `ladder_only` when eng idle + Sundays |
 | Phase 3 weekday shard | `ftse-library shard-weekday --markets euro_depth` | Weekdays after Phase 2 gate |
 
@@ -44,23 +44,39 @@ persists `docs/data/library/euro_ingest_dispatch.json`:
 
 | Mode | When | Ingest cadence | Cron jobs |
 |------|------|----------------|-----------|
-| `sprint` | Phase 3 not ready | 2×/day, 12 targets | morning + afternoon + weekday ladder |
+| `sprint` | Phase 3 not ready | 4×/day, 24 targets | morning + afternoon + mid-afternoon + evening + weekday ladder |
 | `maintenance` | Phase 3 ready, filing gaps remain | 1×/day, 4 targets | morning only |
 | `idle` | Phase 3 ready + no unmeasured/zero-body buy-tier | skip | all euro ingest + weekday ladder crons disabled |
+
+Sprint UTC slots: **07:15 / 10:15 / 13:15 / 16:15** (≈96 ticker-slots/weekday).
 
 The gate runs at the start of `euro-ingest-loop.yml`, after each ingest loop, and after
 library ladder when `euro_depth` is in the phase rollup. With `CRONJOB_API_KEY` in GitHub
 secrets, the workflow also calls `scripts/sync_euro_ingest_cron.py` to toggle cron-job.org
 jobs automatically.
 
-Register production crons (one-time):
+### Register euro ingest crons after cadence changes
 
 ```bash
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all
 ```
 
-New job keys: `euro-ingest-loop-morning`, `euro-ingest-loop-afternoon`,
+Or only the euro ingest slots:
+
+```bash
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
+  --job euro-ingest-loop-morning \
+  --job euro-ingest-loop-afternoon \
+  --job euro-ingest-loop-midafternoon \
+  --job euro-ingest-loop-evening
+```
+
+Job keys: `euro-ingest-loop-morning`, `euro-ingest-loop-afternoon`,
+`euro-ingest-loop-midafternoon`, `euro-ingest-loop-evening`,
 `orchestrator-ladder-weekday`.
+
+After merge of a cadence change, re-import so cron-job.org picks up new slots and
+`max_targets=24` dispatch bodies (GitHub `schedule` alone is best-effort).
 
 ### Filing sources (euro_filings)
 
@@ -73,7 +89,7 @@ New job keys: `euro-ingest-loop-morning`, `euro-ingest-loop-afternoon`,
 
 ```text
 Days 1–2     Burst grow all constituents; warm-start euro_stoxx50 buy-tier ingest
-Days 2–7     Daily ladder (screen archives) + 2× weekday ingest-loop
+Days 2–7     Daily ladder (screen archives) + 4× weekday ingest-loop (24 targets)
 Days 5–12    Phase 1 gate (4 archives) → weekly shard batches (4 Sundays or daily shard-paper)
 Days 12–20   Phase 2 gate + weekday shard batches (8 trading days)
 Days 20–30   Phase 3 gate; monthly parity review; re-enable AI beat-rules if bodies look FTSE-like
@@ -86,8 +102,8 @@ Days 20–30   Phase 3 gate; monthly parity review; re-enable AI beat-rules if b
 ftse-library grow --market euro_depth --max-tickers 200
 
 # Filing deepen (local or workflow_dispatch)
-ftse-library ingest-loop --market euro_depth --max-targets 12
-gh workflow run euro-ingest-loop.yml -f market=euro_depth -f max_targets=12 -f force=true
+ftse-library ingest-loop --market euro_depth --max-targets 24
+gh workflow run euro-ingest-loop.yml -f market=euro_depth -f max_targets=24 -f force=true
 
 # Accelerated ladder (screen archives without waiting for Sunday)
 gh workflow run automation-orchestrator.yml -f suite=ladder_only -f force=true
