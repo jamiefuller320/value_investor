@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T13:32:14+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T16:57:53+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -144,6 +144,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
 | L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
 | L192 | **Extra euro_depth ingest bursts beyond 2x/day** | euro_depth is in sprint with ~26 unmeasured buy-tier; ~2 closed per morning run. Extra force-dispatched runs or higher max_targets would accelerate filing bootstrap while capacity is free. | Want faster euro filing parity before Phase 3 exit; GHA capacity still free |
+| L195 | **Market ingest lifecycle: sprint deepen then scan-maintain while next market sprints** | Doctrine: once a market buy-tier is filing-deepened, switch it to scan-then-target maintenance (cheap index discovery + bounded body ingest) running alongside learning experiments; start the next market on sprint deepen. FTSE is the first candidate now (hard gaps closed); euro_depth stays sprint until parity. Regime adapters still need per-market fetch work — do not assume FTSE eng fully transfers to ESEF/IR. | Designing FTSE maintenance throttle or euro_depth Phase 3 exit / filing parity review |
 
 ### Research & portfolio product
 
@@ -215,6 +216,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L175 | **Graduated loser-filter tightening ladder experiment** | Complement winner-selection calibration with an observe-only paper track or offline_sim that steps portfolio knobs tighter on a schedule (or when bottom-quartile buy-tier names enter the book), ranking primarily on exclude_rate and bottom_buy_tier_held rather than catch_rate. Mirrors momentum_grace track pattern; keeps N3 screen thresholds frozen. | Primary AI track has ≥8 acted rebalance_log entries and knob calibration still shows negligible min_conviction/sector_cap discrimination |
 | L187 | **Excluded-loser short overlay vs index (offline diagnostic)** | Complement survivor EW cohort tracking with an observe-only long-index / short-excluded overlay replay on archive weeks. Isolates avoidance alpha separately from winner-pick concentration; keep gross-of-borrow offline until filtered_cohort_track shows stable cohort excess vs ^FTSE. | filtered_cohort_track active with >=8 epoch marks and survivor cohort excess vs index is flat or ambiguous |
 | L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
+| L194 | **Scan-then-target euro/FTSE ingest (index discovery before deepen)** | Current ingest scores local coverage then deepens a fixed top-N batch; it does not scan providers across the buy-tier/index for newly published filings. Add a cheap discovery pass (ESEF/CH/RNS index only) that diffs vs filings_index, then run bounded body ingest on the hit list. | Euro sprint filing gaps are mostly closed (maintenance/idle) or buy-tier rewalks stop finding new bodies while fresh results are still missing |
 
 ### Ops / reliability
 
@@ -250,6 +252,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L188 | **Sunday review weekly tables on dashboard** | Publish slim week-by-week rows from exclusion_universe_archive (u4 weekly: exclusion_alpha, filtered vs baseline vs benchmark), learning_tracks_review per-track excess, and regime readiness flags into latest.json; render sortable tables on Analysis or Automation tab. Persist dated review snapshots (extend publish archive or docs/data/review_history/) so rows accumulate beyond the current Sunday overwrite. | Human Sunday review habit forms and JSON file hopping becomes friction — or when regime_slices_8_16_24 phase activates |
 | L191 | **FTSE ingest maintenance/idle throttle like euro** | Euro has sprint/maintenance/idle dispatch; FTSE still always schedules 2x/day even at buy-tier parity. Mirror a completion gate to drop to 1x/day or idle when hard gaps are gone. | Want to reclaim GHA minutes or reduce no-op strong_buy rewalks after sustained FTSE parity |
 | L193 | **Stress euro ingest near 50min GHA job timeout** | Lengthening sequence reached ~9min ingest job (24 targets) with no stability issues; runtime budgets unused. To probe GHA timeout/OOM edges, need tickers that actually fetch bodies slowly or much higher target counts. | Want confidence near workflow timeout-minutes:50 or after ESEF/IR fetches make per-ticker work heavier |
+| L196 | **FTSE-first scan-then-target maintenance ingest** | Implement scan-then-target on live FTSE buy-tier now that hard gaps are closed (0 unmeasured/zero-body): cheap RNS/CH/Investegate index scan across buy-tier (optionally strong_buy first), queue new/changed filings, deepen only hits within max_targets. Replaces no-op strong_buy rewalks; frees capacity for euro sprint. | Next ingest/ops engineering slot after euro 4x24 cadence is stable, or when FTSE weekday runs show improved=0 for several days while new RNS appear |
 
 ---
 
