@@ -71,6 +71,7 @@ from value_investor.research.filings import (
     resolve_investegate_lse_pdf_url,
     resolve_lse_document_url,
     resolve_lse_rns_document_url,
+    resolve_sec_cik,
     sanitize_filings_index,
     summarize_filings,
 )
@@ -3801,6 +3802,74 @@ def test_fetch_filings_esef_direct_parses_xbrl_api(mock_get):
     assert rows[0]["period"] == "annual"
 
 
+def test_resolve_sec_cik_euro_depth_dual_listed_aliases():
+    assert resolve_sec_cik("SHELL") == resolve_sec_cik("SHEL")
+    assert resolve_sec_cik("NOVN") == resolve_sec_cik("NVS")
+    assert resolve_sec_cik("LOGN") == resolve_sec_cik("LOGI")
+
+
+def test_sec_edgar_supplement_allowed_euro_depth_representatives():
+    assert _sec_edgar_supplement_allowed("SHELL.AS", "Shell plc") is True
+    assert _sec_edgar_supplement_allowed("NOVN.SW", "Novartis AG") is True
+    assert _sec_edgar_supplement_allowed("ABI.BR", "Anheuser-Busch InBev SA/NV") is True
+    assert _sec_edgar_supplement_allowed("LOGN.SW", "Logitech International SA") is True
+    assert _sec_edgar_supplement_allowed("C5H.IR", "CRH plc") is True
+
+
+def test_fetch_filings_ir_allowlist_shell_as_inherits_shel_l(tmp_path: Path):
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SHELL.AS", path=allowlist_path)
+    assert rows
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any("sec.gov" in row["url"] for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_euro_depth_belgian_builtins(tmp_path: Path):
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    for ticker in ("ACKB.BR", "UMI.BR", "MELE.BR"):
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert rows, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+
+
+@patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_sec_edgar")
+def test_ingest_filings_euro_depth_shell_as_indexes_sec_and_ir(
+    mock_sec,
+    _mock_investegate,
+    _mock_esef,
+    _mock_news,
+    tmp_path: Path,
+):
+    mock_sec.return_value = [
+        {
+            "id": "sec1",
+            "source": "sec_edgar",
+            "headline": "20-F",
+            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    meta = ingest_filings(
+        ticker="SHELL.AS",
+        company_name="Shell plc",
+        sources_dir=tmp_path,
+        market="euro_depth",
+        deepen_history=False,
+    )
+    summary = meta.get("filings_summary") or {}
+    assert int(summary.get("total") or 0) > 0
+    mock_sec.assert_called_once()
+    assert mock_sec.call_args.kwargs["ticker"] == "SHELL"
+
+
 def test_prune_orphaned_filing_bodies(tmp_path: Path):
     filings_dir = tmp_path / "filings"
     bodies_dir = filings_dir / "bodies"
@@ -4517,7 +4586,9 @@ def test_load_ir_url_allowlist_merges_file_with_builtin(tmp_path: Path):
     assert rows[1]["url"] == file_hik_urls[1]
     assert rows[1]["period"] == "interim"
     shel = fetch_filings_ir_allowlist("SHEL.L", path=path)
-    assert len(shel) == 1
+    builtin_shel = _BUILTIN_IR_URLS.get("SHEL.L") or []
+    assert len(mapping["SHEL.L"]) == len(builtin_shel)
+    assert len(shel) == len(mapping["SHEL.L"])
     assert shel[0]["period"] == "annual"
 
 
