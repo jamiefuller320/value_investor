@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-20",
+  "updated_at": "2026-08-25",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -73,6 +73,14 @@
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
+        },
+        {
+          "id": "sunday-hypothesis-integrity",
+          "title": "Review in-portfolio hypothesis integrity when losers breach tolerance",
+          "summary": "If learning_tracks_hypothesis_integrity shows within_tolerance=false, broken_loser_count>0, or selection_feedback_flags, read track hypothesis_integrity.md. Prefer thesis-broken rotation over crude stops; do not auto-apply exit knobs.",
+          "automated": false,
+          "doc_path": "docs/ops/hypothesis-integrity.md",
+          "doc_anchor": "human-gate"
         },
         {
           "id": "sunday-analysis-tasks",

@@ -14,6 +14,13 @@ from value_investor.exit_timing_cohorts import (
     run_exit_timing_cohort_pass,
     summarize_learning_tracks_exit_timing,
 )
+from value_investor.hypothesis_integrity import (
+    ROLLUP_FILENAME as HYPOTHESIS_ROLLUP_FILENAME,
+)
+from value_investor.hypothesis_integrity import (
+    run_hypothesis_integrity_pass,
+    summarize_learning_tracks_hypothesis_integrity,
+)
 from value_investor.paper_fund import (
     DEFAULT_EXIT_CONFIRM_SCREENS,
     DEFAULT_INITIAL_CASH,
@@ -404,22 +411,80 @@ def surveil_position(
     take_profit: float | None = None,
     timing_signal: str | None = None,
     signal: str | None = None,
+    avg_cost: float | None = None,
+    screen_row: dict[str, Any] | None = None,
+    use_adjusted_signal: bool = False,
 ) -> list[SurveillanceAlert]:
+    from value_investor.hypothesis_integrity import (
+        ACTION_EXIT_CANDIDATE,
+        ACTION_WATCH_REVIEW,
+        THESIS_BROKEN,
+        THESIS_INTACT,
+        THESIS_WEAKENING,
+        assess_holding_hypothesis,
+    )
+
     alerts: list[SurveillanceAlert] = []
-    if mark is not None and stop_loss is not None and mark <= stop_loss:
-        alerts.append(
-            SurveillanceAlert(
-                ticker=ticker,
-                name=name,
-                source=source,
-                severity="action",
-                message=f"Mark {mark:.2f} at/under stop {stop_loss:.2f}",
-                mark=mark,
-                stop_loss=stop_loss,
-                take_profit=take_profit,
-                timing_signal=timing_signal,
-            )
+    hypothesis: dict[str, Any] | None = None
+    if avg_cost is not None and avg_cost > 0 and mark is not None:
+        hypothesis = assess_holding_hypothesis(
+            ticker=ticker,
+            mark=mark,
+            avg_cost=float(avg_cost),
+            row=screen_row,
+            use_adjusted_signal=use_adjusted_signal,
         )
+
+    if mark is not None and stop_loss is not None and mark <= stop_loss:
+        # Prefer hypothesis framing over a crude stop-only action alert.
+        if hypothesis and hypothesis.get("thesis_status") == THESIS_INTACT:
+            alerts.append(
+                SurveillanceAlert(
+                    ticker=ticker,
+                    name=name,
+                    source=source,
+                    severity="watch",
+                    message=(
+                        f"Mark {mark:.2f} at/under tactical stop {stop_loss:.2f}, "
+                        "but thesis intact — review facts before exiting"
+                    ),
+                    mark=mark,
+                    stop_loss=stop_loss,
+                    take_profit=take_profit,
+                    timing_signal=timing_signal,
+                )
+            )
+        elif hypothesis and hypothesis.get("thesis_status") == THESIS_BROKEN:
+            alerts.append(
+                SurveillanceAlert(
+                    ticker=ticker,
+                    name=name,
+                    source=source,
+                    severity="action",
+                    message=(
+                        f"Stop + broken thesis ({mark:.2f} ≤ {stop_loss:.2f}): "
+                        + "; ".join((hypothesis.get("reasons") or [])[:2])
+                    ),
+                    mark=mark,
+                    stop_loss=stop_loss,
+                    take_profit=take_profit,
+                    timing_signal=timing_signal,
+                )
+            )
+        else:
+            alerts.append(
+                SurveillanceAlert(
+                    ticker=ticker,
+                    name=name,
+                    source=source,
+                    severity="action",
+                    message=f"Mark {mark:.2f} at/under stop {stop_loss:.2f}",
+                    mark=mark,
+                    stop_loss=stop_loss,
+                    take_profit=take_profit,
+                    timing_signal=timing_signal,
+                )
+            )
     if mark is not None and take_profit is not None and mark >= take_profit:
         alerts.append(
             SurveillanceAlert(
@@ -462,6 +527,54 @@ def surveil_position(
                 timing_signal=timing_signal,
             )
         )
+    if hypothesis and hypothesis.get("underwater"):
+        status = hypothesis.get("thesis_status")
+        action = hypothesis.get("recommended_action")
+        reason = "; ".join((hypothesis.get("reasons") or [])[:2]) or "see hypothesis card"
+        if status == THESIS_BROKEN or action == ACTION_EXIT_CANDIDATE:
+            alerts.append(
+                SurveillanceAlert(
+                    ticker=ticker,
+                    name=name,
+                    source=source,
+                    severity="action",
+                    message=f"Underwater + thesis broken — exit candidate: {reason}",
+                    mark=mark,
+                    stop_loss=stop_loss,
+                    take_profit=take_profit,
+                    timing_signal=timing_signal,
+                )
+            )
+        elif status == THESIS_WEAKENING or action == ACTION_WATCH_REVIEW:
+            alerts.append(
+                SurveillanceAlert(
+                    ticker=ticker,
+                    name=name,
+                    source=source,
+                    severity="watch",
+                    message=f"Underwater — re-check hypothesis: {reason}",
+                    mark=mark,
+                    stop_loss=stop_loss,
+                    take_profit=take_profit,
+                    timing_signal=timing_signal,
+                )
+            )
+        elif status == THESIS_INTACT:
+            alerts.append(
+                SurveillanceAlert(
+                    ticker=ticker,
+                    name=name,
+                    source=source,
+                    severity="info",
+                    message=(
+                        f"Underwater but thesis intact — tolerate within loser band: {reason}"
+                    ),
+                    mark=mark,
+                    stop_loss=stop_loss,
+                    take_profit=take_profit,
+                    timing_signal=timing_signal,
+                )
+            )
     if not alerts:
         alerts.append(
             SurveillanceAlert(
@@ -653,6 +766,9 @@ def run_owned_surveillance(
                     take_profit=position.take_profit,
                     timing_signal=row.get("timing_signal"),
                     signal=row.get("signal"),
+                    avg_cost=float(position.avg_cost or 0) or None,
+                    screen_row=row or None,
+                    use_adjusted_signal=bool(config.use_adjusted_signal),
                 )
             )
 
@@ -667,6 +783,7 @@ def run_owned_surveillance(
                 stop = (row.get("trade_plan") or {}).get("tactical_stop_loss")
             if target is None:
                 target = (row.get("trade_plan") or {}).get("tactical_take_profit")
+            avg_cost = item.get("avg_cost") or item.get("cost")
             alerts.extend(
                 surveil_position(
                     ticker=ticker,
@@ -677,6 +794,9 @@ def run_owned_surveillance(
                     take_profit=float(target) if target is not None else None,
                     timing_signal=row.get("timing_signal"),
                     signal=row.get("signal"),
+                    avg_cost=float(avg_cost) if avg_cost is not None else None,
+                    screen_row=row or None,
+                    use_adjusted_signal=bool(config.use_adjusted_signal),
                 )
             )
     return alerts
@@ -715,6 +835,7 @@ class AutomationRunResult:
     note: str = ""
     exit_shadow_review: dict[str, Any] = field(default_factory=dict)
     exit_timing_cohorts_review: dict[str, Any] = field(default_factory=dict)
+    hypothesis_integrity: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -727,6 +848,7 @@ class AutomationRunResult:
             "note": self.note,
             "exit_shadow_review": self.exit_shadow_review,
             "exit_timing_cohorts_review": self.exit_timing_cohorts_review,
+            "hypothesis_integrity": self.hypothesis_integrity,
             "generated_at": datetime.now(UTC).isoformat(),
         }
 
@@ -871,6 +993,15 @@ def run_daily_automation(
         trade_cost_pct=float(config.trade_cost_pct),
         as_of=gate["local_time"],
     )
+    hypothesis_integrity = run_hypothesis_integrity_pass(
+        output_dir=output_dir,
+        fund=fund,
+        track_id=str(config.track_id or "rules"),
+        candidates=marked,
+        prices_by_ticker=price_map,
+        use_adjusted_signal=bool(config.use_adjusted_signal),
+        as_of=gate["local_time"],
+    )
 
     result = AutomationRunResult(
         acted=acted,
@@ -882,6 +1013,7 @@ def run_daily_automation(
         note=note,
         exit_shadow_review=exit_shadow_review,
         exit_timing_cohorts_review=exit_timing_cohorts_review,
+        hypothesis_integrity=hypothesis_integrity,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -1204,7 +1336,8 @@ def run_learning_tracks(
             "primary AI-judgment track; rules track is the control; "
             "technical track is the timing/levels baseline; "
             "momentum_grace is an experimental exit overlay; "
-            "graduated_allocation tests trade-plan entry sizing and harvest skims."
+            "graduated_allocation tests trade-plan entry sizing and harvest skims; "
+            "hypothesis_integrity reviews underwater holdings before crude stops."
         ),
         "tracks": results,
     }
@@ -1220,6 +1353,11 @@ def run_learning_tracks(
     timing_summary = summarize_learning_tracks_exit_timing(base_dir)
     (base_dir / "learning_tracks_exit_timing.json").write_text(
         json.dumps(timing_summary, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    hypothesis_summary = summarize_learning_tracks_hypothesis_integrity(base_dir)
+    (base_dir / HYPOTHESIS_ROLLUP_FILENAME).write_text(
+        json.dumps(hypothesis_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary

@@ -32,6 +32,7 @@ from value_investor.review_payload_slim import (
     slim_exclusion_ladder_replay,
     slim_exclusion_universe,
     slim_exit_timing,
+    slim_hypothesis_integrity,
     slim_loser_snapshot_cards,
 )
 from value_investor.review_policy import (
@@ -243,6 +244,9 @@ def build_learning_director_payload(
         "loser_snapshot_cards": slim_loser_snapshot_cards(
             _safe_read(data_dir / "loser_snapshot_cards.json")
         ),
+        "hypothesis_integrity": slim_hypothesis_integrity(
+            _safe_read(paper_root / "learning_tracks_hypothesis_integrity.json")
+        ),
         "trajectory_evidence": slim_trajectory_evidence_for_review(
             _safe_read(data_dir / "trajectory_evidence_review.json")
         ),
@@ -330,8 +334,8 @@ You coordinate winner-pick vs loser-filter evidence across weekly reviews. This 
 observe-only — do not propose auto-applying knobs, mutating screens, spawning tracks,
 or opening engineering PRs. Vision phase activation is **proposal-only** (human ack).
 
-Trajectory evidence, loser cards, exclusion, and exit-timing exist to **highlight
-assessment-model and filter weak spots**. Scoring / filter experiments belong in
+Trajectory evidence, loser cards, exclusion, exit-timing, and hypothesis_integrity exist to
+**highlight assessment-model and filter weak spots**. Scoring / filter experiments belong in
 analysis-review (promotable to engineering). Churn experiments belong in
 paper-learning-review. Your job is oversight: check that those specialist reviews
 proposed experiments when their triggers fired — if they missed them, propose a thin
@@ -350,6 +354,9 @@ Reconcile top-pick (ai_judgment, conviction, sleeves) vs bottom-filter (exclusio
 universe archive). State whether strands are converging toward a bettable filtered cohort.
 Frame success as timely opinion updates (prediction_philosophy), not perfect backstory.
 If model_focus_candidates exist, say which assessment-model gap they imply.
+When hypothesis_integrity is present, note whether intact losers are within tolerance and
+whether selection_feedback_flags imply a scoring/filter gap (prefer thesis review over
+crude stops).
 
 COMPLEXITY & EXPERIMENT INVENTORY
 Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T06:25:30+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T09:14:49+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -93,6 +93,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N40 | **Auto-spawn exclusion ladder shadows from Sunday readiness** | exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet — keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows. | exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate |
 | N41 | **Auto-spawn exclusion ladder shadow when ready** | ready_for_shadow_spawn is computed Sunday but spawn-shadow stays manual; auto-spawn would couple lab noise to weekday tracks before human ack. Keep CLI spawn + register checklist gate instead. | Exclusion u4 shadow has been manually spawned and observed for >=4 weeks with clear ops load |
 | N42 | **Whole-index research memos for trajectory learning** | Do not memo the full FTSE hold tier to learn trajectory shifts. Screen archives + transition ledger + boundary watch already cover full-range opinion migration; blanket memos add noise and dilute buy-tier learning. | Trajectory prediction hit rates stay below chance after ≥13 archive weeks AND boundary-watch model_focus_candidates are exhausted |
+| N43 | **Replace technical-mode hard stops with hypothesis gate** | Technical paper track still auto-sells on tactical stop hits. Do not replace until hypothesis_integrity + exit-timing hold-recovery show that thesis-broken exits beat crude stops after costs. | hypothesis_first_exit has >=8 weekly marks and exit_timing hold-recovery ready_for_probability_analysis |
+| N44 | **Auto-tune selection knobs from in-portfolio loser family feedback** | selection_feedback_flags attribute loser family failures vs non-losers. Do not auto-apply model weights or exclusion knobs from this until shadow evidence links flags to forward excess. | hypothesis_integrity selection_feedback_flags stable for >=8 weeks and a scoring shadow beats control |
 
 ---
 
@@ -209,6 +211,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L174 | **Commercial EU regulatory filing API fallback** | If in-house Euronext/ESEF/direct-exchange fetch still leaves large indexed-without-body gaps on euro_depth buy-tier, evaluate a paid regulatory news or filing API (LSEG, Refinitiv, etc.) for headline+PDF retrieval — only after DIY provider MVP is measured. | euro_depth buy-tier has ≥30 memos but filings_with_body/total ratio still below 0.5 after 4 weeks of weekday EU ingest-loop |
 | L175 | **Graduated loser-filter tightening ladder experiment** | Complement winner-selection calibration with an observe-only paper track or offline_sim that steps portfolio knobs tighter on a schedule (or when bottom-quartile buy-tier names enter the book), ranking primarily on exclude_rate and bottom_buy_tier_held rather than catch_rate. Mirrors momentum_grace track pattern; keeps N3 screen thresholds frozen. | Primary AI track has ≥8 acted rebalance_log entries and knob calibration still shows negligible min_conviction/sector_cap discrimination |
 | L187 | **Excluded-loser short overlay vs index (offline diagnostic)** | Complement survivor EW cohort tracking with an observe-only long-index / short-excluded overlay replay on archive weeks. Isolates avoidance alpha separately from winner-pick concentration; keep gross-of-borrow offline until filtered_cohort_track shows stable cohort excess vs ^FTSE. | filtered_cohort_track active with >=8 epoch marks and survivor cohort excess vs index is flat or ambiguous |
+| L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
 
 ### Ops / reliability
 

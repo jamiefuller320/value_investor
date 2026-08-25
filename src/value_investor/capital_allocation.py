@@ -119,12 +119,21 @@ def exit_urgency(
     exit_streak: int = 0,
     momentum_grace: bool = False,
     use_adjusted_signal: bool = False,
+    hypothesis_status: str | None = None,
 ) -> float:
     """
-      Score 0–1 for how urgently to reduce or exit a holding.
+    Score 0–1 for how urgently to reduce or exit a holding.
 
     Harvest (still in target) vs rotation (left target) use the same scale.
+    When ``hypothesis_status`` is provided, price drawdowns do not dominate:
+    intact theses dampen urgency; broken theses boost it.
     """
+    from value_investor.hypothesis_integrity import (
+        DEFAULT_HYPOTHESIS_CONFIG,
+        THESIS_INTACT,
+        urgency_adjustment_for_hypothesis,
+    )
+
     score = 0.0
     signal = _screen_signal(row or {}, use_adjusted_signal=use_adjusted_signal)
 
@@ -143,7 +152,13 @@ def exit_urgency(
         elif gain >= 0.15:
             score += 0.1
         elif gain <= -0.1:
-            score += 0.12
+            # Crude underwater bump — skip when thesis still intact.
+            skip_underwater = (
+                hypothesis_status == THESIS_INTACT
+                and DEFAULT_HYPOTHESIS_CONFIG.skip_underwater_urgency_when_intact
+            )
+            if not skip_underwater:
+                score += 0.12
 
         plan = (row or {}).get("trade_plan") or {}
         take_profit = _optional_float(plan.get("tactical_take_profit"))
@@ -152,6 +167,8 @@ def exit_urgency(
 
     if momentum_grace:
         score = max(0.0, score - 0.2)
+
+    score += urgency_adjustment_for_hypothesis(hypothesis_status)
 
     if in_target_set and signal in BUY_SIGNALS and timing != "wait":
         score = min(score, 0.45)
@@ -291,6 +308,8 @@ def score_rebalance_candidates(
             }
         )
 
+    from value_investor.hypothesis_integrity import assess_holding_hypothesis
+
     exits: list[dict[str, Any]] = []
     for ticker, position in holdings.items():
         row = next((r for r in targets if str(r.get("ticker")) == ticker), None)
@@ -298,6 +317,13 @@ def score_rebalance_candidates(
         mark = price if price > 0 else None
         in_target = ticker in target_tickers
         streak = int(exit_streaks.get(ticker, 0))
+        hypothesis = assess_holding_hypothesis(
+            ticker=str(ticker),
+            mark=mark,
+            avg_cost=float(position.avg_cost or 0),
+            row=row,
+            use_adjusted_signal=use_adjusted_signal,
+        )
         urgency = exit_urgency(
             row=row,
             mark=mark,
@@ -306,6 +332,7 @@ def score_rebalance_candidates(
             exit_streak=streak,
             momentum_grace=bool(position.momentum_grace),
             use_adjusted_signal=use_adjusted_signal,
+            hypothesis_status=str(hypothesis.get("thesis_status") or ""),
         )
         current_value = (position.shares * price) if price else 0.0
         exits.append(
@@ -313,6 +340,8 @@ def score_rebalance_candidates(
                 "ticker": ticker,
                 "exit_urgency": round(urgency, 4),
                 "skim_fraction": round(skim_fraction(urgency, config=cfg), 4),
+                "thesis_status": hypothesis.get("thesis_status"),
+                "hypothesis_action": hypothesis.get("recommended_action"),
                 "lifecycle": classify_lifecycle_phase(
                     held=True,
                     in_target_set=in_target,

@@ -201,12 +201,46 @@ def slim_exit_timing(payload: dict[str, Any] | None, *, label: str) -> dict[str,
     return slim
 
 
+def slim_hypothesis_integrity(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Compact in-portfolio hypothesis + loser-tolerance rollup for director/review."""
+    if not isinstance(payload, dict):
+        return None
+    tracks_raw = payload.get("tracks") or {}
+    if not isinstance(tracks_raw, dict):
+        return None
+    tracks: dict[str, Any] = {}
+    for track_id, row in tracks_raw.items():
+        if not isinstance(row, dict):
+            continue
+        tracks[str(track_id)] = {
+            "holding_count": row.get("holding_count"),
+            "underwater_count": row.get("underwater_count"),
+            "loser_share": row.get("loser_share"),
+            "within_tolerance": row.get("within_tolerance"),
+            "balancing_hint": row.get("balancing_hint"),
+            "broken_loser_count": row.get("broken_loser_count"),
+            "intact_loser_count": row.get("intact_loser_count"),
+            "selection_feedback_flags": (row.get("selection_feedback_flags") or [])[:4],
+            "thesis_status_counts": row.get("thesis_status_counts"),
+        }
+    return {
+        "purpose": (
+            "Hypothesis-first underwater review — tolerate intact losers within band; "
+            "rotate broken theses; feed selection_feedback_flags into scoring/balancing"
+        ),
+        "observe_only": True,
+        "tracks": tracks,
+        "note": payload.get("note"),
+    }
+
+
 __all__ = [
     "slim_backtest",
     "slim_exclusion_ladder_replay",
     "slim_exclusion_universe",
     "slim_exit_timing",
     "slim_historical",
+    "slim_hypothesis_integrity",
     "slim_loser_snapshot_cards",
     "slim_simulation",
 ]

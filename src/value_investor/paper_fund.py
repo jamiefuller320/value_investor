@@ -1594,6 +1594,15 @@ def run_graduated_rebalance(
         current_value = position.shares * float(price)
         if current_value <= target_each * REBALANCE_TRIM_TOLERANCE:
             continue
+        from value_investor.hypothesis_integrity import assess_holding_hypothesis
+
+        hypothesis = assess_holding_hypothesis(
+            ticker=ticker,
+            mark=float(price),
+            avg_cost=float(position.avg_cost or 0),
+            row=row,
+            use_adjusted_signal=use_adjusted_signal,
+        )
         urgency = exit_urgency(
             row=row,
             mark=float(price),
@@ -1602,6 +1611,7 @@ def run_graduated_rebalance(
             exit_streak=0,
             momentum_grace=bool(position.momentum_grace),
             use_adjusted_signal=use_adjusted_signal,
+            hypothesis_status=str(hypothesis.get("thesis_status") or ""),
         )
         gain = unrealized_gain_pct(mark=float(price), avg_cost=float(position.avg_cost or 0))
         if urgency < alloc_cfg.skim_urgency_threshold:
