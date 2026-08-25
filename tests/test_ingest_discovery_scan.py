@@ -11,7 +11,6 @@ from value_investor.ingest_discovery_scan import (
     collect_curiosity_for_rows,
     merge_discovery_into_index,
     run_buy_tier_discovery_scan,
-    scan_ticker_for_new_filings,
 )
 from value_investor.research.ingest_improvement import (
     _priority_score,
