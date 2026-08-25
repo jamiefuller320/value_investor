@@ -82,6 +82,8 @@ def framework_metadata() -> dict[str, Any]:
                 "effective_signal",
                 "exit_streak",
                 "stress_triggers",
+                "thesis_status_at_start",
+                "recommended_action_at_start",
                 "checkpoints",
             ],
         },
@@ -165,6 +167,7 @@ def ingest_hold_episodes(
     prices_by_ticker: dict[str, float],
     as_of: str,
     cfg: ExitTimingCohortConfig | None = None,
+    use_adjusted_signal: bool = False,
 ) -> int:
     """Open hold-recovery episodes when stress triggers fire on an open position."""
     cfg = cfg or ExitTimingCohortConfig()
@@ -195,6 +198,17 @@ def ingest_hold_episodes(
         if ticker in open_by_ticker:
             continue
         started_at = str(as_of)
+        thesis_fields: dict[str, Any] = {}
+        if candidate is not None and mark > 0 and position.avg_cost > 0:
+            from value_investor.hypothesis_outcome_linker import assess_thesis_at_mark
+
+            thesis_fields = assess_thesis_at_mark(
+                ticker=ticker,
+                mark=mark,
+                avg_cost=float(position.avg_cost),
+                candidate=candidate,
+                use_adjusted_signal=use_adjusted_signal,
+            )
         episode = {
             "episode_id": _episode_id(track_id, ticker, started_at),
             "track_id": track_id,
@@ -209,6 +223,7 @@ def ingest_hold_episodes(
                 (mark - position.avg_cost) / position.avg_cost if position.avg_cost > 0 else 0.0,
                 4,
             ),
+            **thesis_fields,
             "screen_signal": str((candidate or {}).get("signal") or ""),
             "effective_signal": _effective_signal(candidate),
             "data_quality_score": (candidate or {}).get("data_quality_score"),
@@ -336,6 +351,8 @@ def ingest_swap_rotations(
     trades: list[dict[str, Any]],
     as_of: str,
     trade_cost_pct: float,
+    candidates: list[dict[str, Any]] | None = None,
+    use_adjusted_signal: bool = False,
 ) -> int:
     """Record same-pass sell+buy rotations for swap-success analysis."""
     sells = [t for t in trades if str(t.get("side") or "") == "sell"]
@@ -349,18 +366,34 @@ def ingest_swap_rotations(
         return 0
 
     def _leg(row: dict[str, Any], side: str) -> dict[str, Any]:
+        from value_investor.hypothesis_outcome_linker import assess_thesis_at_mark
+
         price = float(row.get("price") or 0)
-        avg_cost = float(row.get("avg_cost_at_exit") or 0)
+        avg_cost = float(row.get("avg_cost_at_exit") or row.get("avg_cost") or 0)
         realized = ((price - avg_cost) / avg_cost) if side == "sell" and avg_cost > 0 else None
-        payload = {
+        payload: dict[str, Any] = {
             "ticker": str(row.get("ticker") or ""),
             "price": round(price, 4),
             "shares": round(float(row.get("shares") or 0), 6),
             "gross": round(float(row.get("gross") or 0), 2),
             "cost": round(float(row.get("cost") or 0), 2),
         }
+        if avg_cost > 0:
+            payload["avg_cost_at_exit"] = round(avg_cost, 4)
         if realized is not None:
             payload["realized_pct"] = round(realized, 4)
+        if side == "sell" and price > 0 and avg_cost > 0:
+            ticker = str(row.get("ticker") or "")
+            cmap = _candidate_map(candidates or [])
+            payload.update(
+                assess_thesis_at_mark(
+                    ticker=ticker,
+                    mark=price,
+                    avg_cost=avg_cost,
+                    candidate=cmap.get(ticker.upper()) or cmap.get(ticker),
+                    use_adjusted_signal=use_adjusted_signal,
+                )
+            )
         return payload
 
     rotations.append(
@@ -575,6 +608,7 @@ def run_exit_timing_cohort_pass(
     trade_cost_pct: float,
     as_of: str | datetime | None = None,
     config: ExitTimingCohortConfig | None = None,
+    use_adjusted_signal: bool = False,
 ) -> dict[str, Any]:
     """Ingest/update observe-only exit-timing cohorts for one paper track."""
     cfg = config or ExitTimingCohortConfig()
@@ -601,6 +635,7 @@ def run_exit_timing_cohort_pass(
         prices_by_ticker=prices_by_ticker,
         as_of=when,
         cfg=cfg,
+        use_adjusted_signal=use_adjusted_signal,
     )
     hold_scored = update_hold_episodes(
         fund,
@@ -615,6 +650,8 @@ def run_exit_timing_cohort_pass(
         trades=trades,
         as_of=when,
         trade_cost_pct=trade_cost_pct,
+        candidates=candidates,
+        use_adjusted_signal=use_adjusted_signal,
     )
     swap_scored = update_swap_rotations(
         store,

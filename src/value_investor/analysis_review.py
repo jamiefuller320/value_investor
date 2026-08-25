@@ -36,6 +36,9 @@ from value_investor.review_payload_slim import (
     slim_loser_snapshot_cards as _slim_loser_snapshot_cards,
 )
 from value_investor.review_payload_slim import (
+    slim_hypothesis_outcomes as _slim_hypothesis_outcomes,
+)
+from value_investor.review_payload_slim import (
     slim_simulation as _slim_simulation,
 )
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
@@ -236,6 +239,9 @@ def build_analysis_payload(
     hypothesis_integrity = _slim_hypothesis_integrity(
         _safe_read(paper_root / "learning_tracks_hypothesis_integrity.json")
     )
+    hypothesis_outcomes = _slim_hypothesis_outcomes(
+        _safe_read(paper_root / "learning_tracks_hypothesis_outcomes.json")
+    )
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
     experiment_assessment = slim_experiment_assessment_for_review(
@@ -275,6 +281,7 @@ def build_analysis_payload(
         "trajectory_evidence": trajectory_evidence,
         "loser_snapshot_cards": loser_snapshot_cards,
         "hypothesis_integrity": hypothesis_integrity,
+        "hypothesis_outcomes": hypothesis_outcomes,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "experiment_assessment": experiment_assessment,
@@ -492,7 +499,7 @@ The **purpose of this review** is to turn evidence into **focus areas that refin
 assessment models and portfolio filters** — not to archive metrics for their own sake.
 Primary diagnostics for assessment models: trajectory_evidence + loser_snapshot_cards.
 Primary diagnostics for loser filters / churn: exclusion_universe, exclusion_ladder_replay,
-exit_timing_cohorts, exit_shadow, hypothesis_integrity. Paper-track P&L and backtests are context.
+exit_timing_cohorts, exit_shadow, hypothesis_integrity, hypothesis_outcomes. Paper-track P&L and backtests are context.
 
 Write SIX plain-text sections with headings exactly as shown:
 
@@ -556,6 +563,9 @@ Action contracts (include a line when the trigger fires — do not invent metric
 8. If hypothesis_integrity shows within_tolerance false OR broken_loser_count > 0 OR
    selection_feedback_flags non-empty → ≥1 [paper_churn] or [scoring] citing balancing_hint
    / failed family (do not propose crude mark stops; prefer thesis-broken rotation).
+9. If hypothesis_outcomes.readiness.ready_for_thesis_outcome_analysis is true → ≥1
+   [paper_churn] or [offline_sim] citing intact vs broken recovery_rate or learning_hints
+   (observe-only; no auto-apply thesis thresholds).
 
 Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 

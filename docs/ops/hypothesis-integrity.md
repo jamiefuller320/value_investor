@@ -68,7 +68,26 @@ losers than non-losers (feeds analysis-review / scoring experiments).
 | Surveillance | Stop-hit + intact thesis → **watch** (not action); underwater broken → action |
 | `exit_urgency` | Intact dampens urgency and skips crude −10% bump; broken boosts urgency |
 | Graduated harvest | Uses hypothesis-aware urgency |
-| Analysis / Learning Director | Slim rollup in weekly payloads |
+| **Outcome linker** | Stamps `thesis_status_at_start` on exit_timing hold/swap cohorts; aggregates recovery rates by thesis |
+| Analysis / Learning Director | Slim rollups in weekly payloads |
+
+### Outcome linker (learning loop)
+
+Runs after exit-timing + hypothesis integrity on each paper-auto pass:
+
+```bash
+ftse-hypothesis-outcomes --output-dir docs/data/paper_automation --tracks all
+```
+
+| Artifact | Role |
+|----------|------|
+| `hypothesis_outcome_link.json` | Enriched cohorts + review |
+| `hypothesis_outcome_link_review.json` | Rates by thesis_status_at_start |
+| `learning_tracks_hypothesis_outcomes.json` | Cross-track rollup |
+
+Readiness: `ready_for_thesis_outcome_analysis` when ≥8 closed hold episodes with thesis labels (and ≥3 per bucket where applicable). Until then, collects only — no auto-apply.
+
+Hold episodes opened via `exit_timing_cohorts` now stamp thesis at ingest; the linker backfills older episodes when screen rows are available.
 
 Automated / AI / graduated tracks already exit via target-set + confirm screens,
 not hard stops. Technical-mode hard stops remain for the timing baseline track

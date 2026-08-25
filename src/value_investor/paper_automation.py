@@ -21,6 +21,13 @@ from value_investor.hypothesis_integrity import (
     run_hypothesis_integrity_pass,
     summarize_learning_tracks_hypothesis_integrity,
 )
+from value_investor.hypothesis_outcome_linker import (
+    ROLLUP_FILENAME as HYPOTHESIS_OUTCOMES_ROLLUP_FILENAME,
+)
+from value_investor.hypothesis_outcome_linker import (
+    run_hypothesis_outcome_link_pass,
+    summarize_learning_tracks_hypothesis_outcomes,
+)
 from value_investor.paper_fund import (
     DEFAULT_EXIT_CONFIRM_SCREENS,
     DEFAULT_INITIAL_CASH,
@@ -836,6 +843,7 @@ class AutomationRunResult:
     exit_shadow_review: dict[str, Any] = field(default_factory=dict)
     exit_timing_cohorts_review: dict[str, Any] = field(default_factory=dict)
     hypothesis_integrity: dict[str, Any] = field(default_factory=dict)
+    hypothesis_outcome_link: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -849,6 +857,7 @@ class AutomationRunResult:
             "exit_shadow_review": self.exit_shadow_review,
             "exit_timing_cohorts_review": self.exit_timing_cohorts_review,
             "hypothesis_integrity": self.hypothesis_integrity,
+            "hypothesis_outcome_link": self.hypothesis_outcome_link,
             "generated_at": datetime.now(UTC).isoformat(),
         }
 
@@ -992,6 +1001,7 @@ def run_daily_automation(
         prices_by_ticker=price_map,
         trade_cost_pct=float(config.trade_cost_pct),
         as_of=gate["local_time"],
+        use_adjusted_signal=bool(config.use_adjusted_signal),
     )
     hypothesis_integrity = run_hypothesis_integrity_pass(
         output_dir=output_dir,
@@ -999,6 +1009,13 @@ def run_daily_automation(
         track_id=str(config.track_id or "rules"),
         candidates=marked,
         prices_by_ticker=price_map,
+        use_adjusted_signal=bool(config.use_adjusted_signal),
+        as_of=gate["local_time"],
+    )
+    hypothesis_outcome_link = run_hypothesis_outcome_link_pass(
+        output_dir=output_dir,
+        track_id=str(config.track_id or "rules"),
+        candidates=decision_candidates,
         use_adjusted_signal=bool(config.use_adjusted_signal),
         as_of=gate["local_time"],
     )
@@ -1014,6 +1031,7 @@ def run_daily_automation(
         exit_shadow_review=exit_shadow_review,
         exit_timing_cohorts_review=exit_timing_cohorts_review,
         hypothesis_integrity=hypothesis_integrity,
+        hypothesis_outcome_link=hypothesis_outcome_link,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -1358,6 +1376,11 @@ def run_learning_tracks(
     hypothesis_summary = summarize_learning_tracks_hypothesis_integrity(base_dir)
     (base_dir / HYPOTHESIS_ROLLUP_FILENAME).write_text(
         json.dumps(hypothesis_summary, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    outcomes_summary = summarize_learning_tracks_hypothesis_outcomes(base_dir)
+    (base_dir / HYPOTHESIS_OUTCOMES_ROLLUP_FILENAME).write_text(
+        json.dumps(outcomes_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary

@@ -234,6 +234,37 @@ def slim_hypothesis_integrity(payload: dict[str, Any] | None) -> dict[str, Any] 
     }
 
 
+def slim_hypothesis_outcomes(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Compact thesis-vs-outcome rollup for weekly reviews."""
+    if not isinstance(payload, dict):
+        return None
+    tracks_raw = payload.get("tracks") or {}
+    if not isinstance(tracks_raw, dict):
+        return None
+    tracks: dict[str, Any] = {}
+    for track_id, row in tracks_raw.items():
+        if not isinstance(row, dict):
+            continue
+        readiness = row.get("readiness") or {}
+        tracks[str(track_id)] = {
+            "readiness": readiness,
+            "learning_hints": (row.get("learning_hints") or [])[:3],
+            "hold_closed_with_thesis": row.get("hold_closed_with_thesis"),
+            "intact_recovery_rate": row.get("intact_recovery_rate"),
+            "broken_recovery_rate": row.get("broken_recovery_rate"),
+            "swap_sell_legs_with_thesis": row.get("swap_sell_legs_with_thesis"),
+        }
+    return {
+        "purpose": (
+            "Thesis-at-start vs hold-recovery / swap outcomes — learning loop for "
+            "hypothesis-first exits (observe-only until readiness.ready_for_thesis_outcome_analysis)"
+        ),
+        "observe_only": True,
+        "tracks": tracks,
+        "note": payload.get("note"),
+    }
+
+
 __all__ = [
     "slim_backtest",
     "slim_exclusion_ladder_replay",
@@ -241,6 +272,7 @@ __all__ = [
     "slim_exit_timing",
     "slim_historical",
     "slim_hypothesis_integrity",
+    "slim_hypothesis_outcomes",
     "slim_loser_snapshot_cards",
     "slim_simulation",
 ]
