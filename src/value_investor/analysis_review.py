@@ -30,6 +30,9 @@ from value_investor.review_payload_slim import (
     slim_historical as _slim_historical,
 )
 from value_investor.review_payload_slim import (
+    slim_hypothesis_integrity as _slim_hypothesis_integrity,
+)
+from value_investor.review_payload_slim import (
     slim_loser_snapshot_cards as _slim_loser_snapshot_cards,
 )
 from value_investor.review_payload_slim import (
@@ -230,6 +233,9 @@ def build_analysis_payload(
     loser_snapshot_cards = _slim_loser_snapshot_cards(
         _safe_read(data_dir / "loser_snapshot_cards.json")
     )
+    hypothesis_integrity = _slim_hypothesis_integrity(
+        _safe_read(paper_root / "learning_tracks_hypothesis_integrity.json")
+    )
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
     experiment_assessment = slim_experiment_assessment_for_review(
@@ -268,6 +274,7 @@ def build_analysis_payload(
         "exclusion_ladder_replay": exclusion_ladder_replay,
         "trajectory_evidence": trajectory_evidence,
         "loser_snapshot_cards": loser_snapshot_cards,
+        "hypothesis_integrity": hypothesis_integrity,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "experiment_assessment": experiment_assessment,
@@ -485,7 +492,7 @@ The **purpose of this review** is to turn evidence into **focus areas that refin
 assessment models and portfolio filters** — not to archive metrics for their own sake.
 Primary diagnostics for assessment models: trajectory_evidence + loser_snapshot_cards.
 Primary diagnostics for loser filters / churn: exclusion_universe, exclusion_ladder_replay,
-exit_timing_cohorts, exit_shadow. Paper-track P&L and backtests are context.
+exit_timing_cohorts, exit_shadow, hypothesis_integrity. Paper-track P&L and backtests are context.
 
 Write SIX plain-text sections with headings exactly as shown:
 
@@ -515,6 +522,8 @@ Compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
 knob_calibration_priors (recommended_prior per track, confidence, changed_vs_current),
 and exit_shadow when present. Cite exit_timing_cohorts.readiness (hold/swap closed counts)
 and exclusion_ladder_replay.readiness.ready_for_shadow_spawn when present.
+When hypothesis_integrity is present, cite per-track loser_share, within_tolerance,
+balancing_hint, and any selection_feedback_flags (intact losers are expected in a value book).
 Note unrealized vs realized marks only if present in JSON.
 
 PROPOSED EXPERIMENTS
@@ -544,6 +553,9 @@ Action contracts (include a line when the trigger fires — do not invent metric
 7. If experiment_assessment.recommendations is non-empty → ≥1 [monitoring] line listing
    experiment_id(s) with status recommend and human_ack_required (never auto-apply;
    cite gate_marks / gate_excess_after_costs when present).
+8. If hypothesis_integrity shows within_tolerance false OR broken_loser_count > 0 OR
+   selection_feedback_flags non-empty → ≥1 [paper_churn] or [scoring] citing balancing_hint
+   / failed family (do not propose crude mark stops; prefer thesis-broken rotation).
 
 Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 

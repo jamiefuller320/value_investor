@@ -56,6 +56,7 @@ consistently under-weight capital-allocation evidence.
 | Phase | Status | Activate when |
 |-------|--------|---------------|
 | `graduated_allocation_track` | **active** | v1 shadow running |
+| `hypothesis_first_exit` | **active** | Underwater thesis cards + loser tolerance |
 | `capital_rotation_coordinator` | planned | Exit-timing cohorts ready + swap rotations ≥10 closed |
 | `conviction_weighted_sizing` | planned | Graduated track ≥8 epoch marks; cost_drag stable |
 
@@ -88,4 +89,5 @@ state machine), **N38** (no live capital promotion before paper evidence).
 
 See also [`primary-learning-track.md`](primary-learning-track.md),
 [`learning-director-vision.md`](learning-director-vision.md),
-[`exit-timing-cohorts.md`](exit-timing-cohorts.md).
+[`exit-timing-cohorts.md`](exit-timing-cohorts.md),
+[`hypothesis-integrity.md`](hypothesis-integrity.md).

@@ -58,6 +58,7 @@ builds; it proposes activation with explicit triggers cited from JSON.
 | Phase | What | Activate when |
 |-------|------|----------------|
 | `graduated_allocation_track` | Trade-plan starter sizing + harvest skims (v1 shadow) | **Active** — compare vs rules after ≥8 marks |
+| `hypothesis_first_exit` | Underwater thesis cards + loser-tolerance feedback | **Active** — observe-only; pair with exit-timing |
 | `capital_rotation_coordinator` | Swap-score gate for sell→buy rotations | Exit-timing cohorts + graduated track history |
 | `conviction_weighted_sizing` | Conviction-weighted sleeves vs equal-weight | Graduated track cost_drag stable |
 | `regime_slices_8_16_24` | Rolling 8/16/24-week metric slices | ≥16 archive weeks |
@@ -82,6 +83,7 @@ owning every experiment:
 | Assessment models / scoring | analysis-review | Check scoring experiments cite trajectory / loser cards |
 | Loser filters / exclusion | analysis-review (+ manual spawn) | Convergence of filter vs pick strands |
 | Churn / exit overlays | paper-learning-review | Inventory budget; do not duplicate churn experiments |
+| Hypothesis-first underwater | analysis-review (+ hypothesis cards) | Intact losers vs broken theses; selection feedback |
 | Stage / vision activation | director + monthly horizon | ACTIVATE / HOLD / RETIRE only |
 
 Director **PROPOSED ACTIONS** should stay thin (≤3–5), prefer `[analysis]` / `[monitoring]`

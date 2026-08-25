@@ -100,6 +100,14 @@
       "dependencies": ["graduated_allocation_track", "capital_rotation_coordinator"]
     },
     {
+      "id": "hypothesis_first_exit",
+      "status": "active",
+      "label": "Hypothesis-first underwater exit (not crude stops)",
+      "summary": "On mark drawdown, ask whether the investment hypothesis still holds on screen/research facts; tolerate a configured share of intact losers; feed family-fail attribution into selection feedback and balancing hints. Observe-only cards + exit_urgency dampening; no auto-sell from price alone.",
+      "revisit_when": "learning_tracks_hypothesis_integrity shows stable within_tolerance patterns across >=8 weekly marks AND exit_timing hold-recovery readiness met",
+      "dependencies": ["v1_weekly_director", "exit_timing_cohorts", "graduated_allocation_track"]
+    },
+    {
       "id": "super_director_auto_promote",
       "status": "deferred",
       "label": "Auto-promote experiments to engineering",
