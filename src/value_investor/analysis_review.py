@@ -33,10 +33,10 @@ from value_investor.review_payload_slim import (
     slim_hypothesis_integrity as _slim_hypothesis_integrity,
 )
 from value_investor.review_payload_slim import (
-    slim_loser_snapshot_cards as _slim_loser_snapshot_cards,
+    slim_hypothesis_outcomes as _slim_hypothesis_outcomes,
 )
 from value_investor.review_payload_slim import (
-    slim_hypothesis_outcomes as _slim_hypothesis_outcomes,
+    slim_loser_snapshot_cards as _slim_loser_snapshot_cards,
 )
 from value_investor.review_payload_slim import (
     slim_simulation as _slim_simulation,

@@ -169,9 +169,7 @@ def enrich_cohorts_with_thesis(
 
     rotations: list[dict[str, Any]] = []
     for rotation in store.get("swap_rotations") or []:
-        before = any(
-            leg.get("thesis_status_at_start") for leg in (rotation.get("sells") or [])
-        )
+        before = any(leg.get("thesis_status_at_start") for leg in (rotation.get("sells") or []))
         stamped = stamp_swap_rotation_thesis(
             dict(rotation),
             candidates_by_ticker=cmap,
@@ -212,8 +210,7 @@ def aggregate_hold_outcomes_by_thesis(
     closed = [
         row
         for row in episodes
-        if str(row.get("status") or "open") != "open"
-        and row.get("thesis_status_at_start")
+        if str(row.get("status") or "open") != "open" and row.get("thesis_status_at_start")
     ]
     buckets: dict[str, list[dict[str, Any]]] = {status: [] for status in THESIS_STATUSES}
     unknown = 0
@@ -292,11 +289,7 @@ def aggregate_swap_outcomes_by_thesis(
         by_status[status] = {
             "leg_count": leg_count,
             "replacement_outperformed_rate": round(replacement_wins / leg_count, 4),
-            "verdicts": {
-                key: value
-                for key, value in counts.items()
-                if key not in {"leg_count"}
-            },
+            "verdicts": {key: value for key, value in counts.items() if key not in {"leg_count"}},
         }
 
     return {
@@ -359,9 +352,10 @@ def build_hypothesis_outcome_review(
     intact = (hold_summary.get("by_thesis_status") or {}).get(THESIS_INTACT) or {}
     broken = (hold_summary.get("by_thesis_status") or {}).get(THESIS_BROKEN) or {}
     learning_hints: list[str] = []
-    if int(intact.get("closed_count") or 0) >= MIN_CLOSED_PER_BUCKET and int(
-        broken.get("closed_count") or 0
-    ) >= MIN_CLOSED_PER_BUCKET:
+    if (
+        int(intact.get("closed_count") or 0) >= MIN_CLOSED_PER_BUCKET
+        and int(broken.get("closed_count") or 0) >= MIN_CLOSED_PER_BUCKET
+    ):
         intact_recovery = float(intact.get("recovery_rate") or 0)
         broken_recovery = float(broken.get("recovery_rate") or 0)
         if intact_recovery > broken_recovery + 0.15:
@@ -476,9 +470,7 @@ def run_hypothesis_outcome_link_pass(
     )
     save_exit_timing_cohorts(cohorts_path, store)
 
-    review = build_hypothesis_outcome_review(
-        store, track_id=track_id, stamped_this_pass=stamped
-    )
+    review = build_hypothesis_outcome_review(store, track_id=track_id, stamped_this_pass=stamped)
     payload = {
         **review,
         "cohorts_path": str(cohorts_path),
@@ -488,9 +480,7 @@ def run_hypothesis_outcome_link_pass(
     (output_dir / OUTCOMES_FILENAME).write_text(
         json.dumps(payload, indent=2) + "\n", encoding="utf-8"
     )
-    (output_dir / REVIEW_FILENAME).write_text(
-        json.dumps(review, indent=2) + "\n", encoding="utf-8"
-    )
+    (output_dir / REVIEW_FILENAME).write_text(json.dumps(review, indent=2) + "\n", encoding="utf-8")
     (output_dir / "hypothesis_outcome_link.md").write_text(
         format_hypothesis_outcome_markdown(review), encoding="utf-8"
     )
