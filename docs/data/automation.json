@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-24T08:28:22.836072+00:00",
+  "generated_at": "2026-08-25T08:28:12.890025+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -317,10 +317,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-08-24T08:27:16.649541+00:00",
+        "at": "2026-08-25T08:27:10.972313+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (0 trade(s))."
+        "detail": "Rebalanced after open settle (3 trade(s))."
       },
       {
         "at": "2026-08-23T05:58:06.255702+00:00",
@@ -891,20 +891,42 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-08-24T08:27:16.649541+00:00",
+      "generated_at": "2026-08-25T08:27:10.972313+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "note": "Rebalanced after open settle (3 trade(s)).",
       "gate": {
-        "local_time": "2026-08-24T09:27:05.367477+01:00",
+        "local_time": "2026-08-25T09:27:01.290495+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-08-24T08:00:00+01:00",
-        "settle_at": "2026-08-24T09:15:00+01:00",
+        "market_open_at": "2026-08-25T08:00:00+01:00",
+        "settle_at": "2026-08-25T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 0,
-      "trades_sample": [],
+      "trade_count": 3,
+      "trades_sample": [
+        {
+          "acted_at": "2026-08-25T09:27:01.290495+01:00",
+          "ticker": "SN.L",
+          "side": "sell",
+          "name": "Smith & Nephew plc",
+          "net_cash": 234.41
+        },
+        {
+          "acted_at": "2026-08-25T09:27:01.290495+01:00",
+          "ticker": "MEGP.L",
+          "side": "sell",
+          "name": "ME Group International plc",
+          "net_cash": 21.49
+        },
+        {
+          "acted_at": "2026-08-25T09:27:01.290495+01:00",
+          "ticker": "IMB.L",
+          "side": "buy",
+          "name": "Imperial Brands PLC",
+          "net_cash": -255.9
+        }
+      ],
       "fund": {
         "cash": 0.0,
         "nav": null,
@@ -1122,7 +1144,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-08-23T07:23:23.356628+00:00",
-    "queue_ui_updated_at": "2026-08-24T08:28:22.837399+00:00",
+    "queue_ui_updated_at": "2026-08-25T08:28:12.891627+00:00",
     "task_count": 59,
     "status": {
       "open_count": 0,
@@ -1142,7 +1164,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-24T08:28:22.851616+00:00",
+    "generated_at": "2026-08-25T08:28:12.909034+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1152,9 +1174,9 @@
         "track_label": "AI judgment (research accumulate + adjusted_signal)",
         "is_primary_learning_track": true,
         "applied": true,
-        "epoch_started_at": "2026-08-24T08:28:21.043909+00:00",
-        "baseline_nav": 833.43,
-        "epoch_nav": 833.43,
+        "epoch_started_at": "2026-08-25T08:28:10.767585+00:00",
+        "baseline_nav": 822.16,
+        "epoch_nav": 822.16,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
         "equity_marks": 0,
@@ -1166,7 +1188,7 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.5,
+          "min_conviction": 0.55,
           "sector_cap": 0.2
         }
       },
@@ -1252,10 +1274,10 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 8,
+        "equity_marks": 9,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0015,
-        "excess_after_costs": 0.0015,
+        "benchmark_return": 0.0019,
+        "excess_after_costs": -0.0019,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1272,13 +1294,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-12T09:36:42.012926+00:00",
         "baseline_nav": 862.27,
-        "epoch_nav": 752.85,
-        "epoch_return": -0.1269,
-        "post_apply_trade_count": 13,
-        "equity_marks": 8,
+        "epoch_nav": 742.81,
+        "epoch_return": -0.1385,
+        "post_apply_trade_count": 16,
+        "equity_marks": 9,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0015,
-        "excess_after_costs": -0.1254,
+        "benchmark_return": 0.0019,
+        "excess_after_costs": -0.1405,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {

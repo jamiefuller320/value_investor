@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-08-24T16:52:29.115282+00:00",
+  "updated_at": "2026-08-25T08:28:13.760743+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -25,12 +25,12 @@
     "experimental_track_count": 1
   },
   "summary": {
-    "continue": 2,
     "fail": 2,
-    "proposed": 2,
-    "observing": 8,
-    "recommend": 0,
-    "human_ack_pending": 0,
+    "observing": 5,
+    "recommend": 4,
+    "continue": 2,
+    "proposed": 1,
+    "human_ack_pending": 4,
     "total": 14
   },
   "experiments": [
@@ -52,10 +52,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 5,
-      "gate_excess_after_costs": -0.0712,
-      "excess_vs_primary": 0.1121,
-      "excess_vs_rules": 0.2037,
+      "gate_marks": 6,
+      "gate_excess_after_costs": -0.0803,
+      "excess_vs_primary": 0.1177,
+      "excess_vs_rules": 0.2082,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -77,7 +77,7 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 2,
+      "gate_marks": 3,
       "gate_excess_after_costs": null,
       "excess_vs_primary": null,
       "excess_vs_rules": null,
@@ -103,7 +103,7 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 2,
+      "gate_marks": 3,
       "gate_excess_after_costs": null,
       "excess_vs_primary": null,
       "excess_vs_rules": null,
@@ -140,9 +140,9 @@
       "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 13,
-      "gate_excess_after_costs": -0.0241,
-      "excess_vs_primary": 0.1592,
+      "gate_marks": 14,
+      "gate_excess_after_costs": -0.0276,
+      "excess_vs_primary": 0.1704,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": true,
@@ -192,6 +192,14 @@
               "positive_rate": 0.3431,
               "mean_forward_return": -0.002598,
               "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "horizon_hit_rate",
+              "key": "1w",
+              "horizon": "1w",
+              "count": 266,
+              "prediction_hit_rate": 0.406,
+              "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
             }
           ]
         },
@@ -243,15 +251,15 @@
       "title": "Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
       "area": "monitoring",
       "pipeline": "analysis_review",
-      "status": "proposed",
+      "status": "recommend",
       "source_status": "proposed",
-      "human_ack_required": false,
+      "human_ack_required": true,
       "task_status": "proposed",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
-          "exit_timing_ready": false
+          "exit_timing_ready": true
         }
       },
       "evidence_path": "docs/data/analysis_tasks.json"
@@ -281,15 +289,15 @@
       "title": "Epoch-zero dashboard for min_conviction 0.45 apply (2026-08-21) — expected learning value: first trajectory read on whether the opinion-flip reduced `trade_count`/`cost_drag` without eroding the +9.16",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "observing",
+      "status": "recommend",
       "source_status": "accepted",
-      "human_ack_required": false,
+      "human_ack_required": true,
       "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
-          "exit_timing_ready": false
+          "exit_timing_ready": true
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
@@ -300,15 +308,15 @@
       "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "observing",
+      "status": "recommend",
       "source_status": "accepted",
-      "human_ack_required": false,
+      "human_ack_required": true,
       "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
-          "exit_timing_ready": false
+          "exit_timing_ready": true
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
@@ -354,6 +362,14 @@
               "positive_rate": 0.3431,
               "mean_forward_return": -0.002598,
               "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "horizon_hit_rate",
+              "key": "1w",
+              "horizon": "1w",
+              "count": 266,
+              "prediction_hit_rate": 0.406,
+              "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
             }
           ]
         },
@@ -391,15 +407,15 @@
       "title": "IMB.L adjacent buy→sell flip audit (rules + ai_judgment) — expected learning value: isolate whether conviction exits or screen-rotation drove the shared flip (`paper_learning_review.sections.per_track",
       "area": "paper_churn",
       "pipeline": "learning_director",
-      "status": "observing",
+      "status": "recommend",
       "source_status": "accepted",
-      "human_ack_required": false,
+      "human_ack_required": true,
       "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
-          "exit_timing_ready": false
+          "exit_timing_ready": true
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
@@ -424,8 +440,62 @@
       "evidence_path": "docs/data/learning_director_tasks.json"
     }
   ],
-  "recommendations": [],
-  "task_sync": null,
+  "recommendations": [
+    {
+      "experiment_id": "ana-20260728-04",
+      "kind": "analysis_task",
+      "title": "Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
+      "pipeline": "analysis_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
+      "experiment_id": "ldr-20260823-01",
+      "kind": "learning_director_task",
+      "title": "Epoch-zero dashboard for min_conviction 0.45 apply (2026-08-21) — expected learning value: first trajectory read on whether the opinion-flip reduced `trade_count`/`cost_drag` without eroding the +9.16",
+      "pipeline": "learning_director",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
+      "experiment_id": "ldr-20260823-02",
+      "kind": "learning_director_task",
+      "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
+      "pipeline": "learning_director",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "monitoring"
+    },
+    {
+      "experiment_id": "ldr-20260823-04",
+      "kind": "learning_director_task",
+      "title": "IMB.L adjacent buy→sell flip audit (rules + ai_judgment) — expected learning value: isolate whether conviction exits or screen-rotation drove the shared flip (`paper_learning_review.sections.per_track",
+      "pipeline": "learning_director",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "paper_churn"
+    }
+  ],
+  "task_sync": {
+    "updated": [
+      "ana-20260728-01",
+      "ana-20260728-02",
+      "ana-20260728-04",
+      "ana-20260728-05",
+      "ldr-20260823-01",
+      "ldr-20260823-02",
+      "ldr-20260823-03",
+      "ldr-20260823-04",
+      "ldr-20260823-05"
+    ],
+    "skipped": []
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
