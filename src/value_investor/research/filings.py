@@ -103,6 +103,44 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
         "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
     ],
+    "VOE.VI": [
+        "https://www.voestalpine.com/group/static/sites/group/.downloads/en/publications-2025-26/2025-26-annual-report.pdf",
+    ],
+    "BAS.DE": [
+        "https://report.basf.com/2025/en/_assets/downloads/full-basf-report-2025-basf-ar25.pdf",
+    ],
+    "ESSITY-B.ST": [
+        "https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
+    ],
+    "DOC.VI": [
+        "https://www.doco.com/Portals/8/berichte/jahres-und-quartalsberichte/en/q4_2526.pdf",
+        "https://www.doco.com/Portals/8/berichte/jahres-und-quartalsberichte/en/q4_2425.pdf",
+    ],
+    "VIG.VI": [
+        "https://group.vig/media/kyij42ig/2025-vig-group-annual-report.pdf",
+    ],
+    "APAM.AS": [
+        "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
+    ],
+    "POST.VI": [
+        "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
+    ],
+    "OMV.VI": [
+        "https://reports.omv.com/en/annual-report/2025/_assets/downloads/entire-omv-ar25.pdf",
+    ],
+    "NVG.LS": [
+        "https://thenavigatorcompany.com/wp-content/uploads/2026/02/NVG_Divulgacao_Resultados_2025-1.pdf",
+        "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
+    ],
+    "DQ7A.IR": [
+        "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf",
+    ],
+    "NBA.LS": [
+        "https://content.novabase.com/storage/uploads/relatorio-contas-novabase-2025-versao-ingles-nao-esef.pdf",
+    ],
+    "MUV2.DE": [
+        "https://www.munichre.com/content/dam/munichre/mrwebsiteslaunches/2025-annual-report/MunichRe-Group-Annual-Report-2025-en.pdf/_jcr_content/renditions/original./MunichRe-Group-Annual-Report-2025-en.pdf",
+    ],
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
@@ -117,6 +155,12 @@ _SEC_TICKER_ALIASES: dict[str, str] = {
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
 _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
     "SHELL.AS": ("SHEL.L",),
+}
+
+# filings.xbrl.org entity search aliases when Yahoo/legal names miss the ESEF index.
+_ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
+    "SKF": ("SKF Group",),
+    "SKF-B": ("SKF Group",),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -2148,7 +2192,7 @@ ESEF_API_BASE = "https://filings.xbrl.org/api"
 ESEF_FILINGS_BASE = "https://filings.xbrl.org"
 
 
-def _esef_entity_name_variants(company_name: str) -> list[str]:
+def _esef_entity_name_variants(company_name: str, *, ticker: str = "") -> list[str]:
     """Candidate legal names for filings.xbrl.org entity search."""
     raw = (company_name or "").strip()
     if not raw:
@@ -2177,12 +2221,17 @@ def _esef_entity_name_variants(company_name: str) -> list[str]:
         _add(" ".join(parts[:2]))
     if len(parts) >= 3:
         _add(" ".join(parts[:3]))
+    upper = (ticker or "").strip().upper()
+    base = _base_symbol(ticker)
+    for key in (upper, base):
+        for alias in _ESEF_ENTITY_SEARCH_ALIASES.get(key, ()):
+            _add(str(alias))
     return variants
 
 
-def _esef_search_entity_identifier(company_name: str) -> str | None:
+def _esef_search_entity_identifier(company_name: str, *, ticker: str = "") -> str | None:
     """Resolve an ESEF entity LEI/identifier via name search."""
-    for name in _esef_entity_name_variants(company_name):
+    for name in _esef_entity_name_variants(company_name, ticker=ticker):
         query = urllib.parse.urlencode(
             {
                 "filter[name]": name,
@@ -2215,7 +2264,7 @@ def fetch_filings_esef_direct(
 
     Returns metadata rows with direct XHTML report URLs suitable for body extraction.
     """
-    identifier = _esef_search_entity_identifier(company_name)
+    identifier = _esef_search_entity_identifier(company_name, ticker=ticker)
     if not identifier:
         return []
     query = urllib.parse.urlencode(
