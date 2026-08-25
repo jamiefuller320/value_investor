@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-24T16:41:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T06:14:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -92,6 +92,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N39 | **Full-universe deep memo PIT replay** | Re-running full research memos for every name on each archived weekly turn is out of scope; use logged screen/overlay fields at t instead (see ftse-trajectory-evidence). | Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features) |
 | N40 | **Auto-spawn exclusion ladder shadows from Sunday readiness** | exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet — keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows. | exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate |
 | N41 | **Auto-spawn exclusion ladder shadow when ready** | ready_for_shadow_spawn is computed Sunday but spawn-shadow stays manual; auto-spawn would couple lab noise to weekday tracks before human ack. Keep CLI spawn + register checklist gate instead. | Exclusion u4 shadow has been manually spawned and observed for >=4 weeks with clear ops load |
+| N42 | **Whole-index research memos for trajectory learning** | Do not memo the full FTSE hold tier to learn trajectory shifts. Screen archives + transition ledger + boundary watch already cover full-range opinion migration; blanket memos add noise and dilute buy-tier learning. | Trajectory prediction hit rates stay below chance after ≥13 archive weeks AND boundary-watch model_focus_candidates are exhausted |
 
 ---
 
@@ -125,6 +126,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L176 | **Conviction-weighted sleeve sizing (replace equal-weight)** | When max_positions widens to 4-8, rank sleeves by conviction_score (with sector_cap floor) instead of strict NAV/positions equal-weight; cap any single name at e.g. 1.5x the median sleeve. | Primary learning track has >=12 weeks marks at max_positions>=4 and cost_drag is stable; compare vs equal-weight in rebalance_log replay |
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
+| L189 | **Surplus-budget deepen cheap full-range trajectory features** | If Cursor Ultra headroom stays high, spend on denser weekly archives, richer boundary-watch features, and wider near-miss exit-timing sims—not on expanding selective research into static mid-index holds. | weekly_ops regularly underspends AND trajectory evidence has ≥13 labeled archive weeks |
 
 ### Universe & data
 
