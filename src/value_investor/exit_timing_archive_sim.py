@@ -24,19 +24,24 @@ from value_investor.exit_timing_cohorts import (
     framework_metadata,
 )
 from value_investor.paper_fund import BUY_SIGNALS
+from value_investor.trajectory_evidence import PRE_BUY_CONVICTION
 
 COHORTS_FILENAME = "exit_timing_near_miss.json"
 REVIEW_FILENAME = "exit_timing_near_miss_review.json"
 ARCHIVE_TRACK_ID = "archive_near_miss"
 
+# Wider surplus-budget defaults (L118 / L189): align with pre_buy floor, more episodes/week.
+DEFAULT_MIN_CONVICTION = PRE_BUY_CONVICTION
+DEFAULT_MAX_EPISODES_PER_WEEK = 25
+
 
 @dataclass
 class ExitTimingArchiveSimConfig:
     shadow_windows_days: tuple[int, ...] = DEFAULT_WINDOWS_DAYS
-    min_conviction: float = 0.35
+    min_conviction: float = DEFAULT_MIN_CONVICTION
     min_data_quality: float = 0.0
     near_miss_signals: frozenset[str] = frozenset({"hold"})
-    max_episodes_per_week: int = 10
+    max_episodes_per_week: int = DEFAULT_MAX_EPISODES_PER_WEEK
     breakeven_threshold: float = BREAKEVEN_THRESHOLD
     include_held_episodes: bool = True
     paper_root: Path | None = None
@@ -462,13 +467,48 @@ def archive_sim_metadata() -> dict[str, Any]:
         "below_buy_tier": True,
         "held_book_from_rebalance_log": True,
         "default_signals": sorted({"hold"}),
-        "default_min_conviction": 0.35,
+        "default_min_conviction": DEFAULT_MIN_CONVICTION,
+        "default_max_episodes_per_week": DEFAULT_MAX_EPISODES_PER_WEEK,
+        "aligned_with": "trajectory_evidence.PRE_BUY_CONVICTION",
     }
     base["note"] = (
         "Observe-only priors from archived weekly screens plus rebalance_log "
         "held-ticker episodes. Does not replace live paper exit_timing cohorts."
     )
     return base
+
+
+def _conviction_band(conviction: float | None) -> str:
+    value = float(conviction or 0)
+    if value >= 0.45:
+        return "high_ge_0.45"
+    if value >= PRE_BUY_CONVICTION:
+        return "pre_buy_0.28_0.45"
+    return "below_pre_buy"
+
+
+def summarize_near_miss_by_conviction_band(
+    hold_episodes: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Stratify closed near-miss hold episodes by conviction band."""
+    bands: dict[str, list[dict[str, Any]]] = {}
+    for episode in hold_episodes:
+        if str(episode.get("episode_kind") or "") != "near_miss_observe":
+            continue
+        if str(episode.get("status") or "") != "closed":
+            continue
+        band = _conviction_band(episode.get("conviction_score"))
+        bands.setdefault(band, []).append(episode)
+
+    summary: dict[str, Any] = {}
+    for band, rows in sorted(bands.items()):
+        recovered = sum(1 for row in rows if row.get("recovered_to_breakeven") is True)
+        summary[band] = {
+            "closed_count": len(rows),
+            "recovered_to_breakeven_count": recovered,
+            "recovery_rate": round(recovered / len(rows), 4) if rows else None,
+        }
+    return summary
 
 
 def run_exit_timing_archive_sim(
@@ -567,9 +607,12 @@ def run_exit_timing_archive_sim(
         "swap_rotation_near_miss": near_miss_swap_count,
         "swap_rotation_log_book": log_swap_added,
     }
+    review["by_conviction_band"] = summarize_near_miss_by_conviction_band(hold_episodes)
     review["note"] = (
         "Archive near-miss + held-book observe sim — priors only; pair with live "
-        "learning_tracks_exit_timing.json for paper-track evidence."
+        "learning_tracks_exit_timing.json for paper-track evidence. "
+        f"Wider gate: min_conviction={cfg.min_conviction}, "
+        f"max_episodes_per_week={cfg.max_episodes_per_week}."
     )
     _write_artifacts(output_dir, store, review)
     return review
@@ -600,6 +643,14 @@ def format_exit_timing_archive_text(review: dict[str, Any]) -> str:
         f"  Closed swap rotations: {swap.get('count', 0)}",
         f"  Ready for probability work: {readiness.get('ready_for_probability_analysis')}",
     ]
+    bands = review.get("by_conviction_band") or {}
+    if bands:
+        lines.append("  By conviction band (closed near-miss holds):")
+        for band, stats in bands.items():
+            lines.append(
+                f"    {band}: n={stats.get('closed_count')} "
+                f"recovery_rate={stats.get('recovery_rate')}"
+            )
     note = review.get("note")
     if note:
         lines.append(f"  Note: {note}")

@@ -1,6 +1,6 @@
 # Loser snapshot cards
 
-Generated: 2026-08-23T20:15:17.008264+00:00
+Generated: 2026-08-25T06:24:54.105731+00:00
 Scope: Avoid-tier screen names + failed-buy alumni (memo present, no longer buy-tier). Hold tier and full index excluded.
 Card count: 53
 

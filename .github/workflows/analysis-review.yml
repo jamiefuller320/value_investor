@@ -105,6 +105,11 @@ jobs:
             --paper-root docs/data/paper_automation \
             --sync-task-status || true
 
+      - name: Backfill run history from dashboard archives
+        run: |
+          # Densify weekly history for full 12-week trajectory labels (soft-fail offline).
+          ftse-archive-history --data-dir docs/data || true
+
       - name: Exclusion-universe archive priors (observe-only)
         run: ftse-exclusion-universe-archive --output-dir docs/data || true
 
@@ -119,8 +124,8 @@ jobs:
 
       - name: Exit-timing archive near-miss priors (observe-only)
         run: |
-          # Consumer (analysis-review) already reads exit_timing_near_miss_review.json;
-          # produce it when history exists. Soft-fail until archives are thick.
+          # Wider surplus-budget gate (pre_buy floor + more episodes/week). Soft-fail
+          # until archives are thick enough for closed cohorts.
           ftse-exit-timing-archive --output-dir docs/data || true
 
       - name: Commit knob bootstrap artifacts
@@ -130,6 +135,8 @@ jobs:
         with:
           commit_message: "chore: knob bootstrap priors + calibrated shadows [skip ci]"
           file_pattern: |
+            docs/data/history/run_*.json
+            docs/data/history/run_*.json.gz
             docs/data/paper_automation/knob_calibration_priors.json
             docs/data/paper_automation/calibration_shadow_endurance.json
             docs/data/experiment_assessment.json

@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 
 from value_investor.exit_timing_archive_sim import (
+    DEFAULT_MAX_EPISODES_PER_WEEK,
+    DEFAULT_MIN_CONVICTION,
     ExitTimingArchiveSimConfig,
     format_exit_timing_archive_text,
     run_exit_timing_archive_sim,
@@ -30,8 +32,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--min-conviction",
         type=float,
-        default=0.35,
-        help="Minimum conviction_score for near-miss holds (default: 0.35)",
+        default=None,
+        help=(
+            "Minimum conviction_score for near-miss holds "
+            f"(default: {DEFAULT_MIN_CONVICTION} = pre_buy floor)"
+        ),
     )
     parser.add_argument(
         "--min-data-quality",
@@ -48,8 +53,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-episodes-per-week",
         type=int,
-        default=10,
-        help="Cap near-miss episodes opened per snapshot week (default: 10)",
+        default=None,
+        help=(
+            "Cap near-miss episodes opened per snapshot week "
+            f"(default: {DEFAULT_MAX_EPISODES_PER_WEEK})"
+        ),
     )
     parser.add_argument(
         "--paper-root",
@@ -75,10 +83,18 @@ def main(argv: list[str] | None = None) -> int:
     signal_set = frozenset(s.strip() for s in args.signals.split(",") if s.strip())
     track_ids = tuple(t.strip() for t in args.tracks.split(",") if t.strip()) or ("rules",)
     config = ExitTimingArchiveSimConfig(
-        min_conviction=float(args.min_conviction),
+        min_conviction=(
+            float(args.min_conviction)
+            if args.min_conviction is not None
+            else DEFAULT_MIN_CONVICTION
+        ),
         min_data_quality=float(args.min_data_quality),
         near_miss_signals=signal_set or frozenset({"hold"}),
-        max_episodes_per_week=int(args.max_episodes_per_week),
+        max_episodes_per_week=(
+            int(args.max_episodes_per_week)
+            if args.max_episodes_per_week is not None
+            else DEFAULT_MAX_EPISODES_PER_WEEK
+        ),
         include_held_episodes=not args.no_held_episodes,
         paper_root=args.paper_root,
         track_ids=track_ids,

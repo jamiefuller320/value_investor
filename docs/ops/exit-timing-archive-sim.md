@@ -12,29 +12,32 @@ Accelerate data gathering for:
 - **P(swap → better prospect)** vs top buy-tier name from the same weekly screen
 
 This is **observe-only** — priors for hold-buffer and grace knob design until live paper
-cohorts mature (deferred L118). Does not auto-apply knobs.
+cohorts mature. Does not auto-apply knobs.
 
 ## When it runs
 
 | Trigger | Schedule |
 |---------|----------|
-| **Sunday analysis-review** | After trajectory evidence; soft-fail if history thin |
+| **Sunday analysis-review** | After archive backfill + trajectory evidence; soft-fail if history thin |
 | Manual | `ftse-exit-timing-archive --output-dir docs/data` |
 
 Artifacts feed slim `exit_timing_near_miss` into the analysis-review payload (hold/swap
-readiness → `[paper_churn]` / `[offline_sim]` action contracts).
+readiness → `[paper_churn]` / `[offline_sim]` action contracts), including
+`by_conviction_band` stratification.
 
 ## How it works
 
 1. Loads `history/run_*.json.gz` snapshots from `docs/data` (same chain as `ftse-simulate`).
 2. Each week (except the last snapshot), opens episodes for near-miss rows matching:
    - Signal not in `strong_buy` / `buy` (default: `hold`)
-   - `conviction_score >= min_conviction` (default 0.35)
+   - `conviction_score >= min_conviction` (default **0.28** = trajectory `pre_buy` floor)
    - Optional `data_quality_score` floor
+   - Cap **25** episodes per week (highest conviction first)
 3. Scores forward paths using **subsequent snapshot prices** at 7 / 28 / 56 / 84 days.
 4. Pairs each near-miss with the **top buy-tier** name from the same week for swap comparison.
+5. Review adds `by_conviction_band` recovery rates on closed near-miss holds.
 
-If history is thin, backfill first:
+If history is thin, backfill first (also run automatically on Sunday analysis-review):
 
 ```bash
 ftse-archive-history --data-dir docs/data
@@ -43,7 +46,7 @@ ftse-archive-history --data-dir docs/data
 ## Commands
 
 ```bash
-# Default gate: hold names with conviction >= 0.35, max 10 per week
+# Defaults: hold names with conviction >= 0.28, max 25 per week
 ftse-exit-timing-archive --output-dir docs/data
 
 # Tighter gate + JSON output
@@ -60,7 +63,7 @@ ftse-exit-timing-archive \
 Written to `--output-dir`:
 
 - `exit_timing_near_miss.json` — cohort store (hold episodes + swap rotations)
-- `exit_timing_near_miss_review.json` — summary + readiness gates
+- `exit_timing_near_miss_review.json` — summary + readiness gates + conviction bands
 
 Weekly `ftse-analysis-review` payload includes `exit_timing_near_miss` when the review file exists.
 

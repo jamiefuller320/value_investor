@@ -25,6 +25,10 @@ ARCHIVE_SIGNAL_FIELDS = (
     "research_verdict",
     "adjusted_signal",
     "research_as_of",
+    # Trajectory / boundary-watch richness retained from dashboard archives
+    "signal_trend",
+    "weeks_at_signal",
+    "passed_families",
     "core_order",
     "core_limit",
     "core_allocation_pct",
