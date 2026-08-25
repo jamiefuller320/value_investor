@@ -878,6 +878,42 @@ def ingest_research_sources(
                                 pass
                         filings_meta["ch_body_refetch"] = ch_refetch
 
+            elif resolve_filings_regime(market, ticker) == "euro_filings":
+                from value_investor.research.filings import (
+                    refetch_ir_allowlist_filing_bodies,
+                    refetch_residual_filing_bodies,
+                )
+
+                summary = filings_meta.get("filings_summary") or {}
+                ir_refetch = refetch_ir_allowlist_filing_bodies(
+                    sources_dir / "filings",
+                    ticker=ticker,
+                    company_name=company_name,
+                    max_bodies=12,
+                )
+                residual_refetch = refetch_residual_filing_bodies(
+                    sources_dir / "filings",
+                    ticker=ticker,
+                    company_name=company_name,
+                    max_bodies=12,
+                )
+                filings_meta["ir_refetch"] = ir_refetch
+                filings_meta["residual_refetch"] = residual_refetch
+                if int(ir_refetch.get("fetched") or 0) or int(residual_refetch.get("fetched") or 0):
+                    index_path = sources_dir / "filings" / "filings_index.json"
+                    resolved_index = resolve_json_path(index_path)
+                    if resolved_index is not None:
+                        try:
+                            index_payload = read_json(resolved_index)
+                            filings_meta["filings_summary"] = dict(
+                                index_payload.get("summary") or summary
+                            )
+                            filings_meta["filings_sources"] = list(
+                                index_payload.get("sources_used") or []
+                            )
+                        except (OSError, ValueError, TypeError):
+                            pass
+
         if deepen_history:
             from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
 

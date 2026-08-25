@@ -85,7 +85,40 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/251118-firstgroup-plc-h1-2026-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/press-release/firstgroup-plc-h1-2026-results.pdf",
     ],
+    # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
+    "ACKB.BR": [
+        "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
+    ],
+    "UMI.BR": [
+        "https://www.umicore.com/files/secure-documents/7cfa416e-e500-4fbd-a040-2b45c0575430.pdf",
+        "https://www.umicore.com/files/secure-documents/8b39d7eb-8694-4c9b-9dfc-5b12a2d2cf81.pdf",
+    ],
+    "MELE.BR": [
+        "https://www.melexis.com/-/media/files/documents/investor-relations/2026/en/260204-melexis-q4-2025-investor-presentation.pdf?ts=20260205t0821293810",
+        "https://www.melexis.com/-/media/files/documents/press-releases/2026/pr_eng_melexis_q4-2025.pdf?ts=20260203t1849342568",
+        "https://www.melexis.com/-/media/files/documents/investor-relations/reports/statutory-reports/en/2024-statutory-report-melexis-en.pdf?ts=20250410t1351177737",
+    ],
+    "SHEL.L": [
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
+    ],
 }
+
+# Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
+_SEC_TICKER_ALIASES: dict[str, str] = {
+    "SHELL": "SHEL",
+    "NOVN": "NVS",
+    "ABI": "BUD",
+    "LOGN": "LOGI",
+    "C5H": "CRH",
+}
+
+# Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
+_IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
+    "SHELL.AS": ("SHEL.L",),
+}
+
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik10}.json"
 SEC_ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{accession_nodash}/{document}"
@@ -1635,7 +1668,14 @@ def _load_sec_ticker_cik_map() -> dict[str, int]:
 def resolve_sec_cik(ticker: str) -> int | None:
     """Map a US ticker to SEC CIK, or None if unknown."""
     epic = _epic(ticker)
-    return _load_sec_ticker_cik_map().get(epic)
+    mapping = _load_sec_ticker_cik_map()
+    cik = mapping.get(epic)
+    if cik is not None:
+        return cik
+    alias = _SEC_TICKER_ALIASES.get(epic)
+    if alias:
+        return mapping.get(alias)
+    return None
 
 
 def _sec_submissions_entity_name(cik: int) -> str | None:
@@ -1673,6 +1713,10 @@ def _issuer_matches_sec_name(company_name: str, sec_name: str, ticker: str) -> b
         return True
     if hits == 1 and any(len(tok) >= 5 and tok in sec_l for tok in tokens):
         return True
+    if norm_company and sec_l:
+        short_token = norm_company.split()[0]
+        if len(short_token) >= 3 and sec_l.startswith(short_token):
+            return True
     epic = _base_symbol(ticker).lower()
     if len(epic) >= 4 and re.search(rf"\b{re.escape(epic)}\b", sec_l, flags=re.I):
         return any(len(tok) >= 5 and tok in sec_l for tok in tokens)
@@ -2120,12 +2164,12 @@ def _esef_entity_name_variants(company_name: str) -> list[str]:
 
     _add(raw)
     simplified = re.sub(
-        r"\b(AG|SE|SA|S\.A\.|plc|PLC|N\.V\.|NV|AB|A/S|ASA|SE & Co\. KGaA|KGaA)\b",
+        r"\b(AG|SE|SA|S\.A\.|S\.A/NV|plc|PLC|N\.V\.|NV|AB|A/S|ASA|SE & Co\. KGaA|KGaA)\b",
         "",
         raw,
         flags=re.I,
     )
-    simplified = re.sub(r"\s+", " ", simplified).strip(" ,.-")
+    simplified = re.sub(r"\s+", " ", simplified).strip(" ,.-/")
     if simplified:
         _add(simplified)
     parts = raw.replace(",", " ").split()
@@ -2806,6 +2850,26 @@ def _merge_ir_url_lists(*groups: dict[str, list[str]]) -> dict[str, list[str]]:
     return out
 
 
+def _ir_allowlist_ticker_keys(ticker: str) -> list[str]:
+    """Return lookup keys for IR URL allowlist (primary ticker + cross-listing aliases)."""
+    upper = (ticker or "").strip().upper()
+    keys: list[str] = []
+    seen: set[str] = set()
+
+    def _add(key: str) -> None:
+        cleaned = str(key or "").strip().upper()
+        if cleaned and cleaned not in seen:
+            seen.add(cleaned)
+            keys.append(cleaned)
+
+    _add(upper)
+    base = _base_symbol(ticker)
+    _add(base)
+    for alias in _IR_ALLOWLIST_TICKER_ALIASES.get(upper, ()):
+        _add(str(alias))
+    return keys
+
+
 def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
     """Manual IR/results PDF URLs by Yahoo ticker (MVP until a generic crawler)."""
     path = path or DEFAULT_IR_URLS_PATH
@@ -2834,7 +2898,14 @@ def fetch_filings_ir_allowlist(
 ) -> list[dict[str, Any]]:
     """Build filing rows from the optional per-ticker IR URL allowlist."""
     mapping = load_ir_url_allowlist(path)
-    urls = mapping.get(ticker.upper()) or mapping.get(_base_symbol(ticker)) or []
+    urls: list[str] = []
+    seen_urls: set[str] = set()
+    for key in _ir_allowlist_ticker_keys(ticker):
+        for url in mapping.get(key) or []:
+            cleaned = str(url).strip()
+            if cleaned and cleaned not in seen_urls:
+                urls.append(cleaned)
+                seen_urls.add(cleaned)
     rows: list[dict[str, Any]] = []
     for url in urls:
         lower = url.lower()
@@ -5434,7 +5505,8 @@ def ingest_filings(
         )
     elif regime == "euro_filings":
         note = (
-            "Euro-listed results discovery via Google News and Investegate (when listed), "
+            "Euro-listed results discovery via ESEF (filings.xbrl.org when available), "
+            "Google News, optional IR allowlist URLs, Investegate (when listed), "
             "plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. "
             "Bodies when a direct HTML/PDF URL is available."
         )

@@ -350,7 +350,9 @@ def test_ir_allowlist_load_and_fetch(tmp_path: Path):
     assert rows[1]["url"] == file_hik_urls[1]
     assert rows[1]["period"] == "interim"
     shel = fetch_filings_ir_allowlist("SHEL.L", path=path)
-    assert len(shel) == 1
+    builtin_shel = _BUILTIN_IR_URLS.get("SHEL.L") or []
+    assert len(mapping["SHEL.L"]) == len(builtin_shel)
+    assert len(shel) == len(mapping["SHEL.L"])
     assert shel[0]["period"] == "annual"
 
 
