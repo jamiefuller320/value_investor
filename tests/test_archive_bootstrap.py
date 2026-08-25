@@ -94,6 +94,11 @@ def test_backfill_writes_missing_archive_day(tmp_path: Path, monkeypatch):
                         "signal": "buy",
                         "conviction_score": 0.8,
                         "timing_signal": "accumulate",
+                        "signal_trend": "improving",
+                        "weeks_at_signal": 3,
+                        "passed_families": "cheapness,quality",
+                        "name": "Beta",
+                        "sector": "Mining",
                     }
                 ],
             }
@@ -108,7 +113,12 @@ def test_backfill_writes_missing_archive_day(tmp_path: Path, monkeypatch):
     assert len(written) == 1
     snapshots = load_run_snapshots(data)
     assert len(snapshots) == 1
-    assert snapshots[0].signals[0]["ticker"] == "BBB.L"
+    row = snapshots[0].signals[0]
+    assert row["ticker"] == "BBB.L"
+    assert row["signal_trend"] == "improving"
+    assert row["weeks_at_signal"] == 3
+    assert row["passed_families"] == "cheapness,quality"
+    assert row["name"] == "Beta"
 
 
 def test_bootstrap_rebalance_log_from_trades_and_archive(tmp_path: Path):

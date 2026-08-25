@@ -33,6 +33,20 @@ def test_is_near_miss_filters_buy_tier():
     assert not _is_near_miss({"ticker": "C.L", "signal": "hold", "conviction_score": 0.1}, cfg)
 
 
+def test_default_gate_aligns_with_pre_buy_floor():
+    from value_investor.exit_timing_archive_sim import (
+        DEFAULT_MAX_EPISODES_PER_WEEK,
+        DEFAULT_MIN_CONVICTION,
+    )
+    from value_investor.trajectory_evidence import PRE_BUY_CONVICTION
+
+    cfg = ExitTimingArchiveSimConfig()
+    assert cfg.min_conviction == PRE_BUY_CONVICTION == DEFAULT_MIN_CONVICTION
+    assert cfg.max_episodes_per_week == DEFAULT_MAX_EPISODES_PER_WEEK == 25
+    assert _is_near_miss({"ticker": "A.L", "signal": "hold", "conviction_score": 0.28}, cfg)
+    assert not _is_near_miss({"ticker": "B.L", "signal": "hold", "conviction_score": 0.27}, cfg)
+
+
 def test_run_exit_timing_archive_sim_scores_episodes(tmp_path: Path):
     signals_hold = {
         "ticker": "NEAR.L",
@@ -81,6 +95,9 @@ def test_run_exit_timing_archive_sim_scores_episodes(tmp_path: Path):
     assert review["episodes_opened"]["hold_recovery_near_miss"] >= 1
     closed_hold = (review.get("hold_recovery") or {}).get("closed") or {}
     assert closed_hold.get("count", 0) >= 1
+    bands = review.get("by_conviction_band") or {}
+    assert "high_ge_0.45" in bands
+    assert bands["high_ge_0.45"]["closed_count"] >= 1
 
 
 def test_run_exit_timing_archive_sim_held_book_episodes(tmp_path: Path):

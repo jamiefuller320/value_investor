@@ -106,10 +106,85 @@ def test_build_boundary_watch_panel_tags_pre_buy():
                 "conviction_score": 0.30,
                 "signal_trend": "improving",
                 "timing_signal": "neutral",
+                "data_quality_score": 0.8,
+                "sector": "Consumer",
             }
         ]
     )
-    assert panel[0]["boundary_tags"] == ["pre_buy"]
+    assert "pre_buy" in panel[0]["boundary_tags"]
+    assert "hold_improving" in panel[0]["core_boundary_tags"]
+    assert panel[0]["conviction_gap_to_buy"] == 0.02
+    assert panel[0]["data_quality_score"] == 0.8
+
+
+def test_build_boundary_watch_panel_excludes_fresh_opinion_only():
+    """Mid-pack names with only fresh_opinion must not inflate the panel."""
+    panel = build_boundary_watch_panel(
+        [
+            {
+                "ticker": "MID.L",
+                "name": "Mid",
+                "signal": "hold",
+                "conviction_score": 0.20,
+                "signal_trend": "new",
+                "timing_signal": "neutral",
+            },
+            {
+                "ticker": "BUY.L",
+                "name": "Buy",
+                "signal": "buy",
+                "conviction_score": 0.40,
+                "signal_trend": "new",
+                "timing_signal": "neutral",
+            },
+            {
+                "ticker": "EDGE.L",
+                "name": "Edge",
+                "signal": "hold",
+                "conviction_score": 0.29,
+                "signal_trend": "new",
+                "timing_signal": "neutral",
+            },
+        ]
+    )
+    tickers = {row["ticker"] for row in panel}
+    assert "MID.L" not in tickers
+    assert "BUY.L" not in tickers
+    assert "EDGE.L" in tickers
+    assert panel[0]["core_boundary_tags"] == ["pre_buy"]
+
+
+def test_build_boundary_watch_panel_history_features():
+    snaps = [
+        _snap(
+            "2026-08-09T00:00:00+00:00",
+            [{"ticker": "A.L", "signal": "hold", "conviction_score": 0.25}],
+        ),
+        _snap(
+            "2026-08-16T00:00:00+00:00",
+            [{"ticker": "A.L", "signal": "hold", "conviction_score": 0.29}],
+        ),
+        _snap(
+            "2026-08-23T00:00:00+00:00",
+            [{"ticker": "A.L", "signal": "hold", "conviction_score": 0.31}],
+        ),
+    ]
+    panel = build_boundary_watch_panel(
+        [
+            {
+                "ticker": "A.L",
+                "name": "A",
+                "signal": "hold",
+                "conviction_score": 0.31,
+                "signal_trend": "improving",
+                "timing_signal": "neutral",
+            }
+        ],
+        snapshots=snaps,
+    )
+    assert panel[0]["weeks_on_boundary"] == 2
+    assert panel[0]["conviction_delta_1w"] == 0.02
+    assert panel[0]["archive_point_count"] == 3
 
 
 def test_summarize_transition_outcomes_groups_direction():

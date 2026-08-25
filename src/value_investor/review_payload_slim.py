@@ -181,7 +181,7 @@ def slim_exit_timing(payload: dict[str, Any] | None, *, label: str) -> dict[str,
     readiness = payload.get("readiness") or {}
     hold = (payload.get("hold_recovery") or {}).get("closed") or {}
     swap = (payload.get("swap_rotation") or {}).get("closed") or {}
-    return {
+    slim: dict[str, Any] = {
         "purpose": (
             f"{label} — when readiness.ready_for_probability_analysis (or closed counts near "
             "targets), propose [paper_churn] / [offline_sim] hold-vs-swap experiments"
@@ -192,6 +192,13 @@ def slim_exit_timing(payload: dict[str, Any] | None, *, label: str) -> dict[str,
         "swap_rotation_closed": swap,
         "note": payload.get("note"),
     }
+    if payload.get("snapshot_count") is not None:
+        slim["snapshot_count"] = payload.get("snapshot_count")
+    if payload.get("episodes_opened") is not None:
+        slim["episodes_opened"] = payload.get("episodes_opened")
+    if payload.get("by_conviction_band") is not None:
+        slim["by_conviction_band"] = payload.get("by_conviction_band")
+    return slim
 
 
 __all__ = [

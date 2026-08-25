@@ -33,6 +33,27 @@ WEAK_POSITIVE_RATE = 0.40
 WEAK_HIT_RATE = 0.50
 MAX_FOCUS_CANDIDATES = 6
 
+# Tier-boundary conviction floors (also used by exit-timing near-miss gate alignment)
+PRE_BUY_CONVICTION = 0.28
+PRE_AVOID_CONVICTION = 0.12
+STRONG_BUY_CANDIDATE_CONVICTION = 0.50
+AVOID_RECOVERY_CONVICTION = 0.20
+
+# Tags that qualify a name for the boundary panel (secondary tags alone do not).
+CORE_BOUNDARY_TAGS = frozenset(
+    {
+        "pre_buy",
+        "pre_avoid",
+        "buy_weakening",
+        "strong_buy_candidate",
+        "timing_wait_on_buy_tier",
+        "avoid_recovery_candidate",
+        "hold_improving",
+        "hold_deteriorating",
+    }
+)
+SECONDARY_BOUNDARY_TAGS = frozenset({"fresh_opinion"})
+
 
 def _signal_rank(signal: str | None) -> int:
     return SIGNAL_RANK.get(str(signal or "hold").strip().lower(), 1)
@@ -265,30 +286,114 @@ def _boundary_tags(row: dict[str, Any]) -> list[str]:
     timing = str(row.get("timing_signal") or "").lower()
     tags: list[str] = []
 
-    if signal == "hold" and conviction >= 0.28:
+    if signal == "hold" and conviction >= PRE_BUY_CONVICTION:
         tags.append("pre_buy")
-    if signal == "hold" and conviction <= 0.12:
+    if signal == "hold" and conviction <= PRE_AVOID_CONVICTION:
         tags.append("pre_avoid")
+    if signal == "hold" and trend == "improving":
+        tags.append("hold_improving")
+    if signal == "hold" and trend == "deteriorating":
+        tags.append("hold_deteriorating")
     if signal in BUY_SIGNALS and trend == "deteriorating":
         tags.append("buy_weakening")
-    if signal == "buy" and conviction >= 0.50:
+    if signal == "buy" and conviction >= STRONG_BUY_CANDIDATE_CONVICTION:
         tags.append("strong_buy_candidate")
     if signal in BUY_SIGNALS and timing == "wait":
         tags.append("timing_wait_on_buy_tier")
-    if signal == "avoid" and conviction >= 0.20:
+    if signal == "avoid" and conviction >= AVOID_RECOVERY_CONVICTION:
         tags.append("avoid_recovery_candidate")
+    # Secondary only — never qualifies a name alone (keeps panel ~30–80, not whole index).
     if trend == "new" and signal in {"hold", "buy", "strong_buy"}:
         tags.append("fresh_opinion")
     return tags
 
 
-def build_boundary_watch_panel(reports: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _core_boundary_tags(tags: list[str]) -> list[str]:
+    return [tag for tag in tags if tag in CORE_BOUNDARY_TAGS]
+
+
+def _conviction_gaps(row: dict[str, Any]) -> dict[str, float | None]:
+    """Distance to nearest buy/avoid conviction floors (positive = above floor)."""
+    signal = str(row.get("signal") or "hold").lower()
+    conviction = float(row.get("conviction_score") or 0)
+    buy_gap: float | None = None
+    avoid_gap: float | None = None
+    if signal == "hold":
+        buy_gap = round(conviction - PRE_BUY_CONVICTION, 4)
+        avoid_gap = round(conviction - PRE_AVOID_CONVICTION, 4)
+    elif signal in BUY_SIGNALS:
+        buy_gap = round(conviction - PRE_BUY_CONVICTION, 4)
+    elif signal == "avoid":
+        avoid_gap = round(conviction - PRE_AVOID_CONVICTION, 4)
+    return {"conviction_gap_to_buy": buy_gap, "conviction_gap_to_avoid": avoid_gap}
+
+
+def _archive_conviction_series(
+    snapshots: list[RunSnapshot],
+) -> dict[str, list[tuple[str, float, list[str]]]]:
+    """Per ticker: chronological (run_at, conviction, core_tags) from archives."""
+    series: dict[str, list[tuple[str, float, list[str]]]] = {}
+    for snap in sorted(snapshots, key=lambda item: item.run_at):
+        for row in snap.signals:
+            ticker = str(row.get("ticker") or "").strip()
+            if not ticker:
+                continue
+            tags = _core_boundary_tags(_boundary_tags(row))
+            series.setdefault(ticker, []).append(
+                (snap.run_at, float(row.get("conviction_score") or 0), tags)
+            )
+    return series
+
+
+def _history_features(
+    ticker: str,
+    archive_series: dict[str, list[tuple[str, float, list[str]]]],
+) -> dict[str, Any]:
+    """Cheap archive-derived features for boundary panel enrichment."""
+    points = archive_series.get(ticker) or []
+    if not points:
+        return {
+            "weeks_on_boundary": 0,
+            "conviction_delta_1w": None,
+            "conviction_delta_4w": None,
+            "archive_point_count": 0,
+        }
+    weeks_on_boundary = 0
+    for _run_at, _conv, tags in reversed(points):
+        if not tags:
+            break
+        weeks_on_boundary += 1
+    latest_conv = points[-1][1]
+    delta_1w = None
+    delta_4w = None
+    if len(points) >= 2:
+        delta_1w = round(latest_conv - points[-2][1], 4)
+    if len(points) >= 5:
+        delta_4w = round(latest_conv - points[-5][1], 4)
+    return {
+        "weeks_on_boundary": weeks_on_boundary,
+        "conviction_delta_1w": delta_1w,
+        "conviction_delta_4w": delta_4w,
+        "archive_point_count": len(points),
+    }
+
+
+def build_boundary_watch_panel(
+    reports: list[dict[str, Any]],
+    *,
+    snapshots: list[RunSnapshot] | None = None,
+) -> list[dict[str, Any]]:
     """Names near tier boundaries — full-range trajectory watch, not whole index."""
+    archive_series = _archive_conviction_series(snapshots or [])
     panel: list[dict[str, Any]] = []
     for row in reports:
         tags = _boundary_tags(row)
-        if not tags:
+        core_tags = _core_boundary_tags(tags)
+        if not core_tags:
             continue
+        ticker = str(row.get("ticker") or "").strip()
+        gaps = _conviction_gaps(row)
+        history = _history_features(ticker, archive_series)
         panel.append(
             {
                 "ticker": row.get("ticker"),
@@ -299,11 +404,50 @@ def build_boundary_watch_panel(reports: list[dict[str, Any]]) -> list[dict[str, 
                 "timing_signal": row.get("timing_signal"),
                 "weeks_at_signal": row.get("weeks_at_signal"),
                 "passed_families": row.get("passed_families"),
+                "data_quality_score": row.get("data_quality_score"),
+                "sector": row.get("sector"),
+                "adjusted_signal": row.get("adjusted_signal"),
+                "research_verdict": row.get("research_verdict"),
+                "price_vs_sma200_pct": row.get("price_vs_sma200_pct"),
+                "volume_ratio_20": row.get("volume_ratio_20"),
+                "conviction_gap_to_buy": gaps["conviction_gap_to_buy"],
+                "conviction_gap_to_avoid": gaps["conviction_gap_to_avoid"],
+                "weeks_on_boundary": history["weeks_on_boundary"],
+                "conviction_delta_1w": history["conviction_delta_1w"],
+                "conviction_delta_4w": history["conviction_delta_4w"],
+                "archive_point_count": history["archive_point_count"],
                 "boundary_tags": tags,
+                "core_boundary_tags": core_tags,
             }
         )
-    panel.sort(key=lambda item: (-len(item["boundary_tags"]), str(item.get("ticker") or "")))
+    panel.sort(
+        key=lambda item: (
+            -len(item.get("core_boundary_tags") or []),
+            -int(item.get("weeks_on_boundary") or 0),
+            str(item.get("ticker") or ""),
+        )
+    )
     return panel
+
+
+def summarize_boundary_panel(panel: list[dict[str, Any]]) -> dict[str, Any]:
+    """Tag/count rollup for review docs and analysis-review slim payload."""
+    by_tag: dict[str, int] = {}
+    for row in panel:
+        for tag in row.get("core_boundary_tags") or []:
+            by_tag[str(tag)] = by_tag.get(str(tag), 0) + 1
+    return {
+        "panel_count": len(panel),
+        "by_core_tag": dict(sorted(by_tag.items())),
+        "mean_weeks_on_boundary": (
+            round(
+                mean(int(row.get("weeks_on_boundary") or 0) for row in panel),
+                2,
+            )
+            if panel
+            else None
+        ),
+    }
 
 
 def _outcome_bucket(values: list[float]) -> dict[str, Any]:
@@ -528,6 +672,7 @@ def slim_trajectory_evidence_for_review(review: dict[str, Any] | None) -> dict[s
     candidates = review.get("model_focus_candidates")
     if not isinstance(candidates, list):
         candidates = build_model_focus_candidates(summary)
+    boundary_summary = review.get("boundary_summary") or {}
     return {
         "purpose": (
             "PIT prediction calibration — output is model_focus_candidates for "
@@ -541,6 +686,8 @@ def slim_trajectory_evidence_for_review(review: dict[str, Any] | None) -> dict[s
         "weeks_to_realization": summary.get("weeks_to_realization"),
         "upgrade_events": summary.get("upgrade_events"),
         "downgrade_events": summary.get("downgrade_events"),
+        "boundary_watch_count": review.get("boundary_watch_count"),
+        "boundary_summary": boundary_summary,
         "model_focus_candidates": candidates,
         "note": summary.get("note"),
     }
@@ -548,6 +695,7 @@ def slim_trajectory_evidence_for_review(review: dict[str, Any] | None) -> dict[s
 
 def format_trajectory_evidence_markdown(payload: dict[str, Any]) -> str:
     review = payload.get("outcome_summary") or {}
+    boundary = payload.get("boundary_summary") or {}
     lines = [
         "# Trajectory evidence review",
         "",
@@ -557,9 +705,26 @@ def format_trajectory_evidence_markdown(payload: dict[str, Any]) -> str:
         f"Boundary watch panel: {payload.get('boundary_watch_count')}",
         f"Loser snapshot cards: {payload.get('loser_card_count')}",
         "",
-        "## Outcome summary (1-week forward)",
+        "## Boundary watch",
         "",
     ]
+    if boundary:
+        lines.append(
+            f"- Panel count: {boundary.get('panel_count')} "
+            f"(core tags only; mean weeks on boundary="
+            f"{boundary.get('mean_weeks_on_boundary')})"
+        )
+        for tag, count in (boundary.get("by_core_tag") or {}).items():
+            lines.append(f"- {tag}: {count}")
+    else:
+        lines.append("No boundary summary.")
+    lines.extend(
+        [
+            "",
+            "## Outcome summary (1-week forward)",
+            "",
+        ]
+    )
     if review.get("labeled_event_count", 0) == 0:
         lines.append(review.get("note") or "No labeled transitions yet.")
     else:
@@ -630,7 +795,8 @@ def run_trajectory_evidence(
 
     latest = read_json(data_dir / "latest.json") or {}
     reports = list(latest.get("reports") or [])
-    boundary = build_boundary_watch_panel(reports)
+    boundary = build_boundary_watch_panel(reports, snapshots=snapshots)
+    boundary_summary = summarize_boundary_panel(boundary)
     outcome_summary = summarize_transition_outcomes(events)
     focus_candidates = build_model_focus_candidates(outcome_summary)
 
@@ -653,13 +819,17 @@ def run_trajectory_evidence(
         "events": events,
     }
     boundary_doc = {
-        "schema_version": 1,
+        "schema_version": 2,
         "scope": "trajectory_boundary_watch",
         "observe_only": True,
         "generated_at": effective_run_at.isoformat(),
         "screen_run_at": latest.get("run_at"),
         "panel_count": len(boundary),
-        "note": "Names near tier boundaries — not the full hold tier",
+        "summary": boundary_summary,
+        "note": (
+            "Names near tier boundaries (core tags required) — not the full hold tier. "
+            "Includes archive-derived weeks_on_boundary and conviction deltas."
+        ),
         "panel": boundary,
     }
     review_doc = {
@@ -670,6 +840,7 @@ def run_trajectory_evidence(
         "snapshot_count": len(snapshots),
         "transition_event_count": len(events),
         "boundary_watch_count": len(boundary),
+        "boundary_summary": boundary_summary,
         "loser_card_count": (loser_payload or {}).get("card_count"),
         "outcome_summary": outcome_summary,
         "model_focus_candidates": focus_candidates,
@@ -692,7 +863,10 @@ def run_trajectory_evidence(
 
 __all__ = [
     "BOUNDARY_FILENAME",
+    "CORE_BOUNDARY_TAGS",
     "FORWARD_HORIZONS_WEEKS",
+    "PRE_AVOID_CONVICTION",
+    "PRE_BUY_CONVICTION",
     "REVIEW_FILENAME",
     "TRANSITIONS_FILENAME",
     "build_boundary_watch_panel",
@@ -700,5 +874,6 @@ __all__ = [
     "build_transition_events",
     "run_trajectory_evidence",
     "slim_trajectory_evidence_for_review",
+    "summarize_boundary_panel",
     "summarize_transition_outcomes",
 ]

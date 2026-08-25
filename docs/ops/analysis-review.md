@@ -35,6 +35,9 @@ At least one of:
 - `docs/data/history/` with **≥2** weekly run snapshots (after history persistence), or
 - `docs/data/paper_automation/learning_tracks_review.json` (paper marks available)
 
+Sunday workflow first runs `ftse-archive-history` to densify `docs/data/history/` from
+dashboard archives, then trajectory evidence and the wider exit-timing near-miss sim.
+
 If history is still seeding, the workflow logs `payload` readiness and skips the agent.
 
 ## Artifacts

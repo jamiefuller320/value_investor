@@ -128,6 +128,8 @@ def save_run_snapshot(
 
     signal_cols = ["ticker", "signal", "conviction_score", "data_quality_score"]
     for optional in (
+        "name",
+        "sector",
         "timing_signal",
         "timing_score",
         "action_note",
@@ -136,6 +138,11 @@ def save_run_snapshot(
         "research_verdict",
         "adjusted_signal",
         "research_as_of",
+        # Trajectory / boundary-watch richness (cheap full-range features)
+        "signal_trend",
+        "weeks_at_signal",
+        "passed_families",
+        "price_vs_sma200_pct",
         # Trade-plan levels for optional simulator validation (L3)
         "core_order",
         "core_limit",
