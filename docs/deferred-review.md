@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T09:14:49+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T12:59:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -95,6 +95,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N42 | **Whole-index research memos for trajectory learning** | Do not memo the full FTSE hold tier to learn trajectory shifts. Screen archives + transition ledger + boundary watch already cover full-range opinion migration; blanket memos add noise and dilute buy-tier learning. | Trajectory prediction hit rates stay below chance after ≥13 archive weeks AND boundary-watch model_focus_candidates are exhausted |
 | N43 | **Replace technical-mode hard stops with hypothesis gate** | Technical paper track still auto-sells on tactical stop hits. Do not replace until hypothesis_integrity + exit-timing hold-recovery show that thesis-broken exits beat crude stops after costs. | hypothesis_first_exit has >=8 weekly marks and exit_timing hold-recovery ready_for_probability_analysis |
 | N44 | **Auto-tune selection knobs from in-portfolio loser family feedback** | selection_feedback_flags attribute loser family failures vs non-losers. Do not auto-apply model weights or exclusion knobs from this until shadow evidence links flags to forward excess. | hypothesis_integrity selection_feedback_flags stable for >=8 weeks and a scoring shadow beats control |
+| N45 | **More FTSE ingest runs for enrichment** | FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint. | Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path |
+| N46 | **More frequent engineering task generation to accelerate enrichment** | Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks — drafting more eng work would not speed enrichment. | Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing |
 
 ---
 
@@ -141,6 +143,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L48 | **Improve Yahoo↔T212 mapping for weak catalogue markets** | After live catalogue fetch, hang_seng/sti show 0% catalogue hits and several EU/AU markets are well below 70% while allowlist still marks them tradable. Tighten ISIN/shortName mapping or trim via unavailable_watch. | Next t212-align after catalogue refresh, or when researching those markets for paper/live trading |
 | L8 | **Official AIC / published NAV for trusts** | Trust track uses book-value NAV proxy | Discount-to-book too coarse |
 | L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
+| L192 | **Extra euro_depth ingest bursts beyond 2x/day** | euro_depth is in sprint with ~26 unmeasured buy-tier; ~2 closed per morning run. Extra force-dispatched runs or higher max_targets would accelerate filing bootstrap while capacity is free. | Want faster euro filing parity before Phase 3 exit; GHA capacity still free |
 
 ### Research & portfolio product
 
@@ -245,6 +248,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L183 | **Promote path for paper-learning and learning-director tasks** | paper_learning_tasks and learning_director_tasks compile to JSON with no promote CLI; only analysis-review and horizon-scan can enqueue engineering. Either add promote helpers for ops/manual gates or register explicit weekly checklist triage. | Human ops review finds untriaged PLR/director tasks accumulating for 3+ Sundays |
 | L185 | **Keep PLR and director task queues checklist-triaged not promote CLI** | Sunday checklist now requires human triage of paper_learning_tasks and learning_director_tasks. A promote CLI is only worth building if untriaged tasks accumulate for 3+ Sundays after this gate is live. | Untriaged PLR/director tasks accumulate for 3+ Sundays after sunday-triage-plr-director-tasks checklist is in use |
 | L188 | **Sunday review weekly tables on dashboard** | Publish slim week-by-week rows from exclusion_universe_archive (u4 weekly: exclusion_alpha, filtered vs baseline vs benchmark), learning_tracks_review per-track excess, and regime readiness flags into latest.json; render sortable tables on Analysis or Automation tab. Persist dated review snapshots (extend publish archive or docs/data/review_history/) so rows accumulate beyond the current Sunday overwrite. | Human Sunday review habit forms and JSON file hopping becomes friction — or when regime_slices_8_16_24 phase activates |
+| L191 | **FTSE ingest maintenance/idle throttle like euro** | Euro has sprint/maintenance/idle dispatch; FTSE still always schedules 2x/day even at buy-tier parity. Mirror a completion gate to drop to 1x/day or idle when hard gaps are gone. | Want to reclaim GHA minutes or reduce no-op strong_buy rewalks after sustained FTSE parity |
 
 ---
 
