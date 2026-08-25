@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-25T09:14:49+00:00",
+  "updated_at": "2026-08-25T13:32:14+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -3910,6 +3910,87 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a03829-44b3-7644-9ee1-c260474dda69",
       "added_at": "2026-08-25T09:14:49+00:00"
+    },
+    {
+      "id": "N45",
+      "category": "not_now",
+      "section": "ops",
+      "title": "More FTSE ingest runs for enrichment",
+      "summary": "FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint.",
+      "revisit_when": "Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path",
+      "tags": [
+        "ingest",
+        "ftse",
+        "cadence"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T12:59:48+00:00"
+    },
+    {
+      "id": "L191",
+      "category": "later",
+      "section": "ops",
+      "title": "FTSE ingest maintenance/idle throttle like euro",
+      "summary": "Euro has sprint/maintenance/idle dispatch; FTSE still always schedules 2x/day even at buy-tier parity. Mirror a completion gate to drop to 1x/day or idle when hard gaps are gone.",
+      "revisit_when": "Want to reclaim GHA minutes or reduce no-op strong_buy rewalks after sustained FTSE parity",
+      "tags": [
+        "ingest",
+        "ftse",
+        "dispatch",
+        "maintenance"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T12:59:48+00:00"
+    },
+    {
+      "id": "N46",
+      "category": "not_now",
+      "section": "ops",
+      "title": "More frequent engineering task generation to accelerate enrichment",
+      "summary": "Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks \u2014 drafting more eng work would not speed enrichment.",
+      "revisit_when": "Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing",
+      "tags": [
+        "engineering",
+        "ingest",
+        "enrichment"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T12:59:48+00:00"
+    },
+    {
+      "id": "L192",
+      "category": "later",
+      "section": "universe",
+      "title": "Extra euro_depth ingest bursts beyond 2x/day",
+      "summary": "euro_depth is in sprint with ~26 unmeasured buy-tier; ~2 closed per morning run. Extra force-dispatched runs or higher max_targets would accelerate filing bootstrap while capacity is free.",
+      "revisit_when": "Want faster euro filing parity before Phase 3 exit; GHA capacity still free",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T12:59:48+00:00"
+    },
+    {
+      "id": "L193",
+      "category": "later",
+      "section": "ops",
+      "title": "Stress euro ingest near 50min GHA job timeout",
+      "summary": "Lengthening sequence reached ~9min ingest job (24 targets) with no stability issues; runtime budgets unused. To probe GHA timeout/OOM edges, need tickers that actually fetch bodies slowly or much higher target counts.",
+      "revisit_when": "Want confidence near workflow timeout-minutes:50 or after ESEF/IR fetches make per-ticker work heavier",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "stability"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a038ff-0858-782d-b1a0-d2f3710f7c80",
+      "added_at": "2026-08-25T13:32:14+00:00"
     }
   ],
   "fragments": [
