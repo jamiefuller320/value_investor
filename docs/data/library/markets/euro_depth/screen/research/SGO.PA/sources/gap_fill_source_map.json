@@ -1,0 +1,138 @@
+{
+  "ticker": "SGO.PA",
+  "company_name": "Compagnie de Saint-Gobain S.A.",
+  "market": "euro_depth",
+  "built_at": "2026-08-26T10:25:31.264761+00:00",
+  "inventory": {
+    "available": {
+      "filings_index": true,
+      "filings_bodies": true,
+      "yahoo_financials": true,
+      "yahoo_quarterly_cashflow": false,
+      "yahoo_quarterly_income": false,
+      "news_manifest": true,
+      "screening_snapshot": true,
+      "screen_run_manifest": false,
+      "ir_presentation_metrics": true,
+      "macro_context": false,
+      "alternate_news": true
+    },
+    "thin": [
+      "yahoo_quarterly_cashflow",
+      "yahoo_quarterly_income",
+      "screen_run_manifest",
+      "macro_context"
+    ],
+    "filings_body_files": 1,
+    "filings_indexed_bodies": 1,
+    "filings_summary": {
+      "total": 1,
+      "annual": 0,
+      "interim": 1,
+      "trading_update": 0,
+      "other": 0,
+      "with_body": 1,
+      "period_coverage": {
+        "annual": {
+          "total": 0,
+          "with_body": 0
+        },
+        "interim": {
+          "total": 1,
+          "with_body": 1
+        },
+        "trading_update": {
+          "total": 0,
+          "with_body": 0
+        },
+        "other": {
+          "total": 0,
+          "with_body": 0
+        }
+      }
+    },
+    "period_coverage": {
+      "annual": {
+        "total": 0,
+        "with_body": 0
+      },
+      "interim": {
+        "total": 1,
+        "with_body": 1
+      },
+      "trading_update": {
+        "total": 0,
+        "with_body": 0
+      },
+      "other": {
+        "total": 0,
+        "with_body": 0
+      }
+    },
+    "news_article_count": 45,
+    "evidence_ladder": [
+      "filings_bodies",
+      "filings_index",
+      "yahoo_financials",
+      "yahoo_quarterly_cashflow",
+      "news_manifest",
+      "alternate_news",
+      "screening_snapshot",
+      "screen_run_manifest",
+      "ir_presentation_metrics",
+      "macro_context"
+    ]
+  },
+  "body_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "with_body_before": 1,
+    "with_body_after": 1,
+    "note": "refetch_missing_filing_bodies"
+  },
+  "ch_refetch": {},
+  "investegate_refetch": {},
+  "ticker_rns_refetch": {},
+  "ir_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "with_body_before": 1,
+    "with_body_after": 1,
+    "investegate_fallbacks": 0,
+    "merge": {
+      "added": 0,
+      "total_allowlist": 1,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "note": "no missing IR allowlist bodies",
+    "mandatory": true,
+    "allowlist_count": 1
+  },
+  "screen_run_manifest": {
+    "attached": false,
+    "reason": "not_ftse350"
+  },
+  "ir_presentation_metrics": {
+    "bridge_count": 0,
+    "segment_split_count": 0,
+    "lease_maturity_count": 0,
+    "mandatory": true,
+    "path": "docs/data/library/markets/euro_depth/screen/research/SGO.PA/sources/ir_presentation_metrics.json"
+  },
+  "alternate_news_added": 4,
+  "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/SGO.PA/sources/alternate_news.json",
+  "planned_alternate_sources": [],
+  "evidence_ladder": [
+    "filings_bodies",
+    "filings_index",
+    "yahoo_financials",
+    "yahoo_quarterly_cashflow",
+    "news_manifest",
+    "alternate_news",
+    "screening_snapshot",
+    "screen_run_manifest",
+    "ir_presentation_metrics",
+    "macro_context"
+  ],
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+}
