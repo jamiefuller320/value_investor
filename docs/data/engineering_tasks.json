@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-25T13:14:34.553291+00:00",
+  "compiled_at": "2026-08-26T09:36:12.535521+00:00",
   "run_at": "2026-08-23T06:22:09.407971+00:00",
-  "task_count": 60,
+  "task_count": 61,
   "tasks": [
     {
       "id": "eng-20260823-01",
@@ -2097,6 +2097,46 @@
       "merged_at": "2026-08-11T10:37:09.697810+00:00"
     },
     {
+      "id": "eng-20260826-01",
+      "area": "ingest",
+      "title": "Workflow fix: ingest-loop failure on main",
+      "summary": "GitHub workflow ingest-loop.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/32950154010",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "ingest-loop.yml",
+        "run_id": "32950154010",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/32950154010",
+        "signature": [
+          "ingest.improvement",
+          "ftse-ingest-loop",
+          "CurlError",
+          "HTTPError"
+        ]
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for .github/workflows/ingest-loop.yml",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        ".github/workflows/ingest-loop.yml",
+        "src/value_investor/ingest_loop.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "tests/test_ingest_loop.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260811-03",
       "area": "ops",
       "title": "Buffered-hold counterfactual on rules/ai_judgment — replay last 7d exits (3 full_exits each track, exit_streak=1 on HIK.L/ITV.L/FGP.L) with exit_confirm_screens",
@@ -3143,5 +3183,6 @@
     ]
   },
   "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "euro_depth"
+  "library_market_id": "euro_depth",
+  "workflow_failure_compiled": true
 }
