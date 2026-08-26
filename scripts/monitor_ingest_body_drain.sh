@@ -15,9 +15,11 @@ set -euo pipefail
 
 REPO="${REPO:-jamiefuller320/value_investor}"
 TARGET="${TARGET_INDEXED_WITHOUT_BODY:-0}"
-MAX_TARGETS="${MAX_TARGETS:-62}"
+# Defaults sized to finish under the hosted step budget. Raise after the
+# learning-phase ingest PR (65m step / 3600s runtime) is on main.
+MAX_TARGETS="${MAX_TARGETS:-12}"
 MAX_BODIES="${MAX_BODIES:-40}"
-MAX_RUNTIME_SECONDS="${MAX_RUNTIME_SECONDS:-3600}"
+MAX_RUNTIME_SECONDS="${MAX_RUNTIME_SECONDS:-1800}"
 MAX_DRAIN_GENERATIONS="${MAX_DRAIN_GENERATIONS:-12}"
 STATUS_ONLY=0
 DISPATCH_IF_IDLE=0
