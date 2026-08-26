@@ -30,9 +30,17 @@ While compute is unconstrained:
 
 - Weekday cron deepens up to **full buy-tier** (`max_targets=62`, `max_bodies=40`,
   ~60 min runtime).
-- After a successful batch, if `indexed_without_body > 0`, the workflow chains
-  one forced body-gap drain (does not re-chain forever).
+- After a successful batch, if `indexed_without_body > 0` **and progress was made**,
+  the workflow chains another deepen (`drain_generation` 1…`max_drain_generations`,
+  default max **12**) until gaps clear or a follow-up stalls with no progress.
 - Same-day goal: buy-tier `indexed_without_body` back near **0** after discovery.
+
+Ops monitor (agent / manual catch-up):
+
+```bash
+./scripts/monitor_ingest_body_drain.sh --status-only
+WORKFLOW_DISPATCH_PAT=… ./scripts/monitor_ingest_body_drain.sh --dispatch-if-idle
+```
 
 Re-throttle `max_targets` / daily success cap when GHA minutes bind — do not
 weaken discovery or curiosity recording.
