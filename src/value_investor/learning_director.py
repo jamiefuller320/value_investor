@@ -33,6 +33,7 @@ from value_investor.review_payload_slim import (
     slim_exclusion_universe,
     slim_exit_timing,
     slim_hypothesis_integrity,
+    slim_hypothesis_outcomes,
     slim_loser_snapshot_cards,
 )
 from value_investor.review_policy import (
@@ -247,6 +248,9 @@ def build_learning_director_payload(
         "hypothesis_integrity": slim_hypothesis_integrity(
             _safe_read(paper_root / "learning_tracks_hypothesis_integrity.json")
         ),
+        "hypothesis_outcomes": slim_hypothesis_outcomes(
+            _safe_read(paper_root / "learning_tracks_hypothesis_outcomes.json")
+        ),
         "trajectory_evidence": slim_trajectory_evidence_for_review(
             _safe_read(data_dir / "trajectory_evidence_review.json")
         ),
@@ -357,6 +361,8 @@ If model_focus_candidates exist, say which assessment-model gap they imply.
 When hypothesis_integrity is present, note whether intact losers are within tolerance and
 whether selection_feedback_flags imply a scoring/filter gap (prefer thesis review over
 crude stops).
+When hypothesis_outcomes.readiness.ready_for_thesis_outcome_analysis is true, cite
+intact vs broken recovery_rate and learning_hints — still observe-only.
 
 COMPLEXITY & EXPERIMENT INVENTORY
 Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer
