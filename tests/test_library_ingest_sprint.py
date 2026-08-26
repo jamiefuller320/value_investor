@@ -33,9 +33,23 @@ def test_parallel_sprint_markets_needing_ingest():
     assert markets == ["sp500"]
 
 
-def test_run_library_ingest_sprint_skips_parity_markets():
+def test_parallel_sprint_markets_needing_ingest_includes_thin_bodies_at_parity():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["sp500"],
+    }
+    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0, "thin_body_buy_tier": 5}
+    with patch(
+        "value_investor.library_ingest_sprint.snapshot_library_buy_tier_filing_health",
+        return_value=health,
+    ):
+        markets = parallel_sprint_markets_needing_ingest(policy=policy)
+    assert markets == ["sp500"]
+
+
+def test_run_library_ingest_sprint_skips_when_no_work():
     policy = {"focus_market": "euro_depth", "ingest_parallel_sprint": ["sp500"]}
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0, "thin_body_buy_tier": 0}
     with (
         patch(
             "value_investor.library_ingest_sprint.load_policy",
@@ -46,8 +60,8 @@ def test_run_library_ingest_sprint_skips_parity_markets():
             return_value=["sp500"],
         ),
         patch(
-            "value_investor.library_ingest_sprint.evaluate_library_ingest_dispatch",
-            return_value={"should_run_sprint_ingest": False, "reason": "parity"},
+            "value_investor.library_ingest_sprint.snapshot_library_buy_tier_filing_health",
+            return_value=health,
         ),
         patch("value_investor.library_ingest_sprint.run_library_ingest_loop") as run_loop,
         patch(

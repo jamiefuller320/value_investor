@@ -68,7 +68,7 @@ jobs:
           needing = [
               row.get("market_id")
               for row in (data.get("parallel_sprint_status") or [])
-              if row.get("should_run_sprint_ingest")
+              if row.get("should_run_parallel_ingest")
           ]
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(

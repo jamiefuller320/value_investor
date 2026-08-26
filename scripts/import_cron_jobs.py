@@ -310,15 +310,16 @@ def _parallel_sprint_dispatch_enabled() -> bool:
     """True when any ingest_parallel_sprint market still needs sprint ingest."""
     from value_investor.agent_model_policy import load_policy
     from value_investor.library_ingest_dispatch import (
-        evaluate_library_ingest_dispatch,
         list_library_ingest_parallel_sprint_markets,
+        should_run_parallel_sprint_ingest,
     )
+    from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
 
     policy = load_policy()
     parallel = list_library_ingest_parallel_sprint_markets(policy=policy)
     for market_id in parallel:
-        evaluation = evaluate_library_ingest_dispatch(market_id, policy=policy)
-        if evaluation.get("should_run_sprint_ingest"):
+        health = snapshot_library_buy_tier_filing_health(market_id)
+        if should_run_parallel_sprint_ingest(market_id, health, policy=policy):
             return True
     return False
 

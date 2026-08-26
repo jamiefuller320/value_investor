@@ -63,6 +63,20 @@ def ingest_parity_met(health: dict[str, Any]) -> bool:
     return library_ingest_filing_gaps(health) == 0
 
 
+def should_run_parallel_sprint_ingest(
+    market_id: str,
+    health: dict[str, Any],
+    *,
+    policy: dict[str, Any],
+) -> bool:
+    """Whether ``ingest_parallel_sprint`` market should run automated ingest."""
+    if market_id not in list_library_ingest_parallel_sprint_markets(policy=policy):
+        return False
+    if not ingest_parity_met(health):
+        return True
+    return int(health.get("thin_body_buy_tier") or 0) > 0
+
+
 def evaluate_library_ingest_dispatch(
     market_id: str,
     *,
@@ -129,6 +143,51 @@ def evaluate_library_ingest_dispatch(
     }
 
 
+def enrich_library_ingest_dispatch(
+    evaluation: dict[str, Any],
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+    policy: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Attach maintenance + parallel sprint rollup fields to a focus dispatch row."""
+    library_root = Path(library_root)
+    policy = policy if policy is not None else load_policy(policy_path)
+    evaluation["maintenance_markets"] = list_library_ingest_maintenance_markets(
+        library_root=library_root,
+        policy_path=policy_path,
+        policy=policy,
+    )
+    parallel = list_library_ingest_parallel_sprint_markets(policy=policy)
+    evaluation["parallel_sprint_markets"] = parallel
+    parallel_status: list[dict[str, Any]] = []
+    for market_id in parallel:
+        row = evaluate_library_ingest_dispatch(
+            market_id,
+            library_root=library_root,
+            policy_path=policy_path,
+            policy=policy,
+        )
+        health = row.get("filing_health") or snapshot_library_buy_tier_filing_health(
+            market_id,
+            library_root=library_root,
+        )
+        row["should_run_parallel_ingest"] = should_run_parallel_sprint_ingest(
+            market_id,
+            health,
+            policy=policy,
+        )
+        parallel_status.append(row)
+    evaluation["parallel_sprint_status"] = parallel_status
+    evaluation["sprint_markets"] = list_library_ingest_sprint_markets(
+        library_root=library_root,
+        policy_path=policy_path,
+        policy=policy,
+    )
+    evaluation["market_queue"] = list(policy.get("market_queue") or [])
+    return evaluation
+
+
 def evaluate_euro_ingest_dispatch(
     *,
     market_id: str = DEFAULT_MARKET_ID,
@@ -142,8 +201,14 @@ def evaluate_euro_ingest_dispatch(
     target = market_id if market_id else focus
     if target != focus and market_id == DEFAULT_MARKET_ID:
         target = focus
-    return evaluate_library_ingest_dispatch(
+    evaluation = evaluate_library_ingest_dispatch(
         target,
+        library_root=library_root,
+        policy_path=policy_path,
+        policy=policy,
+    )
+    return enrich_library_ingest_dispatch(
+        evaluation,
         library_root=library_root,
         policy_path=policy_path,
         policy=policy,
@@ -234,24 +299,6 @@ def refresh_euro_ingest_dispatch(
         library_root=library_root,
         policy_path=policy_path,
     )
-    evaluation["maintenance_markets"] = list_library_ingest_maintenance_markets(
-        library_root=library_root,
-        policy_path=policy_path,
-    )
-    parallel = list_library_ingest_parallel_sprint_markets(policy_path=policy_path)
-    evaluation["parallel_sprint_markets"] = parallel
-    evaluation["parallel_sprint_status"] = [
-        evaluate_library_ingest_dispatch(
-            market_id,
-            library_root=library_root,
-            policy_path=policy_path,
-        )
-        for market_id in parallel
-    ]
-    evaluation["sprint_markets"] = list_library_ingest_sprint_markets(
-        library_root=library_root,
-        policy_path=policy_path,
-    )
     write_euro_ingest_dispatch(evaluation, path=dispatch_path)
     if sync_cron:
         try:
@@ -296,12 +343,14 @@ __all__ = [
     "cron_enabled_for_dispatch",
     "evaluate_euro_ingest_dispatch",
     "evaluate_library_ingest_dispatch",
+    "enrich_library_ingest_dispatch",
     "ingest_parity_met",
     "list_library_ingest_maintenance_markets",
     "list_library_ingest_parallel_sprint_markets",
     "list_library_ingest_sprint_markets",
     "load_euro_ingest_dispatch",
     "refresh_euro_ingest_dispatch",
+    "should_run_parallel_sprint_ingest",
     "snapshot_library_buy_tier_filing_health",
     "write_euro_ingest_dispatch",
 ]

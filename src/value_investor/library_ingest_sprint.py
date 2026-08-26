@@ -11,9 +11,9 @@ from typing import Any
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.library_ingest_dispatch import (
-    evaluate_library_ingest_dispatch,
     ingest_parity_met,
     list_library_ingest_parallel_sprint_markets,
+    should_run_parallel_sprint_ingest,
 )
 from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
 from value_investor.library_ingest_loop import (
@@ -49,13 +49,13 @@ def parallel_sprint_markets_needing_ingest(
     policy_path: Path = DEFAULT_POLICY_PATH,
     policy: dict[str, Any] | None = None,
 ) -> list[str]:
-    """Parallel sprint markets that still have buy-tier filing gaps."""
+    """Parallel sprint markets that should receive ingest this run."""
     library_root = Path(library_root)
     policy = policy if policy is not None else load_policy(policy_path)
     needing: list[str] = []
     for market_id in list_library_ingest_parallel_sprint_markets(policy=policy):
         health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
-        if not ingest_parity_met(health):
+        if should_run_parallel_sprint_ingest(market_id, health, policy=policy):
             needing.append(market_id)
     return needing
 
@@ -82,28 +82,26 @@ def run_library_ingest_sprint(
         return outcome
 
     for market_id in market_list:
-        dispatch = evaluate_library_ingest_dispatch(
-            market_id,
-            library_root=library_root,
-            policy=policy,
-        )
-        if not dispatch.get("should_run_sprint_ingest"):
+        health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+        if not should_run_parallel_sprint_ingest(market_id, health, policy=policy):
             outcome.skipped.append(
                 {
                     "market_id": market_id,
-                    "reason": dispatch.get("reason") or "sprint_not_needed",
+                    "reason": "parallel_ingest_not_needed",
                 }
             )
             continue
+        at_parity = ingest_parity_met(health)
+        max_for_run = 4 if at_parity else max_targets
         try:
             loop_result: LibraryIngestLoopResult = run_library_ingest_loop(
                 market_id,
                 library_root=library_root,
-                max_targets=max_targets,
+                max_targets=max_for_run,
                 max_runtime_seconds=max_runtime_seconds,
                 max_bodies=max_bodies,
-                discovery_scan=False,
-                maintenance_mode=False,
+                discovery_scan=at_parity,
+                maintenance_mode=at_parity,
             )
             outcome.results.append(loop_result.to_dict())
         except Exception as exc:  # noqa: BLE001
