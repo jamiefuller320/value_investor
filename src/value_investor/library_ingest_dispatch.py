@@ -228,7 +228,9 @@ def list_library_ingest_parallel_sprint_markets(
     """
     policy = policy if policy is not None else load_policy(policy_path)
     focus = str(policy.get("focus_market") or "").strip()
-    parallel = [str(m).strip() for m in (policy.get("ingest_parallel_sprint") or []) if str(m).strip()]
+    parallel = [
+        str(m).strip() for m in (policy.get("ingest_parallel_sprint") or []) if str(m).strip()
+    ]
     return sorted({m for m in parallel if m and m != focus})
 
 
