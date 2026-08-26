@@ -40,6 +40,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_LIBRARY_INGEST_HEALTH_LOG = Path("docs/data/library/euro_ingest_health_log.json")
 DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 12
 DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 2100.0
+DEFAULT_MAINTENANCE_MAX_TARGETS = 4
 UNMEASURED_PRIORITY_BONUS = 12.0
 ZERO_BODY_PRIORITY_BONUS = 8.0
 
@@ -72,6 +73,9 @@ class LibraryIngestLoopResult:
     recorded_gap_closure: bool = False
     gap_closure_compiled: bool = False
     gap_closure_compile: dict[str, Any] = field(default_factory=dict)
+    discovery_scan: dict[str, Any] | None = None
+    maintenance_mode: bool = False
+    parity_handoff: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -100,6 +104,9 @@ class LibraryIngestLoopResult:
             "recorded_gap_closure": self.recorded_gap_closure,
             "gap_closure_compiled": self.gap_closure_compiled,
             "gap_closure_compile": self.gap_closure_compile,
+            "discovery_scan": self.discovery_scan,
+            "maintenance_mode": self.maintenance_mode,
+            "parity_handoff": self.parity_handoff,
         }
 
 
@@ -213,7 +220,9 @@ def select_library_ingest_targets(
     library_root: Path,
     market_id: str,
     max_targets: int,
+    discovery_bonus_by_ticker: dict[str, float] | None = None,
 ) -> list[LibraryIngestTarget]:
+    bonuses = discovery_bonus_by_ticker or {}
     scored: list[LibraryIngestTarget] = []
     for report in reports:
         coverage = _filing_coverage_for_ticker(
@@ -237,6 +246,7 @@ def select_library_ingest_targets(
         if report.signal == "strong_buy":
             score += 2.0
         score += float(report.conviction_score or 0.0)
+        score += float(bonuses.get(report.ticker) or bonuses.get(report.ticker.upper()) or 0.0)
         scored.append(
             LibraryIngestTarget(
                 ticker=report.ticker,
@@ -332,6 +342,8 @@ def run_library_ingest_loop(
     record_gap_closure: dict[str, Any] | None = None,
     record_trial: dict[str, Any] | None = None,
     pin_tickers: list[str] | None = None,
+    discovery_scan: bool | None = None,
+    maintenance_mode: bool = False,
 ) -> LibraryIngestLoopResult:
     """
     Weekday deepen pass for library buy-tier names (euro_depth pilot and successors).
@@ -344,8 +356,12 @@ def run_library_ingest_loop(
     health_log_path = Path(
         health_log_path or resolve_library_ingest_health_log_path(library_root, market_id)
     )
-    result = LibraryIngestLoopResult(market_id=market_id)
+    result = LibraryIngestLoopResult(market_id=market_id, maintenance_mode=maintenance_mode)
     result.health_before = snapshot_library_ingest_health(market_id, library_root=library_root)
+    if discovery_scan is None:
+        discovery_scan = maintenance_mode
+    if maintenance_mode and max_targets == DEFAULT_WEEKDAY_BATCH_MAX_TARGETS:
+        max_targets = DEFAULT_MAINTENANCE_MAX_TARGETS
 
     gap_closure_spec = record_gap_closure or record_trial
     gap_closure_require_gaps = bool(gap_closure_spec)
@@ -405,11 +421,35 @@ def run_library_ingest_loop(
         if pinned:
             reports = pinned
 
+    discovery_bonus_by_ticker: dict[str, float] = {}
+    if discovery_scan:
+        from value_investor.library_discovery_scan import run_library_buy_tier_discovery_scan
+
+        scan = run_library_buy_tier_discovery_scan(
+            reports,
+            library_root=library_root,
+            market_id=market_id,
+            persist_index=True,
+            persist_summary=True,
+        )
+        discovery_bonus_by_ticker = {
+            hit.ticker: hit.priority_bonus(scan.prioritization_weights) for hit in scan.tickers
+        }
+        result.discovery_scan = {
+            "scanned": scan.scanned,
+            "hits": scan.hits,
+            "new_rows_total": scan.new_rows_total,
+            "curiosity_total": scan.curiosity_total,
+            "errors": scan.errors,
+            "prioritization_weights": scan.prioritization_weights,
+        }
+
     result.targets = select_library_ingest_targets(
         reports,
         library_root=library_root,
         market_id=market_id,
         max_targets=max_targets,
+        discovery_bonus_by_ticker=discovery_bonus_by_ticker,
     )
     if pin_tickers and result.targets:
         pin_set = {str(t or "").strip().upper() for t in pin_tickers if str(t or "").strip()}
@@ -444,6 +484,26 @@ def run_library_ingest_loop(
             break
 
     result.health_after = snapshot_library_ingest_health(market_id, library_root=library_root)
+
+    from value_investor.library_ingest_escalation import library_ingest_filing_gaps
+
+    gaps_before = library_ingest_filing_gaps(result.health_before)
+    gaps_after = library_ingest_filing_gaps(result.health_after)
+    if gaps_before > 0 and gaps_after == 0:
+        try:
+            from value_investor.library_ingest_maintenance import (
+                maybe_handoff_focus_on_ingest_parity,
+            )
+
+            result.parity_handoff = maybe_handoff_focus_on_ingest_parity(
+                market_id=market_id,
+                library_root=library_root,
+                health=result.health_after,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Ingest parity handoff failed for %s: %s", market_id, exc)
+            result.parity_handoff = {"error": str(exc)}
+
     append_library_ingest_health_log(
         {
             "run_at": datetime.now(UTC).isoformat(),
@@ -473,13 +533,12 @@ def run_library_ingest_loop(
             compact=False,
         )
 
-    if market_id == "euro_depth":
-        try:
-            from value_investor.euro_depth_ingest_dispatch import refresh_euro_ingest_dispatch
+    try:
+        from value_investor.library_ingest_dispatch import refresh_euro_ingest_dispatch
 
-            refresh_euro_ingest_dispatch(library_root=library_root, market_id=market_id)
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("Euro ingest dispatch refresh failed: %s", exc)
+        refresh_euro_ingest_dispatch(library_root=library_root, market_id=market_id)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Library ingest dispatch refresh failed: %s", exc)
 
     result.stalled = library_ingest_health_stalled(
         health_log_path,

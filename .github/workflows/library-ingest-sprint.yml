@@ -1,0 +1,144 @@
+name: Library ingest sprint (parallel)
+
+# High-tempo buy-tier filing deepen for parallel queue markets (e.g. sp500 while
+# euro_depth remains focus). Focus market sprint stays on euro-ingest-loop.yml.
+on:
+  schedule:
+    - cron: "45 7 * * 1-5"
+    - cron: "45 10 * * 1-5"
+    - cron: "45 13 * * 1-5"
+    - cron: "45 16 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      markets:
+        description: "Comma-separated market ids (empty = ingest_parallel_sprint with gaps)"
+        type: string
+        default: ""
+      max_targets:
+        description: "Max buy-tier tickers per market"
+        type: string
+        default: "24"
+      max_runtime_seconds:
+        description: "Runtime budget per market (seconds)"
+        type: string
+        default: "2100"
+      max_bodies:
+        description: "Max bodies to refetch per ticker"
+        type: string
+        default: "20"
+      force:
+        description: "Run even if no parallel sprint markets need ingest"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: library-ingest-sprint
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Evaluate parallel sprint markets
+        id: dispatch
+        run: |
+          set -euo pipefail
+          ftse-library euro-ingest-dispatch --json --json-path /tmp/library_ingest_dispatch.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/library_ingest_dispatch.json").read_text())
+          parallel = data.get("parallel_sprint_markets") or []
+          needing = [
+              row.get("market_id")
+              for row in (data.get("parallel_sprint_status") or [])
+              if row.get("should_run_parallel_ingest")
+          ]
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"parallel_markets={','.join(parallel)}\n"
+              f"needing_sprint={','.join(needing)}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Skip when no parallel sprint work
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+          NEEDING: ${{ steps.dispatch.outputs.needing_sprint }}
+        with:
+          script: |
+            if (process.env.FORCE === 'true') {
+              core.setOutput('should_run', 'true');
+              core.info('force=true — running parallel library ingest sprint');
+              return;
+            }
+            const needing = (process.env.NEEDING || '').split(',').filter(Boolean);
+            if (needing.length === 0) {
+              core.setOutput('should_run', 'false');
+              core.info('No parallel sprint markets with filing gaps');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
+  library-ingest-sprint:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run parallel library ingest sprint
+        run: |
+          set -euo pipefail
+          ARGS=(ingest-sprint --json --json-path /tmp/library_ingest_sprint.json)
+          MARKETS="${{ github.event.inputs.markets }}"
+          if [ -n "$MARKETS" ]; then
+            ARGS+=(--markets "$MARKETS")
+          fi
+          if [ -n "${{ github.event.inputs.max_targets }}" ]; then
+            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
+          fi
+          if [ -n "${{ github.event.inputs.max_runtime_seconds }}" ]; then
+            ARGS+=(--max-runtime-seconds "${{ github.event.inputs.max_runtime_seconds }}")
+          fi
+          if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
+            ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
+          fi
+          ftse-library "${ARGS[@]}"
+
+      - name: Commit and push library ingest artifacts
+        run: |
+          bash scripts/push_library_ingest_artifacts.sh \
+            'chore: library ingest sprint (parallel) [skip ci]'

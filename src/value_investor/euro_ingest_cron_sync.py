@@ -88,6 +88,7 @@ def sync_euro_ingest_cron_jobs(
         EURO_INGEST_CRON_TITLES["midafternoon"]: desired["midafternoon"],
         EURO_INGEST_CRON_TITLES["evening"]: desired["evening"],
         EURO_INGEST_CRON_TITLES["ladder_weekday"]: desired["ladder_weekday"],
+        EURO_INGEST_CRON_TITLES["maintenance"]: desired["maintenance"],
     }
     if dry_run:
         return {

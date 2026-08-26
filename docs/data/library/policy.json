@@ -1,7 +1,16 @@
 {
   "schema_version": 1,
   "focus_market": "euro_depth",
-  "market_queue": [],
+  "ingest_parity_markets": [],
+  "ingest_parallel_sprint": [
+    "sp500"
+  ],
+  "market_queue": [
+    "sp500",
+    "asx200",
+    "ftse_smallcap",
+    "tsx60"
+  ],
   "graduated_markets": [
     {
       "market": "sp500",
@@ -138,6 +147,8 @@
     "maintenance_max_tickers": "full",
     "maintenance_include_focus_when_queue_complete": true,
     "maintenance_refresh_constituents": true,
+    "require_ingest_parity": false,
+    "advance_focus_on_ingest_parity": true,
     "history": [
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
@@ -323,7 +334,7 @@
         "reason": "queue_complete"
       }
     ],
-    "note": "Depth-first EU pilot (euro_depth): do not advance focus; other graduated markets stay Layer A maintenance only."
+    "note": "Depth-first EU pilot (euro_depth): coverage auto_advance off; parallel ingest_sprint front-starts queue head while focus completes; advance_focus_on_ingest_parity moves focus when parity met."
   },
   "research_model": {
     "model_id": "composer-2.5",

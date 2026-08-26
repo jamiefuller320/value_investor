@@ -15,7 +15,8 @@ Stage 0 — Live FTSE 350
   gap-closure runs → eng queue → verify merged → ingest-loop rerun
 
 Stage 1 — Library market pilot (euro_depth)
-  euro-ingest-loop.yml → markets/{id}/ingest_health_log → stall → micro-compile
+  euro-ingest-loop.yml (sprint) + library-ingest-maintenance.yml (parity)
+  → markets/{id}/ingest_health_log → stall → micro-compile
   same ingest_gap_closure_runs.json + engineering_tasks.json queue
 
 Stage 2+ — Next library markets
@@ -32,7 +33,8 @@ depth offline using the same eng escalation semantics as FTSE.
 |------|---------|
 | `docs/data/library/markets/{market_id}/ingest_health_log.json` | Before/after filing health snapshots |
 | `docs/data/library/markets/{market_id}/ingest_summary.json` | Latest run targets + per-ticker results |
-| `docs/data/library/euro_ingest_dispatch.json` | Completion gate (`euro_depth` only today) |
+| `docs/data/library/euro_ingest_dispatch.json` | Sprint vs maintenance gate (focus market) |
+| `docs/data/library/library_ingest_discovery_scan_summary.json` | Maintenance discovery scan summary |
 | `docs/data/ingest_gap_closure_runs.json` | Shared gap-closure run log (FTSE + library) |
 | `docs/data/engineering_tasks.json` | Shared engineering queue |
 
@@ -64,8 +66,14 @@ and gap detection use the market canonical filing index.
 ## Commands
 
 ```bash
-# Weekday deepen (automation default)
-ftse-library ingest-loop --market euro_depth --max-targets 12
+# Weekday deepen (sprint automation)
+ftse-library ingest-loop --market euro_depth --max-targets 24
+
+# Daily maintenance (parity markets; discovery scan on by default)
+ftse-library ingest-maintenance --json
+
+# Parallel sprint (queue head-start while focus still sprinting)
+ftse-library ingest-sprint --json
 
 # Manual gap-closure pass
 ftse-library ingest-loop --market euro_depth --max-targets 1 --record-gap-closure \
@@ -83,6 +91,9 @@ ftse-library euro-ingest-dispatch --json
 
 | Hook | Workflow | Behaviour |
 |------|----------|-----------|
+| Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
+| Sprint ingest (parallel) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
+| Maintenance ingest | `library-ingest-maintenance.yml` | Daily scan-then-target for `ingest_parity_markets` + focus at parity |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
@@ -93,7 +104,7 @@ ftse-library euro-ingest-dispatch --json
 2. Point `ingest-loop --market {id}` at the market (workflow or cron).
 3. Confirm `markets/{id}/ingest_health_log.json` accumulates before expecting stall
    escalation (needs ≥2 runs).
-4. Optionally add a market-specific completion gate (see `euro_depth_ingest_dispatch.py`).
+4. Completion gate lives in `library_ingest_dispatch.py` (euro wrapper: `euro_depth_ingest_dispatch.py`).
 5. Register cron via `scripts/import_cron_jobs.py` when the market graduates from
    manual pilot.
 

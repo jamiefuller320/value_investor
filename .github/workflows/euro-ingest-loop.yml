@@ -3,9 +3,8 @@ name: Euro library ingest loop
 # Weekday buy-tier filing deepen for euro_depth (and warm-start euro_stoxx50).
 # No weekly_ops spend — ESEF + euro_filings + IR allowlist body fetch only.
 #
-# Completion gate: ftse-library euro-ingest-dispatch throttles or skips when
-# Phase 3 is ready and filing parity is met (see euro_depth_ingest_dispatch.py).
-# Sprint: 4×/day × 24 targets (07:15 / 10:15 / 13:15 / 16:15 UTC).
+# Completion gate: ftse-library euro-ingest-dispatch throttles sprint when filing
+# parity is met (see library_ingest_dispatch.py). Sprint: 4×/day × 24 targets.
 on:
   schedule:
     - cron: "15 7 * * 1-5"
@@ -96,6 +95,7 @@ jobs:
               f"mode={data.get('mode', '')}\n"
               f"max_daily_successes={data.get('max_daily_successes', 0)}\n"
               f"max_targets={data.get('max_targets', 12)}\n"
+              f"should_run_sprint_ingest={'true' if data.get('should_run_sprint_ingest') else 'false'}\n"
               f"should_run_ingest={'true' if data.get('should_run_ingest') else 'false'}\n"
               f"dispatch_reason={data.get('reason', '')}\n",
               encoding="utf-8",
@@ -107,6 +107,7 @@ jobs:
         uses: actions/github-script@v8
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
+          SHOULD_RUN_SPRINT_INGEST: ${{ steps.dispatch.outputs.should_run_sprint_ingest }}
           SHOULD_RUN_INGEST: ${{ steps.dispatch.outputs.should_run_ingest }}
           MAX_DAILY_SUCCESSES: ${{ steps.dispatch.outputs.max_daily_successes }}
           DISPATCH_MODE: ${{ steps.dispatch.outputs.mode }}
@@ -119,10 +120,10 @@ jobs:
               core.info('force=true — bypassing completion gate');
               return;
             }
-            if (process.env.SHOULD_RUN_INGEST !== 'true') {
+            if (process.env.SHOULD_RUN_SPRINT_INGEST !== 'true' && process.env.SHOULD_RUN_INGEST !== 'true') {
               core.setOutput('should_run', 'false');
               core.info(
-                `Skipping euro ingest: mode=${process.env.DISPATCH_MODE} `
+                `Skipping euro sprint ingest: mode=${process.env.DISPATCH_MODE} `
                 + `(${process.env.DISPATCH_REASON})`
               );
               return;

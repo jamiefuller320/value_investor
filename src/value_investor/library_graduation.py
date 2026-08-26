@@ -61,11 +61,14 @@ def _graduation_config(policy: dict[str, Any]) -> dict[str, Any]:
     # Once the queue is finished, refresh every graduated market (including focus).
     cfg.setdefault("maintenance_include_focus_when_queue_complete", True)
     cfg.setdefault("maintenance_refresh_constituents", True)
+    cfg.setdefault("require_ingest_parity", False)
+    cfg.setdefault("advance_focus_on_ingest_parity", True)
     cfg.setdefault(
         "note",
         "Advance to next queue market only when focus meets these floors; "
         "graduated markets keep a full-universe maintenance refresh by default "
-        "(set maintenance_max_tickers to an int to throttle later).",
+        "(set maintenance_max_tickers to an int to throttle later). "
+        "Ingest-parity handoff (advance_focus_on_ingest_parity) is separate from coverage floors.",
     )
     return cfg
 
@@ -137,10 +140,16 @@ def evaluate_graduation(
         min_coverage_pct=float(cfg["min_coverage_pct"]),
         max_stale_pct=float(cfg["max_stale_pct"]),
     )
+    parity_eval = evaluate_ingest_parity_handoff(root, policy)
+    ingest_parity = bool(parity_eval.get("ingest_parity_met"))
+    if cfg.get("require_ingest_parity") and meets:
+        meets = meets and ingest_parity
     nxt = next_focus_market(policy) if meets else None
     return {
         "focus_market": focus,
         "meets_floors": meets,
+        "ingest_parity_met": ingest_parity,
+        "filing_health": parity_eval.get("filing_health"),
         "auto_advance": bool(cfg.get("auto_advance", True)),
         "coverage_pct": float(row.get("coverage_pct") or 0.0),
         "stale_pct": stale_pct,
@@ -150,6 +159,74 @@ def evaluate_graduation(
         "status": row,
         "can_advance": bool(meets and cfg.get("auto_advance", True) and nxt),
         "queue_complete": bool(meets and nxt is None),
+    }
+
+
+def evaluate_ingest_parity_handoff(
+    root: Path,
+    policy: dict[str, Any],
+    *,
+    market_id: str | None = None,
+) -> dict[str, Any]:
+    """Evaluate whether focus market may hand off to the next queue market on ingest parity."""
+    from value_investor.library_ingest_dispatch import ingest_parity_met
+    from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
+
+    cfg = _graduation_config(policy)
+    focus = str(policy.get("focus_market") or "")
+    target = str(market_id or focus)
+    if not focus or target != focus:
+        return {
+            "focus_market": focus,
+            "market_id": target,
+            "skipped": True,
+            "reason": "not_focus_market",
+            "ingest_parity_met": False,
+            "can_advance": False,
+        }
+
+    health = snapshot_library_buy_tier_filing_health(focus, library_root=root)
+    parity = ingest_parity_met(health)
+    advance_enabled = bool(cfg.get("advance_focus_on_ingest_parity", True))
+    nxt = next_focus_market(policy) if parity else None
+    return {
+        "focus_market": focus,
+        "market_id": target,
+        "ingest_parity_met": parity,
+        "filing_health": health,
+        "advance_focus_on_ingest_parity": advance_enabled,
+        "next_focus": nxt,
+        "can_advance": bool(parity and advance_enabled and nxt),
+        "queue_complete": bool(parity and nxt is None),
+    }
+
+
+def maybe_record_ingest_parity(
+    policy: dict[str, Any],
+    market_id: str,
+    *,
+    library_root: Path,
+    health: dict[str, Any] | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Record ``market_id`` in ``ingest_parity_markets`` when filing parity is met."""
+    from value_investor.library_ingest_dispatch import ingest_parity_met
+    from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
+
+    health = health or snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+    if not ingest_parity_met(health):
+        return policy, {"recorded": False, "reason": "parity_not_met", "market_id": market_id}
+
+    markets = list(policy.get("ingest_parity_markets") or [])
+    first_time = market_id not in markets
+    if first_time:
+        markets.append(market_id)
+        policy["ingest_parity_markets"] = sorted(set(markets))
+    return policy, {
+        "recorded": True,
+        "first_time": first_time,
+        "market_id": market_id,
+        "ingest_parity_met": True,
+        "filing_health": health,
     }
 
 
@@ -180,14 +257,15 @@ def apply_graduation(
     already = graduated_market_ids(policy)
     graduated = list(policy.get("graduated_markets") or [])
     if focus and focus not in already:
-        graduated.append(
-            {
-                "market": focus,
-                "graduated_at": now.isoformat(),
-                "coverage_pct": evaluation.get("coverage_pct"),
-                "stale_pct": evaluation.get("stale_pct"),
-            }
-        )
+        entry: dict[str, Any] = {
+            "market": focus,
+            "graduated_at": now.isoformat(),
+            "coverage_pct": evaluation.get("coverage_pct"),
+            "stale_pct": evaluation.get("stale_pct"),
+        }
+        if evaluation.get("ingest_parity_met") is not None:
+            entry["ingest_parity_met"] = bool(evaluation.get("ingest_parity_met"))
+        graduated.append(entry)
         policy["graduated_markets"] = graduated
         event["graduated"] = True
 

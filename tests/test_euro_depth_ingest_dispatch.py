@@ -1,4 +1,4 @@
-"""Tests for euro_depth ingest completion-gate dispatch."""
+"""Tests for library ingest completion-gate dispatch (euro_depth wrapper)."""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ def test_snapshot_library_buy_tier_filing_health_counts_gaps(tmp_path: Path):
     assert health["thin_body_buy_tier"] == 1
 
 
-def test_evaluate_dispatch_sprint_when_phase3_not_ready():
+def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
     phase = {"phase3_ready": False, "blockers": ["need 8 weekday batch marks"]}
     health = {
         "unmeasured_buy_tier": 2,
@@ -81,84 +81,80 @@ def test_evaluate_dispatch_sprint_when_phase3_not_ready():
     }
     with (
         patch(
-            "value_investor.euro_depth_ingest_dispatch.evaluate_market_phase",
+            "value_investor.library_ingest_dispatch.evaluate_market_phase",
             return_value=phase,
         ),
         patch(
-            "value_investor.euro_depth_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
             return_value=health,
         ),
     ):
         result = evaluate_euro_ingest_dispatch()
     assert result["mode"] == MODE_SPRINT
+    assert result["should_run_sprint_ingest"] is True
+    assert result["should_run_maintenance_ingest"] is False
     assert result["should_run_ingest"] is True
+    assert result["ingest_parity_met"] is False
     assert result["max_daily_successes"] == 4
     assert result["max_targets"] == 24
-    assert result["cron_afternoon"] is True
-    assert result["cron_midafternoon"] is True
-    assert result["cron_evening"] is True
     assert cron_enabled_for_dispatch(result) == {
         "morning": True,
         "afternoon": True,
         "midafternoon": True,
         "evening": True,
         "ladder_weekday": True,
+        "maintenance": False,
     }
 
 
-def test_evaluate_dispatch_maintenance_when_phase3_with_gaps():
+def test_evaluate_dispatch_sprint_when_phase3_ready_but_gaps_remain():
     phase = {"phase3_ready": True, "blockers": []}
     health = {"unmeasured_buy_tier": 1, "zero_body_buy_tier": 0}
     with (
         patch(
-            "value_investor.euro_depth_ingest_dispatch.evaluate_market_phase",
+            "value_investor.library_ingest_dispatch.evaluate_market_phase",
             return_value=phase,
         ),
         patch(
-            "value_investor.euro_depth_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            return_value=health,
+        ),
+    ):
+        result = evaluate_euro_ingest_dispatch()
+    assert result["mode"] == MODE_SPRINT
+    assert result["should_run_sprint_ingest"] is True
+    assert result["should_run_ingest"] is True
+
+
+def test_evaluate_dispatch_maintenance_when_parity_met():
+    phase = {"phase3_ready": True, "blockers": []}
+    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    with (
+        patch(
+            "value_investor.library_ingest_dispatch.evaluate_market_phase",
+            return_value=phase,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
             return_value=health,
         ),
     ):
         result = evaluate_euro_ingest_dispatch()
     assert result["mode"] == MODE_MAINTENANCE
-    assert result["should_run_ingest"] is True
+    assert result["ingest_parity_met"] is True
+    assert result["should_run_sprint_ingest"] is False
+    assert result["should_run_maintenance_ingest"] is True
+    assert result["should_run_ingest"] is False
     assert result["max_daily_successes"] == 1
     assert result["max_targets"] == 4
-    assert result["cron_afternoon"] is False
-    assert result["cron_midafternoon"] is False
-    assert result["cron_evening"] is False
-    assert cron_enabled_for_dispatch(result) == {
-        "morning": True,
-        "afternoon": False,
-        "midafternoon": False,
-        "evening": False,
-        "ladder_weekday": False,
-    }
-
-
-def test_evaluate_dispatch_idle_when_phase3_and_parity():
-    phase = {"phase3_ready": True, "blockers": []}
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
-    with (
-        patch(
-            "value_investor.euro_depth_ingest_dispatch.evaluate_market_phase",
-            return_value=phase,
-        ),
-        patch(
-            "value_investor.euro_depth_ingest_dispatch.snapshot_library_buy_tier_filing_health",
-            return_value=health,
-        ),
-    ):
-        result = evaluate_euro_ingest_dispatch()
-    assert result["mode"] == MODE_IDLE
-    assert result["should_run_ingest"] is False
-    assert result["max_daily_successes"] == 0
+    assert MODE_IDLE == MODE_MAINTENANCE
     assert cron_enabled_for_dispatch(result) == {
         "morning": False,
         "afternoon": False,
         "midafternoon": False,
         "evening": False,
-        "ladder_weekday": False,
+        "ladder_weekday": True,
+        "maintenance": True,
     }
 
 
