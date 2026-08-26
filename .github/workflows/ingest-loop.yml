@@ -6,8 +6,9 @@ name: FTSE Ingest Loop
 #
 # Reliability: GitHub schedule is best-effort — use external cron → workflow_dispatch
 # (see docs/ops/orchestrator-cron.md). Two batches per ingest day (morning +
-# afternoon); gate allows up to two successful runs per UTC day.
-# Volume plan: docs/ops/market-scrutiny.md
+# afternoon); gate allows multiple successes per UTC day during learning phase.
+# Learning-phase bar: scan all buy-tier, then deepen toward indexed_without_body≈0
+# same day (compute unconstrained). Volume plan: docs/ops/market-scrutiny.md
 on:
   schedule:
     - cron: "5 7 * * 1-5"
@@ -17,21 +18,33 @@ on:
       max_targets:
         description: "Max buy-tier tickers for ingest-improvement pass"
         type: string
-        default: "12"
+        default: "62"
       max_runtime_seconds:
         description: "Python runtime budget for ingest-improvement (seconds)"
         type: string
-        default: "2100"
+        default: "3600"
       max_bodies:
         description: "Max bodies to refetch per ticker (backfill bursts: 40)"
         type: string
-        default: "20"
+        default: "40"
       bootstrap_seed_cap:
         description: "Canonical index seeds per run (0 = body-drain only)"
         type: string
         default: ""
       force:
         description: "Re-run even if ingest loop already succeeded today"
+        type: boolean
+        default: false
+      drain_generation:
+        description: "Body-gap drain generation (0=root; follow-ups increment; stops at max)"
+        type: string
+        default: "0"
+      max_drain_generations:
+        description: "Max auto body-gap drain follow-ups while indexed_without_body>0"
+        type: string
+        default: "12"
+      body_gap_chain:
+        description: "Deprecated; use drain_generation>=1"
         type: boolean
         default: false
       record_gap_closure:
@@ -78,7 +91,8 @@ jobs:
         uses: actions/github-script@v8
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
-          MAX_DAILY_SUCCESSES: "2"
+          # Learning phase: allow morning + afternoon + body-gap chains
+          MAX_DAILY_SUCCESSES: "8"
         with:
           script: |
             const force = process.env.FORCE === 'true';
@@ -144,7 +158,7 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v5
 
@@ -165,10 +179,14 @@ jobs:
 
       - name: Run weekday ingest loop
         id: loop
-        timeout-minutes: 40
+        timeout-minutes: 65
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
           PYTHONUNBUFFERED: "1"
+          PIN_TICKER: ${{ github.event.inputs.pin_ticker }}
+          DRAIN_GENERATION: ${{ github.event.inputs.drain_generation || '0' }}
+          MAX_DRAIN_GENERATIONS: ${{ github.event.inputs.max_drain_generations || '12' }}
+          BODY_GAP_CHAIN_LEGACY: ${{ github.event.inputs.body_gap_chain || 'false' }}
         run: |
           set -euo pipefail
           ARGS=(run --json --json-path /tmp/ingest_loop.json)
@@ -177,7 +195,7 @@ jobs:
           fi
           RUNTIME="${{ github.event.inputs.max_runtime_seconds }}"
           if [ -z "$RUNTIME" ]; then
-            RUNTIME="2100"
+            RUNTIME="3600"
           fi
           ARGS+=(--max-runtime-seconds "$RUNTIME")
           BODIES="${{ github.event.inputs.max_bodies }}"
@@ -235,6 +253,40 @@ jobs:
           ingest_summary = data.get("ingest_summary") or {}
           targets_deferred = int(ingest_summary.get("targets_deferred") or 0)
           chain = partial and targets_deferred > 0
+          health_before = data.get("health_before") or {}
+          health_after = data.get("health_after") or {}
+          indexed_before = int(health_before.get("indexed_without_body") or 0)
+          indexed_without_body = int(health_after.get("indexed_without_body") or 0)
+          improved = int(
+              data.get("ingest_improved")
+              if data.get("ingest_improved") is not None
+              else (ingest_summary.get("improved") or 0)
+          )
+          pin = bool(str(os.environ.get("PIN_TICKER") or "").strip())
+          recorded_gap = bool(data.get("recorded_gap_closure"))
+          try:
+              gen = int(str(os.environ.get("DRAIN_GENERATION") or "0").strip() or "0")
+          except ValueError:
+              gen = 0
+          if str(os.environ.get("BODY_GAP_CHAIN_LEGACY") or "").lower() == "true" and gen <= 0:
+              gen = 1
+          try:
+              max_gen = int(str(os.environ.get("MAX_DRAIN_GENERATIONS") or "12").strip() or "12")
+          except ValueError:
+              max_gen = 12
+          progress = indexed_without_body < indexed_before or improved > 0
+          # Keep chaining while gaps remain; stop if a follow-up makes no progress
+          # (unfetchable residual) or max generations hit.
+          stalled = (not progress) and gen >= 1
+          body_gap_chain = (
+              not partial
+              and not pin
+              and not recorded_gap
+              and indexed_without_body > 0
+              and gen < max_gen
+              and not stalled
+          )
+          next_gen = gen + 1
           out.write_text(
               f"micro_compiled={'true' if data.get('micro_compiled') else 'false'}\n"
               f"gap_closure_compiled={'true' if data.get('gap_closure_compiled') or data.get('trial_compiled') else 'false'}\n"
@@ -242,11 +294,31 @@ jobs:
               f"recorded_gap_closure={'true' if data.get('recorded_gap_closure') else 'false'}\n"
               f"partial={'true' if partial else 'false'}\n"
               f"chain_dispatch={'true' if chain else 'false'}\n"
-              f"targets_deferred={targets_deferred}\n",
+              f"targets_deferred={targets_deferred}\n"
+              f"indexed_without_body={indexed_without_body}\n"
+              f"indexed_before={indexed_before}\n"
+              f"drain_generation={gen}\n"
+              f"next_drain_generation={next_gen}\n"
+              f"body_gap_chain={'true' if body_gap_chain else 'false'}\n"
+              f"body_gap_stalled={'true' if stalled else 'false'}\n",
               encoding="utf-8",
           )
           if partial:
               print("Ingest loop partial run — committing artifacts from completed targets")
+          if body_gap_chain:
+              print(
+                  f"Body-gap remain indexed_without_body={indexed_without_body} "
+                  f"(was {indexed_before}); chaining drain generation {next_gen}/{max_gen}",
+                  flush=True,
+              )
+          elif indexed_without_body > 0 and stalled:
+              print(
+                  f"Body-gap drain stalled at indexed_without_body={indexed_without_body} "
+                  f"(no progress on generation {gen}) — stopping auto-chain",
+                  flush=True,
+              )
+          elif indexed_without_body == 0:
+              print("Buy-tier body gaps cleared (indexed_without_body=0)", flush=True)
           if data.get("error"):
               print(f"Ingest loop reported error: {data['error']}", flush=True)
           PY
@@ -266,7 +338,6 @@ jobs:
         if: >-
           steps.loop.outputs.partial == 'true'
           && steps.loop.outputs.chain_dispatch == 'true'
-          && github.event.inputs.force != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -276,11 +347,40 @@ jobs:
             exit 0
           fi
           CHUNK="$DEFERRED"
-          if [ "$CHUNK" -gt 8 ]; then
-            CHUNK=8
+          if [ "$CHUNK" -gt 62 ]; then
+            CHUNK=62
           fi
-          gh workflow run ingest-loop.yml -f max_targets="$CHUNK" -f max_runtime_seconds=2100
-          echo "Dispatched ingest-loop chunk (max_targets=$CHUNK) to drain backlog"
+          NEXT_GEN="${{ steps.loop.outputs.next_drain_generation }}"
+          if [ -z "$NEXT_GEN" ]; then
+            NEXT_GEN=1
+          fi
+          gh workflow run ingest-loop.yml \
+            -f max_targets="$CHUNK" \
+            -f max_bodies=40 \
+            -f max_runtime_seconds=3600 \
+            -f force=true \
+            -f drain_generation="$NEXT_GEN" \
+            -f max_drain_generations="${{ github.event.inputs.max_drain_generations || '12' }}"
+          echo "Dispatched ingest-loop chunk (max_targets=$CHUNK, drain_generation=$NEXT_GEN)"
+
+      - name: Chain body-gap drain until caught up
+        if: >-
+          steps.loop.outputs.body_gap_chain == 'true'
+          && github.event.inputs.pin_ticker == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          GAPS="${{ steps.loop.outputs.indexed_without_body }}"
+          NEXT_GEN="${{ steps.loop.outputs.next_drain_generation }}"
+          echo "Buy-tier still has indexed_without_body=$GAPS — chaining drain generation $NEXT_GEN"
+          gh workflow run ingest-loop.yml \
+            -f max_targets=62 \
+            -f max_bodies=40 \
+            -f max_runtime_seconds=3600 \
+            -f force=true \
+            -f drain_generation="$NEXT_GEN" \
+            -f max_drain_generations="${{ github.event.inputs.max_drain_generations || '12' }}"
+          echo "Dispatched learning-phase body-gap drain generation $NEXT_GEN"
 
       - name: Evaluate weekly gap-closure follow-up
         id: gap_followup

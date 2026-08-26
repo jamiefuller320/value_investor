@@ -77,7 +77,9 @@ def test_import_cron_jobs_dry_run_ingest_loop_morning():
     assert payload["schedule"]["minutes"] == [5]
     assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
     body = json.loads(payload["extendedData"]["body"])
-    assert body["inputs"]["max_targets"] == "12"
+    assert body["inputs"]["max_targets"] == "62"
+    assert body["inputs"]["max_bodies"] == "40"
+    assert body["inputs"]["max_runtime_seconds"] == "3600"
     assert "ingest-loop.yml" in payload["url"]
 
 
@@ -96,7 +98,27 @@ def test_import_cron_jobs_dry_run_ingest_loop_afternoon():
     assert payload["schedule"]["hours"] == [10]
     assert payload["schedule"]["minutes"] == [5]
     body = json.loads(payload["extendedData"]["body"])
-    assert body["inputs"]["max_targets"] == "12"
+    assert body["inputs"]["max_targets"] == "62"
+    assert body["inputs"]["max_bodies"] == "40"
+
+
+def test_import_cron_jobs_dry_run_disable_legacy_ingest():
+    import os
+
+    script = Path("scripts/import_cron_jobs.py")
+    env = os.environ.copy()
+    env.pop("CRONJOB_API_KEY", None)
+    proc = subprocess.run(
+        [sys.executable, str(script), "--disable-legacy-ingest", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    rows = json.loads(proc.stdout)
+    titles = {row["title"] for row in rows}
+    assert "FTSE ingest loop (Mon/Wed/Fri morning)" in titles
+    assert all(row["action"] == "would_disable" for row in rows)
 
 
 def test_import_cron_jobs_dry_run_ops_monitor():

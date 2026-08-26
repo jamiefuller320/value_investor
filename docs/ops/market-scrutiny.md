@@ -10,8 +10,8 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 
 | Lane | Status | Gap |
 |------|--------|-----|
-| **FTSE live ingest** | 70/70 buy-tier measured; **0 zero-body**; **scan-then-target** maintenance | Residual soft enrichment + new-filing discovery (see [`ingest-scan-then-target.md`](ingest-scan-then-target.md)) |
-| **FTSE filing depth** | ~3,700 bodies; global indexed-without-body ~36 | Weekday depth continues; not a one-shot sprint |
+| **FTSE live ingest** | buy-tier measured; **0 zero-body**; **scan-then-target** | Learning phase: same-day body deepen (`max_targets=62`) — see [`ingest-scan-then-target.md`](ingest-scan-then-target.md) |
+| **FTSE filing depth** | bodies + discovery | Weekday deepen toward `indexed_without_body≈0` on buy-tier |
 | **Offline queue** | Breadth queue complete; **depth-first focus `euro_depth`** (~194 names) | Grow metrics + screen archives; deepen `euro_filings` on buy-tier |
 | **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday ladder concentrates weekly_ops on this book only |
 | **S&P / STOXX shards** | Demoted from weekly slot under depth-first policy | Layer A maintenance only until euro_depth filing parity |
@@ -29,39 +29,35 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 
 Raising **`weekly_ops_cap_usd`** does **not** fund ingest — it funds Sunday scrutiny memos and email agents.
 
-## FTSE 350 — ingest volume to close gaps
+## FTSE 350 — ingest volume (learning phase)
 
-### 11 unmeasured buy-tier tickers
+Live AI-judgment learning needs **filing bodies** on buy-tier names the same day
+new filings are discovered. Index-only rows are not enough for research overlay /
+source quality.
 
-Each needs: bootstrap filings index → ingest-improvement pass (bodies + alternate sources).
+| Setting | Previous throttle | Learning phase (compute unconstrained) |
+|---------|-------------------|----------------------------------------|
+| Ingest days | Mon–Fri | Mon–Fri |
+| Runs per day | 2 (07:05, 10:05 UTC) | 2 + optional body-gap chain |
+| `max_targets` | 12 | **62** (≈ full buy-tier) |
+| `max_bodies` | 20 | **40** |
+| `max_runtime_seconds` | 2100 | **3600** |
+| Daily success cap | 2 | **8** |
 
-| Setting | Before | After (this plan) |
-|---------|--------|-------------------|
-| Ingest days | Mon / Wed / Fri | **Mon–Fri** |
-| Runs per day | 2 (07:05, 10:05 UTC) | 2 (unchanged) |
-| `max_targets` | 8 | **12** |
-| `bootstrap_seed_cap` | 3 | **6** |
+**Bar:** after weekday discovery, drive buy-tier `indexed_without_body` back toward
+**0** before relying on refreshed research for paper learning.
 
-**Capacity:** 5 days × 2 runs × 12 targets = **120 ticker-slots/week**.
-
-**Time to clear 11 unmeasured:** **1–2 ingest days** (unmeasured get +10 priority; 6 bootstrap slots per run → 2 runs cover all 11).
-
-### 167 indexed-without-body (depth tail)
-
-Not a single sprint — ingest prioritises zero-body and period gaps. At **120 slots/week**, expect meaningful depth improvement over **2–4 weeks** without extra Cursor spend.
-
-### Immediate burst (optional)
-
-From GitHub Actions → **FTSE Ingest Loop** → Run workflow:
-
-- `max_targets`: `12`
-- `force`: `true`
-
-Run twice same UTC day (gate allows 2 successes/day) to push all 11 unmeasured in one afternoon.
+### Immediate body-gap burst
 
 ```bash
-gh workflow run ingest-loop.yml -f max_targets=12 -f force=true
+gh workflow run ingest-loop.yml \
+  -f max_targets=62 -f max_bodies=40 -f max_runtime_seconds=3600 -f force=true
 ```
+
+### Historical note (gap-closure sprint)
+
+Earlier plan used `max_targets=12` / 120 slots/week to clear unmeasured buy-tier
+and a soft depth tail. That throttle returns only when GHA minutes bind.
 
 ## Offline markets — scrutiny volume
 
