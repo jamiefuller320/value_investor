@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-25T16:57:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-26T08:54:32+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -253,6 +253,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L191 | **FTSE ingest maintenance/idle throttle like euro** | Euro has sprint/maintenance/idle dispatch; FTSE still always schedules 2x/day even at buy-tier parity. Mirror a completion gate to drop to 1x/day or idle when hard gaps are gone. | Want to reclaim GHA minutes or reduce no-op strong_buy rewalks after sustained FTSE parity |
 | L193 | **Stress euro ingest near 50min GHA job timeout** | Lengthening sequence reached ~9min ingest job (24 targets) with no stability issues; runtime budgets unused. To probe GHA timeout/OOM edges, need tickers that actually fetch bodies slowly or much higher target counts. | Want confidence near workflow timeout-minutes:50 or after ESEF/IR fetches make per-ticker work heavier |
 | L196 | **FTSE-first scan-then-target maintenance ingest** | Implement scan-then-target on live FTSE buy-tier now that hard gaps are closed (0 unmeasured/zero-body): cheap RNS/CH/Investegate index scan across buy-tier (optionally strong_buy first), queue new/changed filings, deepen only hits within max_targets. Replaces no-op strong_buy rewalks; frees capacity for euro sprint. | Next ingest/ops engineering slot after euro 4x24 cadence is stable, or when FTSE weekday runs show improved=0 for several days while new RNS appear |
+| L197 | **Re-throttle FTSE ingest deepen when GHA minutes bind** | Learning phase uses max_targets=62, max_bodies=40, daily success cap 8, and body-gap chaining. When Actions minutes become scarce, lower targets/cap and keep discovery scan uncapped. | GitHub Actions minutes approach quota or weekday ingest runtime regularly exceeds budget |
 
 ---
 
