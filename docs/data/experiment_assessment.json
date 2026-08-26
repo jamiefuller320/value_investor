@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-08-25T08:28:13.760743+00:00",
+  "updated_at": "2026-08-26T08:28:58.650578+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -25,11 +25,11 @@
     "experimental_track_count": 1
   },
   "summary": {
-    "fail": 2,
-    "observing": 5,
-    "recommend": 4,
+    "observing": 3,
     "continue": 2,
     "proposed": 1,
+    "recommend": 4,
+    "fail": 4,
     "human_ack_pending": 4,
     "total": 14
   },
@@ -52,10 +52,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 6,
-      "gate_excess_after_costs": -0.0803,
-      "excess_vs_primary": 0.1177,
-      "excess_vs_rules": 0.2082,
+      "gate_marks": 7,
+      "gate_excess_after_costs": -0.0832,
+      "excess_vs_primary": 0.118,
+      "excess_vs_rules": 0.2083,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -65,8 +65,8 @@
       "title": "Calibrated shadow rank 2",
       "area": "paper_knobs",
       "pipeline": "knob_calibration",
-      "status": "observing",
-      "source_status": "observing",
+      "status": "fail",
+      "source_status": "failed",
       "human_ack_required": false,
       "track_id": "ai_judgment_calibrated_r2",
       "rank": 2,
@@ -77,10 +77,10 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 3,
-      "gate_excess_after_costs": null,
-      "excess_vs_primary": null,
-      "excess_vs_rules": null,
+      "gate_marks": 4,
+      "gate_excess_after_costs": -0.032,
+      "excess_vs_primary": 0.1692,
+      "excess_vs_rules": 0.2595,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -91,8 +91,8 @@
       "title": "Calibrated shadow rank 3",
       "area": "paper_knobs",
       "pipeline": "knob_calibration",
-      "status": "observing",
-      "source_status": "observing",
+      "status": "fail",
+      "source_status": "failed",
       "human_ack_required": false,
       "track_id": "ai_judgment_calibrated_r3",
       "rank": 3,
@@ -103,10 +103,10 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 3,
-      "gate_excess_after_costs": null,
-      "excess_vs_primary": null,
-      "excess_vs_rules": null,
+      "gate_marks": 4,
+      "gate_excess_after_costs": -0.032,
+      "excess_vs_primary": 0.1692,
+      "excess_vs_rules": 0.2595,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -140,9 +140,9 @@
       "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 14,
-      "gate_excess_after_costs": -0.0276,
-      "excess_vs_primary": 0.1704,
+      "gate_marks": 15,
+      "gate_excess_after_costs": -0.0305,
+      "excess_vs_primary": 0.1707,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": true,
@@ -486,15 +486,16 @@
     "updated": [
       "ana-20260728-01",
       "ana-20260728-02",
-      "ana-20260728-04",
       "ana-20260728-05",
-      "ldr-20260823-01",
-      "ldr-20260823-02",
       "ldr-20260823-03",
-      "ldr-20260823-04",
       "ldr-20260823-05"
     ],
-    "skipped": []
+    "skipped": [
+      "ana-20260728-04",
+      "ldr-20260823-01",
+      "ldr-20260823-02",
+      "ldr-20260823-04"
+    ]
   },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
