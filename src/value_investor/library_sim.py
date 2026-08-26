@@ -86,7 +86,7 @@ def run_observe_sims_for_screened_markets(
         try:
             result = run_library_observe_sim(root, mid, rebuild_snapshots=True)
             screen = result.tracks.get("screen_rules") or {}
-            markets_out[mid] = {
+            row: dict[str, Any] = {
                 "snapshot_count": result.snapshot_count,
                 "benchmark": result.benchmark,
                 "comparison_note": result.comparison_note,
@@ -95,6 +95,10 @@ def run_observe_sims_for_screened_markets(
                 "trade_count": screen.get("trade_count"),
                 "path": f"markets/{mid}/screen/sim/observe_summary.json",
             }
+            traj_path = screen_dir_for(root, mid) / "trajectory_transitions.json"
+            if traj_path.exists():
+                row["trajectory_path"] = f"markets/{mid}/screen/trajectory_transitions.json"
+            markets_out[mid] = row
         except Exception as exc:  # noqa: BLE001
             logger.warning("Observe sim for %s failed: %s", mid, exc)
             markets_out[mid] = {"error": str(exc)}
@@ -445,4 +449,15 @@ def run_library_observe_sim(
     )
 
     write_json(sim_dir / "observe_summary.json", result.to_dict(), compact=False)
+    from value_investor.library_ingest_escalation import is_ftse_equivalent_market
+
+    if is_ftse_equivalent_market(market_id):
+        try:
+            from value_investor.library_learning_depth import (
+                refresh_library_trajectory_artifacts,
+            )
+
+            refresh_library_trajectory_artifacts(root, market_id)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Library trajectory refresh failed for %s: %s", market_id, exc)
     return result

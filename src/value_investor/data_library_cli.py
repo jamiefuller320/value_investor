@@ -375,6 +375,38 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_sprint_p.set_defaults(func=cmd_library_ingest_sprint)
 
+    learning_depth_p = sub.add_parser(
+        "learning-depth",
+        parents=[common],
+        help=(
+            "Assess FTSE-equivalent filing + trajectory depth "
+            "(canonical screen research only)"
+        ),
+    )
+    learning_depth_p.add_argument(
+        "--market",
+        default="sp500",
+        help="Library market id (default: sp500)",
+    )
+    learning_depth_p.add_argument(
+        "--write",
+        action="store_true",
+        help="Persist markets/{id}/learning_depth.json",
+    )
+    learning_depth_p.add_argument(
+        "--write-trajectory",
+        action="store_true",
+        help="Refresh markets/{id}/screen/trajectory_*.json from existing snapshots",
+    )
+    learning_depth_p.add_argument("--json", action="store_true")
+    learning_depth_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path",
+    )
+    learning_depth_p.set_defaults(func=cmd_library_learning_depth)
+
     shard_weekday_p = sub.add_parser(
         "shard-weekday",
         parents=[common],
@@ -934,6 +966,10 @@ def cmd_policy(args: argparse.Namespace) -> int:
     print(f"Policy: {args.policy}")
     print(f"Focus market: {policy.get('focus_market')}")
     print(f"Queue: {', '.join(policy.get('market_queue') or [])}")
+    print(
+        "FTSE-equivalent markets: "
+        + (", ".join(policy.get("ftse_equivalent_markets") or []) or "—")
+    )
     print(f"Graduated: {', '.join(graduated) if graduated else '—'}")
     print(
         f"Graduation floors: coverage>={fg.get('min_coverage_pct')}  "
@@ -1243,6 +1279,53 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
         for err in outcome.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not outcome.errors else 1
+
+
+def cmd_library_learning_depth(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.library_learning_depth import assess_library_learning_depth
+
+    policy = load_policy(args.policy)
+    payload = assess_library_learning_depth(
+        str(args.market),
+        library_root=args.root,
+        policy=policy,
+        write=bool(args.write),
+        write_trajectory=bool(args.write_trajectory),
+    )
+    _emit_cli_json(payload, args)
+    if args.json:
+        return 0
+    filing = payload.get("filing") or {}
+    screen = payload.get("screen") or {}
+    traj = payload.get("trajectory") or {}
+    print(f"{payload.get('market_id')}: learning_ready={payload.get('learning_ready')}")
+    print(
+        f"  filing_ready={payload.get('filing_ready')}  "
+        f"unmeasured={payload.get('unmeasured_buy_tier')}  "
+        f"zero_body={filing.get('zero_body_buy_tier')}  "
+        f"thin={filing.get('thin_body_buy_tier')}  "
+        f"indexed_without_body={filing.get('indexed_without_body')}"
+    )
+    print(
+        f"  coverage_scope={payload.get('coverage_scope')}  "
+        f"ftse_equivalent={payload.get('ftse_equivalent')}"
+    )
+    print(
+        f"  screen files={screen.get('archive_files')}  "
+        f"unique_days={screen.get('unique_days')}  "
+        f"span_weeks={screen.get('span_weeks')}  "
+        f"last={screen.get('last_screen')}  stale={screen.get('stale')}"
+    )
+    print(
+        f"  trajectory_ready={payload.get('trajectory_ready')}  "
+        f"events={traj.get('event_count')}  "
+        f"boundary={traj.get('boundary_count')}  "
+        f"{traj.get('ready_reason')}"
+    )
+    if payload.get("path"):
+        print(f"  wrote {payload['path']}")
+    return 0
 
 
 def cmd_library_ingest_sprint(args: argparse.Namespace) -> int:
