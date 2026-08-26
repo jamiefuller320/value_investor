@@ -1,0 +1,153 @@
+name: Library ingest maintenance
+
+# Daily scan-then-target filing maintenance for library markets at ingest parity.
+# Unified workflow for focus + ingest_parity_markets (see library_ingest_maintenance.py).
+on:
+  schedule:
+    - cron: "30 7 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      markets:
+        description: "Comma-separated market ids (empty = parity markets from policy)"
+        type: string
+        default: ""
+      max_targets:
+        description: "Max buy-tier tickers per market"
+        type: string
+        default: "4"
+      max_runtime_seconds:
+        description: "Runtime budget per market (seconds)"
+        type: string
+        default: "2100"
+      max_bodies:
+        description: "Max bodies to refetch per ticker"
+        type: string
+        default: "20"
+      force:
+        description: "Run even if dispatch says no maintenance markets"
+        type: boolean
+        default: false
+      no_discovery_scan:
+        description: "Skip listing-only discovery pass"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: library-ingest-maintenance
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+      maintenance_markets: ${{ steps.dispatch.outputs.maintenance_markets }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Evaluate library ingest dispatch
+        id: dispatch
+        run: |
+          set -euo pipefail
+          ftse-library euro-ingest-dispatch --json --json-path /tmp/library_ingest_dispatch.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/library_ingest_dispatch.json").read_text())
+          markets = data.get("maintenance_markets") or []
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_run_maintenance={'true' if data.get('should_run_maintenance_ingest') else 'false'}\n"
+              f"maintenance_markets={','.join(markets)}\n"
+              f"mode={data.get('mode', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Skip when no parity maintenance markets
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+          SHOULD_RUN_MAINTENANCE: ${{ steps.dispatch.outputs.should_run_maintenance }}
+          MARKETS: ${{ steps.dispatch.outputs.maintenance_markets }}
+        with:
+          script: |
+            const force = process.env.FORCE === 'true';
+            if (force) {
+              core.setOutput('should_run', 'true');
+              core.info('force=true — running library ingest maintenance');
+              return;
+            }
+            const markets = (process.env.MARKETS || '').split(',').filter(Boolean);
+            if (process.env.SHOULD_RUN_MAINTENANCE !== 'true' && markets.length === 0) {
+              core.setOutput('should_run', 'false');
+              core.info('No parity markets configured for maintenance');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
+  library-ingest-maintenance:
+    needs: check
+    if: needs.check.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run library ingest maintenance
+        run: |
+          set -euo pipefail
+          ARGS=(ingest-maintenance --json --json-path /tmp/library_ingest_maintenance.json)
+          MARKETS="${{ github.event.inputs.markets }}"
+          if [ -n "$MARKETS" ]; then
+            ARGS+=(--markets "$MARKETS")
+          fi
+          if [ -n "${{ github.event.inputs.max_targets }}" ]; then
+            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
+          fi
+          if [ -n "${{ github.event.inputs.max_runtime_seconds }}" ]; then
+            ARGS+=(--max-runtime-seconds "${{ github.event.inputs.max_runtime_seconds }}")
+          fi
+          if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
+            ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
+          fi
+          if [ "${{ github.event.inputs.no_discovery_scan }}" = "true" ]; then
+            ARGS+=(--no-discovery-scan)
+          fi
+          ftse-library "${ARGS[@]}"
+
+      - name: Refresh completion gate and sync crons
+        env:
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+        run: |
+          ftse-library euro-ingest-dispatch --refresh --sync-cron --json --json-path /tmp/library_dispatch_refresh.json
+
+      - name: Commit and push library ingest artifacts
+        run: |
+          bash scripts/push_library_ingest_artifacts.sh \
+            'chore: library ingest maintenance [skip ci]'

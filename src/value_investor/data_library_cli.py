@@ -277,6 +277,17 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_loop_p.add_argument("--gap-closure-parent-id", default="")
     ingest_loop_p.add_argument("--gap-closure-trigger", default="")
     ingest_loop_p.add_argument("--pin-ticker", default="")
+    ingest_loop_p.add_argument(
+        "--discovery-scan",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Run listing-only discovery before deepen (default: on in maintenance mode)",
+    )
+    ingest_loop_p.add_argument(
+        "--maintenance-mode",
+        action="store_true",
+        help="Maintenance pass: 4 targets, discovery scan on by default",
+    )
     ingest_loop_p.add_argument("--json", action="store_true")
     ingest_loop_p.add_argument(
         "--json-path",
@@ -314,6 +325,33 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write dispatch JSON to this path (avoids stdout log pollution in CI)",
     )
     euro_dispatch_p.set_defaults(func=cmd_euro_ingest_dispatch)
+
+    ingest_maint_p = sub.add_parser(
+        "ingest-maintenance",
+        parents=[common],
+        help="Daily scan-then-target maintenance for library markets at filing parity",
+    )
+    ingest_maint_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: parity markets from policy + focus)",
+    )
+    ingest_maint_p.add_argument("--max-targets", type=int, default=4)
+    ingest_maint_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
+    ingest_maint_p.add_argument("--max-bodies", type=int, default=20)
+    ingest_maint_p.add_argument(
+        "--no-discovery-scan",
+        action="store_true",
+        help="Skip listing-only discovery pass",
+    )
+    ingest_maint_p.add_argument("--json", action="store_true")
+    ingest_maint_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path (avoids stdout log pollution in CI)",
+    )
+    ingest_maint_p.set_defaults(func=cmd_library_ingest_maintenance)
 
     shard_weekday_p = sub.add_parser(
         "shard-weekday",
@@ -1126,6 +1164,8 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         micro_compile_max_tasks=args.micro_compile_max_tasks,
         pin_tickers=pin_tickers,
         record_gap_closure=_library_gap_closure_spec(args),
+        discovery_scan=args.discovery_scan,
+        maintenance_mode=args.maintenance_mode,
     )
     payload = result.to_dict()
     if args.json or args.json_path is not None:
@@ -1155,6 +1195,32 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         for err in result.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not result.errors or result.improved else 1
+
+
+def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
+    from value_investor.library_ingest_maintenance import run_library_ingest_maintenance
+
+    markets = [m.strip() for m in str(args.markets or "").split(",") if m.strip()] or None
+    outcome = run_library_ingest_maintenance(
+        library_root=args.root,
+        policy_path=args.policy,
+        markets=markets,
+        max_targets=args.max_targets,
+        max_runtime_seconds=args.max_runtime_seconds,
+        max_bodies=args.max_bodies,
+        discovery_scan=not args.no_discovery_scan,
+    )
+    payload = outcome.to_dict()
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        print(
+            f"maintenance: markets={len(outcome.markets)} "
+            f"results={len(outcome.results)} errors={len(outcome.errors)}"
+        )
+        for err in outcome.errors:
+            print(f"  error: {err}", file=sys.stderr)
+    return 0 if not outcome.errors else 1
 
 
 def cmd_euro_ingest_dispatch(args: argparse.Namespace) -> int:

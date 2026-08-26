@@ -33,22 +33,27 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 | Layer | Command / workflow | Cadence |
 |-------|-------------------|---------|
 | Metrics grow (full ~194) | `ftse-library grow --market euro_depth` | Day 1 burst (`focus_grow_cap: 200`) |
-| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays via `euro-ingest-loop.yml` — **4×/day sprint (24 targets)**, **1×/day maintenance**, **idle when parity met**; **stall → eng task** (see [`library-ingest-escalation.md`](library-ingest-escalation.md)) |
+| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays via `euro-ingest-loop.yml` — **4×/day sprint (24 targets)** while filing gaps remain; **`library-ingest-maintenance.yml`** daily scan+deepen once parity met; **stall → eng task** (see [`library-ingest-escalation.md`](library-ingest-escalation.md)) |
 | Screen + observe + weekly shard | `ftse-library ladder` | Daily `ladder_only` when eng idle + Sundays |
 | Phase 3 weekday shard | `ftse-library shard-weekday --markets euro_depth` | Weekdays after Phase 2 gate |
 
 ### Completion gate (ingest throttle)
 
-`ftse-library euro-ingest-dispatch` evaluates Phase 3 + buy-tier filing parity and
-persists `docs/data/library/euro_ingest_dispatch.json`:
+`ftse-library euro-ingest-dispatch` evaluates **buy-tier filing parity** on the focus market
+and persists `docs/data/library/euro_ingest_dispatch.json`:
 
-| Mode | When | Ingest cadence | Cron jobs |
-|------|------|----------------|-----------|
-| `sprint` | Phase 3 not ready | 4×/day, 24 targets | morning + afternoon + mid-afternoon + evening + weekday ladder |
-| `maintenance` | Phase 3 ready, filing gaps remain | 1×/day, 4 targets | morning only |
-| `idle` | Phase 3 ready + no unmeasured/zero-body buy-tier | skip | all euro ingest + weekday ladder crons disabled |
+| Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Maintenance workflow |
+|------|------|------------------------------------------|----------------------|
+| `sprint` | `unmeasured + zero_body > 0` | 4×/day, 24 targets | off |
+| `maintenance` | filing parity met | off (skipped) | 1×/day, 4 targets + discovery scan via `library-ingest-maintenance.yml` |
+
+Phase 3 readiness is **informational only** — weekday ladder crons stay enabled during maintenance.
 
 Sprint UTC slots: **07:15 / 10:15 / 13:15 / 16:15** (≈96 ticker-slots/weekday).
+Maintenance UTC slot: **07:30** weekdays (`library-ingest-maintenance.yml`).
+
+When focus reaches parity, `ingest_parity_markets` is updated and focus may advance to
+`market_queue[0]` when `focus_graduation.advance_focus_on_ingest_parity` is true.
 
 The gate runs at the start of `euro-ingest-loop.yml`, after each ingest loop, and after
 library ladder when `euro_depth` is in the phase rollup. With `CRONJOB_API_KEY` in GitHub

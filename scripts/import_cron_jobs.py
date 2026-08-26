@@ -223,6 +223,15 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[50],
             wdays=[1, 2, 3, 4, 5],
         ),
+        CronJobSpec(
+            key="library-ingest-maintenance",
+            title="Library ingest maintenance (parity markets)",
+            workflow="library-ingest-maintenance.yml",
+            body={"ref": REF, "inputs": {"max_targets": "4"}},
+            hours=[7],
+            minutes=[30],
+            wdays=[1, 2, 3, 4, 5],
+        ),
     ]
 
 
@@ -268,6 +277,7 @@ def _job_enabled(spec: CronJobSpec) -> bool:
         "euro-ingest-loop-midafternoon": "midafternoon",
         "euro-ingest-loop-evening": "evening",
         "orchestrator-ladder-weekday": "ladder_weekday",
+        "library-ingest-maintenance": "maintenance",
     }
     slot = euro_keys.get(spec.key)
     if slot is None:
