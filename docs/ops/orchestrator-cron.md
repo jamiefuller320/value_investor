@@ -40,7 +40,7 @@ token instead of your user PAT.
 | `library-grow.yml` | Via orchestrator | ↑ | None |
 | `library-model-review.yml` | Via orchestrator | ↑ | None |
 | `paper-auto.yml` | Via orchestrator weekdays | ↑ | None |
-| `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05** → two batches (`max_targets=12`) | Mon–Fri 07:05 + 10:05 |
+| `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05** → two batches (`max_targets=62`, `max_bodies=40`) | Mon–Fri 07:05 + 10:05 |
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
 | `ops-monitor.yml` | External **primary** | `45 7 * * *` → `ops-monitor.yml` | Daily 07:45 |
@@ -175,28 +175,29 @@ WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --jo
 ### 3. Ingest loop — weekday two batches per day
 
 Schedules: **07:05** and **10:05 UTC** on **Mon–Fri** (`ingest-loop-morning` /
-`ingest-loop-afternoon` cron-job.org keys). Each dispatch uses `max_targets=12`;
-the workflow gate allows **up to two successful runs per UTC day** (morning +
-afternoon), not one.
+`ingest-loop-afternoon` cron-job.org keys). Each dispatch uses learning-phase
+inputs (`max_targets=62`, `max_bodies=40`, `max_runtime_seconds=3600`). The
+workflow gate allows **up to eight successful runs per UTC day** (morning +
+afternoon + body-gap chains).
 
 Volume and budget context: [`market-scrutiny.md`](market-scrutiny.md).
 
 ```bash
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"12"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"62","max_bodies":"40","max_runtime_seconds":"3600"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Refresh external cron after merge:
 
 ```bash
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
-  --job ingest-loop-morning --job ingest-loop-afternoon
+  --job ingest-loop-morning --job ingest-loop-afternoon --disable-legacy-ingest
 ```
 
-Disable the legacy single job **“FTSE ingest loop (Mon/Wed/Fri)”** on cron-job.org
-if it still exists (superseded by morning + afternoon jobs).
+Disable legacy **“FTSE ingest loop (Mon/Wed/Fri*)”** jobs via `--disable-legacy-ingest`
+(they double-fired with weekday crons).
 
 Same-day gate — safe alongside GitHub `0 7` / `0 10` schedules; skips only after
-two successes or while another run is active.
+the daily success cap or while another run is active.
 
 #### Why weekday (Mon–Fri) ingest?
 
@@ -205,7 +206,7 @@ two successes or while another run is active.
 | **FTSE gap closure** | 11 unmeasured buy-tier tickers need bootstrap slots; Tue/Thu add capacity without waiting for Mon/Wed/Fri |
 | **Screen cadence** | Sunday screen refreshes buy-tier; weekday ingest deepens filings against `latest.json` |
 | **Cost** | Ingest-loop uses CH/RNS/API fetch — **not** `weekly_ops` Cursor spend |
-| **Capacity** | 5 days × 2 runs × 12 targets = **120 ticker-slots/week** (see `market-scrutiny.md`) |
+| **Capacity** | Learning phase: ~full buy-tier deepen per batch (`max_targets=62`) + body-gap chain (see `market-scrutiny.md`) |
 
 The **10:05 UTC afternoon batch** continues coverage after the morning slot (~12
 targets + 6 bootstrap seeds each; ~25 min budget per run). Ops monitor at
@@ -248,9 +249,9 @@ Optional `BACKUP_S3_URI` + AWS secrets for off-repo copy. See [`data-backup.md`]
 ### Generic dispatch (any workflow)
 
 ```bash
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"12"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"max_targets":"62","max_bodies":"40"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 # with inputs:
-WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"12"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW=ingest-loop.yml INPUTS_JSON='{"force":"true","max_targets":"62","max_bodies":"40","max_runtime_seconds":"3600"}' WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
 Equivalent curl:

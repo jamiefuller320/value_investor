@@ -59,7 +59,20 @@ class CronJobSpec:
         return f"https://api.github.com/repos/{REPO}/actions/workflows/{self.workflow}/dispatches"
 
 
-_INGEST_LOOP_INPUTS = {"inputs": {"max_targets": "12"}}
+# Learning-phase FTSE live deepen: full buy-tier slot + higher body budget.
+# Revisit when GHA minutes become scarce (see deferred-ideas / ingest docs).
+_INGEST_LOOP_INPUTS = {
+    "inputs": {
+        "max_targets": "62",
+        "max_bodies": "40",
+        "max_runtime_seconds": "3600",
+    }
+}
+_LEGACY_INGEST_TITLES_TO_DISABLE = (
+    "FTSE ingest loop (Mon/Wed/Fri morning)",
+    "FTSE ingest loop (Mon/Wed/Fri afternoon)",
+    "FTSE ingest loop (Mon/Wed/Fri)",
+)
 _EURO_INGEST_LOOP_INPUTS = {
     "inputs": {
         "market": "euro_depth",
@@ -316,11 +329,64 @@ def import_job(
     return {"action": "created", "title": spec.title, "jobId": created.get("jobId")}
 
 
+def disable_legacy_ingest_jobs(
+    *,
+    api_key: str,
+    dry_run: bool = False,
+) -> list[dict[str, Any]]:
+    """Disable superseded Mon/Wed/Fri ingest crons that double-fire with weekday jobs."""
+    results: list[dict[str, Any]] = []
+    if dry_run and not api_key:
+        return [
+            {"action": "would_disable", "title": title, "jobId": None}
+            for title in _LEGACY_INGEST_TITLES_TO_DISABLE
+        ]
+    existing = {job.get("title"): job for job in _list_jobs(api_key)}
+    for title in _LEGACY_INGEST_TITLES_TO_DISABLE:
+        current = existing.get(title)
+        if not current or not current.get("jobId"):
+            results.append({"action": "missing", "title": title})
+            continue
+        if not current.get("enabled", True):
+            results.append(
+                {"action": "already_disabled", "title": title, "jobId": current["jobId"]}
+            )
+            continue
+        if dry_run:
+            results.append({"action": "would_disable", "title": title, "jobId": current["jobId"]})
+            continue
+        # Preserve URL/schedule; only flip enabled off.
+        payload = {
+            "job": {
+                "title": title,
+                "url": current.get("url"),
+                "enabled": False,
+                "saveResponses": bool(current.get("saveResponses", True)),
+                "requestMethod": int(current.get("requestMethod") or REQUEST_METHOD_POST),
+                "schedule": current.get("schedule") or {},
+                "extendedData": current.get("extendedData") or {},
+            }
+        }
+        _cronjob_request(
+            "PATCH",
+            f"/jobs/{current['jobId']}",
+            api_key=api_key,
+            payload=payload,
+        )
+        results.append({"action": "disabled", "title": title, "jobId": current["jobId"]})
+    return results
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Import cron-job.org production schedules")
     parser.add_argument("--all", action="store_true", help="Import every production job")
     parser.add_argument(
         "--job", action="append", dest="jobs", help="Import one job key (repeatable)"
+    )
+    parser.add_argument(
+        "--disable-legacy-ingest",
+        action="store_true",
+        help="Disable superseded Mon/Wed/Fri FTSE ingest cron jobs",
     )
     parser.add_argument(
         "--dry-run", action="store_true", help="Print payloads without calling cron-job.org"
@@ -332,17 +398,9 @@ def main(argv: list[str] | None = None) -> int:
     if not args.dry_run and not api_key:
         print("CRONJOB_API_KEY is required (cron-job.org → Settings → API)", file=sys.stderr)
         return 1
-    if args.dry_run:
-        gh_pat = resolve_workflow_dispatch_pat() or "github_pat_dry_run_placeholder"
-    else:
-        try:
-            gh_pat = require_workflow_dispatch_pat()
-        except RuntimeError as exc:
-            print(str(exc), file=sys.stderr)
-            return 1
 
     specs = {spec.key: spec for spec in _job_specs()}
-    selected: list[CronJobSpec]
+    selected: list[CronJobSpec] = []
     if args.all:
         selected = list(specs.values())
     elif args.jobs:
@@ -352,17 +410,34 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Known keys: {', '.join(sorted(specs))}", file=sys.stderr)
             return 1
         selected = [specs[key] for key in args.jobs]
-    else:
-        parser.error("pass --all or at least one --job")
+    elif not args.disable_legacy_ingest:
+        parser.error("pass --all, --disable-legacy-ingest, or at least one --job")
 
-    results = [
-        import_job(spec, api_key=api_key, gh_pat=gh_pat, dry_run=args.dry_run) for spec in selected
+    gh_pat = ""
+    if selected:
+        if args.dry_run:
+            gh_pat = resolve_workflow_dispatch_pat() or "github_pat_dry_run_placeholder"
+        else:
+            try:
+                gh_pat = require_workflow_dispatch_pat()
+            except RuntimeError as exc:
+                print(str(exc), file=sys.stderr)
+                return 1
+
+    results: list[dict[str, Any]] = [
+        import_job(spec, api_key=api_key, gh_pat=gh_pat, dry_run=args.dry_run)
+        for spec in selected
     ]
+    if args.all or args.disable_legacy_ingest:
+        results.extend(
+            disable_legacy_ingest_jobs(api_key=api_key, dry_run=args.dry_run)
+        )
     if args.json or args.dry_run:
         print(json.dumps(results, indent=2))
     else:
         for row in results:
-            print(f"{row['action']}: {row['title']} (jobId={row.get('jobId', '?')})")
+            title = row.get("title", "?")
+            print(f"{row['action']}: {title} (jobId={row.get('jobId', '?')})")
     return 0
 
 

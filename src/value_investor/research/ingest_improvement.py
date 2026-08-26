@@ -48,11 +48,13 @@ from value_investor.summary import CompanyReport
 logger = logging.getLogger(__name__)
 
 DEFAULT_INGEST_IMPROVEMENT_CAP = 15
-DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 12
+# Learning-phase default: deepen roughly full FTSE buy-tier in one weekday pass
+# when compute is unconstrained (stage 2b). Re-throttle when GHA minutes bind.
+DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 62
 DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP = 6
 DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
 PER_TICKER_MIN_BUDGET_SECONDS = 120.0
-DEFAULT_INGEST_REFETCH_MAX_BODIES = 20
+DEFAULT_INGEST_REFETCH_MAX_BODIES = 40
 DEFAULT_BACKFILL_MAX_BODIES = 40
 UNMEASURED_PRIORITY_BONUS = 10.0
 # Buy-tier tickers with recurring indexed-without-body gaps — batch-prioritized in ingest pass.

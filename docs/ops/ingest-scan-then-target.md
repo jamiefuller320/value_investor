@@ -21,7 +21,21 @@ bootstrap (seed missing indexes)
 | Phase | What | Bodies? |
 |-------|------|---------|
 | Discovery scan | All buy-tier (`scan_cap=None`, no throttle today) | No |
-| Deepen | Top `max_targets` (default 12) | Yes |
+| Deepen | Top `max_targets` (learning-phase default **62**) | Yes |
+
+### Learning-phase bar (stage 2b)
+
+AI judgment / research overlay needs **filing bodies**, not just index rows.
+While compute is unconstrained:
+
+- Weekday cron deepens up to **full buy-tier** (`max_targets=62`, `max_bodies=40`,
+  ~60 min runtime).
+- After a successful batch, if `indexed_without_body > 0`, the workflow chains
+  one forced body-gap drain (does not re-chain forever).
+- Same-day goal: buy-tier `indexed_without_body` back near **0** after discovery.
+
+Re-throttle `max_targets` / daily success cap when GHA minutes bind — do not
+weaken discovery or curiosity recording.
 
 Pinned gap-closure / verification reruns skip the full scan (single-ticker cost).
 
@@ -53,7 +67,7 @@ No compute throttle today. When GHA minutes become scarce, set
 
 ```bash
 ftse-ingest-loop status --json
-ftse-ingest-loop run --max-targets 12 --json   # discovery on by default
+ftse-ingest-loop run --max-targets 62 --json   # discovery on by default
 ```
 
 Artifacts are committed by `scripts/push_ingest_loop_artifacts.sh`.
