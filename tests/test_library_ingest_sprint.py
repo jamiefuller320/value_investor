@@ -1,0 +1,59 @@
+"""Tests for parallel library ingest sprint."""
+
+from __future__ import annotations
+
+from unittest.mock import patch
+
+from value_investor.library_ingest_dispatch import list_library_ingest_parallel_sprint_markets
+from value_investor.library_ingest_sprint import (
+    parallel_sprint_markets_needing_ingest,
+    run_library_ingest_sprint,
+)
+
+
+def test_list_parallel_sprint_excludes_focus():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["sp500", "euro_depth"],
+    }
+    assert list_library_ingest_parallel_sprint_markets(policy=policy) == ["sp500"]
+
+
+def test_parallel_sprint_markets_needing_ingest():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["sp500"],
+    }
+    health = {"unmeasured_buy_tier": 3, "zero_body_buy_tier": 1}
+    with patch(
+        "value_investor.library_ingest_sprint.snapshot_library_buy_tier_filing_health",
+        return_value=health,
+    ):
+        markets = parallel_sprint_markets_needing_ingest(policy=policy)
+    assert markets == ["sp500"]
+
+
+def test_run_library_ingest_sprint_skips_parity_markets():
+    policy = {"focus_market": "euro_depth", "ingest_parallel_sprint": ["sp500"]}
+    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    with (
+        patch(
+            "value_investor.library_ingest_sprint.load_policy",
+            return_value=policy,
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.parallel_sprint_markets_needing_ingest",
+            return_value=["sp500"],
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.evaluate_library_ingest_dispatch",
+            return_value={"should_run_sprint_ingest": False, "reason": "parity"},
+        ),
+        patch("value_investor.library_ingest_sprint.run_library_ingest_loop") as run_loop,
+        patch(
+            "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
+        ),
+    ):
+        outcome = run_library_ingest_sprint()
+    run_loop.assert_not_called()
+    assert outcome.skipped[0]["market_id"] == "sp500"

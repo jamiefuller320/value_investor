@@ -72,6 +72,9 @@ ftse-library ingest-loop --market euro_depth --max-targets 24
 # Daily maintenance (parity markets; discovery scan on by default)
 ftse-library ingest-maintenance --json
 
+# Parallel sprint (queue head-start while focus still sprinting)
+ftse-library ingest-sprint --json
+
 # Manual gap-closure pass
 ftse-library ingest-loop --market euro_depth --max-targets 1 --record-gap-closure \
   --pin-ticker SHELL.AS --gap-closure-review-trigger horizon_scan
@@ -88,7 +91,8 @@ ftse-library euro-ingest-dispatch --json
 
 | Hook | Workflow | Behaviour |
 |------|----------|-----------|
-| Sprint ingest | `euro-ingest-loop.yml` | Runs only when `should_run_sprint_ingest` (filing gaps remain) |
+| Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
+| Sprint ingest (parallel) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
 | Maintenance ingest | `library-ingest-maintenance.yml` | Daily scan-then-target for `ingest_parity_markets` + focus at parity |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |

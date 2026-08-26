@@ -33,7 +33,7 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 | Layer | Command / workflow | Cadence |
 |-------|-------------------|---------|
 | Metrics grow (full ~194) | `ftse-library grow --market euro_depth` | Day 1 burst (`focus_grow_cap: 200`) |
-| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays via `euro-ingest-loop.yml` — **4×/day sprint (24 targets)** while filing gaps remain; **`library-ingest-maintenance.yml`** daily scan+deepen once parity met; **stall → eng task** (see [`library-ingest-escalation.md`](library-ingest-escalation.md)) |
+| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays: **euro-ingest-loop.yml** 4×/day sprint on focus; **library-ingest-sprint.yml** 4×/day on `ingest_parallel_sprint` (sp500); **library-ingest-maintenance.yml** daily once parity met |
 | Screen + observe + weekly shard | `ftse-library ladder` | Daily `ladder_only` when eng idle + Sundays |
 | Phase 3 weekday shard | `ftse-library shard-weekday --markets euro_depth` | Weekdays after Phase 2 gate |
 
@@ -54,6 +54,11 @@ Maintenance UTC slot: **07:30** weekdays (`library-ingest-maintenance.yml`).
 
 When focus reaches parity, `ingest_parity_markets` is updated and focus may advance to
 `market_queue[0]` when `focus_graduation.advance_focus_on_ingest_parity` is true.
+
+**Parallel sprint:** `ingest_parallel_sprint` (default `["sp500"]`) front-starts filing
+deepen on the next queue market while focus is still in sprint. Slots: **07:45 / 10:45 /
+13:45 / 16:45** UTC via `library-ingest-sprint.yml` (30 minutes after euro focus slots).
+Learning focus (`weekly_paper_shard_markets`, observe sim) stays on `euro_depth` until handoff.
 
 The gate runs at the start of `euro-ingest-loop.yml`, after each ingest loop, and after
 library ladder when `euro_depth` is in the phase rollup. With `CRONJOB_API_KEY` in GitHub

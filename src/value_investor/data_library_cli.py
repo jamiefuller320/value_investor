@@ -353,6 +353,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_maint_p.set_defaults(func=cmd_library_ingest_maintenance)
 
+    ingest_sprint_p = sub.add_parser(
+        "ingest-sprint",
+        parents=[common],
+        help="Parallel sprint ingest for ingest_parallel_sprint markets (non-focus)",
+    )
+    ingest_sprint_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: ingest_parallel_sprint with gaps)",
+    )
+    ingest_sprint_p.add_argument("--max-targets", type=int, default=24)
+    ingest_sprint_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
+    ingest_sprint_p.add_argument("--max-bodies", type=int, default=20)
+    ingest_sprint_p.add_argument("--json", action="store_true")
+    ingest_sprint_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path (avoids stdout log pollution in CI)",
+    )
+    ingest_sprint_p.set_defaults(func=cmd_library_ingest_sprint)
+
     shard_weekday_p = sub.add_parser(
         "shard-weekday",
         parents=[common],
@@ -1218,6 +1240,34 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
             f"maintenance: markets={len(outcome.markets)} "
             f"results={len(outcome.results)} errors={len(outcome.errors)}"
         )
+        for err in outcome.errors:
+            print(f"  error: {err}", file=sys.stderr)
+    return 0 if not outcome.errors else 1
+
+
+def cmd_library_ingest_sprint(args: argparse.Namespace) -> int:
+    from value_investor.library_ingest_sprint import run_library_ingest_sprint
+
+    markets = [m.strip() for m in str(args.markets or "").split(",") if m.strip()] or None
+    outcome = run_library_ingest_sprint(
+        library_root=args.root,
+        policy_path=args.policy,
+        markets=markets,
+        max_targets=args.max_targets,
+        max_runtime_seconds=args.max_runtime_seconds,
+        max_bodies=args.max_bodies,
+    )
+    payload = outcome.to_dict()
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        print(
+            f"sprint: markets={len(outcome.markets)} "
+            f"results={len(outcome.results)} skipped={len(outcome.skipped)} "
+            f"errors={len(outcome.errors)}"
+        )
+        for row in outcome.skipped:
+            print(f"  skipped {row.get('market_id') or ''}: {row.get('reason')}")
         for err in outcome.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not outcome.errors else 1

@@ -150,6 +150,47 @@ def evaluate_euro_ingest_dispatch(
     )
 
 
+def list_library_ingest_parallel_sprint_markets(
+    *,
+    policy: dict[str, Any] | None = None,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+) -> list[str]:
+    """
+    Markets in ``ingest_parallel_sprint`` that run sprint ingest alongside focus.
+
+    Focus market sprint is handled by ``euro-ingest-loop.yml``; this list is for
+    parallel queue head-start (e.g. sp500 while euro_depth finishes).
+    """
+    policy = policy if policy is not None else load_policy(policy_path)
+    focus = str(policy.get("focus_market") or "").strip()
+    parallel = [str(m).strip() for m in (policy.get("ingest_parallel_sprint") or []) if str(m).strip()]
+    return sorted({m for m in parallel if m and m != focus})
+
+
+def list_library_ingest_sprint_markets(
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+    policy: dict[str, Any] | None = None,
+) -> list[str]:
+    """All markets that should run sprint ingest (focus + parallel with filing gaps)."""
+    library_root = Path(library_root)
+    policy = policy if policy is not None else load_policy(policy_path)
+    focus = str(policy.get("focus_market") or "").strip()
+    markets: list[str] = []
+    if focus:
+        health = snapshot_library_buy_tier_filing_health(focus, library_root=library_root)
+        if not ingest_parity_met(health):
+            markets.append(focus)
+    for market_id in list_library_ingest_parallel_sprint_markets(policy=policy):
+        if market_id in markets:
+            continue
+        health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+        if not ingest_parity_met(health):
+            markets.append(market_id)
+    return markets
+
+
 def list_library_ingest_maintenance_markets(
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
@@ -194,6 +235,20 @@ def refresh_euro_ingest_dispatch(
         policy_path=policy_path,
     )
     evaluation["maintenance_markets"] = list_library_ingest_maintenance_markets(
+        library_root=library_root,
+        policy_path=policy_path,
+    )
+    parallel = list_library_ingest_parallel_sprint_markets(policy_path=policy_path)
+    evaluation["parallel_sprint_markets"] = parallel
+    evaluation["parallel_sprint_status"] = [
+        evaluate_library_ingest_dispatch(
+            market_id,
+            library_root=library_root,
+            policy_path=policy_path,
+        )
+        for market_id in parallel
+    ]
+    evaluation["sprint_markets"] = list_library_ingest_sprint_markets(
         library_root=library_root,
         policy_path=policy_path,
     )
@@ -243,6 +298,8 @@ __all__ = [
     "evaluate_library_ingest_dispatch",
     "ingest_parity_met",
     "list_library_ingest_maintenance_markets",
+    "list_library_ingest_parallel_sprint_markets",
+    "list_library_ingest_sprint_markets",
     "load_euro_ingest_dispatch",
     "refresh_euro_ingest_dispatch",
     "snapshot_library_buy_tier_filing_health",
