@@ -1,10 +1,6 @@
 {
   "schema_version": 1,
   "focus_market": "euro_depth",
-  "ingest_parity_markets": [],
-  "ingest_parallel_sprint": [
-    "sp500"
-  ],
   "market_queue": [
     "sp500",
     "asx200",
@@ -147,8 +143,6 @@
     "maintenance_max_tickers": "full",
     "maintenance_include_focus_when_queue_complete": true,
     "maintenance_refresh_constituents": true,
-    "require_ingest_parity": false,
-    "advance_focus_on_ingest_parity": true,
     "history": [
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
@@ -334,7 +328,9 @@
         "reason": "queue_complete"
       }
     ],
-    "note": "Depth-first EU pilot (euro_depth): coverage auto_advance off; parallel ingest_sprint front-starts queue head while focus completes; advance_focus_on_ingest_parity moves focus when parity met."
+    "note": "Depth-first EU pilot (euro_depth): coverage auto_advance off; parallel ingest_sprint front-starts queue head while focus completes; advance_focus_on_ingest_parity moves focus when parity met.",
+    "require_ingest_parity": false,
+    "advance_focus_on_ingest_parity": true
   },
   "research_model": {
     "model_id": "composer-2.5",
@@ -349,8 +345,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 215.66,
-    "estimated_spend_usd_this_week": 16.8,
+    "estimated_spend_usd_this_cycle": 216.86,
+    "estimated_spend_usd_this_week": 18.0,
     "week_id": "2026-W35",
     "cycle_id": "2026-08-d8",
     "weekly_ops_cap_usd": 80.0,
@@ -409,7 +405,11 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-08-26T20:20:03.316343+00:00",
+  "updated_at": "2026-08-26T21:20:08.072299+00:00",
+  "ingest_parity_markets": [],
+  "ingest_parallel_sprint": [
+    "sp500"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
