@@ -15,9 +15,11 @@ set -euo pipefail
 
 REPO="${REPO:-jamiefuller320/value_investor}"
 TARGET="${TARGET_INDEXED_WITHOUT_BODY:-0}"
-MAX_TARGETS="${MAX_TARGETS:-62}"
+# Defaults sized to finish under the hosted step budget. Raise after the
+# learning-phase ingest PR (65m step / 3600s runtime) is on main.
+MAX_TARGETS="${MAX_TARGETS:-12}"
 MAX_BODIES="${MAX_BODIES:-40}"
-MAX_RUNTIME_SECONDS="${MAX_RUNTIME_SECONDS:-3600}"
+MAX_RUNTIME_SECONDS="${MAX_RUNTIME_SECONDS:-1800}"
 MAX_DRAIN_GENERATIONS="${MAX_DRAIN_GENERATIONS:-12}"
 STATUS_ONLY=0
 DISPATCH_IF_IDLE=0
@@ -107,11 +109,19 @@ if [[ "$DISPATCH_IF_IDLE" -ne 1 ]]; then
 fi
 
 echo "Dispatching deepen batch (gaps=$gaps > target=$TARGET)"
-gh workflow run ingest-loop.yml --repo "$REPO" \
-  -f max_targets="$MAX_TARGETS" \
-  -f max_bodies="$MAX_BODIES" \
-  -f max_runtime_seconds="$MAX_RUNTIME_SECONDS" \
-  -f force=true \
-  -f drain_generation=1 \
-  -f max_drain_generations="$MAX_DRAIN_GENERATIONS"
+# Only pass inputs present on main today. After the learning-phase ingest PR
+# merges, set PASS_DRAIN_GENERATION=1 to enable multi-gen workflow chaining.
+DISPATCH_ARGS=(
+  -f "max_targets=${MAX_TARGETS}"
+  -f "max_bodies=${MAX_BODIES}"
+  -f "max_runtime_seconds=${MAX_RUNTIME_SECONDS}"
+  -f "force=true"
+)
+if [[ "${PASS_DRAIN_GENERATION:-0}" == "1" ]]; then
+  DISPATCH_ARGS+=(
+    -f "drain_generation=1"
+    -f "max_drain_generations=${MAX_DRAIN_GENERATIONS}"
+  )
+fi
+gh workflow run ingest-loop.yml --repo "$REPO" "${DISPATCH_ARGS[@]}"
 echo "dispatched=true"
