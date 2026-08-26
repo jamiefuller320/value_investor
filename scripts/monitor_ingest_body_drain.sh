@@ -109,11 +109,19 @@ if [[ "$DISPATCH_IF_IDLE" -ne 1 ]]; then
 fi
 
 echo "Dispatching deepen batch (gaps=$gaps > target=$TARGET)"
-gh workflow run ingest-loop.yml --repo "$REPO" \
-  -f max_targets="$MAX_TARGETS" \
-  -f max_bodies="$MAX_BODIES" \
-  -f max_runtime_seconds="$MAX_RUNTIME_SECONDS" \
-  -f force=true \
-  -f drain_generation=1 \
-  -f max_drain_generations="$MAX_DRAIN_GENERATIONS"
+# Only pass inputs present on main today. After the learning-phase ingest PR
+# merges, set PASS_DRAIN_GENERATION=1 to enable multi-gen workflow chaining.
+DISPATCH_ARGS=(
+  -f "max_targets=${MAX_TARGETS}"
+  -f "max_bodies=${MAX_BODIES}"
+  -f "max_runtime_seconds=${MAX_RUNTIME_SECONDS}"
+  -f "force=true"
+)
+if [[ "${PASS_DRAIN_GENERATION:-0}" == "1" ]]; then
+  DISPATCH_ARGS+=(
+    -f "drain_generation=1"
+    -f "max_drain_generations=${MAX_DRAIN_GENERATIONS}"
+  )
+fi
+gh workflow run ingest-loop.yml --repo "$REPO" "${DISPATCH_ARGS[@]}"
 echo "dispatched=true"
