@@ -278,6 +278,12 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_loop_p.add_argument("--gap-closure-trigger", default="")
     ingest_loop_p.add_argument("--pin-ticker", default="")
     ingest_loop_p.add_argument("--json", action="store_true")
+    ingest_loop_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path (avoids stdout log pollution in CI)",
+    )
     ingest_loop_p.set_defaults(func=cmd_library_ingest_loop)
 
     euro_dispatch_p = sub.add_parser(
@@ -301,6 +307,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Enable/disable cron-job.org euro ingest + ladder jobs (needs CRONJOB_API_KEY)",
     )
     euro_dispatch_p.add_argument("--json", action="store_true")
+    euro_dispatch_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write dispatch JSON to this path (avoids stdout log pollution in CI)",
+    )
     euro_dispatch_p.set_defaults(func=cmd_euro_ingest_dispatch)
 
     shard_weekday_p = sub.add_parser(
@@ -1087,6 +1099,19 @@ def _library_gap_closure_spec(args: argparse.Namespace) -> dict[str, Any] | None
     return spec
 
 
+def _emit_cli_json(payload: dict[str, Any], args: argparse.Namespace) -> None:
+    """Write optional --json-path and/or print --json (FTSE ingest-loop parity)."""
+    text = json.dumps(payload, indent=2)
+    json_path = getattr(args, "json_path", None)
+    if json_path is not None:
+        path = Path(json_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text + "\n", encoding="utf-8")
+    if getattr(args, "json", False):
+        print(text)
+        sys.stdout.flush()
+
+
 def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
     from value_investor.library_ingest_loop import run_library_ingest_loop
 
@@ -1103,8 +1128,8 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         record_gap_closure=_library_gap_closure_spec(args),
     )
     payload = result.to_dict()
-    if args.json:
-        print(json.dumps(payload, indent=2))
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
     else:
         gaps_before = int(result.health_before.get("unmeasured_buy_tier") or 0) + int(
             result.health_before.get("zero_body_buy_tier") or 0
@@ -1151,8 +1176,8 @@ def cmd_euro_ingest_dispatch(args: argparse.Namespace) -> int:
             library_root=args.root,
             policy_path=args.policy,
         )
-    if args.json:
-        print(json.dumps(payload, indent=2))
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
     else:
         print(
             f"{args.market}: mode={payload.get('mode')} "

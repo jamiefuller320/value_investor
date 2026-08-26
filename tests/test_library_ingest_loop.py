@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from unittest.mock import patch
 
+from value_investor.data_library_cli import main as library_main
 from value_investor.library_ingest_loop import (
+    LibraryIngestLoopResult,
     _filing_coverage_for_ticker,
     select_library_ingest_targets,
 )
@@ -128,3 +132,103 @@ def test_filing_coverage_uses_best_fallback_when_canonical_missing(tmp_path: Pat
         market_id=market,
     )
     assert coverage == {"filings_total": 4, "filings_with_body": 3}
+
+
+def test_library_ingest_loop_cli_writes_json_path(tmp_path: Path):
+    """CI must read clean JSON from --json-path even if stdout has warnings."""
+    out_path = tmp_path / "euro_ingest_loop.json"
+    result = LibraryIngestLoopResult(
+        market_id="euro_depth",
+        improved=["AAA.DE"],
+        partial=False,
+        health_before={"unmeasured_buy_tier": 2},
+        health_after={"unmeasured_buy_tier": 1},
+    )
+    with patch(
+        "value_investor.library_ingest_loop.run_library_ingest_loop",
+        return_value=result,
+    ):
+        assert (
+            library_main(
+                [
+                    "ingest-loop",
+                    "--market",
+                    "euro_depth",
+                    "--json-path",
+                    str(out_path),
+                    "--root",
+                    str(tmp_path / "library"),
+                ]
+            )
+            == 0
+        )
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    assert payload["market_id"] == "euro_depth"
+    assert payload["improved"] == ["AAA.DE"]
+    assert payload["health_after"]["unmeasured_buy_tier"] == 1
+
+
+def test_euro_ingest_dispatch_cli_writes_json_path(tmp_path: Path):
+    out_path = tmp_path / "euro_ingest_dispatch.json"
+    dispatch = {
+        "mode": "sprint",
+        "should_run_ingest": True,
+        "max_daily_successes": 4,
+        "max_targets": 24,
+        "reason": "test",
+    }
+    with patch(
+        "value_investor.euro_depth_ingest_dispatch.evaluate_euro_ingest_dispatch",
+        return_value=dispatch,
+    ):
+        assert (
+            library_main(
+                [
+                    "euro-ingest-dispatch",
+                    "--json-path",
+                    str(out_path),
+                    "--root",
+                    str(tmp_path / "library"),
+                ]
+            )
+            == 0
+        )
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    assert payload["mode"] == "sprint"
+    assert payload["should_run_ingest"] is True
+
+
+def test_library_ingest_json_path_survives_stdout_pollution(tmp_path: Path, capsys):
+    """Reproduce morning failure mode: stdout noise must not taint --json-path."""
+    out_path = tmp_path / "euro_ingest_loop.json"
+    result = LibraryIngestLoopResult(market_id="euro_depth", improved=["BBB.DE"])
+
+    def _run(*_a, **_k):
+        print(
+            "warning: The `fitz` API is deprecated and will be removed in future. "
+            "Use `import pymupdf` instead."
+        )
+        return result
+
+    with patch(
+        "value_investor.library_ingest_loop.run_library_ingest_loop",
+        side_effect=_run,
+    ):
+        assert (
+            library_main(
+                [
+                    "ingest-loop",
+                    "--json",
+                    "--json-path",
+                    str(out_path),
+                    "--root",
+                    str(tmp_path / "library"),
+                ]
+            )
+            == 0
+        )
+    captured = capsys.readouterr().out
+    assert "fitz" in captured
+    # Teeing stdout would break; the dedicated path must stay parseable.
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    assert payload["improved"] == ["BBB.DE"]
