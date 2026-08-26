@@ -83,7 +83,9 @@ jobs:
         id: dispatch
         run: |
           set -euo pipefail
-          ftse-library euro-ingest-dispatch --json | tee /tmp/euro_ingest_dispatch.json
+          # Prefer --json-path over tee: stdout can include third-party warnings (e.g. fitz)
+          # that break json.loads of a teed capture.
+          ftse-library euro-ingest-dispatch --json --json-path /tmp/euro_ingest_dispatch.json
           python3 - <<'PY'
           import json
           import os
@@ -179,7 +181,13 @@ jobs:
           set -euo pipefail
           MARKET="${{ github.event.inputs.market || 'euro_depth' }}"
           MAX_TARGETS="${{ github.event.inputs.max_targets || needs.check.outputs.max_targets || '12' }}"
-          ARGS=(ingest-loop --market "$MARKET" --json --max-targets "$MAX_TARGETS")
+          ARGS=(
+            ingest-loop
+            --market "$MARKET"
+            --json
+            --json-path /tmp/euro_ingest_loop.json
+            --max-targets "$MAX_TARGETS"
+          )
           if [ -n "${{ github.event.inputs.max_runtime_seconds }}" ]; then
             ARGS+=(--max-runtime-seconds "${{ github.event.inputs.max_runtime_seconds }}")
           fi
@@ -212,7 +220,7 @@ jobs:
           if [ -n "$PIN" ]; then
             ARGS+=(--pin-ticker "$PIN")
           fi
-          ftse-library "${ARGS[@]}" | tee /tmp/euro_ingest_loop.json
+          ftse-library "${ARGS[@]}"
           python3 - <<'PY'
           import json
           import os
@@ -242,7 +250,7 @@ jobs:
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
         run: |
-          ftse-library euro-ingest-dispatch --refresh --sync-cron --json | tee /tmp/euro_dispatch_refresh.json
+          ftse-library euro-ingest-dispatch --refresh --sync-cron --json --json-path /tmp/euro_dispatch_refresh.json
 
       - name: Commit and push library ingest artifacts
         run: |
