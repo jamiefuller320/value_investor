@@ -378,10 +378,7 @@ def build_parser() -> argparse.ArgumentParser:
     learning_depth_p = sub.add_parser(
         "learning-depth",
         parents=[common],
-        help=(
-            "Assess FTSE-equivalent filing + trajectory depth "
-            "(canonical screen research only)"
-        ),
+        help=("Assess FTSE-equivalent filing + trajectory depth (canonical screen research only)"),
     )
     learning_depth_p.add_argument(
         "--market",

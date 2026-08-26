@@ -217,7 +217,12 @@ def test_write_trajectory_from_snapshots(tmp_path: Path):
             "run_at": "2026-07-01T12:00:00+00:00",
             "prices": {"AAA": 10.0},
             "signals": [
-                {"ticker": "AAA", "signal": "buy", "conviction_score": 0.4, "data_quality_score": 1.0}
+                {
+                    "ticker": "AAA",
+                    "signal": "buy",
+                    "conviction_score": 0.4,
+                    "data_quality_score": 1.0,
+                }
             ],
         },
         compact=True,
@@ -281,11 +286,11 @@ def test_learning_depth_cli_json(tmp_path: Path):
 
 def test_canonical_only_default_for_select_targets(tmp_path: Path):
     root = tmp_path / "library"
-    _write_index(root, "nasdaq100", "ADBE", total=9, with_body=9)
+    _write_index(root, "nasdaq100", "ZZZZTEST", total=9, with_body=9)
     from value_investor.library_ingest_loop import select_library_ingest_targets
 
     targets = select_library_ingest_targets(
-        [_report("ADBE")],
+        [_report("ZZZZTEST")],
         library_root=root,
         market_id="sp500",
         max_targets=1,
@@ -293,7 +298,7 @@ def test_canonical_only_default_for_select_targets(tmp_path: Path):
     )
     assert targets[0].reason == "unmeasured"
     fallback = _filing_coverage_for_ticker(
-        "ADBE",
+        "ZZZZTEST",
         library_root=root,
         market_id="sp500",
         canonical_only=False,

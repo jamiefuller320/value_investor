@@ -297,19 +297,22 @@ def assess_library_learning_depth(
             "(e.g. nasdaq100) are not measured for FTSE-equivalent parity."
         ),
         "filing": {
-            **{k: health.get(k) for k in (
-                "buy_tier_count",
-                "unmeasured_buy_tier",
-                "zero_body_buy_tier",
-                "thin_body_buy_tier",
-                "indexed_without_body",
-                "bodies_min",
-                "bodies_median",
-                "bodies_max",
-                "unmeasured_tickers",
-                "zero_body_tickers",
-                "thin_body_tickers",
-            )},
+            **{
+                k: health.get(k)
+                for k in (
+                    "buy_tier_count",
+                    "unmeasured_buy_tier",
+                    "zero_body_buy_tier",
+                    "thin_body_buy_tier",
+                    "indexed_without_body",
+                    "bodies_min",
+                    "bodies_median",
+                    "bodies_max",
+                    "unmeasured_tickers",
+                    "zero_body_tickers",
+                    "thin_body_tickers",
+                )
+            },
             "filing_ready": filing_ready,
             "ingest_parity_met": ingest_parity_met(health),
         },

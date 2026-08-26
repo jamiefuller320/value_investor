@@ -93,7 +93,7 @@ def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_pat
     canonical_dir.mkdir(parents=True)
     write_json(
         canonical_dir / "filings_index.json",
-        {"summary": {"total": 2, "with_body": 2}, "filings": [{}, {}]},
+        {"summary": {"total": 2, "with_body": 2}, "filings": []},
         compact=False,
     )
 

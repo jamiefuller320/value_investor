@@ -10,9 +10,8 @@ from __future__ import annotations
 import logging
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
-
 from statistics import median
+from typing import Any
 
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.engineering_tasks import (
