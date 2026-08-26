@@ -42,9 +42,7 @@ logger = logging.getLogger(__name__)
 LIBRARY_DISCOVERY_SUMMARY_PATH = Path(
     "docs/data/library/library_ingest_discovery_scan_summary.json"
 )
-LIBRARY_DISCOVERY_CURIOSITY_PATH = Path(
-    "docs/data/library/library_ingest_discovery_curiosity.json"
-)
+LIBRARY_DISCOVERY_CURIOSITY_PATH = Path("docs/data/library/library_ingest_discovery_curiosity.json")
 
 
 def list_regime_filings_index_only(

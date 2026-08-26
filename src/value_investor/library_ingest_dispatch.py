@@ -91,8 +91,7 @@ def evaluate_library_ingest_dispatch(
     if parity:
         mode = MODE_MAINTENANCE
         reason = (
-            "Ingest parity met — focus on daily maintenance; "
-            "Phase 3 ladder continues separately"
+            "Ingest parity met — focus on daily maintenance; Phase 3 ladder continues separately"
         )
         config = MAINTENANCE_CONFIG
     else:
