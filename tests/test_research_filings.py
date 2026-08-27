@@ -3814,6 +3814,7 @@ def test_sec_edgar_supplement_allowed_euro_depth_representatives():
     assert _sec_edgar_supplement_allowed("ABI.BR", "Anheuser-Busch InBev SA/NV") is True
     assert _sec_edgar_supplement_allowed("LOGN.SW", "Logitech International SA") is True
     assert _sec_edgar_supplement_allowed("C5H.IR", "CRH plc") is True
+    assert _sec_edgar_supplement_allowed("C5H.IR", "Cairn Homes plc") is False
 
 
 def test_fetch_filings_ir_allowlist_shell_as_inherits_shel_l(tmp_path: Path):
@@ -3854,12 +3855,36 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "NBA.LS": "novabase.com",
         "MUV2.DE": "munichre.com",
         "DOC.VI": "doco.com",
+        "STR.VI": "strabag.com",
+        "VOLV-B.ST": "volvogroup.com",
+        "GVR.IR": "glenveagh.ie",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
         assert rows, ticker
         assert all(row["source"] == "ir_allowlist" for row in rows)
         assert any(host_fragment in row["url"] for row in rows), ticker
+
+
+@patch("value_investor.research.filings._fetch_filings_investegate_company_for_epic")
+def test_fetch_filings_investegate_c5h_ir_resolves_via_crn_epic(mock_fetch):
+    mock_fetch.side_effect = lambda *, epic, max_items: (
+        [
+            {
+                "id": "ig_crn_annual",
+                "source": "investegate_direct",
+                "headline": "Cairn Homes Plc: Annual Report and Notice of Annual General Meeting",
+                "published_at": "2026-03-30T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/eqs/cairn-homes-cdi---crn/annual-report/1",
+                "period": "annual",
+            }
+        ]
+        if epic == "CRN"
+        else []
+    )
+    rows = fetch_filings_investegate_company(ticker="C5H.IR", company_name="Cairn Homes plc")
+    assert len(rows) == 1
+    assert mock_fetch.call_args_list[-1].kwargs["epic"] == "CRN"
 
 
 @patch("value_investor.research.filings._http_get")

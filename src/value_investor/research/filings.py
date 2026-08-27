@@ -141,6 +141,18 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "MUV2.DE": [
         "https://www.munichre.com/content/dam/munichre/mrwebsiteslaunches/2025-annual-report/MunichRe-Group-Annual-Report-2025-en.pdf/_jcr_content/renditions/original./MunichRe-Group-Annual-Report-2025-en.pdf",
     ],
+    # euro_depth buy-tier deepen — remaining unmeasured STOXX/periphery names (2026-08-27).
+    "STR.VI": [
+        "https://www.strabag.com/site/strabag-company-locale/get/params_E1717455665/2418307/Annual_and_Sustainability_Report_2025.pdf",
+        "https://www.strabag.com/site/strabag-company-locale/get/params_E815001242/2418311/STRABAG_Annual%20Financial%20Report%202025_e.pdf",
+    ],
+    "VOLV-B.ST": [
+        "https://www.volvogroup.com/content/dam/volvo-group/markets/master/news/2026/feb/Volvo-Group-Annual-Report-2025.pdf",
+        "https://www.volvogroup.com/content/dam/volvo-group/markets/master/investors/reports-and-presentations/interim-reports/2025/volvo-group-q4-2025-eng.pdf",
+    ],
+    "GVR.IR": [
+        "https://glenveagh.ie/download/annual-report-and-accounts-2025",
+    ],
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
@@ -1018,6 +1030,7 @@ def _base_symbol(ticker: str) -> str:
 # Alternate LSE/ISE EPICs seen in RNS headlines and Ticker.app metadata (primary EPIC first).
 _UK_RNS_EPIC_ALIASES: dict[str, tuple[str, ...]] = {
     "GFTU": ("GN5",),  # Grafton Group: LSE GFTU / ISE GN5
+    "C5H": ("CRN",),  # Cairn Homes: ISE C5H.IR / LSE CRN CDI Investegate epic
 }
 
 
