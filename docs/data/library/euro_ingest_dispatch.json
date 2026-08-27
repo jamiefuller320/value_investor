@@ -1,14 +1,16 @@
 {
   "market_id": "euro_depth",
+  "focus_market": "euro_depth",
   "mode": "sprint",
-  "reason": "Phase 3 in progress (2 blocker(s))",
+  "reason": "Ingest sprint: 4 buy-tier filing gap(s) (unmeasured=4, zero_body=0)",
+  "ingest_parity_met": false,
   "phase3_ready": false,
   "phase_blockers": [
     "need 4 weekly batch marks (have 0)",
     "learning_tracks_review missing or inconclusive"
   ],
   "filing_health": {
-    "snapshot_at": "2026-08-26T14:40:25.242605+00:00",
+    "snapshot_at": "2026-08-27T02:14:21.071371+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 48,
     "unmeasured_buy_tier": 4,
@@ -57,6 +59,92 @@
   "cron_midafternoon": true,
   "cron_evening": true,
   "cron_ladder_weekday": true,
+  "cron_maintenance": false,
+  "should_run_sprint_ingest": true,
+  "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-08-26T14:40:25.242953+00:00"
+  "evaluated_at": "2026-08-27T02:14:21.071816+00:00",
+  "maintenance_markets": [],
+  "parallel_sprint_markets": [
+    "sp500"
+  ],
+  "parallel_sprint_status": [
+    {
+      "market_id": "sp500",
+      "focus_market": "euro_depth",
+      "mode": "sprint",
+      "reason": "Ingest sprint: 4 buy-tier filing gap(s) (unmeasured=0, zero_body=4)",
+      "ingest_parity_met": false,
+      "phase3_ready": false,
+      "phase_blockers": [
+        "sp500 not in ladder.weekly_paper_shard_markets"
+      ],
+      "filing_health": {
+        "snapshot_at": "2026-08-27T02:14:28.237453+00:00",
+        "market_id": "sp500",
+        "buy_tier_count": 140,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 4,
+        "thin_body_buy_tier": 41,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [
+          "GEHC",
+          "NXPI",
+          "TMUS",
+          "WBD"
+        ],
+        "thin_body_tickers": [
+          "CTSH",
+          "SWK",
+          "AOS",
+          "UPS",
+          "PNR",
+          "EXE",
+          "CF",
+          "SNA",
+          "TROW",
+          "CINF",
+          "QCOM",
+          "GD",
+          "PTC",
+          "FSLR",
+          "EOG",
+          "DECK",
+          "PFE",
+          "CPRT",
+          "INCY",
+          "TEL",
+          "XYL",
+          "BF-B",
+          "PHM",
+          "NKE",
+          "PYPL"
+        ]
+      },
+      "filing_gaps": 4,
+      "max_daily_successes": 4,
+      "max_targets": 24,
+      "cron_morning": true,
+      "cron_afternoon": true,
+      "cron_midafternoon": true,
+      "cron_evening": true,
+      "cron_ladder_weekday": true,
+      "cron_maintenance": false,
+      "should_run_sprint_ingest": true,
+      "should_run_maintenance_ingest": false,
+      "should_run_ingest": true,
+      "evaluated_at": "2026-08-27T02:14:28.238371+00:00",
+      "should_run_parallel_ingest": true
+    }
+  ],
+  "sprint_markets": [
+    "euro_depth",
+    "sp500"
+  ],
+  "market_queue": [
+    "sp500",
+    "asx200",
+    "ftse_smallcap",
+    "tsx60"
+  ]
 }
