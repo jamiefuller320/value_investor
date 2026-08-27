@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T05:06:27+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T08:10:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -97,6 +97,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N44 | **Auto-tune selection knobs from in-portfolio loser family feedback** | selection_feedback_flags attribute loser family failures vs non-losers. Do not auto-apply model weights or exclusion knobs from this until shadow evidence links flags to forward excess. | hypothesis_integrity selection_feedback_flags stable for >=8 weeks and a scoring shadow beats control |
 | N45 | **More FTSE ingest runs for enrichment** | FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint. | Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path |
 | N46 | **More frequent engineering task generation to accelerate enrichment** | Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks — drafting more eng work would not speed enrichment. | Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing |
+| N47 | **Do not add sp500 to ingest_parity_markets until learning-depth is green** | Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain. | ftse-library learning-depth --market sp500 reports learning_ready true |
 
 ---
 
@@ -130,6 +131,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L176 | **Conviction-weighted sleeve sizing (replace equal-weight)** | When max_positions widens to 4-8, rank sleeves by conviction_score (with sector_cap floor) instead of strict NAV/positions equal-weight; cap any single name at e.g. 1.5x the median sleeve. | Primary learning track has >=12 weeks marks at max_positions>=4 and cost_drag is stable; compare vs equal-weight in rebalance_log replay |
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
+| L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
 
 ### Universe & data
 
@@ -145,7 +147,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
 | L192 | **Extra euro_depth ingest bursts beyond 2x/day** | euro_depth is in sprint with ~26 unmeasured buy-tier; ~2 closed per morning run. Extra force-dispatched runs or higher max_targets would accelerate filing bootstrap while capacity is free. | Want faster euro filing parity before Phase 3 exit; GHA capacity still free |
 | L195 | **Market ingest lifecycle: sprint deepen then scan-maintain while next market sprints** | Doctrine: once a market buy-tier is filing-deepened, switch it to scan-then-target maintenance (cheap index discovery + bounded body ingest) running alongside learning experiments; start the next market on sprint deepen. FTSE is the first candidate now (hard gaps closed); euro_depth stays sprint until parity. Regime adapters still need per-market fetch work — do not assume FTSE eng fully transfers to ESEF/IR. | Designing FTSE maintenance throttle or euro_depth Phase 3 exit / filing parity review |
-| L198 | **Cross-shard winner selection deployable book** | After ≥2 market shards clear Phase 3, rank survivors across shards into a deployable book using benchmark-relative excess, conviction, T212 tradability, and liquidity — winner-selection mechanics prove utility at this layer. | ≥2 shards at Phase 3 with stable local-benchmark excess; FTSE filtered_cohort_track active with ≥8 epoch marks |
+| L200 | **Cross-shard winner selection deployable book** | After ≥2 market shards clear Phase 3, rank survivors across shards into a deployable book using benchmark-relative excess, conviction, T212 tradability, and liquidity — winner-selection mechanics prove utility at this layer. | ≥2 shards at Phase 3 with stable local-benchmark excess; FTSE filtered_cohort_track active with ≥8 epoch marks |
 
 ### Research & portfolio product
 
@@ -255,6 +257,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L193 | **Stress euro ingest near 50min GHA job timeout** | Lengthening sequence reached ~9min ingest job (24 targets) with no stability issues; runtime budgets unused. To probe GHA timeout/OOM edges, need tickers that actually fetch bodies slowly or much higher target counts. | Want confidence near workflow timeout-minutes:50 or after ESEF/IR fetches make per-ticker work heavier |
 | L196 | **FTSE-first scan-then-target maintenance ingest** | Implement scan-then-target on live FTSE buy-tier now that hard gaps are closed (0 unmeasured/zero-body): cheap RNS/CH/Investegate index scan across buy-tier (optionally strong_buy first), queue new/changed filings, deepen only hits within max_targets. Replaces no-op strong_buy rewalks; frees capacity for euro sprint. | Next ingest/ops engineering slot after euro 4x24 cadence is stable, or when FTSE weekday runs show improved=0 for several days while new RNS appear |
 | L197 | **Re-throttle FTSE ingest deepen when GHA minutes bind** | Learning phase uses max_targets=62, max_bodies=40, daily success cap 8, and body-gap chaining. When Actions minutes become scarce, lower targets/cap and keep discovery scan uncapped. | GitHub Actions minutes approach quota or weekday ingest runtime regularly exceeds budget |
+| L199 | **Force S&P parallel ingest sprint after learning-depth gate** | After the FTSE-equivalent measurement gate lands, library-ingest-sprint should see real canonical gaps (8 unmeasured + 21 thin + 1154 indexed_without_body) and run 24 targets, not 4-target maintenance. Trigger gh workflow run library-ingest-sprint.yml -f force=true; do not ingest all 503 constituents. | After PR #354 merges and before the next weekday ingest-sprint slot |
 
 ---
 

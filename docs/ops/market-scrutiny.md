@@ -14,6 +14,7 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 | **FTSE filing depth** | bodies + discovery | Weekday deepen toward `indexed_without_body≈0` on buy-tier |
 | **Offline queue** | Breadth queue complete; **depth-first focus `euro_depth`** (~194 names) | Grow metrics + screen archives; deepen `euro_filings` on buy-tier |
 | **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday ladder concentrates weekly_ops on this book only |
+| **S&P 500 FTSE-equivalent** | Canonical-only filing + trajectory measurement; not weekly-paper | Close unmeasured / thin / `indexed_without_body` on **buy-tier** via parallel sprint; do not count nasdaq100 overlap |
 | **S&P / STOXX shards** | Demoted from weekly slot under depth-first policy | Layer A maintenance only until euro_depth filing parity |
 | **`weekly_ops`** | $80 cap | Sunday email + ladder selective research |
 | **Director–worker** | Exploration phase (15/week); **MEGP.L** trial run 2026-08-16 | `auto_escalate_director` stays false until calibrated |
@@ -111,7 +112,12 @@ At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports rough
 1. **FTSE ingest** — scan-then-target maintenance for new filings (buy-tier measured).
 2. **`euro_depth` metrics + screen archives** — sole offline research/observe/weekly focus.
 3. **Deepen `euro_filings`** on euro_depth buy-tier before treating AI tracks as FTSE-equivalent.
-4. **Keep Layer A maintenance** on other graduated markets — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
+4. **S&P 500 learning-depth** (parallel, not live-path): canonical indexes only under
+   `markets/sp500/screen/research/{TICKER}/`. Gate with
+   `ftse-library learning-depth --market sp500`. Do **not** add `sp500` to
+   `ingest_parity_markets` until `learning_ready` is true. Keep Sunday screen-lite so
+   unique days / span reach 12 weeks — do not ingest all 503 constituents.
+5. **Keep Layer A maintenance** on other graduated markets — no stage-4 live expansion until stage **2b** shows edge vs ^FTSE.
 
 ## Commands
 

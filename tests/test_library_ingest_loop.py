@@ -93,7 +93,7 @@ def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_pat
     canonical_dir.mkdir(parents=True)
     write_json(
         canonical_dir / "filings_index.json",
-        {"summary": {"total": 2, "with_body": 2}, "filings": [{}, {}]},
+        {"summary": {"total": 2, "with_body": 2}, "filings": []},
         compact=False,
     )
 
@@ -102,7 +102,7 @@ def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_pat
         library_root=root,
         market_id=market,
     )
-    assert coverage == {"filings_total": 2, "filings_with_body": 2}
+    assert coverage == {"filings_total": 2, "filings_with_body": 2, "indexed_without_body": 0}
 
 
 def test_filing_coverage_uses_best_fallback_when_canonical_missing(tmp_path: Path):
@@ -131,7 +131,35 @@ def test_filing_coverage_uses_best_fallback_when_canonical_missing(tmp_path: Pat
         library_root=root,
         market_id=market,
     )
-    assert coverage == {"filings_total": 4, "filings_with_body": 3}
+    assert coverage == {"filings_total": 4, "filings_with_body": 3, "indexed_without_body": 4}
+
+
+def test_filing_coverage_canonical_only_ignores_other_shard(tmp_path: Path):
+    root = tmp_path / "library"
+    ticker = "ZZZZTEST"
+    nasdaq_dir = (
+        root / "markets" / "nasdaq100" / "screen" / "research" / ticker / "sources" / "filings"
+    )
+    nasdaq_dir.mkdir(parents=True)
+    write_json(
+        nasdaq_dir / "filings_index.json",
+        {"summary": {"total": 20, "with_body": 18}, "filings": []},
+        compact=False,
+    )
+    fallback = _filing_coverage_for_ticker(
+        ticker,
+        library_root=root,
+        market_id="sp500",
+        canonical_only=False,
+    )
+    assert fallback["filings_with_body"] == 18
+    canonical = _filing_coverage_for_ticker(
+        ticker,
+        library_root=root,
+        market_id="sp500",
+        canonical_only=True,
+    )
+    assert canonical == {"filings_total": 0, "filings_with_body": 0, "indexed_without_body": 0}
 
 
 def test_library_ingest_loop_cli_writes_json_path(tmp_path: Path):

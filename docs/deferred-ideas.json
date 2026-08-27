@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-27T05:06:27+00:00",
+  "updated_at": "2026-08-27T08:10:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4065,6 +4065,39 @@
     {
       "id": "L198",
       "category": "later",
+      "section": "learning",
+      "title": "Sunday S&P 500 screen-lite for 12-week trajectory span",
+      "summary": "S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth.",
+      "revisit_when": "After each Sunday ladder while sp500 learning-depth trajectory_ready is false",
+      "tags": [
+        "sp500",
+        "learning-depth",
+        "screen-lite",
+        "trajectory"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0f3d2fa7-903d-401e-86e2-e29548757725",
+      "added_at": "2026-08-26T20:56:15+00:00"
+    },
+    {
+      "id": "L199",
+      "category": "later",
+      "section": "ops",
+      "title": "Force S&P parallel ingest sprint after learning-depth gate",
+      "summary": "After the FTSE-equivalent measurement gate lands, library-ingest-sprint should see real canonical gaps (8 unmeasured + 21 thin + 1154 indexed_without_body) and run 24 targets, not 4-target maintenance. Trigger gh workflow run library-ingest-sprint.yml -f force=true; do not ingest all 503 constituents.",
+      "revisit_when": "After PR #354 merges and before the next weekday ingest-sprint slot",
+      "tags": [
+        "sp500",
+        "ingest-sprint",
+        "learning-depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0f3d2fa7-903d-401e-86e2-e29548757725",
+      "added_at": "2026-08-26T20:56:15+00:00"
+    },
+    {
+      "id": "L200",
+      "category": "later",
       "section": "universe",
       "title": "Cross-shard winner selection deployable book",
       "summary": "After \u22652 market shards clear Phase 3, rank survivors across shards into a deployable book using benchmark-relative excess, conviction, T212 tradability, and liquidity \u2014 winner-selection mechanics prove utility at this layer.",
@@ -4077,6 +4110,22 @@
       "status": "open",
       "source": "cursor agent \u2014 cross-shard discrimination layer discussion",
       "added_at": "2026-08-27T05:06:27+00:00"
+    },
+    {
+      "id": "N47",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Do not add sp500 to ingest_parity_markets until learning-depth is green",
+      "summary": "Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain.",
+      "revisit_when": "ftse-library learning-depth --market sp500 reports learning_ready true",
+      "tags": [
+        "sp500",
+        "ingest-parity",
+        "learning-depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-0f3d2fa7-903d-401e-86e2-e29548757725",
+      "added_at": "2026-08-26T20:56:15+00:00"
     }
   ],
   "fragments": [

@@ -1,8 +1,9 @@
 # Library ingest escalation (FTSE parity)
 
 Reusable weekday filing-deepen escalation for **offline library markets**. The
-`euro_depth` sprint is the first pilot; copy this pattern when adding the next
-market shard (e.g. `asx200`, `sp500` offline depth).
+`euro_depth` sprint is the first pilot; `sp500` is the first
+**FTSE-equivalent** market (`policy.ftse_equivalent_markets`). Copy this pattern
+when adding the next market shard (e.g. `asx200` offline depth).
 
 Live FTSE reference: [`ingest-loop.yml`](../../.github/workflows/ingest-loop.yml),
 [`docs/ops/horizon-scan.md`](horizon-scan.md) (gap-closure runs).
@@ -33,6 +34,8 @@ depth offline using the same eng escalation semantics as FTSE.
 |------|---------|
 | `docs/data/library/markets/{market_id}/ingest_health_log.json` | Before/after filing health snapshots |
 | `docs/data/library/markets/{market_id}/ingest_summary.json` | Latest run targets + per-ticker results |
+| `docs/data/library/markets/{market_id}/learning_depth.json` | FTSE-equivalent filing + trajectory readiness (`ftse-library learning-depth --write`) |
+| `docs/data/library/markets/{market_id}/screen/trajectory_*.json` | Library trajectory artifacts (refreshed after observe-sim on FTSE-equivalent markets) |
 | `docs/data/library/euro_ingest_dispatch.json` | Sprint vs maintenance gate (focus market) |
 | `docs/data/library/library_ingest_discovery_scan_summary.json` | Maintenance discovery scan summary |
 | `docs/data/ingest_gap_closure_runs.json` | Shared gap-closure run log (FTSE + library) |
@@ -97,6 +100,28 @@ ftse-library euro-ingest-dispatch --json
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
+
+## FTSE-equivalent markets (`sp500`)
+
+Policy `ftse_equivalent_markets: ["sp500"]` changes measurement and the parity bar:
+
+1. **Canonical-only coverage.** `_filing_coverage_for_ticker(..., canonical_only=True)`
+   reads only `markets/sp500/screen/research/{TICKER}/`. Bodies that exist only under
+   `nasdaq100` (or any other shard) are **unmeasured** for S&P parity.
+2. **`ingest_parity_met()`** for `health.ftse_equivalent` also requires
+   `thin_body_buy_tier == 0` and `indexed_without_body == 0`. `euro_depth` stays
+   unmeasured + zero-body only.
+3. **Health snapshot** includes `indexed_without_body`, `bodies_min` / `median` /
+   `max`, `coverage_scope`, and `ftse_equivalent`.
+4. **Do not** append `sp500` to `ingest_parity_markets` until
+   `ftse-library learning-depth --market sp500` is green (`learning_ready`).
+5. Parallel sprint then sees real gaps (24 targets) instead of a 4-target
+   maintenance pass that treated shard fallback as zero gaps.
+
+```bash
+ftse-library learning-depth --market sp500 --json
+# expect filing_ready=false / trajectory_ready=false until depth matches FTSE
+```
 
 ## Adding a new market
 

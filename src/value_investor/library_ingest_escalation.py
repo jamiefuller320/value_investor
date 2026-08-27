@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 from datetime import UTC, datetime
 from pathlib import Path
+from statistics import median
 from typing import Any
 
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
@@ -28,9 +29,32 @@ from value_investor.storage import read_json, write_json
 logger = logging.getLogger(__name__)
 
 DEFAULT_STALL_RUNS = 2
+DEFAULT_FTSE_EQUIVALENT_MARKETS = ("sp500",)
 LIBRARY_INGEST_STALL_SOURCES = frozenset(
     {"library_ingest_stall", "library_ingest_gap_closure", "ingest_gap_closure", "ingest_trial"}
 )
+
+
+def ftse_equivalent_markets(policy: dict[str, Any] | None = None) -> list[str]:
+    """Markets that must match live FTSE filing + trajectory depth (canonical only)."""
+    if policy is None:
+        try:
+            from value_investor.agent_model_policy import load_policy
+
+            policy = load_policy()
+        except (OSError, ValueError, TypeError):
+            policy = {}
+    raw = policy.get("ftse_equivalent_markets")
+    if raw is None:
+        raw = DEFAULT_FTSE_EQUIVALENT_MARKETS
+    return [str(mid).strip() for mid in raw if str(mid).strip()]
+
+
+def is_ftse_equivalent_market(
+    market_id: str,
+    policy: dict[str, Any] | None = None,
+) -> bool:
+    return str(market_id or "").strip() in set(ftse_equivalent_markets(policy))
 
 
 def library_ingest_health_log_path(library_root: Path, market_id: str) -> Path:
@@ -68,6 +92,7 @@ def library_ingest_ticker_has_gaps(
         ticker,
         library_root=library_root,
         market_id=market_id,
+        canonical_only=is_ftse_equivalent_market(market_id),
     )
     total = int(coverage.get("filings_total") or 0)
     with_body = int(coverage.get("filings_with_body") or 0)
@@ -261,6 +286,7 @@ def snapshot_library_buy_tier_filing_health(
     market_id: str,
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Summarise buy-tier filing body coverage for a library market screen."""
     from value_investor.library_ingest_loop import (
@@ -269,32 +295,47 @@ def snapshot_library_buy_tier_filing_health(
     )
 
     library_root = Path(library_root)
+    ftse_equivalent = is_ftse_equivalent_market(market_id, policy)
+    coverage_scope = "canonical" if ftse_equivalent else "canonical_plus_shards"
+    empty = {
+        "snapshot_at": datetime.now(UTC).isoformat(),
+        "market_id": market_id,
+        "buy_tier_count": 0,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+        "bodies_min": None,
+        "bodies_median": None,
+        "bodies_max": None,
+        "coverage_scope": coverage_scope,
+        "ftse_equivalent": ftse_equivalent,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [],
+        "thin_body_tickers": [],
+    }
     try:
         reports = load_library_buy_tier_reports(library_root, market_id)
     except FileNotFoundError:
-        return {
-            "snapshot_at": datetime.now(UTC).isoformat(),
-            "market_id": market_id,
-            "buy_tier_count": 0,
-            "unmeasured_buy_tier": 0,
-            "zero_body_buy_tier": 0,
-            "thin_body_buy_tier": 0,
-            "unmeasured_tickers": [],
-            "zero_body_tickers": [],
-            "error": "screen shortlist missing",
-        }
+        return {**empty, "error": "screen shortlist missing"}
 
     unmeasured_tickers: list[str] = []
     zero_body_tickers: list[str] = []
     thin_body_tickers: list[str] = []
+    indexed_without_body = 0
+    body_counts: list[int] = []
     for report in reports:
         coverage = _filing_coverage_for_ticker(
             report.ticker,
             library_root=library_root,
             market_id=market_id,
+            canonical_only=ftse_equivalent,
         )
         total = int(coverage.get("filings_total") or 0)
         with_body = int(coverage.get("filings_with_body") or 0)
+        indexed_without_body += int(coverage.get("indexed_without_body") or 0)
+        if with_body > 0:
+            body_counts.append(with_body)
         if total == 0:
             unmeasured_tickers.append(report.ticker)
         elif with_body == 0:
@@ -309,6 +350,12 @@ def snapshot_library_buy_tier_filing_health(
         "unmeasured_buy_tier": len(unmeasured_tickers),
         "zero_body_buy_tier": len(zero_body_tickers),
         "thin_body_buy_tier": len(thin_body_tickers),
+        "indexed_without_body": indexed_without_body,
+        "bodies_min": min(body_counts) if body_counts else None,
+        "bodies_median": median(body_counts) if body_counts else None,
+        "bodies_max": max(body_counts) if body_counts else None,
+        "coverage_scope": coverage_scope,
+        "ftse_equivalent": ftse_equivalent,
         "unmeasured_tickers": unmeasured_tickers[:25],
         "zero_body_tickers": zero_body_tickers[:25],
         "thin_body_tickers": thin_body_tickers[:25],
@@ -319,14 +366,22 @@ def snapshot_library_ingest_health(
     market_id: str,
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+    return snapshot_library_buy_tier_filing_health(
+        market_id,
+        library_root=library_root,
+        policy=policy,
+    )
 
 
 __all__ = [
+    "DEFAULT_FTSE_EQUIVALENT_MARKETS",
     "DEFAULT_STALL_RUNS",
     "compile_library_ingest_engineering_tasks_micro",
+    "ftse_equivalent_markets",
     "has_open_library_ingest_task_for_market",
+    "is_ftse_equivalent_market",
     "library_ingest_filing_gaps",
     "library_ingest_health_log_path",
     "library_ingest_health_stalled",

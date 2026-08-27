@@ -25,6 +25,14 @@ Other graduated markets stay **Layer A maintenance only**. FTSE live learning is
 Do **not** expand with DAX/CAC/MIB until this pilot has euro_filings depth comparable
 to FTSE buy-tier.
 
+**S&P 500 FTSE-equivalent depth** is a **parallel ingest + measurement** track, not a
+live-screen / weekly-paper expansion. Policy `ftse_equivalent_markets: ["sp500"]`
+forces **canonical-only** filing coverage under
+`docs/data/library/markets/sp500/screen/research/{TICKER}/`. nasdaq100 (or any other
+shard) indexes must not be counted as S&P parity. Do **not** append `sp500` to
+`ingest_parity_markets` until `ftse-library learning-depth --market sp500` reports
+`learning_ready: true`. Live screen and weekly paper stay on `euro_depth`.
+
 **30-day sprint:** compressed phase gates + weekday ingest/shard automation — see
 [`euro-depth-sprint.md`](euro-depth-sprint.md).
 
@@ -66,7 +74,7 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 | Market (benchmark wired) | Benchmark | Phase 1 notes |
 |--------------------------|-----------|---------------|
 | `euro_depth` | ^STOXX50E | Depth-first pilot — sole observe/weekly slot |
-| `sp500` | ^GSPC | Legacy archives; not in weekly shard list under depth-first |
+| `sp500` | ^GSPC | FTSE-equivalent **measurement** track (`ftse_equivalent_markets`); not in weekly shard list under depth-first |
 | `euro_stoxx50` | ^STOXX50E | Component of `euro_depth`; demoted from weekly slot |
 
 **Timescale:** New depth book needs ~**11 Sunday ladder cycles** (~3 months at weekly cadence) before Phase 2 evidence is meaningful.
@@ -95,7 +103,9 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **Timescale:** **8 Sunday cycles** hands-off after the first weekly batch deploy (~2 months).
 
-**Pilot order:** `euro_depth` first (depth-first). Revisit `sp500` / standalone `euro_stoxx50` after filing parity.
+**Pilot order:** `euro_depth` first (depth-first). Revisit `sp500` weekly paper only after
+`learning-depth` is green (canonical filing + 12-week trajectory). Do not ingest all 503
+constituents — buy-tier depth only.
 
 ### Phase 3 — Weekday paper shard *(one market at a time, 8–12 weeks)*
 
@@ -155,6 +165,10 @@ A market may graduate from **Phase 2** to **Phase 3 weekday shard** when:
 ## Commands
 
 ```bash
+# S&P 500 FTSE-equivalent depth (canonical filings + trajectory)
+ftse-library learning-depth --market sp500 --json
+ftse-library learning-depth --market sp500 --write --write-trajectory
+
 # Manual observe sim refresh (Phase 1)
 ftse-library sim --markets euro_depth
 

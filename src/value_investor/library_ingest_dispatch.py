@@ -59,8 +59,20 @@ EURO_INGEST_CRON_TITLES = {
 
 
 def ingest_parity_met(health: dict[str, Any]) -> bool:
-    """True when buy-tier has no unmeasured or zero-body filing gaps."""
-    return library_ingest_filing_gaps(health) == 0
+    """True when buy-tier filing gaps are closed for this market's bar.
+
+    euro_depth (and other non-FTSE-equivalent markets) use unmeasured +
+    zero-body only. ``ftse_equivalent`` markets also require thin_body == 0
+    and indexed_without_body == 0 — hard gaps must not look like zero.
+    """
+    if library_ingest_filing_gaps(health) != 0:
+        return False
+    if health.get("ftse_equivalent"):
+        return (
+            int(health.get("thin_body_buy_tier") or 0) == 0
+            and int(health.get("indexed_without_body") or 0) == 0
+        )
+    return True
 
 
 def should_run_parallel_sprint_ingest(
@@ -98,9 +110,13 @@ def evaluate_library_ingest_dispatch(
         library_root=library_root,
         policy=policy,
     )
-    health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+    health = snapshot_library_buy_tier_filing_health(
+        market_id,
+        library_root=library_root,
+        policy=policy,
+    )
     gaps = library_ingest_filing_gaps(health)
-    parity = gaps == 0
+    parity = ingest_parity_met(health)
 
     if parity:
         mode = MODE_MAINTENANCE
@@ -110,11 +126,20 @@ def evaluate_library_ingest_dispatch(
         config = MAINTENANCE_CONFIG
     else:
         mode = MODE_SPRINT
-        reason = (
-            f"Ingest sprint: {gaps} buy-tier filing gap(s) "
-            f"(unmeasured={health.get('unmeasured_buy_tier')}, "
-            f"zero_body={health.get('zero_body_buy_tier')})"
-        )
+        if health.get("ftse_equivalent"):
+            reason = (
+                f"Ingest sprint: FTSE-equivalent depth gaps "
+                f"(unmeasured={health.get('unmeasured_buy_tier')}, "
+                f"zero_body={health.get('zero_body_buy_tier')}, "
+                f"thin={health.get('thin_body_buy_tier')}, "
+                f"indexed_without_body={health.get('indexed_without_body')})"
+            )
+        else:
+            reason = (
+                f"Ingest sprint: {gaps} buy-tier filing gap(s) "
+                f"(unmeasured={health.get('unmeasured_buy_tier')}, "
+                f"zero_body={health.get('zero_body_buy_tier')})"
+            )
         config = SPRINT_CONFIG
 
     return {
@@ -246,13 +271,21 @@ def list_library_ingest_sprint_markets(
     focus = str(policy.get("focus_market") or "").strip()
     markets: list[str] = []
     if focus:
-        health = snapshot_library_buy_tier_filing_health(focus, library_root=library_root)
+        health = snapshot_library_buy_tier_filing_health(
+            focus,
+            library_root=library_root,
+            policy=policy,
+        )
         if not ingest_parity_met(health):
             markets.append(focus)
     for market_id in list_library_ingest_parallel_sprint_markets(policy=policy):
         if market_id in markets:
             continue
-        health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+        health = snapshot_library_buy_tier_filing_health(
+            market_id,
+            library_root=library_root,
+            policy=policy,
+        )
         if not ingest_parity_met(health):
             markets.append(market_id)
     return markets
@@ -270,7 +303,11 @@ def list_library_ingest_maintenance_markets(
     markets: set[str] = set(policy.get("ingest_parity_markets") or [])
     focus = str(policy.get("focus_market") or "").strip()
     if focus:
-        health = snapshot_library_buy_tier_filing_health(focus, library_root=library_root)
+        health = snapshot_library_buy_tier_filing_health(
+            focus,
+            library_root=library_root,
+            policy=policy,
+        )
         if ingest_parity_met(health):
             markets.add(focus)
     return sorted(markets)

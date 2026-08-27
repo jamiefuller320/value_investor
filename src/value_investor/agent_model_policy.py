@@ -154,6 +154,7 @@ def default_policy() -> dict[str, Any]:
         "schema_version": 1,
         "focus_market": DEFAULT_FOCUS_MARKET,
         "market_queue": list(DEFAULT_MARKET_QUEUE),
+        "ftse_equivalent_markets": ["sp500"],
         "graduated_markets": [],
         "focus_graduation": {
             "min_coverage_pct": 0.95,
@@ -277,6 +278,8 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         base["focus_market"] = DEFAULT_FOCUS_MARKET
     if not isinstance(base.get("graduated_markets"), list):
         base["graduated_markets"] = list(data.get("graduated_markets") or [])
+    if not isinstance(base.get("ftse_equivalent_markets"), list):
+        base["ftse_equivalent_markets"] = ["sp500"]
     return base
 
 

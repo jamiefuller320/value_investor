@@ -11,6 +11,7 @@ from value_investor.euro_depth_ingest_dispatch import (
     MODE_SPRINT,
     cron_enabled_for_dispatch,
     evaluate_euro_ingest_dispatch,
+    ingest_parity_met,
     snapshot_library_buy_tier_filing_health,
     write_euro_ingest_dispatch,
 )
@@ -71,6 +72,12 @@ def test_snapshot_library_buy_tier_filing_health_counts_gaps(tmp_path: Path):
     assert health["unmeasured_buy_tier"] == 1
     assert health["zero_body_buy_tier"] == 1
     assert health["thin_body_buy_tier"] == 1
+    assert health["indexed_without_body"] == 8
+    assert health["bodies_min"] == 2
+    assert health["bodies_median"] == 2
+    assert health["bodies_max"] == 2
+    assert health["coverage_scope"] == "canonical_plus_shards"
+    assert health["ftse_equivalent"] is False
 
 
 def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
@@ -156,6 +163,58 @@ def test_evaluate_dispatch_maintenance_when_parity_met():
         "ladder_weekday": True,
         "maintenance": True,
     }
+
+
+def test_ingest_parity_met_euro_depth_ignores_thin_and_indexed():
+    assert ingest_parity_met(
+        {
+            "unmeasured_buy_tier": 0,
+            "zero_body_buy_tier": 0,
+            "thin_body_buy_tier": 5,
+            "indexed_without_body": 20,
+            "ftse_equivalent": False,
+        }
+    )
+    assert not ingest_parity_met({"unmeasured_buy_tier": 1, "zero_body_buy_tier": 0})
+
+
+def test_ingest_parity_met_ftse_equivalent_requires_thin_and_indexed():
+    base = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+        "ftse_equivalent": True,
+    }
+    assert ingest_parity_met(base)
+    assert not ingest_parity_met({**base, "thin_body_buy_tier": 1})
+    assert not ingest_parity_met({**base, "indexed_without_body": 12})
+
+
+def test_evaluate_dispatch_sprint_when_ftse_equivalent_thin_only():
+    phase = {"phase3_ready": False, "blockers": []}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 21,
+        "indexed_without_body": 1154,
+        "ftse_equivalent": True,
+    }
+    with (
+        patch(
+            "value_investor.library_ingest_dispatch.evaluate_market_phase",
+            return_value=phase,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            return_value=health,
+        ),
+    ):
+        result = evaluate_euro_ingest_dispatch(market_id="sp500")
+    assert result["mode"] == MODE_SPRINT
+    assert result["ingest_parity_met"] is False
+    assert result["max_targets"] == 24
+    assert "indexed_without_body" in result["reason"]
 
 
 def test_write_euro_ingest_dispatch_persists(tmp_path: Path):
