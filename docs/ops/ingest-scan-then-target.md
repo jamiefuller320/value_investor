@@ -82,3 +82,8 @@ ftse-ingest-loop run --max-targets 62 --json   # discovery on by default
 ```
 
 Artifacts are committed by `scripts/push_ingest_loop_artifacts.sh`.
+
+That script restores **only** ingest allowlisted paths from its stash before
+commit. It must not check out the whole `docs/data/` tree from the stash WIP
+commit — that resurrects stale `ops_status.json` (and similar) when ops-monitor
+or other automation lands on `main` mid-run.
