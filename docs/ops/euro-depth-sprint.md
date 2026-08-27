@@ -60,6 +60,14 @@ deepen on the next queue market while focus is still in sprint. Slots: **07:45 /
 13:45 / 16:45** UTC via `library-ingest-sprint.yml` (30 minutes after euro focus slots).
 Learning focus (`weekly_paper_shard_markets`, observe sim) stays on `euro_depth` until handoff.
 
+`sp500` is also in `ftse_equivalent_markets`: coverage is **canonical-only** (do not
+count nasdaq100 overlap), and `ingest_parity_met` requires thin-body and
+`indexed_without_body` to be zero as well as unmeasured/zero-body. Until
+`ftse-library learning-depth --market sp500` is green, the sprint must keep seeing
+those real gaps (24 targets) — do **not** add `sp500` to `ingest_parity_markets`.
+Keep Sunday screen-lite so unique days / span reach 12 weeks; do not ingest all 503
+constituents.
+
 The gate runs at the start of `euro-ingest-loop.yml`, after each ingest loop, and after
 library ladder when `euro_depth` is in the phase rollup. With `CRONJOB_API_KEY` in GitHub
 secrets, the workflow also calls `scripts/sync_euro_ingest_cron.py` to toggle cron-job.org

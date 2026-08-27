@@ -136,20 +136,30 @@ def _canonical_filing_index_path(
     )
 
 
+def _empty_filing_coverage() -> dict[str, int]:
+    return {"filings_total": 0, "filings_with_body": 0, "indexed_without_body": 0}
+
+
 def _coverage_from_filing_index_path(path: Path) -> dict[str, int] | None:
     try:
         read_json(path)
     except (OSError, ValueError, TypeError):
         return None
     summary = _coverage_from_index(path)
+    total = int(summary.get("filings_total") or 0)
+    with_body = int(summary.get("filings_with_body") or 0)
+    indexed = int(summary.get("indexed_without_body") or 0)
+    if indexed == 0 and total > with_body:
+        indexed = total - with_body
     return {
-        "filings_total": int(summary.get("filings_total") or 0),
-        "filings_with_body": int(summary.get("filings_with_body") or 0),
+        "filings_total": total,
+        "filings_with_body": with_body,
+        "indexed_without_body": indexed,
     }
 
 
 def _best_filing_coverage(paths: list[Path]) -> dict[str, int]:
-    best = {"filings_total": 0, "filings_with_body": 0}
+    best = _empty_filing_coverage()
     seen: set[str] = set()
     for path in paths:
         key = str(path.resolve())
@@ -173,6 +183,7 @@ def _filing_coverage_for_ticker(
     *,
     library_root: Path,
     market_id: str,
+    canonical_only: bool = False,
 ) -> dict[str, int]:
     """
     Return filing coverage for a library market ticker.
@@ -180,6 +191,10 @@ def _filing_coverage_for_ticker(
     Prefer the active market's canonical screen research index so stale empty
     indexes from other graduated shards (e.g. aex vs euro_depth) do not shadow
     fresh euro_depth ingest writes.
+
+    When ``canonical_only`` is true (FTSE-equivalent markets such as ``sp500``),
+    do **not** fall back to other shards — nasdaq100 overlap must not count as
+    S&P parity.
     """
     canonical = _canonical_filing_index_path(
         ticker,
@@ -190,11 +205,16 @@ def _filing_coverage_for_ticker(
         coverage = _coverage_from_filing_index_path(canonical)
         if coverage is not None:
             return coverage
+        if canonical_only:
+            return _empty_filing_coverage()
+
+    if canonical_only:
+        return _empty_filing_coverage()
 
     roots = _research_roots_for_market(library_root, market_id)
     paths = _filing_index_paths_for_ticker(ticker, roots=roots)
     if not paths:
-        return {"filings_total": 0, "filings_with_body": 0}
+        return _empty_filing_coverage()
     return _best_filing_coverage(paths)
 
 
@@ -221,14 +241,20 @@ def select_library_ingest_targets(
     market_id: str,
     max_targets: int,
     discovery_bonus_by_ticker: dict[str, float] | None = None,
+    canonical_only: bool | None = None,
 ) -> list[LibraryIngestTarget]:
     bonuses = discovery_bonus_by_ticker or {}
+    if canonical_only is None:
+        from value_investor.library_ingest_escalation import is_ftse_equivalent_market
+
+        canonical_only = is_ftse_equivalent_market(market_id)
     scored: list[LibraryIngestTarget] = []
     for report in reports:
         coverage = _filing_coverage_for_ticker(
             report.ticker,
             library_root=library_root,
             market_id=market_id,
+            canonical_only=canonical_only,
         )
         total = coverage["filings_total"]
         with_body = coverage["filings_with_body"]
@@ -269,15 +295,21 @@ def _ingest_single_library_target(
     market_id: str,
     deepen_history: bool = True,
     max_bodies: int = 20,
+    canonical_only: bool | None = None,
 ) -> dict[str, Any]:
     screen_dir = screen_dir_for(library_root, market_id)
     store = ResearchStore(screen_dir)
     sources_dir = store.sources_dir(target.ticker)
     sources_dir.mkdir(parents=True, exist_ok=True)
+    if canonical_only is None:
+        from value_investor.library_ingest_escalation import is_ftse_equivalent_market
+
+        canonical_only = is_ftse_equivalent_market(market_id)
     before = _filing_coverage_for_ticker(
         target.ticker,
         library_root=library_root,
         market_id=market_id,
+        canonical_only=canonical_only,
     )
 
     meta = ingest_research_sources(
@@ -310,6 +342,7 @@ def _ingest_single_library_target(
         target.ticker,
         library_root=library_root,
         market_id=market_id,
+        canonical_only=canonical_only,
     )
     improved = (
         after["filings_with_body"] > before["filings_with_body"]
