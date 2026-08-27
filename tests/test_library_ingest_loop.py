@@ -136,7 +136,7 @@ def test_filing_coverage_uses_best_fallback_when_canonical_missing(tmp_path: Pat
 
 def test_filing_coverage_canonical_only_ignores_other_shard(tmp_path: Path):
     root = tmp_path / "library"
-    ticker = "ADBE"
+    ticker = "ZZZZTEST"
     nasdaq_dir = (
         root / "markets" / "nasdaq100" / "screen" / "research" / ticker / "sources" / "filings"
     )
