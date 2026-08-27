@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-26T20:56:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T14:05:49+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -98,6 +98,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N45 | **More FTSE ingest runs for enrichment** | FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint. | Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path |
 | N46 | **More frequent engineering task generation to accelerate enrichment** | Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks — drafting more eng work would not speed enrichment. | Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing |
 | N47 | **Do not add sp500 to ingest_parity_markets until learning-depth is green** | Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain. | ftse-library learning-depth --market sp500 reports learning_ready true |
+| N48 | **Do not raise euro maintenance to FTSE body-drain intensity** | Euro library maintenance uses the same scan-then-target shape as live FTSE but a lighter bar and throttle: parity is unmeasured+zero-body only, 1x/day, max_targets=4, no drain chain. Thin and indexed_without_body remain after euro 'parity'. Do not copy FTSE weekday 62-target / same-day indexed_without_body≈0 drain onto euro_depth until it is an explicit ftse_equivalent market (or live/paper leave euro). | euro_depth is added to ftse_equivalent_markets, or live screen / weekly paper leave euro_depth, or GHA minutes are unused after S&P learning-depth is green |
 
 ---
 
