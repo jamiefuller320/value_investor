@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "title": "Learning Director — capability roadmap",
-  "updated_at": "2026-08-24T00:00:00+00:00",
+  "updated_at": "2026-08-27T00:00:00+00:00",
   "north_star": "Converge winner-picking (top) and loser-filtering (bottom) into a bettable model: progressively narrow the eligible pool into a mostly-decent cohort, then allocate sleeves — with regime monitoring so assumptions expire safely.",
   "prediction_philosophy": {
     "primary_aim": "Predict future growth in value of individual stocks — not perfect historical explanation.",
@@ -18,6 +18,7 @@
   "convergence_thesis": {
     "bottom_filter": "Raise the floor — exclude recurrent loser signatures before concentration.",
     "top_pick": "Among survivors, allocate sleeves by conviction, sector caps, and research overlay.",
+    "cross_shard": "After ≥2 market shards clear Phase 3, rank survivors across shards into a deployable book — winner selection operates here, not inside individual shards.",
     "primary_metric": "Filtered cohort excess (gross then net) before hero 3-position P&L.",
     "bet_gate": "Promote only when cohort floor, retain rate, and deployable book agree over extending windows."
   },
@@ -98,6 +99,18 @@
       "summary": "Size sleeves by conviction_score with sector_cap floor; cap any name at ~1.5x median sleeve.",
       "revisit_when": "graduated_allocation_track >=8 epoch marks and cost_drag stable vs rules control",
       "dependencies": ["graduated_allocation_track", "capital_rotation_coordinator"]
+    },
+    {
+      "id": "cross_shard_winner_selection",
+      "status": "planned",
+      "label": "Cross-shard winner selection (deployable book)",
+      "summary": "After ≥2 market shards clear Phase 3 with stable local-benchmark excess, rank survivors across shards into a deployable book. Use benchmark-relative excess, conviction, tradability (T212 overlay), and liquidity — not raw screen score alone. Winner-selection mechanics (calibration, cohort fitness, swap-score rotation) prove utility here; shards stay independent until this layer.",
+      "revisit_when": "≥2 shards at Phase 3 with stable local-benchmark excess AND T212 tradability documented; FTSE filtered_cohort_track active with ≥8 epoch marks",
+      "dependencies": [
+        "filtered_cohort_track",
+        "conviction_weighted_sizing",
+        "capital_rotation_coordinator"
+      ]
     },
     {
       "id": "hypothesis_first_exit",

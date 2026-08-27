@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-26T20:56:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T08:10:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -147,6 +147,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L152 | **Raise Phase 2 weekly_paper_shard_capacity above 2** | Default capacity of 2 is appropriate while only euro_stoxx50 is in Phase 2 and sp500 is AI-gate blocked. Revisit raising capacity (or swapping slots) once another market is phase1_ready and Sunday ladder/ops headroom is proven. | ftse-library shard-status shows a second market phase1_ready besides the current Phase 2 pilots, and weekly_ops / Actions runtime still have headroom |
 | L192 | **Extra euro_depth ingest bursts beyond 2x/day** | euro_depth is in sprint with ~26 unmeasured buy-tier; ~2 closed per morning run. Extra force-dispatched runs or higher max_targets would accelerate filing bootstrap while capacity is free. | Want faster euro filing parity before Phase 3 exit; GHA capacity still free |
 | L195 | **Market ingest lifecycle: sprint deepen then scan-maintain while next market sprints** | Doctrine: once a market buy-tier is filing-deepened, switch it to scan-then-target maintenance (cheap index discovery + bounded body ingest) running alongside learning experiments; start the next market on sprint deepen. FTSE is the first candidate now (hard gaps closed); euro_depth stays sprint until parity. Regime adapters still need per-market fetch work — do not assume FTSE eng fully transfers to ESEF/IR. | Designing FTSE maintenance throttle or euro_depth Phase 3 exit / filing parity review |
+| L200 | **Cross-shard winner selection deployable book** | After ≥2 market shards clear Phase 3, rank survivors across shards into a deployable book using benchmark-relative excess, conviction, T212 tradability, and liquidity — winner-selection mechanics prove utility at this layer. | ≥2 shards at Phase 3 with stable local-benchmark excess; FTSE filtered_cohort_track active with ≥8 epoch marks |
 
 ### Research & portfolio product
 

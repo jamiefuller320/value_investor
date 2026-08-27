@@ -215,6 +215,194 @@ def build_regime_summary(
     }
 
 
+def build_convergence_summary(
+    data_dir: Path,
+    *,
+    paper_root: Path | None = None,
+    vision: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """
+    Deterministic winner-pick vs loser-filter strand comparison for the director.
+
+    Surfaces knob-direction tensions (live primary, exclusion ladder, calibration
+    priors, shadow tracks) so the CONVERGENCE section cites structured facts.
+    """
+    data_dir = Path(data_dir)
+    paper_root = Path(paper_root or data_dir / "paper_automation")
+    vision = vision or load_learning_director_vision()
+
+    learning = _safe_read(paper_root / "learning_tracks_review.json") or {}
+    knob = _safe_read(paper_root / "knob_calibration_priors.json") or {}
+    ladder_replay = _safe_read(paper_root / "exclusion_ladder_replay_review.json") or {}
+    exclusion = _safe_read(data_dir / "exclusion_universe_review.json") or {}
+    inventory = build_experiment_inventory(data_dir, paper_root=paper_root)
+
+    primary_id = str(learning.get("primary_learning_track") or "ai_judgment")
+    primary_review = (learning.get("reviews") or {}).get(primary_id) or {}
+    live_knobs = dict(primary_review.get("knobs_after") or {})
+
+    rec_step_id = ladder_replay.get("recommended_step_id") or (
+        exclusion.get("recommended_step") or {}
+    ).get("step_id")
+    ladder_step = next(
+        (
+            step
+            for step in (ladder_replay.get("ladder") or [])
+            if step.get("step_id") == rec_step_id
+        ),
+        None,
+    )
+    exclusion_knobs = {
+        "min_conviction": (ladder_step or {}).get("min_conviction"),
+        "max_positions": live_knobs.get("max_positions"),
+        "step_id": rec_step_id,
+    }
+
+    priors_track = (knob.get("tracks") or {}).get(primary_id) or {}
+    priors_readiness = priors_track.get("readiness") or {}
+    recommended_prior = (priors_track.get("recommended_prior") or {}).get("knobs") or {}
+    calibration_knobs = dict(recommended_prior)
+
+    shadow_by_kind: dict[str, dict[str, Any]] = {}
+    for row in inventory.get("shadow_tracks") or []:
+        if row.get("is_calibration_shadow"):
+            shadow_by_kind["calibration_shadow"] = row
+        elif row.get("is_exclusion_shadow"):
+            shadow_by_kind["exclusion_shadow"] = row
+
+    strands: dict[str, Any] = {
+        "live_primary": {
+            "track_id": primary_id,
+            "min_conviction": live_knobs.get("min_conviction"),
+            "max_positions": live_knobs.get("max_positions"),
+            "applied": primary_review.get("applied"),
+            "epoch_equity_marks": ((primary_review.get("metrics") or {}).get("epoch") or {}).get(
+                "equity_marks"
+            ),
+        },
+        "exclusion_ladder": exclusion_knobs,
+        "calibration_priors": {
+            "min_conviction": calibration_knobs.get("min_conviction"),
+            "max_positions": calibration_knobs.get("max_positions"),
+            "ready_for_priors": priors_readiness.get("ready_for_priors"),
+            "confidence": (priors_track.get("recommended_prior") or {}).get("confidence"),
+        },
+    }
+    for kind, row in shadow_by_kind.items():
+        strands[kind] = {
+            "track_id": row.get("track_id"),
+            "min_conviction": row.get("min_conviction"),
+            "max_positions": row.get("max_positions"),
+        }
+
+    def _float(value: Any) -> float | None:
+        if value is None:
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    live_mc = _float(live_knobs.get("min_conviction"))
+    ladder_mc = _float(exclusion_knobs.get("min_conviction"))
+    prior_mc = _float(calibration_knobs.get("min_conviction"))
+    live_mp = _float(live_knobs.get("max_positions"))
+    prior_mp = _float(calibration_knobs.get("max_positions"))
+
+    tensions: list[str] = []
+    look_now: list[str] = []
+
+    if live_mc is not None and ladder_mc is not None and live_mc > ladder_mc + 1e-9:
+        tensions.append(
+            f"live_primary_min_conviction_above_ladder:{live_mc}>{ladder_mc}@{rec_step_id}"
+        )
+    if (
+        live_mc is not None
+        and prior_mc is not None
+        and abs(live_mc - prior_mc) >= 0.15
+        and priors_readiness.get("ready_for_priors") is not True
+    ):
+        tensions.append(
+            f"calibration_priors_direction_opposes_live:{prior_mc}_vs_{live_mc}_not_ready"
+        )
+    elif live_mc is not None and prior_mc is not None and abs(live_mc - prior_mc) >= 0.15:
+        tensions.append(f"calibration_priors_direction_opposes_live:{prior_mc}_vs_{live_mc}")
+    if live_mp is not None and prior_mp is not None and live_mp != prior_mp:
+        tensions.append(f"sleeve_count_conflict:live_{live_mp}_priors_{prior_mp}")
+    if priors_readiness.get("ready_for_priors") is False:
+        tensions.append("calibration_priors_not_ready_for_apply")
+    for warning in priors_readiness.get("warnings") or []:
+        text = str(warning)
+        if "min_conviction" in text and "negligible" in text:
+            tensions.append("min_conviction_axis_negligible_in_calibration")
+            break
+    if not shadow_by_kind.get("exclusion_shadow"):
+        tensions.append("missing:exclusion_shadow_track")
+    elif ladder_replay.get("readiness", {}).get("ready_for_shadow_spawn"):
+        look_now.append(
+            "Observe ai_judgment_exclusion_u4 shadow forward marks vs live primary "
+            "(exclusion_ladder_replay.readiness.ready_for_shadow_spawn)."
+        )
+    if shadow_by_kind.get("calibration_shadow"):
+        cal_shadow_mc = _float(shadow_by_kind["calibration_shadow"].get("min_conviction"))
+        if (
+            live_mc is not None
+            and cal_shadow_mc is not None
+            and abs(live_mc - cal_shadow_mc) >= 0.15
+        ):
+            tensions.append(f"calibration_shadow_frozen_at_{cal_shadow_mc}_live_at_{live_mc}")
+
+    filtered_phase = next(
+        (
+            phase
+            for phase in (vision.get("phases") or [])
+            if phase.get("id") == "filtered_cohort_track"
+        ),
+        {},
+    )
+    cross_shard_phase = next(
+        (
+            phase
+            for phase in (vision.get("phases") or [])
+            if phase.get("id") == "cross_shard_winner_selection"
+        ),
+        {},
+    )
+    bet_gate_met = (
+        filtered_phase.get("status") == "active"
+        and (primary_review.get("metrics") or {}).get("equity_marks", 0) >= 8
+    )
+    if not bet_gate_met:
+        tensions.append("bet_gate_unmet:filtered_cohort_track_not_active")
+
+    if tensions:
+        look_now.append(
+            "Do not auto-apply knob_calibration_priors while convergence tensions "
+            "include calibration_priors_not_ready or direction conflicts."
+        )
+    if "min_conviction_axis_negligible_in_calibration" in tensions:
+        look_now.append(
+            "Treat min_conviction as a churn guard, not a winner-rank axis, until "
+            "dual_objective_calibration or filtered_cohort_track provides signal."
+        )
+    if ladder_replay.get("readiness", {}).get("ready_for_shadow_spawn"):
+        look_now.append(
+            "Count consecutive weeks of exclusion shadow forward differentiation "
+            "toward filtered_cohort_track activation (≥4 weeks per vision)."
+        )
+
+    return {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "primary_track": primary_id,
+        "strands": strands,
+        "tensions": tensions,
+        "look_now": look_now,
+        "bet_gate_met": bet_gate_met,
+        "cross_shard_phase_status": cross_shard_phase.get("status"),
+        "convergence_thesis": vision.get("convergence_thesis"),
+    }
+
+
 def load_learning_director_vision(path: Path = VISION_PATH) -> dict[str, Any]:
     raw = _safe_read(path)
     if not raw:
@@ -224,6 +412,7 @@ def load_learning_director_vision(path: Path = VISION_PATH) -> dict[str, Any]:
 
 __all__ = [
     "VISION_PATH",
+    "build_convergence_summary",
     "build_experiment_inventory",
     "build_regime_summary",
     "load_learning_director_vision",
