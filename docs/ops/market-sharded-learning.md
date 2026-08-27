@@ -117,6 +117,14 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **Timescale:** Project stage gate — not calendar-driven. Revisit N17 / L26 when Phase 3 pilot completes.
 
+### Phase 5 — Cross-shard winner selection *(stage 6 precursor, not built)*
+
+**What runs:** Observe-only ranking of survivors across **≥2** Phase-3 shards into a deployable book (benchmark-relative excess, conviction, T212 tradability). Shards remain independent learning stacks; this layer does **not** merge books prematurely.
+
+**Enter when:** Vision phase `cross_shard_winner_selection` triggers — see [`learning-director-vision.md`](learning-director-vision.md) and `docs/data/learning_director_vision.json`.
+
+**Prerequisite:** FTSE `filtered_cohort_track` active with ≥8 epoch marks (within-shard convergence first).
+
 ## End-to-end timeline (realistic)
 
 ```text

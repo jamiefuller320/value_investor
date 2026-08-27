@@ -66,6 +66,7 @@ builds; it proposes activation with explicit triggers cited from JSON.
 | `loser_pattern_lab` | PIT loser feature attribution | Cohort track or ≥20 history runs |
 | `filter_invention_loop` | Search invented exclusion rules | ≥3 validated patterns |
 | `dual_objective_calibration` | Exclude + catch blended ranking | Cohort track ≥8 epoch marks |
+| `cross_shard_winner_selection` | Rank survivors across mature shards into deployable book | ≥2 shards Phase 3 + filtered_cohort_track ≥8 marks |
 
 ## Complexity budget (default)
 
