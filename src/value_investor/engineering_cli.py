@@ -283,11 +283,12 @@ def _cmd_list_parked(args: argparse.Namespace) -> int:
 def _cmd_park_task(args: argparse.Namespace) -> int:
     from value_investor.engineering_recovery import park_agent_task
 
+    parked_policy = str(getattr(args, "parked_policy", "") or "").strip() or None
     action = park_agent_task(
         str(args.task_id).strip(),
         reason=str(args.reason).strip(),
         tasks_path=_resolve_tasks_path(args.tasks_path),
-        parked_policy=str(args.policy).strip() or None,
+        parked_policy=parked_policy,
         apply=not args.dry_run,
     )
     if action is None:
@@ -1107,7 +1108,7 @@ def main(argv: list[str] | None = None) -> int:
         help="Human-readable parked_reason stored on the task",
     )
     park_task_p.add_argument(
-        "--policy",
+        "--parked-policy",
         default="workflow_permission",
         help="parked_policy value (default: workflow_permission)",
     )

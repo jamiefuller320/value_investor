@@ -343,9 +343,9 @@ def cancel_resolved_workflow_failure_tasks(
             failure_run_id = None
 
         if workflow not in success_cache:
-            success_cache[workflow] = _latest_workflow_success_run(
-                workflow, repo=repo, token=token
-            ) or {}
+            success_cache[workflow] = (
+                _latest_workflow_success_run(workflow, repo=repo, token=token) or {}
+            )
         success = success_cache.get(workflow) or {}
         if not success:
             continue
@@ -358,9 +358,16 @@ def cancel_resolved_workflow_failure_tasks(
         if failure_run_id is not None and success_run_id is not None:
             healed = success_run_id > failure_run_id
         else:
-            success_at = _parse_iso(str(success.get("created_at") or success.get("updated_at") or ""))
+            success_at = _parse_iso(
+                str(success.get("created_at") or success.get("updated_at") or "")
+            )
             failure_at = _parse_iso(
-                str(evidence.get("failed_at") or row.get("created_at") or row.get("compiled_at") or "")
+                str(
+                    evidence.get("failed_at")
+                    or row.get("created_at")
+                    or row.get("compiled_at")
+                    or ""
+                )
             )
             if success_at is not None and failure_at is not None:
                 healed = success_at > failure_at

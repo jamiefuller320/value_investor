@@ -269,7 +269,7 @@ jobs:
                   ftse-engineering park-task \
                     --task-id "$TASK_ID" \
                     --reason "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update" \
-                    --policy workflow_permission
+                    --parked-policy workflow_permission
                   echo "No pushable changes remain after dropping workflow files"
                   exit 1
                 fi
@@ -284,7 +284,7 @@ jobs:
                     ftse-engineering park-task \
                       --task-id "$TASK_ID" \
                       --reason "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update" \
-                      --policy workflow_permission
+                      --parked-policy workflow_permission
                   fi
                   exit "$PUSH_RC"
                 fi
