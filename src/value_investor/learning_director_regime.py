@@ -241,10 +241,9 @@ def build_convergence_summary(
     primary_review = (learning.get("reviews") or {}).get(primary_id) or {}
     live_knobs = dict(primary_review.get("knobs_after") or {})
 
-    rec_step_id = (
-        ladder_replay.get("recommended_step_id")
-        or (exclusion.get("recommended_step") or {}).get("step_id")
-    )
+    rec_step_id = ladder_replay.get("recommended_step_id") or (
+        exclusion.get("recommended_step") or {}
+    ).get("step_id")
     ladder_step = next(
         (
             step
@@ -346,13 +345,19 @@ def build_convergence_summary(
         )
     if shadow_by_kind.get("calibration_shadow"):
         cal_shadow_mc = _float(shadow_by_kind["calibration_shadow"].get("min_conviction"))
-        if live_mc is not None and cal_shadow_mc is not None and abs(live_mc - cal_shadow_mc) >= 0.15:
-            tensions.append(
-                f"calibration_shadow_frozen_at_{cal_shadow_mc}_live_at_{live_mc}"
-            )
+        if (
+            live_mc is not None
+            and cal_shadow_mc is not None
+            and abs(live_mc - cal_shadow_mc) >= 0.15
+        ):
+            tensions.append(f"calibration_shadow_frozen_at_{cal_shadow_mc}_live_at_{live_mc}")
 
     filtered_phase = next(
-        (phase for phase in (vision.get("phases") or []) if phase.get("id") == "filtered_cohort_track"),
+        (
+            phase
+            for phase in (vision.get("phases") or [])
+            if phase.get("id") == "filtered_cohort_track"
+        ),
         {},
     )
     cross_shard_phase = next(
