@@ -11,6 +11,9 @@ from typing import Any
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy, save_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.library_ingest_dispatch import (
+    FTSE_MAINTENANCE_MAX_BODIES,
+    FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS,
+    FTSE_MAINTENANCE_MAX_TARGETS,
     ingest_parity_met,
     list_library_ingest_maintenance_markets,
 )
@@ -22,7 +25,7 @@ from value_investor.library_ingest_loop import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MAINTENANCE_MAX_TARGETS = 4
+DEFAULT_MAINTENANCE_MAX_TARGETS = FTSE_MAINTENANCE_MAX_TARGETS
 
 
 @dataclass
@@ -58,8 +61,8 @@ def run_library_ingest_maintenance(
     policy_path: Path = DEFAULT_POLICY_PATH,
     markets: list[str] | None = None,
     max_targets: int = DEFAULT_MAINTENANCE_MAX_TARGETS,
-    max_runtime_seconds: float = 2100.0,
-    max_bodies: int = 20,
+    max_runtime_seconds: float = FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS,
+    max_bodies: int = FTSE_MAINTENANCE_MAX_BODIES,
     discovery_scan: bool = True,
 ) -> LibraryIngestMaintenanceResult:
     """Run scan-then-target maintenance for all parity library markets."""

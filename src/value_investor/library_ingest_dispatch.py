@@ -26,6 +26,12 @@ MODE_MAINTENANCE = "maintenance"
 # Deprecated alias — parity met maps to maintenance (daily scan+deepen), not zero ingest.
 MODE_IDLE = MODE_MAINTENANCE
 
+# Same learning-phase numbers as live FTSE ingest-loop.yml / ingest-scan-then-target.md.
+FTSE_MAINTENANCE_MAX_TARGETS = 62
+FTSE_MAINTENANCE_MAX_BODIES = 40
+FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS = 3600.0
+FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES = 8
+
 SPRINT_CONFIG: dict[str, Any] = {
     "max_daily_successes": 4,
     "max_targets": 24,
@@ -38,8 +44,8 @@ SPRINT_CONFIG: dict[str, Any] = {
 }
 
 MAINTENANCE_CONFIG: dict[str, Any] = {
-    "max_daily_successes": 1,
-    "max_targets": 4,
+    "max_daily_successes": FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES,
+    "max_targets": FTSE_MAINTENANCE_MAX_TARGETS,
     "cron_morning": False,
     "cron_afternoon": False,
     "cron_midafternoon": False,
@@ -55,24 +61,23 @@ EURO_INGEST_CRON_TITLES = {
     "evening": "Euro ingest loop (weekday evening)",
     "ladder_weekday": "FTSE orchestrator (weekday ladder)",
     "maintenance": "Library ingest maintenance (parity markets)",
+    "maintenance_afternoon": "Library ingest maintenance (parity markets afternoon)",
 }
 
 
 def ingest_parity_met(health: dict[str, Any]) -> bool:
-    """True when buy-tier filing gaps are closed for this market's bar.
+    """True when buy-tier filing quality matches the live FTSE maintenance bar.
 
-    euro_depth (and other non-FTSE-equivalent markets) use unmeasured +
-    zero-body only. ``ftse_equivalent`` markets also require thin_body == 0
-    and indexed_without_body == 0 — hard gaps must not look like zero.
+    Every library market uses the same gate: unmeasured, zero-body, thin-body,
+    and ``indexed_without_body`` must all be zero. ``ftse_equivalent`` only
+    changes *measurement* (canonical-only coverage), not the quality bar.
     """
     if library_ingest_filing_gaps(health) != 0:
         return False
-    if health.get("ftse_equivalent"):
-        return (
-            int(health.get("thin_body_buy_tier") or 0) == 0
-            and int(health.get("indexed_without_body") or 0) == 0
-        )
-    return True
+    return (
+        int(health.get("thin_body_buy_tier") or 0) == 0
+        and int(health.get("indexed_without_body") or 0) == 0
+    )
 
 
 def should_run_parallel_sprint_ingest(
@@ -84,9 +89,7 @@ def should_run_parallel_sprint_ingest(
     """Whether ``ingest_parallel_sprint`` market should run automated ingest."""
     if market_id not in list_library_ingest_parallel_sprint_markets(policy=policy):
         return False
-    if not ingest_parity_met(health):
-        return True
-    return int(health.get("thin_body_buy_tier") or 0) > 0
+    return not ingest_parity_met(health)
 
 
 def evaluate_library_ingest_dispatch(
@@ -99,8 +102,9 @@ def evaluate_library_ingest_dispatch(
     """
     Decide ingest cadence from **filing parity** on the focus market.
 
-    Sprint (high tempo) while ``unmeasured + zero_body > 0``; maintenance once parity
-    is met. Phase 3 readiness is informational only — ladder/shard crons continue
+    Sprint (high tempo) while FTSE-standard filing gaps remain; maintenance once
+    unmeasured, zero-body, thin-body, and ``indexed_without_body`` are all zero.
+    Phase 3 readiness is informational only — ladder/shard crons continue
     separately during maintenance.
     """
     library_root = Path(library_root)
@@ -126,20 +130,13 @@ def evaluate_library_ingest_dispatch(
         config = MAINTENANCE_CONFIG
     else:
         mode = MODE_SPRINT
-        if health.get("ftse_equivalent"):
-            reason = (
-                f"Ingest sprint: FTSE-equivalent depth gaps "
-                f"(unmeasured={health.get('unmeasured_buy_tier')}, "
-                f"zero_body={health.get('zero_body_buy_tier')}, "
-                f"thin={health.get('thin_body_buy_tier')}, "
-                f"indexed_without_body={health.get('indexed_without_body')})"
-            )
-        else:
-            reason = (
-                f"Ingest sprint: {gaps} buy-tier filing gap(s) "
-                f"(unmeasured={health.get('unmeasured_buy_tier')}, "
-                f"zero_body={health.get('zero_body_buy_tier')})"
-            )
+        reason = (
+            f"Ingest sprint: FTSE-standard depth gaps "
+            f"(unmeasured={health.get('unmeasured_buy_tier')}, "
+            f"zero_body={health.get('zero_body_buy_tier')}, "
+            f"thin={health.get('thin_body_buy_tier')}, "
+            f"indexed_without_body={health.get('indexed_without_body')})"
+        )
         config = SPRINT_CONFIG
 
     return {
@@ -297,20 +294,25 @@ def list_library_ingest_maintenance_markets(
     policy_path: Path = DEFAULT_POLICY_PATH,
     policy: dict[str, Any] | None = None,
 ) -> list[str]:
-    """Markets with ingest parity that should receive daily maintenance passes."""
+    """Markets that currently meet the FTSE filing-quality bar."""
     library_root = Path(library_root)
     policy = policy if policy is not None else load_policy(policy_path)
-    markets: set[str] = set(policy.get("ingest_parity_markets") or [])
+    candidates: set[str] = {
+        str(m).strip() for m in (policy.get("ingest_parity_markets") or []) if str(m).strip()
+    }
     focus = str(policy.get("focus_market") or "").strip()
     if focus:
+        candidates.add(focus)
+    markets: list[str] = []
+    for market_id in sorted(candidates):
         health = snapshot_library_buy_tier_filing_health(
-            focus,
+            market_id,
             library_root=library_root,
             policy=policy,
         )
         if ingest_parity_met(health):
-            markets.add(focus)
-    return sorted(markets)
+            markets.append(market_id)
+    return markets
 
 
 def write_euro_ingest_dispatch(
@@ -361,19 +363,25 @@ def load_euro_ingest_dispatch(*, path: Path = DEFAULT_DISPATCH_PATH) -> dict[str
 
 
 def cron_enabled_for_dispatch(evaluation: dict[str, Any]) -> dict[str, bool]:
+    maintenance = bool(evaluation.get("cron_maintenance"))
     return {
         "morning": bool(evaluation.get("cron_morning")),
         "afternoon": bool(evaluation.get("cron_afternoon")),
         "midafternoon": bool(evaluation.get("cron_midafternoon")),
         "evening": bool(evaluation.get("cron_evening")),
         "ladder_weekday": bool(evaluation.get("cron_ladder_weekday")),
-        "maintenance": bool(evaluation.get("cron_maintenance")),
+        "maintenance": maintenance,
+        "maintenance_afternoon": maintenance,
     }
 
 
 __all__ = [
     "DEFAULT_DISPATCH_PATH",
     "EURO_INGEST_CRON_TITLES",
+    "FTSE_MAINTENANCE_MAX_BODIES",
+    "FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES",
+    "FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS",
+    "FTSE_MAINTENANCE_MAX_TARGETS",
     "MAINTENANCE_CONFIG",
     "MODE_IDLE",
     "MODE_MAINTENANCE",

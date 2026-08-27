@@ -18,7 +18,12 @@ from value_investor.library_ingest_maintenance import (
 
 def test_list_library_ingest_maintenance_markets_includes_focus_at_parity():
     policy = {"focus_market": "euro_depth", "ingest_parity_markets": ["aex"]}
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
     with patch(
         "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
         return_value=health,
@@ -27,9 +32,30 @@ def test_list_library_ingest_maintenance_markets_includes_focus_at_parity():
     assert markets == ["aex", "euro_depth"]
 
 
+def test_list_library_ingest_maintenance_markets_excludes_stale_parity_list():
+    policy = {"focus_market": "euro_depth", "ingest_parity_markets": ["euro_depth"]}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 29,
+        "indexed_without_body": 94,
+    }
+    with patch(
+        "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+        return_value=health,
+    ):
+        markets = list_library_ingest_maintenance_markets(policy=policy)
+    assert markets == []
+
+
 def test_maybe_record_ingest_parity_adds_market_once():
     policy: dict = {"ingest_parity_markets": []}
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
     policy, event = maybe_record_ingest_parity(
         policy,
         "euro_depth",
@@ -56,7 +82,12 @@ def test_evaluate_ingest_parity_handoff_can_advance_when_queue_has_next():
         "graduated_markets": [],
         "focus_graduation": {"advance_focus_on_ingest_parity": True},
     }
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
     with patch(
         "value_investor.library_ingest_escalation.snapshot_library_buy_tier_filing_health",
         return_value=health,
@@ -93,7 +124,12 @@ def test_maybe_handoff_focus_on_ingest_parity_advances_focus(tmp_path: Path):
         "ingest_parity_markets": [],
         "focus_graduation": {"advance_focus_on_ingest_parity": True},
     }
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
     with (
         patch(
             "value_investor.library_ingest_maintenance.load_policy",

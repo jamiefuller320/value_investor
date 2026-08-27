@@ -111,6 +111,7 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
         "evening": True,
         "ladder_weekday": True,
         "maintenance": False,
+        "maintenance_afternoon": False,
     }
 
 
@@ -135,7 +136,12 @@ def test_evaluate_dispatch_sprint_when_phase3_ready_but_gaps_remain():
 
 def test_evaluate_dispatch_maintenance_when_parity_met():
     phase = {"phase3_ready": True, "blockers": []}
-    health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
     with (
         patch(
             "value_investor.library_ingest_dispatch.evaluate_market_phase",
@@ -152,8 +158,8 @@ def test_evaluate_dispatch_maintenance_when_parity_met():
     assert result["should_run_sprint_ingest"] is False
     assert result["should_run_maintenance_ingest"] is True
     assert result["should_run_ingest"] is False
-    assert result["max_daily_successes"] == 1
-    assert result["max_targets"] == 4
+    assert result["max_daily_successes"] == 8
+    assert result["max_targets"] == 62
     assert MODE_IDLE == MODE_MAINTENANCE
     assert cron_enabled_for_dispatch(result) == {
         "morning": False,
@@ -162,33 +168,25 @@ def test_evaluate_dispatch_maintenance_when_parity_met():
         "evening": False,
         "ladder_weekday": True,
         "maintenance": True,
+        "maintenance_afternoon": True,
     }
 
 
-def test_ingest_parity_met_euro_depth_ignores_thin_and_indexed():
-    assert ingest_parity_met(
-        {
-            "unmeasured_buy_tier": 0,
-            "zero_body_buy_tier": 0,
-            "thin_body_buy_tier": 5,
-            "indexed_without_body": 20,
-            "ftse_equivalent": False,
-        }
-    )
-    assert not ingest_parity_met({"unmeasured_buy_tier": 1, "zero_body_buy_tier": 0})
-
-
-def test_ingest_parity_met_ftse_equivalent_requires_thin_and_indexed():
+def test_ingest_parity_met_requires_thin_and_indexed_for_all_markets():
     base = {
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
         "indexed_without_body": 0,
-        "ftse_equivalent": True,
+        "ftse_equivalent": False,
     }
     assert ingest_parity_met(base)
-    assert not ingest_parity_met({**base, "thin_body_buy_tier": 1})
-    assert not ingest_parity_met({**base, "indexed_without_body": 12})
+    assert not ingest_parity_met({**base, "thin_body_buy_tier": 5})
+    assert not ingest_parity_met({**base, "indexed_without_body": 20})
+    assert not ingest_parity_met({"unmeasured_buy_tier": 1, "zero_body_buy_tier": 0})
+    assert ingest_parity_met({**base, "ftse_equivalent": True})
+    assert not ingest_parity_met({**base, "ftse_equivalent": True, "thin_body_buy_tier": 1})
+    assert not ingest_parity_met({**base, "ftse_equivalent": True, "indexed_without_body": 12})
 
 
 def test_evaluate_dispatch_sprint_when_ftse_equivalent_thin_only():
@@ -215,6 +213,33 @@ def test_evaluate_dispatch_sprint_when_ftse_equivalent_thin_only():
     assert result["ingest_parity_met"] is False
     assert result["max_targets"] == 24
     assert "indexed_without_body" in result["reason"]
+
+
+def test_evaluate_dispatch_sprint_when_euro_thin_only():
+    phase = {"phase3_ready": True, "blockers": []}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 29,
+        "indexed_without_body": 94,
+        "ftse_equivalent": False,
+    }
+    with (
+        patch(
+            "value_investor.library_ingest_dispatch.evaluate_market_phase",
+            return_value=phase,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            return_value=health,
+        ),
+    ):
+        result = evaluate_euro_ingest_dispatch()
+    assert result["mode"] == MODE_SPRINT
+    assert result["ingest_parity_met"] is False
+    assert result["should_run_sprint_ingest"] is True
+    assert result["max_targets"] == 24
+    assert "thin=29" in result["reason"]
 
 
 def test_write_euro_ingest_dispatch_persists(tmp_path: Path):

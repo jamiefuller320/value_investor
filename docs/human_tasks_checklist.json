@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-25",
+  "updated_at": "2026-08-27",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -186,7 +186,7 @@
         {
           "id": "adhoc-euro-ingest-cron-reimport",
           "title": "Re-import euro ingest cron slots after cadence change",
-          "summary": "After merging euro ingest cadence changes (e.g. 4×/day × 24 targets), run import_cron_jobs for the four euro-ingest-loop-* keys so cron-job.org matches sprint slots and max_targets=24. GitHub schedule alone is best-effort.",
+          "summary": "After merging euro ingest cadence changes, run import_cron_jobs for euro-ingest-loop-* (sprint 4×/day × 24) and library-ingest-maintenance / library-ingest-maintenance-afternoon (FTSE-standard 2×/day × 62). GitHub schedule alone is best-effort.",
           "automated": false,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"

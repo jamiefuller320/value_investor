@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T14:09:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T14:18:46+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -257,7 +257,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L196 | **FTSE-first scan-then-target maintenance ingest** | Implement scan-then-target on live FTSE buy-tier now that hard gaps are closed (0 unmeasured/zero-body): cheap RNS/CH/Investegate index scan across buy-tier (optionally strong_buy first), queue new/changed filings, deepen only hits within max_targets. Replaces no-op strong_buy rewalks; frees capacity for euro sprint. | Next ingest/ops engineering slot after euro 4x24 cadence is stable, or when FTSE weekday runs show improved=0 for several days while new RNS appear |
 | L197 | **Re-throttle FTSE ingest deepen when GHA minutes bind** | Learning phase uses max_targets=62, max_bodies=40, daily success cap 8, and body-gap chaining. When Actions minutes become scarce, lower targets/cap and keep discovery scan uncapped. | GitHub Actions minutes approach quota or weekday ingest runtime regularly exceeds budget |
 | L199 | **Force S&P parallel ingest sprint after learning-depth gate** | After the FTSE-equivalent measurement gate lands, library-ingest-sprint should see real canonical gaps (8 unmeasured + 21 thin + 1154 indexed_without_body) and run 24 targets, not 4-target maintenance. Trigger gh workflow run library-ingest-sprint.yml -f force=true; do not ingest all 503 constituents. | After PR #354 merges and before the next weekday ingest-sprint slot |
-| L200 | **Copy FTSE learning-phase volume onto library parity maintenance** | Maintenance already means the same job for every parity market: scan-then-target, never idle. Library still uses leftover sprint-handoff numbers (1x/day, max_targets=4, no drain chain) while live FTSE deepens full buy-tier toward indexed_without_body≈0. Copy that volume (and optional same-day drain) onto library-ingest-maintenance.yml so euro and later parity markets match FTSE, not a second definition. | Operator confirms library parity maintenance should use FTSE learning-phase deepen/drain numbers, or GHA minutes are unused after S&P sprint |
 
 ---
 
