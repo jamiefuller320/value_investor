@@ -252,7 +252,47 @@ jobs:
               exit 1
             fi
           else
-            git push -u origin "$BRANCH"
+            set +e
+            PUSH_OUTPUT=$(git push -u origin "$BRANCH" 2>&1)
+            PUSH_RC=$?
+            set -e
+            if [ "$PUSH_RC" -ne 0 ]; then
+              if echo "$PUSH_OUTPUT" | grep -qi 'without `workflows` permission'; then
+                echo "$PUSH_OUTPUT"
+                echo "::warning::Workflow file push blocked — retrying without .github/workflows changes"
+                for wf in .github/workflows/*.yml .github/workflows/*.yaml; do
+                  [ -e "$wf" ] || continue
+                  git reset HEAD "$wf" 2>/dev/null || true
+                  git checkout -- "$wf" 2>/dev/null || true
+                done
+                if git diff --cached --quiet; then
+                  ftse-engineering park-task \
+                    --task-id "$TASK_ID" \
+                    --reason "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update" \
+                    --parked-policy workflow_permission
+                  echo "No pushable changes remain after dropping workflow files"
+                  exit 1
+                fi
+                git commit --amend --no-edit
+                set +e
+                PUSH_OUTPUT=$(git push -u origin "$BRANCH" 2>&1)
+                PUSH_RC=$?
+                set -e
+                if [ "$PUSH_RC" -ne 0 ]; then
+                  echo "$PUSH_OUTPUT"
+                  if echo "$PUSH_OUTPUT" | grep -qi 'without `workflows` permission'; then
+                    ftse-engineering park-task \
+                      --task-id "$TASK_ID" \
+                      --reason "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update" \
+                      --parked-policy workflow_permission
+                  fi
+                  exit "$PUSH_RC"
+                fi
+              else
+                echo "$PUSH_OUTPUT"
+                exit "$PUSH_RC"
+              fi
+            fi
           fi
 
           AUTO_MERGE=false

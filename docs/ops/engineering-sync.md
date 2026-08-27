@@ -128,9 +128,14 @@ Add repository secret **`WORKFLOW_DISPATCH_PAT`** — fine-grained PAT with:
 - **Contents:** Read and write
 - **Pull requests:** Read and write
 - **Actions:** Read and write (for existing dispatch scripts)
+- **Workflows:** Read and write (required when engineering tasks edit `.github/workflows/*`)
 
 When `WORKFLOW_DISPATCH_PAT` is not set, the workflow falls back to
 `GITHUB_TOKEN` and logs a warning.
+
+When the PAT lacks **Workflows** permission, the agent drops workflow-file
+changes from the branch and parks the task (`parked_policy=workflow_permission`)
+instead of retrying forever.
 
 Email reuses Sunday report SMTP secrets (`SMTP_*`, `EMAIL_TO`).
 

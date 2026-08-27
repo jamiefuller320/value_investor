@@ -1063,6 +1063,8 @@ def run_ops_monitor(
         open_prs=open_prs,
         recent_agent_failures=eng_failures,
         apply=apply_fixes,
+        repo=repo,
+        token=token,
     )
     for repair in sync_report.repairs:
         auto_fixes.append(repair)

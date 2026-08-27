@@ -238,6 +238,9 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
     open_prs: list[dict] = []
     if args.open_prs_json:
         open_prs = json.loads(Path(args.open_prs_json).read_text(encoding="utf-8"))
+    recent_failures: list[dict] = []
+    if getattr(args, "agent_failures_json", None):
+        recent_failures = json.loads(Path(args.agent_failures_json).read_text(encoding="utf-8"))
     result = recover_engineering_queue(
         tasks_path=tasks_path,
         open_prs=open_prs,
@@ -245,12 +248,15 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
         max_agent_retries=args.max_agent_retries,
         retry_cooldown_hours=args.retry_cooldown_hours,
         ci_red_park_hours=args.ci_red_park_hours,
+        recent_agent_failures=recent_failures or None,
     )
     if args.json:
         _print_json(result.to_dict())
     else:
         if result.merged:
             print(f"Marked merged from GitHub: {', '.join(result.merged)}")
+        for action in result.cancelled:
+            print(f"Cancelled {action.task_id}: {action.reason}")
         if result.reconciled:
             print(f"Reconciled orphaned pr_open: {', '.join(result.reconciled)}")
         if result.reopened:
@@ -271,6 +277,30 @@ def _cmd_list_parked(args: argparse.Namespace) -> int:
     else:
         for row in rows:
             print(f"{row['id']}: {row.get('parked_reason')}")
+    return 0
+
+
+def _cmd_park_task(args: argparse.Namespace) -> int:
+    from value_investor.engineering_recovery import park_agent_task
+
+    parked_policy = str(getattr(args, "parked_policy", "") or "").strip() or None
+    action = park_agent_task(
+        str(args.task_id).strip(),
+        reason=str(args.reason).strip(),
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        parked_policy=parked_policy,
+        apply=not args.dry_run,
+    )
+    if action is None:
+        if args.json:
+            _print_json({"parked": False, "reason": "task not found or already terminal"})
+        else:
+            print("Task not found or already terminal", file=sys.stderr)
+        return 1
+    if args.json:
+        _print_json({"parked": True, **action.to_dict()})
+    else:
+        print(f"Parked {action.task_id}: {action.reason}")
     return 0
 
 
@@ -983,6 +1013,11 @@ def main(argv: list[str] | None = None) -> int:
     recover_p.add_argument("--max-agent-retries", type=int, default=2)
     recover_p.add_argument("--retry-cooldown-hours", type=int, default=24)
     recover_p.add_argument("--ci-red-park-hours", type=int, default=48)
+    recover_p.add_argument(
+        "--agent-failures-json",
+        default=None,
+        help="Optional JSON list of recent engineering-agent failures",
+    )
     recover_p.set_defaults(func=_cmd_recover_queue)
 
     try_accel_p = sub.add_parser(
@@ -1060,6 +1095,29 @@ def main(argv: list[str] | None = None) -> int:
         "list-parked", parents=[common], help="List tasks parked for manual review"
     )
     parked_p.set_defaults(func=_cmd_list_parked)
+
+    park_task_p = sub.add_parser(
+        "park-task",
+        parents=[common],
+        help="Park a task (e.g. workflows permission block during agent push)",
+    )
+    park_task_p.add_argument("--task-id", required=True)
+    park_task_p.add_argument(
+        "--reason",
+        required=True,
+        help="Human-readable parked_reason stored on the task",
+    )
+    park_task_p.add_argument(
+        "--parked-policy",
+        default="workflow_permission",
+        help="parked_policy value (default: workflow_permission)",
+    )
+    park_task_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show the park action without writing the queue",
+    )
+    park_task_p.set_defaults(func=_cmd_park_task)
 
     record_no_diff_p = sub.add_parser(
         "record-no-diff",
