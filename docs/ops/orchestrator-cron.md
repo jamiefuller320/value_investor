@@ -48,6 +48,7 @@ token instead of your user PAT.
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
 | `euro-ingest-loop.yml` | External **primary** | Mon–Fri **07:15 + 10:15 + 13:15 + 16:15** → `euro-ingest-loop.yml` (sprint: 4×/day × 24 targets; throttled by completion gate) | Mon–Fri 07:15 / 10:15 / 13:15 / 16:15 |
+| `library-ingest-maintenance.yml` | External **primary** | Mon–Fri **07:30 + 10:30** → FTSE-standard maintenance (`max_targets=62`) when the quality bar is met | Mon–Fri 07:30 / 10:30 |
 | `automation-orchestrator.yml` (`ladder_only`) | External **primary** (sprint) | Mon–Fri **06:50** → `suite=ladder_only` (disabled when Phase 3 + parity idle) | No |
 | `engineering-agent.yml` | Queue / manual | No | No |
 | `ci.yml` / `pages.yml` | Push to `docs/**` on `main`; **also** `email-report.yml` dispatches after dashboard commit (`[skip ci]` blocks push-triggered Pages) | No | No |

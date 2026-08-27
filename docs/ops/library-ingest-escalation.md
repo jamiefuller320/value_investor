@@ -72,7 +72,7 @@ and gap detection use the market canonical filing index.
 # Weekday deepen (sprint automation)
 ftse-library ingest-loop --market euro_depth --max-targets 24
 
-# Daily maintenance (parity markets; discovery scan on by default)
+# FTSE-standard maintenance (parity markets; discovery scan on by default)
 ftse-library ingest-maintenance --json
 
 # Parallel sprint (queue head-start while focus still sprinting)
@@ -96,26 +96,30 @@ ftse-library euro-ingest-dispatch --json
 |------|----------|-----------|
 | Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
 | Sprint ingest (parallel) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
-| Maintenance ingest | `library-ingest-maintenance.yml` | Daily scan-then-target for `ingest_parity_markets` + focus at parity |
+| Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
 
-## FTSE-equivalent markets (`sp500`)
+## Filing-quality bar (all library markets)
 
-Policy `ftse_equivalent_markets: ["sp500"]` changes measurement and the parity bar:
+`ingest_parity_met()` uses the **live FTSE maintenance bar** for every market:
+unmeasured, zero-body, thin-body, and `indexed_without_body` must all be zero.
+Maintenance then uses the same deepen volume as `ingest-loop.yml`
+(`max_targets=62`, `max_bodies=40`, 2×/weekday). Do not keep a lighter library
+variant — learning needs the same body quality as soon as a market is the
+paper/research focus.
+
+Policy `ftse_equivalent_markets: ["sp500"]` changes **measurement only**:
 
 1. **Canonical-only coverage.** `_filing_coverage_for_ticker(..., canonical_only=True)`
    reads only `markets/sp500/screen/research/{TICKER}/`. Bodies that exist only under
-   `nasdaq100` (or any other shard) are **unmeasured** for S&P parity.
-2. **`ingest_parity_met()`** for `health.ftse_equivalent` also requires
-   `thin_body_buy_tier == 0` and `indexed_without_body == 0`. `euro_depth` stays
-   unmeasured + zero-body only.
-3. **Health snapshot** includes `indexed_without_body`, `bodies_min` / `median` /
+   `nasdaq100` (or any other shard) are **unmeasured** for S&P.
+2. **Health snapshot** includes `indexed_without_body`, `bodies_min` / `median` /
    `max`, `coverage_scope`, and `ftse_equivalent`.
-4. **Do not** append `sp500` to `ingest_parity_markets` until
+3. **Do not** append `sp500` to `ingest_parity_markets` until
    `ftse-library learning-depth --market sp500` is green (`learning_ready`).
-5. Parallel sprint then sees real gaps (24 targets) instead of a 4-target
+4. Parallel sprint then sees real canonical gaps (24 targets) instead of a
    maintenance pass that treated shard fallback as zero gaps.
 
 ```bash

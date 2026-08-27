@@ -29,6 +29,11 @@ from .data_library import (
     list_markets,
     refresh_constituents,
 )
+from .library_ingest_dispatch import (
+    FTSE_MAINTENANCE_MAX_BODIES,
+    FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS,
+    FTSE_MAINTENANCE_MAX_TARGETS,
+)
 from .library_retention import DEFAULT_MONTHLY_UNTIL_DAYS, DEFAULT_RETENTION_DAYS
 
 
@@ -329,16 +334,20 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_maint_p = sub.add_parser(
         "ingest-maintenance",
         parents=[common],
-        help="Daily scan-then-target maintenance for library markets at filing parity",
+        help="FTSE-standard scan-then-target maintenance for library markets at filing parity",
     )
     ingest_maint_p.add_argument(
         "--markets",
         default="",
         help="Comma-separated market ids (default: parity markets from policy + focus)",
     )
-    ingest_maint_p.add_argument("--max-targets", type=int, default=4)
-    ingest_maint_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
-    ingest_maint_p.add_argument("--max-bodies", type=int, default=20)
+    ingest_maint_p.add_argument("--max-targets", type=int, default=FTSE_MAINTENANCE_MAX_TARGETS)
+    ingest_maint_p.add_argument(
+        "--max-runtime-seconds",
+        type=float,
+        default=FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS,
+    )
+    ingest_maint_p.add_argument("--max-bodies", type=int, default=FTSE_MAINTENANCE_MAX_BODIES)
     ingest_maint_p.add_argument(
         "--no-discovery-scan",
         action="store_true",

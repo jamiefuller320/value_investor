@@ -79,6 +79,13 @@ _EURO_INGEST_LOOP_INPUTS = {
         "max_targets": "24",
     }
 }
+_LIBRARY_MAINTENANCE_INPUTS = {
+    "inputs": {
+        "max_targets": "62",
+        "max_bodies": "40",
+        "max_runtime_seconds": "3600",
+    }
+}
 
 
 def _euro_dispatch_enabled() -> dict[str, bool]:
@@ -227,8 +234,17 @@ def _job_specs() -> list[CronJobSpec]:
             key="library-ingest-maintenance",
             title="Library ingest maintenance (parity markets)",
             workflow="library-ingest-maintenance.yml",
-            body={"ref": REF, "inputs": {"max_targets": "4"}},
+            body={"ref": REF, **_LIBRARY_MAINTENANCE_INPUTS},
             hours=[7],
+            minutes=[30],
+            wdays=[1, 2, 3, 4, 5],
+        ),
+        CronJobSpec(
+            key="library-ingest-maintenance-afternoon",
+            title="Library ingest maintenance (parity markets afternoon)",
+            workflow="library-ingest-maintenance.yml",
+            body={"ref": REF, **_LIBRARY_MAINTENANCE_INPUTS},
+            hours=[10],
             minutes=[30],
             wdays=[1, 2, 3, 4, 5],
         ),
@@ -334,6 +350,7 @@ def _job_enabled(spec: CronJobSpec) -> bool:
         "euro-ingest-loop-evening": "evening",
         "orchestrator-ladder-weekday": "ladder_weekday",
         "library-ingest-maintenance": "maintenance",
+        "library-ingest-maintenance-afternoon": "maintenance_afternoon",
         "library-ingest-sprint-morning": "morning",
         "library-ingest-sprint-afternoon": "afternoon",
         "library-ingest-sprint-midafternoon": "midafternoon",
