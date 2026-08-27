@@ -6,6 +6,9 @@ closed, without assuming engineering fetch coverage is ever finished.
 
 Related: [`ingest-backfill-plan.md`](ingest-backfill-plan.md),
 [`market-scrutiny.md`](market-scrutiny.md), weekday `ingest-loop.yml`.
+Library parity markets use the **same quality bar and deepen volume** via
+[`library-ingest-maintenance.yml`](../../.github/workflows/library-ingest-maintenance.yml)
+— see [`library-ingest-escalation.md`](library-ingest-escalation.md).
 
 ## Flow
 
