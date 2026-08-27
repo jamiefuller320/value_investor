@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-27T14:05:49+00:00",
+  "updated_at": "2026-08-27T14:09:29+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4124,9 +4124,27 @@
         "maintenance",
         "ftse_equivalent"
       ],
+      "status": "drop",
+      "source": "https://cursor.com/agents/bc-0f3d2fa7-903d-401e-86e2-e29548757725",
+      "added_at": "2026-08-27T14:05:49+00:00",
+      "updated_at": "2026-08-27T14:09:29+00:00"
+    },
+    {
+      "id": "L200",
+      "category": "later",
+      "section": "ops",
+      "title": "Copy FTSE learning-phase volume onto library parity maintenance",
+      "summary": "Maintenance already means the same job for every parity market: scan-then-target, never idle. Library still uses leftover sprint-handoff numbers (1x/day, max_targets=4, no drain chain) while live FTSE deepens full buy-tier toward indexed_without_body\u22480. Copy that volume (and optional same-day drain) onto library-ingest-maintenance.yml so euro and later parity markets match FTSE, not a second definition.",
+      "revisit_when": "Operator confirms library parity maintenance should use FTSE learning-phase deepen/drain numbers, or GHA minutes are unused after S&P sprint",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "maintenance",
+        "scan-then-target"
+      ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-0f3d2fa7-903d-401e-86e2-e29548757725",
-      "added_at": "2026-08-27T14:05:49+00:00"
+      "added_at": "2026-08-27T14:09:29+00:00"
     }
   ],
   "fragments": [
