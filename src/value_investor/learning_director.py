@@ -24,6 +24,7 @@ from value_investor.deferred_ideas import add_fragment, list_open_fragments, wri
 from value_investor.experiment_assessment import slim_experiment_assessment_for_review
 from value_investor.learning_director_regime import (
     VISION_PATH,
+    build_convergence_summary,
     build_experiment_inventory,
     build_regime_summary,
     load_learning_director_vision,
@@ -214,12 +215,18 @@ def build_learning_director_payload(
         history_run_count=history_runs,
     )
     experiment_inventory = build_experiment_inventory(data_dir, paper_root=paper_root)
+    convergence_summary = build_convergence_summary(
+        data_dir,
+        paper_root=paper_root,
+        vision=vision,
+    )
 
     return {
         "run_at": effective_run_at.isoformat(),
         "history_run_count": history_runs,
         "vision": vision,
         "regime_summary": regime_summary,
+        "convergence_summary": convergence_summary,
         "experiment_inventory": experiment_inventory,
         "review_policy": load_review_policy(paper_root / "review_policy.json"),
         "analysis_review": _safe_read(data_dir / "analysis_review.json"),
@@ -355,7 +362,9 @@ Cite trajectory_evidence prediction_hit_rate_by_horizon and weeks_to_realization
 
 CONVERGENCE
 Reconcile top-pick (ai_judgment, conviction, sleeves) vs bottom-filter (exclusion ladder,
-universe archive). State whether strands are converging toward a bettable filtered cohort.
+universe archive). Start from convergence_summary.strands and .tensions — cite paths.
+State whether strands are converging toward a bettable filtered cohort.
+Include convergence_summary.look_now actionable items when present.
 Frame success as timely opinion updates (prediction_philosophy), not perfect backstory.
 If model_focus_candidates exist, say which assessment-model gap they imply.
 When hypothesis_integrity is present, note whether intact losers are within tolerance and

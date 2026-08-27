@@ -14,6 +14,7 @@ from value_investor.learning_director import (
     parse_learning_director_review,
 )
 from value_investor.learning_director_regime import (
+    build_convergence_summary,
     build_experiment_inventory,
     build_regime_summary,
 )
@@ -116,6 +117,8 @@ def test_build_payload_includes_vision_and_regime(tmp_path: Path):
     assert payload["vision"]["phases"][0]["id"] == "v1_weekly_director"
     assert payload["regime_summary"]["recommended_exclusion_step"] == "u4"
     assert "primary_underperforming_market" in payload["regime_summary"]["flags"]
+    assert "convergence_summary" in payload
+    assert "strands" in payload["convergence_summary"]
     assert payload["trajectory_evidence"] is None
     assert payload["exclusion_universe"]["purpose"]
     assert "ladder_results_slim" in payload["exclusion_universe"]
@@ -159,6 +162,98 @@ def test_regime_summary_flags_thin_history(tmp_path: Path):
     data_dir.mkdir(parents=True)
     summary = build_regime_summary(data_dir, history_run_count=3)
     assert "thin_history:<8_archive_runs" in summary["flags"]
+
+
+def test_convergence_summary_flags_min_conviction_tension(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    paper = data_dir / "paper_automation"
+    paper.mkdir(parents=True)
+    vision = {
+        "schema_version": 1,
+        "convergence_thesis": {"bet_gate": "test"},
+        "phases": [
+            {"id": "filtered_cohort_track", "status": "planned"},
+            {"id": "cross_shard_winner_selection", "status": "planned"},
+        ],
+    }
+    (data_dir / "learning_director_vision.json").write_text(
+        json.dumps(vision),
+        encoding="utf-8",
+    )
+    (paper / "learning_tracks_review.json").write_text(
+        json.dumps(
+            {
+                "primary_learning_track": "ai_judgment",
+                "reviews": {
+                    "ai_judgment": {
+                        "knobs_after": {
+                            "min_conviction": 0.6,
+                            "max_positions": 3,
+                        },
+                        "applied": True,
+                        "metrics": {"epoch": {"equity_marks": 2}},
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper / "knob_calibration_priors.json").write_text(
+        json.dumps(
+            {
+                "tracks": {
+                    "ai_judgment": {
+                        "readiness": {
+                            "ready_for_priors": False,
+                            "warnings": [
+                                "knob axis 'min_conviction' shows negligible cohort discrimination"
+                            ],
+                        },
+                        "recommended_prior": {
+                            "knobs": {"min_conviction": 0.0, "max_positions": 5},
+                            "confidence": "low",
+                        },
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper / "exclusion_ladder_replay_review.json").write_text(
+        json.dumps(
+            {
+                "recommended_step_id": "u4",
+                "ladder": [{"step_id": "u4", "min_conviction": 0.35}],
+                "readiness": {"ready_for_shadow_spawn": True},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (data_dir / "exclusion_universe_review.json").write_text(
+        json.dumps({"recommended_step": {"step_id": "u4"}}),
+        encoding="utf-8",
+    )
+    shadow_dir = paper / "ai_judgment_exclusion_u4"
+    shadow_dir.mkdir(parents=True)
+    (shadow_dir / "config.json").write_text(
+        json.dumps(
+            {
+                "track_id": "ai_judgment_exclusion_u4",
+                "is_exclusion_shadow": True,
+                "min_conviction": 0.35,
+                "max_positions": 3,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    summary = build_convergence_summary(data_dir, vision=vision)
+    assert summary["strands"]["live_primary"]["min_conviction"] == 0.6
+    assert summary["strands"]["exclusion_ladder"]["min_conviction"] == 0.35
+    assert "live_primary_min_conviction_above_ladder" in " ".join(summary["tensions"])
+    assert "min_conviction_axis_negligible_in_calibration" in summary["tensions"]
+    assert summary["look_now"]
+    assert summary["bet_gate_met"] is False
 
 
 def test_review_policy_learning_director_defaults_enabled(tmp_path: Path):
