@@ -341,17 +341,13 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Comma-separated market ids (default: parity markets from policy + focus)",
     )
-    ingest_maint_p.add_argument(
-        "--max-targets", type=int, default=FTSE_MAINTENANCE_MAX_TARGETS
-    )
+    ingest_maint_p.add_argument("--max-targets", type=int, default=FTSE_MAINTENANCE_MAX_TARGETS)
     ingest_maint_p.add_argument(
         "--max-runtime-seconds",
         type=float,
         default=FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS,
     )
-    ingest_maint_p.add_argument(
-        "--max-bodies", type=int, default=FTSE_MAINTENANCE_MAX_BODIES
-    )
+    ingest_maint_p.add_argument("--max-bodies", type=int, default=FTSE_MAINTENANCE_MAX_BODIES)
     ingest_maint_p.add_argument(
         "--no-discovery-scan",
         action="store_true",
