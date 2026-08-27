@@ -32,15 +32,21 @@ PARKED_STATUS = "parked"
 PARKED_POLICY_DUPLICATE = "duplicate"
 PARKED_POLICY_NO_DIFF = "no_diff_cap"
 PARKED_POLICY_CI_BLOCKED = "ci_blocked"
+PARKED_POLICY_WORKFLOW_PERMISSION = "workflow_permission"
 PARKED_POLICY_MANUAL = "manual"
 INFORMATIONAL_PARKED_POLICIES = frozenset({PARKED_POLICY_DUPLICATE, PARKED_POLICY_NO_DIFF})
 DUPLICATE_PARKED_REASON_RE = re.compile(r"duplicate|dup of|superseded", re.IGNORECASE)
 NO_DIFF_PARKED_REASON_RE = re.compile(r"no code changes", re.IGNORECASE)
+WORKFLOW_PERMISSION_REASON_RE = re.compile(
+    r"workflows?\s+permission|cannot push workflow",
+    re.IGNORECASE,
+)
 DEFAULT_MAX_AGENT_RETRIES = 2
 DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
 DEFAULT_CI_RED_PARK_HOURS = 48
 GITHUB_API_VERSION = "2022-11-28"
+WORKFLOW_PATH_PREFIX = ".github/workflows/"
 
 
 def _github_token() -> str | None:
@@ -102,6 +108,7 @@ class RecoveryResult:
     merged: list[str] = field(default_factory=list)
     reconciled: list[str] = field(default_factory=list)
     reopened: list[str] = field(default_factory=list)
+    cancelled: list[RecoveryAction] = field(default_factory=list)
     parked: list[RecoveryAction] = field(default_factory=list)
     skipped: list[dict[str, str]] = field(default_factory=list)
 
@@ -110,13 +117,48 @@ class RecoveryResult:
             "merged": self.merged,
             "reconciled": self.reconciled,
             "reopened": self.reopened,
+            "cancelled": [row.to_dict() for row in self.cancelled],
             "parked": [row.to_dict() for row in self.parked],
             "skipped": self.skipped,
             "action_count": len(self.merged)
             + len(self.reconciled)
             + len(self.reopened)
+            + len(self.cancelled)
             + len(self.parked),
         }
+
+
+def task_allows_workflow_files(row: dict[str, Any]) -> bool:
+    """True when the task allowlist includes GitHub Actions workflow paths."""
+    for path in row.get("allowed_paths") or []:
+        text = str(path or "").strip().replace("\\", "/")
+        if text.startswith(WORKFLOW_PATH_PREFIX) or f"/{WORKFLOW_PATH_PREFIX}" in f"/{text}":
+            return True
+    return False
+
+
+def _latest_workflow_success_run(
+    workflow_file: str,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> dict[str, Any] | None:
+    repo = repo or _github_repo()
+    token = token or _github_token()
+    if not repo or not token or not workflow_file:
+        return None
+    owner, name = repo.split("/", 1)
+    try:
+        payload = _github_api_get(
+            f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/runs"
+            f"?per_page=1&status=success",
+            token=token,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Latest success lookup failed for %s: %s", workflow_file, exc)
+        return None
+    rows = list((payload or {}).get("workflow_runs") or [])
+    return rows[0] if rows else None
 
 
 def _parse_iso(value: str | None) -> datetime | None:
@@ -195,6 +237,21 @@ def _pr_check_state(
     }
 
 
+def _infer_parked_policy(reason: str, *, explicit: str | None = None) -> str:
+    if explicit:
+        return str(explicit).strip().lower()
+    lowered = reason.lower()
+    if "checks still failing" in lowered or "ci blocked" in lowered:
+        return PARKED_POLICY_CI_BLOCKED
+    if WORKFLOW_PERMISSION_REASON_RE.search(reason):
+        return PARKED_POLICY_WORKFLOW_PERMISSION
+    if NO_DIFF_PARKED_REASON_RE.search(reason):
+        return PARKED_POLICY_NO_DIFF
+    if DUPLICATE_PARKED_REASON_RE.search(reason):
+        return PARKED_POLICY_DUPLICATE
+    return PARKED_POLICY_MANUAL
+
+
 def _park_task(
     task_id: str,
     *,
@@ -202,6 +259,7 @@ def _park_task(
     tasks_path: Path,
     from_status: str,
     apply: bool,
+    parked_policy: str | None = None,
 ) -> RecoveryAction:
     action = RecoveryAction(
         task_id=task_id,
@@ -216,13 +274,162 @@ def _park_task(
             PARKED_STATUS,
             path=tasks_path,
             parked_reason=reason,
-            parked_policy=(
-                PARKED_POLICY_CI_BLOCKED
-                if ("checks still failing" in reason.lower() or "ci blocked" in reason.lower())
-                else PARKED_POLICY_MANUAL
-            ),
+            parked_policy=_infer_parked_policy(reason, explicit=parked_policy),
         )
     return action
+
+
+def park_agent_task(
+    task_id: str,
+    *,
+    reason: str,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    parked_policy: str | None = None,
+    apply: bool = True,
+) -> RecoveryAction | None:
+    """Park an open/failed task from the agent workflow (e.g. workflows permission)."""
+    wanted = str(task_id or "").strip()
+    if not wanted:
+        return None
+    data = load_engineering_tasks(tasks_path)
+    row = next(
+        (item for item in (data.get("tasks") or []) if str(item.get("id") or "") == wanted),
+        None,
+    )
+    if row is None:
+        return None
+    from_status = str(row.get("status") or "open")
+    if from_status in {"merged", "completed", "cancelled", PARKED_STATUS}:
+        return None
+    return _park_task(
+        wanted,
+        reason=reason,
+        tasks_path=tasks_path,
+        from_status=from_status,
+        apply=apply,
+        parked_policy=parked_policy or PARKED_POLICY_WORKFLOW_PERMISSION,
+    )
+
+
+def cancel_resolved_workflow_failure_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
+    latest_success_by_workflow: dict[str, dict[str, Any]] | None = None,
+    apply: bool = True,
+) -> list[RecoveryAction]:
+    """
+    Cancel open workflow_failure tasks when the named workflow has succeeded
+    after the failure run that minted the task (transient / already-healed).
+    """
+    data = load_engineering_tasks(tasks_path)
+    cancelled: list[RecoveryAction] = []
+    success_cache = dict(latest_success_by_workflow or {})
+
+    for row in list(data.get("tasks") or []):
+        if str(row.get("status") or "") != "open":
+            continue
+        if str(row.get("source") or "") != "workflow_failure":
+            continue
+        evidence = row.get("evidence") or {}
+        workflow = str(evidence.get("workflow") or "").strip()
+        if not workflow:
+            continue
+        failure_run_id_raw = evidence.get("run_id")
+        try:
+            failure_run_id = int(failure_run_id_raw) if failure_run_id_raw is not None else None
+        except (TypeError, ValueError):
+            failure_run_id = None
+
+        if workflow not in success_cache:
+            success_cache[workflow] = _latest_workflow_success_run(
+                workflow, repo=repo, token=token
+            ) or {}
+        success = success_cache.get(workflow) or {}
+        if not success:
+            continue
+        try:
+            success_run_id = int(success.get("id")) if success.get("id") is not None else None
+        except (TypeError, ValueError):
+            success_run_id = None
+
+        healed = False
+        if failure_run_id is not None and success_run_id is not None:
+            healed = success_run_id > failure_run_id
+        else:
+            success_at = _parse_iso(str(success.get("created_at") or success.get("updated_at") or ""))
+            failure_at = _parse_iso(
+                str(evidence.get("failed_at") or row.get("created_at") or row.get("compiled_at") or "")
+            )
+            if success_at is not None and failure_at is not None:
+                healed = success_at > failure_at
+            elif success_at is not None and failure_run_id is None:
+                healed = True
+
+        if not healed:
+            continue
+
+        task_id = str(row.get("id") or "")
+        reason = (
+            f"workflow {workflow} recovered "
+            f"(success run {success_run_id or 'unknown'} after failure "
+            f"{failure_run_id or 'unknown'})"
+        )
+        action = RecoveryAction(
+            task_id=task_id,
+            action="cancel_resolved_workflow_failure",
+            reason=reason,
+            from_status="open",
+            to_status="cancelled",
+        )
+        if apply:
+            mark_task_status(
+                task_id,
+                "cancelled",
+                path=tasks_path,
+                cancelled_reason=reason,
+                cancelled_policy="workflow_recovered",
+            )
+        cancelled.append(action)
+    return cancelled
+
+
+def park_workflow_permission_blocked_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    apply: bool = True,
+) -> list[RecoveryAction]:
+    """
+    Park open tasks that allow workflow-file edits when engineering-agent is
+    failing and no PR can be opened (PAT lacks Workflows permission).
+    """
+    failures = list(recent_agent_failures or [])
+    if not failures:
+        return []
+    data = load_engineering_tasks(tasks_path)
+    parked: list[RecoveryAction] = []
+    reason = (
+        "engineering-agent cannot push .github/workflows changes without "
+        "WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update"
+    )
+    for row in list(data.get("tasks") or []):
+        if str(row.get("status") or "") != "open":
+            continue
+        if not task_allows_workflow_files(row):
+            continue
+        parked.append(
+            _park_task(
+                str(row.get("id") or ""),
+                reason=reason,
+                tasks_path=tasks_path,
+                from_status="open",
+                apply=apply,
+                parked_policy=PARKED_POLICY_WORKFLOW_PERMISSION,
+            )
+        )
+    return parked
 
 
 def record_agent_no_diff_run(
@@ -482,12 +689,17 @@ def recover_engineering_queue(
     max_agent_retries: int = DEFAULT_MAX_AGENT_RETRIES,
     retry_cooldown_hours: int = DEFAULT_RETRY_COOLDOWN_HOURS,
     ci_red_park_hours: int = DEFAULT_CI_RED_PARK_HOURS,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    latest_success_by_workflow: dict[str, dict[str, Any]] | None = None,
 ) -> RecoveryResult:
     """
     Run queue self-repair in order:
-    1. Reconcile orphaned pr_open → open
-    2. Retry cooled-down failed tasks (or park when retries exhausted)
-    3. Park pr_open tasks blocked on long-running red CI
+    1. Mark merged when GitHub shows a merged engineering PR
+    2. Cancel workflow_failure tasks whose workflow has already recovered
+    3. Reconcile orphaned pr_open → open
+    4. Retry cooled-down failed tasks (or park when retries exhausted)
+    5. Park pr_open tasks blocked on long-running red CI
+    6. Park open workflow-path tasks when agent push is permission-blocked
     """
     result = RecoveryResult()
 
@@ -496,6 +708,16 @@ def recover_engineering_queue(
         repo=repo,
         token=token,
         apply=apply,
+    )
+
+    result.cancelled.extend(
+        cancel_resolved_workflow_failure_tasks(
+            tasks_path=tasks_path,
+            repo=repo,
+            token=token,
+            latest_success_by_workflow=latest_success_by_workflow,
+            apply=apply,
+        )
     )
 
     if apply:
@@ -523,6 +745,14 @@ def recover_engineering_queue(
             repo=repo,
             token=token,
             ci_red_hours=ci_red_park_hours,
+            apply=apply,
+        )
+    )
+
+    result.parked.extend(
+        park_workflow_permission_blocked_tasks(
+            tasks_path=tasks_path,
+            recent_agent_failures=recent_agent_failures,
             apply=apply,
         )
     )
@@ -555,6 +785,8 @@ def classify_parked_task(
             policy = PARKED_POLICY_NO_DIFF
         elif "checks still failing" in reason.lower() or "ci blocked" in reason.lower():
             policy = PARKED_POLICY_CI_BLOCKED
+        elif WORKFLOW_PERMISSION_REASON_RE.search(reason):
+            policy = PARKED_POLICY_WORKFLOW_PERMISSION
         else:
             policy = PARKED_POLICY_MANUAL
 

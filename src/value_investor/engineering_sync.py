@@ -85,6 +85,9 @@ def run_engineering_sync(
     open_prs: list[dict[str, Any]] | None = None,
     recent_agent_failures: list[dict[str, Any]] | None = None,
     apply: bool = False,
+    repo: str | None = None,
+    token: str | None = None,
+    latest_success_by_workflow: dict[str, dict] | None = None,
 ) -> EngineeringSyncReport:
     """
     Detect queue/agent desync and optionally reconcile queue state.
@@ -108,6 +111,10 @@ def run_engineering_sync(
         recovery = recover_engineering_queue(
             tasks_path=tasks_path,
             open_prs=open_prs,
+            repo=repo,
+            token=token,
+            recent_agent_failures=failures,
+            latest_success_by_workflow=latest_success_by_workflow,
             apply=True,
         )
         if recovery.merged:
@@ -115,6 +122,13 @@ def run_engineering_sync(
                 {
                     "action": "mark_merged_pr",
                     "detail": ", ".join(recovery.merged),
+                }
+            )
+        if recovery.cancelled:
+            repairs.append(
+                {
+                    "action": "cancel_resolved_workflow_failure",
+                    "detail": ", ".join(row.task_id for row in recovery.cancelled),
                 }
             )
         if recovery.reconciled:
@@ -129,6 +143,13 @@ def run_engineering_sync(
                 {
                     "action": "reopen_failed_tasks",
                     "detail": ", ".join(recovery.reopened),
+                }
+            )
+        if recovery.parked:
+            repairs.append(
+                {
+                    "action": "park_blocked_tasks",
+                    "detail": ", ".join(row.task_id for row in recovery.parked),
                 }
             )
 

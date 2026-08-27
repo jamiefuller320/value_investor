@@ -282,8 +282,25 @@ jobs:
           PY
 
       - name: Recover engineering queue
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          ftse-engineering --json recover-queue --open-prs-json /tmp/open_prs.json | tee /tmp/recovery.json
+          python3 - <<'PY' > /tmp/agent_failures.json
+          import json
+          import os
+          from value_investor.ops_monitor import recent_workflow_failures, _github_repo, _github_token
+          repo = _github_repo() or os.environ.get("GITHUB_REPOSITORY", "")
+          failures = recent_workflow_failures(
+              "engineering-agent.yml",
+              repo=repo or None,
+              token=_github_token(),
+              within_hours=6,
+          )
+          print(json.dumps(failures))
+          PY
+          ftse-engineering --json recover-queue \
+            --open-prs-json /tmp/open_prs.json \
+            --agent-failures-json /tmp/agent_failures.json | tee /tmp/recovery.json
 
       - name: Engineering sync check
         id: sync
@@ -304,7 +321,13 @@ jobs:
               token=_github_token(),
               within_hours=6,
           )
-          report = run_engineering_sync(open_prs=open_prs, recent_agent_failures=failures, apply=True)
+          report = run_engineering_sync(
+              open_prs=open_prs,
+              recent_agent_failures=failures,
+              apply=True,
+              repo=repo or None,
+              token=_github_token(),
+          )
           print(json.dumps(report.to_dict(), indent=2))
           PY
           python3 - <<'PY'

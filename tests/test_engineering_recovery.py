@@ -8,13 +8,17 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.engineering_recovery import (
+    cancel_resolved_workflow_failure_tasks,
     housekeep_parked_tasks,
+    park_agent_task,
+    park_workflow_permission_blocked_tasks,
     reconcile_merged_pr_open_tasks,
     record_agent_no_diff_run,
     recover_engineering_queue,
     retry_failed_tasks,
     summarize_parked_tasks,
     summarize_parked_tasks_needing_attention,
+    task_allows_workflow_files,
 )
 from value_investor.engineering_tasks import (
     EngineeringTask,
@@ -304,3 +308,97 @@ def test_record_agent_no_diff_run_increments_then_parks(tmp_path: Path):
     assert updated["tasks"][0]["status"] == "parked"
     assert "no code changes" in str(updated["tasks"][0].get("parked_reason"))
     assert updated["tasks"][0].get("parked_policy") == "no_diff_cap"
+
+
+def test_task_allows_workflow_files():
+    assert task_allows_workflow_files(
+        {"allowed_paths": [".github/workflows/ingest-loop.yml", "tests/test_x.py"]}
+    )
+    assert not task_allows_workflow_files({"allowed_paths": ["src/value_investor/ingest_loop.py"]})
+
+
+def test_cancel_resolved_workflow_failure_task(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260826-01",
+                        "status": "open",
+                        "source": "workflow_failure",
+                        "evidence": {
+                            "workflow": "ingest-loop.yml",
+                            "run_id": "32950154010",
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    cancelled = cancel_resolved_workflow_failure_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        latest_success_by_workflow={
+            "ingest-loop.yml": {"id": 33048306272, "created_at": "2026-08-27T07:05:30Z"}
+        },
+    )
+    assert len(cancelled) == 1
+    assert cancelled[0].task_id == "eng-20260826-01"
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "cancelled"
+    assert updated["tasks"][0].get("cancelled_policy") == "workflow_recovered"
+
+
+def test_park_workflow_permission_blocked_tasks(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260826-01",
+                        "status": "open",
+                        "allowed_paths": [".github/workflows/ingest-loop.yml"],
+                    },
+                    {
+                        "id": "eng-20260826-02",
+                        "status": "open",
+                        "allowed_paths": ["src/value_investor/ingest_loop.py"],
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    failures = [{"id": 1, "created_at": "2026-08-27T07:00:00Z"}]
+    parked = park_workflow_permission_blocked_tasks(
+        tasks_path=tasks_path,
+        recent_agent_failures=failures,
+        apply=True,
+    )
+    assert len(parked) == 1
+    assert parked[0].task_id == "eng-20260826-01"
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "parked"
+    assert updated["tasks"][0].get("parked_policy") == "workflow_permission"
+    assert updated["tasks"][1]["status"] == "open"
+
+
+def test_park_agent_task_cli(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps({"tasks": [_task("eng-20260826-01").to_dict()]}),
+        encoding="utf-8",
+    )
+    action = park_agent_task(
+        "eng-20260826-01",
+        reason="cannot push workflow without Workflows permission",
+        tasks_path=tasks_path,
+        apply=True,
+    )
+    assert action is not None
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "parked"
+    assert updated["tasks"][0].get("parked_policy") == "workflow_permission"
