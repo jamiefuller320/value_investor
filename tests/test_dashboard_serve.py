@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import json
 from http.client import HTTPConnection
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
 
 from value_investor.dashboard_serve_cli import make_handler
 from value_investor.storage import write_json
-from http.server import ThreadingHTTPServer
 
 
 def _seed_docs(tmp_path: Path) -> Path:

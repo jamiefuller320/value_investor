@@ -39,7 +39,7 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
 
     class DashboardHandler(BaseHTTPRequestHandler):
         def log_message(self, format: str, *args: Any) -> None:  # noqa: A003
-            sys.stderr.write("%s - %s\n" % (self.address_string(), format % args))
+            sys.stderr.write(f"{self.address_string()} - {format % args}\n")
 
         def _send(self, status: int, body: bytes, content_type: str) -> None:
             self.send_response(status)
