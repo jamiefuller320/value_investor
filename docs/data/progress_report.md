@@ -1,6 +1,6 @@
 # FTSE progress report
 
-Generated `2026-08-28T05:39:20+00:00` · overall **WARN**
+Generated `2026-08-28T07:09:01+00:00` · overall **WARN**
 
 Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
 
@@ -133,7 +133,7 @@ _None._
 
 Overall: **WARN**
 
-- **[WARN]** Ops status snapshot is stale: ops_status.json dated 2026-08-26T07:46:22.902420+00:00 (45h ago). Run ftse-ops-monitor run.
+- **[WARN]** Ops status snapshot is stale: ops_status.json dated 2026-08-26T07:46:22.902420+00:00 (47h ago). Run ftse-ops-monitor run.
 
 ## Role coherence (join-up)
 
