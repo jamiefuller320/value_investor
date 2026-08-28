@@ -206,7 +206,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Benchmark ticker override (default: per-market, e.g. ^GSPC for sp500)",
     )
     sim_p.add_argument("--capital", type=float, default=1000.0)
-    sim_p.add_argument("--trade-cost", type=float, default=0.03)
+    sim_p.add_argument(
+        "--trade-cost",
+        type=float,
+        default=None,
+        help=(
+            "Per-side trade cost override (decimal). Default: fair market assumption "
+            "from ftse-trading-costs (not the live FTSE 3%% stress case)."
+        ),
+    )
     sim_p.add_argument("--max-positions", type=int, default=5)
     sim_p.add_argument(
         "--no-rebuild-snapshots",
@@ -1064,14 +1072,19 @@ def cmd_sim(args: argparse.Namespace) -> int:
             mid,
             benchmark=args.benchmark or None,
             initial_capital=float(args.capital),
-            trade_cost_pct=float(args.trade_cost),
+            trade_cost_pct=None if args.trade_cost is None else float(args.trade_cost),
             max_positions=int(args.max_positions),
             rebuild_snapshots=not args.no_rebuild_snapshots,
         )
         payloads.append(result.to_dict())
         if not args.json:
             screen = result.tracks.get("screen_rules") or {}
+            cost_pct = screen.get("trade_cost_pct") if isinstance(screen, dict) else None
             print(f"{mid}: benchmark={result.benchmark}  snapshots={result.snapshot_count}")
+            if cost_pct is not None:
+                print(
+                    f"  trade_cost_pct={float(cost_pct):.4%} (fair market default unless overridden)"
+                )
             print(
                 f"  screen_rules return={screen.get('total_return', 0):+.1%}  "
                 f"excess={screen.get('excess_return', 0):+.1%}  "

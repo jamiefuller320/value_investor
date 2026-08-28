@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T14:23:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T22:18:11+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -48,7 +48,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-24 | Auto-merge is scoped to narrow CI-fix tasks; ingest/scoring engineering PRs stay human-merge — implicit throughput ceiling on self-improvement. | auto_merge, engineering, policy |
 | frag-20260811-25 | Research spend scales with researched-name count R not universe N — widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates. | research, cost, research_cap |
 | frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
-| frag-20260828-01 | Aug 27 paper-auto failed on git push race after run; Aug 28 recovered. If push races recur, harden paper-auto commit/push retry before blaming settle gate. | ops, paper-auto, git |
+| frag-20260828-01 | Aug 27 paper-auto failed on git push race after run; Aug 28 recovered. If push races recur, harden paper-auto commit/push locking or retry. | paper-auto, git, ops |
 
 ---
 
@@ -99,7 +99,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N45 | **More FTSE ingest runs for enrichment** | FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint. | Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path |
 | N46 | **More frequent engineering task generation to accelerate enrichment** | Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks — drafting more eng work would not speed enrichment. | Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing |
 | N47 | **Do not add sp500 to ingest_parity_markets until learning-depth is green** | Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain. | ftse-library learning-depth --market sp500 reports learning_ready true |
-| N48 | **Do not invent new paper tracks or knob churn to 'fix' stage 2b excess** | End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate. | AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy |
+| N48 | **Flip live FTSE paper books off 3% stress costs** | Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults — do not silently rewrite live configs. | Human decides stress vs fair is the primary learning metric, or live/demo broker path starts |
+| N49 | **Do not invent new paper tracks or knob churn to 'fix' stage 2b excess** | End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate. | AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy |
 
 ---
 
@@ -134,7 +135,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 | L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
-| L204 | **Recalibrate paper trade_cost_pct toward T212-realistic friction** | Default 3% per-side paper cost is far above T212 commission-free + sub-0.05% spreads. UK Invest buys still face ~0.5% stamp duty; a realistic band is likely ~0.5–1% round-trip, not 6%. Run a cost-sensitivity shadow before changing primary-track defaults so stage-2b excess is not silently rewritten. | Human agrees cost model change; spawn observe-only shadow or replay with trade_cost_pct in {0.001, 0.005, 0.01} vs 0.03 |
+| L204 | **Per-ticker AIM stamp exemption in cost model** | AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable. | Trading AIM paper/live or when HMRC/T212 exemption list is wired |
+| L205 | **Fair-cost warm-start shadow suite (Suite B)** | Spawn 1-2 FTSE paper shadows (AI + rules) stamped with fair buy/sell costs, PIT warm-start from parent rebalance_log, forward endurance vs ^FTSE. Keep live primary on 3% stress (Suite A) until B clears promotion gates. | Next engineering pass after dual-suite adoption doc lands; before flipping primary off 3% (N48) |
 
 ### Universe & data
 
@@ -262,7 +264,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L197 | **Re-throttle FTSE ingest deepen when GHA minutes bind** | Learning phase uses max_targets=62, max_bodies=40, daily success cap 8, and body-gap chaining. When Actions minutes become scarce, lower targets/cap and keep discovery scan uncapped. | GitHub Actions minutes approach quota or weekday ingest runtime regularly exceeds budget |
 | L199 | **Force S&P parallel ingest sprint after learning-depth gate** | After the FTSE-equivalent measurement gate lands, library-ingest-sprint should see real canonical gaps (8 unmeasured + 21 thin + 1154 indexed_without_body) and run 24 targets, not 4-target maintenance. Trigger gh workflow run library-ingest-sprint.yml -f force=true; do not ingest all 503 constituents. | After PR #354 merges and before the next weekday ingest-sprint slot |
 | L202 | **Ops-monitor drafted engineering tasks sometimes not committed** | 18:24 ops-monitor report listed drafted eng-20260827-01/02 but the commit only contained ops_status.json; engineering_tasks.json was unchanged. Investigate draft write vs auto-commit race. | Next ops-monitor run drafts tasks that do not appear on main |
-| L203 | **Triage July analysis_tasks proposed queue against current archive thickness** | Four ana-20260728-* proposed tasks (second weekly archive, knob counterfactual, exit-shadow dashboard, historical overlay bootstrap) may be obsolete or still blocked; drop/done/promote on next Sunday analysis review so progress-report proposed_total is honest. | Next Sunday analysis-review human triage (~10:35 UTC) |
+| L206 | **Triage July analysis_tasks proposed queue against current archive thickness** | Four ana-20260728-* proposed tasks (second weekly archive, knob counterfactual, exit-shadow dashboard, historical overlay bootstrap) may be obsolete or still blocked; drop/done/promote on next Sunday analysis review so progress-report proposed_total is honest. | Next Sunday analysis-review human triage (~10:35 UTC) |
 
 ---
 

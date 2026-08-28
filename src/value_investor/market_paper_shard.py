@@ -23,6 +23,7 @@ from value_investor.market_shard_phases import (
     weekly_paper_shard_markets_for_policy,
     write_market_phase_status,
 )
+from value_investor.market_trading_costs import cost_fields_for_config, costs_for_market
 from value_investor.paper_automation import (
     CONFIG_FILENAME,
     ensure_learning_track_configs,
@@ -87,6 +88,7 @@ def ensure_shard_meta(
         "market_open": session["market_open"],
         "settle_minutes_after_open": session["settle_minutes_after_open"],
         "weekdays_only": session["weekdays_only"],
+        "trading_costs": costs_for_market(market_id).to_dict(),
         "updated_at": datetime.now(UTC).isoformat(),
     }
     if path.exists():
@@ -101,10 +103,12 @@ def ensure_shard_meta(
 
 
 def apply_shard_session_to_configs(shard_root: Path, session: dict[str, Any]) -> None:
-    """Stamp timezone / open / settle onto all learning-track configs under a shard."""
+    """Stamp timezone / open / settle / fair trading costs onto shard learning-track configs."""
     shard_root = Path(shard_root)
     configs = ensure_learning_track_configs(shard_root)
     dirs = learning_track_dirs(shard_root)
+    market_id = str(session.get("market_id") or "").strip()
+    cost_fields = cost_fields_for_config(market_id) if market_id else None
     for track_id, cfg in configs.items():
         cfg.timezone = str(session.get("timezone") or cfg.timezone)
         cfg.market_open = str(session.get("market_open") or cfg.market_open)
@@ -113,6 +117,11 @@ def apply_shard_session_to_configs(shard_root: Path, session: dict[str, Any]) ->
         )
         if "weekdays_only" in session:
             cfg.weekdays_only = bool(session["weekdays_only"])
+        if cost_fields is not None:
+            # Fair T212-shaped costs for non-FTSE shards (not the live 3% stress case).
+            cfg.trade_cost_pct = float(cost_fields["trade_cost_pct"])
+            cfg.buy_cost_pct = float(cost_fields["buy_cost_pct"])
+            cfg.sell_cost_pct = float(cost_fields["sell_cost_pct"])
         track_dir = dirs[track_id]
         track_dir.mkdir(parents=True, exist_ok=True)
         (track_dir / CONFIG_FILENAME).write_text(

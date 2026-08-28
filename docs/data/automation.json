@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-26T08:28:57.889306+00:00",
+  "generated_at": "2026-08-28T08:28:08.442355+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -38,7 +38,12 @@
     },
     "library": {
       "focus_market": "euro_depth",
-      "market_queue": [],
+      "market_queue": [
+        "sp500",
+        "asx200",
+        "ftse_smallcap",
+        "tsx60"
+      ],
       "graduated_markets": [
         {
           "market": "sp500",
@@ -168,7 +173,7 @@
         }
       ],
       "graduated_count": 21,
-      "queue_complete": false,
+      "queue_complete": true,
       "focus_graduation": {
         "auto_advance": false,
         "min_coverage_pct": 0.95,
@@ -176,7 +181,7 @@
         "maintenance_enabled": true,
         "maintenance_max_tickers": "full",
         "maintenance_include_focus_when_queue_complete": true,
-        "note": "Depth-first EU pilot (euro_depth): do not advance focus; other graduated markets stay Layer A maintenance only."
+        "note": "Depth-first EU pilot (euro_depth): coverage auto_advance off; parallel ingest_sprint front-starts queue head while focus completes; advance_focus_on_ingest_parity moves focus when parity met."
       },
       "budget": {
         "plan_name": "Cursor Pro",
@@ -192,9 +197,9 @@
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 2.4,
+        "estimated_spend_usd_this_week": 32.4,
         "estimated_spend_weekly_ops_usd_this_week": 0.0,
-        "estimated_spend_usd_this_cycle": 201.26,
+        "estimated_spend_usd_this_cycle": 231.26,
         "week_id": "2026-W35",
         "cycle_id": "2026-08-d8"
       },
@@ -222,7 +227,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-08-25T16:14:11.532100+00:00"
+      "updated_at": "2026-08-27T13:26:43.359122+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -317,7 +322,7 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-08-26T08:27:36.152601+00:00",
+        "at": "2026-08-28T08:27:12.888268+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
         "detail": "Rebalanced after open settle (0 trade(s))."
@@ -891,15 +896,15 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-08-26T08:27:36.152601+00:00",
+      "generated_at": "2026-08-28T08:27:12.888268+00:00",
       "acted": true,
       "note": "Rebalanced after open settle (0 trade(s)).",
       "gate": {
-        "local_time": "2026-08-26T09:27:21.515658+01:00",
+        "local_time": "2026-08-28T09:27:04.273878+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-08-26T08:00:00+01:00",
-        "settle_at": "2026-08-26T09:15:00+01:00",
+        "market_open_at": "2026-08-28T08:00:00+01:00",
+        "settle_at": "2026-08-28T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
@@ -1121,9 +1126,9 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-25T13:14:34.553291+00:00",
-    "queue_ui_updated_at": "2026-08-26T08:28:57.890791+00:00",
-    "task_count": 60,
+    "compiled_at": "2026-08-26T09:36:12.535521+00:00",
+    "queue_ui_updated_at": "2026-08-28T08:28:08.443224+00:00",
+    "task_count": 61,
     "status": {
       "open_count": 0,
       "pr_open_count": 0,
@@ -1142,7 +1147,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-26T08:28:57.906970+00:00",
+    "generated_at": "2026-08-28T08:28:08.453744+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1151,13 +1156,13 @@
         "track_id": "ai_judgment",
         "track_label": "AI judgment (research accumulate + adjusted_signal)",
         "is_primary_learning_track": true,
-        "applied": true,
+        "applied": false,
         "epoch_started_at": "2026-08-26T08:28:55.552465+00:00",
         "baseline_nav": 821.98,
         "epoch_nav": 821.98,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 0,
+        "equity_marks": 1,
         "benchmark_span_available": false,
         "benchmark_return": null,
         "excess_after_costs": null,
@@ -1252,10 +1257,10 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 10,
+        "equity_marks": 11,
         "benchmark_span_available": true,
-        "benchmark_return": 0.0049,
-        "excess_after_costs": -0.0049,
+        "benchmark_return": -0.0038,
+        "excess_after_costs": 0.0038,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1275,10 +1280,10 @@
         "epoch_nav": 742.81,
         "epoch_return": -0.1385,
         "post_apply_trade_count": 16,
-        "equity_marks": 10,
+        "equity_marks": 11,
         "benchmark_span_available": true,
-        "benchmark_return": 0.0049,
-        "excess_after_costs": -0.1434,
+        "benchmark_return": -0.0038,
+        "excess_after_costs": -0.1348,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {

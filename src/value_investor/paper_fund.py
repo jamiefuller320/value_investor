@@ -87,6 +87,8 @@ class PaperFundConfig:
     initial_cash: float = DEFAULT_INITIAL_CASH
     monthly_deposit: float = 0.0
     trade_cost_pct: float = DEFAULT_TRADE_COST_PCT
+    buy_cost_pct: float | None = None
+    sell_cost_pct: float | None = None
     max_positions: int = DEFAULT_MAX_POSITIONS
     reporting_currency: str = "GBP"
     hedge_assumption: str = "none"
@@ -102,10 +104,22 @@ class PaperFundConfig:
             raise ValueError("monthly_deposit must be >= 0")
         if self.trade_cost_pct < 0:
             raise ValueError("trade_cost_pct must be >= 0")
+        if self.buy_cost_pct is not None and self.buy_cost_pct < 0:
+            raise ValueError("buy_cost_pct must be >= 0")
+        if self.sell_cost_pct is not None and self.sell_cost_pct < 0:
+            raise ValueError("sell_cost_pct must be >= 0")
         if self.max_positions < 1:
             raise ValueError("max_positions must be >= 1")
         self.reporting_currency = str(self.reporting_currency or "GBP").upper()
         self.hedge_assumption = str(self.hedge_assumption or "none").lower()
+
+    def cost_pct_for_side(self, side: str) -> float:
+        side_l = str(side or "").lower()
+        if side_l == "buy" and self.buy_cost_pct is not None:
+            return float(self.buy_cost_pct)
+        if side_l == "sell" and self.sell_cost_pct is not None:
+            return float(self.sell_cost_pct)
+        return float(self.trade_cost_pct)
 
 
 @dataclass
@@ -463,7 +477,7 @@ class PaperFund:
             price=price,
             nav=nav,
             cash=self.cash,
-            trade_cost_pct=self.config.trade_cost_pct,
+            trade_cost_pct=self.config.cost_pct_for_side("buy"),
             side="buy",
         )
         if shares <= 1e-12:
@@ -474,7 +488,7 @@ class PaperFund:
             )
 
         gross = shares * price
-        cost = gross * self.config.trade_cost_pct
+        cost = gross * self.config.cost_pct_for_side("buy")
         spent = gross + cost
         if spent > self.cash + 1e-9:
             raise ValueError("Insufficient cash for this buy")
@@ -552,7 +566,7 @@ class PaperFund:
             price=price,
             nav=nav,
             cash=self.cash,
-            trade_cost_pct=self.config.trade_cost_pct,
+            trade_cost_pct=self.config.cost_pct_for_side("sell"),
             side="sell",
         )
         shares = min(shares, position.shares)
@@ -560,7 +574,7 @@ class PaperFund:
             raise ValueError("Sell quantity is zero")
 
         gross = shares * price
-        cost = gross * self.config.trade_cost_pct
+        cost = gross * self.config.cost_pct_for_side("sell")
         proceeds = gross - cost
         self.cash += proceeds
         avg_cost_at_exit = float(position.avg_cost)
@@ -613,9 +627,21 @@ class PaperFund:
             id=str(cfg.get("id") or create_fund_id()),
             name=str(cfg.get("name") or "Untitled"),
             mode=str(cfg.get("mode") or "manual"),  # type: ignore[arg-type]
-            initial_cash=float(cfg.get("initial_cash") or DEFAULT_INITIAL_CASH),
+            initial_cash=float(
+                DEFAULT_INITIAL_CASH if cfg.get("initial_cash") is None else cfg.get("initial_cash")
+            ),
             monthly_deposit=float(cfg.get("monthly_deposit") or 0),
-            trade_cost_pct=float(cfg.get("trade_cost_pct") or DEFAULT_TRADE_COST_PCT),
+            trade_cost_pct=float(
+                DEFAULT_TRADE_COST_PCT
+                if cfg.get("trade_cost_pct") is None
+                else cfg.get("trade_cost_pct")
+            ),
+            buy_cost_pct=(
+                None if cfg.get("buy_cost_pct") is None else float(cfg.get("buy_cost_pct"))
+            ),
+            sell_cost_pct=(
+                None if cfg.get("sell_cost_pct") is None else float(cfg.get("sell_cost_pct"))
+            ),
             max_positions=int(cfg.get("max_positions") or DEFAULT_MAX_POSITIONS),
             reporting_currency=str(cfg.get("reporting_currency") or "GBP"),
             hedge_assumption=str(cfg.get("hedge_assumption") or "none"),
@@ -1050,7 +1076,7 @@ def preview_automated_plan(
                 "value": round(value, 2),
             }
         )
-        cash += value * (1 - fund.config.trade_cost_pct)
+        cash += value * (1 - fund.config.cost_pct_for_side("sell"))
 
     grace_holds = [
         item for item in grace_transitions if item.get("action") in {"grace_enter", "grace_hold"}
@@ -1097,7 +1123,7 @@ def preview_automated_plan(
                         "signal": signal,
                     }
                 )
-                cash += excess * (1 - fund.config.trade_cost_pct)
+                cash += excess * (1 - fund.config.cost_pct_for_side("sell"))
                 current_value = target_each
 
         shortfall = target_each - current_value
@@ -1228,7 +1254,9 @@ def preview_automated_plan(
         ),
         f"Ranking: highest conviction_score first, keep at most {fund.config.max_positions} names.",
         "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
-        f"Costs: {fund.config.trade_cost_pct:.1%} applied on each buy and sell.",
+        f"Costs: buy {fund.config.cost_pct_for_side('buy'):.2%} / "
+        f"sell {fund.config.cost_pct_for_side('sell'):.2%} "
+        f"(legacy symmetric slot {fund.config.trade_cost_pct:.2%}).",
     ]
     if exit_confirm_screens > 0:
         narrative.append(
