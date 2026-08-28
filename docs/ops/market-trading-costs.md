@@ -63,4 +63,62 @@ ftse-library sim --markets euro_depth --trade-cost 0.03   # explicit stress over
 2. New market shards and observe sims should use fair assumptions by default.
 3. AIM stamp exemptions and per-ticker spreads are deferred; current AIM row keeps stamp on for conservatism.
 
-See also: [`primary-learning-track.md`](primary-learning-track.md), [`market-sharded-learning.md`](market-sharded-learning.md).
+## Test and adoption strategy (dual suite)
+
+Fair costs change the **performance narrative**, not the value of a harsh churn lab.
+Run **two suites with different jobs** — do not merge them into one muddy primary.
+
+### Suite A — Stress / defensive lab (keep running)
+
+| | |
+|--|--|
+| **Where** | Live FTSE primary + control (`ai_judgment`, `rules`, existing calibrated/exclusion shadows) at **3% per side** |
+| **Job** | Find the best **conservative / low-churn** policy: survive harsh friction, keep cost_drag and trade_count in check |
+| **Optimize for** | Cost drag, trade count, hold stability, epoch knob discipline |
+| **Do not use for** | Absolute “beat ^FTSE after costs” promotion truth (the hurdle is artificially brutal) |
+
+Keep weekday paper-auto and decision-review on this suite uninterrupted. Stress remains a **filter**: knobs that only “win” by churning will still look bad here.
+
+### Suite B — Fair / performance lab (start warm)
+
+| | |
+|--|--|
+| **Where** | Small new parallel books (prefer **1–2** fair-cost shadows first: AI + rules), warm-started from parent `rebalance_log` like calibration shadows |
+| **Job** | Measure **deployable** excess vs ^FTSE / control under T212-shaped buy/sell |
+| **Stamp** | `buy_cost_pct` / `sell_cost_pct` / symmetric proxy from `ftse-trading-costs` (UK table for FTSE) |
+| **Optimize for** | Excess after fair costs; secondary: still-reasonable churn |
+
+Use the existing warm-start pattern (`ftse-knob-calibrate warm-start-shadow`) so forward endurance is clean — do **not** re-warm every weekday.
+
+### How the two interact
+
+```text
+Stress lab (A) ──discovers──▶ conservative knob candidates
+                                    │
+                                    ▼
+Fair lab (B) ──validates──▶ promotion / adoption truth vs ^FTSE
+                                    │
+                                    ▼
+Primary flip (N48) only after B endures — never silent config rewrite
+```
+
+1. **Discover** under stress (A): raise conviction, exit confirms, grace/exclusion that cut churn.
+2. **Validate** under fair (B): same knobs on fair-cost warm-start books; require beat market *and* beat fair-cost rules control.
+3. **Promote** to primary only when B clears human gates — primary can stay on stress until then, or flip together once B is trusted (**N48**).
+4. **Observe sims / euro_depth shards** already default to fair — treat those as Suite B breadth, not a second stress lab (override with `--trade-cost 0.03` only when deliberately stress-testing a market).
+
+### Capacity guard
+
+Learning-director vision caps open experiments (~5). Fair lab should start as **two books**, not a fork of every shadow. Existing calibrated shadows stay on stress with primary until Suite B proves useful.
+
+### Near-term actions
+
+| Priority | Action |
+|----------|--------|
+| Now | Keep Suite A as-is; use `ftse-trading-costs assess` on Sunday for a first-order fair read of primary |
+| Next | Implement Suite B warm-start shadows with fair costs stamped (parked as deferred until built) |
+| Later | Flip primary off 3% only after B has a thick forward window (**N48**) |
+
+See also: [`knob-calibration.md`](knob-calibration.md) (warm-start),
+[`primary-learning-track.md`](primary-learning-track.md),
+[`market-sharded-learning.md`](market-sharded-learning.md).

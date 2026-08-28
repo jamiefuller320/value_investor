@@ -19,9 +19,11 @@ trade checklist — it is a performance comparison to market datums. Success =
 | **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
-Live FTSE configs keep the **3% per-side stress** cost by default; use
-`ftse-trading-costs assess` for a fair T212-shaped view without rewriting books
-([`market-trading-costs.md`](market-trading-costs.md)).
+Live FTSE configs keep the **3% per-side stress** cost by default (Suite A —
+defensive / low-churn lab). Fair T212-shaped performance truth is Suite B /
+`ftse-trading-costs assess` — see
+[`market-trading-costs.md`](market-trading-costs.md#test-and-adoption-strategy-dual-suite).
+Do **not** promote knobs on stress excess vs ^FTSE alone.
 
 ## Post-exit shadow learning (observe-only)
 
@@ -49,9 +51,13 @@ See also [`exit-timing-cohorts.md`](exit-timing-cohorts.md) for live paper cohor
 
 ## Success datums
 
-1. **Market:** excess return after costs vs FTSE 100 (`^FTSE`) on the primary book.
-2. **Control:** primary excess should also beat the rules book on the same window
-   before promoting further knobs/gates.
+1. **Market (adoption truth):** excess return after **fair** costs vs FTSE 100 (`^FTSE`)
+   on the fair-cost lab / assess view — not the 3% stress book alone.
+2. **Control:** primary (or fair AI book) excess should also beat the rules book on the
+   same cost basis before promoting further knobs/gates.
+3. **Stress lab (defensive):** on the live 3% books, prefer improving cost drag /
+   churn / epoch stability; treat deep negative excess vs ^FTSE as expected under
+   stress, not as automatic policy failure.
 
 Human verify-before-trade packs remain useful for live capital, but they are
 **not** the primary learning loop.
