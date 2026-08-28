@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T12:03:07+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T14:23:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -134,6 +134,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 | L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
+| L204 | **Recalibrate paper trade_cost_pct toward T212-realistic friction** | Default 3% per-side paper cost is far above T212 commission-free + sub-0.05% spreads. UK Invest buys still face ~0.5% stamp duty; a realistic band is likely ~0.5–1% round-trip, not 6%. Run a cost-sensitivity shadow before changing primary-track defaults so stage-2b excess is not silently rewritten. | Human agrees cost model change; spawn observe-only shadow or replay with trade_cost_pct in {0.001, 0.005, 0.01} vs 0.03 |
 
 ### Universe & data
 
