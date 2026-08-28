@@ -23,7 +23,9 @@ def _seed_docs(tmp_path: Path) -> Path:
     )
     (data / "progress_report.md").write_text("# FTSE progress report\n", encoding="utf-8")
     write_json(tmp_path / "docs/deferred-ideas.json", {"version": 1, "ideas": [], "fragments": []})
-    write_json(data / "latest.json", {"run_at": "2026-08-27T18:00:00+00:00", "meta": {"company_count": 10}})
+    write_json(
+        data / "latest.json", {"run_at": "2026-08-27T18:00:00+00:00", "meta": {"company_count": 10}}
+    )
     write_json(data / "ops_status.json", {"run_at": "2026-08-27T12:00:00+00:00", "overall": "ok"})
     write_json(data / "engineering_tasks.json", {"tasks": []})
     write_json(data / "automation.json", {"settings": {"library": {"graduated_count": 0}}})
@@ -53,7 +55,9 @@ def test_dashboard_serve_get_and_generate(tmp_path: Path, monkeypatch):
         assert payload["ok"] is True
         assert payload["report"]["overall"] == "ok"
 
-        conn.request("POST", "/api/progress-report", body=b"{}", headers={"Content-Type": "application/json"})
+        conn.request(
+            "POST", "/api/progress-report", body=b"{}", headers={"Content-Type": "application/json"}
+        )
         resp = conn.getresponse()
         payload = json.loads(resp.read().decode("utf-8"))
         assert resp.status == 200
