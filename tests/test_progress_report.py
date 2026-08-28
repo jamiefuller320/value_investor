@@ -97,9 +97,7 @@ def _seed_minimal(tmp_path: Path) -> dict[str, Path]:
                     "status": "now",
                 },
             ],
-            "fragments": [
-                {"id": "frag-20260827-01", "text": "Try sector caps", "status": "open"}
-            ],
+            "fragments": [{"id": "frag-20260827-01", "text": "Try sector caps", "status": "open"}],
         },
     )
     return {

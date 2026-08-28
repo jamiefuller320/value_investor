@@ -9,7 +9,11 @@ from typing import Any, Literal
 from value_investor.committed_data_json import check_paths
 from value_investor.deferred_ideas import DEFAULT_STORE, list_open_fragments, load_store
 from value_investor.engineering_sync import audit_compile_drop_risk
-from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, TERMINAL_TASK_STATUSES, load_engineering_tasks
+from value_investor.engineering_tasks import (
+    COMMITTED_TASKS_PATH,
+    TERMINAL_TASK_STATUSES,
+    load_engineering_tasks,
+)
 from value_investor.ops_monitor import (
     DEFAULT_LATEST_PATH,
     DEFAULT_STATUS_PATH,
@@ -111,11 +115,7 @@ def _proposed_task_paths(data_dir: Path) -> tuple[tuple[str, Path], ...]:
 
 def _open_engineering_tasks(tasks_path: Path = COMMITTED_TASKS_PATH) -> list[dict[str, Any]]:
     rows = list(load_engineering_tasks(tasks_path).get("tasks") or [])
-    return [
-        row
-        for row in rows
-        if str(row.get("status") or "") not in TERMINAL_TASK_STATUSES
-    ]
+    return [row for row in rows if str(row.get("status") or "") not in TERMINAL_TASK_STATUSES]
 
 
 def _compact_deferred(row: dict[str, Any]) -> dict[str, Any]:
@@ -178,8 +178,7 @@ def build_actionable_items(
         proposed[source] = [_compact_task(row, source=source) for row in _proposed_tasks(path)]
 
     engineering_open = [
-        _compact_task(row, source="engineering")
-        for row in _open_engineering_tasks(tasks_path)
+        _compact_task(row, source="engineering") for row in _open_engineering_tasks(tasks_path)
     ]
 
     return {
@@ -353,11 +352,7 @@ def build_role_coherence(
         )
 
     eng_rows = _open_engineering_tasks(tasks_path)
-    missing_paths = [
-        str(row.get("id"))
-        for row in eng_rows
-        if not (row.get("allowed_paths") or [])
-    ]
+    missing_paths = [str(row.get("id")) for row in eng_rows if not (row.get("allowed_paths") or [])]
     if missing_paths:
         checks.append(
             {
@@ -509,9 +504,7 @@ def build_integration_checks(
     if latest:
         run_at = _parse_time(str(latest.get("run_at") or latest.get("updated_at") or ""))
         progress_saved = _safe_read(progress_path)
-        progress_generated = _parse_time(
-            str((progress_saved or {}).get("generated_at") or "")
-        )
+        progress_generated = _parse_time(str((progress_saved or {}).get("generated_at") or ""))
         if run_at and progress_generated and progress_generated < run_at - timedelta(hours=1):
             checks.append(
                 {
