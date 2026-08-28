@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-27",
+  "updated_at": "2026-08-28",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -69,10 +69,18 @@
         {
           "id": "sunday-promote-knobs-gate",
           "title": "Promote knob priors only when gates pass",
-          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement \u2014 never auto-apply.",
+          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement — never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient — see fair-cost gate.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
+        },
+        {
+          "id": "sunday-fair-cost-promotion-gate",
+          "title": "Require fair-cost view before treating excess as deployable",
+          "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
+          "automated": false,
+          "doc_path": "docs/ops/market-trading-costs.md",
+          "doc_anchor": "test-and-adoption-strategy-dual-suite"
         },
         {
           "id": "sunday-hypothesis-integrity",
