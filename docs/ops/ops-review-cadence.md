@@ -12,6 +12,7 @@ map (L124 / frag-20260811-08).
 | **Weekly** | Sunday ~10:55 UTC (after paper-learning-review) | Learning Director: regime, convergence, vision roadmap activation proposals | `docs/data/learning_director_review.md`, `learning_director_tasks.json`, `learning_director_vision.json` | [learning-director.md](learning-director.md) · [learning-director-vision.md](learning-director-vision.md) |
 | **Monthly** | First Sunday **11:00** (after weekly when possible) | Horizon scan; triage open `ftse-defer` fragments / ACCELERATE | `docs/data/horizon_scan.md`, `horizon_scan.json`, `horizon_tasks.json` | [horizon-scan.md](horizon-scan.md) |
 | **Quarterly** | Calendar quarter review | Deferred ideas pass (`ftse-defer status` done/drop/now) | `docs/deferred-review.md`, `docs/deferred-ideas.json` | [deferred-review.md](../deferred-review.md) |
+| **Sunday / monthly / quarterly** | After publish or before strategic review | Standardised progress rollup (stages + actionable deferred + join-up) | `docs/data/progress_report.md`, `progress_report.json` | [progress-report.md](progress-report.md) |
 
 Weekday paper-auto + decision-review are **automated**; still spot-check learning
 tracks on the Automation tab — see [human-tasks-checklist.md](human-tasks-checklist.md).
