@@ -378,25 +378,28 @@ async function generateProgressReportFromUi() {
 }
 
 function bindProgressReportActions() {
-  const generateBtn = document.getElementById("progress-report-generate-btn");
-  const reloadBtn = document.getElementById("progress-report-reload-btn");
-  const viewBtn = document.getElementById("progress-report-view-btn");
-  if (generateBtn) {
-    generateBtn.onclick = () => {
+  const panel = document.getElementById("panel-overview");
+  if (!panel || panel.dataset.progressReportBound === "1") return;
+  panel.dataset.progressReportBound = "1";
+  panel.addEventListener("click", (event) => {
+    const target = event.target.closest("button");
+    if (!target || !panel.contains(target)) return;
+    if (target.id === "progress-report-generate-btn") {
+      event.preventDefault();
       void generateProgressReportFromUi();
-    };
-  }
-  if (reloadBtn) {
-    reloadBtn.onclick = () => {
+    } else if (target.id === "progress-report-reload-btn") {
+      event.preventDefault();
       void reloadProgressReportIntoDashboard();
-    };
-  }
-  if (viewBtn) {
-    viewBtn.onclick = () => {
+    } else if (target.id === "progress-report-view-btn") {
+      event.preventDefault();
       void openProgressReportMarkdown();
-    };
-  }
+    }
+  });
 }
+
+window.__generateProgressReport = generateProgressReportFromUi;
+window.__reloadProgressReport = reloadProgressReportIntoDashboard;
+window.__openProgressReport = openProgressReportMarkdown;
 
 function renderProjectProgress(data) {
   const progress = data.project_progress;
