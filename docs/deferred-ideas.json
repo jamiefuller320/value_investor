@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-27T19:11:53+00:00",
+  "updated_at": "2026-08-28T16:10:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4159,6 +4159,57 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a04231-e84b-7338-bc2e-28a0f52ffefe",
       "added_at": "2026-08-27T19:11:53+00:00"
+    },
+    {
+      "id": "L203",
+      "category": "later",
+      "section": "learning",
+      "title": "T212-realistic per-market trading costs",
+      "summary": "Done: market_trading_costs table + asymmetric buy/sell on paper configs; shards/observe sims use fair rates; ftse-trading-costs list/assess; live FTSE keeps 3% stress.",
+      "revisit_when": "When deciding whether primary FTSE books should leave the 3% stress case",
+      "tags": [
+        "costs",
+        "t212",
+        "paper",
+        "learning"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
+      "added_at": "2026-08-28T16:09:57+00:00",
+      "updated_at": "2026-08-28T16:10:06+00:00"
+    },
+    {
+      "id": "N48",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Flip live FTSE paper books off 3% stress costs",
+      "summary": "Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults \u2014 do not silently rewrite live configs.",
+      "revisit_when": "Human decides stress vs fair is the primary learning metric, or live/demo broker path starts",
+      "tags": [
+        "costs",
+        "paper",
+        "learning",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
+      "added_at": "2026-08-28T16:10:06+00:00"
+    },
+    {
+      "id": "L204",
+      "category": "later",
+      "section": "learning",
+      "title": "Per-ticker AIM stamp exemption in cost model",
+      "summary": "AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable.",
+      "revisit_when": "Trading AIM paper/live or when HMRC/T212 exemption list is wired",
+      "tags": [
+        "costs",
+        "aim",
+        "stamp"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
+      "added_at": "2026-08-28T16:10:06+00:00"
     }
   ],
   "fragments": [

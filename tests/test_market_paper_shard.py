@@ -63,6 +63,9 @@ def test_ensure_shard_meta_writes_benchmark(tmp_path: Path):
     meta = ensure_shard_meta("sp500", shard_root)
     assert meta["benchmark_ticker"] == "^GSPC"
     assert (shard_root / "shard_meta.json").exists()
+    assert "trading_costs" in meta
+    assert meta["trading_costs"]["fx_applies"] is True
+    assert meta["trading_costs"]["stamp_duty_on_buy"] is False
 
 
 def test_run_weekly_market_paper_shard(tmp_path: Path):

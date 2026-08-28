@@ -19,6 +19,9 @@ trade checklist — it is a performance comparison to market datums. Success =
 | **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
+Live FTSE configs keep the **3% per-side stress** cost by default; use
+`ftse-trading-costs assess` for a fair T212-shaped view without rewriting books
+([`market-trading-costs.md`](market-trading-costs.md)).
 
 ## Post-exit shadow learning (observe-only)
 
