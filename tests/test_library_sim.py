@@ -108,6 +108,9 @@ def test_run_library_observe_sim_writes_summary(tmp_path: Path):
     assert (screen_dir / "sim" / "observe_summary.json").exists()
     assert "screen_rules" in result.tracks
     assert result.tracks["screen_rules"]["periods"] == 2
+    # Default cost is fair market proxy (~0.175% for sp500), not 3% stress.
+    assert result.tracks["screen_rules"]["trade_cost_pct"] < 0.01
+    assert result.tracks["screen_rules"]["trade_cost_pct"] > 0.001
 
 
 def test_observe_sim_markets_from_policy_respects_toggle(tmp_path: Path):

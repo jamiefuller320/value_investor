@@ -90,6 +90,8 @@ class AutomationConfig:
     initial_cash: float = DEFAULT_INITIAL_CASH
     monthly_deposit: float = 0.0
     trade_cost_pct: float = DEFAULT_TRADE_COST_PCT
+    buy_cost_pct: float | None = None
+    sell_cost_pct: float | None = None
     max_positions: int = DEFAULT_MAX_POSITIONS
     # Decision-review learning knobs (L1) — tuned by ftse-decision-review.
     skip_timing_wait: bool = True
@@ -162,6 +164,12 @@ class AutomationConfig:
             initial_cash=float(raw.get("initial_cash", DEFAULT_INITIAL_CASH)),
             monthly_deposit=float(raw.get("monthly_deposit") or 0),
             trade_cost_pct=float(raw.get("trade_cost_pct", DEFAULT_TRADE_COST_PCT)),
+            buy_cost_pct=(
+                None if raw.get("buy_cost_pct") is None else float(raw.get("buy_cost_pct"))
+            ),
+            sell_cost_pct=(
+                None if raw.get("sell_cost_pct") is None else float(raw.get("sell_cost_pct"))
+            ),
             max_positions=int(raw.get("max_positions", DEFAULT_MAX_POSITIONS)),
             skip_timing_wait=bool(raw.get("skip_timing_wait", True)),
             min_conviction=float(raw.get("min_conviction") or 0.0),
@@ -643,6 +651,10 @@ def sync_fund_from_automation_config(fund: PaperFund, config: AutomationConfig) 
     fund.config.max_positions = int(config.max_positions)
     fund.config.monthly_deposit = float(config.monthly_deposit)
     fund.config.trade_cost_pct = float(config.trade_cost_pct)
+    fund.config.buy_cost_pct = None if config.buy_cost_pct is None else float(config.buy_cost_pct)
+    fund.config.sell_cost_pct = (
+        None if config.sell_cost_pct is None else float(config.sell_cost_pct)
+    )
 
 
 def ensure_automated_fund(path: Path, config: AutomationConfig) -> PaperFund:
@@ -665,6 +677,8 @@ def ensure_automated_fund(path: Path, config: AutomationConfig) -> PaperFund:
             initial_cash=config.initial_cash,
             monthly_deposit=config.monthly_deposit,
             trade_cost_pct=config.trade_cost_pct,
+            buy_cost_pct=config.buy_cost_pct,
+            sell_cost_pct=config.sell_cost_pct,
             max_positions=config.max_positions,
         )
     )
@@ -1075,6 +1089,12 @@ def run_daily_automation(
     return result
 
 
+def _inherit_cost_fields(dst: AutomationConfig, src: AutomationConfig) -> None:
+    dst.trade_cost_pct = src.trade_cost_pct
+    dst.buy_cost_pct = src.buy_cost_pct
+    dst.sell_cost_pct = src.sell_cost_pct
+
+
 def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]:
     """Ensure rules (control) + AI judgment (primary) configs exist under base_dir."""
     base_dir = Path(base_dir)
@@ -1113,7 +1133,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         ai.market_open = rules.market_open
         ai.settle_minutes_after_open = rules.settle_minutes_after_open
         ai.weekdays_only = rules.weekdays_only
-        ai.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(ai, rules)
         ai.initial_cash = rules.initial_cash
     else:
         ai = default_ai_judgment_config(rules)
@@ -1135,7 +1155,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         mg.market_open = rules.market_open
         mg.settle_minutes_after_open = rules.settle_minutes_after_open
         mg.weekdays_only = rules.weekdays_only
-        mg.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(mg, rules)
         mg.initial_cash = rules.initial_cash
     else:
         mg = default_momentum_grace_config(rules)
@@ -1158,7 +1178,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         ga.market_open = rules.market_open
         ga.settle_minutes_after_open = rules.settle_minutes_after_open
         ga.weekdays_only = rules.weekdays_only
-        ga.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(ga, rules)
         ga.initial_cash = rules.initial_cash
         if int(ga.max_positions) < 4:
             ga.max_positions = 4
@@ -1183,7 +1203,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         tech.market_open = rules.market_open
         tech.settle_minutes_after_open = rules.settle_minutes_after_open
         tech.weekdays_only = rules.weekdays_only
-        tech.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(tech, rules)
         tech.initial_cash = rules.initial_cash
     else:
         tech = default_technical_config(rules)
@@ -1211,7 +1231,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         calibrated.market_open = rules.market_open
         calibrated.settle_minutes_after_open = rules.settle_minutes_after_open
         calibrated.weekdays_only = rules.weekdays_only
-        calibrated.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(calibrated, rules)
         calibrated.initial_cash = rules.initial_cash
         calibrated_path.write_text(json.dumps(calibrated.to_dict(), indent=2), encoding="utf-8")
         configs[AI_JUDGMENT_CALIBRATED_TRACK_ID] = calibrated
@@ -1245,7 +1265,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow.market_open = rules.market_open
         shadow.settle_minutes_after_open = rules.settle_minutes_after_open
         shadow.weekdays_only = rules.weekdays_only
-        shadow.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(shadow, rules)
         shadow.initial_cash = rules.initial_cash
         shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
         configs[track_id] = shadow
@@ -1278,7 +1298,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow.market_open = rules.market_open
         shadow.settle_minutes_after_open = rules.settle_minutes_after_open
         shadow.weekdays_only = rules.weekdays_only
-        shadow.trade_cost_pct = rules.trade_cost_pct
+        _inherit_cost_fields(shadow, rules)
         shadow.initial_cash = rules.initial_cash
         shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
         configs[track_id] = shadow

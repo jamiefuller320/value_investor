@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-27T19:11:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T16:10:06+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -98,6 +98,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N45 | **More FTSE ingest runs for enrichment** | FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint. | Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path |
 | N46 | **More frequent engineering task generation to accelerate enrichment** | Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks — drafting more eng work would not speed enrichment. | Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing |
 | N47 | **Do not add sp500 to ingest_parity_markets until learning-depth is green** | Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain. | ftse-library learning-depth --market sp500 reports learning_ready true |
+| N48 | **Flip live FTSE paper books off 3% stress costs** | Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults — do not silently rewrite live configs. | Human decides stress vs fair is the primary learning metric, or live/demo broker path starts |
 
 ---
 
@@ -132,6 +133,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L177 | **Position cycle-phase state machine for graduated entry/exit** | Per-holding lifecycle (prospect->starter->build->full->harvest->grace->exit) driven by timing_signal, conviction delta, unrealized gain, and trade_plan proximity; coordinates partial trims/adds with portfolio cash budget each rebalance. | Exit-timing cohorts (L117) reach readiness gates and swap-rotation evidence shows graduated exits beat binary screen rotation on cost-adjusted excess |
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 | L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
+| L204 | **Per-ticker AIM stamp exemption in cost model** | AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable. | Trading AIM paper/live or when HMRC/T212 exemption list is wired |
 
 ### Universe & data
 

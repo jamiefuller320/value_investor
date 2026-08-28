@@ -55,6 +55,8 @@ ftse-library shard-status --markets euro_depth
 
 Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50E`, `^IETP`, …).
 
+**Trading costs:** market shards and observe sims use **fair T212-shaped** per-market assumptions (UK stamp / FX / half-spread), not the live FTSE 3% stress case. See [`market-trading-costs.md`](market-trading-costs.md).
+
 ## Phases and timescale
 
 Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The Sunday quiet bundle is the natural heartbeat (~1 screen-lite pass per market per week when that market is in the maintenance/screen set).

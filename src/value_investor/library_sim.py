@@ -14,6 +14,7 @@ import yfinance as yf
 
 from value_investor.backtest import HISTORY_DIR, RunSnapshot, load_run_snapshots
 from value_investor.library_screen import screen_dir_for
+from value_investor.market_trading_costs import trade_cost_pct_for_market
 from value_investor.research.verdict import coerce_research_verdict, compute_adjusted_signal
 from value_investor.simulator import SimulationSummary, SimulatorConfig, run_simulation
 from value_investor.storage import read_json, write_json
@@ -382,7 +383,7 @@ def run_library_observe_sim(
     *,
     benchmark: str | None = None,
     initial_capital: float = 1000.0,
-    trade_cost_pct: float = 0.03,
+    trade_cost_pct: float | None = None,
     max_positions: int = 5,
     rebuild_snapshots: bool = True,
 ) -> LibraryObserveSimResult:
@@ -391,6 +392,10 @@ def run_library_observe_sim(
 
     Writes snapshots under screen/history/ and summary under screen/sim/.
     Does not touch live FTSE paper automation or decision-review knobs.
+
+    Default ``trade_cost_pct`` is the fair per-market symmetric proxy
+    (see ``market_trading_costs``), not the live FTSE 3% stress case.
+    Pass an explicit float to override.
     """
     bench = benchmark or benchmark_for_market(market_id)
     screen_dir = screen_dir_for(root, market_id)
@@ -400,10 +405,16 @@ def run_library_observe_sim(
     if rebuild_snapshots:
         save_library_run_snapshots(root, market_id, benchmark=bench)
 
+    cost_pct = (
+        float(trade_cost_pct)
+        if trade_cost_pct is not None
+        else float(trade_cost_pct_for_market(market_id))
+    )
+
     snapshots = load_run_snapshots(screen_dir)
     base = SimulatorConfig(
         initial_capital=initial_capital,
-        trade_cost_pct=trade_cost_pct,
+        trade_cost_pct=cost_pct,
         max_positions=max_positions,
         benchmark_ticker=bench,
     )
