@@ -1,52 +1,20 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-26T09:27:36.177488+01:00",
+    "local_time": "2026-08-28T09:27:12.906113+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-26T08:00:00+01:00",
-    "settle_at": "2026-08-26T09:15:00+01:00",
+    "market_open_at": "2026-08-28T08:00:00+01:00",
+    "settle_at": "2026-08-28T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "431e33cd-fd8f-4029-b953-042ed906d600",
-      "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
-      "acted_at": "2026-08-26T09:27:36.177488+01:00",
-      "ticker": "AEP.L",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 0.058705,
-      "price": 193.6,
-      "gross": 11.37,
-      "cost": 0.34,
-      "net_cash": 11.02,
-      "note": "Automated trim",
-      "name": "AEP Plantations Plc",
-      "avg_cost_at_exit": 185.4078
-    },
-    {
-      "id": "9057e2f0-4e95-4dde-92c1-e477efe34632",
-      "fund_id": "f9c1f59b-28b7-4306-8321-b1a432c9aeb0",
-      "acted_at": "2026-08-26T09:27:36.177488+01:00",
-      "ticker": "IMB.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.004246,
-      "price": 2521.0,
-      "gross": 10.7,
-      "cost": 0.32,
-      "net_cash": -11.02,
-      "note": "Automated buy",
-      "name": "Imperial Brands PLC"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
-      "Conviction floor: min_conviction=0.55.",
+      "Conviction floor: min_conviction=0.60.",
       "Sector cap: at most 1 name(s) per known sector (cap=20%).",
       "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
@@ -55,38 +23,38 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 851.77,
+    "nav": 857.84,
     "cash": 0.0,
     "max_positions": 3,
-    "min_conviction": 0.55,
+    "min_conviction": 0.6,
     "sector_cap": 0.2,
     "skip_timing_wait": true,
     "use_momentum_grace": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 283.92,
+    "target_sleeve_value": 285.95,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7331000000000002,
-        "price": 126.6
+        "conviction_score": 0.7831000000000002,
+        "price": 127.81
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6808000000000002,
-        "price": 193.6
+        "conviction_score": 0.7308000000000002,
+        "price": 196.4
       },
       {
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.6615000000000002,
-        "price": 2521.0
+        "conviction_score": 0.7115000000000002,
+        "price": 2514.0
       }
     ],
     "anticipated_exits": [],
@@ -99,9 +67,9 @@
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "reason": "Already near equal-weight target",
-        "value": 283.8,
-        "target_value": 283.92,
-        "conviction_score": 0.6808000000000002,
+        "value": 287.91,
+        "target_value": 285.95,
+        "conviction_score": 0.7308000000000002,
         "signal": "strong_buy"
       }
     ],
@@ -110,8 +78,8 @@
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 283.92,
-        "conviction_score": 0.6615000000000002,
+        "target_value": 285.95,
+        "conviction_score": 0.7115000000000002,
         "signal": "strong_buy"
       }
     ],
@@ -125,7 +93,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 126.5999984741211,
+      "mark": 127.80999755859375,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -136,7 +104,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 193.60000610351562,
+      "mark": 196.39999389648438,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -147,7 +115,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2521.0,
+      "mark": 2514.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -1044,19 +1012,35 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-28T09:27:12.906113+01:00",
+        "portfolio_value": 857.84,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-26T09:27:36.177488+01:00",
+    "last_mark_at": "2026-08-28T09:27:12.906113+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-26T08:27:49.227481+00:00",
+    "generated_at": "2026-08-28T08:27:20.759290+00:00",
     "open_count": 12,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1070,12 +1054,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-26T08:27:49.228124+00:00",
+    "generated_at": "2026-08-28T08:27:20.759745+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1149,10 +1133,7 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 1,
-        "verdicts": {
-          "open": 1
-        }
+        "count": 0
       },
       "closed": {
         "count": 0
@@ -1161,7 +1142,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1173,8 +1154,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment",
-    "updated_at": "2026-08-26T08:27:49.228546+00:00",
-    "as_of": "2026-08-26T09:27:36.177488+01:00",
+    "updated_at": "2026-08-28T08:27:20.760015+00:00",
+    "as_of": "2026-08-28T09:27:12.906113+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1231,12 +1212,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0012,
-        "mark": 2521.0,
+        "unrealized_pct": -0.0039,
+        "mark": 2514.0,
         "avg_cost": 2523.919,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6615,
+        "conviction_score": 0.7115,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1252,14 +1233,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 71%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 71%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1271,12 +1252,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0442,
-        "mark": 193.6,
+        "unrealized_pct": 0.0593,
+        "mark": 196.4,
         "avg_cost": 185.4078,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6808,
+        "conviction_score": 0.7308,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1292,14 +1273,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 73%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 73%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1311,12 +1292,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0672,
-        "mark": 126.6,
+        "unrealized_pct": 0.0774,
+        "mark": 127.81,
         "avg_cost": 118.6312,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7331,
+        "conviction_score": 0.7831,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1332,14 +1313,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 78%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 78%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1352,7 +1333,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-26T08:27:49.229052+00:00",
+    "generated_at": "2026-08-28T08:27:20.760369+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1408,13 +1389,13 @@
     "learning_hints": [],
     "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
   },
-  "generated_at": "2026-08-26T08:27:49.229480+00:00",
+  "generated_at": "2026-08-28T08:27:20.760658+00:00",
   "track_id": "ai_judgment",
   "track_label": "AI judgment (research accumulate + adjusted_signal)",
   "is_primary_learning_track": true,
   "selection": {
     "skip_timing_wait": true,
-    "min_conviction": 0.55,
+    "min_conviction": 0.6,
     "sector_cap": 0.2,
     "use_adjusted_signal": true,
     "require_research_accumulate": true,
