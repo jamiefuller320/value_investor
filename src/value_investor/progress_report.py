@@ -420,6 +420,7 @@ def build_integration_checks(
     ops_path: Path = DEFAULT_STATUS_PATH,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     progress_path: Path = DEFAULT_PROGRESS_PATH,
+    progress: dict[str, Any] | None = None,
     ops_stale_hours: int = 30,
 ) -> dict[str, Any]:
     """Read-only health and artifact freshness checks (no auto-fixes)."""
@@ -455,6 +456,8 @@ def build_integration_checks(
     ops_findings.extend(sync_findings)
     checks.extend(_finding_rows(ops_findings))
 
+    progress_payload = progress if progress is not None else (_safe_read(progress_path) or {})
+
     ops_payload = _safe_read(ops_path)
     if ops_payload:
         ops_run = _parse_time(str(ops_payload.get("run_at") or ""))
@@ -474,8 +477,7 @@ def build_integration_checks(
                     }
                 )
         saved_overall = str(ops_payload.get("overall") or "")
-        progress = _safe_read(progress_path) or build_project_progress()
-        evidence_overall = str((progress.get("evidence") or {}).get("ops_overall") or "")
+        evidence_overall = str((progress_payload.get("evidence") or {}).get("ops_overall") or "")
         if evidence_overall and saved_overall and evidence_overall != saved_overall:
             checks.append(
                 {
@@ -503,8 +505,7 @@ def build_integration_checks(
     latest = _safe_read(latest_path)
     if latest:
         run_at = _parse_time(str(latest.get("run_at") or latest.get("updated_at") or ""))
-        progress_saved = _safe_read(progress_path)
-        progress_generated = _parse_time(str((progress_saved or {}).get("generated_at") or ""))
+        progress_generated = _parse_time(str(progress_payload.get("generated_at") or ""))
         if run_at and progress_generated and progress_generated < run_at - timedelta(hours=1):
             checks.append(
                 {
@@ -550,6 +551,7 @@ def build_progress_report(
         ops_path=ops_path,
         tasks_path=tasks_path,
         progress_path=progress_path,
+        progress=progress,
     )
     role_coherence = build_role_coherence(
         progress=progress,
@@ -740,6 +742,7 @@ def write_progress_report(
     *,
     json_path: Path = DEFAULT_REPORT_PATH,
     markdown_path: Path = DEFAULT_MARKDOWN_PATH,
+    sync_project_progress: bool = True,
     **kwargs: Any,
 ) -> dict[str, Any]:
     payload = build_progress_report(**kwargs)
@@ -751,4 +754,7 @@ def write_progress_report(
 
     write_json(json_path, payload, compact=False)
     markdown_path.write_text(format_progress_report_markdown(payload), encoding="utf-8")
+    if sync_project_progress:
+        progress_path = Path(kwargs.get("progress_path") or DEFAULT_PROGRESS_PATH)
+        write_json(progress_path, payload.get("progress") or {}, compact=False)
     return payload
