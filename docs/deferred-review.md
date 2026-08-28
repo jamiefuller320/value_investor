@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T17:35:46+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T22:18:47+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -134,6 +134,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 | L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
 | L204 | **Per-ticker AIM stamp exemption in cost model** | AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable. | Trading AIM paper/live or when HMRC/T212 exemption list is wired |
+| L205 | **Fair-cost warm-start shadow suite (Suite B)** | Spawn 1-2 FTSE paper shadows (AI + rules) stamped with fair buy/sell costs, PIT warm-start from parent rebalance_log, forward endurance vs ^FTSE. Keep live primary on 3% stress (Suite A) until B clears promotion gates. | Next engineering pass after dual-suite adoption doc lands; before flipping primary off 3% (N48) |
 
 ### Universe & data
 
@@ -222,7 +223,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L187 | **Excluded-loser short overlay vs index (offline diagnostic)** | Complement survivor EW cohort tracking with an observe-only long-index / short-excluded overlay replay on archive weeks. Isolates avoidance alpha separately from winner-pick concentration; keep gross-of-borrow offline until filtered_cohort_track shows stable cohort excess vs ^FTSE. | filtered_cohort_track active with >=8 epoch marks and survivor cohort excess vs index is flat or ambiguous |
 | L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
 | L194 | **Scan-then-target euro/FTSE ingest (index discovery before deepen)** | Current ingest scores local coverage then deepens a fixed top-N batch; it does not scan providers across the buy-tier/index for newly published filings. Add a cheap discovery pass (ESEF/CH/RNS index only) that diffs vs filings_index, then run bounded body ingest on the hit list. | Euro sprint filing gaps are mostly closed (maintenance/idle) or buy-tier rewalks stop finding new bodies while fresh results are still missing |
-| L205 | **Structured filing/news event taxonomy (warnings, M&A, deals)** | No systematic classifier today for profit warnings, acquisitions, collaborations, guidance cuts. LLM memos mention them in prose; period/entity filing tags are structural only. A labelled event layer (rules+LLM) would feed AI judgment without becoming a sentiment quant model (see N6). | After buy-tier filing-body parity is stable and memo schema/AI-judgment utility is clearer (L141); or when paid news API (L12) lands |
+| L206 | **Structured filing/news event taxonomy (warnings, M&A, deals)** | No systematic classifier today for profit warnings, acquisitions, collaborations, guidance cuts. LLM memos mention them in prose; period/entity filing tags are structural only. A labelled event layer (rules+LLM) would feed AI judgment without becoming a sentiment quant model (see N6). | After buy-tier filing-body parity is stable and memo schema/AI-judgment utility is clearer (L141); or when paid news API (L12) lands |
 
 ### Ops / reliability
 

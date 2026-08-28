@@ -28,6 +28,7 @@ most automation — this list is what still needs a human.
 | Review **unified experiment assessment** (`experiment_assessment.json`) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
 | **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
+| **Fair-cost gate** — keep 3% books as churn lab; require `ftse-trading-costs assess` / fair shadows before calling excess deployable | Human | [market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite) |
 | Review **hypothesis integrity** when losers breach tolerance or theses break | Human | [hypothesis-integrity.md](hypothesis-integrity.md#human-gate) |
 | Triage **analysis_tasks** — promote scoring/ingest via `ftse-analysis-review promote` | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
 | Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` (never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
@@ -42,6 +43,7 @@ Do **not** promote calibration priors to `ai_judgment/config.json` until:
 2. `ready_for_priors: true` / `ready_for_shadow_bootstrap` look sound in `knob_calibration_priors.json`
 3. `score_gap_vs_runner_up ≥ 0.005`
 4. `recommended_prior.confidence` is acceptable (not `insufficient` / thin `low`)
+5. **Fair-cost view** supports treating excess as deployable (`ftse-trading-costs assess` and/or fair-cost shadows) — 3% stress excess vs ^FTSE alone is not the adoption datum
 
 Survivors are **starting priors for learning-loop refinement** — never auto-apply.
 
