@@ -173,6 +173,231 @@ function stageStatusBadge(status) {
   return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(labels[key] || key)}</span>`;
 }
 
+function overallStatusBadge(status) {
+  const key = String(status || "ok").toLowerCase();
+  const cls = {
+    ok: "stage-complete",
+    info: "stage-active",
+    warn: "stage-pending",
+    fail: "stage-fail",
+  };
+  return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(key)}</span>`;
+}
+
+function renderProgressReport(data) {
+  const report = data.progress_report;
+  const runbookUrl = githubOpsDocUrl("docs/ops/progress-report.md");
+  if (!report) {
+    return `
+    <div class="card progress-report-card" style="margin-top:1rem" id="progress-report-card">
+      <div class="progress-report-header">
+        <h3>Progress report</h3>
+        <div class="progress-report-actions">
+          <button type="button" class="btn btn-primary" id="progress-report-generate-btn">Generate fresh report</button>
+          <button type="button" class="btn" id="progress-report-reload-btn">Reload</button>
+        </div>
+      </div>
+      <p class="muted small">No published progress report yet.</p>
+      <p class="small">Generate locally with <code>ftse-progress-report build --write</code>
+        (or use <code>ftse-dashboard-serve</code> so this button can call the API), then reload.</p>
+      ${runbookUrl ? `<p class="small"><a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a></p>` : ""}
+      <p class="small muted" id="progress-report-status" aria-live="polite"></p>
+    </div>`;
+  }
+
+  const actionable = report.actionable || {};
+  const counts = actionable.counts || {};
+  const integration = report.integration || {};
+  const role = report.role_coherence || {};
+  const progress = report.progress || {};
+  const headline = progress.headline || report.headline || "";
+
+  const checkPreview = (bucket) => {
+    const rows = (bucket.checks || []).filter((row) => row.severity !== "ok").slice(0, 4);
+    if (!rows.length) {
+      return '<p class="small muted">No warnings.</p>';
+    }
+    return `<ul class="list-plain small">${rows
+      .map(
+        (row) =>
+          `<li><strong>[${esc(String(row.severity || "").toUpperCase())}]</strong> ${esc(row.title)} — ${esc(row.summary)}</li>`
+      )
+      .join("")}</ul>`;
+  };
+
+  const deferNow = (actionable.defer_now || []).slice(0, 5);
+  const deferHtml = deferNow.length
+    ? `<ul class="list-plain small">${deferNow
+        .map(
+          (row) =>
+            `<li><strong>${esc(row.id)}</strong> ${esc(row.title)}${
+              row.revisit_when ? ` <span class="muted">(revisit: ${esc(row.revisit_when)})</span>` : ""
+            }</li>`
+        )
+        .join("")}</ul>`
+    : '<p class="small muted">None marked <code>now</code>.</p>';
+
+  return `
+    <div class="card progress-report-card" style="margin-top:1rem" id="progress-report-card">
+      <div class="progress-report-header">
+        <div>
+          <h3>Progress report ${overallStatusBadge(report.overall)}</h3>
+          <p class="small muted" style="margin:0.15rem 0 0">
+            Generated ${esc(fmtDate(report.generated_at))} · focus
+            <strong>${esc(progress.current_focus || "—")}</strong>
+          </p>
+        </div>
+        <div class="progress-report-actions">
+          <button type="button" class="btn btn-primary" id="progress-report-generate-btn">Generate fresh report</button>
+          <button type="button" class="btn" id="progress-report-reload-btn">Reload</button>
+          <button type="button" class="btn" id="progress-report-view-btn">View full report</button>
+        </div>
+      </div>
+      <p>${esc(headline)}</p>
+      <div class="grid" style="margin-top:0.75rem">
+        <div class="setting-row"><span class="setting-label">Deferred now</span><span class="setting-value">${esc(String(counts.defer_now ?? 0))}</span></div>
+        <div class="setting-row"><span class="setting-label">Open fragments</span><span class="setting-value">${esc(String(counts.open_fragments ?? 0))}</span></div>
+        <div class="setting-row"><span class="setting-label">Proposed review tasks</span><span class="setting-value">${esc(String(counts.proposed_total ?? 0))}</span></div>
+        <div class="setting-row"><span class="setting-label">Engineering open</span><span class="setting-value">${esc(String(counts.engineering_open ?? 0))}</span></div>
+        <div class="setting-row"><span class="setting-label">Integration</span><span class="setting-value">${overallStatusBadge(integration.overall)}</span></div>
+        <div class="setting-row"><span class="setting-label">Role coherence</span><span class="setting-value">${overallStatusBadge(role.overall)}</span></div>
+      </div>
+      <div class="automation-grid" style="margin-top:1rem">
+        <section class="automation-section">
+          <h4>Actionable now</h4>
+          ${deferHtml}
+        </section>
+        <section class="automation-section">
+          <h4>Integration / join-up</h4>
+          ${checkPreview(integration)}
+          <h4 style="margin-top:0.75rem">Role coherence</h4>
+          ${checkPreview(role)}
+        </section>
+      </div>
+      <p class="small muted" style="margin-top:0.75rem">
+        GitHub Pages serves the last committed report.
+        Local regenerate needs <code>ftse-dashboard-serve</code> (or run <code>ftse-progress-report build --write</code>).
+        ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a>` : ""}
+      </p>
+      <p class="small muted" id="progress-report-status" aria-live="polite"></p>
+    </div>
+  `;
+}
+
+function setProgressReportStatus(message, isError) {
+  const el = document.getElementById("progress-report-status");
+  if (!el) return;
+  el.textContent = message || "";
+  el.classList.toggle("progress-report-status-error", Boolean(isError));
+}
+
+async function fetchProgressReportJson() {
+  const response = await fetch(`data/progress_report.json?ts=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+async function openProgressReportMarkdown() {
+  const dialog = document.getElementById("memo-dialog");
+  const title = document.getElementById("memo-title");
+  const body = document.getElementById("memo-body");
+  title.textContent = "Progress report";
+  body.innerHTML = "<p class='muted'>Loading report…</p>";
+  dialog.showModal();
+  try {
+    const response = await fetch(`data/progress_report.md?ts=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("progress_report.md not found");
+    const markdown = await response.text();
+    body.innerHTML = marked.parse(markdown);
+  } catch (err) {
+    body.innerHTML = `<p class="muted">Could not load progress report (${esc(err.message)}).</p>`;
+  }
+}
+
+async function reloadProgressReportIntoDashboard() {
+  setProgressReportStatus("Reloading published report…");
+  try {
+    const report = await fetchProgressReportJson();
+    if (!dashboardData) dashboardData = {};
+    dashboardData.progress_report = report;
+    renderOverview(dashboardData);
+    bindProgressReportActions();
+    setProgressReportStatus(`Reloaded · generated ${fmtDate(report.generated_at)}`);
+  } catch (err) {
+    setProgressReportStatus(`Reload failed: ${err.message}`, true);
+  }
+}
+
+async function generateProgressReportFromUi() {
+  const btn = document.getElementById("progress-report-generate-btn");
+  if (btn) btn.disabled = true;
+  setProgressReportStatus("Generating fresh report…");
+  try {
+    const response = await fetch("/api/progress-report", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+    if (response.ok) {
+      const payload = await response.json();
+      if (!payload.ok || !payload.report) {
+        throw new Error(payload.error || "Generate API returned no report");
+      }
+      if (!dashboardData) dashboardData = {};
+      dashboardData.progress_report = payload.report;
+      renderOverview(dashboardData);
+      bindProgressReportActions();
+      setProgressReportStatus(
+        `Generated ${fmtDate(payload.report.generated_at)} · overall ${String(payload.report.overall || "").toUpperCase()}`
+      );
+      return;
+    }
+    if (response.status === 404 || response.status === 405) {
+      throw new Error("API_UNAVAILABLE");
+    }
+    let detail = `HTTP ${response.status}`;
+    try {
+      const payload = await response.json();
+      detail = payload.error || detail;
+    } catch {
+      /* ignore */
+    }
+    throw new Error(detail);
+  } catch (err) {
+    if (String(err.message) === "API_UNAVAILABLE" || err instanceof TypeError) {
+      setProgressReportStatus(
+        "Generate API unavailable on GitHub Pages. Run locally: ftse-dashboard-serve  — or  ftse-progress-report build --write",
+        true
+      );
+    } else {
+      setProgressReportStatus(`Generate failed: ${err.message}`, true);
+    }
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+function bindProgressReportActions() {
+  const generateBtn = document.getElementById("progress-report-generate-btn");
+  const reloadBtn = document.getElementById("progress-report-reload-btn");
+  const viewBtn = document.getElementById("progress-report-view-btn");
+  if (generateBtn) {
+    generateBtn.onclick = () => {
+      void generateProgressReportFromUi();
+    };
+  }
+  if (reloadBtn) {
+    reloadBtn.onclick = () => {
+      void reloadProgressReportIntoDashboard();
+    };
+  }
+  if (viewBtn) {
+    viewBtn.onclick = () => {
+      void openProgressReportMarkdown();
+    };
+  }
+}
+
 function renderProjectProgress(data) {
   const progress = data.project_progress;
   if (!progress) {
@@ -363,8 +588,10 @@ function renderOverview(data) {
       ${diffHtml}
     </div>
     ${renderProjectProgress(data)}
+    ${renderProgressReport(data)}
     ${renderIngestHealth(data)}
   `;
+  bindProgressReportActions();
 }
 
 function renderTrusts(data) {
@@ -2322,6 +2549,14 @@ async function loadDashboard() {
       try {
         const progressResp = await fetch("data/project_progress.json");
         if (progressResp.ok) data.project_progress = await progressResp.json();
+      } catch {
+        /* optional sidecar */
+      }
+    }
+    if (!data.progress_report) {
+      try {
+        const reportResp = await fetch("data/progress_report.json");
+        if (reportResp.ok) data.progress_report = await reportResp.json();
       } catch {
         /* optional sidecar */
       }

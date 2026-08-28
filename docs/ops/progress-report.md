@@ -30,7 +30,26 @@ ftse-progress-report build --write
 
 # Render markdown from saved JSON
 ftse-progress-report markdown
+
+# Local dashboard with Generate button API
+ftse-dashboard-serve
+# open http://127.0.0.1:8765/ → Overview → Generate fresh report
 ```
+
+## Dashboard UI
+
+Overview shows the latest `progress_report.json` with counts, actionable deferred
+items, and integration / role-coherence warnings.
+
+| Control | Behaviour |
+|---------|-----------|
+| **Generate fresh report** | `POST /api/progress-report` when served via `ftse-dashboard-serve`; on GitHub Pages shows the CLI fallback message |
+| **Reload** | Re-fetches published `data/progress_report.json` |
+| **View full report** | Opens `data/progress_report.md` in the memo dialog |
+
+GitHub Pages cannot run the CLI. Commit refreshed artifacts (or run Sunday
+publish after wiring) so Pages shows the latest report; use
+`ftse-dashboard-serve` for interactive regenerate while developing.
 
 ## Artifacts
 
