@@ -15,6 +15,7 @@ from value_investor.ops_monitor import (
     MONITORED_WORKFLOWS,
     OpsFinding,
     OpsMonitorReport,
+    _overall_status,
     apply_auto_fixes,
     check_backtest_history,
     check_committed_json,
@@ -24,9 +25,12 @@ from value_investor.ops_monitor import (
     check_workflow_freshness,
     draft_ops_engineering_tasks,
     filter_unresolved_workflow_failures,
+    findings_needing_investigation,
     format_ops_monitor_text,
+    merge_healed_findings,
     recovery_bundle_in_flight,
     run_ops_monitor,
+    send_ops_monitor_email,
     workflow_stale_only_failures,
 )
 from value_investor.storage import write_json
@@ -379,7 +383,7 @@ def test_draft_ops_engineering_tasks_appends_open_ops_task(tmp_path: Path):
 def test_format_ops_monitor_text_includes_findings():
     report = OpsMonitorReport(
         run_at="2026-07-29T07:00:00+00:00",
-        overall="warn",
+        overall="ok",
         findings=[
             OpsFinding(
                 severity="warn",
@@ -394,8 +398,217 @@ def test_format_ops_monitor_text_includes_findings():
     )
     text = format_ops_monitor_text(report)
     assert "FTSE Ops Monitor" in text
+    assert "HEALED" in text
     assert "FIXED" in text
     assert "micro_compile_ingest" in text
+    assert "NEEDS INVESTIGATION" not in text
+
+
+def test_overall_status_ignores_fixed_findings():
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="ingest",
+            title="Ingest health log is corrupt",
+            summary="bad json",
+            fixed=True,
+            action_taken="normalized",
+        )
+    ]
+    assert _overall_status(findings) == "ok"
+    assert findings_needing_investigation(findings) == []
+
+
+def test_merge_healed_findings_keeps_audit_trail():
+    before = [
+        OpsFinding(
+            severity="fail",
+            category="ingest",
+            title="Ingest health log is corrupt",
+            summary="bad",
+            fixed=True,
+            action_taken="normalized",
+        ),
+        OpsFinding(
+            severity="warn",
+            category="dashboard",
+            title="Dashboard bundle is stale",
+            summary="old",
+        ),
+    ]
+    after = [
+        OpsFinding(
+            severity="warn",
+            category="dashboard",
+            title="Dashboard bundle is stale",
+            summary="old",
+        )
+    ]
+    merged = merge_healed_findings(before, after)
+    assert len(merged) == 2
+    assert merged[0].title == "Dashboard bundle is stale"
+    assert merged[1].fixed is True
+    assert _overall_status(merged) == "warn"
+
+
+def test_send_ops_monitor_email_skips_when_only_healed(monkeypatch):
+    sent: list[str] = []
+
+    def _fake_send(**kwargs):
+        sent.append(kwargs["subject"])
+
+    monkeypatch.setattr("value_investor.ops_monitor.send_report_email", _fake_send)
+    monkeypatch.setattr(
+        "value_investor.ops_monitor.EmailConfig.from_env",
+        lambda: object(),
+    )
+    report = OpsMonitorReport(
+        run_at="2026-07-29T07:00:00+00:00",
+        overall="ok",
+        findings=[
+            OpsFinding(
+                severity="fail",
+                category="ingest",
+                title="Ingest health log is corrupt",
+                summary="bad",
+                fixed=True,
+            )
+        ],
+        auto_fixes=[{"action": "repair_health_log", "detail": "normalized"}],
+    )
+    assert send_ops_monitor_email(report, only_if_not_ok=True) is False
+    assert sent == []
+
+
+def test_send_ops_monitor_email_sends_for_unfixed(monkeypatch):
+    sent: list[str] = []
+
+    def _fake_send(**kwargs):
+        sent.append(kwargs["subject"])
+
+    monkeypatch.setattr("value_investor.ops_monitor.send_report_email", _fake_send)
+    monkeypatch.setattr(
+        "value_investor.ops_monitor.EmailConfig.from_env",
+        lambda: object(),
+    )
+    report = OpsMonitorReport(
+        run_at="2026-07-29T07:00:00+00:00",
+        overall="fail",
+        findings=[
+            OpsFinding(
+                severity="fail",
+                category="workflows",
+                title="Workflow overdue: FTSE Ingest Loop",
+                summary="stale",
+            )
+        ],
+    )
+    assert send_ops_monitor_email(report, only_if_not_ok=True) is True
+    assert sent == ["FTSE Ops Monitor — FAIL"]
+
+
+def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
+    success_at = weekday_noon_utc() - timedelta(hours=2)
+    failure_at = (weekday_noon_utc() - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def _latest(workflow, **_kwargs):
+        return {
+            "id": 10,
+            "created_at": success_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+
+    def _failures(workflow, **_kwargs):
+        return [{"id": 99, "created_at": failure_at}]
+
+    def _active(workflow, **_kwargs):
+        return [{"id": 100, "status": "in_progress"}]
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=_latest),
+        patch("value_investor.ops_monitor.recent_workflow_failures", side_effect=_failures),
+        patch("value_investor.ops_monitor.active_workflow_runs", side_effect=_active),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, _checks = check_workflow_freshness(
+            queue_status=idle_queue, now=weekday_noon_utc()
+        )
+    failure_rows = [row for row in findings if "workflow failure" in row.title.lower()]
+    assert failure_rows
+    assert all(row.fixed for row in failure_rows)
+    assert _overall_status(findings) != "fail" or not any(
+        row.severity == "fail" and not row.fixed for row in failure_rows
+    )
+
+
+@patch("value_investor.ops_monitor.list_open_pull_requests", return_value=[])
+@patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
+@patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
+def test_run_ops_monitor_reverifies_after_health_log_repair(
+    _budget,
+    _workflows,
+    _prs,
+    tmp_path: Path,
+):
+    latest = tmp_path / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {"updated_at": datetime.now(UTC).isoformat(), "reports": [{"ticker": "BT-A.L"}]}
+        ),
+        encoding="utf-8",
+    )
+    health = tmp_path / "ingest_health_log.json"
+    health.write_text("{not-json", encoding="utf-8")
+    tasks = tmp_path / "engineering_tasks.json"
+    tasks.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    status_path = tmp_path / "ops_status.json"
+
+    with (
+        patch("value_investor.ops_monitor.COMMITTED_TASKS_PATH", tasks),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch(
+            "value_investor.ops_monitor.check_engineering_sync",
+            return_value=([], type("R", (), {"repairs": [], "should_redispatch": False})()),
+        ),
+        patch(
+            "value_investor.ops_monitor.run_engineering_sync",
+            return_value=type("R", (), {"repairs": [], "should_redispatch": False})(),
+        ),
+        patch(
+            "value_investor.ops_monitor.evaluate_engineering_dispatch",
+            return_value=type("D", (), {"should_dispatch": False})(),
+        ),
+        patch("value_investor.ops_monitor.check_committed_json", return_value=[]),
+        patch("value_investor.ops_monitor.check_backtest_history", return_value=[]),
+        patch("value_investor.ops_monitor.check_latest_bundle", return_value=[]),
+        patch(
+            "value_investor.ops_monitor.check_engineering_queue",
+            return_value=([], {"open_count": 0, "pr_open_count": 0}),
+        ),
+        patch("value_investor.backtest_health.run_backtest_health", return_value=None),
+    ):
+        report = run_ops_monitor(
+            latest_path=latest,
+            health_log_path=health,
+            tasks_path=tasks,
+            status_path=status_path,
+            apply_fixes=True,
+            draft_tasks=False,
+        )
+
+    assert report.auto_fixes
+    needs = findings_needing_investigation(report.findings)
+    assert not any(row.severity == "fail" for row in needs)
+    assert any(row.fixed and "corrupt" in row.title.lower() for row in report.findings)
+    # Re-verify replaces the corrupt fail with post-repair truth (thin history warn).
+    assert any("thin history" in row.title.lower() for row in needs) or report.overall == "ok"
+    assert json.loads(health.read_text(encoding="utf-8")).get("entries") == []
 
 
 @patch("value_investor.ops_monitor.list_open_pull_requests", return_value=[])

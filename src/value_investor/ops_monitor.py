@@ -602,17 +602,25 @@ def check_workflow_freshness(
 
         if unresolved:
             run_ids = ", ".join(str(item.get("id")) for item in unresolved[:3])
-            findings.append(
-                OpsFinding(
-                    severity="warn",
-                    category="workflows",
-                    title=f"Recent workflow failure: {row['name']}",
-                    summary=(
-                        f"{len(unresolved)} unresolved failure(s) since last success "
-                        f"(runs: {run_ids})."
-                    ),
-                )
+            failure_finding = OpsFinding(
+                severity="warn",
+                category="workflows",
+                title=f"Recent workflow failure: {row['name']}",
+                summary=(
+                    f"{len(unresolved)} unresolved failure(s) since last success "
+                    f"(runs: {run_ids})."
+                ),
             )
+            active = active_workflow_runs(workflow, repo=repo, token=token)
+            if active:
+                # Dedicated responders (ladder / workflow-failure) may already be
+                # re-running — suppress from email until the recovery settles.
+                active_id = active[0].get("id")
+                failure_finding.fixed = True
+                failure_finding.action_taken = (
+                    f"Recovery run in flight (#{active_id}); suppressed from alert"
+                )
+            findings.append(failure_finding)
         if stale:
             findings.append(
                 OpsFinding(
@@ -981,11 +989,21 @@ def apply_auto_fixes(
 
 
 def _overall_status(findings: list[OpsFinding]) -> str:
+    """Grade from unfixed findings only — healed rows do not keep the report red."""
     if any(row.severity == "fail" and not row.fixed for row in findings):
         return "fail"
-    if any(row.severity in {"fail", "warn"} for row in findings):
+    if any(row.severity in {"fail", "warn"} and not row.fixed for row in findings):
         return "warn"
     return "ok"
+
+
+def findings_needing_investigation(findings: list[OpsFinding]) -> list[OpsFinding]:
+    """Unfixed warn/fail rows that should reach email / drafting."""
+    return [
+        row
+        for row in findings
+        if row.severity in {"fail", "warn"} and not row.fixed
+    ]
 
 
 def workflow_stale_only_failures(findings: list[OpsFinding]) -> bool:
@@ -997,6 +1015,69 @@ def workflow_stale_only_failures(findings: list[OpsFinding]) -> bool:
         row.category == "workflows" and row.title.startswith("Workflow overdue:")
         for row in unfixed_fails
     )
+
+
+def _finding_key(finding: OpsFinding) -> tuple[str, str]:
+    return (finding.category, finding.title)
+
+
+def merge_healed_findings(
+    before: list[OpsFinding],
+    after: list[OpsFinding],
+) -> list[OpsFinding]:
+    """Keep fixed findings that no longer reproduce after re-verify (audit trail)."""
+    after_keys = {_finding_key(row) for row in after}
+    healed = [
+        row for row in before if row.fixed and _finding_key(row) not in after_keys
+    ]
+    return list(after) + healed
+
+
+def collect_ops_findings(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    health_log_path: Path = DEFAULT_HEALTH_LOG_PATH,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    eng_failures: list[dict[str, Any]] | None = None,
+) -> tuple[list[OpsFinding], dict[str, Any], list[dict[str, Any]]]:
+    """Run all detection checks without applying fixes."""
+    findings: list[OpsFinding] = []
+    findings.extend(check_committed_json())
+    findings.extend(check_ingest_health_log(health_log_path))
+    findings.extend(check_latest_bundle(latest_path))
+    findings.extend(check_ops_budget())
+    findings.extend(check_backtest_history())
+
+    engineering_findings, queue_status = check_engineering_queue(
+        open_prs=open_prs,
+        tasks_path=tasks_path,
+    )
+    if eng_failures is None:
+        eng_failures = recent_workflow_failures(
+            ENGINEERING_AGENT_WORKFLOW,
+            repo=repo,
+            token=token,
+            within_hours=6,
+        )
+    sync_findings, _sync_preview = check_engineering_sync(
+        open_prs=open_prs,
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+        recent_agent_failures=eng_failures,
+    )
+    workflow_findings, workflow_checks = check_workflow_freshness(
+        repo=repo,
+        token=token,
+        queue_status=queue_status,
+    )
+    findings.extend(workflow_findings)
+    findings.extend(engineering_findings)
+    findings.extend(sync_findings)
+    return findings, queue_status, workflow_checks
 
 
 def run_ops_monitor(
@@ -1011,44 +1092,27 @@ def run_ops_monitor(
     repo: str | None = None,
     token: str | None = None,
 ) -> OpsMonitorReport:
+    """Detect → safe auto-fix → re-verify → draft/email only remaining issues."""
     run_at = datetime.now(UTC).isoformat()
-    findings: list[OpsFinding] = []
 
     if open_prs is None and _github_token():
         open_prs = list_open_pull_requests(repo=repo, token=token)
 
-    findings.extend(check_committed_json())
-    findings.extend(check_ingest_health_log(health_log_path))
-    findings.extend(check_latest_bundle(latest_path))
-    findings.extend(check_ops_budget())
-    findings.extend(check_backtest_history())
-
-    engineering_findings, queue_status = check_engineering_queue(
-        open_prs=open_prs,
-        tasks_path=tasks_path,
-    )
     eng_failures = recent_workflow_failures(
         ENGINEERING_AGENT_WORKFLOW,
         repo=repo,
         token=token,
         within_hours=6,
     )
-    sync_findings, _sync_preview = check_engineering_sync(
-        open_prs=open_prs,
+    findings, queue_status, workflow_checks = collect_ops_findings(
         tasks_path=tasks_path,
+        health_log_path=health_log_path,
+        latest_path=latest_path,
+        open_prs=open_prs,
         repo=repo,
         token=token,
-        recent_agent_failures=eng_failures,
+        eng_failures=eng_failures,
     )
-
-    workflow_findings, workflow_checks = check_workflow_freshness(
-        repo=repo,
-        token=token,
-        queue_status=queue_status,
-    )
-    findings.extend(workflow_findings)
-    findings.extend(engineering_findings)
-    findings.extend(sync_findings)
 
     auto_fixes = apply_auto_fixes(
         findings,
@@ -1081,6 +1145,19 @@ def run_ops_monitor(
                 finding.action_taken = "; ".join(
                     f"{row['action']}: {row['detail']}" for row in sync_report.repairs[:2]
                 )
+
+    # Heal → re-verify: re-run detection so overall/email reflect post-fix truth.
+    if apply_fixes and auto_fixes:
+        verified, queue_status, workflow_checks = collect_ops_findings(
+            tasks_path=tasks_path,
+            health_log_path=health_log_path,
+            latest_path=latest_path,
+            open_prs=open_prs,
+            repo=repo,
+            token=token,
+            eng_failures=eng_failures,
+        )
+        findings = merge_healed_findings(findings, verified)
 
     drafted_ids: list[str] = []
     if draft_tasks and apply_fixes:
@@ -1150,18 +1227,31 @@ def format_ops_monitor_text(report: OpsMonitorReport) -> str:
         f"Overall: {report.overall.upper()}",
         "",
     ]
+    needs = findings_needing_investigation(report.findings)
+    healed = [row for row in report.findings if row.fixed]
     if not report.findings:
         lines.append("No issues detected.")
     else:
-        lines.append("FINDINGS")
-        lines.append("-" * 40)
-        for row in report.findings:
-            status = "FIXED" if row.fixed else row.severity.upper()
-            lines.append(f"[{status}] {row.title}")
-            lines.append(f"  {row.summary}")
-            if row.action_taken:
-                lines.append(f"  Action: {row.action_taken}")
-            lines.append("")
+        if needs:
+            lines.append("NEEDS INVESTIGATION")
+            lines.append("-" * 40)
+            for row in needs:
+                lines.append(f"[{row.severity.upper()}] {row.title}")
+                lines.append(f"  {row.summary}")
+                if row.action_taken:
+                    lines.append(f"  Action: {row.action_taken}")
+                lines.append("")
+        if healed:
+            lines.append("HEALED (auto-fixed / recovery in flight)")
+            lines.append("-" * 40)
+            for row in healed:
+                lines.append(f"[FIXED] {row.title}")
+                lines.append(f"  {row.summary}")
+                if row.action_taken:
+                    lines.append(f"  Action: {row.action_taken}")
+                lines.append("")
+        if not needs and not healed:
+            lines.append("No issues detected.")
     if report.auto_fixes:
         lines.append("AUTO-FIXES APPLIED")
         lines.append("-" * 40)
@@ -1189,17 +1279,29 @@ def format_ops_monitor_text(report: OpsMonitorReport) -> str:
 
 def format_ops_monitor_html(report: OpsMonitorReport) -> str:
     severity_colors = {"fail": "#b33a3a", "warn": "#b8860b", "ok": "#1b7f3a"}
-    rows = []
-    for row in report.findings:
-        color = severity_colors.get("ok" if row.fixed else row.severity, "#333")
-        label = "FIXED" if row.fixed else row.severity.upper()
+    needs = findings_needing_investigation(report.findings)
+    healed = [row for row in report.findings if row.fixed]
+    needs_rows = []
+    for row in needs:
+        color = severity_colors.get(row.severity, "#333")
         action = (
             f"<br><span style='color:#666;font-size:12px'>Action: {row.action_taken}</span>"
             if row.action_taken
             else ""
         )
-        rows.append(
-            f"<li style='margin-bottom:10px'><strong style='color:{color}'>{label}</strong> "
+        needs_rows.append(
+            f"<li style='margin-bottom:10px'><strong style='color:{color}'>{row.severity.upper()}</strong> "
+            f"{row.title}<br><span style='color:#555'>{row.summary}</span>{action}</li>"
+        )
+    healed_rows = []
+    for row in healed:
+        action = (
+            f"<br><span style='color:#666;font-size:12px'>Action: {row.action_taken}</span>"
+            if row.action_taken
+            else ""
+        )
+        healed_rows.append(
+            f"<li style='margin-bottom:10px'><strong style='color:{severity_colors['ok']}'>FIXED</strong> "
             f"{row.title}<br><span style='color:#555'>{row.summary}</span>{action}</li>"
         )
     fixes = "".join(
@@ -1210,13 +1312,21 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
         f"{'(stale)' if row.get('stale') else ''}</li>"
         for row in report.workflow_checks
     )
+    needs_block = (
+        f"<h3>Needs investigation</h3><ul>{''.join(needs_rows)}</ul>"
+        if needs_rows
+        else "<h3>Needs investigation</h3><ul><li>None — all detected issues were healed or suppressed.</li></ul>"
+    )
+    healed_block = (
+        f"<h3>Healed</h3><ul>{''.join(healed_rows)}</ul>" if healed_rows else ""
+    )
     return f"""<!DOCTYPE html>
 <html><body style="font-family:Arial,sans-serif;color:#222;max-width:720px">
   <h2>FTSE Ops Monitor</h2>
   <p style="color:#666">{report.run_at}</p>
   <p><strong>Overall:</strong> {report.overall.upper()}</p>
-  <h3>Findings</h3>
-  <ul>{"".join(rows) if rows else "<li>No issues detected.</li>"}</ul>
+  {needs_block}
+  {healed_block}
   {"<h3>Auto-fixes</h3><ul>" + fixes + "</ul>" if fixes else ""}
   {"<h3>Workflow freshness</h3><ul>" + workflows + "</ul>" if workflows else ""}
   {"<p><strong>Engineering queue ready</strong> for next supervised PR.</p>" if report.should_dispatch_engineering else ""}
@@ -1229,8 +1339,12 @@ def send_ops_monitor_email(
     config: EmailConfig | None = None,
     only_if_not_ok: bool = True,
 ) -> bool:
-    if only_if_not_ok and report.overall == "ok" and not report.auto_fixes:
-        logger.info("Ops monitor OK — skipping email")
+    """Email only when unfixed warn/fail remain (or always when only_if_not_ok=False).
+
+    Auto-fixes alone do not trigger email — healed issues stay in ops_status.json.
+    """
+    if only_if_not_ok and report.overall == "ok":
+        logger.info("Ops monitor OK after heal/re-verify — skipping email")
         return False
     config = config or EmailConfig.from_env()
     subject = f"FTSE Ops Monitor — {report.overall.upper()}"

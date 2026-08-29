@@ -113,8 +113,8 @@ WORKFLOW_SCHEDULES = {
         "cron": "45 7 * * *",
         "cadence": (
             "Daily 07:45 UTC (GitHub schedule + external cron). "
-            "Workflow/artifact health, safe auto-fixes, ops engineering task drafting, "
-            "daily SMTP summary on warn/fail. docs/ops/ops-monitor.md."
+            "Workflow/artifact health, safe auto-fixes, re-verify, ops engineering "
+            "task drafting; SMTP only for unfixed warn/fail. docs/ops/ops-monitor.md."
         ),
         "workflow": "ops-monitor.yml",
     },

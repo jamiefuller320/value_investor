@@ -45,12 +45,12 @@ def main(argv: list[str] | None = None) -> int:
     run_p.add_argument(
         "--email",
         action="store_true",
-        help="Send SMTP summary when status is warn/fail or auto-fixes ran",
+        help="Send SMTP summary only when unfixed warn/fail remain after heal/re-verify",
     )
     run_p.add_argument(
         "--email-always",
         action="store_true",
-        help="Send SMTP summary even when overall status is ok",
+        help="Send SMTP summary even when overall status is ok (includes healed-only runs)",
     )
     run_p.add_argument(
         "--allow-workflow-stale-exit-zero",
@@ -67,7 +67,7 @@ def main(argv: list[str] | None = None) -> int:
     email_p.add_argument(
         "--always",
         action="store_true",
-        help="Send even when the saved report is ok with no auto-fixes",
+        help="Send even when the saved report is overall ok",
     )
     email_p.set_defaults(func=_cmd_email)
 
