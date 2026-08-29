@@ -607,8 +607,7 @@ def check_workflow_freshness(
                 category="workflows",
                 title=f"Recent workflow failure: {row['name']}",
                 summary=(
-                    f"{len(unresolved)} unresolved failure(s) since last success "
-                    f"(runs: {run_ids})."
+                    f"{len(unresolved)} unresolved failure(s) since last success (runs: {run_ids})."
                 ),
             )
             active = active_workflow_runs(workflow, repo=repo, token=token)
@@ -999,11 +998,7 @@ def _overall_status(findings: list[OpsFinding]) -> str:
 
 def findings_needing_investigation(findings: list[OpsFinding]) -> list[OpsFinding]:
     """Unfixed warn/fail rows that should reach email / drafting."""
-    return [
-        row
-        for row in findings
-        if row.severity in {"fail", "warn"} and not row.fixed
-    ]
+    return [row for row in findings if row.severity in {"fail", "warn"} and not row.fixed]
 
 
 def workflow_stale_only_failures(findings: list[OpsFinding]) -> bool:
@@ -1027,9 +1022,7 @@ def merge_healed_findings(
 ) -> list[OpsFinding]:
     """Keep fixed findings that no longer reproduce after re-verify (audit trail)."""
     after_keys = {_finding_key(row) for row in after}
-    healed = [
-        row for row in before if row.fixed and _finding_key(row) not in after_keys
-    ]
+    healed = [row for row in before if row.fixed and _finding_key(row) not in after_keys]
     return list(after) + healed
 
 
@@ -1317,9 +1310,7 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
         if needs_rows
         else "<h3>Needs investigation</h3><ul><li>None — all detected issues were healed or suppressed.</li></ul>"
     )
-    healed_block = (
-        f"<h3>Healed</h3><ul>{''.join(healed_rows)}</ul>" if healed_rows else ""
-    )
+    healed_block = f"<h3>Healed</h3><ul>{''.join(healed_rows)}</ul>" if healed_rows else ""
     return f"""<!DOCTYPE html>
 <html><body style="font-family:Arial,sans-serif;color:#222;max-width:720px">
   <h2>FTSE Ops Monitor</h2>
