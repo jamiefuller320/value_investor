@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-28T22:18:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-29T07:22:02+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -49,6 +49,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-25 | Research spend scales with researched-name count R not universe N — widen or raise buy-tier memo caps need a hard weekly research_cap or ingest/API cost dominates. | research, cost, research_cap |
 | frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
 | frag-20260828-01 | Aug 27 paper-auto failed on git push race after run; Aug 28 recovered. If push races recur, harden paper-auto commit/push locking or retry. | paper-auto, git, ops |
+| frag-20260829-01 | Paid news API recommendation (2026): prefer Marketaux (~$29–99/mo, ticker+sentiment) or Finnhub company-news (free–$50–130/mo personal; All-In-One ~$3500) for media coverage; do not buy LSE RNS enterprise feed (~£6.5k data feed + £26k non-display) while CH/RNS filing ingest covers regulatory text. Benzinga is sales-quoted US newsroom — not first pick for FTSE-first. Revisit L12 when memo news quality is the bottleneck. | news, api, costs, L12 |
 
 ---
 
@@ -225,6 +226,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L187 | **Excluded-loser short overlay vs index (offline diagnostic)** | Complement survivor EW cohort tracking with an observe-only long-index / short-excluded overlay replay on archive weeks. Isolates avoidance alpha separately from winner-pick concentration; keep gross-of-borrow offline until filtered_cohort_track shows stable cohort excess vs ^FTSE. | filtered_cohort_track active with >=8 epoch marks and survivor cohort excess vs index is flat or ambiguous |
 | L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
 | L194 | **Scan-then-target euro/FTSE ingest (index discovery before deepen)** | Current ingest scores local coverage then deepens a fixed top-N batch; it does not scan providers across the buy-tier/index for newly published filings. Add a cheap discovery pass (ESEF/CH/RNS index only) that diffs vs filings_index, then run bounded body ingest on the hit list. | Euro sprint filing gaps are mostly closed (maintenance/idle) or buy-tier rewalks stop finding new bodies while fresh results are still missing |
+| L207 | **Structured filing/news event taxonomy (warnings, M&A, deals)** | No systematic classifier today for profit warnings, acquisitions, collaborations, guidance cuts. LLM memos mention them in prose; period/entity filing tags are structural only. A labelled event layer (rules+LLM) would feed AI judgment without becoming a sentiment quant model (see N6). | After buy-tier filing-body parity is stable and memo schema/AI-judgment utility is clearer (L141); or when paid news API (L12) lands |
 
 ### Ops / reliability
 
