@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-29T07:22:02+00:00",
+  "updated_at": "2026-08-29T08:02:46+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4277,6 +4277,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
       "added_at": "2026-08-29T07:22:01+00:00"
+    },
+    {
+      "id": "L208",
+      "category": "later",
+      "section": "ops",
+      "title": "Ops monitor wait-for-workflow-rerun before email",
+      "summary": "After dispatching guarded workflow recovery, poll until success/fail (capped) and only then email remaining issues. Skipped for now because long Actions jobs would exceed ops-monitor budget; dedicated workflow_run responders already handle reruns asynchronously.",
+      "revisit_when": "Ops-monitor job SLA allows 15+ minutes of polling, or a follow-up verifier workflow can own the wait",
+      "tags": [
+        "ops-monitor",
+        "email",
+        "workflow-recovery"
+      ],
+      "status": "open",
+      "source": "ops monitor heal-before-email enhancement",
+      "added_at": "2026-08-29T08:02:46+00:00"
     }
   ],
   "fragments": [

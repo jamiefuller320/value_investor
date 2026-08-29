@@ -3,7 +3,14 @@
 Daily operational health checks for cron-driven workflows, committed
 artifacts, ingest stall detection, and the engineering queue.
 
-**Safe auto-fixes** (when `--apply` / default in CI):
+**Heal → re-verify → report** (when `--apply` / default in CI):
+
+1. Detect findings (artifacts, ingest health, workflows, engineering queue, …)
+2. Apply **safe auto-fixes** (below)
+3. **Re-run detection** so overall status reflects post-fix truth
+4. Draft supervised tasks / send email only for **unfixed** warn/fail
+
+**Safe auto-fixes:**
 
 - Reconcile orphaned `pr_open` engineering tasks (no matching open PR)
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
@@ -11,11 +18,17 @@ artifacts, ingest stall detection, and the engineering queue.
 - Grade parked engineering tasks and auto-cancel duplicates of merged work
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
+- Suppress “recent workflow failure” alerts while a recovery run for that workflow is already in flight
 
 **Supervised follow-ons** (not automatic code changes):
 
 - Draft `ops` engineering tasks for unresolved failures (workflow overdue, etc.)
 - Dispatch `engineering-queue.yml` when the queue is ready for the next PR
+
+Workflow failure **reruns** (library ladder guarded rerun, CI fix, etc.) stay in their
+dedicated `workflow_run` responders — ops monitor does not wait on long GitHub jobs
+before emailing. Healed local issues and in-flight recoveries are recorded in
+`ops_status.json` but do not generate alert email.
 
 ## When it runs
 
@@ -106,8 +119,8 @@ Verify:
 gh run list --workflow=ops-monitor.yml --limit 3
 ```
 
-Expect a successful `workflow_dispatch` run; `docs/data/ops_status.json` updates on
-warn/fail or when auto-fixes run.
+Expect a successful `workflow_dispatch` run; `docs/data/ops_status.json` updates each
+run (including healed-only mornings).
 
 See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
 
@@ -142,7 +155,7 @@ successful run), scanned within a 12h window.
 # Check only (no writes beyond ops_status.json)
 ftse-ops-monitor run --no-apply --no-draft
 
-# Full run + email on warn/fail/auto-fix
+# Full run + email only when unfixed warn/fail remain after heal/re-verify
 ftse-ops-monitor run --email
 
 # CI: do not fail the workflow when only workflow-overdue checks are red
@@ -207,13 +220,14 @@ ftse-engineering draft-workflow-failure --workflow-file ingest-loop.yml --run-id
 
 ## Email policy
 
-By default the workflow sends email when:
+By default the workflow sends email only when **unfixed** findings leave overall
+status `warn` or `fail` after heal/re-verify.
 
-- Overall status is `warn` or `fail`, or
-- Any auto-fix ran
+Auto-fixes and recovery-in-flight suppressions alone do **not** send email — they
+still land in `ops_status.json` / `ops_monitor_log.json` for audit.
 
 Use workflow input `email_always=true` or `ftse-ops-monitor run --email-always`
-for a daily digest regardless of status.
+for a daily digest regardless of status (includes healed-only runs).
 
 ## Guardrails
 

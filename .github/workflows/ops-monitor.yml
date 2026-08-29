@@ -1,7 +1,7 @@
 name: FTSE Ops Monitor
 
-# Daily operational health checks, safe auto-fixes, engineering task drafting,
-# and SMTP summary. See docs/ops/ops-monitor.md.
+# Daily operational health checks: detect → safe auto-fix → re-verify →
+# email only unfixed warn/fail. See docs/ops/ops-monitor.md.
 on:
   schedule:
     - cron: "45 7 * * *"

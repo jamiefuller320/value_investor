@@ -234,7 +234,8 @@ Schedule: `45 7 * * *`.
 WORKFLOW=ops-monitor.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
-Sends SMTP summary on warn/fail or when auto-fixes run. Same-day skip on duplicate success.
+Sends SMTP summary only when unfixed warn/fail remain after heal/re-verify.
+Same-day skip on duplicate success.
 
 ### 6. Data backup — Sunday tier-1 snapshot (~12:30 UTC)
 
