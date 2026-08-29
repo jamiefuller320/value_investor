@@ -1,6 +1,6 @@
 # FTSE progress report
 
-Generated `2026-08-28T07:09:01+00:00` · overall **WARN**
+Generated `2026-08-28T11:55:47+00:00` · overall **INFO**
 
 Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
 
@@ -39,16 +39,14 @@ Infrastructure and offline library are ahead of schedule; the primary AI learnin
 
 ## Actionable now
 
-- Deferred `now`: **3**
+- Deferred `now`: **0**
 - Open fragments: **19**
 - Proposed review tasks: **5**
 - Open engineering tasks: **0**
 
 ### Deferred — act now (`ftse-defer status … now`)
 
-- **N37** Depth-first single-market FTSE-parity before parallel learning shards — Stop treating multi-market Phase 1/2 promotion (AI beat rules on thin memos) as the path to equivalent learning. Instead sequentially deepen one small market to FTSE-like filings+memo+weekday cadence, then clone the weekly development system as an isolated parallel universe. Keep Layer A maintenance on other markets cheap; do not round-robin weekly_ops research across 21 thin shards. _(revisit: FTSE stage 2b still primary OR eng capacity free; pick pilot market (prefer euro_stoxx50 or iseq20 over sp500) with a market-aware filing provider ready; weekly_ops can fund buy-tier depth for that one slice)_
-- **L166** Rewire shard promotion gates off AI-beat-rules until filing parity — Current Phase 1→2 gate requires AI judgment to beat screen rules on observe sim, which is often unachievable or meaningless when memos lack filing bodies. Until a depth-first pilot has FTSE-comparable research inputs, gate Phase 2 on archives+metrics stability only (or screen-rules experiments), and reserve AI-track promotion for post-parity weekday shards. _(revisit: Depth-first pilot doctrine accepted, or sp500 remains blocked on AI-beat-rules while euro_stoxx50 Phase 2 stalls on thin overlay)_
-- **L167** EU depth-first pilot as composite ~150-250 names not 21 thin shards — For the first non-UK FTSE-parity build, group smaller European index slices into one isolated universe sized near the live FTSE screen (~150-250 unique names; buy-tier depth ~30-70). Prefer euro_stoxx50 alone as filing-stack proof, then expand with low-overlap periphery (ISEQ/OMXS/ATX/BEL/AEX/SMI/PSI) rather than stacking DAX+CAC+MIB (heavy STOXX overlap). One book needs one benchmark; keep US/APAC out of this pilot. _(revisit: Depth-first doctrine (N37) accepted and euro_filings provider is being chosen for the first parallel universe)_
+_None._
 
 ### Deferred — not now (review triggers)
 
@@ -85,7 +83,6 @@ Infrastructure and offline library are ahead of schedule; the primary AI learnin
 - **N34** Stage-4 live universe expansion before 2b edge — Keep live screen on FTSE 350; offline library (iseq20 screen-lite) is enough until primary AI track beats ^FTSE after costs. _(revisit: Stage 2b AI judgment excess vs ^FTSE is positive with thick history)_
 - **N35** Do not use weekly historical shadow rewind as promotion proof — Rewinding competing shadows through known history to pick a winner overfits the same window used for bootstrap; keep weekly consistency as a diagnostic, and reserve promotion for forward endurance vs market/rules. _(revisit: Only if a held-out weekly archive path (true walk-forward / purged CV) is implemented under L111)_
 - **N36** Do not auto-promote surviving shadows into ai_judgment — Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough. _(revisit: Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors)_
-- **N37** Depth-first single-market FTSE-parity before parallel learning shards — Stop treating multi-market Phase 1/2 promotion (AI beat rules on thin memos) as the path to equivalent learning. Instead sequentially deepen one small market to FTSE-like filings+memo+weekday cadence, then clone the weekly development system as an isolated parallel universe. Keep Layer A maintenance on other markets cheap; do not round-robin weekly_ops research across 21 thin shards. _(revisit: FTSE stage 2b still primary OR eng capacity free; pick pilot market (prefer euro_stoxx50 or iseq20 over sp500) with a market-aware filing provider ready; weekly_ops can fund buy-tier depth for that one slice)_
 - **N38** Live capital dynamic rotation before paper evidence thickens — Broad-portfolio capital recycling (skim end-of-cycle, fund new growth-cycle entries) should stay paper/observe-only until primary track beats ^FTSE and rules control with graduated sizing shadow, not just equal-weight top-N rotation. _(revisit: Stage 2b exit criteria met; graduated-sizing shadow beats equal-weight in walk-forward replay; human tasks checklist promotion gate signed off)_
 - **N39** Full-universe deep memo PIT replay — Re-running full research memos for every name on each archived weekly turn is out of scope; use logged screen/overlay fields at t instead (see ftse-trajectory-evidence). _(revisit: Filtered cohort track active AND loser_pattern_lab shows gaps only addressable via memo-depth (not quant features))_
 - **N40** Auto-spawn exclusion ladder shadows from Sunday readiness — exclusion_ladder_replay writes ready_for_shadow_spawn but spawn remains a manual CLI. Do not auto-spawn yet — keep human gate like knob prior promotion; only revisit when checklist and endurance gates mirror calibration shadows. _(revisit: exclusion ladder ready_for_shadow_spawn true for >=4 weeks and filtered_cohort_track vision phase approaches activate)_
@@ -131,17 +128,15 @@ _None._
 
 ## Integration health
 
-Overall: **WARN**
+Overall: **OK**
 
-- **[WARN]** Ops status snapshot is stale: ops_status.json dated 2026-08-26T07:46:22.902420+00:00 (47h ago). Run ftse-ops-monitor run.
 
 ## Role coherence (join-up)
 
-Overall: **WARN**
+Overall: **INFO**
 
 - **[INFO]** Stage 2b focus aligned with primary learning gap: North-star focus is stage 2b while AI-judgment excess after costs is still negative (-20.1%). Breadth expansion and new tracks should stay deferred.
 - **[INFO]** Offline library ahead of live learning edge: 21 graduated library markets vs stage 2b still in progress — library growth is correctly offline; live universe expansion remains gated.
-- **[WARN]** Deferred now items without matching queue work: 3 item(s) marked `now` have no obvious engineering or review-task counterpart (N37, L166, L167). Promote via ftse-defer status or draft a supervised task.
 
 ## References
 
