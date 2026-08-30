@@ -194,7 +194,7 @@
         {
           "id": "adhoc-euro-ingest-cron-reimport",
           "title": "Re-import euro ingest cron slots after cadence change",
-          "summary": "After merging euro ingest cadence changes, run import_cron_jobs for euro-ingest-loop-* (sprint 4×/day × 24) and library-ingest-maintenance / library-ingest-maintenance-afternoon (FTSE-standard 2×/day × 62). GitHub schedule alone is best-effort.",
+          "summary": "After merging library ingest cadence changes, run import_cron_jobs --all (or euro/sprint/maintenance job keys) so cron-job.org gets Mon–Sat peak + daily off-peak slots and disables old weekday-only titles. Sprint ≤4×/day × 24; maintenance ≤4×/day × 62. GitHub schedule alone is best-effort.",
           "automated": false,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"

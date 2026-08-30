@@ -112,6 +112,8 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
         "ladder_weekday": True,
         "maintenance": False,
         "maintenance_afternoon": False,
+        "maintenance_midafternoon": False,
+        "maintenance_evening": False,
     }
 
 
@@ -169,6 +171,8 @@ def test_evaluate_dispatch_maintenance_when_parity_met():
         "ladder_weekday": True,
         "maintenance": True,
         "maintenance_afternoon": True,
+        "maintenance_midafternoon": True,
+        "maintenance_evening": True,
     }
 
 

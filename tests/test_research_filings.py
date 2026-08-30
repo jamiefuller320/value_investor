@@ -1432,6 +1432,114 @@ def test_refetch_investegate_rejects_html_fallback_headline_mismatch(tmp_path, m
     assert saved["filings"][0]["has_body"] is False
 
 
+def test_refetch_investegate_rejects_duplicate_rns_body_hash(tmp_path, monkeypatch):
+    """Reject RNS refetch when fetched body matches another indexed filing's content hash."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    shared_body = (
+        "Hikma Pharmaceuticals PLC half year interim results for six months ended June 2025. "
+        "Core revenue grew 6% with adjusted operating profit up 4%." + ("x" * 220)
+    )
+    content_hash = _ir_body_content_hash(shared_body)
+    interim_path = bodies_dir / "hik_interim.txt"
+    interim_path.write_text(shared_body, encoding="utf-8")
+    index = {
+        "ticker": "HIK.L",
+        "company_name": "Hikma Pharmaceuticals PLC",
+        "filings": [
+            {
+                "id": "hik_interim",
+                "source": "ticker_rns_api",
+                "headline": "Hikma Pharmaceuticals PLC Half Year Results 2025",
+                "published_at": "2026-08-01T00:00:00+00:00",
+                "url": "https://newswire.tickerapp.net/rns/interim.pdf",
+                "period": "interim",
+                "has_body": True,
+                "body_path": str(interim_path),
+                "body_content_hash": content_hash,
+                "priority": 120,
+            },
+            {
+                "id": "hik_trading",
+                "source": "investegate_resolved",
+                "headline": "Hikma Pharmaceuticals PLC April 2026 Trading Update",
+                "published_at": "2026-04-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/hikma/trading/1",
+                "period": "trading_update",
+                "has_body": False,
+                "body_path": None,
+                "priority": 90,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (shared_body, None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    assert result["body_rejected"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    trading = next(row for row in saved["filings"] if row["id"] == "hik_trading")
+    assert trading["has_body"] is False
+    assert not (bodies_dir / "hik_trading.txt").exists()
+
+
+def test_refetch_ticker_rns_api_stores_body_content_hash(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    pdf_url = "https://newswire.tickerapp.net/rns/2026-03-05/1234M/example.content.pdf"
+    sample_body = (
+        "ME Group International plc full year results for the year ended 31 March 2026. "
+        "Revenue increased across all segments." + ("x" * 220)
+    )
+    index = {
+        "ticker": "MEGP.L",
+        "company_name": "ME Group International plc",
+        "filings": [
+            {
+                "id": "megp1",
+                "source": "ticker_rns_api",
+                "headline": "ME Group Full Year Results",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": pdf_url,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: sample_body if url == pdf_url else None,
+    )
+    result = refetch_ticker_rns_api_filing_bodies(
+        filings_dir,
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        max_bodies=5,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["has_body"] is True
+    assert row["body_content_hash"] == _ir_body_content_hash(sample_body)
+
+
 def test_refetch_investegate_prioritizes_other_results_rows(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()

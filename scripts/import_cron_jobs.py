@@ -72,7 +72,23 @@ _LEGACY_INGEST_TITLES_TO_DISABLE = (
     "FTSE ingest loop (Mon/Wed/Fri morning)",
     "FTSE ingest loop (Mon/Wed/Fri afternoon)",
     "FTSE ingest loop (Mon/Wed/Fri)",
+    # Superseded by Mon–Sat peak + daily off-peak library ingest titles (Aug 2026).
+    "Euro ingest loop (weekday morning)",
+    "Euro ingest loop (weekday afternoon)",
+    "Euro ingest loop (weekday mid-afternoon)",
+    "Euro ingest loop (weekday evening)",
+    "Library ingest maintenance (parity markets)",
+    "Library ingest maintenance (parity markets afternoon)",
+    "Library ingest sprint (parallel morning)",
+    "Library ingest sprint (parallel afternoon)",
+    "Library ingest sprint (parallel mid-afternoon)",
+    "Library ingest sprint (parallel evening)",
 )
+
+# cron-job.org: 0=Sun … 6=Sat; -1 = every day.
+# Peak slots skip Sunday morning (quiet bundle: orchestrator ~06:20, catch-ups through ~12:30).
+_LIBRARY_INGEST_PEAK_WDAYS = [1, 2, 3, 4, 5, 6]
+_LIBRARY_INGEST_OFFPEAK_WDAYS = [-1]
 _EURO_INGEST_LOOP_INPUTS = {
     "inputs": {
         "market": "euro_depth",
@@ -196,39 +212,39 @@ def _job_specs() -> list[CronJobSpec]:
         ),
         CronJobSpec(
             key="euro-ingest-loop-morning",
-            title="Euro ingest loop (weekday morning)",
+            title="Euro ingest loop (Mon-Sat morning)",
             workflow="euro-ingest-loop.yml",
             body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
             hours=[7],
             minutes=[15],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
         ),
         CronJobSpec(
             key="euro-ingest-loop-afternoon",
-            title="Euro ingest loop (weekday afternoon)",
+            title="Euro ingest loop (Mon-Sat afternoon)",
             workflow="euro-ingest-loop.yml",
             body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
             hours=[10],
             minutes=[15],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
         ),
         CronJobSpec(
             key="euro-ingest-loop-midafternoon",
-            title="Euro ingest loop (weekday mid-afternoon)",
+            title="Euro ingest loop (daily mid-afternoon)",
             workflow="euro-ingest-loop.yml",
             body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
             hours=[13],
             minutes=[15],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
         ),
         CronJobSpec(
             key="euro-ingest-loop-evening",
-            title="Euro ingest loop (weekday evening)",
+            title="Euro ingest loop (daily evening)",
             workflow="euro-ingest-loop.yml",
             body={"ref": REF, **_EURO_INGEST_LOOP_INPUTS},
             hours=[16],
             minutes=[15],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
         ),
         CronJobSpec(
             key="orchestrator-ladder-weekday",
@@ -241,57 +257,75 @@ def _job_specs() -> list[CronJobSpec]:
         ),
         CronJobSpec(
             key="library-ingest-maintenance",
-            title="Library ingest maintenance (parity markets)",
+            title="Library ingest maintenance (Mon-Sat morning)",
             workflow="library-ingest-maintenance.yml",
             body={"ref": REF, **_LIBRARY_MAINTENANCE_INPUTS},
             hours=[7],
             minutes=[30],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
         ),
         CronJobSpec(
             key="library-ingest-maintenance-afternoon",
-            title="Library ingest maintenance (parity markets afternoon)",
+            title="Library ingest maintenance (Mon-Sat afternoon)",
             workflow="library-ingest-maintenance.yml",
             body={"ref": REF, **_LIBRARY_MAINTENANCE_INPUTS},
             hours=[10],
             minutes=[30],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
+        ),
+        CronJobSpec(
+            key="library-ingest-maintenance-midafternoon",
+            title="Library ingest maintenance (daily mid-afternoon)",
+            workflow="library-ingest-maintenance.yml",
+            body={"ref": REF, **_LIBRARY_MAINTENANCE_INPUTS},
+            hours=[13],
+            minutes=[30],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
+        ),
+        CronJobSpec(
+            key="library-ingest-maintenance-evening",
+            title="Library ingest maintenance (daily evening)",
+            workflow="library-ingest-maintenance.yml",
+            body={"ref": REF, **_LIBRARY_MAINTENANCE_INPUTS},
+            hours=[16],
+            minutes=[30],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
         ),
         CronJobSpec(
             key="library-ingest-sprint-morning",
-            title="Library ingest sprint (parallel morning)",
+            title="Library ingest sprint (Mon-Sat morning)",
             workflow="library-ingest-sprint.yml",
             body={"ref": REF, "inputs": {"max_targets": "24"}},
             hours=[7],
             minutes=[45],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
         ),
         CronJobSpec(
             key="library-ingest-sprint-afternoon",
-            title="Library ingest sprint (parallel afternoon)",
+            title="Library ingest sprint (Mon-Sat afternoon)",
             workflow="library-ingest-sprint.yml",
             body={"ref": REF, "inputs": {"max_targets": "24"}},
             hours=[10],
             minutes=[45],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
         ),
         CronJobSpec(
             key="library-ingest-sprint-midafternoon",
-            title="Library ingest sprint (parallel mid-afternoon)",
+            title="Library ingest sprint (daily mid-afternoon)",
             workflow="library-ingest-sprint.yml",
             body={"ref": REF, "inputs": {"max_targets": "24"}},
             hours=[13],
             minutes=[45],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
         ),
         CronJobSpec(
             key="library-ingest-sprint-evening",
-            title="Library ingest sprint (parallel evening)",
+            title="Library ingest sprint (daily evening)",
             workflow="library-ingest-sprint.yml",
             body={"ref": REF, "inputs": {"max_targets": "24"}},
             hours=[16],
             minutes=[45],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
         ),
     ]
 
@@ -360,10 +394,8 @@ def _job_enabled(spec: CronJobSpec) -> bool:
         "orchestrator-ladder-weekday": "ladder_weekday",
         "library-ingest-maintenance": "maintenance",
         "library-ingest-maintenance-afternoon": "maintenance_afternoon",
-        "library-ingest-sprint-morning": "morning",
-        "library-ingest-sprint-afternoon": "afternoon",
-        "library-ingest-sprint-midafternoon": "midafternoon",
-        "library-ingest-sprint-evening": "evening",
+        "library-ingest-maintenance-midafternoon": "maintenance_midafternoon",
+        "library-ingest-maintenance-evening": "maintenance_evening",
     }
     slot = euro_keys.get(spec.key)
     if slot is None:
@@ -482,7 +514,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--disable-legacy-ingest",
         action="store_true",
-        help="Disable superseded Mon/Wed/Fri FTSE ingest cron jobs",
+        help="Disable superseded library/FTSE ingest cron job titles",
     )
     parser.add_argument(
         "--dry-run", action="store_true", help="Print payloads without calling cron-job.org"

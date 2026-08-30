@@ -55,13 +55,16 @@ MAINTENANCE_CONFIG: dict[str, Any] = {
 }
 
 EURO_INGEST_CRON_TITLES = {
-    "morning": "Euro ingest loop (weekday morning)",
-    "afternoon": "Euro ingest loop (weekday afternoon)",
-    "midafternoon": "Euro ingest loop (weekday mid-afternoon)",
-    "evening": "Euro ingest loop (weekday evening)",
+    # Peak slots: Mon–Sat (skip Sunday quiet-bundle morning). Off-peak: daily.
+    "morning": "Euro ingest loop (Mon-Sat morning)",
+    "afternoon": "Euro ingest loop (Mon-Sat afternoon)",
+    "midafternoon": "Euro ingest loop (daily mid-afternoon)",
+    "evening": "Euro ingest loop (daily evening)",
     "ladder_weekday": "FTSE orchestrator (weekday ladder)",
-    "maintenance": "Library ingest maintenance (parity markets)",
-    "maintenance_afternoon": "Library ingest maintenance (parity markets afternoon)",
+    "maintenance": "Library ingest maintenance (Mon-Sat morning)",
+    "maintenance_afternoon": "Library ingest maintenance (Mon-Sat afternoon)",
+    "maintenance_midafternoon": "Library ingest maintenance (daily mid-afternoon)",
+    "maintenance_evening": "Library ingest maintenance (daily evening)",
 }
 
 
@@ -372,6 +375,8 @@ def cron_enabled_for_dispatch(evaluation: dict[str, Any]) -> dict[str, bool]:
         "ladder_weekday": bool(evaluation.get("cron_ladder_weekday")),
         "maintenance": maintenance,
         "maintenance_afternoon": maintenance,
+        "maintenance_midafternoon": maintenance,
+        "maintenance_evening": maintenance,
     }
 
 

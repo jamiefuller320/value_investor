@@ -1,16 +1,19 @@
 name: Euro library ingest loop
 
-# Weekday buy-tier filing deepen for euro_depth (and warm-start euro_stoxx50).
+# Buy-tier filing deepen for euro_depth (and warm-start euro_stoxx50).
 # No weekly_ops spend — ESEF + euro_filings + IR allowlist body fetch only.
 #
+# Cadence: Mon–Sat peak (07:15/10:15) + daily off-peak (13:15/16:15, includes
+# Sunday after the quiet bundle). Skips Sunday morning to avoid ladder/email contention.
+#
 # Completion gate: ftse-library euro-ingest-dispatch throttles sprint when filing
-# parity is met (see library_ingest_dispatch.py). Sprint: 4×/day × 24 targets.
+# parity is met (see library_ingest_dispatch.py). Sprint: ≤4×/day × 24 targets.
 on:
   schedule:
-    - cron: "15 7 * * 1-5"
-    - cron: "15 10 * * 1-5"
-    - cron: "15 13 * * 1-5"
-    - cron: "15 16 * * 1-5"
+    - cron: "15 7 * * 1-6"
+    - cron: "15 10 * * 1-6"
+    - cron: "15 13 * * *"
+    - cron: "15 16 * * *"
   workflow_dispatch:
     inputs:
       market:
