@@ -219,6 +219,42 @@ def sync_output_research_to_committed(
     return synced
 
 
+def sync_committed_sources_to_output(
+    output_dir: Path,
+    *,
+    data_dir: Path = Path("docs/data"),
+    tickers: list[str] | None = None,
+) -> int:
+    """
+    Copy thickened filing/news sources from docs/data/research into output/research.
+
+    Sunday email historically wrote memos under ``output/`` *before* weekday-style
+    ingest improvement thickened ``docs/data/``. Seeding output from committed
+    sources first lets research-docs / gap-fill score and cite full bodies.
+    """
+    committed_root = data_dir / "research"
+    if not committed_root.is_dir():
+        return 0
+    wanted = {t.strip().upper() for t in (tickers or []) if t and t.strip()} or None
+    synced = 0
+    dest_root = output_dir / "research"
+    dest_root.mkdir(parents=True, exist_ok=True)
+    for ticker_dir in sorted(committed_root.iterdir()):
+        if not ticker_dir.is_dir():
+            continue
+        ticker = ticker_dir.name.strip().upper()
+        if wanted is not None and ticker not in wanted:
+            continue
+        sources_src = ticker_dir / "sources"
+        if not sources_src.is_dir():
+            continue
+        dest = dest_root / ticker
+        dest.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(sources_src, dest / "sources", dirs_exist_ok=True)
+        synced += 1
+    return synced
+
+
 def publish_memo_backfill_batch(
     output_dir: Path,
     *,

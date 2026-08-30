@@ -379,6 +379,27 @@ def main(argv: list[str] | None = None) -> int:
         analysis_path = args.output_dir / "deep_analysis.txt"
         analysis_path.write_text(deep_analysis.full_text, encoding="utf-8")
 
+    # Thicken committed filing bodies *before* memo agents run. Historically
+    # research-docs ran first against thin output/ corpora while ingest later
+    # filled docs/data — leaving adequate Sources grades until a manual rememo.
+    if args.ingest_improvement_pass:
+        from value_investor.research.ingest_improvement import run_ingest_improvement_pass
+
+        ingest_data_dir = Path("docs/data")
+        ingest_improvement_summary = run_ingest_improvement_pass(
+            reports=reports,
+            output_dir=ingest_data_dir,
+            market="ftse350",
+            max_targets=int(args.ingest_improvement_cap),
+        )
+
+    if args.research_docs or args.research_gap_fill:
+        from value_investor.research.memo_backfill import sync_committed_sources_to_output
+
+        synced_sources = sync_committed_sources_to_output(args.output_dir)
+        if synced_sources:
+            print(f"Seeded thickened sources into output/research for {synced_sources} ticker(s)")
+
     if args.research_docs:
         if not args.api_key:
             print("CURSOR_API_KEY required for --research-docs", file=sys.stderr)
@@ -402,17 +423,6 @@ def main(argv: list[str] | None = None) -> int:
             print(str(err), file=sys.stderr)
             return 2
         research_documents = research_documents_for_reports(reports, research_summary.documents)
-
-    if args.ingest_improvement_pass:
-        from value_investor.research.ingest_improvement import run_ingest_improvement_pass
-
-        ingest_data_dir = Path("docs/data")
-        ingest_improvement_summary = run_ingest_improvement_pass(
-            reports=reports,
-            output_dir=ingest_data_dir,
-            market="ftse350",
-            max_targets=int(args.ingest_improvement_cap),
-        )
 
     if args.research_gap_fill:
         if not args.api_key:

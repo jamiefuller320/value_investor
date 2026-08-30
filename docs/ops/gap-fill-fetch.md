@@ -38,6 +38,20 @@ left questions `unresolved` and parked ingest suggestions.
     ladder, gap resolution) on `ResearchDocument.memo_quality`. Dashboard shows a Sources
     grade badge; historical replay carries the score for attribution.
 
+## Sunday email order (required)
+
+`ftse-email` runs **ingest-improvement before research-docs / gap-fill**, then seeds
+thickened `docs/data/research/*/sources` into `output/research` so memo agents and
+`memo_quality` scores see full filing bodies. Do not reorder back to
+research-docs-first — that left adequate Sources grades on memos written against
+thin corpora while bodies landed afterward.
+
+Manual rememo of an adequate set (after bodies already exist):
+
+```bash
+python3 scripts/rememo_adequate_tickers.py
+```
+
 ## Retry flow (summary)
 
 ```
