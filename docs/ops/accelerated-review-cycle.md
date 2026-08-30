@@ -20,8 +20,10 @@ The GitHub Pages **Analysis** tab reads `docs/data/latest.json`:
 shown on the Analysis tab, but useful ops synthesis. Run it after the email refresh
 when modelling/backtest review should catch up.
 
-Weekday **ingest-loop** (Mon/Wed/Fri) improves filing bodies offline; this runbook
-**re-screens and re-publishes** so gap-fill and post-run review see those bodies.
+Weekday **ingest-loop** (Mon–Fri) improves filing bodies offline and now runs a
+**bounded weekday rememo** (cap 3, `weekly_ops` headroom) when memo tickers gain
+bodies or published Sources grades lag disk coverage. The Wednesday anchor still
+dispatches a fuller `email_only` refresh once per week when material.
 
 ## Rollout plan
 

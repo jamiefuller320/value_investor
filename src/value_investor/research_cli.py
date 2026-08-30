@@ -122,6 +122,27 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--weekday-rememo",
+        action="store_true",
+        help=(
+            "Bounded force-initial rememo for memo tickers whose filing bodies "
+            "improved (or whose published grade lags disk bodies). Used after "
+            "weekday ingest-loop."
+        ),
+    )
+    parser.add_argument(
+        "--weekday-rememo-cap",
+        type=int,
+        default=3,
+        help="Max tickers for --weekday-rememo (default: 3)",
+    )
+    parser.add_argument(
+        "--ingest-loop-json",
+        type=Path,
+        default=None,
+        help="Optional ingest_loop.json for --weekday-rememo candidate selection",
+    )
+    parser.add_argument(
         "--tickers",
         default="",
         help="Comma-separated tickers for --deepen-sources (default: all memos in output-dir)",
@@ -451,6 +472,34 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  ! {err}", file=sys.stderr)
         print(f"Wrote {args.output_dir / 'deepen_sources_summary.json'}")
         return 1 if result.errors and not result.deepened else 0
+
+    if args.weekday_rememo:
+        from value_investor.research.weekday_rememo import run_weekday_memo_rememo_pass
+
+        if not args.api_key and not args.dry_run:
+            print("CURSOR_API_KEY required for --weekday-rememo", file=sys.stderr)
+            return 1
+        summary = run_weekday_memo_rememo_pass(
+            api_key=args.api_key,
+            output_dir=args.output_dir,
+            ingest_loop_json=args.ingest_loop_json,
+            max_targets=int(args.weekday_rememo_cap),
+            dry_run=bool(args.dry_run),
+            model=args.model,
+        )
+        print(
+            f"Weekday rememo selected={len(summary.selected)} "
+            f"rememoed={len(summary.rememoed)} skipped={summary.skipped} "
+            f"errors={len(summary.errors)}"
+        )
+        for ticker in summary.rememoed:
+            after = summary.grades_after.get(ticker) or {}
+            print(
+                f"  {ticker}: {after.get('grade')} {after.get('score')} "
+                f"bodies={after.get('bodies')} ({summary.reasons.get(ticker)})"
+            )
+        print("Wrote docs/data/weekday_memo_rememo_summary.json")
+        return 1 if summary.errors and not summary.rememoed else 0
 
     if args.skip_screen:
         signals_path = args.output_dir / "latest_signals.csv"

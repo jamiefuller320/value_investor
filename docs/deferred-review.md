@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T09:30:56+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T09:47:03+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -228,9 +228,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
 | L194 | **Scan-then-target euro/FTSE ingest (index discovery before deepen)** | Current ingest scores local coverage then deepens a fixed top-N batch; it does not scan providers across the buy-tier/index for newly published filings. Add a cheap discovery pass (ESEF/CH/RNS index only) that diffs vs filings_index, then run bounded body ingest on the hit list. | Euro sprint filing gaps are mostly closed (maintenance/idle) or buy-tier rewalks stop finding new bodies while fresh results are still missing |
 | L207 | **Structured filing/news event taxonomy (warnings, M&A, deals)** | No systematic classifier today for profit warnings, acquisitions, collaborations, guidance cuts. LLM memos mention them in prose; period/entity filing tags are structural only. A labelled event layer (rules+LLM) would feed AI judgment without becoming a sentiment quant model (see N6). | After buy-tier filing-body parity is stable and memo schema/AI-judgment utility is clearer (L141); or when paid news API (L12) lands |
-| L210 | **Auto rememo after deepen when body coverage jumps** | When deepen/ingest lifts filings_with_body substantially, automatically queue gap-fill rememo so published memo text and memo_quality stay aligned with the thickened corpus instead of stale initial drafts. | After next weekly screen still shows adequate grades despite on-disk body coverage near 100% |
 | L211 | **IR presentation metrics + alternate news as default gap-fill pack** | Populate ir_presentation_metrics.json and alternate_news.json for every buy-tier memo pack so evidence-ladder thin gaps stop capping scores at adequate even when filing bodies are strong. | When filing-body coverage is routinely strong but evidence_ladder driver remains ~0.5 on published memos |
-| L213 | **Weekday auto-rememo when ingest lifts body coverage mid-week** | Sunday email now ingests before research-docs and seeds docs/data sources into output. Weekday ingest-loop still thickens bodies without rememoing existing adequate memos until the next Sunday — consider a bounded rememo queue when filings_with_body jumps materially. | After next mid-week Wednesday anchor still shows adequate grades on names whose disk bodies are already full |
 
 ### Ops / reliability
 
