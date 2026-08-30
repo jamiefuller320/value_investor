@@ -3966,6 +3966,11 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "STR.VI": "strabag.com",
         "VOLV-B.ST": "volvogroup.com",
         "GVR.IR": "glenveagh.ie",
+        "PHIA.AS": "philips.com",
+        "HEIA.AS": "theheinekencompany.com",
+        "UCB.BR": "ucb.com",
+        "TTE.PA": "totalenergies.com",
+        "ABI.BR": "bmv.com.mx",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
@@ -4021,6 +4026,53 @@ def test_esef_entity_search_skf_ab_resolves_via_group_alias(mock_get):
     assert len(rows) == 1
     assert rows[0]["source"] == "esef_direct"
     assert any("/entities?" in str(args[0]) for args, _kwargs in mock_get.call_args_list if args)
+
+
+def test_esef_entity_variants_include_periphery_aliases_and_strip_bv():
+    from value_investor.research.filings import (
+        _esef_country_hint,
+        _esef_entity_name_variants,
+    )
+
+    assert _esef_country_hint("PHIA.AS") == "NL"
+    assert _esef_country_hint("ANDR.VI") == "AT"
+    variants = _esef_entity_name_variants("Koninklijke Philips N.V.", ticker="PHIA.AS")
+    assert any("Philips" in v for v in variants)
+    stripped = _esef_entity_name_variants("Randstad N.V.", ticker="RAND.AS")
+    assert any(v == "Randstad" for v in stripped)
+
+
+@patch("value_investor.research.filings._http_get")
+def test_esef_entity_search_retries_without_country_filter(mock_get):
+    empty = {"data": []}
+    entity_payload = {
+        "data": [{"attributes": {"identifier": "529900D6BF99LW9R2E68", "name": "SAP SE"}}]
+    }
+    filings_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "period_end": "2024-12-31",
+                    "report_url": "/529900/example/reports/sap-2024.xhtml",
+                }
+            }
+        ]
+    }
+    calls: list[str] = []
+
+    def _fake_get(url: str, **kwargs):
+        calls.append(url)
+        if "/entities?" in url and "filter%5Bcountry%5D" in url:
+            return json.dumps(empty).encode("utf-8")
+        if "/entities?" in url:
+            return json.dumps(entity_payload).encode("utf-8")
+        return json.dumps(filings_payload).encode("utf-8")
+
+    mock_get.side_effect = _fake_get
+    rows = fetch_filings_esef_direct(company_name="SAP SE", ticker="SAP.DE")
+    assert len(rows) == 1
+    assert any("filter%5Bcountry%5D" in u for u in calls)
+    assert any("/entities?" in u and "filter%5Bcountry%5D" not in u for u in calls)
 
 
 @patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])

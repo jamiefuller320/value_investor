@@ -43,6 +43,11 @@ DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 2100.0
 DEFAULT_MAINTENANCE_MAX_TARGETS = 62
 UNMEASURED_PRIORITY_BONUS = 12.0
 ZERO_BODY_PRIORITY_BONUS = 8.0
+INDEXED_WITHOUT_BODY_PRIORITY_BONUS = 14.0
+THIN_DISCOVERY_PRIORITY_BONUS = 3.0
+THIN_BODY_PRIORITY_BONUS = 5.0
+# Only deepen tickers with a real filing gap — skip high-conviction "maintain".
+GAP_REASONS = frozenset({"unmeasured", "zero_body", "indexed_without_body", "thin_bodies"})
 
 
 @dataclass
@@ -53,6 +58,7 @@ class LibraryIngestTarget:
     priority_score: float
     filings_total: int = 0
     filings_with_body: int = 0
+    indexed_without_body: int = 0
     reason: str = ""
 
 
@@ -76,6 +82,7 @@ class LibraryIngestLoopResult:
     discovery_scan: dict[str, Any] | None = None
     maintenance_mode: bool = False
     parity_handoff: dict[str, Any] | None = None
+    critical_path: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -87,6 +94,7 @@ class LibraryIngestLoopResult:
                     "priority_score": t.priority_score,
                     "filings_total": t.filings_total,
                     "filings_with_body": t.filings_with_body,
+                    "indexed_without_body": t.indexed_without_body,
                     "reason": t.reason,
                 }
                 for t in self.targets
@@ -107,6 +115,7 @@ class LibraryIngestLoopResult:
             "discovery_scan": self.discovery_scan,
             "maintenance_mode": self.maintenance_mode,
             "parity_handoff": self.parity_handoff,
+            "critical_path": self.critical_path,
         }
 
 
@@ -242,6 +251,7 @@ def select_library_ingest_targets(
     max_targets: int,
     discovery_bonus_by_ticker: dict[str, float] | None = None,
     canonical_only: bool | None = None,
+    gap_only: bool = True,
 ) -> list[LibraryIngestTarget]:
     bonuses = discovery_bonus_by_ticker or {}
     if canonical_only is None:
@@ -256,19 +266,30 @@ def select_library_ingest_targets(
             market_id=market_id,
             canonical_only=canonical_only,
         )
-        total = coverage["filings_total"]
-        with_body = coverage["filings_with_body"]
+        total = int(coverage["filings_total"])
+        with_body = int(coverage["filings_with_body"])
+        iwb = int(coverage.get("indexed_without_body") or 0)
         score = 0.0
         reason = "maintain"
+        # Body-fill and bootstrap beat discovery-only thin churn.
         if total == 0:
             score += UNMEASURED_PRIORITY_BONUS
             reason = "unmeasured"
         elif with_body == 0:
             score += ZERO_BODY_PRIORITY_BONUS
             reason = "zero_body"
+        elif iwb > 0:
+            score += INDEXED_WITHOUT_BODY_PRIORITY_BONUS + min(iwb, 20) * 0.35
+            reason = "indexed_without_body"
         elif with_body < max(3, total // 2):
-            score += 4.0
+            # Thin with bodies for every indexed row → discovery problem.
+            if iwb <= 0 and with_body >= total:
+                score += THIN_DISCOVERY_PRIORITY_BONUS
+            else:
+                score += THIN_BODY_PRIORITY_BONUS
             reason = "thin_bodies"
+        if reason not in GAP_REASONS and gap_only:
+            continue
         if report.signal == "strong_buy":
             score += 2.0
         score += float(report.conviction_score or 0.0)
@@ -281,11 +302,18 @@ def select_library_ingest_targets(
                 priority_score=score,
                 filings_total=total,
                 filings_with_body=with_body,
+                indexed_without_body=iwb,
                 reason=reason,
             )
         )
-    scored.sort(key=lambda row: (-row.priority_score, row.ticker))
-    return scored[: max(1, int(max_targets))]
+    scored.sort(
+        key=lambda row: (
+            -row.priority_score,
+            -int(row.indexed_without_body or 0),
+            row.ticker,
+        )
+    )
+    return scored[: max(1, int(max_targets))] if scored else []
 
 
 def _ingest_single_library_target(
@@ -391,8 +419,6 @@ def run_library_ingest_loop(
     )
     result = LibraryIngestLoopResult(market_id=market_id, maintenance_mode=maintenance_mode)
     result.health_before = snapshot_library_ingest_health(market_id, library_root=library_root)
-    if discovery_scan is None:
-        discovery_scan = maintenance_mode
     if maintenance_mode and max_targets == DEFAULT_WEEKDAY_BATCH_MAX_TARGETS:
         max_targets = DEFAULT_MAINTENANCE_MAX_TARGETS
 
@@ -411,6 +437,28 @@ def run_library_ingest_loop(
         result.health_after = dict(result.health_before)
         return result
 
+    from value_investor.ingest_critical_path import (
+        apply_critical_path_to_target_order,
+        assess_library_ingest_critical_path,
+        persist_ingest_critical_path,
+    )
+
+    critical = assess_library_ingest_critical_path(
+        market_id,
+        library_root=library_root,
+        reports=reports,
+        health=result.health_before,
+    )
+    result.critical_path = critical.to_dict()
+    try:
+        persist_ingest_critical_path(critical, library_root=library_root)
+    except OSError as exc:
+        logger.warning("Failed to persist ingest critical path for %s: %s", market_id, exc)
+
+    # Sprint + maintenance: run discovery whenever critical path says so (or explicit).
+    if discovery_scan is None:
+        discovery_scan = bool(maintenance_mode or critical.force_discovery_scan)
+
     gap_closure_record: dict[str, Any] | None = None
     if gap_closure_spec:
         from value_investor.ingest_gap_closure import record_ingest_gap_closure_run
@@ -424,6 +472,8 @@ def run_library_ingest_loop(
         gap_ticker = preview_targets[0].ticker if preview_targets else ""
         if pin_tickers and not gap_ticker:
             gap_ticker = str(pin_tickers[0] or "").strip().upper()
+        if not gap_ticker and critical.auto_pin_tickers:
+            gap_ticker = critical.auto_pin_tickers[0]
         params = {
             "max_targets": max_targets,
             "max_bodies": max_bodies,
@@ -433,6 +483,7 @@ def run_library_ingest_loop(
             "pin_tickers": list(pin_tickers or []),
             "market_id": market_id,
             "universe": "library",
+            "critical_path_blocker": critical.primary_blocker,
         }
         parent_run_id = str(
             gap_closure_spec.get("parent_run_id") or gap_closure_spec.get("parent_trial_id") or ""
@@ -475,6 +526,7 @@ def run_library_ingest_loop(
             "curiosity_total": scan.curiosity_total,
             "errors": scan.errors,
             "prioritization_weights": scan.prioritization_weights,
+            "forced_by_critical_path": bool(critical.force_discovery_scan and not maintenance_mode),
         }
 
     result.targets = select_library_ingest_targets(
@@ -484,6 +536,8 @@ def run_library_ingest_loop(
         max_targets=max_targets,
         discovery_bonus_by_ticker=discovery_bonus_by_ticker,
     )
+    if not pin_tickers:
+        result.targets = apply_critical_path_to_target_order(result.targets, critical)
     if pin_tickers and result.targets:
         pin_set = {str(t or "").strip().upper() for t in pin_tickers if str(t or "").strip()}
         result.targets = [

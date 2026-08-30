@@ -110,10 +110,23 @@ off-peak schedules and disables old weekday-only titles. GitHub `schedule` alone
 
 ### Filing sources (euro_filings)
 
-1. **ESEF direct** — `filings.xbrl.org` API (`esef_direct`)
+1. **ESEF direct** — `filings.xbrl.org` API (`esef_direct`); country-hinted entity search + periphery aliases
 2. **Google News** — euro exchange site clauses (existing)
-3. **IR allowlist** — `docs/data/research_ir_urls.json`
+3. **IR allowlist** — `docs/data/research_ir_urls.json` + builtin seeds for thin/unmeasured/iwb names
 4. **SEC 20-F** — dual-listed names (existing)
+
+### Critical-path monitoring (automated)
+
+Each `ftse-library ingest-loop` run assesses buy-tier gaps and persists
+`docs/data/library/ingest_critical_path.json` (+ per-market copy):
+
+| Blocker | Automated action |
+|---------|------------------|
+| `unmeasured` / `thin_need_discovery` | Force listing-only `discovery_scan` even in sprint |
+| `indexed_without_body` | Prefer those tickers over discovery-only thin / maintain |
+| any gap | Skip high-conviction **maintain** names (no wasted slots) |
+
+Inspect with the latest loop summary (`markets/<id>/ingest_summary.json` → `critical_path`).
 
 ## 30-day calendar (target)
 

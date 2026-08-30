@@ -153,6 +153,61 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "GVR.IR": [
         "https://glenveagh.ie/download/annual-report-and-accounts-2025",
     ],
+    # euro_depth critical-path seed (2026-08-30) — thin/unmeasured + iwb body-fill.
+    "PHIA.AS": [
+        "https://www.results.philips.com/app/uploads/2026/04/Philips20F-2025.pdf",
+        "https://www.sec.gov/Archives/edgar/data/313216/000162828026009469/philipsfullannualreport2.htm",
+    ],
+    "HEIA.AS": [
+        "https://www.theheinekencompany.com/sites/heineken-corp/files/2025-12/heineken-nv-annual-report-interactive-2025.pdf",
+        "https://www.theheinekencompany.com/sites/heineken-corp/files/2026-03/heineken-nv-bezoldigingsverslag-2025-uitsluitend-engelse-versie.pdf",
+    ],
+    "AKZA.AS": [
+        "https://www.akzonobel.com/en/investors/results-center",
+    ],
+    "UCB.BR": [
+        "https://www.ucb.com/sites/default/files/2026-03/UCB%20SA_Management%20Report_Statutory%20Acccounts%202025_EN.pdf",
+        "https://reports.ucb.com/",
+    ],
+    "AGS.BR": [
+        "https://ageas.com/en/annual-report-2025",
+    ],
+    "TTE.PA": [
+        "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
+    ],
+    "ABI.BR": [
+        "https://www.bmv.com.mx/docs-pub/10-k/10-k_1539631_2025_1.pdf",
+    ],
+    "ANDR.VI": [
+        "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf",
+    ],
+    "EG7.IR": [
+        "https://www.cairnhomes.com/investors/",
+    ],
+    "EVN.VI": [
+        "https://www.evn.at/en/investor-relations/publications/",
+    ],
+    "WIE.VI": [
+        "https://www.wienerberger.com/en/investors/reports-presentations.html",
+    ],
+    "SKA-B.ST": [
+        "https://group.skanska.com/investors/reports-publications/",
+    ],
+    "AZE.BR": [
+        "https://www.azelis.com/en/investors",
+    ],
+    "SGO.PA": [
+        "https://media.saint-gobain.com/group/lettreauxactionnaires/letter-to-shareholders-n102/",
+        "https://www.saint-gobain.com/en/finance/regulated-information",
+    ],
+    "VOW.DE": [
+        "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
+        "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-1886",
+    ],
+    "DTE.DE": [
+        "https://www.telekom.com/resource/blob/1101986/912628a6116bb7b1ecdfc36b578d66ef/dt-25-annual-report-data.pdf",
+        "https://www.telekom.com/en/investor-relations/publications",
+    ],
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
@@ -173,6 +228,23 @@ _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
 _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "SKF": ("SKF Group",),
     "SKF-B": ("SKF Group",),
+    "PHIA": ("Koninklijke Philips", "Philips", "Koninklijke Philips N.V."),
+    "HEIA": ("Heineken", "Heineken N.V."),
+    "AKZA": ("Akzo Nobel", "AkzoNobel"),
+    "ANDR": ("Andritz", "ANDRITZ AG"),
+    "EVN": ("EVN AG",),
+    "WIE": ("Wienerberger", "Wienerberger AG"),
+    "EG7": ("Cairn Homes",),
+    "AZE": ("Azelis", "Azelis Group"),
+    "AGS": ("ageas", "Ageas SA/NV"),
+    "UCB": ("UCB", "UCB SA"),
+    "VOW": ("Volkswagen", "Volkswagen AG"),
+    "DTE": ("Deutsche Telekom", "Deutsche Telekom AG"),
+    "BAS": ("BASF", "BASF SE"),
+    "TTE": ("TotalEnergies", "TotalEnergies SE"),
+    "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
+    "RAND": ("Randstad", "Randstad N.V."),
+    "NOVN": ("Novartis", "Novartis AG"),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -2221,7 +2293,12 @@ def _esef_entity_name_variants(company_name: str, *, ticker: str = "") -> list[s
 
     _add(raw)
     simplified = re.sub(
-        r"\b(AG|SE|SA|S\.A\.|S\.A/NV|plc|PLC|N\.V\.|NV|AB|A/S|ASA|SE & Co\. KGaA|KGaA)\b",
+        r"\b("
+        r"AG|SE|SA|S\.A\.|S\.A/NV|SA/NV|NV|N\.V\.|B\.V\.|BV|"
+        r"plc|PLC|Ltd|Limited|GmbH|SpA|S\.p\.A\.|"
+        r"AB|A/S|ASA|Oyj|Oy|SAS|SCA|S\.p\.A|"
+        r"SE & Co\. KGaA|KGaA|S\.A\.S\."
+        r")\b",
         "",
         raw,
         flags=re.I,
@@ -2242,22 +2319,59 @@ def _esef_entity_name_variants(company_name: str, *, ticker: str = "") -> list[s
     return variants
 
 
+_ESEF_TICKER_COUNTRY: dict[str, str] = {
+    "DE": "DE",
+    "PA": "FR",
+    "AS": "NL",
+    "BR": "BE",
+    "MI": "IT",
+    "MC": "ES",
+    "SW": "CH",
+    "ST": "SE",
+    "HE": "FI",
+    "VI": "AT",
+    "LS": "PT",
+    "IR": "IE",
+    "CO": "DK",
+}
+
+
+def _esef_country_hint(ticker: str) -> str | None:
+    upper = (ticker or "").strip().upper()
+    if "." not in upper:
+        return None
+    suffix = upper.rsplit(".", 1)[-1]
+    return _ESEF_TICKER_COUNTRY.get(suffix)
+
+
 def _esef_search_entity_identifier(company_name: str, *, ticker: str = "") -> str | None:
     """Resolve an ESEF entity LEI/identifier via name search."""
+    country = _esef_country_hint(ticker)
     for name in _esef_entity_name_variants(company_name, ticker=ticker):
-        query = urllib.parse.urlencode(
-            {
-                "filter[name]": name,
-                "page[size]": "5",
-            }
-        )
+        params: dict[str, str] = {
+            "filter[name]": name,
+            "page[size]": "8",
+        }
+        if country:
+            params["filter[country]"] = country
+        query = urllib.parse.urlencode(params)
         url = f"{ESEF_API_BASE}/entities?{query}"
         try:
             payload = json.loads(_http_get(url, timeout=30).decode("utf-8"))
         except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
             logger.warning("ESEF entity search failed for %r: %s", name, exc)
             continue
-        for row in payload.get("data") or []:
+        rows = list(payload.get("data") or [])
+        # Retry without country filter when the hint yields nothing.
+        if not rows and country:
+            query = urllib.parse.urlencode({"filter[name]": name, "page[size]": "8"})
+            url = f"{ESEF_API_BASE}/entities?{query}"
+            try:
+                payload = json.loads(_http_get(url, timeout=30).decode("utf-8"))
+            except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError):
+                continue
+            rows = list(payload.get("data") or [])
+        for row in rows:
             attrs = row.get("attributes") or {}
             identifier = str(attrs.get("identifier") or "").strip()
             if identifier:
