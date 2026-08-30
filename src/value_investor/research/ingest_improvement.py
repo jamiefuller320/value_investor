@@ -60,6 +60,13 @@ UNMEASURED_PRIORITY_BONUS = 10.0
 # Buy-tier tickers with recurring indexed-without-body gaps — batch-prioritized in ingest pass.
 BODY_GAP_BATCH_TICKERS = frozenset({"ITV.L", "GFTU.L", "MGNS.L", "AEP.L"})
 BODY_GAP_BATCH_PRIORITY_BONUS = 8.0
+# Buy-tier tickers with low body penetration (many indexed rows, few substantive bodies).
+LOW_PENETRATION_RATIO_THRESHOLD = 0.35
+LOW_PENETRATION_MIN_INDEXED = 15
+LOW_PENETRATION_BATCH_TICKERS = frozenset(
+    {"MEGP.L", "GFTU.L", "GSK.L", "JSG.L", "MGNS.L", "AEP.L", "IMB.L", "KLR.L"}
+)
+LOW_PENETRATION_BATCH_PRIORITY_BONUS = 12.0
 KNOWN_SOURCE_IDS = frozenset(
     {
         "companies_house_accounts",
@@ -279,15 +286,44 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
     return coverage
 
 
+def _body_penetration_ratio(coverage: dict[str, int]) -> float:
+    """Fraction of indexed filings that carry on-disk bodies."""
+    total = int(coverage.get("filings_total") or 0)
+    if total <= 0:
+        return 1.0
+    return int(coverage.get("filings_with_body") or 0) / total
+
+
+def _is_low_penetration_pack(coverage: dict[str, int], *, ticker: str = "") -> bool:
+    """
+    True when a buy-tier ticker has many indexed rows but thin body penetration.
+
+    Targets initial-mode memos stuck at adequate source quality despite a full index.
+    """
+    total = int(coverage.get("filings_total") or 0)
+    if total < LOW_PENETRATION_MIN_INDEXED:
+        return False
+    with_body = int(coverage.get("filings_with_body") or 0)
+    ratio = _body_penetration_ratio(coverage)
+    if ratio >= LOW_PENETRATION_RATIO_THRESHOLD:
+        return False
+    upper = ticker.upper()
+    if upper in LOW_PENETRATION_BATCH_TICKERS:
+        return True
+    return with_body <= 20 and total >= 40
+
+
 def _is_uk_listed(*, market: str | None, ticker: str) -> bool:
     return _market_bucket(market, ticker) == "uk"
 
 
-def _has_outstanding_ingest_gap(coverage: dict[str, int]) -> bool:
+def _has_outstanding_ingest_gap(coverage: dict[str, int], *, ticker: str = "") -> bool:
     """True when indexed filings or period buckets still lack bodies."""
     if coverage["filings_total"] == 0:
         return True
     if coverage["indexed_without_body"] > 0:
+        return True
+    if _is_low_penetration_pack(coverage, ticker=ticker):
         return True
     if coverage["filings_with_body"] == 0 and coverage["filings_total"] > 0:
         return True
@@ -359,6 +395,11 @@ def _priority_score(
         score += 2.0
     if ticker.upper() in BODY_GAP_BATCH_TICKERS and coverage["indexed_without_body"] > 0:
         score += BODY_GAP_BATCH_PRIORITY_BONUS
+    if _is_low_penetration_pack(coverage, ticker=ticker):
+        score += LOW_PENETRATION_BATCH_PRIORITY_BONUS + min(
+            int(coverage["filings_total"] - coverage["filings_with_body"]),
+            15,
+        )
     if discovery_bonus > 0:
         score += float(discovery_bonus)
     return score
@@ -400,7 +441,10 @@ def select_ingest_improvement_targets(
         )
         if score <= 0:
             continue
-        if require_outstanding_gaps and not _has_outstanding_ingest_gap(coverage):
+        if require_outstanding_gaps and not _has_outstanding_ingest_gap(
+            coverage,
+            ticker=report.ticker,
+        ):
             # Discovery hits still qualify — new index rows need deepen even without
             # prior outstanding gaps.
             if discovery_bonus <= 0:
@@ -475,6 +519,22 @@ def _planned_sources_for_ticker(
             score = "8"
             if existing is None or int(existing.get("score") or 0) < int(score):
                 ranked["company_ir_presentation"] = {**ir_item, "score": score}
+
+    if _is_uk_listed(market=market, ticker=ticker) and _is_low_penetration_pack(
+        {
+            "filings_total": int((inventory.get("filings_summary") or {}).get("total") or 0),
+            "filings_with_body": with_body,
+        },
+        ticker=ticker,
+    ):
+        for source_id in ("companies_house_accounts", "investegate_rns_full"):
+            item = _catalog_item(source_id, market=market, ticker=ticker)
+            if item is None:
+                continue
+            existing = ranked.get(source_id)
+            score = "9"
+            if existing is None or int(existing.get("score") or 0) < int(score):
+                ranked[source_id] = {**item, "score": score}
 
     for row in ingest_suggestions:
         for source_id in map_suggestion_to_source_ids(str(row.get("suggestion") or "")):
@@ -648,6 +708,12 @@ def run_ingest_improvement_pass(
             if report is None:
                 summary.skipped += 1
                 continue
+            coverage = _filing_coverage(store, target.ticker, output_dir)
+            target_max_bodies = (
+                max(max_bodies, DEFAULT_BACKFILL_MAX_BODIES)
+                if _is_low_penetration_pack(coverage, ticker=target.ticker)
+                else max_bodies
+            )
             sources_dir = _resolve_sources_dir(store, target.ticker, output_dir)
             sources_dir.mkdir(parents=True, exist_ok=True)
             sanitize_filings_index(
@@ -681,7 +747,7 @@ def run_ingest_improvement_pass(
                     sources_dir / "filings",
                     ticker=target.ticker,
                     company_name=target.name,
-                    max_bodies=max_bodies,
+                    max_bodies=target_max_bodies,
                 )
                 ch_refetch = dict(primary_refetch.get("companies_house") or {})
                 indexed_refetch = dict(primary_refetch.get("rns") or {})
@@ -700,7 +766,7 @@ def run_ingest_improvement_pass(
                     sources_dir / "filings",
                     ticker=target.ticker,
                     company_name=target.name,
-                    max_bodies=max_bodies,
+                    max_bodies=target_max_bodies,
                     prune_unfetchable_after_attempt=prune_failed_residual_fetches,
                 )
                 if int(residual_refetch.get("fetched") or 0) > 0:
@@ -725,7 +791,7 @@ def run_ingest_improvement_pass(
                     sources_dir / "filings",
                     target.ticker,
                     company_name=target.name,
-                    max_bodies=max_bodies,
+                    max_bodies=target_max_bodies,
                 )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
@@ -795,6 +861,12 @@ def run_ingest_improvement_pass(
                     "name": target.name,
                     "with_body_before": before,
                     "with_body_after": after,
+                    "low_penetration_pack": _is_low_penetration_pack(
+                        coverage,
+                        ticker=target.ticker,
+                    ),
+                    "body_penetration_ratio": round(_body_penetration_ratio(coverage), 3),
+                    "max_bodies_used": target_max_bodies,
                     "improved": improved,
                     "quarterly_cashflow_usable": bool(
                         (after_inventory.get("available") or {}).get("yahoo_quarterly_cashflow")

@@ -9,6 +9,7 @@ from unittest.mock import patch
 from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
     BODY_GAP_BATCH_TICKERS,
+    LOW_PENETRATION_BATCH_TICKERS,
     IngestImprovementSummary,
     IngestImprovementTarget,
     _planned_sources_for_ticker,
@@ -307,6 +308,49 @@ def test_select_ingest_improvement_targets_prioritizes_body_gap_batch(tmp_path: 
     assert targets[0].ticker == "ITV.L"
     assert targets[0].ticker in BODY_GAP_BATCH_TICKERS
     assert targets[0].priority_score > targets[1].priority_score
+
+
+def test_select_ingest_improvement_targets_prioritises_low_penetration_batch(tmp_path: Path):
+    """Low-penetration buy-tier packs rank ahead of peers with similar indexed gaps."""
+    output_dir = tmp_path / "output"
+
+    def _write_index(ticker: str, *, total: int, with_body: int) -> None:
+        filings_dir = output_dir / "research" / ticker / "sources" / "filings"
+        filings_dir.mkdir(parents=True)
+        rows = [{"has_body": True}] * with_body + [{"has_body": False}] * (total - with_body)
+        (filings_dir / "filings_index.json").write_text(
+            json.dumps(
+                {
+                    "summary": {
+                        "total": total,
+                        "annual": total,
+                        "interim": 0,
+                        "with_body": with_body,
+                    },
+                    "filings": rows,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    _write_index("MEGP.L", total=61, with_body=16)
+    _write_index("OTHER.L", total=61, with_body=25)
+
+    targets = select_ingest_improvement_targets(
+        [
+            _report("OTHER.L", "Other plc", signal="buy"),
+            _report("MEGP.L", "ME Group International plc", signal="buy"),
+        ],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=2,
+    )
+
+    assert targets[0].ticker == "MEGP.L"
+    assert targets[0].ticker in LOW_PENETRATION_BATCH_TICKERS
+    assert targets[0].priority_score > targets[1].priority_score
+    assert targets[0].filings_with_body == 16
+    assert targets[0].filings_total == 61
 
 
 def test_select_ingest_improvement_targets_require_gaps_skips_suggestion_rich_full_coverage(
