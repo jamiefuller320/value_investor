@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T08:49:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T08:57:27+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -269,7 +269,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L206 | **Triage July analysis_tasks proposed queue against current archive thickness** | Four ana-20260728-* proposed tasks (second weekly archive, knob counterfactual, exit-shadow dashboard, historical overlay bootstrap) may be obsolete or still blocked; drop/done/promote on next Sunday analysis review so progress-report proposed_total is honest. | Next Sunday analysis-review human triage (~10:35 UTC) |
 | L208 | **Ops monitor wait-for-workflow-rerun before email** | After dispatching guarded workflow recovery, poll until success/fail (capped) and only then email remaining issues. Skipped for now because long Actions jobs would exceed ops-monitor budget; dedicated workflow_run responders already handle reruns asynchronously. | Ops-monitor job SLA allows 15+ minutes of polling, or a follow-up verifier workflow can own the wait |
 | L209 | **Ops monitor: soften Sunday workflow overdue before scheduled slots** | Sunday 07:45 ops monitor always flags analysis-review (10:35) and data-backup (12:30) as overdue when last success was prior Sunday, even when those slots have not arrived yet. Soften or delay those checks until after each workflow scheduled time (or while Sunday bundle email-report is in flight). | Next Sunday morning ops email is again mostly pre-slot overdue noise |
-| L210 | **7-day library ingest (euro/S&P deepening + maintenance)** | Extend euro-ingest-loop, library-ingest-sprint, and library-ingest-maintenance crons from Mon–Fri to daily. Ingest is not weekly_ops spend; weekends can close indexed_without_body backlog and catch IR/news/SEC drops. Avoid colliding with Sunday quiet-bundle peak; prefer Sat + off-peak Sunday slots. | During euro_depth sprint parity push, or when indexed_without_body progress stalls on weekdays alone |
 
 ---
 
