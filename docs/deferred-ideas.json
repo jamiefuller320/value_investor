@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-29T08:02:46+00:00",
+  "updated_at": "2026-08-30T07:55:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4293,6 +4293,23 @@
       "status": "open",
       "source": "ops monitor heal-before-email enhancement",
       "added_at": "2026-08-29T08:02:46+00:00"
+    },
+    {
+      "id": "L209",
+      "category": "later",
+      "section": "ops",
+      "title": "Ops monitor: soften Sunday workflow overdue before scheduled slots",
+      "summary": "Sunday 07:45 ops monitor always flags analysis-review (10:35) and data-backup (12:30) as overdue when last success was prior Sunday, even when those slots have not arrived yet. Soften or delay those checks until after each workflow scheduled time (or while Sunday bundle email-report is in flight).",
+      "revisit_when": "Next Sunday morning ops email is again mostly pre-slot overdue noise",
+      "tags": [
+        "ops-monitor",
+        "sunday",
+        "false-positive",
+        "email"
+      ],
+      "status": "open",
+      "source": "2026-08-30 morning ops failure email triage",
+      "added_at": "2026-08-30T07:55:01+00:00"
     }
   ],
   "fragments": [
