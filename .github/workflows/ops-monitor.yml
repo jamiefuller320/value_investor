@@ -1,20 +1,28 @@
 name: FTSE Ops Monitor
 
 # Daily operational health checks: detect → safe auto-fix → re-verify →
-# email only unfixed warn/fail. See docs/ops/ops-monitor.md.
+# email only unfixed warn/fail (deferred until day's slots complete when needed).
+# See docs/ops/ops-monitor.md.
 on:
   schedule:
+    # Morning detect / heal; may defer email when Sunday slots still pending.
     - cron: "45 7 * * *"
+    # Catch-up after data-backup (12:30) and other day slots — emails if still red.
+    - cron: "15 13 * * *"
   workflow_dispatch:
     inputs:
       email_always:
-        description: "Send email even when overall status is ok"
+        description: "Send email even when overall status is ok or would be deferred"
         type: boolean
         default: false
       apply_fixes:
         description: "Apply safe auto-fixes and draft engineering tasks"
         type: boolean
         default: true
+      force:
+        description: "Run even if a successful ops-monitor already ran today"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -31,15 +39,17 @@ jobs:
     outputs:
       should_run: ${{ steps.gate.outputs.should_run }}
     steps:
-      - name: Skip if ops monitor already emailed today
+      - name: Skip if ops monitor already finalized today
         id: gate
         uses: actions/github-script@v8
         env:
           EMAIL_ALWAYS: ${{ github.event.inputs.email_always || 'false' }}
+          FORCE: ${{ github.event.inputs.force || 'false' }}
         with:
           script: |
             const emailAlways = process.env.EMAIL_ALWAYS === 'true';
-            if (emailAlways) {
+            const force = process.env.FORCE === 'true';
+            if (emailAlways || force) {
               core.setOutput('should_run', 'true');
               return;
             }
@@ -63,12 +73,35 @@ jobs:
               && r.created_at >= dayStart
               && r.conclusion === 'success'
             );
-            if (prior.length) {
-              core.info(`Skipping — ops monitor already succeeded today (run ${prior[0].id})`);
-              core.setOutput('should_run', 'false');
+            if (!prior.length) {
+              core.setOutput('should_run', 'true');
               return;
             }
-            core.setOutput('should_run', 'true');
+            // Allow catch-up when the latest successful run deferred email
+            // (day's slots / recovery still outstanding).
+            let emailDeferred = false;
+            try {
+              const file = await github.rest.repos.getContent({
+                owner,
+                repo,
+                path: 'docs/data/ops_status.json',
+                ref: 'main',
+              });
+              const raw = Buffer.from(file.data.content, 'base64').toString('utf8');
+              const status = JSON.parse(raw);
+              emailDeferred = Boolean(status.email_deferred);
+            } catch (err) {
+              core.warning(`Could not read ops_status.json: ${err.message}`);
+            }
+            if (emailDeferred) {
+              core.info(
+                `Prior run deferred email — allowing catch-up (prior ${prior[0].id})`
+              );
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            core.info(`Skipping — ops monitor already finalized today (run ${prior[0].id})`);
+            core.setOutput('should_run', 'false');
 
   monitor:
     needs: check
@@ -119,7 +152,12 @@ jobs:
           data = json.loads(Path("/tmp/ops_monitor.json").read_text())
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
-              f"should_dispatch={'true' if data.get('should_dispatch_engineering') else 'false'}\n",
+              "should_dispatch="
+              + ("true" if data.get("should_dispatch_engineering") else "false")
+              + "\n"
+              + "email_deferred="
+              + ("true" if data.get("email_deferred") else "false")
+              + "\n",
               encoding="utf-8",
           )
           PY

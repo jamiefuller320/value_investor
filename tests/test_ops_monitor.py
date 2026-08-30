@@ -709,3 +709,135 @@ def test_monitored_workflows_include_safe_extensions():
     paper = next(row for row in MONITORED_WORKFLOWS if row["key"] == "paper_auto")
     assert paper["weekdays"] == {0, 1, 2, 3, 4}
     assert paper["max_age_hours"] == 28
+
+
+def _sunday_morning_checks() -> list[dict]:
+    return [
+        {
+            "workflow": "analysis-review.yml",
+            "name": "Modelling analysis review",
+            "expected_today": True,
+            "stale": True,
+            "last_success_at": "2026-08-23T10:35:11+00:00",
+        },
+        {
+            "workflow": "data-backup.yml",
+            "name": "FTSE Data Backup",
+            "expected_today": True,
+            "stale": True,
+            "last_success_at": "2026-08-23T13:06:48+00:00",
+        },
+        {
+            "workflow": "email-report.yml",
+            "name": "Email report",
+            "expected_today": True,
+            "stale": True,
+            "last_success_at": "2026-08-23T06:21:15+00:00",
+        },
+    ]
+
+
+def test_evaluate_email_deferral_sunday_morning_pre_slot():
+    from value_investor.ops_monitor import evaluate_email_deferral
+
+    now = datetime(2026, 8, 30, 7, 46, tzinfo=UTC)  # Sunday 07:46
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: Modelling analysis review",
+            summary="No successful run within 36h.",
+        ),
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: FTSE Data Backup",
+            summary="No successful run within 36h.",
+        ),
+        OpsFinding(
+            severity="warn",
+            category="workflows",
+            title="Workflow overdue: Email report",
+            summary="No successful run within 36h. Recovery bundle in flight (email-report.yml#1).",
+        ),
+        OpsFinding(
+            severity="warn",
+            category="dashboard",
+            title="Dashboard bundle is stale",
+            summary="latest.json updated 2026-08-23T06:22:09+00:00",
+        ),
+    ]
+    deferred, reasons = evaluate_email_deferral(findings, _sunday_morning_checks(), now=now)
+    assert deferred is True
+    assert len(reasons) >= 3
+
+
+def test_evaluate_email_deferral_after_slots_is_actionable():
+    from value_investor.ops_monitor import evaluate_email_deferral
+
+    now = datetime(2026, 8, 30, 13, 30, tzinfo=UTC)  # after data-backup ready
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: FTSE Data Backup",
+            summary="No successful run within 36h.",
+        ),
+    ]
+    deferred, reasons = evaluate_email_deferral(findings, _sunday_morning_checks(), now=now)
+    assert deferred is False
+    assert reasons == []
+
+
+def test_send_ops_monitor_email_skips_when_deferred(monkeypatch):
+    sent: list[str] = []
+
+    def _fake_send(**kwargs):
+        sent.append(kwargs["subject"])
+
+    monkeypatch.setattr("value_investor.ops_monitor.send_report_email", _fake_send)
+    monkeypatch.setattr(
+        "value_investor.ops_monitor.EmailConfig.from_env",
+        lambda: object(),
+    )
+    report = OpsMonitorReport(
+        run_at="2026-08-30T07:46:00+00:00",
+        overall="fail",
+        findings=[
+            OpsFinding(
+                severity="fail",
+                category="workflows",
+                title="Workflow overdue: Modelling analysis review",
+                summary="stale",
+            )
+        ],
+        email_deferred=True,
+        email_defer_reasons=["Modelling analysis review: scheduled slot not reached yet"],
+    )
+    assert send_ops_monitor_email(report, only_if_not_ok=True) is False
+    assert sent == []
+
+
+def test_ops_monitor_cli_exit_zero_when_email_deferred():
+    from value_investor.ops_monitor_cli import main
+
+    with patch("value_investor.ops_monitor_cli.run_ops_monitor") as mock_run:
+        mock_run.return_value = OpsMonitorReport(
+            run_at="2026-08-30T07:46:00+00:00",
+            overall="fail",
+            findings=[
+                OpsFinding(
+                    severity="fail",
+                    category="workflows",
+                    title="Workflow overdue: Modelling analysis review",
+                    summary="stale",
+                )
+            ],
+            email_deferred=True,
+            email_defer_reasons=["pre-slot"],
+        )
+        with patch("value_investor.ops_monitor_cli.append_monitor_log_entry"):
+            with patch("value_investor.ops_monitor_cli.send_ops_monitor_email") as mock_email:
+                mock_email.return_value = False
+                rc = main(["run", "--json", "--email", "--allow-workflow-stale-exit-zero"])
+    assert rc == 0

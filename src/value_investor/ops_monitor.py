@@ -150,6 +150,23 @@ RECOVERY_BUNDLE_WORKFLOWS: frozenset[str] = frozenset(
 )
 ACTIVE_RUN_STATUSES: tuple[str, ...] = ("in_progress", "queued", "waiting")
 
+# Earliest UTC (hour, minute) when a workflow overdue finding is actionable on a
+# scheduled day. Before this wall-clock time, morning ops email is deferred so
+# the afternoon catch-up (13:15) can report after the day's slots complete.
+WORKFLOW_EMAIL_READY_UTC: dict[str, tuple[int, int]] = {
+    "ingest_loop": (8, 0),
+    "orchestrator": (7, 30),
+    "engineering_queue": (8, 0),
+    "ci_main_nightly": (8, 30),
+    "analysis_review": (11, 0),  # external primary ~10:35
+    "library_ladder": (8, 0),
+    "model_review": (8, 0),
+    "email_report": (9, 0),  # quiet-bundle child; often ~70m from ~06:40
+    "data_backup": (13, 0),  # external primary ~12:30
+    "paper_auto": (10, 0),  # weekday ~08:20
+    "ops_monitor": (8, 0),
+}
+
 COMMITTED_JSON_PATHS: tuple[Path, ...] = (
     DEFAULT_HEALTH_LOG_PATH,
     DEFAULT_LATEST_PATH,
@@ -191,6 +208,8 @@ class OpsMonitorReport:
     workflow_checks: list[dict[str, Any]] = field(default_factory=list)
     queue_status: dict[str, Any] = field(default_factory=dict)
     should_dispatch_engineering: bool = False
+    email_deferred: bool = False
+    email_defer_reasons: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -202,6 +221,8 @@ class OpsMonitorReport:
             "workflow_checks": self.workflow_checks,
             "queue_status": self.queue_status,
             "should_dispatch_engineering": self.should_dispatch_engineering,
+            "email_deferred": self.email_deferred,
+            "email_defer_reasons": self.email_defer_reasons,
         }
 
 
@@ -1001,6 +1022,121 @@ def findings_needing_investigation(findings: list[OpsFinding]) -> list[OpsFindin
     return [row for row in findings if row.severity in {"fail", "warn"} and not row.fixed]
 
 
+def _workflow_key_for_name(schedule_name: str) -> str | None:
+    name = schedule_name.strip()
+    for spec in MONITORED_WORKFLOWS:
+        key = str(spec["key"])
+        schedule = WORKFLOW_SCHEDULES.get(key, {})
+        if str(schedule.get("name") or spec["workflow"]) == name:
+            return key
+    return None
+
+
+def _workflow_check_by_name(
+    workflow_checks: list[dict[str, Any]], schedule_name: str
+) -> dict[str, Any] | None:
+    name = schedule_name.strip()
+    for row in workflow_checks:
+        if str(row.get("name") or "") == name:
+            return row
+    return None
+
+
+def _email_report_pending_today(
+    workflow_checks: list[dict[str, Any]],
+    *,
+    now: datetime,
+) -> bool:
+    """True when today's email-report success is still outstanding or in flight."""
+    email_row = next(
+        (row for row in workflow_checks if row.get("workflow") == "email-report.yml"),
+        None,
+    )
+    if not email_row:
+        return False
+    if not email_row.get("expected_today"):
+        return False
+    last = _parse_github_time(str(email_row.get("last_success_at") or ""))
+    if last is not None and last.date() == now.date():
+        return False
+    ready_h, ready_m = WORKFLOW_EMAIL_READY_UTC.get("email_report", (9, 0))
+    if (now.hour, now.minute) < (ready_h, ready_m):
+        return True
+    # Past ready time but still no today success — not "pending", actionable.
+    return False
+
+
+def finding_email_defer_reason(
+    finding: OpsFinding,
+    *,
+    workflow_checks: list[dict[str, Any]],
+    now: datetime | None = None,
+) -> str | None:
+    """Return a deferral reason when this finding should wait for later-day catch-up."""
+    now = now or datetime.now(UTC)
+    summary = finding.summary or ""
+    action = finding.action_taken or ""
+
+    if "Recovery bundle in flight" in summary or "Recovery run in flight" in action:
+        return "recovery run still in flight"
+
+    if finding.title.startswith("Workflow overdue:"):
+        schedule_name = finding.title.removeprefix("Workflow overdue:").strip()
+        key = _workflow_key_for_name(schedule_name)
+        check = _workflow_check_by_name(workflow_checks, schedule_name)
+        if check and not check.get("expected_today"):
+            return None
+        if key and key in WORKFLOW_EMAIL_READY_UTC:
+            ready_h, ready_m = WORKFLOW_EMAIL_READY_UTC[key]
+            if (now.hour, now.minute) < (ready_h, ready_m):
+                return (
+                    f"{schedule_name} scheduled slot not reached yet "
+                    f"(email-ready after {ready_h:02d}:{ready_m:02d} UTC)"
+                )
+        return None
+
+    if finding.title == "Dashboard bundle is stale":
+        if _email_report_pending_today(workflow_checks, now=now):
+            return "dashboard refresh waits on today's email-report"
+        overdue_email = next(
+            (
+                c
+                for c in workflow_checks
+                if c.get("workflow") == "email-report.yml" and c.get("stale")
+            ),
+            None,
+        )
+        if overdue_email:
+            ready_h, ready_m = WORKFLOW_EMAIL_READY_UTC.get("email_report", (9, 0))
+            if (now.hour, now.minute) < (ready_h, ready_m):
+                return "dashboard refresh waits on today's email-report"
+        return None
+
+    return None
+
+
+def evaluate_email_deferral(
+    findings: list[OpsFinding],
+    workflow_checks: list[dict[str, Any]],
+    *,
+    now: datetime | None = None,
+) -> tuple[bool, list[str]]:
+    """Defer alert email when every unfixed issue is still expected to clear today."""
+    now = now or datetime.now(UTC)
+    needs = findings_needing_investigation(findings)
+    if not needs:
+        return False, []
+    reasons: list[str] = []
+    for row in needs:
+        reason = finding_email_defer_reason(row, workflow_checks=workflow_checks, now=now)
+        if not reason:
+            return False, []
+        label = f"{row.title}: {reason}"
+        if label not in reasons:
+            reasons.append(label)
+    return True, reasons
+
+
 def workflow_stale_only_failures(findings: list[OpsFinding]) -> bool:
     """True when every unfixed fail finding is a workflow-overdue stale check."""
     unfixed_fails = [row for row in findings if row.severity == "fail" and not row.fixed]
@@ -1152,9 +1288,17 @@ def run_ops_monitor(
         )
         findings = merge_healed_findings(findings, verified)
 
+    email_deferred, email_defer_reasons = evaluate_email_deferral(findings, workflow_checks)
+
     drafted_ids: list[str] = []
     if draft_tasks and apply_fixes:
-        drafted_ids = draft_ops_engineering_tasks(findings, tasks_path=tasks_path)
+        # Do not mint ops tasks for findings that are still expected to clear today.
+        draftable = [
+            row
+            for row in findings
+            if finding_email_defer_reason(row, workflow_checks=workflow_checks) is None
+        ]
+        drafted_ids = draft_ops_engineering_tasks(draftable, tasks_path=tasks_path)
 
     dispatch = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=open_prs)
     should_dispatch = dispatch.should_dispatch or sync_report.should_redispatch
@@ -1168,6 +1312,8 @@ def run_ops_monitor(
         workflow_checks=workflow_checks,
         queue_status=queue_status,
         should_dispatch_engineering=should_dispatch,
+        email_deferred=email_deferred,
+        email_defer_reasons=email_defer_reasons,
     )
 
     status_path = Path(status_path)
@@ -1205,6 +1351,8 @@ def append_monitor_log_entry(
             "auto_fix_count": len(report.auto_fixes),
             "drafted_task_ids": report.drafted_task_ids,
             "should_dispatch_engineering": report.should_dispatch_engineering,
+            "email_deferred": report.email_deferred,
+            "email_defer_reasons": report.email_defer_reasons,
         }
     )
     payload["entries"] = entries[-max(1, int(keep)) :]
@@ -1220,13 +1368,22 @@ def format_ops_monitor_text(report: OpsMonitorReport) -> str:
         f"Overall: {report.overall.upper()}",
         "",
     ]
+    if report.email_deferred:
+        lines.append("EMAIL DEFERRED — waiting on today's remaining slots / recovery")
+        lines.append("-" * 40)
+        for reason in report.email_defer_reasons:
+            lines.append(f"  • {reason}")
+        lines.append("")
     needs = findings_needing_investigation(report.findings)
     healed = [row for row in report.findings if row.fixed]
     if not report.findings:
         lines.append("No issues detected.")
     else:
         if needs:
-            lines.append("NEEDS INVESTIGATION")
+            section = (
+                "PENDING TODAY (email deferred)" if report.email_deferred else "NEEDS INVESTIGATION"
+            )
+            lines.append(section)
             lines.append("-" * 40)
             for row in needs:
                 lines.append(f"[{row.severity.upper()}] {row.title}")
@@ -1305,17 +1462,30 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
         f"{'(stale)' if row.get('stale') else ''}</li>"
         for row in report.workflow_checks
     )
+    needs_heading = (
+        "Pending today (email deferred)" if report.email_deferred else "Needs investigation"
+    )
     needs_block = (
-        f"<h3>Needs investigation</h3><ul>{''.join(needs_rows)}</ul>"
+        f"<h3>{needs_heading}</h3><ul>{''.join(needs_rows)}</ul>"
         if needs_rows
         else "<h3>Needs investigation</h3><ul><li>None — all detected issues were healed or suppressed.</li></ul>"
     )
     healed_block = f"<h3>Healed</h3><ul>{''.join(healed_rows)}</ul>" if healed_rows else ""
+    defer_block = ""
+    if report.email_deferred:
+        defer_items = "".join(f"<li>{reason}</li>" for reason in report.email_defer_reasons)
+        defer_block = (
+            "<h3>Email deferred</h3>"
+            "<p>Waiting on today's remaining scheduled slots / in-flight recovery. "
+            "Afternoon catch-up will email only if issues remain.</p>"
+            f"<ul>{defer_items}</ul>"
+        )
     return f"""<!DOCTYPE html>
 <html><body style="font-family:Arial,sans-serif;color:#222;max-width:720px">
   <h2>FTSE Ops Monitor</h2>
   <p style="color:#666">{report.run_at}</p>
   <p><strong>Overall:</strong> {report.overall.upper()}</p>
+  {defer_block}
   {needs_block}
   {healed_block}
   {"<h3>Auto-fixes</h3><ul>" + fixes + "</ul>" if fixes else ""}
@@ -1330,10 +1500,18 @@ def send_ops_monitor_email(
     config: EmailConfig | None = None,
     only_if_not_ok: bool = True,
 ) -> bool:
-    """Email only when unfixed warn/fail remain (or always when only_if_not_ok=False).
+    """Email only when unfixed warn/fail remain after heal/re-verify.
 
+    Skips when overall is ok, or when every remaining finding is still expected to
+    clear later today (pre-slot Sunday workflows, recovery in flight, etc.).
     Auto-fixes alone do not trigger email — healed issues stay in ops_status.json.
     """
+    if only_if_not_ok and report.email_deferred:
+        logger.info(
+            "Ops monitor email deferred (%s reason(s)) — afternoon catch-up will re-check",
+            len(report.email_defer_reasons),
+        )
+        return False
     if only_if_not_ok and report.overall == "ok":
         logger.info("Ops monitor OK after heal/re-verify — skipping email")
         return False

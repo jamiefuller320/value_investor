@@ -159,6 +159,15 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[-1],
         ),
         CronJobSpec(
+            key="ops-monitor-catchup",
+            title="FTSE ops monitor catch-up (daily)",
+            workflow="ops-monitor.yml",
+            body={"ref": REF},
+            hours=[13],
+            minutes=[15],
+            wdays=[-1],
+        ),
+        CronJobSpec(
             key="ci-main-nightly",
             title="FTSE CI main nightly (daily)",
             workflow="ci-main-nightly.yml",

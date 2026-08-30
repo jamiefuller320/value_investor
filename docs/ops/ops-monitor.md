@@ -34,8 +34,8 @@ before emailing. Healed local issues and in-flight recoveries are recorded in
 
 | Trigger | Schedule |
 |---------|----------|
-| **cron-job.org (primary)** | Daily **07:45 UTC** (`45 7 * * *`) |
-| GitHub cron (backup) | Same expression |
+| **cron-job.org (primary)** | Daily **07:45 UTC** (`45 7 * * *`) morning + **13:15 UTC** (`15 13 * * *`) catch-up |
+| GitHub cron (backup) | Same expressions |
 | Manual | Actions → **FTSE Ops Monitor** → Run workflow |
 
 External dispatch:
@@ -45,8 +45,25 @@ WORKFLOW=ops-monitor.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_wor
 ```
 
 Runs after the Mon/Wed/Fri ingest loop (~07:05) and before weekday paper
-orchestrator (~08:20). Same-day skip — a second successful run the same UTC
-day exits quickly unless `email_always=true`.
+orchestrator (~08:20). Morning may **defer email** when remaining findings are
+still expected to clear later the same day (Sunday analysis-review / data-backup
+slots, quiet-bundle recovery still in flight, dashboard waiting on email-report).
+Same-day skip applies only after a run that did **not** defer email — the 13:15
+catch-up re-checks and emails only if issues remain.
+
+### Email deferral (day-complete gate)
+
+Alert email is skipped when **every** unfixed warn/fail is still “pending today”:
+
+| Finding class | Deferred until |
+|---------------|----------------|
+| Workflow overdue before `WORKFLOW_EMAIL_READY_UTC` for that workflow | After that wall-clock time (e.g. analysis-review 11:00, data-backup 13:00) |
+| Recovery / quiet bundle in flight | Active recovery run finishes |
+| Dashboard stale while today's email-report still pending | email-report succeeds today |
+
+`ops_status.json` records `email_deferred` + `email_defer_reasons`. Ops engineering
+tasks are **not** drafted for deferred findings. Use `email_always=true` / `--email-always`
+to force a digest anyway.
 
 ### cron-job.org setup (one-time)
 
@@ -221,13 +238,14 @@ ftse-engineering draft-workflow-failure --workflow-file ingest-loop.yml --run-id
 ## Email policy
 
 By default the workflow sends email only when **unfixed** findings leave overall
-status `warn` or `fail` after heal/re-verify.
+status `warn` or `fail` after heal/re-verify **and** those findings are not
+deferred for later-day catch-up.
 
-Auto-fixes and recovery-in-flight suppressions alone do **not** send email — they
-still land in `ops_status.json` / `ops_monitor_log.json` for audit.
+Auto-fixes, recovery-in-flight suppressions, and pre-slot Sunday overdue alone do
+**not** send email — they still land in `ops_status.json` / `ops_monitor_log.json`.
 
 Use workflow input `email_always=true` or `ftse-ops-monitor run --email-always`
-for a daily digest regardless of status (includes healed-only runs).
+for a digest regardless of status / deferral.
 
 ## Guardrails
 
