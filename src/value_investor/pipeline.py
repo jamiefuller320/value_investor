@@ -57,6 +57,7 @@ from value_investor.scoring.healthcare_price_erosion_overlay import (
 from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
 )
+from value_investor.scoring.leverage_overlay import enrich_universe_with_leverage_override
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
@@ -279,6 +280,7 @@ def run_screen(
     universe_df = add_sector_scores(universe_df)
     universe_df = enrich_universe_with_canonical_fcf(universe_df, out_dir)
     universe_df = enrich_universe_with_filing_metrics(universe_df, out_dir)
+    universe_df = enrich_universe_with_leverage_override(universe_df, out_dir)
     model_results = evaluate_universe(universe_df)
     model_results = suppress_fcf_yield_passes(model_results, universe_df, output_dir=out_dir)
     weight_state = load_model_weights(out_dir)

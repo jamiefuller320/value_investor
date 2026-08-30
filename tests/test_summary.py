@@ -1277,3 +1277,45 @@ def test_build_company_reports_exports_annual_aligned_gross_coverage(tmp_path: P
     assert snapshot["fcf_dividend_coverage_gross"] > 1.0
     assert snapshot["interim_quality_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
+
+
+def test_build_company_reports_exports_dual_leverage_display():
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="FGP.L",
+                name="FirstGroup plc",
+                debt_to_equity=19.4,
+                debt_to_equity_yahoo=161.0,
+                filing_adjusted_net_debt_gbp=137_700_000.0,
+                leverage_override=True,
+                dual_leverage_display=True,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results)[0].to_dict()
+
+    assert snapshot["leverage_override"] is True
+    assert snapshot["dual_leverage_display"] is True
+    assert snapshot["screening_inputs"]["debt_to_equity_yahoo"] == pytest.approx(161.0)
+    assert snapshot["screening_inputs"]["filing_adjusted_net_debt_gbp"] == pytest.approx(
+        137_700_000.0
+    )
+    assert snapshot["screening_inputs"]["debt_to_equity"] == pytest.approx(19.4)
+    assert snapshot["key_metrics"]["D/E (Yahoo)"] == "161%"
+    assert snapshot["key_metrics"]["Leverage (filing)"] == "£137.7m adj. net debt"
+    assert "Leverage override" in snapshot["summary"]
