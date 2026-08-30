@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-08-26T09:36:12.535521+00:00",
-  "run_at": "2026-08-23T06:22:09.407971+00:00",
-  "task_count": 61,
+  "compiled_at": "2026-08-30T07:53:04.316839+00:00",
+  "run_at": "2026-08-30T06:43:33.462150+00:00",
+  "task_count": 65,
   "tasks": [
     {
       "id": "eng-20260823-01",
@@ -108,6 +108,44 @@
       "merged_at": "2026-08-18T04:56:01.662016+00:00"
     },
     {
+      "id": "eng-20260830-02",
+      "area": "scoring",
+      "title": "When FCF overlay fires, auto-bind `company_adjusted` FCF from RNS reconciliation tables and exclude divergent Yahoo `screen_ttm` from FCF Yield, Earnings Qualit",
+      "summary": "When FCF overlay fires, auto-bind `company_adjusted` FCF from RNS reconciliation tables and exclude divergent Yahoo `screen_ttm` from FCF Yield, Earnings Quality, and dividend-coverage models",
+      "priority": "high",
+      "priority_score": 100.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "RNS"
+        ],
+        "plan_index": 2
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260726-05",
       "area": "scoring",
       "title": "Persist per-model failure reasons and raw inputs in `screening_snapshot.json` (D/E, current ratio, earnings growth %, NCAV availability, yield raw value) and pr",
@@ -201,6 +239,52 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/303",
       "pr_number": 303,
       "merged_at": "2026-08-19T14:43:08.228027+00:00"
+    },
+    {
+      "id": "eng-20260830-01",
+      "area": "ingest",
+      "title": "Enforce filing-body quality gate: full RNS/PDF fetch, period/headline validation, and content-hash dedup before indexing",
+      "summary": "Enforce filing-body quality gate: full RNS/PDF fetch, period/headline validation, and content-hash dedup before indexing",
+      "priority": "high",
+      "priority_score": 99.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "RNS",
+          "PDF"
+        ],
+        "plan_index": 1
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for RNS",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20260830-01.md",
+      "branch_name": "cursor/eng-20260830-01-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-08-30T08:32:50.924941+00:00"
     },
     {
       "id": "eng-20260819-03",
@@ -730,6 +814,44 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/290",
       "pr_number": 290,
       "merged_at": "2026-08-18T07:43:55.796641+00:00"
+    },
+    {
+      "id": "eng-20260830-04",
+      "area": "scoring",
+      "title": "Dual leverage display and lease-adjusted net debt override when Yahoo D/E >100% but filing-adjusted net debt < policy threshold",
+      "summary": "Dual leverage display and lease-adjusted net debt override when Yahoo D/E >100% but filing-adjusted net debt < policy threshold",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "D",
+          "E"
+        ],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260823-02",
@@ -1367,6 +1489,50 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/327",
       "pr_number": 327,
       "merged_at": "2026-08-23T19:27:09.194493+00:00"
+    },
+    {
+      "id": "eng-20260830-03",
+      "area": "ingest",
+      "title": "Bulk backfill indexed-without-body and low-penetration buy-tier packs: Investegate/LSE direct HTML, CH iXBRL borrowings/pension notes, IR allowlist PDFs",
+      "summary": "Bulk backfill indexed-without-body and low-penetration buy-tier packs: Investegate/LSE direct HTML, CH iXBRL borrowings/pension notes, IR allowlist PDFs",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "LSE",
+          "HTML",
+          "CH",
+          "IR"
+        ],
+        "plan_index": 3
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for LSE",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260823-03",
@@ -3108,7 +3274,7 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-08-25T16:38:43.348801+00:00",
+    "snapshot_at": "2026-08-30T07:53:04.316811+00:00",
     "buy_tier_count": 62,
     "measured_tickers": 62,
     "unmeasured_buy_tier": 0,
@@ -3116,76 +3282,6 @@
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
     "indexed_without_body": 0,
-    "filings_with_body": 3409
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-08-23T19:26:12.223889+00:00",
-    "buy_tier_count": 62,
-    "measured_tickers": 62,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 0,
-    "filings_with_body": 3396
-  },
-  "reprioritized_at": "2026-08-25T16:38:43.348912+00:00",
-  "reprioritized_after_task": "eng-20260825-01",
-  "library_ingest_health": {
-    "snapshot_at": "2026-08-25T13:14:31.876515+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 48,
-    "unmeasured_buy_tier": 26,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 16,
-    "unmeasured_tickers": [
-      "SHELL.AS",
-      "ACKB.BR",
-      "UMI.BR",
-      "MELE.BR",
-      "LOGN.SW",
-      "STR.VI",
-      "VOE.VI",
-      "ABI.BR",
-      "ESSITY-B.ST",
-      "NOVN.SW",
-      "MUV2.DE",
-      "SKA-B.ST",
-      "DOC.VI",
-      "VOLV-B.ST",
-      "VIG.VI",
-      "BAS.DE",
-      "APAM.AS",
-      "POST.VI",
-      "OMV.VI",
-      "C5H.IR",
-      "SKF-B.ST",
-      "AZE.BR",
-      "NVG.LS",
-      "DQ7A.IR",
-      "NBA.LS"
-    ],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "AD.AS",
-      "ERIC-B.ST",
-      "SGO.PA",
-      "DHL.DE",
-      "PHIA.AS",
-      "VOW.DE",
-      "ANDR.VI",
-      "MIO.IR",
-      "EG7.IR",
-      "EVN.VI",
-      "HEIA.AS",
-      "WIE.VI",
-      "AKZA.AS",
-      "WKL.AS",
-      "DTE.DE",
-      "TTE.PA"
-    ]
-  },
-  "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "euro_depth",
-  "workflow_failure_compiled": true
+    "filings_with_body": 3917
+  }
 }
