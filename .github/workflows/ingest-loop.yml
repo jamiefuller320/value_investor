@@ -334,6 +334,55 @@ jobs:
       - name: Commit and push ingest loop artifacts
         run: "bash scripts/push_ingest_loop_artifacts.sh 'chore: weekday ingest loop [skip ci]'"
 
+      # Skip while drain/chunk chains continue so rememo sees the thickened corpus
+      # and does not burn weekly_ops mid-queue.
+      - name: Weekday rememo when memo bodies improved or grades lag
+        id: weekday_rememo
+        if: >-
+          steps.loop.outputs.chain_dispatch != 'true'
+          && steps.loop.outputs.body_gap_chain != 'true'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          if [ -z "$CURSOR_API_KEY" ]; then
+            echo "CURSOR_API_KEY unset — skip weekday rememo"
+            echo "ran=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          set +e
+          ftse-research --weekday-rememo --weekday-rememo-cap 3 \
+            --ingest-loop-json /tmp/ingest_loop.json \
+            --skip-screen
+          REMEMO_EXIT=$?
+          set -e
+          if [ "$REMEMO_EXIT" -ne 0 ]; then
+            echo "weekday rememo exited $REMEMO_EXIT (continuing; see summary)"
+          fi
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path("docs/data/weekday_memo_rememo_summary.json")
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          if not path.exists():
+              with out.open("a", encoding="utf-8") as handle:
+                  handle.write("ran=false\nrememoed=0\n")
+              raise SystemExit(0)
+          data = json.loads(path.read_text(encoding="utf-8"))
+          rememoed = data.get("rememoed") or []
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  f"ran=true\n"
+                  f"rememoed={len(rememoed)}\n"
+                  f"skipped={','.join(data.get('skipped') or [])}\n"
+              )
+          print(json.dumps(data, indent=2)[:2000])
+          PY
+
+      - name: Commit weekday rememo artifacts
+        if: steps.weekday_rememo.outputs.ran == 'true' && steps.weekday_rememo.outputs.rememoed != '0'
+        run: "bash scripts/push_weekday_rememo_artifacts.sh 'chore: weekday memo rememo [skip ci]'"
+
       - name: Chain ingest chunk when runtime cutoff deferred targets
         if: >-
           steps.loop.outputs.partial == 'true'

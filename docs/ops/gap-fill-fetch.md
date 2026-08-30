@@ -52,6 +52,27 @@ Manual rememo of an adequate set (after bodies already exist):
 python3 scripts/rememo_adequate_tickers.py
 ```
 
+## Weekday rememo (after ingest-loop)
+
+Mon–Fri `ingest-loop` thickens filing bodies offline. After a non-chaining pass,
+`ftse-research --weekday-rememo` force-initial rememos up to **3** memo tickers when:
+
+- ingest marked the ticker `improved`, or
+- published Sources grade is adequate/thin/poor (or missing) and disk
+  `filings_with_body` lags the published count by ≥10, or
+- a strong badge still lags disk by a large margin (≥25)
+
+Guards: `weekly_ops` remaining must cover estimated spend plus ~$8 headroom;
+requires `CURSOR_API_KEY`. Summary: `docs/data/weekday_memo_rememo_summary.json`.
+Published memos land via `publish_memo_backfill_batch` (updates `docs/research`
+and `docs/data/latest.json`).
+
+```bash
+ftse-research --weekday-rememo --weekday-rememo-cap 3 --dry-run --skip-screen
+ftse-research --weekday-rememo --weekday-rememo-cap 3 \
+  --ingest-loop-json /tmp/ingest_loop.json --skip-screen
+```
+
 ## Retry flow (summary)
 
 ```
@@ -100,6 +121,9 @@ ftse-research --deepen-sources --tickers SHEL.L,BP.L
 
 # Backfill source-quality scores on existing memos (no agent call):
 python3 scripts/backfill_memo_quality.py
+
+# Bounded weekday rememo after ingest thickened bodies:
+ftse-research --weekday-rememo --dry-run --skip-screen
 ```
 
 See `gap_fill_summary.json` → `fetch_attempts` / `follow_ups`, and
