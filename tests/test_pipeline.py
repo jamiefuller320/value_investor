@@ -10,6 +10,7 @@ import pytest
 
 import value_investor.pipeline  # noqa: F401 — installs research snapshot hooks
 from value_investor.models.classic import FCFYieldModel
+from value_investor.models.graham_enterprising import GrahamEnterprisingModel
 from value_investor.models.risk import EarningsQualityModel
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
@@ -35,6 +36,11 @@ from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_bas
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
+)
+from value_investor.scoring.leverage_overlay import (
+    enrich_universe_with_leverage_override,
+    leverage_override_triggered,
+    parse_adjusted_net_debt_gbp,
 )
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
@@ -1453,3 +1459,71 @@ def test_enrich_signals_with_healthcare_price_erosion_overlay_caps_hik_like_prof
 
     assert bool(enriched.iloc[0]["healthcare_price_erosion_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_parse_adjusted_net_debt_gbp_from_filing_prose_and_ocr_table():
+    assert parse_adjusted_net_debt_gbp("Adjusted net debt of £137.7m at year-end") == pytest.approx(
+        137_700_000.0
+    )
+    assert parse_adjusted_net_debt_gbp("Adjusted net debt? 1377 869") == pytest.approx(
+        137_700_000.0
+    )
+    assert parse_adjusted_net_debt_gbp("Adjusted net cash of £109.9m at year-end") == pytest.approx(
+        -109_900_000.0
+    )
+
+
+def test_leverage_override_triggered_when_yahoo_de_high_and_filing_net_debt_modest():
+    assert leverage_override_triggered(yahoo_de=161.0, filing_adjusted_net_debt_gbp=137_700_000.0)
+    assert not leverage_override_triggered(
+        yahoo_de=161.0, filing_adjusted_net_debt_gbp=250_000_000.0
+    )
+    assert not leverage_override_triggered(yahoo_de=80.0, filing_adjusted_net_debt_gbp=50_000_000.0)
+
+
+def test_enrich_universe_with_leverage_override_replaces_high_yahoo_de(tmp_path: Path):
+    ticker = "FGP.L"
+    sources = tmp_path / "research" / ticker / "sources"
+    filings_dir = sources / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_path = bodies_dir / "annual.txt"
+    body_path.write_text(
+        "FY results: Adjusted net debt of £137.7m; leverage policy below 2.0x.\n",
+        encoding="utf-8",
+    )
+    write_json(
+        filings_dir / "filings_index.json",
+        {
+            "filings": [
+                {
+                    "period": "annual",
+                    "published_at": "2026-06-20T00:00:00+00:00",
+                    "has_body": True,
+                    "body_path": str(body_path),
+                }
+            ]
+        },
+    )
+    write_json(
+        sources / "financials_annual.json",
+        {
+            "balance_sheet": {
+                "2026": {"Stockholders Equity": 710_000_000.0},
+            }
+        },
+    )
+
+    universe = pd.DataFrame([{"ticker": ticker, "debt_to_equity": 161.0}])
+    enriched = enrich_universe_with_leverage_override(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["leverage_override"] is True
+    assert row["dual_leverage_display"] is True
+    assert row["debt_to_equity_yahoo"] == pytest.approx(161.0)
+    assert row["filing_adjusted_net_debt_gbp"] == pytest.approx(137_700_000.0)
+    assert row["debt_to_equity"] == pytest.approx(137_700_000.0 / 710_000_000.0 * 100.0)
+
+    graham = GrahamEnterprisingModel().evaluate(row.to_dict())
+    assert "excessive leverage" not in graham.failed_criteria
+    assert any("Debt/equity" in reason and "100%" in reason for reason in graham.reasons)

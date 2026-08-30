@@ -37,6 +37,7 @@ from value_investor.scoring.healthcare_price_erosion_overlay import (
     apply_healthcare_price_erosion_overlay_to_signal,
 )
 from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
+from value_investor.scoring.leverage_overlay import format_adjusted_net_debt_gbp
 from value_investor.technical_analysis import (
     TradePlan,
     format_timing_summary,
@@ -96,6 +97,8 @@ class CompanyReport:
     cyclical_exposure_detected: bool = False
     earnings_basis_overlay: bool = False
     fcf_basis_overlay: bool = False
+    leverage_override: bool = False
+    dual_leverage_display: bool = False
     operating_cashflow: float | None = None
     fcf_dividend_coverage_gross: float | None = None
     fcf_dividend_coverage_net: float | None = None
@@ -148,6 +151,8 @@ class CompanyReport:
             "cyclical_exposure_detected": self.cyclical_exposure_detected,
             "earnings_basis_overlay": self.earnings_basis_overlay,
             "fcf_basis_overlay": self.fcf_basis_overlay,
+            "leverage_override": self.leverage_override,
+            "dual_leverage_display": self.dual_leverage_display,
             "operating_cashflow": self.operating_cashflow,
             "fcf_dividend_coverage_gross": self.fcf_dividend_coverage_gross,
             "fcf_dividend_coverage_net": self.fcf_dividend_coverage_net,
@@ -206,6 +211,8 @@ class CompanyReport:
             cyclical_exposure_detected=bool(data.get("cyclical_exposure_detected")),
             earnings_basis_overlay=bool(data.get("earnings_basis_overlay")),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
+            leverage_override=bool(data.get("leverage_override")),
+            dual_leverage_display=bool(data.get("dual_leverage_display")),
             operating_cashflow=data.get("operating_cashflow"),
             fcf_dividend_coverage_gross=data.get("fcf_dividend_coverage_gross"),
             fcf_dividend_coverage_net=data.get("fcf_dividend_coverage_net"),
@@ -259,6 +266,31 @@ def _key_metrics_row(row: pd.Series, *, canonical_fcf: float | None = None) -> d
         if formatted is not None:
             metrics[label] = formatted
 
+    dual_display = row.get("dual_leverage_display")
+    if (
+        dual_display is not None
+        and not (isinstance(dual_display, float) and pd.isna(dual_display))
+        and bool(dual_display)
+    ):
+        yahoo_de = row.get("debt_to_equity_yahoo")
+        if yahoo_de is not None and not (isinstance(yahoo_de, float) and pd.isna(yahoo_de)):
+            metrics["D/E (Yahoo)"] = f"{float(yahoo_de):.0f}%"
+        filing_label = format_adjusted_net_debt_gbp(row.get("filing_adjusted_net_debt_gbp"))
+        if filing_label is not None:
+            metrics["Leverage (filing)"] = filing_label
+        effective_de = row.get("debt_to_equity")
+        if (
+            row.get("leverage_override") is not None
+            and not (
+                isinstance(row.get("leverage_override"), float)
+                and pd.isna(row.get("leverage_override"))
+            )
+            and bool(row.get("leverage_override"))
+            and effective_de is not None
+            and not (isinstance(effective_de, float) and pd.isna(effective_de))
+        ):
+            metrics["D/E (screen)"] = f"{float(effective_de):.0f}%"
+
     fcf_value = canonical_fcf if canonical_fcf is not None else row.get("free_cashflow")
     formatted_fcf = _format_metric(fcf_value, pct=False)
     if formatted_fcf is not None:
@@ -270,9 +302,35 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
     """Raw metric inputs cited by D/E, liquidity, growth, NCAV, and yield models."""
     inputs: dict[str, Any] = {}
 
-    de = row.get("debt_to_equity")
-    if de is not None and not (isinstance(de, float) and pd.isna(de)):
-        inputs["debt_to_equity"] = float(de)
+    yahoo_de = row.get("debt_to_equity_yahoo")
+    effective_de = row.get("debt_to_equity")
+    filing_net_debt = row.get("filing_adjusted_net_debt_gbp")
+    dual_display = row.get("dual_leverage_display")
+    leverage_override = row.get("leverage_override")
+
+    if (
+        dual_display is not None
+        and not (isinstance(dual_display, float) and pd.isna(dual_display))
+        and bool(dual_display)
+    ):
+        if yahoo_de is not None and not (isinstance(yahoo_de, float) and pd.isna(yahoo_de)):
+            inputs["debt_to_equity_yahoo"] = float(yahoo_de)
+        if effective_de is not None and not (
+            isinstance(effective_de, float) and pd.isna(effective_de)
+        ):
+            inputs["debt_to_equity"] = float(effective_de)
+        if filing_net_debt is not None and not (
+            isinstance(filing_net_debt, float) and pd.isna(filing_net_debt)
+        ):
+            inputs["filing_adjusted_net_debt_gbp"] = float(filing_net_debt)
+        if leverage_override is not None and not (
+            isinstance(leverage_override, float) and pd.isna(leverage_override)
+        ):
+            inputs["leverage_override"] = bool(leverage_override)
+    elif effective_de is not None and not (
+        isinstance(effective_de, float) and pd.isna(effective_de)
+    ):
+        inputs["debt_to_equity"] = float(effective_de)
 
     cr = row.get("current_ratio_bs")
     if cr is None or (isinstance(cr, float) and pd.isna(cr)):
@@ -386,6 +444,10 @@ def _brief_summary(
     cyclical_exposure_overlay: bool = False,
     earnings_basis_overlay: bool = False,
     fcf_basis_overlay: bool = False,
+    leverage_override: bool = False,
+    dual_leverage_display: bool = False,
+    debt_to_equity_yahoo: float | None = None,
+    filing_adjusted_net_debt_gbp: float | None = None,
     fcf_dividend_coverage_gross: float | None = None,
     fcf_dividend_coverage_net: float | None = None,
 ) -> str:
@@ -504,6 +566,26 @@ def _brief_summary(
             f"yield-dependent screens pass "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
+
+    if dual_leverage_display:
+        yahoo_text = (
+            f"Yahoo D/E {debt_to_equity_yahoo:.0f}%"
+            if debt_to_equity_yahoo is not None
+            else "Yahoo D/E elevated"
+        )
+        filing_text = (
+            format_adjusted_net_debt_gbp(filing_adjusted_net_debt_gbp) or "filing net debt"
+        )
+        if leverage_override:
+            parts.append(
+                f"Leverage override: {yahoo_text} vs {filing_text} "
+                f"(IFRS lease gross-up; screening uses filing-adjusted net debt)."
+            )
+        else:
+            parts.append(
+                f"Dual leverage: {yahoo_text} vs {filing_text} "
+                f"(review filing-adjusted net debt before verdict)."
+            )
 
     return " ".join(parts)
 
@@ -792,6 +874,35 @@ def build_company_reports(
                 )
             )
 
+        leverage_override_flag = row.get("leverage_override")
+        leverage_override = (
+            bool(leverage_override_flag)
+            if leverage_override_flag is not None
+            and not (isinstance(leverage_override_flag, float) and pd.isna(leverage_override_flag))
+            else False
+        )
+        dual_display_flag = row.get("dual_leverage_display")
+        dual_leverage_display = (
+            bool(dual_display_flag)
+            if dual_display_flag is not None
+            and not (isinstance(dual_display_flag, float) and pd.isna(dual_display_flag))
+            else False
+        )
+        yahoo_de_raw = row.get("debt_to_equity_yahoo")
+        debt_to_equity_yahoo = (
+            float(yahoo_de_raw)
+            if yahoo_de_raw is not None
+            and not (isinstance(yahoo_de_raw, float) and pd.isna(yahoo_de_raw))
+            else None
+        )
+        filing_net_debt_raw = row.get("filing_adjusted_net_debt_gbp")
+        filing_adjusted_net_debt_gbp = (
+            float(filing_net_debt_raw)
+            if filing_net_debt_raw is not None
+            and not (isinstance(filing_net_debt_raw, float) and pd.isna(filing_net_debt_raw))
+            else None
+        )
+
         research_verdict = row.get("research_verdict")
         research_verdict_str = (
             str(research_verdict)
@@ -877,6 +988,10 @@ def build_company_reports(
             cyclical_exposure_overlay=cyclical_exposure_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
             fcf_basis_overlay=fcf_basis_overlay,
+            leverage_override=leverage_override,
+            dual_leverage_display=dual_leverage_display,
+            debt_to_equity_yahoo=debt_to_equity_yahoo,
+            filing_adjusted_net_debt_gbp=filing_adjusted_net_debt_gbp,
             fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
         )
@@ -934,6 +1049,8 @@ def build_company_reports(
                 cyclical_exposure_detected=cyclical_exposure_detected,
                 earnings_basis_overlay=earnings_basis_overlay,
                 fcf_basis_overlay=fcf_basis_overlay,
+                leverage_override=leverage_override,
+                dual_leverage_display=dual_leverage_display,
                 operating_cashflow=operating_cashflow,
                 fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
                 fcf_dividend_coverage_net=fcf_dividend_coverage_net,
