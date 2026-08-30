@@ -43,7 +43,7 @@ token instead of your user PAT.
 | `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05** → two batches (`max_targets=62`, `max_bodies=40`) | Mon–Fri 07:05 + 10:05 |
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
-| `ops-monitor.yml` | External **primary** | `45 7 * * *` → `ops-monitor.yml` | Daily 07:45 |
+| `ops-monitor.yml` | External **primary** | `45 7 * * *` + catch-up `15 13 * * *` → `ops-monitor.yml` | Daily 07:45 + 13:15 |
 | `ci-main-nightly.yml` | External **primary** | `30 7 * * *` → `ci-main-nightly.yml` | Daily 07:30 |
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
@@ -240,8 +240,9 @@ Schedule: `45 7 * * *`.
 WORKFLOW=ops-monitor.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
-Sends SMTP summary only when unfixed warn/fail remain after heal/re-verify.
-Same-day skip on duplicate success.
+Sends SMTP summary only when unfixed warn/fail remain after heal/re-verify and
+are not deferred for later-day catch-up (13:15). Same-day skip only after a run
+that finalized email (not `email_deferred`).
 
 ### 6. Data backup — Sunday tier-1 snapshot (~12:30 UTC)
 
