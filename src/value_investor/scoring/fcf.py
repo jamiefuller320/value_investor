@@ -563,6 +563,76 @@ def extract_filing_metrics_from_annual_financials(
     return metrics
 
 
+def _ir_presentation_metrics_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
+    ticker = ticker.strip().upper()
+    candidates: list[Path] = []
+    if output_dir is not None:
+        candidates.append(
+            Path(output_dir) / "research" / ticker / "sources" / "ir_presentation_metrics.json"
+        )
+    for root in _RESEARCH_ROOTS:
+        candidates.append(root / ticker / "sources" / "ir_presentation_metrics.json")
+    return candidates
+
+
+def load_ir_presentation_metrics(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any] | None:
+    """Load cached IR presentation bridge metrics when indexed."""
+    for path in _ir_presentation_metrics_candidates(ticker, output_dir):
+        resolved = resolve_json_path(path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if isinstance(payload, dict) and payload.get("bridges"):
+            return payload
+    return None
+
+
+def extract_company_adjusted_fcf_from_reconciliation_bridges(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> tuple[float | None, str | None]:
+    """Return company-adjusted FCF totals from IR/RNS reconciliation bridge tables."""
+    payload = load_ir_presentation_metrics(ticker, output_dir=output_dir)
+    if not payload:
+        return None, None
+
+    default_currency = _ticker_reporting_currency(ticker)
+    annual: tuple[float | None, str | None] = (None, None)
+    interim: tuple[float | None, str | None] = (None, None)
+
+    for bridge in payload.get("bridges") or []:
+        if not isinstance(bridge, dict):
+            continue
+        if bridge.get("bridge_type") != "fcf_by_division":
+            continue
+        derived = bridge.get("derived") or {}
+        total = derived.get("total_fcf_millions")
+        if total is None:
+            continue
+        try:
+            amount = float(total) * 1_000_000.0
+        except (TypeError, ValueError):
+            continue
+        currency = str(bridge.get("currency") or default_currency)
+        period = str(bridge.get("period") or "").lower()
+        if period == "annual":
+            annual = (amount, currency)
+        elif period == "interim" and interim == (None, None):
+            interim = (amount, currency)
+
+    if annual != (None, None):
+        return annual
+    return interim
+
+
 def _financials_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
     ticker = ticker.strip().upper()
     candidates: list[Path] = []
@@ -706,13 +776,20 @@ def extract_company_adjusted_fcf_for_ticker(
     *,
     output_dir: Path | None = None,
 ) -> tuple[float | None, str | None]:
-    """Return company-adjusted FCF from IR/filing bodies when prose exposes it."""
+    """Return company-adjusted FCF from RNS prose and reconciliation bridge tables."""
     default_currency = _ticker_reporting_currency(ticker)
-    for body in load_filing_bodies_for_ticker(ticker, output_dir=output_dir):
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("annual",)):
         amount, currency = parse_company_adjusted_fcf(body, default_currency=default_currency)
         if amount is not None:
             return amount, currency or default_currency
-    return None, None
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("interim",)):
+        amount, currency = parse_company_adjusted_fcf(body, default_currency=default_currency)
+        if amount is not None:
+            return amount, currency or default_currency
+    return extract_company_adjusted_fcf_from_reconciliation_bridges(
+        ticker,
+        output_dir=output_dir,
+    )
 
 
 def fcf_basis_values_diverge(

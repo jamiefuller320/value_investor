@@ -15,6 +15,7 @@ from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     earnings_growth_signs_diverge,
     enrich_universe_with_filing_metrics,
+    extract_company_adjusted_fcf_from_reconciliation_bridges,
     fcf_basis_divergence_flagged,
     fcf_filing_screen_mismatch,
     fcf_values_diverge,
@@ -806,6 +807,40 @@ def test_parse_company_adjusted_fcf_from_ir_prose():
     assert currency == "GBP"
 
 
+def test_extract_company_adjusted_fcf_from_reconciliation_bridges(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "bridges": [
+                    {
+                        "period": "interim",
+                        "bridge_type": "fcf_by_division",
+                        "currency": "GBP",
+                        "derived": {"total_fcf_millions": -35.6},
+                    },
+                    {
+                        "period": "annual",
+                        "bridge_type": "fcf_by_division",
+                        "currency": "GBP",
+                        "derived": {"total_fcf_millions": 113.5},
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    amount, currency = extract_company_adjusted_fcf_from_reconciliation_bridges(
+        "FGP.L",
+        output_dir=tmp_path,
+    )
+
+    assert amount == 113_500_000.0
+    assert currency == "GBP"
+
+
 def test_append_fcf_divergence_to_action_note():
     bundle = reconcile_fcf(
         screen_ttm=-66_125_000.0,
@@ -976,6 +1011,8 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
     assert snapshot["fcf_basis_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
     assert snapshot["conviction_score"] == pytest.approx(0.51)
+    assert snapshot["cashflow_metrics"]["free_cashflow"] == 113_500_000.0
+    assert snapshot["key_metrics"]["FCF"] == "113500000.0"
     assert "company-adj £113.5M" in snapshot["action_note"]
 
 
