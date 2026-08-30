@@ -156,7 +156,11 @@ def select_weekday_rememo_targets(
         disk_bodies = _disk_body_count(committed_dir, ticker)
         pub = published.get(ticker) or {}
         mq = pub.get("memo_quality") or {}
-        pub_bodies = int(mq.get("filings_with_body") or (pub.get("source_counts") or {}).get("filings_with_body") or 0)
+        pub_bodies = int(
+            mq.get("filings_with_body")
+            or (pub.get("source_counts") or {}).get("filings_with_body")
+            or 0
+        )
         grade = str(mq.get("grade") or "").strip().lower() or None
         seen.add(ticker)
         candidates.append(

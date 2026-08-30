@@ -72,7 +72,11 @@ def test_push_weekday_rememo_commits_latest_not_ops_status(tmp_path: Path):
 
     env = {**os.environ, "MAX_ATTEMPTS": "2"}
     result = subprocess.run(
-        ["bash", "scripts/push_weekday_rememo_artifacts.sh", "chore: weekday memo rememo [skip ci]"],
+        [
+            "bash",
+            "scripts/push_weekday_rememo_artifacts.sh",
+            "chore: weekday memo rememo [skip ci]",
+        ],
         cwd=work,
         env=env,
         capture_output=True,
