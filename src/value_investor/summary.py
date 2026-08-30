@@ -20,6 +20,8 @@ from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_o
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    fcf_dividend_coverage,
+    fcf_filing_screen_mismatch,
     overlay_free_cashflow_from_bundle,
     reconcile_fcf_for_ticker,
     resolve_free_cashflow,
@@ -822,6 +824,17 @@ def build_company_reports(
         cashflow_metrics = dict(fcf_bundle.get("cashflow_metrics") or {})
         if operating_cashflow is not None:
             cashflow_metrics["operating_cashflow"] = operating_cashflow
+        if free_cashflow is not None:
+            cashflow_metrics["free_cashflow"] = free_cashflow
+        filing_aligned = fcf_bundle.get("filing_aligned")
+        if fcf_filing_screen_mismatch(
+            filing_aligned=filing_aligned if filing_aligned is not None else free_cashflow,
+            screen_ttm=screen_ttm,
+            divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+        ):
+            overlay_coverage = fcf_dividend_coverage(free_cashflow, dividends_paid)
+            if overlay_coverage is not None:
+                fcf_dividend_coverage_net = overlay_coverage
         if fcf_dividend_coverage_gross is not None:
             cashflow_metrics["fcf_dividend_coverage_gross"] = fcf_dividend_coverage_gross
         if fcf_dividend_coverage_net is not None:

@@ -10,6 +10,7 @@ import pytest
 
 import value_investor.pipeline  # noqa: F401 — installs research snapshot hooks
 from value_investor.models.classic import FCFYieldModel
+from value_investor.models.risk import EarningsQualityModel
 from value_investor.research.document import ResearchDocument
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.store import ResearchStore
@@ -1117,6 +1118,37 @@ def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(t
     row = enriched.iloc[0]
     assert row["free_cashflow_screen_ttm"] == 362_600_000.0
     assert row["free_cashflow"] == 113_500_000.0
+
+
+def test_fcf_overlay_models_exclude_divergent_screen_ttm(tmp_path: Path):
+    """FCF Yield and Earnings Quality must use company-adjusted FCF, not Yahoo screen TTM."""
+    _fgp_style_research_tree(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "free_cashflow": 302_812_512.0,
+                "free_cashflow_screen_ttm": 302_812_512.0,
+                "market_cap": 973_000_000.0,
+                "net_income": 116_200_000.0,
+                "operating_cashflow": 615_600_000.0,
+                "total_assets": 5_000_000_000.0,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    universe = enrich_universe_with_filing_metrics(universe, tmp_path)
+    assert universe.iloc[0]["free_cashflow"] == 113_500_000.0
+    assert universe.iloc[0]["free_cashflow_screen_ttm"] == 302_812_512.0
+
+    model_results = evaluate_universe(universe, models=[FCFYieldModel(), EarningsQualityModel()])
+    fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
+    earnings_quality = model_results.loc[model_results["model_id"] == "earnings_quality"].iloc[0]
+
+    assert "31" not in str(fcf_yield["reasons"])
+    assert "11.7" in str(fcf_yield["reasons"]) or "11.6" in str(fcf_yield["reasons"])
+    assert bool(earnings_quality["passed"]) is True
+    assert "FCF/NI=" in str(earnings_quality["reasons"])
 
 
 def test_suppress_fcf_yield_passes_skips_when_company_fcf_is_canonical(tmp_path: Path):
