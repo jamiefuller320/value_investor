@@ -3057,6 +3057,48 @@ def _ir_body_content_hash(body: str) -> str:
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16]
 
 
+def _filing_body_hashes_from_rows(
+    filings: list[dict[str, Any]],
+    *,
+    bodies_dir: Path | None = None,
+) -> dict[str, str]:
+    """Map ``body_content_hash`` to row id for indexed filings that already have bodies."""
+    out: dict[str, str] = {}
+    for row in filings:
+        if not row.get("has_body"):
+            continue
+        row_id = str(row.get("id") or "")
+        if not row_id:
+            continue
+        content_hash = row.get("body_content_hash")
+        if not content_hash and bodies_dir is not None:
+            body_path = row.get("body_path")
+            path = Path(str(body_path)) if body_path else bodies_dir / f"{row_id}.txt"
+            if path.is_file():
+                try:
+                    content_hash = _ir_body_content_hash(
+                        path.read_text(encoding="utf-8", errors="replace")
+                    )
+                except OSError:
+                    content_hash = None
+        if content_hash:
+            out[str(content_hash)] = row_id
+    return out
+
+
+def _reject_duplicate_filing_body_hash(
+    row_id: str,
+    body: str,
+    known_hashes: dict[str, str],
+) -> tuple[str, str | None]:
+    """Return ``(content_hash, reject_reason)`` when hash already belongs to another row."""
+    content_hash = _ir_body_content_hash(body)
+    owner = known_hashes.get(content_hash)
+    if owner and owner != row_id:
+        return content_hash, "duplicate_body"
+    return content_hash, None
+
+
 def _ir_body_title_tokens_match(row: dict[str, Any], body: str) -> bool:
     tokens = _ir_row_search_tokens(row)
     if not tokens:
@@ -3137,6 +3179,7 @@ def _try_persist_rns_filing_body(
     ticker: str,
     bodies_dir: Path,
     extracted_headline: str | None = None,
+    known_body_hashes: dict[str, str] | None = None,
 ) -> tuple[dict[str, Any], str | None]:
     """Validate, reclassify ``period``, and persist an RNS body when the gate passes."""
     valid, reason = _validate_rns_filing_body_content(
@@ -3149,11 +3192,22 @@ def _try_persist_rns_filing_body(
     if not valid:
         return item, reason
     updated = _apply_headline_period(item, body_snippet=body[:4000])
+    row_id = str(updated.get("id") or "")
+    content_hash, dup_reason = _reject_duplicate_filing_body_hash(
+        row_id,
+        body,
+        known_body_hashes or {},
+    )
+    if dup_reason:
+        return item, dup_reason
     filename = f"{updated['id']}.txt"
     path = bodies_dir / filename
     path.write_text(body, encoding="utf-8")
     updated["has_body"] = True
     updated["body_path"] = str(path)
+    updated["body_content_hash"] = content_hash
+    if known_body_hashes is not None and row_id:
+        known_body_hashes[content_hash] = row_id
     return updated, None
 
 
@@ -3485,6 +3539,7 @@ def refetch_ir_allowlist_filing_bodies(
     retries_used = 0
     investegate_fallbacks = 0
     retry_log: list[dict[str, Any]] = []
+    known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
@@ -3564,17 +3619,31 @@ def refetch_ir_allowlist_filing_bodies(
                     max_retries + 1,
                 )
             if body:
-                filename = f"{item['id']}.txt"
-                path = bodies_dir / filename
-                path.write_text(body, encoding="utf-8")
-                item["has_body"] = True
-                item["body_path"] = str(path)
-                item["body_content_hash"] = _ir_body_content_hash(body)
-                if fetch_source and fetch_source.startswith("pdf_"):
-                    item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
-                if fetch_source == "investegate_html":
-                    investegate_fallbacks += 1
-                downloaded += 1
+                content_hash, dup_reason = _reject_duplicate_filing_body_hash(
+                    row_id,
+                    body,
+                    known_body_hashes,
+                )
+                if dup_reason:
+                    logger.debug(
+                        "IR allowlist body rejected for %s: %s",
+                        row_id,
+                        dup_reason,
+                    )
+                    body = None
+                else:
+                    filename = f"{item['id']}.txt"
+                    path = bodies_dir / filename
+                    path.write_text(body, encoding="utf-8")
+                    item["has_body"] = True
+                    item["body_path"] = str(path)
+                    item["body_content_hash"] = content_hash
+                    known_body_hashes[content_hash] = row_id
+                    if fetch_source and fetch_source.startswith("pdf_"):
+                        item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
+                    if fetch_source == "investegate_html":
+                        investegate_fallbacks += 1
+                    downloaded += 1
         updated.append(item)
 
     after = sum(1 for row in updated if row.get("has_body"))
@@ -4310,6 +4379,7 @@ def _write_bodies(
         key=lambda row: (-int(row.get("priority") or 0), row.get("published_at") or ""),
     )
     downloaded = 0
+    known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
     for row in candidates:
         row = dict(row)
@@ -4336,6 +4406,7 @@ def _write_bodies(
                             company_name=company_name,
                             ticker=ticker,
                             bodies_dir=bodies_dir,
+                            known_body_hashes=known_body_hashes,
                         )
                         if row.get("has_body"):
                             downloaded += 1
@@ -4827,6 +4898,7 @@ def refetch_investegate_filing_bodies(
     downloaded = 0
     body_rejected = 0
     html_fallbacks = 0
+    known_body_hashes = _filing_body_hashes_from_rows(enriched, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
     missing_ids = {row.get("id") for row in missing}
     enriched.sort(
@@ -4855,6 +4927,7 @@ def refetch_investegate_filing_bodies(
                     ticker=ticker,
                     bodies_dir=bodies_dir,
                     extracted_headline=extracted_headline,
+                    known_body_hashes=known_body_hashes,
                 )
                 if reject_reason:
                     body_rejected += 1
@@ -5163,6 +5236,7 @@ def refetch_ticker_rns_api_filing_bodies(
     bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
     body_rejected = 0
+    known_body_hashes = _filing_body_hashes_from_rows(filtered, bodies_dir=bodies_dir)
     missing_ids = {row.get("id") for row in missing}
     updated: list[dict[str, Any]] = []
     for row in filtered:
@@ -5181,6 +5255,7 @@ def refetch_ticker_rns_api_filing_bodies(
                     company_name=company_name,
                     ticker=ticker,
                     bodies_dir=bodies_dir,
+                    known_body_hashes=known_body_hashes,
                 )
                 if reject_reason:
                     body_rejected += 1
@@ -5256,7 +5331,13 @@ def refetch_missing_filing_bodies(
     remaining = max(0, max_bodies - int(ch_result.get("fetched") or 0))
     mid = int(ch_result.get("with_body_after") or before)
     missing = [row for row in filings if row.get("url") and not row.get("has_body")]
-    updated = _write_bodies(filings, bodies_dir, max_bodies=remaining)
+    updated = _write_bodies(
+        filings,
+        bodies_dir,
+        max_bodies=remaining,
+        ticker=ticker,
+        company_name=company_name,
+    )
     after = sum(1 for row in updated if row.get("has_body"))
     payload["filings"] = updated
     payload["summary"] = summarize_filings(updated)
@@ -5522,7 +5603,13 @@ def ingest_filings(
     )
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
-    merged = _write_bodies(merged, bodies_dir, max_bodies=max_bodies)
+    merged = _write_bodies(
+        merged,
+        bodies_dir,
+        max_bodies=max_bodies,
+        ticker=ticker,
+        company_name=company_name,
+    )
     merged = _scrub_misattributed_filing_rows(
         merged,
         bodies_dir,
