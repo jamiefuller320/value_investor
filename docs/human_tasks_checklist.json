@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-28",
+  "updated_at": "2026-08-30",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -198,6 +198,14 @@
           "automated": false,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"
+        },
+        {
+          "id": "adhoc-ops-monitor-catchup-cron",
+          "title": "Register ops-monitor 13:15 UTC catch-up on cron-job.org",
+          "summary": "After merging email-deferral catch-up, run import_cron_jobs.py --job ops-monitor-catchup (or --all) so external primary fires daily 13:15 UTC. GitHub schedule alone is backup. Verify with gh run list --workflow=ops-monitor.yml.",
+          "automated": false,
+          "doc_path": "docs/ops/ops-monitor.md",
+          "doc_anchor": "email-deferral-day-complete-gate"
         }
       ]
     }
