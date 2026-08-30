@@ -112,9 +112,10 @@ WORKFLOW_SCHEDULES = {
         "name": "FTSE Ops Monitor",
         "cron": "45 7 * * *",
         "cadence": (
-            "Daily 07:45 UTC (GitHub schedule + external cron). "
-            "Workflow/artifact health, safe auto-fixes, re-verify, ops engineering "
-            "task drafting; SMTP only for unfixed warn/fail. docs/ops/ops-monitor.md."
+            "Daily 07:45 UTC morning + 13:15 UTC catch-up (GitHub schedule + "
+            "external cron). Workflow/artifact health, safe auto-fixes, re-verify; "
+            "SMTP deferred until day's slots complete when only pre-slot/recovery "
+            "findings remain. docs/ops/ops-monitor.md."
         ),
         "workflow": "ops-monitor.yml",
     },
