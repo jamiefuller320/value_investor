@@ -2253,7 +2253,103 @@
       "priority": "low",
       "suggestion": "Require gap-fill follow-ups to cite whether newly fetched body count changed the status of each open question (resolved / partially_resolved / unresolved) versus the prior pass, avoiding duplicate analysis when bodies add governance colour but not product economics.",
       "recorded_at": "2026-08-23T07:22:59.243770+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Five pipeline items: IR bridge parsing, stale FCF binding, Sky RNS structured extraction, CH OCR validation, truncation flagging.",
+      "recorded_at": "2026-08-30T07:52:44.471726+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Prioritise full RNS results body fetch (e.g. `3bf5ff09fbc5c747.txt`) over Investegate AI-summary wrappers — this pass added the FCF bridge that unlocked Q4/Q5",
+      "recorded_at": "2026-08-30T07:52:44.471739+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "When FCF overlay fires, auto-select company-adjusted FCF from RNS reconciliation table and suppress filing-aligned FCF for FCF Yield and dividend-coverage models",
+      "recorded_at": "2026-08-30T07:52:44.471743+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Extract borrowings-note covenant ratios from Companies House iXBRL; 57 text bodies still omit quantified RCF covenant headroom",
+      "recorded_at": "2026-08-30T07:52:44.471745+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Parse H1 interim pension note 18 tables into structured fields — interim deficit £29.3m vs FY surplus £19.9m is material for risk scoring",
+      "recorded_at": "2026-08-30T07:52:44.471749+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "Flag names where Yahoo D/E exceeds 100% but adjusted net debt is below £200m, requiring dual leverage display before verdict",
+      "recorded_at": "2026-08-30T07:52:44.471752+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "`research.md` updated to v2 follow-up. All five questions remain **partially_resolved**; the main incremental finding is H1 pension interim deficit (£29.3m) versus FY surplus (£19.9m), and confirmation that covenant language is still absent from all 57 extracts.",
+      "recorded_at": "2026-08-30T07:52:44.471757+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Validate refetched IR PDF bodies against index headline/period via content-hash dedup — `ir_a9733d0de6aec27d.txt` is identical to H1 interim (`5f26e81d036b3596.txt` hash match) while indexed as April trading update; reject or re-fetch from source PDF URL.",
+      "recorded_at": "2026-08-30T07:52:44.471762+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Prefer Investegate RNS trading statement (`94eb1f8d38a51fa6.txt`) over IR PDF allowlist when Investegate fallback returns wrong document class.",
+      "recorded_at": "2026-08-30T07:52:44.471764+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse annual report consolidated cash flow statement dividends-paid line into FCF coverage overlay (replace Yahoo-only dividend cash with filing-sourced $(185)m).",
+      "recorded_at": "2026-08-30T07:52:44.471766+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Segment-level healthcare price-erosion overlay using filing margin guides (Injectables 27–28% vs 31% prior) so Branded/MENA offsets do not fully neutralise US erosion penalty.",
+      "recorded_at": "2026-08-30T07:52:44.471769+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Extract annual report principal risks (pp 84–88) and patent/contingency Notes into structured fields for pipeline-cliff gap-fill without manual PDF reads.",
+      "recorded_at": "2026-08-30T07:52:44.471772+00:00"
     }
   ],
-  "updated_at": "2026-08-23T07:22:59.243772+00:00"
+  "updated_at": "2026-08-30T07:52:44.471774+00:00"
 }

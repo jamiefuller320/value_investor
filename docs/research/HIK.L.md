@@ -1,161 +1,139 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 3 · Updated 2026-08-23T07:20:36.646319+00:00 · Mode: gap_fill_
+_Version 3 · Updated 2026-08-30T07:52:44.443515+00:00 · Mode: gap_fill_
 
 ## EXECUTIVE SUMMARY
-Hikma is a diversified FTSE 100 generic and specialty pharmaceutical group spanning US injectables, MENA branded generics, and US oral/specialty (Hikma Rx), trading at roughly 12.7× P/E and 1.9× P/B with a ~3.9% dividend yield — metrics that underpin the quantitative **strong buy** (10/22 models, 81% composite, 91% sector-relative). The investment case rests on a quality compounder trading below historical multiples after a February 2026 guidance reset, now partially repaired by a solid H1 2026 beat and reiterated FY guidance. The central debate is whether Branded momentum and Hikma Rx mix improvement can offset structurally lower Injectables margins, elevated capex, and weak reported free cash flow ($119m FY2025; screen flags FCF basis divergence). Deep research broadly supports accumulation at current valuation, but overlays on earnings quality, healthcare pricing, and cash conversion warrant measured sizing rather than full conviction.
+Hikma is a FTSE 100 multinational generics and injectables group with three engines — US-focused Injectables and Hikma Rx, plus MENA Branded — trading on roughly 12.5× earnings, 1.9× book and a 3.9% dividend yield, which the quantitative screen flags as a **strong buy** (10/22 models; 81% composite). The value case rests on investment-grade balance sheet strength (BBB), durable cash generation, shareholder returns ($250m buyback, rising dividend), and a H1 2026 profit beat that has prompted multiple broker upgrades. The central debate is whether Injectables margin erosion, elevated capex and working-capital build, and the February 2026 withdrawal of medium-term guidance mark a cyclical trough or a structural reset — compounded by an unresolved free-cash-flow measurement gap (filing-aligned FY2025 FCF $119m vs screen TTM $14.4m).
 
 ## INVESTMENT THESIS
-The quantitative screen flags Hikma across five factor families — cheapness, quality, dividend, GARP, and risk — passing Graham Enterprising, Buffett Quality, Magic Formula, Acquirer's Multiple, and Financial Health, among others. At P/E 12.7, P/B 1.9, ROE 15.4%, and debt/equity 77%, the stock screens as inexpensive relative to a business with investment-grade balance sheet (BBB/stable, S&P and Fitch), 16% ROIC (FY2025 filing), and a growing dividend (84 cents FY2025, +5%).
+The screen’s strong-buy signal is underpinned by breadth across value families: cheapness (P/E 12.5, P/B 1.89, D/E 77%), quality (ROE 15.4%, passes Buffett Quality and Financial Health), dividend (3.9% yield, Dividend Growth model pass), GARP (Neff PEGY, Magic Formula), and risk (Acquirer’s Multiple, Composite Value). Sector-relative composite (91%) is elevated for Healthcare. Business quality is genuine: FY2025 core revenue grew 6% to **$3,349m**, core operating profit rose 3% to **$741m** (22.1% margin), and the group retained S&P/Fitch **BBB** ratings with net debt/core EBITDA at **1.6×** (FY2025 results, 26 February 2026). H1 2026 confirmed operational momentum — core operating profit **+9%** to **$405m** on revenue **+4%** to **$1,728m** — with Branded (+15%) offsetting flat Injectables.
 
-Business quality is segment-differentiated. **Branded** is the standout: FY2025 core revenue +10%, core operating profit +19%, margin 26.4%; H1 2026 revenue +15%, core operating margin 32.5%, with Hikma the largest pharma company by sales in MENA. **Hikma Rx** is stabilising: FY2025 core revenue ~$1.04bn flat, margin 17.3% rising to 20.6% in H1 2026 on CMO mix and sodium oxybate terms. **Injectables** remains the swing factor: FY2025 core revenue +7% but core operating profit −6% (margin 31.0% vs 35.3%), with H1 2026 revenue flat and core margin 27.6%.
-
-For a value investor, the hook is a credible recovery narrative — Said Darwazah's return as CEO (December 2025), withdrawal of medium-term margin guidance, increased Injectables investment, and a $250m share buyback signal management alignment — layered onto a stock that screens cheaply versus healthcare peers while paying an income stream with gross FCF dividend coverage of ~1.3× (net ~0.64× per screen). Failed screens (FCF Yield, Economic Moat, Piotroski 6/9, Earnings Quality) correctly flag that the cheapness is not pristine; the thesis requires Branded to keep compounding while Injectables margins floor in the guided 27–28% range.
+For a value investor, the hook is a quality compounder priced like a distressed generic: statutory earnings recovered (FY2025 profit to shareholders **$402m**, +12%; basic EPS **182 cents**) after a one-off sodium oxybate legal settlement, while the market still prices low single-digit growth (screen: ~1.7% earnings growth; Lynch PEG fails). Capital return is tangible: total FY2025 dividend **84 cents** (+5%), interim H1 2026 **38 cents** (+6%), and **$227m** of the **$250m** buyback completed by 5 August 2026. US manufacturing footprint (Ohio, New Jersey) offers a relative tariff hedge versus import-dependent peers — a point echoed in sell-side commentary. Overlays that temper the raw screen signal to **Buy** (from Strong Buy) — healthcare price-erosion and FCF basis divergence — are worth monitoring but do not invalidate the core cheapness/quality pairing.
 
 ## FINANCIAL REVIEW
-**Annual (FY2025 — primary: `filings/bodies/ir_0e40d9707e30c3b7.txt`)**
+**Sources:** FY2025 press release (`ir_0e40d9707e30c3b7.txt`), annual report (`ir_3a67962eb8770824.txt`), H1 2026 interim (`5f26e81d036b3596.txt`), April trading statement (`94eb1f8d38a51fa6.txt`). Refetched `ir_a9733d0de6aec27d.txt` is duplicate H1 body — no new April content. Yahoo fallback for total capex/FCF only.
 
-| Metric | FY2025 | FY2024 | Change |
-|--------|--------|--------|--------|
-| Reported revenue | $3,349m | $3,127m | +7% |
-| Core operating profit | $741m | $719m | +3% |
-| Reported operating profit | $542m | $612m | −11% |
-| Profit attributable | $402m | $359m | +12% |
-| Basic EPS | 182 cents | 162 cents | +12% |
-| Operating cash flow | $436m | $564m | −23% |
-| PPE capex | $197m | $165m | +19% |
-| Intangible capex | $120m | $70m | +71% |
-| FCF (Yahoo fallback) | $119m | $329m | −64% |
-| Cash dividends paid | $185m | $175m | +6% |
-| Net debt / core EBITDA | 1.6× | 1.4× | — |
-| Working capital days | 245 | 240 | — |
+**FY2025:** Revenue **$3,349m** (+7%); core OP **$741m** (+3%); profit **$402m** (+12%); dividend **84c** (+5%); OCF **$436m** (−23%, **$186m** settlements). Annual report: dividends paid **$(185)m**. Yahoo-implied FCF **$119m**; net FCF/dividend **0.64×**.
 
-Reported OP fell on **$72m sodium oxybate settlement**; **$186m** settlement cash reduced OCF. Hikma Rx: flat revenue, **"expected price erosion"**; Injectables: US competition, core margin **31.0%**. Annual report: **300+ pipeline products**, **84 launches** (`ir_3a67962eb8770824.txt`).
+**H1 2026:** Revenue **$1,728m** (+4%); core OP **$405m** (+9%); OCF **$214m**; capex **$122m**; net debt **1.9×**. Dividends **$105m**, buyback **$175m** H1.
 
-**Interim (H1 2026 — primary: `filings/bodies/5f26e81d036b3596.txt`)**
+**Guidance:** Revenue **+2–4%**; core OP **$720–770m**; Injectables margin **27–28%**.
 
-Revenue **$1,728m** (+4%); core OP **$405m** (+9%); OCF **$214m** (+33%); net debt **$1,694m** (1.9× EBITDA). Hikma Rx: **"modest price erosion… in line with recent history"**, core margin **20.6%**. Injectables flat, core margin **27.6%**. Capex **$122m** PPE + **$31m** intangibles; **$39m** partner-reimbursed. Buyback **$175m** H1. Guidance reiterated: core OP **$720–770m**; capex **$190–210m** (excl. **$120m** reimbursed).
-
-**Trading update (23 April 2026 — `filings/bodies/94eb1f8d38a51fa6.txt`):** Guidance unchanged; buyback **$71.5m** to 17 April.
-
-**Cash conversion:** Net FCF/dividend **0.64×** reflects FY2025 trough (settlement, WC build, growth capex). H1 OCF recovery suggests partial normalisation; buyback and Bedford capex (commercial **2028**) keep near-term FCF tight. Screen TTM FCF **$14.4m** vs filing **$119m** — unresolved.
-
-**Gap:** `ir_a9733d0de6aec27d.txt` still mis-indexed after refetch; use `94eb1f8d38a51fa6.txt` for April trading update.
+**Gaps:** No filing-labelled FCF; misattributed April PDF body; TTM FCF unreliable.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Evident from filings:** Pricing erosion language in Hikma Rx (modest, in line with history; margin **20.6%** H1) vs Injectables guided compression (**27–28%**). Principal risk **Market dynamics** covers pricing/reimbursement/policy (`5f26e81d036b3596.txt`). Litigation: sodium oxybate settled; generic pricing **MDL** bellwether Sep 2026, no provision (`ir_0e40d9707e30c3b7.txt`). Leverage **1.9×** EBITDA, buyback-driven; IG mitigants intact. FCF/dividend **0.64×** net — allocation tension, not cut signal. Governance transition; MENA conflict exposure up; two wholesalers **~11%** each.
+**Evidenced:** US pricing/competition (Injectables margin guide down; Hikma Rx erosion “modest”); pipeline dependency (118 products, sodium oxybate competition flagged); FCF/dividend mismatch (**$119m** FCF vs **$185m** dividends); leverage **1.9×**; customer concentration; MENA geopolitical cost inflation (`94eb1f8d38a51fa6.txt`); leadership transition; 503B wind-down.
 
-**Still open:** Quantified US price-decline (CMS/IQVIA); FCF normalisation path; MDL sizing; direct PDF fetch for April trading update.
+**Open:** Misattributed `ir_a9733d0de6aec27d.txt`; pension/lease detail not extracted; principal-risk tables not structured.
 
-RiskTags: regulatory, competitive, governance, leverage, customer_concentration, key_person, litigation, accounting, liquidity
+RiskTags: regulatory, competitive, cyclical, leverage, customer_concentration, key_person, litigation, accounting, governance
 
 ---
-RiskTags: regulatory, competitive, governance, leverage, customer_concentration, key_person, litigation, accounting, liquidity
+RiskTags: regulatory, competitive, cyclical, leverage, customer_concentration, key_person, litigation, accounting, governance
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-heavy on broker commentary and Kalkine Media pieces**, with fewer deep investigative articles.
+Coverage over the past year is **moderate-to-heavy on sell-side and aggregator content** (notably Kalkine Media); fewer primary-journalism deep dives.
 
-**Strategy and guidance (Feb–Aug 2026):**
-- *Hikma's shares plummet after guidance cut* (Investors' Chronicle, 26 Feb 2026) and *Hikma Pharma tumbles on softer guidance as buyback fails to soften pill* (Yahoo Finance UK, 26 Feb 2026) — February FY2025 results paired with softer 2026 outlook and medium-term guidance withdrawal.
-- *Hikma launches $250m buyback with first £1.2m share purchase* (TipRanks, 27 Feb 2026).
-- Trading statement reaffirming FY2026 guidance (23 Apr 2026); *Hikma jumps 10% as brokers point to profit beat* (Yahoo Finance, 6 Aug 2026) on H1 beat.
+**Strategy / guidance:**  
+- **26 February 2026** — FY2025 results: $250m buyback, +5% dividend, 2026 core OP guide $720–770m; **medium-term guidance withdrawn**; shares fell sharply (“Hikma’s shares plummet after guidance cut”, *Investors’ Chronicle*; “Hikma Pharma tumbles on softer guidance…”, *Yahoo Finance UK*, both 26 Feb 2026).  
+- **23 April 2026** — Trading statement reiterates full-year guidance; Ellipta® device partnership for inhalation platform.  
+- **6 August 2026** — H1 beat; guidance reiterated; Branded now expected at top of range.
 
-**Management and board:**
-- Leadership restructuring announced with FY2025 results (CEO focus, new Deputy CEOs, CFO transition).
-- *Convatec Group's Tobias Hestler Joins Hikma Pharmaceuticals Board* (Kalkine Media, 6 Aug 2026).
-- *Independent Chairman Victoria Hull Buys 241% More Shares* (simplywall.st, 2 May 2026).
+**Management / board:** Leadership restructuring (CEO focus, new Chair, Deputy CEO roles, CFO transition); Tobias Hestler appointed NED (11 August 2026); Chairman Victoria Hull increased shareholding (May 2026, *simplywall.st*).
 
-**Broker sentiment (post-H1):**
-- *Deutsche Bank Lifts Hikma Price Target To 2,050p On Half-Year Beat* (londoninsider.co.uk, 11 Aug 2026).
-- *Citi sees Hikma discount as unwarranted after upgrade to forecasts* (Yahoo Finance, 12 Aug 2026).
-- Earlier: *Citi starts Hikma at 'buy'* (16 Jul 2026); *Panmure: recovery story still has further to run* (22 Jul 2026).
+**Capital return:** Buyback nearing completion — “Finalizes $250 Million Share Buyback Program” (*Kalkine*, 28 Aug 2026); ongoing weekly RNS purchase disclosures.
 
-**Thematic:**
-- *Hikma and Fresenius best positioned from Trump's generic drug tariffs* (Yahoo Finance, 23 Jul 2026) — US manufacturing footprint cited as relative advantage.
-- *Why Is Hikma Pharmaceuticals Suddenly In The Regulatory Crosshairs?* (Kalkine Media, 14 Jul 2026) — regulatory scrutiny theme.
-- *Does Hikma Face a Sharper Middle East Question Than Its Peers?* (Kalkine Media, 19 Aug 2026).
+**Broker sentiment (post-H1):** Citi, Deutsche Bank, Jefferies raised targets citing undemanding valuation and H1 beat (*Yahoo Finance*, 10–25 August 2026). Citi initiated at Buy (July 2026); Panmure noted recovery from lows (22 July 2026).
 
-**Capital returns:** Active buyback — *Hikma Buys Back 569,511 Shares... Part of $250 Million Repurchase Plan* (Kalkine Media, 10 Aug 2026); H1 filing states $227m purchased by 5 August 2026.
+**Regulatory / macro:** Citi flagged Hikma as relatively well placed vs proposed US generic tariffs given US manufacturing (23 July 2026). Supreme Court ruling in Hikma’s favour on Amarin litigation (referenced in H1 RNS).
+
+**Ownership:** Wellington Management reduced stake below 5% threshold (24 July 2026, *Kalkine*).
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: caution
 Risk: medium
-Confidence: 0.68
-Rationale: Follow-up refetch adds no new primary figures but confirms filing-backed pricing pressure is segment-specific and partly offset, FCF weakness is mixed (one-offs plus structural capex), and leverage remains manageable within IG guardrails — supporting accumulate over watchlist, but not full strong-buy while TTM screen inputs and net dividend coverage stay unresolved.
+Confidence: 0.67
+Rationale: Follow-up refetch adds no new April trading-update text (misattributed duplicate) and filings still confirm segment-level US pricing pressure plus filing-aligned FCF well below dividends, partially offset by H1 operating momentum — gap-fill slightly weakens confidence in the screen’s strong-buy/yield case without resolving cash or pricing questions.
 
 ## OPEN QUESTIONS
-- [partially_resolved] Healthcare price-erosion overlay indicates filing pricing pressure — US/generic drug pricing regulation and pipeline concentration risk are not quantified in the screen.
-- [partially_resolved] Net FCF dividend coverage 0.64× with heavy capex ($317M vs OCF $436M) — cyclicality of injectables/generics demand and R&D pipeline gaps are open questions.
-- [partially_resolved] Leverage rising (Piotroski leverage-declining component failed) — balance-sheet trajectory under pricing pressure warrants scrutiny.
-- [partially_resolved] How material is the healthcare price-erosion overlay for US generics pricing, and does weak free-cash conversion (net FCF/dividend coverage 0.64×) reflect temporary capex or a lasting margin squeeze?
-- [partially_resolved] (Hikma Pharmaceuticals PLC) — Ten of 22 models pass… Verdict: watchlist — sector-relative cheapness appealing, but weak cash conversion, negative statutory earnings growth (-4.7%), and healthcare pricing overlay argue for patience.
+- [partially_resolved] Generic-drug pricing pressure in the US (screen’s healthcare price-erosion overlay hints at this) can erode margins faster than trailing multiples imply.
+- [partially_resolved] Patent cliffs, FDA/competition dynamics, and pipeline dependency are standard pharma risks absent from quantitative inputs.
+- [partially_resolved] Net FCF dividend coverage 0.64× raises dividend-cut risk if pricing pressure persists — qualitative sustainability concern beyond the yield figure.
+- [partially_resolved] Is US generic pricing erosion a temporary margin squeeze or a structural reset that makes a 3.9% yield and 12.5× P/E unsafe?
+- [partially_resolved] (Hikma) — 10/22 models pass, quality-over-yield lean, watchlist verdict due to stalled growth, cash conversion, pricing flags.
 
 ## Weekly updates
 
-### 2026-08-23T07:19:44.788782+00:00
-Q: Healthcare price-erosion overlay indicates filing pricing pressure — US/generic drug pricing regulation and pipeline concentration risk are not quantified in the screen.
+### 2026-08-30T07:51:28.752475+00:00
+Q: Generic-drug pricing pressure in the US (screen’s healthcare price-erosion overlay hints at this) can erode margins faster than trailing multiples imply.
 Status: partially_resolved
-Evidence: The overlay fires on filing phrases such as "price erosion" and "competition on higher margin products" (`ir_0e40d9707e30c3b7.txt`, `ir_a70365d580129295.txt`, H1 2026 interim `5f26e81d036b3596.txt` — "modest price erosion… in line with recent history"). FY2025 Hikma Rx revenue was flat with "expected price erosion across the base portfolio"; Injectables saw US competition on testosterone/calcitonin; 2026 guidance embeds Injectables margin 27–28% (down from 31% FY2025). Annual report cites **300+ pipeline products** and **84 launches in 2025**; revenue mix is diversified (Injectables 42.5%, Hikma Rx 31%, Branded 25.4% FY2025 per `ir_presentation_metrics.json`). US generic pricing **antitrust MDL** bellwether trial scheduled September 2026 — no provision, liability "impracticable to estimate" (`ir_0e40d9707e30c3b7.txt`). Potential US import tariffs discussed in H1 2026 but not quantified; FY2025 tariff impact ~$3m.
-SourcesTried: filings_bodies, filings_index, ir_presentation_metrics, screening_snapshot, news_manifest, alternate_news
-NextSources: CMS/Medicare generic reimbursement data or IQVIA price-decline indices by therapeutic class; product-level revenue disclosure from next annual report segment note (not in current extracts)
+Evidence: FY2025 results (`filings/bodies/ir_0e40d9707e30c3b7.txt`) cite US Injectables competition on high-value products (testosterone, calcitonin) and Hikma Rx “expected price erosion across the base portfolio”; H1 2026 (`5f26e81d036b3596.txt`) describes “modest price erosion… in line with recent history,” offset by launches. `ir_presentation_metrics.json` shows Injectables core margin 36.3% → 30.0% (1H24→1H25). Group core OP still grew +9% in H1 2026 on Branded strength — erosion is segment-specific, not portfolio-wide.
+SourcesTried: filings_bodies, filings_index, ir_presentation_metrics, screening_snapshot, screen_run_manifest
+NextSources: FDA Orange Book competitive-entry calendar for top US Injectables SKUs; IQVIA channel pricing for sodium oxybate/vancomycin basket
 
-Q: Net FCF dividend coverage 0.64× with heavy capex ($317M vs OCF $436M) — cyclicality of injectables/generics demand and R&D pipeline gaps are open questions.
+Q: Patent cliffs, FDA/competition dynamics, and pipeline dependency are standard pharma risks absent from quantitative inputs.
 Status: partially_resolved
-Evidence: FY2025 cash bridge (filing `ir_0e40d9707e30c3b7.txt`): OCF **$436m**; PPE capex **$197m**; intangible purchases **$120m** (Yahoo `financials_annual.json` aggregates to **$317m**, FCF **$119m**); dividends **$185m** (Yahoo) → net coverage **0.64×** per `screening_snapshot.json`. One-off **$186m** legal settlement cash depressed FY2025 OCF; ex-settlement OCF would have risen ~10%. H1 2026 OCF **$214m** (+33%) with capex **$122m** (includes **$39m** partner-reimbursed CMO). Demand described as "steady/good" — not cyclical recession exposure; Branded is H1-weighted by tender timing. R&D: **$151m** FY2025 (4.5% of revenue); H1 2026 **$86m** (+18%, 5.0% of revenue) with **48 submissions / 43 launches**; aspiration 5–6% of revenue. Pipeline not thin (300+ products) but Injectables margin investment is structural through 2028 (Bedford commercial production).
-SourcesTried: filings_bodies, yahoo_financials, ir_presentation_metrics, screening_snapshot, screen_run_manifest
-NextSources: Company IR presentation PDF cash-flow bridge (`ir_presentation_metrics.json` returned zero FCF bridges); Yahoo quarterly cashflow (marked thin/absent in source map)
+Evidence: FY2025 filing documents 118 Injectables pipeline products (15 ready-to-use), 84 launches in 2025, first US biosimilar (ustekinumab), Tyzavan®; H1 2026 reports 48 submissions and 43 launches. 2026 outlook flags “expected competition on sodium oxybate as well as usual price erosion” in Hikma Rx. Principal risks (annual report pp 84–88) referenced in H1 2026 but not fully re-extracted.
+SourcesTried: filings_bodies, filings_index, ir_presentation_metrics, news_manifest, alternate_news
+NextSources: FDA ANDA/PMA approval database; annual report Note on contingent liabilities and patent expiry schedule
 
-Q: Leverage rising (Piotroski leverage-declining component failed) — balance-sheet trajectory under pricing pressure warrants scrutiny.
+Q: Net FCF dividend coverage 0.64× raises dividend-cut risk if pricing pressure persists — qualitative sustainability concern beyond the yield figure.
 Status: partially_resolved
-Evidence: Net debt/core EBITDA: **1.4×** (Dec 2024) → **1.6×** (Dec 2025) → **1.9×** (Jun 2026); net debt **$1,387m** → **$1,694m** (`ir_0e40d9707e30c3b7.txt`, `5f26e81d036b3596.txt`). H1 filing attributes rise to **$175m buyback**, prior legal settlements, and investment; **$790m undrawn committed facilities**; BBB/stable (S&P, Fitch); covenants suspended while investment-grade. Total debt Jun 2026 **$1,957m** vs Dec 2025 **$1,604m**. Gross margin pressure is segment-specific (Injectables mix) while group core gross margin improved to **44.8%** H1 2026. Piotroski 6/9: leverage, gross margin, and asset turnover components failed (`screening_snapshot.json`).
-SourcesTried: filings_bodies, yahoo_financials, screening_snapshot, screen_run_manifest
-NextSources: IFRS 16 lease maturity table from annual report notes (not extracted — `ir_presentation_metrics.json` lease count 0); debt maturity schedule from FY2025 annual report Note 9/11 full extract
+Evidence: `screening_snapshot.json`: filing-aligned FY2025 FCF $119m; gross FCF/dividend 1.31×, net 0.64× (post-buyback). Yahoo fallback: cash dividends paid $185m. H1 2026 OCF $214m (+33%) covered H1 dividends paid $105m, but capex $122m implies ~$92m half-year FCF before $175m buyback. AGM (`79020e7741ba8f95.txt`) approved 48c final; interim raised to 38c — no cut signal, but headroom is thin.
+SourcesTried: filings_bodies, yahoo_financials, yahoo_quarterly_cashflow, screening_snapshot, screen_run_manifest, ir_presentation_metrics
+NextSources: Company IR presentation FCF bridge (legal settlements, partner-reimbursed capex) per `gap_fill_source_map.json` planned_alternate_sources
 
-Q: How material is the healthcare price-erosion overlay for US generics pricing, and does weak free-cash conversion (net FCF/dividend coverage 0.64×) reflect temporary capex or a lasting margin squeeze?
+Q: Is US generic pricing erosion a temporary margin squeeze or a structural reset that makes a 3.9% yield and 12.5× P/E unsafe?
 Status: partially_resolved
-Evidence: Overlay is a **one-notch signal cap** (strong_buy → buy per `screening_snapshot.json` adjusted_signal), triggered because quality/dividend families pass while all yield screens fail and filings cite pricing language — it does **not** quantify erosion magnitude. Management frames Hikma Rx erosion as "modest… in line with recent history" with mix offset (CMO, sodium oxybate); Injectables margin reset is **guided and partly investment-driven** (R&D/S&M up double digits H1 2026). FCF weakness is **mixed**: temporary (legal settlement cash, working capital build to 264 days for MENA supply continuity) plus **structural** (capex $190–210m guided 2026 excl. $120m reimbursed CMO; Bedford until 2028). H1 OCF recovery (+33%) suggests FY2025 was trough-like, but buyback competes with dividend for cash.
-SourcesTried: filings_bodies, yahoo_financials, screening_snapshot, ir_presentation_metrics, news_manifest
-NextSources: Company IR / results presentation PDF with explicit OCF-to-FCF waterfall (`planned_alternate_sources` in `gap_fill_source_map.json`)
+Evidence: Structural: medium-term guidance withdrawn (Feb 2026); Injectables 2026 margin guide 27–28% vs ~31% FY2025 and prior “mid-30s” (`ir_a70365d580129295.txt`). Cyclical/mix: Hikma Rx H1 2026 core margin 20.6% (up from 17.6%); group tracking $720–770m core OP guide. Screen P/E 12.5 and 1.7% growth embed low expectations — yield unsafe only if FCF stays ~$119m with dividend+buyback continuing; H1 OCF trend argues against imminent cut, not against compressed headroom.
+SourcesTried: filings_bodies, ir_presentation_metrics, screening_snapshot, screen_run_manifest, news_manifest, macro_context
+NextSources: US generic pricing indices; post-$250m buyback capital-allocation statement
 
-Q: (Hikma Pharmaceuticals PLC) — Ten of 22 models pass… Verdict: watchlist — sector-relative cheapness appealing, but weak cash conversion, negative statutory earnings growth (-4.7%), and healthcare pricing overlay argue for patience.
+Q: (Hikma) — 10/22 models pass, quality-over-yield lean, watchlist verdict due to stalled growth, cash conversion, pricing flags.
 Status: partially_resolved
-Evidence: Screen facts confirmed in `screening_snapshot.json` / `screen_run_manifest.json`: 10/22 pass, composite 0.805, healthcare_price_erosion_overlay true, adjusted_signal **buy** (not strong_buy). Statutory earnings growth **−4.7%** is a **screen TTM input** diverging from FY2025 filing EPS **+12%** (182 vs 162 cents) — earnings-basis overlay also flagged. TTM vs filing divergence unresolved (Yahoo quarterly income empty). Qualitative work supports **patience with sizing** rather than outright pass: investment-grade balance sheet, H1 beat, reiterated guidance, but FCF yield 3.5% vs 5% threshold and net dividend coverage remain weak.
-SourcesTried: screening_snapshot, screen_run_manifest, filings_bodies, yahoo_financials, news_manifest, alternate_news
-NextSources: Yahoo quarterly income/EPS TTM series to reconcile −4.7% statutory growth; verify-before-trade pack on FCF TTM ($14.4m screen vs $119m filing per action_note)
+Evidence: `screen_run_manifest.json` confirms 10/22 passes, 81% composite, 91% sector-relative, raw strong_buy → buy via price-erosion and FCF overlays; conviction 46%, 1 week at signal. Failed: FCF Yield, Lynch PEG, Earnings Quality, Economic Moat. H1 core OP +9% partially addresses growth stall; FCF/PEG gaps persist. Lone Healthcare top-ranker in FTSE350 (248 names).
+SourcesTried: screening_snapshot, screen_run_manifest, filings_bodies, yahoo_financials, ir_presentation_metrics
+NextSources: Second screen run after 4+ weeks; manual FCF reconciliation vs FY2025 cash flow statement
+
+Q: FTSE screen neutral-to-cautious; cyclical top picks; FCF overlays downgrade HIK.L among others.
+Status: resolved
+Evidence: Universe 248: 157 hold, 43 avoid, 12 strong_buy, 35 buy. HIK.L adjusted to buy; FCF filing $119m vs TTM $14.4m — TTM unreliable (Yahoo quarterly cashflow empty, `ttm_cashflow_suppressed`).
+SourcesTried: screen_run_manifest, screening_snapshot, yahoo_quarterly_cashflow, gap_fill_source_map
+NextSources: none
 
 ---
 
-### 2026-08-23T07:20:36.646319+00:00
-Q: Healthcare price-erosion overlay indicates filing pricing pressure — US/generic drug pricing regulation and pipeline concentration risk are not quantified in the screen.
+### 2026-08-30T07:52:44.443515+00:00
+Q: Generic-drug pricing pressure in the US (screen’s healthcare price-erosion overlay hints at this) can erode margins faster than trailing multiples imply.
 Status: partially_resolved
-Evidence: Re-read of 58 filing bodies confirms overlay trigger language in `ir_0e40d9707e30c3b7.txt` ("expected price erosion across the base portfolio"; "usual price erosion"; US competition on testosterone/calcitonin), `ir_a70365d580129295.txt` ("Increased competition on higher margin products"; "price erosion"), and `5f26e81d036b3596.txt` ("modest price erosion across the portfolio, in line with recent history"). H1 principal risks define **Market dynamics and commercial environment** to include "pricing and reimbursement environments, regulatory and policy interventions" and flag increased exposure to potential US generic import tariffs (`5f26e81d036b3596.txt`). Quantified margin impact: Injectables core margin guided **27–28%** for 2026 vs **31.0%** FY2025 (`94eb1f8d38a51fa6.txt`). Pipeline breadth: **300+ products**, **84 launches in 2025** (`ir_3a67962eb8770824.txt`); **118 injectables pipeline products** in FY2025 release (`ir_0e40d9707e30c3b7.txt`). Generic pricing **antitrust MDL** bellwether September 2026 — liability "impracticable to estimate" (`ir_0e40d9707e30c3b7.txt`). No CMS/IQVIA quantification in local sources.
-SourcesTried: filings_bodies, filings_index, ir_presentation_metrics, screening_snapshot, news_manifest, alternate_news
-NextSources: CMS/Medicare generic ASP/reimbursement series or IQVIA price-decline indices; annual report product revenue concentration note (not in current extracts)
+Evidence: FY2025 press release (`filings/bodies/ir_0e40d9707e30c3b7.txt`) flags US Injectables “competition on certain high value products” (testosterone, calcitonin) and Hikma Rx “expected price erosion across the base portfolio.” H1 2026 interim (`5f26e81d036b3596.txt`) states Hikma Rx sees “modest price erosion across the portfolio, in line with recent history,” offset by launches; Injectables US revenue −4% on Tyzavan® transition timing. April trading statement (`94eb1f8d38a51fa6.txt`) embeds lower 2026 Injectables core margin guide **27–28%** (vs **31.0%** FY2025). Companies House 2024 narrative (`ch_05557934_MzQyMDM4OTc0OWFkaXF6a2N4.txt`) acknowledges generic prices “erode as competition increases.” Group core OP still +9% H1 2026 — Branded/MENA offset US headwinds.
+SourcesTried: filings_bodies, filings_index, screening_snapshot
+NextSources: FDA Orange Book competitive-entry dates for top US Injectables revenue lines; IQVIA channel pricing for sodium oxybate and vancomycin — not in local pack
 
-Q: Net FCF dividend coverage 0.64× with heavy capex ($317M vs OCF $436M) — cyclicality of injectables/generics demand and R&D pipeline gaps are open questions.
+Q: Patent cliffs, FDA/competition dynamics, and pipeline dependency are standard pharma risks absent from quantitative inputs.
 Status: partially_resolved
-Evidence: FY2025 cash-flow statement in `ir_0e40d9707e30c3b7.txt`: OCF **$436m**; PPE **$197m**; intangibles **$120m**; FCF **$119m** (Yahoo `financials_annual.json`); dividends **$185m** → net coverage **0.64×** (`screening_snapshot.json`). One-off **$186m** legal settlement cash; ex-settlement OCF ~+10%. H1 2026 (`5f26e81d036b3596.txt`): OCF **$214m** (+33%); PPE **$122m** (incl. **$39m** partner-reimbursed); guided FY2026 capex **$190–210m** excl. **$120m** reimbursed. Demand not cyclical: Injectables US "steady"; Branded H1-weighted by tender timing. R&D not thin: **$151m** FY2025; H1 **$86m** (+18%); **48 submissions / 43 launches**; Bedford commercial from **2028**.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, screen_run_manifest
-NextSources: IR presentation OCF-to-FCF waterfall; Yahoo quarterly cashflow (absent)
+Evidence: FY2025 filing (`ir_0e40d9707e30c3b7.txt`): **118** Injectables pipeline products (15 ready-to-use), **50** injectable launches globally; 2026 outlook cites “expected competition on sodium oxybate as well as usual price erosion” in Hikma Rx. H1 2026 (`5f26e81d036b3596.txt`): **48** product submissions, **43** launches; Ellipta® device partnership in April trading update (`94eb1f8d38a51fa6.txt`). Annual report (`ir_3a67962eb8770824.txt`) references going concern and principal risks but no structured patent-expiry or ANDA ledger in bodies.
+SourcesTried: filings_bodies, filings_index
+NextSources: FDA Drugs@FDA / Orange Book pull for Hikma US approvals and Paragraph IV filings; annual report Note on contingent liabilities (full PDF table extract)
 
-Q: Leverage rising (Piotroski leverage-declining component failed) — balance-sheet trajectory under pricing pressure warrants scrutiny.
+Q: Net FCF dividend coverage 0.64× raises dividend-cut risk if pricing pressure persists — qualitative sustainability concern beyond the yield figure.
 Status: partially_resolved
-Evidence: Net debt/EBITDA **1.4×** Dec 2024 → **1.6×** Dec 2025 → **1.9×** Jun 2026; net debt **$1,387m** → **$1,694m** (`ir_0e40d9707e30c3b7.txt`, `5f26e81d036b3596.txt`). Rise attributed to **$175m buyback**, legal settlements, investment. Mitigants: **$790m** undrawn facilities; BBB/stable; covenants suspended while IG; going concern passed. Group core gross margin **44.8%** H1 despite Injectables compression. Piotroski 6/9, leverage-declining failed. No new debt-maturity tables this pass.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, screen_run_manifest
-NextSources: FY2025 annual report Note 9/11 debt maturity; IFRS 16 lease maturity
+Evidence: Screen (`screening_snapshot.json`): filing-aligned FY2025 FCF **$119m**; net FCF/dividend **0.64×** (gross **1.31×**). Annual report cash flow (`ir_3a67962eb8770824.txt`): dividends paid **$(185)m** FY2025. H1 2026 (`5f26e81d036b3596.txt`): OCF **$214m**, capex **$122m**, dividends paid **$105m**, buyback **$175m** — OCF covers dividends but implied H1 FCF (~**$92m**) does not cover both dividends and repurchases. Interim dividend raised to **38c** (+6%); AGM (`79020e7741ba8f95.txt`) approved **48c** final. No cut signalled.
+SourcesTried: filings_bodies, filings_index, screening_snapshot, yahoo_financials
+NextSources: Management FCF bridge from IR results deck — April PDF body (`ir_a9733d0de6aec27d.txt`) refetched but misattributed as H1 duplicate
 
-Q: How material is the healthcare price-erosion overlay for US generics pricing, and does weak free-cash conversion (net FCF/dividend coverage 0.64×) reflect temporary capex or a lasting margin squeeze?
+Q: Is US generic pricing erosion a temporary margin squeeze or a structural reset that makes a 3.9% yield and 12.5× P/E unsafe?
 Status: partially_resolved
-Evidence: Overlay caps screen **one notch** (strong_buy → adjusted **buy**); triggered by filing phrase match plus failed yield screens — not measured erosion. Hikma Rx: "modest… in line with recent history" with core margin **20.6%** H1 (`5f26e81d036b3596.txt`). Injectables margin reset **27–28%** partly investment-driven. FCF weakness **mixed**: one-offs lapping; WC **264 days**; structural capex through 2028. H1 OCF +33% vs FY2025 trough; buyback competes with dividend. FY2025 tariff impact **~$3m** only.
-SourcesTried: filings_bodies, filings_index, yahoo_financials, screening_snapshot, ir_presentation_metrics
-NextSources: IR presentation cash bridge; H2 2026 working-capital trend
+Evidence: Structural: medium-term margin guidance withdrawn (`ir_0e40d9707e30c3b7.txt`); Injectables 2026 margin **27–28%** vs **31.0%** FY2025 (`94eb1f8d38a51fa6.txt`); mix shift to partnered products and higher R&D/S&M. Offsetting: Hikma Rx H1 core margin **20.6%** (+3.0pp); group reiterates **$720–770m** core OP guide (`5f26e81d036b3596.txt`); screen P/E **12.5**, yield **3.9%**, growth **~1.7%**. Yield stretched on filing FCF (0.64× net coverage) but not immediately unsafe while OCF exceeds dividends and buyback nears completion.
+SourcesTried: filings_bodies, filings_index, screening_snapshot
+NextSources: Post-buyback capital-allocation statement; US generic pricing index time series — external, not ingested
 
-Q: (Hikma Pharmaceuticals PLC) — Ten of 22 models pass… Verdict: watchlist — sector-relative cheapness appealing, but weak cash conversion, negative statutory earnings growth (-4.7%), and healthcare pricing overlay argue for patience.
+Q: (Hikma) — 10/22 models pass, quality-over-yield lean, watchlist verdict due to stalled growth, cash conversion, pricing flags.
 Status: partially_resolved
-Evidence: Screen confirmed: 10/22 pass, composite **0.805**, adjusted_signal **buy**; FCF Yield and Earnings Quality fail. Statutory EPS growth **−4.7%** unreconciled vs filing FY2025 **+12%** (182 vs 162 cents). H1 beat and reiterated guidance weaken watchlist vs pass, but net FCF/dividend **0.64×** and rising leverage keep patience warranted. Refetch of `ir_a9733d0de6aec27d.txt` added no new data — still H1 duplicate; April update correctly in `94eb1f8d38a51fa6.txt`.
-SourcesTried: filings_bodies, filings_index, screening_snapshot, screen_run_manifest, yahoo_financials, news_manifest, alternate_news
-NextSources: Yahoo quarterly EPS/cashflow TTM; verify-before-trade on FCF TTM ($14.4m vs $119m filing)
+Evidence: `screening_snapshot.json`: **10/22** passes, composite **81%**, sector-relative **91%**, raw **strong_buy** → **buy** via price-erosion and FCF overlays; conviction **46%**, **1 week** at signal. Failures: FCF Yield, Lynch PEG, Earnings Quality, Economic Moat. H1 core OP **+9%** eases growth stall but does not fix FCF/PEG screens. Quality passes remain valid on earnings/balance-sheet metrics, not cash yield.
+SourcesTried: filings_bodies, filings_index, screening_snapshot
+NextSources: Repeat screen after 4+ weeks; manual FCF worksheet vs annual report cash flow statement (`ir_3a67962eb8770824.txt`)
 
 ---

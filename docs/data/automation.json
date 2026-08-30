@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-30T06:42:19.561440+00:00",
+  "generated_at": "2026-08-30T07:53:04.628792+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1126,28 +1126,77 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-26T09:36:12.535521+00:00",
-    "queue_ui_updated_at": "2026-08-30T06:42:19.563101+00:00",
-    "task_count": 61,
+    "compiled_at": "2026-08-30T07:53:04.316839+00:00",
+    "queue_ui_updated_at": "2026-08-30T07:53:04.629673+00:00",
+    "task_count": 65,
     "status": {
-      "open_count": 0,
+      "open_count": 4,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 57,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260830-02",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260830-02",
+        "area": "scoring",
+        "title": "When FCF overlay fires, auto-bind `company_adjusted` FCF from RNS reconciliation tables and exclude divergent Yahoo `screen_ttm` from FCF Yield, Earnings Qualit",
+        "priority": "high",
+        "priority_score": 100.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260830-01",
+        "area": "ingest",
+        "title": "Enforce filing-body quality gate: full RNS/PDF fetch, period/headline validation, and content-hash dedup before indexing",
+        "priority": "high",
+        "priority_score": 99.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260830-04",
+        "area": "scoring",
+        "title": "Dual leverage display and lease-adjusted net debt override when Yahoo D/E >100% but filing-adjusted net debt < policy threshold",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260830-03",
+        "area": "ingest",
+        "title": "Bulk backfill indexed-without-body and low-penetration buy-tier packs: Investegate/LSE direct HTML, CH iXBRL borrowings/pension notes, IR allowlist PDFs",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-08-30T06:42:19.582379+00:00",
+    "generated_at": "2026-08-30T07:53:04.629909+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
