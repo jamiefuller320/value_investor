@@ -1,0 +1,87 @@
+# ageas SA/NV (AGS.BR) — Research memo
+
+_Version 1 · Updated 2026-08-30T06:40:53.352908+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+ageas SA/NV screens as a Strong Buy on cheapness, quality, dividend, GARP, and risk metrics (composite 75%, sector-relative 78%), anchored by a low P/E of 7.7, P/B of 1.5, 6.1% dividend yield, and ~19.7% ROE. The investment case rests on a diversified European and Asian insurer trading below typical sector multiples despite accelerating statutory earnings and a raised 2026 operating outlook following H1 results. The central debate is whether headline value metrics adequately capture insurer-specific balance-sheet risk—leverage, investment-portfolio sensitivity, and Solvency II capital—given that no primary filing bodies were retrieved for this memo. Conviction on the screen signal remains moderate (45%) and the evidence pack is thin on regulatory filings; verify-before-trade is warranted.
+
+## INVESTMENT THESIS
+The quantitative screen identifies ageas as a multi-factor value compounder rather than a deep-discount net-net. Fourteen of twenty-two models pass, spanning Graham Enterprising, Earnings Yield, FCF Yield, Low P/E + High Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, High Dividend Yield, Dividend Growth, Acquirer's Multiple, Dreman Contrarian, Composite Value, and Earnings Quality. That breadth suggests the signal is not driven by a single distressed multiple but by a cluster of cheapness and quality inputs: P/E well below 25, P/B below 3, debt/equity at 78%, and statutory earnings growth of ~17.6%.
+
+For a value investor, the hook is a high-return insurer (ROE ~19.7%) priced like a cyclical financial at single-digit earnings multiples, with a dividend yield above 6%. Yahoo-sourced financials (filings unavailable—see Financial Review) show net income rising from €953m (2023) to €1.118bn (2024) to €1.712bn (2025), with diluted EPS moving from €5.19 to €9.09 over the same span. Free cash flow recovered sharply to €2.576bn in 2025 from €642m in 2024, implying dividend headroom against €657m of cash dividends paid.
+
+Business quality supports the screen's quality and dividend families. ageas is a established Benelux-led insurer with a dominant Belgian franchise (AG Insurance), European non-life and life operations, and Asian partnerships across nine markets. Recent news flow points to operational momentum: H1 2026 net operating result reportedly rose 6% to €776m, with management raising full-year 2026 earnings and cash-upstream guidance. The May 2026 move to sole ownership of AG Insurance, while renewing the BNP Paribas bancassurance partnership, simplifies the group structure and should improve capital allocation clarity—factors the screen's quality and GARP passes implicitly reward but filings would be needed to confirm capital impacts.
+
+Failed models (Graham Defensive, Net-Net, Schloss, Deep Value, Economic Moat, Magic Formula, Piotroski F-Score, Financial Health) flag that this is not a balance-sheet bargain: current ratio 0.78, P/B above 1.0, Piotroski 4/9, and weak liquidity scores are typical for insurers but mean the name suits enterprising value rather than defensive deep-value mandates.
+
+## FINANCIAL REVIEW
+**Primary filings gap.** The `filings_index.json` catalogue (`regime: euro_filings`) contains zero indexed filings—no annual reports, interim results, trading updates, or body extracts under `filings/bodies/`. Annual and interim analysis below therefore relies on Yahoo `financials_annual.json` (explicit fallback) and H1 2026 figures from news headlines only. Solvency II ratios, embedded value, combined ratios, and management commentary on contingencies cannot be verified from primary sources in this pack.
+
+**Annual trends (Yahoo fallback, FY2022–FY2025).**
+
+| Metric | 2022 | 2023 | 2024 | 2025 |
+|--------|------|------|------|------|
+| Total revenue | €4.894bn | €7.880bn | €8.637bn | €9.044bn |
+| Net income (group) | €1.097bn | €953m | €1.118bn | €1.712bn |
+| Diluted EPS | €5.95 | €5.19 | €6.09 | €9.09 |
+| EBIT | €1.642bn | €1.703bn | €1.861bn | €2.460bn |
+| Operating cash flow | €1.019bn | €121m | €1.045bn | €2.898bn |
+| Free cash flow | €859m | −€118m | €642m | €2.576bn |
+| Cash dividends paid | €765m | €540m | €584m | €657m |
+
+Revenue jumped materially between 2022 and 2023 (€4.9bn to €7.9bn), likely reflecting consolidation or reporting scope changes rather than organic growth alone; year-on-year comparability from 2023 onward is more reliable. Earnings rebounded strongly in 2025: net income rose 53% versus 2024, aided by a €46m special charge (Yahoo flags unusual items) versus a €12m gain in 2024. Normalised income in 2025 was €1.889bn versus reported €1.712bn.
+
+Profitability improved alongside scale: EBIT margin expanded from ~22% (2023) to ~27% (2025). Operating cash flow volatility is pronounced (€121m in 2023, €2.898bn in 2025), consistent with insurance working-capital and investment-portfolio swings; the screen's canonical FCF of ~$23bn (USD) diverges sharply from Yahoo's €2.576bn and should be treated as a data artefact—operating cash flow of €2.898bn is the more credible cash proxy here.
+
+**Balance sheet (Yahoo fallback, FY2025).** Total assets €107.1bn; stockholders' equity €9.44bn (total equity including minorities €11.5bn). Total debt €7.13bn; net debt €3.18bn, up from €1.95bn in 2024, following €1.43bn long-term debt issuance. Non-current pension and post-retirement obligations €903m; defined benefit pension liability €48m. Goodwill and intangibles €4.39bn (post AG Insurance consolidation). Cash and equivalents €3.10bn against a large investment book (investments and advances €88.6bn)—standard insurer asset structure but opaque without filing footnotes.
+
+**Interim / H1 2026 (news only; no filing body).** Headlines dated 27–28 August 2026 report H1 2026 net operating result up 6% to **€776m**, with management **raising full-year 2026 earnings guidance and cash-upstream targets** (TradingView, 27 Aug 2026; marketscreener.com, 27 Aug 2026; TipRanks, 28 Aug 2026). These operating metrics are not reconciled to Yahoo's statutory income statement in this pack and should be treated as indicative until interim filings are ingested.
+
+**Dividend and coverage (Yahoo fallback).** Cash dividends rose steadily from €540m (2023) to €657m (2025). On 2025 FCF of €2.576bn, gross cash dividend coverage appears comfortable (~3.9×), though insurer FCF is not a clean dividend proxy without regulatory capital constraints—which filings would clarify.
+
+## RISKS AND RED FLAGS
+**Regulatory and capital.** As a Solvency II-regulated European insurer, ageas is exposed to capital requirements, reserving standards, and supervisory interventions that generic value screens do not model. No filing bodies were available to review going-concern language, contingency disclosures, or covenant terms.
+
+**Leverage and liquidity.** Debt/equity of 78% and net debt rising to €3.18bn in 2025 (from €1.95bn in 2024) warrant scrutiny, especially after full acquisition of AG Insurance (May 2026 news). The screen fails Financial Health and Graham Defensive on weak liquidity (current ratio 0.78). Piotroski F-Score is 4/9, failing on leverage trend, current-ratio improvement, share dilution, gross margin, and asset turnover—partly insurer-inappropriate but still a caution flag.
+
+**Investment and interest-rate sensitivity.** With ~€89bn in investments and advances (Yahoo, 2025), earnings and equity are materially exposed to mark-to-market moves, credit spreads, and reinvestment yields. Macro context (secondary only) shows elevated European and US rate levels; direction of travel for fixed-income portfolios is a key cyclical variable.
+
+**Pension and legacy liabilities.** Non-current pension/post-retirement obligations of €903m represent a meaningful off-balance-sheet-style commitment; defined benefit plans require ongoing funding monitoring absent filing detail.
+
+**M&A and integration.** Sole ownership of AG Insurance simplifies structure but concentrates Belgian exposure and may have increased goodwill (€1.99bn in 2025 versus €642m in 2024). Integration, bancassurance renewal terms with BNP Paribas, and capital deployment into Asia (top-ten India ambition, April 2026) add execution risk.
+
+**Accounting and data quality.** No primary filings means unusual items (€46m charge in 2025), minority interests (−€198m in 2025), and policyholder benefit trends (€5.40bn claims in 2025) cannot be audited against management narrative. Yahoo quarterly income and cash-flow series are empty (`ttm_cashflow_suppressed`), limiting TTM verification.
+
+**Competitive.** European life and non-life markets face bancassurance competition, pricing pressure, and digital distribution disruption; ageas's moat rests on distribution partnerships and local scale rather than screen-detectable structural advantage (Economic Moat model fails).
+
+RiskTags: regulatory, cyclical, pension, leverage, competitive, accounting
+RiskTags: regulatory, cyclical, pension, leverage, competitive, accounting
+
+## NEWS HIGHLIGHTS
+Coverage for ageas SA/NV is **moderately useful but noisy**: many headlines match the "AGS" ticker for unrelated issuers (PlayAGS, AGS Transact, Applied Materials AGS division, Hour Glass SGX:AGS). Ageas-specific items are concentrated in late August 2026 and spring 2026.
+
+**H1 2026 results and guidance (Aug 2026).**
+- "AGS: Net operating result up 6% to EUR 776m; guidance and cash upstream both raised for 2026" — TradingView, 27 Aug 2026
+- "Ageas SA/NV Raises Earnings Guidance for the Full Year 2026" — marketscreener.com, 27 Aug 2026
+- "Ageas Sa/Nv Lifts 2026 Outlook After Strong H1" — TipRanks, 28 Aug 2026
+- "Ageas stock gains as analysts welcome stronger half-year and higher 2026 earnings target" — AD HOC NEWS, 28 Aug 2026
+- "Earnings call transcript: Ageas lifts H1 2026 profit and cash guidance" — Investing.com, 27 Aug 2026
+
+**Strategy and M&A (Apr–May 2026).**
+- "Ageas becomes sole owner of AG Insurance, renews bancassurance partnership with BNP Paribas" — Reinsurance News, 1 May 2026
+- "Ageas 2025 Report Links Elevate27 Progress With Capital Flexibility Moves" — Yahoo Finance, 17 Apr 2026
+- "Ageas pursues top ten ranking in Indian insurance space – report" — Yahoo Finance, 27 Apr 2026
+
+**Valuation and sentiment (2025–2026).**
+- "Ageas (ENXTBR:AGS) Stock Can Margins Keep Outrunning Capital Strain" — simplywall.st, 28 Aug 2026
+- "Those who invested in ageas (EBR:AGS) five years ago are up 115%" — simplywall.st, 13 Oct 2025
+- "Are Investors Undervaluing Ageas (AGESY) Right Now?" — Zacks/Yahoo, 29 Dec 2025
+- "New Strong Sell Stocks for August 5th" (includes AGESY) — Zacks, 5 Aug 2026 — conflicting sell-side sentiment on the US ADR
+
+No material management-change or regulatory-enforcement headlines specific to ageas were identified in the manifest. Interim filing text was not available to corroborate the H1 operating figures cited in press aggregators.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.58
+Rationale: Directional evidence from Yahoo financials and recent H1 news supports the screen's Strong Buy on earnings momentum, yield, and ROE, but the complete absence of primary filings prevents confirmation of solvency, capital allocation, and risk disclosures, so conviction remains tempered pending filing ingestion.

@@ -348,13 +348,13 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 231.26,
-    "estimated_spend_usd_this_week": 32.4,
+    "estimated_spend_usd_this_cycle": 231.66,
+    "estimated_spend_usd_this_week": 32.8,
     "week_id": "2026-W35",
     "cycle_id": "2026-08-d8",
     "weekly_ops_cap_usd": 80.0,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 0.0,
+    "estimated_spend_weekly_ops_usd_this_week": 0.4,
     "note": "Subscription (Pro $20/mo) is metadata only. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd."
   },
   "model_review": {
@@ -408,7 +408,7 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-08-27T13:26:43.359122+00:00",
+  "updated_at": "2026-08-30T06:42:14.321523+00:00",
   "ingest_parity_markets": [
     "euro_depth"
   ],
@@ -427,10 +427,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-08-23T05:58:06.255702+00:00",
+      "run_at": "2026-08-30T06:22:01.501891+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 48,
+      "screen_shortlist": 46,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -444,15 +444,20 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 80.0,
-        "estimated_spend_weekly_ops_usd_this_week": 13.6,
+        "estimated_spend_weekly_ops_usd_this_week": 0.4,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 67.2,
+        "remaining_usd_before": 80.0,
         "dedupe": {
-          "already_researched_count": 430,
-          "skipped_count": 46,
+          "already_researched_count": 432,
+          "skipped_count": 45,
           "skipped_sample": [
+            {
+              "market": "euro_depth",
+              "ticker": "ERIC-B.ST",
+              "reason": "duplicate_ticker"
+            },
             {
               "market": "euro_depth",
               "ticker": "AD.AS",
@@ -461,6 +466,11 @@
             {
               "market": "euro_depth",
               "ticker": "DG.PA",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "UMI.BR",
               "reason": "duplicate_ticker"
             },
             {
@@ -475,37 +485,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "ERIC-B.ST",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "SGO.PA",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "DHL.DE",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "ACKB.BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "UMI.BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "MELE.BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "LOGN.SW",
               "reason": "duplicate_ticker"
             },
             {
@@ -515,17 +495,27 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "LOGN.SW",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "DHL.DE",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "STR.VI",
               "reason": "duplicate_ticker"
             },
             {
               "market": "euro_depth",
-              "ticker": "VOW.DE",
+              "ticker": "ACKB.BR",
               "reason": "duplicate_ticker"
             },
             {
               "market": "euro_depth",
-              "ticker": "POS.VI",
+              "ticker": "VOW.DE",
               "reason": "duplicate_ticker"
             },
             {
@@ -552,6 +542,16 @@
               "market": "euro_depth",
               "ticker": "EVN.VI",
               "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "WKL.AS",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "DTE.DE",
+              "reason": "duplicate_ticker"
             }
           ],
           "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
@@ -559,25 +559,18 @@
         "targets": [
           {
             "market": "euro_depth",
-            "ticker": "C5H.IR",
-            "name": "Cairn Homes plc",
-            "signal": "buy",
-            "conviction_score": 0.3469
-          },
-          {
-            "market": "euro_depth",
-            "ticker": "NBA.LS",
-            "name": "Novabase S.G.P.S., S.A.",
-            "signal": "buy",
-            "conviction_score": 0.2562
+            "ticker": "AGS.BR",
+            "name": "ageas SA/NV",
+            "signal": "strong_buy",
+            "conviction_score": 0.4518
           }
         ],
-        "executed": 2,
-        "created": 2,
+        "executed": 1,
+        "created": 1,
         "updated": 0,
         "errors": [],
-        "estimated_spend_usd": 0.8,
-        "remaining_usd_after": 66.4
+        "estimated_spend_usd": 0.4,
+        "remaining_usd_after": 79.6
       },
       "graduation": {
         "graduated": false,
