@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T08:47:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T08:48:54+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -102,6 +102,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N47 | **Do not add sp500 to ingest_parity_markets until learning-depth is green** | Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain. | ftse-library learning-depth --market sp500 reports learning_ready true |
 | N48 | **Flip live FTSE paper books off 3% stress costs** | Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults — do not silently rewrite live configs. | Human decides stress vs fair is the primary learning metric, or live/demo broker path starts |
 | N49 | **Do not invent new paper tracks or knob churn to 'fix' stage 2b excess** | End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate. | AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy |
+| N50 | **Treat Yahoo quarterly cashflow as optional for UK memo excellence** | yahoo_quarterly_cashflow is thin on nearly every FTSE memo; do not block excellent/strong narrative quality on it. Prefer filing OCF bridges and gate/suppress empty Yahoo TTM rather than waiting for Yahoo series. | If Yahoo UK quarterly cashflow coverage improves or a primary filing OCF bridge is standardized in every memo |
 
 ---
 
@@ -227,6 +228,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L190 | **Agent deep-dive thesis review for underwater holdings** | Deterministic hypothesis cards use screen/research fields only. A bounded agent pass could re-check filings/news when thesis is weakening or deep-underwater intact — expensive, so keep after cards prove useful. | Sunday human gate regularly needs deeper fact checks than hypothesis_integrity.md provides |
 | L194 | **Scan-then-target euro/FTSE ingest (index discovery before deepen)** | Current ingest scores local coverage then deepens a fixed top-N batch; it does not scan providers across the buy-tier/index for newly published filings. Add a cheap discovery pass (ESEF/CH/RNS index only) that diffs vs filings_index, then run bounded body ingest on the hit list. | Euro sprint filing gaps are mostly closed (maintenance/idle) or buy-tier rewalks stop finding new bodies while fresh results are still missing |
 | L207 | **Structured filing/news event taxonomy (warnings, M&A, deals)** | No systematic classifier today for profit warnings, acquisitions, collaborations, guidance cuts. LLM memos mention them in prose; period/entity filing tags are structural only. A labelled event layer (rules+LLM) would feed AI judgment without becoming a sentiment quant model (see N6). | After buy-tier filing-body parity is stable and memo schema/AI-judgment utility is clearer (L141); or when paid news API (L12) lands |
+| L210 | **Auto rememo after deepen when body coverage jumps** | When deepen/ingest lifts filings_with_body substantially, automatically queue gap-fill rememo so published memo text and memo_quality stay aligned with the thickened corpus instead of stale initial drafts. | After next weekly screen still shows adequate grades despite on-disk body coverage near 100% |
+| L211 | **IR presentation metrics + alternate news as default gap-fill pack** | Populate ir_presentation_metrics.json and alternate_news.json for every buy-tier memo pack so evidence-ladder thin gaps stop capping scores at adequate even when filing bodies are strong. | When filing-body coverage is routinely strong but evidence_ladder driver remains ~0.5 on published memos |
 
 ### Ops / reliability
 
