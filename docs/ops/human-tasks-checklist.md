@@ -67,7 +67,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 |------|-----|-----|
 | **Decision packs** before live capital (verify checklist) | Human | [primary-learning-track.md](primary-learning-track.md#success-datums) |
 | **Paper-learning review** when churn / exit-timing cohorts mature | Human | [paper-learning-review.md](paper-learning-review.md) |
-| **Re-import euro ingest crons** after cadence changes (sprint 4×/day × 24; maintenance 2×/day × 62) | Human | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
+| **Re-import library ingest crons** after cadence changes (Mon–Sat peak + daily off-peak; sprint ≤4×/day × 24; maintenance ≤4×/day × 62) | Human | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
 | **Register ops-monitor 13:15 catch-up** on cron-job.org after email-deferral merge | Human | [ops-monitor.md](ops-monitor.md#email-deferral-day-complete-gate) |
 
 ## Maintenance

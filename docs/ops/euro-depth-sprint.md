@@ -33,7 +33,7 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 | Layer | Command / workflow | Cadence |
 |-------|-------------------|---------|
 | Metrics grow (full ~194) | `ftse-library grow --market euro_depth` | Day 1 burst (`focus_grow_cap: 200`) |
-| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | Weekdays: **euro-ingest-loop.yml** 4×/day sprint on focus; **library-ingest-sprint.yml** 4×/day on `ingest_parallel_sprint` (sp500); **library-ingest-maintenance.yml** 2×/day at FTSE volume once the FTSE quality bar is met |
+| Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | **7-day:** Mon–Sat peak + daily off-peak — **euro-ingest-loop.yml** on focus; **library-ingest-sprint.yml** on `ingest_parallel_sprint` (sp500); **library-ingest-maintenance.yml** at FTSE volume once the quality bar is met |
 | Screen + observe + weekly shard | `ftse-library ladder` | Daily `ladder_only` when eng idle + Sundays |
 | Phase 3 weekday shard | `ftse-library shard-weekday --markets euro_depth` | Weekdays after Phase 2 gate |
 
@@ -44,21 +44,22 @@ and persists `docs/data/library/euro_ingest_dispatch.json`:
 
 | Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Maintenance workflow |
 |------|------|------------------------------------------|----------------------|
-| `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 | 4×/day, 24 targets | off |
-| `maintenance` | FTSE quality bar met (all four zero) | off (skipped) | 2×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
+| `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 | ≤4×/day, 24 targets | off |
+| `maintenance` | FTSE quality bar met (all four zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
 
 Phase 3 readiness is **informational only** — weekday ladder crons stay enabled during maintenance.
 
-Sprint UTC slots: **07:15 / 10:15 / 13:15 / 16:15** (≈96 ticker-slots/weekday).
-Maintenance UTC slots: **07:30 / 10:30** weekdays (`library-ingest-maintenance.yml`). Same deepen volume as live FTSE (`max_targets=62`, `max_bodies=40`).
+**Sprint UTC slots** (`euro-ingest-loop.yml`): Mon–Sat **07:15 / 10:15**; daily (incl. Sunday) **13:15 / 16:15**. Sunday morning is skipped so the quiet bundle (orchestrator ~06:20 → backup ~12:30) is not contended.
+**Parallel sprint** (`library-ingest-sprint.yml`): same days, **+30 min** (07:45 / 10:45 / 13:45 / 16:45).
+**Maintenance** (`library-ingest-maintenance.yml`): Mon–Sat **07:30 / 10:30**; daily **13:30 / 16:30**. Same deepen volume as live FTSE (`max_targets=62`, `max_bodies=40`).
 
 When focus reaches parity, `ingest_parity_markets` is updated and focus may advance to
 `market_queue[0]` when `focus_graduation.advance_focus_on_ingest_parity` is true.
 
 **Parallel sprint:** `ingest_parallel_sprint` (default `["sp500"]`) front-starts filing
-deepen on the next queue market while focus is still in sprint. Slots: **07:45 / 10:45 /
-13:45 / 16:45** UTC via `library-ingest-sprint.yml` (30 minutes after euro focus slots).
-Learning focus (`weekly_paper_shard_markets`, observe sim) stays on `euro_depth` until handoff.
+deepen on the next queue market while focus is still in sprint. Slots match euro focus
+(+30 min) via `library-ingest-sprint.yml`. Learning focus (`weekly_paper_shard_markets`,
+observe sim) stays on `euro_depth` until handoff.
 
 `ingest_parity_met` is the FTSE quality bar for **every** library market
 (unmeasured, zero-body, thin, and `indexed_without_body` all zero).
@@ -88,18 +89,24 @@ WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
   --job euro-ingest-loop-afternoon \
   --job euro-ingest-loop-midafternoon \
   --job euro-ingest-loop-evening \
+  --job library-ingest-sprint-morning \
+  --job library-ingest-sprint-afternoon \
+  --job library-ingest-sprint-midafternoon \
+  --job library-ingest-sprint-evening \
   --job library-ingest-maintenance \
-  --job library-ingest-maintenance-afternoon
+  --job library-ingest-maintenance-afternoon \
+  --job library-ingest-maintenance-midafternoon \
+  --job library-ingest-maintenance-evening \
+  --disable-legacy-ingest
 ```
 
-Job keys: `euro-ingest-loop-morning`, `euro-ingest-loop-afternoon`,
-`euro-ingest-loop-midafternoon`, `euro-ingest-loop-evening`,
-`orchestrator-ladder-weekday`, `library-ingest-maintenance`,
-`library-ingest-maintenance-afternoon`.
+Job keys: `euro-ingest-loop-morning|afternoon|midafternoon|evening`,
+`library-ingest-sprint-*`, `library-ingest-maintenance` /
+`library-ingest-maintenance-afternoon|midafternoon|evening`,
+`orchestrator-ladder-weekday`.
 
-After merge of a cadence change, re-import so cron-job.org picks up new slots and
-dispatch bodies (`max_targets=24` sprint, `max_targets=62` maintenance). GitHub
-`schedule` alone is best-effort.
+After merge of a cadence change, re-import so cron-job.org picks up Mon–Sat peak + daily
+off-peak schedules and disables old weekday-only titles. GitHub `schedule` alone is best-effort.
 
 ### Filing sources (euro_filings)
 

@@ -2,12 +2,13 @@ name: Library ingest sprint (parallel)
 
 # High-tempo buy-tier filing deepen for parallel queue markets (e.g. sp500 while
 # euro_depth remains focus). Focus market sprint stays on euro-ingest-loop.yml.
+# Cadence mirrors euro focus: Mon–Sat peak + daily off-peak (incl. Sunday after quiet bundle).
 on:
   schedule:
-    - cron: "45 7 * * 1-5"
-    - cron: "45 10 * * 1-5"
-    - cron: "45 13 * * 1-5"
-    - cron: "45 16 * * 1-5"
+    - cron: "45 7 * * 1-6"
+    - cron: "45 10 * * 1-6"
+    - cron: "45 13 * * *"
+    - cron: "45 16 * * *"
   workflow_dispatch:
     inputs:
       markets:

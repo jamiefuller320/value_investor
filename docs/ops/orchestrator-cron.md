@@ -47,8 +47,9 @@ token instead of your user PAT.
 | `ci-main-nightly.yml` | External **primary** | `30 7 * * *` → `ci-main-nightly.yml` | Daily 07:30 |
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
-| `euro-ingest-loop.yml` | External **primary** | Mon–Fri **07:15 + 10:15 + 13:15 + 16:15** → `euro-ingest-loop.yml` (sprint: 4×/day × 24 targets; throttled by completion gate) | Mon–Fri 07:15 / 10:15 / 13:15 / 16:15 |
-| `library-ingest-maintenance.yml` | External **primary** | Mon–Fri **07:30 + 10:30** → FTSE-standard maintenance (`max_targets=62`) when the quality bar is met | Mon–Fri 07:30 / 10:30 |
+| `euro-ingest-loop.yml` | External **primary** | Mon–Sat **07:15 + 10:15**; daily **13:15 + 16:15** (Sunday morning skipped for quiet bundle) → sprint ≤4×/day × 24 | Same as external |
+| `library-ingest-sprint.yml` | External **primary** | Mon–Sat **07:45 + 10:45**; daily **13:45 + 16:45** (parallel `sp500`) | Same as external |
+| `library-ingest-maintenance.yml` | External **primary** | Mon–Sat **07:30 + 10:30**; daily **13:30 + 16:30** → FTSE-standard maintenance (`max_targets=62`) when parity met | Same as external |
 | `automation-orchestrator.yml` (`ladder_only`) | External **primary** (sprint) | Mon–Fri **06:50** → `suite=ladder_only` (disabled when Phase 3 + parity idle) | No |
 | `engineering-agent.yml` | Queue / manual | No | No |
 | `ci.yml` / `pages.yml` | Push to `docs/**` on `main`; **also** `email-report.yml` dispatches after dashboard commit (`[skip ci]` blocks push-triggered Pages) | No | No |
@@ -200,14 +201,19 @@ Disable legacy **“FTSE ingest loop (Mon/Wed/Fri*)”** jobs via `--disable-leg
 Same-day gate — safe alongside GitHub `0 7` / `0 10` schedules; skips only after
 the daily success cap or while another run is active.
 
-#### Why weekday (Mon–Fri) ingest?
+#### Why weekday (Mon–Fri) for live FTSE ingest?
 
 | Factor | Notes |
 |--------|--------|
-| **FTSE gap closure** | 11 unmeasured buy-tier tickers need bootstrap slots; Tue/Thu add capacity without waiting for Mon/Wed/Fri |
-| **Screen cadence** | Sunday screen refreshes buy-tier; weekday ingest deepens filings against `latest.json` |
+| **FTSE gap closure** | Buy-tier deepen slots against Sunday-refreshed `latest.json` |
+| **Screen cadence** | Sunday screen refreshes buy-tier; weekday ingest deepens filings |
 | **Cost** | Ingest-loop uses CH/RNS/API fetch — **not** `weekly_ops` Cursor spend |
 | **Capacity** | Learning phase: ~full buy-tier deepen per batch (`max_targets=62`) + body-gap chain (see `market-scrutiny.md`) |
+
+**Library euro/S&P deepen** is separate: Mon–Sat peak + daily off-peak (incl. Sunday
+after the quiet bundle) — see `euro-ingest-loop.yml` / `library-ingest-sprint.yml` /
+`library-ingest-maintenance.yml` and [`euro-depth-sprint.md`](euro-depth-sprint.md).
+Ingest still does not burn `weekly_ops`.
 
 The **10:05 UTC afternoon batch** continues coverage after the morning slot (~12
 targets + 6 bootstrap seeds each; ~25 min budget per run). Ops monitor at

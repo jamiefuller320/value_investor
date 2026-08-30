@@ -118,7 +118,68 @@ def test_import_cron_jobs_dry_run_disable_legacy_ingest():
     rows = json.loads(proc.stdout)
     titles = {row["title"] for row in rows}
     assert "FTSE ingest loop (Mon/Wed/Fri morning)" in titles
+    assert "Euro ingest loop (weekday morning)" in titles
+    assert "Library ingest sprint (parallel morning)" in titles
     assert all(row["action"] == "would_disable" for row in rows)
+
+
+def test_import_cron_jobs_library_ingest_7day_peak_and_offpeak():
+    script = Path("scripts/import_cron_jobs.py")
+    peak_keys = (
+        "euro-ingest-loop-morning",
+        "euro-ingest-loop-afternoon",
+        "library-ingest-sprint-morning",
+        "library-ingest-maintenance",
+    )
+    offpeak_keys = (
+        "euro-ingest-loop-midafternoon",
+        "euro-ingest-loop-evening",
+        "library-ingest-sprint-evening",
+        "library-ingest-maintenance-evening",
+    )
+    peak_wdays = [1, 2, 3, 4, 5, 6]
+    offpeak_wdays = [-1]
+
+    for key in peak_keys:
+        proc = subprocess.run(
+            [sys.executable, str(script), "--job", key, "--dry-run", "--json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        payload = json.loads(proc.stdout)[0]["payload"]["job"]
+        assert payload["schedule"]["wdays"] == peak_wdays, key
+        assert "weekday" not in payload["title"].lower()
+
+    for key in offpeak_keys:
+        proc = subprocess.run(
+            [sys.executable, str(script), "--job", key, "--dry-run", "--json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        payload = json.loads(proc.stdout)[0]["payload"]["job"]
+        assert payload["schedule"]["wdays"] == offpeak_wdays, key
+        assert "daily" in payload["title"].lower()
+
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(script),
+            "--job",
+            "library-ingest-maintenance-midafternoon",
+            "--dry-run",
+            "--json",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    maint = json.loads(proc.stdout)[0]["payload"]["job"]
+    assert maint["schedule"]["hours"] == [13]
+    assert maint["schedule"]["minutes"] == [30]
+    assert maint["schedule"]["wdays"] == offpeak_wdays
+    assert "library-ingest-maintenance.yml" in maint["url"]
 
 
 def test_import_cron_jobs_dry_run_ops_monitor():
