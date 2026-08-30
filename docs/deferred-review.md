@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-29T08:02:46+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-30T07:55:01+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -268,6 +268,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L202 | **Ops-monitor drafted engineering tasks sometimes not committed** | 18:24 ops-monitor report listed drafted eng-20260827-01/02 but the commit only contained ops_status.json; engineering_tasks.json was unchanged. Investigate draft write vs auto-commit race. | Next ops-monitor run drafts tasks that do not appear on main |
 | L206 | **Triage July analysis_tasks proposed queue against current archive thickness** | Four ana-20260728-* proposed tasks (second weekly archive, knob counterfactual, exit-shadow dashboard, historical overlay bootstrap) may be obsolete or still blocked; drop/done/promote on next Sunday analysis review so progress-report proposed_total is honest. | Next Sunday analysis-review human triage (~10:35 UTC) |
 | L208 | **Ops monitor wait-for-workflow-rerun before email** | After dispatching guarded workflow recovery, poll until success/fail (capped) and only then email remaining issues. Skipped for now because long Actions jobs would exceed ops-monitor budget; dedicated workflow_run responders already handle reruns asynchronously. | Ops-monitor job SLA allows 15+ minutes of polling, or a follow-up verifier workflow can own the wait |
+| L209 | **Ops monitor: soften Sunday workflow overdue before scheduled slots** | Sunday 07:45 ops monitor always flags analysis-review (10:35) and data-backup (12:30) as overdue when last success was prior Sunday, even when those slots have not arrived yet. Soften or delay those checks until after each workflow scheduled time (or while Sunday bundle email-report is in flight). | Next Sunday morning ops email is again mostly pre-slot overdue noise |
 
 ---
 
