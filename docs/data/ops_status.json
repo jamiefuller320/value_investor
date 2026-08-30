@@ -1,9 +1,49 @@
 {
-  "run_at": "2026-08-29T07:46:31.220219+00:00",
-  "overall": "ok",
-  "findings": [],
+  "run_at": "2026-08-30T07:46:28.787351+00:00",
+  "overall": "fail",
+  "findings": [
+    {
+      "severity": "warn",
+      "category": "dashboard",
+      "title": "Dashboard bundle is stale",
+      "summary": "latest.json updated 2026-08-23T06:22:09.407971+00:00 (169h ago; threshold 168h).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: Modelling analysis review",
+      "summary": "No successful run within 36h (last: 2026-08-23T10:35:11+00:00).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "workflows",
+      "title": "Workflow overdue: Email report",
+      "summary": "No successful run within 36h (last: 2026-08-23T06:21:15+00:00). Recovery bundle in flight (email-report.yml#33297524039).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: FTSE Data Backup",
+      "summary": "No successful run within 36h (last: 2026-08-23T13:06:48+00:00).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    }
+  ],
   "auto_fixes": [],
-  "drafted_task_ids": [],
+  "drafted_task_ids": [
+    "eng-20260830-01",
+    "eng-20260830-02"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
@@ -12,7 +52,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-08-28T21:09:18+00:00",
       "last_success_run_id": 33211315647,
-      "age_hours": 10.6,
+      "age_hours": 34.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -22,9 +62,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-28T21:27:35+00:00",
-      "last_success_run_id": 33212643748,
-      "age_hours": 10.3,
+      "last_success_at": "2026-08-30T06:20:21+00:00",
+      "last_success_run_id": 33296665463,
+      "age_hours": 1.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -34,9 +74,9 @@
       "name": "FTSE Engineering Queue",
       "expected_today": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-08-29T07:27:03+00:00",
-      "last_success_run_id": 33240866906,
-      "age_hours": 0.3,
+      "last_success_at": "2026-08-29T08:15:06+00:00",
+      "last_success_run_id": 33242707098,
+      "age_hours": 23.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -46,8 +86,8 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-29T07:31:04+00:00",
-      "last_success_run_id": 33241023921,
+      "last_success_at": "2026-08-30T07:31:10+00:00",
+      "last_success_run_id": 33299399831,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -56,23 +96,23 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-23T10:35:11+00:00",
       "last_success_run_id": 32634151660,
-      "age_hours": 141.2,
-      "stale": false,
+      "age_hours": 165.2,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
       "workflow": "library-grow.yml",
       "name": "FTSE Library Ladder",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
-      "last_success_at": "2026-08-28T06:51:44+00:00",
-      "last_success_run_id": 33149374895,
-      "age_hours": 24.9,
+      "last_success_at": "2026-08-30T06:21:17+00:00",
+      "last_success_run_id": 33296700345,
+      "age_hours": 1.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -80,11 +120,11 @@
     {
       "workflow": "library-model-review.yml",
       "name": "Library model review",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
-      "last_success_at": "2026-08-23T06:21:14+00:00",
-      "last_success_run_id": 32622706131,
-      "age_hours": 145.4,
+      "last_success_at": "2026-08-30T06:42:38+00:00",
+      "last_success_run_id": 33297522821,
+      "age_hours": 1.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -92,24 +132,24 @@
     {
       "workflow": "email-report.yml",
       "name": "Email report",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-23T06:21:15+00:00",
       "last_success_run_id": 32622706961,
-      "age_hours": 145.4,
-      "stale": false,
+      "age_hours": 169.4,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
       "workflow": "data-backup.yml",
       "name": "FTSE Data Backup",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-23T13:06:48+00:00",
       "last_success_run_id": 32641360771,
-      "age_hours": 138.7,
-      "stale": false,
+      "age_hours": 162.7,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
@@ -120,7 +160,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-08-28T08:26:11+00:00",
       "last_success_run_id": 33155327999,
-      "age_hours": 23.3,
+      "age_hours": 47.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -130,9 +170,9 @@
       "name": "FTSE Ops Monitor",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-08-28T19:34:46+00:00",
-      "last_success_run_id": 33204487677,
-      "age_hours": 12.2,
+      "last_success_at": "2026-08-29T13:21:01+00:00",
+      "last_success_run_id": 33254794172,
+      "age_hours": 18.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -151,5 +191,5 @@
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false
+  "should_dispatch_engineering": true
 }
