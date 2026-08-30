@@ -31,9 +31,7 @@ def test_sync_committed_sources_to_output_filters_tickers(tmp_path: Path):
         (sources / "news_manifest.json").write_text("{}", encoding="utf-8")
 
     output_dir = tmp_path / "output"
-    synced = sync_committed_sources_to_output(
-        output_dir, data_dir=data_dir, tickers=["BBB.L"]
-    )
+    synced = sync_committed_sources_to_output(output_dir, data_dir=data_dir, tickers=["BBB.L"])
     assert synced == 1
     assert (output_dir / "research" / "BBB.L" / "sources" / "news_manifest.json").exists()
     assert not (output_dir / "research" / "AAA.L").exists()
