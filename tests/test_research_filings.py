@@ -1630,6 +1630,93 @@ def test_fetch_rns_filing_body_for_refetch_uses_html_fallback(monkeypatch):
     assert "Full Year Results 2025" in body
 
 
+def test_fetch_rns_filing_body_for_refetch_lse_html_fallback(monkeypatch):
+    """Regression: direct LSE HTML wrapper without embedded PDF uses narrative fallback."""
+    lse_html = "https://docs.londonstockexchange.com/rns/itv/fy2025.html"
+    page_html = (
+        """
+    <html><body>
+    <h1>ITV plc Full Year Results 2025</h1>
+    <p>Revenue increased 3% and operating profit rose with pension deficit reduced.</p>
+    """
+        + ("detail " * 120)
+        + """
+    </body></html>
+    """
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == lse_html:
+            return page_html.encode("utf-8")
+        raise AssertionError(url)
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    body, headline = _fetch_rns_filing_body_for_refetch(lse_html)
+    assert headline == "ITV plc Full Year Results 2025"
+    assert body is not None
+    assert "Revenue increased" in body
+
+
+def test_ch_row_needs_body_refetch_when_lacks_financial_depth(tmp_path):
+    from value_investor.research.filings import _ch_row_needs_body_refetch
+
+    filings_dir = tmp_path / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    row_id = "ch_shallow"
+    shallow = "Directors report and strategic overview " + ("x" * 220)
+    (filings_dir / f"{row_id}.txt").write_text(shallow, encoding="utf-8")
+    row = {
+        "id": row_id,
+        "source": "companies_house",
+        "has_body": True,
+        "body_path": str(filings_dir / f"{row_id}.txt"),
+    }
+    assert _ch_row_needs_body_refetch(row, filings_dir) is True
+
+
+def test_refetch_companies_house_filing_bodies_retries_shallow_ixbrl_body(tmp_path, monkeypatch):
+    """Regression: shallow CH front-matter bodies are re-fetched for pension/borrowings depth."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    row_id = "ch_shallow_ixbrl"
+    shallow = "Directors report and strategic overview " + ("x" * 220)
+    deep = "Defined benefit pension scheme borrowings covenant going concern cash flow " + (
+        "x" * 220
+    )
+    index = {
+        "filings": [
+            {
+                "id": row_id,
+                "source": "companies_house",
+                "headline": "Companies House accounts",
+                "url": "https://document-api.company-information.service.gov.uk/document/ch1",
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(filings_dir / "bodies" / f"{row_id}.txt"),
+            }
+        ],
+        "summary": {"total": 1, "with_body": 1},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir()
+    (bodies_dir / f"{row_id}.txt").write_text(shallow, encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: deep if row.get("id") == row_id else None,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=3)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert "borrowings" in (bodies_dir / f"{row_id}.txt").read_text(encoding="utf-8")
+    assert saved["filings"][0]["has_body"] is True
+
+
 def test_refetch_investegate_rejects_misattributed_body(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()

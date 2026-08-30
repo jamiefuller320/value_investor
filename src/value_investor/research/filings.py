@@ -2917,7 +2917,9 @@ def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
         text = candidate.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return True
-    return not _filing_text_is_substantive(text, min_chars=200)
+    if not _filing_text_is_substantive(text, min_chars=200):
+        return True
+    return _ch_body_lacks_financial_depth(text)
 
 
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
@@ -2984,9 +2986,9 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
                 if pdf_body:
                     text = pdf_body
                 else:
-                    text = _strip_html(html)
+                    text = _extract_investegate_html_text(html) or _strip_html(html)
             else:
-                text = _strip_html(html)
+                text = _extract_investegate_html_text(html) or _strip_html(html)
         else:
             html = raw.decode("utf-8", errors="replace")
             text = _extract_ixbrl_html_text(html) if _is_ixbrl_html(html) else _strip_html(html)
@@ -3445,32 +3447,45 @@ def _fetch_investegate_html_body(url: str) -> str | None:
     return text
 
 
+def _fetch_rns_html_body_fallback(url: str) -> tuple[str | None, str | None]:
+    """
+    Download Investegate or LSE RNS HTML narrative when PDF extract fails.
+
+    Returns ``(body, extracted_h1_headline)`` for period/headline validation.
+    """
+    if "investegate.co.uk/announcement/" not in url and not _is_lse_rns_url(url):
+        return None, None
+    if _is_lse_rns_pdf_url(url):
+        return None, None
+    try:
+        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
+        html = raw.decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        logger.debug("RNS HTML body fallback failed for %s: %s", url, exc)
+        return None, None
+    extracted_headline = _extract_investegate_html_headline(html)
+    text = _extract_investegate_html_text(html)
+    if not _filing_text_is_substantive(text, min_chars=IR_BODY_MIN_CHARS):
+        text = _strip_html(html)
+    if not _filing_text_is_substantive(text, min_chars=IR_BODY_MIN_CHARS):
+        return None, extracted_headline
+    if len(text) > FILINGS_BODY_MAX_CHARS:
+        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return text, extracted_headline
+
+
 def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None]:
     """
     Fetch an RNS body for indexed-without-body refetch.
 
-    Tries the PDF/HTML primary path first, then Investegate HTML-only fallback.
+    Tries the PDF/HTML primary path first, then Investegate/LSE HTML-only fallback.
     Returns ``(body, extracted_h1_headline)`` where ``extracted_h1_headline`` is set
     only for the HTML fallback path (used to reject period/headline mismatches).
     """
     body = fetch_filing_body(url)
     if body:
         return body, None
-    if "investegate.co.uk/announcement/" not in url:
-        return None, None
-    try:
-        raw = _http_get(url, headers={"User-Agent": _INVESTEGATE_USER_AGENT}, timeout=40)
-        html = raw.decode("utf-8", errors="replace")
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        logger.debug("Investegate HTML refetch failed for %s: %s", url, exc)
-        return None, None
-    extracted_headline = _extract_investegate_html_headline(html)
-    text = _extract_investegate_html_text(html)
-    if not _filing_text_is_substantive(text, min_chars=IR_BODY_MIN_CHARS):
-        return None, extracted_headline
-    if len(text) > FILINGS_BODY_MAX_CHARS:
-        text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
-    return text, extracted_headline
+    return _fetch_rns_html_body_fallback(url)
 
 
 def _fetch_ir_allowlist_body(
@@ -4507,11 +4522,19 @@ def _write_bodies(
                 row_id = str(row.get("id") or "").strip()
                 if row_id and attempted_ids is not None:
                     attempted_ids.add(row_id)
+                if _is_index_noise_row(row):
+                    updated.append(row)
+                    continue
                 body = None
+                extracted_headline: str | None = None
                 if _is_ch_filing_row(row):
                     body = _fetch_companies_house_body(row)
                 elif row.get("url"):
-                    body = fetch_filing_body(str(row["url"]))
+                    url = str(row["url"])
+                    if ticker and company_name and _is_rns_body_fetch_candidate(row):
+                        body, extracted_headline = _fetch_rns_filing_body_for_refetch(url)
+                    else:
+                        body = fetch_filing_body(url)
                 if body:
                     if ticker and company_name and _is_rns_body_fetch_candidate(row):
                         row, _reject_reason = _try_persist_rns_filing_body(
@@ -4520,6 +4543,7 @@ def _write_bodies(
                             company_name=company_name,
                             ticker=ticker,
                             bodies_dir=bodies_dir,
+                            extracted_headline=extracted_headline,
                             known_body_hashes=known_body_hashes,
                         )
                         if row.get("has_body"):
@@ -5012,6 +5036,7 @@ def refetch_investegate_filing_bodies(
     downloaded = 0
     body_rejected = 0
     html_fallbacks = 0
+    lse_html_fallbacks = 0
     known_body_hashes = _filing_body_hashes_from_rows(enriched, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
     missing_ids = {row.get("id") for row in missing}
@@ -5034,6 +5059,8 @@ def refetch_investegate_filing_bodies(
             if body:
                 if extracted_headline:
                     html_fallbacks += 1
+                    if _is_lse_rns_url(str(item["url"])):
+                        lse_html_fallbacks += 1
                 item, reject_reason = _try_persist_rns_filing_body(
                     item,
                     body,
@@ -5063,6 +5090,7 @@ def refetch_investegate_filing_bodies(
         "misattributed_pruned": misattributed_pruned,
         "body_rejected": body_rejected,
         "html_fallbacks": html_fallbacks,
+        "lse_html_fallbacks": lse_html_fallbacks,
         "other_results_candidates": other_results_candidates,
         "note": "refetch_investegate_filing_bodies",
     }
