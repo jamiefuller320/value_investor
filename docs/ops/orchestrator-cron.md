@@ -252,8 +252,9 @@ After the Sunday email bundle commits `docs/data/`. Schedule: `30 12 * * 0`.
 WORKFLOW=data-backup.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
 ```
 
-Creates `output/backups/ftse-tier1-*.tar.gz` as a GitHub Actions artifact (90-day retention).
-Optional `BACKUP_S3_URI` + AWS secrets for off-repo copy. See [`data-backup.md`](data-backup.md).
+Creates `output/backups/ftse-tier1-*.tar.gz` and `ftse-code-*.tar.gz` as GitHub
+Actions artifacts (90-day retention). Optional `BACKUP_S3_URI` + AWS secrets for
+off-repo copy. See [`data-backup.md`](data-backup.md).
 
 ### Generic dispatch (any workflow)
 

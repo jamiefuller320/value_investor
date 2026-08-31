@@ -38,6 +38,27 @@ TIER2_RELATIVE_PATHS: tuple[str, ...] = (
     "docs/data/research_model_suggestions.json",
 )
 
+# Used when git is unavailable (tests / offline). Prefer ``git ls-files``.
+CODE_FALLBACK_ROOTS: tuple[str, ...] = (
+    "src",
+    "tests",
+    "scripts",
+    ".github",
+    ".cursor",
+    "docs",
+)
+CODE_FALLBACK_ROOT_FILES: tuple[str, ...] = (
+    "pyproject.toml",
+    "AGENTS.md",
+    "README.md",
+    "LICENSE",
+    ".gitignore",
+    ".cursorindexingignore",
+)
+CODE_EXCLUDE_PREFIXES: tuple[str, ...] = ("docs/data/",)
+CODE_ARCHIVE_FAMILY = "ftse-code"
+DATA_ARCHIVE_FAMILY = "ftse-tier1"
+
 
 @dataclass
 class BackupManifest:
@@ -104,6 +125,75 @@ def _existing_paths(repo_root: Path, relative_paths: Iterable[str]) -> list[Path
     return found
 
 
+def _is_excluded_code_rel(rel: str) -> bool:
+    posix = rel.replace("\\", "/")
+    return posix == "docs/data" or posix.startswith(CODE_EXCLUDE_PREFIXES)
+
+
+def _git_tracked_code_files(repo_root: Path) -> list[Path] | None:
+    """Return tracked files excluding ``docs/data``, or None if git is unusable."""
+    if not (repo_root / ".git").exists() or not shutil.which("git"):
+        return None
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(repo_root), "ls-files", "-z"],
+            check=True,
+            capture_output=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    found: list[Path] = []
+    for raw in result.stdout.split(b"\0"):
+        if not raw:
+            continue
+        rel = raw.decode("utf-8", errors="replace")
+        if _is_excluded_code_rel(rel):
+            continue
+        path = repo_root / rel
+        if path.is_file():
+            found.append(path)
+    return found
+
+
+def _fallback_code_files(repo_root: Path) -> list[Path]:
+    files: list[Path] = []
+    for rel in CODE_FALLBACK_ROOTS:
+        root = repo_root / rel
+        if not root.exists():
+            continue
+        if root.is_file():
+            if not _is_excluded_code_rel(rel):
+                files.append(root)
+            continue
+        for path in root.rglob("*"):
+            if not path.is_file():
+                continue
+            nested = path.relative_to(repo_root).as_posix()
+            if _is_excluded_code_rel(nested):
+                continue
+            files.append(path)
+    for name in CODE_FALLBACK_ROOT_FILES:
+        path = repo_root / name
+        if path.is_file():
+            files.append(path)
+    return files
+
+
+def _code_files_to_archive(repo_root: Path) -> list[Path]:
+    tracked = _git_tracked_code_files(repo_root)
+    if tracked is not None:
+        return tracked
+    return _fallback_code_files(repo_root)
+
+
+def _top_level_rels(repo_root: Path, files: Iterable[Path]) -> list[str]:
+    tops: set[str] = set()
+    for path in files:
+        rel = path.relative_to(repo_root)
+        tops.add(rel.parts[0])
+    return sorted(tops)
+
+
 def _archive_stamp(now: datetime | None = None) -> str:
     current = now or datetime.now(UTC)
     return current.strftime("%Y%m%dT%H%M%SZ")
@@ -149,6 +239,43 @@ def create_backup_snapshot(
         archive_name=archive_path.name,
         paths=[path.relative_to(repo_root).as_posix() for path in sources],
         file_count=file_count,
+        bytes=archive_path.stat().st_size,
+        sha256=digest,
+    )
+    write_json(manifest_path, manifest.to_dict(), compact=False)
+    return BackupSnapshot(archive_path=archive_path, manifest_path=manifest_path, manifest=manifest)
+
+
+def create_code_backup_snapshot(
+    *,
+    repo_root: Path | None = None,
+    backup_dir: Path = DEFAULT_BACKUP_DIR,
+    now: datetime | None = None,
+) -> BackupSnapshot:
+    """Create a gzip tarball of git-tracked source/docs, excluding ``docs/data``."""
+    repo_root = Path(repo_root or Path.cwd())
+    files = _code_files_to_archive(repo_root)
+    if not files:
+        raise FileNotFoundError("No code files found to back up")
+
+    stamp = _archive_stamp(now)
+    backup_dir = Path(backup_dir)
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    archive_path = backup_dir / f"{CODE_ARCHIVE_FAMILY}-{stamp}.tar.gz"
+    manifest_path = backup_dir / f"{CODE_ARCHIVE_FAMILY}-{stamp}.manifest.json"
+
+    with tarfile.open(archive_path, "w:gz") as tar:
+        for path in files:
+            rel = path.relative_to(repo_root).as_posix()
+            tar.add(path, arcname=rel)
+
+    digest = _sha256_file(archive_path)
+    manifest = BackupManifest(
+        created_at=(now or datetime.now(UTC)).isoformat(),
+        tier="code",
+        archive_name=archive_path.name,
+        paths=_top_level_rels(repo_root, files),
+        file_count=len(files),
         bytes=archive_path.stat().st_size,
         sha256=digest,
     )
@@ -223,7 +350,9 @@ def list_local_snapshots(backup_dir: Path = DEFAULT_BACKUP_DIR) -> list[dict[str
     if not backup_dir.exists():
         return []
     rows: list[dict[str, Any]] = []
-    for manifest_path in sorted(backup_dir.glob("ftse-tier1-*.manifest.json"), reverse=True):
+    manifests = list(backup_dir.glob("ftse-tier1-*.manifest.json"))
+    manifests.extend(backup_dir.glob("ftse-code-*.manifest.json"))
+    for manifest_path in sorted(set(manifests), reverse=True):
         try:
             manifest = BackupManifest.from_dict(read_json(manifest_path))
         except (OSError, ValueError, TypeError, KeyError):
@@ -252,12 +381,24 @@ def _month_key_from_snapshot(snapshot: BackupSnapshot) -> str:
     return created.strftime("%Y-%m")
 
 
+def snapshot_archive_family(snapshot: BackupSnapshot) -> str:
+    """S3 object family prefix: ``ftse-code`` or ``ftse-tier1``."""
+    tier = (snapshot.manifest.tier or "").strip().lower()
+    if tier == "code":
+        return CODE_ARCHIVE_FAMILY
+    name = snapshot.manifest.archive_name or ""
+    if name.startswith(f"{CODE_ARCHIVE_FAMILY}-"):
+        return CODE_ARCHIVE_FAMILY
+    return DATA_ARCHIVE_FAMILY
+
+
 def monthly_backup_dest_names(snapshot: BackupSnapshot) -> tuple[str, str]:
     """Fixed S3 object names for the snapshot's calendar month (overwrite on each Sunday)."""
     month_key = _month_key_from_snapshot(snapshot)
+    family = snapshot_archive_family(snapshot)
     return (
-        f"ftse-tier1-monthly-{month_key}.tar.gz",
-        f"ftse-tier1-monthly-{month_key}.manifest.json",
+        f"{family}-monthly-{month_key}.tar.gz",
+        f"{family}-monthly-{month_key}.manifest.json",
     )
 
 
