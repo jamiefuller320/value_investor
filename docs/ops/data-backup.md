@@ -12,6 +12,7 @@ Related: [`architecture.md`](../architecture.md), [`orchestrator-cron.md`](orche
 |------|----------------|----------------------|-----------|
 | **Tier 1** | 7 days (weekly Sunday snapshot) | &lt; 1 hour manual | `ftse-data-backup` + email + optional S3 |
 | **Tier 2** | 7 days if `--include-tier2` | Same session as tier 1 | Optional in snapshot |
+| **Code** | 7 days (same Sunday job) | Minutes | `ftse-data-backup snapshot --code` + S3 |
 | **GitHub `main`** | Last commit | Minutes (clone/checkout) | Implicit backup |
 
 RPO improves to **24h** if you add a daily cron (optional); Sunday-after-email is the default.
@@ -35,6 +36,13 @@ RPO improves to **24h** if you add a daily cron (optional); Sunday-after-email i
 | `docs/data/latest.json` | Dashboard bundle (rebuild from Sunday screen) |
 | `docs/data/research_model_suggestions.json` | Suggestions ledger |
 
+### Code — same Sunday job (`snapshot --code`)
+
+Git-tracked source, tests, scripts, workflows, and docs **except** `docs/data/`
+(that tree is already in the tier-1 snapshot). Archive name:
+`ftse-code-YYYYMMDDTHHMMSSZ.tar.gz`. GitHub remains the primary code store;
+this is the off-repo copy on the weekly backup S3 account.
+
 ### Ephemeral — not backed up
 
 | Path | Why |
@@ -54,8 +62,12 @@ ftse-data-backup snapshot
 # Include tier-2 JSON files
 ftse-data-backup snapshot --include-tier2
 
+# Source/docs tarball (excludes docs/data)
+ftse-data-backup snapshot --code
+
 # Upload to S3 when BACKUP_S3_URI is set (requires AWS CLI + credentials)
 ftse-data-backup snapshot --upload
+ftse-data-backup snapshot --code --upload --upload-monthly
 
 # Pin to monthly/ key (overwrite same calendar month; use with --upload on Sunday cron)
 ftse-data-backup snapshot --upload --upload-monthly
@@ -193,8 +205,8 @@ Lifecycle rules on the bucket:
 
 | Prefix | Retention | Notes |
 |--------|-----------|-------|
-| Root (`BACKUP_S3_URI`) | **90 days** | Weekly timestamped `ftse-tier1-*.tar.gz` |
-| `monthly/` | **365 days** | One pin per month: `ftse-tier1-monthly-YYYY-MM.tar.gz` (Sunday overwrite) |
+| Root (`BACKUP_S3_URI`) | **90 days** | Weekly timestamped `ftse-tier1-*.tar.gz` and `ftse-code-*.tar.gz` |
+| `monthly/` | **365 days** | One pin per month: `ftse-tier1-monthly-YYYY-MM.tar.gz` and `ftse-code-monthly-YYYY-MM.tar.gz` |
 
 Example lifecycle setup (AWS console → bucket → Management → Lifecycle):
 
@@ -239,8 +251,9 @@ Optional GitHub secret `BACKUP_EMAIL_TO` overrides the default mailbox.
 3. If from email: `ftse-data-backup reassemble --output archive.tar.gz *.part*`
 4. `ftse-data-backup verify <archive.tar.gz>`
 5. `ftse-data-backup restore <archive.tar.gz>`
-6. `ftse-data-backup drill`
-7. `ftse-preflight` and `python3 -m pytest tests/test_historical_analysis.py -q` (smoke)
+6. For a code-only restore: `ftse-data-backup restore output/backups/ftse-code-....tar.gz`
+7. `ftse-data-backup drill`
+8. `ftse-preflight` and `python3 -m pytest tests/test_historical_analysis.py -q` (smoke)
 
 ## What GitHub already gives you
 

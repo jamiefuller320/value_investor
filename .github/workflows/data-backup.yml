@@ -1,7 +1,8 @@
 name: FTSE Data Backup
 
-# Weekly tier-1 snapshot of committed docs/data after the Sunday bundle.
-# Produces a GitHub Actions artifact (90-day retention) and optional S3 upload.
+# Weekly tier-1 snapshot of committed docs/data after the Sunday bundle,
+# plus a source-code tarball (git-tracked files except docs/data).
+# Produces GitHub Actions artifacts (90-day retention) and optional S3 upload.
 on:
   schedule:
     - cron: "30 12 * * 0"
@@ -13,6 +14,14 @@ on:
         default: false
       include_tier2:
         description: "Include tier-2 JSON files in the snapshot"
+        type: boolean
+        default: false
+      include_code:
+        description: "Also snapshot source code (excludes docs/data)"
+        type: boolean
+        default: true
+      code_only:
+        description: "Snapshot and upload source code only (skip docs/data)"
         type: boolean
         default: false
       upload_s3:
@@ -43,10 +52,12 @@ jobs:
         uses: actions/github-script@v8
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
+          CODE_ONLY: ${{ github.event.inputs.code_only || 'false' }}
         with:
           script: |
             const force = process.env.FORCE === 'true';
-            if (force) {
+            const codeOnly = process.env.CODE_ONLY === 'true';
+            if (force || codeOnly) {
               core.setOutput('should_run', 'true');
               return;
             }
@@ -91,6 +102,7 @@ jobs:
 
       - name: Create tier-1 snapshot
         id: snap
+        if: ${{ github.event.inputs.code_only != 'true' }}
         run: |
           set -euo pipefail
           ARGS=(snapshot --json)
@@ -110,13 +122,32 @@ jobs:
           )
           PY
 
-      - name: Upload backup artifact
+      - name: Create code snapshot
+        id: code
+        if: ${{ github.event_name != 'workflow_dispatch' || format('{0}', github.event.inputs.include_code) != 'false' || format('{0}', github.event.inputs.code_only) == 'true' }}
+        run: |
+          set -euo pipefail
+          ftse-data-backup snapshot --code --json > /tmp/code-backup.json
+
+      - name: Upload data backup artifact
+        if: ${{ github.event.inputs.code_only != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ftse-tier1-data-backup
           path: |
             output/backups/ftse-tier1-*.tar.gz
             output/backups/ftse-tier1-*.manifest.json
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Upload code backup artifact
+        if: ${{ github.event_name != 'workflow_dispatch' || format('{0}', github.event.inputs.include_code) != 'false' || format('{0}', github.event.inputs.code_only) == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftse-code-backup
+          path: |
+            output/backups/ftse-code-*.tar.gz
+            output/backups/ftse-code-*.manifest.json
           retention-days: 90
           if-no-files-found: error
 
@@ -130,7 +161,12 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
           set -euo pipefail
-          ftse-data-backup deliver --from-json /tmp/backup.json --upload --upload-monthly --json
+          if [ -f /tmp/backup.json ]; then
+            ftse-data-backup deliver --from-json /tmp/backup.json --upload --upload-monthly --json
+          fi
+          if [ -f /tmp/code-backup.json ]; then
+            ftse-data-backup deliver --from-json /tmp/code-backup.json --upload --upload-monthly --json
+          fi
 
       - name: Optional email backup
         if: ${{ github.event_name != 'workflow_dispatch' || format('{0}', github.event.inputs.email_backup) != 'false' }}
@@ -143,48 +179,59 @@ jobs:
           BACKUP_EMAIL_TO: ${{ secrets.BACKUP_EMAIL_TO }}
         run: |
           set -euo pipefail
+          if [ ! -f /tmp/backup.json ]; then
+            echo "No data snapshot — skipping email (code-only or snapshot skipped)"
+            exit 0
+          fi
           ftse-data-backup deliver --from-json /tmp/backup.json --email --json
 
       - name: Backup delivery summary
         if: always()
         run: |
-          if [ ! -f /tmp/backup.json ]; then
-            echo "No backup.json — snapshot step did not complete"
-            exit 0
-          fi
           python3 - <<'PY'
           import json
           from pathlib import Path
-          payload = json.loads(Path("/tmp/backup.json").read_text())
-          upload = payload.get("upload") or {}
-          upload_monthly = payload.get("upload_monthly") or {}
-          email = payload.get("email") or {}
-          manifest = payload.get("manifest") or {}
-          print(
-              f"Snapshot ok: {manifest.get('archive_name')} "
-              f"({manifest.get('bytes', 0):,} bytes, {manifest.get('file_count', 0)} files)"
-          )
-          if upload.get("uploaded"):
-              print(f"S3 upload ok: {upload.get('archive_dest')}")
-          elif upload:
-              detail = upload.get("reason") or upload.get("error") or "not requested"
-              print(f"S3 upload skipped/failed: {detail}")
-          if upload_monthly.get("uploaded"):
+
+          def summarize(label: str, path: Path) -> None:
+              if not path.exists():
+                  print(f"{label}: not created")
+                  return
+              payload = json.loads(path.read_text())
+              upload = payload.get("upload") or {}
+              upload_monthly = payload.get("upload_monthly") or {}
+              email = payload.get("email") or {}
+              manifest = payload.get("manifest") or {}
               print(
-                  f"S3 monthly pin ok: {upload_monthly.get('archive_dest')} "
-                  f"(month {upload_monthly.get('month_key')})"
+                  f"{label} snapshot ok: {manifest.get('archive_name')} "
+                  f"({manifest.get('bytes', 0):,} bytes, {manifest.get('file_count', 0)} files)"
               )
-          elif upload_monthly:
-              detail = upload_monthly.get("reason") or upload_monthly.get("error") or "not requested"
-              print(f"S3 monthly pin skipped/failed: {detail}")
-          if email.get("emailed"):
-              print(
-                  f"Email backup ok: {email.get('email_to')} "
-                  f"({email.get('parts')} part(s))"
-              )
-          elif email:
-              detail = email.get("error") or "not recorded"
-              print(f"Email backup skipped/failed: {detail}")
-          elif "${{ github.event.inputs.email_backup || 'true' }}" == "true":
-              print("Email backup not attempted")
+              if upload.get("uploaded"):
+                  print(f"{label} S3 upload ok: {upload.get('archive_dest')}")
+              elif upload:
+                  detail = upload.get("reason") or upload.get("error") or "not requested"
+                  print(f"{label} S3 upload skipped/failed: {detail}")
+              if upload_monthly.get("uploaded"):
+                  print(
+                      f"{label} S3 monthly pin ok: {upload_monthly.get('archive_dest')} "
+                      f"(month {upload_monthly.get('month_key')})"
+                  )
+              elif upload_monthly:
+                  detail = upload_monthly.get("reason") or upload_monthly.get("error") or "not requested"
+                  print(f"{label} S3 monthly pin skipped/failed: {detail}")
+              if email.get("emailed"):
+                  print(
+                      f"{label} email backup ok: {email.get('email_to')} "
+                      f"({email.get('parts')} part(s))"
+                  )
+              elif email:
+                  detail = email.get("error") or "not recorded"
+                  print(f"{label} email backup skipped/failed: {detail}")
+
+          summarize("Data", Path("/tmp/backup.json"))
+          summarize("Code", Path("/tmp/code-backup.json"))
+          if (
+              not Path("/tmp/backup.json").exists()
+              and not Path("/tmp/code-backup.json").exists()
+          ):
+              print("No snapshot JSON — snapshot steps did not complete")
           PY

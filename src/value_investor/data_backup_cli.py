@@ -11,6 +11,7 @@ from pathlib import Path
 from value_investor.data_backup import (
     DEFAULT_BACKUP_DIR,
     create_backup_snapshot,
+    create_code_backup_snapshot,
     list_local_snapshots,
     merge_email_chunks,
     restore_backup_snapshot,
@@ -45,6 +46,11 @@ def main(argv: list[str] | None = None) -> int:
         "--include-tier2",
         action="store_true",
         help="Also include small regenerable dashboard/queue JSON files",
+    )
+    snap.add_argument(
+        "--code",
+        action="store_true",
+        help="Snapshot git-tracked source/docs (excludes docs/data)",
     )
     snap.add_argument("--upload", action="store_true", help="Upload when BACKUP_S3_URI is set")
     snap.add_argument(
@@ -201,11 +207,17 @@ def _email_snapshot(
 
 
 def _cmd_snapshot(args: argparse.Namespace) -> int:
-    snapshot = create_backup_snapshot(
-        repo_root=args.repo_root,
-        backup_dir=args.backup_dir,
-        include_tier2=args.include_tier2,
-    )
+    if args.code:
+        snapshot = create_code_backup_snapshot(
+            repo_root=args.repo_root,
+            backup_dir=args.backup_dir,
+        )
+    else:
+        snapshot = create_backup_snapshot(
+            repo_root=args.repo_root,
+            backup_dir=args.backup_dir,
+            include_tier2=args.include_tier2,
+        )
     upload_result = None
     if args.upload:
         upload_result, code = _upload_snapshot(snapshot, strict=args.strict_upload)

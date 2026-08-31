@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import tarfile
 from pathlib import Path
 
 from value_investor.data_backup import (
     create_backup_snapshot,
+    create_code_backup_snapshot,
     merge_email_chunks,
     monthly_backup_dest_names,
     restore_backup_snapshot,
@@ -302,3 +305,102 @@ def test_deliver_cli_updates_json_with_monthly_upload(monkeypatch, tmp_path: Pat
     saved = json.loads(payload_path.read_text(encoding="utf-8"))
     assert saved["upload_monthly"]["uploaded"] is True
     assert "monthly" in saved["upload_monthly"]["archive_dest"]
+
+
+def _write_code_repo(repo: Path, *, init_git: bool) -> None:
+    (repo / "src").mkdir(parents=True)
+    (repo / "src" / "app.py").write_text("print('ok')\n", encoding="utf-8")
+    (repo / "docs/ops").mkdir(parents=True)
+    (repo / "docs/ops" / "runbook.md").write_text("# ops\n", encoding="utf-8")
+    (repo / "docs/data/library").mkdir(parents=True)
+    (repo / "docs/data/library" / "blob.json").write_text("{}", encoding="utf-8")
+    (repo / "pyproject.toml").write_text("[project]\nname='t'\n", encoding="utf-8")
+    if not init_git:
+        return
+    subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "t@example.com"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.name", "test"], cwd=repo, check=True)
+    subprocess.run(["git", "add", "-A"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True, capture_output=True)
+
+
+def test_code_snapshot_excludes_docs_data(tmp_path: Path):
+    repo = tmp_path / "repo"
+    _write_code_repo(repo, init_git=True)
+    snapshot = create_code_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    assert snapshot.manifest.tier == "code"
+    assert snapshot.archive_path.name.startswith("ftse-code-")
+    verify = verify_backup_snapshot(snapshot.archive_path)
+    assert verify["ok"] is True
+    with tarfile.open(snapshot.archive_path, "r:gz") as tar:
+        names = set(tar.getnames())
+    assert "src/app.py" in names
+    assert "docs/ops/runbook.md" in names
+    assert "pyproject.toml" in names
+    assert not any(name.startswith("docs/data/") for name in names)
+    assert "docs" in snapshot.manifest.paths or "src" in snapshot.manifest.paths
+
+
+def test_code_snapshot_fallback_without_git(tmp_path: Path):
+    repo = tmp_path / "repo"
+    _write_code_repo(repo, init_git=False)
+    snapshot = create_code_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    with tarfile.open(snapshot.archive_path, "r:gz") as tar:
+        names = set(tar.getnames())
+    assert "src/app.py" in names
+    assert not any(name.startswith("docs/data/") for name in names)
+
+
+def test_code_snapshot_restore_roundtrip(tmp_path: Path):
+    repo = tmp_path / "repo"
+    _write_code_repo(repo, init_git=False)
+    snapshot = create_code_backup_snapshot(repo_root=repo, backup_dir=tmp_path / "backups")
+    target = tmp_path / "restore"
+    target.mkdir()
+    restore_backup_snapshot(snapshot.archive_path, repo_root=target)
+    assert (target / "src/app.py").read_text(encoding="utf-8") == "print('ok')\n"
+    assert not (target / "docs/data/library/blob.json").exists()
+
+
+def test_code_monthly_dest_names(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    repo = tmp_path / "repo"
+    _write_code_repo(repo, init_git=False)
+    snapshot = create_code_backup_snapshot(
+        repo_root=repo,
+        backup_dir=tmp_path / "backups",
+        now=datetime(2026, 8, 31, 14, 0, tzinfo=UTC),
+    )
+    archive_name, manifest_name = monthly_backup_dest_names(snapshot)
+    assert archive_name == "ftse-code-monthly-2026-08.tar.gz"
+    assert manifest_name == "ftse-code-monthly-2026-08.manifest.json"
+
+
+def test_code_snapshot_cli_json(tmp_path: Path, monkeypatch):
+    from unittest.mock import MagicMock
+
+    from value_investor.data_backup_cli import main
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    mock_snapshot = MagicMock()
+    mock_snapshot.to_dict.return_value = {
+        "archive_path": "code.tar.gz",
+        "manifest_path": "code.json",
+        "manifest": {"tier": "code"},
+    }
+    called: dict[str, object] = {}
+
+    def _fake_code(**kwargs):
+        called.update(kwargs)
+        return mock_snapshot
+
+    monkeypatch.chdir(repo)
+    monkeypatch.setattr(
+        "value_investor.data_backup_cli.create_code_backup_snapshot",
+        _fake_code,
+    )
+    rc = main(["snapshot", "--code", "--json", "--backup-dir", str(tmp_path / "backups")])
+    assert rc == 0
+    assert called["repo_root"] == repo
