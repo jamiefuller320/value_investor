@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-28T09:27:12.906113+01:00",
+    "local_time": "2026-08-31T09:28:00.257630+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-28T08:00:00+01:00",
-    "settle_at": "2026-08-28T09:15:00+01:00",
+    "market_open_at": "2026-08-31T08:00:00+01:00",
+    "settle_at": "2026-08-31T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -18,12 +18,12 @@
       "Sector cap: at most 1 name(s) per known sector (cap=20%).",
       "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
-      "Costs: 3.0% applied on each buy and sell.",
+      "Costs: buy 3.00% / sell 3.00% (legacy symmetric slot 3.00%).",
       "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 857.84,
+    "nav": 857.52,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -33,28 +33,28 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 285.95,
+    "target_sleeve_value": 285.84,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7831000000000002,
-        "price": 127.81
+        "conviction_score": 1.0,
+        "price": 128.0
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7308000000000002,
-        "price": 196.4
+        "conviction_score": 0.9719000000000004,
+        "price": 195.2
       },
       {
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.7115000000000002,
-        "price": 2514.0
+        "conviction_score": 0.9615000000000005,
+        "price": 2523.0
       }
     ],
     "anticipated_exits": [],
@@ -67,9 +67,9 @@
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "reason": "Already near equal-weight target",
-        "value": 287.91,
-        "target_value": 285.95,
-        "conviction_score": 0.7308000000000002,
+        "value": 286.15,
+        "target_value": 285.84,
+        "conviction_score": 0.9719000000000004,
         "signal": "strong_buy"
       }
     ],
@@ -78,8 +78,8 @@
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 285.95,
-        "conviction_score": 0.7115000000000002,
+        "target_value": 285.84,
+        "conviction_score": 0.9615000000000005,
         "signal": "strong_buy"
       }
     ],
@@ -93,7 +93,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 127.80999755859375,
+      "mark": 128.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -104,7 +104,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 196.39999389648438,
+      "mark": 195.1999969482422,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -115,7 +115,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2514.0,
+      "mark": 2523.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -128,6 +128,8 @@
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.03,
+      "buy_cost_pct": null,
+      "sell_cost_pct": null,
       "max_positions": 3,
       "reporting_currency": "GBP",
       "hedge_assumption": "none",
@@ -1028,9 +1030,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-31T09:28:00.257630+01:00",
+        "portfolio_value": 857.52,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-28T09:27:12.906113+01:00",
+    "last_mark_at": "2026-08-31T09:28:00.257630+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1040,7 +1058,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-28T08:27:20.759290+00:00",
+    "generated_at": "2026-08-31T08:28:13.960161+00:00",
     "open_count": 12,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1054,12 +1072,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-28T08:27:20.759745+00:00",
+    "generated_at": "2026-08-31T08:28:13.960598+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1154,8 +1172,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment",
-    "updated_at": "2026-08-28T08:27:20.760015+00:00",
-    "as_of": "2026-08-28T09:27:12.906113+01:00",
+    "updated_at": "2026-08-31T08:28:13.960875+00:00",
+    "as_of": "2026-08-31T09:28:00.257630+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1212,12 +1230,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0039,
-        "mark": 2514.0,
+        "unrealized_pct": -0.0004,
+        "mark": 2523.0,
         "avg_cost": 2523.919,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7115,
+        "conviction_score": 0.9615,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1233,14 +1251,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 96%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 96%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1252,12 +1270,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0593,
-        "mark": 196.4,
+        "unrealized_pct": 0.0528,
+        "mark": 195.2,
         "avg_cost": 185.4078,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7308,
+        "conviction_score": 0.9719,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1273,14 +1291,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 97%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 97%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1292,12 +1310,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0774,
-        "mark": 127.81,
+        "unrealized_pct": 0.079,
+        "mark": 128.0,
         "avg_cost": 118.6312,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7831,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1313,14 +1331,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 78%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 78%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1333,7 +1351,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment",
-    "generated_at": "2026-08-28T08:27:20.760369+00:00",
+    "generated_at": "2026-08-31T08:28:13.961178+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1389,7 +1407,7 @@
     "learning_hints": [],
     "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
   },
-  "generated_at": "2026-08-28T08:27:20.760658+00:00",
+  "generated_at": "2026-08-31T08:28:13.961463+00:00",
   "track_id": "ai_judgment",
   "track_label": "AI judgment (research accumulate + adjusted_signal)",
   "is_primary_learning_track": true,

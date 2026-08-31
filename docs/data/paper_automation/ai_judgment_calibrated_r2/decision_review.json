@@ -1,5 +1,5 @@
 {
-  "reviewed_at": "2026-08-28T08:28:07.180698+00:00",
+  "reviewed_at": "2026-08-31T08:29:24.107440+00:00",
   "enough_history": true,
   "applied": false,
   "knobs_before": {
@@ -18,7 +18,7 @@
     "max_positions": 4
   },
   "reasons": [
-    "Weak excess after costs (-2.3%) \u2014 reduce max_positions."
+    "Weak excess after costs (-2.6%) \u2014 reduce max_positions."
   ],
   "metrics": {
     "portfolio_value": 970.88,
@@ -31,11 +31,11 @@
     "sell_count": 0,
     "positions": 5,
     "cash_fraction": 0.0,
-    "equity_marks": 5,
+    "equity_marks": 6,
     "max_sector_weight": 0.2,
     "dominant_sector": "Basic Materials",
-    "benchmark_return": -0.0057,
-    "excess_after_costs": -0.0234,
+    "benchmark_return": -0.0028,
+    "excess_after_costs": -0.0263,
     "note": ""
   },
   "counterfactual_preview": {
@@ -51,33 +51,62 @@
       "candidate_source": "auto"
     },
     "used_screen_buy_tier_pool": false,
-    "log_entries_total": 4,
-    "log_entries_replayed": 4,
+    "log_entries_total": 5,
+    "log_entries_replayed": 5,
     "lookback_days": null,
     "replay_from": "2026-08-24T09:27:38.731726+01:00",
-    "replay_to": "2026-08-28T09:27:30.155410+01:00",
-    "simulated_nav": 982.56,
+    "replay_to": "2026-08-31T09:28:27.802554+01:00",
+    "simulated_nav": 984.54,
     "baseline_nav": 1000.0,
-    "simulated_return": -0.0174,
+    "simulated_return": -0.0155,
     "simulated_total_costs": 29.13,
     "simulated_cost_drag": 0.0291,
     "simulated_trade_count": 4,
     "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-    "actual_nav": 980.91,
-    "actual_return_over_window": -0.0191,
+    "actual_nav": 981.81,
+    "actual_return_over_window": -0.0182,
     "actual_total_costs_over_window": 29.15,
     "actual_cost_drag_over_window": 0.0291,
-    "return_delta_vs_actual": 0.0016,
+    "return_delta_vs_actual": 0.0027,
     "cost_drag_delta_vs_actual": 0.0,
-    "archive_rebalance_replay": null,
+    "archive_rebalance_replay": {
+      "scope": "archive_rebalance_replay",
+      "knobs": {
+        "max_positions": 4,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.25,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true
+      },
+      "archive_passes_replayed": 1,
+      "archive_replay_from": "2026-08-30T06:43:33.462150+00:00",
+      "archive_replay_to": "2026-08-30T06:43:33.462150+00:00",
+      "log_replay_from": "2026-08-24T09:27:38.731726+01:00",
+      "log_replay_to": "2026-08-31T09:28:27.802554+01:00",
+      "log_entries_replayed": 5,
+      "simulated_nav": 1000.0,
+      "baseline_nav": 1000.0,
+      "simulated_return": 0.0,
+      "simulated_total_costs": 0,
+      "simulated_cost_drag": 0.0,
+      "simulated_trade_count": 0,
+      "limitations": "Observe-only archive walk \u2014 one rebalance per archived weekly screen from first logged pass. Does not mutate live knobs. AI overlay gates need PIT research joins for ai_judgment tracks (L113).",
+      "actual_nav": 992.72,
+      "actual_return_over_window": -0.0073,
+      "actual_total_costs_over_window": 29.15,
+      "actual_cost_drag_over_window": 0.0291,
+      "return_delta_vs_actual": 0.0073,
+      "cost_drag_delta_vs_actual": 0.0291
+    },
     "archive_vs_log": {
-      "log_entries_replayed": 4,
-      "archive_passes_replayed": null,
-      "log_return_delta_vs_actual": 0.0016,
-      "archive_return_delta_vs_actual": null,
-      "return_delta_gap_archive_minus_log": null,
-      "log_simulated_return": -0.0174,
-      "archive_simulated_return": null
+      "log_entries_replayed": 5,
+      "archive_passes_replayed": 1,
+      "log_return_delta_vs_actual": 0.0027,
+      "archive_return_delta_vs_actual": 0.0073,
+      "return_delta_gap_archive_minus_log": 0.0046,
+      "log_simulated_return": -0.0155,
+      "archive_simulated_return": 0.0
     }
   },
   "note": "Frozen shadow track \u2014 knobs fixed; decision-review apply skipped.",

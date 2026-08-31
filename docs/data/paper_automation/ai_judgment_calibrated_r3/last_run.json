@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-28T09:27:39.251947+01:00",
+    "local_time": "2026-08-31T09:28:41.422176+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-28T08:00:00+01:00",
-    "settle_at": "2026-08-28T09:15:00+01:00",
+    "market_open_at": "2026-08-31T08:00:00+01:00",
+    "settle_at": "2026-08-31T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -18,12 +18,12 @@
       "Sector cap: at most 1 name(s) per known sector (cap=30%).",
       "Ranking: highest conviction_score first, keep at most 5 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
-      "Costs: 3.0% applied on each buy and sell.",
+      "Costs: buy 3.00% / sell 3.00% (legacy symmetric slot 3.00%).",
       "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 980.93,
+    "nav": 981.83,
     "cash": 0.0,
     "max_positions": 5,
     "min_conviction": 0.0,
@@ -33,82 +33,105 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 196.19,
+    "target_sleeve_value": 194.04,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7831000000000002,
-        "price": 127.81
+        "conviction_score": 1.0,
+        "price": 128.0
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7308000000000002,
-        "price": 196.4
+        "conviction_score": 0.9719000000000004,
+        "price": 195.2
       },
       {
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.7115000000000002,
-        "price": 2514.0
+        "conviction_score": 0.9615000000000005,
+        "price": 2523.0
       },
       {
-        "ticker": "SN.L",
-        "name": "Smith & Nephew plc",
+        "ticker": "GSK.L",
+        "name": "GSK plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7093000000000002,
-        "price": 1062.5
+        "conviction_score": 0.9503000000000004,
+        "price": 1852.0
       },
       {
-        "ticker": "RIO.L",
-        "name": "Rio Tinto Group",
+        "ticker": "ITV.L",
+        "name": "ITV plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7045000000000002,
-        "price": 7715.0
+        "conviction_score": 0.5765950000000001,
+        "price": 71.35
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.181032,
+        "price": 1072.5,
+        "value": 194.16
+      },
+      {
+        "action": "sell",
+        "ticker": "RIO.L",
+        "name": "Rio Tinto Group",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.02527,
+        "price": 7688.0,
+        "value": 194.28
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "GSK.L",
+        "name": "GSK plc",
+        "reason": "New sleeve",
+        "value": 194.04,
+        "price": 1852.0,
+        "target_value": 194.04,
+        "conviction_score": 0.9503000000000004,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "ITV.L",
+        "name": "ITV plc",
+        "reason": "New sleeve",
+        "value": 182.74,
+        "price": 71.35,
+        "target_value": 194.04,
+        "conviction_score": 0.5765950000000001,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "reason": "Already near equal-weight target",
-        "value": 195.18,
-        "target_value": 196.19,
-        "conviction_score": 0.7115000000000002,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "RIO.L",
-        "name": "Rio Tinto Group",
-        "reason": "Already near equal-weight target",
-        "value": 194.96,
-        "target_value": 196.19,
-        "conviction_score": 0.7045000000000002,
+        "value": 195.88,
+        "target_value": 194.04,
+        "conviction_score": 0.9615000000000005,
         "signal": "strong_buy"
       }
     ],
-    "skipped": [
-      {
-        "ticker": "SN.L",
-        "name": "Smith & Nephew plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 196.19,
-        "conviction_score": 0.7093000000000002,
-        "signal": "strong_buy"
-      }
-    ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -117,7 +140,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 127.80999755859375,
+      "mark": 128.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -128,7 +151,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 196.39999389648438,
+      "mark": 195.1999969482422,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -139,7 +162,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2514.0,
+      "mark": 2523.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -150,7 +173,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1062.5,
+      "mark": 1072.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -161,7 +184,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 7715.0,
+      "mark": 7688.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -174,6 +197,8 @@
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.03,
+      "buy_cost_pct": null,
+      "sell_cost_pct": null,
       "max_positions": 5,
       "reporting_currency": "GBP",
       "hedge_assumption": "none",
@@ -405,11 +430,30 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-31T09:28:41.422176+01:00",
+        "portfolio_value": 981.83,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-28T09:27:39.251947+01:00",
+    "last_mark_at": "2026-08-31T09:28:41.422176+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "SN.L": 1,
+        "RIO.L": 1
+      },
       "reentry_cooldown": {}
     }
   },
@@ -417,7 +461,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-08-28T08:27:48.724215+00:00",
+    "generated_at": "2026-08-31T08:28:54.996984+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -436,7 +480,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-08-28T08:27:48.724470+00:00",
+    "generated_at": "2026-08-31T08:28:54.997209+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -492,17 +536,20 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 0,
+      "hold_with_data_quality_count": 2,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
-        "swap_rotation closed rotations=0 (target >=10)",
-        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
+        "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 0
+        "count": 2,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "open": 2
+        }
       },
       "closed": {
         "count": 0
@@ -518,7 +565,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -531,8 +578,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated_r3",
-    "updated_at": "2026-08-28T08:27:48.724782+00:00",
-    "as_of": "2026-08-28T09:27:39.251947+01:00",
+    "updated_at": "2026-08-31T08:28:54.997575+00:00",
+    "as_of": "2026-08-31T09:28:41.422176+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -547,8 +594,8 @@
     "holding_count": 5,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 5,
-      "weakening": 0,
+      "intact": 4,
+      "weakening": 1,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -589,12 +636,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0094,
-        "mark": 1062.5,
+        "unrealized_pct": -0.0001,
+        "mark": 1072.5,
         "avg_cost": 1072.5995,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7093,
+        "conviction_score": 0.5593,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -610,14 +657,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 56%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 56%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -625,16 +672,16 @@
       {
         "ticker": "RIO.L",
         "name": "Rio Tinto Group",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.004,
-        "mark": 7715.0,
+        "unrealized_pct": 0.0005,
+        "mark": 7688.0,
         "avg_cost": 7684.0,
-        "signal": "strong_buy",
+        "signal": "hold",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7045,
+        "conviction_score": 0.4228,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -644,22 +691,20 @@
           "risk"
         ],
         "failed_families": [],
-        "research_verdict": "accumulate",
+        "research_verdict": null,
         "reasons": [
-          "still strong_buy",
-          "research accumulate",
+          "left buy tier (hold)",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 70%"
+          "data_quality 1.00"
         ],
         "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 70%"
+          "conviction 42%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)"
+        ],
         "broken_reasons": []
       },
       {
@@ -669,12 +714,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0052,
-        "mark": 2514.0,
+        "unrealized_pct": 0.0088,
+        "mark": 2523.0,
         "avg_cost": 2501.0,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7115,
+        "conviction_score": 0.9615,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -690,54 +735,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 96%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "MEGP.L",
-        "name": "ME Group International plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0241,
-        "mark": 127.81,
-        "avg_cost": 124.8,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7831,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 78%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 78%"
+          "conviction 96%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -749,12 +754,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0278,
-        "mark": 196.4,
+        "unrealized_pct": 0.0216,
+        "mark": 195.2,
         "avg_cost": 191.08,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7308,
+        "conviction_score": 0.9719,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -770,14 +775,54 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 97%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 97%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "MEGP.L",
+        "name": "ME Group International plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0256,
+        "mark": 128.0,
+        "avg_cost": 124.8,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 1.0,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -790,7 +835,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-08-28T08:27:48.725194+00:00",
+    "generated_at": "2026-08-31T08:28:54.997970+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -798,7 +843,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 0,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -846,7 +891,7 @@
     "learning_hints": [],
     "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
   },
-  "generated_at": "2026-08-28T08:27:48.725443+00:00",
+  "generated_at": "2026-08-31T08:28:54.998226+00:00",
   "track_id": "ai_judgment_calibrated_r3",
   "track_label": "AI judgment calibrated shadow rank 3 (frozen priors)",
   "is_primary_learning_track": false,
