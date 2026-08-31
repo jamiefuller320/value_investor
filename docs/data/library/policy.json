@@ -408,7 +408,7 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-08-30T13:42:53.317203+00:00",
+  "updated_at": "2026-08-31T07:16:41.516440+00:00",
   "ingest_parity_markets": [
     "euro_depth"
   ],
@@ -427,10 +427,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-08-30T06:22:01.501891+00:00",
+      "run_at": "2026-08-31T06:52:14.865302+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 46,
+      "screen_shortlist": 45,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -444,13 +444,13 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 80.0,
-        "estimated_spend_weekly_ops_usd_this_week": 0.4,
+        "estimated_spend_weekly_ops_usd_this_week": 7.2,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 80.0,
+        "remaining_usd_before": 72.8,
         "dedupe": {
-          "already_researched_count": 432,
+          "already_researched_count": 433,
           "skipped_count": 45,
           "skipped_sample": [
             {
@@ -466,6 +466,11 @@
             {
               "market": "euro_depth",
               "ticker": "DG.PA",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "STR.VI",
               "reason": "duplicate_ticker"
             },
             {
@@ -505,22 +510,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "STR.VI",
+              "ticker": "ANDR.VI",
               "reason": "duplicate_ticker"
             },
             {
               "market": "euro_depth",
               "ticker": "ACKB.BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "VOW.DE",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "ANDR.VI",
               "reason": "duplicate_ticker"
             },
             {
@@ -531,6 +526,11 @@
             {
               "market": "euro_depth",
               "ticker": "MIO.IR",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "VOW.DE",
               "reason": "duplicate_ticker"
             },
             {
@@ -556,21 +556,9 @@
           ],
           "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
         },
-        "targets": [
-          {
-            "market": "euro_depth",
-            "ticker": "AGS.BR",
-            "name": "ageas SA/NV",
-            "signal": "strong_buy",
-            "conviction_score": 0.4518
-          }
-        ],
-        "executed": 1,
-        "created": 1,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 79.6
+        "targets": [],
+        "dry_run": true,
+        "executed": 0
       },
       "graduation": {
         "graduated": false,
