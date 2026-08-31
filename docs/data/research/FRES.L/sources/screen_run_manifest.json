@@ -1,18 +1,19 @@
 {
   "ticker": "FRES.L",
-  "run_at": "2026-08-23T06:22:09.407971+00:00",
-  "attached_at": "2026-08-28T21:32:08.241925+00:00",
-  "history_run_path": "docs/data/history/run_20260823_062209.json.gz",
-  "history_models_path": "docs/data/history/models_20260823_062209.json.gz",
+  "run_at": "2026-08-30T06:43:33.462150+00:00",
+  "attached_at": "2026-08-31T07:29:40.607223+00:00",
+  "history_run_path": "docs/data/history/run_20260830_064333.json.gz",
+  "history_models_path": "docs/data/history/models_20260830_064333.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 20,
-      "buy": 42,
+      "strong_buy": 17,
+      "buy": 44,
       "hold": 143,
-      "avoid": 43
+      "avoid": 43,
+      "insufficient_data": 1
     },
-    "strong_buy_count": 20,
+    "strong_buy_count": 17,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,10 +21,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "strong_buy": 16,
-      "buy": 25,
-      "hold": 44,
-      "avoid": 17
+      "strong_buy": 17,
+      "buy": 24,
+      "hold": 43,
+      "avoid": 18
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -33,26 +34,32 @@
   "ticker_signal": {
     "ticker": "FRES.L",
     "signal": "buy",
-    "conviction_score": 0.3697,
+    "conviction_score": 0.4138,
     "data_quality_score": 1.0,
+    "name": "Fresnillo plc",
+    "sector": "Basic Materials",
     "timing_signal": "neutral",
-    "timing_score": 0.5,
+    "timing_score": 0.375,
     "action_note": "Buy — neutral timing",
-    "models_passed": 11.0,
-    "weighted_model_score": 0.7023590909090909,
+    "models_passed": 13.0,
+    "weighted_model_score": 0.7605181818181819,
     "research_verdict": null,
     "adjusted_signal": "buy",
     "research_as_of": null,
+    "signal_trend": "new",
+    "weeks_at_signal": 1,
+    "passed_families": "cheapness,quality,dividend,garp,risk",
+    "price_vs_sma200_pct": -0.01558782283550047,
     "core_order": "limit",
-    "core_limit": 2780.29,
+    "core_limit": 2775.94,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 2474.74,
+    "tactical_limit": 2497.73,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 2400.5,
-    "tactical_take_profit": 3379.95,
-    "trade_plan_summary": "Trade plan: core 60% limit £2780.29; tactical 40% limit £2474.74; tactical stop £2400.50, target £3379.95.",
-    "atr_14": 142.0188,
-    "volume_ratio_20": 1.1052
+    "tactical_stop_loss": 2422.8,
+    "tactical_take_profit": 3328.5,
+    "trade_plan_summary": "Trade plan: core 60% limit £2775.94; tactical 40% limit £2497.73; tactical stop £2422.80, target £3328.50.",
+    "atr_14": 134.2583,
+    "volume_ratio_20": 1.4115
   },
   "ticker_models": [
     {
@@ -89,13 +96,13 @@
       "ticker": "FRES.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.5877
+      "score": 0.5994
     },
     {
       "ticker": "FRES.L",
       "model_id": "fcf_yield",
-      "passed": false,
-      "score": 0.0084
+      "passed": true,
+      "score": 0.8561
     },
     {
       "ticker": "FRES.L",
@@ -107,19 +114,19 @@
       "ticker": "FRES.L",
       "model_id": "lynch_peg",
       "passed": true,
-      "score": 0.9377
+      "score": 0.9731
     },
     {
       "ticker": "FRES.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9753
+      "score": 0.984
     },
     {
       "ticker": "FRES.L",
       "model_id": "quality_value",
       "passed": true,
-      "score": 0.8
+      "score": 1.0
     },
     {
       "ticker": "FRES.L",
@@ -137,7 +144,7 @@
       "ticker": "FRES.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.6111
+      "score": 0.6326
     },
     {
       "ticker": "FRES.L",
@@ -149,19 +156,19 @@
       "ticker": "FRES.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.836
+      "score": 0.8454
     },
     {
       "ticker": "FRES.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.7103
+      "score": 0.729
     },
     {
       "ticker": "FRES.L",
       "model_id": "dreman_contrarian",
       "passed": false,
-      "score": 0.4767
+      "score": 0.4917
     },
     {
       "ticker": "FRES.L",
@@ -172,8 +179,8 @@
     {
       "ticker": "FRES.L",
       "model_id": "composite_value",
-      "passed": false,
-      "score": 0.5698
+      "passed": true,
+      "score": 0.6812
     },
     {
       "ticker": "FRES.L",
@@ -188,6 +195,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 11,
+  "models_passed": 13,
   "models_total": 22
 }
