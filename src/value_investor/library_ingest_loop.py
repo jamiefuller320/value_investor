@@ -505,6 +505,8 @@ def run_library_ingest_loop(
         if pinned:
             reports = pinned
 
+    # Wall clock covers discovery + deepen so schedule jobs exit before GHA timeout.
+    started = time.monotonic()
     discovery_bonus_by_ticker: dict[str, float] = {}
     if discovery_scan:
         from value_investor.library_discovery_scan import run_library_buy_tier_discovery_scan
@@ -544,8 +546,13 @@ def run_library_ingest_loop(
             row for row in result.targets if row.ticker.upper() in pin_set
         ] or result.targets[:1]
 
-    started = time.monotonic()
+    if time.monotonic() - started >= max_runtime_seconds:
+        result.runtime_cutoff = True
+        result.partial = True
+
     for target in result.targets:
+        if result.runtime_cutoff:
+            break
         elapsed = time.monotonic() - started
         if elapsed >= max_runtime_seconds:
             result.runtime_cutoff = True

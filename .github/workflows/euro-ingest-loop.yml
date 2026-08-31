@@ -163,7 +163,9 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    # Must exceed Python budget (default 2700s) + setup + last-ticker overrun + commit.
+    # Schedule events omit workflow_dispatch defaults; timed-out jobs show as cancelled.
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v5
 
@@ -192,9 +194,12 @@ jobs:
             --json-path /tmp/euro_ingest_loop.json
             --max-targets "$MAX_TARGETS"
           )
-          if [ -n "${{ github.event.inputs.max_runtime_seconds }}" ]; then
-            ARGS+=(--max-runtime-seconds "${{ github.event.inputs.max_runtime_seconds }}")
+          # schedule/workflow_run events do not apply workflow_dispatch input defaults
+          RUNTIME="${{ github.event.inputs.max_runtime_seconds }}"
+          if [ -z "$RUNTIME" ]; then
+            RUNTIME="2700"
           fi
+          ARGS+=(--max-runtime-seconds "$RUNTIME")
           if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
             ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
           fi

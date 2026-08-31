@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-31T14:08:18+00:00",
+  "updated_at": "2026-08-31T23:18:37+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4417,6 +4417,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0581a-2fe8-7803-b424-bf525c9c1b87",
       "added_at": "2026-08-31T14:08:18+00:00"
+    },
+    {
+      "id": "L215",
+      "category": "later",
+      "section": "ops",
+      "title": "Per-ticker wall-clock cap in library ingest loop",
+      "summary": "A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery.",
+      "revisit_when": "Euro or parallel library ingest again times out after the schedule runtime-budget fix lands",
+      "tags": [
+        "ingest",
+        "timeout",
+        "gha"
+      ],
+      "status": "open",
+      "source": "euro ingest schedule timeout fix conversation",
+      "added_at": "2026-08-31T23:18:37+00:00"
     }
   ],
   "fragments": [

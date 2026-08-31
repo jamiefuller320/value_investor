@@ -10,6 +10,7 @@ from value_investor.data_library_cli import main as library_main
 from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
     _filing_coverage_for_ticker,
+    run_library_ingest_loop,
     select_library_ingest_targets,
 )
 from value_investor.storage import write_json
@@ -260,3 +261,90 @@ def test_library_ingest_json_path_survives_stdout_pollution(tmp_path: Path, caps
     # Teeing stdout would break; the dedicated path must stay parseable.
     payload = json.loads(out_path.read_text(encoding="utf-8"))
     assert payload["improved"] == ["BBB.DE"]
+
+
+def test_run_library_ingest_loop_counts_discovery_toward_runtime(tmp_path: Path):
+    """Discovery must consume the runtime budget so GHA jobs can finish before timeout."""
+    root = tmp_path / "library"
+    market = "euro_depth"
+    research = root / "markets" / market / "screen" / "research"
+    for ticker in ("AAA.DE", "BBB.DE"):
+        filings = research / ticker / "sources" / "filings"
+        filings.mkdir(parents=True)
+        write_json(
+            filings / "filings_index.json",
+            {"summary": {"total": 0, "with_body": 0}, "filings": []},
+            compact=False,
+        )
+    reports = [_report("AAA.DE"), _report("BBB.DE")]
+
+    class _Scan:
+        scanned = 2
+        hits = 0
+        new_rows_total = 0
+        curiosity_total = 0
+        errors = 0
+        prioritization_weights: dict = {}
+        tickers: list = []
+
+    ingest_calls: list[str] = []
+
+    def _slow_discovery(*_a, **_k):
+        import time
+
+        time.sleep(0.05)
+        return _Scan()
+
+    def _track_ingest(target, **_k):
+        ingest_calls.append(target.ticker)
+        return {"ticker": target.ticker, "improved": False}
+
+    with (
+        patch(
+            "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+            return_value=reports,
+        ),
+        patch(
+            "value_investor.library_ingest_loop.snapshot_library_ingest_health",
+            return_value={"unmeasured_buy_tier": 2, "zero_body_buy_tier": 0},
+        ),
+        patch("value_investor.library_ingest_loop.append_library_ingest_health_log"),
+        patch(
+            "value_investor.library_discovery_scan.run_library_buy_tier_discovery_scan",
+            side_effect=_slow_discovery,
+        ),
+        patch(
+            "value_investor.library_ingest_loop._ingest_single_library_target",
+            side_effect=_track_ingest,
+        ),
+        patch(
+            "value_investor.ingest_critical_path.assess_library_ingest_critical_path",
+            return_value=type(
+                "CP",
+                (),
+                {
+                    "force_discovery_scan": False,
+                    "auto_pin_tickers": [],
+                    "primary_blocker": "none",
+                    "to_dict": lambda self: {},
+                },
+            )(),
+        ),
+        patch("value_investor.ingest_critical_path.persist_ingest_critical_path"),
+        patch(
+            "value_investor.ingest_critical_path.apply_critical_path_to_target_order",
+            side_effect=lambda targets, _c: targets,
+        ),
+    ):
+        result = run_library_ingest_loop(
+            market,
+            library_root=root,
+            max_targets=2,
+            max_runtime_seconds=0.01,
+            discovery_scan=True,
+            deepen_history=False,
+        )
+
+    assert result.runtime_cutoff is True
+    assert result.partial is True
+    assert ingest_calls == []
