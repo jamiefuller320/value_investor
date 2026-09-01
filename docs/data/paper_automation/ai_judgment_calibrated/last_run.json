@@ -1,15 +1,80 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-31T09:28:13.986400+01:00",
+    "local_time": "2026-09-01T09:27:57.614119+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-31T08:00:00+01:00",
-    "settle_at": "2026-08-31T09:15:00+01:00",
+    "market_open_at": "2026-09-01T08:00:00+01:00",
+    "settle_at": "2026-09-01T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "ab772dc3-ba77-4ad4-8c31-ff4a7c887085",
+      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+      "acted_at": "2026-09-01T09:27:57.614119+01:00",
+      "ticker": "SN.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.176918,
+      "price": 1070.0,
+      "gross": 189.3,
+      "cost": 5.68,
+      "net_cash": 183.62,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Smith & Nephew plc",
+      "avg_cost_at_exit": 1053.0,
+      "position_closed": true
+    },
+    {
+      "id": "3de54ad2-40ba-4f25-b7e7-30dde162fd81",
+      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+      "acted_at": "2026-09-01T09:27:57.614119+01:00",
+      "ticker": "RIO.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.024435,
+      "price": 7585.0,
+      "gross": 185.34,
+      "cost": 5.56,
+      "net_cash": 179.78,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Rio Tinto Group",
+      "avg_cost_at_exit": 7688.0,
+      "position_closed": true
+    },
+    {
+      "id": "3752c081-9b2a-4254-b8d7-3bed676e82f5",
+      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+      "acted_at": "2026-09-01T09:27:57.614119+01:00",
+      "ticker": "GSK.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.098496,
+      "price": 1849.5,
+      "gross": 182.17,
+      "cost": 5.47,
+      "net_cash": -187.63,
+      "note": "Automated buy",
+      "name": "GSK plc"
+    },
+    {
+      "id": "46183eb4-f31d-485e-a51a-53d7740a0371",
+      "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+      "acted_at": "2026-09-01T09:27:57.614119+01:00",
+      "ticker": "ITV.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 2.45547,
+      "price": 70.85,
+      "gross": 173.97,
+      "cost": 5.22,
+      "net_cash": -179.19,
+      "note": "Automated buy",
+      "name": "ITV plc"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +88,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 953.31,
-    "cash": 3.42,
+    "nav": 927.48,
+    "cash": 0.0,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.2,
@@ -33,105 +98,80 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 188.4,
+    "target_sleeve_value": 185.5,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
         "conviction_score": 1.0,
-        "price": 128.0
+        "price": 125.8
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.9719000000000004,
-        "price": 195.2
+        "conviction_score": 1.0,
+        "price": 196.36
       },
       {
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.9615000000000005,
-        "price": 2523.0
+        "conviction_score": 1.0,
+        "price": 2540.0
       },
       {
         "ticker": "GSK.L",
         "name": "GSK plc",
         "signal": "strong_buy",
-        "conviction_score": 0.9503000000000004,
-        "price": 1852.0
+        "conviction_score": 1.0,
+        "price": 1849.5
       },
       {
         "ticker": "ITV.L",
         "name": "ITV plc",
         "signal": "strong_buy",
-        "conviction_score": 0.5765950000000001,
-        "price": 71.35
+        "conviction_score": 0.6265950000000001,
+        "price": 70.85
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "SN.L",
-        "name": "Smith & Nephew plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.176918,
-        "price": 1072.5,
-        "value": 189.74
-      },
-      {
-        "action": "sell",
-        "ticker": "RIO.L",
-        "name": "Rio Tinto Group",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.024435,
-        "price": 7688.0,
-        "value": 187.86
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "GSK.L",
-        "name": "GSK plc",
-        "reason": "New sleeve",
-        "value": 188.4,
-        "price": 1852.0,
-        "target_value": 188.4,
-        "conviction_score": 0.9503000000000004,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "ITV.L",
-        "name": "ITV plc",
-        "reason": "New sleeve",
-        "value": 181.3,
-        "price": 71.35,
-        "target_value": 188.4,
-        "conviction_score": 0.5765950000000001,
-        "signal": "strong_buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 184.61,
-        "target_value": 188.4,
-        "conviction_score": 0.9615000000000005,
+        "reason": "Already near equal-weight target",
+        "value": 185.85,
+        "target_value": 185.5,
+        "conviction_score": 1.0,
         "signal": "strong_buy"
       }
     ],
-    "skipped": [],
+    "skipped": [
+      {
+        "ticker": "GSK.L",
+        "name": "GSK plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 185.5,
+        "conviction_score": 1.0,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "ITV.L",
+        "name": "ITV plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 185.5,
+        "conviction_score": 0.6265950000000001,
+        "signal": "strong_buy"
+      }
+    ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -140,7 +180,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 128.0,
+      "mark": 125.80000305175781,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -151,29 +191,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 195.1999969482422,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "insufficient_data"
-    },
-    {
-      "ticker": "SN.L",
-      "name": "Smith & Nephew plc",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 1072.5,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "insufficient_data"
-    },
-    {
-      "ticker": "RIO.L",
-      "name": "Rio Tinto Group",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 7688.0,
+      "mark": 196.36000061035156,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -184,7 +202,29 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2523.0,
+      "mark": 2540.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "GSK.L",
+      "name": "GSK plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 1849.5,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 70.8499984741211,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -205,7 +245,7 @@
       "id": "f0da5661-164e-4112-ac92-981543584fef",
       "created_at": "2026-08-18T17:06:30.678239+00:00"
     },
-    "cash": 3.42,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -231,28 +271,6 @@
         "take_profit": null,
         "opened_at": "2026-08-19T10:00:23.967158+01:00"
       },
-      "SN.L": {
-        "ticker": "SN.L",
-        "shares": 0.176918,
-        "avg_cost": 1053.0,
-        "name": "Smith & Nephew plc",
-        "sector": "Healthcare",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-08-21T09:27:27.149429+01:00"
-      },
-      "RIO.L": {
-        "ticker": "RIO.L",
-        "shares": 0.024435,
-        "avg_cost": 7688.0,
-        "name": "Rio Tinto Group",
-        "sector": "Basic Materials",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-08-24T09:27:27.704412+01:00"
-      },
       "IMB.L": {
         "ticker": "IMB.L",
         "shares": 0.073169,
@@ -263,6 +281,28 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-08-25T09:27:20.613562+01:00"
+      },
+      "GSK.L": {
+        "ticker": "GSK.L",
+        "shares": 0.098496,
+        "avg_cost": 1849.5,
+        "name": "GSK plc",
+        "sector": "Healthcare",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-01T09:27:57.614119+01:00"
+      },
+      "ITV.L": {
+        "ticker": "ITV.L",
+        "shares": 2.45547,
+        "avg_cost": 70.85,
+        "name": "ITV plc",
+        "sector": "Communication Services",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-01T09:27:57.614119+01:00"
       }
     },
     "trades": [
@@ -436,6 +476,70 @@
         "net_cash": -190.07,
         "note": "Automated buy",
         "name": "Imperial Brands PLC"
+      },
+      {
+        "id": "ab772dc3-ba77-4ad4-8c31-ff4a7c887085",
+        "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+        "acted_at": "2026-09-01T09:27:57.614119+01:00",
+        "ticker": "SN.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.176918,
+        "price": 1070.0,
+        "gross": 189.3,
+        "cost": 5.68,
+        "net_cash": 183.62,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Smith & Nephew plc",
+        "avg_cost_at_exit": 1053.0,
+        "position_closed": true
+      },
+      {
+        "id": "3de54ad2-40ba-4f25-b7e7-30dde162fd81",
+        "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+        "acted_at": "2026-09-01T09:27:57.614119+01:00",
+        "ticker": "RIO.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.024435,
+        "price": 7585.0,
+        "gross": 185.34,
+        "cost": 5.56,
+        "net_cash": 179.78,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Rio Tinto Group",
+        "avg_cost_at_exit": 7688.0,
+        "position_closed": true
+      },
+      {
+        "id": "3752c081-9b2a-4254-b8d7-3bed676e82f5",
+        "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+        "acted_at": "2026-09-01T09:27:57.614119+01:00",
+        "ticker": "GSK.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.098496,
+        "price": 1849.5,
+        "gross": 182.17,
+        "cost": 5.47,
+        "net_cash": -187.63,
+        "note": "Automated buy",
+        "name": "GSK plc"
+      },
+      {
+        "id": "46183eb4-f31d-485e-a51a-53d7740a0371",
+        "fund_id": "f0da5661-164e-4112-ac92-981543584fef",
+        "acted_at": "2026-09-01T09:27:57.614119+01:00",
+        "ticker": "ITV.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.45547,
+        "price": 70.85,
+        "gross": 173.97,
+        "cost": 5.22,
+        "net_cash": -179.19,
+        "note": "Automated buy",
+        "name": "ITV plc"
       }
     ],
     "equity_curve": [
@@ -588,23 +692,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-01T09:27:57.614119+01:00",
+        "portfolio_value": 927.48,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-31T09:28:13.986400+01:00",
+    "last_mark_at": "2026-09-01T09:27:57.614119+01:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "SN.L": 1,
         "RIO.L": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated",
-    "generated_at": "2026-08-31T08:28:27.783162+00:00",
-    "open_count": 1,
+    "generated_at": "2026-09-01T08:28:12.927762+00:00",
+    "open_count": 3,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -616,13 +736,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated",
-    "generated_at": "2026-08-31T08:28:27.783495+00:00",
+    "generated_at": "2026-09-01T08:28:12.928390+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -678,20 +798,17 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 2,
+      "hold_with_data_quality_count": 0,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
-        "swap_rotation closed rotations=0 (target >=10)"
+        "swap_rotation closed rotations=0 (target >=10)",
+        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 2,
-        "close_reasons": {
-          "open": 2
-        }
+        "count": 0
       },
       "closed": {
         "count": 0
@@ -699,7 +816,10 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 0
+        "count": 1,
+        "verdicts": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -707,8 +827,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -720,8 +840,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated",
-    "updated_at": "2026-08-31T08:28:27.783828+00:00",
-    "as_of": "2026-08-31T09:28:13.986400+01:00",
+    "updated_at": "2026-09-01T08:28:12.929004+00:00",
+    "as_of": "2026-09-01T09:27:57.614119+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -736,8 +856,8 @@
     "holding_count": 5,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 4,
-      "weakening": 1,
+      "intact": 5,
+      "weakening": 0,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -772,56 +892,18 @@
     },
     "holdings": [
       {
-        "ticker": "RIO.L",
-        "name": "Rio Tinto Group",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 7688.0,
-        "avg_cost": 7688.0,
-        "signal": "hold",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.4228,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": null,
-        "reasons": [
-          "left buy tier (hold)",
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "intact_reasons": [
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 42%"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)"
-        ],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "IMB.L",
-        "name": "Imperial Brands PLC",
+        "ticker": "GSK.L",
+        "name": "GSK plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0004,
-        "mark": 2523.0,
-        "avg_cost": 2522.0,
+        "unrealized_pct": 0.0,
+        "mark": 1849.5,
+        "avg_cost": 1849.5,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9615,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -837,14 +919,94 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 96%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 96%"
+          "conviction 100%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ITV.L",
+        "name": "ITV plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 70.85,
+        "avg_cost": 70.85,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.6266,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0071,
+        "mark": 2540.0,
+        "avg_cost": 2522.0,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 1.0,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -856,12 +1018,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0114,
-        "mark": 195.2,
+        "unrealized_pct": 0.0174,
+        "mark": 196.36,
         "avg_cost": 193.0,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9719,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -877,54 +1039,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 97%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 97%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "SN.L",
-        "name": "Smith & Nephew plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0185,
-        "mark": 1072.5,
-        "avg_cost": 1053.0,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.5593,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 56%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 56%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -936,8 +1058,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0904,
-        "mark": 128.0,
+        "unrealized_pct": 0.0716,
+        "mark": 125.8,
         "avg_cost": 117.392,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -977,7 +1099,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated",
-    "generated_at": "2026-08-31T08:28:27.784222+00:00",
+    "generated_at": "2026-09-01T08:28:12.929793+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -985,7 +1107,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 0,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1033,7 +1155,7 @@
     "learning_hints": [],
     "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
   },
-  "generated_at": "2026-08-31T08:28:27.784510+00:00",
+  "generated_at": "2026-09-01T08:28:12.930395+00:00",
   "track_id": "ai_judgment_calibrated",
   "track_label": "AI judgment calibrated shadow (frozen priors)",
   "is_primary_learning_track": false,

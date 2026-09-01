@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-08-31T09:27:46.585014+01:00",
+    "local_time": "2026-09-01T09:27:27.726879+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-08-31T08:00:00+01:00",
-    "settle_at": "2026-08-31T09:15:00+01:00",
+    "market_open_at": "2026-09-01T08:00:00+01:00",
+    "settle_at": "2026-09-01T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 774.78,
+    "nav": 773.4,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -33,47 +33,58 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 258.26,
+    "target_sleeve_value": 257.8,
     "targets": [
       {
         "ticker": "MEGP.L",
         "name": "ME Group International plc",
         "signal": "strong_buy",
         "conviction_score": 1.0,
-        "price": 128.0
+        "price": 125.8
       },
       {
         "ticker": "AEP.L",
         "name": "AEP Plantations Plc",
         "signal": "strong_buy",
-        "conviction_score": 0.9719000000000004,
-        "price": 195.2
+        "conviction_score": 1.0,
+        "price": 196.36
       },
       {
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.9615000000000005,
-        "price": 2523.0
+        "conviction_score": 1.0,
+        "price": 2538.9099
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "MEGP.L",
+        "name": "ME Group International plc",
+        "reason": "Already near equal-weight target",
+        "value": 257.94,
+        "target_value": 257.8,
+        "conviction_score": 1.0,
+        "signal": "strong_buy"
+      }
+    ],
     "skipped": [
       {
         "ticker": "IMB.L",
         "name": "Imperial Brands PLC",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 258.26,
-        "conviction_score": 0.9615000000000005,
+        "target_value": 257.8,
+        "conviction_score": 1.0,
         "signal": "strong_buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -82,7 +93,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 128.0,
+      "mark": 125.80000305175781,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -93,7 +104,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 195.1999969482422,
+      "mark": 196.36000061035156,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -104,7 +115,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2523.0,
+      "mark": 2538.909912109375,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -1299,9 +1310,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-01T09:27:27.726879+01:00",
+        "portfolio_value": 773.4,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-08-31T09:27:46.585014+01:00",
+    "last_mark_at": "2026-09-01T09:27:27.726879+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1311,7 +1338,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-08-31T08:28:00.234133+00:00",
+    "generated_at": "2026-09-01T08:27:42.592485+00:00",
     "open_count": 12,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1325,12 +1352,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-08-31T08:28:00.234619+00:00",
+    "generated_at": "2026-09-01T08:27:42.593257+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1425,8 +1452,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "rules",
-    "updated_at": "2026-08-31T08:28:00.234887+00:00",
-    "as_of": "2026-08-31T09:27:46.585014+01:00",
+    "updated_at": "2026-09-01T08:27:42.593745+00:00",
+    "as_of": "2026-09-01T09:27:27.726879+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1483,12 +1510,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0004,
-        "mark": 2523.0,
+        "unrealized_pct": 0.0059,
+        "mark": 2538.9099,
         "avg_cost": 2524.0349,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9615,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1504,54 +1531,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 96%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 96%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "AEP.L",
-        "name": "AEP Plantations Plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0528,
-        "mark": 195.2,
-        "avg_cost": 185.4078,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.9719,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 97%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 97%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1563,9 +1550,49 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0773,
-        "mark": 128.0,
+        "unrealized_pct": 0.0588,
+        "mark": 125.8,
         "avg_cost": 118.8188,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 1.0,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0591,
+        "mark": 196.36,
+        "avg_cost": 185.4078,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
         "conviction_score": 1.0,
@@ -1604,7 +1631,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "rules",
-    "generated_at": "2026-08-31T08:28:00.235188+00:00",
+    "generated_at": "2026-09-01T08:27:42.594381+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1660,7 +1687,7 @@
     "learning_hints": [],
     "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
   },
-  "generated_at": "2026-08-31T08:28:00.235520+00:00",
+  "generated_at": "2026-09-01T08:27:42.594991+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,
