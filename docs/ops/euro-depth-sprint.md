@@ -59,9 +59,11 @@ When focus reaches parity, `ingest_parity_markets` is updated and focus may adva
 
 **Parallel sprint:** `ingest_parallel_sprint` (default `["sp500"]`) and `ingest_parallel_sprint_2`
 (default `["asx200"]`) front-start filing deepen on queue markets while focus is still in
-sprint. Stream 1 slots match euro focus (+30 min) via `library-ingest-sprint.yml`; stream 2
-(+60 min) via `library-ingest-sprint-2.yml`. Learning focus (`weekly_paper_shard_markets`,
-observe sim) stays on `euro_depth` until handoff.
+sprint. When a parallel market reaches filing parity, `advance_parallel_sprint_on_ingest_parity`
+(default true) removes it from its stream and promotes the next `market_queue` market that
+still has gaps into the same slot. Stream 1 slots match euro focus (+30 min) via
+`library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`. Learning
+focus (`weekly_paper_shard_markets`, observe sim) stays on `euro_depth` until handoff.
 
 `ingest_parity_met` is the FTSE quality bar for **every** library market
 (unmeasured, zero-body, thin, and `indexed_without_body` all zero).

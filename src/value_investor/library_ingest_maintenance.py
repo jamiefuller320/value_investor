@@ -16,8 +16,15 @@ from value_investor.library_ingest_dispatch import (
     FTSE_MAINTENANCE_MAX_TARGETS,
     ingest_parity_met,
     list_library_ingest_maintenance_markets,
+    list_library_ingest_parallel_sprint_markets,
+    next_parallel_sprint_queue_market,
+    parallel_sprint_stream_for_market,
+    replace_parallel_sprint_market,
 )
-from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
+from value_investor.library_ingest_escalation import (
+    is_ftse_equivalent_market,
+    snapshot_library_buy_tier_filing_health,
+)
 from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
     run_library_ingest_loop,
@@ -181,10 +188,164 @@ def maybe_handoff_focus_on_ingest_parity(
     }
 
 
+def _parallel_sprint_advance_enabled(policy: dict[str, Any]) -> bool:
+    fg = policy.get("focus_graduation") or {}
+    return bool(fg.get("advance_parallel_sprint_on_ingest_parity", True))
+
+
+def _record_parallel_parity_for_maintenance(
+    policy: dict[str, Any],
+    market_id: str,
+    *,
+    library_root: Path,
+    health: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Record parity for maintenance; FTSE-equivalent markets wait for learning_ready."""
+    from value_investor.library_graduation import maybe_record_ingest_parity
+    from value_investor.library_learning_depth import assess_library_learning_depth
+
+    if is_ftse_equivalent_market(market_id, policy):
+        depth = assess_library_learning_depth(
+            market_id,
+            library_root=library_root,
+            policy=policy,
+        )
+        if not depth.get("learning_ready"):
+            return policy, {
+                "recorded": False,
+                "reason": "learning_depth_not_ready",
+                "market_id": market_id,
+                "learning_ready": False,
+                "filing_ready": depth.get("filing_ready"),
+            }
+    return maybe_record_ingest_parity(
+        policy,
+        market_id,
+        library_root=library_root,
+        health=health,
+    )
+
+
+def maybe_advance_parallel_sprint_on_parity(
+    *,
+    market_id: str,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+    health: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """
+    When a parallel sprint market reaches filing parity, record maintenance eligibility
+    and promote the next ``market_queue`` market into the same stream slot.
+    """
+    library_root = Path(library_root)
+    policy = load_policy(policy_path)
+    parallel_stream = parallel_sprint_stream_for_market(market_id, policy=policy)
+    if parallel_stream is None:
+        return {"skipped": True, "reason": "not_parallel_sprint_market", "market_id": market_id}
+
+    health = health or snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
+    if not ingest_parity_met(health):
+        return {"skipped": True, "reason": "parity_not_met", "market_id": market_id}
+
+    if not _parallel_sprint_advance_enabled(policy):
+        return {
+            "skipped": True,
+            "reason": "advance_parallel_sprint_on_ingest_parity_disabled",
+            "market_id": market_id,
+        }
+
+    policy, parity_event = _record_parallel_parity_for_maintenance(
+        policy,
+        market_id,
+        library_root=library_root,
+        health=health,
+    )
+    nxt = next_parallel_sprint_queue_market(
+        policy,
+        library_root=library_root,
+        vacating=market_id,
+    )
+    policy, stream_after = replace_parallel_sprint_market(
+        policy,
+        parallel_stream=parallel_stream,
+        from_market=market_id,
+        to_market=nxt,
+    )
+    history = list((policy.get("parallel_sprint_graduation") or {}).get("history") or [])
+    event_row = {
+        "at": datetime.now(UTC).isoformat(),
+        "parallel_stream": parallel_stream,
+        "from_market": market_id,
+        "to_market": nxt,
+        "stream_markets_after": list(stream_after),
+        "ingest_parity_recorded": bool(parity_event.get("recorded")),
+    }
+    history.append(event_row)
+    policy["parallel_sprint_graduation"] = {
+        **(policy.get("parallel_sprint_graduation") or {}),
+        "history": history[-50:],
+    }
+    save_policy(policy, policy_path)
+
+    try:
+        from value_investor.library_ingest_dispatch import refresh_euro_ingest_dispatch
+
+        refresh_euro_ingest_dispatch(library_root=library_root, policy_path=policy_path)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Dispatch refresh after parallel sprint handoff failed: %s", exc)
+
+    return {
+        "advanced": True,
+        "parallel_stream": parallel_stream,
+        "from_market": market_id,
+        "to_market": nxt,
+        "stream_markets_after": stream_after,
+        "parity_event": parity_event,
+        **event_row,
+    }
+
+
+def reconcile_parallel_sprint_queues(
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+) -> list[dict[str, Any]]:
+    """Advance any parallel sprint markets already at parity before a sprint run."""
+    library_root = Path(library_root)
+    policy = load_policy(policy_path)
+    if not _parallel_sprint_advance_enabled(policy):
+        return []
+
+    events: list[dict[str, Any]] = []
+    for parallel_stream in (1, 2):
+        for market_id in list_library_ingest_parallel_sprint_markets(
+            policy=policy,
+            parallel_stream=parallel_stream,
+        ):
+            health = snapshot_library_buy_tier_filing_health(
+                market_id,
+                library_root=library_root,
+            )
+            if not ingest_parity_met(health):
+                continue
+            event = maybe_advance_parallel_sprint_on_parity(
+                market_id=market_id,
+                library_root=library_root,
+                policy_path=policy_path,
+                health=health,
+            )
+            if event.get("advanced"):
+                events.append(event)
+                policy = load_policy(policy_path)
+    return events
+
+
 __all__ = [
     "DEFAULT_MAINTENANCE_MAX_TARGETS",
     "LibraryIngestMaintenanceResult",
+    "maybe_advance_parallel_sprint_on_parity",
     "maybe_handoff_focus_on_ingest_parity",
+    "reconcile_parallel_sprint_queues",
     "record_ingest_parity_market",
     "run_library_ingest_maintenance",
 ]
