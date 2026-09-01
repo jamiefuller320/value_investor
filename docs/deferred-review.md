@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-08-31T23:18:37+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T09:41:34+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -103,6 +103,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N48 | **Flip live FTSE paper books off 3% stress costs** | Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults — do not silently rewrite live configs. | Human decides stress vs fair is the primary learning metric, or live/demo broker path starts |
 | N49 | **Do not invent new paper tracks or knob churn to 'fix' stage 2b excess** | End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate. | AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy |
 | N50 | **Treat Yahoo quarterly cashflow as optional for UK memo excellence** | yahoo_quarterly_cashflow is thin on nearly every FTSE memo; do not block excellent/strong narrative quality on it. Prefer filing OCF bridges and gate/suppress empty Yahoo TTM rather than waiting for Yahoo series. | If Yahoo UK quarterly cashflow coverage improves or a primary filing OCF bridge is standardized in every memo |
+| N51 | **Consider making value_investor private** | Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. | If further secret exposure incidents occur or Pages no longer needs a public repo |
 
 ---
 
@@ -282,6 +283,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | S1 | **Rotate any API/SMTP secrets that were pasted or committed** | Git history may still contain old keys even after gitignore fixes | Immediately if keys may still be live |
 | S2 | **Re-verify CURSOR_API_KEY in a fresh Cloud Agent** | Secrets may not inject into an already-running pod | Next new Cloud Agent run |
 | S3 | **Quote special characters in .env** | Unquoted passwords break source .env | When recreating or editing .env locally |
+| L216 | **Enable main branch protection against Actions token pushes** | Require PR reviews / restrict GITHUB_TOKEN from pushing workflow changes to main so a stolen Actions token cannot plant a CURSOR_API_KEY exfil workflow. | After rotating CURSOR_API_KEY and merging GHA secret hygiene, or next security review |
+| N51 | **Consider making value_investor private** | Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. | If further secret exposure incidents occur or Pages no longer needs a public repo |
 
 ---
 
