@@ -60,8 +60,6 @@ jobs:
     assert any(item.rule == "untrusted_expr_in_run" for item in findings)
 
 
-
-
 def test_detects_dispatch_input_in_run_block() -> None:
     evil = """
 name: Evil
@@ -100,6 +98,7 @@ jobs:
 """
     findings = scan_workflow_text("ok.yml", ok)
     assert not any(item.rule == "dispatch_input_in_run" for item in findings)
+
 
 def test_detects_missing_same_repo_gate_on_head_checkout() -> None:
     evil = """
