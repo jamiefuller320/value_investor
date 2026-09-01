@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T12:54:11+00:00",
+  "updated_at": "2026-09-01T13:25:31+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4487,7 +4487,7 @@
       "category": "later",
       "section": "security",
       "title": "Harden workflow_dispatch string inputs against shell injection",
-      "summary": "Several secret-bearing workflows still interpolate free-form github.event.inputs (pin_ticker, task_id, markets, max_targets, etc.) into run: bodies. A stolen WORKFLOW_DISPATCH_PAT or write collaborator can shell-inject, poison GITHUB_PATH, and exfiltrate step secrets (COMPANIES_HOUSE, CURSOR, CRONJOB, SMTP, AWS). Pass all inputs via env: + allowlists; never ${{ }} into script bodies.",
+      "summary": "Several secret-bearing workflows still interpolate free-form github.event.inputs (pin_ticker, task_id, markets, max_targets, etc.) into run: bodies. A stolen WORKFLOW_DISPATCH_PAT or write collaborator can shell-inject, poison GITHUB_PATH, and exfiltrate step secrets (COMPANIES_HOUSE, CURSOR, CRONJOB, SMTP, AWS). Pass all inputs via env: + allowlists; never ${{ }} into script bodies. Implemented in PR #384 (env: + allowlists + dispatch_input_in_run scanner).",
       "revisit_when": "After rotating PAT/cron credentials, or when next hardening the Actions surface beyond outsider workflow_run PPE",
       "tags": [
         "gha",
@@ -4495,7 +4495,7 @@
         "workflow_dispatch",
         "injection"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
       "added_at": "2026-09-01T12:54:11+00:00"
     },

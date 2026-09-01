@@ -183,10 +183,32 @@ jobs:
 
       - name: Run library ingest loop
         id: loop
+        env:
+          MARKET: ${{ github.event.inputs.market || 'euro_depth' }}
+          MAX_TARGETS: ${{ github.event.inputs.max_targets || needs.check.outputs.max_targets || '12' }}
+          MAX_RUNTIME_SECONDS: ${{ github.event.inputs.max_runtime_seconds }}
+          MAX_BODIES: ${{ github.event.inputs.max_bodies }}
+          RECORD_GAP_CLOSURE_INPUT: ${{ github.event.inputs.record_gap_closure }}
+          RECORD_TRIAL: ${{ github.event.inputs.record_trial }}
+          GAP_CLOSURE_PARENT_ID: ${{ github.event.inputs.gap_closure_parent_id }}
+          GAP_CLOSURE_TRIGGER: ${{ github.event.inputs.gap_closure_trigger }}
+          PIN_TICKER: ${{ github.event.inputs.pin_ticker }}
         run: |
           set -euo pipefail
-          MARKET="${{ github.event.inputs.market || 'euro_depth' }}"
-          MAX_TARGETS="${{ github.event.inputs.max_targets || needs.check.outputs.max_targets || '12' }}"
+          require_safe() {
+            local name="$1" val="$2" re="$3"
+            if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
+              echo "Rejecting unsafe dispatch input: $name" >&2
+              exit 1
+            fi
+          }
+          require_safe market "${MARKET:-}" '^[a-z][a-z0-9_]{0,63}$'
+          require_safe max_targets "${MAX_TARGETS:-}" '^[0-9]+$'
+          require_safe max_runtime_seconds "${MAX_RUNTIME_SECONDS:-}" '^[0-9]+$'
+          require_safe max_bodies "${MAX_BODIES:-}" '^[0-9]+$'
+          require_safe pin_ticker "${PIN_TICKER:-}" '^[A-Za-z0-9][A-Za-z0-9._%-]{0,31}$'
+          require_safe gap_closure_parent_id "${GAP_CLOSURE_PARENT_ID:-}" '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$'
+          require_safe gap_closure_trigger "${GAP_CLOSURE_TRIGGER:-}" '^[a-z0-9_]{1,64}$'
           ARGS=(
             ingest-loop
             --market "$MARKET"
@@ -195,20 +217,20 @@ jobs:
             --max-targets "$MAX_TARGETS"
           )
           # schedule/workflow_run events do not apply workflow_dispatch input defaults
-          RUNTIME="${{ github.event.inputs.max_runtime_seconds }}"
+          RUNTIME="${MAX_RUNTIME_SECONDS:-}"
           if [ -z "$RUNTIME" ]; then
             RUNTIME="2700"
           fi
           ARGS+=(--max-runtime-seconds "$RUNTIME")
-          if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
-            ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
+          if [ -n "${MAX_BODIES:-}" ]; then
+            ARGS+=(--max-bodies "$MAX_BODIES")
           fi
-          RECORD_GAP_CLOSURE="${{ github.event.inputs.record_gap_closure }}"
-          if [ "$RECORD_GAP_CLOSURE" != "true" ] && [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
+          RECORD_GAP_CLOSURE="${RECORD_GAP_CLOSURE_INPUT:-}"
+          if [ "$RECORD_GAP_CLOSURE" != "true" ] && [ "${RECORD_TRIAL:-}" = "true" ]; then
             RECORD_GAP_CLOSURE=true
           fi
-          PARENT_ID="${{ github.event.inputs.gap_closure_parent_id }}"
-          TRIGGER="${{ github.event.inputs.gap_closure_trigger }}"
+          PARENT_ID="${GAP_CLOSURE_PARENT_ID:-}"
+          TRIGGER="${GAP_CLOSURE_TRIGGER:-}"
           if [ "$RECORD_GAP_CLOSURE" = "true" ]; then
             ARGS+=(--record-gap-closure)
             if [ -n "$PARENT_ID" ]; then
@@ -225,7 +247,7 @@ jobs:
             fi
             ARGS+=(--gap-closure-review-trigger horizon_scan)
           fi
-          PIN="${{ github.event.inputs.pin_ticker }}"
+          PIN="${PIN_TICKER:-}"
           if [ -n "$PIN" ]; then
             ARGS+=(--pin-ticker "$PIN")
           fi

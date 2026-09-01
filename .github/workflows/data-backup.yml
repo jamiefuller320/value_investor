@@ -103,10 +103,12 @@ jobs:
       - name: Create tier-1 snapshot
         id: snap
         if: ${{ github.event.inputs.code_only != 'true' }}
+        env:
+          INCLUDE_TIER2: ${{ github.event.inputs.include_tier2 || 'false' }}
         run: |
           set -euo pipefail
           ARGS=(snapshot --json)
-          if [ "${{ github.event.inputs.include_tier2 || 'false' }}" = "true" ]; then
+          if [ "${INCLUDE_TIER2:-}" = "true" ]; then
             ARGS+=(--include-tier2)
           fi
           ftse-data-backup "${ARGS[@]}" > /tmp/backup.json

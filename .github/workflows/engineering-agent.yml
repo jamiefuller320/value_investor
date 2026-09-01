@@ -81,14 +81,23 @@ jobs:
       - name: Resolve engineering task id
         if: ${{ github.event.inputs.compile_only != 'true' }}
         id: task
+        env:
+          TASK_ID_INPUT: ${{ github.event.inputs.task_id }}
+          PR_ONLY: ${{ github.event.inputs.pr_only }}
         run: |
-          if [ -n "${{ github.event.inputs.task_id }}" ]; then
-            TASK_ID=$(python3 - <<'PY'
+          set -euo pipefail
+          if [ -n "${TASK_ID_INPUT:-}" ]; then
+            if ! [[ "$TASK_ID_INPUT" =~ ^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$ ]]; then
+              echo "Rejecting unsafe task_id input" >&2
+              exit 1
+            fi
+            TASK_ID=$(TASK_ID_INPUT="$TASK_ID_INPUT" python3 - <<'PY'
+          import os
           from value_investor.engineering_sync import resolve_dispatch_task_id
-          print(resolve_dispatch_task_id("${{ github.event.inputs.task_id }}") or "")
+          print(resolve_dispatch_task_id(os.environ.get("TASK_ID_INPUT") or "") or "")
           PY
           )
-          elif [ "${{ github.event.inputs.pr_only }}" = "true" ]; then
+          elif [ "${PR_ONLY:-}" = "true" ]; then
             echo "task_id is required when pr_only is true"
             exit 1
           else
@@ -96,6 +105,10 @@ jobs:
           fi
           if [ -z "$TASK_ID" ]; then
             echo "No open engineering tasks in queue"
+            exit 1
+          fi
+          if ! [[ "$TASK_ID" =~ ^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$ ]]; then
+            echo "Resolved task_id failed allowlist" >&2
             exit 1
           fi
           echo "task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
@@ -109,15 +122,16 @@ jobs:
           CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
           FORCE_RUN: ${{ github.event.inputs.force }}
+          TASK_ID: ${{ steps.task.outputs.task_id }}
         run: |
-          ARGS="run --max-tasks 1 --defer-pr-open"
-          if [ -n "${{ steps.task.outputs.task_id }}" ]; then
-            ARGS="$ARGS --task-id ${{ steps.task.outputs.task_id }}"
+          ARGS=(run --max-tasks 1 --defer-pr-open)
+          if [ -n "${TASK_ID:-}" ]; then
+            ARGS+=(--task-id "$TASK_ID")
           fi
           if [ "$FORCE_RUN" = "true" ]; then
-            ARGS="$ARGS --force"
+            ARGS+=(--force)
           fi
-          ftse-engineering --output-dir output $ARGS
+          ftse-engineering --output-dir output "${ARGS[@]}"
 
       - name: Commit ad-hoc spend to main
         if: >-
@@ -231,10 +245,11 @@ jobs:
         env:
           WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
           GITHUB_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.task.outputs.branch }}
+          TASK_ID: ${{ steps.task.outputs.task_id }}
+          PR_ONLY: ${{ github.event.inputs.pr_only }}
         run: |
           set -euo pipefail
-          BRANCH="${{ steps.task.outputs.branch }}"
-          TASK_ID="${{ steps.task.outputs.task_id }}"
           TITLE=$(ftse-engineering task-title --task-id "$TASK_ID" --max-len 120)
 
           if [ -n "${WORKFLOW_DISPATCH_PAT:-}" ]; then
@@ -247,7 +262,7 @@ jobs:
           fi
           gh auth setup-git
 
-          if [ "${{ github.event.inputs.pr_only }}" = "true" ]; then
+          if [ "${PR_ONLY:-}" = "true" ]; then
             if ! git ls-remote --exit-code origin "refs/heads/$BRANCH" >/dev/null 2>&1; then
               echo "Remote branch $BRANCH not found"
               exit 1

@@ -12,6 +12,7 @@ PR head branch names and fork commits as **untrusted input**.
 | `workflow_run` autofix that `pip install -e .` from the PR ref | Malicious `pyproject` / package code runs with write token | Install **non-editable** package from `main`, copy trusted scripts to `/tmp`, then check out the PR SHA |
 | `workflow_run` without a same-repo gate | Public **fork** PRs trigger privileged jobs | Require `head_repository.full_name == github.repository` |
 | Logging full API keys | Key leak via Actions logs | Use `api_key_fingerprint()` / env status helpers only |
+| `${{ github.event.inputs.* }}` inside `run:` (string dispatch inputs) | Shell / Python injection → secret theft if a write collaborator or stolen `WORKFLOW_DISPATCH_PAT` can dispatch | Pass all inputs via `env:` + allowlists; never `${{ }}` into the script body |
 
 ## Workflows that must stay gated
 
@@ -69,6 +70,18 @@ Failures on `main` draft a supervised engineering task via `workflow-failure-res
 3. Review recent Actions runs for unexpected `workflow_run` jobs on odd `cursor/*` branch names.
 4. Confirm `main` workflow files were not modified by an unexpected actor.
 5. Prefer branch protection on `main` (required reviews / block GITHUB_TOKEN force-push) so a stolen Actions token cannot silently plant a secret-exfiltrating workflow.
+
+## `workflow_dispatch` inputs and PAT blast radius
+
+`WORKFLOW_DISPATCH_PAT` / cron-job.org do **not** store SMTP / AWS / Cursor secrets, but a
+stolen dispatch PAT can start any `workflow_dispatch` job that loads them. Free-form
+string inputs (`pin_ticker`, `task_id`, `markets`, …) interpolated with `${{ }}` into
+`run:` enable shell injection in those jobs (and cross-step `GITHUB_PATH` poisoning into
+later secret-bearing steps).
+
+Hardening rule: put every `github.event.inputs.*` value into `env:`, quote it in the
+shell, and allowlist free-form strings with a strict regex before use. The daily
+`ftse-gha-secret-hygiene` scan fails on `dispatch_input_in_run`.
 
 ## Related
 

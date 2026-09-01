@@ -73,15 +73,18 @@ jobs:
           PY
 
       - name: Run paper automation (AI judgment primary + rules control + momentum grace)
+        env:
+          FORCE_RUN: ${{ github.event.inputs.force }}
+          SURVEILLANCE_ONLY: ${{ github.event.inputs.surveillance_only }}
         run: |
-          ARGS="--output-dir output/paper_automation --reports docs/data/latest.json --tracks all"
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            ARGS="$ARGS --force"
+          ARGS=(--output-dir output/paper_automation --reports docs/data/latest.json --tracks all)
+          if [ "${FORCE_RUN:-}" = "true" ]; then
+            ARGS+=(--force)
           fi
-          if [ "${{ github.event.inputs.surveillance_only }}" = "true" ]; then
-            ARGS="$ARGS --surveillance-only"
+          if [ "${SURVEILLANCE_ONLY:-}" = "true" ]; then
+            ARGS+=(--surveillance-only)
           fi
-          ftse-paper-auto $ARGS
+          ftse-paper-auto "${ARGS[@]}"
 
       - name: Decision-review learning (both tracks vs market)
         if: ${{ github.event.inputs.surveillance_only != 'true' }}

@@ -60,6 +60,46 @@ jobs:
     assert any(item.rule == "untrusted_expr_in_run" for item in findings)
 
 
+def test_detects_dispatch_input_in_run_block() -> None:
+    evil = """
+name: Evil
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        type: string
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "${{ github.event.inputs.task_id }}"
+"""
+    findings = scan_workflow_text("evil.yml", evil)
+    assert any(item.rule == "dispatch_input_in_run" for item in findings)
+
+
+def test_dispatch_input_via_env_is_allowed() -> None:
+    ok = """
+name: Ok
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        type: string
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          TASK_ID: ${{ github.event.inputs.task_id }}
+        run: |
+          echo "$TASK_ID"
+"""
+    findings = scan_workflow_text("ok.yml", ok)
+    assert not any(item.rule == "dispatch_input_in_run" for item in findings)
+
+
 def test_detects_missing_same_repo_gate_on_head_checkout() -> None:
     evil = """
 name: Evil

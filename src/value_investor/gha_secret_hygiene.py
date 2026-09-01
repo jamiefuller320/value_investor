@@ -32,6 +32,10 @@ _UNTRUSTED_RUN_INTERP = re.compile(
     r"\s*\}\}"
 )
 
+# workflow_dispatch inputs interpolated into run: enable shell injection when a
+# write token / WORKFLOW_DISPATCH_PAT can dispatch (and later steps may load secrets).
+_DISPATCH_INPUT_IN_RUN = re.compile(r"\$\{\{\s*github\.event\.inputs\.")
+
 _WORKFLOW_RUN_TRIGGER = re.compile(r"(?m)^\s*workflow_run\s*:")
 _HEAD_REPO_GATE = re.compile(r"head_repository\.full_name\s*==\s*github\.repository")
 _EDITABLE_PIP = re.compile(r"pip\s+install\s+-e\b")
@@ -140,6 +144,20 @@ def scan_workflow_text(path: str, text: str) -> list[HygieneFinding]:
                     message=(
                         f"Untrusted GitHub expression inside run script: {hit.group(0)}. "
                         "Pass via env: and validate with a strict regex."
+                    ),
+                )
+            )
+        input_hit = _DISPATCH_INPUT_IN_RUN.search(block)
+        if input_hit:
+            findings.append(
+                HygieneFinding(
+                    severity="error",
+                    path=path,
+                    rule="dispatch_input_in_run",
+                    message=(
+                        f"workflow_dispatch input interpolated inside run script: "
+                        f"{input_hit.group(0)}. Pass via env: (and allowlist) so a "
+                        "stolen dispatch PAT cannot shell-inject into secret-bearing jobs."
                     ),
                 )
             )

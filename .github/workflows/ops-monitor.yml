@@ -130,15 +130,17 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          APPLY_FIXES: ${{ github.event.inputs.apply_fixes || 'true' }}
+          EMAIL_ALWAYS: ${{ github.event.inputs.email_always || 'false' }}
         run: |
           set -euo pipefail
           ARGS=(run --json)
-          if [ "${{ github.event.inputs.apply_fixes || 'true' }}" != "false" ]; then
+          if [ "${APPLY_FIXES:-}" != "false" ]; then
             :
           else
             ARGS+=(--no-apply --no-draft)
           fi
-          if [ "${{ github.event.inputs.email_always || 'false' }}" = "true" ]; then
+          if [ "${EMAIL_ALWAYS:-}" = "true" ]; then
             ARGS+=(--email-always)
           else
             ARGS+=(--email)
