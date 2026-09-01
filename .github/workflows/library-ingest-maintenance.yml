@@ -125,25 +125,41 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Run library ingest maintenance
+        env:
+          MARKETS: ${{ github.event.inputs.markets }}
+          MAX_TARGETS: ${{ github.event.inputs.max_targets }}
+          MAX_RUNTIME_SECONDS: ${{ github.event.inputs.max_runtime_seconds }}
+          MAX_BODIES: ${{ github.event.inputs.max_bodies }}
+          NO_DISCOVERY_SCAN: ${{ github.event.inputs.no_discovery_scan }}
         run: |
           set -euo pipefail
+          require_safe() {
+            local name="$1" val="$2" re="$3"
+            if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
+              echo "Rejecting unsafe dispatch input: $name" >&2
+              exit 1
+            fi
+          }
+          require_safe markets "${MARKETS:-}" '^[a-z0-9_,]+$'
+          require_safe max_targets "${MAX_TARGETS:-}" '^[0-9]+$'
+          require_safe max_runtime_seconds "${MAX_RUNTIME_SECONDS:-}" '^[0-9]+$'
+          require_safe max_bodies "${MAX_BODIES:-}" '^[0-9]+$'
           ARGS=(ingest-maintenance --json --json-path /tmp/library_ingest_maintenance.json)
-          MARKETS="${{ github.event.inputs.markets }}"
-          if [ -n "$MARKETS" ]; then
+          if [ -n "${MARKETS:-}" ]; then
             ARGS+=(--markets "$MARKETS")
           fi
-          if [ -n "${{ github.event.inputs.max_targets }}" ]; then
-            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
+          if [ -n "${MAX_TARGETS:-}" ]; then
+            ARGS+=(--max-targets "$MAX_TARGETS")
           fi
-          RUNTIME="${{ github.event.inputs.max_runtime_seconds }}"
+          RUNTIME="${MAX_RUNTIME_SECONDS:-}"
           if [ -z "$RUNTIME" ]; then
             RUNTIME="3600"
           fi
           ARGS+=(--max-runtime-seconds "$RUNTIME")
-          if [ -n "${{ github.event.inputs.max_bodies }}" ]; then
-            ARGS+=(--max-bodies "${{ github.event.inputs.max_bodies }}")
+          if [ -n "${MAX_BODIES:-}" ]; then
+            ARGS+=(--max-bodies "$MAX_BODIES")
           fi
-          if [ "${{ github.event.inputs.no_discovery_scan }}" = "true" ]; then
+          if [ "${NO_DISCOVERY_SCAN:-}" = "true" ]; then
             ARGS+=(--no-discovery-scan)
           fi
           ftse-library "${ARGS[@]}"

@@ -88,22 +88,25 @@ jobs:
         env:
           CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+          MAX_TICKERS: ${{ steps.plan.outputs.max_tickers }}
+          DRY_RUN_RESEARCH: ${{ github.event.inputs.dry_run_research }}
+          SKIP_RESEARCH: ${{ github.event.inputs.skip_research }}
         run: |
           ROOT="docs/data/library"
-          ARGS="--root $ROOT --policy $ROOT/policy.json ladder --max-tickers ${{ steps.plan.outputs.max_tickers }} --json"
-          if [ "${{ github.event.inputs.dry_run_research }}" = "true" ]; then
-            ARGS="$ARGS --dry-run-research"
+          ARGS=(--root "$ROOT" --policy "$ROOT/policy.json" ladder --max-tickers "$MAX_TICKERS" --json)
+          if [ "${DRY_RUN_RESEARCH:-}" = "true" ]; then
+            ARGS+=(--dry-run-research)
           fi
-          if [ "${{ github.event.inputs.skip_research }}" = "true" ]; then
-            ARGS="$ARGS --skip-research"
+          if [ "${SKIP_RESEARCH:-}" = "true" ]; then
+            ARGS+=(--skip-research)
           fi
           # Research only when key present; otherwise dry-run research
           if [ -z "$CURSOR_API_KEY" ]; then
-            ARGS="$ARGS --dry-run-research"
+            ARGS+=(--dry-run-research)
           fi
           # run_library_ladder already writes $ROOT/last_ladder.json; do not tee stdout
           # over it (automation-status logs would corrupt JSON for engineering_drafted).
-          ftse-library $ARGS
+          ftse-library "${ARGS[@]}"
           FOCUS=$(python3 -c "import json; print(json.load(open('$ROOT/policy.json')).get('focus_market','sp500'))")
           ftse-library --root "$ROOT" --policy "$ROOT/policy.json" status --markets "$FOCUS" --json \
             | tee "$ROOT/status_snapshot.json"

@@ -187,34 +187,59 @@ jobs:
           DRAIN_GENERATION: ${{ github.event.inputs.drain_generation || '0' }}
           MAX_DRAIN_GENERATIONS: ${{ github.event.inputs.max_drain_generations || '12' }}
           BODY_GAP_CHAIN_LEGACY: ${{ github.event.inputs.body_gap_chain || 'false' }}
+          MAX_TARGETS: ${{ github.event.inputs.max_targets }}
+          MAX_RUNTIME_SECONDS: ${{ github.event.inputs.max_runtime_seconds }}
+          MAX_BODIES: ${{ github.event.inputs.max_bodies }}
+          BOOTSTRAP_SEED_CAP: ${{ github.event.inputs.bootstrap_seed_cap }}
+          RECORD_GAP_CLOSURE_INPUT: ${{ github.event.inputs.record_gap_closure }}
+          RECORD_TRIAL: ${{ github.event.inputs.record_trial }}
+          GAP_CLOSURE_PARENT_ID: ${{ github.event.inputs.gap_closure_parent_id }}
+          TRIAL_PARENT_ID: ${{ github.event.inputs.trial_parent_id }}
+          GAP_CLOSURE_TRIGGER: ${{ github.event.inputs.gap_closure_trigger }}
         run: |
           set -euo pipefail
+          # Dispatch inputs arrive via env (never ${{ }} into this script body).
+          require_safe() {
+            local name="$1" val="$2" re="$3"
+            if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
+              echo "Rejecting unsafe dispatch input: $name" >&2
+              exit 1
+            fi
+          }
+          require_safe max_targets "${MAX_TARGETS:-}" '^[0-9]+$'
+          require_safe max_runtime_seconds "${MAX_RUNTIME_SECONDS:-}" '^[0-9]+$'
+          require_safe max_bodies "${MAX_BODIES:-}" '^[0-9]+$'
+          require_safe bootstrap_seed_cap "${BOOTSTRAP_SEED_CAP:-}" '^[0-9]+$'
+          require_safe pin_ticker "${PIN_TICKER:-}" '^[A-Za-z0-9][A-Za-z0-9._%-]{0,31}$'
+          require_safe gap_closure_parent_id "${GAP_CLOSURE_PARENT_ID:-}" '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$'
+          require_safe trial_parent_id "${TRIAL_PARENT_ID:-}" '^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$'
+          require_safe gap_closure_trigger "${GAP_CLOSURE_TRIGGER:-}" '^[a-z0-9_]{1,64}$'
           ARGS=(run --json --json-path /tmp/ingest_loop.json)
-          if [ -n "${{ github.event.inputs.max_targets }}" ]; then
-            ARGS+=(--max-targets "${{ github.event.inputs.max_targets }}")
+          if [ -n "${MAX_TARGETS:-}" ]; then
+            ARGS+=(--max-targets "$MAX_TARGETS")
           fi
-          RUNTIME="${{ github.event.inputs.max_runtime_seconds }}"
+          RUNTIME="${MAX_RUNTIME_SECONDS:-}"
           if [ -z "$RUNTIME" ]; then
             RUNTIME="3600"
           fi
           ARGS+=(--max-runtime-seconds "$RUNTIME")
-          BODIES="${{ github.event.inputs.max_bodies }}"
+          BODIES="${MAX_BODIES:-}"
           if [ -n "$BODIES" ]; then
             ARGS+=(--max-bodies "$BODIES")
           fi
-          SEED_CAP="${{ github.event.inputs.bootstrap_seed_cap }}"
+          SEED_CAP="${BOOTSTRAP_SEED_CAP:-}"
           if [ -n "$SEED_CAP" ]; then
             ARGS+=(--bootstrap-seed-cap "$SEED_CAP")
           fi
-          RECORD_GAP_CLOSURE="${{ github.event.inputs.record_gap_closure }}"
-          if [ "$RECORD_GAP_CLOSURE" != "true" ] && [ "${{ github.event.inputs.record_trial }}" = "true" ]; then
+          RECORD_GAP_CLOSURE="${RECORD_GAP_CLOSURE_INPUT:-}"
+          if [ "$RECORD_GAP_CLOSURE" != "true" ] && [ "${RECORD_TRIAL:-}" = "true" ]; then
             RECORD_GAP_CLOSURE=true
           fi
-          PARENT_ID="${{ github.event.inputs.gap_closure_parent_id }}"
+          PARENT_ID="${GAP_CLOSURE_PARENT_ID:-}"
           if [ -z "$PARENT_ID" ]; then
-            PARENT_ID="${{ github.event.inputs.trial_parent_id }}"
+            PARENT_ID="${TRIAL_PARENT_ID:-}"
           fi
-          TRIGGER="${{ github.event.inputs.gap_closure_trigger }}"
+          TRIGGER="${GAP_CLOSURE_TRIGGER:-}"
           if [ "$RECORD_GAP_CLOSURE" = "true" ]; then
             ARGS+=(--record-gap-closure)
             if [ -n "$PARENT_ID" ]; then
@@ -231,7 +256,7 @@ jobs:
             fi
             ARGS+=(--gap-closure-review-trigger horizon_scan)
           fi
-          PIN="${{ github.event.inputs.pin_ticker }}"
+          PIN="${PIN_TICKER:-}"
           if [ -n "$PIN" ]; then
             ARGS+=(--pin-ticker "$PIN")
           fi
@@ -390,8 +415,11 @@ jobs:
           && steps.loop.outputs.chain_dispatch == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          TARGETS_DEFERRED: ${{ steps.loop.outputs.targets_deferred }}
+          NEXT_DRAIN_GENERATION: ${{ steps.loop.outputs.next_drain_generation }}
+          MAX_DRAIN_GENERATIONS: ${{ github.event.inputs.max_drain_generations || '12' }}
         run: |
-          DEFERRED="${{ steps.loop.outputs.targets_deferred }}"
+          DEFERRED="${TARGETS_DEFERRED:-}"
           if [ -z "$DEFERRED" ] || [ "$DEFERRED" -le 0 ]; then
             echo "No deferred targets — skip chain dispatch"
             exit 0
@@ -400,9 +428,13 @@ jobs:
           if [ "$CHUNK" -gt 62 ]; then
             CHUNK=62
           fi
-          NEXT_GEN="${{ steps.loop.outputs.next_drain_generation }}"
+          NEXT_GEN="${NEXT_DRAIN_GENERATION:-}"
           if [ -z "$NEXT_GEN" ]; then
             NEXT_GEN=1
+          fi
+          if ! [[ "$MAX_DRAIN_GENERATIONS" =~ ^[0-9]+$ ]]; then
+            echo "Rejecting unsafe max_drain_generations" >&2
+            exit 1
           fi
           gh workflow run ingest-loop.yml \
             -f max_targets="$CHUNK" \
@@ -410,7 +442,7 @@ jobs:
             -f max_runtime_seconds=3600 \
             -f force=true \
             -f drain_generation="$NEXT_GEN" \
-            -f max_drain_generations="${{ github.event.inputs.max_drain_generations || '12' }}"
+            -f max_drain_generations="$MAX_DRAIN_GENERATIONS"
           echo "Dispatched ingest-loop chunk (max_targets=$CHUNK, drain_generation=$NEXT_GEN)"
 
       - name: Chain body-gap drain until caught up
@@ -419,9 +451,16 @@ jobs:
           && github.event.inputs.pin_ticker == ''
         env:
           GH_TOKEN: ${{ github.token }}
+          INDEXED_WITHOUT_BODY: ${{ steps.loop.outputs.indexed_without_body }}
+          NEXT_DRAIN_GENERATION: ${{ steps.loop.outputs.next_drain_generation }}
+          MAX_DRAIN_GENERATIONS: ${{ github.event.inputs.max_drain_generations || '12' }}
         run: |
-          GAPS="${{ steps.loop.outputs.indexed_without_body }}"
-          NEXT_GEN="${{ steps.loop.outputs.next_drain_generation }}"
+          GAPS="${INDEXED_WITHOUT_BODY:-}"
+          NEXT_GEN="${NEXT_DRAIN_GENERATION:-}"
+          if ! [[ "$MAX_DRAIN_GENERATIONS" =~ ^[0-9]+$ ]]; then
+            echo "Rejecting unsafe max_drain_generations" >&2
+            exit 1
+          fi
           echo "Buy-tier still has indexed_without_body=$GAPS — chaining drain generation $NEXT_GEN"
           gh workflow run ingest-loop.yml \
             -f max_targets=62 \
@@ -429,7 +468,7 @@ jobs:
             -f max_runtime_seconds=3600 \
             -f force=true \
             -f drain_generation="$NEXT_GEN" \
-            -f max_drain_generations="${{ github.event.inputs.max_drain_generations || '12' }}"
+            -f max_drain_generations="$MAX_DRAIN_GENERATIONS"
           echo "Dispatched learning-phase body-gap drain generation $NEXT_GEN"
 
       - name: Evaluate weekly gap-closure follow-up
