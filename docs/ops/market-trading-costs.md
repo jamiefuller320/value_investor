@@ -115,9 +115,22 @@ Learning-director vision caps open experiments (~5). Fair lab should start as **
 
 | Priority | Action |
 |----------|--------|
-| Now | Keep Suite A as-is; use `ftse-trading-costs assess` on Sunday for a first-order fair read of primary |
-| Next | Implement Suite B warm-start shadows with fair costs stamped (parked as deferred until built) |
+| Now | Suite B books live: `ai_judgment_fair` + `rules_fair` under `docs/data/paper_automation/` (fair T212 costs; warm-started). Suite A stays on 3% stress. |
+| Now | Weekday paper-auto includes Suite B when present; decision-review `--suite B --apply` tunes fair-lab knobs only. |
+| Now | Sunday: `ftse-trading-costs assess` + compare Suite B excess vs ^FTSE / fair rules control before any promotion talk |
 | Later | Flip primary off 3% only after B has a thick forward window (**N48**) |
+
+```bash
+# Spawn / re-stamp (idempotent) and PIT warm-start
+ftse-trading-costs spawn-fair-lab
+ftse-trading-costs warm-start-fair-lab
+
+# Suite-local decision-review apply (does not write Suite A configs)
+ftse-decision-review --tracks all --suite B --apply
+
+# Weekday paper marks for fair lab only
+ftse-paper-auto --tracks all --suite B
+```
 
 See also: [`knob-calibration.md`](knob-calibration.md) (warm-start),
 [`primary-learning-track.md`](primary-learning-track.md),

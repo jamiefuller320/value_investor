@@ -1093,13 +1093,19 @@ def compare_learning_tracks(
     force: bool = False,
     fetch_benchmark: bool = True,
     counterfactual: bool = True,
+    suite: str | None = None,
+    track_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Review rules (control) + AI judgment (primary) and summarize outperformance.
 
     Success for the primary track = excess_after_costs vs ^FTSE (and ideally
     beating the rules control on the same window).
+
+    ``suite`` filters to Suite A (stress), Suite B (fair-cost lab), or all.
+    Applies remain per-track (suite-local knobs) — never copy B knobs onto A.
     """
+    from value_investor.fair_cost_lab import filter_track_ids_for_suite
     from value_investor.paper_automation import (
         AI_JUDGMENT_TRACK_ID,
         RULES_TRACK_ID,
@@ -1110,9 +1116,14 @@ def compare_learning_tracks(
     base_dir = Path(base_dir)
     ensure_learning_track_configs(base_dir)
     dirs = learning_track_dirs(base_dir)
+    selected_ids = list(track_ids) if track_ids else list(dirs.keys())
+    selected_ids = filter_track_ids_for_suite(selected_ids, suite)
     bench_ticker = benchmark_ticker_for_dir(base_dir)
     reviews: dict[str, Any] = {}
-    for track_id, track_dir in dirs.items():
+    for track_id in selected_ids:
+        track_dir = dirs.get(track_id)
+        if track_dir is None:
+            continue
         result = run_decision_review(
             output_dir=track_dir,
             apply=apply,
@@ -1136,9 +1147,12 @@ def compare_learning_tracks(
     summary = {
         "schema_version": 1,
         "primary_learning_track": AI_JUDGMENT_TRACK_ID,
+        "suite_filter": suite or "all",
+        "reviewed_track_ids": list(reviews.keys()),
         "success_criterion": (
             f"Primary AI-judgment track outperforms {bench_ticker} after costs; "
-            "rules track is the control datum."
+            "rules track is the control datum. Suite B fair-lab tracks learn "
+            "independently under T212-shaped costs."
         ),
         "benchmark_ticker": bench_ticker,
         "primary_excess_after_costs": primary_excess,

@@ -113,6 +113,9 @@ class AutomationConfig:
     is_exclusion_shadow: bool = False
     exclusion_parent_track: str | None = None
     exclusion_ladder_step_id: str | None = None
+    # Suite B fair-cost lab — T212-shaped costs; decision-review apply allowed on these tracks.
+    is_fair_cost_lab: bool = False
+    fair_cost_parent_track: str | None = None
     # Churn guards — tuneable via config.json (not decision-review knobs yet).
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
@@ -200,6 +203,10 @@ class AutomationConfig:
                 str(raw["exclusion_ladder_step_id"])
                 if raw.get("exclusion_ladder_step_id")
                 else None
+            ),
+            is_fair_cost_lab=bool(raw.get("is_fair_cost_lab", False)),
+            fair_cost_parent_track=(
+                str(raw["fair_cost_parent_track"]) if raw.get("fair_cost_parent_track") else None
             ),
             exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
             reentry_cooldown_screens=int(
@@ -317,6 +324,13 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     for step_id in discover_exclusion_shadow_step_ids(root):
         track_id = exclusion_shadow_track_id(step_id)
         dirs[track_id] = root / exclusion_shadow_subdir(step_id)
+    from value_investor.fair_cost_lab import (
+        discover_fair_cost_lab_track_ids,
+        fair_cost_lab_subdir,
+    )
+
+    for track_id in discover_fair_cost_lab_track_ids(root):
+        dirs[track_id] = root / fair_cost_lab_subdir(track_id)
     return dirs
 
 
@@ -1303,6 +1317,37 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
         configs[track_id] = shadow
 
+    from value_investor.fair_cost_lab import (
+        discover_fair_cost_lab_track_ids,
+        fair_cost_lab_parent_track_id,
+        fair_cost_lab_subdir,
+        stamp_fair_costs,
+    )
+
+    for track_id in discover_fair_cost_lab_track_ids(base_dir):
+        shadow_dir = base_dir / fair_cost_lab_subdir(track_id)
+        shadow_path = shadow_dir / CONFIG_FILENAME
+        if not shadow_path.exists():
+            continue
+        shadow = AutomationConfig.from_dict(json.loads(shadow_path.read_text(encoding="utf-8")))
+        shadow.track_id = track_id
+        shadow.is_primary_learning_track = False
+        shadow.is_fair_cost_lab = True
+        shadow.fair_cost_parent_track = (
+            shadow.fair_cost_parent_track or fair_cost_lab_parent_track_id(track_id)
+        )
+        shadow.is_calibration_shadow = False
+        shadow.is_exclusion_shadow = False
+        shadow.timezone = rules.timezone
+        shadow.market_open = rules.market_open
+        shadow.settle_minutes_after_open = rules.settle_minutes_after_open
+        shadow.weekdays_only = rules.weekdays_only
+        shadow.initial_cash = rules.initial_cash
+        # Keep Suite B fair costs — do NOT inherit Suite A 3% stress.
+        stamp_fair_costs(shadow)
+        shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
+        configs[track_id] = shadow
+
     return configs
 
 
@@ -1336,6 +1381,7 @@ def run_learning_tracks(
         for track_id, cfg in configs.items()
         if getattr(cfg, "is_calibration_shadow", False)
         or getattr(cfg, "is_exclusion_shadow", False)
+        or getattr(cfg, "is_fair_cost_lab", False)
     ]
     insert_at = default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1
     for track_id in sorted(shadow_ids):

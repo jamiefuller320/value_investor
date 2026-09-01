@@ -58,6 +58,47 @@ def main(argv: list[str] | None = None) -> int:
     assess_p.add_argument("--json", action="store_true")
     assess_p.set_defaults(func=_cmd_assess)
 
+    spawn_p = sub.add_parser(
+        "spawn-fair-lab",
+        help="Spawn Suite B fair-cost AI + rules tracks (does not flip Suite A off 3%)",
+    )
+    spawn_p.add_argument(
+        "--paper-root",
+        type=Path,
+        default=DEFAULT_PAPER_ROOT,
+        help="Paper automation root (default: docs/data/paper_automation)",
+    )
+    spawn_p.add_argument(
+        "--market",
+        default="ftse350",
+        help="Market id for fair cost stamps (default: ftse350)",
+    )
+    spawn_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Recreate configs/funds even if Suite B tracks already exist",
+    )
+    spawn_p.add_argument("--json", action="store_true")
+    spawn_p.set_defaults(func=_cmd_spawn_fair_lab)
+
+    warm_p = sub.add_parser(
+        "warm-start-fair-lab",
+        help="PIT warm-start Suite B tracks from Suite A parent rebalance logs",
+    )
+    warm_p.add_argument(
+        "--paper-root",
+        type=Path,
+        default=DEFAULT_PAPER_ROOT,
+        help="Paper automation root (default: docs/data/paper_automation)",
+    )
+    warm_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-seed even when endurance_zero_datum already exists",
+    )
+    warm_p.add_argument("--json", action="store_true")
+    warm_p.set_defaults(func=_cmd_warm_start_fair_lab)
+
     args = parser.parse_args(argv)
     return int(args.func(args))
 
@@ -130,6 +171,55 @@ def _cmd_assess(args: argparse.Namespace) -> int:
             f"recorded_costs={recorded:.2f}  fair_costs={fair:.4f}  "
             f"drag_relief={relief_s}"
         )
+    return 0
+
+
+def _cmd_spawn_fair_lab(args: argparse.Namespace) -> int:
+    from value_investor.fair_cost_lab import spawn_fair_cost_lab
+
+    payload = spawn_fair_cost_lab(
+        args.paper_root,
+        market_id=args.market,
+        force=bool(args.force),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(
+        f"Suite B spawn: created={payload.get('created_count')} "
+        f"spawned={payload.get('spawned_count')} market={payload.get('market_id')}"
+    )
+    for row in payload.get("tracks") or []:
+        print(
+            f"  [{row.get('track_id')}] created={row.get('created')} "
+            f"parent={row.get('parent_track_id')} dir={row.get('track_dir')}"
+        )
+    return 0
+
+
+def _cmd_warm_start_fair_lab(args: argparse.Namespace) -> int:
+    from value_investor.fair_cost_lab import warm_start_fair_cost_lab
+
+    payload = warm_start_fair_cost_lab(
+        args.paper_root,
+        force=bool(args.force),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(
+        f"Suite B warm-start: warm_started={payload.get('warm_started_count')} "
+        f"skipped={payload.get('skipped_count')}"
+    )
+    for row in payload.get("tracks") or []:
+        if row.get("warm_started"):
+            zero = row.get("endurance_zero_datum") or {}
+            print(
+                f"  [{row.get('track_id')}] positions={row.get('positions')} "
+                f"zero_at={zero.get('started_at')}"
+            )
+        else:
+            print(f"  [{row.get('track_id')}] {row.get('reason') or row.get('skipped')}")
     return 0
 
 
