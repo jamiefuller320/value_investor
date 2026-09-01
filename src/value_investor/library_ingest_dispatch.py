@@ -333,12 +333,7 @@ def next_parallel_sprint_queue_market(
     vacating_id = str(vacating or "").strip()
     for raw in policy.get("market_queue") or []:
         market_id = str(raw).strip()
-        if (
-            not market_id
-            or market_id == focus
-            or market_id == vacating_id
-            or market_id in occupied
-        ):
+        if not market_id or market_id == focus or market_id == vacating_id or market_id in occupied:
             continue
         health = snapshot_library_buy_tier_filing_health(
             market_id,
