@@ -336,6 +336,42 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[45],
             wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
         ),
+        CronJobSpec(
+            key="library-ingest-sprint-2-morning",
+            title="Library ingest sprint 2 (Mon-Sat morning)",
+            workflow="library-ingest-sprint-2.yml",
+            body={"ref": REF, "inputs": {"max_targets": "24"}},
+            hours=[8],
+            minutes=[15],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
+        ),
+        CronJobSpec(
+            key="library-ingest-sprint-2-afternoon",
+            title="Library ingest sprint 2 (Mon-Sat afternoon)",
+            workflow="library-ingest-sprint-2.yml",
+            body={"ref": REF, "inputs": {"max_targets": "24"}},
+            hours=[11],
+            minutes=[15],
+            wdays=list(_LIBRARY_INGEST_PEAK_WDAYS),
+        ),
+        CronJobSpec(
+            key="library-ingest-sprint-2-midafternoon",
+            title="Library ingest sprint 2 (daily mid-afternoon)",
+            workflow="library-ingest-sprint-2.yml",
+            body={"ref": REF, "inputs": {"max_targets": "24"}},
+            hours=[14],
+            minutes=[15],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
+        ),
+        CronJobSpec(
+            key="library-ingest-sprint-2-evening",
+            title="Library ingest sprint 2 (daily evening)",
+            workflow="library-ingest-sprint-2.yml",
+            body={"ref": REF, "inputs": {"max_targets": "24"}},
+            hours=[17],
+            minutes=[15],
+            wdays=list(_LIBRARY_INGEST_OFFPEAK_WDAYS),
+        ),
     ]
 
 
@@ -374,8 +410,8 @@ def _list_jobs(api_key: str) -> list[dict[str, Any]]:
     return list(payload.get("jobs") or [])
 
 
-def _parallel_sprint_dispatch_enabled() -> bool:
-    """True when any ingest_parallel_sprint market still needs sprint ingest."""
+def _parallel_sprint_dispatch_enabled(*, parallel_stream: int = 1) -> bool:
+    """True when any parallel sprint market in ``parallel_stream`` still needs ingest."""
     from value_investor.agent_model_policy import load_policy
     from value_investor.library_ingest_dispatch import (
         list_library_ingest_parallel_sprint_markets,
@@ -384,17 +420,27 @@ def _parallel_sprint_dispatch_enabled() -> bool:
     from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
 
     policy = load_policy()
-    parallel = list_library_ingest_parallel_sprint_markets(policy=policy)
+    parallel = list_library_ingest_parallel_sprint_markets(
+        policy=policy,
+        parallel_stream=parallel_stream,
+    )
     for market_id in parallel:
         health = snapshot_library_buy_tier_filing_health(market_id)
-        if should_run_parallel_sprint_ingest(market_id, health, policy=policy):
+        if should_run_parallel_sprint_ingest(
+            market_id,
+            health,
+            policy=policy,
+            parallel_stream=parallel_stream,
+        ):
             return True
     return False
 
 
 def _job_enabled(spec: CronJobSpec) -> bool:
+    if spec.key.startswith("library-ingest-sprint-2-"):
+        return _parallel_sprint_dispatch_enabled(parallel_stream=2)
     if spec.key.startswith("library-ingest-sprint-"):
-        return _parallel_sprint_dispatch_enabled()
+        return _parallel_sprint_dispatch_enabled(parallel_stream=1)
     euro_keys = {
         "euro-ingest-loop-morning": "morning",
         "euro-ingest-loop-afternoon": "afternoon",

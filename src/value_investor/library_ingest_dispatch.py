@@ -21,6 +21,12 @@ logger = logging.getLogger(__name__)
 DEFAULT_MARKET_ID = "euro_depth"
 DEFAULT_DISPATCH_PATH = Path("docs/data/library/euro_ingest_dispatch.json")
 
+# Parallel sprint streams (non-focus): stream 1 at +30 min, stream 2 at +60 min vs focus.
+PARALLEL_SPRINT_POLICY_KEYS: dict[int, str] = {
+    1: "ingest_parallel_sprint",
+    2: "ingest_parallel_sprint_2",
+}
+
 MODE_SPRINT = "sprint"
 MODE_MAINTENANCE = "maintenance"
 # Deprecated alias — parity met maps to maintenance (daily scan+deepen), not zero ingest.
@@ -88,9 +94,13 @@ def should_run_parallel_sprint_ingest(
     health: dict[str, Any],
     *,
     policy: dict[str, Any],
+    parallel_stream: int = 1,
 ) -> bool:
-    """Whether ``ingest_parallel_sprint`` market should run automated ingest."""
-    if market_id not in list_library_ingest_parallel_sprint_markets(policy=policy):
+    """Whether a parallel sprint market should run automated ingest."""
+    if market_id not in list_library_ingest_parallel_sprint_markets(
+        policy=policy,
+        parallel_stream=parallel_stream,
+    ):
         return False
     return not ingest_parity_met(health)
 
@@ -183,27 +193,33 @@ def enrich_library_ingest_dispatch(
         policy_path=policy_path,
         policy=policy,
     )
-    parallel = list_library_ingest_parallel_sprint_markets(policy=policy)
-    evaluation["parallel_sprint_markets"] = parallel
-    parallel_status: list[dict[str, Any]] = []
-    for market_id in parallel:
-        row = evaluate_library_ingest_dispatch(
-            market_id,
-            library_root=library_root,
-            policy_path=policy_path,
+    for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
+        suffix = "" if parallel_stream == 1 else f"_{parallel_stream}"
+        parallel = list_library_ingest_parallel_sprint_markets(
             policy=policy,
+            parallel_stream=parallel_stream,
         )
-        health = row.get("filing_health") or snapshot_library_buy_tier_filing_health(
-            market_id,
-            library_root=library_root,
-        )
-        row["should_run_parallel_ingest"] = should_run_parallel_sprint_ingest(
-            market_id,
-            health,
-            policy=policy,
-        )
-        parallel_status.append(row)
-    evaluation["parallel_sprint_status"] = parallel_status
+        evaluation[f"parallel_sprint{suffix}_markets"] = parallel
+        parallel_status: list[dict[str, Any]] = []
+        for market_id in parallel:
+            row = evaluate_library_ingest_dispatch(
+                market_id,
+                library_root=library_root,
+                policy_path=policy_path,
+                policy=policy,
+            )
+            health = row.get("filing_health") or snapshot_library_buy_tier_filing_health(
+                market_id,
+                library_root=library_root,
+            )
+            row["should_run_parallel_ingest"] = should_run_parallel_sprint_ingest(
+                market_id,
+                health,
+                policy=policy,
+                parallel_stream=parallel_stream,
+            )
+            parallel_status.append(row)
+        evaluation[f"parallel_sprint{suffix}_status"] = parallel_status
     evaluation["sprint_markets"] = list_library_ingest_sprint_markets(
         library_root=library_root,
         policy_path=policy_path,
@@ -244,18 +260,18 @@ def list_library_ingest_parallel_sprint_markets(
     *,
     policy: dict[str, Any] | None = None,
     policy_path: Path = DEFAULT_POLICY_PATH,
+    parallel_stream: int = 1,
 ) -> list[str]:
     """
-    Markets in ``ingest_parallel_sprint`` that run sprint ingest alongside focus.
+    Markets in a parallel sprint stream that run ingest alongside focus.
 
-    Focus market sprint is handled by ``euro-ingest-loop.yml``; this list is for
-    parallel queue head-start (e.g. sp500 while euro_depth finishes).
+    Focus market sprint is handled by ``euro-ingest-loop.yml``; stream 1/2 lists
+    front-start queue markets (e.g. sp500, asx200 while euro_depth finishes).
     """
     policy = policy if policy is not None else load_policy(policy_path)
     focus = str(policy.get("focus_market") or "").strip()
-    parallel = [
-        str(m).strip() for m in (policy.get("ingest_parallel_sprint") or []) if str(m).strip()
-    ]
+    policy_key = PARALLEL_SPRINT_POLICY_KEYS.get(parallel_stream, "ingest_parallel_sprint")
+    parallel = [str(m).strip() for m in (policy.get(policy_key) or []) if str(m).strip()]
     return sorted({m for m in parallel if m and m != focus})
 
 
@@ -278,16 +294,20 @@ def list_library_ingest_sprint_markets(
         )
         if not ingest_parity_met(health):
             markets.append(focus)
-    for market_id in list_library_ingest_parallel_sprint_markets(policy=policy):
-        if market_id in markets:
-            continue
-        health = snapshot_library_buy_tier_filing_health(
-            market_id,
-            library_root=library_root,
+    for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
+        for market_id in list_library_ingest_parallel_sprint_markets(
             policy=policy,
-        )
-        if not ingest_parity_met(health):
-            markets.append(market_id)
+            parallel_stream=parallel_stream,
+        ):
+            if market_id in markets:
+                continue
+            health = snapshot_library_buy_tier_filing_health(
+                market_id,
+                library_root=library_root,
+                policy=policy,
+            )
+            if not ingest_parity_met(health):
+                markets.append(market_id)
     return markets
 
 
@@ -382,6 +402,7 @@ def cron_enabled_for_dispatch(evaluation: dict[str, Any]) -> dict[str, bool]:
 
 __all__ = [
     "DEFAULT_DISPATCH_PATH",
+    "PARALLEL_SPRINT_POLICY_KEYS",
     "EURO_INGEST_CRON_TITLES",
     "FTSE_MAINTENANCE_MAX_BODIES",
     "FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES",

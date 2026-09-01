@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T14:40:27+00:00",
+  "updated_at": "2026-09-01T23:13:50.002472+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4521,6 +4521,55 @@
       "id": "N52",
       "category": "not_now",
       "section": "learning",
+      "title": "Fit a new screen ruleset from Suite A stress P&L for Suite B",
+      "summary": "Do not reverse-engineer a full new screen/model from Suite A after-cost returns \u2014 those P&Ls are stress-distorted and history is thin. Suite B should warm-start from current AI+rules books and transplant stress-surviving knobs (conviction, exit confirms, cooldowns) as priors only.",
+      "revisit_when": "Suite B has a thick forward window and a separate offline rules lab is justified",
+      "tags": [
+        "suite-b",
+        "overfitting",
+        "rules",
+        "suite-a"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T13:56:19+00:00"
+    },
+    {
+      "id": "N53",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Mirror every Suite A shadow into Suite B (full 2x fork)",
+      "summary": "Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal.",
+      "revisit_when": "Suite B AI+rules endurance is trusted and human triage load is light",
+      "tags": [
+        "suite-b",
+        "capacity",
+        "shadows"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T14:03:21+00:00"
+    },
+    {
+      "id": "L220",
+      "category": "later",
+      "section": "learning",
+      "title": "Selective A\u2192B mirror for recommend-state experiments only",
+      "summary": "Once Suite B base books exist, optionally spawn fair-cost twins only for Suite A experiments that reach recommend / human-ack \u2014 not for every open shadow. Keeps discover/validate pipeline without a full fork.",
+      "revisit_when": "Suite B AI+rules warm-start books are running and experiment_assessment has stable recommend rows",
+      "tags": [
+        "suite-b",
+        "experiments",
+        "promotion"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T14:03:22+00:00"
+    },
+    {
+      "id": "N54",
+      "category": "not_now",
+      "section": "learning",
       "title": "Do not treat Suite A conviction floors as Suite B policy",
       "summary": "High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs.",
       "revisit_when": "Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy",
@@ -4535,7 +4584,7 @@
       "added_at": "2026-09-01T14:40:17+00:00"
     },
     {
-      "id": "L220",
+      "id": "L221",
       "category": "later",
       "section": "learning",
       "title": "Suite-aware cost_drag thresholds for conviction proposals",
@@ -4929,6 +4978,18 @@
       "status": "open",
       "source": "learning_director:20260901",
       "added_at": "2026-09-01T10:12:57+00:00"
+    },
+    {
+      "id": "frag-20260901-03",
+      "text": "Suite B seed: copy Suite A stress-surviving knobs (min_conviction 0.6, exit_confirm_screens 2, reentry_cooldown 1) onto fair-cost AI+rules warm-start shadows; keep decision-review --apply scoped to Suite B track dirs only.",
+      "tags": [
+        "suite-b",
+        "warm-start",
+        "knobs"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T13:56:19+00:00"
     }
   ]
 }
