@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T14:24:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T14:40:27+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -106,6 +106,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N49 | **Do not invent new paper tracks or knob churn to 'fix' stage 2b excess** | End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate. | AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy |
 | N50 | **Treat Yahoo quarterly cashflow as optional for UK memo excellence** | yahoo_quarterly_cashflow is thin on nearly every FTSE memo; do not block excellent/strong narrative quality on it. Prefer filing OCF bridges and gate/suppress empty Yahoo TTM rather than waiting for Yahoo series. | If Yahoo UK quarterly cashflow coverage improves or a primary filing OCF bridge is standardized in every memo |
 | N51 | **Consider making value_investor private** | Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. | If further secret exposure incidents occur or Pages no longer needs a public repo |
+| N52 | **Do not treat Suite A conviction floors as Suite B policy** | High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. | Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy |
 
 ---
 
@@ -141,6 +142,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 | L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
 | L204 | **Per-ticker AIM stamp exemption in cost model** | AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable. | Trading AIM paper/live or when HMRC/T212 exemption list is wired |
+| L220 | **Suite-aware cost_drag thresholds for conviction proposals** | decision_review HIGH_COST_DRAG (4%) and auto-raise min_conviction were tuned for Suite A 3% stress. Under Suite B fair costs (~0.55% RT), the same threshold rarely fires and may over-filter if A knobs are copied. Split proposal thresholds / idle-cash ease rules by is_fair_cost_lab so B can explore trade intensity while A stays defensive. | Suite B has enough epoch marks to compare cost_drag and trade_count vs Suite A under the same parent knobs, or decision-review starts proposing contradictory conviction moves across suites |
 
 ### Universe & data
 
