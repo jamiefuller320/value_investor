@@ -24,6 +24,28 @@ check out `main` (or the dispatch ref). The outsider path to that secret is
 **indirect**: steal a write-capable `GITHUB_TOKEN` from a `workflow_run` job, push a
 malicious workflow, then wait for the next schedule that loads `CURSOR_API_KEY`.
 
+## Automated daily check
+
+`gha-secret-hygiene.yml` runs:
+
+1. **Daily** (~06:20 UTC via cron-job.org `workflow_dispatch`, GitHub `schedule` as backup)
+2. **On PRs / pushes** that touch `.github/workflows/**` or the scanner itself
+3. **Manual** `workflow_dispatch` with optional `force=true`
+
+The daily job **skips** when no PRs were merged to `main` and no commits touched
+`.github/workflows/` in the last **36 hours** (override with `force`). That keeps
+noise low while still catching workflow changes introduced by merges.
+
+Local / CI commands:
+
+```bash
+ftse-gha-secret-hygiene check
+ftse-gha-secret-hygiene schedule-gate --force
+pytest -q tests/test_gha_secret_hygiene.py
+```
+
+Failures on `main` draft a supervised engineering task via `workflow-failure-responder`.
+
 ## If `CURSOR_API_KEY` may already be compromised
 
 1. Revoke the key at [Cursor API keys](https://cursor.com/dashboard/api-keys).

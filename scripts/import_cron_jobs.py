@@ -184,6 +184,15 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[-1],
         ),
         CronJobSpec(
+            key="gha-secret-hygiene",
+            title="GHA secret hygiene (daily)",
+            workflow="gha-secret-hygiene.yml",
+            body={"ref": REF, "inputs": {"force": "false", "lookback_hours": "36"}},
+            hours=[6],
+            minutes=[20],
+            wdays=[-1],
+        ),
+        CronJobSpec(
             key="ci-main-nightly",
             title="FTSE CI main nightly (daily)",
             workflow="ci-main-nightly.yml",

@@ -18,6 +18,7 @@ most automation — this list is what still needs a human.
 |------|-----|-----|
 | **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
 | Paper-auto + decision-review `--apply` (all tracks; shadows observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
+| **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
 
 ## Sunday
 
@@ -70,6 +71,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **Re-import library ingest crons** after cadence changes (Mon–Sat peak + daily off-peak; sprint ≤4×/day × 24; maintenance ≤4×/day × 62) | Human | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
 | **Register ops-monitor 13:15 catch-up** on cron-job.org after email-deferral merge | Human | [ops-monitor.md](ops-monitor.md#email-deferral-day-complete-gate) |
 | **Rotate `CURSOR_API_KEY`** (and review Actions) if Cursor API misuse or secret exposure is suspected | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised) |
+| **Register daily GHA secret-hygiene cron** on cron-job.org after merge (`import_cron_jobs.py --job gha-secret-hygiene`) | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
 
 ## Maintenance
 
