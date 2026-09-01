@@ -1,0 +1,38 @@
+# GitHub Actions secret hygiene
+
+This repo is **public**. Any `workflow_run` job runs in the base-repo context and
+receives the default `GITHUB_TOKEN` (and repository secrets when configured). Treat
+PR head branch names and fork commits as **untrusted input**.
+
+## High-risk patterns (blocked)
+
+| Pattern | Risk | Mitigation in this repo |
+|---------|------|-------------------------|
+| `workflow_run` after PR CI, then `${{ github.event.workflow_run.head_branch }}` inside `run:` | Shell injection → token / secret theft | Pass via `env:` + strict regex; never `${{ }}` into the script body |
+| `workflow_run` autofix that `pip install -e .` from the PR ref | Malicious `pyproject` / package code runs with write token | Install **non-editable** package from `main`, copy trusted scripts to `/tmp`, then check out the PR SHA |
+| `workflow_run` without a same-repo gate | Public **fork** PRs trigger privileged jobs | Require `head_repository.full_name == github.repository` |
+| Logging full API keys | Key leak via Actions logs | Use `api_key_fingerprint()` / env status helpers only |
+
+## Workflows that must stay gated
+
+- `ci-pr-autofix.yml` — same-repo + `cursor/*` regex + trusted install from `main`
+- `engineering-auto-merge.yml` — same-repo + `cursor/eng-YYYYMMDD-NN-1de3` regex
+- `engineering-queue.yml` — PR head ref only via `env:` after regex gate
+
+`CURSOR_API_KEY` itself is only injected into schedule / `workflow_dispatch` jobs that
+check out `main` (or the dispatch ref). The outsider path to that secret is
+**indirect**: steal a write-capable `GITHUB_TOKEN` from a `workflow_run` job, push a
+malicious workflow, then wait for the next schedule that loads `CURSOR_API_KEY`.
+
+## If `CURSOR_API_KEY` may already be compromised
+
+1. Revoke the key at [Cursor API keys](https://cursor.com/dashboard/api-keys).
+2. Create a new key; update GitHub Actions secret `CURSOR_API_KEY` (and any Cursor Cloud / cron host copies).
+3. Review recent Actions runs for unexpected `workflow_run` jobs on odd `cursor/*` branch names.
+4. Confirm `main` workflow files were not modified by an unexpected actor.
+5. Prefer branch protection on `main` (required reviews / block GITHUB_TOKEN force-push) so a stolen Actions token cannot silently plant a secret-exfiltrating workflow.
+
+## Related
+
+- [ci-fix-automation.md](ci-fix-automation.md) — PR autofix / auto-merge flow
+- [engineering-sync.md](engineering-sync.md) — `WORKFLOW_DISPATCH_PAT` scope

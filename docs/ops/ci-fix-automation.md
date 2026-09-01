@@ -57,7 +57,9 @@ A task is eligible when **all** of:
 - Changed files ⊆ `allowed_paths` and ∩ `blocked_paths` = ∅ (`ftse-engineering check-pr-paths`)
 
 `engineering-auto-merge.yml` listens for **CI success** on engineering branches and
-runs `ftse-engineering try-auto-merge`.
+runs `ftse-engineering try-auto-merge`. Fork PRs are ignored (`head_repository` must
+equal this repo). The branch name is passed via `env` and must match
+`cursor/eng-YYYYMMDD-NN-1de3` exactly.
 
 Non-eligible tasks (broad scope, blocked paths, ingest/scoring work) stay as
 **draft PRs** for human merge — same as before.
@@ -99,10 +101,13 @@ failed CI workflow:
 
 **Guardrails:**
 
-- Only `cursor/*` PR branches
+- Only **same-repo** `cursor/*` PR branches (`head_repository.full_name == github.repository`)
+- Branch names must match `^cursor/[A-Za-z0-9][A-Za-z0-9._/-]*$` (no shell metacharacters)
+- Package + autofix scripts installed from **main** (trusted); PR head is checked out afterward
 - Skips when the latest commit already starts with `chore(ci):` (one bot attempt per push)
 - Pytest and committed-data JSON failures are **diagnosed but not auto-fixed** on PRs
 - Path-guard expand only adds non-blocked paths; blocked paths still need agent/human edits
+- See [gha-secret-hygiene.md](gha-secret-hygiene.md) for why these gates matter on a public repo
 
 **Local dry-run:**
 
