@@ -49,7 +49,8 @@ token instead of your user PAT.
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
 | `euro-ingest-loop.yml` | External **primary** | Mon–Sat **07:15 + 10:15**; daily **13:15 + 16:15** (Sunday morning skipped for quiet bundle) → sprint ≤4×/day × 24 | Same as external |
-| `library-ingest-sprint.yml` | External **primary** | Mon–Sat **07:45 + 10:45**; daily **13:45 + 16:45** (parallel `sp500`) | Same as external |
+| `library-ingest-sprint.yml` | External **primary** | Mon–Sat **07:45 + 10:45**; daily **13:45 + 16:45** (parallel stream 1 `sp500`) | Same as external |
+| `library-ingest-sprint-2.yml` | External **primary** | Mon–Sat **08:15 + 11:15**; daily **14:15 + 17:15** (parallel stream 2 `asx200`) | Same as external |
 | `library-ingest-maintenance.yml` | External **primary** | Mon–Sat **07:30 + 10:30**; daily **13:30 + 16:30** → FTSE-standard maintenance (`max_targets=62`) when parity met | Same as external |
 | `automation-orchestrator.yml` (`ladder_only`) | External **primary** (sprint) | Mon–Fri **06:50** → `suite=ladder_only` (disabled when Phase 3 + parity idle) | No |
 | `engineering-agent.yml` | Queue / manual | No | No |

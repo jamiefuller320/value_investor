@@ -19,6 +19,16 @@ def test_list_parallel_sprint_excludes_focus():
     assert list_library_ingest_parallel_sprint_markets(policy=policy) == ["sp500"]
 
 
+def test_list_parallel_sprint_stream_2():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint_2": ["asx200", "euro_depth"],
+    }
+    assert list_library_ingest_parallel_sprint_markets(policy=policy, parallel_stream=2) == [
+        "asx200"
+    ]
+
+
 def test_parallel_sprint_markets_needing_ingest():
     policy = {
         "focus_market": "euro_depth",
