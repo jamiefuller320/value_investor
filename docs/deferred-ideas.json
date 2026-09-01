@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T13:25:31+00:00",
+  "updated_at": "2026-09-01T14:03:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4224,9 +4224,10 @@
         "calibration",
         "learning"
       ],
-      "status": "open",
+      "status": "now",
       "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
-      "added_at": "2026-08-28T16:53:33+00:00"
+      "added_at": "2026-08-28T16:53:33+00:00",
+      "updated_at": "2026-09-01T13:56:32+00:00"
     },
     {
       "id": "N49",
@@ -4515,6 +4516,55 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
       "added_at": "2026-09-01T12:54:11+00:00"
+    },
+    {
+      "id": "N52",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Fit a new screen ruleset from Suite A stress P&L for Suite B",
+      "summary": "Do not reverse-engineer a full new screen/model from Suite A after-cost returns \u2014 those P&Ls are stress-distorted and history is thin. Suite B should warm-start from current AI+rules books and transplant stress-surviving knobs (conviction, exit confirms, cooldowns) as priors only.",
+      "revisit_when": "Suite B has a thick forward window and a separate offline rules lab is justified",
+      "tags": [
+        "suite-b",
+        "overfitting",
+        "rules",
+        "suite-a"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T13:56:19+00:00"
+    },
+    {
+      "id": "N53",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Mirror every Suite A shadow into Suite B (full 2x fork)",
+      "summary": "Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal.",
+      "revisit_when": "Suite B AI+rules endurance is trusted and human triage load is light",
+      "tags": [
+        "suite-b",
+        "capacity",
+        "shadows"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T14:03:21+00:00"
+    },
+    {
+      "id": "L220",
+      "category": "later",
+      "section": "learning",
+      "title": "Selective A\u2192B mirror for recommend-state experiments only",
+      "summary": "Once Suite B base books exist, optionally spawn fair-cost twins only for Suite A experiments that reach recommend / human-ack \u2014 not for every open shadow. Keeps discover/validate pipeline without a full fork.",
+      "revisit_when": "Suite B AI+rules warm-start books are running and experiment_assessment has stable recommend rows",
+      "tags": [
+        "suite-b",
+        "experiments",
+        "promotion"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T14:03:22+00:00"
     }
   ],
   "fragments": [
@@ -4894,6 +4944,18 @@
       "status": "open",
       "source": "learning_director:20260901",
       "added_at": "2026-09-01T10:12:57+00:00"
+    },
+    {
+      "id": "frag-20260901-03",
+      "text": "Suite B seed: copy Suite A stress-surviving knobs (min_conviction 0.6, exit_confirm_screens 2, reentry_cooldown 1) onto fair-cost AI+rules warm-start shadows; keep decision-review --apply scoped to Suite B track dirs only.",
+      "tags": [
+        "suite-b",
+        "warm-start",
+        "knobs"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
+      "added_at": "2026-09-01T13:56:19+00:00"
     }
   ]
 }
