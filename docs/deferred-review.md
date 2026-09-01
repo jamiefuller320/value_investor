@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T13:17:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T13:25:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -288,7 +288,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | S3 | **Quote special characters in .env** | Unquoted passwords break source .env | When recreating or editing .env locally |
 | L216 | **Enable main branch protection against Actions token pushes** | Require PR reviews / restrict GITHUB_TOKEN from pushing workflow changes to main so a stolen Actions token cannot plant a CURSOR_API_KEY exfil workflow. | After rotating CURSOR_API_KEY and merging GHA secret hygiene, or next security review |
 | N51 | **Consider making value_investor private** | Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. | If further secret exposure incidents occur or Pages no longer needs a public repo |
-| L218 | **Branch protection against Actions-token workflow pushes** | Even with dispatch-input hardening, a stolen GITHUB_TOKEN with contents:write can still push a malicious workflow to main unless branch protection blocks it. | After next security incident review or when enabling required reviews on main |
+| L219 | **Treat PAT/cron compromise as full Actions secret blast radius** | WORKFLOW_DISPATCH_PAT and CRONJOB_API_KEY do not store SMTP/AWS/Cursor secrets, but PAT can start any workflow_dispatch job that loads them. Combined with input injection this is an insider/stolen-credential path to every repo Actions secret. | Credential incident involving cron-job.org or the dispatch PAT |
 
 ---
 

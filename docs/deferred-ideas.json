@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T13:17:21+00:00",
+  "updated_at": "2026-09-01T13:25:31+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4486,17 +4486,35 @@
       "id": "L218",
       "category": "later",
       "section": "security",
-      "title": "Branch protection against Actions-token workflow pushes",
-      "summary": "Even with dispatch-input hardening, a stolen GITHUB_TOKEN with contents:write can still push a malicious workflow to main unless branch protection blocks it.",
-      "revisit_when": "After next security incident review or when enabling required reviews on main",
+      "title": "Harden workflow_dispatch string inputs against shell injection",
+      "summary": "Several secret-bearing workflows still interpolate free-form github.event.inputs (pin_ticker, task_id, markets, max_targets, etc.) into run: bodies. A stolen WORKFLOW_DISPATCH_PAT or write collaborator can shell-inject, poison GITHUB_PATH, and exfiltrate step secrets (COMPANIES_HOUSE, CURSOR, CRONJOB, SMTP, AWS). Pass all inputs via env: + allowlists; never ${{ }} into script bodies. Implemented in PR #384 (env: + allowlists + dispatch_input_in_run scanner).",
+      "revisit_when": "After rotating PAT/cron credentials, or when next hardening the Actions surface beyond outsider workflow_run PPE",
       "tags": [
         "gha",
-        "branch-protection",
+        "secrets",
+        "workflow_dispatch",
+        "injection"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
+      "added_at": "2026-09-01T12:54:11+00:00"
+    },
+    {
+      "id": "L219",
+      "category": "later",
+      "section": "security",
+      "title": "Treat PAT/cron compromise as full Actions secret blast radius",
+      "summary": "WORKFLOW_DISPATCH_PAT and CRONJOB_API_KEY do not store SMTP/AWS/Cursor secrets, but PAT can start any workflow_dispatch job that loads them. Combined with input injection this is an insider/stolen-credential path to every repo Actions secret.",
+      "revisit_when": "Credential incident involving cron-job.org or the dispatch PAT",
+      "tags": [
+        "gha",
+        "pat",
+        "cron",
         "secrets"
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
-      "added_at": "2026-09-01T13:17:21+00:00"
+      "added_at": "2026-09-01T12:54:11+00:00"
     }
   ],
   "fragments": [
