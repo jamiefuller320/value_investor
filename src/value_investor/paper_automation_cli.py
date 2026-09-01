@@ -70,8 +70,16 @@ def main(argv: list[str] | None = None) -> int:
             "momentum_grace",
             "graduated_allocation",
             "technical",
+            "ai_judgment_fair",
+            "rules_fair",
         ],
-        help="Which learning track(s) to run (default: all)",
+        help="Which learning track(s) to run (default: all, includes Suite B when present)",
+    )
+    parser.add_argument(
+        "--suite",
+        default="all",
+        choices=["all", "A", "B"],
+        help="When --tracks all: run Suite A (stress), Suite B (fair lab), or both",
     )
     parser.add_argument(
         "--add-watch",
@@ -100,6 +108,7 @@ def main(argv: list[str] | None = None) -> int:
         save_watchlist(watch_path, existing)
 
     if args.tracks == "all":
+        from value_investor.fair_cost_lab import filter_track_ids_for_suite
         from value_investor.paper_automation import ensure_learning_track_configs
 
         configs = ensure_learning_track_configs(output_dir)
@@ -108,11 +117,13 @@ def main(argv: list[str] | None = None) -> int:
                 cfg.settle_minutes_after_open = args.settle_minutes
                 cfg_path = learning_track_dirs(output_dir)[track_id] / "config.json"
                 cfg_path.write_text(json.dumps(cfg.to_dict(), indent=2), encoding="utf-8")
+        track_list = filter_track_ids_for_suite(list(configs.keys()), args.suite)
         summary = run_learning_tracks(
             base_dir=output_dir,
             reports_path=args.reports,
             force=args.force,
             surveillance_only=args.surveillance_only,
+            tracks=track_list,
         )
         if args.json:
             print(json.dumps(summary, indent=2))
@@ -134,8 +145,17 @@ def main(argv: list[str] | None = None) -> int:
         "momentum_grace": MOMENTUM_GRACE_TRACK_ID,
         "graduated_allocation": GRADUATED_ALLOCATION_TRACK_ID,
         "technical": TECHNICAL_TRACK_ID,
+        "ai_judgment_fair": "ai_judgment_fair",
+        "rules_fair": "rules_fair",
     }[args.tracks]
-    track_dir = learning_track_dirs(output_dir)[track_id]
+    dirs = learning_track_dirs(output_dir)
+    if track_id not in dirs:
+        # Ensure discovery after spawn.
+        from value_investor.paper_automation import ensure_learning_track_configs
+
+        ensure_learning_track_configs(output_dir)
+        dirs = learning_track_dirs(output_dir)
+    track_dir = dirs[track_id]
     track_dir.mkdir(parents=True, exist_ok=True)
 
     config = AutomationConfig()

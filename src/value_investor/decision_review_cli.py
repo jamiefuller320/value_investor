@@ -39,8 +39,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--tracks",
         default="all",
-        choices=["all", "rules", "ai_judgment", "momentum_grace"],
+        choices=[
+            "all",
+            "rules",
+            "ai_judgment",
+            "momentum_grace",
+            "ai_judgment_fair",
+            "rules_fair",
+        ],
         help="Which learning track(s) to review (default: all)",
+    )
+    parser.add_argument(
+        "--suite",
+        default="all",
+        choices=["all", "A", "B"],
+        help=(
+            "When --tracks all: review Suite A (stress), Suite B (fair-cost lab), or both. "
+            "Applies stay per-track (suite-local)."
+        ),
     )
     parser.add_argument(
         "--apply",
@@ -72,6 +88,7 @@ def main(argv: list[str] | None = None) -> int:
             force=bool(args.force),
             fetch_benchmark=not args.no_benchmark,
             counterfactual=not args.no_counterfactual,
+            suite=args.suite,
         )
         if args.json:
             print(json.dumps(summary, indent=2))
@@ -108,8 +125,14 @@ def main(argv: list[str] | None = None) -> int:
         "rules": RULES_TRACK_ID,
         "ai_judgment": AI_JUDGMENT_TRACK_ID,
         "momentum_grace": MOMENTUM_GRACE_TRACK_ID,
+        "ai_judgment_fair": "ai_judgment_fair",
+        "rules_fair": "rules_fair",
     }[args.tracks]
-    track_dir = learning_track_dirs(Path(args.output_dir))[track_id]
+    dirs = learning_track_dirs(Path(args.output_dir))
+    if track_id not in dirs:
+        print(f"Track {track_id} not found under {args.output_dir}", file=sys.stderr)
+        return 1
+    track_dir = dirs[track_id]
     result = run_decision_review(
         output_dir=track_dir,
         apply=bool(args.apply),
