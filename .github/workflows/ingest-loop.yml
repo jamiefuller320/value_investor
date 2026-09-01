@@ -342,7 +342,8 @@ jobs:
           steps.loop.outputs.chain_dispatch != 'true'
           && steps.loop.outputs.body_gap_chain != 'true'
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: |
           if [ -z "$CURSOR_API_KEY" ]; then
             echo "CURSOR_API_KEY unset — skip weekday rememo"

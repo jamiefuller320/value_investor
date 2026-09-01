@@ -19,10 +19,25 @@ PR head branch names and fork commits as **untrusted input**.
 - `engineering-auto-merge.yml` — same-repo + `cursor/eng-YYYYMMDD-NN-1de3` regex
 - `engineering-queue.yml` — PR head ref only via `env:` after regex gate
 
-`CURSOR_API_KEY` itself is only injected into schedule / `workflow_dispatch` jobs that
-check out `main` (or the dispatch ref). The outsider path to that secret is
-**indirect**: steal a write-capable `GITHUB_TOKEN` from a `workflow_run` job, push a
-malicious workflow, then wait for the next schedule that loads `CURSOR_API_KEY`.
+`CURSOR_API_KEY` / `CURSOR_API_KEY_V2` themselves are only injected into schedule /
+`workflow_dispatch` jobs that check out `main` (or the dispatch ref). The outsider
+path to those secrets is **indirect**: steal a write-capable `GITHUB_TOKEN` from a
+`workflow_run` job, push a malicious workflow, then wait for the next schedule that
+loads the Cursor key.
+
+## Which secret workflows use
+
+Agent workflows inject both secrets and prefer V2:
+
+```yaml
+CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+```
+
+Local / Cloud CLIs already resolve `CURSOR_API_KEY_V2` first via `resolve_cursor_api_key()`.
+Keep **GitHub Actions** `CURSOR_API_KEY_V2` (or `CURSOR_API_KEY`) equal to a **valid**
+User API key from the Cursor dashboard. A set-but-dead legacy `CURSOR_API_KEY` alone
+still fails authentication even though preflight only checks “non-empty”.
 
 ## Automated daily check
 
@@ -49,7 +64,8 @@ Failures on `main` draft a supervised engineering task via `workflow-failure-res
 ## If `CURSOR_API_KEY` may already be compromised
 
 1. Revoke the key at [Cursor API keys](https://cursor.com/dashboard/api-keys).
-2. Create a new key; update GitHub Actions secret `CURSOR_API_KEY` (and any Cursor Cloud / cron host copies).
+2. Create a new key; update GitHub Actions secrets `CURSOR_API_KEY_V2` **and**
+   `CURSOR_API_KEY` (and any Cursor Cloud / cron host copies) to the new value.
 3. Review recent Actions runs for unexpected `workflow_run` jobs on odd `cursor/*` branch names.
 4. Confirm `main` workflow files were not modified by an unexpected actor.
 5. Prefer branch protection on `main` (required reviews / block GITHUB_TOKEN force-push) so a stolen Actions token cannot silently plant a secret-exfiltrating workflow.

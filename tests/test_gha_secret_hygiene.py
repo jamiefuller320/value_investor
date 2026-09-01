@@ -115,3 +115,26 @@ jobs:
     assert len(blocks) == 1
     assert "$BRANCH" in blocks[0]
     assert "github.event" not in blocks[0]
+
+
+def test_cursor_agent_workflows_prefer_api_key_v2() -> None:
+    """GHA must prefer CURSOR_API_KEY_V2 so a dead legacy secret does not brick agents."""
+    prefer = "secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY"
+    for name in (
+        "analysis-review.yml",
+        "email-report.yml",
+        "engineering-agent.yml",
+        "horizon-scan.yml",
+        "ingest-loop.yml",
+        "learning-director-review.yml",
+        "library-grow.yml",
+        "library-model-review.yml",
+        "memo-backfill.yml",
+        "paper-learning-review.yml",
+    ):
+        text = (WORKFLOWS / name).read_text(encoding="utf-8")
+        assert prefer in text, f"{name} missing V2-preferring CURSOR_API_KEY injection"
+        for i, line in enumerate(text.splitlines(), 1):
+            if "secrets.CURSOR_API_KEY" not in line or line.lstrip().startswith("#"):
+                continue
+            assert "CURSOR_API_KEY_V2" in line, f"{name}:{i} bare CURSOR_API_KEY secret"

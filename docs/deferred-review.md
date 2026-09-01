@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T09:41:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T10:14:44+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -50,6 +50,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
 | frag-20260828-01 | Aug 27 paper-auto failed on git push race after run; Aug 28 recovered. If push races recur, harden paper-auto commit/push locking or retry. | paper-auto, git, ops |
 | frag-20260829-01 | Paid news API recommendation (2026): prefer Marketaux (~$29–99/mo, ticker+sentiment) or Finnhub company-news (free–$50–130/mo personal; All-In-One ~$3500) for media coverage; do not buy LSE RNS enterprise feed (~£6.5k data feed + £26k non-display) while CH/RNS filing ingest covers regulatory text. Benzinga is sales-quoted US newsroom — not first pick for FTSE-first. Revisit L12 when memo news quality is the bottleneck. | news, api, costs, L12 |
+| frag-20260901-01 | Upgrade events show 34.69% positive_rate vs 52.38% on downgrades (`trajectory_evidence.upgrade_events` / `downgrade_events`) — what if the assessment model is structurally better at timing exits than entries, and winner-picking should defer allocation until loser-filter cohort floor is proven? | upgrade_inversion, trajectory_evidence, hypothesis |
+| frag-20260901-02 | Nine of 53 loser cards fail quality family while `opinion_flip_triggers` still permit conviction ≥0.35 upgrades above avoid — what if family-failure veto runs as a pre-upgrade gate rather than post-hoc forensics in loser_pattern_lab? | quality_veto_timing, loser_cards, hypothesis |
 
 ---
 
@@ -273,6 +275,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L208 | **Ops monitor wait-for-workflow-rerun before email** | After dispatching guarded workflow recovery, poll until success/fail (capped) and only then email remaining issues. Skipped for now because long Actions jobs would exceed ops-monitor budget; dedicated workflow_run responders already handle reruns asynchronously. | Ops-monitor job SLA allows 15+ minutes of polling, or a follow-up verifier workflow can own the wait |
 | L214 | **Git bundle of full repo history on S3** | Weekly code tarball is a current-tree snapshot, not a full git history. A git bundle (or git-filtered archive) would recover branches and history if GitHub were unavailable. | After the first Sunday that uploads ftse-code-* to S3, or if GitHub availability becomes a real recovery concern |
 | L215 | **Per-ticker wall-clock cap in library ingest loop** | A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery. | Euro or parallel library ingest again times out after the schedule runtime-budget fix lands |
+| L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
 
 ---
 

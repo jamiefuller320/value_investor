@@ -72,18 +72,31 @@ def run_preflight(
             )
         )
 
-    if os.environ.get("CURSOR_API_KEY"):
-        report.checks.append(PreflightCheck("cursor_api", "ok", "CURSOR_API_KEY set"))
+    from value_investor.cursor_api_key import resolve_cursor_api_key
+
+    cursor_key, cursor_source = resolve_cursor_api_key()
+    if cursor_key:
+        report.checks.append(
+            PreflightCheck(
+                "cursor_api",
+                "ok",
+                f"{cursor_source or 'CURSOR_API_KEY'} set",
+            )
+        )
     elif require_agents:
         report.checks.append(
-            PreflightCheck("cursor_api", "fail", "CURSOR_API_KEY required for agents")
+            PreflightCheck(
+                "cursor_api",
+                "fail",
+                "CURSOR_API_KEY_V2 or CURSOR_API_KEY required for agents",
+            )
         )
     else:
         report.checks.append(
             PreflightCheck(
                 "cursor_api",
                 "warn",
-                "CURSOR_API_KEY not set — deep analysis and research updates will be skipped",
+                "CURSOR_API_KEY_V2 / CURSOR_API_KEY not set — deep analysis and research updates will be skipped",
             )
         )
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T09:41:34+00:00",
+  "updated_at": "2026-09-01T10:14:44+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4465,6 +4465,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
       "added_at": "2026-09-01T09:41:34+00:00"
+    },
+    {
+      "id": "L217",
+      "category": "later",
+      "section": "ops",
+      "title": "Alert when GHA Cursor API key auth fails",
+      "summary": "Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails.",
+      "revisit_when": "After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass",
+      "tags": [
+        "cursor-api",
+        "gha",
+        "ops-monitor"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05c6a-e322-73c6-9838-30477020636b",
+      "added_at": "2026-09-01T10:14:44+00:00"
     }
   ],
   "fragments": [
@@ -4820,6 +4836,30 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
       "added_at": "2026-08-29T07:22:02+00:00"
+    },
+    {
+      "id": "frag-20260901-01",
+      "text": "Upgrade events show 34.69% positive_rate vs 52.38% on downgrades (`trajectory_evidence.upgrade_events` / `downgrade_events`) \u2014 what if the assessment model is structurally better at timing exits than entries, and winner-picking should defer allocation until loser-filter cohort floor is proven?",
+      "tags": [
+        "upgrade_inversion",
+        "trajectory_evidence",
+        "hypothesis"
+      ],
+      "status": "open",
+      "source": "learning_director:20260901",
+      "added_at": "2026-09-01T10:12:57+00:00"
+    },
+    {
+      "id": "frag-20260901-02",
+      "text": "Nine of 53 loser cards fail quality family while `opinion_flip_triggers` still permit conviction \u22650.35 upgrades above avoid \u2014 what if family-failure veto runs as a pre-upgrade gate rather than post-hoc forensics in loser_pattern_lab?",
+      "tags": [
+        "quality_veto_timing",
+        "loser_cards",
+        "hypothesis"
+      ],
+      "status": "open",
+      "source": "learning_director:20260901",
+      "added_at": "2026-09-01T10:12:57+00:00"
     }
   ]
 }

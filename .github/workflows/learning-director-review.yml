@@ -106,7 +106,8 @@ jobs:
       - name: Run learning director review
         if: steps.ready.outputs.skip != 'true'
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: ftse-learning-director run --json
 
       - name: Sync main before commit

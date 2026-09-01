@@ -7,6 +7,7 @@ from value_investor.preflight import run_preflight
 
 def test_preflight_warns_without_history(tmp_path: Path, monkeypatch):
     monkeypatch.delenv("CURSOR_API_KEY", raising=False)
+    monkeypatch.delenv("CURSOR_API_KEY_V2", raising=False)
     monkeypatch.delenv("SMTP_HOST", raising=False)
     monkeypatch.setattr(
         "value_investor.preflight.restore_committed_run_history",

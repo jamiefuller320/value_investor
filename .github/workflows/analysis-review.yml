@@ -174,7 +174,8 @@ jobs:
       - name: Run modelling analysis review
         if: steps.ready.outputs.skip != 'true'
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: ftse-analysis-review run --json
 
       - name: Sync main before commit
