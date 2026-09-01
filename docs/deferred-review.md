@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T13:56:32+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-01T14:03:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -108,6 +108,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N50 | **Treat Yahoo quarterly cashflow as optional for UK memo excellence** | yahoo_quarterly_cashflow is thin on nearly every FTSE memo; do not block excellent/strong narrative quality on it. Prefer filing OCF bridges and gate/suppress empty Yahoo TTM rather than waiting for Yahoo series. | If Yahoo UK quarterly cashflow coverage improves or a primary filing OCF bridge is standardized in every memo |
 | N51 | **Consider making value_investor private** | Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. | If further secret exposure incidents occur or Pages no longer needs a public repo |
 | N52 | **Fit a new screen ruleset from Suite A stress P&L for Suite B** | Do not reverse-engineer a full new screen/model from Suite A after-cost returns — those P&Ls are stress-distorted and history is thin. Suite B should warm-start from current AI+rules books and transplant stress-surviving knobs (conviction, exit confirms, cooldowns) as priors only. | Suite B has a thick forward window and a separate offline rules lab is justified |
+| N53 | **Mirror every Suite A shadow into Suite B (full 2x fork)** | Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal. | Suite B AI+rules endurance is trusted and human triage load is light |
 
 ---
 
@@ -143,6 +144,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L178 | **PIT prediction calibration (know-when vs outcome lag)** | Extend trajectory evidence: for each archived turn record what the screen asserted at t (signal, conviction, timing, overlay), score whether the predicted direction/flip occurred, and measure weeks-to-realization at 1/4/8/12w — no memo re-runs. | trajectory_transitions.json has >= 50 labeled events OR history_run_count >= 16 (regime_slices gate) |
 | L198 | **Sunday S&P 500 screen-lite for 12-week trajectory span** | S&P archives are 12 files / 7 unique days / 4.14 weeks and last screened 2026-08-16. Keep Sunday screen-lite so unique days and span reach 12 weeks without expanding weekly paper or live screen off euro_depth. | After each Sunday ladder while sp500 learning-depth trajectory_ready is false |
 | L204 | **Per-ticker AIM stamp exemption in cost model** | AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable. | Trading AIM paper/live or when HMRC/T212 exemption list is wired |
+| L220 | **Selective A→B mirror for recommend-state experiments only** | Once Suite B base books exist, optionally spawn fair-cost twins only for Suite A experiments that reach recommend / human-ack — not for every open shadow. Keeps discover/validate pipeline without a full fork. | Suite B AI+rules warm-start books are running and experiment_assessment has stable recommend rows |
 
 ### Universe & data
 
