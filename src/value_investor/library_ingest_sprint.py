@@ -48,14 +48,23 @@ def parallel_sprint_markets_needing_ingest(
     library_root: Path = DEFAULT_LIBRARY_ROOT,
     policy_path: Path = DEFAULT_POLICY_PATH,
     policy: dict[str, Any] | None = None,
+    parallel_stream: int = 1,
 ) -> list[str]:
     """Parallel sprint markets that should receive ingest this run."""
     library_root = Path(library_root)
     policy = policy if policy is not None else load_policy(policy_path)
     needing: list[str] = []
-    for market_id in list_library_ingest_parallel_sprint_markets(policy=policy):
+    for market_id in list_library_ingest_parallel_sprint_markets(
+        policy=policy,
+        parallel_stream=parallel_stream,
+    ):
         health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
-        if should_run_parallel_sprint_ingest(market_id, health, policy=policy):
+        if should_run_parallel_sprint_ingest(
+            market_id,
+            health,
+            policy=policy,
+            parallel_stream=parallel_stream,
+        ):
             needing.append(market_id)
     return needing
 
@@ -68,6 +77,7 @@ def run_library_ingest_sprint(
     max_targets: int = DEFAULT_PARALLEL_SPRINT_MAX_TARGETS,
     max_runtime_seconds: float = 2100.0,
     max_bodies: int = 20,
+    parallel_stream: int = 1,
 ) -> LibraryIngestSprintResult:
     """Run high-tempo sprint ingest for parallel queue markets (not focus)."""
     library_root = Path(library_root)
@@ -75,6 +85,7 @@ def run_library_ingest_sprint(
     market_list = markets or parallel_sprint_markets_needing_ingest(
         library_root=library_root,
         policy=policy,
+        parallel_stream=parallel_stream,
     )
     outcome = LibraryIngestSprintResult(markets=market_list)
     if not market_list:
@@ -83,7 +94,12 @@ def run_library_ingest_sprint(
 
     for market_id in market_list:
         health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
-        if not should_run_parallel_sprint_ingest(market_id, health, policy=policy):
+        if not should_run_parallel_sprint_ingest(
+            market_id,
+            health,
+            policy=policy,
+            parallel_stream=parallel_stream,
+        ):
             outcome.skipped.append(
                 {
                     "market_id": market_id,
