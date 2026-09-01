@@ -26,6 +26,14 @@
           "automated": true,
           "doc_path": "docs/ops/decision-review.md",
           "doc_anchor": "commands"
+        },
+        {
+          "id": "weekday-gha-secret-hygiene",
+          "title": "GHA secret hygiene scan",
+          "summary": "Daily Actions scan for public-repo workflow_run secret-exposure patterns. Skips when no main merges / workflow touches in the last 36h; always runs on PRs that change workflows. Failures open a supervised engineering task.",
+          "automated": true,
+          "doc_path": "docs/ops/gha-secret-hygiene.md",
+          "doc_anchor": "automated-daily-check"
         }
       ]
     },
@@ -214,6 +222,14 @@
           "automated": false,
           "doc_path": "docs/ops/gha-secret-hygiene.md",
           "doc_anchor": "if-cursor_api_key-may-already-be-compromised"
+        },
+        {
+          "id": "adhoc-gha-secret-hygiene-cron",
+          "title": "Register daily GHA secret-hygiene cron on cron-job.org",
+          "summary": "After merging gha-secret-hygiene.yml, run import_cron_jobs.py --job gha-secret-hygiene (or --all) so external primary fires daily 06:20 UTC. GitHub schedule alone is backup. Verify with gh run list --workflow=gha-secret-hygiene.yml.",
+          "automated": false,
+          "doc_path": "docs/ops/gha-secret-hygiene.md",
+          "doc_anchor": "automated-daily-check"
         }
       ]
     }

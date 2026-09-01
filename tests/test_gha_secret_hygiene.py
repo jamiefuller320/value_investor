@@ -2,53 +2,30 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
+
+from value_investor.gha_secret_hygiene import (
+    decide_schedule_gate,
+    extract_run_blocks,
+    scan_workflow_text,
+    scan_workflows,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github" / "workflows"
 
-_INTERP = re.compile(
-    r"\$\{\{\s*github\.event\."
-    r"(?:pull_request\.head\.ref|workflow_run\.head_branch|workflow_run\.name)"
-    r"\s*\}\}"
-)
 
-
-def _workflow_text(name: str) -> str:
-    return (WORKFLOWS / name).read_text(encoding="utf-8")
-
-
-def _run_blocks(text: str) -> list[str]:
-    """Return bodies of `run: |` / `run: >` steps (shell scripts only)."""
-    blocks: list[str] = []
-    lines = text.splitlines()
-    i = 0
-    while i < len(lines):
-        match = re.match(r"^(\s*)run:\s*[|>]", lines[i])
-        if not match:
-            i += 1
-            continue
-        indent = len(match.group(1))
-        i += 1
-        body: list[str] = []
-        while i < len(lines):
-            line = lines[i]
-            if line.strip() == "":
-                body.append(line)
-                i += 1
-                continue
-            leading = len(line) - len(line.lstrip(" "))
-            if leading <= indent:
-                break
-            body.append(line)
-            i += 1
-        blocks.append("\n".join(body))
-    return blocks
+def test_scan_workflows_clean_on_repo() -> None:
+    report = scan_workflows(WORKFLOWS)
+    errors = [item for item in report.findings if item.severity == "error"]
+    assert errors == [], errors
+    assert report.ok
 
 
 def test_pr_autofix_requires_same_repo_and_trusted_install() -> None:
-    text = _workflow_text("ci-pr-autofix.yml")
+    text = (WORKFLOWS / "ci-pr-autofix.yml").read_text(encoding="utf-8")
+    findings = scan_workflow_text("ci-pr-autofix.yml", text)
+    assert not any(item.severity == "error" for item in findings)
     assert "head_repository.full_name == github.repository" in text
     assert 'pip install ".[dev]"' in text
     assert "pip install -e" not in text
@@ -57,22 +34,84 @@ def test_pr_autofix_requires_same_repo_and_trusted_install() -> None:
 
 
 def test_auto_merge_requires_same_repo_and_env_branch() -> None:
-    text = _workflow_text("engineering-auto-merge.yml")
-    assert "head_repository.full_name == github.repository" in text
+    text = (WORKFLOWS / "engineering-auto-merge.yml").read_text(encoding="utf-8")
+    findings = scan_workflow_text("engineering-auto-merge.yml", text)
+    assert not any(item.severity == "error" for item in findings)
     assert "BRANCH: ${{ github.event.workflow_run.head_branch }}" in text
     assert '--branch "${{ github.event.workflow_run.head_branch }}"' not in text
     assert r"^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$" in text
 
 
-def test_no_untrusted_expr_inside_run_scripts() -> None:
-    for name in (
-        "ci-pr-autofix.yml",
-        "engineering-auto-merge.yml",
-        "engineering-queue.yml",
-        "workflow-failure-responder.yml",
-        "ci-fix-responder.yml",
-        "library-ladder-responder.yml",
-    ):
-        for block in _run_blocks(_workflow_text(name)):
-            hit = _INTERP.search(block)
-            assert hit is None, f"{name} run script interpolates untrusted field: {hit.group(0)}"
+def test_detects_untrusted_expr_in_run_block() -> None:
+    evil = """
+name: Evil
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "${{ github.event.workflow_run.head_branch }}"
+"""
+    findings = scan_workflow_text("evil.yml", evil)
+    assert any(item.rule == "untrusted_expr_in_run" for item in findings)
+
+
+def test_detects_missing_same_repo_gate_on_head_checkout() -> None:
+    evil = """
+name: Evil
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+"""
+    findings = scan_workflow_text("evil.yml", evil)
+    assert any(item.rule == "workflow_run_missing_same_repo_gate" for item in findings)
+
+
+def test_schedule_gate_force_and_recent_changes() -> None:
+    forced = decide_schedule_gate(force=True)
+    assert forced.should_run and forced.reason == "force"
+
+    skip = decide_schedule_gate(
+        force=False,
+        merged_pr_count=0,
+        workflow_touch_count=0,
+        lookback_hours=36,
+    )
+    assert not skip.should_run
+    assert skip.reason == "no_recent_merges_or_workflow_changes"
+
+    run = decide_schedule_gate(
+        force=False,
+        merged_pr_count=2,
+        workflow_touch_count=0,
+        lookback_hours=36,
+    )
+    assert run.should_run and run.reason == "recent_main_changes"
+
+
+def test_extract_run_blocks_ignores_env() -> None:
+    text = """
+jobs:
+  x:
+    steps:
+      - env:
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          echo "$BRANCH"
+"""
+    blocks = extract_run_blocks(text)
+    assert len(blocks) == 1
+    assert "$BRANCH" in blocks[0]
+    assert "github.event" not in blocks[0]

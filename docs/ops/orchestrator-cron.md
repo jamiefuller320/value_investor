@@ -44,6 +44,7 @@ token instead of your user PAT.
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
 | `ops-monitor.yml` | External **primary** | `45 7 * * *` + catch-up `15 13 * * *` → `ops-monitor.yml` | Daily 07:45 + 13:15 |
+| `gha-secret-hygiene.yml` | External **primary** | `20 6 * * *` → `gha-secret-hygiene.yml` (skips if no merges / workflow touches in 36h) | Daily 06:20 |
 | `ci-main-nightly.yml` | External **primary** | `30 7 * * *` → `ci-main-nightly.yml` | Daily 07:30 |
 | `data-backup.yml` | External **primary** | `30 12 * * 0` → `data-backup.yml` | Sun 12:30 (after email) |
 | `engineering-queue.yml` | External **primary** | `15 * * * 1-5` → `engineering-queue.yml` (hourly :15 UTC) | Hourly weekdays (backup) |
