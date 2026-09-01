@@ -106,9 +106,7 @@ def test_suite_filter_and_cli_spawn(tmp_path: Path, capsys):
     ]
     assert AI_JUDGMENT_FAIR_TRACK_ID not in filter_track_ids_for_suite(ids, "A")
 
-    rc = trading_costs_main(
-        ["spawn-fair-lab", "--paper-root", str(root), "--force", "--json"]
-    )
+    rc = trading_costs_main(["spawn-fair-lab", "--paper-root", str(root), "--force", "--json"])
     assert rc == 0
     payload = json.loads(capsys.readouterr().out)
     assert payload["created_count"] == 2

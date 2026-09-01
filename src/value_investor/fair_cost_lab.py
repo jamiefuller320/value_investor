@@ -87,9 +87,7 @@ def discover_fair_cost_lab_track_ids(paper_root: Path) -> list[str]:
     ]
 
 
-def stamp_fair_costs(
-    config: AutomationConfig, *, market_id: str = LIVE_PAPER_MARKET_ID
-) -> None:
+def stamp_fair_costs(config: AutomationConfig, *, market_id: str = LIVE_PAPER_MARKET_ID) -> None:
     """Stamp T212-shaped fair buy/sell costs onto an automation config."""
     fields = cost_fields_for_config(market_id)
     config.trade_cost_pct = float(fields["trade_cost_pct"])
@@ -376,9 +374,7 @@ def warm_start_fair_cost_lab_track(
     provenance["warm_start_force"] = bool(force)
     write_json(provenance_path, provenance, compact=False)
 
-    post_seed = _compute_epoch_metrics(
-        fund, epoch, fetch_benchmark=bool(fetch_benchmark)
-    )
+    post_seed = _compute_epoch_metrics(fund, epoch, fetch_benchmark=bool(fetch_benchmark))
 
     return {
         "warm_started": True,
