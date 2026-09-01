@@ -36,7 +36,9 @@ def _cmd_check(args: argparse.Namespace) -> int:
 
 
 def _cmd_schedule_gate(args: argparse.Namespace) -> int:
-    token = (args.token or os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or "").strip()
+    token = (
+        args.token or os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or ""
+    ).strip()
     repo = (args.repo or os.environ.get("GITHUB_REPOSITORY") or "").strip()
     force = bool(args.force)
     if not force and (not token or not repo):

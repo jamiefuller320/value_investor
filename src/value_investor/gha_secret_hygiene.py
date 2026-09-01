@@ -33,13 +33,9 @@ _UNTRUSTED_RUN_INTERP = re.compile(
 )
 
 _WORKFLOW_RUN_TRIGGER = re.compile(r"(?m)^\s*workflow_run\s*:")
-_HEAD_REPO_GATE = re.compile(
-    r"head_repository\.full_name\s*==\s*github\.repository"
-)
+_HEAD_REPO_GATE = re.compile(r"head_repository\.full_name\s*==\s*github\.repository")
 _EDITABLE_PIP = re.compile(r"pip\s+install\s+-e\b")
-_USES_WORKFLOW_RUN_HEAD = re.compile(
-    r"github\.event\.workflow_run\.(?:head_branch|head_sha)"
-)
+_USES_WORKFLOW_RUN_HEAD = re.compile(r"github\.event\.workflow_run\.(?:head_branch|head_sha)")
 _CHECKOUT_UNTRUSTED_REF = re.compile(
     r"ref:\s*\$\{\{\s*github\.event\.workflow_run\.(?:head_branch|head_sha)\s*\}\}"
 )
@@ -296,9 +292,8 @@ def count_merged_prs_since(
     owner, name = _parse_repo(repo)
     since_iso = since.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     query = f"repo:{owner}/{name} is:pr is:merged base:{base} merged:>={since_iso}"
-    url = (
-        "https://api.github.com/search/issues?"
-        + urllib.parse.urlencode({"q": query, "per_page": "1"})
+    url = "https://api.github.com/search/issues?" + urllib.parse.urlencode(
+        {"q": query, "per_page": "1"}
     )
     payload = _gh_api_json(url, token=token)
     return int(payload.get("total_count") or 0)
@@ -314,16 +309,13 @@ def count_workflow_commits_since(
 ) -> int:
     owner, name = _parse_repo(repo)
     since_iso = since.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
-    url = (
-        f"https://api.github.com/repos/{owner}/{name}/commits?"
-        + urllib.parse.urlencode(
-            {
-                "sha": branch,
-                "since": since_iso,
-                "path": path,
-                "per_page": "100",
-            }
-        )
+    url = f"https://api.github.com/repos/{owner}/{name}/commits?" + urllib.parse.urlencode(
+        {
+            "sha": branch,
+            "since": since_iso,
+            "path": path,
+            "per_page": "100",
+        }
     )
     payload = _gh_api_json(url, token=token)
     if not isinstance(payload, list):
@@ -365,9 +357,7 @@ def decide_schedule_gate(
         if merged_pr_count is None:
             merged_pr_count = count_merged_prs_since(repo=repo, token=token, since=since)
         if workflow_touch_count is None:
-            workflow_touch_count = count_workflow_commits_since(
-                repo=repo, token=token, since=since
-            )
+            workflow_touch_count = count_workflow_commits_since(repo=repo, token=token, since=since)
 
     merged = int(merged_pr_count or 0)
     touches = int(workflow_touch_count or 0)
