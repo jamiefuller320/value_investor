@@ -2,11 +2,11 @@
   "ticker": "UCB.BR",
   "company_name": "UCB SA",
   "market": "euro_depth",
-  "built_at": "2026-08-30T13:17:38.006730+00:00",
+  "built_at": "2026-09-01T07:22:52.073505+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
-      "filings_bodies": false,
+      "filings_bodies": true,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": false,
       "yahoo_quarterly_income": false,
@@ -18,28 +18,27 @@
       "alternate_news": true
     },
     "thin": [
-      "filings_bodies",
       "yahoo_quarterly_cashflow",
       "yahoo_quarterly_income",
       "screen_run_manifest"
     ],
-    "filings_body_files": 0,
-    "filings_indexed_bodies": 0,
+    "filings_body_files": 1,
+    "filings_indexed_bodies": 1,
     "filings_summary": {
-      "total": 0,
+      "total": 2,
       "annual": 0,
-      "interim": 0,
+      "interim": 2,
       "trading_update": 0,
       "other": 0,
-      "with_body": 0,
+      "with_body": 1,
       "period_coverage": {
         "annual": {
           "total": 0,
           "with_body": 0
         },
         "interim": {
-          "total": 0,
-          "with_body": 0
+          "total": 2,
+          "with_body": 1
         },
         "trading_update": {
           "total": 0,
@@ -57,8 +56,8 @@
         "with_body": 0
       },
       "interim": {
-        "total": 0,
-        "with_body": 0
+        "total": 2,
+        "with_body": 1
       },
       "trading_update": {
         "total": 0,
@@ -69,7 +68,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 85,
+    "news_article_count": 93,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -84,16 +83,54 @@
     ]
   },
   "body_refetch": {
-    "attempted": 0,
+    "attempted": 1,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 1,
+    "with_body_after": 1,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {},
   "investegate_refetch": {},
   "ticker_rns_refetch": {},
-  "ir_refetch": {},
+  "ir_refetch": {
+    "attempted": 1,
+    "fetched": 0,
+    "with_body_before": 1,
+    "with_body_after": 1,
+    "retries_used": 2,
+    "retry_log": [
+      {
+        "filing_id": "ir_985b85763d54e432",
+        "url": "https://reports.ucb.com/",
+        "attempt": 1,
+        "outcome": "retry",
+        "source": null
+      },
+      {
+        "filing_id": "ir_985b85763d54e432",
+        "url": "https://reports.ucb.com/",
+        "attempt": 2,
+        "outcome": "retry",
+        "source": null
+      },
+      {
+        "filing_id": "ir_985b85763d54e432",
+        "url": "https://reports.ucb.com/",
+        "attempt": 3,
+        "outcome": "failed",
+        "source": null
+      }
+    ],
+    "investegate_fallbacks": 0,
+    "merge": {
+      "added": 0,
+      "total_allowlist": 2,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "mandatory": true,
+    "note": "refetch_ir_allowlist_filing_bodies",
+    "allowlist_count": 2
+  },
   "screen_run_manifest": {
     "attached": false,
     "reason": "not_ftse350"
@@ -102,31 +139,12 @@
     "bridge_count": 0,
     "segment_split_count": 0,
     "lease_maturity_count": 0,
-    "mandatory": false,
+    "mandatory": true,
     "path": "docs/data/library/markets/euro_depth/screen/research/UCB.BR/sources/ir_presentation_metrics.json"
   },
-  "alternate_news_added": 3,
+  "alternate_news_added": 1,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/UCB.BR/sources/alternate_news.json",
-  "planned_alternate_sources": [
-    {
-      "id": "investegate_rns_full",
-      "label": "Full Investegate / RNS HTML body re-pull",
-      "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
-      "score": "3"
-    },
-    {
-      "id": "exchange_filings_full",
-      "label": "Euronext / national register filing full-text re-pull",
-      "why": "Euro memos often index headlines without bodies",
-      "score": "3"
-    },
-    {
-      "id": "company_ir_presentation",
-      "label": "Company IR annual report / results deck PDF",
-      "why": "ESEF/iXBRL and segment tables often missing from Yahoo",
-      "score": "3"
-    }
-  ],
+  "planned_alternate_sources": [],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",
