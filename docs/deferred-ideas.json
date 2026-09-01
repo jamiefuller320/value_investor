@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-31T23:18:37+00:00",
+  "updated_at": "2026-09-01T09:41:34+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4433,6 +4433,38 @@
       "status": "open",
       "source": "euro ingest schedule timeout fix conversation",
       "added_at": "2026-08-31T23:18:37+00:00"
+    },
+    {
+      "id": "L216",
+      "category": "later",
+      "section": "security",
+      "title": "Enable main branch protection against Actions token pushes",
+      "summary": "Require PR reviews / restrict GITHUB_TOKEN from pushing workflow changes to main so a stolen Actions token cannot plant a CURSOR_API_KEY exfil workflow.",
+      "revisit_when": "After rotating CURSOR_API_KEY and merging GHA secret hygiene, or next security review",
+      "tags": [
+        "github-actions",
+        "secrets",
+        "branch-protection"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
+      "added_at": "2026-09-01T09:41:34+00:00"
+    },
+    {
+      "id": "N51",
+      "category": "not_now",
+      "section": "security",
+      "title": "Consider making value_investor private",
+      "summary": "Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs.",
+      "revisit_when": "If further secret exposure incidents occur or Pages no longer needs a public repo",
+      "tags": [
+        "github",
+        "visibility",
+        "secrets"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a05c4d-2244-7c71-b920-8479b505b1cc",
+      "added_at": "2026-09-01T09:41:34+00:00"
     }
   ],
   "fragments": [

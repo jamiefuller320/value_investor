@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-30",
+  "updated_at": "2026-09-01",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -206,6 +206,14 @@
           "automated": false,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "email-deferral-day-complete-gate"
+        },
+        {
+          "id": "adhoc-rotate-cursor-api-key",
+          "title": "Rotate CURSOR_API_KEY after suspected exposure",
+          "summary": "If Cursor API misuse or GitHub secret exposure is suspected: revoke the key in the Cursor dashboard, set a new GitHub Actions secret (and any Cloud/cron copies), review odd workflow_run jobs, and confirm main workflow files were not planted. Prefer main branch protection so a stolen GITHUB_TOKEN cannot push exfil workflows.",
+          "automated": false,
+          "doc_path": "docs/ops/gha-secret-hygiene.md",
+          "doc_anchor": "if-cursor_api_key-may-already-be-compromised"
         }
       ]
     }

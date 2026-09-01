@@ -48,8 +48,10 @@ jobs:
 
       - name: Map workflow name to file
         id: map
+        env:
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
         run: |
-          case "${{ github.event.workflow_run.name }}" in
+          case "$WORKFLOW_NAME" in
             "FTSE Ingest Loop") FILE="ingest-loop.yml" ;;
             "FTSE Email Report") FILE="email-report.yml" ;;
             "FTSE Analysis Review") FILE="analysis-review.yml" ;;
@@ -68,12 +70,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          WORKFLOW_FILE: ${{ steps.map.outputs.workflow_file }}
         run: |
           set -euo pipefail
-          RUN_ID="${{ github.event.workflow_run.id }}"
-          RUN_URL="${{ github.event.workflow_run.html_url }}"
           ftse-engineering draft-workflow-failure \
-            --workflow-file "${{ steps.map.outputs.workflow_file }}" \
+            --workflow-file "$WORKFLOW_FILE" \
             --run-id "$RUN_ID" \
             --run-url "$RUN_URL" \
             --json > /tmp/workflow_failure_draft.json

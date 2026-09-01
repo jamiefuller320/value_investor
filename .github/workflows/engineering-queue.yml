@@ -27,6 +27,8 @@ permissions:
   actions: write
   pull-requests: read
 
+# Security: pull_request heads are untrusted. Pass branch/URL via env after a
+# strict eng-branch regex — never ${{ github.event.pull_request.* }} inside run:.
 concurrency:
   group: ftse-engineering-queue
   cancel-in-progress: false
@@ -53,28 +55,39 @@ jobs:
           github.event_name == 'pull_request'
           && github.event.pull_request.merged == true
         id: eng_branch
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          BRANCH="${{ github.event.pull_request.head.ref }}"
+          # Pass PR head via env — never ${{ }}-interpolate into the shell.
           if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
             echo "is_task=true" >> "$GITHUB_OUTPUT"
+            echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           else
             echo "is_task=false" >> "$GITHUB_OUTPUT"
+            echo "branch=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Mark merged engineering task
         if: steps.eng_branch.outputs.is_task == 'true'
+        env:
+          BRANCH: ${{ steps.eng_branch.outputs.branch }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           ftse-engineering mark-merged \
-            --branch "${{ github.event.pull_request.head.ref }}" \
-            --pr-url "${{ github.event.pull_request.html_url }}" \
-            --pr-number "${{ github.event.pull_request.number }}"
+            --branch "$BRANCH" \
+            --pr-url "$PR_URL" \
+            --pr-number "$PR_NUMBER"
 
       - name: Reprioritize queue after ingest merge
         if: steps.eng_branch.outputs.is_task == 'true'
+        env:
+          BRANCH: ${{ steps.eng_branch.outputs.branch }}
         run: |
-          TASK_ID=$(python3 - <<'PY'
+          TASK_ID=$(BRANCH="$BRANCH" python3 - <<'PY'
+          import os
           from value_investor.engineering_queue import task_id_from_branch
-          print(task_id_from_branch("${{ github.event.pull_request.head.ref }}") or "")
+          print(task_id_from_branch(os.environ.get("BRANCH", "")) or "")
           PY
           )
           if [ -n "$TASK_ID" ]; then
@@ -84,10 +97,13 @@ jobs:
       - name: Evaluate ingest gap-closure rerun after gap-fix merge
         if: steps.eng_branch.outputs.is_task == 'true'
         id: gap_rerun
+        env:
+          BRANCH: ${{ steps.eng_branch.outputs.branch }}
         run: |
-          TASK_ID=$(python3 - <<'PY'
+          TASK_ID=$(BRANCH="$BRANCH" python3 - <<'PY'
+          import os
           from value_investor.engineering_queue import task_id_from_branch
-          print(task_id_from_branch("${{ github.event.pull_request.head.ref }}") or "")
+          print(task_id_from_branch(os.environ.get("BRANCH", "")) or "")
           PY
           )
           echo "merged_task_id=$TASK_ID" >> "$GITHUB_OUTPUT"
@@ -121,13 +137,19 @@ jobs:
         if: steps.gap_rerun.outputs.should_rerun_gap_closure == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          WORKFLOW: ${{ steps.gap_rerun.outputs.rerun_workflow }}
+          MARKET: ${{ steps.gap_rerun.outputs.market_id }}
+          PIN_TICKER: ${{ steps.gap_rerun.outputs.pin_ticker }}
+          GAP_PARENT: ${{ steps.gap_rerun.outputs.gap_closure_parent_id }}
         run: |
-          WORKFLOW="${{ steps.gap_rerun.outputs.rerun_workflow }}"
           if [ -z "$WORKFLOW" ]; then
             WORKFLOW="ingest-loop.yml"
           fi
+          case "$WORKFLOW" in
+            euro-ingest-loop.yml|ingest-loop.yml) ;;
+            *) echo "Rejecting unexpected workflow file: $WORKFLOW"; exit 1 ;;
+          esac
           if [ "$WORKFLOW" = "euro-ingest-loop.yml" ]; then
-            MARKET="${{ steps.gap_rerun.outputs.market_id }}"
             if [ -z "$MARKET" ]; then
               MARKET="euro_depth"
             fi
@@ -138,9 +160,9 @@ jobs:
               -f max_runtime_seconds=2100 \
               -f force=true \
               -f record_gap_closure=true \
-              -f pin_ticker="${{ steps.gap_rerun.outputs.pin_ticker }}" \
-              -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
-            echo "Dispatched euro-ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }} ($MARKET)"
+              -f pin_ticker="$PIN_TICKER" \
+              -f gap_closure_parent_id="$GAP_PARENT"
+            echo "Dispatched euro-ingest-loop gap-closure verification for $PIN_TICKER ($MARKET)"
           else
             gh workflow run ingest-loop.yml \
               -f max_targets=1 \
@@ -149,9 +171,9 @@ jobs:
               -f max_runtime_seconds=2100 \
               -f force=true \
               -f record_gap_closure=true \
-              -f pin_ticker="${{ steps.gap_rerun.outputs.pin_ticker }}" \
-              -f gap_closure_parent_id="${{ steps.gap_rerun.outputs.gap_closure_parent_id }}"
-            echo "Dispatched ingest-loop gap-closure verification for ${{ steps.gap_rerun.outputs.pin_ticker }}"
+              -f pin_ticker="$PIN_TICKER" \
+              -f gap_closure_parent_id="$GAP_PARENT"
+            echo "Dispatched ingest-loop gap-closure verification for $PIN_TICKER"
           fi
 
       # L161: generic post-merge acceptance proof + capped rework (skips gap-closure tasks).
@@ -160,12 +182,16 @@ jobs:
           steps.eng_branch.outputs.is_task == 'true'
           && steps.gap_rerun.outputs.should_rerun_gap_closure != 'true'
         id: accept_verify
+        env:
+          BRANCH: ${{ steps.eng_branch.outputs.branch }}
+          MERGED_TASK_ID: ${{ steps.gap_rerun.outputs.merged_task_id }}
         run: |
-          TASK_ID="${{ steps.gap_rerun.outputs.merged_task_id }}"
+          TASK_ID="$MERGED_TASK_ID"
           if [ -z "$TASK_ID" ]; then
-            TASK_ID=$(python3 - <<'PY'
+            TASK_ID=$(BRANCH="$BRANCH" python3 - <<'PY'
+          import os
           from value_investor.engineering_queue import task_id_from_branch
-          print(task_id_from_branch("${{ github.event.pull_request.head.ref }}") or "")
+          print(task_id_from_branch(os.environ.get("BRANCH", "")) or "")
           PY
             )
           fi
