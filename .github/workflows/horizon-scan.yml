@@ -111,7 +111,8 @@ jobs:
       - name: Run horizon scan
         if: steps.ready.outputs.skip != 'true'
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
           APPLY_DEFER: ${{ github.event.inputs.apply_defer || 'false' }}
           APPLY_FRAGMENTS: ${{ github.event.inputs.apply_fragments || 'false' }}
         run: |

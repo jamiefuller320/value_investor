@@ -34,7 +34,8 @@ jobs:
 
       - name: Preflight checks
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
           TICKER_API_KEY: ${{ secrets.TICKER_API_KEY }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -44,7 +45,8 @@ jobs:
 
       - name: Screen, build reports, and publish dashboard
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
           TICKER_API_KEY: ${{ secrets.TICKER_API_KEY }}
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
           COMPANIES_HOUSE_OCR: "1"

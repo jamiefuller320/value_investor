@@ -40,7 +40,8 @@ jobs:
 
       - name: Run memo backfill batch
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: |
           ftse-research-backfill --batch-size "${{ inputs.batch_size }}" -v
 

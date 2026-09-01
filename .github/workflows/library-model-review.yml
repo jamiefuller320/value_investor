@@ -33,7 +33,8 @@ jobs:
       - name: Review cheapest agent model
         id: review
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
           FORCE_REVIEW: ${{ github.event.inputs.force }}
         run: |
           mkdir -p docs/data/library

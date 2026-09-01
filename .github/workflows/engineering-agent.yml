@@ -106,7 +106,8 @@ jobs:
           github.event.inputs.compile_only != 'true'
           && github.event.inputs.pr_only != 'true'
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
           FORCE_RUN: ${{ github.event.inputs.force }}
         run: |
           ARGS="run --max-tasks 1 --defer-pr-open"

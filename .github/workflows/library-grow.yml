@@ -86,7 +86,8 @@ jobs:
         if: steps.plan.outputs.skip != 'true'
         id: ladder
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: |
           ROOT="docs/data/library"
           ARGS="--root $ROOT --policy $ROOT/policy.json ladder --max-tickers ${{ steps.plan.outputs.max_tickers }} --json"
