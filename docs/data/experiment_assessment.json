@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-01T14:52:45.119745+00:00",
+  "updated_at": "2026-09-01T15:02:36.323259+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -26,11 +26,11 @@
   },
   "summary": {
     "proposed": 1,
-    "continue": 7,
-    "recommend": 5,
-    "fail": 4,
+    "recommend": 0,
+    "continue": 12,
     "observing": 4,
-    "human_ack_pending": 5,
+    "fail": 4,
+    "human_ack_pending": 0,
     "total": 21
   },
   "experiments": [
@@ -294,15 +294,20 @@
       "title": "Raise `min_rebalance_notional_gbp` on rules and ai_judgment track `config.json` (e.g. 10 → 25 GBP) and run one weekly paper pass — expected learning value: test whether sub-notional rebalance intents ",
       "area": "paper_churn",
       "pipeline": "paper_learning_review",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
+      "status": "continue",
+      "source_status": "accepted",
+      "human_ack_required": false,
+      "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T15:02:30.320205+00:00",
+          "note": "Accept bounded Suite A paper probe: raise min_rebalance_notional_gbp on rules+ai_judgment (~10→25 GBP) for one weekly pass. Goal: test whether sub-notional reshuffles explain elevated lifetime trade_count vs momentum_grace. Not a permanent policy lock.",
+          "modifications": "Dual-suite: Suite A (3% stress) = relative/churn lab; Suite B (fair costs) = absolute excess. Do not promote A churn austerity into B policy without a fair-cost read. These acks approve observation/probes only — no live primary knob auto-apply."
         }
       },
       "evidence_path": "docs/data/paper_learning_tasks.json",
@@ -314,15 +319,20 @@
       "title": "Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer ",
       "area": "paper_churn",
       "pipeline": "paper_learning_review",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
+      "status": "continue",
+      "source_status": "accepted",
+      "human_ack_required": false,
+      "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T15:02:31.499668+00:00",
+          "note": "Accept extended buffered-hold counterfactual (exit_confirm_screens 1 vs 2) with lookback covering epoch starts 2026-08-12/26. 7d window tied at delta 0 with no full exits — longer replay needed before any guard change.",
+          "modifications": "Dual-suite: Suite A (3% stress) = relative/churn lab; Suite B (fair costs) = absolute excess. Do not promote A churn austerity into B policy without a fair-cost read. These acks approve observation/probes only — no live primary knob auto-apply."
         }
       },
       "evidence_path": "docs/data/paper_learning_tasks.json",
@@ -567,15 +577,20 @@
       "title": "Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
+      "status": "continue",
+      "source_status": "accepted",
+      "human_ack_required": false,
+      "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T15:02:32.709937+00:00",
+          "note": "Accept as continuation of ldr-20260823-02: keep forward-observing ai_judgment_exclusion_u4 vs primary; count cost-aware week-pairs toward filtered-cohort gate; no live promotion from archive ladder alpha.",
+          "modifications": "Dual-suite: Suite A (3% stress) = relative/churn lab; Suite B (fair costs) = absolute excess. Do not promote A churn austerity into B policy without a fair-cost read. These acks approve observation/probes only — no live primary knob auto-apply."
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json",
@@ -627,15 +642,20 @@
       "title": "Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs ",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
+      "status": "continue",
+      "source_status": "accepted",
+      "human_ack_required": false,
+      "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T15:02:33.895838+00:00",
+          "note": "Accept as continuation of ana-20260728-04: exit-shadow thickness dashboard remains hard pre-gate (≥10 closed exits with grace vs screen_rotation) before momentum_grace knob experiments. Still expect thin cohorts.",
+          "modifications": "Dual-suite: Suite A (3% stress) = relative/churn lab; Suite B (fair costs) = absolute excess. Do not promote A churn austerity into B policy without a fair-cost read. These acks approve observation/probes only — no live primary knob auto-apply."
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json",
@@ -647,73 +667,27 @@
       "title": "Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surfac",
       "area": "paper_churn",
       "pipeline": "learning_director",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
+      "status": "continue",
+      "source_status": "accepted",
+      "human_ack_required": false,
+      "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T15:02:35.110238+00:00",
+          "note": "Accept as director ack of plr-20260901-02 (same extended buffered-hold counterfactual). Duplicate human gate closed with the paper-learning probe.",
+          "modifications": "Dual-suite: Suite A (3% stress) = relative/churn lab; Suite B (fair costs) = absolute excess. Do not promote A churn austerity into B policy without a fair-cost read. These acks approve observation/probes only — no live primary knob auto-apply."
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json",
       "initiated_at": "2026-09-01T14:52:45.118999+00:00"
     }
   ],
-  "recommendations": [
-    {
-      "experiment_id": "plr-20260901-01",
-      "kind": "paper_learning_task",
-      "title": "Raise `min_rebalance_notional_gbp` on rules and ai_judgment track `config.json` (e.g. 10 → 25 GBP) and run one weekly paper pass — expected learning value: test whether sub-notional rebalance intents ",
-      "pipeline": "paper_learning_review",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "paper_churn"
-    },
-    {
-      "experiment_id": "plr-20260901-02",
-      "kind": "paper_learning_task",
-      "title": "Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer ",
-      "pipeline": "paper_learning_review",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "paper_churn"
-    },
-    {
-      "experiment_id": "ldr-20260901-01",
-      "kind": "learning_director_task",
-      "title": "Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u",
-      "pipeline": "learning_director",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "monitoring"
-    },
-    {
-      "experiment_id": "ldr-20260901-04",
-      "kind": "learning_director_task",
-      "title": "Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs ",
-      "pipeline": "learning_director",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "monitoring"
-    },
-    {
-      "experiment_id": "ldr-20260901-05",
-      "kind": "learning_director_task",
-      "title": "Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surfac",
-      "pipeline": "learning_director",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "paper_churn"
-    }
-  ],
+  "recommendations": [],
   "task_sync": {
     "updated": [
       "ana-20260728-01",
