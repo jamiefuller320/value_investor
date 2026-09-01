@@ -120,13 +120,38 @@ class LibraryIngestLoopResult:
 
 
 def _research_roots_for_market(library_root: Path, market_id: str) -> list[Path]:
+    """Return research roots to scan for a ticker's filing indexes.
+
+    Always include paths under ``library_root``. Only when ``library_root`` is the
+    committed default library do we also scan cwd ``docs/data/research`` (live
+    FTSE overlap). Hardcoding those cwd paths for *every* library_root leaked
+    committed PHIA.AS (etc.) into tmp_path unit tests and CI.
+    """
     library_root = Path(library_root)
-    return [
+    roots: list[Path] = [
         library_root / "markets",
-        Path("docs/data/library/markets"),
         screen_dir_for(library_root, market_id),
-        Path("docs/data/research"),
     ]
+    try:
+        if library_root.resolve() == Path(DEFAULT_LIBRARY_ROOT).resolve():
+            roots.extend(
+                [
+                    Path("docs/data/library/markets"),
+                    Path("docs/data/research"),
+                ]
+            )
+    except OSError:
+        pass
+    # Preserve order, drop duplicates.
+    seen: set[str] = set()
+    ordered: list[Path] = []
+    for root in roots:
+        key = str(root)
+        if key in seen:
+            continue
+        seen.add(key)
+        ordered.append(root)
+    return ordered
 
 
 def _canonical_filing_index_path(

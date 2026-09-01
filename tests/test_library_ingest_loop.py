@@ -78,7 +78,7 @@ def test_select_library_ingest_targets_prioritizes_unmeasured(tmp_path: Path):
 def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_path: Path):
     root = tmp_path / "library"
     market = "euro_depth"
-    ticker = "PHIA.AS"
+    ticker = "ZZCANON.AS"
 
     stale_dir = root / "markets" / "aex" / "screen" / "research" / ticker / "sources" / "filings"
     stale_dir.mkdir(parents=True)
@@ -109,7 +109,8 @@ def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_pat
 def test_filing_coverage_uses_best_fallback_when_canonical_missing(tmp_path: Path):
     root = tmp_path / "library"
     market = "euro_depth"
-    ticker = "PHIA.AS"
+    # Synthetic ticker — must not collide with committed docs/data/library names.
+    ticker = "ZZFALLBACK.AS"
 
     stale_dir = root / "markets" / "aex" / "screen" / "research" / ticker / "sources" / "filings"
     stale_dir.mkdir(parents=True)
