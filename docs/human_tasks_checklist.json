@@ -61,7 +61,7 @@
         {
           "id": "sunday-shadow-endurance",
           "title": "Review unified experiment assessment",
-          "summary": "Read experiment_assessment.json for continue/fail/recommend rows across calibration shadows, exclusion shadows, and open task queues. Drill into calibration_shadow_endurance.json for shadow detail.",
+          "summary": "Read experiment_assessment.json for continue/fail/recommend rows across calibration shadows, exclusion shadows, and open task queues. Ack monitoring/observe recommends via ftse-experiment-assess ack (clears human_ack_pending; does not apply knobs). Drill into calibration_shadow_endurance.json for shadow detail.",
           "automated": false,
           "doc_path": "docs/ops/experiment-assessment.md",
           "doc_anchor": "human-gate"
@@ -77,7 +77,7 @@
         {
           "id": "sunday-promote-knobs-gate",
           "title": "Promote knob priors only when gates pass",
-          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement — never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient — see fair-cost gate.",
+          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement \u2014 never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient \u2014 see fair-cost gate.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
@@ -202,7 +202,7 @@
         {
           "id": "adhoc-euro-ingest-cron-reimport",
           "title": "Re-import euro ingest cron slots after cadence change",
-          "summary": "After merging library ingest cadence changes, run import_cron_jobs --all (or euro/sprint/maintenance job keys) so cron-job.org gets Mon–Sat peak + daily off-peak slots and disables old weekday-only titles. Sprint ≤4×/day × 24; maintenance ≤4×/day × 62. GitHub schedule alone is best-effort.",
+          "summary": "After merging library ingest cadence changes, run import_cron_jobs --all (or euro/sprint/maintenance job keys) so cron-job.org gets Mon\u2013Sat peak + daily off-peak slots and disables old weekday-only titles. Sprint \u22644\u00d7/day \u00d7 24; maintenance \u22644\u00d7/day \u00d7 62. GitHub schedule alone is best-effort.",
           "automated": false,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"

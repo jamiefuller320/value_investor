@@ -209,3 +209,70 @@ def test_refresh_preserves_and_sets_initiated_at(tmp_path: Path):
     payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
     row = next(r for r in payload["experiments"] if r["experiment_id"] == "ai_judgment_calibrated")
     assert row["initiated_at"] == prior_time
+
+
+
+def test_ack_moves_recommend_monitoring_to_continue(tmp_path: Path):
+    from value_investor.experiment_assessment import ack_experiment_tasks
+
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "analysis_tasks.json").write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-ack-01",
+                        "area": "monitoring",
+                        "title": "Exit shadow thickness gate",
+                        "status": "proposed",
+                        "promote_to": "manual",
+                        "evidence": {},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (data_dir / "learning_director_tasks.json").write_text(
+        json.dumps({"tasks": []}), encoding="utf-8"
+    )
+    (data_dir / "paper_learning_tasks.json").write_text(
+        json.dumps({"tasks": []}), encoding="utf-8"
+    )
+    (paper_root / "learning_tracks_exit_timing.json").write_text(
+        json.dumps({"readiness": {"ready_for_probability_analysis": True}}),
+        encoding="utf-8",
+    )
+    (paper_root / "learning_tracks_exit_shadow.json").write_text(
+        json.dumps({"closed_total": 0, "tracks": {}}),
+        encoding="utf-8",
+    )
+
+    before = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    row = next(r for r in before["experiments"] if r["experiment_id"] == "ana-ack-01")
+    assert row["status"] == "recommend"
+    assert row["human_ack_required"] is True
+
+    result = ack_experiment_tasks(
+        data_dir,
+        ["ana-ack-01"],
+        note="Accept thickness pre-gate",
+        modifications="Dual-suite: keep as A/B pre-gate; no grace knobs until thick.",
+        refresh=True,
+        sync_task_status=False,
+    )
+    assert result["updated"] == ["ana-ack-01"]
+    assert "ana-ack-01" not in (result.get("recommendations") or [])
+
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    after = next(r for r in payload["experiments"] if r["experiment_id"] == "ana-ack-01")
+    assert after["status"] == "continue"
+    assert after["human_ack_required"] is False
+    assert after["task_status"] == "accepted"
+    assert payload["summary"]["human_ack_pending"] == 0
+    task = json.loads((data_dir / "analysis_tasks.json").read_text(encoding="utf-8"))["tasks"][0]
+    assert task["status"] == "accepted"
+    assert task["evidence"]["human_ack"]["note"] == "Accept thickness pre-gate"

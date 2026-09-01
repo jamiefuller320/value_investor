@@ -407,7 +407,7 @@ def _assess_task_row(
     tasks_path: Path,
 ) -> dict[str, Any]:
     status = str(task.get("status") or "proposed").strip().lower()
-    if status in {"promoted", "cancelled"}:
+    if status in {"promoted", "cancelled", "done"}:
         return {}
     area = str(task.get("area") or "").strip().lower()
     text = _task_text(task)
@@ -501,6 +501,20 @@ def _assess_task_row(
             "top_failed_families": ctx.loser_top_failed_families[:4],
         }
 
+    evidence = task.get("evidence") if isinstance(task.get("evidence"), dict) else {}
+    human_ack = evidence.get("human_ack") if isinstance(evidence.get("human_ack"), dict) else None
+    if human_ack:
+        forward_evidence["human_ack"] = {
+            "accepted_at": human_ack.get("accepted_at") or task.get("accepted_at"),
+            "note": human_ack.get("note"),
+            "modifications": human_ack.get("modifications"),
+        }
+
+    # Human-accepted monitoring / observe plans leave the recommend queue and
+    # continue as standing surveillance (do not re-page Sunday ack forever).
+    if status == "accepted" and assessment == "recommend":
+        assessment = "continue"
+
     return {
         "experiment_id": task.get("id"),
         "kind": kind,
@@ -515,6 +529,87 @@ def _assess_task_row(
         "forward_evidence": forward_evidence or None,
         "evidence_path": str(tasks_path),
     }
+
+
+def ack_experiment_tasks(
+    data_dir: Path,
+    experiment_ids: list[str],
+    *,
+    note: str,
+    modifications: str | None = None,
+    refresh: bool = True,
+    sync_task_status: bool = True,
+) -> dict[str, Any]:
+    """
+    Record human acceptance of recommend-gated task-queue experiments.
+
+    Sets task status to ``accepted`` and stores ack evidence. After refresh,
+    accepted monitoring/churn plans move from ``recommend`` → ``continue``.
+    Never applies knobs or opens engineering tasks.
+    """
+    data_dir = Path(data_dir)
+    wanted = {str(x).strip() for x in experiment_ids if str(x).strip()}
+    if not wanted:
+        raise ValueError("experiment_ids must be non-empty")
+    note_text = str(note or "").strip()
+    if not note_text:
+        raise ValueError("note is required for human ack")
+    mod_text = str(modifications or "").strip() or None
+    now = datetime.now(UTC).isoformat()
+
+    updated: list[str] = []
+    missing = set(wanted)
+    for filename, _, _kind, _ in TASK_STORES:
+        path = data_dir / filename
+        raw = _safe_read(path)
+        if not raw:
+            continue
+        changed = False
+        for task in raw.get("tasks") or []:
+            if not isinstance(task, dict):
+                continue
+            task_id = str(task.get("id") or "")
+            if task_id not in wanted:
+                continue
+            missing.discard(task_id)
+            if task.get("status") in {"cancelled", "promoted", "done"}:
+                continue
+            evidence = dict(task.get("evidence") or {})
+            evidence["human_ack"] = {
+                "accepted_at": now,
+                "note": note_text,
+                "modifications": mod_text,
+            }
+            evidence["assessment_recommend"] = False
+            task["evidence"] = evidence
+            task["status"] = "accepted"
+            task["accepted_at"] = now
+            task["accepted_note"] = note_text
+            if mod_text:
+                task["acceptance_modifications"] = mod_text
+            updated.append(task_id)
+            changed = True
+        if changed:
+            write_json(path, raw, compact=True)
+
+    result: dict[str, Any] = {
+        "updated": updated,
+        "missing": sorted(missing),
+        "accepted_at": now,
+        "note": note_text,
+        "modifications": mod_text,
+    }
+    if refresh:
+        payload = refresh_experiment_assessment(
+            data_dir,
+            sync_task_status=sync_task_status,
+        )
+        result["assessment_path"] = payload.get("path")
+        result["summary"] = payload.get("summary")
+        result["recommendations"] = [
+            row.get("experiment_id") for row in (payload.get("recommendations") or [])
+        ]
+    return result
 
 
 def _experiments_from_task_queues(ctx: AssessmentContext) -> list[dict[str, Any]]:
@@ -613,7 +708,9 @@ def _summary_counts(experiments: list[dict[str, Any]]) -> dict[str, int]:
         status = str(row.get("status") or "proposed")
         if status in counts:
             counts[status] += 1
-    counts["human_ack_pending"] = counts.get("recommend", 0)
+    counts["human_ack_pending"] = sum(
+        1 for row in experiments if row.get("human_ack_required")
+    )
     counts["total"] = len(experiments)
     return counts
 
@@ -782,6 +879,7 @@ __all__ = [
     "ASSESSMENT_FILENAME",
     "ASSESSMENT_STATUSES",
     "AssessmentContext",
+    "ack_experiment_tasks",
     "build_assessment_context",
     "map_endurance_status_to_assessment",
     "refresh_experiment_assessment",

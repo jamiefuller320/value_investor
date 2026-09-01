@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-01T08:29:18.958829+00:00",
+  "updated_at": "2026-09-01T14:52:45.119745+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -25,13 +25,13 @@
     "experimental_track_count": 1
   },
   "summary": {
-    "recommend": 4,
-    "fail": 4,
-    "continue": 2,
-    "observing": 3,
     "proposed": 1,
-    "human_ack_pending": 4,
-    "total": 14
+    "continue": 7,
+    "recommend": 5,
+    "fail": 4,
+    "observing": 4,
+    "human_ack_pending": 5,
+    "total": 21
   },
   "experiments": [
     {
@@ -251,15 +251,20 @@
       "title": "Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
       "area": "monitoring",
       "pipeline": "analysis_review",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
+      "status": "continue",
+      "source_status": "accepted",
+      "human_ack_required": false,
+      "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T14:52:40.301970+00:00",
+          "note": "Accept exit-shadow thickness dashboard as hard pre-gate before momentum_grace knobs on Suite A or B. Expect still thin; no grace experiments until ≥10 closed exits with grace vs rotation split.",
+          "modifications": "Dual-suite scoring: Suite A (3% stress) = relative AI-vs-rules / churn-survival lab; Suite B (fair T212 costs) = absolute excess. Do not copy Suite A conviction floors into Suite B policy. Score ldr-20260823-01 as Suite A post-apply surveillance only (relative spread + stress cost_drag/trade_count). Score ldr-20260823-04 flips for mechanism (A: churn survival; B: whether flip destroyed edge)."
         }
       },
       "evidence_path": "docs/data/analysis_tasks.json"
@@ -284,20 +289,146 @@
       "evidence_path": "docs/data/analysis_tasks.json"
     },
     {
+      "experiment_id": "plr-20260901-01",
+      "kind": "paper_learning_task",
+      "title": "Raise `min_rebalance_notional_gbp` on rules and ai_judgment track `config.json` (e.g. 10 → 25 GBP) and run one weekly paper pass — expected learning value: test whether sub-notional rebalance intents ",
+      "area": "paper_churn",
+      "pipeline": "paper_learning_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        }
+      },
+      "evidence_path": "docs/data/paper_learning_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
+    },
+    {
+      "experiment_id": "plr-20260901-02",
+      "kind": "paper_learning_task",
+      "title": "Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer ",
+      "area": "paper_churn",
+      "pipeline": "paper_learning_review",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        }
+      },
+      "evidence_path": "docs/data/paper_learning_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
+    },
+    {
+      "experiment_id": "plr-20260901-03",
+      "kind": "paper_learning_task",
+      "title": "Manual replay of ai_judgment_calibrated proposed knobs (`min_conviction=0.05`, `max_positions=4`) already sketched in `learning_tracks_review` counterfactual — expected learning value: log replay show",
+      "area": "offline_sim",
+      "pipeline": "paper_learning_review",
+      "status": "continue",
+      "source_status": "proposed",
+      "human_ack_required": false,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "trajectory": {
+          "labeled_event_count": 336,
+          "model_focus_candidates": [
+            {
+              "kind": "transition_key",
+              "key": "hold->buy",
+              "horizon": "1w",
+              "count": 20,
+              "positive_rate": 0.25,
+              "mean_forward_return": -0.008424,
+              "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "buy->strong_buy",
+              "horizon": "1w",
+              "count": 12,
+              "positive_rate": 0.25,
+              "mean_forward_return": -0.00492,
+              "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "transition_key",
+              "key": "signal_unchanged",
+              "horizon": "1w",
+              "count": 239,
+              "positive_rate": 0.3431,
+              "mean_forward_return": -0.002598,
+              "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+            },
+            {
+              "kind": "horizon_hit_rate",
+              "key": "1w",
+              "horizon": "1w",
+              "count": 266,
+              "prediction_hit_rate": 0.406,
+              "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
+            }
+          ]
+        },
+        "archive": {
+          "history_run_count": 11,
+          "backtest_run_count": 11,
+          "simulation_ready": true
+        },
+        "loser_cards": {
+          "top_failed_families": [
+            [
+              "quality",
+              37
+            ],
+            [
+              "dividend",
+              35
+            ],
+            [
+              "garp",
+              28
+            ],
+            [
+              "risk",
+              21
+            ]
+          ]
+        }
+      },
+      "evidence_path": "docs/data/paper_learning_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
+    },
+    {
       "experiment_id": "ldr-20260823-01",
       "kind": "learning_director_task",
       "title": "Epoch-zero dashboard for min_conviction 0.45 apply (2026-08-21) — expected learning value: first trajectory read on whether the opinion-flip reduced `trade_count`/`cost_drag` without eroding the +9.16",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "recommend",
+      "status": "continue",
       "source_status": "accepted",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T14:52:41.509121+00:00",
+          "note": "Accept epoch-zero watch on Suite A after min_conviction raise. Pass = relative control spread + stress churn under control. Explicitly NOT a Suite B / deployable conviction policy lock.",
+          "modifications": "Dual-suite scoring: Suite A (3% stress) = relative AI-vs-rules / churn-survival lab; Suite B (fair T212 costs) = absolute excess. Do not copy Suite A conviction floors into Suite B policy. Score ldr-20260823-01 as Suite A post-apply surveillance only (relative spread + stress cost_drag/trade_count). Score ldr-20260823-04 flips for mechanism (A: churn survival; B: whether flip destroyed edge)."
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
@@ -308,15 +439,20 @@
       "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "recommend",
+      "status": "continue",
       "source_status": "accepted",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T14:52:42.718320+00:00",
+          "note": "Accept continue forward-observe exclusion_u4 vs primary; no live promotion from archive ladder alpha. Suite B is a later validation surface, not a substitute for this A shadow yet.",
+          "modifications": "Dual-suite scoring: Suite A (3% stress) = relative AI-vs-rules / churn-survival lab; Suite B (fair T212 costs) = absolute excess. Do not copy Suite A conviction floors into Suite B policy. Score ldr-20260823-01 as Suite A post-apply surveillance only (relative spread + stress cost_drag/trade_count). Score ldr-20260823-04 flips for mechanism (A: churn survival; B: whether flip destroyed edge)."
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
@@ -407,10 +543,34 @@
       "title": "IMB.L adjacent buy→sell flip audit (rules + ai_judgment) — expected learning value: isolate whether conviction exits or screen-rotation drove the shared flip (`paper_learning_review.sections.per_track",
       "area": "paper_churn",
       "pipeline": "learning_director",
-      "status": "recommend",
+      "status": "continue",
       "source_status": "accepted",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "task_status": "accepted",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        },
+        "human_ack": {
+          "accepted_at": "2026-09-01T14:52:43.909866+00:00",
+          "note": "Accept IMB.L adjacent flip forensic audit (conviction exit vs screen-rotation) before guard/knob changes. Mechanistic classification; Suite A cares churn survival, Suite B cares whether the flip destroyed edge.",
+          "modifications": "Dual-suite scoring: Suite A (3% stress) = relative AI-vs-rules / churn-survival lab; Suite B (fair T212 costs) = absolute excess. Do not copy Suite A conviction floors into Suite B policy. Score ldr-20260823-01 as Suite A post-apply surveillance only (relative spread + stress cost_drag/trade_count). Score ldr-20260823-04 flips for mechanism (A: churn survival; B: whether flip destroyed edge)."
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json"
+    },
+    {
+      "experiment_id": "ldr-20260901-01",
+      "kind": "learning_director_task",
+      "title": "Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u",
+      "area": "monitoring",
+      "pipeline": "learning_director",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
@@ -418,18 +578,19 @@
           "exit_timing_ready": true
         }
       },
-      "evidence_path": "docs/data/learning_director_tasks.json"
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
     },
     {
-      "experiment_id": "ldr-20260823-05",
+      "experiment_id": "ldr-20260901-02",
       "kind": "learning_director_task",
-      "title": "Retire/defer one overlapping paper_knobs slot (ana-20260728-02 or ana-20260728-03) — expected learning value: restore compliance with `vision.complexity_budget.max_parallel_open_experiments` 5 while p",
+      "title": "Ensure scoring experiment queued for hold->buy and signal_unchanged transition keys — expected learning value: convert `analysis_review.sections.proposed_experiments` item 1 (offline conviction-timing",
       "area": "analysis",
       "pipeline": "learning_director",
       "status": "observing",
-      "source_status": "done",
+      "source_status": "proposed",
       "human_ack_required": false,
-      "task_status": "done",
+      "task_status": "proposed",
       "promote_to": "manual",
       "forward_evidence": {
         "archive": {
@@ -437,24 +598,95 @@
           "backtest_run_count": 11
         }
       },
-      "evidence_path": "docs/data/learning_director_tasks.json"
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
+    },
+    {
+      "experiment_id": "ldr-20260901-03",
+      "kind": "learning_director_task",
+      "title": "Ensure scoring experiment queued for quality-family composite gate on avoid cohort — expected learning value: convert `analysis_review.sections.proposed_experiments` item 2 into tracked task; tests fa",
+      "area": "analysis",
+      "pipeline": "learning_director",
+      "status": "observing",
+      "source_status": "proposed",
+      "human_ack_required": false,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "archive": {
+          "history_run_count": 11,
+          "backtest_run_count": 11
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
+    },
+    {
+      "experiment_id": "ldr-20260901-04",
+      "kind": "learning_director_task",
+      "title": "Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs ",
+      "area": "monitoring",
+      "pipeline": "learning_director",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
+    },
+    {
+      "experiment_id": "ldr-20260901-05",
+      "kind": "learning_director_task",
+      "title": "Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surfac",
+      "area": "paper_churn",
+      "pipeline": "learning_director",
+      "status": "recommend",
+      "source_status": "proposed",
+      "human_ack_required": true,
+      "task_status": "proposed",
+      "promote_to": "manual",
+      "forward_evidence": {
+        "exit_shadow": {
+          "closed_total": 0,
+          "exit_timing_ready": true
+        }
+      },
+      "evidence_path": "docs/data/learning_director_tasks.json",
+      "initiated_at": "2026-09-01T14:52:45.118999+00:00"
     }
   ],
   "recommendations": [
     {
-      "experiment_id": "ana-20260728-04",
-      "kind": "analysis_task",
-      "title": "Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
-      "pipeline": "analysis_review",
+      "experiment_id": "plr-20260901-01",
+      "kind": "paper_learning_task",
+      "title": "Raise `min_rebalance_notional_gbp` on rules and ai_judgment track `config.json` (e.g. 10 → 25 GBP) and run one weekly paper pass — expected learning value: test whether sub-notional rebalance intents ",
+      "pipeline": "paper_learning_review",
       "track_id": null,
       "gate_marks": null,
       "gate_excess_after_costs": null,
-      "area": "monitoring"
+      "area": "paper_churn"
     },
     {
-      "experiment_id": "ldr-20260823-01",
+      "experiment_id": "plr-20260901-02",
+      "kind": "paper_learning_task",
+      "title": "Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer ",
+      "pipeline": "paper_learning_review",
+      "track_id": null,
+      "gate_marks": null,
+      "gate_excess_after_costs": null,
+      "area": "paper_churn"
+    },
+    {
+      "experiment_id": "ldr-20260901-01",
       "kind": "learning_director_task",
-      "title": "Epoch-zero dashboard for min_conviction 0.45 apply (2026-08-21) — expected learning value: first trajectory read on whether the opinion-flip reduced `trade_count`/`cost_drag` without eroding the +9.16",
+      "title": "Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u",
       "pipeline": "learning_director",
       "track_id": null,
       "gate_marks": null,
@@ -462,9 +694,9 @@
       "area": "monitoring"
     },
     {
-      "experiment_id": "ldr-20260823-02",
+      "experiment_id": "ldr-20260901-04",
       "kind": "learning_director_task",
-      "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
+      "title": "Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs ",
       "pipeline": "learning_director",
       "track_id": null,
       "gate_marks": null,
@@ -472,9 +704,9 @@
       "area": "monitoring"
     },
     {
-      "experiment_id": "ldr-20260823-04",
+      "experiment_id": "ldr-20260901-05",
       "kind": "learning_director_task",
-      "title": "IMB.L adjacent buy→sell flip audit (rules + ai_judgment) — expected learning value: isolate whether conviction exits or screen-rotation drove the shared flip (`paper_learning_review.sections.per_track",
+      "title": "Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surfac",
       "pipeline": "learning_director",
       "track_id": null,
       "gate_marks": null,
@@ -486,16 +718,22 @@
     "updated": [
       "ana-20260728-01",
       "ana-20260728-02",
-      "ana-20260728-05",
-      "ldr-20260823-03",
-      "ldr-20260823-05"
-    ],
-    "skipped": [
       "ana-20260728-04",
+      "ana-20260728-05",
+      "plr-20260901-01",
+      "plr-20260901-02",
+      "plr-20260901-03",
       "ldr-20260823-01",
       "ldr-20260823-02",
-      "ldr-20260823-04"
-    ]
+      "ldr-20260823-03",
+      "ldr-20260823-04",
+      "ldr-20260901-01",
+      "ldr-20260901-02",
+      "ldr-20260901-03",
+      "ldr-20260901-04",
+      "ldr-20260901-05"
+    ],
+    "skipped": []
   },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",

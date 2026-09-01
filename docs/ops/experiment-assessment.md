@@ -28,6 +28,14 @@ ftse-experiment-assess refresh \
 
 # Inspect committed ledger (slim JSON for agents)
 ftse-experiment-assess status --data-dir docs/data --json
+
+# Human-ack recommend-gated task experiments (monitoring / observe plans)
+# Moves accepted monitoring/churn plans recommend → continue (clears human_ack_pending)
+ftse-experiment-assess ack \
+  --data-dir docs/data \
+  --ids ana-20260728-04,ldr-20260823-01 \
+  --note "Accept as standing surveillance" \
+  --modifications "Optional dual-suite scoring notes"
 ```
 
 `--sync-task-status` writes assessment evidence back into task JSON stores:
@@ -78,6 +86,9 @@ When `recommendations` is non-empty:
 2. For calibration shadows — follow [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate)
 3. For exclusion shadows — follow [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate)
 4. For scoring tasks with `assessment_recommend` — triage via `ftse-analysis-review promote` (human only)
-5. Do **not** auto-apply — survivors are priors for refinement only
+5. For monitoring / paper_churn observe plans — `ftse-experiment-assess ack --ids … --note …` (optional `--modifications`). Accepted plans become `continue` standing surveillance and drop off `human_ack_pending`; they do **not** apply knobs
+6. Do **not** auto-apply — survivors are priors for refinement only
+
+Dual-suite note: Suite A (3% stress) scores relative AI-vs-rules / churn survival; Suite B (fair costs) scores absolute excess. Do not treat Suite A conviction floors as Suite B policy when acking conviction or churn recommendations.
 
 See also: [analysis-review.md](analysis-review.md), [learning-director-vision.md](learning-director-vision.md).

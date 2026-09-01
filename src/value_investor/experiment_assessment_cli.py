@@ -9,6 +9,7 @@ from pathlib import Path
 
 from value_investor.experiment_assessment import (
     ASSESSMENT_FILENAME,
+    ack_experiment_tasks,
     refresh_experiment_assessment,
     slim_experiment_assessment_for_review,
 )
@@ -71,6 +72,48 @@ def _cmd_status(args: argparse.Namespace) -> int:
     return 0
 
 
+
+def _cmd_ack(args: argparse.Namespace) -> int:
+    ids = list(args.experiment_id or [])
+    if args.ids:
+        ids.extend(x.strip() for x in str(args.ids).split(",") if x.strip())
+    # de-dupe preserve order
+    seen: set[str] = set()
+    experiment_ids: list[str] = []
+    for item in ids:
+        if item not in seen:
+            seen.add(item)
+            experiment_ids.append(item)
+    if not experiment_ids:
+        print("Provide --experiment-id and/or --ids", file=sys.stderr)
+        return 2
+    result = ack_experiment_tasks(
+        Path(args.data_dir),
+        experiment_ids,
+        note=str(args.note),
+        modifications=args.modifications,
+        refresh=not args.no_refresh,
+        sync_task_status=bool(args.sync_task_status),
+    )
+    if args.json:
+        _print_json(result)
+        return 0 if not result.get("missing") else 1
+    print(f"Acked {len(result.get('updated') or [])} task(s): {', '.join(result.get('updated') or []) or '(none)'}")
+    if result.get("missing"):
+        print(f"Missing ids: {', '.join(result['missing'])}", file=sys.stderr)
+    summary = result.get("summary") or {}
+    if summary:
+        print(
+            f"Ledger summary: recommend={summary.get('recommend', 0)} "
+            f"human_ack_pending={summary.get('human_ack_pending', 0)} "
+            f"continue={summary.get('continue', 0)}"
+        )
+    for exp_id in result.get("recommendations") or []:
+        print(f"  still RECOMMEND {exp_id}")
+    return 0 if not result.get("missing") else 1
+
+
+
 def main(argv: list[str] | None = None) -> int:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--data-dir", default=str(DEFAULT_DATA_DIR))
@@ -93,6 +136,47 @@ def main(argv: list[str] | None = None) -> int:
 
     status_p = sub.add_parser("status", parents=[common], help="Show committed assessment ledger")
     status_p.set_defaults(func=_cmd_status)
+
+    ack_p = sub.add_parser(
+        "ack",
+        parents=[common],
+        help="Human-ack recommend-gated task experiments (monitoring/observe plans)",
+    )
+    ack_p.add_argument(
+        "--experiment-id",
+        action="append",
+        default=[],
+        help="Experiment/task id to accept (repeatable)",
+    )
+    ack_p.add_argument(
+        "--ids",
+        default="",
+        help="Comma-separated experiment ids (alternative to repeating --experiment-id)",
+    )
+    ack_p.add_argument("--note", required=True, help="Why this recommendation is accepted")
+    ack_p.add_argument(
+        "--modifications",
+        default=None,
+        help="Optional acceptance modifications (e.g. dual-suite scoring rules)",
+    )
+    ack_p.add_argument(
+        "--no-refresh",
+        action="store_true",
+        help="Write task ack only; do not rebuild experiment_assessment.json",
+    )
+    ack_p.add_argument(
+        "--sync-task-status",
+        action="store_true",
+        default=True,
+        help="After refresh, sync assessment evidence into task stores (default on)",
+    )
+    ack_p.add_argument(
+        "--no-sync-task-status",
+        action="store_false",
+        dest="sync_task_status",
+        help="Skip task-store evidence sync after refresh",
+    )
+    ack_p.set_defaults(func=_cmd_ack)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
