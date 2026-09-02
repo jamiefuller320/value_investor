@@ -21,6 +21,9 @@ from value_investor.scoring.cash_conversion_overlay import (
 )
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
+from value_investor.scoring.earnings_growth_overlay import (
+    enrich_signals_with_earnings_growth_overlay,
+)
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
@@ -1009,6 +1012,27 @@ def test_enrich_signals_with_earnings_basis_overlay_falls_back_to_yahoo_without_
     assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
+
+
+def test_enrich_signals_with_earnings_growth_overlay_exports_lynch_peg_and_bps_warning():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "signal": "strong_buy",
+                "trailing_pe": 11.6,
+                "earnings_growth": 0.045,
+                "basic_eps_growth_pct": 0.004,
+                "adjusted_eps_growth_pct": 0.045,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_earnings_growth_overlay(signals)
+
+    assert bool(enriched.iloc[0]["earnings_growth_bps_divergence_warning"]) is True
+    assert enriched.iloc[0]["lynch_peg_model"] == pytest.approx(11.6 / (0.045 * 100))
+    assert enriched.iloc[0]["lynch_peg_statutory"] == pytest.approx(11.6 / (0.004 * 100))
 
 
 def _fgp_style_research_tree(tmp_path: Path) -> None:

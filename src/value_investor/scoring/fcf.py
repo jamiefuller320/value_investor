@@ -125,6 +125,7 @@ FCF_UNIVERSE_DIVERGENCE_THRESHOLD = 0.15
 FCF_DEFINITION_DIVERGENCE_THRESHOLD = 0.15
 FCF_YIELD_COMPANY_TOLERANCE = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
+EARNINGS_GROWTH_BPS_DIVERGENCE_THRESHOLD = 0.03
 FCF_YIELD_MODEL_ID = "fcf_yield"
 _FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
 
@@ -467,6 +468,40 @@ def earnings_growth_signs_diverge(
     if statutory == 0 or adjusted == 0:
         return False
     return (statutory > 0) != (adjusted > 0)
+
+
+def earnings_growth_bps_diverge(
+    statutory_growth: float | None,
+    core_growth: float | None,
+    *,
+    threshold: float = EARNINGS_GROWTH_BPS_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """True when statutory and core/adjusted filing growth differ by more than threshold."""
+    if statutory_growth is None or core_growth is None:
+        return False
+    if isinstance(statutory_growth, float) and pd.isna(statutory_growth):
+        return False
+    if isinstance(core_growth, float) and pd.isna(core_growth):
+        return False
+    return abs(float(statutory_growth) - float(core_growth)) > threshold
+
+
+def compute_lynch_peg(
+    trailing_pe: float | None,
+    earnings_growth: float | None,
+) -> float | None:
+    """Peter Lynch PEG ratio from P/E and decimal earnings growth."""
+    if trailing_pe is None or earnings_growth is None:
+        return None
+    if isinstance(trailing_pe, float) and pd.isna(trailing_pe):
+        return None
+    if isinstance(earnings_growth, float) and pd.isna(earnings_growth):
+        return None
+    pe = float(trailing_pe)
+    growth = float(earnings_growth)
+    if pe <= 0 or growth <= 0:
+        return None
+    return pe / (growth * 100)
 
 
 def _filings_index_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
