@@ -1,112 +1,96 @@
 # Alfa Financial Software Holdings PLC (ALFA.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:45:43.738692+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T11:20:18.050832+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Alfa is a niche, mission-critical enterprise software provider to global asset finance — automotive, equipment and wholesale lending — with a durable competitive position, high operating margins (~32%), and accelerating subscription revenue as SaaS adoption deepens. FY2025 revenue reached £126.7m (+15%) with operating profit of £40.1m (+17%), 97% free cash flow conversion, and £26.4m cash with no bank debt; the capital-return model (progressive ordinary plus recurring special dividends) supports the screen’s quality, dividend and FCF-yield passes. Valuation looks reasonable on earnings (screen P/E ~16x) but less so on book (P/B ~9x), reflecting intangible-heavy accounts and limited tangible equity. The central debate is whether subscription mix, TCV momentum and customer stickiness (NRR 109–112%) justify a quality-premium multiple, or whether FX headwinds (Americas ~45% of revenue), AI disruption fears, and lumpy implementation revenue cap re-rating.
+Alfa develops mission-critical asset-finance software (Alfa Systems) for OEMs, banks and independents globally, with a durable moat in complex implementations and exceptionally high customer retention. The quantitative screen flags a buy on quality, cash generation, GARP and dividend characteristics (P/E ~16, ROE ~62%, FCF yield ~5%, PEG ~0.9, Piotroski 8/9), though it fails classic deep-value screens owing to a high P/B (~9.3). FY2025 RNS results show revenue up 15% to £126.7m, operating profit up 17% to £40.1m (31.6% margin), 97% cash conversion and £26.4m cash with no bank debt, supporting a capital-return model of progressive ordinary dividends plus specials. The central debate is whether subscription-led compounding and TCV visibility justify the premium book multiple, or whether FX headwinds (Americas ~45% of revenue), AI disruption narratives and insider/governance signals cap upside.
 
 ## INVESTMENT THESIS
-The quantitative screen rates ALFA.L as **buy** (10/22 models passed; composite score 61%; families: cheapness, quality, dividend, GARP, risk). That profile fits the filing narrative: a capital-light, cash-generative software franchise with improving fundamentals.
+For a value-oriented investor, ALFA is better framed as **quality-at-a-reasonable-price** than deep value. The screen passes FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Piotroski F-Score, Earnings Quality and Financial Health — five factor families (cheapness, quality, dividend, GARP, risk) — which aligns with a business transitioning from licence-heavy revenue to recurring SaaS.
 
-**Business quality.** Alfa Systems is embedded “heart and lungs” software for regulated lenders; since cloud-native v5 launched in 2010, no implemented modern customer has migrated to a rival (per FY2025 results). Net revenue retention was 109% in FY2025 and 112% in H1 2025. Customer concentration has materially improved — top five customers ~33% of FY2025 revenue vs 61% in 2019; largest customer ~9%.
+Filings corroborate the screen’s quality bias:
 
-**Growth engine.** Subscription revenue grew 16% to £43.6m in FY2025 (34% of total revenue); ARR reached £43.9m. TCV was £227.5m at FY2025 year-end (+3% YoY; +34% in FY2024 on record wins). FY2026 trading updates show continued momentum: TCV £247.0m at 30 Jun 2026 (+17% YoY per H1 2026 trading update).
+- **Recurring economics:** Subscription revenue grew 16% to £43.6m in FY2025 (34% of total); NRR 109%; ARR £43.9m. Since the 2010 cloud-native launch, only two post-go-live customer losses (one acquired by another Alfa client).
+- **Pipeline and visibility:** TCV £227.5m; next-12-month TCV £98.2m (+3% YoY). Late-stage pipeline of 10 prospects at FY2025 year-end, eight preferred supplier.
+- **Cash and balance sheet:** Net cash, negligible bank debt (lease liabilities only under IFRS 16); operating FCF conversion 97% in FY2025 vs 89% in FY2024.
+- **Capital discipline:** FY2025 dividends paid £26.0m (ordinary + specials) while cash still rose £5.9m to £26.4m.
 
-**Financial strength.** Operating margin ~31.6% (FY2025). Operating free cash flow conversion 97% (FY2025) vs 89% (FY2024). Balance sheet: total equity £51.7m, cash £26.4m, total liabilities £39.0m; no bank borrowings (only IFRS 16 lease liabilities). Product investment ~£37.7m capitalised in FY2025.
-
-**Value screen alignment.** Passes on FCF Yield (~6.6% per screen), Piotroski F-Score, Earnings Quality, Financial Health, Economic Moat and Quality Value are consistent with filing evidence of strong cash conversion, minimal leverage and high returns on equity (screen ROE 61.5%). Neff PEGY (0.17) and ~5% revenue growth (screen) align with mid-teens constant-currency growth in recent periods. **Caveat:** the screen’s reported dividend yield of 90.0% is inconsistent with filing dividend data (FY2025 proposed ordinary 1.5p + special 3.1p per share) and should be treated as a metric error; dividend quality is better assessed from RNS payout history (c.£26.0m total dividends paid in FY2025).
-
-**Why buy for a value investor.** This is not deep cyclical value — it is profitable, moat-adjacent vertical software trading at a moderate earnings multiple, with a shareholder-friendly cash-return policy and identifiable SaaS transition upside. The screen’s multi-factor pass set captures cheapness on cash earnings and quality, not distressed asset value.
+The screen’s Graham/Schloss/Deep Value failures reflect structural reality: intangible-heavy software at P/B 9.3 is not a net-net. The buy case rests on **sustainable ROIC, subscription mix shift and special-dividend optionality**, not on asset-based cheapness.
 
 ## FINANCIAL REVIEW
-*Primary source: RNS filing bodies. Yahoo `financials_annual.json` used only where noted for cross-check.*
+*Primary source: RNS filing bodies. Figures in £m unless stated.*
 
-### Annual results
+**Annual trend (FY2023–FY2025)**
 
-| Metric | FY2025 (31 Dec 2025) | FY2024 (31 Dec 2024) | FY2023 (filings) |
-|--------|----------------------|----------------------|------------------|
-| Revenue | £126.7m (+15%) | £109.9m (+8%) | £102.0m |
-| Operating profit | £40.1m (+17%); margin 31.6% | £34.3m (+14%); margin 31.2% | £30.1m |
-| Profit before tax | £40.1m (+18%) | £34.1m (+15%) | £29.6m |
-| Profit after tax | £30.1m (+18%) | £25.6m (+9%) | £23.5m |
-| Basic EPS | 10.19p (+17%) | 8.68p (+9%) | 7.99p |
-| Cash | £26.4m | £20.5m | £21.8m |
-| Total equity | £51.7m | £46.2m | £42.0m |
-| OCF conversion | 97% | 89% | 115% |
-| TCV | £227.5m (+3%) | £221.3m (+34%) | £165.3m |
-| NRR | 109% | 103% | — |
+| Metric | FY2023 | FY2024 | FY2025 | Source |
+|--------|--------|--------|--------|--------|
+| Revenue | 102.0 | 109.9 (+8%) | 126.7 (+15%) | FY2024 & FY2025 full-year RNS |
+| Operating profit | 30.1 | 34.3 (+14%) | 40.1 (+17%) | As above |
+| Operating margin | 29.5% | 31.2% | 31.6% | As above |
+| PBT | 29.6 | 34.1 (+15%) | 40.1 (+18%) | As above |
+| Basic EPS | 7.99p | 8.68p (+9%) | 10.19p (+17%) | As above |
+| Cash | 21.8 | 20.5 | 26.4 | As above |
+| OCF conversion | 115% | 89% | 97% | As above |
+| TCV | 165.3 | 221.3 (+34%) | 227.5 (+3%) | As above |
 
-*Source: Full Year Results RNS, 12 Mar 2026 (FY2025) and 13 Mar 2025 (FY2024).*
+FY2024 was a breakthrough year (record eight customer wins, Alfa Systems 6 launch, SaaS-only sales). FY2025 delivered acceleration: constant-currency revenue +17%; Americas +23%, now 45% of revenue. Gross margin dipped slightly to 63.7% (64.5% in FY2024) as capitalised development remained flat as a percentage of revenue. Product investment ~£37.7m annually.
 
-**Revenue mix (FY2025):** Subscription £43.6m (+16%), Delivery £63.5m (+15%), Software Engineering £19.6m (+13%). Americas 45% of revenue (FY2025) vs 42% (FY2024), creating reported-growth FX headwind at current rates.
+**Revenue mix (FY2025):** Subscription £43.6m (+16%); Delivery £63.5m (+15%); Software Engineering £19.6m (+13%). Customer concentration continues to fall: top five customers 33% of revenue (61% in 2019); largest customer 9%.
 
-**Cash flow (FY2025):** Cash from operations £44.5m; net operating cash £37.2m; capex £5.4m; dividends paid £26.0m. Yahoo FCF £31.8m (FY2025) and £22.8m (FY2024) are directionally consistent with filing conversion metrics; primary figures from filings.
+**Interim coverage**
 
-**Capital return (FY2025):** Proposed ordinary dividend 1.5p (+7%); declared special 3.1p (+29%). Total shareholder return via dividends remains a core capital allocation pillar.
+- **H1 2025 Half Year Report** (4 September 2025): Revenue £62.5m (+20%, +22% CC); operating profit £21.6m (35% margin); ARR £41.6m (+16%); NRR 112%; cash £23.9m; TCV £211m (+9%). Special dividend declared: 5.0p (£14.8m). Management guided to lower H2 Software Engineering revenue and higher headcount investment, but full-year expectations unchanged.
+- **H1 2026 Trading Update** (30 July 2026): Revenue £65.1m (+4% YoY); subscription +14% to £24.1m; TCV £247.0m (+17%); trading in line with full-year targets. One-off workforce restructuring costs £1.6m (H2 savings expected). **Gap:** No audited H1 2026 half-year report is present in the filings index — only this trading update. H1 2025 remains the latest full interim accounts pack.
 
-**FY2023 baseline:** Revenue £102.0m, operating profit £30.1m, PAT £23.5m — per FY2024 results comparative table.
+**Cash flow and dividends (FY2025 filing):** Cash from operations £44.5m; capex £5.4m; operating FCF £39.0m. Dividends paid £26.0m. Proposed FY2025 ordinary dividend 1.5p (+7%); special 3.1p (+29%). FCF/dividend coverage on a net basis is ~1.2x per the screen — adequate but not abundant once specials are included.
 
-### Interim results
+**Balance sheet (31 Dec 2025, filing):** Total assets £90.7m; equity £51.7m; total debt £9.3m (capital leases only). Goodwill £24.7m; other intangibles £12.5m. Trade receivables tightly controlled (£0.7m overdue, all within 30 days).
 
-**H1 2025 (audited interim report, 4 Sep 2025)** — full body available:
+**Going concern:** FY2025 and H1 2025 filings affirm going concern; directors state sufficient cash under downside stress scenarios; auditors issued unqualified opinions with no section 498 emphasis.
 
-| Metric | H1 2025 | H1 2024 | Change |
-|--------|---------|---------|--------|
-| Revenue | £62.5m | £52.3m | +20% (+22% CC) |
-| Operating profit | £21.6m | £16.2m | +33%; margin 35% |
-| Profit after tax | £15.9m | £11.9m | +34% |
-| Basic EPS | 5.38p | 4.05p | +33% |
-| Cash | £23.9m | — | vs £20.5m at FY2024 YE |
-| ARR | £41.6m | £35.8m | +16% |
-| NRR | 112% | 106% | — |
-| TCV | £211m | £193m | +9% |
-| OCF conversion | 88% | 95% | in line with 80–90% H1 guidance |
-
-Special dividend declared: 5.0p (£14.8m). H1 margin was elevated by +72% Software Engineering revenue, with management guiding normalisation in H2.
-
-**H1 2026:** No formal interim report in the filings index as of 13 Aug 2026. **H1 Trading update (30 Jul 2026)** provides unaudited H1 revenue £65.1m (+4%; +5% CC): Subscription £24.1m (+14%), Delivery £32.4m (+5%), Software Engineering £8.6m (−17%); TCV £247.0m (+17% YoY). Full H1 2026 results expected 3 Sep 2026 per RNS.
-
-### Trend assessment
-
-Three-year revenue CAGR from filings: ~11% (£102.0m → £126.7m). Operating profit growth has tracked revenue with modest margin expansion. Subscription mix and NRR support recurring-quality improvement, though Delivery and Software Engineering remain lumpy (percentage-of-completion accounting; H1/H2 phasing visible in FY2024–FY2025). Cash conversion normalised to 89–97% after FY2023 timing benefit. Balance sheet strengthened; no debt covenant exposure identified — going concern affirmed with FRC stress testing (FY2025 and H1 2025 filings).
-
-**Gaps:** H1 2026 audited interim not yet filed. Companies House statutory accounts in index provide supplementary annual filings but RNS results are used as primary. One indexed “interim” body (`bdd87881745f550b`) is misattributed to RWS Holdings and excluded.
+*Note on screen yield:* The screening snapshot reports dividend yield 89%, which is inconsistent with filing dividend levels (~4–5p total per share annually including specials vs share price ~£1.55–£1.65). Treat screen yield as unreliable; rely on filing dividend disclosures.
 
 ## RISKS AND RED FLAGS
-**Macro and cyclical.** Filings cite socio-economic and geo-political risk as “Major/possible”: customer IT spending could soften in downturns, though asset finance is described as relatively resilient. Americas revenue share (~45%) creates **FX translation headwind** on reported GBP growth.
+**Macro and cyclical:** Filings cite socio-economic/geopolitical risk and US trade/tariff exposure; a new principal risk was added in H1 2025 for potential US taxes on software/services supplied from outside the US. Asset finance demand has held up, but customer implementation delays were noted in the H1 2026 trading update.
 
-**Competitive and technology.** Competition risk rated Major/possible. AI is framed by management as an enabler, not an existential threat (contract-volume pricing, domain complexity, regulated workflows), but sector commentary (e.g. Investors’ Chronicle, Feb 2026) highlights industry-wide AI anxiety. Generic platform vendors and internal IT remain competitive threats.
+**FX:** 45% of FY2025 revenue from Americas; USD strength/GBP weakness creates reported-growth headwinds despite robust constant-currency performance.
 
-**Operational.** Talent recruitment and retention (97% retention but rising headcount needs) rated Major/possible. **H1 2026 trading update:** 31 non-voluntary departures and £1.6m one-off restructuring costs; some customer implementation delays reduced Delivery revenue in Q2 2026.
+**Competitive and technology:** Competition risk flagged as “Major/Possible” in H1 2025 principal risks. Management argues AI is an enabler (contract-volume pricing, domain complexity, regulated workflows), but industry commentary (“Software industry needs to face up to the AI challenge”, Investors’ Chronicle, 19 February 2026) highlights sector-wide uncertainty not fully resolved in filings.
 
-**Regulatory and tax.** H1 2025 added US exposure to potential new taxes on software/services supplied from outside the US (Major/possible). UK corporation tax ETR ~24.9–26.0%. No pension deficit or material pension risk identified in available filing extracts.
+**People and delivery:** Talent retention is strong (97%), but scaling delivery (Poland smart hub, partner-led delivery) and concurrent implementations remain execution risks. CFO succession: Duncan Magrath retires end-2026; Andrew Dickson (Cerillion) appointed CFO from September 2026.
 
-**Governance and key person.** Ultimate controlling party: **Andrew Page** (Executive Chairman). CFO **Duncan Magrath** retiring; **Andrew Dickson** (Cerillion) appointed CFO from Sep 2026 — transition risk. Dec 2025: appointment of independent NED; Dec 2025 director retirement. **Aug 2025:** Senior Independent NED reportedly sold ~80% of holding (Simply Wall St / TipRanks) — insider selling worth monitoring.
+**Governance and insider activity:** Ultimate controlling party is Andrew Page (via CHP Software and Consulting Holdings). Christopher Sullivan, Senior Independent Non-Executive Director, sold ~80% of his holding (reported August 2025). Adrian Chamberlain stepped down from the board (10 August 2026). These are not accounting red flags but warrant monitoring alongside related-party dividend flows to the ultimate parent (£6.1m in H1 2025).
 
-**Accounting and liquidity.** Complex IFRS 15 revenue recognition (multi-element contracts, percentage-of-completion). Goodwill £24.7m on £90.7m total assets; no impairment flagged in H1 2025 review. **Liquidity strong:** net cash, no bank debt; lease liabilities ~£9.5m. Going concern: unqualified; stress tests pass per FY2025 and H1 2025.
+**Customer concentration:** Improved but not eliminated — top five still 33% of revenue.
 
-**Customer concentration.** Improved but not eliminated — top five at 33% (FY2025); largest ~9%.
+**Accounting:** Revenue recognition relies on percentage-of-completion and TCV estimates; customised licence judgements declining as SaaS mix rises. No pension deficit flagged; pension costs are running charges (~£2.0m in H1 2025). No material litigation or covenant concerns disclosed; liquidity is strong with net cash.
 
-RiskTags: cyclical, competitive, key_person, regulatory, governance, other
-RiskTags: cyclical, competitive, key_person, regulatory, governance, other
+**Valuation:** High P/B and failure of deep-value screens mean downside if growth slows or specials are reduced.
+
+RiskTags: cyclical, competitive, governance, customer_concentration, key_person, regulatory, other
+RiskTags: cyclical, competitive, governance, customer_concentration, key_person, regulatory, other
 
 ## NEWS HIGHLIGHTS
-**Material company-specific coverage (past year):**
+Coverage is **thin and noisy** — many Google News hits relate to Alfa Romeo, Alfa Laval or other “Alfa” names. Material ALFA-specific items from the manifest:
 
-- **FY2025 Full Year Results / Earnings (Mar 2026):** Revenue +17% CC, subscription +16%, margin 32%, “Rule of 40” exceeded — *Alfa Financial Software H2 Earnings Call Highlights* (Yahoo Finance, 12 Mar 2026); *Full Year 2025 Earnings Call Highlights* (17 Mar 2026).
-- **Q4/FY25 trading update (29 Jan 2026):** Revenue £126.5m (~£2m ahead of expectations); operating profit £40.0m (~£3m ahead).
-- **H1 2025 results (4 Sep 2025):** Strong H1; 5.0p special dividend declared.
-- **Q1/Q2 2026 trading updates (30 Apr / 30 Jul 2026):** In-line trading; TCV growth to £232.4m then £247.0m; wins including global OEM Canada and major European automotive manufacturer.
-- **CFO succession (12 Feb 2026):** Andrew Dickson appointed; Duncan Magrath to retire Sep 2026.
-- **Citywire Expert View (27 Feb 2026):** ALFA included in multi-stock analyst roundup.
-- **Investors’ Chronicle (19 Feb 2026):** Software sector AI challenge — contextual, not ALFA-specific operational news.
-- **Insider selling (Aug 2025):** Senior Independent NED large disposal — *Senior Independent Non-Executive Director… Sold 80% Of Their Shares* (Simply Wall St, 7 Aug 2025; TipRanks, 4 Aug 2025).
-- **Dividend commentary (Jul 2026):** Kalkine Media pieces on UK dividend appeal.
+| Date | Title / theme |
+|------|----------------|
+| 12 Mar 2026 | “Alfa Financial adds special dividend as cash flows impress” (Investors’ Chronicle) — FY2025 results and capital return |
+| 12 Mar 2026 | Yahoo: “Full Year 2025 Earnings Call Highlights: Strong … revenue increase” |
+| 27 Feb 2026 | Citywire “Expert View: … Alfa Financial Software …” |
+| 19 Feb 2026 | Investors’ Chronicle: “Software industry needs to face up to the AI challenge” (sector context) |
+| 12 Feb 2026 | CFO appointment: Andrew Dickson to succeed Duncan Magrath |
+| 23 Dec 2025 | RNS: Duncan Magrath retirement announced |
+| 5 Sep 2025 | Investors’ Chronicle: “Fast-growing Alfa Financial continues to expand margins” (H1 2025) |
+| 7–9 Aug 2025 | TipRanks/Simply Wall St: Non-exec Adrian Chamberlain departure; Christopher Sullivan large share sale |
+| 12 Dec 2025 | BlackRock TR-1: holding crossed above 5%, later fell below (May 2026) |
+| 21 Aug 2026 | “H126 analyst and retail investor presentations” (TradingView syndication) |
+| 30 Jul 2026 | H1 2026 trading update — TCV growth, on-track FY guidance |
 
-**Coverage quality:** RNS disclosure is rich and timely (eight trading updates with bodies in index). Third-party news is thin on fundamental analysis — several Google News hits are false positives (Alfa Romeo automotive). Treat non-RNS sources as secondary.
+No M&A, regulatory enforcement or profit warnings identified in the manifest. Strategy focus in filings: US Auto Originations, Fleet, Commercial Finance, Alfa Cloud expansion.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filing-backed growth, margins, cash generation and balance-sheet strength corroborate the quantitative buy signal, offset by FX exposure, intangible-heavy accounting, insider selling and the unresolved AI/competitive debate.
+Rationale: Primary filings confirm accelerating revenue, margins, cash conversion and a defensible subscription moat that supports the quantitative buy signal, partially offset by premium P/B, FX/governance flags and incomplete H1 2026 interim accounts.

@@ -1,110 +1,84 @@
 # Grafton Group plc (GFTU.L) — Research memo
 
-_Version 1 · Updated 2026-08-30T08:26:11.896678+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T10:53:35.546631+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Grafton Group plc is a geographically diversified European distributor of construction-related products and solutions, operating across the Island of Ireland, Great Britain, Northern Europe and Iberia, with Woodie’s as Ireland’s leading home improvement retailer. The quantitative screen rates GFTU.L as a strong buy (10/22 models; composite score 82%), driven by cheapness (P/E 12.7, P/B 1.2), dividend yield (3.6%), FCF generation, Piotroski F-Score 8/9 and financial health (current ratio 2.1). Primary filings confirm a net-cash balance sheet (£274.0m before IFRS 16 leases at FY2025) and sustained capital returns, but sub-12% ROE and regional cyclicality — especially Great Britain — temper the earnings-growth narrative. The central debate is whether Iberia/Ireland diversification and M&A can offset a structurally weak UK RMI market long enough for the valuation discount to close.
+Grafton Group is a European distributor of construction-related products and solutions, operating c.470 branches across the Island of Ireland, Great Britain, Northern Europe and Iberia, with market-leading brands including Chadwicks, Woodie's, Selco and Salvador Escoda. The quantitative screen rates the stock a **Strong Buy** (11/22 models, composite 71%), supported by modest absolute valuation (P/E 12.4, P/B 1.2, yield 3.7%), a Piotroski F-Score of 8/9, strong liquidity (current ratio 2.11) and consistent capital returns. The investment case rests on a resilient, cash-generative franchise trading below typical quality multiples, with £274m net cash (pre-IFRS 16) and a track record of returning surplus capital via buybacks (share count down 21.8% since May 2022). The central debate is whether cyclical weakness in Great Britain RMI/housebuilding and subdued Northern European construction will cap margin recovery, or whether geographic diversification, Iberian M&A and operating leverage on a market upturn will drive the >10% adjusted EPS CAGR management targets for 2030.
 
 ## INVESTMENT THESIS
-For a value investor, Grafton offers a rare combination of screen-passing cheapness and balance-sheet quality in a cyclical sector. The screen passes five factor families — cheapness, quality, dividend, GARP and risk — with standout models including Graham Defensive/Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Dreman Contrarian, Piotroski F-Score (8/9), Composite Value, Earnings Quality and Financial Health. Debt-to-equity of 37.6% and net cash before leases sit comfortably within the “risk” family pass criteria.
+The screen's Strong Buy signal is well grounded in Grafton's financial profile. The name passes five factor families — cheapness, quality, dividend, GARP and risk — and eleven individual models including Graham Defensive/Enterprising, Schloss Low P/B, Earnings Yield, Neff PEGY, Dividend Growth, Dreman Contrarian, Piotroski F-Score, Composite Value, Earnings Quality and Financial Health. At P/E 12.4 and P/B 1.19, the stock sits in classic deep-value territory for a business that is not distressed: FY2025 revenue rose 10.4% to £2.52bn and adjusted operating profit rose 7.1% to £190.2m (Annual Report 2025), with adjusted EPS of 75.4p (+5.1%) and a maintained dividend of 37.75p (2.0x cover).
 
-Business quality supports the screen rather than contradicting it. FY2025 filings show revenue of £2,520m (+10.4%), adjusted operating profit of £190.2m (+7.1%), adjusted EPS of 75.4p (+5.1%) and ROCE of 10.9% (+60bps). Free cash flow of £168.3m (company-adjusted; £205.6m per the Group Cash Flow Statement) and operating cash flow of £251.8m underpin dividend cover and a cumulative £700m+ of FCF over four years. Management has returned £428m via buybacks since May 2022, reducing the share count by over 20%, and maintains a 37.75p full-year dividend (+2.0%).
+Business quality, while not elite on ROE (8.4%, failing Buffett/Magic Formula screens), is solid for a value investor. Grafton operates a federated model of local market-leading brands with industry-leading margins in Ireland (10.4% adjusted operating margin) and a diversified revenue base — Island of Ireland 42.5%, Great Britain 30.4%, Northern Europe 18.6%, Iberia 8.5% (Capital Markets Event presentation, June 2026). Free cash flow generation is a structural strength: £168.3m in FY2025 and more than £700m cumulatively over four years (Final Results, March 2026). Management deploys surplus cash systematically — £428m returned via buybacks and dividends since 2022, plus a new £25m programme launched June 2026 — which directly supports per-share value accretion.
 
-Where the screen’s “quality” passes are narrower — ROE 8.4% fails Buffett Quality, Economic Moat and Quality Value thresholds — filing evidence explains the gap: margin discipline (7.3% adjusted operating margin) and cash conversion are strong, but returns are diluted by acquisition goodwill (£659.1m), lease-adjusted net debt of £123.4m, and cyclically depressed GB/Northern Europe earnings. The federated, multi-geography model (non-UK markets ~64% of H1 2025 turnover) provides genuine diversification that pure-play UK merchants lack. At ~12x adjusted earnings with net cash, the market prices in prolonged GB weakness; if Ireland/Iberia hold and GB stabilises, operating leverage and buybacks offer upside without requiring heroic growth assumptions.
+The screen's failed models highlight the trade-off rather than invalidate the case. FCF Yield (0.1% vs 5% threshold), Lynch PEG (2.43) and Quality Value (ROE <12%) reflect a cyclically depressed earnings base and IFRS 16 lease-adjusted balance sheet, not fundamental distress. Debt/equity of 37.6% and net cash of £274m (pre-leases) provide balance-sheet support that screens capture via the risk and financial health passes. For a value investor, Grafton offers a rare combination: statistically cheap, financially healthy, actively returning capital, and positioned for earnings leverage when construction markets normalise.
 
 ## FINANCIAL REVIEW
-Sources: FY2025 Annual Report and Final Results (31 December 2025); H1 2025 Interim Results (30 June 2025); H1 2026 Trading Update (July 2026); May 2026 Trading Update. All figures from filing body extracts unless noted.
+**Primary source:** IR Annual Report 2025 (`ir_b9e18372b456fd3b`) and Final Results (`ir_c6a7de8af8b2c4c5`). Interim and trading updates from `ir_7216cf1b38542321`, `ir_3ae4cc4aa2a00721`, `db602b475451c6b6` and `8a4381478b93c824`.
 
-Annual results (FY2025)
+**FY2025 (year ended 31 December 2025)**
 
-| Metric | FY2025 | FY2024 | Change |
-|--------|--------|--------|--------|
+| Metric | 2025 | 2024 | Change |
+|---|---|---|---|
 | Revenue | £2,520m | £2,282m | +10.4% |
 | Adjusted operating profit | £190.2m | £177.5m | +7.1% |
-| Adj. operating margin (ex property) | 7.3% | 7.6% | −30bps |
-| Adjusted EPS (basic) | 75.4p | 71.8p | +5.1% |
+| Adj. operating margin (ex-property) | 7.3% | 7.6% | −30bps |
+| Adjusted EPS | 75.4p | 71.8p | +5.1% |
 | Statutory operating profit | £174.8m | £152.6m | +14.6% |
 | Statutory basic EPS | 70.3p | 60.9p | +15.4% |
-| ROCE (adjusted) | 10.9% | 10.3% | +60bps |
-| Free cash flow (company-adj.) | £168.3m | £178.2m | −5.6% |
-| Net cash (before IFRS 16 leases) | £274.0m | £272.1m | +£1.9m |
-| Net debt (incl. IFRS 16 leases) | (£123.4m) | (£131.7m) | improved £8.3m |
-| Full-year dividend | 37.75p | 37.0p | +2.0% |
-| Financial leverage (lease-adj. net debt/EBITDA) | 0.39x | — | well below 2.0x ceiling |
+| Free cash flow | £168.3m | £178.2m | −5.6% |
+| Net cash (pre-IFRS 16) | £274.0m | £272.1m | +£1.9m |
+| Net debt (incl. leases) | (£123.4m) | (£131.7m) | improved £8.3m |
+| Adjusted ROCE | 10.9% | 10.3% | +60bps |
+| Full-year dividend | 37.75p | 37.00p | +2.0% |
 
-Segment FY2025 (Annual Report): Island of Ireland revenue £1,071.6m with adjusted operating profit £111.0m (margin 10.4%); Great Britain revenue £765.4m (−0.2%) with adjusted OP £49.2m (margin 6.4%, +40bps); Northern Europe revenue £469.7m with adjusted OP £29.6m (margin 6.3%); Iberia revenue £212.9m with adjusted OP £13.6m, reflecting the first full year of Salvador Escoda.
+Revenue growth was driven substantially by the first full-year contribution of Salvador Escoda in Iberia (£212.9m vs £29.7m prior year). Organic performance was mixed: Ireland grew strongly (+5.4% revenue, profit +3.2%), Great Britain was flat (−0.2% revenue) amid weak RMI and slow housebuilding recovery, and Northern Europe saw lower profits on reduced Finnish sales and Dutch softening in H2.
 
-Revenue growth was acquisition-led (Iberia revenue rose from £29.7m to £212.9m). Organic LFL trends were mixed: GB average daily LFL +0.4% for FY2025 but with distribution declining; Northern Europe LFL declined; Ireland and Iberia were stronger.
+**H1 2025 (interim results, 30 June 2025)**
 
-Interim results (H1 2025, six months to 30 June 2025)
+Revenue +10.1% to £1,252m; adjusted operating profit +9.5% to £91.0m; margin maintained at 7.3%; adjusted EPS 35.5p (+6.5%). Net cash (pre-leases) £245.8m. UK Distribution returned to profit growth for the first time since 2021, though Finland (IKH) reported a significant profit drop. Trading update to 24 August 2025 showed Group LFL revenue +2.3%.
 
-| Metric | H1 2025 | H1 2024 | Change |
-|--------|---------|---------|--------|
-| Revenue | £1,252m | £1,137m | +10.1% |
-| Adjusted operating profit | £91.0m | £83.1m | +9.5% |
-| Adjusted EPS | 35.5p | 33.4p | +6.5% |
-| Adj. operating margin | 7.3% | 7.3% | flat |
-| ROCE | 10.9% | 11.1% | −20bps |
-| Net cash (before leases) | £245.8m | £361.1m | −£115.3m |
-| Interim dividend | 10.75p | 10.5p | +2.4% |
+**H1 2026 / current trading (interim trading updates, January–June 2026)**
 
-H1 commentary noted easing momentum from mid-May into June, offset by gross margin improvement of 60bps. GB distribution returned to profit growth for the first time since 2021; Finland (IKH) profitability fell sharply on weak markets and operational issues; Salvador Escoda contributed £104.2m revenue and £6.5m adjusted OP.
+Revenue +6.7% to £1.34bn (includes Mercaluz acquisition from 30 April 2026). Group average daily LFL revenue +0.6%: Island of Ireland +3.4%, Iberia +6.6%, Northern Europe +0.8%, **Great Britain −5.1%**. Management reaffirmed FY2026 adjusted operating profit guidance of **£190m–£200m** (consensus circa £193.7m). January–April 2026 trading update (15 May 2026) showed revenue +3.2% to £830.1m with flat LFL, and GB LFL −5.0%.
 
-Interim / trading updates (2026)
+**Balance sheet and cash flow**
 
-No formal H1 2026 accounts are in the index; two trading updates provide interim-period colour:
+Grafton maintains investment-grade financial leverage of 0.39x (lease-adjusted net debt/EBITDA; target ceiling ~2.0x). IFRS 16 lease liabilities are material — net debt inclusive of leases was £123.4m at FY2025 versus £274m net cash pre-leases. Yahoo Finance (`financials_annual.json`, used only where filing bodies lack detail) shows total debt £619m and capital lease obligations £397m at FY2025; operating cash flow £252m and filing-aligned FCF £206m, broadly consistent with the £168.3m company-adjusted FCF cited in the annual report (difference reflects lease payments and working-capital treatment).
 
-- May 2026 (four months to 30 April 2026): Group revenue £830.1m (+3.2%); average daily LFL flat. GB LFL −5.0%; Ireland +1.8%; Northern Europe +1.6%; Iberia +5.0%. Full-year 2026 adjusted operating profit guidance introduced at £190m–£200m.
-- July 2026 (six months to 30 June 2026): Group revenue £1.34bn (+6.7%); average daily LFL +0.6%. GB LFL −5.1%; Ireland +3.4%; Northern Europe +0.8%; Iberia +6.6%. FY2026 adjusted OP guidance of £190m–£200m maintained. Acquisitions Mercaluz (Spain, completed 30 April 2026) and Cygnum (Ireland, 31 March 2026) included.
-
-FY2025 exit-rate weakness persisted into 2026: Q4 2025 Group LFL was +0.2% (GB 0.0%, Northern Europe −2.3%), and Jan–Feb 2026 Group LFL was +0.2% with GB at −5.7%.
-
-Balance sheet and cash flow (filings)
-
-FY2025 Group Cash Flow Statement (Annual Report): operating cash flow £251.8m; capex £46.2m; free cash flow £205.6m. Goodwill £659.1m (auditor flagged limited headroom in former UK Distribution CGUs; impairment test performed 30 September 2025 with no charge recorded). Lease-adjusted leverage 0.39x versus a stated ceiling of ~2.0x EBITDA.
-
-Yahoo fallback: `financials_annual.json` aligns closely with filings on revenue (£2,519.6m), net income (£136.6m statutory) and FCF (£205.6m). No Yahoo fallback was required for headline operating metrics; Yahoo quarterly cash flow is empty (TTM suppressed).
-
-Trend summary: Revenue and adjusted profit grew in FY2025 and H1 2025, supported by Iberia M&A and Irish resilience, but margin compression (−30bps full year) and GB/Northern Europe cyclical weakness are evident. 2026 guidance (£190m–£200m adjusted OP) implies flat-to-modest growth versus FY2025 £190.2m, with acquisitions offsetting GB deterioration.
+**Trend assessment:** Revenue and profit have recovered from the 2023–24 cyclical trough (statutory net income fell from £149m in 2023 to £122m in 2024 before rising to £137m in 2025 per Yahoo). Margins are stable but not expanding, reflecting cost inflation and GB weakness. The earnings trajectory is positive but heavily acquisition-assisted; organic LFL growth in H1 2026 was modest (+0.6%) and GB remains a drag. No annual or interim filing gaps were identified in `filings_index.json` (9 annual, 5 interim, 3 trading updates, all with bodies).
 
 ## RISKS AND RED FLAGS
-Cyclical exposure: Construction and RMI markets drive volumes. FY2025 and 2026 trading updates describe subdued GB conditions, London/Southeast housing starts at a 40-year low (~6,000 units in 2025), and uncertain recovery timing in Finland and the Netherlands. Over 75% of 2025 profits were generated outside GB, but GB still represents ~24% of adjusted operating profit — material if deterioration continues.
+**Cyclical and regional concentration.** Grafton's earnings are tied to construction, RMI and housebuilding activity. FY2025 Final Results explicitly flagged "challenging conditions" in Great Britain, with RMI weakness especially in London, and continued economic/construction-sector weakness in Finland. H1 2026 LFL revenue in Great Britain declined 5.1%, with management expecting "no meaningful improvement in the near term." A prolonged UK construction downturn would limit operating leverage and cap the screen's earnings-recovery thesis.
 
-Goodwill and impairment sensitivity: Goodwill of £659.1m (FY2025) is a key audit matter. Management previously identified limited headroom in the former UK Distribution CGU group; a VIU impairment test at 30 September 2025 preceded reallocation to the enlarged Great Britain segment. No impairment was recorded, but sensitivity to GB recovery assumptions remains.
+**Margin pressure.** Adjusted operating margin fell 30bps to 7.3% in FY2025 despite revenue growth, reflecting inflation-driven overhead pressure in the Netherlands and Finland. Trading updates emphasise "disciplined cost control and margin management," suggesting margins are being defended rather than expanded.
 
-Competitive and margin pressure: GB filings cite “increasing competitive pressures” despite 120bps gross margin improvement from commercial actions. Selco’s permanent price cuts on 357 SKUs (November 2025) improve value proposition but may constrain margin if volumes do not respond.
+**IFRS 16 lease exposure.** Substantial lease liabilities (~£397m per Yahoo balance sheet) convert apparent net cash into lease-adjusted net debt of £123.4m. Payment on lease liabilities was £81.7m in FY2025 (Annual Report cash flow note). This is not a covenant risk given 0.39x leverage, but it reduces economic FCF and explains the screen's FCF Yield failure.
 
-Inflation, labour and supply chain: Interim and trading updates flag minimum wage rises, UK national insurance, inflation-linked property rents, supplier price increases, fuel costs, and geopolitical supply-chain risks (Middle East conflict). No material disruption reported to date.
+**M&A integration and goodwill.** Iberia growth depends on Salvador Escoda (Oct 2024) and Mercaluz (Apr 2026). Goodwill and intangibles total ~£790m (Yahoo FY2025). Impairment testing involves judgement on revenue growth and discount rates (auditor emphasis of matter, Annual Report). Integration of Cygnum (Ireland timber frame) is ongoing.
 
-M&A integration and execution: Salvador Escoda, Mercaluz, Cygnum and HSS Hire Ireland expand the footprint but add integration risk and goodwill. Capital Markets Event (June 2026) targets >10% adjusted EPS CAGR to 2030 and cumulative FCF >£850m (2026–2030) — ambitious if GB remains weak.
+**Pension.** Defined benefit schemes in Ireland and the UK are closed to accrual; remeasurement gains of £2.3m (FY2025) and contributions in excess of IAS 19 charge of £2.4m are modest. Non-current pension liabilities ~£4m (Yahoo). Not a material red flag.
 
-Pension: Defined benefit obligation modest (defined pension benefit asset £11.6m per Yahoo balance sheet; IAS 19 remeasurement gains in FY2025). Not a primary balance-sheet concern.
+**Governance and going concern.** Companies House parent-company accounts (June 2026) and auditor confirm going concern basis appropriate for at least 12 months. No covenant breach language identified. CEO Eric Born and CFO David Arnold in post; Frank Elkins appointed CEO Great Britain and Anu Ora MD Finland in 2025.
 
-Governance / going concern: Auditors concluded no material going-concern uncertainties (Interim Report, H1 2025). Board refreshment in 2025 (retirements and two new NEDs). No governance red flags identified in available filings.
-
-Liquidity / leverage: Statutory net debt including leases (£123.4m) and £619m total debt (Yahoo) are manageable against £274m net cash pre-leases and investment-grade target (lease-adj. net debt/EBITDA 1.0x–2.0x per CME 2026). Covenants not explicitly detailed in extracts reviewed; leverage well within stated policy.
+**Competitive.** Fragmented merchanting markets with local scale advantages; no single customer concentration disclosed, but competitive pricing pressure in weak GB markets is implicit in LFL declines.
 
 RiskTags: cyclical, competitive, leverage, other
 RiskTags: cyclical, competitive, leverage, other
 
 ## NEWS HIGHLIGHTS
-News coverage over the past year is voluminous but shallow: the manifest is dominated by daily £25m buyback transaction headlines (TipRanks, Kalkine Media, Globe and Mail, August 2026), with limited sell-side or investigative depth.
+News coverage over the past year is **heavy on buyback mechanics** (daily RNS repurchase notices, August–September 2026) but contains several material strategic items:
 
-Material corporate events (non-buyback):
+- **"Grafton Group Sets 2030 Growth Targets as Cash Flow and Acquisitions Take Center Stage"** (Yahoo Finance, 11 June 2026): Capital Markets Event outlined >10% adjusted EPS CAGR, >£850m cumulative FCF 2026–2030, ~13% ROCE target, and continued capital returns.
+- **"Grafton Reports Higher First-Half Revenue and Launches New £25 Million Share Buyback"** (Yahoo Finance UK, 13 July 2026): H1 revenue +6.7%, LFL +0.6%, new buyback launched.
+- **"Completion of Acquisition of Mercaluz"** (RNS, 1 May 2026): Spanish HVAC distributor acquired, reinforcing Iberian platform post-Salvador Escoda.
+- **"Grafton Raises Profit Outlook Following Resilient Trading and Strategic Acquisitions"** / **"Grafton Group welcomes 'resilient trading performance' for Q1"** (15 May 2026): Q1 2026 revenue +3.2%, FY2026 profit guidance £190–200m introduced.
+- **"Grafton Group (LSE:GFTU) In Focus: Are Merchanting Margins Under Pressure Again?"** (Kalkine Media, 1 September 2026): Analytical coverage questioning margin sustainability.
+- **"Grafton Group plc (GROUF) Full Year 2025 Earnings Call Highlights"** (Yahoo Finance, 5 March 2026): 10.4% revenue growth, £25m buyback announced at FY results.
 
-- “Grafton Group plc-Final Results” / FY2025 results (March 2026): Revenue +10.4%, adjusted OP ahead of consensus, new £25m buyback; outlook flags GB/Northern Europe weakness (Yahoo Finance UK, 5 March 2026).
-- “Grafton Reports Higher First-Half Revenue and Launches New £25 Million Share Buyback” (Yahoo Finance UK, 13 July 2026): H1 2026 trading update with maintained £190m–£200m profit guidance.
-- “Grafton Group Sets 2030 Growth Targets as Cash Flow and Acquisitions Take Center Stage” (Yahoo Finance, 11 June 2026): CME targets >10% adjusted EPS CAGR, >£850m cumulative FCF, ~13% ROCE.
-- “Completion of Acquisition of Mercaluz” (1 May 2026): Iberian HVAC expansion.
-- “Grafton Raises Profit Outlook Following Resilient Trading and Strategic Acquisitions” (Yahoo Finance UK, 15 May 2026): Q1 2026 resilient trading; Cygnum acquisition.
-- “Grafton Group welcomes ‘resilient trading performance’ for Q1” (Builders’ Merchants News / RTE, 15 May 2026).
-- “FTSE Stock Spotlight: Grafton Expands Iberian Growth Strategy” (Kalkine Media, 1 May 2026).
-- “Can Grafton (LSE:GFTU) Ride Out A Rates Reversal Across Its UK And Irish Merchanting Base?” (Kalkine Media, 27 August 2026): macro sensitivity commentary.
-
-Coverage is thin on fundamental analysis; most items recycle RNS buyback data. Strategy, M&A and regional performance colour come primarily from company filings rather than third-party news.
+Analytical/strategic news is adequate; **operational news is thin beyond RNS buyback repetition**. No regulatory actions, accounting investigations or management departures were identified.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.76
-Rationale: Primary filings confirm the screen’s cheapness/quality/cash-flow thesis — strong balance sheet, dividend discipline, and geographic diversification — but GB cyclical weakness, goodwill headroom sensitivity, and elevated RSI/timing support accumulate-on-pullback rather than immediate full sizing.
+Confidence: 0.72
+Rationale: Deep research largely confirms the Strong Buy screen — Grafton is genuinely cheap on earnings and book, financially robust with strong cash conversion and active buybacks, but cyclical GB weakness, flat organic LFL growth and sub-12% ROE warrant accumulation rather than unqualified conviction until regional recovery is visible.

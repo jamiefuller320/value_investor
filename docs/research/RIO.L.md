@@ -1,89 +1,73 @@
 # Rio Tinto Group (RIO.L) — Research memo
 
-_Version 1 · Updated 2026-08-23T06:45:20.059681+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T11:03:00.544372+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Rio Tinto Group (RIO.L) is a globally diversified miner pivoting from Pilbara iron ore dominance towards copper, aluminium and lithium, with a capital-heavy growth pipeline (Simandou, Oyu Tolgoi, Arcadium lithium) and a stated mission to become the “most valued” metals business under CEO Simon Trott. The quantitative screen rates the name a strong buy (12/22 models; composite 70%), anchored by cheapness on P/E ~14, P/B ~2.6, ~4.5% yield, 19% ROE and modest leverage (D/E ~32%), though the overlay trims the headline to Buy on weak FCF yield and earnings-quality flags. Filings show FY2025 revenue of $57.6bn and underlying EBITDA of $25.4bn, with H1 2026 accelerating sharply on commodity prices and copper growth; the central debate is whether cyclical earnings and heavy capex can sustain dividend-led value screens through the down-cycle, or whether net debt (~$14bn), closure provisions (~$19bn at H1 2026) and operational/social-licence risks cap upside.
+Rio Tinto screens as a **strong buy** on valuation and quality (11/22 models pass; composite 68%; P/E 13.7, yield 4.6%, ROE 19.3%), but the dividend overlay trims the headline to **Buy** because free-cash-flow yield and earnings-quality screens fail. The investment case rests on a portfolio pivot toward copper, aluminium and lithium, with H1 2026 showing underlying EBITDA up 28% to $14.8bn and a 43% interim dividend increase, against a still-material iron ore earnings base. The central debate is whether commodity-price strength and Oyu Tolgoi/Simandou growth justify holding a cyclical mega-cap through peak-cycle optics, rising capex, and episodic governance and jurisdictional risk. Deep research broadly supports accumulation at screen-implied levels, with conviction tempered by thin statutory filing extracts and cyclical cash-flow volatility.
 
 ## INVESTMENT THESIS
-For a value investor, Rio Tinto offers a rare combination: sector-leading asset quality, a visible pivot into energy-transition metals, and a decade-long record of returning ~60% of underlying earnings as dividends (402 US cents/share maintained in FY2025; interim raised 43% in H1 2026). The screen passes five factor families—cheapness, quality, dividend, GARP and risk—with models including Graham Enterprising, Lynch/Neff PEG variants, Magic Formula, Acquirer’s Multiple and Financial Health. Business quality is corroborated in filings: underlying ROCE 16% (FY2025), net gearing 18% at year-end (16% at H1 2026), and a productivity programme targeting $1.8bn annualised run-rate by end-2026 ($870m banked in H1). Portfolio diversification is real: copper underlying EBITDA rose 114% YoY in FY2025 to $7.4bn; in H1 2026 copper, aluminium and lithium together contributed over 50% of group underlying EBITDA. Against that, the screen’s failures matter for pure value: FCF yield ~2.9% (below 5% threshold), Piotroski F-Score 5/9, and statutory EPS down ~14% in FY2025. The investment case is therefore “quality cyclical at a reasonable multiple with a high dividend”—not deep net-net or FCF compounder—making the strong-buy signal credible on headline valuation but requiring acceptance of commodity and execution risk.
+For a value investor, Rio Tinto combines **sector-leading asset quality** with **multiple-screen cheapness**: Graham Enterprising, Quality Value, Buffett Quality, Economic Moat, High Dividend Yield, Magic Formula, Acquirer's Multiple, Composite Value and Financial Health all pass, spanning cheapness, quality, dividend, GARP and risk families. Debt/equity of 32% and current ratio 1.44 support the balance-sheet leg of the screen.
+
+Business quality is credible in filings: 2025 consolidated sales revenue of **$57.6bn** (2024: $53.7bn), underlying EBITDA **$25.4bn** (2024: $23.3bn), and net cash from operating activities **$16.8bn** (2024: $15.6bn), per the 2025 Companies House annual extract. Segment mix is shifting—2025 underlying EBITDA was **Iron Ore $15.2bn**, **Copper $7.4bn** and **Aluminium & Lithium $4.6bn**—with copper and aluminium/lithium growing sharply versus prior year while iron ore moderated. H1 2026 interim results (29 Jul 2026 RNS) report a further step-up: underlying EBITDA **$14.8bn** (+28% YoY), underlying earnings **$6.9bn** (+43%), free cash flow **$3.8bn** (+75%), interim dividend **$3.4bn** (+43%), and copper/aluminium/lithium together contributing over half of underlying EBITDA.
+
+The screen's weak points—FCF yield (~3%), Piotroski 5/9, negative EPS growth, and net FCF dividend coverage ~0.73—are partly explained by a heavy 2025 investment cycle (Arcadium lithium acquisition, Simandou, copper growth) rather than balance-sheet distress, but they matter for dividend durability through a downturn. At ~4.6% yield on a policy of 40–60% of underlying earnings through the cycle, the equity offers a **cash-return hook** if commodity prices hold; the value case is not deep net-net but **quality cyclical at a reasonable multiple**.
 
 ## FINANCIAL REVIEW
-**Annual (FY2025 — primary sources: SEC Form 20-F 2025 body extract and Companies House group accounts; both filed February–April 2026)**
+**Annual trend (Companies House 2025 and 2024 annual extracts — primary source)**
 
-| Metric | FY2025 | FY2024 | Change |
-|--------|--------|--------|--------|
-| Consolidated sales revenue | $57.6bn | $53.7bn | +7% |
-| Underlying EBITDA | $25.4bn | $23.3bn | +9% |
-| Underlying earnings | $10.9bn | $10.9bn | flat |
-| Net earnings (owners) | $10.0bn | $11.6bn | −14% |
-| Operating cash flow | $16.8bn | $15.6bn | +8% |
-| Free cash flow | $4.0bn | $5.6bn | −28% |
-| Ordinary DPS | 402 US¢ | 402 US¢ | flat |
-| Net debt | $14.4bn | $5.5bn | +162% |
-| Underlying ROCE | 16% | 18% | −2pp |
+| Metric | 2025 | 2024 | Direction |
+|--------|------|------|-----------|
+| Consolidated sales revenue | $57.6bn | $53.7bn | ↑ |
+| Underlying EBITDA | $25.4bn | $23.3bn | ↑ |
+| Profit after tax (owners) | $10.0bn | $11.6bn | ↓ |
+| Net cash from operating activities | $16.8bn | $15.6bn | ↑ |
+| Total dividend per share | 402 US cents | 402 US cents | Flat |
 
-Revenue and underlying EBITDA improved on volume (copper equivalent sales +5%), cost discipline (operating unit costs −5% in 2024 real terms) and diversification—iron ore EBITDA fell 11% to $15.2bn while copper rose 114% to $7.4bn and Aluminium & Lithium +29% to $4.6bn. Net earnings declined on higher depreciation (Oyu Tolgoi ramp, Arcadium consolidation), tax (effective rate on underlying earnings 31.5% vs 28.3%) and finance costs after ~$9bn bond issuance. FCF compression reflects capex: Rio share of capital investment $11.4bn (Simandou, Arcadium integration, sustaining/replacement). Net debt rose primarily on the $7.6bn Arcadium acquisition and $6.1bn dividends paid, partially offset by FCF and partner funding. The CFO anchors balance-sheet policy around single-A credit rating; no explicit net-debt target.
+Revenue and underlying EBITDA improved in 2025, but **reported net earnings fell** to $10.0bn from $11.6bn, consistent with the screen's negative statutory EPS growth (~−8% to −14%). Iron ore underlying EBITDA declined ($15.2bn vs $17.0bn) while copper ($7.4bn vs $3.4bn) and aluminium & lithium ($4.6bn vs $3.6bn) expanded—confirming the strategic pivot visible in production and capex.
 
-*Gap:* The standalone RNS “2025 Annual Report” and “Full year results presentation” bodies in the index are release notices only—detailed figures are taken from the 20-F extract and Companies House accounts.
+**Cash flow and balance sheet:** Filing-aligned 2025 free cash flow is **$4.5bn** (operating cash flow $16.8bn less capex $12.4bn), down from **$6.0bn** in 2024, reflecting higher capital expenditure and the Arcadium acquisition noted in the 2025 annual extract. **Net debt at 31 Dec 2025 is not stated in available filing body extracts**; falling back to Yahoo (`financials_annual.json`): net debt **$15.0bn** (2024: $5.6bn), total debt **$23.5bn**, equity **$62.2bn**—a meaningful leverage step-up worth monitoring against the interim RNS description of a "robust balance sheet."
 
-**Interim (H1 2026 — primary source: “Rio Tinto 2026 half year results”, 29 July 2026)**
+**Interim (H1 2026 — RNS "Rio Tinto 2026 half year results", 29 Jul 2026):** Underlying EBITDA **$14.8bn** (+28%); free cash flow **$3.8bn** (+75%); underlying earnings **$6.9bn** (+43%); underlying ROCE **17%**; interim ordinary dividend **$3.4bn** (+43%); productivity benefits **$870m** realised (target **$1.8bn** annualised run-rate by year-end). Copper EBITDA **$5.7bn** (+84%). Methodology change: from H1 2026, free cash flow includes Rio Tinto's share of capital investment (disclosed in Q2 2026 production release, 15 Jul 2026).
 
-| Metric | H1 2026 | H1 2025 | Change |
-|--------|---------|---------|--------|
-| Consolidated sales revenue | $31.0bn | $26.9bn | +15% |
-| Underlying EBITDA | $14.8bn | $11.5bn | +28% |
-| Underlying earnings | $6.9bn | $4.8bn | +43% |
-| Net earnings (owners) | $6.7bn | $4.5bn | +47% |
-| Operating cash flow | $9.2bn | $6.9bn | +32% |
-| Free cash flow | $3.8bn | $2.2bn | +75% |
-| Interim ordinary dividend | $3.4bn (211 US¢/sh) | $2.9bn (148 US¢) | +43% |
-| Net debt (30 Jun) | $14.1bn | — | −2% vs Dec-25 |
-| Underlying ROCE | 17% | 14% | +3pp |
+**Interim gap:** H1 2025 **financial** interim accounts are indexed (SEC 6-K `rio-20250630.htm`) but body extracts contain no line-item P&L or cash-flow figures; only **production/trading updates** are usable for that period. No standalone trading-update filings are indexed (`trading_update`: 0).
 
-H1 reflects favourable commodity prices (copper +39% benchmark YoY; aluminium +33%; lithium spot +125%), 3% copper-equivalent production growth, and productivity benefits of $870m. Copper segment underlying EBITDA $5.7bn (+84%); iron ore $6.8bn (−1%); Aluminium & Lithium $3.3bn (+38%). Capital investment (Rio share) $5.0bn; closure provision $18.9bn (up from $17.8bn at Dec-25). Q2 production update (15 July 2026) confirmed guidance held and cut copper C1 guidance to US 30–50¢/lb.
-
-**Yahoo fallback (used only where filings lack TTM market metrics):** Screening inputs align with filing-aligned FCF of ~$4.5bn for FY2025 (Yahoo cash-flow statement: OCF $16.8bn, capex −$12.3bn). Yahoo statutory net income FY2025 $9.97bn matches 20-F net earnings. No quarterly cash-flow series in Yahoo for this ticker (TTM suppressed).
-
-**Trend summary:** FY2025 showed earnings resilience at the underlying level but weaker statutory earnings and FCF amid growth capex and M&A; H1 2026 is a step-change higher on prices and execution. Iron ore remains the profit engine but is shrinking as a share; copper/lithium/aluminium are the growth narrative. Dividend policy (40–60% of underlying earnings through the cycle; 50% interim payout in H1 2026) remains intact, but FY2025 FCF/dividend coverage was thin (~0.73x on screening metrics)—a key screen weakness.
+**SEC 20-F 2025:** Indexed (19 Feb 2026) but the downloaded body is a table-of-contents stub without consolidated numbers; statutory detail should be verified from the full 20-F before trade.
 
 ## RISKS AND RED FLAGS
-**Cyclical:** Earnings and H1 2026 cash generation are heavily price-sensitive (20-F sensitivity tables; H1 EBITDA +$3.6bn from prices alone). Iron ore still ~44% of H1 revenue; a China steel slowdown or iron ore oversupply would pressure the largest legacy profit pool.
+**Cyclical:** Earnings remain levered to iron ore ($15.2bn underlying EBITDA in 2025) and spot commodity prices; H1 2026 strength partly reflects favourable copper and aluminium pricing. A China steel or global manufacturing slowdown would compress margins quickly—screens do not fully capture trough earnings.
 
-**Leverage and capital intensity:** Net debt rose from $5.5bn to $14.4bn in FY2025; gearing 18% (16% at Jun-26). Rio share of capital investment up to ~$11bn in FY2025 with up to ~$11bn guided for 2026. FCF yield screen failure reflects structural capex plus dividends competing for cash.
+**Regulatory and jurisdictional:** Q2 2026 production release discloses **MNT 1.6 trillion (~$443m)** in Mongolian tax assessments on Oyu Tolgoi (FY2021–22), paid under protest and disputed as inconsistent with the Investment Agreement. Indigenous land, heritage clearances (Pilbara guidance caveats) and US permitting (Resolution Copper) add approval risk.
 
-**Regulatory and tax:** Oyu Tolgoi paid $443m following Mongolian tax assessments for 2021–22 (paid under protest; disputed as inconsistent with the Investment Agreement)—disclosed in Q2 production and H1 results. US aluminium tariffs added ~$773m H1 2026 cost (disclosed in H1 filing). Pilbara guidance remains subject to heritage clearances and mining approvals.
+**Operational:** Safety incidents in 2026 (Simandou, Kennecott fatalities cited in Q1 production release); Kennecott flash-converter breach (~75-day smelter rebuild) will reduce H2 2026 refined copper/gold; Simandou ramp remains complex with ~2–3 month production-to-sales lag.
 
-**Governance and safety:** Fatalities at managed operations (one in FY2025; two colleagues lost in H1 2026 at Simandou and Kennecott). Simandou and cultural-heritage history remain reputational overhangs despite PKKP agreement progress in FY2025.
+**Governance and strategy execution:** CEO transition (Jakob Stausholm succession announced May 2025; Simon Trott appointed CEO July 2025), operating-model simplification (Aug 2025), and failed **Glencore merger talks** (Feb 2026) introduce integration and capital-allocation uncertainty. Borates and Iron & Titanium businesses under strategic review.
 
-**Closure and pension:** Provision for closure costs $18.9bn at 30 Jun 2026 (+$0.9bn in H1 from inflation assumption changes and new provisions); ~$1bn annual closure cash spend expected. Central pension costs appear in segment reconciliations; pension and post-retirement liabilities on balance sheet (~$1.1bn non-current per Yahoo/20-F structure).
+**Financial structure:** Rising net debt (Yahoo fallback), heavy capex pipeline (Simandou ~$6.2bn Rio share, lithium, Resolution), and **FCF dividend coverage below 1x** on 2025 filing-aligned figures. Dividend maintained at 402 cents in 2025 despite lower PAT—policy flexibility exists but payout stress would emerge in a commodity down-cycle.
 
-**Operational:** Kennecott flash-converter breach (~75-day rebuild) will reduce H2 refined copper/gold; Yarwun alumina curtailment 40% from Oct 2026; Nemaska lithium construction slowed in 2026.
+**Contingencies (filings language):** Companies House interim notes (Jun 2021, still illustrative of Rio parent-company disclosure style) state litigation is "inherently unpredictable" with potential "material cash outflows," and that pension-fund guarantees could require parent contributions if participating entities default. No going-concern qualification appears in available extracts; covenant detail is not present in indexed bodies.
 
-**M&A/strategy:** Glencore merger talks ended February 2026 over price; standstill expiry led to August 2026 press that Rio is in no rush to revive—reducing near-term deal risk but leaving organic execution as the growth path.
+**Other:** Geopolitical supply-chain disruption (Strait of Hormuz monitoring), aluminium US tariff costs (H1 2026 tariff cost **$773m** on US shipments per production data), and lithium price/volume volatility post-Arcadium.
 
-**Accounting/quality:** Piotroski 5/9; screen flags weak free-cash conversion and earnings-quality overlay. Impairments in FY2025 ($0.2bn after tax, mainly Yarwun tailings).
-
-RiskTags: cyclical, regulatory, governance, pension, leverage, litigation, other
-RiskTags: cyclical, regulatory, governance, pension, leverage, litigation, other
+RiskTags: cyclical, regulatory, governance, litigation, leverage, key_person, competitive, other
+RiskTags: cyclical, regulatory, governance, litigation, leverage, key_person, competitive, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is adequate (37 articles in manifest; mix of Reuters, Yahoo, Morningstar, UK retail media).
+Coverage over the past year is **extensive** (80+ items in `news_manifest.json`), though much is syndicated commentary rather than primary disclosure.
 
-**Strategy and M&A:** “Glencore shares soar in Rio Tinto merger talks” (This is Money, 9 Jan 2026); “Rio Tinto, Glencore end merger talks over price dispute” (Yahoo Finance UK, 5 Feb 2026); “Rio Tinto and Glencore Go Their Separate Ways” (Morningstar, 6 Feb 2026); “Rio Tinto signals no rush to revive Glencore deal as standstill ends” (WTVB, 4 Aug 2026).
+**Strategy and portfolio:** "Rio Tinto operating model & executive team updates" (27 Aug 2025 RNS/filings)—three product groups (Iron Ore; Aluminium & Lithium; Copper). Arcadium lithium acquisition completed (referenced in 2025 annual extract). Kasiya rutile-graphite collaboration with Sovereign Metals concluded (8 Jul 2026).
 
-**Results and operations:** “FTSE 100 falls as Rio Tinto results disappoint” (Reuters, 19 Feb 2026)—market reaction to FY2025; “Rio Tinto (FY Results): copper shines” (Hargreaves Lansdown, 18 Feb 2026); “Rio Tinto: Solid Second Quarter and First Half of 2026” (Morningstar, 15 Jul 2026); cyclone-related “Rio Tinto shares rise as guidance held after cyclone” (Yahoo Finance UK, 30 Mar 2026).
+**Management:** "Rio Tinto - Chief Executive succession plan" (22 May 2025); Simon Trott as CEO from July 2025. Chief Legal Officer appointment (14 May 2026 RNS).
 
-**Energy transition and smelters:** “Rio Tinto (LSE:RIO) Secures Long Term Renewable Power For Tomago Smelter” (Yahoo, 19 Aug 2026); Boyne smelter long-term future secured (RNS headline, Mar 2026).
+**M&A:** "Rio Tinto and Glencore in $200bn merger talks" (9 Jan 2026, Investors' Chronicle); "Rio Tinto, Glencore end merger talks over price dispute" (5 Feb 2026, Reuters/Yahoo); Aug 2026 reports that Rio signalled no rush to revive talks as standstill ended ("Rio Tinto signals no rush to revive Glencore deal", 4 Aug 2026).
 
-**Management:** Trudi Charles appointed Chief Legal Officer (RNS, 14 May 2026).
+**Results and market reaction:** "Rio Tinto reports broadly in-line 2025 results, shares dip" (19 Feb 2026, Investing.com UK); "Rio Tinto (FY Results): copper shines" (18 Feb 2026, Hargreaves Lansdown). H1 2026: "Rio Tinto: Solid Second Quarter and First Half of 2026" (15 Jul 2026, Morningstar).
 
-**Geopolitics:** Dominic Barton (Rio chair context) on corporate geopolitical risk (Yahoo, 19 Aug 2026).
+**Operations and energy transition:** Tomago smelter long-term power agreement to 2038 with A$1.1bn investment (13 Aug 2026 RNS); Boyne smelter secured (Mar 2026 RNS). Oyu Tolgoi ramp and Simandou progress featured in Q1/Q2 2026 production releases.
 
-Retail-oriented pieces (“Why is everyone buying Rio Tinto shares?”, Twelfth Magpie, Apr 2026) suggest elevated UK retail interest rather than new fundamental information.
+**Sell-side:** "Morgan Stanley starts Rio Tinto ADR coverage at underweight" (24 Aug 2026, yfinance)—notable dissent on valuation after the run-up.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filings confirm a high-quality, diversifying miner trading on reasonable multiples with a dependable dividend policy and improving H1 2026 momentum, which supports—but does not fully validate—the quantitative strong-buy signal given cyclical exposure, elevated capex, thin FCF coverage and persistent safety/governance risks.
+Confidence: 0.74
+Rationale: Filing-backed quality, dividend yield and screen cheapness support the strong-buy signal, but cyclical mix, rising leverage, FCF/dividend tension and jurisdictional gaps prevent full confirmation at maximum conviction.

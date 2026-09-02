@@ -1,7 +1,13 @@
 {
+<<<<<<< Updated upstream
   "compiled_at": "2026-09-02T11:04:06.239442+00:00",
   "run_at": "2026-08-30T06:43:33.462150+00:00",
   "task_count": 66,
+=======
+  "compiled_at": "2026-09-02T11:13:23.900406+00:00",
+  "run_at": "2026-09-02T10:22:48.084715+00:00",
+  "task_count": 69,
+>>>>>>> Stashed changes
   "tasks": [
     {
       "id": "eng-20260823-01",
@@ -255,6 +261,54 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/303",
       "pr_number": 303,
       "merged_at": "2026-08-19T14:43:08.228027+00:00"
+    },
+    {
+      "id": "eng-20260902-01",
+      "area": "ingest",
+      "title": "Parse IR results-presentation PDFs into `ir_presentation_metrics.json` (FCF bridges, segment revenue, pipeline tables) with mandatory fetch when allowlist bodie",
+      "summary": "Parse IR results-presentation PDFs into `ir_presentation_metrics.json` (FCF bridges, segment revenue, pipeline tables) with mandatory fetch when allowlist bodies exist but `bridge_count: 0`",
+      "priority": "high",
+      "priority_score": 99.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "FCF"
+        ],
+        "plan_index": 1
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20260902-01.md",
+      "branch_name": "cursor/eng-20260902-01-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/392",
+      "pr_number": 392,
+      "completed_at": "2026-09-02T08:08:26.777946+00:00",
+      "merged_at": "2026-09-02T08:26:49.316776+00:00"
     },
     {
       "id": "eng-20260830-01",
@@ -846,6 +900,90 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/290",
       "pr_number": 290,
       "merged_at": "2026-08-18T07:43:55.796641+00:00"
+    },
+    {
+      "id": "eng-20260902-02",
+      "area": "ingest",
+      "title": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
+      "summary": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "TTM",
+          "FCF",
+          "HIK.L",
+          "ITV.L"
+        ],
+        "plan_index": 2
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for UK",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260902-03",
+      "area": "scoring",
+      "title": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapsho",
+      "summary": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapshot` and run-history `action_note` when filing, company-adjusted, and TTM differ by >15%",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "OCF",
+          "TTM"
+        ],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260830-04",
@@ -1539,6 +1677,44 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/327",
       "pr_number": 327,
       "merged_at": "2026-08-23T19:27:09.194493+00:00"
+    },
+    {
+      "id": "eng-20260902-04",
+      "area": "scoring",
+      "title": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-gener",
+      "summary": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-generated peer model pass table from sibling `screen_run_manifest.json` files to gap-fill output",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "PEG",
+          "EPS"
+        ],
+        "plan_index": 5
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260823-03",
@@ -2755,6 +2931,7 @@
       "merged_at": "2026-08-11T11:27:24.557027+00:00"
     },
     {
+<<<<<<< Updated upstream
       "id": "eng-20260902-01",
       "area": "ingest",
       "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 1 buy-tier gaps after stalled weekday loop",
@@ -2853,6 +3030,8 @@
       "merged_at": "2026-09-02T08:26:49.316776+00:00"
     },
     {
+=======
+>>>>>>> Stashed changes
       "id": "eng-20260825-01",
       "area": "ingest",
       "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 26 buy-tier gaps after stalled weekday loop",
@@ -3445,13 +3624,14 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-09-02T08:25:33.983285+00:00",
+    "snapshot_at": "2026-09-02T11:13:23.900377+00:00",
     "buy_tier_count": 61,
     "measured_tickers": 61,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
+<<<<<<< Updated upstream
     "indexed_without_body": 5,
     "filings_with_body": 3971
   },
@@ -3514,4 +3694,9 @@
   },
   "micro_compile_source": "library_ingest_loop",
   "library_market_id": "euro_depth"
+=======
+    "indexed_without_body": 3,
+    "filings_with_body": 3923
+  }
+>>>>>>> Stashed changes
 }
