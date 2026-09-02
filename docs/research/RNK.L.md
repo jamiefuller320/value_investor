@@ -1,97 +1,101 @@
 # The Rank Group Plc (RNK.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:56:12.459882+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T17:19:27.334033+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-The Rank Group is a UK-focused gambling operator (Grosvenor casinos, Mecca bingo, Enracha Spain, proprietary digital brands) in a multi-year earnings recovery: underlying like-for-like net gaming revenue (NGR) rose from £716m in FY2023/24 to £834m in FY2025/26, with underlying operating profit up from £46m to £79m over the same span. The quantitative screen flags the name as a buy on cheapness (P/E ~12.5, P/B ~1.2), FCF yield, dividend growth, quality and risk metrics — broadly aligned with filing-reported ROCE of 18.3% and net cash pre-IFRS 16 of £56.8m. The valuation hook is a land-based casino machine rollout and bingo turnaround, against a medium-term target of at least £100m underlying operating profit, at a multiple that embeds little credit for further venue optimisation. The central debate is whether venues-led growth and cost mitigation offset a structurally lower UK digital margin after Remote Gaming Duty (RGD) rose to 40% from April 2026, plus ongoing regulatory, tax and governance noise (Gambling Commission settlement, lease restatement, CEO/CFO transitions). Coverage is adequate on filings but thin on independent news.
+The Rank Group Plc is a UK-focused casino and bingo operator (Grosvenor, Mecca, Enracha) with a growing digital arm. Underlying trading has improved materially: FY2026 like-for-like net gaming revenue (NGR) rose 6% to £834.1m and underlying operating profit rose 21% to £78.6m, with ROCE at 18.3% and net cash pre-IFRS 16 of £56.8m. The quantitative screen rates the name a hold (7/22 models; composite 56%), reflecting partial cheapness and dividend appeal offset by weak reported ROE (7.8%), thin liquidity (current ratio ~0.48), and earnings-quality concerns around free-cash-flow definitions. The central debate is whether venue-led growth (850 additional gaming machines, Mecca turnaround, bingo duty abolition) and management’s £100m medium-term profit ambition can outweigh a structurally lower UK digital margin after Remote Gaming Duty (RGD) rose to 40%, ongoing regulatory scrutiny, and statutory earnings volatility from one-offs.
 
 ## INVESTMENT THESIS
-For a value investor, Rank offers a rare combination in UK mid-cap gambling: improving underlying economics, balance-sheet optionality, and a screen that passes across cheapness, quality, dividend, GARP and risk families (11/22 models including Graham Enterprising, FCF Yield, Piotroski F-Score, Magic Formula and Earnings Quality; data quality 20/20).
-
-**Business quality.** Rank is not a commodity online bookmaker. It owns leading UK land-based casino and bingo brands with cross-channel proprietary technology — a moat the group emphasises in filings. FY2025/26 underlying LFL NGR grew 6% with all divisions in growth for a fifth consecutive year; underlying operating margin reached 9.4% (from 8.1%). ROCE improved to 18.3% (15.1% prior year). Grosvenor benefited from 850 additional gaming machines (+60%) installed in H1 2025/26; Mecca underlying LFL operating profit more than doubled to £8.9m after estate rationalisation (41 clubs) and bingo duty abolition; digital grew LFL NGR 8% despite pre-emptive cost action ahead of RGD.
-
-**Screen linkage.** Trailing underlying EPS of 10.5p (FY2025/26 filing) against a ~12.5x P/E implies the market prices modest growth and heavy regulatory discount. FCF yield screen support aligns with net free cash flow of £25.5m and net cash pre-IFRS 16 of £56.8m. Dividend growth (+35% to 3.50p; progressive policy targeting >35% payout medium term) matches the Dividend Growth screen pass. Debt/equity ~62% in the screen reflects IFRS 16 lease liabilities (£204m); on a pre-IFRS 16 basis the group is net cash positive — a nuance the leverage screen partially captures via the risk family pass.
-
-**Catalyst path.** Management reiterates at least £100m underlying operating profit medium term, driven by gaming machine optimisation (Grosvenor weekly machine NGR target £3m+ vs £2.2m), Mecca double-digit operating profit in FY2026/27, international digital (Portugal YoBingo launch), and normalised capex (~£40m vs £50m). Current trading (first six weeks of FY2026/27: Group NGR +8%) supports momentum, though management warns digital profitability will step down in 2026/27 on annualised RGD.
+A hold is appropriate for a value investor because Rank passes enough of the screen’s cheapness, dividend, and GARP families (FCF yield, Lynch PEG, Magic Formula, Acquirer’s Multiple; Piotroski 8/9) to avoid a pass, yet fails most quality and financial-health models. ROE at 7.8% sits below Graham Enterprising and Buffett Quality thresholds; the current ratio fails Graham Defensive; and Schloss/Deep Value screens reject the 1.2x P/B with elevated lease-adjusted leverage. Business quality is improving operationally—five consecutive years of LFL NGR growth across all divisions, disciplined capex moderating to ~£40m, and a progressive dividend lifted 35% to 3.50p—but the screen correctly flags that statutory profit (£29.9m PAT; 6.4p EPS) diverges sharply from underlying earnings (10.5p EPS) because of £22.9m separately disclosed items (SDIs). For a value investor, Rank offers a reasonably priced, cash-generative leisure name with identifiable operational levers, but not the balance-sheet strength, earnings clarity, or moat characteristics that would justify upgrading beyond hold until digital profitability post-RGD and governance/accounting noise are clearer.
 
 ## FINANCIAL REVIEW
-*Primary source: RNS preliminary/interim results and trading updates. Yahoo `financials_annual.json` used only where noted for cross-check; figures below are from filings unless stated.*
+Primary source: UK RNS filing bodies (Investegate). Annual and interim coverage is good: FY2024, FY2025, and FY2026 final results plus H1 FY2026 half-year report are all present in the filings index.
 
-**Annual trend (June year-end)**
+**Annual trend (filings)**
 
-| Metric | FY2023/24 (Aug 2024) | FY2024/25 (Aug 2025) | FY2025/26 (Aug 2026) |
-|--------|----------------------|----------------------|----------------------|
-| LFL NGR | £734.4m (+9%) | £795.3m (+11%) | £834.1m (+6%) |
-| Underlying LFL operating profit | £46.5m (+131%) | £63.7m (+38%) | £78.6m (+21%) |
+| Metric | FY2024 (Jun 2024) | FY2025 (Jun 2025) | FY2026 (Jun 2026) |
+|---|---|---|---|
+| LFL NGR | £716.3m | £795.3m (+11%) | £834.1m (+6%) |
+| Underlying operating profit | £46.3m | £64.8m* (+21%) | £78.6m (+21%) |
 | Underlying EPS | 5.9p | 9.1p | 10.5p |
-| Statutory operating profit | £29.4m | £67.0m | £55.7m |
-| Statutory PAT | £12.0m | £44.6m | £29.9m |
+| Statutory operating profit | £29.4m | £60.1m* | £55.7m (-7%) |
+| Net free cash flow (company) | £27.6m | £27.7m | £25.5m |
 | Net cash pre-IFRS 16 | £20.9m | £45.4m | £56.8m |
-| Net debt (IFRS 16) | £132.5m | £130.8m | £147.2m |
-| Net free cash flow | £27.7m* | £27.7m | £25.5m |
-| ROCE | n/a (introduced FY2024/25) | 14.5% | 18.3% |
-| Dividend | 0.85p | 2.60p | 3.50p |
+| Net debt (IFRS 16) | £132.5m | £154.7m* | £147.2m |
+| Dividend per share | 0.85p | 2.60p | 3.50p |
+| ROCE | 10.3% | 15.1% | 18.3% |
 
-*FY2023/24 net free cash flow per Aug 2024 filing; Yahoo reports £27.6m for FY2024/25 and FCF £67.4m for FY2024/25 on a different basis — filing figure used.*
+*FY2025 comparatives restated for lease-accounting errors (retained earnings reduced by £8.8m at 30 June 2025; no cash impact).
 
-The recovery arc is clear: from post-Covid lows (FY2022/23 statutory loss) to consistent underlying profit growth. FY2025/26 statutory profit fell (PAT £29.9m vs £44.6m) because separately disclosed items (SDIs) totalled £22.9m, including £6.5m Spanish payment fraud, £5.0m Gambling Commission settlement provision, £6.7m Mecca closure costs and restructuring. Underlying trends remain positive.
+FY2025 (final results, 14 August 2025) showed strong momentum: LFL NGR +11%, underlying LFL operating profit +38% to £63.7m (pre-restatement headline), net cash pre-IFRS 16 more than doubled to £45.4m, and the board lifted the total dividend to 2.60p. Casino reforms (additional machines, sports betting) and digital scale-building were the strategic drivers.
 
-**Divisional FY2025/26 (underlying LFL operating profit):** Grosvenor £35.5m (+11%); Mecca £8.9m (+107%); Enracha £12.0m (+8%); Digital £37.9m (+8%). Digital statutory operating profit fell to £31.3m on SDIs. Management expects UK digital profitability to be “markedly lower” in Q4 FY2025/26 and into 2026/27 despite mitigations (annualised RGD impact cited at ~£46m pre-mitigation in H1 filing).
+FY2026 (preliminary results, 13 August 2026) confirmed continued underlying growth but a statutory step-back. Underlying operating profit reached £78.6m on LFL NGR of £834.1m; underlying margin improved to 9.4%. Statutory operating profit fell 7% to £55.7m and PAT fell 23% to £29.9m after SDIs of £22.9m (Spanish payment fraud £6.5m, proposed Gambling Commission settlement £5.0m, Mecca closures £6.7m, restructuring £3.7m). Cash generation remained positive: net free cash flow £25.5m; operating cash inflow £142.9m before capex of £50.2m. The group refinanced in June 2026 to a four-year £120m revolving credit facility. Total tax and duty payments to authorities were £225.9m in FY2026.
 
-**Interim trend (six months to 31 December)**
+Divisionally (FY2026 filing): Grosvenor venues LFL NGR +5% with gaming machines +11%; Mecca underlying LFL operating profit more than doubled to £8.9m after nine venue closures; Digital LFL NGR +8% but management warns digital profitability will “step down” in 2026/27 from the annualised RGD impact despite Q4 mitigation actions.
 
-| Metric | H1 2024/25 (Jan 2025) | H1 2025/26 (Jan 2026) |
-|--------|----------------------|----------------------|
-| LFL NGR | £401.8m (+13%) | £419.8m (+6%) |
-| Underlying LFL operating profit | £32.9m (+55%) | £40.6m (+15%) |
-| Underlying EPS | 4.8p | 5.5p |
-| Statutory operating profit | £40.2m | £31.3m |
-| Net cash pre-IFRS 16 | £24.2m | £39.4m |
-| Interim dividend | 0.65p | 1.00p (+54%) |
+**Interim (H1 FY2026, six months to 31 December 2025)**
 
-H1 2025/26 statutory profit was hit by the £6.5m Spanish fraud SDI. Underlying margin improved to 9.7% (8.9% prior-year comp, restated).
+H1 FY2026 (half-year report, 29 January 2026): LFL NGR £419.8m (+6%); underlying LFL operating profit £40.6m (+15%); underlying EPS 5.6p; interim dividend raised 54% to 1.00p. Statutory operating profit was £31.3m, hit by the €7.1m Spanish payment fraud (£6.5m SDI). Net cash pre-IFRS 16 at period-end was £39.4m (+63% YoY). H1 confirmed 850 machines installed across 37 Grosvenor venues and flagged RGD rising to 40% from April 2026 as the principal H2 headwind.
 
-**Balance sheet and cash (FY2025/26 filing).** Total equity £384.7m; cash £86.8m; drawn RCF £30.0m; IFRS 16 lease liabilities £204.0m. June 2026 refinancing: new four-year £120m RCF on improved terms (replacing term loan/RCF mix). Retirement benefit obligations £3.5m — immaterial. Group paid £225.9m in taxes and duties in FY2025/26 (filings), underscoring fiscal exposure beyond corporation tax.
+**Trading updates**
 
-**Accounting restatement (material gap to note).** H1 2025/26 and FY2025/26 comparatives were restated for historical lease accounting errors in UK venues (gaming machines, property lease extensions, Romford onerous lease): retained earnings reduced by £8.8m at 30 June 2025; non-cash. This raises governance/accounting diligence flags even though underlying profit before tax was unaffected.
+The 14 July 2026 full-year trading update pre-announced underlying operating profit of at least £76m (vs consensus £68.2m) and the £5.0m regulatory settlement provision—both subsequently confirmed in finals.
 
-**Trading updates (interim between periods).** Q3 FY2025/26 (to 31 Mar 2026): LFL NGR +5% YoY; FY underlying LFL OP guidance raised to at least £68m. Full-year trading update (10 Jul 2026): LFL NGR £834.1m (+6%); underlying OP expected at least £76m (vs consensus £68.2m); £5.0m regulatory settlement flagged. Final results (13 Aug 2026) delivered underlying OP £78.6m — ahead of July guidance.
+**Yahoo fallback note**
 
-**Yahoo fallback.** Screening P/E 12.5 and P/B 1.2 are consistent with filing underlying EPS 10.5p and equity £384.7m (~468m shares). Yahoo FY2024/25 revenue £795.4m and net income £44.6m match Aug 2025 statutory filing; no Yahoo figures used for FY2025/26, which post-dates Yahoo’s latest annual set.
+Yahoo `financials_annual.json` aligns with FY2025 filing revenue (£795.4m) and statutory net income (£44.6m) but does not include FY2026. For FY2025 cash flow, Yahoo reports operating cash flow £125.9m and FCF £67.4m (before lease/SDI adjustments); the screen flags divergence from company net free cash flow of £25.5m in FY2026. Investors should treat filing-defined net free cash flow as primary and note the basis mismatch explicitly flagged by the screen.
 
-**Filing gaps.** Annual reports for FY2023/24 and FY2024/25 and both interim reports are present with bodies. Companies House accounts are indexed but paths in the index point outside this workspace; RNS bodies were used throughout. No Q2 standalone interim beyond half-year reports.
+**Accounting gap**
+
+The lease-accounting restatement (gaming machines, property lease extensions, Romford onerous lease) reduces confidence in historical comparability. Going concern is affirmed through August 2027 with covenant headroom under base and downside scenarios; reverse stress testing shows a remote covenant breach only under extreme revenue declines.
 
 ## RISKS AND RED FLAGS
-**Regulatory and tax.** RGD increase from 21% to 40% (effective 1 Apr 2026) is the largest near-term profit headwind; filings guide to a digital profit step-down in 2026/27 despite mitigations. Proposals to raise Machine Games Duty (MGD) from 20% would threaten venue viability — management argues closures would follow within 12 months. Gambling Commission review of Grosvenor Casinos Limited (Nov 2024–May 2025) led to a £5.0m settlement proposal for historical compliance failings; remedial actions substantially implemented. Financial Risk Assessments for digital customers remain an industry overhang. Anti-gambling campaign tax proposals (including Andy Burnham machine-tax reports in Jun 2026 news) add political tail risk.
+**Regulatory and tax.** Compliance risk is rated medium and increasing (Gambling Commission settlement proposal £5.0m for historical Grosvenor failings; Financial Risk Assessments for digital customers under consultation). RGD at 40% (from 21%) is the largest profit headwind: Autumn Budget filing estimated ~£40m annualised operating profit reduction before mitigation (~£46m digital duty cost offset by ~£6m bingo duty abolition). Proposed Machine Games Duty increases and anti-gambling tax campaigns pose further venue viability risk. Black-market displacement is repeatedly cited in filings.
 
-**Operational / fraud.** December 2025 Spanish payment fraud: £6.5m loss; recovery unlikely per H1 filing. Controls strengthened but reputational and cyber risk trajectory is “increasing” in principal risk register.
+**Operational and fraud.** December 2025 Spanish payment fraud (~€7.1m; recovery unlikely) exposed control weaknesses; remedial actions taken but reputational and repeat-risk remain.
 
-**Governance and accounting.** CEO John O’Reilly retired Jan 2026; Richard Harris (ex-CFO) appointed permanent CEO Jul 2026; Cliff Baty interim CFO (not a board director). Chair turnover (Ott from Nov 2025). Lease accounting restatement (£8.8m retained earnings) and prior FRC-related cash flow reclassifications (FY2024/25 interim) warrant scrutiny. SDI-heavy statutory accounts obscure GAAP earnings (FY2025/26 statutory EPS 6.4p vs underlying 10.5p).
+**Cyclical and cost.** National Living Wage, employer NI, and RPT/statutory levies pressure fixed-cost venue models. Middle East conflict impacted H2 table gaming. Consumer softness around the Autumn Budget noted in H1.
 
-**Cyclical and competitive.** Middle East conflict impacted H2 table gaming; consumer softness around Autumn Budget 2025 noted in H1. Black-market operators cited as beneficiaries of higher duty. Short property leases in venues create tenure risk.
+**Governance and management.** Material board turnover: chair change (Ott from November 2025), CEO succession (O’Reilly retired January 2026; Richard Harris permanent CEO July 2026), interim CFO (Cliff Baty), multiple NED departures. Succession execution risk during a tax/regulatory transition.
 
-**Liquidity and covenants.** Going concern confirmed to Aug 2027 with no material uncertainties; reverse stress test shows covenant breach only under extreme revenue declines (remote). Liquidity risk rated low in FY2025/26 annual filing. Net debt IFRS 16 £147.2m is meaningful but mitigated by £56.8m net cash pre-leases and £120m undrawn/drawn RCF capacity.
+**Balance sheet and liquidity.** Screen current ratio 0.48 and negative working capital (£109m net current liabilities at June 2026) fail financial-health models despite positive net cash pre-IFRS 16. IFRS 16 lease liabilities £204m and drawn RCF £30m matter for covenant sensitivity (reverse stress test: covenant breach January 2027 under extreme scenario—deemed remote).
 
-**Pension.** Defined benefit obligations ~£3.5m — not a screen-level concern.
+**Pension.** Retirement benefit obligations modest at £3.5m; actuarial losses immaterial.
 
-RiskTags: regulatory, cyclical, governance, leverage, accounting, competitive
-RiskTags: regulatory, cyclical, governance, leverage, accounting, competitive
+**Competitive.** UK digital market restructuring post-RGD may reduce competition long term but near-term margin compression is acute. Mecca estate rationalisation (41 clubs) reflects structural bingo pressure pending legislative reform (B3:C machine ratio, side bets).
+
+RiskTags: regulatory, cyclical, governance, competitive, leverage, accounting, liquidity
+RiskTags: regulatory, cyclical, governance, competitive, leverage, accounting, liquidity
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate — mostly RNS, trade press and retail-analyst commentary; limited investigative or sell-side depth.
+News coverage over the past year is reasonably thick, centred on results, tax, and leadership.
 
-- **FY2025/26 results / valuation** (13 Aug 2026): “UK Stock Market News: Entain, Rank, Costain” (The Armchair Trader); “Rank Group: this week’s Finals look for increased NGR, profits, earnings and net cash…” (UK Investor Magazine, 11 Aug 2026).
-- **Trading momentum** (15 Apr 2026): “Rank tops risers after hiking profit outlook” (Yahoo Finance UK) following Q3 update raising profit guidance.
-- **Tax / political risk** (30 Jun 2026): “Entain and Rank fall on report that Burnham could hike gambling machine taxes” (Yahoo Finance UK).
-- **Budget impact** (26 Nov 2025): “BUDGET LIVE: William Hill owner Evoke plunges but Rank and Entain jump on Budget tax changes” (Proactive Investors) — bingo duty abolition positive; RGD increase negative.
-- **Spanish fraud** (22 Dec 2025): “Rank Group falls as Spanish arm hit by €7.1m payment fraud” (Proactive Investors).
-- **Management** (Jan–Jul 2026): CEO succession and Richard Harris appointment covered via RNS headlines; “Rank Group H1 Earnings Call Highlights” (Yahoo Finance, 29 Jan 2026).
-- **Analyst narrative** (Mar 2026): “How The Rank Group (LSE:RNK) Story Is Shifting With A Higher Target And Downgrade” (Yahoo Finance) — mixed Street signals.
+**Results and strategy (2026):**
+- “Rank Group Shares Jump 6% as Underlying Profit Rises” (AskTraders, 14 August 2026)
+- “Rank Group (RNK) Reports 21% Increase in Underlying Operating Profit to £78.6m for FY2026” (Kalkine Media, 13 August 2026)
+- “RNK: Underlying profit up 21% and NGR up 6%, but statutory profit down on one-off items” (TradingView, 13 August 2026)
+- “Rank Group lifts underlying profits and dividend amid tax and regulatory pressures” (TipRanks, 12 August 2026)
 
-Material strategy items (machine rollout, Portugal launch, non-proprietary digital disposal completed Dec 2024) are better documented in filings than in news. News coverage is thin on forensic accounting and regulatory enforcement beyond the settlement RNS.
+**Leadership:**
+- “Rank Group Confirms Richard Harris as Permanent CEO to Drive Next Growth Phase” (Globe and Mail, 14 July 2026)
+- “Could This Boardroom Move Shape Rank Group’s (LSE:RNK) Next Chapter?” (Kalkine Media, 13 August 2026)
+- H1 earnings call coverage noted outgoing CEO John O’Reilly and interim CEO transition (Yahoo Finance, 29 January 2026)
+
+**Regulatory and tax:**
+- “BUDGET LIVE: William Hill owner Evoke plunges but Rank and Entain jump on Budget tax changes” (Proactive Investors, 26 November 2025)—RGD increase vs bingo duty abolition
+- “Entain and Rank fall on report that Burnham could hike gambling machine taxes” (Yahoo Finance UK, 30 June 2026)
+
+**Incidents:**
+- “Rank Group falls as Spanish arm hit by €7.1m payment fraud” (Proactive Investors, 22 December 2025)
+
+**Trading momentum:**
+- “Rank Group Raises Profit Guidance as Digital Growth and Gaming Machines Boost Performance” (Yahoo Finance UK, 14 July 2026)
+- “Rank tops risers after hiking profit outlook” (Yahoo Finance UK / Proactive, 15 April 2026)
+
+Analyst commentary is mixed (e.g. downgrades alongside steady fair-value estimates in March 2026 Yahoo pieces). No major M&A announced; focus remains organic venue optimisation and Portugal digital bingo launch.
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: neutral
 Risk: medium
-Confidence: 0.72
-Rationale: Filing-backed underlying profit, cash generation and ROCE improvement support the quantitative buy signal, but regulatory taxation, FY2025/26 SDI distortion, lease restatement and leadership transition temper conviction pending clarity on 2026/27 digital margins.
+Confidence: 0.68
+Rationale: Deep research confirms the hold signal—underlying operational improvement and dividend support are real, but regulatory/tax headwinds, SDI-driven statutory earnings volatility, lease restatement, weak liquidity metrics, and FCF definition divergence prevent a conviction upgrade.
