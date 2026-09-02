@@ -13,12 +13,16 @@ from value_investor.models.risk import EarningsQualityModel
 from value_investor.scoring import evaluate_universe
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    build_labelled_fcf_dividend_coverage,
     earnings_growth_signs_diverge,
     enrich_universe_with_filing_metrics,
     extract_company_adjusted_fcf_from_reconciliation_bridges,
+    fcf_action_note_mismatch,
     fcf_basis_divergence_flagged,
     fcf_filing_screen_mismatch,
+    fcf_universe_divergence_flagged,
     fcf_values_diverge,
+    ocf_definition_diverges,
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
@@ -793,7 +797,8 @@ def test_append_fcf_divergence_note_when_filing_screen_gap_exceeds_25_pct():
         screen_ttm=70_000_000.0,
         fcf_bundle={"filing_aligned": 100_000_000.0, "divergence_flagged": False},
     )
-    assert "FCF filing-aligned $100M" in note
+    assert "FCF basis mismatch" in note
+    assert "filing $100M" in note
     assert "screen TTM $70M" in note
 
 
@@ -1288,6 +1293,140 @@ def test_build_company_reports_exports_annual_aligned_gross_coverage(tmp_path: P
     assert snapshot["fcf_dividend_coverage_gross"] > 1.0
     assert snapshot["interim_quality_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
+
+
+def test_ocf_definition_diverges_when_management_ocf_exceeds_statutory_by_15_pct():
+    assert ocf_definition_diverges(90_762_000.0, 115_500_000.0) is True
+    assert ocf_definition_diverges(90_762_000.0, 100_000_000.0) is False
+
+
+def test_build_labelled_fcf_dividend_coverage_uses_statutory_and_management_labels():
+    labelled = build_labelled_fcf_dividend_coverage(
+        fcf_dividend_coverage_net=0.84,
+        fcf_dividend_coverage_gross=1.68,
+    )
+    assert labelled["statutory_ocf_minus_capex"]["label"] == "Statutory OCF−CapEx"
+    assert labelled["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
+    assert labelled["management_cash_generated_minus_capex"]["label"] == (
+        "Management cash-generated−CapEx"
+    )
+    assert labelled["management_cash_generated_minus_capex"]["ratio"] == pytest.approx(1.68)
+
+
+def test_fcf_universe_divergence_flagged_at_15_pct_without_50_pct_overlay():
+    assert fcf_universe_divergence_flagged(
+        filing_aligned=100_000_000.0,
+        screen_ttm=84_000_000.0,
+        company_adjusted=None,
+    )
+    assert not fcf_basis_divergence_flagged(
+        filing_aligned=100_000_000.0,
+        screen_ttm=84_000_000.0,
+        company_adjusted=None,
+    )
+
+
+def test_fcf_action_note_mismatch_triggers_at_15_pct_universe_gap():
+    assert fcf_action_note_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=84_000_000.0,
+        company_adjusted=None,
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=100_000_000.0,
+        screen_ttm=84_000_000.0,
+        divergence_flagged=False,
+    )
+
+
+def test_append_fcf_divergence_note_includes_definition_divergence_coverage():
+    note = append_fcf_divergence_to_action_note(
+        "Strong Buy — neutral timing",
+        canonical=25_153_000.0,
+        screen_ttm=25_153_000.0,
+        fcf_definition_divergence=True,
+        fcf_dividend_coverage_net=0.84,
+        fcf_dividend_coverage_gross=1.68,
+    )
+    assert "FCF definition divergence" in note
+    assert "statutory 0.84×" in note
+    assert "management 1.68×" in note
+
+
+def test_build_company_reports_exports_labelled_dual_coverage_and_flags(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    annual_body = filings_dir / "annual.txt"
+    annual_body.write_text(
+        "Cash generated from operations £115.5m while net cash generated from operating "
+        "activities was £90.8m.",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "annual",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(annual_body),
+                        "published_at": "2026-03-23",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Capital Expenditure": -65_609_000.0,
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Dividends Paid": -29_769_000.0,
+            }
+        }
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                free_cashflow=25_153_000.0,
+                free_cashflow_screen_ttm=15_565_750.0,
+            ),
+        ]
+    )
+    signals = enrich_universe_with_filing_metrics(signals, tmp_path)
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_definition_divergence"] is True
+    assert snapshot["fcf_divergence_flagged"] is True
+    assert snapshot["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        25_153_000.0 / 29_769_000.0
+    )
+    assert snapshot["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
+        "ratio"
+    ] == pytest.approx(49_891_000.0 / 29_769_000.0)
+    assert "FCF definition divergence" in snapshot["action_note"]
 
 
 def test_build_company_reports_exports_dual_leverage_display():

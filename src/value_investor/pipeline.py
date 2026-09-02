@@ -174,6 +174,8 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "operating_cashflow",
         "fcf_dividend_coverage_gross",
         "fcf_dividend_coverage_net",
+        "fcf_definition_divergence",
+        "fcf_divergence_flagged",
         "adjusted_signal",
     ]
     present = [c for c in cols if c in signals.columns]

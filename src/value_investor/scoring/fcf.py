@@ -108,6 +108,8 @@ _FILING_METRIC_KEYS = (
     "dividends_paid",
     "fcf_dividend_coverage_gross",
     "fcf_dividend_coverage_net",
+    "fcf_definition_divergence",
+    "fcf_divergence_flagged",
     "interim_eps_decline_pct",
     "adjusted_eps_growth_pct",
 )
@@ -119,6 +121,8 @@ _RESEARCH_ROOTS = (
 
 FCF_DIVERGENCE_THRESHOLD = 0.50
 FCF_FILING_SCREEN_DIVERGENCE_THRESHOLD = 0.25
+FCF_UNIVERSE_DIVERGENCE_THRESHOLD = 0.15
+FCF_DEFINITION_DIVERGENCE_THRESHOLD = 0.15
 FCF_YIELD_COMPANY_TOLERANCE = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 FCF_YIELD_MODEL_ID = "fcf_yield"
@@ -263,6 +267,73 @@ def compute_dual_fcf_dividend_coverage(
         "fcf_dividend_coverage_net": fcf_dividend_coverage(net_fcf, dividends_paid),
         "fcf_dividend_coverage_gross": fcf_dividend_coverage(gross_fcf, dividends_paid),
     }
+
+
+def build_labelled_fcf_dividend_coverage(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    fcf_dividend_coverage_gross: float | None,
+) -> dict[str, dict[str, Any]]:
+    """Return dual dividend-coverage ratios with explicit statutory vs management labels."""
+    return {
+        "statutory_ocf_minus_capex": {
+            "label": "Statutory OCF−CapEx",
+            "ratio": fcf_dividend_coverage_net,
+        },
+        "management_cash_generated_minus_capex": {
+            "label": "Management cash-generated−CapEx",
+            "ratio": fcf_dividend_coverage_gross,
+        },
+    }
+
+
+def ocf_definition_diverges(
+    operating_cashflow: float | None,
+    operating_cashflow_gross: float | None,
+    *,
+    threshold: float = FCF_DEFINITION_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """True when management gross OCF exceeds statutory net OCF by more than ``threshold``."""
+    if operating_cashflow is None or operating_cashflow_gross is None:
+        return False
+    if isinstance(operating_cashflow, float) and pd.isna(operating_cashflow):
+        return False
+    if isinstance(operating_cashflow_gross, float) and pd.isna(operating_cashflow_gross):
+        return False
+    statutory = float(operating_cashflow)
+    gross = float(operating_cashflow_gross)
+    if gross <= statutory:
+        return False
+    if statutory == 0:
+        return gross > 0
+    return (gross - statutory) / abs(statutory) > threshold
+
+
+def fcf_universe_divergence_flagged(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    threshold: float = FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """Universe-level flag when any FCF basis pair exceeds ``threshold`` (default 15%)."""
+    pairs: list[tuple[float | None, str | None, float | None, str | None]] = [
+        (filing_aligned, filing_currency, screen_ttm, filing_currency),
+        (filing_aligned, filing_currency, company_adjusted, company_adjusted_currency),
+        (screen_ttm, filing_currency, company_adjusted, company_adjusted_currency),
+    ]
+    return any(
+        fcf_basis_values_diverge(
+            a,
+            b,
+            left_currency=curr_a,
+            right_currency=curr_b,
+            threshold=threshold,
+        )
+        for a, curr_a, b, curr_b in pairs
+    )
 
 
 def extract_cashflow_metrics_from_annual_financials(
@@ -1076,6 +1147,13 @@ def reconcile_fcf(
         filing_currency=currency,
         company_adjusted_currency=company_adjusted_currency,
     )
+    fcf_divergence_flagged = fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
     filing_screen_mismatch = fcf_filing_screen_mismatch(
         filing_aligned=filing_aligned if filing_aligned is not None else canonical,
         screen_ttm=screen_ttm,
@@ -1097,6 +1175,7 @@ def reconcile_fcf(
         "company_adjusted": company_adjusted,
         "company_adjusted_currency": company_adjusted_currency,
         "divergence_flagged": divergence_flagged,
+        "fcf_divergence_flagged": fcf_divergence_flagged,
         "filing_screen_mismatch": filing_screen_mismatch,
         "bridge_resolved": bool(bridge_resolved),
         "policy_fcf": float(policy_fcf) if policy_fcf is not None else None,
@@ -1315,6 +1394,50 @@ def format_fcf_basis_action_note(
     return "FCF basis mismatch: " + " | ".join(parts)
 
 
+def format_fcf_definition_divergence_action_note(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    fcf_dividend_coverage_gross: float | None,
+) -> str:
+    """Surface labelled statutory vs management dividend coverage when OCF definitions diverge."""
+    parts: list[str] = []
+    if fcf_dividend_coverage_net is not None:
+        parts.append(f"statutory {fcf_dividend_coverage_net:.2f}×")
+    if fcf_dividend_coverage_gross is not None:
+        parts.append(f"management {fcf_dividend_coverage_gross:.2f}×")
+    if not parts:
+        return "FCF definition divergence"
+    return "FCF definition divergence: " + " vs ".join(parts) + " dividend coverage"
+
+
+def fcf_action_note_mismatch(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None = None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    divergence_flagged: bool = False,
+    fcf_definition_divergence: bool = False,
+) -> bool:
+    """True when run-history action notes should surface FCF basis or definition divergence."""
+    if fcf_definition_divergence:
+        return True
+    if fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    ):
+        return True
+    return fcf_filing_screen_mismatch(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        divergence_flagged=divergence_flagged,
+    )
+
+
 def format_fcf_divergence_action_note(
     canonical: float,
     screen_ttm: float,
@@ -1334,6 +1457,9 @@ def append_fcf_divergence_to_action_note(
     canonical: float | None,
     screen_ttm: float | None,
     fcf_bundle: dict[str, Any] | None = None,
+    fcf_dividend_coverage_net: float | None = None,
+    fcf_dividend_coverage_gross: float | None = None,
+    fcf_definition_divergence: bool = False,
 ) -> str:
     """Append a compact FCF bridge note when FCF bases diverge beyond thresholds."""
     bundle = fcf_bundle or {}
@@ -1343,30 +1469,67 @@ def append_fcf_divergence_to_action_note(
     filing_currency = str(bundle.get("currency") or "USD")
     divergence_flagged = bool(bundle.get("divergence_flagged"))
     filing_for_mismatch = filing_aligned if filing_aligned is not None else canonical
+    definition_divergence = fcf_definition_divergence or bool(
+        bundle.get("fcf_definition_divergence")
+    )
+    coverage_net = fcf_dividend_coverage_net
+    if coverage_net is None:
+        coverage_net = bundle.get("fcf_dividend_coverage_net")
+    coverage_gross = fcf_dividend_coverage_gross
+    if coverage_gross is None:
+        coverage_gross = bundle.get("fcf_dividend_coverage_gross")
 
-    if not fcf_filing_screen_mismatch(
+    notes: list[str] = []
+    if fcf_action_note_mismatch(
         filing_aligned=filing_for_mismatch,
         screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
         divergence_flagged=divergence_flagged,
+        fcf_definition_divergence=definition_divergence,
     ):
+        if (
+            company_adjusted is not None
+            or divergence_flagged
+            or fcf_universe_divergence_flagged(
+                filing_aligned=filing_for_mismatch,
+                screen_ttm=screen_ttm,
+                company_adjusted=company_adjusted,
+                filing_currency=filing_currency,
+                company_adjusted_currency=company_adjusted_currency,
+            )
+        ):
+            notes.append(
+                format_fcf_basis_action_note(
+                    filing_aligned=filing_aligned if filing_aligned is not None else canonical,
+                    screen_ttm=screen_ttm,
+                    company_adjusted=company_adjusted,
+                    filing_currency=filing_currency,
+                    company_adjusted_currency=company_adjusted_currency,
+                )
+            )
+        elif canonical is not None and screen_ttm is not None:
+            notes.append(
+                format_fcf_divergence_action_note(
+                    canonical,
+                    screen_ttm,
+                    filing_currency=filing_currency,
+                )
+            )
+
+    if definition_divergence:
+        notes.append(
+            format_fcf_definition_divergence_action_note(
+                fcf_dividend_coverage_net=_float_or_none(coverage_net),
+                fcf_dividend_coverage_gross=_float_or_none(coverage_gross),
+            )
+        )
+
+    if not notes:
         return action_note
 
-    if company_adjusted is not None or divergence_flagged:
-        divergence_note = format_fcf_basis_action_note(
-            filing_aligned=filing_aligned if filing_aligned is not None else canonical,
-            screen_ttm=screen_ttm,
-            company_adjusted=company_adjusted,
-            filing_currency=filing_currency,
-            company_adjusted_currency=company_adjusted_currency,
-        )
-    else:
-        assert canonical is not None and screen_ttm is not None
-        divergence_note = format_fcf_divergence_action_note(
-            canonical,
-            screen_ttm,
-            filing_currency=filing_currency,
-        )
-
+    divergence_note = " | ".join(notes)
     if action_note and divergence_note in action_note:
         return action_note
     if action_note:
@@ -1478,6 +1641,21 @@ def enrich_universe_with_filing_metrics(
         for key, value in coverage.items():
             if value is not None:
                 out.at[index, key] = value
+
+        statutory_ocf = _float_or_none(out.at[index, "operating_cashflow"])
+        gross_ocf = _float_or_none(out.at[index, "operating_cashflow_gross"])
+        definition_divergence = ocf_definition_diverges(statutory_ocf, gross_ocf)
+        out.at[index, "fcf_definition_divergence"] = definition_divergence
+
+        screen_ttm = _float_or_none(row.get("free_cashflow_screen_ttm"))
+        if screen_ttm is None:
+            screen_ttm = _float_or_none(row.get("free_cashflow"))
+        fcf_bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        out.at[index, "fcf_divergence_flagged"] = bool(fcf_bundle.get("fcf_divergence_flagged"))
 
         interim_decline = extract_interim_eps_decline_for_ticker(ticker, output_dir=output_dir)
         if interim_decline is not None:
