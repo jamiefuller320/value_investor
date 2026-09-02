@@ -805,6 +805,54 @@ def check_ops_budget() -> list[OpsFinding]:
     return findings
 
 
+def check_memo_rememo_backlog() -> list[OpsFinding]:
+    """Flag when body-lag rememo backlog exceeds in-week maintenance capacity."""
+    from value_investor.research.weekday_rememo import assess_rememo_backlog
+
+    try:
+        assessment = assess_rememo_backlog()
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Memo rememo backlog assessment failed",
+                summary=str(exc),
+            )
+        ]
+
+    count = int(assessment.get("backlog_count") or 0)
+    capacity = int(assessment.get("weekly_maintenance_capacity") or 0)
+    action = str(assessment.get("action") or "none")
+    if count <= 0 or not assessment.get("over_weekly_capacity"):
+        return []
+
+    weeks = assessment.get("weeks_to_clear_at_maintenance")
+    summary = (
+        f"{count} memo(s) need rememo vs in-week capacity {capacity} "
+        f"(~{weeks} week(s) at weekday maintenance). action={action}."
+    )
+    if action == "escalate":
+        return [
+            OpsFinding(
+                severity="fail",
+                category="research",
+                title="Memo rememo backlog exceeds in-week capacity (budget blocked)",
+                summary=summary,
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity="fail",
+            category="research",
+            title="Memo rememo backlog exceeds in-week capacity",
+            summary=summary,
+            auto_fixable=True,
+        )
+    ]
+
+
 def check_backtest_history(
     history_dir: Path = COMMITTED_HISTORY_DIR,
 ) -> list[OpsFinding]:
@@ -1005,6 +1053,26 @@ def apply_auto_fixes(
                     finding.fixed = True
                     finding.action_taken = "; ".join(row.detail for row in repairs[:3])
 
+    rememo_over = any(
+        row.title == "Memo rememo backlog exceeds in-week capacity" and not row.fixed
+        for row in findings
+    )
+    if rememo_over and apply:
+        from value_investor.research.weekday_rememo import write_rememo_backlog_status
+
+        status = write_rememo_backlog_status()
+        request = status.get("catchup_request") or {}
+        elevated = request.get("elevated_cap")
+        action = (
+            f"wrote memo rememo catch-up request "
+            f"(backlog={status.get('backlog_count')}, elevated_cap={elevated})"
+        )
+        results.append({"action": "activate_memo_rememo_catchup", "detail": action})
+        for finding in findings:
+            if finding.title == "Memo rememo backlog exceeds in-week capacity":
+                finding.fixed = True
+                finding.action_taken = action
+
     return results
 
 
@@ -1178,6 +1246,7 @@ def collect_ops_findings(
     findings.extend(check_ingest_health_log(health_log_path))
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
+    findings.extend(check_memo_rememo_backlog())
     findings.extend(check_backtest_history())
 
     engineering_findings, queue_status = check_engineering_queue(

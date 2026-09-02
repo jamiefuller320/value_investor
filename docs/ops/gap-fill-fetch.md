@@ -58,9 +58,13 @@ Mon–Fri `ingest-loop` thickens filing bodies offline. After a non-chaining pas
 `ftse-research --weekday-rememo` force-initial rememos up to **3** memo tickers when:
 
 - ingest marked the ticker `improved`, or
-- published Sources grade is adequate/thin/poor (or missing) and disk
-  `filings_with_body` lags the published count by ≥10, or
+- committed Sources grade is adequate/thin/poor (or missing) and disk
+  `filings_with_body` lags the memo's recorded count by ≥10, or
 - a strong badge still lags disk by a large margin (≥25)
+
+Selection scans committed `docs/data/research/*/research.json` (not only the
+`latest.json` research index), so body-lag catch-up is not blind to memos missing
+from the dashboard slice.
 
 Guards: `weekly_ops` remaining must cover estimated spend plus ~$8 headroom;
 requires `CURSOR_API_KEY`. Summary: `docs/data/weekday_memo_rememo_summary.json`.
@@ -72,6 +76,35 @@ ftse-research --weekday-rememo --weekday-rememo-cap 3 --dry-run --skip-screen
 ftse-research --weekday-rememo --weekday-rememo-cap 3 \
   --ingest-loop-json /tmp/ingest_loop.json --skip-screen
 ```
+
+## Rememo backlog catch-up + capacity monitor
+
+When ingest has thickened many memo corpora faster than weekday rememo can clear
+them, the backlog can exceed **in-week maintenance capacity** (default
+`3/day × 5 weekdays = 15`).
+
+Assess and (if over capacity) activate an elevated catch-up request:
+
+```bash
+ftse-research --rememo-backlog-status
+```
+
+Artifacts:
+
+- `docs/data/memo_rememo_backlog.json` — full backlog + capacity assessment
+- `docs/data/memo_rememo_catchup_request.json` — active elevated rememo cap
+
+Drain the backlog in batches (budget-aware):
+
+```bash
+ftse-research --rememo-catchup --rememo-catchup-cap 5 --dry-run --skip-screen
+ftse-research --rememo-catchup --rememo-catchup-cap 5 --skip-screen
+```
+
+`ftse-ops-monitor` also watches this backlog. If it exceeds in-week capacity and
+budget remains, the monitor auto-writes the catch-up request so weekday rememo
+raises its cap until the backlog is back within maintenance range. If budget is
+exhausted, it drafts an engineering task instead (`action=escalate`).
 
 ## Retry flow (summary)
 

@@ -1,92 +1,90 @@
 # Pets at Home Group Plc (PETS.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:10:05.265031+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:19:29.503004+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Pets at Home is the UK’s leading integrated pet care platform—460+ pet care centres, 450+ vet practices, and a growing subscription base—trading at a discount to book (P/B ~0.9) with a 16% FCF yield on the quantitative screen. FY26 was a transition year: statutory PBT fell to £86.5m and underlying PBT to ~£92m as retail margins were hit by price investment and weak H1 execution, while the vet business grew underlying PBT to £83.8m. The central debate is whether the Retail Turnaround Plan can restore retail profit from ~£31m while vets and subscriptions carry the group, against CMA veterinary remedies and persistent UK consumer pressure. Early FY27 trading (Q1 consumer revenue +3.9%) and a rebased capital-return policy (50% payout ratio plus £50m buyback) support a value case, but earnings quality remains bifurcated and management turnover is fresh.
+Pets at Home is the UK’s leading integrated pet-care platform—460 pet care centres, a Joint Venture vet estate (~455 practices), and a subscription-heavy loyalty base—trading at roughly book value (P/B ~1.0) with a screen-indicated FCF yield of ~10% after a sharp FY26 earnings reset. The value case rests on a capital-light vet franchise generating most group profit and cash, management’s Retail Turnaround Plan showing early traction (Q1 FY27 retail consumer revenue +4.9%), and shareholder returns via a rebased dividend plus £50m buyback. The central debate is whether retail margin recovery and vet growth can restore underlying PBT from £92.8m (FY26) toward consensus ~£98m (FY27) without further price investment eroding returns, against a backdrop of post-pandemic vet market softness, heavy intangible assets, and recent leadership turnover.
 
 ## INVESTMENT THESIS
-The quantitative screen flags PETS as a buy across four families—cheapness, dividend, GARP, and risk—with six passing models (Schloss Low P/B, FCF Yield, Neff PEGY, Dividend Growth, Dreman Contrarian, Earnings Quality). At P/E ~14.9, P/B ~0.9, dividend yield ~3.5%, D/E ~41%, and screen-reported FCF yield ~16.2%, the market prices in sustained retail weakness and ignores vet-led cash generation.
+The quantitative screen flags PETS across four families—cheapness, dividend, GARP, and risk—consistent with a quality-adjacent compounder priced for disappointment. Schloss Low P/B (0.99), FCF Yield (~10.3%), Neff PEGY, Dividend Growth, Dreman Contrarian, and Earnings Quality all pass; leverage (D/E ~41%) and data quality (20/20 metrics) do not veto the signal.
 
-Business quality rests on durable structural advantages cited in FY26 filings: ~95% brand awareness, 7.4m active Pets Club members, subscriptions at 15.2% of consumer revenue, and a JV vet model generating £74.2m vet free cash flow in FY26. The integrated omnichannel platform (completed distribution and digital investments) creates switching costs competitors struggle to replicate. For a value investor, the hook is asset-backed cheapness (goodwill-heavy balance sheet notwithstanding) plus optionality from retail stabilisation: FY26 underlying PBT trough (~£92m) vs FY27 analyst consensus ~£99m (pre-close guidance, range £90–108m) implies modest recovery at a sub-1× book multiple. Screen conviction is low (30%, new signal, neutral timing, RSI ~63), so this is a fundamental turnaround overlay rather than a momentum trade.
+Business quality is bifurcated. The Vet Group is the economic engine: FY26 underlying PBT £83.8m (+10.4% YoY) on consumer revenue £688.1m (+5.0%), with JV practices paying ~£48.1m in partner dividends and 71% debt-free. Retail collapsed to underlying PBT £30.8m (−57.8%) after deliberate price cuts on 1,000+ SKUs and weak discretionary demand, but H2 showed improving volume and Q1 FY27 retail momentum (+4.9% consumer revenue, volumes ahead of sales). The integrated model—Pets Club (7.0–7.4m active members), subscriptions at 15%+ of consumer revenue, and an insurance launch (FCA-approved, on track for 2026)—supports recurring revenue and cross-sell that screens do not fully capture.
+
+For a value investor, the hook is buying a near-net-cash balance sheet (adjusted net debt £19.4m; 0.1× underlying EBITDA leverage) and depressed earnings at ~15.6× P/E and ~1.0× book, with management explicitly targeting FY27 underlying PBT in line with consensus (~£98m) and returning surplus cash via buybacks (£150m over four prior years; further £50m authorised). Timing is neutral per the screen (RSI ~57, price above 200-day MA), favouring staged accumulation rather than momentum chasing.
 
 ## FINANCIAL REVIEW
-**Source hierarchy:** Primary figures from UK RNS trading updates and Companies House annual report extracts (`filings/bodies/`). Yahoo (`financials_annual.json`) used only where filing bodies lack line-item detail; noted explicitly below.
+**Primary source:** FY26 Preliminary Results (52 weeks to 26 March 2026, RNS 27 May 2026); supplemented by Companies House annual accounts (FY24, FY23) and trading/pre-close statements. No dedicated statutory half-year results release appears in `filings_index.json`—interim coverage is via Q3 FY26 trading (28 Jan 2026), FY26 pre-close (31 Mar 2026), full-year preliminary results, and Q1 FY27 trading (30 Jul 2026). H1 FY27 interim results are scheduled for 25 November 2026.
 
-**Coverage gaps:** The filings index contains **no interim (half-year) releases** (`interim: 0`). FY26 preliminary results (27 May 2026) and several annual RNS notices have **no downloadable body text**—only administrative posting announcements. Latest full annual extract is Companies House FY26 accounts (`ch_08885072_MzUyNzI1OTAyMmFkaXF6a2N4.txt`); FY25 comparatives from `ch_08885072_MzQ3MTUxMTEwNWFkaXF6a2N4.txt`.
+**Income statement trend (statutory unless noted)**
 
-### Annual trend (FY25 → FY26, year ended 26 March 2026)
+| Year (Mar) | Revenue (£m) | Statutory PBT (£m) | Underlying PBT (£m) | Underlying EPS (p) | Dividend (p) |
+|------------|-------------|-------------------|--------------------|--------------------|--------------|
+| FY23 | 1,404.2 | 122.5 | 136.4 | — | 12.8 |
+| FY24 | 1,476.6 | 105.7 | 132.0 | — | — |
+| FY25 | 1,481.7 | 120.6 | 133.0 | 21.0 | 13.0 |
+| FY26 | 1,469.6 | 86.5 | 92.8 | 14.8 | 7.4 |
 
-| Metric | FY25 | FY26 | YoY |
-|--------|------|------|-----|
-| Group statutory revenue | £1,482.1m | £1,469.6m | −0.8% |
-| Group statutory PBT | £120.6m | £86.5m | −28.3% |
-| Group underlying PBT | £133.0m | £92.8m | −30.2% |
-| Group consumer revenue (APM) | £1,961.9m | £1,981.0m | +1.0% |
-| Vet Group underlying PBT | £75.9m | £83.8m | +10.4% |
-| Retail underlying PBT | £72.9m | £30.8m | −57.8% |
-| Group free cash flow (APM) | £83.8m | £61.9m | −26.1% |
-| Dividend per share | 13.0p | 7.4p | −43.1% (rebased) |
+FY23–FY24 from Companies House annual report extracts; FY25–FY26 from FY26 preliminary results filing.
 
-FY26 statutory revenue decline (−0.8%) masked a divergent mix: vet consumer revenue grew 5.0% while retail consumer revenue fell 1.0%, with H1 retail down 2.3%. Underlying PBT of ~£92m (pre-close: “c£92m”) came in at the low end of revised guidance after profit warnings through the year; retail delivered ~£30m underlying PBT following price cuts on 1,000+ products (average −12%) and £20m overhead savings.
+FY26 statutory revenue fell 0.8% to £1,469.6m while group consumer revenue rose 1.0% to £1,981.0m (retail −1.0% to £1,292.9m; vet +5.0% to £688.1m). Underlying PBT margin compressed from 9.0% to 6.3%, driven by retail (underlying margin 2.4% vs 5.6% prior year) including ~80bps planned price investment; vet underlying margin improved to 47.4%. Statutory basic EPS was 13.8p (underlying 14.8p), down ~28–30% YoY. Insurance start-up costs were £5.2m; non-underlying restructuring £6.3m.
 
-Cash and leverage: FY26 pre-close statement expects **net debt ~£20m** after returning **~£85m** to shareholders via dividends and buybacks. *Fallback (Yahoo, FY26 balance sheet):* net debt £18.3m, total debt £396.7m (including £338.8m capital lease obligations), equity £973m, working capital −£131.5m. Yahoo reports operating cash flow £191m and FCF £148.2m—**higher than the company’s APM free cash flow of £61.9m**, reflecting definitional differences (JV treatment, lease accounting); primary filing figure used for trend analysis.
+**Interim / trading trajectory**
 
-FY25 (prior year) showed resilience: statutory PBT £120.6m (+14.1%), underlying PBT £133.0m (+0.7%), group FCF £83.8m (+21.5%), finishing in an “adjusted net cash” position per the chair’s statement, with dividend 13.0p.
+- **Q3 FY26** (12 weeks to 1 Jan 2026): Group consumer revenue +0.8% to £472m; retail −1.1% but positive volume growth; vet +5.0%. FY26 underlying PBT guided in line with consensus ~£93m.
+- **Pre-close FY26** (31 Mar 2026): Underlying PBT expected ~£92m; retail ~£30m; vet ~£83m; net debt ~£20m.
+- **Q1 FY27** (16 weeks to 16 Jul 2026): Group consumer revenue +3.9% to £614m (retail +4.9% to £399m; vet +1.9% to £215m); FY27 guidance unchanged; ~£25m of £50m buyback complete by H1 end.
 
-### Trading updates (no interim accounts available)
+**Cash flow and balance sheet (FY26 preliminary)**
 
-- **Q3 FY26** (28 Jan 2026): Group consumer revenue +0.8% to £472m; vet +5.0%; retail −1.1% with positive volumes and low-teens online growth; FY26 underlying PBT guided in line with consensus ~£93m.
-- **FY26 pre-close** (31 Mar 2026): Confirmed underlying PBT ~£92m; retail ~£30m, vet ~£83m; net debt ~£20m; dividend rebased to 50% payout with buyback offset; CMA vet investigation expected non-adverse; FY27 consensus underlying PBT ~£99m.
-- **Q1 FY27** (30 Jul 2026): Total consumer revenue +3.9% to £614m (retail +4.9%, vet +1.9%); full-year guidance maintained; £25m of £50m buyback completed by H1 end.
+- Group free cash flow (APM): £61.9m (FY25: £83.8m); vet FCF £74.2m, retail £2.7m.
+- Capex: £42.1m (FY27 guide ~£50m).
+- Cash £39.6m; drawn debt £59.0m; **adjusted net debt £19.4m** (FY25: net cash £6.2m).
+- Total assets £1,654.7m; equity £973.1m; goodwill and intangibles £981.7m (tangible book value negative per Yahoo balance sheet—fallback for this metric only).
+- Net current liabilities £131.5m (working-capital and lease timing; going concern not impaired per auditor and directors’ statements in FY26 accounts).
 
-**Direction:** Earnings peaked in FY25 and troughed in FY26 on retail investment and execution. H2 FY26 showed sequential retail improvement (positive LFL in Q4 per pre-close); Q1 FY27 suggests turnaround momentum, but statutory earnings remain well below FY23–25 levels (Yahoo: net income fell from £100.7m in FY23 to £62.5m in FY26).
+**Yahoo fallback (where filings lack a consolidated multi-year series)**
+
+Yahoo `financials_annual.json` aligns closely with FY26 filing figures (revenue £1,469.6m; net income £62.5m; operating cash flow £191.0m; Yahoo FCF £148.2m vs company APM £61.9m—difference reflects lease/capex definitions). Yahoo shows operating cash flow declining from £218m (FY25) to £191m (FY26), consistent with the filing trend. Quarterly cash-flow series are empty (`ttm_cashflow_suppressed`), limiting TTM cross-checks.
+
+**Gap note:** FY24 dividend per share and FY23 underlying EPS are not cleanly extracted from OCR-degraded Companies House PDF text; multi-year dividend/EPS continuity relies primarily on FY26 preliminary comparatives.
 
 ## RISKS AND RED FLAGS
-**Regulatory:** The CMA veterinary services market investigation is a live overhang. FY26 filings note extensive engagement; pre-close states **no adverse impact** on vet growth strategy expected from the final decision, but remedy implementation could affect pricing, transparency, or JV economics—unresolved until fully embedded.
+**Retail execution and margin risk.** Underlying retail PBT fell 58% in FY26; gross margin down ~180bps including deliberate price investment. Turnaround depends on volume-led recovery without further margin erosion—a risk screens’ cheapness metrics underweight.
 
-**Competitive:** Grocery discounters, pure-play online (including Amazon), and specialist DTC brands pressure retail price and mix. FY25–26 filings acknowledge subdued UK pet market growth and channel shift to online; Pets at Home must defend share through price investment that compresses retail margins.
+**Cyclical and cohort headwinds.** Management cites subdued vet market growth as pandemic-era pet cohorts age; vet consumer revenue growth slowed to +1.9% in Q1 FY27 despite care-plan strength. UK consumer pressure (credit-card borrowing, discretionary accessories −3.5% in FY26) remains a drag.
 
-**Cyclical / consumer:** UK macro uncertainty and cost-of-living pressure weighed on discretionary pet spend; retail transactions fell 1% in FY26 despite volume-led recovery in H2. Vet growth may slow as pandemic-era pet cohorts age through a lower-visit life stage (flagged in Q3 FY26 and pre-close).
+**Governance and key-person transition.** CEO James Bailey and CFO Sarah Pollard (appointed March 2026) follow the September 2025 departure of prior CEO Lyssa McGowan amid a profit warning—material governance/event risk within the past year.
 
-**Governance / key person:** CEO departure in September 2025 led to interim Executive Chair (Ian Burke) until March 2026; James Bailey appointed CEO and Sarah Pollard CFO at FY27 start. Profit guidance was cut multiple times in FY26—investor feedback explicitly cited in filings as a concern. Leadership transition adds execution risk to the Retail Turnaround Plan.
+**Competitive and regulatory.** Supermarkets, online (including Amazon Pet Fest coverage in news flow), and specialists compete on price; the CMA veterinary market investigation concluded with no expected adverse impact on Pets’ JV model (per FY26 filings), but sector scrutiny persists. Own-label insurance launch adds execution and regulatory cost (£5.2m FY26; higher in FY27).
 
-**Leverage / liquidity:** Reported net debt is modest (~£20m), but **£339m+ of lease obligations** (Yahoo FY26) and negative working capital (−£131.5m) mean liquidity depends on continued operating cash generation. Goodwill ~£960m leaves **negative tangible book** (Yahoo: −£8.7m)—screen cheapness on P/B reflects intangible-heavy accounting, not hard asset cover.
+**Balance sheet and accounting.** ~£982m goodwill/intangibles against £973m equity; negative tangible book. Defined-contribution pension only (no material DB scheme flagged in FY26 accounting policies excerpt). Going concern supported with £300m RCF (expires Sep 2028), covenant compliance confirmed, but scenario 3 stress tests show tighter headroom if sales and buybacks/dividends coincide with severe downside.
 
-**Accounting / KPI quality:** Heavy reliance on alternative performance measures (underlying PBT, consumer revenue, free cash flow). Pets Club active members fell 10.5% to 7.4m in FY26 partly due to **methodology change** (April 2025 till-system lookup)—KPI comparability is impaired; management directs investors to transaction counts instead.
+**Capital allocation shift.** Dividend rebased 43% to 7.4p (50% payout policy); total shareholder return reweighted to buybacks—positive for per-share value if earnings recover, but signals reduced income certainty.
 
-**Going concern:** FY26 annual report includes a Going Concern and Viability section (page 26 per contents), but **full text was not extracted** in available filing bodies—cannot quote covenant or going-concern language directly; no explicit going-concern qualification visible in available extracts.
-
-**Pension:** No pension deficit or scheme detail surfaced in available filing body extracts—gap for verify-before-trade.
-
-RiskTags: regulatory, cyclical, competitive, governance, key_person, leverage, accounting
-RiskTags: regulatory, cyclical, competitive, governance, key_person, leverage, accounting
+RiskTags: cyclical, competitive, governance, leverage, other
+RiskTags: cyclical, competitive, governance, leverage, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but material events are well represented**, though many headlines are generic pet-care content rather than company-specific analysis.
+Coverage over the past year is adequate on corporate events but thin on independent sell-side depth; much syndicated content (Kalkine, AD HOC NEWS).
 
-**Strategy & turnaround**
-- “Pets at Home boss plots 'urgent' retail turnaround as profits tumble” (This is Money, 26 Nov 2025)
-- “Pets at Home shares rally as James Bailey signals turnaround progress” (The Grocer, 29 May 2026)
-- “Pets at Home Group H2 Earnings Call Highlights” (Yahoo Finance, 27 May 2026)—early retail momentum, subdued near-term vet revenue growth expected
+**Leadership and turnaround (2025–2026)**  
+- *“Pets at Home boss quits as retailer suffers declining sales”* (The Independent, 18 Sep 2025) and *“UK's Pets at Home launches retail turnaround drive after profit drop”* (Reuters, 25 Nov 2025)—CEO exit, profit warning, turnaround launch.  
+- *“Pets at Home shares rally as James Bailey signals turnaround progress”* (The Grocer, 29 May 2026)—post-FY26 results sentiment.  
+- Board change: Sarah Pollard confirmed as CFO (RNS, 23 Jan 2026).
 
-**Management changes**
-- “Pets at Home shares tank as CEO leaves in the wake of another profits warning” (The Grocer, 18 Sep 2025)
-- “Pets At Home boss quits as retailer suffers declining sales” (The Independent, 18 Sep 2025)
-- Board confirmation: Sarah Pollard CFO from 23 Mar 2026 (RNS, 23 Jan 2026)
+**Results and guidance (2026)**  
+- *“Pets at Home profit drops to £92.8 mln but shares up on steady FY27 outlook”* (Investing.com UK, 27 May 2026); *“Pets at Home profits hit by retail price cuts”* (Investors' Chronicle, 27 May 2026); Yahoo *“Pets at Home Group H2 Earnings Call Highlights”* (27 May 2026)—early retail momentum, vet caution near term.  
+- *“Pets at Home narrows sales decline after slashing prices”* (This is Money, 28 Jan 2026)—Q3 FY26 trading.
 
-**Results & capital allocation**
-- “Pets at Home profits hit by retail price cuts” (Investors' Chronicle, 27 May 2026)
-- “Pets at Home Group (PETS) Executes Buyback of 765,671 Shares…” (Kalkine Media, 10 Aug 2026)
-- Dividend ex-date commentary (Yahoo Finance, 31 May 2026)
+**Capital return and strategy (2026)**  
+- £50m buyback programme commenced (RNS, 24 Jun 2026); ongoing weekly repurchase headlines (Kalkine/TipRanks, Aug–Sep 2026).  
+- Pet insurance platform expansion noted in trade press (*“Pets at Home stock holds steady as new insurance launch broadens its pet services platform”*, AD HOC NEWS, 29 Aug 2026).
 
-**Analyst sentiment**
-- “How the Narrative Surrounding Pets at Home Has Shifted Amid Mixed Analyst Views” (Yahoo Finance, 4 Dec 2025)—fair value estimate trimmed to ~£2.24
-
-**Thin/irrelevant coverage:** Numerous RSPCA pet-welfare and unrelated “PETS ticker” (PetMed Express) articles dilute signal quality.
+**Macro/context (low direct impact)**  
+- Renters’ Rights Act pet provisions (Verge Magazine, 1 May 2026) potentially supportive of pet ownership long term; not yet quantified in filings.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Quantitative cheapness and cash-generation screens are partially confirmed by vet-led FCF and sub-book valuation, but FY26 retail trough, management turnover, and regulatory KPI noise warrant a measured accumulate rather than high-conviction buy until interim accounts and full FY26 financial statement extracts are available.
+Rationale: Filings confirm the screen’s asset/FCF cheapness and manageable leverage, and Q1 FY27 trading supports a stabilising retail turnaround, but FY26’s 30% underlying profit decline and leadership change warrant a conviction overlay below the quantitative buy signal until H1 FY27 interim margins are verified.

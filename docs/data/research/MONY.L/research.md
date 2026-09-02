@@ -1,106 +1,120 @@
 # MONY Group plc (MONY.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:43:18.075095+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:16:49.267628+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-MONY Group plc operates a portfolio of trusted UK consumer finance brands — MoneySuperMarket, MoneySavingExpert and Quidco — on a scalable, data-led comparison platform. The quantitative screen rates the name a buy (13/22 models; composite 64%, sector-relative 72%), anchored by a 6.3% dividend yield, 7.7% FCF yield, P/E of 12.6 and a Piotroski F-Score pass. Primary filings show five consecutive years of revenue and adjusted EBITDA growth through FY2025, with H1 2026 delivering record like-for-like revenue (+6%) and a fifth successive interim period of EBITDA growth. The valuation hook is a cash-generative, capital-light aggregator trading below intrinsic-value estimates cited in sell-side and third-party coverage, whilst returning over £90m to shareholders in 2026 via progressive dividends and an ongoing £25m buyback. The central debate is whether AI-driven search disruption and FCA/regulatory evolution erode comparison traffic, or whether MONY's brand trust, SuperSaveClub membership model (2.5m+ members; 19% of revenue) and pivot to an "everyday financial companion" entrench its moat.
+MONY Group plc operates a UK consumer finance comparison platform spanning MoneySuperMarket, MoneySavingExpert, Quidco and the SuperSaveClub membership proposition. The quantitative screen flags the name as a buy on cheapness, quality, dividend and GARP metrics (P/E 12.7x, yield 6.1%, FCF yield 7.7%, ROE 37.1%). Filings show a resilient, cash-generative business: FY2025 revenue rose 2% to £446.3m and adjusted EBITDA 2% to £145.1m, with H1 2026 delivering record revenue on a like-for-like basis (+6%) despite insurance and PPC headwinds. The value case rests on high margins, progressive dividends, active buybacks (over £90m planned shareholder returns in 2026), and a pivot from transactional comparison to a membership-led “everyday financial companion.” The central debate is whether AI-driven search disruption and customer-acquisition inflation permanently compress margins, or whether brand trust, proprietary data and regulated broker capabilities widen the moat. Net debt has risen to £31.8m at H1 2026 and an ongoing HMRC VAT dispute adds accounting uncertainty not fully captured by screens.
+
+---
 
 ## INVESTMENT THESIS
-For a value investor, MONY offers a rare combination: cheapness on earnings and cash (FCF Yield, Acquirer's Multiple, Magic Formula passes), quality markers (Buffett Quality, Economic Moat, Earnings Quality), and income (High Dividend Yield, Dividend Growth). The screen's five family passes — cheapness, quality, dividend, GARP and risk — align with filing evidence of durable profitability: adjusted EBITDA rose from £115.5m (FY2022) to £145.1m (FY2025), margins remain above 30%, and operating cash conversion exceeded 80% in FY2025 despite a softer insurance backdrop.
+For a value investor, MONY offers a rare combination of **defensive cash generation** and **capital return** at a modest earnings multiple. The screen passes five factor families — cheapness, quality, dividend, GARP and risk — with full data quality (20/20 metrics). Business quality supports the signal:
 
-Business quality is underpinned by market-leading NPS (73–74), an estimated £2.8bn in customer savings (FY2025), and a two-sided marketplace expanding through SuperSaveClub and B2B provider services. Management has completed a five-year re-platforming programme, reduced headcount 9% year-on-year at H1 2026 through automation, and is deploying AI across product development (Investments, SuperSaveClub Insurance, Business Banking) without breaching capex guidance. Capital allocation is disciplined and shareholder-friendly: FY2025 total dividend of 12.63p (+1%), a concluded £30m buyback, and a new £25m programme launched February 2026. Net debt at H1 2026 (£31.8m on £48m drawn of a £125m RCF) remains modest relative to EBITDA generation. The screen's Neff PEGY pass (PEGY 0.02; growth 4.7%) reflects modest but consistent earnings compounding rather than cyclical re-rating — appropriate for a defensive income compounder within FTSE 350 Communication Services.
+- **Profitability:** Adjusted EBITDA margin has been consistently high (FY2025 adjusted EBITDA £145.1m on revenue £446.3m; H1 2026 adjusted EBITDA £75.5m on revenue £227.1m). Insurance vertical EBITDA contribution margin fell to 47% in H1 2026 (from 56%) on PPC inflation, but Home Services (69%) and member economics (SuperSaveClub ARPU ~£35 vs group ~£21) offset partially.
+- **Cash and returns:** FY2025 operating cash flow was £108m (cash conversion >80% per annual report). The group returned £96m in 2025 (1% dividend growth plus £30m buyback) and plans over £90m in 2026 (progressive dividend, ongoing £25m buyback). H1 2026 interim dividend +1% to 3.36p.
+- **Quality markers:** Piotroski F-Score, earnings quality and financial health models all pass. Revenue has compounded from £432.1m (2023) to £446.3m (2025) despite car-insurance market contraction and Travel deconsolidation (ITG minority stake from 1 Dec 2025).
+- **Strategic optionality:** SuperSaveClub surpassed 2.5m members (19% of group revenue); new launches (Investments, SuperSaveClub Insurance broker, Business Banking waitlist) diversify beyond click-through comparison into recurring and AUM-linked revenue.
+
+The screen’s buy rating aligns with a business that generates substantial free cash, returns most of it to shareholders, and trades below sector-relative composite (64% vs 73% sector). Conviction is tempered by structural AI/search risk and a goodwill-heavy balance sheet (Yahoo tangible book negative £1.8m at FY2025 — fallback figure).
+
+---
 
 ## FINANCIAL REVIEW
-**Annual trend (Companies House consolidated accounts)**
+**Source hierarchy:** Primary figures from Companies House annual accounts and the H1 2026 RNS interim report; Yahoo `financials_annual.json` used only where filing OCR bodies lack a clean line item (noted below).
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|---|---|---|---|---|
-| Revenue | £387.6m | £432.1m | £439.2m | £446.3m |
-| Profit before tax | £85.2m | £92.1m | £108.7m | £110.5m |
-| Adjusted EBITDA | £115.5m | £132.9m | £141.8m | £145.1m |
-| Basic EPS | 12.7p | 13.5p | 15.0p | 15.3p |
-| Adjusted basic EPS | 14.4p | 16.0p | 17.1p | 17.9p |
-| Total dividend/share | 11.71p | 12.1p | 12.5p | 12.63p |
-| Operating cash flow | — | — | £115.6m | £108m |
+### Annual trend (Companies House accounts)
 
-*Source: annual report extracts, Companies House filings (FY2022–FY2025). FY2025 revenue includes 11 months of Travel prior to deconsolidation.*
+| Metric | FY2023 | FY2024 | FY2025 | Source |
+|--------|--------|--------|--------|--------|
+| Revenue | £432.1m | £439.2m (+2%) | £446.3m (+2%) | CH accounts 2024 & 2025 |
+| Adjusted EBITDA | £132.9m | £141.8m (+7%) | £145.1m (+2%) | CH accounts |
+| Profit before tax | £92.1m | £108.7m (+18%) | £110.5m (+2%) | CH accounts |
+| Adjusted basic EPS | 16.2p | 17.1p | 17.9p (+5%) | CH accounts |
+| Total dividend/share | 12.10p | 12.50p | 12.63p (+1%) | CH accounts |
+| Operating cash flow | £102.2m | £115.6m* | £108m | CH 2025 report; *2024 from Yahoo fallback as OCR garbled |
 
-Revenue CAGR of approximately 5% over four years reflects portfolio breadth offsetting insurance headwinds (car premium deflation, PPC cost inflation). Adjusted EBITDA growth has outpaced revenue, demonstrating operating leverage and cost discipline. FY2025 profit before tax grew 2% to £110.5m; adjusted basic EPS grew 5% to 17.9p. FY2025 operating cash flow of £108m (FY2024: £116m) represents cash conversion above 80%, per the Chair's statement.
+**FY2025 segment revenue** (11 months Travel; full year otherwise): Insurance £233m, Money £106m, Home Services £48m, Cashback £53m, Travel £18m (CH 2025 annual report).
 
-Segment mix (FY2025): Insurance £233m, Money £106m, Home Services £48m, Cashback £53m, Travel £18m (11 months). Home Services and Money have been the growth engines; Cashback remains cyclically exposed to retail spend.
+**Profit after tax:** Not legible in the annual report body extract. **Yahoo fallback:** £81.2m (2025) vs £80.6m (2024) — modest net income growth despite higher PBT, consistent with stable tax and minority interests.
 
-Balance sheet (FY2025, per interim comparatives): total assets £377.8m; goodwill and intangibles £228.3m; cash £20.3m; long-term debt £14.0m; RCF drawn £48.0m at 30 June 2026. Tangible book value is negative once intangibles are stripped — a structural feature of acquisitive history (Quidco, travel assets), not a screen failure given strong cash generation.
+**Balance sheet / leverage (Yahoo fallback, FY2025):** Cash £20.3m; total debt £34m; net debt minimal at year-end. Goodwill and intangibles £228m on total assets £378m — asset-light model but limited tangible book support for P/B 5.0x.
 
-**Interim H1 2026 (RNS half-year report, 21 July 2026)**
+### Interim H1 2026 (RNS, 21 Jul 2026)
 
-- Group revenue £227.1m (+1% reported; +6% like-for-like excluding disposed Travel)
-- Adjusted EBITDA £75.5m (+1% reported; +3% LFL)
-- Profit after tax £46.1m (+1%)
-- Adjusted basic EPS 9.7p (+5%)
-- Operating cashflow £36.2m (−17%), attributed to seasonal working-capital timing (energy receivables, Quidco member payables); management expects H2 conversion improvement
-- Net debt £31.8m (31 December 2025: net cash £4.1m), reflecting £48m RCF draw and £16.5m buyback in H1
-- Interim dividend 3.36p (+1%); FY2026 shareholder returns guided above £90m
-- FY2026 adjusted EBITDA consensus midpoint £146m (range £140–148m)
+| Metric | H1 2026 | H1 2025 | Change |
+|--------|---------|---------|--------|
+| Revenue (reported) | £227.1m | £225.3m | +1% |
+| Revenue (like-for-like) | £227.1m | — | +6% (ex-Travel) |
+| Adjusted EBITDA | £75.5m | £75.1m | +1% (+3% LFL) |
+| Profit after tax | £46.1m | £45.6m | +1% |
+| Basic EPS | 8.9p | 8.6p | +4% |
+| Adjusted basic EPS | 9.7p | 9.3p | +5% |
+| Operating cashflow | £36.2m | £43.7m | −17% |
+| Net debt | £31.8m | £18.4m | +73% |
+| Interim dividend | 3.36p | 3.33p | +1% |
 
-Vertical H1 2026 performance: Insurance +4% (£122.1m); Money +9%; Home Services +30%; Cashback −13%; Travel nil (associate from 1 December 2025). Insurance margin compressed (47% vs 56%) on PPC inflation and B2B mix; Home Services margin expanded to 69%.
+H1 vertical performance (reported): Insurance +4% to £122.1m; Money +9% to £57.6m; Home Services +30% to £28.2m; Cashback −13% to £23.8m; Travel nil (deconsolidated). Gross margin compressed to 63% (66% prior year) on PPC cost inflation (~8% exiting H1 vs >20% prior year). Operating costs −7% reported, −2% LFL; headcount −9% LFL.
 
-Going concern: directors and PwC interim review confirm adequate liquidity for 12+ months; £125m RCF renewed to June 2028; covenant compliance maintained under severe-but-plausible downside scenarios including dividend reduction and cost mitigations.
+**Liquidity:** £48m drawn on £125m RCF (renewal June 2028). Going concern basis confirmed; covenant compliance stated; severe downside scenarios modelled with dividend/capex mitigation (H1 2026 interim, Note 1).
 
-**Trading update (2 December 2025)**
+**Outlook:** Board expects FY2026 adjusted EBITDA within published consensus £140–148m (midpoint £146m).
 
-Management confirmed continued H2 2025 revenue and adjusted EBITDA growth (July–November), with FY25 adjusted EBITDA expected in line with consensus £142.7m. SuperSaveClub reached 2m members; Ice Travel Group deconsolidated to 49% minority stake from 1 December 2025.
+### Trading update (RNS, 2 Dec 2025)
 
-**Yahoo fallback**
+Jul–Nov 2025 trading showed continued revenue and adjusted EBITDA growth. FY2025 adjusted EBITDA guided in line with consensus £142.7m (actual FY2025 reported £145.1m — beat). Completed £30m buyback; ITG moved to 49% associate; SuperSaveClub reached 2m members.
 
-Where filing bodies lack granular balance-sheet line items for FY2025, Yahoo (`financials_annual.json`) corroborates: total revenue £446.3m, net income £81.2m, free cash flow £98.1m, total debt £34m, operating cash flow £107.7m. These align directionally with primary sources; Yahoo figures are not used as the primary citation where filing data exists.
+### Gaps and comparability notes
 
-**Gaps:** Only one interim filing (H1 2026) is indexed; no standalone Q1/Q3 trading updates with body extracts beyond the December 2025 statement. Historical annual coverage is complete (FY2021–FY2025 via Companies House).
+- Filing index holds **nine annual** Companies House accounts (2019–2025) and **one interim** (H1 2026); no separate RNS full-year results body classified as annual.
+- Travel deconsolidation from Dec 2025 distorts reported YoY comparisons; LFL figures are essential.
+- H1 operating cashflow decline (−17%) reflects working capital seasonality and energy channel mix; management expects H2 improvement (interim commentary).
+- Yahoo quarterly cashflow empty — TTM cash metrics suppressed on screen; rely on annual/H1 filing cash figures.
+
+---
 
 ## RISKS AND RED FLAGS
-**Regulatory and tax:** Ongoing HMRC dispute over Partial Exemption Special Method (PESM) for VAT recovery. HMRC issued a Special Method Override Notice in 2024; the Group has recognised an irrecoverable VAT provision of £7.5m (30 June 2026), with £2.3m charged in H1 2026 as an adjusting item. Resolution expected through 2026–2027; amounts remain uncertain. FCA Consumer Duty, insurance pricing reforms and data-privacy requirements create compliance cost and product-design constraints — filing language treats regulatory capability as a moat, but also as an execution risk.
+**Regulatory and tax:** MONY operates in FCA-regulated markets. An **HMRC Partial Exemption Special Method (PESM) dispute** is material: HMRC issued a Special Method Override Notice in 2024; the group holds an irrecoverable VAT provision of **£7.5m** at 30 Jun 2026 (charges of £2.3m in H1 treated as adjusting items). Resolution expected through 2026–2027; amounts uncertain. Interim going concern assessment assumes covenant headroom under severe scenarios.
 
-**Competitive / AI:** The dominant narrative in sell-side coverage (Morgan Stanley downgrade, December 2025; Berenberg rebuttal, February–March 2026) is whether generative AI and search-engine AI overviews disintermediate price-comparison traffic. H1 2026 filing acknowledges PPC inflation (~8% exiting the half, down from 20%+) and AI overview landscape changes; marketing margin fell to 56% (from 58% LFL). Active users declined 0.5m to 12.5m, partly from car-insurance enquiry mix-out.
+**Competitive / AI disruption:** Customer acquisition depends heavily on **PPC/search** (marketing spend £100.7m in H1 2026; PPC inflation annualising prior-year spikes). Google AI overviews and generative search are cited as landscape risks. Morgan Stanley downgraded on AI concerns (Dec 2025 news); Berenberg argued selloff overdone (Feb/Mar 2026). Insurance comparison faces direct and aggregator competition; margin pressure visible (Insurance EBITDA contribution margin 47% vs 56%).
 
-**Cyclical exposure:** Insurance premium cycles, energy market volatility, and weak UK consumer confidence weigh on Cashback (−13% H1 2026) and travel-adjacent revenue. Car insurance headwinds are easing (average premiums −5% YoY) but home insurance lags by ~9 months.
+**Cyclical exposure:** Car insurance premium cycles drove active user decline (−0.5m to 12.5m); Cashback −13% on weak retail/travel spend. Macro and cost-of-living sensitivity acknowledged in going concern note.
 
-**Balance sheet / intangibles:** Goodwill and intangibles of £223.6m (30 June 2026) against equity of £208.2m; no impairment indicators identified at H1, but acquisition-related amortisation remains a drag on GAAP earnings. Negative tangible book is a red flag for asset-based investors.
+**Leverage:** Net debt swung from **net cash £4.1m** (31 Dec 2025) to **net debt £31.8m** (30 Jun 2026) after £48.5m dividends, £16.5m buybacks and £59m RCF draw. Manageable against EBITDA but worth monitoring if H2 cash conversion disappoints.
 
-**Leverage / liquidity:** Net debt swing from net cash to £31.8m net debt in H1 2026 is timing-related (buybacks, dividends, working capital) rather than structural, but warrants monitoring against £90m+ planned shareholder returns. RCF utilisation at 38% of facility; reverse stress testing in interim accounts supports covenant headroom.
+**Governance:** Planned board succession — Sarah Warby retires Oct 2026; Emma Lloyd (Netflix/Sky) appointed NED (RNS, 20 Jul 2026). No red flags in filing language.
 
-**Governance:** Planned board succession (Sarah Warby retirement October 2026; Emma Lloyd appointment) is orderly. No going-concern qualification. Contingencies described as incidental disputes not expected to have material adverse effect.
+**Accounting:** Goodwill £203m (H1 2026); no impairment indicators identified. Adjusted metrics exclude VAT provisions and acquisition amortisation — understand GAAP vs adjusted gap.
 
-**Pension:** No defined-benefit pension deficit flagged in available filing extracts; not a primary risk factor in indexed bodies.
+**Contingencies (interim Note 9):** Routine operational disputes and regulatory scrutiny; professional indemnity insurance held; **not expected to have material adverse effect**.
 
-RiskTags: regulatory, competitive, cyclical, accounting, leverage
-RiskTags: regulatory, competitive, cyclical, accounting, leverage
+RiskTags: regulatory, competitive, cyclical, leverage, accounting, other
+
+---
+RiskTags: regulatory, competitive, cyclical, leverage, accounting, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is bifurcated between operational RNS flow (buybacks, director dealings) and a polarised AI-disruption debate in sell-side media.
+Coverage over the past year is **moderate but repetitive** — dominated by buyback tranche announcements (TipRanks, Globe and Mail, Aug 2026) rather than deep sell-side research.
 
-**Strategy and results**
-- *Mony Group H1 Earnings Call Highlights* (Yahoo Finance, 21 July 2026): record H1 revenue, SuperSaveClub as "everyday financial companion," product launches (Investments, SuperSaveClub Insurance, Business Banking).
-- *Mony Group PLC (MNSKY) (H1 2026) Earnings Call Highlights* (Yahoo Finance, 21 July 2026): 6% revenue increase, plans for £90m+ shareholder returns.
+**Material items:**
 
-**Capital returns**
-- *MONY Group PLC Share Repurchase Programme* (Investegate/RNS, 23 February 2026): new £25m buyback through September 2026.
-- Multiple TipRanks/Globe and Mail items (July–August 2026): daily buyback-and-cancel notices (~99,000–100,000 shares per tranche).
+| Date | Headline | Significance |
+|------|----------|--------------|
+| 21 Jul 2026 | *MONY Group delivers record first-half revenue as AI strategy supports growth* (Yahoo Finance UK) | H1 results; record LFL revenue; shares initially weak on margin/cashflow |
+| 21 Jul 2026 | *High-yield Mony makes steady progress* (Investors' Chronicle) | Income investor angle |
+| 20 Jul 2026 | Directorate changes — Emma Lloyd appointed, Sarah Warby retiring | Board refresh |
+| 23 Feb 2026 | *Moneysupermarket owner MONY launches new buyback after making record profits* (Yahoo Finance UK) | £25m programme post-FY2025 |
+| 24 Feb 2026 | *Mony is now a dividend stock* (Investors' Chronicle) | Dividend/buyback framing |
+| 27 Mar 2026 | *MONY Group up 4% after bank moves to 'buy' with 51% upside as AI fears called overdone* (Yahoo Finance UK) | Berenberg bullish vs AI narrative |
+| 11 Feb 2026 | *Mony Group, Future selloff on AI worries overdone, says Berenberg* (sharecast.com) | Counter to disruption thesis |
+| 5 Dec 2025 | *MONY stock falls as Morgan Stanley downgrades on AI concerns* (Investing.com UK) | Key bear catalyst |
+| 2 Dec 2025 | Trading statement — H2 growth, ITG deconsolidation, £30m buyback complete | Strategic/portfolio shift |
 
-**AI debate**
-- *MONY stock falls as Morgan Stanley downgrades on AI concerns* (Investing.com UK, 5 December 2025).
-- *Mony Group, Future selloff on AI worries overdone, says Berenberg* (sharecast.com, 11 February 2026).
-- *MONY Group up 4% after bank moves to 'buy' with 51% upside as AI fears called overdone* (Yahoo Finance UK, 27 March 2026).
+No M&A beyond ITG stake reduction. Strategy shift toward membership, AI-enabled broker/investment products and capital returns is the dominant narrative. **News gap:** limited regulatory enforcement headlines; VAT dispute detail comes from filings, not press.
 
-**Corporate**
-- *Directorate Changes* (RNS, 20 July 2026): Emma Lloyd appointed NED; Sarah Warby to retire October 2026.
-- *Mony is now a dividend stock* (Investors' Chronicle, 24 February 2026): income-investor framing post-buyback/dividend policy.
-
-**Valuation**
-- *MONY Group plc Shares Could Be 45% Below Intrinsic Value* (simplywall.st, 20 November 2025).
-
-News coverage is adequate on capital allocation and the AI narrative but thin on deep operational analysis; most August 2026 headlines are mechanical buyback notices rather than fundamental research.
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Primary filings confirm the screen's quality, cash-generation and dividend thesis, with consistent EBITDA compounding and shareholder returns, partially offset by AI/competitive uncertainty, HMRC VAT exposure and H1 working-capital seasonality that warrants monitoring before full sizing.
+Confidence: 0.74
+Rationale: Filings confirm the screen’s quality-and-yield buy case — record LFL revenue, disciplined costs, strong cash conversion and explicit capital returns — but AI/search disruption risk, PPC margin pressure, the HMRC VAT dispute and recent leverage build prevent full conviction without further H2 cashflow and FY2026 margin verification.

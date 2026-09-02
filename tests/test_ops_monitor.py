@@ -549,9 +549,11 @@ def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
 
 @patch("value_investor.ops_monitor.list_open_pull_requests", return_value=[])
 @patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
+@patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
 def test_run_ops_monitor_reverifies_after_health_log_repair(
     _budget,
+    _rememo,
     _workflows,
     _prs,
     tmp_path: Path,
@@ -613,9 +615,11 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
 
 @patch("value_investor.ops_monitor.list_open_pull_requests", return_value=[])
 @patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
+@patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
 def test_run_ops_monitor_writes_status(
     _budget,
+    _rememo,
     _workflows,
     _prs,
     tmp_path: Path,

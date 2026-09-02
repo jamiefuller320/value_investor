@@ -1,118 +1,117 @@
 # RS Group plc (RS1.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:58:18.569078+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:31:26.271249+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-RS Group plc is a UK-listed industrial and electronics distributor executing a multi-year transformation under CEO Simon Pryce, with FY2026 revenue broadly flat at £2,881m in difficult markets but gross margin improving to 43.4% and cash conversion remaining exceptional at 109%. The quantitative screen rates RS1.L as a buy (7/22 models; composite 60%), supported by moderate valuation (P/E 21.6, yield 3.1%), solid balance sheet (net debt/EBITDA 1.0x), dividend growth, and strong free cash flow (~£211m). The valuation hook is a cash-generative, low-leverage compounder trading below medium-term margin ambitions (mid-teens adjusted operating margin vs current 9.2%), with a £100m buyback adding capital-return support. The central debate is whether share-gaining operational progress and H2 momentum can translate into sustained adjusted earnings growth, or whether cyclical headwinds (Mexico, DACH, weak PMIs) and heavy transformation spend keep margins and adjusted EPS under pressure — a tension flagged by the screen’s earnings-basis overlay (adjusted signal: Hold).
+RS Group is a FTSE 250 industrial and electronics distributor trading at roughly 22× earnings with a 3.0% yield, passing multiple value/quality screens on balance-sheet strength, dividend continuity, and Piotroski/Earnings Quality metrics. The investment case rests on a high-service distribution franchise gaining share in flat markets, improving gross margins (43.4%), exceptional cash conversion (109%), and capital returns (£100m buyback plus progressive dividend), against a cyclical backdrop where like-for-like revenue has stagnated. The central debate is whether multi-year operational investment and bolt-on M&A (e.g. BPX) can drive the stated medium-term targets—mid-teen margins and >20% ROCE—when adjusted earnings are still drifting lower and Mexico/Latin America remains a drag. Statutory EPS rose 6% in FY26 while adjusted EPS fell 1%, a divergence the screen flags and that warrants caution on growth-dependent metrics.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, RS Group offers a defensible industrial distribution franchise — high-service MRO/electronics supply across 33+ markets, low customer/supplier concentration (largest customer <1% of revenue; largest supplier <5%), and a balance sheet that screens as investment-grade on leverage metrics. The buy screen passes five factor families (cheapness, quality, dividend, GARP, risk), including Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Piotroski F-Score (≥7), Earnings Quality, and Financial Health — consistent with a business that converts earnings to cash reliably rather than one relying on accounting optics.
+The quantitative screen rates RS1 as a **buy**, with five factor families passing (cheapness, quality, dividend, GARP, risk): P/E 22.2, P/B 2.48, yield 3.0%, ROE 11.7%, and debt/equity ~35%. Models passing include Graham Enterprising, Neff PEGY, Dividend Growth, Piotroski F-Score, Earnings Quality, and Financial Health—consistent with a capital-light distributor that generates cash through cycles.
 
-Business quality is evidenced in filings: like-for-like revenue flat in FY2026 despite contracting industrial PMIs for much of the year; RS PRO (+5% LFL) and services/solutions (+6% LFL) outperforming; Distrelec synergies exceeding £40m (ahead of plan); and adjusted operating cash conversion of 109% versus an >80% target. Net debt fell to £329m (1.0x adjusted EBITDA), covenant headroom is wide (EBITA/interest 14.9x vs 3.0x minimum), and capital returns are active (dividend +2% to 22.9p; £100m buyback over 12 months from May 2026).
+Business quality supports the screen. RS operates in 33 markets with 875,000+ stocked SKUs, low customer/supplier concentration (largest customer <1% of revenue; largest supplier <5%), and growth accelerators (RS PRO +5% LFL; services/solutions +6%) outperforming the core. FY26 filings show net debt/EBITDA of 1.0× (target range 1.0–2.0×), EBITA/interest of 14.9× versus a 3.0× covenant floor, and adjusted operating cash conversion of 109%—well above the 80% internal target. Management is returning surplus capital via a £100m share buyback (commenced May 2026) and a 2% dividend increase to 22.9p, signalling confidence despite soft top-line growth.
 
-The value case rests on mean reversion: adjusted operating margin at 9.2% sits well below management’s mid-teens medium-term target, while gross margin is already inflecting (+60bps to 43.4%). If industrial end-markets stabilise — PMIs trending positive into FY2027 — operating leverage from completed Distrelec integration, pricing discipline, and cost savings (£55m cumulative since April 2023) could drive EPS recovery without requiring heroic top-line growth. At ~21x P/E and 3.1% yield on a progressive dividend with 1.7x adjusted cover, the screen’s buy rating is fundamentally grounded, though the earnings-basis overlay (statutory EPS +6% vs adjusted EPS −1% in FY2026) warrants treating growth-dependent metrics with caution.
+For a value investor, the hook is a quality compounder priced without premium growth: the share trades near sector-relative composite scores (58% vs 61% sector), with neutral timing (RSI ~66, above 200-day MA). The screen’s earnings-basis overlay downgrades to **Hold** because statutory and adjusted EPS growth diverge in sign—adjusted metrics are the better operational read-through, and they are still declining. Conviction on the raw buy signal is low (31%) and the signal is new (one week). Deep research broadly **confirms** the quality/cash-return pillar of the buy case but **does not yet validate** earnings re-acceleration or margin progression toward mid-teens.
 
 ## FINANCIAL REVIEW
-*Primary source: UK RNS filing bodies (Investegate). Yahoo Finance used only where noted.*
+*Primary source: RNS filing bodies (`filings_index.json`, regime: uk_rns). Figures below are from Final Results (20 May 2026), Half-year Report (6 November 2025), and Pre-close Trading Update (25 March 2026) unless noted.*
 
-**Annual results (FY2026, year ended 31 March 2026 — Final Results RNS, 20 May 2026)**
+**Annual trend (FY23–FY26)**
 
-| Metric | FY2026 | FY2025 | Change |
-|---|---|---|---|
-| Revenue | £2,881m | £2,904m | −1% (−0% LFL) |
-| Gross margin | 43.4% | 42.8% | +0.6 pts |
-| Adjusted operating profit | £265m | £274m | −3% (−4% LFL) |
-| Adjusted operating margin | 9.2% | 9.4% | −0.2 pts |
-| Statutory operating profit | £239m | £233m | +2% |
-| Adjusted PBT | £246m | £248m | −1% |
-| Statutory PBT | £220m | £206m | +7% |
-| Adjusted EPS | 38.7p | 39.1p | −1% |
-| Statutory EPS | 34.6p | 32.5p | +6% |
-| Full-year dividend | 22.9p | 22.4p | +2% |
-| Adjusted free cash flow | £202m | £214m | −6% |
-| Cash from operations | £351m | £349m | +1% |
-| Adjusted op. cash conversion | 109% | 111% | — |
-| Net debt | £329m | £364m | −£35m |
-| Net debt / adj. EBITDA | 1.0x | 1.1x | — |
-| ROCE | 15.4% | 15.2% | +0.2 pts |
+Revenue has gently contracted over four years while margins and cash metrics have held up:
 
-FY2026 was resilient rather than robust: revenue was flat on a like-for-like basis in challenging markets, with H2 momentum improving (Q4 growth in EMEA, APAC, and US/Canada). Adjusted profits declined modestly, but statutory profits rose on lower amortisation/impairment charges and acquisition-related items (including an £11m legal settlement gain). Gross margin expansion (+60bps) from pricing discipline and mix was the standout operational achievement. Cash generation remained a core strength — adjusted FCF of £202m funded dividends (£106m), the BPX acquisition (£28m net), and net deleveraging.
+| Metric | FY23 | FY24 | FY25 | FY26 (filing) |
+|--------|------|------|------|---------------|
+| Revenue | — | — | £2,904m | **£2,881m** (−1% reported; flat LFL) |
+| Adjusted operating profit | — | — | £274m | **£265m** (−3%) |
+| Adjusted OP margin | — | — | 9.4% | **9.2%** |
+| Statutory operating profit | — | — | £233m | **£239m** (+2%) |
+| Statutory basic EPS | — | — | 32.5p | **34.6p** (+6%) |
+| Adjusted basic EPS | — | — | 39.1p | **38.7p** (−1%) |
+| Gross margin | — | — | 42.8% | **43.4%** (+0.6 pts) |
+| Net debt | — | — | £364m | **£329m** |
+| Net debt / adj. EBITDA | — | — | 1.1× | **1.0×** |
+| Adj. operating cash conversion | — | — | 111% | **109%** |
+| ROCE | — | — | 15.2% | **15.4%** |
+| Full-year dividend | — | — | 22.4p | **22.9p** (+2%) |
 
-Regional split (FY2026): EMEA £1,803m (+1% reported, −1% LFL; op. margin 10.9%); Americas £855m (−6%, −2% LFL; Mexico −21% LFL in H2); Asia Pacific £223m (+2%, +5% LFL).
+*FY23–FY24 revenue and earnings from Yahoo `financials_annual.json` (fallback): FY24 revenue £2,942m, FY23 £2,982m—confirming the multi-year top-line drift; filing bodies are preferred for FY25–FY26.*
 
-**Interim results (H1 FY2026, six months ended 30 September 2025 — Half-year Financial Report, 6 November 2025)**
+FY26 statutory profit rose on lower amortisation (£20m vs £37m), acquisition-related net gains (£9m including an £11m legal settlement), and lower net finance costs (£20m vs £27m), partially offset by a £15m technology impairment. Adjusted figures strip these items and show underlying profit pressure from flat volumes and continued organic investment (£35m).
 
-| Metric | H1 FY2026 | H1 FY2025 (restated) | Change |
-|---|---|---|---|
-| Revenue | £1,403m | £1,441m | −3% (−1% LFL) |
-| Gross margin | 43.1% | 42.7% | +0.4 pts |
-| Adjusted operating profit | £122m | £133m | −8% (−7% LFL) |
-| Adjusted operating margin | 8.7% | 9.2% | −0.5 pts |
-| Adjusted EPS | 17.6p | 18.5p | −5% |
-| Statutory EPS | 17.7p | 16.4p | +8% |
-| Interim dividend | 8.7p | 8.5p | +2% |
-| Adjusted FCF | £86m | £89m | −3% |
-| Net debt | £333m | £437m | — |
-| Net debt / adj. EBITDA | 1.0x | 1.3x | — |
-| Adj. op. cash conversion | 107% | 104% | — |
-| ROCE (LTM) | 15.0% | 15.5% | — |
+**Interim FY26 (H1 ended 30 September 2025)**
 
-H1 confirmed the pattern: flat LFL sales with Q2 returning to marginal growth (+1%), gross margin improving, but adjusted operating profit down on planned organic investment (£19m in H1) and inflation. Notable one-offs included a £10.5m acquisition-related legal settlement gain and a £3m profit on disposal of Nordics/Baltics sales activities. H1 2024/25 comparatives were restated for US inventory provisioning policy — a point to note for trend consistency.
+- Revenue **£1,403m** (−3% reported; **−1% LFL**); Q2 returned to **+1% LFL** growth after a −2% Q1 (digital platform upgrade in Americas; Distrelec DC closure in EMEA).
+- Adjusted operating profit **£122m** (−8%; −7% LFL); margin **8.7%** (−0.5 pts).
+- Gross margin **43.1%** (+0.4 pts).
+- Adjusted operating cash conversion **107%**; net debt **£333m** (1.0× EBITDA).
+- Interim dividend **8.7p** (+2%).
 
-**Trading update (Pre-Close, 25 March 2026)**
+H1 FY24/25 comparatives were **restated** for US inventory provisioning policy application (per interim filing Note 16)—a minor accounting adjustment worth noting.
 
-Management guided FY2026 like-for-like revenue down ~0.6%, with adjusted PBT marginally ahead of consensus (£241m). EMEA expected marginal H2 growth; APAC momentum continuing; Americas expected to decline in H2 on Mexico weakness. Actual FY2026 adjusted PBT of £246m came in ahead of this pre-close guidance.
+**Second half FY26 and trading update**
 
-**Multi-year trend**
+The Pre-close Update (25 March 2026) guided FY26 LFL revenue down ~**0.6%**, with EMEA returning to marginal H2 growth, APAC accelerating, and Americas declining in H2 on **Mexico**. Adjusted PBT was expected marginally ahead of consensus (£241m). Final Results delivered adjusted PBT of **£246m** (−1%), broadly in line. H2 momentum improved: adjusted operating margin reached **9.7%** in H2 vs 8.7% in H1 (per CEO commentary).
 
-From FY2023 peak earnings (Yahoo fallback for earlier years where RNS bodies in index are FY2025–FY2026 only): revenue has declined from ~£2,982m (FY2023) to £2,881m (FY2026), and statutory net income from ~£285m to £162m, reflecting post-pandemic normalisation, Distrelec integration costs, and cyclical industrial weakness. However, FY2026 marked stabilisation — flat LFL revenue, improving gross margin, and net debt at the bottom of the 1.0–2.0x target range. FCF has remained resilient (~£211m per Yahoo, consistent with filing-adjusted FCF of £202m).
+**Regional FY26 highlights (annual filing)**
 
-**Balance sheet and pensions**
+- **EMEA** (63% of revenue): +1% reported, −1% LFL; OP margin 10.9%. DACH −8% LFL (Distrelec integration); UK/Ireland returned to growth in H2; BPX acquired March 2026.
+- **Americas** (30%): −6% reported, −2% LFL; US/Canada +2% LFL; **Mexico/Latin America −13% LFL** on deferred capex and tariff uncertainty.
+- **Asia Pacific** (8%): +5% LFL; margin 3.0%.
 
-Committed facilities total £682m with £335m undrawn at year-end. UK defined benefit pension recovery plan is complete; preliminary triennial valuation (31 March 2025) indicates a likely surplus, with no UK contributions expected in FY2027 (£0.4m payable to other DB schemes). Going concern is explicitly affirmed in both interim and annual filings, with reverse stress tests assuming no mitigations deemed “remote” by the Board.
+**Cash flow and balance sheet (FY26 filing)**
 
-**Filing coverage note:** Annual RNS bodies cover FY2025 and FY2026; one interim (H1 FY2026) is present. Companies House accounts (2022–2026) are indexed but not relied upon here for consolidated P&L. No material gaps for the periods analysed.
+- Cash from operations **£351m**; adjusted free cash flow **£202m**.
+- Capex **£53m** (~1.3× depreciation); FY27 guidance ~£50m.
+- Committed facilities **£682m**; **£335m undrawn**.
+- £75m private placement notes mature in Q4 calendar 2026 (earliest facility maturity noted in interim going-concern disclosure).
+
+**Pension (FY26 filing):** UK deficit recovery plan complete; triennial valuation indicates likely surplus; **no UK contributions expected in FY27** (£0.4m payable to other DB schemes).
+
+**Gaps:** Two interim filings in index (H1 FY26 plus AGM Statement classified interim); no separate H2-only interim. Companies House accounts provide statutory history but RNS Final Results is the primary consolidated source for FY26.
 
 ## RISKS AND RED FLAGS
-**Cyclical and regional exposure.** Americas revenue fell 6% in FY2026, with Mexico like-for-like down 21% in H2 on deferred capex tied to tariff/trade uncertainty. DACH declined 8% LFL on weak PMIs and Distrelec integration disruption. A prolonged industrial downturn or escalation in US–Mexico trade friction could delay the margin recovery thesis.
+**Cyclical/industrial exposure:** Like-for-like revenue has been flat to negative for two years; recovery depends on PMI-driven industrial production. Mexico declined 21% LFL in H2 FY26; pre-close guidance flagged continued Americas weakness. Tariff and geopolitical risks (Middle East, Ukraine) are explicitly cited in outlook language.
 
-**Adjusted vs statutory earnings divergence.** FY2026 adjusted EPS fell 1% while statutory EPS rose 6%, driven by amortisation of acquired intangibles (£20m), technology impairments (£14.9m), and acquisition-related items. The screen’s earnings-basis overlay downgrades the headline buy to Hold on this divergence — adjusted metrics remain the more relevant trend indicator for operating performance.
+**Execution and change risk:** Digital commerce platform upgrades temporarily suppressed web revenue and NPS in Americas; Distrelec integration caused anticipated customer attrition in DACH. A **£15m technology impairment** in FY26 and ongoing ERP upgrade carry integration risk. Principal risks list includes cyber security, change initiatives, and M&A activity.
 
-**Transformation execution risk.** The Group is mid-way through a major ERP upgrade, digital commerce replatform (temporary NPS and web revenue disruption in US and DACH), and ~£35–45m annual organic investment. Principal risks explicitly listed in filings include change initiatives, cyber security, M&A integration, and market disruption. Failure to deliver operating leverage would leave RS stuck at ~9% margins.
+**Competitive/market disruption:** Fragmented but competitive industrial distribution; web traffic trends weak industry-wide; RS is pivoting larger customers to eProcurement (+9% LFL).
 
-**Competitive and structural.** Fragmented but competitive industrial distribution; web revenue declined 6% LFL in FY2026 (partly platform-related). Amazon Business and specialist distributors remain structural threats, though RS’s technical/service model and eProcurement solutions (+9% LFL) provide differentiation.
+**Accounting/governance:** H1 FY25/26 comparatives restated for US inventory provisioning. Statutory/adjusted EPS divergence (statutory +6%, adjusted −1%) reflects amortisation, impairments, and one-offs—relevant to screen overlays. Planned board succession (Louisa Burdett retirement January 2026; Carole Cran as Audit Committee chair from July 2025) appears orderly, not contentious.
 
-**Governance and accounting.** H1 2024/25 restatement for US inventory provisioning policy warrants monitoring. Technology asset impairments (£14.9m in FY2026; £12.8m in FY2025) suggest prior capitalisation assumptions require scrutiny. Pension risk is diminished post-recovery plan completion.
+**Financial resilience (mitigants):** Going concern confirmed in annual and interim filings; reverse stress tests on revenue/margin/collections deemed remote; covenant headroom substantial (net debt/EBITDA 1.0× vs 3.25× limit). No going-concern qualification from auditors on FY25 accounts; FY26 accounts approved 19 May 2026 with unqualified expectation stated.
 
-**Liquidity and covenants.** Not a near-term concern: net debt/EBITDA 1.0x vs 3.25x covenant; £335m undrawn facilities. However, £75m private placement notes mature in late 2026 — refinancing risk is low given headroom but should be tracked.
-
-**Going concern language (interim filing):** Board has “reasonable expectation” of continuing operations for ≥12 months; reverse stress scenarios (revenue/gross margin collapse, receivables deterioration driving adjusted margin below 1%) assessed as “remote.”
+**Pension:** Largely de-risked; surplus likely on UK scheme—low near-term cash drain.
 
 RiskTags: cyclical, competitive, accounting, other
 RiskTags: cyclical, competitive, accounting, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate and generally company-relevant, though Google News queries also captured unrelated “Rs” (rupee) articles that should be disregarded.
+Coverage over the past year is **moderate but repetitive**: substantive corporate news clusters around results and buyback mechanics; Google News includes significant noise from unrelated “Rs1” currency stories (Pakistan, India).
 
-**Strategy and capital allocation**
-- “RS Group launches £100mn buyback” (Investors’ Chronicle, 20 May 2026) and “RS Group shares jump 8% on FY26 profit beat, £100 mln buyback” (Investing.com UK, 20 May 2026) — FY2026 results beat expectations; £100m repurchase commenced alongside a 2% dividend increase.
-- “RS Group Continues £100m Buyback, Cuts Share Count to 470m” (TipRanks, 10 Aug 2026) and “RS Group advances £100m buyback as share count falls to 470.4m” (Globe and Mail, 4 Aug 2026) — buyback progressing; share count reduction underway.
+**Strategy and results**
+- *RS Group shares surge after FY26 earnings beat expectations and company launches £100m buyback (RS1)* — Yahoo Finance UK, 20 May 2026
+- *RS Group launches £100mn buyback* — Investors’ Chronicle, 20 May 2026
+- *RS Group H2 Earnings Call Highlights* — Yahoo Finance, 20 May 2026 (resilient performance, building momentum)
+- *RS Group falls as sales drop more steeply than expected due to Mexico* — Yahoo Finance UK, 25 March 2026 (pre-close update)
+- *RS Group reports solid start to new financial year as momentum continues* — TipRanks, 15 July 2026 (AGM statement)
 
 **M&A**
-- “Acquisition of BPX Group” (RNS headline, 3 Mar 2026; body not in corpus) — £30m UK/Ireland automation distributor acquired to bolster A&C capabilities.
+- *Acquisition of BPX Group* — RNS, 3 March 2026 (£27m EV plus up to £3m earn-out; ~10× EBIT; A&C specialist, 6,000 customers)
 
-**Trading and sentiment**
-- “RS Group falls as sales drop more steeply than expected due to Mexico” (Yahoo Finance UK, 25 Mar 2026) — pre-close update flagged Mexico/Americas H2 weakness, though profit guidance held up.
-- “RS Group reports solid start to new financial year as momentum continues” (TipRanks, 15 Jul 2026) — post-AGM trading commentary positive.
-- “RS Group upgraded to buy at Deutsche Bank on strengthening recovery case” (Yahoo Finance, 1 Jul 2026) — sell-side upgrade on European cyclical recovery thesis.
+**Capital allocation**
+- Sustained buyback progress through July–September 2026 (e.g. *RS Group Advances £100m Buyback, Cuts Share Count to 469.5m* — TipRanks, 1 September 2026; multiple similar weekly updates)
 
-**Governance**
-- “RS Group Wins Strong Shareholder Backing at AGM” (Globe and Mail, 17 Jul 2026) — AGM held 16 Jul 2026 with strong support.
+**Sell-side and governance**
+- *RS Group upgraded to buy at Deutsche Bank* — Yahoo Finance, 1 July 2025 (European cyclical recovery thesis)
+- *Directorate change* — RNS, 12 December 2025 (Louisa Burdett planned retirement; Audit Committee succession)
 
-News coverage is adequate on corporate actions and results but thin on deep operational analysis. No material regulatory enforcement actions identified in the manifest.
+**Analytical/context**
+- *RS (LSE:RS1) Makes Industrial Availability More Valuable Than A Vast Catalogue* — Kalkine Media, 6 August 2026
+
+No material regulatory enforcement actions identified in the manifest. News is thin on operational detail beyond RNS filings.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Deep research largely confirms the screen’s buy case on cash generation, balance-sheet quality, and dividend/buyback support, but adjusted earnings are still declining, cyclical risks (Mexico, DACH) are live, and the stock is technically extended — favour accumulation on weakness rather than chasing momentum.
+Confidence: 0.68
+Rationale: Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case.

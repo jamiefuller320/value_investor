@@ -1,85 +1,100 @@
 # RHI Magnesita N.V. (RHIM.L) — Research memo
 
-_Version 1 · Updated 2026-08-16T06:50:08.988071+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:30:38.478146+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-RHI Magnesita N.V. (RHIM.L) is the global leader in refractory products and solutions, with roughly 69% of revenue tied to steel and the balance to industrial end-markets (cement, non-ferrous metals, glass). The quantitative screen flags a strong buy on cheapness, dividend yield (~5.2%), GARP-style metrics (P/E 19.9, P/B 1.6) and cash generation, offset by elevated leverage and sub-moat quality scores (ROE 9.9%, Piotroski 5/9). Primary filings show a cyclical trough in demand—Chinese steel/refractory exports, weak industrial capex—partially masked by self-help: pricing, plant network optimisation, Resco integration and a strong H2 earnings skew. The value hook is a maintained €1.80 dividend, filing-aligned free cash flow of €214–268m, and management guidance for adj. EBITA recovery to ~€400m in 2026 (from €373m in 2025) with deleveraging toward 2.6× net debt/adj. EBITDA. The central debate is whether margin momentum and cash conversion are sustainable through a prolonged downturn, or whether post-Resco leverage (~2.9×), FX and Chinese competition cap re-rating.
+RHI Magnesita is the global leader in high-temperature refractory products and services, with roughly 69% of revenue tied to steel and the balance to industrial end-markets (cement, non-ferrous metals, glass). The quantitative screen flags the name as a buy on cheapness, dividend yield (~5.6%), GARP, and risk metrics (P/E 18.1, P/B 1.4, screen FCF yield 16.4%), though the signal is new (one week) with only 40% conviction overlay. Filings show a cyclical trough: FY2025 adjusted EBITA fell to €373m from €407m in FY2024, but H2 self-help drove a sharp recovery (H1 margin 8.4% → full-year 11.1%), and H1 2026 adjusted EBITA rose 42% on a constant-currency basis to €165m. The investment debate is whether depressed earnings, elevated leverage (2.9× post-Resco), and persistent Chinese export pressure are already in the price, or whether operational gearing and deleveraging toward 2.6× will unlock re-rating as cyclical demand eventually normalises.
 
 ## INVESTMENT THESIS
-The screen’s strong-buy signal rests on a credible combination of valuation, income and cash—not on classic quality or moat screens. RHIM passes eight of 22 models across cheapness, dividend, GARP and risk families (composite score 84%, sector-relative 74%), with full data coverage (20/20 metrics). At ~19.9× reported earnings and 1.6× book, the market prices in cyclical weakness that filings partly confirm but also partly dispute: adj. EBITA fell only 8% in 2025 to €373m despite revenue down 3% to €3,366m, and H1 2026 adj. EBITA rose 17% (42% constant currency) to €165m on flat CC revenue.
+For a value investor, RHIM offers a globally diversified industrial franchise trading below book on a screen basis (P/B 1.4) with a well-covered dividend (FY2025 full-year dividend €1.80 per share; 2.3× cover on adjusted EPS of €4.18) and material free cash flow. The screen passes six models spanning FCF Yield, Neff PEGY, High Dividend Yield, Dividend Growth, Composite Value, and Earnings Quality, with all four factor families (cheapness, dividend, GARP, risk) clearing thresholds and data quality at 20/20 metrics.
 
-Business quality, in refractory terms, is reasonable: global scale, vertical integration (~42% raw material self-sufficiency), a differentiated 4PRO solutions model, and a consolidation-led M&A track record (Resco, €391m, closed January 2025). Cash discipline supports the income case: 2025 adjusted operating cash flow was €391m (105% conversion) and free cash flow €214m, covering the €1.80/share dividend (~2.3× cover on adj. EPS of €4.18). The screen’s FCF yield and dividend-growth passes align with this filing evidence rather than with Buffett/moat models that fail on ROE, leverage and margins.
+Business quality is better than the headline earnings decline suggests. Management has executed a self-help playbook—pricing discipline, plant network optimisation (Mainzlar/Wetro closures), SG&A reduction, and the 4PRO performance-based contract model—that lifted H2 2025 adjusted EBITA to €232m (13.7% margin) from H1's €141m (8.4%). Resco (closed January 2025 for c.€390m) strengthens the North American footprint and local-for-local production (65% in 2025, targeting >75% by H2 2026). Cash conversion remains robust: FY2025 adjusted operating cash flow was €391m (105% conversion) and company-reported free cash flow €214m.
 
-For a value investor, the asymmetry is cyclical recovery plus self-help on a depressed multiple: management guides ~€400m adj. EBITA for 2026 (vs €435m CC before FX), net debt falling toward ~€1.4bn and leverage ~2.6× by year-end. If end-markets merely stabilise, operational gearing on the existing cost base could drive EPS and dividend sustainability; a genuine steel/industrial upturn would add further upside the screen’s GARP passes implicitly underwrite.
+The value case rests on cyclical mean reversion plus self-help. FY2026 guidance confirms adjusted EBITA of €400m (vs €373m in FY2025), with net debt targeted to fall to c.€1.4bn and leverage to ~2.6× by year-end. Screen FCF of €214m (company-adjusted basis) supports the yield case, though the screen itself flags a basis mismatch (filing €268m vs screen TTM €179m)—worth reconciling before sizing. At trough margins and with high operational gearing to steel/industrial capex recovery, the risk/reward skews favourable if self-help delivery continues and leverage trends down as guided.
 
 ## FINANCIAL REVIEW
-Sources: UK RNS filing bodies (annual 2024 FY, 2025 FY, interim H1 2025 and H1 2026, plus trading updates). All figures in € millions unless stated. Yahoo `financials_annual.json` aligns on 2025 revenue (€3,366m) and reported EPS (€1.82); filing bodies are used throughout.
+*Primary source: RNS filing bodies. Yahoo (`financials_annual.json`) cited only where noted.*
 
-**Annual trend (2023–2025)**
+**Annual results**
 
-| Metric | 2024 FY (RNS 27 Feb 2025) | 2025 FY (RNS 2 Mar 2026) |
-|--------|---------------------------|--------------------------|
-| Revenue | €3,487m (−2% reported) | €3,366m (−3%) |
-| Adj. EBITA / margin | €407m / 11.7% | €373m / 11.1% |
-| Adj. EPS | €5.32 | €4.18 |
-| Reported EPS | €3.01 | €1.82 |
-| Adj. operating cash flow | €419m (103% conversion) | €391m (105%) |
-| Free cash flow | €225m | €214m |
-| Net debt / leverage | €1,251m / 2.3× | €1,495m / 2.9× |
-| Dividend | €1.80/share | €1.80/share |
-| ROIC (APM) | 9.8% | 9.5% |
+| Metric | FY2025 (31 Dec 2025) | FY2024 (31 Dec 2024) | YoY |
+|--------|----------------------|----------------------|-----|
+| Revenue | €3,366m | €3,487m | −3% (−1% CC) |
+| Adjusted EBITA | €373m (11.1% margin) | €407m (11.7%) | −8% |
+| Adjusted EPS | €4.18 | €5.32 | −21% |
+| Reported EPS | €1.82 | €3.01 | −40% |
+| Net debt | €1,495m | €1,251m | +19% |
+| Leverage (ND / pro forma adj. EBITDA) | 2.9× | 2.3× | +0.6× |
+| Adj. operating cash flow | €391m (105% conversion) | €419m (103%) | −7% |
+| Free cash flow (company adj.) | €214m | €225m | −5% |
+| Dividend | €1.80/sh | €1.80/sh | flat |
+| Liquidity | €955m | €1,376m | −31% |
 
-2024 was resilient in a weak market: flat adj. EBITA at €407m, net debt reduced to €1,251m, and strong cash conversion. 2025 was harder at the headline level—volumes −2%, pricing pressure, industrial project deferrals—but management actions drove a material H2 recovery (H1 adj. EBITA €141m at 8.4% margin; H2 €232m at 13.7%). The Resco acquisition added €184m revenue and €25m adj. EBITA but pushed net debt up €244m to €1,495m. Reported profit after tax fell to €94m (2024: €154m), reflecting €98m of adjusted exclusions (ERP/digital spend, plant closures, restructuring).
+FY2025 revenue declined on weak volumes (−2%), FX headwinds (€97m), and soft industrial project demand, partly offset by Resco (€184m revenue, €25m adjusted EBITA over eleven months). Reported profit after tax fell to €94m (shareholders €86m) from €154m, reflecting €98m of adjusting items including ERP/digital spend (€44m), network optimisation (€27m), and restructuring. Steel gross margin compressed to 22.5% from 23.4%; industrial revenue fell 9% to €958m with gross margin down 330bps to 25.1%.
 
-**Interim trajectory**
+FY2024 was more resilient: revenue €3,487m (−2% reported), adjusted EBITA flat at €407m within guidance, net debt reduced €53m to €1,251m, and cash conversion 103% with €115m working-capital release. Resco was announced but not yet consolidated.
 
-- **H1 2025** (RNS 30 Jul 2025): Revenue €1,677m (−3%); adj. EBITA €141m (−26%), margin 8.4%; net debt €1,583m, leverage peak 3.1× post-Resco cash-out. FY guidance cut to €370–390m adj. EBITA.
-- **H1 2026** (RNS 31 Jul 2026): Revenue €1,595m (−5% reported, flat CC); adj. EBITA €165m (+17%, +42% CC), margin 10.3%; adj. EPS €1.81 (+32%); net debt €1,528m, leverage 2.9×. FY 2026 adj. EBITA guidance confirmed at €400m (€35m FX headwind). Cash conversion temporarily 97% on planned inventory build.
+**Interim results**
 
-**Trading updates (sequential colour)**
+| Metric | H1 2026 (30 Jun 2026) | H1 2025 (30 Jun 2025) |
+|--------|----------------------|----------------------|
+| Revenue | €1,595m (−5% rpt; flat CC) | €1,677m |
+| Adjusted EBITA | €165m (10.3% margin) | €141m (8.4%) |
+| Adj. EBITA CC change | +42% | — |
+| Adjusted EPS | €1.81 | €1.37 |
+| Net debt | €1,528m | €1,583m |
+| Leverage | 2.9× | 3.1× (post-Resco peak) |
+| Cash conversion | 97% | 124% |
 
-- **Nov 2025**: Four months to October—adj. EBITA €136m at 12.7% margin; on track for €370–390m FY; leverage expected ~3.0× at 2025 year-end.
-- **Apr 2026 Q1**: Adj. EBITA ~+15% y/y (+46% CC); FY €400m adj. EBITA reconfirmed; France footprint review announced.
+H1 2026 shows clear operational momentum: steel adjusted EBITA +33% to €126m; gross margin improved 130bps to 22.0%. FX remained a €24m EBITA headwind. Industrial revenue fell 13% on deferred glass and industrial-application projects. Working capital rose temporarily (inventory intensity 31.0%) ahead of an expected stronger H2 order book; management guides working capital intensity back to ~22% by year-end.
 
-**Balance sheet and pensions (2025 annual report body)**
+H1 2025 was the trough: adjusted EBITA down 26% on industrial project deferrals (glass −40%, non-ferrous −22%), pricing pressure, and Resco acquisition cash-out lifting leverage to 3.1×. Full-year FY2025 guidance was cut to €370–390m (from ~€406m consensus); actual FY2025 of €373m landed within that range after a strong H2.
 
-Gross debt €1,786m; cash €355m; liquidity €955m (€600m undrawn RCF plus cash). Net employee defined benefit liabilities €232m (31 Dec 2025). Goodwill and intangibles €943m against common equity €1,025m—tangible book value is thin (~€82m per consolidated balance sheet in filing).
+**Trading update (interim colour)**
 
-**Gaps**
+The November 2025 trading update (four months to October 2025) reported adjusted EBITA of €136m at a 12.7% margin—well above the H1 run-rate—confirming the H2 weighting pattern. Industrial project volumes remained ~40% below recent years.
 
-Companies House accounts in the index relate to a UK entity (SC410994) and are not consolidated group accounts; they are not used here. No SEC 20-F is present. `macro_context.json` was unavailable in the source pack.
+**Cash flow and balance sheet**
+
+FY2025 capital expenditure was €111m (down from €145m). Resco acquisition consumed €350m net of cash in investing activities. Pension and post-retirement liabilities stood at €232m non-current (FY2025 balance sheet). Available liquidity €955m includes €600m undrawn RCF plus €355m cash.
+
+Yahoo fallback: `financials_annual.json` shows FY2025 free cash flow of €268m and net debt €1,434m—differing from filing definitions (company-adjusted FCF €214m; filing net debt €1,495m). Prefer filing figures; treat Yahoo as approximate cross-check only.
+
+**Trend summary:** Revenue and adjusted EBITA peaked in FY2024 and dipped in FY2025 on cyclical weakness, with a pronounced H1/H2 split. FY2026 is tracking toward recovery (H1 adj. EBITA +42% CC; full-year guide €400m), but reported earnings remain heavily adjusted and leverage is above the through-cycle target of 1.0–2.0× (temporarily up to ~2.5× for M&A).
 
 ## RISKS AND RED FLAGS
-**Cyclical and competitive:** Filings repeatedly cite cyclical lows in steel and industrial capex, Chinese steel/refractory export pressure (India, META, Latin America), and deferred high-margin glass/non-ferrous projects (>€50m revenue deferred past 2026 per H1 2026 RNS). Principal risk scores for macro/geopolitical and competitive environment were raised in 2025 interim reporting.
+**Cyclical and competitive:** Steel and industrial refractory demand remain at cyclical lows globally, with no near-term recovery in the order book (FY2025 outlook). Chinese steel and refractory exports continue to pressure pricing and volumes, particularly in India, META, and Latin America. H1 2026 filings cite Middle East conflict-related cost increases (€28m) and project cancellations/deferrals (>€50m revenue pushed beyond 2026).
 
-**Leverage and covenants:** Leverage rose from 2.3× (2024) to 3.1× at H1 2025 after Resco, moderating to 2.9× at 2025 year-end; H1 2026 going-concern disclosure models severe downside scenarios where EBITDA could breach covenants, with mitigants (deeper cost cuts, covenant waiver, dividend reduction) explicitly listed but not included in base-case modelling. Refinancing activity in H1 2026 (new term loan, €450m Schuldschein) extends maturity but increases average cost of debt to 3.54%.
+**Leverage and liquidity:** Net debt rose to €1,495m (2.9×) after the Resco acquisition, from 2.3× at FY2024. H1 2026 principal-risk disclosure flags increased execution risk on strategic/digital transformation combined with working-capital pressure on cash generation. Going-concern assessments (H1 2025 and H1 2026 interim accounts) adopt going concern but note that downside scenarios could breach debt covenants; mitigants listed include price increases, cost cuts, working-capital reduction, capex cuts, covenant waivers, and dividend cancellation—none modelled in base case.
 
-**Pension:** €232m net defined benefit liability at 31 Dec 2025; ongoing pension charges in finance costs (~€11m in 2025).
+**Pension and legacy obligations:** Non-current net employee defined benefit liabilities €232m (FY2025). Present-value adjustments for onerous contracts from the 2017 EU merger remedies continue (€6m in FY2025). Non-cash revaluation of obligations to purchase remaining stakes in Jinan New Emei and Chongqing contributed to higher net finance expenses (€95m FY2025 vs €42m FY2024).
 
-**Operational and governance:** Fatal safety incidents reported in 2024 and H1 2025; TRIF increased in H1 2026 as reporting scope expanded. Multiple directorate changes RNS-listed in late 2025 (bodies not extracted). ERP rollout in North America (May 2026) caused temporary invoicing/receivable disruption.
+**Operational and governance:** A work-related fatality in Brazil in H1 2025; TRIF increased in H1 2026. ERP rollout in North America (May 2026) caused temporary invoicing and receivables delays. CEO Stefan Borgas steps down 31 October 2026; Gustavo Franco succeeds from 1 November 2026—planned succession, but leadership transition during a digital transformation and deleveraging phase adds execution uncertainty.
 
-**Regulatory / trade:** US/EU/Brazil tariff regimes materially affect regional economics; EU merger remedies include ongoing Oberhausen present-value adjustments. Middle East conflict cited as €28m unplanned CoGS in H1 2026, partly not yet passed through.
+**Regulatory/trade:** Tariff volatility (US/EU/Brazil), EU CBAM, and proposed EU steel import quota cuts create demand and margin uncertainty, though local-for-local production partially mitigates. Brazil refractory duty investigation outcome uncertain (potential positive from late 2026).
 
-**Accounting / adjusted metrics:** Heavy reliance on adj. EBITA (€98m exclusions in 2025; €42m in H1 2026). 2024 revenue recognition policy change added €42m revenue. Put-option revaluations for Jinan/Chongqing stakes create volatile non-operating items. Screen fails Piotroski (5/9), Financial Health and quality models on leverage and margin trends.
+**Accounting:** Heavy reliance on adjusted metrics (€98m FY2025 adjusting items; €42m H1 2026). Vertical integration contribution near record lows (~0.9–1.1 ppts) due to depressed raw-material prices—recovery in magnesia pricing would help refractory competitors as much as RHIM's backward integration.
 
-RiskTags: cyclical, competitive, leverage, pension, regulatory, governance, accounting, other
-RiskTags: cyclical, competitive, leverage, pension, regulatory, governance, accounting, other
+RiskTags: cyclical, competitive, leverage, pension, key_person, regulatory, liquidity, other
+RiskTags: cyclical, competitive, leverage, pension, key_person, regulatory, liquidity, other
 
 ## NEWS HIGHLIGHTS
-UK-focused coverage over the past year is moderate and often syndicated from RNS rather than independent depth.
+Coverage over the past year is moderate for RHIM.L specifically; several manifest entries relate to RHI Magnesita India (NSE:RHIM), which should not be conflated with the London-listed parent.
 
-Material themes from `news_manifest.json`:
+**Material parent-company items:**
 
-- **H1 2026 results (31 Jul 2026):** “RHI Magnesita (-RHIM) Posts 42% Constant-Currency Growth in Adjusted EBITA for H1 2026” (Kalkine); Yahoo earnings-call summaries highlight self-help offsetting FX and soft industrial demand.
-- **Strategy / operations:** “RHIM: Margin and profit growth offset revenue decline; guidance and deleveraging on track” (TradingView, 30 Jul 2026); Q1 2026 trading update (RNS, 29 Apr 2026) on France network review.
-- **Trade and macro:** “RHI Magnesita at the mercy of global trade” (Investors’ Chronicle, 2 Mar 2026)—tariffs and Chinese export dynamics.
-- **M&A / sustainability:** Resco completion (Jan 2025, per filings); “EU-backed RAPTOR sets new standard in refractory recycling” (Nov 2025); Khemka recycling JV announced Jun 2026 (H1 2026 RNS).
-- **Governance:** Several RNS directorate-change notices in Nov–Dec 2025 (headlines only in index; bodies not available).
+- **2026 Half Year Results** (31 July 2026): "RHI Magnesita (-RHIM) Posts 42% Constant-Currency Growth in Adjusted EBITA for H1 2026" — Kalkine Media; Investors' Chronicle, "RHI Magnesita's internal efficiencies build the margin" (31 July 2026).
+- **CEO succession** (18 August 2026): "RHI Magnesita Names Gustavo Franco as Successor to CEO Stefan Borgas" — TipRanks, Yahoo Finance UK, Kalkine Media.
+- **Trading update** (10 November 2025): "RHI Magnesita surges 15% after hailing effects of cost-cutting, plant closures" — Proactive Investors; company RNS "Trading Update: Delivering in a challenging backdrop."
+- **Resco completion** (28 January 2025): $410m acquisition completed — RNS filing.
+- **FY2025 results** (2 March 2026): Full-year results confirming €373m adjusted EBITA and €435m CC-adjusted EBITA guide for FY2026 (subsequently revised to €400m at H1 2026).
+- **EU trade context** (2 March 2026): Investors' Chronicle, "RHI Magnesita at the mercy of global trade."
+- **Dividend/yield commentary** (23 August 2026): simplywall.st, "RHI Magnesita N.V. (LON:RHIM) Looks Interesting, And It's About To Pay A Dividend."
 
-**Noise / gap:** Several Google News hits refer to RHI Magnesita India (NSE:RHIM), not the LSE parent—treat as related-party context only. No major UK press on accounting or regulatory enforcement; coverage is thin on balance-sheet and pension detail.
+No material negative regulatory actions or unexpected M&A beyond the planned Resco integration and the June 2026 Khemka recycling JV in India (immaterial cash outlay) were identified in the manifest. Third-party sell-side depth on RHIM.L appears thin relative to RNS primary disclosure.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Primary filings confirm the screen’s cheapness/dividend/FCF case and show improving adj. EBITA momentum and a credible deleveraging path, but elevated leverage, cyclical demand, Chinese competition and reliance on adjusted earnings prevent full conviction on the strong-buy signal without further covenant and H2 2026 cash conversion verification.
+Confidence: 0.68
+Rationale: Filings confirm the screen's cheapness and cash/dividend appeal, with credible self-help driving H1 2026 earnings momentum, but cyclical demand weakness, elevated leverage, heavy adjustment items, and CEO transition prevent full confirmation of a high-conviction buy.

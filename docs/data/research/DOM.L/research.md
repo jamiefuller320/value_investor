@@ -1,37 +1,48 @@
 # Domino's Pizza Group plc (DOM.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T00:55:54.990943+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:18:33.371560+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Domino's Pizza Group is the exclusive UK and Ireland master franchisee for Domino's, operating 1,410 stores with dominant UK pizza takeaway share (52.6% per management, FY25 filing). The quantitative screen rates the stock a **Strong Buy** on cheapness, dividend yield (~5.5%), FCF yield (~10.4%), and GARP metrics, despite negative book equity (P/B screen artefact). FY25 (Dec 2025) showed resilient system sales (+1.5% to £1,595.6m) but weaker orders (−0.9%) and underlying EBITDA down 6.6% to £133.9m; H1 2026 marks a clear inflection with LFL sales +4.9% and underlying FCF +74.9% to £50.2m. The investment case rests on a cash-generative franchise/supply-chain model, progressive dividend (11.3p FY25; 3.7p interim H1 26), and organic growth levers (CHICK 'N' DIP, loyalty, supply-chain automation). The central debate is whether H1 momentum is sustainable or masks structural volume pressure, franchisee margin stress from labour/tax, and leverage near the top of the 1.5–2.5x target range.
+Domino's Pizza Group plc (DOM.L) is the exclusive master franchisee for Domino's in the UK and Ireland, operating a capital-light, royalty-and-supply-chain model across 1,410 stores. The quantitative screen rates the name a strong buy on cheapness (P/E ~14x, ~5.4% yield, ~10% FCF yield on company-adjusted cash flow), dividend quality, GARP and risk metrics, despite a new signal with only one week of history. FY25 underlying earnings fell on weaker order volumes and supply-chain margin pressure, but H1 2026 filings show a clear inflection: like-for-like sales +4.9%, underlying EBITDA +3.6% and underlying free cash flow +75%. The valuation hook is a market-leading UK pizza franchise trading at a mid-teens multiple of trough-normalised earnings with a progressive dividend and substantial cash generation. The central debate is whether CHICK 'N' DIP, loyalty and supply-chain automation can restore sustainable volume and EBITDA growth, or whether consumer pressure, leverage near the top of management's 1.5–2.5x target range, and franchisee concentration limit re-rating.
 
 ## INVESTMENT THESIS
-The screen's Strong Buy signal (8/22 models, composite 72%, sector-relative 84%; families: cheapness, dividend, GARP, risk) aligns with a business that converts earnings to cash: underlying FCF of £84.6m in FY25 (filing) versus dividends of £43.4m, and H1 26 FCF of £50.2m on a half-year basis. At ~13.4x P/E and ~5.5% yield, the market prices in FY25 earnings contraction (underlying EPS 17.6p vs 20.4p prior year) rather than the recovery now visible in trading. Business quality supports the value case: vertically integrated supply chain (four SCCs, fifth opened H1 26), ~75% digital orders, industry-leading delivery times, and market share gains in pizza and broader QSR. FY25 non-underlying noise (Shorecal impairment £10.4m, failed transaction costs £6.0m) obscured underlying cash generation; H1 26 confirms operational improvement with hedged cost lines into 2027 and management guiding to full-year expectations in line with consensus (~£137m underlying EBITDA per FY25 RNS footnote). For a value investor, the asymmetry is attractive: high FCF/dividend yield, identifiable organic catalysts, and a brand moat — offset by negative equity and leverage that limit balance-sheet optionality.
+The screen's strong-buy signal (8 of 22 models passed; composite score 74%, sector-relative 82%; four of four families — cheapness, dividend, GARP, risk) aligns with a business that screens cheaply yet retains genuine franchise quality. DOM passes FCF Yield, Neff PEGY (0.03), High Dividend Yield, Dividend Growth, Magic Formula, Dreman Contrarian, Composite Value and Earnings Quality. Data quality is high (18 of 20 metrics). The negative P/B (-9.8) reflects accumulated losses and buybacks driving negative common equity (£88.9m net liabilities at FY25), not asset impairment — a known UK consumer-franchise accounting quirk rather than a broken balance sheet, given £84.6m of underlying FCF and £600m of committed facilities.
+
+Business quality supports the value case: ~52.6% share of UK pizza takeaway (Numerator/Worldpanel, FY25 filing), industry-leading delivery times (~24 minutes), ~75% of digital orders via app, and a vertically integrated supply chain serving 1,399 stores at FY25 year-end. The model is highly cash-generative — underlying FCF of £84.6m in FY25 funded dividends (£43.4m), buybacks (£20.1m) and growth capex (£24.1m) while leverage stayed within the stated 1.5–2.5x band at 2.26x. For a value investor, the opportunity is a dominant UK QSR franchise whose earnings dipped in a difficult FY25 consumer backdrop but is recovering in FY26, offered at a yield and FCF yield that embed little growth. The screen flags an FCF basis mismatch (filing £79.8m statutory / £84.6m underlying vs screen TTM £49.6m due to suppressed Yahoo quarterly cashflow); filing figures are preferred and still support the cheapness case.
 
 ## FINANCIAL REVIEW
-**Annual (FY25 — 52 weeks to 28 December 2025; RNS, 10 March 2026)**
+Primary source: RNS filing bodies. Annual and interim coverage is good; a Q1 trading update is also present. Companies House accounts (FY22–FY25) provide historical corroboration but are secondary to RNS for consolidated figures.
+
+**Annual trend (FY24 → FY25)**
+
+FY25 full-year results (52 weeks to 28 December 2025, RNS 10 March 2026):
 
 | Metric | FY25 | FY24 | Change |
-|---|---|---|---|
+|--------|------|------|--------|
 | System sales | £1,595.6m | £1,571.5m | +1.5% |
 | Group revenue | £685.4m | £664.5m | +3.1% |
-| Underlying EBITDA | £133.9m | £143.4m | −6.6% |
-| Underlying PBT | £91.2m | £107.3m | −15.0% |
-| Statutory PBT | £81.1m | £124.9m | −35.1% |
-| Underlying basic EPS | 17.6p | 20.4p | −13.7% |
+| Underlying EBITDA | £133.9m | £143.4m | -6.6% |
+| Underlying PBT | £91.2m | £107.3m | -15.0% |
+| Statutory PBT | £81.1m | £124.9m | -35.1% |
+| Underlying basic EPS | 17.6p | 20.4p | -13.7% |
+| Underlying FCF (pre non-underlying) | £84.6m | £97.0m | -12.8% |
+| Statutory FCF | £80.7m | £84.7m | — |
 | Full-year dividend | 11.3p | 11.0p | +2.7% |
-| Underlying FCF | £84.6m | £97.0m | −12.8% |
-| Net debt | £284.6m | £265.5m | +£19.1m |
-| Leverage (ex-IFRS 16) | 2.26x | 1.93x | ↑ |
+| Net debt (excl. IFRS 16 leases) | £284.6m | £265.5m | +7.2% |
+| Leverage (net debt / underlying EBITDA) | 2.26x | 1.93x | — |
 
-Revenue growth was driven by corporate stores (Shorecal/Victa consolidation) and price, while LFL orders fell 2.3% and supply-chain EBITDA declined £10.4m on lower volumes and mix. Statutory profit was further reduced by Shorecal goodwill impairment (£10.4m), reacquired-rights amortisation (£6.5m), and £6.0m transaction costs on deals that did not proceed (second-brand work ceased). Cash remained strong: statutory FCF £80.7m after £24.1m capex, £43.4m dividends, and £20.0m buybacks. Net liabilities stood at £88.9m (negative equity); distributable reserves in the parent were sufficient for the proposed 7.7p final dividend. Debt facilities total £600m (RCF £300m to July 2030; USPP £200m at 4.26% due July 2027, £100m at 5.97% to 2034); covenants require interest cover ≥1.5x and leverage ≤3.0x — both met, with reverse stress testing indicating breach only on >13% system-sales decline.
+FY25 was a transition year. System sales grew modestly (+1.5%) on price/mix, but like-for-like system sales rose only 0.2% and total orders fell 0.9% (delivery orders -1.7%). Underlying EBITDA declined £9.5m, driven by supply-chain EBITDA down £10.4m (lower volumes, mix, rebates) and net overheads up £5.6m from capability investment, partly offset by lower technology costs and corporate-store growth. Non-underlying items net £9.6m debit included a £10.4m Shorecal goodwill impairment (Irish driver employment transition, higher UK employment taxes), £6.0m of aborted transaction costs (second-brand work ceased) and £6.5m reacquired-rights amortisation, offset by a £9.9m gain on disposal of 25% of Full House.
 
-Yahoo `financials_annual.json` corroborates FY25 revenue (£685.4m), net income (£58.6m), and FCF (£79.8m); figures align with filings and are not used as primary source.
+FY24 comparatives (Companies House annual accounts, filed July 2024) confirm the prior peak: underlying EBITDA £143.4m, underlying PBT £107.3m, full-year dividend 11.0p — establishing a clear FY24 peak / FY25 trough pattern before the H1 2026 rebound.
 
-**Interim (H1 2026 — 26 weeks to 28 June 2026; RNS, 4 August 2026)**
+Capital allocation remained shareholder-friendly: £43.4m dividends, £20.1m buybacks, £25.5m Victa DP acquisition (70% stake), £24.1m capex (including SCC5 Avonmouth). Net debt rose to £284.6m; leverage moved to the upper end of the 1.5–2.5x target.
+
+**Interim trend (H1 2026 vs H1 2025)**
+
+Half-year results (26 weeks to 28 June 2026, RNS 4 August 2026):
 
 | Metric | H1 26 | H1 25 | Change |
-|---|---|---|---|
+|--------|-------|-------|--------|
 | System sales | £825.3m | £777.8m | +6.1% |
 | Group revenue | £353.6m | £331.5m | +6.7% |
 | Underlying EBITDA | £66.2m | £63.9m | +3.6% |
@@ -39,49 +50,76 @@ Yahoo `financials_annual.json` corroborates FY25 revenue (£685.4m), net income 
 | Underlying basic EPS | 8.8p | 8.4p | +4.8% |
 | Underlying FCF | £50.2m | £28.7m | +74.9% |
 | Interim dividend | 3.7p | 3.6p | +2.8% |
-| Net debt | £290.1m | £306.6m | ↓ vs H1 25 |
-| Leverage (LTM, ex-IFRS 16) | 2.3x | 2.3x | flat |
+| Net debt | £290.1m | £306.6m | — |
+| Leverage (LTM) | 2.3x | 2.3x | flat |
 
-H1 26 shows broad-based improvement: LFL system sales +4.9%, LFL orders +1.6%, supply-chain and corporate-store EBITDA up, and working-capital inflow (£3.2m vs £12.1m outflow prior year). Management confirmed full-year earnings in line with market expectations; major costs hedged through FY26 and into FY27. Capital allocation has shifted toward debt reduction rather than buybacks or M&A.
+Trading momentum improved materially: LFL system sales +4.9%, LFL orders +1.6%, aided by CHICK 'N' DIP (nationwide from February 2026), Italiano's pizza range and World Cup uplift. Underlying EBITDA growth was modest (+3.6%) as supply-chain margins remained slightly below prior year pending automation benefits from H2 2026. The standout was cash: underlying FCF more than doubled to £50.2m on higher EBITDA and favourable working-capital timing. Management reiterated full-year earnings in line with market expectations (consensus underlying EBITDA ~£137m per FY25 filing footnote).
 
-**Trading update (Q1 2026; RNS, 23 April 2026):** Total system sales +5.8%, LFL +4.5%; total orders +2.3%, LFL +0.9%; CHICK 'N' DIP launch met initial expectations.
+**Trading update (Q1 2026)**
 
-**Trend and gaps:** FY25 was an earnings trough with volume weakness; H1 26 and Q1 trading indicate recovery. The H1 26 interim disclosed a balance-sheet restatement (IFRS 15 franchise incentives; £9.2m adjustment to accumulated losses) — immaterial to cash but worth monitoring. Older interim RNS (H1 2025) is not in the filing index with a body; Companies House interim accounts (Jan 2023) lack an extract. Historical annual CH accounts (2023–2024) are indexed without bodies; FY25 RNS body provides the primary annual financial set.
+Q1 trading statement (RNS 23 April 2026): total system sales +5.8%, LFL sales +4.5%, total orders +2.3%, LFL orders +0.9%; CHICK 'N' DIP met initial expectations; costs hedged through FY26 and into FY27.
+
+**Balance sheet and covenants**
+
+At FY25: net liabilities £88.9m (negative equity from buybacks and retained-loss position); gross debt facilities £600m (£300m RCF to July 2030; £300m USPP — £200m at 4.26% maturing July 2027, £100m at 5.97% to June 2034); undrawn RCF £287m. Covenants: interest cover ≥1.5x, leverage ≤3.0x (excluding IFRS 16); group compliant. Going-concern assessment (FY25 and H1 26 filings) concludes adequate resources through at least 12 months; severe-but-plausible stress (7.5% system-sales decline plus two-week peak disruption) keeps covenants intact; reverse stress requires >13–14% system-sales decline.
+
+**H1 2026 accounting restatement**
+
+The interim report restated FY25/H1 25 comparatives for IFRS 15 treatment of new-store incentives and Shorecal share-consideration reclassification (£9.2m impact on accumulated losses). Income-statement impact in 2025 was immaterial; this is an accounting presentation change, not an earnings-quality red flag, but warrants monitoring in the full annual report.
+
+**Yahoo fallback**
+
+`financials_annual.json` (Yahoo) corroborates FY25 group revenue £685.4m, statutory net income £58.6m and Yahoo FCF £79.8m vs filing underlying FCF £84.6m. Yahoo quarterly cashflow is empty (TTM suppressed), so filing figures are used throughout. No material gaps in annual or interim RNS coverage; historical Companies House interims are S838 holding-company filings and are not consolidated substitutes.
 
 ## RISKS AND RED FLAGS
-**Cyclical / volume:** FY25 LFL orders −2.3% and delivery orders −1.7% reflect a challenging consumer backdrop; price/mix masked volume weakness. Recovery in H1 26 may partly reflect World Cup and event-led trading — durability is unproven.
+**Franchise and regulatory:** Material compliance with the Master Franchise Agreement with Domino's Pizza International Inc. is confirmed in going-concern disclosures; loss of or adverse amendment to this agreement would be existential. Food safety, HFSS regulation and employment-law changes (Irish driver reclassification, UK employer NI increases post-2024 Budget) have already impaired Shorecal (£10.4m goodwill write-down in FY25).
 
-**Leverage / liquidity:** Net debt £290.1m at H1 26; leverage 2.3x sits toward the upper end of the 1.5–2.5x target. £200m USPP matures July 2027; H1 going-concern modelling assumes refinancing risk. Cash at bank fell to £9.6m (H1 26) from £24.6m (FY25).
+**Leverage and liquidity:** Net debt/underlying EBITDA of 2.26x (FY25) rising to 2.3x (H1 26) sits at the top of the 1.5–2.5x target. £200m USPP notes mature July 2027; H1 26 going-concern modelling assumes refinancing risk but no covenant breach if unrenewed. Interest cover covenant floor is 1.5x — comfortable today but sensitive to EBITDA erosion. Negative consolidated equity (£88.9m) limits financial flexibility perception though distributable reserves exist in the parent.
 
-**Franchisee / competitive:** Shorecal impairment (£10.4m) driven by Irish driver employment transition, UK 2024 Budget employer costs, and weaker ROI/Northern Ireland trading. Master Franchise Agreement compliance is affirmed but remains a structural dependency. Two franchisees each contributed ~£120m+ of group revenue (FY25 note 3) — material concentration.
+**Customer concentration:** FY25 filing notes two franchisees individually contributing £122.4m and £118.9m of group revenue (~35% combined) — a structural feature of the master-franchise model but a concentration risk if either re-franchises or disputes terms.
 
-**Governance / key person:** Extended management transition: Nicola Frampton interim CEO through FY25, permanent CEO from 31 March 2026; incoming CFO Andrew Andrea; prior executive changes generated non-underlying credits/charges. Board strengthened (Annie Murphy NED, December 2025).
+**Governance and key person:** Significant leadership turnover — interim CEO Nicola Frampton appointed permanent CEO on 31 March 2026; CFO Andrew Andrea recently joined; prior CEO departed November 2025 (Financial Times: "Domino's Pizza parts ways with chief who bet on fried chicken", 25 November 2025). Browning West LP published a letter to the board (3 September 2025), indicating activist scrutiny. Fosse Capital short-position disclosures appear in the filing index (June 2024, March 2025).
 
-**Accounting:** H1 26 restatement of franchise incentive recognition and Shorecal share-premium reclassification; auditors issued unqualified FY25 opinion with no emphasis of matter. Negative consolidated equity (£82.5m net liabilities at H1 26) is an accounting artefact from buybacks and accumulated losses, not insolvency — but it distorts P/B metrics.
+**Competitive and cyclical:** FY25 LFL orders fell 2.3%; delivery channel weakened in H2. Consumer value sensitivity persists despite recent recovery. Aggregator dependence and chicken-category expansion (Just Eat, Uber Eats, CHICK 'N' DIP) intensify competitive overlap with broader QSR.
 
-**Strategic / M&A:** £6.0m spent on transactions that did not proceed; second-brand initiatives ceased. DP Poland investment (£8.0m fair value at H1 26) has recorded OCI losses.
+**Accounting:** H1 26 comparative restatement for franchise incentives; ongoing non-underlying reacquired-rights amortisation (£6.5m FY25, £3.5m H1 26) from Shorecal/Victa acquisitions clouds statutory comparability. DP Poland investment fair-value loss £3.5m through OCI in FY25.
 
-**Going concern / covenants (filing language):** Directors affirm going concern through at least 12 months; stress scenarios (7.5% system-sales decline, cyber-attack, supply-chain disruption, USPP non-renewal) model covenant compliance; mitigants include delaying shareholder distributions and discretionary spend.
+**Aborted M&A:** £6.0m transaction costs on deals that did not proceed; management has ceased second-brand work and stated no near-term acquisition appetite (H1 26).
 
-RiskTags: cyclical, competitive, leverage, customer_concentration, governance, accounting, key_person
-RiskTags: cyclical, competitive, leverage, customer_concentration, governance, accounting, key_person
+No material defined-benefit pension exposure surfaced in reviewed filing bodies.
+
+RiskTags: cyclical, governance, leverage, customer_concentration, competitive, accounting
+RiskTags: cyclical, governance, leverage, customer_concentration, competitive, accounting
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate-to-good around results and strategy, with notable sell-side dissent.
+Coverage over the past year is adequate on results and strategy, thinner on deep sell-side debate, and noisy with irrelevant "DOM" ticker matches.
 
-- **4 August 2026:** H1 results drove positive reaction — "Revenue Beat: Domino's Pizza Group plc Exceeded Revenue Forecasts By 5.5%" (simplywall.st); "Domino's Pizza Group (DOM) Reports 6.1% System Sales Increase and 74.9% Surge in Free Cash Flow for H1 2026" (Kalkine Media).
-- **12 August 2026:** Counter-narrative — "Domino's Pizza Group: Decent Half-Year Results Are Masking Its Growth Issues" (Seeking Alpha).
-- **23 April 2026:** Q1 trading update; shares rose on LFL beat — "Domino's Pizza shares rise 4% as first-quarter like-for-like sales surge ahead of forecasts" (Yahoo Finance UK).
-- **31 March / 1 April 2026:** Nicola Frampton appointed permanent CEO — "Domino's Pizza Group appoints Nicola Frampton as permanent CEO" (Yahoo Finance).
-- **10 March 2026:** FY25 results — "Domino's grapples with lower profit and management churn" (Investors' Chronicle); "Domino's Pizza Shares Rise After Solid FY25 Results, Optimistic Outlook" (AskTraders).
-- **5 March 2026:** "Deutsche Bank downgrades Domino's Pizza Group to 'sell' amid stalling recovery" (Yahoo Finance UK).
-- **25 June 2026:** "JP Morgan starts Domino's Pizza Group at 'underweight', sees 25% downside" (Yahoo Finance UK).
-- **September 2025:** Value-oriented coverage — "Domino's Pizza Group: A global brand going cheap" (MoneyWeek).
+**Operations and strategy**
+- "Half year results ended 28 June 2026" (4 August 2026): strong H1 — system sales +6.1%, underlying FCF +74.9%; CHICK 'N' DIP and loyalty rollout highlighted.
+- "Q1 Trading Update" (23 April 2026): LFL sales +4.5%, orders +2.3%; costs hedged into 2027.
+- "Full year results for the 52 weeks ended 28.12.25" (10 March 2026): FY25 in line with guidance; dividend +3% to 7.7p final; FY26 tracking to expectations.
+- "Domino's Pizza Group: Decent Half-Year Results Are Masking Its Growth Issues" — Seeking Alpha (12 August 2026): sceptical take on underlying growth quality.
+- "How World Cup Surge and Automation Push Will Impact Domino's Pizza (DPZ) Investors" — Yahoo Finance (6 August 2026): World Cup demand boost (~45,000 extra orders on an England match day cited in summary).
 
-Institutional holding notifications dominate RNS flow (Bank of Montreal, etc.); Fosse Capital short-position disclosures appear in the filing index (June 2024, March 2025). No material regulatory enforcement or M&A announcements in the news manifest.
+**Management**
+- "Chief Executive Officer ('CEO') Appointment" (31 March 2026): Nicola Frampton confirmed permanent CEO after interim role from November 2025.
+- "Domino's Pizza parts ways with chief who bet on fried chicken" — Financial Times (25 November 2025): prior CEO exit linked to strategic disagreements.
+- "Domino's Board and Directorate Changes" — Investegate (18 September 2025).
+
+**Sell-side and shareholder**
+- "Deutsche Bank downgrades Domino's Pizza Group to 'sell' amid stalling recovery" — Yahoo Finance UK (5 March 2026).
+- "JP Morgan starts Domino's Pizza Group at 'underweight', sees 25% downside" — Yahoo Finance UK (25 June 2026).
+- "Browning West LP publishes letter to the Board of Domino's Pizza Group PLC" — BeBeez International (3 September 2025).
+- "Domino's Pizza Group: A global brand going cheap" — MoneyWeek (20 September 2025): constructive retail view.
+
+**Dividend and price action**
+- "Domino's Pizza shares rise 4% as first-quarter like-for-like sales surge ahead of forecasts" — Yahoo Finance UK (23 April 2026).
+- "Only Three Days Left To Cash In On Domino's Pizza Group's (LON:DOM) Dividend" — simplywall.st (9 August 2026).
+
+No major regulatory enforcement actions or transformative M&A closed in the period; acquisition activity has shifted to organic growth (chicken, loyalty, SCC5 automation).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Deep research largely confirms the screen's value case — high FCF/dividend yield, franchise moat, and improving H1 26 trading — but FY25 earnings decline, leverage near range ceiling, negative equity, and mixed sell-side views temper conviction versus a outright Strong Buy.
+Confidence: 0.76
+Rationale: Filings confirm a cash-rich market leader whose FY25 earnings trough and leverage near range ceiling are partly offset by a credible H1 2026 operational rebound, supporting the quantitative strong-buy signal while warranting patience on volume sustainability and the July 2027 refinancing overhang.

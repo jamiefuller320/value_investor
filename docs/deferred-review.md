@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T08:19:27+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T08:37:17+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -241,6 +241,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L223 | **Prefer open-source news until quality bottleneck** | Weekly value horizon does not need a paid news API yet. Keep Google News RSS + yfinance as the media layer; revisit L12 (Marketaux/Finnhub) only if memo news quality or phrase-panel coverage is the proven bottleneck. | Memo news quality or phrase-panel coverage is the proven bottleneck (see L12) |
 | L224 | **Chronological PIT news walk with lexicon self-improve** | Offline module walks each ticker from earliest news/price day forward (full backfill, then rolling append). Phrase lexicon updates only on past windows; evaluate on forward embargoed weeks. Self-improve via propose→OOS measure→promote (like analysis-review), never silent live scoring. Prefer buy-tier cohort first; require cross-ticker holdout. | Starting L222 offline pilot; history thick enough for walk-forward splits on a buy-tier cohort |
 | L225 | **Memo-grade news phrase walk (isolated from buy/boundary lexicon)** | If the buy∪boundary offline phrase panel proves useful, run a broader memo-grade news walk into a separate artifact namespace so additional headlines do not contaminate the pilot lexicon. Keep observe-only until OOS lift is stable. | L222/L224 buy-boundary panel shows stable walk-forward phrase lift across ≥2 lexicon generations with denser archive labels |
+| L226 | **Parallel rememo catch-up workers** | When body-lag rememo backlog again exceeds multi-week capacity, consider parallel Cursor rememo workers with a shared lock/ledger instead of serial --rememo-catchup batches. | memo rememo backlog stays above 2× weekly maintenance capacity for 2+ consecutive weeks after catch-up requests fire |
 
 ### Ops / reliability
 
