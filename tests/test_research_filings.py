@@ -4270,6 +4270,7 @@ def test_ingest_filings_euro_depth_rand_as_indexes_esef_and_ir(
     assert "sec_edgar" not in index["sources_used"]
 
 
+@patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_sec_edgar")
