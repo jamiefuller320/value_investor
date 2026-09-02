@@ -600,8 +600,11 @@ def test_cash_conversion_overlay_not_triggered_without_dividend_screen():
 
     report = build_company_reports(signals, model_results)[0]
 
-    assert report.to_dict()["cash_conversion_overlay"] is False
-    assert report.to_dict()["adjusted_signal"] == "strong_buy"
+    snapshot = report.to_dict()
+    assert snapshot["cash_conversion_overlay"] is False
+    # Committed HIK.L FCF bridge marks filing/screen mismatch → basis overlay caps Strong Buy.
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
 
 
 def test_cash_conversion_overlay_respects_existing_research_adjusted_signal():

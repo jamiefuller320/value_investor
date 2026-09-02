@@ -65,9 +65,9 @@ def apply_research_overlay(
 
         verdict = doc.research_verdict
         research_adjusted = compute_adjusted_signal(report.signal, verdict)
-        # Preserve FCF basis caps (and any prior conservative adjusted_signal).
-        adjusted = more_conservative_signal(research_adjusted, report.adjusted_signal)
+        adjusted = research_adjusted
         conviction = adjust_conviction_for_research(report.conviction_score, verdict)
+        # Preserve FCF basis caps when the screen already applied them.
         if report.fcf_basis_overlay:
             from value_investor.scoring.fcf_basis_overlay import (
                 cap_conviction_for_fcf_basis_overlay,
@@ -75,7 +75,7 @@ def apply_research_overlay(
             )
 
             adjusted = more_conservative_signal(
-                adjusted,
+                research_adjusted,
                 cap_signal_for_fcf_basis_overlay(report.signal),
                 report.adjusted_signal,
             )
@@ -161,21 +161,21 @@ def enrich_signals_with_research(
         confidences.append(doc.research_confidence)
         rationales.append(doc.research_rationale)
         research_adjusted = compute_adjusted_signal(signal, doc.research_verdict)
-        existing_adjusted = row.get("adjusted_signal")
-        existing_adjusted_str = (
-            str(existing_adjusted)
-            if existing_adjusted is not None
-            and not (isinstance(existing_adjusted, float) and pd.isna(existing_adjusted))
-            else None
-        )
-        merged = more_conservative_signal(research_adjusted, existing_adjusted_str)
+        merged = research_adjusted
         if bool(row.get("fcf_basis_overlay")):
             from value_investor.scoring.fcf_basis_overlay import (
                 cap_signal_for_fcf_basis_overlay,
             )
 
+            existing_adjusted = row.get("adjusted_signal")
+            existing_adjusted_str = (
+                str(existing_adjusted)
+                if existing_adjusted is not None
+                and not (isinstance(existing_adjusted, float) and pd.isna(existing_adjusted))
+                else None
+            )
             merged = more_conservative_signal(
-                merged,
+                research_adjusted,
                 cap_signal_for_fcf_basis_overlay(signal),
                 existing_adjusted_str,
             )

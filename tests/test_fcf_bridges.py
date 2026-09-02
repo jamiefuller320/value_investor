@@ -278,3 +278,51 @@ def test_committed_bridges_resolve_policy_for_itv_fgp_hik():
         assert bundle["bridge_resolved"] is True
         assert bundle["canonical"] == pytest.approx(expected)
         assert bundle["source"].startswith("policy_")
+
+
+def test_research_overlay_without_fcf_flag_does_not_keep_stale_hold():
+    report = CompanyReport(
+        ticker="AAA.L",
+        name="Alpha",
+        sector="Media",
+        signal="strong_buy",
+        models_passed=8,
+        model_count=18,
+        composite_score=0.8,
+        sector_composite_score=0.7,
+        families_passed=3,
+        passed_families="cheapness,quality,dividend",
+        data_quality_score=0.9,
+        metrics_present=18,
+        metrics_total=20,
+        weeks_at_signal=2,
+        signal_trend="stable",
+        conviction_score=0.6,
+        stability_label="building",
+        timing_signal="accumulate",
+        timing_score=0.7,
+        rsi_14=40.0,
+        price_vs_sma200_pct=-0.05,
+        action_note="stale",
+        trade_plan=None,
+        summary="stale hold",
+        passed_models=["graham"],
+        key_metrics={},
+        fcf_basis_overlay=False,
+        adjusted_signal="hold",
+    )
+    doc = ResearchDocument(
+        ticker="AAA.L",
+        name="Alpha",
+        signal="strong_buy",
+        version=1,
+        created_at="2026-01-01T00:00:00+00:00",
+        updated_at="2026-01-02T00:00:00+00:00",
+        mode="initial",
+        research_verdict="accumulate",
+        research_risk_level="low",
+        research_confidence=0.8,
+        research_rationale="Thesis intact.",
+    )
+    updated = apply_research_overlay([report], [doc])[0]
+    assert updated.adjusted_signal == "strong_buy"
