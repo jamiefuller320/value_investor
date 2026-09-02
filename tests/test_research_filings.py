@@ -215,6 +215,35 @@ def test_fetch_annual_financials_resolves_quarterly_cashflow_from_alternate_attr
     assert "ttm_cashflow_suppressed" not in payload["cashflow_metrics"]
 
 
+def test_fetch_annual_financials_uk_empty_quarterly_suppresses_ttm(monkeypatch):
+    """Regression: UK (.L) tickers with empty Yahoo quarterly cashflow gate TTM at fetch."""
+    cashflow_df = pd.DataFrame(
+        {"2025": [436_000_000.0, -317_000_000.0, 119_000_000.0]},
+        index=["Operating Cash Flow", "Capital Expenditure", "Free Cash Flow"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = cashflow_df
+        quarterly_financials = None
+        quarterly_cashflow = pd.DataFrame()
+        quarterly_cash_flow = pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    for ticker in ("HIK.L", "ITV.L"):
+        payload = fetch_annual_financials(ticker)
+        assert payload["ticker"] == ticker
+        assert payload["quarterly_cashflow"] == {}
+        assert payload["cashflow_metrics"]["free_cashflow"] == 119_000_000.0
+        assert "free_cashflow_ttm" not in payload["cashflow_metrics"]
+        assert payload["cashflow_metrics"]["ttm_cashflow_suppressed"] is True
+        assert (
+            payload["cashflow_metrics"]["ttm_cashflow_suppressed_reason"]
+            == "quarterly_cashflow_empty"
+        )
+
+
 def test_fetch_annual_financials_quarterly_income_uses_period_keys(monkeypatch):
     quarterly_income_df = pd.DataFrame(
         {
