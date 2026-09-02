@@ -1,119 +1,87 @@
 # Bytes Technology Group plc (BYIT.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:50:34.319992+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:15:52.028306+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Bytes Technology Group is a UK-focused value-added IT reseller (Bytes Software Services and Phoenix Software) serving nearly 6,000 corporate and public-sector customers, with a deep Microsoft partnership and expanding security, cloud and AI services. FY2026 (year ended 28 February 2026) showed resilient top-line momentum — gross invoiced income up 11.5% to £2.34bn — but operating profit fell 5.6% to £62.7m as Microsoft enterprise incentive changes and a private-sector sales reorganisation compressed margin conversion. The quantitative screen flags the name as a buy on quality, free-cash-flow yield (5.7%), dividend support and high ROE (57.2%), despite trailing earnings growth of −6.8%. Valuation at ~19.9× P/E and 2.4% yield embeds a recovery debate: whether services mix-shift and incentive normalisation can restore profit growth, or whether FY2027 flat operating-profit guidance (per March 2026 trading commentary) marks a prolonged earnings plateau.
-
----
+Bytes Technology Group is a UK and Ireland value-added reseller of subscription software, cloud, security and AI solutions, operating through the Bytes and Phoenix brands with a deep Microsoft partnership and a recurring, B2B customer base of roughly 6,000 accounts. The quantitative screen flags the name as a buy on cheapness, quality, dividend, GARP and risk metrics (FCF yield ~5.4%, ROE 57%, yield 2.3%, P/E 20.9), but conviction is modest at 41% given the signal is new and timing is neutral with the share price extended above the 200-day moving average (RSI ~67). The valuation hook is a cash-generative, asset-light distributor trading below intrinsic quality markers, with filing-aligned FCF of c.£55m versus a screen TTM figure of c.£39m. The central debate is whether double-digit gross invoiced income (GII) growth can translate back into operating profit expansion after FY2026’s 5.6% decline, Microsoft incentive headwinds, and management’s flat FY2027 operating profit guidance.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, BYIT offers an asset-light, cash-generative franchise in a structurally growing UK IT solutions market, currently priced through a cyclical earnings trough rather than a balance-sheet crisis.
+For a value investor, BYIT offers a rare combination of high cash conversion, shareholder returns and balance-sheet optionality in UK mid-cap tech. Primary filings show FY2026 (year ended 28 February 2026) GII of £2,341m (+11.5%), gross profit of £167.3m (+2.4%), operating profit of £62.7m (−5.6%), cash conversion of 105.1% and cash of £98.6m, with negligible borrowings (Yahoo: total debt £2.0m, essentially capital leases). The business reinvests in specialist sales teams and managed services while returning capital via a 7.0p final dividend (FY2026) and an active share buyback programme through 2026.
 
-**Screen alignment.** The buy signal rests on five factor families — cheapness, quality, dividend, GARP and risk — with eight models passing, including FCF Yield, Buffett Quality, Economic Moat, Dividend Growth and Earnings Quality. Data quality is full (20/20 metrics). Key inputs: P/E 19.9, P/B 12.2, FCF yield 5.7%, dividend yield 2.4%, ROE 57.2%, Neff PEGY 0.08. The screen correctly identifies a business that converts profit to cash (105.1% cash conversion per FY2026 annual report) and returns capital aggressively (90% of post-tax profit returned over five years; £205m to shareholders).
-
-**Business quality.** Filings describe a sticky, diversified customer base (~5,916 customers; high retention at both divisions), employee NPS of 62, customer NPS 70+, and one of Microsoft's largest UK partners by revenue, alongside 1,000+ other vendor relationships. The model is capital-light: gross margin expanded to 75.8% (FY2026) from 75.2% (FY2025), and five-year gross-profit CAGR is 13.3%. Management is pivoting from licence resale toward managed services and AI/cloud outcomes — a higher-quality, stickier revenue mix if execution holds.
-
-**Why buy now.** The screen's quality and cash metrics remain intact even as operating profit dipped; the market appears to penalise a one-year margin reset (Microsoft incentives, sales realignment) rather than franchise impairment. Active capital return — £25m buyback programme announced May 2026, ongoing cancellations through August — and a 40–50% dividend payout policy provide a shareholder yield floor while the services transition plays out.
-
----
+The screen’s buy signal is supported by eight passing models including FCF Yield, Buffett Quality, Economic Moat, Dividend Growth and Earnings Quality, with full data quality (20/20 metrics). Structural quality is evident: high customer retention, ~4% UK market share in a fragmented VAR market, and vendor relationships (Microsoft among the largest UK partners by revenue). The offset is earnings momentum: operating margin fell from 40.7% to 37.5% of gross profit, and the AGM trading update (July 2026) confirmed operating profit “broadly flat” year-on-year in the opening four months of FY2027 despite double-digit GII and gross profit growth. The screen’s negative headline growth (−6.5%) and elevated P/B (12.8) reflect this profit plateau rather than balance-sheet weakness. Net-net, the buy case rests on cash yield and franchise durability outweighing near-term margin compression — not on a clear re-rating catalyst.
 
 ## FINANCIAL REVIEW
-*Primary source: FY2026 and FY2025 annual report extracts (Companies House / RNS annual report body). Consolidated group interim results are **not** present in the filings index; interim Companies House accounts are parent-company dividend-justification filings only (Sections 836/838). Where noted, Yahoo Finance annual data is used as fallback.*
+**Primary source:** Companies House consolidated annual accounts (FY2026: `ch_12935776_MzUyNjIzMDc2MGFkaXF6a2N4`, published June 2026; FY2025: `ch_12935776_MzQ2OTQ2NDM2MWFkaXF6a2N4`). The RNS annual report notice (`4f20963ff8cee3e8`) confirms audited results but contains no financial tables.
 
-### Annual results trend
+**Annual trend (consolidated, filings)**
 
-| Metric | FY2026 (28 Feb 2026) | FY2025 (28 Feb 2025) | YoY |
-|--------|------------------------|----------------------|-----|
-| Gross invoiced income | £2,341.0m | £2,099.8m | +11.5% |
-| Revenue (IFRS 15) | £220.5m | £217.1m | +1.6% |
+| Metric | FY2026 | FY2025 | YoY |
+|--------|--------|--------|-----|
+| GII | £2,341.0m | £2,099.8m | +11.5% |
+| IFRS revenue | £220.5m | £217.1m | +1.6% |
 | Gross profit | £167.3m | £163.3m | +2.4% |
-| Gross margin | 75.8% | 75.2% | +60bps |
+| Gross margin (GP/revenue) | 75.8% | 75.2% | +60bps |
 | Operating profit | £62.7m | £66.4m | −5.6% |
-| Op. profit / GP | 37.5% | 40.7% | −320bps |
+| OP as % of gross profit | 37.5% | 40.7% | −320bps |
 | Cash conversion | 105.1% | n/a in extract | — |
-| Cash | £98.6m | £113.1m* | −12.8% |
+| Cash | £98.6m | n/a in FY26 KPI panel | −12.8% vs prior year per filing |
 
-*Prior-year cash per FY2026 KPI panel (£113.1m implied from −12.8% move).*
+FY2025 (prior year filing) showed stronger profit leverage: GII +15.2% to £2.1bn, operating profit +17.1% to £66.4m, with a final dividend of 6.9p plus a 10.0p special dividend. FY2026 reversed that pattern: GII grew double-digit but operating profit fell, which the chair attributes to (i) changes to Microsoft enterprise incentive structures, particularly in H1 around public-sector and Microsoft year-end renewals, and (ii) a longer-than-expected transition from generalist to specialist, customer-segment-focused sales teams.
 
-**FY2024 context** (prior annual report): revenue £207.0m, gross profit £145.8m, operating profit £56.7m — confirming a multi-year growth track that FY2026 interrupted at the operating line.
+**Cash and returns (filings + Yahoo fallback where noted)**
 
-**Profitability bridge (filings narrative).** Chair and CEO attribute FY2026 operating-profit decline to: (1) Microsoft enterprise incentive structure changes, concentrated around public-sector year-end renewals (March/April) and Microsoft's June year-end; and (2) transition of private-sector sales from generalist to segment-focused teams (enterprise, mid-market, SMB), which took longer than planned and created temporary pipeline disruption. Gross invoiced income growth (+11.5%) materially outpaced gross-profit growth (+2.4%), confirming margin pressure at the rebate/incentive layer rather than demand collapse.
+- Filing: cash conversion 105.1% (defined as free cash flow divided by operating profit); cash £98.6m at year-end.
+- Yahoo fallback (`financials_annual.json`, used only where filing bodies lack detail): FY2026 operating cash flow £61.0m, free cash flow £55.1m, net income £51.3m, dividends paid £48.6m, share repurchases £25.2m. These align with the screen’s filing-aligned FCF of $55.1m and explain the screen’s note that TTM Yahoo cash flow is suppressed.
+- Dividend policy (FY2026 annual report): distribute 40–50% of post-tax pre-exceptional earnings; proposed final dividend 7.0p (£16.5m), paid July 2026 after AGM approval.
+- Balance sheet (Yahoo fallback): net cash position; total debt £2.0m (capital leases); working capital remains receivable-heavy (trade receivables £290m vs cash £99m).
 
-**Below operating profit (Yahoo fallback — not in annual report body extract).** Net income fell to £51.3m (FY2026) from £54.8m (FY2025), basic EPS 21.4p from 22.8p. Free cash flow was £55.1m (FY2026) vs £64.9m (FY2025); operating cash flow £61.0m. Interest income (£7.6m) materially boosted pre-tax profit given minimal leverage (capital lease obligations ~£2.0m; undrawn £30m RCF). Dividends paid £48.6m; share repurchases £25.2m. Net cash position remains strong.
+**Interim / trading updates**
 
-**Dividend.** Board proposed a final dividend of 7.0p per share (£16.5m), within the stated 40–50% payout of post-tax pre-exceptional earnings. Combined with buybacks, capital return remains a central part of the investment case.
+| Filing | Period | Scope | Key figures |
+|--------|--------|-------|-------------|
+| `ch_12935776_MzQ0MTA3MDg1OGFkaXF6a2N4` | 6m to 31 Aug 2024 | **Parent company only** (s838) | OP £2.8m; going concern to 29 Feb 2026 |
+| `ch_12935776_MzQ3Nzg1OTQyOGFkaXF6a2N4` | 5m to 31 Jul 2025 | Parent company only | OP £23.0m; cash £49.5m |
+| `ch_12935776_MzUyNzI2MzA3NmFkaXF6a2N4` | 3m to 31 May 2026 | Parent company only | OP £23.6m; cash £62.9m; £30m RCF; going concern to 31 Aug 2027 |
+| `faba91e1688746cb` (AGM, 9 Jul 2026) | First 4 months FY2027 | **Group trading update** | Double-digit YoY GII and gross profit growth; operating profit broadly flat YoY |
 
-**Balance sheet (Yahoo fallback).** Total assets £474.1m; shareholders' equity £81.1m (compressed by cumulative distributions); trade receivables £290.2m vs payables £218.5m — typical working-capital intensity for a reseller. No material drawn debt.
-
-### Interim / half-year coverage
-
-**Gap:** The filings index contains three interim Companies House accounts (Aug 2024, Jul 2025, May 2026) but **no consolidated group half-year or trading-update RNS with a downloadable body**. Interim filings are parent-company only, filed to justify distributions under the Companies Act.
-
-What interim filings do show:
-
-- **May 2026 (3 months to 31 May 2026):** Parent received £23.7m dividend from Holdco; £25.0m share-repurchase programme announced (1.05m shares bought for £3.68m by period-end; £21.3m provision for further purchases); RCF extended three years to May 2030 with £45m accordion (from £20m). Going concern affirmed through August 2027; parent cash £62.9m; undrawn £30m RCF.
-- **July 2025 (5 months to 31 July 2025):** Parent dividend income £22.7m; dividends paid £41.0m in period; going concern affirmed.
-- **August 2024 (6 months to 31 August 2024):** Parent dividend income £3.0m; going concern affirmed.
-
-**Trading update (news only, no filing body):** Investegate commentary (24 March 2026) reported FY2026 performance in line with outlook but guided **flat operating profit for FY2027**, citing higher technology costs — a material forward indicator absent from primary filing bodies.
-
-### Cash and capital allocation
-
-FY2026 cash conversion of 105.1% confirms the asset-light model. Cash fell £14.4m year-on-year (Yahoo: £98.6m end-FY26 from £113.1m), driven by dividends (£48.6m) and buybacks (£25.2m) exceeding FCF. The May 2026 £25m programme signals continued confidence in balance-sheet capacity. Five-year cash conversion averages 113% per the investment-case panel.
-
----
+**Gaps:** The filings index contains **no trading_update** category entries and **no consolidated half-year RNS** with group GII, gross profit or operating profit. Interim Companies House accounts are statutory parent-company filings under sections 836/838 and explicitly exclude consolidated group information. Consolidated interim performance must therefore be inferred from the AGM statement and March 2026 market commentary (`d8f9d34309cc62c8`), which references flat FY2027 operating profit expectations due to higher technology costs — not from audited interim accounts.
 
 ## RISKS AND RED FLAGS
-**Vendor concentration (customer_concentration).** Microsoft is the largest vendor partner by revenue. FY2026 results explicitly cite enterprise incentive restructurings as the primary driver of operating-profit decline. Rebate and incentive terms remain largely outside management control and can re-cut profitability even when gross invoiced income grows strongly.
+**Vendor concentration:** Microsoft is the largest vendor partner and a material driver of gross invoiced income. FY2026 operating profit fell partly due to reduced Microsoft enterprise incentives (annual report chair’s statement). UBS downgraded the stock in July 2026 citing Microsoft-related headwinds (news manifest). This is the single most material earnings risk not captured by static quality screens.
 
-**Execution / key-person (key_person, governance).** Private-sector sales realignment caused a longer-than-expected adjustment period; CEO acknowledges temporary pipeline disruption from account handovers. CFO Andrew Holden will step down from the Board once a replacement is recruited, transitioning to COO-only (RNS, 12 May 2026). Chair Patrick De Smedt retirement and board appointments were announced 1 July 2026 (headline only; no body). March 2026 news reported departure of a long-serving MD. Leadership continuity during a strategic pivot is a live risk.
+**Margin and cyclicality:** Enterprise IT spending is cyclical; FY2026 showed revenue growing only 1.6% on an IFRS net basis despite 11.5% GII growth, reflecting agent/principal accounting and mix. Operating leverage has turned negative: gross profit +2.4% but operating profit −5.6%. Management guided flat FY2027 operating profit (March 2026 trading commentary).
 
-**Cyclical and demand (cyclical).** Public-sector renewal timing (March/April budget cycles) creates H1/H2 skew. CEO flags "significant economic uncertainty." FY2027 flat operating-profit guidance (news, March 2026) suggests near-term earnings may not rebound quickly.
+**Governance and key-person:** Chair Patrick De Smedt retires by September 2026; Gavin Rochussen appointed chair-designate (July 2026 RNS). CFO Andrew Holden will step down from the board once a replacement is found and move to COO-only role (May 2026). A long-serving managing director departed in March 2026 (news). CFO transition during a profit plateau adds execution risk.
 
-**Competitive (competitive).** UK IT reseller market is fragmented but competitive (Softcat, Computacenter peers cited in news flow). Vendor "partner-first" strategies benefit scale players but also invite margin compression as vendors adjust programmes.
+**Shareholder concentration:** Coronation Fund Managers has repeatedly trimmed its stake (to c.22.5% by August 2026 per news/filings), which may reflect portfolio rebalancing but signals reduced conviction from a major holder.
 
-**Working capital / liquidity (liquidity).** Receivables grew to £290m (FY2026) on revenue growth of only 1.6% — working-capital absorption is recurring (Yahoo: −£28.4m receivable change in FY2026 operating cash flow). Not a near-term stress given £98.6m cash and undrawn RCF, but worth monitoring.
+**Working capital:** Large trade receivables (£290m per Yahoo) relative to equity (£81m) are typical for VAR models but create liquidity sensitivity if customer payment cycles lengthen; parent-company going concern disclosures reference “liquidity and cash flow risk” as a key dependency.
 
-**Accounting / revenue recognition (accounting).** IFRS 15 agent/principal judgements materially affect reported revenue (net vs gross); investors must track gross invoiced income and gross profit, not revenue alone. FY2026 revenue +1.6% vs GII +11.5% illustrates the distortion.
+**Filing language:** Parent-company interim accounts confirm going concern through August 2027, supported by £62.9m cash and a £30m revolving credit facility (`ch_12935776_MzUyNzI2MzA3NmFkaXF6a2N4`). No covenant breach or going-concern qualification is flagged. Consolidated viability/risk-report text is present in annual account PDF extracts but full principal-risk tables were not machine-readable in the body extracts reviewed.
 
-**Going concern / viability.** Parent interim accounts affirm going concern (assessed to August 2027) with £680m+ net assets and undrawn RCF. Full-group viability statement is referenced in the annual report contents (page 75) but the body extract does not include the detailed viability text — a verify-before-trade gap.
+**Positive offsets:** Net cash balance sheet, 105% cash conversion, active buybacks, high customer retention (cited in annual report), and no pension or litigation flags surfaced in available filing bodies.
 
-**Pension.** No pension deficit or scheme detail surfaced in available filing extracts; cannot confirm absence from primary sources.
-
-RiskTags: cyclical, competitive, customer_concentration, governance, key_person, liquidity, accounting
-
----
-RiskTags: cyclical, competitive, customer_concentration, governance, key_person, liquidity, accounting
+RiskTags: competitive, cyclical, customer_concentration, key_person, governance
+RiskTags: competitive, cyclical, customer_concentration, key_person, governance
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate — dominated by earnings, capital return and governance, with limited sell-side depth in the manifest.
+Coverage over the past year is ** voluminous but skewed toward syndicated commentary** (chiefly Kalkine Media) rather than deep sell-side research.
 
-**Earnings and outlook**
-- *Bytes Technology shares tumble as profit outlook disappoints* (Yahoo Finance UK, 24 March 2026) — full-year trading update in line with expectations but FY2027 operating profit guided flat; shares fell ~11%.
-- *Bytes Technology Group H2 Earnings Call Highlights* (Yahoo Finance, 12 May 2026) — higher gross invoice income and modest GP growth, but operating profit declined on Microsoft incentive changes and sales realignment.
-- *Across The Markets: Bytes Technology, Kingfisher, Trustpilot* (Investegate, 24 March 2026) — corroborates flat FY2027 operating-profit outlook.
+**Material events:**
 
-**Management and governance**
-- *Board change* (RNS, 12 May 2026) — CFO/COO role split; Andrew Holden to exit Board upon CFO replacement.
-- *Retirement of Chair and Board appointments* (RNS headline, 1 July 2026) — body not in index.
-- *Bytes share price drops as MD departs after two decades* (businesscloud.co.uk, 10 March 2026).
+- **24 March 2026:** “Bytes Technology shares tumble as profit outlook disappoints” (Yahoo Finance UK / Proactive Investors); “UK's Bytes Technology forecasts flat profit as costs rise” (marketscreener.com). Investegate commentary (`d8f9d34309cc62c8`, 24 March 2026) notes FY performance in line with outlook but **flat FY2027 operating profit** expected due to higher technology costs; shares fell ~11%.
+- **12 May 2026:** Full-year FY2026 results released; board change splitting CFO/COO roles (`1d002940e6a99bdf`); final dividend 7.0p proposed.
+- **9 July 2026:** AGM statement — strong GII and gross profit growth in first four months of FY2027, operating profit broadly flat (“Bytes Technology Group Delivers Strong Start to the Year with Continued Double-Digit Growth”, Yahoo Finance UK, 9 July 2026).
+- **1 July 2026:** Chair retirement and board appointments (`0483fac6300d5d53`).
+- **10 March 2026:** “Bytes share price drops as MD departs after two decades” (businesscloud.co.uk).
+- **27 July 2026:** “Bytes Technology downgraded by UBS due to twin threat from Microsoft cuts” (Proactive Investors).
+- **May–September 2026:** Sustained share buyback programme — e.g. “Bytes Technology Group Cancels 559,000 Shares in Latest Buyback Tranche” (Globe and Mail, 18 August 2026); multiple “Transaction in Own Shares” RNS entries.
+- **August 2026:** Coronation stake reduced to c.23.5% (“Coronation Fund Managers Lowers Bytes Technology Group (BYIT) Stake to 23.48%”, Kalkine Media, 28 August 2026); JPMorgan crossed below 5% threshold (20 August 2026).
 
-**Capital return**
-- *Bytes Technology Group (BYIT) Completes Buyback of 345,000 Shares at Prices up to 420p in Early August 2026* (Kalkine Media, 10 August 2026).
-- *Bytes Technology Group Cancels Shares After Latest Buyback Tranche* (Globe and Mail, 28 July 2026).
-- *Bytes Technology Group Adjusts Share Capital With New Issue for Employee Plans* (Globe and Mail, 12 August 2026).
-
-**Broader context**
-- Multiple Kalkine Media pieces (July–August 2026) position BYIT alongside Softcat, Sage and Kainos as a UK tech resilience name post-AI sell-off — largely thematic, not company-specific.
-- Analyst fair-value resets cited in Yahoo Finance (May 2026: cut from £4.59 to £3.81; March 2026: Hold rating, target £4.00) — sentiment has cooled even as fundamentals remain cash-rich.
-
-**Coverage assessment:** News is adequate on events but thin on independent deep analysis; promotional "upside potential" pieces (DirectorsTalk) should be treated with caution.
-
----
+**Thematic narrative:** AI, cloud and cybersecurity demand feature repeatedly in press coverage, positioning BYIT alongside Softcat and Sage as a UK enterprise-tech beneficiary. The substantive news flow, however, centres on **profit stagnation, Microsoft dependency, management turnover and capital return** rather than structural deterioration of the franchise.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Deep research confirms the screen's quality, cash-generation and dividend case but moderates conviction given FY2026 operating-profit decline, Microsoft incentive dependency, FY2027 flat-profit guidance and ongoing board/CFO transitions.
+Rationale: Filing-backed cash generation, dividend discipline and screen quality metrics support the buy signal, but confirmed operating profit decline in FY2026 and flat near-term guidance weaken the case for aggressive conviction until consolidated interim evidence shows margin stabilisation.

@@ -127,14 +127,36 @@ def main(argv: list[str] | None = None) -> int:
         help=(
             "Bounded force-initial rememo for memo tickers whose filing bodies "
             "improved (or whose published grade lags disk bodies). Used after "
-            "weekday ingest-loop."
+            "weekday ingest-loop. Honors an active catch-up request to raise the cap."
         ),
     )
     parser.add_argument(
         "--weekday-rememo-cap",
         type=int,
         default=3,
-        help="Max tickers for --weekday-rememo (default: 3)",
+        help="Max tickers for --weekday-rememo (default: 3; may be raised by catch-up request)",
+    )
+    parser.add_argument(
+        "--rememo-catchup",
+        action="store_true",
+        help=(
+            "Batch rememo of the outstanding body-lag backlog (committed memo_quality "
+            "vs disk filings). Use repeatedly until backlog is within in-week capacity."
+        ),
+    )
+    parser.add_argument(
+        "--rememo-catchup-cap",
+        type=int,
+        default=5,
+        help="Max tickers for --rememo-catchup (default: 5)",
+    )
+    parser.add_argument(
+        "--rememo-backlog-status",
+        action="store_true",
+        help=(
+            "Assess memo rememo backlog vs in-week maintenance capacity, write "
+            "docs/data/memo_rememo_backlog.json, and activate/clear catch-up requests."
+        ),
     )
     parser.add_argument(
         "--ingest-loop-json",
@@ -473,24 +495,57 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote {args.output_dir / 'deepen_sources_summary.json'}")
         return 1 if result.errors and not result.deepened else 0
 
-    if args.weekday_rememo:
+    if args.rememo_backlog_status:
+        from value_investor.research.weekday_rememo import write_rememo_backlog_status
+
+        status = write_rememo_backlog_status()
+        print(
+            f"Memo rememo backlog={status.get('backlog_count')} "
+            f"weekly_capacity={status.get('weekly_maintenance_capacity')} "
+            f"action={status.get('action')} "
+            f"recommended_batch={status.get('recommended_catchup_batch')}"
+        )
+        request = status.get("catchup_request") or {}
+        if request:
+            print(
+                f"Catch-up request active={request.get('active')} "
+                f"elevated_cap={request.get('elevated_cap')}"
+            )
+        print("Wrote docs/data/memo_rememo_backlog.json")
+        return 0
+
+    if args.weekday_rememo or args.rememo_catchup:
         from value_investor.research.weekday_rememo import run_weekday_memo_rememo_pass
 
+        catchup = bool(args.rememo_catchup)
+        label = "catch-up rememo" if catchup else "weekday rememo"
         if not args.api_key and not args.dry_run:
-            print("CURSOR_API_KEY required for --weekday-rememo", file=sys.stderr)
+            print(f"CURSOR_API_KEY required for --{label.replace(' ', '-')}", file=sys.stderr)
             return 1
+        model = args.model or os.environ.get("CURSOR_RESEARCH_MODEL")
+        if not model:
+            try:
+                from value_investor.agent_model_policy import research_model_id
+
+                model = research_model_id()
+            except Exception:  # noqa: BLE001
+                model = "composer-2.5"
         summary = run_weekday_memo_rememo_pass(
             api_key=args.api_key,
             output_dir=args.output_dir,
             ingest_loop_json=args.ingest_loop_json,
-            max_targets=int(args.weekday_rememo_cap),
+            max_targets=int(args.rememo_catchup_cap if catchup else args.weekday_rememo_cap),
             dry_run=bool(args.dry_run),
-            model=args.model,
+            model=model,
+            mode="catchup" if catchup else "weekday",
+            honor_catchup_request=not catchup,
         )
         print(
-            f"Weekday rememo selected={len(summary.selected)} "
+            f"{label} selected={len(summary.selected)} "
             f"rememoed={len(summary.rememoed)} skipped={summary.skipped} "
-            f"errors={len(summary.errors)}"
+            f"errors={len(summary.errors)} "
+            f"backlog_before={summary.backlog_before} "
+            f"backlog_after={summary.backlog_after}"
         )
         for ticker in summary.rememoed:
             after = summary.grades_after.get(ticker) or {}

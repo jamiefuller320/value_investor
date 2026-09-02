@@ -1,88 +1,107 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 1 · Updated 2026-08-23T06:49:53.066093+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:22:07.924226+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Currys plc is a UK-listed omnichannel consumer electronics retailer trading at a material discount to book (P/B ~0.7) with improving earnings, strong free cash flow generation, and a balance sheet that has shifted from net debt to net cash over the past three years. The quantitative screen flags a Strong Buy on cheapness, dividend, GARP, and risk metrics (Piotroski F-Score 8/9), though quality screens fail on thin margins and sub-12% ROE. The investment case rests on whether operational momentum in UK & Ireland services/credit and Nordics recovery can sustain adjusted profit growth and capital returns (dividend plus £50m buyback) against cyclical demand, rising competitive intensity, and a CEO transition. Key debate: is the stock a structurally cheap cash compounder, or a low-moat cyclical trading below goodwill-inflated book?
+Currys plc is the leading omnichannel electricals retailer in the UK & Ireland (Currys, iD Mobile) and the Nordics (Elkjøp), with FY2025/26 group revenue of £9.3bn and a multi-year turnaround from distressed earnings in FY2022/23 to adjusted profit before tax of £191m and net cash of £176m. The quantitative screen flags the name as a buy on deep value metrics (P/B ~0.7, P/E ~10, dividend yield ~2%), supported by improving operating margins, sustained free cash flow, and an explicit capital-return framework including a new £50m buyback and a doubled dividend. The valuation hook is a repaired balance sheet trading below book value while management targets at least 3% adjusted EBIT margins and growing recurring Services revenue. The central debate is whether Currys is a cyclical consumer-electronics retailer facing online disruption and chip-supply inflation, or a structurally improving omnichannel platform with credit, connectivity and repair moats that can compound cash returns — with the screen’s FCF basis mismatch (filing £157m vs company-adjusted £157m vs Yahoo £346m) warranting caution on yield-dependent models.
 
 ## INVESTMENT THESIS
-The screen’s Strong Buy signal is anchored in classic deep-value metrics: P/B 0.66 (Schloss, Deep Value), P/E ~10 (Earnings Yield, Low P/E + High Yield), FCF yield, and Acquirer’s Multiple, with leverage contained (D/E ~40%) and a Piotroski score of 8/9 confirming improving fundamentals rather than a pure value trap. Business quality is mixed but directionally positive: Currys is the #1 omnichannel electronics retailer in the UK (~17% share) and Nordics (~28% under Elkjøp), with a growing higher-margin services layer (credit sales, iD Mobile subscribers, repair/recycling). FY2024/25 Companies House accounts show adjusted PBT of £162m (+37% YoY) and net cash of £184m—the strongest balance sheet in over a decade per management—supporting the screen’s dividend and risk-family passes. For a value investor, the hook is a de-risked turnaround trading below tangible equity (goodwill-heavy balance sheet) with management explicitly targeting surplus cash return via dividends and buybacks, while near-term catalysts include AI PC replacement cycles and Windows 10 end-of-support. The screen’s failures (Graham Defensive liquidity, Buffett Quality ROE/margins, Economic Moat) correctly flag that this is not a franchise-quality compounder—it is a cyclical retailer bought on asset backing, cash yield, and operational inflection.
+For a value investor, Currys offers a rare combination in UK retail: statistically cheap assets, a credible earnings recovery, and capital discipline. The screen passes 13 of 22 models across five families — cheapness (Schloss Low P/B, Deep Value, Earnings Yield, FCF Yield, Low P/E + High Yield), quality (Piotroski F-Score, Earnings Quality, Composite Value), dividend, GARP (Lynch/Neff PEG variants), and risk (Acquirer’s Multiple, Dreman Contrarian) — with full data quality (20/20 metrics). That breadth suggests the signal is not a single-ratio artefact.
+
+Business quality is improving in ways the screen partially captures but does not fully encode. FY2025/26 filings show group like-for-like sales growth of +4%, UK&I market share gains of +60bps in a declining addressable market, and Nordics adjusted EBIT up +26% currency-neutral. Recurring Services revenue reached £873m (+7%), including flexpay credit sales of £1.2bn and iD Mobile subscribers of 2.6m (+18%). Adjusted EBIT margin expanded 20bps to 2.8%; management targets at least 3% in both segments. Colleague engagement (84) and customer NPS are rising — qualitative markers of execution under outgoing CEO Alex Baldock.
+
+The balance sheet supports the value case. Year-end net cash was £176m (target minimum £100m), the IAS 19 pension deficit fell to £6m from £103m after £82m of contributions, and scheduled pension cash drops to £13m p.a. from FY2026/27. Shareholder returns totalled £74m (buyback plus dividend) in FY2025/26, with ~£85m planned for FY2026/27. Net lease liabilities of £950m remain material, but reported bank debt is minimal and covenant headroom is explicitly stress-tested in filings.
+
+The screen’s adjusted signal is Hold due to FCF basis divergence; filing-reported free cash flow of £157m supports yield screens at a more conservative level than Yahoo’s £346m operating-cashflow-derived figure. On company-reported FCF and net cash, the buy case holds; on aggressive FCF normalisation, it weakens.
 
 ## FINANCIAL REVIEW
-**Source hierarchy:** Annual figures below are taken from Companies House account extracts (`filings/bodies/ch_*`) unless stated. FY2025/26 full-year numbers fall back to `financials_annual.json` (Yahoo) because the July 2026 Annual Report RNS body extract contains risk disclosures only, not financial tables. **No interim or trading-update filing bodies are present in `filings_index.json` (interim: 0, trading_update: 0)**—half-year analysis relies on secondary news commentary only.
+**Source hierarchy:** Primary figures from RNS preliminary/full-year results (2 July 2026, filing body `941f59ac0a40743d.txt`) and Companies House annual accounts (FY2024/25: `ch_07105905_MzQ3ODYxMDM1NWFkaXF6a2N4.txt`; FY2025/26 annual report filed 28 August 2026: `ch_07105905_MzU0MDc2NTM3OWFkaXF6a2N4.txt`). Yahoo (`financials_annual.json`) used only where noted for earlier-period context.
 
-**Annual trend (primary filings)**
+**Coverage gap:** `filings_index.json` lists 17 annual filings, two trading updates, and **zero interim** RNS/accounts. Half-year results for H1 FY2025/26 appear in news headlines (18 December 2025) but are **not present** in the filing index; interim analysis below relies on the May 2026 trading update (`499096e61247cc51.txt`) as the nearest in-period management commentary.
 
-| Period (FY end) | Revenue | Adj. PBT | FCF (company adj.) | Net cash | Source |
-|---|---|---|---|---|---|
-| 2021/22 | £10,144m | £186m | £72m | — | CH accounts |
-| 2023/24 | £8,476m | £118m (+10%) | £82m | £96m | CH accounts |
-| 2024/25 | £8,706m | £162m (+37%) | £149m (+82%) | £184m | CH accounts |
+### Annual trend (primary filings)
 
-FY2022/23 annual accounts are indexed but financial highlights in the body extract are OCR-degraded; Yahoo (`financials_annual.json`) shows a statutory loss year (continuing net income −£492m on revenue £8,874m), marking the trough of the post-pandemic electronics downturn.
+| Metric | FY2024/25 (ye 3 May 2025) | FY2025/26 (ye 2 May 2026) | YoY |
+|--------|---------------------------|---------------------------|-----|
+| Group revenue | £8,706m | £9,254m | +6% (+4% ccy-neutral LFL) |
+| Adjusted PBT | £162m | £191m | +18% |
+| Adjusted EBIT | £225m | £255m | +13% |
+| Adjusted EBIT margin | 2.6% | 2.8% | +20bps |
+| Adjusted EPS | 11.3p | 13.4p | +19% |
+| Statutory PBT | £124m | £153m | +23% |
+| Free cash flow | £149m | £157m | +5% |
+| Operating cash flow | £260m | £294m | +13% |
+| Year-end net cash | £184m | £176m | −£8m |
+| Dividend per share | 1.5p | 3.0p | +100% |
+| IAS 19 pension deficit | £(103)m | £(6)m | largely funded |
 
-**FY2024/25 highlights (Companies House, published August 2025)**
+**Segment FY2025/26:** UK&I revenue £5,438m (+3% LFL), adjusted EBIT £158m (+3%). Nordics revenue £3,816m (+6% ccy-neutral LFL), adjusted EBIT £97m (+26% ccy-neutral). Group adjusted EBITDA £526m (+7%).
 
-- Group revenue £8,706m; like-for-like revenue +2%.
-- Adjusted PBT £162m (+37% YoY); adjusted EPS 11.3p; statutory PBT £124m.
-- Free cash flow £149m (+82% YoY); year-end net cash £184m (+£88m YoY).
-- UK & Ireland revenue +6% with services revenue +12%, credit sales +14% to £1.1bn, iD Mobile subscribers +26% to 2.2m.
-- Final dividend 1.5p declared.
-- Balance sheet: net cash position intended to be maintained as pension deficit reduces; indebtedness excluding lease liabilities improved from £(805)m deficit to +£81m surplus over five years (2024/25 annual report).
+**Cash deployment FY2025/26:** £82m pension contributions, £50m share buyback, £24m dividends, £79m capex (guidance <£100m maintained). Closing net cash £176m after these outflows.
 
-**FY2025/26 (fallback: Yahoo `financials_annual.json`; partial RNS confirmation)**
+**Balance sheet (2 May 2026, filing):** Total assets £5,627m; net assets £2,408m; goodwill £2,290m; net lease liabilities £(950)m; working capital £(182)m; inventory £1,181m (+14%, partly for chip-shortage protection). No individual customer >10% of revenue.
 
-The July 2026 Annual Financial Report RNS (`14270db68af31cc6.txt`) confirms publication of FY2025/26 accounts and references preliminary results of 2 July 2026, but the downloaded body does not contain financial tables. Per Yahoo fallback (labelled FY2026, fiscal year ending ~May 2026):
+### Earlier recovery (filings + Yahoo fallback)
 
-- Revenue £9,254m (+6% vs FY2024/25 filing revenue).
-- Operating income £220m; pretax income £153m; net income £165m.
-- Operating cash flow £425m; capex −£79m; **free cash flow £346m** (screen filing-aligned; company-adjusted FCF per screen snapshot: £157m—basis divergence noted).
-- Cash £147m; total debt (incl. capital leases) £952m; shareholders’ equity £2,408m; tangible book value negative (−£45m) due to £2.45bn goodwill/intangibles.
-- March 2026 RNS (`00644c3c6fac5ff5.txt`) guided adjusted PBT £180–190m (+11–17% YoY) and net cash above the £100m target at year-end 2 May 2026, consistent with continued profitability improvement.
+FY2024/25 Companies House accounts confirm the step-change from prior year: adjusted PBT £162m (+37% YoY per CH strategic report), free cash flow £149m (+82% YoY), net cash £184m. For FY2022/23, primary filing bodies in the index do not provide clean consolidated PBT in extractable form; **Yahoo fallback** shows revenue £8,874m and a statutory net loss of £(481)m (including £511m goodwill impairment on continuing operations) — illustrating the trough from which the current recovery began. FY2023/24 Yahoo shows revenue £8,476m and continuing-operations net income £27m; treat as indicative only given period-alignment risk.
 
-**Interim / trading updates — gap**
+### Trading update / near-term (interim substitute)
 
-No interim filing bodies are available. Secondary news (Investegate, 12 December 2024) reported H1 FY2024/25 interim results with fractional sales growth, margin improvement, and an estimated £32m annual cost from UK Budget changes (half absorbed at that point)—these figures cannot be verified from primary filing extracts in this pack.
+19 May 2026 trading update (`499096e61247cc51.txt`): full-year LFL sales +4%; adjusted PBT expected ~£191m (+18% YoY, above prior £180–190m guidance); net cash >£170m; £74m returned to shareholders during the year. This preceded audited results that confirmed £191m PBT and £176m net cash.
 
-**Cash flow and balance-sheet quality**
+FY2025/26 outlook in results release: early FY2026/27 trading “very solid”; comfortable with consensus adjusted PBT ~£198m; planned shareholder returns ~£85m including new £50m buyback.
 
-Cash conversion remains a strength: Piotroski components pass on positive OCF, OCF > net income, declining leverage, and no dilution. Weaknesses: current ratio 0.89 (screen flags Graham Defensive and Financial Health failures); working capital negative (£258m per Yahoo FY2026); heavy lease obligations (~£952m). FCF dividend coverage (net) ~14x per screen—comfortable but sensitive to inventory build (FY2026 inventory +£114m working-capital outflow per Yahoo).
+**Going concern (FY2025/26 accounts, filing):** Directors model a severe-but-plausible downside with 5% annual sales decline over the three-year viability window; controllable cost mitigations mean **no facility or banking covenant breach**. Cyber-attack scenario also modelled as manageable within facilities and covenant headroom. Going concern basis adopted.
 
 ## RISKS AND RED FLAGS
-**Competitive and cyclical.** The FY2025/26 annual report RNS flags *increased* principal risks in business continuity, competition, and supply chain resilience. Consumer electronics spending is cyclical; FY2022/23 demonstrated earnings vulnerability in downturns. Management warned (July 2026 news) that AI-driven memory chip shortages could push up product costs and constrain availability later in the year.
+**Cyclical and macro:** Electricals retail remains big-ticket and discretionary. Filings flag macroeconomic/geopolitical risk (tariffs, FX, rates, inflation) and May/July 2026 commentary notes Middle East conflict and consumer backdrop uncertainty. Kalkine headlines (August 2026) question big-ticket resilience as gilt yields rise.
 
-**Liquidity and leverage.** Current ratio below 1.0 and negative working capital are structural for big-box retail but limit balance-sheet flexibility in a shock. Lease-adjusted debt remains material (~£952m) despite headline net cash.
+**Competitive:** Annual report 2025/26 (`14270db68af31cc6.txt`) rates **competition risk as increased**, citing agentic AI as a transformative sales channel and intensifying online challengers. UK&I must defend shop-floor and omnichannel model (33% omnichannel penetration). Market share in Nordics dipped slightly to 28.0% as management balanced margin and growth.
 
-**Pension.** FY2024/25 annual report references an IAS 19 pension deficit that continues to absorb required contributions; capital allocation prioritises pension payments before surplus returns to equity.
+**Supply chain / input costs:** Supply chain resilience risk **increased** in the annual report. July 2026 RNS and press (Yahoo: “UK's Currys warns memory chip shortage will push up prices”) flag AI-driven memory-chip allocation away from consumer devices, with availability and cost-price inflation expected later in 2026. Inventory was deliberately raised (+14%) to mitigate shortages.
 
-**Regulatory and tax.** FY2025/26 risk disclosures highlight financial services regulation (consumer credit, insurance) and liquidity/tax/treasury risk, including open cases with HMRC where the Group “remains committed to achieving a resolution.”
+**Regulatory:** Financial services regulation risk stable but material — insurance, consumer credit (flexpay), iD Mobile MVNO. Product safety and GDPR/cyber risks remain; business continuity risk **increased** after sector cyber incidents.
 
-**Governance / key person.** Alex Baldock stepped down as Group CEO in March 2026 after eight years; Fredrik Tønnesen (Nordics CEO) appointed group CEO from August 2026. Succession removes a proven turnaround leader mid-cycle.
+**Pension and legacy liabilities:** Pension deficit largely closed (£6m), but £13m annual contributions continue to 2030/31, with shareholder-matching contributions (~£5m anticipated) when returns exceed £80m. Liquidity risk filing notes **HMRC open tax cases** and legacy corporate tax exposures. Provisions £50m include property and regulatory matters.
 
-**Accounting / book value.** Goodwill of ~£2.3bn drives negative tangible equity; NCAV unavailable (Graham Net-Net screen fail). ROE 7.1% and thin margins fail quality screens—recovery may be priced but moat is unproven.
+**Leverage and accounting:** Reported net cash masks £950m lease liabilities and £952m total debt/capital-lease per Yahoo balance sheet. Goodwill £2.3bn drives **negative tangible book** (~£(45)m Yahoo FY2026). Adjusted metrics exclude restructuring (£24m EBIT adjusting items), acquisition amortisation, and pension finance costs — statutory PBT £153m is 20% below adjusted £191m. **FCF basis mismatch** flagged by the screen (filing £157m vs Yahoo £346m) affects yield-dependent valuation.
 
-**Going concern.** FY2024/25 accounts include a going concern and viability statement (page reference in filing index); no going-concern qualification appears in available body extracts. Viability assessment covers principal risks including business continuity and liquidity.
+**Governance / key person:** Alex Baldock stepped down (26 March 2026 RNS); Fredrik Tønnesen (Nordics CEO) appointed group CEO from 3 August 2026. Succession reduces key-person risk but introduces execution uncertainty at group level.
 
-**Other.** Cyber-attacks on UK retail peers elevate business continuity risk. UK employment-tax policy (Budget cost ~£32m per interim news) is an unresolved operating headwind.
+**Liquidity:** £525m revolving facilities (renewed September 2024); net cash £176m. Negative working capital (£182m) typical for retail but magnifies downturn sensitivity.
 
-RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, key_person, accounting
-RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, key_person, accounting
+RiskTags: cyclical, competitive, pension, leverage, key_person, regulatory, liquidity, accounting, other
+RiskTags: cyclical, competitive, pension, leverage, key_person, regulatory, liquidity, accounting, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate-to-good, dominated by results, capital returns, and management change rather than M&A.
+Coverage over the past year is **moderate-to-good**, dominated by results, buybacks, and CEO succession; thin on independent sell-side depth beyond RBC.
 
-- **FY2025/26 results and strategy (July 2026):** “Currys publishes 2025/26 annual report and details evolving risk landscape” (The Globe and Mail, 31 July 2026); “Currys H2 Earnings Call Highlights” (Yahoo Finance, 9 July 2026)—stronger annual profit, FCF, and net cash; UK and Nordics momentum.
-- **Capital return:** “Launch of £50m Share Buyback Programme” (TradingView/RNS, 1 July 2026); ongoing buyback execution reported through August 2026 (Kalkine Media, 11 & 18 August 2026)—3.24m shares repurchased at 159.90p average (18 August 2026).
-- **CEO succession:** “Currys slides as CEO Baldock quits after eight years” (Proactive Investors, 26 March 2026); “Currys profit climbs 18%, CEO succession confirmed” (Yahoo Finance, 3 July 2026)—Fredrik Tønnesen appointed group CEO from Nordics role.
-- **Trading upgrades:** “Currys stock surges 11% after full-year profit outlook upgrade” (Investing.com UK, 19 May 2026); “Performance continues to strengthen” (RNS headline, 19 May 2026—body not downloaded).
-- **Analyst sentiment:** “Currys Gains as RBC Upgrades Stock and Sees Long-Term Growth Story Emerging” (Yahoo Finance UK, 16 June 2026).
-- **Industry headwind:** “UK's Currys warns memory chip shortage will push up prices” (Yahoo Finance, 2 July 2026); “Currys falls as AI-driven chip shortage raises fears” (Proactive Investors, 2 July 2026).
-- **Interim (secondary only):** December 2024 interim results noted in Investegate market commentary (12 December 2024)—fractional sales growth, £32m Budget cost estimate; no primary interim filing in index.
+**Results and guidance**
+- *Currys (CURY) Posts 18% Increase in Adjusted Pre-Tax Profit to £191m, Initiates £50m Share Buyback and Confirms CEO Succession* — Kalkine Media, 1 July 2026 (aligned with RNS full-year results).
+- *Currys publishes 2025/26 annual report and details evolving risk landscape* — The Globe and Mail, 31 July 2026.
+- *Currys stock surges 11% after full-year profit outlook upgrade* — Investing.com UK, 19 May 2026 (trading update beat).
+- *Shares in Currys jump on half-year results beat* — Investors’ Chronicle, 18 December 2025 (interim not in filing index).
+- *Solid Earnings Reflect Currys' (LON:CURY) Strength As A Business* — simplywall.st, 9 August 2026.
 
-News is not thin, but much is syndicated retail commentary (Kalkine, TipRanks) rather than deep investigative coverage.
+**Strategy and operations**
+- *UK's Currys warns memory chip shortage will push up prices* — Yahoo Finance, 2 July 2026.
+- *‘Supersize’ TVs and beer pumps flying off shelves during World Cup, says Currys* — Yahoo Finance, 2 July 2026.
+- *Is Currys (LSE:CURY) relying on the shop floor to hold off an online challenger?* — Kalkine Media, 1 September 2026.
+
+**Management and capital allocation**
+- *Currys profit climbs 18%, CEO succession confirmed* — Yahoo Finance, 3 July 2026 (Tønnesen succeeds Baldock).
+- *Currys slides as CEO Baldock quits after eight years* — Proactive Investors, 26 March 2026.
+- *Currys Launches New £50m Share Buyback to Boost Capital Efficiency* — The Globe and Mail, 3 July 2026.
+- Multiple buyback execution headlines (TipRanks/Kalkine, July–September 2026).
+
+**Broker / sentiment**
+- *Currys Gains as RBC Upgrades Stock and Sees Long-Term Growth Story Emerging* — Yahoo Finance UK, 16 June 2026.
+
+**Other**
+- *Currys (CURY) Short Positions* — Investegate, 26 February 2025 (short interest monitoring; no detail in manifest).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Primary filings confirm a multi-year earnings and balance-sheet recovery that supports the screen’s deep-value Strong Buy, but gaps on interim filing bodies, FY2025/26 table-level filing data, thin margins, CEO transition, and cyclical/competitive risks warrant accumulation rather than unqualified confirmation.
+Rationale: Primary filings confirm a sustained earnings, cash-flow and balance-sheet recovery that supports the quantitative buy signal on cheapness and quality, but cyclical retail exposure, lease-adjusted leverage, CEO transition, chip-supply headwinds, and FCF definition ambiguity prevent full conviction without verify-before-trade on interim disclosure and adjusted-to-statutory bridge.
