@@ -58,7 +58,7 @@ jobs:
         env:
           BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          # Pass PR head via env — never ${{ }}-interpolate into the shell.
+          # Pass PR head via env — never expression-interpolate into the shell.
           if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
             echo "is_task=true" >> "$GITHUB_OUTPUT"
             echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
