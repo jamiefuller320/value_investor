@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-28T11:55:47+00:00",
-  "overall": "info",
+  "generated_at": "2026-09-02T12:32:11+00:00",
+  "overall": "warn",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-08-28T11:55:47.364891+00:00",
+    "generated_at": "2026-09-02T12:32:11.712690+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -18,7 +18,7 @@
         "id": "1",
         "name": "Decision-review learning",
         "focus": "Book learns from outcomes after costs",
-        "status": "complete"
+        "status": "in_progress"
       },
       {
         "id": "2b",
@@ -47,20 +47,20 @@
     ],
     "evidence": {
       "screen_company_count": 248,
-      "strong_buy_count": 20,
-      "screen_run_at": "2026-08-23T06:22:09.407971+00:00",
+      "strong_buy_count": 19,
+      "screen_run_at": "2026-09-02T10:22:48.084715+00:00",
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
-      "decision_review_applied": true,
-      "ai_excess_after_costs": -0.2012,
-      "rules_excess_after_costs": -0.2915,
+      "decision_review_applied": false,
+      "ai_excess_after_costs": -0.1921,
+      "rules_excess_after_costs": -0.2823,
       "ai_total_return": -0.178,
       "rules_total_return": -0.2572,
-      "ops_overall": "fail",
+      "ops_overall": "ok",
       "zero_body_buy_tier": 0,
       "unmeasured_buy_tier": 0,
-      "measured_tickers": 62,
-      "buy_tier_count": 62,
+      "measured_tickers": 59,
+      "buy_tier_count": 59,
       "ingest_stalled": false
     },
     "appraisal": {
@@ -68,12 +68,11 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 0 open, 57 merged supervised tasks.",
-        "AI-judgment track beating rules control (-20.1% vs -29.1% excess)."
+        "Engineering queue: 3 open, 63 merged supervised tasks.",
+        "AI-judgment track beating rules control (-19.2% vs -28.2% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-20.1% excess; history still thin).",
-        "Published screen bundle dated 2026-08-23 — confirm Sunday refresh."
+        "Primary AI track still below ^FTSE after costs (-19.2% excess; history still thin)."
       ],
       "next_actions": [
         "Let the learning loop accumulate before adding tracks or knobs.",
@@ -86,15 +85,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-08-27T20:38:40.625629+00:00",
-        "buy_tier_count": 62,
-        "measured_tickers": 62,
+        "snapshot_at": "2026-09-02T11:18:08.563007+00:00",
+        "buy_tier_count": 59,
+        "measured_tickers": 59,
         "unmeasured_buy_tier": 0,
         "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 0,
-        "filings_with_body": 3948
+        "indexed_without_body": 3,
+        "filings_with_body": 3836
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -717,6 +716,137 @@
           "sp500",
           "ingest-parity",
           "learning-depth"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N48",
+        "title": "Flip live FTSE paper books off 3% stress costs",
+        "summary": "Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults — do not silently rewrite live configs.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Human decides stress vs fair is the primary learning metric, or live/demo broker path starts",
+        "tags": [
+          "costs",
+          "paper",
+          "learning",
+          "not_now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N49",
+        "title": "Do not invent new paper tracks or knob churn to 'fix' stage 2b excess",
+        "summary": "End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy",
+        "tags": [
+          "stage2b",
+          "learning",
+          "knobs"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N50",
+        "title": "Treat Yahoo quarterly cashflow as optional for UK memo excellence",
+        "summary": "yahoo_quarterly_cashflow is thin on nearly every FTSE memo; do not block excellent/strong narrative quality on it. Prefer filing OCF bridges and gate/suppress empty Yahoo TTM rather than waiting for Yahoo series.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "If Yahoo UK quarterly cashflow coverage improves or a primary filing OCF bridge is standardized in every memo",
+        "tags": [
+          "yahoo",
+          "fcf",
+          "memo",
+          "uk"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N51",
+        "title": "Consider making value_investor private",
+        "summary": "Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs.",
+        "category": "not_now",
+        "section": "security",
+        "revisit_when": "If further secret exposure incidents occur or Pages no longer needs a public repo",
+        "tags": [
+          "github",
+          "visibility",
+          "secrets"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N52",
+        "title": "Fit a new screen ruleset from Suite A stress P&L for Suite B",
+        "summary": "Do not reverse-engineer a full new screen/model from Suite A after-cost returns — those P&Ls are stress-distorted and history is thin. Suite B should warm-start from current AI+rules books and transplant stress-surviving knobs (conviction, exit confirms, cooldowns) as priors only.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Suite B has a thick forward window and a separate offline rules lab is justified",
+        "tags": [
+          "suite-b",
+          "overfitting",
+          "rules",
+          "suite-a"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N53",
+        "title": "Mirror every Suite A shadow into Suite B (full 2x fork)",
+        "summary": "Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Suite B AI+rules endurance is trusted and human triage load is light",
+        "tags": [
+          "suite-b",
+          "capacity",
+          "shadows"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N54",
+        "title": "Do not treat Suite A conviction floors as Suite B policy",
+        "summary": "High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy",
+        "tags": [
+          "suite-b",
+          "conviction",
+          "promotion",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N55",
+        "title": "Live sentiment scoring from mined news phrases",
+        "summary": "Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6).",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment",
+        "tags": [
+          "sentiment",
+          "models",
+          "N6",
+          "news"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N56",
+        "title": "Auto-write FCF bridges without human review",
+        "summary": "Do not auto-author policy_fcf bridge numbers; choosing company-adjusted vs filing-aligned remains a judgment call. Keep human_gate for bridges.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "If an explicit deterministic source policy covers every buy-tier mismatch without filing judgment",
+        "tags": [
+          "fcf",
+          "so-what",
+          "human-gate"
         ],
         "status": "open"
       }
@@ -2665,6 +2795,418 @@
           "engineering-queue"
         ],
         "status": "open"
+      },
+      {
+        "id": "L204",
+        "title": "Per-ticker AIM stamp exemption in cost model",
+        "summary": "AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Trading AIM paper/live or when HMRC/T212 exemption list is wired",
+        "tags": [
+          "costs",
+          "aim",
+          "stamp"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L206",
+        "title": "Triage July analysis_tasks proposed queue against current archive thickness",
+        "summary": "Four ana-20260728-* proposed tasks (second weekly archive, knob counterfactual, exit-shadow dashboard, historical overlay bootstrap) may be obsolete or still blocked; drop/done/promote on next Sunday analysis review so progress-report proposed_total is honest.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next Sunday analysis-review human triage (~10:35 UTC)",
+        "tags": [
+          "analysis-review",
+          "triage",
+          "debt"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L207",
+        "title": "Structured filing/news event taxonomy (warnings, M&A, deals)",
+        "summary": "No systematic classifier today for profit warnings, acquisitions, collaborations, guidance cuts. LLM memos mention them in prose; period/entity filing tags are structural only. A labelled event layer (rules+LLM) would feed AI judgment without becoming a sentiment quant model (see N6).",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After buy-tier filing-body parity is stable and memo schema/AI-judgment utility is clearer (L141); or when paid news API (L12) lands",
+        "tags": [
+          "filings",
+          "news",
+          "events",
+          "research",
+          "qualitative"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L208",
+        "title": "Ops monitor wait-for-workflow-rerun before email",
+        "summary": "After dispatching guarded workflow recovery, poll until success/fail (capped) and only then email remaining issues. Skipped for now because long Actions jobs would exceed ops-monitor budget; dedicated workflow_run responders already handle reruns asynchronously.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Ops-monitor job SLA allows 15+ minutes of polling, or a follow-up verifier workflow can own the wait",
+        "tags": [
+          "ops-monitor",
+          "email",
+          "workflow-recovery"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L211",
+        "title": "IR presentation metrics + alternate news as default gap-fill pack",
+        "summary": "Populate ir_presentation_metrics.json and alternate_news.json for every buy-tier memo pack so evidence-ladder thin gaps stop capping scores at adequate even when filing bodies are strong.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "When filing-body coverage is routinely strong but evidence_ladder driver remains ~0.5 on published memos",
+        "tags": [
+          "memo",
+          "evidence-ladder",
+          "ir",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L214",
+        "title": "Git bundle of full repo history on S3",
+        "summary": "Weekly code tarball is a current-tree snapshot, not a full git history. A git bundle (or git-filtered archive) would recover branches and history if GitHub were unavailable.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After the first Sunday that uploads ftse-code-* to S3, or if GitHub availability becomes a real recovery concern",
+        "tags": [
+          "backup",
+          "s3",
+          "git",
+          "disaster-recovery"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L215",
+        "title": "Per-ticker wall-clock cap in library ingest loop",
+        "summary": "A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Euro or parallel library ingest again times out after the schedule runtime-budget fix lands",
+        "tags": [
+          "ingest",
+          "timeout",
+          "gha"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L216",
+        "title": "Enable main branch protection against Actions token pushes",
+        "summary": "Require PR reviews / restrict GITHUB_TOKEN from pushing workflow changes to main so a stolen Actions token cannot plant a CURSOR_API_KEY exfil workflow.",
+        "category": "later",
+        "section": "security",
+        "revisit_when": "After rotating CURSOR_API_KEY and merging GHA secret hygiene, or next security review",
+        "tags": [
+          "github-actions",
+          "secrets",
+          "branch-protection"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L217",
+        "title": "Alert when GHA Cursor API key auth fails",
+        "summary": "Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass",
+        "tags": [
+          "cursor-api",
+          "gha",
+          "ops-monitor"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L219",
+        "title": "Treat PAT/cron compromise as full Actions secret blast radius",
+        "summary": "WORKFLOW_DISPATCH_PAT and CRONJOB_API_KEY do not store SMTP/AWS/Cursor secrets, but PAT can start any workflow_dispatch job that loads them. Combined with input injection this is an insider/stolen-credential path to every repo Actions secret.",
+        "category": "later",
+        "section": "security",
+        "revisit_when": "Credential incident involving cron-job.org or the dispatch PAT",
+        "tags": [
+          "gha",
+          "pat",
+          "cron",
+          "secrets"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L220",
+        "title": "Selective A→B mirror for recommend-state experiments only",
+        "summary": "Once Suite B base books exist, optionally spawn fair-cost twins only for Suite A experiments that reach recommend / human-ack — not for every open shadow. Keeps discover/validate pipeline without a full fork.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Suite B AI+rules warm-start books are running and experiment_assessment has stable recommend rows",
+        "tags": [
+          "suite-b",
+          "experiments",
+          "promotion"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L221",
+        "title": "Suite-aware cost_drag thresholds for conviction proposals",
+        "summary": "decision_review HIGH_COST_DRAG (4%) and auto-raise min_conviction were tuned for Suite A 3% stress. Under Suite B fair costs (~0.55% RT), the same threshold rarely fires and may over-filter if A knobs are copied. Split proposal thresholds / idle-cash ease rules by is_fair_cost_lab so B can explore trade intensity while A stays defensive.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Suite B has enough epoch marks to compare cost_drag and trade_count vs Suite A under the same parent knobs, or decision-review starts proposing contradictory conviction moves across suites",
+        "tags": [
+          "suite-b",
+          "conviction",
+          "cost-drag",
+          "decision-review"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L222",
+        "title": "News phrase to trajectory correlation panel",
+        "summary": "Offline per-ticker time-aligned join of open-source headlines (Google News RSS / Yahoo) with price and trajectory labels; mine n-grams/phrases that precede 4/8/12-week trend moves or opinion flips—not same-day price correlation. Output is a research lexicon/feature candidates for AI judgment or L207 event tags, not a live sentiment quant score.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "Buy-tier news_manifest history is thick enough for a pilot cohort (or L207 event taxonomy starts); and trajectory_evidence has stable 8–12w outcome labels",
+        "tags": [
+          "news",
+          "nlp",
+          "trajectory",
+          "sentiment",
+          "open-source",
+          "L207",
+          "N6"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L223",
+        "title": "Prefer open-source news until quality bottleneck",
+        "summary": "Weekly value horizon does not need a paid news API yet. Keep Google News RSS + yfinance as the media layer; revisit L12 (Marketaux/Finnhub) only if memo news quality or phrase-panel coverage is the proven bottleneck.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "Memo news quality or phrase-panel coverage is the proven bottleneck (see L12)",
+        "tags": [
+          "news",
+          "api",
+          "costs",
+          "L12",
+          "open-source"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L224",
+        "title": "Chronological PIT news walk with lexicon self-improve",
+        "summary": "Offline module walks each ticker from earliest news/price day forward (full backfill, then rolling append). Phrase lexicon updates only on past windows; evaluate on forward embargoed weeks. Self-improve via propose→OOS measure→promote (like analysis-review), never silent live scoring. Prefer buy-tier cohort first; require cross-ticker holdout.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "Starting L222 offline pilot; history thick enough for walk-forward splits on a buy-tier cohort",
+        "tags": [
+          "news",
+          "nlp",
+          "trajectory",
+          "PIT",
+          "walk-forward",
+          "learning",
+          "L222"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L225",
+        "title": "Memo-grade news phrase walk (isolated from buy/boundary lexicon)",
+        "summary": "If the buy∪boundary offline phrase panel proves useful, run a broader memo-grade news walk into a separate artifact namespace so additional headlines do not contaminate the pilot lexicon. Keep observe-only until OOS lift is stable.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "L222/L224 buy-boundary panel shows stable walk-forward phrase lift across ≥2 lexicon generations with denser archive labels",
+        "tags": [
+          "news",
+          "nlp",
+          "trajectory",
+          "memo",
+          "isolation",
+          "L222",
+          "L224"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L226",
+        "title": "Parallel rememo catch-up workers",
+        "summary": "When body-lag rememo backlog again exceeds multi-week capacity, consider parallel Cursor rememo workers with a shared lock/ledger instead of serial --rememo-catchup batches.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "memo rememo backlog stays above 2× weekly maintenance capacity for 2+ consecutive weeks after catch-up requests fire",
+        "tags": [
+          "rememo",
+          "catch-up",
+          "throughput"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L227",
+        "title": "Gap-fill: ingest — On Companies House refetch, map CH document IDs to filing_index entries",
+        "summary": "On Companies House refetch, map CH document IDs to filing_index entries and flag when OCR extracts corroborate but do not extend IR PDF content (e.g. missing cash-flow statements, truncated principal-risk pages)",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L228",
+        "title": "Gap-fill: ingest — Pull FDA inspection-outcome and Orange Book patent-expiry feeds keyed to",
+        "summary": "Pull FDA inspection-outcome and Orange Book patent-expiry feeds keyed to Hikma US site names and disclosed product brands (Tyzavan®, sodium oxybate) to close regulatory and patent-cliff gaps the RNS/CH bodies do not address",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L229",
+        "title": "Gap-fill: scoring — Attach run-history FCF divergence flags to `docs/data/history/run_*.json",
+        "summary": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in history export), enabling cross-ticker verification before sizing",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "scoring"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L230",
+        "title": "Gap-fill: ingest — Filter Companies House refetch to current-period group accounts only; th",
+        "summary": "Filter Companies House refetch to current-period group accounts only; this pass returned 2019 parent interim and a 2020 date-change form (`ch_00735438_*`), adding no research value and risking stale citations.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L231",
+        "title": "Gap-fill: scoring — Attach cross-ticker model pass/score table to gap-fill output automatica",
+        "summary": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “widest moat in group”) are evidence-backed without manual peer lookups.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "scoring"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L232",
+        "title": "Gap-fill: scoring — Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-",
+        "summary": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation of 0.84× and 1.68×.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "scoring"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L233",
+        "title": "Gap-fill: ingest — Improve Companies House PDF/iXBRL extraction for FTSE names — new body `",
+        "summary": "Improve Companies House PDF/iXBRL extraction for FTSE names — new body `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` is truncated (~820 lines), OCR-degraded, and missing Finance Review/dividend-policy sections that would resolve dividend-governance gaps.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L234",
+        "title": "Gap-fill: ingest — Parse IR results presentation PDFs into structured FCF bridges; `ir_pres",
+        "summary": "Parse IR results presentation PDFs into structured FCF bridges; `ir_presentation_metrics.json` returned zero bridges despite three allowlisted PDF bodies being present, leaving the £148m vs £187m vs £212m FCF mismatch unresolved.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L235",
+        "title": "Gap-fill: ingest — Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empt",
+        "summary": "Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empty for ITV) to test intra-year dividend coverage rather than relying on a single annual snapshot.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L236",
+        "title": "Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted",
+        "summary": "Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch).",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "scoring"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L237",
+        "title": "Expand so-what detectors beyond FCF",
+        "summary": "Add more no-judgment enforcement detectors (cash conversion overlays, memo eligibility gates, stale research caps) to the so-what loop once FCF auto-queue proves stable in ops-monitor.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After so-what FCF auto_queue has run cleanly in production ops-monitor for several weeks",
+        "tags": [
+          "so-what",
+          "automation",
+          "ops"
+        ],
+        "status": "open"
       }
     ],
     "defer_security": [
@@ -2703,6 +3245,49 @@
         "tags": [
           "security",
           "config"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L216",
+        "title": "Enable main branch protection against Actions token pushes",
+        "summary": "Require PR reviews / restrict GITHUB_TOKEN from pushing workflow changes to main so a stolen Actions token cannot plant a CURSOR_API_KEY exfil workflow.",
+        "category": "later",
+        "section": "security",
+        "revisit_when": "After rotating CURSOR_API_KEY and merging GHA secret hygiene, or next security review",
+        "tags": [
+          "github-actions",
+          "secrets",
+          "branch-protection"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N51",
+        "title": "Consider making value_investor private",
+        "summary": "Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs.",
+        "category": "not_now",
+        "section": "security",
+        "revisit_when": "If further secret exposure incidents occur or Pages no longer needs a public repo",
+        "tags": [
+          "github",
+          "visibility",
+          "secrets"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L219",
+        "title": "Treat PAT/cron compromise as full Actions secret blast radius",
+        "summary": "WORKFLOW_DISPATCH_PAT and CRONJOB_API_KEY do not store SMTP/AWS/Cursor secrets, but PAT can start any workflow_dispatch job that loads them. Combined with input injection this is an insider/stolen-credential path to every repo Actions secret.",
+        "category": "later",
+        "section": "security",
+        "revisit_when": "Credential incident involving cron-job.org or the dispatch PAT",
+        "tags": [
+          "gha",
+          "pat",
+          "cron",
+          "secrets"
         ],
         "status": "open"
       }
@@ -2896,6 +3481,46 @@
           "counterfactual"
         ],
         "status": "open"
+      },
+      {
+        "id": "frag-20260828-01",
+        "text": "Aug 27 paper-auto failed on git push race after run; Aug 28 recovered. If push races recur, harden paper-auto commit/push locking or retry.",
+        "tags": [
+          "paper-auto",
+          "git",
+          "ops"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260901-01",
+        "text": "Upgrade events show 34.69% positive_rate vs 52.38% on downgrades (`trajectory_evidence.upgrade_events` / `downgrade_events`) — what if the assessment model is structurally better at timing exits than entries, and winner-picking should defer allocation until loser-filter cohort floor is proven?",
+        "tags": [
+          "upgrade_inversion",
+          "trajectory_evidence",
+          "hypothesis"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260901-02",
+        "text": "Nine of 53 loser cards fail quality family while `opinion_flip_triggers` still permit conviction ≥0.35 upgrades above avoid — what if family-failure veto runs as a pre-upgrade gate rather than post-hoc forensics in loser_pattern_lab?",
+        "tags": [
+          "quality_veto_timing",
+          "loser_cards",
+          "hypothesis"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260901-03",
+        "text": "Suite B seed: copy Suite A stress-surviving knobs (min_conviction 0.6, exit_confirm_screens 2, reentry_cooldown 1) onto fair-cost AI+rules warm-start shadows; keep decision-review --apply scoped to Suite B track dirs only.",
+        "tags": [
+          "suite-b",
+          "warm-start",
+          "knobs"
+        ],
+        "status": "open"
       }
     ],
     "proposed_tasks": {
@@ -2948,29 +3573,103 @@
           "area": "paper_knobs"
         }
       ],
-      "learning_director": []
+      "learning_director": [
+        {
+          "id": "ldr-20260901-01",
+          "source": "learning_director",
+          "title": "Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u",
+          "summary": "Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u4 ladder replay alpha (`exclusion_ladder_replay.readiness.primary_return_delta_vs_actual` 0.057) converts to post-cost shadow differentiation; counts toward `filtered_cohort_track` ≥4-week gate.",
+          "status": "proposed",
+          "added_at": null,
+          "area": "monitoring"
+        },
+        {
+          "id": "ldr-20260901-02",
+          "source": "learning_director",
+          "title": "Ensure scoring experiment queued for hold->buy and signal_unchanged transition keys — expected learning value: convert `analysis_review.sections.proposed_experiments` item 1 (offline conviction-timing",
+          "summary": "Ensure scoring experiment queued for hold->buy and signal_unchanged transition keys — expected learning value: convert `analysis_review.sections.proposed_experiments` item 1 (offline conviction-timing overlay; 1w `prediction_hit_rate` 0.406, n=266) from review prose into a tracked `analysis_tasks` entry; top trajectory focus per `trajectory_evidence.model_focus_candidates[0]` and `[2]`.",
+          "status": "proposed",
+          "added_at": null,
+          "area": "analysis"
+        },
+        {
+          "id": "ldr-20260901-03",
+          "source": "learning_director",
+          "title": "Ensure scoring experiment queued for quality-family composite gate on avoid cohort — expected learning value: convert `analysis_review.sections.proposed_experiments` item 2 into tracked task; tests fa",
+          "summary": "Ensure scoring experiment queued for quality-family composite gate on avoid cohort — expected learning value: convert `analysis_review.sections.proposed_experiments` item 2 into tracked task; tests false-upgrade rate where quality failed in 9/53 `loser_snapshot_cards` (AAL.L, AML.L pattern).",
+          "status": "proposed",
+          "added_at": null,
+          "area": "analysis"
+        },
+        {
+          "id": "ldr-20260901-04",
+          "source": "learning_director",
+          "title": "Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs ",
+          "summary": "Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split; prerequisite before momentum_grace knob experiments (`exit_shadow` closed_total 0 across focus tracks).",
+          "status": "proposed",
+          "added_at": null,
+          "area": "monitoring"
+        },
+        {
+          "id": "ldr-20260901-05",
+          "source": "learning_director",
+          "title": "Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surfac",
+          "summary": "Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surface whether `exit_confirm_screens` 1 vs 2 changes trade count when exits actually fire.",
+          "status": "proposed",
+          "added_at": null,
+          "area": "paper_churn"
+        }
+      ]
     },
-    "engineering_open": [],
+    "engineering_open": [
+      {
+        "id": "eng-20260902-02",
+        "source": "engineering",
+        "title": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
+        "summary": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
+        "status": "open",
+        "added_at": null,
+        "area": "ingest"
+      },
+      {
+        "id": "eng-20260902-03",
+        "source": "engineering",
+        "title": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapsho",
+        "summary": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapshot` and run-history `action_note` when filing, company-adjusted, and TTM differ by >15%",
+        "status": "open",
+        "added_at": null,
+        "area": "scoring"
+      },
+      {
+        "id": "eng-20260902-04",
+        "source": "engineering",
+        "title": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-gener",
+        "summary": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-generated peer model pass table from sibling `screen_run_manifest.json` files to gap-fill output",
+        "status": "open",
+        "added_at": null,
+        "area": "scoring"
+      }
+    ],
     "counts": {
       "defer_now": 0,
-      "defer_not_now": 43,
-      "defer_later": 138,
-      "defer_security": 3,
-      "open_fragments": 19,
-      "proposed_total": 5,
-      "engineering_open": 0
+      "defer_not_now": 52,
+      "defer_later": 166,
+      "defer_security": 6,
+      "open_fragments": 23,
+      "proposed_total": 10,
+      "engineering_open": 3
     }
   },
   "integration": {
     "overall": "ok",
     "checks": [],
     "queue_status": {
-      "open_count": 0,
+      "open_count": 3,
       "pr_open_count": 0,
       "parked_count": 0,
-      "merged_count": 57,
+      "merged_count": 63,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260902-02",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -2986,7 +3685,7 @@
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-20.1%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-19.2%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -2997,9 +3696,152 @@
       }
     ]
   },
+  "so_what": {
+    "generated_at": "2026-09-02T12:32:11Z",
+    "counts": {
+      "findings": 56,
+      "auto_queue": 14,
+      "human_gate": 22,
+      "observe": 20,
+      "tasks_created": 0
+    },
+    "high_severity": [
+      {
+        "finding_id": "fcf_enforcement_gap:BKG.L",
+        "ticker": "BKG.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~46%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:BME.L",
+        "ticker": "BME.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~39%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:BT-A.L",
+        "ticker": "BT-A.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~35%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:BTRW.L",
+        "ticker": "BTRW.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~111%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:BYIT.L",
+        "ticker": "BYIT.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~29%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:DOM.L",
+        "ticker": "DOM.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~38%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:FOUR.L",
+        "ticker": "FOUR.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~30%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:GSK.L",
+        "ticker": "GSK.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~27%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:INCH.L",
+        "ticker": "INCH.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~28%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:ITV.L",
+        "ticker": "ITV.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~30%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:MEGP.L",
+        "ticker": "MEGP.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~38%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      },
+      {
+        "finding_id": "fcf_enforcement_gap:MGAM.L",
+        "ticker": "MGAM.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~29%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      }
+    ],
+    "human_gates_preview": [
+      {
+        "finding_id": "fcf_bridge_needed:ABDN.L",
+        "ticker": "ABDN.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for ABDN.L and write docs/data/research/ABDN.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:BKG.L",
+        "ticker": "BKG.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for BKG.L and write docs/data/research/BKG.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:BME.L",
+        "ticker": "BME.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for BME.L and write docs/data/research/BME.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:BT-A.L",
+        "ticker": "BT-A.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for BT-A.L and write docs/data/research/BT-A.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:BTRW.L",
+        "ticker": "BTRW.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for BTRW.L and write docs/data/research/BTRW.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:BYIT.L",
+        "ticker": "BYIT.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for BYIT.L and write docs/data/research/BYIT.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:CNA.L",
+        "ticker": "CNA.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for CNA.L and write docs/data/research/CNA.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      },
+      {
+        "finding_id": "fcf_bridge_needed:DOM.L",
+        "ticker": "DOM.L",
+        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
+        "human_action": "Review filings for DOM.L and write docs/data/research/DOM.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
+        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
+      }
+    ]
+  },
   "references": {
     "deferred_review": "docs/deferred-review.md",
     "ops_cadence": "docs/ops/ops-review-cadence.md",
-    "human_tasks": "docs/ops/human-tasks-checklist.md"
+    "human_tasks": "docs/ops/human-tasks-checklist.md",
+    "so_what_closure": "docs/ops/so-what-gap-closure.md"
   }
 }

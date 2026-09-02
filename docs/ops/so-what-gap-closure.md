@@ -69,3 +69,7 @@ Analysis-review experiment promotion stays human for the same reason: judgment.
 - [ops-monitor.md](ops-monitor.md)
 - [fcf-basis-bridges.md](fcf-basis-bridges.md)
 - [ops-review-cadence.md](ops-review-cadence.md)
+
+## Dashboard
+
+Overview → Progress report → **So what? — needs your judgment** lists live `human_gate` items. Auto-queue counts are informational; engineering picks those up from the queue.

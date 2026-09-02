@@ -237,6 +237,52 @@ function renderProgressReport(data) {
         .join("")}</ul>`
     : '<p class="small muted">None marked <code>now</code>.</p>';
 
+  const soWhat = report.so_what || {};
+  const soCounts = soWhat.counts || {};
+  const humanGateCount = Number(soCounts.human_gate || 0);
+  const autoQueueCount = Number(soCounts.auto_queue || 0);
+  const observeCount = Number(soCounts.observe || 0);
+  const gates = soWhat.human_gates_preview || [];
+  const soWhatDocUrl = githubOpsDocUrl("docs/ops/so-what-gap-closure.md");
+  const gatesHtml = gates.length
+    ? `<ul class="list-plain small so-what-gate-list">${gates
+        .map((row) => {
+          const docPath = row.human_doc_path || "";
+          const docUrl = docPath ? githubOpsDocUrl(docPath) : null;
+          const action = row.human_action || row.so_what || "";
+          return `<li class="so-what-gate-item">
+            <strong>${esc(row.ticker || "—")}</strong>
+            <span class="so-what-gate-action">${esc(action)}</span>
+            ${
+              docUrl
+                ? `<a class="small" href="${esc(docUrl)}" target="_blank" rel="noopener">Runbook</a>`
+                : ""
+            }
+          </li>`;
+        })
+        .join("")}</ul>`
+    : humanGateCount > 0
+      ? '<p class="small muted">Human gates present — open the full report for the complete list.</p>'
+      : '<p class="small muted">No human gates right now.</p>';
+  const soWhatSection = `
+      <section class="so-what-section${humanGateCount > 0 ? " so-what-section-attention" : ""}">
+        <div class="so-what-section-header">
+          <h4>So what? — needs your judgment</h4>
+          ${soWhatDocUrl ? `<a class="small" href="${esc(soWhatDocUrl)}" target="_blank" rel="noopener">How this works</a>` : ""}
+        </div>
+        <p class="small muted" style="margin-top:0">
+          Human gates need a policy/filing choice. Enforcement gaps
+          (<strong>${esc(String(autoQueueCount))}</strong> auto-queued) are handled by the engineering queue without a prompt.
+          ${observeCount ? ` · ${esc(String(observeCount))} observe-only` : ""}
+        </p>
+        <div class="grid so-what-count-grid">
+          <div class="setting-row"><span class="setting-label">Human gates</span><span class="setting-value">${esc(String(humanGateCount))}</span></div>
+          <div class="setting-row"><span class="setting-label">Auto-queued</span><span class="setting-value">${esc(String(autoQueueCount))}</span></div>
+          <div class="setting-row"><span class="setting-label">Observe</span><span class="setting-value">${esc(String(observeCount))}</span></div>
+        </div>
+        ${gatesHtml}
+      </section>`;
+
   return `
     <div class="card progress-report-card" style="margin-top:1rem" id="progress-report-card">
       <div class="progress-report-header">
@@ -254,6 +300,7 @@ function renderProgressReport(data) {
         </div>
       </div>
       <p>${esc(headline)}</p>
+      ${soWhatSection}
       <div class="grid" style="margin-top:0.75rem">
         <div class="setting-row"><span class="setting-label">Deferred now</span><span class="setting-value">${esc(String(counts.defer_now ?? 0))}</span></div>
         <div class="setting-row"><span class="setting-label">Open fragments</span><span class="setting-value">${esc(String(counts.open_fragments ?? 0))}</span></div>
@@ -262,18 +309,21 @@ function renderProgressReport(data) {
         <div class="setting-row"><span class="setting-label">Integration</span><span class="setting-value">${overallStatusBadge(integration.overall)}</span></div>
         <div class="setting-row"><span class="setting-label">Role coherence</span><span class="setting-value">${overallStatusBadge(role.overall)}</span></div>
       </div>
-      <div class="automation-grid" style="margin-top:1rem">
-        <section class="automation-section">
-          <h4>Actionable now</h4>
-          ${deferHtml}
-        </section>
-        <section class="automation-section">
-          <h4>Integration / join-up</h4>
-          ${checkPreview(integration)}
-          <h4 style="margin-top:0.75rem">Role coherence</h4>
-          ${checkPreview(role)}
-        </section>
-      </div>
+      <details class="overview-secondary" style="margin-top:1rem">
+        <summary>Deferred items &amp; join-up checks</summary>
+        <div class="automation-grid" style="margin-top:0.75rem">
+          <section class="automation-section">
+            <h4>Actionable now</h4>
+            ${deferHtml}
+          </section>
+          <section class="automation-section">
+            <h4>Integration / join-up</h4>
+            ${checkPreview(integration)}
+            <h4 style="margin-top:0.75rem">Role coherence</h4>
+            ${checkPreview(role)}
+          </section>
+        </div>
+      </details>
       <p class="small muted" style="margin-top:0.75rem">
         GitHub Pages serves the last committed report.
         Local regenerate needs <code>ftse-dashboard-serve</code> (or run <code>ftse-progress-report build --write</code>).
@@ -427,18 +477,20 @@ function renderProjectProgress(data) {
       ? `<ul class="list-plain small">${items.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
       : '<p class="muted small">—</p>';
 
-  const ingestHtml = ingest.summary
-    ? `
-    <div class="card" style="margin-top:1rem">
+  const stalled = Boolean(ingest.stalled);
+  const ingestHtml =
+    ingest.summary && stalled
+      ? `
+    <div class="card overview-alert-card" style="margin-top:1rem">
       <h3>Ingest bottleneck</h3>
       <p class="small">${esc(ingest.summary)}</p>
-      ${ingest.stalled ? `<p class="small"><strong>Status:</strong> stalled (zero_body_buy_tier=${esc(String(ingest.zero_body_buy_tier ?? "—"))})</p>` : '<p class="small muted">No active stall detected in latest health log.</p>'}
+      <p class="small"><strong>Status:</strong> stalled (zero_body_buy_tier=${esc(String(ingest.zero_body_buy_tier ?? "—"))})</p>
       <h4 class="small" style="margin-top:0.75rem">Recommended fixes</h4>
       ${list(ingest.fixes)}
       <h4 class="small" style="margin-top:0.75rem">Commands</h4>
       <ul class="list-plain small">${(ingest.commands || []).map((cmd) => `<li><code>${esc(cmd)}</code></li>`).join("")}</ul>
     </div>`
-    : "";
+      : "";
 
   return `
     <div class="card" style="margin-top:1rem">
@@ -447,18 +499,20 @@ function renderProjectProgress(data) {
       <p>${esc(progress.headline || "")}</p>
       <div class="automation-grid" style="margin-top:0.75rem">
         <section class="automation-section">
-          <h4>North-star stages</h4>
-          ${stageRows}
+          <h4>Next actions</h4>
+          ${list(appraisal.next_actions)}
+          <h4 style="margin-top:1rem">Gaps</h4>
+          ${list(appraisal.gaps)}
         </section>
         <section class="automation-section">
           <h4>Strengths</h4>
           ${list(appraisal.strengths)}
-          <h4 style="margin-top:1rem">Gaps</h4>
-          ${list(appraisal.gaps)}
-          <h4 style="margin-top:1rem">Next actions</h4>
-          ${list(appraisal.next_actions)}
         </section>
       </div>
+      <details class="overview-secondary" style="margin-top:0.75rem">
+        <summary>North-star stages</summary>
+        <div style="margin-top:0.5rem">${stageRows}</div>
+      </details>
     </div>
     ${ingestHtml}
   `;
@@ -550,6 +604,9 @@ function renderOverview(data) {
   const trustCounts = meta.trust_signal_counts || {};
   const trustSegments = Object.entries(trustCounts).sort((a, b) => b[1] - a[1]);
 
+  const bottleneck = (data.project_progress || {}).ingest_bottleneck || {};
+  const showIngestHealth = !bottleneck.stalled;
+
   document.getElementById("panel-overview").innerHTML = `
     ${note}
     <div class="grid">
@@ -572,27 +629,29 @@ function renderOverview(data) {
         <div class="small muted">Published ${fmtDate(data.generated_at)}</div>
       </div>
     </div>
-    <div class="card" style="margin-top:1rem">
-      <h3>Signal distribution</h3>
-      <div class="signal-bar">${bar}</div>
-      <ul class="list-plain small">
-        ${segments.map(([s, c]) => `<li>${signalBadge(s)} ${c}</li>`).join("")}
-      </ul>
-    </div>
-    ${trustSegments.length ? `
-    <div class="card" style="margin-top:1rem">
-      <h3>Trust signal distribution</h3>
-      <ul class="list-plain small">
-        ${trustSegments.map(([s, c]) => `<li>${signalBadge(s)} ${c}</li>`).join("")}
-      </ul>
-    </div>` : ""}
-    <div class="card" style="margin-top:1rem">
-      <h3>Week-over-week changes</h3>
-      ${diffHtml}
-    </div>
-    ${renderProjectProgress(data)}
     ${renderProgressReport(data)}
-    ${renderIngestHealth(data)}
+    ${renderProjectProgress(data)}
+    <details class="card overview-secondary" style="margin-top:1rem">
+      <summary><strong>Screen context</strong> — signal mix, trusts, week-over-week</summary>
+      <div style="margin-top:0.75rem">
+        <h4 class="small">Signal distribution</h4>
+        <div class="signal-bar">${bar}</div>
+        <ul class="list-plain small">
+          ${segments.map(([s, c]) => `<li>${signalBadge(s)} ${c}</li>`).join("")}
+        </ul>
+        ${
+          trustSegments.length
+            ? `<h4 class="small" style="margin-top:0.75rem">Trust signal distribution</h4>
+        <ul class="list-plain small">
+          ${trustSegments.map(([s, c]) => `<li>${signalBadge(s)} ${c}</li>`).join("")}
+        </ul>`
+            : ""
+        }
+        <h4 class="small" style="margin-top:0.75rem">Week-over-week changes</h4>
+        ${diffHtml}
+      </div>
+    </details>
+    ${showIngestHealth ? renderIngestHealth(data) : ""}
   `;
   bindProgressReportActions();
 }

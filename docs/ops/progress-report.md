@@ -43,6 +43,8 @@ ftse-dashboard-serve
 
 ## Dashboard UI
 
+Overview leads with the progress report card so review work is visible before screen context. The card includes a **So what? — needs your judgment** block for `human_gate` items (with runbook links). Auto-queued enforcement gaps are shown as counts only — they do not need a human prompt. Signal mix / trusts / WoW sit under a collapsed **Screen context** section.
+
 Overview shows the latest `progress_report.json` with counts, actionable deferred
 items, and integration / role-coherence warnings.
 
