@@ -473,9 +473,7 @@ def refresh_dashboard_report_stability(
             data_quality_score=float(report.get("data_quality_score") or 0),
             current_run_at=run_at,
         )
-        refreshed.append(
-            patch_report_stability_fields(report, info, family_count=family_count)
-        )
+        refreshed.append(patch_report_stability_fields(report, info, family_count=family_count))
     return refreshed
 
 

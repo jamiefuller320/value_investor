@@ -231,9 +231,7 @@ def ensure_buy_tier_charts(
             else None,
             signal=str(report.get("signal") or ""),
             as_of=as_of,
-            signal_since=str(report["signal_since"])
-            if report.get("signal_since")
-            else None,
+            signal_since=str(report["signal_since"]) if report.get("signal_since") else None,
         )
         if payload is None:
             continue
