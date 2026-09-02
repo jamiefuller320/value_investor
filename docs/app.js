@@ -406,10 +406,16 @@ function showProgressReportPatPrompt(reason) {
   );
 }
 
-async function fetchProgressReportJson() {
-  const response = await fetch(`data/progress_report.json?ts=${Date.now()}`, { cache: "no-store" });
+/** GitHub Pages sets max-age≈600 on JSON; always bust so refresh sees new reports. */
+async function fetchDashboardJson(path) {
+  const joiner = path.includes("?") ? "&" : "?";
+  const response = await fetch(`${path}${joiner}ts=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json();
+}
+
+async function fetchProgressReportJson() {
+  return fetchDashboardJson("data/progress_report.json");
 }
 
 async function openProgressReportMarkdown() {
@@ -2818,42 +2824,34 @@ function renderDashboard(data) {
   renderAnalysis(data);
 }
 
+async function loadOptionalDashboardJson(path) {
+  try {
+    return await fetchDashboardJson(path);
+  } catch {
+    return null;
+  }
+}
+
 async function loadDashboard() {
   try {
-    const response = await fetch("data/latest.json");
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
+    // Always cache-bust: Pages CDN/browser keep JSON for ~10 minutes otherwise,
+    // so a refresh after Generate can still show a stale progress report.
+    const data = await fetchDashboardJson("data/latest.json");
     if (!data.automation) {
-      try {
-        const autoResp = await fetch("data/automation.json");
-        if (autoResp.ok) data.automation = await autoResp.json();
-      } catch {
-        /* optional sidecar */
-      }
+      const automation = await loadOptionalDashboardJson("data/automation.json");
+      if (automation) data.automation = automation;
     }
     if (!data.project_progress) {
-      try {
-        const progressResp = await fetch("data/project_progress.json");
-        if (progressResp.ok) data.project_progress = await progressResp.json();
-      } catch {
-        /* optional sidecar */
-      }
+      const projectProgress = await loadOptionalDashboardJson("data/project_progress.json");
+      if (projectProgress) data.project_progress = projectProgress;
     }
-    if (!data.progress_report) {
-      try {
-        const reportResp = await fetch("data/progress_report.json");
-        if (reportResp.ok) data.progress_report = await reportResp.json();
-      } catch {
-        /* optional sidecar */
-      }
-    }
+    // Prefer the sidecar every load so a freshly published report wins over any
+    // stale embedded copy and over a cached progress_report.json.
+    const progressReport = await loadOptionalDashboardJson("data/progress_report.json");
+    if (progressReport) data.progress_report = progressReport;
     if (!data.engineering_tasks && !(data.automation || {}).engineering_queue) {
-      try {
-        const engResp = await fetch("data/engineering_tasks.json");
-        if (engResp.ok) data.engineering_tasks = await engResp.json();
-      } catch {
-        /* optional sidecar */
-      }
+      const engineering = await loadOptionalDashboardJson("data/engineering_tasks.json");
+      if (engineering) data.engineering_tasks = engineering;
     }
     renderDashboard(data);
   } catch (err) {

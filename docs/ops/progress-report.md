@@ -51,7 +51,7 @@ items, and integration / role-coherence warnings.
 | Control | Behaviour |
 |---------|-----------|
 | **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: dispatches the `progress-report` Actions workflow (requires a fine-grained PAT with Actions: Write stored in this browser via **Pages token**), then waits for Pages to publish the new JSON |
-| **Reload** | Re-fetches published `data/progress_report.json` |
+| **Reload** | Re-fetches published `data/progress_report.json` (cache-busted; same as a full page load) |
 | **View full report** | Opens `data/progress_report.md` in the memo dialog |
 | **Pages token** | Save / clear the browser-local PAT used for Pages generate (never committed) |
 
@@ -64,6 +64,10 @@ Pages is static and cannot run `ftse-progress-report`. The Generate button:
    [`.github/workflows/progress-report.yml`](../../.github/workflows/progress-report.yml)
    via the GitHub API.
 3. Polls the workflow, then reloads `data/progress_report.json` after Pages deploy.
+
+Initial Overview load also cache-busts `data/progress_report.json` (`?ts=…` +
+`cache: "no-store"`). GitHub Pages serves JSON with `max-age≈600`, so a plain
+refresh without busting can keep showing the previous report for up to ~10 minutes.
 
 You can also run the workflow from the Actions UI (no PAT in the browser), or:
 
