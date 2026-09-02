@@ -1,131 +1,78 @@
 # discoverIE Group plc (DSCV.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:59:24.042255+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T11:19:32.822196+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-discoverIE Group plc is a FTSE 250 acquirer and operator of customised industrial electronics businesses, organised through Magnetics & Controls and Sensing & Connectivity. The quantitative screen rates the name a buy (5/22 models; composite 60%), supported by quality, dividend, GARP and risk factors — notably Neff PEGY (0.16), Piotroski F-Score, earnings quality and financial health — against a backdrop of ~24% earnings growth and 1.6% yield. Filings show a business recovering from customer destocking: FY2025 adjusted EPS rose 5% to 38.7p despite a 2% CER revenue decline, and FY2026 momentum has strengthened through H1 interim results and subsequent trading updates, with full-year adjusted EPS consensus at 40.1p. The value case rests on compounding organic growth, bolt-on M&A, strong cash conversion (>100% over the last decade) and moderate leverage (gearing ~1.2–1.3x), but headline P/E of 28.2x and RSI near 69 suggest the market has already re-rated the recovery. Key debate: whether acquisition-led growth and order-book acceleration justify a growth-multiple entry, or whether cyclical industrial exposure and integration risk limit upside from here.
+discoverIE is a FTSE 250 designer and manufacturer of customised industrial electronics, built through a 15-year roll-up of niche component businesses across Magnetics & Controls and Sensing & Connectivity. The quantitative screen rates the name a buy on growth-adjusted value (FCF yield 5.5%, Neff PEGY 0.14, Piotroski 8/9, dividend growth), though headline multiples are not deep-value (P/E 26.5, P/B 2.2, ROE 9.1%). FY2026 filings show record adjusted earnings (40.3p EPS), strong free cash flow (£36.6m, 92% conversion), and accelerating organic orders after an 18-month destocking cycle. The central debate is whether compounding organic growth plus defence/security M&A (Trival, 3Gmetalworx) justifies a premium rating, or whether acquisition-driven leverage (proforma gearing 2.2x) and goodwill-heavy balance sheet cap upside.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, discoverIE offers a hybrid quality-compounder profile rather than a deep cyclical trough. The screen’s buy signal aligns with filing evidence of durable business quality: adjusted operating margin expanded to 14.3% in FY2025 (Companies House annual report, year ended 31 March 2025) despite organic sales falling 7% during destocking; H1 FY2026 interim results (2 December 2025) delivered record adjusted operating profit of £30.2m on revenue of £216.4m, with LTM free cash conversion of 104% and ROCE of 15.4% — above the Group’s 15% target.
-
-The Neff PEGY pass (PEGY 0.16; screen growth 24.2%) is corroborated by the earnings trajectory: adjusted EPS grew from 36.8p (FY2024) to 38.7p (FY2025), with H1 FY2026 at 19.5p (+6%) and the April 2026 Q4 trading update citing consensus adjusted EPS of 40.1p for FY2026. Dividend Growth and Financial Health model passes are supported by progressive dividends (interim 4.05p declared in H1 FY2026; final 8.60p paid August 2025) and gearing of 1.3x at September 2025, below the 1.5–2.0x target range, on a £240m facility extended to May 2030.
-
-Business quality drivers visible in filings include: (i) design-win-led repeating revenue (£210m of new design wins in H1 FY2026); (ii) structural end-markets (industrial automation, medical, renewable energy, security, electrification); (iii) a capital-light model (capex ~1.6% of sales); and (iv) a disciplined bolt-on M&A pipeline (28 acquisitions over 14 years per interim filing). Trading updates from Q3 FY2026 through Q1 FY2027 show accelerating organic orders (+31% organically in Q1 FY2027), suggesting the destocking headwind is fading. The screen’s neutral timing flag (RSI 69; price extended above 200-day MA) is consistent with a stock that has re-rated on improving fundamentals — favouring accumulation on weakness rather than chasing momentum.
+For a value investor oriented towards quality compounders rather than net-nets, discoverIE fits the screen’s GARP and cash-generation profile more than its Graham or deep-value buckets. Seven of 22 models pass across five families (cheapness, quality, dividend, GARP, risk), with composite score 67% and full data quality (20/20 metrics). Adjusted EPS has compounded at roughly 14% over ten years (per FY2026 preliminary results); statutory EPS growth of ~18% in the screen reflects the FY2026 recovery from a softer FY2025. Free cash flow of £36.6m (filings) covers dividends ~3.3× on a net basis, supporting a progressive 13.0p full-year dividend (+4%). Business quality rests on design-in, long-life OEM components with low customer concentration (~80% of sales in five structural end markets: industrial automation, security, renewables, medical, electrification). Order momentum has re-accelerated—Q4 FY2026 organic orders +14%, Q1 FY2027 +31%—while the order book stood at £165m (~4.5 months’ cover). Management targets 17% adjusted operating margin by FY2029/30 (from 13.8%), driven two-thirds by higher-margin acquisitions. The screen’s buy signal aligns with a capital-light, acquisitive compounder trading below its growth trajectory on PEGY-adjusted metrics, not on absolute cheapness.
 
 ## FINANCIAL REVIEW
-**Annual results (FY2025, year ended 31 March 2025)**
+**Annual results (FY2026, year ended 31 March 2026)** — Source: preliminary results RNS, 3 June 2026 (`4800431cc01098cf.txt`).
 
-Source: Companies House annual report body (`ch_02008246_MzQ5MzExOTc4OWFkaXF6a2N4.txt`, filed December 2025).
+| Metric | FY2026 | FY2025 | Change |
+|--------|--------|--------|--------|
+| Revenue | £443.3m | £422.9m | +5% CER |
+| Adjusted operating profit | £61.0m | £60.5m | +1% |
+| Adjusted operating margin | 13.8% | 14.3% | −0.5ppt |
+| Adjusted EPS | 40.3p | 38.7p | +4% |
+| Reported PBT | £36.1m | £32.0m | +13% |
+| Reported diluted EPS | 29.4p | 25.0p | +18% |
+| Free cash flow | £36.6m | £40.4m | 92% conversion |
+| Net debt (excl. IFRS 16) | £80.5m | £94.3m | Gearing 1.2x |
+| Full-year dividend | 13.0p | 12.5p | +4% |
+| ROCE | 15.2% | 15.8% | Target >15% |
 
-| Metric | FY2025 | FY2024 (comparator) |
-|--------|--------|---------------------|
-| Group revenue | £422.9m | £437.0m |
-| Adjusted operating profit | £60.5m (+8% CER) | £57.2m |
-| Adjusted operating margin | 14.3% (+1.2ppt CER) | — |
-| Adjusted profit before tax | £50.1m (+4%) | — |
-| Adjusted EPS | 38.7p (+5%) | 36.8p |
-| Reported PBT | £32.0m (+44%) | £22.2m |
-| Reported diluted EPS | 25.0p (+58%) | 15.8p |
-| Free cash flow | £40.4m (106% of adj. earnings) | — |
-| Net debt (excl. IFRS 16) | £94.3m | £104.0m |
-| Gearing | 1.3x | 1.5x |
+Organic sales grew 2% CER after customer destocking; acquisitions (Burster, Hivolt, Storm) added 4%, Santon solar disposal reduced 1%. Adjusted margin dipped 0.4ppt CER as the group invested in US/European sales and engineering capacity and Asian production (Thailand, India). Reported profit benefited from lower finance costs (£9.1m vs £10.4m) and a net acquisition credit (£0.5m). Cash generation remained robust despite £5.5m working-capital investment in a strong Q4; capex was 1.5% of sales (£6.6m). Net debt fell £13.8m; £240m revolving facility extended to May 2030 (covenant gearing limit raised to 3.5x). Proforma gearing including Trival and 3G was 2.2x at year-end, forecast 1.8x by March 2027.
 
-FY2025 revenue fell 2% at constant exchange rates as customer destocking reduced organic sales by 7%, partly offset by 5% acquisition contribution (Burster, Hivolt). Margin expansion on lower sales demonstrates operating leverage and efficiency gains from the cluster model. Adjusting items of £18.1m (primarily amortisation of acquired intangibles) widen the gap between adjusted and reported earnings — a recurring feature given the acquisition strategy.
+Prior-year trend: FY2025 revenue £422.9m and adjusted EPS 38.7p represented recovery from FY2024’s weaker organic period (FY2024 revenue £437.0m per Yahoo, adjusted EPS trajectory per filings). FY2026 marks a return to organic growth with record adjusted profit.
 
-**Interim results (H1 FY2026, six months ended 30 September 2025)**
+**Interim results (H1 FY2026, six months to 30 September 2025)** — Source: interim results RNS, 2 December 2025 (`2517327c6fecb5fe.txt`).
 
-Source: RNS interim results body (`2517327c6fecb5fe.txt`, 2 December 2025).
+Revenue £216.4m (+3.5% CER, +0.5% organic); adjusted operating profit £30.2m (+5% CER); margin 14.0% (+0.3ppt CER); adjusted EPS 19.5p (+6%). H1 free cash flow £16.2m; LTM free cash conversion 104%. Net debt £90.7m; gearing 1.3x. Three of four operating units returned to organic growth; Controls remained in destocking but improved through the half. Interim dividend raised 4% to 4.05p. Going concern affirmed with covenant headroom.
 
-| Metric | H1 FY2026 | H1 FY2025 | Change |
-|--------|-----------|-----------|--------|
-| Revenue | £216.4m | £211.1m | +2.5% reported; +3.5% CER |
-| Adjusted operating profit | £30.2m | £29.1m | +4% (+5% CER) |
-| Adjusted operating margin | 14.0% | 13.8% | +0.2ppt |
-| Adjusted EPS (diluted) | 19.5p | 18.4p | +6% |
-| Reported PBT | £17.6m | £15.8m | +11% |
-| Free cash flow (period) | £16.2m | £15.7m | +3% |
-| LTM free cash conversion | 104% | — | — |
-| Net debt (excl. IFRS 16) | £90.7m | £98.7m | −£3.6m in period |
-| Gearing | 1.3x | 1.4x | — |
-| Order book | £157m (~4.3 months) | — | — |
+**Trading updates (interim cadence)** — Sources: Q3 update 2 February 2026; Q4/full-year update 17 April 2026; Q1 FY2027 update 24 July 2026.
 
-H1 FY2026 marked the first return to organic sales growth (+0.5%) after 18 months of destocking. Q2 organic orders grew 8% with book-to-bill of 1.04. Sensing & Connectivity adjusted operating margin reached 18.3%; Magnetics & Controls remained pressured by Controls destocking (divisional revenue −4% reported). The interim financial statements confirm going concern, with net debt of £90.7m against a £240m committed facility (covenant headroom: gearing 1.3x vs 3.5x limit).
+H2 FY2026 accelerated: Q4 organic orders +15%, sales +5%; full-year organic orders +5%, sales +2%. Q1 FY2027: organic orders +31%, sales +6%, book-to-bill 1.15; full-year adjusted earnings tracking ahead of board expectations. Gross margins described as robust throughout.
 
-**Trading updates and FY2026 full-year trajectory**
+**Balance sheet and pension** — FY2026 net assets £328.6m; goodwill and intangibles £330.5m, yielding negative tangible book value (−£1.9m per Yahoo, consistent with acquisition-heavy model). Legacy UK defined benefit scheme buy-in completed January 2025 for £29.1m; residual IAS 19 liability £0.2m at March 2026. Going concern assessment (preliminary results, note 3) shows net leverage 1.2x and interest cover 9.6x vs covenants of <3.5x and >4.0x; reverse stress test requires adjusted operating margin below 6.3% before covenant breach.
 
-Sources: RNS trading update bodies.
+**Yahoo fallback** — `financials_annual.json` aligns closely with filing figures for FY2026 (revenue £443.3m, net income £29.0m, FCF £38.7m vs filing £36.6m—minor reconciliation difference on pension/legacy items). No Yahoo interim figures used; all interim data from RNS.
 
-- **Q4/FY2026 trading update** (17 April 2026, `9bcb46315d291d32.txt`): Q4 orders +16% CER (+15% organic); Q4 sales +6% CER (+5% organic). Full-year orders +9% CER (+5% organic); full-year sales +5% reported and CER (+2% organic; acquisitions +3%). Gross margins “remain robust.” Year-end gearing expected ~1.2x (~1.7x pro forma including Trival). Company-compiled consensus adjusted EPS: **40.1p**. Group “on-track” for adjusted EPS growth in line with consensus.
-
-- **Q3 FY2026** (2 February 2026): Sales +5% CER (+1% organic); orders +9% CER (+4% organic); book-to-bill 1.03x. Controls unit showing recovery.
-
-- **Q1 FY2027** (24 July 2026, `0cdb1c0b2553153c.txt`): Organic orders +31%; organic sales +6%; book-to-bill 1.15. Full-year adjusted earnings “tracking ahead of the Board’s expectations.”
-
-**FY2026 full-year P&L — data gap**
-
-The preliminary/full-year results RNS for year ended 31 March 2026 (announced 3 June 2026) has **no body extract** in the filings index. The Annual Report & Accounts 2026 notice (`8ba8158fee91fb53.txt`) is a submission announcement only. The August 2026 Companies House filing is indexed but **without a downloadable body**. Accordingly, full FY2026 income-statement and balance-sheet line items below are taken from **Yahoo `financials_annual.json` (fallback)** and should be treated as unaudited secondary data pending verified annual accounts:
-
-| Metric (FY2026, Yahoo fallback) | Value |
-|--------------------------------|-------|
-| Total revenue | £443.3m |
-| Operating income | £45.2m |
-| Net income | £29.0m |
-| Basic EPS | 30.2p |
-| Free cash flow | £38.7m |
-| Net debt | £80.5m |
-| Total debt | £239.8m |
-| Goodwill | £249.2m |
-| Tangible book value | −£1.9m |
-
-Yahoo revenue of £443.3m is directionally consistent with FY2025 £422.9m plus the +5% CER sales growth cited in the April 2026 trading update (~£444m). Net debt of £80.5m is broadly consistent with the trading update’s expected ~1.2x gearing.
-
-**Trend summary**
-
-Revenue troughed in FY2025 during destocking, then re-accelerated: organic growth returned in H1 FY2026 and strengthened through FY2026 and into Q1 FY2027. Margins have expanded structurally (adjusted operating margin from 11.5% in FY2023 toward 14%+), with a stated five-year target of 17% by FY2029/30. Cash conversion remains a standout: LTM 104% at H1 FY2026; FY2025 free cash flow £40.4m. Leverage is manageable and falling, though pro forma gearing rises toward ~1.7x after defence-oriented acquisitions (Trival, 3Gmetalworx). Reported ROE of 9.1% (screen) reflects goodwill-heavy balance sheet; adjusted ROCE of 15%+ is the more relevant return metric per company disclosure.
+**Gaps** — Annual Report & Accounts 2026 notice (18 June 2026) confirms publication but full AR body text is not in the filing extracts corpus; detailed risk disclosures reference the AR (pages 68–78 of prior year). Companies House statutory accounts are indexed but preliminary RNS statements are the primary source for FY2026 consolidated figures.
 
 ## RISKS AND RED FLAGS
-**Cyclical and demand risks.** FY2025 results were materially affected by customer destocking (−7% organic sales). Controls, a later-cycle unit, lagged recovery through H1 FY2026. A renewed industrial downturn could delay design-win conversion and order momentum despite structural end-market drivers.
+**Macro and cyclical.** Filings flag elevated risk from US trade tariffs, Middle East and Ukraine conflicts, and industrial destocking (largely worked through in Controls by year-end). Q1 FY2027 momentum is strong, but the group remains exposed to OEM capital spending cycles; FY2026 organic sales growth was only 2% despite improving exit rates.
 
-**Acquisition and integration risk.** The roll-up model is central to strategy (30 acquisitions in 15 years per latest RNS). FY2025 added Burster and Hivolt; FY2026–FY2027 adds Keymat (£5.5m), Trival (defence antennas), Storm and 3Gmetalworx. Interim and annual filings flag “performance of acquired companies” as a principal risk. ROCE is diluted near term by new acquisitions; historic vintages are cited at 27% ROCE, but recent deals are unproven at that level.
+**Acquisition and leverage.** Three deals in six months (Storm £5.5m, Trival ~£40m, 3G ~£50m) lift proforma gearing to 2.2x. Integration of 30 prior acquisitions remains an ongoing principal risk; ROCE dipped to 15.2% and is diluted near-term by recent deals. £16.3m annual amortisation of acquired intangibles suppresses reported EPS (29.4p vs 40.3p adjusted).
 
-**Leverage and covenant exposure.** Net debt of £90.7m at H1 FY2026 on a £240m revolving facility; covenant gearing limit raised to 3.5x (from 3.0x) on renewal. Pro forma gearing ~1.7x post-Trival remains within target range but reduces headroom for larger deals without equity or further debt. Interest costs were £10.4m in FY2025 (+16%); interim notes ~£1.3m annual saving per 1ppt rate cut across principal currencies.
+**Balance sheet quality.** Goodwill/intangibles exceed tangible equity; debt/equity ~73% on screen inputs. Failure of acquirer’s multiple and Buffett quality screens reflects leverage and sub-12% ROE. Screen NCAV unavailable.
 
-**Goodwill and intangible asset concentration.** Goodwill of £244–249m and acquired intangibles ~£81–92m (interim balance sheet) drive negative tangible book value. Adjusted earnings exclude £8.2m amortisation in H1 FY2026 alone; reported EPS (13.5p diluted H1) is materially lower than adjusted (19.5p).
+**Operational.** Principal risks per FY2026 preliminary results include cyber security (explicitly increased in year), loss of key personnel, product liability, climate-related disruption, technological obsolescence, and foreign exchange (22% US sales, multi-currency debt aligned to cash flows). Customer concentration described as low, but Controls division lagged on destocking.
 
-**Trade, geopolitical and FX risks.** Principal risks (interim results, referencing FY2025 annual report pages 68–78) include economic environment, Ukraine/Middle East tensions, US trade tariffs and counter-tariffs, and adverse FX movements. Management asserts limited direct tariff impact (73% local manufacture; flexible footprint across 38 sites), but Sterling strength reduced translated profits in H1 FY2026.
+**Governance and pension.** Legacy pension substantially de-risked via buy-in; residual GMP equalisation cost £0.4m in FY2026 adjusting items. No going-concern qualification; covenant headroom described as comfortable under severe downside scenarios.
 
-**Operational and governance risks.** Other principal risks listed in the H1 FY2026 interim include loss of major customers/suppliers, technological change, business disruption, cyber security, key personnel, control risk, product liability, liquidity/covenants, and regulatory non-compliance. Legacy defined benefit pension liability is small (£0.7m at September 2025) but recorded actuarial losses.
-
-**Valuation and timing.** Screen metrics (P/E 28.2x, P/B 2.4x) are not classical deep-value multiples; timing signal is neutral with RSI 69 and price above the 200-day MA. Broker coverage turned mixed after a ~50% share price surge (Proactive Investors, 5 June 2026).
+**Valuation.** Lynch PEG (1.48) and earnings yield (3.8%) fail traditional value thresholds; broker coverage turned more cautious after a ~50% share price rise (Proactive Investors, 5 June 2026). Simply Wall St flagged shares potentially above intrinsic value (11 January 2026).
 
 RiskTags: cyclical, leverage, competitive, accounting, key_person
 RiskTags: cyclical, leverage, competitive, accounting, key_person
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate — dominated by trading updates, acquisition announcements and third-party equity commentary rather than investigative or regulatory news.
+Coverage over the past year is moderate-to-good, dominated by RNS trading updates and M&A rather than investigative journalism.
 
-**Trading and earnings momentum**
-- “DiscoverIE climbs as order book boosts expectations” (Proactive Investors, 24 July 2026) — positive market reaction to Q1 FY2027 trading update.
-- “discoverIE Group H2 Earnings Call Highlights” (Yahoo Finance, 3 June 2026) — CEO Nick Jefferies described in-line annual performance with improving momentum; orders and sales returned to organic growth.
-- “discoverIE Group PLC (STU:9A5) Full Year 2026 Earnings Call Highlights” (Yahoo Finance, 8 June 2026) — strong organic growth and strategic investments despite margin pressures and higher net debt.
+**Results and trading.** *Interim Results* (2 December 2025): record H1 profitability, return to organic growth. *Preliminary results* / *Full Year 2026 Earnings Call Highlights* (3–8 June 2026): in-line year, margin investment, acquisition pipeline. *Q4 and full year trading update* (17 April 2026): Q4 orders +16% CER. *Q3 Trading Update* (2 February 2026): orders +9% CER. *Trading Update* (24 July 2026): Q1 organic orders +31%, earnings ahead of expectations. *DiscoverIE climbs as order book boosts expectations* (Proactive Investors / Yahoo Finance UK, 24 July 2026).
 
-**M&A and strategy**
-- Acquisition of Trival Antene d.o.o. (defence/industrial antennas) — completed April 2026 after regulatory approval (Q4 trading update, 17 April 2026).
-- Acquisition of 3Gmetalworx announced 19 May 2026 (filings index headline; broker coverage: “Broker backs discoverIE's defence push after £50 million Canadian acquisition,” Proactive Investors, 19 May 2026).
-- Keymat Technology Ltd (£5.5m bolt-on, assistive HMI) signed December 2025; completed per Q3 update (2 February 2026).
+**M&A and strategy.** *Acquisition of Trival* (4 December 2025; completed April 2026): Slovenian defence antennas, €45.5m. *Acquisition of 3Gmetalworx* (19 May 2026): North American electromagnetic shielding, US$67.5m, defence/security focus; *Broker backs discoverIE's defence push after £50 million Canadian acquisition* (Proactive Investors, 19 May 2026). *Major Expansion of Manufacturing Capacity in India* (19 August 2026): Bangalore facility trebling capacity.
 
-**Insider activity and governance**
-- “Independent Non-Executive Chairman of discoverIE Group Bruce Thompson Buys 20% More Shares” (Yahoo Finance, 14 December 2025).
-- “Positive Signs As Multiple Insiders Buy discoverIE Group Stock” (simplywall.st / Yahoo Finance, April–May 2025).
+**Management and insiders.** CEO Nick Jefferies and CFO Simon Gibbins unchanged. Multiple director share purchases via DRIP and open market (*discoverIE Directors Boost Holdings Through Dividend Reinvestment*, TipRanks/Kalkine, 13 August 2026; *Independent Non-Executive Chairman Bruce Thompson Buys 20% More Shares*, Yahoo Finance, 14 December 2025; *Positive Signs As Multiple Insiders Buy discoverIE Group Stock*, Yahoo Finance, 23 May 2026).
 
-**Broker and sentiment**
-- “Deutsche Bank lifts Discoverie target to 910p on order growth and confident outlook” (Proactive Investors, 4 June 2026).
-- “Broker cuts discoverIE to sector perform after 50% share price surge” (Proactive Investors, 5 June 2026) — signals post-rally valuation caution.
+**Broker sentiment.** *Deutsche Bank lifts Discoverie target to 910p* (Proactive Investors, 4 June 2026) vs *Broker cuts discoverIE to sector perform after 50% share price surge* (Proactive Investors, 5 June 2026). *discoverIE rises after leading bank lifts rating to ‘buy’* (Proactive Investors, 1 December 2025).
 
-**Coverage assessment:** News is adequate for tracking operational milestones but thin on independent fundamental analysis. No material regulatory actions, litigation or management changes were identified in the manifest. Strategy direction — defence/security weighting, bolt-on M&A, margin target of 17% — is consistently reinforced across RNS and news items.
+**Other.** Revolving credit facility extended to May 2030 (November 2025, per interim/final results). Appointment of joint corporate broker (28 October 2025). No material regulatory enforcement actions identified in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Primary filings confirm improving fundamentals, strong cash conversion and manageable leverage, supporting the quantitative buy signal, but FY2026 audited accounts are absent from the body extracts, headline multiples are not deep-value, and acquisition/cyclical risks warrant phased entry rather than full conviction at current momentum levels.
+Rationale: Filings confirm the screen’s buy case on cash generation, earnings momentum, and balance-sheet resilience, partially offset by acquisition leverage, goodwill-heavy accounts, and a valuation that fails deep-value screens.
