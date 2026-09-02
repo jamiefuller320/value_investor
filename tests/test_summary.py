@@ -44,6 +44,7 @@ def _signal_row(**overrides) -> dict:
         "composite_score": 0.75,
         "sector_composite_score": 0.91,
         "families_passed": 4,
+        "family_count": 5,
         "passed_families": "cheapness,quality,garp,risk",
         "data_quality_score": 0.95,
         "metrics_present": 19,

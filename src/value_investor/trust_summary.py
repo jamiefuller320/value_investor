@@ -179,6 +179,7 @@ def build_trust_reports(signals: pd.DataFrame, model_results: pd.DataFrame) -> l
                 sector_composite_score=None,
                 families_passed=int(row.get("families_passed") or 0),
                 passed_families=row.get("passed_families"),
+                family_count=int(row.get("family_count") or 3),
                 data_quality_score=float(row.get("data_quality_score") or 0),
                 metrics_present=int(row.get("metrics_present") or 0),
                 metrics_total=int(row.get("metrics_total") or 0),

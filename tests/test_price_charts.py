@@ -27,6 +27,7 @@ def test_build_price_chart_payload_includes_levels():
         name="Alpha",
         series=series,
         signal="strong_buy",
+        signal_since="2025-06-15",
         trade_plan={
             "core_limit": 98.0,
             "tactical_limit": 95.0,
@@ -41,6 +42,8 @@ def test_build_price_chart_payload_includes_levels():
     assert payload["levels"]["stop_loss"] == 90.0
     assert payload["levels"]["take_profit"] == 110.0
     assert payload["levels"]["last"] == payload["closes"][-1]
+    assert payload["signal_since"] == "2025-06-15"
+    assert payload["levels_as_of"]
 
 
 def test_write_buy_tier_charts_from_history(tmp_path: Path):

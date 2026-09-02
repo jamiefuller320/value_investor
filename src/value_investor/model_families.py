@@ -46,6 +46,9 @@ MODEL_TO_FAMILY: dict[str, str] = {
     model_id: family for family, model_ids in MODEL_FAMILIES.items() for model_id in model_ids
 }
 
+# Canonical denominator for "N/M families" in summaries and the dashboard.
+FAMILY_COUNT = len(MODEL_FAMILIES)
+
 
 def summarize_by_family(model_results: pd.DataFrame) -> pd.DataFrame:
     """Per-ticker family pass counts and mean scores."""

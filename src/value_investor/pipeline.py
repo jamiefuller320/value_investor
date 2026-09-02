@@ -66,7 +66,9 @@ from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
     append_signal_history,
     enrich_signals_with_stability,
+    ensure_signal_history,
     load_signal_history,
+    publish_committed_signal_history,
 )
 from value_investor.signals import build_signals
 from value_investor.simulator import SimulationComparison, run_simulation_comparison
@@ -294,10 +296,12 @@ def run_screen(
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
     signals = build_signals(universe_df, model_results, summary)
-    signals = enrich_signals_with_technicals(signals, chart_dir=out_dir / "charts")
 
+    # Stability before charts so buy-tier payloads can mark signal_since.
+    ensure_signal_history(out_dir)
     history = load_signal_history(out_dir)
     signals = enrich_signals_with_stability(signals, history, run_at=run_at)
+    signals = enrich_signals_with_technicals(signals, chart_dir=out_dir / "charts")
 
     sort_cols = [
         "signal_rank",
@@ -449,6 +453,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
 
     append_signal_history(output_dir, signals_out, run_at=result.run_at)
     paths["signal_history"] = output_dir / "signal_history.csv"
+    publish_committed_signal_history(output_dir)
 
     apply_output_retention(output_dir)
     publish_committed_run_history(output_dir)

@@ -131,6 +131,23 @@ function renderPriceChartSvg(payload) {
     })
     .join("");
 
+  const markerDate = (payload.signal_since || payload.levels_as_of || "").slice(0, 10);
+  let signalMarker = "";
+  if (markerDate) {
+    let markerIndex = dates.findIndex((date) => date >= markerDate);
+    if (markerIndex < 0) markerIndex = dates.length - 1;
+    // Prefer the last date on/before the marker when the series overshoots.
+    for (let i = 0; i < dates.length; i += 1) {
+      if (dates[i] <= markerDate) markerIndex = i;
+      else break;
+    }
+    const mx = xAt(markerIndex);
+    signalMarker = `
+      <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + plotH}"
+        stroke="#0f172a" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.75" />
+      <text x="${mx + 4}" y="${pad.top + 14}" class="chart-signal-marker-label">Signal since ${esc(markerDate)}</text>`;
+  }
+
   const xLabels = dates
     .map((date, index) => ({ date, index }))
     .filter(({ index }) => index % Math.max(1, Math.ceil(dates.length / 5)) === 0 || index === dates.length - 1)
@@ -153,6 +170,7 @@ function renderPriceChartSvg(payload) {
         ${grid}
         <polygon points="${areaPoints}" fill="rgba(43,108,176,0.08)"></polygon>
         <polyline fill="none" stroke="#2b6cb0" stroke-width="2.25" points="${linePoints}" />
+        ${signalMarker}
         ${levelLines}
         <text x="${pad.left}" y="${pad.top + 4}" class="chart-axis-label">${formatChartPrice(maxY)}</text>
         <text x="${pad.left}" y="${pad.top + plotH}" class="chart-axis-label">${formatChartPrice(minY)}</text>
@@ -201,8 +219,19 @@ async function openPriceChart(report) {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
+    const levelsAsOf = (payload.levels_as_of || payload.as_of || "").slice(0, 10);
+    const signalSince = (payload.signal_since || "").slice(0, 10);
     const planHint = report.trade_plan?.trade_plan_summary
       ? `<p class="small muted">${esc(report.trade_plan.trade_plan_summary)}</p>`
+      : "";
+    const levelsHint = levelsAsOf
+      ? `<p class="small muted">Trade levels / SMAs from the latest screen (${esc(levelsAsOf)})${
+          signalSince && signalSince !== levelsAsOf
+            ? ` · vertical line marks current signal since ${esc(signalSince)}`
+            : signalSince
+              ? ` · vertical line marks signal date`
+              : ""
+        }. Levels refresh each weekly screen; they are not frozen at first recommendation.</p>`
       : "";
     body.innerHTML = `
       <p class="small muted">
@@ -210,6 +239,7 @@ async function openPriceChart(report) {
         ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
       </p>
       ${planHint}
+      ${levelsHint}
       ${renderPriceChartSvg(payload)}
       ${levelsTableHtml(payload.levels || {})}
     `;
