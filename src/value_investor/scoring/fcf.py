@@ -1156,9 +1156,7 @@ def pick_fcf_majority_policy(
     for left, right in agreeing_pairs:
         if left not in sources or right not in sources:
             continue
-        if not _fcf_sources_agree(
-            sources[left], sources[right], threshold=agree_threshold
-        ):
+        if not _fcf_sources_agree(sources[left], sources[right], threshold=agree_threshold):
             continue
         cluster = {left, right}
         for preferred in _FCF_MAJORITY_PREFERENCE:
@@ -1237,7 +1235,9 @@ def reconcile_fcf(
         filing_aligned=filing_aligned,
         company_adjusted=company_adjusted,
     )
-    auto_policy_resolved = bool(auto_policy.get("resolved") and auto_policy.get("policy_fcf") is not None)
+    auto_policy_resolved = bool(
+        auto_policy.get("resolved") and auto_policy.get("policy_fcf") is not None
+    )
 
     if policy_fcf is not None and bridge_resolved:
         canonical = float(policy_fcf)
@@ -1301,7 +1301,9 @@ def reconcile_fcf(
         "bridge_resolved": bool(bridge_resolved) or auto_policy_resolved,
         "auto_policy_resolved": auto_policy_resolved and not bridge_resolved,
         "auto_policy_method": auto_policy.get("method") if auto_policy_resolved else None,
-        "auto_policy_cluster": list(auto_policy.get("cluster") or []) if auto_policy_resolved else [],
+        "auto_policy_cluster": list(auto_policy.get("cluster") or [])
+        if auto_policy_resolved
+        else [],
         "auto_policy_discarded": list(auto_policy.get("discarded") or [])
         if auto_policy_resolved
         else [],

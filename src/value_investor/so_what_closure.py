@@ -109,9 +109,7 @@ def _policy_fcf_resolved(bridge: dict[str, Any] | None, fcf: dict[str, Any]) -> 
     if bool(fcf.get("bridge_resolved")) or bool(fcf.get("auto_policy_resolved")):
         return True
     source = str(fcf.get("source") or "")
-    if _as_float(fcf.get("policy_fcf")) is not None and source.startswith(
-        ("auto_", "policy_")
-    ):
+    if _as_float(fcf.get("policy_fcf")) is not None and source.startswith(("auto_", "policy_")):
         return True
     # Auto majority / filing fallback does not need a reviewed bridge file.
     if _as_float(fcf.get("filing_aligned")) is not None:
