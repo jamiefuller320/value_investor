@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T14:43:45+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T15:17:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -253,6 +253,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L235 | **Gap-fill: ingest — Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empt** | Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empty for ITV) to test intra-year dividend coverage rather than relying on a single annual snapshot. | After next weekly email gap-fill pass confirms the gap persists |
 | L236 | **Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted** | Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch). | After next weekly email gap-fill pass confirms the gap persists |
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
+| L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
 
 ### Ops / reliability
 
