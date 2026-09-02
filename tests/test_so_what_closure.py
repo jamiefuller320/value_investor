@@ -44,7 +44,24 @@ def test_scan_flags_uncapped_buy_tier_mismatch(tmp_path: Path):
     closures = {f.recommended_closure for f in findings}
     assert "fcf_enforcement_gap" in kinds
     assert CLOSURE_AUTO_QUEUE in closures
-    assert CLOSURE_HUMAN_GATE in closures
+    # Filing present ⇒ auto majority / filing fallback; no human bridge gate.
+    assert CLOSURE_HUMAN_GATE not in closures
+    assert "fcf_bridge_needed" not in kinds
+
+
+def test_scan_human_gate_only_without_auto_resolvable_basis(tmp_path: Path):
+    report = {
+        "ticker": "NOFILING.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": True,
+        "action_note": "Buy | FCF basis mismatch: screen TTM only",
+        "fcf": {"screen_ttm": 200.0, "filing_aligned": None},
+    }
+    findings = scan_so_what_issues(reports=[report], artifacts_dir=tmp_path)
+    kinds = {f.kind for f in findings}
+    assert "fcf_bridge_needed" in kinds
+    assert any(f.recommended_closure == CLOSURE_HUMAN_GATE for f in findings)
 
 
 def test_scan_skips_when_overlay_present_and_bridge_resolved(tmp_path: Path):

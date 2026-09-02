@@ -15,6 +15,7 @@ from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     load_fcf_bridge,
     overlay_free_cashflow_from_bundle,
+    pick_fcf_majority_policy,
     reconcile_fcf,
     reconcile_fcf_for_ticker,
 )
@@ -42,6 +43,70 @@ def _write_bridge(tmp_path: Path, ticker: str, payload: dict) -> None:
     (sources / "financials_annual.json").write_text(
         json.dumps(_itv_style_financials()), encoding="utf-8"
     )
+
+
+def test_majority_prefers_company_when_paired_with_filing():
+    # ITV-like: company≈filing within 25%; screen is the outlier vs filing.
+    pick = pick_fcf_majority_policy(
+        screen_ttm=211_900_000.0,
+        filing_aligned=148_000_000.0,
+        company_adjusted=187_000_000.0,
+    )
+    assert pick["method"] == "majority_discard_outlier"
+    assert pick["policy_basis"] == "company_adjusted"
+    assert pick["policy_fcf"] == pytest.approx(187_000_000.0)
+    assert "screen_ttm" in pick["discarded"]
+
+
+def test_majority_discards_company_outlier_uses_filing():
+    # Filing and screen agree; company is the outlier.
+    pick = pick_fcf_majority_policy(
+        screen_ttm=105_000_000.0,
+        filing_aligned=100_000_000.0,
+        company_adjusted=250_000_000.0,
+    )
+    assert pick["method"] == "majority_discard_outlier"
+    assert pick["policy_basis"] == "filing_aligned"
+    assert pick["policy_fcf"] == pytest.approx(100_000_000.0)
+    assert pick["discarded"] == ["company_adjusted"]
+
+
+def test_fallback_filing_when_all_three_disagree():
+    pick = pick_fcf_majority_policy(
+        screen_ttm=300_000_000.0,
+        filing_aligned=100_000_000.0,
+        company_adjusted=50_000_000.0,
+    )
+    assert pick["method"] == "fallback_filing_aligned"
+    assert pick["policy_fcf"] == pytest.approx(100_000_000.0)
+
+
+def test_reconcile_auto_policy_without_human_bridge():
+    bundle = reconcile_fcf(
+        screen_ttm=211_900_000.0,
+        financials=_itv_style_financials(),
+        company_adjusted=187_000_000.0,
+        company_adjusted_currency="GBP",
+        filing_currency="GBP",
+    )
+    assert bundle["auto_policy_resolved"] is True
+    assert bundle["bridge_resolved"] is True
+    assert bundle["canonical"] == pytest.approx(187_000_000.0)
+    assert bundle["policy_basis"] == "company_adjusted"
+    assert str(bundle["source"]).startswith("auto_majority")
+
+
+def test_reconcile_fallback_filing_without_company_adjusted():
+    bundle = reconcile_fcf(
+        screen_ttm=211_900_000.0,
+        financials=_itv_style_financials(),
+        company_adjusted=None,
+        filing_currency="GBP",
+    )
+    assert bundle["auto_policy_resolved"] is True
+    assert bundle["canonical"] == pytest.approx(148_000_000.0)
+    assert bundle["policy_basis"] == "filing_aligned"
+    assert "fallback_filing" in str(bundle["source"])
 
 
 def test_load_fcf_bridge_and_policy_canonical(tmp_path: Path):
@@ -259,6 +324,7 @@ def test_eligible_research_targets_uses_adjusted_signal_and_blocks_unresolved_mi
         passed_models=[],
         key_metrics={},
         adjusted_signal="buy",
+        # No filing/company/auto fields — cannot auto-resolve policy FCF.
         fcf={"filing_screen_mismatch": True, "bridge_resolved": False},
     )
     assert eligible_strong_buys([capped]) == []

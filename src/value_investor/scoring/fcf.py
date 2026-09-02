@@ -124,8 +124,11 @@ FCF_FILING_SCREEN_DIVERGENCE_THRESHOLD = 0.25
 FCF_UNIVERSE_DIVERGENCE_THRESHOLD = 0.15
 FCF_DEFINITION_DIVERGENCE_THRESHOLD = 0.15
 FCF_YIELD_COMPANY_TOLERANCE = 0.25
+FCF_MAJORITY_AGREE_THRESHOLD = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 FCF_YIELD_MODEL_ID = "fcf_yield"
+# Prefer company-adjusted, then filing-aligned, never Yahoo TTM when a non-TTM peer agrees.
+_FCF_MAJORITY_PREFERENCE = ("company_adjusted", "filing_aligned", "screen_ttm")
 _FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
 
 _COMPANY_ADJUSTED_FCF_RES = (
@@ -1092,6 +1095,115 @@ def resolve_model_earnings_growth(row: pd.Series) -> float | None:
     return float(statutory)
 
 
+def _fcf_relative_gap(left: float, right: float) -> float:
+    denom = max(abs(left), abs(right), 1.0)
+    return abs(left - right) / denom
+
+
+def _fcf_sources_agree(
+    left: float | None,
+    right: float | None,
+    *,
+    threshold: float = FCF_MAJORITY_AGREE_THRESHOLD,
+) -> bool:
+    if left is None or right is None:
+        return False
+    return _fcf_relative_gap(float(left), float(right)) <= threshold
+
+
+def pick_fcf_majority_policy(
+    *,
+    screen_ttm: float | None,
+    filing_aligned: float | None,
+    company_adjusted: float | None,
+    agree_threshold: float = FCF_MAJORITY_AGREE_THRESHOLD,
+) -> dict[str, Any]:
+    """Discard the FCF outlier among screen / filing / company-adjusted.
+
+    When a pairwise majority agrees within ``agree_threshold``, use that pair
+    (prefer company-adjusted, then filing-aligned, never lone Yahoo TTM).
+    Pair checks are ordered so company+filing beats company+screen beats
+    filing+screen — no transitive bridging through a middle value.
+    When pairs disagree or the third source is missing, fall back to official
+    filing-aligned OCF−CapEx. Screen TTM alone is used only when no filing or
+    company-adjusted figure exists.
+    """
+    sources: dict[str, float] = {}
+    if company_adjusted is not None:
+        sources["company_adjusted"] = float(company_adjusted)
+    if filing_aligned is not None:
+        sources["filing_aligned"] = float(filing_aligned)
+    if screen_ttm is not None:
+        sources["screen_ttm"] = float(screen_ttm)
+
+    if not sources:
+        return {
+            "resolved": False,
+            "policy_fcf": None,
+            "policy_basis": None,
+            "method": "none",
+            "cluster": [],
+            "discarded": [],
+        }
+
+    names = list(sources.keys())
+    # Prefer non-TTM pairs first so Yahoo never wins a 2-of-3 alone.
+    agreeing_pairs = (
+        ("company_adjusted", "filing_aligned"),
+        ("company_adjusted", "screen_ttm"),
+        ("filing_aligned", "screen_ttm"),
+    )
+    for left, right in agreeing_pairs:
+        if left not in sources or right not in sources:
+            continue
+        if not _fcf_sources_agree(
+            sources[left], sources[right], threshold=agree_threshold
+        ):
+            continue
+        cluster = {left, right}
+        for preferred in _FCF_MAJORITY_PREFERENCE:
+            if preferred in cluster:
+                discarded = sorted(set(names) - cluster)
+                return {
+                    "resolved": True,
+                    "policy_fcf": sources[preferred],
+                    "policy_basis": preferred,
+                    "method": "majority_discard_outlier",
+                    "cluster": sorted(cluster),
+                    "discarded": discarded,
+                }
+
+    if filing_aligned is not None:
+        discarded = sorted(name for name in names if name != "filing_aligned")
+        return {
+            "resolved": True,
+            "policy_fcf": float(filing_aligned),
+            "policy_basis": "filing_aligned",
+            "method": "fallback_filing_aligned",
+            "cluster": ["filing_aligned"],
+            "discarded": discarded,
+        }
+
+    if company_adjusted is not None:
+        return {
+            "resolved": True,
+            "policy_fcf": float(company_adjusted),
+            "policy_basis": "company_adjusted",
+            "method": "fallback_company_adjusted",
+            "cluster": ["company_adjusted"],
+            "discarded": sorted(name for name in names if name != "company_adjusted"),
+        }
+
+    return {
+        "resolved": True,
+        "policy_fcf": float(screen_ttm) if screen_ttm is not None else None,
+        "policy_basis": "screen_ttm",
+        "method": "fallback_screen_ttm",
+        "cluster": ["screen_ttm"] if screen_ttm is not None else [],
+        "discarded": [],
+    }
+
+
 def reconcile_fcf(
     *,
     screen_ttm: float | None,
@@ -1104,11 +1216,11 @@ def reconcile_fcf(
     bridge_resolved: bool = False,
 ) -> dict[str, Any]:
     """
-    Pick one canonical FCF from screen TTM, ``cashflow_metrics.free_cashflow``, and OCF−CapEx.
+    Pick one canonical FCF from screen TTM, company-adjusted, and filing OCF−CapEx.
 
-    Priority: reviewed policy FCF (when bridge resolved), company-adjusted, filing-aligned
-    OCF−CapEx, annual ``Free Cash Flow`` line, then screen TTM. Also surfaces screen TTM and
-    company-adjusted FCF side-by-side with a divergence flag.
+    Priority: reviewed human bridge policy; else deterministic majority among the
+    three bases (discard outlier) with filing-aligned fallback; else cashflow
+    metrics / screen TTM. Surfaces all bases plus divergence flags.
     """
     cashflow_metrics = (
         extract_cashflow_metrics_from_annual_financials(financials) if financials else {}
@@ -1120,16 +1232,25 @@ def reconcile_fcf(
     metrics_fcf = float(metrics_fcf) if metrics_fcf is not None else None
     currency = str(filing_currency or company_adjusted_currency or "USD")
 
+    auto_policy = pick_fcf_majority_policy(
+        screen_ttm=screen_ttm,
+        filing_aligned=filing_aligned,
+        company_adjusted=company_adjusted,
+    )
+    auto_policy_resolved = bool(auto_policy.get("resolved") and auto_policy.get("policy_fcf") is not None)
+
     if policy_fcf is not None and bridge_resolved:
         canonical = float(policy_fcf)
         source = f"policy_{policy_basis or 'fcf_bridge'}"
-    elif company_adjusted is not None:
-        canonical = float(company_adjusted)
-        source = "company_adjusted"
-        currency = str(company_adjusted_currency or currency)
-    elif filing_aligned is not None:
-        canonical = filing_aligned
-        source = "filing_aligned_ocf_capex"
+    elif auto_policy_resolved:
+        canonical = float(auto_policy["policy_fcf"])
+        basis = str(auto_policy.get("policy_basis") or "filing_aligned")
+        method = str(auto_policy.get("method") or "auto")
+        source = f"auto_{method}_{basis}"
+        if basis == "company_adjusted":
+            currency = str(company_adjusted_currency or currency)
+        policy_fcf = canonical
+        policy_basis = basis
     elif metrics_fcf is not None:
         canonical = metrics_fcf
         source = "cashflow_metrics"
@@ -1177,7 +1298,13 @@ def reconcile_fcf(
         "divergence_flagged": divergence_flagged,
         "fcf_divergence_flagged": fcf_divergence_flagged,
         "filing_screen_mismatch": filing_screen_mismatch,
-        "bridge_resolved": bool(bridge_resolved),
+        "bridge_resolved": bool(bridge_resolved) or auto_policy_resolved,
+        "auto_policy_resolved": auto_policy_resolved and not bridge_resolved,
+        "auto_policy_method": auto_policy.get("method") if auto_policy_resolved else None,
+        "auto_policy_cluster": list(auto_policy.get("cluster") or []) if auto_policy_resolved else [],
+        "auto_policy_discarded": list(auto_policy.get("discarded") or [])
+        if auto_policy_resolved
+        else [],
         "policy_fcf": float(policy_fcf) if policy_fcf is not None else None,
         "policy_basis": policy_basis,
         "fiscal_year": fiscal_year,
@@ -1318,9 +1445,14 @@ def overlay_free_cashflow_from_bundle(
     fcf_bundle: dict[str, Any],
 ) -> float | None:
     """Pick company-adjusted or filing-aligned FCF; never Yahoo TTM when bases diverge."""
-    # Prefer reviewed policy FCF when a bridge resolved the basis conflict.
+    # Prefer reviewed / auto policy FCF when it is not lone Yahoo TTM.
     policy_fcf = fcf_bundle.get("policy_fcf")
-    if fcf_bundle.get("bridge_resolved") and isinstance(policy_fcf, (int, float)):
+    policy_basis = str(fcf_bundle.get("policy_basis") or "")
+    if (
+        fcf_bundle.get("bridge_resolved")
+        and isinstance(policy_fcf, (int, float))
+        and policy_basis != "screen_ttm"
+    ):
         return float(policy_fcf)
 
     company_adjusted = fcf_bundle.get("company_adjusted")
@@ -1341,7 +1473,11 @@ def overlay_free_cashflow_from_bundle(
     )
     if mismatched:
         canonical = fcf_bundle.get("canonical")
-        if canonical is not None and fcf_bundle.get("source") != "screen_ttm":
+        if (
+            canonical is not None
+            and fcf_bundle.get("source") != "screen_ttm"
+            and not str(fcf_bundle.get("source") or "").endswith("_screen_ttm")
+        ):
             return float(canonical)
         if filing_aligned is not None:
             return filing_aligned
@@ -1567,13 +1703,18 @@ def enrich_universe_with_canonical_fcf(
             divergence_flagged=bool(bundle.get("divergence_flagged")),
         )
         mismatched_flags.append(mismatched)
-        if bundle.get("bridge_resolved") and bundle.get("policy_fcf") is not None:
+        if (
+            bundle.get("bridge_resolved")
+            and bundle.get("policy_fcf") is not None
+            and str(bundle.get("policy_basis") or "") != "screen_ttm"
+        ):
             canonicals.append(bundle.get("policy_fcf"))
         elif bundle.get("company_adjusted") is not None:
             canonicals.append(bundle.get("company_adjusted"))
         elif mismatched:
             canonical = bundle.get("canonical")
-            if bundle.get("source") == "screen_ttm":
+            source = str(bundle.get("source") or "")
+            if source == "screen_ttm" or source.endswith("_screen_ttm"):
                 canonical = bundle.get("filing_aligned")
             canonicals.append(canonical)
         else:

@@ -43,14 +43,27 @@ def _buy_tier_signal(report: CompanyReport) -> str:
 
 
 def _fcf_mismatch_unresolved(report: CompanyReport) -> bool:
-    """True when filing/screen FCF diverge and no reviewed bridge has resolved policy FCF."""
+    """True when filing/screen FCF diverge and no policy FCF is locked.
+
+    Policy FCF may come from a reviewed bridge or from automatic majority /
+    filing-aligned fallback (``bridge_resolved`` / ``auto_policy_resolved``).
+    """
     bundle = report.fcf if isinstance(report.fcf, dict) else None
     if not bundle:
         return False
     mismatched = bool(bundle.get("filing_screen_mismatch"))
     if not mismatched:
         return False
-    return not bool(bundle.get("bridge_resolved"))
+    if bool(bundle.get("bridge_resolved")) or bool(bundle.get("auto_policy_resolved")):
+        return False
+    if bundle.get("policy_fcf") is not None and str(bundle.get("source") or "").startswith(
+        ("auto_", "policy_")
+    ):
+        return False
+    # Deterministic auto path available when filing or company-adjusted exists.
+    if bundle.get("filing_aligned") is not None or bundle.get("company_adjusted") is not None:
+        return False
+    return True
 
 
 def eligible_strong_buys(reports: list[CompanyReport]) -> list[CompanyReport]:
