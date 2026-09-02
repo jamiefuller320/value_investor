@@ -1,140 +1,90 @@
 # Dunelm Group plc (DNLM.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:57:07.846575+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T08:54:12.954882+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Dunelm is the UK's leading homewares retailer — c.204 stores, 42% digital penetration, and only c.7.9% share of a fragmented c.£24bn market — generating resilient cash through a specialist own-brand, omnichannel model. The quantitative screen flags the stock as a buy on cheapness (P/E 12.2x, FCF yield 11.8%), quality, dividend (5.0% yield), GARP (PEGY 0.02), and risk metrics, though timing suggests waiting for a pullback (RSI 63, price roughly in line with the 200-day SMA). FY26 is tracking solidly on revenue (+3.1% to £1,825m) with PBT guided in line with consensus at c.£210m, but interim profit fell 7.5% on cost phasing and a recurring soft Q2, and management has twice trimmed profit expectations within the year. The central debate is whether Dunelm's cash-rich, market-leading franchise deserves a re-rating on long-run store and digital white space, or whether UK consumer fragility, promotional intensity, and a new CEO's strategic reset cap near-term earnings momentum.
-
----
+Dunelm Group plc is the UK’s leading homewares specialist, combining a 203-store estate with a fast-growing digital channel (40% of FY25 sales; 42% in FY26). The quantitative screen rates DNLM.L as a buy on cheapness, quality, dividend, GARP and risk metrics (12/22 models; composite 62.9%; P/E 11.8, FCF yield 9.7%, dividend yield 5.2%). Filings show resilient revenue growth, high gross margins (~52–53%), strong cash conversion and a capital-return policy that includes ordinary plus special dividends. The valuation hook is a cash-generative market leader trading at a mid-teens earnings yield despite ROE and dividend metrics that screen well. The key debate is whether softer UK consumer demand and a new CEO strategy phase cap margin progression, or whether store expansion, digital (app, AI assistant) and 7.9% market share in a fragmented category support continued compounding.
 
 ## INVESTMENT THESIS
-For a value investor, Dunelm combines **durable cash economics with a discounted earnings/FCF profile** — exactly the profile the screen is designed to surface.
+For a value investor, Dunelm offers a rare combination: a defensible specialist franchise, net-cash or modest leverage balance sheet, and shareholder returns funded by operating cash flow rather than balance-sheet stretch. The screen passes earnings yield, FCF yield, low P/E plus high yield, quality and dividend growth models — consistent with a business generating FY25 PBT of £211.0m on revenue of £1,771.0m (interim results statutory column for 52 weeks to 28 June 2025) while paying 44.5p ordinary plus 35p special dividends in FY25.
 
-**Business quality.** Dunelm is a vertically integrated homewares specialist: c.70% own-brand, 100k+ SKUs, stores supporting c.70% of sales (including Click & Collect), and digital growing to 42% of FY26 revenue. Gross margin held at 52.5% for FY26 (FY25: 52.4%), and free-cash conversion remains strong — c.70% of operating profit in FY26 per the July trading update, and 65% underlying at H1 per interim filings. Market share rose to 7.9% in H1 FY26 despite a subdued UK homewares market. The balance sheet is manageable: £250m RCF (maturity September 2029), covenants met comfortably at H1, and reported net cash of £13m at 27 December 2025 (underlying net debt c.£80m after working-capital timing).
+Business quality supports the signal: gross margin rose from 52.4% in FY25 to 53.4% in H1 FY26 (interim results, 10 February 2026); market share reached 7.9% versus a combined UK homewares and furniture market the company cites at c.£24bn; and free cash flow was £171.4m in H1 FY26 with underlying operating-profit-to-FCF conversion of c.65%. Management targets net debt (excluding leases) of 0.2–0.6× EBITDA and returns surplus cash via specials and buybacks (£17m programme announced February 2026).
 
-**Quantitative alignment.** The screen passes 11 of 22 models across five families — cheapness, quality, dividend, GARP, and risk — with full data quality (20/20 metrics). Highlights include earnings yield 8.2%, FCF yield 11.8%, high dividend yield, Magic Formula and Acquirer's Multiple passes, and Buffett Quality. The composite score (62%) sits near the FTSE 350 sector median (63%), suggesting the name is **cheap relative to quality peers**, not a deep outlier.
-
-**Capital returns.** Dunelm has returned over £1.5bn to shareholders since IPO. FY25 paid 44.5p ordinary plus 35p special; H1 FY26 declared 17.0p interim ordinary and 25.0p special. Dividend cover policy targets 1.75–2.25x; surplus cash is routinely returned via specials and buybacks (1.7m-share programme announced February 2026).
-
-**Value hook.** At c.12x earnings and double-digit FCF yield on a business growing sales low-to-mid single digits with scope to expand from 7.9% share, the market appears to price cyclical consumer risk rather than franchise durability. New CEO Clodagh Moriarty (from October 2025) is articulating a credible growth agenda — app launch, accelerated store pipeline, AI commerce — without abandoning Dunelm's "growth and grip" discipline.
-
-**Caveat on timing.** The screen's "wait for pullback" overlay is relevant: profit guidance has drifted through FY26 (consensus PBT from c.£222m at January to c.£210m by July), and H1 PBT fell 7.5% year-on-year. Patience on entry is warranted even if the fundamental case holds.
-
----
+The buy case is not purely statistical: Dunelm grew total sales 3.8% in FY25 and guided FY26 sales to £1,825m (+3.1%) with PBT in line with consensus (~£210m), per the 16 July 2026 trading update — growth and profitability holding in a subdued consumer backdrop. High reported ROE (86.1% on the screen) reflects a thin equity base after sustained distributions; treat as a quality marker, not a sustainable reinvestment rate. Timing is neutral (RSI ~50, price near 200-day SMA), so the screen’s “buy — neutral timing” fits a accumulate-on-weakness rather than momentum entry.
 
 ## FINANCIAL REVIEW
-*Primary source: RNS filing bodies and Companies House annual accounts. Yahoo (`financials_annual.json`) used only where filing bodies lack clean annual P&L/cash-flow lines.*
+Primary source: RNS interim results (10 February 2026) and trading updates; FY25 annual report (Companies House filing, November 2025) for narrative and highlights; statutory FY25 figures from interim consolidated income statement (52-week column).
 
-### Annual trend (FY22–FY25)
+Annual trend (FY23–FY25)
 
-| Metric | FY22 | FY23 | FY24 | FY25 |
-|--------|------|------|------|------|
-| Revenue | £1,581m* | £1,639m* | £1,706m | £1,771m |
-| PBT | — | — | £205m | £211m |
-| PAT | £171m† | £152m† | £151m† | £156m |
-| Diluted EPS | 83.6p† | 75.0p† | 74.4p | 76.8p |
-| Gross margin | — | — | — | 52.4% |
-| FCF | £228m† | £219m† | £200m† | £211m† |
-| Ordinary DPS | — | — | 43.5p | 44.5p |
+| Metric | FY23 | FY24 | FY25 |
+|--------|------|------|------|
+| Revenue | £1,638.8m (Yahoo fallback) | £1,706m (FY24 annual report) | £1,771.0m (interim statutory) |
+| PBT | £192.7m (Yahoo) | £205m (FY24 annual report) | £211.0m (interim statutory) |
+| Operating profit | £198.8m (Yahoo) | £213.3m (Yahoo) | £222.0m (interim statutory) |
+| Diluted EPS | 75.0p (Yahoo) | 74.4p (FY24 annual report) | 76.8p (FY25 annual report / interim statutory) |
+| Gross margin | — | — | 52.4% (FY25 annual report highlights) |
 
-*FY22–FY23 revenue/PAT/FCF from Yahoo fallback (`financials_annual.json`) — filing bodies lack clean consolidated P&L for these years.*  
-*FY24 revenue/PBT/EPS from Companies House FY24 annual accounts body; FY25 revenue £1,771m, EPS 76.8p, gross margin 52.4%, ordinary DPS 44.5p (+35p special) from CH FY25 body; FY25 PBT £211m and PAT £156m from H1 FY26 interim income-statement comparatives (RNS body). FY25 FCF £211m from Yahoo, consistent with CH headline "£…m" free-cash-flow reference.*
+FY25 revenue rose 3.8% to £1,771m; PBT rose 2.9% to £211.0m; diluted EPS rose 3.2% to 76.8p. FY24 had been stronger on profit momentum (PBT +7% to £205m on sales +4% to £1,706m). FY25 capex was elevated (freehold purchases noted in the annual report); Yahoo records FY25 FCF of £211.4m and operating cash flow of £255.9m — consistent with filing emphasis on cash returns (FY25 ordinary dividend 44.5p plus 35p special).
 
-**FY25 (52 weeks to 28 June 2025).** Revenue grew 3.8% to £1,771m; PBT £211m (+2.9% vs FY24 £205m); diluted EPS 76.8p (+3.2%). Gross margin strengthened to 52.4%. Free cash flow remained robust. Total ordinary dividend 44.5p (+2.3%), plus 35p special. Digital reached 40% of sales; market share 7.9%. Capital allocation included Ireland acquisition (13 Home Focus stores), Designers Guild brand acquisition, two freehold store purchases, and higher capex.
+Balance sheet and cash (filings)
 
-**FY24 (52 weeks to 29 June 2024).** Per Companies House body: sales £1,706m (+4%); PBT £205m (+7%); diluted EPS 74.4p; ordinary dividend 43.5p plus 35p special; PBT margin 12.0%.
+At 28 June 2025 (interim balance sheet): cash £30.0m, borrowings £130.2m, equity £118.8m. At 27 December 2025 (H1 FY26): reported net cash £13.3m, but underlying net debt £80m after adjusting for a £93m working-capital timing item (interim CFO review). RCF £250m matures September 2029; covenants (leverage ≤2.5× adjusted EBITDA; fixed charge cover ≥1.75× EBITDAR) were met comfortably at half-year.
 
-### Interim FY26 (26 weeks to 27 December 2025) — RNS Interim Results, 10 February 2026
+Interim H1 FY26 (26 weeks to 27 December 2025)
 
-| Metric | H1 FY26 | H1 FY25 | YoY |
-|--------|---------|---------|-----|
-| Revenue | £926.3m | £893.7m | +3.6% |
-| Gross margin | 53.4% | 52.8% | +60bps |
-| Operating profit | £119.9m | £128.6m | −6.8% |
-| PBT | £114.0m | £123.2m | −7.5% |
-| Diluted EPS | 41.7p | 45.0p | −7.3% |
-| Free cash flow | £171.4m | £168.5m | +£2.9m |
-| Net cash (reported) | £13.3m | £57.1m | — |
+- Total sales £926.3m (+3.6%); digital 41% of sales (+2ppts).
+- Gross margin 53.4% (+60bps), largely FX-driven.
+- PBT £114.0m (-7.5% vs £123.2m H1 FY25); net operating costs +9.2% on wage inflation, digital logistics and cost phasing.
+- Free cash flow £171.4m; interim ordinary dividend 17.0p plus special 25.0p.
+- FY26 PBT guidance: in line with consensus average £214m (range £210–221m) at interim; revised to “towards lower end” (£210–217m) in Q3 update (16 April 2026); Q4 update (16 July 2026) expects FY26 PBT in line with consensus ~£210m on sales £1,825m and gross margin 52.5%.
 
-H1 revenue growth was ahead of market (+20bps share to 7.9%), but PBT fell on: (i) softer Q2 (+1.6% sales) amid competitive Black Friday/Christmas discounting; (ii) cost phasing (+9.2% net operating costs in H1, expected to moderate in H2); (iii) wage/NI inflation. Interim ordinary dividend 17.0p (+3.0%); special 25.0p (vs 35.0p prior year). Underlying FCF conversion 65% of operating profit; underlying net debt c.£80m. £33m drawn on £250m RCF at period end; leverage and fixed-charge covenants met comfortably. No contingent liabilities at 27 December 2025.
+Trading trajectory
 
-PwC interim review: **going concern basis appropriate**; no material going-concern uncertainties identified (less extensive than audit).
+Q2 FY26 was soft (+1.6% sales; Investors’ Chronicle, 15 January 2026); Q3 improved (+2.1%); Q4 +2.9%. Full-year sales growth 3.1% with digital participation 42%. FY26 capex guided ~£40m; dividend payments £141m in the year per July trading update.
 
-### Trading updates — FY26 trajectory (RNS bodies)
+Gaps
 
-| Period | Sales | Growth | Commentary |
-|--------|-------|--------|------------|
-| Q1 (to 27 Sep 2025) | £428m | +6.2% | Strong; gross margin +80bps; app launched |
-| Q2 / H1 (to 27 Dec 2025) | £498m / £926m | +1.6% / +3.6% | Soft Q2; H1 PBT guided £112–114m |
-| Q3 YTD (to 28 Mar 2026) | £1,398m | +3.1% | March softening; PBT towards lower end of £210–217m consensus |
-| Q4 / FY26 (to 27 Jun 2026) | £1,825m | +3.1% | Gross margin 52.5% (+10bps); **PBT in line with £210m consensus**; FCF c.70% of operating profit; dividends paid £141m |
-
-FY26 shows a familiar pattern: strong Q1, weak Q2 (third consecutive year), recovery in Q3, solid Q4. Full-year profit is flat to slightly down on FY25 £211m at the guided £210m, despite revenue growth — reflecting cost inflation, promotional mix, and investment.
-
-### Balance sheet (filings + Yahoo fallback)
-
-At 28 June 2025 (Yahoo fallback for line-item detail): net debt £100m; total debt £378m (including £248m capitalised leases under IFRS 16); equity £119m; cash £30m. **Reported ROE of 86% (screen) reflects a thin equity base** after sustained distributions, not necessarily operational leverage. Inventories stable at c.£226–228m; no customer concentration (revenue from small-ticket transactions).
-
-### Filing gaps
-
-- **FY26 preliminary annual report** not yet in index (expected 8 September 2026 per July trading update).
-- FY25 RNS "Notice of AGM" body contains no financial statements; **FY25 P&L detail relies on CH OCR extract (partial) and interim comparatives**.
-- Companies House interim accounts in index are s.838 holding-company filings, not consolidated group accounts — **consolidated interim figures taken from RNS Interim Results body only**.
-
----
+FY26 audited annual accounts are not yet in the filings index (only July 2026 trading update). Companies House annual PDF extracts are OCR-degraded and lack full statutory tables; detailed FY25 P&L/cash-flow line items are taken from the interim results statutory comparatives. Yahoo was used only for FY23 and select FY24 bridge figures where annual OCR bodies did not provide the number.
 
 ## RISKS AND RED FLAGS
-**Cyclical / consumer.** Dunelm is exposed to UK discretionary homewares spending. Management repeatedly cites "challenging" and "variable" consumer conditions; Q3 FY26 saw broad-based March softening. Homewares has lagged improving lead indicators (per FY24 chair commentary). Promotional participation rose in H2 FY26, pressuring mix despite stable headline gross margin.
+Cyclical consumer exposure: Interim principal risks cite ongoing macro uncertainty, inflationary pressure on consumers and “significant change in consumer behaviour.” H1 FY26 PBT fell 7.5% despite sales growth; Q2 festive trading has underperformed in three consecutive years. Furniture availability issues in H1 FY26 illustrate category sensitivity.
 
-**Competitive.** Black Friday and Christmas saw "especially high" competitive activity in digital marketing and discounting (January 2026 trading update). Dunelm deliberately limits Q2 promotions, but this may contribute to recurring Q2 underperformance — now under review.
+Competitive and promotional intensity: Black Friday and pre-Christmas periods saw elevated discounting and performance-marketing spend (interim CEO review). Gross margin held via FX tailwinds, but FY26 full-year margin of 52.5% (+10bps) suggests limited expansion as customers lean into promotions.
 
-**Operational / supply chain.** Furniture availability shortfalls hurt Q2; recovery plans in place. Geopolitical uncertainty and Middle East instability cited as risk (Q3 update: small direct cost impact expected in FY26). Two store fires in FY25 generated £7m insurance income in FY26 — operational disruption risk, though compensated.
+Key-person and strategy execution: CEO transition from Nick Wilkinson to Clo Moriarty (from October 2025) coincides with a strategic refresh — store white-space expansion, app launch, AI shopping assistant, range simplification. Execution risk is real though chair-led succession was planned (FY25 annual report).
 
-**Execution / strategy.** New CEO (October 2025) is resetting strategy (brand proposition, store white space, app, AI assistant). Opportunity is large but execution unproven at scale. Store opening pipeline slipped (two H2 FY26 openings likely early FY27).
+Supply chain and geopolitical: Filings flag global supply-chain disruption, trade disputes and ethical-sourcing expectations. Dunelm is predominantly own-brand with long-term suppliers, but remains exposed to shipping, FX and Asian sourcing.
 
-**Financial structure.** IFRS 16 lease liabilities (£256m at H1 FY26) materially exceed equity. Dividend-plus-special payout remains aggressive; reliance on strong FCF to fund distributions and growth capex (~£40m FY26). Net debt rose on underlying basis in H1.
+Operational and IT: Principal risks include business-change delivery, cyber security, and regulatory compliance (product safety, modern slavery). Two store fires in the prior year drove £7m insurance income in FY26 — operational disruption risk, though no net profit on claims.
 
-**Governance / key person.** Orderly CEO transition from Nick Wilkinson (2018–2025) to Clo Moriarty; Adderley family founding legacy remains influential though not flagged as a control concern. AGM November 2025: all resolutions passed (>96% support).
+Financial structure: IFRS 16 lease liabilities £256.5m at H1 FY26; right-of-use assets £231.6m. Reported net cash is flattered by working-capital timing; underlying leverage remains modest and covenants were met. No contingent liabilities at H1 FY26 (interim note 17). Going concern adopted; PwC review found no material going-concern uncertainties (interim auditor report, 10 February 2026).
 
-**Regulatory / cyber.** Interim going-concern scenarios include cyber-security disruption to trading. Product compliance, modern slavery, and environmental sourcing risks listed in interim principal-risks section (unchanged from FY25 annual report).
+Governance: Chair Alison Brittain increased her stake (TipRanks, 8 May 2026); ongoing share buybacks and PDMR dealings are routine. Family heritage (Adderley) is historical; no control premium evident.
 
-**Going concern / covenants (filing language).** Directors satisfied Group has adequate resources for 12 months; severe-but-plausible downside scenarios modelled; RCF to September 2029; covenants (leverage ≤2.5x adjusted EBITDA; fixed charge cover ≥1.75x) met comfortably. **No going-concern material uncertainty flagged.**
+Accounting: High ROE partly reflects depleted equity after dividends — not an earnings-quality red flag, but P/B 10.7x on screen reflects asset-light retail accounting post-IFRS 16 and capital returns, not tangible book.
 
-**Not identified in available bodies:** pension deficit, litigation contingencies (explicitly nil at H1 FY26), or accounting red flags.
-
-RiskTags: cyclical, competitive, governance, liquidity, key_person, other
-
----
-RiskTags: cyclical, competitive, governance, liquidity, key_person, other
+RiskTags: cyclical, competitive, key_person, supply chain, leverage, governance
+RiskTags: cyclical, competitive, key_person, leverage, governance
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-thick on trading and analyst commentary, thin on structural M&A or regulatory action**.
+Coverage over the past year is moderate-to-heavy on trading and analyst commentary, lighter on deep investigative reporting.
 
-**Management & strategy**
-- CEO succession: Nick Wilkinson retiring after 2018–2025 tenure; Clodagh Moriarty appointed (referenced in FY25 annual report CH body and Q1 FY26 trading statement, 23 October 2025).
-- App launch and AI shopping assistant beta (Q1 and Q4 FY26 updates).
-- Kingston-upon-Thames superstore opened; accelerated FY27 store pipeline signalled.
+Material corporate events (from news manifest and filings):
 
-**Trading & profit guidance**
-- *"Dunelm shares tumble as festive demand takes a hit"* (Investors' Chronicle, 15 January 2026) — Q2/H1 trading update flagged softer Christmas trading.
-- *"Dunelm sell-off was 'overdone' after profit warning"* (Proactive Investors, 19 January 2026).
-- *"What lifted Dunelm (LSE:DNLM) after the homewares retailer reassured on full-year profit?"* (Kalkine Media, 27 July 2026) — Q4 update confirmed PBT in line with consensus.
-- *"Dunelm shares tumble as sales growth slows, outlook dims"* (Investing.com UK, 16 April 2026) — Q3 update.
+- 16 July 2026 — “Dunelm profit on track as new boss promises bigger, bolder plans” (Proactive Investors); Q4/FY26 trading update: sales £1,825m, PBT in line with ~£210m consensus.
+- 10 February 2026 — Interim results: H1 PBT £114m, special dividend 25p; CEO Clo Moriarty’s first results set outlining six growth pillars.
+- 15 January 2026 — “Dunelm shares tumble as festive demand takes a hit” (Investors’ Chronicle): softer Q2, FY PBT at lower end of consensus (~£222m then).
+- 16 April 2026 — Q3 update: sales growth but FY PBT towards lower end of £210–217m range.
+- 16 February 2026 — Share buyback programme up to 1.6m shares / £17m (RNS).
+- October 2025 — FY25 annual report and AGM notice; Nick Wilkinson retirement announced in FY25 report.
+- 8 May 2026 — Chair Alison Brittain share purchase (TipRanks).
+- 26 June 2026 — Yahoo: split analyst revisions as UK consumer data softens; fair-value estimates trimmed.
 
-**Analyst sentiment**
-- Split revisions on softer UK consumer data: targets ranging c.£8.50–£13.50 (*"Dunelm Group (LSE:DNLM) Stock Sees Split Analyst Revisions As UK Consumer Data Softens"*, Yahoo Finance, 26 June 2026).
-- Fair-value estimate trimmed from £11.31 to £11.04 (*"How The Dunelm Group (LSE:DNLM) Narrative Is Shifting As Analysts Reassess Valuation"*, 11 June 2026).
-
-**Corporate**
-- AGM resolutions passed (RNS, 19 November 2025).
-- Extensive share buyback activity February–March 2026 (multiple RNS "Transaction in Own Shares" notices in index; bodies not downloaded).
-
-**Notable absence:** No material regulatory enforcement, major M&A beyond FY25 Ireland/Designers Guild deals, or litigation headlines in the news manifest.
-
----
+Strategy themes in news: big-format/superstore expansion (Kalkine, 1 September 2026), AI shopping assistant and app (August 2026 headlines), dividend yield focus for income investors. No M&A or regulatory enforcement actions surfaced in the manifest. Much coverage is syndicated retail-commentary rather than primary investigative journalism.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Deep research confirms the screen's view of a cash-generative, market-leading franchise at a reasonable earnings/FCF multiple, but near-term profit momentum is flat-to-down and consumer/competitive pressures warrant the screen's "wait for pullback" timing rather than aggressive chase.
+Confidence: 0.72
+Rationale: Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal.
