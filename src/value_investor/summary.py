@@ -20,8 +20,10 @@ from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_o
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    build_labelled_fcf_dividend_coverage,
     fcf_dividend_coverage,
     fcf_filing_screen_mismatch,
+    ocf_definition_diverges,
     overlay_free_cashflow_from_bundle,
     reconcile_fcf_for_ticker,
     resolve_free_cashflow,
@@ -102,6 +104,9 @@ class CompanyReport:
     operating_cashflow: float | None = None
     fcf_dividend_coverage_gross: float | None = None
     fcf_dividend_coverage_net: float | None = None
+    fcf_dividend_coverage: dict[str, Any] | None = None
+    fcf_definition_divergence: bool = False
+    fcf_divergence_flagged: bool = False
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -156,6 +161,9 @@ class CompanyReport:
             "operating_cashflow": self.operating_cashflow,
             "fcf_dividend_coverage_gross": self.fcf_dividend_coverage_gross,
             "fcf_dividend_coverage_net": self.fcf_dividend_coverage_net,
+            "fcf_dividend_coverage": self.fcf_dividend_coverage,
+            "fcf_definition_divergence": self.fcf_definition_divergence,
+            "fcf_divergence_flagged": self.fcf_divergence_flagged,
             "adjusted_signal": self.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -216,6 +224,9 @@ class CompanyReport:
             operating_cashflow=data.get("operating_cashflow"),
             fcf_dividend_coverage_gross=data.get("fcf_dividend_coverage_gross"),
             fcf_dividend_coverage_net=data.get("fcf_dividend_coverage_net"),
+            fcf_dividend_coverage=data.get("fcf_dividend_coverage"),
+            fcf_definition_divergence=bool(data.get("fcf_definition_divergence")),
+            fcf_divergence_flagged=bool(data.get("fcf_divergence_flagged")),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
             research_risk_level=data.get("research_risk_level"),
@@ -644,6 +655,37 @@ def build_company_reports(
             and not (isinstance(coverage_net_raw, float) and pd.isna(coverage_net_raw))
             else None
         )
+        definition_div_raw = row.get("fcf_definition_divergence")
+        gross_ocf_raw = row.get("operating_cashflow_gross")
+        operating_cashflow_gross = (
+            float(gross_ocf_raw)
+            if gross_ocf_raw is not None
+            and not (isinstance(gross_ocf_raw, float) and pd.isna(gross_ocf_raw))
+            else None
+        )
+        fcf_definition_divergence = (
+            bool(definition_div_raw)
+            if definition_div_raw is not None
+            and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
+            else ocf_definition_diverges(operating_cashflow, operating_cashflow_gross)
+        )
+        divergence_flag_raw = row.get("fcf_divergence_flagged")
+        fcf_divergence_flagged = (
+            bool(divergence_flag_raw)
+            if divergence_flag_raw is not None
+            and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
+            else bool(fcf_bundle.get("fcf_divergence_flagged"))
+        )
+        labelled_fcf_dividend_coverage = build_labelled_fcf_dividend_coverage(
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+        )
+        if (
+            labelled_fcf_dividend_coverage["statutory_ocf_minus_capex"]["ratio"] is None
+            and labelled_fcf_dividend_coverage["management_cash_generated_minus_capex"]["ratio"]
+            is None
+        ):
+            labelled_fcf_dividend_coverage = None
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
             passed_reasons.extend(_parse_list_field(model_row.get("reasons")))
@@ -734,6 +776,9 @@ def build_company_reports(
             canonical=free_cashflow,
             screen_ttm=screen_ttm,
             fcf_bundle=fcf_bundle,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+            fcf_definition_divergence=fcf_definition_divergence,
         )
 
         dividend_yield_overlay_flag = row.get("dividend_yield_overlay")
@@ -1005,6 +1050,16 @@ def build_company_reports(
         vs_sma = row.get("price_vs_sma200_pct")
         price_vs_sma200_pct = float(vs_sma) if vs_sma is not None and not pd.isna(vs_sma) else None
 
+        fcf_snapshot = {
+            key: value
+            for key, value in fcf_bundle.items()
+            if key != "cashflow_metrics" and value is not None
+        }
+        if fcf_definition_divergence:
+            fcf_snapshot["fcf_definition_divergence"] = True
+        if fcf_divergence_flagged:
+            fcf_snapshot["fcf_divergence_flagged"] = True
+
         reports.append(
             CompanyReport(
                 ticker=ticker,
@@ -1039,12 +1094,7 @@ def build_company_reports(
                 model_failures=model_failures,
                 screening_inputs=screening_inputs,
                 cashflow_metrics=cashflow_metrics or None,
-                fcf={
-                    key: value
-                    for key, value in fcf_bundle.items()
-                    if key != "cashflow_metrics" and value is not None
-                }
-                or None,
+                fcf=fcf_snapshot or None,
                 piotroski_f_score=piotroski_f_score,
                 healthcare_overlay=healthcare_overlay,
                 healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
@@ -1060,6 +1110,9 @@ def build_company_reports(
                 operating_cashflow=operating_cashflow,
                 fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
                 fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+                fcf_dividend_coverage=labelled_fcf_dividend_coverage,
+                fcf_definition_divergence=fcf_definition_divergence,
+                fcf_divergence_flagged=fcf_divergence_flagged,
                 adjusted_signal=adjusted_signal_str or signal,
                 research_verdict=research_verdict_str,
                 research_risk_level=research_risk_str,
