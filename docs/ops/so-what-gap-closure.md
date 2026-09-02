@@ -7,20 +7,22 @@ and an automatic gap-closure path when there is little or no fix/no-fix judgment
 
 Issues like FCF basis mismatches (Yahoo TTM vs filing-aligned) should not wait for
 a human to notice and prompt a fix when the answer is already decided by policy:
-fail closed, overlay the signal, queue engineering work. Human judgment stays
-only where it belongs (which policy FCF to lock in a bridge).
+fail closed, overlay the signal, lock policy FCF via majority / filing fallback,
+queue engineering work when enforcement is missing. Human judgment stays only for
+residual overrides (auto pick wrong, or no filing/company figure).
 
 ## Closure classes
 
 | Class | Meaning | Action |
 |-------|---------|--------|
 | `auto_queue` | No-judgment enforcement gap | Compile an open scoring engineering task (`source=so_what_closure`) |
-| `human_gate` | Needs a policy / filing choice | Surface in progress report; existing FCF bridge checklist |
+| `human_gate` | Residual: cannot auto-resolve policy FCF | Surface in progress report; optional bridge override |
 | `observe` | Mild / non-actionable | Report only |
 
 First detector: buy-tier names in `docs/data/latest.json` with material screen vs
 filing FCF divergence (≥25%) or FCF action-note markers, without
-`fcf_basis_overlay` and/or without a resolved `fcf_bridge.json`.
+`fcf_basis_overlay`. Policy FCF no longer requires a human bridge when
+filing-aligned or company-adjusted is present — see [fcf-basis-bridges.md](fcf-basis-bridges.md).
 
 ## Commands
 
@@ -44,7 +46,7 @@ ftse-progress-report build --write
 | Cadence | Who | Behaviour |
 |---------|-----|-----------|
 | **Daily ops monitor** | Automation | When `--apply` / CI default: run so-what auto-queue after other drafts |
-| **Sunday / ad hoc progress report** | Automation + human | Honest status + so-what section; human still reviews bridges |
+| **Sunday / ad hoc progress report** | Automation + human | Honest status + so-what section; residual bridge overrides only |
 | **Engineering queue** | Automation | Picks up `source=so_what_closure` tasks like any other open scoring task |
 
 ## Artifacts
@@ -57,11 +59,8 @@ ftse-progress-report build --write
 
 ## What stays human
 
-Writing `docs/data/research/<TICKER>/sources/fcf_bridge.json` (which policy FCF)
-remains a human gate — see [fcf-basis-bridges.md](fcf-basis-bridges.md). So-what
-surfaces those gates; it does not invent policy FCF numbers.
-
-Analysis-review experiment promotion stays human for the same reason: judgment.
+- Optional override of auto FCF policy via `fcf_bridge.json` when majority/filing is wrong — see [fcf-basis-bridges.md](fcf-basis-bridges.md).
+- Analysis-review experiment promotion (judgment).
 
 ## Related
 

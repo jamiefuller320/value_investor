@@ -74,7 +74,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **Rotate `CURSOR_API_KEY`** (and review Actions) if Cursor API misuse or secret exposure is suspected | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised) |
 | **Register daily GHA secret-hygiene cron** on cron-job.org after merge (`import_cron_jobs.py --job gha-secret-hygiene`) | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
 | **Sync valid Cursor key into GitHub Actions** (`CURSOR_API_KEY_V2` + `CURSOR_API_KEY`) when legacy secret is dead/missing | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#which-secret-workflows-use) |
-| **Review FCF basis bridges** when mismatch notes fire on buy-tier names — write `fcf_bridge.json` before trusting yield/coverage or deep memos | Human | [fcf-basis-bridges.md](fcf-basis-bridges.md#when-to-review) |
+| **Override FCF auto policy** only when majority/filing fallback is wrong (or so-what `fcf_bridge_needed` with no filing/company figure) | Human (residual) | [fcf-basis-bridges.md](fcf-basis-bridges.md#when-to-review-residual) |
 
 ## Maintenance
 

@@ -597,7 +597,8 @@ def test_enrich_universe_with_canonical_fcf_uses_cached_financials(tmp_path: Pat
     assert other["free_cashflow"] == 10_000_000.0
 
 
-def test_enrich_universe_keeps_screen_ttm_when_filing_within_25_pct(tmp_path: Path):
+def test_enrich_universe_uses_filing_when_screen_and_filing_agree(tmp_path: Path):
+    """Within-25% pairs count as agreement; prefer filing over Yahoo screen TTM."""
     sources = tmp_path / "research" / "CLOSE.L" / "sources"
     sources.mkdir(parents=True)
     financials = {
@@ -619,7 +620,7 @@ def test_enrich_universe_keeps_screen_ttm_when_filing_within_25_pct(tmp_path: Pa
     row = enriched.iloc[0]
 
     assert row["free_cashflow_screen_ttm"] == 92_000_000.0
-    assert row["free_cashflow"] == 92_000_000.0
+    assert row["free_cashflow"] == 100_000_000.0
 
 
 def test_enrich_universe_uses_filing_when_gap_exceeds_25_pct_without_divergence_flag(

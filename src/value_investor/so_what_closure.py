@@ -2,8 +2,10 @@
 
 Adapts the existing progress-report / ops-monitor / engineering-queue loop so
 enforcement gaps (e.g. FCF basis mismatch noted but strong_buy left uncapped)
-are queued for auto-dispatch without waiting for a human prompt. Judgment calls
-(which filing FCF to lock in a bridge) remain human_gate.
+are queued for auto-dispatch without waiting for a human prompt. Policy FCF is
+chosen automatically (majority among screen / filing / company-adjusted, else
+filing-aligned fallback); human_gate remains only when no auto-resolvable basis
+exists.
 """
 
 from __future__ import annotations
@@ -102,8 +104,17 @@ def _load_bridge(ticker: str, *, artifacts_dir: Path = ARTIFACTS_DIR) -> dict[st
     return payload if isinstance(payload, dict) else None
 
 
-def _bridge_resolved(bridge: dict[str, Any] | None, fcf: dict[str, Any]) -> bool:
-    if bool(fcf.get("bridge_resolved")):
+def _policy_fcf_resolved(bridge: dict[str, Any] | None, fcf: dict[str, Any]) -> bool:
+    """True when human bridge or deterministic auto policy can lock policy FCF."""
+    if bool(fcf.get("bridge_resolved")) or bool(fcf.get("auto_policy_resolved")):
+        return True
+    source = str(fcf.get("source") or "")
+    if _as_float(fcf.get("policy_fcf")) is not None and source.startswith(("auto_", "policy_")):
+        return True
+    # Auto majority / filing fallback does not need a reviewed bridge file.
+    if _as_float(fcf.get("filing_aligned")) is not None:
+        return True
+    if _as_float(fcf.get("company_adjusted")) is not None:
         return True
     if not isinstance(bridge, dict):
         return False
@@ -134,7 +145,7 @@ def _fcf_findings_from_report(
     overlay = bool(report.get("fcf_basis_overlay"))
     action_note = str(report.get("action_note") or "").strip()
     bridge = _load_bridge(ticker, artifacts_dir=artifacts_dir)
-    bridge_ok = _bridge_resolved(bridge, fcf)
+    bridge_ok = _policy_fcf_resolved(bridge, fcf)
 
     findings: list[SoWhatFinding] = []
 
@@ -213,6 +224,8 @@ def _fcf_findings_from_report(
             )
         )
 
+    # Residual only: cannot auto-resolve (no filing-aligned / company-adjusted /
+    # auto policy) yet buy-tier still shows a mismatch note.
     if buy_tier and (material_mismatch or note_flag) and not bridge_ok:
         findings.append(
             SoWhatFinding(
@@ -221,9 +234,9 @@ def _fcf_findings_from_report(
                 ticker=ticker,
                 severity="medium",
                 so_what=(
-                    "Mismatch is visible on a buy-tier name; choosing the reviewed "
-                    "policy FCF still needs a human (or explicit source policy). "
-                    "Enforcement overlay alone does not replace a durable bridge."
+                    "Buy-tier FCF concern with no filing-aligned or company-adjusted "
+                    "figure for auto majority / filing fallback. Optional human "
+                    "bridge can still lock policy FCF; default path remains fail-closed."
                 ),
                 recommended_closure=CLOSURE_HUMAN_GATE,
                 evidence={
@@ -231,14 +244,17 @@ def _fcf_findings_from_report(
                     "adjusted_signal": effective,
                     "screen_ttm": screen,
                     "filing_aligned": filing,
+                    "company_adjusted": _as_float(fcf.get("company_adjusted")),
                     "gap_pct": round(gap * 100.0, 1) if gap is not None else None,
                     "fcf_basis_overlay": overlay,
                     "bridge_present": bridge is not None,
+                    "auto_policy_resolved": bool(fcf.get("auto_policy_resolved")),
                 },
                 human_action=(
-                    f"Review filings for {ticker} and write "
-                    f"docs/data/research/{ticker}/sources/fcf_bridge.json "
-                    "(policy_fcf + policy_basis + source_refs; set resolved=true)."
+                    f"If auto policy cannot run (missing filing/company figures), "
+                    f"write docs/data/research/{ticker}/sources/fcf_bridge.json "
+                    "(policy_fcf + policy_basis + source_refs; set resolved=true). "
+                    "Otherwise leave the automatic majority / filing fallback in place."
                 ),
                 human_doc_path="docs/ops/fcf-basis-bridges.md",
             )
