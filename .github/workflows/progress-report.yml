@@ -1,0 +1,117 @@
+name: Progress report
+
+# Rebuild docs/data/progress_report.{json,md} (+ synced project_progress.json)
+# and refresh GitHub Pages. Triggered from the dashboard Generate button
+# (workflow_dispatch via a browser-stored PAT), Actions UI, or repository_dispatch.
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Run even if a successful progress-report already ran today"
+        type: boolean
+        default: true
+  repository_dispatch:
+    types: [progress-report]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: progress-report
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip if already succeeded today (unless force)
+        id: gate
+        uses: actions/github-script@v8
+        env:
+          # repository_dispatch has no inputs — treat as force=true.
+          FORCE: ${{ github.event.inputs.force || 'true' }}
+        with:
+          script: |
+            const force = process.env.FORCE !== 'false';
+            if (force) {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflow_id = 'progress-report.yml';
+            const runId = context.runId;
+            const dayStart = new Date(Date.UTC(
+              new Date().getUTCFullYear(),
+              new Date().getUTCMonth(),
+              new Date().getUTCDate(),
+            )).toISOString();
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner, repo, workflow_id, per_page: 20,
+            });
+            const prior = (data.workflow_runs || []).filter((r) =>
+              r.id !== runId
+              && r.created_at >= dayStart
+              && r.conclusion === 'success'
+            );
+            if (prior.length) {
+              core.info(`Skipping — progress report already succeeded today (run ${prior[0].id})`);
+              core.setOutput('should_run', 'false');
+              return;
+            }
+            core.setOutput('should_run', 'true');
+
+      - uses: actions/checkout@v5
+        if: steps.gate.outputs.should_run == 'true'
+
+      - uses: actions/setup-python@v6
+        if: steps.gate.outputs.should_run == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        if: steps.gate.outputs.should_run == 'true'
+        run: pip install -e .
+
+      - name: Build progress report
+        if: steps.gate.outputs.should_run == 'true'
+        run: ftse-progress-report build --write
+
+      - name: Configure git author
+        if: steps.gate.outputs.should_run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync main before commit
+        if: steps.gate.outputs.should_run == 'true'
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: git pull --rebase --autostash origin "$BRANCH"
+
+      - name: Commit progress report artifacts
+        id: commit
+        if: steps.gate.outputs.should_run == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: refresh progress report [skip ci]"
+          file_pattern: |
+            docs/data/progress_report.json
+            docs/data/progress_report.md
+            docs/data/project_progress.json
+          skip_fetch: false
+
+      # [skip ci] skips pages.yml's push trigger — dispatch explicitly.
+      - name: Deploy dashboard to GitHub Pages
+        if: steps.gate.outputs.should_run == 'true' && steps.commit.outputs.changes_detected == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'pages.yml',
+              ref: 'main',
+            });
+            core.info('Dispatched pages.yml after progress report commit');

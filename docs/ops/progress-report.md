@@ -50,13 +50,38 @@ items, and integration / role-coherence warnings.
 
 | Control | Behaviour |
 |---------|-----------|
-| **Generate fresh report** | `POST /api/progress-report` when served via `ftse-dashboard-serve`; on GitHub Pages shows the CLI fallback message |
+| **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: dispatches the `progress-report` Actions workflow (requires a fine-grained PAT with Actions: Write stored in this browser via **Pages token**), then waits for Pages to publish the new JSON |
 | **Reload** | Re-fetches published `data/progress_report.json` |
 | **View full report** | Opens `data/progress_report.md` in the memo dialog |
+| **Pages token** | Save / clear the browser-local PAT used for Pages generate (never committed) |
 
-GitHub Pages cannot run the CLI. Commit refreshed artifacts (or run Sunday
-publish after wiring) so Pages shows the latest report; use
-`ftse-dashboard-serve` for interactive regenerate while developing.
+### GitHub Pages generate
+
+Pages is static and cannot run `ftse-progress-report`. The Generate button:
+
+1. Tries the local API (`ftse-dashboard-serve`).
+2. If that is unavailable (404/405/network), dispatches
+   [`.github/workflows/progress-report.yml`](../../.github/workflows/progress-report.yml)
+   via the GitHub API.
+3. Polls the workflow, then reloads `data/progress_report.json` after Pages deploy.
+
+You can also run the workflow from the Actions UI (no PAT in the browser), or:
+
+```bash
+gh workflow run progress-report.yml -f force=true
+# or
+curl -X POST -H "Authorization: Bearer $WORKFLOW_DISPATCH_PAT" \
+  -H "Accept: application/vnd.github+json" \
+  https://api.github.com/repos/jamiefuller320/value_investor/dispatches \
+  -d '{"event_type":"progress-report"}'
+```
+
+**PAT scope:** fine-grained token limited to this repo with **Actions: Write**.
+That permission can dispatch *any* workflow in the repo — do not paste a broad
+classic PAT, and clear the token on shared browsers (Overview → Pages token → Clear).
+
+The workflow rebuilds `progress_report.json` / `.md`, syncs `project_progress.json`,
+commits with `[skip ci]`, then explicitly dispatches `pages.yml` so the site refreshes.
 
 ## Artifacts
 
