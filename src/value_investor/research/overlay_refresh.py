@@ -59,6 +59,7 @@ def _company_report_from_dict(data: dict[str, Any]) -> CompanyReport:
         passed_models=list(data.get("passed_models") or []),
         key_metrics=dict(data.get("key_metrics") or {}),
         adjusted_signal=data.get("adjusted_signal"),
+        fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
         research_verdict=data.get("research_verdict"),
         research_risk_level=data.get("research_risk_level"),
         research_confidence=(

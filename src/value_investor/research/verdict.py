@@ -173,6 +173,30 @@ def compute_adjusted_signal(signal: str, verdict: ResearchVerdict | None) -> str
     return signal
 
 
+_SIGNAL_RANK = {
+    "strong_buy": 4,
+    "buy": 3,
+    "hold": 2,
+    "avoid": 1,
+    "insufficient_data": 0,
+}
+
+
+def more_conservative_signal(*signals: str | None) -> str:
+    """Return the most conservative non-null signal (lowest conviction tier)."""
+    ranked = [str(signal) for signal in signals if signal]
+    if not ranked:
+        return "hold"
+    return min(ranked, key=lambda signal: _SIGNAL_RANK.get(signal, 0))
+
+
+def effective_screen_signal(report_signal: str, adjusted_signal: str | None) -> str:
+    """Prefer FCF-/research-adjusted signal when present for gating spend."""
+    if adjusted_signal:
+        return more_conservative_signal(report_signal, adjusted_signal)
+    return report_signal
+
+
 def adjust_conviction_for_research(
     conviction_score: float,
     verdict: ResearchVerdict | None,

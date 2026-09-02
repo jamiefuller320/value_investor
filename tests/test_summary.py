@@ -376,9 +376,12 @@ def test_healthcare_overlay_not_triggered_for_hik_like_profile():
     report = build_company_reports(signals, model_results)[0]
 
     assert report.signal == "strong_buy"
-    assert report.to_dict()["healthcare_overlay"] is False
-    assert report.to_dict()["cash_conversion_overlay"] is False
-    assert report.to_dict()["adjusted_signal"] == "strong_buy"
+    snapshot = report.to_dict()
+    assert snapshot["healthcare_overlay"] is False
+    assert snapshot["cash_conversion_overlay"] is False
+    # Committed HIK.L FCF bridge marks filing/screen mismatch → basis overlay caps Strong Buy.
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
 
 
 def _model_results_for_megp_dividend_overlay(*, ticker: str = "MEGP.L") -> pd.DataFrame:
@@ -887,11 +890,14 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     assert snapshot["key_metrics"]["FCF"] == "119000000.0"
     assert snapshot["cashflow_metrics"]["free_cashflow"] == 119_000_000.0
     assert snapshot["fcf"]["canonical"] == 119_000_000.0
-    assert snapshot["fcf"]["source"] == "filing_aligned_ocf_capex"
+    assert snapshot["fcf"]["source"] == "policy_filing_aligned"
+    assert snapshot["fcf"]["bridge_resolved"] is True
     assert snapshot["fcf"]["screen_ttm"] == -66_125_000.0
     assert snapshot["fcf"]["divergence_flagged"] is True
+    assert snapshot["fcf"]["filing_screen_mismatch"] is True
     assert snapshot["cash_conversion_overlay"] is False
-    assert snapshot["adjusted_signal"] == "strong_buy"
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
     assert "FCF basis mismatch" in snapshot["action_note"]
     assert "filing $119M" in snapshot["action_note"]
     assert "screen TTM −$66.1M" in snapshot["action_note"]
@@ -1104,8 +1110,10 @@ def test_build_company_reports_exports_earnings_basis_overlay_for_fgp(tmp_path: 
     )
     assert snapshot["screening_inputs"]["adjusted_eps_growth_pct"] == pytest.approx(0.16)
     assert snapshot["earnings_basis_overlay"] is False
-    assert snapshot["adjusted_signal"] == "strong_buy"
-    assert snapshot["conviction_score"] == pytest.approx(0.6)
+    # Committed FGP.L FCF bridge marks basis mismatch → FCF overlay caps Strong Buy.
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.51)
 
 
 def test_build_company_reports_interim_quality_uses_filing_fcf_for_megp():

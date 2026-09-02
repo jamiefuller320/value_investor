@@ -21,6 +21,7 @@ from value_investor.research.timeline import (
     build_weekly_delta,
     revision_id_from_datetime,
 )
+from value_investor.research.verdict import effective_screen_signal
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
@@ -36,12 +37,28 @@ def _rank_key(report: CompanyReport) -> tuple[float, float]:
     return (report.conviction_score, composite)
 
 
+def _buy_tier_signal(report: CompanyReport) -> str:
+    """Screen signal after FCF/research caps for research spend gating."""
+    return effective_screen_signal(report.signal, report.adjusted_signal)
+
+
+def _fcf_mismatch_unresolved(report: CompanyReport) -> bool:
+    """True when filing/screen FCF diverge and no reviewed bridge has resolved policy FCF."""
+    bundle = report.fcf if isinstance(report.fcf, dict) else None
+    if not bundle:
+        return False
+    mismatched = bool(bundle.get("filing_screen_mismatch"))
+    if not mismatched:
+        return False
+    return not bool(bundle.get("bridge_resolved"))
+
+
 def eligible_strong_buys(reports: list[CompanyReport]) -> list[CompanyReport]:
     """Quality-gated strong buys only (no weekly cap). Prefer eligible_research_targets()."""
     return [
         report
         for report in reports
-        if report.signal == "strong_buy" and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+        if _buy_tier_signal(report) == "strong_buy" and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
     ]
 
 
@@ -62,12 +79,16 @@ def eligible_research_targets(
     strong = [
         report
         for report in reports
-        if report.signal == "strong_buy" and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+        if _buy_tier_signal(report) == "strong_buy"
+        and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+        and not _fcf_mismatch_unresolved(report)
     ]
     buys = [
         report
         for report in reports
-        if report.signal == "buy" and report.data_quality_score >= MIN_QUALITY_FOR_BUY
+        if _buy_tier_signal(report) == "buy"
+        and report.data_quality_score >= MIN_QUALITY_FOR_BUY
+        and not _fcf_mismatch_unresolved(report)
     ]
     strong.sort(key=_rank_key, reverse=True)
     buys.sort(key=_rank_key, reverse=True)
@@ -106,7 +127,7 @@ def eligible_alumni_research_targets(
         if report is None:
             # Left the screened universe — skip until/unless re-listed.
             continue
-        if report.signal in {"strong_buy", "buy"}:
+        if _buy_tier_signal(report) in {"strong_buy", "buy"}:
             # Still an active pick; handled by eligible_research_targets.
             continue
         candidates.append((doc.updated_at or "", report))

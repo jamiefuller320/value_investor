@@ -15,6 +15,7 @@ from value_investor.research.verdict import (
     adjust_conviction_for_research,
     compute_adjusted_signal,
     format_research_action_note,
+    more_conservative_signal,
 )
 from value_investor.summary import CompanyReport
 
@@ -63,8 +64,25 @@ def apply_research_overlay(
             continue
 
         verdict = doc.research_verdict
-        adjusted = compute_adjusted_signal(report.signal, verdict)
+        research_adjusted = compute_adjusted_signal(report.signal, verdict)
+        # Preserve FCF basis caps (and any prior conservative adjusted_signal).
+        adjusted = more_conservative_signal(research_adjusted, report.adjusted_signal)
         conviction = adjust_conviction_for_research(report.conviction_score, verdict)
+        if report.fcf_basis_overlay:
+            from value_investor.scoring.fcf_basis_overlay import (
+                cap_conviction_for_fcf_basis_overlay,
+                cap_signal_for_fcf_basis_overlay,
+            )
+
+            adjusted = more_conservative_signal(
+                adjusted,
+                cap_signal_for_fcf_basis_overlay(report.signal),
+                report.adjusted_signal,
+            )
+            conviction = min(
+                conviction,
+                cap_conviction_for_fcf_basis_overlay(report.conviction_score),
+            )
         research_note = format_research_action_note(
             verdict=verdict,
             risk_level=doc.research_risk_level,
@@ -142,7 +160,26 @@ def enrich_signals_with_research(
         risk_levels.append(doc.research_risk_level)
         confidences.append(doc.research_confidence)
         rationales.append(doc.research_rationale)
-        adjusted_signals.append(compute_adjusted_signal(signal, doc.research_verdict))
+        research_adjusted = compute_adjusted_signal(signal, doc.research_verdict)
+        existing_adjusted = row.get("adjusted_signal")
+        existing_adjusted_str = (
+            str(existing_adjusted)
+            if existing_adjusted is not None
+            and not (isinstance(existing_adjusted, float) and pd.isna(existing_adjusted))
+            else None
+        )
+        merged = more_conservative_signal(research_adjusted, existing_adjusted_str)
+        if bool(row.get("fcf_basis_overlay")):
+            from value_investor.scoring.fcf_basis_overlay import (
+                cap_signal_for_fcf_basis_overlay,
+            )
+
+            merged = more_conservative_signal(
+                merged,
+                cap_signal_for_fcf_basis_overlay(signal),
+                existing_adjusted_str,
+            )
+        adjusted_signals.append(merged)
         research_as_ofs.append(doc.updated_at)
 
     out["research_verdict"] = verdicts

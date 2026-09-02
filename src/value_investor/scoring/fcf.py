@@ -598,6 +598,7 @@ def extract_company_adjusted_fcf_from_reconciliation_bridges(
     ticker: str,
     *,
     output_dir: Path | None = None,
+    prefer_annual: bool = True,
 ) -> tuple[float | None, str | None]:
     """Return company-adjusted FCF totals from IR/RNS reconciliation bridge tables."""
     payload = load_ir_presentation_metrics(ticker, output_dir=output_dir)
@@ -623,11 +624,15 @@ def extract_company_adjusted_fcf_from_reconciliation_bridges(
             continue
         currency = str(bridge.get("currency") or default_currency)
         period = str(bridge.get("period") or "").lower()
-        if period == "annual":
+        if _annual_period_label(period):
             annual = (amount, currency)
-        elif period == "interim" and interim == (None, None):
+        elif interim == (None, None):
+            # Keep first non-annual as interim fallback; FY decks mislabelled
+            # "interim" are still usable when no true annual bridge exists.
             interim = (amount, currency)
 
+    if prefer_annual and annual != (None, None):
+        return annual
     if annual != (None, None):
         return annual
     return interim
@@ -771,25 +776,78 @@ def load_filing_bodies_for_ticker(
     return bodies
 
 
+def _fcf_bridge_candidates(ticker: str, output_dir: Path | None = None) -> list[Path]:
+    ticker = ticker.strip().upper()
+    candidates: list[Path] = []
+    if output_dir is not None:
+        candidates.append(Path(output_dir) / "research" / ticker / "sources" / "fcf_bridge.json")
+    for root in _RESEARCH_ROOTS:
+        candidates.append(root / ticker / "sources" / "fcf_bridge.json")
+    return candidates
+
+
+def load_fcf_bridge(ticker: str, *, output_dir: Path | None = None) -> dict[str, Any] | None:
+    """Load a reviewed ``fcf_bridge.json`` policy artifact when present."""
+    for path in _fcf_bridge_candidates(ticker, output_dir):
+        resolved = resolve_json_path(path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if isinstance(payload, dict) and payload.get("ticker"):
+            return payload
+    return None
+
+
+def _annual_period_label(period: str | None) -> bool:
+    text = str(period or "").strip().lower()
+    return any(token in text for token in ("annual", "full", "fy", "year-end", "year_end"))
+
+
 def extract_company_adjusted_fcf_for_ticker(
     ticker: str,
     *,
     output_dir: Path | None = None,
+    fiscal_year: str | None = None,
 ) -> tuple[float | None, str | None]:
-    """Return company-adjusted FCF from RNS prose and reconciliation bridge tables."""
+    """Return company-adjusted FCF from bridge policy, RNS prose, then IR tables.
+
+    Period lock: prefer reviewed annual bridge / annual prose. Interim figures are used
+    only when no annual source exists. When ``fiscal_year`` is provided, a reviewed
+    bridge for another year is ignored.
+    """
     default_currency = _ticker_reporting_currency(ticker)
+    bridge = load_fcf_bridge(ticker, output_dir=output_dir)
+    if bridge and bridge.get("resolved"):
+        bridge_year = str(bridge.get("fiscal_year") or "") or None
+        if fiscal_year is None or bridge_year is None or bridge_year == str(fiscal_year):
+            amount = bridge.get("company_adjusted")
+            if amount is None and bridge.get("policy_basis") == "company_adjusted":
+                amount = bridge.get("policy_fcf")
+            if isinstance(amount, (int, float)):
+                currency = str(bridge.get("currency") or default_currency)
+                return float(amount), currency
+
     for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("annual",)):
         amount, currency = parse_company_adjusted_fcf(body, default_currency=default_currency)
         if amount is not None:
             return amount, currency or default_currency
+
+    bridge_amount, bridge_currency = extract_company_adjusted_fcf_from_reconciliation_bridges(
+        ticker,
+        output_dir=output_dir,
+        prefer_annual=True,
+    )
+    if bridge_amount is not None:
+        return bridge_amount, bridge_currency or default_currency
+
     for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("interim",)):
         amount, currency = parse_company_adjusted_fcf(body, default_currency=default_currency)
         if amount is not None:
             return amount, currency or default_currency
-    return extract_company_adjusted_fcf_from_reconciliation_bridges(
-        ticker,
-        output_dir=output_dir,
-    )
+    return None, None
 
 
 def fcf_basis_values_diverge(
@@ -969,12 +1027,17 @@ def reconcile_fcf(
     financials: dict[str, Any] | None = None,
     company_adjusted: float | None = None,
     company_adjusted_currency: str | None = None,
+    filing_currency: str | None = None,
+    policy_fcf: float | None = None,
+    policy_basis: str | None = None,
+    bridge_resolved: bool = False,
 ) -> dict[str, Any]:
     """
     Pick one canonical FCF from screen TTM, ``cashflow_metrics.free_cashflow``, and OCF−CapEx.
 
-    Priority: filing-aligned OCF−CapEx, then annual ``Free Cash Flow`` line, then screen TTM.
-    Also surfaces screen TTM and company-adjusted FCF side-by-side with a divergence flag.
+    Priority: reviewed policy FCF (when bridge resolved), company-adjusted, filing-aligned
+    OCF−CapEx, annual ``Free Cash Flow`` line, then screen TTM. Also surfaces screen TTM and
+    company-adjusted FCF side-by-side with a divergence flag.
     """
     cashflow_metrics = (
         extract_cashflow_metrics_from_annual_financials(financials) if financials else {}
@@ -984,12 +1047,15 @@ def reconcile_fcf(
     )
     metrics_fcf = cashflow_metrics.get("free_cashflow")
     metrics_fcf = float(metrics_fcf) if metrics_fcf is not None else None
-    filing_currency = "USD"
+    currency = str(filing_currency or company_adjusted_currency or "USD")
 
-    if company_adjusted is not None:
+    if policy_fcf is not None and bridge_resolved:
+        canonical = float(policy_fcf)
+        source = f"policy_{policy_basis or 'fcf_bridge'}"
+    elif company_adjusted is not None:
         canonical = float(company_adjusted)
         source = "company_adjusted"
-        filing_currency = str(company_adjusted_currency or filing_currency)
+        currency = str(company_adjusted_currency or currency)
     elif filing_aligned is not None:
         canonical = filing_aligned
         source = "filing_aligned_ocf_capex"
@@ -1007,8 +1073,13 @@ def reconcile_fcf(
         filing_aligned=filing_aligned,
         screen_ttm=screen_ttm,
         company_adjusted=company_adjusted,
-        filing_currency=filing_currency,
+        filing_currency=currency,
         company_adjusted_currency=company_adjusted_currency,
+    )
+    filing_screen_mismatch = fcf_filing_screen_mismatch(
+        filing_aligned=filing_aligned if filing_aligned is not None else canonical,
+        screen_ttm=screen_ttm,
+        divergence_flagged=divergence_flagged,
     )
 
     snapshot_metrics = (
@@ -1026,8 +1097,12 @@ def reconcile_fcf(
         "company_adjusted": company_adjusted,
         "company_adjusted_currency": company_adjusted_currency,
         "divergence_flagged": divergence_flagged,
+        "filing_screen_mismatch": filing_screen_mismatch,
+        "bridge_resolved": bool(bridge_resolved),
+        "policy_fcf": float(policy_fcf) if policy_fcf is not None else None,
+        "policy_basis": policy_basis,
         "fiscal_year": fiscal_year,
-        "currency": filing_currency,
+        "currency": currency,
         "cashflow_metrics": snapshot_metrics,
     }
 
@@ -1039,16 +1114,47 @@ def reconcile_fcf_for_ticker(
     output_dir: Path | None = None,
 ) -> dict[str, Any]:
     financials = load_cached_financials(ticker, output_dir=output_dir)
+    filing_aligned_preview, fiscal_year = (
+        compute_filing_aligned_fcf(financials) if financials else (None, None)
+    )
     company_adjusted, company_adjusted_currency = extract_company_adjusted_fcf_for_ticker(
         ticker,
         output_dir=output_dir,
+        fiscal_year=fiscal_year,
     )
-    return reconcile_fcf(
+    bridge = load_fcf_bridge(ticker, output_dir=output_dir)
+    policy_fcf = None
+    policy_basis = None
+    bridge_resolved = False
+    filing_currency = _ticker_reporting_currency(ticker)
+    if bridge and bridge.get("resolved"):
+        bridge_year = str(bridge.get("fiscal_year") or "") or None
+        if fiscal_year is None or bridge_year is None or bridge_year == str(fiscal_year):
+            bridge_resolved = True
+            policy_basis = str(bridge.get("policy_basis") or "fcf_bridge")
+            raw_policy = bridge.get("policy_fcf")
+            if isinstance(raw_policy, (int, float)):
+                policy_fcf = float(raw_policy)
+            filing_currency = str(bridge.get("currency") or filing_currency)
+            if company_adjusted is None and isinstance(bridge.get("company_adjusted"), (int, float)):
+                company_adjusted = float(bridge["company_adjusted"])
+                company_adjusted_currency = filing_currency
+
+    bundle = reconcile_fcf(
         screen_ttm=screen_ttm,
         financials=financials,
         company_adjusted=company_adjusted,
         company_adjusted_currency=company_adjusted_currency,
+        filing_currency=filing_currency,
+        policy_fcf=policy_fcf,
+        policy_basis=policy_basis,
+        bridge_resolved=bridge_resolved,
     )
+    if filing_aligned_preview is not None and bundle.get("filing_aligned") is None:
+        bundle["filing_aligned"] = filing_aligned_preview
+    if fiscal_year is not None and bundle.get("fiscal_year") is None:
+        bundle["fiscal_year"] = fiscal_year
+    return bundle
 
 
 def _float_or_none(value: Any) -> float | None:
@@ -1130,7 +1236,12 @@ def overlay_free_cashflow_from_bundle(
     row: pd.Series,
     fcf_bundle: dict[str, Any],
 ) -> float | None:
-    """Pick company-adjusted, filing-aligned, or screen TTM FCF for yield and overlay inputs."""
+    """Pick company-adjusted or filing-aligned FCF; never Yahoo TTM when bases diverge."""
+    # Prefer reviewed policy FCF when a bridge resolved the basis conflict.
+    policy_fcf = fcf_bundle.get("policy_fcf")
+    if fcf_bundle.get("bridge_resolved") and isinstance(policy_fcf, (int, float)):
+        return float(policy_fcf)
+
     company_adjusted = fcf_bundle.get("company_adjusted")
     if isinstance(company_adjusted, (int, float)):
         return float(company_adjusted)
@@ -1142,16 +1253,19 @@ def overlay_free_cashflow_from_bundle(
     else:
         filing_aligned = None
 
-    if fcf_filing_screen_mismatch(
+    mismatched = bool(fcf_bundle.get("filing_screen_mismatch")) or fcf_filing_screen_mismatch(
         filing_aligned=filing_aligned,
         screen_ttm=screen_ttm,
         divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
-    ):
+    )
+    if mismatched:
         canonical = fcf_bundle.get("canonical")
-        if canonical is not None:
+        if canonical is not None and fcf_bundle.get("source") != "screen_ttm":
             return float(canonical)
         if filing_aligned is not None:
             return filing_aligned
+        # Fail closed: do not feed divergent Yahoo TTM into yield / coverage models.
+        return None
 
     if screen_ttm is not None:
         return screen_ttm
@@ -1262,13 +1376,17 @@ def enrich_universe_with_canonical_fcf(
     universe: pd.DataFrame,
     output_dir: Path | None = None,
 ) -> pd.DataFrame:
-    """Replace ``free_cashflow`` with filing-aligned canonical values when research caches exist."""
+    """Replace ``free_cashflow`` with filing/policy canonical values when research caches exist.
+
+    When filing and screen TTM diverge, never keep Yahoo TTM as ``free_cashflow``.
+    """
     if universe.empty or "free_cashflow" not in universe.columns:
         return universe
 
     out = universe.copy()
     screen_ttms: list[float | None] = []
     canonicals: list[float | None] = []
+    mismatched_flags: list[bool] = []
 
     for _, row in out.iterrows():
         screen_ttm = _float_or_none(row.get("free_cashflow"))
@@ -1278,21 +1396,30 @@ def enrich_universe_with_canonical_fcf(
             output_dir=output_dir,
         )
         screen_ttms.append(screen_ttm)
-        if bundle.get("company_adjusted") is not None:
-            canonicals.append(bundle.get("company_adjusted"))
-        elif fcf_filing_screen_mismatch(
+        mismatched = bool(bundle.get("filing_screen_mismatch")) or fcf_filing_screen_mismatch(
             filing_aligned=bundle.get("filing_aligned"),
             screen_ttm=screen_ttm,
             divergence_flagged=bool(bundle.get("divergence_flagged")),
-        ):
-            canonicals.append(bundle.get("canonical"))
+        )
+        mismatched_flags.append(mismatched)
+        if bundle.get("bridge_resolved") and bundle.get("policy_fcf") is not None:
+            canonicals.append(bundle.get("policy_fcf"))
+        elif bundle.get("company_adjusted") is not None:
+            canonicals.append(bundle.get("company_adjusted"))
+        elif mismatched:
+            canonical = bundle.get("canonical")
+            if bundle.get("source") == "screen_ttm":
+                canonical = bundle.get("filing_aligned")
+            canonicals.append(canonical)
         else:
             canonicals.append(screen_ttm)
 
     out["free_cashflow_screen_ttm"] = screen_ttms
     out["free_cashflow"] = [
-        canonical if canonical is not None else screen
-        for canonical, screen in zip(canonicals, screen_ttms, strict=True)
+        canonical if canonical is not None else (None if mismatched else screen)
+        for canonical, screen, mismatched in zip(
+            canonicals, screen_ttms, mismatched_flags, strict=True
+        )
     ]
     return out
 
