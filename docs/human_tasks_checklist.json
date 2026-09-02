@@ -249,11 +249,11 @@
         },
         {
           "id": "adhoc-review-fcf-basis-bridges",
-          "title": "Review FCF basis bridges when mismatch notes fire",
-          "summary": "When buy-tier names show FCF basis mismatch (filing vs Yahoo TTM >25%), write or update docs/data/research/<TICKER>/sources/fcf_bridge.json with resolved policy FCF before trusting yield/coverage or spending on a deep memo. Prefer company-adjusted or filing-aligned annual figures; never leave divergent Yahoo TTM as policy.",
+          "title": "Override FCF auto policy only when majority/filing is wrong",
+          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
           "automated": false,
           "doc_path": "docs/ops/fcf-basis-bridges.md",
-          "doc_anchor": "when-to-review"
+          "doc_anchor": "when-to-review-residual"
         }
       ]
     }

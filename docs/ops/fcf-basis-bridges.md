@@ -1,14 +1,33 @@
-# FCF basis bridges (human review)
+# FCF basis bridges (auto policy + residual override)
 
 When filing-aligned FCF and Yahoo screen TTM diverge by more than **25%**, the screener:
 
 1. Stops using Yahoo TTM as the live FCF input (fail closed).
 2. Raises `fcf_basis_overlay`, capping `strong_buy` → `buy` (and `buy` → `hold`).
-3. Blocks new deep-research memo spend until a reviewed bridge resolves policy FCF.
+3. Locks **policy FCF automatically** via majority / filing fallback (see below).
+4. Optional: a reviewed `fcf_bridge.json` can override the auto pick.
 
-## Artifact
+## Automatic policy (default — no human required)
 
-Write `docs/data/research/<TICKER>/sources/fcf_bridge.json`:
+Three bases are compared:
+
+| Basis | Source |
+|-------|--------|
+| `screen_ttm` | Yahoo trailing free cash flow |
+| `filing_aligned` | Annual OCF − CapEx from cached financials |
+| `company_adjusted` | Company/IR prose figure when extractable |
+
+Rules (`reconcile_fcf` → `pick_fcf_majority_policy`):
+
+1. If a pairwise majority agrees within **25%**, use that pair and **discard the outlier**. Preference inside the pair: company-adjusted → filing-aligned → screen TTM. Pair order: company+filing, then company+screen, then filing+screen (Yahoo never wins alone).
+2. If pairs disagree or the third source is missing, **fall back to official filing-aligned** OCF−CapEx.
+3. Company-adjusted alone only if filing is missing; screen TTM alone only if both filing and company-adjusted are missing.
+
+`fcf.bridge_resolved` / `fcf.auto_policy_resolved` / `fcf.auto_policy_*` surface the outcome on reports. Deep-research memo gating treats auto-resolved policy the same as a human bridge.
+
+## Optional human override artifact
+
+Write `docs/data/research/<TICKER>/sources/fcf_bridge.json` only when the auto pick is wrong (definition fights: leases, M&A, one-offs the majority mishandles):
 
 ```json
 {
@@ -25,24 +44,24 @@ Write `docs/data/research/<TICKER>/sources/fcf_bridge.json`:
   "bridge_steps": [],
   "source_refs": [],
   "reviewed_at": "2026-09-02T11:00:00+00:00",
-  "notes": "Policy FCF and why TTM/prior-year figures are diagnostic only."
+  "notes": "Override auto policy when majority/filing fallback is wrong."
 }
 ```
 
-`policy_basis` is typically `company_adjusted` or `filing_aligned`. Set `resolved` only after checking the annual filing / RNS against the bridge steps.
+`policy_basis` is typically `company_adjusted` or `filing_aligned`. A resolved bridge always wins over auto majority.
 
-## When to review
+## When to review (residual)
 
-- Screen / email action notes show **FCF basis mismatch**.
-- Dashboard report `fcf.filing_screen_mismatch` is true and `fcf.bridge_resolved` is false.
-- Names such as ITV.L / FGP.L / HIK.L after results season when company-defined FCF differs from OCF−CapEx or Yahoo TTM.
+- Auto policy chose a figure you disagree with after reading the annual / RNS.
+- So-what `human_gate` for `fcf_bridge_needed` (rare): buy-tier mismatch note with **no** filing-aligned or company-adjusted figure available.
+- Spot-check Sunday if action notes still look wrong after auto resolution.
 
 ## Cadence
 
-Ad hoc when mismatch notes appear on buy-tier names; spot-check Sunday after analysis review if the screen still lists unresolved mismatches.
+No standing human gate for ordinary mismatches. Residual overrides are ad hoc.
 
 ## Automation vs human
 
-- **Auto (so-what / scoring tasks):** fail-closed overlay when buy-tier + material mismatch and `fcf_basis_overlay` is missing — no fix/no-fix fork.
-- **Human:** choosing `policy_fcf` in `fcf_bridge.json`. So-what surfaces these as `human_gate`; it does not invent policy numbers.
+- **Auto:** majority discard-outlier + filing fallback; fail-closed overlay; so-what enforcement queue when overlay missing.
+- **Human (residual):** optional `fcf_bridge.json` override when auto policy is wrong, or when no filing/company figure exists.
 - Runbook: [so-what-gap-closure.md](so-what-gap-closure.md)

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T12:19:07+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T14:43:45+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -110,7 +110,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N53 | **Mirror every Suite A shadow into Suite B (full 2x fork)** | Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal. | Suite B AI+rules endurance is trusted and human triage load is light |
 | N54 | **Do not treat Suite A conviction floors as Suite B policy** | High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. | Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy |
 | N55 | **Live sentiment scoring from mined news phrases** | Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). | Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment |
-| N56 | **Auto-write FCF bridges without human review** | Do not auto-author policy_fcf bridge numbers; choosing company-adjusted vs filing-aligned remains a judgment call. Keep human_gate for bridges. | If an explicit deterministic source policy covers every buy-tier mismatch without filing judgment |
 
 ---
 
@@ -253,6 +252,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L234 | **Gap-fill: ingest — Parse IR results presentation PDFs into structured FCF bridges; `ir_pres** | Parse IR results presentation PDFs into structured FCF bridges; `ir_presentation_metrics.json` returned zero bridges despite three allowlisted PDF bodies being present, leaving the £148m vs £187m vs £212m FCF mismatch unresolved. | After next weekly email gap-fill pass confirms the gap persists |
 | L235 | **Gap-fill: ingest — Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empt** | Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empty for ITV) to test intra-year dividend coverage rather than relying on a single annual snapshot. | After next weekly email gap-fill pass confirms the gap persists |
 | L236 | **Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted** | Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch). | After next weekly email gap-fill pass confirms the gap persists |
+| L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 
 ### Ops / reliability
 
