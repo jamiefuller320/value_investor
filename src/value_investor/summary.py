@@ -18,6 +18,10 @@ from value_investor.scoring.cyclical_exposure_overlay import (
 )
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
+from value_investor.scoring.earnings_growth_overlay import (
+    build_earnings_growth_overlay,
+    format_earnings_growth_bps_warning,
+)
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     build_labelled_fcf_dividend_coverage,
@@ -40,6 +44,10 @@ from value_investor.scoring.healthcare_price_erosion_overlay import (
 )
 from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
 from value_investor.scoring.leverage_overlay import format_adjusted_net_debt_gbp
+from value_investor.scoring.peer_model_pass_table import (
+    attach_peer_model_pass_table,
+    build_peer_model_pass_table,
+)
 from value_investor.technical_analysis import (
     TradePlan,
     format_timing_summary,
@@ -98,6 +106,9 @@ class CompanyReport:
     cyclical_exposure_overlay: bool = False
     cyclical_exposure_detected: bool = False
     earnings_basis_overlay: bool = False
+    earnings_growth_overlay: dict[str, Any] = field(default_factory=dict)
+    earnings_growth_bps_divergence_warning: bool = False
+    peer_model_pass_table: dict[str, Any] = field(default_factory=dict)
     fcf_basis_overlay: bool = False
     leverage_override: bool = False
     dual_leverage_display: bool = False
@@ -155,6 +166,9 @@ class CompanyReport:
             "cyclical_exposure_overlay": self.cyclical_exposure_overlay,
             "cyclical_exposure_detected": self.cyclical_exposure_detected,
             "earnings_basis_overlay": self.earnings_basis_overlay,
+            "earnings_growth_overlay": self.earnings_growth_overlay,
+            "earnings_growth_bps_divergence_warning": self.earnings_growth_bps_divergence_warning,
+            "peer_model_pass_table": self.peer_model_pass_table,
             "fcf_basis_overlay": self.fcf_basis_overlay,
             "leverage_override": self.leverage_override,
             "dual_leverage_display": self.dual_leverage_display,
@@ -218,6 +232,11 @@ class CompanyReport:
             cyclical_exposure_overlay=bool(data.get("cyclical_exposure_overlay")),
             cyclical_exposure_detected=bool(data.get("cyclical_exposure_detected")),
             earnings_basis_overlay=bool(data.get("earnings_basis_overlay")),
+            earnings_growth_overlay=dict(data.get("earnings_growth_overlay") or {}),
+            earnings_growth_bps_divergence_warning=bool(
+                data.get("earnings_growth_bps_divergence_warning")
+            ),
+            peer_model_pass_table=dict(data.get("peer_model_pass_table") or {}),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
             leverage_override=bool(data.get("leverage_override")),
             dual_leverage_display=bool(data.get("dual_leverage_display")),
@@ -454,6 +473,7 @@ def _brief_summary(
     interim_quality_overlay: bool = False,
     cyclical_exposure_overlay: bool = False,
     earnings_basis_overlay: bool = False,
+    earnings_growth_bps_divergence_warning: bool = False,
     fcf_basis_overlay: bool = False,
     leverage_override: bool = False,
     dual_leverage_display: bool = False,
@@ -571,6 +591,11 @@ def _brief_summary(
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
+    if earnings_growth_bps_divergence_warning:
+        parts.append(
+            "Earnings growth warning: statutory and filing core EPS growth diverge by >300 bps."
+        )
+
     if fcf_basis_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
             f"FCF basis overlay: filing, screen TTM, and company-adjusted FCF diverge while "
@@ -621,6 +646,13 @@ def build_company_reports(
         failed_model_names = failed["model_name"].tolist()
         model_failures = _build_model_failures(ticker_models)
         screening_inputs = _build_screening_inputs(row)
+        earnings_growth_overlay = build_earnings_growth_overlay(row)
+        earnings_growth_bps_divergence_warning = bool(
+            earnings_growth_overlay.get("bps_divergence_warning")
+        )
+        screening_inputs.update(
+            {key: value for key, value in earnings_growth_overlay.items() if value is not None}
+        )
         piotroski_f_score = _piotroski_f_score_from_models(ticker_models)
         screen_ttm = screen_ttm_from_row(row)
         fcf_bundle = reconcile_fcf_for_ticker(ticker, screen_ttm=screen_ttm, output_dir=output_dir)
@@ -780,6 +812,9 @@ def build_company_reports(
             fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
             fcf_definition_divergence=fcf_definition_divergence,
         )
+        bps_warning = format_earnings_growth_bps_warning(earnings_growth_overlay)
+        if bps_warning and bps_warning not in action_note:
+            action_note = f"{action_note} | {bps_warning}" if action_note else bps_warning
 
         dividend_yield_overlay_flag = row.get("dividend_yield_overlay")
         if dividend_yield_overlay_flag is not None and not (
@@ -1002,6 +1037,21 @@ def build_company_reports(
         if fcf_dividend_coverage_net is not None:
             cashflow_metrics["fcf_dividend_coverage_net"] = fcf_dividend_coverage_net
 
+        peer_model_pass_table: dict[str, Any] = {}
+        if signal in ("strong_buy", "buy"):
+            if output_dir is not None:
+                peer_model_pass_table = attach_peer_model_pass_table(
+                    Path(output_dir) / "research" / ticker / "sources",
+                    ticker,
+                    sector=row.get("sector"),
+                    output_dir=output_dir,
+                )
+            else:
+                peer_model_pass_table = build_peer_model_pass_table(
+                    ticker,
+                    sector=row.get("sector"),
+                )
+
         summary = _brief_summary(
             signal=signal,
             models_passed=int(row.get("models_passed") or 0),
@@ -1038,6 +1088,7 @@ def build_company_reports(
             interim_quality_overlay=interim_quality_overlay,
             cyclical_exposure_overlay=cyclical_exposure_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
+            earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
             fcf_basis_overlay=fcf_basis_overlay,
             leverage_override=leverage_override,
             dual_leverage_display=dual_leverage_display,
@@ -1104,6 +1155,9 @@ def build_company_reports(
                 cyclical_exposure_overlay=cyclical_exposure_overlay,
                 cyclical_exposure_detected=cyclical_exposure_detected,
                 earnings_basis_overlay=earnings_basis_overlay,
+                earnings_growth_overlay=earnings_growth_overlay,
+                earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
+                peer_model_pass_table=peer_model_pass_table,
                 fcf_basis_overlay=fcf_basis_overlay,
                 leverage_override=leverage_override,
                 dual_leverage_display=dual_leverage_display,

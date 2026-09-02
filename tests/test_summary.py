@@ -1498,3 +1498,119 @@ def test_build_company_reports_exports_dual_leverage_display():
     assert snapshot["key_metrics"]["D/E (Yahoo)"] == "161%"
     assert snapshot["key_metrics"]["Leverage (filing)"] == "£137.7m adj. net debt"
     assert "Leverage override" in snapshot["summary"]
+
+
+def test_earnings_growth_bps_diverge_flags_hik_style_gap():
+    from value_investor.scoring.fcf import earnings_growth_bps_diverge
+
+    assert earnings_growth_bps_diverge(0.017, 0.05) is True
+    assert earnings_growth_bps_diverge(0.017, 0.03) is False
+    assert earnings_growth_bps_diverge(0.05, 0.08) is False
+
+
+def test_build_company_reports_exports_lynch_peg_and_bps_warning(tmp_path: Path):
+    from value_investor.storage import write_json
+
+    run_at = "2026-09-02T10:22:48.084715+00:00"
+    for ticker, moat_pass in (("MEGP.L", True), ("FGP.L", False)):
+        sources = tmp_path / "research" / ticker / "sources"
+        sources.mkdir(parents=True)
+        write_json(
+            sources / "screen_run_manifest.json",
+            {
+                "ticker": ticker,
+                "run_at": run_at,
+                "ticker_signal": {
+                    "ticker": ticker,
+                    "signal": "strong_buy",
+                    "sector": "Industrials",
+                    "models_passed": 15,
+                },
+                "ticker_models": [
+                    {"ticker": ticker, "model_id": "economic_moat", "passed": moat_pass},
+                    {"ticker": ticker, "model_id": "lynch_peg", "passed": False},
+                ],
+                "models_passed": 15,
+            },
+            compact=False,
+            compress=False,
+        )
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                sector="Industrials",
+                signal="strong_buy",
+                trailing_pe=12.0,
+                earnings_growth=0.045,
+                basic_eps_growth_pct=0.004,
+                adjusted_eps_growth_pct=0.045,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["earnings_growth_bps_divergence_warning"] is True
+    assert snapshot["screening_inputs"]["lynch_peg_model"] == pytest.approx(12.0 / (0.045 * 100))
+    assert snapshot["screening_inputs"]["lynch_peg_statutory"] == pytest.approx(
+        12.0 / (0.004 * 100)
+    )
+    assert snapshot["peer_model_pass_table"]["peer_count"] == 2
+    moat_row = next(
+        row
+        for row in snapshot["peer_model_pass_table"]["model_rows"]
+        if row["model_id"] == "economic_moat"
+    )
+    assert moat_row["peer_passes"]["MEGP.L"] is True
+    assert moat_row["peer_passes"]["FGP.L"] is False
+    assert (tmp_path / "research" / "MEGP.L" / "sources" / "peer_model_pass_table.json").exists()
+    assert "Earnings growth basis divergence >300 bps" in snapshot["action_note"]
+
+
+def test_build_company_reports_lynch_peg_uses_filing_growth_without_bps_warning():
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="HIK.L",
+                name="Hikma Pharmaceuticals PLC",
+                sector="Health Care",
+                signal="strong_buy",
+                trailing_pe=11.6,
+                earnings_growth=0.05,
+                basic_eps_growth_pct=0.05,
+                adjusted_eps_growth_pct=0.05,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results)[0].to_dict()
+
+    assert snapshot["earnings_growth_bps_divergence_warning"] is False
+    assert snapshot["screening_inputs"]["model_earnings_growth_pct"] == pytest.approx(0.05)
+    assert snapshot["screening_inputs"]["lynch_peg_model"] == pytest.approx(11.6 / (0.05 * 100))

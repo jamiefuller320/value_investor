@@ -44,6 +44,9 @@ from value_investor.scoring.cyclical_exposure_overlay import (
 )
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
+from value_investor.scoring.earnings_growth_overlay import (
+    enrich_signals_with_earnings_growth_overlay,
+)
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
@@ -170,6 +173,9 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "cyclical_exposure_overlay",
         "cyclical_exposure_detected",
         "earnings_basis_overlay",
+        "earnings_growth_bps_divergence_warning",
+        "lynch_peg_model",
+        "lynch_peg_statutory",
         "fcf_basis_overlay",
         "operating_cashflow",
         "fcf_dividend_coverage_gross",
@@ -365,6 +371,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_earnings_basis_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_earnings_growth_overlay(signals_out)
     signals_out = enrich_signals_with_fcf_basis_overlay(
         signals_out,
         result.model_results,
