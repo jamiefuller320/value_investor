@@ -76,7 +76,6 @@ class CompanyReport:
     sector_composite_score: float | None
     families_passed: int
     passed_families: str | None
-    family_count: int
     data_quality_score: float
     metrics_present: int
     metrics_total: int
@@ -93,6 +92,7 @@ class CompanyReport:
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
+    family_count: int = FAMILY_COUNT
     signal_since: str | None = None
     failed_models: list[str] = field(default_factory=list)
     model_failures: dict[str, list[str]] = field(default_factory=dict)
