@@ -275,6 +275,100 @@ def list_library_ingest_parallel_sprint_markets(
     return sorted({m for m in parallel if m and m != focus})
 
 
+def parallel_sprint_stream_for_market(
+    market_id: str,
+    *,
+    policy: dict[str, Any] | None = None,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+) -> int | None:
+    """Return parallel sprint stream (1 or 2) containing ``market_id``, else None."""
+    policy = policy if policy is not None else load_policy(policy_path)
+    mid = str(market_id or "").strip()
+    if not mid:
+        return None
+    for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
+        if mid in list_library_ingest_parallel_sprint_markets(
+            policy=policy,
+            parallel_stream=parallel_stream,
+        ):
+            return parallel_stream
+    return None
+
+
+def all_parallel_sprint_market_ids(
+    *,
+    policy: dict[str, Any] | None = None,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+) -> set[str]:
+    """All markets assigned to any parallel sprint stream."""
+    policy = policy if policy is not None else load_policy(policy_path)
+    out: set[str] = set()
+    for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
+        out.update(
+            list_library_ingest_parallel_sprint_markets(
+                policy=policy,
+                parallel_stream=parallel_stream,
+            )
+        )
+    return out
+
+
+def next_parallel_sprint_queue_market(
+    policy: dict[str, Any],
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    vacating: str | None = None,
+) -> str | None:
+    """
+    Next ``market_queue`` market that still needs sprint deepen.
+
+    Skips focus, markets already in a parallel stream (except ``vacating``), and
+    markets already at filing parity.
+    """
+    library_root = Path(library_root)
+    focus = str(policy.get("focus_market") or "").strip()
+    occupied = all_parallel_sprint_market_ids(policy=policy)
+    if vacating:
+        occupied.discard(str(vacating).strip())
+    vacating_id = str(vacating or "").strip()
+    for raw in policy.get("market_queue") or []:
+        market_id = str(raw).strip()
+        if not market_id or market_id == focus or market_id == vacating_id or market_id in occupied:
+            continue
+        health = snapshot_library_buy_tier_filing_health(
+            market_id,
+            library_root=library_root,
+            policy=policy,
+        )
+        if ingest_parity_met(health):
+            continue
+        return market_id
+    return None
+
+
+def _parallel_sprint_policy_key(parallel_stream: int) -> str:
+    return PARALLEL_SPRINT_POLICY_KEYS.get(parallel_stream, "ingest_parallel_sprint")
+
+
+def replace_parallel_sprint_market(
+    policy: dict[str, Any],
+    *,
+    parallel_stream: int,
+    from_market: str,
+    to_market: str | None,
+) -> tuple[dict[str, Any], list[str]]:
+    """Remove ``from_market`` from a stream list; append ``to_market`` when set."""
+    key = _parallel_sprint_policy_key(parallel_stream)
+    current = [str(m).strip() for m in (policy.get(key) or []) if str(m).strip()]
+    updated = [m for m in current if m != str(from_market).strip()]
+    if to_market:
+        nxt = str(to_market).strip()
+        if nxt and nxt not in updated:
+            updated.append(nxt)
+    policy[key] = updated
+    return policy, updated
+
+
 def list_library_ingest_sprint_markets(
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
@@ -420,6 +514,10 @@ __all__ = [
     "ingest_parity_met",
     "list_library_ingest_maintenance_markets",
     "list_library_ingest_parallel_sprint_markets",
+    "all_parallel_sprint_market_ids",
+    "next_parallel_sprint_queue_market",
+    "parallel_sprint_stream_for_market",
+    "replace_parallel_sprint_market",
     "list_library_ingest_sprint_markets",
     "load_euro_ingest_dispatch",
     "refresh_euro_ingest_dispatch",

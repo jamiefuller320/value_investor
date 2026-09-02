@@ -63,6 +63,7 @@ def _graduation_config(policy: dict[str, Any]) -> dict[str, Any]:
     cfg.setdefault("maintenance_refresh_constituents", True)
     cfg.setdefault("require_ingest_parity", False)
     cfg.setdefault("advance_focus_on_ingest_parity", True)
+    cfg.setdefault("advance_parallel_sprint_on_ingest_parity", True)
     cfg.setdefault(
         "note",
         "Advance to next queue market only when focus meets these floors; "

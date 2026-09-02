@@ -82,6 +82,7 @@ class LibraryIngestLoopResult:
     discovery_scan: dict[str, Any] | None = None
     maintenance_mode: bool = False
     parity_handoff: dict[str, Any] | None = None
+    parallel_sprint_handoff: dict[str, Any] | None = None
     critical_path: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
@@ -115,6 +116,7 @@ class LibraryIngestLoopResult:
             "discovery_scan": self.discovery_scan,
             "maintenance_mode": self.maintenance_mode,
             "parity_handoff": self.parity_handoff,
+            "parallel_sprint_handoff": self.parallel_sprint_handoff,
             "critical_path": self.critical_path,
         }
 
@@ -608,6 +610,8 @@ def run_library_ingest_loop(
 
     gaps_before = library_ingest_filing_gaps(result.health_before)
     gaps_after = library_ingest_filing_gaps(result.health_after)
+    from value_investor.library_ingest_dispatch import ingest_parity_met as _ingest_parity_met
+
     if gaps_before > 0 and gaps_after == 0:
         try:
             from value_investor.library_ingest_maintenance import (
@@ -622,6 +626,21 @@ def run_library_ingest_loop(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Ingest parity handoff failed for %s: %s", market_id, exc)
             result.parity_handoff = {"error": str(exc)}
+
+    if _ingest_parity_met(result.health_after):
+        try:
+            from value_investor.library_ingest_maintenance import (
+                maybe_advance_parallel_sprint_on_parity,
+            )
+
+            result.parallel_sprint_handoff = maybe_advance_parallel_sprint_on_parity(
+                market_id=market_id,
+                library_root=library_root,
+                health=result.health_after,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Parallel sprint handoff failed for %s: %s", market_id, exc)
+            result.parallel_sprint_handoff = {"error": str(exc)}
 
     append_library_ingest_health_log(
         {

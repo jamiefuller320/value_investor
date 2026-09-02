@@ -81,6 +81,17 @@ def run_library_ingest_sprint(
 ) -> LibraryIngestSprintResult:
     """Run high-tempo sprint ingest for parallel queue markets (not focus)."""
     library_root = Path(library_root)
+    policy_path = Path(policy_path)
+    try:
+        from value_investor.library_ingest_maintenance import reconcile_parallel_sprint_queues
+
+        reconcile_parallel_sprint_queues(
+            library_root=library_root,
+            policy_path=policy_path,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Parallel sprint queue reconcile failed: %s", exc)
+
     policy = load_policy(policy_path)
     market_list = markets or parallel_sprint_markets_needing_ingest(
         library_root=library_root,
