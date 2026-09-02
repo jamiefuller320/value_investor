@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-02T12:32:11+00:00",
+  "generated_at": "2026-09-02T17:28:14+00:00",
   "overall": "warn",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-02T12:32:11.712690+00:00",
+    "generated_at": "2026-09-02T17:28:14.502201+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -68,7 +68,7 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 3 open, 63 merged supervised tasks.",
+        "Engineering queue: 0 open, 66 merged supervised tasks.",
         "AI-judgment track beating rules control (-19.2% vs -28.2% excess)."
       ],
       "gaps": [
@@ -85,7 +85,7 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-02T11:18:08.563007+00:00",
+        "snapshot_at": "2026-09-02T17:27:15.405814+00:00",
         "buy_tier_count": 59,
         "measured_tickers": 59,
         "unmeasured_buy_tier": 0,
@@ -93,7 +93,7 @@
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
         "indexed_without_body": 3,
-        "filings_with_body": 3836
+        "filings_with_body": 3840
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -833,20 +833,6 @@
           "models",
           "N6",
           "news"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "N56",
-        "title": "Auto-write FCF bridges without human review",
-        "summary": "Do not auto-author policy_fcf bridge numbers; choosing company-adjusted vs filing-aligned remains a judgment call. Keep human_gate for bridges.",
-        "category": "not_now",
-        "section": "not_now",
-        "revisit_when": "If an explicit deterministic source policy covers every buy-tier mismatch without filing judgment",
-        "tags": [
-          "fcf",
-          "so-what",
-          "human-gate"
         ],
         "status": "open"
       }
@@ -3207,6 +3193,52 @@
           "ops"
         ],
         "status": "open"
+      },
+      {
+        "id": "L238",
+        "title": "Human FCF bridge override for lease/M&A definition fights",
+        "summary": "Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names",
+        "tags": [
+          "fcf",
+          "bridge",
+          "policy",
+          "residual"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L239",
+        "title": "Metric change without narrative mention trap",
+        "summary": "Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names",
+        "tags": [
+          "fcf",
+          "narrative",
+          "error-trap",
+          "so-what",
+          "filings"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L240",
+        "title": "Token-free progress-report regenerate on Pages",
+        "summary": "Pages Generate currently needs a browser-stored Actions:Write PAT (or Actions UI). A dedicated low-privilege relay or issue-form trigger would remove the PAT from localStorage.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After progress-report Pages generate is in regular use and PAT friction is annoying",
+        "tags": [
+          "dashboard",
+          "pages",
+          "actions",
+          "ux"
+        ],
+        "status": "open"
       }
     ],
     "defer_security": [
@@ -3621,55 +3653,27 @@
         }
       ]
     },
-    "engineering_open": [
-      {
-        "id": "eng-20260902-02",
-        "source": "engineering",
-        "title": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
-        "summary": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
-        "status": "open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
-        "id": "eng-20260902-03",
-        "source": "engineering",
-        "title": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapsho",
-        "summary": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapshot` and run-history `action_note` when filing, company-adjusted, and TTM differ by >15%",
-        "status": "open",
-        "added_at": null,
-        "area": "scoring"
-      },
-      {
-        "id": "eng-20260902-04",
-        "source": "engineering",
-        "title": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-gener",
-        "summary": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-generated peer model pass table from sibling `screen_run_manifest.json` files to gap-fill output",
-        "status": "open",
-        "added_at": null,
-        "area": "scoring"
-      }
-    ],
+    "engineering_open": [],
     "counts": {
       "defer_now": 0,
-      "defer_not_now": 52,
-      "defer_later": 166,
+      "defer_not_now": 51,
+      "defer_later": 169,
       "defer_security": 6,
       "open_fragments": 23,
       "proposed_total": 10,
-      "engineering_open": 3
+      "engineering_open": 0
     }
   },
   "integration": {
     "overall": "ok",
     "checks": [],
     "queue_status": {
-      "open_count": 3,
+      "open_count": 0,
       "pr_open_count": 0,
       "parked_count": 0,
-      "merged_count": 63,
+      "merged_count": 66,
       "failed_count": 0,
-      "next_task_id": "eng-20260902-02",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -3697,12 +3701,12 @@
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-02T12:32:11Z",
+    "generated_at": "2026-09-02T17:28:14Z",
     "counts": {
-      "findings": 56,
+      "findings": 14,
       "auto_queue": 14,
-      "human_gate": 22,
-      "observe": 20,
+      "human_gate": 0,
+      "observe": 0,
       "tasks_created": 0
     },
     "high_severity": [
@@ -3779,64 +3783,7 @@
         "recommended_closure": "auto_queue"
       }
     ],
-    "human_gates_preview": [
-      {
-        "finding_id": "fcf_bridge_needed:ABDN.L",
-        "ticker": "ABDN.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for ABDN.L and write docs/data/research/ABDN.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:BKG.L",
-        "ticker": "BKG.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for BKG.L and write docs/data/research/BKG.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:BME.L",
-        "ticker": "BME.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for BME.L and write docs/data/research/BME.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:BT-A.L",
-        "ticker": "BT-A.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for BT-A.L and write docs/data/research/BT-A.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:BTRW.L",
-        "ticker": "BTRW.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for BTRW.L and write docs/data/research/BTRW.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:BYIT.L",
-        "ticker": "BYIT.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for BYIT.L and write docs/data/research/BYIT.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:CNA.L",
-        "ticker": "CNA.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for CNA.L and write docs/data/research/CNA.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      },
-      {
-        "finding_id": "fcf_bridge_needed:DOM.L",
-        "ticker": "DOM.L",
-        "so_what": "Mismatch is visible on a buy-tier name; choosing the reviewed policy FCF still needs a human (or explicit source policy). Enforcement overlay alone does not replace a durable bridge.",
-        "human_action": "Review filings for DOM.L and write docs/data/research/DOM.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).",
-        "human_doc_path": "docs/ops/fcf-basis-bridges.md"
-      }
-    ]
+    "human_gates_preview": []
   },
   "references": {
     "deferred_review": "docs/deferred-review.md",
