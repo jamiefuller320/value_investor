@@ -58,7 +58,8 @@ def eligible_strong_buys(reports: list[CompanyReport]) -> list[CompanyReport]:
     return [
         report
         for report in reports
-        if _buy_tier_signal(report) == "strong_buy" and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
+        if _buy_tier_signal(report) == "strong_buy"
+        and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
     ]
 
 

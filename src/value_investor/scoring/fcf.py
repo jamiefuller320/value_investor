@@ -1136,7 +1136,9 @@ def reconcile_fcf_for_ticker(
             if isinstance(raw_policy, (int, float)):
                 policy_fcf = float(raw_policy)
             filing_currency = str(bridge.get("currency") or filing_currency)
-            if company_adjusted is None and isinstance(bridge.get("company_adjusted"), (int, float)):
+            if company_adjusted is None and isinstance(
+                bridge.get("company_adjusted"), (int, float)
+            ):
                 company_adjusted = float(bridge["company_adjusted"])
                 company_adjusted_currency = filing_currency
 

@@ -64,9 +64,7 @@ def test_load_fcf_bridge_and_policy_canonical(tmp_path: Path):
     assert bridge is not None
     assert bridge["policy_fcf"] == 187_000_000.0
 
-    bundle = reconcile_fcf_for_ticker(
-        "ITV.L", screen_ttm=211_900_000.0, output_dir=tmp_path
-    )
+    bundle = reconcile_fcf_for_ticker("ITV.L", screen_ttm=211_900_000.0, output_dir=tmp_path)
     assert bundle["bridge_resolved"] is True
     assert bundle["canonical"] == 187_000_000.0
     assert bundle["source"] == "policy_company_adjusted"
@@ -105,9 +103,7 @@ def test_enrich_universe_never_keeps_divergent_yahoo_ttm(tmp_path: Path):
     sources = tmp_path / "research" / "ZZZZ.L" / "sources"
     sources.mkdir(parents=True)
     (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
-    universe = pd.DataFrame(
-        [{"ticker": "ZZZZ.L", "free_cashflow": 211_900_000.0}]
-    )
+    universe = pd.DataFrame([{"ticker": "ZZZZ.L", "free_cashflow": 211_900_000.0}])
     enriched = enrich_universe_with_canonical_fcf(universe, output_dir=tmp_path)
     assert enriched.iloc[0]["free_cashflow_screen_ttm"] == 211_900_000.0
     # Filing-aligned 148m replaces divergent Yahoo TTM as live FCF.
@@ -147,9 +143,7 @@ def test_fcf_basis_overlay_caps_strong_buy_on_25pct_mismatch_without_yield_pass(
             }
         ]
     )
-    enriched = enrich_signals_with_fcf_basis_overlay(
-        signals, model_results, output_dir=tmp_path
-    )
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
     assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)

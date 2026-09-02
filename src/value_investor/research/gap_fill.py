@@ -99,8 +99,7 @@ def _candidate_reports(reports: list[CompanyReport]) -> dict[str, CompanyReport]
     return {
         report.ticker.upper(): report
         for report in reports
-        if effective_screen_signal(report.signal, report.adjusted_signal)
-        in ("strong_buy", "buy")
+        if effective_screen_signal(report.signal, report.adjusted_signal) in ("strong_buy", "buy")
     }
 
 
