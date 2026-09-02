@@ -198,7 +198,7 @@ jobs:
           GAP_CLOSURE_TRIGGER: ${{ github.event.inputs.gap_closure_trigger }}
         run: |
           set -euo pipefail
-          # Dispatch inputs arrive via env (never ${{ }} into this script body).
+          # Dispatch inputs arrive via env (never expression-interpolate into this script body).
           require_safe() {
             local name="$1" val="$2" re="$3"
             if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
