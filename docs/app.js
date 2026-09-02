@@ -195,12 +195,13 @@ function renderProgressReport(data) {
         <div class="progress-report-actions">
           <button type="button" class="btn btn-primary" id="progress-report-generate-btn">Generate fresh report</button>
           <button type="button" class="btn" id="progress-report-reload-btn">Reload</button>
+          <button type="button" class="btn" id="progress-report-token-btn" title="Fine-grained PAT for Pages generate">Pages token</button>
         </div>
       </div>
       <p class="muted small">No published progress report yet.</p>
       <p class="small">
-        On GitHub Pages, Generate dispatches the <code>progress-report</code> workflow (one-time PAT via
-        <button type="button" class="btn-link" id="progress-report-token-btn">Pages token</button>).
+        On GitHub Pages, Generate dispatches the <code>progress-report</code> workflow
+        (configure a one-time PAT with <strong>Pages token</strong>).
         Locally use <code>ftse-dashboard-serve</code> or <code>ftse-progress-report build --write</code>.
       </p>
       ${runbookUrl ? `<p class="small"><a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a></p>` : ""}
@@ -300,6 +301,7 @@ function renderProgressReport(data) {
           <button type="button" class="btn btn-primary" id="progress-report-generate-btn">Generate fresh report</button>
           <button type="button" class="btn" id="progress-report-reload-btn">Reload</button>
           <button type="button" class="btn" id="progress-report-view-btn">View full report</button>
+          <button type="button" class="btn" id="progress-report-token-btn" title="Fine-grained PAT for Pages generate">Pages token</button>
         </div>
       </div>
       <p>${esc(headline)}</p>
@@ -328,10 +330,10 @@ function renderProgressReport(data) {
         </div>
       </details>
       <p class="small muted" style="margin-top:0.75rem">
-        GitHub Pages: Generate dispatches the <code>progress-report</code> Actions workflow (one-time PAT in this browser).
+        GitHub Pages: Generate dispatches the <code>progress-report</code> Actions workflow
+        (one-time PAT via <strong>Pages token</strong>).
         Local: <code>ftse-dashboard-serve</code> or <code>ftse-progress-report build --write</code>.
         ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a>` : ""}
-        · <button type="button" class="btn-link" id="progress-report-token-btn">Pages token</button>
       </p>
       <p class="small muted" id="progress-report-status" aria-live="polite"></p>
     </div>
