@@ -1,87 +1,44 @@
 {
-  "market_id": "sp500",
-  "assessed_at": "2026-09-02T19:32:57.601012+00:00",
-  "unmeasured": [],
+  "market_id": "asx200",
+  "assessed_at": "2026-09-02T19:49:06.773102+00:00",
+  "unmeasured": [
+    "EBO.AX"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "FICO",
-      "indexed_without_body": 5,
-      "filings_total": 19,
-      "filings_with_body": 14
-    },
-    {
-      "ticker": "APTV",
-      "indexed_without_body": 2,
-      "filings_total": 20,
-      "filings_with_body": 18
-    },
-    {
-      "ticker": "BXP",
-      "indexed_without_body": 2,
-      "filings_total": 71,
-      "filings_with_body": 69
-    },
-    {
-      "ticker": "CRH",
-      "indexed_without_body": 2,
-      "filings_total": 69,
-      "filings_with_body": 67
-    },
-    {
-      "ticker": "DGX",
+      "ticker": "WDS.AX",
       "indexed_without_body": 1,
-      "filings_total": 19,
-      "filings_with_body": 18
-    },
-    {
-      "ticker": "INTU",
-      "indexed_without_body": 1,
-      "filings_total": 19,
-      "filings_with_body": 18
-    },
-    {
-      "ticker": "LDOS",
-      "indexed_without_body": 1,
-      "filings_total": 19,
-      "filings_with_body": 18
-    },
-    {
-      "ticker": "LMT",
-      "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
-    },
-    {
-      "ticker": "TSN",
-      "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
+      "filings_total": 111,
+      "filings_with_body": 110
     }
   ],
-  "thin_need_discovery": [],
+  "thin_need_discovery": [
+    "ZIM.AX",
+    "SDF.AX",
+    "JBH.AX",
+    "RWC.AX",
+    "DNL.AX"
+  ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "FICO",
-    "APTV",
-    "BXP",
-    "CRH",
-    "DGX",
-    "INTU",
-    "LDOS",
-    "LMT"
+    "WDS.AX",
+    "EBO.AX"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (9 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), DGX(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (1 tickers, top: WDS.AX(1))",
+    "Discovery/IR seed for 5 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 9,
-    "indexed_without_body_rows": 16,
-    "thin_need_discovery": 0,
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 1,
+    "thin_need_discovery": 5,
     "thin_need_bodies": 0
   }
 }
