@@ -81,3 +81,15 @@ def test_run_library_ingest_sprint_skips_when_no_work():
         outcome = run_library_ingest_sprint()
     run_loop.assert_not_called()
     assert outcome.skipped[0]["market_id"] == "sp500"
+
+
+def test_ingest_sprint_cli_accepts_max_targets_and_parallel_stream():
+    """Regression: --parallel-stream must not drop --max-targets (workflow still passes it)."""
+    from value_investor.data_library_cli import build_parser
+
+    args = build_parser().parse_args(
+        ["ingest-sprint", "--max-targets", "24", "--parallel-stream", "2", "--json"]
+    )
+    assert args.max_targets == 24
+    assert args.parallel_stream == 2
+    assert args.json is True
