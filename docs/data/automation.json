@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-02T07:12:56.863197+00:00",
+  "generated_at": "2026-09-02T08:29:59.683243+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -34,6 +34,8 @@
       "is_exclusion_shadow": false,
       "exclusion_parent_track": null,
       "exclusion_ladder_step_id": null,
+      "is_fair_cost_lab": false,
+      "fair_cost_parent_track": null,
       "exit_confirm_screens": 2,
       "reentry_cooldown_screens": 1,
       "min_rebalance_notional_gbp": 10.0
@@ -193,17 +195,17 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 72.8,
+        "remaining_weekly_ops_usd": 80.0,
         "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 44.4,
-        "estimated_spend_weekly_ops_usd_this_week": 7.2,
-        "estimated_spend_usd_this_cycle": 243.26,
-        "week_id": "2026-W35",
-        "cycle_id": "2026-08-d8"
+        "estimated_spend_usd_this_week": 1.2,
+        "estimated_spend_weekly_ops_usd_this_week": 0.0,
+        "estimated_spend_usd_this_cycle": 1.2,
+        "week_id": "2026-W36",
+        "cycle_id": "2026-09-d8"
       },
       "ladder": {
         "enabled": true,
@@ -229,7 +231,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-02T07:12:53.775225+00:00"
+      "updated_at": "2026-09-02T08:08:12.596082+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -252,7 +254,7 @@
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
+        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -324,27 +326,27 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-09-02T06:52:24.042142+00:00",
-        "kind": "ladder_run",
-        "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=44 research created=None updated=None spend≈None"
-      },
-      {
-        "at": "2026-09-01T09:52:07.968538+00:00",
-        "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
-        "detail": "pool=first_party"
-      },
-      {
-        "at": "2026-09-01T08:27:42.594991+00:00",
+        "at": "2026-09-02T08:27:14.753256+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
         "detail": "Rebalanced after open settle (0 trade(s))."
       },
       {
+        "at": "2026-09-02T06:52:24.042142+00:00",
+        "kind": "ladder_run",
+        "title": "Library ladder run (focus euro_depth)",
+        "detail": "shortlist=44 research created=None updated=None spend\u2248None"
+      },
+      {
+        "at": "2026-09-01T09:52:07.968538+00:00",
+        "kind": "model_review",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "detail": "pool=first_party"
+      },
+      {
         "at": "2026-08-19T08:26:14.657687+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
@@ -362,7 +364,7 @@
       {
         "at": "2026-08-14T15:46:47.564038+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: omxs30 → iseq20",
+        "title": "Focus advanced: omxs30 \u2192 iseq20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -374,13 +376,13 @@
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-02T12:33:10.531346+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: smi → omxs30",
+        "title": "Focus advanced: smi \u2192 omxs30",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -392,7 +394,7 @@
       {
         "at": "2026-07-26T18:19:32.036441+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: psi20 → smi",
+        "title": "Focus advanced: psi20 \u2192 smi",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -404,7 +406,7 @@
       {
         "at": "2026-07-26T05:41:29.750591+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: atx → psi20",
+        "title": "Focus advanced: atx \u2192 psi20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -416,7 +418,7 @@
       {
         "at": "2026-07-25T06:02:07.067074+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: us_adr_asia → atx",
+        "title": "Focus advanced: us_adr_asia \u2192 atx",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -440,7 +442,7 @@
       {
         "at": "2026-07-18T18:33:47.281863+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sti → us_adr_asia",
+        "title": "Focus advanced: sti \u2192 us_adr_asia",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -452,7 +454,7 @@
       {
         "at": "2026-07-18T18:33:47.280727+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: hang_seng → sti",
+        "title": "Focus advanced: hang_seng \u2192 sti",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -464,7 +466,7 @@
       {
         "at": "2026-07-18T18:33:47.279140+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: bel20 → hang_seng",
+        "title": "Focus advanced: bel20 \u2192 hang_seng",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -476,7 +478,7 @@
       {
         "at": "2026-07-18T18:33:47.278138+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aex → bel20",
+        "title": "Focus advanced: aex \u2192 bel20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -488,7 +490,7 @@
       {
         "at": "2026-07-18T18:33:47.277118+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_mib → aex",
+        "title": "Focus advanced: ftse_mib \u2192 aex",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -500,7 +502,7 @@
       {
         "at": "2026-07-18T18:33:47.275978+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ibex35 → ftse_mib",
+        "title": "Focus advanced: ibex35 \u2192 ftse_mib",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -512,7 +514,7 @@
       {
         "at": "2026-07-18T18:33:47.274723+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aim → ibex35",
+        "title": "Focus advanced: aim \u2192 ibex35",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -524,7 +526,7 @@
       {
         "at": "2026-07-18T18:04:30.214468+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: tsx60 → aim",
+        "title": "Focus advanced: tsx60 \u2192 aim",
         "detail": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       },
       {
@@ -572,32 +574,32 @@
       {
         "at": "2026-07-18T13:49:17.502997+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: cac40 → tsx60",
+        "title": "Focus advanced: cac40 \u2192 tsx60",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.501764+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: dax → cac40",
+        "title": "Focus advanced: dax \u2192 cac40",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.500540+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: nasdaq100 → dax",
+        "title": "Focus advanced: nasdaq100 \u2192 dax",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.498573+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_smallcap → nasdaq100",
+        "title": "Focus advanced: ftse_smallcap \u2192 nasdaq100",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-17T04:51:50.477798+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:51:50.477265+00:00",
@@ -639,12 +641,12 @@
         "at": "2026-07-17T04:28:29.172645+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:28:29.172198+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: euro_stoxx50 → asx200",
+        "title": "Focus advanced: euro_stoxx50 \u2192 asx200",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -681,12 +683,12 @@
         "at": "2026-07-17T04:23:00.290382+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sp500 → euro_stoxx50",
+        "title": "Focus advanced: sp500 \u2192 euro_stoxx50",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -698,7 +700,7 @@
       {
         "at": "2026-07-16T14:09:40.872338+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       }
     ],
@@ -904,15 +906,15 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-09-01T08:27:42.594991+00:00",
+      "generated_at": "2026-09-02T08:27:14.753256+00:00",
       "acted": true,
       "note": "Rebalanced after open settle (0 trade(s)).",
       "gate": {
-        "local_time": "2026-09-01T09:27:27.726879+01:00",
+        "local_time": "2026-09-02T09:26:51.825300+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-09-01T08:00:00+01:00",
-        "settle_at": "2026-09-01T09:15:00+01:00",
+        "market_open_at": "2026-09-02T08:00:00+01:00",
+        "settle_at": "2026-09-02T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
@@ -1141,12 +1143,12 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-08-30T07:53:04.316839+00:00",
-    "queue_ui_updated_at": "2026-09-02T07:12:56.866375+00:00",
-    "task_count": 65,
+    "compiled_at": "2026-09-02T08:03:58.657427+00:00",
+    "queue_ui_updated_at": "2026-09-02T08:29:59.684664+00:00",
+    "task_count": 66,
     "status": {
       "open_count": 0,
-      "pr_open_count": 0,
+      "pr_open_count": 1,
       "parked_count": 0,
       "merged_count": 61,
       "failed_count": 0,
@@ -1157,14 +1159,27 @@
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260902-01",
+        "area": "ingest",
+        "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 1 buy-tier gaps after stalled weekday loop",
+        "priority": "high",
+        "priority_score": 86.0,
+        "status": "pr_open",
+        "source": "library_ingest_stall",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": "cursor/eng-20260902-01-1de3"
+      }
+    ],
     "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-02T07:12:56.883371+00:00",
+    "generated_at": "2026-09-02T08:29:59.701768+00:00",
     "observe_only": true,
-    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
+    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
     "tracks": {
       "ai_judgment": {
@@ -1177,10 +1192,10 @@
         "epoch_nav": 821.98,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 3,
+        "equity_marks": 4,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0079,
-        "excess_after_costs": 0.0079,
+        "benchmark_return": -0.0082,
+        "excess_after_costs": 0.0082,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1272,10 +1287,10 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 13,
+        "equity_marks": 14,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0038,
-        "excess_after_costs": 0.0038,
+        "benchmark_return": -0.0041,
+        "excess_after_costs": 0.0041,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1295,10 +1310,10 @@
         "epoch_nav": 742.81,
         "epoch_return": -0.1385,
         "post_apply_trade_count": 16,
-        "equity_marks": 13,
+        "equity_marks": 14,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0038,
-        "excess_after_costs": -0.1348,
+        "benchmark_return": -0.0041,
+        "excess_after_costs": -0.1345,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
