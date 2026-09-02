@@ -23,6 +23,7 @@ artifacts, ingest stall detection, and the engineering queue.
 **Supervised follow-ons** (not automatic code changes):
 
 - Draft `ops` engineering tasks for unresolved failures (workflow overdue, etc.)
+- Run so-what auto-queue for no-judgment enforcement gaps (see [so-what-gap-closure.md](so-what-gap-closure.md))
 - Dispatch `engineering-queue.yml` when the queue is ready for the next PR
 
 Workflow failure **reruns** (library ladder guarded rerun, CI fix, etc.) stay in their

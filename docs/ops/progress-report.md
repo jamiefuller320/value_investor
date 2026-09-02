@@ -19,6 +19,11 @@ stage appraisal, deferred action lists, and role-coherence checks on top.
 ## Commands
 
 ```bash
+# So-what gap closure (classify / dry-run / queue)
+ftse-progress-report so-what
+ftse-progress-report so-what --dry-run
+ftse-progress-report so-what --apply
+
 # Build and print markdown to stdout
 ftse-progress-report build
 
@@ -89,7 +94,14 @@ Read-only slices of ops monitor checks (no auto-fixes):
 - Engineering queue orphans, sync, compile drop risk
 - Ops status snapshot age and consistency with project progress
 
-### 4. Role coherence (join-up)
+### 4. So what? (gap closure)
+
+Classifies live findings into `auto_queue` / `human_gate` / `observe`.
+No-judgment enforcement gaps (e.g. FCF mismatch with uncapped buy-tier)
+are queued by ops-monitor or `ftse-progress-report so-what --apply`.
+See [so-what-gap-closure.md](so-what-gap-closure.md).
+
+### 5. Role coherence (join-up)
 
 Doctrine and wiring checks:
 
@@ -107,6 +119,7 @@ Exit code is **1** when overall status is `fail` (same pattern as ops monitor).
 - [ops-review-cadence.md](ops-review-cadence.md) — weekly / monthly / quarterly human loops
 - [deferred-review.md](../deferred-review.md) — generated deferred ideas page
 - [ops-monitor.md](ops-monitor.md) — daily automated health
+- [so-what-gap-closure.md](so-what-gap-closure.md) — periodic so-what + auto gap-close
 - [human-tasks-checklist.md](human-tasks-checklist.md) — manual gates
 
 ## Checklist registration

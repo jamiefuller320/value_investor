@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T11:12:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T12:19:07+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -110,6 +110,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N53 | **Mirror every Suite A shadow into Suite B (full 2x fork)** | Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal. | Suite B AI+rules endurance is trusted and human triage load is light |
 | N54 | **Do not treat Suite A conviction floors as Suite B policy** | High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. | Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy |
 | N55 | **Live sentiment scoring from mined news phrases** | Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). | Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment |
+| N56 | **Auto-write FCF bridges without human review** | Do not auto-author policy_fcf bridge numbers; choosing company-adjusted vs filing-aligned remains a judgment call. Keep human_gate for bridges. | If an explicit deterministic source policy covers every buy-tier mismatch without filing judgment |
 
 ---
 
@@ -296,6 +297,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L214 | **Git bundle of full repo history on S3** | Weekly code tarball is a current-tree snapshot, not a full git history. A git bundle (or git-filtered archive) would recover branches and history if GitHub were unavailable. | After the first Sunday that uploads ftse-code-* to S3, or if GitHub availability becomes a real recovery concern |
 | L215 | **Per-ticker wall-clock cap in library ingest loop** | A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery. | Euro or parallel library ingest again times out after the schedule runtime-budget fix lands |
 | L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
+| L237 | **Expand so-what detectors beyond FCF** | Add more no-judgment enforcement detectors (cash conversion overlays, memo eligibility gates, stale research caps) to the so-what loop once FCF auto-queue proves stable in ops-monitor. | After so-what FCF auto_queue has run cleanly in production ops-monitor for several weeks |
 
 ---
 

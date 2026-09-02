@@ -32,6 +32,7 @@ tracks on the Automation tab — see [human-tasks-checklist.md](human-tasks-chec
 |------------|---------|-----|
 | Paper-auto + decision-review | Weekday | [decision-review.md](decision-review.md) |
 | Email / deep analysis / gap-fill | Sunday quiet | [orchestrator-cron.md](orchestrator-cron.md) |
+| So-what auto-queue (enforcement gaps) | Daily via ops-monitor | [so-what-gap-closure.md](so-what-gap-closure.md) |
 | Engineering queue / eng-idle ingest | Hourly weekdays | [engineering-sync.md](engineering-sync.md) · [horizon-scan.md](horizon-scan.md#ingest-gap-closure-runs) |
 
 ## Checklist registration

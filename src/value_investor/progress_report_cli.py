@@ -14,6 +14,13 @@ from value_investor.progress_report import (
     format_progress_report_markdown,
     write_progress_report,
 )
+from value_investor.so_what_closure import (
+    apply_so_what_auto_queue,
+    build_so_what_section,
+    render_so_what_markdown,
+    scan_so_what_issues,
+    so_what_summary_for_progress,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -35,6 +42,23 @@ def main(argv: list[str] | None = None) -> int:
     build_p.add_argument("--report-path", type=Path, default=DEFAULT_REPORT_PATH)
     build_p.add_argument("--markdown-path", type=Path, default=DEFAULT_MARKDOWN_PATH)
     build_p.set_defaults(func=_cmd_build)
+
+    so_p = sub.add_parser(
+        "so-what",
+        help="Scan honest findings, ask so-what, and optionally queue auto gap-closures",
+    )
+    so_p.add_argument(
+        "--apply",
+        action="store_true",
+        help="Queue auto_queue findings into engineering_tasks.json",
+    )
+    so_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Classify and show would-be tasks without writing the queue",
+    )
+    so_p.add_argument("--json", action="store_true", help="Print JSON snapshot to stdout")
+    so_p.set_defaults(func=_cmd_so_what)
 
     md_p = sub.add_parser("markdown", help="Render markdown from an existing JSON report")
     md_p.add_argument(
@@ -70,6 +94,13 @@ def _cmd_build(args: argparse.Namespace) -> int:
                 f"proposed={counts.get('proposed_total', 0)}, "
                 f"engineering_open={counts.get('engineering_open', 0)}"
             )
+            so_counts = (payload.get("so_what") or {}).get("counts") or {}
+            print(
+                "  so_what: "
+                f"findings={so_counts.get('findings', 0)}, "
+                f"auto_queue={so_counts.get('auto_queue', 0)}, "
+                f"human_gate={so_counts.get('human_gate', 0)}"
+            )
     else:
         payload = build_progress_report()
         if args.json:
@@ -78,6 +109,31 @@ def _cmd_build(args: argparse.Namespace) -> int:
             print(format_progress_report_markdown(payload))
     if payload.get("overall") == "fail":
         return 1
+    return 0
+
+
+def _cmd_so_what(args: argparse.Namespace) -> int:
+    if args.apply or args.dry_run:
+        snapshot = apply_so_what_auto_queue(dry_run=bool(args.dry_run) and not bool(args.apply))
+        section = so_what_summary_for_progress(snapshot)
+    else:
+        section = build_so_what_section(apply=False)
+        snapshot = {
+            "counts": section.get("counts") or {},
+            "findings": [],
+            "created_tasks": [],
+        }
+    if args.json:
+        print(json.dumps(snapshot if (args.apply or args.dry_run) else section, indent=2))
+    else:
+        print(render_so_what_markdown(section))
+        created = snapshot.get("created_tasks") or []
+        if created and args.apply:
+            print(f"Queued {len(created)} engineering task(s).")
+        elif created and args.dry_run:
+            print(f"Dry-run: would queue {len(created)} engineering task(s) (not written).")
+        elif args.apply:
+            print("No new auto_queue tasks (already open or none found).")
     return 0
 
 
