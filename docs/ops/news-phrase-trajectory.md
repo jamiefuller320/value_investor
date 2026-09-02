@@ -4,13 +4,20 @@ Observe-only module that walks **buy-tier ∪ boundary-watch** names chronologic
 joins open-source headlines (`news_manifest.json`) to archive forward returns, and
 builds a walk-forward phrase lexicon. Does **not** write screen weights or paper knobs.
 
+## Weekly automation
+
+Sunday `analysis-review.yml` runs a **rolling** refresh after `ftse-trajectory-evidence`
+(soft-fail, observe-only) and commits the four artifacts below with the knob/trajectory
+bootstrap commit. No human checklist gate — review the markdown opportunistically when
+promotions start appearing.
+
 ## Command
 
 ```bash
-# Full backfill over buy ∪ boundary cohort
+# Full backfill over buy ∪ boundary cohort (manual / first seed)
 ftse-news-phrase-trajectory --data-dir docs/data --mode full
 
-# Later: rolling watermark refresh
+# Weekly / Sunday: rolling watermark refresh (also what CI runs)
 ftse-news-phrase-trajectory --data-dir docs/data --mode rolling
 ```
 

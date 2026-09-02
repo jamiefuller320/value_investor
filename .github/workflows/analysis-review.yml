@@ -122,6 +122,12 @@ jobs:
       - name: Trajectory evidence (transitions, boundary, loser cards, outcomes)
         run: ftse-trajectory-evidence --data-dir docs/data || true
 
+      - name: News-phrase trajectory panel (buy∪boundary, observe-only)
+        run: |
+          # Rolling watermark refresh after trajectory evidence densifies labels.
+          # Soft-fail until news manifests / archive history are thick enough.
+          ftse-news-phrase-trajectory --data-dir docs/data --mode rolling || true
+
       - name: Exit-timing archive near-miss priors (observe-only)
         run: |
           # Wider surplus-budget gate (pre_buy floor + more episodes/week). Soft-fail
@@ -153,6 +159,10 @@ jobs:
             docs/data/trajectory_boundary_watch.json
             docs/data/trajectory_evidence_review.json
             docs/data/trajectory_evidence_review.md
+            docs/data/news_phrase_trajectory.json
+            docs/data/news_phrase_lexicon.json
+            docs/data/news_phrase_trajectory_state.json
+            docs/data/news_phrase_trajectory_review.md
             docs/data/exit_timing_near_miss.json
             docs/data/exit_timing_near_miss_review.json
           skip_fetch: false
