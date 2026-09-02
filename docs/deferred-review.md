@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T07:55:47+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T08:00:26+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -239,6 +239,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L211 | **IR presentation metrics + alternate news as default gap-fill pack** | Populate ir_presentation_metrics.json and alternate_news.json for every buy-tier memo pack so evidence-ladder thin gaps stop capping scores at adequate even when filing bodies are strong. | When filing-body coverage is routinely strong but evidence_ladder driver remains ~0.5 on published memos |
 | L222 | **News phrase to trajectory correlation panel** | Offline per-ticker time-aligned join of open-source headlines (Google News RSS / Yahoo) with price and trajectory labels; mine n-grams/phrases that precede 4/8/12-week trend moves or opinion flips—not same-day price correlation. Output is a research lexicon/feature candidates for AI judgment or L207 event tags, not a live sentiment quant score. | Buy-tier news_manifest history is thick enough for a pilot cohort (or L207 event taxonomy starts); and trajectory_evidence has stable 8–12w outcome labels |
 | L223 | **Prefer open-source news until quality bottleneck** | Weekly value horizon does not need a paid news API yet. Keep Google News RSS + yfinance as the media layer; revisit L12 (Marketaux/Finnhub) only if memo news quality or phrase-panel coverage is the proven bottleneck. | Memo news quality or phrase-panel coverage is the proven bottleneck (see L12) |
+| L224 | **Chronological PIT news walk with lexicon self-improve** | Offline module walks each ticker from earliest news/price day forward (full backfill, then rolling append). Phrase lexicon updates only on past windows; evaluate on forward embargoed weeks. Self-improve via propose→OOS measure→promote (like analysis-review), never silent live scoring. Prefer buy-tier cohort first; require cross-ticker holdout. | Starting L222 offline pilot; history thick enough for walk-forward splits on a buy-tier cohort |
 
 ### Ops / reliability
 
