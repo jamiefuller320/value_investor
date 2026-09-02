@@ -1246,7 +1246,13 @@ def reconcile_fcf(
         canonical = float(auto_policy["policy_fcf"])
         basis = str(auto_policy.get("policy_basis") or "filing_aligned")
         method = str(auto_policy.get("method") or "auto")
-        source = f"auto_{method}_{basis}"
+        # Avoid redundant labels like auto_fallback_filing_aligned_filing_aligned.
+        if method.startswith("fallback_"):
+            source = f"auto_{method}"
+        elif method == "majority_discard_outlier":
+            source = f"auto_majority_{basis}"
+        else:
+            source = f"auto_{method}_{basis}"
         if basis == "company_adjusted":
             currency = str(company_adjusted_currency or currency)
         policy_fcf = canonical

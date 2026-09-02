@@ -695,8 +695,9 @@ def test_earnings_quality_prefers_adjusted_net_income():
 def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
     bundle = reconcile_fcf(screen_ttm=-66_125_000.0, financials=_hik_financials())
     assert bundle["canonical"] == 119_000_000.0
-    assert bundle["source"] == "filing_aligned_ocf_capex"
-    assert bundle["source"] == "filing_aligned_ocf_capex"
+    assert bundle["source"] == "auto_fallback_filing_aligned"
+    assert bundle["policy_basis"] == "filing_aligned"
+    assert bundle["auto_policy_resolved"] is True
     assert bundle["screen_ttm"] == -66_125_000.0
     assert bundle["cashflow_metrics_free_cashflow"] == 119_000_000.0
 
@@ -744,16 +745,44 @@ def test_fcf_filing_screen_mismatch_measures_gap_against_filing_fcf():
     )
 
 
-def test_reconcile_fcf_prefers_company_adjusted_when_present():
+def test_reconcile_fcf_discards_company_adjusted_outlier():
+    # FGP-like: filing OCF−CapEx ≈ screen TTM; company-adjusted is the outlier.
     bundle = reconcile_fcf(
         screen_ttm=362_600_000.0,
         financials=_fgp_financials(),
         company_adjusted=113_500_000.0,
         company_adjusted_currency="GBP",
     )
-    assert bundle["canonical"] == 113_500_000.0
-    assert bundle["source"] == "company_adjusted"
+    assert bundle["canonical"] == 362_600_000.0
+    assert bundle["source"] == "auto_majority_filing_aligned"
+    assert bundle["policy_basis"] == "filing_aligned"
+    assert "company_adjusted" in (bundle.get("auto_policy_discarded") or [])
     assert bundle["divergence_flagged"] is True
+
+
+def test_reconcile_fcf_majority_prefers_company_when_paired_with_filing():
+    # ITV-like: company-adjusted agrees with filing; discard divergent Yahoo TTM.
+    financials = {
+        "ticker": "ITV.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 202_000_000.0,
+                "Capital Expenditure": -54_000_000.0,
+                "Free Cash Flow": 148_000_000.0,
+            }
+        },
+    }
+    bundle = reconcile_fcf(
+        screen_ttm=211_900_000.0,
+        financials=financials,
+        company_adjusted=187_000_000.0,
+        company_adjusted_currency="GBP",
+        filing_currency="GBP",
+    )
+    assert bundle["canonical"] == 187_000_000.0
+    assert bundle["source"] == "auto_majority_company_adjusted"
+    assert bundle["policy_basis"] == "company_adjusted"
+    assert "screen_ttm" in (bundle.get("auto_policy_discarded") or [])
 
 
 def test_overlay_free_cashflow_from_bundle_uses_company_adjusted():
